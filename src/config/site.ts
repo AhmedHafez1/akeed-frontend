@@ -36,7 +36,7 @@ export const pricing: { tiers: Tier[] } = {
       orders: 500,
       price: 599,
       perOrder: 1.2,
-      saving: 10,
+      saving: 20,
       ordersDisplay: '500',
     },
     {
@@ -44,7 +44,7 @@ export const pricing: { tiers: Tier[] } = {
       orders: 1000,
       price: 999,
       perOrder: 1,
-      saving: 25,
+      saving: 50,
       ordersDisplay: '1000',
     },
   ],
