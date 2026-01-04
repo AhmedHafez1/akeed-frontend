@@ -73,7 +73,7 @@ function Hero() {
           <SocialProof />
           <button
             onClick={() => setIsReservationModalOpen(true)}
-            className="group relative hidden w-auto items-center justify-center gap-2 rounded-xl bg-linear-to-r from-orange-600 to-orange-500 px-6 py-3.5 text-sm font-bold text-white shadow-sm shadow-emerald-500/30 transition-all hover:-translate-y-0.5 hover:shadow-gray-400/70 sm:w-auto sm:px-8 sm:py-4 md:flex md:text-base lg:py-5 lg:text-lg"
+            className="group relative flex w-auto items-center justify-center gap-2 rounded-xl bg-linear-to-r from-orange-600 to-orange-500 px-6 py-3.5 text-sm font-bold text-white shadow-sm shadow-emerald-500/30 transition-all hover:-translate-y-0.5 hover:shadow-gray-400/70 sm:w-auto sm:px-8 sm:py-4 md:flex md:text-base lg:py-5 lg:text-lg"
             suppressHydrationWarning
           >
             {t('cta')}
