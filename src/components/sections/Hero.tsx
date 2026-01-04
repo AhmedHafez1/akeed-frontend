@@ -43,7 +43,7 @@ function Hero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-8 self-start sm:mb-6 lg:mb-10 lg:px-20"
+          className="mb-6 self-start sm:mb-6 lg:px-20"
         >
           <div className="border-slate-200 backdrop-blur-sm sm:p-5">
             <p
@@ -57,6 +57,9 @@ function Hero() {
               <li>{t('subtitle_bullet_1')}</li>
               <li>{t('subtitle_bullet_2')}</li>
               <li>{t('subtitle_bullet_3')}</li>
+              <li>{t('subtitle_bullet_4')}</li>
+              <li>{t('subtitle_bullet_5')}</li>
+              <li>{t('subtitle_bullet_6')}</li>
             </ul>
           </div>
         </motion.div>
