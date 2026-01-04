@@ -59,7 +59,6 @@ function Hero() {
               <li>{t('subtitle_bullet_3')}</li>
               <li>{t('subtitle_bullet_4')}</li>
               <li>{t('subtitle_bullet_5')}</li>
-              <li>{t('subtitle_bullet_6')}</li>
             </ul>
           </div>
         </motion.div>
