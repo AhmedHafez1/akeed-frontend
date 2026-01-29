@@ -1,0 +1,285 @@
+'use client'
+
+import { IWindow } from '@/types/window.model'
+import { createClient } from '@supabase/supabase-js'
+
+/**
+ * Akeed API Client with Dual Authentication
+ *
+ * This module provides a unified API client that automatically:
+ * 1. Detects the current runtime mode (EMBEDDED vs STANDALONE)
+ * 2. Fetches the appropriate authentication token
+ * 3. Injects the token into API requests
+ *
+ * Token Types:
+ * - EMBEDDED: Shopify Session Token (via App Bridge)
+ * - STANDALONE: Supabase JWT (via Supabase Auth)
+ */
+
+const API_BASE_URL = process.env.API_URL || 'http://localhost:3000'
+
+// Initialize Supabase client for standalone auth
+const supabaseUrl = process.env.SUPABASE_URL!
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY!
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true,
+  },
+})
+
+/**
+ * Get authentication token based on current mode
+ */
+async function getAuthToken(): Promise<string | null> {
+  // Check if we're in a browser environment
+  if (typeof window === 'undefined') {
+    return null
+  }
+
+  // Detect mode from URL parameters
+  const urlParams = new URLSearchParams(window.location.search)
+  const shopDomain = urlParams.get('shop')
+  const hostParam = urlParams.get('host')
+  const isEmbedded = !!(shopDomain && hostParam)
+
+  if (isEmbedded) {
+    // EMBEDDED MODE: Get Shopify Session Token
+    return await getShopifySessionToken()
+  } else {
+    // STANDALONE MODE: Get Supabase JWT
+    return await getSupabaseToken()
+  }
+}
+
+/**
+ * Get Shopify Session Token (for embedded mode)
+ */
+async function getShopifySessionToken(): Promise<string | null> {
+  try {
+    // Get App Bridge instance from global scope
+    // (It should be initialized by useAkeedMode hook)
+    const appBridge = (window as IWindow).__SHOPIFY_APP_BRIDGE__
+
+    if (!appBridge) {
+      console.error('[Auth] App Bridge not initialized')
+      return null
+    }
+
+    // Use App Bridge to get session token
+    const getSessionToken = await import('@shopify/app-bridge/utilities').then(
+      (module) => module.getSessionToken
+    )
+
+    const token = await getSessionToken(appBridge)
+    return token
+  } catch (error) {
+    console.error('[Auth] Failed to get Shopify session token:', error)
+    return null
+  }
+}
+
+/**
+ * Get Supabase JWT (for standalone mode)
+ */
+async function getSupabaseToken(): Promise<string | null> {
+  try {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
+
+    if (!session?.access_token) {
+      console.warn('[Auth] No Supabase session found')
+      return null
+    }
+
+    return session.access_token
+  } catch (error) {
+    console.error('[Auth] Failed to get Supabase token:', error)
+    return null
+  }
+}
+
+/**
+ * Enhanced fetch with automatic authentication
+ *
+ * Usage:
+ * ```ts
+ * const data = await fetchWithAuth('/api/orders');
+ * ```
+ */
+export async function fetchWithAuth(
+  url: string,
+  options: RequestInit = {}
+): Promise<Response> {
+  // Get authentication token
+  const token = await getAuthToken()
+
+  // Prepare headers
+  const headers = new Headers(options.headers)
+  headers.set('Content-Type', 'application/json')
+
+  if (token) {
+    headers.set('Authorization', `Bearer ${token}`)
+  } else {
+    console.warn('[Auth] No authentication token available')
+  }
+
+  // Make request
+  const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url}`
+
+  const response = await fetch(fullUrl, {
+    ...options,
+    headers,
+  })
+
+  // Handle 401 Unauthorized
+  if (response.status === 401) {
+    console.error('[Auth] Unauthorized - redirecting to login')
+
+    // Redirect to login if in standalone mode
+    const urlParams = new URLSearchParams(window.location.search)
+    const isEmbedded = !!(urlParams.get('shop') && urlParams.get('host'))
+
+    if (!isEmbedded && typeof window !== 'undefined') {
+      window.location.href = '/login'
+    }
+  }
+
+  return response
+}
+
+/**
+ * Convenience methods for common HTTP verbs
+ */
+export const api = {
+  async get<T = unknown>(url: string): Promise<T> {
+    const response = await fetchWithAuth(url, { method: 'GET' })
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.statusText}`)
+    }
+    return response.json()
+  },
+
+  async post<T = unknown>(url: string, data?: unknown): Promise<T> {
+    const response = await fetchWithAuth(url, {
+      method: 'POST',
+      body: data ? JSON.stringify(data) : undefined,
+    })
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.statusText}`)
+    }
+    return response.json()
+  },
+
+  async put<T = unknown>(url: string, data?: unknown): Promise<T> {
+    const response = await fetchWithAuth(url, {
+      method: 'PUT',
+      body: data ? JSON.stringify(data) : undefined,
+    })
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.statusText}`)
+    }
+    return response.json()
+  },
+
+  async patch<T = unknown>(url: string, data?: unknown): Promise<T> {
+    const response = await fetchWithAuth(url, {
+      method: 'PATCH',
+      body: data ? JSON.stringify(data) : undefined,
+    })
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.statusText}`)
+    }
+    return response.json()
+  },
+
+  async delete<T = unknown>(url: string): Promise<T> {
+    const response = await fetchWithAuth(url, { method: 'DELETE' })
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.statusText}`)
+    }
+    return response.json()
+  },
+}
+
+/**
+ * Auth helpers for standalone mode
+ */
+export const auth = {
+  /**
+   * Sign up with email and password
+   */
+  async signUp(
+    email: string,
+    password: string,
+    metadata?: Record<string, number | string>
+  ) {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: metadata,
+      },
+    })
+
+    if (error) throw error
+    return data
+  },
+
+  /**
+   * Sign in with email and password
+   */
+  async signIn(email: string, password: string) {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+
+    if (error) throw error
+    return data
+  },
+
+  /**
+   * Sign out
+   */
+  async signOut() {
+    const { error } = await supabase.auth.signOut()
+    if (error) throw error
+  },
+
+  /**
+   * Get current user
+   */
+  async getCurrentUser() {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    return user
+  },
+
+  /**
+   * Check if user is authenticated
+   */
+  async isAuthenticated() {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
+    return !!session
+  },
+}
+
+/**
+ * Utility to check current authentication mode
+ */
+export function getAuthMode(): 'EMBEDDED' | 'STANDALONE' {
+  if (typeof window === 'undefined') return 'STANDALONE'
+
+  const urlParams = new URLSearchParams(window.location.search)
+  const shopDomain = urlParams.get('shop')
+  const hostParam = urlParams.get('host')
+
+  return shopDomain && hostParam ? 'EMBEDDED' : 'STANDALONE'
+}
