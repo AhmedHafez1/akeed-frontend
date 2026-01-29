@@ -225,7 +225,10 @@ export const auth = {
       },
     })
 
-    if (error) throw error
+    if (error) {
+      console.log(error)
+      throw error
+    }
     return data
   },
 
@@ -238,7 +241,10 @@ export const auth = {
       password,
     })
 
-    if (error) throw error
+    if (error) {
+      console.log(error)
+      throw error
+    }
     return data
   },
 
