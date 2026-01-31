@@ -4,7 +4,7 @@ import { Tier } from '@/types/tier.model'
 export const siteConfig: SiteConfig = {
   name: 'Akeed',
   description: 'Smart WhatsApp bot for COD order verification',
-  url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+  url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3001',
   ogImage: '/images/og-image.jpg',
   links: {
     whatsapp: `https://wa.me/${process.env.NEXT_PUBLIC_CONTACT_WHATSAPP}`,
