@@ -38,11 +38,16 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
+            value: 'ALLOWALL',
           },
           {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin',
+          },
+          {
+            key: 'Content-Security-Policy',
+            value:
+              "frame-ancestors 'self' https://admin.shopify.com https://*.myshopify.com",
           },
         ],
       },
