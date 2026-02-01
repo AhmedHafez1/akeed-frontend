@@ -67,9 +67,17 @@ export function useAkeedMode(): AkeedModeContext {
 
         if (!mounted) return
 
+        const apiKey = process.env.SHOPIFY_API_KEY
+
+        if (!apiKey) {
+          console.error('[Akeed] SHOPIFY_API_KEY is not defined')
+          setIsLoading(false)
+          return
+        }
+
         // Initialize App Bridge
         const app = createApp({
-          apiKey: process.env.SHOPIFY_API_KEY!,
+          apiKey: apiKey,
           host: hostParam!,
           forceRedirect: true,
         })
