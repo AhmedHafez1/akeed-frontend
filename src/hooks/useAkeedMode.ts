@@ -67,10 +67,10 @@ export function useAkeedMode(): AkeedModeContext {
 
         if (!mounted) return
 
-        const apiKey = process.env.SHOPIFY_API_KEY
+        const apiKey = process.env.NEXT_PUBLIC_SHOPIFY_API_KEY
 
         if (!apiKey) {
-          console.error('[Akeed] SHOPIFY_API_KEY is not defined')
+          console.error('[Akeed] NEXT_PUBLIC_SHOPIFY_API_KEY is not defined')
           setIsLoading(false)
           return
         }
