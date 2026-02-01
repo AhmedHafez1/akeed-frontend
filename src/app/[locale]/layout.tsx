@@ -1,9 +1,7 @@
 import { Cairo } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
-import { Toaster } from 'react-hot-toast'
-import { Header } from '@/components/layout/Header'
-import { WhatsAppButton } from '@/components/ui/WhatsAppButton'
+import { AppLayout } from '@/components/layout/AppLayout'
 import '../globals.css'
 import Script from 'next/script'
 
@@ -71,19 +69,7 @@ export default async function LocaleLayout({
       </head>
       <body className={cairo.className}>
         <NextIntlClientProvider messages={messages}>
-          <Header />
-          {children}
-          <WhatsAppButton />
-          <Toaster
-            position={locale === 'ar' ? 'top-left' : 'top-right'}
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: '#333',
-                color: '#fff',
-              },
-            }}
-          />
+          <AppLayout>{children}</AppLayout>
         </NextIntlClientProvider>
       </body>
     </html>

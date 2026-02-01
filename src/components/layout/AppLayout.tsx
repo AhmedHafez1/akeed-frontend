@@ -3,7 +3,9 @@
 import { ReactNode, Suspense } from 'react'
 import { useAkeedMode } from '@/hooks/useAkeedMode'
 import { Sidebar } from './Sidebar'
-import { Header as CustomHeader } from './Header'
+import { Header } from './Header'
+import { WhatsAppButton } from '@/components/ui/WhatsAppButton'
+import { Toaster } from 'react-hot-toast'
 
 /**
  * AppLayout - Adaptive Layout Component
@@ -61,7 +63,6 @@ function AppLayoutInner({ children }: AppLayoutProps) {
  */
 async function EmbeddedLayout({
   children,
-  appBridge,
 }: {
   children: ReactNode
   appBridge: unknown
@@ -95,6 +96,8 @@ async function EmbeddedLayout({
  * Standalone Mode Layout - Custom SaaS UI
  */
 function StandaloneLayout({ children }: { children: ReactNode }) {
+  // Optionally, you can detect locale here if you want to set Toaster position dynamically
+  // For now, default to top-right
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Custom Sidebar */}
@@ -103,10 +106,23 @@ function StandaloneLayout({ children }: { children: ReactNode }) {
       {/* Main Content Area */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Custom Header */}
-        <CustomHeader />
+        <Header />
 
         {/* Page Content */}
         <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        {/* WhatsApp Button (global, only in standalone) */}
+        <WhatsAppButton />
+        {/* Toaster (global, only in standalone) */}
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: '#333',
+              color: '#fff',
+            },
+          }}
+        />
       </div>
     </div>
   )
