@@ -317,4 +317,32 @@
     "text": "جرب الخدمة على موبايلك الأول",
     "message": "مرحباً، عايز أجرب خدمة أكيد"
   }
+  ,
+  "onboarding": {
+    "organization": "المنظمة",
+    "platform": "المنصة",
+    "whatsapp": "واتساب",
+    "welcomeToAkeed": "مرحباً بك في أكيد!",
+    "letsSetupAccount": "يلا نجهز حسابك",
+    "createOrganization": "إنشاء منظمة",
+    "organizationDescription": "يرجى إدخال بيانات المنظمة للبدء.",
+    "organizationName": "اسم المنظمة",
+    "organizationNamePlaceholder": "ادخل اسم المنظمة",
+    "organizationSlug": "المعرف المختصر للمنظمة",
+    "continue": "استمرار"
+    ,
+    "processing": "جاري المعالجة...",
+    "gotoDashboard": "اذهب للوحة التحكم",
+    "skipForNow": "تخطي الآن",
+    "readyToStart": "أنت جاهز للبدء في استخدام أكيد!",
+    "selectPlatforms": "اختر منصاتك",
+    "platformsDescription": "اختر المنصات التي تريد ربطها مع أكيد.",
+    "configureWhatsApp": "إعداد واتساب",
+    "whatsappDescription": "ادخل بيانات واتساب بيزنس لتفعيل تأكيد الطلبات.",
+    "phoneNumberId": "معرف رقم الهاتف",
+    "businessAccountId": "معرف حساب الأعمال",
+    "accessToken": "رمز الوصول",
+    "whatsappHelp": "يمكنك إيجاد هذه البيانات في لوحة تحكم واتساب بيزنس.",
+    "allSet": "تم كل شيء!"
+  }
 }

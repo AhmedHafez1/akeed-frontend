@@ -317,4 +317,32 @@
     "text": "Try it on your phone first",
     "message": "Hi, I want to try Akeed service"
   }
+  ,
+  "onboarding": {
+    "organization": "Organization",
+    "platform": "Platform",
+    "whatsapp": "WhatsApp",
+    "welcomeToAkeed": "Welcome to Akeed!",
+    "letsSetupAccount": "Let's set up your account",
+    "createOrganization": "Create Organization",
+    "organizationDescription": "Please provide your organization details to get started.",
+    "organizationName": "Organization Name",
+    "organizationNamePlaceholder": "Enter your organization name",
+    "organizationSlug": "Organization Slug",
+    "continue": "Continue"
+    ,
+    "processing": "Processing...",
+    "gotoDashboard": "Go to Dashboard",
+    "skipForNow": "Skip for now",
+    "readyToStart": "You're ready to start using Akeed!",
+    "selectPlatforms": "Select Your Platforms",
+    "platformsDescription": "Choose the platforms you want to connect with Akeed.",
+    "configureWhatsApp": "Configure WhatsApp",
+    "whatsappDescription": "Enter your WhatsApp Business details to enable order confirmations.",
+    "phoneNumberId": "Phone Number ID",
+    "businessAccountId": "Business Account ID",
+    "accessToken": "Access Token",
+    "whatsappHelp": "You can find these details in your WhatsApp Business dashboard.",
+    "allSet": "All set!"
+  }
 }
