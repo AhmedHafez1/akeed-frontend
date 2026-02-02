@@ -6,6 +6,7 @@ import { Sidebar } from './Sidebar'
 import { Header } from './Header'
 import { WhatsAppButton } from '@/components/ui/WhatsAppButton'
 import { Toaster } from 'react-hot-toast'
+import { AuthGuard } from '../auth/AuthGuard'
 
 /**
  * AppLayout - Adaptive Layout Component
@@ -55,7 +56,11 @@ function AppLayoutInner({ children }: AppLayoutProps) {
    * STANDALONE MODE - Custom SaaS Portal
    * Uses Akeed's custom sidebar and header
    */
-  return <StandaloneLayout>{children}</StandaloneLayout>
+  return (
+    <StandaloneLayout>
+      <AuthGuard>{children}</AuthGuard>
+    </StandaloneLayout>
+  )
 }
 
 /**
