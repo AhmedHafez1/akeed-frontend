@@ -316,8 +316,7 @@
   "whatsapp_button": {
     "text": "Try it on your phone first",
     "message": "Hi, I want to try Akeed service"
-  }
-  ,
+  },
   "onboarding": {
     "organization": "Organization",
     "platform": "Platform",
@@ -329,8 +328,7 @@
     "organizationName": "Organization Name",
     "organizationNamePlaceholder": "Enter your organization name",
     "organizationSlug": "Organization Slug",
-    "continue": "Continue"
-    ,
+    "continue": "Continue",
     "processing": "Processing...",
     "gotoDashboard": "Go to Dashboard",
     "skipForNow": "Skip for now",

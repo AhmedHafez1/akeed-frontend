@@ -316,8 +316,7 @@
   "whatsapp_button": {
     "text": "جرب الخدمة على موبايلك الأول",
     "message": "مرحباً، عايز أجرب خدمة أكيد"
-  }
-  ,
+  },
   "onboarding": {
     "organization": "المنظمة",
     "platform": "المنصة",
@@ -329,8 +328,7 @@
     "organizationName": "اسم المنظمة",
     "organizationNamePlaceholder": "ادخل اسم المنظمة",
     "organizationSlug": "المعرف المختصر للمنظمة",
-    "continue": "استمرار"
-    ,
+    "continue": "استمرار",
     "processing": "جاري المعالجة...",
     "gotoDashboard": "اذهب للوحة التحكم",
     "skipForNow": "تخطي الآن",
