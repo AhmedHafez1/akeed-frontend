@@ -150,35 +150,159 @@ export default function OnboardingPage() {
           </div>
         )}
 
-          {/* Step 1: Organization */}
-          {currentStep === 'organization' && (
-            <div className="space-y-6">
-              <h2 className="text-2xl font-semibold text-slate-900">
-                {t('onboarding.createOrganization')}
-              </h2>
-              <p className="text-sm text-slate-600">
-                {t('onboarding.organizationDescription')}
-              </p>
+        {/* Step 1: Organization */}
+        {currentStep === 'organization' && (
+          <div className="space-y-6">
+            <h2 className="text-2xl font-semibold text-slate-900">
+              {t('onboarding.createOrganization')}
+            </h2>
+            <p className="text-sm text-slate-600">
+              {t('onboarding.organizationDescription')}
+            </p>
 
+            <div>
+              <label
+                htmlFor="orgName"
+                className="text-sm font-medium text-slate-700"
+              >
+                {t('onboarding.organizationName')}
+              </label>
+              <div className="relative mt-2">
+                <input
+                  type="text"
+                  id="orgName"
+                  name="orgName"
+                  required
+                  value={formData.orgName}
+                  onChange={handleChange}
+                  className="block w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 shadow-sm transition placeholder:text-slate-400 focus-visible:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+                  placeholder={t('onboarding.organizationNamePlaceholder')}
+                />
+                {formData.orgName ? (
+                  <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-emerald-500">
+                    <svg
+                      className="h-4 w-4"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-7.07 7.07a1 1 0 01-1.414 0L3.293 9.848a1 1 0 011.414-1.414l4.102 4.102 6.364-6.364a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                ) : null}
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="orgSlug"
+                className="text-sm font-medium text-slate-700"
+              >
+                {t('onboarding.organizationSlug')}
+              </label>
+              <div className="mt-2 flex rounded-xl shadow-sm">
+                <span className="inline-flex items-center rounded-l-xl border border-r-0 border-slate-200 bg-slate-50 px-3 text-sm text-slate-500">
+                  app.akeed.com/
+                </span>
+                <div className="relative w-full">
+                  <input
+                    type="text"
+                    id="orgSlug"
+                    name="orgSlug"
+                    required
+                    value={formData.orgSlug}
+                    onChange={handleChange}
+                    className="block w-full min-w-0 flex-1 rounded-none rounded-r-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+                    placeholder="my-company"
+                  />
+                  {formData.orgSlug ? (
+                    <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-emerald-500">
+                      <svg
+                        className="h-4 w-4"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-7.07 7.07a1 1 0 01-1.414 0L3.293 9.848a1 1 0 011.414-1.414l4.102 4.102 6.364-6.364a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </span>
+                  ) : null}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Step 2: Platform Selection */}
+        {currentStep === 'platform' && (
+          <div className="space-y-6">
+            <h2 className="text-2xl font-semibold text-slate-900">
+              {t('onboarding.selectPlatforms')}
+            </h2>
+            <p className="text-sm text-slate-600">
+              {t('onboarding.platformsDescription')}
+            </p>
+
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { id: 'shopify', name: 'Shopify', icon: '🛍️' },
+                { id: 'salla', name: 'Salla', icon: '🏪' },
+                { id: 'zid', name: 'Zid', icon: '🛒' },
+                { id: 'woocommerce', name: 'WooCommerce', icon: '🔌' },
+                { id: 'whatsapp', name: 'WhatsApp', icon: '💬' },
+              ].map((platform) => (
+                <button
+                  key={platform.id}
+                  type="button"
+                  onClick={() => handlePlatformToggle(platform.id)}
+                  className={`flex items-center justify-center gap-3 rounded-xl border-2 p-6 text-center text-sm font-medium transition-all focus-visible:ring-2 focus-visible:ring-emerald-500/30 focus-visible:outline-none ${
+                    formData.selectedPlatforms.includes(platform.id)
+                      ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                      : 'border-slate-200 text-slate-700 hover:border-slate-300'
+                  }`}
+                >
+                  <span className="text-3xl">{platform.icon}</span>
+                  <span className="font-medium">{platform.name}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: WhatsApp Configuration */}
+        {currentStep === 'whatsapp' && (
+          <div className="space-y-6">
+            <h2 className="text-2xl font-semibold text-slate-900">
+              {t('onboarding.configureWhatsApp')}
+            </h2>
+            <p className="text-sm text-slate-600">
+              {t('onboarding.whatsappDescription')}
+            </p>
+
+            <div className="space-y-4">
               <div>
                 <label
-                  htmlFor="orgName"
+                  htmlFor="whatsappPhoneId"
                   className="text-sm font-medium text-slate-700"
                 >
-                  {t('onboarding.organizationName')}
+                  {t('onboarding.phoneNumberId')}
                 </label>
                 <div className="relative mt-2">
                   <input
                     type="text"
-                    id="orgName"
-                    name="orgName"
-                    required
-                    value={formData.orgName}
+                    id="whatsappPhoneId"
+                    name="whatsappPhoneId"
+                    value={formData.whatsappPhoneId}
                     onChange={handleChange}
-                    className="block w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm transition focus-visible:border-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2"
-                    placeholder={t('onboarding.organizationNamePlaceholder')}
+                    className="block w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 shadow-sm transition placeholder:text-slate-400 focus-visible:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
                   />
-                  {formData.orgName ? (
+                  {formData.whatsappPhoneId ? (
                     <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-emerald-500">
                       <svg
                         className="h-4 w-4"
@@ -198,256 +322,132 @@ export default function OnboardingPage() {
 
               <div>
                 <label
-                  htmlFor="orgSlug"
+                  htmlFor="whatsappBusinessId"
                   className="text-sm font-medium text-slate-700"
                 >
-                  {t('onboarding.organizationSlug')}
+                  {t('onboarding.businessAccountId')}
                 </label>
-                <div className="mt-2 flex rounded-xl shadow-sm">
-                  <span className="inline-flex items-center rounded-l-xl border border-r-0 border-slate-200 bg-slate-50 px-3 text-sm text-slate-500">
-                    app.akeed.com/
-                  </span>
-                  <div className="relative w-full">
-                    <input
-                      type="text"
-                      id="orgSlug"
-                      name="orgSlug"
-                      required
-                      value={formData.orgSlug}
-                      onChange={handleChange}
-                      className="block w-full min-w-0 flex-1 rounded-none rounded-r-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:border-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2"
-                      placeholder="my-company"
-                    />
-                    {formData.orgSlug ? (
-                      <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-emerald-500">
-                        <svg
-                          className="h-4 w-4"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-7.07 7.07a1 1 0 01-1.414 0L3.293 9.848a1 1 0 011.414-1.414l4.102 4.102 6.364-6.364a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Step 2: Platform Selection */}
-          {currentStep === 'platform' && (
-            <div className="space-y-6">
-              <h2 className="text-2xl font-semibold text-slate-900">
-                {t('onboarding.selectPlatforms')}
-              </h2>
-              <p className="text-sm text-slate-600">
-                {t('onboarding.platformsDescription')}
-              </p>
-
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { id: 'shopify', name: 'Shopify', icon: '🛍️' },
-                  { id: 'salla', name: 'Salla', icon: '🏪' },
-                  { id: 'zid', name: 'Zid', icon: '🛒' },
-                  { id: 'woocommerce', name: 'WooCommerce', icon: '🔌' },
-                  { id: 'whatsapp', name: 'WhatsApp', icon: '💬' },
-                ].map((platform) => (
-                  <button
-                    key={platform.id}
-                    type="button"
-                    onClick={() => handlePlatformToggle(platform.id)}
-                    className={`flex items-center justify-center gap-3 rounded-xl border-2 p-6 text-center text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30 ${
-                      formData.selectedPlatforms.includes(platform.id)
-                        ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
-                        : 'border-slate-200 text-slate-700 hover:border-slate-300'
-                    }`}
-                  >
-                    <span className="text-3xl">{platform.icon}</span>
-                    <span className="font-medium">{platform.name}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Step 3: WhatsApp Configuration */}
-          {currentStep === 'whatsapp' && (
-            <div className="space-y-6">
-              <h2 className="text-2xl font-semibold text-slate-900">
-                {t('onboarding.configureWhatsApp')}
-              </h2>
-              <p className="text-sm text-slate-600">
-                {t('onboarding.whatsappDescription')}
-              </p>
-
-              <div className="space-y-4">
-                <div>
-                  <label
-                    htmlFor="whatsappPhoneId"
-                    className="text-sm font-medium text-slate-700"
-                  >
-                    {t('onboarding.phoneNumberId')}
-                  </label>
-                  <div className="relative mt-2">
-                    <input
-                      type="text"
-                      id="whatsappPhoneId"
-                      name="whatsappPhoneId"
-                      value={formData.whatsappPhoneId}
-                      onChange={handleChange}
-                      className="block w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm transition focus-visible:border-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2"
-                    />
-                    {formData.whatsappPhoneId ? (
-                      <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-emerald-500">
-                        <svg
-                          className="h-4 w-4"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-7.07 7.07a1 1 0 01-1.414 0L3.293 9.848a1 1 0 011.414-1.414l4.102 4.102 6.364-6.364a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="whatsappBusinessId"
-                    className="text-sm font-medium text-slate-700"
-                  >
-                    {t('onboarding.businessAccountId')}
-                  </label>
-                  <div className="relative mt-2">
-                    <input
-                      type="text"
-                      id="whatsappBusinessId"
-                      name="whatsappBusinessId"
-                      value={formData.whatsappBusinessId}
-                      onChange={handleChange}
-                      className="block w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm transition focus-visible:border-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2"
-                    />
-                    {formData.whatsappBusinessId ? (
-                      <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-emerald-500">
-                        <svg
-                          className="h-4 w-4"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-7.07 7.07a1 1 0 01-1.414 0L3.293 9.848a1 1 0 011.414-1.414l4.102 4.102 6.364-6.364a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="whatsappAccessToken"
-                    className="text-sm font-medium text-slate-700"
-                  >
-                    {t('onboarding.accessToken')}
-                  </label>
-                  <div className="relative mt-2">
-                    <input
-                      type="password"
-                      id="whatsappAccessToken"
-                      name="whatsappAccessToken"
-                      value={formData.whatsappAccessToken}
-                      onChange={handleChange}
-                      className="block w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm transition focus-visible:border-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2"
-                    />
-                    {formData.whatsappAccessToken ? (
-                      <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-emerald-500">
-                        <svg
-                          className="h-4 w-4"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-7.07 7.07a1 1 0 01-1.414 0L3.293 9.848a1 1 0 011.414-1.414l4.102 4.102 6.364-6.364a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-
-              <div className="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
-                <p className="text-sm text-emerald-700">
-                  💡 {t('onboarding.whatsappHelp')}
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Step 4: Complete */}
-          {currentStep === 'complete' && (
-            <div className="space-y-6 text-center">
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100">
-                <svg
-                  className="h-10 w-10 text-emerald-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
+                <div className="relative mt-2">
+                  <input
+                    type="text"
+                    id="whatsappBusinessId"
+                    name="whatsappBusinessId"
+                    value={formData.whatsappBusinessId}
+                    onChange={handleChange}
+                    className="block w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 shadow-sm transition placeholder:text-slate-400 focus-visible:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
                   />
-                </svg>
+                  {formData.whatsappBusinessId ? (
+                    <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-emerald-500">
+                      <svg
+                        className="h-4 w-4"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-7.07 7.07a1 1 0 01-1.414 0L3.293 9.848a1 1 0 011.414-1.414l4.102 4.102 6.364-6.364a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </span>
+                  ) : null}
+                </div>
               </div>
-              <h2 className="text-2xl font-semibold text-slate-900">
-                {t('onboarding.allSet')}
-              </h2>
-              <p className="text-slate-600">{t('onboarding.readyToStart')}</p>
-            </div>
-          )}
 
-          {/* Actions */}
-          <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
-            {currentStep === 'whatsapp' && (
-              <button
-                type="button"
-                onClick={handleSkip}
-                className="text-sm font-medium text-slate-600 transition-colors hover:text-slate-900"
+              <div>
+                <label
+                  htmlFor="whatsappAccessToken"
+                  className="text-sm font-medium text-slate-700"
+                >
+                  {t('onboarding.accessToken')}
+                </label>
+                <div className="relative mt-2">
+                  <input
+                    type="password"
+                    id="whatsappAccessToken"
+                    name="whatsappAccessToken"
+                    value={formData.whatsappAccessToken}
+                    onChange={handleChange}
+                    className="block w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 shadow-sm transition placeholder:text-slate-400 focus-visible:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+                  />
+                  {formData.whatsappAccessToken ? (
+                    <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-emerald-500">
+                      <svg
+                        className="h-4 w-4"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-7.07 7.07a1 1 0 01-1.414 0L3.293 9.848a1 1 0 011.414-1.414l4.102 4.102 6.364-6.364a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </span>
+                  ) : null}
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
+              <p className="text-sm text-emerald-700">
+                💡 {t('onboarding.whatsappHelp')}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Step 4: Complete */}
+        {currentStep === 'complete' && (
+          <div className="space-y-6 text-center">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100">
+              <svg
+                className="h-10 w-10 text-emerald-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                {t('onboarding.skipForNow')}
-              </button>
-            )}
-            <div className="flex-1" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-semibold text-slate-900">
+              {t('onboarding.allSet')}
+            </h2>
+            <p className="text-slate-600">{t('onboarding.readyToStart')}</p>
+          </div>
+        )}
+
+        {/* Actions */}
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
+          {currentStep === 'whatsapp' && (
             <button
               type="button"
-              onClick={handleNext}
-              disabled={isLoading}
-              className="rounded-xl bg-emerald-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 disabled:opacity-50"
+              onClick={handleSkip}
+              className="text-sm font-medium text-slate-600 transition-colors hover:text-slate-900"
             >
-              {isLoading
-                ? t('onboarding.processing')
-                : currentStep === 'complete'
-                  ? t('onboarding.gotoDashboard')
-                  : t('onboarding.continue')}
+              {t('onboarding.skipForNow')}
             </button>
-          </div>
+          )}
+          <div className="flex-1" />
+          <button
+            type="button"
+            onClick={handleNext}
+            disabled={isLoading}
+            className="rounded-xl bg-emerald-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-50"
+          >
+            {isLoading
+              ? t('onboarding.processing')
+              : currentStep === 'complete'
+                ? t('onboarding.gotoDashboard')
+                : t('onboarding.continue')}
+          </button>
         </div>
+      </div>
     </div>
   )
 }

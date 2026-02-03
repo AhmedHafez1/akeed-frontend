@@ -151,7 +151,13 @@ function isStandaloneAuthRoute(pathname?: string | null): boolean {
   return AUTH_ROUTES.some((route) => withoutLocale.startsWith(route))
 }
 
-function AuthLayout({ children, locale }: { children: ReactNode; locale: string }) {
+function AuthLayout({
+  children,
+  locale,
+}: {
+  children: ReactNode
+  locale: string
+}) {
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="flex min-h-screen">
@@ -192,7 +198,7 @@ function AuthLayout({ children, locale }: { children: ReactNode; locale: string 
             >
               Akeed
             </Link>
-            <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            <span className="text-xs font-medium tracking-wide text-slate-500 uppercase">
               Secure access
             </span>
           </nav>
