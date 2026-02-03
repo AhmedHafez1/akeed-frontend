@@ -1,9 +1,9 @@
 'use client'
 
-import { ReactNode, Suspense } from 'react'
+import { ReactNode, Suspense, useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
-import Link from 'next/link'
 import { useAkeedMode } from '@/hooks/useAkeedMode'
+import { supabase } from '@/lib/auth'
 import { Sidebar } from './Sidebar'
 import { Header } from './Header'
 import { WhatsAppButton } from '@/components/ui/WhatsAppButton'
@@ -58,11 +58,7 @@ function AppLayoutInner({ children }: AppLayoutProps) {
    * STANDALONE MODE - Custom SaaS Portal
    * Uses Akeed's custom sidebar and header
    */
-  return (
-    <StandaloneLayout>
-      <AuthGuard>{children}</AuthGuard>
-    </StandaloneLayout>
-  )
+  return <StandaloneLayout>{children}</StandaloneLayout>
 }
 
 /**
@@ -111,35 +107,35 @@ function StandaloneLayout({ children }: { children: ReactNode }) {
     return <AuthLayout locale={locale}>{children}</AuthLayout>
   }
 
-  // Optionally, you can detect locale here if you want to set Toaster position dynamically
-  // For now, default to top-right
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Custom Sidebar */}
-      <Sidebar />
+    <AuthGuard>
+      <div className="flex h-screen bg-gray-50">
+        {/* Custom Sidebar */}
+        <Sidebar locale={locale} />
 
-      {/* Main Content Area */}
-      <div className="flex flex-1 flex-col overflow-hidden">
-        {/* Custom Header */}
-        <Header />
+        {/* Main Content Area */}
+        <div className="flex flex-1 flex-col overflow-hidden">
+          {/* Custom Header */}
+          <Header />
 
-        {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
-        {/* WhatsApp Button (global, only in standalone) */}
-        <WhatsAppButton />
-        {/* Toaster (global, only in standalone) */}
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 4000,
-            style: {
-              background: '#333',
-              color: '#fff',
-            },
-          }}
-        />
+          {/* Page Content */}
+          <main className="flex-1 overflow-y-auto p-6">{children}</main>
+          {/* WhatsApp Button (global, only in standalone) */}
+          <WhatsAppButton />
+          {/* Toaster (global, only in standalone) */}
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 4000,
+              style: {
+                background: '#333',
+                color: '#fff',
+              },
+            }}
+          />
+        </div>
       </div>
-    </div>
+    </AuthGuard>
   )
 }
 
@@ -160,48 +156,9 @@ function AuthLayout({
 }) {
   return (
     <div className="min-h-screen bg-slate-50">
-      <div className="flex min-h-screen">
-        <aside className="relative hidden w-90 flex-col justify-between overflow-hidden border-r border-slate-200 bg-white p-10 lg:flex">
-          <div>
-            <Link
-              href={`/${locale}`}
-              className="text-2xl font-semibold tracking-tight text-slate-900"
-            >
-              Akeed
-            </Link>
-            <p className="mt-4 text-sm leading-relaxed text-slate-600">
-              Focused onboarding for modern commerce teams.
-            </p>
-            <div className="mt-8 space-y-3 text-sm text-slate-600">
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                Clean, distraction-free flow
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                Secure access with modern UX
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                Responsive on every screen
-              </div>
-            </div>
-          </div>
-          <div className="text-xs text-slate-400">© 2026 Akeed</div>
-        </aside>
-
+      <Header />
+      <div className="flex min-h-screen pt-20">
         <div className="flex flex-1 flex-col">
-          <nav className="flex items-center justify-between border-b border-slate-200 bg-white/80 px-6 py-4 backdrop-blur">
-            <Link
-              href={`/${locale}`}
-              className="text-lg font-semibold text-slate-900"
-            >
-              Akeed
-            </Link>
-            <span className="text-xs font-medium tracking-wide text-slate-500 uppercase">
-              Secure access
-            </span>
-          </nav>
           <main className="flex flex-1 items-center justify-center px-6 py-10">
             <div className="w-full max-w-md">{children}</div>
           </main>
