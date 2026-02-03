@@ -112,5 +112,5 @@ export function getBaseUrl(): string {
     return process.env.NEXT_PUBLIC_APP_URL
   }
 
-  return `http://localhost:${process.env.PORT || 3000}`
+  return `http://localhost:${process.env.PORT || 3001}`
 }
