@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { auth } from '@/lib/auth'
 import { useTranslations } from 'next-intl'
@@ -16,6 +16,8 @@ import { useTranslations } from 'next-intl'
 export default function LoginPage() {
   const t = useTranslations()
   const router = useRouter()
+  const pathname = usePathname()
+  const locale = pathname?.split('/')[1] || 'ar'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -31,7 +33,7 @@ export default function LoginPage() {
       await auth.signIn(email, password)
 
       // Redirect to dashboard
-      router.push('/dashboard')
+      router.push(auth.getDashboardPath(locale))
     } catch {
       setError('Failed to sign in!')
     } finally {
@@ -48,7 +50,7 @@ export default function LoginPage() {
         <p className="text-sm text-slate-600">
           {t('auth.dontHaveAccount')}{' '}
           <Link
-            href="/signup"
+            href={auth.getSignupPath(locale)}
             className="font-semibold text-emerald-600 transition-colors hover:text-emerald-700"
           >
             {t('auth.signUp')}

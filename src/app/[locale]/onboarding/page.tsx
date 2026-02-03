@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { api } from '@/lib/auth'
+import { usePathname, useRouter } from 'next/navigation'
+import { api, auth } from '@/lib/auth'
 import { useTranslations } from 'next-intl'
 
 /**
@@ -19,6 +19,8 @@ type OnboardingStep = 'organization' | 'platform' | 'whatsapp' | 'complete'
 export default function OnboardingPage() {
   const t = useTranslations()
   const router = useRouter()
+  const pathname = usePathname()
+  const locale = pathname?.split('/')[1] || 'ar'
   const [currentStep, setCurrentStep] = useState<OnboardingStep>('organization')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -85,7 +87,7 @@ export default function OnboardingPage() {
         })
         setCurrentStep('complete')
       } else if (currentStep === 'complete') {
-        router.push('/dashboard')
+        router.push(auth.getDashboardPath(locale))
       }
     } catch {
       setError('An error occurred')

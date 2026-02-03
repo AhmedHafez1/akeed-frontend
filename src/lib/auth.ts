@@ -52,9 +52,25 @@ function isLocalizedPathname(pathname: string): boolean {
 /**
  * Apply the current locale prefix to a path
  */
-function withLocale(path: string): string {
+function withLocale(path: string, locale?: string): string {
   const normalized = normalizePath(path)
-  if (typeof window === 'undefined' || /^https?:\/\//i.test(normalized)) {
+  if (/^https?:\/\//i.test(normalized)) {
+    return normalized
+  }
+
+  const safeLocale = SUPPORTED_LOCALES.includes(locale as SupportedLocale)
+    ? (locale as SupportedLocale)
+    : undefined
+
+  if (safeLocale) {
+    const url = new URL(normalized, 'http://localhost')
+    if (isLocalizedPathname(url.pathname)) {
+      return `${url.pathname}${url.search}${url.hash}`
+    }
+    return `/${safeLocale}${url.pathname}${url.search}${url.hash}`
+  }
+
+  if (typeof window === 'undefined') {
     return normalized
   }
 
@@ -63,8 +79,8 @@ function withLocale(path: string): string {
     return `${url.pathname}${url.search}${url.hash}`
   }
 
-  const locale = getLocaleFromPathname(window.location.pathname)
-  return `/${locale}${url.pathname}${url.search}${url.hash}`
+  const inferredLocale = getLocaleFromPathname(window.location.pathname)
+  return `/${inferredLocale}${url.pathname}${url.search}${url.hash}`
 }
 
 // Initialize Supabase client for standalone auth
@@ -279,22 +295,22 @@ export const auth = {
   /**
    * Get localized login path
    */
-  getLoginPath() {
-    return withLocale('/login')
+  getLoginPath(locale?: string) {
+    return withLocale('/login', locale)
   },
 
   /**
    * Get localized signup path
    */
-  getSignupPath() {
-    return withLocale('/signup')
+  getSignupPath(locale?: string) {
+    return withLocale('/signup', locale)
   },
 
   /**
    * Get localized dashboard path
    */
-  getDashboardPath() {
-    return withLocale('/dashboard')
+  getDashboardPath(locale?: string) {
+    return withLocale('/dashboard', locale)
   },
 
   /**

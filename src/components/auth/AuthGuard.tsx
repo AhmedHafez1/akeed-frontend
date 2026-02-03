@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
-import { supabase } from '@/lib/auth'
+import { auth, supabase } from '@/lib/auth'
 
 const PUBLIC_ROUTES = ['/login', '/signup', '/onboarding']
 
@@ -34,7 +34,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
       if (!session) {
         const locale = pathname.split('/')[1]
-        router.push(`/${locale}/login`)
+        router.push(auth.getLoginPath(locale))
         return
       }
 
@@ -48,7 +48,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session) {
         const locale = pathname.split('/')[1]
-        router.push(`/${locale}/login`)
+        router.push(auth.getLoginPath(locale))
       }
     })
 

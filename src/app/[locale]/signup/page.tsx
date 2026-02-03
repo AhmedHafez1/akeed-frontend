@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { auth } from '@/lib/auth'
 import { useTranslations } from 'next-intl'
@@ -16,6 +16,8 @@ import { useTranslations } from 'next-intl'
 export default function SignupPage() {
   const t = useTranslations()
   const router = useRouter()
+  const pathname = usePathname()
+  const locale = pathname?.split('/')[1] || 'ar'
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -70,7 +72,7 @@ export default function SignupPage() {
       })
 
       // Redirect to onboarding
-      router.push('/onboarding')
+      router.push(`/${locale}/onboarding`)
     } catch {
       setError('Failed to create account!')
     } finally {
@@ -87,7 +89,7 @@ export default function SignupPage() {
         <p className="text-sm text-slate-600">
           {t('auth.alreadyHaveAccount')}{' '}
           <Link
-            href="/login"
+            href={auth.getLoginPath(locale)}
             className="font-semibold text-emerald-600 transition-colors hover:text-emerald-700"
           >
             {t('auth.signIn')}
