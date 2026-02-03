@@ -107,100 +107,133 @@ export default function OnboardingPage() {
   ]
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-2xl space-y-8">
-        {/* Header */}
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
-            {t('onboarding.welcomeToAkeed')}
-          </h1>
-          <p className="mt-2 text-sm text-gray-600">
-            {t('onboarding.letsSetupAccount')}
-          </p>
-        </div>
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="space-y-2 text-center">
+        <h1 className="text-3xl font-semibold text-slate-900">
+          {t('onboarding.welcomeToAkeed')}
+        </h1>
+        <p className="text-sm text-slate-600">
+          {t('onboarding.letsSetupAccount')}
+        </p>
+      </div>
 
-        {/* Progress Steps */}
-        {currentStep !== 'complete' && (
-          <nav aria-label="Progress">
-            <ol className="flex items-center justify-center space-x-5">
-              {steps.map((step, index) => (
-                <li key={step.id} className="flex items-center">
-                  <div
-                    className={`flex h-10 w-10 items-center justify-center rounded-full ${
-                      steps.findIndex((s) => s.id === currentStep) >= index
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-300 text-gray-600'
-                    }`}
-                  >
-                    {index + 1}
-                  </div>
-                  <span className="ml-2 hidden text-sm font-medium text-gray-900 sm:inline">
-                    {step.label}
-                  </span>
-                </li>
-              ))}
-            </ol>
-          </nav>
+      {/* Progress Steps */}
+      {currentStep !== 'complete' && (
+        <nav aria-label="Progress">
+          <ol className="flex flex-wrap items-center justify-center gap-4">
+            {steps.map((step, index) => (
+              <li key={step.id} className="flex items-center gap-3">
+                <div
+                  className={`flex h-10 w-10 items-center justify-center rounded-full border text-sm font-semibold ${
+                    steps.findIndex((s) => s.id === currentStep) >= index
+                      ? 'border-emerald-600 bg-emerald-600 text-white'
+                      : 'border-slate-200 bg-white text-slate-500'
+                  }`}
+                >
+                  {index + 1}
+                </div>
+                <span className="text-sm font-medium text-slate-700">
+                  {step.label}
+                </span>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )}
+
+      {/* Form Content */}
+      <div className="rounded-2xl border border-slate-200 bg-white px-8 py-10 shadow-sm">
+        {error && (
+          <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {error}
+          </div>
         )}
-
-        {/* Form Content */}
-        <div className="rounded-lg bg-white px-8 py-10 shadow">
-          {error && (
-            <div className="mb-6 rounded-md bg-red-50 p-4">
-              <p className="text-sm text-red-800">{error}</p>
-            </div>
-          )}
 
           {/* Step 1: Organization */}
           {currentStep === 'organization' && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl font-semibold text-slate-900">
                 {t('onboarding.createOrganization')}
               </h2>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-slate-600">
                 {t('onboarding.organizationDescription')}
               </p>
 
               <div>
                 <label
                   htmlFor="orgName"
-                  className="block text-sm font-medium text-gray-700"
+                  className="text-sm font-medium text-slate-700"
                 >
                   {t('onboarding.organizationName')}
                 </label>
-                <input
-                  type="text"
-                  id="orgName"
-                  name="orgName"
-                  required
-                  value={formData.orgName}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-                  placeholder={t('onboarding.organizationNamePlaceholder')}
-                />
+                <div className="relative mt-2">
+                  <input
+                    type="text"
+                    id="orgName"
+                    name="orgName"
+                    required
+                    value={formData.orgName}
+                    onChange={handleChange}
+                    className="block w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm transition focus-visible:border-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2"
+                    placeholder={t('onboarding.organizationNamePlaceholder')}
+                  />
+                  {formData.orgName ? (
+                    <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-emerald-500">
+                      <svg
+                        className="h-4 w-4"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-7.07 7.07a1 1 0 01-1.414 0L3.293 9.848a1 1 0 011.414-1.414l4.102 4.102 6.364-6.364a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </span>
+                  ) : null}
+                </div>
               </div>
 
               <div>
                 <label
                   htmlFor="orgSlug"
-                  className="block text-sm font-medium text-gray-700"
+                  className="text-sm font-medium text-slate-700"
                 >
                   {t('onboarding.organizationSlug')}
                 </label>
-                <div className="mt-1 flex rounded-md shadow-sm">
-                  <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500">
+                <div className="mt-2 flex rounded-xl shadow-sm">
+                  <span className="inline-flex items-center rounded-l-xl border border-r-0 border-slate-200 bg-slate-50 px-3 text-sm text-slate-500">
                     app.akeed.com/
                   </span>
-                  <input
-                    type="text"
-                    id="orgSlug"
-                    name="orgSlug"
-                    required
-                    value={formData.orgSlug}
-                    onChange={handleChange}
-                    className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-                    placeholder="my-company"
-                  />
+                  <div className="relative w-full">
+                    <input
+                      type="text"
+                      id="orgSlug"
+                      name="orgSlug"
+                      required
+                      value={formData.orgSlug}
+                      onChange={handleChange}
+                      className="block w-full min-w-0 flex-1 rounded-none rounded-r-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:border-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2"
+                      placeholder="my-company"
+                    />
+                    {formData.orgSlug ? (
+                      <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-emerald-500">
+                        <svg
+                          className="h-4 w-4"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-7.07 7.07a1 1 0 01-1.414 0L3.293 9.848a1 1 0 011.414-1.414l4.102 4.102 6.364-6.364a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
               </div>
             </div>
@@ -209,10 +242,10 @@ export default function OnboardingPage() {
           {/* Step 2: Platform Selection */}
           {currentStep === 'platform' && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl font-semibold text-slate-900">
                 {t('onboarding.selectPlatforms')}
               </h2>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-slate-600">
                 {t('onboarding.platformsDescription')}
               </p>
 
@@ -228,10 +261,10 @@ export default function OnboardingPage() {
                     key={platform.id}
                     type="button"
                     onClick={() => handlePlatformToggle(platform.id)}
-                    className={`flex items-center justify-center gap-3 rounded-lg border-2 p-6 text-center transition-all ${
+                    className={`flex items-center justify-center gap-3 rounded-xl border-2 p-6 text-center text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30 ${
                       formData.selectedPlatforms.includes(platform.id)
-                        ? 'border-blue-500 bg-blue-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                        : 'border-slate-200 text-slate-700 hover:border-slate-300'
                     }`}
                   >
                     <span className="text-3xl">{platform.icon}</span>
@@ -245,10 +278,10 @@ export default function OnboardingPage() {
           {/* Step 3: WhatsApp Configuration */}
           {currentStep === 'whatsapp' && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl font-semibold text-slate-900">
                 {t('onboarding.configureWhatsApp')}
               </h2>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-slate-600">
                 {t('onboarding.whatsappDescription')}
               </p>
 
@@ -256,57 +289,108 @@ export default function OnboardingPage() {
                 <div>
                   <label
                     htmlFor="whatsappPhoneId"
-                    className="block text-sm font-medium text-gray-700"
+                    className="text-sm font-medium text-slate-700"
                   >
                     {t('onboarding.phoneNumberId')}
                   </label>
-                  <input
-                    type="text"
-                    id="whatsappPhoneId"
-                    name="whatsappPhoneId"
-                    value={formData.whatsappPhoneId}
-                    onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-                  />
+                  <div className="relative mt-2">
+                    <input
+                      type="text"
+                      id="whatsappPhoneId"
+                      name="whatsappPhoneId"
+                      value={formData.whatsappPhoneId}
+                      onChange={handleChange}
+                      className="block w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm transition focus-visible:border-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2"
+                    />
+                    {formData.whatsappPhoneId ? (
+                      <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-emerald-500">
+                        <svg
+                          className="h-4 w-4"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-7.07 7.07a1 1 0 01-1.414 0L3.293 9.848a1 1 0 011.414-1.414l4.102 4.102 6.364-6.364a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
 
                 <div>
                   <label
                     htmlFor="whatsappBusinessId"
-                    className="block text-sm font-medium text-gray-700"
+                    className="text-sm font-medium text-slate-700"
                   >
                     {t('onboarding.businessAccountId')}
                   </label>
-                  <input
-                    type="text"
-                    id="whatsappBusinessId"
-                    name="whatsappBusinessId"
-                    value={formData.whatsappBusinessId}
-                    onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-                  />
+                  <div className="relative mt-2">
+                    <input
+                      type="text"
+                      id="whatsappBusinessId"
+                      name="whatsappBusinessId"
+                      value={formData.whatsappBusinessId}
+                      onChange={handleChange}
+                      className="block w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm transition focus-visible:border-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2"
+                    />
+                    {formData.whatsappBusinessId ? (
+                      <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-emerald-500">
+                        <svg
+                          className="h-4 w-4"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-7.07 7.07a1 1 0 01-1.414 0L3.293 9.848a1 1 0 011.414-1.414l4.102 4.102 6.364-6.364a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
 
                 <div>
                   <label
                     htmlFor="whatsappAccessToken"
-                    className="block text-sm font-medium text-gray-700"
+                    className="text-sm font-medium text-slate-700"
                   >
                     {t('onboarding.accessToken')}
                   </label>
-                  <input
-                    type="password"
-                    id="whatsappAccessToken"
-                    name="whatsappAccessToken"
-                    value={formData.whatsappAccessToken}
-                    onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-                  />
+                  <div className="relative mt-2">
+                    <input
+                      type="password"
+                      id="whatsappAccessToken"
+                      name="whatsappAccessToken"
+                      value={formData.whatsappAccessToken}
+                      onChange={handleChange}
+                      className="block w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm transition focus-visible:border-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2"
+                    />
+                    {formData.whatsappAccessToken ? (
+                      <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-emerald-500">
+                        <svg
+                          className="h-4 w-4"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-7.07 7.07a1 1 0 01-1.414 0L3.293 9.848a1 1 0 011.414-1.414l4.102 4.102 6.364-6.364a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
               </div>
 
-              <div className="rounded-md bg-blue-50 p-4">
-                <p className="text-sm text-blue-800">
+              <div className="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
+                <p className="text-sm text-emerald-700">
                   💡 {t('onboarding.whatsappHelp')}
                 </p>
               </div>
@@ -316,9 +400,9 @@ export default function OnboardingPage() {
           {/* Step 4: Complete */}
           {currentStep === 'complete' && (
             <div className="space-y-6 text-center">
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
+              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100">
                 <svg
-                  className="h-10 w-10 text-green-600"
+                  className="h-10 w-10 text-emerald-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -331,20 +415,20 @@ export default function OnboardingPage() {
                   />
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl font-semibold text-slate-900">
                 {t('onboarding.allSet')}
               </h2>
-              <p className="text-gray-600">{t('onboarding.readyToStart')}</p>
+              <p className="text-slate-600">{t('onboarding.readyToStart')}</p>
             </div>
           )}
 
           {/* Actions */}
-          <div className="mt-8 flex justify-between">
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
             {currentStep === 'whatsapp' && (
               <button
                 type="button"
                 onClick={handleSkip}
-                className="text-sm text-gray-600 hover:text-gray-900"
+                className="text-sm font-medium text-slate-600 transition-colors hover:text-slate-900"
               >
                 {t('onboarding.skipForNow')}
               </button>
@@ -354,7 +438,7 @@ export default function OnboardingPage() {
               type="button"
               onClick={handleNext}
               disabled={isLoading}
-              className="rounded-md bg-blue-600 px-6 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:opacity-50"
+              className="rounded-xl bg-emerald-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 disabled:opacity-50"
             >
               {isLoading
                 ? t('onboarding.processing')
@@ -364,7 +448,6 @@ export default function OnboardingPage() {
             </button>
           </div>
         </div>
-      </div>
     </div>
   )
 }
