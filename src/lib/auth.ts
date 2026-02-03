@@ -18,6 +18,55 @@ import { createClient } from '@supabase/supabase-js'
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
 
+const SUPPORTED_LOCALES = ['ar', 'en'] as const
+type SupportedLocale = (typeof SUPPORTED_LOCALES)[number]
+const DEFAULT_LOCALE: SupportedLocale = 'ar'
+
+/**
+ * Normalize a path to ensure it starts with '/'
+ */
+function normalizePath(path: string): string {
+  if (/^https?:\/\//i.test(path)) return path
+  return path.startsWith('/') ? path : `/${path}`
+}
+
+/**
+ * Extract locale from a pathname or return the default
+ */
+function getLocaleFromPathname(pathname: string): SupportedLocale {
+  const [, maybeLocale] = pathname.split('/')
+  if (SUPPORTED_LOCALES.includes(maybeLocale as SupportedLocale)) {
+    return maybeLocale as SupportedLocale
+  }
+  return DEFAULT_LOCALE
+}
+
+/**
+ * Check whether a pathname already contains a locale prefix
+ */
+function isLocalizedPathname(pathname: string): boolean {
+  const [, maybeLocale] = pathname.split('/')
+  return SUPPORTED_LOCALES.includes(maybeLocale as SupportedLocale)
+}
+
+/**
+ * Apply the current locale prefix to a path
+ */
+function withLocale(path: string): string {
+  const normalized = normalizePath(path)
+  if (typeof window === 'undefined' || /^https?:\/\//i.test(normalized)) {
+    return normalized
+  }
+
+  const url = new URL(normalized, window.location.origin)
+  if (isLocalizedPathname(url.pathname)) {
+    return `${url.pathname}${url.search}${url.hash}`
+  }
+
+  const locale = getLocaleFromPathname(window.location.pathname)
+  return `/${locale}${url.pathname}${url.search}${url.hash}`
+}
+
 // Initialize Supabase client for standalone auth
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -144,7 +193,7 @@ export async function fetchWithAuth(
     const isEmbedded = !!(urlParams.get('shop') && urlParams.get('host'))
 
     if (!isEmbedded && typeof window !== 'undefined') {
-      window.location.href = '/login'
+      window.location.href = withLocale('/login')
     }
   }
 
@@ -155,6 +204,9 @@ export async function fetchWithAuth(
  * Convenience methods for common HTTP verbs
  */
 export const api = {
+  /**
+   * GET request with auth
+   */
   async get<T = unknown>(url: string): Promise<T> {
     const response = await fetchWithAuth(url, { method: 'GET' })
     if (!response.ok) {
@@ -163,6 +215,9 @@ export const api = {
     return response.json()
   },
 
+  /**
+   * POST request with auth
+   */
   async post<T = unknown>(url: string, data?: unknown): Promise<T> {
     const response = await fetchWithAuth(url, {
       method: 'POST',
@@ -174,6 +229,9 @@ export const api = {
     return response.json()
   },
 
+  /**
+   * PUT request with auth
+   */
   async put<T = unknown>(url: string, data?: unknown): Promise<T> {
     const response = await fetchWithAuth(url, {
       method: 'PUT',
@@ -185,6 +243,9 @@ export const api = {
     return response.json()
   },
 
+  /**
+   * PATCH request with auth
+   */
   async patch<T = unknown>(url: string, data?: unknown): Promise<T> {
     const response = await fetchWithAuth(url, {
       method: 'PATCH',
@@ -196,6 +257,9 @@ export const api = {
     return response.json()
   },
 
+  /**
+   * DELETE request with auth
+   */
   async delete<T = unknown>(url: string): Promise<T> {
     const response = await fetchWithAuth(url, { method: 'DELETE' })
     if (!response.ok) {
@@ -209,6 +273,60 @@ export const api = {
  * Auth helpers for standalone mode
  */
 export const auth = {
+  /**
+   * Locale-aware auth paths
+   */
+  /**
+   * Get localized login path
+   */
+  getLoginPath() {
+    return withLocale('/login')
+  },
+
+  /**
+   * Get localized signup path
+   */
+  getSignupPath() {
+    return withLocale('/signup')
+  },
+
+  /**
+   * Get localized dashboard path
+   */
+  getDashboardPath() {
+    return withLocale('/dashboard')
+  },
+
+  /**
+   * Locale-aware auth redirects
+   */
+  /**
+   * Redirect to localized login
+   */
+  redirectToLogin() {
+    if (typeof window !== 'undefined') {
+      window.location.href = withLocale('/login')
+    }
+  },
+
+  /**
+   * Redirect to localized signup
+   */
+  redirectToSignup() {
+    if (typeof window !== 'undefined') {
+      window.location.href = withLocale('/signup')
+    }
+  },
+
+  /**
+   * Redirect to localized dashboard
+   */
+  redirectToDashboard() {
+    if (typeof window !== 'undefined') {
+      window.location.href = withLocale('/dashboard')
+    }
+  },
+
   /**
    * Sign up with email and password
    */
