@@ -1,12 +1,12 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { usePathname } from 'next/navigation'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { motion } from 'framer-motion'
 import { features } from '@/config/site'
 import ScrollDownArrow from './ScrollDownArrow'
+import { useLocaleInfo } from '@/hooks/useLocaleInfo'
 
 const container = {
   hidden: { opacity: 0 },
@@ -25,9 +25,7 @@ const item = {
 
 function Problem() {
   const t = useTranslations('problems')
-  const pathname = usePathname()
-  const locale = pathname?.split('/')[1] === 'ar' ? 'ar' : 'en'
-  const isRTL = locale === 'ar'
+  const { isRTL } = useLocaleInfo()
 
   return (
     <Section

@@ -1,14 +1,12 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { usePathname } from 'next/navigation'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { motion } from 'framer-motion'
-import { features, testimonials } from '@/config/site'
-import { CheckCircle2, Sparkles } from 'lucide-react'
+import { features } from '@/config/site'
 import ScrollDownArrow from './ScrollDownArrow'
-import Testimonial from '../ui/user-testimonial'
+import { useLocaleInfo } from '@/hooks/useLocaleInfo'
 
 const container = {
   hidden: { opacity: 0 },
@@ -27,15 +25,7 @@ const item = {
 
 export function Solution() {
   const t = useTranslations('solution')
-  const pathname = usePathname()
-  const locale = pathname?.split('/')[1] === 'ar' ? 'ar' : 'en'
-  const isRTL = locale === 'ar'
-
-  const scrollToSection = (id: string) => {
-    document
-      .getElementById(id)
-      ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
+  const { isRTL } = useLocaleInfo()
 
   return (
     <Section

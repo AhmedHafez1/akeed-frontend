@@ -2,23 +2,28 @@
 
 import { motion } from 'framer-motion'
 import { SocialProof } from '../ui/SocialProof'
-import { ChevronRight, ChevronLeft, Star } from 'lucide-react'
+import { ChevronRight, ChevronLeft } from 'lucide-react'
 import ScrollDownArrow from './ScrollDownArrow'
 import { useTranslations } from 'next-intl'
-import { usePathname } from 'next/navigation'
-import { ChatInterface } from '../ui/ChatInterface'
 import { LogoTicker } from '../ui'
 import { useState } from 'react'
-import { ReservationModal } from './ReservationModal'
-import Image from 'next/image'
+import dynamic from 'next/dynamic'
+import { useLocaleInfo } from '@/hooks/useLocaleInfo'
+
+const ChatInterface = dynamic(
+  () => import('../ui/ChatInterface').then((mod) => mod.ChatInterface),
+  { ssr: false }
+)
+
+const ReservationModal = dynamic(
+  () => import('./ReservationModal').then((mod) => mod.ReservationModal),
+  { ssr: false }
+)
 
 function Hero() {
   const t = useTranslations('hero')
-  const pathname = usePathname()
+  const { isRTL } = useLocaleInfo()
   const [isReservationModalOpen, setIsReservationModalOpen] = useState(false)
-
-  // Extract locale from pathname (assuming /[locale]/...)
-  const locale = pathname?.split('/')[1] === 'en' ? 'en' : 'ar'
 
   return (
     <section className="relative flex min-h-screen flex-col justify-center gap-6 overflow-hidden px-6 pt-20 pb-8 sm:gap-8 sm:px-6 md:flex-row md:items-end md:gap-16 md:px-12 lg:gap-20 lg:px-24 lg:pt-22 lg:pb-24 xl:px-48">
@@ -47,12 +52,12 @@ function Hero() {
         >
           <div className="border-slate-200 backdrop-blur-sm sm:p-5">
             <p
-              className={`${locale === 'ar' ? 'text-right' : 'text-left'} text-sm text-slate-700 md:text-lg lg:text-xl lg:leading-relaxed`}
+              className={`${isRTL ? 'text-right' : 'text-left'} text-sm text-slate-700 md:text-lg lg:text-xl lg:leading-relaxed`}
             >
               {t('subtitle')}
             </p>
             <ul
-              className={`${locale === 'ar' ? 'text-right' : 'text-left'} md:text-md mt-3 space-y-2 text-sm text-slate-700 sm:text-base lg:text-lg`}
+              className={`${isRTL ? 'text-right' : 'text-left'} md:text-md mt-3 space-y-2 text-sm text-slate-700 sm:text-base lg:text-lg`}
             >
               <li>{t('subtitle_bullet_1')}</li>
               <li>{t('subtitle_bullet_2')}</li>
@@ -77,7 +82,7 @@ function Hero() {
             suppressHydrationWarning
           >
             {t('cta')}
-            {locale === 'ar' ? (
+            {isRTL ? (
               <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1 sm:h-5 sm:w-5" />
             ) : (
               <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1 sm:h-5 sm:w-5" />
