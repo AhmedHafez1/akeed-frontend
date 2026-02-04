@@ -1,6 +1,4 @@
 'use client'
-
-import { IWindow } from '@/types/window.model'
 import { createClient } from '@supabase/supabase-js'
 import { withLocale } from './locale'
 
@@ -17,7 +15,7 @@ import { withLocale } from './locale'
  * - STANDALONE: Supabase JWT (via Supabase Auth)
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'
 
 // Initialize Supabase client for standalone auth
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
@@ -62,7 +60,7 @@ async function getShopifySessionToken(): Promise<string | null> {
   try {
     // Get App Bridge instance from global scope
     // (It should be initialized by useAkeedMode hook)
-    const appBridge = (window as IWindow).__SHOPIFY_APP_BRIDGE__
+    const appBridge = window.__SHOPIFY_APP_BRIDGE__
 
     if (!appBridge) {
       console.error('[Auth] App Bridge not initialized')
@@ -155,69 +153,59 @@ export async function fetchWithAuth(
 /**
  * Convenience methods for common HTTP verbs
  */
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
+
+async function request<T>(
+  method: HttpMethod,
+  url: string,
+  data?: unknown
+): Promise<T> {
+  const response = await fetchWithAuth(url, {
+    method,
+    body: data ? JSON.stringify(data) : undefined,
+  })
+
+  if (!response.ok) {
+    throw new Error(`API Error: ${response.statusText}`)
+  }
+
+  return response.json() as Promise<T>
+}
+
 export const api = {
   /**
    * GET request with auth
    */
-  async get<T = unknown>(url: string): Promise<T> {
-    const response = await fetchWithAuth(url, { method: 'GET' })
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.statusText}`)
-    }
-    return response.json()
+  get<T = unknown>(url: string): Promise<T> {
+    return request<T>('GET', url)
   },
 
   /**
    * POST request with auth
    */
-  async post<T = unknown>(url: string, data?: unknown): Promise<T> {
-    const response = await fetchWithAuth(url, {
-      method: 'POST',
-      body: data ? JSON.stringify(data) : undefined,
-    })
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.statusText}`)
-    }
-    return response.json()
+  post<T = unknown>(url: string, data?: unknown): Promise<T> {
+    return request<T>('POST', url, data)
   },
 
   /**
    * PUT request with auth
    */
-  async put<T = unknown>(url: string, data?: unknown): Promise<T> {
-    const response = await fetchWithAuth(url, {
-      method: 'PUT',
-      body: data ? JSON.stringify(data) : undefined,
-    })
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.statusText}`)
-    }
-    return response.json()
+  put<T = unknown>(url: string, data?: unknown): Promise<T> {
+    return request<T>('PUT', url, data)
   },
 
   /**
    * PATCH request with auth
    */
-  async patch<T = unknown>(url: string, data?: unknown): Promise<T> {
-    const response = await fetchWithAuth(url, {
-      method: 'PATCH',
-      body: data ? JSON.stringify(data) : undefined,
-    })
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.statusText}`)
-    }
-    return response.json()
+  patch<T = unknown>(url: string, data?: unknown): Promise<T> {
+    return request<T>('PATCH', url, data)
   },
 
   /**
    * DELETE request with auth
    */
-  async delete<T = unknown>(url: string): Promise<T> {
-    const response = await fetchWithAuth(url, { method: 'DELETE' })
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.statusText}`)
-    }
-    return response.json()
+  delete<T = unknown>(url: string): Promise<T> {
+    return request<T>('DELETE', url)
   },
 }
 

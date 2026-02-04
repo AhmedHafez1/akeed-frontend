@@ -1,5 +1,9 @@
-import { ClientApplication } from '@shopify/app-bridge'
+import type { ClientApplication } from '@shopify/app-bridge'
 
-export interface IWindow extends Window {
-  __SHOPIFY_APP_BRIDGE__?: ClientApplication
+declare global {
+  interface Window {
+    __SHOPIFY_APP_BRIDGE__?: ClientApplication
+  }
 }
+
+export type IWindow = Window

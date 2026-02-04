@@ -3,7 +3,6 @@
 import { useEffect, useState, useMemo, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 import type { ClientApplication } from '@shopify/app-bridge'
-import type { IWindow } from '@/types/window.model'
 
 /**
  * Akeed Runtime Mode Detection
@@ -78,7 +77,7 @@ export function useAkeedMode(): AkeedModeContext {
         })
 
         // Store globally for auth module access
-        ;(window as IWindow).__SHOPIFY_APP_BRIDGE__ = app
+        window.__SHOPIFY_APP_BRIDGE__ = app
 
         setAppBridge(app)
         setIsLoading(false)

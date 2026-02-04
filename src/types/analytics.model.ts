@@ -6,7 +6,12 @@ export type AnalyticsEvent =
   | 'payment_complete'
   | 'button_click'
 
+export type AnalyticsEventProperties = Record<
+  string,
+  string | number | boolean | null
+>
+
 export interface AnalyticsEventData {
   event: AnalyticsEvent
-  properties?: Record<string, any>
+  properties?: AnalyticsEventProperties
 }
