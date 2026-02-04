@@ -19,7 +19,6 @@ export function AuthGuard({ children }: AuthGuardProps) {
   useEffect(() => {
     // Skip auth check for public routes
     if (isPublic) {
-      setAuthChecked(true)
       return
     }
 

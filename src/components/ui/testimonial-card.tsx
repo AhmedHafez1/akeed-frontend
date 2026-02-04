@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Card, CardContent } from './card'
 import { Quote } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -21,21 +20,19 @@ export function TestimonialCard({
   return (
     <Card
       className={cn(
-        'border-s-4 border-s-primary hover:shadow-lg transition-all',
+        'border-s-primary border-s-4 transition-all hover:shadow-lg',
         className
       )}
     >
       <CardContent className="p-6">
-        <Quote className="h-8 w-8 text-primary/40 mb-4" />
-        <blockquote className="text-lg text-foreground mb-4 italic">
-          "{quote}"
+        <Quote className="text-primary/40 mb-4 h-8 w-8" />
+        <blockquote className="text-foreground mb-4 text-lg italic">
+          &quot;{quote}&quot;
         </blockquote>
         <div>
-          <p className="font-bold text-foreground">{author}</p>
-          <p className="text-sm text-muted-foreground">{role}</p>
-          {meta && (
-            <p className="text-xs text-muted-foreground mt-1">{meta}</p>
-          )}
+          <p className="text-foreground font-bold">{author}</p>
+          <p className="text-muted-foreground text-sm">{role}</p>
+          {meta && <p className="text-muted-foreground mt-1 text-xs">{meta}</p>}
         </div>
       </CardContent>
     </Card>

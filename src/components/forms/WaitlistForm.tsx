@@ -1,3 +1,5 @@
+'use client'
+
 import { Phone, Store, Package } from 'lucide-react'
 import { useWaitlistForm } from '@/hooks/useWaitlistForm'
 import { WaitlistError } from './waitlist/WaitlistError'
@@ -93,4 +95,3 @@ export function WaitlistForm() {
     </div>
   )
 }
-;('use client')
