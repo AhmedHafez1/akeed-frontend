@@ -1,9 +1,8 @@
 'use client'
 
-import { ReactNode, Suspense, useEffect, useState } from 'react'
+import { ReactNode, Suspense } from 'react'
 import { usePathname } from 'next/navigation'
 import { useAkeedMode } from '@/hooks/useAkeedMode'
-import { supabase } from '@/lib/auth'
 import { Sidebar } from './Sidebar'
 import { Header } from './Header'
 import { WhatsAppButton } from '@/components/ui/WhatsAppButton'
@@ -104,7 +103,7 @@ function StandaloneLayout({ children }: { children: ReactNode }) {
   const locale = pathname?.split('/')[1] || 'en'
 
   if (isAuthRoute) {
-    return <AuthLayout locale={locale}>{children}</AuthLayout>
+    return <AuthLayout>{children}</AuthLayout>
   }
 
   return (
@@ -147,13 +146,7 @@ function isStandaloneAuthRoute(pathname?: string | null): boolean {
   return AUTH_ROUTES.some((route) => withoutLocale.startsWith(route))
 }
 
-function AuthLayout({
-  children,
-  locale,
-}: {
-  children: ReactNode
-  locale: string
-}) {
+function AuthLayout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-slate-50">
       <Header />
