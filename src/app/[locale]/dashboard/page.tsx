@@ -2,10 +2,9 @@
 
 import { useMemo, useState } from 'react'
 import { useDashboardData } from '@/hooks/useDashboardData'
-import type {
-  VerificationStatus,
-  VerificationStatusFilter,
-} from '@/types/dashboard.model'
+import { LoadingSpinner, EmptyState } from '@/components/ui'
+import { VerificationsTable, OrdersTable } from '@/components/dashboard'
+import type { VerificationStatusFilter } from '@/types/dashboard.model'
 
 const STATUS_FILTERS = [
   { id: 'all', label: 'All' },
@@ -84,57 +83,11 @@ export default function DashboardPage() {
 
         <div className="mt-6">
           {isVerificationsLoading ? (
-            <div className="flex items-center gap-3 text-sm text-slate-500">
-              <span className="h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-transparent" />
-              Loading verifications...
-            </div>
+            <LoadingSpinner message="Loading verifications..." />
           ) : hasVerifications ? (
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-140 text-left text-sm">
-                <thead className="border-b border-slate-200 text-xs text-slate-500 uppercase">
-                  <tr>
-                    <th className="px-4 py-3 font-semibold">Status</th>
-                    <th className="px-4 py-3 font-semibold">Customer</th>
-                    <th className="px-4 py-3 font-semibold">Order</th>
-                    <th className="px-4 py-3 font-semibold">Created</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {verifications.map((verification) => (
-                    <tr key={verification.id} className="text-slate-700">
-                      <td className="px-4 py-3">
-                        <StatusBadge status={verification.status} />
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="font-medium">
-                          {verification.customer_name || 'Unknown customer'}
-                        </div>
-                        <div className="text-xs text-slate-500">
-                          {verification.customer_phone || 'No phone'}
-                        </div>
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="font-medium">
-                          {verification.order_number || 'Order'}
-                        </div>
-                        <div className="text-xs text-slate-500">
-                          {verification.order_id}
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 text-xs text-slate-500">
-                        {verification.created_at
-                          ? new Date(verification.created_at).toLocaleString()
-                          : '-'}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <VerificationsTable verifications={verifications} />
           ) : (
-            <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-6 py-8 text-center text-sm text-slate-500">
-              {emptyVerificationsMessage}
-            </div>
+            <EmptyState message={emptyVerificationsMessage} />
           )}
         </div>
       </section>
@@ -149,96 +102,14 @@ export default function DashboardPage() {
 
         <div className="mt-6">
           {isOrdersLoading ? (
-            <div className="flex items-center gap-3 text-sm text-slate-500">
-              <span className="h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-transparent" />
-              Loading orders...
-            </div>
+            <LoadingSpinner message="Loading orders..." />
           ) : hasOrders ? (
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-160 text-left text-sm">
-                <thead className="border-b border-slate-200 text-xs text-slate-500 uppercase">
-                  <tr>
-                    <th className="px-4 py-3 font-semibold">Order</th>
-                    <th className="px-4 py-3 font-semibold">Customer</th>
-                    <th className="px-4 py-3 font-semibold">Total</th>
-                    <th className="px-4 py-3 font-semibold">Verification</th>
-                    <th className="px-4 py-3 font-semibold">Created</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {orders.map((order) => (
-                    <tr key={order.id} className="text-slate-700">
-                      <td className="px-4 py-3">
-                        <div className="font-medium">
-                          {order.order_number || 'Order'}
-                        </div>
-                        <div className="text-xs text-slate-500">
-                          {order.external_order_id}
-                        </div>
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="font-medium">
-                          {order.customer_name || 'Unknown customer'}
-                        </div>
-                        <div className="text-xs text-slate-500">
-                          {order.customer_phone}
-                        </div>
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="font-medium">
-                          {order.total_price
-                            ? `${order.total_price} ${order.currency ?? ''}`
-                            : '-'}
-                        </div>
-                        <div className="text-xs text-slate-500">
-                          {order.customer_email || 'No email'}
-                        </div>
-                      </td>
-                      <td className="px-4 py-3">
-                        {order.verification_status ? (
-                          <StatusBadge status={order.verification_status} />
-                        ) : (
-                          <span className="text-xs text-slate-500">
-                            Not sent
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-4 py-3 text-xs text-slate-500">
-                        {order.created_at
-                          ? new Date(order.created_at).toLocaleString()
-                          : '-'}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <OrdersTable orders={orders} />
           ) : (
-            <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-6 py-8 text-center text-sm text-slate-500">
-              No orders yet. Once orders are synced, they will show up here.
-            </div>
+            <EmptyState message="No orders yet. Once orders are synced, they will show up here." />
           )}
         </div>
       </section>
     </div>
-  )
-}
-
-function StatusBadge({ status }: { status: VerificationStatus }) {
-  const color =
-    status === 'confirmed'
-      ? 'bg-emerald-100 text-emerald-700'
-      : status === 'pending' || status === 'sent'
-        ? 'bg-amber-100 text-amber-700'
-        : status === 'canceled' || status === 'failed'
-          ? 'bg-red-100 text-red-700'
-          : 'bg-slate-100 text-slate-700'
-
-  return (
-    <span
-      className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold capitalize ${color}`}
-    >
-      {status}
-    </span>
   )
 }

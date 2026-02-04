@@ -2,6 +2,7 @@
 
 import { IWindow } from '@/types/window.model'
 import { createClient } from '@supabase/supabase-js'
+import { withLocale } from './locale'
 
 /**
  * Akeed API Client with Dual Authentication
@@ -17,71 +18,6 @@ import { createClient } from '@supabase/supabase-js'
  */
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
-
-const SUPPORTED_LOCALES = ['ar', 'en'] as const
-type SupportedLocale = (typeof SUPPORTED_LOCALES)[number]
-const DEFAULT_LOCALE: SupportedLocale = 'ar'
-
-/**
- * Normalize a path to ensure it starts with '/'
- */
-function normalizePath(path: string): string {
-  if (/^https?:\/\//i.test(path)) return path
-  return path.startsWith('/') ? path : `/${path}`
-}
-
-/**
- * Extract locale from a pathname or return the default
- */
-function getLocaleFromPathname(pathname: string): SupportedLocale {
-  const [, maybeLocale] = pathname.split('/')
-  if (SUPPORTED_LOCALES.includes(maybeLocale as SupportedLocale)) {
-    return maybeLocale as SupportedLocale
-  }
-  return DEFAULT_LOCALE
-}
-
-/**
- * Check whether a pathname already contains a locale prefix
- */
-function isLocalizedPathname(pathname: string): boolean {
-  const [, maybeLocale] = pathname.split('/')
-  return SUPPORTED_LOCALES.includes(maybeLocale as SupportedLocale)
-}
-
-/**
- * Apply the current locale prefix to a path
- */
-function withLocale(path: string, locale?: string): string {
-  const normalized = normalizePath(path)
-  if (/^https?:\/\//i.test(normalized)) {
-    return normalized
-  }
-
-  const safeLocale = SUPPORTED_LOCALES.includes(locale as SupportedLocale)
-    ? (locale as SupportedLocale)
-    : undefined
-
-  if (safeLocale) {
-    const url = new URL(normalized, 'http://localhost')
-    if (isLocalizedPathname(url.pathname)) {
-      return `${url.pathname}${url.search}${url.hash}`
-    }
-    return `/${safeLocale}${url.pathname}${url.search}${url.hash}`
-  }
-
-  if (typeof window === 'undefined') {
-    return normalized
-  }
-
-  const url = new URL(normalized, window.location.origin)
-  if (isLocalizedPathname(url.pathname)) {
-    return `${url.pathname}${url.search}${url.hash}`
-  }
-
-  const inferredLocale = getLocaleFromPathname(window.location.pathname)
-  return `/${inferredLocale}${url.pathname}${url.search}${url.hash}`
-}
 
 // Initialize Supabase client for standalone auth
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!

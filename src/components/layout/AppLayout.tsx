@@ -1,13 +1,10 @@
 'use client'
 
-import { ReactNode, Suspense } from 'react'
-import { usePathname } from 'next/navigation'
+import { type ReactNode, Suspense } from 'react'
 import { useAkeedMode } from '@/hooks/useAkeedMode'
-import { Sidebar } from './Sidebar'
-import { Header } from './Header'
-import { WhatsAppButton } from '@/components/ui/WhatsAppButton'
-import { Toaster } from 'react-hot-toast'
-import { AuthGuard } from '../auth/AuthGuard'
+import { FullPageLoader } from './FullPageLoader'
+import { EmbeddedLayout } from './EmbeddedLayout'
+import { StandaloneLayout } from './StandaloneLayout'
 
 /**
  * AppLayout - Adaptive Layout Component
@@ -33,132 +30,15 @@ interface AppLayoutProps {
 function AppLayoutInner({ children }: AppLayoutProps) {
   const { isEmbedded, isLoading, appBridge } = useAkeedMode()
 
-  // Show loading state while detecting mode
   if (isLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="text-center">
-          <div className="mb-4 inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent"></div>
-          <p className="text-sm text-gray-600">Loading Akeed...</p>
-        </div>
-      </div>
-    )
+    return <FullPageLoader />
   }
 
-  /**
-   * EMBEDDED MODE - Shopify Admin Integration
-   * Uses Polaris Frame for native Shopify feel
-   */
   if (isEmbedded && appBridge) {
-    return <EmbeddedLayout appBridge={appBridge}>{children}</EmbeddedLayout>
+    return <EmbeddedLayout>{children}</EmbeddedLayout>
   }
 
-  /**
-   * STANDALONE MODE - Custom SaaS Portal
-   * Uses Akeed's custom sidebar and header
-   */
   return <StandaloneLayout>{children}</StandaloneLayout>
-}
-
-/**
- * Embedded Mode Layout - Shopify Polaris Integration
- */
-async function EmbeddedLayout({
-  children,
-}: {
-  children: ReactNode
-  appBridge: unknown
-}) {
-  // Dynamic import of Polaris to avoid loading it in standalone mode
-  const { Frame, AppProvider } = await import('@shopify/polaris')
-
-  return (
-    <AppProvider
-      i18n={{
-        Polaris: {
-          // Add Polaris translations if needed
-          Common: {
-            loading: 'Loading',
-          },
-        },
-      }}
-    >
-      <Frame>
-        {/* 
-          No custom sidebar/header in embedded mode
-          Shopify Admin chrome provides all navigation
-        */}
-        <div className="p-4">{children}</div>
-      </Frame>
-    </AppProvider>
-  )
-}
-
-/**
- * Standalone Mode Layout - Custom SaaS UI
- */
-function StandaloneLayout({ children }: { children: ReactNode }) {
-  const pathname = usePathname()
-  const isAuthRoute = isStandaloneAuthRoute(pathname)
-  const locale = pathname?.split('/')[1] || 'en'
-
-  if (isAuthRoute) {
-    return <AuthLayout>{children}</AuthLayout>
-  }
-
-  return (
-    <AuthGuard>
-      <div className="flex h-screen bg-gray-50">
-        {/* Custom Sidebar */}
-        <Sidebar locale={locale} />
-
-        {/* Main Content Area */}
-        <div className="flex flex-1 flex-col overflow-hidden">
-          {/* Custom Header */}
-          <Header />
-
-          {/* Page Content */}
-          <main className="flex-1 overflow-y-auto p-6">{children}</main>
-          {/* WhatsApp Button (global, only in standalone) */}
-          <WhatsAppButton />
-          {/* Toaster (global, only in standalone) */}
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: '#333',
-                color: '#fff',
-              },
-            }}
-          />
-        </div>
-      </div>
-    </AuthGuard>
-  )
-}
-
-const AUTH_ROUTES = ['/login', '/signup', '/onboarding']
-
-function isStandaloneAuthRoute(pathname?: string | null): boolean {
-  if (!pathname) return false
-  const withoutLocale = '/' + pathname.split('/').slice(2).join('/')
-  return AUTH_ROUTES.some((route) => withoutLocale.startsWith(route))
-}
-
-function AuthLayout({ children }: { children: ReactNode }) {
-  return (
-    <div className="min-h-screen bg-slate-50">
-      <Header />
-      <div className="flex min-h-screen pt-20">
-        <div className="flex flex-1 flex-col">
-          <main className="flex flex-1 items-center justify-center px-6 py-10">
-            <div className="w-full max-w-md">{children}</div>
-          </main>
-        </div>
-      </div>
-    </div>
-  )
 }
 
 /**
@@ -166,16 +46,7 @@ function AuthLayout({ children }: { children: ReactNode }) {
  */
 export function AppLayout({ children }: AppLayoutProps) {
   return (
-    <Suspense
-      fallback={
-        <div className="flex h-screen items-center justify-center">
-          <div className="text-center">
-            <div className="mb-4 inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent"></div>
-            <p className="text-sm text-gray-600">Loading...</p>
-          </div>
-        </div>
-      }
-    >
+    <Suspense fallback={<FullPageLoader />}>
       <AppLayoutInner>{children}</AppLayoutInner>
     </Suspense>
   )

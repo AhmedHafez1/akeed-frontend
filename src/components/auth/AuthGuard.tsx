@@ -3,27 +3,28 @@
 import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { auth, supabase } from '@/lib/auth'
+import { isAuthRoute, getLocaleFromPathname } from '@/lib/locale'
+import { FullPageLoader } from '@/components/layout/FullPageLoader'
 
-const PUBLIC_ROUTES = ['/login', '/signup', '/onboarding']
-
-function isPublicRoute(pathname: string): boolean {
-  const withoutLocale = '/' + pathname.split('/').slice(2).join('/')
-  return PUBLIC_ROUTES.some((route) => withoutLocale.startsWith(route))
+interface AuthGuardProps {
+  children: React.ReactNode
 }
 
-export function AuthGuard({ children }: { children: React.ReactNode }) {
+export function AuthGuard({ children }: AuthGuardProps) {
   const router = useRouter()
   const pathname = usePathname()
-
-  const isPublic = isPublicRoute(pathname)
-
-  // Only needed for standalone + protected routes
+  const isPublic = isAuthRoute(pathname)
   const [authChecked, setAuthChecked] = useState(false)
 
   useEffect(() => {
-    if (isPublic) return
+    // Skip auth check for public routes
+    if (isPublic) {
+      setAuthChecked(true)
+      return
+    }
 
     let active = true
+    const locale = getLocaleFromPathname(pathname ?? '')
 
     const checkAuth = async () => {
       const {
@@ -33,7 +34,6 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
       if (!active) return
 
       if (!session) {
-        const locale = pathname.split('/')[1]
         router.push(auth.getLoginPath(locale))
         return
       }
@@ -46,8 +46,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) {
-        const locale = pathname.split('/')[1]
+      if (!session && !isPublic) {
         router.push(auth.getLoginPath(locale))
       }
     })
@@ -58,9 +57,10 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     }
   }, [isPublic, pathname, router])
 
-  const isReady = isPublic || authChecked
-
-  if (!isReady) return null
+  // Show loading state while checking auth (only for protected routes)
+  if (!isPublic && !authChecked) {
+    return <FullPageLoader />
+  }
 
   return <>{children}</>
 }
