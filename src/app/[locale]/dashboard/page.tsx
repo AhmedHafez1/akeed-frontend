@@ -1,7 +1,11 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
-import { api } from '@/lib/auth'
+import { useMemo, useState } from 'react'
+import { useDashboardData } from '@/hooks/useDashboardData'
+import type {
+  VerificationStatus,
+  VerificationStatusFilter,
+} from '@/types/dashboard.model'
 
 const STATUS_FILTERS = [
   { id: 'all', label: 'All' },
@@ -9,96 +13,21 @@ const STATUS_FILTERS = [
   { id: 'sent', label: 'Sent' },
   { id: 'confirmed', label: 'Confirmed' },
   { id: 'canceled', label: 'Canceled' },
-] as const
-
-type StatusFilter = (typeof STATUS_FILTERS)[number]['id']
-
-type VerificationItem = {
-  id: string
-  status: string
-  order_id: string
-  order_number: string | null
-  customer_name: string | null
-  customer_phone: string | null
-  created_at: string | null
-}
-
-type OrderItem = {
-  id: string
-  order_number: string | null
-  external_order_id: string
-  customer_name: string | null
-  customer_phone: string
-  customer_email: string | null
-  total_price: string | null
-  currency: string | null
-  created_at: string | null
-  verification_status: string | null
-}
+] as const satisfies ReadonlyArray<{
+  id: VerificationStatusFilter
+  label: string
+}>
 
 export default function DashboardPage() {
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
-  const [verifications, setVerifications] = useState<VerificationItem[]>([])
-  const [orders, setOrders] = useState<OrderItem[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [isOrdersLoading, setIsOrdersLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    let isActive = true
-
-    const loadVerifications = async () => {
-      setIsLoading(true)
-      setError(null)
-      try {
-        const query =
-          statusFilter === 'all'
-            ? ''
-            : `?status=${encodeURIComponent(statusFilter)}`
-        const response = await api.get<{ verifications: VerificationItem[] }>(
-          `/api/verifications${query}`
-        )
-        if (!isActive) return
-        setVerifications(response.verifications)
-      } catch (err) {
-        if (!isActive) return
-        setError(err instanceof Error ? err.message : 'Failed to load data')
-      } finally {
-        if (isActive) setIsLoading(false)
-      }
-    }
-
-    loadVerifications()
-
-    return () => {
-      isActive = false
-    }
-  }, [statusFilter])
-
-  useEffect(() => {
-    let isActive = true
-
-    const loadOrders = async () => {
-      setIsOrdersLoading(true)
-      setError(null)
-      try {
-        const response = await api.get<{ orders: OrderItem[] }>('/api/orders')
-        if (!isActive) return
-        setOrders(response.orders)
-      } catch (err) {
-        if (!isActive) return
-        setError(err instanceof Error ? err.message : 'Failed to load orders')
-      } finally {
-        if (isActive) setIsOrdersLoading(false)
-      }
-    }
-
-    loadOrders()
-
-    return () => {
-      isActive = false
-    }
-  }, [])
+  const [statusFilter, setStatusFilter] =
+    useState<VerificationStatusFilter>('all')
+  const {
+    verifications,
+    orders,
+    isVerificationsLoading,
+    isOrdersLoading,
+    error,
+  } = useDashboardData(statusFilter)
 
   const hasVerifications = verifications.length > 0
   const hasOrders = orders.length > 0
@@ -154,7 +83,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="mt-6">
-          {isLoading ? (
+          {isVerificationsLoading ? (
             <div className="flex items-center gap-3 text-sm text-slate-500">
               <span className="h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-transparent" />
               Loading verifications...
@@ -295,7 +224,7 @@ export default function DashboardPage() {
   )
 }
 
-function StatusBadge({ status }: { status: string }) {
+function StatusBadge({ status }: { status: VerificationStatus }) {
   const color =
     status === 'confirmed'
       ? 'bg-emerald-100 text-emerald-700'
