@@ -2,6 +2,7 @@ import createNextIntlPlugin from 'next-intl/plugin'
 import type { NextConfig } from 'next'
 
 const withNextIntl = createNextIntlPlugin('./src/i18n.ts')
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -56,6 +57,14 @@ const nextConfig: NextConfig = {
   // Rewrites for locale-less default
   async rewrites() {
     return [
+      {
+        source: '/auth/shopify',
+        destination: `${apiBaseUrl}/auth/shopify`,
+      },
+      {
+        source: '/auth/shopify/callback',
+        destination: `${apiBaseUrl}/auth/shopify/callback`,
+      },
       {
         source: '/',
         destination: '/ar', // Default to Arabic
