@@ -1,18 +1,4 @@
-import { SiteConfig } from '@/types'
 import { Tier } from '@/types/tier.model'
-
-export const siteConfig: SiteConfig = {
-  name: 'Akeed',
-  description: 'Smart WhatsApp bot for COD order verification',
-  url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3001',
-  ogImage: '/images/og-image.jpg',
-  links: {
-    whatsapp: `https://wa.me/${process.env.NEXT_PUBLIC_CONTACT_WHATSAPP}`,
-    facebook: 'https://facebook.com/yourpage',
-    instagram: 'https://instagram.com/yourpage',
-    linkesdin: 'https://linkedin.com/company/yourpage',
-  },
-}
 
 export const pricing: { tiers: Tier[] } = {
   tiers: [
@@ -73,21 +59,6 @@ export const features = {
     { key: 'analytics', icon: '📊' },
   ],
 }
-
-export const testimonials = [
-  {
-    name: 'Ahmed Mahmoud',
-    store: 'Electronics Store',
-    orders: '850+',
-    confirmationsRaise: '+34% Confirmations',
-  },
-  {
-    name: 'Omar Sayed',
-    store: 'Clothes Store',
-    orders: '600+',
-    confirmationsRaise: '+27% Confirmations',
-  },
-]
 
 export const faqs = [
   { key: 'easy_integration' },

@@ -5,5 +5,3 @@ declare global {
     __SHOPIFY_APP_BRIDGE__?: ClientApplication
   }
 }
-
-export type IWindow = Window
