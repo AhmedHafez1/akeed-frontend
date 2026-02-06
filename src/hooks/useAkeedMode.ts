@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useMemo, useCallback } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import type { ClientApplication } from '@shopify/app-bridge'
 
@@ -103,29 +103,4 @@ export function useAkeedMode(): AkeedModeContext {
     appBridge,
     isLoading,
   }
-}
-
-/**
- * Helper hook to get session token for API requests
- * Only works in embedded mode
- */
-export function useShopifySessionToken() {
-  const { appBridge, isEmbedded } = useAkeedMode()
-
-  const getSessionToken = useCallback(async (): Promise<string | null> => {
-    if (!isEmbedded || !appBridge) {
-      return null
-    }
-
-    try {
-      const { getSessionToken: getToken } =
-        await import('@shopify/app-bridge/utilities')
-      return await getToken(appBridge)
-    } catch (error) {
-      console.error('[Akeed] Failed to get session token:', error)
-      return null
-    }
-  }, [isEmbedded, appBridge])
-
-  return { getSessionToken }
 }
