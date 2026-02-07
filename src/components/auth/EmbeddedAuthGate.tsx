@@ -15,11 +15,12 @@ export function EmbeddedAuthGate({
   children,
   fallback = null,
 }: EmbeddedAuthGateProps) {
-  const { isEmbedded, shopDomain, appBridge, isLoading } = useAkeedMode()
+  const { isEmbedded, shopDomain, hostParam, appBridge, isLoading } =
+    useAkeedMode()
   const [isEmbeddedReady, setIsEmbeddedReady] = useState(false)
 
   useEffect(() => {
-    if (isLoading || !isEmbedded) return
+    if (isLoading || !isEmbedded || !shopDomain || !appBridge) return
 
     let active = true
 
@@ -27,12 +28,26 @@ export function EmbeddedAuthGate({
       if (!active) return
 
       try {
-        const redirect = Redirect.create(appBridge!)
-        const authUrl = `${API_BASE_URL}/auth/shopify?shop=${encodeURIComponent(
-          shopDomain!
+        const checkUrl = `${API_BASE_URL}/auth/shopify/check?shop=${encodeURIComponent(
+          shopDomain
         )}`
+        const response = await fetch(checkUrl, {
+          method: 'GET',
+          credentials: 'include',
+        })
+        const data = (await response.json()) as { installed?: boolean }
+
+        if (data.installed) {
+          setIsEmbeddedReady(true)
+          return
+        }
+
+        const redirect = Redirect.create(appBridge)
+        const authUrl = `${API_BASE_URL}/auth/shopify?shop=${encodeURIComponent(
+          shopDomain
+        )}&host=${encodeURIComponent(hostParam ?? '')}`
         redirect.dispatch(Redirect.Action.REMOTE, authUrl)
-        setIsEmbeddedReady(true)
+        setIsEmbeddedReady(false)
       } catch (error) {
         console.error('Error during install check:', error)
         setIsEmbeddedReady(false)
@@ -44,7 +59,7 @@ export function EmbeddedAuthGate({
     return () => {
       active = false
     }
-  }, [isLoading, isEmbedded, appBridge, shopDomain])
+  }, [isLoading, isEmbedded, appBridge, shopDomain, hostParam])
 
   if (isLoading) return fallback
   if (!isEmbedded) return children
