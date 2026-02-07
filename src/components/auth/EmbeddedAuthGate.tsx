@@ -19,18 +19,26 @@ export function EmbeddedAuthGate({
   const { isEmbedded, appBridge, shopDomain, isLoading } = useAkeedMode()
   const [isEmbeddedReady, setIsEmbeddedReady] = useState(false)
 
+  console.log('Embedded auth gate', appBridge, shopDomain, isEmbedded)
+
   useEffect(() => {
+    console.log('Embedded auth gate useEffect')
+
     if (isLoading || !isEmbedded || !appBridge) return
+
+    console.log('Checking embedded auth status')
 
     let active = true
 
     const ensureInstalled = async () => {
       try {
+        console.log('Checking auth status via API')
         const response = await fetchWithAuth('/auth/status')
 
         if (!active) return
 
         if (response.ok) {
+          console.log('Embedded auth status OK')
           setIsEmbeddedReady(true)
           return
         }
