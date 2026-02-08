@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start -p 3001",
     "lint": "eslint",
-    "shopify:dev": "shopify app dev",
-    "shopify:start": "next dev -p 3001"
+    "shopify:dev": "shopify app dev"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
