@@ -29,13 +29,29 @@ export function EmbeddedAuthGate({
         const checkUrl = `/auth/shopify/check?shop=${encodeURIComponent(
           shopDomain
         )}`
+
+        console.log('Install check URL:', checkUrl)
+
         const response = await fetch(checkUrl, {
           method: 'GET',
           credentials: 'include',
+          headers: {
+            accept: 'application/json',
+          },
+          cache: 'no-store',
         })
-        const data = (await response.json()) as { installed?: boolean }
 
-        if (data.installed) {
+        console.log('Install check response:', response)
+
+        const contentType = response.headers.get('content-type') ?? ''
+        let installed = false
+
+        if (response.ok && contentType.includes('application/json')) {
+          const data = (await response.json()) as { installed?: boolean }
+          installed = Boolean(data.installed)
+        }
+
+        if (installed) {
           setIsEmbeddedReady(true)
           return
         }
