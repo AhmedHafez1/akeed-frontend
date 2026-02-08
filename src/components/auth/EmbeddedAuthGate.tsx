@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import { Redirect } from '@shopify/app-bridge/actions'
 import { useAkeedMode } from '@/hooks/useAkeedMode'
+import { useSearchParams } from 'next/navigation'
 
 interface EmbeddedAuthGateProps {
   children: React.ReactNode
@@ -16,6 +17,8 @@ export function EmbeddedAuthGate({
   const { isEmbedded, shopDomain, hostParam, appBridge, isLoading } =
     useAkeedMode()
   const [isEmbeddedReady, setIsEmbeddedReady] = useState(false)
+  const pathParams = useSearchParams()
+  const installed = pathParams.get('installed') === 'true'
 
   useEffect(() => {
     if (isLoading || !isEmbedded || !shopDomain || !appBridge) return
@@ -25,12 +28,15 @@ export function EmbeddedAuthGate({
     const ensureInstalled = async () => {
       if (!active) return
 
+      if (installed) {
+        setIsEmbeddedReady(true)
+        return
+      }
+
       try {
         const checkUrl = `/auth/shopify/check?shop=${encodeURIComponent(
           shopDomain
         )}`
-
-        console.log('Install check URL:', checkUrl)
 
         const response = await fetch(checkUrl, {
           method: 'GET',
@@ -41,17 +47,15 @@ export function EmbeddedAuthGate({
           cache: 'no-store',
         })
 
-        console.log('Install check response:', response)
-
         const contentType = response.headers.get('content-type') ?? ''
-        let installed = false
+        let alreadyInstalled = false
 
         if (response.ok && contentType.includes('application/json')) {
           const data = (await response.json()) as { installed?: boolean }
-          installed = Boolean(data.installed)
+          alreadyInstalled = Boolean(data.installed)
         }
 
-        if (installed) {
+        if (alreadyInstalled) {
           setIsEmbeddedReady(true)
           return
         }
