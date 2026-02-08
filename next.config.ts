@@ -58,6 +58,18 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
+        source: '/:locale/auth/shopify',
+        destination: `${apiBaseUrl}/auth/shopify`,
+      },
+      {
+        source: '/:locale/auth/shopify/check',
+        destination: `${apiBaseUrl}/auth/shopify/check`,
+      },
+      {
+        source: '/:locale/auth/shopify/callback',
+        destination: `${apiBaseUrl}/auth/shopify/callback`,
+      },
+      {
         source: '/auth/shopify',
         destination: `${apiBaseUrl}/auth/shopify`,
       },
