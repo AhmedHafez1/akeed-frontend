@@ -1,0 +1,17 @@
+# This file is used to configure your app for local development with Shopify CLI.
+# Learn more: https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "f1f4012b31f1bb37c897ee284a501623"
+name = "akeed"
+application_url = "http://localhost:3001"
+embedded = true
+
+
+[auth]
+redirect_urls = [
+  "http://localhost:3001/auth/shopify/callback",
+  "http://localhost:3001/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2024-01"

@@ -6,7 +6,9 @@
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start -p 3001",
-    "lint": "eslint"
+    "lint": "eslint",
+    "shopify:dev": "shopify app dev",
+    "shopify:start": "next dev -p 3001"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -39,6 +41,8 @@
     "zod": "^4.1.13"
   },
   "devDependencies": {
+    "@shopify/app": "^3.50.0",
+    "@shopify/cli": "^3.50.0",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20.19.26",

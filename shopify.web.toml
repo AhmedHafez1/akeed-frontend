@@ -1,0 +1,4 @@
+type = "frontend"
+name = "frontend"
+roles = ["frontend"]
+commands = { dev = "npm run shopify:start" }
