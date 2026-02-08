@@ -26,27 +26,13 @@ export function EmbeddedAuthGate({
       if (!active) return
 
       try {
-        const checkUrl = new URL('/auth/shopify/check', window.location.origin)
-        checkUrl.searchParams.set('shop', shopDomain)
+        const checkUrl = `/auth/shopify/check?shop=${encodeURIComponent(
+          shopDomain
+        )}`
         const response = await fetch(checkUrl, {
           method: 'GET',
           credentials: 'include',
         })
-        if (!response.ok) {
-          const body = await response.text()
-          throw new Error(
-            `Install check failed (${response.status}): ${body.slice(0, 200)}`
-          )
-        }
-
-        const contentType = response.headers.get('content-type') ?? ''
-        if (!contentType.includes('application/json')) {
-          const body = await response.text()
-          throw new Error(
-            `Install check returned non-JSON response: ${body.slice(0, 200)}`
-          )
-        }
-
         const data = (await response.json()) as { installed?: boolean }
 
         if (data.installed) {
