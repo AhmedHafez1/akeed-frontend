@@ -32,6 +32,21 @@ export function EmbeddedAuthGate({
           method: 'GET',
           credentials: 'include',
         })
+        if (!response.ok) {
+          const body = await response.text()
+          throw new Error(
+            `Install check failed (${response.status}): ${body.slice(0, 200)}`
+          )
+        }
+
+        const contentType = response.headers.get('content-type') ?? ''
+        if (!contentType.includes('application/json')) {
+          const body = await response.text()
+          throw new Error(
+            `Install check returned non-JSON response: ${body.slice(0, 200)}`
+          )
+        }
+
         const data = (await response.json()) as { installed?: boolean }
 
         if (data.installed) {
