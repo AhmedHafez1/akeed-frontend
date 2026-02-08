@@ -62,6 +62,10 @@ const nextConfig: NextConfig = {
         destination: `${apiBaseUrl}/auth/shopify`,
       },
       {
+        source: '/auth/shopify/check',
+        destination: `${apiBaseUrl}/auth/shopify/check`,
+      },
+      {
         source: '/auth/shopify/callback',
         destination: `${apiBaseUrl}/auth/shopify/callback`,
       },

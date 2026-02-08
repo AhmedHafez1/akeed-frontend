@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react'
 import { Redirect } from '@shopify/app-bridge/actions'
 import { useAkeedMode } from '@/hooks/useAkeedMode'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'
-
 interface EmbeddedAuthGateProps {
   children: React.ReactNode
   fallback?: React.ReactNode
@@ -28,7 +26,7 @@ export function EmbeddedAuthGate({
       if (!active) return
 
       try {
-        const checkUrl = `${API_BASE_URL}/auth/shopify/check?shop=${encodeURIComponent(
+        const checkUrl = `/auth/shopify/check?shop=${encodeURIComponent(
           shopDomain
         )}`
         const response = await fetch(checkUrl, {
@@ -43,10 +41,10 @@ export function EmbeddedAuthGate({
         }
 
         const redirect = Redirect.create(appBridge)
-        const authUrl = `${API_BASE_URL}/auth/shopify?shop=${encodeURIComponent(
-          shopDomain
-        )}&host=${encodeURIComponent(hostParam ?? '')}`
-        redirect.dispatch(Redirect.Action.REMOTE, authUrl)
+        const authUrl = new URL('/auth/shopify', window.location.origin)
+        authUrl.searchParams.set('shop', shopDomain)
+        authUrl.searchParams.set('host', hostParam ?? '')
+        redirect.dispatch(Redirect.Action.REMOTE, authUrl.toString())
         setIsEmbeddedReady(false)
       } catch (error) {
         console.error('Error during install check:', error)
