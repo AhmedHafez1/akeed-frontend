@@ -26,9 +26,8 @@ export function EmbeddedAuthGate({
       if (!active) return
 
       try {
-        const checkUrl = `/auth/shopify/check?shop=${encodeURIComponent(
-          shopDomain
-        )}`
+        const checkUrl = new URL('/auth/shopify/check', window.location.origin)
+        checkUrl.searchParams.set('shop', shopDomain)
         const response = await fetch(checkUrl, {
           method: 'GET',
           credentials: 'include',
