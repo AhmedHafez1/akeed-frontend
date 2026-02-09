@@ -1,20 +1,3 @@
 {
-  "files.associations": {
-    "*.css": "tailwindcss"
-  },
-  "css.lint.unknownAtRules": "ignore",
-  "cSpell.words": [
-    "waitlist",
-    "أوردر",
-    "اختر",
-    "الآن",
-    "الأكثر",
-    "الخطة",
-    "بنسبة",
-    "تأكيد",
-    "جنيه",
-    "شعبية",
-    "شهرياً",
-    "عربي"
-  ]
+  "debug.javascript.autoAttachFilter": "disabled"
 }

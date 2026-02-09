@@ -1,0 +1,53 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node-terminal",
+      "request": "launch",
+      "name": "Frontend: Shopify CLI (Dev)",
+      "command": "shopify app dev",
+      "cwd": "${workspaceFolder}/akeed-frontend",
+      "env": {
+        "NODE_OPTIONS": "--dns-result-order=ipv4first",
+        "SHOPIFY_CLI_NO_ANALYTICS": "1"
+      }
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Frontend: Attach (Next.js)",
+      "port": 9232,
+      "cwd": "${workspaceFolder}/akeed-frontend",
+      "restart": true,
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Backend: NestJS (Debug 9230)",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "${workspaceFolder}/akeed-backend/node_modules/@nestjs/cli/bin/nest.js",
+        "start",
+        "--watch",
+        "--debug",
+        "9230"
+      ],
+      "cwd": "${workspaceFolder}/akeed-backend",
+      "console": "integratedTerminal",
+      "envFile": "${workspaceFolder}/akeed-backend/.env",
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Full Stack: Shopify + Backend",
+      "configurations": [
+        "Frontend: Shopify CLI (Dev)",
+        "Frontend: Attach (Next.js)",
+        "Backend: NestJS (Debug 9230)"
+      ]
+    }
+  ]
+}
