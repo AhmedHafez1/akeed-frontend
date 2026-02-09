@@ -8,10 +8,7 @@ embedded = true
 
 
 [auth]
-redirect_urls = [
-  "http://localhost:3001/auth/shopify/callback",
-  "http://localhost:3001/api/auth/callback"
-]
+redirect_urls = ["http://localhost:3001/auth/shopify/callback"]
 
 [webhooks]
 api_version = "2026-01"
