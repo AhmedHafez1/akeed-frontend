@@ -35,18 +35,12 @@ export function useDashboard(): DashboardSkinProps {
   const [statusFilter, setStatusFilter] =
     useState<VerificationStatusFilter>('all')
 
-  const {
-    verifications,
-    orders,
-    isVerificationsLoading,
-    isOrdersLoading,
-    error,
-  } = useDashboardData(statusFilter)
+  const { verifications, isVerificationsLoading, error } =
+    useDashboardData(statusFilter)
 
   // ── Derived values ──────────────────────────────────────────────────────
 
   const hasVerifications = verifications.length > 0
-  const hasOrders = orders.length > 0
 
   const emptyVerificationsMessage = useMemo(() => {
     if (statusFilter === 'all') {
@@ -71,10 +65,6 @@ export function useDashboard(): DashboardSkinProps {
     isVerificationsLoading,
     hasVerifications,
     emptyVerificationsMessage,
-
-    orders,
-    isOrdersLoading,
-    hasOrders,
 
     statusFilter,
     statusFilters: STATUS_FILTERS,

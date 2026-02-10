@@ -1,6 +1,5 @@
 import { LoadingSpinner, EmptyState } from '@/components/ui'
 import { VerificationsTableStandalone } from './VerificationsTableStandalone'
-import { OrdersTableStandalone } from './OrdersTableStandalone'
 import type { DashboardSkinProps } from '../../domain/dashboard.types'
 
 /**
@@ -18,9 +17,6 @@ export function DashboardStandaloneSkin({
   isVerificationsLoading,
   hasVerifications,
   emptyVerificationsMessage,
-  orders,
-  isOrdersLoading,
-  hasOrders,
   statusFilter,
   statusFilters,
   onStatusFilterChange,
@@ -79,26 +75,6 @@ export function DashboardStandaloneSkin({
             <VerificationsTableStandalone verifications={verifications} />
           ) : (
             <EmptyState message={emptyVerificationsMessage} />
-          )}
-        </div>
-      </section>
-
-      {/* ── Orders section ──────────────────────────────────────────── */}
-      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <div className="space-y-1">
-          <h2 className="text-xl font-semibold text-slate-900">Orders</h2>
-          <p className="text-sm text-slate-600">
-            Review the most recent orders synced into Akeed.
-          </p>
-        </div>
-
-        <div className="mt-6">
-          {isOrdersLoading ? (
-            <LoadingSpinner message="Loading orders..." />
-          ) : hasOrders ? (
-            <OrdersTableStandalone orders={orders} />
-          ) : (
-            <EmptyState message="No orders yet. Once orders are synced, they will show up here." />
           )}
         </div>
       </section>

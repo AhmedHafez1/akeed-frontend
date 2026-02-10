@@ -32,11 +32,6 @@ export interface DashboardSkinProps {
   hasVerifications: boolean
   emptyVerificationsMessage: string
 
-  // Orders
-  orders: OrderItem[]
-  isOrdersLoading: boolean
-  hasOrders: boolean
-
   // Status filter controls
   statusFilter: VerificationStatusFilter
   statusFilters: ReadonlyArray<StatusFilterOption>

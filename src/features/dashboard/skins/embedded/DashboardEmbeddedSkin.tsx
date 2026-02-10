@@ -12,7 +12,6 @@ import {
   InlineStack,
 } from '@shopify/polaris'
 import { VerificationsTableEmbedded } from './VerificationsTableEmbedded'
-import { OrdersTableEmbedded } from './OrdersTableEmbedded'
 import type { DashboardSkinProps } from '../../domain/dashboard.types'
 
 /**
@@ -30,9 +29,6 @@ export function DashboardEmbeddedSkin({
   isVerificationsLoading,
   hasVerifications,
   emptyVerificationsMessage,
-  orders,
-  isOrdersLoading,
-  hasOrders,
   statusFilter,
   statusFilters,
   onStatusFilterChange,
@@ -95,45 +91,6 @@ export function DashboardEmbeddedSkin({
                     image={null as unknown as string}
                   >
                     <p>{emptyVerificationsMessage}</p>
-                  </PolarisEmptyState>
-                )}
-              </BlockStack>
-            </Card>
-          </Layout.Section>
-        </Layout>
-
-        {/* ── Orders section ────────────────────────────────────────── */}
-        <Layout>
-          <Layout.Section>
-            <Card>
-              <BlockStack gap="400">
-                <BlockStack gap="100">
-                  <Text variant="headingMd" as="h2">
-                    Orders
-                  </Text>
-                  <Text variant="bodySm" tone="subdued" as="p">
-                    Review the most recent orders synced into Akeed.
-                  </Text>
-                </BlockStack>
-
-                {isOrdersLoading ? (
-                  <InlineStack align="center">
-                    <Spinner size="small" />
-                    <Text variant="bodySm" tone="subdued" as="span">
-                      Loading orders...
-                    </Text>
-                  </InlineStack>
-                ) : hasOrders ? (
-                  <OrdersTableEmbedded orders={orders} />
-                ) : (
-                  <PolarisEmptyState
-                    heading="No orders"
-                    image={null as unknown as string}
-                  >
-                    <p>
-                      No orders yet. Once orders are synced, they will show up
-                      here.
-                    </p>
                   </PolarisEmptyState>
                 )}
               </BlockStack>

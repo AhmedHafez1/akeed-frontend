@@ -42,14 +42,24 @@ export function VerificationsTableEmbedded({
   }
 
   const headings = [
+    { title: 'Order' },
     { title: 'Status' },
     { title: 'Customer' },
-    { title: 'Order' },
+    { title: 'Total' },
     { title: 'Created' },
   ] as const
 
   const rowMarkup = verifications.map((verification, index) => (
     <IndexTable.Row id={verification.id} key={verification.id} position={index}>
+      <IndexTable.Cell>
+        <Text variant="bodyMd" fontWeight="semibold" as="span">
+          {verification.order_number || 'Order'}
+        </Text>
+        <br />
+        <Text variant="bodySm" tone="subdued" as="span">
+          {verification.order_id}
+        </Text>
+      </IndexTable.Cell>
       <IndexTable.Cell>
         <Badge tone={STATUS_TONE_MAP[verification.status]}>
           {verification.status}
@@ -65,12 +75,10 @@ export function VerificationsTableEmbedded({
         </Text>
       </IndexTable.Cell>
       <IndexTable.Cell>
-        <Text variant="bodyMd" fontWeight="semibold" as="span">
-          {verification.order_number || 'Order'}
-        </Text>
-        <br />
-        <Text variant="bodySm" tone="subdued" as="span">
-          {verification.order_id}
+        <Text variant="bodyMd" as="span">
+          {verification.total_price
+            ? `${verification.total_price} ${verification.currency || 'SAR'}`
+            : '-'}
         </Text>
       </IndexTable.Cell>
       <IndexTable.Cell>

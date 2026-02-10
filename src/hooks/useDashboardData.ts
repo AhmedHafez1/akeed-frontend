@@ -12,20 +12,15 @@ import type {
 
 interface DashboardState {
   verifications: VerificationItem[]
-  orders: OrderItem[]
+  verifications: VerificationItem[]
   isVerificationsLoading: boolean
-  isOrdersLoading: boolean
   verificationsError: string | null
-  ordersError: string | null
 }
 
 const INITIAL_STATE: DashboardState = {
   verifications: [],
-  orders: [],
   isVerificationsLoading: true,
-  isOrdersLoading: true,
   verificationsError: null,
-  ordersError: null,
 }
 
 function getErrorMessage(error: unknown, fallback: string): string {
@@ -69,29 +64,6 @@ export function useDashboardData(statusFilter: VerificationStatusFilter) {
     }
   }, [])
 
-  const fetchOrders = useCallback(async () => {
-    setState((prev) => ({
-      ...prev,
-      isOrdersLoading: true,
-      ordersError: null,
-    }))
-
-    try {
-      const response = await api.get<OrdersResponse>('/api/orders')
-      setState((prev) => ({
-        ...prev,
-        orders: response.orders,
-        isOrdersLoading: false,
-      }))
-    } catch (err) {
-      setState((prev) => ({
-        ...prev,
-        ordersError: getErrorMessage(err, 'Failed to load orders'),
-        isOrdersLoading: false,
-      }))
-    }
-  }, [])
-
   // Fetch verifications when filter changes
   useEffect(() => {
     let isActive = true
@@ -108,32 +80,13 @@ export function useDashboardData(statusFilter: VerificationStatusFilter) {
     }
   }, [verificationQuery, fetchVerifications])
 
-  // Fetch orders once on mount
-  useEffect(() => {
-    let isActive = true
-
-    const load = async () => {
-      if (!isActive) return
-      await fetchOrders()
-    }
-
-    load()
-
-    return () => {
-      isActive = false
-    }
-  }, [fetchOrders])
-
   // Combine errors for backward compatibility
-  const error = state.verificationsError || state.ordersError
+  const error = state.verificationsError
 
   return {
     verifications: state.verifications,
-    orders: state.orders,
     isVerificationsLoading: state.isVerificationsLoading,
-    isOrdersLoading: state.isOrdersLoading,
     error,
     verificationsError: state.verificationsError,
-    ordersError: state.ordersError,
   }
 }
