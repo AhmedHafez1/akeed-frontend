@@ -82,6 +82,10 @@ const nextConfig: NextConfig = {
         destination: `${apiBaseUrl}/auth/shopify/callback`,
       },
       {
+        source: '/api/:path*',
+        destination: `${apiBaseUrl}/api/:path*`,
+      },
+      {
         source: '/',
         destination: '/ar', // Default to Arabic
       },

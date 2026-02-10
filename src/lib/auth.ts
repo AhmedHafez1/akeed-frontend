@@ -119,6 +119,8 @@ export async function fetchWithAuth(
   // Prepare headers
   const headers = new Headers(options.headers)
   headers.set('Content-Type', 'application/json')
+  // Bypass Ngrok browser warning
+  headers.set('ngrok-skip-browser-warning', 'true')
 
   if (token) {
     headers.set('Authorization', `Bearer ${token}`)
