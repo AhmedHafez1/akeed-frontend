@@ -1,24 +1,40 @@
+'use client'
+
 import type { ReactNode } from 'react'
+import { AppProvider, Frame } from '@shopify/polaris'
+import enTranslations from '@shopify/polaris/locales/en.json'
+import '@shopify/polaris/build/esm/styles.css'
+import { EmbeddedNavigation } from './EmbeddedNavigation'
+
+/**
+ * EmbeddedLayout — Shopify Polaris Integration
+ *
+ * Production layout for embedded mode (Shopify Admin iframe).
+ *
+ * Responsibilities:
+ *  - Wraps children in Polaris `AppProvider` with i18n translations
+ *  - Imports Polaris CSS (scoped to embedded mode — never leaks to standalone)
+ *  - Renders Polaris `Frame` for proper layout structure
+ *  - Registers Shopify Admin sidebar navigation via `EmbeddedNavigation`
+ *
+ * Note: Shopify Admin chrome provides the header and sidebar chrome.
+ * We only register navigation links — Shopify renders them.
+ */
 
 interface EmbeddedLayoutProps {
   children: ReactNode
 }
 
-/**
- * Embedded Mode Layout - Shopify Polaris Integration
- *
- * Note: Dynamic import moved to effect to avoid async component issues.
- * For now, render a simple wrapper. Full Polaris integration should be
- * handled via a separate client component with useEffect for dynamic imports.
- */
 export function EmbeddedLayout({ children }: EmbeddedLayoutProps) {
   return (
-    <div className="p-4">
-      {/* 
-        Shopify Admin chrome provides navigation.
-        TODO: Add proper Polaris AppProvider when needed.
-      */}
-      {children}
-    </div>
+    <AppProvider i18n={enTranslations}>
+      <Frame>
+        {/* Register Shopify sidebar nav links (renders nothing) */}
+        <EmbeddedNavigation />
+
+        {/* Page content rendered by skins (e.g. DashboardEmbeddedSkin) */}
+        {children}
+      </Frame>
+    </AppProvider>
   )
 }
