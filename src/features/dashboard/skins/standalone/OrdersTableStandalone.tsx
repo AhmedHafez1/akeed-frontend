@@ -1,11 +1,15 @@
 import { StatusBadge } from '@/components/ui'
 import type { OrderItem } from '@/types/dashboard.model'
 
-interface OrdersTableProps {
+interface OrdersTableStandaloneProps {
   orders: OrderItem[]
 }
 
-export function OrdersTable({ orders }: OrdersTableProps) {
+/**
+ * Standalone skin for the orders table.
+ * Uses Tailwind CSS — no Polaris imports allowed.
+ */
+export function OrdersTableStandalone({ orders }: OrdersTableStandaloneProps) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full min-w-160 text-left text-sm">

@@ -1,11 +1,17 @@
 import { StatusBadge } from '@/components/ui'
 import type { VerificationItem } from '@/types/dashboard.model'
 
-interface VerificationsTableProps {
+interface VerificationsTableStandaloneProps {
   verifications: VerificationItem[]
 }
 
-export function VerificationsTable({ verifications }: VerificationsTableProps) {
+/**
+ * Standalone skin for the verifications table.
+ * Uses Tailwind CSS — no Polaris imports allowed.
+ */
+export function VerificationsTableStandalone({
+  verifications,
+}: VerificationsTableStandaloneProps) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full min-w-140 text-left text-sm">
