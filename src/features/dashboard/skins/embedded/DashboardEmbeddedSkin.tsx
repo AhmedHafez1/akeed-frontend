@@ -90,7 +90,10 @@ export function DashboardEmbeddedSkin({
                 ) : hasVerifications ? (
                   <VerificationsTableEmbedded verifications={verifications} />
                 ) : (
-                  <PolarisEmptyState heading="No verifications" image="">
+                  <PolarisEmptyState
+                    heading="No verifications"
+                    image={null as unknown as string}
+                  >
                     <p>{emptyVerificationsMessage}</p>
                   </PolarisEmptyState>
                 )}
@@ -123,7 +126,10 @@ export function DashboardEmbeddedSkin({
                 ) : hasOrders ? (
                   <OrdersTableEmbedded orders={orders} />
                 ) : (
-                  <PolarisEmptyState heading="No orders" image="">
+                  <PolarisEmptyState
+                    heading="No orders"
+                    image={null as unknown as string}
+                  >
                     <p>
                       No orders yet. Once orders are synced, they will show up
                       here.
