@@ -371,6 +371,27 @@
     "businessAccountId": "معرف حساب الأعمال",
     "accessToken": "رمز الوصول",
     "whatsappHelp": "يمكنك إيجاد هذه البيانات في لوحة تحكم واتساب بيزنس.",
-    "allSet": "تم كل شيء!"
+    "allSet": "تم كل شيء!",
+    "title": "مرحباً بك في أكيد",
+    "stepCounter": "الخطوة {current} من {total}",
+    "welcomeHeading": "مرحباً بك في أكيد",
+    "welcomeBody": "أكد طلبات الدفع عند الاستلام تلقائياً عبر واتساب لتقليل الطلبات الوهمية والمرتجعات.",
+    "startSetup": "ابدأ الإعداد",
+    "configurationHeading": "إعدادات المتجر",
+    "storeNameLabel": "اسم المتجر",
+    "storeNameRequired": "اسم المتجر مطلوب.",
+    "defaultLanguageLabel": "اللغة الافتراضية",
+    "languageAuto": "تلقائي - بناءً على دولة رقم هاتف العميل",
+    "languageEnglish": "الإنجليزية",
+    "languageArabic": "العربية",
+    "autoVerifyLabel": "تفعيل التأكيد التلقائي؟",
+    "autoVerifyDescription": "عند تفعيله، سيرسل أكيد رسائل تأكيد واتساب تلقائياً للطلبات الجديدة الدفع عند الاستلام.",
+    "continueToBilling": "المتابعة إلى الفوترة",
+    "billingHeading": "تفعيل الخطة",
+    "billingBody": "لبدء تأكيد الطلبات، يرجى تفعيل خطتك.",
+    "activatePlan": "تفعيل الخطة",
+    "prefillWarning": "لم نتمكن من تعبئة تفاصيل Shopify تلقائياً. يرجى إدخال اسم المتجر يدوياً.",
+    "settingsSaveError": "لم نتمكن من حفظ إعدادات الإعداد. يرجى المحاولة مرة أخرى.",
+    "billingActivationError": "لم نتمكن من بدء تفعيل الفوترة. يرجى المحاولة مرة أخرى."
   }
 }

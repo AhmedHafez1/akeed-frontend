@@ -371,6 +371,27 @@
     "businessAccountId": "Business Account ID",
     "accessToken": "Access Token",
     "whatsappHelp": "You can find these details in your WhatsApp Business dashboard.",
-    "allSet": "All set!"
+    "allSet": "All set!",
+    "title": "Welcome to Akeed",
+    "stepCounter": "Step {current} of {total}",
+    "welcomeHeading": "Welcome to Akeed",
+    "welcomeBody": "Automatically verify COD orders via WhatsApp to reduce fake orders and returns.",
+    "startSetup": "Start Setup",
+    "configurationHeading": "Store Configuration",
+    "storeNameLabel": "Store Name",
+    "storeNameRequired": "Store name is required.",
+    "defaultLanguageLabel": "Default Language",
+    "languageAuto": "Auto - based on customer phone country",
+    "languageEnglish": "English",
+    "languageArabic": "Arabic",
+    "autoVerifyLabel": "Enable auto-verification?",
+    "autoVerifyDescription": "When enabled, Akeed will automatically send WhatsApp verification messages for new COD orders.",
+    "continueToBilling": "Continue to Billing",
+    "billingHeading": "Billing Activation",
+    "billingBody": "To start verifying orders, please activate your plan.",
+    "activatePlan": "Activate Plan",
+    "prefillWarning": "We could not prefill Shopify store details. Please enter the store name manually.",
+    "settingsSaveError": "We could not save your onboarding settings. Please try again.",
+    "billingActivationError": "We could not start billing activation. Please try again."
   }
 }

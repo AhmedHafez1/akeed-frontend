@@ -1,5 +1,6 @@
 'use client'
 import { createClient } from '@supabase/supabase-js'
+import { getErrorMessage, parseJsonResponse } from './http'
 import { withLocale } from './locale'
 
 /**
@@ -168,10 +169,10 @@ async function request<T>(
   })
 
   if (!response.ok) {
-    throw new Error(`API Error: ${response.statusText}`)
+    throw new Error(await getErrorMessage(response))
   }
 
-  return response.json() as Promise<T>
+  return parseJsonResponse<T>(response)
 }
 
 export const api = {

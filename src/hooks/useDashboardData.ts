@@ -3,15 +3,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { api } from '@/lib/auth'
 import type {
-  OrdersResponse,
   VerificationsResponse,
   VerificationItem,
   VerificationStatusFilter,
-  OrderItem,
 } from '@/types/dashboard.model'
 
 interface DashboardState {
-  verifications: VerificationItem[]
   verifications: VerificationItem[]
   isVerificationsLoading: boolean
   verificationsError: string | null

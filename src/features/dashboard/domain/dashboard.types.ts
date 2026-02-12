@@ -10,7 +10,6 @@
 
 import type {
   VerificationItem,
-  OrderItem,
   VerificationStatusFilter,
 } from '@/types/dashboard.model'
 

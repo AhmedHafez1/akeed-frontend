@@ -1,25 +1,63 @@
 'use client'
 
-/**
- * Dashboard Page — Thin Orchestrator
- *
- * This page owns NO business logic and NO UI markup.
- * It simply:
- *   1. Detects the current app mode (EMBEDDED vs STANDALONE)
- *   2. Runs the shared domain hook to get all data + handlers
- *   3. Resolves the correct skin for the detected mode
- *   4. Renders the skin with the domain props
- *
- * Result: zero conditional rendering, zero `if (isEmbedded)` in JSX.
- */
-
+import { useEffect, useState } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
 import { useAkeedMode } from '@/hooks/useAkeedMode'
+import { fetchOnboardingState } from '@/lib/onboarding'
+import { getLocaleFromPathname } from '@/lib/locale'
+import { FullPageLoader } from '@/components/layout/FullPageLoader'
 import { useDashboard, resolveDashboardSkin } from '@/features/dashboard'
 
 export default function DashboardPage() {
-  const { mode } = useAkeedMode()
+  const { mode, isEmbedded, isLoading, appBridge } = useAkeedMode()
   const skinProps = useDashboard()
   const Skin = resolveDashboardSkin(mode)
+
+  const router = useRouter()
+  const pathname = usePathname()
+  const locale = getLocaleFromPathname(pathname ?? '')
+  const [isCheckingOnboarding, setIsCheckingOnboarding] = useState(true)
+
+  useEffect(() => {
+    if (isLoading) return
+
+    if (!isEmbedded || !appBridge) {
+      setIsCheckingOnboarding(false)
+      return
+    }
+
+    let active = true
+
+    const verifyOnboarding = async () => {
+      setIsCheckingOnboarding(true)
+
+      try {
+        const { state } = await fetchOnboardingState()
+        if (!active) return
+
+        if (state.onboardingStatus === 'pending') {
+          router.replace(`/${locale}/onboarding${window.location.search}`)
+          return
+        }
+      } catch (error) {
+        console.error('[Dashboard] Failed to fetch onboarding state:', error)
+      } finally {
+        if (active) {
+          setIsCheckingOnboarding(false)
+        }
+      }
+    }
+
+    void verifyOnboarding()
+
+    return () => {
+      active = false
+    }
+  }, [appBridge, isEmbedded, isLoading, locale, router])
+
+  if (isLoading || (isEmbedded && isCheckingOnboarding)) {
+    return <FullPageLoader />
+  }
 
   return <Skin {...skinProps} />
 }

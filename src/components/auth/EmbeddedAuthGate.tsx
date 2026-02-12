@@ -1,6 +1,6 @@
 'use client'
 
-import { use, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Redirect } from '@shopify/app-bridge/actions'
 import { useAkeedMode } from '@/hooks/useAkeedMode'
 import { useSearchParams } from 'next/navigation'
@@ -77,7 +77,7 @@ export function EmbeddedAuthGate({
     return () => {
       active = false
     }
-  }, [isLoading, isEmbedded, appBridge, shopDomain, hostParam])
+  }, [isLoading, isEmbedded, appBridge, shopDomain, hostParam, installed])
 
   if (isLoading) return fallback
   if (!isEmbedded) return children
