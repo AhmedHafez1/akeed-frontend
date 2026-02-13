@@ -21,6 +21,24 @@ export interface OnboardingSettingsPayload {
   isAutoVerifyEnabled: boolean
 }
 
+export const ONBOARDING_BILLING_PLAN_IDS = [
+  'starter',
+  'growth',
+  'pro',
+  'scale',
+] as const
+
+export type OnboardingBillingPlanId = (typeof ONBOARDING_BILLING_PLAN_IDS)[number]
+
+export interface OnboardingBillingPlan {
+  id: OnboardingBillingPlanId
+  name: string
+  monthlyPriceLabel: string
+  monthlyVolumeLabel: string
+  features: string[]
+  badge?: string
+}
+
 export interface OnboardingBillingResponse {
   confirmationUrl: string
 }

@@ -7,7 +7,10 @@ import {
   fetchOnboardingState,
   updateOnboardingSettings,
 } from '@/lib/onboarding'
-import type { IntegrationOnboardingLanguage } from '@/types/embedded-onboarding.model'
+import type {
+  IntegrationOnboardingLanguage,
+  OnboardingBillingPlanId,
+} from '@/types/embedded-onboarding.model'
 
 type EmbeddedStep = 1 | 2 | 3
 
@@ -43,6 +46,8 @@ export function useEmbeddedOnboarding({
   const [storeNameError, setStoreNameError] = useState<string | undefined>()
   const [defaultLanguage, setDefaultLanguage] =
     useState<IntegrationOnboardingLanguage>('auto')
+  const [selectedPlanId, setSelectedPlanId] =
+    useState<OnboardingBillingPlanId>('growth')
   const [isAutoVerifyEnabled, setIsAutoVerifyEnabled] = useState(true)
   const [isSavingSettings, setIsSavingSettings] = useState(false)
   const [isActivatingPlan, setIsActivatingPlan] = useState(false)
@@ -149,6 +154,7 @@ export function useEmbeddedOnboarding({
 
     try {
       const { confirmationUrl } = await createOnboardingBilling(
+        selectedPlanId,
         hostParam ?? undefined
       )
       onBillingConfirmation(confirmationUrl)
@@ -158,7 +164,12 @@ export function useEmbeddedOnboarding({
     } finally {
       setIsActivatingPlan(false)
     }
-  }, [hostParam, messages.billingActivationError, onBillingConfirmation])
+  }, [
+    hostParam,
+    messages.billingActivationError,
+    onBillingConfirmation,
+    selectedPlanId,
+  ])
 
   return {
     isInitialLoading,
@@ -168,6 +179,8 @@ export function useEmbeddedOnboarding({
     storeNameError,
     defaultLanguage,
     setDefaultLanguage,
+    selectedPlanId,
+    setSelectedPlanId,
     isAutoVerifyEnabled,
     setIsAutoVerifyEnabled,
     isSavingSettings,

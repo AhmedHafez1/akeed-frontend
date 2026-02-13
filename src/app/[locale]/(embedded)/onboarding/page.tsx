@@ -10,6 +10,7 @@ import { OnboardingContainer } from '@/components/onboarding/OnboardingContainer
 import { useAkeedMode } from '@/hooks/useAkeedMode'
 import { useEmbeddedOnboarding } from '@/hooks/useEmbeddedOnboarding'
 import { getLocaleFromPathname } from '@/lib/locale'
+import type { OnboardingBillingPlan } from '@/types/embedded-onboarding.model'
 import { OnboardingAlerts } from './components/OnboardingAlerts'
 import { OnboardingStepCounter } from './components/OnboardingStepCounter'
 import { BillingStep } from './steps/BillingStep'
@@ -32,6 +33,42 @@ export default function OnboardingPage() {
       { label: t('languageAuto'), value: 'auto' },
       { label: t('languageEnglish'), value: 'en' },
       { label: t('languageArabic'), value: 'ar' },
+    ],
+    [t]
+  )
+
+  const billingPlans = useMemo<OnboardingBillingPlan[]>(
+    () => [
+      {
+        id: 'starter',
+        name: t('planStarterName'),
+        monthlyPriceLabel: t('planStarterPrice'),
+        monthlyVolumeLabel: t('planStarterVolume'),
+        features: [t('planStarterFeature1'), t('planStarterFeature2')],
+      },
+      {
+        id: 'growth',
+        name: t('planGrowthName'),
+        monthlyPriceLabel: t('planGrowthPrice'),
+        monthlyVolumeLabel: t('planGrowthVolume'),
+        features: [t('planGrowthFeature1'), t('planGrowthFeature2')],
+        badge: t('planGrowthBadge'),
+      },
+      {
+        id: 'pro',
+        name: t('planProName'),
+        monthlyPriceLabel: t('planProPrice'),
+        monthlyVolumeLabel: t('planProVolume'),
+        features: [t('planProFeature1'), t('planProFeature2')],
+      },
+      {
+        id: 'scale',
+        name: t('planScaleName'),
+        monthlyPriceLabel: t('planScalePrice'),
+        monthlyVolumeLabel: t('planScaleVolume'),
+        features: [t('planScaleFeature1'), t('planScaleFeature2')],
+        badge: t('planScaleBadge'),
+      },
     ],
     [t]
   )
@@ -67,6 +104,8 @@ export default function OnboardingPage() {
     storeNameError,
     defaultLanguage,
     setDefaultLanguage,
+    selectedPlanId,
+    setSelectedPlanId,
     isAutoVerifyEnabled,
     setIsAutoVerifyEnabled,
     isSavingSettings,
@@ -124,7 +163,11 @@ export default function OnboardingPage() {
             heading={t('billingHeading')}
             body={t('billingBody')}
             ctaLabel={t('activatePlan')}
+            selectedBadgeLabel={t('selectedPlan')}
+            plans={billingPlans}
+            selectedPlanId={selectedPlanId}
             isActivating={isActivatingPlan}
+            onPlanSelect={setSelectedPlanId}
             onActivate={handleActivatePlan}
           />
         )

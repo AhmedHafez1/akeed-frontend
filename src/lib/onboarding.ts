@@ -3,6 +3,7 @@
 import { fetchWithAuth } from '@/lib/auth'
 import { getErrorMessage, parseJsonResponse } from '@/lib/http'
 import type {
+  OnboardingBillingPlanId,
   OnboardingBillingResponse,
   OnboardingSettingsPayload,
   OnboardingStateResponse,
@@ -37,11 +38,12 @@ export async function updateOnboardingSettings(
 }
 
 export async function createOnboardingBilling(
+  planId: OnboardingBillingPlanId,
   host?: string
 ): Promise<OnboardingBillingResponse> {
   const response = await fetchWithAuth('/api/onboarding/billing', {
     method: 'POST',
-    body: JSON.stringify({ host }),
+    body: JSON.stringify({ planId, host }),
   })
 
   if (!response.ok) {
