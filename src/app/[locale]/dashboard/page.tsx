@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { useAkeedMode } from '@/hooks/useAkeedMode'
 import { fetchOnboardingState } from '@/lib/onboarding'
 import { getLocaleFromPathname } from '@/lib/locale'
@@ -15,7 +15,10 @@ export default function DashboardPage() {
 
   const router = useRouter()
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const locale = getLocaleFromPathname(pathname ?? '')
+  const onboardingParam = searchParams.get('onboarding')
+  const billingStatusParam = searchParams.get('billing_status')
   const [isCheckingOnboarding, setIsCheckingOnboarding] = useState(true)
 
   useEffect(() => {
@@ -30,6 +33,16 @@ export default function DashboardPage() {
 
     const verifyOnboarding = async () => {
       setIsCheckingOnboarding(true)
+
+      // Billing callback already confirmed onboarding; skip bounce back.
+      if (
+        onboardingParam === 'completed' ||
+        billingStatusParam === 'active' ||
+        billingStatusParam === 'not_required'
+      ) {
+        setIsCheckingOnboarding(false)
+        return
+      }
 
       try {
         const { state } = await fetchOnboardingState()
@@ -53,7 +66,15 @@ export default function DashboardPage() {
     return () => {
       active = false
     }
-  }, [appBridge, isEmbedded, isLoading, locale, router])
+  }, [
+    appBridge,
+    billingStatusParam,
+    isEmbedded,
+    isLoading,
+    locale,
+    onboardingParam,
+    router,
+  ])
 
   if (isLoading || (isEmbedded && isCheckingOnboarding)) {
     return <FullPageLoader />

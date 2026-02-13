@@ -36,9 +36,12 @@ export async function updateOnboardingSettings(
   return parseJsonResponse<OnboardingStateResponse>(response)
 }
 
-export async function createOnboardingBilling(): Promise<OnboardingBillingResponse> {
+export async function createOnboardingBilling(
+  host?: string
+): Promise<OnboardingBillingResponse> {
   const response = await fetchWithAuth('/api/onboarding/billing', {
     method: 'POST',
+    body: JSON.stringify({ host }),
   })
 
   if (!response.ok) {

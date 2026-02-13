@@ -32,7 +32,8 @@ type EmbeddedStep = 1 | 2 | 3
 
 export default function OnboardingPage() {
   const t = useTranslations('onboarding')
-  const { isEmbedded, isLoading: isModeLoading, appBridge } = useAkeedMode()
+  const { isEmbedded, isLoading: isModeLoading, appBridge, hostParam } =
+    useAkeedMode()
 
   const router = useRouter()
   const pathname = usePathname()
@@ -142,7 +143,9 @@ export default function OnboardingPage() {
     setIsActivatingPlan(true)
 
     try {
-      const { confirmationUrl } = await createOnboardingBilling()
+      const { confirmationUrl } = await createOnboardingBilling(
+        hostParam ?? undefined
+      )
 
       if (appBridge) {
         const redirect = Redirect.create(appBridge)
