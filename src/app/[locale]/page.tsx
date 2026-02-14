@@ -15,6 +15,11 @@ import { fetchOnboardingState } from '@/lib/onboarding'
 import { HomePage } from '@/components/pages/HomePage'
 import { FullPageLoader } from '@/components/layout/FullPageLoader'
 import { EmbeddedAuthGate } from '@/components/auth/EmbeddedAuthGate'
+import {
+  buildEmbeddedRoute,
+  isOnboardingCompletedByQuery,
+  resolveEmbeddedDestinationByOnboardingStatus,
+} from './embedded-routing.helpers'
 
 export default function Home() {
   const { isEmbedded, isLoading, appBridge } = useAkeedMode()
@@ -32,19 +37,33 @@ export default function Home() {
 
     const handleEmbeddedLanding = async () => {
       if (!active) return
+      const search = window.location.search
 
       // Billing callback already confirmed onboarding; avoid extra roundtrip.
       if (
-        onboardingParam === 'completed' ||
-        billingStatusParam === 'active' ||
-        billingStatusParam === 'not_required'
+        isOnboardingCompletedByQuery({
+          onboardingParam,
+          billingStatusParam,
+        })
       ) {
-        router.replace(`/${locale}/dashboard${window.location.search}`)
+        router.replace(
+          buildEmbeddedRoute({
+            locale,
+            destination: 'dashboard',
+            search,
+          })
+        )
         return
       }
 
       if (!appBridge) {
-        router.replace(`/${locale}/dashboard${window.location.search}`)
+        router.replace(
+          buildEmbeddedRoute({
+            locale,
+            destination: 'dashboard',
+            search,
+          })
+        )
         return
       }
 
@@ -52,14 +71,26 @@ export default function Home() {
         const { state } = await fetchOnboardingState()
         if (!active) return
 
-        const destination =
-          state.onboardingStatus === 'pending' ? 'onboarding' : 'dashboard'
-
-        router.replace(`/${locale}/${destination}${window.location.search}`)
+        const destination = resolveEmbeddedDestinationByOnboardingStatus(
+          state.onboardingStatus
+        )
+        router.replace(
+          buildEmbeddedRoute({
+            locale,
+            destination,
+            search,
+          })
+        )
       } catch (error) {
         console.error('[Home] Failed to resolve onboarding state:', error)
         if (active) {
-          router.replace(`/${locale}/dashboard${window.location.search}`)
+          router.replace(
+            buildEmbeddedRoute({
+              locale,
+              destination: 'dashboard',
+              search,
+            })
+          )
         }
       }
     }

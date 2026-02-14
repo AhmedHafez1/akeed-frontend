@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { auth } from '@/lib/auth'
+import { getLocaleFromPathname } from '@/lib/locale'
 import { useTranslations } from 'next-intl'
 
 /**
@@ -17,7 +18,7 @@ export default function LoginPage() {
   const t = useTranslations()
   const router = useRouter()
   const pathname = usePathname()
-  const locale = pathname?.split('/')[1] || 'ar'
+  const locale = getLocaleFromPathname(pathname ?? '')
   const isRtl = locale === 'ar'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')

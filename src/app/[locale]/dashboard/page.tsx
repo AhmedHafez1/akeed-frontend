@@ -7,6 +7,7 @@ import { fetchOnboardingState } from '@/lib/onboarding'
 import { getLocaleFromPathname } from '@/lib/locale'
 import { FullPageLoader } from '@/components/layout/FullPageLoader'
 import { useDashboard, resolveDashboardSkin } from '@/features/dashboard'
+import { buildEmbeddedRoute, isOnboardingCompletedByQuery } from '../embedded-routing.helpers'
 
 export default function DashboardPage() {
   const { mode, isEmbedded, isLoading, appBridge } = useAkeedMode()
@@ -33,12 +34,14 @@ export default function DashboardPage() {
 
     const verifyOnboarding = async () => {
       setIsCheckingOnboarding(true)
+      const search = window.location.search
 
       // Billing callback already confirmed onboarding; skip bounce back.
       if (
-        onboardingParam === 'completed' ||
-        billingStatusParam === 'active' ||
-        billingStatusParam === 'not_required'
+        isOnboardingCompletedByQuery({
+          onboardingParam,
+          billingStatusParam,
+        })
       ) {
         setIsCheckingOnboarding(false)
         return
@@ -49,7 +52,13 @@ export default function DashboardPage() {
         if (!active) return
 
         if (state.onboardingStatus === 'pending') {
-          router.replace(`/${locale}/onboarding${window.location.search}`)
+          router.replace(
+            buildEmbeddedRoute({
+              locale,
+              destination: 'onboarding',
+              search,
+            })
+          )
           return
         }
       } catch (error) {

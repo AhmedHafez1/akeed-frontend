@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useMemo } from 'react'
+import { type ReactNode, useCallback, useMemo } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { Redirect } from '@shopify/app-bridge/actions'
@@ -13,11 +13,15 @@ import { getLocaleFromPathname } from '@/lib/locale'
 import type { OnboardingBillingPlan } from '@/types/embedded-onboarding.model'
 import { OnboardingAlerts } from './components/OnboardingAlerts'
 import { OnboardingStepCounter } from './components/OnboardingStepCounter'
+import {
+  BILLING_PLAN_DEFINITIONS,
+  type EmbeddedStep,
+  LANGUAGE_OPTION_DEFINITIONS,
+  TOTAL_STEPS,
+} from './onboarding.config'
 import { BillingStep } from './steps/BillingStep'
 import { ConfigurationStep } from './steps/ConfigurationStep'
 import { WelcomeStep } from './steps/WelcomeStep'
-
-const TOTAL_STEPS = 3
 
 export default function OnboardingPage() {
   const t = useTranslations('onboarding')
@@ -29,47 +33,26 @@ export default function OnboardingPage() {
   const locale = getLocaleFromPathname(pathname ?? '')
 
   const languageOptions = useMemo(
-    () => [
-      { label: t('languageAuto'), value: 'auto' },
-      { label: t('languageEnglish'), value: 'en' },
-      { label: t('languageArabic'), value: 'ar' },
-    ],
+    () =>
+      LANGUAGE_OPTION_DEFINITIONS.map(({ labelKey, value }) => ({
+        label: t(labelKey),
+        value,
+      })),
     [t]
   )
 
   const billingPlans = useMemo<OnboardingBillingPlan[]>(
-    () => [
-      {
-        id: 'starter',
-        name: t('planStarterName'),
-        monthlyPriceLabel: t('planStarterPrice'),
-        monthlyVolumeLabel: t('planStarterVolume'),
-        features: [t('planStarterFeature1'), t('planStarterFeature2')],
-      },
-      {
-        id: 'growth',
-        name: t('planGrowthName'),
-        monthlyPriceLabel: t('planGrowthPrice'),
-        monthlyVolumeLabel: t('planGrowthVolume'),
-        features: [t('planGrowthFeature1'), t('planGrowthFeature2')],
-        badge: t('planGrowthBadge'),
-      },
-      {
-        id: 'pro',
-        name: t('planProName'),
-        monthlyPriceLabel: t('planProPrice'),
-        monthlyVolumeLabel: t('planProVolume'),
-        features: [t('planProFeature1'), t('planProFeature2')],
-      },
-      {
-        id: 'scale',
-        name: t('planScaleName'),
-        monthlyPriceLabel: t('planScalePrice'),
-        monthlyVolumeLabel: t('planScaleVolume'),
-        features: [t('planScaleFeature1'), t('planScaleFeature2')],
-        badge: t('planScaleBadge'),
-      },
-    ],
+    () =>
+      BILLING_PLAN_DEFINITIONS.map((planDefinition) => ({
+        id: planDefinition.id,
+        name: t(planDefinition.nameKey),
+        monthlyPriceLabel: t(planDefinition.priceKey),
+        monthlyVolumeLabel: t(planDefinition.volumeKey),
+        features: planDefinition.featureKeys.map((key) => t(key)),
+        badge: planDefinition.badgeKey
+          ? t(planDefinition.badgeKey)
+          : undefined,
+      })),
     [t]
   )
 
@@ -125,53 +108,48 @@ export default function OnboardingPage() {
     onBillingConfirmation: handleBillingConfirmation,
   })
 
-  const renderCurrentStep = () => {
-    switch (step) {
-      case 1:
-        return (
-          <WelcomeStep
-            heading={t('welcomeHeading')}
-            body={t('welcomeBody')}
-            ctaLabel={t('startSetup')}
-            onStart={() => setStep(2)}
-          />
-        )
-      case 2:
-        return (
-          <ConfigurationStep
-            heading={t('configurationHeading')}
-            storeNameLabel={t('storeNameLabel')}
-            storeName={storeName}
-            storeNameError={storeNameError}
-            defaultLanguageLabel={t('defaultLanguageLabel')}
-            languageOptions={languageOptions}
-            defaultLanguage={defaultLanguage}
-            autoVerifyLabel={t('autoVerifyLabel')}
-            autoVerifyDescription={t('autoVerifyDescription')}
-            continueLabel={t('continueToBilling')}
-            isAutoVerifyEnabled={isAutoVerifyEnabled}
-            isSaving={isSavingSettings}
-            onStoreNameChange={handleStoreNameChange}
-            onLanguageChange={setDefaultLanguage}
-            onAutoVerifyChange={setIsAutoVerifyEnabled}
-            onContinue={handleContinueToBilling}
-          />
-        )
-      default:
-        return (
-          <BillingStep
-            heading={t('billingHeading')}
-            body={t('billingBody')}
-            ctaLabel={t('activatePlan')}
-            selectedBadgeLabel={t('selectedPlan')}
-            plans={billingPlans}
-            selectedPlanId={selectedPlanId}
-            isActivating={isActivatingPlan}
-            onPlanSelect={setSelectedPlanId}
-            onActivate={handleActivatePlan}
-          />
-        )
-    }
+  const stepComponents: Record<EmbeddedStep, ReactNode> = {
+    1: (
+      <WelcomeStep
+        heading={t('welcomeHeading')}
+        body={t('welcomeBody')}
+        ctaLabel={t('startSetup')}
+        onStart={() => setStep(2)}
+      />
+    ),
+    2: (
+      <ConfigurationStep
+        heading={t('configurationHeading')}
+        storeNameLabel={t('storeNameLabel')}
+        storeName={storeName}
+        storeNameError={storeNameError}
+        defaultLanguageLabel={t('defaultLanguageLabel')}
+        languageOptions={languageOptions}
+        defaultLanguage={defaultLanguage}
+        autoVerifyLabel={t('autoVerifyLabel')}
+        autoVerifyDescription={t('autoVerifyDescription')}
+        continueLabel={t('continueToBilling')}
+        isAutoVerifyEnabled={isAutoVerifyEnabled}
+        isSaving={isSavingSettings}
+        onStoreNameChange={handleStoreNameChange}
+        onLanguageChange={setDefaultLanguage}
+        onAutoVerifyChange={setIsAutoVerifyEnabled}
+        onContinue={handleContinueToBilling}
+      />
+    ),
+    3: (
+      <BillingStep
+        heading={t('billingHeading')}
+        body={t('billingBody')}
+        ctaLabel={t('activatePlan')}
+        selectedBadgeLabel={t('selectedPlan')}
+        plans={billingPlans}
+        selectedPlanId={selectedPlanId}
+        isActivating={isActivatingPlan}
+        onPlanSelect={setSelectedPlanId}
+        onActivate={handleActivatePlan}
+      />
+    ),
   }
 
   if (isModeLoading || isInitialLoading) {
@@ -197,7 +175,7 @@ export default function OnboardingPage() {
                 <OnboardingStepCounter
                   label={t('stepCounter', { current: step, total: TOTAL_STEPS })}
                 />
-                {renderCurrentStep()}
+                {stepComponents[step]}
               </BlockStack>
             </Card>
           </BlockStack>
