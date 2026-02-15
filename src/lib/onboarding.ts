@@ -3,7 +3,9 @@
 import { fetchWithAuth } from '@/lib/auth'
 import { getErrorMessage, parseJsonResponse } from '@/lib/http'
 import type {
+  OnboardingBillingPlanConfig,
   OnboardingBillingPlanId,
+  OnboardingBillingPlansResponse,
   OnboardingBillingResponse,
   OnboardingSettingsPayload,
   OnboardingStateResponse,
@@ -51,4 +53,25 @@ export async function createOnboardingBilling(
   }
 
   return parseJsonResponse<OnboardingBillingResponse>(response)
+}
+
+export async function fetchOnboardingBillingPlans(): Promise<OnboardingBillingPlansResponse> {
+  const response = await fetchWithAuth('/api/onboarding/billing/plans', {
+    method: 'GET',
+    cache: 'no-store',
+  })
+
+  if (!response.ok) {
+    throw new Error(await getErrorMessage(response))
+  }
+
+  const payload = await parseJsonResponse<OnboardingBillingPlansResponse>(response)
+
+  // Defensive normalization in case the backend returns duplicated plan IDs.
+  const dedupedPlans = new Map<OnboardingBillingPlanId, OnboardingBillingPlanConfig>()
+  for (const plan of payload.plans) {
+    dedupedPlans.set(plan.id, plan)
+  }
+
+  return { plans: [...dedupedPlans.values()] }
 }

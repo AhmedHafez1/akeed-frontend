@@ -41,18 +41,31 @@ export default function OnboardingPage() {
     [t]
   )
 
-  const billingPlans = useMemo<OnboardingBillingPlan[]>(
-    () =>
-      BILLING_PLAN_DEFINITIONS.map((planDefinition) => ({
-        id: planDefinition.id,
-        name: t(planDefinition.nameKey),
-        monthlyPriceLabel: t(planDefinition.priceKey),
-        monthlyVolumeLabel: t(planDefinition.volumeKey),
-        features: planDefinition.featureKeys.map((key) => t(key)),
-        badge: planDefinition.badgeKey
-          ? t(planDefinition.badgeKey)
-          : undefined,
-      })),
+  const numberLocale = useMemo(() => {
+    return locale === 'ar' ? 'ar' : 'en-US'
+  }, [locale])
+
+  const formatPlanPriceLabel = useCallback(
+    (amount: number, currencyCode: string) => {
+      if (amount === 0) {
+        return t('planPriceFree')
+      }
+
+      const formattedAmount = new Intl.NumberFormat(numberLocale, {
+        style: 'currency',
+        currency: currencyCode,
+        minimumFractionDigits: Number.isInteger(amount) ? 0 : 2,
+        maximumFractionDigits: 2,
+      }).format(amount)
+
+      return t('planPricePerMonth', { price: formattedAmount })
+    },
+    [numberLocale, t]
+  )
+
+  const formatPlanVolumeLabel = useCallback(
+    (includedVerifications: number) =>
+      t('planVolumePerMonth', { count: includedVerifications }),
     [t]
   )
 
@@ -89,6 +102,7 @@ export default function OnboardingPage() {
     setDefaultLanguage,
     selectedPlanId,
     setSelectedPlanId,
+    billingPlanConfigsById,
     isAutoVerifyEnabled,
     setIsAutoVerifyEnabled,
     isSavingSettings,
@@ -107,6 +121,34 @@ export default function OnboardingPage() {
     messages,
     onBillingConfirmation: handleBillingConfirmation,
   })
+
+  const billingPlans = useMemo<OnboardingBillingPlan[]>(
+    () =>
+      BILLING_PLAN_DEFINITIONS.map((planDefinition) => {
+        const runtimePlan = billingPlanConfigsById[planDefinition.id]
+
+        return {
+          id: planDefinition.id,
+          name: t(planDefinition.nameKey),
+          monthlyPriceLabel: runtimePlan
+            ? formatPlanPriceLabel(runtimePlan.amount, runtimePlan.currencyCode)
+            : t(planDefinition.priceKey),
+          monthlyVolumeLabel: runtimePlan
+            ? formatPlanVolumeLabel(runtimePlan.includedVerifications)
+            : t(planDefinition.volumeKey),
+          features: planDefinition.featureKeys.map((key) => t(key)),
+          badge: planDefinition.badgeKey
+            ? t(planDefinition.badgeKey)
+            : undefined,
+        }
+      }),
+    [
+      billingPlanConfigsById,
+      formatPlanPriceLabel,
+      formatPlanVolumeLabel,
+      t,
+    ]
+  )
 
   const stepComponents: Record<EmbeddedStep, ReactNode> = {
     1: (

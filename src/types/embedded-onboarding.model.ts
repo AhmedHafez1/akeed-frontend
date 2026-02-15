@@ -42,3 +42,19 @@ export interface OnboardingBillingPlan {
 export interface OnboardingBillingResponse {
   confirmationUrl: string
 }
+
+export interface OnboardingBillingPlanConfig {
+  id: OnboardingBillingPlanId
+  name: string
+  amount: number
+  currencyCode: string
+  includedVerifications: number
+  usage?: {
+    cappedAmount: number
+    terms: string
+  }
+}
+
+export interface OnboardingBillingPlansResponse {
+  plans: OnboardingBillingPlanConfig[]
+}

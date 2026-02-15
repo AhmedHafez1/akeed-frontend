@@ -4,11 +4,13 @@ import { useCallback, useEffect, useState } from 'react'
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import {
   createOnboardingBilling,
+  fetchOnboardingBillingPlans,
   fetchOnboardingState,
   updateOnboardingSettings,
 } from '@/lib/onboarding'
 import type {
   IntegrationOnboardingLanguage,
+  OnboardingBillingPlanConfig,
   OnboardingBillingPlanId,
 } from '@/types/embedded-onboarding.model'
 
@@ -48,6 +50,9 @@ export function useEmbeddedOnboarding({
     useState<IntegrationOnboardingLanguage>('auto')
   const [selectedPlanId, setSelectedPlanId] =
     useState<OnboardingBillingPlanId>('growth')
+  const [billingPlanConfigsById, setBillingPlanConfigsById] = useState<
+    Partial<Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>>
+  >({})
   const [isAutoVerifyEnabled, setIsAutoVerifyEnabled] = useState(true)
   const [isSavingSettings, setIsSavingSettings] = useState(false)
   const [isActivatingPlan, setIsActivatingPlan] = useState(false)
@@ -69,7 +74,15 @@ export function useEmbeddedOnboarding({
       setErrorBanner(null)
 
       try {
-        const { state } = await fetchOnboardingState()
+        const [stateResponse, billingPlansResponse] = await Promise.all([
+          fetchOnboardingState(),
+          fetchOnboardingBillingPlans().catch((error) => {
+            console.error('[Onboarding] Failed to load billing plans:', error)
+            return null
+          }),
+        ])
+
+        const { state } = stateResponse
         if (!active) return
 
         if (state.onboardingStatus === 'completed') {
@@ -80,6 +93,18 @@ export function useEmbeddedOnboarding({
         setStoreName(state.storeName ?? '')
         setDefaultLanguage(state.defaultLanguage)
         setIsAutoVerifyEnabled(state.isAutoVerifyEnabled)
+
+        if (billingPlansResponse) {
+          const plansById: Partial<
+            Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>
+          > = {}
+          for (const plan of billingPlansResponse.plans) {
+            plansById[plan.id] = plan
+          }
+          setBillingPlanConfigsById(plansById)
+        } else {
+          setBillingPlanConfigsById({})
+        }
       } catch (error) {
         console.error('[Onboarding] Failed to load state:', error)
 
@@ -181,6 +206,7 @@ export function useEmbeddedOnboarding({
     setDefaultLanguage,
     selectedPlanId,
     setSelectedPlanId,
+    billingPlanConfigsById,
     isAutoVerifyEnabled,
     setIsAutoVerifyEnabled,
     isSavingSettings,
