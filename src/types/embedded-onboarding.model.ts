@@ -9,7 +9,9 @@ export interface IntegrationOnboardingState {
   storeName: string | null
   defaultLanguage: IntegrationOnboardingLanguage
   isAutoVerifyEnabled: boolean
+  billingPlanId: OnboardingBillingPlanId | null
   billingStatus: string | null
+  billingManagementUrl: string | null
 }
 
 export interface OnboardingStateResponse {
