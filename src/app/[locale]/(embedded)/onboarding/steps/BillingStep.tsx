@@ -64,20 +64,15 @@ export function BillingStep({
           const isSelected = selectedPlanId === plan.id
 
           return (
-            <div
-              key={plan.id}
-              style={{
-                minWidth: '220px',
-                flex: '1 1 220px',
-              }}
-            >
+            <div key={plan.id} className="flex-1-1-220px min-w-220px">
               <div
                 role="button"
                 tabIndex={0}
-                aria-pressed={isSelected}
                 onClick={() => onPlanSelect(plan.id)}
-                onKeyDown={(event) => handlePlanSelectByKeyboard(event, plan.id)}
-                style={{ cursor: 'pointer' }}
+                onKeyDown={(event) =>
+                  handlePlanSelectByKeyboard(event, plan.id)
+                }
+                className="cursor-pointer"
               >
                 <Card>
                   <BlockStack gap="300">
@@ -103,7 +98,11 @@ export function BillingStep({
 
                     <BlockStack gap="100">
                       {plan.features.map((feature) => (
-                        <Text key={`${plan.id}-${feature}`} as="p" variant="bodySm">
+                        <Text
+                          key={`${plan.id}-${feature}`}
+                          as="p"
+                          variant="bodySm"
+                        >
                           • {feature}
                         </Text>
                       ))}
