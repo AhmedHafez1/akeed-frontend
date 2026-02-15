@@ -50,13 +50,6 @@ export type OrdersResponse = {
   orders: OrderItem[]
 }
 
-export type VerificationStatsTrend = {
-  current_month: number
-  previous_month: number
-  change: number
-  change_percentage: number | null
-}
-
 export type DashboardStats = {
   date_range: DashboardStatsDateRange
   totals: {
@@ -67,16 +60,14 @@ export type DashboardStats = {
     expired: number
     verification_rate: number
   }
-  monthly_trends: {
-    total: VerificationStatsTrend
-    pending: VerificationStatsTrend
-    confirmed: VerificationStatsTrend
-    canceled: VerificationStatsTrend
-    expired: VerificationStatsTrend
-  }
   usage: {
     used: number
     limit: number
+  }
+  savings: {
+    avg_shipping_cost: number
+    currency: string
+    money_saved: number
   }
 }
 
