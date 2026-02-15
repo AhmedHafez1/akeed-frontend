@@ -1,30 +1,28 @@
-/**
- * Dashboard Skin Props Contract
- *
- * This interface is the SINGLE source of truth for the data shape
- * that every dashboard skin must accept. It enforces a clean boundary:
- *   - Domain hook (useDashboard) PRODUCES these props
- *   - Each skin component CONSUMES these props
- *   - No business logic lives inside any skin
- */
-
 import type {
+  DashboardStats,
+  DashboardStatsDateRange,
   VerificationItem,
   VerificationStatusFilter,
 } from '@/types/dashboard.model'
 
-// ─── Status filter descriptor ────────────────────────────────────────────────
-
 export interface StatusFilterOption {
-  /** Filter value sent to the API (e.g. 'all', 'pending') */
   id: VerificationStatusFilter
-  /** Human-readable label rendered in the UI */
   label: string
 }
 
-// ─── Props contract shared by all skins ──────────────────────────────────────
+export interface DateRangeFilterOption {
+  id: DashboardStatsDateRange
+  label: string
+}
 
 export interface DashboardSkinProps {
+  // Stats
+  stats: DashboardStats | null
+  isStatsLoading: boolean
+  dateRangeFilter: DashboardStatsDateRange
+  dateRangeOptions: ReadonlyArray<DateRangeFilterOption>
+  onDateRangeFilterChange: (filter: DashboardStatsDateRange) => void
+
   // Verifications
   verifications: VerificationItem[]
   isVerificationsLoading: boolean

@@ -1,25 +1,17 @@
 'use client'
 
-/**
- * useDashboard — Domain Hook (Logic Only)
- *
- * This is the "headless controller" for the Dashboard feature.
- * It owns ALL business logic: state, data fetching, derived values,
- * and event handlers.
- *
- * Rules:
- *  - NO JSX or rendering code
- *  - NO imports from Polaris or Tailwind
- *  - Returns a DashboardSkinProps object consumed by any UI skin
- *  - Wraps the existing useDashboardData hook — no data logic duplication
- */
-
 import { useCallback, useMemo, useState } from 'react'
 import { useDashboardData } from '@/hooks/useDashboardData'
-import type { VerificationStatusFilter } from '@/types/dashboard.model'
-import type { DashboardSkinProps, StatusFilterOption } from './dashboard.types'
-
-// ─── Constants ───────────────────────────────────────────────────────────────
+import { useDashboardStats } from '@/hooks/useDashboardStats'
+import type {
+  DashboardStatsDateRange,
+  VerificationStatusFilter,
+} from '@/types/dashboard.model'
+import type {
+  DashboardSkinProps,
+  DateRangeFilterOption,
+  StatusFilterOption,
+} from './dashboard.types'
 
 const STATUS_FILTERS: ReadonlyArray<StatusFilterOption> = [
   { id: 'all', label: 'All' },
@@ -29,16 +21,25 @@ const STATUS_FILTERS: ReadonlyArray<StatusFilterOption> = [
   { id: 'canceled', label: 'Canceled' },
 ] as const
 
-// ─── Hook ────────────────────────────────────────────────────────────────────
+const DATE_RANGE_FILTERS: ReadonlyArray<DateRangeFilterOption> = [
+  { id: 'today', label: 'Today' },
+  { id: 'last_7_days', label: 'Last 7 days' },
+  { id: 'last_30_days', label: 'Last 30 days' },
+] as const
 
 export function useDashboard(): DashboardSkinProps {
   const [statusFilter, setStatusFilter] =
     useState<VerificationStatusFilter>('all')
+  const [dateRangeFilter, setDateRangeFilter] =
+    useState<DashboardStatsDateRange>('last_30_days')
 
-  const { verifications, isVerificationsLoading, error } =
-    useDashboardData(statusFilter)
+  const {
+    verifications,
+    isVerificationsLoading,
+    error: verificationsError,
+  } = useDashboardData(statusFilter)
 
-  // ── Derived values ──────────────────────────────────────────────────────
+  const { stats, isStatsLoading, statsError } = useDashboardStats(dateRangeFilter)
 
   const hasVerifications = verifications.length > 0
 
@@ -49,18 +50,32 @@ export function useDashboard(): DashboardSkinProps {
     return 'No verifications match the selected status.'
   }, [statusFilter])
 
-  // ── Handlers ────────────────────────────────────────────────────────────
+  const onStatusFilterChange = useCallback((filter: VerificationStatusFilter) => {
+    setStatusFilter(filter)
+  }, [])
 
-  const onStatusFilterChange = useCallback(
-    (filter: VerificationStatusFilter) => {
-      setStatusFilter(filter)
+  const onDateRangeFilterChange = useCallback(
+    (filter: DashboardStatsDateRange) => {
+      setDateRangeFilter(filter)
     },
     []
   )
 
-  // ── Return skin-agnostic props ──────────────────────────────────────────
+  const error = useMemo(() => {
+    if (verificationsError && statsError) {
+      return `${verificationsError}. ${statsError}.`
+    }
+
+    return verificationsError ?? statsError
+  }, [statsError, verificationsError])
 
   return {
+    stats,
+    isStatsLoading,
+    dateRangeFilter,
+    dateRangeOptions: DATE_RANGE_FILTERS,
+    onDateRangeFilterChange,
+
     verifications,
     isVerificationsLoading,
     hasVerifications,

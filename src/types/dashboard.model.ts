@@ -15,6 +15,8 @@ export type VerificationStatusFilter =
   | 'confirmed'
   | 'canceled'
 
+export type DashboardStatsDateRange = 'today' | 'last_7_days' | 'last_30_days'
+
 export type VerificationItem = {
   id: string
   status: VerificationStatus
@@ -46,4 +48,38 @@ export type VerificationsResponse = {
 
 export type OrdersResponse = {
   orders: OrderItem[]
+}
+
+export type VerificationStatsTrend = {
+  current_month: number
+  previous_month: number
+  change: number
+  change_percentage: number | null
+}
+
+export type DashboardStats = {
+  date_range: DashboardStatsDateRange
+  totals: {
+    total: number
+    pending: number
+    confirmed: number
+    canceled: number
+    expired: number
+    verification_rate: number
+  }
+  monthly_trends: {
+    total: VerificationStatsTrend
+    pending: VerificationStatsTrend
+    confirmed: VerificationStatsTrend
+    canceled: VerificationStatsTrend
+    expired: VerificationStatsTrend
+  }
+  usage: {
+    used: number
+    limit: number
+  }
+}
+
+export type DashboardStatsResponse = {
+  stats: DashboardStats
 }
