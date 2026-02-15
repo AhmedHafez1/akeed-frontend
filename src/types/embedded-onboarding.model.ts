@@ -9,6 +9,7 @@ export interface IntegrationOnboardingState {
   storeName: string | null
   defaultLanguage: IntegrationOnboardingLanguage
   isAutoVerifyEnabled: boolean
+  billingStatus: string | null
 }
 
 export interface OnboardingStateResponse {

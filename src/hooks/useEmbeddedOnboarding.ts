@@ -21,6 +21,13 @@ interface EmbeddedOnboardingMessages {
   storeNameRequired: string
   settingsSaveError: string
   billingActivationError: string
+  billingStatusPending: string
+  billingStatusDeclined: string
+  billingStatusFrozen: string
+  billingStatusExpired: string
+  billingStatusCanceled: string
+  billingStatusError: string
+  billingStatusNeedsAttention: string
 }
 
 interface UseEmbeddedOnboardingParams {
@@ -33,6 +40,60 @@ interface UseEmbeddedOnboardingParams {
   onBillingConfirmation: (confirmationUrl: string) => void
 }
 
+interface BillingRecoveryMessages {
+  billingStatusPending: string
+  billingStatusDeclined: string
+  billingStatusFrozen: string
+  billingStatusExpired: string
+  billingStatusCanceled: string
+  billingStatusError: string
+  billingStatusNeedsAttention: string
+}
+
+function normalizeBillingStatus(status: string | null): string | null {
+  if (!status) {
+    return null
+  }
+
+  const normalized = status.trim().toLowerCase()
+  return normalized.length > 0 ? normalized : null
+}
+
+function resolveBillingRecoveryMessage(
+  status: string,
+  messages: BillingRecoveryMessages
+): string | null {
+  if (status === 'active' || status === 'not_required') {
+    return null
+  }
+
+  if (status === 'pending') {
+    return messages.billingStatusPending
+  }
+
+  if (status === 'declined') {
+    return messages.billingStatusDeclined
+  }
+
+  if (status === 'frozen') {
+    return messages.billingStatusFrozen
+  }
+
+  if (status === 'expired') {
+    return messages.billingStatusExpired
+  }
+
+  if (status === 'cancelled' || status === 'canceled') {
+    return messages.billingStatusCanceled
+  }
+
+  if (status === 'error') {
+    return messages.billingStatusError
+  }
+
+  return messages.billingStatusNeedsAttention
+}
+
 export function useEmbeddedOnboarding({
   isEmbedded,
   isModeLoading,
@@ -42,6 +103,20 @@ export function useEmbeddedOnboarding({
   messages,
   onBillingConfirmation,
 }: UseEmbeddedOnboardingParams) {
+  const {
+    prefillWarning: prefillWarningMessage,
+    storeNameRequired: storeNameRequiredMessage,
+    settingsSaveError: settingsSaveErrorMessage,
+    billingActivationError: billingActivationErrorMessage,
+    billingStatusPending: billingStatusPendingMessage,
+    billingStatusDeclined: billingStatusDeclinedMessage,
+    billingStatusFrozen: billingStatusFrozenMessage,
+    billingStatusExpired: billingStatusExpiredMessage,
+    billingStatusCanceled: billingStatusCanceledMessage,
+    billingStatusError: billingStatusErrorMessage,
+    billingStatusNeedsAttention: billingStatusNeedsAttentionMessage,
+  } = messages
+
   const [isInitialLoading, setIsInitialLoading] = useState(true)
   const [step, setStep] = useState<EmbeddedStep>(1)
   const [storeName, setStoreName] = useState('')
@@ -94,6 +169,25 @@ export function useEmbeddedOnboarding({
         setDefaultLanguage(state.defaultLanguage)
         setIsAutoVerifyEnabled(state.isAutoVerifyEnabled)
 
+        const normalizedBillingStatus = normalizeBillingStatus(
+          state.billingStatus
+        )
+        const billingRecoveryMessage = normalizedBillingStatus
+          ? resolveBillingRecoveryMessage(normalizedBillingStatus, {
+              billingStatusPending: billingStatusPendingMessage,
+              billingStatusDeclined: billingStatusDeclinedMessage,
+              billingStatusFrozen: billingStatusFrozenMessage,
+              billingStatusExpired: billingStatusExpiredMessage,
+              billingStatusCanceled: billingStatusCanceledMessage,
+              billingStatusError: billingStatusErrorMessage,
+              billingStatusNeedsAttention: billingStatusNeedsAttentionMessage,
+            })
+          : null
+        if (billingRecoveryMessage) {
+          setErrorBanner(billingRecoveryMessage)
+          setStep(3)
+        }
+
         if (billingPlansResponse) {
           const plansById: Partial<
             Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>
@@ -109,7 +203,7 @@ export function useEmbeddedOnboarding({
         console.error('[Onboarding] Failed to load state:', error)
 
         if (active) {
-          setPrefillWarning(messages.prefillWarning)
+          setPrefillWarning(prefillWarningMessage)
           setDefaultLanguage('auto')
           setIsAutoVerifyEnabled(true)
         }
@@ -129,7 +223,14 @@ export function useEmbeddedOnboarding({
     isEmbedded,
     isModeLoading,
     locale,
-    messages.prefillWarning,
+    billingStatusCanceledMessage,
+    billingStatusDeclinedMessage,
+    billingStatusErrorMessage,
+    billingStatusExpiredMessage,
+    billingStatusFrozenMessage,
+    billingStatusNeedsAttentionMessage,
+    billingStatusPendingMessage,
+    prefillWarningMessage,
     router,
   ])
 
@@ -145,7 +246,7 @@ export function useEmbeddedOnboarding({
 
     const trimmedStoreName = storeName.trim()
     if (!trimmedStoreName) {
-      setStoreNameError(messages.storeNameRequired)
+      setStoreNameError(storeNameRequiredMessage)
       return
     }
 
@@ -161,15 +262,15 @@ export function useEmbeddedOnboarding({
       setStep(3)
     } catch (error) {
       console.error('[Onboarding] Failed to save settings:', error)
-      setErrorBanner(messages.settingsSaveError)
+      setErrorBanner(settingsSaveErrorMessage)
     } finally {
       setIsSavingSettings(false)
     }
   }, [
     defaultLanguage,
     isAutoVerifyEnabled,
-    messages.settingsSaveError,
-    messages.storeNameRequired,
+    settingsSaveErrorMessage,
+    storeNameRequiredMessage,
     storeName,
   ])
 
@@ -185,13 +286,13 @@ export function useEmbeddedOnboarding({
       onBillingConfirmation(confirmationUrl)
     } catch (error) {
       console.error('[Onboarding] Failed to activate billing:', error)
-      setErrorBanner(messages.billingActivationError)
+      setErrorBanner(billingActivationErrorMessage)
     } finally {
       setIsActivatingPlan(false)
     }
   }, [
+    billingActivationErrorMessage,
     hostParam,
-    messages.billingActivationError,
     onBillingConfirmation,
     selectedPlanId,
   ])

@@ -418,6 +418,13 @@
     "planScaleBadge": "Best Value",
     "prefillWarning": "We could not prefill Shopify store details. Please enter the store name manually.",
     "settingsSaveError": "We could not save your onboarding settings. Please try again.",
-    "billingActivationError": "We could not start billing activation. Please try again."
+    "billingActivationError": "We could not start billing activation. Please try again.",
+    "billingStatusPending": "Your billing approval is still pending. Please complete approval in Shopify, then try again.",
+    "billingStatusDeclined": "Your billing approval was declined. Please choose a plan and approve billing to continue.",
+    "billingStatusFrozen": "Your subscription is frozen. Please resolve billing in Shopify and reactivate your plan.",
+    "billingStatusExpired": "Your subscription expired. Please reactivate a plan to continue verifying orders.",
+    "billingStatusCanceled": "Your subscription is canceled. Please choose a plan and activate billing to continue.",
+    "billingStatusError": "We could not verify your billing status. Please try activating your plan again.",
+    "billingStatusNeedsAttention": "Your billing status needs attention. Please activate or update your plan to continue."
   }
 }

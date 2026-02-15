@@ -75,6 +75,13 @@ export default function OnboardingPage() {
       storeNameRequired: t('storeNameRequired'),
       settingsSaveError: t('settingsSaveError'),
       billingActivationError: t('billingActivationError'),
+      billingStatusPending: t('billingStatusPending'),
+      billingStatusDeclined: t('billingStatusDeclined'),
+      billingStatusFrozen: t('billingStatusFrozen'),
+      billingStatusExpired: t('billingStatusExpired'),
+      billingStatusCanceled: t('billingStatusCanceled'),
+      billingStatusError: t('billingStatusError'),
+      billingStatusNeedsAttention: t('billingStatusNeedsAttention'),
     }),
     [t]
   )
