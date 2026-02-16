@@ -2,12 +2,10 @@ import {
   Badge,
   Banner,
   BlockStack,
-  Box,
   Button,
   ButtonGroup,
   Card,
   EmptyState as PolarisEmptyState,
-  Icon,
   InlineGrid,
   InlineStack,
   Layout,
@@ -29,36 +27,29 @@ import type { IconSource } from '@shopify/polaris'
 import type { DashboardStatsDateRange } from '@/types/dashboard.model'
 import { VerificationsTableEmbedded } from './VerificationsTableEmbedded'
 import type { DashboardSkinProps } from '../../domain/dashboard.types'
+import { StatCard, StatTone } from './components/StatCard'
 
 interface KpiMetric {
   id: 'pending' | 'confirmed' | 'canceled' | 'expired'
   label: string
   value: number
   icon: IconSource
-  badgeTone: 'attention' | 'critical' | 'success' | 'warning'
-  iconTone: 'critical' | 'success' | 'warning' | 'info'
-  background:
-    | 'bg-surface-secondary'
-    | 'bg-surface-success'
-    | 'bg-surface-warning'
-    | 'bg-surface-critical'
+  tone: StatTone
 }
 
-function resolveRateTone(rate: number): 'attention' | 'critical' | 'success' {
+function resolveRateTone(rate: number): 'critical' | 'success' {
   if (rate >= 80) return 'success'
-  if (rate >= 55) return 'attention'
+  if (rate >= 55) return 'critical'
   return 'critical'
 }
 
-function resolveUsageBadgeTone(usagePercent: number) {
+function resolveUsageProgressTone(
+  usagePercent: number
+): 'critical' | 'success' {
   if (usagePercent >= 95) return 'critical'
-  if (usagePercent >= 80) return 'attention'
-  return 'success'
-}
-
-function resolveUsageProgressTone(usagePercent: number) {
-  if (usagePercent >= 95) return 'critical'
-  if (usagePercent >= 80) return 'primary'
+  if (usagePercent >= 80) return 'critical'
+  // ProgressBar uses 'highlight' or 'primary' depending on version. 'success' acts as 'highlight' in some contexts or just mapped.
+  // Actually ProgressBar tone: 'highlight' | 'primary' | 'success' | 'critical'
   return 'success'
 }
 
@@ -73,26 +64,6 @@ function formatMoney(amount: number, currency: string): string {
   } catch {
     return `${amount.toFixed(2)} ${currency}`
   }
-}
-
-function MetricIconChip({
-  icon,
-  tone = 'base',
-}: {
-  icon: IconSource
-  tone?: 'base' | 'critical' | 'success' | 'warning' | 'info'
-}) {
-  return (
-    <Box
-      background="bg-surface"
-      borderColor="border-secondary"
-      borderWidth="025"
-      borderRadius="300"
-      padding="200"
-    >
-      <Icon source={icon} tone={tone} />
-    </Box>
-  )
 }
 
 export function DashboardEmbeddedSkin({
@@ -110,10 +81,6 @@ export function DashboardEmbeddedSkin({
   onStatusFilterChange,
   error,
 }: DashboardSkinProps) {
-  const rangeLabel =
-    dateRangeOptions.find((option) => option.id === dateRangeFilter)?.label ??
-    'Range'
-
   const kpiMetrics: KpiMetric[] = stats
     ? [
         {
@@ -121,36 +88,28 @@ export function DashboardEmbeddedSkin({
           label: 'Pending',
           value: stats.totals.pending,
           icon: ClockIcon,
-          badgeTone: 'attention',
-          iconTone: 'warning',
-          background: 'bg-surface-warning',
+          tone: 'warning',
         },
         {
           id: 'confirmed',
           label: 'Confirmed',
           value: stats.totals.confirmed,
           icon: CheckCircleIcon,
-          badgeTone: 'success',
-          iconTone: 'success',
-          background: 'bg-surface-success',
+          tone: 'success',
         },
         {
           id: 'canceled',
           label: 'Cancelled',
           value: stats.totals.canceled,
           icon: AlertCircleIcon,
-          badgeTone: 'critical',
-          iconTone: 'critical',
-          background: 'bg-surface-critical',
+          tone: 'critical',
         },
         {
           id: 'expired',
           label: 'Expired',
           value: stats.totals.expired,
           icon: CalendarTimeIcon,
-          badgeTone: 'warning',
-          iconTone: 'warning',
-          background: 'bg-surface-secondary',
+          tone: 'base', // Use base to get secondary background
         },
       ]
     : []
@@ -176,280 +135,142 @@ export function DashboardEmbeddedSkin({
 
         <Layout>
           <Layout.Section>
-            <Card>
-              <BlockStack gap="300">
-                <InlineStack
-                  align="space-between"
-                  blockAlign="center"
-                  gap="300"
-                >
-                  <BlockStack gap="050">
-                    <Text variant="headingMd" as="h2">
-                      Dashboard Metrics
-                    </Text>
-                    <Text variant="bodySm" as="p">
-                      Live verification performance overview.
-                    </Text>
-                  </BlockStack>
+            <BlockStack gap="400">
+              <InlineStack align="space-between" blockAlign="center" gap="300">
+                <BlockStack gap="050">
+                  <Text variant="headingMd" as="h2">
+                    Dashboard Metrics
+                  </Text>
+                  <Text variant="bodySm" tone="subdued" as="p">
+                    Live verification performance overview.
+                  </Text>
+                </BlockStack>
 
-                  <div style={{ minWidth: 220 }}>
-                    <Select
-                      label="Date range"
-                      labelHidden
-                      options={dateRangeOptions.map((option) => ({
-                        label: option.label,
-                        value: option.id,
-                      }))}
-                      value={dateRangeFilter}
-                      onChange={(value) =>
-                        onDateRangeFilterChange(
-                          value as DashboardStatsDateRange
-                        )
-                      }
-                    />
-                  </div>
-                </InlineStack>
+                <div className="min-w-[220px]">
+                  <Select
+                    label="Date range"
+                    labelHidden
+                    options={dateRangeOptions.map((option) => ({
+                      label: option.label,
+                      value: option.id,
+                    }))}
+                    value={dateRangeFilter}
+                    onChange={(value) =>
+                      onDateRangeFilterChange(value as DashboardStatsDateRange)
+                    }
+                  />
+                </div>
+              </InlineStack>
 
-                {isStatsLoading && !stats ? (
+              {isStatsLoading && !stats ? (
+                <Card>
                   <InlineStack align="center" gap="200">
                     <Spinner size="small" />
                     <Text variant="bodySm" tone="subdued" as="span">
                       Loading metrics...
                     </Text>
                   </InlineStack>
-                ) : stats ? (
-                  <BlockStack gap="300">
-                    <InlineGrid
-                      columns={{ xs: 1, lg: 2 }}
-                      gap={{ xs: '200', lg: '300' }}
-                    >
-                      <Card background="bg-surface-secondary">
-                        <Box
-                          position="relative"
-                          overflowX="hidden"
-                          overflowY="hidden"
-                        >
-                          <Box
-                            position="absolute"
-                            insetBlockStart="200"
-                            insetInlineEnd="200"
-                            opacity="0.15"
+                </Card>
+              ) : stats ? (
+                <InlineGrid columns={{ xs: 1, sm: 2, md: 3 }} gap="400">
+                  {/* Performance Snapshot */}
+                  <StatCard
+                    label="Total Verifications"
+                    value={stats.totals.total}
+                    icon={ChartDonutIcon}
+                    tone="info"
+                    footer={
+                      <BlockStack gap="050">
+                        <Text variant="bodyXs" tone="subdued" as="p">
+                          Verification Rate
+                        </Text>
+                        <InlineStack gap="200" blockAlign="center">
+                          <Text variant="headingMd" as="span">
+                            {stats.totals.verification_rate}%
+                          </Text>
+                          <Badge
+                            tone={resolveRateTone(
+                              stats.totals.verification_rate
+                            )}
                           >
-                            <Icon source={ChartDonutIcon} tone="subdued" />
-                          </Box>
+                            {`${stats.totals.confirmed} confirmed`}
+                          </Badge>
+                        </InlineStack>
+                      </BlockStack>
+                    }
+                  />
 
-                          <BlockStack gap="200">
-                            <InlineStack
-                              align="space-between"
-                              blockAlign="center"
-                            >
-                              <InlineStack gap="200" blockAlign="center">
-                                <MetricIconChip
-                                  icon={ChartDonutIcon}
-                                  tone="info"
-                                />
-                                <Text variant="headingSm" as="h3">
-                                  Performance Snapshot
-                                </Text>
-                              </InlineStack>
-                              <Badge tone="info">{rangeLabel}</Badge>
-                            </InlineStack>
+                  {/* Money Saved */}
+                  <StatCard
+                    label="Money Saved"
+                    value={formatMoney(
+                      stats.savings.money_saved,
+                      stats.savings.currency
+                    )}
+                    icon={CashDollarFilledIcon}
+                    tone="success"
+                    footer={
+                      <BlockStack gap="050">
+                        <Text variant="bodyXs" tone="subdued" as="p">
+                          Savings Breakdown
+                        </Text>
+                        <Text variant="bodySm" as="p">
+                          {stats.totals.canceled} cancelled ×{' '}
+                          {stats.savings.avg_shipping_cost}{' '}
+                          {stats.savings.currency} shipping
+                        </Text>
+                      </BlockStack>
+                    }
+                  />
 
-                            <InlineGrid
-                              columns={{ xs: 1, sm: 2 }}
-                              gap={{ xs: '150', sm: '300' }}
-                            >
-                              <BlockStack gap="050">
-                                <Text variant="bodyXs" as="p">
-                                  Total verifications
-                                </Text>
-                                <Text variant="heading2xl" as="p">
-                                  {stats.totals.total}
-                                </Text>
-                              </BlockStack>
-
-                              <BlockStack gap="050">
-                                <Text variant="bodyXs" as="p">
-                                  Verification rate
-                                </Text>
-                                <InlineStack gap="200" blockAlign="center">
-                                  <Text variant="headingLg" as="p">
-                                    {`${stats.totals.verification_rate}%`}
-                                  </Text>
-                                  <Badge
-                                    tone={resolveRateTone(
-                                      stats.totals.verification_rate
-                                    )}
-                                  >
-                                    {`${stats.totals.confirmed} confirmed`}
-                                  </Badge>
-                                </InlineStack>
-                              </BlockStack>
-                            </InlineGrid>
-                          </BlockStack>
-                        </Box>
-                      </Card>
-
-                      <Card background="bg-surface-success">
-                        <Box
-                          position="relative"
-                          overflowX="hidden"
-                          overflowY="hidden"
-                        >
-                          <Box
-                            position="absolute"
-                            insetBlockStart="200"
-                            insetInlineEnd="200"
-                            opacity="0.15"
-                          >
-                            <Icon
-                              source={CashDollarFilledIcon}
-                              tone="success"
-                            />
-                          </Box>
-
-                          <BlockStack gap="200">
-                            <InlineStack
-                              align="space-between"
-                              blockAlign="center"
-                            >
-                              <InlineStack gap="200" blockAlign="center">
-                                <MetricIconChip
-                                  icon={CashDollarFilledIcon}
-                                  tone="success"
-                                />
-                                <Text variant="headingSm" as="h3">
-                                  Money Saved
-                                </Text>
-                              </InlineStack>
-                              <Badge tone="success">
-                                {`${stats.totals.canceled} cancelled`}
-                              </Badge>
-                            </InlineStack>
-
-                            <Text variant="heading2xl" as="p">
-                              {formatMoney(
-                                stats.savings.money_saved,
-                                stats.savings.currency
-                              )}
-                            </Text>
-
-                            <Text variant="bodySm" as="p">
-                              {`${stats.totals.canceled} cancelled x ${stats.savings.avg_shipping_cost} ${stats.savings.currency} avg shipping`}
-                            </Text>
-                          </BlockStack>
-                        </Box>
-                      </Card>
-                    </InlineGrid>
-
-                    <InlineGrid
-                      columns={{ xs: 1, sm: 2, md: 4 }}
-                      gap={{ xs: '200', md: '300' }}
-                    >
-                      {kpiMetrics.map((metric) => {
-                        const share =
-                          stats.totals.total > 0
-                            ? Math.round(
-                                (metric.value / stats.totals.total) * 100
-                              )
-                            : 0
-
-                        return (
-                          <Card key={metric.id} background={metric.background}>
-                            <Box
-                              position="relative"
-                              overflowX="hidden"
-                              overflowY="hidden"
-                            >
-                              <Box
-                                position="absolute"
-                                insetBlockStart="200"
-                                insetInlineEnd="200"
-                                opacity="0.12"
-                              >
-                                <Icon
-                                  source={metric.icon}
-                                  tone={metric.iconTone}
-                                />
-                              </Box>
-
-                              <BlockStack gap="200">
-                                <InlineStack
-                                  align="space-between"
-                                  blockAlign="center"
-                                  gap="200"
-                                >
-                                  <InlineStack gap="150" blockAlign="center">
-                                    <MetricIconChip
-                                      icon={metric.icon}
-                                      tone={metric.iconTone}
-                                    />
-                                    <Text
-                                      variant="bodySm"
-                                      as="p"
-                                    >
-                                      {metric.label}
-                                    </Text>
-                                  </InlineStack>
-                                  <Badge
-                                    tone={metric.badgeTone}
-                                  >{`${share}%`}</Badge>
-                                </InlineStack>
-
-                                <Text variant="headingLg" as="p">
-                                  {metric.value}
-                                </Text>
-                              </BlockStack>
-                            </Box>
-                          </Card>
-                        )
-                      })}
-                    </InlineGrid>
-
-                    <Card background="bg-surface-secondary">
-                      <Box
-                        borderColor="border-secondary"
-                        borderWidth="025"
-                        borderRadius="300"
-                        padding="300"
-                      >
-                        <BlockStack gap="200">
-                          <InlineStack
-                            align="space-between"
-                            blockAlign="center"
-                          >
-                            <InlineStack gap="200" blockAlign="center">
-                              <MetricIconChip
-                                icon={ChartDonutIcon}
-                                tone="info"
-                              />
-                              <Text variant="bodyMd" as="p">
-                                Usage this month:{' '}
-                                <strong>{stats.usage.used}</strong> /{' '}
-                                <strong>{stats.usage.limit}</strong>{' '}
-                                verifications
-                              </Text>
-                            </InlineStack>
-                            <Badge tone={resolveUsageBadgeTone(usagePercent)}>
-                              {`${usagePercent}%`}
-                            </Badge>
-                          </InlineStack>
-                          <ProgressBar
-                            progress={usagePercent}
-                            size="small"
+                  {/* Usage */}
+                  <StatCard
+                    label="Included Usage"
+                    value={`${stats.usage.used} / ${stats.usage.limit}`}
+                    icon={ChartDonutIcon}
+                    tone="base"
+                    footer={
+                      <BlockStack gap="200">
+                        <InlineStack align="space-between">
+                          <Text variant="bodyXs" tone="subdued" as="p">
+                            Monthly Limit
+                          </Text>
+                          <Text
+                            variant="bodyXs"
                             tone={resolveUsageProgressTone(usagePercent)}
-                          />
-                        </BlockStack>
-                      </Box>
-                    </Card>
-                  </BlockStack>
-                ) : (
+                            as="p"
+                          >
+                            {usagePercent}% Used
+                          </Text>
+                        </InlineStack>
+                        <ProgressBar
+                          progress={usagePercent}
+                          size="small"
+                          tone={resolveUsageProgressTone(usagePercent)}
+                        />
+                      </BlockStack>
+                    }
+                  />
+
+                  {/* KPI Cards */}
+                  {kpiMetrics.map((metric) => (
+                    <StatCard
+                      key={metric.id}
+                      label={metric.label}
+                      value={metric.value}
+                      icon={metric.icon}
+                      tone={metric.tone}
+                    />
+                  ))}
+                </InlineGrid>
+              ) : (
+                <Card>
                   <Text variant="bodySm" tone="subdued" as="p">
                     Metrics are not available right now.
                   </Text>
-                )}
-              </BlockStack>
-            </Card>
+                </Card>
+              )}
+            </BlockStack>
           </Layout.Section>
         </Layout>
 
@@ -469,7 +290,7 @@ export function DashboardEmbeddedSkin({
                       </Text>
                       <Badge tone="info">Live</Badge>
                     </InlineStack>
-                    <Text variant="bodySm" as="p">
+                    <Text variant="bodySm" tone="subdued" as="p">
                       Latest verification events across your active channels.
                     </Text>
                   </BlockStack>
