@@ -1,5 +1,4 @@
 import {
-  Badge,
   Banner,
   BlockStack,
   Button,
@@ -69,7 +68,6 @@ export function DashboardEmbeddedSkin({
                       <Text variant="headingMd" as="h2">
                         Verification Status
                       </Text>
-                      <Badge tone="info">Live</Badge>
                     </InlineStack>
                     <Text variant="bodySm" tone="subdued" as="p">
                       Latest verification events across your active channels.
