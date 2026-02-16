@@ -9,6 +9,8 @@ export interface IntegrationOnboardingState {
   storeName: string | null
   defaultLanguage: IntegrationOnboardingLanguage
   isAutoVerifyEnabled: boolean
+  shippingCurrency: string
+  avgShippingCost: number
   billingPlanId: OnboardingBillingPlanId | null
   billingStatus: string | null
   billingManagementUrl: string | null
@@ -22,6 +24,8 @@ export interface OnboardingSettingsPayload {
   storeName: string
   defaultLanguage: IntegrationOnboardingLanguage
   isAutoVerifyEnabled: boolean
+  shippingCurrency?: string
+  avgShippingCost?: number
 }
 
 export const ONBOARDING_BILLING_PLAN_IDS = [

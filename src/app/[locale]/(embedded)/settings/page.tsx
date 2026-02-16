@@ -89,6 +89,20 @@ function formatPlanId(planId: OnboardingBillingPlanId): string {
   return planId.charAt(0).toUpperCase() + planId.slice(1)
 }
 
+const SHIPPING_CURRENCY_OPTIONS = [
+  'USD',
+  'EUR',
+  'EGP',
+  'SAR',
+  'AED',
+  'QAR',
+  'KWD',
+  'BHD',
+  'OMR',
+  'JOD',
+  'MAD',
+] as const
+
 export default function SettingsPage() {
   const t = useTranslations('settings')
   const { isEmbedded, isLoading: isModeLoading, appBridge } = useAkeedMode()
@@ -102,6 +116,11 @@ export default function SettingsPage() {
   const [storeNameError, setStoreNameError] = useState<string | undefined>(
     undefined
   )
+  const [shippingCurrency, setShippingCurrency] = useState('USD')
+  const [avgShippingCost, setAvgShippingCost] = useState('3')
+  const [avgShippingCostError, setAvgShippingCostError] = useState<
+    string | undefined
+  >(undefined)
   const [defaultLanguage, setDefaultLanguage] =
     useState<IntegrationOnboardingLanguage>('auto')
   const [isAutoVerifyEnabled, setIsAutoVerifyEnabled] = useState(true)
@@ -124,6 +143,15 @@ export default function SettingsPage() {
       { label: t('languageEnglish'), value: 'en' },
       { label: t('languageArabic'), value: 'ar' },
     ],
+    [t]
+  )
+
+  const shippingCurrencyOptions = useMemo(
+    () =>
+      SHIPPING_CURRENCY_OPTIONS.map((currency) => ({
+        label: t(`shippingCurrencyOption${currency}`),
+        value: currency,
+      })),
     [t]
   )
 
@@ -159,6 +187,8 @@ export default function SettingsPage() {
         }
 
         setStoreName(state.storeName ?? '')
+        setShippingCurrency(state.shippingCurrency ?? 'USD')
+        setAvgShippingCost(String(state.avgShippingCost ?? 3))
         setDefaultLanguage(state.defaultLanguage)
         setIsAutoVerifyEnabled(state.isAutoVerifyEnabled)
         setBillingPlanId(state.billingPlanId)
@@ -216,8 +246,14 @@ export default function SettingsPage() {
       setStoreNameError(t('storeNameRequired'))
       return
     }
+    const parsedAvgShippingCost = Number.parseFloat(avgShippingCost)
+    if (!Number.isFinite(parsedAvgShippingCost) || parsedAvgShippingCost < 0) {
+      setAvgShippingCostError(t('avgShippingCostInvalid'))
+      return
+    }
 
     setStoreNameError(undefined)
+    setAvgShippingCostError(undefined)
     setIsSaving(true)
 
     try {
@@ -225,9 +261,13 @@ export default function SettingsPage() {
         storeName: trimmedStoreName,
         defaultLanguage,
         isAutoVerifyEnabled,
+        shippingCurrency,
+        avgShippingCost: Number(parsedAvgShippingCost.toFixed(2)),
       })
 
       setStoreName(state.storeName ?? trimmedStoreName)
+      setShippingCurrency(state.shippingCurrency ?? shippingCurrency)
+      setAvgShippingCost(String(state.avgShippingCost ?? parsedAvgShippingCost))
       setDefaultLanguage(state.defaultLanguage)
       setIsAutoVerifyEnabled(state.isAutoVerifyEnabled)
       setBillingPlanId(state.billingPlanId)
@@ -240,7 +280,14 @@ export default function SettingsPage() {
     } finally {
       setIsSaving(false)
     }
-  }, [defaultLanguage, isAutoVerifyEnabled, storeName, t])
+  }, [
+    avgShippingCost,
+    defaultLanguage,
+    isAutoVerifyEnabled,
+    shippingCurrency,
+    storeName,
+    t,
+  ])
 
   const handleManageBilling = useCallback(() => {
     if (!billingManagementUrl) {
@@ -304,6 +351,30 @@ export default function SettingsPage() {
                   onChange={(value) =>
                     setDefaultLanguage(value as IntegrationOnboardingLanguage)
                   }
+                />
+
+                <Select
+                  label={t('shippingCurrencyLabel')}
+                  options={shippingCurrencyOptions}
+                  value={shippingCurrency}
+                  onChange={setShippingCurrency}
+                />
+
+                <TextField
+                  label={t('avgShippingCostLabel')}
+                  type="number"
+                  autoComplete="off"
+                  min={0}
+                  step={0.01}
+                  value={avgShippingCost}
+                  onChange={(value) => {
+                    setAvgShippingCost(value)
+                    if (avgShippingCostError) {
+                      setAvgShippingCostError(undefined)
+                    }
+                  }}
+                  error={avgShippingCostError}
+                  helpText={t('avgShippingCostHelp')}
                 />
 
                 <Checkbox
