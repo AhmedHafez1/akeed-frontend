@@ -25,6 +25,7 @@ import { WelcomeStep } from './steps/WelcomeStep'
 
 export default function OnboardingPage() {
   const t = useTranslations('onboarding')
+  const tEmbedded = useTranslations('embeddedOnboarding')
   const { isEmbedded, isLoading: isModeLoading, appBridge, hostParam } =
     useAkeedMode()
 
@@ -48,7 +49,7 @@ export default function OnboardingPage() {
   const formatPlanPriceLabel = useCallback(
     (amount: number, currencyCode: string) => {
       if (amount === 0) {
-        return t('planPriceFree')
+        return tEmbedded('planPriceFree')
       }
 
       const formattedAmount = new Intl.NumberFormat(numberLocale, {
@@ -58,32 +59,32 @@ export default function OnboardingPage() {
         maximumFractionDigits: 2,
       }).format(amount)
 
-      return t('planPricePerMonth', { price: formattedAmount })
+      return tEmbedded('planPricePerMonth', { price: formattedAmount })
     },
-    [numberLocale, t]
+    [numberLocale, tEmbedded]
   )
 
   const formatPlanVolumeLabel = useCallback(
     (includedVerifications: number) =>
-      t('planVolumePerMonth', { count: includedVerifications }),
-    [t]
+      tEmbedded('planVolumePerMonth', { count: includedVerifications }),
+    [tEmbedded]
   )
 
   const messages = useMemo(
     () => ({
-      prefillWarning: t('prefillWarning'),
-      storeNameRequired: t('storeNameRequired'),
-      settingsSaveError: t('settingsSaveError'),
-      billingActivationError: t('billingActivationError'),
-      billingStatusPending: t('billingStatusPending'),
-      billingStatusDeclined: t('billingStatusDeclined'),
-      billingStatusFrozen: t('billingStatusFrozen'),
-      billingStatusExpired: t('billingStatusExpired'),
-      billingStatusCanceled: t('billingStatusCanceled'),
-      billingStatusError: t('billingStatusError'),
-      billingStatusNeedsAttention: t('billingStatusNeedsAttention'),
+      prefillWarning: tEmbedded('prefillWarning'),
+      storeNameRequired: tEmbedded('storeNameRequired'),
+      settingsSaveError: tEmbedded('settingsSaveError'),
+      billingActivationError: tEmbedded('billingActivationError'),
+      billingStatusPending: tEmbedded('billingStatusPending'),
+      billingStatusDeclined: tEmbedded('billingStatusDeclined'),
+      billingStatusFrozen: tEmbedded('billingStatusFrozen'),
+      billingStatusExpired: tEmbedded('billingStatusExpired'),
+      billingStatusCanceled: tEmbedded('billingStatusCanceled'),
+      billingStatusError: tEmbedded('billingStatusError'),
+      billingStatusNeedsAttention: tEmbedded('billingStatusNeedsAttention'),
     }),
-    [t]
+    [tEmbedded]
   )
 
   const handleBillingConfirmation = useCallback(
@@ -136,16 +137,16 @@ export default function OnboardingPage() {
 
         return {
           id: planDefinition.id,
-          name: t(planDefinition.nameKey),
+          name: tEmbedded(planDefinition.nameKey),
           monthlyPriceLabel: runtimePlan
             ? formatPlanPriceLabel(runtimePlan.amount, runtimePlan.currencyCode)
-            : t(planDefinition.priceKey),
+            : tEmbedded(planDefinition.priceKey),
           monthlyVolumeLabel: runtimePlan
             ? formatPlanVolumeLabel(runtimePlan.includedVerifications)
-            : t(planDefinition.volumeKey),
-          features: planDefinition.featureKeys.map((key) => t(key)),
+            : tEmbedded(planDefinition.volumeKey),
+          features: planDefinition.featureKeys.map((key) => tEmbedded(key)),
           badge: planDefinition.badgeKey
-            ? t(planDefinition.badgeKey)
+            ? tEmbedded(planDefinition.badgeKey)
             : undefined,
         }
       }),
@@ -153,7 +154,7 @@ export default function OnboardingPage() {
       billingPlanConfigsById,
       formatPlanPriceLabel,
       formatPlanVolumeLabel,
-      t,
+      tEmbedded,
     ]
   )
 
@@ -188,10 +189,10 @@ export default function OnboardingPage() {
     ),
     3: (
       <BillingStep
-        heading={t('billingHeading')}
-        body={t('billingBody')}
-        ctaLabel={t('activatePlan')}
-        selectedBadgeLabel={t('selectedPlan')}
+        heading={tEmbedded('billingHeading')}
+        body={tEmbedded('billingBody')}
+        ctaLabel={tEmbedded('activatePlan')}
+        selectedBadgeLabel={tEmbedded('selectedPlan')}
         plans={billingPlans}
         selectedPlanId={selectedPlanId}
         isActivating={isActivatingPlan}

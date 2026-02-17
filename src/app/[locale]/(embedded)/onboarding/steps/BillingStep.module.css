@@ -1,0 +1,50 @@
+.plansGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  align-items: stretch;
+}
+
+@media (min-width: 768px) {
+  .plansGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .plansGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.planGridItem {
+  min-height: 100%;
+}
+
+.planButton {
+  display: block;
+  cursor: pointer;
+  border-radius: 12px;
+  outline: none;
+  min-height: 100%;
+}
+
+.planButton:focus-visible {
+  box-shadow: 0 0 0 3px rgba(0, 127, 95, 0.35);
+}
+
+.planButtonSelected {
+  box-shadow: 0 0 0 2px rgba(0, 127, 95, 0.45);
+}
+
+.planCardContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 290px;
+}
+
+.planFeature {
+  line-height: 1.5;
+}

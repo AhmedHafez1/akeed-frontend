@@ -12,6 +12,7 @@ import type {
   OnboardingBillingPlan,
   OnboardingBillingPlanId,
 } from '@/types/embedded-onboarding.model'
+import styles from './BillingStep.module.css'
 
 interface BillingStepProps {
   heading: string
@@ -59,12 +60,12 @@ export function BillingStep({
         </Text>
       </BlockStack>
 
-      <InlineStack align="start" gap="300" wrap>
+      <div className={styles.plansGrid}>
         {plans.map((plan) => {
           const isSelected = selectedPlanId === plan.id
 
           return (
-            <div key={plan.id} className="flex-1-1-220px min-w-220px">
+            <div key={plan.id} className={styles.planGridItem}>
               <div
                 role="button"
                 tabIndex={0}
@@ -72,12 +73,14 @@ export function BillingStep({
                 onKeyDown={(event) =>
                   handlePlanSelectByKeyboard(event, plan.id)
                 }
-                className="cursor-pointer"
+                className={`${styles.planButton} ${
+                  isSelected ? styles.planButtonSelected : ''
+                }`}
               >
                 <Card>
-                  <BlockStack gap="300">
+                  <div className={styles.planCardContent}>
                     <InlineStack align="space-between" blockAlign="center">
-                      <Text as="h3" variant="headingMd">
+                      <Text as="h3" variant="headingLg">
                         {plan.name}
                       </Text>
                       {isSelected ? (
@@ -88,10 +91,10 @@ export function BillingStep({
                     </InlineStack>
 
                     <BlockStack gap="100">
-                      <Text as="p" variant="headingSm">
+                      <Text as="p" variant="headingXl">
                         {plan.monthlyPriceLabel}
                       </Text>
-                      <Text as="p" tone="subdued" variant="bodySm">
+                      <Text as="p" tone="subdued" variant="bodyMd">
                         {plan.monthlyVolumeLabel}
                       </Text>
                     </BlockStack>
@@ -101,19 +104,20 @@ export function BillingStep({
                         <Text
                           key={`${plan.id}-${feature}`}
                           as="p"
-                          variant="bodySm"
+                          variant="bodyMd"
+                          className={styles.planFeature}
                         >
-                          • {feature}
+                          - {feature}
                         </Text>
                       ))}
                     </BlockStack>
-                  </BlockStack>
+                  </div>
                 </Card>
               </div>
             </div>
           )
         })}
-      </InlineStack>
+      </div>
 
       <Box>
         <Button variant="primary" loading={isActivating} onClick={onActivate}>
