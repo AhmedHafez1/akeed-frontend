@@ -4,6 +4,7 @@ import type {
   VerificationItem,
   VerificationStatus,
 } from '@/types/dashboard.model'
+import { useLocaleInfo } from '@/hooks/useLocaleInfo'
 
 type PolarisBadgeTone =
   | 'attention'
@@ -72,6 +73,10 @@ export function VerificationsTableEmbedded({
   verifications,
 }: VerificationsTableEmbeddedProps) {
   const t = useTranslations('dashboard')
+  const { isRTL } = useLocaleInfo()
+  const textAlignment = isRTL ? 'end' : undefined
+  const dataCellClassName = isRTL ? 'w-full text-right' : 'w-full'
+  const statusCellClassName = 'flex w-full'
 
   const resourceName = {
     singular: t('table.resource.singular'),
@@ -79,58 +84,68 @@ export function VerificationsTableEmbedded({
   }
 
   const headings = [
-    { title: t('table.headings.order') },
-    { title: t('table.headings.customer') },
-    { title: t('table.headings.status') },
-    { title: t('table.headings.total'), alignment: 'end' as const },
-    { title: t('table.headings.created'), alignment: 'end' as const },
+    { title: t('table.headings.order'), alignment: textAlignment },
+    { title: t('table.headings.customer'), alignment: textAlignment },
+    { title: t('table.headings.status'), alignment: textAlignment },
+    { title: t('table.headings.total'), alignment: textAlignment },
+    { title: t('table.headings.created'), alignment: textAlignment },
   ] as const
 
   const rows = verifications.map((verification, index) => (
     <IndexTable.Row id={verification.id} key={verification.id} position={index}>
       <IndexTable.Cell>
-        <BlockStack gap="100">
+        <div className={dataCellClassName}>
+          <BlockStack gap="100">
+            <Text variant="bodyMd" fontWeight="semibold" as="p">
+              {formatOrderTitle(verification, t('table.orderFallbackPrefix'))}
+            </Text>
+            <Text variant="bodySm" tone="subdued" as="p">
+              {verification.order_id.slice(0, 12)}
+            </Text>
+          </BlockStack>
+        </div>
+      </IndexTable.Cell>
+
+      <IndexTable.Cell>
+        <div className={dataCellClassName}>
+          <BlockStack gap="100">
+            <Text variant="bodyMd" fontWeight="semibold" as="p">
+              {verification.customer_name || t('table.unknownCustomer')}
+            </Text>
+            <Text variant="bodySm" tone="subdued" as="p">
+              {verification.customer_phone || t('table.noPhone')}
+            </Text>
+          </BlockStack>
+        </div>
+      </IndexTable.Cell>
+
+      <IndexTable.Cell>
+        <div className={statusCellClassName}>
+          <Badge tone={STATUS_TONE_MAP[verification.status]}>
+            {t(`verificationStatus.${verification.status}`)}
+          </Badge>
+        </div>
+      </IndexTable.Cell>
+
+      <IndexTable.Cell>
+        <div className={dataCellClassName}>
           <Text variant="bodyMd" fontWeight="semibold" as="p">
-            {formatOrderTitle(verification, t('table.orderFallbackPrefix'))}
+            {formatCurrencyTotal(verification)}
           </Text>
-          <Text variant="bodySm" tone="subdued" as="p">
-            {verification.order_id.slice(0, 12)}
-          </Text>
-        </BlockStack>
+        </div>
       </IndexTable.Cell>
 
       <IndexTable.Cell>
-        <BlockStack gap="100">
-          <Text variant="bodyMd" fontWeight="semibold" as="p">
-            {verification.customer_name || t('table.unknownCustomer')}
-          </Text>
-          <Text variant="bodySm" tone="subdued" as="p">
-            {verification.customer_phone || t('table.noPhone')}
-          </Text>
-        </BlockStack>
-      </IndexTable.Cell>
-
-      <IndexTable.Cell>
-        <Badge tone={STATUS_TONE_MAP[verification.status]}>
-          {t(`verificationStatus.${verification.status}`)}
-        </Badge>
-      </IndexTable.Cell>
-
-      <IndexTable.Cell>
-        <Text alignment="end" variant="bodyMd" fontWeight="semibold" as="p">
-          {formatCurrencyTotal(verification)}
-        </Text>
-      </IndexTable.Cell>
-
-      <IndexTable.Cell>
-        <BlockStack gap="100">
-          <Text alignment="end" variant="bodySm" as="p">
-            {formatCreatedDate(verification.created_at)}
-          </Text>
-          <Text alignment="end" variant="bodyXs" tone="subdued" as="p">
-            {formatCreatedTime(verification.created_at)}
-          </Text>
-        </BlockStack>
+        <div className={dataCellClassName}>
+          <BlockStack gap="100">
+            <Text variant="bodySm" as="p">
+              {formatCreatedDate(verification.created_at)}
+            </Text>
+            <Text variant="bodyXs" tone="subdued" as="p">
+              {formatCreatedTime(verification.created_at)}
+            </Text>
+          </BlockStack>
+        </div>
       </IndexTable.Cell>
     </IndexTable.Row>
   ))
