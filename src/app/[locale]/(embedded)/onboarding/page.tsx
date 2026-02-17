@@ -26,8 +26,12 @@ import { WelcomeStep } from './steps/WelcomeStep'
 export default function OnboardingPage() {
   const t = useTranslations('onboarding')
   const tEmbedded = useTranslations('embeddedOnboarding')
-  const { isEmbedded, isLoading: isModeLoading, appBridge, hostParam } =
-    useAkeedMode()
+  const {
+    isEmbedded,
+    isLoading: isModeLoading,
+    appBridge,
+    hostParam,
+  } = useAkeedMode()
 
   const router = useRouter()
   const pathname = usePathname()
@@ -141,13 +145,12 @@ export default function OnboardingPage() {
           monthlyPriceLabel: runtimePlan
             ? formatPlanPriceLabel(runtimePlan.amount, runtimePlan.currencyCode)
             : tEmbedded(planDefinition.priceKey),
-          monthlyVolumeLabel: runtimePlan
-            ? formatPlanVolumeLabel(runtimePlan.includedVerifications)
-            : tEmbedded(planDefinition.volumeKey),
-          features: planDefinition.featureKeys.map((key) => tEmbedded(key)),
-          badge: planDefinition.badgeKey
-            ? tEmbedded(planDefinition.badgeKey)
-            : undefined,
+          monthlyVolumeLabel:
+            planDefinition.id === 'starter'
+              ? tEmbedded(planDefinition.volumeKey)
+              : runtimePlan
+                ? formatPlanVolumeLabel(runtimePlan.includedVerifications)
+                : tEmbedded(planDefinition.volumeKey),
         }
       }),
     [
@@ -192,7 +195,6 @@ export default function OnboardingPage() {
         heading={tEmbedded('billingHeading')}
         body={tEmbedded('billingBody')}
         ctaLabel={tEmbedded('activatePlan')}
-        selectedBadgeLabel={tEmbedded('selectedPlan')}
         plans={billingPlans}
         selectedPlanId={selectedPlanId}
         isActivating={isActivatingPlan}
@@ -223,7 +225,10 @@ export default function OnboardingPage() {
             <Card>
               <BlockStack gap="200">
                 <OnboardingStepCounter
-                  label={t('stepCounter', { current: step, total: TOTAL_STEPS })}
+                  label={t('stepCounter', {
+                    current: step,
+                    total: TOTAL_STEPS,
+                  })}
                 />
                 {stepComponents[step]}
               </BlockStack>

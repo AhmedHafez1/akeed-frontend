@@ -1,6 +1,5 @@
 import type { KeyboardEvent } from 'react'
 import {
-  Badge,
   BlockStack,
   Box,
   Button,
@@ -17,7 +16,6 @@ interface BillingStepProps {
   heading: string
   body: string
   ctaLabel: string
-  selectedBadgeLabel: string
   plans: OnboardingBillingPlan[]
   selectedPlanId: OnboardingBillingPlanId
   isActivating: boolean
@@ -29,7 +27,6 @@ export function BillingStep({
   heading,
   body,
   ctaLabel,
-  selectedBadgeLabel,
   plans,
   selectedPlanId,
   isActivating,
@@ -73,42 +70,37 @@ export function BillingStep({
                   handlePlanSelectByKeyboard(event, plan.id)
                 }
                 className={`block min-h-full cursor-pointer rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-emerald-700/35 ${
-                  isSelected ? 'shadow-[0_0_0_2px_rgba(0,127,95,0.45)]' : ''
+                  isSelected ? 'shadow-[0_0_0_3px_rgba(0,160,70,0.7)]' : ''
                 }`}
               >
                 <Card>
-                  <div className="flex min-h-[290px] flex-col justify-between gap-[18px]">
+                  <div className="flex min-h-64 flex-col justify-between gap-4.5">
                     <InlineStack align="space-between" blockAlign="center">
-                      <Text as="h3" variant="headingLg">
+                      <Text as="h3" variant="headingLg" tone="subdued">
                         {plan.name}
                       </Text>
                       {isSelected ? (
-                        <Badge tone="success">{selectedBadgeLabel}</Badge>
-                      ) : (
-                        plan.badge && <Badge>{plan.badge}</Badge>
-                      )}
+                        <span
+                          aria-label="Selected plan"
+                          className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-emerald-600 text-sm font-bold text-white"
+                        >
+                          &#10003;
+                        </span>
+                      ) : null}
                     </InlineStack>
 
-                    <BlockStack gap="100">
-                      <Text as="p" variant="headingXl">
+                    <Text as="h4" variant="headingXl">
+                      <span
+                        dir="auto"
+                        className="block text-center [unicode-bidi:isolate]"
+                      >
                         {plan.monthlyPriceLabel}
-                      </Text>
-                      <Text as="p" tone="subdued" variant="bodyMd">
+                      </span>
+                    </Text>
+                    <BlockStack gap="100">
+                      <Text as="p" tone="subdued" variant="bodyLg">
                         {plan.monthlyVolumeLabel}
                       </Text>
-                    </BlockStack>
-
-                    <BlockStack gap="100">
-                      {plan.features.map((feature) => (
-                        <Text
-                          key={`${plan.id}-${feature}`}
-                          as="p"
-                          variant="bodyMd"
-                          className="leading-6"
-                        >
-                          - {feature}
-                        </Text>
-                      ))}
                     </BlockStack>
                   </div>
                 </Card>
