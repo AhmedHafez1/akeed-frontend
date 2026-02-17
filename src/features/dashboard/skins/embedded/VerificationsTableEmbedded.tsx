@@ -1,5 +1,9 @@
 import { Badge, BlockStack, IndexTable, Text } from '@shopify/polaris'
-import type { VerificationItem, VerificationStatus } from '@/types/dashboard.model'
+import { useTranslations } from 'next-intl'
+import type {
+  VerificationItem,
+  VerificationStatus,
+} from '@/types/dashboard.model'
 
 type PolarisBadgeTone =
   | 'attention'
@@ -20,27 +24,19 @@ const STATUS_TONE_MAP: Record<VerificationStatus, PolarisBadgeTone> = {
   expired: 'warning',
 }
 
-const STATUS_LABEL_MAP: Record<VerificationStatus, string> = {
-  confirmed: 'Confirmed',
-  pending: 'Pending',
-  sent: 'Sent',
-  delivered: 'Delivered',
-  read: 'Read',
-  canceled: 'Cancelled',
-  failed: 'Failed',
-  expired: 'Expired',
-}
-
 interface VerificationsTableEmbeddedProps {
   verifications: VerificationItem[]
 }
 
-function formatOrderTitle(verification: VerificationItem): string {
+function formatOrderTitle(
+  verification: VerificationItem,
+  fallbackLabel: string
+): string {
   if (verification.order_number) {
     return `#${verification.order_number}`
   }
 
-  return `Order ${verification.order_id.slice(0, 8)}`
+  return `${fallbackLabel} ${verification.order_id.slice(0, 8)}`
 }
 
 function formatCurrencyTotal(verification: VerificationItem): string {
@@ -75,27 +71,29 @@ function formatCreatedTime(value: string | null): string {
 export function VerificationsTableEmbedded({
   verifications,
 }: VerificationsTableEmbeddedProps) {
+  const t = useTranslations('dashboard')
+
   const resourceName = {
-    singular: 'verification',
-    plural: 'verifications',
+    singular: t('table.resource.singular'),
+    plural: t('table.resource.plural'),
   }
 
   const headings = [
-    { title: 'Order' },
-    { title: 'Customer' },
-    { title: 'Status' },
-    { title: 'Total', alignment: 'end' as const },
-    { title: 'Created', alignment: 'end' as const },
+    { title: t('table.headings.order') },
+    { title: t('table.headings.customer') },
+    { title: t('table.headings.status') },
+    { title: t('table.headings.total'), alignment: 'end' as const },
+    { title: t('table.headings.created'), alignment: 'end' as const },
   ] as const
 
   const rows = verifications.map((verification, index) => (
     <IndexTable.Row id={verification.id} key={verification.id} position={index}>
       <IndexTable.Cell>
         <BlockStack gap="100">
-          <Text variant="bodyMd" fontWeight="semibold" as="span">
-            {formatOrderTitle(verification)}
+          <Text variant="bodyMd" fontWeight="semibold" as="p">
+            {formatOrderTitle(verification, t('table.orderFallbackPrefix'))}
           </Text>
-          <Text variant="bodySm" tone="subdued" as="span">
+          <Text variant="bodySm" tone="subdued" as="p">
             {verification.order_id.slice(0, 12)}
           </Text>
         </BlockStack>
@@ -103,18 +101,18 @@ export function VerificationsTableEmbedded({
 
       <IndexTable.Cell>
         <BlockStack gap="100">
-          <Text variant="bodyMd" fontWeight="semibold" as="span">
-            {verification.customer_name || 'Unknown customer'}
+          <Text variant="bodyMd" fontWeight="semibold" as="p">
+            {verification.customer_name || t('table.unknownCustomer')}
           </Text>
-          <Text variant="bodySm" tone="subdued" as="span">
-            {verification.customer_phone || 'No phone'}
+          <Text variant="bodySm" tone="subdued" as="p">
+            {verification.customer_phone || t('table.noPhone')}
           </Text>
         </BlockStack>
       </IndexTable.Cell>
 
       <IndexTable.Cell>
         <Badge tone={STATUS_TONE_MAP[verification.status]}>
-          {STATUS_LABEL_MAP[verification.status]}
+          {t(`verificationStatus.${verification.status}`)}
         </Badge>
       </IndexTable.Cell>
 

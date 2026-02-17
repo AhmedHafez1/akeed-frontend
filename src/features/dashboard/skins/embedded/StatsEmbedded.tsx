@@ -10,6 +10,7 @@ import {
   Spinner,
   Text,
 } from '@shopify/polaris'
+import { useTranslations } from 'next-intl'
 import type {
   DashboardStats,
   DashboardStatsDateRange,
@@ -91,35 +92,37 @@ export function StatsEmbedded({
   dateRangeOptions,
   onDateRangeFilterChange,
 }: StatsEmbeddedProps) {
+  const t = useTranslations('dashboard')
+
   const summaryMetrics: SummaryMetric[] = stats
     ? [
         {
           id: 'total',
-          label: 'Total',
+          label: t('metrics.cards.total'),
           value: stats.totals.total,
           tone: 'brand',
         },
         {
           id: 'confirmed',
-          label: 'Confirmed',
+          label: t('metrics.cards.confirmed'),
           value: stats.totals.confirmed,
           tone: 'success',
         },
         {
           id: 'canceled',
-          label: 'Cancelled',
+          label: t('metrics.cards.canceled'),
           value: stats.totals.canceled,
           tone: 'critical',
         },
         {
           id: 'pending',
-          label: 'Pending',
+          label: t('metrics.cards.pending'),
           value: stats.totals.pending,
           tone: 'brand',
         },
         {
           id: 'expired',
-          label: 'Expired',
+          label: t('metrics.cards.expired'),
           value: stats.totals.expired,
           tone: 'warning',
         },
@@ -138,14 +141,14 @@ export function StatsEmbedded({
       <InlineStack align="space-between" blockAlign="center" gap="300">
         <BlockStack gap="050">
           <Text variant="headingMd" as="h2">
-            Dashboard Metrics
+            {t('metrics.title')}
           </Text>
           <Text variant="bodySm" tone="subdued" as="p">
-            Live verification performance overview.
+            {t('metrics.subtitle')}
           </Text>
         </BlockStack>
         <Select
-          label="Date range"
+          label={t('filters.dateRange.label')}
           labelHidden
           options={dateRangeOptions.map((option) => ({
             label: option.label,
@@ -163,7 +166,7 @@ export function StatsEmbedded({
           <InlineStack align="center" gap="200">
             <Spinner size="small" />
             <Text variant="bodySm" tone="subdued" as="span">
-              Loading metrics...
+              {t('metrics.loading')}
             </Text>
           </InlineStack>
         </Card>
@@ -173,10 +176,10 @@ export function StatsEmbedded({
             <BlockStack gap="300">
               <InlineStack align="space-between" blockAlign="center" gap="200">
                 <Text variant="headingSm" as="h3">
-                  Verification Summary
+                  {t('metrics.summaryTitle')}
                 </Text>
                 <Badge tone={resolveRateTone(stats.totals.reply_rate)}>
-                  {`${stats.totals.reply_rate}% Reply Rate`}
+                  {t('metrics.replyRate', { value: stats.totals.reply_rate })}
                 </Badge>
               </InlineStack>
 
@@ -208,7 +211,7 @@ export function StatsEmbedded({
               <BlockStack gap="300">
                 <BlockStack gap="050">
                   <Text variant="headingSm" as="h3">
-                    Money Saved
+                    {t('metrics.moneySaved.title')}
                   </Text>
                   <Text variant="heading2xl" as="p">
                     {formatMoney(
@@ -225,12 +228,14 @@ export function StatsEmbedded({
                 >
                   <BlockStack gap="050">
                     <Text variant="bodyXs" tone="subdued" as="p">
-                      Savings Breakdown
+                      {t('metrics.moneySaved.breakdownTitle')}
                     </Text>
                     <Text variant="bodySm" as="p">
-                      {stats.totals.canceled} cancelled x{' '}
-                      {stats.savings.avg_shipping_cost} {stats.savings.currency}{' '}
-                      shipping
+                      {t('metrics.moneySaved.breakdownLine', {
+                        count: stats.totals.canceled,
+                        cost: stats.savings.avg_shipping_cost,
+                        currency: stats.savings.currency,
+                      })}
                     </Text>
                   </BlockStack>
                 </Box>
@@ -241,7 +246,7 @@ export function StatsEmbedded({
               <BlockStack gap="300">
                 <BlockStack gap="050">
                   <Text variant="headingSm" as="h3">
-                    Included Usage
+                    {t('metrics.usage.title')}
                   </Text>
                   <Text variant="heading2xl" as="p">
                     {stats.usage.used} / {stats.usage.limit}
@@ -256,14 +261,14 @@ export function StatsEmbedded({
                   <BlockStack gap="200">
                     <InlineStack align="space-between">
                       <Text variant="bodyXs" tone="subdued" as="p">
-                        Monthly Limit
+                        {t('metrics.usage.monthlyLimit')}
                       </Text>
                       <Text
                         variant="bodyXs"
                         tone={resolveUsageProgressTone(usagePercent)}
                         as="p"
                       >
-                        {usagePercent}% Used
+                        {t('metrics.usage.used', { value: usagePercent })}
                       </Text>
                     </InlineStack>
                     <ProgressBar
@@ -280,7 +285,7 @@ export function StatsEmbedded({
       ) : (
         <Card>
           <Text variant="bodySm" tone="subdued" as="p">
-            Metrics are not available right now.
+            {t('metrics.unavailable')}
           </Text>
         </Card>
       )}

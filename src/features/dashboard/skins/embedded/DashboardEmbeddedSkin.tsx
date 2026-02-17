@@ -11,6 +11,7 @@ import {
   Spinner,
   Text,
 } from '@shopify/polaris'
+import { useTranslations } from 'next-intl'
 import { VerificationsTableEmbedded } from './VerificationsTableEmbedded'
 import { StatsEmbedded } from './StatsEmbedded'
 import type { DashboardSkinProps } from '../../domain/dashboard.types'
@@ -30,10 +31,12 @@ export function DashboardEmbeddedSkin({
   onStatusFilterChange,
   error,
 }: DashboardSkinProps) {
+  const t = useTranslations('dashboard')
+
   return (
     <Page
-      title="Dashboard"
-      subtitle="Monitor verification status and recent orders across your channels."
+      title={t('title')}
+      subtitle={t('subtitle')}
     >
       <BlockStack gap="400">
         {error && (
@@ -66,11 +69,11 @@ export function DashboardEmbeddedSkin({
                   <BlockStack gap="100">
                     <InlineStack gap="200" blockAlign="center">
                       <Text variant="headingMd" as="h2">
-                        Verification Status
+                        {t('verificationSection.title')}
                       </Text>
                     </InlineStack>
                     <Text variant="bodySm" tone="subdued" as="p">
-                      Latest verification events across your active channels.
+                      {t('verificationSection.subtitle')}
                     </Text>
                   </BlockStack>
 
@@ -91,14 +94,14 @@ export function DashboardEmbeddedSkin({
                   <InlineStack align="center" gap="200">
                     <Spinner size="small" />
                     <Text variant="bodySm" tone="subdued" as="span">
-                      Loading verifications...
+                      {t('verificationSection.loading')}
                     </Text>
                   </InlineStack>
                 ) : hasVerifications ? (
                   <VerificationsTableEmbedded verifications={verifications} />
                 ) : (
                   <PolarisEmptyState
-                    heading="No verifications"
+                    heading={t('verificationSection.emptyHeading')}
                     image={null as unknown as string}
                   >
                     <p>{emptyVerificationsMessage}</p>

@@ -442,6 +442,86 @@
     "billingStatusError": "تعذر التحقق من حالة الفوترة. يرجى إعادة محاولة تفعيل الخطة.",
     "billingStatusNeedsAttention": "حالة الفوترة تحتاج إلى إجراء. يرجى تفعيل أو تحديث خطتك للمتابعة."
   },
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "subtitle": "تابع حالة تأكيد الطلبات وآخر الطلبات عبر قنواتك.",
+    "filters": {
+      "status": {
+        "all": "الكل",
+        "pending": "قيد الانتظار",
+        "sent": "تم الإرسال",
+        "confirmed": "مؤكد",
+        "canceled": "ملغي"
+      },
+      "dateRange": {
+        "label": "النطاق الزمني",
+        "today": "اليوم",
+        "last_7_days": "آخر 7 أيام",
+        "last_30_days": "آخر 30 يومًا"
+      }
+    },
+    "emptyState": {
+      "all": "لا توجد عمليات تأكيد بعد. عند استلام أي طلب ستظهر طلبات التأكيد هنا.",
+      "filtered": "لا توجد عمليات تأكيد تطابق الحالة المحددة."
+    },
+    "verificationSection": {
+      "title": "حالة التأكيدات الأخيرة",
+      "subtitle": "أحدث أحداث التأكيد عبر قنواتك النشطة.",
+      "loading": "جارٍ تحميل عمليات التأكيد...",
+      "emptyHeading": "لا توجد عمليات تأكيد"
+    },
+    "metrics": {
+      "title": "مؤشرات لوحة التحكم",
+      "subtitle": "نظرة مباشرة على تأكيد الطلبات.",
+      "loading": "جارٍ تحميل المؤشرات...",
+      "summaryTitle": "ملخص تأكيد الطلبات",
+      "replyRate": "معدل الرد {value}%",
+      "cards": {
+        "total": "الإجمالي",
+        "confirmed": "المؤكد",
+        "canceled": "الملغي",
+        "pending": "قيد الانتظار",
+        "expired": "منتهي"
+      },
+      "moneySaved": {
+        "title": "المبلغ الموفَّر",
+        "breakdownTitle": "تفصيل التوفير",
+        "breakdownLine": "{count} ملغي × {cost} {currency} شحن"
+      },
+      "usage": {
+        "title": "الاستخدام المتضمن",
+        "monthlyLimit": "الحد الشهري",
+        "used": "المستخدم {value}%"
+      },
+      "unavailable": "المؤشرات غير متاحة حاليًا."
+    },
+    "table": {
+      "resource": {
+        "singular": "عملية تأكيد",
+        "plural": "عمليات تأكيد"
+      },
+      "headings": {
+        "order": "الطلب",
+        "customer": "العميل",
+        "status": "الحالة",
+        "total": "الإجمالي",
+        "created": "تاريخ الإنشاء"
+      },
+      "orderFallbackPrefix": "طلب",
+      "unknownCustomer": "عميل غير معروف",
+      "noPhone": "بدون رقم هاتف"
+    },
+    "verificationStatus": {
+      "confirmed": "مؤكد",
+      "pending": "قيد الانتظار",
+      "sent": "تم الإرسال",
+      "delivered": "تم التسليم",
+      "read": "تمت القراءة",
+      "canceled": "ملغي",
+      "failed": "فشل",
+      "expired": "منتهي"
+    }
+  },
   "settings": {
     "title": "الإعدادات",
     "subtitle": "إدارة إعدادات المتجر والاشتراك.",

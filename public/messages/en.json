@@ -442,6 +442,86 @@
     "billingStatusError": "We could not verify your billing status. Please try activating your plan again.",
     "billingStatusNeedsAttention": "Your billing status needs attention. Please activate or update your plan to continue."
   },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Monitor verification status and recent orders across your channels.",
+    "filters": {
+      "status": {
+        "all": "All",
+        "pending": "Pending",
+        "sent": "Sent",
+        "confirmed": "Confirmed",
+        "canceled": "Canceled"
+      },
+      "dateRange": {
+        "label": "Date range",
+        "today": "Today",
+        "last_7_days": "Last 7 days",
+        "last_30_days": "Last 30 days"
+      }
+    },
+    "emptyState": {
+      "all": "No verifications yet. Once an order is received, verification requests will appear here.",
+      "filtered": "No verifications match the selected status."
+    },
+    "verificationSection": {
+      "title": "Verification Status",
+      "subtitle": "Latest verification events across your active channels.",
+      "loading": "Loading verifications...",
+      "emptyHeading": "No verifications"
+    },
+    "metrics": {
+      "title": "Dashboard Metrics",
+      "subtitle": "Live verification performance overview.",
+      "loading": "Loading metrics...",
+      "summaryTitle": "Verification Summary",
+      "replyRate": "{value}% Reply Rate",
+      "cards": {
+        "total": "Total",
+        "confirmed": "Confirmed",
+        "canceled": "Canceled",
+        "pending": "Pending",
+        "expired": "Expired"
+      },
+      "moneySaved": {
+        "title": "Money Saved",
+        "breakdownTitle": "Savings Breakdown",
+        "breakdownLine": "{count} canceled x {cost} {currency} shipping"
+      },
+      "usage": {
+        "title": "Included Usage",
+        "monthlyLimit": "Monthly Limit",
+        "used": "{value}% Used"
+      },
+      "unavailable": "Metrics are not available right now."
+    },
+    "table": {
+      "resource": {
+        "singular": "verification",
+        "plural": "verifications"
+      },
+      "headings": {
+        "order": "Order",
+        "customer": "Customer",
+        "status": "Status",
+        "total": "Total",
+        "created": "Created"
+      },
+      "orderFallbackPrefix": "Order",
+      "unknownCustomer": "Unknown customer",
+      "noPhone": "No phone"
+    },
+    "verificationStatus": {
+      "confirmed": "Confirmed",
+      "pending": "Pending",
+      "sent": "Sent",
+      "delivered": "Delivered",
+      "read": "Read",
+      "canceled": "Canceled",
+      "failed": "Failed",
+      "expired": "Expired"
+    }
+  },
   "settings": {
     "title": "Settings",
     "subtitle": "Manage your storefront and billing preferences.",

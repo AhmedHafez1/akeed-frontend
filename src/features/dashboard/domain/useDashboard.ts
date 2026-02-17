@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useMemo, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { useDashboardData } from '@/hooks/useDashboardData'
 import { useDashboardStats } from '@/hooks/useDashboardStats'
 import type {
@@ -13,21 +14,8 @@ import type {
   StatusFilterOption,
 } from './dashboard.types'
 
-const STATUS_FILTERS: ReadonlyArray<StatusFilterOption> = [
-  { id: 'all', label: 'All' },
-  { id: 'pending', label: 'Pending' },
-  { id: 'sent', label: 'Sent' },
-  { id: 'confirmed', label: 'Confirmed' },
-  { id: 'canceled', label: 'Canceled' },
-] as const
-
-const DATE_RANGE_FILTERS: ReadonlyArray<DateRangeFilterOption> = [
-  { id: 'today', label: 'Today' },
-  { id: 'last_7_days', label: 'Last 7 days' },
-  { id: 'last_30_days', label: 'Last 30 days' },
-] as const
-
 export function useDashboard(): DashboardSkinProps {
+  const t = useTranslations('dashboard')
   const [statusFilter, setStatusFilter] =
     useState<VerificationStatusFilter>('all')
   const [dateRangeFilter, setDateRangeFilter] =
@@ -43,12 +31,32 @@ export function useDashboard(): DashboardSkinProps {
 
   const hasVerifications = verifications.length > 0
 
+  const statusFilters = useMemo<ReadonlyArray<StatusFilterOption>>(
+    () => [
+      { id: 'all', label: t('filters.status.all') },
+      { id: 'pending', label: t('filters.status.pending') },
+      { id: 'sent', label: t('filters.status.sent') },
+      { id: 'confirmed', label: t('filters.status.confirmed') },
+      { id: 'canceled', label: t('filters.status.canceled') },
+    ],
+    [t]
+  )
+
+  const dateRangeOptions = useMemo<ReadonlyArray<DateRangeFilterOption>>(
+    () => [
+      { id: 'today', label: t('filters.dateRange.today') },
+      { id: 'last_7_days', label: t('filters.dateRange.last_7_days') },
+      { id: 'last_30_days', label: t('filters.dateRange.last_30_days') },
+    ],
+    [t]
+  )
+
   const emptyVerificationsMessage = useMemo(() => {
     if (statusFilter === 'all') {
-      return 'No verifications yet. Once an order is received, verification requests will appear here.'
+      return t('emptyState.all')
     }
-    return 'No verifications match the selected status.'
-  }, [statusFilter])
+    return t('emptyState.filtered')
+  }, [statusFilter, t])
 
   const onStatusFilterChange = useCallback((filter: VerificationStatusFilter) => {
     setStatusFilter(filter)
@@ -73,7 +81,7 @@ export function useDashboard(): DashboardSkinProps {
     stats,
     isStatsLoading,
     dateRangeFilter,
-    dateRangeOptions: DATE_RANGE_FILTERS,
+    dateRangeOptions,
     onDateRangeFilterChange,
 
     verifications,
@@ -82,7 +90,7 @@ export function useDashboard(): DashboardSkinProps {
     emptyVerificationsMessage,
 
     statusFilter,
-    statusFilters: STATUS_FILTERS,
+    statusFilters,
     onStatusFilterChange,
 
     error,
