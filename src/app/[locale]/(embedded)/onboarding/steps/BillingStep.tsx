@@ -12,7 +12,6 @@ import type {
   OnboardingBillingPlan,
   OnboardingBillingPlanId,
 } from '@/types/embedded-onboarding.model'
-import styles from './BillingStep.module.css'
 
 interface BillingStepProps {
   heading: string
@@ -60,12 +59,12 @@ export function BillingStep({
         </Text>
       </BlockStack>
 
-      <div className={styles.plansGrid}>
+      <div className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 xl:grid-cols-4">
         {plans.map((plan) => {
           const isSelected = selectedPlanId === plan.id
 
           return (
-            <div key={plan.id} className={styles.planGridItem}>
+            <div key={plan.id} className="min-h-full">
               <div
                 role="button"
                 tabIndex={0}
@@ -73,12 +72,12 @@ export function BillingStep({
                 onKeyDown={(event) =>
                   handlePlanSelectByKeyboard(event, plan.id)
                 }
-                className={`${styles.planButton} ${
-                  isSelected ? styles.planButtonSelected : ''
+                className={`block min-h-full cursor-pointer rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-emerald-700/35 ${
+                  isSelected ? 'shadow-[0_0_0_2px_rgba(0,127,95,0.45)]' : ''
                 }`}
               >
                 <Card>
-                  <div className={styles.planCardContent}>
+                  <div className="flex min-h-[290px] flex-col justify-between gap-[18px]">
                     <InlineStack align="space-between" blockAlign="center">
                       <Text as="h3" variant="headingLg">
                         {plan.name}
@@ -105,7 +104,7 @@ export function BillingStep({
                           key={`${plan.id}-${feature}`}
                           as="p"
                           variant="bodyMd"
-                          className={styles.planFeature}
+                          className="leading-6"
                         >
                           - {feature}
                         </Text>
