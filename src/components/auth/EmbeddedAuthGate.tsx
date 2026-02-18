@@ -1,83 +1,136 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Redirect } from '@shopify/app-bridge/actions'
 import { useAkeedMode } from '@/hooks/useAkeedMode'
-import { useSearchParams } from 'next/navigation'
+import {
+  checkEmbeddedInstall,
+  fetchOnboardingStatusWithRetry,
+  resolveOnboardingRedirect,
+  type EmbeddedOnboardingGate,
+} from '@/lib/embeddedAuth'
+import { getLocaleFromPathname, withLocale } from '@/lib/locale'
 
 interface EmbeddedAuthGateProps {
   children: React.ReactNode
   fallback?: React.ReactNode
+  onboardingGate?: EmbeddedOnboardingGate
+}
+
+function buildInstallAuthUrl(
+  shopDomain: string,
+  hostParam: string | null
+): URL {
+  const authUrl = new URL('/auth/shopify', window.location.origin)
+  authUrl.searchParams.set('shop', shopDomain)
+  if (hostParam) {
+    authUrl.searchParams.set('host', hostParam)
+  }
+  return authUrl
 }
 
 export function EmbeddedAuthGate({
   children,
   fallback = null,
+  onboardingGate = 'none',
 }: EmbeddedAuthGateProps) {
   const { isEmbedded, shopDomain, hostParam, appBridge, isLoading } =
     useAkeedMode()
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const locale = getLocaleFromPathname(pathname ?? '')
+  const search = useMemo(() => {
+    const query = searchParams.toString()
+    return query ? `?${query}` : ''
+  }, [searchParams])
   const [isEmbeddedReady, setIsEmbeddedReady] = useState(false)
-  const pathParams = useSearchParams()
-  const installed = pathParams.get('installed') === 'true'
 
   useEffect(() => {
-    if (isLoading || !isEmbedded || !shopDomain || !appBridge) return
+    if (isLoading) return
+
+    if (!isEmbedded || !shopDomain) return
+    if (onboardingGate !== 'none' && !appBridge) return
 
     let active = true
 
-    const ensureInstalled = async () => {
-      if (!active) return
+    const redirectToAuth = () => {
+      const authUrl = buildInstallAuthUrl(shopDomain, hostParam)
 
-      if (installed) {
-        setIsEmbeddedReady(true)
+      if (appBridge) {
+        const redirect = Redirect.create(appBridge)
+        redirect.dispatch(Redirect.Action.REMOTE, authUrl.toString())
         return
       }
 
+      window.location.href = authUrl.toString()
+    }
+
+    const runChecks = async () => {
+      if (!active) return
+
+      setIsEmbeddedReady(false)
+
       try {
-        const checkUrl = `/auth/shopify/check?shop=${encodeURIComponent(
-          shopDomain
-        )}`
-
-        const response = await fetch(checkUrl, {
-          method: 'GET',
-          credentials: 'include',
-          headers: {
-            accept: 'application/json',
-          },
-          cache: 'no-store',
-        })
-
-        const contentType = response.headers.get('content-type') ?? ''
-        let alreadyInstalled = false
-
-        if (response.ok && contentType.includes('application/json')) {
-          const data = (await response.json()) as { installed?: boolean }
-          alreadyInstalled = Boolean(data.installed)
-        }
-
-        if (alreadyInstalled) {
-          setIsEmbeddedReady(true)
+        const isInstalled = await checkEmbeddedInstall(shopDomain)
+        if (!isInstalled) {
+          redirectToAuth()
           return
         }
 
-        const redirect = Redirect.create(appBridge)
-        const authUrl = new URL('/auth/shopify', window.location.origin)
-        authUrl.searchParams.set('shop', shopDomain)
-        authUrl.searchParams.set('host', hostParam ?? '')
-        redirect.dispatch(Redirect.Action.REMOTE, authUrl.toString())
-        setIsEmbeddedReady(false)
+        if (onboardingGate !== 'none') {
+          const onboardingStatus = await fetchOnboardingStatusWithRetry()
+          if (!active) return
+
+          const redirectDestination = resolveOnboardingRedirect({
+            onboardingGate,
+            onboardingStatus,
+          })
+
+          if (redirectDestination) {
+            const destinationPath = withLocale(
+              `/${redirectDestination}`,
+              locale
+            )
+            const destinationRoute = `${destinationPath}${search}`
+            const currentRoute = `${pathname ?? ''}${search}`
+
+            if (destinationRoute !== currentRoute) {
+              router.replace(destinationRoute)
+              return
+            }
+          }
+        }
+
+        if (active) {
+          setIsEmbeddedReady(true)
+        }
       } catch (error) {
-        console.error('Error during install check:', error)
-        setIsEmbeddedReady(false)
+        console.error('[EmbeddedAuthGate] Failed embedded auth checks:', error)
+        if (active) {
+          setIsEmbeddedReady(false)
+        }
       }
     }
 
-    void ensureInstalled()
+    void runChecks()
 
     return () => {
       active = false
     }
-  }, [isLoading, isEmbedded, appBridge, shopDomain, hostParam, installed])
+  }, [
+    appBridge,
+    hostParam,
+    isEmbedded,
+    isLoading,
+    locale,
+    onboardingGate,
+    pathname,
+    router,
+    search,
+    shopDomain,
+  ])
 
   if (isLoading) return fallback
   if (!isEmbedded) return children
