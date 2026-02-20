@@ -466,11 +466,11 @@
       "summaryTitle": "Verification Summary",
       "replyRate": "{value}% Reply Rate",
       "cards": {
-        "total": "Total",
         "confirmed": "Confirmed",
         "canceled": "Canceled",
-        "pending": "Pending",
-        "expired": "Expired"
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "read": "Read"
       },
       "moneySaved": {
         "title": "Money Saved",

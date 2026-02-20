@@ -53,11 +53,11 @@ export type OrdersResponse = {
 export type DashboardStats = {
   date_range: DashboardStatsDateRange
   totals: {
-    total: number
-    pending: number
     confirmed: number
     canceled: number
-    expired: number
+    sent: number
+    delivered: number
+    read: number
     reply_rate: number
   }
   usage: {

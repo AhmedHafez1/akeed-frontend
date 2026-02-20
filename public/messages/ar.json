@@ -466,11 +466,11 @@
       "summaryTitle": "ملخص تأكيد الطلبات",
       "replyRate": "معدل الرد {value}%",
       "cards": {
-        "total": "الإجمالي",
         "confirmed": "المؤكد",
         "canceled": "الملغي",
-        "pending": "قيد الانتظار",
-        "expired": "منتهي"
+        "sent": "تم الإرسال",
+        "delivered": "تم التسليم",
+        "read": "تمت القراءة"
       },
       "moneySaved": {
         "title": "المبلغ الموفَّر",

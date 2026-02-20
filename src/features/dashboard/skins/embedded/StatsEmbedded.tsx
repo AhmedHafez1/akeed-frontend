@@ -35,7 +35,7 @@ type PolarisBadgeTone =
   | undefined
 
 interface SummaryMetric {
-  id: 'total' | 'confirmed' | 'canceled' | 'pending' | 'expired'
+  id: 'confirmed' | 'canceled' | 'sent' | 'delivered' | 'read'
   label: string
   value: number
   tone: PolarisBadgeTone
@@ -97,12 +97,6 @@ export function StatsEmbedded({
   const summaryMetrics: SummaryMetric[] = stats
     ? [
         {
-          id: 'total',
-          label: t('metrics.cards.total'),
-          value: stats.totals.total,
-          tone: 'brand',
-        },
-        {
           id: 'confirmed',
           label: t('metrics.cards.confirmed'),
           value: stats.totals.confirmed,
@@ -115,16 +109,22 @@ export function StatsEmbedded({
           tone: 'critical',
         },
         {
-          id: 'pending',
-          label: t('metrics.cards.pending'),
-          value: stats.totals.pending,
-          tone: 'brand',
+          id: 'sent',
+          label: t('metrics.cards.sent'),
+          value: stats.totals.sent,
+          tone: 'info',
         },
         {
-          id: 'expired',
-          label: t('metrics.cards.expired'),
-          value: stats.totals.expired,
+          id: 'delivered',
+          label: t('metrics.cards.delivered'),
+          value: stats.totals.delivered,
           tone: 'warning',
+        },
+        {
+          id: 'read',
+          label: t('metrics.cards.read'),
+          value: stats.totals.read,
+          tone: 'brand',
         },
       ]
     : []
