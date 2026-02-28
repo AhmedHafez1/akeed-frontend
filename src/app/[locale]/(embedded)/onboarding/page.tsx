@@ -3,7 +3,6 @@
 import { type ReactNode, useCallback, useMemo } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { Redirect } from '@shopify/app-bridge/actions'
 import { BlockStack, Card, Layout, Page } from '@shopify/polaris'
 import { FullPageLoader } from '@/components/layout/FullPageLoader'
 import { OnboardingContainer } from '@/components/onboarding/OnboardingContainer'
@@ -29,7 +28,6 @@ export default function OnboardingPage() {
   const {
     isEmbedded,
     isLoading: isModeLoading,
-    appBridge,
     hostParam,
   } = useAkeedMode()
 
@@ -93,15 +91,15 @@ export default function OnboardingPage() {
 
   const handleBillingConfirmation = useCallback(
     (confirmationUrl: string) => {
-      if (appBridge) {
-        const redirect = Redirect.create(appBridge)
-        redirect.dispatch(Redirect.Action.REMOTE, confirmationUrl)
-        return
+      // In App Bridge v4, use open() with _top to navigate out of
+      // the embedded iframe for external redirects (e.g. Shopify billing).
+      if (window.top && window.top !== window.self) {
+        window.open(confirmationUrl, '_top')
+      } else {
+        window.location.href = confirmationUrl
       }
-
-      window.location.href = confirmationUrl
     },
-    [appBridge]
+    []
   )
 
   const {

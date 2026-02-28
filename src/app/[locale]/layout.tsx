@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import Script from 'next/script'
 import { Cairo } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
@@ -39,6 +40,20 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       <head>
+        {/*
+          Shopify App Bridge v4 — loaded via CDN for embedded mode.
+          The script exposes `window.shopify` with session token,
+          navigation, and toast APIs. It is a no-op when the page
+          is not loaded inside the Shopify Admin iframe.
+
+          Using next/script with beforeInteractive strategy to ensure
+          it loads before React hydrates.
+        */}
+        <Script
+          src="https://cdn.shopify.com/shopifycloud/app-bridge.js"
+          data-api-key={process.env.NEXT_PUBLIC_SHOPIFY_API_KEY}
+          strategy="beforeInteractive"
+        />
         {/*
           Marketing scripts (Facebook Pixel, Google Analytics) are loaded
           ONLY in standalone mode. They are suppressed in Shopify embedded

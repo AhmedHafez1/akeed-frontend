@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { Redirect } from '@shopify/app-bridge/actions'
 import { useAkeedMode } from '@/hooks/useAkeedMode'
 import {
   checkEmbeddedInstall,
@@ -35,7 +34,7 @@ export function EmbeddedAuthGate({
   fallback = null,
   onboardingGate = 'none',
 }: EmbeddedAuthGateProps) {
-  const { isEmbedded, shopDomain, hostParam, appBridge, isLoading } =
+  const { isEmbedded, shopDomain, hostParam, shopify, isLoading } =
     useAkeedMode()
   const router = useRouter()
   const pathname = usePathname()
@@ -51,20 +50,21 @@ export function EmbeddedAuthGate({
     if (isLoading) return
 
     if (!isEmbedded || !shopDomain) return
-    if (onboardingGate !== 'none' && !appBridge) return
+    if (onboardingGate !== 'none' && !shopify) return
 
     let active = true
 
     const redirectToAuth = () => {
       const authUrl = buildInstallAuthUrl(shopDomain, hostParam)
 
-      if (appBridge) {
-        const redirect = Redirect.create(appBridge)
-        redirect.dispatch(Redirect.Action.REMOTE, authUrl.toString())
-        return
+      // In App Bridge v4, use open() to navigate out of the iframe
+      // for full-page redirects (e.g. OAuth install flow).
+      // Fallback to window.open for top-level navigation.
+      if (window.top && window.top !== window.self) {
+        window.open(authUrl.toString(), '_top')
+      } else {
+        window.location.href = authUrl.toString()
       }
-
-      window.location.href = authUrl.toString()
     }
 
     const runChecks = async () => {
@@ -120,7 +120,7 @@ export function EmbeddedAuthGate({
       active = false
     }
   }, [
-    appBridge,
+    shopify,
     hostParam,
     isEmbedded,
     isLoading,

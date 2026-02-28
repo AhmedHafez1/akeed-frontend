@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
-import type { ClientApplication } from '@shopify/app-bridge'
+import type { ShopifyGlobal } from '@/types/window.model'
 
 /**
  * Akeed Runtime Mode Detection
@@ -14,6 +14,10 @@ import type { ClientApplication } from '@shopify/app-bridge'
  * Detection is based on URL parameters:
  * - Presence of 'shop' and 'host' params = EMBEDDED
  * - Absence of these params = STANDALONE
+ *
+ * In App Bridge v4, the Shopify CDN script exposes `window.shopify`
+ * automatically when the app runs inside Shopify Admin. There is
+ * no `createApp()` call or npm package required.
  */
 
 export type AkeedMode = 'EMBEDDED' | 'STANDALONE'
@@ -24,17 +28,65 @@ export interface AkeedModeContext {
   isStandalone: boolean
   shopDomain: string | null
   hostParam: string | null
-  appBridge: ClientApplication | null
+  shopify: ShopifyGlobal | null
   isLoading: boolean
 }
+
+/**
+ * Polls for `window.shopify` to become available.
+ * The CDN script initialises asynchronously, so it may not exist on
+ * the very first render tick.
+ */
+function waitForShopifyGlobal(
+  signal: AbortSignal,
+  timeoutMs = 3000,
+  intervalMs = 50
+): Promise<ShopifyGlobal | null> {
+  return new Promise((resolve) => {
+    if (window?.shopify) {
+      resolve(window.shopify)
+      return
+    }
+
+    const start = Date.now()
+
+    const check = () => {
+      if (signal.aborted) {
+        resolve(null)
+        return
+      }
+
+      if (window?.shopify) {
+        resolve(window.shopify)
+        return
+      }
+
+      if (Date.now() - start >= timeoutMs) {
+        resolve(null)
+        return
+      }
+
+      setTimeout(check, intervalMs)
+    }
+
+    check()
+  })
+}
+
+/** Internal state for the resolved App Bridge instance + readiness. */
+interface ResolvedState {
+  shopify: ShopifyGlobal | null
+  ready: boolean
+}
+
+const INITIAL_STATE: ResolvedState = { shopify: null, ready: false }
+const STANDALONE_STATE: ResolvedState = { shopify: null, ready: true }
 
 /**
  * Core hook for runtime mode detection
  */
 export function useAkeedMode(): AkeedModeContext {
   const searchParams = useSearchParams()
-  const [appBridge, setAppBridge] = useState<ClientApplication | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
 
   const shopDomain = searchParams.get('shop')
   const hostParam = searchParams.get('host')
@@ -46,53 +98,46 @@ export function useAkeedMode(): AkeedModeContext {
   const isEmbedded = mode === 'EMBEDDED'
   const isStandalone = mode === 'STANDALONE'
 
+  // Track async App Bridge resolution for embedded mode only.
+  const [embeddedResolved, setEmbeddedResolved] =
+    useState<ResolvedState>(INITIAL_STATE)
+
+  const markReady = useCallback(
+    (instance: ShopifyGlobal | null) =>
+      setEmbeddedResolved({ shopify: instance, ready: true }),
+    []
+  )
+
   useEffect(() => {
-    if (!isEmbedded) {
-      setIsLoading(false)
-      return
-    }
+    if (!isEmbedded) return
 
-    let mounted = true
+    const controller = new AbortController()
 
-    const initializeAppBridge = async () => {
-      try {
-        const createApp = await import('@shopify/app-bridge').then(
-          (module) => module.default || module.createApp
-        )
+    waitForShopifyGlobal(controller.signal)
+      .then((instance) => {
+        if (controller.signal.aborted) return
 
-        if (!mounted) return
-
-        const apiKey = process.env.NEXT_PUBLIC_SHOPIFY_API_KEY
-
-        if (!apiKey) {
-          console.error('[Akeed] NEXT_PUBLIC_SHOPIFY_API_KEY is not defined')
-          setIsLoading(false)
-          return
+        if (!instance) {
+          console.error(
+            '[Akeed] window.shopify not available — is the App Bridge CDN script loaded?'
+          )
         }
 
-        const app = createApp({
-          apiKey,
-          host: hostParam!,
-          forceRedirect: true,
-        })
-
-        // Store globally for auth module access
-        window.__SHOPIFY_APP_BRIDGE__ = app
-
-        setAppBridge(app)
-        setIsLoading(false)
-      } catch (error) {
-        console.error('[Akeed] Failed to initialize App Bridge:', error)
-        setIsLoading(false)
-      }
-    }
-
-    initializeAppBridge()
+        markReady(instance)
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) {
+          markReady(null)
+        }
+      })
 
     return () => {
-      mounted = false
+      controller.abort()
     }
-  }, [isEmbedded, hostParam])
+  }, [isEmbedded, markReady])
+
+  // Derive final state: standalone is always ready; embedded waits for resolution.
+  const resolved = isEmbedded ? embeddedResolved : STANDALONE_STATE
 
   return {
     mode,
@@ -100,7 +145,7 @@ export function useAkeedMode(): AkeedModeContext {
     isStandalone,
     shopDomain,
     hostParam,
-    appBridge,
-    isLoading,
+    shopify: resolved.shopify,
+    isLoading: !resolved.ready,
   }
 }

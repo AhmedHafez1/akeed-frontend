@@ -56,24 +56,21 @@ async function getAuthToken(): Promise<string | null> {
 
 /**
  * Get Shopify Session Token (for embedded mode)
+ *
+ * In App Bridge v4, the CDN script exposes `window.shopify` with an
+ * `idToken()` method that returns the current session token (JWT).
+ * No npm package or App Bridge instance is needed.
  */
 async function getShopifySessionToken(): Promise<string | null> {
   try {
-    // Get App Bridge instance from global scope
-    // (It should be initialized by useAkeedMode hook)
-    const appBridge = window.__SHOPIFY_APP_BRIDGE__
+    const shopify = window.shopify
 
-    if (!appBridge) {
-      console.error('[Auth] App Bridge not initialized')
+    if (!shopify) {
+      console.error('[Auth] window.shopify not available — App Bridge CDN script may not be loaded')
       return null
     }
 
-    // Use App Bridge to get session token
-    const getSessionToken = await import('@shopify/app-bridge/utilities').then(
-      (module) => module.getSessionToken
-    )
-
-    const token = await getSessionToken(appBridge)
+    const token = await shopify.idToken()
     return token
   } catch (error) {
     console.error('[Auth] Failed to get Shopify session token:', error)

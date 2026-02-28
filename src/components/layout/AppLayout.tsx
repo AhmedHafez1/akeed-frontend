@@ -14,7 +14,6 @@ import { StandaloneLayout } from './StandaloneLayout'
  * EMBEDDED MODE (Shopify):
  * - Uses Shopify Polaris Frame
  * - Hides custom sidebar/header
- * - Uses Shopify App Bridge for navigation
  * - Feels native to Shopify Admin
  *
  * STANDALONE MODE (SaaS):
@@ -28,13 +27,13 @@ interface AppLayoutProps {
 }
 
 function AppLayoutInner({ children }: AppLayoutProps) {
-  const { isEmbedded, isLoading, appBridge } = useAkeedMode()
+  const { isEmbedded, isLoading } = useAkeedMode()
 
   if (isLoading) {
     return <FullPageLoader />
   }
 
-  if (isEmbedded && appBridge) {
+  if (isEmbedded) {
     return <EmbeddedLayout>{children}</EmbeddedLayout>
   }
 

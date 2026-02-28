@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { Redirect } from '@shopify/app-bridge/actions'
 import {
   Banner,
   BlockStack,
@@ -105,7 +104,7 @@ const SHIPPING_CURRENCY_OPTIONS = [
 
 export default function SettingsPage() {
   const t = useTranslations('settings')
-  const { isEmbedded, isLoading: isModeLoading, appBridge } = useAkeedMode()
+  const { isEmbedded, isLoading: isModeLoading } = useAkeedMode()
   const router = useRouter()
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname ?? '')
@@ -295,14 +294,15 @@ export default function SettingsPage() {
       return
     }
 
-    if (isEmbedded && appBridge) {
-      const redirect = Redirect.create(appBridge)
-      redirect.dispatch(Redirect.Action.REMOTE, billingManagementUrl)
+    // In App Bridge v4, use open() with _top to navigate out of the
+    // embedded iframe for external redirects (e.g. Shopify billing page).
+    if (isEmbedded && window.top && window.top !== window.self) {
+      window.open(billingManagementUrl, '_top')
       return
     }
 
     window.location.href = billingManagementUrl
-  }, [appBridge, billingManagementUrl, isEmbedded, t])
+  }, [billingManagementUrl, isEmbedded, t])
 
   if (isModeLoading || isInitialLoading) {
     return <FullPageLoader />
