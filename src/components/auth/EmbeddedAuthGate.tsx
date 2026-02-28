@@ -6,6 +6,7 @@ import { useAkeedMode } from '@/hooks/useAkeedMode'
 import {
   checkEmbeddedInstall,
   fetchOnboardingStatusWithRetry,
+  performTokenExchange,
   resolveOnboardingRedirect,
   type EmbeddedOnboardingGate,
 } from '@/lib/embeddedAuth'
@@ -73,7 +74,31 @@ export function EmbeddedAuthGate({
       setIsEmbeddedReady(false)
 
       try {
-        const isInstalled = await checkEmbeddedInstall(shopDomain)
+        let isInstalled = false
+
+        // -- Primary: Token Exchange (App Bridge v4)
+        // If the Shopify global is available we can attempt a seamless
+        // token exchange. This both verifies install status AND performs
+        // first-install without a full-page redirect out of the iframe.
+        if (shopify) {
+          try {
+            const sessionToken = await shopify.idToken()
+            if (sessionToken) {
+              isInstalled = await performTokenExchange(sessionToken)
+            }
+          } catch (exchangeError) {
+            console.warn(
+              '[EmbeddedAuthGate] Token exchange failed, falling back to legacy flow:',
+              exchangeError
+            )
+          }
+        }
+
+        // -- Fallback: Legacy install check + OAuth redirect ──────────
+        if (!isInstalled) {
+          isInstalled = await checkEmbeddedInstall(shopDomain)
+        }
+
         if (!isInstalled) {
           redirectToAuth()
           return

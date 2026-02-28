@@ -52,6 +52,41 @@ export function resolveOnboardingRedirect(params: {
 }
 
 /**
+ * Exchange a Shopify session token for an offline access token.
+ *
+ * This is the primary install path for embedded apps running App Bridge v4.
+ * It both checks install status AND performs first-install without
+ * redirecting out of the iframe.
+ *
+ * @returns `true` when the shop is installed (or was just installed).
+ *          `false` when the exchange failed (caller should fall back to
+ *          legacy OAuth).
+ */
+export async function performTokenExchange(
+  sessionToken: string
+): Promise<boolean> {
+  try {
+    const response = await fetch('/auth/shopify/token-exchange', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        accept: 'application/json',
+        'ngrok-skip-browser-warning': 'true',
+      },
+      body: JSON.stringify({ sessionToken }),
+      cache: 'no-store',
+    })
+
+    if (!response.ok) return false
+
+    const data = (await response.json()) as { installed?: boolean }
+    return Boolean(data.installed)
+  } catch {
+    return false
+  }
+}
+
+/**
  * Checks backend install status for the current Shopify shop.
  * Returns true only when the endpoint confirms the app is installed.
  */
