@@ -70,7 +70,7 @@ export function DashboardEmptyState({
             {messages.testSectionDescription}
           </Text>
           <InlineStack gap="300" blockAlign="end" wrap>
-            <div className="min-w-65 max-w-105 flex-1">
+            <div className="max-w-105 min-w-65 flex-1">
               <TextField
                 label={messages.testPhoneLabel ?? ''}
                 value={testPhone}
@@ -79,7 +79,11 @@ export function DashboardEmptyState({
                 autoComplete="tel"
               />
             </div>
-            <Button variant="primary" loading={isSendingTest} onClick={handleSend}>
+            <Button
+              variant="primary"
+              loading={isSendingTest}
+              onClick={handleSend}
+            >
               {isSendingTest
                 ? messages.testSendingLabel
                 : messages.testSendLabel}
