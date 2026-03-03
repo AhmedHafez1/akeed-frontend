@@ -457,7 +457,17 @@
         "activeDescription": "Akeed is active and monitoring your store. As soon as a new cash-on-delivery order is placed, a WhatsApp verification will be sent automatically.",
         "step1": "A customer places a COD order in your store.",
         "step2": "Akeed sends a WhatsApp verification message to the customer.",
-        "step3": "The customer confirms or cancels — results appear here in real time."
+        "step3": "The customer confirms or cancels — results appear here in real time.",
+        "testSectionHeading": "Test verification (test mode)",
+        "testSectionDescription": "Use a real WhatsApp number in E.164 format to trigger a test verification.",
+        "testPhoneLabel": "Customer phone",
+        "testPhonePlaceholder": "+201234567890",
+        "testSendLabel": "Send test verification",
+        "testSendingLabel": "Sending...",
+        "testPhoneRequired": "Please enter a customer phone number.",
+        "testSent": "Test verification sent successfully.",
+        "testFailed": "We could not send a test verification. Please try again.",
+        "testSkipped": "Test verification was skipped."
       }
     },
     "verificationSection": {

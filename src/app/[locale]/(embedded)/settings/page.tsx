@@ -292,6 +292,10 @@ export default function SettingsPage() {
     }
   }, [stats, t])
 
+  useEffect(() => {
+    setSelectedPlanId(billingPlanId)
+  }, [billingPlanId])
+
   const handleChangePlan = useCallback(async () => {
     if (!selectedPlanId || selectedPlanId === billingPlanId) return
 
