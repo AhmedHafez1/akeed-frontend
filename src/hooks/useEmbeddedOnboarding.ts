@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import {
   createOnboardingBilling,
@@ -10,6 +10,7 @@ import {
 } from '@/lib/onboarding'
 import type {
   IntegrationOnboardingLanguage,
+  IntegrationOnboardingState,
   OnboardingBillingPlanConfig,
   OnboardingBillingPlanId,
 } from '@/types/embedded-onboarding.model'
@@ -94,6 +95,22 @@ function resolveBillingRecoveryMessage(
   return messages.billingStatusNeedsAttention
 }
 
+function resolveResumeStep(state: IntegrationOnboardingState): EmbeddedStep {
+  const hasBillingActivity =
+    state.billingPlanId !== null || state.billingStatus !== null
+  if (hasBillingActivity) {
+    return 3
+  }
+
+  const hasConfigProgress =
+    state.storeName !== null && state.storeName.trim().length > 0
+  if (hasConfigProgress) {
+    return 2
+  }
+
+  return 1
+}
+
 export function useEmbeddedOnboarding({
   isEmbedded,
   isModeLoading,
@@ -131,8 +148,13 @@ export function useEmbeddedOnboarding({
   const [isAutoVerifyEnabled, setIsAutoVerifyEnabled] = useState(true)
   const [isSavingSettings, setIsSavingSettings] = useState(false)
   const [isActivatingPlan, setIsActivatingPlan] = useState(false)
+  const [isBillingRedirecting, setIsBillingRedirecting] = useState(false)
+  const [billingManagementUrl, setBillingManagementUrl] = useState<
+    string | null
+  >(null)
   const [errorBanner, setErrorBanner] = useState<string | null>(null)
   const [prefillWarning, setPrefillWarning] = useState<string | null>(null)
+  const hasCompletedInitRef = useRef(false)
 
   useEffect(() => {
     if (isModeLoading) return
@@ -168,6 +190,7 @@ export function useEmbeddedOnboarding({
         setStoreName(state.storeName ?? '')
         setDefaultLanguage(state.defaultLanguage)
         setIsAutoVerifyEnabled(state.isAutoVerifyEnabled)
+        setBillingManagementUrl(state.billingManagementUrl)
 
         const normalizedBillingStatus = normalizeBillingStatus(
           state.billingStatus
@@ -186,6 +209,11 @@ export function useEmbeddedOnboarding({
         if (billingRecoveryMessage) {
           setErrorBanner(billingRecoveryMessage)
           setStep(3)
+        } else {
+          const resumeStep = resolveResumeStep(state)
+          if (resumeStep !== 1) {
+            setStep(resumeStep)
+          }
         }
 
         if (billingPlansResponse) {
@@ -210,6 +238,7 @@ export function useEmbeddedOnboarding({
       } finally {
         if (active) {
           setIsInitialLoading(false)
+          hasCompletedInitRef.current = true
         }
       }
     }
@@ -233,6 +262,30 @@ export function useEmbeddedOnboarding({
     prefillWarningMessage,
     router,
   ])
+
+  // Debounced auto-save: persist step 2 field changes to the backend
+  useEffect(() => {
+    if (!hasCompletedInitRef.current || step !== 2) return
+
+    const trimmed = storeName.trim()
+    if (!trimmed) return
+
+    const timeoutId = setTimeout(() => {
+      void updateOnboardingSettings({
+        storeName: trimmed,
+        defaultLanguage,
+        isAutoVerifyEnabled,
+      }).catch((error: unknown) => {
+        console.error('[Onboarding] Auto-save failed:', error)
+      })
+    }, 1500)
+
+    return () => clearTimeout(timeoutId)
+  }, [step, storeName, defaultLanguage, isAutoVerifyEnabled])
+
+  const handleStartSetup = useCallback(() => {
+    setStep(2)
+  }, [])
 
   const handleStoreNameChange = useCallback((value: string) => {
     setStoreName(value)
@@ -283,10 +336,12 @@ export function useEmbeddedOnboarding({
         selectedPlanId,
         hostParam ?? undefined
       )
+      setIsBillingRedirecting(true)
       onBillingConfirmation(confirmationUrl)
     } catch (error) {
       console.error('[Onboarding] Failed to activate billing:', error)
       setErrorBanner(billingActivationErrorMessage)
+      setIsBillingRedirecting(false)
     } finally {
       setIsActivatingPlan(false)
     }
@@ -296,6 +351,20 @@ export function useEmbeddedOnboarding({
     onBillingConfirmation,
     selectedPlanId,
   ])
+
+  const handleRetryBilling = useCallback(() => {
+    setErrorBanner(null)
+  }, [])
+
+  const handleManageBilling = useCallback(() => {
+    if (!billingManagementUrl) return
+
+    if (window.top && window.top !== window.self) {
+      window.open(billingManagementUrl, '_top')
+    } else {
+      window.location.href = billingManagementUrl
+    }
+  }, [billingManagementUrl])
 
   return {
     isInitialLoading,
@@ -312,10 +381,15 @@ export function useEmbeddedOnboarding({
     setIsAutoVerifyEnabled,
     isSavingSettings,
     isActivatingPlan,
+    isBillingRedirecting,
+    billingManagementUrl,
     errorBanner,
     prefillWarning,
     handleStoreNameChange,
+    handleStartSetup,
     handleContinueToBilling,
     handleActivatePlan,
+    handleRetryBilling,
+    handleManageBilling,
   }
 }

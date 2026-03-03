@@ -25,11 +25,7 @@ import { WelcomeStep } from './steps/WelcomeStep'
 export default function OnboardingPage() {
   const t = useTranslations('onboarding')
   const tEmbedded = useTranslations('embeddedOnboarding')
-  const {
-    isEmbedded,
-    isLoading: isModeLoading,
-    hostParam,
-  } = useAkeedMode()
+  const { isEmbedded, isLoading: isModeLoading, hostParam } = useAkeedMode()
 
   const router = useRouter()
   const pathname = usePathname()
@@ -89,23 +85,19 @@ export default function OnboardingPage() {
     [tEmbedded]
   )
 
-  const handleBillingConfirmation = useCallback(
-    (confirmationUrl: string) => {
-      // In App Bridge v4, use open() with _top to navigate out of
-      // the embedded iframe for external redirects (e.g. Shopify billing).
-      if (window.top && window.top !== window.self) {
-        window.open(confirmationUrl, '_top')
-      } else {
-        window.location.href = confirmationUrl
-      }
-    },
-    []
-  )
+  const handleBillingConfirmation = useCallback((confirmationUrl: string) => {
+    // In App Bridge v4, use open() with _top to navigate out of
+    // the embedded iframe for external redirects (e.g. Shopify billing).
+    if (window.top && window.top !== window.self) {
+      window.open(confirmationUrl, '_top')
+    } else {
+      window.location.href = confirmationUrl
+    }
+  }, [])
 
   const {
     isInitialLoading,
     step,
-    setStep,
     storeName,
     storeNameError,
     defaultLanguage,
@@ -117,11 +109,16 @@ export default function OnboardingPage() {
     setIsAutoVerifyEnabled,
     isSavingSettings,
     isActivatingPlan,
+    isBillingRedirecting,
+    billingManagementUrl,
     errorBanner,
     prefillWarning,
     handleStoreNameChange,
+    handleStartSetup,
     handleContinueToBilling,
     handleActivatePlan,
+    handleRetryBilling,
+    handleManageBilling,
   } = useEmbeddedOnboarding({
     isEmbedded,
     isModeLoading,
@@ -165,7 +162,7 @@ export default function OnboardingPage() {
         heading={t('welcomeHeading')}
         body={t('welcomeBody')}
         ctaLabel={t('startSetup')}
-        onStart={() => setStep(2)}
+        onStart={handleStartSetup}
       />
     ),
     2: (
@@ -196,14 +193,23 @@ export default function OnboardingPage() {
         plans={billingPlans}
         selectedPlanId={selectedPlanId}
         isActivating={isActivatingPlan}
+        errorMessage={step === 3 ? errorBanner : null}
+        retryLabel={tEmbedded('billingTryAgain')}
+        manageSettingsLabel={tEmbedded('billingManageSettings')}
+        canManageBilling={billingManagementUrl !== null}
         onPlanSelect={setSelectedPlanId}
         onActivate={handleActivatePlan}
+        onRetry={handleRetryBilling}
+        onManageBilling={handleManageBilling}
       />
     ),
   }
 
-  if (isModeLoading || isInitialLoading) {
-    return <FullPageLoader />
+  if (isModeLoading || isInitialLoading || isBillingRedirecting) {
+    const loaderMessage = isBillingRedirecting
+      ? tEmbedded('billingRedirecting')
+      : undefined
+    return <FullPageLoader message={loaderMessage} />
   }
 
   if (!isEmbedded) {
@@ -216,7 +222,7 @@ export default function OnboardingPage() {
         <Layout.Section>
           <BlockStack gap="400">
             <OnboardingAlerts
-              errorMessage={errorBanner}
+              errorMessage={step === 3 ? null : errorBanner}
               warningMessage={prefillWarning}
             />
 

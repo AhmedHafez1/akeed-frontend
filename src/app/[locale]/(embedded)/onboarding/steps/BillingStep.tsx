@@ -1,5 +1,6 @@
 import type { KeyboardEvent } from 'react'
 import {
+  Banner,
   BlockStack,
   Box,
   Button,
@@ -19,8 +20,14 @@ interface BillingStepProps {
   plans: OnboardingBillingPlan[]
   selectedPlanId: OnboardingBillingPlanId
   isActivating: boolean
+  errorMessage: string | null
+  retryLabel: string
+  manageSettingsLabel: string
+  canManageBilling: boolean
   onPlanSelect: (planId: OnboardingBillingPlanId) => void
   onActivate: () => void
+  onRetry: () => void
+  onManageBilling: () => void
 }
 
 export function BillingStep({
@@ -30,8 +37,14 @@ export function BillingStep({
   plans,
   selectedPlanId,
   isActivating,
+  errorMessage,
+  retryLabel,
+  manageSettingsLabel,
+  canManageBilling,
   onPlanSelect,
   onActivate,
+  onRetry,
+  onManageBilling,
 }: BillingStepProps) {
   const handlePlanSelectByKeyboard = (
     event: KeyboardEvent<HTMLDivElement>,
@@ -47,6 +60,17 @@ export function BillingStep({
 
   return (
     <BlockStack gap="400">
+      {errorMessage && (
+        <BillingErrorBanner
+          message={errorMessage}
+          retryLabel={retryLabel}
+          manageSettingsLabel={manageSettingsLabel}
+          canManageBilling={canManageBilling}
+          onRetry={onRetry}
+          onManageBilling={onManageBilling}
+        />
+      )}
+
       <BlockStack gap="200">
         <Text as="h2" variant="headingLg">
           {heading}
@@ -116,5 +140,41 @@ export function BillingStep({
         </Button>
       </Box>
     </BlockStack>
+  )
+}
+
+interface BillingErrorBannerProps {
+  message: string
+  retryLabel: string
+  manageSettingsLabel: string
+  canManageBilling: boolean
+  onRetry: () => void
+  onManageBilling: () => void
+}
+
+function BillingErrorBanner({
+  message,
+  retryLabel,
+  manageSettingsLabel,
+  canManageBilling,
+  onRetry,
+  onManageBilling,
+}: BillingErrorBannerProps) {
+  return (
+    <Banner tone="critical" onDismiss={onRetry}>
+      <BlockStack gap="300">
+        <p>{message}</p>
+        <InlineStack gap="300" blockAlign="center">
+          <Button size="slim" onClick={onRetry}>
+            {retryLabel}
+          </Button>
+          {canManageBilling && (
+            <Button size="slim" variant="plain" onClick={onManageBilling}>
+              {manageSettingsLabel}
+            </Button>
+          )}
+        </InlineStack>
+      </BlockStack>
+    </Banner>
   )
 }
