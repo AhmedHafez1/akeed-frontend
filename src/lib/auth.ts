@@ -18,17 +18,37 @@ import { withLocale } from './locale'
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'
 
-// Initialize Supabase client for standalone auth
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+let supabaseClient: ReturnType<typeof createClient> | null = null
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: true,
-  },
-})
+function getRequiredPublicEnvVar(name: string): string {
+  const value = process.env[name]
+  if (!value) {
+    throw new Error(
+      `[Auth] Missing required environment variable: ${name}. ` +
+        'Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY for frontend auth.'
+    )
+  }
+  return value
+}
+
+export function getSupabaseClient() {
+  if (supabaseClient) {
+    return supabaseClient
+  }
+
+  const supabaseUrl = getRequiredPublicEnvVar('NEXT_PUBLIC_SUPABASE_URL')
+  const supabaseAnonKey = getRequiredPublicEnvVar('NEXT_PUBLIC_SUPABASE_ANON_KEY')
+
+  supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: true,
+    },
+  })
+
+  return supabaseClient
+}
 
 /**
  * Get authentication token based on current mode
@@ -83,6 +103,7 @@ async function getShopifySessionToken(): Promise<string | null> {
  */
 async function getSupabaseToken(): Promise<string | null> {
   try {
+    const supabase = getSupabaseClient()
     const {
       data: { session },
     } = await supabase.auth.getSession()
@@ -275,6 +296,7 @@ export const auth = {
     password: string,
     metadata?: Record<string, number | string>
   ) {
+    const supabase = getSupabaseClient()
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -294,6 +316,7 @@ export const auth = {
    * Sign in with email and password
    */
   async signIn(email: string, password: string) {
+    const supabase = getSupabaseClient()
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -310,6 +333,7 @@ export const auth = {
    * Sign out
    */
   async signOut() {
+    const supabase = getSupabaseClient()
     const { error } = await supabase.auth.signOut()
     if (error) throw error
   },
@@ -318,6 +342,7 @@ export const auth = {
    * Get current user
    */
   async getCurrentUser() {
+    const supabase = getSupabaseClient()
     const {
       data: { user },
     } = await supabase.auth.getUser()
@@ -328,6 +353,7 @@ export const auth = {
    * Check if user is authenticated
    */
   async isAuthenticated() {
+    const supabase = getSupabaseClient()
     const {
       data: { session },
     } = await supabase.auth.getSession()

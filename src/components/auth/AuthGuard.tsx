@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
-import { auth, supabase } from '@/lib/auth'
+import { auth, getSupabaseClient } from '@/lib/auth'
 import { isAuthRoute, getLocaleFromPathname } from '@/lib/locale'
 import { FullPageLoader } from '@/components/layout/FullPageLoader'
 
@@ -24,6 +24,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
 
     let active = true
     const locale = getLocaleFromPathname(pathname ?? '')
+    const supabase = getSupabaseClient()
 
     const checkAuth = async () => {
       const {
