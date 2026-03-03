@@ -451,7 +451,14 @@
     },
     "emptyState": {
       "all": "لا توجد عمليات تأكيد بعد. عند استلام أي طلب ستظهر طلبات التأكيد هنا.",
-      "filtered": "لا توجد عمليات تأكيد تطابق الحالة المحددة."
+      "filtered": "لا توجد عمليات تأكيد تطابق الحالة المحددة.",
+      "onboarding": {
+        "heading": "في انتظار طلبات الدفع عند الاستلام…",
+        "activeDescription": "أكيد نشط ويراقب متجرك. بمجرد وصول طلب دفع عند الاستلام، سيتم إرسال رسالة تأكيد واتساب تلقائيًا.",
+        "step1": "يقوم عميل بإنشاء طلب دفع عند الاستلام في متجرك.",
+        "step2": "يرسل أكيد رسالة تأكيد واتساب للعميل.",
+        "step3": "يؤكد العميل أو يلغي — وتظهر النتائج هنا مباشرة."
+      }
     },
     "verificationSection": {
       "title": "حالة التأكيدات الأخيرة",
@@ -555,7 +562,17 @@
     "billingStatusError": "يحتاج إجراء",
     "billingStatusUnknown": "غير معروف",
     "manageBillingButton": "إدارة الفوترة في Shopify",
-    "billingManagementUnavailable": "رابط إدارة الفوترة غير متاح حاليًا."
+    "billingManagementUnavailable": "رابط إدارة الفوترة غير متاح حاليًا.",
+    "usageTitle": "استخدام التأكيدات",
+    "usageUsedPercent": "المستخدم {value}%",
+    "usageMonthlyLimit": "الحد الشهري",
+    "usageUpgradePrompt": "أنت تقترب من حد التأكيدات الشهري. فكّر في ترقية خطتك.",
+    "currentPlanBadge": "الحالية",
+    "changePlanButton": "التبديل إلى الخطة المحددة",
+    "changePlanError": "تعذر بدء تغيير الخطة. يرجى المحاولة مرة أخرى.",
+    "planFree": "مجانًا",
+    "planPricePerMonth": "{price} / شهر",
+    "planVolumePerMonth": "حتى {count} تأكيد / شهر"
   },
   "embeddedOnboarding": {
     "prefillWarning": "لم نتمكن من تعبئة تفاصيل Shopify تلقائياً. يرجى إدخال اسم المتجر يدوياً.",

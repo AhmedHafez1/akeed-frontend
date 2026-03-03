@@ -451,7 +451,14 @@
     },
     "emptyState": {
       "all": "No verifications yet. Once an order is received, verification requests will appear here.",
-      "filtered": "No verifications match the selected status."
+      "filtered": "No verifications match the selected status.",
+      "onboarding": {
+        "heading": "Waiting for COD orders…",
+        "activeDescription": "Akeed is active and monitoring your store. As soon as a new cash-on-delivery order is placed, a WhatsApp verification will be sent automatically.",
+        "step1": "A customer places a COD order in your store.",
+        "step2": "Akeed sends a WhatsApp verification message to the customer.",
+        "step3": "The customer confirms or cancels — results appear here in real time."
+      }
     },
     "verificationSection": {
       "title": "Verification Status",
@@ -555,7 +562,17 @@
     "billingStatusError": "Needs attention",
     "billingStatusUnknown": "Unknown",
     "manageBillingButton": "Manage Billing in Shopify",
-    "billingManagementUnavailable": "Billing management link is unavailable right now."
+    "billingManagementUnavailable": "Billing management link is unavailable right now.",
+    "usageTitle": "Verification Usage",
+    "usageUsedPercent": "{value}% Used",
+    "usageMonthlyLimit": "Monthly Limit",
+    "usageUpgradePrompt": "You are approaching your monthly verification limit. Consider upgrading your plan.",
+    "currentPlanBadge": "Current",
+    "changePlanButton": "Switch to selected plan",
+    "changePlanError": "We could not start the plan change. Please try again.",
+    "planFree": "Free",
+    "planPricePerMonth": "{price} / month",
+    "planVolumePerMonth": "Up to {count} verifications / month"
   },
   "embeddedOnboarding": {
     "prefillWarning": "We could not prefill Shopify store details. Please enter the store name manually.",

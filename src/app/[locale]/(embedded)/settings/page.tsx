@@ -17,8 +17,10 @@ import {
 } from '@shopify/polaris'
 import { FullPageLoader } from '@/components/layout/FullPageLoader'
 import { useAkeedMode } from '@/hooks/useAkeedMode'
+import { useDashboardStats } from '@/hooks/useDashboardStats'
 import { getLocaleFromPathname } from '@/lib/locale'
 import {
+  createOnboardingBilling,
   fetchOnboardingBillingPlans,
   fetchOnboardingState,
   updateOnboardingSettings,
@@ -28,6 +30,8 @@ import type {
   OnboardingBillingPlanConfig,
   OnboardingBillingPlanId,
 } from '@/types/embedded-onboarding.model'
+import { PlanComparison } from './components/PlanComparison'
+import { UsageOverview } from './components/UsageOverview'
 
 type BillingStatusKey =
   | 'billingStatusActive'
@@ -104,10 +108,11 @@ const SHIPPING_CURRENCY_OPTIONS = [
 
 export default function SettingsPage() {
   const t = useTranslations('settings')
-  const { isEmbedded, isLoading: isModeLoading } = useAkeedMode()
+  const { isEmbedded, isLoading: isModeLoading, hostParam } = useAkeedMode()
   const router = useRouter()
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname ?? '')
+  const { stats } = useDashboardStats('last_30_days')
 
   const [isInitialLoading, setIsInitialLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
@@ -123,18 +128,20 @@ export default function SettingsPage() {
   const [defaultLanguage, setDefaultLanguage] =
     useState<IntegrationOnboardingLanguage>('auto')
   const [isAutoVerifyEnabled, setIsAutoVerifyEnabled] = useState(true)
-  const [billingPlanId, setBillingPlanId] = useState<OnboardingBillingPlanId | null>(
-    null
-  )
+  const [billingPlanId, setBillingPlanId] =
+    useState<OnboardingBillingPlanId | null>(null)
   const [billingStatus, setBillingStatus] = useState<string | null>(null)
-  const [billingManagementUrl, setBillingManagementUrl] = useState<string | null>(
-    null
-  )
+  const [billingManagementUrl, setBillingManagementUrl] = useState<
+    string | null
+  >(null)
   const [billingPlansById, setBillingPlansById] = useState<
     Partial<Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>>
   >({})
   const [errorBanner, setErrorBanner] = useState<string | null>(null)
   const [successBanner, setSuccessBanner] = useState<string | null>(null)
+  const [selectedPlanId, setSelectedPlanId] =
+    useState<OnboardingBillingPlanId | null>(null)
+  const [isChangingPlan, setIsChangingPlan] = useState(false)
 
   const languageOptions = useMemo(
     () => [
@@ -235,6 +242,81 @@ export default function SettingsPage() {
     const key = resolveBillingStatusKey(normalized)
     return t(key)
   }, [billingStatus, t])
+
+  const planOptions = useMemo(() => {
+    const planIds: OnboardingBillingPlanId[] = [
+      'starter',
+      'growth',
+      'pro',
+      'scale',
+    ]
+    return planIds.map((id) => {
+      const config = billingPlansById[id]
+      return {
+        id,
+        name: config?.name ?? formatPlanId(id),
+        priceLabel: config
+          ? config.amount === 0
+            ? t('planFree')
+            : t('planPricePerMonth', {
+                price: new Intl.NumberFormat(locale, {
+                  style: 'currency',
+                  currency: config.currencyCode,
+                  minimumFractionDigits: Number.isInteger(config.amount)
+                    ? 0
+                    : 2,
+                  maximumFractionDigits: 2,
+                }).format(config.amount),
+              })
+          : formatPlanId(id),
+        volumeLabel: config
+          ? t('planVolumePerMonth', { count: config.includedVerifications })
+          : '',
+      }
+    })
+  }, [billingPlansById, locale, t])
+
+  const usageData = useMemo(() => {
+    if (!stats) return null
+
+    const { used, limit } = stats.usage
+    const safeLimit = Math.max(limit, 1)
+    const percent = Math.min(100, Math.round((used / safeLimit) * 100))
+
+    return {
+      used,
+      limit,
+      usedLabel: t('usageUsedPercent', { value: percent }),
+      limitLabel: t('usageMonthlyLimit'),
+      upgradePrompt: percent >= 80 ? t('usageUpgradePrompt') : null,
+    }
+  }, [stats, t])
+
+  const handleChangePlan = useCallback(async () => {
+    if (!selectedPlanId || selectedPlanId === billingPlanId) return
+
+    setErrorBanner(null)
+    setSuccessBanner(null)
+    setIsChangingPlan(true)
+
+    try {
+      const { confirmationUrl } = await createOnboardingBilling(
+        selectedPlanId,
+        hostParam ?? undefined
+      )
+
+      if (isEmbedded && window.top && window.top !== window.self) {
+        window.open(confirmationUrl, '_top')
+      } else {
+        window.location.href = confirmationUrl
+      }
+    } catch (error) {
+      console.error('[Settings] Failed to change plan:', error)
+      setErrorBanner(t('changePlanError'))
+    } finally {
+      setIsChangingPlan(false)
+    }
+  }, [billingPlanId, hostParam, isEmbedded, selectedPlanId, t])
 
   const handleSave = useCallback(async () => {
     setErrorBanner(null)
@@ -384,27 +466,57 @@ export default function SettingsPage() {
                   onChange={setIsAutoVerifyEnabled}
                 />
 
-                <Button variant="primary" loading={isSaving} onClick={handleSave}>
+                <Button
+                  variant="primary"
+                  loading={isSaving}
+                  onClick={handleSave}
+                >
                   {t('saveButton')}
                 </Button>
               </BlockStack>
             </Card>
 
             <Card>
-              <BlockStack gap="300">
-                <Text as="h2" variant="headingMd">
-                  {t('subscriptionHeading')}
-                </Text>
+              <BlockStack gap="400">
+                <BlockStack gap="200">
+                  <Text as="h2" variant="headingMd">
+                    {t('subscriptionHeading')}
+                  </Text>
 
-                <Text as="p" variant="bodyMd">
-                  {activePlanName
-                    ? t('subscriptionCurrentPlan', { plan: activePlanName })
-                    : t('subscriptionNoPlan')}
-                </Text>
+                  <Text as="p" variant="bodyMd">
+                    {activePlanName
+                      ? t('subscriptionCurrentPlan', { plan: activePlanName })
+                      : t('subscriptionNoPlan')}
+                  </Text>
 
-                <Text as="p" tone="subdued" variant="bodySm">
-                  {t('subscriptionStatusLabel', { status: billingStatusLabel })}
-                </Text>
+                  <Text as="p" tone="subdued" variant="bodySm">
+                    {t('subscriptionStatusLabel', {
+                      status: billingStatusLabel,
+                    })}
+                  </Text>
+                </BlockStack>
+
+                {usageData && (
+                  <UsageOverview
+                    used={usageData.used}
+                    limit={usageData.limit}
+                    title={t('usageTitle')}
+                    usedLabel={usageData.usedLabel}
+                    limitLabel={usageData.limitLabel}
+                    upgradePrompt={usageData.upgradePrompt}
+                  />
+                )}
+
+                <PlanComparison
+                  plans={planOptions}
+                  currentPlanId={billingPlanId}
+                  selectedPlanId={selectedPlanId}
+                  isChangingPlan={isChangingPlan}
+                  currentBadgeLabel={t('currentPlanBadge')}
+                  changePlanLabel={t('changePlanButton')}
+                  onPlanSelect={setSelectedPlanId}
+                  onChangePlan={handleChangePlan}
+                />
 
                 <Button onClick={handleManageBilling}>
                   {t('manageBillingButton')}

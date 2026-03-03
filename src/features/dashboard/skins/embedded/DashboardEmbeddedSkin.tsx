@@ -4,7 +4,6 @@ import {
   Button,
   ButtonGroup,
   Card,
-  EmptyState as PolarisEmptyState,
   InlineStack,
   Layout,
   Page,
@@ -14,6 +13,7 @@ import {
 import { useTranslations } from 'next-intl'
 import { VerificationsTableEmbedded } from './VerificationsTableEmbedded'
 import { StatsEmbedded } from './StatsEmbedded'
+import { DashboardEmptyState } from './components/DashboardEmptyState'
 import type { DashboardSkinProps } from '../../domain/dashboard.types'
 
 export function DashboardEmbeddedSkin({
@@ -34,10 +34,7 @@ export function DashboardEmbeddedSkin({
   const t = useTranslations('dashboard')
 
   return (
-    <Page
-      title={t('title')}
-      subtitle={t('subtitle')}
-    >
+    <Page title={t('title')} subtitle={t('subtitle')}>
       <BlockStack gap="400">
         {error && (
           <Banner tone="critical" onDismiss={() => {}}>
@@ -99,13 +96,22 @@ export function DashboardEmbeddedSkin({
                   </InlineStack>
                 ) : hasVerifications ? (
                   <VerificationsTableEmbedded verifications={verifications} />
+                ) : statusFilter === 'all' ? (
+                  <DashboardEmptyState
+                    messages={{
+                      heading: t('emptyState.onboarding.heading'),
+                      activeDescription: t(
+                        'emptyState.onboarding.activeDescription'
+                      ),
+                      step1: t('emptyState.onboarding.step1'),
+                      step2: t('emptyState.onboarding.step2'),
+                      step3: t('emptyState.onboarding.step3'),
+                    }}
+                  />
                 ) : (
-                  <PolarisEmptyState
-                    heading={t('verificationSection.emptyHeading')}
-                    image={null as unknown as string}
-                  >
-                    <p>{emptyVerificationsMessage}</p>
-                  </PolarisEmptyState>
+                  <Text as="p" tone="subdued" variant="bodySm">
+                    {emptyVerificationsMessage}
+                  </Text>
                 )}
               </BlockStack>
             </Card>
