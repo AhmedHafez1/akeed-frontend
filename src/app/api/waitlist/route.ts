@@ -18,7 +18,10 @@ const waitlistRequestSchema = z.object({
 const WAITLIST_RATE_LIMIT_WINDOW_MS = 60_000
 const WAITLIST_RATE_LIMIT_MAX_REQUESTS = 6
 
-const waitlistRateLimitStore = new Map<string, { count: number; resetAt: number }>()
+const waitlistRateLimitStore = new Map<
+  string,
+  { count: number; resetAt: number }
+>()
 
 function getRequiredEnvVar(name: string): string {
   const value = process.env[name]
@@ -104,7 +107,9 @@ export async function POST(request: NextRequest) {
 
     const { name, phone, platform, monthlyOrders, locale } = parsed.data
 
-    const serviceAccountEmail = getRequiredEnvVar('GOOGLE_SERVICE_ACCOUNT_EMAIL')
+    const serviceAccountEmail = getRequiredEnvVar(
+      'GOOGLE_SERVICE_ACCOUNT_EMAIL'
+    )
     const privateKey = getRequiredEnvVar('GOOGLE_PRIVATE_KEY').replace(
       /\\n/g,
       '\n'
