@@ -12,19 +12,42 @@
  * correct locale-aware hrefs.
  */
 
-import { usePathname } from 'next/navigation'
+import { useMemo } from 'react'
+import { usePathname, useSearchParams } from 'next/navigation'
+import {
+  appendEmbeddedParamsToPath,
+  resolveEmbeddedContextFromSearch,
+} from '@/lib/embedded-context'
 import { getLocaleFromPathname } from '@/lib/locale'
 
 export function EmbeddedNavigation() {
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const locale = getLocaleFromPathname(pathname ?? '')
+
+  const resolvedContext = useMemo(
+    () => resolveEmbeddedContextFromSearch(searchParams),
+    [searchParams]
+  )
+
+  const dashboardHref = appendEmbeddedParamsToPath({
+    path: `/${locale}/dashboard`,
+    shopDomain: resolvedContext.shopDomain,
+    hostParam: resolvedContext.hostParam,
+  })
+
+  const settingsHref = appendEmbeddedParamsToPath({
+    path: `/${locale}/settings`,
+    shopDomain: resolvedContext.shopDomain,
+    hostParam: resolvedContext.hostParam,
+  })
 
   return (
     <ui-nav-menu>
-      <a href={`/${locale}/dashboard`} rel="home">
+      <a href={dashboardHref} rel="home">
         Dashboard
       </a>
-      <a href={`/${locale}/settings`}>Settings</a>
+      <a href={settingsHref}>Settings</a>
     </ui-nav-menu>
   )
 }

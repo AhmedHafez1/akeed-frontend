@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { resolveEmbeddedContextFromSearch } from '@/lib/embedded-context'
 import type { ShopifyGlobal } from '@/types/window.model'
 
 /**
@@ -87,15 +88,17 @@ const STANDALONE_STATE: ResolvedState = { shopify: null, ready: true }
  */
 export function useAkeedMode(): AkeedModeContext {
   const searchParams = useSearchParams()
+  const resolvedContext = useMemo(
+    () => resolveEmbeddedContextFromSearch(searchParams),
+    [searchParams]
+  )
 
-  const shopDomain = searchParams.get('shop')
-  const hostParam = searchParams.get('host')
+  const { shopDomain, hostParam, isEmbedded } = resolvedContext
 
   const mode: AkeedMode = useMemo(() => {
-    return shopDomain && hostParam ? 'EMBEDDED' : 'STANDALONE'
-  }, [shopDomain, hostParam])
+    return isEmbedded ? 'EMBEDDED' : 'STANDALONE'
+  }, [isEmbedded])
 
-  const isEmbedded = mode === 'EMBEDDED'
   const isStandalone = mode === 'STANDALONE'
 
   // Track async App Bridge resolution for embedded mode only.

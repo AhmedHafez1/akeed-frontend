@@ -1,5 +1,6 @@
 'use client'
 import { createClient } from '@supabase/supabase-js'
+import { resolveEmbeddedContextFromWindow } from './embedded-context'
 import { getErrorMessage, parseJsonResponse } from './http'
 import { withLocale } from './locale'
 
@@ -37,7 +38,9 @@ export function getSupabaseClient() {
   }
 
   const supabaseUrl = getRequiredPublicEnvVar('NEXT_PUBLIC_SUPABASE_URL')
-  const supabaseAnonKey = getRequiredPublicEnvVar('NEXT_PUBLIC_SUPABASE_ANON_KEY')
+  const supabaseAnonKey = getRequiredPublicEnvVar(
+    'NEXT_PUBLIC_SUPABASE_ANON_KEY'
+  )
 
   supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
@@ -60,10 +63,7 @@ async function getAuthToken(): Promise<string | null> {
   }
 
   // Detect mode from URL parameters
-  const urlParams = new URLSearchParams(window.location.search)
-  const shopDomain = urlParams.get('shop')
-  const hostParam = urlParams.get('host')
-  const isEmbedded = !!(shopDomain && hostParam)
+  const { isEmbedded } = resolveEmbeddedContextFromWindow()
 
   if (isEmbedded) {
     // EMBEDDED MODE: Get Shopify Session Token
@@ -86,7 +86,9 @@ async function getShopifySessionToken(): Promise<string | null> {
     const shopify = window.shopify
 
     if (!shopify) {
-      console.error('[Auth] window.shopify not available — App Bridge CDN script may not be loaded')
+      console.error(
+        '[Auth] window.shopify not available — App Bridge CDN script may not be loaded'
+      )
       return null
     }
 
@@ -160,8 +162,7 @@ export async function fetchWithAuth(
     console.error('[Auth] Unauthorized - redirecting to login')
 
     // Redirect to login if in standalone mode
-    const urlParams = new URLSearchParams(window.location.search)
-    const isEmbedded = !!(urlParams.get('shop') && urlParams.get('host'))
+    const { isEmbedded } = resolveEmbeddedContextFromWindow()
 
     if (!isEmbedded && typeof window !== 'undefined') {
       window.location.href = withLocale('/login')
@@ -367,9 +368,7 @@ export const auth = {
 export function getAuthMode(): 'EMBEDDED' | 'STANDALONE' {
   if (typeof window === 'undefined') return 'STANDALONE'
 
-  const urlParams = new URLSearchParams(window.location.search)
-  const shopDomain = urlParams.get('shop')
-  const hostParam = urlParams.get('host')
+  const { isEmbedded } = resolveEmbeddedContextFromWindow()
 
-  return shopDomain && hostParam ? 'EMBEDDED' : 'STANDALONE'
+  return isEmbedded ? 'EMBEDDED' : 'STANDALONE'
 }
