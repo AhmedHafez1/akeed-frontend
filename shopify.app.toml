@@ -6,42 +6,11 @@ name = "akeed"
 application_url = "http://localhost:3001"
 embedded = true
 
-
 [auth]
 redirect_urls = ["http://localhost:3001/auth/shopify/callback"]
 
 [webhooks]
 api_version = "2026-01"
-
-  # ── Compliance / GDPR (auto-managed by Shopify) ──────────────────
-  [[webhooks.subscriptions]]
-  topics = ["customers/data_request"]
-  uri = "/webhooks/shopify/customers/data_request"
-  compliance_topics = ["customers/data_request"]
-
-  [[webhooks.subscriptions]]
-  topics = ["customers/redact"]
-  uri = "/webhooks/shopify/customers/redact"
-  compliance_topics = ["customers/redact"]
-
-  [[webhooks.subscriptions]]
-  topics = ["shop/redact"]
-  uri = "/webhooks/shopify/shop/redact"
-  compliance_topics = ["shop/redact"]
-
-  # ── App lifecycle ────────────────────────────────────────────────
-  [[webhooks.subscriptions]]
-  topics = ["app/uninstalled"]
-  uri = "/webhooks/shopify/uninstalled"
-
-  [[webhooks.subscriptions]]
-  topics = ["app_subscriptions/update"]
-  uri = "/webhooks/shopify/app-subscriptions/update"
-
-  # ── Business ─────────────────────────────────────────────────────
-  [[webhooks.subscriptions]]
-  topics = ["orders/create"]
-  uri = "/webhooks/shopify/orders-create"
 
 [build]
 automatically_update_urls_on_dev = true
