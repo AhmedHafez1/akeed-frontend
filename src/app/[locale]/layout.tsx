@@ -38,7 +38,7 @@ export default async function LocaleLayout({
   const messages = await getMessages()
 
   return (
-    <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+    <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} suppressHydrationWarning>
       <head>
         {/*
           Shopify App Bridge v4 — loaded via CDN for embedded mode.
@@ -56,7 +56,7 @@ export default async function LocaleLayout({
           <MarketingScripts />
         </Suspense>
       </head>
-      <body className={cairo.className}>
+      <body className={cairo.className} suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
           <AppLayout>{children}</AppLayout>
         </NextIntlClientProvider>
