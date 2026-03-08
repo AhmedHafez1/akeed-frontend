@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import type { RefObject } from 'react'
 import { updateOnboardingSettings } from '@/lib/onboarding'
 import type { IntegrationOnboardingLanguage } from '@/types/embedded-onboarding.model'
-import type { EmbeddedStep } from '../onboarding.config'
+import type { EmbeddedStep } from '../model/onboarding.config'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

@@ -1,25 +1,25 @@
 'use client'
 
-import { type ReactNode, useCallback, useMemo } from 'react'
+import { type ReactNode, useCallback, useEffect, useMemo } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { BlockStack, Card, Layout, Page } from '@shopify/polaris'
 import { FullPageLoader } from '@/components/layout/FullPageLoader'
-import { useAkeedMode } from '@/hooks/useAkeedMode'
-import { useEmbeddedOnboarding } from '@/hooks/useEmbeddedOnboarding'
-import { getLocaleFromPathname } from '@/lib/locale'
-import type { OnboardingBillingPlan } from '@/types/embedded-onboarding.model'
-import { OnboardingAlerts } from './components/OnboardingAlerts'
-import { OnboardingStepCounter } from './components/OnboardingStepCounter'
+import { useEmbeddedOnboarding } from '@/features/onboarding/hooks/useEmbeddedOnboarding'
 import {
   BILLING_PLAN_DEFINITIONS,
   type EmbeddedStep,
   LANGUAGE_OPTION_DEFINITIONS,
   TOTAL_STEPS,
-} from './onboarding.config'
-import { BillingStep } from './steps/BillingStep'
-import { ConfigurationStep } from './steps/ConfigurationStep'
-import { WelcomeStep } from './steps/WelcomeStep'
+} from '@/features/onboarding/model/onboarding.config'
+import { OnboardingAlerts } from '@/features/onboarding/ui/embedded/components/OnboardingAlerts'
+import { OnboardingStepCounter } from '@/features/onboarding/ui/embedded/components/OnboardingStepCounter'
+import { BillingStep } from '@/features/onboarding/ui/embedded/steps/BillingStep'
+import { ConfigurationStep } from '@/features/onboarding/ui/embedded/steps/ConfigurationStep'
+import { WelcomeStep } from '@/features/onboarding/ui/embedded/steps/WelcomeStep'
+import { useAkeedMode } from '@/hooks/useAkeedMode'
+import { getLocaleFromPathname } from '@/lib/locale'
+import type { OnboardingBillingPlan } from '@/types/embedded-onboarding.model'
 
 export default function OnboardingPage() {
   const t = useTranslations('onboarding')
@@ -29,6 +29,16 @@ export default function OnboardingPage() {
   const router = useRouter()
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname ?? '')
+
+  useEffect(() => {
+    if (isModeLoading) {
+      return
+    }
+
+    if (!isEmbedded) {
+      router.replace(`/${locale}/dashboard`)
+    }
+  }, [isEmbedded, isModeLoading, locale, router])
 
   const languageOptions = useMemo(
     () =>
@@ -204,7 +214,7 @@ export default function OnboardingPage() {
     ),
   }
 
-  if (isModeLoading || isInitialLoading || isBillingRedirecting) {
+  if (!isEmbedded || isModeLoading || isInitialLoading || isBillingRedirecting) {
     const loaderMessage = isBillingRedirecting
       ? tEmbedded('billingRedirecting')
       : undefined

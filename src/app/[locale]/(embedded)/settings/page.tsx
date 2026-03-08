@@ -16,8 +16,8 @@ import {
   TextField,
 } from '@shopify/polaris'
 import { FullPageLoader } from '@/components/layout/FullPageLoader'
+import { useDashboardStats } from '@/features/dashboard/hooks/useDashboardStats'
 import { useAkeedMode } from '@/hooks/useAkeedMode'
-import { useDashboardStats } from '@/hooks/useDashboardStats'
 import { getLocaleFromPathname } from '@/lib/locale'
 import {
   createOnboardingBilling,
@@ -114,6 +114,16 @@ export default function SettingsPage() {
   const locale = getLocaleFromPathname(pathname ?? '')
   const { stats } = useDashboardStats('last_30_days')
 
+  useEffect(() => {
+    if (isModeLoading) {
+      return
+    }
+
+    if (!isEmbedded) {
+      router.replace(`/${locale}/dashboard`)
+    }
+  }, [isEmbedded, isModeLoading, locale, router])
+
   const [isInitialLoading, setIsInitialLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [storeName, setStoreName] = useState('')
@@ -163,6 +173,11 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (isModeLoading) {
+      return
+    }
+
+    if (!isEmbedded) {
+      setIsInitialLoading(false)
       return
     }
 
@@ -227,7 +242,7 @@ export default function SettingsPage() {
     return () => {
       active = false
     }
-  }, [isModeLoading, locale, router, t])
+  }, [isEmbedded, isModeLoading, locale, router, t])
 
   const activePlanName = useMemo(() => {
     if (!billingPlanId) {
@@ -390,7 +405,7 @@ export default function SettingsPage() {
     window.location.href = billingManagementUrl
   }, [billingManagementUrl, isEmbedded, t])
 
-  if (isModeLoading || isInitialLoading) {
+  if (!isEmbedded || isModeLoading || isInitialLoading) {
     return <FullPageLoader />
   }
 

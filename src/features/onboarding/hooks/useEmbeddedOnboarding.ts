@@ -2,10 +2,10 @@
 
 import { useCallback, useState } from 'react'
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
-import { useOnboardingInit } from '@/app/[locale]/(embedded)/onboarding/hooks/useOnboardingInit'
-import { useOnboardingSettings } from '@/app/[locale]/(embedded)/onboarding/hooks/useOnboardingSettings'
-import { useOnboardingBilling } from '@/app/[locale]/(embedded)/onboarding/hooks/useOnboardingBilling'
-import type { EmbeddedStep } from '@/app/[locale]/(embedded)/onboarding/onboarding.config'
+import { useOnboardingInit } from './useOnboardingInit'
+import { useOnboardingSettings } from './useOnboardingSettings'
+import { useOnboardingBilling } from './useOnboardingBilling'
+import type { EmbeddedStep } from '../model/onboarding.config'
 
 /**
  * Embedded Onboarding — Coordinator Hook

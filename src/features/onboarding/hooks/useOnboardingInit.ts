@@ -12,7 +12,7 @@ import type {
   OnboardingBillingPlanConfig,
   OnboardingBillingPlanId,
 } from '@/types/embedded-onboarding.model'
-import type { EmbeddedStep } from '../onboarding.config'
+import type { EmbeddedStep } from '../model/onboarding.config'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

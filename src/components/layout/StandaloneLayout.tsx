@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
-import { isAuthRoute, getLocaleFromPathname } from '@/lib/locale'
+import { isAuthRoute } from '@/lib/locale'
 import { Header } from './Header'
 import { WhatsAppButton } from '@/components/ui/WhatsAppButton'
 import { Toaster } from 'react-hot-toast'
@@ -19,7 +19,6 @@ interface StandaloneLayoutProps {
 export function StandaloneLayout({ children }: StandaloneLayoutProps) {
   const pathname = usePathname()
   const isOnAuthRoute = isAuthRoute(pathname)
-  const locale = getLocaleFromPathname(pathname ?? '')
 
   if (isOnAuthRoute) {
     return <AuthLayout>{children}</AuthLayout>

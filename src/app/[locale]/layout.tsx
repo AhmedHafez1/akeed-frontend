@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 
 import { Cairo } from 'next/font/google'
+import Script from 'next/script'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
 import { AppLayout } from '@/components/layout/AppLayout'
@@ -38,7 +39,11 @@ export default async function LocaleLayout({
   const messages = await getMessages()
 
   return (
-    <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} suppressHydrationWarning>
+    <html
+      lang={locale}
+      dir={locale === 'ar' ? 'rtl' : 'ltr'}
+      suppressHydrationWarning
+    >
       <head>
         {/*
           Shopify App Bridge v4 — loaded via CDN for embedded mode.
@@ -46,7 +51,10 @@ export default async function LocaleLayout({
           navigation, and toast APIs. It is a no-op when the page
           is not loaded inside the Shopify Admin iframe.
         */}
-        <script src="https://cdn.shopify.com/shopifycloud/app-bridge.js" data-api-key={process.env.NEXT_PUBLIC_SHOPIFY_API_KEY}></script>
+        <script
+          src="https://cdn.shopify.com/shopifycloud/app-bridge.js"
+          data-api-key={process.env.NEXT_PUBLIC_SHOPIFY_API_KEY}
+        ></script>
         {/*
           Marketing scripts (Facebook Pixel, Google Analytics) are loaded
           ONLY in standalone mode. They are suppressed in Shopify embedded

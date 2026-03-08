@@ -72,8 +72,8 @@ export default function SignupPage() {
         company_name: formData.companyName,
       })
 
-      // Redirect to onboarding
-      router.push(`/${locale}/onboarding`)
+      // Redirect to standalone dashboard
+      router.push(auth.getDashboardPath(locale))
     } catch {
       setError('Failed to create account!')
     } finally {

@@ -13,9 +13,6 @@ export type {
   TestFeedback,
 } from './domain/dashboard.types'
 
-// Skin resolver
-export { resolveDashboardSkin } from './skins/resolveDashboardSkin'
-
 // Individual skins (for direct import if needed)
 export { DashboardStandaloneSkin } from './skins/standalone'
 export { DashboardEmbeddedSkin } from './skins/embedded'
