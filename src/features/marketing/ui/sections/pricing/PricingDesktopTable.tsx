@@ -1,5 +1,5 @@
 import { Zap } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/shared/ui/button'
 import { Tier } from '@/features/marketing/model/tier.model'
 
 interface PricingDesktopTableProps {

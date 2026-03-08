@@ -1,8 +1,8 @@
 'use client'
 
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
-import { FullPageLoader } from '@/components/layout/FullPageLoader'
-import { EmbeddedAuthGate } from '@/components/auth/EmbeddedAuthGate'
+import { FullPageLoader } from '@/shared/layout/FullPageLoader'
+import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import {
   DashboardEmbeddedSkin,
   DashboardStandaloneSkin,

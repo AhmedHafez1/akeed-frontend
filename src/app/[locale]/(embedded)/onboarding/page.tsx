@@ -4,7 +4,7 @@ import { type ReactNode, useCallback, useEffect, useMemo } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { BlockStack, Card, Layout, Page } from '@shopify/polaris'
-import { FullPageLoader } from '@/components/layout/FullPageLoader'
+import { FullPageLoader } from '@/shared/layout/FullPageLoader'
 import { useEmbeddedOnboarding } from '@/features/onboarding/hooks/useEmbeddedOnboarding'
 import {
   BILLING_PLAN_DEFINITIONS,

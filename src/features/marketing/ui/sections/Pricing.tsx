@@ -1,8 +1,8 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { Container } from '@/components/ui/container'
-import { Section } from '@/components/ui/section'
+import { Container } from '@/shared/ui/container'
+import { Section } from '@/shared/ui/section'
 import { PricingHeader } from './pricing/PricingHeader'
 import { PricingMobileCards } from './pricing/PricingMobileCards'
 import { PricingDesktopTable } from './pricing/PricingDesktopTable'

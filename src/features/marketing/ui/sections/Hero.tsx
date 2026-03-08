@@ -1,17 +1,20 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { SocialProof } from '@/components/ui/SocialProof'
+import { SocialProof } from '@/features/marketing/ui/components/SocialProof'
 import { ChevronRight, ChevronLeft } from 'lucide-react'
 import ScrollDownArrow from './ScrollDownArrow'
 import { useTranslations } from 'next-intl'
-import { LogoTicker } from '@/components/ui/LogoTicker'
+import { LogoTicker } from '@/features/marketing/ui/components/LogoTicker'
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 
 const ChatInterface = dynamic(
-  () => import('@/components/ui/ChatInterface').then((mod) => mod.ChatInterface),
+  () =>
+    import('@/features/marketing/ui/components/ChatInterface').then(
+      (mod) => mod.ChatInterface
+    ),
   { ssr: false }
 )
 

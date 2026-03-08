@@ -4,8 +4,8 @@ import { Cairo } from 'next/font/google'
 import Script from 'next/script'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
-import { AppLayout } from '@/components/layout/AppLayout'
-import { MarketingScripts } from '@/components/layout/MarketingScripts'
+import { AppLayout } from '@/shared/layout/AppLayout'
+import { MarketingScripts } from '@/shared/layout/MarketingScripts'
 import '../globals.css'
 
 const cairo = Cairo({

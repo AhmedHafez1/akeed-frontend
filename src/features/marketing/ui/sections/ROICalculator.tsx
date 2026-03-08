@@ -1,8 +1,8 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Container } from '@/components/ui/container'
-import { Section } from '@/components/ui/section'
+import { Container } from '@/shared/ui/container'
+import { Section } from '@/shared/ui/section'
 import ScrollDownArrow from './ScrollDownArrow'
 import { ROI_DATA } from '@/features/marketing/config/roi'
 import { ROICalculatorHeader } from './roi/ROICalculatorHeader'

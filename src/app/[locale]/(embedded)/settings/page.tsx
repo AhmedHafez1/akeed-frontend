@@ -15,7 +15,7 @@ import {
   Text,
   TextField,
 } from '@shopify/polaris'
-import { FullPageLoader } from '@/components/layout/FullPageLoader'
+import { FullPageLoader } from '@/shared/layout/FullPageLoader'
 import { useDashboardStats } from '@/features/dashboard/hooks/useDashboardStats'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { getLocaleFromPathname } from '@/shared/lib/locale'

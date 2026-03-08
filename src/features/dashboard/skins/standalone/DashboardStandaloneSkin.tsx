@@ -1,4 +1,4 @@
-import { LoadingSpinner, EmptyState } from '@/components/ui'
+import { LoadingSpinner, EmptyState } from '@/shared/ui'
 import { VerificationsTableStandalone } from './VerificationsTableStandalone'
 import type { DashboardSkinProps } from '../../domain/dashboard.types'
 

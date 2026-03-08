@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { auth, getSupabaseClient } from '@/shared/lib/auth'
 import { isAuthRoute, getLocaleFromPathname } from '@/shared/lib/locale'
-import { FullPageLoader } from '@/components/layout/FullPageLoader'
+import { FullPageLoader } from '@/shared/layout/FullPageLoader'
 
 interface AuthGuardProps {
   children: React.ReactNode

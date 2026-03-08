@@ -1,11 +1,11 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Container } from '@/components/ui/container'
-import { Section } from '@/components/ui/section'
+import { Container } from '@/shared/ui/container'
+import { Section } from '@/shared/ui/section'
 import { motion } from 'framer-motion'
-import { Accordion } from '@/components/ui/accordion'
-import { FAQItem } from '@/components/ui/faq-item'
+import { Accordion } from '@/shared/ui/accordion'
+import { FAQItem } from '@/shared/ui/faq-item'
 import { faqs } from '@/features/marketing/config/site'
 
 function FAQ() {

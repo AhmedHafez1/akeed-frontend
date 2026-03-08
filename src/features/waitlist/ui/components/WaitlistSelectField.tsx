@@ -7,7 +7,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/shared/ui/select'
 import { WaitlistFormData } from '@/features/waitlist/model/waitlist.model'
 import { Controller } from 'react-hook-form'
 
