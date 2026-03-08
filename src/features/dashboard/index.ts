@@ -12,6 +12,15 @@ export type {
   StatusFilterOption,
   TestFeedback,
 } from './domain/dashboard.types'
+export type {
+  DashboardStats,
+  DashboardStatsDateRange,
+  DashboardStatsResponse,
+  VerificationItem,
+  VerificationStatus,
+  VerificationStatusFilter,
+  VerificationsResponse,
+} from './model/dashboard.model'
 
 // Individual skins (for direct import if needed)
 export { DashboardStandaloneSkin } from './skins/standalone'

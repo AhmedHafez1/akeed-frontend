@@ -3,7 +3,7 @@ import type {
   DashboardStatsDateRange,
   VerificationItem,
   VerificationStatusFilter,
-} from '@/types/dashboard.model'
+} from '../model/dashboard.model'
 
 export interface StatusFilterOption {
   id: VerificationStatusFilter

@@ -14,7 +14,7 @@ import { useTranslations } from 'next-intl'
 import type {
   DashboardStats,
   DashboardStatsDateRange,
-} from '@/types/dashboard.model'
+} from '../../model/dashboard.model'
 import type { DateRangeFilterOption } from '../../domain/dashboard.types'
 import type { ColorBorderAlias } from '@shopify/polaris-tokens'
 

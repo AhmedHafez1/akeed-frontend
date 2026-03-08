@@ -8,7 +8,7 @@ import { useDashboardStats } from '../hooks/useDashboardStats'
 import type {
   DashboardStatsDateRange,
   VerificationStatusFilter,
-} from '@/types/dashboard.model'
+} from '../model/dashboard.model'
 import type {
   DashboardSkinProps,
   DateRangeFilterOption,

@@ -6,7 +6,7 @@ import type {
   VerificationsResponse,
   VerificationItem,
   VerificationStatusFilter,
-} from '@/types/dashboard.model'
+} from '../model/dashboard.model'
 
 function getErrorMessage(error: unknown, fallback: string): string {
   if (error instanceof Error) return error.message

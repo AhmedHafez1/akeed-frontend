@@ -1,5 +1,5 @@
-import { StatusBadge } from '@/components/ui'
-import type { VerificationItem } from '@/types/dashboard.model'
+import { StatusBadge } from '../../ui/shared/StatusBadge'
+import type { VerificationItem } from '../../model/dashboard.model'
 
 interface VerificationsTableStandaloneProps {
   verifications: VerificationItem[]

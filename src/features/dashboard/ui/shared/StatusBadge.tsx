@@ -1,4 +1,4 @@
-import type { VerificationStatus } from '@/types/dashboard.model'
+import type { VerificationStatus } from '../../model/dashboard.model'
 
 const STATUS_COLORS = {
   confirmed: 'bg-emerald-100 text-emerald-700',

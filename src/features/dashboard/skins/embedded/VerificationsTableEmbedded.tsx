@@ -3,7 +3,7 @@ import { useTranslations } from 'next-intl'
 import type {
   VerificationItem,
   VerificationStatus,
-} from '@/types/dashboard.model'
+} from '../../model/dashboard.model'
 import { useLocaleInfo } from '@/hooks/useLocaleInfo'
 
 type PolarisBadgeTone =
