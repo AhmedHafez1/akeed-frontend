@@ -4,9 +4,9 @@ import { useTranslations } from 'next-intl'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { motion } from 'framer-motion'
-import { features } from '@/config/site'
+import { features } from '@/features/marketing/config/site'
 import ScrollDownArrow from './ScrollDownArrow'
-import { useLocaleInfo } from '@/hooks/useLocaleInfo'
+import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 
 const container = {
   hidden: { opacity: 0 },

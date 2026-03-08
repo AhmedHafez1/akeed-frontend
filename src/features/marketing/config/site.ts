@@ -1,4 +1,4 @@
-import { Tier } from '@/types/tier.model'
+import { Tier } from '@/features/marketing/model/tier.model'
 
 export const pricing: { tiers: Tier[] } = {
   tiers: [

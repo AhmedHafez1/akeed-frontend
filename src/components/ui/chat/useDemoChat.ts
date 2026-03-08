@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { DemoMessage } from '@/types/demo-message.model'
+import { DemoMessage } from './demo-message.model'
 
 export function useDemoChat(t: (key: string) => string) {
   const [isTyping, setIsTyping] = useState(false)

@@ -1,7 +1,7 @@
 'use client'
 
 import { type ReactNode, Suspense } from 'react'
-import { useAkeedMode } from '@/hooks/useAkeedMode'
+import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { FullPageLoader } from './FullPageLoader'
 import { EmbeddedLayout } from './EmbeddedLayout'
 import { StandaloneLayout } from './StandaloneLayout'

@@ -17,7 +17,7 @@ import {
 } from '@shopify/polaris'
 import { FullPageLoader } from '@/components/layout/FullPageLoader'
 import { useDashboardStats } from '@/features/dashboard/hooks/useDashboardStats'
-import { useAkeedMode } from '@/hooks/useAkeedMode'
+import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
 import {
   createOnboardingBilling,
@@ -29,7 +29,7 @@ import type {
   IntegrationOnboardingLanguage,
   OnboardingBillingPlanConfig,
   OnboardingBillingPlanId,
-} from '@/types/embedded-onboarding.model'
+} from '@/features/onboarding/domain/onboarding.types'
 import { PlanComparison } from './components/PlanComparison'
 import { UsageOverview } from './components/UsageOverview'
 

@@ -6,7 +6,7 @@ import { Section } from '@/components/ui/section'
 import { PricingHeader } from './pricing/PricingHeader'
 import { PricingMobileCards } from './pricing/PricingMobileCards'
 import { PricingDesktopTable } from './pricing/PricingDesktopTable'
-import { usePricing } from '@/hooks/usePricing'
+import { usePricing } from '@/features/marketing/hooks/usePricing'
 
 const ReservationModal = dynamic(
   () => import('./ReservationModal').then((mod) => mod.ReservationModal),

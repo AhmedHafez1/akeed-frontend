@@ -1,12 +1,12 @@
 'use client'
 
 import { Phone, Store, Package } from 'lucide-react'
-import { useWaitlistForm } from '@/hooks/useWaitlistForm'
-import { WaitlistError } from './waitlist/WaitlistError'
-import { WaitlistSelectField } from './waitlist/WaitlistSelectField'
-import { WaitlistSubmitButton } from './waitlist/WaitlistSubmitButton'
-import { WaitlistSuccess } from './waitlist/WaitlistSuccess'
-import { WaitlistTextField } from './waitlist/WaitlistTextField'
+import { useWaitlistForm } from '@/features/waitlist/hooks/useWaitlistForm'
+import { WaitlistError } from '@/features/waitlist/ui/components/WaitlistError'
+import { WaitlistSelectField } from '@/features/waitlist/ui/components/WaitlistSelectField'
+import { WaitlistSubmitButton } from '@/features/waitlist/ui/components/WaitlistSubmitButton'
+import { WaitlistSuccess } from '@/features/waitlist/ui/components/WaitlistSuccess'
+import { WaitlistTextField } from '@/features/waitlist/ui/components/WaitlistTextField'
 
 export function WaitlistForm() {
   const { t, form, isSubmitting, isSuccess, error, onSubmit } =

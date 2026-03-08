@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 import { Container } from '@/components/ui/container'
 import { Section } from '@/components/ui/section'
 import { motion } from 'framer-motion'
-import { features } from '@/config/site'
+import { features } from '@/features/marketing/config/site'
 import { usePathname } from 'next/navigation'
 import ScrollDownArrow from './ScrollDownArrow'
 

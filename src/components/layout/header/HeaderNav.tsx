@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { HeaderNavItem } from '@/types/header.model'
+import { HeaderNavItem } from './header.model'
 
 interface HeaderNavProps {
   items: HeaderNavItem[]

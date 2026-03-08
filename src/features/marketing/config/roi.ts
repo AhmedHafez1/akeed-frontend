@@ -1,4 +1,4 @@
-import { RoiRow } from '@/types/roi.model'
+import { RoiRow } from '@/features/marketing/model/roi.model'
 
 export const ROI_DATA: RoiRow[] = [
   {

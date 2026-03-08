@@ -17,9 +17,9 @@ import { OnboardingStepCounter } from '@/features/onboarding/ui/embedded/compone
 import { BillingStep } from '@/features/onboarding/ui/embedded/steps/BillingStep'
 import { ConfigurationStep } from '@/features/onboarding/ui/embedded/steps/ConfigurationStep'
 import { WelcomeStep } from '@/features/onboarding/ui/embedded/steps/WelcomeStep'
-import { useAkeedMode } from '@/hooks/useAkeedMode'
+import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
-import type { OnboardingBillingPlan } from '@/types/embedded-onboarding.model'
+import type { OnboardingBillingPlan } from '@/features/onboarding/domain/onboarding.types'
 
 export default function OnboardingPage() {
   const t = useTranslations('onboarding')

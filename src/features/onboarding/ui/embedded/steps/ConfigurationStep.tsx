@@ -8,7 +8,7 @@ import {
   Text,
   TextField,
 } from '@shopify/polaris'
-import type { IntegrationOnboardingLanguage } from '@/types/embedded-onboarding.model'
+import type { IntegrationOnboardingLanguage } from '@/features/onboarding/domain/onboarding.types'
 
 interface LanguageOption {
   label: string

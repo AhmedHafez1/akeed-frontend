@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import type { RefObject } from 'react'
-import { DemoMessage } from '@/types/demo-message.model'
+import { DemoMessage } from './demo-message.model'
 import { ChatMessageBubble } from './ChatMessageBubble'
 import { ChatQuickReplies } from './ChatQuickReplies'
 import { ChatTypingIndicator } from './ChatTypingIndicator'

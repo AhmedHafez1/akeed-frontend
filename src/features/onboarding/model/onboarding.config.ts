@@ -1,4 +1,4 @@
-import type { OnboardingBillingPlanId } from '@/types/embedded-onboarding.model'
+import type { OnboardingBillingPlanId } from '@/features/onboarding/domain/onboarding.types'
 
 export const TOTAL_STEPS = 3
 

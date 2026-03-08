@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog'
-import { WaitlistForm } from '@/components/forms/WaitlistForm'
+import { WaitlistForm } from '@/features/waitlist'
 
 interface ReservationModalProps {
   isOpen: boolean

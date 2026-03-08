@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { pricing } from '@/config/site'
+import { pricing } from '@/features/marketing/config/site'
 
 export function usePricing() {
   const t = useTranslations('pricing')

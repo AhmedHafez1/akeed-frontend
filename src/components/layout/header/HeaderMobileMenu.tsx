@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { Globe } from 'lucide-react'
-import { HeaderNavItem } from '@/types/header.model'
+import { HeaderNavItem } from './header.model'
 
 interface HeaderMobileMenuProps {
   isOpen: boolean

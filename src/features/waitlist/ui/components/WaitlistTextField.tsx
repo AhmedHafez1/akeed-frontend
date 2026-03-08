@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import type { FieldErrors, UseFormRegister } from 'react-hook-form'
 import { AlertCircle } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { WaitlistFormData } from '@/types/waitlist.model'
+import { WaitlistFormData } from '@/features/waitlist/model/waitlist.model'
 
 interface WaitlistTextFieldProps {
   id: keyof WaitlistFormData

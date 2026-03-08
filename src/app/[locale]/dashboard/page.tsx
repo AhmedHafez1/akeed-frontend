@@ -1,6 +1,6 @@
 'use client'
 
-import { useAkeedMode } from '@/hooks/useAkeedMode'
+import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { FullPageLoader } from '@/components/layout/FullPageLoader'
 import { EmbeddedAuthGate } from '@/components/auth/EmbeddedAuthGate'
 import {

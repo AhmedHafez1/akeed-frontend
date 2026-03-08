@@ -11,7 +11,7 @@
  */
 
 import Script from 'next/script'
-import { useAkeedMode } from '@/hooks/useAkeedMode'
+import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 
 export function MarketingScripts() {
   const { isStandalone } = useAkeedMode()

@@ -8,7 +8,7 @@ import {
   InlineStack,
   Text,
 } from '@shopify/polaris'
-import type { OnboardingBillingPlanId } from '@/types/embedded-onboarding.model'
+import type { OnboardingBillingPlanId } from '@/features/onboarding/domain/onboarding.types'
 
 interface PlanOption {
   id: OnboardingBillingPlanId

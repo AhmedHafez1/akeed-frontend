@@ -1,6 +1,6 @@
 import { Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Tier } from '@/types/tier.model'
+import { Tier } from '@/features/marketing/model/tier.model'
 
 interface PricingDesktopTableProps {
   tiers: Tier[]

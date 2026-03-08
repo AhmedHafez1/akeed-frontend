@@ -8,7 +8,7 @@ import { useTranslations } from 'next-intl'
 import { LogoTicker } from '@/components/ui/LogoTicker'
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
-import { useLocaleInfo } from '@/hooks/useLocaleInfo'
+import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 
 const ChatInterface = dynamic(
   () => import('@/components/ui/ChatInterface').then((mod) => mod.ChatInterface),

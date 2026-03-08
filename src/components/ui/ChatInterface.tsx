@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
-import { useDemoChat } from '@/hooks/useDemoChat'
+import { useDemoChat } from '@/components/ui/chat/useDemoChat'
 import { ChatHeader } from './chat/ChatHeader'
 import { ChatInputBar } from './chat/ChatInputBar'
 import { ChatMessageList } from './chat/ChatMessageList'

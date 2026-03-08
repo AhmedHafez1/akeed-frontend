@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { DollarSign, TrendingDown, TrendingUp } from 'lucide-react'
-import { RoiRow } from '@/types/roi.model'
+import { RoiRow } from '@/features/marketing/model/roi.model'
 
 interface ROICalculatorTableProps {
   rows: RoiRow[]

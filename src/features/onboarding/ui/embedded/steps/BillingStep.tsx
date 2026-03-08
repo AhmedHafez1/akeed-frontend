@@ -11,7 +11,7 @@ import {
 import type {
   OnboardingBillingPlan,
   OnboardingBillingPlanId,
-} from '@/types/embedded-onboarding.model'
+} from '@/features/onboarding/domain/onboarding.types'
 
 interface BillingStepProps {
   heading: string

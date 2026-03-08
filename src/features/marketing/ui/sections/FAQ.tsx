@@ -6,7 +6,7 @@ import { Section } from '@/components/ui/section'
 import { motion } from 'framer-motion'
 import { Accordion } from '@/components/ui/accordion'
 import { FAQItem } from '@/components/ui/faq-item'
-import { faqs } from '@/config/site'
+import { faqs } from '@/features/marketing/config/site'
 
 function FAQ() {
   const tFaq = useTranslations('faq')

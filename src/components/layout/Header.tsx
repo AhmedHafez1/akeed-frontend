@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useHeader } from '@/hooks/useHeader'
+import { useHeader } from './header/useHeader'
 import { HeaderActions } from './header/HeaderActions'
 import { HeaderLogo } from './header/HeaderLogo'
 import { HeaderMobileMenu } from './header/HeaderMobileMenu'

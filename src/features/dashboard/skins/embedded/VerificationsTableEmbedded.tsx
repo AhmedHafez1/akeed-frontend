@@ -4,7 +4,7 @@ import type {
   VerificationItem,
   VerificationStatus,
 } from '../../model/dashboard.model'
-import { useLocaleInfo } from '@/hooks/useLocaleInfo'
+import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 
 type PolarisBadgeTone =
   | 'attention'

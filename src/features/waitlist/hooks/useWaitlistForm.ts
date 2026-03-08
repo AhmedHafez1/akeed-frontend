@@ -8,7 +8,7 @@ import { getLocaleFromPathname } from '@/shared/lib/locale'
 import {
   WaitlistFormData,
   WaitlistSubmissionResponse,
-} from '@/types/waitlist.model'
+} from '@/features/waitlist/model/waitlist.model'
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),

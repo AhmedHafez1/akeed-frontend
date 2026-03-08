@@ -1,5 +1,5 @@
 import { CheckCheck } from 'lucide-react'
-import { DemoMessage } from '@/types/demo-message.model'
+import { DemoMessage } from './demo-message.model'
 import { ChatLocationCard } from './ChatLocationCard'
 
 interface ChatMessageBubbleProps {

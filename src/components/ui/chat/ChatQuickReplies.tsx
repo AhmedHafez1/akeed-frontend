@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { DemoMessage } from '@/types/demo-message.model'
+import { DemoMessage } from './demo-message.model'
 
 interface ChatQuickRepliesProps {
   message: DemoMessage

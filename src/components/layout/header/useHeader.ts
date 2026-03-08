@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
-import { HeaderNavItem } from '@/types/header.model'
+import { HeaderNavItem } from './header.model'
 
 const SCROLL_THRESHOLD = 20
 const SCROLL_OFFSET = 80

@@ -1,7 +1,7 @@
 'use client'
 
 import { fetchOnboardingState } from '@/features/onboarding/api/onboardingApi'
-import type { IntegrationOnboardingStatus } from '@/types/embedded-onboarding.model'
+import type { IntegrationOnboardingStatus } from '@/features/onboarding/domain/onboarding.types'
 
 export type EmbeddedOnboardingGate =
   | 'none'

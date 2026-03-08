@@ -9,7 +9,7 @@ import type {
   OnboardingBillingResponse,
   OnboardingSettingsPayload,
   OnboardingStateResponse,
-} from '@/types/embedded-onboarding.model'
+} from '@/features/onboarding/domain/onboarding.types'
 
 export async function fetchOnboardingState(): Promise<OnboardingStateResponse> {
   const response = await fetchWithAuth('/api/onboarding/state', {

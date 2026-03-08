@@ -11,7 +11,7 @@ import type {
   IntegrationOnboardingState,
   OnboardingBillingPlanConfig,
   OnboardingBillingPlanId,
-} from '@/types/embedded-onboarding.model'
+} from '@/features/onboarding/domain/onboarding.types'
 import type { EmbeddedStep } from '../model/onboarding.config'
 
 // ─── Types ────────────────────────────────────────────────────────────────────

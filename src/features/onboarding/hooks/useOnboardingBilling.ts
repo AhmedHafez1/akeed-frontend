@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from 'react'
 import { createOnboardingBilling } from '@/features/onboarding/api/onboardingApi'
-import type { OnboardingBillingPlanId } from '@/types/embedded-onboarding.model'
+import type { OnboardingBillingPlanId } from '@/features/onboarding/domain/onboarding.types'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
