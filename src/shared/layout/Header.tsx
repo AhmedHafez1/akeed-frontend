@@ -10,7 +10,7 @@ import { HeaderNav } from './header/HeaderNav'
 
 const ReservationModal = dynamic(
   () =>
-    import('@/features/marketing/ui/sections/ReservationModal').then((mod) => mod.ReservationModal),
+    import('@/features/marketing').then((mod) => mod.ReservationModal),
   { ssr: false }
 )
 

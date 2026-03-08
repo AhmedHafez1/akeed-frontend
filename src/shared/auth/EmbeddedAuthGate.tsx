@@ -9,7 +9,7 @@ import {
   performTokenExchange,
   resolveOnboardingRedirect,
   type EmbeddedOnboardingGate,
-} from '@/features/onboarding/lib/embeddedAuth'
+} from '@/features/onboarding'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
 
 interface EmbeddedAuthGateProps {

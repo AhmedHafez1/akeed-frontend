@@ -23,13 +23,11 @@ import {
   createOnboardingBilling,
   fetchOnboardingBillingPlans,
   fetchOnboardingState,
+  type IntegrationOnboardingLanguage,
+  type OnboardingBillingPlanConfig,
+  type OnboardingBillingPlanId,
   updateOnboardingSettings,
-} from '@/features/onboarding/api/onboardingApi'
-import type {
-  IntegrationOnboardingLanguage,
-  OnboardingBillingPlanConfig,
-  OnboardingBillingPlanId,
-} from '@/features/onboarding/domain/onboarding.types'
+} from '@/features/onboarding'
 import { PlanComparison } from './components/PlanComparison'
 import { UsageOverview } from './components/UsageOverview'
 

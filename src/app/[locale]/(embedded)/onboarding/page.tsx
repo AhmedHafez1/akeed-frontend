@@ -5,21 +5,21 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { BlockStack, Card, Layout, Page } from '@shopify/polaris'
 import { FullPageLoader } from '@/shared/layout/FullPageLoader'
-import { useEmbeddedOnboarding } from '@/features/onboarding/hooks/useEmbeddedOnboarding'
 import {
   BILLING_PLAN_DEFINITIONS,
-  type EmbeddedStep,
   LANGUAGE_OPTION_DEFINITIONS,
+  OnboardingAlerts,
+  OnboardingStepCounter,
+  BillingStep,
+  ConfigurationStep,
   TOTAL_STEPS,
-} from '@/features/onboarding/model/onboarding.config'
-import { OnboardingAlerts } from '@/features/onboarding/ui/embedded/components/OnboardingAlerts'
-import { OnboardingStepCounter } from '@/features/onboarding/ui/embedded/components/OnboardingStepCounter'
-import { BillingStep } from '@/features/onboarding/ui/embedded/steps/BillingStep'
-import { ConfigurationStep } from '@/features/onboarding/ui/embedded/steps/ConfigurationStep'
-import { WelcomeStep } from '@/features/onboarding/ui/embedded/steps/WelcomeStep'
+  useEmbeddedOnboarding,
+  WelcomeStep,
+  type EmbeddedStep,
+  type OnboardingBillingPlan,
+} from '@/features/onboarding'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
-import type { OnboardingBillingPlan } from '@/features/onboarding/domain/onboarding.types'
 
 export default function OnboardingPage() {
   const t = useTranslations('onboarding')
