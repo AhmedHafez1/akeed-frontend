@@ -1,9 +1,5 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Project Documentation
-
-- Frontend architecture and agent context: [docs/ARCHITECTURE_AGENT_CONTEXT.md](docs/ARCHITECTURE_AGENT_CONTEXT.md)
-
 ## Getting Started
 
 First, run the development server:
