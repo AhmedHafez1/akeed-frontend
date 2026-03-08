@@ -51,10 +51,9 @@ export default async function LocaleLayout({
           navigation, and toast APIs. It is a no-op when the page
           is not loaded inside the Shopify Admin iframe.
         */}
-        <Script
+        <script
           src="https://cdn.shopify.com/shopifycloud/app-bridge.js"
           data-api-key={process.env.NEXT_PUBLIC_SHOPIFY_API_KEY}
-          strategy="beforeInteractive"
         />
         {/*
           Marketing scripts (Facebook Pixel, Google Analytics) are loaded
