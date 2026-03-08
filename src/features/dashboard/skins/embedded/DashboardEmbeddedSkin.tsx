@@ -10,21 +10,11 @@ import {
   Spinner,
   Text,
 } from '@shopify/polaris'
-import { useCallback, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { api } from '@/lib/auth'
 import { VerificationsTableEmbedded } from './VerificationsTableEmbedded'
 import { StatsEmbedded } from './StatsEmbedded'
 import { DashboardEmptyState } from './components/DashboardEmptyState'
 import type { DashboardSkinProps } from '../../domain/dashboard.types'
-
-interface SendTestVerificationResponse {
-  success: boolean
-  skipped?: boolean
-  reason?: string
-}
-
-type TestBannerTone = 'success' | 'critical' | 'warning'
 
 export function DashboardEmbeddedSkin({
   stats,
@@ -39,63 +29,15 @@ export function DashboardEmbeddedSkin({
   statusFilter,
   statusFilters,
   onStatusFilterChange,
+  isSendingTest,
+  testFeedback,
+  onSendTestVerification,
+  onDismissTestFeedback,
   error,
 }: DashboardSkinProps) {
   const t = useTranslations('dashboard')
-  const [isSendingTest, setIsSendingTest] = useState(false)
-  const [testFeedback, setTestFeedback] = useState<{
-    tone: TestBannerTone
-    message: string
-  } | null>(null)
   const isBillingTestMode =
     process.env.NEXT_PUBLIC_SHOPIFY_BILLING_TEST_MODE === 'true'
-
-  const handleSendTestVerification = useCallback(
-    async (customerPhone: string) => {
-      const normalizedPhone = customerPhone.trim()
-      if (!normalizedPhone) {
-        setTestFeedback({
-          tone: 'critical',
-          message: t('emptyState.onboarding.testPhoneRequired'),
-        })
-        return
-      }
-
-      setIsSendingTest(true)
-      setTestFeedback(null)
-
-      try {
-        const response = await api.post<SendTestVerificationResponse>(
-          '/api/verifications/test',
-          {
-            customerPhone: normalizedPhone,
-          }
-        )
-
-        if (response.skipped) {
-          setTestFeedback({
-            tone: 'warning',
-            message: response.reason ?? t('emptyState.onboarding.testSkipped'),
-          })
-          return
-        }
-
-        setTestFeedback({
-          tone: 'success',
-          message: t('emptyState.onboarding.testSent'),
-        })
-      } catch (error) {
-        console.error('[Dashboard] Failed to send test verification:', error)
-        setTestFeedback({
-          tone: 'critical',
-          message: t('emptyState.onboarding.testFailed'),
-        })
-      } finally {
-        setIsSendingTest(false)
-      }
-    },
-    [t]
-  )
 
   return (
     <Page title={t('title')} subtitle={t('subtitle')}>
@@ -109,7 +51,7 @@ export function DashboardEmbeddedSkin({
         {testFeedback && (
           <Banner
             tone={testFeedback.tone}
-            onDismiss={() => setTestFeedback(null)}
+            onDismiss={onDismissTestFeedback}
           >
             <p>{testFeedback.message}</p>
           </Banner>
@@ -196,7 +138,7 @@ export function DashboardEmbeddedSkin({
                     }}
                     showTestSection={isBillingTestMode}
                     isSendingTest={isSendingTest}
-                    onSendTestVerification={handleSendTestVerification}
+                    onSendTestVerification={onSendTestVerification}
                   />
                 ) : (
                   <Text as="p" tone="subdued" variant="bodySm">
@@ -211,3 +153,4 @@ export function DashboardEmbeddedSkin({
     </Page>
   )
 }
+

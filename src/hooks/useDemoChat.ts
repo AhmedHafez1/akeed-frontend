@@ -69,35 +69,47 @@ export function useDemoChat(t: (key: string) => string) {
   }, [messages, isTyping])
 
   useEffect(() => {
+    // Collect all timer IDs so we can clear ALL of them on cleanup.
+    // The original code returned clearTimeout inside the outer setTimeout
+    // callback — that return value is ignored by React, so the inner timer
+    // was never cancelled on unmount, causing setState on an unmounted component.
+    const timers: ReturnType<typeof setTimeout>[] = []
+
     if (currentStep >= conversation.length) {
-      const resetTimer = setTimeout(() => {
-        setMessages([])
-        setCurrentStep(0)
-      }, 11000)
-      return () => clearTimeout(resetTimer)
+      timers.push(
+        setTimeout(() => {
+          setMessages([])
+          setCurrentStep(0)
+        }, 11000)
+      )
+      return () => timers.forEach(clearTimeout)
     }
 
     const message = conversation[currentStep]
 
     if (message.type === 'bot') {
-      const typingStartTimer = setTimeout(() => {
-        setIsTyping(true)
-        const typingTimer = setTimeout(() => {
-          setIsTyping(false)
+      timers.push(
+        setTimeout(() => {
+          setIsTyping(true)
+          timers.push(
+            setTimeout(() => {
+              setIsTyping(false)
+              setMessages((prev) => [...prev, message])
+              setCurrentStep((prev) => prev + 1)
+            }, message.delay)
+          )
+        }, 0)
+      )
+    } else {
+      timers.push(
+        setTimeout(() => {
           setMessages((prev) => [...prev, message])
           setCurrentStep((prev) => prev + 1)
         }, message.delay)
-        return () => clearTimeout(typingTimer)
-      }, 0)
-      return () => clearTimeout(typingStartTimer)
+      )
     }
 
-    const userTimer = setTimeout(() => {
-      setMessages((prev) => [...prev, message])
-      setCurrentStep((prev) => prev + 1)
-    }, message.delay)
-
-    return () => clearTimeout(userTimer)
+    return () => timers.forEach(clearTimeout)
   }, [conversation, currentStep])
 
   return {

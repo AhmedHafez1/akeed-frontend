@@ -15,6 +15,13 @@ export interface DateRangeFilterOption {
   label: string
 }
 
+export type TestBannerTone = 'success' | 'critical' | 'warning'
+
+export interface TestFeedback {
+  tone: TestBannerTone
+  message: string
+}
+
 export interface DashboardSkinProps {
   // Stats
   stats: DashboardStats | null
@@ -33,6 +40,12 @@ export interface DashboardSkinProps {
   statusFilter: VerificationStatusFilter
   statusFilters: ReadonlyArray<StatusFilterOption>
   onStatusFilterChange: (filter: VerificationStatusFilter) => void
+
+  // Test verification (embedded billing test mode only)
+  isSendingTest: boolean
+  testFeedback: TestFeedback | null
+  onSendTestVerification: (customerPhone: string) => Promise<void>
+  onDismissTestFeedback: () => void
 
   // Errors
   error: string | null

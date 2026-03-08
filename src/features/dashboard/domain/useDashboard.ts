@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
+import { api } from '@/lib/auth'
 import { useDashboardData } from '@/hooks/useDashboardData'
 import { useDashboardStats } from '@/hooks/useDashboardStats'
 import type {
@@ -12,7 +13,14 @@ import type {
   DashboardSkinProps,
   DateRangeFilterOption,
   StatusFilterOption,
+  TestFeedback,
 } from './dashboard.types'
+
+interface SendTestVerificationResponse {
+  success: boolean
+  skipped?: boolean
+  reason?: string
+}
 
 export function useDashboard(): DashboardSkinProps {
   const t = useTranslations('dashboard')
@@ -20,6 +28,10 @@ export function useDashboard(): DashboardSkinProps {
     useState<VerificationStatusFilter>('all')
   const [dateRangeFilter, setDateRangeFilter] =
     useState<DashboardStatsDateRange>('last_30_days')
+
+  // Test verification state (billing test mode only)
+  const [isSendingTest, setIsSendingTest] = useState(false)
+  const [testFeedback, setTestFeedback] = useState<TestFeedback | null>(null)
 
   const {
     verifications,
@@ -51,29 +63,68 @@ export function useDashboard(): DashboardSkinProps {
     [t]
   )
 
-  const emptyVerificationsMessage = useMemo(() => {
-    if (statusFilter === 'all') {
-      return t('emptyState.all')
-    }
-    return t('emptyState.filtered')
-  }, [statusFilter, t])
+  // Simple conditional — not complex enough for useMemo
+  const emptyVerificationsMessage =
+    statusFilter === 'all' ? t('emptyState.all') : t('emptyState.filtered')
 
-  const onStatusFilterChange = useCallback((filter: VerificationStatusFilter) => {
-    setStatusFilter(filter)
+  // Stable setters from useState are already referentially stable.
+  // Wrapping them in useCallback adds overhead without benefit.
+  const onStatusFilterChange = setStatusFilter
+  const onDateRangeFilterChange = setDateRangeFilter
+
+  const onDismissTestFeedback = useCallback(() => {
+    setTestFeedback(null)
   }, [])
 
-  const onDateRangeFilterChange = useCallback(
-    (filter: DashboardStatsDateRange) => {
-      setDateRangeFilter(filter)
+  const onSendTestVerification = useCallback(
+    async (customerPhone: string) => {
+      const normalizedPhone = customerPhone.trim()
+      if (!normalizedPhone) {
+        setTestFeedback({
+          tone: 'critical',
+          message: t('emptyState.onboarding.testPhoneRequired'),
+        })
+        return
+      }
+
+      setIsSendingTest(true)
+      setTestFeedback(null)
+
+      try {
+        const response = await api.post<SendTestVerificationResponse>(
+          '/api/verifications/test',
+          { customerPhone: normalizedPhone }
+        )
+
+        if (response.skipped) {
+          setTestFeedback({
+            tone: 'warning',
+            message: response.reason ?? t('emptyState.onboarding.testSkipped'),
+          })
+          return
+        }
+
+        setTestFeedback({
+          tone: 'success',
+          message: t('emptyState.onboarding.testSent'),
+        })
+      } catch (error) {
+        console.error('[Dashboard] Failed to send test verification:', error)
+        setTestFeedback({
+          tone: 'critical',
+          message: t('emptyState.onboarding.testFailed'),
+        })
+      } finally {
+        setIsSendingTest(false)
+      }
     },
-    []
+    [t]
   )
 
   const error = useMemo(() => {
     if (verificationsError && statsError) {
       return `${verificationsError}. ${statsError}.`
     }
-
     return verificationsError ?? statsError
   }, [statsError, verificationsError])
 
@@ -93,6 +144,12 @@ export function useDashboard(): DashboardSkinProps {
     statusFilters,
     onStatusFilterChange,
 
+    isSendingTest,
+    testFeedback,
+    onSendTestVerification,
+    onDismissTestFeedback,
+
     error,
   }
 }
+

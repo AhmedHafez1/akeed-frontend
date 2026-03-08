@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { api } from '@/lib/auth'
 import type {
   DashboardStats,
@@ -28,51 +28,44 @@ function getErrorMessage(error: unknown, fallback: string): string {
 export function useDashboardStats(dateRange: DashboardStatsDateRange) {
   const [state, setState] = useState<DashboardStatsState>(INITIAL_STATE)
 
-  const statsQuery = useMemo(
-    () => `?date_range=${encodeURIComponent(dateRange)}`,
-    [dateRange]
-  )
+  const statsQuery = `?date_range=${encodeURIComponent(dateRange)}`
 
-  const fetchStats = useCallback(async (query: string) => {
+  useEffect(() => {
+    const controller = new AbortController()
+
     setState((prev) => ({
       ...prev,
       isStatsLoading: true,
       statsError: null,
     }))
 
-    try {
-      const response = await api.get<DashboardStatsResponse>(
-        `/api/verifications/stats${query}`
-      )
-
-      setState((prev) => ({
-        ...prev,
-        stats: response.stats,
-        isStatsLoading: false,
-      }))
-    } catch (error) {
-      setState((prev) => ({
-        ...prev,
-        statsError: getErrorMessage(error, 'Failed to load dashboard metrics'),
-        isStatsLoading: false,
-      }))
-    }
-  }, [])
-
-  useEffect(() => {
-    let isActive = true
-
-    const load = async () => {
-      if (!isActive) return
-      await fetchStats(statsQuery)
-    }
-
-    void load()
+    api
+      .get<DashboardStatsResponse>(`/api/verifications/stats${statsQuery}`)
+      .then((response) => {
+        if (controller.signal.aborted) return
+        setState((prev) => ({
+          ...prev,
+          stats: response.stats,
+          isStatsLoading: false,
+        }))
+      })
+      .catch((error: unknown) => {
+        if (controller.signal.aborted) return
+        setState((prev) => ({
+          ...prev,
+          statsError: getErrorMessage(
+            error,
+            'Failed to load dashboard metrics'
+          ),
+          isStatsLoading: false,
+        }))
+      })
 
     return () => {
-      isActive = false
+      controller.abort()
     }
-  }, [fetchStats, statsQuery])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statsQuery])
 
   return {
     stats: state.stats,

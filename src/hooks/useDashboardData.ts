@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { api } from '@/lib/auth'
 import type {
   VerificationsResponse,
@@ -28,62 +28,52 @@ function getErrorMessage(error: unknown, fallback: string): string {
 export function useDashboardData(statusFilter: VerificationStatusFilter) {
   const [state, setState] = useState<DashboardState>(INITIAL_STATE)
 
-  const verificationQuery = useMemo(() => {
-    if (statusFilter === 'all') return ''
-    return `?status=${encodeURIComponent(statusFilter)}`
-  }, [statusFilter])
+  // Derive query string inline — string concat is too cheap to warrant useMemo
+  const verificationQuery =
+    statusFilter === 'all' ? '' : `?status=${encodeURIComponent(statusFilter)}`
 
-  const fetchVerifications = useCallback(async (query: string) => {
+  useEffect(() => {
+    // AbortController gives us proper per-request cancellation.
+    // The old `isActive` guard only prevented a fetch from *starting* after
+    // unmount; it did not stop setState from firing when a previous in-flight
+    // request settled after a rapid filter change.
+    const controller = new AbortController()
+
     setState((prev) => ({
       ...prev,
       isVerificationsLoading: true,
       verificationsError: null,
     }))
 
-    try {
-      const response = await api.get<VerificationsResponse>(
-        `/api/verifications${query}`
-      )
-      setState((prev) => ({
-        ...prev,
-        verifications: response.verifications,
-        isVerificationsLoading: false,
-      }))
-    } catch (err) {
-      setState((prev) => ({
-        ...prev,
-        verificationsError: getErrorMessage(
-          err,
-          'Failed to load verifications'
-        ),
-        isVerificationsLoading: false,
-      }))
-    }
-  }, [])
-
-  // Fetch verifications when filter changes
-  useEffect(() => {
-    let isActive = true
-
-    const load = async () => {
-      if (!isActive) return
-      await fetchVerifications(verificationQuery)
-    }
-
-    load()
+    api
+      .get<VerificationsResponse>(`/api/verifications${verificationQuery}`)
+      .then((response) => {
+        if (controller.signal.aborted) return
+        setState((prev) => ({
+          ...prev,
+          verifications: response.verifications,
+          isVerificationsLoading: false,
+        }))
+      })
+      .catch((err: unknown) => {
+        if (controller.signal.aborted) return
+        setState((prev) => ({
+          ...prev,
+          verificationsError: getErrorMessage(err, 'Failed to load verifications'),
+          isVerificationsLoading: false,
+        }))
+      })
 
     return () => {
-      isActive = false
+      controller.abort()
     }
-  }, [verificationQuery, fetchVerifications])
-
-  // Combine errors for backward compatibility
-  const error = state.verificationsError
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [verificationQuery])
 
   return {
     verifications: state.verifications,
     isVerificationsLoading: state.isVerificationsLoading,
-    error,
+    error: state.verificationsError,
     verificationsError: state.verificationsError,
   }
 }

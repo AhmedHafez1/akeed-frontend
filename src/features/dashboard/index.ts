@@ -10,6 +10,7 @@ export { useDashboard } from './domain/useDashboard'
 export type {
   DashboardSkinProps,
   StatusFilterOption,
+  TestFeedback,
 } from './domain/dashboard.types'
 
 // Skin resolver

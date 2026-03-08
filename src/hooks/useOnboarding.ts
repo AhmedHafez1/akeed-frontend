@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useReducer, useState } from 'react'
 import type { ChangeEvent } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
@@ -11,6 +11,30 @@ import {
   OnboardingStepMeta,
   PlatformId,
 } from '@/types/onboarding.model'
+
+type FormAction =
+  | { type: 'SET_FIELD'; name: string; value: string }
+  | { type: 'TOGGLE_PLATFORM'; platform: PlatformId }
+
+function formReducer(state: OnboardingFormData, action: FormAction): OnboardingFormData {
+  switch (action.type) {
+    case 'SET_FIELD': {
+      const next = { ...state, [action.name]: action.value }
+      // Derive slug automatically when org name changes — single render
+      if (action.name === 'orgName') next.orgSlug = slugify(action.value)
+      return next
+    }
+    case 'TOGGLE_PLATFORM':
+      return {
+        ...state,
+        selectedPlatforms: state.selectedPlatforms.includes(action.platform)
+          ? state.selectedPlatforms.filter((p) => p !== action.platform)
+          : [...state.selectedPlatforms, action.platform],
+      }
+    default:
+      return state
+  }
+}
 
 const initialFormData: OnboardingFormData = {
   orgName: '',
@@ -30,7 +54,7 @@ export function useOnboarding() {
   const [currentStep, setCurrentStep] = useState<OnboardingStep>('organization')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
-  const [formData, setFormData] = useState<OnboardingFormData>(initialFormData)
+  const [formData, dispatch] = useReducer(formReducer, initialFormData)
 
   const steps = useMemo<OnboardingStepMeta[]>(
     () => [
@@ -42,26 +66,11 @@ export function useOnboarding() {
   )
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: value,
-    }))
-
-    if (e.target.name === 'orgName') {
-      const slug = slugify(value)
-      setFormData((prev) => ({ ...prev, orgSlug: slug }))
-    }
+    dispatch({ type: 'SET_FIELD', name: e.target.name, value: e.target.value })
   }
 
   const handlePlatformToggle = (platform: PlatformId) => {
-    setFormData((prev) => ({
-      ...prev,
-      selectedPlatforms: prev.selectedPlatforms.includes(platform)
-        ? prev.selectedPlatforms.filter((p) => p !== platform)
-        : [...prev.selectedPlatforms, platform],
-    }))
+    dispatch({ type: 'TOGGLE_PLATFORM', platform })
   }
 
   const handleNext = async () => {
@@ -91,8 +100,9 @@ export function useOnboarding() {
       } else if (currentStep === 'complete') {
         router.push(auth.getDashboardPath(locale))
       }
-    } catch {
-      setError('An error occurred')
+    } catch (err) {
+      console.error('[Onboarding] Step failed:', currentStep, err)
+      setError(err instanceof Error ? err.message : t('errors.generic'))
     } finally {
       setIsLoading(false)
     }
