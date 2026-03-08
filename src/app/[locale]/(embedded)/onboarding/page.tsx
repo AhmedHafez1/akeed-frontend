@@ -5,7 +5,6 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { BlockStack, Card, Layout, Page } from '@shopify/polaris'
 import { FullPageLoader } from '@/components/layout/FullPageLoader'
-import { OnboardingContainer } from '@/components/onboarding/OnboardingContainer'
 import { useAkeedMode } from '@/hooks/useAkeedMode'
 import { useEmbeddedOnboarding } from '@/hooks/useEmbeddedOnboarding'
 import { getLocaleFromPathname } from '@/lib/locale'
@@ -210,10 +209,6 @@ export default function OnboardingPage() {
       ? tEmbedded('billingRedirecting')
       : undefined
     return <FullPageLoader message={loaderMessage} />
-  }
-
-  if (!isEmbedded) {
-    return <OnboardingContainer />
   }
 
   return (
