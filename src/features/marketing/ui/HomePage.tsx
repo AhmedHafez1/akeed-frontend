@@ -1,12 +1,12 @@
 'use client'
 
-import Hero from '@/components/sections/Hero'
-import Problem from '@/components/sections/Problem'
-import HowItWorks from '@/components/sections/HowItWorks'
-import Solution from '@/components/sections/Solution'
-import Pricing from '@/components/sections/Pricing'
-import FAQ from '@/components/sections/FAQ'
-import ROICalculator from '@/components/sections/ROICalculator'
+import Hero from '@/features/marketing/ui/sections/Hero'
+import Problem from '@/features/marketing/ui/sections/Problem'
+import HowItWorks from '@/features/marketing/ui/sections/HowItWorks'
+import Solution from '@/features/marketing/ui/sections/Solution'
+import Pricing from '@/features/marketing/ui/sections/Pricing'
+import FAQ from '@/features/marketing/ui/sections/FAQ'
+import ROICalculator from '@/features/marketing/ui/sections/ROICalculator'
 
 export function HomePage() {
   return (

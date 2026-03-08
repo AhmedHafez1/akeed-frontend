@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { api } from '@/lib/auth'
+import { api } from '@/shared/lib/auth'
 import type {
   DashboardStats,
   DashboardStatsDateRange,

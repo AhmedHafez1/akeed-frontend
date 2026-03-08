@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { resolveEmbeddedContextFromSearch } from '@/lib/embedded-context'
+import { resolveEmbeddedContextFromSearch } from '@/shared/lib/embedded-context'
 import type { ShopifyGlobal } from '@/types/window.model'
 
 /**

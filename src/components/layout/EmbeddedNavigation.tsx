@@ -17,8 +17,8 @@ import { usePathname, useSearchParams } from 'next/navigation'
 import {
   appendEmbeddedParamsToPath,
   resolveEmbeddedContextFromSearch,
-} from '@/lib/embedded-context'
-import { getLocaleFromPathname } from '@/lib/locale'
+} from '@/shared/lib/embedded-context'
+import { getLocaleFromPathname } from '@/shared/lib/locale'
 
 export function EmbeddedNavigation() {
   const pathname = usePathname()

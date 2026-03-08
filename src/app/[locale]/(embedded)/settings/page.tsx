@@ -18,13 +18,13 @@ import {
 import { FullPageLoader } from '@/components/layout/FullPageLoader'
 import { useDashboardStats } from '@/features/dashboard/hooks/useDashboardStats'
 import { useAkeedMode } from '@/hooks/useAkeedMode'
-import { getLocaleFromPathname } from '@/lib/locale'
+import { getLocaleFromPathname } from '@/shared/lib/locale'
 import {
   createOnboardingBilling,
   fetchOnboardingBillingPlans,
   fetchOnboardingState,
   updateOnboardingSettings,
-} from '@/lib/onboarding'
+} from '@/features/onboarding/api/onboardingApi'
 import type {
   IntegrationOnboardingLanguage,
   OnboardingBillingPlanConfig,

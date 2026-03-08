@@ -1,8 +1,8 @@
 'use client'
 import { createClient } from '@supabase/supabase-js'
-import { resolveEmbeddedContextFromWindow } from './embedded-context'
-import { getErrorMessage, parseJsonResponse } from './http'
-import { withLocale } from './locale'
+import { resolveEmbeddedContextFromWindow } from '@/shared/lib/embedded-context'
+import { getErrorMessage, parseJsonResponse } from '@/shared/lib/http'
+import { withLocale } from '@/shared/lib/locale'
 
 /**
  * Akeed API Client with Dual Authentication

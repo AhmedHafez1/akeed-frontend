@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { auth } from '@/lib/auth'
-import { getLocaleFromPathname } from '@/lib/locale'
+import { auth } from '@/shared/lib/auth'
+import { getLocaleFromPathname } from '@/shared/lib/locale'
 import { useTranslations } from 'next-intl'
 
 /**

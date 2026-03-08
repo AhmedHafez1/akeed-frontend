@@ -9,8 +9,8 @@ import {
   performTokenExchange,
   resolveOnboardingRedirect,
   type EmbeddedOnboardingGate,
-} from '@/lib/embeddedAuth'
-import { getLocaleFromPathname, withLocale } from '@/lib/locale'
+} from '@/features/onboarding/lib/embeddedAuth'
+import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
 
 interface EmbeddedAuthGateProps {
   children: React.ReactNode

@@ -5,7 +5,7 @@ import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.
 import {
   fetchOnboardingBillingPlans,
   fetchOnboardingState,
-} from '@/lib/onboarding'
+} from '@/features/onboarding/api/onboardingApi'
 import type {
   IntegrationOnboardingLanguage,
   IntegrationOnboardingState,

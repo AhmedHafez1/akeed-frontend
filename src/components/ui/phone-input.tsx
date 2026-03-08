@@ -2,8 +2,8 @@
 
 import * as React from 'react'
 import { Input, InputProps } from './input'
-import { cn } from '@/lib/utils'
-import { isValidEgyptianPhone } from '@/lib/utils'
+import { cn } from '@/shared/lib/utils'
+import { isValidEgyptianPhone } from '@/shared/lib/utils'
 
 export interface PhoneInputProps extends Omit<InputProps, 'type'> {
   onValidityChange?: (isValid: boolean) => void

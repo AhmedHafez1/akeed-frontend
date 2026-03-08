@@ -18,7 +18,7 @@ import { BillingStep } from '@/features/onboarding/ui/embedded/steps/BillingStep
 import { ConfigurationStep } from '@/features/onboarding/ui/embedded/steps/ConfigurationStep'
 import { WelcomeStep } from '@/features/onboarding/ui/embedded/steps/WelcomeStep'
 import { useAkeedMode } from '@/hooks/useAkeedMode'
-import { getLocaleFromPathname } from '@/lib/locale'
+import { getLocaleFromPathname } from '@/shared/lib/locale'
 import type { OnboardingBillingPlan } from '@/types/embedded-onboarding.model'
 
 export default function OnboardingPage() {

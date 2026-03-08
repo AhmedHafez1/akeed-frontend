@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
-import { isAuthRoute } from '@/lib/locale'
+import { isAuthRoute } from '@/shared/lib/locale'
 import { Header } from './Header'
 import { WhatsAppButton } from '@/components/ui/WhatsAppButton'
 import { Toaster } from 'react-hot-toast'

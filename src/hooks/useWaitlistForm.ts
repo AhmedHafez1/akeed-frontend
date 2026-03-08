@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { getLocaleFromPathname } from '@/lib/locale'
+import { getLocaleFromPathname } from '@/shared/lib/locale'
 import {
   WaitlistFormData,
   WaitlistSubmissionResponse,

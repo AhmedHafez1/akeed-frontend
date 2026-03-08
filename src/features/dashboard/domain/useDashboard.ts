@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { api } from '@/lib/auth'
+import { api } from '@/shared/lib/auth'
 import { useDashboardData } from '../hooks/useDashboardData'
 import { useDashboardStats } from '../hooks/useDashboardStats'
 import type {

@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useState } from 'react'
-import { createOnboardingBilling } from '@/lib/onboarding'
+import { createOnboardingBilling } from '@/features/onboarding/api/onboardingApi'
 import type { OnboardingBillingPlanId } from '@/types/embedded-onboarding.model'
 
 // ─── Types ────────────────────────────────────────────────────────────────────

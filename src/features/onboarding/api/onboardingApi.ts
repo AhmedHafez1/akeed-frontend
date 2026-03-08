@@ -1,7 +1,7 @@
 'use client'
 
-import { fetchWithAuth } from '@/lib/auth'
-import { getErrorMessage, parseJsonResponse } from '@/lib/http'
+import { fetchWithAuth } from '@/shared/lib/auth'
+import { getErrorMessage, parseJsonResponse } from '@/shared/lib/http'
 import type {
   OnboardingBillingPlanConfig,
   OnboardingBillingPlanId,

@@ -7,8 +7,8 @@
  * - Standalone: renders the marketing homepage.
  */
 
-import { HomePage } from '@/components/pages/HomePage'
 import { FullPageLoader } from '@/components/layout/FullPageLoader'
+import { HomePage } from '@/features/marketing'
 import { EmbeddedAuthGate } from '@/components/auth/EmbeddedAuthGate'
 
 export default function Home() {
