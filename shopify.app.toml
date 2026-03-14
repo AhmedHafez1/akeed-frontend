@@ -6,11 +6,29 @@ name = "akeed"
 application_url = "http://localhost:3001"
 embedded = true
 
+# Production template (replace with your live app domain when deploying):
+# application_url = "https://your-app-domain.com"
+
 [auth]
 redirect_urls = ["http://localhost:3001/auth/shopify/callback"]
 
+# Production template (replace with your live app domain when deploying):
+# redirect_urls = ["https://your-app-domain.com/auth/shopify/callback"]
+
 [webhooks]
 api_version = "2026-01"
+
+[[webhooks.subscriptions]]
+topics = ["customers/data_request"]
+uri = "/webhooks/shopify/customers/data_request"
+
+[[webhooks.subscriptions]]
+topics = ["customers/redact"]
+uri = "/webhooks/shopify/customers/redact"
+
+[[webhooks.subscriptions]]
+topics = ["shop/redact"]
+uri = "/webhooks/shopify/shop/redact"
 
 [build]
 automatically_update_urls_on_dev = true

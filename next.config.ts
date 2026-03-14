@@ -70,6 +70,10 @@ const nextConfig: NextConfig = {
         destination: `${apiBaseUrl}/auth/shopify/callback`,
       },
       {
+        source: '/webhooks/:path*',
+        destination: `${apiBaseUrl}/webhooks/:path*`,
+      },
+      {
         source: '/api/:path*',
         destination: `${apiBaseUrl}/api/:path*`,
       },
