@@ -1,19 +1,10 @@
-# This file is used to configure your app for local development with Shopify CLI.
-# Learn more: https://shopify.dev/docs/apps/tools/cli/configuration
-
 client_id = "f1f4012b31f1bb37c897ee284a501623"
 name = "akeed"
-application_url = "http://localhost:3001"
+application_url = "https://akeed-eta.vercel.app"
 embedded = true
 
-# Production template (replace with your live app domain when deploying):
-# application_url = "https://your-app-domain.com"
-
 [auth]
-redirect_urls = ["http://localhost:3001/auth/shopify/callback"]
-
-# Production template (replace with your live app domain when deploying):
-# redirect_urls = ["https://your-app-domain.com/auth/shopify/callback"]
+redirect_urls = ["https://akeed-eta.vercel.app/auth/shopify/callback"]
 
 [webhooks]
 api_version = "2026-01"
