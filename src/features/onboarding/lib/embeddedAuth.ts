@@ -66,7 +66,7 @@ export async function performTokenExchange(
   sessionToken: string
 ): Promise<boolean> {
   try {
-    const response = await fetch('/auth/shopify/token-exchange', {
+    const response = await fetch('/api/auth/shopify/token-exchange', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ export async function performTokenExchange(
 export async function checkEmbeddedInstall(
   shopDomain: string
 ): Promise<boolean> {
-  const checkUrl = `/auth/shopify/check?shop=${encodeURIComponent(shopDomain)}`
+  const checkUrl = `/api/auth/shopify/check?shop=${encodeURIComponent(shopDomain)}`
   const response = await fetch(checkUrl, {
     method: 'GET',
     credentials: 'include',

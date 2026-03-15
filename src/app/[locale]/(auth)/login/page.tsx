@@ -40,7 +40,7 @@ export default function LoginPage() {
     // Normalize: strip .myshopify.com if user included it
     const normalized = trimmed.replace(/\.myshopify\.com$/i, '')
     const fullDomain = `${normalized}.myshopify.com`
-    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/shopify?shop=${encodeURIComponent(fullDomain)}`
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/shopify?shop=${encodeURIComponent(fullDomain)}`
   }
 
   const handleSubmit = async (e: React.FormEvent) => {

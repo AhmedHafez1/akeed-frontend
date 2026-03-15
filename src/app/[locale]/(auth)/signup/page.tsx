@@ -353,7 +353,7 @@ export default function SignupPage() {
         </div>
 
         <Link
-          href="/auth/shopify"
+          href="/api/auth/shopify"
           className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">

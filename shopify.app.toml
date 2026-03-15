@@ -4,7 +4,7 @@ application_url = "https://akeed-eta.vercel.app"
 embedded = true
 
 [auth]
-redirect_urls = ["https://akeed-eta.vercel.app/auth/shopify/callback"]
+redirect_urls = ["https://akeed-eta.vercel.app/api/auth/shopify/callback"]
 
 [webhooks]
 api_version = "2026-01"

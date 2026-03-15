@@ -22,7 +22,7 @@ function buildInstallAuthUrl(
   shopDomain: string,
   hostParam: string | null
 ): URL {
-  const authUrl = new URL('/auth/shopify', window.location.origin)
+  const authUrl = new URL('/api/auth/shopify', window.location.origin)
   authUrl.searchParams.set('shop', shopDomain)
   if (hostParam) {
     authUrl.searchParams.set('host', hostParam)
