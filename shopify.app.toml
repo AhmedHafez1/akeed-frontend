@@ -1,25 +1,25 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
 client_id = "f1f4012b31f1bb37c897ee284a501623"
-name = "akeed"
+name = "Akeed"
 application_url = "https://akeed-eta.vercel.app"
 embedded = true
 
-[auth]
-redirect_urls = ["https://akeed-eta.vercel.app/api/auth/shopify/callback"]
+[build]
+automatically_update_urls_on_dev = true
 
 [webhooks]
 api_version = "2026-01"
 
-[[webhooks.subscriptions]]
-topics = ["customers/data_request"]
-uri = "/webhooks/shopify/customers/data_request"
+  [[webhooks.subscriptions]]
+  compliance_topics = [ "customers/data_request", "customers/redact", "shop/redact" ]
+  uri = "/webhooks/shopify/compliance"
 
-[[webhooks.subscriptions]]
-topics = ["customers/redact"]
-uri = "/webhooks/shopify/customers/redact"
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "read_customers,write_order_edits,read_orders,write_orders,read_products"
+optional_scopes = [ ]
+use_legacy_install_flow = false
 
-[[webhooks.subscriptions]]
-topics = ["shop/redact"]
-uri = "/webhooks/shopify/shop/redact"
-
-[build]
-automatically_update_urls_on_dev = true
+[auth]
+redirect_urls = [ "https://akeed-eta.vercel.app/api/auth/shopify/callback" ]
