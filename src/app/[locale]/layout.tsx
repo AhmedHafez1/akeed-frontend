@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 
 import { Cairo } from 'next/font/google'
-import Script from 'next/script'
+
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
 import { AppLayout } from '@/shared/layout/AppLayout'
@@ -51,10 +51,10 @@ export default async function LocaleLayout({
           navigation, and toast APIs. It is a no-op when the page
           is not loaded inside the Shopify Admin iframe.
         */}
-        <Script
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+        <script
           src="https://cdn.shopify.com/shopifycloud/app-bridge.js"
-          data-api-key={process.env.NEXT_PUBLIC_SHOPIFY_API_KEY}
-          strategy="beforeInteractive"
+          data-api-key={process.env.SHOPIFY_API_KEY || process.env.NEXT_PUBLIC_SHOPIFY_API_KEY || ''}
         />
         {/*
           Marketing scripts (Facebook Pixel, Google Analytics) are loaded
