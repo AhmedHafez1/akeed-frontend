@@ -39,9 +39,10 @@ export function useDashboard(): DashboardSkinProps {
     error: verificationsError,
   } = useDashboardData(statusFilter)
 
-  const { stats, isStatsLoading, statsError } = useDashboardStats(dateRangeFilter)
+  const { stats, isStatsLoading, statsError } =
+    useDashboardStats(dateRangeFilter)
 
-  const hasVerifications = verifications.length > 0
+  const hasVerifications = verifications?.length > 0
 
   const statusFilters = useMemo<ReadonlyArray<StatusFilterOption>>(
     () => [
@@ -152,4 +153,3 @@ export function useDashboard(): DashboardSkinProps {
     error,
   }
 }
-

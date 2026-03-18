@@ -20,14 +20,10 @@ export function useDashboardData(statusFilter: VerificationStatusFilter) {
   )
   const [resolvedQuery, setResolvedQuery] = useState<string | null>(null)
 
-  // Derive query string inline — string concat is too cheap to warrant useMemo
   const verificationQuery =
     statusFilter === 'all' ? '' : `?status=${encodeURIComponent(statusFilter)}`
 
   useEffect(() => {
-    // AbortController gives us proper per-request cancellation.
-    // The old `isActive` guard only prevented a fetch from starting after
-    // unmount; it did not stop updates when an old in-flight request settled.
     const controller = new AbortController()
 
     api
@@ -40,7 +36,9 @@ export function useDashboardData(statusFilter: VerificationStatusFilter) {
       })
       .catch((err: unknown) => {
         if (controller.signal.aborted) return
-        setVerificationsError(getErrorMessage(err, 'Failed to load verifications'))
+        setVerificationsError(
+          getErrorMessage(err, 'Failed to load verifications')
+        )
         setResolvedQuery(verificationQuery)
       })
 
