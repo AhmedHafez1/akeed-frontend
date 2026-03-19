@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 import { AppProvider, Frame } from '@shopify/polaris'
 import enTranslations from '@shopify/polaris/locales/en.json'
 import '@shopify/polaris/build/esm/styles.css'
+import { EmbeddedLanguageSelector } from './EmbeddedLanguageSelector'
 import { EmbeddedNavigation } from './EmbeddedNavigation'
 
 /**
@@ -31,6 +32,9 @@ export function EmbeddedLayout({ children }: EmbeddedLayoutProps) {
       <Frame>
         {/* Register Shopify sidebar nav links (renders nothing) */}
         <EmbeddedNavigation />
+
+        {/* In-app controls should live in the app surface (Polaris), not admin chrome. */}
+        <EmbeddedLanguageSelector />
 
         {/* Page content rendered by skins (e.g. DashboardEmbeddedSkin) */}
         {children}
