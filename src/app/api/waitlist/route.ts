@@ -1,15 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { google } from 'googleapis'
 import { z } from 'zod'
+import * as libphonenumber from 'google-libphonenumber'
 
 export const runtime = 'nodejs'
+
+const phoneUtil = libphonenumber.PhoneNumberUtil.getInstance()
 
 const waitlistRequestSchema = z.object({
   name: z.string().trim().min(2).max(120),
   phone: z
     .string()
     .trim()
-    .regex(/^(\+20|0)?1[0-2,5]\d{8}$/),
+    .refine((val) => {
+      try {
+        const parsed = phoneUtil.parse(val, 'EG')
+        return phoneUtil.isValidNumber(parsed)
+      } catch {
+        return false
+      }
+    }, 'Invalid phone number format')
+    .transform((val) => {
+      try {
+        const parsed = phoneUtil.parse(val, 'EG')
+        return phoneUtil.format(parsed, libphonenumber.PhoneNumberFormat.E164)
+      } catch {
+        return val
+      }
+    }),
   monthlyOrders: z.string().trim().min(1).max(50),
   platform: z.string().trim().max(80).optional(),
   locale: z.enum(['ar', 'en']).optional(),
