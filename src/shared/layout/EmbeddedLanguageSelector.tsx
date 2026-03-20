@@ -3,7 +3,6 @@
 import { useCallback, useMemo, useTransition } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { Select } from '@shopify/polaris'
 import {
   getLocaleFromPathname,
   isSupportedLocale,
@@ -48,14 +47,6 @@ export function EmbeddedLanguageSelector() {
     return serialized ? `?${serialized}` : ''
   }, [searchParams])
 
-  const languageOptions = useMemo(
-    () => [
-      { label: t('languageEnglish'), value: 'en' },
-      { label: t('languageArabic'), value: 'ar' },
-    ],
-    [t]
-  )
-
   const handleLocaleChange = useCallback(
     (nextLocale: string) => {
       if (!isSupportedLocale(nextLocale) || nextLocale === locale) {
@@ -72,19 +63,22 @@ export function EmbeddedLanguageSelector() {
     [locale, pathname, router, search]
   )
 
+  const nextLocale: SupportedLocale = locale === 'ar' ? 'en' : 'ar'
+  const switchActionLabel = isPending
+    ? t('languageSwitching')
+    : nextLocale === 'en'
+      ? t('switchToEnglish')
+      : t('switchToArabic')
+
   return (
-    <div className="border-b border-gray-200 bg-white px-4 py-3">
-      <div className="mx-auto flex w-full max-w-6xl justify-end">
-        <div className="w-full max-w-55">
-          <Select
-            label={t('defaultLanguageLabel')}
-            options={languageOptions}
-            value={locale}
-            onChange={handleLocaleChange}
-            disabled={isPending}
-          />
-        </div>
-      </div>
-    </div>
+    <ui-title-bar title="Akeed">
+      <button
+        type="button"
+        onClick={() => handleLocaleChange(nextLocale)}
+        disabled={isPending}
+      >
+        {switchActionLabel}
+      </button>
+    </ui-title-bar>
   )
 }

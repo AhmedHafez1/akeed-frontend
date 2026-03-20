@@ -33,7 +33,7 @@ export function EmbeddedLayout({ children }: EmbeddedLayoutProps) {
         {/* Register Shopify sidebar nav links (renders nothing) */}
         <EmbeddedNavigation />
 
-        {/* In-app controls should live in the app surface (Polaris), not admin chrome. */}
+        {/* Register native Shopify App Bridge title bar locale actions. */}
         <EmbeddedLanguageSelector />
 
         {/* Page content rendered by skins (e.g. DashboardEmbeddedSkin) */}

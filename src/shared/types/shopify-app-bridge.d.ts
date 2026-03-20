@@ -10,11 +10,16 @@
 import type { DetailedHTMLProps, HTMLAttributes } from 'react'
 
 type UiNavMenuProps = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>
+type UiTitleBarProps = DetailedHTMLProps<
+  HTMLAttributes<HTMLElement>,
+  HTMLElement
+>
 
 declare module 'react' {
   namespace JSX {
     interface IntrinsicElements {
       'ui-nav-menu': UiNavMenuProps
+      'ui-title-bar': UiTitleBarProps
     }
   }
 }
