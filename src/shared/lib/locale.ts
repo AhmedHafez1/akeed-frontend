@@ -5,12 +5,58 @@
 export const SUPPORTED_LOCALES = ['ar', 'en'] as const
 export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number]
 export const DEFAULT_LOCALE: SupportedLocale = 'ar'
+export const LOCALE_PREFERENCE_STORAGE_KEY = 'akeed:preferred-locale'
+const LOCALE_COOKIE_NAME = 'NEXT_LOCALE'
+const LOCALE_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365
 
 /**
  * Type guard to check if a string is a valid locale
  */
 export function isSupportedLocale(value: string): value is SupportedLocale {
   return SUPPORTED_LOCALES.includes(value as SupportedLocale)
+}
+
+/**
+ * Persist user locale preference for client-side reuse and middleware locale detection.
+ */
+export function persistLocalePreference(locale: SupportedLocale): void {
+  if (typeof window === 'undefined') return
+
+  try {
+    localStorage.setItem(LOCALE_PREFERENCE_STORAGE_KEY, locale)
+  } catch {
+    // Ignore localStorage failures (private mode, blocked storage, etc.)
+  }
+
+  document.cookie = `${LOCALE_COOKIE_NAME}=${locale}; path=/; max-age=${LOCALE_COOKIE_MAX_AGE_SECONDS}; samesite=lax`
+}
+
+/**
+ * Read a persisted locale preference from localStorage first, then cookie fallback.
+ */
+export function getPersistedLocalePreference(): SupportedLocale | null {
+  if (typeof window === 'undefined') return null
+
+  try {
+    const storedLocale = localStorage.getItem(LOCALE_PREFERENCE_STORAGE_KEY)
+    if (storedLocale && isSupportedLocale(storedLocale)) {
+      return storedLocale
+    }
+  } catch {
+    // Ignore localStorage failures (private mode, blocked storage, etc.)
+  }
+
+  const cookieEntry = document.cookie
+    .split(';')
+    .map((entry) => entry.trim())
+    .find((entry) => entry.startsWith(`${LOCALE_COOKIE_NAME}=`))
+
+  if (!cookieEntry) return null
+
+  const cookieValue = decodeURIComponent(
+    cookieEntry.split('=').slice(1).join('=')
+  )
+  return isSupportedLocale(cookieValue) ? cookieValue : null
 }
 
 /**

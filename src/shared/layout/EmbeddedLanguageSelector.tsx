@@ -1,11 +1,13 @@
 'use client'
 
-import { useCallback, useMemo, useTransition } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useTransition } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import {
+  getPersistedLocalePreference,
   getLocaleFromPathname,
   isSupportedLocale,
+  persistLocalePreference,
   type SupportedLocale,
 } from '@/shared/lib/locale'
 
@@ -41,6 +43,7 @@ export function EmbeddedLanguageSelector() {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const locale = getLocaleFromPathname(pathname)
+  const hasSyncedPersistedLocaleRef = useRef(false)
 
   const search = useMemo(() => {
     const serialized = searchParams.toString()
@@ -53,6 +56,8 @@ export function EmbeddedLanguageSelector() {
         return
       }
 
+      persistLocalePreference(nextLocale)
+
       const localizedPathname = buildLocalizedPathname(pathname, nextLocale)
       const destination = `${localizedPathname}${search}`
 
@@ -62,6 +67,25 @@ export function EmbeddedLanguageSelector() {
     },
     [locale, pathname, router, search]
   )
+
+  useEffect(() => {
+    if (hasSyncedPersistedLocaleRef.current) return
+
+    const persistedLocale = getPersistedLocalePreference()
+    if (!persistedLocale) {
+      persistLocalePreference(locale)
+      hasSyncedPersistedLocaleRef.current = true
+      return
+    }
+
+    if (persistedLocale === locale) {
+      hasSyncedPersistedLocaleRef.current = true
+      return
+    }
+
+    hasSyncedPersistedLocaleRef.current = true
+    handleLocaleChange(persistedLocale)
+  }, [handleLocaleChange, locale])
 
   const nextLocale: SupportedLocale = locale === 'ar' ? 'en' : 'ar'
   const switchActionLabel = isPending
