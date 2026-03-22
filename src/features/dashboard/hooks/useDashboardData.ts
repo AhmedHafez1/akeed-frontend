@@ -30,7 +30,7 @@ export function useDashboardData(statusFilter: VerificationStatusFilter) {
       .get<VerificationsResponse>(`/api/verifications${verificationQuery}`)
       .then((response) => {
         if (controller.signal.aborted) return
-        setVerifications(response.verifications)
+        setVerifications(response.data)
         setVerificationsError(null)
         setResolvedQuery(verificationQuery)
       })
