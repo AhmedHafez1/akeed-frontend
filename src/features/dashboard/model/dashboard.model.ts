@@ -43,7 +43,8 @@ export type OrderItem = {
 }
 
 export type VerificationsResponse = {
-  verifications: VerificationItem[]
+  data: VerificationItem[]
+  next_cursor: string | null
 }
 
 export type OrdersResponse = {
