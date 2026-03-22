@@ -7,6 +7,8 @@ import {
   InlineStack,
   ProgressBar,
   Select,
+  SkeletonBodyText,
+  SkeletonDisplayText,
   Spinner,
   Text,
 } from '@shopify/polaris'
@@ -162,14 +164,33 @@ export function StatsEmbedded({
       </InlineStack>
 
       {isStatsLoading && !stats ? (
-        <Card>
-          <InlineStack align="center" gap="200">
-            <Spinner size="small" />
-            <Text variant="bodySm" tone="subdued" as="span">
-              {t('metrics.loading')}
-            </Text>
-          </InlineStack>
-        </Card>
+        <BlockStack gap="400">
+          <Card>
+            <BlockStack gap="300">
+              <SkeletonDisplayText size="small" />
+              <InlineGrid columns={{ xs: 2, sm: 3, md: 5 }} gap="300">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <SkeletonBodyText key={i} lines={2} />
+                ))}
+              </InlineGrid>
+            </BlockStack>
+          </Card>
+
+          <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
+            <Card>
+              <BlockStack gap="300">
+                <SkeletonDisplayText size="small" />
+                <SkeletonBodyText lines={2} />
+              </BlockStack>
+            </Card>
+            <Card>
+              <BlockStack gap="300">
+                <SkeletonDisplayText size="small" />
+                <SkeletonBodyText lines={2} />
+              </BlockStack>
+            </Card>
+          </InlineGrid>
+        </BlockStack>
       ) : stats ? (
         <BlockStack gap="400">
           <Card>

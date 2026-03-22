@@ -1,8 +1,8 @@
 'use client'
 
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
-import { FullPageLoader } from '@/shared/layout/FullPageLoader'
 import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
+import { DashboardPageSkeleton } from '@/shared/layout/skeletons'
 import {
   DashboardEmbeddedSkin,
   DashboardStandaloneSkin,
@@ -22,7 +22,10 @@ function DashboardPageContent() {
 
 export default function DashboardPage() {
   return (
-    <EmbeddedAuthGate fallback={<FullPageLoader />} onboardingGate="dashboard">
+    <EmbeddedAuthGate
+      fallback={<DashboardPageSkeleton />}
+      onboardingGate="dashboard"
+    >
       <DashboardPageContent />
     </EmbeddedAuthGate>
   )

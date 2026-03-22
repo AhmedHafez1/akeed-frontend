@@ -84,9 +84,7 @@ export function DashboardEmptyState({
               loading={isSendingTest}
               onClick={handleSend}
             >
-              {isSendingTest
-                ? messages.testSendingLabel
-                : messages.testSendLabel}
+              {messages.testSendLabel}
             </Button>
           </InlineStack>
         </BlockStack>

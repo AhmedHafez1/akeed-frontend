@@ -4,7 +4,8 @@ import { type ReactNode, useCallback, useEffect, useMemo } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { BlockStack, Card, Layout, Page } from '@shopify/polaris'
-import { FullPageLoader } from '@/shared/layout/FullPageLoader'
+import { OnboardingPageSkeleton } from '@/shared/layout/skeletons'
+import { useAppBridgeLoading } from '@/shared/hooks/useAppBridgeLoading'
 import {
   BILLING_PLAN_DEFINITIONS,
   LANGUAGE_OPTION_DEFINITIONS,
@@ -214,11 +215,11 @@ export default function OnboardingPage() {
     ),
   }
 
-  if (!isEmbedded || isModeLoading || isInitialLoading || isBillingRedirecting) {
-    const loaderMessage = isBillingRedirecting
-      ? tEmbedded('billingRedirecting')
-      : undefined
-    return <FullPageLoader message={loaderMessage} />
+  const isPageLoading = !isEmbedded || isModeLoading || isInitialLoading
+  useAppBridgeLoading(isPageLoading || isBillingRedirecting)
+
+  if (isPageLoading || isBillingRedirecting) {
+    return <OnboardingPageSkeleton />
   }
 
   return (
