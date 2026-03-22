@@ -1,32 +1,19 @@
 'use client'
 
 import { type ReactNode, Suspense } from 'react'
-import {
-  BlockStack,
-  Card,
-  Layout,
-  SkeletonBodyText,
-  SkeletonDisplayText,
-  SkeletonPage,
-} from '@shopify/polaris'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { EmbeddedLayout } from './EmbeddedLayout'
 import { StandaloneLayout } from './StandaloneLayout'
 
 function AppLayoutSkeleton() {
   return (
-    <SkeletonPage>
-      <Layout>
-        <Layout.Section>
-          <Card>
-            <BlockStack gap="400">
-              <SkeletonDisplayText size="small" />
-              <SkeletonBodyText lines={4} />
-            </BlockStack>
-          </Card>
-        </Layout.Section>
-      </Layout>
-    </SkeletonPage>
+    <div className="flex min-h-screen items-center justify-center bg-white p-6">
+      <div className="w-full max-w-3xl animate-pulse space-y-4">
+        <div className="h-6 w-40 rounded bg-gray-200" />
+        <div className="h-28 rounded-xl bg-gray-200" />
+        <div className="h-28 rounded-xl bg-gray-200" />
+      </div>
+    </div>
   )
 }
 
