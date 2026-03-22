@@ -1,10 +1,34 @@
 'use client'
 
 import { type ReactNode, Suspense } from 'react'
+import {
+  BlockStack,
+  Card,
+  Layout,
+  SkeletonBodyText,
+  SkeletonDisplayText,
+  SkeletonPage,
+} from '@shopify/polaris'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
-import { FullPageLoader } from './FullPageLoader'
 import { EmbeddedLayout } from './EmbeddedLayout'
 import { StandaloneLayout } from './StandaloneLayout'
+
+function AppLayoutSkeleton() {
+  return (
+    <SkeletonPage>
+      <Layout>
+        <Layout.Section>
+          <Card>
+            <BlockStack gap="400">
+              <SkeletonDisplayText size="small" />
+              <SkeletonBodyText lines={4} />
+            </BlockStack>
+          </Card>
+        </Layout.Section>
+      </Layout>
+    </SkeletonPage>
+  )
+}
 
 /**
  * AppLayout - Adaptive Layout Component
@@ -30,7 +54,7 @@ function AppLayoutInner({ children }: AppLayoutProps) {
   const { isEmbedded, isLoading } = useAkeedMode()
 
   if (isLoading) {
-    return <FullPageLoader />
+    return <AppLayoutSkeleton />
   }
 
   if (isEmbedded) {
@@ -45,7 +69,7 @@ function AppLayoutInner({ children }: AppLayoutProps) {
  */
 export function AppLayout({ children }: AppLayoutProps) {
   return (
-    <Suspense fallback={<FullPageLoader />}>
+    <Suspense fallback={<AppLayoutSkeleton />}>
       <AppLayoutInner>{children}</AppLayoutInner>
     </Suspense>
   )

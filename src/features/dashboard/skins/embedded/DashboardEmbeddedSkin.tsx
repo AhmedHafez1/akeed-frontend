@@ -49,10 +49,7 @@ export function DashboardEmbeddedSkin({
         )}
 
         {testFeedback && (
-          <Banner
-            tone={testFeedback.tone}
-            onDismiss={onDismissTestFeedback}
-          >
+          <Banner tone={testFeedback.tone} onDismiss={onDismissTestFeedback}>
             <p>{testFeedback.message}</p>
           </Banner>
         )}
@@ -104,7 +101,10 @@ export function DashboardEmbeddedSkin({
 
                 {isVerificationsLoading ? (
                   <InlineStack align="center" gap="200">
-                    <Spinner size="small" />
+                    <Spinner
+                      size="small"
+                      accessibilityLabel={t('verificationSection.loading')}
+                    />
                     <Text variant="bodySm" tone="subdued" as="span">
                       {t('verificationSection.loading')}
                     </Text>
@@ -153,4 +153,3 @@ export function DashboardEmbeddedSkin({
     </Page>
   )
 }
-

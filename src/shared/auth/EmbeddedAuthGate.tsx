@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
+import { useAppBridgeLoading } from '@/shared/hooks/useAppBridgeLoading'
 import {
   checkEmbeddedInstall,
   fetchOnboardingStatusWithRetry,
@@ -46,6 +47,9 @@ export function EmbeddedAuthGate({
     return query ? `?${query}` : ''
   }, [searchParams])
   const [isEmbeddedReady, setIsEmbeddedReady] = useState(false)
+
+  // Show native Shopify top-bar progress while auth gate is checking
+  useAppBridgeLoading(isEmbedded && !isEmbeddedReady)
 
   useEffect(() => {
     if (isLoading) return

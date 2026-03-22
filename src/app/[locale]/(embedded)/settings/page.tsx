@@ -15,7 +15,8 @@ import {
   Text,
   TextField,
 } from '@shopify/polaris'
-import { FullPageLoader } from '@/shared/layout/FullPageLoader'
+import { SettingsPageSkeleton } from '@/shared/layout/skeletons'
+import { useAppBridgeLoading } from '@/shared/hooks/useAppBridgeLoading'
 import { useDashboardStats } from '@/features/dashboard/hooks/useDashboardStats'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
@@ -106,7 +107,12 @@ const SHIPPING_CURRENCY_OPTIONS = [
 
 export default function SettingsPage() {
   const t = useTranslations('settings')
-  const { isEmbedded, isLoading: isModeLoading, hostParam } = useAkeedMode()
+  const {
+    isEmbedded,
+    isLoading: isModeLoading,
+    hostParam,
+    shopify,
+  } = useAkeedMode()
   const router = useRouter()
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname ?? '')
@@ -354,6 +360,17 @@ export default function SettingsPage() {
     setAvgShippingCostError(undefined)
     setIsSaving(true)
 
+    // Optimistic: show success immediately so the app feels instant
+    setSuccessBanner(t('saveSuccess'))
+    shopify?.toast.show(t('saveSuccess'))
+
+    // Snapshot current values to revert on failure
+    const prevStoreName = storeName
+    const prevShippingCurrency = shippingCurrency
+    const prevAvgShippingCost = avgShippingCost
+    const prevDefaultLanguage = defaultLanguage
+    const prevIsAutoVerifyEnabled = isAutoVerifyEnabled
+
     try {
       const { state } = await updateOnboardingSettings({
         storeName: trimmedStoreName,
@@ -363,6 +380,7 @@ export default function SettingsPage() {
         avgShippingCost: Number(parsedAvgShippingCost.toFixed(2)),
       })
 
+      // Reconcile with server state
       setStoreName(state.storeName ?? trimmedStoreName)
       setShippingCurrency(state.shippingCurrency ?? shippingCurrency)
       setAvgShippingCost(String(state.avgShippingCost ?? parsedAvgShippingCost))
@@ -371,10 +389,16 @@ export default function SettingsPage() {
       setBillingPlanId(state.billingPlanId)
       setBillingStatus(state.billingStatus)
       setBillingManagementUrl(state.billingManagementUrl)
-      setSuccessBanner(t('saveSuccess'))
     } catch (error) {
       console.error('[Settings] Failed to save onboarding settings:', error)
+      // Revert optimistic update
+      setSuccessBanner(null)
       setErrorBanner(t('saveError'))
+      setStoreName(prevStoreName)
+      setShippingCurrency(prevShippingCurrency)
+      setAvgShippingCost(prevAvgShippingCost)
+      setDefaultLanguage(prevDefaultLanguage)
+      setIsAutoVerifyEnabled(prevIsAutoVerifyEnabled)
     } finally {
       setIsSaving(false)
     }
@@ -403,8 +427,11 @@ export default function SettingsPage() {
     window.location.href = billingManagementUrl
   }, [billingManagementUrl, isEmbedded, t])
 
-  if (!isEmbedded || isModeLoading || isInitialLoading) {
-    return <FullPageLoader />
+  const isPageLoading = !isEmbedded || isModeLoading || isInitialLoading
+  useAppBridgeLoading(isPageLoading)
+
+  if (isPageLoading) {
+    return <SettingsPageSkeleton />
   }
 
   return (
