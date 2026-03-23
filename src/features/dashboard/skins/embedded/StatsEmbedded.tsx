@@ -9,7 +9,6 @@ import {
   Select,
   SkeletonBodyText,
   SkeletonDisplayText,
-  Spinner,
   Text,
 } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
