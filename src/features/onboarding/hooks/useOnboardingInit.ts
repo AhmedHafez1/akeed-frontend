@@ -104,6 +104,15 @@ export function useOnboardingInit({
     Partial<Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>>
   >({})
   const [prefillWarning, setPrefillWarning] = useState<string | null>(null)
+  const {
+    billingStatusPending,
+    billingStatusDeclined,
+    billingStatusFrozen,
+    billingStatusExpired,
+    billingStatusCanceled,
+    billingStatusError,
+    billingStatusNeedsAttention,
+  } = billingStatusMessages
 
   /**
    * Ref used by useOnboardingSettings to know whether to skip auto-save
@@ -153,7 +162,15 @@ export function useOnboardingInit({
         const billingRecoveryMessage = normalizedBillingStatus
           ? resolveBillingRecoveryMessage(
               normalizedBillingStatus,
-              billingStatusMessages
+              {
+                billingStatusPending,
+                billingStatusDeclined,
+                billingStatusFrozen,
+                billingStatusExpired,
+                billingStatusCanceled,
+                billingStatusError,
+                billingStatusNeedsAttention,
+              }
             )
           : null
 
@@ -202,7 +219,13 @@ export function useOnboardingInit({
     isModeLoading,
     locale,
     prefillWarningMessage,
-    billingStatusMessages,
+    billingStatusPending,
+    billingStatusDeclined,
+    billingStatusFrozen,
+    billingStatusExpired,
+    billingStatusCanceled,
+    billingStatusError,
+    billingStatusNeedsAttention,
     router,
     setStep,
     setErrorBanner,
