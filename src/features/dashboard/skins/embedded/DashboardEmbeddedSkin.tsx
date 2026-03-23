@@ -4,10 +4,11 @@ import {
   Button,
   ButtonGroup,
   Card,
+  IndexTable,
   InlineStack,
   Layout,
   Page,
-  Spinner,
+  SkeletonBodyText,
   Text,
 } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
@@ -15,6 +16,45 @@ import { VerificationsTableEmbedded } from './VerificationsTableEmbedded'
 import { StatsEmbedded } from './StatsEmbedded'
 import { DashboardEmptyState } from './components/DashboardEmptyState'
 import type { DashboardSkinProps } from '../../domain/dashboard.types'
+
+const SKELETON_ROW_COUNT = 5
+
+function VerificationsTableSkeleton() {
+  return (
+    <IndexTable
+      itemCount={SKELETON_ROW_COUNT}
+      headings={[
+        { title: '' },
+        { title: '' },
+        { title: '' },
+        { title: '' },
+        { title: '' },
+      ]}
+      selectable={false}
+      hasZebraStriping
+    >
+      {Array.from({ length: SKELETON_ROW_COUNT }, (_, i) => (
+        <IndexTable.Row id={`skeleton-${i}`} key={i} position={i}>
+          <IndexTable.Cell>
+            <SkeletonBodyText lines={2} />
+          </IndexTable.Cell>
+          <IndexTable.Cell>
+            <SkeletonBodyText lines={2} />
+          </IndexTable.Cell>
+          <IndexTable.Cell>
+            <SkeletonBodyText lines={1} />
+          </IndexTable.Cell>
+          <IndexTable.Cell>
+            <SkeletonBodyText lines={1} />
+          </IndexTable.Cell>
+          <IndexTable.Cell>
+            <SkeletonBodyText lines={2} />
+          </IndexTable.Cell>
+        </IndexTable.Row>
+      ))}
+    </IndexTable>
+  )
+}
 
 export function DashboardEmbeddedSkin({
   stats,
@@ -100,15 +140,7 @@ export function DashboardEmbeddedSkin({
                 </InlineStack>
 
                 {isVerificationsLoading ? (
-                  <InlineStack align="center" gap="200">
-                    <Spinner
-                      size="small"
-                      accessibilityLabel={t('verificationSection.loading')}
-                    />
-                    <Text variant="bodySm" tone="subdued" as="span">
-                      {t('verificationSection.loading')}
-                    </Text>
-                  </InlineStack>
+                  <VerificationsTableSkeleton />
                 ) : hasVerifications ? (
                   <VerificationsTableEmbedded verifications={verifications} />
                 ) : statusFilter === 'all' ? (
