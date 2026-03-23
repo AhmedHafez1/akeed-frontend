@@ -24,11 +24,11 @@ function VerificationsTableSkeleton() {
     <IndexTable
       itemCount={SKELETON_ROW_COUNT}
       headings={[
-        { title: '' },
-        { title: '' },
-        { title: '' },
-        { title: '' },
-        { title: '' },
+        { id: 'skeleton-order', title: '' },
+        { id: 'skeleton-customer', title: '' },
+        { id: 'skeleton-status', title: '' },
+        { id: 'skeleton-total', title: '' },
+        { id: 'skeleton-created', title: '' },
       ]}
       selectable={false}
       hasZebraStriping
