@@ -6,6 +6,7 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
 import { AppLayout } from '@/shared/layout/AppLayout'
 import { MarketingScripts } from '@/shared/layout/MarketingScripts'
+import { ShopifyAppBridgeScript } from '@/shared/layout/ShopifyAppBridgeScript'
 import '../globals.css'
 
 const cairo = Cairo({
@@ -46,17 +47,6 @@ export default async function LocaleLayout({
     >
       <head>
         {/*
-          Shopify App Bridge v4 — loaded via CDN for embedded mode.
-          The script exposes `window.shopify` with session token,
-          navigation, and toast APIs. It is a no-op when the page
-          is not loaded inside the Shopify Admin iframe.
-        */}
-        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-        <script
-          src="https://cdn.shopify.com/shopifycloud/app-bridge.js"
-          data-api-key={process.env.SHOPIFY_API_KEY || process.env.NEXT_PUBLIC_SHOPIFY_API_KEY || ''}
-        />
-        {/*
           Marketing scripts (Facebook Pixel, Google Analytics) are loaded
           ONLY in standalone mode. They are suppressed in Shopify embedded
           mode to avoid unnecessary tracking and CSP issues.
@@ -66,6 +56,7 @@ export default async function LocaleLayout({
         </Suspense>
       </head>
       <body className={cairo.className} suppressHydrationWarning>
+        <ShopifyAppBridgeScript />
         <NextIntlClientProvider messages={messages}>
           <AppLayout>{children}</AppLayout>
         </NextIntlClientProvider>
