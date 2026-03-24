@@ -439,6 +439,8 @@
         "all": "الكل",
         "pending": "قيد الانتظار",
         "sent": "تم الإرسال",
+        "delivered": "تم التسليم",
+        "read": "تمت القراءة",
         "confirmed": "مؤكد",
         "canceled": "ملغي"
       },
@@ -446,7 +448,8 @@
         "label": "النطاق الزمني",
         "today": "اليوم",
         "last_7_days": "آخر 7 أيام",
-        "last_30_days": "آخر 30 يومًا"
+        "last_30_days": "آخر 30 يومًا",
+        "last_3_months": "آخر 3 أشهر"
       }
     },
     "emptyState": {
@@ -483,6 +486,7 @@
       "summaryTitle": "ملخص تأكيد الطلبات",
       "replyRate": "معدل الرد {value}%",
       "cards": {
+        "pending": "قيد الانتظار",
         "confirmed": "المؤكد",
         "canceled": "الملغي",
         "sent": "تم الإرسال",

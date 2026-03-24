@@ -37,7 +37,7 @@ export function useDashboard(): DashboardSkinProps {
     verifications,
     isVerificationsLoading,
     error: verificationsError,
-  } = useDashboardData(statusFilter)
+  } = useDashboardData(statusFilter, dateRangeFilter)
 
   const { stats, isStatsLoading, statsError } =
     useDashboardStats(dateRangeFilter)
@@ -47,8 +47,9 @@ export function useDashboard(): DashboardSkinProps {
   const statusFilters = useMemo<ReadonlyArray<StatusFilterOption>>(
     () => [
       { id: 'all', label: t('filters.status.all') },
-      { id: 'pending', label: t('filters.status.pending') },
       { id: 'sent', label: t('filters.status.sent') },
+      { id: 'delivered', label: t('filters.status.delivered') },
+      { id: 'read', label: t('filters.status.read') },
       { id: 'confirmed', label: t('filters.status.confirmed') },
       { id: 'canceled', label: t('filters.status.canceled') },
     ],
@@ -60,6 +61,10 @@ export function useDashboard(): DashboardSkinProps {
       { id: 'today', label: t('filters.dateRange.today') },
       { id: 'last_7_days', label: t('filters.dateRange.last_7_days') },
       { id: 'last_30_days', label: t('filters.dateRange.last_30_days') },
+      {
+        id: 'last_3_months',
+        label: t('filters.dateRange.last_3_months'),
+      },
     ],
     [t]
   )

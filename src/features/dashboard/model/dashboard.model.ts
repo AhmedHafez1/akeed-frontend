@@ -1,5 +1,4 @@
 export type VerificationStatus =
-  | 'pending'
   | 'sent'
   | 'delivered'
   | 'read'
@@ -10,12 +9,17 @@ export type VerificationStatus =
 
 export type VerificationStatusFilter =
   | 'all'
-  | 'pending'
   | 'sent'
+  | 'delivered'
+  | 'read'
   | 'confirmed'
   | 'canceled'
 
-export type DashboardStatsDateRange = 'today' | 'last_7_days' | 'last_30_days'
+export type DashboardStatsDateRange =
+  | 'today'
+  | 'last_7_days'
+  | 'last_30_days'
+  | 'last_3_months'
 
 export type VerificationItem = {
   id: string

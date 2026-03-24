@@ -9,7 +9,6 @@ import {
   Select,
   SkeletonBodyText,
   SkeletonDisplayText,
-  Spinner,
   Text,
 } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
@@ -29,6 +28,7 @@ interface StatsEmbeddedProps {
 }
 
 type PolarisBadgeTone =
+  | 'attention'
   | 'brand'
   | 'critical'
   | 'info'
@@ -120,13 +120,13 @@ export function StatsEmbedded({
           id: 'delivered',
           label: t('metrics.cards.delivered'),
           value: stats.totals.delivered,
-          tone: 'warning',
+          tone: 'info',
         },
         {
           id: 'read',
           label: t('metrics.cards.read'),
           value: stats.totals.read,
-          tone: 'brand',
+          tone: 'info',
         },
       ]
     : []

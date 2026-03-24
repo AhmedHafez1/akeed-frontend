@@ -16,7 +16,6 @@ type PolarisBadgeTone =
 
 const STATUS_TONE_MAP: Record<VerificationStatus, PolarisBadgeTone> = {
   confirmed: 'success',
-  pending: 'attention',
   sent: 'info',
   delivered: 'info',
   read: 'info',

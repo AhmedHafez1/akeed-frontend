@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { api } from '@/shared/lib/auth'
 import type {
+  DashboardStatsDateRange,
   VerificationsResponse,
   VerificationItem,
   VerificationStatusFilter,
@@ -13,15 +14,24 @@ function getErrorMessage(error: unknown, fallback: string): string {
   return fallback
 }
 
-export function useDashboardData(statusFilter: VerificationStatusFilter) {
+export function useDashboardData(
+  statusFilter: VerificationStatusFilter,
+  dateRangeFilter: DashboardStatsDateRange
+) {
   const [verifications, setVerifications] = useState<VerificationItem[]>([])
   const [verificationsError, setVerificationsError] = useState<string | null>(
     null
   )
   const [resolvedQuery, setResolvedQuery] = useState<string | null>(null)
 
-  const verificationQuery =
-    statusFilter === 'all' ? '' : `?status=${encodeURIComponent(statusFilter)}`
+  const queryParams = new URLSearchParams()
+  queryParams.set('date_range', dateRangeFilter)
+
+  if (statusFilter !== 'all') {
+    queryParams.set('status', statusFilter)
+  }
+
+  const verificationQuery = `?${queryParams.toString()}`
 
   useEffect(() => {
     const controller = new AbortController()

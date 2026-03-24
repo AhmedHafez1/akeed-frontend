@@ -439,6 +439,8 @@
         "all": "All",
         "pending": "Pending",
         "sent": "Sent",
+        "delivered": "Delivered",
+        "read": "Read",
         "confirmed": "Confirmed",
         "canceled": "Canceled"
       },
@@ -446,7 +448,8 @@
         "label": "Date range",
         "today": "Today",
         "last_7_days": "Last 7 days",
-        "last_30_days": "Last 30 days"
+        "last_30_days": "Last 30 days",
+        "last_3_months": "Last 3 months"
       }
     },
     "emptyState": {
@@ -483,6 +486,7 @@
       "summaryTitle": "Verification Summary",
       "replyRate": "{value}% Reply Rate",
       "cards": {
+        "pending": "Pending",
         "confirmed": "Confirmed",
         "canceled": "Canceled",
         "sent": "Sent",
