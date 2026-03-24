@@ -1,6 +1,5 @@
 'use client'
 
-import Script from 'next/script'
 import { resolveEmbeddedContextFromWindow } from '@/shared/lib/embedded-context'
 
 const appBridgeApiKey =
@@ -20,11 +19,11 @@ export function ShopifyAppBridgeScript() {
   }
 
   return (
-    <Script
+    <script
       id="shopify-app-bridge"
       src="https://cdn.shopify.com/shopifycloud/app-bridge.js"
-      strategy="afterInteractive"
       data-api-key={appBridgeApiKey}
+      async={false}
     />
   )
 }
