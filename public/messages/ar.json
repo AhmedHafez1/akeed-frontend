@@ -474,7 +474,7 @@
       }
     },
     "verificationSection": {
-      "title": "حالة التأكيدات الأخيرة",
+      "title": "تأكيدات الطلبات",
       "subtitle": "أحدث أحداث التأكيد عبر قنواتك النشطة.",
       "loading": "جارٍ تحميل عمليات التأكيد...",
       "emptyHeading": "لا توجد عمليات تأكيد"
@@ -519,7 +519,9 @@
       },
       "orderFallbackPrefix": "طلب",
       "unknownCustomer": "عميل غير معروف",
-      "noPhone": "بدون رقم هاتف"
+      "noPhone": "بدون رقم هاتف",
+      "loadMore": "عرض المزيد",
+      "loadingMore": "جارٍ تحميل المزيد..."
     },
     "verificationStatus": {
       "confirmed": "مؤكد",

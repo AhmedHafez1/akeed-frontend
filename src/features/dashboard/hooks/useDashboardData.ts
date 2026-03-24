@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { api } from '@/shared/lib/auth'
 import type {
   DashboardStatsDateRange,
@@ -19,19 +19,23 @@ export function useDashboardData(
   dateRangeFilter: DashboardStatsDateRange
 ) {
   const [verifications, setVerifications] = useState<VerificationItem[]>([])
+  const [nextCursor, setNextCursor] = useState<string | null>(null)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [verificationsError, setVerificationsError] = useState<string | null>(
     null
   )
   const [resolvedQuery, setResolvedQuery] = useState<string | null>(null)
 
-  const queryParams = new URLSearchParams()
-  queryParams.set('date_range', dateRangeFilter)
+  const verificationQuery = useMemo(() => {
+    const queryParams = new URLSearchParams()
+    queryParams.set('date_range', dateRangeFilter)
 
-  if (statusFilter !== 'all') {
-    queryParams.set('status', statusFilter)
-  }
+    if (statusFilter !== 'all') {
+      queryParams.set('status', statusFilter)
+    }
 
-  const verificationQuery = `?${queryParams.toString()}`
+    return `?${queryParams.toString()}`
+  }, [dateRangeFilter, statusFilter])
 
   useEffect(() => {
     const controller = new AbortController()
@@ -41,6 +45,7 @@ export function useDashboardData(
       .then((response) => {
         if (controller.signal.aborted) return
         setVerifications(response.data)
+        setNextCursor(response.next_cursor)
         setVerificationsError(null)
         setResolvedQuery(verificationQuery)
       })
@@ -49,6 +54,7 @@ export function useDashboardData(
         setVerificationsError(
           getErrorMessage(err, 'Failed to load verifications')
         )
+        setNextCursor(null)
         setResolvedQuery(verificationQuery)
       })
 
@@ -61,9 +67,37 @@ export function useDashboardData(
   const activeError =
     resolvedQuery === verificationQuery ? verificationsError : null
 
+  const onLoadMoreVerifications = useCallback(async () => {
+    if (!nextCursor || isLoadingMore || isVerificationsLoading) {
+      return
+    }
+
+    setIsLoadingMore(true)
+
+    try {
+      const cursorQuery = `${verificationQuery}&cursor=${encodeURIComponent(nextCursor)}`
+      const response = await api.get<VerificationsResponse>(
+        `/api/verifications${cursorQuery}`
+      )
+
+      setVerifications((previous) => [...previous, ...response.data])
+      setNextCursor(response.next_cursor)
+      setVerificationsError(null)
+    } catch (error) {
+      setVerificationsError(
+        getErrorMessage(error, 'Failed to load more verifications')
+      )
+    } finally {
+      setIsLoadingMore(false)
+    }
+  }, [isLoadingMore, isVerificationsLoading, nextCursor, verificationQuery])
+
   return {
     verifications,
     isVerificationsLoading,
+    hasMoreVerifications: Boolean(nextCursor),
+    isLoadingMoreVerifications: isLoadingMore,
+    onLoadMoreVerifications,
     error: activeError,
     verificationsError: activeError,
   }

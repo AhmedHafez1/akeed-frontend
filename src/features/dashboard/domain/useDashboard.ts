@@ -36,6 +36,9 @@ export function useDashboard(): DashboardSkinProps {
   const {
     verifications,
     isVerificationsLoading,
+    hasMoreVerifications,
+    isLoadingMoreVerifications,
+    onLoadMoreVerifications,
     error: verificationsError,
   } = useDashboardData(statusFilter, dateRangeFilter)
 
@@ -143,6 +146,9 @@ export function useDashboard(): DashboardSkinProps {
 
     verifications,
     isVerificationsLoading,
+    hasMoreVerifications,
+    isLoadingMoreVerifications,
+    onLoadMoreVerifications,
     hasVerifications,
     emptyVerificationsMessage,
 

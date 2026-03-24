@@ -64,6 +64,9 @@ export function DashboardEmbeddedSkin({
   onDateRangeFilterChange,
   verifications,
   isVerificationsLoading,
+  hasMoreVerifications,
+  isLoadingMoreVerifications,
+  onLoadMoreVerifications,
   hasVerifications,
   emptyVerificationsMessage,
   statusFilter,
@@ -142,7 +145,21 @@ export function DashboardEmbeddedSkin({
                 {isVerificationsLoading ? (
                   <VerificationsTableSkeleton />
                 ) : hasVerifications ? (
-                  <VerificationsTableEmbedded verifications={verifications} />
+                  <BlockStack gap="300">
+                    <VerificationsTableEmbedded verifications={verifications} />
+                    {hasMoreVerifications && (
+                      <InlineStack align="center">
+                        <Button
+                          onClick={onLoadMoreVerifications}
+                          loading={isLoadingMoreVerifications}
+                        >
+                          {isLoadingMoreVerifications
+                            ? t('table.loadingMore')
+                            : t('table.loadMore')}
+                        </Button>
+                      </InlineStack>
+                    )}
+                  </BlockStack>
                 ) : statusFilter === 'all' ? (
                   <DashboardEmptyState
                     messages={{

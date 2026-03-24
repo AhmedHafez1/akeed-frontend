@@ -33,6 +33,9 @@ export interface DashboardSkinProps {
   // Verifications
   verifications: VerificationItem[]
   isVerificationsLoading: boolean
+  hasMoreVerifications: boolean
+  isLoadingMoreVerifications: boolean
+  onLoadMoreVerifications: () => Promise<void>
   hasVerifications: boolean
   emptyVerificationsMessage: string
 

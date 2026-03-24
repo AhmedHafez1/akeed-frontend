@@ -474,7 +474,7 @@
       }
     },
     "verificationSection": {
-      "title": "Verification Status",
+      "title": "Order Verifications",
       "subtitle": "Latest verification events across your active channels.",
       "loading": "Loading verifications...",
       "emptyHeading": "No verifications"
@@ -519,7 +519,9 @@
       },
       "orderFallbackPrefix": "Order",
       "unknownCustomer": "Unknown customer",
-      "noPhone": "No phone"
+      "noPhone": "No phone",
+      "loadMore": "Load more",
+      "loadingMore": "Loading more..."
     },
     "verificationStatus": {
       "confirmed": "Confirmed",

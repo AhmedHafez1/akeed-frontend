@@ -22,6 +22,9 @@ export function DashboardStandaloneSkin({
   onDateRangeFilterChange,
   verifications,
   isVerificationsLoading,
+  hasMoreVerifications,
+  isLoadingMoreVerifications,
+  onLoadMoreVerifications,
   hasVerifications,
   emptyVerificationsMessage,
   statusFilter,
@@ -165,9 +168,25 @@ export function DashboardStandaloneSkin({
 
         <div className="mt-6">
           {isVerificationsLoading ? (
-            <LoadingSpinner message="Loading verifications..." />
+            <LoadingSpinner message={t('verificationSection.loading')} />
           ) : hasVerifications ? (
-            <VerificationsTableStandalone verifications={verifications} />
+            <div className="space-y-4">
+              <VerificationsTableStandalone verifications={verifications} />
+              {hasMoreVerifications && (
+                <div className="flex justify-center">
+                  <button
+                    type="button"
+                    onClick={onLoadMoreVerifications}
+                    disabled={isLoadingMoreVerifications}
+                    className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {isLoadingMoreVerifications
+                      ? t('table.loadingMore')
+                      : t('table.loadMore')}
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <EmptyState message={emptyVerificationsMessage} />
           )}
