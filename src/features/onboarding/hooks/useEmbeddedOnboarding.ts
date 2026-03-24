@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useOnboardingInit } from './useOnboardingInit'
 import { useOnboardingSettings } from './useOnboardingSettings'
@@ -63,6 +63,26 @@ export function useEmbeddedOnboarding({
     (msg: string | null) => setErrorBanner(msg),
     []
   )
+  const billingStatusMessages = useMemo(
+    () => ({
+      billingStatusPending: messages.billingStatusPending,
+      billingStatusDeclined: messages.billingStatusDeclined,
+      billingStatusFrozen: messages.billingStatusFrozen,
+      billingStatusExpired: messages.billingStatusExpired,
+      billingStatusCanceled: messages.billingStatusCanceled,
+      billingStatusError: messages.billingStatusError,
+      billingStatusNeedsAttention: messages.billingStatusNeedsAttention,
+    }),
+    [
+      messages.billingStatusPending,
+      messages.billingStatusDeclined,
+      messages.billingStatusFrozen,
+      messages.billingStatusExpired,
+      messages.billingStatusCanceled,
+      messages.billingStatusError,
+      messages.billingStatusNeedsAttention,
+    ]
+  )
 
   // ── Sub-hook: initial data load ──────────────────────────────────────────
   const init = useOnboardingInit({
@@ -71,15 +91,7 @@ export function useEmbeddedOnboarding({
     locale,
     router,
     prefillWarningMessage: messages.prefillWarning,
-    billingStatusMessages: {
-      billingStatusPending: messages.billingStatusPending,
-      billingStatusDeclined: messages.billingStatusDeclined,
-      billingStatusFrozen: messages.billingStatusFrozen,
-      billingStatusExpired: messages.billingStatusExpired,
-      billingStatusCanceled: messages.billingStatusCanceled,
-      billingStatusError: messages.billingStatusError,
-      billingStatusNeedsAttention: messages.billingStatusNeedsAttention,
-    },
+    billingStatusMessages,
     setStep: stableSetStep,
     setErrorBanner: stableSetErrorBanner,
   })
