@@ -79,8 +79,6 @@ export function DashboardEmbeddedSkin({
   error,
 }: DashboardSkinProps) {
   const t = useTranslations('dashboard')
-  const isBillingTestMode =
-    process.env.NEXT_PUBLIC_SHOPIFY_BILLING_TEST_MODE === 'true'
 
   return (
     <Page title={t('title')} subtitle={t('subtitle')}>
@@ -185,7 +183,7 @@ export function DashboardEmbeddedSkin({
                         'emptyState.onboarding.testSendingLabel'
                       ),
                     }}
-                    showTestSection={isBillingTestMode}
+                    showTestSection={true}
                     isSendingTest={isSendingTest}
                     onSendTestVerification={onSendTestVerification}
                   />
