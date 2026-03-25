@@ -1,20 +1,17 @@
 'use client'
 
-import { resolveEmbeddedContextFromWindow } from '@/shared/lib/embedded-context'
+import { useSearchParams } from 'next/navigation'
+import { resolveEmbeddedContextFromSearch } from '@/shared/lib/embedded-context'
+import { Suspense } from 'react'
 
 const appBridgeApiKey =
   process.env.NEXT_PUBLIC_SHOPIFY_API_KEY || process.env.SHOPIFY_API_KEY || ''
 
-/**
- * Loads Shopify App Bridge only when running in embedded mode.
- * This avoids blocking script execution for standalone pages.
- */
-export function ShopifyAppBridgeScript() {
-  const shouldLoad =
-    typeof window !== 'undefined' &&
-    resolveEmbeddedContextFromWindow().isEmbedded
+function ShopifyAppBridgeScriptInner() {
+  const searchParams = useSearchParams()
+  const isEmbedded = resolveEmbeddedContextFromSearch(searchParams).isEmbedded
 
-  if (!appBridgeApiKey || !shouldLoad) {
+  if (!appBridgeApiKey || !isEmbedded) {
     return null
   }
 
@@ -23,7 +20,18 @@ export function ShopifyAppBridgeScript() {
       id="shopify-app-bridge"
       src="https://cdn.shopify.com/shopifycloud/app-bridge.js"
       data-api-key={appBridgeApiKey}
-      async={false}
     />
+  )
+}
+
+/**
+ * Loads Shopify App Bridge only when running in embedded mode.
+ * This avoids blocking script execution for standalone pages.
+ */
+export function ShopifyAppBridgeScript() {
+  return (
+    <Suspense fallback={null}>
+      <ShopifyAppBridgeScriptInner />
+    </Suspense>
   )
 }
