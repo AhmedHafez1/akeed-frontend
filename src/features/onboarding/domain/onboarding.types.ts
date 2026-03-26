@@ -62,4 +62,5 @@ export interface OnboardingBillingPlanConfig {
 
 export interface OnboardingBillingPlansResponse {
   plans: OnboardingBillingPlanConfig[]
+  isFreePlanClaimed: boolean
 }

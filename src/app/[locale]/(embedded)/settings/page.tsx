@@ -156,6 +156,7 @@ export default function SettingsPage() {
   const [selectedPlanId, setSelectedPlanId] =
     useState<OnboardingBillingPlanId | null>(null)
   const [isChangingPlan, setIsChangingPlan] = useState(false)
+  const [isFreePlanClaimed, setIsFreePlanClaimed] = useState(false)
 
   const languageOptions = useMemo(
     () => [
@@ -228,6 +229,7 @@ export default function SettingsPage() {
             plansMap[plan.id] = plan
           }
           setBillingPlansById(plansMap)
+          setIsFreePlanClaimed(plansResponse.isFreePlanClaimed)
         }
       } catch (error) {
         console.error('[Settings] Failed to load onboarding settings:', error)
@@ -556,6 +558,7 @@ export default function SettingsPage() {
                   currentPlanId={billingPlanId}
                   selectedPlanId={selectedPlanId}
                   isChangingPlan={isChangingPlan}
+                  disabledPlanIds={isFreePlanClaimed ? ['starter'] : []}
                   currentBadgeLabel={t('currentPlanBadge')}
                   changePlanLabel={t('changePlanButton')}
                   onPlanSelect={setSelectedPlanId}

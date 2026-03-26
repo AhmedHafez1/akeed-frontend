@@ -141,6 +141,7 @@ export function useEmbeddedOnboarding({
     handleContinueToBilling: settings.handleContinueToBilling,
     // Step-3 billing
     billingPlanConfigsById: init.billingPlanConfigsById,
+    isFreePlanClaimed: init.isFreePlanClaimed,
     billingManagementUrl: init.billingManagementUrl,
     selectedPlanId: billing.selectedPlanId,
     setSelectedPlanId: billing.setSelectedPlanId,

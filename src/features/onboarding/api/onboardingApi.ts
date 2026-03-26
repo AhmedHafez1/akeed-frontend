@@ -73,5 +73,5 @@ export async function fetchOnboardingBillingPlans(): Promise<OnboardingBillingPl
     dedupedPlans.set(plan.id, plan)
   }
 
-  return { plans: [...dedupedPlans.values()] }
+  return { plans: [...dedupedPlans.values()], isFreePlanClaimed: payload.isFreePlanClaimed }
 }

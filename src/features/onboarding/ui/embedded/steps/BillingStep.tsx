@@ -20,6 +20,7 @@ interface BillingStepProps {
   plans: OnboardingBillingPlan[]
   selectedPlanId: OnboardingBillingPlanId
   isActivating: boolean
+  disabledPlanIds?: OnboardingBillingPlanId[]
   errorMessage: string | null
   retryLabel: string
   manageSettingsLabel: string
@@ -37,6 +38,7 @@ export function BillingStep({
   plans,
   selectedPlanId,
   isActivating,
+  disabledPlanIds = [],
   errorMessage,
   retryLabel,
   manageSettingsLabel,
@@ -82,18 +84,23 @@ export function BillingStep({
 
       <div className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 xl:grid-cols-4">
         {plans.map((plan) => {
-          const isSelected = selectedPlanId === plan.id
+          const isDisabled = disabledPlanIds.includes(plan.id)
+          const isSelected = selectedPlanId === plan.id && !isDisabled
 
           return (
             <div key={plan.id} className="min-h-full">
               <div
                 role="button"
-                tabIndex={0}
-                onClick={() => onPlanSelect(plan.id)}
+                tabIndex={isDisabled ? -1 : 0}
+                onClick={() => !isDisabled && onPlanSelect(plan.id)}
                 onKeyDown={(event) =>
-                  handlePlanSelectByKeyboard(event, plan.id)
+                  !isDisabled && handlePlanSelectByKeyboard(event, plan.id)
                 }
-                className={`block min-h-full cursor-pointer rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-emerald-700/35 ${
+                className={`block min-h-full rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-emerald-700/35 ${
+                  isDisabled
+                    ? 'cursor-not-allowed opacity-50'
+                    : 'cursor-pointer'
+                } ${
                   isSelected ? 'shadow-[0_0_0_3px_rgba(0,160,70,0.7)]' : ''
                 }`}
               >

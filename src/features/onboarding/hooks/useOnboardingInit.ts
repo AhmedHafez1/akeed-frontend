@@ -103,6 +103,7 @@ export function useOnboardingInit({
   const [billingPlanConfigsById, setBillingPlanConfigsById] = useState<
     Partial<Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>>
   >({})
+  const [isFreePlanClaimed, setIsFreePlanClaimed] = useState(false)
   const [prefillWarning, setPrefillWarning] = useState<string | null>(null)
   const {
     billingStatusPending,
@@ -190,6 +191,7 @@ export function useOnboardingInit({
             plansById[plan.id] = plan
           }
           setBillingPlanConfigsById(plansById)
+          setIsFreePlanClaimed(billingPlansResponse.isFreePlanClaimed)
         } else {
           setBillingPlanConfigsById({})
         }
@@ -238,6 +240,7 @@ export function useOnboardingInit({
     initialIsAutoVerifyEnabled,
     billingManagementUrl,
     billingPlanConfigsById,
+    isFreePlanClaimed,
     prefillWarning,
     hasCompletedInitRef,
   }

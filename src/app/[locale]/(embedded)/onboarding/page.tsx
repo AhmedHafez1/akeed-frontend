@@ -115,6 +115,7 @@ export default function OnboardingPage() {
     selectedPlanId,
     setSelectedPlanId,
     billingPlanConfigsById,
+    isFreePlanClaimed,
     isAutoVerifyEnabled,
     setIsAutoVerifyEnabled,
     isSavingSettings,
@@ -203,6 +204,7 @@ export default function OnboardingPage() {
         plans={billingPlans}
         selectedPlanId={selectedPlanId}
         isActivating={isActivatingPlan}
+        disabledPlanIds={isFreePlanClaimed ? ['starter'] : []}
         errorMessage={step === 3 ? errorBanner : null}
         retryLabel={tEmbedded('billingTryAgain')}
         manageSettingsLabel={tEmbedded('billingManageSettings')}

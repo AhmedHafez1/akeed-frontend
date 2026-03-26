@@ -22,6 +22,7 @@ interface PlanComparisonProps {
   currentPlanId: OnboardingBillingPlanId | null
   selectedPlanId: OnboardingBillingPlanId | null
   isChangingPlan: boolean
+  disabledPlanIds?: OnboardingBillingPlanId[]
   currentBadgeLabel: string
   changePlanLabel: string
   onPlanSelect: (planId: OnboardingBillingPlanId) => void
@@ -33,6 +34,7 @@ export function PlanComparison({
   currentPlanId,
   selectedPlanId,
   isChangingPlan,
+  disabledPlanIds = [],
   currentBadgeLabel,
   changePlanLabel,
   onPlanSelect,
@@ -55,16 +57,21 @@ export function PlanComparison({
       <div className="grid grid-cols-1 items-stretch gap-3 md:grid-cols-2 xl:grid-cols-4">
         {plans.map((plan) => {
           const isCurrent = plan.id === currentPlanId
-          const isSelected = plan.id === selectedPlanId
+          const isDisabled = disabledPlanIds.includes(plan.id) && !isCurrent
+          const isSelected = plan.id === selectedPlanId && !isDisabled
 
           return (
             <div key={plan.id} className="min-h-full">
               <div
                 role="button"
-                tabIndex={0}
-                onClick={() => onPlanSelect(plan.id)}
-                onKeyDown={(e) => handleKeyDown(e, plan.id)}
-                className={`block min-h-full cursor-pointer rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-emerald-700/35 ${
+                tabIndex={isDisabled ? -1 : 0}
+                onClick={() => !isDisabled && onPlanSelect(plan.id)}
+                onKeyDown={(e) => !isDisabled && handleKeyDown(e, plan.id)}
+                className={`block min-h-full rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-emerald-700/35 ${
+                  isDisabled
+                    ? 'cursor-not-allowed opacity-50'
+                    : 'cursor-pointer'
+                } ${
                   isSelected ? 'shadow-[0_0_0_3px_rgba(0,160,70,0.7)]' : ''
                 }`}
               >
