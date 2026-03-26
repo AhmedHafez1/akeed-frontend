@@ -127,9 +127,11 @@ export function useDashboard(): DashboardSkinProps {
         refetchStats()
       } catch (error) {
         console.error('[Dashboard] Failed to send test verification:', error)
+        const backendMessage =
+          error instanceof Error ? error.message : undefined
         setTestFeedback({
           tone: 'critical',
-          message: t('emptyState.onboarding.testFailed'),
+          message: backendMessage ?? t('emptyState.onboarding.testFailed'),
         })
       } finally {
         setIsSendingTest(false)
