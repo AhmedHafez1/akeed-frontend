@@ -20,6 +20,9 @@ interface ConfigurationStepProps {
   storeNameLabel: string
   storeName: string
   storeNameError?: string
+  appLanguageLabel: string
+  appLanguageOptions: LanguageOption[]
+  appLanguage: string
   defaultLanguageLabel: string
   languageOptions: LanguageOption[]
   defaultLanguage: IntegrationOnboardingLanguage
@@ -29,6 +32,7 @@ interface ConfigurationStepProps {
   isAutoVerifyEnabled: boolean
   isSaving: boolean
   onStoreNameChange: (value: string) => void
+  onAppLanguageChange: (value: string) => void
   onLanguageChange: (value: IntegrationOnboardingLanguage) => void
   onAutoVerifyChange: (value: boolean) => void
   onContinue: () => void
@@ -39,6 +43,9 @@ export function ConfigurationStep({
   storeNameLabel,
   storeName,
   storeNameError,
+  appLanguageLabel,
+  appLanguageOptions,
+  appLanguage,
   defaultLanguageLabel,
   languageOptions,
   defaultLanguage,
@@ -48,6 +55,7 @@ export function ConfigurationStep({
   isAutoVerifyEnabled,
   isSaving,
   onStoreNameChange,
+  onAppLanguageChange,
   onLanguageChange,
   onAutoVerifyChange,
   onContinue,
@@ -64,6 +72,13 @@ export function ConfigurationStep({
         onChange={onStoreNameChange}
         autoComplete="organization"
         error={storeNameError}
+      />
+
+      <Select
+        label={appLanguageLabel}
+        options={appLanguageOptions}
+        value={appLanguage}
+        onChange={onAppLanguageChange}
       />
 
       <Select

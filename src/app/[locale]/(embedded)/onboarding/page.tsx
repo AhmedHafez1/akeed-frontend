@@ -9,6 +9,7 @@ import { useAppBridgeLoading } from '@/shared/hooks/useAppBridgeLoading'
 import {
   BILLING_PLAN_DEFINITIONS,
   LANGUAGE_OPTION_DEFINITIONS,
+  APP_LANGUAGE_OPTION_DEFINITIONS,
   OnboardingAlerts,
   OnboardingStepCounter,
   BillingStep,
@@ -20,7 +21,11 @@ import {
   type OnboardingBillingPlan,
 } from '@/features/onboarding'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
-import { getLocaleFromPathname } from '@/shared/lib/locale'
+import {
+  getLocaleFromPathname,
+  isSupportedLocale,
+  persistLocalePreference,
+} from '@/shared/lib/locale'
 
 export default function OnboardingPage() {
   const t = useTranslations('onboarding')
@@ -48,6 +53,28 @@ export default function OnboardingPage() {
         value,
       })),
     [t]
+  )
+
+  const appLanguageOptions = useMemo(
+    () =>
+      APP_LANGUAGE_OPTION_DEFINITIONS.map(({ labelKey, value }) => ({
+        label: t(labelKey),
+        value,
+      })),
+    [t]
+  )
+
+  const handleAppLanguageChange = useCallback(
+    (nextLocale: string) => {
+      if (!isSupportedLocale(nextLocale) || nextLocale === locale) return
+
+      persistLocalePreference(nextLocale)
+
+      const newPathname = pathname.replace(`/${locale}`, `/${nextLocale}`)
+      const search = typeof window !== 'undefined' ? window.location.search : ''
+      router.replace(`${newPathname}${search}`)
+    },
+    [locale, pathname, router]
   )
 
   const numberLocale = useMemo(() => {
@@ -182,6 +209,9 @@ export default function OnboardingPage() {
         storeNameLabel={t('storeNameLabel')}
         storeName={storeName}
         storeNameError={storeNameError}
+        appLanguageLabel={t('appLanguageLabel')}
+        appLanguageOptions={appLanguageOptions}
+        appLanguage={locale}
         defaultLanguageLabel={t('defaultLanguageLabel')}
         languageOptions={languageOptions}
         defaultLanguage={defaultLanguage}
@@ -191,6 +221,7 @@ export default function OnboardingPage() {
         isAutoVerifyEnabled={isAutoVerifyEnabled}
         isSaving={isSavingSettings}
         onStoreNameChange={handleStoreNameChange}
+        onAppLanguageChange={handleAppLanguageChange}
         onLanguageChange={setDefaultLanguage}
         onAutoVerifyChange={setIsAutoVerifyEnabled}
         onContinue={handleContinueToBilling}

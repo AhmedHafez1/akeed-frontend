@@ -1,6 +1,7 @@
 export { useEmbeddedOnboarding } from './hooks/useEmbeddedOnboarding'
 
 export {
+  APP_LANGUAGE_OPTION_DEFINITIONS,
   BILLING_PLAN_DEFINITIONS,
   LANGUAGE_OPTION_DEFINITIONS,
   TOTAL_STEPS,
