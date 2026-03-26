@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { api } from '@/shared/lib/auth'
 import type {
   DashboardStats,
@@ -17,6 +17,7 @@ export function useDashboardStats(dateRange: DashboardStatsDateRange) {
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [statsError, setStatsError] = useState<string | null>(null)
   const [resolvedQuery, setResolvedQuery] = useState<string | null>(null)
+  const [refetchKey, setRefetchKey] = useState(0)
 
   const statsQuery = `?date_range=${encodeURIComponent(dateRange)}`
 
@@ -33,14 +34,16 @@ export function useDashboardStats(dateRange: DashboardStatsDateRange) {
       })
       .catch((error: unknown) => {
         if (controller.signal.aborted) return
-        setStatsError(getErrorMessage(error, 'Failed to load dashboard metrics'))
+        setStatsError(
+          getErrorMessage(error, 'Failed to load dashboard metrics')
+        )
         setResolvedQuery(statsQuery)
       })
 
     return () => {
       controller.abort()
     }
-  }, [statsQuery])
+  }, [statsQuery, refetchKey])
 
   const isStatsLoading = resolvedQuery !== statsQuery
   const activeError = resolvedQuery === statsQuery ? statsError : null
@@ -49,5 +52,6 @@ export function useDashboardStats(dateRange: DashboardStatsDateRange) {
     stats,
     isStatsLoading,
     statsError: activeError,
+    refetch: useCallback(() => setRefetchKey((k) => k + 1), []),
   }
 }

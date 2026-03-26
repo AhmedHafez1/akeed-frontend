@@ -29,7 +29,7 @@ export function useDashboard(): DashboardSkinProps {
   const [dateRangeFilter, setDateRangeFilter] =
     useState<DashboardStatsDateRange>('last_30_days')
 
-  // Test verification state (billing test mode only)
+  // Test verification state
   const [isSendingTest, setIsSendingTest] = useState(false)
   const [testFeedback, setTestFeedback] = useState<TestFeedback | null>(null)
 
@@ -39,11 +39,16 @@ export function useDashboard(): DashboardSkinProps {
     hasMoreVerifications,
     isLoadingMoreVerifications,
     onLoadMoreVerifications,
+    refetch: refetchVerifications,
     error: verificationsError,
   } = useDashboardData(statusFilter, dateRangeFilter)
 
-  const { stats, isStatsLoading, statsError } =
-    useDashboardStats(dateRangeFilter)
+  const {
+    stats,
+    isStatsLoading,
+    statsError,
+    refetch: refetchStats,
+  } = useDashboardStats(dateRangeFilter)
 
   const hasVerifications = verifications?.length > 0
 
@@ -117,6 +122,9 @@ export function useDashboard(): DashboardSkinProps {
           tone: 'success',
           message: t('emptyState.onboarding.testSent'),
         })
+
+        refetchVerifications()
+        refetchStats()
       } catch (error) {
         console.error('[Dashboard] Failed to send test verification:', error)
         setTestFeedback({
@@ -127,7 +135,7 @@ export function useDashboard(): DashboardSkinProps {
         setIsSendingTest(false)
       }
     },
-    [t]
+    [t, refetchVerifications, refetchStats]
   )
 
   const error = useMemo(() => {

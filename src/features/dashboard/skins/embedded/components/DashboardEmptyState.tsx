@@ -82,9 +82,12 @@ export function DashboardEmptyState({
             <Button
               variant="primary"
               loading={isSendingTest}
+              disabled={!testPhone.trim()}
               onClick={handleSend}
             >
-              {messages.testSendLabel}
+              {isSendingTest
+                ? (messages.testSendingLabel ?? messages.testSendLabel)
+                : messages.testSendLabel}
             </Button>
           </InlineStack>
         </BlockStack>

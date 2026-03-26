@@ -44,7 +44,7 @@ export interface DashboardSkinProps {
   statusFilters: ReadonlyArray<StatusFilterOption>
   onStatusFilterChange: (filter: VerificationStatusFilter) => void
 
-  // Test verification (embedded billing test mode only)
+  // Test verification
   isSendingTest: boolean
   testFeedback: TestFeedback | null
   onSendTestVerification: (customerPhone: string) => Promise<void>

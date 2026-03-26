@@ -25,6 +25,7 @@ export function useDashboardData(
     null
   )
   const [resolvedQuery, setResolvedQuery] = useState<string | null>(null)
+  const [refetchKey, setRefetchKey] = useState(0)
 
   const verificationQuery = useMemo(() => {
     const queryParams = new URLSearchParams()
@@ -61,7 +62,7 @@ export function useDashboardData(
     return () => {
       controller.abort()
     }
-  }, [verificationQuery])
+  }, [verificationQuery, refetchKey])
 
   const isVerificationsLoading = resolvedQuery !== verificationQuery
   const activeError =
@@ -98,6 +99,7 @@ export function useDashboardData(
     hasMoreVerifications: Boolean(nextCursor),
     isLoadingMoreVerifications: isLoadingMore,
     onLoadMoreVerifications,
+    refetch: useCallback(() => setRefetchKey((k) => k + 1), []),
     error: activeError,
     verificationsError: activeError,
   }

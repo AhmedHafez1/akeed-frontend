@@ -84,7 +84,7 @@ export function DashboardEmbeddedSkin({
     <Page title={t('title')} subtitle={t('subtitle')}>
       <BlockStack gap="400">
         {error && (
-          <Banner tone="critical" onDismiss={() => {}}>
+          <Banner tone="critical">
             <p>{error}</p>
           </Banner>
         )}
