@@ -65,13 +65,20 @@ export async function fetchOnboardingBillingPlans(): Promise<OnboardingBillingPl
     throw new Error(await getErrorMessage(response))
   }
 
-  const payload = await parseJsonResponse<OnboardingBillingPlansResponse>(response)
+  const payload =
+    await parseJsonResponse<OnboardingBillingPlansResponse>(response)
 
   // Defensive normalization in case the backend returns duplicated plan IDs.
-  const dedupedPlans = new Map<OnboardingBillingPlanId, OnboardingBillingPlanConfig>()
+  const dedupedPlans = new Map<
+    OnboardingBillingPlanId,
+    OnboardingBillingPlanConfig
+  >()
   for (const plan of payload.plans) {
     dedupedPlans.set(plan.id, plan)
   }
 
-  return { plans: [...dedupedPlans.values()], isFreePlanClaimed: payload.isFreePlanClaimed }
+  return {
+    plans: [...dedupedPlans.values()],
+    isFreePlanClaimed: payload.isFreePlanClaimed,
+  }
 }

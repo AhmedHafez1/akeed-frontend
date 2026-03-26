@@ -161,18 +161,15 @@ export function useOnboardingInit({
           state.billingStatus
         )
         const billingRecoveryMessage = normalizedBillingStatus
-          ? resolveBillingRecoveryMessage(
-              normalizedBillingStatus,
-              {
-                billingStatusPending,
-                billingStatusDeclined,
-                billingStatusFrozen,
-                billingStatusExpired,
-                billingStatusCanceled,
-                billingStatusError,
-                billingStatusNeedsAttention,
-              }
-            )
+          ? resolveBillingRecoveryMessage(normalizedBillingStatus, {
+              billingStatusPending,
+              billingStatusDeclined,
+              billingStatusFrozen,
+              billingStatusExpired,
+              billingStatusCanceled,
+              billingStatusError,
+              billingStatusNeedsAttention,
+            })
           : null
 
         if (billingRecoveryMessage) {

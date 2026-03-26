@@ -35,7 +35,8 @@ export const ONBOARDING_BILLING_PLAN_IDS = [
   'scale',
 ] as const
 
-export type OnboardingBillingPlanId = (typeof ONBOARDING_BILLING_PLAN_IDS)[number]
+export type OnboardingBillingPlanId =
+  (typeof ONBOARDING_BILLING_PLAN_IDS)[number]
 
 export interface OnboardingBillingPlan {
   id: OnboardingBillingPlanId

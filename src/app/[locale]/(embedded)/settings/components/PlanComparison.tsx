@@ -71,9 +71,7 @@ export function PlanComparison({
                   isDisabled
                     ? 'cursor-not-allowed opacity-50'
                     : 'cursor-pointer'
-                } ${
-                  isSelected ? 'shadow-[0_0_0_3px_rgba(0,160,70,0.7)]' : ''
-                }`}
+                } ${isSelected ? 'shadow-[0_0_0_3px_rgba(0,160,70,0.7)]' : ''}`}
               >
                 <Card>
                   <BlockStack gap="300">
