@@ -461,7 +461,7 @@
         "step1": "A customer places a COD order in your store.",
         "step2": "Akeed sends a WhatsApp verification message to the customer.",
         "step3": "The customer confirms or cancels — results appear here in real time.",
-        "testSectionHeading": "Test verification (test mode)",
+        "testSectionHeading": "Test verification",
         "testSectionDescription": "Use a real WhatsApp number in E.164 format to trigger a test verification.",
         "testPhoneLabel": "Customer phone",
         "testPhonePlaceholder": "+201234567890",
