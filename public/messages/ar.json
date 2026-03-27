@@ -381,6 +381,7 @@
     "storeNameLabel": "اسم المتجر",
     "storeNameRequired": "اكتب اسم المتجر.",
     "defaultLanguageLabel": "لغة الرسائل الافتراضية",
+    "appLanguageLabel": "لغة التطبيق",
     "languageAuto": "تلقائي حسب دولة رقم هاتف العميل",
     "languageEnglish": "الإنجليزية",
     "languageArabic": "العربية",

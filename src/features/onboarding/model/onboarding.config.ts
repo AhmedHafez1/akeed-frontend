@@ -1,4 +1,5 @@
 import type { OnboardingBillingPlanId } from '@/features/onboarding/domain/onboarding.types'
+import type { SupportedLocale } from '@/shared/lib/locale'
 
 export const TOTAL_STEPS = 3
 
@@ -35,6 +36,14 @@ export const LANGUAGE_OPTION_DEFINITIONS = [
 ] as const satisfies ReadonlyArray<{
   labelKey: OnboardingMessageKey
   value: 'auto' | 'en' | 'ar'
+}>;
+
+export const APP_LANGUAGE_OPTION_DEFINITIONS = [
+  { labelKey: 'languageEnglish', value: 'en' },
+  { labelKey: 'languageArabic', value: 'ar' },
+] as const satisfies ReadonlyArray<{
+  labelKey: OnboardingMessageKey
+  value: SupportedLocale
 }>
 
 export const BILLING_PLAN_DEFINITIONS: PlanDefinition[] = [
