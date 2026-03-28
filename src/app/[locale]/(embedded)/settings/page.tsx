@@ -559,6 +559,11 @@ export default function SettingsPage() {
                   selectedPlanId={selectedPlanId}
                   isChangingPlan={isChangingPlan}
                   disabledPlanIds={isFreePlanClaimed ? ['starter'] : []}
+                  disabledPlanTooltips={
+                    isFreePlanClaimed
+                      ? { starter: t('freePlanAlreadyClaimedTooltip') }
+                      : undefined
+                  }
                   currentBadgeLabel={t('currentPlanBadge')}
                   changePlanLabel={t('changePlanButton')}
                   onPlanSelect={setSelectedPlanId}

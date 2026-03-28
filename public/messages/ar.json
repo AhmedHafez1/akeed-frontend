@@ -592,7 +592,8 @@
     "changePlanError": "تعذر بدء تغيير الخطة. حاول مرة أخرى.",
     "planFree": "مجانية",
     "planPricePerMonth": "{price} / شهر",
-    "planVolumePerMonth": "حتى {count} تأكيد شهرياً"
+    "planVolumePerMonth": "حتى {count} تأكيد شهرياً",
+    "freePlanAlreadyClaimedTooltip": "لقد استخدمت الخطة المجانية من قبل. يمكن اختيار الخطة المجانية مرة واحدة فقط."
   },
   "embeddedOnboarding": {
     "prefillWarning": "لم نتمكن من تعبئة بيانات Shopify تلقائياً. أدخل اسم المتجر يدوياً.",
@@ -615,6 +616,7 @@
     "planPriceFree": "مجاناً",
     "planPricePerMonth": "{price}/شهر",
     "planVolumePerMonth": "حتى {count} تأكيد شهرياً",
+    "freePlanAlreadyClaimedTooltip": "لقد استخدمت الخطة المجانية من قبل. يمكن اختيار الخطة المجانية مرة واحدة فقط.",
     "planStarterName": "البداية",
     "planStarterPrice": "مجاناً",
     "planStarterVolume": "أول 50 تأكيد مجاناً",

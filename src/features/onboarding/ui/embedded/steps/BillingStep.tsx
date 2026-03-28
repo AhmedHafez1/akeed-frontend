@@ -21,6 +21,7 @@ interface BillingStepProps {
   selectedPlanId: OnboardingBillingPlanId
   isActivating: boolean
   disabledPlanIds?: OnboardingBillingPlanId[]
+  disabledPlanTooltips?: Partial<Record<OnboardingBillingPlanId, string>>
   errorMessage: string | null
   retryLabel: string
   manageSettingsLabel: string
@@ -39,6 +40,7 @@ export function BillingStep({
   selectedPlanId,
   isActivating,
   disabledPlanIds = [],
+  disabledPlanTooltips = {},
   errorMessage,
   retryLabel,
   manageSettingsLabel,
@@ -85,6 +87,9 @@ export function BillingStep({
       <div className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 xl:grid-cols-4">
         {plans.map((plan) => {
           const isDisabled = disabledPlanIds.includes(plan.id)
+          const disabledPlanTooltip = isDisabled
+            ? disabledPlanTooltips[plan.id]
+            : undefined
           const isSelected = selectedPlanId === plan.id && !isDisabled
 
           return (
@@ -96,6 +101,7 @@ export function BillingStep({
                 onKeyDown={(event) =>
                   !isDisabled && handlePlanSelectByKeyboard(event, plan.id)
                 }
+                title={disabledPlanTooltip}
                 className={`block min-h-full rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-emerald-700/35 ${
                   isDisabled
                     ? 'cursor-not-allowed opacity-50'

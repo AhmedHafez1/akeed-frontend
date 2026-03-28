@@ -236,6 +236,11 @@ export default function OnboardingPage() {
         selectedPlanId={selectedPlanId}
         isActivating={isActivatingPlan}
         disabledPlanIds={isFreePlanClaimed ? ['starter'] : []}
+        disabledPlanTooltips={
+          isFreePlanClaimed
+            ? { starter: tEmbedded('freePlanAlreadyClaimedTooltip') }
+            : undefined
+        }
         errorMessage={step === 3 ? errorBanner : null}
         retryLabel={tEmbedded('billingTryAgain')}
         manageSettingsLabel={tEmbedded('billingManageSettings')}

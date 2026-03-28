@@ -23,6 +23,7 @@ interface PlanComparisonProps {
   selectedPlanId: OnboardingBillingPlanId | null
   isChangingPlan: boolean
   disabledPlanIds?: OnboardingBillingPlanId[]
+  disabledPlanTooltips?: Partial<Record<OnboardingBillingPlanId, string>>
   currentBadgeLabel: string
   changePlanLabel: string
   onPlanSelect: (planId: OnboardingBillingPlanId) => void
@@ -35,6 +36,7 @@ export function PlanComparison({
   selectedPlanId,
   isChangingPlan,
   disabledPlanIds = [],
+  disabledPlanTooltips = {},
   currentBadgeLabel,
   changePlanLabel,
   onPlanSelect,
@@ -58,6 +60,9 @@ export function PlanComparison({
         {plans.map((plan) => {
           const isCurrent = plan.id === currentPlanId
           const isDisabled = disabledPlanIds.includes(plan.id) && !isCurrent
+          const disabledPlanTooltip = isDisabled
+            ? disabledPlanTooltips[plan.id]
+            : undefined
           const isSelected = plan.id === selectedPlanId && !isDisabled
 
           return (
@@ -67,6 +72,7 @@ export function PlanComparison({
                 tabIndex={isDisabled ? -1 : 0}
                 onClick={() => !isDisabled && onPlanSelect(plan.id)}
                 onKeyDown={(e) => !isDisabled && handleKeyDown(e, plan.id)}
+                title={disabledPlanTooltip}
                 className={`block min-h-full rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-emerald-700/35 ${
                   isDisabled
                     ? 'cursor-not-allowed opacity-50'

@@ -592,7 +592,8 @@
     "changePlanError": "We could not start the plan change. Please try again.",
     "planFree": "Free",
     "planPricePerMonth": "{price} / month",
-    "planVolumePerMonth": "Up to {count} verifications / month"
+    "planVolumePerMonth": "Up to {count} verifications / month",
+    "freePlanAlreadyClaimedTooltip": "You already used the free plan before. Free plan can only be selected once."
   },
   "embeddedOnboarding": {
     "prefillWarning": "We could not prefill Shopify store details. Please enter the store name manually.",
@@ -615,6 +616,7 @@
     "planPriceFree": "Free",
     "planPricePerMonth": "{price} / month",
     "planVolumePerMonth": "Includes up to {count} verifications per month",
+    "freePlanAlreadyClaimedTooltip": "You already used the free plan before. Free plan can only be selected once.",
     "planStarterName": "Starter",
     "planStarterPrice": "Free",
     "planStarterVolume": "First 50 verifications are free",
