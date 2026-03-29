@@ -1,6 +1,6 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "f1f4012b31f1bb37c897ee284a501623"
+client_id = "1a5206c30b74f6600897545465ee8d13"
 name = "Akeed"
 application_url = "https://akeed-eta.vercel.app"
 embedded = true
