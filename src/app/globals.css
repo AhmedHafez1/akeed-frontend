@@ -142,3 +142,37 @@
     }
   }
 }
+
+/*
+ * ── International Phone Input ──────────────────────────────────────────
+ * Only library-internal selectors that can't be reached via JSX live here.
+ * Everything else uses Tailwind classes directly in the component.
+ */
+.intl-phone .PhoneInput {
+  @apply flex w-full items-center gap-2;
+}
+
+.intl-phone .PhoneInputCountry {
+  @apply relative flex shrink-0 items-center gap-1;
+}
+
+.intl-phone .PhoneInputCountryIcon {
+  @apply h-[1.125rem] w-6 overflow-hidden rounded-sm shadow-[0_0_0_1px_rgba(0,0,0,0.1)];
+}
+
+.intl-phone .PhoneInputCountrySelectArrow {
+  @apply ms-0.5 opacity-60;
+}
+
+.intl-phone .PhoneInputCountrySelect {
+  @apply absolute inset-0 z-10 cursor-pointer opacity-0;
+}
+
+.intl-phone .PhoneInputInput {
+  @apply min-w-0 flex-1 border-none bg-transparent p-0 text-base leading-normal text-inherit outline-none;
+  direction: ltr;
+}
+
+.intl-phone .PhoneInputInput::placeholder {
+  @apply text-gray-400;
+}

@@ -6,9 +6,13 @@ import {
   Icon,
   InlineStack,
   Text,
-  TextField,
 } from '@shopify/polaris'
 import { CheckCircleIcon, OrderIcon, SendIcon } from '@shopify/polaris-icons'
+import {
+  InternationalPhoneInput,
+  isValidPhoneNumber,
+  type E164Value,
+} from '@/shared/ui'
 
 interface DashboardEmptyStateMessages {
   heading: string
@@ -37,10 +41,12 @@ export function DashboardEmptyState({
   isSendingTest = false,
   onSendTestVerification,
 }: DashboardEmptyStateProps) {
-  const [testPhone, setTestPhone] = useState('')
+  const [testPhone, setTestPhone] = useState<E164Value | undefined>()
+
+  const isPhoneValid = testPhone ? isValidPhoneNumber(testPhone) : false
 
   const handleSend = () => {
-    if (!onSendTestVerification) return
+    if (!onSendTestVerification || !testPhone || !isPhoneValid) return
     onSendTestVerification(testPhone)
   }
 
@@ -71,18 +77,19 @@ export function DashboardEmptyState({
           </Text>
           <InlineStack gap="300" blockAlign="end" wrap>
             <div className="max-w-105 min-w-65 flex-1">
-              <TextField
-                label={messages.testPhoneLabel ?? ''}
+              <InternationalPhoneInput
                 value={testPhone}
                 onChange={setTestPhone}
+                label={messages.testPhoneLabel}
                 placeholder={messages.testPhonePlaceholder}
-                autoComplete="tel"
+                defaultCountry="EG"
+                disabled={isSendingTest}
               />
             </div>
             <Button
               variant="primary"
               loading={isSendingTest}
-              disabled={!testPhone.trim()}
+              disabled={!isPhoneValid}
               onClick={handleSend}
             >
               {isSendingTest
