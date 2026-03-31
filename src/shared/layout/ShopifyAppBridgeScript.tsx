@@ -16,6 +16,7 @@ function ShopifyAppBridgeScriptInner() {
   }
 
   return (
+    // eslint-disable-next-line @next/next/no-sync-scripts
     <script
       id="shopify-app-bridge"
       src="https://cdn.shopify.com/shopifycloud/app-bridge.js"
