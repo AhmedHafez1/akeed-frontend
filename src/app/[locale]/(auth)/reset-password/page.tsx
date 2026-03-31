@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { getSupabaseClient } from '@/shared/lib/auth'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
