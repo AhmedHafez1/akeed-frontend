@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { auth } from '@/shared/lib/auth'
-import { getLocaleFromPathname } from '@/shared/lib/locale'
+import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
 import { useTranslations } from 'next-intl'
 
 /**
@@ -54,7 +54,7 @@ export default function LoginPage() {
       // Redirect to dashboard
       router.push(auth.getDashboardPath(locale))
     } catch {
-      setError('Failed to sign in!')
+      setError(t('auth.signInFailed'))
     } finally {
       setIsLoading(false)
     }
@@ -214,7 +214,7 @@ export default function LoginPage() {
             </label>
 
             <Link
-              href="/forgot-password"
+              href={withLocale('/forgot-password', locale)}
               className="text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900"
             >
               {t('auth.forgotPassword')}

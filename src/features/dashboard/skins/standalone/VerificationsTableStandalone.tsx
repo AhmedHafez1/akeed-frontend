@@ -1,3 +1,6 @@
+'use client'
+
+import { useTranslations } from 'next-intl'
 import { StatusBadge } from '../../ui/shared/StatusBadge'
 import type { VerificationItem } from '../../model/dashboard.model'
 
@@ -12,16 +15,18 @@ interface VerificationsTableStandaloneProps {
 export function VerificationsTableStandalone({
   verifications,
 }: VerificationsTableStandaloneProps) {
+  const t = useTranslations('dashboard.table')
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full min-w-140 text-left text-sm">
         <thead className="border-b border-slate-200 text-xs text-slate-500 uppercase">
           <tr>
-            <th className="px-4 py-3 text-center font-semibold">Order</th>
-            <th className="px-4 py-3 font-semibold">Status</th>
-            <th className="px-4 py-3 font-semibold">Customer</th>
-            <th className="px-4 py-3 text-right font-semibold">Total</th>
-            <th className="px-4 py-3 text-right font-semibold">Created</th>
+            <th className="px-4 py-3 text-center font-semibold">{t('headings.order')}</th>
+            <th className="px-4 py-3 font-semibold">{t('headings.status')}</th>
+            <th className="px-4 py-3 font-semibold">{t('headings.customer')}</th>
+            <th className="px-4 py-3 text-right font-semibold">{t('headings.total')}</th>
+            <th className="px-4 py-3 text-right font-semibold">{t('headings.created')}</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-100">
@@ -40,10 +45,10 @@ export function VerificationsTableStandalone({
               </td>
               <td className="px-4 py-4">
                 <div className="font-medium text-slate-900">
-                  {verification.customer_name || 'Unknown customer'}
+                  {verification.customer_name || t('unknownCustomer')}
                 </div>
                 <div className="text-xs text-slate-500">
-                  {verification.customer_phone || 'No phone'}
+                  {verification.customer_phone || t('noPhone')}
                 </div>
               </td>
               <td className="px-4 py-4 text-right">

@@ -129,7 +129,7 @@ export function withLocale(path: string, locale?: string): string {
 /**
  * Auth route paths (without locale prefix)
  */
-export const AUTH_ROUTES = ['/login', '/signup', '/onboarding'] as const
+export const AUTH_ROUTES = ['/login', '/signup', '/onboarding', '/forgot-password', '/reset-password'] as const
 
 /**
  * Check if a pathname (with locale) matches an auth route
@@ -138,4 +138,19 @@ export function isAuthRoute(pathname: string | null | undefined): boolean {
   if (!pathname) return false
   const withoutLocale = '/' + pathname.split('/').slice(2).join('/')
   return AUTH_ROUTES.some((route) => withoutLocale.startsWith(route))
+}
+
+/**
+ * Public route paths (without locale prefix) — accessible without auth,
+ * rendered with the marketing Header instead of AppHeader.
+ */
+export const PUBLIC_ROUTES = ['/', '/terms', '/privacy'] as const
+
+/**
+ * Check if a pathname (with locale) matches a public marketing route
+ */
+export function isPublicRoute(pathname: string | null | undefined): boolean {
+  if (!pathname) return false
+  const withoutLocale = '/' + pathname.split('/').slice(2).join('/')
+  return PUBLIC_ROUTES.some((route) => withoutLocale === route)
 }
