@@ -16,7 +16,6 @@ import { useTranslations } from 'next-intl'
 
 export default function ResetPasswordPage() {
   const t = useTranslations()
-  const router = useRouter()
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname ?? '')
 
