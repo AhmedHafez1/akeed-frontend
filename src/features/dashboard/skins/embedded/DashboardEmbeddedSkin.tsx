@@ -81,7 +81,7 @@ export function DashboardEmbeddedSkin({
   const t = useTranslations('dashboard')
 
   return (
-    <Page title={t('title')} subtitle={t('subtitle')}>
+    <Page>
       <BlockStack gap="400">
         {error && (
           <Banner tone="critical">
