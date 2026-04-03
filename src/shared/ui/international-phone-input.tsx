@@ -52,7 +52,6 @@ export function InternationalPhoneInput({
   onChange,
   placeholder = '+20 123 456 7890',
   defaultCountry = 'EG',
-  label,
   disabled = false,
   className,
 }: InternationalPhoneInputProps) {
@@ -60,14 +59,9 @@ export function InternationalPhoneInput({
 
   return (
     <div className={cn(className)}>
-      {label && (
-        <label className="mb-1.5 block text-sm font-medium text-slate-700">
-          {label}
-        </label>
-      )}
       <div
         className={cn(
-          'intl-phone relative flex h-12 w-full items-center rounded-lg border-2 border-gray-200 bg-white px-3 transition-colors',
+          'intl-phone relative flex h-10 w-full items-center rounded-lg border-2 border-gray-200 bg-white px-3 transition-colors',
           'focus-within:border-ring focus-within:bg-slate-100',
           isValid === true &&
             'border-green-600 focus-within:border-green-600 focus-within:ring-1 focus-within:ring-green-600',
@@ -86,16 +80,6 @@ export function InternationalPhoneInput({
           placeholder={placeholder}
           disabled={disabled}
         />
-        {isValid === true && (
-          <span className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-base text-green-600">
-            ✓
-          </span>
-        )}
-        {isValid === false && (
-          <span className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-base text-red-500">
-            ✗
-          </span>
-        )}
       </div>
     </div>
   )
@@ -106,4 +90,7 @@ export function InternationalPhoneInput({
  * a direct dependency on `react-phone-number-input`.
  */
 export { isValidPhoneNumber } from 'react-phone-number-input'
-export type { Value as E164Value, Country as PhoneCountry } from 'react-phone-number-input'
+export type {
+  Value as E164Value,
+  Country as PhoneCountry,
+} from 'react-phone-number-input'

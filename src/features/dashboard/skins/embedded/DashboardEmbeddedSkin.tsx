@@ -171,9 +171,6 @@ export function DashboardEmbeddedSkin({
                       testSectionHeading: t(
                         'emptyState.onboarding.testSectionHeading'
                       ),
-                      testSectionDescription: t(
-                        'emptyState.onboarding.testSectionDescription'
-                      ),
                       testPhoneLabel: t('emptyState.onboarding.testPhoneLabel'),
                       testPhonePlaceholder: t(
                         'emptyState.onboarding.testPhonePlaceholder'

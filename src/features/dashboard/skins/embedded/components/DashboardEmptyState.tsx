@@ -72,11 +72,8 @@ export function DashboardEmptyState({
           <Text as="h4" variant="headingSm">
             {messages.testSectionHeading}
           </Text>
-          <Text as="p" tone="subdued" variant="bodySm">
-            {messages.testSectionDescription}
-          </Text>
           <InlineStack gap="300" blockAlign="end" wrap>
-            <div className="max-w-105 min-w-65 flex-1">
+            <div className="flex max-w-105 min-w-65 flex-1 items-center gap-5">
               <InternationalPhoneInput
                 value={testPhone}
                 onChange={setTestPhone}
