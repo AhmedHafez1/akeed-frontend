@@ -13,6 +13,7 @@ export * from './accordion'
 // Custom components
 export * from './loading-button'
 export * from './phone-input'
+export * from './international-phone-input'
 export * from './faq-item'
 export * from './container'
 export * from './section'

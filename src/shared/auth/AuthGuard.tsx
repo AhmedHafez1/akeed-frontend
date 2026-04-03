@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { auth, getSupabaseClient } from '@/shared/lib/auth'
-import { isAuthRoute, getLocaleFromPathname } from '@/shared/lib/locale'
+import { isAuthRoute, isPublicRoute, getLocaleFromPathname } from '@/shared/lib/locale'
 import { FullPageLoader } from '@/shared/layout/FullPageLoader'
 
 interface AuthGuardProps {
@@ -13,7 +13,7 @@ interface AuthGuardProps {
 export function AuthGuard({ children }: AuthGuardProps) {
   const router = useRouter()
   const pathname = usePathname()
-  const isPublic = isAuthRoute(pathname)
+  const isPublic = isAuthRoute(pathname) || isPublicRoute(pathname)
   const [authChecked, setAuthChecked] = useState(false)
 
   useEffect(() => {

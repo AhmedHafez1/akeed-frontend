@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { auth } from '@/shared/lib/auth'
-import { getLocaleFromPathname } from '@/shared/lib/locale'
+import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
 import { useTranslations } from 'next-intl'
 
 /**
@@ -55,7 +55,7 @@ export default function SignupPage() {
     }
 
     if (formData.password !== formData.confirmPassword) {
-      nextErrors.confirmPassword = 'Passwords do not match'
+      nextErrors.confirmPassword = t('auth.passwordsDoNotMatch')
     }
 
     if (Object.keys(nextErrors).length > 0) {
@@ -75,7 +75,7 @@ export default function SignupPage() {
       // Redirect to standalone dashboard
       router.push(auth.getDashboardPath(locale))
     } catch {
-      setError('Failed to create account!')
+      setError(t('auth.signUpFailed'))
     } finally {
       setIsLoading(false)
     }
@@ -315,7 +315,7 @@ export default function SignupPage() {
             <span>
               {t('auth.agreeToTerms')}{' '}
               <Link
-                href="/terms"
+                href={withLocale('/terms', locale)}
                 className="font-semibold text-emerald-600 transition-colors hover:text-emerald-700"
                 target="_blank"
               >
@@ -323,7 +323,7 @@ export default function SignupPage() {
               </Link>{' '}
               {t('auth.and')}{' '}
               <Link
-                href="/privacy"
+                href={withLocale('/privacy', locale)}
                 className="font-semibold text-emerald-600 transition-colors hover:text-emerald-700"
                 target="_blank"
               >

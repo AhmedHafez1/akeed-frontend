@@ -33,6 +33,7 @@
     "react-dom": "19.2.1",
     "react-hook-form": "^7.68.0",
     "react-hot-toast": "^2.6.0",
+    "react-phone-number-input": "^3.4.16",
     "tailwind-merge": "^3.4.0",
     "zod": "^4.1.13"
   },
