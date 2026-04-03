@@ -437,7 +437,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <Page title={t('title')} subtitle={t('subtitle')}>
+    <Page>
       <Layout>
         <Layout.Section>
           <BlockStack gap="400">
