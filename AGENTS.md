@@ -1,7 +1,6 @@
 # AGENTS.md — Akeed Frontend
 
 Guidelines for AI coding agents operating in this repository.
-Read `docs/ARCHITECTURE_AGENT_CONTEXT.md` for full architectural detail.
 
 ## Build / Lint / Typecheck / Dev
 
