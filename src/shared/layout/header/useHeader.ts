@@ -59,7 +59,7 @@ export function useHeader() {
   }
 
   const handleCtaClick = () => {
-    router.push(withLocale('/signup', locale))
+    router.push(withLocale('/login', locale))
   }
 
   return {
