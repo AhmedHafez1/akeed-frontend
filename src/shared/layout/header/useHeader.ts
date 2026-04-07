@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { getLocaleFromPathname } from '@/shared/lib/locale'
+import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
 import { HeaderNavItem } from './header.model'
 
 const SCROLL_THRESHOLD = 20
@@ -16,7 +16,6 @@ export function useHeader() {
 
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [isReservationModalOpen, setIsReservationModalOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,6 +58,10 @@ export function useHeader() {
     }
   }
 
+  const handleCtaClick = () => {
+    router.push(withLocale('/signup', locale))
+  }
+
   return {
     t,
     locale,
@@ -66,9 +69,8 @@ export function useHeader() {
     isScrolled,
     isMobileMenuOpen,
     setIsMobileMenuOpen,
-    isReservationModalOpen,
-    setIsReservationModalOpen,
     scrollToSection,
     handleLocaleChange,
+    handleCtaClick,
   }
 }

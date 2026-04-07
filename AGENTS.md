@@ -39,14 +39,14 @@ Until a runner exists, validate changes with `npm run build && npm run lint`.
 
 ## Source Layout
 
-```
+```text
 src/
   app/[locale]/           # Next.js App Router pages (locale-prefixed)
   components/
     ui/                   # Reusable primitives (shadcn-style, barrel-exported via index.ts)
     layout/               # Shell components (AppLayout, Header, Sidebar, EmbeddedLayout)
     sections/             # Marketing page sections (Hero, Pricing, FAQ, etc.)
-    forms/                # Form components (WaitlistForm and sub-components)
+    forms/                # Form components
     auth/                 # AuthGuard, EmbeddedAuthGate
     onboarding/           # Onboarding wizard steps and container
     pages/                # Page-level composition components
@@ -99,7 +99,7 @@ src/
 ### Naming Conventions
 
 - Files: PascalCase for components (`Button.tsx`), camelCase for hooks/utils (`useHeader.ts`, `auth.ts`)
-- Types: PascalCase (`WaitlistFormData`), model files use `.model.ts` suffix
+- Types: PascalCase (`UserProfile`, `BillingConfig`), model files use `.model.ts` suffix
 - Hooks: `use` prefix, camelCase (`useAkeedMode`, `useDashboard`)
 - Constants/config: camelCase for objects (`faqs`), UPPER_SNAKE for primitive constants (`ROI_DATA`, `AUTH_ROUTES`)
 - Component props: `{ComponentName}Props` interface
@@ -152,14 +152,12 @@ Required variables (see `.env.local`):
 - `NEXT_PUBLIC_API_URL` — Backend API base URL
 - `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` — Supabase auth
 - `NEXT_PUBLIC_SHOPIFY_API_KEY` — Shopify App Bridge
-- `GOOGLE_SERVICE_ACCOUNT_EMAIL` / `GOOGLE_PRIVATE_KEY` / `GOOGLE_SHEET_ID` — Waitlist (server-only)
 
 Never commit `.env.local` or files containing secrets.
 
 ## Common Pitfalls
 
 - Embedded navigation registers a Settings link, but `/settings` route is not implemented yet
-- Waitlist types have overlapping models — keep aligned with `useWaitlistForm` and the API route
 - Polaris CSS is imported only inside `EmbeddedLayout` — never import it globally
 - `suppressHydrationWarning` is used on interactive elements; keep this when wrapping Radix primitives
 - Dynamic imports (`next/dynamic` with `{ ssr: false }`) are used for modals and heavy client components

@@ -1,18 +1,11 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 import { useHeader } from './header/useHeader'
 import { HeaderActions } from './header/HeaderActions'
 import { HeaderLogo } from './header/HeaderLogo'
 import { HeaderMobileMenu } from './header/HeaderMobileMenu'
 import { HeaderMobileToggle } from './header/HeaderMobileToggle'
 import { HeaderNav } from './header/HeaderNav'
-
-const ReservationModal = dynamic(
-  () =>
-    import('@/features/marketing').then((mod) => mod.ReservationModal),
-  { ssr: false }
-)
 
 export function Header() {
   const {
@@ -22,10 +15,9 @@ export function Header() {
     isScrolled,
     isMobileMenuOpen,
     setIsMobileMenuOpen,
-    isReservationModalOpen,
-    setIsReservationModalOpen,
     scrollToSection,
     handleLocaleChange,
+    handleCtaClick,
   } = useHeader()
 
   return (
@@ -52,7 +44,7 @@ export function Header() {
               locale={locale}
               ctaLabel={t('cta')}
               onLocaleChange={handleLocaleChange}
-              onCtaClick={() => setIsReservationModalOpen(true)}
+              onCtaClick={handleCtaClick}
             />
 
             {/* Mobile Menu Button */}
@@ -73,12 +65,8 @@ export function Header() {
           onLocaleChange={handleLocaleChange}
           onCtaClick={() => {
             setIsMobileMenuOpen(false)
-            setIsReservationModalOpen(true)
+            handleCtaClick()
           }}
-        />
-        <ReservationModal
-          isOpen={isReservationModalOpen}
-          onClose={() => setIsReservationModalOpen(false)}
         />
       </header>
     </>

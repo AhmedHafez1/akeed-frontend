@@ -6,9 +6,10 @@ import { ChevronRight, ChevronLeft } from 'lucide-react'
 import ScrollDownArrow from './ScrollDownArrow'
 import { useTranslations } from 'next-intl'
 import { LogoTicker } from '@/features/marketing/ui/components/LogoTicker'
-import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { useRouter } from 'next/navigation'
+import { withLocale } from '@/shared/lib/locale'
 
 const ChatInterface = dynamic(
   () =>
@@ -18,15 +19,10 @@ const ChatInterface = dynamic(
   { ssr: false }
 )
 
-const ReservationModal = dynamic(
-  () => import('./ReservationModal').then((mod) => mod.ReservationModal),
-  { ssr: false }
-)
-
 function Hero() {
   const t = useTranslations('hero')
-  const { isRTL } = useLocaleInfo()
-  const [isReservationModalOpen, setIsReservationModalOpen] = useState(false)
+  const { locale, isRTL } = useLocaleInfo()
+  const router = useRouter()
 
   return (
     <section className="relative flex min-h-screen flex-col justify-center gap-6 overflow-hidden px-6 pt-20 pb-8 sm:gap-8 sm:px-6 md:flex-row md:items-end md:gap-16 md:px-12 lg:gap-20 lg:px-24 lg:pt-22 lg:pb-24 xl:px-48">
@@ -80,7 +76,7 @@ function Hero() {
         >
           <SocialProof />
           <button
-            onClick={() => setIsReservationModalOpen(true)}
+            onClick={() => router.push(withLocale('/signup', locale))}
             className="group relative flex w-auto items-center justify-center gap-2 rounded-xl bg-linear-to-r from-orange-600 to-orange-500 px-6 py-3.5 text-sm font-bold text-white shadow-sm shadow-emerald-500/30 transition-all hover:-translate-y-0.5 hover:shadow-gray-400/70 sm:w-auto sm:px-8 sm:py-4 md:flex md:text-base lg:py-5 lg:text-lg"
             suppressHydrationWarning
           >
@@ -128,10 +124,6 @@ function Hero() {
 
       {/* Scroll Indicator */}
       <ScrollDownArrow to="problem" className="hidden sm:block" />
-      <ReservationModal
-        isOpen={isReservationModalOpen}
-        onClose={() => setIsReservationModalOpen(false)}
-      />
     </section>
   )
 }

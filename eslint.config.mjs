@@ -106,11 +106,6 @@ const eslintConfig = defineConfig([
               group: ["@/features/onboarding", "@/features/onboarding/**"],
               message: "Do not couple marketing to onboarding internals.",
             },
-            {
-              group: ["@/features/waitlist/**"],
-              message:
-                "Import waitlist only via public API: @/features/waitlist",
-            },
           ],
         },
       ],
@@ -132,10 +127,6 @@ const eslintConfig = defineConfig([
               group: ["@/features/marketing", "@/features/marketing/**"],
               message: "Do not couple onboarding to marketing internals.",
             },
-            {
-              group: ["@/features/waitlist", "@/features/waitlist/**"],
-              message: "Do not couple onboarding to waitlist internals.",
-            },
           ],
         },
       ],
@@ -156,35 +147,6 @@ const eslintConfig = defineConfig([
             {
               group: ["@/features/marketing", "@/features/marketing/**"],
               message: "Do not couple dashboard to marketing internals.",
-            },
-            {
-              group: ["@/features/waitlist", "@/features/waitlist/**"],
-              message: "Do not couple dashboard to waitlist internals.",
-            },
-          ],
-        },
-      ],
-    },
-  },
-  {
-    files: ["src/features/waitlist/**/*.{ts,tsx}"],
-    rules: {
-      "no-restricted-imports": [
-        "error",
-        {
-          patterns: [
-            ...restrictedLegacyPaths,
-            {
-              group: ["@/features/onboarding", "@/features/onboarding/**"],
-              message: "Do not couple waitlist to onboarding internals.",
-            },
-            {
-              group: ["@/features/marketing", "@/features/marketing/**"],
-              message: "Do not couple waitlist to marketing internals.",
-            },
-            {
-              group: ["@/features/dashboard", "@/features/dashboard/**"],
-              message: "Do not couple waitlist to dashboard internals.",
             },
           ],
         },

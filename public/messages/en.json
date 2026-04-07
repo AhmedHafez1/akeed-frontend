@@ -9,7 +9,7 @@
     "demo": "Demo",
     "pricing": "Pricing",
     "faq": "FAQ",
-    "cta": "Reserve Your Spot"
+    "cta": "Create Account"
   },
   "hero": {
     "title": "Confirm + GPS + Saving =",
@@ -24,7 +24,7 @@
     "social_proof": "Save up to 12,000 EGP monthly from COD returns",
     "join_social_proof": "Join <bold>+85</bold> who registered their interest today",
     "rating": "5.0 rating",
-    "cta": "Reserve Your Spot",
+    "cta": "Start Free",
     "learn_more": "See Live Demo",
     "scroll_down": "See it in action",
     "benefit_1": "No credit card required",
@@ -188,22 +188,13 @@
     "tier": "Tier",
     "saving": "Save",
     "most_popular": "Most Popular",
-    "cta_recharge": "Recharge Your Balance and Start Now",
+    "cta_recharge": "Create Account and Start Now",
     "tiers": {
       "trial": "Trial",
       "pro": "Pro Package",
       "growth": "Growth Package",
       "merchant": "Merchant Package",
       "corporate": "Corporate Package"
-    }
-  },
-  "reservation": {
-    "reserve_title": "Reserve Your Spot",
-    "reserve_subtitle": "We are currently activating accounts for a limited number of stores to ensure service quality. Leave your WhatsApp number or email, and we will contact you to activate your 50 free orders.",
-    "trust_badges": {
-      "secure": "100% secure data",
-      "refund": "30-day refund",
-      "support": "Continuous technical support"
     }
   },
   "faq": {
@@ -242,64 +233,6 @@
       "question": "Can I customize Akeed's messages and language?",
       "answer": "Absolutely, you can choose the dialect that fits your brand (colloquial, formal, Franco) and edit the messages as you like."
     }
-  },
-  "form": {
-    "name": {
-      "label": "Store Name",
-      "placeholder": "Example: Electronics Store",
-      "required": "Store name is required"
-    },
-    "phone": {
-      "label": "WhatsApp Number",
-      "placeholder": "+20 1XX XXX XXXX",
-      "required": "WhatsApp number is required",
-      "invalid": "Invalid WhatsApp number"
-    },
-    "email": {
-      "label": "Email",
-      "placeholder": "email@example.com",
-      "required": "Email is required",
-      "invalid": "Invalid email"
-    },
-    "platform": {
-      "label": "What is your store platform? (optional)",
-      "placeholder": "E.g., Shopify, WooCommerce..."
-    },
-    "storeUrl": {
-      "label": "Store URL (optional)",
-      "placeholder": "https://mystore.com"
-    },
-    "monthlyOrders": {
-      "label": "Approximately how many monthly orders?",
-      "placeholder": "Select...",
-      "required": "Select number of orders",
-      "options": {
-        "0-50": "Less than 50",
-        "50-200": "50 - 200",
-        "200-500": "200 - 500",
-        "500-1000": "500 - 1000",
-        "1000+": "More than 1000"
-      }
-    },
-    "submit": "Reserve Your Spot Now 🎉",
-    "submitting": "Sending...",
-    "error": "An error occurred. Try again or contact us",
-    "info": "We'll contact you within 24 hours to start free setup",
-    "success_title": "Registration Successful! 🎉"
-  },
-  "success": {
-    "title": "Reservation Successful! 🎉",
-    "subtitle": "Congratulations! You're now among the first 20 stores to get 2 months free",
-    "next_title": "Next Steps",
-    "next_steps": {
-      "1": "We'll contact you within 24 hours on WhatsApp",
-      "2": "We'll help you with setup (only 5 minutes)",
-      "3": "You'll start saving money from the first week"
-    },
-    "important_title": "Very Important!",
-    "important_text": "Open WhatsApp and send us 'Ready' at number:",
-    "important_cta": "So we can start with you immediately",
-    "cta": "Open WhatsApp Now 📱"
   },
   "roi_calculator": {
     "section_title": "Calculate for yourself... How much can Akeed save you monthly?",
