@@ -3,35 +3,33 @@ import { Tier } from '@/features/marketing/model/tier.model'
 export const pricing: { tiers: Tier[] } = {
   tiers: [
     {
-      key: 'trial',
-      orders: 20,
+      key: 'starter',
+      orders: 50,
       price: 0,
       perOrder: 0,
       isFree: true,
-      ordersDisplay: null, // Will show free badge
+      ordersDisplay: '50',
     },
     {
       key: 'growth',
-      orders: 200,
-      price: 299,
-      perOrder: 1.5,
-      ordersDisplay: '200',
-    },
-    {
-      key: 'pro',
       orders: 500,
-      price: 599,
-      perOrder: 1.2,
-      saving: 20,
+      price: 9,
+      perOrder: 0.03,
       ordersDisplay: '500',
     },
     {
-      key: 'merchant',
+      key: 'pro',
       orders: 1000,
-      price: 999,
-      perOrder: 1,
-      saving: 50,
+      price: 15,
+      perOrder: 0.025,
       ordersDisplay: '1000',
+    },
+    {
+      key: 'scale',
+      orders: 2500,
+      price: 29,
+      perOrder: 0.02,
+      ordersDisplay: '2500',
     },
   ],
 }
