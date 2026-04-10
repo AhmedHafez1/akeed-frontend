@@ -74,7 +74,8 @@ export default function SignupPage() {
 
       // Redirect to standalone dashboard
       router.push(auth.getDashboardPath(locale))
-    } catch {
+    } catch (e) {
+      console.error(e)
       setError(t('auth.signUpFailed'))
     } finally {
       setIsLoading(false)

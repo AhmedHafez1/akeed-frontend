@@ -53,7 +53,8 @@ export default function LoginPage() {
 
       // Redirect to dashboard
       router.push(auth.getDashboardPath(locale))
-    } catch {
+    } catch (e) {
+      console.error(e)
       setError(t('auth.signInFailed'))
     } finally {
       setIsLoading(false)

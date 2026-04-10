@@ -18,18 +18,23 @@ import { withLocale } from '@/shared/lib/locale'
  */
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
 let supabaseClient: ReturnType<typeof createClient> | null = null
 
-function getRequiredPublicEnvVar(name: string): string {
-  const value = process.env[name]
-  if (!value) {
+function getSupabasePublicConfig(): { url: string; anonKey: string } {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
     throw new Error(
-      `[Auth] Missing required environment variable: ${name}. ` +
-        'Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY for frontend auth.'
+      '[Auth] Missing required environment variables: NEXT_PUBLIC_SUPABASE_URL and/or NEXT_PUBLIC_SUPABASE_ANON_KEY. ' +
+        'Set both values for frontend auth and restart the Next.js dev server.'
     )
   }
-  return value
+
+  return {
+    url: SUPABASE_URL,
+    anonKey: SUPABASE_ANON_KEY,
+  }
 }
 
 export function getSupabaseClient() {
@@ -37,10 +42,8 @@ export function getSupabaseClient() {
     return supabaseClient
   }
 
-  const supabaseUrl = getRequiredPublicEnvVar('NEXT_PUBLIC_SUPABASE_URL')
-  const supabaseAnonKey = getRequiredPublicEnvVar(
-    'NEXT_PUBLIC_SUPABASE_ANON_KEY'
-  )
+  const { url: supabaseUrl, anonKey: supabaseAnonKey } =
+    getSupabasePublicConfig()
 
   supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
