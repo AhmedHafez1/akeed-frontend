@@ -2,7 +2,7 @@
 
 client_id = "1a5206c30b74f6600897545465ee8d13"
 name = "Akeed"
-application_url = "https://akeed-eta.vercel.app"
+application_url = "https://get-akeed.vercel.app"
 embedded = true
 
 [build]
@@ -42,4 +42,4 @@ optional_scopes = [ ]
 use_legacy_install_flow = false
 
 [auth]
-redirect_urls = [ "https://akeed-eta.vercel.app/api/auth/shopify/callback" ]
+redirect_urls = [ "https://get-akeed.vercel.app/api/auth/shopify/callback" ]
