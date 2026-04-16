@@ -185,9 +185,6 @@ export function DashboardStandaloneSkin({
             <h2 className="text-xl font-semibold text-slate-900">
               {t('verificationSection.title')}
             </h2>
-            <p className="text-sm text-slate-600">
-              {t('verificationSection.subtitle')}
-            </p>
           </div>
           <div className="flex flex-wrap gap-2">
             {statusFilters.map((filter) => (
@@ -241,7 +238,10 @@ export function DashboardStandaloneSkin({
 
               <ul className="space-y-3">
                 {(['step1', 'step2', 'step3'] as const).map((step) => (
-                  <li key={step} className="flex items-start gap-3 text-sm text-slate-500">
+                  <li
+                    key={step}
+                    className="flex items-start gap-3 text-sm text-slate-500"
+                  >
                     <span className="mt-0.5 text-slate-400">•</span>
                     {t(`emptyState.onboarding.${step}`)}
                   </li>
@@ -258,12 +258,14 @@ export function DashboardStandaloneSkin({
                 </p>
 
                 <div className="flex flex-wrap items-end gap-3 pt-1">
-                  <div className="min-w-[16rem] max-w-sm flex-1">
+                  <div className="max-w-sm min-w-[16rem] flex-1">
                     <InternationalPhoneInput
                       value={testPhone}
                       onChange={setTestPhone}
                       label={t('emptyState.onboarding.testPhoneLabel')}
-                      placeholder={t('emptyState.onboarding.testPhonePlaceholder')}
+                      placeholder={t(
+                        'emptyState.onboarding.testPhonePlaceholder'
+                      )}
                       defaultCountry="EG"
                       disabled={isSendingTest}
                     />

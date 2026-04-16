@@ -122,9 +122,6 @@ export function DashboardEmbeddedSkin({
                         {t('verificationSection.title')}
                       </Text>
                     </InlineStack>
-                    <Text variant="bodySm" tone="subdued" as="p">
-                      {t('verificationSection.subtitle')}
-                    </Text>
                   </BlockStack>
 
                   <ButtonGroup>

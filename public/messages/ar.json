@@ -482,7 +482,7 @@
         "read": "تمت قراءتها"
       },
       "moneySaved": {
-        "title": "التوفير المحقق",
+        "title": "التوفير",
         "breakdownTitle": "طريقة احتساب التوفير",
         "breakdownLine": "{count} طلب ملغي × {cost} {currency} تكلفة شحن"
       },
