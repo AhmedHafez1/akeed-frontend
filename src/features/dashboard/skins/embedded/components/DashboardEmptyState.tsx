@@ -3,6 +3,7 @@ import {
   BlockStack,
   Box,
   Button,
+  Divider,
   Icon,
   InlineStack,
   Text,
@@ -26,6 +27,7 @@ interface DashboardEmptyStateMessages {
   testPhonePlaceholder?: string
   testSendLabel?: string
   testSendingLabel?: string
+  nextStepHint?: string
 }
 
 interface DashboardEmptyStateProps {
@@ -51,69 +53,98 @@ export function DashboardEmptyState({
   }
 
   return (
-    <BlockStack gap="500">
-      <BlockStack gap="200">
-        <Text as="h3" variant="headingMd">
-          {messages.heading}
-        </Text>
-        <Text as="p" tone="subdued" variant="bodyMd">
-          {messages.activeDescription}
-        </Text>
-      </BlockStack>
-
-      <BlockStack gap="400">
-        <EmptyStateStep icon={OrderIcon} text={messages.step1} />
-        <EmptyStateStep icon={SendIcon} text={messages.step2} />
-        <EmptyStateStep icon={CheckCircleIcon} text={messages.step3} />
-      </BlockStack>
-
-      {showTestSection && onSendTestVerification && (
-        <BlockStack gap="300">
-          <Text as="h4" variant="headingSm">
-            {messages.testSectionHeading}
+    <Box padding="400" background="bg-surface-secondary" borderRadius="200">
+      <BlockStack gap="500">
+        {/* Header */}
+        <BlockStack gap="200">
+          <Text as="h3" variant="headingMd">
+            {messages.heading}
           </Text>
-          <InlineStack gap="400" blockAlign="center" align="start" wrap>
-            <div className="max-w-105 min-w-65">
-              <InternationalPhoneInput
-                value={testPhone}
-                onChange={setTestPhone}
-                label={messages.testPhoneLabel}
-                placeholder={messages.testPhonePlaceholder}
-                defaultCountry="EG"
-                disabled={isSendingTest}
-              />
-            </div>
-            <Button
-              variant="primary"
-              loading={isSendingTest}
-              disabled={!isPhoneValid}
-              onClick={handleSend}
-            >
-              {isSendingTest
-                ? (messages.testSendingLabel ?? messages.testSendLabel)
-                : messages.testSendLabel}
-            </Button>
-          </InlineStack>
+          <Text as="p" tone="subdued" variant="bodyMd">
+            {messages.activeDescription}
+          </Text>
         </BlockStack>
-      )}
-    </BlockStack>
+
+        {/* How it works — numbered steps */}
+        <BlockStack gap="300">
+          <EmptyStateStep icon={OrderIcon} text={messages.step1} step={1} />
+          <EmptyStateStep icon={SendIcon} text={messages.step2} step={2} />
+          <EmptyStateStep
+            icon={CheckCircleIcon}
+            text={messages.step3}
+            step={3}
+          />
+        </BlockStack>
+
+        {/* Test verification section */}
+        {showTestSection && onSendTestVerification && (
+          <>
+            <Divider />
+            <BlockStack gap="300">
+              <BlockStack gap="100">
+                <Text as="h4" variant="headingSm">
+                  {messages.testSectionHeading}
+                </Text>
+                {messages.nextStepHint && (
+                  <Text as="p" variant="bodySm" tone="subdued">
+                    {messages.nextStepHint}
+                  </Text>
+                )}
+              </BlockStack>
+              <InlineStack gap="400" blockAlign="center" align="start" wrap>
+                <div className="max-w-105 min-w-65">
+                  <InternationalPhoneInput
+                    value={testPhone}
+                    onChange={setTestPhone}
+                    label={messages.testPhoneLabel}
+                    placeholder={messages.testPhonePlaceholder}
+                    defaultCountry="EG"
+                    disabled={isSendingTest}
+                  />
+                </div>
+                <Button
+                  variant="primary"
+                  loading={isSendingTest}
+                  disabled={!isPhoneValid}
+                  onClick={handleSend}
+                >
+                  {isSendingTest
+                    ? (messages.testSendingLabel ?? messages.testSendLabel)
+                    : messages.testSendLabel}
+                </Button>
+              </InlineStack>
+            </BlockStack>
+          </>
+        )}
+      </BlockStack>
+    </Box>
   )
 }
 
 interface EmptyStateStepProps {
   icon: typeof OrderIcon
   text: string
+  step: number
 }
 
 function EmptyStateStep({ icon, text }: EmptyStateStepProps) {
   return (
-    <InlineStack gap="300" blockAlign="start" wrap={false}>
-      <Box>
-        <Icon source={icon} tone="subdued" />
+    <InlineStack gap="300" blockAlign="center" wrap={false}>
+      <Box
+        background="bg-fill-info-secondary"
+        borderRadius="full"
+        minWidth="32px"
+        minHeight="32px"
+      >
+        <div className="flex h-8 w-8 items-center justify-center">
+          <Icon source={icon} tone="info" />
+        </div>
       </Box>
-      <Text as="p" variant="bodySm" tone="subdued">
-        {text}
-      </Text>
+      <BlockStack gap="0">
+        <Text as="p" variant="bodySm" fontWeight="medium">
+          {text}
+        </Text>
+      </BlockStack>
     </InlineStack>
   )
 }

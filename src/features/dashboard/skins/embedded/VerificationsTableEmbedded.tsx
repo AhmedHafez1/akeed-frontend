@@ -41,18 +41,27 @@ function formatOrderTitle(
 
 function formatCurrencyTotal(verification: VerificationItem): string {
   if (!verification.total_price) {
-    return '-'
+    return '—'
   }
 
-  return `${verification.total_price} ${verification.currency ?? 'SAR'}`
+  const currency = verification.currency ?? 'SAR'
+  try {
+    return new Intl.NumberFormat(undefined, {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(Number(verification.total_price))
+  } catch {
+    return `${verification.total_price} ${currency}`
+  }
 }
 
 function formatCreatedDate(value: string | null): string {
-  if (!value) return '-'
+  if (!value) return '—'
 
   const date = new Date(value)
   return date.toLocaleDateString(undefined, {
-    year: 'numeric',
     month: 'short',
     day: 'numeric',
   })

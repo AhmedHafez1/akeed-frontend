@@ -1,6 +1,7 @@
 import {
   Banner,
   BlockStack,
+  Box,
   Button,
   ButtonGroup,
   Card,
@@ -82,7 +83,7 @@ export function DashboardEmbeddedSkin({
 
   return (
     <Page>
-      <BlockStack gap="400">
+      <BlockStack gap="500">
         {error && (
           <Banner tone="critical">
             <p>{error}</p>
@@ -95,6 +96,7 @@ export function DashboardEmbeddedSkin({
           </Banner>
         )}
 
+        {/* ── Metrics section ─────────────────────────────────────── */}
         <Layout>
           <Layout.Section>
             <StatsEmbedded
@@ -107,36 +109,48 @@ export function DashboardEmbeddedSkin({
           </Layout.Section>
         </Layout>
 
+        {/* ── Verifications section ───────────────────────────────── */}
         <Layout>
           <Layout.Section>
             <Card>
-              <BlockStack gap="300">
-                <InlineStack
-                  align="space-between"
-                  blockAlign="center"
-                  gap="300"
-                >
-                  <BlockStack gap="100">
-                    <InlineStack gap="200" blockAlign="center">
+              <BlockStack gap="400">
+                {/* Section header + filters */}
+                <BlockStack gap="300">
+                  <InlineStack
+                    align="space-between"
+                    blockAlign="center"
+                    gap="300"
+                  >
+                    <BlockStack gap="050">
                       <Text variant="headingMd" as="h2">
                         {t('verificationSection.title')}
                       </Text>
+                      <Text variant="bodySm" tone="subdued" as="p">
+                        {t('verificationSection.subtitle')}
+                      </Text>
+                    </BlockStack>
+                  </InlineStack>
+
+                  {/* Status filter pills */}
+                  <Box>
+                    <InlineStack gap="200" wrap>
+                      <ButtonGroup>
+                        {statusFilters.map((filter) => (
+                          <Button
+                            key={filter.id}
+                            pressed={statusFilter === filter.id}
+                            onClick={() => onStatusFilterChange(filter.id)}
+                            size="slim"
+                          >
+                            {filter.label}
+                          </Button>
+                        ))}
+                      </ButtonGroup>
                     </InlineStack>
-                  </BlockStack>
+                  </Box>
+                </BlockStack>
 
-                  <ButtonGroup>
-                    {statusFilters.map((filter) => (
-                      <Button
-                        key={filter.id}
-                        pressed={statusFilter === filter.id}
-                        onClick={() => onStatusFilterChange(filter.id)}
-                      >
-                        {filter.label}
-                      </Button>
-                    ))}
-                  </ButtonGroup>
-                </InlineStack>
-
+                {/* Table content */}
                 {isVerificationsLoading ? (
                   <VerificationsTableSkeleton />
                 ) : hasVerifications ? (
@@ -176,15 +190,25 @@ export function DashboardEmbeddedSkin({
                       testSendingLabel: t(
                         'emptyState.onboarding.testSendingLabel'
                       ),
+                      nextStepHint: t('emptyState.onboarding.nextStepHint'),
                     }}
                     showTestSection={true}
                     isSendingTest={isSendingTest}
                     onSendTestVerification={onSendTestVerification}
                   />
                 ) : (
-                  <Text as="p" tone="subdued" variant="bodySm">
-                    {emptyVerificationsMessage}
-                  </Text>
+                  <Box padding="400">
+                    <BlockStack gap="200" inlineAlign="center">
+                      <Text
+                        as="p"
+                        tone="subdued"
+                        variant="bodySm"
+                        alignment="center"
+                      >
+                        {emptyVerificationsMessage}
+                      </Text>
+                    </BlockStack>
+                  </Box>
                 )}
               </BlockStack>
             </Card>

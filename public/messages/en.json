@@ -449,7 +449,7 @@
         "step1": "A customer places a COD order in your store.",
         "step2": "Akeed sends a WhatsApp verification message to the customer.",
         "step3": "The customer confirms or cancels — results appear here in real time.",
-        "testSectionHeading": "Test verification",
+        "testSectionHeading": "Send a test verification",
         "testSectionDescription": "Select a country and enter a real WhatsApp number to trigger a test verification.",
         "testPhoneLabel": "Customer phone",
         "testPhonePlaceholder": "123 456 7890",
@@ -458,7 +458,8 @@
         "testPhoneRequired": "Please enter a customer phone number.",
         "testSent": "Test verification sent successfully.",
         "testFailed": "We could not send a test verification. Please try again.",
-        "testSkipped": "Test verification was skipped."
+        "testSkipped": "Test verification was skipped.",
+        "nextStepHint": "Try it now — send a test to your own WhatsApp number."
       }
     },
     "verificationSection": {
@@ -468,11 +469,12 @@
       "emptyHeading": "No verifications"
     },
     "metrics": {
-      "title": "Dashboard Metrics",
+      "title": "Overview",
       "subtitle": "Live verification performance overview.",
       "loading": "Loading metrics...",
       "summaryTitle": "Verification Summary",
       "replyRate": "{value}% Reply Rate",
+      "replyRateHelp": "Percentage of sent verifications that received a customer response.",
       "cards": {
         "pending": "Pending",
         "confirmed": "Confirmed",
@@ -483,13 +485,17 @@
       },
       "moneySaved": {
         "title": "Money Saved",
-        "breakdownTitle": "Savings Breakdown",
-        "breakdownLine": "{count} canceled x {cost} {currency} shipping"
+        "helpText": "Estimated savings from orders canceled before shipping.",
+        "breakdownTitle": "How it's calculated",
+        "breakdownLine": "{count} canceled × {cost} {currency} avg. shipping"
       },
       "usage": {
-        "title": "Included Usage",
+        "title": "Plan Usage",
+        "helpText": "Verifications used out of your monthly plan allowance.",
         "monthlyLimit": "Monthly Limit",
-        "used": "{value}% Used"
+        "used": "{value}% Used",
+        "warningNearLimit": "You're approaching your plan limit. Consider upgrading.",
+        "warningAtLimit": "You've reached your plan limit. Upgrade to keep verifying."
       },
       "unavailable": "Metrics are not available right now."
     },

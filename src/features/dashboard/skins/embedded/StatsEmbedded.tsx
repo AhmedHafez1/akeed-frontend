@@ -1,5 +1,6 @@
 import {
   Badge,
+  Banner,
   BlockStack,
   Box,
   Card,
@@ -29,7 +30,6 @@ interface StatsEmbeddedProps {
 
 type PolarisBadgeTone =
   | 'attention'
-  | 'brand'
   | 'critical'
   | 'info'
   | 'success'
@@ -41,6 +41,7 @@ interface SummaryMetric {
   label: string
   value: number
   tone: PolarisBadgeTone
+  isPrimary?: boolean
 }
 
 function resolveMetricBorderColor(tone: PolarisBadgeTone): ColorBorderAlias {
@@ -53,8 +54,6 @@ function resolveMetricBorderColor(tone: PolarisBadgeTone): ColorBorderAlias {
       return 'border-warning'
     case 'info':
       return 'border-info'
-    case 'brand':
-      return 'border-brand'
     default:
       return 'border-secondary'
   }
@@ -69,7 +68,6 @@ function resolveRateTone(rate: number): 'critical' | 'success' | 'warning' {
 function resolveUsageProgressTone(
   usagePercent: number
 ): 'critical' | 'success' {
-  if (usagePercent >= 95) return 'critical'
   if (usagePercent >= 80) return 'critical'
   return 'success'
 }
@@ -96,20 +94,27 @@ export function StatsEmbedded({
 }: StatsEmbeddedProps) {
   const t = useTranslations('dashboard')
 
-  const summaryMetrics: SummaryMetric[] = stats
+  const primaryMetrics: SummaryMetric[] = stats
     ? [
         {
           id: 'confirmed',
           label: t('metrics.cards.confirmed'),
           value: stats.totals.confirmed,
           tone: 'success',
+          isPrimary: true,
         },
         {
           id: 'canceled',
           label: t('metrics.cards.canceled'),
           value: stats.totals.canceled,
           tone: 'critical',
+          isPrimary: true,
         },
+      ]
+    : []
+
+  const secondaryMetrics: SummaryMetric[] = stats
+    ? [
         {
           id: 'sent',
           label: t('metrics.cards.sent'),
@@ -138,6 +143,8 @@ export function StatsEmbedded({
       )
     : 0
 
+  const showUsageWarning = stats && usagePercent >= 80
+
   return (
     <BlockStack gap="400">
       <InlineStack align="space-between" blockAlign="center" gap="300">
@@ -165,11 +172,26 @@ export function StatsEmbedded({
 
       {isStatsLoading && !stats ? (
         <BlockStack gap="400">
+          <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
+            <Card>
+              <BlockStack gap="300">
+                <SkeletonDisplayText size="medium" />
+                <SkeletonBodyText lines={1} />
+              </BlockStack>
+            </Card>
+            <Card>
+              <BlockStack gap="300">
+                <SkeletonDisplayText size="medium" />
+                <SkeletonBodyText lines={1} />
+              </BlockStack>
+            </Card>
+          </InlineGrid>
+
           <Card>
             <BlockStack gap="300">
               <SkeletonDisplayText size="small" />
-              <InlineGrid columns={{ xs: 2, sm: 3, md: 5 }} gap="300">
-                {Array.from({ length: 5 }).map((_, i) => (
+              <InlineGrid columns={{ xs: 3 }} gap="300">
+                {Array.from({ length: 3 }).map((_, i) => (
                   <SkeletonBodyText key={i} lines={2} />
                 ))}
               </InlineGrid>
@@ -193,6 +215,30 @@ export function StatsEmbedded({
         </BlockStack>
       ) : stats ? (
         <BlockStack gap="400">
+          {/* Primary KPIs — Confirmed & Canceled (hero emphasis) */}
+          <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
+            {primaryMetrics.map((metric) => (
+              <Card key={metric.id}>
+                <BlockStack gap="200">
+                  <InlineStack
+                    align="space-between"
+                    blockAlign="center"
+                    gap="200"
+                  >
+                    <Text variant="bodySm" tone="subdued" as="p">
+                      {metric.label}
+                    </Text>
+                    <Badge tone={metric.tone}>{metric.label}</Badge>
+                  </InlineStack>
+                  <Text variant="heading3xl" as="p">
+                    {metric.value}
+                  </Text>
+                </BlockStack>
+              </Card>
+            ))}
+          </InlineGrid>
+
+          {/* Secondary metrics + Reply Rate context */}
           <Card>
             <BlockStack gap="300">
               <InlineStack align="space-between" blockAlign="center" gap="200">
@@ -204,20 +250,21 @@ export function StatsEmbedded({
                 </Badge>
               </InlineStack>
 
-              <InlineGrid columns={{ xs: 2, sm: 3, md: 5 }} gap="300">
-                {summaryMetrics.map((metric) => (
+              <InlineGrid columns={{ xs: 3 }} gap="300">
+                {secondaryMetrics.map((metric) => (
                   <Box
                     key={metric.id}
-                    padding="200"
+                    padding="300"
                     background="bg-surface-secondary"
                     borderBlockEndWidth="100"
                     borderColor={resolveMetricBorderColor(metric.tone)}
+                    borderRadius="200"
                   >
                     <BlockStack gap="100">
                       <Text variant="bodySm" tone="subdued" as="p">
                         {metric.label}
                       </Text>
-                      <Text alignment="center" variant="heading3xl" as="p">
+                      <Text variant="headingXl" as="p">
                         {metric.value}
                       </Text>
                     </BlockStack>
@@ -227,6 +274,7 @@ export function StatsEmbedded({
             </BlockStack>
           </Card>
 
+          {/* Insights row: Savings + Usage */}
           <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
             <Card>
               <BlockStack gap="300">
@@ -247,7 +295,7 @@ export function StatsEmbedded({
                   borderColor="border-secondary"
                   paddingBlockStart="300"
                 >
-                  <BlockStack gap="050">
+                  <BlockStack gap="100">
                     <Text variant="bodyXs" tone="subdued" as="p">
                       {t('metrics.moneySaved.breakdownTitle')}
                     </Text>
@@ -302,6 +350,17 @@ export function StatsEmbedded({
               </BlockStack>
             </Card>
           </InlineGrid>
+
+          {/* Usage warning banner */}
+          {showUsageWarning && (
+            <Banner tone={usagePercent >= 95 ? 'critical' : 'warning'}>
+              <p>
+                {usagePercent >= 95
+                  ? t('metrics.usage.warningAtLimit')
+                  : t('metrics.usage.warningNearLimit')}
+              </p>
+            </Banner>
+          )}
         </BlockStack>
       ) : (
         <Card>
