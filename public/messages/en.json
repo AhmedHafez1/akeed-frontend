@@ -481,8 +481,14 @@
         "canceled": "Canceled",
         "sent": "Sent",
         "delivered": "Delivered",
-        "read": "Read"
+        "read": "Read",
+        "responded": "Customer Responded"
       },
+      "funnelTitle": "Verification Funnel",
+      "funnelSubtitle": "Step-by-step conversion from message sent to customer response.",
+      "conversionFromPrevious": "{value}% conversion",
+      "dropOff": "{value} drop-off",
+      "responseBreakdown": "Response Breakdown",
       "moneySaved": {
         "title": "Money Saved",
         "helpText": "Estimated savings from orders canceled before shipping.",

@@ -481,8 +481,14 @@
         "canceled": "تم الإلغاء",
         "sent": "تم الإرسال",
         "delivered": "وصلت",
-        "read": "تمت قراءتها"
+        "read": "تمت قراءتها",
+        "responded": "استجاب العميل"
       },
+      "funnelTitle": "مسار التأكيد",
+      "funnelSubtitle": "تحويل خطوة بخطوة من الإرسال إلى استجابة العميل.",
+      "conversionFromPrevious": "تحويل {value}%",
+      "dropOff": "{value} فقدان",
+      "responseBreakdown": "توزيع الاستجابات",
       "moneySaved": {
         "title": "التوفير",
         "helpText": "التوفير المقدّر من الطلبات التي أُلغيت قبل الشحن.",
