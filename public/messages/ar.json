@@ -473,7 +473,7 @@
       "subtitle": "لمحة مباشرة عن أداء تأكيد الطلبات.",
       "loading": "جارٍ تحميل المؤشرات...",
       "summaryTitle": "ملخص الأداء",
-      "replyRate": "معدل الرد {value}%",
+      "replyRate": "{value}% من العملاء قاموا بالرد ",
       "replyRateHelp": "نسبة التأكيدات المرسلة التي استجاب لها العميل.",
       "cards": {
         "pending": "بانتظار الرد",
@@ -482,13 +482,13 @@
         "sent": "تم الإرسال",
         "delivered": "وصلت",
         "read": "تمت قراءتها",
-        "responded": "استجاب العميل"
+        "responded": "استجاب",
+        "total": "الإجمالي"
       },
       "funnelTitle": "مسار التأكيد",
       "funnelSubtitle": "تحويل خطوة بخطوة من الإرسال إلى استجابة العميل.",
       "conversionFromPrevious": "تحويل {value}%",
       "dropOff": "{value} فقدان",
-      "responseBreakdown": "توزيع الاستجابات",
       "moneySaved": {
         "title": "التوفير",
         "helpText": "التوفير المقدّر من الطلبات التي أُلغيت قبل الشحن.",

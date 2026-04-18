@@ -4,7 +4,6 @@ import {
   BlockStack,
   Box,
   Card,
-  Divider,
   Icon,
   InlineGrid,
   InlineStack,
@@ -19,8 +18,7 @@ import {
   PackageFulfilledIcon,
   ViewIcon,
   ChatIcon,
-  CheckCircleIcon,
-  XCircleIcon,
+  ArrowRightIcon,
 } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import type {
@@ -38,19 +36,13 @@ interface StatsEmbeddedProps {
   onDateRangeFilterChange: (filter: DashboardStatsDateRange) => void
 }
 
-type PolarisBadgeTone =
-  | 'attention'
-  | 'critical'
-  | 'info'
-  | 'success'
-  | 'warning'
-  | undefined
+type PolarisTextTone = 'success' | 'critical'
 
 interface TopMetric {
-  id: 'sent' | 'confirmed' | 'canceled'
+  id: 'total' | 'confirmed' | 'canceled'
   label: string
   value: number
-  tone: PolarisBadgeTone
+  tone?: PolarisTextTone
 }
 
 interface FunnelStep {
@@ -113,10 +105,9 @@ export function StatsEmbedded({
   const topMetrics: TopMetric[] = stats
     ? [
         {
-          id: 'sent',
-          label: t('metrics.cards.sent'),
+          id: 'total',
+          label: t('metrics.cards.total'),
           value: stats.totals.sent,
-          tone: 'info',
         },
         {
           id: 'confirmed',
@@ -150,10 +141,7 @@ export function StatsEmbedded({
           label: t('metrics.cards.delivered'),
           value: stats.totals.delivered,
           icon: PackageFulfilledIcon,
-          conversionPercent: computeConversion(
-            stats.totals.delivered,
-            stats.totals.sent
-          ),
+          conversionPercent: null,
           dropOff: computeDropOff(stats.totals.delivered, stats.totals.sent),
         },
         {
@@ -161,10 +149,7 @@ export function StatsEmbedded({
           label: t('metrics.cards.read'),
           value: stats.totals.read,
           icon: ViewIcon,
-          conversionPercent: computeConversion(
-            stats.totals.read,
-            stats.totals.delivered
-          ),
+          conversionPercent: null,
           dropOff: computeDropOff(stats.totals.read, stats.totals.delivered),
         },
         {
@@ -177,13 +162,6 @@ export function StatsEmbedded({
         },
       ]
     : []
-
-  const confirmedPercent = stats
-    ? computeConversion(stats.totals.confirmed, responded)
-    : '—'
-  const canceledPercent = stats
-    ? computeConversion(stats.totals.canceled, responded)
-    : '—'
 
   const usagePercent = stats
     ? Math.min(
@@ -263,22 +241,18 @@ export function StatsEmbedded({
           {/* Row 1: Top KPIs — Total (Sent), Confirmed, Canceled */}
           <InlineGrid columns={{ xs: 1, md: 3 }} gap="400">
             {topMetrics.map((metric) => (
-              <Card key={metric.id}>
-                <BlockStack gap="200">
-                  <InlineStack
-                    align="space-between"
-                    blockAlign="center"
-                    gap="200"
-                  >
-                    <Text variant="bodySm" tone="subdued" as="p">
-                      {metric.label}
-                    </Text>
-                    <Badge tone={metric.tone}>{metric.label}</Badge>
-                  </InlineStack>
-                  <Text variant="heading3xl" as="p">
+              <Card
+                key={metric.id}
+                background={`bg-surface-${metric.tone ?? 'secondary'}`}
+              >
+                <InlineStack align="space-between" blockAlign="center">
+                  <Text variant="headingLg" as="p" tone={metric.tone}>
+                    {metric.label}
+                  </Text>
+                  <Text variant="heading2xl" as="h2" tone={metric.tone}>
                     {metric.value}
                   </Text>
-                </BlockStack>
+                </InlineStack>
               </Card>
             ))}
           </InlineGrid>
@@ -286,112 +260,53 @@ export function StatsEmbedded({
           {/* Row 2: Verification Funnel */}
           <Card>
             <BlockStack gap="400">
-              <BlockStack gap="050">
-                <Text variant="headingSm" as="h3">
-                  {t('metrics.funnelTitle')}
-                </Text>
-                <Text variant="bodySm" tone="subdued" as="p">
-                  {t('metrics.funnelSubtitle')}
-                </Text>
-              </BlockStack>
+              <InlineStack align="space-between" blockAlign="stretch">
+                <BlockStack gap="050">
+                  <Text variant="headingSm" as="h3">
+                    {t('metrics.funnelTitle')}
+                  </Text>
+                  <Text variant="bodySm" tone="subdued" as="p">
+                    {t('metrics.funnelSubtitle')}
+                  </Text>
+                </BlockStack>
+
+                <Badge
+                  tone={resolveConversionTone(
+                    funnelSteps[3].conversionPercent!
+                  )}
+                >
+                  {t('metrics.replyRate', {
+                    value: funnelSteps[3].conversionPercent!,
+                  })}
+                </Badge>
+              </InlineStack>
 
               {/* Funnel steps: horizontal on md+, stacked on xs */}
               <InlineGrid columns={{ xs: 1, md: 4 }} gap="300">
                 {funnelSteps.map((step) => (
-                  <Box
-                    key={step.id}
-                    padding="300"
-                    background="bg-surface-secondary"
-                    borderRadius="200"
-                  >
-                    <BlockStack gap="200">
-                      <InlineStack gap="200" blockAlign="center">
-                        <Icon source={step.icon} tone="subdued" />
-                        <Text variant="bodySm" tone="subdued" as="p">
+                  <InlineStack key={step.id} align="space-between">
+                    <Box
+                      padding="300"
+                      background="bg-surface-secondary"
+                      borderRadius="200"
+                      minWidth="70%"
+                    >
+                      <InlineStack blockAlign="center" align="space-between">
+                        <Text variant="bodyMd" tone="subdued" as="p">
                           {step.label}
                         </Text>
+                        <Text variant="heading2xl" as="p">
+                          {step.value}
+                        </Text>
                       </InlineStack>
-                      <Text variant="headingXl" as="p">
-                        {step.value}
-                      </Text>
-                      {step.conversionPercent !== null && (
-                        <BlockStack gap="100">
-                          <Badge
-                            tone={resolveConversionTone(step.conversionPercent)}
-                          >
-                            {t('metrics.conversionFromPrevious', {
-                              value: step.conversionPercent,
-                            })}
-                          </Badge>
-                          <Text variant="bodyXs" tone="subdued" as="p">
-                            {t('metrics.dropOff', {
-                              value: step.dropOff ?? 0,
-                            })}
-                          </Text>
-                        </BlockStack>
-                      )}
-                    </BlockStack>
-                  </Box>
+                    </Box>
+
+                    {step.id !== 'responded' && (
+                      <Icon source={ArrowRightIcon} />
+                    )}
+                  </InlineStack>
                 ))}
               </InlineGrid>
-
-              {/* Response Breakdown: Confirmed vs Canceled split */}
-              <Divider />
-              <BlockStack gap="200">
-                <Text variant="headingSm" as="h4">
-                  {t('metrics.responseBreakdown')}
-                </Text>
-                <InlineGrid columns={{ xs: 1, md: 2 }} gap="300">
-                  <Box
-                    padding="300"
-                    background="bg-surface-secondary"
-                    borderRadius="200"
-                  >
-                    <InlineStack gap="200" blockAlign="center">
-                      <Icon source={CheckCircleIcon} tone="success" />
-                      <BlockStack gap="100">
-                        <Text variant="bodySm" tone="subdued" as="p">
-                          {t('metrics.cards.confirmed')}
-                        </Text>
-                        <InlineStack gap="200" blockAlign="center">
-                          <Text variant="headingLg" as="p">
-                            {stats.totals.confirmed}
-                          </Text>
-                          <Badge tone="success">
-                            {t('metrics.conversionFromPrevious', {
-                              value: confirmedPercent,
-                            })}
-                          </Badge>
-                        </InlineStack>
-                      </BlockStack>
-                    </InlineStack>
-                  </Box>
-                  <Box
-                    padding="300"
-                    background="bg-surface-secondary"
-                    borderRadius="200"
-                  >
-                    <InlineStack gap="200" blockAlign="center">
-                      <Icon source={XCircleIcon} tone="critical" />
-                      <BlockStack gap="100">
-                        <Text variant="bodySm" tone="subdued" as="p">
-                          {t('metrics.cards.canceled')}
-                        </Text>
-                        <InlineStack gap="200" blockAlign="center">
-                          <Text variant="headingLg" as="p">
-                            {stats.totals.canceled}
-                          </Text>
-                          <Badge tone="critical">
-                            {t('metrics.conversionFromPrevious', {
-                              value: canceledPercent,
-                            })}
-                          </Badge>
-                        </InlineStack>
-                      </BlockStack>
-                    </InlineStack>
-                  </Box>
-                </InlineGrid>
-              </BlockStack>
             </BlockStack>
           </Card>
 
