@@ -146,7 +146,7 @@ export function StatsEmbedded({
           value: stats.totals.delivered,
           icon: PackageFulfilledIcon,
           conversionPercent: null,
-          dropOff: null
+          dropOff: null,
         },
         {
           id: 'read',
@@ -154,7 +154,7 @@ export function StatsEmbedded({
           value: stats.totals.read,
           icon: ViewIcon,
           conversionPercent: null,
-          dropOff: null
+          dropOff: null,
         },
         {
           id: 'responded',
@@ -245,9 +245,13 @@ export function StatsEmbedded({
           {/* Row 1: Top KPIs — Total (Sent), Confirmed, Canceled */}
           <InlineGrid columns={{ xs: 1, md: 3 }} gap="400">
             {topMetrics.map((metric) => (
-              <Card
-                key={metric.id}
-                background={`bg-surface-${metric.tone ?? 'secondary'}`}
+              <Box
+                key={metric.id}   
+                padding="300"
+                background="bg-surface-secondary"
+                borderRadius="200"
+                borderWidth="025"
+                borderColor="border-tertiary"
               >
                 <InlineStack align="space-between" blockAlign="center">
                   <Text variant="headingLg" as="p" tone={metric.tone}>
@@ -257,7 +261,7 @@ export function StatsEmbedded({
                     {metric.value}
                   </Text>
                 </InlineStack>
-              </Card>
+              </Box>
             ))}
           </InlineGrid>
 
@@ -274,11 +278,12 @@ export function StatsEmbedded({
                   </Text>
                 </BlockStack>
 
-                <Text tone={resolveConversionTone(
+                <Text
+                  tone={resolveConversionTone(
                     funnelSteps[3].conversionPercent!
                   )}
-                  as='h6'
-                  variant='bodyLg'
+                  as="h6"
+                  variant="bodyLg"  
                 >
                   {t('metrics.replyRate', {
                     value: funnelSteps[3].conversionPercent!,
@@ -298,8 +303,8 @@ export function StatsEmbedded({
                         padding="300"
                         background="bg-surface-secondary"
                         borderRadius="200"
-                        borderWidth='025'
-                        borderColor='border-tertiary'
+                        borderWidth="025"
+                        borderColor="border-tertiary"
                       >
                         <InlineStack blockAlign="center" align="space-between">
                           <Text variant="headingMd" tone="subdued" as="p">
@@ -315,12 +320,12 @@ export function StatsEmbedded({
                     {step.id !== 'responded' && (
                       <>
                         <div className="flex justify-center md:hidden">
-                          <Icon source={ArrowDownIcon} tone='subdued'/>
+                          <Icon source={ArrowDownIcon} tone="subdued" />
                         </div>
                         <div className="hidden md:flex md:items-center">
                           <Icon
                             source={isRTL ? ArrowLeftIcon : ArrowRightIcon}
-                            tone='subdued'
+                            tone="subdued"
                           />
                         </div>
                       </>
@@ -335,17 +340,17 @@ export function StatsEmbedded({
           <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
             <Card>
               <BlockStack gap="300">
-                <BlockStack gap="050">
-                  <Text variant="headingSm" as="h3">
+                <InlineStack align="space-between" blockAlign="center">
+                  <Text variant="headingSm" tone="subdued" as="p">
                     {t('metrics.moneySaved.title')}
                   </Text>
-                  <Text variant="heading2xl" as="p">
+                  <Text variant="headingLg" tone="subdued" as="p">
                     {formatMoney(
                       stats.savings.money_saved,
                       stats.savings.currency
                     )}
                   </Text>
-                </BlockStack>
+                </InlineStack>
 
                 <Box
                   borderBlockStartWidth="025"
@@ -370,14 +375,14 @@ export function StatsEmbedded({
 
             <Card>
               <BlockStack gap="300">
-                <BlockStack gap="050">
-                  <Text variant="headingSm" as="h3">
+                <InlineStack align="space-between" blockAlign="center">
+                  <Text variant="headingSm" tone="subdued" as="p">
                     {t('metrics.usage.title')}
                   </Text>
-                  <Text variant="heading2xl" as="p">
+                  <Text variant="headingLg" as="p" tone="subdued">
                     {stats.usage.used} / {stats.usage.limit}
                   </Text>
-                </BlockStack>
+                </InlineStack>
 
                 <Box
                   borderBlockStartWidth="025"
