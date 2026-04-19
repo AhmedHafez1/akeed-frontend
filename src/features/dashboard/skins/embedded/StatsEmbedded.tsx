@@ -39,10 +39,10 @@ interface StatsEmbeddedProps {
   onDateRangeFilterChange: (filter: DashboardStatsDateRange) => void
 }
 
-type PolarisTextTone = 'success' | 'critical'
+type PolarisTextTone = 'success' | 'critical' | 'caution' | 'subdued'
 
 interface TopMetric {
-  id: 'total' | 'confirmed' | 'canceled'
+  id: 'total' | 'confirmed' | 'canceled' | 'pending'
   label: string
   value: number
   tone?: PolarisTextTone
@@ -124,6 +124,12 @@ export function StatsEmbedded({
           label: t('metrics.cards.canceled'),
           value: stats.totals.canceled,
           tone: 'critical',
+        },
+        {
+          id : 'pending',
+          label: t('metrics.cards.pending'),
+          value: stats.totals.sent - stats.totals.confirmed - stats.totals.canceled,
+          tone: 'caution',
         },
       ]
     : []
@@ -243,7 +249,7 @@ export function StatsEmbedded({
       ) : stats ? (
         <BlockStack gap="400">
           {/* Row 1: Top KPIs — Total (Sent), Confirmed, Canceled */}
-          <InlineGrid columns={{ xs: 1, md: 3 }} gap="400">
+          <InlineGrid columns={{ xs: 1, md: 4 }} gap="400">
             {topMetrics.map((metric) => (
               <Box
                 key={metric.id}   
