@@ -146,6 +146,7 @@ export function StatsEmbedded({
           value: stats.totals.delivered,
           icon: PackageFulfilledIcon,
           conversionPercent: null,
+          dropOff: null
         },
         {
           id: 'read',
@@ -153,6 +154,7 @@ export function StatsEmbedded({
           value: stats.totals.read,
           icon: ViewIcon,
           conversionPercent: null,
+          dropOff: null
         },
         {
           id: 'responded',
