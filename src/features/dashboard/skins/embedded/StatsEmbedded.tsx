@@ -68,11 +68,11 @@ function computeDropOff(current: number, previous: number): number {
 
 function resolveConversionTone(
   percent: string
-): 'critical' | 'success' | 'warning' {
-  if (percent === '—') return 'warning'
+): 'critical' | 'success' | 'caution' {
+  if (percent === '—') return 'caution'
   const value = parseInt(percent, 10)
   if (value >= 80) return 'success'
-  if (value >= 55) return 'warning'
+  if (value >= 55) return 'caution'
   return 'critical'
 }
 
@@ -146,7 +146,6 @@ export function StatsEmbedded({
           value: stats.totals.delivered,
           icon: PackageFulfilledIcon,
           conversionPercent: null,
-          dropOff: computeDropOff(stats.totals.delivered, stats.totals.sent),
         },
         {
           id: 'read',
@@ -154,14 +153,13 @@ export function StatsEmbedded({
           value: stats.totals.read,
           icon: ViewIcon,
           conversionPercent: null,
-          dropOff: computeDropOff(stats.totals.read, stats.totals.delivered),
         },
         {
           id: 'responded',
           label: t('metrics.cards.responded'),
           value: responded,
           icon: ChatIcon,
-          conversionPercent: computeConversion(responded, stats.totals.read),
+          conversionPercent: computeConversion(responded, stats.totals.sent),
           dropOff: computeDropOff(responded, stats.totals.read),
         },
       ]
@@ -264,7 +262,7 @@ export function StatsEmbedded({
           {/* Row 2: Verification Funnel */}
           <Card>
             <BlockStack gap="400">
-              <InlineStack align="space-between" blockAlign="stretch">
+              <InlineStack align="space-between" blockAlign="center">
                 <BlockStack gap="050">
                   <Text variant="headingSm" as="h3">
                     {t('metrics.funnelTitle')}
@@ -274,15 +272,16 @@ export function StatsEmbedded({
                   </Text>
                 </BlockStack>
 
-                <Badge
-                  tone={resolveConversionTone(
+                <Text tone={resolveConversionTone(
                     funnelSteps[3].conversionPercent!
                   )}
+                  as='h6'
+                  variant='bodyLg'
                 >
                   {t('metrics.replyRate', {
                     value: funnelSteps[3].conversionPercent!,
                   })}
-                </Badge>
+                </Text>
               </InlineStack>
 
               {/* Funnel steps: horizontal on md+, stacked on xs */}
