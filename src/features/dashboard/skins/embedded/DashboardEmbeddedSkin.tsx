@@ -129,8 +129,6 @@ export function DashboardEmbeddedSkin({
                         {t('verificationSection.subtitle')}
                       </Text>
                     </BlockStack>
-                  </InlineStack>
-
                   {/* Status filter pills */}
                   <Box>
                     <InlineStack gap="200" wrap>
@@ -148,6 +146,8 @@ export function DashboardEmbeddedSkin({
                       </ButtonGroup>
                     </InlineStack>
                   </Box>
+                  </InlineStack>
+
                 </BlockStack>
 
                 {/* Table content */}
