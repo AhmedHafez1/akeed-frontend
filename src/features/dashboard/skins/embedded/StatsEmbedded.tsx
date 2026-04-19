@@ -18,9 +18,12 @@ import {
   PackageFulfilledIcon,
   ViewIcon,
   ChatIcon,
+  ArrowDownIcon,
+  ArrowLeftIcon,
   ArrowRightIcon,
 } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
+import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import type {
   DashboardStats,
   DashboardStatsDateRange,
@@ -101,6 +104,7 @@ export function StatsEmbedded({
   onDateRangeFilterChange,
 }: StatsEmbeddedProps) {
   const t = useTranslations('dashboard')
+  const { isRTL } = useLocaleInfo()
 
   const topMetrics: TopMetric[] = stats
     ? [
@@ -284,27 +288,40 @@ export function StatsEmbedded({
               {/* Funnel steps: horizontal on md+, stacked on xs */}
               <InlineGrid columns={{ xs: 1, md: 4 }} gap="300">
                 {funnelSteps.map((step) => (
-                  <InlineStack key={step.id} align="space-between">
-                    <Box
-                      padding="300"
-                      background="bg-surface-secondary"
-                      borderRadius="200"
-                      minWidth="70%"
-                    >
-                      <InlineStack blockAlign="center" align="space-between">
-                        <Text variant="bodyMd" tone="subdued" as="p">
-                          {step.label}
-                        </Text>
-                        <Text variant="heading2xl" as="p">
-                          {step.value}
-                        </Text>
-                      </InlineStack>
-                    </Box>
+                  <div
+                    key={step.id}
+                    className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
+                  >
+                    <div className="w-full md:min-w-[70%]">
+                      <Box
+                        padding="300"
+                        background="bg-surface-secondary"
+                        borderRadius="200"
+                      >
+                        <InlineStack blockAlign="center" align="space-between">
+                          <Text variant="bodyMd" tone="subdued" as="p">
+                            {step.label}
+                          </Text>
+                          <Text variant="heading2xl" as="p">
+                            {step.value}
+                          </Text>
+                        </InlineStack>
+                      </Box>
+                    </div>
 
                     {step.id !== 'responded' && (
-                      <Icon source={ArrowRightIcon} />
+                      <>
+                        <div className="flex justify-center md:hidden">
+                          <Icon source={ArrowDownIcon} />
+                        </div>
+                        <div className="hidden md:flex md:items-center">
+                          <Icon
+                            source={isRTL ? ArrowLeftIcon : ArrowRightIcon}
+                          />
+                        </div>
+                      </>
                     )}
-                  </InlineStack>
+                  </div>
                 ))}
               </InlineGrid>
             </BlockStack>
