@@ -298,9 +298,11 @@ export function StatsEmbedded({
                         padding="300"
                         background="bg-surface-secondary"
                         borderRadius="200"
+                        borderWidth='025'
+                        borderColor='border-tertiary'
                       >
                         <InlineStack blockAlign="center" align="space-between">
-                          <Text variant="bodyMd" tone="subdued" as="p">
+                          <Text variant="headingMd" tone="subdued" as="p">
                             {step.label}
                           </Text>
                           <Text variant="heading2xl" as="p">
@@ -313,11 +315,12 @@ export function StatsEmbedded({
                     {step.id !== 'responded' && (
                       <>
                         <div className="flex justify-center md:hidden">
-                          <Icon source={ArrowDownIcon} />
+                          <Icon source={ArrowDownIcon} tone='subdued'/>
                         </div>
                         <div className="hidden md:flex md:items-center">
                           <Icon
                             source={isRTL ? ArrowLeftIcon : ArrowRightIcon}
+                            tone='subdued'
                           />
                         </div>
                       </>
