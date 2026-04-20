@@ -67,6 +67,7 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+  allowedDevOrigins: ['*'],
 }
 
 export default withNextIntl(nextConfig)
