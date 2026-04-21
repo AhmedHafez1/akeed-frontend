@@ -13,9 +13,9 @@ import {
   Text,
 } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
-import { VerificationsTableEmbedded } from './VerificationsTableEmbedded'
-import { StatsEmbedded } from './StatsEmbedded'
 import { DashboardEmptyState } from './components/DashboardEmptyState'
+import { StatsEmbedded } from './StatsEmbedded'
+import { VerificationsTableEmbedded } from './VerificationsTableEmbedded'
 import type { DashboardSkinProps } from '../../domain/dashboard.types'
 
 const SKELETON_ROW_COUNT = 5
@@ -96,7 +96,6 @@ export function DashboardEmbeddedSkin({
           </Banner>
         )}
 
-        {/* ── Metrics section ─────────────────────────────────────── */}
         <Layout>
           <Layout.Section>
             <StatsEmbedded
@@ -109,12 +108,10 @@ export function DashboardEmbeddedSkin({
           </Layout.Section>
         </Layout>
 
-        {/* ── Verifications section ───────────────────────────────── */}
         <Layout>
           <Layout.Section>
             <Card>
               <BlockStack gap="400">
-                {/* Section header + filters */}
                 <BlockStack gap="300">
                   <InlineStack
                     align="space-between"
@@ -122,35 +119,33 @@ export function DashboardEmbeddedSkin({
                     gap="300"
                   >
                     <BlockStack gap="050">
-                      <Text variant="headingMd" tone='subdued' as="h2">
+                      <Text variant="headingMd" tone="subdued" as="h2">
                         {t('verificationSection.title')}
                       </Text>
                       <Text variant="bodySm" tone="subdued" as="p">
                         {t('verificationSection.subtitle')}
                       </Text>
                     </BlockStack>
-                  {/* Status filter pills */}
-                  <Box>
-                    <InlineStack gap="200" wrap>
-                      <ButtonGroup>
-                        {statusFilters.map((filter) => (
-                          <Button
-                            key={filter.id}
-                            pressed={statusFilter === filter.id}
-                            onClick={() => onStatusFilterChange(filter.id)}
-                            size="slim"
-                          >
-                            {filter.label}
-                          </Button>
-                        ))}
-                      </ButtonGroup>
-                    </InlineStack>
-                  </Box>
-                  </InlineStack>
 
+                    <Box>
+                      <InlineStack gap="200" wrap>
+                        <ButtonGroup>
+                          {statusFilters.map((filter) => (
+                            <Button
+                              key={filter.id}
+                              pressed={statusFilter === filter.id}
+                              onClick={() => onStatusFilterChange(filter.id)}
+                              size="slim"
+                            >
+                              {filter.label}
+                            </Button>
+                          ))}
+                        </ButtonGroup>
+                      </InlineStack>
+                    </Box>
+                  </InlineStack>
                 </BlockStack>
 
-                {/* Table content */}
                 {isVerificationsLoading ? (
                   <VerificationsTableSkeleton />
                 ) : hasVerifications ? (
@@ -192,7 +187,7 @@ export function DashboardEmbeddedSkin({
                       ),
                       nextStepHint: t('emptyState.onboarding.nextStepHint'),
                     }}
-                    showTestSection={true}
+                    showTestSection
                     isSendingTest={isSendingTest}
                     onSendTestVerification={onSendTestVerification}
                   />
