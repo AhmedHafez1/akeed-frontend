@@ -251,13 +251,9 @@ export function StatsEmbedded({
           {/* Row 1: Top KPIs — Total (Sent), Confirmed, Canceled */}
           <InlineGrid columns={{ xs: 1, md: 4 }} gap="400">
             {topMetrics.map((metric) => (
-              <Box
+              <Card
                 key={metric.id}   
                 padding="300"
-                background="bg-surface-secondary"
-                borderRadius="200"
-                borderWidth="025"
-                borderColor="border-tertiary"
               >
                 <InlineStack align="space-between" blockAlign="center">
                   <Text variant="headingLg" as="p" tone={metric.tone}>
@@ -267,7 +263,7 @@ export function StatsEmbedded({
                     {metric.value}
                   </Text>
                 </InlineStack>
-              </Box>
+              </Card>
             ))}
           </InlineGrid>
 
