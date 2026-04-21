@@ -276,7 +276,7 @@ export function StatsEmbedded({
             <BlockStack gap="400">
               <InlineStack align="space-between" blockAlign="center">
                 <BlockStack gap="050">
-                  <Text variant="headingSm" as="h3">
+                  <Text variant="headingSm" tone="subdued" as="h3">
                     {t('metrics.funnelTitle')}
                   </Text>
                   <Text variant="bodySm" tone="subdued" as="p">

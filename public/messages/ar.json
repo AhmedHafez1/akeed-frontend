@@ -464,7 +464,7 @@
     },
     "verificationSection": {
       "title": "تأكيدات الطلبات",
-      "subtitle": "آخر عمليات التأكيد على القنوات المفعلة.",
+      "subtitle": "أحدث عمليات التأكيد لطلبات الدفع عند الاستلام",
       "loading": "جارٍ تحميل التأكيدات...",
       "emptyHeading": "لا توجد تأكيدات"
     },
@@ -486,18 +486,16 @@
         "total": "الإجمالي"
       },
       "funnelTitle": "مسار التأكيد",
-      "funnelSubtitle": "تحويل خطوة بخطوة من الإرسال إلى استجابة العميل.",
+      "funnelSubtitle": "من الإرسال إلى استجابة العميل",
       "conversionFromPrevious": "تحويل {value}%",
       "dropOff": "{value} فقدان",
       "moneySaved": {
         "title": "التوفير",
-        "helpText": "التوفير المقدّر من الطلبات التي أُلغيت قبل الشحن.",
         "breakdownTitle": "طريقة الاحتساب",
         "breakdownLine": "{count} طلب ملغي × {cost} {currency} متوسط شحن"
       },
       "usage": {
         "title": "استهلاك الباقة",
-        "helpText": "عدد التأكيدات المستخدمة من حصة خطتك الشهرية.",
         "monthlyLimit": "الحد الشهري",
         "used": "استخدمت {value}%",
         "warningNearLimit": "اقتربت من حد خطتك. فكّر في الترقية.",

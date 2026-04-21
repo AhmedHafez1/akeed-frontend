@@ -464,7 +464,7 @@
     },
     "verificationSection": {
       "title": "Order Verifications",
-      "subtitle": "Latest verification events across your active channels.",
+      "subtitle": "Latest COD verifications across your store.",
       "loading": "Loading verifications...",
       "emptyHeading": "No verifications"
     },
@@ -486,18 +486,16 @@
         "total": "Total"
       },
       "funnelTitle": "Verification Funnel",
-      "funnelSubtitle": "Step-by-step conversion from message sent to customer response.",
+      "funnelSubtitle": "From sending message to customer response.",
       "conversionFromPrevious": "{value}% conversion",
       "dropOff": "{value} drop-off",
       "moneySaved": {
         "title": "Money Saved",
-        "helpText": "Estimated savings from orders canceled before shipping.",
         "breakdownTitle": "How it's calculated",
         "breakdownLine": "{count} canceled × {cost} {currency} avg. shipping"
       },
       "usage": {
         "title": "Plan Usage",
-        "helpText": "Verifications used out of your monthly plan allowance.",
         "monthlyLimit": "Monthly Limit",
         "used": "{value}% Used",
         "warningNearLimit": "You're approaching your plan limit. Consider upgrading.",

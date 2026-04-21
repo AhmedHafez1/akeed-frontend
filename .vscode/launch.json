@@ -45,6 +45,13 @@
       "name": "Full Stack: Shopify + Backend",
       "configurations": [
         "Frontend: Shopify CLI (Dev)",
+        "Backend: NestJS (Debug 9230)"
+      ]
+    },
+    {
+      "name": "Full Stack: Shopify + Backend + Frontend Attach",
+      "configurations": [
+        "Frontend: Shopify CLI (Dev)",
         "Frontend: Attach (Next.js)",
         "Backend: NestJS (Debug 9230)"
       ]

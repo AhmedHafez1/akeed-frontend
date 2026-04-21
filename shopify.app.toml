@@ -2,7 +2,7 @@
 
 client_id = "f1f4012b31f1bb37c897ee284a501623"
 name = "Akeed"
-application_url = "https://get-akeed-dev.vercel.app"
+application_url = "http://localhost:3001"
 embedded = true
 
 [build]

@@ -122,7 +122,7 @@ export function DashboardEmbeddedSkin({
                     gap="300"
                   >
                     <BlockStack gap="050">
-                      <Text variant="headingMd" as="h2">
+                      <Text variant="headingMd" tone='subdued' as="h2">
                         {t('verificationSection.title')}
                       </Text>
                       <Text variant="bodySm" tone="subdued" as="p">
