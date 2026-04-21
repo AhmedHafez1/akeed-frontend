@@ -5,6 +5,7 @@ import {
   Button,
   ButtonGroup,
   Card,
+  Divider,
   IndexTable,
   InlineStack,
   Layout,
@@ -148,62 +149,75 @@ export function DashboardEmbeddedSkin({
 
                 {isVerificationsLoading ? (
                   <VerificationsTableSkeleton />
-                ) : hasVerifications ? (
-                  <BlockStack gap="300">
-                    <VerificationsTableEmbedded verifications={verifications} />
-                    {hasMoreVerifications && (
-                      <InlineStack align="center">
-                        <Button
-                          onClick={onLoadMoreVerifications}
-                          loading={isLoadingMoreVerifications}
-                        >
-                          {isLoadingMoreVerifications
-                            ? t('table.loadingMore')
-                            : t('table.loadMore')}
-                        </Button>
-                      </InlineStack>
-                    )}
-                  </BlockStack>
-                ) : statusFilter === 'all' ? (
-                  <DashboardEmptyState
-                    messages={{
-                      heading: t('emptyState.onboarding.heading'),
-                      activeDescription: t(
-                        'emptyState.onboarding.activeDescription'
-                      ),
-                      step1: t('emptyState.onboarding.step1'),
-                      step2: t('emptyState.onboarding.step2'),
-                      step3: t('emptyState.onboarding.step3'),
-                      testSectionHeading: t(
-                        'emptyState.onboarding.testSectionHeading'
-                      ),
-                      testPhoneLabel: t('emptyState.onboarding.testPhoneLabel'),
-                      testPhonePlaceholder: t(
-                        'emptyState.onboarding.testPhonePlaceholder'
-                      ),
-                      testSendLabel: t('emptyState.onboarding.testSendLabel'),
-                      testSendingLabel: t(
-                        'emptyState.onboarding.testSendingLabel'
-                      ),
-                      nextStepHint: t('emptyState.onboarding.nextStepHint'),
-                    }}
-                    showTestSection
-                    isSendingTest={isSendingTest}
-                    onSendTestVerification={onSendTestVerification}
-                  />
                 ) : (
-                  <Box padding="400">
-                    <BlockStack gap="200" inlineAlign="center">
-                      <Text
-                        as="p"
-                        tone="subdued"
-                        variant="bodySm"
-                        alignment="center"
-                      >
-                        {emptyVerificationsMessage}
-                      </Text>
+                  <>
+                    <BlockStack gap="300">
+                      <VerificationsTableEmbedded
+                        verifications={verifications}
+                      />
+                      {hasMoreVerifications && (
+                        <InlineStack align="center">
+                          <Button
+                            onClick={onLoadMoreVerifications}
+                            loading={isLoadingMoreVerifications}
+                          >
+                            {isLoadingMoreVerifications
+                              ? t('table.loadingMore')
+                              : t('table.loadMore')}
+                          </Button>
+                        </InlineStack>
+                      )}
                     </BlockStack>
-                  </Box>
+
+                    <Divider />
+
+                    {statusFilter === 'all' ? (
+                      <DashboardEmptyState
+                        messages={{
+                          heading: t('emptyState.onboarding.heading'),
+                          activeDescription: t(
+                            'emptyState.onboarding.activeDescription'
+                          ),
+                          step1: t('emptyState.onboarding.step1'),
+                          step2: t('emptyState.onboarding.step2'),
+                          step3: t('emptyState.onboarding.step3'),
+                          testSectionHeading: t(
+                            'emptyState.onboarding.testSectionHeading'
+                          ),
+                          testPhoneLabel: t(
+                            'emptyState.onboarding.testPhoneLabel'
+                          ),
+                          testPhonePlaceholder: t(
+                            'emptyState.onboarding.testPhonePlaceholder'
+                          ),
+                          testSendLabel: t(
+                            'emptyState.onboarding.testSendLabel'
+                          ),
+                          testSendingLabel: t(
+                            'emptyState.onboarding.testSendingLabel'
+                          ),
+                          nextStepHint: t('emptyState.onboarding.nextStepHint'),
+                        }}
+                        showTestSection
+                        isSendingTest={isSendingTest}
+                        onSendTestVerification={onSendTestVerification}
+                        hasVerifications={hasVerifications}
+                      />
+                    ) : (
+                      <Box padding="400">
+                        <BlockStack gap="200" inlineAlign="center">
+                          <Text
+                            as="p"
+                            tone="subdued"
+                            variant="bodySm"
+                            alignment="center"
+                          >
+                            {emptyVerificationsMessage}
+                          </Text>
+                        </BlockStack>
+                      </Box>
+                    )}
+                  </>
                 )}
               </BlockStack>
             </Card>

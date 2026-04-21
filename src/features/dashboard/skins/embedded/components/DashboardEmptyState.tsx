@@ -35,6 +35,7 @@ interface DashboardEmptyStateProps {
   showTestSection?: boolean
   isSendingTest?: boolean
   onSendTestVerification?: (customerPhone: string) => void
+  hasVerifications?: boolean
 }
 
 export function DashboardEmptyState({
@@ -42,6 +43,7 @@ export function DashboardEmptyState({
   showTestSection = false,
   isSendingTest = false,
   onSendTestVerification,
+  hasVerifications = false,
 }: DashboardEmptyStateProps) {
   const [testPhone, setTestPhone] = useState<E164Value | undefined>()
 
@@ -56,30 +58,35 @@ export function DashboardEmptyState({
     <Box padding="400" background="bg-surface-secondary" borderRadius="200">
       <BlockStack gap="500">
         {/* Header */}
-        <BlockStack gap="200">
-          <Text as="h3" variant="headingMd">
-            {messages.heading}
-          </Text>
-          <Text as="p" tone="subdued" variant="bodyMd">
-            {messages.activeDescription}
-          </Text>
-        </BlockStack>
 
-        {/* How it works — numbered steps */}
-        <BlockStack gap="300">
-          <EmptyStateStep icon={OrderIcon} text={messages.step1} step={1} />
-          <EmptyStateStep icon={SendIcon} text={messages.step2} step={2} />
-          <EmptyStateStep
-            icon={CheckCircleIcon}
-            text={messages.step3}
-            step={3}
-          />
-        </BlockStack>
+        {!hasVerifications && (
+          <>
+            <BlockStack gap="200">
+              <Text as="h3" variant="headingMd">
+                {messages.heading}
+              </Text>
+              <Text as="p" tone="subdued" variant="bodyMd">
+                {messages.activeDescription}
+              </Text>
+            </BlockStack>
+
+            {/* How it works — numbered steps */}
+            <BlockStack gap="300">
+              <EmptyStateStep icon={OrderIcon} text={messages.step1} step={1} />
+              <EmptyStateStep icon={SendIcon} text={messages.step2} step={2} />
+              <EmptyStateStep
+                icon={CheckCircleIcon}
+                text={messages.step3}
+                step={3}
+              />
+            </BlockStack>
+            <Divider />
+          </>
+        )}
 
         {/* Test verification section */}
         {showTestSection && onSendTestVerification && (
           <>
-            <Divider />
             <BlockStack gap="300">
               <BlockStack gap="100">
                 <Text as="h4" variant="headingSm">
