@@ -479,6 +479,8 @@
         "pending": "بانتظار الرد",
         "confirmed": "تم التأكيد",
         "canceled": "تم الإلغاء",
+        "awaitingResponse": "بانتظار الرد",
+        "responseRate": "معدل الرد",
         "sent": "تم الإرسال",
         "delivered": "وصلت",
         "read": "تمت قراءتها",
