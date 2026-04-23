@@ -21,11 +21,11 @@ export function LogoTicker() {
   const shouldReduceMotion = useReducedMotion()
 
   return (
-    <motion.div className="overflow-hidden border-y border-gray-200 bg-linear-to-r from-gray-50 to-white py-4">
+    <motion.div className="overflow-hidden rounded-2xl border border-gray-200/80 bg-linear-to-r from-gray-50 via-white to-gray-50/80 py-4 shadow-sm shadow-slate-200/50 backdrop-blur-sm">
       <div className="container mx-auto">
-        <div className="flex overflow-hidden mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+        <div className="flex overflow-hidden mask-[linear-gradient(to_right,transparent_0,black_10%,black_90%,transparent_100%)]">
           <motion.div
-            className="flex flex-none gap-16 px-8" // Use px instead of pr to keep spacing even on both sides
+            className="flex flex-none items-center gap-12 px-12 sm:gap-14 sm:px-14"
             animate={
               shouldReduceMotion
                 ? { x: '0%' }
@@ -43,14 +43,14 @@ export function LogoTicker() {
             {[...logos, ...logos].map((logo, index) => (
               <div
                 key={`${logo.name}-${index}`}
-                className="flex shrink-0 items-center"
+                className="flex h-12 min-w-[124px] shrink-0 items-center justify-center px-2"
               >
                 <Image
                   src={logo.src}
                   alt={logo.name}
                   width={140}
                   height={40}
-                  className="h-10 w-auto object-contain opacity-70 transition-all duration-300 hover:opacity-100"
+                  className="max-h-8 w-auto object-contain opacity-65 grayscale transition-[filter,opacity,transform] duration-300 hover:scale-[1.02] hover:opacity-100 hover:grayscale-0"
                 />
               </div>
             ))}

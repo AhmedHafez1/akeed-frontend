@@ -25,6 +25,13 @@ function Hero() {
   const { locale, isRTL } = useLocaleInfo()
   const router = useRouter()
   const shouldReduceMotion = useReducedMotion()
+  const bulletKeys = [
+    'subtitle_bullet_1',
+    'subtitle_bullet_2',
+    'subtitle_bullet_3',
+    'subtitle_bullet_4',
+    'subtitle_bullet_5',
+  ] as const
 
   const baseTransition = {
     duration: shouldReduceMotion ? 0 : 0.6,
@@ -64,13 +71,22 @@ function Hero() {
               {t('subtitle')}
             </p>
             <ul
-              className={`${isRTL ? 'text-right' : 'text-left'} mt-4 space-y-2.5 text-sm leading-7 font-medium text-slate-700 sm:text-base lg:text-lg`}
+              className={`${isRTL ? 'text-right' : 'text-left'} mt-5 space-y-3 text-sm font-medium text-slate-700 sm:text-base lg:text-lg`}
             >
-              <li>{t('subtitle_bullet_1')}</li>
-              <li>{t('subtitle_bullet_2')}</li>
-              <li>{t('subtitle_bullet_3')}</li>
-              <li>{t('subtitle_bullet_4')}</li>
-              <li>{t('subtitle_bullet_5')}</li>
+              {bulletKeys.map((bulletKey) => (
+                <li
+                  key={bulletKey}
+                  className={`${isRTL ? 'leading-7 lg:leading-8' : 'leading-6 lg:leading-7'}`}
+                >
+                  {t.rich(bulletKey, {
+                    strong: (chunks) => (
+                      <strong className="font-semibold text-slate-950">
+                        {chunks}
+                      </strong>
+                    ),
+                  })}
+                </li>
+              ))}
             </ul>
           </div>
         </motion.div>
@@ -131,7 +147,7 @@ function Hero() {
       </div>
 
       {/* Chat Interface */}
-      <div className="flex w-full scale-90 items-center justify-center sm:scale-95 md:w-2/5 md:scale-100 lg:w-auto">
+      <div className="flex w-full scale-[0.94] items-center justify-center sm:scale-[0.98] md:w-[42%] md:scale-105 lg:w-auto lg:scale-110 xl:scale-[1.12]">
         <ChatInterface />
       </div>
 

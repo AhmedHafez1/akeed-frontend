@@ -22,9 +22,10 @@ export function ChatInterface() {
       className="relative w-full md:w-auto"
     >
       <div className="relative mx-auto w-full max-w-[320px] md:w-80">
-        <div className="/10 blur-1xl absolute inset-0 rounded-[3rem] bg-linear-to-br from-gray-400/20 to-gray-200" />
+        <div className="pointer-events-none absolute inset-x-8 -bottom-6 h-14 rounded-full bg-slate-900/12 blur-2xl" />
+        <div className="pointer-events-none absolute inset-0 rounded-[3rem] bg-linear-to-br from-slate-300/35 via-white/10 to-slate-200/80 blur-2xl" />
 
-        <div className="relative rounded-[3rem] border-8 border-slate-900 bg-slate-900 p-2 shadow-2xl">
+        <div className="relative rounded-[3rem] border-8 border-slate-900 bg-slate-900 p-2 shadow-[0_28px_70px_-28px_rgba(15,23,42,0.5)]">
           <div className="absolute top-3 left-1/2 z-20 h-6 w-32 -translate-x-1/2 rounded-full bg-slate-900" />
 
           <div className="relative overflow-hidden rounded-[2.2rem] bg-white">
