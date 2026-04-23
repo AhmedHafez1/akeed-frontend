@@ -118,7 +118,9 @@ function Hero() {
           transition={{ ...baseTransition, delay: 0.35 }}
           className="mb-6 sm:mb-8 md:mb-10"
         >
-          <p className="text-xs font-semibold tracking-tight text-slate-500 sm:text-sm md:text-base">
+          <p
+            className={` ${isRTL ? 'text-right' : 'text-left'} text-xs font-semibold tracking-tight text-slate-500 sm:text-sm md:text-base`}
+          >
             {t('no_credit_card')}
           </p>
         </motion.div>
@@ -141,7 +143,6 @@ function Hero() {
           >
             {t('easy_integrated')}
           </h3>
-
           <LogoTicker />
         </motion.div>
       </div>

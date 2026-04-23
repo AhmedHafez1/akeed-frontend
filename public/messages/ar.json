@@ -13,14 +13,14 @@
     "sign_in": "تسجيل الدخول"
   },
   "hero": {
-    "title": "خفّف خسائر الشحن.",
+    "title": "أوقف خسائر الشحن.",
     "highlight": "وأكد طلبات الدفع عند الاستلام عبر واتساب.",
     "subtitle": "عمليات تأكيد تلقائية ، تُرسل عبر واجهات Meta WhatsApp Cloud API الرسمية.",
     "subtitle_bullet_1": "✅ <strong>إرسال موثوق</strong> عبر واجهات Meta WhatsApp Cloud API الرسمية",
     "subtitle_bullet_2": "✅ <strong>من دون رقم واتساب أو إعداد API</strong> من طرفك",
     "subtitle_bullet_3": "✅ <strong>رسائل تأكيد باسم متجرك</strong> بالعربية والإنجليزية",
     "subtitle_bullet_4": "✅ <strong>لوحة واضحة</strong> للطلبات المؤكدة والملغاة والمعلّقة",
-    "subtitle_bullet_5": "✅ <strong>ربط سريع</strong> مع Shopify وأشهر منصات المنطقة",
+    "subtitle_bullet_5": "✅ <strong>ربط سريع مع Shopify </strong> وأشهر المنصات",
     "urgency": "عرض البداية: أول 20 متجر يحصلون على 50 تأكيد مجاناً",
     "join_social_proof": "انضم إلى قائمة الانتظار مع <bold>85+</bold> متجرًا من المنطقة",
     "social_proof": "قلّل خسائر الشحن القابلة للتفادي في أسواق المنطقة",
@@ -31,8 +31,8 @@
     "benefit_1": "بدون بطاقة ائتمان",
     "benefit_2": "تجربة مجانية 14 يوم",
     "benefit_3": "إلغاء في أي وقت",
-    "easy_integrated": "يعمل مع المنصات التي يعتمد عليها تجار المنطقة",
-    "no_credit_card": "ابدأ خلال دقيقة، ومن دون بطاقة ائتمان"
+    "easy_integrated": "وقريبا مع المزيد من المنصات ...",
+    "no_credit_card": "ابدأ الآن مجانا على Shopify. لا حاجة لبطاقة ائتمان"
   },
   "demo": {
     "badge": "تجربة حية",
