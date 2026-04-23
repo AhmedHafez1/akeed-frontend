@@ -55,9 +55,10 @@ export function useDashboard(): DashboardSkinProps {
   const statusFilters = useMemo<ReadonlyArray<StatusFilterOption>>(
     () => [
       { id: 'all', label: t('filters.status.all') },
-      { id: 'sent', label: t('filters.status.sent') },
-      { id: 'delivered', label: t('filters.status.delivered') },
-      { id: 'read', label: t('filters.status.read') },
+      {
+        id: 'awaiting_response',
+        label: t('filters.status.awaiting_response'),
+      },
       { id: 'confirmed', label: t('filters.status.confirmed') },
       { id: 'canceled', label: t('filters.status.canceled') },
     ],

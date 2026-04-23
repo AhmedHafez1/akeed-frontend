@@ -1,10 +1,10 @@
 import { Badge, BlockStack, IndexTable, Text } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
+import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import type {
   VerificationItem,
   VerificationStatus,
 } from '../../model/dashboard.model'
-import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 
 type PolarisBadgeTone =
   | 'attention'
@@ -39,14 +39,17 @@ function formatOrderTitle(
   return `${fallbackLabel} ${verification.order_id.slice(0, 8)}`
 }
 
-function formatCurrencyTotal(verification: VerificationItem): string {
+function formatCurrencyTotal(
+  verification: VerificationItem,
+  locale: string
+): string {
   if (!verification.total_price) {
-    return '—'
+    return '-'
   }
 
   const currency = verification.currency ?? 'SAR'
   try {
-    return new Intl.NumberFormat(undefined, {
+    return new Intl.NumberFormat(locale, {
       style: 'currency',
       currency,
       minimumFractionDigits: 2,
@@ -57,21 +60,21 @@ function formatCurrencyTotal(verification: VerificationItem): string {
   }
 }
 
-function formatCreatedDate(value: string | null): string {
-  if (!value) return '—'
+function formatCreatedDate(value: string | null, locale: string): string {
+  if (!value) return '-'
 
   const date = new Date(value)
-  return date.toLocaleDateString(undefined, {
+  return date.toLocaleDateString(locale, {
     month: 'short',
     day: 'numeric',
   })
 }
 
-function formatCreatedTime(value: string | null): string {
+function formatCreatedTime(value: string | null, locale: string): string {
   if (!value) return ''
 
   const date = new Date(value)
-  return date.toLocaleTimeString(undefined, {
+  return date.toLocaleTimeString(locale, {
     hour: '2-digit',
     minute: '2-digit',
   })
@@ -81,7 +84,7 @@ export function VerificationsTableEmbedded({
   verifications,
 }: VerificationsTableEmbeddedProps) {
   const t = useTranslations('dashboard')
-  const { isRTL } = useLocaleInfo()
+  const { isRTL, locale } = useLocaleInfo()
   const textAlignment = isRTL ? 'end' : undefined
   const dataCellClassName = isRTL ? 'w-full text-right' : 'w-full'
   const statusCellClassName = 'flex w-full'
@@ -138,7 +141,7 @@ export function VerificationsTableEmbedded({
       <IndexTable.Cell>
         <div className={dataCellClassName}>
           <Text variant="bodyMd" fontWeight="semibold" as="p">
-            {formatCurrencyTotal(verification)}
+            {formatCurrencyTotal(verification, locale)}
           </Text>
         </div>
       </IndexTable.Cell>
@@ -147,10 +150,10 @@ export function VerificationsTableEmbedded({
         <div className={dataCellClassName}>
           <BlockStack gap="100">
             <Text variant="bodySm" as="p">
-              {formatCreatedDate(verification.created_at)}
+              {formatCreatedDate(verification.created_at, locale)}
             </Text>
             <Text variant="bodyXs" tone="subdued" as="p">
-              {formatCreatedTime(verification.created_at)}
+              {formatCreatedTime(verification.created_at, locale)}
             </Text>
           </BlockStack>
         </div>

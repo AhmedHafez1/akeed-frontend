@@ -9,6 +9,7 @@ export type VerificationStatus =
 
 export type VerificationStatusFilter =
   | 'all'
+  | 'awaiting_response'
   | 'sent'
   | 'delivered'
   | 'read'

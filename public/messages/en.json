@@ -424,7 +424,9 @@
     "subtitle": "Monitor verification status and recent orders across your channels.",
     "filters": {
       "status": {
+        "label": "Status",
         "all": "All",
+        "awaiting_response": "Awaiting response",
         "pending": "Pending",
         "sent": "Sent",
         "delivered": "Delivered",
@@ -444,11 +446,11 @@
       "all": "No verifications yet. Once an order is received, verification requests will appear here.",
       "filtered": "No verifications match the selected status.",
       "onboarding": {
-        "heading": "Waiting for COD orders…",
+        "heading": "Waiting for COD orders...",
         "activeDescription": "Akeed is active and monitoring your store. As soon as a new cash-on-delivery order is placed, a WhatsApp verification will be sent automatically.",
         "step1": "A customer places a COD order in your store.",
         "step2": "Akeed sends a WhatsApp verification message to the customer.",
-        "step3": "The customer confirms or cancels — results appear here in real time.",
+        "step3": "The customer confirms or cancels - results appear here in real time.",
         "testSectionHeading": "Send a test verification",
         "testSectionDescription": "Select a country and enter a real WhatsApp number to trigger a test verification.",
         "testPhoneLabel": "Customer phone",
@@ -459,7 +461,7 @@
         "testSent": "Test verification sent successfully.",
         "testFailed": "We could not send a test verification. Please try again.",
         "testSkipped": "Test verification was skipped.",
-        "nextStepHint": "Try it now — send a test to your own WhatsApp number."
+        "nextStepHint": "Try it now - send a test to your own WhatsApp number."
       }
     },
     "verificationSection": {
@@ -494,14 +496,15 @@
       "moneySaved": {
         "title": "Money Saved",
         "breakdownTitle": "How it's calculated",
-        "breakdownLine": "{count} canceled × {cost} {currency} avg. shipping"
+        "breakdownLine": "{count} canceled x {cost} avg. shipping"
       },
       "usage": {
         "title": "Plan Usage",
         "monthlyLimit": "Monthly Limit",
         "used": "{value}% Used",
         "warningNearLimit": "You're approaching your plan limit. Consider upgrading.",
-        "warningAtLimit": "You've reached your plan limit. Upgrade to keep verifying."
+        "warningAtLimit": "You've reached your plan limit. Upgrade to keep verifying.",
+        "manageCta": "Review in Settings"
       },
       "unavailable": "Metrics are not available right now."
     },

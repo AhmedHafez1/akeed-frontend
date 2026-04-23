@@ -31,7 +31,9 @@ export function useDashboardData(
     const queryParams = new URLSearchParams()
     queryParams.set('date_range', dateRangeFilter)
 
-    if (statusFilter !== 'all') {
+    if (statusFilter === 'awaiting_response') {
+      queryParams.set('status', 'sent,delivered,read')
+    } else if (statusFilter !== 'all') {
       queryParams.set('status', statusFilter)
     }
 

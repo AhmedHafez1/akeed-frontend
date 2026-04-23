@@ -105,6 +105,8 @@ const SHIPPING_CURRENCY_OPTIONS = [
   'MAD',
 ] as const
 
+const SUBSCRIPTION_SECTION_ID = 'subscription-usage'
+
 export default function SettingsPage() {
   const t = useTranslations('settings')
   const {
@@ -522,59 +524,61 @@ export default function SettingsPage() {
               </BlockStack>
             </Card>
 
-            <Card>
-              <BlockStack gap="400">
-                <BlockStack gap="200">
-                  <Text as="h2" variant="headingMd">
-                    {t('subscriptionHeading')}
-                  </Text>
+            <div id={SUBSCRIPTION_SECTION_ID}>
+              <Card>
+                <BlockStack gap="400">
+                  <BlockStack gap="200">
+                    <Text as="h2" variant="headingMd">
+                      {t('subscriptionHeading')}
+                    </Text>
 
-                  <Text as="p" variant="bodyMd">
-                    {activePlanName
-                      ? t('subscriptionCurrentPlan', { plan: activePlanName })
-                      : t('subscriptionNoPlan')}
-                  </Text>
+                    <Text as="p" variant="bodyMd">
+                      {activePlanName
+                        ? t('subscriptionCurrentPlan', { plan: activePlanName })
+                        : t('subscriptionNoPlan')}
+                    </Text>
 
-                  <Text as="p" tone="subdued" variant="bodySm">
-                    {t('subscriptionStatusLabel', {
-                      status: billingStatusLabel,
-                    })}
-                  </Text>
-                </BlockStack>
+                    <Text as="p" tone="subdued" variant="bodySm">
+                      {t('subscriptionStatusLabel', {
+                        status: billingStatusLabel,
+                      })}
+                    </Text>
+                  </BlockStack>
 
-                {usageData && (
-                  <UsageOverview
-                    used={usageData.used}
-                    limit={usageData.limit}
-                    title={t('usageTitle')}
-                    usedLabel={usageData.usedLabel}
-                    limitLabel={usageData.limitLabel}
-                    upgradePrompt={usageData.upgradePrompt}
+                  {usageData && (
+                    <UsageOverview
+                      used={usageData.used}
+                      limit={usageData.limit}
+                      title={t('usageTitle')}
+                      usedLabel={usageData.usedLabel}
+                      limitLabel={usageData.limitLabel}
+                      upgradePrompt={usageData.upgradePrompt}
+                    />
+                  )}
+
+                  <PlanComparison
+                    plans={planOptions}
+                    currentPlanId={billingPlanId}
+                    selectedPlanId={selectedPlanId}
+                    isChangingPlan={isChangingPlan}
+                    disabledPlanIds={isFreePlanClaimed ? ['starter'] : []}
+                    disabledPlanTooltips={
+                      isFreePlanClaimed
+                        ? { starter: t('freePlanAlreadyClaimedTooltip') }
+                        : undefined
+                    }
+                    currentBadgeLabel={t('currentPlanBadge')}
+                    changePlanLabel={t('changePlanButton')}
+                    onPlanSelect={setSelectedPlanId}
+                    onChangePlan={handleChangePlan}
                   />
-                )}
 
-                <PlanComparison
-                  plans={planOptions}
-                  currentPlanId={billingPlanId}
-                  selectedPlanId={selectedPlanId}
-                  isChangingPlan={isChangingPlan}
-                  disabledPlanIds={isFreePlanClaimed ? ['starter'] : []}
-                  disabledPlanTooltips={
-                    isFreePlanClaimed
-                      ? { starter: t('freePlanAlreadyClaimedTooltip') }
-                      : undefined
-                  }
-                  currentBadgeLabel={t('currentPlanBadge')}
-                  changePlanLabel={t('changePlanButton')}
-                  onPlanSelect={setSelectedPlanId}
-                  onChangePlan={handleChangePlan}
-                />
-
-                <Button onClick={handleManageBilling}>
-                  {t('manageBillingButton')}
-                </Button>
-              </BlockStack>
-            </Card>
+                  <Button onClick={handleManageBilling}>
+                    {t('manageBillingButton')}
+                  </Button>
+                </BlockStack>
+              </Card>
+            </div>
           </BlockStack>
         </Layout.Section>
       </Layout>

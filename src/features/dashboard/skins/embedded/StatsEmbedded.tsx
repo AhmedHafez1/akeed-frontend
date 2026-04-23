@@ -6,7 +6,6 @@ import {
   Icon,
   InlineGrid,
   InlineStack,
-  ProgressBar,
   Select,
   SkeletonBodyText,
   SkeletonDisplayText,
@@ -22,8 +21,10 @@ import {
   ViewIcon,
 } from '@shopify/polaris-icons'
 import type { IconSource } from '@shopify/polaris'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { withLocale } from '@/shared/lib/locale'
 import type { DateRangeFilterOption } from '../../domain/dashboard.types'
 import type {
   DashboardStats,
@@ -72,16 +73,17 @@ function resolveMetricBorderColor(tone: MetricTone): PolarisBorderColor {
   return 'border-critical'
 }
 
-function resolveUsageProgressTone(
-  usagePercent: number
-): 'critical' | 'success' {
-  if (usagePercent >= 80) return 'critical'
-  return 'success'
+function formatNumber(value: number, locale: string): string {
+  try {
+    return new Intl.NumberFormat(locale).format(value)
+  } catch {
+    return String(value)
+  }
 }
 
-function formatMoney(amount: number, currency: string): string {
+function formatMoney(amount: number, currency: string, locale: string): string {
   try {
-    return new Intl.NumberFormat(undefined, {
+    return new Intl.NumberFormat(locale, {
       style: 'currency',
       currency,
       minimumFractionDigits: 2,
@@ -99,8 +101,10 @@ export function StatsEmbedded({
   dateRangeOptions,
   onDateRangeFilterChange,
 }: StatsEmbeddedProps) {
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const t = useTranslations('dashboard')
-  const { isRTL } = useLocaleInfo()
+  const { isRTL, locale } = useLocaleInfo()
 
   const awaitingResponse = stats
     ? Math.max(
@@ -111,27 +115,29 @@ export function StatsEmbedded({
   const responseRateTone = stats
     ? resolveResponseRateTone(stats.totals.reply_rate)
     : 'caution'
+  const searchQuery = searchParams.toString()
+  const settingsHref = `${withLocale('/settings', locale)}${searchQuery ? `?${searchQuery}` : ''}#subscription-usage`
 
   const topMetrics: TopMetric[] = stats
     ? [
         {
           id: 'confirmed',
           label: t('metrics.cards.confirmed'),
-          value: String(stats.totals.confirmed),
+          value: formatNumber(stats.totals.confirmed, locale),
           tone: 'success',
           borderColor: 'border-success',
         },
         {
           id: 'canceled',
           label: t('metrics.cards.canceled'),
-          value: String(stats.totals.canceled),
+          value: formatNumber(stats.totals.canceled, locale),
           tone: 'critical',
           borderColor: 'border-critical',
         },
         {
           id: 'awaitingResponse',
           label: t('metrics.cards.awaitingResponse'),
-          value: String(awaitingResponse),
+          value: formatNumber(awaitingResponse, locale),
           tone: 'caution',
           borderColor: 'border-caution',
         },
@@ -183,7 +189,7 @@ export function StatsEmbedded({
       )
     : 0
 
-  const showUsageWarning = stats && usagePercent >= 80
+  const showUsageWarning = Boolean(stats) && usagePercent >= 80
 
   return (
     <BlockStack gap="400">
@@ -223,31 +229,25 @@ export function StatsEmbedded({
             ))}
           </InlineGrid>
 
-          <Card>
-            <BlockStack gap="300">
-              <SkeletonDisplayText size="small" />
-              <InlineGrid columns={{ xs: 1, md: 4 }} gap="300">
-                {Array.from({ length: 4 }).map((_, i) => (
-                  <SkeletonBodyText key={i} lines={3} />
-                ))}
-              </InlineGrid>
-            </BlockStack>
-          </Card>
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+            <Card>
+              <BlockStack gap="300">
+                <SkeletonDisplayText size="small" />
+                <InlineGrid columns={{ xs: 1, md: 4 }} gap="300">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <SkeletonBodyText key={i} lines={3} />
+                  ))}
+                </InlineGrid>
+              </BlockStack>
+            </Card>
 
-          <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
             <Card>
               <BlockStack gap="300">
                 <SkeletonDisplayText size="small" />
                 <SkeletonBodyText lines={2} />
               </BlockStack>
             </Card>
-            <Card>
-              <BlockStack gap="300">
-                <SkeletonDisplayText size="small" />
-                <SkeletonBodyText lines={2} />
-              </BlockStack>
-            </Card>
-          </InlineGrid>
+          </div>
         </BlockStack>
       ) : stats ? (
         <BlockStack gap="400">
@@ -274,80 +274,84 @@ export function StatsEmbedded({
             ))}
           </InlineGrid>
 
-          <Card>
-            <BlockStack gap="400">
-              <BlockStack gap="050">
-                <Text variant="headingSm" tone="subdued" as="h3">
-                  {t('metrics.funnelTitle')}
-                </Text>
-                <Text variant="bodySm" tone="subdued" as="p">
-                  {t('metrics.funnelSubtitle')}
-                </Text>
-              </BlockStack>
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,3fr)_minmax(0,1fr)]">
+            <Card>
+              <BlockStack gap="400">
+                <BlockStack gap="050">
+                  <Text variant="headingSm" tone="subdued" as="h3">
+                    {t('metrics.funnelTitle')}
+                  </Text>
+                  <Text variant="bodySm" tone="subdued" as="p">
+                    {t('metrics.funnelSubtitle')}
+                  </Text>
+                </BlockStack>
 
-              <InlineGrid columns={{ xs: 1, md: 4 }} gap="300">
-                {funnelSteps.map((step) => (
-                  <div
-                    key={step.id}
-                    className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
-                  >
-                    <div className="w-full md:min-w-[70%]">
-                      <Box
-                        padding="300"
-                        background="bg-surface-secondary"
-                        borderRadius="200"
-                        borderWidth="025"
-                        borderColor="border-tertiary"
-                      >
-                        <InlineStack blockAlign="center" align="space-between">
-                          <Text variant="headingMd" tone="subdued" as="p">
-                            {step.label}
-                          </Text>
-                          <Text variant="heading2xl" as="p">
-                            {step.value}
-                          </Text>
-                        </InlineStack>
-                      </Box>
+                <InlineGrid columns={{ xs: 1, md: 4 }} gap="300">
+                  {funnelSteps.map((step) => (
+                    <div
+                      key={step.id}
+                      className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between"
+                    >
+                      <div className="w-full md:min-w-[85%]">
+                        <Box
+                          padding="300"
+                          background="bg-surface-secondary"
+                          borderRadius="200"
+                          borderWidth="025"
+                          borderColor="border-tertiary"
+                        >
+                          <InlineStack
+                            blockAlign="center"
+                            align="space-between"
+                          >
+                            <Text variant="headingMd" tone="subdued" as="p">
+                              {step.label}
+                            </Text>
+                            <Text variant="heading2xl" as="p">
+                              {formatNumber(step.value, locale)}
+                            </Text>
+                          </InlineStack>
+                        </Box>
+                      </div>
+
+                      {step.id !== 'responded' && (
+                        <>
+                          <div className="flex justify-center md:hidden">
+                            <Icon source={ArrowDownIcon} tone="subdued" />
+                          </div>
+                          <div className="hidden md:flex md:items-center">
+                            <Icon
+                              source={isRTL ? ArrowLeftIcon : ArrowRightIcon}
+                              tone="info"
+                            />
+                          </div>
+                        </>
+                      )}
                     </div>
+                  ))}
+                </InlineGrid>
+              </BlockStack>
+            </Card>
 
-                    {step.id !== 'responded' && (
-                      <>
-                        <div className="flex justify-center md:hidden">
-                          <Icon source={ArrowDownIcon} tone="subdued" />
-                        </div>
-                        <div className="hidden md:flex md:items-center">
-                          <Icon
-                            source={isRTL ? ArrowLeftIcon : ArrowRightIcon}
-                            tone="subdued"
-                          />
-                        </div>
-                      </>
-                    )}
-                  </div>
-                ))}
-              </InlineGrid>
-            </BlockStack>
-          </Card>
-
-          <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
             <Card>
               <BlockStack gap="300">
                 <InlineStack align="space-between" blockAlign="center">
                   <Text variant="headingSm" tone="subdued" as="p">
                     {t('metrics.moneySaved.title')}
                   </Text>
-                  <Text variant="headingLg" tone="subdued" as="p">
+                  <Text variant="headingXl" as="p" tone="success">
                     {formatMoney(
                       stats.savings.money_saved,
-                      stats.savings.currency
+                      stats.savings.currency,
+                      locale
                     )}
                   </Text>
                 </InlineStack>
 
                 <Box
-                  borderBlockStartWidth="025"
-                  borderColor="border-secondary"
-                  paddingBlockStart="300"
+                  background="bg-surface-secondary"
+                  borderRadius="200"
+                  padding="300"
                 >
                   <BlockStack gap="100">
                     <Text variant="bodyXs" tone="subdued" as="p">
@@ -355,58 +359,29 @@ export function StatsEmbedded({
                     </Text>
                     <Text variant="bodySm" as="p">
                       {t('metrics.moneySaved.breakdownLine', {
-                        count: stats.totals.canceled,
-                        cost: stats.savings.avg_shipping_cost,
-                        currency: stats.savings.currency,
+                        count: formatNumber(stats.totals.canceled, locale),
+                        cost: formatMoney(
+                          stats.savings.avg_shipping_cost,
+                          stats.savings.currency,
+                          locale
+                        ),
                       })}
                     </Text>
                   </BlockStack>
                 </Box>
               </BlockStack>
             </Card>
-
-            <Card>
-              <BlockStack gap="300">
-                <InlineStack align="space-between" blockAlign="center">
-                  <Text variant="headingSm" tone="subdued" as="p">
-                    {t('metrics.usage.title')}
-                  </Text>
-                  <Text variant="headingLg" as="p" tone="subdued">
-                    {stats.usage.used} / {stats.usage.limit}
-                  </Text>
-                </InlineStack>
-
-                <Box
-                  borderBlockStartWidth="025"
-                  borderColor="border-secondary"
-                  paddingBlockStart="300"
-                >
-                  <BlockStack gap="200">
-                    <InlineStack align="space-between">
-                      <Text variant="bodyXs" tone="subdued" as="p">
-                        {t('metrics.usage.monthlyLimit')}
-                      </Text>
-                      <Text
-                        variant="bodyXs"
-                        tone={resolveUsageProgressTone(usagePercent)}
-                        as="p"
-                      >
-                        {t('metrics.usage.used', { value: usagePercent })}
-                      </Text>
-                    </InlineStack>
-                    <ProgressBar
-                      progress={usagePercent}
-                      size="small"
-                      tone={resolveUsageProgressTone(usagePercent)}
-                    />
-                  </BlockStack>
-                </Box>
-              </BlockStack>
-            </Card>
-          </InlineGrid>
+          </div>
 
           {showUsageWarning && (
-            <Banner tone={usagePercent >= 95 ? 'critical' : 'warning'}>
+            <Banner
+              tone={usagePercent >= 95 ? 'critical' : 'warning'}
+              title={t('metrics.usage.title')}
+              action={{
+                content: t('metrics.usage.manageCta'),
+                onAction: () => router.push(settingsHref),
+              }}
+            >
               <p>
                 {usagePercent >= 95
                   ? t('metrics.usage.warningAtLimit')
