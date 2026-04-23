@@ -40,7 +40,9 @@ function Hero() {
           transition={{ ...baseTransition, delay: 0.1 }}
           className="mb-4 flex max-w-4xl flex-col items-center gap-2.5 sm:mb-6 md:items-start lg:mb-8"
         >
-          <h1 className="landing-title max-w-4xl">
+          <h1
+            className={`${isRTL ? 'text-right' : 'text-left'} landing-title max-w-4xl`}
+          >
             {t('title')}{' '}
             <span className="bg-linear-to-r from-emerald-600 to-emerald-400 bg-clip-text text-transparent">
               {t('highlight')}
@@ -118,7 +120,9 @@ function Hero() {
           }}
           className="mt-2 w-full sm:mt-4"
         >
-          <h3 className="my-3 text-xs font-semibold tracking-tight text-slate-500 sm:text-sm md:text-base lg:mt-0 lg:mb-4">
+          <h3
+            className={`${isRTL ? 'text-right' : 'text-left'} my-3 text-xs font-semibold tracking-tight text-slate-500 sm:text-sm md:text-base lg:mt-0 lg:mb-4`}
+          >
             {t('easy_integrated')}
           </h3>
 
