@@ -99,6 +99,36 @@
 
 /* Smooth animations */
 @layer utilities {
+  .landing-title {
+    font-size: 3rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+    color: #121212;
+    text-wrap: balance;
+  }
+
+  .landing-section-title {
+    font-size: 2.25rem;
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    color: #212121;
+    text-wrap: balance;
+  }
+
+  .landing-subtitle {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    font-weight: 500;
+    color: #3e3e3e;
+    text-wrap: pretty;
+  }
+
+  .landing-section-header {
+    @apply mx-auto flex max-w-5xl flex-col items-center gap-4 text-center sm:gap-5;
+  }
+
   .animate-fade-in {
     animation: fade-in 0.5s ease-in;
   }

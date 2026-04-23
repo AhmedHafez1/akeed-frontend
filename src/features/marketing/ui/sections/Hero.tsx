@@ -38,9 +38,9 @@ function Hero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...baseTransition, delay: 0.1 }}
-          className="mb-4 flex flex-col items-center space-y-2 sm:mb-6 md:items-start lg:mb-8"
+          className="mb-4 flex max-w-4xl flex-col items-center gap-2.5 sm:mb-6 md:items-start lg:mb-8"
         >
-          <h1 className="text-2xl leading-tight font-black text-slate-900 sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl">
+          <h1 className="landing-title max-w-4xl">
             {t('title')}{' '}
             <span className="bg-linear-to-r from-emerald-600 to-emerald-400 bg-clip-text text-transparent">
               {t('highlight')}
@@ -53,16 +53,16 @@ function Hero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...baseTransition, delay: 0.2 }}
-          className="mb-6 self-stretch sm:mb-6 lg:max-w-2xl"
+          className="mb-6 self-stretch sm:mb-7 lg:max-w-2xl"
         >
-          <div className="border-slate-200 backdrop-blur-sm sm:p-5">
+          <div className="border-slate-200 backdrop-blur-sm">
             <p
-              className={`${isRTL ? 'text-right' : 'text-left'} text-sm text-slate-700 md:text-lg lg:text-xl lg:leading-relaxed`}
+              className={`${isRTL ? 'text-right' : 'text-left'} landing-subtitle text-slate-700`}
             >
               {t('subtitle')}
             </p>
             <ul
-              className={`${isRTL ? 'text-right' : 'text-left'} md:text-md mt-3 space-y-2 text-sm text-slate-700 sm:text-base lg:text-lg`}
+              className={`${isRTL ? 'text-right' : 'text-left'} mt-4 space-y-2.5 text-sm leading-7 font-medium text-slate-700 sm:text-base lg:text-lg`}
             >
               <li>{t('subtitle_bullet_1')}</li>
               <li>{t('subtitle_bullet_2')}</li>
@@ -100,7 +100,7 @@ function Hero() {
           transition={{ ...baseTransition, delay: 0.35 }}
           className="mb-6 sm:mb-8 md:mb-10"
         >
-          <p className="text-xs font-semibold text-slate-500 sm:text-sm md:text-base">
+          <p className="text-xs font-semibold tracking-tight text-slate-500 sm:text-sm md:text-base">
             {t('no_credit_card')}
           </p>
         </motion.div>
@@ -118,7 +118,7 @@ function Hero() {
           }}
           className="mt-2 w-full sm:mt-4"
         >
-          <h3 className="my-3 text-xs font-semibold text-slate-500 sm:text-sm md:text-base lg:mt-0 lg:mb-4">
+          <h3 className="my-3 text-xs font-semibold tracking-tight text-slate-500 sm:text-sm md:text-base lg:mt-0 lg:mb-4">
             {t('easy_integrated')}
           </h3>
 

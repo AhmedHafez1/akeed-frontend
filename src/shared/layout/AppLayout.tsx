@@ -1,9 +1,17 @@
 'use client'
 
 import { type ReactNode, Suspense } from 'react'
+import dynamic from 'next/dynamic'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
-import { EmbeddedLayout } from './EmbeddedLayout'
 import { StandaloneLayout } from './StandaloneLayout'
+
+const EmbeddedLayout = dynamic(
+  () => import('./EmbeddedLayout').then((mod) => mod.EmbeddedLayout),
+  {
+    ssr: false,
+    loading: () => <AppLayoutSkeleton />,
+  }
+)
 
 function AppLayoutSkeleton() {
   return (

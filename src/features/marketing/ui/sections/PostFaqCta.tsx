@@ -21,10 +21,14 @@ export function PostFaqCta() {
             <p className="mb-2 text-xs font-bold tracking-[0.16em] text-emerald-700 uppercase">
               {t('eyebrow')}
             </p>
-            <h3 className="mb-3 text-2xl leading-tight font-black text-slate-900 sm:text-3xl lg:text-4xl">
+            <h3
+              className={`landing-section-title mb-3 max-w-4xl ${
+                isRTL ? 'text-right' : 'text-left'
+              }`}
+            >
               {t('title')}
             </h3>
-            <p className="max-w-3xl text-sm text-slate-600 sm:text-base lg:text-lg">
+            <p className="landing-subtitle max-w-3xl text-slate-600">
               {t('subtitle')}
             </p>
 

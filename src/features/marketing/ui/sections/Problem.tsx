@@ -28,19 +28,16 @@ function Problem() {
   const { isRTL } = useLocaleInfo()
 
   return (
-    <Section
-      id="problem"
-      className="relative px-4 sm:px-6 lg:px-10"
-    >
+    <Section id="problem" className="relative px-4 sm:px-6 lg:px-10">
       <Container>
         {/* Section Header */}
-        <div className="mb-8 text-center sm:mb-10 lg:mb-12">
+        <div className="landing-section-header mb-10 sm:mb-12 lg:mb-14">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="mb-3 text-2xl leading-tight font-black text-slate-700 sm:mb-4 sm:text-3xl md:text-4xl lg:text-5xl"
+            className="landing-section-title max-w-5xl"
           >
             {t('title')}
           </motion.h2>
@@ -49,7 +46,7 @@ function Problem() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="mb-6 text-base font-medium text-slate-600 sm:mb-8 sm:text-lg md:text-xl lg:mb-12"
+            className="landing-subtitle max-w-3xl"
           >
             {t('subtitle')}
           </motion.p>
@@ -65,7 +62,7 @@ function Problem() {
         >
           {features.problems.map((problem) => (
             <motion.div key={problem.key} variants={item}>
-               <div className="group relative overflow-hidden rounded-2xl border border-rose-100 bg-white px-4 py-5 transition-all duration-300 hover:-translate-y-1 hover:border-rose-200 hover:shadow-md sm:px-6 sm:py-6 lg:min-h-72 lg:px-8">
+              <div className="group relative overflow-hidden rounded-2xl border border-rose-100 bg-white px-4 py-5 transition-all duration-300 hover:-translate-y-1 hover:border-rose-200 hover:shadow-md sm:px-6 sm:py-6 lg:min-h-72 lg:px-8">
                 {/* Gradient overlay on hover */}
                 <div className="absolute inset-0 bg-linear-to-br from-rose-50/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 

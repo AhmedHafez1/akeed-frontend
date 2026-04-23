@@ -1,10 +1,24 @@
 import { motion } from 'framer-motion'
-import { DollarSign, TrendingDown, TrendingUp } from 'lucide-react'
-import { RoiRow } from '@/features/marketing/model/roi.model'
+import {
+  ArrowDownRight,
+  Package2,
+  TrendingDown,
+  TrendingUp,
+} from 'lucide-react'
+import type { RoiRow } from '@/features/marketing/model/roi.model'
 
 interface ROICalculatorTableProps {
   rows: RoiRow[]
   t: (key: string) => string
+}
+
+function parseMetric(value: string) {
+  const [count, ratio] = value.split(' ')
+
+  return {
+    count,
+    ratio: ratio?.replace(/[()]/g, '') ?? '',
+  }
 }
 
 export function ROICalculatorTable({ rows, t }: ROICalculatorTableProps) {
@@ -13,88 +27,115 @@ export function ROICalculatorTable({ rows, t }: ROICalculatorTableProps) {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="hidden overflow-hidden rounded-2xl border-2 border-emerald-200 bg-white shadow-2xl sm:block"
+      className="hidden rounded-3xl border border-emerald-100 bg-white p-4 shadow-sm lg:block lg:p-5"
     >
-      <div className="overflow-x-auto">
-        <table className="w-full text-center">
-          <thead>
-            <tr className="bg-linear-to-r from-emerald-50 via-emerald-100 to-emerald-50">
-              <th className="px-4 py-5 text-sm font-black tracking-wide text-slate-700 uppercase lg:px-6 lg:text-base">
-                {t('orders')}
-              </th>
-              <th className="px-4 py-5 text-sm font-black tracking-wide text-slate-700 uppercase lg:px-6 lg:text-base">
-                <div className="flex flex-col items-center gap-2">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-500 shadow-md">
-                    <TrendingUp className="h-5 w-5 text-white" />
-                  </div>
-                  <span>{t('returns_without')}</span>
+      <div className="mb-4 grid grid-cols-[1.15fr_1fr_1fr_1.1fr] gap-3 rounded-2xl bg-slate-50 p-4 text-left">
+        <div>
+          <span className="text-xs font-bold tracking-[0.14em] text-slate-400 uppercase">
+            {t('orders')}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-rose-100 text-rose-600">
+            <TrendingUp className="h-4 w-4" />
+          </span>
+          <span className="text-sm font-semibold text-slate-700">
+            {t('returns_without')}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+            <TrendingDown className="h-4 w-4" />
+          </span>
+          <span className="text-sm font-semibold text-slate-700">
+            {t('returns_with')}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 text-orange-600">
+            <ArrowDownRight className="h-4 w-4" />
+          </span>
+          <span className="text-sm font-semibold text-slate-700">
+            {t('savings')}
+          </span>
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        {rows.map((row, idx) => {
+          const without = parseMetric(row.returnsWithout)
+          const withAkeed = parseMetric(row.returnsWith)
+
+          return (
+            <motion.div
+              key={row.orders}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.08 }}
+              className="grid grid-cols-[1.15fr_1fr_1fr_1.1fr] gap-3 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-emerald-200 hover:shadow-md"
+            >
+              <div className="flex items-center gap-3">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-600">
+                  <Package2 className="h-5 w-5" />
+                </span>
+                <div>
+                  <p className="text-xs font-semibold tracking-[0.12em] text-slate-400 uppercase">
+                    {t('orders')}
+                  </p>
+                  <p className="text-2xl font-black tracking-tight text-slate-900">
+                    {row.orders}
+                  </p>
                 </div>
-              </th>
-              <th className="px-4 py-5 text-sm font-black tracking-wide text-slate-700 uppercase lg:px-6 lg:text-base">
-                <div className="flex flex-col items-center gap-2">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500 shadow-md">
-                    <TrendingDown className="h-5 w-5 text-white" />
-                  </div>
-                  <span>{t('returns_with')}</span>
+              </div>
+
+              <div className="rounded-2xl bg-rose-50 px-4 py-3">
+                <p className="text-xs font-semibold tracking-[0.12em] text-rose-500 uppercase">
+                  {t('returns_without')}
+                </p>
+                <div className="mt-2 flex items-end gap-2">
+                  <span className="text-2xl font-black tracking-tight text-rose-700">
+                    {without.count}
+                  </span>
+                  <span className="pb-1 text-sm font-semibold text-rose-500">
+                    {without.ratio}
+                  </span>
                 </div>
-              </th>
-              <th className="bg-linear-to-r from-emerald-500 to-emerald-600 px-4 py-5 text-sm font-black tracking-wide text-white uppercase shadow-inner lg:px-6 lg:text-base">
-                <div className="flex flex-col items-center gap-2">
-                  <DollarSign className="h-6 w-6" />
-                  <span>{t('savings')}</span>
+              </div>
+
+              <div className="rounded-2xl bg-emerald-50 px-4 py-3">
+                <p className="text-xs font-semibold tracking-[0.12em] text-emerald-600 uppercase">
+                  {t('returns_with')}
+                </p>
+                <div className="mt-2 flex items-end gap-2">
+                  <span className="text-2xl font-black tracking-tight text-emerald-700">
+                    {withAkeed.count}
+                  </span>
+                  <span className="pb-1 text-sm font-semibold text-emerald-600">
+                    {withAkeed.ratio}
+                  </span>
                 </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, idx) => (
-              <motion.tr
-                key={row.orders}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className={`border-t-2 border-emerald-100 transition-all hover:bg-emerald-50/70 ${
-                  idx === 1 ? 'bg-emerald-50/40' : ''
-                }`}
-              >
-                <td className="px-4 py-6 text-2xl font-black text-slate-800 lg:px-6 lg:text-3xl">
-                  {row.orders}
-                </td>
-                <td className="px-4 py-6 lg:px-6">
-                  <div className="inline-flex flex-col items-center rounded-xl bg-linear-to-br from-red-50 to-red-100 px-5 py-3 shadow-sm">
-                    <span className="text-xl font-black text-red-700 lg:text-2xl">
-                      {row.returnsWithout.split(' ')[0]}
-                    </span>
-                    <span className="text-sm font-bold text-red-600">
-                      {row.returnsWithout.split(' ')[1]}
-                    </span>
-                  </div>
-                </td>
-                <td className="px-4 py-6 lg:px-6">
-                  <div className="inline-flex flex-col items-center rounded-xl bg-linear-to-br from-emerald-50 to-emerald-100 px-5 py-3 shadow-sm">
-                    <span className="text-xl font-black text-emerald-700 lg:text-2xl">
-                      {row.returnsWith.split(' ')[0]}
-                    </span>
-                    <span className="text-sm font-bold text-emerald-600">
-                      {row.returnsWith.split(' ')[1]}
-                    </span>
-                  </div>
-                </td>
-                <td className="bg-linear-to-r from-emerald-50 via-emerald-100 to-emerald-50 px-4 py-6 lg:px-6">
-                  <div className="flex flex-col items-center">
-                    <span className="text-3xl font-black text-emerald-700 lg:text-4xl">
-                      {row.savings}
-                    </span>
-                    <span className="text-sm font-bold text-emerald-600">
-                      {t('currency')}
-                    </span>
-                  </div>
-                </td>
-              </motion.tr>
-            ))}
-          </tbody>
-        </table>
+              </div>
+
+              <div className="rounded-2xl bg-linear-to-r from-orange-50 to-emerald-50 px-4 py-3">
+                <p className="text-xs font-semibold tracking-[0.12em] text-orange-500 uppercase">
+                  {t('savings')}
+                </p>
+                <div className="mt-2 flex items-end gap-2">
+                  <span className="text-3xl font-black tracking-tight text-slate-900">
+                    {row.savings}
+                  </span>
+                  <span className="pb-1 text-sm font-semibold text-slate-500">
+                    {t('currency')}
+                  </span>
+                </div>
+                <p className="mt-1 text-xs font-semibold text-emerald-600">
+                  {row.reduction} {t('reduction_label')}
+                </p>
+              </div>
+            </motion.div>
+          )
+        })}
       </div>
     </motion.div>
   )

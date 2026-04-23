@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 
-import { Cairo } from 'next/font/google'
+import { Cairo, Inter } from 'next/font/google'
 
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
@@ -12,6 +12,12 @@ import '../globals.css'
 const cairo = Cairo({
   subsets: ['arabic', 'latin'],
   weight: ['400', '600', '700', '900'],
+  display: 'swap',
+})
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800', '900'],
   display: 'swap',
 })
 
@@ -38,6 +44,7 @@ export default async function LocaleLayout({
 }) {
   const { locale } = await params
   const messages = await getMessages()
+  const bodyFontClassName = locale === 'ar' ? cairo.className : inter.className
 
   return (
     <html
@@ -55,7 +62,7 @@ export default async function LocaleLayout({
           <MarketingScripts />
         </Suspense>
       </head>
-      <body className={cairo.className} suppressHydrationWarning>
+      <body className={bodyFontClassName} suppressHydrationWarning>
         <ShopifyAppBridgeScript />
         <NextIntlClientProvider messages={messages}>
           <AppLayout>{children}</AppLayout>

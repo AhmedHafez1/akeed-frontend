@@ -73,13 +73,13 @@ export function Solution() {
       className="relative px-4 sm:px-6 lg:px-10"
     >
       <Container>
-        <div className="mb-8 text-center sm:mb-10 lg:mb-12">
+        <div className="landing-section-header mb-10 sm:mb-12 lg:mb-14">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="mb-3 text-2xl leading-tight font-black text-slate-700 sm:mb-4 sm:text-3xl md:text-4xl lg:text-5xl"
+            className="landing-section-title max-w-5xl"
           >
             {t('title')}
           </motion.h2>
@@ -88,7 +88,7 @@ export function Solution() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="mx-auto mb-6 max-w-3xl text-base font-medium text-slate-600 sm:mb-8 sm:text-lg md:text-xl lg:mb-12"
+            className="landing-subtitle max-w-3xl"
           >
             {t('subtitle')}
           </motion.p>

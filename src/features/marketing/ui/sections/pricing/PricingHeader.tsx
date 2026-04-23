@@ -8,15 +8,11 @@ interface PricingHeaderProps {
 
 export function PricingHeader({ title, subtitle, checks }: PricingHeaderProps) {
   return (
-    <div className="mb-8 text-center sm:mb-12">
-      <h2 className="mb-4 text-2xl leading-tight font-black text-slate-700 sm:text-3xl md:text-4xl lg:text-5xl">
-        {title}
-      </h2>
-      <p className="mx-auto mb-8 max-w-3xl text-sm text-gray-600 sm:mb-8 sm:text-base md:text-lg">
-        {subtitle}
-      </p>
+    <div className="landing-section-header mb-10 sm:mb-12">
+      <h2 className="landing-section-title max-w-4xl">{title}</h2>
+      <p className="landing-subtitle max-w-3xl text-slate-600">{subtitle}</p>
 
-      <div className="mx-auto grid max-w-4xl grid-cols-1 gap-3 text-sm font-semibold text-gray-700 sm:grid-cols-2 sm:gap-4 md:grid-cols-3 md:text-base">
+      <div className="mx-auto mt-1 grid max-w-4xl grid-cols-1 gap-3 text-sm font-semibold text-gray-700 sm:grid-cols-2 sm:gap-4 md:grid-cols-3 md:text-base">
         {checks.map((check) => (
           <div
             key={check}

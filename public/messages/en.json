@@ -13,7 +13,7 @@
     "sign_in": "Sign in"
   },
   "hero": {
-    "title": "Confirm COD orders on WhatsApp.",
+    "title": "Confirm COD orders on WhatsApp with",
     "highlight": "Akeed",
     "subtitle": "Rule-based COD confirmation workflows sent through official Meta WhatsApp Cloud APIs.",
     "subtitle_bullet_1": "✅ Official Meta WhatsApp Cloud APIs",
@@ -126,15 +126,15 @@
     "steps": {
       "1": {
         "title": "New Order Arrives",
-      "description": "Akeed receives the order automatically from your store platform as soon as it is placed."
+        "description": "Akeed receives the order automatically from your store platform as soon as it is placed."
       },
       "2": {
         "title": "Instant WhatsApp Send",
-      "description": "A branded WhatsApp confirmation message reaches the customer within seconds to confirm order details."
+        "description": "A branded WhatsApp confirmation message reaches the customer within seconds to confirm order details."
       },
       "3": {
         "title": "Automatic Confirmation",
-      "description": "Akeed captures the customer response and updates the order status to confirmed, canceled, or pending review."
+        "description": "Akeed captures the customer response and updates the order status to confirmed, canceled, or pending review."
       }
     },
     "auto": {
@@ -243,6 +243,7 @@
     "returns_without": "Avg. returns (without Akeed)",
     "returns_with": "Avg. returns (with Akeed)",
     "savings": "Expected monthly shipping savings",
+    "reduction_label": "lower return volume",
     "currency": "EGP",
     "note": "Note: Average shipping cost burned per order is around 60 EGP (round trip)."
   },

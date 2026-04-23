@@ -12,10 +12,7 @@ function FAQ() {
   const tFaq = useTranslations('faq')
 
   return (
-    <Section
-      id="faq"
-      className="relative px-4 sm:px-6 lg:px-10"
-    >
+    <Section id="faq" className="relative px-4 sm:px-6 lg:px-10">
       <Container>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -24,10 +21,10 @@ function FAQ() {
           transition={{ duration: 0.6 }}
           className="mx-auto max-w-3xl rounded-2xl border border-emerald-100 bg-white/90 p-6 shadow-sm"
         >
-          <h2 className="mb-4 text-center text-2xl leading-tight font-black text-slate-700 sm:text-3xl md:text-4xl lg:text-5xl">
+          <h2 className="landing-section-title mx-auto mb-4 max-w-4xl text-center">
             {tFaq('section_title')}
           </h2>
-          <p className="mb-8 text-center text-lg font-medium text-slate-600 sm:text-xl lg:mb-16">
+          <p className="landing-subtitle mx-auto mb-8 max-w-3xl text-center sm:mb-10 lg:mb-14">
             {tFaq('section_description')}
           </p>
           <Accordion type="single" collapsible className="space-y-3">
