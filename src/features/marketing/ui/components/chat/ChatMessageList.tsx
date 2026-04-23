@@ -8,16 +8,12 @@ import { ChatTypingIndicator } from './ChatTypingIndicator'
 interface ChatMessageListProps {
   messages: DemoMessage[]
   isTyping: boolean
-  locationTitle: string
-  locationFallbackAddress: string
   scrollRef: RefObject<HTMLDivElement | null>
 }
 
 export function ChatMessageList({
   messages,
   isTyping,
-  locationTitle,
-  locationFallbackAddress,
   scrollRef,
 }: ChatMessageListProps) {
   return (
@@ -38,8 +34,6 @@ export function ChatMessageList({
               <ChatMessageBubble
                 message={message}
                 timeLabel={`09:4${(index % 5) + 1}`}
-                locationTitle={locationTitle}
-                locationFallbackAddress={locationFallbackAddress}
               />
 
               <ChatQuickReplies

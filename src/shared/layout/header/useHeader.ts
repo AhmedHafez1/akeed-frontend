@@ -59,6 +59,10 @@ export function useHeader() {
   }
 
   const handleCtaClick = () => {
+    router.push(withLocale('/signup', locale))
+  }
+
+  const handleSignInClick = () => {
     router.push(withLocale('/login', locale))
   }
 
@@ -72,5 +76,6 @@ export function useHeader() {
     scrollToSection,
     handleLocaleChange,
     handleCtaClick,
+    handleSignInClick,
   }
 }

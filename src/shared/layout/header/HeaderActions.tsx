@@ -3,15 +3,19 @@ import { Globe } from 'lucide-react'
 interface HeaderActionsProps {
   locale: string
   ctaLabel: string
+  signInLabel: string
   onLocaleChange: () => void
   onCtaClick: () => void
+  onSignInClick: () => void
 }
 
 export function HeaderActions({
   locale,
   ctaLabel,
+  signInLabel,
   onLocaleChange,
   onCtaClick,
+  onSignInClick,
 }: HeaderActionsProps) {
   return (
     <div className="hidden items-center gap-3 md:flex">
@@ -24,8 +28,15 @@ export function HeaderActions({
         <span>{locale === 'ar' ? 'EN' : 'عربي'}</span>
       </button>
       <button
+        onClick={onSignInClick}
+        className="rounded-lg border border-orange-100/70 bg-white/80 px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:border-orange-200 hover:bg-orange-50 hover:text-orange-700"
+        suppressHydrationWarning
+      >
+        {signInLabel}
+      </button>
+      <button
         onClick={onCtaClick}
-        className="group hover:-translate-y- relative overflow-hidden rounded-lg bg-linear-to-r from-orange-600 to-orange-500 px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:shadow-lg"
+        className="group relative overflow-hidden rounded-lg bg-linear-to-r from-orange-600 to-orange-500 px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg"
         suppressHydrationWarning
       >
         <span className="relative z-10">{ctaLabel}</span>

@@ -7,8 +7,10 @@ interface HeaderMobileMenuProps {
   items: HeaderNavItem[]
   locale: string
   ctaLabel: string
+  signInLabel: string
   onNavigate: (id: string) => void
   onLocaleChange: () => void
+  onSignInClick: () => void
   onCtaClick: () => void
 }
 
@@ -17,8 +19,10 @@ export function HeaderMobileMenu({
   items,
   locale,
   ctaLabel,
+  signInLabel,
   onNavigate,
   onLocaleChange,
+  onSignInClick,
   onCtaClick,
 }: HeaderMobileMenuProps) {
   return (
@@ -52,6 +56,12 @@ export function HeaderMobileMenu({
                 >
                   <Globe className="h-5 w-5" />
                   {locale === 'ar' ? 'English' : 'عربي'}
+                </button>
+                <button
+                  onClick={onSignInClick}
+                  className="w-full rounded-lg border border-orange-100/70 bg-white px-4 py-3 text-base font-semibold text-gray-700 transition-colors hover:bg-orange-50 hover:text-orange-700"
+                >
+                  {signInLabel}
                 </button>
                 <button
                   onClick={onCtaClick}

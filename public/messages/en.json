@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "Akeed - WhatsApp Bot to Confirm Cash-on-Delivery Orders for E-commerce Stores",
-    "description": "Smart WhatsApp bot automatically confirms cash-on-delivery orders. Save thousands of EGP monthly from return shipping for Egyptian stores."
+    "title": "Akeed - WhatsApp COD Confirmation for MENA E-commerce Stores",
+    "description": "Automate COD order confirmation on WhatsApp with official Meta WhatsApp Cloud APIs. Cut wasted shipping costs across MENA with no WhatsApp setup required from your store."
   },
   "header": {
     "tagline": "Smart Verification",
@@ -9,20 +9,21 @@
     "demo": "Demo",
     "pricing": "Pricing",
     "faq": "FAQ",
-    "cta": "Sign in"
+    "cta": "Start free",
+    "sign_in": "Sign in"
   },
   "hero": {
-    "title": "Confirm + GPS + Saving =",
+    "title": "Confirm COD orders on WhatsApp.",
     "highlight": "Akeed",
-    "subtitle": "Smart WhatsApp bot automatically confirms cash-on-delivery orders",
-    "subtitle_bullet_1": "✅ Instant Confirmation",
-    "subtitle_bullet_2": "✅ GPS Location",
-    "subtitle_bullet_3": "✅ Customized Messages",
-    "subtitle_bullet_4": "✅ Clear Dashboard",
-    "subtitle_bullet_5": "✅ 24/7 Technical Support",
+    "subtitle": "Rule-based COD confirmation workflows sent through official Meta WhatsApp Cloud APIs.",
+    "subtitle_bullet_1": "✅ Official Meta WhatsApp Cloud APIs",
+    "subtitle_bullet_2": "✅ No WhatsApp number or API setup required",
+    "subtitle_bullet_3": "✅ Branded Arabic and English confirmation messages",
+    "subtitle_bullet_4": "✅ Clear dashboard for confirmed, canceled, and pending orders",
+    "subtitle_bullet_5": "✅ Fast setup for Shopify and leading MENA platforms",
     "urgency": "Special Offer: First 20 stores get 50 confirmations FREE",
-    "social_proof": "Save up to 12,000 EGP monthly from COD returns",
-    "join_social_proof": "Join <bold>+85</bold> who registered their interest today",
+    "social_proof": "Cut avoidable COD shipping losses across MENA",
+    "join_social_proof": "Join <bold>+85</bold> stores that asked for early access today",
     "rating": "5.0 rating",
     "cta": "Start Free",
     "learn_more": "See Live Demo",
@@ -30,63 +31,61 @@
     "benefit_1": "No credit card required",
     "benefit_2": "14-day free trial",
     "benefit_3": "Cancel anytime",
-    "easy_integrated": "Easy Integrated with your platform",
-    "no_credit_card": "No credit card required, Start in 60 seconds!"
+    "easy_integrated": "Works with the platforms MENA merchants already use",
+    "no_credit_card": "Start in 60 seconds. No credit card required."
   },
   "demo": {
     "badge": "Live Demo",
-    "title": "See How It Works in",
+    "title": "See the confirmation flow in",
     "title_highlight": "Real-Time",
-    "subtitle": "Watch our AI bot handle a real customer conversation - automatically confirming orders, verifying addresses, and ensuring successful deliveries.",
+    "subtitle": "Watch Akeed run a branded, rule-based WhatsApp confirmation flow that verifies the order details and updates the result automatically.",
     "phone_status": "Online",
     "chat": {
-      "bot_1": "Hello Ahmed! 👋,\n Thank you for your order!\n We'd like to confirm your order details.\n\n📦 Order #12847\n🛍️ iPhone 15 Pro - Space Black\n💰 Total: 45,999 EGP.\n\n✅ Confirm the order?",
+      "bot_1": "Hello Ahmed! 👋\nThanks for your order.\nWe just need to confirm the details before shipping.\n\n📦 Order #12847\n🛍️ iPhone 15 Pro - Space Black\n💰 Total: 45,999 EGP\n\n✅ Would you like us to confirm this order?",
       "user_1": "Confirm Order",
-      "bot_3": "📍 Delivery Address:\n123 El Tahrir Street\nCairo, Egypt\n\nIs this address correct?",
+      "bot_3": "📍 Delivery Address:\n12 King Fahd Road\nRiyadh, Saudi Arabia\n\nIs this delivery address correct?",
       "user_2": "Yes, the address is correct",
-      "bot_5": "Excellent ✅! Your order is confirmed for delivery. 🚚",
-      "bot_6": "We'll send you tracking details shortly. Thank you for shopping with us! 🎉",
-      "request_location": "Can you share your location?",
-      "location_shared": "Location shared",
+      "bot_5": "Perfect ✅ Your order is now confirmed and marked ready for shipping.",
+      "bot_6": "We'll keep your store updated automatically. Thank you for shopping with us.",
       "buttons": {
         "confirm": "Confirm Order",
         "cancel": "Cancel",
-        "will_confirm_later": "Will Confirm Later",
-        "send_location": "Share Location"
+        "will_confirm_later": "Confirm Later",
+        "correct_address": "Yes, address is correct"
       }
     },
-    "bot_name": "Akeed Bot",
+    "bot_name": "Akeed Confirmation",
     "typing_placeholder": "Type a message...",
     "stats_title": "Real-Time Performance",
     "stat_1_label": "Orders Confirmed",
     "stat_1_value": "12,847",
     "stat_2_label": "Average Response Time",
     "stat_2_value": "< 3 sec",
-    "stat_3_label": "Money Saved",
-    "stat_3_value": "128K EGP",
+    "stat_3_label": "Shipping Cost Saved",
+    "stat_3_value": "$34K",
     "stat_4_label": "Confirmation Rate",
     "stat_4_value": "85%",
     "stat_5_label": "Orders Daily",
     "stat_5_value": "+10K",
     "stat_6_label": "Setup Time",
     "stat_6_value": "5min",
-    "features_title": "What Makes It Smart?",
-    "feature_1": "Natural language understanding in Arabic & English",
-    "feature_2": "Automatic address verification",
-    "feature_3": "Smart delivery time scheduling",
+    "features_title": "Why teams trust it",
+    "feature_1": "Official Meta WhatsApp Cloud API delivery",
+    "feature_2": "Structured confirmation and address checks",
+    "feature_3": "Rule-based flows your team can control",
     "feature_4": "Real-time order status updates",
-    "feature_5": "Fallback to human agent when needed"
+    "feature_5": "Shared WhatsApp infrastructure for faster setup"
   },
   "problems": {
     "title": "Delivery driver lost again? Customer not responding? Burning money on shipping?",
     "subtitle": "Honestly, we know exactly how you feel",
     "loss": {
       "title": "Massive Financial Losses",
-      "description": "30-40% of COD orders return due to lack of confirmation, costing you thousands monthly in wasted shipping"
+      "description": "30-40% of COD orders can return without confirmation, draining budget on failed delivery attempts and reverse shipping."
     },
     "time": {
       "title": "Wasted Time on Calls",
-      "description": "Hours daily wasted calling customers to confirm orders instead of focusing on growing your store"
+      "description": "Your team loses hours every week calling customers to confirm COD orders instead of growing the business."
     },
     "customer": {
       "title": "Poor Customer Experience",
@@ -94,91 +93,91 @@
     },
     "scale": {
       "title": "Difficulty Scaling",
-      "description": "As your orders increase, confirmation chaos and rejection rates grow - you can't scale this way"
+      "description": "As order volume grows across markets, manual confirmation becomes slower, more expensive, and harder to manage."
     },
     "address": {
-      "title": "Address Verification",
-      "description": "The address you receive from the customer is not verified, leading to failed deliveries and lost orders"
+      "title": "Unclear Delivery Details",
+      "description": "Unconfirmed addresses and missing customer replies lead to failed deliveries, extra courier calls, and preventable COD returns."
     },
-    "reality": "This is not a problem with the customer... This is not a problem with the system!",
-    "reality_highlight": "And the solution is in 'Akeed'"
+    "reality": "This is not just a customer problem. It is an operations problem.",
+    "reality_highlight": "Akeed fixes it with fast, rule-based WhatsApp confirmation"
   },
   "how_it_works": {
-    "section_title": "How Akeed Works?",
-    "main_title": "Just 3 Steps... Your Orders Are Safe.",
+    "section_title": "How Akeed Works",
+    "main_title": "Three simple steps to safer COD shipping across MENA.",
     "steps": {
       "connect": {
-        "title": "Connect Your Store (in 60 seconds)",
-        "description": "Whether on Shopify, WooCommerce, Salla, Zid, or others, integration is easy and simple. No code or programming needed, Akeed detects your orders as soon as they come in."
+        "title": "Connect your store in minutes",
+        "description": "Connect Shopify, WooCommerce, Salla, Zid, and other stores quickly. No custom WhatsApp setup is required for most merchants."
       },
       "automation": {
-        "title": "Akeed Handles It All",
-        "description": "Right after the order, Akeed bot sends a friendly message to the customer (with your brand name), confirms order details, and requests their GPS Location."
+        "title": "Akeed sends the confirmation automatically",
+        "description": "As soon as a COD order is created, Akeed sends a branded WhatsApp confirmation flow through official Meta APIs and captures a clear customer response."
       },
       "ship": {
-        "title": "Ship With Confidence (Save Money)",
-        "description": "The order is updated in your store dashboard as 'Confirmed' with a map link. And those who didn’t confirm or send location? Akeed flags them so you don’t ship and save wasted shipping costs!"
+        "title": "Ship only verified COD orders",
+        "description": "Confirmed and unconfirmed orders are synced back to your dashboard, so your team ships with more confidence and avoids wasted shipping costs."
       }
     }
   },
   "solution": {
-    "title": "Smart Solution for Your Store",
-    "subtitle": "Complete automation working 24/7 to increase your profits",
+    "title": "Built for MENA merchants shipping COD at scale",
+    "subtitle": "Clear, rule-based workflows that reduce returns and make operations easier to trust",
     "steps": {
       "1": {
         "title": "New Order Arrives",
-        "description": "Bot receives the order automatically from your platform (Shopify, WooCommerce, etc.)"
+      "description": "Akeed receives the order automatically from your store platform as soon as it is placed."
       },
       "2": {
         "title": "Instant WhatsApp Send",
-        "description": "Professional message reaches customer within seconds to confirm address and order"
+      "description": "A branded WhatsApp confirmation message reaches the customer within seconds to confirm order details."
       },
       "3": {
         "title": "Automatic Confirmation",
-        "description": "Bot follows up on reply and updates order status - ready to ship or canceled"
+      "description": "Akeed captures the customer response and updates the order status to confirmed, canceled, or pending review."
       }
     },
     "auto": {
-      "title": "Smart Automation 24/7",
-      "description": "Bot works non-stop - no holidays, no sleep, no human errors"
+      "title": "Rule-Based Automation 24/7",
+      "description": "Reliable confirmation workflows run around the clock with consistent logic for every COD order."
     },
     "response": {
-      "title": "Instant Response",
-      "description": "Messages arrive in seconds, 3x higher response rate than traditional calls"
+      "title": "Fast WhatsApp Reach",
+      "description": "Messages are sent in seconds while order intent is still fresh, helping teams get faster customer responses."
     },
     "natural": {
-      "title": "Natural Conversations",
-      "description": "Smart Arabic replies that understand customer intent - like a professional employee"
+      "title": "Arabic-Ready Confirmation Flows",
+      "description": "Use structured Arabic and English message flows that feel clear to customers without promising AI chat behavior."
     },
     "analytics": {
       "title": "Advanced Analytics",
-      "description": "Dashboard shows everything: confirmation rates, reasons, best times"
+      "description": "Track confirmation rates, cancellation reasons, and operational performance from one dashboard."
     },
-    "testimonial_1": "After using Akeed, our confirmation rate went from 55% to 89%! We saved 15,000 EGP monthly from return shipping. The bot works better than 3 employees!",
+    "testimonial_1": "After using Akeed, our confirmation rate jumped from 55% to 89%, and we cut wasted shipping costs every month.",
     "orders_monthly": "orders monthly",
     "fast-confirm": {
       "title": "Faster Confirmation",
-      "description": "The customer feels valued by the brand and confirms their order in seconds while still excited"
+      "description": "Customers receive a clear branded message quickly, which helps them confirm while purchase intent is still high."
     },
     "location": {
-      "title": "Pinpoint Location",
-      "description": "The 'Akeed' bot doesn't just talk to the customer, it asks them to 'Share Location' on WhatsApp. This way, the courier reaches the customer directly on the map, without getting lost or calling 100 times!"
+      "title": "Official Meta API Delivery",
+      "description": "Akeed runs on official Meta WhatsApp Cloud APIs, giving merchants a more stable and trustworthy infrastructure than unofficial workarounds."
     },
     "save-time": {
       "title": "Save Your Time & Effort",
-      "description": "No more wasting time on boring confirmation calls. Focus on more important tasks and leave the endless confirmation and double-checking to 'Akeed'."
+      "description": "Replace repetitive confirmation calls with automated workflows so your team can focus on support, fulfillment, and growth."
     },
     "integration": {
-      "title": "Seamless Integration",
-      "description": "Easily connects with popular e-commerce platforms - setup in minutes"
+      "title": "No WhatsApp Setup for Most Stores",
+      "description": "Most merchants can start with Akeed's shared WhatsApp infrastructure. Larger merchants can later move to their own number if needed."
     }
   },
   "pricing": {
     "title": "Simple Monthly Plans for Every Store Size",
     "subtitle": "Choose a plan based on included successful verifications, then pay a small overage rate when needed.",
-    "check_1": "Monthly billing with clear included limits",
-    "check_2": "No hidden fees",
-    "check_3": "Transparent overage pricing",
+    "check_1": "Official Meta WhatsApp Cloud APIs",
+    "check_2": "No WhatsApp number or business verification required to start",
+    "check_3": "Transparent monthly verification limits and overage pricing",
     "orders_label": "successful verifications/month",
     "currency": "USD",
     "free_badge": "Includes 50 successful verifications/month",
@@ -189,6 +188,10 @@
     "saving": "Save",
     "most_popular": "Most Popular",
     "cta_recharge": "Create Account and Get Started",
+    "starter_note": "Best for new stores validating COD workflows",
+    "growth_note": "Best for growing teams with weekly volume",
+    "pro_note": "Best for high-volume stores optimizing margin",
+    "scale_note": "Best for multi-market operations and larger teams",
     "tiers": {
       "starter": "Starter",
       "pro": "Pro Package",
@@ -199,39 +202,39 @@
   },
   "faq": {
     "section_title": "Frequently Asked Questions",
-    "section_description": "Everything you need to know about Akeed and our services. If you can't find your answer here, contact us directly!",
+    "section_description": "Answers to the main setup, WhatsApp, and pricing questions MENA merchants ask before getting started.",
     "title": "Frequently Asked Questions",
     "integration": {
       "question": "How does it integrate with my store?",
       "answer": "We integrate with all popular platforms: Shopify, WooCommerce, Zid, Salla, and others. Setup takes only 5 minutes via a simple Webhook."
     },
     "whatsapp": {
-      "question": "Do I need a special WhatsApp number?",
-      "answer": "Yes, you need a WhatsApp Business number. We help you with setup and connecting to WhatsApp Business API completely."
+      "question": "Do I need my own WhatsApp number to start?",
+      "answer": "No. Most merchants can start immediately using Akeed's shared WhatsApp infrastructure, so there is no business verification or API setup required on your side. Larger merchants can later connect their own number if needed."
     },
     "arabic": {
-      "question": "Does the bot understand Arabic well?",
-      "answer": "Yes! The bot is specially trained on Egyptian dialect and Modern Standard Arabic. It understands different replies like 'tamam', 'mashi', 'mowafek', 'la shukran' and others."
+      "question": "Does Akeed use AI to talk to customers?",
+      "answer": "No. Akeed uses rule-based automation, not open-ended AI chat. That keeps the confirmation flow clear, predictable, and easier to control for COD operations."
     },
     "pricing": {
       "question": "What happens if I exceed the confirmation limit?",
       "answer": "In the Professional plan, each additional confirmation is only 0.70 EGP. In the Starter plan, you can upgrade anytime."
     },
     "whatsapp_api": {
-      "question": "Do I need an expensive WhatsApp Business API?",
-      "answer": "Akeed offers you easy and affordable integration options, whether you want to use your own number or benefit from our solutions."
+      "question": "Are messages sent through official WhatsApp APIs?",
+      "answer": "Yes. Akeed uses official Meta WhatsApp Cloud APIs, which gives you a more reliable foundation than unofficial or unstable messaging workarounds."
     },
     "unconfirmed_order": {
-      "question": "What if the customer doesn't confirm the order or send their location?",
-      "answer": "Akeed immediately marks the order as 'Unconfirmed' in your store, so you don't ship it and save your money."
+      "question": "What happens if the customer does not confirm the order?",
+      "answer": "Akeed marks the order as unconfirmed in your store so your team can hold it, review it, or avoid shipping it until the customer responds."
     },
     "easy_integration": {
       "question": "Is integration with my store difficult?",
-      "answer": "Not at all! Akeed provides you with a simple step-by-step video guide to connect your store in less than a minute. It's just an API Key or a simple plugin."
+      "answer": "No. Akeed is designed for fast setup with platforms like Shopify, Salla, Zid, and WooCommerce. Most stores can be connected in minutes with a simple setup flow."
     },
     "customize_messages": {
       "question": "Can I customize Akeed's messages and language?",
-      "answer": "Absolutely, you can choose the dialect that fits your brand (colloquial, formal, Franco) and edit the messages as you like."
+      "answer": "Yes. You can customize the confirmation copy and choose the language style that best fits your brand and customer base."
     }
   },
   "roi_calculator": {
@@ -249,6 +252,21 @@
   "whatsapp_button": {
     "text": "Try it on your phone first",
     "message": "Hi, I want to try Akeed service"
+  },
+  "mobile_cta": {
+    "eyebrow": "Ready to reduce COD waste?",
+    "title": "Launch your WhatsApp confirmation flow",
+    "primary": "Start free"
+  },
+  "post_faq_cta": {
+    "eyebrow": "Final Step",
+    "title": "Start with shared WhatsApp infrastructure today",
+    "subtitle": "Get your COD confirmation workflow live in minutes with official Meta WhatsApp Cloud APIs, then scale to your own number later if needed.",
+    "point_1": "No business verification required to start",
+    "point_2": "Rule-based automation, no AI uncertainty",
+    "point_3": "Built for Shopify and MENA commerce stacks",
+    "primary": "Create account and start",
+    "secondary": "Review the problem we solve"
   },
   "auth": {
     "signInToAccount": "Sign in to your account",

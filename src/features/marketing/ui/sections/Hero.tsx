@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useReducedMotion } from 'framer-motion'
 import { SocialProof } from '@/features/marketing/ui/components/SocialProof'
 import { ChevronRight, ChevronLeft } from 'lucide-react'
 import ScrollDownArrow from './ScrollDownArrow'
@@ -23,16 +24,21 @@ function Hero() {
   const t = useTranslations('hero')
   const { locale, isRTL } = useLocaleInfo()
   const router = useRouter()
+  const shouldReduceMotion = useReducedMotion()
+
+  const baseTransition = {
+    duration: shouldReduceMotion ? 0 : 0.6,
+  }
 
   return (
-    <section className="relative flex min-h-screen flex-col justify-center gap-6 overflow-hidden px-6 pt-20 pb-8 sm:gap-8 sm:px-6 md:flex-row md:items-end md:gap-16 md:px-12 lg:gap-20 lg:px-24 lg:pt-22 lg:pb-24 xl:px-48">
-      <div className="flex max-w-4xl flex-col items-center text-center md:w-3/5 md:justify-center md:self-stretch">
+    <section className="relative flex min-h-screen flex-col justify-center gap-8 overflow-hidden px-6 pt-20 pb-10 sm:gap-10 md:flex-row md:items-center md:px-12 lg:gap-16 lg:px-20 lg:pt-24 lg:pb-20 xl:px-32">
+      <div className="flex max-w-4xl flex-col items-center text-center md:w-3/5 md:items-start md:text-left">
         {/* Main Headline */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="mb-4 flex flex-col items-center space-y-2 sm:mb-6 lg:mb-8"
+          transition={{ ...baseTransition, delay: 0.1 }}
+          className="mb-4 flex flex-col items-center space-y-2 sm:mb-6 md:items-start lg:mb-8"
         >
           <h1 className="text-2xl leading-tight font-black text-slate-900 sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl">
             {t('title')}{' '}
@@ -46,8 +52,8 @@ function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-6 self-start sm:mb-6 lg:px-20"
+          transition={{ ...baseTransition, delay: 0.2 }}
+          className="mb-6 self-stretch sm:mb-6 lg:max-w-2xl"
         >
           <div className="border-slate-200 backdrop-blur-sm sm:p-5">
             <p
@@ -71,8 +77,8 @@ function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mb-3 flex w-full flex-col items-center justify-center gap-4 sm:mb-4 sm:gap-5 md:flex-row lg:mb-6"
+          transition={{ ...baseTransition, delay: 0.3 }}
+          className="mb-3 flex w-full flex-col items-center justify-center gap-4 sm:mb-4 sm:gap-5 md:flex-row md:justify-start lg:mb-6"
         >
           <SocialProof />
           <button
@@ -91,7 +97,7 @@ function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+          transition={{ ...baseTransition, delay: 0.35 }}
           className="mb-6 sm:mb-8 md:mb-10"
         >
           <p className="text-xs font-semibold text-slate-500 sm:text-sm md:text-base">
@@ -106,8 +112,11 @@ function Hero() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-2 sm:mt-4"
+          transition={{
+            duration: shouldReduceMotion ? 0 : 0.8,
+            delay: 0.6,
+          }}
+          className="mt-2 w-full sm:mt-4"
         >
           <h3 className="my-3 text-xs font-semibold text-slate-500 sm:text-sm md:text-base lg:mt-0 lg:mb-4">
             {t('easy_integrated')}

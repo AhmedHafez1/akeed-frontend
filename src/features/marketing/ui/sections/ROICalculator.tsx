@@ -16,7 +16,7 @@ export default function ROICalculator() {
   return (
     <Section
       id="calculator"
-      className="relative bg-linear-to-b from-white via-emerald-50/30 to-white px-4 sm:px-6 md:px-12 lg:px-24 xl:px-48"
+      className="relative bg-linear-to-b from-white via-emerald-50/30 to-white px-4 sm:px-6 lg:px-10"
     >
       <Container>
         <ROICalculatorHeader title={t('section_title')} />

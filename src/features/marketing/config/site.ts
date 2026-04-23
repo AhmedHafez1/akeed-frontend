@@ -1,4 +1,4 @@
-import { Tier } from '@/features/marketing/model/tier.model'
+import type { Tier } from '@/features/marketing/model/tier.model'
 
 export const pricing: { tiers: Tier[] } = {
   tiers: [
@@ -43,16 +43,16 @@ export const features = {
   ],
   howItWorks: [
     { key: 'connect', icon: '🔗' },
-    { key: 'automation', icon: '🤖' },
+    { key: 'automation', icon: '💬' },
     { key: 'ship', icon: '🚚' },
   ],
   solutions: [
-    { key: 'auto', icon: '🤖' },
+    { key: 'auto', icon: '⚙️' },
     { key: 'response', icon: '⚡' },
     { key: 'fast-confirm', icon: '🚀' },
-    { key: 'location', icon: '🌍' },
+    { key: 'location', icon: '🛡️' },
     { key: 'save-time', icon: '⌛' },
-    { key: 'integration', icon: '🔗' },
+    { key: 'integration', icon: '📲' },
     { key: 'natural', icon: '💬' },
     { key: 'analytics', icon: '📊' },
   ],
@@ -60,6 +60,7 @@ export const features = {
 
 export const faqs = [
   { key: 'easy_integration' },
+  { key: 'whatsapp' },
   { key: 'arabic' },
   { key: 'whatsapp_api' },
   { key: 'unconfirmed_order' },

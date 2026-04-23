@@ -30,7 +30,7 @@ function Problem() {
   return (
     <Section
       id="problem"
-      className="relative px-4 sm:px-6 md:px-12 lg:px-24 xl:px-48"
+      className="relative px-4 sm:px-6 lg:px-10"
     >
       <Container>
         {/* Section Header */}
@@ -65,7 +65,7 @@ function Problem() {
         >
           {features.problems.map((problem) => (
             <motion.div key={problem.key} variants={item}>
-              <div className="group relative overflow-hidden rounded-2xl border border-rose-100 bg-white px-4 py-5 transition-all duration-300 hover:-translate-y-1 hover:border-rose-200 hover:shadow-lg sm:px-6 sm:py-6 lg:min-h-80 lg:px-8">
+               <div className="group relative overflow-hidden rounded-2xl border border-rose-100 bg-white px-4 py-5 transition-all duration-300 hover:-translate-y-1 hover:border-rose-200 hover:shadow-md sm:px-6 sm:py-6 lg:min-h-72 lg:px-8">
                 {/* Gradient overlay on hover */}
                 <div className="absolute inset-0 bg-linear-to-br from-rose-50/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 

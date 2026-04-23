@@ -8,7 +8,6 @@ import { ChatInputBar } from './chat/ChatInputBar'
 import { ChatMessageList } from './chat/ChatMessageList'
 
 const HEADER_TIME = '09:41'
-const LOCATION_FALLBACK = '30.0444, 31.2357'
 
 export function ChatInterface() {
   const t = useTranslations('demo')
@@ -37,8 +36,6 @@ export function ChatInterface() {
             <ChatMessageList
               messages={messages}
               isTyping={isTyping}
-              locationTitle={t('chat.location_shared')}
-              locationFallbackAddress={LOCATION_FALLBACK}
               scrollRef={scrollAreaRef}
             />
 

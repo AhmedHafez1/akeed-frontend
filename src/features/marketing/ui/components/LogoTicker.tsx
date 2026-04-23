@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { usePathname } from 'next/navigation'
+import { useReducedMotion } from 'framer-motion'
 
 const logos = [
   { name: 'ExpandCart', src: '/images/landing/logos/exp-cart.png' },
@@ -17,6 +18,7 @@ export function LogoTicker() {
   const pathname = usePathname()
   const locale = pathname?.split('/')[1] === 'en' ? 'en' : 'ar'
   const isRtl = locale === 'ar'
+  const shouldReduceMotion = useReducedMotion()
 
   return (
     <motion.div className="overflow-hidden border-y border-gray-200 bg-linear-to-r from-gray-50 to-white py-4">
@@ -24,13 +26,16 @@ export function LogoTicker() {
         <div className="flex overflow-hidden mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
           <motion.div
             className="flex flex-none gap-16 px-8" // Use px instead of pr to keep spacing even on both sides
-            animate={{
-              // If RTL, move 50% to the right. If LTR, move -50% to the left.
-              x: isRtl ? ['0%', '50%'] : ['0%', '-50%'],
-            }}
+            animate={
+              shouldReduceMotion
+                ? { x: '0%' }
+                : {
+                    x: isRtl ? ['0%', '50%'] : ['0%', '-50%'],
+                  }
+            }
             transition={{
-              duration: 25,
-              repeat: Infinity,
+              duration: shouldReduceMotion ? 0 : 25,
+              repeat: shouldReduceMotion ? 0 : Infinity,
               ease: 'linear',
             }}
           >

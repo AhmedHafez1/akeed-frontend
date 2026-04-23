@@ -27,22 +27,19 @@ export function useDemoChat(t: (key: string) => string) {
       },
       {
         type: 'bot',
-        text: t('chat.request_location'),
+        text: t('chat.bot_3'),
         delay: 2000,
         buttons: [
-          { text: t('chat.buttons.send_location'), action: 'location' },
+          {
+            text: t('chat.buttons.correct_address'),
+            action: 'correct-address',
+          },
         ],
-        selectedAction: 'location',
+        selectedAction: 'correct-address',
       },
       {
         type: 'user',
-        contentType: 'location',
-        text: t('chat.location_shared'),
-        locationData: {
-          lat: 30.0444,
-          lng: 31.2357,
-          address: '123 El Tahrir Street, Cairo',
-        },
+        text: t('chat.user_2'),
         delay: 2500,
       },
       {

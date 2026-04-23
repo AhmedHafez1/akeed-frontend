@@ -4,7 +4,7 @@ import { Container } from '@/shared/ui/container'
 import { Section } from '@/shared/ui/section'
 import { PricingHeader } from './pricing/PricingHeader'
 import { PricingMobileCards } from './pricing/PricingMobileCards'
-import { PricingDesktopTable } from './pricing/PricingDesktopTable'
+import { PricingDesktopCards } from './pricing/PricingDesktopCards'
 import { usePricing } from '@/features/marketing/hooks/usePricing'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { useRouter } from 'next/navigation'
@@ -14,9 +14,10 @@ export default function Pricing() {
   const { t, tiers, checks } = usePricing()
   const { locale } = useLocaleInfo()
   const router = useRouter()
+  const handleCtaClick = () => router.push(withLocale('/signup', locale))
 
   return (
-    <Section id="pricing" className="px-4 sm:px-6 md:px-12 lg:px-24 xl:px-48">
+    <Section id="pricing" className="px-4 sm:px-6 lg:px-10">
       <Container>
         <PricingHeader
           title={t('title')}
@@ -24,12 +25,12 @@ export default function Pricing() {
           checks={checks}
         />
 
-        <PricingMobileCards tiers={tiers} t={t} />
+        <PricingMobileCards tiers={tiers} t={t} onCtaClick={handleCtaClick} />
 
-        <PricingDesktopTable
+        <PricingDesktopCards
           tiers={tiers}
           t={t}
-          onCtaClick={() => router.push(withLocale('/signup', locale))}
+          onCtaClick={handleCtaClick}
         />
       </Container>
     </Section>
