@@ -30,7 +30,6 @@ export function HomePage() {
       <section className="w-full border-t border-slate-200/70 bg-linear-to-b from-white via-slate-50 to-white">
         <FAQ />
       </section>
-      <PostFaqCta />
       <StickyMobileCta />
     </main>
   )
