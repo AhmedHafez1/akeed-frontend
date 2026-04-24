@@ -6,7 +6,14 @@ export function usePricing() {
   const t = useTranslations('pricing')
   const { tiers } = pricing
 
-  const checks = useMemo(() => [t('check_1'), t('check_2'), t('check_3')], [t])
+  const checks = useMemo(
+    () => [
+      { key: 'whatsapp', label: t('check_1') },
+      { key: 'security', label: t('check_2') },
+      { key: 'pricing', label: t('check_3') },
+    ],
+    [t]
+  )
 
   return {
     t,
