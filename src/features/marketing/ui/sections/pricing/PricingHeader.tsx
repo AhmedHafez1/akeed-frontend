@@ -36,24 +36,14 @@ const checkIcons: Record<
   pricing: BadgePercent,
 }
 
-export function PricingHeader({
-  eyebrow,
-  title,
-  subtitle,
-  checks,
-  isRTL,
-}: PricingHeaderProps) {
+export function PricingHeader({ title, checks, isRTL }: PricingHeaderProps) {
   return (
-    <div className="mx-auto mb-10 max-w-6xl sm:mb-12 lg:mb-16">
+    <div className="mx-auto mb-10 sm:mb-12 lg:mb-16">
       <div className="landing-section-header">
-        <p className="text-xs font-bold tracking-[0.16em] text-emerald-700 uppercase">
-          {eyebrow}
-        </p>
         <h2 className="landing-section-title max-w-5xl">{title}</h2>
-        <p className="landing-subtitle max-w-3xl">{subtitle}</p>
       </div>
 
-      <div className="mx-auto mt-10 grid max-w-6xl gap-4 md:grid-cols-3 xl:mt-12">
+      <div className="mx-auto mt-10 grid gap-4 md:grid-cols-3 xl:mt-12">
         {checks.map((check) => {
           const Icon = checkIcons[check.key] ?? ShieldCheck
 
@@ -61,11 +51,11 @@ export function PricingHeader({
             <article
               key={check.key}
               className={cn(
-                `${landingCardClass} items-center gap-4 p-5 sm:px-6`,
+                `${landingCardClass} flex items-center gap-4 p-5 sm:px-6`,
                 isRTL && 'text-right'
               )}
             >
-              <LandingIconBadge icon={Icon} />
+              <LandingIconBadge icon={Icon} size="sm" tone="sky" />
               <p className="text-base leading-7 font-medium text-slate-800 sm:text-lg sm:leading-8">
                 {check.label}
               </p>
