@@ -77,8 +77,8 @@
     "feature_5": "Shared WhatsApp infrastructure for faster setup"
   },
   "problems": {
-    "title": "Delivery driver lost again? Customer not responding? Burning money on shipping?",
-    "subtitle": "Honestly, we know exactly how you feel",
+    "title": "Customer not responding? Burning money on shipping?",
+    "subtitle": "These problems happen daily with COD orders",
     "loss": {
       "title": "Massive Financial Losses",
       "description": "30-40% of COD orders can return without confirmation, draining budget on failed delivery attempts and reverse shipping."
@@ -100,7 +100,7 @@
       "description": "Unconfirmed addresses and missing customer replies lead to failed deliveries, extra courier calls, and preventable COD returns."
     },
     "reality": "This is not just a customer problem. It is an operations problem.",
-    "reality_highlight": "Akeed fixes it with fast, rule-based WhatsApp confirmation"
+    "reality_highlight": "Akeed is built to solve these problems"
   },
   "how_it_works": {
     "section_title": "How Akeed Works",

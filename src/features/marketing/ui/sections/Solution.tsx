@@ -108,7 +108,7 @@ export function Solution() {
               <motion.article
                 key={solution.key}
                 variants={item}
-                className="group relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-md"
+                className="group relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-md"
               >
                 <div className="absolute -right-10 -bottom-10 h-28 w-28 rounded-full bg-emerald-200/30 opacity-50 blur-3xl transition-opacity group-hover:opacity-90" />
 
@@ -126,7 +126,7 @@ export function Solution() {
                   </span>
                 </div>
 
-                <h3 className="mb-2 text-lg font-bold text-slate-800">
+                <h3 className="my-4 text-lg font-bold text-slate-800">
                   {t(`${solution.key}.title`)}
                 </h3>
                 <p className="text-sm leading-relaxed text-slate-600">
@@ -136,19 +136,6 @@ export function Solution() {
             )
           })}
         </motion.div>
-
-        <div className="mx-auto mb-8 grid max-w-5xl grid-cols-1 gap-3 rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm sm:grid-cols-3 sm:p-5">
-          <div className="rounded-xl bg-emerald-50 px-4 py-3 text-center text-sm font-semibold text-emerald-800">
-            {t('location.title')}
-          </div>
-          <div className="rounded-xl bg-teal-50 px-4 py-3 text-center text-sm font-semibold text-teal-800">
-            {t('integration.title')}
-          </div>
-          <div className="rounded-xl bg-cyan-50 px-4 py-3 text-center text-sm font-semibold text-cyan-800">
-            {t('analytics.title')}
-          </div>
-        </div>
-
         <ScrollDownArrow to="how-it-works" className="hidden sm:block" />
       </Container>
     </Section>

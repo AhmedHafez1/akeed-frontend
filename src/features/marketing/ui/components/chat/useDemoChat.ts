@@ -16,7 +16,6 @@ export function useDemoChat(t: (key: string) => string) {
         buttons: [
           { text: t('chat.buttons.confirm'), action: 'confirm' },
           { text: t('chat.buttons.cancel'), action: 'cancel' },
-          { text: t('chat.buttons.will_confirm_later'), action: 'later' },
         ],
         selectedAction: 'confirm',
       },
@@ -46,11 +45,6 @@ export function useDemoChat(t: (key: string) => string) {
         type: 'bot',
         text: t('chat.bot_5'),
         delay: 2000,
-      },
-      {
-        type: 'bot',
-        text: t('chat.bot_6'),
-        delay: 2500,
       },
     ],
     [t]
