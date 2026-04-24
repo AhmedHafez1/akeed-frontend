@@ -18,7 +18,6 @@ export function LogoTicker() {
   const pathname = usePathname()
   const locale = pathname?.split('/')[1] === 'en' ? 'en' : 'ar'
   const isRtl = locale === 'ar'
-  const shouldReduceMotion = useReducedMotion()
 
   return (
     <motion.div className="overflow-hidden rounded-2xl border border-gray-200/80 bg-linear-to-r from-gray-50 via-white to-gray-50/80 py-4 shadow-sm shadow-slate-200/50 backdrop-blur-sm">
@@ -26,16 +25,12 @@ export function LogoTicker() {
         <div className="flex overflow-hidden mask-[linear-gradient(to_right,transparent_0,black_10%,black_90%,transparent_100%)]">
           <motion.div
             className="flex flex-none items-center gap-12 px-12 sm:gap-14 sm:px-14"
-            animate={
-              shouldReduceMotion
-                ? { x: '0%' }
-                : {
-                    x: isRtl ? ['0%', '50%'] : ['0%', '-50%'],
-                  }
-            }
+            animate={{
+              x: isRtl ? ['0%', '50%'] : ['0%', '-50%'],
+            }}
             transition={{
-              duration: shouldReduceMotion ? 0 : 25,
-              repeat: shouldReduceMotion ? 0 : Infinity,
+              duration: 25,
+              repeat: Infinity,
               ease: 'linear',
             }}
           >
@@ -43,7 +38,7 @@ export function LogoTicker() {
             {[...logos, ...logos].map((logo, index) => (
               <div
                 key={`${logo.name}-${index}`}
-                className="flex h-12 min-w-[124px] shrink-0 items-center justify-center px-2"
+                className="flex h-12 min-w-31 shrink-0 items-center justify-center px-2"
               >
                 <Image
                   src={logo.src}

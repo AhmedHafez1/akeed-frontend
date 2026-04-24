@@ -83,10 +83,11 @@ function HowItWorks() {
               >
                 <div className={landingCardGlowClass} />
 
-                <div className="relative mb-4 flex items-center justify-between">
+                <div className="relative mb-6 flex items-center justify-between">
                   <LandingIconBadge
                     icon={stepCards[index % stepCards.length].icon}
                     tone={stepCards[index % stepCards.length].tone}
+                    size="sm"
                   />
                   <span className="text-xs font-bold tracking-[0.12em] text-slate-300">
                     {String(index + 1).padStart(2, '0')}

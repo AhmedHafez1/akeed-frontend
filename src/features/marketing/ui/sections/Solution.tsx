@@ -36,11 +36,6 @@ const item = {
 
 const solutionCards = [
   {
-    key: 'auto',
-    icon: Settings2,
-    iconTone: 'emerald',
-  },
-  {
     key: 'response',
     icon: MessagesSquare,
     iconTone: 'teal',
@@ -64,6 +59,11 @@ const solutionCards = [
     key: 'analytics',
     icon: BarChart3,
     iconTone: 'teal',
+  },
+  {
+    key: 'auto',
+    icon: Settings2,
+    iconTone: 'emerald',
   },
 ] as const
 

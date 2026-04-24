@@ -145,8 +145,8 @@
       "description": "Messages are sent in seconds while order intent is still fresh, helping teams get faster customer responses."
     },
     "natural": {
-      "title": "Arabic-Ready Confirmation Flows",
-      "description": "Use structured Arabic and English message flows that feel clear to customers without promising AI chat behavior."
+      "title": "Clear, Customer-Friendly Messages",
+      "description": "Use clear, simple messages that customers understand and can easily respond to"
     },
     "analytics": {
       "title": "Advanced Analytics",
