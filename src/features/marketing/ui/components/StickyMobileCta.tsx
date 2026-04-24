@@ -12,7 +12,7 @@ export function StickyMobileCta() {
   const { locale } = useLocaleInfo()
 
   return (
-    <div className="fixed right-0 bottom-0 left-0 z-50 border-t border-orange-100 bg-white/95 px-3 py-3 shadow-lg backdrop-blur md:hidden">
+    <div className="fixed right-0 bottom-0 left-0 z-50 border-t border-slate-200/80 bg-white/95 px-3 py-3 shadow-[0_-10px_30px_rgba(15,23,42,0.08)] backdrop-blur md:hidden">
       <div className="mx-auto flex max-w-md items-center gap-3">
         <div className="min-w-0 flex-1">
           <p className="truncate text-xs font-semibold text-slate-500">

@@ -1,5 +1,9 @@
 import type { ReactNode, SVGProps } from 'react'
 import { BadgePercent, ShieldCheck } from 'lucide-react'
+import {
+  LandingIconBadge,
+  landingCardClass,
+} from '@/features/marketing/ui/components/LandingPrimitives'
 import { cn } from '@/shared/lib/utils'
 
 interface PricingCheck {
@@ -33,19 +37,21 @@ const checkIcons: Record<
 }
 
 export function PricingHeader({
+  eyebrow,
   title,
   subtitle,
   checks,
   isRTL,
 }: PricingHeaderProps) {
   return (
-    <div className="mx-auto mb-10 max-w-6xl text-center sm:mb-12 lg:mb-16">
-      <h2 className="mx-auto mt-6 max-w-5xl text-[clamp(2.5rem,5.8vw,4.5rem)] leading-[0.95] font-semibold tracking-[-0.06em] text-balance text-slate-950">
-        {title}
-      </h2>
-      <p className="mx-auto mt-5 max-w-3xl text-[1.05rem] leading-8 font-medium text-slate-500 sm:text-xl">
-        {subtitle}
-      </p>
+    <div className="mx-auto mb-10 max-w-6xl sm:mb-12 lg:mb-16">
+      <div className="landing-section-header">
+        <p className="text-xs font-bold tracking-[0.16em] text-emerald-700 uppercase">
+          {eyebrow}
+        </p>
+        <h2 className="landing-section-title max-w-5xl">{title}</h2>
+        <p className="landing-subtitle max-w-3xl">{subtitle}</p>
+      </div>
 
       <div className="mx-auto mt-10 grid max-w-6xl gap-4 md:grid-cols-3 xl:mt-12">
         {checks.map((check) => {
@@ -55,13 +61,11 @@ export function PricingHeader({
             <article
               key={check.key}
               className={cn(
-                'flex items-center gap-4 rounded-3xl border border-slate-200/80 bg-white/95 px-5 py-5 shadow-[0_12px_30px_rgba(15,23,42,0.06)] backdrop-blur-sm sm:px-6',
+                `${landingCardClass} items-center gap-4 p-5 sm:px-6`,
                 isRTL && 'text-right'
               )}
             >
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100">
-                <Icon className="h-7 w-7" />
-              </div>
+              <LandingIconBadge icon={Icon} />
               <p className="text-base leading-7 font-medium text-slate-800 sm:text-lg sm:leading-8">
                 {check.label}
               </p>

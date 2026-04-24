@@ -7,6 +7,10 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import type { Tier } from '@/features/marketing/model/tier.model'
+import {
+  LandingIconBadge,
+  landingCardClass,
+} from '@/features/marketing/ui/components/LandingPrimitives'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/button'
 
@@ -39,8 +43,8 @@ export function PricingPlanCard({
   return (
     <article
       className={cn(
-        'relative flex h-full min-h-115 flex-col rounded-[30px] border p-8 text-center transition-all duration-300 hover:-translate-y-1',
-        'border-slate-200 bg-white shadow-[0_18px_40px_rgba(15,23,42,0.08)]'
+        landingCardClass,
+        'flex h-full min-h-115 flex-col overflow-visible text-center'
       )}
     >
       {isPopular && (
@@ -61,9 +65,10 @@ export function PricingPlanCard({
 
       <div className="mb-8 border-b border-slate-200/80 pb-8">
         <div className="mb-6 flex justify-center">
-          <div className="flex h-18 w-18 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100">
-            <Icon className="h-9 w-9" />
-          </div>
+          <LandingIconBadge
+            icon={Icon}
+            className="h-18 w-18 [&_svg]:h-9 [&_svg]:w-9"
+          />
         </div>
 
         <h3 className="text-[1.8rem] leading-tight font-semibold tracking-[-0.055em] text-slate-800 uppercase">

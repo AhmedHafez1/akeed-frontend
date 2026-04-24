@@ -10,7 +10,11 @@ import {
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
-import { cn } from '@/shared/lib/utils'
+import {
+  LandingIconBadge,
+  landingCardClass,
+  landingCardGlowClass,
+} from '@/features/marketing/ui/components/LandingPrimitives'
 import { Container } from '@/shared/ui/container'
 import { Section } from '@/shared/ui/section'
 import ScrollDownArrow from './ScrollDownArrow'
@@ -34,32 +38,32 @@ const solutionCards = [
   {
     key: 'auto',
     icon: Settings2,
-    iconTone: 'bg-emerald-100 text-emerald-700',
+    iconTone: 'emerald',
   },
   {
     key: 'response',
     icon: MessagesSquare,
-    iconTone: 'bg-teal-100 text-teal-700',
+    iconTone: 'teal',
   },
   {
     key: 'location',
     icon: ShieldCheck,
-    iconTone: 'bg-cyan-100 text-cyan-700',
+    iconTone: 'cyan',
   },
   {
     key: 'integration',
     icon: BadgeCheck,
-    iconTone: 'bg-sky-100 text-sky-700',
+    iconTone: 'sky',
   },
   {
     key: 'natural',
     icon: Clock3,
-    iconTone: 'bg-emerald-100 text-emerald-700',
+    iconTone: 'emerald',
   },
   {
     key: 'analytics',
     icon: BarChart3,
-    iconTone: 'bg-teal-100 text-teal-700',
+    iconTone: 'teal',
   },
 ] as const
 
@@ -67,11 +71,7 @@ export function Solution() {
   const t = useTranslations('solution')
 
   return (
-    <Section
-      id="solution"
-      variant="gradient"
-      className="relative px-4 sm:px-6 lg:px-10"
-    >
+    <Section id="solution" className="relative px-4 sm:px-6 lg:px-10">
       <Container>
         <div className="landing-section-header mb-10 sm:mb-12 lg:mb-14">
           <motion.h2
@@ -108,19 +108,12 @@ export function Solution() {
               <motion.article
                 key={solution.key}
                 variants={item}
-                className="group relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-md"
+                className={landingCardClass}
               >
-                <div className="absolute -right-10 -bottom-10 h-28 w-28 rounded-full bg-emerald-200/30 opacity-50 blur-3xl transition-opacity group-hover:opacity-90" />
+                <div className={landingCardGlowClass} />
 
                 <div className="relative mb-4 flex items-center justify-between">
-                  <span
-                    className={cn(
-                      'inline-flex h-11 w-11 items-center justify-center rounded-xl',
-                      solution.iconTone
-                    )}
-                  >
-                    <Icon className="h-5 w-5" />
-                  </span>
+                  <LandingIconBadge icon={Icon} tone={solution.iconTone} />
                   <span className="text-xs font-bold tracking-[0.12em] text-slate-300">
                     {String(index + 1).padStart(2, '0')}
                   </span>

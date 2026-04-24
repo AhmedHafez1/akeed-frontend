@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import { Accordion } from '@/shared/ui/accordion'
 import { FAQItem } from '@/shared/ui/faq-item'
 import { faqs } from '@/features/marketing/config/site'
+import { landingInsetCardClass } from '@/features/marketing/ui/components/LandingPrimitives'
 
 function FAQ() {
   const tFaq = useTranslations('faq')
@@ -40,7 +41,7 @@ function FAQ() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mx-auto max-w-3xl rounded-2xl border border-emerald-100 bg-white/90 p-6 shadow-sm"
+          className={`mx-auto max-w-3xl p-6 ${landingInsetCardClass}`}
         >
           <Accordion type="single" collapsible className="space-y-3">
             {faqs.map((faq, index) => (

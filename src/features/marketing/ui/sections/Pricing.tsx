@@ -2,6 +2,10 @@
 
 import { BadgePercent, Headset } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import {
+  LandingIconBadge,
+  landingInsetCardClass,
+} from '@/features/marketing/ui/components/LandingPrimitives'
 import { usePricing } from '@/features/marketing/hooks/usePricing'
 import { cn } from '@/shared/lib/utils'
 import { withLocale } from '@/shared/lib/locale'
@@ -20,31 +24,8 @@ export default function Pricing() {
   return (
     <Section
       id="pricing"
-      className="relative overflow-hidden bg-[#fffcf8] px-4 sm:px-6 lg:px-10"
+      className="relative overflow-hidden px-4 sm:px-6 lg:px-10"
     >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,rgba(16,185,129,0.09),transparent_70%)]"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute top-8 left-6 hidden h-32 w-40 opacity-70 md:block"
-        style={{
-          backgroundImage:
-            'radial-gradient(circle, rgba(16, 185, 129, 0.24) 1.4px, transparent 1.4px)',
-          backgroundSize: '18px 18px',
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-28 -right-24 hidden h-105 w-105 opacity-70 lg:block"
-        style={{
-          backgroundImage:
-            'repeating-radial-gradient(circle at center, transparent 0 13px, rgba(16, 185, 129, 0.12) 13px 14px)',
-          clipPath: 'ellipse(68% 58% at 100% 0%)',
-        }}
-      />
-
       <Container className="relative z-10 max-w-351.5">
         <PricingHeader
           eyebrow={t('eyebrow')}
@@ -65,17 +46,17 @@ export default function Pricing() {
           isRTL={isRTL}
         />
 
-        <div className="mx-auto mt-8 grid max-w-5xl gap-px overflow-hidden rounded-[28px] border border-slate-200/90 bg-slate-200/80 shadow-[0_16px_38px_rgba(15,23,42,0.08)] md:grid-cols-2 lg:mt-10">
-          <div className="bg-white px-5 py-5 sm:px-7 sm:py-6">
+        <div className="mx-auto mt-8 grid max-w-5xl gap-4 md:grid-cols-2 lg:mt-10">
+          <div
+            className={cn(landingInsetCardClass, 'px-5 py-5 sm:px-7 sm:py-6')}
+          >
             <div
               className={cn(
                 'flex items-center gap-4',
                 isRTL && 'text-right md:flex-row-reverse'
               )}
             >
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100">
-                <BadgePercent className="h-7 w-7" />
-              </div>
+              <LandingIconBadge icon={BadgePercent} size="sm" />
 
               <div>
                 <p className="text-lg font-semibold tracking-[-0.03em] text-slate-950">
@@ -88,16 +69,16 @@ export default function Pricing() {
             </div>
           </div>
 
-          <div className="bg-white px-5 py-5 sm:px-7 sm:py-6">
+          <div
+            className={cn(landingInsetCardClass, 'px-5 py-5 sm:px-7 sm:py-6')}
+          >
             <div
               className={cn(
                 'flex items-center gap-4',
                 isRTL && 'text-right md:flex-row-reverse'
               )}
             >
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100">
-                <Headset className="h-7 w-7" />
-              </div>
+              <LandingIconBadge icon={Headset} size="sm" />
 
               <div>
                 <p className="text-lg font-semibold tracking-[-0.03em] text-slate-950">

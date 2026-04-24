@@ -1,8 +1,14 @@
 'use client'
 
+import { BarChart3, Clock3, MapPinned, Wallet } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 
+import {
+  LandingIconBadge,
+  landingCardClass,
+  landingCardGlowClass,
+} from '@/features/marketing/ui/components/LandingPrimitives'
 import { cn } from '@/shared/lib/utils'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { Container } from '@/shared/ui/container'
@@ -25,11 +31,11 @@ const item = {
   show: { opacity: 1, y: 0 },
 }
 
-const problemIconTones = [
-  'bg-emerald-100 text-emerald-700',
-  'bg-teal-100 text-teal-700',
-  'bg-cyan-100 text-cyan-700',
-  'bg-sky-100 text-sky-700',
+const problemCards = [
+  { icon: Wallet, tone: 'emerald' },
+  { icon: Clock3, tone: 'teal' },
+  { icon: BarChart3, tone: 'cyan' },
+  { icon: MapPinned, tone: 'sky' },
 ] as const
 
 function Problem() {
@@ -73,19 +79,15 @@ function Problem() {
             <motion.article
               key={problem.key}
               variants={item}
-              className="group relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-md"
+              className={landingCardClass}
             >
-              <div className="absolute -right-10 -bottom-10 h-28 w-28 rounded-full bg-emerald-200/30 opacity-50 blur-3xl transition-opacity group-hover:opacity-90" />
+              <div className={landingCardGlowClass} />
 
               <div className="relative mb-4 flex items-center justify-between">
-                <span
-                  className={cn(
-                    'inline-flex h-11 w-11 items-center justify-center rounded-xl text-2xl',
-                    problemIconTones[index % problemIconTones.length]
-                  )}
-                >
-                  {problem.icon}
-                </span>
+                <LandingIconBadge
+                  icon={problemCards[index % problemCards.length].icon}
+                  tone={problemCards[index % problemCards.length].tone}
+                />
                 <span className="text-xs font-bold tracking-[0.12em] text-slate-300">
                   {String(index + 1).padStart(2, '0')}
                 </span>
