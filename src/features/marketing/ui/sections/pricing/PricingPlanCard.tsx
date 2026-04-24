@@ -17,10 +17,10 @@ export function PricingPlanCard({ tier, t, onSelect }: PricingPlanCardProps) {
 
   return (
     <article
-      className={`relative flex h-full flex-col rounded-2xl border bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
+      className={`relative flex h-full flex-col rounded-2xl border bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-md ${
         isPopular
           ? 'border-emerald-400 shadow-md ring-2 ring-emerald-100'
-          : 'border-slate-200 shadow-sm'
+          : 'border-emerald-100 shadow-sm hover:border-emerald-200'
       }`}
     >
       {isPopular && (

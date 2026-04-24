@@ -14,6 +14,27 @@ function FAQ() {
   return (
     <Section id="faq" className="relative px-4 sm:px-6 lg:px-10">
       <Container>
+        <div className="landing-section-header mb-10 sm:mb-12 lg:mb-14">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="landing-section-title max-w-4xl"
+          >
+            {tFaq('section_title')}
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="landing-subtitle max-w-3xl"
+          >
+            {tFaq('section_description')}
+          </motion.p>
+        </div>
+
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -21,12 +42,6 @@ function FAQ() {
           transition={{ duration: 0.6 }}
           className="mx-auto max-w-3xl rounded-2xl border border-emerald-100 bg-white/90 p-6 shadow-sm"
         >
-          <h2 className="landing-section-title mx-auto mb-4 max-w-4xl text-center">
-            {tFaq('section_title')}
-          </h2>
-          <p className="landing-subtitle mx-auto mb-8 max-w-3xl text-center sm:mb-10 lg:mb-14">
-            {tFaq('section_description')}
-          </p>
           <Accordion type="single" collapsible className="space-y-3">
             {faqs.map((faq, index) => (
               <FAQItem

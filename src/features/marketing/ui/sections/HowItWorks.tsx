@@ -1,12 +1,13 @@
 'use client'
 
+import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 
+import { cn } from '@/shared/lib/utils'
+import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { Container } from '@/shared/ui/container'
 import { Section } from '@/shared/ui/section'
-import { motion } from 'framer-motion'
 import { features } from '@/features/marketing/config/site'
-import { usePathname } from 'next/navigation'
 import ScrollDownArrow from './ScrollDownArrow'
 
 const container = {
@@ -24,12 +25,15 @@ const item = {
   show: { opacity: 1, y: 0 },
 }
 
+const stepIconTones = [
+  'bg-emerald-100 text-emerald-700',
+  'bg-teal-100 text-teal-700',
+  'bg-cyan-100 text-cyan-700',
+] as const
+
 function HowItWorks() {
   const t = useTranslations('how_it_works')
-  const pathname = usePathname()
-  // Extract locale from pathname (assuming /[locale]/...)
-  const locale = pathname?.split('/')[1] === 'en' ? 'en' : 'ar'
-  const isRTL = locale === 'ar'
+  const { isRTL } = useLocaleInfo()
 
   return (
     <>
@@ -65,42 +69,37 @@ function HowItWorks() {
             viewport={{ once: true, margin: '-50px' }}
             className="mb-8 grid grid-cols-1 gap-4 sm:mb-10 sm:gap-6 md:grid-cols-3 md:gap-8 lg:mb-12 lg:gap-16"
           >
-            {features.howItWorks.map((step, idx) => (
-              <motion.div key={step.key} variants={item}>
-                <div className="group relative overflow-hidden rounded-2xl border border-emerald-100 bg-white px-4 py-5 pt-12 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-md sm:px-6 lg:min-h-72 lg:px-8 lg:pt-10">
-                  {/* Gradient overlay on hover */}
-                  <div className="absolute inset-0 bg-linear-to-br from-emerald-50/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            {features.howItWorks.map((step, index) => (
+              <motion.article
+                key={step.key}
+                variants={item}
+                className="group relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-md"
+              >
+                <div className="absolute -right-10 -bottom-10 h-28 w-28 rounded-full bg-emerald-200/30 opacity-50 blur-3xl transition-opacity group-hover:opacity-90" />
 
-                  <div className="relative flex flex-row items-start gap-3 sm:flex-col sm:items-center sm:gap-4">
-                    {/* Step Number Badge */}
-                    <div
-                      className={`absolute -top-10 lg:-top-6 ${locale === 'en' ? '-left-2 lg:-left-4' : '-right-2 lg:-right-4'} z-10 flex h-6 w-6 items-center justify-center rounded-lg bg-linear-to-br from-orange-500 to-orange-600 text-base text-white shadow-lg ring-4 ring-white transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 lg:h-8 lg:w-8 lg:rounded-xl lg:font-semibold`}
-                    >
-                      {idx + 1}
-                    </div>
-
-                    {/* Icon */}
-                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-emerald-50 to-emerald-100 text-4xl shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:shadow-md sm:h-20 sm:w-20 sm:text-6xl lg:h-24 lg:w-24">
-                      {step.icon}
-                    </div>
-
-                    {/* Content */}
-                    <div
-                      className={`flex-1 space-y-1 sm:space-y-2 sm:text-center lg:space-y-3 ${isRTL ? 'text-right' : 'text-left'}`}
-                    >
-                      <h3 className="text-base font-bold text-slate-700 transition-colors group-hover:text-emerald-700 sm:text-lg lg:text-xl">
-                        {t(`steps.${step.key}.title`)}
-                      </h3>
-                      <p className="text-sm leading-relaxed text-slate-600">
-                        {t(`steps.${step.key}.description`)}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Decorative element */}
-                  <div className="absolute -right-8 -bottom-8 h-24 w-24 rounded-full bg-emerald-100/30 blur-2xl transition-opacity group-hover:opacity-60" />
+                <div className="relative mb-4 flex items-center justify-between">
+                  <span
+                    className={cn(
+                      'inline-flex h-11 w-11 items-center justify-center rounded-xl text-2xl',
+                      stepIconTones[index % stepIconTones.length]
+                    )}
+                  >
+                    {step.icon}
+                  </span>
+                  <span className="text-xs font-bold tracking-[0.12em] text-slate-300">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
                 </div>
-              </motion.div>
+
+                <div className={cn(isRTL ? 'text-right' : 'text-left')}>
+                  <h3 className="my-4 text-lg font-bold text-slate-800">
+                    {t(`steps.${step.key}.title`)}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-slate-600">
+                    {t(`steps.${step.key}.description`)}
+                  </p>
+                </div>
+              </motion.article>
             ))}
           </motion.div>
 

@@ -6,7 +6,6 @@ import HowItWorks from '@/features/marketing/ui/sections/HowItWorks'
 import Solution from '@/features/marketing/ui/sections/Solution'
 import Pricing from '@/features/marketing/ui/sections/Pricing'
 import FAQ from '@/features/marketing/ui/sections/FAQ'
-import ROICalculator from '@/features/marketing/ui/sections/ROICalculator'
 import { PostFaqCta } from '@/features/marketing/ui/sections/PostFaqCta'
 import { StickyMobileCta } from '@/features/marketing/ui/components/StickyMobileCta'
 
@@ -24,9 +23,6 @@ export function HomePage() {
       </section>
       <section className="w-full border-t border-slate-200/70 bg-white">
         <HowItWorks />
-      </section>
-      <section className="w-full border-t border-slate-200/70 bg-linear-to-b from-white via-emerald-50/20 to-white">
-        <ROICalculator />
       </section>
       <section className="w-full border-t border-slate-200/70 bg-white">
         <Pricing />

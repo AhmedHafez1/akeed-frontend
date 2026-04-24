@@ -1,12 +1,14 @@
 'use client'
 
+import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
+
+import { cn } from '@/shared/lib/utils'
+import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { Container } from '@/shared/ui/container'
 import { Section } from '@/shared/ui/section'
-import { motion } from 'framer-motion'
 import { features } from '@/features/marketing/config/site'
 import ScrollDownArrow from './ScrollDownArrow'
-import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 
 const container = {
   hidden: { opacity: 0 },
@@ -22,6 +24,13 @@ const item = {
   hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0 },
 }
+
+const problemIconTones = [
+  'bg-emerald-100 text-emerald-700',
+  'bg-teal-100 text-teal-700',
+  'bg-cyan-100 text-cyan-700',
+  'bg-sky-100 text-sky-700',
+] as const
 
 function Problem() {
   const t = useTranslations('problems')
@@ -60,35 +69,37 @@ function Problem() {
           viewport={{ once: true, margin: '-50px' }}
           className="mb-8 grid grid-cols-1 gap-4 sm:mb-10 sm:grid-cols-2 sm:gap-6 md:gap-8 lg:mb-12 lg:grid-cols-3 lg:gap-10 xl:grid-cols-4"
         >
-          {features.problems.map((problem) => (
-            <motion.div key={problem.key} variants={item}>
-              <div className="group relative overflow-hidden rounded-2xl border border-rose-100 bg-white px-4 py-5 transition-all duration-300 hover:-translate-y-1 hover:border-rose-200 hover:shadow-md sm:px-6 sm:py-6 lg:min-h-72 lg:px-8">
-                {/* Gradient overlay on hover */}
-                <div className="absolute inset-0 bg-linear-to-br from-rose-50/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          {features.problems.map((problem, index) => (
+            <motion.article
+              key={problem.key}
+              variants={item}
+              className="group relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-md"
+            >
+              <div className="absolute -right-10 -bottom-10 h-28 w-28 rounded-full bg-emerald-200/30 opacity-50 blur-3xl transition-opacity group-hover:opacity-90" />
 
-                <div className="relative flex flex-row items-start gap-3 sm:flex-col sm:items-center sm:gap-4">
-                  {/* Icon */}
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-rose-50 to-rose-100 text-4xl shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:shadow-md sm:h-20 sm:w-20 sm:text-6xl lg:h-24 lg:w-24">
-                    {problem.icon}
-                  </div>
-
-                  {/* Content */}
-                  <div
-                    className={`flex-1 space-y-1 sm:space-y-2 sm:text-center lg:space-y-3 ${isRTL ? 'text-right' : 'text-left'}`}
-                  >
-                    <h3 className="text-base font-bold text-slate-700 transition-colors group-hover:text-rose-700 sm:text-lg lg:text-xl">
-                      {t(`${problem.key}.title`)}
-                    </h3>
-                    <p className="text-sm leading-relaxed text-slate-600">
-                      {t(`${problem.key}.description`)}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Decorative element */}
-                <div className="absolute -right-8 -bottom-8 h-24 w-24 rounded-full bg-rose-100/30 blur-2xl transition-opacity group-hover:opacity-60" />
+              <div className="relative mb-4 flex items-center justify-between">
+                <span
+                  className={cn(
+                    'inline-flex h-11 w-11 items-center justify-center rounded-xl text-2xl',
+                    problemIconTones[index % problemIconTones.length]
+                  )}
+                >
+                  {problem.icon}
+                </span>
+                <span className="text-xs font-bold tracking-[0.12em] text-slate-300">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
               </div>
-            </motion.div>
+
+              <div className={cn(isRTL ? 'text-right' : 'text-left')}>
+                <h3 className="my-4 text-lg font-bold text-slate-800">
+                  {t(`${problem.key}.title`)}
+                </h3>
+                <p className="text-sm leading-relaxed text-slate-600">
+                  {t(`${problem.key}.description`)}
+                </p>
+              </div>
+            </motion.article>
           ))}
         </motion.div>
 

@@ -16,7 +16,7 @@ export function PostFaqCta() {
   return (
     <Section className="border-t border-slate-200/70 bg-linear-to-b from-white via-emerald-50/30 to-white px-4 pt-10 pb-24 sm:px-6 sm:pb-20 lg:px-10">
       <Container>
-        <div className="mx-auto max-w-5xl overflow-hidden rounded-3xl border border-emerald-200 bg-white shadow-sm">
+        <div className="mx-auto max-w-5xl overflow-hidden rounded-2xl border border-emerald-200 bg-white shadow-sm">
           <div className="bg-linear-to-r from-emerald-50 via-white to-cyan-50 px-6 py-8 sm:px-8 sm:py-10 lg:px-10">
             <p className="mb-2 text-xs font-bold tracking-[0.16em] text-emerald-700 uppercase">
               {t('eyebrow')}
