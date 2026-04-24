@@ -37,7 +37,7 @@ export default function Pricing() {
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-28 -right-24 hidden h-[420px] w-[420px] opacity-70 lg:block"
+        className="pointer-events-none absolute -top-28 -right-24 hidden h-105 w-105 opacity-70 lg:block"
         style={{
           backgroundImage:
             'repeating-radial-gradient(circle at center, transparent 0 13px, rgba(16, 185, 129, 0.12) 13px 14px)',
@@ -45,7 +45,7 @@ export default function Pricing() {
         }}
       />
 
-      <Container className="relative z-10 max-w-[1406px]">
+      <Container className="relative z-10 max-w-351.5">
         <PricingHeader
           eyebrow={t('eyebrow')}
           title={t.rich('title', {

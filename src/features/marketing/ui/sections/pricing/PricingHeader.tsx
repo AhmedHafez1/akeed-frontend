@@ -33,7 +33,6 @@ const checkIcons: Record<
 }
 
 export function PricingHeader({
-  eyebrow,
   title,
   subtitle,
   checks,
@@ -41,23 +40,6 @@ export function PricingHeader({
 }: PricingHeaderProps) {
   return (
     <div className="mx-auto mb-10 max-w-6xl text-center sm:mb-12 lg:mb-16">
-      <div
-        className={cn(
-          'inline-flex items-center gap-2 rounded-full border border-emerald-200/80 bg-white/90 px-5 py-2 shadow-[0_10px_28px_rgba(16,185,129,0.12)] backdrop-blur-sm',
-          isRTL && 'text-right'
-        )}
-      >
-        <ShieldCheck className="h-4 w-4 text-emerald-600" />
-        <span
-          className={cn(
-            'text-[0.78rem] font-semibold text-emerald-700',
-            isRTL ? 'tracking-normal' : 'tracking-[0.22em] uppercase'
-          )}
-        >
-          {eyebrow}
-        </span>
-      </div>
-
       <h2 className="mx-auto mt-6 max-w-5xl text-[clamp(2.5rem,5.8vw,4.5rem)] leading-[0.95] font-semibold tracking-[-0.06em] text-balance text-slate-950">
         {title}
       </h2>
@@ -73,7 +55,7 @@ export function PricingHeader({
             <article
               key={check.key}
               className={cn(
-                'flex items-center gap-4 rounded-[24px] border border-slate-200/80 bg-white/95 px-5 py-5 shadow-[0_12px_30px_rgba(15,23,42,0.06)] backdrop-blur-sm sm:px-6',
+                'flex items-center gap-4 rounded-3xl border border-slate-200/80 bg-white/95 px-5 py-5 shadow-[0_12px_30px_rgba(15,23,42,0.06)] backdrop-blur-sm sm:px-6',
                 isRTL && 'text-right'
               )}
             >
