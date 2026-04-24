@@ -83,15 +83,6 @@ export function Solution() {
           >
             {t('title')}
           </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="landing-subtitle max-w-3xl"
-          >
-            {t('subtitle')}
-          </motion.p>
         </div>
 
         <motion.div
@@ -112,8 +103,12 @@ export function Solution() {
               >
                 <div className={landingCardGlowClass} />
 
-                <div className="relative mb-4 flex items-center justify-between">
-                  <LandingIconBadge icon={Icon} tone={solution.iconTone} />
+                <div className="relative mb-8 flex items-center justify-between">
+                  <LandingIconBadge
+                    icon={Icon}
+                    tone={solution.iconTone}
+                    size="sm"
+                  />
                   <span className="text-xs font-bold tracking-[0.12em] text-slate-300">
                     {String(index + 1).padStart(2, '0')}
                   </span>

@@ -83,10 +83,11 @@ function Problem() {
             >
               <div className={landingCardGlowClass} />
 
-              <div className="relative mb-4 flex items-center justify-between">
+              <div className="relative mb-8 flex items-center justify-between">
                 <LandingIconBadge
                   icon={problemCards[index % problemCards.length].icon}
                   tone={problemCards[index % problemCards.length].tone}
+                  size="sm"
                 />
                 <span className="text-xs font-bold tracking-[0.12em] text-slate-300">
                   {String(index + 1).padStart(2, '0')}
@@ -105,7 +106,6 @@ function Problem() {
           ))}
         </motion.div>
 
-        {/* Reality Check Card - More Prominent */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -113,11 +113,11 @@ function Problem() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="relative mx-4 overflow-hidden sm:mx-6 lg:mx-8"
         >
-          <div className="space-y-2 text-center sm:space-y-3">
+          <div className="mb-4 space-y-4 text-center">
             <p className="text-base leading-relaxed text-slate-700 sm:text-lg md:text-xl">
               {t('reality')}
             </p>
-            <p className="text-xl font-black text-emerald-600 sm:text-2xl md:text-3xl">
+            <p className="text-xl font-medium text-emerald-600 sm:text-2xl md:text-3xl">
               {t('reality_highlight')}
             </p>
           </div>

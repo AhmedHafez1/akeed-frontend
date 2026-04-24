@@ -46,7 +46,7 @@ export function LandingIconBadge({
 }: LandingIconBadgeProps) {
   const sizeClasses =
     size === 'sm'
-      ? 'h-14 w-14 [&_svg]:h-6 [&_svg]:w-6'
+      ? 'h-12 w-12 [&_svg]:h-6 [&_svg]:w-6'
       : 'h-16 w-16 [&_svg]:h-7 [&_svg]:w-7'
 
   return (
