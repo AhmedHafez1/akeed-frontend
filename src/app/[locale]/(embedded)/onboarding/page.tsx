@@ -241,6 +241,7 @@ export default function OnboardingPage() {
             ? { starter: tEmbedded('freePlanAlreadyClaimedTooltip') }
             : undefined
         }
+        recommendedBadgeLabel={tEmbedded('recommendedBadge')}
         errorMessage={step === 3 ? errorBanner : null}
         retryLabel={tEmbedded('billingTryAgain')}
         manageSettingsLabel={tEmbedded('billingManageSettings')}

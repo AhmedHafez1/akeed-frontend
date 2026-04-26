@@ -22,6 +22,7 @@ interface BillingStepProps {
   isActivating: boolean
   disabledPlanIds?: OnboardingBillingPlanId[]
   disabledPlanTooltips?: Partial<Record<OnboardingBillingPlanId, string>>
+  recommendedBadgeLabel?: string
   errorMessage: string | null
   retryLabel: string
   manageSettingsLabel: string
@@ -41,6 +42,7 @@ export function BillingStep({
   isActivating,
   disabledPlanIds = [],
   disabledPlanTooltips = {},
+  recommendedBadgeLabel,
   errorMessage,
   retryLabel,
   manageSettingsLabel,
@@ -84,16 +86,22 @@ export function BillingStep({
         </Text>
       </BlockStack>
 
-      <div className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 xl:grid-cols-3">
         {plans.map((plan) => {
           const isDisabled = disabledPlanIds.includes(plan.id)
           const disabledPlanTooltip = isDisabled
             ? disabledPlanTooltips[plan.id]
             : undefined
           const isSelected = selectedPlanId === plan.id && !isDisabled
+          const isRecommended = plan.id === 'pro' && !isDisabled
 
           return (
-            <div key={plan.id} className="min-h-full">
+            <div key={plan.id} className="relative min-h-full">
+              {isRecommended && recommendedBadgeLabel ? (
+                <span className="absolute -top-2 left-1/2 z-10 -translate-x-1/2 rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold tracking-wide text-white uppercase shadow-sm">
+                  {recommendedBadgeLabel}
+                </span>
+              ) : null}
               <div
                 role="button"
                 tabIndex={isDisabled ? -1 : 0}

@@ -56,7 +56,7 @@ export function PlanComparison({
 
   return (
     <BlockStack gap="400">
-      <div className="grid grid-cols-1 items-stretch gap-3 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 items-stretch gap-3 md:grid-cols-2 xl:grid-cols-3">
         {plans.map((plan) => {
           const isCurrent = plan.id === currentPlanId
           const isDisabled = disabledPlanIds.includes(plan.id) && !isCurrent

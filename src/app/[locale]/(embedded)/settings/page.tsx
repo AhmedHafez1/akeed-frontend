@@ -267,12 +267,7 @@ export default function SettingsPage() {
   }, [billingStatus, t])
 
   const planOptions = useMemo(() => {
-    const planIds: OnboardingBillingPlanId[] = [
-      'starter',
-      'growth',
-      'pro',
-      'scale',
-    ]
+    const planIds: OnboardingBillingPlanId[] = ['starter', 'pro', 'business']
     return planIds.map((id) => {
       const config = billingPlansById[id]
       return {

@@ -1,11 +1,4 @@
-import {
-  Building2,
-  ChartColumnIncreasing,
-  Rocket,
-  Sprout,
-  Star,
-  type LucideIcon,
-} from 'lucide-react'
+import { Building2, Rocket, Sprout, Star, type LucideIcon } from 'lucide-react'
 import type { Tier } from '@/features/marketing/model/tier.model'
 import {
   LandingIconBadge,
@@ -23,9 +16,8 @@ interface PricingPlanCardProps {
 
 const tierIcons: Record<string, LucideIcon> = {
   starter: Sprout,
-  growth: ChartColumnIncreasing,
   pro: Rocket,
-  scale: Building2,
+  business: Building2,
 }
 
 export function PricingPlanCard({

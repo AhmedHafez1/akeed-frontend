@@ -12,15 +12,12 @@ type OnboardingMessageKey =
   | 'planStarterName'
   | 'planStarterPrice'
   | 'planStarterVolume'
-  | 'planGrowthName'
-  | 'planGrowthPrice'
-  | 'planGrowthVolume'
   | 'planProName'
   | 'planProPrice'
   | 'planProVolume'
-  | 'planScaleName'
-  | 'planScalePrice'
-  | 'planScaleVolume'
+  | 'planBusinessName'
+  | 'planBusinessPrice'
+  | 'planBusinessVolume'
 
 interface PlanDefinition {
   id: OnboardingBillingPlanId
@@ -36,7 +33,7 @@ export const LANGUAGE_OPTION_DEFINITIONS = [
 ] as const satisfies ReadonlyArray<{
   labelKey: OnboardingMessageKey
   value: 'auto' | 'en' | 'ar'
-}>;
+}>
 
 export const APP_LANGUAGE_OPTION_DEFINITIONS = [
   { labelKey: 'languageEnglish', value: 'en' },
@@ -54,21 +51,15 @@ export const BILLING_PLAN_DEFINITIONS: PlanDefinition[] = [
     volumeKey: 'planStarterVolume',
   },
   {
-    id: 'growth',
-    nameKey: 'planGrowthName',
-    priceKey: 'planGrowthPrice',
-    volumeKey: 'planGrowthVolume',
-  },
-  {
     id: 'pro',
     nameKey: 'planProName',
     priceKey: 'planProPrice',
     volumeKey: 'planProVolume',
   },
   {
-    id: 'scale',
-    nameKey: 'planScaleName',
-    priceKey: 'planScalePrice',
-    volumeKey: 'planScaleVolume',
+    id: 'business',
+    nameKey: 'planBusinessName',
+    priceKey: 'planBusinessPrice',
+    volumeKey: 'planBusinessVolume',
   },
 ]

@@ -30,9 +30,8 @@ export interface OnboardingSettingsPayload {
 
 export const ONBOARDING_BILLING_PLAN_IDS = [
   'starter',
-  'growth',
   'pro',
-  'scale',
+  'business',
 ] as const
 
 export type OnboardingBillingPlanId =
