@@ -36,6 +36,7 @@ export function PricingPlanCard({
     `${tier.key}_feature_3`,
     `${tier.key}_feature_4`,
     `${tier.key}_feature_5`,
+    `${tier.key}_feature_6`,
   ]
 
   const priceLabel = tier.isFree ? t('free') : t(`${tier.key}_price`)
@@ -52,7 +53,8 @@ export function PricingPlanCard({
           : '',
         isBusiness
           ? 'border-slate-300 bg-linear-to-b from-slate-100 to-white shadow-[0_18px_34px_rgba(15,23,42,0.12)]'
-          : ''
+          : '',
+        isRTL ? 'text-right' : 'text-left'
       )}
     >
       {isPopular && (
@@ -72,17 +74,19 @@ export function PricingPlanCard({
       )}
 
       <div className="mb-6 border-b border-slate-200/80 pb-6">
-        <div className="mb-4 flex justify-start">
+        <div className="flex justify-between">
+          <div>
+            <h3 className="text-[1.55rem] leading-tight font-semibold tracking-[-0.04em] text-slate-900">
+              {t(`tiers.${tier.key}`)}
+            </h3>
+            <p className="mt-2 text-xs text-slate-600">{subtitle}</p>
+          </div>
           <LandingIconBadge
             icon={Icon}
             className="h-14 w-14 [&_svg]:h-7 [&_svg]:w-7"
+            tone="slate"
           />
         </div>
-
-        <h3 className="text-[1.55rem] leading-tight font-semibold tracking-[-0.04em] text-slate-900">
-          {t(`tiers.${tier.key}`)}
-        </h3>
-        <p className="mt-2 text-sm text-slate-600">{subtitle}</p>
       </div>
 
       <div className="mb-6 border-b border-slate-200/80 pb-6">

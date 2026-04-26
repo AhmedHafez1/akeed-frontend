@@ -10,7 +10,7 @@ import { PricingHeader } from './pricing/PricingHeader'
 import { PricingDesktopCards } from './pricing/PricingDesktopCards'
 
 export default function Pricing() {
-  const { t, tiers, checks } = usePricing()
+  const { t, tiers } = usePricing()
   const { locale, isRTL } = useLocaleInfo()
   const router = useRouter()
   const handleCtaClick = () => router.push(withLocale('/signup', locale))
@@ -29,7 +29,6 @@ export default function Pricing() {
             ),
           })}
           subtitle={t('subtitle')}
-          checks={checks}
           isRTL={isRTL}
         />
 

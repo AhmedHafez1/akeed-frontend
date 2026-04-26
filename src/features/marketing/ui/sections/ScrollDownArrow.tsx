@@ -23,7 +23,7 @@ export function ScrollDownArrow({ to, className = '' }: ScrollDownArrowProps) {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: shouldReduceMotion ? 0 : 0.6, delay: 0.3 }}
-      className={`absolute bottom-4 left-1/2 z-10 -translate-x-1/2 cursor-pointer sm:bottom-6 md:bottom-8 ${className}`}
+      className={`z-10 -translate-x-1/2 cursor-pointer sm:bottom-6 md:bottom-8 ${className}`}
       onClick={handleClick}
     >
       <ChevronDownIcon

@@ -23,6 +23,7 @@ const iconToneClasses = {
   teal: 'bg-teal-50 text-teal-600 ring-1 ring-teal-100',
   cyan: 'bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100',
   sky: 'bg-sky-50 text-sky-600 ring-1 ring-sky-100',
+  slate: 'bg-slate-50 text-slate-600 ring-1 ring-slate-100',
 } as const
 
 type LandingIconTone = keyof typeof iconToneClasses

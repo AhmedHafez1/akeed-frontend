@@ -4,7 +4,6 @@ import { motion } from 'framer-motion'
 import { useReducedMotion } from 'framer-motion'
 import { SocialProof } from '@/features/marketing/ui/components/SocialProof'
 import { ChevronRight, ChevronLeft } from 'lucide-react'
-import ScrollDownArrow from './ScrollDownArrow'
 import { useTranslations } from 'next-intl'
 import { LogoTicker } from '@/features/marketing/ui/components/LogoTicker'
 import dynamic from 'next/dynamic'
@@ -151,9 +150,6 @@ function Hero() {
       <div className="mt-2 flex w-full scale-[0.9] items-center justify-center sm:mt-4 sm:scale-[0.98] md:mt-0 md:w-[42%] md:scale-105 lg:w-auto lg:scale-110 xl:scale-[1.12]">
         <ChatInterface />
       </div>
-
-      {/* Scroll Indicator */}
-      <ScrollDownArrow to="problem" className="hidden sm:block" />
     </section>
   )
 }

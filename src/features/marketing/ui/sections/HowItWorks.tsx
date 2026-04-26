@@ -14,7 +14,6 @@ import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { Container } from '@/shared/ui/container'
 import { Section } from '@/shared/ui/section'
 import { features } from '@/features/marketing/config/site'
-import ScrollDownArrow from './ScrollDownArrow'
 
 const container = {
   hidden: { opacity: 0 },
@@ -44,7 +43,7 @@ function HowItWorks() {
   return (
     <>
       <Section id="how-it-works" className="relative px-4 sm:px-6 lg:px-10">
-        <Container>
+        <Container className="relative z-10 max-w-351.5">
           {/* Section Header */}
           <div className="landing-section-header mb-10 sm:mb-12 lg:mb-14">
             <motion.h2
@@ -105,9 +104,6 @@ function HowItWorks() {
               </motion.article>
             ))}
           </motion.div>
-
-          {/* Scroll Indicator */}
-          <ScrollDownArrow to="calculator" className="hidden sm:block" />
         </Container>
       </Section>
     </>
