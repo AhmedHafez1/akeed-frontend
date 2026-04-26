@@ -158,7 +158,12 @@ export function BillingStep({
                       </Text>
                       <BlockStack gap="050">
                         {plan.features.map((feature) => (
-                          <Text key={feature} as="p" tone="subdued" variant="bodySm">
+                          <Text
+                            key={feature}
+                            as="p"
+                            tone="subdued"
+                            variant="bodySm"
+                          >
                             • {feature}
                           </Text>
                         ))}
