@@ -171,19 +171,25 @@ export default function OnboardingPage() {
     () =>
       BILLING_PLAN_DEFINITIONS.map((planDefinition) => {
         const runtimePlan = billingPlanConfigsById[planDefinition.id]
+        const planId = planDefinition.id
 
         return {
-          id: planDefinition.id,
+          id: planId,
           name: tEmbedded(planDefinition.nameKey),
           monthlyPriceLabel: runtimePlan
             ? formatPlanPriceLabel(runtimePlan.amount, runtimePlan.currencyCode)
             : tEmbedded(planDefinition.priceKey),
           monthlyVolumeLabel:
-            planDefinition.id === 'starter'
+            planId === 'starter'
               ? tEmbedded(planDefinition.volumeKey)
               : runtimePlan
                 ? formatPlanVolumeLabel(runtimePlan.includedVerifications)
                 : tEmbedded(planDefinition.volumeKey),
+          subtitle: tEmbedded(`${planId}Subtitle`),
+          features: [1, 2, 3, 4, 5].map((index) =>
+            tEmbedded(`${planId}Feature${index}`)
+          ),
+          ctaLabel: tEmbedded(`${planId}Cta`),
         }
       }),
     [
@@ -193,6 +199,34 @@ export default function OnboardingPage() {
       tEmbedded,
     ]
   )
+
+  const selectedPlanDetails = useMemo(() => {
+    if (selectedPlanId === 'starter') {
+      return {
+        title: tEmbedded('starterPlanDetailsTitle'),
+        lines: [
+          tEmbedded('starterNoShopifyCharge'),
+          tEmbedded('starterStopsAtLimit'),
+        ],
+      }
+    }
+
+    const includedAttempts =
+      billingPlanConfigsById[selectedPlanId]?.includedVerifications ??
+      (selectedPlanId === 'pro' ? 1000 : 3000)
+    const overageRate = selectedPlanId === 'pro' ? '$0.03' : '$0.025'
+    const monthlyCap = selectedPlanId === 'pro' ? '$60' : '$150'
+
+    return {
+      title: tEmbedded('paidPlanDetailsTitle'),
+      lines: [
+        tEmbedded('paidBillingHandledByShopify'),
+        tEmbedded('paidIncludedAttempts', { count: includedAttempts }),
+        tEmbedded('paidOverageRate', { rate: overageRate }),
+        tEmbedded('paidUsageCap', { cap: monthlyCap }),
+      ],
+    }
+  }, [billingPlanConfigsById, selectedPlanId, tEmbedded])
 
   const stepComponents: Record<EmbeddedStep, ReactNode> = {
     1: (
@@ -231,7 +265,9 @@ export default function OnboardingPage() {
       <BillingStep
         heading={tEmbedded('billingHeading')}
         body={tEmbedded('billingBody')}
-        ctaLabel={tEmbedded('activatePlan')}
+        changeLaterNote={tEmbedded('changePlanLaterNote')}
+        selectedPlanDetailsTitle={selectedPlanDetails.title}
+        selectedPlanDetailLines={selectedPlanDetails.lines}
         plans={billingPlans}
         selectedPlanId={selectedPlanId}
         isActivating={isActivatingPlan}

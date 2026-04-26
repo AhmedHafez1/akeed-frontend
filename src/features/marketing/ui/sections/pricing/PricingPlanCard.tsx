@@ -27,16 +27,32 @@ export function PricingPlanCard({
   onSelect,
 }: PricingPlanCardProps) {
   const isPopular = tier.key === 'pro'
+  const isBusiness = tier.key === 'business'
   const Icon = tierIcons[tier.key] ?? Sprout
-  const verificationLabel = tier.isFree
-    ? t('free_badge')
-    : `${tier.ordersDisplay} ${t('orders_label')}`
+
+  const featureKeys = [
+    `${tier.key}_feature_1`,
+    `${tier.key}_feature_2`,
+    `${tier.key}_feature_3`,
+    `${tier.key}_feature_4`,
+    `${tier.key}_feature_5`,
+  ]
+
+  const priceLabel = tier.isFree ? t('free') : t(`${tier.key}_price`)
+  const subtitle = t(`${tier.key}_subtitle`)
+  const ctaLabel = t(`${tier.key}_cta`)
 
   return (
     <article
       className={cn(
         landingCardClass,
-        'flex h-full min-h-115 flex-col overflow-visible text-center'
+        'flex h-full min-h-115 flex-col overflow-visible text-left',
+        isPopular
+          ? 'border-emerald-500/60 bg-linear-to-b from-emerald-50 to-white shadow-[0_22px_40px_rgba(16,185,129,0.18)]'
+          : '',
+        isBusiness
+          ? 'border-slate-300 bg-linear-to-b from-slate-100 to-white shadow-[0_18px_34px_rgba(15,23,42,0.12)]'
+          : ''
       )}
     >
       {isPopular && (
@@ -55,57 +71,52 @@ export function PricingPlanCard({
         </div>
       )}
 
-      <div className="mb-8 border-b border-slate-200/80 pb-8">
-        <div className="mb-6 flex justify-center">
+      <div className="mb-6 border-b border-slate-200/80 pb-6">
+        <div className="mb-4 flex justify-start">
           <LandingIconBadge
             icon={Icon}
-            className="h-18 w-18 [&_svg]:h-9 [&_svg]:w-9"
+            className="h-14 w-14 [&_svg]:h-7 [&_svg]:w-7"
           />
         </div>
 
-        <h3 className="text-[1.8rem] leading-tight font-semibold tracking-[-0.055em] text-slate-800 uppercase">
+        <h3 className="text-[1.55rem] leading-tight font-semibold tracking-[-0.04em] text-slate-900">
           {t(`tiers.${tier.key}`)}
         </h3>
-        <p className="mt-3 text-[1rem] text-slate-500">
-          {t(`${tier.key}_note`)}
-        </p>
+        <p className="mt-2 text-sm text-slate-600">{subtitle}</p>
       </div>
 
-      <div className="mb-8 border-b border-slate-200/80 pb-8">
+      <div className="mb-6 border-b border-slate-200/80 pb-6">
         <p
           className={cn(
-            'text-sm font-semibold',
-            isRTL ? 'tracking-normal' : 'tracking-[0.2em] uppercase',
-            'text-slate-400'
+            'text-xs font-semibold text-slate-400',
+            isRTL ? 'tracking-normal' : 'tracking-[0.18em] uppercase'
           )}
         >
           {tier.isFree ? t('without_price') : t('total_price')}
         </p>
 
-        {tier.isFree ? (
-          <div className="mt-5 text-[clamp(1.5rem,7vw,3.3rem)] leading-none font-bold text-emerald-600">
-            {t('free')}
-          </div>
-        ) : (
-          <div
-            className={cn(
-              'mt-5 flex flex-wrap items-end justify-center gap-x-3 gap-y-1 leading-none font-bold tracking-[-0.08em]',
-              'text-slate-500'
-            )}
-          >
-            <span className="text-[clamp(1.5rem,7vw,3.3rem)]">
-              {tier.price}
-            </span>
-            <span className="text-[clamp(1rem,5vw,2.5rem)] whitespace-nowrap">
-              {t('currency')}
-            </span>
-          </div>
-        )}
+        <p
+          className={cn(
+            'mt-3 text-4xl leading-none font-bold tracking-[-0.04em]',
+            tier.isFree ? 'text-emerald-600' : 'text-slate-900'
+          )}
+        >
+          {priceLabel}
+        </p>
       </div>
 
-      <p className="mb-8 text-[1.5rem] leading-8 font-bold text-slate-950">
-        {verificationLabel}
-      </p>
+      <div className="mb-6 border-b border-slate-200/80 pb-6">
+        <p className="mb-3 text-xs font-semibold tracking-[0.14em] text-slate-400 uppercase">
+          {t('plan_features')}
+        </p>
+        <ul className="space-y-2">
+          {featureKeys.map((key) => (
+            <li key={key} className="text-sm text-slate-700">
+              • {t(key)}
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <Button
         onClick={onSelect}
@@ -113,11 +124,13 @@ export function PricingPlanCard({
         className={cn(
           'mt-auto h-14 w-full rounded-2xl border text-base font-semibold shadow-none',
           isPopular
-            ? 'border-orange-500 bg-orange-500 text-white hover:bg-orange-600 hover:text-white'
-            : 'border-emerald-600 bg-white text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700'
+            ? 'border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700 hover:text-white'
+            : isBusiness
+              ? 'border-slate-700 bg-slate-700 text-white hover:bg-slate-800 hover:text-white'
+              : 'border-emerald-600 bg-white text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700'
         )}
       >
-        {t('cta_recharge')}
+        {ctaLabel}
       </Button>
     </article>
   )

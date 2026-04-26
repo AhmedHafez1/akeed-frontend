@@ -16,7 +16,9 @@ import type {
 interface BillingStepProps {
   heading: string
   body: string
-  ctaLabel: string
+  changeLaterNote: string
+  selectedPlanDetailsTitle: string
+  selectedPlanDetailLines: string[]
   plans: OnboardingBillingPlan[]
   selectedPlanId: OnboardingBillingPlanId
   isActivating: boolean
@@ -36,7 +38,9 @@ interface BillingStepProps {
 export function BillingStep({
   heading,
   body,
-  ctaLabel,
+  changeLaterNote,
+  selectedPlanDetailsTitle,
+  selectedPlanDetailLines,
   plans,
   selectedPlanId,
   isActivating,
@@ -52,6 +56,8 @@ export function BillingStep({
   onRetry,
   onManageBilling,
 }: BillingStepProps) {
+  const selectedPlan = plans.find((plan) => plan.id === selectedPlanId)
+
   const handlePlanSelectByKeyboard = (
     event: KeyboardEvent<HTMLDivElement>,
     planId: OnboardingBillingPlanId
@@ -83,6 +89,9 @@ export function BillingStep({
         </Text>
         <Text as="p" tone="subdued" variant="bodyMd">
           {body}
+        </Text>
+        <Text as="p" tone="subdued" variant="bodySm">
+          {changeLaterNote}
         </Text>
       </BlockStack>
 
@@ -117,7 +126,7 @@ export function BillingStep({
                 } ${isSelected ? 'shadow-[0_0_0_3px_rgba(0,160,70,0.7)]' : ''}`}
               >
                 <Card>
-                  <div className="flex min-h-64 flex-col justify-between gap-4.5">
+                  <div className="flex min-h-64 flex-col justify-between gap-4">
                     <InlineStack align="space-between" blockAlign="center">
                       <Text as="h3" variant="headingLg" tone="subdued">
                         {plan.name}
@@ -144,6 +153,16 @@ export function BillingStep({
                       <Text as="p" tone="subdued" variant="bodyLg">
                         {plan.monthlyVolumeLabel}
                       </Text>
+                      <Text as="p" tone="subdued" variant="bodySm">
+                        {plan.subtitle}
+                      </Text>
+                      <BlockStack gap="050">
+                        {plan.features.map((feature) => (
+                          <Text key={feature} as="p" tone="subdued" variant="bodySm">
+                            • {feature}
+                          </Text>
+                        ))}
+                      </BlockStack>
                     </BlockStack>
                   </div>
                 </Card>
@@ -153,9 +172,22 @@ export function BillingStep({
         })}
       </div>
 
+      <Card>
+        <BlockStack gap="100">
+          <Text as="p" variant="headingSm">
+            {selectedPlanDetailsTitle}
+          </Text>
+          {selectedPlanDetailLines.map((line) => (
+            <Text key={line} as="p" tone="subdued" variant="bodySm">
+              • {line}
+            </Text>
+          ))}
+        </BlockStack>
+      </Card>
+
       <Box>
         <Button variant="primary" loading={isActivating} onClick={onActivate}>
-          {ctaLabel}
+          {selectedPlan?.ctaLabel ?? ''}
         </Button>
       </Box>
     </BlockStack>

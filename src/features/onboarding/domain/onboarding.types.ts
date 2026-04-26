@@ -42,6 +42,9 @@ export interface OnboardingBillingPlan {
   name: string
   monthlyPriceLabel: string
   monthlyVolumeLabel: string
+  subtitle: string
+  features: string[]
+  ctaLabel: string
 }
 
 export interface OnboardingBillingResponse {
