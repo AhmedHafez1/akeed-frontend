@@ -18,6 +18,7 @@ import { StatsEmbedded } from './StatsEmbedded'
 import { VerificationsTableEmbedded } from './VerificationsTableEmbedded'
 import type { DashboardSkinProps } from '../../domain/dashboard.types'
 import type { VerificationStatusFilter } from '../../model/dashboard.model'
+import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 
 const SKELETON_ROW_COUNT = 5
 
@@ -81,6 +82,7 @@ export function DashboardEmbeddedSkin({
   error,
 }: DashboardSkinProps) {
   const t = useTranslations('dashboard')
+  const { isRTL } = useLocaleInfo()
   const shouldShowEmptyState = !hasVerifications
 
   return (
@@ -116,10 +118,14 @@ export function DashboardEmbeddedSkin({
               <BlockStack gap="400">
                 <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                   <BlockStack gap="050">
-                    <Text variant="headingMd" tone="subdued" as="h2">
+                    <Text variant={isRTL ? 'headingMd' : 'headingSm'} as="h2">
                       {t('verificationSection.title')}
                     </Text>
-                    <Text variant="bodySm" tone="subdued" as="p">
+                    <Text
+                      variant={isRTL ? 'bodySm' : 'bodyXs'}
+                      tone="subdued"
+                      as="p"
+                    >
                       {t('verificationSection.subtitle')}
                     </Text>
                   </BlockStack>
@@ -183,9 +189,7 @@ export function DashboardEmbeddedSkin({
                       testSectionHeading: t(
                         'emptyState.onboarding.testSectionHeading'
                       ),
-                      testPhoneLabel: t(
-                        'emptyState.onboarding.testPhoneLabel'
-                      ),
+                      testPhoneLabel: t('emptyState.onboarding.testPhoneLabel'),
                       testPhonePlaceholder: t(
                         'emptyState.onboarding.testPhonePlaceholder'
                       ),

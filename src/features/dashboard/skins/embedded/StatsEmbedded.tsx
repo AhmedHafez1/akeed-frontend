@@ -195,10 +195,10 @@ export function StatsEmbedded({
     <BlockStack gap="400">
       <InlineStack align="space-between" blockAlign="center" gap="300">
         <BlockStack gap="050">
-          <Text variant="headingMd" as="h2">
+          <Text variant={isRTL ? 'headingMd' : 'headingSm'} as="h2">
             {t('metrics.title')}
           </Text>
-          <Text variant="bodySm" tone="subdued" as="p">
+          <Text variant={isRTL ? 'bodySm' : 'bodyXs'} tone="subdued" as="p">
             {t('metrics.subtitle')}
           </Text>
         </BlockStack>
@@ -263,10 +263,14 @@ export function StatsEmbedded({
                 shadow="100"
               >
                 <InlineStack align="space-between" blockAlign="center">
-                  <Text variant="headingLg" as="p" tone={metric.tone}>
+                  <Text
+                    variant={isRTL ? 'headingMd' : 'headingSm'}
+                    as="h3"
+                    tone={metric.tone}
+                  >
                     {metric.label}
                   </Text>
-                  <Text variant="heading2xl" as="h2">
+                  <Text variant="headingXl" as="h2">
                     {metric.value}
                   </Text>
                 </InlineStack>
@@ -278,10 +282,14 @@ export function StatsEmbedded({
             <Card>
               <BlockStack gap="400">
                 <BlockStack gap="050">
-                  <Text variant="headingSm" tone="subdued" as="h3">
+                  <Text variant={isRTL ? 'headingMd' : 'headingSm'} as="h2">
                     {t('metrics.funnelTitle')}
                   </Text>
-                  <Text variant="bodySm" tone="subdued" as="p">
+                  <Text
+                    variant={isRTL ? 'bodySm' : 'bodyXs'}
+                    tone="subdued"
+                    as="p"
+                  >
                     {t('metrics.funnelSubtitle')}
                   </Text>
                 </BlockStack>
@@ -304,10 +312,14 @@ export function StatsEmbedded({
                             blockAlign="center"
                             align="space-between"
                           >
-                            <Text variant="headingMd" tone="subdued" as="p">
+                            <Text
+                              variant={isRTL ? 'bodyMd' : 'bodySm'}
+                              tone="subdued"
+                              as="p"
+                            >
                               {step.label}
                             </Text>
-                            <Text variant="heading2xl" as="p">
+                            <Text variant="headingLg" as="p">
                               {formatNumber(step.value, locale)}
                             </Text>
                           </InlineStack>
@@ -336,10 +348,10 @@ export function StatsEmbedded({
             <Card>
               <BlockStack gap="300">
                 <InlineStack align="space-between" blockAlign="center">
-                  <Text variant="headingSm" tone="subdued" as="p">
+                  <Text variant="headingSm" as="p">
                     {t('metrics.moneySaved.title')}
                   </Text>
-                  <Text variant="headingXl" as="p" tone="success">
+                  <Text variant="headingXl" as="p">
                     {formatMoney(
                       stats.savings.money_saved,
                       stats.savings.currency,
@@ -354,10 +366,14 @@ export function StatsEmbedded({
                   padding="300"
                 >
                   <BlockStack gap="100">
-                    <Text variant="bodyXs" tone="subdued" as="p">
+                    <Text
+                      variant={isRTL ? 'bodyMd' : 'bodySm'}
+                      tone="subdued"
+                      as="p"
+                    >
                       {t('metrics.moneySaved.breakdownTitle')}
                     </Text>
-                    <Text variant="bodySm" as="p">
+                    <Text variant={isRTL ? 'bodySm' : 'bodyXs'} as="p">
                       {t('metrics.moneySaved.breakdownLine', {
                         count: formatNumber(stats.totals.canceled, locale),
                         cost: formatMoney(
