@@ -22,6 +22,10 @@ import {
 } from '@/features/onboarding'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import {
+  getPricingFeatureKey,
+  PRICING_FEATURE_INDICES,
+} from '@/shared/config/pricing'
+import {
   getLocaleFromPathname,
   isSupportedLocale,
   persistLocalePreference,
@@ -30,6 +34,7 @@ import {
 export default function OnboardingPage() {
   const t = useTranslations('onboarding')
   const tEmbedded = useTranslations('embeddedOnboarding')
+  const tPricing = useTranslations('pricing')
   const { isEmbedded, isLoading: isModeLoading, hostParam } = useAkeedMode()
 
   const router = useRouter()
@@ -185,11 +190,11 @@ export default function OnboardingPage() {
               : runtimePlan
                 ? formatPlanVolumeLabel(runtimePlan.includedVerifications)
                 : tEmbedded(planDefinition.volumeKey),
-          subtitle: tEmbedded(`${planId}Subtitle`),
-          features: [1, 2, 3, 4, 5].map((index) =>
-            tEmbedded(`${planId}Feature${index}`)
+          subtitle: tPricing(`${planId}_subtitle`),
+          features: PRICING_FEATURE_INDICES.map((index) =>
+            tPricing(getPricingFeatureKey(planId, index))
           ),
-          ctaLabel: tEmbedded(`${planId}Cta`),
+          ctaLabel: tPricing(`${planId}_cta`),
         }
       }),
     [
@@ -197,6 +202,7 @@ export default function OnboardingPage() {
       formatPlanPriceLabel,
       formatPlanVolumeLabel,
       tEmbedded,
+      tPricing,
     ]
   )
 

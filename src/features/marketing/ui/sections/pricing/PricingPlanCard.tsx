@@ -4,6 +4,10 @@ import {
   LandingIconBadge,
   landingCardClass,
 } from '@/features/marketing/ui/components/LandingPrimitives'
+import {
+  getPricingFeatureKey,
+  PRICING_FEATURE_INDICES,
+} from '@/shared/config/pricing'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/button'
 
@@ -30,14 +34,9 @@ export function PricingPlanCard({
   const isBusiness = tier.key === 'business'
   const Icon = tierIcons[tier.key] ?? Sprout
 
-  const featureKeys = [
-    `${tier.key}_feature_1`,
-    `${tier.key}_feature_2`,
-    `${tier.key}_feature_3`,
-    `${tier.key}_feature_4`,
-    `${tier.key}_feature_5`,
-    `${tier.key}_feature_6`,
-  ]
+  const featureKeys = PRICING_FEATURE_INDICES.map((index) =>
+    getPricingFeatureKey(tier.key, index)
+  )
 
   const priceLabel = tier.isFree ? t('free') : t(`${tier.key}_price`)
   const subtitle = t(`${tier.key}_subtitle`)
