@@ -24,6 +24,7 @@ import {
   createOnboardingBilling,
   fetchOnboardingBillingPlans,
   fetchOnboardingState,
+  ONBOARDING_BILLING_PLAN_IDS,
   type IntegrationOnboardingLanguage,
   type OnboardingBillingPlanConfig,
   type OnboardingBillingPlanId,
@@ -267,8 +268,7 @@ export default function SettingsPage() {
   }, [billingStatus, t])
 
   const planOptions = useMemo(() => {
-    const planIds: OnboardingBillingPlanId[] = ['starter', 'pro', 'business']
-    return planIds.map((id) => {
+    return ONBOARDING_BILLING_PLAN_IDS.map((id) => {
       const config = billingPlansById[id]
       return {
         id,

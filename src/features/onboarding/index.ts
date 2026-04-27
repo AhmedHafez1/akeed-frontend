@@ -29,6 +29,8 @@ export {
 } from './lib/embeddedAuth'
 export type { EmbeddedOnboardingGate } from './lib/embeddedAuth'
 
+export { ONBOARDING_BILLING_PLAN_IDS } from './domain/onboarding.types'
+
 export type {
   IntegrationOnboardingLanguage,
   OnboardingBillingPlan,

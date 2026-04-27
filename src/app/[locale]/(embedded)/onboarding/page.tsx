@@ -24,6 +24,7 @@ import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import {
   getPricingFeatureKey,
   PRICING_FEATURE_INDICES,
+  BILLING_PLANS,
 } from '@/shared/config/pricing'
 import {
   getLocaleFromPathname,
@@ -217,11 +218,15 @@ export default function OnboardingPage() {
       }
     }
 
+    const runtimePlan = billingPlanConfigsById[selectedPlanId]
+    const planDefaults = BILLING_PLANS[selectedPlanId]
+
     const includedAttempts =
-      billingPlanConfigsById[selectedPlanId]?.includedVerifications ??
-      (selectedPlanId === 'pro' ? 1000 : 3000)
-    const overageRate = selectedPlanId === 'pro' ? '$0.03' : '$0.025'
-    const monthlyCap = selectedPlanId === 'pro' ? '$60' : '$150'
+      runtimePlan?.includedVerifications ??
+      planDefaults?.includedVerifications ??
+      0
+    const overageRate = `$${runtimePlan?.usage?.overageRate ?? planDefaults?.overageRate ?? 0}`
+    const monthlyCap = `$${runtimePlan?.usage?.cappedAmount ?? planDefaults?.cappedAmount ?? 0}`
 
     return {
       title: tEmbedded('paidPlanDetailsTitle'),

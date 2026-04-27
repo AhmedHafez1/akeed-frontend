@@ -59,6 +59,7 @@ export interface OnboardingBillingPlanConfig {
   includedVerifications: number
   usage?: {
     cappedAmount: number
+    overageRate: number
     terms: string
   }
 }
