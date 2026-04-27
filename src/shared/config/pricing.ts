@@ -47,4 +47,3 @@ export const BILLING_PLANS: Record<string, BillingPlanDefaults> = {
     isFree: false,
   },
 }
-
