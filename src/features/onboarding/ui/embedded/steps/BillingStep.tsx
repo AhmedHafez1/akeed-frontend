@@ -3,7 +3,6 @@ import {
   Badge,
   Banner,
   BlockStack,
-  Box,
   Button,
   Divider,
   Icon,
@@ -12,7 +11,6 @@ import {
   Text,
 } from '@shopify/polaris'
 import {
-  ArrowRightIcon,
   BookIcon,
   CheckCircleIcon,
   CreditCardIcon,
@@ -23,14 +21,12 @@ import {
   ShieldCheckMarkIcon,
   StarFilledIcon,
 } from '@shopify/polaris-icons'
-import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import type {
   OnboardingBillingPlan,
   OnboardingBillingPlanId,
 } from '@/features/onboarding/domain/onboarding.types'
 
 interface BillingStepProps {
-  stepCounterLabel: string
   heading: string
   body: string
   changeLaterNote: string
@@ -57,7 +53,6 @@ interface BillingStepProps {
 }
 
 export function BillingStep({
-  stepCounterLabel,
   heading,
   body,
   changeLaterNote,
@@ -83,7 +78,6 @@ export function BillingStep({
   onManageBilling,
 }: BillingStepProps) {
   const selectedPlan = plans.find((plan) => plan.id === selectedPlanId)
-  const { isRTL } = useLocaleInfo()
 
   const handlePlanSelectByKeyboard = (
     event: KeyboardEvent<HTMLDivElement>,
@@ -98,7 +92,7 @@ export function BillingStep({
   }
 
   return (
-    <BlockStack gap="500">
+    <BlockStack gap="400">
       {errorMessage && (
         <BillingErrorBanner
           message={errorMessage}
@@ -111,27 +105,21 @@ export function BillingStep({
       )}
 
       <BlockStack gap="400">
-        <BlockStack gap="400">
-          <Box>
-            <Badge>{stepCounterLabel}</Badge>
-          </Box>
-
-          <BlockStack gap="200">
-            <Text as="h2" variant="heading2xl">
-              {heading}
+        <BlockStack gap="200">
+          <Text as="h2" variant="headingLg">
+            {heading}
+          </Text>
+          <BlockStack gap="050">
+            <Text as="p" tone="subdued" variant="bodySm">
+              {body}
             </Text>
-            <BlockStack gap="050">
-              <Text as="p" tone="subdued" variant="bodyLg">
-                {body}
-              </Text>
-              <Text as="p" tone="subdued" variant="bodyLg">
-                {changeLaterNote}
-              </Text>
-            </BlockStack>
+            <Text as="p" tone="subdued" variant="bodySm">
+              {changeLaterNote}
+            </Text>
           </BlockStack>
         </BlockStack>
 
-        <InlineGrid columns={{ xs: 1, md: 3 }} gap="500">
+        <InlineGrid columns={{ xs: 1, md: 3 }} gap="400">
           {plans.map((plan) => {
             const isDisabled = disabledPlanIds.includes(plan.id)
             const disabledPlanTooltip = isDisabled
@@ -169,17 +157,14 @@ export function BillingStep({
             {backLabel}
           </Button>
 
-          <button
-            type="button"
-            disabled={isActivating || !selectedPlan}
+          <Button
+            variant="primary"
+            loading={isActivating}
+            disabled={!selectedPlan}
             onClick={onActivate}
-            className="inline-flex min-h-12 items-center justify-center gap-3 rounded-lg bg-[#008060] px-7 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-[#006e52] focus-visible:ring-3 focus-visible:ring-[#008060]/30 focus-visible:outline-none disabled:cursor-wait disabled:opacity-70"
           >
-            <span>{selectedPlan?.ctaLabel ?? ''}</span>
-            <span className={isRTL ? 'rotate-180' : ''} aria-hidden>
-              <ArrowRightIcon className="h-5 w-5 fill-current" />
-            </span>
-          </button>
+            {selectedPlan?.ctaLabel ?? ''}
+          </Button>
         </InlineStack>
 
         <InlineStack align="end" blockAlign="center" gap="150">
@@ -233,40 +218,48 @@ function PlanCard({
       tabIndex={isDisabled ? -1 : 0}
       onClick={() => !isDisabled && onSelect(plan.id)}
       onKeyDown={(event) => !isDisabled && onKeyboardSelect(event, plan.id)}
-      className={`min-h-full rounded-xl transition outline-none focus-visible:ring-3 focus-visible:ring-[#008060]/25 ${
+      className={`h-full rounded-lg transition outline-none focus-visible:ring-3 focus-visible:ring-[#008060]/25 ${
         isDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:shadow-sm'
       }`}
     >
       <div
-        className={`flex min-h-[380px] flex-col rounded-xl border bg-white p-6 shadow-xs ${
-          isSelected ? 'border-2 border-[#008060]' : 'border-[#d9d9d9]'
+        className={`flex h-full min-h-[360px] flex-col rounded-lg border bg-white p-5 shadow-xs transition ring-inset md:p-6 ${
+          isSelected
+            ? 'border-[#008060] ring-2 ring-[#008060]'
+            : 'border-[#d9d9d9] ring-1 ring-transparent'
         } ${isDisabled ? 'bg-[#fafafa] text-[#8a8a8a]' : ''}`}
       >
-        <BlockStack gap="500">
-          <InlineStack align="space-between" blockAlign="start" gap="300">
-            <Text
-              as="h3"
-              variant="headingLg"
-              tone={isDisabled ? 'subdued' : undefined}
-            >
-              <span className={isSelected ? 'text-[#008060]' : undefined}>
-                {plan.name}
-              </span>
-            </Text>
+        <BlockStack gap="400">
+          <div className="flex items-start justify-between gap-3 text-start">
+            <div className="min-w-0">
+              <Text
+                as="h3"
+                variant="headingMd"
+                tone={isDisabled ? 'subdued' : undefined}
+              >
+                <span className={isSelected ? 'text-[#008060]' : undefined}>
+                  {plan.name}
+                </span>
+              </Text>
+            </div>
 
             {isDisabled ? (
-              <Badge tone="read-only">{freePlanUsedLabel}</Badge>
+              <div className="shrink-0">
+                <Badge tone="read-only">{freePlanUsedLabel}</Badge>
+              </div>
             ) : isRecommended && recommendedBadgeLabel ? (
-              <Badge tone="success-strong" icon={StarFilledIcon}>
-                {recommendedBadgeLabel}
-              </Badge>
+              <div className="shrink-0">
+                <Badge tone="success-strong" icon={StarFilledIcon}>
+                  {recommendedBadgeLabel}
+                </Badge>
+              </div>
             ) : null}
-          </InlineStack>
+          </div>
 
           <BlockStack gap="200">
-            <p dir="auto" className="[unicode-bidi:isolate]">
+            <p dir="auto" className="text-start [unicode-bidi:isolate]">
               <span
-                className={`text-[2.45rem] leading-none font-bold tracking-[-0.03em] ${
+                className={`text-[2rem] leading-none font-bold tracking-normal ${
                   isDisabled ? 'text-[#8a8a8a]' : 'text-[#202223]'
                 }`}
               >
@@ -283,7 +276,11 @@ function PlanCard({
               ) : null}
             </p>
 
-            <Text as="p" tone={isDisabled ? 'subdued' : undefined}>
+            <Text
+              as="p"
+              tone={isDisabled ? 'subdued' : undefined}
+              variant="bodySm"
+            >
               {summary}
             </Text>
           </BlockStack>
@@ -302,12 +299,14 @@ function PlanCard({
 
           {isDisabled && disabledReason ? (
             <div className="mt-auto rounded-lg bg-[#f1f1f1] px-3 py-3">
-              <InlineStack gap="200" blockAlign="center" wrap={false}>
-                <Icon source={InfoIcon} tone="subdued" />
+              <div className="grid grid-cols-[20px_minmax(0,1fr)] items-start gap-2 text-start">
+                <span className="flex h-5 w-5 items-center justify-center">
+                  <Icon source={InfoIcon} tone="subdued" />
+                </span>
                 <Text as="p" variant="bodySm">
                   {disabledReason}
                 </Text>
-              </InlineStack>
+              </div>
             </div>
           ) : null}
         </BlockStack>
@@ -324,15 +323,17 @@ function FeatureRow({
   isDisabled: boolean
 }) {
   return (
-    <InlineStack gap="300" blockAlign="center" wrap={false}>
-      <Icon
-        source={CheckCircleIcon}
-        tone={isDisabled ? 'subdued' : 'success'}
-      />
+    <div className="grid grid-cols-[20px_minmax(0,1fr)] items-start gap-3 text-start">
+      <span className="flex h-5 w-5 items-center justify-center">
+        <Icon
+          source={CheckCircleIcon}
+          tone={isDisabled ? 'subdued' : 'success'}
+        />
+      </span>
       <Text as="p" tone={isDisabled ? 'subdued' : undefined} variant="bodySm">
         {feature}
       </Text>
-    </InlineStack>
+    </div>
   )
 }
 
@@ -349,33 +350,37 @@ const billingDetailIcons = [
 ] as const
 
 function BillingDetailsCard({ title, lines }: BillingDetailsCardProps) {
+  const columnCount = Math.max(lines.length, 1)
+
   return (
-    <div className="rounded-xl border border-[#d9d9d9] bg-white p-5 shadow-xs">
+    <div className="rounded-lg border border-[#d9d9d9] bg-white p-5 shadow-xs">
       <BlockStack gap="400">
-        <InlineStack gap="300" blockAlign="center">
-          <Icon source={BookIcon} tone="success" />
+        <div className="flex items-center gap-3 text-start">
+          <span className="flex h-5 w-5 shrink-0 items-center justify-center">
+            <Icon source={BookIcon} tone="success" />
+          </span>
           <Text as="h3" variant="headingMd">
             {title}
           </Text>
-        </InlineStack>
+        </div>
 
-        <InlineGrid columns={{ xs: 1, md: 4 }} gap="0">
+        <InlineGrid columns={{ xs: 1, md: columnCount }} gap="0">
           {lines.map((line, index) => {
             const DetailIcon = billingDetailIcons[index] ?? ReceiptIcon
 
             return (
               <div
                 key={line}
-                className="border-[#d9d9d9] py-2 md:border-s md:px-5 md:first:border-s-0"
+                className="border-t border-[#d9d9d9] py-3 first:border-t-0 first:pt-0 last:pb-0 md:border-s md:border-t-0 md:px-5 md:py-2 md:first:border-s-0 md:first:ps-0 md:last:pe-0"
               >
-                <InlineStack gap="300" blockAlign="center" wrap={false}>
+                <div className="grid grid-cols-[40px_minmax(0,1fr)] items-center gap-3 text-start">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#e9f6ef]">
                     <Icon source={DetailIcon} tone="success" />
                   </div>
                   <Text as="p" tone="subdued" variant="bodySm">
                     {line}
                   </Text>
-                </InlineStack>
+                </div>
               </div>
             )
           })}

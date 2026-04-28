@@ -42,7 +42,6 @@ const EMBEDDED_PLAN_FEATURE_KEYS = {
     'planProFeature3',
     'planProFeature4',
     'planProFeature5',
-    'planProFeature6',
   ],
   business: [
     'planBusinessFeature1',
@@ -50,7 +49,6 @@ const EMBEDDED_PLAN_FEATURE_KEYS = {
     'planBusinessFeature3',
     'planBusinessFeature4',
     'planBusinessFeature5',
-    'planBusinessFeature6',
   ],
 } as const
 
@@ -306,7 +304,6 @@ export default function OnboardingPage() {
     ),
     3: (
       <BillingStep
-        stepCounterLabel={stepCounterLabel}
         heading={tEmbedded('billingHeading')}
         body={tEmbedded('billingBody')}
         changeLaterNote={tEmbedded('changePlanLaterNote')}
@@ -321,7 +318,7 @@ export default function OnboardingPage() {
             ? { starter: tEmbedded('freePlanAlreadyClaimedTooltip') }
             : undefined
         }
-        recommendedBadgeLabel={tEmbedded('recommendedBadge')}
+        recommendedBadgeLabel={t('recommendedBadge')}
         errorMessage={step === 3 ? errorBanner : null}
         retryLabel={tEmbedded('billingTryAgain')}
         manageSettingsLabel={tEmbedded('billingManageSettings')}
@@ -358,7 +355,10 @@ export default function OnboardingPage() {
             {step === 3 ? (
               <div className="mx-auto w-full max-w-[1120px]">
                 <Card padding={{ xs: '400', md: '800' }}>
-                  {stepComponents[step]}
+                  <BlockStack gap="200">
+                    <OnboardingStepCounter label={stepCounterLabel} />
+                    {stepComponents[step]}
+                  </BlockStack>
                 </Card>
               </div>
             ) : (
