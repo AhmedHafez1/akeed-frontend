@@ -1,19 +1,36 @@
 import type { KeyboardEvent } from 'react'
 import {
+  Badge,
   Banner,
   BlockStack,
   Box,
   Button,
-  Card,
+  Divider,
+  Icon,
+  InlineGrid,
   InlineStack,
   Text,
 } from '@shopify/polaris'
+import {
+  ArrowRightIcon,
+  BookIcon,
+  CheckCircleIcon,
+  CreditCardIcon,
+  InfoIcon,
+  LockIcon,
+  PlusCircleIcon,
+  ReceiptIcon,
+  ShieldCheckMarkIcon,
+  StarFilledIcon,
+} from '@shopify/polaris-icons'
+import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import type {
   OnboardingBillingPlan,
   OnboardingBillingPlanId,
 } from '@/features/onboarding/domain/onboarding.types'
 
 interface BillingStepProps {
+  stepCounterLabel: string
   heading: string
   body: string
   changeLaterNote: string
@@ -28,14 +45,19 @@ interface BillingStepProps {
   errorMessage: string | null
   retryLabel: string
   manageSettingsLabel: string
+  freePlanUsedLabel: string
+  backLabel: string
+  trustNote: string
   canManageBilling: boolean
   onPlanSelect: (planId: OnboardingBillingPlanId) => void
   onActivate: () => void
+  onBack: () => void
   onRetry: () => void
   onManageBilling: () => void
 }
 
 export function BillingStep({
+  stepCounterLabel,
   heading,
   body,
   changeLaterNote,
@@ -50,13 +72,18 @@ export function BillingStep({
   errorMessage,
   retryLabel,
   manageSettingsLabel,
+  freePlanUsedLabel,
+  backLabel,
+  trustNote,
   canManageBilling,
   onPlanSelect,
   onActivate,
+  onBack,
   onRetry,
   onManageBilling,
 }: BillingStepProps) {
   const selectedPlan = plans.find((plan) => plan.id === selectedPlanId)
+  const { isRTL } = useLocaleInfo()
 
   const handlePlanSelectByKeyboard = (
     event: KeyboardEvent<HTMLDivElement>,
@@ -71,7 +98,7 @@ export function BillingStep({
   }
 
   return (
-    <BlockStack gap="400">
+    <BlockStack gap="500">
       {errorMessage && (
         <BillingErrorBanner
           message={errorMessage}
@@ -83,120 +110,293 @@ export function BillingStep({
         />
       )}
 
-      <BlockStack gap="200">
-        <Text as="h2" variant="headingLg">
-          {heading}
-        </Text>
-        <Text as="p" tone="subdued" variant="bodyMd">
-          {body}
-        </Text>
-        <Text as="p" tone="subdued" variant="bodySm">
-          {changeLaterNote}
-        </Text>
+      <BlockStack gap="400">
+        <BlockStack gap="400">
+          <Box>
+            <Badge>{stepCounterLabel}</Badge>
+          </Box>
+
+          <BlockStack gap="200">
+            <Text as="h2" variant="heading2xl">
+              {heading}
+            </Text>
+            <BlockStack gap="050">
+              <Text as="p" tone="subdued" variant="bodyLg">
+                {body}
+              </Text>
+              <Text as="p" tone="subdued" variant="bodyLg">
+                {changeLaterNote}
+              </Text>
+            </BlockStack>
+          </BlockStack>
+        </BlockStack>
+
+        <InlineGrid columns={{ xs: 1, md: 3 }} gap="500">
+          {plans.map((plan) => {
+            const isDisabled = disabledPlanIds.includes(plan.id)
+            const disabledPlanTooltip = isDisabled
+              ? disabledPlanTooltips[plan.id]
+              : undefined
+            const isSelected = selectedPlanId === plan.id && !isDisabled
+            const isRecommended = plan.id === 'pro' && !isDisabled
+
+            return (
+              <PlanCard
+                key={plan.id}
+                plan={plan}
+                isDisabled={isDisabled}
+                isSelected={isSelected}
+                isRecommended={isRecommended}
+                disabledReason={disabledPlanTooltip}
+                recommendedBadgeLabel={recommendedBadgeLabel}
+                freePlanUsedLabel={freePlanUsedLabel}
+                onSelect={onPlanSelect}
+                onKeyboardSelect={handlePlanSelectByKeyboard}
+              />
+            )
+          })}
+        </InlineGrid>
       </BlockStack>
 
-      <div className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {plans.map((plan) => {
-          const isDisabled = disabledPlanIds.includes(plan.id)
-          const disabledPlanTooltip = isDisabled
-            ? disabledPlanTooltips[plan.id]
-            : undefined
-          const isSelected = selectedPlanId === plan.id && !isDisabled
-          const isRecommended = plan.id === 'pro' && !isDisabled
+      <BillingDetailsCard
+        title={selectedPlanDetailsTitle}
+        lines={selectedPlanDetailLines}
+      />
 
-          return (
-            <div key={plan.id} className="relative min-h-full">
-              {isRecommended && recommendedBadgeLabel ? (
-                <span className="absolute -top-2 left-1/2 z-10 -translate-x-1/2 rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold tracking-wide text-white uppercase shadow-sm">
-                  {recommendedBadgeLabel}
-                </span>
-              ) : null}
-              <div
-                role="button"
-                tabIndex={isDisabled ? -1 : 0}
-                onClick={() => !isDisabled && onPlanSelect(plan.id)}
-                onKeyDown={(event) =>
-                  !isDisabled && handlePlanSelectByKeyboard(event, plan.id)
-                }
-                title={disabledPlanTooltip}
-                className={`block min-h-full rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-emerald-700/35 ${
-                  isDisabled
-                    ? 'cursor-not-allowed opacity-50'
-                    : 'cursor-pointer'
-                } ${isSelected ? 'shadow-[0_0_0_3px_rgba(0,160,70,0.7)]' : ''}`}
-              >
-                <Card>
-                  <div className="flex min-h-64 flex-col justify-between gap-4">
-                    <InlineStack align="space-between" blockAlign="center">
-                      <Text as="h3" variant="headingLg" tone="subdued">
-                        {plan.name}
-                      </Text>
-                      {isSelected ? (
-                        <span
-                          aria-label="Selected plan"
-                          className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-emerald-600 text-sm font-bold text-white"
-                        >
-                          &#10003;
-                        </span>
-                      ) : null}
-                    </InlineStack>
+      <BlockStack gap="300">
+        <InlineStack align="space-between" blockAlign="center" gap="400">
+          <Button disabled={isActivating} onClick={onBack}>
+            {backLabel}
+          </Button>
 
-                    <Text as="h4" variant="headingXl">
-                      <span
-                        dir="auto"
-                        className="block text-center [unicode-bidi:isolate]"
-                      >
-                        {plan.monthlyPriceLabel}
-                      </span>
-                    </Text>
-                    <BlockStack gap="100">
-                      <Text as="p" tone="subdued" variant="bodyLg">
-                        {plan.monthlyVolumeLabel}
-                      </Text>
-                      <Text as="p" tone="subdued" variant="bodySm">
-                        {plan.subtitle}
-                      </Text>
-                      <BlockStack gap="050">
-                        {plan.features.map((feature) => (
-                          <Text
-                            key={feature}
-                            as="p"
-                            tone="subdued"
-                            variant="bodySm"
-                          >
-                            • {feature}
-                          </Text>
-                        ))}
-                      </BlockStack>
-                    </BlockStack>
-                  </div>
-                </Card>
-              </div>
-            </div>
-          )
-        })}
-      </div>
+          <button
+            type="button"
+            disabled={isActivating || !selectedPlan}
+            onClick={onActivate}
+            className="inline-flex min-h-12 items-center justify-center gap-3 rounded-lg bg-[#008060] px-7 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-[#006e52] focus-visible:ring-3 focus-visible:ring-[#008060]/30 focus-visible:outline-none disabled:cursor-wait disabled:opacity-70"
+          >
+            <span>{selectedPlan?.ctaLabel ?? ''}</span>
+            <span className={isRTL ? 'rotate-180' : ''} aria-hidden>
+              <ArrowRightIcon className="h-5 w-5 fill-current" />
+            </span>
+          </button>
+        </InlineStack>
 
-      <Card>
-        <BlockStack gap="100">
-          <Text as="p" variant="headingSm">
-            {selectedPlanDetailsTitle}
+        <InlineStack align="end" blockAlign="center" gap="150">
+          <Icon source={LockIcon} tone="subdued" />
+          <Text as="p" tone="subdued" variant="bodySm">
+            {trustNote}
           </Text>
-          {selectedPlanDetailLines.map((line) => (
-            <Text key={line} as="p" tone="subdued" variant="bodySm">
-              • {line}
-            </Text>
-          ))}
-        </BlockStack>
-      </Card>
-
-      <Box>
-        <Button variant="primary" loading={isActivating} onClick={onActivate}>
-          {selectedPlan?.ctaLabel ?? ''}
-        </Button>
-      </Box>
+        </InlineStack>
+      </BlockStack>
     </BlockStack>
   )
+}
+
+interface PlanCardProps {
+  plan: OnboardingBillingPlan
+  isDisabled: boolean
+  isSelected: boolean
+  isRecommended: boolean
+  disabledReason?: string
+  recommendedBadgeLabel?: string
+  freePlanUsedLabel: string
+  onSelect: (planId: OnboardingBillingPlanId) => void
+  onKeyboardSelect: (
+    event: KeyboardEvent<HTMLDivElement>,
+    planId: OnboardingBillingPlanId
+  ) => void
+}
+
+function PlanCard({
+  plan,
+  isDisabled,
+  isSelected,
+  isRecommended,
+  disabledReason,
+  recommendedBadgeLabel,
+  freePlanUsedLabel,
+  onSelect,
+  onKeyboardSelect,
+}: PlanCardProps) {
+  const { price, cadence } = splitPriceLabel(plan.monthlyPriceLabel)
+  const summary =
+    plan.id === 'starter'
+      ? `~ ${plan.monthlyVolumeLabel}`
+      : plan.monthlyVolumeLabel
+
+  return (
+    <div
+      role="button"
+      aria-disabled={isDisabled}
+      aria-pressed={isSelected}
+      tabIndex={isDisabled ? -1 : 0}
+      onClick={() => !isDisabled && onSelect(plan.id)}
+      onKeyDown={(event) => !isDisabled && onKeyboardSelect(event, plan.id)}
+      className={`min-h-full rounded-xl transition outline-none focus-visible:ring-3 focus-visible:ring-[#008060]/25 ${
+        isDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:shadow-sm'
+      }`}
+    >
+      <div
+        className={`flex min-h-[380px] flex-col rounded-xl border bg-white p-6 shadow-xs ${
+          isSelected ? 'border-2 border-[#008060]' : 'border-[#d9d9d9]'
+        } ${isDisabled ? 'bg-[#fafafa] text-[#8a8a8a]' : ''}`}
+      >
+        <BlockStack gap="500">
+          <InlineStack align="space-between" blockAlign="start" gap="300">
+            <Text
+              as="h3"
+              variant="headingLg"
+              tone={isDisabled ? 'subdued' : undefined}
+            >
+              <span className={isSelected ? 'text-[#008060]' : undefined}>
+                {plan.name}
+              </span>
+            </Text>
+
+            {isDisabled ? (
+              <Badge tone="read-only">{freePlanUsedLabel}</Badge>
+            ) : isRecommended && recommendedBadgeLabel ? (
+              <Badge tone="success-strong" icon={StarFilledIcon}>
+                {recommendedBadgeLabel}
+              </Badge>
+            ) : null}
+          </InlineStack>
+
+          <BlockStack gap="200">
+            <p dir="auto" className="[unicode-bidi:isolate]">
+              <span
+                className={`text-[2.45rem] leading-none font-bold tracking-[-0.03em] ${
+                  isDisabled ? 'text-[#8a8a8a]' : 'text-[#202223]'
+                }`}
+              >
+                {price}
+              </span>
+              {cadence ? (
+                <span
+                  className={`ms-2 text-base ${
+                    isDisabled ? 'text-[#8a8a8a]' : 'text-[#202223]'
+                  }`}
+                >
+                  {cadence}
+                </span>
+              ) : null}
+            </p>
+
+            <Text as="p" tone={isDisabled ? 'subdued' : undefined}>
+              {summary}
+            </Text>
+          </BlockStack>
+
+          <Divider />
+
+          <BlockStack gap="300">
+            {plan.features.map((feature) => (
+              <FeatureRow
+                key={feature}
+                feature={feature}
+                isDisabled={isDisabled}
+              />
+            ))}
+          </BlockStack>
+
+          {isDisabled && disabledReason ? (
+            <div className="mt-auto rounded-lg bg-[#f1f1f1] px-3 py-3">
+              <InlineStack gap="200" blockAlign="center" wrap={false}>
+                <Icon source={InfoIcon} tone="subdued" />
+                <Text as="p" variant="bodySm">
+                  {disabledReason}
+                </Text>
+              </InlineStack>
+            </div>
+          ) : null}
+        </BlockStack>
+      </div>
+    </div>
+  )
+}
+
+function FeatureRow({
+  feature,
+  isDisabled,
+}: {
+  feature: string
+  isDisabled: boolean
+}) {
+  return (
+    <InlineStack gap="300" blockAlign="center" wrap={false}>
+      <Icon
+        source={CheckCircleIcon}
+        tone={isDisabled ? 'subdued' : 'success'}
+      />
+      <Text as="p" tone={isDisabled ? 'subdued' : undefined} variant="bodySm">
+        {feature}
+      </Text>
+    </InlineStack>
+  )
+}
+
+interface BillingDetailsCardProps {
+  title: string
+  lines: string[]
+}
+
+const billingDetailIcons = [
+  ShieldCheckMarkIcon,
+  ReceiptIcon,
+  PlusCircleIcon,
+  CreditCardIcon,
+] as const
+
+function BillingDetailsCard({ title, lines }: BillingDetailsCardProps) {
+  return (
+    <div className="rounded-xl border border-[#d9d9d9] bg-white p-5 shadow-xs">
+      <BlockStack gap="400">
+        <InlineStack gap="300" blockAlign="center">
+          <Icon source={BookIcon} tone="success" />
+          <Text as="h3" variant="headingMd">
+            {title}
+          </Text>
+        </InlineStack>
+
+        <InlineGrid columns={{ xs: 1, md: 4 }} gap="0">
+          {lines.map((line, index) => {
+            const DetailIcon = billingDetailIcons[index] ?? ReceiptIcon
+
+            return (
+              <div
+                key={line}
+                className="border-[#d9d9d9] py-2 md:border-s md:px-5 md:first:border-s-0"
+              >
+                <InlineStack gap="300" blockAlign="center" wrap={false}>
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#e9f6ef]">
+                    <Icon source={DetailIcon} tone="success" />
+                  </div>
+                  <Text as="p" tone="subdued" variant="bodySm">
+                    {line}
+                  </Text>
+                </InlineStack>
+              </div>
+            )
+          })}
+        </InlineGrid>
+      </BlockStack>
+    </div>
+  )
+}
+
+function splitPriceLabel(label: string) {
+  if (label.includes(' / ')) {
+    const [price, ...cadenceParts] = label.split(' / ')
+    return { price, cadence: `/ ${cadenceParts.join(' / ')}` }
+  }
+
+  if (label.includes('/')) {
+    const [price, ...cadenceParts] = label.split('/')
+    return { price, cadence: `/ ${cadenceParts.join('/')}` }
+  }
+
+  return { price: label, cadence: '' }
 }
 
 interface BillingErrorBannerProps {

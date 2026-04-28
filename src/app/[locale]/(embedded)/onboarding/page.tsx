@@ -21,16 +21,38 @@ import {
   type OnboardingBillingPlan,
 } from '@/features/onboarding'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
-import {
-  getPricingFeatureKey,
-  PRICING_FEATURE_INDICES,
-  BILLING_PLANS,
-} from '@/shared/config/pricing'
+import { BILLING_PLANS } from '@/shared/config/pricing'
 import {
   getLocaleFromPathname,
   isSupportedLocale,
   persistLocalePreference,
 } from '@/shared/lib/locale'
+
+const EMBEDDED_PLAN_FEATURE_KEYS = {
+  starter: [
+    'planStarterFeature1',
+    'planStarterFeature2',
+    'planStarterFeature3',
+    'planStarterFeature4',
+    'planStarterFeature5',
+  ],
+  pro: [
+    'planProFeature1',
+    'planProFeature2',
+    'planProFeature3',
+    'planProFeature4',
+    'planProFeature5',
+    'planProFeature6',
+  ],
+  business: [
+    'planBusinessFeature1',
+    'planBusinessFeature2',
+    'planBusinessFeature3',
+    'planBusinessFeature4',
+    'planBusinessFeature5',
+    'planBusinessFeature6',
+  ],
+} as const
 
 export default function OnboardingPage() {
   const t = useTranslations('onboarding')
@@ -144,6 +166,7 @@ export default function OnboardingPage() {
     storeName,
     storeNameError,
     defaultLanguage,
+    setStep,
     setDefaultLanguage,
     selectedPlanId,
     setSelectedPlanId,
@@ -173,6 +196,15 @@ export default function OnboardingPage() {
     onBillingConfirmation: handleBillingConfirmation,
   })
 
+  const stepCounterLabel = t('stepCounter', {
+    current: step,
+    total: TOTAL_STEPS,
+  })
+
+  const handleBackToConfiguration = useCallback(() => {
+    setStep(2)
+  }, [setStep])
+
   const billingPlans = useMemo<OnboardingBillingPlan[]>(
     () =>
       BILLING_PLAN_DEFINITIONS.map((planDefinition) => {
@@ -192,8 +224,8 @@ export default function OnboardingPage() {
                 ? formatPlanVolumeLabel(runtimePlan.includedVerifications)
                 : tEmbedded(planDefinition.volumeKey),
           subtitle: tPricing(`${planId}_subtitle`),
-          features: PRICING_FEATURE_INDICES.map((index) =>
-            tPricing(getPricingFeatureKey(planId, index))
+          features: EMBEDDED_PLAN_FEATURE_KEYS[planId].map((featureKey) =>
+            tEmbedded(featureKey)
           ),
           ctaLabel: tPricing(`${planId}_cta`),
         }
@@ -274,6 +306,7 @@ export default function OnboardingPage() {
     ),
     3: (
       <BillingStep
+        stepCounterLabel={stepCounterLabel}
         heading={tEmbedded('billingHeading')}
         body={tEmbedded('billingBody')}
         changeLaterNote={tEmbedded('changePlanLaterNote')}
@@ -292,9 +325,13 @@ export default function OnboardingPage() {
         errorMessage={step === 3 ? errorBanner : null}
         retryLabel={tEmbedded('billingTryAgain')}
         manageSettingsLabel={tEmbedded('billingManageSettings')}
+        freePlanUsedLabel={tEmbedded('freePlanUsedBadge')}
+        backLabel={tEmbedded('billingBack')}
+        trustNote={tEmbedded('billingTrustNote')}
         canManageBilling={billingManagementUrl !== null}
         onPlanSelect={setSelectedPlanId}
         onActivate={handleActivatePlan}
+        onBack={handleBackToConfiguration}
         onRetry={handleRetryBilling}
         onManageBilling={handleManageBilling}
       />
@@ -309,7 +346,7 @@ export default function OnboardingPage() {
   }
 
   return (
-    <Page title={t('title')}>
+    <Page title={step === 3 ? undefined : t('title')} fullWidth={step === 3}>
       <Layout>
         <Layout.Section>
           <BlockStack gap="400">
@@ -318,17 +355,20 @@ export default function OnboardingPage() {
               warningMessage={prefillWarning}
             />
 
-            <Card>
-              <BlockStack gap="200">
-                <OnboardingStepCounter
-                  label={t('stepCounter', {
-                    current: step,
-                    total: TOTAL_STEPS,
-                  })}
-                />
-                {stepComponents[step]}
-              </BlockStack>
-            </Card>
+            {step === 3 ? (
+              <div className="mx-auto w-full max-w-[1120px]">
+                <Card padding={{ xs: '400', md: '800' }}>
+                  {stepComponents[step]}
+                </Card>
+              </div>
+            ) : (
+              <Card>
+                <BlockStack gap="200">
+                  <OnboardingStepCounter label={stepCounterLabel} />
+                  {stepComponents[step]}
+                </BlockStack>
+              </Card>
+            )}
           </BlockStack>
         </Layout.Section>
       </Layout>
