@@ -21,7 +21,6 @@ import {
   type OnboardingBillingPlan,
 } from '@/features/onboarding'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
-import { BILLING_PLANS } from '@/shared/config/pricing'
 import {
   getLocaleFromPathname,
   isSupportedLocale,
@@ -34,8 +33,6 @@ const EMBEDDED_PLAN_FEATURE_KEYS = {
     'planStarterFeature2',
     'planStarterFeature3',
     'planStarterFeature4',
-    'planStarterFeature5',
-    'planStarterFeature6',
   ],
   pro: [
     'planProFeature1',
@@ -50,8 +47,6 @@ const EMBEDDED_PLAN_FEATURE_KEYS = {
     'planBusinessFeature2',
     'planBusinessFeature3',
     'planBusinessFeature4',
-    'planBusinessFeature5',
-    'planBusinessFeature6',
   ],
 } as const
 
@@ -240,38 +235,6 @@ export default function OnboardingPage() {
     ]
   )
 
-  const selectedPlanDetails = useMemo(() => {
-    if (selectedPlanId === 'starter') {
-      return {
-        title: tEmbedded('starterPlanDetailsTitle'),
-        lines: [
-          tEmbedded('starterNoShopifyCharge'),
-          tEmbedded('starterStopsAtLimit'),
-        ],
-      }
-    }
-
-    const runtimePlan = billingPlanConfigsById[selectedPlanId]
-    const planDefaults = BILLING_PLANS[selectedPlanId]
-
-    const includedAttempts =
-      runtimePlan?.includedVerifications ??
-      planDefaults?.includedVerifications ??
-      0
-    const overageRate = `$${runtimePlan?.usage?.overageRate ?? planDefaults?.overageRate ?? 0}`
-    const monthlyCap = `$${runtimePlan?.usage?.cappedAmount ?? planDefaults?.cappedAmount ?? 0}`
-
-    return {
-      title: tEmbedded('paidPlanDetailsTitle'),
-      lines: [
-        tEmbedded('paidBillingHandledByShopify'),
-        tEmbedded('paidIncludedAttempts', { count: includedAttempts }),
-        tEmbedded('paidOverageRate', { rate: overageRate }),
-        tEmbedded('paidUsageCap', { cap: monthlyCap }),
-      ],
-    }
-  }, [billingPlanConfigsById, selectedPlanId, tEmbedded])
-
   const stepComponents: Record<EmbeddedStep, ReactNode> = {
     1: (
       <WelcomeStep
@@ -310,8 +273,6 @@ export default function OnboardingPage() {
         heading={tEmbedded('billingHeading')}
         body={tEmbedded('billingBody')}
         changeLaterNote={tEmbedded('changePlanLaterNote')}
-        selectedPlanDetailsTitle={selectedPlanDetails.title}
-        selectedPlanDetailLines={selectedPlanDetails.lines}
         plans={billingPlans}
         selectedPlanId={selectedPlanId}
         isActivating={isActivatingPlan}
@@ -327,7 +288,6 @@ export default function OnboardingPage() {
         manageSettingsLabel={tEmbedded('billingManageSettings')}
         freePlanUsedLabel={tEmbedded('freePlanUsedBadge')}
         backLabel={tEmbedded('billingBack')}
-        trustNote={tEmbedded('billingTrustNote')}
         canManageBilling={billingManagementUrl !== null}
         onPlanSelect={setSelectedPlanId}
         onActivate={handleActivatePlan}

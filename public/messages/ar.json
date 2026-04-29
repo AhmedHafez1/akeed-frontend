@@ -653,7 +653,6 @@
     "billingTryAgain": "حاول مرة أخرى",
     "billingManageSettings": "إدارة الفوترة داخل Shopify",
     "billingBack": "رجوع",
-    "billingTrustNote": "يمكنك تغيير أو إلغاء خطتك في أي وقت من الإعدادات.",
     "planPriceFree": "مجاناً",
     "planPricePerMonth": "{price}/شهر",
     "planVolumePerMonth": "حتى {count} تأكيد شهرياً",
@@ -685,14 +684,6 @@
     "planBusinessFeature3": "لا تحتاج رقم واتساب أو توثيق أعمال. استخدم أرقام أكيد الرسمية لبدء التأكيد فوراً.",
     "planBusinessFeature4": "أولويّة في الدعم",
     "planBusinessFeature5": "استخدام إضافي أقل: 0.025$ لكل تأكيد إضافي",
-    "planBusinessFeature6": "مصممة لأحجام COD الأكبر",
-    "starterPlanDetailsTitle": "تفاصيل فوترة Starter",
-    "starterNoShopifyCharge": "لا يتم إنشاء أي رسوم Shopify عند اختيار Starter.",
-    "starterStopsAtLimit": "يتوقف الاستخدام بعد 30 تأكيد.",
-    "paidPlanDetailsTitle": "تفاصيل فوترة الخطة المحددة",
-    "paidBillingHandledByShopify": "الفوترة تتم بشكل آمن عبر Shopify.",
-    "paidIncludedAttempts": "تشمل {count} تأكيد شهرياً.",
-    "paidOverageRate": "المحاولات الإضافية تُحتسب بسعر {rate} لكل محاولة.",
-    "paidUsageCap": "الاستخدام الإضافي له حد أقصى {cap} شهرياً."
+    "planBusinessFeature6": "مصممة لأحجام COD الأكبر"
   }
 }

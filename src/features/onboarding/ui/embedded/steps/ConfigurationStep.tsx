@@ -1,9 +1,9 @@
 import {
   BlockStack,
-  Box,
   Button,
   Card,
   Checkbox,
+  InlineStack,
   Select,
   Text,
   TextField,
@@ -85,7 +85,9 @@ export function ConfigurationStep({
         label={defaultLanguageLabel}
         options={languageOptions}
         value={defaultLanguage}
-        onChange={(value) => onLanguageChange(value as IntegrationOnboardingLanguage)}
+        onChange={(value) =>
+          onLanguageChange(value as IntegrationOnboardingLanguage)
+        }
       />
 
       <Card>
@@ -101,11 +103,11 @@ export function ConfigurationStep({
         </BlockStack>
       </Card>
 
-      <Box>
+      <InlineStack align="end">
         <Button variant="primary" loading={isSaving} onClick={onContinue}>
           {continueLabel}
         </Button>
-      </Box>
+      </InlineStack>
     </BlockStack>
   )
 }
