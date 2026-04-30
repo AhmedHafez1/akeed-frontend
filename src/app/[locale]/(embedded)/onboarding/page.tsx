@@ -324,7 +324,7 @@ export default function OnboardingPage() {
             />
 
             {step === 3 ? (
-              <div className="mx-auto w-full max-w-[1120px]">
+              <div className="mx-auto w-full max-w-280">
                 <Card padding={{ xs: '400', md: '800' }}>
                   <BlockStack gap="200">
                     <OnboardingStepCounter label={stepCounterLabel} />
