@@ -1,4 +1,4 @@
-import { Building2, Rocket, Sprout, Star, type LucideIcon } from 'lucide-react'
+import { Building2, Rocket, Sprout, Star, Zap, type LucideIcon } from 'lucide-react'
 import type { Tier } from '@/features/marketing/model/tier.model'
 import {
   LandingIconBadge,
@@ -20,6 +20,7 @@ interface PricingPlanCardProps {
 
 const tierIcons: Record<string, LucideIcon> = {
   starter: Sprout,
+  basic: Zap,
   pro: Rocket,
   business: Building2,
 }
@@ -30,7 +31,7 @@ export function PricingPlanCard({
   isRTL,
   onSelect,
 }: PricingPlanCardProps) {
-  const isPopular = tier.key === 'pro'
+  const isPopular = tier.key === 'basic'
   const isBusiness = tier.key === 'business'
   const Icon = tierIcons[tier.key] ?? Sprout
 

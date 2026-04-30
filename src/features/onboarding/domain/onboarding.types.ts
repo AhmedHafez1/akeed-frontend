@@ -30,6 +30,7 @@ export interface OnboardingSettingsPayload {
 
 export const ONBOARDING_BILLING_PLAN_IDS = [
   'starter',
+  'basic',
   'pro',
   'business',
 ] as const

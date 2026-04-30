@@ -1,7 +1,7 @@
 import type { Tier } from '@/features/marketing/model/tier.model'
 import { BILLING_PLANS } from '@/shared/config/pricing'
 
-const { starter, pro, business } = BILLING_PLANS
+const { starter, basic, pro, business } = BILLING_PLANS
 
 export const pricing: { tiers: Tier[] } = {
   tiers: [
@@ -14,18 +14,25 @@ export const pricing: { tiers: Tier[] } = {
       ordersDisplay: '30',
     },
     {
+      key: 'basic',
+      orders: basic.includedVerifications,
+      price: basic.price,
+      perOrder: basic.overageRate,
+      ordersDisplay: '200',
+    },
+    {
       key: 'pro',
       orders: pro.includedVerifications,
       price: pro.price,
       perOrder: pro.overageRate,
-      ordersDisplay: '1,000',
+      ordersDisplay: '500',
     },
     {
       key: 'business',
       orders: business.includedVerifications,
       price: business.price,
       perOrder: business.overageRate,
-      ordersDisplay: '3,000',
+      ordersDisplay: '1,500',
     },
   ],
 }

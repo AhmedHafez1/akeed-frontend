@@ -100,14 +100,14 @@ export function BillingStep({
           </BlockStack>
         </BlockStack>
 
-        <InlineGrid columns={{ xs: 1, md: 3 }} gap="400">
+        <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
           {plans.map((plan) => {
             const isDisabled = disabledPlanIds.includes(plan.id)
             const disabledPlanTooltip = isDisabled
               ? disabledPlanTooltips[plan.id]
               : undefined
             const isSelected = selectedPlanId === plan.id && !isDisabled
-            const isRecommended = plan.id === 'pro' && !isDisabled
+            const isRecommended = plan.id === 'basic' && !isDisabled
 
             return (
               <PlanCard

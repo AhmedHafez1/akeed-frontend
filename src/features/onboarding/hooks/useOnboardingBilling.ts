@@ -30,7 +30,7 @@ export function useOnboardingBilling({
   onBillingConfirmation,
 }: UseOnboardingBillingParams) {
   const [selectedPlanId, setSelectedPlanId] =
-    useState<OnboardingBillingPlanId>('pro')
+    useState<OnboardingBillingPlanId>('basic')
   const [isActivatingPlan, setIsActivatingPlan] = useState(false)
   const [isBillingRedirecting, setIsBillingRedirecting] = useState(false)
 

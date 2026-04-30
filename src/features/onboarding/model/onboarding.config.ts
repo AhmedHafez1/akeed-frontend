@@ -12,6 +12,9 @@ type OnboardingMessageKey =
   | 'planStarterName'
   | 'planStarterPrice'
   | 'planStarterVolume'
+  | 'planBasicName'
+  | 'planBasicPrice'
+  | 'planBasicVolume'
   | 'planProName'
   | 'planProPrice'
   | 'planProVolume'
@@ -49,6 +52,12 @@ export const BILLING_PLAN_DEFINITIONS: PlanDefinition[] = [
     nameKey: 'planStarterName',
     priceKey: 'planStarterPrice',
     volumeKey: 'planStarterVolume',
+  },
+  {
+    id: 'basic',
+    nameKey: 'planBasicName',
+    priceKey: 'planBasicPrice',
+    volumeKey: 'planBasicVolume',
   },
   {
     id: 'pro',

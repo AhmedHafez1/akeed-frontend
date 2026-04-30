@@ -16,7 +16,7 @@ export function PricingDesktopCards({
 }: PricingDesktopCardsProps) {
   return (
     <div>
-      <div className="mx-auto grid gap-5 md:grid-cols-2 xl:grid-cols-3 xl:gap-8">
+      <div className="mx-auto grid gap-5 md:grid-cols-2 xl:grid-cols-4 xl:gap-8">
         {tiers.map((tier) => (
           <PricingPlanCard
             key={tier.key}

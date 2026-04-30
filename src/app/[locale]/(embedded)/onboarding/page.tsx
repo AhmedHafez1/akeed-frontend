@@ -34,6 +34,14 @@ const EMBEDDED_PLAN_FEATURE_KEYS = {
     'planStarterFeature3',
     'planStarterFeature4',
   ],
+  basic: [
+    'planBasicFeature1',
+    'planBasicFeature2',
+    'planBasicFeature3',
+    'planBasicFeature4',
+    'planBasicFeature5',
+    'planBasicFeature6',
+  ],
   pro: [
     'planProFeature1',
     'planProFeature2',
