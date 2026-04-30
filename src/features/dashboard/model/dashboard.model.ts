@@ -1,4 +1,5 @@
 export type VerificationStatus =
+  | 'pending'
   | 'sent'
   | 'delivered'
   | 'read'
@@ -6,6 +7,7 @@ export type VerificationStatus =
   | 'canceled'
   | 'expired'
   | 'failed'
+  | 'no_reply'
 
 export type VerificationStatusFilter =
   | 'all'
@@ -15,6 +17,7 @@ export type VerificationStatusFilter =
   | 'read'
   | 'confirmed'
   | 'canceled'
+  | 'no_reply'
 
 export type DashboardStatsDateRange =
   | 'today'

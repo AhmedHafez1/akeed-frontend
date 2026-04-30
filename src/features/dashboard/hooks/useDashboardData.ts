@@ -32,7 +32,7 @@ export function useDashboardData(
     queryParams.set('date_range', dateRangeFilter)
 
     if (statusFilter === 'awaiting_response') {
-      queryParams.set('status', 'sent,delivered,read')
+      queryParams.set('status', 'pending,sent,delivered,read')
     } else if (statusFilter !== 'all') {
       queryParams.set('status', statusFilter)
     }

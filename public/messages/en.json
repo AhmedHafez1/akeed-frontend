@@ -488,7 +488,8 @@
         "delivered": "Delivered",
         "read": "Read",
         "confirmed": "Confirmed",
-        "canceled": "Canceled"
+        "canceled": "Canceled",
+        "no_reply": "No Reply"
       },
       "dateRange": {
         "label": "Date range",
@@ -591,7 +592,8 @@
       "read": "Read",
       "canceled": "Canceled",
       "failed": "Failed",
-      "expired": "Expired"
+      "expired": "Expired",
+      "no_reply": "No Reply"
     }
   },
   "settings": {

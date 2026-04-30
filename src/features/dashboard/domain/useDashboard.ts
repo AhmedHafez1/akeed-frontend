@@ -61,6 +61,7 @@ export function useDashboard(): DashboardSkinProps {
       },
       { id: 'confirmed', label: t('filters.status.confirmed') },
       { id: 'canceled', label: t('filters.status.canceled') },
+      { id: 'no_reply', label: t('filters.status.no_reply') },
     ],
     [t]
   )

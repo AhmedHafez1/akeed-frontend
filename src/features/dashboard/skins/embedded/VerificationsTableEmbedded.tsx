@@ -15,6 +15,7 @@ type PolarisBadgeTone =
   | undefined
 
 const STATUS_TONE_MAP: Record<VerificationStatus, PolarisBadgeTone> = {
+  pending: undefined,
   confirmed: 'success',
   sent: 'info',
   delivered: 'info',
@@ -22,6 +23,7 @@ const STATUS_TONE_MAP: Record<VerificationStatus, PolarisBadgeTone> = {
   canceled: 'critical',
   failed: 'critical',
   expired: 'warning',
+  no_reply: 'attention',
 }
 
 interface VerificationsTableEmbeddedProps {

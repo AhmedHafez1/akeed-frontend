@@ -481,7 +481,8 @@
         "delivered": "وصلت",
         "read": "تمت قراءتها",
         "confirmed": "تم التأكيد",
-        "canceled": "تم الإلغاء"
+        "canceled": "تم الإلغاء",
+        "no_reply": "لم يتم الرد"
       },
       "dateRange": {
         "label": "الفترة الزمنية",
@@ -584,7 +585,8 @@
       "read": "قُرأت",
       "canceled": "تم الإلغاء",
       "failed": "فشل الإرسال",
-      "expired": "انتهت المهلة"
+      "expired": "انتهت المهلة",
+      "no_reply": "لم يتم الرد"
     }
   },
   "settings": {

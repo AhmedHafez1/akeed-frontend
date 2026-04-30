@@ -2,6 +2,18 @@ export type IntegrationOnboardingLanguage = 'auto' | 'en' | 'ar'
 
 export type IntegrationOnboardingStatus = 'pending' | 'completed'
 
+export type AutomationTimezone =
+  | 'Asia/Riyadh'
+  | 'Asia/Dubai'
+  | 'Asia/Qatar'
+  | 'Asia/Kuwait'
+  | 'Asia/Bahrain'
+  | 'Asia/Muscat'
+  | 'Asia/Amman'
+  | 'Africa/Cairo'
+  | 'Africa/Casablanca'
+  | 'UTC'
+
 export interface IntegrationOnboardingState {
   integrationId: string
   onboardingStatus: IntegrationOnboardingStatus
@@ -14,6 +26,14 @@ export interface IntegrationOnboardingState {
   billingPlanId: OnboardingBillingPlanId | null
   billingStatus: string | null
   billingManagementUrl: string | null
+  followUpEnabled: boolean
+  followUpDelayMinutes: number
+  escalationDelayMinutes: number
+  quietHoursEnabled: boolean
+  quietHoursStart: string | null
+  quietHoursEnd: string | null
+  timezone: AutomationTimezone
+  sendDelayMinutes: number
 }
 
 export interface OnboardingStateResponse {
@@ -26,6 +46,14 @@ export interface OnboardingSettingsPayload {
   isAutoVerifyEnabled: boolean
   shippingCurrency?: string
   avgShippingCost?: number
+  followUpEnabled?: boolean
+  followUpDelayMinutes?: number
+  escalationDelayMinutes?: number
+  quietHoursEnabled?: boolean
+  quietHoursStart?: string
+  quietHoursEnd?: string
+  timezone?: AutomationTimezone
+  sendDelayMinutes?: number
 }
 
 export const ONBOARDING_BILLING_PLAN_IDS = [
