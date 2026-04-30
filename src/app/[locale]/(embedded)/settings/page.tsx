@@ -32,6 +32,7 @@ import {
 } from '@/features/onboarding'
 import { PlanComparison } from './components/PlanComparison'
 import { UsageOverview } from './components/UsageOverview'
+import { VerificationTemplatePreview } from '@/features/message-preview'
 
 type BillingStatusKey =
   | 'billingStatusActive'
@@ -517,6 +518,10 @@ export default function SettingsPage() {
                   {t('saveButton')}
                 </Button>
               </BlockStack>
+            </Card>
+
+            <Card>
+              <VerificationTemplatePreview variant="full" />
             </Card>
 
             <div id={SUBSCRIPTION_SECTION_ID}>

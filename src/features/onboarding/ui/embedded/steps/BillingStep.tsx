@@ -12,6 +12,7 @@ import type {
 } from '@/features/onboarding/domain/onboarding.types'
 import { BillingErrorBanner } from '../components/BillingErrorBanner'
 import { PlanCard } from '../components/PlanCard'
+import { VerificationTemplatePreview } from '@/features/message-preview'
 
 interface BillingStepProps {
   heading: string
@@ -99,6 +100,8 @@ export function BillingStep({
             </Text>
           </BlockStack>
         </BlockStack>
+
+        <VerificationTemplatePreview variant="compact" />
 
         <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
           {plans.map((plan) => {

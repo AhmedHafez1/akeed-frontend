@@ -8,7 +8,7 @@ export type PolarisBorderColor =
   | 'border-caution'
 
 export interface TopMetric {
-  id: 'confirmed' | 'canceled' | 'awaitingResponse' | 'responseRate'
+  id: 'confirmed' | 'canceled' | 'awaitingResponse' | 'responseRate' | 'confirmationRate'
   label: string
   value: string
   tone: MetricTone
@@ -22,7 +22,7 @@ interface TopMetricGridProps {
 
 export function TopMetricGrid({ metrics, isRTL }: TopMetricGridProps) {
   return (
-    <InlineGrid columns={{ xs: 1, md: 4 }} gap="400">
+    <InlineGrid columns={{ xs: 1, md: 5 }} gap="400">
       {metrics.map((metric) => (
         <Box
           key={metric.id}

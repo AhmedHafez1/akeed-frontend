@@ -9,8 +9,8 @@ import {
 export function StatsEmbeddedSkeleton() {
   return (
     <BlockStack gap="400">
-      <InlineGrid columns={{ xs: 1, md: 4 }} gap="400">
-        {Array.from({ length: 4 }).map((_, index) => (
+      <InlineGrid columns={{ xs: 1, md: 5 }} gap="400">
+        {Array.from({ length: 5 }).map((_, index) => (
           <Card key={index}>
             <BlockStack gap="300">
               <SkeletonDisplayText size="medium" />

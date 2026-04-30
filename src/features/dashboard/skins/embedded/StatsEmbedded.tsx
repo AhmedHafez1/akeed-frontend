@@ -42,6 +42,12 @@ function resolveResponseRateTone(replyRate: number): MetricTone {
   return 'critical'
 }
 
+function resolveConfirmationRateTone(rate: number): MetricTone {
+  if (rate >= 70) return 'success'
+  if (rate >= 45) return 'caution'
+  return 'critical'
+}
+
 function resolveMetricBorderColor(tone: MetricTone): PolarisBorderColor {
   if (tone === 'success') return 'border-success'
   if (tone === 'caution') return 'border-caution'
@@ -68,6 +74,9 @@ export function StatsEmbedded({
     : 0
   const responseRateTone = stats
     ? resolveResponseRateTone(stats.totals.reply_rate)
+    : 'caution'
+  const confirmationRateTone = stats
+    ? resolveConfirmationRateTone(stats.totals.confirmation_rate)
     : 'caution'
   const searchQuery = searchParams.toString()
   const settingsHref = `${withLocale('/settings', locale)}${searchQuery ? `?${searchQuery}` : ''}#subscription-usage`
@@ -101,6 +110,13 @@ export function StatsEmbedded({
           value: `${Math.round(stats.totals.reply_rate)}%`,
           tone: responseRateTone,
           borderColor: resolveMetricBorderColor(responseRateTone),
+        },
+        {
+          id: 'confirmationRate',
+          label: t('metrics.cards.confirmationRate'),
+          value: `${Math.round(stats.totals.confirmation_rate)}%`,
+          tone: confirmationRateTone,
+          borderColor: resolveMetricBorderColor(confirmationRateTone),
         },
       ]
     : []

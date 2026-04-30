@@ -65,6 +65,7 @@ export type DashboardStats = {
     delivered: number
     read: number
     reply_rate: number
+    confirmation_rate: number
   }
   usage: {
     used: number

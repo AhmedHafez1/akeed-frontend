@@ -50,7 +50,7 @@ export function StandaloneStatsSummary({
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <div className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-white p-5 shadow-sm">
           <p className="text-xs font-medium tracking-wide text-emerald-600 uppercase">
             {t('metrics.cards.confirmed')}
@@ -69,9 +69,18 @@ export function StandaloneStatsSummary({
           </p>
         </div>
 
+        <div className="relative overflow-hidden rounded-2xl border border-amber-100 bg-gradient-to-br from-amber-50 to-white p-5 shadow-sm">
+          <p className="text-xs font-medium tracking-wide text-amber-600 uppercase">
+            {t('metrics.cards.awaitingResponse')}
+          </p>
+          <p className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
+            {Math.max(0, stats.totals.sent - stats.totals.confirmed - stats.totals.canceled)}
+          </p>
+        </div>
+
         <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">
-            {t('metrics.replyRate', { value: '' }).replace(/%?\s*$/, '')}
+            {t('metrics.cards.responseRate')}
           </p>
           <div className="mt-2 flex items-baseline gap-2">
             <p className="text-4xl font-bold tracking-tight text-slate-900">
@@ -88,20 +97,18 @@ export function StandaloneStatsSummary({
 
         <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">
-            {t('metrics.usage.title')}
+            {t('metrics.cards.confirmationRate')}
           </p>
-          <p className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
-            {stats.usage.used}
-            <span className="text-lg font-normal text-slate-400">
-              {' '}
-              / {stats.usage.limit}
+          <div className="mt-2 flex items-baseline gap-2">
+            <p className="text-4xl font-bold tracking-tight text-slate-900">
+              {stats.totals.confirmation_rate}%
+            </p>
+            <span
+              aria-hidden="true"
+              className={`inline-flex h-5 w-5 items-center justify-center rounded-full border ${resolveRateColor(stats.totals.confirmation_rate)}`}
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-current" />
             </span>
-          </p>
-          <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
-            <div
-              className={`h-full rounded-full transition-all duration-500 ${resolveUsageColor(usagePercent)}`}
-              style={{ width: `${usagePercent}%` }}
-            />
           </div>
         </div>
       </div>
@@ -119,6 +126,25 @@ export function StandaloneStatsSummary({
             : t('metrics.usage.warningNearLimit')}
         </div>
       )}
+
+      <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">
+          {t('metrics.usage.title')}
+        </p>
+        <p className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
+          {stats.usage.used}
+          <span className="text-lg font-normal text-slate-400">
+            {' '}
+            / {stats.usage.limit}
+          </span>
+        </p>
+        <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+          <div
+            className={`h-full rounded-full transition-all duration-500 ${resolveUsageColor(usagePercent)}`}
+            style={{ width: `${usagePercent}%` }}
+          />
+        </div>
+      </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:col-span-2">

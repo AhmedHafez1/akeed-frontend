@@ -532,6 +532,7 @@
         "canceled": "تم الإلغاء",
         "awaitingResponse": "بانتظار الرد",
         "responseRate": "معدل الرد",
+        "confirmationRate": "معدل التأكيد",
         "sent": "تم الإرسال",
         "delivered": "وصلت",
         "read": "قُرأت",
@@ -705,5 +706,14 @@
     "planBusinessFeature4": "أولويّة في الدعم",
     "planBusinessFeature5": "استخدام إضافي أقل: 0.03$ لكل تأكيد إضافي",
     "planBusinessFeature6": "مصممة لأحجام COD الأكبر"
+  },
+  "messagePreview": {
+    "title": "معاينة رسالة التأكيد",
+    "subtitle": "هذه هي رسالة الواتساب التي سيستلمها عملاؤك عند تقديم طلب دفع عند الاستلام.",
+    "whatsappLabel": "واتساب",
+    "sampleBadge": "معاينة تجريبية",
+    "trustNote": "تُرسل الرسائل عبر واجهات Meta WhatsApp Cloud APIs الرسمية باستخدام رقم أكيد الموثّق.",
+    "confirmationRate": "معدل التأكيد",
+    "confirmationRateHelp": "نسبة التأكيدات المرسلة التي أكّدها العميل."
   }
 }

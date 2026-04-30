@@ -537,8 +537,9 @@
         "pending": "Pending",
         "confirmed": "Confirmed",
         "canceled": "Canceled",
-        "awaitingResponse": "Pending",
+        "awaitingResponse": "Awaiting Reply",
         "responseRate": "Response Rate",
+        "confirmationRate": "Confirmation Rate",
         "sent": "Sent",
         "delivered": "Delivered",
         "read": "Read",
@@ -710,5 +711,14 @@
     "planBusinessFeature2": "3× more monthly confirmation messages",
     "planBusinessFeature3": "Priority support",
     "planBusinessFeature4": "Lower overage fees for extra messages"
+  },
+  "messagePreview": {
+    "title": "Verification Message Preview",
+    "subtitle": "This is the exact WhatsApp message your customers will receive when a COD order is placed.",
+    "whatsappLabel": "WhatsApp",
+    "sampleBadge": "Sample preview",
+    "trustNote": "Messages are sent via official Meta WhatsApp Cloud APIs using Akeed's verified business number.",
+    "confirmationRate": "Confirmation Rate",
+    "confirmationRateHelp": "Percentage of sent verifications that the customer confirmed."
   }
 }
