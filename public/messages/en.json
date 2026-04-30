@@ -383,6 +383,7 @@
   },
   "appHeader": {
     "dashboard": "Dashboard",
+    "settings": "Settings",
     "signOut": "Sign out",
     "signingOut": "Signing out..."
   },
@@ -576,13 +577,22 @@
         "customer": "Customer",
         "status": "Status",
         "total": "Total",
-        "created": "Created"
+        "created": "Created",
+        "actions": "Actions"
       },
       "orderFallbackPrefix": "Order",
       "unknownCustomer": "Unknown customer",
       "noPhone": "No phone",
       "loadMore": "Load more",
-      "loadingMore": "Loading more..."
+      "loadingMore": "Loading more...",
+      "actions": {
+        "cancelOrder": "Cancel order",
+        "confirmCancelOrder": "Yes, cancel",
+        "keepOrder": "Keep order",
+        "cancelingOrder": "Canceling...",
+        "cancelOrderError": "We could not cancel this order. Please try again.",
+        "cancelOrderConfirmDescription": "This will cancel the Shopify order and mark it as merchant-canceled."
+      }
     },
     "verificationStatus": {
       "confirmed": "Confirmed",
@@ -626,7 +636,43 @@
     "avgShippingCostInvalid": "Average shipping cost must be a number greater than or equal to 0.",
     "autoVerifyLabel": "Enable auto-verification?",
     "autoVerifyDescription": "When enabled, Akeed automatically sends WhatsApp verification for new COD orders.",
+    "automation": {
+      "heading": "Automation",
+      "description": "Control when Akeed sends verification, one follow-up, and no-reply escalation.",
+      "sendDelayMinutesLabel": "First send delay (minutes)",
+      "sendDelayMinutesHelp": "Use 0 to send immediately after a new COD order is received.",
+      "followUpEnabledLabel": "Send one follow-up message",
+      "followUpEnabledHelp": "If the customer does not respond, Akeed sends the same WhatsApp template one more time.",
+      "followUpDelayMinutesLabel": "Follow-up delay (minutes)",
+      "escalationDelayMinutesLabel": "No-reply escalation delay (minutes)",
+      "escalationDelayMinutesHelp": "Measured from the successful first WhatsApp send.",
+      "quietHoursEnabledLabel": "Pause sending during quiet hours",
+      "quietHoursEnabledHelp": "Akeed shifts scheduled sends to the next allowed local time.",
+      "quietHoursStartLabel": "Quiet hours start",
+      "quietHoursEndLabel": "Quiet hours end",
+      "timezoneLabel": "Timezone",
+      "validation": {
+        "sendDelayMinutes": "First send delay must be a whole number from 0 to 1440.",
+        "followUpDelayMinutes": "Follow-up delay must be a whole number from 0 to 10080.",
+        "escalationDelayMinutes": "No-reply escalation delay must be a whole number from 0 to 10080.",
+        "followUpBeforeEscalation": "Follow-up delay must be less than no-reply escalation delay.",
+        "quietHoursRequired": "Enter quiet-hours start and end times in HH:mm format."
+      },
+      "timezones": {
+        "Asia_Riyadh": "Saudi Arabia (Asia/Riyadh)",
+        "Asia_Dubai": "UAE (Asia/Dubai)",
+        "Asia_Qatar": "Qatar (Asia/Qatar)",
+        "Asia_Kuwait": "Kuwait (Asia/Kuwait)",
+        "Asia_Bahrain": "Bahrain (Asia/Bahrain)",
+        "Asia_Muscat": "Oman (Asia/Muscat)",
+        "Asia_Amman": "Jordan (Asia/Amman)",
+        "Africa_Cairo": "Egypt (Africa/Cairo)",
+        "Africa_Casablanca": "Morocco (Africa/Casablanca)",
+        "UTC": "UTC"
+      }
+    },
     "saveButton": "Save Changes",
+    "savingButton": "Saving...",
     "saveSuccess": "Settings updated successfully.",
     "saveError": "We could not save your settings. Please try again.",
     "loadError": "We could not load your settings. Please refresh and try again.",
@@ -650,6 +696,7 @@
     "usageUpgradePrompt": "You are approaching your monthly Confirmation Message limit. Consider upgrading your plan.",
     "currentPlanBadge": "Current",
     "changePlanButton": "Switch to selected plan",
+    "changingPlanButton": "Switching plan...",
     "changePlanError": "We could not start the plan change. Please try again.",
     "planFree": "Free",
     "planPricePerMonth": "{price} / month",

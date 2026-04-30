@@ -17,9 +17,15 @@ interface StandaloneVerificationsSectionProps {
   isLoadingMoreVerifications: boolean
   hasVerifications: boolean
   emptyVerificationsMessage: string
+  cancelingVerificationId: string | null
+  confirmingCancelVerificationId: string | null
+  cancelOrderErrors: Record<string, string>
   statusFilter: VerificationStatusFilter
   statusFilters: ReadonlyArray<StatusFilterOption>
   isSendingTest: boolean
+  onRequestCancelOrder: (verificationId: string) => void
+  onDismissCancelOrder: (verificationId: string) => void
+  onConfirmCancelOrder: (verificationId: string) => Promise<void>
   onStatusFilterChange: (filter: VerificationStatusFilter) => void
   onLoadMoreVerifications: () => Promise<void>
   onSendTestVerification: (customerPhone: string) => Promise<void>
@@ -32,9 +38,15 @@ export function StandaloneVerificationsSection({
   isLoadingMoreVerifications,
   hasVerifications,
   emptyVerificationsMessage,
+  cancelingVerificationId,
+  confirmingCancelVerificationId,
+  cancelOrderErrors,
   statusFilter,
   statusFilters,
   isSendingTest,
+  onRequestCancelOrder,
+  onDismissCancelOrder,
+  onConfirmCancelOrder,
   onStatusFilterChange,
   onLoadMoreVerifications,
   onSendTestVerification,
@@ -80,7 +92,15 @@ export function StandaloneVerificationsSection({
           </div>
         ) : hasVerifications ? (
           <div className="space-y-4">
-            <VerificationsTableStandalone verifications={verifications} />
+            <VerificationsTableStandalone
+              verifications={verifications}
+              cancelingVerificationId={cancelingVerificationId}
+              confirmingCancelVerificationId={confirmingCancelVerificationId}
+              cancelOrderErrors={cancelOrderErrors}
+              onRequestCancelOrder={onRequestCancelOrder}
+              onDismissCancelOrder={onDismissCancelOrder}
+              onConfirmCancelOrder={onConfirmCancelOrder}
+            />
             {hasMoreVerifications && (
               <div className="flex justify-center pt-2">
                 <button

@@ -19,6 +19,12 @@ export function DashboardStandaloneSkin({
   onLoadMoreVerifications,
   hasVerifications,
   emptyVerificationsMessage,
+  cancelingVerificationId,
+  confirmingCancelVerificationId,
+  cancelOrderErrors,
+  onRequestCancelOrder,
+  onDismissCancelOrder,
+  onConfirmCancelOrder,
   statusFilter,
   statusFilters,
   onStatusFilterChange,
@@ -51,9 +57,15 @@ export function DashboardStandaloneSkin({
         isLoadingMoreVerifications={isLoadingMoreVerifications}
         hasVerifications={hasVerifications}
         emptyVerificationsMessage={emptyVerificationsMessage}
+        cancelingVerificationId={cancelingVerificationId}
+        confirmingCancelVerificationId={confirmingCancelVerificationId}
+        cancelOrderErrors={cancelOrderErrors}
         statusFilter={statusFilter}
         statusFilters={statusFilters}
         isSendingTest={isSendingTest}
+        onRequestCancelOrder={onRequestCancelOrder}
+        onDismissCancelOrder={onDismissCancelOrder}
+        onConfirmCancelOrder={onConfirmCancelOrder}
         onStatusFilterChange={onStatusFilterChange}
         onLoadMoreVerifications={onLoadMoreVerifications}
         onSendTestVerification={onSendTestVerification}

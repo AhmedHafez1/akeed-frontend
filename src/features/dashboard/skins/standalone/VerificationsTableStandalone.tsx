@@ -7,6 +7,12 @@ import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 
 interface VerificationsTableStandaloneProps {
   verifications: VerificationItem[]
+  cancelingVerificationId: string | null
+  confirmingCancelVerificationId: string | null
+  cancelOrderErrors: Record<string, string>
+  onRequestCancelOrder: (verificationId: string) => void
+  onDismissCancelOrder: (verificationId: string) => void
+  onConfirmCancelOrder: (verificationId: string) => Promise<void>
 }
 
 function formatCurrency(price: string | null, currency: string | null): string {
@@ -42,6 +48,12 @@ function formatTime(value: string | null): string {
 
 export function VerificationsTableStandalone({
   verifications,
+  cancelingVerificationId,
+  confirmingCancelVerificationId,
+  cancelOrderErrors,
+  onRequestCancelOrder,
+  onDismissCancelOrder,
+  onConfirmCancelOrder,
 }: VerificationsTableStandaloneProps) {
   const t = useTranslations('dashboard.table')
   const { isRTL } = useLocaleInfo()
@@ -57,14 +69,20 @@ export function VerificationsTableStandalone({
             <th className="px-4 py-3 text-start">{t('headings.customer')}</th>
             <th className={`px-4 py-3 ${alignEnd}`}>{t('headings.total')}</th>
             <th className={`px-4 py-3 ${alignEnd}`}>{t('headings.created')}</th>
+            <th className="px-4 py-3 text-start">{t('headings.actions')}</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-50">
-          {verifications.map((verification) => (
-            <tr
-              key={verification.id}
-              className="text-slate-700 transition-colors hover:bg-slate-50/60"
-            >
+          {verifications.map((verification) => {
+            const isConfirming = confirmingCancelVerificationId === verification.id
+            const isCanceling = cancelingVerificationId === verification.id
+            const cancelError = cancelOrderErrors[verification.id]
+
+            return (
+              <tr
+                key={verification.id}
+                className="text-slate-700 transition-colors hover:bg-slate-50/60"
+              >
               {/* Order */}
               <td className="px-4 py-3.5">
                 <p className="font-semibold text-slate-900">
@@ -111,8 +129,62 @@ export function VerificationsTableStandalone({
                   {formatTime(verification.created_at)}
                 </p>
               </td>
+
+              {/* Actions */}
+              <td className="px-4 py-3.5">
+                {verification.status === 'no_reply' ? (
+                  <div className="max-w-[260px] space-y-2">
+                    {isConfirming ? (
+                      <div className="space-y-2">
+                        <p className="text-xs text-slate-500">
+                          {t('actions.cancelOrderConfirmDescription')}
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          <button
+                            type="button"
+                            disabled={isCanceling}
+                            onClick={() =>
+                              void onConfirmCancelOrder(verification.id)
+                            }
+                            className="rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+                          >
+                            {isCanceling
+                              ? t('actions.cancelingOrder')
+                              : t('actions.confirmCancelOrder')}
+                          </button>
+                          <button
+                            type="button"
+                            disabled={isCanceling}
+                            onClick={() => onDismissCancelOrder(verification.id)}
+                            className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                          >
+                            {t('actions.keepOrder')}
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => onRequestCancelOrder(verification.id)}
+                        className="rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700 transition hover:bg-red-100"
+                      >
+                        {t('actions.cancelOrder')}
+                      </button>
+                    )}
+
+                    {cancelError && (
+                      <p className="text-xs font-medium text-red-600">
+                        {cancelError}
+                      </p>
+                    )}
+                  </div>
+                ) : (
+                  <span className="text-xs text-slate-300">—</span>
+                )}
+              </td>
             </tr>
-          ))}
+            )
+          })}
         </tbody>
       </table>
     </div>

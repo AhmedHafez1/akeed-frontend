@@ -376,6 +376,7 @@
   },
   "appHeader": {
     "dashboard": "لوحة التحكم",
+    "settings": "الإعدادات",
     "signOut": "تسجيل الخروج",
     "signingOut": "جارٍ تسجيل الخروج..."
   },
@@ -569,13 +570,22 @@
         "customer": "العميل",
         "status": "الحالة",
         "total": "الإجمالي",
-        "created": "وقت الإنشاء"
+        "created": "وقت الإنشاء",
+        "actions": "الإجراءات"
       },
       "orderFallbackPrefix": "طلب",
       "unknownCustomer": "عميل غير معروف",
       "noPhone": "لا يوجد رقم",
       "loadMore": "عرض المزيد",
-      "loadingMore": "جارٍ تحميل المزيد..."
+      "loadingMore": "جارٍ تحميل المزيد...",
+      "actions": {
+        "cancelOrder": "إلغاء الطلب",
+        "confirmCancelOrder": "نعم، ألغِ الطلب",
+        "keepOrder": "إبقاء الطلب",
+        "cancelingOrder": "جارٍ الإلغاء...",
+        "cancelOrderError": "تعذر إلغاء هذا الطلب. حاول مرة أخرى.",
+        "cancelOrderConfirmDescription": "سيتم إلغاء الطلب في Shopify وتسجيله كإلغاء من التاجر."
+      }
     },
     "verificationStatus": {
       "confirmed": "تم التأكيد",
@@ -619,7 +629,43 @@
     "avgShippingCostInvalid": "يجب أن تكون تكلفة الشحن رقماً أكبر من أو يساوي 0.",
     "autoVerifyLabel": "تفعيل التأكيد التلقائي",
     "autoVerifyDescription": "عند التفعيل، يرسل أكيد رسائل واتساب تلقائياً لكل طلب جديد بنظام الدفع عند الاستلام.",
+    "automation": {
+      "heading": "الأتمتة",
+      "description": "تحكم في توقيت إرسال التأكيد، ورسالة المتابعة، وتصعيد عدم الرد.",
+      "sendDelayMinutesLabel": "تأخير أول إرسال (بالدقائق)",
+      "sendDelayMinutesHelp": "استخدم 0 للإرسال فور وصول طلب دفع عند الاستلام.",
+      "followUpEnabledLabel": "إرسال رسالة متابعة واحدة",
+      "followUpEnabledHelp": "إذا لم يرد العميل، يرسل أكيد نفس قالب واتساب مرة إضافية.",
+      "followUpDelayMinutesLabel": "تأخير المتابعة (بالدقائق)",
+      "escalationDelayMinutesLabel": "تأخير تصعيد عدم الرد (بالدقائق)",
+      "escalationDelayMinutesHelp": "يُحسب من وقت نجاح أول إرسال واتساب.",
+      "quietHoursEnabledLabel": "إيقاف الإرسال أثناء ساعات الهدوء",
+      "quietHoursEnabledHelp": "ينقل أكيد الرسائل المجدولة إلى أول وقت مسموح حسب التوقيت المحلي.",
+      "quietHoursStartLabel": "بداية ساعات الهدوء",
+      "quietHoursEndLabel": "نهاية ساعات الهدوء",
+      "timezoneLabel": "المنطقة الزمنية",
+      "validation": {
+        "sendDelayMinutes": "يجب أن يكون تأخير أول إرسال رقماً صحيحاً من 0 إلى 1440.",
+        "followUpDelayMinutes": "يجب أن يكون تأخير المتابعة رقماً صحيحاً من 0 إلى 10080.",
+        "escalationDelayMinutes": "يجب أن يكون تأخير تصعيد عدم الرد رقماً صحيحاً من 0 إلى 10080.",
+        "followUpBeforeEscalation": "يجب أن يكون تأخير المتابعة أقل من تأخير تصعيد عدم الرد.",
+        "quietHoursRequired": "أدخل بداية ونهاية ساعات الهدوء بصيغة HH:mm."
+      },
+      "timezones": {
+        "Asia_Riyadh": "السعودية (Asia/Riyadh)",
+        "Asia_Dubai": "الإمارات (Asia/Dubai)",
+        "Asia_Qatar": "قطر (Asia/Qatar)",
+        "Asia_Kuwait": "الكويت (Asia/Kuwait)",
+        "Asia_Bahrain": "البحرين (Asia/Bahrain)",
+        "Asia_Muscat": "عُمان (Asia/Muscat)",
+        "Asia_Amman": "الأردن (Asia/Amman)",
+        "Africa_Cairo": "مصر (Africa/Cairo)",
+        "Africa_Casablanca": "المغرب (Africa/Casablanca)",
+        "UTC": "UTC"
+      }
+    },
     "saveButton": "حفظ التغييرات",
+    "savingButton": "جارٍ الحفظ...",
     "saveSuccess": "تم حفظ الإعدادات بنجاح.",
     "saveError": "تعذر حفظ الإعدادات. حاول مرة أخرى.",
     "loadError": "تعذر تحميل الإعدادات. حدّث الصفحة ثم حاول مرة أخرى.",
@@ -643,6 +689,7 @@
     "usageUpgradePrompt": "أنت قريب من الحد الشهري لمحاولات التأكيد. فكّر في ترقية الخطة.",
     "currentPlanBadge": "الخطة الحالية",
     "changePlanButton": "التبديل إلى هذه الخطة",
+    "changingPlanButton": "جارٍ تبديل الخطة...",
     "changePlanError": "تعذر بدء تغيير الخطة. حاول مرة أخرى.",
     "planFree": "مجانية",
     "planPricePerMonth": "{price} / شهر",

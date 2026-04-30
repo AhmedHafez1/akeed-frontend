@@ -38,6 +38,12 @@ export interface DashboardSkinProps {
   onLoadMoreVerifications: () => Promise<void>
   hasVerifications: boolean
   emptyVerificationsMessage: string
+  cancelingVerificationId: string | null
+  confirmingCancelVerificationId: string | null
+  cancelOrderErrors: Record<string, string>
+  onRequestCancelOrder: (verificationId: string) => void
+  onDismissCancelOrder: (verificationId: string) => void
+  onConfirmCancelOrder: (verificationId: string) => Promise<void>
 
   // Status filter controls
   statusFilter: VerificationStatusFilter

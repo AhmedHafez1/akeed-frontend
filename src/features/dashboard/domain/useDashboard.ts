@@ -22,6 +22,14 @@ interface SendTestVerificationResponse {
   reason?: string
 }
 
+interface CancelOrderResponse {
+  success: true
+  verificationId: string
+  status: 'canceled'
+  alreadyCanceled?: boolean
+  shopifyJobId?: string
+}
+
 export function useDashboard(): DashboardSkinProps {
   const t = useTranslations('dashboard')
   const [statusFilter, setStatusFilter] =
@@ -32,6 +40,14 @@ export function useDashboard(): DashboardSkinProps {
   // Test verification state
   const [isSendingTest, setIsSendingTest] = useState(false)
   const [testFeedback, setTestFeedback] = useState<TestFeedback | null>(null)
+  const [confirmingCancelVerificationId, setConfirmingCancelVerificationId] =
+    useState<string | null>(null)
+  const [cancelingVerificationId, setCancelingVerificationId] = useState<
+    string | null
+  >(null)
+  const [cancelOrderErrors, setCancelOrderErrors] = useState<
+    Record<string, string>
+  >({})
 
   const {
     verifications,
@@ -91,6 +107,63 @@ export function useDashboard(): DashboardSkinProps {
   const onDismissTestFeedback = useCallback(() => {
     setTestFeedback(null)
   }, [])
+
+  const onRequestCancelOrder = useCallback((verificationId: string) => {
+    setConfirmingCancelVerificationId(verificationId)
+    setCancelOrderErrors((previous) => {
+      const next = { ...previous }
+      delete next[verificationId]
+      return next
+    })
+  }, [])
+
+  const onDismissCancelOrder = useCallback((verificationId: string) => {
+    setConfirmingCancelVerificationId((current) =>
+      current === verificationId ? null : current
+    )
+    setCancelOrderErrors((previous) => {
+      const next = { ...previous }
+      delete next[verificationId]
+      return next
+    })
+  }, [])
+
+  const onConfirmCancelOrder = useCallback(
+    async (verificationId: string) => {
+      if (cancelingVerificationId) {
+        return
+      }
+
+      setCancelingVerificationId(verificationId)
+      setCancelOrderErrors((previous) => {
+        const next = { ...previous }
+        delete next[verificationId]
+        return next
+      })
+
+      try {
+        await api.post<CancelOrderResponse>(
+          `/api/verifications/${verificationId}/cancel`
+        )
+        setConfirmingCancelVerificationId((current) =>
+          current === verificationId ? null : current
+        )
+        refetchVerifications()
+        refetchStats()
+      } catch (error) {
+        console.error('[Dashboard] Failed to cancel Shopify order:', error)
+        setCancelOrderErrors((previous) => ({
+          ...previous,
+          [verificationId]: t('table.actions.cancelOrderError'),
+        }))
+      } finally {
+        setCancelingVerificationId((current) =>
+          current === verificationId ? null : current
+        )
+      }
+    },
+    [cancelingVerificationId, refetchStats, refetchVerifications, t]
+  )
 
   const onSendTestVerification = useCallback(
     async (customerPhone: string) => {
@@ -163,6 +236,12 @@ export function useDashboard(): DashboardSkinProps {
     onLoadMoreVerifications,
     hasVerifications,
     emptyVerificationsMessage,
+    cancelingVerificationId,
+    confirmingCancelVerificationId,
+    cancelOrderErrors,
+    onRequestCancelOrder,
+    onDismissCancelOrder,
+    onConfirmCancelOrder,
 
     statusFilter,
     statusFilters,

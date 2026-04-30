@@ -1,4 +1,11 @@
-import { Badge, BlockStack, IndexTable, Text } from '@shopify/polaris'
+import {
+  Badge,
+  BlockStack,
+  Button,
+  ButtonGroup,
+  IndexTable,
+  Text,
+} from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import type {
@@ -28,6 +35,12 @@ const STATUS_TONE_MAP: Record<VerificationStatus, PolarisBadgeTone> = {
 
 interface VerificationsTableEmbeddedProps {
   verifications: VerificationItem[]
+  cancelingVerificationId: string | null
+  confirmingCancelVerificationId: string | null
+  cancelOrderErrors: Record<string, string>
+  onRequestCancelOrder: (verificationId: string) => void
+  onDismissCancelOrder: (verificationId: string) => void
+  onConfirmCancelOrder: (verificationId: string) => Promise<void>
 }
 
 function formatOrderTitle(
@@ -84,6 +97,12 @@ function formatCreatedTime(value: string | null, locale: string): string {
 
 export function VerificationsTableEmbedded({
   verifications,
+  cancelingVerificationId,
+  confirmingCancelVerificationId,
+  cancelOrderErrors,
+  onRequestCancelOrder,
+  onDismissCancelOrder,
+  onConfirmCancelOrder,
 }: VerificationsTableEmbeddedProps) {
   const t = useTranslations('dashboard')
   const { isRTL, locale } = useLocaleInfo()
@@ -102,10 +121,20 @@ export function VerificationsTableEmbedded({
     { title: t('table.headings.status'), alignment: textAlignment },
     { title: t('table.headings.total'), alignment: textAlignment },
     { title: t('table.headings.created'), alignment: textAlignment },
+    { title: t('table.headings.actions'), alignment: textAlignment },
   ] as const
 
-  const rows = verifications.map((verification, index) => (
-    <IndexTable.Row id={verification.id} key={verification.id} position={index}>
+  const rows = verifications.map((verification, index) => {
+    const isConfirming = confirmingCancelVerificationId === verification.id
+    const isCanceling = cancelingVerificationId === verification.id
+    const cancelError = cancelOrderErrors[verification.id]
+
+    return (
+      <IndexTable.Row
+        id={verification.id}
+        key={verification.id}
+        position={index}
+      >
       <IndexTable.Cell>
         <div className={dataCellClassName}>
           <BlockStack gap="100">
@@ -148,20 +177,75 @@ export function VerificationsTableEmbedded({
         </div>
       </IndexTable.Cell>
 
-      <IndexTable.Cell>
-        <div className={dataCellClassName}>
-          <BlockStack gap="100">
-            <Text variant="bodySm" as="p">
-              {formatCreatedDate(verification.created_at, locale)}
-            </Text>
-            <Text variant="bodyXs" tone="subdued" as="p">
-              {formatCreatedTime(verification.created_at, locale)}
-            </Text>
-          </BlockStack>
-        </div>
-      </IndexTable.Cell>
-    </IndexTable.Row>
-  ))
+        <IndexTable.Cell>
+          <div className={dataCellClassName}>
+            <BlockStack gap="100">
+              <Text variant="bodySm" as="p">
+                {formatCreatedDate(verification.created_at, locale)}
+              </Text>
+              <Text variant="bodyXs" tone="subdued" as="p">
+                {formatCreatedTime(verification.created_at, locale)}
+              </Text>
+            </BlockStack>
+          </div>
+        </IndexTable.Cell>
+
+        <IndexTable.Cell>
+          <div className={dataCellClassName}>
+            {verification.status === 'no_reply' ? (
+              <BlockStack gap="150">
+                {isConfirming ? (
+                  <BlockStack gap="150">
+                    <Text as="p" variant="bodySm" tone="subdued">
+                      {t('table.actions.cancelOrderConfirmDescription')}
+                    </Text>
+                    <ButtonGroup>
+                      <Button
+                        size="slim"
+                        tone="critical"
+                        loading={isCanceling}
+                        disabled={isCanceling}
+                        onClick={() => void onConfirmCancelOrder(verification.id)}
+                      >
+                        {isCanceling
+                          ? t('table.actions.cancelingOrder')
+                          : t('table.actions.confirmCancelOrder')}
+                      </Button>
+                      <Button
+                        size="slim"
+                        disabled={isCanceling}
+                        onClick={() => onDismissCancelOrder(verification.id)}
+                      >
+                        {t('table.actions.keepOrder')}
+                      </Button>
+                    </ButtonGroup>
+                  </BlockStack>
+                ) : (
+                  <Button
+                    size="slim"
+                    tone="critical"
+                    onClick={() => onRequestCancelOrder(verification.id)}
+                  >
+                    {t('table.actions.cancelOrder')}
+                  </Button>
+                )}
+
+                {cancelError && (
+                  <Text as="p" variant="bodyXs" tone="critical">
+                    {cancelError}
+                  </Text>
+                )}
+              </BlockStack>
+            ) : (
+              <Text as="span" variant="bodySm" tone="subdued">
+                -
+              </Text>
+            )}
+          </div>
+        </IndexTable.Cell>
+      </IndexTable.Row>
+    )
+  })
 
   return (
     <IndexTable

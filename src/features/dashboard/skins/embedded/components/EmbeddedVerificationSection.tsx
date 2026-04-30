@@ -46,9 +46,15 @@ interface EmbeddedVerificationSectionProps {
   hasMoreVerifications: boolean
   isLoadingMoreVerifications: boolean
   hasVerifications: boolean
+  cancelingVerificationId: string | null
+  confirmingCancelVerificationId: string | null
+  cancelOrderErrors: Record<string, string>
   statusFilter: VerificationStatusFilter
   statusFilters: ReadonlyArray<StatusFilterOption>
   isSendingTest: boolean
+  onRequestCancelOrder: (verificationId: string) => void
+  onDismissCancelOrder: (verificationId: string) => void
+  onConfirmCancelOrder: (verificationId: string) => Promise<void>
   onStatusFilterChange: (filter: VerificationStatusFilter) => void
   onLoadMoreVerifications: () => Promise<void>
   onSendTestVerification: (customerPhone: string) => Promise<void>
@@ -61,9 +67,15 @@ export function EmbeddedVerificationSection({
   hasMoreVerifications,
   isLoadingMoreVerifications,
   hasVerifications,
+  cancelingVerificationId,
+  confirmingCancelVerificationId,
+  cancelOrderErrors,
   statusFilter,
   statusFilters,
   isSendingTest,
+  onRequestCancelOrder,
+  onDismissCancelOrder,
+  onConfirmCancelOrder,
   onStatusFilterChange,
   onLoadMoreVerifications,
   onSendTestVerification,
@@ -120,7 +132,15 @@ export function EmbeddedVerificationSection({
           <VerificationsTableSkeleton />
         ) : hasVerifications ? (
           <BlockStack gap="300">
-            <VerificationsTableEmbedded verifications={verifications} />
+            <VerificationsTableEmbedded
+              verifications={verifications}
+              cancelingVerificationId={cancelingVerificationId}
+              confirmingCancelVerificationId={confirmingCancelVerificationId}
+              cancelOrderErrors={cancelOrderErrors}
+              onRequestCancelOrder={onRequestCancelOrder}
+              onDismissCancelOrder={onDismissCancelOrder}
+              onConfirmCancelOrder={onConfirmCancelOrder}
+            />
             {hasMoreVerifications && (
               <InlineStack align="center">
                 <Button
