@@ -50,12 +50,12 @@ export function StandaloneStatsSummary({
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         <div className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-white p-5 shadow-sm">
           <p className="text-xs font-medium tracking-wide text-emerald-600 uppercase">
             {t('metrics.cards.confirmed')}
           </p>
-          <p className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
+          <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
             {stats.totals.confirmed}
           </p>
         </div>
@@ -64,7 +64,7 @@ export function StandaloneStatsSummary({
           <p className="text-xs font-medium tracking-wide text-red-600 uppercase">
             {t('metrics.cards.canceled')}
           </p>
-          <p className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
+          <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
             {stats.totals.canceled}
           </p>
         </div>
@@ -73,7 +73,7 @@ export function StandaloneStatsSummary({
           <p className="text-xs font-medium tracking-wide text-amber-600 uppercase">
             {t('metrics.cards.awaitingResponse')}
           </p>
-          <p className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
+          <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
             {Math.max(0, stats.totals.sent - stats.totals.confirmed - stats.totals.canceled)}
           </p>
         </div>
@@ -83,7 +83,7 @@ export function StandaloneStatsSummary({
             {t('metrics.cards.responseRate')}
           </p>
           <div className="mt-2 flex items-baseline gap-2">
-            <p className="text-4xl font-bold tracking-tight text-slate-900">
+            <p className="text-3xl font-bold tracking-tight text-slate-900">
               {stats.totals.reply_rate}%
             </p>
             <span
@@ -100,7 +100,7 @@ export function StandaloneStatsSummary({
             {t('metrics.cards.confirmationRate')}
           </p>
           <div className="mt-2 flex items-baseline gap-2">
-            <p className="text-4xl font-bold tracking-tight text-slate-900">
+            <p className="text-3xl font-bold tracking-tight text-slate-900">
               {stats.totals.confirmation_rate}%
             </p>
             <span
@@ -131,7 +131,7 @@ export function StandaloneStatsSummary({
         <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">
           {t('metrics.usage.title')}
         </p>
-        <p className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
+        <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
           {stats.usage.used}
           <span className="text-lg font-normal text-slate-400">
             {' '}
