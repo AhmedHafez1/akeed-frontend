@@ -33,18 +33,13 @@ const EMBEDDED_PLAN_FEATURE_KEYS = {
     'planStarterFeature2',
     'planStarterFeature3',
     'planStarterFeature4',
-    'planStarterFeature5',
-    'planStarterFeature6',
   ],
   basic: [
     'planBasicFeature1',
     'planBasicFeature2',
     'planBasicFeature3',
-    'planBasicFeature4',
     'planBasicFeature5',
-    'planBasicFeature6',
-    'planBasicFeature7',
-    'planBasicFeature8',
+    'planBasicFeature4',
   ],
   pro: [
     'planProFeature1',
@@ -52,6 +47,7 @@ const EMBEDDED_PLAN_FEATURE_KEYS = {
     'planProFeature3',
     'planProFeature4',
     'planProFeature5',
+    'planProFeature6',
   ],
   business: [
     'planBusinessFeature1',
@@ -59,6 +55,7 @@ const EMBEDDED_PLAN_FEATURE_KEYS = {
     'planBusinessFeature3',
     'planBusinessFeature4',
     'planBusinessFeature5',
+    'planBusinessFeature6',
   ],
 } as const
 

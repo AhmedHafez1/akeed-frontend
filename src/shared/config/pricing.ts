@@ -2,10 +2,10 @@ export const PRICING_FEATURE_INDICES_BY_PLAN: Record<
   string,
   readonly number[]
 > = {
-  starter: [1, 2, 3, 4, 5, 6],
-  basic: [1, 2, 3, 4, 5, 6, 7, 8],
-  pro: [1, 2, 3, 4, 5],
-  business: [1, 2, 3, 4, 5],
+  starter: [1, 2, 3, 4],
+  basic: [1, 2, 3, 5, 4],
+  pro: [1, 2, 3, 4, 5, 6],
+  business: [1, 2, 3, 4, 5, 6],
 }
 
 export function getPricingFeatureKey(
