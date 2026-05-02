@@ -37,7 +37,7 @@ export function EmbeddedLayout({ children }: EmbeddedLayoutProps) {
         <EmbeddedLanguageSelector />
 
         {/* Page content rendered by skins (e.g. DashboardEmbeddedSkin) */}
-        {children}
+        <div className="akeed-polaris-polish">{children}</div>
       </Frame>
     </AppProvider>
   )

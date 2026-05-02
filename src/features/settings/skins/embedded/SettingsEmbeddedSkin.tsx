@@ -65,8 +65,10 @@ function EmbeddedPlanComparison({
               disabled={isDisabled}
               title={isDisabled ? disabledPlanTooltips[plan.id] : undefined}
               onClick={() => onPlanSelect(plan.id)}
-              className={`min-h-full rounded-xl text-start outline-none focus-visible:ring-3 focus-visible:ring-emerald-700/35 disabled:cursor-not-allowed disabled:opacity-50 ${
-                isSelected ? 'shadow-[0_0_0_3px_rgba(0,160,70,0.7)]' : ''
+              className={`min-h-full rounded-xl border text-start transition outline-none focus-visible:ring-3 focus-visible:ring-emerald-700/25 disabled:cursor-not-allowed disabled:opacity-50 ${
+                isSelected
+                  ? 'border-emerald-600 bg-emerald-50/35'
+                  : 'border-transparent bg-transparent hover:border-slate-200'
               }`}
             >
               <Card>
@@ -76,7 +78,7 @@ function EmbeddedPlanComparison({
                       {plan.name}
                     </Text>
                     {isCurrent && (
-                      <span className="rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700">
+                      <span className="rounded-md border border-blue-200 bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700">
                         {currentBadgeLabel}
                       </span>
                     )}
@@ -141,10 +143,10 @@ function EmbeddedUsageOverview({
           {title}
         </Text>
         <span
-          className={`rounded-full px-2.5 py-1 text-xs font-medium ${
+          className={`rounded-md border px-2.5 py-1 text-xs font-medium ${
             usagePercent >= 80
-              ? 'bg-red-50 text-red-700'
-              : 'bg-emerald-50 text-emerald-700'
+              ? 'border-amber-200 bg-amber-50 text-amber-800'
+              : 'border-emerald-200 bg-emerald-50 text-emerald-700'
           }`}
         >
           {usedLabel}
@@ -153,7 +155,7 @@ function EmbeddedUsageOverview({
       <div className="h-2 overflow-hidden rounded-full bg-slate-100">
         <div
           className={`h-full rounded-full ${
-            usagePercent >= 80 ? 'bg-red-500' : 'bg-emerald-500'
+            usagePercent >= 80 ? 'bg-amber-500' : 'bg-emerald-500'
           }`}
           style={{ width: `${usagePercent}%` }}
         />

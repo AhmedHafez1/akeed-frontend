@@ -10,8 +10,8 @@ interface StandaloneStatsSummaryProps {
 
 function resolveRateColor(rate: number): string {
   if (rate >= 80) return 'text-emerald-600 bg-emerald-50 border-emerald-200'
-  if (rate >= 55) return 'text-amber-600 bg-amber-50 border-amber-200'
-  return 'text-red-600 bg-red-50 border-red-200'
+  if (rate >= 55) return 'text-amber-700 bg-amber-50 border-amber-200'
+  return 'text-red-700 bg-red-50 border-red-200'
 }
 
 function resolveUsageColor(percent: number): string {
@@ -51,8 +51,8 @@ export function StandaloneStatsSummary({
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        <div className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-white p-5 shadow-sm">
-          <p className="text-xs font-medium tracking-wide text-emerald-600 uppercase">
+        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">
             {t('metrics.cards.confirmed')}
           </p>
           <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
@@ -60,8 +60,8 @@ export function StandaloneStatsSummary({
           </p>
         </div>
 
-        <div className="relative overflow-hidden rounded-2xl border border-red-100 bg-gradient-to-br from-red-50 to-white p-5 shadow-sm">
-          <p className="text-xs font-medium tracking-wide text-red-600 uppercase">
+        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">
             {t('metrics.cards.canceled')}
           </p>
           <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
@@ -69,12 +69,15 @@ export function StandaloneStatsSummary({
           </p>
         </div>
 
-        <div className="relative overflow-hidden rounded-2xl border border-amber-100 bg-gradient-to-br from-amber-50 to-white p-5 shadow-sm">
-          <p className="text-xs font-medium tracking-wide text-amber-600 uppercase">
+        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">
             {t('metrics.cards.awaitingResponse')}
           </p>
           <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
-            {Math.max(0, stats.totals.sent - stats.totals.confirmed - stats.totals.canceled)}
+            {Math.max(
+              0,
+              stats.totals.sent - stats.totals.confirmed - stats.totals.canceled
+            )}
           </p>
         </div>
 
@@ -118,7 +121,7 @@ export function StandaloneStatsSummary({
           className={`rounded-xl border px-4 py-3 text-sm ${
             usagePercent >= 95
               ? 'border-red-200 bg-red-50 text-red-700'
-              : 'border-amber-200 bg-amber-50 text-amber-700'
+              : 'border-amber-200 bg-amber-50 text-amber-800'
           }`}
         >
           {usagePercent >= 95
@@ -169,7 +172,10 @@ export function StandaloneStatsSummary({
                 value: stats.totals.read,
               },
             ].map((metric) => (
-              <div key={metric.id} className="rounded-xl bg-slate-50 p-3 text-center">
+              <div
+                key={metric.id}
+                className="rounded-xl bg-slate-50 p-3 text-center"
+              >
                 <p className="text-[11px] font-medium tracking-wide text-slate-400 uppercase">
                   {metric.label}
                 </p>

@@ -1,8 +1,4 @@
-import {
-  BlockStack,
-  Card,
-  Text,
-} from '@shopify/polaris'
+import { BlockStack, Card, Text } from '@shopify/polaris'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
@@ -18,7 +14,6 @@ import { StatsEmbeddedSkeleton } from './components/StatsEmbeddedSkeleton'
 import {
   TopMetricGrid,
   type MetricTone,
-  type PolarisBorderColor,
   type TopMetric,
 } from './components/TopMetricGrid'
 import { UsageWarningBanner } from './components/UsageWarningBanner'
@@ -46,12 +41,6 @@ function resolveConfirmationRateTone(rate: number): MetricTone {
   if (rate >= 70) return 'success'
   if (rate >= 45) return 'caution'
   return 'critical'
-}
-
-function resolveMetricBorderColor(tone: MetricTone): PolarisBorderColor {
-  if (tone === 'success') return 'border-success'
-  if (tone === 'caution') return 'border-caution'
-  return 'border-critical'
 }
 
 export function StatsEmbedded({
@@ -88,35 +77,30 @@ export function StatsEmbedded({
           label: t('metrics.cards.confirmed'),
           value: formatDashboardNumber(stats.totals.confirmed, locale),
           tone: 'success',
-          borderColor: 'border-success',
         },
         {
           id: 'canceled',
           label: t('metrics.cards.canceled'),
           value: formatDashboardNumber(stats.totals.canceled, locale),
           tone: 'critical',
-          borderColor: 'border-critical',
         },
         {
           id: 'awaitingResponse',
           label: t('metrics.cards.awaitingResponse'),
           value: formatDashboardNumber(awaitingResponse, locale),
           tone: 'caution',
-          borderColor: 'border-caution',
         },
         {
           id: 'responseRate',
           label: t('metrics.cards.responseRate'),
           value: `${Math.round(stats.totals.reply_rate)}%`,
           tone: responseRateTone,
-          borderColor: resolveMetricBorderColor(responseRateTone),
         },
         {
           id: 'confirmationRate',
           label: t('metrics.cards.confirmationRate'),
           value: `${Math.round(stats.totals.confirmation_rate)}%`,
           tone: confirmationRateTone,
-          borderColor: resolveMetricBorderColor(confirmationRateTone),
         },
       ]
     : []

@@ -34,10 +34,7 @@ export function PlanCard({
   onKeyboardSelect,
 }: PlanCardProps) {
   const { price, cadence } = splitPriceLabel(plan.monthlyPriceLabel)
-  const summary =
-    plan.id === 'starter'
-      ? `~ ${plan.monthlyVolumeLabel}`
-      : plan.monthlyVolumeLabel
+  const summary = plan.monthlyVolumeLabel
 
   return (
     <div
@@ -54,7 +51,7 @@ export function PlanCard({
       <div
         className={`flex h-full min-h-[360px] flex-col rounded-lg border bg-white p-5 shadow-xs transition ring-inset md:p-6 ${
           isSelected
-            ? 'border-[#008060] ring-2 ring-[#008060]'
+            ? 'border-[#008060] bg-[#f7fbf9] ring-1 ring-[#008060]'
             : 'border-[#d9d9d9] ring-1 ring-transparent'
         } ${isDisabled ? 'bg-[#fafafa] text-[#8a8a8a]' : ''}`}
       >
@@ -78,7 +75,7 @@ export function PlanCard({
               </div>
             ) : isRecommended && recommendedBadgeLabel ? (
               <div className="shrink-0">
-                <Badge tone="success-strong" icon={StarFilledIcon}>
+                <Badge tone="success" icon={StarFilledIcon}>
                   {recommendedBadgeLabel}
                 </Badge>
               </div>

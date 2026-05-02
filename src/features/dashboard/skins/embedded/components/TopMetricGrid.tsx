@@ -2,22 +2,28 @@ import { Box, InlineGrid, InlineStack, Text } from '@shopify/polaris'
 
 export type PolarisTextTone = 'success' | 'critical' | 'caution' | 'subdued'
 export type MetricTone = Exclude<PolarisTextTone, 'subdued'>
-export type PolarisBorderColor =
-  | 'border-success'
-  | 'border-critical'
-  | 'border-caution'
 
 export interface TopMetric {
-  id: 'confirmed' | 'canceled' | 'awaitingResponse' | 'responseRate' | 'confirmationRate'
+  id:
+    | 'confirmed'
+    | 'canceled'
+    | 'awaitingResponse'
+    | 'responseRate'
+    | 'confirmationRate'
   label: string
   value: string
   tone: MetricTone
-  borderColor: PolarisBorderColor
 }
 
 interface TopMetricGridProps {
   metrics: TopMetric[]
   isRTL: boolean
+}
+
+const metricAccentClassNames: Record<MetricTone, string> = {
+  success: 'bg-[#008060]',
+  critical: 'bg-[#8e0b21]',
+  caution: 'bg-[#b28400]',
 }
 
 export function TopMetricGrid({ metrics, isRTL }: TopMetricGridProps) {
@@ -27,20 +33,26 @@ export function TopMetricGrid({ metrics, isRTL }: TopMetricGridProps) {
         <Box
           key={metric.id}
           background="bg-surface"
-          borderColor={metric.borderColor}
+          borderColor="border"
           borderRadius="300"
           borderWidth="025"
           padding="300"
           shadow="100"
         >
           <InlineStack align="space-between" blockAlign="center">
-            <Text
-              variant={isRTL ? 'headingMd' : 'headingSm'}
-              as="h3"
-              tone={metric.tone}
-            >
-              {metric.label}
-            </Text>
+            <InlineStack gap="200" blockAlign="center">
+              <span
+                aria-hidden="true"
+                className={`h-2 w-2 rounded-full ${metricAccentClassNames[metric.tone]}`}
+              />
+              <Text
+                variant={isRTL ? 'headingMd' : 'headingSm'}
+                as="h3"
+                tone="subdued"
+              >
+                {metric.label}
+              </Text>
+            </InlineStack>
             <Text variant="headingXl" as="h2">
               {metric.value}
             </Text>
