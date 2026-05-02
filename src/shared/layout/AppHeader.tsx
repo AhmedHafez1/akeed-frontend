@@ -75,6 +75,12 @@ export function AppHeader() {
               {t('dashboard')}
             </Link>
             <Link
+              href={withLocale('/verifications', locale)}
+              className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900"
+            >
+              {t('verifications')}
+            </Link>
+            <Link
               href={withLocale('/settings', locale)}
               className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900"
             >

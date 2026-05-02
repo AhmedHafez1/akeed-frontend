@@ -36,6 +36,12 @@ export function EmbeddedNavigation() {
     hostParam: resolvedContext.hostParam,
   })
 
+  const verificationsHref = appendEmbeddedParamsToPath({
+    path: `/${locale}/verifications`,
+    shopDomain: resolvedContext.shopDomain,
+    hostParam: resolvedContext.hostParam,
+  })
+
   const settingsHref = appendEmbeddedParamsToPath({
     path: `/${locale}/settings`,
     shopDomain: resolvedContext.shopDomain,
@@ -47,6 +53,7 @@ export function EmbeddedNavigation() {
       <a href={dashboardHref} rel="home">
         Dashboard
       </a>
+      <a href={verificationsHref}>Verifications</a>
       <a href={settingsHref}>Settings</a>
     </ui-nav-menu>
   )

@@ -34,7 +34,7 @@ export function MoneySavedCard({
 
         <Box background="bg-surface-secondary" borderRadius="200" padding="300">
           <BlockStack gap="100">
-            <Text variant={isRTL ? 'bodyMd' : 'bodySm'} tone="subdued" as="p">
+            <Text variant={isRTL ? 'bodySm' : 'bodyXs'} tone="subdued" as="p">
               {breakdownTitle}
             </Text>
             <Text variant={isRTL ? 'bodySm' : 'bodyXs'} as="p">

@@ -53,27 +53,23 @@ export function FunnelCard({ title, subtitle, steps, isRTL }: FunnelCardProps) {
                   borderWidth="025"
                   borderColor="border-tertiary"
                 >
-                  <InlineStack
-                    blockAlign="center"
-                    align="space-between"
-                    gap="300"
-                  >
-                    <InlineStack gap="200" blockAlign="center">
+                  <BlockStack gap="200">
+                    <InlineStack align="space-between" blockAlign="center">
                       <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] leading-none font-medium text-[#8a8a8a] shadow-[inset_0_0_0_1px_#d4d4d4]">
                         {index + 1}
                       </span>
-                      <Text
-                        variant={isRTL ? 'bodyMd' : 'bodySm'}
-                        tone="subdued"
-                        as="p"
-                      >
-                        {step.label}
+                      <Text variant="headingLg" as="p">
+                        {step.value}
                       </Text>
                     </InlineStack>
-                    <Text variant="headingLg" as="p">
-                      {step.value}
+                    <Text
+                      variant={isRTL ? 'bodyMd' : 'bodySm'}
+                      tone="subdued"
+                      as="p"
+                    >
+                      {step.label}
                     </Text>
-                  </InlineStack>
+                  </BlockStack>
                 </Box>
               </div>
 

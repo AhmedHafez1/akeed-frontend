@@ -205,6 +205,12 @@ export default function OnboardingPage() {
     current: step,
     total: TOTAL_STEPS,
   })
+  const setupFlowSteps = [
+    t('flow.storeSetup'),
+    t('flow.messagePreview'),
+    t('flow.plan'),
+    t('flow.dashboard'),
+  ]
 
   const handleBackToConfiguration = useCallback(() => {
     setStep(2)
@@ -296,6 +302,7 @@ export default function OnboardingPage() {
         retryLabel={tEmbedded('billingTryAgain')}
         manageSettingsLabel={tEmbedded('billingManageSettings')}
         freePlanUsedLabel={tEmbedded('freePlanUsedBadge')}
+        readyMessage={tEmbedded('readyToVerify')}
         backLabel={tEmbedded('billingBack')}
         canManageBilling={billingManagementUrl !== null}
         onPlanSelect={setSelectedPlanId}
@@ -328,7 +335,11 @@ export default function OnboardingPage() {
               <div className="mx-auto w-full max-w-280">
                 <Card padding={{ xs: '400', md: '800' }}>
                   <BlockStack gap="200">
-                    <OnboardingStepCounter label={stepCounterLabel} />
+                    <OnboardingStepCounter
+                      label={stepCounterLabel}
+                      currentStep={step}
+                      steps={setupFlowSteps}
+                    />
                     {stepComponents[step]}
                   </BlockStack>
                 </Card>
@@ -336,7 +347,11 @@ export default function OnboardingPage() {
             ) : (
               <Card>
                 <BlockStack gap="200">
-                  <OnboardingStepCounter label={stepCounterLabel} />
+                  <OnboardingStepCounter
+                    label={stepCounterLabel}
+                    currentStep={step}
+                    steps={setupFlowSteps}
+                  />
                   {stepComponents[step]}
                 </BlockStack>
               </Card>

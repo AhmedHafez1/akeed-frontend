@@ -1,6 +1,7 @@
 import type { KeyboardEvent } from 'react'
 import {
   BlockStack,
+  Box,
   Button,
   InlineGrid,
   InlineStack,
@@ -28,6 +29,7 @@ interface BillingStepProps {
   retryLabel: string
   manageSettingsLabel: string
   freePlanUsedLabel: string
+  readyMessage: string
   backLabel: string
   canManageBilling: boolean
   onPlanSelect: (planId: OnboardingBillingPlanId) => void
@@ -51,6 +53,7 @@ export function BillingStep({
   retryLabel,
   manageSettingsLabel,
   freePlanUsedLabel,
+  readyMessage,
   backLabel,
   canManageBilling,
   onPlanSelect,
@@ -102,6 +105,18 @@ export function BillingStep({
         </BlockStack>
 
         <VerificationTemplatePreview variant="compact" />
+
+        <Box
+          background="bg-fill-success-secondary"
+          borderColor="border-brand"
+          borderRadius="300"
+          borderWidth="025"
+          padding="300"
+        >
+          <Text as="p" variant="bodyMd" fontWeight="medium">
+            {readyMessage}
+          </Text>
+        </Box>
 
         <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
           {plans.map((plan) => {

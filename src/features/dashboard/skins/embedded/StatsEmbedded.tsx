@@ -70,7 +70,7 @@ export function StatsEmbedded({
   const searchQuery = searchParams.toString()
   const settingsHref = `${withLocale('/settings', locale)}${searchQuery ? `?${searchQuery}` : ''}#subscription-usage`
 
-  const topMetrics: TopMetric[] = stats
+  const countMetrics: TopMetric[] = stats
     ? [
         {
           id: 'confirmed',
@@ -90,6 +90,11 @@ export function StatsEmbedded({
           value: formatDashboardNumber(awaitingResponse, locale),
           tone: 'caution',
         },
+      ]
+    : []
+
+  const rateMetrics: TopMetric[] = stats
+    ? [
         {
           id: 'responseRate',
           label: t('metrics.cards.responseRate'),
@@ -159,15 +164,10 @@ export function StatsEmbedded({
         <StatsEmbeddedSkeleton />
       ) : stats ? (
         <BlockStack gap="400">
-          <TopMetricGrid metrics={topMetrics} isRTL={isRTL} />
+          <TopMetricGrid metrics={countMetrics} isRTL={isRTL} />
 
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,3fr)_minmax(0,1fr)]">
-            <FunnelCard
-              title={t('metrics.funnelTitle')}
-              subtitle={t('metrics.funnelSubtitle')}
-              steps={funnelSteps}
-              isRTL={isRTL}
-            />
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+            <TopMetricGrid metrics={rateMetrics} isRTL={isRTL} />
 
             <MoneySavedCard
               title={t('metrics.moneySaved.title')}
@@ -189,6 +189,13 @@ export function StatsEmbedded({
               isRTL={isRTL}
             />
           </div>
+
+          <FunnelCard
+            title={t('metrics.funnelTitle')}
+            subtitle={t('metrics.funnelSubtitle')}
+            steps={funnelSteps}
+            isRTL={isRTL}
+          />
 
           {showUsageWarning && (
             <UsageWarningBanner

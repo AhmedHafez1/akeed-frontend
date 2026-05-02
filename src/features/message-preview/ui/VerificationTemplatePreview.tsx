@@ -47,9 +47,14 @@ export function VerificationTemplatePreview({
       )}
 
       {variant === 'compact' && (
-        <Text as="h3" variant="headingSm">
-          {t('title')}
-        </Text>
+        <BlockStack gap="100">
+          <Text as="h3" variant="headingSm">
+            {t('title')}
+          </Text>
+          <Text as="p" tone="subdued" variant="bodySm">
+            {t('subtitle')}
+          </Text>
+        </BlockStack>
       )}
 
       <InlineStack gap="200">
@@ -58,22 +63,18 @@ export function VerificationTemplatePreview({
           variant={language === 'ar' ? 'primary' : 'secondary'}
           onClick={() => setLanguage('ar')}
         >
-          العربية
+          {t('languageArabic')}
         </Button>
         <Button
           size="micro"
           variant={language === 'en' ? 'primary' : 'secondary'}
           onClick={() => setLanguage('en')}
         >
-          English
+          {t('languageEnglish')}
         </Button>
       </InlineStack>
 
-      <Box
-        background="bg-surface-secondary"
-        borderRadius="300"
-        padding="400"
-      >
+      <Box background="bg-surface-secondary" borderRadius="300" padding="400">
         <BlockStack gap="300">
           <InlineStack gap="200" align="start" blockAlign="center">
             <Badge tone="info">{t('whatsappLabel')}</Badge>

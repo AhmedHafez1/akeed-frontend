@@ -37,7 +37,7 @@ const metricAccentClassNames: Record<MetricTone, string> = {
 
 export function TopMetricGrid({ metrics, isRTL }: TopMetricGridProps) {
   return (
-    <InlineGrid columns={{ xs: 1, md: 5 }} gap="400">
+    <InlineGrid columns={{ xs: 1, md: metrics.length }} gap="400">
       {metrics.map((metric) => (
         <Box
           key={metric.id}

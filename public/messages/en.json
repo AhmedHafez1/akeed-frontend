@@ -375,6 +375,7 @@
   },
   "appHeader": {
     "dashboard": "Dashboard",
+    "verifications": "Verifications",
     "settings": "Settings",
     "signOut": "Sign out",
     "signingOut": "Signing out..."
@@ -407,11 +408,17 @@
     "accessToken": "Access Token",
     "whatsappHelp": "You can find these details in your WhatsApp Business dashboard.",
     "allSet": "All set!",
-    "title": "Welcome to Akeed",
+    "title": "Confirm COD orders before fulfillment",
     "stepCounter": "Step {current} of {total}",
-    "welcomeHeading": "Welcome to Akeed",
-    "welcomeBody": "Automatically verify COD orders via WhatsApp to reduce fake orders and returns.",
-    "startSetup": "Start Setup",
+    "flow": {
+      "storeSetup": "Store setup",
+      "messagePreview": "Message preview",
+      "plan": "Plan",
+      "dashboard": "Dashboard"
+    },
+    "welcomeHeading": "Confirm COD orders on WhatsApp before fulfillment",
+    "welcomeBody": "Set up Akeed to send WhatsApp confirmation requests, record customer responses, and update Shopify order status.",
+    "startSetup": "Start setup",
     "configurationHeading": "Store configuration",
     "storeNameLabel": "Store name",
     "storeNameRequired": "Store name is required.",
@@ -561,7 +568,7 @@
       "dropOff": "{value} drop-off",
       "moneySaved": {
         "title": "Money Saved",
-        "description": "Estimated shipping cost avoided by catching canceled COD orders before fulfillment.",
+        "description": "Estimated shipping cost saved by catching canceled COD orders before fulfillment.",
         "breakdownTitle": "How it's calculated",
         "breakdownLine": "{count} canceled x {cost} avg. shipping"
       },
@@ -723,9 +730,10 @@
     "billingStatusCanceled": "Your subscription is canceled. Please choose a plan and activate billing to continue.",
     "billingStatusError": "We could not verify your billing status. Please try activating your plan again.",
     "billingStatusNeedsAttention": "Your billing status needs attention. Please activate or update your plan to continue.",
-    "billingHeading": "Choose the right plan for your monthly WhatsApp confirmations",
-    "billingBody": "All plans include WhatsApp COD confirmation, Shopify order updates, and no extra costs.",
+    "billingHeading": "Review the message and choose a plan",
+    "billingBody": "Preview the exact WhatsApp message customers receive, then choose your monthly confirmation volume.",
     "changePlanLaterNote": "You can change plans later from settings.",
+    "readyToVerify": "Akeed is ready to verify new COD orders.",
     "activatePlan": "Activate selected plan",
     "billingRedirecting": "Redirecting to Shopify for billing approval…",
     "billingTryAgain": "Try Again",
@@ -771,11 +779,13 @@
     "planBusinessFeature6": "No extra costs"
   },
   "messagePreview": {
-    "title": "Verification message preview",
-    "subtitle": "This is the exact WhatsApp message your customers will receive when a COD order is placed.",
+    "title": "Exact customer-facing WhatsApp message",
+    "subtitle": "This is the exact WhatsApp message customers receive when a COD order is placed.",
     "whatsappLabel": "WhatsApp",
-    "sampleBadge": "Sample preview",
-    "trustNote": "Messages are sent via official Meta WhatsApp Cloud APIs using Akeed's verified business number.",
+    "sampleBadge": "Customer preview",
+    "trustNote": "Sent via official Meta WhatsApp Cloud APIs from Akeed's verified business number.",
+    "languageArabic": "Arabic",
+    "languageEnglish": "English",
     "confirmationRate": "Confirmation rate",
     "confirmationRateHelp": "Percentage of sent verifications that the customer confirmed."
   }
