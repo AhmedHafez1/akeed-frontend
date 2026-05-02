@@ -6,6 +6,7 @@ import {
   InlineStack,
   Select,
   Text,
+  Tooltip,
 } from '@shopify/polaris'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import type { StatusFilterOption } from '@/features/dashboard/domain/dashboard.types'
@@ -21,6 +22,7 @@ interface EmbeddedVerificationMessages {
   title: string
   subtitle: string
   statusFilterLabel: string
+  noReplyTooltip: string
   loadingMore: string
   loadMore: string
   emptyMessage: string
@@ -91,11 +93,7 @@ export function EmbeddedVerificationSection({
             <Text variant={isRTL ? 'headingMd' : 'headingSm'} as="h2">
               {messages.title}
             </Text>
-            <Text
-              variant={isRTL ? 'bodySm' : 'bodyXs'}
-              tone="subdued"
-              as="p"
-            >
+            <Text variant={isRTL ? 'bodySm' : 'bodyXs'} tone="subdued" as="p">
               {messages.subtitle}
             </Text>
           </BlockStack>
@@ -115,16 +113,30 @@ export function EmbeddedVerificationSection({
           </div>
 
           <div className="hidden md:flex md:flex-wrap md:justify-end md:gap-2">
-            {statusFilters.map((filter) => (
-              <Button
-                key={filter.id}
-                pressed={statusFilter === filter.id}
-                onClick={() => onStatusFilterChange(filter.id)}
-                size="slim"
-              >
-                {filter.label}
-              </Button>
-            ))}
+            {statusFilters.map((filter) => {
+              const button = (
+                <Button
+                  key={filter.id}
+                  pressed={statusFilter === filter.id}
+                  onClick={() => onStatusFilterChange(filter.id)}
+                  size="slim"
+                >
+                  {filter.label}
+                </Button>
+              )
+
+              return filter.id === 'no_reply' ? (
+                <Tooltip
+                  key={filter.id}
+                  content={messages.noReplyTooltip}
+                  preferredPosition="above"
+                >
+                  {button}
+                </Tooltip>
+              ) : (
+                button
+              )
+            })}
           </div>
         </div>
 

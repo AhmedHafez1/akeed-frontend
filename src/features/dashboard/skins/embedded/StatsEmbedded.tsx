@@ -95,12 +95,14 @@ export function StatsEmbedded({
           label: t('metrics.cards.responseRate'),
           value: `${Math.round(stats.totals.reply_rate)}%`,
           tone: responseRateTone,
+          tooltip: t('tooltips.responseRate'),
         },
         {
           id: 'confirmationRate',
           label: t('metrics.cards.confirmationRate'),
           value: `${Math.round(stats.totals.confirmation_rate)}%`,
           tone: confirmationRateTone,
+          tooltip: t('tooltips.confirmationRate'),
         },
       ]
     : []
@@ -183,6 +185,7 @@ export function StatsEmbedded({
                   locale
                 ),
               })}
+              description={t('metrics.moneySaved.description')}
               isRTL={isRTL}
             />
           </div>

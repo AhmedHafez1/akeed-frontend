@@ -23,7 +23,7 @@ export function StandaloneDashboardHeader({
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">
           {t('title')}
         </h1>
-        <p className="text-sm text-slate-500">{t('subtitle')}</p>
+        <p className="text-sm text-slate-500">{t('valueProposition')}</p>
       </div>
 
       <label className="flex items-center gap-2 text-sm text-slate-500">

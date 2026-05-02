@@ -7,7 +7,11 @@ import {
   InlineStack,
   Text,
 } from '@shopify/polaris'
-import { ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon } from '@shopify/polaris-icons'
+import {
+  ArrowDownIcon,
+  ArrowLeftIcon,
+  ArrowRightIcon,
+} from '@shopify/polaris-icons'
 
 export interface FunnelStep {
   id: 'sent' | 'delivered' | 'read' | 'responded'
@@ -36,7 +40,7 @@ export function FunnelCard({ title, subtitle, steps, isRTL }: FunnelCardProps) {
         </BlockStack>
 
         <InlineGrid columns={{ xs: 1, md: 4 }} gap="300">
-          {steps.map((step) => (
+          {steps.map((step, index) => (
             <div
               key={step.id}
               className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between"
@@ -49,14 +53,23 @@ export function FunnelCard({ title, subtitle, steps, isRTL }: FunnelCardProps) {
                   borderWidth="025"
                   borderColor="border-tertiary"
                 >
-                  <InlineStack blockAlign="center" align="space-between">
-                    <Text
-                      variant={isRTL ? 'bodyMd' : 'bodySm'}
-                      tone="subdued"
-                      as="p"
-                    >
-                      {step.label}
-                    </Text>
+                  <InlineStack
+                    blockAlign="center"
+                    align="space-between"
+                    gap="300"
+                  >
+                    <InlineStack gap="200" blockAlign="center">
+                      <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] leading-none font-medium text-[#8a8a8a] shadow-[inset_0_0_0_1px_#d4d4d4]">
+                        {index + 1}
+                      </span>
+                      <Text
+                        variant={isRTL ? 'bodyMd' : 'bodySm'}
+                        tone="subdued"
+                        as="p"
+                      >
+                        {step.label}
+                      </Text>
+                    </InlineStack>
                     <Text variant="headingLg" as="p">
                       {step.value}
                     </Text>

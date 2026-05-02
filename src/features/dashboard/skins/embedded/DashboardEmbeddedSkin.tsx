@@ -1,10 +1,6 @@
-import {
-  Banner,
-  BlockStack,
-  Layout,
-  Page,
-} from '@shopify/polaris'
+import { Banner, BlockStack, Layout, Page } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
+import { DashboardStatusCard } from './components/DashboardStatusCard'
 import { EmbeddedVerificationSection } from './components/EmbeddedVerificationSection'
 import { StatsEmbedded } from './StatsEmbedded'
 import type { DashboardSkinProps } from '../../domain/dashboard.types'
@@ -40,7 +36,7 @@ export function DashboardEmbeddedSkin({
   const t = useTranslations('dashboard')
 
   return (
-    <Page title={t('title')} subtitle={t('subtitle')}>
+    <Page title={t('title')} subtitle={t('valueProposition')}>
       <BlockStack gap="500">
         {error && (
           <Banner tone="critical">
@@ -53,6 +49,15 @@ export function DashboardEmbeddedSkin({
             <p>{testFeedback.message}</p>
           </Banner>
         )}
+
+        <Layout>
+          <Layout.Section>
+            <DashboardStatusCard
+              activeLabel={t('statusCard.activeLabel')}
+              title={t('statusCard.title')}
+            />
+          </Layout.Section>
+        </Layout>
 
         <Layout>
           <Layout.Section>
@@ -73,6 +78,7 @@ export function DashboardEmbeddedSkin({
                 title: t('verificationSection.title'),
                 subtitle: t('verificationSection.subtitle'),
                 statusFilterLabel: t('filters.status.label'),
+                noReplyTooltip: t('tooltips.noReply'),
                 loadingMore: t('table.loadingMore'),
                 loadMore: t('table.loadMore'),
                 emptyMessage: emptyVerificationsMessage,
@@ -92,9 +98,7 @@ export function DashboardEmbeddedSkin({
                     'emptyState.onboarding.testPhonePlaceholder'
                   ),
                   testSendLabel: t('emptyState.onboarding.testSendLabel'),
-                  testSendingLabel: t(
-                    'emptyState.onboarding.testSendingLabel'
-                  ),
+                  testSendingLabel: t('emptyState.onboarding.testSendingLabel'),
                   nextStepHint: t('emptyState.onboarding.nextStepHint'),
                 },
               }}

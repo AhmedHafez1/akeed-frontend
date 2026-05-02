@@ -5,6 +5,7 @@ interface MoneySavedCardProps {
   value: string
   breakdownTitle: string
   breakdownLine: string
+  description: string
   isRTL: boolean
 }
 
@@ -13,6 +14,7 @@ export function MoneySavedCard({
   value,
   breakdownTitle,
   breakdownLine,
+  description,
   isRTL,
 }: MoneySavedCardProps) {
   return (
@@ -26,6 +28,9 @@ export function MoneySavedCard({
             {value}
           </Text>
         </InlineStack>
+        <Text variant={isRTL ? 'bodySm' : 'bodyXs'} tone="subdued" as="p">
+          {description}
+        </Text>
 
         <Box background="bg-surface-secondary" borderRadius="200" padding="300">
           <BlockStack gap="100">

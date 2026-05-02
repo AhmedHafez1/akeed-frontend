@@ -71,11 +71,14 @@ export function StandaloneVerificationsSection({
               <button
                 key={filter.id}
                 type="button"
+                title={
+                  filter.id === 'no_reply' ? t('tooltips.noReply') : undefined
+                }
                 onClick={() => onStatusFilterChange(filter.id)}
-                className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
+                className={`rounded-md border px-3 py-1.5 text-xs font-medium transition-colors ${
                   statusFilter === filter.id
-                    ? 'bg-slate-900 text-white shadow-sm'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                    : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
                 }`}
               >
                 {filter.label}

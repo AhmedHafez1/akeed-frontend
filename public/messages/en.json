@@ -471,6 +471,21 @@
   "dashboard": {
     "title": "Dashboard",
     "subtitle": "Monitor verification status and recent orders across your channels.",
+    "valueProposition": "Akeed confirms cash-on-delivery orders through WhatsApp before fulfillment.",
+    "statusCard": {
+      "activeLabel": "Auto-verification is on",
+      "title": "Verification is active",
+      "description": "Akeed is monitoring new COD orders and sending WhatsApp confirmation requests automatically.",
+      "workflowTitle": "After a COD order is placed",
+      "workflowDescription": "Akeed sends a WhatsApp confirmation request, records the customer response, and updates the order status in Shopify.",
+      "reviewTitle": "Suspicious or unconfirmed orders",
+      "reviewDescription": "If the customer does not reply, the order remains awaiting reply / no reply and can be reviewed before fulfillment."
+    },
+    "tooltips": {
+      "responseRate": "Percentage of sent confirmations that received any customer response.",
+      "confirmationRate": "Percentage of sent confirmations that customers confirmed.",
+      "noReply": "Orders where the customer did not respond after the configured follow-up and escalation window."
+    },
     "filters": {
       "status": {
         "label": "Status",
@@ -546,6 +561,7 @@
       "dropOff": "{value} drop-off",
       "moneySaved": {
         "title": "Money Saved",
+        "description": "Estimated shipping cost avoided by catching canceled COD orders before fulfillment.",
         "breakdownTitle": "How it's calculated",
         "breakdownLine": "{count} canceled x {cost} avg. shipping"
       },

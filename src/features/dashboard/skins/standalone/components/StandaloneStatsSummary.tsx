@@ -83,7 +83,9 @@ export function StandaloneStatsSummary({
 
         <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">
-            {t('metrics.cards.responseRate')}
+            <span title={t('tooltips.responseRate')}>
+              {t('metrics.cards.responseRate')}
+            </span>
           </p>
           <div className="mt-2 flex items-baseline gap-2">
             <p className="text-3xl font-bold tracking-tight text-slate-900">
@@ -100,7 +102,9 @@ export function StandaloneStatsSummary({
 
         <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">
-            {t('metrics.cards.confirmationRate')}
+            <span title={t('tooltips.confirmationRate')}>
+              {t('metrics.cards.confirmationRate')}
+            </span>
           </p>
           <div className="mt-2 flex items-baseline gap-2">
             <p className="text-3xl font-bold tracking-tight text-slate-900">
@@ -191,6 +195,9 @@ export function StandaloneStatsSummary({
           <h3 className="mb-1 text-sm font-semibold text-slate-700">
             {t('metrics.moneySaved.title')}
           </h3>
+          <p className="mb-3 text-xs text-slate-500">
+            {t('metrics.moneySaved.description')}
+          </p>
           <p className="text-3xl font-bold tracking-tight text-slate-900">
             {formatDashboardMoney(
               stats.savings.money_saved,
