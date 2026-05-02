@@ -254,7 +254,7 @@
     },
     "pricing": {
       "question": "What happens if I exceed my plan's COD Confirmation Messages?",
-      "answer": "On the Pro plan, each additional COD Confirmation Message is only $0.03. On the Business plan, it is $0.025. On the Starter plan, you can upgrade anytime."
+      "answer": "Starter stops at 30 messages until you upgrade. Paid plans continue with overages: Basic is $0.035 per extra message, Pro is $0.032, and Business is $0.03, up to each plan's monthly Shopify usage cap."
     },
     "whatsapp_api": {
       "question": "Are messages sent through official WhatsApp APIs?",
@@ -561,8 +561,8 @@
         "title": "Plan Usage",
         "monthlyLimit": "Monthly Limit",
         "used": "{value}% Used",
-        "warningNearLimit": "You're approaching your plan limit. Consider upgrading.",
-        "warningAtLimit": "You've reached your plan limit. Upgrade to keep verifying.",
+        "warningNearLimit": "You're approaching your included message limit. Extra messages may be billed at your plan's overage rate.",
+        "warningAtLimit": "You've used your included messages. Paid plans can continue with overage billing; Starter stores should upgrade to keep verifying.",
         "manageCta": "Review in Settings"
       },
       "unavailable": "Metrics are not available right now."
@@ -693,7 +693,7 @@
     "usageTitle": "Confirmation Messages",
     "usageUsedPercent": "{value}% Used",
     "usageMonthlyLimit": "Monthly Limit",
-    "usageUpgradePrompt": "You are approaching your monthly Confirmation Message limit. Consider upgrading your plan.",
+    "usageUpgradePrompt": "You are approaching your included monthly Confirmation Message limit. Extra messages may be billed at your plan's overage rate.",
     "currentPlanBadge": "Current",
     "changePlanButton": "Switch to selected plan",
     "changingPlanButton": "Switching plan...",
