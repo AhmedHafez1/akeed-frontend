@@ -1,4 +1,12 @@
-export const PRICING_FEATURE_INDICES = [1, 2, 3, 4, 5, 6] as const
+export const PRICING_FEATURE_INDICES_BY_PLAN: Record<
+  string,
+  readonly number[]
+> = {
+  starter: [1, 2, 3, 4, 5, 6],
+  basic: [1, 2, 3, 4, 5, 6, 7, 8],
+  pro: [1, 2, 3, 4, 5],
+  business: [1, 2, 3, 4, 5],
+}
 
 export function getPricingFeatureKey(
   planId: string,
@@ -11,8 +19,6 @@ export interface BillingPlanDefaults {
   id: string
   includedVerifications: number
   price: number
-  overageRate: number
-  cappedAmount: number
   isFree: boolean
 }
 
@@ -26,32 +32,24 @@ export const BILLING_PLANS: Record<string, BillingPlanDefaults> = {
     id: 'starter',
     includedVerifications: 30,
     price: 0,
-    overageRate: 0,
-    cappedAmount: 0,
     isFree: true,
   },
   basic: {
     id: 'basic',
-    includedVerifications: 200,
-    price: 9.99,
-    overageRate: 0.035,
-    cappedAmount: 14,
+    includedVerifications: 300,
+    price: 8.99,
     isFree: false,
   },
   pro: {
     id: 'pro',
-    includedVerifications: 500,
-    price: 18.99,
-    overageRate: 0.032,
-    cappedAmount: 32,
+    includedVerifications: 1000,
+    price: 19.99,
     isFree: false,
   },
   business: {
     id: 'business',
-    includedVerifications: 1500,
-    price: 48.99,
-    overageRate: 0.03,
-    cappedAmount: 90,
+    includedVerifications: 3000,
+    price: 49.99,
     isFree: false,
   },
 }

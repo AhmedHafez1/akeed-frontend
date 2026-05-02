@@ -6,7 +6,7 @@ import {
 } from '@/features/marketing/ui/components/LandingPrimitives'
 import {
   getPricingFeatureKey,
-  PRICING_FEATURE_INDICES,
+  PRICING_FEATURE_INDICES_BY_PLAN,
 } from '@/shared/config/pricing'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/button'
@@ -35,7 +35,10 @@ export function PricingPlanCard({
   const isBusiness = tier.key === 'business'
   const Icon = tierIcons[tier.key] ?? Sprout
 
-  const featureKeys = PRICING_FEATURE_INDICES.map((index) =>
+  const featureKeys = (
+    PRICING_FEATURE_INDICES_BY_PLAN[tier.key] ??
+    PRICING_FEATURE_INDICES_BY_PLAN.starter
+  ).map((index) =>
     getPricingFeatureKey(tier.key, index)
   )
 
