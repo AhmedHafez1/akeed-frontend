@@ -372,12 +372,6 @@ export function SettingsEmbeddedSkin(props: SettingsSkinProps) {
                           })
                         : t('subscriptionNoPlan')}
                     </Text>
-
-                    <Text as="p" tone="subdued" variant="bodySm">
-                      {t('subscriptionStatusLabel', {
-                        status: props.billingStatusLabel,
-                      })}
-                    </Text>
                   </BlockStack>
 
                   {props.usageData && (

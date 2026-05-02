@@ -4,6 +4,7 @@ export interface TemplatePreviewData {
   greeting: string
   body: string
   totalLabel: string
+  ending: string
   confirmButton: string
   cancelButton: string
 }
@@ -13,6 +14,7 @@ const templates: Record<TemplateLanguage, TemplatePreviewData> = {
     greeting: 'Hello',
     body: 'We have received your order #{order_number} with Cash on Delivery.',
     totalLabel: 'Total Price: {total}',
+    ending: 'Please confirm your order.',
     confirmButton: 'Confirm',
     cancelButton: 'Cancel',
   },
@@ -20,6 +22,7 @@ const templates: Record<TemplateLanguage, TemplatePreviewData> = {
     greeting: 'السلام عليكم',
     body: 'تم استلام طلبك رقم #{order_number} والدفع عند الاستلام',
     totalLabel: 'إجمالي السعر: {total}',
+    ending: 'من فضلك أكد الطلب.',
     confirmButton: 'تأكيد',
     cancelButton: 'إلغاء',
   },
@@ -42,5 +45,5 @@ export function renderTemplateBody(
 ): string {
   const body = template.body.replace('{order_number}', data.order_number)
   const totalLine = template.totalLabel.replace('{total}', data.total)
-  return `${template.greeting}\n${body}\n${totalLine}`
+  return `${template.greeting}\n${body}\n${totalLine}\n${template.ending}`
 }

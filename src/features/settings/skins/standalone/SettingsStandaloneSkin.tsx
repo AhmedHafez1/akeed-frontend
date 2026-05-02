@@ -30,7 +30,9 @@ function Field({ label, error, helpText, children }: FieldProps) {
     <div className="space-y-2">
       <Label>{label}</Label>
       {children}
-      {helpText && !error && <p className="text-xs text-slate-500">{helpText}</p>}
+      {helpText && !error && (
+        <p className="text-xs text-slate-500">{helpText}</p>
+      )}
       {error && <p className="text-xs font-medium text-red-600">{error}</p>}
     </div>
   )
@@ -49,7 +51,7 @@ function NativeSelect<TValue extends string>({
     <select
       value={value}
       onChange={(event) => onChange(event.target.value as TValue)}
-      className="h-12 w-full rounded-lg border-2 border-gray-200 bg-white px-4 text-base outline-none transition-colors focus:border-emerald-500"
+      className="h-12 w-full rounded-lg border-2 border-gray-200 bg-white px-4 text-base transition-colors outline-none focus:border-emerald-500"
     >
       {options.map((option) => (
         <option key={option.value} value={option.value}>
@@ -103,7 +105,9 @@ function SectionCard({
       <div className="space-y-5">
         <div className="space-y-1">
           <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
-          {description && <p className="text-sm text-slate-500">{description}</p>}
+          {description && (
+            <p className="text-sm text-slate-500">{description}</p>
+          )}
         </div>
         {children}
       </div>
@@ -270,7 +274,8 @@ function StandalonePlanComparison({
 export function SettingsStandaloneSkin(props: SettingsSkinProps) {
   const t = useTranslations('settings')
   const canChangePlan =
-    props.selectedPlanId !== null && props.selectedPlanId !== props.billingPlanId
+    props.selectedPlanId !== null &&
+    props.selectedPlanId !== props.billingPlanId
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 pb-8">
@@ -472,11 +477,6 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
               {props.activePlanName
                 ? t('subscriptionCurrentPlan', { plan: props.activePlanName })
                 : t('subscriptionNoPlan')}
-            </p>
-            <p className="text-sm text-slate-500">
-              {t('subscriptionStatusLabel', {
-                status: props.billingStatusLabel,
-              })}
             </p>
           </div>
 
