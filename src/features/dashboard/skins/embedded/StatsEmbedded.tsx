@@ -109,6 +109,27 @@ export function StatsEmbedded({
           tone: confirmationRateTone,
           tooltip: t('tooltips.confirmationRate'),
         },
+        {
+          id: 'saving',
+          label: t('metrics.moneySaved.title'),
+          value: formatDashboardMoney(
+            stats.savings.money_saved,
+            stats.savings.currency,
+            locale
+          ),
+          tone: 'success',
+          tooltip: `${t('metrics.moneySaved.description')} = ${t(
+            'metrics.moneySaved.breakdownLine',
+            {
+              count: formatDashboardNumber(stats.totals.canceled, locale),
+              cost: formatDashboardMoney(
+                stats.savings.avg_shipping_cost,
+                stats.savings.currency,
+                locale
+              ),
+            }
+          )}`,
+        },
       ]
     : []
 
@@ -166,29 +187,7 @@ export function StatsEmbedded({
         <BlockStack gap="400">
           <TopMetricGrid metrics={countMetrics} isRTL={isRTL} />
 
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-            <TopMetricGrid metrics={rateMetrics} isRTL={isRTL} />
-
-            <MoneySavedCard
-              title={t('metrics.moneySaved.title')}
-              value={formatDashboardMoney(
-                stats.savings.money_saved,
-                stats.savings.currency,
-                locale
-              )}
-              breakdownTitle={t('metrics.moneySaved.breakdownTitle')}
-              breakdownLine={t('metrics.moneySaved.breakdownLine', {
-                count: formatDashboardNumber(stats.totals.canceled, locale),
-                cost: formatDashboardMoney(
-                  stats.savings.avg_shipping_cost,
-                  stats.savings.currency,
-                  locale
-                ),
-              })}
-              description={t('metrics.moneySaved.description')}
-              isRTL={isRTL}
-            />
-          </div>
+          <TopMetricGrid metrics={rateMetrics} isRTL={isRTL} />
 
           <FunnelCard
             title={t('metrics.funnelTitle')}

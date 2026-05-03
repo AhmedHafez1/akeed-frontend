@@ -18,6 +18,7 @@ export interface TopMetric {
     | 'awaitingResponse'
     | 'responseRate'
     | 'confirmationRate'
+    | 'saving'
   label: string
   value: string
   tone: MetricTone
