@@ -1,7 +1,5 @@
 'use client'
 
-import { useState } from 'react'
-import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import type {
   IntegrationOnboardingLanguage,
@@ -87,58 +85,6 @@ function SectionCard({
   )
 }
 
-function StandaloneTemplatePreview() {
-  const t = useTranslations('messagePreview')
-  const [language, setLanguage] = useState<IntegrationOnboardingLanguage>('ar')
-  const previewSrc =
-    language === 'ar'
-      ? '/images/Preview/ar-preview-light.png'
-      : '/images/Preview/en-preview-light.png'
-
-  return (
-    <SectionCard title={t('title')} description={t('subtitle')}>
-      <div className="flex gap-2">
-        <Button
-          type="button"
-          size="sm"
-          variant={language === 'ar' ? 'default' : 'outline'}
-          onClick={() => setLanguage('ar')}
-        >
-          {t('languageArabic')}
-        </Button>
-        <Button
-          type="button"
-          size="sm"
-          variant={language === 'en' ? 'default' : 'outline'}
-          onClick={() => setLanguage('en')}
-        >
-          {t('languageEnglish')}
-        </Button>
-      </div>
-
-      <div className="rounded-2xl border border-slate-200 bg-slate-100 p-4">
-        <div className="mb-3 flex items-center gap-2">
-          <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-medium text-emerald-700">
-            {t('whatsappLabel')}
-          </span>
-          <span className="text-xs text-slate-500">{t('sampleBadge')}</span>
-        </div>
-        <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-          <Image
-            src={previewSrc}
-            alt={t('title')}
-            width={1200}
-            height={750}
-            className="h-auto w-full"
-          />
-        </div>
-      </div>
-
-      <p className="text-sm text-slate-500">{t('trustNote')}</p>
-    </SectionCard>
-  )
-}
-
 function StandaloneUsageOverview({
   used,
   limit,
@@ -212,13 +158,13 @@ function StandalonePlanComparison({
             disabled={isDisabled}
             title={isDisabled ? disabledPlanTooltips[plan.id] : undefined}
             onClick={() => onPlanSelect(plan.id)}
-            className={`rounded-2xl border p-4 text-start transition disabled:cursor-not-allowed disabled:opacity-50 ${
+            className={`rounded-2xl border p-4 text-center transition disabled:cursor-not-allowed disabled:opacity-50 ${
               isSelected
                 ? 'border-emerald-500 bg-emerald-50 shadow-sm'
                 : 'border-slate-200 bg-white hover:border-slate-300'
             }`}
           >
-            <div className="flex items-start justify-between gap-2">
+            <div className="flex min-h-12 flex-col items-center justify-start gap-1">
               <p className="font-semibold text-slate-900">{plan.name}</p>
               {isCurrent && (
                 <span className="rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700">
@@ -226,10 +172,18 @@ function StandalonePlanComparison({
                 </span>
               )}
             </div>
-            <p className="mt-3 text-xl font-bold text-slate-900">
+            <p
+              dir="auto"
+              className="mt-3 text-xl leading-7 font-bold text-slate-900 [unicode-bidi:isolate]"
+            >
               {plan.priceLabel}
             </p>
-            <p className="mt-2 text-sm text-slate-500">{plan.volumeLabel}</p>
+            <p
+              dir="auto"
+              className="mx-auto mt-2 max-w-40 text-sm text-slate-500 [unicode-bidi:isolate]"
+            >
+              {plan.volumeLabel}
+            </p>
           </button>
         )
       })}
@@ -307,8 +261,6 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
           </Field>
         </div>
       </SectionCard>
-
-      <StandaloneTemplatePreview />
 
       <SectionCard title={t('subscriptionHeading')}>
         <div id={SUBSCRIPTION_SECTION_ID} className="space-y-5">

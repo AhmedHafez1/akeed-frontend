@@ -71,12 +71,6 @@ export function AutomationSettingsEmbeddedSkin(props: SettingsSkinProps) {
                       </Text>
                       <HelpIcon content={t('automation.description')} />
                     </InlineStack>
-                    <InlineStack gap="200" blockAlign="center">
-                      <Icon source={ShieldCheckMarkIcon} tone="success" />
-                      <Text as="p" tone="subdued" variant="bodySm">
-                        {t('automation.trustSignal')}
-                      </Text>
-                    </InlineStack>
                   </BlockStack>
 
                   <Button
@@ -167,9 +161,6 @@ export function AutomationSettingsEmbeddedSkin(props: SettingsSkinProps) {
                       onChange={props.onEscalationDelayMinutesChange}
                       error={props.escalationDelayMinutesError}
                     />
-                    <Text as="p" tone="subdued" variant="bodySm">
-                      {props.escalationReviewDescription}
-                    </Text>
                   </BlockStack>
                 </div>
 

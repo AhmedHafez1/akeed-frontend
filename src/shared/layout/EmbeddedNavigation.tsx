@@ -48,6 +48,12 @@ export function EmbeddedNavigation() {
     hostParam: resolvedContext.hostParam,
   })
 
+  const messagePreviewHref = appendEmbeddedParamsToPath({
+    path: `/${locale}/message-preview`,
+    shopDomain: resolvedContext.shopDomain,
+    hostParam: resolvedContext.hostParam,
+  })
+
   const automationSettingsHref = appendEmbeddedParamsToPath({
     path: `/${locale}/automation-settings`,
     shopDomain: resolvedContext.shopDomain,
@@ -61,6 +67,7 @@ export function EmbeddedNavigation() {
       </a>
       <a href={verificationsHref}>Verifications</a>
       <a href={settingsHref}>Settings</a>
+      <a href={messagePreviewHref}>Message Preview</a>
       <a href={automationSettingsHref}>Automation Settings</a>
     </ui-nav-menu>
   )

@@ -204,9 +204,6 @@ export function AutomationSettingsStandaloneSkin(props: SettingsSkinProps) {
                   props.onEscalationDelayMinutesChange(event.target.value)
                 }
               />
-              <p className="mt-2 text-xs text-slate-500">
-                {props.escalationReviewDescription}
-              </p>
             </Field>
           </div>
 

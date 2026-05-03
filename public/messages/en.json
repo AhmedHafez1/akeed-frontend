@@ -377,6 +377,7 @@
     "dashboard": "Dashboard",
     "verifications": "Verifications",
     "settings": "Settings",
+    "messagePreview": "Message preview",
     "automationSettings": "Automation",
     "signOut": "Sign out",
     "signingOut": "Signing out..."
@@ -789,8 +790,11 @@
     "planBusinessFeature6": "No extra costs"
   },
   "messagePreview": {
+    "pageTitle": "Message preview",
+    "pageSubtitle": "Review the exact WhatsApp message customers receive for COD confirmation.",
     "title": "Exact customer-facing WhatsApp message",
     "subtitle": "This is the exact WhatsApp message customers receive when a COD order is placed.",
+    "imageAlt": "Akeed WhatsApp confirmation message preview",
     "whatsappLabel": "WhatsApp",
     "sampleBadge": "Customer preview",
     "trustNote": "Sent via official Meta WhatsApp Cloud APIs from Akeed's verified business number.",
