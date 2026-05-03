@@ -4,6 +4,7 @@ import type { DashboardSkinProps } from '../../domain/dashboard.types'
 import type { DashboardStatsDateRange } from '../../model/dashboard.model'
 import { EmbeddedVerificationSection } from './components/EmbeddedVerificationSection'
 import { ConfirmationStatusFlags } from './components/ConfirmationStatusFlags'
+import { StatsEmbeddedSkeletonHeader } from './components/StatsEmbeddedSkeletonHeader'
 
 export function DashboardVerificationsEmbeddedSkin({
   dateRangeFilter,
@@ -14,6 +15,7 @@ export function DashboardVerificationsEmbeddedSkin({
   quietHoursEnabled,
   verifications,
   isVerificationsLoading,
+  isStatsLoading,
   hasMoreVerifications,
   isLoadingMoreVerifications,
   onLoadMoreVerifications,
@@ -54,25 +56,29 @@ export function DashboardVerificationsEmbeddedSkin({
           </Banner>
         )}
 
-        <div className="flex items-center justify-between">
-          <ConfirmationStatusFlags
-            autoConfirmStatus={isAutoVerifyEnabled}
-            followUpStatus={followUpEnabled}
-            quietHoursConfigured={quietHoursEnabled}
-          />
-          <Select
-            label={t('filters.dateRange.label')}
-            labelHidden
-            options={dateRangeOptions.map((option) => ({
-              label: option.label,
-              value: option.id,
-            }))}
-            value={dateRangeFilter}
-            onChange={(value) =>
-              onDateRangeFilterChange(value as DashboardStatsDateRange)
-            }
-          />
-        </div>
+        {isStatsLoading ? (
+          <StatsEmbeddedSkeletonHeader />
+        ) : (
+          <div className="flex items-center justify-between">
+            <ConfirmationStatusFlags
+              autoConfirmStatus={isAutoVerifyEnabled}
+              followUpStatus={followUpEnabled}
+              quietHoursConfigured={quietHoursEnabled}
+            />
+            <Select
+              label={t('filters.dateRange.label')}
+              labelHidden
+              options={dateRangeOptions.map((option) => ({
+                label: option.label,
+                value: option.id,
+              }))}
+              value={dateRangeFilter}
+              onChange={(value) =>
+                onDateRangeFilterChange(value as DashboardStatsDateRange)
+              }
+            />
+          </div>
+        )}
 
         <Layout>
           <Layout.Section>

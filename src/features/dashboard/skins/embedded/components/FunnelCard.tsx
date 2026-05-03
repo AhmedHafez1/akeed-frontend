@@ -48,7 +48,6 @@ export function FunnelCard({ title, subtitle, steps, isRTL }: FunnelCardProps) {
               <div className="w-full md:min-w-[85%]">
                 <Box
                   padding="300"
-                  paddingInline="400"
                   background="bg-surface-secondary"
                   borderRadius="200"
                   borderWidth="025"
@@ -67,9 +66,11 @@ export function FunnelCard({ title, subtitle, steps, isRTL }: FunnelCardProps) {
                         {step.label}
                       </Text>
                     </InlineStack>
-                    <Text variant="headingXl" as="p">
-                      {step.value}
-                    </Text>
+                    <Box paddingInlineStart="600">
+                      <Text variant="headingXl" as="p">
+                        {step.value}
+                      </Text>
+                    </Box>
                   </BlockStack>
                 </Box>
               </div>
