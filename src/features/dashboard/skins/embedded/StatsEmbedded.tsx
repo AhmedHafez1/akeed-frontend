@@ -8,7 +8,6 @@ import {
   formatDashboardNumber,
 } from '@/features/dashboard/lib/dashboardFormatters'
 import { FunnelCard, type FunnelStep } from './components/FunnelCard'
-import { MoneySavedCard } from './components/MoneySavedCard'
 import { StatsEmbeddedHeader } from './components/StatsEmbeddedHeader'
 import { StatsEmbeddedSkeleton } from './components/StatsEmbeddedSkeleton'
 import {
@@ -26,6 +25,9 @@ import type {
 interface StatsEmbeddedProps {
   stats: DashboardStats | null
   isStatsLoading: boolean
+  isAutoVerifyEnabled: boolean
+  followUpEnabled: boolean
+  quietHoursEnabled: boolean
   dateRangeFilter: DashboardStatsDateRange
   dateRangeOptions: ReadonlyArray<DateRangeFilterOption>
   onDateRangeFilterChange: (filter: DashboardStatsDateRange) => void
@@ -46,6 +48,9 @@ function resolveConfirmationRateTone(rate: number): MetricTone {
 export function StatsEmbedded({
   stats,
   isStatsLoading,
+  isAutoVerifyEnabled,
+  followUpEnabled,
+  quietHoursEnabled,
   dateRangeFilter,
   dateRangeOptions,
   onDateRangeFilterChange,
@@ -178,6 +183,9 @@ export function StatsEmbedded({
         dateRangeFilter={dateRangeFilter}
         dateRangeOptions={dateRangeOptions}
         isRTL={isRTL}
+        isAutoVerifyEnabled={isAutoVerifyEnabled}
+        followUpEnabled={followUpEnabled}
+        quietHoursEnabled={quietHoursEnabled}
         onDateRangeFilterChange={onDateRangeFilterChange}
       />
 

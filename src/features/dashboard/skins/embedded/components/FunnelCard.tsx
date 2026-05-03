@@ -28,7 +28,7 @@ interface FunnelCardProps {
 
 export function FunnelCard({ title, subtitle, steps, isRTL }: FunnelCardProps) {
   return (
-    <Card>
+    <Card padding={{ lg: '500', xs: '300' }}>
       <BlockStack gap="400">
         <BlockStack gap="050">
           <Text variant={isRTL ? 'headingMd' : 'headingSm'} as="h2">
@@ -48,26 +48,27 @@ export function FunnelCard({ title, subtitle, steps, isRTL }: FunnelCardProps) {
               <div className="w-full md:min-w-[85%]">
                 <Box
                   padding="300"
+                  paddingInline="400"
                   background="bg-surface-secondary"
                   borderRadius="200"
                   borderWidth="025"
                   borderColor="border-tertiary"
                 >
                   <BlockStack gap="200">
-                    <InlineStack align="space-between" blockAlign="center">
+                    <InlineStack gap="200" blockAlign="center">
                       <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] leading-none font-medium text-[#8a8a8a] shadow-[inset_0_0_0_1px_#d4d4d4]">
                         {index + 1}
                       </span>
-                      <Text variant="headingLg" as="p">
-                        {step.value}
+                      <Text
+                        variant={isRTL ? 'bodyMd' : 'bodySm'}
+                        tone="subdued"
+                        as="p"
+                      >
+                        {step.label}
                       </Text>
                     </InlineStack>
-                    <Text
-                      variant={isRTL ? 'bodyMd' : 'bodySm'}
-                      tone="subdued"
-                      as="p"
-                    >
-                      {step.label}
+                    <Text variant="headingXl" as="p">
+                      {step.value}
                     </Text>
                   </BlockStack>
                 </Box>

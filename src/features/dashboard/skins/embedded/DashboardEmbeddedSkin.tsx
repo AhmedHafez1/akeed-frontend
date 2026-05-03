@@ -6,6 +6,9 @@ import type { DashboardSkinProps } from '../../domain/dashboard.types'
 export function DashboardEmbeddedSkin({
   stats,
   isStatsLoading,
+  isAutoVerifyEnabled,
+  followUpEnabled,
+  quietHoursEnabled,
   dateRangeFilter,
   dateRangeOptions,
   onDateRangeFilterChange,
@@ -35,6 +38,9 @@ export function DashboardEmbeddedSkin({
             <StatsEmbedded
               stats={stats}
               isStatsLoading={isStatsLoading}
+              isAutoVerifyEnabled={isAutoVerifyEnabled}
+              followUpEnabled={followUpEnabled}
+              quietHoursEnabled={quietHoursEnabled}
               dateRangeFilter={dateRangeFilter}
               dateRangeOptions={dateRangeOptions}
               onDateRangeFilterChange={onDateRangeFilterChange}

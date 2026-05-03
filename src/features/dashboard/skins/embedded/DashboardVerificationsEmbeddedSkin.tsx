@@ -3,11 +3,15 @@ import { useTranslations } from 'next-intl'
 import type { DashboardSkinProps } from '../../domain/dashboard.types'
 import type { DashboardStatsDateRange } from '../../model/dashboard.model'
 import { EmbeddedVerificationSection } from './components/EmbeddedVerificationSection'
+import { ConfirmationStatusFlags } from './components/ConfirmationStatusFlags'
 
 export function DashboardVerificationsEmbeddedSkin({
   dateRangeFilter,
   dateRangeOptions,
   onDateRangeFilterChange,
+  isAutoVerifyEnabled,
+  followUpEnabled,
+  quietHoursEnabled,
   verifications,
   isVerificationsLoading,
   hasMoreVerifications,
@@ -50,7 +54,12 @@ export function DashboardVerificationsEmbeddedSkin({
           </Banner>
         )}
 
-        <div className="flex justify-end">
+        <div className="flex items-center justify-between">
+          <ConfirmationStatusFlags
+            autoConfirmStatus={isAutoVerifyEnabled}
+            followUpStatus={followUpEnabled}
+            quietHoursConfigured={quietHoursEnabled}
+          />
           <Select
             label={t('filters.dateRange.label')}
             labelHidden

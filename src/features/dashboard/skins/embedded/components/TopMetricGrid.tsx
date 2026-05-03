@@ -46,7 +46,7 @@ export function TopMetricGrid({ metrics, isRTL }: TopMetricGridProps) {
           borderColor="border"
           borderRadius="300"
           borderWidth="025"
-          padding="300"
+          padding={{ lg: '400', xs: '300' }}
           shadow="100"
         >
           <div className="flex min-h-16 flex-col justify-between gap-3">
@@ -74,7 +74,7 @@ export function TopMetricGrid({ metrics, isRTL }: TopMetricGridProps) {
                 </Tooltip>
               ) : null}
             </InlineStack>
-            <Text variant="headingXl" as="h2">
+            <Text variant="heading2xl" as="h2">
               {metric.value}
             </Text>
           </div>

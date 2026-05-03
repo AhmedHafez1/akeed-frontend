@@ -61,6 +61,11 @@ export type OrdersResponse = {
 
 export type DashboardStats = {
   date_range: DashboardStatsDateRange
+  automation: {
+    is_auto_verify_enabled: boolean
+    follow_up_enabled: boolean
+    quiet_hours_enabled: boolean
+  }
   totals: {
     confirmed: number
     canceled: number

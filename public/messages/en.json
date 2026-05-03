@@ -480,7 +480,12 @@
     "subtitle": "Monitor verification status and recent orders across your channels.",
     "valueProposition": "Akeed confirms cash-on-delivery orders through WhatsApp before fulfillment.",
     "statusCard": {
-      "activeLabel": "Auto-verification is on",
+      "activeLabel": "Auto-confirmation is on",
+      "inactiveLabel": "Auto-confirmation is off",
+      "followUpActiveLabel": "Follow-up reminder is on",
+      "followUpInactiveLabel": "Follow-up reminder is off",
+      "quietHoursActiveLabel": "Quiet hours are configured",
+      "quietHoursInactiveLabel": "Quiet hours are disabled",
       "title": "Verification is active",
       "description": "Akeed is monitoring new COD orders and sending WhatsApp confirmation requests automatically.",
       "workflowTitle": "After a COD order is placed",

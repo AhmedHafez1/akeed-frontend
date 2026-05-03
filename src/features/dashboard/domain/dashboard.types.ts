@@ -26,6 +26,9 @@ export interface DashboardSkinProps {
   // Stats
   stats: DashboardStats | null
   isStatsLoading: boolean
+  isAutoVerifyEnabled: boolean
+  followUpEnabled: boolean
+  quietHoursEnabled: boolean
   dateRangeFilter: DashboardStatsDateRange
   dateRangeOptions: ReadonlyArray<DateRangeFilterOption>
   onDateRangeFilterChange: (filter: DashboardStatsDateRange) => void

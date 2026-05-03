@@ -475,6 +475,11 @@
     "valueProposition": "يؤكد أكيد طلبات الدفع عند الاستلام عبر واتساب قبل التجهيز.",
     "statusCard": {
       "activeLabel": "التأكيد التلقائي مفعّل",
+      "inactiveLabel": "التأكيد التلقائي معطّل",
+      "followUpActiveLabel": "تذكير المتابعة مفعّل",
+      "followUpInactiveLabel": "تذكير المتابعة معطّل",
+      "quietHoursActiveLabel": "فترات الصمت مفعّلة",
+      "quietHoursInactiveLabel": "فترات الصمت معطّلة",
       "title": "التأكيد يعمل الآن",
       "description": "يراقب أكيد طلبات الدفع عند الاستلام الجديدة ويرسل رسائل تأكيد واتساب تلقائياً.",
       "workflowTitle": "بعد إنشاء طلب دفع عند الاستلام",

@@ -1,6 +1,7 @@
 import { BlockStack, InlineStack, Select, Text } from '@shopify/polaris'
 import type { DateRangeFilterOption } from '@/features/dashboard/domain/dashboard.types'
 import type { DashboardStatsDateRange } from '@/features/dashboard/model/dashboard.model'
+import { ConfirmationStatusFlags } from './ConfirmationStatusFlags'
 
 interface StatsEmbeddedHeaderProps {
   title: string
@@ -9,28 +10,29 @@ interface StatsEmbeddedHeaderProps {
   dateRangeFilter: DashboardStatsDateRange
   dateRangeOptions: ReadonlyArray<DateRangeFilterOption>
   isRTL: boolean
+  isAutoVerifyEnabled: boolean
+  followUpEnabled: boolean
+  quietHoursEnabled: boolean
   onDateRangeFilterChange: (filter: DashboardStatsDateRange) => void
 }
 
 export function StatsEmbeddedHeader({
   title,
-  subtitle,
   dateRangeLabel,
   dateRangeFilter,
   dateRangeOptions,
-  isRTL,
+  isAutoVerifyEnabled,
+  followUpEnabled,
+  quietHoursEnabled,
   onDateRangeFilterChange,
 }: StatsEmbeddedHeaderProps) {
   return (
     <InlineStack align="space-between" blockAlign="center" gap="300">
-      <BlockStack gap="050">
-        <Text variant={isRTL ? 'headingMd' : 'headingSm'} as="h2">
-          {title}
-        </Text>
-        <Text variant={isRTL ? 'bodySm' : 'bodyXs'} tone="subdued" as="p">
-          {subtitle}
-        </Text>
-      </BlockStack>
+      <ConfirmationStatusFlags
+        autoConfirmStatus={isAutoVerifyEnabled}
+        followUpStatus={followUpEnabled}
+        quietHoursConfigured={quietHoursEnabled}
+      />
       <Select
         label={dateRangeLabel}
         labelHidden

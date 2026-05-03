@@ -65,6 +65,9 @@ export function useDashboard(): DashboardSkinProps {
     statsError,
     refetch: refetchStats,
   } = useDashboardStats(dateRangeFilter)
+  const isAutoVerifyEnabled = stats?.automation.is_auto_verify_enabled ?? false
+  const followUpEnabled = stats?.automation.follow_up_enabled ?? false
+  const quietHoursEnabled = stats?.automation.quiet_hours_enabled ?? false
 
   const hasVerifications = verifications?.length > 0
 
@@ -225,6 +228,9 @@ export function useDashboard(): DashboardSkinProps {
   return {
     stats,
     isStatsLoading,
+    isAutoVerifyEnabled,
+    followUpEnabled,
+    quietHoursEnabled,
     dateRangeFilter,
     dateRangeOptions,
     onDateRangeFilterChange,
