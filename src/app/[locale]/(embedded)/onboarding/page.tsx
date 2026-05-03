@@ -14,9 +14,7 @@ import {
   OnboardingStepCounter,
   BillingStep,
   ConfigurationStep,
-  TOTAL_STEPS,
   useEmbeddedOnboarding,
-  WelcomeStep,
   type EmbeddedStep,
   type OnboardingBillingPlan,
 } from '@/features/onboarding'
@@ -186,7 +184,6 @@ export default function OnboardingPage() {
     errorBanner,
     prefillWarning,
     handleStoreNameChange,
-    handleStartSetup,
     handleContinueToBilling,
     handleActivatePlan,
     handleRetryBilling,
@@ -201,19 +198,10 @@ export default function OnboardingPage() {
     onBillingConfirmation: handleBillingConfirmation,
   })
 
-  const stepCounterLabel = t('stepCounter', {
-    current: step,
-    total: TOTAL_STEPS,
-  })
-  const setupFlowSteps = [
-    t('flow.storeSetup'),
-    t('flow.messagePreview'),
-    t('flow.plan'),
-    t('flow.dashboard'),
-  ]
+  const setupFlowSteps = [t('flow.storeSetup'), t('flow.plan')]
 
   const handleBackToConfiguration = useCallback(() => {
-    setStep(2)
+    setStep(1)
   }, [setStep])
 
   const billingPlans = useMemo<OnboardingBillingPlan[]>(
@@ -252,14 +240,6 @@ export default function OnboardingPage() {
 
   const stepComponents: Record<EmbeddedStep, ReactNode> = {
     1: (
-      <WelcomeStep
-        heading={t('welcomeHeading')}
-        body={t('welcomeBody')}
-        ctaLabel={t('startSetup')}
-        onStart={handleStartSetup}
-      />
-    ),
-    2: (
       <ConfigurationStep
         heading={t('configurationHeading')}
         storeNameLabel={t('storeNameLabel')}
@@ -283,11 +263,9 @@ export default function OnboardingPage() {
         onContinue={handleContinueToBilling}
       />
     ),
-    3: (
+    2: (
       <BillingStep
         heading={tEmbedded('billingHeading')}
-        body={tEmbedded('billingBody')}
-        changeLaterNote={tEmbedded('changePlanLaterNote')}
         plans={billingPlans}
         selectedPlanId={selectedPlanId}
         isActivating={isActivatingPlan}
@@ -298,11 +276,10 @@ export default function OnboardingPage() {
             : undefined
         }
         recommendedBadgeLabel={t('recommendedBadge')}
-        errorMessage={step === 3 ? errorBanner : null}
+        errorMessage={step === 2 ? errorBanner : null}
         retryLabel={tEmbedded('billingTryAgain')}
         manageSettingsLabel={tEmbedded('billingManageSettings')}
         freePlanUsedLabel={tEmbedded('freePlanUsedBadge')}
-        readyMessage={tEmbedded('readyToVerify')}
         backLabel={tEmbedded('billingBack')}
         canManageBilling={billingManagementUrl !== null}
         onPlanSelect={setSelectedPlanId}
@@ -326,40 +303,26 @@ export default function OnboardingPage() {
   }
 
   return (
-    <Page title={step === 3 ? undefined : t('title')} fullWidth={step === 3}>
+    <Page fullWidth>
       <Layout>
         <Layout.Section>
           <BlockStack gap="400">
             <OnboardingAlerts
-              errorMessage={step === 3 ? null : errorBanner}
+              errorMessage={step === 2 ? null : errorBanner}
               warningMessage={prefillWarning}
             />
 
-            {step === 3 ? (
-              <div className="mx-auto w-full max-w-280">
-                <Card padding={{ xs: '400', md: '800' }}>
-                  <BlockStack gap="200">
-                    <OnboardingStepCounter
-                      label={stepCounterLabel}
-                      currentStep={step}
-                      steps={setupFlowSteps}
-                    />
-                    {stepComponents[step]}
-                  </BlockStack>
-                </Card>
-              </div>
-            ) : (
-              <Card>
-                <BlockStack gap="200">
+            <div className="mx-auto w-full max-w-[1280px]">
+              <Card padding={{ xs: '400', md: '800' }}>
+                <BlockStack gap="500">
                   <OnboardingStepCounter
-                    label={stepCounterLabel}
                     currentStep={step}
                     steps={setupFlowSteps}
                   />
                   {stepComponents[step]}
                 </BlockStack>
               </Card>
-            )}
+            </div>
           </BlockStack>
         </Layout.Section>
       </Layout>

@@ -1,9 +1,9 @@
 import type { OnboardingBillingPlanId } from '@/features/onboarding/domain/onboarding.types'
 import type { SupportedLocale } from '@/shared/lib/locale'
 
-export const TOTAL_STEPS = 3
+export const TOTAL_STEPS = 2
 
-export type EmbeddedStep = 1 | 2 | 3
+export type EmbeddedStep = 1 | 2
 
 type OnboardingMessageKey =
   | 'languageAuto'

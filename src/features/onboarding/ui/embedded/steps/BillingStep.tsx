@@ -1,7 +1,6 @@
 import type { KeyboardEvent } from 'react'
 import {
   BlockStack,
-  Box,
   Button,
   InlineGrid,
   InlineStack,
@@ -13,12 +12,9 @@ import type {
 } from '@/features/onboarding/domain/onboarding.types'
 import { BillingErrorBanner } from '../components/BillingErrorBanner'
 import { PlanCard } from '../components/PlanCard'
-import { VerificationTemplatePreview } from '@/features/message-preview'
 
 interface BillingStepProps {
   heading: string
-  body: string
-  changeLaterNote: string
   plans: OnboardingBillingPlan[]
   selectedPlanId: OnboardingBillingPlanId
   isActivating: boolean
@@ -29,7 +25,6 @@ interface BillingStepProps {
   retryLabel: string
   manageSettingsLabel: string
   freePlanUsedLabel: string
-  readyMessage: string
   backLabel: string
   canManageBilling: boolean
   onPlanSelect: (planId: OnboardingBillingPlanId) => void
@@ -41,8 +36,6 @@ interface BillingStepProps {
 
 export function BillingStep({
   heading,
-  body,
-  changeLaterNote,
   plans,
   selectedPlanId,
   isActivating,
@@ -53,7 +46,6 @@ export function BillingStep({
   retryLabel,
   manageSettingsLabel,
   freePlanUsedLabel,
-  readyMessage,
   backLabel,
   canManageBilling,
   onPlanSelect,
@@ -90,35 +82,11 @@ export function BillingStep({
       )}
 
       <BlockStack gap="400">
-        <BlockStack gap="200">
-          <Text as="h2" variant="headingLg">
-            {heading}
-          </Text>
-          <BlockStack gap="050">
-            <Text as="p" tone="subdued" variant="bodySm">
-              {body}
-            </Text>
-            <Text as="p" tone="subdued" variant="bodySm">
-              {changeLaterNote}
-            </Text>
-          </BlockStack>
-        </BlockStack>
+        <Text as="h2" variant="headingLg">
+          {heading}
+        </Text>
 
-        <VerificationTemplatePreview variant="compact" />
-
-        <Box
-          background="bg-fill-success-secondary"
-          borderColor="border-brand"
-          borderRadius="300"
-          borderWidth="025"
-          padding="300"
-        >
-          <Text as="p" variant="bodyMd" fontWeight="medium">
-            {readyMessage}
-          </Text>
-        </Box>
-
-        <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
+        <InlineGrid columns={{ xs: 1, sm: 2, lg: 4 }} gap="400">
           {plans.map((plan) => {
             const isDisabled = disabledPlanIds.includes(plan.id)
             const disabledPlanTooltip = isDisabled

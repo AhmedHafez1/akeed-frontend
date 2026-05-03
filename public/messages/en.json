@@ -735,7 +735,7 @@
     "billingStatusCanceled": "Your subscription is canceled. Please choose a plan and activate billing to continue.",
     "billingStatusError": "We could not verify your billing status. Please try activating your plan again.",
     "billingStatusNeedsAttention": "Your billing status needs attention. Please activate or update your plan to continue.",
-    "billingHeading": "Review the message and choose a plan",
+    "billingHeading": "Choose your plan",
     "billingBody": "Preview the exact WhatsApp message customers receive, then choose your monthly confirmation volume.",
     "changePlanLaterNote": "You can change plans later from settings.",
     "readyToVerify": "Akeed is ready to verify new COD orders.",

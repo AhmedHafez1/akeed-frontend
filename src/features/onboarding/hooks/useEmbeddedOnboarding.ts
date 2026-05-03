@@ -118,8 +118,6 @@ export function useEmbeddedOnboarding({
     onBillingConfirmation,
   })
 
-  const handleStartSetup = useCallback(() => setStep(2), [])
-
   return {
     // Loader gate
     isInitialLoading: init.isInitialLoading,
@@ -129,7 +127,7 @@ export function useEmbeddedOnboarding({
     // Alerts
     errorBanner,
     prefillWarning: init.prefillWarning,
-    // Step-2 settings
+    // Setup settings
     storeName: settings.storeName,
     storeNameError: settings.storeNameError,
     defaultLanguage: settings.defaultLanguage,
@@ -139,7 +137,7 @@ export function useEmbeddedOnboarding({
     isSavingSettings: settings.isSavingSettings,
     handleStoreNameChange: settings.handleStoreNameChange,
     handleContinueToBilling: settings.handleContinueToBilling,
-    // Step-3 billing
+    // Billing
     billingPlanConfigsById: init.billingPlanConfigsById,
     isFreePlanClaimed: init.isFreePlanClaimed,
     billingManagementUrl: init.billingManagementUrl,
@@ -150,7 +148,5 @@ export function useEmbeddedOnboarding({
     handleActivatePlan: billing.handleActivatePlan,
     handleRetryBilling: billing.handleRetryBilling,
     handleManageBilling: billing.handleManageBilling,
-    // Welcome step
-    handleStartSetup,
   }
 }

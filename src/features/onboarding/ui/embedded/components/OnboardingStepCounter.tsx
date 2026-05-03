@@ -1,80 +1,66 @@
-import { BlockStack, Box, InlineStack, Text } from '@shopify/polaris'
+import { Text } from '@shopify/polaris'
 
 interface OnboardingStepCounterProps {
-  label: string
   currentStep: number
   steps: string[]
 }
 
-function getFlowState(currentStep: number, index: number) {
-  const activeIndex = currentStep === 3 ? 2 : 0
-  const completedIndex = currentStep === 3 ? 1 : -1
-
-  if (index <= completedIndex) {
-    return 'completed'
-  }
-
-  if (index === activeIndex) {
-    return 'active'
-  }
-
+function getStepState(currentStep: number, stepNumber: number) {
+  if (stepNumber < currentStep) return 'completed'
+  if (stepNumber === currentStep) return 'active'
   return 'pending'
 }
 
 export function OnboardingStepCounter({
-  label,
   currentStep,
   steps,
 }: OnboardingStepCounterProps) {
   return (
-    <BlockStack gap="200">
-      <Text as="p" tone="subdued" variant="bodySm">
-        {label}
-      </Text>
-
-      <InlineStack gap="200" wrap>
+    <div className="w-full">
+      <div className="flex items-start">
         {steps.map((stepLabel, index) => {
-          const state = getFlowState(currentStep, index)
+          const stepNumber = index + 1
+          const state = getStepState(currentStep, stepNumber)
           const isActive = state === 'active'
           const isCompleted = state === 'completed'
 
           return (
-            <InlineStack key={stepLabel} gap="200" blockAlign="center">
-              <Box
-                borderColor={
-                  isActive || isCompleted ? 'border-brand' : 'border-secondary'
-                }
-                borderRadius="300"
-                borderWidth="025"
-                background={
-                  isCompleted
-                    ? 'bg-fill-success-secondary'
-                    : isActive
-                      ? 'bg-fill-success-secondary'
-                      : 'bg-surface-secondary'
-                }
-                paddingInline="300"
-                paddingBlock="150"
-              >
+            <div
+              key={stepLabel}
+              className="flex min-w-0 flex-1 items-start last:flex-none"
+            >
+              <div className="flex min-w-0 flex-col items-center gap-2">
+                <span
+                  className={`flex h-7 w-7 items-center justify-center rounded-full border text-xs font-semibold ${
+                    isActive || isCompleted
+                      ? 'border-[#008060] bg-[#008060] text-white'
+                      : 'border-[#c9cccf] bg-white text-[#6d7175]'
+                  }`}
+                >
+                  {stepNumber}
+                </span>
                 <Text
                   as="span"
                   variant="bodySm"
                   fontWeight={isActive ? 'semibold' : 'medium'}
                   tone={isActive || isCompleted ? undefined : 'subdued'}
+                  alignment="center"
                 >
                   {stepLabel}
                 </Text>
-              </Box>
+              </div>
 
               {index < steps.length - 1 && (
-                <Text as="span" tone="subdued" variant="bodySm">
-                  -&gt;
-                </Text>
+                <div
+                  className={`mx-3 mt-3 h-px min-w-8 flex-1 ${
+                    isCompleted ? 'bg-[#008060]' : 'bg-[#d9d9d9]'
+                  }`}
+                />
               )}
-            </InlineStack>
+            </div>
           )
         })}
-      </InlineStack>
-    </BlockStack>
+      </div>
+    </div>
   )
 }

@@ -63,11 +63,7 @@ function resolveBillingRecoveryMessage(
 function resolveResumeStep(state: IntegrationOnboardingState): EmbeddedStep {
   const hasBillingActivity =
     state.billingPlanId !== null || state.billingStatus !== null
-  if (hasBillingActivity) return 3
-
-  const hasConfigProgress =
-    state.storeName !== null && state.storeName.trim().length > 0
-  if (hasConfigProgress) return 2
+  if (hasBillingActivity) return 2
 
   return 1
 }
@@ -174,7 +170,7 @@ export function useOnboardingInit({
 
         if (billingRecoveryMessage) {
           setErrorBanner(billingRecoveryMessage)
-          setStep(3)
+          setStep(2)
         } else {
           const resumeStep = resolveResumeStep(state)
           if (resumeStep !== 1) setStep(resumeStep)

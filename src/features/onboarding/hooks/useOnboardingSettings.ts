@@ -25,7 +25,7 @@ export interface UseOnboardingSettingsParams {
 // ─── Hook ─────────────────────────────────────────────────────────────────────
 
 /**
- * Manages step-2 settings form state (store name, language, auto-verify)
+ * Manages step-1 settings form state (store name, language, auto-verify)
  * and the debounced auto-save effect.
  *
  * Receives `setStep` and `setErrorBanner` from the coordinator so it can
@@ -66,7 +66,7 @@ export function useOnboardingSettings({
 
   // Debounced auto-save: persist step-2 field changes to the backend
   useEffect(() => {
-    if (!hasCompletedInitRef.current || step !== 2) return
+    if (!hasCompletedInitRef.current || step !== 1) return
 
     const trimmed = storeName.trim()
     if (!trimmed) return
@@ -115,7 +115,7 @@ export function useOnboardingSettings({
         defaultLanguage,
         isAutoVerifyEnabled,
       })
-      setStep(3)
+      setStep(2)
     } catch (error) {
       console.error('[Onboarding] Failed to save settings:', error)
       setErrorBanner(settingsSaveErrorMessage)
