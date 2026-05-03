@@ -574,7 +574,7 @@
       "dropOff": "{value} drop-off",
       "moneySaved": {
         "title": "Money Saved",
-        "description": "Estimated shipping cost saved by catching canceled COD orders before fulfillment",
+        "description": "Shipping cost saved by catching canceled COD orders",
         "breakdownTitle": "How it's calculated",
         "breakdownLine": "{count} canceled x {cost} avg. shipping"
       },
