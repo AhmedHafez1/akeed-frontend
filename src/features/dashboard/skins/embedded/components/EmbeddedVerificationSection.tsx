@@ -6,7 +6,6 @@ import {
   InlineStack,
   Select,
   Text,
-  Tooltip,
 } from '@shopify/polaris'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import type { StatusFilterOption } from '@/features/dashboard/domain/dashboard.types'
@@ -116,25 +115,31 @@ export function EmbeddedVerificationSection({
             {statusFilters.map((filter) => {
               const button = (
                 <Button
-                  key={filter.id}
                   pressed={statusFilter === filter.id}
                   onClick={() => onStatusFilterChange(filter.id)}
                   size="slim"
+                  accessibilityLabel={
+                    filter.id === 'no_reply'
+                      ? `${filter.label}. ${messages.noReplyTooltip}`
+                      : filter.label
+                  }
                 >
                   {filter.label}
                 </Button>
               )
 
               return filter.id === 'no_reply' ? (
-                <Tooltip
+                <span
                   key={filter.id}
-                  content={messages.noReplyTooltip}
-                  preferredPosition="above"
+                  title={messages.noReplyTooltip}
+                  className="inline-flex"
                 >
                   {button}
-                </Tooltip>
+                </span>
               ) : (
-                button
+                <span key={filter.id} className="inline-flex">
+                  {button}
+                </span>
               )
             })}
           </div>

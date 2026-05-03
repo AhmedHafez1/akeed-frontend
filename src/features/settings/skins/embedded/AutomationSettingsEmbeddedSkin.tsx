@@ -12,7 +12,6 @@ import {
   Select,
   Text,
   TextField,
-  Tooltip,
 } from '@shopify/polaris'
 import { QuestionCircleIcon, ShieldCheckMarkIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
@@ -21,11 +20,13 @@ import type { SettingsSkinProps } from '@/features/settings/domain/settings.type
 
 function HelpIcon({ content }: { content: string }) {
   return (
-    <Tooltip content={content} preferredPosition="above">
-      <span className="inline-flex h-5 w-5 items-center justify-center text-[#8a8a8a]">
-        <Icon source={QuestionCircleIcon} tone="subdued" />
-      </span>
-    </Tooltip>
+    <span
+      title={content}
+      aria-label={content}
+      className="inline-flex h-5 w-5 items-center justify-center text-[#8a8a8a]"
+    >
+      <Icon source={QuestionCircleIcon} tone="subdued" />
+    </span>
   )
 }
 

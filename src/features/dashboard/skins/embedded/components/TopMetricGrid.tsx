@@ -1,11 +1,4 @@
-import {
-  Box,
-  Icon,
-  InlineGrid,
-  InlineStack,
-  Text,
-  Tooltip,
-} from '@shopify/polaris'
+import { Box, Icon, InlineGrid, InlineStack, Text } from '@shopify/polaris'
 import { QuestionCircleIcon } from '@shopify/polaris-icons'
 
 export type PolarisTextTone = 'success' | 'critical' | 'caution' | 'subdued'
@@ -67,11 +60,13 @@ export function TopMetricGrid({ metrics, isRTL }: TopMetricGridProps) {
                 </span>
               </span>
               {metric.tooltip ? (
-                <Tooltip content={metric.tooltip} preferredPosition="above">
-                  <span className="flex h-4 w-4 shrink-0 items-center justify-center text-[#8a8a8a]">
-                    <Icon source={QuestionCircleIcon} tone="subdued" />
-                  </span>
-                </Tooltip>
+                <span
+                  title={metric.tooltip}
+                  aria-label={metric.tooltip}
+                  className="flex h-4 w-4 shrink-0 items-center justify-center text-[#8a8a8a]"
+                >
+                  <Icon source={QuestionCircleIcon} tone="subdued" />
+                </span>
               ) : null}
             </InlineStack>
             <Text variant="heading2xl" as="h2">
