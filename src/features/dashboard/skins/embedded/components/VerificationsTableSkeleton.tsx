@@ -12,16 +12,13 @@ export function VerificationsTableSkeleton() {
         { id: 'skeleton-status', title: '' },
         { id: 'skeleton-total', title: '' },
         { id: 'skeleton-created', title: '' },
+        { id: 'skeleton-actions', title: '' },
       ]}
       selectable={false}
       hasZebraStriping
     >
       {Array.from({ length: SKELETON_ROW_COUNT }, (_, index) => (
-        <IndexTable.Row
-          id={`skeleton-${index}`}
-          key={index}
-          position={index}
-        >
+        <IndexTable.Row id={`skeleton-${index}`} key={index} position={index}>
           <IndexTable.Cell>
             <SkeletonBodyText lines={2} />
           </IndexTable.Cell>
@@ -36,6 +33,9 @@ export function VerificationsTableSkeleton() {
           </IndexTable.Cell>
           <IndexTable.Cell>
             <SkeletonBodyText lines={2} />
+          </IndexTable.Cell>
+          <IndexTable.Cell>
+            <SkeletonBodyText lines={1} />
           </IndexTable.Cell>
         </IndexTable.Row>
       ))}

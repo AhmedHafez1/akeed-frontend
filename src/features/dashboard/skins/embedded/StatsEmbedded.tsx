@@ -21,6 +21,7 @@ import type {
   DashboardStats,
   DashboardStatsDateRange,
 } from '../../model/dashboard.model'
+import { StatsEmbeddedSkeletonHeader } from './components/StatsEmbeddedSkeletonHeader'
 
 interface StatsEmbeddedProps {
   stats: DashboardStats | null
@@ -176,18 +177,19 @@ export function StatsEmbedded({
 
   return (
     <BlockStack gap="400">
-      <StatsEmbeddedHeader
-        title={t('metrics.title')}
-        subtitle={t('metrics.subtitle')}
-        dateRangeLabel={t('filters.dateRange.label')}
-        dateRangeFilter={dateRangeFilter}
-        dateRangeOptions={dateRangeOptions}
-        isRTL={isRTL}
-        isAutoVerifyEnabled={isAutoVerifyEnabled}
-        followUpEnabled={followUpEnabled}
-        quietHoursEnabled={quietHoursEnabled}
-        onDateRangeFilterChange={onDateRangeFilterChange}
-      />
+      {isStatsLoading && !stats ? (
+        <StatsEmbeddedSkeletonHeader />
+      ) : (
+        <StatsEmbeddedHeader
+          dateRangeLabel={t('filters.dateRange.label')}
+          dateRangeFilter={dateRangeFilter}
+          dateRangeOptions={dateRangeOptions}
+          isAutoVerifyEnabled={isAutoVerifyEnabled}
+          followUpEnabled={followUpEnabled}
+          quietHoursEnabled={quietHoursEnabled}
+          onDateRangeFilterChange={onDateRangeFilterChange}
+        />
+      )}
 
       {isStatsLoading && !stats ? (
         <StatsEmbeddedSkeleton />

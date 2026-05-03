@@ -23,7 +23,7 @@ function VerificationsPageContent() {
 export default function VerificationsPage() {
   return (
     <EmbeddedAuthGate
-      fallback={<DashboardPageSkeleton />}
+      fallback={<DashboardPageSkeleton variant="verifications" />}
       onboardingGate="dashboard"
     >
       <VerificationsPageContent />

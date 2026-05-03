@@ -318,7 +318,11 @@ export default function OnboardingPage() {
   useAppBridgeLoading(isPageLoading || isBillingRedirecting)
 
   if (isPageLoading || isBillingRedirecting) {
-    return <OnboardingPageSkeleton />
+    return (
+      <OnboardingPageSkeleton
+        variant={isBillingRedirecting ? 'billing' : 'setup'}
+      />
+    )
   }
 
   return (

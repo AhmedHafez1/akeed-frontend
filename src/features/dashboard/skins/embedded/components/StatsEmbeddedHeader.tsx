@@ -1,15 +1,12 @@
-import { BlockStack, InlineStack, Select, Text } from '@shopify/polaris'
+import { InlineStack, Select } from '@shopify/polaris'
 import type { DateRangeFilterOption } from '@/features/dashboard/domain/dashboard.types'
 import type { DashboardStatsDateRange } from '@/features/dashboard/model/dashboard.model'
 import { ConfirmationStatusFlags } from './ConfirmationStatusFlags'
 
 interface StatsEmbeddedHeaderProps {
-  title: string
-  subtitle: string
   dateRangeLabel: string
   dateRangeFilter: DashboardStatsDateRange
   dateRangeOptions: ReadonlyArray<DateRangeFilterOption>
-  isRTL: boolean
   isAutoVerifyEnabled: boolean
   followUpEnabled: boolean
   quietHoursEnabled: boolean
@@ -17,7 +14,6 @@ interface StatsEmbeddedHeaderProps {
 }
 
 export function StatsEmbeddedHeader({
-  title,
   dateRangeLabel,
   dateRangeFilter,
   dateRangeOptions,

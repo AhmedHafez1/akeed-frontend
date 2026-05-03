@@ -23,7 +23,7 @@ function DashboardPageContent() {
 export default function DashboardPage() {
   return (
     <EmbeddedAuthGate
-      fallback={<DashboardPageSkeleton />}
+      fallback={<DashboardPageSkeleton variant="stats" />}
       onboardingGate="dashboard"
     >
       <DashboardPageContent />
