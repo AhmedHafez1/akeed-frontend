@@ -86,6 +86,12 @@ export function AppHeader() {
             >
               {t('settings')}
             </Link>
+            <Link
+              href={withLocale('/automation-settings', locale)}
+              className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900"
+            >
+              {t('automationSettings')}
+            </Link>
           </nav>
         </div>
 

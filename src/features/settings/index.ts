@@ -1,4 +1,6 @@
 export { useSettings } from './domain/useSettings'
 export type { SettingsSkinProps } from './domain/settings.types'
+export { AutomationSettingsEmbeddedSkin } from './skins/embedded/AutomationSettingsEmbeddedSkin'
+export { AutomationSettingsStandaloneSkin } from './skins/standalone/AutomationSettingsStandaloneSkin'
 export { SettingsEmbeddedSkin } from './skins/embedded/SettingsEmbeddedSkin'
 export { SettingsStandaloneSkin } from './skins/standalone/SettingsStandaloneSkin'

@@ -48,6 +48,12 @@ export function EmbeddedNavigation() {
     hostParam: resolvedContext.hostParam,
   })
 
+  const automationSettingsHref = appendEmbeddedParamsToPath({
+    path: `/${locale}/automation-settings`,
+    shopDomain: resolvedContext.shopDomain,
+    hostParam: resolvedContext.hostParam,
+  })
+
   return (
     <ui-nav-menu>
       <a href={dashboardHref} rel="home">
@@ -55,6 +61,7 @@ export function EmbeddedNavigation() {
       </a>
       <a href={verificationsHref}>Verifications</a>
       <a href={settingsHref}>Settings</a>
+      <a href={automationSettingsHref}>Automation Settings</a>
     </ui-nav-menu>
   )
 }

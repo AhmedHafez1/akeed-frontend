@@ -51,6 +51,7 @@ export interface SettingsSkinProps {
   quietHoursError: string | undefined
   timezone: AutomationTimezone
   timezoneOptions: ReadonlyArray<SettingsSelectOption<AutomationTimezone>>
+  escalationReviewDescription: string
 
   isSaving: boolean
   errorBanner: string | null

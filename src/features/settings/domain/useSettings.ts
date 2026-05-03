@@ -18,10 +18,7 @@ import {
 import { useAppBridgeLoading } from '@/shared/hooks/useAppBridgeLoading'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
-import type {
-  SettingsSelectOption,
-  SettingsSkinProps,
-} from './settings.types'
+import type { SettingsSelectOption, SettingsSkinProps } from './settings.types'
 
 type BillingStatusKey =
   | 'billingStatusActive'
@@ -87,16 +84,39 @@ function formatPlanId(planId: OnboardingBillingPlanId): string {
   return planId.charAt(0).toUpperCase() + planId.slice(1)
 }
 
-function parseIntegerField(value: string): number | null {
+function parseHourField(value: string): number | null {
   const trimmed = value.trim()
-  if (!/^\d+$/.test(trimmed)) return null
+  if (!/^\d+(\.\d{1,2})?$/.test(trimmed)) return null
 
-  const parsed = Number.parseInt(trimmed, 10)
-  return Number.isSafeInteger(parsed) ? parsed : null
+  const parsed = Number.parseFloat(trimmed)
+  return Number.isFinite(parsed) ? parsed : null
 }
 
-function toMinutesInput(value: number | null | undefined, fallback: number) {
-  return String(value ?? fallback)
+function hoursToMinutes(value: number): number {
+  return Math.round(value * 60)
+}
+
+function toHoursInput(value: number | null | undefined, fallback: number) {
+  const minutes = value ?? fallback
+  const hours = minutes / 60
+  return Number.isInteger(hours)
+    ? String(hours)
+    : String(Number(hours.toFixed(2)))
+}
+
+function formatDelayUnit(hours: number) {
+  if (Number.isInteger(hours)) {
+    return {
+      value: hours,
+      unit: hours === 1 ? 'hour' : 'hours',
+    }
+  }
+
+  const minutes = Math.round(hours * 60)
+  return {
+    value: minutes,
+    unit: minutes === 1 ? 'minute' : 'minutes',
+  }
 }
 
 export function useSettings(): {
@@ -144,8 +164,7 @@ export function useSettings(): {
   const [quietHoursStart, setQuietHoursStart] = useState('21:00')
   const [quietHoursEnd, setQuietHoursEnd] = useState('09:00')
   const [quietHoursError, setQuietHoursError] = useState<string | undefined>()
-  const [timezone, setTimezone] =
-    useState<AutomationTimezone>('Asia/Riyadh')
+  const [timezone, setTimezone] = useState<AutomationTimezone>('Asia/Riyadh')
 
   const [billingPlanId, setBillingPlanId] =
     useState<OnboardingBillingPlanId | null>(null)
@@ -225,12 +244,10 @@ export function useSettings(): {
         setDefaultLanguage(state.defaultLanguage)
         setIsAutoVerifyEnabled(state.isAutoVerifyEnabled)
         setFollowUpEnabled(state.followUpEnabled)
-        setSendDelayMinutes(toMinutesInput(state.sendDelayMinutes, 0))
-        setFollowUpDelayMinutes(
-          toMinutesInput(state.followUpDelayMinutes, 120)
-        )
+        setSendDelayMinutes(toHoursInput(state.sendDelayMinutes, 0))
+        setFollowUpDelayMinutes(toHoursInput(state.followUpDelayMinutes, 120))
         setEscalationDelayMinutes(
-          toMinutesInput(state.escalationDelayMinutes, 360)
+          toHoursInput(state.escalationDelayMinutes, 360)
         )
         setQuietHoursEnabled(state.quietHoursEnabled)
         setQuietHoursStart(state.quietHoursStart ?? '21:00')
@@ -323,6 +340,12 @@ export function useSettings(): {
     }
   }, [stats, t])
 
+  const escalationReviewDescription = useMemo(() => {
+    const parsed = parseHourField(escalationDelayMinutes) ?? 6
+    const { value, unit } = formatDelayUnit(parsed)
+    return t('automation.escalationReviewDescription', { value, unit })
+  }, [escalationDelayMinutes, t])
+
   const handleChangePlan = useCallback(async () => {
     if (!selectedPlanId || selectedPlanId === billingPlanId) return
 
@@ -352,9 +375,9 @@ export function useSettings(): {
   const validateSettings = useCallback(() => {
     const trimmedStoreName = storeName.trim()
     const parsedAvgShippingCost = Number.parseFloat(avgShippingCost)
-    const parsedSendDelay = parseIntegerField(sendDelayMinutes)
-    const parsedFollowUpDelay = parseIntegerField(followUpDelayMinutes)
-    const parsedEscalationDelay = parseIntegerField(escalationDelayMinutes)
+    const parsedSendDelayHours = parseHourField(sendDelayMinutes)
+    const parsedFollowUpDelayHours = parseHourField(followUpDelayMinutes)
+    const parsedEscalationDelayHours = parseHourField(escalationDelayMinutes)
 
     const nextStoreNameError = trimmedStoreName
       ? undefined
@@ -364,26 +387,31 @@ export function useSettings(): {
         ? undefined
         : t('avgShippingCostInvalid')
     const nextSendDelayMinutesError =
-      parsedSendDelay !== null && parsedSendDelay >= 0 && parsedSendDelay <= 1440
+      parsedSendDelayHours !== null &&
+      parsedSendDelayHours >= 0 &&
+      parsedSendDelayHours <= 720
         ? undefined
         : t('automation.validation.sendDelayMinutes')
     const nextFollowUpDelayMinutesError =
       !followUpEnabled ||
-      (parsedFollowUpDelay !== null &&
-        parsedFollowUpDelay >= 0 &&
-        parsedFollowUpDelay <= 10080)
+      (parsedFollowUpDelayHours !== null &&
+        parsedFollowUpDelayHours >= 0 &&
+        parsedFollowUpDelayHours <= 720)
         ? undefined
         : t('automation.validation.followUpDelayMinutes')
     const nextEscalationDelayMinutesError =
-      parsedEscalationDelay !== null &&
-      parsedEscalationDelay >= 0 &&
-      parsedEscalationDelay <= 10080
+      parsedEscalationDelayHours !== null &&
+      parsedEscalationDelayHours >= 0 &&
+      parsedEscalationDelayHours <= 720
         ? undefined
         : t('automation.validation.escalationDelayMinutes')
 
     let nextQuietHoursError: string | undefined
     if (quietHoursEnabled) {
-      if (!TIME_PATTERN.test(quietHoursStart) || !TIME_PATTERN.test(quietHoursEnd)) {
+      if (
+        !TIME_PATTERN.test(quietHoursStart) ||
+        !TIME_PATTERN.test(quietHoursEnd)
+      ) {
         nextQuietHoursError = t('automation.validation.quietHoursRequired')
       }
     }
@@ -394,12 +422,16 @@ export function useSettings(): {
       followUpEnabled &&
       !resolvedFollowUpDelayError &&
       !resolvedEscalationDelayError &&
-      parsedFollowUpDelay !== null &&
-      parsedEscalationDelay !== null &&
-      parsedFollowUpDelay >= parsedEscalationDelay
+      parsedFollowUpDelayHours !== null &&
+      parsedEscalationDelayHours !== null &&
+      parsedFollowUpDelayHours >= parsedEscalationDelayHours
     ) {
-      resolvedFollowUpDelayError = t('automation.validation.followUpBeforeEscalation')
-      resolvedEscalationDelayError = t('automation.validation.followUpBeforeEscalation')
+      resolvedFollowUpDelayError = t(
+        'automation.validation.followUpBeforeEscalation'
+      )
+      resolvedEscalationDelayError = t(
+        'automation.validation.followUpBeforeEscalation'
+      )
     }
 
     setStoreNameError(nextStoreNameError)
@@ -416,8 +448,8 @@ export function useSettings(): {
       resolvedFollowUpDelayError ||
       resolvedEscalationDelayError ||
       nextQuietHoursError ||
-      parsedSendDelay === null ||
-      parsedEscalationDelay === null
+      parsedSendDelayHours === null ||
+      parsedEscalationDelayHours === null
     ) {
       return null
     }
@@ -425,9 +457,11 @@ export function useSettings(): {
     return {
       trimmedStoreName,
       avgShippingCost: Number(parsedAvgShippingCost.toFixed(2)),
-      sendDelayMinutes: parsedSendDelay,
-      followUpDelayMinutes: parsedFollowUpDelay ?? 0,
-      escalationDelayMinutes: parsedEscalationDelay,
+      sendDelayMinutes: hoursToMinutes(parsedSendDelayHours),
+      followUpDelayMinutes: parsedFollowUpDelayHours
+        ? hoursToMinutes(parsedFollowUpDelayHours)
+        : 0,
+      escalationDelayMinutes: hoursToMinutes(parsedEscalationDelayHours),
     }
   }, [
     avgShippingCost,
@@ -450,8 +484,6 @@ export function useSettings(): {
     if (!validated) return
 
     setIsSaving(true)
-    setSuccessBanner(t('saveSuccess'))
-    shopify?.toast.show(t('saveSuccess'))
 
     const previous = {
       storeName,
@@ -490,13 +522,15 @@ export function useSettings(): {
 
       setStoreName(state.storeName ?? validated.trimmedStoreName)
       setShippingCurrency(state.shippingCurrency ?? shippingCurrency)
-      setAvgShippingCost(String(state.avgShippingCost ?? validated.avgShippingCost))
+      setAvgShippingCost(
+        String(state.avgShippingCost ?? validated.avgShippingCost)
+      )
       setDefaultLanguage(state.defaultLanguage)
       setIsAutoVerifyEnabled(state.isAutoVerifyEnabled)
       setFollowUpEnabled(state.followUpEnabled)
-      setSendDelayMinutes(toMinutesInput(state.sendDelayMinutes, 0))
-      setFollowUpDelayMinutes(toMinutesInput(state.followUpDelayMinutes, 120))
-      setEscalationDelayMinutes(toMinutesInput(state.escalationDelayMinutes, 360))
+      setSendDelayMinutes(toHoursInput(state.sendDelayMinutes, 0))
+      setFollowUpDelayMinutes(toHoursInput(state.followUpDelayMinutes, 120))
+      setEscalationDelayMinutes(toHoursInput(state.escalationDelayMinutes, 360))
       setQuietHoursEnabled(state.quietHoursEnabled)
       setQuietHoursStart(state.quietHoursStart ?? quietHoursStart)
       setQuietHoursEnd(state.quietHoursEnd ?? quietHoursEnd)
@@ -504,6 +538,8 @@ export function useSettings(): {
       setBillingPlanId(state.billingPlanId)
       setBillingStatus(state.billingStatus)
       setBillingManagementUrl(state.billingManagementUrl)
+      setSuccessBanner(t('saveSuccess'))
+      shopify?.toast.show(t('saveSuccess'))
     } catch (error) {
       console.error('[Settings] Failed to save onboarding settings:', error)
       setSuccessBanner(null)
@@ -585,6 +621,7 @@ export function useSettings(): {
       quietHoursError,
       timezone,
       timezoneOptions,
+      escalationReviewDescription,
       isSaving,
       errorBanner,
       successBanner,

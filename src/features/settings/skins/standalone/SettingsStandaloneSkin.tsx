@@ -1,15 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { useTranslations } from 'next-intl'
-import {
-  getTemplateContent,
-  renderTemplateBody,
-  sampleData,
-  type TemplateLanguage,
-} from '@/features/message-preview'
 import type {
-  AutomationTimezone,
   IntegrationOnboardingLanguage,
   OnboardingBillingPlanId,
 } from '@/features/onboarding'
@@ -28,11 +22,18 @@ interface FieldProps {
 function Field({ label, error, helpText, children }: FieldProps) {
   return (
     <div className="space-y-2">
-      <Label>{label}</Label>
+      <div className="flex items-center gap-2">
+        <Label>{label}</Label>
+        {helpText && (
+          <span
+            title={helpText}
+            className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 text-[10px] font-semibold text-slate-500"
+          >
+            ?
+          </span>
+        )}
+      </div>
       {children}
-      {helpText && !error && (
-        <p className="text-xs text-slate-500">{helpText}</p>
-      )}
       {error && <p className="text-xs font-medium text-red-600">{error}</p>}
     </div>
   )
@@ -62,35 +63,6 @@ function NativeSelect<TValue extends string>({
   )
 }
 
-function ToggleRow({
-  label,
-  description,
-  checked,
-  onChange,
-}: {
-  label: string
-  description: string
-  checked: boolean
-  onChange: (checked: boolean) => void
-}) {
-  return (
-    <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 transition-colors hover:bg-slate-100">
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={(event) => onChange(event.target.checked)}
-        className="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
-      />
-      <span className="space-y-1">
-        <span className="block text-sm font-semibold text-slate-900">
-          {label}
-        </span>
-        <span className="block text-sm text-slate-500">{description}</span>
-      </span>
-    </label>
-  )
-}
-
 function SectionCard({
   title,
   description,
@@ -117,10 +89,11 @@ function SectionCard({
 
 function StandaloneTemplatePreview() {
   const t = useTranslations('messagePreview')
-  const [language, setLanguage] = useState<TemplateLanguage>('ar')
-  const template = getTemplateContent(language)
-  const messageText = renderTemplateBody(template, sampleData)
-  const isRtl = language === 'ar'
+  const [language, setLanguage] = useState<IntegrationOnboardingLanguage>('ar')
+  const previewSrc =
+    language === 'ar'
+      ? '/images/Preview/ar-preview-light.png'
+      : '/images/Preview/en-preview-light.png'
 
   return (
     <SectionCard title={t('title')} description={t('subtitle')}>
@@ -143,28 +116,21 @@ function StandaloneTemplatePreview() {
         </Button>
       </div>
 
-      <div className="rounded-2xl bg-slate-100 p-4">
+      <div className="rounded-2xl border border-slate-200 bg-slate-100 p-4">
         <div className="mb-3 flex items-center gap-2">
           <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-medium text-emerald-700">
             {t('whatsappLabel')}
           </span>
           <span className="text-xs text-slate-500">{t('sampleBadge')}</span>
         </div>
-
-        <div
-          dir={isRtl ? 'rtl' : 'ltr'}
-          className="rounded-xl bg-white p-4 text-sm leading-relaxed whitespace-pre-line text-slate-800 shadow-sm"
-        >
-          {messageText}
-        </div>
-
-        <div className="mt-3 flex flex-wrap gap-2">
-          <span className="rounded-lg bg-emerald-100 px-3 py-2 text-sm font-medium text-emerald-700">
-            {template.confirmButton}
-          </span>
-          <span className="rounded-lg bg-red-100 px-3 py-2 text-sm font-medium text-red-700">
-            {template.cancelButton}
-          </span>
+        <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <Image
+            src={previewSrc}
+            alt={t('title')}
+            width={1200}
+            height={750}
+            className="h-auto w-full"
+          />
         </div>
       </div>
 
@@ -339,132 +305,6 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
               }
             />
           </Field>
-        </div>
-      </SectionCard>
-
-      <SectionCard
-        title={t('automation.heading')}
-        description={t('automation.description')}
-      >
-        <div className="space-y-5">
-          <ToggleRow
-            label={t('autoVerifyLabel')}
-            description={t('autoVerifyDescription')}
-            checked={props.isAutoVerifyEnabled}
-            onChange={props.onAutoVerifyChange}
-          />
-
-          <Field
-            label={t('automation.sendDelayMinutesLabel')}
-            helpText={t('automation.sendDelayMinutesHelp')}
-            error={props.sendDelayMinutesError}
-          >
-            <Input
-              type="number"
-              min={0}
-              max={1440}
-              step={1}
-              value={props.sendDelayMinutes}
-              onChange={(event) =>
-                props.onSendDelayMinutesChange(event.target.value)
-              }
-            />
-          </Field>
-
-          <div className="border-t border-slate-100 pt-5">
-            <ToggleRow
-              label={t('automation.followUpEnabledLabel')}
-              description={t('automation.followUpEnabledHelp')}
-              checked={props.followUpEnabled}
-              onChange={props.onFollowUpEnabledChange}
-            />
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            <Field
-              label={t('automation.followUpDelayMinutesLabel')}
-              error={props.followUpDelayMinutesError}
-            >
-              <Input
-                type="number"
-                min={0}
-                max={10080}
-                step={1}
-                disabled={!props.followUpEnabled}
-                value={props.followUpDelayMinutes}
-                onChange={(event) =>
-                  props.onFollowUpDelayMinutesChange(event.target.value)
-                }
-              />
-            </Field>
-
-            <Field
-              label={t('automation.escalationDelayMinutesLabel')}
-              helpText={t('automation.escalationDelayMinutesHelp')}
-              error={props.escalationDelayMinutesError}
-            >
-              <Input
-                type="number"
-                min={0}
-                max={10080}
-                step={1}
-                value={props.escalationDelayMinutes}
-                onChange={(event) =>
-                  props.onEscalationDelayMinutesChange(event.target.value)
-                }
-              />
-            </Field>
-          </div>
-
-          <div className="border-t border-slate-100 pt-5">
-            <ToggleRow
-              label={t('automation.quietHoursEnabledLabel')}
-              description={t('automation.quietHoursEnabledHelp')}
-              checked={props.quietHoursEnabled}
-              onChange={props.onQuietHoursEnabledChange}
-            />
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-3">
-            <Field
-              label={t('automation.quietHoursStartLabel')}
-              error={props.quietHoursError}
-            >
-              <Input
-                type="time"
-                disabled={!props.quietHoursEnabled}
-                value={props.quietHoursStart}
-                onChange={(event) =>
-                  props.onQuietHoursStartChange(event.target.value)
-                }
-              />
-            </Field>
-            <Field label={t('automation.quietHoursEndLabel')}>
-              <Input
-                type="time"
-                disabled={!props.quietHoursEnabled}
-                value={props.quietHoursEnd}
-                onChange={(event) =>
-                  props.onQuietHoursEndChange(event.target.value)
-                }
-              />
-            </Field>
-            <Field label={t('automation.timezoneLabel')}>
-              <NativeSelect<AutomationTimezone>
-                value={props.timezone}
-                options={props.timezoneOptions}
-                onChange={props.onTimezoneChange}
-              />
-            </Field>
-          </div>
-
-          <Button
-            type="button"
-            disabled={props.isSaving}
-            onClick={() => void props.onSave()}
-          >
-            {props.isSaving ? t('savingButton') : t('saveButton')}
-          </Button>
         </div>
       </SectionCard>
 

@@ -1,23 +1,26 @@
 import {
   Banner,
   BlockStack,
+  Box,
   Button,
   Card,
-  Checkbox,
-  Divider,
+  Icon,
+  InlineStack,
   Layout,
   Page,
   Select,
   Text,
   TextField,
+  Tooltip,
 } from '@shopify/polaris'
+import { QuestionCircleIcon, ShieldCheckMarkIcon } from '@shopify/polaris-icons'
+import Image from 'next/image'
+import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { VerificationTemplatePreview } from '@/features/message-preview'
 import type {
   IntegrationOnboardingLanguage,
   OnboardingBillingPlanId,
 } from '@/features/onboarding'
-import type { AutomationTimezone } from '@/features/onboarding'
 import type { SettingsSkinProps } from '@/features/settings/domain/settings.types'
 
 const SUBSCRIPTION_SECTION_ID = 'subscription-usage'
@@ -175,6 +178,101 @@ function EmbeddedUsageOverview({
   )
 }
 
+function HelpIcon({ content }: { content: string }) {
+  return (
+    <Tooltip content={content} preferredPosition="above">
+      <span className="inline-flex h-5 w-5 items-center justify-center text-[#8a8a8a]">
+        <Icon source={QuestionCircleIcon} tone="subdued" />
+      </span>
+    </Tooltip>
+  )
+}
+
+function FieldLabel({ label, help }: { label: string; help?: string }) {
+  return (
+    <InlineStack gap="100" blockAlign="center">
+      <Text as="span" variant="bodyMd">
+        {label}
+      </Text>
+      {help ? <HelpIcon content={help} /> : null}
+    </InlineStack>
+  )
+}
+
+function EmbeddedLanguagePreview() {
+  const t = useTranslations('messagePreview')
+  const [language, setLanguage] = useState<IntegrationOnboardingLanguage>('ar')
+  const previewSrc =
+    language === 'ar'
+      ? '/images/Preview/ar-preview-light.png'
+      : '/images/Preview/en-preview-light.png'
+
+  return (
+    <Card>
+      <BlockStack gap="400">
+        <InlineStack align="space-between" blockAlign="center" gap="300">
+          <BlockStack gap="100">
+            <Text as="h2" variant="headingMd">
+              {t('title')}
+            </Text>
+            <InlineStack gap="150" blockAlign="center">
+              <span className="inline-flex rounded-md bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 ring-1 ring-emerald-200">
+                {t('whatsappLabel')}
+              </span>
+              <Text as="span" tone="subdued" variant="bodySm">
+                {t('sampleBadge')}
+              </Text>
+            </InlineStack>
+          </BlockStack>
+
+          <InlineStack gap="200">
+            <Button
+              size="slim"
+              pressed={language === 'ar'}
+              onClick={() => setLanguage('ar')}
+            >
+              {t('languageArabic')}
+            </Button>
+            <Button
+              size="slim"
+              pressed={language === 'en'}
+              onClick={() => setLanguage('en')}
+            >
+              {t('languageEnglish')}
+            </Button>
+          </InlineStack>
+        </InlineStack>
+
+        <Box
+          background="bg-surface-secondary"
+          borderColor="border"
+          borderRadius="300"
+          borderWidth="025"
+          padding="300"
+        >
+          <div className="overflow-hidden rounded-xl border border-[#d9d9d9] bg-white shadow-sm">
+            <Image
+              src={previewSrc}
+              alt={t('title')}
+              width={1200}
+              height={750}
+              className="h-auto w-full"
+              priority={false}
+            />
+          </div>
+        </Box>
+
+        <InlineStack gap="200" blockAlign="center">
+          <Icon source={ShieldCheckMarkIcon} tone="success" />
+          <Text as="p" tone="subdued" variant="bodySm">
+            {t('trustNote')}
+          </Text>
+        </InlineStack>
+      </BlockStack>
+    </Card>
+  )
+}
+
 export function SettingsEmbeddedSkin(props: SettingsSkinProps) {
   const t = useTranslations('settings')
 
@@ -227,137 +325,27 @@ export function SettingsEmbeddedSkin(props: SettingsSkinProps) {
                   onChange={props.onShippingCurrencyChange}
                 />
 
-                <TextField
-                  label={t('avgShippingCostLabel')}
-                  type="number"
-                  autoComplete="off"
-                  min={0}
-                  step={0.01}
-                  value={props.avgShippingCost}
-                  onChange={props.onAvgShippingCostChange}
-                  error={props.avgShippingCostError}
-                  helpText={t('avgShippingCostHelp')}
-                />
-              </BlockStack>
-            </Card>
-
-            <Card>
-              <BlockStack gap="400">
-                <BlockStack gap="150">
-                  <Text as="h2" variant="headingMd">
-                    {t('automation.heading')}
-                  </Text>
-                  <Text as="p" tone="subdued" variant="bodySm">
-                    {t('automation.description')}
-                  </Text>
+                <BlockStack gap="100">
+                  <FieldLabel
+                    label={t('avgShippingCostLabel')}
+                    help={t('avgShippingCostHelp')}
+                  />
+                  <TextField
+                    label={t('avgShippingCostLabel')}
+                    labelHidden
+                    type="number"
+                    autoComplete="off"
+                    min={0}
+                    step={0.01}
+                    value={props.avgShippingCost}
+                    onChange={props.onAvgShippingCostChange}
+                    error={props.avgShippingCostError}
+                  />
                 </BlockStack>
-
-                <Checkbox
-                  label={t('autoVerifyLabel')}
-                  helpText={t('autoVerifyDescription')}
-                  checked={props.isAutoVerifyEnabled}
-                  onChange={props.onAutoVerifyChange}
-                />
-
-                <TextField
-                  label={t('automation.sendDelayMinutesLabel')}
-                  type="number"
-                  autoComplete="off"
-                  min={0}
-                  max={1440}
-                  step={1}
-                  value={props.sendDelayMinutes}
-                  onChange={props.onSendDelayMinutesChange}
-                  error={props.sendDelayMinutesError}
-                  helpText={t('automation.sendDelayMinutesHelp')}
-                />
-
-                <Divider />
-
-                <Checkbox
-                  label={t('automation.followUpEnabledLabel')}
-                  helpText={t('automation.followUpEnabledHelp')}
-                  checked={props.followUpEnabled}
-                  onChange={props.onFollowUpEnabledChange}
-                />
-
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <TextField
-                    label={t('automation.followUpDelayMinutesLabel')}
-                    type="number"
-                    autoComplete="off"
-                    min={0}
-                    max={10080}
-                    step={1}
-                    value={props.followUpDelayMinutes}
-                    onChange={props.onFollowUpDelayMinutesChange}
-                    error={props.followUpDelayMinutesError}
-                    disabled={!props.followUpEnabled}
-                  />
-                  <TextField
-                    label={t('automation.escalationDelayMinutesLabel')}
-                    type="number"
-                    autoComplete="off"
-                    min={0}
-                    max={10080}
-                    step={1}
-                    value={props.escalationDelayMinutes}
-                    onChange={props.onEscalationDelayMinutesChange}
-                    error={props.escalationDelayMinutesError}
-                    helpText={t('automation.escalationDelayMinutesHelp')}
-                  />
-                </div>
-
-                <Divider />
-
-                <Checkbox
-                  label={t('automation.quietHoursEnabledLabel')}
-                  helpText={t('automation.quietHoursEnabledHelp')}
-                  checked={props.quietHoursEnabled}
-                  onChange={props.onQuietHoursEnabledChange}
-                />
-
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                  <TextField
-                    label={t('automation.quietHoursStartLabel')}
-                    type="time"
-                    autoComplete="off"
-                    value={props.quietHoursStart}
-                    onChange={props.onQuietHoursStartChange}
-                    disabled={!props.quietHoursEnabled}
-                    error={props.quietHoursError}
-                  />
-                  <TextField
-                    label={t('automation.quietHoursEndLabel')}
-                    type="time"
-                    autoComplete="off"
-                    value={props.quietHoursEnd}
-                    onChange={props.onQuietHoursEndChange}
-                    disabled={!props.quietHoursEnabled}
-                  />
-                  <Select
-                    label={t('automation.timezoneLabel')}
-                    options={[...props.timezoneOptions]}
-                    value={props.timezone}
-                    onChange={(value) =>
-                      props.onTimezoneChange(value as AutomationTimezone)
-                    }
-                  />
-                </div>
-
-                <Button
-                  variant="primary"
-                  loading={props.isSaving}
-                  onClick={() => void props.onSave()}
-                >
-                  {t('saveButton')}
-                </Button>
               </BlockStack>
             </Card>
 
-            <Card>
-              <VerificationTemplatePreview variant="full" />
-            </Card>
+            <EmbeddedLanguagePreview />
 
             <div id={SUBSCRIPTION_SECTION_ID}>
               <Card>
