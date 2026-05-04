@@ -14,7 +14,7 @@ import {
   Page,
   Text,
 } from '@shopify/polaris'
-import { InfoIcon, ShieldCheckMarkIcon, ViewIcon } from '@shopify/polaris-icons'
+import { ShieldCheckMarkIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import type { IntegrationOnboardingLanguage } from '@/features/onboarding'
 
@@ -55,25 +55,17 @@ export function MessagePreviewEmbeddedSkin() {
 
           <Layout.Section>
             <Card>
-              <BlockStack gap="400">
-                <InlineStack gap="200" blockAlign="center">
-                  <Icon source={ViewIcon} tone="subdued" />
-                  <Text as="h2" variant="headingMd">
-                    {t('previewHeading')}
-                  </Text>
+              <Box
+                background="bg-surface-secondary"
+                borderColor="border"
+                borderRadius="300"
+                borderWidth="025"
+                padding={{ xs: '400', md: '600' }}
+              >
+                <InlineStack align="center">
+                  <PhoneImagePreview src={previewSrc} alt={t('imageAlt')} />
                 </InlineStack>
-                <Box
-                  background="bg-surface-secondary"
-                  borderColor="border"
-                  borderRadius="300"
-                  borderWidth="025"
-                  padding={{ xs: '400', md: '600' }}
-                >
-                  <InlineStack align="center">
-                    <PhoneImagePreview src={previewSrc} alt={t('imageAlt')} />
-                  </InlineStack>
-                </Box>
-              </BlockStack>
+              </Box>
             </Card>
           </Layout.Section>
         </Layout>
@@ -100,12 +92,9 @@ function TemplateInfoCard({
   return (
     <Card>
       <BlockStack gap="500">
-        <InlineStack gap="200" blockAlign="center">
-          <Text as="h2" variant="headingMd">
-            {title}
-          </Text>
-          <Icon source={InfoIcon} tone="subdued" />
-        </InlineStack>
+        <Text as="h2" variant="headingMd">
+          {title}
+        </Text>
 
         <Text as="p" variant="bodyMd">
           {description}
