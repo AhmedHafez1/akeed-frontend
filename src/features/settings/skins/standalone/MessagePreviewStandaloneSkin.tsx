@@ -19,8 +19,8 @@ export function MessagePreviewStandaloneSkin() {
   const [language, setLanguage] = useState<IntegrationOnboardingLanguage>('ar')
   const previewSrc =
     language === 'ar'
-      ? '/images/Preview/ar-preview-light.png'
-      : '/images/Preview/en-preview-light.png'
+      ? '/images/preview/ar-prev.png'
+      : '/images/preview/en-prev.png'
   const variableRows: VariableRow[] = [
     { label: t('variables.orderNumber'), value: t('values.orderNumber') },
     { label: t('variables.paymentMethod'), value: t('values.paymentMethod') },

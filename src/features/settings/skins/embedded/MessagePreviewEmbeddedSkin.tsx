@@ -23,8 +23,8 @@ export function MessagePreviewEmbeddedSkin() {
   const [language, setLanguage] = useState<IntegrationOnboardingLanguage>('ar')
   const previewSrc =
     language === 'ar'
-      ? '/images/preview/ar-preview-light.png'
-      : '/images/preview/en-preview-dark.png'
+      ? '/images/preview/ar-prev.png'
+      : '/images/preview/en-prev.png'
 
   return (
     <Page title={t('pageTitle')} subtitle={t('pageSubtitle')}>
@@ -154,7 +154,7 @@ function TrustCard({ title, note }: { title: string; note: string }) {
 
 function PhoneImagePreview({ src, alt }: { src: string; alt: string }) {
   return (
-    <div className="relative w-full max-w-[340px] rounded-[2.75rem] border-[10px] border-[#111213] bg-[#111213] shadow-xl">
+    <div className="w-265-px relative max-w-[265px] rounded-[2.75rem] border-[10px] border-[#111213] bg-[#111213] shadow-xl">
       <div className="absolute top-4 left-1/2 z-10 h-6 w-24 -translate-x-1/2 rounded-full bg-black" />
 
       <div className="overflow-hidden rounded-[2.05rem] bg-white">
@@ -166,14 +166,14 @@ function PhoneImagePreview({ src, alt }: { src: string; alt: string }) {
           </span>
         </div>
 
-        <div className="relative h-[560px] w-full overflow-hidden bg-white">
+        <div className="relative overflow-hidden bg-white">
           <Image
             src={src}
             alt={alt}
-            fill
             priority={false}
-            className="object-contain object-top"
-            sizes="340px"
+            className="object-cover object-top"
+            height={560}
+            width={265}
           />
         </div>
       </div>
