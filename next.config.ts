@@ -52,20 +52,25 @@ const nextConfig: NextConfig = {
   },
   // Rewrites for locale-less default
   async rewrites() {
-    return [
-      {
-        source: '/webhooks/:path*',
-        destination: `${apiBaseUrl}/webhooks/:path*`,
-      },
-      {
-        source: '/api/:path*',
-        destination: `${apiBaseUrl}/api/:path*`,
-      },
-      {
-        source: '/',
-        destination: '/ar', // Default to Arabic
-      },
-    ]
+    return {
+      beforeFiles: [
+        {
+          source: '/webhooks/:path*',
+          destination: `${apiBaseUrl}/webhooks/:path*`,
+        },
+      ],
+      afterFiles: [
+        {
+          source: '/api/:path*',
+          destination: `${apiBaseUrl}/api/:path*`,
+        },
+        {
+          source: '/',
+          destination: '/ar', // Default to Arabic
+        },
+      ],
+      fallback: [],
+    }
   },
   allowedDevOrigins: ['*'],
 }

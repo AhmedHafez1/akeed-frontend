@@ -11,6 +11,6 @@ export const config = {
   matcher: [
     '/',
     '/(ar|en)/:path*',
-    '/((?!api|auth/shopify|_next|_vercel|images|fonts|.*\\..*).*)',
+    '/((?!api|webhooks|auth/shopify|_next|_vercel|images|fonts|.*\\..*).*)',
   ],
 }
