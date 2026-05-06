@@ -83,9 +83,53 @@ async function getAuthToken(): Promise<string | null> {
  * In App Bridge v4, the CDN script exposes `window.shopify` with an
  * `idToken()` method that returns the current session token (JWT).
  * No npm package or App Bridge instance is needed.
+ *
+ * The token is cached until 5 seconds before its JWT `exp` claim to
+ * avoid repeated async App Bridge round-trips when multiple
+ * `fetchWithAuth` calls fire in parallel during a single page mount.
  */
+
+interface SessionTokenCache {
+  token: string
+  expiresAt: number
+}
+
+let sessionTokenCache: SessionTokenCache | null = null
+
+/** Fallback TTL when the JWT `exp` claim cannot be parsed. */
+const SESSION_TOKEN_FALLBACK_TTL_MS = 30_000
+
+/** Safety margin subtracted from JWT `exp` to avoid serving near-expiry tokens. */
+const SESSION_TOKEN_EXPIRY_MARGIN_MS = 5_000
+
+/**
+ * Decode the `exp` claim from a JWT without pulling in a library.
+ * Returns epoch-seconds or null if the token cannot be parsed.
+ */
+function getJwtExpiry(token: string): number | null {
+  try {
+    const parts = token.split('.')
+    if (parts.length !== 3) return null
+    const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/')
+    const json = atob(base64)
+    const payload = JSON.parse(json) as { exp?: number }
+    return typeof payload.exp === 'number' ? payload.exp : null
+  } catch {
+    return null
+  }
+}
+
+/** Clear the cached session token so the next call fetches a fresh one. */
+function clearSessionTokenCache(): void {
+  sessionTokenCache = null
+}
+
 async function getShopifySessionToken(): Promise<string | null> {
   try {
+    if (sessionTokenCache && Date.now() < sessionTokenCache.expiresAt) {
+      return sessionTokenCache.token
+    }
+
     const shopify = window.shopify
 
     if (!shopify) {
@@ -96,6 +140,17 @@ async function getShopifySessionToken(): Promise<string | null> {
     }
 
     const token = await shopify.idToken()
+
+    if (token) {
+      const expSec = getJwtExpiry(token)
+      sessionTokenCache = {
+        token,
+        expiresAt: expSec
+          ? expSec * 1000 - SESSION_TOKEN_EXPIRY_MARGIN_MS
+          : Date.now() + SESSION_TOKEN_FALLBACK_TTL_MS,
+      }
+    }
+
     return token
   } catch (error) {
     console.error('[Auth] Failed to get Shopify session token:', error)
@@ -162,12 +217,32 @@ export async function fetchWithAuth(
 
   // Handle 401 Unauthorized
   if (response.status === 401) {
-    console.error('[Auth] Unauthorized - redirecting to login')
-
-    // Redirect to login if in standalone mode
     const { isEmbedded } = resolveEmbeddedContextFromWindow()
 
-    if (!isEmbedded && typeof window !== 'undefined') {
+    if (isEmbedded) {
+      // In embedded mode, a 401 likely means the cached session token
+      // expired. Clear the cache, fetch a fresh token, and retry once.
+      clearSessionTokenCache()
+      const freshToken = await getShopifySessionToken()
+
+      if (freshToken) {
+        const retryHeaders = new Headers(options.headers)
+        retryHeaders.set('Content-Type', 'application/json')
+        retryHeaders.set('ngrok-skip-browser-warning', 'true')
+        retryHeaders.set('Authorization', `Bearer ${freshToken}`)
+
+        const retryResponse = await fetch(fullUrl, {
+          ...options,
+          headers: retryHeaders,
+        })
+
+        // If the retry also fails with 401, fall through to return it
+        // without another retry (no infinite loop).
+        return retryResponse
+      }
+    } else if (typeof window !== 'undefined') {
+      // Standalone mode: redirect to login
+      console.error('[Auth] Unauthorized - redirecting to login')
       window.location.href = withLocale('/login')
     }
   }

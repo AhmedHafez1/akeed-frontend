@@ -3,72 +3,39 @@
 /**
  * EmbeddedNavigation — Shopify Admin Sidebar Navigation
  *
- * In App Bridge v4, sidebar navigation is registered declaratively
- * via the `<ui-nav-menu>` web component placed in the rendered DOM.
- * Shopify reads the child `<a>` elements and surfaces them in the
- * Admin sidebar.
+ * Registers app navigation in the Shopify Admin sidebar using the
+ * `<s-app-nav>` / `<s-link>` web components (App Bridge v4).
  *
- * This component renders the `<ui-nav-menu>` element with the
- * correct locale-aware hrefs.
+ * Links use relative paths without `shop`/`host` query params —
+ * App Bridge manages the embedded context automatically. Clicking
+ * a sidebar link navigates within the iframe without a full page
+ * reload, preserving the React tree and cached state.
+ *
+ * The embedded context (shop domain, host) is persisted in
+ * sessionStorage on initial load, so it remains available even
+ * when query params are absent from the URL.
+ *
+ * @see https://shopify.dev/docs/api/app-bridge-library/web-components/ui-nav-menu
  */
 
-import { useMemo } from 'react'
-import { usePathname, useSearchParams } from 'next/navigation'
-import {
-  appendEmbeddedParamsToPath,
-  resolveEmbeddedContextFromSearch,
-} from '@/shared/lib/embedded-context'
+import { usePathname } from 'next/navigation'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
 
 export function EmbeddedNavigation() {
   const pathname = usePathname()
-  const searchParams = useSearchParams()
   const locale = getLocaleFromPathname(pathname ?? '')
 
-  const resolvedContext = useMemo(
-    () => resolveEmbeddedContextFromSearch(searchParams),
-    [searchParams]
-  )
-
-  const dashboardHref = appendEmbeddedParamsToPath({
-    path: `/${locale}/dashboard`,
-    shopDomain: resolvedContext.shopDomain,
-    hostParam: resolvedContext.hostParam,
-  })
-
-  const verificationsHref = appendEmbeddedParamsToPath({
-    path: `/${locale}/verifications`,
-    shopDomain: resolvedContext.shopDomain,
-    hostParam: resolvedContext.hostParam,
-  })
-
-  const settingsHref = appendEmbeddedParamsToPath({
-    path: `/${locale}/settings`,
-    shopDomain: resolvedContext.shopDomain,
-    hostParam: resolvedContext.hostParam,
-  })
-
-  const messagePreviewHref = appendEmbeddedParamsToPath({
-    path: `/${locale}/message-preview`,
-    shopDomain: resolvedContext.shopDomain,
-    hostParam: resolvedContext.hostParam,
-  })
-
-  const automationSettingsHref = appendEmbeddedParamsToPath({
-    path: `/${locale}/automation-settings`,
-    shopDomain: resolvedContext.shopDomain,
-    hostParam: resolvedContext.hostParam,
-  })
-
   return (
-    <ui-nav-menu>
-      <a href={dashboardHref} rel="home">
+    <s-app-nav>
+      <s-link href={`/${locale}/dashboard`} rel="home">
         Dashboard
-      </a>
-      <a href={verificationsHref}>Verifications</a>
-      <a href={settingsHref}>Settings</a>
-      <a href={messagePreviewHref}>Message Preview</a>
-      <a href={automationSettingsHref}>Automation Settings</a>
-    </ui-nav-menu>
+      </s-link>
+      <s-link href={`/${locale}/verifications`}>Verifications</s-link>
+      <s-link href={`/${locale}/settings`}>Settings</s-link>
+      <s-link href={`/${locale}/message-preview`}>Message Preview</s-link>
+      <s-link href={`/${locale}/automation-settings`}>
+        Automation Settings
+      </s-link>
+    </s-app-nav>
   )
 }

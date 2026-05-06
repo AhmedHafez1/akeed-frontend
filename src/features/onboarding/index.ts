@@ -23,9 +23,14 @@ export {
 
 export {
   checkEmbeddedInstall,
+  clearEmbeddedAuthCaches,
   fetchOnboardingStatusWithRetry,
+  getCachedInstallStatus,
+  getCachedOnboardingStatus,
   performTokenExchange,
   resolveOnboardingRedirect,
+  setCachedInstallStatus,
+  setCachedOnboardingStatus,
 } from './lib/embeddedAuth'
 export type { EmbeddedOnboardingGate } from './lib/embeddedAuth'
 
