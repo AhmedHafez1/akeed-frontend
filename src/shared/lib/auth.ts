@@ -83,9 +83,26 @@ async function getAuthToken(): Promise<string | null> {
  * In App Bridge v4, the CDN script exposes `window.shopify` with an
  * `idToken()` method that returns the current session token (JWT).
  * No npm package or App Bridge instance is needed.
+ *
+ * The token is cached briefly (50 s) to avoid repeated async App Bridge
+ * round-trips when multiple `fetchWithAuth` calls fire in parallel
+ * during a single page mount. Shopify session tokens last ~60 s.
  */
+
+interface SessionTokenCache {
+  token: string
+  expiresAt: number
+}
+
+let sessionTokenCache: SessionTokenCache | null = null
+const SESSION_TOKEN_CACHE_TTL_MS = 50 * 1000
+
 async function getShopifySessionToken(): Promise<string | null> {
   try {
+    if (sessionTokenCache && Date.now() < sessionTokenCache.expiresAt) {
+      return sessionTokenCache.token
+    }
+
     const shopify = window.shopify
 
     if (!shopify) {
@@ -96,6 +113,14 @@ async function getShopifySessionToken(): Promise<string | null> {
     }
 
     const token = await shopify.idToken()
+
+    if (token) {
+      sessionTokenCache = {
+        token,
+        expiresAt: Date.now() + SESSION_TOKEN_CACHE_TTL_MS,
+      }
+    }
+
     return token
   } catch (error) {
     console.error('[Auth] Failed to get Shopify session token:', error)

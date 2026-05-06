@@ -11,6 +11,80 @@ export type EmbeddedOnboardingGate =
 
 type EmbeddedDestination = 'dashboard' | 'onboarding'
 
+// ---------------------------------------------------------------------------
+// Module-level caches
+//
+// These caches survive across client-side navigations so that subsequent
+// page mounts inside EmbeddedAuthGate can skip expensive network calls
+// (token exchange, onboarding state fetch) and render content instantly.
+// ---------------------------------------------------------------------------
+
+interface InstallCache {
+  shopDomain: string
+  installed: boolean
+  timestamp: number
+}
+
+interface OnboardingCache {
+  status: IntegrationOnboardingStatus
+  timestamp: number
+}
+
+let installCache: InstallCache | null = null
+let onboardingCache: OnboardingCache | null = null
+
+/** Install status is stable — cache for 5 minutes. */
+const INSTALL_CACHE_TTL_MS = 5 * 60 * 1000
+
+/**
+ * Onboarding 'completed' status is permanent — cache for 5 minutes.
+ * 'pending' is never cached to avoid redirect loops after the user
+ * completes onboarding.
+ */
+const ONBOARDING_CACHE_TTL_MS = 5 * 60 * 1000
+
+export function getCachedInstallStatus(shopDomain: string): boolean | null {
+  if (
+    installCache &&
+    installCache.shopDomain === shopDomain &&
+    Date.now() - installCache.timestamp < INSTALL_CACHE_TTL_MS
+  ) {
+    return installCache.installed
+  }
+  return null
+}
+
+export function setCachedInstallStatus(
+  shopDomain: string,
+  installed: boolean
+): void {
+  installCache = { shopDomain, installed, timestamp: Date.now() }
+}
+
+export function getCachedOnboardingStatus(): IntegrationOnboardingStatus | null {
+  if (
+    onboardingCache &&
+    onboardingCache.status === 'completed' &&
+    Date.now() - onboardingCache.timestamp < ONBOARDING_CACHE_TTL_MS
+  ) {
+    return onboardingCache.status
+  }
+  return null
+}
+
+export function setCachedOnboardingStatus(
+  status: IntegrationOnboardingStatus
+): void {
+  if (status === 'completed') {
+    onboardingCache = { status, timestamp: Date.now() }
+  }
+}
+
+export function clearEmbeddedAuthCaches(): void {
+  installCache = null
+  onboardingCache = null
+}
+
 /**
  * Maps onboarding status to the canonical embedded destination route.
  */
