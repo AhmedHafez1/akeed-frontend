@@ -29,13 +29,20 @@ import type {
 } from '@/features/onboarding'
 import type { SettingsSkinProps } from '@/features/settings/domain/settings.types'
 
-type SettingsTabId = 'settings' | 'confirmation-config' | 'message-template'
+type SettingsTabId = 'store' | 'confirmation' | 'message-preview' | 'billing'
 
 const SETTINGS_TABS: SettingsTabId[] = [
-  'settings',
-  'confirmation-config',
-  'message-template',
+  'store',
+  'confirmation',
+  'message-preview',
+  'billing',
 ]
+
+const SETTINGS_TAB_ALIASES: Partial<Record<string, SettingsTabId>> = {
+  settings: 'store',
+  'confirmation-config': 'confirmation',
+  'message-template': 'message-preview',
+}
 
 const SUBSCRIPTION_SECTION_ID = 'subscription-usage'
 
@@ -119,159 +126,159 @@ function SettingsUsageOverview({
   )
 }
 
-function SettingsTab({ props }: { props: SettingsSkinProps }) {
+function StoreTab({ props }: { props: SettingsSkinProps }) {
+  const t = useTranslations('settings')
+
+  return (
+    <Card>
+      <BlockStack gap="400">
+        <Text as="h2" variant="headingMd">
+          {t('storeConfigurationHeading')}
+        </Text>
+        <TextField
+          label={t('storeNameLabel')}
+          value={props.storeName}
+          onChange={props.onStoreNameChange}
+          autoComplete="organization"
+          error={props.storeNameError}
+        />
+        <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
+          <Select
+            label={t('defaultLanguageLabel')}
+            options={[...props.languageOptions]}
+            value={props.defaultLanguage}
+            onChange={(value) =>
+              props.onDefaultLanguageChange(value as IntegrationOnboardingLanguage)
+            }
+          />
+          <Select
+            label={t('shippingCurrencyLabel')}
+            options={[...props.shippingCurrencyOptions]}
+            value={props.shippingCurrency}
+            onChange={props.onShippingCurrencyChange}
+          />
+        </InlineGrid>
+        <BlockStack gap="100">
+          <FieldLabel
+            label={t('avgShippingCostLabel')}
+            help={t('avgShippingCostHelp')}
+          />
+          <TextField
+            label={t('avgShippingCostLabel')}
+            labelHidden
+            type="number"
+            autoComplete="off"
+            min={0}
+            step={0.01}
+            value={props.avgShippingCost}
+            onChange={props.onAvgShippingCostChange}
+            error={props.avgShippingCostError}
+          />
+        </BlockStack>
+      </BlockStack>
+    </Card>
+  )
+}
+
+function BillingTab({ props }: { props: SettingsSkinProps }) {
   const t = useTranslations('settings')
   const canChangePlan =
     props.selectedPlanId !== null &&
     props.selectedPlanId !== props.billingPlanId
 
   return (
-    <BlockStack gap="400">
+    <div id={SUBSCRIPTION_SECTION_ID}>
       <Card>
         <BlockStack gap="400">
-          <Text as="h2" variant="headingMd">
-            {t('storeConfigurationHeading')}
-          </Text>
-          <TextField
-            label={t('storeNameLabel')}
-            value={props.storeName}
-            onChange={props.onStoreNameChange}
-            autoComplete="organization"
-            error={props.storeNameError}
-          />
-          <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
-            <Select
-              label={t('defaultLanguageLabel')}
-              options={[...props.languageOptions]}
-              value={props.defaultLanguage}
-              onChange={(value) =>
-                props.onDefaultLanguageChange(
-                  value as IntegrationOnboardingLanguage
-                )
-              }
-            />
-            <Select
-              label={t('shippingCurrencyLabel')}
-              options={[...props.shippingCurrencyOptions]}
-              value={props.shippingCurrency}
-              onChange={props.onShippingCurrencyChange}
-            />
-          </InlineGrid>
-          <BlockStack gap="100">
-            <FieldLabel
-              label={t('avgShippingCostLabel')}
-              help={t('avgShippingCostHelp')}
-            />
-            <TextField
-              label={t('avgShippingCostLabel')}
-              labelHidden
-              type="number"
-              autoComplete="off"
-              min={0}
-              step={0.01}
-              value={props.avgShippingCost}
-              onChange={props.onAvgShippingCostChange}
-              error={props.avgShippingCostError}
-            />
+          <BlockStack gap="200">
+            <Text as="h2" variant="headingMd">
+              {t('subscriptionHeading')}
+            </Text>
+            <Text as="p" variant="bodyMd">
+              {props.activePlanName
+                ? t('subscriptionCurrentPlan', { plan: props.activePlanName })
+                : t('subscriptionNoPlan')}
+            </Text>
           </BlockStack>
+
+          {props.usageData && (
+            <SettingsUsageOverview
+              used={props.usageData.used}
+              limit={props.usageData.limit}
+              title={t('usageTitle')}
+              usedLabel={props.usageData.usedLabel}
+              limitLabel={props.usageData.limitLabel}
+              upgradePrompt={props.usageData.upgradePrompt}
+            />
+          )}
+
+          <InlineGrid columns={{ xs: 1, md: 2, lg: 4 }} gap="300">
+            {props.planOptions.map((plan) => {
+              const isCurrent = plan.id === props.billingPlanId
+              const isDisabled = props.isFreePlanClaimed && plan.id === 'starter'
+              const isSelected = plan.id === props.selectedPlanId && !isDisabled
+
+              return (
+                <button
+                  key={plan.id}
+                  type="button"
+                  disabled={isDisabled && !isCurrent}
+                  title={
+                    isDisabled && !isCurrent
+                      ? t('freePlanAlreadyClaimedTooltip')
+                      : undefined
+                  }
+                  onClick={() => props.onPlanSelect(plan.id)}
+                  className={`min-h-full rounded-xl border text-center transition outline-none focus-visible:ring-3 focus-visible:ring-emerald-700/25 disabled:cursor-not-allowed disabled:opacity-50 ${
+                    isSelected
+                      ? 'border-emerald-600 bg-emerald-50/35'
+                      : 'border-transparent bg-transparent hover:border-slate-200'
+                  }`}
+                >
+                  <Card>
+                    <BlockStack gap="300" inlineAlign="center">
+                      <Text as="h3" variant="headingSm" tone="subdued">
+                        {plan.name}
+                      </Text>
+                      <span className="min-h-5">
+                        {isCurrent && (
+                          <Badge tone="info">{t('currentPlanBadge')}</Badge>
+                        )}
+                      </span>
+                      <Text as="p" variant="headingLg">
+                        <span dir="auto" className="[unicode-bidi:isolate]">
+                          {plan.priceLabel}
+                        </span>
+                      </Text>
+                      <Text as="p" tone="subdued" variant="bodySm">
+                        <span dir="auto" className="[unicode-bidi:isolate]">
+                          {plan.volumeLabel}
+                        </span>
+                      </Text>
+                    </BlockStack>
+                  </Card>
+                </button>
+              )
+            })}
+          </InlineGrid>
+
+          <InlineStack gap="300">
+            {canChangePlan && (
+              <Button
+                variant="primary"
+                loading={props.isChangingPlan}
+                onClick={() => void props.onChangePlan()}
+              >
+                {t('changePlanButton')}
+              </Button>
+            )}
+            <Button onClick={props.onManageBilling}>
+              {t('manageBillingButton')}
+            </Button>
+          </InlineStack>
         </BlockStack>
       </Card>
-
-      <div id={SUBSCRIPTION_SECTION_ID}>
-        <Card>
-          <BlockStack gap="400">
-            <BlockStack gap="200">
-              <Text as="h2" variant="headingMd">
-                {t('subscriptionHeading')}
-              </Text>
-              <Text as="p" variant="bodyMd">
-                {props.activePlanName
-                  ? t('subscriptionCurrentPlan', { plan: props.activePlanName })
-                  : t('subscriptionNoPlan')}
-              </Text>
-            </BlockStack>
-
-            {props.usageData && (
-              <SettingsUsageOverview
-                used={props.usageData.used}
-                limit={props.usageData.limit}
-                title={t('usageTitle')}
-                usedLabel={props.usageData.usedLabel}
-                limitLabel={props.usageData.limitLabel}
-                upgradePrompt={props.usageData.upgradePrompt}
-              />
-            )}
-
-            <InlineGrid columns={{ xs: 1, md: 2, lg: 4 }} gap="300">
-              {props.planOptions.map((plan) => {
-                const isCurrent = plan.id === props.billingPlanId
-                const isDisabled =
-                  props.isFreePlanClaimed && plan.id === 'starter'
-                const isSelected =
-                  plan.id === props.selectedPlanId && !isDisabled
-
-                return (
-                  <button
-                    key={plan.id}
-                    type="button"
-                    disabled={isDisabled && !isCurrent}
-                    title={
-                      isDisabled && !isCurrent
-                        ? t('freePlanAlreadyClaimedTooltip')
-                        : undefined
-                    }
-                    onClick={() => props.onPlanSelect(plan.id)}
-                    className={`min-h-full rounded-xl border text-center transition outline-none focus-visible:ring-3 focus-visible:ring-emerald-700/25 disabled:cursor-not-allowed disabled:opacity-50 ${
-                      isSelected
-                        ? 'border-emerald-600 bg-emerald-50/35'
-                        : 'border-transparent bg-transparent hover:border-slate-200'
-                    }`}
-                  >
-                    <Card>
-                      <BlockStack gap="300" inlineAlign="center">
-                        <Text as="h3" variant="headingSm" tone="subdued">
-                          {plan.name}
-                        </Text>
-                        <span className="min-h-5">
-                          {isCurrent && (
-                            <Badge tone="info">{t('currentPlanBadge')}</Badge>
-                          )}
-                        </span>
-                        <Text as="p" variant="headingLg">
-                          <span dir="auto" className="[unicode-bidi:isolate]">
-                            {plan.priceLabel}
-                          </span>
-                        </Text>
-                        <Text as="p" tone="subdued" variant="bodySm">
-                          <span dir="auto" className="[unicode-bidi:isolate]">
-                            {plan.volumeLabel}
-                          </span>
-                        </Text>
-                      </BlockStack>
-                    </Card>
-                  </button>
-                )
-              })}
-            </InlineGrid>
-
-            <InlineStack gap="300">
-              {canChangePlan && (
-                <Button
-                  variant="primary"
-                  loading={props.isChangingPlan}
-                  onClick={() => void props.onChangePlan()}
-                >
-                  {t('changePlanButton')}
-                </Button>
-              )}
-              <Button onClick={props.onManageBilling}>
-                {t('manageBillingButton')}
-              </Button>
-            </InlineStack>
-          </BlockStack>
-        </Card>
-      </div>
-    </BlockStack>
+    </div>
   )
 }
 
@@ -503,21 +510,20 @@ export function SettingsEmbeddedTabbedSkin(props: SettingsSkinProps) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const [isErrorDismissed, setIsErrorDismissed] = useState(false)
+  const [isSuccessDismissed, setIsSuccessDismissed] = useState(false)
   const tabParam = searchParams.get('tab')
-  const activeTab: SettingsTabId = SETTINGS_TABS.includes(
-    tabParam as SettingsTabId
-  )
+  const activeTab: SettingsTabId = SETTINGS_TABS.includes(tabParam as SettingsTabId)
     ? (tabParam as SettingsTabId)
-    : 'settings'
+    : (SETTINGS_TAB_ALIASES[tabParam ?? ''] ?? 'store')
   const selected = SETTINGS_TABS.indexOf(activeTab)
+  const canSaveActiveTab = activeTab === 'store' || activeTab === 'confirmation'
 
   const tabs = [
-    { id: 'settings', content: t('tabs.settings') },
-    {
-      id: 'confirmation-config',
-      content: t('tabs.confirmationConfig'),
-    },
-    { id: 'message-template', content: t('tabs.messageTemplate') },
+    { id: 'store', content: t('tabs.store') },
+    { id: 'confirmation', content: t('tabs.confirmation') },
+    { id: 'message-preview', content: t('tabs.messagePreview') },
+    { id: 'billing', content: t('tabs.billing') },
   ]
 
   const handleTabSelect = (index: number) => {
@@ -529,13 +535,13 @@ export function SettingsEmbeddedTabbedSkin(props: SettingsSkinProps) {
   return (
     <Page title={t('title')} subtitle={t('embeddedSubtitle')}>
       <BlockStack gap="500">
-        {props.errorBanner && (
-          <Banner tone="critical">
+        {props.errorBanner && !isErrorDismissed && (
+          <Banner tone="critical" onDismiss={() => setIsErrorDismissed(true)}>
             <p>{props.errorBanner}</p>
           </Banner>
         )}
-        {props.successBanner && (
-          <Banner tone="success">
+        {props.successBanner && !isSuccessDismissed && (
+          <Banner tone="success" onDismiss={() => setIsSuccessDismissed(true)}>
             <p>{props.successBanner}</p>
           </Banner>
         )}
@@ -544,22 +550,21 @@ export function SettingsEmbeddedTabbedSkin(props: SettingsSkinProps) {
           <div className="min-w-0 flex-1">
             <Tabs tabs={tabs} selected={selected} onSelect={handleTabSelect} />
           </div>
-          <Button
-            variant="primary"
-            loading={props.isSaving}
-            onClick={() => void props.onSave()}
-          >
-            {props.isSaving ? t('savingButton') : t('saveButton')}
-          </Button>
+          {canSaveActiveTab && (
+            <Button
+              variant="primary"
+              loading={props.isSaving}
+              onClick={() => void props.onSave()}
+            >
+              {props.isSaving ? t('savingButton') : t('saveButton')}
+            </Button>
+          )}
         </InlineStack>
 
-        {activeTab === 'settings' && <SettingsTab props={props} />}
-        {activeTab === 'confirmation-config' && (
-          <ConfirmationConfigTab props={props} />
-        )}
-        {activeTab === 'message-template' && (
-          <MessageTemplateTab props={props} />
-        )}
+        {activeTab === 'store' && <StoreTab props={props} />}
+        {activeTab === 'confirmation' && <ConfirmationConfigTab props={props} />}
+        {activeTab === 'message-preview' && <MessageTemplateTab props={props} />}
+        {activeTab === 'billing' && <BillingTab props={props} />}
       </BlockStack>
     </Page>
   )

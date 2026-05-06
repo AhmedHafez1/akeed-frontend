@@ -28,7 +28,7 @@ export function EmbeddedNavigation() {
   return (
     <s-app-nav>
       <s-link href={`/${locale}/dashboard`} rel="home">
-        Main
+        Dashboard
       </s-link>
       <s-link href={`/${locale}/settings`}>Settings</s-link>
     </s-app-nav>

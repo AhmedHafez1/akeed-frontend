@@ -12,7 +12,7 @@ export default function MessagePreviewPage() {
 
   useEffect(() => {
     const nextParams = new URLSearchParams(searchParams.toString())
-    nextParams.set('tab', 'message-template')
+    nextParams.set('tab', 'message-preview')
     router.replace(`/${locale}/settings?${nextParams.toString()}`)
   }, [locale, router, searchParams])
 

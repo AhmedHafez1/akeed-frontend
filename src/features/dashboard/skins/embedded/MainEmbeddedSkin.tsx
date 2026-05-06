@@ -1,11 +1,13 @@
 'use client'
 
+import { useMemo, useState } from 'react'
 import { Banner, BlockStack, Layout, Page, Select, Tabs } from '@shopify/polaris'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useMainConfirmationsTab } from '../../domain/useMainConfirmationsTab'
 import { useMainMetricsTab } from '../../domain/useMainMetricsTab'
 import type { DashboardStatsDateRange } from '../../model/dashboard.model'
+import type { DateRangeFilterOption } from '../../domain/dashboard.types'
 import { StatsEmbedded } from './StatsEmbedded'
 import { ConfirmationStatusFlags } from './components/ConfirmationStatusFlags'
 import { EmbeddedVerificationSection } from './components/EmbeddedVerificationSection'
@@ -14,13 +16,22 @@ type MainTabId = 'metrics' | 'confirmations'
 
 const MAIN_TABS: MainTabId[] = ['metrics', 'confirmations']
 
-function MainMetricsTab() {
-  const metrics = useMainMetricsTab()
+function MainMetricsTab({
+  dateRangeFilter,
+  dateRangeOptions,
+  onDateRangeFilterChange,
+}: {
+  dateRangeFilter: DashboardStatsDateRange
+  dateRangeOptions: ReadonlyArray<DateRangeFilterOption>
+  onDateRangeFilterChange: (filter: DashboardStatsDateRange) => void
+}) {
+  const metrics = useMainMetricsTab(dateRangeFilter)
+  const [isErrorDismissed, setIsErrorDismissed] = useState(false)
 
   return (
     <BlockStack gap="500">
-      {metrics.error && (
-        <Banner tone="critical">
+      {metrics.error && !isErrorDismissed && (
+        <Banner tone="critical" onDismiss={() => setIsErrorDismissed(true)}>
           <p>{metrics.error}</p>
         </Banner>
       )}
@@ -32,9 +43,10 @@ function MainMetricsTab() {
             isAutoVerifyEnabled={metrics.isAutoVerifyEnabled}
             followUpEnabled={metrics.followUpEnabled}
             quietHoursEnabled={metrics.quietHoursEnabled}
-            dateRangeFilter={metrics.dateRangeFilter}
-            dateRangeOptions={metrics.dateRangeOptions}
-            onDateRangeFilterChange={metrics.onDateRangeFilterChange}
+            dateRangeFilter={dateRangeFilter}
+            dateRangeOptions={dateRangeOptions}
+            onDateRangeFilterChange={onDateRangeFilterChange}
+            showDateRangeSelector={false}
           />
         </Layout.Section>
       </Layout>
@@ -42,14 +54,19 @@ function MainMetricsTab() {
   )
 }
 
-function MainConfirmationsTab() {
+function MainConfirmationsTab({
+  dateRangeFilter,
+}: {
+  dateRangeFilter: DashboardStatsDateRange
+}) {
   const t = useTranslations('dashboard')
-  const confirmations = useMainConfirmationsTab()
+  const confirmations = useMainConfirmationsTab(dateRangeFilter)
+  const [isErrorDismissed, setIsErrorDismissed] = useState(false)
 
   return (
     <BlockStack gap="500">
-      {confirmations.error && (
-        <Banner tone="critical">
+      {confirmations.error && !isErrorDismissed && (
+        <Banner tone="critical" onDismiss={() => setIsErrorDismissed(true)}>
           <p>{confirmations.error}</p>
         </Banner>
       )}
@@ -67,20 +84,6 @@ function MainConfirmationsTab() {
           autoConfirmStatus={confirmations.isAutoVerifyEnabled}
           followUpStatus={confirmations.followUpEnabled}
           quietHoursConfigured={confirmations.quietHoursEnabled}
-        />
-        <Select
-          label={t('filters.dateRange.label')}
-          labelHidden
-          options={confirmations.dateRangeOptions.map((option) => ({
-            label: option.label,
-            value: option.id,
-          }))}
-          value={confirmations.dateRangeFilter}
-          onChange={(value) =>
-            confirmations.onDateRangeFilterChange(
-              value as DashboardStatsDateRange
-            )
-          }
         />
       </div>
 
@@ -144,6 +147,8 @@ export function MainEmbeddedSkin() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const [dateRangeFilter, setDateRangeFilter] =
+    useState<DashboardStatsDateRange>('last_30_days')
   const tabParam = searchParams.get('tab')
   const activeTab: MainTabId = MAIN_TABS.includes(tabParam as MainTabId)
     ? (tabParam as MainTabId)
@@ -155,6 +160,19 @@ export function MainEmbeddedSkin() {
     { id: 'confirmations', content: t('tabs.confirmations') },
   ]
 
+  const dateRangeOptions = useMemo<ReadonlyArray<DateRangeFilterOption>>(
+    () => [
+      { id: 'today', label: t('filters.dateRange.today') },
+      { id: 'last_7_days', label: t('filters.dateRange.last_7_days') },
+      { id: 'last_30_days', label: t('filters.dateRange.last_30_days') },
+      {
+        id: 'last_3_months',
+        label: t('filters.dateRange.last_3_months'),
+      },
+    ],
+    [t]
+  )
+
   const handleTabSelect = (index: number) => {
     const nextParams = new URLSearchParams(searchParams.toString())
     nextParams.set('tab', MAIN_TABS[index])
@@ -164,8 +182,32 @@ export function MainEmbeddedSkin() {
   return (
     <Page title={t('mainTitle')} subtitle={t('mainSubtitle')}>
       <BlockStack gap="500">
-        <Tabs tabs={tabs} selected={selected} onSelect={handleTabSelect} />
-        {activeTab === 'metrics' ? <MainMetricsTab /> : <MainConfirmationsTab />}
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div className="min-w-0 flex-1">
+            <Tabs tabs={tabs} selected={selected} onSelect={handleTabSelect} />
+          </div>
+          <Select
+            label={t('filters.dateRange.label')}
+            labelHidden
+            options={dateRangeOptions.map((option) => ({
+              label: option.label,
+              value: option.id,
+            }))}
+            value={dateRangeFilter}
+            onChange={(value) =>
+              setDateRangeFilter(value as DashboardStatsDateRange)
+            }
+          />
+        </div>
+        {activeTab === 'metrics' ? (
+          <MainMetricsTab
+            dateRangeFilter={dateRangeFilter}
+            dateRangeOptions={dateRangeOptions}
+            onDateRangeFilterChange={setDateRangeFilter}
+          />
+        ) : (
+          <MainConfirmationsTab dateRangeFilter={dateRangeFilter} />
+        )}
       </BlockStack>
     </Page>
   )

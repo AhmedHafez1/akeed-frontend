@@ -472,7 +472,7 @@
     "billingStatusNeedsAttention": "الفوترة تحتاج إلى إجراء. فعّل الخطة أو حدّثها للمتابعة."
   },
   "dashboard": {
-    "mainTitle": "الرئيسية",
+    "mainTitle": "لوحة التحكم",
     "mainSubtitle": "تابع تأكيدات الدفع عند الاستلام وردود العملاء.",
     "title": "لوحة التحكم",
     "subtitle": "تابع تأكيدات الطلبات وآخر الحالات من مكان واحد.",
@@ -633,9 +633,10 @@
     "embeddedSubtitle": "تحكم في إعدادات المتجر والتأكيد والرسائل من مكان واحد.",
     "subtitle": "تحكم في إعدادات المتجر والفوترة من مكان واحد.",
     "tabs": {
-      "settings": "الإعدادات",
-      "confirmationConfig": "إعداد التأكيد",
-      "messageTemplate": "قالب الرسالة"
+      "store": "المتجر",
+      "confirmation": "التأكيد",
+      "messagePreview": "معاينة الرسالة",
+      "billing": "الفوترة"
     },
     "storeConfigurationHeading": "إعدادات المتجر",
     "storeNameLabel": "اسم المتجر",

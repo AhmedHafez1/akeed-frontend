@@ -8,11 +8,7 @@ import type {
   DashboardStatsDateRange,
   VerificationStatusFilter,
 } from '../model/dashboard.model'
-import type {
-  DateRangeFilterOption,
-  StatusFilterOption,
-  TestFeedback,
-} from './dashboard.types'
+import type { StatusFilterOption, TestFeedback } from './dashboard.types'
 
 interface SendTestVerificationResponse {
   success: boolean
@@ -28,12 +24,10 @@ interface CancelOrderResponse {
   shopifyJobId?: string
 }
 
-export function useMainConfirmationsTab() {
+export function useMainConfirmationsTab(dateRangeFilter: DashboardStatsDateRange) {
   const t = useTranslations('dashboard')
   const [statusFilter, setStatusFilter] =
     useState<VerificationStatusFilter>('all')
-  const [dateRangeFilter, setDateRangeFilter] =
-    useState<DashboardStatsDateRange>('last_30_days')
   const [isSendingTest, setIsSendingTest] = useState(false)
   const [testFeedback, setTestFeedback] = useState<TestFeedback | null>(null)
   const [confirmingCancelVerificationId, setConfirmingCancelVerificationId] =
@@ -66,19 +60,6 @@ export function useMainConfirmationsTab() {
       { id: 'confirmed', label: t('filters.status.confirmed') },
       { id: 'canceled', label: t('filters.status.canceled') },
       { id: 'no_reply', label: t('filters.status.no_reply') },
-    ],
-    [t]
-  )
-
-  const dateRangeOptions = useMemo<ReadonlyArray<DateRangeFilterOption>>(
-    () => [
-      { id: 'today', label: t('filters.dateRange.today') },
-      { id: 'last_7_days', label: t('filters.dateRange.last_7_days') },
-      { id: 'last_30_days', label: t('filters.dateRange.last_30_days') },
-      {
-        id: 'last_3_months',
-        label: t('filters.dateRange.last_3_months'),
-      },
     ],
     [t]
   )
@@ -193,9 +174,6 @@ export function useMainConfirmationsTab() {
     statusFilter === 'all' ? t('emptyState.all') : t('emptyState.filtered')
 
   return {
-    dateRangeFilter,
-    dateRangeOptions,
-    onDateRangeFilterChange: setDateRangeFilter,
     isAutoVerifyEnabled:
       pageContext?.automation.is_auto_verify_enabled ?? false,
     followUpEnabled: pageContext?.automation.follow_up_enabled ?? false,

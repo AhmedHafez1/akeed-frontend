@@ -478,7 +478,7 @@
     "billingStatusNeedsAttention": "Your billing status needs attention. Please activate or update your plan to continue."
   },
   "dashboard": {
-    "mainTitle": "Main",
+    "mainTitle": "Dashboard",
     "mainSubtitle": "Track COD confirmations and customer replies.",
     "title": "Dashboard",
     "subtitle": "Monitor verification status and recent orders across your channels.",
@@ -639,9 +639,10 @@
     "embeddedSubtitle": "Manage storefront, confirmation, and message preferences.",
     "subtitle": "Manage your storefront and billing preferences.",
     "tabs": {
-      "settings": "Settings",
-      "confirmationConfig": "Confirmation config",
-      "messageTemplate": "Message template"
+      "store": "Store",
+      "confirmation": "Confirmation",
+      "messagePreview": "Message preview",
+      "billing": "Billing"
     },
     "storeConfigurationHeading": "Store configuration",
     "storeNameLabel": "Store name",

@@ -12,7 +12,7 @@ export default function AutomationSettingsPage() {
 
   useEffect(() => {
     const nextParams = new URLSearchParams(searchParams.toString())
-    nextParams.set('tab', 'confirmation-config')
+    nextParams.set('tab', 'confirmation')
     router.replace(`/${locale}/settings?${nextParams.toString()}`)
   }, [locale, router, searchParams])
 
