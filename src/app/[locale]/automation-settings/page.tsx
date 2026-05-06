@@ -1,36 +1,20 @@
 'use client'
 
-import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
-import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
-import { SettingsPageSkeleton } from '@/shared/layout/skeletons'
-import {
-  AutomationSettingsEmbeddedSkin,
-  AutomationSettingsStandaloneSkin,
-  useSettings,
-} from '@/features/settings'
-
-function AutomationSettingsPageContent() {
-  const { mode } = useAkeedMode()
-  const { isPageLoading, skinProps } = useSettings()
-
-  if (isPageLoading) {
-    return <SettingsPageSkeleton />
-  }
-
-  if (mode === 'EMBEDDED') {
-    return <AutomationSettingsEmbeddedSkin {...skinProps} />
-  }
-
-  return <AutomationSettingsStandaloneSkin {...skinProps} />
-}
+import { useEffect } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { getLocaleFromPathname } from '@/shared/lib/locale'
 
 export default function AutomationSettingsPage() {
-  return (
-    <EmbeddedAuthGate
-      fallback={<SettingsPageSkeleton />}
-      onboardingGate="dashboard"
-    >
-      <AutomationSettingsPageContent />
-    </EmbeddedAuthGate>
-  )
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const locale = getLocaleFromPathname(pathname ?? '')
+
+  useEffect(() => {
+    const nextParams = new URLSearchParams(searchParams.toString())
+    nextParams.set('tab', 'confirmation-config')
+    router.replace(`/${locale}/settings?${nextParams.toString()}`)
+  }, [locale, router, searchParams])
+
+  return null
 }

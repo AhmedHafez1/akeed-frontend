@@ -39,7 +39,9 @@ export { ONBOARDING_BILLING_PLAN_IDS } from './domain/onboarding.types'
 export type {
   AutomationTimezone,
   IntegrationOnboardingLanguage,
+  IntegrationOnboardingState,
   OnboardingBillingPlan,
   OnboardingBillingPlanConfig,
   OnboardingBillingPlanId,
+  OnboardingSettingsPayload,
 } from './domain/onboarding.types'

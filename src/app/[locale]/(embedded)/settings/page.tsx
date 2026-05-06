@@ -4,7 +4,7 @@ import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { SettingsPageSkeleton } from '@/shared/layout/skeletons'
 import {
-  SettingsEmbeddedSkin,
+  SettingsEmbeddedTabbedSkin,
   SettingsStandaloneSkin,
   useSettings,
 } from '@/features/settings'
@@ -18,7 +18,7 @@ function SettingsPageContent() {
   }
 
   if (mode === 'EMBEDDED') {
-    return <SettingsEmbeddedSkin {...skinProps} />
+    return <SettingsEmbeddedTabbedSkin {...skinProps} />
   }
 
   return <SettingsStandaloneSkin {...skinProps} />

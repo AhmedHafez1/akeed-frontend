@@ -3,13 +3,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { useDashboardStats } from '@/features/dashboard/hooks/useDashboardStats'
 import {
   createOnboardingBilling,
-  fetchOnboardingBillingPlans,
-  fetchOnboardingState,
   ONBOARDING_BILLING_PLAN_IDS,
-  updateOnboardingSettings,
   type AutomationTimezone,
   type IntegrationOnboardingLanguage,
   type OnboardingBillingPlanConfig,
@@ -18,6 +14,8 @@ import {
 import { useAppBridgeLoading } from '@/shared/hooks/useAppBridgeLoading'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
+import { fetchSettings, updateSettings } from '../api/settingsApi'
+import type { SettingsResponse } from '../api/settingsApi'
 import type { SettingsSelectOption, SettingsSkinProps } from './settings.types'
 
 type BillingStatusKey =
@@ -58,6 +56,25 @@ const AUTOMATION_TIMEZONE_OPTIONS: readonly AutomationTimezone[] = [
 ] as const
 
 const TIME_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/
+
+const DEFAULT_TEMPLATE_PREVIEWS: SettingsSkinProps['templatePreviews'] = {
+  ar: {
+    greeting: 'السلام عليكم',
+    body: 'تم استلام طلبك رقم #{order_number} والدفع عند الاستلام',
+    totalLabel: 'إجمالي السعر: {total}',
+    ending: 'من فضلك أكد الطلب.',
+    confirmButton: 'تأكيد',
+    cancelButton: 'إلغاء',
+  },
+  en: {
+    greeting: 'Hello',
+    body: 'We have received your order #{order_number} with Cash on Delivery.',
+    totalLabel: 'Total Price: {total}',
+    ending: 'Please confirm your order.',
+    confirmButton: 'Confirm',
+    cancelButton: 'Cancel',
+  },
+}
 
 function normalizeBillingStatus(status: string | null): string | null {
   if (!status) return null
@@ -133,7 +150,6 @@ export function useSettings(): {
   const router = useRouter()
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname ?? '')
-  const { stats } = useDashboardStats('last_30_days')
 
   const [isInitialLoading, setIsInitialLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
@@ -175,12 +191,21 @@ export function useSettings(): {
   const [billingPlansById, setBillingPlansById] = useState<
     Partial<Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>>
   >({})
+  const [billingUsage, setBillingUsage] = useState<
+    SettingsResponse['billing']['usage'] | null
+  >(null)
   const [selectedPlanId, setSelectedPlanId] =
     useState<OnboardingBillingPlanId | null>(null)
   const [isChangingPlan, setIsChangingPlan] = useState(false)
   const [isFreePlanClaimed, setIsFreePlanClaimed] = useState(false)
   const [errorBanner, setErrorBanner] = useState<string | null>(null)
   const [successBanner, setSuccessBanner] = useState<string | null>(null)
+  const [templateLanguages, setTemplateLanguages] =
+    useState<ReadonlyArray<'ar' | 'en'>>(['ar', 'en'])
+  const [defaultTemplateLanguage, setDefaultTemplateLanguage] =
+    useState<'ar' | 'en'>('en')
+  const [templatePreviews, setTemplatePreviews] =
+    useState<SettingsSkinProps['templatePreviews']>(DEFAULT_TEMPLATE_PREVIEWS)
 
   const languageOptions = useMemo<
     ReadonlyArray<SettingsSelectOption<IntegrationOnboardingLanguage>>
@@ -222,17 +247,11 @@ export function useSettings(): {
       setErrorBanner(null)
 
       try {
-        const [stateResponse, plansResponse] = await Promise.all([
-          fetchOnboardingState(),
-          fetchOnboardingBillingPlans().catch((error) => {
-            console.error('[Settings] Failed to load billing plans:', error)
-            return null
-          }),
-        ])
+        const settingsResponse = await fetchSettings()
 
         if (!active) return
 
-        const { state } = stateResponse
+        const { state } = settingsResponse
         if (state.onboardingStatus === 'pending') {
           router.replace(`/${locale}/onboarding${search}`)
           return
@@ -257,16 +276,18 @@ export function useSettings(): {
         setBillingStatus(state.billingStatus)
         setBillingManagementUrl(state.billingManagementUrl)
 
-        if (plansResponse) {
-          const plansMap: Partial<
-            Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>
-          > = {}
-          for (const plan of plansResponse.plans) {
-            plansMap[plan.id] = plan
-          }
-          setBillingPlansById(plansMap)
-          setIsFreePlanClaimed(plansResponse.isFreePlanClaimed)
+        const plansMap: Partial<
+          Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>
+        > = {}
+        for (const plan of settingsResponse.billing.plans) {
+          plansMap[plan.id] = plan
         }
+        setBillingPlansById(plansMap)
+        setIsFreePlanClaimed(settingsResponse.billing.isFreePlanClaimed)
+        setBillingUsage(settingsResponse.billing.usage)
+        setTemplateLanguages(settingsResponse.template.languages)
+        setDefaultTemplateLanguage(settingsResponse.template.defaultPreviewLanguage)
+        setTemplatePreviews(settingsResponse.template.previews)
       } catch (error) {
         console.error('[Settings] Failed to load onboarding settings:', error)
         if (active) setErrorBanner(t('loadError'))
@@ -325,20 +346,22 @@ export function useSettings(): {
   }, [billingPlansById, locale, t])
 
   const usageData = useMemo(() => {
-    if (!stats) return null
+    if (!billingUsage) return null
 
-    const { used, limit } = stats.usage
+    const { used, limit, periodStart, periodEnd } = billingUsage
     const safeLimit = Math.max(limit, 1)
     const percent = Math.min(100, Math.round((used / safeLimit) * 100))
 
     return {
       used,
       limit,
+      periodStart,
+      periodEnd,
       usedLabel: t('usageUsedPercent', { value: percent }),
       limitLabel: t('usageMonthlyLimit'),
       upgradePrompt: percent >= 80 ? t('usageUpgradePrompt') : null,
     }
-  }, [stats, t])
+  }, [billingUsage, t])
 
   const escalationReviewDescription = useMemo(() => {
     const parsed = parseHourField(escalationDelayMinutes) ?? 6
@@ -502,7 +525,7 @@ export function useSettings(): {
     }
 
     try {
-      const { state } = await updateOnboardingSettings({
+      const settingsResponse = await updateSettings({
         storeName: validated.trimmedStoreName,
         defaultLanguage,
         isAutoVerifyEnabled,
@@ -519,6 +542,7 @@ export function useSettings(): {
         quietHoursEnd: quietHoursEnabled ? quietHoursEnd : undefined,
         timezone,
       })
+      const { state } = settingsResponse
 
       setStoreName(state.storeName ?? validated.trimmedStoreName)
       setShippingCurrency(state.shippingCurrency ?? shippingCurrency)
@@ -538,6 +562,18 @@ export function useSettings(): {
       setBillingPlanId(state.billingPlanId)
       setBillingStatus(state.billingStatus)
       setBillingManagementUrl(state.billingManagementUrl)
+      const plansMap: Partial<
+        Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>
+      > = {}
+      for (const plan of settingsResponse.billing.plans) {
+        plansMap[plan.id] = plan
+      }
+      setBillingPlansById(plansMap)
+      setIsFreePlanClaimed(settingsResponse.billing.isFreePlanClaimed)
+      setBillingUsage(settingsResponse.billing.usage)
+      setTemplateLanguages(settingsResponse.template.languages)
+      setDefaultTemplateLanguage(settingsResponse.template.defaultPreviewLanguage)
+      setTemplatePreviews(settingsResponse.template.previews)
       setSuccessBanner(t('saveSuccess'))
       shopify?.toast.show(t('saveSuccess'))
     } catch (error) {
@@ -635,6 +671,9 @@ export function useSettings(): {
       isChangingPlan,
       isFreePlanClaimed,
       usageData,
+      templateLanguages,
+      defaultTemplateLanguage,
+      templatePreviews,
       onStoreNameChange: (value) => {
         setStoreName(value)
         setStoreNameError(undefined)
