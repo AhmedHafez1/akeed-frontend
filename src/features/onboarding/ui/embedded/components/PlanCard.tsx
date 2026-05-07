@@ -1,6 +1,6 @@
 import type { KeyboardEvent } from 'react'
 import { Badge, BlockStack, Divider, Icon, Text } from '@shopify/polaris'
-import { InfoIcon, StarFilledIcon } from '@shopify/polaris-icons'
+import { InfoIcon } from '@shopify/polaris-icons'
 import type {
   OnboardingBillingPlan,
   OnboardingBillingPlanId,
@@ -34,7 +34,6 @@ export function PlanCard({
   onKeyboardSelect,
 }: PlanCardProps) {
   const { price, cadence } = splitPriceLabel(plan.monthlyPriceLabel)
-  const summary = plan.monthlyVolumeLabel
 
   return (
     <div
@@ -75,9 +74,7 @@ export function PlanCard({
               </div>
             ) : isRecommended && recommendedBadgeLabel ? (
               <div className="shrink-0">
-                <Badge tone="success" icon={StarFilledIcon}>
-                  {recommendedBadgeLabel}
-                </Badge>
+                <Badge tone="success">{recommendedBadgeLabel}</Badge>
               </div>
             ) : null}
           </div>
@@ -85,7 +82,7 @@ export function PlanCard({
           <BlockStack gap="200">
             <p dir="auto" className="text-start [unicode-bidi:isolate]">
               <span
-                className={`text-[2rem] leading-none font-bold tracking-normal ${
+                className={`text-[1.5rem] leading-none font-bold tracking-normal ${
                   isDisabled ? 'text-[#8a8a8a]' : 'text-[#202223]'
                 }`}
               >
@@ -101,14 +98,6 @@ export function PlanCard({
                 </span>
               ) : null}
             </p>
-
-            <Text
-              as="p"
-              tone={isDisabled ? 'subdued' : undefined}
-              variant="bodySm"
-            >
-              {summary}
-            </Text>
           </BlockStack>
 
           <Divider />

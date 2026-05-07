@@ -3,7 +3,6 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { usePathname } from 'next/navigation'
-import { useReducedMotion } from 'framer-motion'
 
 const logos = [
   { name: 'ExpandCart', src: '/images/landing/logos/exp-cart.png' },

@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react'
 import { Banner, BlockStack } from '@shopify/polaris'
 
 interface OnboardingAlertsProps {
@@ -9,21 +12,41 @@ export function OnboardingAlerts({
   errorMessage,
   warningMessage,
 }: OnboardingAlertsProps) {
-  if (!errorMessage && !warningMessage) {
+  const [dismissedErrorMessage, setDismissedErrorMessage] = useState<
+    string | null
+  >(null)
+  const [dismissedWarningMessage, setDismissedWarningMessage] = useState<
+    string | null
+  >(null)
+
+  const visibleErrorMessage =
+    errorMessage && errorMessage !== dismissedErrorMessage ? errorMessage : null
+  const visibleWarningMessage =
+    warningMessage && warningMessage !== dismissedWarningMessage
+      ? warningMessage
+      : null
+
+  if (!visibleErrorMessage && !visibleWarningMessage) {
     return null
   }
 
   return (
     <BlockStack gap="400">
-      {errorMessage && (
-        <Banner tone="critical">
-          <p>{errorMessage}</p>
+      {visibleErrorMessage && (
+        <Banner
+          tone="critical"
+          onDismiss={() => setDismissedErrorMessage(visibleErrorMessage)}
+        >
+          <p>{visibleErrorMessage}</p>
         </Banner>
       )}
 
-      {warningMessage && (
-        <Banner tone="warning">
-          <p>{warningMessage}</p>
+      {visibleWarningMessage && (
+        <Banner
+          tone="warning"
+          onDismiss={() => setDismissedWarningMessage(visibleWarningMessage)}
+        >
+          <p>{visibleWarningMessage}</p>
         </Banner>
       )}
     </BlockStack>
