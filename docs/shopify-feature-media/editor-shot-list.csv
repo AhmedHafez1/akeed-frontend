@@ -1,9 +1,0 @@
-time_start,time_end,scene,primary_visual,on_screen_text,editor_notes
-00:00,00:08,Problem hook,Incoming COD orders and unread confirmations,COD orders move fast,Use abstract order cards and no real customer data
-00:08,00:18,Manual work cost,Merchant calling customers and holding shipments,Manual COD confirmation does not scale,Use quick cuts and subtle cost markers
-00:18,00:30,Akeed intro,Akeed brand screen with WhatsApp-style confirmation cards,Akeed confirms COD orders on WhatsApp,Avoid Meta and Shopify logos
-00:30,00:45,Customer flow,Hero demo chat showing order confirmation and address correctness,Confirm order details and address before shipping,Do not show GPS or share-location UI
-00:45,00:60,Dashboard clarity,Embedded dashboard metrics cards,See every verification result,Use synthetic demo data only
-00:60,00:72,Operational impact,Verification funnel and money saved card,Know what to ship hold or review,Keep this as an impact scene not a tutorial
-00:72,00:85,Setup confidence,Onboarding configuration with language and auto-verification,Start without WhatsApp API setup for most stores,Show setup as simple and Shopify-admin native
-00:85,00:95,Closing CTA,Akeed logo with message card flowing into dashboard card,Akeed reliable WhatsApp COD confirmation for MENA commerce,End with thumbnail-like composition
