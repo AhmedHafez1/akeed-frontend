@@ -32,6 +32,7 @@ interface StatsEmbeddedProps {
   dateRangeFilter: DashboardStatsDateRange
   dateRangeOptions: ReadonlyArray<DateRangeFilterOption>
   onDateRangeFilterChange: (filter: DashboardStatsDateRange) => void
+  showDateRangeSelector?: boolean
 }
 
 function resolveResponseRateTone(replyRate: number): MetricTone {
@@ -55,6 +56,7 @@ export function StatsEmbedded({
   dateRangeFilter,
   dateRangeOptions,
   onDateRangeFilterChange,
+  showDateRangeSelector = true,
 }: StatsEmbeddedProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -188,6 +190,7 @@ export function StatsEmbedded({
           followUpEnabled={followUpEnabled}
           quietHoursEnabled={quietHoursEnabled}
           onDateRangeFilterChange={onDateRangeFilterChange}
+          showDateRangeSelector={showDateRangeSelector}
         />
       )}
 

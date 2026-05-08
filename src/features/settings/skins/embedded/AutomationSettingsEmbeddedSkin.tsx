@@ -13,7 +13,7 @@ import {
   Text,
   TextField,
 } from '@shopify/polaris'
-import { QuestionCircleIcon, ShieldCheckMarkIcon } from '@shopify/polaris-icons'
+import { QuestionCircleIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import type { AutomationTimezone } from '@/features/onboarding'
 import type { SettingsSkinProps } from '@/features/settings/domain/settings.types'

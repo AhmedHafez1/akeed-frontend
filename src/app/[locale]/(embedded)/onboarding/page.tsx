@@ -36,16 +36,14 @@ const EMBEDDED_PLAN_FEATURE_KEYS = {
     'planBasicFeature1',
     'planBasicFeature2',
     'planBasicFeature3',
-    'planBasicFeature5',
     'planBasicFeature4',
+    'planBasicFeature5',
   ],
   pro: [
     'planProFeature1',
     'planProFeature2',
     'planProFeature3',
     'planProFeature4',
-    'planProFeature5',
-    'planProFeature6',
   ],
   business: [
     'planBusinessFeature1',
@@ -53,7 +51,6 @@ const EMBEDDED_PLAN_FEATURE_KEYS = {
     'planBusinessFeature3',
     'planBusinessFeature4',
     'planBusinessFeature5',
-    'planBusinessFeature6',
   ],
 } as const
 
@@ -303,7 +300,7 @@ export default function OnboardingPage() {
   }
 
   return (
-    <Page fullWidth>
+    <Page>
       <Layout>
         <Layout.Section>
           <BlockStack gap="400">
@@ -312,17 +309,15 @@ export default function OnboardingPage() {
               warningMessage={prefillWarning}
             />
 
-            <div className="mx-auto w-full max-w-[1280px]">
-              <Card padding={{ xs: '400', md: '800' }}>
-                <BlockStack gap="500">
-                  <OnboardingStepCounter
-                    currentStep={step}
-                    steps={setupFlowSteps}
-                  />
-                  {stepComponents[step]}
-                </BlockStack>
-              </Card>
-            </div>
+            <Card padding={{ xs: '400', md: '800' }}>
+              <BlockStack gap="500">
+                <OnboardingStepCounter
+                  currentStep={step}
+                  steps={setupFlowSteps}
+                />
+                {stepComponents[step]}
+              </BlockStack>
+            </Card>
           </BlockStack>
         </Layout.Section>
       </Layout>

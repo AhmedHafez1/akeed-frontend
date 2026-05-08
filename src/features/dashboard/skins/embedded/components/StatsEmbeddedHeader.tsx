@@ -11,6 +11,7 @@ interface StatsEmbeddedHeaderProps {
   followUpEnabled: boolean
   quietHoursEnabled: boolean
   onDateRangeFilterChange: (filter: DashboardStatsDateRange) => void
+  showDateRangeSelector?: boolean
 }
 
 export function StatsEmbeddedHeader({
@@ -21,6 +22,7 @@ export function StatsEmbeddedHeader({
   followUpEnabled,
   quietHoursEnabled,
   onDateRangeFilterChange,
+  showDateRangeSelector = true,
 }: StatsEmbeddedHeaderProps) {
   return (
     <InlineStack align="space-between" blockAlign="center" gap="300">
@@ -29,18 +31,20 @@ export function StatsEmbeddedHeader({
         followUpStatus={followUpEnabled}
         quietHoursConfigured={quietHoursEnabled}
       />
-      <Select
-        label={dateRangeLabel}
-        labelHidden
-        options={dateRangeOptions.map((option) => ({
-          label: option.label,
-          value: option.id,
-        }))}
-        value={dateRangeFilter}
-        onChange={(value) =>
-          onDateRangeFilterChange(value as DashboardStatsDateRange)
-        }
-      />
+      {showDateRangeSelector && (
+        <Select
+          label={dateRangeLabel}
+          labelHidden
+          options={dateRangeOptions.map((option) => ({
+            label: option.label,
+            value: option.id,
+          }))}
+          value={dateRangeFilter}
+          onChange={(value) =>
+            onDateRangeFilterChange(value as DashboardStatsDateRange)
+          }
+        />
+      )}
     </InlineStack>
   )
 }

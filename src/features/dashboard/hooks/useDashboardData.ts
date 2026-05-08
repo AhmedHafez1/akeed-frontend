@@ -21,6 +21,8 @@ export function useDashboardData(
   const [verifications, setVerifications] = useState<VerificationItem[]>([])
   const [nextCursor, setNextCursor] = useState<string | null>(null)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [pageContext, setPageContext] =
+    useState<VerificationsResponse['page_context']>(undefined)
   const [verificationsError, setVerificationsError] = useState<string | null>(
     null
   )
@@ -49,6 +51,7 @@ export function useDashboardData(
         if (controller.signal.aborted) return
         setVerifications(response.data)
         setNextCursor(response.next_cursor)
+        setPageContext(response.page_context)
         setVerificationsError(null)
         setResolvedQuery(verificationQuery)
       })
@@ -85,6 +88,7 @@ export function useDashboardData(
 
       setVerifications((previous) => [...previous, ...response.data])
       setNextCursor(response.next_cursor)
+      setPageContext(response.page_context ?? pageContext)
       setVerificationsError(null)
     } catch (error) {
       setVerificationsError(
@@ -93,7 +97,13 @@ export function useDashboardData(
     } finally {
       setIsLoadingMore(false)
     }
-  }, [isLoadingMore, isVerificationsLoading, nextCursor, verificationQuery])
+  }, [
+    isLoadingMore,
+    isVerificationsLoading,
+    nextCursor,
+    pageContext,
+    verificationQuery,
+  ])
 
   return {
     verifications,
@@ -104,5 +114,6 @@ export function useDashboardData(
     refetch: useCallback(() => setRefetchKey((k) => k + 1), []),
     error: activeError,
     verificationsError: activeError,
+    pageContext,
   }
 }

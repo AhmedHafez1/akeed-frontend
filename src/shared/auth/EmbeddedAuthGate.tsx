@@ -112,8 +112,7 @@ export function EmbeddedAuthGate({
       // Determine whether we already have a cached install confirmation.
       // When the cache is warm we skip the loading state entirely so the
       // page content stays visible while we re-validate in the background.
-      const hasWarmInstallCache =
-        getCachedInstallStatus(shopDomain) === true
+      const hasWarmInstallCache = getCachedInstallStatus(shopDomain) === true
 
       if (!hasWarmInstallCache) {
         setIsEmbeddedReady(false)
@@ -149,7 +148,6 @@ export function EmbeddedAuthGate({
           }
 
           if (!isInstalled) {
-            setCachedInstallStatus(shopDomain, false)
             redirectToAuth()
             return
           }

@@ -1,30 +1,20 @@
 'use client'
 
-import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
-import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
-import { SettingsPageSkeleton } from '@/shared/layout/skeletons'
-import {
-  MessagePreviewEmbeddedSkin,
-  MessagePreviewStandaloneSkin,
-} from '@/features/settings'
-
-function MessagePreviewPageContent() {
-  const { mode } = useAkeedMode()
-
-  if (mode === 'EMBEDDED') {
-    return <MessagePreviewEmbeddedSkin />
-  }
-
-  return <MessagePreviewStandaloneSkin />
-}
+import { useEffect } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { getLocaleFromPathname } from '@/shared/lib/locale'
 
 export default function MessagePreviewPage() {
-  return (
-    <EmbeddedAuthGate
-      fallback={<SettingsPageSkeleton />}
-      onboardingGate="dashboard"
-    >
-      <MessagePreviewPageContent />
-    </EmbeddedAuthGate>
-  )
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const locale = getLocaleFromPathname(pathname ?? '')
+
+  useEffect(() => {
+    const nextParams = new URLSearchParams(searchParams.toString())
+    nextParams.set('tab', 'message-preview')
+    router.replace(`/${locale}/settings?${nextParams.toString()}`)
+  }, [locale, router, searchParams])
+
+  return null
 }

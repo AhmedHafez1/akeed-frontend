@@ -4,20 +4,24 @@ import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import { DashboardPageSkeleton } from '@/shared/layout/skeletons'
 import {
-  DashboardEmbeddedSkin,
   DashboardStandaloneSkin,
+  MainEmbeddedSkin,
   useDashboard,
 } from '@/features/dashboard'
 
+function StandaloneDashboardPageContent() {
+  const skinProps = useDashboard()
+  return <DashboardStandaloneSkin {...skinProps} />
+}
+
 function DashboardPageContent() {
   const { mode } = useAkeedMode()
-  const skinProps = useDashboard()
 
   if (mode === 'EMBEDDED') {
-    return <DashboardEmbeddedSkin {...skinProps} />
+    return <MainEmbeddedSkin />
   }
 
-  return <DashboardStandaloneSkin {...skinProps} />
+  return <StandaloneDashboardPageContent />
 }
 
 export default function DashboardPage() {

@@ -20,9 +20,20 @@ export interface SettingsPlanOption {
 export interface SettingsUsageData {
   used: number
   limit: number
+  periodStart: string
+  periodEnd: string
   usedLabel: string
   limitLabel: string
   upgradePrompt: string | null
+}
+
+export interface SettingsTemplatePreview {
+  greeting: string
+  body: string
+  totalLabel: string
+  ending: string
+  confirmButton: string
+  cancelButton: string
 }
 
 export interface SettingsSkinProps {
@@ -69,6 +80,9 @@ export interface SettingsSkinProps {
   isChangingPlan: boolean
   isFreePlanClaimed: boolean
   usageData: SettingsUsageData | null
+  templateLanguages: ReadonlyArray<'ar' | 'en'>
+  defaultTemplateLanguage: 'ar' | 'en'
+  templatePreviews: Record<'ar' | 'en', SettingsTemplatePreview>
 
   onStoreNameChange: (value: string) => void
   onDefaultLanguageChange: (value: IntegrationOnboardingLanguage) => void

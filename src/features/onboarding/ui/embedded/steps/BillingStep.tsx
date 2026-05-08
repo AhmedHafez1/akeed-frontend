@@ -93,7 +93,7 @@ export function BillingStep({
               ? disabledPlanTooltips[plan.id]
               : undefined
             const isSelected = selectedPlanId === plan.id && !isDisabled
-            const isRecommended = plan.id === 'basic' && !isDisabled
+            const isRecommended = plan.id === 'pro' && !isDisabled
 
             return (
               <PlanCard
