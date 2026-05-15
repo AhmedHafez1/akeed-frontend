@@ -37,7 +37,7 @@ function Hero() {
   }
 
   return (
-    <section className="relative flex min-h-[100svh] flex-col justify-center gap-6 overflow-hidden px-4 pt-20 pb-8 sm:gap-10 md:flex-row md:items-center md:px-12 lg:gap-16 lg:px-20 lg:pt-24 lg:pb-20 xl:px-32">
+    <section className="relative flex min-h-[88svh] flex-col justify-center gap-6 overflow-hidden px-4 pt-20 pb-8 sm:gap-10 md:flex-row md:items-center md:px-12 lg:gap-16 lg:px-20 lg:pt-24 lg:pb-16 xl:px-32">
       <div className="flex w-full max-w-xl flex-col items-center text-center md:w-3/5 md:max-w-4xl md:items-start md:text-left">
         {/* Main Headline */}
         <motion.div
@@ -147,7 +147,7 @@ function Hero() {
       </div>
 
       {/* Chat Interface */}
-      <div className="mt-2 flex w-full scale-[0.9] items-center justify-center sm:mt-4 sm:scale-[0.98] md:mt-0 md:w-[42%] md:scale-105 lg:w-auto lg:scale-110 xl:scale-[1.12]">
+      <div className="mt-2 hidden w-full scale-[0.9] items-center justify-center sm:mt-4 sm:scale-[0.98] md:mt-0 md:flex md:w-[42%] md:scale-105 lg:w-auto lg:scale-110 xl:scale-[1.12]">
         <ChatInterface />
       </div>
     </section>

@@ -15,7 +15,7 @@ export function Section({
   return (
     <section
       className={cn(
-        'py-14 md:py-20',
+        'scroll-mt-20 py-14 md:scroll-mt-24 md:py-20',
         variant === 'gradient' &&
           'from-primary/5 via-background to-background bg-linear-to-b',
         variant === 'muted' && 'bg-muted/30',

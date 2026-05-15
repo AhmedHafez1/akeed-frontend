@@ -2,12 +2,12 @@
 
 import type { ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
+import { Toaster } from 'react-hot-toast'
 import { isAuthRoute, isPublicRoute } from '@/shared/lib/locale'
+import { WhatsAppButton } from '@/shared/ui/WhatsAppButton'
 import { AppHeader } from './AppHeader'
 import { Footer } from './Footer'
 import { Header } from './Header'
-import { WhatsAppButton } from '@/shared/ui/WhatsAppButton'
-import { Toaster } from 'react-hot-toast'
 import { AuthGuard } from '../auth/AuthGuard'
 import { AuthLayout } from './AuthLayout'
 
@@ -34,11 +34,11 @@ export function StandaloneLayout({ children }: StandaloneLayoutProps) {
   // 2. Public marketing routes — no auth required
   if (isPublicRoute(pathname)) {
     return (
-      <>
+      <div className="flex min-h-screen flex-col bg-white">
         <Header />
-        <main>{children}</main>
+        <main className="flex-1">{children}</main>
         <Footer />
-        <WhatsAppButton />
+        <WhatsAppButton offsetForMobileCta />
         <Toaster
           position="top-right"
           toastOptions={{
@@ -49,7 +49,7 @@ export function StandaloneLayout({ children }: StandaloneLayoutProps) {
             },
           }}
         />
-      </>
+      </div>
     )
   }
 

@@ -11,11 +11,13 @@ export function Header() {
   const {
     t,
     locale,
+    homeHref,
     navigation,
     isScrolled,
     isMobileMenuOpen,
     setIsMobileMenuOpen,
     scrollToSection,
+    handleHomeClick,
     handleLocaleChange,
     handleCtaClick,
     handleSignInClick,
@@ -33,9 +35,7 @@ export function Header() {
         <div className="px-4 sm:px-6 lg:px-8 xl:mx-46">
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
-            <HeaderLogo
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            />
+            <HeaderLogo href={homeHref} onClick={handleHomeClick} />
 
             {/* Desktop Navigation */}
             <HeaderNav items={navigation} onNavigate={scrollToSection} />

@@ -1,25 +1,29 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link'
+import type { MouseEvent } from 'react'
 
 interface HeaderLogoProps {
-  onClick: () => void
+  href: string
+  onClick: (event: MouseEvent<HTMLAnchorElement>) => void
 }
 
-export function HeaderLogo({ onClick }: HeaderLogoProps) {
+export function HeaderLogo({ href, onClick }: HeaderLogoProps) {
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
-      className="group flex cursor-pointer items-center gap-3"
-      onClick={onClick}
+      className="group flex items-center gap-3"
     >
-      <Image
-        src="/images/akeed-web-logo-horizontal.png"
-        alt="Akeed Logo"
-        width={200}
-        height={100}
-        className="object-contain"
-      />
+      <Link href={href} onClick={onClick} aria-label="Akeed home">
+        <Image
+          src="/images/akeed-web-logo-horizontal.png"
+          alt="Akeed Logo"
+          width={200}
+          height={100}
+          className="object-contain"
+        />
+      </Link>
     </motion.div>
   )
 }
