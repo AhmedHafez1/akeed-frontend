@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { auth } from '@/shared/lib/auth'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
+import { SHOPIFY_APP_STORE_LISTING_URL } from '@/shared/lib/shopify-auth'
 import { useTranslations } from 'next-intl'
 
 /**
@@ -387,7 +388,7 @@ export default function SignupPage() {
         </div>
 
         <Link
-          href="/api/auth/shopify"
+          href={SHOPIFY_APP_STORE_LISTING_URL}
           className="flex w-full items-center justify-center gap-3 rounded-2xl border border-emerald-100 bg-white px-4 py-3 text-sm font-bold text-slate-700 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           <svg

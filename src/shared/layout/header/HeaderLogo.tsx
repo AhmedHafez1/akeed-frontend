@@ -19,8 +19,8 @@ export function HeaderLogo({ href, onClick }: HeaderLogoProps) {
         <Image
           src="/images/akeed-web-logo-horizontal.png"
           alt="Akeed Logo"
-          width={200}
-          height={100}
+          width={130}
+          height={70}
           className="object-contain"
         />
       </Link>

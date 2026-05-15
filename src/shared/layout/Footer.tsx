@@ -60,7 +60,8 @@ export function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="bg-white text-slate-600">
+    // gradient background
+    <footer className="bg-linear-to-b from-slate-100 to-white text-slate-600">
       <div className="mx-auto max-w-410 rounded-3xl px-6 py-10">
         <div className="grid gap-10 md:grid-cols-[1fr_1fr]">
           <div className="flex flex-col items-center justify-center md:items-start md:justify-start md:text-start">
@@ -123,10 +124,10 @@ export function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-6 border-t border-slate-200 pt-8 text-center md:mt-14 md:flex-row md:text-start">
-          <p className="md:text-md text-base text-slate-600">
+          <p className="md:text-md text-sm text-slate-600">
             {t('copyright', { year })}
           </p>
-          <div className="md:text-md flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-base">
+          <div className="md:text-md flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
             <Link
               href={withLocale('/privacy', locale)}
               className="font-medium text-slate-700 underline underline-offset-2 transition-colors hover:text-emerald-600"
