@@ -23,7 +23,7 @@ export function Footer() {
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-8 text-center md:flex-row md:text-start">
         <div className="flex max-w-xl flex-col items-center gap-4 md:items-start">
           <Image
-            src="/images/akeed_logo_no_bg.png"
+            src="/images/akeed-web-logo-horizontal.png"
             alt={t('logoAlt')}
             width={170}
             height={70}
@@ -49,9 +49,7 @@ export function Footer() {
               </Link>
             ))}
           </nav>
-          <p className="text-base text-slate-500">
-            {t('copyright', { year })}
-          </p>
+          <p className="text-base text-slate-500">{t('copyright', { year })}</p>
         </div>
       </div>
     </footer>

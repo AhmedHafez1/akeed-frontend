@@ -14,10 +14,10 @@ export function HeaderLogo({ onClick }: HeaderLogoProps) {
       onClick={onClick}
     >
       <Image
-        src="/images/akeed_logo_no_bg.png"
+        src="/images/akeed-web-logo-horizontal.png"
         alt="Akeed Logo"
-        width={70}
-        height={70}
+        width={200}
+        height={100}
         className="object-contain"
       />
     </motion.div>

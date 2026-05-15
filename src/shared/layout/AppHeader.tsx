@@ -59,7 +59,7 @@ export function AppHeader() {
             className="flex items-center"
           >
             <Image
-              src="/images/akeed_logo_no_bg.png"
+              src="/images/akeed-web-logo-horizontal.png"
               alt="Akeed"
               width={48}
               height={48}
