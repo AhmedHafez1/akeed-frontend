@@ -268,9 +268,6 @@
     "currency": "جنيه",
     "note": "ملاحظة: متوسط خسارة الشحن في الطلب المرتجع يقارب 60 جنيهاً للذهاب والعودة."
   },
-  "footer": {
-    "copyright": "© 2024 أكيد. جميع الحقوق محفوظة."
-  },
   "whatsapp_button": {
     "text": "جرّب الخدمة من موبايلك أولاً",
     "message": "مرحباً، أريد تجربة خدمة أكيد"
@@ -375,16 +372,31 @@
   "footer": {
     "logoAlt": "أكيد",
     "navigationLabel": "روابط التذييل",
-    "navigationTitle": "استكشف",
+    "navigationTitle": "التنقل",
+    "supportTitle": "الدعم",
+    "legalTitle": "القانونية",
     "home": "الرئيسية",
-    "support": "الدعم",
-    "privacy": "الخصوصية",
-    "terms": "الشروط",
-    "legalLine": "تُشغّل أكيد بواسطة أكيد للحلول الرقمية.",
-    "ctaTitle": "جاهز لتأكيد طلبات الدفع عند الاستلام؟",
-    "ctaDescription": "ابدأ عبر بنية واتساب المشتركة من أكيد، ثم قم بالترقية مع نمو متجرك.",
-    "ctaLabel": "ابدأ مجاناً",
-    "madeForMerchants": "مصمم لتجار المنطقة",
+    "features": "المزايا",
+    "pricing": "الأسعار",
+    "integrations": "التكاملات",
+    "changelog": "سجل التحديثات",
+    "helpCenter": "مركز المساعدة",
+    "contactUs": "تواصل معنا",
+    "status": "الحالة",
+    "resources": "الموارد",
+    "community": "المجتمع",
+    "privacyPolicy": "سياسة الخصوصية",
+    "termsOfService": "شروط الخدمة",
+    "security": "الأمان",
+    "dataProcessing": "معالجة البيانات",
+    "cookiePolicy": "سياسة ملفات الارتباط",
+    "facebook": "فيسبوك",
+    "youtube": "يوتيوب",
+    "instagram": "إنستغرام",
+    "legalLine": "يتم تشغيل أكيد بواسطة أكيد للحلول الرقمية.",
+    "ctaTitle": "ابدأ مع أكيد",
+    "ctaDescription": "انضم إلى الفرق التي توفر الوقت وتدفع العمل إلى الأمام.",
+    "ctaLabel": "إنشاء حساب",
     "copyright": "© {year} أكيد. جميع الحقوق محفوظة."
   },
   "support": {

@@ -275,9 +275,6 @@
     "currency": "EGP",
     "note": "Note: Average shipping cost burned per order is around 60 EGP (round trip)."
   },
-  "footer": {
-    "copyright": "© 2024 Akeed. All rights reserved."
-  },
   "whatsapp_button": {
     "text": "Try it on your phone first",
     "message": "Hi, I want to try Akeed service"
@@ -382,16 +379,31 @@
   "footer": {
     "logoAlt": "Akeed",
     "navigationLabel": "Footer navigation",
-    "navigationTitle": "Explore",
+    "navigationTitle": "Navigation",
+    "supportTitle": "Support",
+    "legalTitle": "Legal",
     "home": "Home",
-    "support": "Support",
-    "privacy": "Privacy",
-    "terms": "Terms",
-    "legalLine": "Akeed is operated by Akeed Digital Solutions.",
-    "ctaTitle": "Ready to confirm COD orders?",
-    "ctaDescription": "Start with Akeed's shared WhatsApp infrastructure and upgrade as your store grows.",
-    "ctaLabel": "Start free",
-    "madeForMerchants": "Built for MENA merchants",
+    "features": "Features",
+    "pricing": "Pricing",
+    "integrations": "Integrations",
+    "changelog": "Changelog",
+    "helpCenter": "Help Center",
+    "contactUs": "Contact Us",
+    "status": "Status",
+    "resources": "Resources",
+    "community": "Community",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "security": "Security",
+    "dataProcessing": "Data Processing",
+    "cookiePolicy": "Cookie Policy",
+    "facebook": "Facebook",
+    "youtube": "YouTube",
+    "instagram": "Instagram",
+    "legalLine": "Operated by Akeed Digital Solutions.",
+    "ctaTitle": "Get started with Akeed",
+    "ctaDescription": "Join teams that are saving time and moving work forward.",
+    "ctaLabel": "Create account",
     "copyright": "© {year} Akeed. All rights reserved."
   },
   "support": {
