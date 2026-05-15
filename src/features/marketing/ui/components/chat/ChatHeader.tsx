@@ -12,7 +12,7 @@ export function ChatHeader({ statusLabel, timeLabel }: ChatHeaderProps) {
       <div className="flex items-center gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md">
           <Image
-            src="/images/akeed_logo_no_bg.png"
+            src="/images/akeed-social-profile-circle-1080.png"
             alt="Akeed Logo"
             width={40}
             height={40}

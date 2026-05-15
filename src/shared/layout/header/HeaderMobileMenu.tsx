@@ -1,5 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { Globe } from 'lucide-react'
+import Link from 'next/link'
+import type { MouseEvent } from 'react'
 import { HeaderNavItem } from './header.model'
 
 interface HeaderMobileMenuProps {
@@ -8,7 +10,7 @@ interface HeaderMobileMenuProps {
   locale: string
   ctaLabel: string
   signInLabel: string
-  onNavigate: (id: string) => void
+  onNavigate: (id: string, event: MouseEvent<HTMLAnchorElement>) => void
   onLocaleChange: () => void
   onSignInClick: () => void
   onCtaClick: () => void
@@ -38,16 +40,20 @@ export function HeaderMobileMenu({
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <nav className="space-y-1 py-6">
               {items.map((item, index) => (
-                <motion.button
+                <motion.div
                   key={item.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  onClick={() => onNavigate(item.id)}
-                  className="block w-full rounded-lg px-4 py-3 text-left text-base font-semibold text-gray-700 transition-colors hover:bg-orange-50 hover:text-orange-600"
                 >
-                  {item.label}
-                </motion.button>
+                  <Link
+                    href={item.href}
+                    onClick={(event) => onNavigate(item.id, event)}
+                    className="block w-full rounded-lg px-4 py-3 text-start text-base font-semibold text-gray-700 transition-colors hover:bg-orange-50 hover:text-orange-600"
+                  >
+                    {item.label}
+                  </Link>
+                </motion.div>
               ))}
               <div className="mt-4 space-y-3 border-t border-gray-200 pt-4">
                 <button

@@ -1,4 +1,11 @@
-import { Building2, Rocket, Sprout, Star, Zap, type LucideIcon } from 'lucide-react'
+import {
+  Building2,
+  Rocket,
+  Sprout,
+  Star,
+  Zap,
+  type LucideIcon,
+} from 'lucide-react'
 import type { Tier } from '@/features/marketing/model/tier.model'
 import {
   LandingIconBadge,
@@ -25,6 +32,11 @@ const tierIcons: Record<string, LucideIcon> = {
   business: Building2,
 }
 
+const priceFormatter = new Intl.NumberFormat('en-US', {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+})
+
 export function PricingPlanCard({
   tier,
   t,
@@ -38,11 +50,17 @@ export function PricingPlanCard({
   const featureKeys = (
     PRICING_FEATURE_INDICES_BY_PLAN[tier.key] ??
     PRICING_FEATURE_INDICES_BY_PLAN.starter
-  ).map((index) =>
-    getPricingFeatureKey(tier.key, index)
-  )
+  ).map((index) => getPricingFeatureKey(tier.key, index))
 
   const priceLabel = tier.isFree ? t('free') : t(`${tier.key}_price`)
+  const [translatedPriceAmount, translatedPricePeriod = ''] = priceLabel
+    .split('/')
+    .map((part) => part.trim())
+  const amountLabel =
+    typeof tier.price === 'number'
+      ? priceFormatter.format(tier.price)
+      : translatedPriceAmount.replace('$', '').trim()
+  const periodLabel = translatedPricePeriod || translatedPriceAmount
   const subtitle = t(`${tier.key}_subtitle`)
   const ctaLabel = t(`${tier.key}_cta`)
 
@@ -79,7 +97,7 @@ export function PricingPlanCard({
       <div className="mb-6 border-b border-slate-200/80 pb-6">
         <div className="flex justify-between">
           <div>
-            <h3 className="text-[1.55rem] leading-tight font-semibold tracking-[-0.04em] text-slate-900">
+            <h3 className="text-[1.55rem] leading-tight font-semibold tracking-normal text-slate-900">
               {t(`tiers.${tier.key}`)}
             </h3>
             <p className="mt-2 text-xs text-slate-600">{subtitle}</p>
@@ -96,31 +114,49 @@ export function PricingPlanCard({
         <p
           className={cn(
             'text-xs font-semibold text-slate-400',
-            isRTL ? 'tracking-normal' : 'tracking-[0.18em] uppercase'
+            isRTL ? 'tracking-normal' : 'tracking-normal uppercase'
           )}
         >
           {tier.isFree ? t('without_price') : t('total_price')}
         </p>
 
-        <p
-          className={cn(
-            'mt-3 text-4xl leading-none font-bold tracking-[-0.04em]',
-            tier.isFree ? 'text-emerald-600' : 'text-slate-900'
-          )}
-        >
-          {priceLabel}
-        </p>
+        {tier.isFree ? (
+          <p className="mt-3 text-4xl leading-none font-bold tracking-normal text-emerald-600">
+            {priceLabel}
+          </p>
+        ) : (
+          <p
+            dir="ltr"
+            className={cn(
+              'mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-slate-900',
+              isRTL ? 'justify-end' : 'justify-start'
+            )}
+          >
+            <span
+              className="inline-flex items-baseline gap-1 text-4xl leading-none font-bold tracking-normal"
+              dir="ltr"
+            >
+              <span className="text-3xl">$</span>
+              <span>{amountLabel}</span>
+            </span>
+            <span className="text-3xl font-semibold text-slate-400">/</span>
+            <span className="text-2xl leading-none font-semibold text-slate-900">
+              {periodLabel}
+            </span>
+          </p>
+        )}
       </div>
 
       <div className="mb-6 border-b border-slate-200/80 pb-6">
-        <p className="mb-3 text-xs font-semibold tracking-[0.14em] text-slate-400 uppercase">
+        <p className="mb-3 text-xs font-semibold tracking-normal text-slate-400 uppercase">
           {t('plan_features')}
         </p>
-        <ul className="space-y-2">
+        <ul
+          className="list-disc space-y-2 ps-5 text-sm text-slate-700 marker:text-slate-400"
+          dir={isRTL ? 'rtl' : 'ltr'}
+        >
           {featureKeys.map((key) => (
-            <li key={key} className="text-sm text-slate-700">
-              • {t(key)}
-            </li>
+            <li key={key}>{t(key)}</li>
           ))}
         </ul>
       </div>

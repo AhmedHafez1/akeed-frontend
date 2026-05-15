@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { type MouseEvent, useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
@@ -8,11 +8,28 @@ const SCROLL_THRESHOLD = 20
 const SCROLL_OFFSET = 80
 const MOBILE_SCROLL_DELAY = 100
 
+function getPathWithoutLocale(pathname: string): string {
+  return '/' + pathname.split('/').slice(2).join('/')
+}
+
+function scrollToElement(id: string): boolean {
+  const element = document.getElementById(id)
+
+  if (!element) return false
+
+  const elementPosition = element.getBoundingClientRect().top
+  const offsetPosition = elementPosition + window.scrollY - SCROLL_OFFSET
+  window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
+  return true
+}
+
 export function useHeader() {
   const t = useTranslations('header')
   const pathname = usePathname() ?? ''
   const router = useRouter()
   const locale = getLocaleFromPathname(pathname)
+  const homeHref = withLocale('/', locale)
+  const isHomePage = getPathWithoutLocale(pathname) === '/'
 
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -28,23 +45,59 @@ export function useHeader() {
 
   const navigation = useMemo<HeaderNavItem[]>(
     () => [
-      { label: t('features'), id: 'solution' },
-      { label: t('pricing'), id: 'pricing' },
-      { label: t('faq'), id: 'faq' },
+      {
+        href: withLocale('/#solution', locale),
+        label: t('features'),
+        id: 'solution',
+      },
+      {
+        href: withLocale('/#pricing', locale),
+        label: t('pricing'),
+        id: 'pricing',
+      },
+      { href: withLocale('/#faq', locale), label: t('faq'), id: 'faq' },
     ],
-    [t]
+    [locale, t]
   )
 
-  const scrollToSection = (id: string) => {
+  useEffect(() => {
+    if (!isHomePage) return
+
+    const id = window.location.hash.replace('#', '')
+    if (!id) return
+
+    const timeoutId = window.setTimeout(() => {
+      scrollToElement(id)
+    }, MOBILE_SCROLL_DELAY)
+
+    return () => window.clearTimeout(timeoutId)
+  }, [isHomePage, pathname])
+
+  const scrollToSection = (
+    id: string,
+    event?: MouseEvent<HTMLAnchorElement>
+  ) => {
     setIsMobileMenuOpen(false)
+
+    if (!isHomePage) return
+
+    event?.preventDefault()
+
     setTimeout(() => {
-      const element = document.getElementById(id)
-      if (element) {
-        const elementPosition = element.getBoundingClientRect().top
-        const offsetPosition = elementPosition + window.scrollY - SCROLL_OFFSET
-        window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
+      if (scrollToElement(id)) {
+        window.history.pushState(null, '', withLocale(`/#${id}`, locale))
       }
     }, MOBILE_SCROLL_DELAY)
+  }
+
+  const handleHomeClick = (event?: MouseEvent<HTMLAnchorElement>) => {
+    setIsMobileMenuOpen(false)
+
+    if (!isHomePage) return
+    event?.preventDefault()
+
+    window.history.pushState(null, '', homeHref)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handleLocaleChange = () => {
@@ -69,11 +122,13 @@ export function useHeader() {
   return {
     t,
     locale,
+    homeHref,
     navigation,
     isScrolled,
     isMobileMenuOpen,
     setIsMobileMenuOpen,
     scrollToSection,
+    handleHomeClick,
     handleLocaleChange,
     handleCtaClick,
     handleSignInClick,
