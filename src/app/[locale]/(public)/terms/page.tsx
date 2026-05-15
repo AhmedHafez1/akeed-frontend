@@ -27,6 +27,7 @@ export default function TermsPage() {
             {t('termsTitle')}
           </h1>
           <p className="text-sm text-slate-500">{t('termsLastUpdated')}</p>
+          <p className="text-sm text-slate-600">{t('legalCompanyLine')}</p>
           <p className="text-sm text-slate-600">{t('termsIntro')}</p>
         </div>
 

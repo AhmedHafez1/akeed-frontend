@@ -27,6 +27,7 @@ export default function PrivacyPage() {
             {t('privacyTitle')}
           </h1>
           <p className="text-sm text-slate-500">{t('privacyLastUpdated')}</p>
+          <p className="text-sm text-slate-600">{t('legalCompanyLine')}</p>
           <p className="text-sm text-slate-600">{t('privacyIntro')}</p>
         </div>
 

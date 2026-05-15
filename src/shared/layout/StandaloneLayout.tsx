@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 import { isAuthRoute, isPublicRoute } from '@/shared/lib/locale'
 import { AppHeader } from './AppHeader'
+import { Footer } from './Footer'
 import { Header } from './Header'
 import { WhatsAppButton } from '@/shared/ui/WhatsAppButton'
 import { Toaster } from 'react-hot-toast'
@@ -19,7 +20,7 @@ interface StandaloneLayoutProps {
  *
  * Three-way branch:
  *  1. Auth routes (login, signup, forgot-password, reset-password) → AuthLayout
- *  2. Public routes (landing, terms, privacy) → marketing Header, no auth guard
+ *  2. Public routes (landing, terms, privacy, support) → marketing Header, no auth guard
  *  3. Protected routes (dashboard, etc.) → AppHeader + AuthGuard
  */
 export function StandaloneLayout({ children }: StandaloneLayoutProps) {
@@ -36,6 +37,7 @@ export function StandaloneLayout({ children }: StandaloneLayoutProps) {
       <>
         <Header />
         <main>{children}</main>
+        <Footer />
         <WhatsAppButton />
         <Toaster
           position="top-right"
