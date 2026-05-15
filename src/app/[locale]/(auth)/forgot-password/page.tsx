@@ -17,6 +17,7 @@ export default function ForgotPasswordPage() {
   const t = useTranslations()
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname ?? '')
+  const isRtl = locale === 'ar'
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -49,9 +50,9 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="space-y-8">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-semibold text-slate-900">
+    <div className="space-y-6">
+      <div className="space-y-2 text-center">
+        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
           {t('auth.forgotPasswordTitle')}
         </h1>
         <p className="text-sm text-slate-600">
@@ -59,15 +60,18 @@ export default function ForgotPasswordPage() {
         </p>
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm transition-all duration-300 hover:border-emerald-200 hover:shadow-md">
         {success ? (
           <div className="space-y-4">
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+            <div
+              role="status"
+              className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700"
+            >
               {t('auth.resetLinkSent')}
             </div>
             <Link
               href={withLocale('/login', locale)}
-              className="inline-flex text-sm font-semibold text-emerald-600 transition-colors hover:text-emerald-700"
+              className="inline-flex text-sm font-semibold text-emerald-600 transition-colors hover:text-emerald-700 focus-visible:underline focus-visible:outline-none"
             >
               {t('auth.backToSignIn')}
             </Link>
@@ -75,7 +79,10 @@ export default function ForgotPasswordPage() {
         ) : (
           <form className="space-y-5" onSubmit={handleSubmit}>
             {error && (
-              <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              <div
+                role="alert"
+                className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+              >
                 {error}
               </div>
             )}
@@ -105,11 +112,11 @@ export default function ForgotPasswordPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="relative flex w-full items-center justify-center rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-70"
+              className="relative flex w-full items-center justify-center rounded-xl bg-emerald-600 px-4 py-3 text-sm font-bold text-white shadow-sm shadow-emerald-900/10 transition-all hover:bg-emerald-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-70"
             >
               {isLoading && (
                 <svg
-                  className="absolute left-4 h-4 w-4 animate-spin"
+                  className={`absolute ${isRtl ? 'right-4' : 'left-4'} h-4 w-4 animate-spin`}
                   viewBox="0 0 24 24"
                   fill="none"
                   aria-hidden="true"
@@ -137,7 +144,7 @@ export default function ForgotPasswordPage() {
             <div className="text-center">
               <Link
                 href={withLocale('/login', locale)}
-                className="text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900"
+                className="text-sm font-semibold text-slate-600 transition-colors hover:text-emerald-700 focus-visible:underline focus-visible:outline-none"
               >
                 {t('auth.backToSignIn')}
               </Link>

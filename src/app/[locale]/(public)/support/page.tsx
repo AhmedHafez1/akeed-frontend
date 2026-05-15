@@ -15,7 +15,7 @@ const detailKeys = ['detailStore', 'detailContact', 'detailIssue'] as const
 
 export default function SupportPage() {
   const t = useTranslations('support')
-  const { locale, isRTL } = useLocaleInfo()
+  const { locale } = useLocaleInfo()
   const email = t('email')
   const whatsappHref = createAkeedWhatsAppUrl(t('whatsappMessage'))
 
@@ -34,7 +34,7 @@ export default function SupportPage() {
         >
           <a
             href={`mailto:${email}`}
-            className="inline-flex h-11 items-center justify-center rounded-xl bg-emerald-600 px-5 text-sm font-bold text-white shadow-sm shadow-emerald-900/10 transition-colors hover:bg-emerald-700"
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-emerald-600 px-5 text-sm font-bold text-white shadow-sm shadow-emerald-900/10 transition-all hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
             dir="ltr"
           >
             {email}
@@ -50,7 +50,7 @@ export default function SupportPage() {
             href={whatsappHref}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-5 text-sm font-bold text-emerald-700 transition-colors hover:border-emerald-300 hover:bg-emerald-100"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50 px-5 text-sm font-bold text-emerald-700 transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:bg-emerald-100 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             {t('whatsappCta')}
             <ArrowUpRight className="h-4 w-4" />
@@ -59,37 +59,37 @@ export default function SupportPage() {
       </div>
 
       <div className="mt-5 grid gap-5 md:grid-cols-[1.1fr_0.9fr]">
-        <section className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-200/60 md:p-7">
-          <h2 className="text-xl leading-8 font-bold text-slate-900">
+        <section className="rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm transition-all duration-300 hover:border-emerald-200 hover:shadow-md md:p-7">
+          <h2 className="text-lg font-bold text-slate-800">
             {t('detailsTitle')}
           </h2>
           <ul className="mt-5 space-y-3">
             {detailKeys.map((key) => (
               <li
                 key={key}
-                className="flex gap-3 text-sm leading-7 text-slate-600"
+                className="flex gap-3 text-sm leading-relaxed text-slate-600"
               >
-                <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-emerald-600" />
+                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
                 <span>{t(key)}</span>
               </li>
             ))}
           </ul>
         </section>
 
-        <section className="rounded-3xl border border-orange-100 bg-orange-50/70 p-6 text-slate-700 shadow-sm shadow-orange-100/60 md:p-7">
-          <p className="text-sm font-semibold text-orange-700">
+        <section className="rounded-2xl border border-orange-200/80 bg-orange-50/60 p-6 shadow-sm transition-all duration-300 hover:shadow-md md:p-7">
+          <p className="text-sm font-bold text-orange-700">
             {t('responseTitle')}
           </p>
-          <p className="mt-3 text-sm leading-7 text-slate-600">
+          <p className="mt-3 text-sm leading-relaxed text-slate-600">
             {t('responseBody')}
           </p>
         </section>
       </div>
 
-      <div className={`mt-8 flex ${isRTL ? 'justify-end' : 'justify-start'}`}>
+      <div className="mt-10 flex justify-center">
         <Link
           href={withLocale('/', locale)}
-          className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 bg-white px-5 text-sm font-bold text-slate-700 transition-colors hover:border-emerald-200 hover:text-emerald-700"
+          className="inline-flex h-11 items-center justify-center rounded-xl border border-emerald-100 bg-white px-6 text-sm font-bold text-slate-700 transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:text-emerald-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           {t('backHome')}
         </Link>
