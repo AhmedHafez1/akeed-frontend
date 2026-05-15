@@ -1,66 +1,99 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { ArrowUpRight, AtSign, CheckCircle2, MessageCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
+import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { withLocale } from '@/shared/lib/locale'
+import { createAkeedWhatsAppUrl } from '@/shared/lib/whatsapp'
+import {
+  PublicInfoCard,
+  PublicPageShell,
+} from '@/shared/layout/PublicPageShell'
+
+const detailKeys = ['detailStore', 'detailContact', 'detailIssue'] as const
 
 export default function SupportPage() {
   const t = useTranslations('support')
-  const pathname = usePathname()
-  const locale = getLocaleFromPathname(pathname ?? '')
+  const { locale, isRTL } = useLocaleInfo()
   const email = t('email')
+  const whatsappHref = createAkeedWhatsAppUrl(t('whatsappMessage'))
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-16">
-      <div className="space-y-8">
-        <div className="space-y-3">
-          <p className="text-sm font-semibold tracking-wide text-emerald-600 uppercase">
-            {t('eyebrow')}
-          </p>
-          <h1 className="text-3xl font-semibold text-slate-900">
-            {t('title')}
-          </h1>
-          <p className="text-sm leading-relaxed text-slate-600">
-            {t('intro')}
-          </p>
-        </div>
+    <PublicPageShell
+      eyebrow={t('eyebrow')}
+      title={t('title')}
+      description={t('intro')}
+      contentClassName="mx-auto max-w-4xl"
+    >
+      <div className="grid gap-5 md:grid-cols-2">
+        <PublicInfoCard
+          icon={<AtSign className="h-5 w-5" />}
+          title={t('emailTitle')}
+          description={t('emailDescription')}
+        >
+          <a
+            href={`mailto:${email}`}
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-emerald-600 px-5 text-sm font-bold text-white shadow-sm shadow-emerald-900/10 transition-colors hover:bg-emerald-700"
+            dir="ltr"
+          >
+            {email}
+          </a>
+        </PublicInfoCard>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="space-y-3">
-            <h2 className="text-lg font-semibold text-slate-800">
-              {t('emailTitle')}
-            </h2>
-            <p className="text-sm leading-relaxed text-slate-600">
-              {t('emailDescription')}
-            </p>
-            <a
-              href={`mailto:${email}`}
-              className="inline-flex text-base font-semibold text-emerald-600 transition-colors hover:text-emerald-700"
-            >
-              {email}
-            </a>
-          </div>
-        </div>
+        <PublicInfoCard
+          icon={<MessageCircle className="h-5 w-5" />}
+          title={t('whatsappTitle')}
+          description={t('whatsappDescription')}
+        >
+          <a
+            href={whatsappHref}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-5 text-sm font-bold text-emerald-700 transition-colors hover:border-emerald-300 hover:bg-emerald-100"
+          >
+            {t('whatsappCta')}
+            <ArrowUpRight className="h-4 w-4" />
+          </a>
+        </PublicInfoCard>
+      </div>
 
-        <div className="space-y-2">
-          <h2 className="text-lg font-semibold text-slate-800">
-            {t('responseTitle')}
+      <div className="mt-5 grid gap-5 md:grid-cols-[1.1fr_0.9fr]">
+        <section className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-200/60 md:p-7">
+          <h2 className="text-xl leading-8 font-bold text-slate-900">
+            {t('detailsTitle')}
           </h2>
-          <p className="text-sm leading-relaxed text-slate-600">
+          <ul className="mt-5 space-y-3">
+            {detailKeys.map((key) => (
+              <li
+                key={key}
+                className="flex gap-3 text-sm leading-7 text-slate-600"
+              >
+                <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-emerald-600" />
+                <span>{t(key)}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="rounded-3xl border border-orange-100 bg-orange-50/70 p-6 text-slate-700 shadow-sm shadow-orange-100/60 md:p-7">
+          <p className="text-sm font-semibold text-orange-700">
+            {t('responseTitle')}
+          </p>
+          <p className="mt-3 text-sm leading-7 text-slate-600">
             {t('responseBody')}
           </p>
-        </div>
-
-        <div className="border-t border-slate-200 pt-6">
-          <Link
-            href={withLocale('/', locale)}
-            className="text-sm font-semibold text-emerald-600 transition-colors hover:text-emerald-700"
-          >
-            {t('backHome')}
-          </Link>
-        </div>
+        </section>
       </div>
-    </div>
+
+      <div className={`mt-8 flex ${isRTL ? 'justify-end' : 'justify-start'}`}>
+        <Link
+          href={withLocale('/', locale)}
+          className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 bg-white px-5 text-sm font-bold text-slate-700 transition-colors hover:border-emerald-200 hover:text-emerald-700"
+        >
+          {t('backHome')}
+        </Link>
+      </div>
+    </PublicPageShell>
   )
 }

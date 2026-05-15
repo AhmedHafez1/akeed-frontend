@@ -347,6 +347,7 @@
   },
   "legal": {
     "legalCompanyLine": "Akeed is operated by Akeed Digital Solutions.",
+    "termsEyebrow": "Legal",
     "termsTitle": "Terms of Service",
     "termsLastUpdated": "Last updated: March 2026",
     "termsIntro": "By using Akeed, you agree to the following terms and conditions.",
@@ -360,6 +361,7 @@
     "termsSection4Body": "Akeed is provided on an \"as-is\" basis. We do not guarantee uninterrupted service and are not liable for indirect damages arising from use of the service.",
     "termsSection5Title": "5. Changes to Terms",
     "termsSection5Body": "We reserve the right to modify these terms at any time. Continued use of the service constitutes acceptance of the updated terms.",
+    "privacyEyebrow": "Privacy",
     "privacyTitle": "Privacy Policy",
     "privacyLastUpdated": "Last updated: March 2026",
     "privacyIntro": "This policy explains how Akeed collects, uses, and protects your data.",
@@ -372,15 +374,24 @@
     "privacySection4Title": "4. Security",
     "privacySection4Body": "We use industry-standard encryption and security practices to protect your data. However, no method of transmission over the internet is 100% secure.",
     "privacySection5Title": "5. Contact",
-    "privacySection5Body": "For privacy-related inquiries, contact us at support@getakeed.com."
+    "privacySection5Body": "For privacy-related inquiries, contact us at support@getakeed.com.",
+    "homeLink": "Back to home",
+    "termsLink": "View Terms of Service",
+    "privacyLink": "View Privacy Policy"
   },
   "footer": {
     "logoAlt": "Akeed",
     "navigationLabel": "Footer navigation",
+    "navigationTitle": "Explore",
+    "home": "Home",
     "support": "Support",
     "privacy": "Privacy",
     "terms": "Terms",
     "legalLine": "Akeed is operated by Akeed Digital Solutions.",
+    "ctaTitle": "Ready to confirm COD orders?",
+    "ctaDescription": "Start with Akeed's shared WhatsApp infrastructure and upgrade as your store grows.",
+    "ctaLabel": "Start free",
+    "madeForMerchants": "Built for MENA merchants",
     "copyright": "© {year} Akeed. All rights reserved."
   },
   "support": {
@@ -390,7 +401,15 @@
     "emailTitle": "Email support",
     "emailDescription": "Send your request to our support team and we will respond as soon as possible.",
     "email": "support@getakeed.com",
-    "responseTitle": "What to include",
+    "whatsappTitle": "WhatsApp support",
+    "whatsappDescription": "Prefer a quick chat? Send us a WhatsApp message and we will guide you from there.",
+    "whatsappCta": "Open WhatsApp",
+    "whatsappMessage": "Hi, I need help with Akeed.",
+    "detailsTitle": "What to include",
+    "detailStore": "Your store name or Shopify domain.",
+    "detailContact": "The email address connected to your Akeed account.",
+    "detailIssue": "A short description of the question, setup step, or order verification issue.",
+    "responseTitle": "Response expectations",
     "responseBody": "Please include your store name, contact email, and a short description of the issue so we can help quickly.",
     "backHome": "Back to home"
   },

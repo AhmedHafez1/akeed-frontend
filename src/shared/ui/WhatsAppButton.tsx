@@ -2,6 +2,7 @@
 
 import { MessageCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { createAkeedWhatsAppUrl } from '@/shared/lib/whatsapp'
 import { cn } from '@/shared/lib/utils'
 
 interface WhatsAppButtonProps {
@@ -13,16 +14,8 @@ export function WhatsAppButton({
 }: WhatsAppButtonProps) {
   const t = useTranslations('whatsapp_button')
 
-  /**
-   * Opens WhatsApp Web with a given message and phone number
-   * @param {string} message - The message to be sent
-   * @param {string} phoneNumber - The phone number to send the message to
-   */
   const handleClick = () => {
-    const message = encodeURIComponent(t('message'))
-    const phoneNumber = '201020956627'
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`
-    window.open(whatsappUrl, '_blank')
+    window.open(createAkeedWhatsAppUrl(t('message')), '_blank')
   }
 
   return (

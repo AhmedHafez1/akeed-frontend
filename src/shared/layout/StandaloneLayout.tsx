@@ -25,6 +25,10 @@ interface StandaloneLayoutProps {
  */
 export function StandaloneLayout({ children }: StandaloneLayoutProps) {
   const pathname = usePathname()
+  const publicPath = pathname
+    ? `/${pathname.split('/').slice(2).join('/')}`
+    : ''
+  const isLandingPage = publicPath === '/'
 
   // 1. Auth routes — minimal auth page shell
   if (isAuthRoute(pathname)) {
@@ -38,7 +42,7 @@ export function StandaloneLayout({ children }: StandaloneLayoutProps) {
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
-        <WhatsAppButton offsetForMobileCta />
+        {isLandingPage && <WhatsAppButton offsetForMobileCta />}
         <Toaster
           position="top-right"
           toastOptions={{
