@@ -69,8 +69,8 @@ export function Footer() {
                 src="/images/akeed-web-logo-horizontal.png"
                 alt={t('logoAlt')}
                 width={110}
-                height={70}
-                className="h-auto w-46 object-contain"
+                height={80}
+                className="object-contain"
               />
             </Link>
             <p className="md:text-md mt-1 max-w-xl text-sm leading-8 text-slate-500">
@@ -103,7 +103,7 @@ export function Footer() {
           >
             {footerLinkGroups.map((group) => (
               <div key={group.titleKey}>
-                <p className="md:text-md text-sm font-bold text-slate-950">
+                <p className="md:text-md text-center text-sm font-bold text-slate-950">
                   {t(group.titleKey)}
                 </p>
                 <div className="mt-7 flex flex-col gap-5">
@@ -111,7 +111,7 @@ export function Footer() {
                     <Link
                       key={link.labelKey}
                       href={withLocale(link.href, locale)}
-                      className="md:text-md text-sm text-slate-600 transition-colors hover:text-emerald-600"
+                      className="md:text-md text-center text-sm text-slate-600 transition-colors hover:text-emerald-600"
                     >
                       {t(link.labelKey)}
                     </Link>
