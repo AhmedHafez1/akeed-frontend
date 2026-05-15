@@ -19,6 +19,7 @@ export default function SignupPage() {
   const router = useRouter()
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname ?? '')
+  const isRtl = locale === 'ar'
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -82,27 +83,40 @@ export default function SignupPage() {
     }
   }
 
+  const inputBaseClass =
+    'block w-full rounded-xl border px-4 py-3 text-sm text-slate-900 shadow-sm transition placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none'
+  const inputDefaultClass =
+    'border-slate-200 focus-visible:border-emerald-500 focus-visible:ring-emerald-500/40'
+  const inputErrorClass =
+    'border-red-300 focus-visible:border-red-400 focus-visible:ring-red-500/40'
+  const iconEndClass = isRtl
+    ? 'pointer-events-none absolute inset-y-0 left-3 flex items-center'
+    : 'pointer-events-none absolute inset-y-0 right-3 flex items-center'
+
   return (
-    <div className="space-y-8">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-semibold text-slate-900">
+    <div className="space-y-6">
+      <div className="space-y-2 text-center">
+        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
           {t('auth.createAccount')}
         </h1>
         <p className="text-sm text-slate-600">
           {t('auth.alreadyHaveAccount')}{' '}
           <Link
             href={auth.getLoginPath(locale)}
-            className="font-semibold text-emerald-600 transition-colors hover:text-emerald-700"
+            className="font-semibold text-emerald-600 transition-colors hover:text-emerald-700 focus-visible:underline focus-visible:outline-none"
           >
             {t('auth.signIn')}
           </Link>
         </p>
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm transition-all duration-300 hover:border-emerald-200 hover:shadow-md">
         <form className="space-y-5" onSubmit={handleSubmit}>
           {error && (
-            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            <div
+              role="alert"
+              className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+            >
               {error}
             </div>
           )}
@@ -123,15 +137,16 @@ export default function SignupPage() {
                   required
                   value={formData.fullName}
                   onChange={handleChange}
-                  className="block w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 shadow-sm transition placeholder:text-slate-400 focus-visible:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+                  className={`${inputBaseClass} ${inputDefaultClass}`}
                   placeholder={t('auth.fullName')}
                 />
                 {formData.fullName ? (
-                  <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-emerald-500">
+                  <span className={`${iconEndClass} text-emerald-500`}>
                     <svg
                       className="h-4 w-4"
                       viewBox="0 0 20 20"
                       fill="currentColor"
+                      aria-hidden="true"
                     >
                       <path
                         fillRule="evenodd"
@@ -160,15 +175,16 @@ export default function SignupPage() {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="block w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 shadow-sm transition placeholder:text-slate-400 focus-visible:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+                  className={`${inputBaseClass} ${inputDefaultClass}`}
                   placeholder={t('auth.email')}
                 />
                 {formData.email ? (
-                  <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-emerald-500">
+                  <span className={`${iconEndClass} text-emerald-500`}>
                     <svg
                       className="h-4 w-4"
                       viewBox="0 0 20 20"
                       fill="currentColor"
+                      aria-hidden="true"
                     >
                       <path
                         fillRule="evenodd"
@@ -197,19 +213,16 @@ export default function SignupPage() {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className={`block w-full rounded-xl border px-4 py-3 text-sm text-slate-900 shadow-sm transition placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none ${
-                    fieldErrors.password
-                      ? 'border-red-300 focus-visible:border-red-400 focus-visible:ring-red-500/40'
-                      : 'border-slate-200 focus-visible:border-emerald-500 focus-visible:ring-emerald-500/40'
-                  }`}
-                  placeholder={t('auth.password')}
+                  aria-describedby="password-hint"
+                  className={`${inputBaseClass} ${fieldErrors.password ? inputErrorClass : inputDefaultClass}`}
                 />
                 {fieldErrors.password ? (
-                  <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-red-500">
+                  <span className={`${iconEndClass} text-red-500`}>
                     <svg
                       className="h-4 w-4"
                       viewBox="0 0 20 20"
                       fill="currentColor"
+                      aria-hidden="true"
                     >
                       <path
                         fillRule="evenodd"
@@ -219,11 +232,12 @@ export default function SignupPage() {
                     </svg>
                   </span>
                 ) : formData.password ? (
-                  <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-emerald-500">
+                  <span className={`${iconEndClass} text-emerald-500`}>
                     <svg
                       className="h-4 w-4"
                       viewBox="0 0 20 20"
                       fill="currentColor"
+                      aria-hidden="true"
                     >
                       <path
                         fillRule="evenodd"
@@ -234,11 +248,11 @@ export default function SignupPage() {
                   </span>
                 ) : null}
               </div>
-              <p className="mt-2 text-xs text-slate-500">
+              <p id="password-hint" className="mt-2 text-xs text-slate-500">
                 {t('auth.passwordRequirement')}
               </p>
               {fieldErrors.password && (
-                <p className="mt-2 text-xs text-red-600">
+                <p className="mt-1 text-xs text-red-600">
                   {fieldErrors.password}
                 </p>
               )}
@@ -260,19 +274,15 @@ export default function SignupPage() {
                   required
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className={`block w-full rounded-xl border px-4 py-3 text-sm text-slate-900 shadow-sm transition placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none ${
-                    fieldErrors.confirmPassword
-                      ? 'border-red-300 focus-visible:border-red-400 focus-visible:ring-red-500/40'
-                      : 'border-slate-200 focus-visible:border-emerald-500 focus-visible:ring-emerald-500/40'
-                  }`}
-                  placeholder={t('auth.confirmPassword')}
+                  className={`${inputBaseClass} ${fieldErrors.confirmPassword ? inputErrorClass : inputDefaultClass}`}
                 />
                 {fieldErrors.confirmPassword ? (
-                  <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-red-500">
+                  <span className={`${iconEndClass} text-red-500`}>
                     <svg
                       className="h-4 w-4"
                       viewBox="0 0 20 20"
                       fill="currentColor"
+                      aria-hidden="true"
                     >
                       <path
                         fillRule="evenodd"
@@ -282,11 +292,12 @@ export default function SignupPage() {
                     </svg>
                   </span>
                 ) : formData.confirmPassword ? (
-                  <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-emerald-500">
+                  <span className={`${iconEndClass} text-emerald-500`}>
                     <svg
                       className="h-4 w-4"
                       viewBox="0 0 20 20"
                       fill="currentColor"
+                      aria-hidden="true"
                     >
                       <path
                         fillRule="evenodd"
@@ -298,7 +309,7 @@ export default function SignupPage() {
                 ) : null}
               </div>
               {fieldErrors.confirmPassword && (
-                <p className="mt-2 text-xs text-red-600">
+                <p className="mt-1 text-xs text-red-600">
                   {fieldErrors.confirmPassword}
                 </p>
               )}
@@ -317,7 +328,7 @@ export default function SignupPage() {
               {t('auth.agreeToTerms')}{' '}
               <Link
                 href={withLocale('/terms', locale)}
-                className="font-semibold text-emerald-600 transition-colors hover:text-emerald-700"
+                className="font-semibold text-emerald-600 transition-colors hover:text-emerald-700 focus-visible:underline focus-visible:outline-none"
                 target="_blank"
               >
                 {t('auth.termsOfService')}
@@ -325,7 +336,7 @@ export default function SignupPage() {
               {t('auth.and')}{' '}
               <Link
                 href={withLocale('/privacy', locale)}
-                className="font-semibold text-emerald-600 transition-colors hover:text-emerald-700"
+                className="font-semibold text-emerald-600 transition-colors hover:text-emerald-700 focus-visible:underline focus-visible:outline-none"
                 target="_blank"
               >
                 {t('auth.privacyPolicy')}
@@ -336,11 +347,11 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="relative flex w-full items-center justify-center rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-70"
+            className="relative flex w-full items-center justify-center rounded-xl bg-emerald-600 px-4 py-3 text-sm font-bold text-white shadow-sm shadow-emerald-900/10 transition-all hover:bg-emerald-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-70"
           >
             {isLoading && (
               <svg
-                className="absolute left-4 h-4 w-4 animate-spin"
+                className={`absolute ${isRtl ? 'right-4' : 'left-4'} h-4 w-4 animate-spin`}
                 viewBox="0 0 24 24"
                 fill="none"
                 aria-hidden="true"
@@ -365,21 +376,26 @@ export default function SignupPage() {
         </form>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-4">
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-slate-200" />
           </div>
           <div className="relative flex justify-center text-xs tracking-widest text-slate-400 uppercase">
-            <span className="bg-slate-50 px-2">{t('auth.orSignUpWith')}</span>
+            <span className="bg-gray-150 px-3">{t('auth.orSignUpWith')}</span>
           </div>
         </div>
 
         <Link
           href="/api/auth/shopify"
-          className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="flex w-full items-center justify-center gap-3 rounded-2xl border border-emerald-100 bg-white px-4 py-3 text-sm font-bold text-slate-700 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
-          <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+          <svg
+            className="h-5 w-5 text-[#96bf48]"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+          >
             <path d="M15.337 2.167c-.026-.028-.057-.05-.089-.066a.397.397 0 0 0-.134-.027c-.05 0-.1.01-.145.027l-.91.33s-1.238-1.27-2.743-1.27c-.064 0-.13.004-.196.01-.027-.027-.055-.05-.088-.072C10.48.726 9.844.5 9.046.5c-2.096 0-3.104 2.621-3.428 3.95-.91.281-1.547.477-1.624.505-.478.15-.493.164-.555.605C3.384 5.89 2 16.983 2 16.983l11.031 2.034 6.03-1.35S15.363 2.195 15.337 2.167zm-2.644.536c-.626.192-1.318.405-2.025.622 0-.002.195-1.617-.706-2.411.89.224 1.746.964 2.73 1.789zm-1.644.505l-2.558.787c.248-.94.723-1.866 1.287-2.345.218-.184.513-.395.839-.556.582.643.432 1.65.432 2.114zm-1.163-3.19c.183 0 .35.03.506.085-.304.17-.615.4-.883.634-.687.596-1.364 1.693-1.625 3.187l-2.008.62c.38-1.457 1.473-4.525 4.01-4.525z" />
           </svg>
           {t('auth.continueWithShopify')}

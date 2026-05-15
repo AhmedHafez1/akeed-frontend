@@ -42,21 +42,22 @@ export function LegalDocumentPage({
       title={title}
       meta={lastUpdated}
       description={intro}
+      contentClassName="mx-auto max-w-3xl"
     >
-      <article className="mx-auto max-w-3xl overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm shadow-slate-200/60">
-        <div className="border-b border-slate-200/80 bg-slate-50/80 px-5 py-5 text-center md:px-8">
-          <p className="text-sm leading-7 font-medium text-slate-600">
+      <article className="overflow-hidden rounded-2xl border border-emerald-100 bg-white shadow-sm transition-all duration-300 hover:border-emerald-200 hover:shadow-md">
+        <div className="border-b border-emerald-100 bg-emerald-50/50 px-6 py-5 text-center md:px-8">
+          <p className="text-sm font-medium leading-relaxed text-slate-600">
             {companyLine}
           </p>
         </div>
 
-        <div className="divide-y divide-slate-200/80 px-5 text-start md:px-8">
+        <div className="divide-y divide-slate-100 px-6 text-start md:px-8">
           {sections.map((section) => (
-            <section key={section.title} className="py-6 md:py-7">
-              <h2 className="text-xl leading-8 font-bold text-slate-900">
+            <section key={section.title} className="py-7 md:py-8">
+              <h2 className="text-lg font-bold text-slate-800">
                 {section.title}
               </h2>
-              <p className="mt-3 text-base leading-8 text-slate-600">
+              <p className="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base sm:leading-8">
                 {section.body}
               </p>
             </section>
@@ -66,19 +67,19 @@ export function LegalDocumentPage({
 
       <div
         className={cn(
-          'mx-auto mt-8 flex max-w-3xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-center',
+          'mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center',
           isRTL && 'sm:flex-row-reverse'
         )}
       >
         <Link
           href={withLocale('/', locale)}
-          className="inline-flex h-11 items-center justify-center rounded-xl bg-emerald-600 px-5 text-sm font-bold text-white shadow-sm shadow-emerald-900/10 transition-colors hover:bg-emerald-700"
+          className="inline-flex h-11 items-center justify-center rounded-xl bg-emerald-600 px-6 text-sm font-bold text-white shadow-sm shadow-emerald-900/10 transition-all hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           {primaryLinkLabel}
         </Link>
         <Link
           href={withLocale(secondaryLinkHref, locale)}
-          className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 bg-white px-5 text-sm font-bold text-slate-700 transition-colors hover:border-emerald-200 hover:text-emerald-700"
+          className="inline-flex h-11 items-center justify-center rounded-xl border border-emerald-100 bg-white px-6 text-sm font-bold text-slate-700 transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:text-emerald-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           {secondaryLinkLabel}
         </Link>
