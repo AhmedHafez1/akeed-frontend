@@ -8,8 +8,7 @@ import { useTranslations } from 'next-intl'
 import { LogoTicker } from '@/features/marketing/ui/components/LogoTicker'
 import dynamic from 'next/dynamic'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import { useRouter } from 'next/navigation'
-import { withLocale } from '@/shared/lib/locale'
+import { openShopifyAppStore } from '@/shared/lib/shopify-auth'
 
 const ChatInterface = dynamic(
   () =>
@@ -21,8 +20,7 @@ const ChatInterface = dynamic(
 
 function Hero() {
   const t = useTranslations('hero')
-  const { locale, isRTL } = useLocaleInfo()
-  const router = useRouter()
+  const { isRTL } = useLocaleInfo()
   const shouldReduceMotion = useReducedMotion()
   const bulletKeys = [
     'subtitle_bullet_1',
@@ -99,7 +97,7 @@ function Hero() {
         >
           <SocialProof />
           <button
-            onClick={() => router.push(withLocale('/signup', locale))}
+            onClick={openShopifyAppStore}
             className="group relative flex w-full max-w-sm items-center justify-center gap-2 rounded-xl bg-linear-to-r from-orange-600 to-orange-500 px-6 py-3.5 text-sm font-bold text-white shadow-sm shadow-emerald-500/30 transition-all hover:-translate-y-0.5 hover:shadow-gray-400/70 sm:w-auto sm:max-w-none sm:px-8 sm:py-4 md:flex md:text-base lg:py-5 lg:text-lg"
             suppressHydrationWarning
           >

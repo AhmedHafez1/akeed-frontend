@@ -1,9 +1,8 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { usePricing } from '@/features/marketing/hooks/usePricing'
-import { withLocale } from '@/shared/lib/locale'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { openShopifyAppStore } from '@/shared/lib/shopify-auth'
 import { Container } from '@/shared/ui/container'
 import { Section } from '@/shared/ui/section'
 import { PricingHeader } from './pricing/PricingHeader'
@@ -11,9 +10,7 @@ import { PricingDesktopCards } from './pricing/PricingDesktopCards'
 
 export default function Pricing() {
   const { t, tiers } = usePricing()
-  const { locale, isRTL } = useLocaleInfo()
-  const router = useRouter()
-  const handleCtaClick = () => router.push(withLocale('/signup', locale))
+  const { isRTL } = useLocaleInfo()
 
   return (
     <Section
@@ -35,7 +32,7 @@ export default function Pricing() {
         <PricingDesktopCards
           tiers={tiers}
           t={t}
-          onCtaClick={handleCtaClick}
+          onCtaClick={openShopifyAppStore}
           isRTL={isRTL}
         />
       </Container>

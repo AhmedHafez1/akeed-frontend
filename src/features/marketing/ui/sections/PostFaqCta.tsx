@@ -1,17 +1,15 @@
 'use client'
 
 import { ArrowRight, CheckCircle2 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { withLocale } from '@/shared/lib/locale'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { openShopifyAppStore } from '@/shared/lib/shopify-auth'
 import { Container } from '@/shared/ui/container'
 import { Section } from '@/shared/ui/section'
 
 export function PostFaqCta() {
   const t = useTranslations('post_faq_cta')
-  const router = useRouter()
-  const { locale, isRTL } = useLocaleInfo()
+  const { isRTL } = useLocaleInfo()
 
   return (
     <Section className="border-t border-slate-200/70 bg-linear-to-b from-white via-emerald-50/30 to-white px-4 pt-10 pb-24 sm:px-6 sm:pb-20 lg:px-10">
@@ -49,7 +47,7 @@ export function PostFaqCta() {
 
             <div className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
               <button
-                onClick={() => router.push(withLocale('/signup', locale))}
+                onClick={openShopifyAppStore}
                 className="inline-flex h-12 items-center gap-2 rounded-xl bg-linear-to-r from-orange-600 to-orange-500 px-6 text-sm font-bold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow md:text-base"
                 suppressHydrationWarning
               >

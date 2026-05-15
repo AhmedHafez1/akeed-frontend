@@ -2,6 +2,7 @@ import { type MouseEvent, useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
+import { openShopifyAppStore } from '@/shared/lib/shopify-auth'
 import { HeaderNavItem } from './header.model'
 
 const SCROLL_THRESHOLD = 20
@@ -112,11 +113,12 @@ export function useHeader() {
   }
 
   const handleCtaClick = () => {
-    router.push(withLocale('/signup', locale))
+    openShopifyAppStore()
   }
 
   const handleSignInClick = () => {
-    router.push(withLocale('/login', locale))
+    setIsMobileMenuOpen(false)
+    openShopifyAppStore()
   }
 
   return {

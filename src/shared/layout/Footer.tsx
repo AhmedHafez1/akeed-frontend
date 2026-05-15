@@ -124,10 +124,10 @@ export function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-6 border-t border-slate-200 pt-8 text-center md:mt-14 md:flex-row md:text-start">
-          <p className="md:text-md text-base text-slate-600">
+          <p className="md:text-md text-sm text-slate-600">
             {t('copyright', { year })}
           </p>
-          <div className="md:text-md flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-base">
+          <div className="md:text-md flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
             <Link
               href={withLocale('/privacy', locale)}
               className="font-medium text-slate-700 underline underline-offset-2 transition-colors hover:text-emerald-600"
