@@ -1,7 +1,14 @@
 {
   "metadata": {
-    "title": "Akeed - WhatsApp COD Confirmation for MENA E-commerce Stores",
-    "description": "Automate COD order confirmation on WhatsApp with official Meta WhatsApp Cloud APIs. Cut wasted shipping costs across MENA with no WhatsApp setup required from your store."
+    "title": "Akeed | COD Order Confirmation",
+    "description": "Automate COD order confirmation on WhatsApp with official Meta WhatsApp Cloud APIs. Cut wasted shipping costs and get faster customer responses with Akeed's rule-based workflows and clear, branded messages.",
+    "tagline": "Smart Verification",
+    "features": "Features",
+    "demo": "Demo",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "cta": "Start free",
+    "sign_in": "Sign in"
   },
   "header": {
     "tagline": "Smart Verification",

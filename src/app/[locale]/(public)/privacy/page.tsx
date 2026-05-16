@@ -1,19 +1,40 @@
-'use client'
-
-import { useTranslations } from 'next-intl'
-import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
+import type { Locale } from '@/i18n'
+import { createPublicPageMetadata } from '@/shared/lib/seo'
 import { LegalDocumentPage } from '@/shared/layout/LegalDocumentPage'
 
 const sections = [1, 2, 3, 4, 5] as const
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'legal' })
+
+  return createPublicPageMetadata({
+    locale: locale as Locale,
+    path: '/privacy',
+    title: t('privacyTitle'),
+    description: t('privacyIntro'),
+  })
+}
 
 /**
  * Privacy Policy Page
  *
  * Public page accessible without authentication.
  */
-export default function PrivacyPage() {
-  const t = useTranslations('legal')
-  const { locale, isRTL } = useLocaleInfo()
+export default async function PrivacyPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
+  const safeLocale = locale as Locale
+  const t = await getTranslations({ locale, namespace: 'legal' })
 
   return (
     <LegalDocumentPage
@@ -26,11 +47,11 @@ export default function PrivacyPage() {
         title: t(`privacySection${section}Title`),
         body: t(`privacySection${section}Body`),
       }))}
-      locale={locale}
+      locale={safeLocale}
       primaryLinkLabel={t('homeLink')}
       secondaryLinkHref="/terms"
       secondaryLinkLabel={t('termsLink')}
-      isRTL={isRTL}
+      isRTL={safeLocale === 'ar'}
     />
   )
 }

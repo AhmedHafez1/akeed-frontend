@@ -4,9 +4,22 @@ import { Cairo, Inter } from 'next/font/google'
 
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
+import type { Metadata } from 'next'
+import type { Locale } from '@/i18n'
 import { AppLayout } from '@/shared/layout/AppLayout'
 import { MarketingScripts } from '@/shared/layout/MarketingScripts'
 import { ShopifyAppBridgeScript } from '@/shared/layout/ShopifyAppBridgeScript'
+import {
+  appIconPath,
+  getAbsoluteUrl,
+  getLocalizedLanguageAlternates,
+  getOpenGraphAlternateLocale,
+  getOpenGraphLocale,
+  getSiteOrigin,
+  logoPath,
+  ogImagePath,
+  siteName,
+} from '@/shared/lib/seo'
 import '../globals.css'
 
 const cairo = Cairo({
@@ -25,13 +38,55 @@ export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: string }>
-}) {
+}): Promise<Metadata> {
   const { locale } = await params
+  const safeLocale = locale as Locale
   const t = await getTranslations({ locale, namespace: 'metadata' })
+  const title = t('title')
+  const description = t('description')
 
   return {
-    title: t('title'),
-    description: t('description'),
+    metadataBase: new URL(getSiteOrigin()),
+    applicationName: siteName,
+    creator: siteName,
+    publisher: siteName,
+    title: {
+      default: title,
+      template: `%s | ${siteName}`,
+    },
+    description,
+    alternates: getLocalizedLanguageAlternates('/', safeLocale),
+    icons: {
+      icon: '/favicon.ico',
+      shortcut: '/favicon.ico',
+      apple: appIconPath,
+    },
+    openGraph: {
+      title,
+      description,
+      url: getAbsoluteUrl(`/${locale}`),
+      siteName,
+      locale: getOpenGraphLocale(safeLocale),
+      alternateLocale: getOpenGraphAlternateLocale(safeLocale),
+      type: 'website',
+      images: [
+        {
+          url: ogImagePath,
+          width: 1200,
+          height: 1200,
+          alt: siteName,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [ogImagePath],
+    },
+    other: {
+      'msapplication-TileImage': logoPath,
+    },
   }
 }
 
