@@ -185,9 +185,6 @@ export function useSettings(): {
   const [billingPlanId, setBillingPlanId] =
     useState<OnboardingBillingPlanId | null>(null)
   const [billingStatus, setBillingStatus] = useState<string | null>(null)
-  const [billingManagementUrl, setBillingManagementUrl] = useState<
-    string | null
-  >(null)
   const [billingPlansById, setBillingPlansById] = useState<
     Partial<Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>>
   >({})
@@ -274,7 +271,6 @@ export function useSettings(): {
         setTimezone(state.timezone)
         setBillingPlanId(state.billingPlanId)
         setBillingStatus(state.billingStatus)
-        setBillingManagementUrl(state.billingManagementUrl)
 
         const plansMap: Partial<
           Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>
@@ -561,7 +557,6 @@ export function useSettings(): {
       setTimezone(state.timezone)
       setBillingPlanId(state.billingPlanId)
       setBillingStatus(state.billingStatus)
-      setBillingManagementUrl(state.billingManagementUrl)
       const plansMap: Partial<
         Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>
       > = {}
@@ -615,20 +610,6 @@ export function useSettings(): {
     validateSettings,
   ])
 
-  const handleManageBilling = useCallback(() => {
-    if (!billingManagementUrl) {
-      setErrorBanner(t('billingManagementUnavailable'))
-      return
-    }
-
-    if (isEmbedded && window.top && window.top !== window.self) {
-      window.open(billingManagementUrl, '_top')
-      return
-    }
-
-    window.location.href = billingManagementUrl
-  }, [billingManagementUrl, isEmbedded, t])
-
   const isPageLoading = isModeLoading || isInitialLoading
   useAppBridgeLoading(isEmbedded && isPageLoading)
 
@@ -664,7 +645,6 @@ export function useSettings(): {
       activePlanName,
       billingPlanId,
       billingStatusLabel,
-      billingManagementUrl,
       billingPlansById,
       selectedPlanId,
       planOptions,
@@ -713,7 +693,6 @@ export function useSettings(): {
       onSave: handleSave,
       onPlanSelect: setSelectedPlanId,
       onChangePlan: handleChangePlan,
-      onManageBilling: handleManageBilling,
     },
   }
 }

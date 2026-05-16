@@ -71,7 +71,6 @@ export interface SettingsSkinProps {
   activePlanName: string | null
   billingPlanId: OnboardingBillingPlanId | null
   billingStatusLabel: string
-  billingManagementUrl: string | null
   billingPlansById: Partial<
     Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>
   >
@@ -100,5 +99,4 @@ export interface SettingsSkinProps {
   onSave: () => Promise<void>
   onPlanSelect: (planId: OnboardingBillingPlanId) => void
   onChangePlan: () => Promise<void>
-  onManageBilling: () => void
 }

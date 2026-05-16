@@ -113,7 +113,6 @@ export function useEmbeddedOnboarding({
   const billing = useOnboardingBilling({
     hostParam,
     billingActivationErrorMessage: messages.billingActivationError,
-    billingManagementUrl: init.billingManagementUrl,
     setErrorBanner: stableSetErrorBanner,
     onBillingConfirmation,
   })
@@ -140,13 +139,11 @@ export function useEmbeddedOnboarding({
     // Billing
     billingPlanConfigsById: init.billingPlanConfigsById,
     isFreePlanClaimed: init.isFreePlanClaimed,
-    billingManagementUrl: init.billingManagementUrl,
     selectedPlanId: billing.selectedPlanId,
     setSelectedPlanId: billing.setSelectedPlanId,
     isActivatingPlan: billing.isActivatingPlan,
     isBillingRedirecting: billing.isBillingRedirecting,
     handleActivatePlan: billing.handleActivatePlan,
     handleRetryBilling: billing.handleRetryBilling,
-    handleManageBilling: billing.handleManageBilling,
   }
 }

@@ -23,15 +23,12 @@ interface BillingStepProps {
   recommendedBadgeLabel?: string
   errorMessage: string | null
   retryLabel: string
-  manageSettingsLabel: string
   freePlanUsedLabel: string
   backLabel: string
-  canManageBilling: boolean
   onPlanSelect: (planId: OnboardingBillingPlanId) => void
   onActivate: () => void
   onBack: () => void
   onRetry: () => void
-  onManageBilling: () => void
 }
 
 export function BillingStep({
@@ -44,15 +41,12 @@ export function BillingStep({
   recommendedBadgeLabel,
   errorMessage,
   retryLabel,
-  manageSettingsLabel,
   freePlanUsedLabel,
   backLabel,
-  canManageBilling,
   onPlanSelect,
   onActivate,
   onBack,
   onRetry,
-  onManageBilling,
 }: BillingStepProps) {
   const selectedPlan = plans.find((plan) => plan.id === selectedPlanId)
 
@@ -74,10 +68,7 @@ export function BillingStep({
         <BillingErrorBanner
           message={errorMessage}
           retryLabel={retryLabel}
-          manageSettingsLabel={manageSettingsLabel}
-          canManageBilling={canManageBilling}
           onRetry={onRetry}
-          onManageBilling={onManageBilling}
         />
       )}
 

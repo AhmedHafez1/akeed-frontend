@@ -177,14 +177,12 @@ export default function OnboardingPage() {
     isSavingSettings,
     isActivatingPlan,
     isBillingRedirecting,
-    billingManagementUrl,
     errorBanner,
     prefillWarning,
     handleStoreNameChange,
     handleContinueToBilling,
     handleActivatePlan,
     handleRetryBilling,
-    handleManageBilling,
   } = useEmbeddedOnboarding({
     isEmbedded,
     isModeLoading,
@@ -275,15 +273,12 @@ export default function OnboardingPage() {
         recommendedBadgeLabel={t('recommendedBadge')}
         errorMessage={step === 2 ? errorBanner : null}
         retryLabel={tEmbedded('billingTryAgain')}
-        manageSettingsLabel={tEmbedded('billingManageSettings')}
         freePlanUsedLabel={tEmbedded('freePlanUsedBadge')}
         backLabel={tEmbedded('billingBack')}
-        canManageBilling={billingManagementUrl !== null}
         onPlanSelect={setSelectedPlanId}
         onActivate={handleActivatePlan}
         onBack={handleBackToConfiguration}
         onRetry={handleRetryBilling}
-        onManageBilling={handleManageBilling}
       />
     ),
   }

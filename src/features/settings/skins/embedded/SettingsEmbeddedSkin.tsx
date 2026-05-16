@@ -320,9 +320,6 @@ export function SettingsEmbeddedSkin(props: SettingsSkinProps) {
                     onChangePlan={props.onChangePlan}
                   />
 
-                  <Button onClick={props.onManageBilling}>
-                    {t('manageBillingButton')}
-                  </Button>
                 </BlockStack>
               </Card>
             </div>

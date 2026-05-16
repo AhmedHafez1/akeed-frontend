@@ -93,9 +93,6 @@ export function useOnboardingInit({
     useState<IntegrationOnboardingLanguage>('auto')
   const [initialIsAutoVerifyEnabled, setInitialIsAutoVerifyEnabled] =
     useState(true)
-  const [billingManagementUrl, setBillingManagementUrl] = useState<
-    string | null
-  >(null)
   const [billingPlanConfigsById, setBillingPlanConfigsById] = useState<
     Partial<Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>>
   >({})
@@ -151,7 +148,6 @@ export function useOnboardingInit({
         setInitialStoreName(state.storeName ?? '')
         setInitialDefaultLanguage(state.defaultLanguage)
         setInitialIsAutoVerifyEnabled(state.isAutoVerifyEnabled)
-        setBillingManagementUrl(state.billingManagementUrl)
 
         const normalizedBillingStatus = normalizeBillingStatus(
           state.billingStatus
@@ -231,7 +227,6 @@ export function useOnboardingInit({
     initialStoreName,
     initialDefaultLanguage,
     initialIsAutoVerifyEnabled,
-    billingManagementUrl,
     billingPlanConfigsById,
     isFreePlanClaimed,
     prefillWarning,

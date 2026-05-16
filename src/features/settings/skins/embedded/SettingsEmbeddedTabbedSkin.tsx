@@ -262,8 +262,8 @@ function BillingTab({ props }: { props: SettingsSkinProps }) {
             })}
           </InlineGrid>
 
-          <InlineStack gap="300">
-            {canChangePlan && (
+          {canChangePlan && (
+            <InlineStack gap="300">
               <Button
                 variant="primary"
                 loading={props.isChangingPlan}
@@ -271,11 +271,8 @@ function BillingTab({ props }: { props: SettingsSkinProps }) {
               >
                 {t('changePlanButton')}
               </Button>
-            )}
-            <Button onClick={props.onManageBilling}>
-              {t('manageBillingButton')}
-            </Button>
-          </InlineStack>
+            </InlineStack>
+          )}
         </BlockStack>
       </Card>
     </div>

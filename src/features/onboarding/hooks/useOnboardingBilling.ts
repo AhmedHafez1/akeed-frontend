@@ -9,7 +9,6 @@ import type { OnboardingBillingPlanId } from '@/features/onboarding/domain/onboa
 export interface UseOnboardingBillingParams {
   hostParam: string | null
   billingActivationErrorMessage: string
-  billingManagementUrl: string | null
   setErrorBanner: (message: string | null) => void
   onBillingConfirmation: (confirmationUrl: string) => void
 }
@@ -25,7 +24,6 @@ export interface UseOnboardingBillingParams {
 export function useOnboardingBilling({
   hostParam,
   billingActivationErrorMessage,
-  billingManagementUrl,
   setErrorBanner,
   onBillingConfirmation,
 }: UseOnboardingBillingParams) {
@@ -64,16 +62,6 @@ export function useOnboardingBilling({
     setErrorBanner(null)
   }, [setErrorBanner])
 
-  const handleManageBilling = useCallback(() => {
-    if (!billingManagementUrl) return
-
-    if (window.top && window.top !== window.self) {
-      window.open(billingManagementUrl, '_top')
-    } else {
-      window.location.href = billingManagementUrl
-    }
-  }, [billingManagementUrl])
-
   return {
     selectedPlanId,
     setSelectedPlanId,
@@ -81,6 +69,5 @@ export function useOnboardingBilling({
     isBillingRedirecting,
     handleActivatePlan,
     handleRetryBilling,
-    handleManageBilling,
   }
 }

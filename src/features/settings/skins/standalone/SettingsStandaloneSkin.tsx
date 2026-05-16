@@ -296,8 +296,8 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
             onPlanSelect={props.onPlanSelect}
           />
 
-          <div className="flex flex-wrap gap-3">
-            {canChangePlan && (
+          {canChangePlan && (
+            <div className="flex flex-wrap gap-3">
               <Button
                 type="button"
                 disabled={props.isChangingPlan}
@@ -307,15 +307,8 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
                   ? t('changingPlanButton')
                   : t('changePlanButton')}
               </Button>
-            )}
-            <Button
-              type="button"
-              variant="outline"
-              onClick={props.onManageBilling}
-            >
-              {t('manageBillingButton')}
-            </Button>
-          </div>
+            </div>
+          )}
         </div>
       </SectionCard>
     </div>
