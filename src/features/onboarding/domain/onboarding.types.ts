@@ -25,7 +25,6 @@ export interface IntegrationOnboardingState {
   avgShippingCost: number
   billingPlanId: OnboardingBillingPlanId | null
   billingStatus: string | null
-  billingManagementUrl: string | null
   followUpEnabled: boolean
   followUpDelayMinutes: number
   escalationDelayMinutes: number
