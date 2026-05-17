@@ -6,6 +6,11 @@ import { usePathname } from 'next/navigation'
 import { Instagram, Youtube } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
+import {
+  facebookProfileUrl,
+  youtubeProfileUrl,
+  instagramProfileUrl,
+} from '@/shared/lib/seo'
 
 const footerLinkGroups = [
   {
@@ -32,12 +37,6 @@ const footerLinkGroups = [
       { href: '/privacy', labelKey: 'security' },
     ],
   },
-] as const
-
-const socialLinks = [
-  { href: 'https://facebook.com', labelKey: 'facebook', icon: 'facebook' },
-  { href: 'https://youtube.com', labelKey: 'youtube', icon: 'youtube' },
-  { href: 'https://instagram.com', labelKey: 'instagram', icon: 'instagram' },
 ] as const
 
 function FacebookIcon({ className }: { className?: string }) {
@@ -78,23 +77,34 @@ export function Footer() {
               {t('legalLine')}
             </p>
 
-            <div className="mt-10 flex items-center gap-4">
-              {socialLinks.map((social) => (
-                <Link
-                  key={social.labelKey}
-                  href={social.href}
-                  aria-label={t(social.labelKey)}
-                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-[0_10px_22px_rgba(15,23,42,0.08)] transition-colors hover:border-emerald-200 hover:text-emerald-600"
-                >
-                  {social.icon === 'facebook' ? (
-                    <FacebookIcon className="h-5 w-5" />
-                  ) : social.icon === 'youtube' ? (
-                    <Youtube className="h-5 w-5" />
-                  ) : (
-                    <Instagram className="h-5 w-5" />
-                  )}
-                </Link>
-              ))}
+            <div className="mt-5 flex items-center gap-3">
+              <Link
+                href={facebookProfileUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={t('facebook')}
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-[0_10px_22px_rgba(15,23,42,0.08)] transition-colors hover:border-emerald-200 hover:text-emerald-600"
+              >
+                <FacebookIcon className="h-5 w-5" />
+              </Link>
+              <Link
+                href={youtubeProfileUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={t('youtube')}
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-[0_10px_22px_rgba(15,23,42,0.08)] transition-colors hover:border-emerald-200 hover:text-emerald-600"
+              >
+                <Youtube className="h-5 w-5" />
+              </Link>
+              <Link
+                href={instagramProfileUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={t('instagram')}
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-[0_10px_22px_rgba(15,23,42,0.08)] transition-colors hover:border-emerald-200 hover:text-emerald-600"
+              >
+                <Instagram className="h-5 w-5" />
+              </Link>
             </div>
           </div>
 
