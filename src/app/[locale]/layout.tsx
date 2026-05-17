@@ -16,7 +16,6 @@ import {
   getOpenGraphAlternateLocale,
   getOpenGraphLocale,
   getSiteOrigin,
-  logoPath,
   ogImagePath,
   siteName,
 } from '@/shared/lib/seo'
@@ -57,9 +56,12 @@ export async function generateMetadata({
     description,
     alternates: getLocalizedLanguageAlternates('/', safeLocale),
     icons: {
-      icon: '/favicon.ico',
+      icon: [
+        { url: '/favicon.ico', sizes: 'any' },
+        { url: appIconPath, type: 'image/png', sizes: '512x512' },
+      ],
       shortcut: '/favicon.ico',
-      apple: appIconPath,
+      apple: [{ url: appIconPath, type: 'image/png', sizes: '512x512' }],
     },
     openGraph: {
       title,
@@ -85,7 +87,7 @@ export async function generateMetadata({
       images: [ogImagePath],
     },
     other: {
-      'msapplication-TileImage': logoPath,
+      'msapplication-TileImage': appIconPath,
     },
   }
 }

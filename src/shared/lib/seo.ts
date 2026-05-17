@@ -4,6 +4,14 @@ import { defaultLocale, locales } from '@/i18n'
 
 export const siteName = 'Akeed'
 export const supportEmail = 'support@getakeed.com'
+export const legalName = 'Akeed Digital Solutions'
+export const commercialRegistrationNumber = '5813'
+export const registeredAddress =
+  'Apartment 13, third floor, plot 473, Area A, Hadabet Al Ahram III, Al Haram, Giza, Egypt'
+export const facebookProfileUrl =
+  'https://www.facebook.com/profile.php?id=61585900432277'
+export const youtubeProfileUrl = 'https://www.youtube.com/@akeed-digital'
+export const instagramProfileUrl = 'https://www.instagram.com/akeed_app'
 
 export const publicSeoRoutes = ['/', '/support', '/privacy', '/terms'] as const
 
@@ -47,9 +55,7 @@ export function getSiteOrigin(): string {
 
 export function getLocalizedPath(locale: Locale, path = '/'): string {
   const normalizedPath = path.startsWith('/') ? path : `/${path}`
-  return normalizedPath === '/'
-    ? `/${locale}`
-    : `/${locale}${normalizedPath}`
+  return normalizedPath === '/' ? `/${locale}` : `/${locale}${normalizedPath}`
 }
 
 export function getAbsoluteUrl(path = '/'): string {
@@ -142,9 +148,20 @@ export function getOrganizationSchema(locale: Locale) {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: siteName,
+    legalName,
+    identifier: commercialRegistrationNumber,
     url: localizedHomeUrl,
     logo: getAbsoluteUrl(logoPath),
     email: supportEmail,
+    sameAs: [facebookProfileUrl, youtubeProfileUrl],
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress:
+        'Apartment 13, third floor, plot 473, Area A, Hadabet Al Ahram III',
+      addressLocality: 'Al Haram',
+      addressRegion: 'Giza',
+      addressCountry: 'EG',
+    },
     contactPoint: [
       {
         '@type': 'ContactPoint',
