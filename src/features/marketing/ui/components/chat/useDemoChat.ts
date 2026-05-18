@@ -12,7 +12,7 @@ export function useDemoChat(t: (key: string) => string) {
       {
         type: 'bot',
         text: t('chat.bot_1'),
-        delay: 1000,
+        delay: 1500,
         buttons: [
           { text: t('chat.buttons.confirm'), action: 'confirm' },
           { text: t('chat.buttons.cancel'), action: 'cancel' },
@@ -24,23 +24,24 @@ export function useDemoChat(t: (key: string) => string) {
         text: t('chat.user_1'),
         delay: 2000,
       },
-      {
-        type: 'bot',
-        text: t('chat.bot_3'),
-        delay: 2000,
-        buttons: [
-          {
-            text: t('chat.buttons.correct_address'),
-            action: 'correct-address',
-          },
-        ],
-        selectedAction: 'correct-address',
-      },
-      {
-        type: 'user',
-        text: t('chat.user_2'),
-        delay: 2500,
-      },
+      // Commenting out this part of the conversation for now, as it doesn't fit the current demo flow. We can reintroduce it later if needed.
+      // {
+      //   type: 'bot',
+      //   text: t('chat.bot_3'),
+      //   delay: 2000,
+      //   buttons: [
+      //     {
+      //       text: t('chat.buttons.correct_address'),
+      //       action: 'correct-address',
+      //     },
+      //   ],
+      //   selectedAction: 'correct-address',
+      // },
+      // {
+      //   type: 'user',
+      //   text: t('chat.user_2'),
+      //   delay: 2500,
+      // },
       {
         type: 'bot',
         text: t('chat.bot_5'),
@@ -71,7 +72,7 @@ export function useDemoChat(t: (key: string) => string) {
         setTimeout(() => {
           setMessages([])
           setCurrentStep(0)
-        }, 11000)
+        }, 15000)
       )
       return () => timers.forEach(clearTimeout)
     }

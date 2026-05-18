@@ -26,7 +26,7 @@ export function ChatInterface() {
         <div className="pointer-events-none absolute inset-0 rounded-[3rem] bg-linear-to-br from-slate-300/35 via-white/10 to-slate-200/80 blur-2xl" />
 
         <div className="relative rounded-4xl border-8 border-slate-900 bg-slate-900 p-0.5 shadow-[0_28px_70px_-28px_rgba(15,23,42,0.5)]">
-          <div className="absolute top-3 left-1/2 z-20 h-6 w-32 -translate-x-1/2 rounded-full bg-slate-900" />
+          <div className="absolute top-3 left-1/2 z-20 h-4 w-24 -translate-x-1/2 rounded-full bg-slate-900" />
 
           <div className="relative overflow-hidden rounded-3xl bg-[#efeae2] bg-[url('/images/landing/wa_chat_bg.png')] bg-cover bg-center">
             <ChatHeader
