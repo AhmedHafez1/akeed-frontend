@@ -129,40 +129,57 @@ export function AutomationSettingsEmbeddedSkin(props: SettingsSkinProps) {
                   onChange={props.onFollowUpEnabledChange}
                 />
 
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <BlockStack gap="100">
-                    <TextField
-                      label={t('automation.followUpDelayMinutesLabel')}
-                      type="number"
-                      autoComplete="off"
-                      min={0}
-                      max={720}
-                      step={0.25}
-                      value={props.followUpDelayMinutes}
-                      onChange={props.onFollowUpDelayMinutesChange}
-                      error={props.followUpDelayMinutesError}
-                      disabled={!props.followUpEnabled}
-                    />
-                  </BlockStack>
-                  <BlockStack gap="100">
-                    <FieldLabel
-                      label={t('automation.escalationDelayMinutesLabel')}
-                      help={t('automation.escalationDelayMinutesHelp')}
-                    />
-                    <TextField
-                      label={t('automation.escalationDelayMinutesLabel')}
-                      labelHidden
-                      type="number"
-                      autoComplete="off"
-                      min={0}
-                      max={720}
-                      step={0.25}
-                      value={props.escalationDelayMinutes}
-                      onChange={props.onEscalationDelayMinutesChange}
-                      error={props.escalationDelayMinutesError}
-                    />
-                  </BlockStack>
-                </div>
+                <BlockStack gap="100">
+                  <TextField
+                    label={t('automation.followUpDelayMinutesLabel')}
+                    type="number"
+                    autoComplete="off"
+                    min={0}
+                    max={720}
+                    step={0.25}
+                    value={props.followUpDelayMinutes}
+                    onChange={props.onFollowUpDelayMinutesChange}
+                    error={props.followUpDelayMinutesError}
+                    disabled={!props.followUpEnabled}
+                  />
+                </BlockStack>
+
+                <Divider />
+
+                <Checkbox
+                  label={
+                    <InlineStack gap="100" blockAlign="center">
+                      <Text as="span">
+                        {t('automation.escalationEnabledLabel')}
+                      </Text>
+                      <HelpIcon
+                        content={t('automation.escalationEnabledHelp')}
+                      />
+                    </InlineStack>
+                  }
+                  checked={props.escalationEnabled}
+                  onChange={props.onEscalationEnabledChange}
+                />
+
+                <BlockStack gap="100">
+                  <FieldLabel
+                    label={t('automation.escalationDelayMinutesLabel')}
+                    help={t('automation.escalationDelayMinutesHelp')}
+                  />
+                  <TextField
+                    label={t('automation.escalationDelayMinutesLabel')}
+                    labelHidden
+                    type="number"
+                    autoComplete="off"
+                    min={0}
+                    max={720}
+                    step={0.25}
+                    value={props.escalationDelayMinutes}
+                    onChange={props.onEscalationDelayMinutesChange}
+                    error={props.escalationDelayMinutesError}
+                    disabled={!props.escalationEnabled}
+                  />
+                </BlockStack>
 
                 <Divider />
 

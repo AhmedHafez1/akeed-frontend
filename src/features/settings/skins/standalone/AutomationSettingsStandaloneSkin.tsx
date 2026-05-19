@@ -171,41 +171,49 @@ export function AutomationSettingsStandaloneSkin(props: SettingsSkinProps) {
             />
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <Field
-              label={t('automation.followUpDelayMinutesLabel')}
-              error={props.followUpDelayMinutesError}
-            >
-              <Input
-                type="number"
-                min={0}
-                max={720}
-                step={0.25}
-                disabled={!props.followUpEnabled}
-                value={props.followUpDelayMinutes}
-                onChange={(event) =>
-                  props.onFollowUpDelayMinutesChange(event.target.value)
-                }
-              />
-            </Field>
+          <Field
+            label={t('automation.followUpDelayMinutesLabel')}
+            error={props.followUpDelayMinutesError}
+          >
+            <Input
+              type="number"
+              min={0}
+              max={720}
+              step={0.25}
+              disabled={!props.followUpEnabled}
+              value={props.followUpDelayMinutes}
+              onChange={(event) =>
+                props.onFollowUpDelayMinutesChange(event.target.value)
+              }
+            />
+          </Field>
 
-            <Field
-              label={t('automation.escalationDelayMinutesLabel')}
-              helpText={t('automation.escalationDelayMinutesHelp')}
-              error={props.escalationDelayMinutesError}
-            >
-              <Input
-                type="number"
-                min={0}
-                max={720}
-                step={0.25}
-                value={props.escalationDelayMinutes}
-                onChange={(event) =>
-                  props.onEscalationDelayMinutesChange(event.target.value)
-                }
-              />
-            </Field>
+          <div className="border-t border-slate-100 pt-5">
+            <ToggleRow
+              label={t('automation.escalationEnabledLabel')}
+              description={t('automation.escalationEnabledHelp')}
+              checked={props.escalationEnabled}
+              onChange={props.onEscalationEnabledChange}
+            />
           </div>
+
+          <Field
+            label={t('automation.escalationDelayMinutesLabel')}
+            helpText={t('automation.escalationDelayMinutesHelp')}
+            error={props.escalationDelayMinutesError}
+          >
+            <Input
+              type="number"
+              min={0}
+              max={720}
+              step={0.25}
+              disabled={!props.escalationEnabled}
+              value={props.escalationDelayMinutes}
+              onChange={(event) =>
+                props.onEscalationDelayMinutesChange(event.target.value)
+              }
+            />
+          </Field>
 
           <div className="border-t border-slate-100 pt-5">
             <ToggleRow

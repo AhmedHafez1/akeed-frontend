@@ -54,6 +54,7 @@ export interface SettingsSkinProps {
   sendDelayMinutesError: string | undefined
   followUpDelayMinutes: string
   followUpDelayMinutesError: string | undefined
+  escalationEnabled: boolean
   escalationDelayMinutes: string
   escalationDelayMinutesError: string | undefined
   quietHoursEnabled: boolean
@@ -91,6 +92,7 @@ export interface SettingsSkinProps {
   onFollowUpEnabledChange: (checked: boolean) => void
   onSendDelayMinutesChange: (value: string) => void
   onFollowUpDelayMinutesChange: (value: string) => void
+  onEscalationEnabledChange: (checked: boolean) => void
   onEscalationDelayMinutesChange: (value: string) => void
   onQuietHoursEnabledChange: (checked: boolean) => void
   onQuietHoursStartChange: (value: string) => void

@@ -727,6 +727,8 @@
       "followUpEnabledLabel": "إرسال رسالة متابعة واحدة",
       "followUpEnabledHelp": "إذا لم يرد العميل، يرسل أكيد نفس قالب واتساب مرة إضافية.",
       "followUpDelayMinutesLabel": "تأخير المتابعة (بالساعات)",
+      "escalationEnabledLabel": "تفعيل تصعيد عدم الرد",
+      "escalationEnabledHelp": "إذا لم يرد العميل أبدًا، يتم وضع علامة على الطلب للمراجعة اليدوية بعد التأخير المحدد.",
       "escalationDelayMinutesLabel": "تأخير تصعيد عدم الرد (بالساعات)",
       "escalationDelayMinutesHelp": "يُحسب من وقت نجاح أول إرسال واتساب.",
       "escalationReviewDescription": "Orders with no response after {value} {unit} are marked for review.",

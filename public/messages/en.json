@@ -741,6 +741,8 @@
       "followUpEnabledLabel": "Send one follow-up message",
       "followUpEnabledHelp": "If the customer does not respond, Akeed sends the same WhatsApp template one more time.",
       "followUpDelayMinutesLabel": "Follow-up delay (hours)",
+      "escalationEnabledLabel": "Enable no-reply escalation",
+      "escalationEnabledHelp": "If the customer never responds, mark the order for manual review after the configured delay.",
       "escalationDelayMinutesLabel": "No-reply escalation delay (hours)",
       "escalationDelayMinutesHelp": "Measured from the successful first WhatsApp send.",
       "escalationReviewDescription": "Orders with no response after {value} {unit} are marked for review.",
