@@ -148,7 +148,9 @@ function StoreTab({ props }: { props: SettingsSkinProps }) {
             options={[...props.languageOptions]}
             value={props.defaultLanguage}
             onChange={(value) =>
-              props.onDefaultLanguageChange(value as IntegrationOnboardingLanguage)
+              props.onDefaultLanguageChange(
+                value as IntegrationOnboardingLanguage
+              )
             }
           />
           <Select
@@ -215,7 +217,8 @@ function BillingTab({ props }: { props: SettingsSkinProps }) {
           <InlineGrid columns={{ xs: 1, md: 2, lg: 4 }} gap="300">
             {props.planOptions.map((plan) => {
               const isCurrent = plan.id === props.billingPlanId
-              const isDisabled = props.isFreePlanClaimed && plan.id === 'starter'
+              const isDisabled =
+                props.isFreePlanClaimed && plan.id === 'starter'
               const isSelected = plan.id === props.selectedPlanId && !isDisabled
 
               return (
@@ -319,31 +322,36 @@ function ConfirmationConfigTab({ props }: { props: SettingsSkinProps }) {
           checked={props.followUpEnabled}
           onChange={props.onFollowUpEnabledChange}
         />
-        <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
-          <TextField
-            label={t('automation.followUpDelayMinutesLabel')}
-            type="number"
-            autoComplete="off"
-            min={0}
-            max={720}
-            step={0.25}
-            value={props.followUpDelayMinutes}
-            onChange={props.onFollowUpDelayMinutesChange}
-            error={props.followUpDelayMinutesError}
-            disabled={!props.followUpEnabled}
-          />
-          <TextField
-            label={t('automation.escalationDelayMinutesLabel')}
-            type="number"
-            autoComplete="off"
-            min={0}
-            max={720}
-            step={0.25}
-            value={props.escalationDelayMinutes}
-            onChange={props.onEscalationDelayMinutesChange}
-            error={props.escalationDelayMinutesError}
-          />
-        </InlineGrid>
+        <TextField
+          label={t('automation.followUpDelayMinutesLabel')}
+          type="number"
+          autoComplete="off"
+          min={0}
+          max={720}
+          step={0.25}
+          value={props.followUpDelayMinutes}
+          onChange={props.onFollowUpDelayMinutesChange}
+          error={props.followUpDelayMinutesError}
+          disabled={!props.followUpEnabled}
+        />
+        <Divider />
+        <Checkbox
+          label={t('automation.escalationEnabledLabel')}
+          checked={props.escalationEnabled}
+          onChange={props.onEscalationEnabledChange}
+        />
+        <TextField
+          label={t('automation.escalationDelayMinutesLabel')}
+          type="number"
+          autoComplete="off"
+          min={0}
+          max={720}
+          step={0.25}
+          value={props.escalationDelayMinutes}
+          onChange={props.onEscalationDelayMinutesChange}
+          error={props.escalationDelayMinutesError}
+          disabled={!props.escalationEnabled}
+        />
         <Divider />
         <Checkbox
           label={t('automation.quietHoursEnabledLabel')}
@@ -468,7 +476,7 @@ function MessageTemplateTab({ props }: { props: SettingsSkinProps }) {
               padding="600"
             >
               <InlineStack align="center">
-                <div className="relative w-full max-w-[265px] rounded-[2.75rem] border-[10px] border-[#111213] bg-[#111213] shadow-xl">
+                <div className="relative w-full max-w-66.25 rounded-[2.75rem] border-10 border-[#111213] bg-[#111213] shadow-xl">
                   <div className="absolute top-4 left-1/2 z-10 h-6 w-24 -translate-x-1/2 rounded-full bg-black" />
                   <div className="overflow-hidden rounded-[2.05rem] bg-[#fbf7ef]">
                     <div className="flex h-12 items-center justify-between px-6 text-xs font-semibold text-[#111213]">
@@ -510,7 +518,9 @@ export function SettingsEmbeddedTabbedSkin(props: SettingsSkinProps) {
   const [isErrorDismissed, setIsErrorDismissed] = useState(false)
   const [isSuccessDismissed, setIsSuccessDismissed] = useState(false)
   const tabParam = searchParams.get('tab')
-  const activeTab: SettingsTabId = SETTINGS_TABS.includes(tabParam as SettingsTabId)
+  const activeTab: SettingsTabId = SETTINGS_TABS.includes(
+    tabParam as SettingsTabId
+  )
     ? (tabParam as SettingsTabId)
     : (SETTINGS_TAB_ALIASES[tabParam ?? ''] ?? 'store')
   const selected = SETTINGS_TABS.indexOf(activeTab)
@@ -559,8 +569,12 @@ export function SettingsEmbeddedTabbedSkin(props: SettingsSkinProps) {
         </InlineStack>
 
         {activeTab === 'store' && <StoreTab props={props} />}
-        {activeTab === 'confirmation' && <ConfirmationConfigTab props={props} />}
-        {activeTab === 'message-preview' && <MessageTemplateTab props={props} />}
+        {activeTab === 'confirmation' && (
+          <ConfirmationConfigTab props={props} />
+        )}
+        {activeTab === 'message-preview' && (
+          <MessageTemplateTab props={props} />
+        )}
         {activeTab === 'billing' && <BillingTab props={props} />}
       </BlockStack>
     </Page>

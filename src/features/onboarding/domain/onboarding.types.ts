@@ -27,6 +27,7 @@ export interface IntegrationOnboardingState {
   billingStatus: string | null
   followUpEnabled: boolean
   followUpDelayMinutes: number
+  escalationEnabled: boolean
   escalationDelayMinutes: number
   quietHoursEnabled: boolean
   quietHoursStart: string | null
@@ -47,6 +48,7 @@ export interface OnboardingSettingsPayload {
   avgShippingCost?: number
   followUpEnabled?: boolean
   followUpDelayMinutes?: number
+  escalationEnabled?: boolean
   escalationDelayMinutes?: number
   quietHoursEnabled?: boolean
   quietHoursStart?: string

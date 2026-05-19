@@ -173,6 +173,7 @@ export function useSettings(): {
   const [followUpDelayMinutesError, setFollowUpDelayMinutesError] = useState<
     string | undefined
   >()
+  const [escalationEnabled, setEscalationEnabled] = useState(true)
   const [escalationDelayMinutes, setEscalationDelayMinutes] = useState('360')
   const [escalationDelayMinutesError, setEscalationDelayMinutesError] =
     useState<string | undefined>()
@@ -262,6 +263,7 @@ export function useSettings(): {
         setFollowUpEnabled(state.followUpEnabled)
         setSendDelayMinutes(toHoursInput(state.sendDelayMinutes, 0))
         setFollowUpDelayMinutes(toHoursInput(state.followUpDelayMinutes, 120))
+        setEscalationEnabled(state.escalationEnabled)
         setEscalationDelayMinutes(
           toHoursInput(state.escalationDelayMinutes, 360)
         )
@@ -419,9 +421,10 @@ export function useSettings(): {
         ? undefined
         : t('automation.validation.followUpDelayMinutes')
     const nextEscalationDelayMinutesError =
-      parsedEscalationDelayHours !== null &&
-      parsedEscalationDelayHours >= 0 &&
-      parsedEscalationDelayHours <= 720
+      !escalationEnabled ||
+      (parsedEscalationDelayHours !== null &&
+        parsedEscalationDelayHours >= 0 &&
+        parsedEscalationDelayHours <= 720)
         ? undefined
         : t('automation.validation.escalationDelayMinutes')
 
@@ -439,6 +442,7 @@ export function useSettings(): {
     let resolvedEscalationDelayError = nextEscalationDelayMinutesError
     if (
       followUpEnabled &&
+      escalationEnabled &&
       !resolvedFollowUpDelayError &&
       !resolvedEscalationDelayError &&
       parsedFollowUpDelayHours !== null &&
@@ -468,7 +472,7 @@ export function useSettings(): {
       resolvedEscalationDelayError ||
       nextQuietHoursError ||
       parsedSendDelayHours === null ||
-      parsedEscalationDelayHours === null
+      (escalationEnabled && parsedEscalationDelayHours === null)
     ) {
       return null
     }
@@ -480,11 +484,14 @@ export function useSettings(): {
       followUpDelayMinutes: parsedFollowUpDelayHours
         ? hoursToMinutes(parsedFollowUpDelayHours)
         : 0,
-      escalationDelayMinutes: hoursToMinutes(parsedEscalationDelayHours),
+      escalationDelayMinutes: parsedEscalationDelayHours
+        ? hoursToMinutes(parsedEscalationDelayHours)
+        : 0,
     }
   }, [
     avgShippingCost,
     escalationDelayMinutes,
+    escalationEnabled,
     followUpDelayMinutes,
     followUpEnabled,
     quietHoursEnabled,
@@ -513,6 +520,7 @@ export function useSettings(): {
       followUpEnabled,
       sendDelayMinutes,
       followUpDelayMinutes,
+      escalationEnabled,
       escalationDelayMinutes,
       quietHoursEnabled,
       quietHoursStart,
@@ -532,7 +540,10 @@ export function useSettings(): {
         followUpDelayMinutes: followUpEnabled
           ? validated.followUpDelayMinutes
           : undefined,
-        escalationDelayMinutes: validated.escalationDelayMinutes,
+        escalationEnabled,
+        escalationDelayMinutes: escalationEnabled
+          ? validated.escalationDelayMinutes
+          : undefined,
         quietHoursEnabled,
         quietHoursStart: quietHoursEnabled ? quietHoursStart : undefined,
         quietHoursEnd: quietHoursEnabled ? quietHoursEnd : undefined,
@@ -550,6 +561,7 @@ export function useSettings(): {
       setFollowUpEnabled(state.followUpEnabled)
       setSendDelayMinutes(toHoursInput(state.sendDelayMinutes, 0))
       setFollowUpDelayMinutes(toHoursInput(state.followUpDelayMinutes, 120))
+      setEscalationEnabled(state.escalationEnabled)
       setEscalationDelayMinutes(toHoursInput(state.escalationDelayMinutes, 360))
       setQuietHoursEnabled(state.quietHoursEnabled)
       setQuietHoursStart(state.quietHoursStart ?? quietHoursStart)
@@ -583,6 +595,7 @@ export function useSettings(): {
       setFollowUpEnabled(previous.followUpEnabled)
       setSendDelayMinutes(previous.sendDelayMinutes)
       setFollowUpDelayMinutes(previous.followUpDelayMinutes)
+      setEscalationEnabled(previous.escalationEnabled)
       setEscalationDelayMinutes(previous.escalationDelayMinutes)
       setQuietHoursEnabled(previous.quietHoursEnabled)
       setQuietHoursStart(previous.quietHoursStart)
@@ -595,6 +608,7 @@ export function useSettings(): {
     avgShippingCost,
     defaultLanguage,
     escalationDelayMinutes,
+    escalationEnabled,
     followUpDelayMinutes,
     followUpEnabled,
     isAutoVerifyEnabled,
@@ -630,6 +644,7 @@ export function useSettings(): {
       sendDelayMinutesError,
       followUpDelayMinutes,
       followUpDelayMinutesError,
+      escalationEnabled,
       escalationDelayMinutes,
       escalationDelayMinutesError,
       quietHoursEnabled,
@@ -675,6 +690,7 @@ export function useSettings(): {
         setFollowUpDelayMinutesError(undefined)
         setEscalationDelayMinutesError(undefined)
       },
+      onEscalationEnabledChange: setEscalationEnabled,
       onEscalationDelayMinutesChange: (value) => {
         setEscalationDelayMinutes(value)
         setFollowUpDelayMinutesError(undefined)
