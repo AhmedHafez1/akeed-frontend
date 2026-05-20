@@ -348,7 +348,8 @@ export function useSettings(): {
 
     const { used, limit, periodStart, periodEnd } = billingUsage
     const safeLimit = Math.max(limit, 1)
-    const percent = Math.min(100, Math.round((used / safeLimit) * 100))
+    const usageRatio = used / safeLimit
+    const percent = Math.min(100, Math.round(usageRatio * 100))
 
     return {
       used,
@@ -357,7 +358,12 @@ export function useSettings(): {
       periodEnd,
       usedLabel: t('usageUsedPercent', { value: percent }),
       limitLabel: t('usageMonthlyLimit'),
-      upgradePrompt: percent >= 80 ? t('usageUpgradePrompt') : null,
+      upgradePrompt:
+        used >= limit
+          ? t('usageLimitReachedPrompt')
+          : usageRatio >= 0.8
+            ? t('usageUpgradePrompt')
+            : null,
     }
   }, [billingUsage, t])
 

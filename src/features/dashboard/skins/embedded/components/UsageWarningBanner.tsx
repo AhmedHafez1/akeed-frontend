@@ -1,4 +1,4 @@
-import { Banner } from '@shopify/polaris'
+import { Banner, Button } from '@shopify/polaris'
 
 interface UsageWarningBannerProps {
   title: string
@@ -16,15 +16,13 @@ export function UsageWarningBanner({
   onManage,
 }: UsageWarningBannerProps) {
   return (
-    <Banner
-      tone={isAtLimit ? 'critical' : 'warning'}
-      title={title}
-      action={{
-        content: manageLabel,
-        onAction: onManage,
-      }}
-    >
-      <p>{message}</p>
+    <Banner tone={isAtLimit ? 'critical' : 'warning'} title={title}>
+      <div className="flex flex-col gap-3">
+        <p>{message}</p>
+        <div className="flex justify-end">
+          <Button onClick={onManage}>{manageLabel}</Button>
+        </div>
+      </div>
     </Banner>
   )
 }
