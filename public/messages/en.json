@@ -663,6 +663,7 @@
         "order": "Order",
         "customer": "Customer",
         "status": "Status",
+        "followUp": "Follow-up",
         "total": "Total",
         "created": "Created",
         "actions": "Actions"
@@ -672,6 +673,10 @@
       "noPhone": "No phone",
       "loadMore": "Load more",
       "loadingMore": "Loading more...",
+      "followUp": {
+        "sent": "Sent",
+        "notSent": "--"
+      },
       "actions": {
         "cancelOrder": "Cancel order",
         "confirmCancelOrder": "Yes, cancel",
