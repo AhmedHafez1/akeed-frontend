@@ -95,6 +95,39 @@ function formatCreatedTime(value: string | null, locale: string): string {
   })
 }
 
+function formatTooltipDateTime(value: string | null, locale: string): string {
+  if (!value) return ''
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return ''
+
+  return new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  }).format(date)
+}
+
+function getStatusTimestamp(verification: VerificationItem): string | null {
+  switch (verification.status) {
+    case 'sent':
+      return verification.last_sent_at
+    case 'delivered':
+      return verification.delivered_at
+    case 'read':
+      return verification.read_at
+    case 'confirmed':
+      return verification.confirmed_at
+    case 'canceled':
+      return verification.canceled_at
+    case 'expired':
+      return verification.expired_at
+    case 'no_reply':
+      return verification.no_reply_at
+    default:
+      return null
+  }
+}
+
 export function VerificationsTableEmbedded({
   verifications,
   cancelingVerificationId,
@@ -119,6 +152,7 @@ export function VerificationsTableEmbedded({
     { title: t('table.headings.order'), alignment: textAlignment },
     { title: t('table.headings.customer'), alignment: textAlignment },
     { title: t('table.headings.status'), alignment: textAlignment },
+    { title: t('table.headings.followUp'), alignment: textAlignment },
     { title: t('table.headings.total'), alignment: textAlignment },
     { title: t('table.headings.created'), alignment: textAlignment },
     { title: t('table.headings.actions'), alignment: textAlignment },
@@ -128,6 +162,17 @@ export function VerificationsTableEmbedded({
     const isConfirming = confirmingCancelVerificationId === verification.id
     const isCanceling = cancelingVerificationId === verification.id
     const cancelError = cancelOrderErrors[verification.id]
+    const statusTitle = formatTooltipDateTime(
+      getStatusTimestamp(verification),
+      locale
+    )
+    const followUpTitle = formatTooltipDateTime(
+      verification.follow_up_sent_at,
+      locale
+    )
+    const followUpLabel = verification.follow_up_sent_at
+      ? t('table.followUp.sent')
+      : t('table.followUp.notSent')
 
     return (
       <IndexTable.Row
@@ -135,47 +180,61 @@ export function VerificationsTableEmbedded({
         key={verification.id}
         position={index}
       >
-      <IndexTable.Cell>
-        <div className={dataCellClassName}>
-          <BlockStack gap="100">
+        <IndexTable.Cell>
+          <div className={dataCellClassName}>
+            <BlockStack gap="100">
+              <Text variant="bodyMd" fontWeight="semibold" as="p">
+                {formatOrderTitle(verification, t('table.orderFallbackPrefix'))}
+              </Text>
+              <Text variant="bodySm" tone="subdued" as="p">
+                {verification.order_id.slice(0, 12)}
+              </Text>
+            </BlockStack>
+          </div>
+        </IndexTable.Cell>
+
+        <IndexTable.Cell>
+          <div className={dataCellClassName}>
+            <BlockStack gap="100">
+              <Text variant="bodyMd" fontWeight="semibold" as="p">
+                {verification.customer_name || t('table.unknownCustomer')}
+              </Text>
+              <Text variant="bodySm" tone="subdued" as="p">
+                {verification.customer_phone || t('table.noPhone')}
+              </Text>
+            </BlockStack>
+          </div>
+        </IndexTable.Cell>
+
+        <IndexTable.Cell>
+          <div className={statusCellClassName}>
+            <span title={statusTitle || undefined}>
+              <Badge tone={STATUS_TONE_MAP[verification.status]}>
+                {t(`verificationStatus.${verification.status}`)}
+              </Badge>
+            </span>
+          </div>
+        </IndexTable.Cell>
+
+        <IndexTable.Cell>
+          <div className={dataCellClassName}>
+            <Text
+              variant="bodySm"
+              tone={verification.follow_up_sent_at ? undefined : 'subdued'}
+              as="span"
+            >
+              <span title={followUpTitle || undefined}>{followUpLabel}</span>
+            </Text>
+          </div>
+        </IndexTable.Cell>
+
+        <IndexTable.Cell>
+          <div className={dataCellClassName}>
             <Text variant="bodyMd" fontWeight="semibold" as="p">
-              {formatOrderTitle(verification, t('table.orderFallbackPrefix'))}
+              {formatCurrencyTotal(verification, locale)}
             </Text>
-            <Text variant="bodySm" tone="subdued" as="p">
-              {verification.order_id.slice(0, 12)}
-            </Text>
-          </BlockStack>
-        </div>
-      </IndexTable.Cell>
-
-      <IndexTable.Cell>
-        <div className={dataCellClassName}>
-          <BlockStack gap="100">
-            <Text variant="bodyMd" fontWeight="semibold" as="p">
-              {verification.customer_name || t('table.unknownCustomer')}
-            </Text>
-            <Text variant="bodySm" tone="subdued" as="p">
-              {verification.customer_phone || t('table.noPhone')}
-            </Text>
-          </BlockStack>
-        </div>
-      </IndexTable.Cell>
-
-      <IndexTable.Cell>
-        <div className={statusCellClassName}>
-          <Badge tone={STATUS_TONE_MAP[verification.status]}>
-            {t(`verificationStatus.${verification.status}`)}
-          </Badge>
-        </div>
-      </IndexTable.Cell>
-
-      <IndexTable.Cell>
-        <div className={dataCellClassName}>
-          <Text variant="bodyMd" fontWeight="semibold" as="p">
-            {formatCurrencyTotal(verification, locale)}
-          </Text>
-        </div>
-      </IndexTable.Cell>
+          </div>
+        </IndexTable.Cell>
 
         <IndexTable.Cell>
           <div className={dataCellClassName}>
@@ -205,7 +264,9 @@ export function VerificationsTableEmbedded({
                         tone="critical"
                         loading={isCanceling}
                         disabled={isCanceling}
-                        onClick={() => void onConfirmCancelOrder(verification.id)}
+                        onClick={() =>
+                          void onConfirmCancelOrder(verification.id)
+                        }
                       >
                         {isCanceling
                           ? t('table.actions.cancelingOrder')

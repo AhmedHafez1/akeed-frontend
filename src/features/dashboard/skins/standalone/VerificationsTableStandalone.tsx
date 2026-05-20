@@ -46,6 +46,39 @@ function formatTime(value: string | null): string {
   })
 }
 
+function formatTooltipDateTime(value: string | null, locale: string): string {
+  if (!value) return ''
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return ''
+
+  return new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  }).format(date)
+}
+
+function getStatusTimestamp(verification: VerificationItem): string | null {
+  switch (verification.status) {
+    case 'sent':
+      return verification.last_sent_at
+    case 'delivered':
+      return verification.delivered_at
+    case 'read':
+      return verification.read_at
+    case 'confirmed':
+      return verification.confirmed_at
+    case 'canceled':
+      return verification.canceled_at
+    case 'expired':
+      return verification.expired_at
+    case 'no_reply':
+      return verification.no_reply_at
+    default:
+      return null
+  }
+}
+
 export function VerificationsTableStandalone({
   verifications,
   cancelingVerificationId,
@@ -56,16 +89,17 @@ export function VerificationsTableStandalone({
   onConfirmCancelOrder,
 }: VerificationsTableStandaloneProps) {
   const t = useTranslations('dashboard.table')
-  const { isRTL } = useLocaleInfo()
+  const { isRTL, locale } = useLocaleInfo()
   const alignEnd = isRTL ? 'text-left' : 'text-right'
 
   return (
     <div className="-mx-6 overflow-x-auto sm:mx-0">
-      <table className="w-full min-w-[640px] text-start text-sm">
+      <table className="w-full min-w-[720px] text-start text-sm">
         <thead>
           <tr className="border-b border-slate-200 text-[11px] font-semibold tracking-wider text-slate-400 uppercase">
             <th className="px-4 py-3 text-start">{t('headings.order')}</th>
             <th className="px-4 py-3 text-start">{t('headings.status')}</th>
+            <th className="px-4 py-3 text-start">{t('headings.followUp')}</th>
             <th className="px-4 py-3 text-start">{t('headings.customer')}</th>
             <th className={`px-4 py-3 ${alignEnd}`}>{t('headings.total')}</th>
             <th className={`px-4 py-3 ${alignEnd}`}>{t('headings.created')}</th>
@@ -74,115 +108,145 @@ export function VerificationsTableStandalone({
         </thead>
         <tbody className="divide-y divide-slate-50">
           {verifications.map((verification) => {
-            const isConfirming = confirmingCancelVerificationId === verification.id
+            const isConfirming =
+              confirmingCancelVerificationId === verification.id
             const isCanceling = cancelingVerificationId === verification.id
             const cancelError = cancelOrderErrors[verification.id]
+            const statusTitle = formatTooltipDateTime(
+              getStatusTimestamp(verification),
+              locale
+            )
+            const followUpTitle = formatTooltipDateTime(
+              verification.follow_up_sent_at,
+              locale
+            )
+            const followUpLabel = verification.follow_up_sent_at
+              ? t('followUp.sent')
+              : t('followUp.notSent')
 
             return (
               <tr
                 key={verification.id}
                 className="text-slate-700 transition-colors hover:bg-slate-50/60"
               >
-              {/* Order */}
-              <td className="px-4 py-3.5">
-                <p className="font-semibold text-slate-900">
-                  {verification.order_number
-                    ? `#${verification.order_number}`
-                    : '—'}
-                </p>
-                <p className="mt-0.5 font-mono text-[10px] leading-none text-slate-400">
-                  {verification.order_id.slice(0, 12)}
-                </p>
-              </td>
+                {/* Order */}
+                <td className="px-4 py-3.5">
+                  <p className="font-semibold text-slate-900">
+                    {verification.order_number
+                      ? `#${verification.order_number}`
+                      : '—'}
+                  </p>
+                  <p className="mt-0.5 font-mono text-[10px] leading-none text-slate-400">
+                    {verification.order_id.slice(0, 12)}
+                  </p>
+                </td>
 
-              {/* Status */}
-              <td className="px-4 py-3.5">
-                <StatusBadge status={verification.status} />
-              </td>
+                {/* Status */}
+                <td className="px-4 py-3.5">
+                  <span title={statusTitle || undefined}>
+                    <StatusBadge status={verification.status} />
+                  </span>
+                </td>
 
-              {/* Customer */}
-              <td className="px-4 py-3.5">
-                <p className="font-medium text-slate-900">
-                  {verification.customer_name || t('unknownCustomer')}
-                </p>
-                <p className="mt-0.5 text-xs text-slate-400">
-                  {verification.customer_phone || t('noPhone')}
-                </p>
-              </td>
+                {/* Follow-up */}
+                <td className="px-4 py-3.5">
+                  <span
+                    title={followUpTitle || undefined}
+                    className={
+                      verification.follow_up_sent_at
+                        ? 'font-medium text-slate-700'
+                        : 'text-slate-400'
+                    }
+                  >
+                    {followUpLabel}
+                  </span>
+                </td>
 
-              {/* Total */}
-              <td className={`px-4 py-3.5 ${alignEnd}`}>
-                <p className="font-semibold text-slate-900 tabular-nums">
-                  {formatCurrency(
-                    verification.total_price,
-                    verification.currency
-                  )}
-                </p>
-              </td>
+                {/* Customer */}
+                <td className="px-4 py-3.5">
+                  <p className="font-medium text-slate-900">
+                    {verification.customer_name || t('unknownCustomer')}
+                  </p>
+                  <p className="mt-0.5 text-xs text-slate-400">
+                    {verification.customer_phone || t('noPhone')}
+                  </p>
+                </td>
 
-              {/* Created */}
-              <td className={`px-4 py-3.5 ${alignEnd}`}>
-                <p className="text-xs text-slate-600">
-                  {formatDate(verification.created_at)}
-                </p>
-                <p className="mt-0.5 text-[11px] text-slate-400">
-                  {formatTime(verification.created_at)}
-                </p>
-              </td>
+                {/* Total */}
+                <td className={`px-4 py-3.5 ${alignEnd}`}>
+                  <p className="font-semibold text-slate-900 tabular-nums">
+                    {formatCurrency(
+                      verification.total_price,
+                      verification.currency
+                    )}
+                  </p>
+                </td>
 
-              {/* Actions */}
-              <td className="px-4 py-3.5">
-                {verification.status === 'no_reply' ? (
-                  <div className="max-w-[260px] space-y-2">
-                    {isConfirming ? (
-                      <div className="space-y-2">
-                        <p className="text-xs text-slate-500">
-                          {t('actions.cancelOrderConfirmDescription')}
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          <button
-                            type="button"
-                            disabled={isCanceling}
-                            onClick={() =>
-                              void onConfirmCancelOrder(verification.id)
-                            }
-                            className="rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
-                          >
-                            {isCanceling
-                              ? t('actions.cancelingOrder')
-                              : t('actions.confirmCancelOrder')}
-                          </button>
-                          <button
-                            type="button"
-                            disabled={isCanceling}
-                            onClick={() => onDismissCancelOrder(verification.id)}
-                            className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
-                          >
-                            {t('actions.keepOrder')}
-                          </button>
+                {/* Created */}
+                <td className={`px-4 py-3.5 ${alignEnd}`}>
+                  <p className="text-xs text-slate-600">
+                    {formatDate(verification.created_at)}
+                  </p>
+                  <p className="mt-0.5 text-[11px] text-slate-400">
+                    {formatTime(verification.created_at)}
+                  </p>
+                </td>
+
+                {/* Actions */}
+                <td className="px-4 py-3.5">
+                  {verification.status === 'no_reply' ? (
+                    <div className="max-w-[260px] space-y-2">
+                      {isConfirming ? (
+                        <div className="space-y-2">
+                          <p className="text-xs text-slate-500">
+                            {t('actions.cancelOrderConfirmDescription')}
+                          </p>
+                          <div className="flex flex-wrap gap-2">
+                            <button
+                              type="button"
+                              disabled={isCanceling}
+                              onClick={() =>
+                                void onConfirmCancelOrder(verification.id)
+                              }
+                              className="rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+                            >
+                              {isCanceling
+                                ? t('actions.cancelingOrder')
+                                : t('actions.confirmCancelOrder')}
+                            </button>
+                            <button
+                              type="button"
+                              disabled={isCanceling}
+                              onClick={() =>
+                                onDismissCancelOrder(verification.id)
+                              }
+                              className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                            >
+                              {t('actions.keepOrder')}
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => onRequestCancelOrder(verification.id)}
-                        className="rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700 transition hover:bg-red-100"
-                      >
-                        {t('actions.cancelOrder')}
-                      </button>
-                    )}
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => onRequestCancelOrder(verification.id)}
+                          className="rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700 transition hover:bg-red-100"
+                        >
+                          {t('actions.cancelOrder')}
+                        </button>
+                      )}
 
-                    {cancelError && (
-                      <p className="text-xs font-medium text-red-600">
-                        {cancelError}
-                      </p>
-                    )}
-                  </div>
-                ) : (
-                  <span className="text-xs text-slate-300">—</span>
-                )}
-              </td>
-            </tr>
+                      {cancelError && (
+                        <p className="text-xs font-medium text-red-600">
+                          {cancelError}
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    <span className="text-xs text-slate-300">—</span>
+                  )}
+                </td>
+              </tr>
             )
           })}
         </tbody>

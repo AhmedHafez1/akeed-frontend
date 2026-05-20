@@ -649,6 +649,7 @@
         "order": "الطلب",
         "customer": "العميل",
         "status": "الحالة",
+        "followUp": "المتابعة",
         "total": "الإجمالي",
         "created": "وقت الإنشاء",
         "actions": "الإجراءات"
@@ -658,6 +659,10 @@
       "noPhone": "لا يوجد رقم",
       "loadMore": "عرض المزيد",
       "loadingMore": "جارٍ تحميل المزيد...",
+      "followUp": {
+        "sent": "تم الإرسال",
+        "notSent": "--"
+      },
       "actions": {
         "cancelOrder": "إلغاء الطلب",
         "confirmCancelOrder": "نعم، ألغِ الطلب",
