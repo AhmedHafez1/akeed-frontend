@@ -797,6 +797,7 @@
     "usageUsedPercent": "{value}% used",
     "usageMonthlyLimit": "Monthly limit",
     "usageUpgradePrompt": "You are approaching your included monthly WhatsApp confirmation limit. Upgrade before you run out to keep confirmations sending.",
+    "usageLimitReachedPrompt": "You have reached your monthly WhatsApp confirmation limit. Upgrade your plan to resume confirmations immediately, or wait for the next billing period.",
     "currentPlanBadge": "Current",
     "changePlanButton": "Switch to selected plan",
     "changingPlanButton": "Switching plan...",

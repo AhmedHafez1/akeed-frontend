@@ -75,8 +75,10 @@ export function StatsEmbedded({
   const confirmationRateTone = stats
     ? resolveConfirmationRateTone(stats.totals.confirmation_rate)
     : 'caution'
-  const searchQuery = searchParams.toString()
-  const settingsHref = `${withLocale('/settings', locale)}${searchQuery ? `?${searchQuery}` : ''}#subscription-usage`
+  const settingsParams = new URLSearchParams(searchParams.toString())
+  settingsParams.set('tab', 'billing')
+  const settingsQuery = settingsParams.toString()
+  const settingsHref = `${withLocale('/settings', locale)}${settingsQuery ? `?${settingsQuery}` : ''}`
 
   const countMetrics: TopMetric[] = stats
     ? [
