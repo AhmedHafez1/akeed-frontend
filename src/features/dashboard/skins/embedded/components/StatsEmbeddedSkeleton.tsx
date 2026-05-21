@@ -11,21 +11,26 @@ export function StatsEmbeddedSkeleton() {
   return (
     <BlockStack gap="400">
       {Array.from({ length: 2 }).map((_, rowIndex) => (
-        <InlineGrid key={rowIndex} columns={{ xs: 1, md: 3 }} gap="400">
-          {Array.from({ length: 3 }).map((__, cardIndex) => (
-            <Card key={`${rowIndex}-${cardIndex}`}>
-              <BlockStack gap="300">
-                <InlineStack gap="200" blockAlign="center">
-                  <div className="h-2 w-2 rounded-full bg-gray-200" />
-                  <div className="w-28">
-                    <SkeletonBodyText lines={1} />
-                  </div>
-                </InlineStack>
-                <SkeletonDisplayText size="medium" />
-              </BlockStack>
-            </Card>
-          ))}
-        </InlineGrid>
+        <BlockStack key={rowIndex} gap="200">
+          <div className="w-36">
+            <SkeletonBodyText lines={1} />
+          </div>
+          <InlineGrid columns={{ xs: 1, md: 4 }} gap="400">
+            {Array.from({ length: 4 }).map((__, cardIndex) => (
+              <Card key={`${rowIndex}-${cardIndex}`}>
+                <BlockStack gap="300">
+                  <InlineStack gap="200" blockAlign="center">
+                    <div className="h-2 w-2 rounded-full bg-gray-200" />
+                    <div className="w-28">
+                      <SkeletonBodyText lines={1} />
+                    </div>
+                  </InlineStack>
+                  <SkeletonDisplayText size="medium" />
+                </BlockStack>
+              </Card>
+            ))}
+          </InlineGrid>
+        </BlockStack>
       ))}
 
       <Card padding={{ lg: '500', xs: '300' }}>

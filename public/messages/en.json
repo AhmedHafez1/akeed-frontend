@@ -557,8 +557,14 @@
       "reviewDescription": "If the customer does not reply, the order remains awaiting reply / no reply and can be reviewed before fulfillment."
     },
     "tooltips": {
-      "responseRate": "Percentage of sent confirmations that received any customer response.",
-      "confirmationRate": "Percentage of sent confirmations that customers confirmed.",
+      "confirmedOrders": "Orders customers confirmed.",
+      "customerCanceled": "Orders customers canceled or declined.",
+      "awaitingReply": "Messages sent successfully, but the customer has not confirmed or canceled yet.",
+      "pending": "COD orders waiting for the first verification message to be sent.",
+      "responseRate": "Customers who replied with a clear decision out of sent verification messages.",
+      "confirmationRate": "Confirmed orders out of sent verification messages.",
+      "failed": "Verification messages that failed to send or were reported failed.",
+      "followUps": "Follow-up reminder messages sent after no customer reply.",
       "noReply": "Orders where the customer did not respond after the configured follow-up and escalation window."
     },
     "filters": {
@@ -621,16 +627,25 @@
       "summaryTitle": "Verification Summary",
       "replyRate": "{value}% of customers responded",
       "replyRateHelp": "Percentage of sent verifications that received a customer response.",
+      "sections": {
+        "orderOutcomes": "Order Outcomes",
+        "needsAttention": "Needs Attention"
+      },
       "cards": {
         "pending": "Pending",
+        "confirmedOrders": "Confirmed Orders",
+        "customerCanceled": "Customer Canceled",
         "confirmed": "Confirmed",
         "canceled": "Canceled",
         "awaitingResponse": "Awaiting reply",
         "responseRate": "Response rate",
         "confirmationRate": "Confirmation rate",
+        "failed": "Failed",
+        "followUps": "Follow-ups",
         "sent": "Sent",
         "delivered": "Delivered",
         "read": "Read",
+        "confirmedCanceled": "Confirmed / Canceled",
         "responded": "Responded",
         "total": "Total"
       },

@@ -1,5 +1,5 @@
 import { Box, Icon, InlineGrid, InlineStack, Text } from '@shopify/polaris'
-import { QuestionCircleIcon } from '@shopify/polaris-icons'
+import { InfoIcon } from '@shopify/polaris-icons'
 
 export type PolarisTextTone = 'success' | 'critical' | 'caution' | 'subdued'
 export type MetricTone = Exclude<PolarisTextTone, 'subdued'>
@@ -9,8 +9,11 @@ export interface TopMetric {
     | 'confirmed'
     | 'canceled'
     | 'awaitingResponse'
+    | 'pending'
     | 'responseRate'
     | 'confirmationRate'
+    | 'failed'
+    | 'followUps'
     | 'saving'
   label: string
   value: string
@@ -65,7 +68,7 @@ export function TopMetricGrid({ metrics, isRTL }: TopMetricGridProps) {
                   aria-label={metric.tooltip}
                   className="flex h-4 w-4 shrink-0 items-center justify-center text-[#8a8a8a]"
                 >
-                  <Icon source={QuestionCircleIcon} tone="subdued" />
+                  <Icon source={InfoIcon} tone="subdued" />
                 </span>
               ) : null}
             </InlineStack>

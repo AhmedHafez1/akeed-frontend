@@ -14,9 +14,14 @@ import {
 } from '@shopify/polaris-icons'
 
 export interface FunnelStep {
-  id: 'sent' | 'delivered' | 'read' | 'responded'
+  id: 'sent' | 'delivered' | 'read' | 'outcomes'
   label: string
-  value: string
+  value?: string
+  branches?: ReadonlyArray<{
+    id: 'confirmed' | 'canceled'
+    label: string
+    value: string
+  }>
 }
 
 interface FunnelCardProps {
@@ -66,16 +71,34 @@ export function FunnelCard({ title, subtitle, steps, isRTL }: FunnelCardProps) {
                         {step.label}
                       </Text>
                     </InlineStack>
-                    <Box paddingInlineStart="600">
-                      <Text variant="headingXl" as="p">
-                        {step.value}
-                      </Text>
-                    </Box>
+                    {step.branches ? (
+                      <div className="grid grid-cols-2 gap-2">
+                        {step.branches.map((branch) => (
+                          <div
+                            key={branch.id}
+                            className="rounded-lg bg-white px-3 py-2 shadow-[inset_0_0_0_1px_#e3e3e3]"
+                          >
+                            <Text variant="bodyXs" tone="subdued" as="p">
+                              {branch.label}
+                            </Text>
+                            <Text variant="headingLg" as="p">
+                              {branch.value}
+                            </Text>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <Box paddingInlineStart="600">
+                        <Text variant="headingXl" as="p">
+                          {step.value}
+                        </Text>
+                      </Box>
+                    )}
                   </BlockStack>
                 </Box>
               </div>
 
-              {step.id !== 'responded' && (
+              {index < steps.length - 1 && (
                 <>
                   <div className="flex justify-center md:hidden">
                     <Icon source={ArrowDownIcon} tone="subdued" />
