@@ -11,7 +11,7 @@ import {
   Text,
   TextField,
 } from '@shopify/polaris'
-import { QuestionCircleIcon } from '@shopify/polaris-icons'
+import { InfoIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import type {
   IntegrationOnboardingLanguage,
@@ -187,7 +187,7 @@ function HelpIcon({ content }: { content: string }) {
       aria-label={content}
       className="inline-flex h-5 w-5 items-center justify-center text-[#8a8a8a]"
     >
-      <Icon source={QuestionCircleIcon} tone="subdued" />
+      <Icon source={InfoIcon} tone="subdued" />
     </span>
   )
 }
@@ -319,7 +319,6 @@ export function SettingsEmbeddedSkin(props: SettingsSkinProps) {
                     onPlanSelect={props.onPlanSelect}
                     onChangePlan={props.onChangePlan}
                   />
-
                 </BlockStack>
               </Card>
             </div>

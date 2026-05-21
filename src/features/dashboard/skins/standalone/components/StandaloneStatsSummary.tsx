@@ -8,16 +8,54 @@ interface StandaloneStatsSummaryProps {
   isStatsLoading: boolean
 }
 
-function resolveRateColor(rate: number): string {
-  if (rate >= 80) return 'text-emerald-600 bg-emerald-50 border-emerald-200'
-  if (rate >= 55) return 'text-amber-700 bg-amber-50 border-amber-200'
-  return 'text-red-700 bg-red-50 border-red-200'
-}
-
 function resolveUsageColor(percent: number): string {
   if (percent >= 95) return 'bg-red-500'
   if (percent >= 80) return 'bg-amber-500'
   return 'bg-emerald-500'
+}
+
+type MetricTone = 'success' | 'critical' | 'caution'
+
+interface MetricCard {
+  id: string
+  label: string
+  value: string | number
+  tone: MetricTone
+  tooltip?: string
+}
+
+const metricAccentClassNames: Record<MetricTone, string> = {
+  success: 'bg-emerald-600',
+  critical: 'bg-red-700',
+  caution: 'bg-amber-500',
+}
+
+function StandaloneMetricCard({ label, value, tone, tooltip }: MetricCard) {
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="flex items-center gap-2">
+        <span
+          aria-hidden="true"
+          className={`h-2 w-2 shrink-0 rounded-full ${metricAccentClassNames[tone]}`}
+        />
+        <p className="min-w-0 truncate text-xs font-medium tracking-wide text-slate-500 uppercase">
+          {label}
+        </p>
+        {tooltip ? (
+          <span
+            title={tooltip}
+            aria-label={tooltip}
+            className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-slate-300 text-[10px] font-semibold text-slate-500"
+          >
+            i
+          </span>
+        ) : null}
+      </div>
+      <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
+        {value}
+      </p>
+    </div>
+  )
 }
 
 export function StandaloneStatsSummary({
@@ -48,77 +86,101 @@ export function StandaloneStatsSummary({
     )
   }
 
+  const orderOutcomeMetrics: MetricCard[] = [
+    {
+      id: 'confirmed',
+      label: t('metrics.cards.confirmedOrders'),
+      value: stats.totals.confirmed,
+      tone: 'success',
+      tooltip: t('tooltips.confirmedOrders'),
+    },
+    {
+      id: 'customerCanceled',
+      label: t('metrics.cards.customerCanceled'),
+      value: stats.totals.customer_canceled,
+      tone: 'critical',
+      tooltip: t('tooltips.customerCanceled'),
+    },
+    {
+      id: 'awaitingResponse',
+      label: t('metrics.cards.awaitingResponse'),
+      value: stats.totals.awaiting_reply,
+      tone: 'caution',
+      tooltip: t('tooltips.awaitingReply'),
+    },
+    {
+      id: 'pending',
+      label: t('metrics.cards.pending'),
+      value: stats.totals.pending,
+      tone: 'caution',
+      tooltip: t('tooltips.pending'),
+    },
+  ]
+
+  const needsAttentionMetrics: MetricCard[] = [
+    {
+      id: 'responseRate',
+      label: t('metrics.cards.responseRate'),
+      value: `${stats.totals.reply_rate}%`,
+      tone:
+        stats.totals.reply_rate >= 80
+          ? 'success'
+          : stats.totals.reply_rate >= 55
+            ? 'caution'
+            : 'critical',
+      tooltip: t('tooltips.responseRate'),
+    },
+    {
+      id: 'confirmationRate',
+      label: t('metrics.cards.confirmationRate'),
+      value: `${stats.totals.confirmation_rate}%`,
+      tone:
+        stats.totals.confirmation_rate >= 70
+          ? 'success'
+          : stats.totals.confirmation_rate >= 45
+            ? 'caution'
+            : 'critical',
+      tooltip: t('tooltips.confirmationRate'),
+    },
+    {
+      id: 'failed',
+      label: t('metrics.cards.failed'),
+      value: stats.totals.failed,
+      tone: 'critical',
+      tooltip: t('tooltips.failed'),
+    },
+    {
+      id: 'followUps',
+      label: t('metrics.cards.followUps'),
+      value: stats.totals.follow_ups_sent,
+      tone: 'caution',
+      tooltip: t('tooltips.followUps'),
+    },
+  ]
+
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">
-            {t('metrics.cards.confirmed')}
-          </p>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
-            {stats.totals.confirmed}
-          </p>
+      <section className="space-y-3">
+        <h2 className="text-sm font-semibold text-slate-700">
+          {t('metrics.sections.orderOutcomes')}
+        </h2>
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {orderOutcomeMetrics.map((metric) => (
+            <StandaloneMetricCard key={metric.id} {...metric} />
+          ))}
         </div>
+      </section>
 
-        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">
-            {t('metrics.cards.canceled')}
-          </p>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
-            {stats.totals.canceled}
-          </p>
+      <section className="space-y-3">
+        <h2 className="text-sm font-semibold text-slate-700">
+          {t('metrics.sections.needsAttention')}
+        </h2>
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {needsAttentionMetrics.map((metric) => (
+            <StandaloneMetricCard key={metric.id} {...metric} />
+          ))}
         </div>
-
-        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">
-            {t('metrics.cards.awaitingResponse')}
-          </p>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
-            {Math.max(
-              0,
-              stats.totals.sent - stats.totals.confirmed - stats.totals.canceled
-            )}
-          </p>
-        </div>
-
-        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">
-            <span title={t('tooltips.responseRate')}>
-              {t('metrics.cards.responseRate')}
-            </span>
-          </p>
-          <div className="mt-2 flex items-baseline gap-2">
-            <p className="text-3xl font-bold tracking-tight text-slate-900">
-              {stats.totals.reply_rate}%
-            </p>
-            <span
-              aria-hidden="true"
-              className={`inline-flex h-5 w-5 items-center justify-center rounded-full border ${resolveRateColor(stats.totals.reply_rate)}`}
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-current" />
-            </span>
-          </div>
-        </div>
-
-        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">
-            <span title={t('tooltips.confirmationRate')}>
-              {t('metrics.cards.confirmationRate')}
-            </span>
-          </p>
-          <div className="mt-2 flex items-baseline gap-2">
-            <p className="text-3xl font-bold tracking-tight text-slate-900">
-              {stats.totals.confirmation_rate}%
-            </p>
-            <span
-              aria-hidden="true"
-              className={`inline-flex h-5 w-5 items-center justify-center rounded-full border ${resolveRateColor(stats.totals.confirmation_rate)}`}
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-current" />
-            </span>
-          </div>
-        </div>
-      </div>
+      </section>
 
       {usagePercent >= 80 && (
         <div

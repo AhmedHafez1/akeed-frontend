@@ -3,10 +3,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
-import {
-  formatDashboardMoney,
-  formatDashboardNumber,
-} from '@/features/dashboard/lib/dashboardFormatters'
+import { formatDashboardNumber } from '@/features/dashboard/lib/dashboardFormatters'
 import { FunnelCard, type FunnelStep } from './components/FunnelCard'
 import { StatsEmbeddedHeader } from './components/StatsEmbeddedHeader'
 import { StatsEmbeddedSkeleton } from './components/StatsEmbeddedSkeleton'
@@ -63,12 +60,6 @@ export function StatsEmbedded({
   const t = useTranslations('dashboard')
   const { isRTL, locale } = useLocaleInfo()
 
-  const awaitingResponse = stats
-    ? Math.max(
-        0,
-        stats.totals.sent - stats.totals.confirmed - stats.totals.canceled
-      )
-    : 0
   const responseRateTone = stats
     ? resolveResponseRateTone(stats.totals.reply_rate)
     : 'caution'
@@ -84,21 +75,31 @@ export function StatsEmbedded({
     ? [
         {
           id: 'confirmed',
-          label: t('metrics.cards.confirmed'),
+          label: t('metrics.cards.confirmedOrders'),
           value: formatDashboardNumber(stats.totals.confirmed, locale),
           tone: 'success',
+          tooltip: t('tooltips.confirmedOrders'),
         },
         {
           id: 'canceled',
-          label: t('metrics.cards.canceled'),
-          value: formatDashboardNumber(stats.totals.canceled, locale),
+          label: t('metrics.cards.customerCanceled'),
+          value: formatDashboardNumber(stats.totals.customer_canceled, locale),
           tone: 'critical',
+          tooltip: t('tooltips.customerCanceled'),
         },
         {
           id: 'awaitingResponse',
           label: t('metrics.cards.awaitingResponse'),
-          value: formatDashboardNumber(awaitingResponse, locale),
+          value: formatDashboardNumber(stats.totals.awaiting_reply, locale),
           tone: 'caution',
+          tooltip: t('tooltips.awaitingReply'),
+        },
+        {
+          id: 'pending',
+          label: t('metrics.cards.pending'),
+          value: formatDashboardNumber(stats.totals.pending, locale),
+          tone: 'caution',
+          tooltip: t('tooltips.pending'),
         },
       ]
     : []
@@ -120,30 +121,21 @@ export function StatsEmbedded({
           tooltip: t('tooltips.confirmationRate'),
         },
         {
-          id: 'saving',
-          label: t('metrics.moneySaved.title'),
-          value: formatDashboardMoney(
-            stats.savings.money_saved,
-            stats.savings.currency,
-            locale
-          ),
-          tone: 'success',
-          tooltip: `${t('metrics.moneySaved.description')} = ${t(
-            'metrics.moneySaved.breakdownLine',
-            {
-              count: formatDashboardNumber(stats.totals.canceled, locale),
-              cost: formatDashboardMoney(
-                stats.savings.avg_shipping_cost,
-                stats.savings.currency,
-                locale
-              ),
-            }
-          )}`,
+          id: 'failed',
+          label: t('metrics.cards.failed'),
+          value: formatDashboardNumber(stats.totals.failed, locale),
+          tone: 'critical',
+          tooltip: t('tooltips.failed'),
+        },
+        {
+          id: 'followUps',
+          label: t('metrics.cards.followUps'),
+          value: formatDashboardNumber(stats.totals.follow_ups_sent, locale),
+          tone: 'caution',
+          tooltip: t('tooltips.followUps'),
         },
       ]
     : []
-
-  const responded = stats ? stats.totals.confirmed + stats.totals.canceled : 0
 
   const funnelSteps: FunnelStep[] = stats
     ? [
@@ -163,9 +155,23 @@ export function StatsEmbedded({
           value: formatDashboardNumber(stats.totals.read, locale),
         },
         {
-          id: 'responded',
-          label: t('metrics.cards.responded'),
-          value: formatDashboardNumber(responded, locale),
+          id: 'outcomes',
+          label: t('metrics.cards.confirmedCanceled'),
+          branches: [
+            {
+              id: 'confirmed',
+              label: t('metrics.cards.confirmed'),
+              value: formatDashboardNumber(stats.totals.confirmed, locale),
+            },
+            {
+              id: 'canceled',
+              label: t('metrics.cards.canceled'),
+              value: formatDashboardNumber(
+                stats.totals.customer_canceled,
+                locale
+              ),
+            },
+          ],
         },
       ]
     : []
@@ -200,9 +206,19 @@ export function StatsEmbedded({
         <StatsEmbeddedSkeleton />
       ) : stats ? (
         <BlockStack gap="400">
-          <TopMetricGrid metrics={countMetrics} isRTL={isRTL} />
+          <BlockStack gap="200">
+            <Text variant={isRTL ? 'headingMd' : 'headingSm'} as="h2">
+              {t('metrics.sections.orderOutcomes')}
+            </Text>
+            <TopMetricGrid metrics={countMetrics} isRTL={isRTL} />
+          </BlockStack>
 
-          <TopMetricGrid metrics={rateMetrics} isRTL={isRTL} />
+          <BlockStack gap="200">
+            <Text variant={isRTL ? 'headingMd' : 'headingSm'} as="h2">
+              {t('metrics.sections.needsAttention')}
+            </Text>
+            <TopMetricGrid metrics={rateMetrics} isRTL={isRTL} />
+          </BlockStack>
 
           <FunnelCard
             title={t('metrics.funnelTitle')}
