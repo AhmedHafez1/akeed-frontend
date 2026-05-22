@@ -10,7 +10,6 @@ interface HeaderMobileMenuProps {
   items: HeaderNavItem[]
   locale: string
   ctaLabel: string
-  signInLabel: string
   onNavigate: (id: string, event: MouseEvent<HTMLAnchorElement>) => void
   onLocaleChange: () => void
   onClose: () => void
@@ -21,7 +20,6 @@ export function HeaderMobileMenu({
   items,
   locale,
   ctaLabel,
-  signInLabel,
   onNavigate,
   onLocaleChange,
   onClose,
@@ -48,7 +46,7 @@ export function HeaderMobileMenu({
                   <Link
                     href={item.href}
                     onClick={(event) => onNavigate(item.id, event)}
-                    className="block w-full rounded-lg px-4 py-3 text-start text-base font-semibold text-gray-700 transition-colors hover:bg-orange-50 hover:text-orange-600"
+                    className="block w-full rounded-lg px-4 py-3 text-start text-base font-semibold text-gray-700 transition-colors hover:bg-emerald-50 hover:text-emerald-600"
                   >
                     {item.label}
                   </Link>
@@ -65,14 +63,7 @@ export function HeaderMobileMenu({
                 <a
                   href={SHOPIFY_APP_STORE_LISTING_URL}
                   onClick={onClose}
-                  className="block w-full rounded-lg border border-orange-100/70 bg-white px-4 py-3 text-center text-base font-semibold text-gray-700 transition-colors hover:bg-orange-50 hover:text-orange-700"
-                >
-                  {signInLabel}
-                </a>
-                <a
-                  href={SHOPIFY_APP_STORE_LISTING_URL}
-                  onClick={onClose}
-                  className="block w-full rounded-lg bg-linear-to-r from-orange-600 to-orange-500 px-4 py-3 text-center text-base font-bold text-white shadow-lg"
+                  className="block w-full rounded-lg bg-linear-to-r from-emerald-700 to-emerald-600 px-4 py-3 text-center text-base font-bold text-white shadow-lg"
                 >
                   {ctaLabel}
                 </a>

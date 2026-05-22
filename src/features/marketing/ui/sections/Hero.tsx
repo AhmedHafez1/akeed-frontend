@@ -7,9 +7,7 @@ import {
   ChevronRight,
   Clock3,
   CreditCard,
-  MessageCircle,
   Play,
-  ShieldCheck,
   ShoppingBag,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -37,21 +35,40 @@ function Hero() {
       label: t('proof_shopify'),
       icon: (
         <Image
-          src="/images/landing/logos/shopify.png"
-          alt=""
-          width={40}
-          height={40}
-          className="h-9 w-9 object-contain"
+          src="/images/landing/logos/shopify_icon_1.png"
+          alt={t('proof_shopify')}
+          width={32}
+          height={32}
+          unoptimized
+          className="h-8 w-8 object-contain"
         />
       ),
     },
     {
       label: t('proof_meta'),
-      icon: <MessageCircle className="h-6 w-6 text-emerald-600" />,
+      icon: (
+        <Image
+          src="/images/landing/logos/wa_icon_1.png"
+          alt={t('proof_meta')}
+          width={32}
+          height={32}
+          unoptimized
+          className="h-12 w-12 object-contain"
+        />
+      ),
     },
     {
       label: t('proof_built'),
-      icon: <ShieldCheck className="h-6 w-6 text-emerald-700" />,
+      icon: (
+        <Image
+          src="/images/landing/logos/built_icon.jpg"
+          alt={t('proof_built')}
+          width={32}
+          height={32}
+          unoptimized
+          className="h-10 w-10 rounded-sm object-cover"
+        />
+      ),
     },
   ]
 
@@ -84,19 +101,6 @@ function Hero() {
     <section className="relative overflow-hidden px-4 pt-22 pb-10 sm:px-6 sm:pt-26 sm:pb-14 lg:px-10 lg:pt-24 lg:pb-12">
       <div className="mx-auto grid w-full max-w-7xl items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.82fr)] lg:gap-12 xl:gap-16">
         <div className="flex w-full max-w-3xl flex-col items-center text-center lg:items-start lg:text-left">
-          {/* Shopify launch badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ ...baseTransition, delay: 0.05 }}
-            className="mb-5 inline-flex items-center gap-3 rounded-full bg-emerald-50 px-4 py-2 text-sm font-bold text-emerald-800 ring-1 ring-emerald-100 sm:text-base"
-          >
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-sm">
-              <ShoppingBag className="h-4 w-4 text-emerald-600" />
-            </span>
-            {t('launch_badge')}
-          </motion.div>
-
           {/* Main Headline */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -140,7 +144,7 @@ function Hero() {
                 key={item.label}
                 className="flex min-h-18 items-center gap-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm shadow-slate-200/40"
               >
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-emerald-50">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl">
                   {item.icon}
                 </span>
                 <span className="text-start text-sm leading-5 font-bold text-slate-800">
@@ -159,11 +163,18 @@ function Hero() {
           >
             <a
               href={SHOPIFY_APP_STORE_LISTING_URL}
-              className="group relative flex h-15 w-full items-center justify-center gap-3 rounded-xl bg-linear-to-r from-orange-600 to-orange-500 px-7 text-base font-bold text-white shadow-lg shadow-orange-500/20 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-orange-500/25 sm:w-auto sm:min-w-64 sm:text-lg"
+              className="group relative flex h-15 w-full items-center justify-center gap-3 rounded-xl bg-linear-to-r from-emerald-700 to-emerald-600 px-7 text-base font-bold text-white shadow-lg shadow-emerald-500/20 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-emerald-500/25 sm:w-auto sm:min-w-64 sm:text-lg"
               suppressHydrationWarning
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-orange-600">
-                <ShoppingBag className="h-5 w-5" />
+              <span className="flex h-12 w-12 items-center justify-center">
+                <Image
+                  src="/images/landing/logos/shopify_icon_1.png"
+                  alt={t('shopify_available')}
+                  width={32}
+                  height={32}
+                  unoptimized
+                  className="h-12 w-12 object-contain"
+                />
               </span>
               {t('cta')}
               {isRTL ? (
