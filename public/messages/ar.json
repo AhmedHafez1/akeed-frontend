@@ -35,8 +35,8 @@
     "no_credit_card": "الخطة المجانية متاحة. يتم التثبيت من Shopify App Store. لا حاجة لبطاقة ائتمان.",
     "launch_badge": "متاح الآن على Shopify",
     "secondary_cta": "شاهد كيف يعمل",
-    "proof_shopify": "معتمد من Shopify App Store",
-    "proof_meta": "واجهة Meta WhatsApp Cloud API الرسمية",
+    "proof_shopify": "معتمد من Shopify",
+    "proof_meta": "واجهة واتساب الرسمية",
     "proof_built": "مصمم لمتاجر Shopify",
     "microcopy_free": "تثبيت مجاني.",
     "microcopy_no_card": "لا حاجة لبطاقة ائتمان.",
@@ -116,8 +116,8 @@
     "main_title": "3 خطوات بسيطة لتشحن بثقة أكبر في أسواق المنطقة.",
     "steps": {
       "connect": {
-        "title": "اربط متجرك خلال دقائق",
-        "description": "اربط Shopify أو WooCommerce أو Salla أو Zid وغيرها بسرعة، ومن غير إعداد واتساب مخصص لمعظم المتاجر."
+        "title": "ثبّت أكيد على Shopify خلال دقائق",
+        "description": "ثبّت أكيد على متجرك في Shopify خلال دقائق بعدد قليل من النقرات. لا حاجة لإعداد واتساب مخصص."
       },
       "automation": {
         "title": "أكيد يرسل التأكيد تلقائياً",
