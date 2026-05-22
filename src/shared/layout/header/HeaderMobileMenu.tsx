@@ -32,7 +32,7 @@ export function HeaderMobileMenu({
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.3 }}
-          className="overflow-hidden border-t border-gray-200/50 bg-white/95 backdrop-blur-xl md:hidden"
+          className="overflow-hidden border-t border-white/10 bg-slate-950/96 backdrop-blur-xl md:hidden"
         >
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <nav className="space-y-1 py-6">
@@ -46,16 +46,16 @@ export function HeaderMobileMenu({
                   <Link
                     href={item.href}
                     onClick={(event) => onNavigate(item.id, event)}
-                    className="block w-full rounded-lg px-4 py-3 text-start text-base font-semibold text-gray-700 transition-colors hover:bg-emerald-50 hover:text-emerald-600"
+                    className="block w-full rounded-lg px-4 py-3 text-start text-base font-semibold text-slate-100 transition-colors hover:bg-white/8 hover:text-white"
                   >
                     {item.label}
                   </Link>
                 </motion.div>
               ))}
-              <div className="mt-4 space-y-3 border-t border-gray-200 pt-4">
+              <div className="mt-4 space-y-3 border-t border-white/10 pt-4">
                 <button
                   onClick={onLocaleChange}
-                  className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-gray-300 px-4 py-3 text-base font-medium text-gray-700 transition-colors hover:bg-gray-50"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-white/8 px-4 py-3 text-base font-semibold text-slate-100 ring-1 ring-white/10 transition-colors hover:bg-white/12 hover:text-white"
                 >
                   <Globe className="h-5 w-5" />
                   {locale === 'ar' ? 'English' : 'عربي'}
@@ -63,7 +63,7 @@ export function HeaderMobileMenu({
                 <a
                   href={SHOPIFY_APP_STORE_LISTING_URL}
                   onClick={onClose}
-                  className="block w-full rounded-lg bg-linear-to-r from-emerald-700 to-emerald-600 px-4 py-3 text-center text-base font-bold text-white shadow-lg"
+                  className="block w-full rounded-xl bg-emerald-600 px-4 py-3 text-center text-base font-bold text-white shadow-[0_14px_30px_rgba(5,150,105,0.28)] transition-colors hover:bg-emerald-500"
                 >
                   {ctaLabel}
                 </a>

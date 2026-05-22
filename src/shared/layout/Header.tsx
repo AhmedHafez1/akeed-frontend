@@ -23,13 +23,13 @@ export function Header() {
 
   return (
     <>
-        <header
-          className={`fixed top-0 z-50 w-full transition-all duration-400 ${
-            isScrolled
-              ? 'border-b border-emerald-100/70 bg-white/85 shadow-sm backdrop-blur-md'
-              : 'bg-white/60 backdrop-blur'
-          }`}
-        >
+      <header
+        className={`fixed top-0 z-50 w-full transition-all duration-400 ${
+          isScrolled
+            ? 'border-b border-white/10 bg-slate-950/92 shadow-[0_16px_40px_rgba(2,6,23,0.22)] backdrop-blur-md'
+            : 'bg-slate-950/88 backdrop-blur'
+        }`}
+      >
         <div className="px-4 sm:px-6 lg:px-8 xl:mx-46">
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}

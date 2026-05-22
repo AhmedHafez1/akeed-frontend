@@ -17,11 +17,11 @@ export function HeaderLogo({ href, onClick }: HeaderLogoProps) {
     >
       <Link href={href} onClick={onClick} aria-label="Akeed home">
         <Image
-          src="/images/akeed-web-logo-horizontal.png"
+          src="/images/akeed-web-logo-horizontal-white.png"
           alt="Akeed Logo"
           width={130}
           height={70}
-          className="object-contain"
+          className="h-auto object-contain"
         />
       </Link>
     </motion.div>
