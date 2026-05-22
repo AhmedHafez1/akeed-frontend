@@ -42,9 +42,9 @@
     "no_credit_card": "Free plan available. Installs from the Shopify App Store. No credit card needed.",
     "launch_badge": "Now live on Shopify",
     "secondary_cta": "See how it works",
-    "proof_shopify": "Approved by Shopify App Store",
-    "proof_meta": "Official Meta WhatsApp Cloud API",
-    "proof_built": "Built for Shopify merchants",
+    "proof_shopify": "Approved by Shopify",
+    "proof_meta": "Official WhatsApp Cloud API",
+    "proof_built": "Built for Shopify",
     "microcopy_free": "Free to install.",
     "microcopy_no_card": "No credit card needed.",
     "microcopy_setup": "2-minute setup.",
@@ -129,8 +129,8 @@
     "main_title": "Three simple steps to safer COD shipping across MENA.",
     "steps": {
       "connect": {
-        "title": "Connect your store in minutes",
-        "description": "Connect Shopify, WooCommerce, Salla, Zid, and other stores quickly. No custom WhatsApp setup is required for most merchants."
+        "title": "Install Akeed on Shopify in minutes",
+        "description": "Install Akeed on your Shopify store in minutes with few clicks. No custom WhatsApp setup is required."
       },
       "automation": {
         "title": "Akeed sends the confirmation automatically",
@@ -280,7 +280,7 @@
     },
     "easy_integration": {
       "question": "Is integration with my store difficult?",
-      "answer": "No. Akeed is designed for fast setup with platforms like Shopify, Salla, Zid, and WooCommerce. Most stores can be connected in minutes with a simple setup flow."
+      "answer": "Nope, integration is easy and fast. You can start confirming orders in 2 minutes after installing Akeed from the Shopify App Store."
     },
     "customize_messages": {
       "question": "Can I customize Akeed's messages and language?",
