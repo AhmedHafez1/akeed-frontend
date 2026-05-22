@@ -21,7 +21,7 @@ export function HeaderNav({ items, onNavigate }: HeaderNavProps) {
           <Link
             href={item.href}
             onClick={(event) => onNavigate(item.id, event)}
-            className="rounded-lg px-3 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-orange-50 hover:text-orange-700"
+            className="rounded-lg px-3 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-emerald-50 hover:text-emerald-700"
           >
             {item.label}
           </Link>
