@@ -19,8 +19,6 @@ export function Header() {
     scrollToSection,
     handleHomeClick,
     handleLocaleChange,
-    handleCtaClick,
-    handleSignInClick,
   } = useHeader()
 
   return (
@@ -46,8 +44,6 @@ export function Header() {
               ctaLabel={t('cta')}
               signInLabel={t('sign_in')}
               onLocaleChange={handleLocaleChange}
-              onCtaClick={handleCtaClick}
-              onSignInClick={handleSignInClick}
             />
 
             {/* Mobile Menu Button */}
@@ -67,14 +63,7 @@ export function Header() {
           signInLabel={t('sign_in')}
           onNavigate={scrollToSection}
           onLocaleChange={handleLocaleChange}
-          onSignInClick={() => {
-            setIsMobileMenuOpen(false)
-            handleSignInClick()
-          }}
-          onCtaClick={() => {
-            setIsMobileMenuOpen(false)
-            handleCtaClick()
-          }}
+          onClose={() => setIsMobileMenuOpen(false)}
         />
       </header>
     </>

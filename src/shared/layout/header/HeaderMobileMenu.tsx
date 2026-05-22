@@ -2,7 +2,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Globe } from 'lucide-react'
 import Link from 'next/link'
 import type { MouseEvent } from 'react'
-import { HeaderNavItem } from './header.model'
+import { SHOPIFY_APP_STORE_LISTING_URL } from '@/shared/lib/shopify-auth'
+import type { HeaderNavItem } from './header.model'
 
 interface HeaderMobileMenuProps {
   isOpen: boolean
@@ -12,8 +13,7 @@ interface HeaderMobileMenuProps {
   signInLabel: string
   onNavigate: (id: string, event: MouseEvent<HTMLAnchorElement>) => void
   onLocaleChange: () => void
-  onSignInClick: () => void
-  onCtaClick: () => void
+  onClose: () => void
 }
 
 export function HeaderMobileMenu({
@@ -24,8 +24,7 @@ export function HeaderMobileMenu({
   signInLabel,
   onNavigate,
   onLocaleChange,
-  onSignInClick,
-  onCtaClick,
+  onClose,
 }: HeaderMobileMenuProps) {
   return (
     <AnimatePresence>
@@ -63,18 +62,20 @@ export function HeaderMobileMenu({
                   <Globe className="h-5 w-5" />
                   {locale === 'ar' ? 'English' : 'عربي'}
                 </button>
-                <button
-                  onClick={onSignInClick}
-                  className="w-full rounded-lg border border-orange-100/70 bg-white px-4 py-3 text-base font-semibold text-gray-700 transition-colors hover:bg-orange-50 hover:text-orange-700"
+                <a
+                  href={SHOPIFY_APP_STORE_LISTING_URL}
+                  onClick={onClose}
+                  className="block w-full rounded-lg border border-orange-100/70 bg-white px-4 py-3 text-center text-base font-semibold text-gray-700 transition-colors hover:bg-orange-50 hover:text-orange-700"
                 >
                   {signInLabel}
-                </button>
-                <button
-                  onClick={onCtaClick}
-                  className="w-full rounded-lg bg-linear-to-r from-orange-600 to-orange-500 px-4 py-3 text-base font-bold text-white shadow-lg"
+                </a>
+                <a
+                  href={SHOPIFY_APP_STORE_LISTING_URL}
+                  onClick={onClose}
+                  className="block w-full rounded-lg bg-linear-to-r from-orange-600 to-orange-500 px-4 py-3 text-center text-base font-bold text-white shadow-lg"
                 >
                   {ctaLabel}
-                </button>
+                </a>
               </div>
             </nav>
           </div>

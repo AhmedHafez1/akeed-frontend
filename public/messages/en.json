@@ -7,8 +7,8 @@
     "demo": "Demo",
     "pricing": "Pricing",
     "faq": "FAQ",
-    "cta": "Start free",
-    "sign_in": "Sign in"
+    "cta": "Install on Shopify",
+    "sign_in": "Open Shopify app"
   },
   "header": {
     "tagline": "Smart Verification",
@@ -16,13 +16,13 @@
     "demo": "Demo",
     "pricing": "Pricing",
     "faq": "FAQ",
-    "cta": "Start free",
-    "sign_in": "Sign in"
+    "cta": "Install on Shopify",
+    "sign_in": "Open Shopify app"
   },
   "hero": {
     "title": "Stop Wasting Shipping Costs.",
-    "highlight": "Confirm COD Orders On WhatsApp.",
-    "subtitle": "Rule-based COD confirmation workflows sent through official Meta WhatsApp Cloud APIs.",
+    "highlight": "Confirm COD Orders on WhatsApp.",
+    "subtitle": "Install Akeed from the Shopify App Store and automate COD confirmation through official Meta WhatsApp Cloud APIs.",
     "subtitle_bullet_1": "✅ <strong>Official Meta WhatsApp Cloud APIs</strong> for reliable delivery",
     "subtitle_bullet_2": "✅ <strong>No WhatsApp number or API setup required</strong>",
     "subtitle_bullet_3": "✅ <strong>Branded Arabic and English</strong> confirmation messages",
@@ -32,14 +32,29 @@
     "social_proof": "Cut avoidable COD shipping losses across MENA",
     "join_social_proof": "Join <bold>85+</bold> MENA merchants on the waitlist",
     "rating": "5.0 rating",
-    "cta": "Start Free",
+    "cta": "Install on Shopify",
     "learn_more": "See Live Demo",
     "scroll_down": "See it in action",
     "benefit_1": "No credit card required",
     "benefit_2": "14-day free trial",
     "benefit_3": "Cancel anytime",
-    "easy_integrated": "And soon with more platforms...",
-    "no_credit_card": "Start now for free on Shopify. No credit card needed"
+    "easy_integrated": "Shopify is live now. More platforms are coming next.",
+    "no_credit_card": "Free plan available. Installs from the Shopify App Store. No credit card needed.",
+    "launch_badge": "Now live on Shopify",
+    "secondary_cta": "See how it works",
+    "proof_shopify": "Approved by Shopify App Store",
+    "proof_meta": "Official Meta WhatsApp Cloud API",
+    "proof_built": "Built for Shopify merchants",
+    "microcopy_free": "Free to install.",
+    "microcopy_no_card": "No credit card needed.",
+    "microcopy_setup": "2-minute setup.",
+    "shopify_store_badge": "Now available on the Shopify App Store",
+    "shopify_available": "Shopify",
+    "platform_live_badge": "Live now",
+    "shopify_available_note": "Install Akeed directly from Shopify to start confirming COD orders on WhatsApp.",
+    "platform_coming_soon_badge": "coming soon",
+    "platform_coming_soon": "Salla, Zid, WooCommerce, ExpandCart, and EasyOrder are planned next.",
+    "platform_note": "<strong>Live on Shopify now.</strong> More platforms coming soon."
   },
   "demo": {
     "badge": "Live Demo",
@@ -287,9 +302,9 @@
     "message": "Hi, I want to try Akeed service"
   },
   "mobile_cta": {
-    "eyebrow": "Ready to reduce COD waste?",
+    "eyebrow": "Now live on Shopify",
     "title": "Launch your WhatsApp confirmation flow",
-    "primary": "Start free"
+    "primary": "Install on Shopify"
   },
   "post_faq_cta": {
     "eyebrow": "Final Step",

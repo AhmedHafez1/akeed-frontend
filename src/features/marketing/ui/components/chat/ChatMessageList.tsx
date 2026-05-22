@@ -19,7 +19,7 @@ export function ChatMessageList({
   return (
     <div
       ref={scrollRef}
-      className="h-110 space-y-3 overflow-y-auto scroll-smooth p-4"
+      className="h-110 space-y-3 overflow-y-auto scroll-smooth p-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
     >
       <AnimatePresence>
         {messages.map((message, index) => (
