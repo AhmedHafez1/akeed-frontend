@@ -97,7 +97,7 @@ function Hero() {
   }
 
   return (
-    <section className="relative overflow-hidden px-4 pt-22 pb-10 sm:px-6 lg:px-10 lg:pt-26 lg:pb-14">
+    <section className="relative overflow-hidden px-4 pt-28 pb-16 sm:px-6 sm:pt-32 sm:pb-20 lg:px-10 lg:pt-34 lg:pb-22">
       <div className="mx-auto grid w-full max-w-7xl items-center gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.75fr)] lg:gap-10 xl:gap-12">
         <div className="flex w-full max-w-3xl flex-col items-center text-center lg:items-start lg:text-left">
           {/* Main Headline */}

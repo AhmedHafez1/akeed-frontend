@@ -13,7 +13,7 @@ export function HeaderMobileToggle({
   return (
     <button
       onClick={onToggle}
-      className="rounded-xl p-2 transition-colors hover:bg-emerald-50 md:hidden"
+      className="rounded-xl p-2 text-slate-100 transition-colors hover:bg-white/10 hover:text-white md:hidden"
       suppressHydrationWarning
     >
       <AnimatePresence mode="wait">

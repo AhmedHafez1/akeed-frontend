@@ -59,21 +59,20 @@ export function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    // gradient background
-    <footer className="bg-linear-to-b from-slate-100 to-white text-slate-600">
+    <footer className="bg-slate-950 text-slate-300">
       <div className="mx-auto max-w-410 rounded-3xl px-6 py-10">
         <div className="grid gap-10 md:grid-cols-[1fr_1fr]">
           <div className="flex flex-col items-center justify-center md:items-start md:justify-start md:text-start">
             <Link href={withLocale('/', locale)}>
               <Image
-                src="/images/akeed-web-logo-horizontal.png"
+                src="/images/akeed-web-logo-horizontal-white.png"
                 alt={t('logoAlt')}
                 width={110}
                 height={80}
-                className="object-contain"
+                className="h-auto object-contain"
               />
             </Link>
-            <p className="md:text-md mt-1 max-w-xl text-sm leading-8 text-slate-500">
+            <p className="md:text-md mt-1 max-w-xl text-sm leading-8 text-slate-400">
               {t('legalLine')}
             </p>
 
@@ -83,7 +82,7 @@ export function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={t('facebook')}
-                className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-[0_10px_22px_rgba(15,23,42,0.08)] transition-colors hover:border-emerald-200 hover:text-emerald-600"
+                className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/8 text-slate-200 ring-1 ring-white/10 transition-colors hover:bg-emerald-500/15 hover:text-emerald-300 hover:ring-emerald-400/30"
               >
                 <FacebookIcon className="h-5 w-5" />
               </Link>
@@ -92,7 +91,7 @@ export function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={t('youtube')}
-                className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-[0_10px_22px_rgba(15,23,42,0.08)] transition-colors hover:border-emerald-200 hover:text-emerald-600"
+                className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/8 text-slate-200 ring-1 ring-white/10 transition-colors hover:bg-emerald-500/15 hover:text-emerald-300 hover:ring-emerald-400/30"
               >
                 <Youtube className="h-5 w-5" />
               </Link>
@@ -101,7 +100,7 @@ export function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={t('instagram')}
-                className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-[0_10px_22px_rgba(15,23,42,0.08)] transition-colors hover:border-emerald-200 hover:text-emerald-600"
+                className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/8 text-slate-200 ring-1 ring-white/10 transition-colors hover:bg-emerald-500/15 hover:text-emerald-300 hover:ring-emerald-400/30"
               >
                 <Instagram className="h-5 w-5" />
               </Link>
@@ -114,7 +113,7 @@ export function Footer() {
           >
             {footerLinkGroups.map((group) => (
               <div key={group.titleKey}>
-                <p className="md:text-md text-center text-sm font-bold text-slate-950">
+                <p className="md:text-md text-center text-sm font-bold text-white">
                   {t(group.titleKey)}
                 </p>
                 <div className="mt-7 flex flex-col gap-5">
@@ -122,7 +121,7 @@ export function Footer() {
                     <Link
                       key={link.labelKey}
                       href={withLocale(link.href, locale)}
-                      className="md:text-md text-center text-sm text-slate-600 transition-colors hover:text-emerald-600"
+                      className="md:text-md text-center text-sm text-slate-400 transition-colors hover:text-emerald-300"
                     >
                       {t(link.labelKey)}
                     </Link>
@@ -133,21 +132,21 @@ export function Footer() {
           </nav>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-6 border-t border-slate-200 pt-8 text-center md:mt-14 md:flex-row md:text-start">
-          <p className="md:text-md text-sm text-slate-600">
+        <div className="mt-12 flex flex-col items-center justify-between gap-6 border-t border-white/10 pt-8 text-center md:mt-14 md:flex-row md:text-start">
+          <p className="md:text-md text-sm text-slate-400">
             {t('copyright', { year })}
           </p>
           <div className="md:text-md flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
             <Link
               href={withLocale('/privacy', locale)}
-              className="font-medium text-slate-700 underline underline-offset-2 transition-colors hover:text-emerald-600"
+              className="font-medium text-slate-300 underline underline-offset-2 transition-colors hover:text-emerald-300"
             >
               {t('privacyPolicy')}
             </Link>
-            <span className="h-6 w-px bg-slate-400" aria-hidden="true" />
+            <span className="h-6 w-px bg-white/20" aria-hidden="true" />
             <Link
               href={withLocale('/terms', locale)}
-              className="font-medium text-slate-700 underline underline-offset-2 transition-colors hover:text-emerald-600"
+              className="font-medium text-slate-300 underline underline-offset-2 transition-colors hover:text-emerald-300"
             >
               {t('termsOfService')}
             </Link>
