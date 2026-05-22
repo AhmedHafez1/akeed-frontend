@@ -2,10 +2,29 @@
 
 import { ArrowUpRight } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { openShopifyAppStore } from '@/shared/lib/shopify-auth'
+import { useEffect, useState } from 'react'
+import { SHOPIFY_APP_STORE_LISTING_URL } from '@/shared/lib/shopify-auth'
+
+const STICKY_CTA_SCROLL_THRESHOLD = 520
 
 export function StickyMobileCta() {
   const t = useTranslations('mobile_cta')
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsVisible(window.scrollY > STICKY_CTA_SCROLL_THRESHOLD)
+    }
+
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  if (!isVisible) {
+    return null
+  }
 
   return (
     <div className="fixed right-0 bottom-0 left-0 z-50 border-t border-slate-200/80 bg-white/95 px-3 py-3 shadow-[0_-10px_30px_rgba(15,23,42,0.08)] backdrop-blur md:hidden">
@@ -18,14 +37,14 @@ export function StickyMobileCta() {
             {t('title')}
           </p>
         </div>
-        <button
-          onClick={openShopifyAppStore}
+        <a
+          href={SHOPIFY_APP_STORE_LISTING_URL}
           className="inline-flex h-11 shrink-0 items-center gap-1 rounded-xl bg-linear-to-r from-orange-600 to-orange-500 px-4 text-sm font-bold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow"
           suppressHydrationWarning
         >
           {t('primary')}
           <ArrowUpRight className="h-4 w-4" />
-        </button>
+        </a>
       </div>
     </div>
   )

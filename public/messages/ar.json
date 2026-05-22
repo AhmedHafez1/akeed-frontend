@@ -9,13 +9,13 @@
     "demo": "شاهد التجربة",
     "pricing": "الأسعار",
     "faq": "الأسئلة الشائعة",
-    "cta": "ابدأ مجاناً",
-    "sign_in": "تسجيل الدخول"
+    "cta": "ثبّت على Shopify",
+    "sign_in": "افتح التطبيق على Shopify"
   },
   "hero": {
     "title": "أوقف خسائر الشحن.",
     "highlight": "وأكد طلبات الدفع عند الاستلام عبر واتساب.",
-    "subtitle": "عمليات تأكيد تلقائية ، تُرسل عبر واجهات Meta WhatsApp Cloud API الرسمية.",
+    "subtitle": "ثبّت أكيد من Shopify App Store وأتمت تأكيد طلبات الدفع عند الاستلام عبر واجهات Meta WhatsApp Cloud API الرسمية.",
     "subtitle_bullet_1": "✅ <strong>إرسال موثوق</strong> عبر واجهات Meta WhatsApp Cloud API الرسمية",
     "subtitle_bullet_2": "✅ <strong>من دون رقم واتساب أو إعداد API</strong> من طرفك",
     "subtitle_bullet_3": "✅ <strong>رسائل تأكيد باسم متجرك</strong> بالعربية والإنجليزية",
@@ -25,14 +25,29 @@
     "join_social_proof": "انضم إلى قائمة الانتظار مع <bold>85+</bold> متجرًا من المنطقة",
     "social_proof": "قلّل خسائر الشحن القابلة للتفادي في أسواق المنطقة",
     "rating": "تقييم 5.0 من المتاجر",
-    "cta": "ابدأ مجاناً",
+    "cta": "ثبّت على Shopify",
     "learn_more": "شاهد التجربة",
     "scroll_down": "شاهد الطريقة",
     "benefit_1": "بدون بطاقة ائتمان",
     "benefit_2": "تجربة مجانية 14 يوم",
     "benefit_3": "إلغاء في أي وقت",
-    "easy_integrated": "وقريبا مع المزيد من المنصات ...",
-    "no_credit_card": "ابدأ الآن مجانا على Shopify. لا حاجة لبطاقة ائتمان"
+    "easy_integrated": "Shopify متاح الآن. المزيد من المنصات قريباً.",
+    "no_credit_card": "الخطة المجانية متاحة. يتم التثبيت من Shopify App Store. لا حاجة لبطاقة ائتمان.",
+    "launch_badge": "متاح الآن على Shopify",
+    "secondary_cta": "شاهد كيف يعمل",
+    "proof_shopify": "معتمد من Shopify App Store",
+    "proof_meta": "واجهة Meta WhatsApp Cloud API الرسمية",
+    "proof_built": "مصمم لمتاجر Shopify",
+    "microcopy_free": "تثبيت مجاني.",
+    "microcopy_no_card": "لا حاجة لبطاقة ائتمان.",
+    "microcopy_setup": "إعداد خلال دقيقتين.",
+    "shopify_store_badge": "متاح الآن على Shopify App Store",
+    "shopify_available": "Shopify",
+    "platform_live_badge": "متاح الآن",
+    "shopify_available_note": "ثبّت أكيد مباشرة من Shopify وابدأ تأكيد طلبات الدفع عند الاستلام عبر واتساب.",
+    "platform_coming_soon_badge": "قريباً",
+    "platform_coming_soon": "Salla وZid وWooCommerce وExpandCart وEasyOrder ضمن المنصات القادمة.",
+    "platform_note": "<strong>Shopify متاح الآن.</strong> المزيد من المنصات قريباً."
   },
   "demo": {
     "badge": "تجربة حية",
@@ -273,9 +288,9 @@
     "message": "مرحباً، أريد تجربة خدمة أكيد"
   },
   "mobile_cta": {
-    "eyebrow": "جاهز لتقليل خسائر الدفع عند الاستلام؟",
+    "eyebrow": "متاح الآن على Shopify",
     "title": "فعّل تدفق تأكيد واتساب لمتجرك",
-    "primary": "ابدأ مجاناً"
+    "primary": "ثبّت على Shopify"
   },
   "post_faq_cta": {
     "eyebrow": "الخطوة الأخيرة",

@@ -23,7 +23,9 @@ export function WhatsAppButton({
       onClick={handleClick}
       className={cn(
         'fixed right-4 z-40 flex h-13 w-13 touch-manipulation items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-emerald-900/20 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-xl md:hidden',
-        offsetForMobileCta ? 'bottom-24' : 'bottom-4'
+        offsetForMobileCta
+          ? 'bottom-24 [@media(max-height:900px)]:hidden'
+          : 'bottom-4'
       )}
       aria-label={t('text')}
     >
