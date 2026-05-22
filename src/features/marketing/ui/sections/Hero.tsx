@@ -8,7 +8,6 @@ import {
   Clock3,
   CreditCard,
   Play,
-  ShoppingBag,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
@@ -40,7 +39,7 @@ function Hero() {
           width={32}
           height={32}
           unoptimized
-          className="h-8 w-8 object-contain"
+          className="h-7 w-7 object-contain"
         />
       ),
     },
@@ -53,7 +52,7 @@ function Hero() {
           width={32}
           height={32}
           unoptimized
-          className="h-12 w-12 object-contain"
+          className="h-7 w-7 object-contain"
         />
       ),
     },
@@ -66,7 +65,7 @@ function Hero() {
           width={32}
           height={32}
           unoptimized
-          className="h-10 w-10 rounded-sm object-cover"
+          className="h-7 w-7 rounded-sm object-cover"
         />
       ),
     },
@@ -75,15 +74,15 @@ function Hero() {
   const microcopyItems = [
     {
       label: t('microcopy_free'),
-      icon: <CheckCircle2 className="h-4 w-4 text-emerald-600" />,
+      icon: <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />,
     },
     {
       label: t('microcopy_no_card'),
-      icon: <CreditCard className="h-4 w-4 text-emerald-600" />,
+      icon: <CreditCard className="h-3.5 w-3.5 text-emerald-600" />,
     },
     {
       label: t('microcopy_setup'),
-      icon: <Clock3 className="h-4 w-4 text-emerald-600" />,
+      icon: <Clock3 className="h-3.5 w-3.5 text-emerald-600" />,
     },
   ] as const
 
@@ -137,17 +136,17 @@ function Hero() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...baseTransition, delay: 0.25 }}
-            className="mb-6 grid w-full grid-cols-1 gap-3 sm:grid-cols-3"
+            className="mb-7 grid w-full max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3"
           >
             {proofItems.map((item) => (
               <div
                 key={item.label}
-                className="flex min-h-18 items-center gap-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm shadow-slate-200/40"
+                className="flex min-h-20 items-center gap-3 rounded-2xl bg-white/95 px-4 py-3 shadow-[0_14px_32px_rgba(15,23,42,0.07)] ring-1 ring-slate-100/80"
               >
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 shadow-inner shadow-white ring-1 ring-emerald-100/70">
                   {item.icon}
                 </span>
-                <span className="text-start text-sm leading-5 font-bold text-slate-800">
+                <span className="text-start text-sm leading-5 font-extrabold text-slate-950">
                   {item.label}
                 </span>
               </div>
@@ -159,24 +158,24 @@ function Hero() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...baseTransition, delay: 0.3 }}
-            className="mb-4 flex w-full flex-col items-center justify-center gap-3 sm:flex-row lg:justify-start"
+            className="mb-4 flex w-full max-w-2xl flex-col items-stretch justify-center gap-3 sm:flex-row lg:justify-start"
           >
             <a
               href={SHOPIFY_APP_STORE_LISTING_URL}
-              className="group relative flex h-15 w-full items-center justify-center gap-3 rounded-xl bg-linear-to-r from-emerald-700 to-emerald-600 px-7 text-base font-bold text-white shadow-lg shadow-emerald-500/20 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-emerald-500/25 sm:w-auto sm:min-w-64 sm:text-lg"
+              className="group relative flex h-16 w-full items-center justify-center gap-3 rounded-2xl bg-emerald-700 px-7 text-lg font-extrabold text-white shadow-[0_18px_36px_rgba(5,150,105,0.28)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-emerald-800 hover:shadow-[0_22px_44px_rgba(5,150,105,0.34)] focus-visible:ring-2 focus-visible:ring-emerald-200 focus-visible:outline-none sm:w-auto sm:min-w-76"
               suppressHydrationWarning
             >
-              <span className="flex h-12 w-12 items-center justify-center">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/95 shadow-sm">
                 <Image
                   src="/images/landing/logos/shopify_icon_1.png"
                   alt={t('shopify_available')}
                   width={32}
                   height={32}
                   unoptimized
-                  className="h-12 w-12 object-contain"
+                  className="h-8 w-8 object-contain"
                 />
               </span>
-              {t('cta')}
+              <span>{t('cta')}</span>
               {isRTL ? (
                 <ChevronLeft className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
               ) : (
@@ -186,7 +185,7 @@ function Hero() {
             <button
               type="button"
               onClick={scrollToHowItWorks}
-              className="flex h-15 w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white/85 px-7 text-base font-bold text-slate-800 shadow-sm transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:bg-emerald-50/60 sm:w-auto sm:min-w-56"
+              className="flex h-16 w-full items-center justify-center gap-3 rounded-2xl bg-white/90 px-7 text-base font-extrabold text-slate-900 shadow-[0_12px_28px_rgba(15,23,42,0.08)] ring-1 ring-slate-100 transition-all duration-200 hover:-translate-y-0.5 hover:bg-emerald-50/70 hover:text-emerald-800 hover:ring-emerald-100 focus-visible:ring-2 focus-visible:ring-emerald-100 focus-visible:outline-none sm:w-auto sm:min-w-56"
             >
               <Play className="h-5 w-5 fill-emerald-600 text-emerald-600" />
               {t('secondary_cta')}
@@ -198,10 +197,13 @@ function Hero() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...baseTransition, delay: 0.35 }}
-            className="mb-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm font-semibold text-slate-500 lg:justify-start"
+            className="mb-8 flex w-full max-w-2xl flex-wrap items-center justify-center gap-x-5 gap-y-3 text-sm font-bold text-slate-500 lg:justify-start"
           >
             {microcopyItems.map((item) => (
-              <span key={item.label} className="inline-flex items-center gap-2">
+              <span
+                key={item.label}
+                className="inline-flex items-center gap-2 whitespace-nowrap"
+              >
                 {item.icon}
                 {item.label}
               </span>
