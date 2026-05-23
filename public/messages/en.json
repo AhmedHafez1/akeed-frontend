@@ -586,13 +586,14 @@
       "status": {
         "label": "Status",
         "all": "All",
-        "awaiting_response": "Pending",
+        "awaiting_response": "Awaiting reply",
         "pending": "Pending",
         "sent": "Sent",
         "delivered": "Delivered",
         "read": "Read",
         "confirmed": "Confirmed",
         "canceled": "Canceled",
+        "failed": "Failed",
         "no_reply": "No reply"
       },
       "dateRange": {

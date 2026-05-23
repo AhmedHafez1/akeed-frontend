@@ -573,12 +573,13 @@
         "label": "الحالة",
         "all": "الكل",
         "awaiting_response": "بانتظار الرد",
-        "pending": "بانتظار الرد",
+        "pending": "معلّقة",
         "sent": "تم الإرسال",
         "delivered": "وصلت",
         "read": "تمت قراءتها",
         "confirmed": "تم التأكيد",
         "canceled": "تم الإلغاء",
+        "failed": "فشل",
         "no_reply": "لم يتم الرد"
       },
       "dateRange": {
