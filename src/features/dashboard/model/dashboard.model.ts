@@ -12,11 +12,13 @@ export type VerificationStatus =
 export type VerificationStatusFilter =
   | 'all'
   | 'awaiting_response'
+  | 'pending'
   | 'sent'
   | 'delivered'
   | 'read'
   | 'confirmed'
   | 'canceled'
+  | 'failed'
   | 'no_reply'
 
 export type DashboardStatsDateRange =
