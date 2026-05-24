@@ -11,11 +11,7 @@ import type { DetailedHTMLProps, HTMLAttributes } from 'react'
 
 type SAppNavProps = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>
 type SLinkProps = DetailedHTMLProps<
-  HTMLAttributes<HTMLElement> & {
-    href: string
-    rel?: string
-    target?: '_blank' | '_self' | '_parent' | '_top'
-  },
+  HTMLAttributes<HTMLElement> & { href: string; rel?: 'home' },
   HTMLElement
 >
 

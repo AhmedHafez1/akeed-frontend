@@ -19,39 +19,18 @@
  */
 
 import { usePathname } from 'next/navigation'
-import { useTranslations } from 'next-intl'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
 
-function getStandaloneSupportUrl(locale: string): string {
-  const configuredAppUrl = process.env.NEXT_PUBLIC_APP_URL?.trim()
-  const appOrigin =
-    configuredAppUrl && configuredAppUrl.length > 0
-      ? configuredAppUrl.replace(/\/$/, '')
-      : window.location.origin
-
-  return `${appOrigin}/${locale}/support`
-}
-
 export function EmbeddedNavigation() {
-  const appHeader = useTranslations('appHeader')
-  const t = useTranslations('embeddedSupport')
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname ?? '')
-  const supportUrl = getStandaloneSupportUrl(locale)
 
   return (
     <s-app-nav>
       <s-link href={`/${locale}/dashboard`} rel="home">
-        {appHeader('dashboard')}
+        Dashboard
       </s-link>
-      <s-link href={`/${locale}/settings`}>{appHeader('settings')}</s-link>
-      <s-link
-        href={supportUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {t('sidebarLabel')}
-      </s-link>
+      <s-link href={`/${locale}/settings`}>Settings</s-link>
     </s-app-nav>
   )
 }
