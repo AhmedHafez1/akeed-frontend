@@ -19,9 +19,11 @@
  */
 
 import { usePathname } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
 
 export function EmbeddedNavigation() {
+  const t = useTranslations('embeddedSupport')
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname ?? '')
 
@@ -31,6 +33,7 @@ export function EmbeddedNavigation() {
         Dashboard
       </s-link>
       <s-link href={`/${locale}/settings`}>Settings</s-link>
+      <s-link href={`/${locale}/support`}>{t('sidebarLabel')}</s-link>
     </s-app-nav>
   )
 }

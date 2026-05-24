@@ -447,6 +447,15 @@
     "responseBody": "Please include your store name, contact email, and a short description of the issue so we can help quickly.",
     "backHome": "Back to home"
   },
+  "embeddedSupport": {
+    "titleBarAction": "Support",
+    "sidebarLabel": "Support",
+    "defaultMessage": "Hi, I need help with Akeed.",
+    "shopLabel": "Shop",
+    "pageLabel": "Current page",
+    "localeLabel": "Language",
+    "issuePrompt": "Issue"
+  },
   "appHeader": {
     "dashboard": "Dashboard",
     "verifications": "Verifications",

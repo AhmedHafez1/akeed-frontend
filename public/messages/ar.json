@@ -433,6 +433,15 @@
     "responseBody": "يرجى تضمين اسم متجرك وبريد التواصل ووصف مختصر للمشكلة لمساعدتك بسرعة.",
     "backHome": "العودة للرئيسية"
   },
+  "embeddedSupport": {
+    "titleBarAction": "الدعم",
+    "sidebarLabel": "الدعم",
+    "defaultMessage": "مرحباً، أحتاج مساعدة بخصوص أكيد.",
+    "shopLabel": "المتجر",
+    "pageLabel": "الصفحة الحالية",
+    "localeLabel": "اللغة",
+    "issuePrompt": "المشكلة"
+  },
   "appHeader": {
     "dashboard": "لوحة التحكم",
     "verifications": "التأكيدات",
