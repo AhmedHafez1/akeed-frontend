@@ -24,7 +24,9 @@ import {
 import { InfoIcon, ShieldCheckMarkIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import type {
+  ArabicCodTemplateVariantId,
   AutomationTimezone,
+  EnglishCodTemplateVariantId,
   IntegrationOnboardingLanguage,
 } from '@/features/onboarding'
 import type { SettingsSkinProps } from '@/features/settings/domain/settings.types'
@@ -393,11 +395,24 @@ function ConfirmationConfigTab({ props }: { props: SettingsSkinProps }) {
 function renderTemplateBody(
   template: SettingsSkinProps['templatePreviews']['en']
 ): string[] {
+  const applyPreviewReplacements = (value: string) => {
+    return [
+      ['{{customer}}', 'Sara'],
+      ['{{store}}', 'Akeed Store'],
+      ['{{order}}', '11996743237999'],
+      ['{order_number}', '11996743237999'],
+      ['{{total}}', '$600.00'],
+      ['{total}', '$600.00'],
+    ].reduce((result, [token, replacement]) => {
+      return result.split(token).join(replacement)
+    }, value)
+  }
+
   return [
-    template.greeting,
-    template.body.replace('{order_number}', '11996743237999'),
-    template.totalLabel.replace('{total}', '$600.00'),
-    template.ending,
+    applyPreviewReplacements(template.greeting),
+    applyPreviewReplacements(template.body),
+    applyPreviewReplacements(template.totalLabel),
+    applyPreviewReplacements(template.ending),
   ]
 }
 
@@ -406,8 +421,33 @@ function MessageTemplateTab({ props }: { props: SettingsSkinProps }) {
   const [language, setLanguage] = useState<'ar' | 'en'>(
     props.defaultTemplateLanguage
   )
-  const template = props.templatePreviews[language]
+  const selectedVariant =
+    language === 'ar'
+      ? props.selectedCodTemplateVariants.ar
+      : props.selectedCodTemplateVariants.en
+  const availableVariants = props.codTemplateVariants[language]
+  const selectedDefinition = availableVariants.find(
+    (variant) => variant.variant === selectedVariant
+  )
+  const template = selectedDefinition?.preview ?? props.templatePreviews[language]
   const isRtl = language === 'ar'
+
+  const variantOptions = availableVariants.map((variant) => ({
+    label: t(`variantLabels.${variant.variant}`),
+    value: variant.variant,
+  }))
+
+  const handleVariantChange = (value: string) => {
+    if (language === 'ar') {
+      props.onCodTemplateArVariantChange(value as ArabicCodTemplateVariantId)
+      return
+    }
+
+    props.onCodTemplateEnVariantChange(value as EnglishCodTemplateVariantId)
+  }
+
+  const defaultVariant = props.codTemplateDefaults[language]
+  const isDefaultVariant = selectedVariant === defaultVariant
 
   return (
     <BlockStack gap="400">
@@ -427,6 +467,32 @@ function MessageTemplateTab({ props }: { props: SettingsSkinProps }) {
       <Layout>
         <Layout.Section variant="oneThird">
           <BlockStack gap="400">
+            <Card>
+              <BlockStack gap="300">
+                <Text as="h2" variant="headingMd">
+                  {t('variantSelectorTitle')}
+                </Text>
+                <Text as="p" tone="subdued" variant="bodySm">
+                  {t('variantSelectorDescription')}
+                </Text>
+                <Select
+                  label={t('variantLabel')}
+                  options={variantOptions}
+                  value={selectedVariant}
+                  onChange={handleVariantChange}
+                />
+                <InlineStack align="space-between" gap="200">
+                  <Text as="span" tone="subdued" variant="bodySm">
+                    {t('defaultVariantLabel', {
+                      variant: t(`variantLabels.${defaultVariant}`),
+                    })}
+                  </Text>
+                  <Badge tone={isDefaultVariant ? 'success' : 'info'}>
+                    {isDefaultVariant ? t('badgeDefault') : t('badgeCustom')}
+                  </Badge>
+                </InlineStack>
+              </BlockStack>
+            </Card>
             <Card>
               <BlockStack gap="400">
                 <Text as="h2" variant="headingMd">
@@ -524,7 +590,10 @@ export function SettingsEmbeddedTabbedSkin(props: SettingsSkinProps) {
     ? (tabParam as SettingsTabId)
     : (SETTINGS_TAB_ALIASES[tabParam ?? ''] ?? 'store')
   const selected = SETTINGS_TABS.indexOf(activeTab)
-  const canSaveActiveTab = activeTab === 'store' || activeTab === 'confirmation'
+  const canSaveActiveTab =
+    activeTab === 'store' ||
+    activeTab === 'confirmation' ||
+    activeTab === 'message-preview'
 
   const tabs = [
     { id: 'store', content: t('tabs.store') },
