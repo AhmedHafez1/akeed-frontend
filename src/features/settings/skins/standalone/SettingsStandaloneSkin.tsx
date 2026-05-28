@@ -18,9 +18,7 @@ function applyPreviewReplacements(value: string): string {
     ['{{customer}}', 'Sara'],
     ['{{store}}', 'Akeed Store'],
     ['{{order}}', '11996743237999'],
-    ['{order_number}', '11996743237999'],
     ['{{total}}', '$600.00'],
-    ['{total}', '$600.00'],
   ].reduce((result, [token, replacement]) => {
     return result.split(token).join(replacement)
   }, value)
@@ -373,22 +371,26 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
       >
         <div className="space-y-5">
           <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white p-1 w-fit">
-            <Button
-              type="button"
-              variant={previewLanguage === 'ar' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setPreviewLanguage('ar')}
-            >
-              {previewT('languageArabic')}
-            </Button>
-            <Button
-              type="button"
-              variant={previewLanguage === 'en' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setPreviewLanguage('en')}
-            >
-              {previewT('languageEnglish')}
-            </Button>
+            {props.templateLanguages.includes('ar') && (
+              <Button
+                type="button"
+                variant={previewLanguage === 'ar' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setPreviewLanguage('ar')}
+              >
+                {previewT('languageArabic')}
+              </Button>
+            )}
+            {props.templateLanguages.includes('en') && (
+              <Button
+                type="button"
+                variant={previewLanguage === 'en' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setPreviewLanguage('en')}
+              >
+                {previewT('languageEnglish')}
+              </Button>
+            )}
           </div>
 
           <div className="grid gap-4 md:grid-cols-[300px_1fr]">

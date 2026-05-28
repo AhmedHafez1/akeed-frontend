@@ -400,9 +400,7 @@ function renderTemplateBody(
       ['{{customer}}', 'Sara'],
       ['{{store}}', 'Akeed Store'],
       ['{{order}}', '11996743237999'],
-      ['{order_number}', '11996743237999'],
       ['{{total}}', '$600.00'],
-      ['{total}', '$600.00'],
     ].reduce((result, [token, replacement]) => {
       return result.split(token).join(replacement)
     }, value)
@@ -554,8 +552,8 @@ function MessageTemplateTab({ props }: { props: SettingsSkinProps }) {
                         dir={isRtl ? 'rtl' : 'ltr'}
                         className="rounded-lg bg-white p-4 text-sm leading-7 text-[#202223] shadow-sm"
                       >
-                        {renderTemplateBody(template).map((line) => (
-                          <p key={line}>{line}</p>
+                        {renderTemplateBody(template).map((line, index) => (
+                          <p key={index}>{line}</p>
                         ))}
                         <div className="mt-4 border-t border-slate-100 pt-3 text-center font-medium text-emerald-700">
                           {template.confirmButton}
