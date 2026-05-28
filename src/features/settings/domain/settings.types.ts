@@ -1,9 +1,12 @@
 import type {
+  ArabicCodTemplateVariantId,
   AutomationTimezone,
+  EnglishCodTemplateVariantId,
   IntegrationOnboardingLanguage,
   OnboardingBillingPlanConfig,
   OnboardingBillingPlanId,
 } from '@/features/onboarding'
+import type { CodTemplateDefinition } from '../api/settingsApi'
 
 export interface SettingsSelectOption<TValue extends string = string> {
   label: string
@@ -82,6 +85,18 @@ export interface SettingsSkinProps {
   usageData: SettingsUsageData | null
   templateLanguages: ReadonlyArray<'ar' | 'en'>
   defaultTemplateLanguage: 'ar' | 'en'
+  codTemplateDefaults: {
+    ar: ArabicCodTemplateVariantId
+    en: EnglishCodTemplateVariantId
+  }
+  selectedCodTemplateVariants: {
+    ar: ArabicCodTemplateVariantId
+    en: EnglishCodTemplateVariantId
+  }
+  codTemplateVariants: {
+    ar: CodTemplateDefinition[]
+    en: CodTemplateDefinition[]
+  }
   templatePreviews: Record<'ar' | 'en', SettingsTemplatePreview>
 
   onStoreNameChange: (value: string) => void
@@ -98,6 +113,8 @@ export interface SettingsSkinProps {
   onQuietHoursStartChange: (value: string) => void
   onQuietHoursEndChange: (value: string) => void
   onTimezoneChange: (value: AutomationTimezone) => void
+  onCodTemplateArVariantChange: (value: ArabicCodTemplateVariantId) => void
+  onCodTemplateEnVariantChange: (value: EnglishCodTemplateVariantId) => void
   onSave: () => Promise<void>
   onPlanSelect: (planId: OnboardingBillingPlanId) => void
   onChangePlan: () => Promise<void>

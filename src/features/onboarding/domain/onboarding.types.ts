@@ -1,5 +1,17 @@
 export type IntegrationOnboardingLanguage = 'auto' | 'en' | 'ar'
 
+export type ArabicCodTemplateVariantId =
+  | 'standard'
+  | 'egyptian'
+  | 'gulf'
+  | 'short'
+
+export type EnglishCodTemplateVariantId =
+  | 'friendly'
+  | 'professional'
+  | 'direct'
+  | 'short'
+
 export type IntegrationOnboardingStatus = 'pending' | 'completed'
 
 export type AutomationTimezone =
@@ -55,6 +67,8 @@ export interface OnboardingSettingsPayload {
   quietHoursEnd?: string
   timezone?: AutomationTimezone
   sendDelayMinutes?: number
+  codTemplateArVariant?: ArabicCodTemplateVariantId
+  codTemplateEnVariant?: EnglishCodTemplateVariantId
 }
 
 export const ONBOARDING_BILLING_PLAN_IDS = [

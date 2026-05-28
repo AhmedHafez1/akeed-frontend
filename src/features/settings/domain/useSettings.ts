@@ -76,6 +76,17 @@ const DEFAULT_TEMPLATE_PREVIEWS: SettingsSkinProps['templatePreviews'] = {
   },
 }
 
+const DEFAULT_COD_TEMPLATE_VARIANTS: SettingsSkinProps['selectedCodTemplateVariants']
+  = {
+    ar: 'standard',
+    en: 'friendly',
+  }
+
+const DEFAULT_COD_TEMPLATE_DEFINITIONS: SettingsSkinProps['codTemplateVariants'] = {
+  ar: [],
+  en: [],
+}
+
 function normalizeBillingStatus(status: string | null): string | null {
   if (!status) return null
 
@@ -202,6 +213,18 @@ export function useSettings(): {
     useState<ReadonlyArray<'ar' | 'en'>>(['ar', 'en'])
   const [defaultTemplateLanguage, setDefaultTemplateLanguage] =
     useState<'ar' | 'en'>('en')
+  const [codTemplateDefaults, setCodTemplateDefaults] =
+    useState<SettingsSkinProps['codTemplateDefaults']>(
+      DEFAULT_COD_TEMPLATE_VARIANTS
+    )
+  const [selectedCodTemplateVariants, setSelectedCodTemplateVariants] =
+    useState<SettingsSkinProps['selectedCodTemplateVariants']>(
+      DEFAULT_COD_TEMPLATE_VARIANTS
+    )
+  const [codTemplateVariants, setCodTemplateVariants] =
+    useState<SettingsSkinProps['codTemplateVariants']>(
+      DEFAULT_COD_TEMPLATE_DEFINITIONS
+    )
   const [templatePreviews, setTemplatePreviews] =
     useState<SettingsSkinProps['templatePreviews']>(DEFAULT_TEMPLATE_PREVIEWS)
 
@@ -285,6 +308,9 @@ export function useSettings(): {
         setBillingUsage(settingsResponse.billing.usage)
         setTemplateLanguages(settingsResponse.template.languages)
         setDefaultTemplateLanguage(settingsResponse.template.defaultPreviewLanguage)
+        setCodTemplateDefaults(settingsResponse.template.defaults)
+        setSelectedCodTemplateVariants(settingsResponse.template.selected)
+        setCodTemplateVariants(settingsResponse.template.variants)
         setTemplatePreviews(settingsResponse.template.previews)
       } catch (error) {
         console.error('[Settings] Failed to load onboarding settings:', error)
@@ -532,6 +558,7 @@ export function useSettings(): {
       quietHoursStart,
       quietHoursEnd,
       timezone,
+      selectedCodTemplateVariants,
     }
 
     try {
@@ -554,6 +581,8 @@ export function useSettings(): {
         quietHoursStart: quietHoursEnabled ? quietHoursStart : undefined,
         quietHoursEnd: quietHoursEnabled ? quietHoursEnd : undefined,
         timezone,
+        codTemplateArVariant: selectedCodTemplateVariants.ar,
+        codTemplateEnVariant: selectedCodTemplateVariants.en,
       })
       const { state } = settingsResponse
 
@@ -586,6 +615,9 @@ export function useSettings(): {
       setBillingUsage(settingsResponse.billing.usage)
       setTemplateLanguages(settingsResponse.template.languages)
       setDefaultTemplateLanguage(settingsResponse.template.defaultPreviewLanguage)
+      setCodTemplateDefaults(settingsResponse.template.defaults)
+      setSelectedCodTemplateVariants(settingsResponse.template.selected)
+      setCodTemplateVariants(settingsResponse.template.variants)
       setTemplatePreviews(settingsResponse.template.previews)
       setSuccessBanner(t('saveSuccess'))
       shopify?.toast.show(t('saveSuccess'))
@@ -607,6 +639,7 @@ export function useSettings(): {
       setQuietHoursStart(previous.quietHoursStart)
       setQuietHoursEnd(previous.quietHoursEnd)
       setTimezone(previous.timezone)
+      setSelectedCodTemplateVariants(previous.selectedCodTemplateVariants)
     } finally {
       setIsSaving(false)
     }
@@ -624,6 +657,7 @@ export function useSettings(): {
     sendDelayMinutes,
     shippingCurrency,
     shopify,
+    selectedCodTemplateVariants,
     storeName,
     t,
     timezone,
@@ -674,6 +708,9 @@ export function useSettings(): {
       usageData,
       templateLanguages,
       defaultTemplateLanguage,
+      codTemplateDefaults,
+      selectedCodTemplateVariants,
+      codTemplateVariants,
       templatePreviews,
       onStoreNameChange: (value) => {
         setStoreName(value)
@@ -712,6 +749,18 @@ export function useSettings(): {
         setQuietHoursError(undefined)
       },
       onTimezoneChange: setTimezone,
+      onCodTemplateArVariantChange: (value) => {
+        setSelectedCodTemplateVariants((current) => ({
+          ...current,
+          ar: value,
+        }))
+      },
+      onCodTemplateEnVariantChange: (value) => {
+        setSelectedCodTemplateVariants((current) => ({
+          ...current,
+          en: value,
+        }))
+      },
       onSave: handleSave,
       onPlanSelect: setSelectedPlanId,
       onChangePlan: handleChangePlan,
