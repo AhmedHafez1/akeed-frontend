@@ -60,17 +60,6 @@ function HelpIcon({ content }: { content: string }) {
   )
 }
 
-function FieldLabel({ label, help }: { label: string; help?: string }) {
-  return (
-    <InlineStack gap="100" blockAlign="center">
-      <Text as="span" variant="bodyMd">
-        {label}
-      </Text>
-      {help ? <HelpIcon content={help} /> : null}
-    </InlineStack>
-  )
-}
-
 function SettingsUsageOverview({
   used,
   limit,
@@ -155,30 +144,7 @@ function StoreTab({ props }: { props: SettingsSkinProps }) {
               )
             }
           />
-          <Select
-            label={t('shippingCurrencyLabel')}
-            options={[...props.shippingCurrencyOptions]}
-            value={props.shippingCurrency}
-            onChange={props.onShippingCurrencyChange}
-          />
         </InlineGrid>
-        <BlockStack gap="100">
-          <FieldLabel
-            label={t('avgShippingCostLabel')}
-            help={t('avgShippingCostHelp')}
-          />
-          <TextField
-            label={t('avgShippingCostLabel')}
-            labelHidden
-            type="number"
-            autoComplete="off"
-            min={0}
-            step={0.01}
-            value={props.avgShippingCost}
-            onChange={props.onAvgShippingCostChange}
-            error={props.avgShippingCostError}
-          />
-        </BlockStack>
       </BlockStack>
     </Card>
   )

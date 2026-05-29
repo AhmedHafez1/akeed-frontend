@@ -46,10 +46,6 @@ export interface SettingsSkinProps {
   languageOptions: ReadonlyArray<
     SettingsSelectOption<IntegrationOnboardingLanguage>
   >
-  shippingCurrency: string
-  shippingCurrencyOptions: ReadonlyArray<SettingsSelectOption>
-  avgShippingCost: string
-  avgShippingCostError: string | undefined
   isAutoVerifyEnabled: boolean
 
   followUpEnabled: boolean
@@ -101,8 +97,6 @@ export interface SettingsSkinProps {
 
   onStoreNameChange: (value: string) => void
   onDefaultLanguageChange: (value: IntegrationOnboardingLanguage) => void
-  onShippingCurrencyChange: (value: string) => void
-  onAvgShippingCostChange: (value: string) => void
   onAutoVerifyChange: (checked: boolean) => void
   onFollowUpEnabledChange: (checked: boolean) => void
   onSendDelayMinutesChange: (value: string) => void

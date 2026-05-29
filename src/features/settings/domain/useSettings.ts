@@ -28,20 +28,6 @@ type BillingStatusKey =
   | 'billingStatusError'
   | 'billingStatusUnknown'
 
-const SHIPPING_CURRENCY_OPTIONS = [
-  'USD',
-  'EUR',
-  'EGP',
-  'SAR',
-  'AED',
-  'QAR',
-  'KWD',
-  'BHD',
-  'OMR',
-  'JOD',
-  'MAD',
-] as const
-
 const AUTOMATION_TIMEZONE_OPTIONS: readonly AutomationTimezone[] = [
   'Asia/Riyadh',
   'Asia/Dubai',
@@ -166,11 +152,6 @@ export function useSettings(): {
   const [isSaving, setIsSaving] = useState(false)
   const [storeName, setStoreName] = useState('')
   const [storeNameError, setStoreNameError] = useState<string | undefined>()
-  const [shippingCurrency, setShippingCurrency] = useState('USD')
-  const [avgShippingCost, setAvgShippingCost] = useState('3')
-  const [avgShippingCostError, setAvgShippingCostError] = useState<
-    string | undefined
-  >()
   const [defaultLanguage, setDefaultLanguage] =
     useState<IntegrationOnboardingLanguage>('auto')
   const [isAutoVerifyEnabled, setIsAutoVerifyEnabled] = useState(true)
@@ -239,15 +220,6 @@ export function useSettings(): {
     [t]
   )
 
-  const shippingCurrencyOptions = useMemo(
-    () =>
-      SHIPPING_CURRENCY_OPTIONS.map((currency) => ({
-        label: t(`shippingCurrencyOption${currency}`),
-        value: currency,
-      })),
-    [t]
-  )
-
   const timezoneOptions = useMemo(
     () =>
       AUTOMATION_TIMEZONE_OPTIONS.map((tz) => ({
@@ -279,8 +251,6 @@ export function useSettings(): {
         }
 
         setStoreName(state.storeName ?? '')
-        setShippingCurrency(state.shippingCurrency ?? 'USD')
-        setAvgShippingCost(String(state.avgShippingCost ?? 3))
         setDefaultLanguage(state.defaultLanguage)
         setIsAutoVerifyEnabled(state.isAutoVerifyEnabled)
         setFollowUpEnabled(state.followUpEnabled)
@@ -427,7 +397,6 @@ export function useSettings(): {
 
   const validateSettings = useCallback(() => {
     const trimmedStoreName = storeName.trim()
-    const parsedAvgShippingCost = Number.parseFloat(avgShippingCost)
     const parsedSendDelayHours = parseHourField(sendDelayMinutes)
     const parsedFollowUpDelayHours = parseHourField(followUpDelayMinutes)
     const parsedEscalationDelayHours = parseHourField(escalationDelayMinutes)
@@ -435,10 +404,6 @@ export function useSettings(): {
     const nextStoreNameError = trimmedStoreName
       ? undefined
       : t('storeNameRequired')
-    const nextAvgShippingCostError =
-      Number.isFinite(parsedAvgShippingCost) && parsedAvgShippingCost >= 0
-        ? undefined
-        : t('avgShippingCostInvalid')
     const nextSendDelayMinutesError =
       parsedSendDelayHours !== null &&
       parsedSendDelayHours >= 0 &&
@@ -490,7 +455,6 @@ export function useSettings(): {
     }
 
     setStoreNameError(nextStoreNameError)
-    setAvgShippingCostError(nextAvgShippingCostError)
     setSendDelayMinutesError(nextSendDelayMinutesError)
     setFollowUpDelayMinutesError(resolvedFollowUpDelayError)
     setEscalationDelayMinutesError(resolvedEscalationDelayError)
@@ -498,7 +462,6 @@ export function useSettings(): {
 
     if (
       nextStoreNameError ||
-      nextAvgShippingCostError ||
       nextSendDelayMinutesError ||
       resolvedFollowUpDelayError ||
       resolvedEscalationDelayError ||
@@ -511,7 +474,6 @@ export function useSettings(): {
 
     return {
       trimmedStoreName,
-      avgShippingCost: Number(parsedAvgShippingCost.toFixed(2)),
       sendDelayMinutes: hoursToMinutes(parsedSendDelayHours),
       followUpDelayMinutes: parsedFollowUpDelayHours
         ? hoursToMinutes(parsedFollowUpDelayHours)
@@ -521,7 +483,6 @@ export function useSettings(): {
         : 0,
     }
   }, [
-    avgShippingCost,
     escalationDelayMinutes,
     escalationEnabled,
     followUpDelayMinutes,
@@ -545,8 +506,6 @@ export function useSettings(): {
 
     const previous = {
       storeName,
-      shippingCurrency,
-      avgShippingCost,
       defaultLanguage,
       isAutoVerifyEnabled,
       followUpEnabled,
@@ -566,8 +525,6 @@ export function useSettings(): {
         storeName: validated.trimmedStoreName,
         defaultLanguage,
         isAutoVerifyEnabled,
-        shippingCurrency,
-        avgShippingCost: validated.avgShippingCost,
         followUpEnabled,
         sendDelayMinutes: validated.sendDelayMinutes,
         followUpDelayMinutes: followUpEnabled
@@ -587,10 +544,6 @@ export function useSettings(): {
       const { state } = settingsResponse
 
       setStoreName(state.storeName ?? validated.trimmedStoreName)
-      setShippingCurrency(state.shippingCurrency ?? shippingCurrency)
-      setAvgShippingCost(
-        String(state.avgShippingCost ?? validated.avgShippingCost)
-      )
       setDefaultLanguage(state.defaultLanguage)
       setIsAutoVerifyEnabled(state.isAutoVerifyEnabled)
       setFollowUpEnabled(state.followUpEnabled)
@@ -626,8 +579,6 @@ export function useSettings(): {
       setSuccessBanner(null)
       setErrorBanner(t('saveError'))
       setStoreName(previous.storeName)
-      setShippingCurrency(previous.shippingCurrency)
-      setAvgShippingCost(previous.avgShippingCost)
       setDefaultLanguage(previous.defaultLanguage)
       setIsAutoVerifyEnabled(previous.isAutoVerifyEnabled)
       setFollowUpEnabled(previous.followUpEnabled)
@@ -644,7 +595,6 @@ export function useSettings(): {
       setIsSaving(false)
     }
   }, [
-    avgShippingCost,
     defaultLanguage,
     escalationDelayMinutes,
     escalationEnabled,
@@ -655,7 +605,6 @@ export function useSettings(): {
     quietHoursEnd,
     quietHoursStart,
     sendDelayMinutes,
-    shippingCurrency,
     shopify,
     selectedCodTemplateVariants,
     storeName,
@@ -674,10 +623,6 @@ export function useSettings(): {
       storeNameError,
       defaultLanguage,
       languageOptions,
-      shippingCurrency,
-      shippingCurrencyOptions,
-      avgShippingCost,
-      avgShippingCostError,
       isAutoVerifyEnabled,
       followUpEnabled,
       sendDelayMinutes,
@@ -717,11 +662,6 @@ export function useSettings(): {
         setStoreNameError(undefined)
       },
       onDefaultLanguageChange: setDefaultLanguage,
-      onShippingCurrencyChange: setShippingCurrency,
-      onAvgShippingCostChange: (value) => {
-        setAvgShippingCost(value)
-        setAvgShippingCostError(undefined)
-      },
       onAutoVerifyChange: setIsAutoVerifyEnabled,
       onFollowUpEnabledChange: setFollowUpEnabled,
       onSendDelayMinutesChange: (value) => {

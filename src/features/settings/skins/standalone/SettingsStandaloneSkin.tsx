@@ -288,30 +288,6 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
               onChange={props.onDefaultLanguageChange}
             />
           </Field>
-
-          <Field label={t('shippingCurrencyLabel')}>
-            <NativeSelect
-              value={props.shippingCurrency}
-              options={props.shippingCurrencyOptions}
-              onChange={props.onShippingCurrencyChange}
-            />
-          </Field>
-
-          <Field
-            label={t('avgShippingCostLabel')}
-            helpText={t('avgShippingCostHelp')}
-            error={props.avgShippingCostError}
-          >
-            <Input
-              type="number"
-              min={0}
-              step={0.01}
-              value={props.avgShippingCost}
-              onChange={(event) =>
-                props.onAvgShippingCostChange(event.target.value)
-              }
-            />
-          </Field>
         </div>
       </SectionCard>
 
