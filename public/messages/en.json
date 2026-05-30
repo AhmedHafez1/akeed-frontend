@@ -929,5 +929,12 @@
     },
     "confirmationRate": "Confirmation rate",
     "confirmationRateHelp": "Percentage of sent verifications that the customer confirmed."
+  },
+  "docs": {
+    "eyebrow": "Documentation",
+    "title": "Akeed Documentation",
+    "description": "Guides, setup steps, and operational documentation for Akeed.",
+    "empty": "Documentation pages will appear here soon.",
+    "backToDocs": "Back to documentation"
   }
 }
