@@ -3,28 +3,15 @@
 import { type ReactNode, Suspense } from 'react'
 import dynamic from 'next/dynamic'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
-import { useDelayedBoolean } from '@/shared/hooks/useDelayedBoolean'
 import { StandaloneLayout } from './StandaloneLayout'
 
 const EmbeddedLayout = dynamic(
   () => import('./EmbeddedLayout').then((mod) => mod.EmbeddedLayout),
   {
     ssr: false,
-    loading: () => <AppLayoutSkeleton />,
+    loading: () => null,
   }
 )
-
-function AppLayoutSkeleton() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-white p-6">
-      <div className="w-full max-w-3xl animate-pulse space-y-4">
-        <div className="h-6 w-40 rounded bg-gray-200" />
-        <div className="h-28 rounded-xl bg-gray-200" />
-        <div className="h-28 rounded-xl bg-gray-200" />
-      </div>
-    </div>
-  )
-}
 
 /**
  * AppLayout - Adaptive Layout Component
@@ -47,12 +34,7 @@ interface AppLayoutProps {
 }
 
 function AppLayoutInner({ children }: AppLayoutProps) {
-  const { isEmbedded, isLoading } = useAkeedMode()
-  const showLayoutSkeleton = useDelayedBoolean(isLoading)
-
-  if (isLoading && showLayoutSkeleton) {
-    return <AppLayoutSkeleton />
-  }
+  const { isEmbedded } = useAkeedMode()
 
   if (isEmbedded) {
     return <EmbeddedLayout>{children}</EmbeddedLayout>
@@ -66,7 +48,7 @@ function AppLayoutInner({ children }: AppLayoutProps) {
  */
 export function AppLayout({ children }: AppLayoutProps) {
   return (
-    <Suspense fallback={<AppLayoutSkeleton />}>
+    <Suspense fallback={null}>
       <AppLayoutInner>{children}</AppLayoutInner>
     </Suspense>
   )
