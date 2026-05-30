@@ -1,5 +1,6 @@
 import {
   BlockStack,
+  Box,
   Card,
   InlineGrid,
   InlineStack,
@@ -9,6 +10,10 @@ import {
   SkeletonPage,
 } from '@shopify/polaris'
 
+interface SettingsPageSkeletonProps {
+  variant?: 'store' | 'confirmation' | 'message-preview' | 'billing'
+}
+
 function FieldSkeleton() {
   return (
     <BlockStack gap="100">
@@ -17,6 +22,23 @@ function FieldSkeleton() {
       </div>
       <SkeletonBodyText lines={1} />
     </BlockStack>
+  )
+}
+
+function HeaderSkeleton() {
+  return (
+    <InlineStack align="space-between" blockAlign="center" gap="400" wrap>
+      <InlineStack gap="200" wrap>
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div key={index} className="w-20">
+            <SkeletonBodyText lines={1} />
+          </div>
+        ))}
+      </InlineStack>
+      <div className="w-24">
+        <SkeletonBodyText lines={1} />
+      </div>
+    </InlineStack>
   )
 }
 
@@ -124,19 +146,23 @@ function SubscriptionSkeleton() {
   )
 }
 
-export function SettingsPageSkeleton() {
+export function SettingsPageSkeleton({
+  variant = 'store',
+}: SettingsPageSkeletonProps) {
   return (
     <SkeletonPage title="Settings">
-      <Layout>
-        <Layout.Section>
-          <BlockStack gap="400">
-            <StoreConfigurationSkeleton />
-            <AutomationSkeleton />
-            <MessagePreviewSkeleton />
-            <SubscriptionSkeleton />
-          </BlockStack>
-        </Layout.Section>
-      </Layout>
+      <BlockStack gap="500">
+        <HeaderSkeleton />
+        <Layout>
+          <Layout.Section>
+            {variant === 'store' && <StoreConfigurationSkeleton />}
+            {variant === 'confirmation' && <AutomationSkeleton />}
+            {variant === 'message-preview' && <MessagePreviewSkeleton />}
+            {variant === 'billing' && <SubscriptionSkeleton />}
+          </Layout.Section>
+        </Layout>
+        <Box padding="200" />
+      </BlockStack>
     </SkeletonPage>
   )
 }

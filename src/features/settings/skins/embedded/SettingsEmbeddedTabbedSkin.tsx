@@ -30,22 +30,11 @@ import type {
   IntegrationOnboardingLanguage,
 } from '@/features/onboarding'
 import type { SettingsSkinProps } from '@/features/settings/domain/settings.types'
+import {
+  SETTINGS_TABS,
+  resolveSettingsTab,
+} from '@/features/settings/domain/settingsTabs'
 import { ContextualDocsLink } from '@/shared/ui'
-
-type SettingsTabId = 'store' | 'confirmation' | 'message-preview' | 'billing'
-
-const SETTINGS_TABS: SettingsTabId[] = [
-  'store',
-  'confirmation',
-  'message-preview',
-  'billing',
-]
-
-const SETTINGS_TAB_ALIASES: Partial<Record<string, SettingsTabId>> = {
-  settings: 'store',
-  'confirmation-config': 'confirmation',
-  'message-template': 'message-preview',
-}
 
 const SUBSCRIPTION_SECTION_ID = 'subscription-usage'
 
@@ -546,11 +535,7 @@ export function SettingsEmbeddedTabbedSkin(props: SettingsSkinProps) {
   const [isErrorDismissed, setIsErrorDismissed] = useState(false)
   const [isSuccessDismissed, setIsSuccessDismissed] = useState(false)
   const tabParam = searchParams.get('tab')
-  const activeTab: SettingsTabId = SETTINGS_TABS.includes(
-    tabParam as SettingsTabId
-  )
-    ? (tabParam as SettingsTabId)
-    : (SETTINGS_TAB_ALIASES[tabParam ?? ''] ?? 'store')
+  const activeTab = resolveSettingsTab(tabParam)
   const selected = SETTINGS_TABS.indexOf(activeTab)
   const canSaveActiveTab =
     activeTab === 'store' ||
