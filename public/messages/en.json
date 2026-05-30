@@ -935,6 +935,24 @@
     "title": "Akeed Documentation",
     "description": "Guides, setup steps, and operational documentation for Akeed.",
     "empty": "Documentation pages will appear here soon.",
-    "backToDocs": "Back to documentation"
+    "backToDocs": "Back to documentation",
+    "sidebarTitle": "Contents",
+    "openContents": "Open contents",
+    "closeContents": "Close contents",
+    "breadcrumbsLabel": "Breadcrumb",
+    "docsCrumb": "Docs",
+    "previous": "Previous",
+    "next": "Next",
+    "searchLabel": "Search documentation",
+    "searchPlaceholder": "Search docs",
+    "searchResultsLabel": "Search results",
+    "searchNoResults": "No documentation pages match your search.",
+    "searchHint": "Tip: Press / to focus search",
+    "clearSearch": "Clear search"
+  },
+  "docsHelp": {
+    "viewDocumentation": "View documentation",
+    "learnMore": "Learn more",
+    "needHelp": "Need help?"
   }
 }

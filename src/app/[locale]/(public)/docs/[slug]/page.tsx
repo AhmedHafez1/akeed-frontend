@@ -3,7 +3,19 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import type { Locale } from '@/i18n'
+import { buildMultiLocaleDocsSearchIndex } from '@/features/docs/lib/docs-search.server'
+import {
+  getDocPager,
+  getDocsBreadcrumbs,
+  getDocsNavItems,
+} from '@/features/docs/lib/docs-navigation'
 import { getAllDocSlugs, getDocBySlug } from '@/features/docs/lib/docs'
+import { DocsBreadcrumbs } from '@/features/docs/ui/DocsBreadcrumbs'
+import { DocsLayout } from '@/features/docs/ui/DocsLayout'
+import { MarkdownContent } from '@/features/docs/ui/MarkdownContent'
+import { DocsPager } from '@/features/docs/ui/DocsPager'
+import { DocsSearch } from '@/features/docs/ui/DocsSearch'
+import { DocsSidebar } from '@/features/docs/ui/DocsSidebar'
 import { PublicPageShell } from '@/shared/layout/PublicPageShell'
 import {
   createPublicPageMetadata,
@@ -72,6 +84,18 @@ export default async function DocPage({
     notFound()
   }
 
+  const [docsNavItems, searchEntries] = await Promise.all([
+    getDocsNavItems(safeLocale),
+    buildMultiLocaleDocsSearchIndex(),
+  ])
+  const pager = await getDocPager(safeLocale, doc.slug)
+  const breadcrumbs = getDocsBreadcrumbs(safeLocale, doc.title)
+
+  const desktopSidebar = <DocsSidebar items={docsNavItems} activeSlug={doc.slug} />
+  const mobileSidebar = (
+    <DocsSidebar items={docsNavItems} activeSlug={doc.slug} showTitle={false} />
+  )
+
   const docUrl = getCanonicalUrl(safeLocale, `/docs/${doc.slug}`)
   const articleDescription = doc.description ?? getExcerpt(doc.content)
   const articleStructuredData = {
@@ -95,22 +119,34 @@ export default async function DocPage({
         eyebrow={t('eyebrow')}
         title={doc.title}
         description={articleDescription}
-        contentClassName="mx-auto max-w-3xl"
+        contentClassName="mx-auto max-w-6xl"
       >
-        <article className="rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm md:p-8">
-          <pre className="overflow-x-auto text-sm leading-7 whitespace-pre-wrap text-slate-700">
-            {doc.content.trim()}
-          </pre>
-        </article>
+        <DocsLayout sidebar={desktopSidebar} mobileSidebar={mobileSidebar}>
+          <div className="mb-4 rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
+            <DocsSearch locale={safeLocale} entries={searchEntries} />
+          </div>
 
-        <div className="mt-8 flex justify-center">
-          <Link
-            href={`/${safeLocale}/docs`}
-            className="inline-flex h-11 items-center justify-center rounded-xl border border-emerald-100 bg-white px-6 text-sm font-bold text-slate-700 transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:text-emerald-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
-          >
-            {t('backToDocs')}
-          </Link>
-        </div>
+          <DocsBreadcrumbs items={breadcrumbs} />
+
+          <article className="mt-4 rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm md:p-8">
+            <MarkdownContent
+              content={doc.content.trim()}
+              locale={safeLocale}
+              currentSlug={doc.slug}
+            />
+          </article>
+
+          <DocsPager previous={pager.previous} next={pager.next} />
+
+          <div className="mt-6 flex justify-center">
+            <Link
+              href={`/${safeLocale}/docs`}
+              className="inline-flex h-11 items-center justify-center rounded-xl border border-emerald-100 bg-white px-6 text-sm font-bold text-slate-700 transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:text-emerald-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+            >
+              {t('backToDocs')}
+            </Link>
+          </div>
+        </DocsLayout>
       </PublicPageShell>
     </>
   )

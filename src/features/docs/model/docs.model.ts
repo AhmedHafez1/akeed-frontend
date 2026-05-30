@@ -24,3 +24,17 @@ export interface DocListItem {
   description?: string
   order: number
 }
+
+export interface DocNavItem {
+  slug: string
+  title: string
+  description?: string
+  href: string
+  order: number
+}
+
+export interface DocPagerItem {
+  slug: string
+  title: string
+  href: string
+}

@@ -921,6 +921,24 @@
     "title": "دليل أكيد",
     "description": "أدلة الإعداد والتشغيل والمحتوى التوضيحي الخاص بمنصة أكيد.",
     "empty": "ستظهر صفحات الدليل هنا قريباً.",
-    "backToDocs": "العودة إلى الدليل الرئيسي"
+    "backToDocs": "العودة إلى الدليل الرئيسي",
+    "sidebarTitle": "المحتويات",
+    "openContents": "فتح المحتويات",
+    "closeContents": "إغلاق المحتويات",
+    "breadcrumbsLabel": "مسار التنقل",
+    "docsCrumb": "الدليل",
+    "previous": "السابق",
+    "next": "التالي",
+    "searchLabel": "البحث في الدليل",
+    "searchPlaceholder": "ابحث في الدليل",
+    "searchResultsLabel": "نتائج البحث",
+    "searchNoResults": "لا توجد صفحات دليل مطابقة لعبارة البحث.",
+    "searchHint": "تلميح: اضغط / للتركيز على البحث",
+    "clearSearch": "مسح البحث"
+  },
+  "docsHelp": {
+    "viewDocumentation": "عرض الدليل",
+    "learnMore": "اعرف المزيد",
+    "needHelp": "تحتاج مساعدة؟"
   }
 }

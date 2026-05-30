@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import type { AutomationTimezone } from '@/features/onboarding'
 import type { SettingsSkinProps } from '@/features/settings/domain/settings.types'
-import { Button, Card, Input, Label } from '@/shared/ui'
+import { Button, Card, HelpButton, Input, Label } from '@/shared/ui'
 
 interface FieldProps {
   label: string
@@ -124,6 +124,7 @@ export function AutomationSettingsStandaloneSkin(props: SettingsSkinProps) {
                 </h2>
                 <HelpIcon content={t('automation.description')} />
               </div>
+              <HelpButton article="automationRules" />
               <p className="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
                 {t('automation.trustSignal')}
               </p>

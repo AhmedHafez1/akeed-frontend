@@ -30,6 +30,7 @@ import type {
   IntegrationOnboardingLanguage,
 } from '@/features/onboarding'
 import type { SettingsSkinProps } from '@/features/settings/domain/settings.types'
+import { ContextualDocsLink } from '@/shared/ui'
 
 type SettingsTabId = 'store' | 'confirmation' | 'message-preview' | 'billing'
 
@@ -257,6 +258,7 @@ function ConfirmationConfigTab({ props }: { props: SettingsSkinProps }) {
             {t('automation.heading')}
           </Text>
           <HelpIcon content={t('automation.description')} />
+          <ContextualDocsLink article="automationRules" />
         </InlineStack>
         <Divider />
         <Checkbox
