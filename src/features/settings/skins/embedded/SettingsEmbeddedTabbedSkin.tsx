@@ -133,18 +133,14 @@ function StoreTab({ props }: { props: SettingsSkinProps }) {
           autoComplete="organization"
           error={props.storeNameError}
         />
-        <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
-          <Select
-            label={t('defaultLanguageLabel')}
-            options={[...props.languageOptions]}
-            value={props.defaultLanguage}
-            onChange={(value) =>
-              props.onDefaultLanguageChange(
-                value as IntegrationOnboardingLanguage
-              )
-            }
-          />
-        </InlineGrid>
+        <Select
+          label={t('defaultLanguageLabel')}
+          options={[...props.languageOptions]}
+          value={props.defaultLanguage}
+          onChange={(value) =>
+            props.onDefaultLanguageChange(value as IntegrationOnboardingLanguage)
+          }
+        />
       </BlockStack>
     </Card>
   )
