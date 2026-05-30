@@ -1,4 +1,9 @@
 {
+  "error": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred. Please try again.",
+    "tryAgain": "Try again"
+  },
   "metadata": {
     "title": "Akeed | COD Order Confirmation",
     "description": "Automate COD order confirmation on WhatsApp with official Meta WhatsApp Cloud APIs. Cut wasted shipping costs and get faster customer responses with Akeed's rule-based workflows and clear, branded messages.",
