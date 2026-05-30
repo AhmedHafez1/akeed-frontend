@@ -3,6 +3,7 @@
 import { type ReactNode, Suspense } from 'react'
 import dynamic from 'next/dynamic'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
+import { useDelayedBoolean } from '@/shared/hooks/useDelayedBoolean'
 import { StandaloneLayout } from './StandaloneLayout'
 
 const EmbeddedLayout = dynamic(
@@ -47,8 +48,9 @@ interface AppLayoutProps {
 
 function AppLayoutInner({ children }: AppLayoutProps) {
   const { isEmbedded, isLoading } = useAkeedMode()
+  const showLayoutSkeleton = useDelayedBoolean(isLoading)
 
-  if (isLoading) {
+  if (isLoading && showLayoutSkeleton) {
     return <AppLayoutSkeleton />
   }
 

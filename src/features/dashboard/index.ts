@@ -24,6 +24,10 @@ export type {
 
 // Individual skins (for direct import if needed)
 export { DashboardStandaloneSkin } from './skins/standalone'
-export { DashboardEmbeddedSkin, MainEmbeddedSkin } from './skins/embedded'
+export {
+  DashboardEmbeddedSkin,
+  DashboardEmbeddedShellSkeleton,
+  MainEmbeddedSkin,
+} from './skins/embedded'
 export { DashboardVerificationsStandaloneSkin } from './skins/standalone'
 export { DashboardVerificationsEmbeddedSkin } from './skins/embedded'

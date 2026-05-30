@@ -3,8 +3,8 @@
 import { useSearchParams } from 'next/navigation'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
-import { DashboardPageSkeleton } from '@/shared/layout/skeletons'
 import {
+  DashboardEmbeddedShellSkeleton,
   DashboardStandaloneSkin,
   MainEmbeddedSkin,
   useDashboard,
@@ -34,7 +34,7 @@ export default function DashboardPage() {
 
   return (
     <EmbeddedAuthGate
-      fallback={<DashboardPageSkeleton variant={skeletonVariant} />}
+      fallback={<DashboardEmbeddedShellSkeleton variant={skeletonVariant} />}
       onboardingGate="dashboard"
     >
       <DashboardPageContent />

@@ -12,6 +12,7 @@ import {
 
 interface SettingsPageSkeletonProps {
   variant?: 'store' | 'confirmation' | 'message-preview' | 'billing'
+  showPageChrome?: boolean
 }
 
 function FieldSkeleton() {
@@ -148,21 +149,30 @@ function SubscriptionSkeleton() {
 
 export function SettingsPageSkeleton({
   variant = 'store',
+  showPageChrome = true,
 }: SettingsPageSkeletonProps) {
+  const content = (
+    <BlockStack gap="500">
+      <HeaderSkeleton />
+      <Layout>
+        <Layout.Section>
+          {variant === 'store' && <StoreConfigurationSkeleton />}
+          {variant === 'confirmation' && <AutomationSkeleton />}
+          {variant === 'message-preview' && <MessagePreviewSkeleton />}
+          {variant === 'billing' && <SubscriptionSkeleton />}
+        </Layout.Section>
+      </Layout>
+      <Box padding="200" />
+    </BlockStack>
+  )
+
+  if (!showPageChrome) {
+    return content
+  }
+
   return (
     <SkeletonPage title="Settings">
-      <BlockStack gap="500">
-        <HeaderSkeleton />
-        <Layout>
-          <Layout.Section>
-            {variant === 'store' && <StoreConfigurationSkeleton />}
-            {variant === 'confirmation' && <AutomationSkeleton />}
-            {variant === 'message-preview' && <MessagePreviewSkeleton />}
-            {variant === 'billing' && <SubscriptionSkeleton />}
-          </Layout.Section>
-        </Layout>
-        <Box padding="200" />
-      </BlockStack>
+      {content}
     </SkeletonPage>
   )
 }

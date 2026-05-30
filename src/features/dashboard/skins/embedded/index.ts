@@ -1,4 +1,5 @@
 export { DashboardEmbeddedSkin } from './DashboardEmbeddedSkin'
 export { DashboardVerificationsEmbeddedSkin } from './DashboardVerificationsEmbeddedSkin'
+export { DashboardEmbeddedShellSkeleton } from './DashboardEmbeddedShellSkeleton'
 export { MainEmbeddedSkin } from './MainEmbeddedSkin'
 export { VerificationsTableEmbedded } from './VerificationsTableEmbedded'
