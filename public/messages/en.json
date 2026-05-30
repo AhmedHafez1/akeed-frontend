@@ -15,6 +15,7 @@
     "features": "Features",
     "demo": "Demo",
     "pricing": "Pricing",
+    "docs": "Docs",
     "faq": "FAQ",
     "cta": "Install on Shopify",
     "sign_in": "Open Shopify app"
@@ -252,39 +253,35 @@
   },
   "faq": {
     "section_title": "Frequently Asked Questions",
-    "section_description": "Answers to the main setup, WhatsApp, and pricing questions MENA merchants ask before getting started.",
+    "section_description": "Quick answers to common setup, WhatsApp, and plan questions. For the full list, see General FAQ in Docs.",
     "title": "Frequently Asked Questions",
-    "integration": {
-      "question": "How does it integrate with my store?",
-      "answer": "We integrate with all popular platforms: Shopify, WooCommerce, Zid, Salla, and others. Setup takes only 5 minutes via a simple Webhook."
+    "supported_platforms": {
+      "question": "Which platforms does Akeed support?",
+      "answer": "Akeed supports Shopify directly and can be connected to other commerce setups through the available integration flow."
     },
-    "whatsapp": {
+    "setup_time": {
+      "question": "How long does setup take?",
+      "answer": "Most merchants finish setup in a few minutes and can send a test confirmation right away."
+    },
+    "own_whatsapp_number": {
       "question": "Do I need my own WhatsApp number to start?",
-      "answer": "No. Most merchants can start immediately using Akeed's shared WhatsApp infrastructure, so there is no business verification or API setup required on your side. Larger merchants can later connect their own number if needed."
+      "answer": "No. Most merchants start with Akeed's shared official infrastructure, then move to their own number later if needed."
     },
-    "arabic": {
-      "question": "Does Akeed use AI to talk to customers?",
-      "answer": "No. Akeed uses rule-based automation, not open-ended AI chat. That keeps the confirmation flow clear, predictable, and easier to control for COD operations."
-    },
-    "pricing": {
-      "question": "What happens if I use all included WhatsApp confirmations?",
-      "answer": "Akeed stops sending new confirmations until your monthly limit renews or you upgrade. You will not be charged extra fees."
-    },
-    "whatsapp_api": {
+    "official_apis": {
       "question": "Are messages sent through official WhatsApp APIs?",
-      "answer": "Yes. Akeed uses official Meta WhatsApp Cloud APIs, which gives you a more reliable foundation than unofficial or unstable messaging workarounds."
-    },
-    "unconfirmed_order": {
-      "question": "What happens if the customer does not confirm the order?",
-      "answer": "Akeed marks the order as unconfirmed in your store so your team can hold it, review it, or avoid shipping it until the customer responds."
-    },
-    "easy_integration": {
-      "question": "Is integration with my store difficult?",
-      "answer": "Nope, integration is easy and fast. You can start confirming orders in 2 minutes after installing Akeed from the Shopify App Store."
+      "answer": "Yes. Akeed uses official Meta WhatsApp APIs for reliable message delivery."
     },
     "customize_messages": {
       "question": "Can I customize Akeed's messages and language?",
       "answer": "Yes. You can customize the confirmation copy and choose the language style that best fits your brand and customer base."
+    },
+    "customer_no_reply": {
+      "question": "What happens if the customer does not reply?",
+      "answer": "The order stays unconfirmed so your team can hold it, follow up, or skip shipping based on your process."
+    },
+    "plan_limit": {
+      "question": "What happens when I reach my monthly confirmation limit?",
+      "answer": "New confirmations pause until your billing cycle renews or you upgrade your plan."
     }
   },
   "roi_calculator": {
@@ -407,6 +404,7 @@
     "home": "Home",
     "features": "Features",
     "pricing": "Pricing",
+    "docs": "Docs",
     "integrations": "Integrations",
     "changelog": "Changelog",
     "helpCenter": "Help Center",

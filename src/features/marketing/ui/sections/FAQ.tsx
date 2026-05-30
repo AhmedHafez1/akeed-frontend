@@ -6,6 +6,7 @@ import { Section } from '@/shared/ui/section'
 import { motion } from 'framer-motion'
 import { Accordion } from '@/shared/ui/accordion'
 import { FAQItem } from '@/shared/ui/faq-item'
+import { LearnMoreLink } from '@/shared/ui/docs-links'
 import { faqs } from '@/features/marketing/config/site'
 import { landingInsetCardClass } from '@/features/marketing/ui/components/LandingPrimitives'
 
@@ -53,6 +54,10 @@ function FAQ() {
               />
             ))}
           </Accordion>
+
+          <div className="mt-6 flex justify-center">
+            <LearnMoreLink article="generalFaq" />
+          </div>
         </motion.div>
       </Container>
     </Section>

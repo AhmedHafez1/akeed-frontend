@@ -8,6 +8,7 @@ export const docsArticleSlugs = {
   automationRules: 'automation-rules',
   analytics: 'analytics',
   troubleshooting: 'troubleshooting',
+  generalFaq: 'general-faq',
 } as const
 
 export type DocsArticleKey = keyof typeof docsArticleSlugs
