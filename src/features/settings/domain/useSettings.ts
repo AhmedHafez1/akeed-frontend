@@ -13,10 +13,13 @@ import {
 } from '@/features/onboarding'
 import { useAppBridgeLoading } from '@/shared/hooks/useAppBridgeLoading'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
+import { createLogger } from '@/shared/lib/logger'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
 import { fetchSettings, updateSettings } from '../api/settingsApi'
 import type { SettingsResponse } from '../api/settingsApi'
 import type { SettingsSelectOption, SettingsSkinProps } from './settings.types'
+
+const logger = createLogger('Settings')
 
 type BillingStatusKey =
   | 'billingStatusActive'
@@ -283,7 +286,7 @@ export function useSettings(): {
         setCodTemplateVariants(settingsResponse.template.variants)
         setTemplatePreviews(settingsResponse.template.previews)
       } catch (error) {
-        console.error('[Settings] Failed to load onboarding settings:', error)
+        logger.error('Failed to load onboarding settings', error)
         if (active) setErrorBanner(t('loadError'))
       } finally {
         if (active) setIsInitialLoading(false)
@@ -388,7 +391,7 @@ export function useSettings(): {
         window.location.href = confirmationUrl
       }
     } catch (error) {
-      console.error('[Settings] Failed to change plan:', error)
+      logger.error('Failed to change plan', error)
       setErrorBanner(t('changePlanError'))
     } finally {
       setIsChangingPlan(false)
@@ -575,7 +578,7 @@ export function useSettings(): {
       setSuccessBanner(t('saveSuccess'))
       shopify?.toast.show(t('saveSuccess'))
     } catch (error) {
-      console.error('[Settings] Failed to save onboarding settings:', error)
+      logger.error('Failed to save onboarding settings', error)
       setSuccessBanner(null)
       setErrorBanner(t('saveError'))
       setStoreName(previous.storeName)

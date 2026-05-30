@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { Globe, LogOut } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { auth } from '@/shared/lib/auth'
+import { createLogger } from '@/shared/lib/logger'
 import {
   getLocaleFromPathname,
   withLocale,
@@ -21,6 +22,7 @@ import type { SupportedLocale } from '@/shared/lib/locale'
  * This replaces the marketing Header on protected routes.
  */
 export function AppHeader() {
+  const logger = createLogger('Auth')
   const t = useTranslations('appHeader')
   const pathname = usePathname() ?? ''
   const router = useRouter()
@@ -43,8 +45,8 @@ export function AppHeader() {
     try {
       await auth.signOut()
       router.push(auth.getLoginPath(locale))
-    } catch (err) {
-      console.error('[Auth] Sign out failed:', err)
+    } catch (error) {
+      logger.error('Sign out failed', error)
       setIsSigningOut(false)
     }
   }

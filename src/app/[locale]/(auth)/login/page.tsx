@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { auth } from '@/shared/lib/auth'
+import { createLogger } from '@/shared/lib/logger'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
 import { useTranslations } from 'next-intl'
 
@@ -15,6 +16,7 @@ import { useTranslations } from 'next-intl'
  */
 
 export default function LoginPage() {
+  const logger = createLogger('Auth')
   const t = useTranslations()
   const router = useRouter()
   const pathname = usePathname()
@@ -53,8 +55,8 @@ export default function LoginPage() {
 
       // Redirect to dashboard
       router.push(auth.getDashboardPath(locale))
-    } catch (e) {
-      console.error(e)
+    } catch (error) {
+      logger.error('Sign in failed', error)
       setError(t('auth.signInFailed'))
     } finally {
       setIsLoading(false)

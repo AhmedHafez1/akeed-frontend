@@ -3,6 +3,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { api } from '@/shared/lib/auth'
+import { createLogger } from '@/shared/lib/logger'
 import { useDashboardData } from '../hooks/useDashboardData'
 import { useDashboardStats } from '../hooks/useDashboardStats'
 import type {
@@ -15,6 +16,8 @@ import type {
   StatusFilterOption,
   TestFeedback,
 } from './dashboard.types'
+
+const logger = createLogger('Dashboard')
 
 interface SendTestVerificationResponse {
   success: boolean
@@ -157,7 +160,7 @@ export function useDashboard(): DashboardSkinProps {
         refetchVerifications()
         refetchStats()
       } catch (error) {
-        console.error('[Dashboard] Failed to cancel Shopify order:', error)
+        logger.error('Failed to cancel Shopify order', error)
         setCancelOrderErrors((previous) => ({
           ...previous,
           [verificationId]: t('table.actions.cancelOrderError'),
@@ -207,7 +210,7 @@ export function useDashboard(): DashboardSkinProps {
         refetchVerifications()
         refetchStats()
       } catch (error) {
-        console.error('[Dashboard] Failed to send test verification:', error)
+        logger.error('Failed to send test verification', error)
         const backendMessage =
           error instanceof Error ? error.message : undefined
         setTestFeedback({

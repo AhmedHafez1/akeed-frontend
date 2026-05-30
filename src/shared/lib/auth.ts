@@ -2,6 +2,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { resolveEmbeddedContextFromWindow } from '@/shared/lib/embedded-context'
 import { getErrorMessage, parseJsonResponse } from '@/shared/lib/http'
+import { createLogger } from '@/shared/lib/logger'
 import { withLocale } from '@/shared/lib/locale'
 
 /**
@@ -22,6 +23,7 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
 let supabaseClient: ReturnType<typeof createClient> | null = null
+const logger = createLogger('Auth')
 
 function getSupabasePublicConfig(): { url: string; anonKey: string } {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
@@ -133,9 +135,7 @@ async function getShopifySessionToken(): Promise<string | null> {
     const shopify = window.shopify
 
     if (!shopify) {
-      console.error(
-        '[Auth] window.shopify not available — App Bridge CDN script may not be loaded'
-      )
+      logger.error('window.shopify not available - App Bridge CDN script may not be loaded')
       return null
     }
 
@@ -153,7 +153,7 @@ async function getShopifySessionToken(): Promise<string | null> {
 
     return token
   } catch (error) {
-    console.error('[Auth] Failed to get Shopify session token:', error)
+    logger.error('Failed to get Shopify session token', error)
     return null
   }
 }
@@ -169,13 +169,13 @@ async function getSupabaseToken(): Promise<string | null> {
     } = await supabase.auth.getSession()
 
     if (!session?.access_token) {
-      console.warn('[Auth] No Supabase session found')
+      logger.warn('No Supabase session found')
       return null
     }
 
     return session.access_token
   } catch (error) {
-    console.error('[Auth] Failed to get Supabase token:', error)
+    logger.error('Failed to get Supabase token', error)
     return null
   }
 }
@@ -204,7 +204,7 @@ export async function fetchWithAuth(
   if (token) {
     headers.set('Authorization', `Bearer ${token}`)
   } else {
-    console.warn('[Auth] No authentication token available')
+    logger.warn('No authentication token available')
   }
 
   // Make request
@@ -242,7 +242,7 @@ export async function fetchWithAuth(
       }
     } else if (typeof window !== 'undefined') {
       // Standalone mode: redirect to login
-      console.error('[Auth] Unauthorized - redirecting to login')
+      logger.error('Unauthorized - redirecting to login')
       window.location.href = withLocale('/login')
     }
   }
@@ -385,7 +385,7 @@ export const auth = {
     })
 
     if (error) {
-      console.log(error)
+      logger.error('Sign up failed', error)
       throw error
     }
     return data
@@ -402,7 +402,7 @@ export const auth = {
     })
 
     if (error) {
-      console.log(error)
+      logger.error('Sign in failed', error)
       throw error
     }
     return data

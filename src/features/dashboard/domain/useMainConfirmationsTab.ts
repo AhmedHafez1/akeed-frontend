@@ -3,12 +3,15 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { api } from '@/shared/lib/auth'
+import { createLogger } from '@/shared/lib/logger'
 import { useDashboardData } from '../hooks/useDashboardData'
 import type {
   DashboardStatsDateRange,
   VerificationStatusFilter,
 } from '../model/dashboard.model'
 import type { StatusFilterOption, TestFeedback } from './dashboard.types'
+
+const logger = createLogger('Dashboard')
 
 interface SendTestVerificationResponse {
   success: boolean
@@ -109,8 +112,8 @@ export function useMainConfirmationsTab(dateRangeFilter: DashboardStatsDateRange
           current === verificationId ? null : current
         )
         refetchVerifications()
-      } catch (err) {
-        console.error('[Dashboard] Failed to cancel Shopify order:', err)
+      } catch (error) {
+        logger.error('Failed to cancel Shopify order', error)
         setCancelOrderErrors((previous) => ({
           ...previous,
           [verificationId]: t('table.actions.cancelOrderError'),
@@ -158,9 +161,10 @@ export function useMainConfirmationsTab(dateRangeFilter: DashboardStatsDateRange
         })
 
         refetchVerifications()
-      } catch (err) {
-        console.error('[Dashboard] Failed to send test verification:', err)
-        const backendMessage = err instanceof Error ? err.message : undefined
+      } catch (error) {
+        logger.error('Failed to send test verification', error)
+        const backendMessage =
+          error instanceof Error ? error.message : undefined
         setTestFeedback({
           tone: 'critical',
           message: backendMessage ?? t('emptyState.onboarding.testFailed'),

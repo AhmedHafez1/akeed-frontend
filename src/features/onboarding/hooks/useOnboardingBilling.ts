@@ -2,7 +2,10 @@
 
 import { useCallback, useState } from 'react'
 import { createOnboardingBilling } from '@/features/onboarding/api/onboardingApi'
+import { createLogger } from '@/shared/lib/logger'
 import type { OnboardingBillingPlanId } from '@/features/onboarding/domain/onboarding.types'
+
+const logger = createLogger('Onboarding')
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -44,7 +47,7 @@ export function useOnboardingBilling({
       setIsBillingRedirecting(true)
       onBillingConfirmation(confirmationUrl)
     } catch (error) {
-      console.error('[Onboarding] Failed to activate billing:', error)
+      logger.error('Failed to activate billing', error)
       setErrorBanner(billingActivationErrorMessage)
       setIsBillingRedirecting(false)
     } finally {
