@@ -92,7 +92,7 @@ export function AppHeader() {
               href={withLocale('/message-preview', locale)}
               className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900"
             >
-              {t('messagePreview')}
+              {t('messageTemplate')}
             </Link>
             <Link
               href={withLocale('/automation-settings', locale)}

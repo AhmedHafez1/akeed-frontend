@@ -170,9 +170,5 @@ export function SettingsPageSkeleton({
     return content
   }
 
-  return (
-    <SkeletonPage title="Settings">
-      {content}
-    </SkeletonPage>
-  )
+  return <SkeletonPage title="Settings">{content}</SkeletonPage>
 }

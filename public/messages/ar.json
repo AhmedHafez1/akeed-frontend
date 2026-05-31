@@ -449,7 +449,7 @@
     "dashboard": "لوحة التحكم",
     "verifications": "التأكيدات",
     "settings": "الإعدادات",
-    "messagePreview": "معاينة الرسالة",
+    "messageTemplate": "قالب الرسالة",
     "automationSettings": "الأتمتة",
     "signOut": "تسجيل الخروج",
     "signingOut": "جارٍ تسجيل الخروج..."
@@ -486,7 +486,7 @@
     "stepCounter": "الخطوة {current} من {total}",
     "flow": {
       "storeSetup": "إعداد المتجر",
-      "messagePreview": "معاينة الرسالة",
+      "messageTemplate": "قالب الرسالة",
       "plan": "الخطة",
       "dashboard": "لوحة التحكم"
     },
@@ -719,7 +719,7 @@
     "tabs": {
       "store": "المتجر",
       "confirmation": "التأكيد",
-      "messagePreview": "معاينة الرسالة",
+      "messageTemplate": "قالب الرسالة",
       "billing": "الفوترة"
     },
     "storeConfigurationHeading": "إعدادات المتجر",
@@ -862,7 +862,7 @@
     "planBusinessFeature4": "مكالمة إعداد لضبط سير عمل التأكيد",
     "planBusinessFeature5": "مصممة لمتاجر الدفع عند الاستلام ذات الحجم الأعلى"
   },
-  "messagePreview": {
+  "messageTemplate": {
     "pageTitle": "معاينة الرسالة",
     "pageSubtitle": "راجع رسالة واتساب الفعلية التي يستلمها العميل لتأكيد طلب الدفع عند الاستلام.",
     "title": "رسالة واتساب التي سيراها العميل",
@@ -881,6 +881,15 @@
     "trustNote": "تُرسل الرسائل عبر واجهات Meta WhatsApp Cloud API الرسمية من رقم أعمال أكيد الموثّق.",
     "languageArabic": "العربية",
     "languageEnglish": "English",
+    "languageAuto": "تلقائي",
+    "languageLabel": "لغة العميل",
+    "styleLabel": "نمط الرسالة",
+    "setupTitle": "إعداد القالب",
+    "setupDescription": "اختر لغة ونمط رسالة التأكيد التي سيستلمها العميل على واتساب.",
+    "storeLanguageAutoHint": "لغة المتجر مضبوطة على تلقائي. اضبط قوالب العربية والإنجليزية معاً.",
+    "storeLanguageFixedHint": "لغة المتجر مضبوطة على {language}. يمكنك مع ذلك ضبط قوالب اللغتين.",
+    "perLanguageStyleHint": "يمكن لكل لغة أن تستخدم نمط رسالة مختلف.",
+    "previewDescription": "معاينة مباشرة لقالب واتساب الذي سيصل للعميل.",
     "variantSelectorTitle": "نمط القالب",
     "variantSelectorDescription": "اختر أسلوب رسالة التأكيد لكل لغة.",
     "variantLabel": "نسخة القالب",

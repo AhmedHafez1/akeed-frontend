@@ -24,6 +24,10 @@ function applyPreviewReplacements(value: string): string {
   }, value)
 }
 
+function formatPreviewTimestamp(language: 'ar' | 'en'): string {
+  return language === 'ar' ? '٨:٠٨ ص' : '8:08 AM'
+}
+
 interface FieldProps {
   label: string
   error?: string
@@ -207,9 +211,13 @@ function StandalonePlanComparison({
 
 export function SettingsStandaloneSkin(props: SettingsSkinProps) {
   const t = useTranslations('settings')
-  const previewT = useTranslations('messagePreview')
+  const previewT = useTranslations('messageTemplate')
+  const initialLanguage =
+    props.defaultLanguage === 'ar' || props.defaultLanguage === 'en'
+      ? props.defaultLanguage
+      : props.defaultTemplateLanguage
   const [previewLanguage, setPreviewLanguage] = useState<'ar' | 'en'>(
-    props.defaultTemplateLanguage
+    initialLanguage
   )
   const canChangePlan =
     props.selectedPlanId !== null &&
@@ -231,6 +239,16 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
   }))
   const defaultVariant = props.codTemplateDefaults[previewLanguage]
   const isDefaultVariant = selectedVariant === defaultVariant
+  const isStoreLanguageAuto = props.defaultLanguage === 'auto'
+  const storeLanguageLabel =
+    props.defaultLanguage === 'ar'
+      ? previewT('languageArabic')
+      : props.defaultLanguage === 'en'
+        ? previewT('languageEnglish')
+        : previewT('languageAuto')
+  const languageContext = isStoreLanguageAuto
+    ? previewT('storeLanguageAutoHint')
+    : previewT('storeLanguageFixedHint', { language: storeLanguageLabel })
 
   const handleVariantChange = (value: string) => {
     if (previewLanguage === 'ar') {
@@ -342,66 +360,95 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
       </SectionCard>
 
       <SectionCard
-        title={previewT('variantSelectorTitle')}
-        description={previewT('variantSelectorDescription')}
+        title={previewT('setupTitle')}
+        description={previewT('setupDescription')}
       >
         <div className="space-y-5">
-          <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white p-1 w-fit">
-            {props.templateLanguages.includes('ar') && (
-              <Button
-                type="button"
-                variant={previewLanguage === 'ar' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setPreviewLanguage('ar')}
-              >
-                {previewT('languageArabic')}
-              </Button>
-            )}
-            {props.templateLanguages.includes('en') && (
-              <Button
-                type="button"
-                variant={previewLanguage === 'en' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setPreviewLanguage('en')}
-              >
-                {previewT('languageEnglish')}
-              </Button>
-            )}
-          </div>
+          <p className="text-sm text-slate-500">{languageContext}</p>
 
-          <div className="grid gap-4 md:grid-cols-[300px_1fr]">
-            <Field label={previewT('variantLabel')}>
-              <NativeSelect
-                value={selectedVariant}
-                options={variantOptions}
-                onChange={handleVariantChange}
-              />
-              <p className="mt-2 text-xs text-slate-500">
-                {previewT('defaultVariantLabel', {
-                  variant: previewT(`variantLabels.${defaultVariant}`),
-                })}
-              </p>
-              <p className="mt-1 text-xs font-semibold text-emerald-700">
-                {isDefaultVariant
-                  ? previewT('badgeDefault')
-                  : previewT('badgeCustom')}
-              </p>
-            </Field>
-
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-              <div
-                dir={previewLanguage === 'ar' ? 'rtl' : 'ltr'}
-                className="rounded-xl bg-white p-4 text-sm leading-7 text-slate-800 shadow-sm"
-              >
-                <p>{applyPreviewReplacements(template.greeting)}</p>
-                <p>{applyPreviewReplacements(template.body)}</p>
-                <p>{applyPreviewReplacements(template.totalLabel)}</p>
-                <p>{applyPreviewReplacements(template.ending)}</p>
-                <div className="mt-4 border-t border-slate-100 pt-3 text-center font-medium text-emerald-700">
-                  {template.confirmButton}
+          <div className="grid gap-4 lg:grid-cols-[280px_1fr]">
+            <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <Field label={previewT('languageLabel')}>
+                <div className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white p-1">
+                  {props.templateLanguages.includes('ar') && (
+                    <Button
+                      type="button"
+                      variant={previewLanguage === 'ar' ? 'default' : 'ghost'}
+                      size="sm"
+                      onClick={() => setPreviewLanguage('ar')}
+                    >
+                      {previewT('languageArabic')}
+                    </Button>
+                  )}
+                  {props.templateLanguages.includes('en') && (
+                    <Button
+                      type="button"
+                      variant={previewLanguage === 'en' ? 'default' : 'ghost'}
+                      size="sm"
+                      onClick={() => setPreviewLanguage('en')}
+                    >
+                      {previewT('languageEnglish')}
+                    </Button>
+                  )}
                 </div>
-                <div className="mt-3 border-t border-slate-100 pt-3 text-center font-medium text-emerald-700">
-                  {template.cancelButton}
+              </Field>
+
+              <Field label={previewT('styleLabel')}>
+                <NativeSelect
+                  value={selectedVariant}
+                  options={variantOptions}
+                  onChange={handleVariantChange}
+                />
+                <p className="mt-2 text-xs text-slate-500">
+                  {previewT('defaultVariantLabel', {
+                    variant: previewT(`variantLabels.${defaultVariant}`),
+                  })}
+                </p>
+                <p className="mt-1 text-xs font-semibold text-emerald-700">
+                  {isDefaultVariant
+                    ? previewT('badgeDefault')
+                    : previewT('badgeCustom')}
+                </p>
+              </Field>
+              <p className="text-xs text-slate-500">
+                {previewT('perLanguageStyleHint')}
+              </p>
+            </div>
+
+            <div className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+              <p className="text-sm text-slate-500">
+                {previewT('previewDescription')}
+              </p>
+              <div className="rounded-2xl border border-[#d8d8d8] bg-[#efeae2] bg-[url('/images/landing/wa_chat_bg.png')] bg-cover bg-center p-4 shadow-sm">
+                <div
+                  dir={previewLanguage === 'ar' ? 'rtl' : 'ltr'}
+                  className="overflow-hidden rounded-xl border border-[#e6e6e6] bg-white text-[#1e1f21]"
+                >
+                  <div className="space-y-4 p-4 text-[17px] leading-8">
+                    <p>{applyPreviewReplacements(template.greeting)}</p>
+                    <p>{applyPreviewReplacements(template.body)}</p>
+                    <p>{applyPreviewReplacements(template.totalLabel)}</p>
+                    <p>{applyPreviewReplacements(template.ending)}</p>
+                  </div>
+                  <div
+                    className={`px-4 pb-2 text-xs text-[#8e8e93] ${
+                      previewLanguage === 'ar' ? 'text-left' : 'text-right'
+                    }`}
+                  >
+                    {formatPreviewTimestamp(previewLanguage)}
+                  </div>
+                  <div className="border-t border-[#ececec] py-3 text-center text-[30px] leading-none text-emerald-700">
+                    ↩
+                    <span className="ml-2 align-middle text-[29px] leading-none">
+                      {template.confirmButton}
+                    </span>
+                  </div>
+                  <div className="border-t border-[#ececec] py-3 text-center text-[30px] leading-none text-emerald-700">
+                    ↩
+                    <span className="ml-2 align-middle text-[29px] leading-none">
+                      {template.cancelButton}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
