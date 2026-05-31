@@ -94,6 +94,16 @@
   --pc-button-box-shadow_pressed: 0 0 0 1px rgba(0, 128, 96, 0.35) inset;
 }
 
+.akeed-embedded-content {
+  width: 100%;
+}
+
+@media (max-width: 48rem) {
+  .akeed-embedded-content {
+    padding-inline: 0.75rem;
+  }
+}
+
 /* Custom scrollbar */
 @layer utilities {
   .scrollbar-thin {
