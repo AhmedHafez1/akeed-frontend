@@ -34,6 +34,10 @@ import {
   SETTINGS_TABS,
   resolveSettingsTab,
 } from '@/features/settings/domain/settingsTabs'
+import {
+  formatTemplatePreviewTimestamp,
+  getTemplatePreviewParagraphs,
+} from '@/features/settings/skins/shared/templatePreview'
 import { ContextualDocsLink } from '@/shared/ui'
 
 const SUBSCRIPTION_SECTION_ID = 'subscription-usage'
@@ -347,32 +351,6 @@ function ConfirmationConfigTab({ props }: { props: SettingsSkinProps }) {
   )
 }
 
-function renderTemplateBody(
-  template: SettingsSkinProps['templatePreviews']['en']
-): string[] {
-  const applyPreviewReplacements = (value: string) => {
-    return [
-      ['{{customer}}', 'Sara'],
-      ['{{store}}', 'Akeed Store'],
-      ['{{order}}', '11996743237999'],
-      ['{{total}}', '$600.00'],
-    ].reduce((result, [token, replacement]) => {
-      return result.split(token).join(replacement)
-    }, value)
-  }
-
-  return [
-    applyPreviewReplacements(template.greeting),
-    applyPreviewReplacements(template.body),
-    applyPreviewReplacements(template.totalLabel),
-    applyPreviewReplacements(template.ending),
-  ]
-}
-
-function formatPreviewTimestamp(language: 'ar' | 'en'): string {
-  return language === 'ar' ? '٨:٠٨ ص' : '8:08 AM'
-}
-
 function MessageTemplateTab({ props }: { props: SettingsSkinProps }) {
   const t = useTranslations('messageTemplate')
   const initialLanguage =
@@ -408,6 +386,7 @@ function MessageTemplateTab({ props }: { props: SettingsSkinProps }) {
 
   const defaultVariant = props.codTemplateDefaults[language]
   const isDefaultVariant = selectedVariant === defaultVariant
+  const previewParagraphs = getTemplatePreviewParagraphs(template, props.storeName)
   const isStoreLanguageAuto = props.defaultLanguage === 'auto'
   const storeLanguageLabel =
     props.defaultLanguage === 'ar'
@@ -496,32 +475,49 @@ function MessageTemplateTab({ props }: { props: SettingsSkinProps }) {
                 padding="500"
               >
                 <InlineStack align="center">
-                  <div className="w-full max-w-105 rounded-2xl border border-[#d8d8d8] bg-[#efeae2] bg-[url('/images/landing/wa_chat_bg.png')] bg-cover bg-center p-4 shadow-sm">
+                  <div className="w-full max-w-[380px] rounded-2xl border border-[#d8d8d8] bg-[#efeae2] bg-[url('/images/landing/wa_chat_bg.png')] bg-cover bg-center p-3 shadow-sm">
                     <div
                       dir={isRtl ? 'rtl' : 'ltr'}
-                      className="overflow-hidden rounded-xl border border-[#e6e6e6] bg-white text-[#1e1f21]"
+                      style={{ fontFamily: 'Segoe UI, Tahoma, sans-serif' }}
+                      className="overflow-hidden rounded-xl border border-[#e7e7e7] bg-white text-[#1e1f21]"
                     >
-                      <div className="space-y-4 p-4 text-[17px] leading-8">
-                        {renderTemplateBody(template).map((line, index) => (
+                      <div className="space-y-5 px-4 pt-4 pb-3 text-[15px] leading-6 font-normal">
+                        {previewParagraphs.map((line, index) => (
                           <p key={index}>{line}</p>
                         ))}
                       </div>
                       <div
-                        className={`px-4 pb-2 text-xs text-[#8e8e93] ${
+                        className={`px-4 pb-2 text-[14px] text-[#8e8e93] ${
                           isRtl ? 'text-left' : 'text-right'
                         }`}
                       >
-                        {formatPreviewTimestamp(language)}
+                        {formatTemplatePreviewTimestamp(language)}
                       </div>
-                      <div className="border-t border-[#ececec] py-3 text-center text-[30px] leading-none text-emerald-700">
-                        ↩
-                        <span className="ml-2 align-middle text-[29px] leading-none">
+                      <div
+                        className={`border-t border-[#ececec] px-4 py-3 text-[#178959] ${
+                          isRtl ? 'text-right' : 'text-left'
+                        }`}
+                      >
+                        <span
+                          className={`flex items-center justify-center gap-2 text-[15px] leading-6 font-normal ${
+                            isRtl ? 'flex-row-reverse' : 'flex-row'
+                          }`}
+                        >
+                          <span className="text-[13px]">↩</span>
                           {template.confirmButton}
                         </span>
                       </div>
-                      <div className="border-t border-[#ececec] py-3 text-center text-[30px] leading-none text-emerald-700">
-                        ↩
-                        <span className="ml-2 align-middle text-[29px] leading-none">
+                      <div
+                        className={`border-t border-[#ececec] px-4 py-3 text-[#178959] ${
+                          isRtl ? 'text-right' : 'text-left'
+                        }`}
+                      >
+                        <span
+                          className={`flex items-center justify-center gap-2 text-[15px] leading-6 font-normal ${
+                            isRtl ? 'flex-row-reverse' : 'flex-row'
+                          }`}
+                        >
+                          <span className="text-[13px]">↩</span>
                           {template.cancelButton}
                         </span>
                       </div>
