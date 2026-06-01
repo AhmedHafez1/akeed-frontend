@@ -15,13 +15,13 @@ export function ConfirmationStatusFlags({
   const t = useTranslations('dashboard.statusCard')
   return (
     <InlineStack align="space-between" blockAlign="center" gap="400">
-      <Badge tone={activeStatus ? 'success' : 'critical'} size="large">
+      <Badge tone={activeStatus ? 'success' : 'attention'} size="large">
         {activeStatus ? t('activeLabel') : t('inactiveLabel')}
       </Badge>
-      <Badge tone={followUpStatus ? 'success' : 'attention'} size="large">
+      <Badge tone={followUpStatus ? 'success' : 'read-only'} size="large">
         {followUpStatus ? t('followUpActiveLabel') : t('followUpInactiveLabel')}
       </Badge>
-      <Badge tone={quietHoursConfigured ? 'success' : 'attention'} size="large">
+      <Badge tone={quietHoursConfigured ? 'success' : 'read-only'} size="large">
         {quietHoursConfigured
           ? t('quietHoursActiveLabel')
           : t('quietHoursInactiveLabel')}
