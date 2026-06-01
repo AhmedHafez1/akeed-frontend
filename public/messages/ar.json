@@ -883,7 +883,7 @@
     "languageEnglish": "English",
     "languageAuto": "تلقائي",
     "languageLabel": "لغة العميل",
-    "styleLabel": "نبرة وأسلوب الرسالة",
+    "styleLabel": "نمط وأسلوب الرسالة",
     "setupTitle": "إعداد القالب",
     "setupDescription": "اختر لغة ونمط رسالة التأكيد التي سيستلمها العميل على واتساب.",
     "storeLanguageAutoHint": "لغة الإرسال في المتجر مضبوطة على تلقائي. سيستلم العميل العربية أو الإنجليزية حسب دولة رقم الهاتف، لذلك اضبط القالبين.",
@@ -897,7 +897,7 @@
     "badgeDefault": "افتراضي",
     "badgeCustom": "مخصص",
     "variantLabels": {
-      "standard": "فصحى (الافتراضي)",
+      "standard": "فصحى",
       "egyptian": "مصري",
       "gulf": "خليجي",
       "friendly": "ودي",

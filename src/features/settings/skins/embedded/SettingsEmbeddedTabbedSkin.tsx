@@ -384,9 +384,10 @@ function MessageTemplateTab({ props }: { props: SettingsSkinProps }) {
     props.onCodTemplateEnVariantChange(value as EnglishCodTemplateVariantId)
   }
 
-  const defaultVariant = props.codTemplateDefaults[language]
-  const isDefaultVariant = selectedVariant === defaultVariant
-  const previewParagraphs = getTemplatePreviewParagraphs(template, props.storeName)
+  const previewParagraphs = getTemplatePreviewParagraphs(
+    template,
+    props.storeName
+  )
   const isStoreLanguageAuto = props.defaultLanguage === 'auto'
   const storeLanguageLabel =
     props.defaultLanguage === 'ar'
@@ -404,7 +405,7 @@ function MessageTemplateTab({ props }: { props: SettingsSkinProps }) {
         <Layout.Section variant="oneThird">
           <BlockStack gap="400">
             <Card>
-              <BlockStack gap="300">
+              <BlockStack gap="400">
                 <Text as="h2" variant="headingMd">
                   {t('setupTitle')}
                 </Text>
@@ -443,19 +444,6 @@ function MessageTemplateTab({ props }: { props: SettingsSkinProps }) {
                   value={selectedVariant}
                   onChange={handleVariantChange}
                 />
-                <InlineStack align="space-between" gap="200">
-                  <Text as="span" tone="subdued" variant="bodySm">
-                    {t('defaultVariantLabel', {
-                      variant: t(`variantLabels.${defaultVariant}`),
-                    })}
-                  </Text>
-                  <Badge tone={isDefaultVariant ? 'success' : 'info'}>
-                    {isDefaultVariant ? t('badgeDefault') : t('badgeCustom')}
-                  </Badge>
-                </InlineStack>
-                <Text as="p" tone="subdued" variant="bodySm">
-                  {t('perLanguageStyleHint')}
-                </Text>
               </BlockStack>
             </Card>
           </BlockStack>
@@ -469,11 +457,7 @@ function MessageTemplateTab({ props }: { props: SettingsSkinProps }) {
               <Text as="p" tone="subdued" variant="bodySm">
                 {t('previewDescription')}
               </Text>
-              <Box
-                background="bg-surface-secondary"
-                borderRadius="300"
-                padding="500"
-              >
+              <Box padding="300">
                 <InlineStack align="center">
                   <div className="w-full max-w-[380px] rounded-2xl border border-[#d8d8d8] bg-[#efeae2] bg-[url('/images/landing/wa_chat_bg.png')] bg-cover bg-center p-3 shadow-sm">
                     <div
@@ -481,9 +465,12 @@ function MessageTemplateTab({ props }: { props: SettingsSkinProps }) {
                       style={{ fontFamily: 'Segoe UI, Tahoma, sans-serif' }}
                       className="overflow-hidden rounded-xl border border-[#e7e7e7] bg-white text-[#1e1f21]"
                     >
-                      <div className="space-y-5 px-4 pt-4 pb-3 text-[15px] leading-6 font-normal">
+                      <div className="space-y-5 px-4 pt-4 pb-3 text-[14px] leading-6 font-normal">
                         {previewParagraphs.map((line, index) => (
-                          <p key={index}>{line}</p>
+                          <>
+                            <p key={index}>{line}</p>
+                            {index < previewParagraphs.length - 1 && <br />}
+                          </>
                         ))}
                       </div>
                       <div
