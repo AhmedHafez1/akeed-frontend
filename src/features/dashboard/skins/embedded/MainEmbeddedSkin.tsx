@@ -1,7 +1,14 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { Banner, BlockStack, Layout, Page, Select, Tabs } from '@shopify/polaris'
+import {
+  Banner,
+  BlockStack,
+  Layout,
+  Page,
+  Select,
+  Tabs,
+} from '@shopify/polaris'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useMainConfirmationsTab } from '../../domain/useMainConfirmationsTab'
@@ -12,6 +19,7 @@ import type { DateRangeFilterOption } from '../../domain/dashboard.types'
 import { StatsEmbedded } from './StatsEmbedded'
 import { ConfirmationStatusFlags } from './components/ConfirmationStatusFlags'
 import { EmbeddedVerificationSection } from './components/EmbeddedVerificationSection'
+import { StatsEmbeddedSkeletonHeader } from './components/StatsEmbeddedSkeletonHeader'
 
 function MainMetricsTab({
   dateRangeFilter,
@@ -76,14 +84,17 @@ function MainConfirmationsTab({
         </Banner>
       )}
 
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <ConfirmationStatusFlags
-          autoConfirmStatus={confirmations.isAutoVerifyEnabled}
-          followUpStatus={confirmations.followUpEnabled}
-          quietHoursConfigured={confirmations.quietHoursEnabled}
-        />
-      </div>
-
+      {confirmations.isVerificationsLoading ? (
+        <StatsEmbeddedSkeletonHeader />
+      ) : (
+        <div className="flex flex-col gap-3 md:flex-row md:items-center">
+          <ConfirmationStatusFlags
+            autoConfirmStatus={confirmations.isAutoVerifyEnabled}
+            followUpStatus={confirmations.followUpEnabled}
+            quietHoursConfigured={confirmations.quietHoursEnabled}
+          />
+        </div>
+      )}
       <Layout>
         <Layout.Section>
           <EmbeddedVerificationSection
@@ -101,7 +112,9 @@ function MainConfirmationsTab({
                 step1: t('emptyState.onboarding.step1'),
                 step2: t('emptyState.onboarding.step2'),
                 step3: t('emptyState.onboarding.step3'),
-                testSectionHeading: t('emptyState.onboarding.testSectionHeading'),
+                testSectionHeading: t(
+                  'emptyState.onboarding.testSectionHeading'
+                ),
                 testPhoneLabel: t('emptyState.onboarding.testPhoneLabel'),
                 testPhonePlaceholder: t(
                   'emptyState.onboarding.testPhonePlaceholder'
