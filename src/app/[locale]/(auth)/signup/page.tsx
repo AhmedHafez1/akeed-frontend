@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { auth } from '@/shared/lib/auth'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
+import { createLogger } from '@/shared/lib/logger'
 import { SHOPIFY_APP_STORE_LISTING_URL } from '@/shared/lib/shopify-auth'
 import { useTranslations } from 'next-intl'
 
@@ -16,6 +17,7 @@ import { useTranslations } from 'next-intl'
  */
 
 export default function SignupPage() {
+  const logger = createLogger('Auth')
   const t = useTranslations()
   const router = useRouter()
   const pathname = usePathname()
@@ -76,8 +78,8 @@ export default function SignupPage() {
 
       // Redirect to standalone dashboard
       router.push(auth.getDashboardPath(locale))
-    } catch (e) {
-      console.error(e)
+    } catch (error) {
+      logger.error('Sign up failed', error)
       setError(t('auth.signUpFailed'))
     } finally {
       setIsLoading(false)

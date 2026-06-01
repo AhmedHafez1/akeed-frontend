@@ -11,6 +11,7 @@ import {
 
 interface DashboardPageSkeletonProps {
   variant: 'stats' | 'verifications'
+  showPageChrome?: boolean
 }
 
 function HeaderControlsSkeleton() {
@@ -120,25 +121,36 @@ function VerificationsSectionSkeleton() {
   )
 }
 
-export function DashboardPageSkeleton({ variant }: DashboardPageSkeletonProps) {
-  return (
-    <SkeletonPage title={variant === 'stats' ? 'Dashboard' : 'Verifications'}>
-      <BlockStack gap="500">
-        <HeaderControlsSkeleton />
+export function DashboardPageSkeleton({
+  variant,
+  showPageChrome = true,
+}: DashboardPageSkeletonProps) {
+  const title = variant === 'stats' ? 'Dashboard' : 'Verifications'
 
-        <Layout>
-          <Layout.Section>
-            {variant === 'stats' ? (
-              <BlockStack gap="400">
-                <MetricCardsSkeleton />
-                <FunnelSkeleton />
-              </BlockStack>
-            ) : (
-              <VerificationsSectionSkeleton />
-            )}
-          </Layout.Section>
-        </Layout>
-      </BlockStack>
-    </SkeletonPage>
+  const content = (
+    <BlockStack gap="500">
+      <HeaderControlsSkeleton />
+
+      <Layout>
+        <Layout.Section>
+          {variant === 'stats' ? (
+            <BlockStack gap="400">
+              <MetricCardsSkeleton />
+              <FunnelSkeleton />
+            </BlockStack>
+          ) : (
+            <VerificationsSectionSkeleton />
+          )}
+        </Layout.Section>
+      </Layout>
+    </BlockStack>
+  )
+
+  if (!showPageChrome) {
+    return content
+  }
+
+  return (
+    <SkeletonPage title={title}>{content}</SkeletonPage>
   )
 }

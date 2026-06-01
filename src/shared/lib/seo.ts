@@ -13,7 +13,7 @@ export const facebookProfileUrl =
 export const youtubeProfileUrl = 'https://www.youtube.com/@akeed-digital'
 export const instagramProfileUrl = 'https://www.instagram.com/akeed_app'
 
-export const publicSeoRoutes = ['/', '/support', '/privacy', '/terms'] as const
+export const publicSeoRoutes = ['/', '/support', '/privacy', '/terms', '/docs'] as const
 
 export const privateSeoRoutes = [
   '/login',

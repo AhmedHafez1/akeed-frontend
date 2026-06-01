@@ -36,7 +36,9 @@ export type { EmbeddedOnboardingGate } from './lib/embeddedAuth'
 export { ONBOARDING_BILLING_PLAN_IDS } from './domain/onboarding.types'
 
 export type {
+  ArabicCodTemplateVariantId,
   AutomationTimezone,
+  EnglishCodTemplateVariantId,
   IntegrationOnboardingLanguage,
   IntegrationOnboardingState,
   OnboardingBillingPlan,

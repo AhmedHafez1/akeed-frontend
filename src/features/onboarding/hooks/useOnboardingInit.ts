@@ -6,6 +6,7 @@ import {
   fetchOnboardingBillingPlans,
   fetchOnboardingState,
 } from '@/features/onboarding/api/onboardingApi'
+import { createLogger } from '@/shared/lib/logger'
 import type {
   IntegrationOnboardingLanguage,
   IntegrationOnboardingState,
@@ -13,6 +14,8 @@ import type {
   OnboardingBillingPlanId,
 } from '@/features/onboarding/domain/onboarding.types'
 import type { EmbeddedStep } from '../model/onboarding.config'
+
+const logger = createLogger('Onboarding')
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -132,7 +135,7 @@ export function useOnboardingInit({
         const [stateResponse, billingPlansResponse] = await Promise.all([
           fetchOnboardingState(),
           fetchOnboardingBillingPlans().catch((error) => {
-            console.error('[Onboarding] Failed to load billing plans:', error)
+            logger.error('Failed to load billing plans', error)
             return null
           }),
         ])
@@ -185,7 +188,7 @@ export function useOnboardingInit({
           setBillingPlanConfigsById({})
         }
       } catch (error) {
-        console.error('[Onboarding] Failed to load state:', error)
+        logger.error('Failed to load state', error)
 
         if (active) {
           setPrefillWarning(prefillWarningMessage)

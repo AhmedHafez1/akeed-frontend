@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { useAppBridgeLoading } from '@/shared/hooks/useAppBridgeLoading'
+import { useDelayedBoolean } from '@/shared/hooks/useDelayedBoolean'
 import {
   checkEmbeddedInstall,
   clearEmbeddedAuthCaches,
@@ -16,7 +17,10 @@ import {
   setCachedOnboardingStatus,
   type EmbeddedOnboardingGate,
 } from '@/features/onboarding'
+import { createLogger } from '@/shared/lib/logger'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
+
+const logger = createLogger('EmbeddedAuthGate')
 
 interface EmbeddedAuthGateProps {
   children: React.ReactNode
@@ -84,6 +88,8 @@ export function EmbeddedAuthGate({
 
   // Show native Shopify top-bar progress while auth gate is checking
   useAppBridgeLoading(isEmbedded && !isEmbeddedReady)
+  const shouldShowGateFallback = isLoading || (isEmbedded && !isEmbeddedReady)
+  const showGateFallback = useDelayedBoolean(shouldShowGateFallback)
 
   useEffect(() => {
     if (isLoading) return
@@ -135,10 +141,12 @@ export function EmbeddedAuthGate({
                 isInstalled = await performTokenExchange(sessionToken)
               }
             } catch (exchangeError) {
-              console.warn(
-                '[EmbeddedAuthGate] Token exchange failed, falling back to legacy flow:',
-                exchangeError
-              )
+              logger.warn('Token exchange failed, falling back to legacy flow', {
+                error:
+                  exchangeError instanceof Error
+                    ? exchangeError.message
+                    : exchangeError,
+              })
             }
           }
 
@@ -191,7 +199,7 @@ export function EmbeddedAuthGate({
           setIsEmbeddedReady(true)
         }
       } catch (error) {
-        console.error('[EmbeddedAuthGate] Failed embedded auth checks:', error)
+        logger.error('Failed embedded auth checks', error)
         if (active) {
           clearEmbeddedAuthCaches()
           setIsEmbeddedReady(false)
@@ -217,9 +225,9 @@ export function EmbeddedAuthGate({
     shopDomain,
   ])
 
-  if (isLoading) return fallback
+  if (isLoading) return showGateFallback ? fallback : null
   if (!isEmbedded) return children
-  if (!isEmbeddedReady) return fallback
+  if (!isEmbeddedReady) return showGateFallback ? fallback : null
 
   return children
 }

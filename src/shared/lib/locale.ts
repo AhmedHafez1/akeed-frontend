@@ -144,7 +144,7 @@ export function isAuthRoute(pathname: string | null | undefined): boolean {
  * Public route paths (without locale prefix) — accessible without auth,
  * rendered with the marketing Header instead of AppHeader.
  */
-export const PUBLIC_ROUTES = ['/', '/terms', '/privacy', '/support'] as const
+export const PUBLIC_ROUTES = ['/', '/terms', '/privacy', '/support', '/docs'] as const
 
 /**
  * Check if a pathname (with locale) matches a public marketing route
@@ -152,5 +152,11 @@ export const PUBLIC_ROUTES = ['/', '/terms', '/privacy', '/support'] as const
 export function isPublicRoute(pathname: string | null | undefined): boolean {
   if (!pathname) return false
   const withoutLocale = '/' + pathname.split('/').slice(2).join('/')
-  return PUBLIC_ROUTES.some((route) => withoutLocale === route)
+  return PUBLIC_ROUTES.some((route) => {
+    if (route === '/') {
+      return withoutLocale === '/'
+    }
+
+    return withoutLocale === route || withoutLocale.startsWith(`${route}/`)
+  })
 }

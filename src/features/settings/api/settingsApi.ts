@@ -3,6 +3,8 @@
 import { fetchWithAuth } from '@/shared/lib/auth'
 import { getErrorMessage, parseJsonResponse } from '@/shared/lib/http'
 import type {
+  ArabicCodTemplateVariantId,
+  EnglishCodTemplateVariantId,
   IntegrationOnboardingState,
   OnboardingBillingPlanConfig,
   OnboardingSettingsPayload,
@@ -15,6 +17,17 @@ export interface MessageTemplatePreview {
   ending: string
   confirmButton: string
   cancelButton: string
+}
+
+export interface CodTemplateDefinition {
+  language: 'ar' | 'en'
+  variant:
+    | ArabicCodTemplateVariantId
+    | EnglishCodTemplateVariantId
+  metaTemplateName: string
+  metaLanguageCode: string
+  bodyParameterOrder: Array<'customer' | 'store' | 'order' | 'total'>
+  preview: MessageTemplatePreview
 }
 
 export interface SettingsResponse {
@@ -32,6 +45,18 @@ export interface SettingsResponse {
   template: {
     languages: Array<'ar' | 'en'>
     defaultPreviewLanguage: 'ar' | 'en'
+    defaults: {
+      ar: ArabicCodTemplateVariantId
+      en: EnglishCodTemplateVariantId
+    }
+    selected: {
+      ar: ArabicCodTemplateVariantId
+      en: EnglishCodTemplateVariantId
+    }
+    variants: {
+      ar: CodTemplateDefinition[]
+      en: CodTemplateDefinition[]
+    }
     previews: {
       ar: MessageTemplatePreview
       en: MessageTemplatePreview

@@ -1,5 +1,6 @@
 import {
   BlockStack,
+  Box,
   Card,
   InlineGrid,
   InlineStack,
@@ -9,6 +10,11 @@ import {
   SkeletonPage,
 } from '@shopify/polaris'
 
+interface SettingsPageSkeletonProps {
+  variant?: 'store' | 'confirmation' | 'message-preview' | 'billing'
+  showPageChrome?: boolean
+}
+
 function FieldSkeleton() {
   return (
     <BlockStack gap="100">
@@ -17,6 +23,23 @@ function FieldSkeleton() {
       </div>
       <SkeletonBodyText lines={1} />
     </BlockStack>
+  )
+}
+
+function HeaderSkeleton() {
+  return (
+    <InlineStack align="space-between" blockAlign="center" gap="400" wrap>
+      <InlineStack gap="200" wrap>
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div key={index} className="w-20">
+            <SkeletonBodyText lines={1} />
+          </div>
+        ))}
+      </InlineStack>
+      <div className="w-24">
+        <SkeletonBodyText lines={1} />
+      </div>
+    </InlineStack>
   )
 }
 
@@ -124,19 +147,28 @@ function SubscriptionSkeleton() {
   )
 }
 
-export function SettingsPageSkeleton() {
-  return (
-    <SkeletonPage title="Settings">
+export function SettingsPageSkeleton({
+  variant = 'store',
+  showPageChrome = true,
+}: SettingsPageSkeletonProps) {
+  const content = (
+    <BlockStack gap="500">
+      <HeaderSkeleton />
       <Layout>
         <Layout.Section>
-          <BlockStack gap="400">
-            <StoreConfigurationSkeleton />
-            <AutomationSkeleton />
-            <MessagePreviewSkeleton />
-            <SubscriptionSkeleton />
-          </BlockStack>
+          {variant === 'store' && <StoreConfigurationSkeleton />}
+          {variant === 'confirmation' && <AutomationSkeleton />}
+          {variant === 'message-preview' && <MessagePreviewSkeleton />}
+          {variant === 'billing' && <SubscriptionSkeleton />}
         </Layout.Section>
       </Layout>
-    </SkeletonPage>
+      <Box padding="200" />
+    </BlockStack>
   )
+
+  if (!showPageChrome) {
+    return content
+  }
+
+  return <SkeletonPage title="Settings">{content}</SkeletonPage>
 }

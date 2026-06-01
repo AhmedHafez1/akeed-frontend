@@ -10,6 +10,8 @@ import {
   persistLocalePreference,
   type SupportedLocale,
 } from '@/shared/lib/locale'
+import { resolveEmbeddedContextFromSearch } from '@/shared/lib/embedded-context'
+import { createAkeedEmbeddedSupportWhatsAppUrl } from '@/shared/lib/whatsapp'
 
 function buildLocalizedPathname(
   pathname: string,
@@ -38,6 +40,7 @@ function buildLocalizedPathname(
 
 export function EmbeddedLanguageSelector() {
   const t = useTranslations('settings')
+  const support = useTranslations('embeddedSupport')
   const pathname = usePathname() ?? '/'
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -49,6 +52,11 @@ export function EmbeddedLanguageSelector() {
     const serialized = searchParams.toString()
     return serialized ? `?${serialized}` : ''
   }, [searchParams])
+
+  const embeddedContext = useMemo(
+    () => resolveEmbeddedContextFromSearch(searchParams),
+    [searchParams]
+  )
 
   const handleLocaleChange = useCallback(
     (nextLocale: string) => {
@@ -102,6 +110,27 @@ export function EmbeddedLanguageSelector() {
         disabled={isPending}
       >
         {switchActionLabel}
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          window.open(
+            createAkeedEmbeddedSupportWhatsAppUrl({
+              defaultMessage: support('defaultMessage'),
+              shopLabel: support('shopLabel'),
+              pageLabel: support('pageLabel'),
+              localeLabel: support('localeLabel'),
+              issuePrompt: support('issuePrompt'),
+              shopDomain: embeddedContext.shopDomain,
+              pathname,
+              locale,
+            }),
+            '_blank',
+            'noopener,noreferrer'
+          )
+        }}
+      >
+        {support('titleBarAction')}
       </button>
     </ui-title-bar>
   )

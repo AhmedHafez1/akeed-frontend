@@ -58,10 +58,11 @@ export const features = {
 }
 
 export const faqs = [
-  { key: 'easy_integration' },
-  { key: 'whatsapp' },
-  { key: 'arabic' },
-  { key: 'whatsapp_api' },
-  { key: 'unconfirmed_order' },
+  { key: 'supported_platforms' },
+  { key: 'setup_time' },
+  { key: 'own_whatsapp_number' },
+  { key: 'official_apis' },
   { key: 'customize_messages' },
+  { key: 'customer_no_reply' },
+  { key: 'plan_limit' },
 ]

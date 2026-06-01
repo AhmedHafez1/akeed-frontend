@@ -21,28 +21,24 @@ import {
   Text,
   TextField,
 } from '@shopify/polaris'
-import { InfoIcon, ShieldCheckMarkIcon } from '@shopify/polaris-icons'
+import { InfoIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import type {
+  ArabicCodTemplateVariantId,
   AutomationTimezone,
+  EnglishCodTemplateVariantId,
   IntegrationOnboardingLanguage,
 } from '@/features/onboarding'
 import type { SettingsSkinProps } from '@/features/settings/domain/settings.types'
-
-type SettingsTabId = 'store' | 'confirmation' | 'message-preview' | 'billing'
-
-const SETTINGS_TABS: SettingsTabId[] = [
-  'store',
-  'confirmation',
-  'message-preview',
-  'billing',
-]
-
-const SETTINGS_TAB_ALIASES: Partial<Record<string, SettingsTabId>> = {
-  settings: 'store',
-  'confirmation-config': 'confirmation',
-  'message-template': 'message-preview',
-}
+import {
+  SETTINGS_TABS,
+  resolveSettingsTab,
+} from '@/features/settings/domain/settingsTabs'
+import {
+  formatTemplatePreviewTimestamp,
+  getTemplatePreviewParagraphs,
+} from '@/features/settings/skins/shared/templatePreview'
+import { ContextualDocsLink } from '@/shared/ui'
 
 const SUBSCRIPTION_SECTION_ID = 'subscription-usage'
 
@@ -55,17 +51,6 @@ function HelpIcon({ content }: { content: string }) {
     >
       <Icon source={InfoIcon} tone="subdued" />
     </span>
-  )
-}
-
-function FieldLabel({ label, help }: { label: string; help?: string }) {
-  return (
-    <InlineStack gap="100" blockAlign="center">
-      <Text as="span" variant="bodyMd">
-        {label}
-      </Text>
-      {help ? <HelpIcon content={help} /> : null}
-    </InlineStack>
   )
 }
 
@@ -142,41 +127,16 @@ function StoreTab({ props }: { props: SettingsSkinProps }) {
           autoComplete="organization"
           error={props.storeNameError}
         />
-        <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
-          <Select
-            label={t('defaultLanguageLabel')}
-            options={[...props.languageOptions]}
-            value={props.defaultLanguage}
-            onChange={(value) =>
-              props.onDefaultLanguageChange(
-                value as IntegrationOnboardingLanguage
-              )
-            }
-          />
-          <Select
-            label={t('shippingCurrencyLabel')}
-            options={[...props.shippingCurrencyOptions]}
-            value={props.shippingCurrency}
-            onChange={props.onShippingCurrencyChange}
-          />
-        </InlineGrid>
-        <BlockStack gap="100">
-          <FieldLabel
-            label={t('avgShippingCostLabel')}
-            help={t('avgShippingCostHelp')}
-          />
-          <TextField
-            label={t('avgShippingCostLabel')}
-            labelHidden
-            type="number"
-            autoComplete="off"
-            min={0}
-            step={0.01}
-            value={props.avgShippingCost}
-            onChange={props.onAvgShippingCostChange}
-            error={props.avgShippingCostError}
-          />
-        </BlockStack>
+        <Select
+          label={t('defaultLanguageLabel')}
+          options={[...props.languageOptions]}
+          value={props.defaultLanguage}
+          onChange={(value) =>
+            props.onDefaultLanguageChange(
+              value as IntegrationOnboardingLanguage
+            )
+          }
+        />
       </BlockStack>
     </Card>
   )
@@ -293,6 +253,7 @@ function ConfirmationConfigTab({ props }: { props: SettingsSkinProps }) {
             {t('automation.heading')}
           </Text>
           <HelpIcon content={t('automation.description')} />
+          <ContextualDocsLink article="automationRules" />
         </InlineStack>
         <Divider />
         <Checkbox
@@ -390,119 +351,181 @@ function ConfirmationConfigTab({ props }: { props: SettingsSkinProps }) {
   )
 }
 
-function renderTemplateBody(
-  template: SettingsSkinProps['templatePreviews']['en']
-): string[] {
-  return [
-    template.greeting,
-    template.body.replace('{order_number}', '11996743237999'),
-    template.totalLabel.replace('{total}', '$600.00'),
-    template.ending,
-  ]
-}
-
 function MessageTemplateTab({ props }: { props: SettingsSkinProps }) {
-  const t = useTranslations('messagePreview')
-  const [language, setLanguage] = useState<'ar' | 'en'>(
-    props.defaultTemplateLanguage
+  const t = useTranslations('messageTemplate')
+  const initialLanguage =
+    props.defaultLanguage === 'ar' || props.defaultLanguage === 'en'
+      ? props.defaultLanguage
+      : props.defaultTemplateLanguage
+  const [language, setLanguage] = useState<'ar' | 'en'>(initialLanguage)
+  const selectedVariant =
+    language === 'ar'
+      ? props.selectedCodTemplateVariants.ar
+      : props.selectedCodTemplateVariants.en
+  const availableVariants = props.codTemplateVariants[language]
+  const selectedDefinition = availableVariants.find(
+    (variant) => variant.variant === selectedVariant
   )
-  const template = props.templatePreviews[language]
+  const template =
+    selectedDefinition?.preview ?? props.templatePreviews[language]
   const isRtl = language === 'ar'
+
+  const variantOptions = availableVariants.map((variant) => ({
+    label: t(`variantLabels.${variant.variant}`),
+    value: variant.variant,
+  }))
+
+  const handleVariantChange = (value: string) => {
+    if (language === 'ar') {
+      props.onCodTemplateArVariantChange(value as ArabicCodTemplateVariantId)
+      return
+    }
+
+    props.onCodTemplateEnVariantChange(value as EnglishCodTemplateVariantId)
+  }
+
+  const defaultVariant = props.codTemplateDefaults[language]
+  const isDefaultVariant = selectedVariant === defaultVariant
+  const previewParagraphs = getTemplatePreviewParagraphs(template, props.storeName)
+  const isStoreLanguageAuto = props.defaultLanguage === 'auto'
+  const storeLanguageLabel =
+    props.defaultLanguage === 'ar'
+      ? t('languageArabic')
+      : props.defaultLanguage === 'en'
+        ? t('languageEnglish')
+        : t('languageAuto')
+  const languageContext = isStoreLanguageAuto
+    ? t('storeLanguageAutoHint')
+    : t('storeLanguageFixedHint', { language: storeLanguageLabel })
 
   return (
     <BlockStack gap="400">
-      <InlineStack align="end" gap="200">
-        {props.templateLanguages.includes('ar') && (
-          <Button pressed={language === 'ar'} onClick={() => setLanguage('ar')}>
-            {t('languageArabic')}
-          </Button>
-        )}
-        {props.templateLanguages.includes('en') && (
-          <Button pressed={language === 'en'} onClick={() => setLanguage('en')}>
-            {t('languageEnglish')}
-          </Button>
-        )}
-      </InlineStack>
-
       <Layout>
         <Layout.Section variant="oneThird">
           <BlockStack gap="400">
             <Card>
-              <BlockStack gap="400">
+              <BlockStack gap="300">
                 <Text as="h2" variant="headingMd">
-                  {t('aboutTitle')}
+                  {t('setupTitle')}
                 </Text>
-                <Text as="p" variant="bodyMd">
-                  {t('aboutDescription')}
+                <Text as="p" tone="subdued" variant="bodySm">
+                  {t('setupDescription')}
                 </Text>
-                <InlineStack align="space-between" gap="400">
-                  <Text as="span" tone="subdued">
-                    {t('purposeLabel')}
+                <Text as="p" tone="subdued" variant="bodySm">
+                  {languageContext}
+                </Text>
+                <BlockStack gap="200">
+                  <Text as="p" variant="bodySm" fontWeight="medium">
+                    {t('languageLabel')}
                   </Text>
-                  <Text as="span" fontWeight="medium">
-                    {t('purposeValue')}
-                  </Text>
-                </InlineStack>
-                <InlineStack align="space-between" gap="400">
-                  <Text as="span" tone="subdued">
-                    {t('channelLabel')}
-                  </Text>
-                  <Badge tone="success">{t('whatsappLabel')}</Badge>
-                </InlineStack>
-              </BlockStack>
-            </Card>
-            <Card>
-              <InlineStack gap="400" blockAlign="center" wrap={false}>
-                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-emerald-50">
-                  <Icon source={ShieldCheckMarkIcon} tone="success" />
-                </span>
-                <BlockStack gap="100">
-                  <Text as="h2" variant="headingMd">
-                    {t('trustTitle')}
-                  </Text>
-                  <Text as="p" tone="subdued" variant="bodySm">
-                    {t('trustNote')}
-                  </Text>
+                  <InlineStack gap="200">
+                    {props.templateLanguages.includes('ar') && (
+                      <Button
+                        pressed={language === 'ar'}
+                        onClick={() => setLanguage('ar')}
+                      >
+                        {t('languageArabic')}
+                      </Button>
+                    )}
+                    {props.templateLanguages.includes('en') && (
+                      <Button
+                        pressed={language === 'en'}
+                        onClick={() => setLanguage('en')}
+                      >
+                        {t('languageEnglish')}
+                      </Button>
+                    )}
+                  </InlineStack>
                 </BlockStack>
-              </InlineStack>
+                <Select
+                  label={t('styleLabel')}
+                  options={variantOptions}
+                  value={selectedVariant}
+                  onChange={handleVariantChange}
+                />
+                <InlineStack align="space-between" gap="200">
+                  <Text as="span" tone="subdued" variant="bodySm">
+                    {t('defaultVariantLabel', {
+                      variant: t(`variantLabels.${defaultVariant}`),
+                    })}
+                  </Text>
+                  <Badge tone={isDefaultVariant ? 'success' : 'info'}>
+                    {isDefaultVariant ? t('badgeDefault') : t('badgeCustom')}
+                  </Badge>
+                </InlineStack>
+                <Text as="p" tone="subdued" variant="bodySm">
+                  {t('perLanguageStyleHint')}
+                </Text>
+              </BlockStack>
             </Card>
           </BlockStack>
         </Layout.Section>
         <Layout.Section>
           <Card>
-            <Box
-              background="bg-surface-secondary"
-              borderRadius="300"
-              padding="600"
-            >
-              <InlineStack align="center">
-                <div className="relative w-full max-w-66.25 rounded-[2.75rem] border-10 border-[#111213] bg-[#111213] shadow-xl">
-                  <div className="absolute top-4 left-1/2 z-10 h-6 w-24 -translate-x-1/2 rounded-full bg-black" />
-                  <div className="overflow-hidden rounded-[2.05rem] bg-[#fbf7ef]">
-                    <div className="flex h-12 items-center justify-between px-6 text-xs font-semibold text-[#111213]">
-                      <span>9:41</span>
-                      <span className="h-2 w-6 rounded-sm border border-[#111213]" />
-                    </div>
-                    <div className="px-5 pb-8">
-                      <div
-                        dir={isRtl ? 'rtl' : 'ltr'}
-                        className="rounded-lg bg-white p-4 text-sm leading-7 text-[#202223] shadow-sm"
-                      >
-                        {renderTemplateBody(template).map((line) => (
-                          <p key={line}>{line}</p>
+            <BlockStack gap="300">
+              <Text as="h2" variant="headingMd">
+                {t('previewHeading')}
+              </Text>
+              <Text as="p" tone="subdued" variant="bodySm">
+                {t('previewDescription')}
+              </Text>
+              <Box
+                background="bg-surface-secondary"
+                borderRadius="300"
+                padding="500"
+              >
+                <InlineStack align="center">
+                  <div className="w-full max-w-[380px] rounded-2xl border border-[#d8d8d8] bg-[#efeae2] bg-[url('/images/landing/wa_chat_bg.png')] bg-cover bg-center p-3 shadow-sm">
+                    <div
+                      dir={isRtl ? 'rtl' : 'ltr'}
+                      style={{ fontFamily: 'Segoe UI, Tahoma, sans-serif' }}
+                      className="overflow-hidden rounded-xl border border-[#e7e7e7] bg-white text-[#1e1f21]"
+                    >
+                      <div className="space-y-5 px-4 pt-4 pb-3 text-[15px] leading-6 font-normal">
+                        {previewParagraphs.map((line, index) => (
+                          <p key={index}>{line}</p>
                         ))}
-                        <div className="mt-4 border-t border-slate-100 pt-3 text-center font-medium text-emerald-700">
+                      </div>
+                      <div
+                        className={`px-4 pb-2 text-[14px] text-[#8e8e93] ${
+                          isRtl ? 'text-left' : 'text-right'
+                        }`}
+                      >
+                        {formatTemplatePreviewTimestamp(language)}
+                      </div>
+                      <div
+                        className={`border-t border-[#ececec] px-4 py-3 text-[#178959] ${
+                          isRtl ? 'text-right' : 'text-left'
+                        }`}
+                      >
+                        <span
+                          className={`flex items-center justify-center gap-2 text-[15px] leading-6 font-normal ${
+                            isRtl ? 'flex-row-reverse' : 'flex-row'
+                          }`}
+                        >
+                          <span className="text-[13px]">↩</span>
                           {template.confirmButton}
-                        </div>
-                        <div className="mt-3 border-t border-slate-100 pt-3 text-center font-medium text-emerald-700">
+                        </span>
+                      </div>
+                      <div
+                        className={`border-t border-[#ececec] px-4 py-3 text-[#178959] ${
+                          isRtl ? 'text-right' : 'text-left'
+                        }`}
+                      >
+                        <span
+                          className={`flex items-center justify-center gap-2 text-[15px] leading-6 font-normal ${
+                            isRtl ? 'flex-row-reverse' : 'flex-row'
+                          }`}
+                        >
+                          <span className="text-[13px]">↩</span>
                           {template.cancelButton}
-                        </div>
+                        </span>
                       </div>
                     </div>
                   </div>
-                </div>
-              </InlineStack>
-            </Box>
+                </InlineStack>
+              </Box>
+            </BlockStack>
           </Card>
         </Layout.Section>
       </Layout>
@@ -518,18 +541,17 @@ export function SettingsEmbeddedTabbedSkin(props: SettingsSkinProps) {
   const [isErrorDismissed, setIsErrorDismissed] = useState(false)
   const [isSuccessDismissed, setIsSuccessDismissed] = useState(false)
   const tabParam = searchParams.get('tab')
-  const activeTab: SettingsTabId = SETTINGS_TABS.includes(
-    tabParam as SettingsTabId
-  )
-    ? (tabParam as SettingsTabId)
-    : (SETTINGS_TAB_ALIASES[tabParam ?? ''] ?? 'store')
+  const activeTab = resolveSettingsTab(tabParam)
   const selected = SETTINGS_TABS.indexOf(activeTab)
-  const canSaveActiveTab = activeTab === 'store' || activeTab === 'confirmation'
+  const canSaveActiveTab =
+    activeTab === 'store' ||
+    activeTab === 'confirmation' ||
+    activeTab === 'message-preview'
 
   const tabs = [
     { id: 'store', content: t('tabs.store') },
     { id: 'confirmation', content: t('tabs.confirmation') },
-    { id: 'message-preview', content: t('tabs.messagePreview') },
+    { id: 'message-preview', content: t('tabs.messageTemplate') },
     { id: 'billing', content: t('tabs.billing') },
   ]
 

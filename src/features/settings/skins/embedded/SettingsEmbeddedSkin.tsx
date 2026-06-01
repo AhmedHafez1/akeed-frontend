@@ -3,15 +3,12 @@ import {
   BlockStack,
   Button,
   Card,
-  Icon,
-  InlineStack,
   Layout,
   Page,
   Select,
   Text,
   TextField,
 } from '@shopify/polaris'
-import { InfoIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import type {
   IntegrationOnboardingLanguage,
@@ -180,29 +177,6 @@ function EmbeddedUsageOverview({
   )
 }
 
-function HelpIcon({ content }: { content: string }) {
-  return (
-    <span
-      title={content}
-      aria-label={content}
-      className="inline-flex h-5 w-5 items-center justify-center text-[#8a8a8a]"
-    >
-      <Icon source={InfoIcon} tone="subdued" />
-    </span>
-  )
-}
-
-function FieldLabel({ label, help }: { label: string; help?: string }) {
-  return (
-    <InlineStack gap="100" blockAlign="center">
-      <Text as="span" variant="bodyMd">
-        {label}
-      </Text>
-      {help ? <HelpIcon content={help} /> : null}
-    </InlineStack>
-  )
-}
-
 export function SettingsEmbeddedSkin(props: SettingsSkinProps) {
   const t = useTranslations('settings')
 
@@ -247,31 +221,6 @@ export function SettingsEmbeddedSkin(props: SettingsSkinProps) {
                     )
                   }
                 />
-
-                <Select
-                  label={t('shippingCurrencyLabel')}
-                  options={[...props.shippingCurrencyOptions]}
-                  value={props.shippingCurrency}
-                  onChange={props.onShippingCurrencyChange}
-                />
-
-                <BlockStack gap="100">
-                  <FieldLabel
-                    label={t('avgShippingCostLabel')}
-                    help={t('avgShippingCostHelp')}
-                  />
-                  <TextField
-                    label={t('avgShippingCostLabel')}
-                    labelHidden
-                    type="number"
-                    autoComplete="off"
-                    min={0}
-                    step={0.01}
-                    value={props.avgShippingCost}
-                    onChange={props.onAvgShippingCostChange}
-                    error={props.avgShippingCostError}
-                  />
-                </BlockStack>
               </BlockStack>
             </Card>
 

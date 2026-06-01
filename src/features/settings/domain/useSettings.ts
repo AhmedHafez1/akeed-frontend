@@ -13,10 +13,13 @@ import {
 } from '@/features/onboarding'
 import { useAppBridgeLoading } from '@/shared/hooks/useAppBridgeLoading'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
+import { createLogger } from '@/shared/lib/logger'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
 import { fetchSettings, updateSettings } from '../api/settingsApi'
 import type { SettingsResponse } from '../api/settingsApi'
 import type { SettingsSelectOption, SettingsSkinProps } from './settings.types'
+
+const logger = createLogger('Settings')
 
 type BillingStatusKey =
   | 'billingStatusActive'
@@ -27,20 +30,6 @@ type BillingStatusKey =
   | 'billingStatusCanceled'
   | 'billingStatusError'
   | 'billingStatusUnknown'
-
-const SHIPPING_CURRENCY_OPTIONS = [
-  'USD',
-  'EUR',
-  'EGP',
-  'SAR',
-  'AED',
-  'QAR',
-  'KWD',
-  'BHD',
-  'OMR',
-  'JOD',
-  'MAD',
-] as const
 
 const AUTOMATION_TIMEZONE_OPTIONS: readonly AutomationTimezone[] = [
   'Asia/Riyadh',
@@ -74,6 +63,17 @@ const DEFAULT_TEMPLATE_PREVIEWS: SettingsSkinProps['templatePreviews'] = {
     confirmButton: 'Confirm',
     cancelButton: 'Cancel',
   },
+}
+
+const DEFAULT_COD_TEMPLATE_VARIANTS: SettingsSkinProps['selectedCodTemplateVariants']
+  = {
+    ar: 'standard',
+    en: 'friendly',
+  }
+
+const DEFAULT_COD_TEMPLATE_DEFINITIONS: SettingsSkinProps['codTemplateVariants'] = {
+  ar: [],
+  en: [],
 }
 
 function normalizeBillingStatus(status: string | null): string | null {
@@ -155,11 +155,6 @@ export function useSettings(): {
   const [isSaving, setIsSaving] = useState(false)
   const [storeName, setStoreName] = useState('')
   const [storeNameError, setStoreNameError] = useState<string | undefined>()
-  const [shippingCurrency, setShippingCurrency] = useState('USD')
-  const [avgShippingCost, setAvgShippingCost] = useState('3')
-  const [avgShippingCostError, setAvgShippingCostError] = useState<
-    string | undefined
-  >()
   const [defaultLanguage, setDefaultLanguage] =
     useState<IntegrationOnboardingLanguage>('auto')
   const [isAutoVerifyEnabled, setIsAutoVerifyEnabled] = useState(true)
@@ -202,6 +197,18 @@ export function useSettings(): {
     useState<ReadonlyArray<'ar' | 'en'>>(['ar', 'en'])
   const [defaultTemplateLanguage, setDefaultTemplateLanguage] =
     useState<'ar' | 'en'>('en')
+  const [codTemplateDefaults, setCodTemplateDefaults] =
+    useState<SettingsSkinProps['codTemplateDefaults']>(
+      DEFAULT_COD_TEMPLATE_VARIANTS
+    )
+  const [selectedCodTemplateVariants, setSelectedCodTemplateVariants] =
+    useState<SettingsSkinProps['selectedCodTemplateVariants']>(
+      DEFAULT_COD_TEMPLATE_VARIANTS
+    )
+  const [codTemplateVariants, setCodTemplateVariants] =
+    useState<SettingsSkinProps['codTemplateVariants']>(
+      DEFAULT_COD_TEMPLATE_DEFINITIONS
+    )
   const [templatePreviews, setTemplatePreviews] =
     useState<SettingsSkinProps['templatePreviews']>(DEFAULT_TEMPLATE_PREVIEWS)
 
@@ -213,15 +220,6 @@ export function useSettings(): {
       { label: t('languageEnglish'), value: 'en' },
       { label: t('languageArabic'), value: 'ar' },
     ],
-    [t]
-  )
-
-  const shippingCurrencyOptions = useMemo(
-    () =>
-      SHIPPING_CURRENCY_OPTIONS.map((currency) => ({
-        label: t(`shippingCurrencyOption${currency}`),
-        value: currency,
-      })),
     [t]
   )
 
@@ -256,8 +254,6 @@ export function useSettings(): {
         }
 
         setStoreName(state.storeName ?? '')
-        setShippingCurrency(state.shippingCurrency ?? 'USD')
-        setAvgShippingCost(String(state.avgShippingCost ?? 3))
         setDefaultLanguage(state.defaultLanguage)
         setIsAutoVerifyEnabled(state.isAutoVerifyEnabled)
         setFollowUpEnabled(state.followUpEnabled)
@@ -285,9 +281,12 @@ export function useSettings(): {
         setBillingUsage(settingsResponse.billing.usage)
         setTemplateLanguages(settingsResponse.template.languages)
         setDefaultTemplateLanguage(settingsResponse.template.defaultPreviewLanguage)
+        setCodTemplateDefaults(settingsResponse.template.defaults)
+        setSelectedCodTemplateVariants(settingsResponse.template.selected)
+        setCodTemplateVariants(settingsResponse.template.variants)
         setTemplatePreviews(settingsResponse.template.previews)
       } catch (error) {
-        console.error('[Settings] Failed to load onboarding settings:', error)
+        logger.error('Failed to load onboarding settings', error)
         if (active) setErrorBanner(t('loadError'))
       } finally {
         if (active) setIsInitialLoading(false)
@@ -392,7 +391,7 @@ export function useSettings(): {
         window.location.href = confirmationUrl
       }
     } catch (error) {
-      console.error('[Settings] Failed to change plan:', error)
+      logger.error('Failed to change plan', error)
       setErrorBanner(t('changePlanError'))
     } finally {
       setIsChangingPlan(false)
@@ -401,7 +400,6 @@ export function useSettings(): {
 
   const validateSettings = useCallback(() => {
     const trimmedStoreName = storeName.trim()
-    const parsedAvgShippingCost = Number.parseFloat(avgShippingCost)
     const parsedSendDelayHours = parseHourField(sendDelayMinutes)
     const parsedFollowUpDelayHours = parseHourField(followUpDelayMinutes)
     const parsedEscalationDelayHours = parseHourField(escalationDelayMinutes)
@@ -409,10 +407,6 @@ export function useSettings(): {
     const nextStoreNameError = trimmedStoreName
       ? undefined
       : t('storeNameRequired')
-    const nextAvgShippingCostError =
-      Number.isFinite(parsedAvgShippingCost) && parsedAvgShippingCost >= 0
-        ? undefined
-        : t('avgShippingCostInvalid')
     const nextSendDelayMinutesError =
       parsedSendDelayHours !== null &&
       parsedSendDelayHours >= 0 &&
@@ -464,7 +458,6 @@ export function useSettings(): {
     }
 
     setStoreNameError(nextStoreNameError)
-    setAvgShippingCostError(nextAvgShippingCostError)
     setSendDelayMinutesError(nextSendDelayMinutesError)
     setFollowUpDelayMinutesError(resolvedFollowUpDelayError)
     setEscalationDelayMinutesError(resolvedEscalationDelayError)
@@ -472,7 +465,6 @@ export function useSettings(): {
 
     if (
       nextStoreNameError ||
-      nextAvgShippingCostError ||
       nextSendDelayMinutesError ||
       resolvedFollowUpDelayError ||
       resolvedEscalationDelayError ||
@@ -485,7 +477,6 @@ export function useSettings(): {
 
     return {
       trimmedStoreName,
-      avgShippingCost: Number(parsedAvgShippingCost.toFixed(2)),
       sendDelayMinutes: hoursToMinutes(parsedSendDelayHours),
       followUpDelayMinutes: parsedFollowUpDelayHours
         ? hoursToMinutes(parsedFollowUpDelayHours)
@@ -495,7 +486,6 @@ export function useSettings(): {
         : 0,
     }
   }, [
-    avgShippingCost,
     escalationDelayMinutes,
     escalationEnabled,
     followUpDelayMinutes,
@@ -519,8 +509,6 @@ export function useSettings(): {
 
     const previous = {
       storeName,
-      shippingCurrency,
-      avgShippingCost,
       defaultLanguage,
       isAutoVerifyEnabled,
       followUpEnabled,
@@ -532,6 +520,7 @@ export function useSettings(): {
       quietHoursStart,
       quietHoursEnd,
       timezone,
+      selectedCodTemplateVariants,
     }
 
     try {
@@ -539,8 +528,6 @@ export function useSettings(): {
         storeName: validated.trimmedStoreName,
         defaultLanguage,
         isAutoVerifyEnabled,
-        shippingCurrency,
-        avgShippingCost: validated.avgShippingCost,
         followUpEnabled,
         sendDelayMinutes: validated.sendDelayMinutes,
         followUpDelayMinutes: followUpEnabled
@@ -554,14 +541,12 @@ export function useSettings(): {
         quietHoursStart: quietHoursEnabled ? quietHoursStart : undefined,
         quietHoursEnd: quietHoursEnabled ? quietHoursEnd : undefined,
         timezone,
+        codTemplateArVariant: selectedCodTemplateVariants.ar,
+        codTemplateEnVariant: selectedCodTemplateVariants.en,
       })
       const { state } = settingsResponse
 
       setStoreName(state.storeName ?? validated.trimmedStoreName)
-      setShippingCurrency(state.shippingCurrency ?? shippingCurrency)
-      setAvgShippingCost(
-        String(state.avgShippingCost ?? validated.avgShippingCost)
-      )
       setDefaultLanguage(state.defaultLanguage)
       setIsAutoVerifyEnabled(state.isAutoVerifyEnabled)
       setFollowUpEnabled(state.followUpEnabled)
@@ -586,16 +571,17 @@ export function useSettings(): {
       setBillingUsage(settingsResponse.billing.usage)
       setTemplateLanguages(settingsResponse.template.languages)
       setDefaultTemplateLanguage(settingsResponse.template.defaultPreviewLanguage)
+      setCodTemplateDefaults(settingsResponse.template.defaults)
+      setSelectedCodTemplateVariants(settingsResponse.template.selected)
+      setCodTemplateVariants(settingsResponse.template.variants)
       setTemplatePreviews(settingsResponse.template.previews)
       setSuccessBanner(t('saveSuccess'))
       shopify?.toast.show(t('saveSuccess'))
     } catch (error) {
-      console.error('[Settings] Failed to save onboarding settings:', error)
+      logger.error('Failed to save onboarding settings', error)
       setSuccessBanner(null)
       setErrorBanner(t('saveError'))
       setStoreName(previous.storeName)
-      setShippingCurrency(previous.shippingCurrency)
-      setAvgShippingCost(previous.avgShippingCost)
       setDefaultLanguage(previous.defaultLanguage)
       setIsAutoVerifyEnabled(previous.isAutoVerifyEnabled)
       setFollowUpEnabled(previous.followUpEnabled)
@@ -607,11 +593,11 @@ export function useSettings(): {
       setQuietHoursStart(previous.quietHoursStart)
       setQuietHoursEnd(previous.quietHoursEnd)
       setTimezone(previous.timezone)
+      setSelectedCodTemplateVariants(previous.selectedCodTemplateVariants)
     } finally {
       setIsSaving(false)
     }
   }, [
-    avgShippingCost,
     defaultLanguage,
     escalationDelayMinutes,
     escalationEnabled,
@@ -622,8 +608,8 @@ export function useSettings(): {
     quietHoursEnd,
     quietHoursStart,
     sendDelayMinutes,
-    shippingCurrency,
     shopify,
+    selectedCodTemplateVariants,
     storeName,
     t,
     timezone,
@@ -640,10 +626,6 @@ export function useSettings(): {
       storeNameError,
       defaultLanguage,
       languageOptions,
-      shippingCurrency,
-      shippingCurrencyOptions,
-      avgShippingCost,
-      avgShippingCostError,
       isAutoVerifyEnabled,
       followUpEnabled,
       sendDelayMinutes,
@@ -674,17 +656,15 @@ export function useSettings(): {
       usageData,
       templateLanguages,
       defaultTemplateLanguage,
+      codTemplateDefaults,
+      selectedCodTemplateVariants,
+      codTemplateVariants,
       templatePreviews,
       onStoreNameChange: (value) => {
         setStoreName(value)
         setStoreNameError(undefined)
       },
       onDefaultLanguageChange: setDefaultLanguage,
-      onShippingCurrencyChange: setShippingCurrency,
-      onAvgShippingCostChange: (value) => {
-        setAvgShippingCost(value)
-        setAvgShippingCostError(undefined)
-      },
       onAutoVerifyChange: setIsAutoVerifyEnabled,
       onFollowUpEnabledChange: setFollowUpEnabled,
       onSendDelayMinutesChange: (value) => {
@@ -712,6 +692,18 @@ export function useSettings(): {
         setQuietHoursError(undefined)
       },
       onTimezoneChange: setTimezone,
+      onCodTemplateArVariantChange: (value) => {
+        setSelectedCodTemplateVariants((current) => ({
+          ...current,
+          ar: value,
+        }))
+      },
+      onCodTemplateEnVariantChange: (value) => {
+        setSelectedCodTemplateVariants((current) => ({
+          ...current,
+          en: value,
+        }))
+      },
       onSave: handleSave,
       onPlanSelect: setSelectedPlanId,
       onChangePlan: handleChangePlan,

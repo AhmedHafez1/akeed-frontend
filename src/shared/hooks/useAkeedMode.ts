@@ -3,7 +3,10 @@
 import { useEffect, useState, useMemo, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { resolveEmbeddedContextFromSearch } from '@/shared/lib/embedded-context'
+import { createLogger } from '@/shared/lib/logger'
 import type { ShopifyGlobal } from '@/shared/types/window.model'
+
+const logger = createLogger('Akeed')
 
 /**
  * Akeed Runtime Mode Detection
@@ -121,8 +124,8 @@ export function useAkeedMode(): AkeedModeContext {
         if (controller.signal.aborted) return
 
         if (!instance) {
-          console.error(
-            '[Akeed] window.shopify not available — is the App Bridge CDN script loaded?'
+          logger.error(
+            'window.shopify not available - is the App Bridge CDN script loaded?'
           )
         }
 

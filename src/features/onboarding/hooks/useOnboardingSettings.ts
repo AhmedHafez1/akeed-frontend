@@ -3,8 +3,11 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { RefObject } from 'react'
 import { updateOnboardingSettings } from '@/features/onboarding/api/onboardingApi'
+import { createLogger } from '@/shared/lib/logger'
 import type { IntegrationOnboardingLanguage } from '@/features/onboarding/domain/onboarding.types'
 import type { EmbeddedStep } from '../model/onboarding.config'
+
+const logger = createLogger('Onboarding')
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -77,7 +80,7 @@ export function useOnboardingSettings({
         defaultLanguage,
         isAutoVerifyEnabled,
       }).catch((error: unknown) => {
-        console.error('[Onboarding] Auto-save failed:', error)
+        logger.error('Auto-save failed', error)
       })
     }, 1500)
 
@@ -117,7 +120,7 @@ export function useOnboardingSettings({
       })
       setStep(2)
     } catch (error) {
-      console.error('[Onboarding] Failed to save settings:', error)
+      logger.error('Failed to save settings', error)
       setErrorBanner(settingsSaveErrorMessage)
     } finally {
       setIsSavingSettings(false)

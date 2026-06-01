@@ -6,15 +6,12 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useMainConfirmationsTab } from '../../domain/useMainConfirmationsTab'
 import { useMainMetricsTab } from '../../domain/useMainMetricsTab'
+import { MAIN_TABS, resolveMainTab } from '../../domain/mainTabs'
 import type { DashboardStatsDateRange } from '../../model/dashboard.model'
 import type { DateRangeFilterOption } from '../../domain/dashboard.types'
 import { StatsEmbedded } from './StatsEmbedded'
 import { ConfirmationStatusFlags } from './components/ConfirmationStatusFlags'
 import { EmbeddedVerificationSection } from './components/EmbeddedVerificationSection'
-
-type MainTabId = 'metrics' | 'confirmations'
-
-const MAIN_TABS: MainTabId[] = ['metrics', 'confirmations']
 
 function MainMetricsTab({
   dateRangeFilter,
@@ -150,9 +147,7 @@ export function MainEmbeddedSkin() {
   const [dateRangeFilter, setDateRangeFilter] =
     useState<DashboardStatsDateRange>('last_30_days')
   const tabParam = searchParams.get('tab')
-  const activeTab: MainTabId = MAIN_TABS.includes(tabParam as MainTabId)
-    ? (tabParam as MainTabId)
-    : 'metrics'
+  const activeTab = resolveMainTab(tabParam)
   const selected = MAIN_TABS.indexOf(activeTab)
 
   const tabs = [

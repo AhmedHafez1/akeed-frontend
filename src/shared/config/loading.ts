@@ -1,0 +1,1 @@
+export const SKELETON_VISIBILITY_DELAY_MS = 180

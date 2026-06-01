@@ -7,6 +7,7 @@ import { HeaderNavItem } from './header.model'
 const SCROLL_THRESHOLD = 20
 const SCROLL_OFFSET = 80
 const MOBILE_SCROLL_DELAY = 100
+const SCROLLABLE_SECTIONS = new Set(['solution', 'pricing', 'faq'])
 
 function getPathWithoutLocale(pathname: string): string {
   return '/' + pathname.split('/').slice(2).join('/')
@@ -55,6 +56,7 @@ export function useHeader() {
         label: t('pricing'),
         id: 'pricing',
       },
+      { href: withLocale('/docs', locale), label: t('docs'), id: 'docs' },
       { href: withLocale('/#faq', locale), label: t('faq'), id: 'faq' },
     ],
     [locale, t]
@@ -78,6 +80,8 @@ export function useHeader() {
     event?: MouseEvent<HTMLAnchorElement>
   ) => {
     setIsMobileMenuOpen(false)
+
+    if (!SCROLLABLE_SECTIONS.has(id)) return
 
     if (!isHomePage) return
 

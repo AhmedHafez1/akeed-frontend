@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { getSupabaseClient } from '@/shared/lib/auth'
+import { createLogger } from '@/shared/lib/logger'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
 import { useTranslations } from 'next-intl'
 
@@ -15,6 +16,7 @@ import { useTranslations } from 'next-intl'
  */
 
 export default function ResetPasswordPage() {
+  const logger = createLogger('Auth')
   const t = useTranslations()
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname ?? '')
@@ -76,13 +78,13 @@ export default function ResetPasswordPage() {
       })
 
       if (updateError) {
-        console.error('[Auth] Password update error:', updateError)
+        logger.error('Password update error', updateError)
         setError(t('auth.resetPasswordFailed'))
       } else {
         setSuccess(true)
       }
-    } catch (err) {
-      console.error('[Auth] Password update failed:', err)
+    } catch (error) {
+      logger.error('Password update failed', error)
       setError(t('auth.resetPasswordFailed'))
     } finally {
       setIsLoading(false)
