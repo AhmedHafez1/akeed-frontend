@@ -87,6 +87,7 @@ export async function generateMetadata({
       images: [ogImagePath],
     },
     other: {
+      'facebook-domain-verification': 'lioini1ppshou1i78ftxxamkddj1x5',
       'msapplication-TileImage': appIconPath,
     },
   }
