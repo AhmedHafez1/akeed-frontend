@@ -6,14 +6,21 @@ export const siteName = 'Akeed'
 export const supportEmail = 'support@getakeed.com'
 export const legalName = 'Akeed Digital Solutions'
 export const commercialRegistrationNumber = '5813'
-export const registeredAddress =
-  'Apartment 13, third floor, plot 473, Area A, Hadabet Al Ahram III, Al Haram, Giza, Egypt'
+export const registeredAddress = `Giza,Remaya,منشأة عمارة ٤٧٣ أ حدائق الأهرام
+الدور الثالث,عمارة 473 أ حدائق`
 export const facebookProfileUrl =
   'https://www.facebook.com/profile.php?id=61585900432277'
 export const youtubeProfileUrl = 'https://www.youtube.com/@akeed-digital'
 export const instagramProfileUrl = 'https://www.instagram.com/akeed_app'
 
-export const publicSeoRoutes = ['/', '/support', '/privacy', '/terms', '/docs'] as const
+export const publicSeoRoutes = [
+  '/',
+  '/about',
+  '/support',
+  '/privacy',
+  '/terms',
+  '/docs',
+] as const
 
 export const privateSeoRoutes = [
   '/login',
@@ -153,6 +160,7 @@ export function getOrganizationSchema(locale: Locale) {
     url: localizedHomeUrl,
     logo: getAbsoluteUrl(logoPath),
     email: supportEmail,
+    telephone: '+20236239569',
     sameAs: [facebookProfileUrl, youtubeProfileUrl],
     address: {
       '@type': 'PostalAddress',
@@ -167,6 +175,7 @@ export function getOrganizationSchema(locale: Locale) {
         '@type': 'ContactPoint',
         contactType: 'customer support',
         email: supportEmail,
+        telephone: '+20236239569',
         availableLanguage: locales,
       },
     ],
