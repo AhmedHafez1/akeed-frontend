@@ -367,7 +367,7 @@
     "resettingPassword": "Resetting..."
   },
   "legal": {
-    "legalCompanyLine": "Akeed is operated by Akeed Digital Solutions.",
+    "legalCompanyLine": "Akeed is operated by : لصاحبها أحمد عبد الغني حافظ ابراهيم Akeed Digital Solutions أكيد للحلول الرقمية",
     "termsEyebrow": "Legal",
     "termsTitle": "Terms of Service",
     "termsLastUpdated": "Last updated: March 2026",
@@ -407,6 +407,7 @@
     "supportTitle": "Support",
     "legalTitle": "Legal",
     "home": "Home",
+    "about": "About Us",
     "features": "Features",
     "pricing": "Pricing",
     "docs": "Docs",
@@ -425,7 +426,7 @@
     "facebook": "Facebook",
     "youtube": "YouTube",
     "instagram": "Instagram",
-    "legalLine": "Operated by Akeed Digital Solutions.",
+    "legalLine": "Operated by : لصاحبها أحمد عبد الغني حافظ ابراهيم Akeed Digital Solutions أكيد للحلول الرقمية",
     "ctaTitle": "Get started with Akeed",
     "ctaDescription": "Join teams that are saving time and moving work forward.",
     "ctaLabel": "Create account",
@@ -438,6 +439,9 @@
     "emailTitle": "Email support",
     "emailDescription": "Send your request to our support team and we will respond as soon as possible.",
     "email": "support@getakeed.com",
+    "phoneTitle": "Phone support",
+    "phoneDescription": "Call us directly for immediate assistance with your account or setup.",
+    "phoneNumber": "+202 3623 9569",
     "whatsappTitle": "WhatsApp support",
     "whatsappDescription": "Prefer a quick chat? Send us a WhatsApp message and we will guide you from there.",
     "whatsappCta": "Open WhatsApp",
@@ -966,5 +970,24 @@
     "viewDocumentation": "View documentation",
     "learnMore": "Learn more",
     "needHelp": "Need help?"
+  },
+  "about": {
+    "eyebrow": "About us",
+    "title": "About Akeed",
+    "intro": "Learn about Akeed Digital Solutions, our mission, and how we help e-commerce merchants reduce wasted shipping costs.",
+    "missionTitle": "Our Mission",
+    "missionBody": "Akeed Digital Solutions builds tools that help e-commerce merchants across the MENA region reduce wasted shipping costs on cash-on-delivery orders. Our flagship product automates order confirmation through official Meta WhatsApp Cloud APIs, helping merchants verify orders before fulfillment and avoid failed delivery attempts.",
+    "legalTitle": "Business Information",
+    "legalDescription": "Registered business details and legal information.",
+    "registrationLabel": "Commercial Registration",
+    "addressTitle": "Registered Address",
+    "addressDescription": "Our official business address.",
+    "phoneTitle": "Contact Phone",
+    "phoneDescription": "Reach us directly by phone during business hours.",
+    "emailTitle": "Email",
+    "emailDescription": "Send us an email and we will respond as soon as possible.",
+    "socialTitle": "Connect With Us",
+    "socialDescription": "Follow us on social media for updates and news.",
+    "backHome": "Back to home"
   }
 }

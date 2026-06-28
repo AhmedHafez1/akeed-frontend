@@ -40,11 +40,13 @@ async function getSupportStructuredData(locale: Locale) {
         '@type': 'Organization',
         name: 'Akeed',
         email: support('email'),
+        telephone: '+20236239569',
         contactPoint: [
           {
             '@type': 'ContactPoint',
             contactType: 'customer support',
             email: support('email'),
+            telephone: '+20236239569',
           },
         ],
       },
@@ -54,16 +56,16 @@ async function getSupportStructuredData(locale: Locale) {
 
 export default async function SupportPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ locale: string }>
-}) {
+}>) {
   const { locale } = await params
   const structuredData = await getSupportStructuredData(locale as Locale)
 
   return (
     <>
       {structuredData.map((data) => (
-        <JsonLd key={data['@type'] as string} data={data} />
+        <JsonLd key={data['@type']} data={data} />
       ))}
       <SupportPageClient />
     </>

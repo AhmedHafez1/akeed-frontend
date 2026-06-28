@@ -1,7 +1,13 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowUpRight, AtSign, CheckCircle2, MessageCircle } from 'lucide-react'
+import {
+  ArrowUpRight,
+  AtSign,
+  CheckCircle2,
+  MessageCircle,
+  Phone,
+} from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
@@ -38,6 +44,20 @@ export function SupportPageClient() {
             dir="ltr"
           >
             {email}
+          </a>
+        </PublicInfoCard>
+
+        <PublicInfoCard
+          icon={<Phone className="h-5 w-5" />}
+          title={t('phoneTitle')}
+          description={t('phoneDescription')}
+        >
+          <a
+            href="tel:+20236239569"
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-emerald-600 px-5 text-sm font-bold text-white shadow-sm shadow-emerald-900/10 transition-all hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+            dir="ltr"
+          >
+            {t('phoneNumber')}
           </a>
         </PublicInfoCard>
 
