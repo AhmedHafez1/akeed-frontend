@@ -20,6 +20,7 @@ import {
   legalName,
   commercialRegistrationNumber,
   registeredAddress,
+  businessPhone,
 } from '@/shared/lib/seo'
 import {
   PublicInfoCard,
@@ -54,7 +55,12 @@ export function AboutPageClient() {
             description={t('legalDescription')}
           >
             <div className="space-y-2 text-sm text-slate-600">
-              <p className="font-medium text-slate-800">{legalName}</p>
+              <p
+                className="font-medium text-slate-800"
+                style={{ unicodeBidi: 'plaintext' }}
+              >
+                {legalName}
+              </p>
               <div className="flex items-start gap-2">
                 <FileCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
                 <span>
@@ -69,7 +75,10 @@ export function AboutPageClient() {
             title={t('addressTitle')}
             description={t('addressDescription')}
           >
-            <p className="text-sm leading-relaxed text-slate-600">
+            <p
+              className="text-sm leading-relaxed whitespace-pre-line text-slate-600"
+              style={{ unicodeBidi: 'plaintext' }}
+            >
               {registeredAddress}
             </p>
           </PublicInfoCard>
@@ -82,11 +91,11 @@ export function AboutPageClient() {
             description={t('phoneDescription')}
           >
             <a
-              href="tel:+20236239569"
+              href={`tel:${businessPhone}`}
               className="inline-flex h-11 items-center justify-center rounded-xl bg-emerald-600 px-5 text-sm font-bold text-white shadow-sm shadow-emerald-900/10 transition-all hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
               dir="ltr"
             >
-              +202 3623 9569
+              {businessPhone}
             </a>
           </PublicInfoCard>
 

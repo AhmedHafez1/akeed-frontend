@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import type { Locale } from '@/i18n'
 import {
+  businessPhone,
   createPublicPageMetadata,
   getCanonicalUrl,
   getOrganizationSchema,
@@ -40,13 +41,13 @@ async function getSupportStructuredData(locale: Locale) {
         '@type': 'Organization',
         name: 'Akeed',
         email: support('email'),
-        telephone: '+20236239569',
+        telephone: businessPhone,
         contactPoint: [
           {
             '@type': 'ContactPoint',
             contactType: 'customer support',
             email: support('email'),
-            telephone: '+20236239569',
+            telephone: businessPhone,
           },
         ],
       },

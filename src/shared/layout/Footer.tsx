@@ -10,6 +10,10 @@ import {
   facebookProfileUrl,
   youtubeProfileUrl,
   instagramProfileUrl,
+  legalName,
+  commercialRegistrationNumber,
+  registeredAddress,
+  businessPhone,
 } from '@/shared/lib/seo'
 
 const footerLinkGroups = [
@@ -133,6 +137,59 @@ export function Footer() {
             ))}
           </nav>
         </div>
+
+        <section
+          aria-label={t('businessInfoTitle')}
+          className="mt-12 rounded-2xl bg-white/5 p-6 ring-1 ring-white/10"
+        >
+          <p className="md:text-md text-sm font-bold text-white">
+            {t('businessInfoTitle')}
+          </p>
+          <dl className="mt-5 grid gap-x-10 gap-y-4 text-sm sm:grid-cols-2">
+            <div>
+              <dt className="font-medium text-slate-300">
+                {t('legalNameLabel')}
+              </dt>
+              <dd
+                className="mt-1 text-slate-400"
+                style={{ unicodeBidi: 'plaintext' }}
+              >
+                {legalName}
+              </dd>
+            </div>
+            <div>
+              <dt className="font-medium text-slate-300">
+                {t('registrationLabel')}
+              </dt>
+              <dd className="mt-1 text-slate-400" dir="ltr">
+                {commercialRegistrationNumber}
+              </dd>
+            </div>
+            <div>
+              <dt className="font-medium text-slate-300">
+                {t('addressLabel')}
+              </dt>
+              <dd
+                className="mt-1 leading-relaxed whitespace-pre-line text-slate-400"
+                style={{ unicodeBidi: 'plaintext' }}
+              >
+                {registeredAddress}
+              </dd>
+            </div>
+            <div>
+              <dt className="font-medium text-slate-300">{t('phoneLabel')}</dt>
+              <dd className="mt-1">
+                <a
+                  href={`tel:${businessPhone}`}
+                  className="text-slate-400 transition-colors hover:text-emerald-300"
+                  dir="ltr"
+                >
+                  {businessPhone}
+                </a>
+              </dd>
+            </div>
+          </dl>
+        </section>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-6 border-t border-white/10 pt-8 text-center md:mt-14 md:flex-row md:text-start">
           <p className="md:text-md text-sm text-slate-400">

@@ -2,12 +2,23 @@ import type { Metadata } from 'next'
 import type { Locale } from '@/i18n'
 import { defaultLocale, locales } from '@/i18n'
 
+// Business identity below must stay byte-identical to the Meta Business
+// Portfolio record (portfolio ID 859731917035191) so business verification
+// reviewers see the same legal name, address, and phone on both sides.
 export const siteName = 'Akeed'
 export const supportEmail = 'support@getakeed.com'
-export const legalName = 'Akeed Digital Solutions'
+export const legalName = 'أكيد للحلول الرقمية - Akeed Digital Solutions'
 export const commercialRegistrationNumber = '5813'
-export const registeredAddress = `Giza,Remaya,منشأة عمارة ٤٧٣ أ حدائق الأهرام
-الدور الثالث,عمارة 473 أ حدائق`
+export const businessPhone = '+201148675077'
+export const registeredAddressStreet =
+  'الجيزة - الأهرام - شقة ١٣ الدور الثالث - قطعة ٤٧٣ منطقة ( أ ) - هضبة الأهرام'
+export const registeredAddressLocality = 'الأهرام'
+export const registeredAddressRegion = 'الجيزة'
+export const registeredAddressPostalCode = '12556'
+export const registeredAddressCountry = 'Egypt'
+export const registeredAddress = `${registeredAddressStreet}
+${registeredAddressLocality}, ${registeredAddressRegion} ${registeredAddressPostalCode}
+${registeredAddressCountry}`
 export const facebookProfileUrl =
   'https://www.facebook.com/profile.php?id=61585900432277'
 export const youtubeProfileUrl = 'https://www.youtube.com/@akeed-digital'
@@ -160,14 +171,14 @@ export function getOrganizationSchema(locale: Locale) {
     url: localizedHomeUrl,
     logo: getAbsoluteUrl(logoPath),
     email: supportEmail,
-    telephone: '+20236239569',
-    sameAs: [facebookProfileUrl, youtubeProfileUrl],
+    telephone: businessPhone,
+    sameAs: [facebookProfileUrl, youtubeProfileUrl, instagramProfileUrl],
     address: {
       '@type': 'PostalAddress',
-      streetAddress:
-        'Apartment 13, third floor, plot 473, Area A, Hadabet Al Ahram III',
-      addressLocality: 'Al Haram',
-      addressRegion: 'Giza',
+      streetAddress: registeredAddressStreet,
+      addressLocality: registeredAddressLocality,
+      addressRegion: registeredAddressRegion,
+      postalCode: registeredAddressPostalCode,
       addressCountry: 'EG',
     },
     contactPoint: [
@@ -175,7 +186,7 @@ export function getOrganizationSchema(locale: Locale) {
         '@type': 'ContactPoint',
         contactType: 'customer support',
         email: supportEmail,
-        telephone: '+20236239569',
+        telephone: businessPhone,
         availableLanguage: locales,
       },
     ],
