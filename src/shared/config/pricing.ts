@@ -37,7 +37,7 @@ export const BILLING_PLANS: Record<string, BillingPlanDefaults> = {
   basic: {
     id: 'basic',
     includedVerifications: 300,
-    price: 8.99,
+    price: 9.99,
     isFree: false,
   },
   pro: {
@@ -49,7 +49,7 @@ export const BILLING_PLANS: Record<string, BillingPlanDefaults> = {
   business: {
     id: 'business',
     includedVerifications: 2500,
-    price: 44.99,
+    price: 49.99,
     isFree: false,
   },
 }
