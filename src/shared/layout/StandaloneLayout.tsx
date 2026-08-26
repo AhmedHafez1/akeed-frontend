@@ -29,6 +29,8 @@ export function StandaloneLayout({ children }: StandaloneLayoutProps) {
     ? `/${pathname.split('/').slice(2).join('/')}`
     : ''
   const isLandingPage = publicPath === '/'
+  const isAdminRoute =
+    publicPath === '/admin' || publicPath.startsWith('/admin/')
 
   // 1. Auth routes — minimal auth page shell
   if (isAuthRoute(pathname)) {
@@ -55,6 +57,10 @@ export function StandaloneLayout({ children }: StandaloneLayoutProps) {
         />
       </div>
     )
+  }
+
+  if (isAdminRoute) {
+    return <AuthGuard>{children}</AuthGuard>
   }
 
   // 3. Protected routes — auth required
