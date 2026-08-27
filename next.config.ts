@@ -23,6 +23,19 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        source: '/:locale/admin/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'private, no-store',
+          },
+          {
+            key: 'X-Robots-Tag',
+            value: 'noindex, nofollow',
+          },
+        ],
+      },
+      {
         source: '/:path*',
         headers: [
           {
