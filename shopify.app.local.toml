@@ -1,12 +1,15 @@
-# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+# Local-only Shopify development configuration.
+# `npm run shopify:dev` also passes --no-update, so this configuration cannot
+# replace the live app URL or redirect allowlist during local development.
 
 client_id = "f1f4012b31f1bb37c897ee284a501623"
-name = "Akeed"
-application_url = "http://localhost:3001"
+name = "Akeed Local"
+application_url = "https://localhost:3458"
 embedded = true
 
 [build]
 automatically_update_urls_on_dev = false
+dev_store_url = "zamalek-store-2.myshopify.com"
 
 [webhooks]
 api_version = "2026-01"
@@ -24,22 +27,21 @@ api_version = "2026-01"
   uri = "/webhooks/shopify/uninstalled"
 
   [[webhooks.subscriptions]]
-  compliance_topics = ["customers/data_request"]
+  compliance_topics = [ "customers/data_request" ]
   uri = "/webhooks/shopify/customers/data_request"
 
   [[webhooks.subscriptions]]
-  compliance_topics = ["customers/redact"]
+  compliance_topics = [ "customers/redact" ]
   uri = "/webhooks/shopify/customers/redact"
 
   [[webhooks.subscriptions]]
-  compliance_topics = ["shop/redact"]
+  compliance_topics = [ "shop/redact" ]
   uri = "/webhooks/shopify/shop/redact"
 
 [access_scopes]
-# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 scopes = "read_customers,write_order_edits,read_orders,write_orders,read_products"
 optional_scopes = [ ]
 use_legacy_install_flow = false
 
 [auth]
-redirect_urls = [ "https://get-akeed-dev.vercel.app/api/auth/shopify/callback" ]
+redirect_urls = [ "https://localhost:3458/api/auth/shopify/callback" ]
