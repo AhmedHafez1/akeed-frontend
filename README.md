@@ -34,7 +34,7 @@ Docker Desktop must be running with virtualization enabled. The backend
 `shopify.app.local.toml`.
 
 The Shopify launch uses the named local configuration with `--no-update` and
-does not deploy or replace production app URLs, redirects, or webhooks.
+installs a trusted localhost development certificate on first use.
 
 ## Main Commands
 

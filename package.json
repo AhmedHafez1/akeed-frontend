@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start -p 3001",
     "lint": "eslint",
-    "shopify:dev": "shopify app dev --config local --use-localhost --localhost-port 3458 --no-update"
+    "shopify:dev": "shopify app dev --config local --use-localhost --localhost-port 3458 --install-mkcert --no-update --skip-dependencies-installation"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
