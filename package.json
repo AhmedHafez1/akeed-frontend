@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start -p 3001",
     "lint": "eslint",
-    "shopify:dev": "shopify app dev"
+    "shopify:dev": "shopify app dev --config local --use-localhost --localhost-port 3458 --install-mkcert --no-update --skip-dependencies-installation"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -41,6 +41,7 @@
     "zod": "^4.1.13"
   },
   "devDependencies": {
+    "@shopify/cli": "4.7.0",
     "@tailwindcss/postcss": "^4",
     "@types/google-libphonenumber": "^7.4.30",
     "@types/node": "^20.19.26",

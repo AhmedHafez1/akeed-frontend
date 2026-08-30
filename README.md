@@ -18,6 +18,24 @@ npm run dev
 
 The app runs on `http://localhost:3001`.
 
+## Full Local Stack (VS Code)
+
+Open the parent `Akeed` folder in VS Code and run the
+`Full Stack: Backend + Standalone + Shopify` launch compound.
+
+- Redis runs in Docker on `localhost:6379`.
+- NestJS runs on `http://localhost:3000` and uses the backend `.env`.
+- The standalone frontend runs on `http://localhost:3001`.
+- The Shopify frontend process runs on `http://localhost:3002`; Shopify's
+  localhost HTTPS proxy uses `https://localhost:3458`.
+
+Docker Desktop must be running with virtualization enabled. The backend
+`SHOPIFY_API_KEY` and `SHOPIFY_API_SECRET` must belong to the app identified in
+`shopify.app.local.toml`.
+
+The Shopify launch uses the named local configuration with `--no-update` and
+installs a trusted localhost development certificate on first use.
+
 ## Main Commands
 
 ```bash

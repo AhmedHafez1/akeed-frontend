@@ -6,6 +6,7 @@ const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  distDir: process.env.NEXT_DIST_DIR ?? '.next',
   // Image optimization
   images: {
     formats: ['image/avif', 'image/webp'],
