@@ -15,6 +15,15 @@ import { useTranslations } from 'next-intl'
  * Shopify merchants will never see this - they use OAuth.
  */
 
+function getAuthErrorCode(error: unknown): string | null {
+  if (!error || typeof error !== 'object' || !('code' in error)) {
+    return null
+  }
+
+  const code = error.code
+  return typeof code === 'string' ? code : null
+}
+
 export default function LoginPage() {
   const logger = createLogger('Auth')
   const t = useTranslations()
@@ -57,7 +66,11 @@ export default function LoginPage() {
       router.push(auth.getDashboardPath(locale))
     } catch (error) {
       logger.error('Sign in failed', error)
-      setError(t('auth.signInFailed'))
+      setError(
+        getAuthErrorCode(error) === 'email_not_confirmed'
+          ? t('auth.emailNotConfirmed')
+          : t('auth.signInFailed')
+      )
     } finally {
       setIsLoading(false)
     }
