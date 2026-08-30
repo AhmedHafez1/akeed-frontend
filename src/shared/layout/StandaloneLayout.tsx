@@ -60,7 +60,7 @@ export function StandaloneLayout({ children }: StandaloneLayoutProps) {
   }
 
   if (isAdminRoute) {
-    return <AuthGuard>{children}</AuthGuard>
+    return <AuthGuard requireOrganization={false}>{children}</AuthGuard>
   }
 
   // 3. Protected routes — auth required

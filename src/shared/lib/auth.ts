@@ -1,5 +1,6 @@
 'use client'
 import { createClient } from '@supabase/supabase-js'
+import type { User } from '@supabase/supabase-js'
 import { resolveEmbeddedContextFromWindow } from '@/shared/lib/embedded-context'
 import { getErrorMessage, parseJsonResponse } from '@/shared/lib/http'
 import { createLogger } from '@/shared/lib/logger'
@@ -98,6 +99,28 @@ interface SessionTokenCache {
 
 let sessionTokenCache: SessionTokenCache | null = null
 
+interface StandaloneOrganization {
+  id: string
+  name: string
+  slug: string
+  plan_type: string | null
+  wa_phone_number_id: string | null
+  wa_business_account_id: string | null
+  wa_access_token_configured: boolean
+}
+
+interface StandaloneOrganizationProvisioningResponse {
+  organization: StandaloneOrganization
+  created: boolean
+}
+
+interface StandaloneBootstrapCache {
+  userId: string
+  promise: Promise<StandaloneOrganizationProvisioningResponse>
+}
+
+let standaloneBootstrapCache: StandaloneBootstrapCache | null = null
+
 /** Fallback TTL when the JWT `exp` claim cannot be parsed. */
 const SESSION_TOKEN_FALLBACK_TTL_MS = 30_000
 
@@ -135,7 +158,9 @@ async function getShopifySessionToken(): Promise<string | null> {
     const shopify = window.shopify
 
     if (!shopify) {
-      logger.error('window.shopify not available - App Bridge CDN script may not be loaded')
+      logger.error(
+        'window.shopify not available - App Bridge CDN script may not be loaded'
+      )
       return null
     }
 
@@ -309,6 +334,49 @@ export const api = {
   },
 }
 
+function getUserMetadataString(user: User, key: string): string | null {
+  const value = user.user_metadata?.[key]
+  if (typeof value !== 'string') return null
+
+  const trimmed = value.trim()
+  return trimmed.length > 0 ? trimmed : null
+}
+
+export function getStandaloneOrganizationName(user: User): string {
+  const companyName = getUserMetadataString(user, 'company_name')
+  const fullName = getUserMetadataString(user, 'full_name')
+  const emailName = user.email?.split('@')[0]?.trim()
+
+  return (companyName ?? fullName ?? emailName ?? 'Workspace').slice(0, 120)
+}
+
+export function clearStandaloneOrganizationBootstrap(): void {
+  standaloneBootstrapCache = null
+}
+
+export async function ensureStandaloneOrganization(
+  user: User
+): Promise<StandaloneOrganizationProvisioningResponse> {
+  if (standaloneBootstrapCache?.userId === user.id) {
+    return standaloneBootstrapCache.promise
+  }
+
+  const promise = api.post<StandaloneOrganizationProvisioningResponse>(
+    '/api/organizations',
+    { name: getStandaloneOrganizationName(user) }
+  )
+  standaloneBootstrapCache = { userId: user.id, promise }
+
+  try {
+    return await promise
+  } catch (error) {
+    if (standaloneBootstrapCache?.promise === promise) {
+      standaloneBootstrapCache = null
+    }
+    throw error
+  }
+}
+
 /**
  * Auth helpers for standalone mode
  */
@@ -373,14 +441,18 @@ export const auth = {
   async signUp(
     email: string,
     password: string,
-    metadata?: Record<string, number | string>
+    options?: {
+      metadata?: Record<string, number | string>
+      emailRedirectTo?: string
+    }
   ) {
     const supabase = getSupabaseClient()
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: metadata,
+        data: options?.metadata,
+        emailRedirectTo: options?.emailRedirectTo,
       },
     })
 
@@ -413,6 +485,7 @@ export const auth = {
    */
   async signOut() {
     const supabase = getSupabaseClient()
+    clearStandaloneOrganizationBootstrap()
     const { error } = await supabase.auth.signOut()
     if (error) throw error
   },
