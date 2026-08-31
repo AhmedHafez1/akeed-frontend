@@ -155,6 +155,7 @@ const eslintConfig = defineConfig([
   globalIgnores([
     // Default ignores of eslint-config-next:
     '.next/**',
+    'test/e01-smoke/.next/**',
     'out/**',
     'build/**',
     'next-env.d.ts',

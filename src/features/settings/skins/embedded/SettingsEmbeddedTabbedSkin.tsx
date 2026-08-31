@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import {
   Badge,
@@ -467,10 +467,10 @@ function MessageTemplateTab({ props }: { props: SettingsSkinProps }) {
                     >
                       <div className="space-y-5 px-4 pt-4 pb-3 text-[14px] leading-6 font-normal">
                         {previewParagraphs.map((line, index) => (
-                          <>
-                            <p key={index}>{line}</p>
+                          <Fragment key={index}>
+                            <p>{line}</p>
                             {index < previewParagraphs.length - 1 && <br />}
-                          </>
+                          </Fragment>
                         ))}
                       </div>
                       <div
