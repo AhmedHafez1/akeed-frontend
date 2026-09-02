@@ -71,6 +71,7 @@ export interface SettingsSkinProps {
   activePlanName: string | null
   billingPlanId: OnboardingBillingPlanId | null
   billingStatusLabel: string
+  canManageBilling: boolean
   billingPlansById: Partial<
     Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>
   >

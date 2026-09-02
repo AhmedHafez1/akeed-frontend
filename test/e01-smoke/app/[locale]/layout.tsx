@@ -22,6 +22,11 @@ export default async function SmokeLayout({
   return (
     <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: 'window.shopify = { loading: function () {} };',
+          }}
+        />
         <NextIntlClientProvider locale={locale} messages={messages}>
           {children}
         </NextIntlClientProvider>

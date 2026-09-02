@@ -80,5 +80,6 @@ export async function fetchOnboardingBillingPlans(): Promise<OnboardingBillingPl
   return {
     plans: [...dedupedPlans.values()],
     isFreePlanClaimed: payload.isFreePlanClaimed,
+    billingManagement: payload.billingManagement,
   }
 }

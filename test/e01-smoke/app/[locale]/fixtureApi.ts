@@ -1,4 +1,5 @@
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
+export { billingFixtureRequest as fetchWithAuth } from './billingFixture'
 
 const order: VerificationItem = {
   id: 'e01-synthetic-verification',

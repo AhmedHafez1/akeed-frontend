@@ -15,6 +15,8 @@ import { PlanCard } from '../components/PlanCard'
 
 interface BillingStepProps {
   heading: string
+  canManageBilling: boolean
+  unavailableMessage: string
   plans: OnboardingBillingPlan[]
   selectedPlanId: OnboardingBillingPlanId
   isActivating: boolean
@@ -33,6 +35,8 @@ interface BillingStepProps {
 
 export function BillingStep({
   heading,
+  canManageBilling,
+  unavailableMessage,
   plans,
   selectedPlanId,
   isActivating,
@@ -77,6 +81,7 @@ export function BillingStep({
           {heading}
         </Text>
 
+        {!canManageBilling && <Text as="p">{unavailableMessage}</Text>}
         <InlineGrid columns={{ xs: 1, sm: 2, lg: 4 }} gap="400">
           {plans.map((plan) => {
             const isDisabled = disabledPlanIds.includes(plan.id)
@@ -110,14 +115,16 @@ export function BillingStep({
             {backLabel}
           </Button>
 
-          <Button
-            variant="primary"
-            loading={isActivating}
-            disabled={!selectedPlan}
-            onClick={onActivate}
-          >
-            {selectedPlan?.ctaLabel ?? ''}
-          </Button>
+          {canManageBilling && (
+            <Button
+              variant="primary"
+              loading={isActivating}
+              disabled={!selectedPlan}
+              onClick={onActivate}
+            >
+              {selectedPlan?.ctaLabel ?? ''}
+            </Button>
+          )}
         </InlineStack>
       </BlockStack>
     </BlockStack>

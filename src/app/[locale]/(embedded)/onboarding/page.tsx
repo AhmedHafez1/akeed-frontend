@@ -172,6 +172,7 @@ export default function OnboardingPage() {
     setSelectedPlanId,
     billingPlanConfigsById,
     isFreePlanClaimed,
+    canManageBilling,
     isAutoVerifyEnabled,
     setIsAutoVerifyEnabled,
     isSavingSettings,
@@ -261,7 +262,9 @@ export default function OnboardingPage() {
     2: (
       <BillingStep
         heading={tEmbedded('billingHeading')}
-        plans={billingPlans}
+        canManageBilling={canManageBilling}
+        unavailableMessage={tEmbedded('billingManagementUnavailable')}
+        plans={canManageBilling ? billingPlans : []}
         selectedPlanId={selectedPlanId}
         isActivating={isActivatingPlan}
         disabledPlanIds={isFreePlanClaimed ? ['starter'] : []}

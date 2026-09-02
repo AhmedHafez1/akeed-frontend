@@ -145,6 +145,7 @@ function StoreTab({ props }: { props: SettingsSkinProps }) {
 function BillingTab({ props }: { props: SettingsSkinProps }) {
   const t = useTranslations('settings')
   const canChangePlan =
+    props.canManageBilling &&
     props.selectedPlanId !== null &&
     props.selectedPlanId !== props.billingPlanId
 
@@ -163,6 +164,10 @@ function BillingTab({ props }: { props: SettingsSkinProps }) {
             </Text>
           </BlockStack>
 
+          <Text as="p" variant="bodyMd">
+            {props.billingStatusLabel}
+          </Text>
+
           {props.usageData && (
             <SettingsUsageOverview
               used={props.usageData.used}
@@ -174,56 +179,59 @@ function BillingTab({ props }: { props: SettingsSkinProps }) {
             />
           )}
 
-          <InlineGrid columns={{ xs: 1, md: 2, lg: 4 }} gap="300">
-            {props.planOptions.map((plan) => {
-              const isCurrent = plan.id === props.billingPlanId
-              const isDisabled =
-                props.isFreePlanClaimed && plan.id === 'starter'
-              const isSelected = plan.id === props.selectedPlanId && !isDisabled
+          {props.canManageBilling && (
+            <InlineGrid columns={{ xs: 1, md: 2, lg: 4 }} gap="300">
+              {props.planOptions.map((plan) => {
+                const isCurrent = plan.id === props.billingPlanId
+                const isDisabled =
+                  props.isFreePlanClaimed && plan.id === 'starter'
+                const isSelected =
+                  plan.id === props.selectedPlanId && !isDisabled
 
-              return (
-                <button
-                  key={plan.id}
-                  type="button"
-                  disabled={isDisabled && !isCurrent}
-                  title={
-                    isDisabled && !isCurrent
-                      ? t('freePlanAlreadyClaimedTooltip')
-                      : undefined
-                  }
-                  onClick={() => props.onPlanSelect(plan.id)}
-                  className={`min-h-full rounded-xl border text-center transition outline-none focus-visible:ring-3 focus-visible:ring-emerald-700/25 disabled:cursor-not-allowed disabled:opacity-50 ${
-                    isSelected
-                      ? 'border-emerald-600 bg-emerald-50/35'
-                      : 'border-transparent bg-transparent hover:border-slate-200'
-                  }`}
-                >
-                  <Card>
-                    <BlockStack gap="300" inlineAlign="center">
-                      <Text as="h3" variant="headingSm" tone="subdued">
-                        {plan.name}
-                      </Text>
-                      <span className="min-h-5">
-                        {isCurrent && (
-                          <Badge tone="info">{t('currentPlanBadge')}</Badge>
-                        )}
-                      </span>
-                      <Text as="p" variant="headingLg">
-                        <span dir="auto" className="[unicode-bidi:isolate]">
-                          {plan.priceLabel}
+                return (
+                  <button
+                    key={plan.id}
+                    type="button"
+                    disabled={isDisabled && !isCurrent}
+                    title={
+                      isDisabled && !isCurrent
+                        ? t('freePlanAlreadyClaimedTooltip')
+                        : undefined
+                    }
+                    onClick={() => props.onPlanSelect(plan.id)}
+                    className={`min-h-full rounded-xl border text-center transition outline-none focus-visible:ring-3 focus-visible:ring-emerald-700/25 disabled:cursor-not-allowed disabled:opacity-50 ${
+                      isSelected
+                        ? 'border-emerald-600 bg-emerald-50/35'
+                        : 'border-transparent bg-transparent hover:border-slate-200'
+                    }`}
+                  >
+                    <Card>
+                      <BlockStack gap="300" inlineAlign="center">
+                        <Text as="h3" variant="headingSm" tone="subdued">
+                          {plan.name}
+                        </Text>
+                        <span className="min-h-5">
+                          {isCurrent && (
+                            <Badge tone="info">{t('currentPlanBadge')}</Badge>
+                          )}
                         </span>
-                      </Text>
-                      <Text as="p" tone="subdued" variant="bodySm">
-                        <span dir="auto" className="[unicode-bidi:isolate]">
-                          {plan.volumeLabel}
-                        </span>
-                      </Text>
-                    </BlockStack>
-                  </Card>
-                </button>
-              )
-            })}
-          </InlineGrid>
+                        <Text as="p" variant="headingLg">
+                          <span dir="auto" className="[unicode-bidi:isolate]">
+                            {plan.priceLabel}
+                          </span>
+                        </Text>
+                        <Text as="p" tone="subdued" variant="bodySm">
+                          <span dir="auto" className="[unicode-bidi:isolate]">
+                            {plan.volumeLabel}
+                          </span>
+                        </Text>
+                      </BlockStack>
+                    </Card>
+                  </button>
+                )
+              })}
+            </InlineGrid>
+          )}
 
           {canChangePlan && (
             <InlineStack gap="300">

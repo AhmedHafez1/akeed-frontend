@@ -209,6 +209,7 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
     initialLanguage
   )
   const canChangePlan =
+    props.canManageBilling &&
     props.selectedPlanId !== null &&
     props.selectedPlanId !== props.billingPlanId
 
@@ -222,7 +223,10 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
   )
   const template =
     selectedDefinition?.preview ?? props.templatePreviews[previewLanguage]
-  const previewParagraphs = getTemplatePreviewParagraphs(template, props.storeName)
+  const previewParagraphs = getTemplatePreviewParagraphs(
+    template,
+    props.storeName
+  )
   const variantOptions = availableVariants.map((variant) => ({
     label: previewT(`variantLabels.${variant.variant}`),
     value: variant.variant,
@@ -309,6 +313,8 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
             </p>
           </div>
 
+          <p className="text-sm text-slate-600">{props.billingStatusLabel}</p>
+
           {props.usageData && (
             <StandaloneUsageOverview
               used={props.usageData.used}
@@ -319,19 +325,21 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
             />
           )}
 
-          <StandalonePlanComparison
-            plans={props.planOptions}
-            currentPlanId={props.billingPlanId}
-            selectedPlanId={props.selectedPlanId}
-            disabledPlanIds={props.isFreePlanClaimed ? ['starter'] : []}
-            disabledPlanTooltips={
-              props.isFreePlanClaimed
-                ? { starter: t('freePlanAlreadyClaimedTooltip') }
-                : undefined
-            }
-            currentBadgeLabel={t('currentPlanBadge')}
-            onPlanSelect={props.onPlanSelect}
-          />
+          {props.canManageBilling && (
+            <StandalonePlanComparison
+              plans={props.planOptions}
+              currentPlanId={props.billingPlanId}
+              selectedPlanId={props.selectedPlanId}
+              disabledPlanIds={props.isFreePlanClaimed ? ['starter'] : []}
+              disabledPlanTooltips={
+                props.isFreePlanClaimed
+                  ? { starter: t('freePlanAlreadyClaimedTooltip') }
+                  : undefined
+              }
+              currentBadgeLabel={t('currentPlanBadge')}
+              onPlanSelect={props.onPlanSelect}
+            />
+          )}
 
           {canChangePlan && (
             <div className="flex flex-wrap gap-3">
@@ -434,7 +442,9 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
                   >
                     <span
                       className={`flex items-center justify-center gap-2 text-[15px] leading-6 font-normal ${
-                        previewLanguage === 'ar' ? 'flex-row-reverse' : 'flex-row'
+                        previewLanguage === 'ar'
+                          ? 'flex-row-reverse'
+                          : 'flex-row'
                       }`}
                     >
                       <span className="text-[13px]">↩</span>
@@ -448,7 +458,9 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
                   >
                     <span
                       className={`flex items-center justify-center gap-2 text-[15px] leading-6 font-normal ${
-                        previewLanguage === 'ar' ? 'flex-row-reverse' : 'flex-row'
+                        previewLanguage === 'ar'
+                          ? 'flex-row-reverse'
+                          : 'flex-row'
                       }`}
                     >
                       <span className="text-[13px]">↩</span>

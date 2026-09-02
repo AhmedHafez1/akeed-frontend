@@ -99,6 +99,7 @@ export function useOnboardingInit({
   const [billingPlanConfigsById, setBillingPlanConfigsById] = useState<
     Partial<Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>>
   >({})
+  const [canManageBilling, setCanManageBilling] = useState(false)
   const [isFreePlanClaimed, setIsFreePlanClaimed] = useState(false)
   const [prefillWarning, setPrefillWarning] = useState<string | null>(null)
   const {
@@ -142,6 +143,10 @@ export function useOnboardingInit({
 
         const { state } = stateResponse
         if (!active) return
+        setCanManageBilling(
+          state.billingManagement?.mode === 'shopify' &&
+            state.billingManagement.canManageBilling === true
+        )
 
         if (state.onboardingStatus === 'completed') {
           router.replace(`/${locale}/dashboard${window.location.search}`)
@@ -232,6 +237,7 @@ export function useOnboardingInit({
     initialIsAutoVerifyEnabled,
     billingPlanConfigsById,
     isFreePlanClaimed,
+    canManageBilling,
     prefillWarning,
     hasCompletedInitRef,
   }

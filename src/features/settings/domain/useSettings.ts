@@ -30,6 +30,7 @@ type BillingStatusKey =
   | 'billingStatusCanceled'
   | 'billingStatusError'
   | 'billingStatusUnknown'
+  | 'billingStatusNotRequired'
 
 const AUTOMATION_TIMEZONE_OPTIONS: readonly AutomationTimezone[] = [
   'Asia/Riyadh',
@@ -65,16 +66,17 @@ const DEFAULT_TEMPLATE_PREVIEWS: SettingsSkinProps['templatePreviews'] = {
   },
 }
 
-const DEFAULT_COD_TEMPLATE_VARIANTS: SettingsSkinProps['selectedCodTemplateVariants']
-  = {
+const DEFAULT_COD_TEMPLATE_VARIANTS: SettingsSkinProps['selectedCodTemplateVariants'] =
+  {
     ar: 'standard',
     en: 'friendly',
   }
 
-const DEFAULT_COD_TEMPLATE_DEFINITIONS: SettingsSkinProps['codTemplateVariants'] = {
-  ar: [],
-  en: [],
-}
+const DEFAULT_COD_TEMPLATE_DEFINITIONS: SettingsSkinProps['codTemplateVariants'] =
+  {
+    ar: [],
+    en: [],
+  }
 
 function normalizeBillingStatus(status: string | null): string | null {
   if (!status) return null
@@ -84,7 +86,8 @@ function normalizeBillingStatus(status: string | null): string | null {
 }
 
 function resolveBillingStatusKey(status: string | null): BillingStatusKey {
-  if (!status || status === 'not_required') return 'billingStatusUnknown'
+  if (!status) return 'billingStatusUnknown'
+  if (status === 'not_required') return 'billingStatusNotRequired'
   if (status === 'active') return 'billingStatusActive'
   if (status === 'pending') return 'billingStatusPending'
   if (status === 'declined') return 'billingStatusDeclined'
@@ -181,6 +184,11 @@ export function useSettings(): {
   const [billingPlanId, setBillingPlanId] =
     useState<OnboardingBillingPlanId | null>(null)
   const [billingStatus, setBillingStatus] = useState<string | null>(null)
+  const [billingManagement, setBillingManagement] =
+    useState<SettingsResponse['state']['billingManagement']>()
+  const canManageBilling =
+    billingManagement?.mode === 'shopify' &&
+    billingManagement.canManageBilling === true
   const [billingPlansById, setBillingPlansById] = useState<
     Partial<Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>>
   >({})
@@ -193,24 +201,25 @@ export function useSettings(): {
   const [isFreePlanClaimed, setIsFreePlanClaimed] = useState(false)
   const [errorBanner, setErrorBanner] = useState<string | null>(null)
   const [successBanner, setSuccessBanner] = useState<string | null>(null)
-  const [templateLanguages, setTemplateLanguages] =
-    useState<ReadonlyArray<'ar' | 'en'>>(['ar', 'en'])
-  const [defaultTemplateLanguage, setDefaultTemplateLanguage] =
-    useState<'ar' | 'en'>('en')
-  const [codTemplateDefaults, setCodTemplateDefaults] =
-    useState<SettingsSkinProps['codTemplateDefaults']>(
-      DEFAULT_COD_TEMPLATE_VARIANTS
-    )
+  const [templateLanguages, setTemplateLanguages] = useState<
+    ReadonlyArray<'ar' | 'en'>
+  >(['ar', 'en'])
+  const [defaultTemplateLanguage, setDefaultTemplateLanguage] = useState<
+    'ar' | 'en'
+  >('en')
+  const [codTemplateDefaults, setCodTemplateDefaults] = useState<
+    SettingsSkinProps['codTemplateDefaults']
+  >(DEFAULT_COD_TEMPLATE_VARIANTS)
   const [selectedCodTemplateVariants, setSelectedCodTemplateVariants] =
     useState<SettingsSkinProps['selectedCodTemplateVariants']>(
       DEFAULT_COD_TEMPLATE_VARIANTS
     )
-  const [codTemplateVariants, setCodTemplateVariants] =
-    useState<SettingsSkinProps['codTemplateVariants']>(
-      DEFAULT_COD_TEMPLATE_DEFINITIONS
-    )
-  const [templatePreviews, setTemplatePreviews] =
-    useState<SettingsSkinProps['templatePreviews']>(DEFAULT_TEMPLATE_PREVIEWS)
+  const [codTemplateVariants, setCodTemplateVariants] = useState<
+    SettingsSkinProps['codTemplateVariants']
+  >(DEFAULT_COD_TEMPLATE_DEFINITIONS)
+  const [templatePreviews, setTemplatePreviews] = useState<
+    SettingsSkinProps['templatePreviews']
+  >(DEFAULT_TEMPLATE_PREVIEWS)
 
   const languageOptions = useMemo<
     ReadonlyArray<SettingsSelectOption<IntegrationOnboardingLanguage>>
@@ -269,6 +278,7 @@ export function useSettings(): {
         setTimezone(state.timezone)
         setBillingPlanId(state.billingPlanId)
         setBillingStatus(state.billingStatus)
+        setBillingManagement(state.billingManagement)
 
         const plansMap: Partial<
           Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>
@@ -280,7 +290,9 @@ export function useSettings(): {
         setIsFreePlanClaimed(settingsResponse.billing.isFreePlanClaimed)
         setBillingUsage(settingsResponse.billing.usage)
         setTemplateLanguages(settingsResponse.template.languages)
-        setDefaultTemplateLanguage(settingsResponse.template.defaultPreviewLanguage)
+        setDefaultTemplateLanguage(
+          settingsResponse.template.defaultPreviewLanguage
+        )
         setCodTemplateDefaults(settingsResponse.template.defaults)
         setSelectedCodTemplateVariants(settingsResponse.template.selected)
         setCodTemplateVariants(settingsResponse.template.variants)
@@ -311,11 +323,14 @@ export function useSettings(): {
 
   const billingStatusLabel = useMemo(() => {
     const normalized = normalizeBillingStatus(billingStatus)
+    if (billingManagement?.mode === 'manual' && normalized === 'not_required')
+      return t('billingStatusManualPilot')
     const key = resolveBillingStatusKey(normalized)
     return t(key)
-  }, [billingStatus, t])
+  }, [billingStatus, billingManagement, t])
 
   const planOptions = useMemo(() => {
+    if (!canManageBilling) return []
     return ONBOARDING_BILLING_PLAN_IDS.map((id) => {
       const config = billingPlansById[id]
       return {
@@ -340,7 +355,7 @@ export function useSettings(): {
           : '',
       }
     })
-  }, [billingPlansById, locale, t])
+  }, [billingPlansById, canManageBilling, locale, t])
 
   const usageData = useMemo(() => {
     if (!billingUsage) return null
@@ -357,14 +372,17 @@ export function useSettings(): {
       periodEnd,
       usedLabel: t('usageUsedPercent', { value: percent }),
       limitLabel: t('usageMonthlyLimit'),
-      upgradePrompt:
-        used >= limit
+      upgradePrompt: !canManageBilling
+        ? used >= limit
+          ? t('usageManualLimitReached')
+          : null
+        : used >= limit
           ? t('usageLimitReachedPrompt')
           : usageRatio >= 0.8
             ? t('usageUpgradePrompt')
             : null,
     }
-  }, [billingUsage, t])
+  }, [billingUsage, canManageBilling, t])
 
   const escalationReviewDescription = useMemo(() => {
     const parsed = parseHourField(escalationDelayMinutes) ?? 6
@@ -373,7 +391,12 @@ export function useSettings(): {
   }, [escalationDelayMinutes, t])
 
   const handleChangePlan = useCallback(async () => {
-    if (!selectedPlanId || selectedPlanId === billingPlanId) return
+    if (
+      !canManageBilling ||
+      !selectedPlanId ||
+      selectedPlanId === billingPlanId
+    )
+      return
 
     setErrorBanner(null)
     setSuccessBanner(null)
@@ -396,7 +419,14 @@ export function useSettings(): {
     } finally {
       setIsChangingPlan(false)
     }
-  }, [billingPlanId, hostParam, isEmbedded, selectedPlanId, t])
+  }, [
+    billingPlanId,
+    canManageBilling,
+    hostParam,
+    isEmbedded,
+    selectedPlanId,
+    t,
+  ])
 
   const validateSettings = useCallback(() => {
     const trimmedStoreName = storeName.trim()
@@ -560,6 +590,7 @@ export function useSettings(): {
       setTimezone(state.timezone)
       setBillingPlanId(state.billingPlanId)
       setBillingStatus(state.billingStatus)
+      setBillingManagement(state.billingManagement)
       const plansMap: Partial<
         Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>
       > = {}
@@ -570,7 +601,9 @@ export function useSettings(): {
       setIsFreePlanClaimed(settingsResponse.billing.isFreePlanClaimed)
       setBillingUsage(settingsResponse.billing.usage)
       setTemplateLanguages(settingsResponse.template.languages)
-      setDefaultTemplateLanguage(settingsResponse.template.defaultPreviewLanguage)
+      setDefaultTemplateLanguage(
+        settingsResponse.template.defaultPreviewLanguage
+      )
       setCodTemplateDefaults(settingsResponse.template.defaults)
       setSelectedCodTemplateVariants(settingsResponse.template.selected)
       setCodTemplateVariants(settingsResponse.template.variants)
@@ -648,6 +681,7 @@ export function useSettings(): {
       activePlanName,
       billingPlanId,
       billingStatusLabel,
+      canManageBilling,
       billingPlansById,
       selectedPlanId,
       planOptions,
@@ -705,7 +739,9 @@ export function useSettings(): {
         }))
       },
       onSave: handleSave,
-      onPlanSelect: setSelectedPlanId,
+      onPlanSelect: (planId) => {
+        if (canManageBilling) setSelectedPlanId(planId)
+      },
       onChangePlan: handleChangePlan,
     },
   }

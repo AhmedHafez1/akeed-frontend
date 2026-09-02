@@ -241,6 +241,10 @@ export function SettingsEmbeddedSkin(props: SettingsSkinProps) {
                     </Text>
                   </BlockStack>
 
+                  <Text as="p" variant="bodyMd">
+                    {props.billingStatusLabel}
+                  </Text>
+
                   {props.usageData && (
                     <EmbeddedUsageOverview
                       used={props.usageData.used}
@@ -252,22 +256,26 @@ export function SettingsEmbeddedSkin(props: SettingsSkinProps) {
                     />
                   )}
 
-                  <EmbeddedPlanComparison
-                    plans={props.planOptions}
-                    currentPlanId={props.billingPlanId}
-                    selectedPlanId={props.selectedPlanId}
-                    isChangingPlan={props.isChangingPlan}
-                    disabledPlanIds={props.isFreePlanClaimed ? ['starter'] : []}
-                    disabledPlanTooltips={
-                      props.isFreePlanClaimed
-                        ? { starter: t('freePlanAlreadyClaimedTooltip') }
-                        : undefined
-                    }
-                    currentBadgeLabel={t('currentPlanBadge')}
-                    changePlanLabel={t('changePlanButton')}
-                    onPlanSelect={props.onPlanSelect}
-                    onChangePlan={props.onChangePlan}
-                  />
+                  {props.canManageBilling && (
+                    <EmbeddedPlanComparison
+                      plans={props.planOptions}
+                      currentPlanId={props.billingPlanId}
+                      selectedPlanId={props.selectedPlanId}
+                      isChangingPlan={props.isChangingPlan}
+                      disabledPlanIds={
+                        props.isFreePlanClaimed ? ['starter'] : []
+                      }
+                      disabledPlanTooltips={
+                        props.isFreePlanClaimed
+                          ? { starter: t('freePlanAlreadyClaimedTooltip') }
+                          : undefined
+                      }
+                      currentBadgeLabel={t('currentPlanBadge')}
+                      changePlanLabel={t('changePlanButton')}
+                      onPlanSelect={props.onPlanSelect}
+                      onChangePlan={props.onChangePlan}
+                    />
+                  )}
                 </BlockStack>
               </Card>
             </div>

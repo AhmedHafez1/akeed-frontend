@@ -1,3 +1,8 @@
+export interface BillingManagement {
+  mode: 'shopify' | 'manual'
+  canManageBilling: boolean
+}
+
 export type IntegrationOnboardingLanguage = 'auto' | 'en' | 'ar'
 
 export type ArabicCodTemplateVariantId =
@@ -37,6 +42,7 @@ export interface IntegrationOnboardingState {
   avgShippingCost: number
   billingPlanId: OnboardingBillingPlanId | null
   billingStatus: string | null
+  billingManagement?: BillingManagement
   followUpEnabled: boolean
   followUpDelayMinutes: number
   escalationEnabled: boolean
@@ -104,6 +110,7 @@ export interface OnboardingBillingPlanConfig {
 }
 
 export interface OnboardingBillingPlansResponse {
+  billingManagement?: BillingManagement
   plans: OnboardingBillingPlanConfig[]
   isFreePlanClaimed: boolean
 }
