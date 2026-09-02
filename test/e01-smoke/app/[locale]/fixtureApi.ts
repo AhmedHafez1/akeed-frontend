@@ -3,6 +3,7 @@ import type { VerificationItem } from '@/features/dashboard/model/dashboard.mode
 const order: VerificationItem = {
   id: 'e01-synthetic-verification',
   status: 'no_reply',
+  capabilities: [{ action: 'merchant_no_reply_cancellation', supported: true }],
   order_id: 'e01-synthetic-order',
   order_number: 'E01-FIXTURE',
   customer_name: 'Synthetic fixture',
@@ -26,6 +27,17 @@ let pending: (() => void) | undefined
 const counts = { cancellations: 0, lists: 0, stats: 0 }
 export function setFixtureResult(value: 'failure' | 'success') {
   result = value
+}
+export function setFixtureCapability(value: string) {
+  order.capabilities =
+    value === 'legacy'
+      ? undefined
+      : [
+          {
+            action: 'merchant_no_reply_cancellation',
+            supported: value === 'supported',
+          },
+        ]
 }
 export function settleFixture() {
   pending?.()
@@ -56,13 +68,18 @@ export const api = {
       pending = resolve
     })
     if (result === 'failure') throw new Error('Synthetic cancellation failure')
+    order.cancellation_operation = {
+      status: 'pending_provider_operation',
+      providerOperationId: 'e01-synthetic-job-reference',
+    }
     order.status = 'canceled'
     order.canceled_at = '2026-05-17T12:00:00Z'
     return {
       success: true,
       status: 'canceled',
       verificationId: order.id,
-      shopifyJobId: 'e01-synthetic-job-reference',
+      providerOperationId: 'e01-synthetic-job-reference',
+      operation: order.cancellation_operation,
     } as T
   },
 }

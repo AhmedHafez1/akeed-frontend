@@ -728,7 +728,10 @@
         "keepOrder": "Keep order",
         "cancelingOrder": "Canceling...",
         "cancelOrderError": "We could not cancel this order. Please try again.",
-        "cancelOrderConfirmDescription": "This will cancel the Shopify order and mark it as merchant-canceled."
+        "cancelOrderConfirmDescription": "This requests cancellation from your order source and records a merchant cancellation in Akeed. Processing may continue after acceptance.",
+        "cancelOrderPending": "Cancellation accepted; awaiting completion at the order source.",
+        "cancelOrderUnsupported": "Cancellation is unavailable for this order source.",
+        "cancelOrderUntracked": "Cancellation request accepted without a tracking reference. Check the order source for completion."
       }
     },
     "verificationStatus": {

@@ -6,6 +6,10 @@ import {
   IndexTable,
   Text,
 } from '@shopify/polaris'
+import {
+  canCancelOrder,
+  cancellationMessageKey,
+} from '@/features/dashboard/domain/cancellation'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import type {
@@ -251,7 +255,7 @@ export function VerificationsTableEmbedded({
 
         <IndexTable.Cell>
           <div className={dataCellClassName}>
-            {verification.status === 'no_reply' ? (
+            {canCancelOrder(verification) ? (
               <BlockStack gap="150">
                 {isConfirming ? (
                   <BlockStack gap="150">
@@ -299,7 +303,9 @@ export function VerificationsTableEmbedded({
               </BlockStack>
             ) : (
               <Text as="span" variant="bodySm" tone="subdued">
-                -
+                {cancellationMessageKey(verification)
+                  ? t(`table.actions.${cancellationMessageKey(verification)}`)
+                  : '—'}
               </Text>
             )}
           </div>

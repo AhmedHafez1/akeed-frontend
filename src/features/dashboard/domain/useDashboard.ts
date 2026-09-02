@@ -2,6 +2,8 @@
 
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
+import type { CancelOrderResponse } from '@/shared/types/commerce-outcome.model'
+import { canCancelOrder } from './cancellation'
 import { api } from '@/shared/lib/auth'
 import { createLogger } from '@/shared/lib/logger'
 import { useDashboardData } from '../hooks/useDashboardData'
@@ -23,14 +25,6 @@ interface SendTestVerificationResponse {
   success: boolean
   skipped?: boolean
   reason?: string
-}
-
-interface CancelOrderResponse {
-  success: true
-  verificationId: string
-  status: 'canceled'
-  alreadyCanceled?: boolean
-  shopifyJobId?: string
 }
 
 export function useDashboard(): DashboardSkinProps {
@@ -68,8 +62,7 @@ export function useDashboard(): DashboardSkinProps {
     statsError,
     refetch: refetchStats,
   } = useDashboardStats(dateRangeFilter)
-  const isAutoVerifyEnabled =
-    stats?.automation?.is_auto_verify_enabled ?? false
+  const isAutoVerifyEnabled = stats?.automation?.is_auto_verify_enabled ?? false
   const followUpEnabled = stats?.automation?.follow_up_enabled ?? false
   const quietHoursEnabled = stats?.automation?.quiet_hours_enabled ?? false
 
@@ -143,6 +136,10 @@ export function useDashboard(): DashboardSkinProps {
         return
       }
 
+      const verification = verifications.find(
+        (item) => item.id === verificationId
+      )
+      if (!verification || !canCancelOrder(verification)) return
       setCancelingVerificationId(verificationId)
       setCancelOrderErrors((previous) => {
         const next = { ...previous }
@@ -160,7 +157,7 @@ export function useDashboard(): DashboardSkinProps {
         refetchVerifications()
         refetchStats()
       } catch (error) {
-        logger.error('Failed to cancel Shopify order', error)
+        logger.error('Failed to cancel order', error)
         setCancelOrderErrors((previous) => ({
           ...previous,
           [verificationId]: t('table.actions.cancelOrderError'),
@@ -171,7 +168,13 @@ export function useDashboard(): DashboardSkinProps {
         )
       }
     },
-    [cancelingVerificationId, refetchStats, refetchVerifications, t]
+    [
+      cancelingVerificationId,
+      refetchStats,
+      refetchVerifications,
+      t,
+      verifications,
+    ]
   )
 
   const onSendTestVerification = useCallback(

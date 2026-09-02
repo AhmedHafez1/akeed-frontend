@@ -1,3 +1,8 @@
+import type {
+  CommerceOutcomeCapability,
+  CommerceOutcomeOperationResult,
+} from '@/shared/types/commerce-outcome.model'
+
 export type VerificationStatus =
   | 'pending'
   | 'sent'
@@ -28,6 +33,8 @@ export type DashboardStatsDateRange =
   | 'last_3_months'
 
 export type VerificationItem = {
+  capabilities?: CommerceOutcomeCapability[]
+  cancellation_operation?: CommerceOutcomeOperationResult
   id: string
   status: VerificationStatus
   order_id: string

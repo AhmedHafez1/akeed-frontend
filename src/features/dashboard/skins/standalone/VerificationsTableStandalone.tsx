@@ -1,5 +1,9 @@
 'use client'
 
+import {
+  canCancelOrder,
+  cancellationMessageKey,
+} from '@/features/dashboard/domain/cancellation'
 import { useTranslations } from 'next-intl'
 import { StatusBadge } from '../../ui/shared/StatusBadge'
 import type { VerificationItem } from '../../model/dashboard.model'
@@ -194,7 +198,7 @@ export function VerificationsTableStandalone({
 
                 {/* Actions */}
                 <td className="px-4 py-3.5">
-                  {verification.status === 'no_reply' ? (
+                  {canCancelOrder(verification) ? (
                     <div className="max-w-[260px] space-y-2">
                       {isConfirming ? (
                         <div className="space-y-2">
@@ -243,7 +247,11 @@ export function VerificationsTableStandalone({
                       )}
                     </div>
                   ) : (
-                    <span className="text-xs text-slate-300">—</span>
+                    <span className="text-xs text-slate-500">
+                      {cancellationMessageKey(verification)
+                        ? t(`actions.${cancellationMessageKey(verification)}`)
+                        : '—'}
+                    </span>
                   )}
                 </td>
               </tr>

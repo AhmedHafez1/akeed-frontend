@@ -2,6 +2,8 @@
 
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
+import type { CancelOrderResponse } from '@/shared/types/commerce-outcome.model'
+import { canCancelOrder } from './cancellation'
 import { api } from '@/shared/lib/auth'
 import { createLogger } from '@/shared/lib/logger'
 import { useDashboardData } from '../hooks/useDashboardData'
@@ -19,15 +21,9 @@ interface SendTestVerificationResponse {
   reason?: string
 }
 
-interface CancelOrderResponse {
-  success: true
-  verificationId: string
-  status: 'canceled'
-  alreadyCanceled?: boolean
-  shopifyJobId?: string
-}
-
-export function useMainConfirmationsTab(dateRangeFilter: DashboardStatsDateRange) {
+export function useMainConfirmationsTab(
+  dateRangeFilter: DashboardStatsDateRange
+) {
   const t = useTranslations('dashboard')
   const [statusFilter, setStatusFilter] =
     useState<VerificationStatusFilter>('all')
@@ -97,6 +93,10 @@ export function useMainConfirmationsTab(dateRangeFilter: DashboardStatsDateRange
     async (verificationId: string) => {
       if (cancelingVerificationId) return
 
+      const verification = verifications.find(
+        (item) => item.id === verificationId
+      )
+      if (!verification || !canCancelOrder(verification)) return
       setCancelingVerificationId(verificationId)
       setCancelOrderErrors((previous) => {
         const next = { ...previous }
@@ -113,7 +113,7 @@ export function useMainConfirmationsTab(dateRangeFilter: DashboardStatsDateRange
         )
         refetchVerifications()
       } catch (error) {
-        logger.error('Failed to cancel Shopify order', error)
+        logger.error('Failed to cancel order', error)
         setCancelOrderErrors((previous) => ({
           ...previous,
           [verificationId]: t('table.actions.cancelOrderError'),
@@ -124,7 +124,7 @@ export function useMainConfirmationsTab(dateRangeFilter: DashboardStatsDateRange
         )
       }
     },
-    [cancelingVerificationId, refetchVerifications, t]
+    [cancelingVerificationId, refetchVerifications, t, verifications]
   )
 
   const onSendTestVerification = useCallback(

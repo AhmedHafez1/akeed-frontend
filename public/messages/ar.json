@@ -714,7 +714,10 @@
         "keepOrder": "إبقاء الطلب",
         "cancelingOrder": "جارٍ الإلغاء...",
         "cancelOrderError": "تعذر إلغاء هذا الطلب. حاول مرة أخرى.",
-        "cancelOrderConfirmDescription": "سيتم إلغاء الطلب في Shopify وتسجيله كإلغاء من التاجر."
+        "cancelOrderConfirmDescription": "سيُرسل طلب إلغاء إلى مصدر الطلب ويُسجّل الإلغاء من التاجر في أكيد. قد تستمر المعالجة بعد قبول الطلب.",
+        "cancelOrderPending": "تم قبول طلب الإلغاء؛ بانتظار اكتماله لدى مصدر الطلب.",
+        "cancelOrderUnsupported": "الإلغاء غير متاح لمصدر هذا الطلب.",
+        "cancelOrderUntracked": "تم قبول طلب الإلغاء دون مرجع للتتبع. تحقّق من اكتماله لدى مصدر الطلب."
       }
     },
     "verificationStatus": {
