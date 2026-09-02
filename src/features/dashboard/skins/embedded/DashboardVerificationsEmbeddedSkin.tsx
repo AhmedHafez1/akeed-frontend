@@ -13,6 +13,7 @@ export function DashboardVerificationsEmbeddedSkin({
   isAutoVerifyEnabled,
   followUpEnabled,
   quietHoursEnabled,
+  sourceStatus,
   verifications,
   isVerificationsLoading,
   isStatsLoading,
@@ -53,6 +54,12 @@ export function DashboardVerificationsEmbeddedSkin({
         {testFeedback && (
           <Banner tone={testFeedback.tone} onDismiss={onDismissTestFeedback}>
             <p>{testFeedback.message}</p>
+          </Banner>
+        )}
+
+        {sourceStatus === 'disconnected' && (
+          <Banner tone="warning" title={t('sourceDisconnectedTitle')}>
+            <p>{t('sourceDisconnectedDescription')}</p>
           </Banner>
         )}
 

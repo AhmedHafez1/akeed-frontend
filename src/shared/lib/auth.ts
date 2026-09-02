@@ -144,6 +144,21 @@ function getJwtExpiry(token: string): number | null {
   }
 }
 
+/**
+ * Reuse a session token already issued by App Bridge during embedded startup.
+ * This avoids an unnecessary second App Bridge round-trip before the first
+ * authenticated API request.
+ */
+export function primeShopifySessionToken(token: string): void {
+  const expSec = getJwtExpiry(token)
+  sessionTokenCache = {
+    token,
+    expiresAt: expSec
+      ? expSec * 1000 - SESSION_TOKEN_EXPIRY_MARGIN_MS
+      : Date.now() + SESSION_TOKEN_FALLBACK_TTL_MS,
+  }
+}
+
 /** Clear the cached session token so the next call fetches a fresh one. */
 function clearSessionTokenCache(): void {
   sessionTokenCache = null
@@ -167,13 +182,7 @@ async function getShopifySessionToken(): Promise<string | null> {
     const token = await shopify.idToken()
 
     if (token) {
-      const expSec = getJwtExpiry(token)
-      sessionTokenCache = {
-        token,
-        expiresAt: expSec
-          ? expSec * 1000 - SESSION_TOKEN_EXPIRY_MARGIN_MS
-          : Date.now() + SESSION_TOKEN_FALLBACK_TTL_MS,
-      }
+      primeShopifySessionToken(token)
     }
 
     return token
@@ -233,7 +242,12 @@ export async function fetchWithAuth(
   }
 
   // Make request
-  const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url}`
+  const { isEmbedded } = resolveEmbeddedContextFromWindow()
+  const fullUrl = url.startsWith('http')
+    ? url
+    : isEmbedded
+      ? url
+      : `${API_BASE_URL}${url}`
 
   const response = await fetch(fullUrl, {
     ...options,
@@ -242,8 +256,6 @@ export async function fetchWithAuth(
 
   // Handle 401 Unauthorized
   if (response.status === 401) {
-    const { isEmbedded } = resolveEmbeddedContextFromWindow()
-
     if (isEmbedded) {
       // In embedded mode, a 401 likely means the cached session token
       // expired. Clear the cache, fetch a fresh token, and retry once.

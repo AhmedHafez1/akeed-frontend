@@ -52,6 +52,7 @@ export function useDashboard(): DashboardSkinProps {
     hasMoreVerifications,
     isLoadingMoreVerifications,
     onLoadMoreVerifications,
+    pageContext,
     refetch: refetchVerifications,
     error: verificationsError,
   } = useDashboardData(statusFilter, dateRangeFilter)
@@ -65,6 +66,8 @@ export function useDashboard(): DashboardSkinProps {
   const isAutoVerifyEnabled = stats?.automation?.is_auto_verify_enabled ?? false
   const followUpEnabled = stats?.automation?.follow_up_enabled ?? false
   const quietHoursEnabled = stats?.automation?.quiet_hours_enabled ?? false
+  const sourceStatus =
+    stats?.source?.status ?? pageContext?.source?.status ?? 'not_connected'
 
   const hasVerifications = verifications?.length > 0
 
@@ -240,6 +243,7 @@ export function useDashboard(): DashboardSkinProps {
     isAutoVerifyEnabled,
     followUpEnabled,
     quietHoursEnabled,
+    sourceStatus,
     dateRangeFilter,
     dateRangeOptions,
     onDateRangeFilterChange,

@@ -572,6 +572,8 @@
     "title": "Dashboard",
     "subtitle": "Monitor verification status and recent orders across your channels.",
     "valueProposition": "Akeed confirms cash-on-delivery orders through WhatsApp before fulfillment.",
+    "sourceDisconnectedTitle": "Order source disconnected",
+    "sourceDisconnectedDescription": "New orders and queued actions are paused. Your order and verification history remains available in the dashboard.",
     "statusCard": {
       "activeLabel": "Auto-confirmation is on",
       "inactiveLabel": "Auto-confirmation is off",
@@ -581,6 +583,8 @@
       "quietHoursInactiveLabel": "Quiet hours are disabled",
       "title": "Verification is active",
       "description": "Akeed is monitoring new COD orders and sending WhatsApp confirmation requests automatically.",
+      "inactiveTitle": "Verification is paused",
+      "inactiveDescription": "Akeed is not sending new automatic verification requests. Historical results remain available.",
       "workflowTitle": "After a COD order is placed",
       "workflowDescription": "Akeed sends a WhatsApp confirmation request, records the customer response, and updates the order status in Shopify.",
       "reviewTitle": "Suspicious or unconfirmed orders",

@@ -10,14 +10,18 @@ import type { DashboardSkinProps } from '../../domain/dashboard.types'
 export function DashboardStandaloneSkin({
   stats,
   isStatsLoading,
+  isAutoVerifyEnabled,
   dateRangeFilter,
   dateRangeOptions,
   onDateRangeFilterChange,
+  sourceStatus,
   testFeedback,
   onDismissTestFeedback,
   error,
 }: DashboardSkinProps) {
   const t = useTranslations('dashboard')
+  const isVerificationActive =
+    sourceStatus === 'connected' && isAutoVerifyEnabled
 
   return (
     <div className="mx-auto w-full max-w-[1400px] space-y-8">
@@ -33,10 +37,31 @@ export function DashboardStandaloneSkin({
         onDismissTestFeedback={onDismissTestFeedback}
       />
 
+      {sourceStatus === 'disconnected' && (
+        <div
+          role="status"
+          className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900"
+        >
+          <p className="font-semibold">{t('sourceDisconnectedTitle')}</p>
+          <p className="mt-1 text-sm">{t('sourceDisconnectedDescription')}</p>
+        </div>
+      )}
+
       <StandaloneStatusPanel
-        activeLabel={t('statusCard.activeLabel')}
-        title={t('statusCard.title')}
-        description={t('statusCard.description')}
+        isActive={isVerificationActive}
+        activeLabel={t(
+          isVerificationActive
+            ? 'statusCard.activeLabel'
+            : 'statusCard.inactiveLabel'
+        )}
+        title={t(
+          isVerificationActive ? 'statusCard.title' : 'statusCard.inactiveTitle'
+        )}
+        description={t(
+          isVerificationActive
+            ? 'statusCard.description'
+            : 'statusCard.inactiveDescription'
+        )}
         workflowTitle={t('statusCard.workflowTitle')}
         workflowDescription={t('statusCard.workflowDescription')}
         reviewTitle={t('statusCard.reviewTitle')}

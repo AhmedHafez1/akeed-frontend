@@ -10,6 +10,7 @@ export function DashboardVerificationsStandaloneSkin({
   dateRangeFilter,
   dateRangeOptions,
   onDateRangeFilterChange,
+  sourceStatus,
   verifications,
   isVerificationsLoading,
   hasMoreVerifications,
@@ -71,6 +72,16 @@ export function DashboardVerificationsStandaloneSkin({
         testFeedback={testFeedback}
         onDismissTestFeedback={onDismissTestFeedback}
       />
+
+      {sourceStatus === 'disconnected' && (
+        <div
+          role="status"
+          className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900"
+        >
+          <p className="font-semibold">{t('sourceDisconnectedTitle')}</p>
+          <p className="mt-1 text-sm">{t('sourceDisconnectedDescription')}</p>
+        </div>
+      )}
 
       <StandaloneVerificationsSection
         verifications={verifications}

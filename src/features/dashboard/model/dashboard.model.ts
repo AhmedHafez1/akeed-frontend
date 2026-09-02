@@ -32,6 +32,17 @@ export type DashboardStatsDateRange =
   | 'last_30_days'
   | 'last_3_months'
 
+export type DashboardSourceStatus =
+  | 'connected'
+  | 'disconnected'
+  | 'not_connected'
+
+export type DashboardSourceState = {
+  status: DashboardSourceStatus
+  integration_id: string | null
+  platform_type: string | null
+}
+
 export type VerificationItem = {
   capabilities?: CommerceOutcomeCapability[]
   cancellation_operation?: CommerceOutcomeOperationResult
@@ -72,6 +83,7 @@ export type VerificationsResponse = {
   data: VerificationItem[]
   next_cursor: string | null
   page_context?: {
+    source?: DashboardSourceState
     automation: {
       is_auto_verify_enabled: boolean
       follow_up_enabled: boolean
@@ -86,6 +98,7 @@ export type OrdersResponse = {
 
 export type DashboardStats = {
   date_range: DashboardStatsDateRange
+  source?: DashboardSourceState
   automation: {
     is_auto_verify_enabled: boolean
     follow_up_enabled: boolean

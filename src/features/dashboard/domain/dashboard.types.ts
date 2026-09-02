@@ -1,6 +1,7 @@
 import type {
   DashboardStats,
   DashboardStatsDateRange,
+  DashboardSourceStatus,
   VerificationItem,
   VerificationStatusFilter,
 } from '../model/dashboard.model'
@@ -29,6 +30,7 @@ export interface DashboardSkinProps {
   isAutoVerifyEnabled: boolean
   followUpEnabled: boolean
   quietHoursEnabled: boolean
+  sourceStatus: DashboardSourceStatus
   dateRangeFilter: DashboardStatsDateRange
   dateRangeOptions: ReadonlyArray<DateRangeFilterOption>
   onDateRangeFilterChange: (filter: DashboardStatsDateRange) => void

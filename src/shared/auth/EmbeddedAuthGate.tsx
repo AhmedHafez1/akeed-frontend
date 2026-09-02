@@ -19,6 +19,7 @@ import {
 } from '@/features/onboarding'
 import { createLogger } from '@/shared/lib/logger'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
+import { primeShopifySessionToken } from '@/shared/lib/auth'
 
 const logger = createLogger('EmbeddedAuthGate')
 
@@ -118,8 +119,7 @@ export function EmbeddedAuthGate({
       // Determine whether we already have a cached install confirmation.
       // When the cache is warm we skip the loading state entirely so the
       // page content stays visible while we re-validate in the background.
-      const hasWarmInstallCache =
-        getCachedInstallStatus(shopDomain) === true
+      const hasWarmInstallCache = getCachedInstallStatus(shopDomain) === true
 
       if (!hasWarmInstallCache) {
         setIsEmbeddedReady(false)
@@ -139,15 +139,19 @@ export function EmbeddedAuthGate({
             try {
               const sessionToken = await shopify.idToken()
               if (sessionToken) {
+                primeShopifySessionToken(sessionToken)
                 isInstalled = await performTokenExchange(sessionToken)
               }
             } catch (exchangeError) {
-              logger.warn('Token exchange failed, falling back to legacy flow', {
-                error:
-                  exchangeError instanceof Error
-                    ? exchangeError.message
-                    : exchangeError,
-              })
+              logger.warn(
+                'Token exchange failed, falling back to legacy flow',
+                {
+                  error:
+                    exchangeError instanceof Error
+                      ? exchangeError.message
+                      : exchangeError,
+                }
+              )
             }
           }
 
