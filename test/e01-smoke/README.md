@@ -21,6 +21,8 @@ The fixture controls are deliberately labeled in English in both locales so the 
 
 Check the fixture's own project with `npx --no-install tsc --noEmit --incremental false -p test/e01-smoke/tsconfig.json` from the frontend root. The normal root lint command also checks its source; generated fixture output is excluded from root lint/type inputs.
 
+For the E02 release gate, `npm run smoke:e02:typecheck` compiles the same fixture against the production neutral cancellation and billing response types, and `npm run smoke:e02` starts it. Exercise both `skin=embedded` and `skin=standalone`; shell mode must not change provider capability or billing entitlement behavior.
+
 Validation: run frontend TypeScript/build/non-fixing lint and the documented backend gate. Use a separate `NEXT_DIST_DIR` for a production validation build while the owner's two development servers run, to avoid deleting their generated chunks. Do not count missing infrastructure, fixture setup errors, or failed smoke actions as passes.
 
 US-02-03 extends the fixture with per-order capabilities and a neutral pending-operation result. After the order row loads, choose **Unsupported** in **Fixture capability**: both skins must show the translated unavailable message with no cancellation button. Choose **Legacy response**: the cancellation controls remain compatible with the old response. In both languages, successful cancellation must show the translated pending-provider message after refresh. Enter activates the native confirmation/dismiss controls. The fixture still does not prove authenticated full-layout styling or remote completion.

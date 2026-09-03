@@ -8,6 +8,8 @@
     "start": "next start -p 3001",
     "lint": "eslint",
     "smoke:e01": "npm --prefix test/e01-smoke run dev",
+    "smoke:e02": "npm --prefix test/e01-smoke run dev",
+    "smoke:e02:typecheck": "tsc --noEmit --incremental false -p test/e01-smoke/tsconfig.json",
     "shopify:dev": "shopify app dev --config local --use-localhost --localhost-port 3458 --install-mkcert --no-update --skip-dependencies-installation"
   },
   "dependencies": {

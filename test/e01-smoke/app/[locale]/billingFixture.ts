@@ -1,4 +1,5 @@
 import type { SettingsResponse } from '@/features/settings/api/settingsApi'
+import type { OnboardingBillingResponse } from '@/features/onboarding/domain/onboarding.types'
 
 let billingPosts = 0
 let settingsReads = 0
@@ -112,7 +113,10 @@ export async function billingFixtureRequest(
       throw new Error('Blocked manual billing fixture request')
     const confirmation = new URL(window.location.href)
     confirmation.searchParams.set('approved', '1')
-    return Response.json({ confirmationUrl: confirmation.toString() })
+    const response = {
+      confirmationUrl: confirmation.toString(),
+    } satisfies OnboardingBillingResponse
+    return Response.json(response)
   }
   throw new Error(`Blocked fixture request: ${options.method} ${url}`)
 }

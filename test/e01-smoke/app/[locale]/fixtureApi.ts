@@ -1,4 +1,5 @@
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
+import type { CancelOrderResponse } from '@/shared/types/commerce-outcome.model'
 export { billingFixtureRequest as fetchWithAuth } from './billingFixture'
 
 const order: VerificationItem = {
@@ -75,12 +76,13 @@ export const api = {
     }
     order.status = 'canceled'
     order.canceled_at = '2026-05-17T12:00:00Z'
-    return {
+    const response = {
       success: true,
       status: 'canceled',
       verificationId: order.id,
       providerOperationId: 'e01-synthetic-job-reference',
       operation: order.cancellation_operation,
-    } as T
+    } satisfies CancelOrderResponse
+    return response as T
   },
 }
