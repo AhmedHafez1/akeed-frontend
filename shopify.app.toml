@@ -42,4 +42,4 @@ optional_scopes = [ ]
 use_legacy_install_flow = false
 
 [auth]
-redirect_urls = [ "https://get-akeed-dev.vercel.app/api/auth/shopify/callback" ]
+redirect_urls = [ "https://unmasticatory-dihydroxy-brittny.ngrok-free.dev/api/auth/shopify/callback" ]

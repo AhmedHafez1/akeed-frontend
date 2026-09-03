@@ -836,6 +836,7 @@
   },
   "embeddedOnboarding": {
     "prefillWarning": "لم نتمكن من تعبئة بيانات Shopify تلقائياً. أدخل اسم المتجر يدوياً.",
+    "billingManagementUnavailable": "إدارة الاشتراك غير متاحة. تواصل مع الدعم لمراجعة صلاحية الوصول.",
     "storeNameRequired": "اكتب اسم المتجر.",
     "settingsSaveError": "لم نتمكن من حفظ إعدادات الإعداد. حاول مرة أخرى.",
     "billingActivationError": "تعذر بدء تفعيل الفوترة. حاول مرة أخرى.",

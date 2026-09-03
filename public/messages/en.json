@@ -850,6 +850,7 @@
   },
   "embeddedOnboarding": {
     "prefillWarning": "We could not prefill Shopify store details. Please enter the store name manually.",
+    "billingManagementUnavailable": "Billing management is unavailable. Contact support to review your access.",
     "storeNameRequired": "Store name is required.",
     "settingsSaveError": "We could not save your onboarding settings. Please try again.",
     "billingActivationError": "We could not start billing activation. Please try again.",
