@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { ShieldX } from 'lucide-react'
+import { useTranslations } from 'next-intl'
+import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { Button, Skeleton } from '@/shared/ui'
 import { AdminApiError, getAdminSession } from './adminApi'
 
@@ -10,6 +12,8 @@ interface AdminAccessGateProps {
 }
 
 export function AdminAccessGate({ children }: AdminAccessGateProps) {
+  const t = useTranslations('adminCommon')
+  const { isRTL } = useLocaleInfo()
   const [state, setState] = useState<
     'loading' | 'allowed' | 'forbidden' | 'error'
   >('loading')
@@ -42,23 +46,21 @@ export function AdminAccessGate({ children }: AdminAccessGateProps) {
   return (
     <main
       className="grid min-h-screen place-items-center bg-slate-50 p-6"
-      dir="ltr"
+      dir={isRTL ? 'rtl' : 'ltr'}
     >
       <div className="max-w-md rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
         <ShieldX className="mx-auto mb-4 size-10 text-slate-500" />
         <h1 className="text-xl font-semibold text-slate-950">
-          {state === 'forbidden'
-            ? 'Admin access required'
-            : 'Unable to verify access'}
+          {state === 'forbidden' ? t('accessRequired') : t('accessError')}
         </h1>
         <p className="mt-2 text-sm text-slate-600">
           {state === 'forbidden'
-            ? 'Your account is signed in but is not authorized for the Akeed control tower.'
-            : 'Try again. If the problem continues, share the request ID with the team.'}
+            ? t('accessRequiredBody')
+            : t('accessErrorBody')}
         </p>
         {requestId && (
           <p className="mt-3 font-mono text-xs text-slate-500">
-            Request ID: {requestId}
+            {t('requestId', { id: requestId })}
           </p>
         )}
         {state === 'error' && (
@@ -69,7 +71,7 @@ export function AdminAccessGate({ children }: AdminAccessGateProps) {
               setRetryKey((value) => value + 1)
             }}
           >
-            Retry
+            {t('retry')}
           </Button>
         )}
       </div>

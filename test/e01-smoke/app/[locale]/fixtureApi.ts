@@ -1,6 +1,15 @@
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
 import type { CancelOrderResponse } from '@/shared/types/commerce-outcome.model'
-export { billingFixtureRequest as fetchWithAuth } from './billingFixture'
+import { billingFixtureRequest } from './billingFixture'
+import { adminPilotFixtureRequest } from './adminPilotFixture'
+
+export { resetPilotFixture } from './adminPilotFixture'
+
+export function fetchWithAuth(url: string, options: RequestInit = {}) {
+  return url.startsWith('/api/admin/')
+    ? adminPilotFixtureRequest(url, options)
+    : billingFixtureRequest(url, options)
+}
 
 const order: VerificationItem = {
   id: 'e01-synthetic-verification',

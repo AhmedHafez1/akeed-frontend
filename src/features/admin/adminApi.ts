@@ -11,8 +11,12 @@ export class AdminApiError extends Error {
   }
 }
 
-async function adminGet<T>(path: string): Promise<T> {
+export async function adminRequest<T>(
+  path: string,
+  options: RequestInit = {}
+): Promise<T> {
   const response = await fetchWithAuth(path, {
+    ...options,
     cache: 'no-store',
     headers: { Accept: 'application/json' },
   })
@@ -36,13 +40,15 @@ async function adminGet<T>(path: string): Promise<T> {
 }
 
 export function getAdminSession() {
-  return adminGet<{ authenticated: true; role: 'admin' }>('/api/admin/session')
+  return adminRequest<{ authenticated: true; role: 'admin' }>(
+    '/api/admin/session'
+  )
 }
 
 export function getAdminStores(query: string) {
-  return adminGet<AdminStoresResponse>(`/api/admin/stores?${query}`)
+  return adminRequest<AdminStoresResponse>(`/api/admin/stores?${query}`)
 }
 
 export function getAdminFunnel(query: string) {
-  return adminGet<AdminFunnelResponse>(`/api/admin/funnel?${query}`)
+  return adminRequest<AdminFunnelResponse>(`/api/admin/funnel?${query}`)
 }

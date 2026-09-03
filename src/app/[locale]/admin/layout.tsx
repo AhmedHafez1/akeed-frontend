@@ -7,13 +7,16 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
+  params,
 }: {
   children: React.ReactNode
+  params: Promise<{ locale: string }>
 }) {
+  const { locale } = await params
   return (
-    <div dir="ltr" lang="en">
+    <div dir={locale === 'ar' ? 'rtl' : 'ltr'} lang={locale}>
       <AdminAccessGate>
         <AdminShell>{children}</AdminShell>
       </AdminAccessGate>

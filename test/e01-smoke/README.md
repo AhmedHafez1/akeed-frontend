@@ -42,3 +42,7 @@ For each locale and shell:
 5. Confirm native Enter-key plan selection and Arabic `lang=ar`/`dir=rtl`. **Inspect billing calls** refreshes counters without changing application state.
 
 The fixture does not simulate onboarding activation or staff provisioning. Its template previews are synthetic. Authenticated layout, live Shopify approval, and staff/audit validation remain separate release gates. See `akeed-backend/docs/US-02-04-PROVIDER-NEUTRAL-ENTITLEMENTS-EVIDENCE.md` for dated results and the unrun PostgreSQL gate.
+
+## US-03-02 Standalone pilot fixture
+
+Open `http://127.0.0.1:3098/en/pilots` and `/ar/pilots`. This route imports the real Standalone pilot page and intercepts every admin API request. Select the first two eligible accounts, preview them, enter a non-secret synthetic reason, and apply. The first result deliberately activates one row and fails one; retry must report the first row as previously completed and activate the second. Verify translated labels, native keyboard controls, disabled in-flight actions, report downloads, and Arabic `lang=ar`, `dir=rtl`. No authentication, database write, merchant activation, or provider call occurs.
