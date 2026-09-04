@@ -49,6 +49,9 @@ export function useMainConfirmationsTab(
     error,
     pageContext,
   } = useDashboardData(statusFilter, dateRangeFilter)
+  const canSendTestVerification =
+    pageContext?.permissions?.can_send_test_verification === true
+  const canCancelOrders = pageContext?.permissions?.can_cancel_orders === true
 
   const statusFilters = useMemo<ReadonlyArray<StatusFilterOption>>(
     () => [
@@ -92,7 +95,7 @@ export function useMainConfirmationsTab(
 
   const onConfirmCancelOrder = useCallback(
     async (verificationId: string) => {
-      if (cancelingVerificationId) return
+      if (!canCancelOrders || cancelingVerificationId) return
 
       const verification = verifications.find(
         (item) => item.id === verificationId
@@ -125,11 +128,24 @@ export function useMainConfirmationsTab(
         )
       }
     },
-    [cancelingVerificationId, refetchVerifications, t, verifications]
+    [
+      canCancelOrders,
+      cancelingVerificationId,
+      refetchVerifications,
+      t,
+      verifications,
+    ]
   )
 
   const onSendTestVerification = useCallback(
     async (customerPhone: string) => {
+      if (!canSendTestVerification) {
+        setTestFeedback({
+          tone: 'critical',
+          message: t('emptyState.onboarding.testRoleRequired'),
+        })
+        return
+      }
       const normalizedPhone = customerPhone.trim()
       if (!normalizedPhone) {
         setTestFeedback({
@@ -175,7 +191,7 @@ export function useMainConfirmationsTab(
         setIsSendingTest(false)
       }
     },
-    [t, refetchVerifications]
+    [canSendTestVerification, t, refetchVerifications]
   )
 
   const emptyVerificationsMessage =
@@ -203,6 +219,8 @@ export function useMainConfirmationsTab(
     statusFilters,
     onStatusFilterChange: setStatusFilter,
     isSendingTest,
+    canSendTestVerification,
+    canCancelOrders,
     testFeedback,
     onSendTestVerification,
     onDismissTestFeedback,

@@ -42,6 +42,7 @@ interface VerificationsTableEmbeddedProps {
   cancelingVerificationId: string | null
   confirmingCancelVerificationId: string | null
   cancelOrderErrors: Record<string, string>
+  canCancelOrders: boolean
   onRequestCancelOrder: (verificationId: string) => void
   onDismissCancelOrder: (verificationId: string) => void
   onConfirmCancelOrder: (verificationId: string) => Promise<void>
@@ -137,6 +138,7 @@ export function VerificationsTableEmbedded({
   cancelingVerificationId,
   confirmingCancelVerificationId,
   cancelOrderErrors,
+  canCancelOrders,
   onRequestCancelOrder,
   onDismissCancelOrder,
   onConfirmCancelOrder,
@@ -263,7 +265,7 @@ export function VerificationsTableEmbedded({
 
         <IndexTable.Cell>
           <div className={dataCellClassName}>
-            {canCancelOrder(verification) ? (
+            {canCancelOrders && canCancelOrder(verification) ? (
               <BlockStack gap="150">
                 {isConfirming ? (
                   <BlockStack gap="150">
@@ -304,9 +306,11 @@ export function VerificationsTableEmbedded({
                 )}
 
                 {cancelError && (
-                  <Text as="p" variant="bodyXs" tone="critical">
-                    {cancelError}
-                  </Text>
+                  <div role="alert">
+                    <Text as="p" variant="bodyXs" tone="critical">
+                      {cancelError}
+                    </Text>
+                  </div>
                 )}
               </BlockStack>
             ) : (

@@ -114,151 +114,164 @@ export function AutomationSettingsStandaloneSkin(props: SettingsSkinProps) {
         </div>
       )}
 
-      <Card className="border-slate-200 bg-white p-6 shadow-sm">
-        <div className="space-y-5">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <h2 className="text-lg font-semibold text-slate-900">
-                  {t('automation.heading')}
-                </h2>
-                <HelpIcon content={t('automation.description')} />
+      {!props.canUpdateConfiguration && (
+        <div
+          role="status"
+          className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800"
+        >
+          {t('readOnly')}
+        </div>
+      )}
+
+      <fieldset disabled={!props.canUpdateConfiguration}>
+        <Card className="border-slate-200 bg-white p-6 shadow-sm">
+          <div className="space-y-5">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <h2 className="text-lg font-semibold text-slate-900">
+                    {t('automation.heading')}
+                  </h2>
+                  <HelpIcon content={t('automation.description')} />
+                </div>
+                <HelpButton article="automationRules" />
+                <p className="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
+                  {t('automation.trustSignal')}
+                </p>
               </div>
-              <HelpButton article="automationRules" />
-              <p className="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
-                {t('automation.trustSignal')}
-              </p>
+
+              {props.canUpdateConfiguration && (
+                <Button
+                  type="button"
+                  disabled={props.isSaving}
+                  onClick={() => void props.onSave()}
+                >
+                  {props.isSaving ? t('savingButton') : t('saveButton')}
+                </Button>
+              )}
             </div>
 
-            <Button
-              type="button"
-              disabled={props.isSaving}
-              onClick={() => void props.onSave()}
-            >
-              {props.isSaving ? t('savingButton') : t('saveButton')}
-            </Button>
-          </div>
-
-          <ToggleRow
-            label={t('autoVerifyLabel')}
-            description={t('autoVerifyDescription')}
-            checked={props.isAutoVerifyEnabled}
-            onChange={props.onAutoVerifyChange}
-          />
-
-          <Field
-            label={t('automation.sendDelayMinutesLabel')}
-            helpText={t('automation.sendDelayMinutesHelp')}
-            error={props.sendDelayMinutesError}
-          >
-            <Input
-              type="number"
-              min={0}
-              max={24}
-              step={0.25}
-              value={props.sendDelayMinutes}
-              onChange={(event) =>
-                props.onSendDelayMinutesChange(event.target.value)
-              }
-            />
-          </Field>
-
-          <div className="border-t border-slate-100 pt-5">
             <ToggleRow
-              label={t('automation.followUpEnabledLabel')}
-              description={t('automation.followUpEnabledHelp')}
-              checked={props.followUpEnabled}
-              onChange={props.onFollowUpEnabledChange}
+              label={t('autoVerifyLabel')}
+              description={t('autoVerifyDescription')}
+              checked={props.isAutoVerifyEnabled}
+              onChange={props.onAutoVerifyChange}
             />
-          </div>
 
-          <Field
-            label={t('automation.followUpDelayMinutesLabel')}
-            error={props.followUpDelayMinutesError}
-          >
-            <Input
-              type="number"
-              min={0}
-              max={168}
-              step={0.25}
-              disabled={!props.followUpEnabled}
-              value={props.followUpDelayMinutes}
-              onChange={(event) =>
-                props.onFollowUpDelayMinutesChange(event.target.value)
-              }
-            />
-          </Field>
-
-          <div className="border-t border-slate-100 pt-5">
-            <ToggleRow
-              label={t('automation.escalationEnabledLabel')}
-              description={t('automation.escalationEnabledHelp')}
-              checked={props.escalationEnabled}
-              onChange={props.onEscalationEnabledChange}
-            />
-          </div>
-
-          <Field
-            label={t('automation.escalationDelayMinutesLabel')}
-            helpText={t('automation.escalationDelayMinutesHelp')}
-            error={props.escalationDelayMinutesError}
-          >
-            <Input
-              type="number"
-              min={0}
-              max={168}
-              step={0.25}
-              disabled={!props.escalationEnabled}
-              value={props.escalationDelayMinutes}
-              onChange={(event) =>
-                props.onEscalationDelayMinutesChange(event.target.value)
-              }
-            />
-          </Field>
-
-          <div className="border-t border-slate-100 pt-5">
-            <ToggleRow
-              label={t('automation.quietHoursEnabledLabel')}
-              description={t('automation.quietHoursEnabledHelp')}
-              checked={props.quietHoursEnabled}
-              onChange={props.onQuietHoursEnabledChange}
-            />
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-3">
             <Field
-              label={t('automation.quietHoursStartLabel')}
-              error={props.quietHoursError}
+              label={t('automation.sendDelayMinutesLabel')}
+              helpText={t('automation.sendDelayMinutesHelp')}
+              error={props.sendDelayMinutesError}
             >
               <Input
-                type="time"
-                disabled={!props.quietHoursEnabled}
-                value={props.quietHoursStart}
+                type="number"
+                min={0}
+                max={24}
+                step={0.25}
+                value={props.sendDelayMinutes}
                 onChange={(event) =>
-                  props.onQuietHoursStartChange(event.target.value)
+                  props.onSendDelayMinutesChange(event.target.value)
                 }
               />
             </Field>
-            <Field label={t('automation.quietHoursEndLabel')}>
+
+            <div className="border-t border-slate-100 pt-5">
+              <ToggleRow
+                label={t('automation.followUpEnabledLabel')}
+                description={t('automation.followUpEnabledHelp')}
+                checked={props.followUpEnabled}
+                onChange={props.onFollowUpEnabledChange}
+              />
+            </div>
+
+            <Field
+              label={t('automation.followUpDelayMinutesLabel')}
+              error={props.followUpDelayMinutesError}
+            >
               <Input
-                type="time"
-                disabled={!props.quietHoursEnabled}
-                value={props.quietHoursEnd}
+                type="number"
+                min={0}
+                max={168}
+                step={0.25}
+                disabled={!props.followUpEnabled}
+                value={props.followUpDelayMinutes}
                 onChange={(event) =>
-                  props.onQuietHoursEndChange(event.target.value)
+                  props.onFollowUpDelayMinutesChange(event.target.value)
                 }
               />
             </Field>
-            <Field label={t('automation.timezoneLabel')}>
-              <NativeSelect<AutomationTimezone>
-                value={props.timezone}
-                options={props.timezoneOptions}
-                onChange={props.onTimezoneChange}
+
+            <div className="border-t border-slate-100 pt-5">
+              <ToggleRow
+                label={t('automation.escalationEnabledLabel')}
+                description={t('automation.escalationEnabledHelp')}
+                checked={props.escalationEnabled}
+                onChange={props.onEscalationEnabledChange}
+              />
+            </div>
+
+            <Field
+              label={t('automation.escalationDelayMinutesLabel')}
+              helpText={t('automation.escalationDelayMinutesHelp')}
+              error={props.escalationDelayMinutesError}
+            >
+              <Input
+                type="number"
+                min={0}
+                max={168}
+                step={0.25}
+                disabled={!props.escalationEnabled}
+                value={props.escalationDelayMinutes}
+                onChange={(event) =>
+                  props.onEscalationDelayMinutesChange(event.target.value)
+                }
               />
             </Field>
+
+            <div className="border-t border-slate-100 pt-5">
+              <ToggleRow
+                label={t('automation.quietHoursEnabledLabel')}
+                description={t('automation.quietHoursEnabledHelp')}
+                checked={props.quietHoursEnabled}
+                onChange={props.onQuietHoursEnabledChange}
+              />
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-3">
+              <Field
+                label={t('automation.quietHoursStartLabel')}
+                error={props.quietHoursError}
+              >
+                <Input
+                  type="time"
+                  disabled={!props.quietHoursEnabled}
+                  value={props.quietHoursStart}
+                  onChange={(event) =>
+                    props.onQuietHoursStartChange(event.target.value)
+                  }
+                />
+              </Field>
+              <Field label={t('automation.quietHoursEndLabel')}>
+                <Input
+                  type="time"
+                  disabled={!props.quietHoursEnabled}
+                  value={props.quietHoursEnd}
+                  onChange={(event) =>
+                    props.onQuietHoursEndChange(event.target.value)
+                  }
+                />
+              </Field>
+              <Field label={t('automation.timezoneLabel')}>
+                <NativeSelect<AutomationTimezone>
+                  value={props.timezone}
+                  options={props.timezoneOptions}
+                  onChange={props.onTimezoneChange}
+                />
+              </Field>
+            </div>
           </div>
-        </div>
-      </Card>
+        </Card>
+      </fieldset>
     </div>
   )
 }

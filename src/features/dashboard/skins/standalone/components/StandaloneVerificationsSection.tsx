@@ -23,6 +23,8 @@ interface StandaloneVerificationsSectionProps {
   statusFilter: VerificationStatusFilter
   statusFilters: ReadonlyArray<StatusFilterOption>
   isSendingTest: boolean
+  canSendTestVerification: boolean
+  canCancelOrders: boolean
   onRequestCancelOrder: (verificationId: string) => void
   onDismissCancelOrder: (verificationId: string) => void
   onConfirmCancelOrder: (verificationId: string) => Promise<void>
@@ -44,6 +46,8 @@ export function StandaloneVerificationsSection({
   statusFilter,
   statusFilters,
   isSendingTest,
+  canSendTestVerification,
+  canCancelOrders,
   onRequestCancelOrder,
   onDismissCancelOrder,
   onConfirmCancelOrder,
@@ -89,6 +93,14 @@ export function StandaloneVerificationsSection({
       </div>
 
       <div className="px-6 py-5">
+        {!canSendTestVerification && !canCancelOrders && (
+          <div
+            role="status"
+            className="mb-5 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900"
+          >
+            {t('readOnlyNotice')}
+          </div>
+        )}
         {isVerificationsLoading ? (
           <div className="py-8">
             <LoadingSpinner message={t('verificationSection.loading')} />
@@ -100,6 +112,7 @@ export function StandaloneVerificationsSection({
               cancelingVerificationId={cancelingVerificationId}
               confirmingCancelVerificationId={confirmingCancelVerificationId}
               cancelOrderErrors={cancelOrderErrors}
+              canCancelOrders={canCancelOrders}
               onRequestCancelOrder={onRequestCancelOrder}
               onDismissCancelOrder={onDismissCancelOrder}
               onConfirmCancelOrder={onConfirmCancelOrder}
@@ -144,21 +157,23 @@ export function StandaloneVerificationsSection({
                 ))}
               </ol>
 
-              <StandaloneTestVerificationPanel
-                heading={t('emptyState.onboarding.testSectionHeading')}
-                hint={t('emptyState.onboarding.nextStepHint')}
-                phoneLabel={t('emptyState.onboarding.testPhoneLabel')}
-                phonePlaceholder={t(
-                  'emptyState.onboarding.testPhonePlaceholder'
-                )}
-                invalidPhoneMessage={t(
-                  'emptyState.onboarding.testPhoneInvalid'
-                )}
-                sendLabel={t('emptyState.onboarding.testSendLabel')}
-                sendingLabel={t('emptyState.onboarding.testSendingLabel')}
-                isSendingTest={isSendingTest}
-                onSendTestVerification={onSendTestVerification}
-              />
+              {canSendTestVerification && (
+                <StandaloneTestVerificationPanel
+                  heading={t('emptyState.onboarding.testSectionHeading')}
+                  hint={t('emptyState.onboarding.nextStepHint')}
+                  phoneLabel={t('emptyState.onboarding.testPhoneLabel')}
+                  phonePlaceholder={t(
+                    'emptyState.onboarding.testPhonePlaceholder'
+                  )}
+                  invalidPhoneMessage={t(
+                    'emptyState.onboarding.testPhoneInvalid'
+                  )}
+                  sendLabel={t('emptyState.onboarding.testSendLabel')}
+                  sendingLabel={t('emptyState.onboarding.testSendingLabel')}
+                  isSendingTest={isSendingTest}
+                  onSendTestVerification={onSendTestVerification}
+                />
+              )}
             </div>
           </div>
         ) : (

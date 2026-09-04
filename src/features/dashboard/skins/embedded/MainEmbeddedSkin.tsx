@@ -106,6 +106,7 @@ function MainConfirmationsTab({
               loadingMore: t('table.loadingMore'),
               loadMore: t('table.loadMore'),
               emptyMessage: confirmations.emptyVerificationsMessage,
+              readOnlyNotice: t('readOnlyNotice'),
               emptyState: {
                 heading: t('emptyState.onboarding.heading'),
                 activeDescription: t('emptyState.onboarding.activeDescription'),
@@ -139,6 +140,8 @@ function MainConfirmationsTab({
             statusFilter={confirmations.statusFilter}
             statusFilters={confirmations.statusFilters}
             isSendingTest={confirmations.isSendingTest}
+            canSendTestVerification={confirmations.canSendTestVerification}
+            canCancelOrders={confirmations.canCancelOrders}
             onRequestCancelOrder={confirmations.onRequestCancelOrder}
             onDismissCancelOrder={confirmations.onDismissCancelOrder}
             onConfirmCancelOrder={confirmations.onConfirmCancelOrder}

@@ -569,12 +569,17 @@ export function SettingsEmbeddedTabbedSkin(props: SettingsSkinProps) {
             <p>{props.successBanner}</p>
           </Banner>
         )}
+        {!props.canUpdateConfiguration && (
+          <Banner tone="info">
+            <p>{t('readOnly')}</p>
+          </Banner>
+        )}
 
         <InlineStack align="space-between" blockAlign="center" gap="400">
           <div className="min-w-0 flex-1">
             <Tabs tabs={tabs} selected={selected} onSelect={handleTabSelect} />
           </div>
-          {canSaveActiveTab && (
+          {canSaveActiveTab && props.canUpdateConfiguration && (
             <Button
               variant="primary"
               loading={props.isSaving}
@@ -585,14 +590,16 @@ export function SettingsEmbeddedTabbedSkin(props: SettingsSkinProps) {
           )}
         </InlineStack>
 
-        {activeTab === 'store' && <StoreTab props={props} />}
-        {activeTab === 'confirmation' && (
-          <ConfirmationConfigTab props={props} />
-        )}
-        {activeTab === 'message-preview' && (
-          <MessageTemplateTab props={props} />
-        )}
-        {activeTab === 'billing' && <BillingTab props={props} />}
+        <fieldset disabled={!props.canUpdateConfiguration}>
+          {activeTab === 'store' && <StoreTab props={props} />}
+          {activeTab === 'confirmation' && (
+            <ConfirmationConfigTab props={props} />
+          )}
+          {activeTab === 'message-preview' && (
+            <MessageTemplateTab props={props} />
+          )}
+          {activeTab === 'billing' && <BillingTab props={props} />}
+        </fieldset>
       </BlockStack>
     </Page>
   )

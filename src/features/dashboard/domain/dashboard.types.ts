@@ -56,6 +56,8 @@ export interface DashboardSkinProps {
   onStatusFilterChange: (filter: VerificationStatusFilter) => void
 
   // Test verification
+  canSendTestVerification: boolean
+  canCancelOrders: boolean
   isSendingTest: boolean
   testFeedback: TestFeedback | null
   onSendTestVerification: (customerPhone: string) => Promise<void>

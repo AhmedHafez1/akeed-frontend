@@ -312,13 +312,15 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
           </h1>
           <p className="text-sm text-slate-500">{t('subtitle')}</p>
         </div>
-        <Button
-          type="button"
-          disabled={!props.canUpdateConfiguration || props.isSaving}
-          onClick={() => void props.onSave()}
-        >
-          {props.isSaving ? t('savingButton') : t('saveButton')}
-        </Button>
+        {props.canUpdateConfiguration && (
+          <Button
+            type="button"
+            disabled={props.isSaving}
+            onClick={() => void props.onSave()}
+          >
+            {props.isSaving ? t('savingButton') : t('saveButton')}
+          </Button>
+        )}
       </div>
 
       {props.errorBanner && (
@@ -334,7 +336,10 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
       )}
 
       {!props.canUpdateConfiguration && (
-        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+        <div
+          role="status"
+          className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800"
+        >
           {t('readOnly')}
         </div>
       )}

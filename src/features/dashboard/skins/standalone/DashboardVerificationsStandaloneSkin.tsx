@@ -28,6 +28,8 @@ export function DashboardVerificationsStandaloneSkin({
   statusFilters,
   onStatusFilterChange,
   isSendingTest,
+  canSendTestVerification,
+  canCancelOrders,
   testFeedback,
   onSendTestVerification,
   onDismissTestFeedback,
@@ -96,6 +98,8 @@ export function DashboardVerificationsStandaloneSkin({
         statusFilter={statusFilter}
         statusFilters={statusFilters}
         isSendingTest={isSendingTest}
+        canSendTestVerification={canSendTestVerification}
+        canCancelOrders={canCancelOrders}
         onRequestCancelOrder={onRequestCancelOrder}
         onDismissCancelOrder={onDismissCancelOrder}
         onConfirmCancelOrder={onConfirmCancelOrder}

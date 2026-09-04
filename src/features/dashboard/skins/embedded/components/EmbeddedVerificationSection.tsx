@@ -1,5 +1,6 @@
 import {
   BlockStack,
+  Banner,
   Box,
   Button,
   Card,
@@ -25,6 +26,7 @@ interface EmbeddedVerificationMessages {
   loadingMore: string
   loadMore: string
   emptyMessage: string
+  readOnlyNotice: string
   emptyState: {
     heading: string
     activeDescription: string
@@ -53,6 +55,8 @@ interface EmbeddedVerificationSectionProps {
   statusFilter: VerificationStatusFilter
   statusFilters: ReadonlyArray<StatusFilterOption>
   isSendingTest: boolean
+  canSendTestVerification: boolean
+  canCancelOrders: boolean
   onRequestCancelOrder: (verificationId: string) => void
   onDismissCancelOrder: (verificationId: string) => void
   onConfirmCancelOrder: (verificationId: string) => Promise<void>
@@ -74,6 +78,8 @@ export function EmbeddedVerificationSection({
   statusFilter,
   statusFilters,
   isSendingTest,
+  canSendTestVerification,
+  canCancelOrders,
   onRequestCancelOrder,
   onDismissCancelOrder,
   onConfirmCancelOrder,
@@ -87,6 +93,11 @@ export function EmbeddedVerificationSection({
   return (
     <Card>
       <BlockStack gap="400">
+        {!canSendTestVerification && !canCancelOrders && (
+          <Banner tone="info">
+            <p>{messages.readOnlyNotice}</p>
+          </Banner>
+        )}
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <BlockStack gap="050">
             <Text variant={isRTL ? 'headingMd' : 'headingSm'} as="h2">
@@ -154,6 +165,7 @@ export function EmbeddedVerificationSection({
               cancelingVerificationId={cancelingVerificationId}
               confirmingCancelVerificationId={confirmingCancelVerificationId}
               cancelOrderErrors={cancelOrderErrors}
+              canCancelOrders={canCancelOrders}
               onRequestCancelOrder={onRequestCancelOrder}
               onDismissCancelOrder={onDismissCancelOrder}
               onConfirmCancelOrder={onConfirmCancelOrder}
@@ -174,7 +186,7 @@ export function EmbeddedVerificationSection({
         ) : shouldShowEmptyState && statusFilter === 'all' ? (
           <DashboardEmptyState
             messages={messages.emptyState}
-            showTestSection
+            showTestSection={canSendTestVerification}
             isSendingTest={isSendingTest}
             onSendTestVerification={onSendTestVerification}
             hasVerifications={hasVerifications}

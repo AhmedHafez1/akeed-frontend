@@ -6,28 +6,40 @@ import enTranslations from '@shopify/polaris/locales/en.json'
 import '@shopify/polaris/build/esm/styles.css'
 import { useDashboard } from '@/features/dashboard/domain/useDashboard'
 import { useMainConfirmationsTab } from '@/features/dashboard/domain/useMainConfirmationsTab'
-import { VerificationsTableEmbedded } from '@/features/dashboard/skins/embedded/VerificationsTableEmbedded'
-import { VerificationsTableStandalone } from '@/features/dashboard/skins/standalone/VerificationsTableStandalone'
+import { DashboardVerificationsEmbeddedSkin } from '@/features/dashboard/skins/embedded/DashboardVerificationsEmbeddedSkin'
+import { DashboardVerificationsStandaloneSkin } from '@/features/dashboard/skins/standalone/DashboardVerificationsStandaloneSkin'
 import {
   fixtureCounts,
   setFixtureResult,
+  setFixtureRole,
   settleFixture,
   setFixtureCapability,
 } from './fixtureApi'
 
 function StandaloneFixture() {
   const dashboard = useDashboard()
-  return <VerificationsTableStandalone {...dashboard} />
+  return <DashboardVerificationsStandaloneSkin {...dashboard} />
 }
 
 function EmbeddedFixture() {
   const confirmations = useMainConfirmationsTab('last_30_days')
-  return <VerificationsTableEmbedded {...confirmations} />
+  return (
+    <DashboardVerificationsEmbeddedSkin
+      {...confirmations}
+      stats={null}
+      isStatsLoading={false}
+      sourceStatus="connected"
+      dateRangeFilter="last_30_days"
+      dateRangeOptions={[]}
+      onDateRangeFilterChange={() => undefined}
+    />
+  )
 }
 
 export default function SmokePage() {
   const [skin, setSkin] = useState('embedded')
   const [capability, setCapability] = useState('supported')
+  const [role, setRole] = useState<'owner' | 'admin' | 'viewer'>('owner')
   const [counts, setCounts] = useState(fixtureCounts())
   const Fixture = skin === 'embedded' ? EmbeddedFixture : StandaloneFixture
   return (
@@ -38,6 +50,25 @@ export default function SmokePage() {
           Authentication and full layouts are checked separately in the real
           apps.
         </p>
+        <label>
+          Fixture role{' '}
+          <select
+            id="fixture-role"
+            value={role}
+            onChange={(event) => {
+              const nextRole = event.target.value as
+                | 'owner'
+                | 'admin'
+                | 'viewer'
+              setFixtureRole(nextRole)
+              setRole(nextRole)
+            }}
+          >
+            <option value="owner">Owner</option>
+            <option value="admin">Admin</option>
+            <option value="viewer">Viewer</option>
+          </select>
+        </label>
         <label>
           Fixture skin{' '}
           <select
@@ -51,12 +82,16 @@ export default function SmokePage() {
         <label>
           Fixture result{' '}
           <select
+            id="fixture-result"
             defaultValue="failure"
             onChange={(event) =>
-              setFixtureResult(event.target.value as 'failure' | 'success')
+              setFixtureResult(
+                event.target.value as 'failure' | 'role_denied' | 'success'
+              )
             }
           >
             <option value="failure">Failure</option>
+            <option value="role_denied">Role denied (stale 403)</option>
             <option value="success">Success</option>
           </select>
         </label>
@@ -79,7 +114,7 @@ export default function SmokePage() {
           Inspect fixture calls
         </button>
         <output aria-label="Fixture calls">{JSON.stringify(counts)}</output>
-        <Fixture key={capability} />
+        <Fixture key={`${capability}-${role}`} />
       </main>
     </AppProvider>
   )

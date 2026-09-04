@@ -14,6 +14,7 @@ interface VerificationsTableStandaloneProps {
   cancelingVerificationId: string | null
   confirmingCancelVerificationId: string | null
   cancelOrderErrors: Record<string, string>
+  canCancelOrders: boolean
   onRequestCancelOrder: (verificationId: string) => void
   onDismissCancelOrder: (verificationId: string) => void
   onConfirmCancelOrder: (verificationId: string) => Promise<void>
@@ -88,6 +89,7 @@ export function VerificationsTableStandalone({
   cancelingVerificationId,
   confirmingCancelVerificationId,
   cancelOrderErrors,
+  canCancelOrders,
   onRequestCancelOrder,
   onDismissCancelOrder,
   onConfirmCancelOrder,
@@ -203,7 +205,7 @@ export function VerificationsTableStandalone({
 
                 {/* Actions */}
                 <td className="px-4 py-3.5">
-                  {canCancelOrder(verification) ? (
+                  {canCancelOrders && canCancelOrder(verification) ? (
                     <div className="max-w-[260px] space-y-2">
                       {isConfirming ? (
                         <div className="space-y-2">
@@ -246,7 +248,10 @@ export function VerificationsTableStandalone({
                       )}
 
                       {cancelError && (
-                        <p className="text-xs font-medium text-red-600">
+                        <p
+                          role="alert"
+                          className="text-xs font-medium text-red-600"
+                        >
                           {cancelError}
                         </p>
                       )}

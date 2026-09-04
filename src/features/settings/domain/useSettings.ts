@@ -194,6 +194,7 @@ export function useSettings(): {
   const [billingManagement, setBillingManagement] =
     useState<SettingsResponse['state']['billingManagement']>()
   const canManageBilling =
+    canUpdateConfiguration &&
     billingManagement?.mode === 'shopify' &&
     billingManagement.canManageBilling === true
   const [billingPlansById, setBillingPlansById] = useState<

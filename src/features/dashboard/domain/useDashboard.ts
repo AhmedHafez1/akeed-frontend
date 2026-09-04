@@ -69,6 +69,9 @@ export function useDashboard(): DashboardSkinProps {
   const quietHoursEnabled = stats?.automation?.quiet_hours_enabled ?? false
   const sourceStatus =
     stats?.source?.status ?? pageContext?.source?.status ?? 'not_connected'
+  const canSendTestVerification =
+    pageContext?.permissions?.can_send_test_verification === true
+  const canCancelOrders = pageContext?.permissions?.can_cancel_orders === true
 
   const hasVerifications = verifications?.length > 0
 
@@ -136,7 +139,7 @@ export function useDashboard(): DashboardSkinProps {
 
   const onConfirmCancelOrder = useCallback(
     async (verificationId: string) => {
-      if (cancelingVerificationId) {
+      if (!canCancelOrders || cancelingVerificationId) {
         return
       }
 
@@ -174,6 +177,7 @@ export function useDashboard(): DashboardSkinProps {
     },
     [
       cancelingVerificationId,
+      canCancelOrders,
       refetchStats,
       refetchVerifications,
       t,
@@ -183,6 +187,13 @@ export function useDashboard(): DashboardSkinProps {
 
   const onSendTestVerification = useCallback(
     async (customerPhone: string) => {
+      if (!canSendTestVerification) {
+        setTestFeedback({
+          tone: 'critical',
+          message: t('emptyState.onboarding.testRoleRequired'),
+        })
+        return
+      }
       const normalizedPhone = customerPhone.trim()
       if (!normalizedPhone) {
         setTestFeedback({
@@ -229,7 +240,7 @@ export function useDashboard(): DashboardSkinProps {
         setIsSendingTest(false)
       }
     },
-    [t, refetchVerifications, refetchStats]
+    [canSendTestVerification, t, refetchVerifications, refetchStats]
   )
 
   const error = useMemo(() => {
@@ -269,6 +280,8 @@ export function useDashboard(): DashboardSkinProps {
     onStatusFilterChange,
 
     isSendingTest,
+    canSendTestVerification,
+    canCancelOrders,
     testFeedback,
     onSendTestVerification,
     onDismissTestFeedback,

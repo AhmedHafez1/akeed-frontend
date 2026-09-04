@@ -50,3 +50,9 @@ Open `http://127.0.0.1:3098/en/pilots` and `/ar/pilots`. This route imports the 
 ## US-03-03 Standalone onboarding fixture
 
 Open `http://127.0.0.1:3098/en/onboarding?role=owner` and `/ar/onboarding?role=owner`. Enter a merchant name, save progress, reload, and complete setup; the fixture redirects to its synthetic dashboard. Use `role=admin` for the same write path, `role=viewer` to verify every configuration action is read-only, `entitlement=blocked` to verify progress persists while completion reports pilot activation, and `backend=unavailable` to verify the localized retry state. Inspect the call counter before and after actions. The fixture uses the real Standalone onboarding hook and skin but synthetic in-memory state; it performs no authentication, database write, provider call, Meta connection, or message send.
+
+## US-03-05 role and stale-page fixture
+
+Open the root fixture in both locales and select each embedded/Standalone skin. Owner and admin must retain cancellation and test-send actions. Viewer must see the localized read-only notice with neither action, while the verification values remain readable. Missing permission data is covered by the production hook's strict `=== true` check and therefore fails closed.
+
+To simulate a membership change after page load, keep the fixture role as owner or admin, choose **Role denied (stale 403)**, request cancellation, and resolve the pending request. The row must remain unchanged and display the localized cancellation error in a `role="alert"` container. This fixture uses a synthetic `403 VERIFICATION_ROLE_REQUIRED`; it does not prove live authentication or membership refresh.

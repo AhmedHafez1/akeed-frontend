@@ -735,6 +735,7 @@
       "metrics": "Metrics",
       "confirmations": "Confirmations"
     },
+    "readOnlyNotice": "You have read-only access. An owner or admin can send tests or cancel orders.",
     "emptyState": {
       "all": "No verifications yet. Once an order is received, verification requests will appear here.",
       "filtered": "No verifications match the selected status.",

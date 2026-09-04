@@ -32,6 +32,8 @@ export function DashboardVerificationsEmbeddedSkin({
   statusFilters,
   onStatusFilterChange,
   isSendingTest,
+  canSendTestVerification,
+  canCancelOrders,
   testFeedback,
   onSendTestVerification,
   onDismissTestFeedback,
@@ -98,6 +100,7 @@ export function DashboardVerificationsEmbeddedSkin({
                 loadingMore: t('table.loadingMore'),
                 loadMore: t('table.loadMore'),
                 emptyMessage: emptyVerificationsMessage,
+                readOnlyNotice: t('readOnlyNotice'),
                 emptyState: {
                   heading: t('emptyState.onboarding.heading'),
                   activeDescription: t(
@@ -129,6 +132,8 @@ export function DashboardVerificationsEmbeddedSkin({
               statusFilter={statusFilter}
               statusFilters={statusFilters}
               isSendingTest={isSendingTest}
+              canSendTestVerification={canSendTestVerification}
+              canCancelOrders={canCancelOrders}
               onRequestCancelOrder={onRequestCancelOrder}
               onDismissCancelOrder={onDismissCancelOrder}
               onConfirmCancelOrder={onConfirmCancelOrder}

@@ -107,7 +107,10 @@ export function StandaloneOnboardingPage() {
       </div>
 
       {!onboarding.canManage && (
-        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+        <div
+          role="status"
+          className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800"
+        >
           {t('readOnly')}
         </div>
       )}
@@ -350,23 +353,29 @@ export function StandaloneOnboardingPage() {
         </Card>
       )}
 
-      <div className="flex flex-wrap justify-end gap-3">
-        <Button
-          type="button"
-          variant="outline"
-          disabled={disabled || onboarding.isSaving || onboarding.isCompleting}
-          onClick={() => void onboarding.save()}
-        >
-          {onboarding.isSaving ? t('saving') : t('saveProgress')}
-        </Button>
-        <Button
-          type="button"
-          disabled={disabled || onboarding.isSaving || onboarding.isCompleting}
-          onClick={() => void onboarding.complete()}
-        >
-          {onboarding.isCompleting ? t('completing') : t('complete')}
-        </Button>
-      </div>
+      {onboarding.canManage && (
+        <div className="flex flex-wrap justify-end gap-3">
+          <Button
+            type="button"
+            variant="outline"
+            disabled={
+              disabled || onboarding.isSaving || onboarding.isCompleting
+            }
+            onClick={() => void onboarding.save()}
+          >
+            {onboarding.isSaving ? t('saving') : t('saveProgress')}
+          </Button>
+          <Button
+            type="button"
+            disabled={
+              disabled || onboarding.isSaving || onboarding.isCompleting
+            }
+            onClick={() => void onboarding.complete()}
+          >
+            {onboarding.isCompleting ? t('completing') : t('complete')}
+          </Button>
+        </div>
+      )}
       <p className="text-center text-xs text-slate-500">{t('metaNotice')}</p>
     </main>
   )
