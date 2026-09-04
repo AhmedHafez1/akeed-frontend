@@ -139,6 +139,11 @@ export function VerificationsTableStandalone({
                     {verification.order_number
                       ? `#${verification.order_number}`
                       : '—'}
+                    {verification.is_test && (
+                      <span className="ms-2 rounded-full bg-sky-100 px-2 py-0.5 text-[10px] font-semibold text-sky-700">
+                        {t('testBadge')}
+                      </span>
+                    )}
                   </p>
                   <p className="mt-0.5 font-mono text-[10px] leading-none text-slate-400">
                     {verification.order_id.slice(0, 12)}

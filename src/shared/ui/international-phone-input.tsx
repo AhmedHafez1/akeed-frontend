@@ -52,13 +52,23 @@ export function InternationalPhoneInput({
   onChange,
   placeholder = '+20 123 456 7890',
   defaultCountry = 'EG',
+  label,
   disabled = false,
   className,
 }: InternationalPhoneInputProps) {
+  const inputId = React.useId()
   const isValid = value ? isValidPhoneNumber(value) : null
 
   return (
-    <div className={cn(className)}>
+    <div className={cn('space-y-1.5', className)}>
+      {label && (
+        <label
+          htmlFor={inputId}
+          className="block text-xs font-medium text-slate-700"
+        >
+          {label}
+        </label>
+      )}
       <div
         className={cn(
           'intl-phone relative flex h-10 w-full items-center rounded-lg border-2 border-gray-200 bg-white px-3 transition-colors',
@@ -71,6 +81,8 @@ export function InternationalPhoneInput({
         )}
       >
         <PhoneInput
+          id={inputId}
+          aria-invalid={isValid === false}
           international
           countryCallingCodeEditable={false}
           defaultCountry={defaultCountry}

@@ -50,6 +50,7 @@ export type VerificationItem = {
   status: VerificationStatus
   order_id: string
   order_number: string | null
+  is_test: boolean
   customer_name: string | null
   customer_phone: string | null
   total_price: string | null

@@ -151,6 +151,9 @@ export function StandaloneVerificationsSection({
                 phonePlaceholder={t(
                   'emptyState.onboarding.testPhonePlaceholder'
                 )}
+                invalidPhoneMessage={t(
+                  'emptyState.onboarding.testPhoneInvalid'
+                )}
                 sendLabel={t('emptyState.onboarding.testSendLabel')}
                 sendingLabel={t('emptyState.onboarding.testSendingLabel')}
                 isSendingTest={isSendingTest}

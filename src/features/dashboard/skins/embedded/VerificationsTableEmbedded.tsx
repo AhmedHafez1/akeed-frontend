@@ -187,9 +187,17 @@ export function VerificationsTableEmbedded({
         <IndexTable.Cell>
           <div className={dataCellClassName}>
             <BlockStack gap="100">
-              <Text variant="bodyMd" fontWeight="semibold" as="p">
-                {formatOrderTitle(verification, t('table.orderFallbackPrefix'))}
-              </Text>
+              <div className="flex items-center gap-2">
+                <Text variant="bodyMd" fontWeight="semibold" as="p">
+                  {formatOrderTitle(
+                    verification,
+                    t('table.orderFallbackPrefix')
+                  )}
+                </Text>
+                {verification.is_test && (
+                  <Badge tone="info">{t('table.testBadge')}</Badge>
+                )}
+              </div>
               <Text variant="bodySm" tone="subdued" as="p">
                 {verification.order_id.slice(0, 12)}
               </Text>

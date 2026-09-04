@@ -24,6 +24,7 @@ const order: VerificationItem = {
   capabilities: [{ action: 'merchant_no_reply_cancellation', supported: true }],
   order_id: 'e01-synthetic-order',
   order_number: 'E01-FIXTURE',
+  is_test: false,
   customer_name: 'Synthetic fixture',
   customer_phone: null,
   total_price: '12.50',

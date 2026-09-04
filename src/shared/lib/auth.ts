@@ -2,7 +2,7 @@
 import { createClient } from '@supabase/supabase-js'
 import type { User } from '@supabase/supabase-js'
 import { resolveEmbeddedContextFromWindow } from '@/shared/lib/embedded-context'
-import { getErrorMessage, parseJsonResponse } from '@/shared/lib/http'
+import { createApiError, parseJsonResponse } from '@/shared/lib/http'
 import { createLogger } from '@/shared/lib/logger'
 import { withLocale } from '@/shared/lib/locale'
 
@@ -303,7 +303,7 @@ async function request<T>(
   })
 
   if (!response.ok) {
-    throw new Error(await getErrorMessage(response))
+    throw await createApiError(response)
   }
 
   return parseJsonResponse<T>(response)

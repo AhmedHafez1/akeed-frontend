@@ -11,24 +11,36 @@ export async function parseJsonResponse<T>(response: Response): Promise<T> {
   }
 }
 
-export async function getErrorMessage(response: Response): Promise<string> {
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+    readonly code?: string
+  ) {
+    super(message)
+    this.name = 'ApiError'
+  }
+}
+
+export async function createApiError(response: Response): Promise<ApiError> {
   const fallback = `Request failed with status ${response.status}`
 
   try {
-    const data = (await parseJsonResponse<Record<string, unknown>>(
-      response
-    )) as { message?: string | string[] }
-
-    if (Array.isArray(data.message) && data.message.length > 0) {
-      return data.message.join(', ')
-    }
-
-    if (typeof data.message === 'string' && data.message.trim().length > 0) {
-      return data.message
-    }
+    const data = await parseJsonResponse<Record<string, unknown>>(response)
+    const message = Array.isArray(data.message)
+      ? data.message
+          .filter((item): item is string => typeof item === 'string')
+          .join(', ')
+      : typeof data.message === 'string' && data.message.trim().length > 0
+        ? data.message
+        : fallback
+    const code = typeof data.code === 'string' ? data.code : undefined
+    return new ApiError(message, response.status, code)
   } catch {
-    return fallback
+    return new ApiError(fallback, response.status)
   }
+}
 
-  return fallback
+export async function getErrorMessage(response: Response): Promise<string> {
+  return (await createApiError(response)).message
 }

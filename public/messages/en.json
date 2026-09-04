@@ -751,10 +751,18 @@
         "testSendLabel": "Send test verification",
         "testSendingLabel": "Sending...",
         "testPhoneRequired": "Please enter a customer phone number.",
-        "testSent": "Test verification sent successfully.",
+        "testPhoneInvalid": "Enter a valid WhatsApp phone number, including its country code.",
+        "testSent": "Synthetic test sent. No real order was created or updated.",
         "testFailed": "We could not send a test verification. Please try again.",
         "testSkipped": "Test verification was skipped.",
-        "nextStepHint": "Try it now - send a test to your own WhatsApp number."
+        "testQuotaReached": "Your current verification limit has been reached. Review usage before trying again.",
+        "testSourceUnavailable": "The current commerce source is not ready for test messaging. Review setup or contact support.",
+        "testEntitlementRequired": "Test messaging is not active for this source. Ask Akeed support to review pilot access.",
+        "testSetupIncomplete": "Complete source setup before sending a test message.",
+        "testRoleRequired": "Only an owner or admin can send a test message.",
+        "testProviderFailed": "WhatsApp did not accept the test message. Check the number and try again.",
+        "testRateLimited": "Too many test attempts. Wait one minute, then try again.",
+        "nextStepHint": "Send one immediate synthetic message to your own WhatsApp number. This does not create or update a real order."
       }
     },
     "verificationSection": {
@@ -827,6 +835,7 @@
         "actions": "Actions"
       },
       "orderFallbackPrefix": "Order",
+      "testBadge": "Test",
       "unknownCustomer": "Unknown customer",
       "noPhone": "No phone",
       "loadMore": "Load more",

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import {
   InternationalPhoneInput,
   isValidPhoneNumber,
@@ -12,6 +12,7 @@ interface StandaloneTestVerificationPanelProps {
   hint: string
   phoneLabel: string
   phonePlaceholder: string
+  invalidPhoneMessage: string
   sendLabel: string
   sendingLabel: string
   isSendingTest: boolean
@@ -23,17 +24,31 @@ export function StandaloneTestVerificationPanel({
   hint,
   phoneLabel,
   phonePlaceholder,
+  invalidPhoneMessage,
   sendLabel,
   sendingLabel,
   isSendingTest,
   onSendTestVerification,
 }: StandaloneTestVerificationPanelProps) {
   const [testPhone, setTestPhone] = useState<E164Value | undefined>()
+  const submissionInFlight = useRef(false)
   const isPhoneValid = testPhone ? isValidPhoneNumber(testPhone) : false
 
-  const handleSendTest = () => {
-    if (!testPhone || !isPhoneValid) return
-    onSendTestVerification(testPhone)
+  const handleSendTest = async () => {
+    if (
+      !testPhone ||
+      !isPhoneValid ||
+      isSendingTest ||
+      submissionInFlight.current
+    ) {
+      return
+    }
+    submissionInFlight.current = true
+    try {
+      await onSendTestVerification(testPhone)
+    } finally {
+      submissionInFlight.current = false
+    }
   }
 
   return (
@@ -53,11 +68,16 @@ export function StandaloneTestVerificationPanel({
             defaultCountry="EG"
             disabled={isSendingTest}
           />
+          {testPhone && !isPhoneValid && (
+            <p role="alert" className="mt-1.5 text-xs text-red-600">
+              {invalidPhoneMessage}
+            </p>
+          )}
         </div>
         <button
           type="button"
           disabled={!isPhoneValid || isSendingTest}
-          onClick={handleSendTest}
+          onClick={() => void handleSendTest()}
           className="rounded-lg bg-emerald-600 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isSendingTest ? sendingLabel : sendLabel}

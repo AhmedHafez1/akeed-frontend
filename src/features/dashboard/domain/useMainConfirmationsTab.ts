@@ -12,6 +12,7 @@ import type {
   VerificationStatusFilter,
 } from '../model/dashboard.model'
 import type { StatusFilterOption, TestFeedback } from './dashboard.types'
+import { getTestVerificationFeedbackKey } from './testVerificationFeedback'
 
 const logger = createLogger('Dashboard')
 
@@ -150,7 +151,10 @@ export function useMainConfirmationsTab(
         if (response.skipped) {
           setTestFeedback({
             tone: 'warning',
-            message: response.reason ?? t('emptyState.onboarding.testSkipped'),
+            message:
+              response.reason === 'plan_limit_reached'
+                ? t('emptyState.onboarding.testQuotaReached')
+                : t('emptyState.onboarding.testSkipped'),
           })
           return
         }
@@ -163,11 +167,9 @@ export function useMainConfirmationsTab(
         refetchVerifications()
       } catch (error) {
         logger.error('Failed to send test verification', error)
-        const backendMessage =
-          error instanceof Error ? error.message : undefined
         setTestFeedback({
           tone: 'critical',
-          message: backendMessage ?? t('emptyState.onboarding.testFailed'),
+          message: t(getTestVerificationFeedbackKey(error)),
         })
       } finally {
         setIsSendingTest(false)
