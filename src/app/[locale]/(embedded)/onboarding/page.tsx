@@ -1,6 +1,6 @@
 'use client'
 
-import { type ReactNode, useCallback, useEffect, useMemo } from 'react'
+import { type ReactNode, useCallback, useMemo } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { BlockStack, Card, Layout, Page } from '@shopify/polaris'
@@ -14,6 +14,7 @@ import {
   OnboardingStepCounter,
   BillingStep,
   ConfigurationStep,
+  StandaloneOnboardingPage,
   useEmbeddedOnboarding,
   type EmbeddedStep,
   type OnboardingBillingPlan,
@@ -63,16 +64,6 @@ export default function OnboardingPage() {
   const router = useRouter()
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname ?? '')
-
-  useEffect(() => {
-    if (isModeLoading) {
-      return
-    }
-
-    if (!isEmbedded) {
-      router.replace(`/${locale}/dashboard`)
-    }
-  }, [isEmbedded, isModeLoading, locale, router])
 
   const languageOptions = useMemo(
     () =>
@@ -288,6 +279,10 @@ export default function OnboardingPage() {
 
   const isPageLoading = !isEmbedded || isModeLoading || isInitialLoading
   useAppBridgeLoading(isPageLoading || isBillingRedirecting)
+
+  if (!isModeLoading && !isEmbedded) {
+    return <StandaloneOnboardingPage />
+  }
 
   if (isPageLoading || isBillingRedirecting) {
     return (

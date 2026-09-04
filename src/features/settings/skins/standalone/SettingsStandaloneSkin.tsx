@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import type {
   ArabicCodTemplateVariantId,
+  AutomationTimezone,
   EnglishCodTemplateVariantId,
   IntegrationOnboardingLanguage,
   OnboardingBillingPlanId,
@@ -48,14 +49,17 @@ function NativeSelect<TValue extends string>({
   value,
   options,
   onChange,
+  disabled = false,
 }: {
   value: TValue
   options: ReadonlyArray<{ label: string; value: TValue }>
   onChange: (value: TValue) => void
+  disabled?: boolean
 }) {
   return (
     <select
       value={value}
+      disabled={disabled}
       onChange={(event) => onChange(event.target.value as TValue)}
       className="h-12 w-full rounded-lg border-2 border-gray-200 bg-white px-4 text-base transition-colors outline-none focus:border-emerald-500"
     >
@@ -65,6 +69,38 @@ function NativeSelect<TValue extends string>({
         </option>
       ))}
     </select>
+  )
+}
+
+function ToggleRow({
+  label,
+  description,
+  checked,
+  disabled,
+  onChange,
+}: {
+  label: string
+  description: string
+  checked: boolean
+  disabled: boolean
+  onChange: (checked: boolean) => void
+}) {
+  return (
+    <label className="flex gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <input
+        type="checkbox"
+        checked={checked}
+        disabled={disabled}
+        onChange={(event) => onChange(event.target.checked)}
+        className="mt-1 h-4 w-4"
+      />
+      <span>
+        <span className="block text-sm font-semibold text-slate-900">
+          {label}
+        </span>
+        <span className="mt-1 block text-xs text-slate-500">{description}</span>
+      </span>
+    </label>
   )
 }
 
@@ -253,6 +289,20 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
     props.onCodTemplateEnVariantChange(value as EnglishCodTemplateVariantId)
   }
 
+  if (props.isLoadError) {
+    return (
+      <div className="mx-auto max-w-xl py-12">
+        <Card className="border-red-200 p-6 text-center">
+          <h1 className="text-xl font-bold text-slate-900">{t('title')}</h1>
+          <p className="mt-3 text-sm text-red-700">{t('loadError')}</p>
+          <Button className="mt-5" onClick={props.onRetry}>
+            {t('retryButton')}
+          </Button>
+        </Card>
+      </div>
+    )
+  }
+
   return (
     <div className="mx-auto max-w-6xl space-y-6 pb-8">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -264,7 +314,7 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
         </div>
         <Button
           type="button"
-          disabled={props.isSaving}
+          disabled={!props.canUpdateConfiguration || props.isSaving}
           onClick={() => void props.onSave()}
         >
           {props.isSaving ? t('savingButton') : t('saveButton')}
@@ -283,11 +333,32 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
         </div>
       )}
 
+      {!props.canUpdateConfiguration && (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          {t('readOnly')}
+        </div>
+      )}
+
+      <SectionCard title={t('sourceHeading')}>
+        <p className="text-sm font-medium text-emerald-700">
+          {props.sourcePlatformType === 'standalone'
+            ? t('sourceStandalone')
+            : props.sourcePlatformType}
+        </p>
+        <code
+          dir="ltr"
+          className="block rounded-lg bg-slate-50 p-3 text-xs break-all text-slate-700"
+        >
+          {props.sourceIdentity}
+        </code>
+      </SectionCard>
+
       <SectionCard title={t('storeConfigurationHeading')}>
         <div className="grid gap-4 md:grid-cols-2">
           <Field label={t('storeNameLabel')} error={props.storeNameError}>
             <Input
               value={props.storeName}
+              disabled={!props.canUpdateConfiguration}
               onChange={(event) => props.onStoreNameChange(event.target.value)}
               autoComplete="organization"
             />
@@ -297,13 +368,148 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
             <NativeSelect<IntegrationOnboardingLanguage>
               value={props.defaultLanguage}
               options={props.languageOptions}
+              disabled={!props.canUpdateConfiguration}
               onChange={props.onDefaultLanguageChange}
+            />
+          </Field>
+        </div>
+        <ToggleRow
+          label={t('codDefaultLabel')}
+          description={t('codDefaultHelp')}
+          checked={props.assumeCodWhenPaymentMissing}
+          disabled={!props.canUpdateConfiguration}
+          onChange={props.onAssumeCodWhenPaymentMissingChange}
+        />
+      </SectionCard>
+
+      <SectionCard
+        title={t('automation.heading')}
+        description={t('automation.description')}
+      >
+        <ToggleRow
+          label={t('autoVerifyLabel')}
+          description={t('autoVerifyDescription')}
+          checked={props.isAutoVerifyEnabled}
+          disabled={!props.canUpdateConfiguration}
+          onChange={props.onAutoVerifyChange}
+        />
+        <div className="grid gap-4 md:grid-cols-2">
+          <Field
+            label={t('automation.sendDelayMinutesLabel')}
+            error={props.sendDelayMinutesError}
+          >
+            <Input
+              type="number"
+              min={0}
+              max={24}
+              step={0.25}
+              disabled={!props.canUpdateConfiguration}
+              value={props.sendDelayMinutes}
+              onChange={(event) =>
+                props.onSendDelayMinutesChange(event.target.value)
+              }
+            />
+          </Field>
+          <Field label={t('automation.timezoneLabel')}>
+            <NativeSelect<AutomationTimezone>
+              value={props.timezone}
+              options={props.timezoneOptions}
+              disabled={!props.canUpdateConfiguration}
+              onChange={props.onTimezoneChange}
+            />
+          </Field>
+        </div>
+        <ToggleRow
+          label={t('automation.followUpEnabledLabel')}
+          description={t('automation.followUpEnabledHelp')}
+          checked={props.followUpEnabled}
+          disabled={!props.canUpdateConfiguration}
+          onChange={props.onFollowUpEnabledChange}
+        />
+        <Field
+          label={t('automation.followUpDelayMinutesLabel')}
+          error={props.followUpDelayMinutesError}
+        >
+          <Input
+            type="number"
+            min={0}
+            max={168}
+            step={0.25}
+            disabled={!props.canUpdateConfiguration || !props.followUpEnabled}
+            value={props.followUpDelayMinutes}
+            onChange={(event) =>
+              props.onFollowUpDelayMinutesChange(event.target.value)
+            }
+          />
+        </Field>
+        <ToggleRow
+          label={t('automation.escalationEnabledLabel')}
+          description={t('automation.escalationEnabledHelp')}
+          checked={props.escalationEnabled}
+          disabled={!props.canUpdateConfiguration}
+          onChange={props.onEscalationEnabledChange}
+        />
+        <Field
+          label={t('automation.escalationDelayMinutesLabel')}
+          error={props.escalationDelayMinutesError}
+        >
+          <Input
+            type="number"
+            min={0}
+            max={168}
+            step={0.25}
+            disabled={!props.canUpdateConfiguration || !props.escalationEnabled}
+            value={props.escalationDelayMinutes}
+            onChange={(event) =>
+              props.onEscalationDelayMinutesChange(event.target.value)
+            }
+          />
+        </Field>
+        <ToggleRow
+          label={t('automation.quietHoursEnabledLabel')}
+          description={t('automation.quietHoursEnabledHelp')}
+          checked={props.quietHoursEnabled}
+          disabled={!props.canUpdateConfiguration}
+          onChange={props.onQuietHoursEnabledChange}
+        />
+        <div className="grid gap-4 md:grid-cols-2">
+          <Field
+            label={t('automation.quietHoursStartLabel')}
+            error={props.quietHoursError}
+          >
+            <Input
+              type="time"
+              disabled={
+                !props.canUpdateConfiguration || !props.quietHoursEnabled
+              }
+              value={props.quietHoursStart}
+              onChange={(event) =>
+                props.onQuietHoursStartChange(event.target.value)
+              }
+            />
+          </Field>
+          <Field label={t('automation.quietHoursEndLabel')}>
+            <Input
+              type="time"
+              disabled={
+                !props.canUpdateConfiguration || !props.quietHoursEnabled
+              }
+              value={props.quietHoursEnd}
+              onChange={(event) =>
+                props.onQuietHoursEndChange(event.target.value)
+              }
             />
           </Field>
         </div>
       </SectionCard>
 
-      <SectionCard title={t('subscriptionHeading')}>
+      <SectionCard
+        title={
+          props.sourcePlatformType === 'standalone'
+            ? t('pilotAccessHeading')
+            : t('subscriptionHeading')
+        }
+      >
         <div id={SUBSCRIPTION_SECTION_ID} className="space-y-5">
           <div className="space-y-1">
             <p className="text-sm text-slate-700">
@@ -373,6 +579,7 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
                       type="button"
                       variant={previewLanguage === 'ar' ? 'default' : 'ghost'}
                       size="sm"
+                      disabled={!props.canUpdateConfiguration}
                       onClick={() => setPreviewLanguage('ar')}
                     >
                       {previewT('languageArabic')}
@@ -383,6 +590,7 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
                       type="button"
                       variant={previewLanguage === 'en' ? 'default' : 'ghost'}
                       size="sm"
+                      disabled={!props.canUpdateConfiguration}
                       onClick={() => setPreviewLanguage('en')}
                     >
                       {previewT('languageEnglish')}
@@ -395,6 +603,7 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
                 <NativeSelect
                   value={selectedVariant}
                   options={variantOptions}
+                  disabled={!props.canUpdateConfiguration}
                   onChange={handleVariantChange}
                 />
                 <p className="mt-2 text-xs text-slate-500">

@@ -22,11 +22,18 @@ function settings(): SettingsResponse {
   return {
     state: {
       integrationId: 'e02-fixture-source',
+      source: {
+        platformType: shopify ? 'shopify' : 'standalone',
+        identity: shopify
+          ? 'synthetic.myshopify.com'
+          : 'standalone:e02-fixture-org',
+      },
       onboardingStatus: 'completed',
       isOnboardingComplete: true,
       storeName: 'E02 synthetic pilot',
       defaultLanguage: 'auto',
       isAutoVerifyEnabled: true,
+      assumeCodWhenPaymentMissing: false,
       shippingCurrency: 'USD',
       avgShippingCost: 3,
       billingPlanId: 'starter',
@@ -45,6 +52,13 @@ function settings(): SettingsResponse {
       quietHoursEnd: null,
       timezone: 'Africa/Cairo',
       sendDelayMinutes: 0,
+      permissions: {
+        canUpdateConfiguration: true,
+        canCompleteOnboarding: !shopify,
+      },
+      standaloneSetup: shopify
+        ? null
+        : { canComplete: true, blockedReasons: [] },
     },
     billing: {
       plans:

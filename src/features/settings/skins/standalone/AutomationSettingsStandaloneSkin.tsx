@@ -154,7 +154,7 @@ export function AutomationSettingsStandaloneSkin(props: SettingsSkinProps) {
             <Input
               type="number"
               min={0}
-              max={720}
+              max={24}
               step={0.25}
               value={props.sendDelayMinutes}
               onChange={(event) =>
@@ -179,7 +179,7 @@ export function AutomationSettingsStandaloneSkin(props: SettingsSkinProps) {
             <Input
               type="number"
               min={0}
-              max={720}
+              max={168}
               step={0.25}
               disabled={!props.followUpEnabled}
               value={props.followUpDelayMinutes}
@@ -206,7 +206,7 @@ export function AutomationSettingsStandaloneSkin(props: SettingsSkinProps) {
             <Input
               type="number"
               min={0}
-              max={720}
+              max={168}
               step={0.25}
               disabled={!props.escalationEnabled}
               value={props.escalationDelayMinutes}

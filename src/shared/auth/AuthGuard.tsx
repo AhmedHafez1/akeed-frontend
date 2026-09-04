@@ -16,6 +16,7 @@ import {
 } from '@/shared/lib/locale'
 import { createLogger } from '@/shared/lib/logger'
 import { FullPageLoader } from '@/shared/layout/FullPageLoader'
+import { fetchOnboardingState } from '@/features/onboarding'
 
 const logger = createLogger('AuthGuard')
 
@@ -74,6 +75,20 @@ export function AuthGuard({
 
         if (requireOrganization) {
           await ensureStandaloneOrganization(session.user)
+          const { state } = await fetchOnboardingState()
+          const routeWithoutLocale = `/${(pathname ?? '')
+            .split('/')
+            .slice(2)
+            .join('/')}`
+          const isOnboardingRoute = routeWithoutLocale.startsWith('/onboarding')
+          if (state.onboardingStatus === 'pending' && !isOnboardingRoute) {
+            router.replace(`/${locale}/onboarding`)
+            return
+          }
+          if (state.onboardingStatus === 'completed' && isOnboardingRoute) {
+            router.replace(auth.getDashboardPath(locale))
+            return
+          }
         }
         if (!active) return
 

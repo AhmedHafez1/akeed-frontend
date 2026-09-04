@@ -156,11 +156,18 @@ export function useSettings(): {
 
   const [isInitialLoading, setIsInitialLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
+  const [retryKey, setRetryKey] = useState(0)
+  const [isLoadError, setIsLoadError] = useState(false)
+  const [sourcePlatformType, setSourcePlatformType] = useState('')
+  const [sourceIdentity, setSourceIdentity] = useState('')
+  const [canUpdateConfiguration, setCanUpdateConfiguration] = useState(false)
   const [storeName, setStoreName] = useState('')
   const [storeNameError, setStoreNameError] = useState<string | undefined>()
   const [defaultLanguage, setDefaultLanguage] =
     useState<IntegrationOnboardingLanguage>('auto')
   const [isAutoVerifyEnabled, setIsAutoVerifyEnabled] = useState(true)
+  const [assumeCodWhenPaymentMissing, setAssumeCodWhenPaymentMissing] =
+    useState(false)
 
   const [followUpEnabled, setFollowUpEnabled] = useState(true)
   const [sendDelayMinutes, setSendDelayMinutes] = useState('0')
@@ -250,6 +257,7 @@ export function useSettings(): {
     const loadSettings = async () => {
       setIsInitialLoading(true)
       setErrorBanner(null)
+      setIsLoadError(false)
 
       try {
         const settingsResponse = await fetchSettings()
@@ -263,8 +271,12 @@ export function useSettings(): {
         }
 
         setStoreName(state.storeName ?? '')
+        setSourcePlatformType(state.source.platformType)
+        setSourceIdentity(state.source.identity)
+        setCanUpdateConfiguration(state.permissions.canUpdateConfiguration)
         setDefaultLanguage(state.defaultLanguage)
         setIsAutoVerifyEnabled(state.isAutoVerifyEnabled)
+        setAssumeCodWhenPaymentMissing(state.assumeCodWhenPaymentMissing)
         setFollowUpEnabled(state.followUpEnabled)
         setSendDelayMinutes(toHoursInput(state.sendDelayMinutes, 0))
         setFollowUpDelayMinutes(toHoursInput(state.followUpDelayMinutes, 120))
@@ -299,7 +311,10 @@ export function useSettings(): {
         setTemplatePreviews(settingsResponse.template.previews)
       } catch (error) {
         logger.error('Failed to load onboarding settings', error)
-        if (active) setErrorBanner(t('loadError'))
+        if (active) {
+          setIsLoadError(true)
+          setErrorBanner(t('loadError'))
+        }
       } finally {
         if (active) setIsInitialLoading(false)
       }
@@ -310,7 +325,7 @@ export function useSettings(): {
     return () => {
       active = false
     }
-  }, [isModeLoading, locale, router, t])
+  }, [isModeLoading, locale, retryKey, router, t])
 
   useEffect(() => {
     setSelectedPlanId(billingPlanId)
@@ -440,21 +455,21 @@ export function useSettings(): {
     const nextSendDelayMinutesError =
       parsedSendDelayHours !== null &&
       parsedSendDelayHours >= 0 &&
-      parsedSendDelayHours <= 720
+      parsedSendDelayHours <= 24
         ? undefined
         : t('automation.validation.sendDelayMinutes')
     const nextFollowUpDelayMinutesError =
       !followUpEnabled ||
       (parsedFollowUpDelayHours !== null &&
         parsedFollowUpDelayHours >= 0 &&
-        parsedFollowUpDelayHours <= 720)
+        parsedFollowUpDelayHours <= 168)
         ? undefined
         : t('automation.validation.followUpDelayMinutes')
     const nextEscalationDelayMinutesError =
       !escalationEnabled ||
       (parsedEscalationDelayHours !== null &&
         parsedEscalationDelayHours >= 0 &&
-        parsedEscalationDelayHours <= 720)
+        parsedEscalationDelayHours <= 168)
         ? undefined
         : t('automation.validation.escalationDelayMinutes')
 
@@ -532,6 +547,11 @@ export function useSettings(): {
     setErrorBanner(null)
     setSuccessBanner(null)
 
+    if (!canUpdateConfiguration) {
+      setErrorBanner(t('readOnly'))
+      return
+    }
+
     const validated = validateSettings()
     if (!validated) return
 
@@ -541,6 +561,7 @@ export function useSettings(): {
       storeName,
       defaultLanguage,
       isAutoVerifyEnabled,
+      assumeCodWhenPaymentMissing,
       followUpEnabled,
       sendDelayMinutes,
       followUpDelayMinutes,
@@ -558,6 +579,7 @@ export function useSettings(): {
         storeName: validated.trimmedStoreName,
         defaultLanguage,
         isAutoVerifyEnabled,
+        assumeCodWhenPaymentMissing,
         followUpEnabled,
         sendDelayMinutes: validated.sendDelayMinutes,
         followUpDelayMinutes: followUpEnabled
@@ -579,6 +601,7 @@ export function useSettings(): {
       setStoreName(state.storeName ?? validated.trimmedStoreName)
       setDefaultLanguage(state.defaultLanguage)
       setIsAutoVerifyEnabled(state.isAutoVerifyEnabled)
+      setAssumeCodWhenPaymentMissing(state.assumeCodWhenPaymentMissing)
       setFollowUpEnabled(state.followUpEnabled)
       setSendDelayMinutes(toHoursInput(state.sendDelayMinutes, 0))
       setFollowUpDelayMinutes(toHoursInput(state.followUpDelayMinutes, 120))
@@ -617,6 +640,7 @@ export function useSettings(): {
       setStoreName(previous.storeName)
       setDefaultLanguage(previous.defaultLanguage)
       setIsAutoVerifyEnabled(previous.isAutoVerifyEnabled)
+      setAssumeCodWhenPaymentMissing(previous.assumeCodWhenPaymentMissing)
       setFollowUpEnabled(previous.followUpEnabled)
       setSendDelayMinutes(previous.sendDelayMinutes)
       setFollowUpDelayMinutes(previous.followUpDelayMinutes)
@@ -631,6 +655,8 @@ export function useSettings(): {
       setIsSaving(false)
     }
   }, [
+    assumeCodWhenPaymentMissing,
+    canUpdateConfiguration,
     defaultLanguage,
     escalationDelayMinutes,
     escalationEnabled,
@@ -655,11 +681,16 @@ export function useSettings(): {
   return {
     isPageLoading,
     skinProps: {
+      sourcePlatformType,
+      sourceIdentity,
+      canUpdateConfiguration,
+      isLoadError,
       storeName,
       storeNameError,
       defaultLanguage,
       languageOptions,
       isAutoVerifyEnabled,
+      assumeCodWhenPaymentMissing,
       followUpEnabled,
       sendDelayMinutes,
       sendDelayMinutesError,
@@ -700,6 +731,7 @@ export function useSettings(): {
       },
       onDefaultLanguageChange: setDefaultLanguage,
       onAutoVerifyChange: setIsAutoVerifyEnabled,
+      onAssumeCodWhenPaymentMissingChange: setAssumeCodWhenPaymentMissing,
       onFollowUpEnabledChange: setFollowUpEnabled,
       onSendDelayMinutesChange: (value) => {
         setSendDelayMinutes(value)
@@ -743,6 +775,7 @@ export function useSettings(): {
         if (canManageBilling) setSelectedPlanId(planId)
       },
       onChangePlan: handleChangePlan,
+      onRetry: () => setRetryKey((value) => value + 1),
     },
   }
 }

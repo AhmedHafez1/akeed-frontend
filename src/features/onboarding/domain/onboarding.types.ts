@@ -19,6 +19,15 @@ export type EnglishCodTemplateVariantId =
 
 export type IntegrationOnboardingStatus = 'pending' | 'completed'
 
+export type StandaloneSetupBlockedReason =
+  | 'source_invalid'
+  | 'pilot_entitlement_missing'
+  | 'merchant_name_missing'
+  | 'language_invalid'
+  | 'cod_default_invalid'
+  | 'automation_invalid'
+  | 'timezone_invalid'
+
 export type AutomationTimezone =
   | 'Asia/Riyadh'
   | 'Asia/Dubai'
@@ -33,11 +42,16 @@ export type AutomationTimezone =
 
 export interface IntegrationOnboardingState {
   integrationId: string
+  source: {
+    platformType: string
+    identity: string
+  }
   onboardingStatus: IntegrationOnboardingStatus
   isOnboardingComplete: boolean
   storeName: string | null
   defaultLanguage: IntegrationOnboardingLanguage
   isAutoVerifyEnabled: boolean
+  assumeCodWhenPaymentMissing: boolean
   shippingCurrency: string
   avgShippingCost: number
   billingPlanId: OnboardingBillingPlanId | null
@@ -52,6 +66,14 @@ export interface IntegrationOnboardingState {
   quietHoursEnd: string | null
   timezone: AutomationTimezone
   sendDelayMinutes: number
+  permissions: {
+    canUpdateConfiguration: boolean
+    canCompleteOnboarding: boolean
+  }
+  standaloneSetup: {
+    canComplete: boolean
+    blockedReasons: StandaloneSetupBlockedReason[]
+  } | null
 }
 
 export interface OnboardingStateResponse {
@@ -62,6 +84,7 @@ export interface OnboardingSettingsPayload {
   storeName: string
   defaultLanguage: IntegrationOnboardingLanguage
   isAutoVerifyEnabled: boolean
+  assumeCodWhenPaymentMissing?: boolean
   shippingCurrency?: string
   avgShippingCost?: number
   followUpEnabled?: boolean

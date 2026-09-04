@@ -46,3 +46,7 @@ The fixture does not simulate onboarding activation or staff provisioning. Its t
 ## US-03-02 Standalone pilot fixture
 
 Open `http://127.0.0.1:3098/en/pilots` and `/ar/pilots`. This route imports the real Standalone pilot page and intercepts every admin API request. Select the first two eligible accounts, preview them, enter a non-secret synthetic reason, and apply. The first result deliberately activates one row and fails one; retry must report the first row as previously completed and activate the second. Verify translated labels, native keyboard controls, disabled in-flight actions, report downloads, and Arabic `lang=ar`, `dir=rtl`. No authentication, database write, merchant activation, or provider call occurs.
+
+## US-03-03 Standalone onboarding fixture
+
+Open `http://127.0.0.1:3098/en/onboarding?role=owner` and `/ar/onboarding?role=owner`. Enter a merchant name, save progress, reload, and complete setup; the fixture redirects to its synthetic dashboard. Use `role=admin` for the same write path, `role=viewer` to verify every configuration action is read-only, `entitlement=blocked` to verify progress persists while completion reports pilot activation, and `backend=unavailable` to verify the localized retry state. Inspect the call counter before and after actions. The fixture uses the real Standalone onboarding hook and skin but synthetic in-memory state; it performs no authentication, database write, provider call, Meta connection, or message send.

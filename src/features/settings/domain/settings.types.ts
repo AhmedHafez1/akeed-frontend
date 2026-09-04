@@ -40,6 +40,10 @@ export interface SettingsTemplatePreview {
 }
 
 export interface SettingsSkinProps {
+  sourcePlatformType: string
+  sourceIdentity: string
+  canUpdateConfiguration: boolean
+  isLoadError: boolean
   storeName: string
   storeNameError: string | undefined
   defaultLanguage: IntegrationOnboardingLanguage
@@ -47,6 +51,7 @@ export interface SettingsSkinProps {
     SettingsSelectOption<IntegrationOnboardingLanguage>
   >
   isAutoVerifyEnabled: boolean
+  assumeCodWhenPaymentMissing: boolean
 
   followUpEnabled: boolean
   sendDelayMinutes: string
@@ -99,6 +104,7 @@ export interface SettingsSkinProps {
   onStoreNameChange: (value: string) => void
   onDefaultLanguageChange: (value: IntegrationOnboardingLanguage) => void
   onAutoVerifyChange: (checked: boolean) => void
+  onAssumeCodWhenPaymentMissingChange: (checked: boolean) => void
   onFollowUpEnabledChange: (checked: boolean) => void
   onSendDelayMinutesChange: (value: string) => void
   onFollowUpDelayMinutesChange: (value: string) => void
@@ -113,4 +119,5 @@ export interface SettingsSkinProps {
   onSave: () => Promise<void>
   onPlanSelect: (planId: OnboardingBillingPlanId) => void
   onChangePlan: () => Promise<void>
+  onRetry: () => void
 }

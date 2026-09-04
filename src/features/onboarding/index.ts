@@ -15,10 +15,13 @@ export { ConfigurationStep } from './ui/embedded/steps/ConfigurationStep'
 
 export {
   createOnboardingBilling,
+  completeStandaloneOnboarding,
   fetchOnboardingBillingPlans,
   fetchOnboardingState,
   updateOnboardingSettings,
 } from './api/onboardingApi'
+export { OnboardingApiError } from './api/onboardingApi'
+export { StandaloneOnboardingPage } from './ui/standalone/StandaloneOnboardingPage'
 
 export {
   checkEmbeddedInstall,
@@ -45,4 +48,5 @@ export type {
   OnboardingBillingPlanConfig,
   OnboardingBillingPlanId,
   OnboardingSettingsPayload,
+  StandaloneSetupBlockedReason,
 } from './domain/onboarding.types'

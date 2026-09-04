@@ -129,7 +129,12 @@ export function withLocale(path: string, locale?: string): string {
 /**
  * Auth route paths (without locale prefix)
  */
-export const AUTH_ROUTES = ['/login', '/signup', '/onboarding', '/forgot-password', '/reset-password'] as const
+export const AUTH_ROUTES = [
+  '/login',
+  '/signup',
+  '/forgot-password',
+  '/reset-password',
+] as const
 
 /**
  * Check if a pathname (with locale) matches an auth route

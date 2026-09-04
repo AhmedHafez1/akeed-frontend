@@ -2,13 +2,20 @@ import type { VerificationItem } from '@/features/dashboard/model/dashboard.mode
 import type { CancelOrderResponse } from '@/shared/types/commerce-outcome.model'
 import { billingFixtureRequest } from './billingFixture'
 import { adminPilotFixtureRequest } from './adminPilotFixture'
+import { onboardingFixtureRequest } from './onboardingFixture'
 
 export { resetPilotFixture } from './adminPilotFixture'
 
 export function fetchWithAuth(url: string, options: RequestInit = {}) {
-  return url.startsWith('/api/admin/')
-    ? adminPilotFixtureRequest(url, options)
-    : billingFixtureRequest(url, options)
+  return [
+    '/api/onboarding/state',
+    '/api/onboarding/settings',
+    '/api/onboarding/complete',
+  ].includes(url)
+    ? onboardingFixtureRequest(url, options)
+    : url.startsWith('/api/admin/')
+      ? adminPilotFixtureRequest(url, options)
+      : billingFixtureRequest(url, options)
 }
 
 const order: VerificationItem = {

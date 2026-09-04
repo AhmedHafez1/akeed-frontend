@@ -9,7 +9,40 @@ import type {
   OnboardingBillingResponse,
   OnboardingSettingsPayload,
   OnboardingStateResponse,
+  StandaloneSetupBlockedReason,
 } from '@/features/onboarding/domain/onboarding.types'
+
+export class OnboardingApiError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+    readonly code: string | null,
+    readonly blockedReasons: StandaloneSetupBlockedReason[] = []
+  ) {
+    super(message)
+  }
+}
+
+async function getOnboardingApiError(response: Response) {
+  let message = `Request failed with status ${response.status}`
+  let code: string | null = null
+  let blockedReasons: StandaloneSetupBlockedReason[] = []
+  try {
+    const body = await parseJsonResponse<{
+      message?: string | string[]
+      code?: string
+      blockedReasons?: StandaloneSetupBlockedReason[]
+    }>(response)
+    message = Array.isArray(body.message)
+      ? body.message.join(', ')
+      : body.message || message
+    code = body.code ?? null
+    blockedReasons = body.blockedReasons ?? []
+  } catch {
+    // Status remains sufficient for a retryable localized error.
+  }
+  return new OnboardingApiError(message, response.status, code, blockedReasons)
+}
 
 export async function fetchOnboardingState(): Promise<OnboardingStateResponse> {
   const response = await fetchWithAuth('/api/onboarding/state', {
@@ -18,7 +51,7 @@ export async function fetchOnboardingState(): Promise<OnboardingStateResponse> {
   })
 
   if (!response.ok) {
-    throw new Error(await getErrorMessage(response))
+    throw await getOnboardingApiError(response)
   }
 
   return parseJsonResponse<OnboardingStateResponse>(response)
@@ -33,7 +66,19 @@ export async function updateOnboardingSettings(
   })
 
   if (!response.ok) {
-    throw new Error(await getErrorMessage(response))
+    throw await getOnboardingApiError(response)
+  }
+
+  return parseJsonResponse<OnboardingStateResponse>(response)
+}
+
+export async function completeStandaloneOnboarding(): Promise<OnboardingStateResponse> {
+  const response = await fetchWithAuth('/api/onboarding/complete', {
+    method: 'POST',
+  })
+
+  if (!response.ok) {
+    throw await getOnboardingApiError(response)
   }
 
   return parseJsonResponse<OnboardingStateResponse>(response)

@@ -90,3 +90,33 @@ export async function checkCancellation(tab, skin, locale) {
   )
   return { skin, locale, baseline, held, rejected, complete, passed: true }
 }
+
+export async function checkStandaloneOnboarding(tab, locale) {
+  if (new URL(await tab.url()).origin !== 'http://127.0.0.1:3098') {
+    throw new Error('Onboarding checks are restricted to the loopback fixture')
+  }
+  const page = tab.playwright
+  const labels =
+    locale === 'ar'
+      ? {
+          name: 'اسم التاجر',
+          save: 'حفظ التقدم',
+          saved: 'تم حفظ تقدم الإعداد.',
+          complete: 'إكمال الإعداد',
+        }
+      : {
+          name: 'Merchant name',
+          save: 'Save progress',
+          saved: 'Setup progress saved.',
+          complete: 'Complete setup',
+        }
+  await page.getByLabel(labels.name).fill('Synthetic merchant')
+  await page.getByRole('button', { name: labels.save }).click()
+  await page.getByText(labels.saved, { exact: true }).waitFor({
+    state: 'visible',
+    timeoutMs: 10000,
+  })
+  await page.getByRole('button', { name: labels.complete }).click()
+  await page.getByRole('status').waitFor({ state: 'visible', timeoutMs: 10000 })
+  return { locale, passed: true }
+}
