@@ -295,9 +295,11 @@ type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 async function request<T>(
   method: HttpMethod,
   url: string,
-  data?: unknown
+  data?: unknown,
+  options: RequestInit = {}
 ): Promise<T> {
   const response = await fetchWithAuth(url, {
+    ...options,
     method,
     body: data ? JSON.stringify(data) : undefined,
   })
@@ -320,8 +322,12 @@ export const api = {
   /**
    * POST request with auth
    */
-  post<T = unknown>(url: string, data?: unknown): Promise<T> {
-    return request<T>('POST', url, data)
+  post<T = unknown>(
+    url: string,
+    data?: unknown,
+    options?: RequestInit
+  ): Promise<T> {
+    return request<T>('POST', url, data, options)
   },
 
   /**

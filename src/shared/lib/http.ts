@@ -15,7 +15,8 @@ export class ApiError extends Error {
   constructor(
     message: string,
     readonly status: number,
-    readonly code?: string
+    readonly code?: string,
+    readonly fieldErrors?: Record<string, string>
   ) {
     super(message)
     this.name = 'ApiError'
@@ -35,7 +36,17 @@ export async function createApiError(response: Response): Promise<ApiError> {
         ? data.message
         : fallback
     const code = typeof data.code === 'string' ? data.code : undefined
-    return new ApiError(message, response.status, code)
+    const fieldErrors =
+      data.fieldErrors &&
+      typeof data.fieldErrors === 'object' &&
+      !Array.isArray(data.fieldErrors)
+        ? Object.fromEntries(
+            Object.entries(data.fieldErrors).filter(
+              (entry): entry is [string, string] => typeof entry[1] === 'string'
+            )
+          )
+        : undefined
+    return new ApiError(message, response.status, code, fieldErrors)
   } catch {
     return new ApiError(fallback, response.status)
   }
