@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { ManualOrderEntryStandalone } from '@/features/orders'
 import { StandaloneDashboardHeader } from './components/StandaloneDashboardHeader'
 import { StandaloneFeedbackBanners } from './components/StandaloneFeedbackBanners'
 import { StandaloneStatsSummary } from './components/StandaloneStatsSummary'
@@ -18,6 +19,7 @@ export function DashboardStandaloneSkin({
   testFeedback,
   onDismissTestFeedback,
   error,
+  canCreateManualOrder,
 }: DashboardSkinProps) {
   const t = useTranslations('dashboard')
   const isVerificationActive =
@@ -29,6 +31,13 @@ export function DashboardStandaloneSkin({
         dateRangeFilter={dateRangeFilter}
         dateRangeOptions={dateRangeOptions}
         onDateRangeFilterChange={onDateRangeFilterChange}
+        action={
+          <ManualOrderEntryStandalone
+            canCreate={canCreateManualOrder}
+            defaultCurrency={stats?.savings.currency}
+            sourceConnected={sourceStatus === 'connected'}
+          />
+        }
       />
 
       <StandaloneFeedbackBanners

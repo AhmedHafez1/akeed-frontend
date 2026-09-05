@@ -58,6 +58,7 @@ export interface DashboardSkinProps {
   // Test verification
   canSendTestVerification: boolean
   canCancelOrders: boolean
+  canCreateManualOrder: boolean
   isSendingTest: boolean
   testFeedback: TestFeedback | null
   onSendTestVerification: (customerPhone: string) => Promise<void>

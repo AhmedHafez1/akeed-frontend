@@ -52,6 +52,7 @@ export function useMainConfirmationsTab(
   const canSendTestVerification =
     pageContext?.permissions?.can_send_test_verification === true
   const canCancelOrders = pageContext?.permissions?.can_cancel_orders === true
+  const canCreateManualOrder = false
 
   const statusFilters = useMemo<ReadonlyArray<StatusFilterOption>>(
     () => [
@@ -221,6 +222,7 @@ export function useMainConfirmationsTab(
     isSendingTest,
     canSendTestVerification,
     canCancelOrders,
+    canCreateManualOrder,
     testFeedback,
     onSendTestVerification,
     onDismissTestFeedback,

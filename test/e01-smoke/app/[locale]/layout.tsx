@@ -3,6 +3,7 @@ import path from 'node:path'
 import type { ReactNode } from 'react'
 import { notFound } from 'next/navigation'
 import { NextIntlClientProvider, type AbstractIntlMessages } from 'next-intl'
+import '../globals.css'
 
 export default async function SmokeLayout({
   children,

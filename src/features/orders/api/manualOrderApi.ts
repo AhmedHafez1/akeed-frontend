@@ -43,10 +43,12 @@ export type ManualOrderApiError = ApiError & {
 
 export function createManualOrder(
   input: ManualOrderCreateInput,
-  idempotencyKey: string
+  idempotencyKey: string,
+  signal?: AbortSignal
 ): Promise<ManualOrderCreateResponse> {
   return api.post<ManualOrderCreateResponse>('/api/orders', input, {
     headers: { 'Idempotency-Key': idempotencyKey },
+    signal,
   })
 }
 

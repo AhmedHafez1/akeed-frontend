@@ -1121,6 +1121,94 @@
     "learnMore": "Learn more",
     "needHelp": "Need help?"
   },
+  "manualOrder": {
+    "title": "Create a manual order",
+    "description": "Enter a cash-on-delivery order for verification. Akeed will confirm acceptance before processing begins.",
+    "open": "New order",
+    "close": "Close",
+    "cancel": "Cancel",
+    "submit": "Create order",
+    "submitting": "Creating order...",
+    "required": "Required",
+    "readOnly": "Only owners and admins can create orders.",
+    "sourceDisconnected": "Order creation is unavailable while the source is disconnected.",
+    "fields": {
+      "customerPhone": {
+        "label": "Customer phone",
+        "placeholder": "+20 100 123 4567",
+        "help": "Choose the country code and enter a valid mobile number."
+      },
+      "customerName": {
+        "label": "Customer name (optional)"
+      },
+      "orderNumber": {
+        "label": "Order reference (optional)"
+      },
+      "totalPrice": {
+        "label": "Order amount",
+        "placeholder": "125.50"
+      },
+      "currency": {
+        "label": "Currency",
+        "placeholder": "Select currency"
+      },
+      "paymentMethod": {
+        "label": "Payment method",
+        "cod": "Cash on delivery",
+        "help": "This MVP accepts cash-on-delivery verification requests only."
+      }
+    },
+    "validation": {
+      "customerPhoneRequired": "Enter the customer's phone number.",
+      "customerPhoneInvalid": "Enter a valid phone number with its country code.",
+      "customerPhoneServer": "Check the phone number and try again.",
+      "customerNameTooLong": "Customer name must be 255 characters or fewer.",
+      "customerNameServer": "Check the customer name and try again.",
+      "orderNumberTooLong": "Order reference must be 100 characters or fewer.",
+      "orderNumberServer": "Check the order reference and try again.",
+      "totalPriceRequired": "Enter the order amount.",
+      "totalPriceInvalid": "Enter an amount greater than zero with no more than two decimal places.",
+      "totalPriceServer": "Check the order amount and try again.",
+      "currencyRequired": "Select a supported currency.",
+      "currencyServer": "Select a supported currency and try again.",
+      "paymentMethodServer": "Select cash on delivery and try again."
+    },
+    "errors": {
+      "validation": "Some order details need your attention.",
+      "timeout": "We could not confirm the result within 30 seconds. Your details and retry token are locked so you can retry safely.",
+      "offline": "You appear to be offline. Your details and retry token are locked; reconnect and retry safely.",
+      "network": "We could not confirm whether the order was accepted. Keep these details unchanged and retry with the same token.",
+      "acceptanceFailed": "The server could not durably accept this order. Keep these details unchanged and retry safely.",
+      "conflict": "This retry token already belongs to different order details. Do not retry it; start over only after checking that no order was created.",
+      "idempotency": "A safe retry token could not be created. Start over and try again.",
+      "role": "Only owners and admins can create manual orders.",
+      "sourceUnavailable": "No active Standalone source is available. Check your setup before retrying.",
+      "sourceAmbiguous": "More than one active source was found. Contact support before creating orders.",
+      "sourceUnsupported": "Manual order entry is available only for Standalone sources.",
+      "setupIncomplete": "Complete Standalone onboarding before creating an order.",
+      "entitlement": "Manual order creation is not enabled for this workspace. Contact support.",
+      "unexpected": "We could not create the order. Review the details and try again."
+    },
+    "retry": {
+      "locked": "These values are locked because the previous result is uncertain. Retrying will reuse the original token and cannot create a second matching order.",
+      "retry": "Retry safely",
+      "retrying": "Retrying...",
+      "startOver": "Start over instead",
+      "startOverWarning": "The previous request may already have been accepted. Starting over uses a new token and could create a duplicate order.",
+      "confirmStartOver": "Start over anyway",
+      "keepRetry": "Keep safe retry"
+    },
+    "success": {
+      "acceptedStatus": "Accepted · Processing pending",
+      "title": "Order accepted",
+      "description": "The order is saved for processing. This does not mean a WhatsApp message was sent or delivered.",
+      "duplicateTitle": "Order already accepted",
+      "duplicateDescription": "Akeed recovered the original order from your safe retry; no duplicate order was created.",
+      "orderId": "Order ID",
+      "createAnother": "Create another order",
+      "viewVerifications": "View verifications"
+    }
+  },
   "standaloneOnboarding": {
     "title": "Set up your Standalone workspace",
     "subtitle": "Configure how Akeed identifies and verifies your cash-on-delivery orders.",

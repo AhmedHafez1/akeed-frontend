@@ -120,3 +120,141 @@ export async function checkStandaloneOnboarding(tab, locale) {
   await page.getByRole('status').waitFor({ state: 'visible', timeoutMs: 10000 })
   return { locale, passed: true }
 }
+
+const manualOrderLabelsByLocale = {
+  en: {
+    open: 'New order',
+    close: 'Close',
+    phone: 'Customer phone Required',
+    phoneRequired: "Enter the customer's phone number.",
+    amount: 'Order amount Required',
+    submit: 'Create order',
+    submitting: 'Creating order...',
+    accepted: 'Accepted · Processing pending',
+    orderId: 'manual-order-fixture-order-id',
+    createAnother: 'Create another order',
+    network:
+      'We could not confirm whether the order was accepted. Keep these details unchanged and retry with the same token.',
+    retry: 'Retry safely',
+  },
+  ar: {
+    open: 'طلب جديد',
+    close: 'إغلاق',
+    phone: 'هاتف العميل مطلوب',
+    phoneRequired: 'أدخل رقم هاتف العميل.',
+    amount: 'قيمة الطلب مطلوب',
+    submit: 'إنشاء الطلب',
+    submitting: 'جارٍ إنشاء الطلب...',
+    accepted: 'مقبول · المعالجة قيد الانتظار',
+    orderId: 'manual-order-fixture-order-id',
+    createAnother: 'إنشاء طلب آخر',
+    network:
+      'تعذر تأكيد قبول الطلب. أبقِ هذه البيانات كما هي وأعد المحاولة بالرمز نفسه.',
+    retry: 'إعادة المحاولة بأمان',
+  },
+}
+
+export async function checkManualOrder(tab, locale) {
+  const url = new URL(await tab.url())
+  if (
+    url.origin !== 'http://127.0.0.1:3098' ||
+    !url.pathname.endsWith('/manual-order')
+  ) {
+    throw new Error(
+      'Manual-order checks are restricted to the isolated loopback fixture'
+    )
+  }
+
+  const page = tab.playwright
+  const labels = manualOrderLabelsByLocale[locale]
+  const button = (name) => page.getByRole('button', { name, exact: true })
+  const inspect = async (force = false) => {
+    await page
+      .locator('button')
+      .filter({ hasText: 'Inspect manual order calls' })
+      .click({ force })
+    return JSON.parse(
+      await page
+        .locator("output[aria-label='Manual order fixture calls']")
+        .innerText({})
+    )
+  }
+  const fillRequiredFields = async () => {
+    await page.locator('#manual-order-phone').fill('+201001234567')
+    await page.locator('#manual-order-total').fill('125.50')
+  }
+
+  await button('Reset manual order calls').click()
+  await button(labels.open).press('Enter')
+  await button(labels.submit).click()
+  await page
+    .getByText(labels.phoneRequired, { exact: true })
+    .waitFor({ state: 'visible', timeoutMs: 10000 })
+  const activeId = await page.evaluate(() => document.activeElement?.id)
+  if (activeId !== 'manual-order-phone') {
+    throw new Error('Validation did not focus the first invalid field')
+  }
+
+  await fillRequiredFields()
+  await page
+    .locator('#manual-order-fixture-outcome')
+    .selectOption('held_success', {})
+  await button(labels.submit).click()
+  await button(labels.submitting).waitFor({
+    state: 'visible',
+    timeoutMs: 10000,
+  })
+  if (await button(labels.submitting).isEnabled()) {
+    throw new Error('Pending submit remained enabled')
+  }
+  const pending = await inspect(true)
+  if (pending.calls.length !== 1 || !pending.pending) {
+    throw new Error('Double-submit protection did not retain one pending call')
+  }
+  await button('Resolve pending manual order').click()
+  await page
+    .getByText(labels.accepted, { exact: true })
+    .waitFor({ state: 'visible', timeoutMs: 10000 })
+  await page
+    .getByText(labels.orderId, { exact: true })
+    .waitFor({ state: 'visible', timeoutMs: 10000 })
+  await button(labels.createAnother).click()
+  if (
+    (await page
+      .locator('#manual-order-total')
+      .evaluate((element) => element.value)) !== ''
+  ) {
+    throw new Error('Create-another did not reset the form')
+  }
+
+  await page
+    .locator('#manual-order-fixture-outcome')
+    .selectOption('network', {})
+  await fillRequiredFields()
+  await button(labels.submit).click()
+  await page
+    .getByText(labels.network, { exact: true })
+    .waitFor({ state: 'visible', timeoutMs: 10000 })
+  await page
+    .locator('#manual-order-fixture-outcome')
+    .selectOption('success', {})
+  await button(labels.retry).click()
+  await page
+    .getByText(labels.accepted, { exact: true })
+    .waitFor({ state: 'visible', timeoutMs: 10000 })
+  await page
+    .getByRole('button', { name: labels.close, exact: true })
+    .first()
+    .click()
+  const retried = await inspect()
+  const lastTwo = retried.calls.slice(-2)
+  if (
+    lastTwo.length !== 2 ||
+    !lastTwo[0].token ||
+    lastTwo[0].token !== lastTwo[1].token
+  ) {
+    throw new Error('Safe retry did not reuse the original token')
+  }
+
+  return { locale, pending, retried, passed: true }
+}

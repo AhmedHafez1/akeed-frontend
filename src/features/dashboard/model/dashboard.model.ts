@@ -93,6 +93,7 @@ export type VerificationsResponse = {
     permissions?: {
       can_send_test_verification: boolean
       can_cancel_orders: boolean
+      can_create_manual_order: boolean
     }
   }
 }

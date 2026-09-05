@@ -4,6 +4,7 @@ import { ApiError } from '@/shared/lib/http'
 import { billingFixtureRequest } from './billingFixture'
 import { adminPilotFixtureRequest } from './adminPilotFixture'
 import { onboardingFixtureRequest } from './onboardingFixture'
+import { manualOrderFixtureRequest } from './manual-order/manualOrderFixture'
 
 export { resetPilotFixture } from './adminPilotFixture'
 
@@ -141,13 +142,21 @@ export const api = {
           permissions: {
             can_send_test_verification: canWrite,
             can_cancel_orders: canWrite,
+            can_create_manual_order: canWrite,
           },
         },
       } as T
     }
     throw new Error(`Unexpected fixture GET: ${url}`)
   },
-  async post<T>(url: string): Promise<T> {
+  async post<T>(
+    url: string,
+    data?: unknown,
+    options: RequestInit = {}
+  ): Promise<T> {
+    if (url === '/api/orders') {
+      return manualOrderFixtureRequest<T>(data, options)
+    }
     const fixture = getFixtureState()
     if (url !== '/api/verifications/e01-synthetic-verification/cancel') {
       throw new Error(`Blocked fixture POST: ${url}`)

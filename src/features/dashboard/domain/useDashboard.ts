@@ -72,6 +72,8 @@ export function useDashboard(): DashboardSkinProps {
   const canSendTestVerification =
     pageContext?.permissions?.can_send_test_verification === true
   const canCancelOrders = pageContext?.permissions?.can_cancel_orders === true
+  const canCreateManualOrder =
+    pageContext?.permissions?.can_create_manual_order === true
 
   const hasVerifications = verifications?.length > 0
 
@@ -282,6 +284,7 @@ export function useDashboard(): DashboardSkinProps {
     isSendingTest,
     canSendTestVerification,
     canCancelOrders,
+    canCreateManualOrder,
     testFeedback,
     onSendTestVerification,
     onDismissTestFeedback,
