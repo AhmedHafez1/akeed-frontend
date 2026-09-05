@@ -1,5 +1,6 @@
 import { api } from '@/shared/lib/auth'
 import { ApiError } from '@/shared/lib/http'
+import type { ManualOrderLifecycle } from '@/features/dashboard/model/dashboard.model'
 
 export type ManualOrderCreateInput = {
   customerPhone: string
@@ -14,6 +15,13 @@ export type ManualOrderCreateResponse = {
   orderId: string
   verificationId?: string
   status: 'accepted'
+  duplicate: boolean
+}
+
+export type ManualOrderVerificationRetryResponse = {
+  orderId: string
+  verificationId?: string
+  lifecycle: ManualOrderLifecycle
   duplicate: boolean
 }
 
@@ -50,6 +58,17 @@ export function createManualOrder(
     headers: { 'Idempotency-Key': idempotencyKey },
     signal,
   })
+}
+
+export function retryManualOrderVerification(
+  orderId: string,
+  signal?: AbortSignal
+): Promise<ManualOrderVerificationRetryResponse> {
+  return api.post<ManualOrderVerificationRetryResponse>(
+    `/api/orders/${encodeURIComponent(orderId)}/verification/retry`,
+    undefined,
+    { signal }
+  )
 }
 
 export function isManualOrderApiError(

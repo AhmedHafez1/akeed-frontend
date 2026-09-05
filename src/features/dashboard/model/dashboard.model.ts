@@ -14,6 +14,21 @@ export type VerificationStatus =
   | 'failed'
   | 'no_reply'
 
+export type ManualOrderLifecycleStatus =
+  | 'accepted'
+  | 'processing'
+  | 'ineligible'
+  | 'blocked'
+  | VerificationStatus
+  | 'review_required'
+
+export type ManualOrderLifecycle = {
+  status: ManualOrderLifecycleStatus
+  reason: string | null
+  verification_id: string | null
+  retryable: boolean
+}
+
 export type VerificationStatusFilter =
   | 'all'
   | 'awaiting_response'
@@ -78,6 +93,7 @@ export type OrderItem = {
   currency: string | null
   created_at: string | null
   verification_status: VerificationStatus | null
+  lifecycle: ManualOrderLifecycle
 }
 
 export type VerificationsResponse = {
