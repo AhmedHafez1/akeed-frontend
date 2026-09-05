@@ -6,10 +6,11 @@ import { StandaloneDashboardHeader } from './components/StandaloneDashboardHeade
 import { StandaloneFeedbackBanners } from './components/StandaloneFeedbackBanners'
 import { StandaloneStatsSummary } from './components/StandaloneStatsSummary'
 import { StandaloneStatusPanel } from './components/StandaloneStatusPanel'
-import type { DashboardSkinProps } from '../../domain/dashboard.types'
+import type { StandaloneDashboardSkinProps } from '../../domain/dashboard.types'
 
 export function DashboardStandaloneSkin({
   stats,
+  reportingTimezone,
   isStatsLoading,
   isAutoVerifyEnabled,
   dateRangeFilter,
@@ -20,7 +21,10 @@ export function DashboardStandaloneSkin({
   onDismissTestFeedback,
   error,
   canCreateManualOrder,
-}: DashboardSkinProps) {
+  actionFeedback,
+  onDismissActionFeedback,
+  onManualOrderAccepted,
+}: StandaloneDashboardSkinProps) {
   const t = useTranslations('dashboard')
   const isVerificationActive =
     sourceStatus === 'connected' && isAutoVerifyEnabled
@@ -36,6 +40,7 @@ export function DashboardStandaloneSkin({
             canCreate={canCreateManualOrder}
             defaultCurrency={stats?.savings.currency}
             sourceConnected={sourceStatus === 'connected'}
+            onAccepted={onManualOrderAccepted}
           />
         }
       />
@@ -44,6 +49,8 @@ export function DashboardStandaloneSkin({
         error={error}
         testFeedback={testFeedback}
         onDismissTestFeedback={onDismissTestFeedback}
+        actionFeedback={actionFeedback}
+        onDismissActionFeedback={onDismissActionFeedback}
       />
 
       {sourceStatus === 'disconnected' && (
@@ -72,12 +79,16 @@ export function DashboardStandaloneSkin({
             : 'statusCard.inactiveDescription'
         )}
         workflowTitle={t('statusCard.workflowTitle')}
-        workflowDescription={t('statusCard.workflowDescription')}
+        workflowDescription={t('statusCard.standaloneWorkflowDescription')}
         reviewTitle={t('statusCard.reviewTitle')}
         reviewDescription={t('statusCard.reviewDescription')}
       />
 
-      <StandaloneStatsSummary stats={stats} isStatsLoading={isStatsLoading} />
+      <StandaloneStatsSummary
+        stats={stats}
+        reportingTimezone={reportingTimezone}
+        isStatsLoading={isStatsLoading}
+      />
     </div>
   )
 }

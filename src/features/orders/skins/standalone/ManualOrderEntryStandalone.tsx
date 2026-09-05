@@ -3,7 +3,7 @@
 import { useCallback } from 'react'
 import Link from 'next/link'
 import { Controller } from 'react-hook-form'
-import { Plus } from 'lucide-react'
+import { ChevronDown, Plus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
@@ -29,6 +29,7 @@ interface ManualOrderEntryStandaloneProps {
   canCreate: boolean
   defaultCurrency?: string
   sourceConnected: boolean
+  onAccepted?: () => void
 }
 
 function RequiredMark() {
@@ -52,13 +53,18 @@ export function ManualOrderEntryStandalone({
   canCreate,
   defaultCurrency,
   sourceConnected,
+  onAccepted,
 }: ManualOrderEntryStandaloneProps) {
   const t = useTranslations('manualOrder')
   const { locale } = useLocaleInfo()
   const focusCustomerPhone = useCallback(() => {
     document.getElementById('manual-order-phone')?.focus()
   }, [])
-  const entry = useManualOrderEntry(defaultCurrency, focusCustomerPhone)
+  const entry = useManualOrderEntry(
+    defaultCurrency,
+    focusCustomerPhone,
+    onAccepted
+  )
   const {
     control,
     register,
@@ -326,23 +332,31 @@ export function ManualOrderEntryStandalone({
                   {t('fields.currency.label')}
                   <RequiredMark />
                 </Label>
-                <select
-                  id="manual-order-currency"
-                  disabled={fieldsDisabled}
-                  aria-invalid={Boolean(errors.currency)}
-                  aria-describedby={
-                    errors.currency ? 'manual-order-currency-error' : undefined
-                  }
-                  className="mt-2 h-12 w-full rounded-lg border-2 border-gray-200 bg-white px-4 text-base focus:border-emerald-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                  {...register('currency')}
-                >
-                  <option value="">{t('fields.currency.placeholder')}</option>
-                  {manualOrderCurrencies.map((currency) => (
-                    <option key={currency} value={currency}>
-                      {currency}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative mt-2">
+                  <select
+                    id="manual-order-currency"
+                    disabled={fieldsDisabled}
+                    aria-invalid={Boolean(errors.currency)}
+                    aria-describedby={
+                      errors.currency
+                        ? 'manual-order-currency-error'
+                        : undefined
+                    }
+                    className="h-12 w-full appearance-none rounded-lg border-2 border-gray-200 bg-white py-2 ps-4 pe-11 text-base focus:border-emerald-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                    {...register('currency')}
+                  >
+                    <option value="">{t('fields.currency.placeholder')}</option>
+                    {manualOrderCurrencies.map((currency) => (
+                      <option key={currency} value={currency}>
+                        {currency}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown
+                    aria-hidden="true"
+                    className="pointer-events-none absolute end-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500"
+                  />
+                </div>
                 <FieldError
                   id="manual-order-currency-error"
                   message={errors.currency?.message}

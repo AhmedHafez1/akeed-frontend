@@ -2,6 +2,7 @@
 
 import type { ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
+import { ChevronDown } from 'lucide-react'
 import type { DateRangeFilterOption } from '@/features/dashboard/domain/dashboard.types'
 import type { DashboardStatsDateRange } from '@/features/dashboard/model/dashboard.model'
 
@@ -30,7 +31,7 @@ export function StandaloneDashboardHeader({
       </div>
 
       <div className="flex flex-wrap items-end gap-3">
-        <label className="flex items-center gap-2 text-sm text-slate-500">
+        <label className="relative flex items-center gap-2 text-sm text-slate-500">
           <span className="sr-only">{t('filters.dateRange.label')}</span>
           <select
             value={dateRangeFilter}
@@ -39,7 +40,7 @@ export function StandaloneDashboardHeader({
                 event.target.value as DashboardStatsDateRange
               )
             }
-            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 focus:outline-none"
+            className="appearance-none rounded-lg border border-slate-200 bg-white py-2 ps-3 pe-10 text-sm text-slate-700 shadow-sm transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 focus:outline-none"
           >
             {dateRangeOptions.map((option) => (
               <option key={option.id} value={option.id}>
@@ -47,6 +48,10 @@ export function StandaloneDashboardHeader({
               </option>
             ))}
           </select>
+          <ChevronDown
+            aria-hidden="true"
+            className="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
+          />
         </label>
         {action}
       </div>

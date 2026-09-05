@@ -1,17 +1,33 @@
 const labelsByLocale = {
   en: {
-    cancel: 'Cancel order',
     keep: 'Keep order',
-    confirm: 'Yes, cancel',
-    loading: 'Canceling...',
-    error: 'We could not cancel this order. Please try again.',
+    embedded: {
+      cancel: 'Cancel order',
+      confirm: 'Yes, cancel',
+      loading: 'Canceling...',
+      error: 'We could not cancel this order. Please try again.',
+    },
+    standalone: {
+      cancel: 'Mark canceled',
+      confirm: 'Yes, mark canceled',
+      loading: 'Updating...',
+      error: 'The order could not be marked canceled. Refresh and try again.',
+    },
   },
   ar: {
-    cancel: 'إلغاء الطلب',
     keep: 'إبقاء الطلب',
-    confirm: 'نعم، ألغِ الطلب',
-    loading: 'جارٍ الإلغاء...',
-    error: 'تعذر إلغاء هذا الطلب. حاول مرة أخرى.',
+    embedded: {
+      cancel: 'إلغاء الطلب',
+      confirm: 'نعم، ألغِ الطلب',
+      loading: 'جارٍ الإلغاء...',
+      error: 'تعذر إلغاء هذا الطلب. حاول مرة أخرى.',
+    },
+    standalone: {
+      cancel: 'تعليم كملغى',
+      confirm: 'نعم، تعليم كملغى',
+      loading: 'جارٍ التحديث...',
+      error: 'تعذر تعليم الطلب كملغى. حدّث الصفحة وحاول مرة أخرى.',
+    },
   },
 }
 
@@ -22,7 +38,10 @@ export async function checkCancellation(tab, skin, locale) {
     )
   }
   const page = tab.playwright
-  const labels = labelsByLocale[locale]
+  const labels = {
+    ...labelsByLocale[locale],
+    ...labelsByLocale[locale][skin],
+  }
   const button = (name) => page.getByRole('button', { name, exact: true })
   const ensure = (condition, message) => {
     if (!condition) throw new Error(message)
@@ -35,7 +54,6 @@ export async function checkCancellation(tab, skin, locale) {
         .innerText({})
     )
   }
-  await button(labels.cancel).waitFor({ state: 'visible', timeoutMs: 10000 })
   await page
     .getByRole('combobox', { name: 'Fixture skin', exact: true })
     .selectOption(skin, {})

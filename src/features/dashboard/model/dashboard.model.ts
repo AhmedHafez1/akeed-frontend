@@ -92,7 +92,27 @@ export type OrderItem = {
   total_price: string | null
   currency: string | null
   created_at: string | null
+  is_test: boolean
+  source: {
+    integration_id: string
+    platform_type: string
+  }
   verification_status: VerificationStatus | null
+  verification: {
+    id: string
+    status: VerificationStatus
+    capabilities: CommerceOutcomeCapability[]
+    cancellation_operation?: CommerceOutcomeOperationResult
+    last_sent_at: string | null
+    delivered_at: string | null
+    read_at: string | null
+    confirmed_at: string | null
+    canceled_at: string | null
+    expired_at: string | null
+    no_reply_at: string | null
+    follow_up_attempts: number
+    follow_up_sent_at: string | null
+  } | null
   lifecycle: ManualOrderLifecycle
 }
 
@@ -110,13 +130,26 @@ export type VerificationsResponse = {
       can_send_test_verification: boolean
       can_cancel_orders: boolean
       can_create_manual_order: boolean
+      can_retry_verifications?: boolean
     }
   }
 }
 
 export type OrdersResponse = {
-  orders: OrderItem[]
+  data: OrderItem[]
+  next_cursor: string | null
+  total_count: number
+  page_context?: VerificationsResponse['page_context'] & {
+    reporting_timezone?: string
+  }
 }
+
+export type StandaloneOrderFilter =
+  | 'all'
+  | 'in_progress'
+  | 'needs_attention'
+  | 'confirmed'
+  | 'canceled'
 
 export type DashboardStats = {
   date_range: DashboardStatsDateRange
@@ -153,4 +186,28 @@ export type DashboardStats = {
 
 export type DashboardStatsResponse = {
   stats: DashboardStats
+}
+
+export type StandaloneDashboardStats = {
+  date_range: DashboardStatsDateRange
+  reporting_timezone: string
+  source: DashboardSourceState
+  automation: DashboardStats['automation']
+  order_totals: {
+    total: number
+    in_progress: number
+    needs_attention: number
+    confirmed: number
+    canceled: number
+  }
+  verification_totals: DashboardStats['totals']
+  usage: DashboardStats['usage'] & {
+    period_start: string | null
+    period_end: string | null
+  }
+  savings: DashboardStats['savings']
+}
+
+export type StandaloneDashboardStatsResponse = {
+  stats: StandaloneDashboardStats
 }

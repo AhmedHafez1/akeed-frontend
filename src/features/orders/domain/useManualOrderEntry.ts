@@ -53,7 +53,8 @@ function toPayload(values: ManualOrderFormValues): ManualOrderCreateInput {
 
 export function useManualOrderEntry(
   defaultCurrency?: string,
-  focusCustomerPhone?: () => void
+  focusCustomerPhone?: () => void,
+  onAccepted?: () => void
 ) {
   const t = useTranslations('manualOrder')
   const schema = useMemo(
@@ -190,6 +191,7 @@ export function useManualOrderEntry(
         )
         setResult(response)
         setRecoveryMode(null)
+        onAccepted?.()
       } catch (error) {
         logger.error('Submission failed', error)
 
@@ -277,7 +279,7 @@ export function useManualOrderEntry(
         setIsSubmitting(false)
       }
     },
-    [applyServerFieldErrors, form, t]
+    [applyServerFieldErrors, form, onAccepted, t]
   )
 
   const submit = form.handleSubmit(

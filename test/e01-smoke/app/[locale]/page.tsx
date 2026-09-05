@@ -72,6 +72,7 @@ export default function SmokePage() {
         <label>
           Fixture skin{' '}
           <select
+            id="fixture-skin"
             value={skin}
             onChange={(event) => setSkin(event.target.value)}
           >

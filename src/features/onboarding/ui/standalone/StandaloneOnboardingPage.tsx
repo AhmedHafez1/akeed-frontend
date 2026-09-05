@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
+import { ChevronDown } from 'lucide-react'
 import type {
   AutomationTimezone,
   IntegrationOnboardingLanguage,
@@ -183,22 +184,28 @@ export function StandaloneOnboardingPage() {
           </div>
           <div>
             <Label htmlFor="standalone-language">{t('language')}</Label>
-            <select
-              id="standalone-language"
-              className="mt-2 h-10 w-full rounded-md border border-slate-200 bg-white px-3"
-              value={onboarding.form.defaultLanguage}
-              disabled={disabled}
-              onChange={(event) =>
-                onboarding.setField(
-                  'defaultLanguage',
-                  event.target.value as IntegrationOnboardingLanguage
-                )
-              }
-            >
-              <option value="auto">{settingsT('languageAuto')}</option>
-              <option value="en">{settingsT('languageEnglish')}</option>
-              <option value="ar">{settingsT('languageArabic')}</option>
-            </select>
+            <div className="relative mt-2">
+              <select
+                id="standalone-language"
+                className="h-10 w-full appearance-none rounded-md border border-slate-200 bg-white py-2 ps-3 pe-10"
+                value={onboarding.form.defaultLanguage}
+                disabled={disabled}
+                onChange={(event) =>
+                  onboarding.setField(
+                    'defaultLanguage',
+                    event.target.value as IntegrationOnboardingLanguage
+                  )
+                }
+              >
+                <option value="auto">{settingsT('languageAuto')}</option>
+                <option value="en">{settingsT('languageEnglish')}</option>
+                <option value="ar">{settingsT('languageArabic')}</option>
+              </select>
+              <ChevronDown
+                aria-hidden="true"
+                className="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
+              />
+            </div>
           </div>
         </div>
 
@@ -223,26 +230,32 @@ export function StandaloneOnboardingPage() {
 
         <div>
           <Label htmlFor="standalone-timezone">{t('timezone')}</Label>
-          <select
-            id="standalone-timezone"
-            className="mt-2 h-10 w-full rounded-md border border-slate-200 bg-white px-3"
-            value={onboarding.form.timezone}
-            disabled={disabled}
-            onChange={(event) =>
-              onboarding.setField(
-                'timezone',
-                event.target.value as AutomationTimezone
-              )
-            }
-          >
-            {timezones.map((timezone) => (
-              <option key={timezone} value={timezone}>
-                {settingsT(
-                  `automation.timezones.${timezone.replaceAll('/', '_')}`
-                )}
-              </option>
-            ))}
-          </select>
+          <div className="relative mt-2">
+            <select
+              id="standalone-timezone"
+              className="h-10 w-full appearance-none rounded-md border border-slate-200 bg-white py-2 ps-3 pe-10"
+              value={onboarding.form.timezone}
+              disabled={disabled}
+              onChange={(event) =>
+                onboarding.setField(
+                  'timezone',
+                  event.target.value as AutomationTimezone
+                )
+              }
+            >
+              {timezones.map((timezone) => (
+                <option key={timezone} value={timezone}>
+                  {settingsT(
+                    `automation.timezones.${timezone.replaceAll('/', '_')}`
+                  )}
+                </option>
+              ))}
+            </select>
+            <ChevronDown
+              aria-hidden="true"
+              className="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
+            />
+          </div>
         </div>
 
         <details className="rounded-xl border border-slate-200 p-4">

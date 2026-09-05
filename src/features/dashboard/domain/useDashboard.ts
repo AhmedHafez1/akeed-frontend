@@ -2,20 +2,21 @@
 
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import type { CancelOrderResponse } from '@/shared/types/commerce-outcome.model'
-import { canCancelOrder } from './cancellation'
 import { api } from '@/shared/lib/auth'
 import { createLogger } from '@/shared/lib/logger'
-import { useDashboardData } from '../hooks/useDashboardData'
-import { useDashboardStats } from '../hooks/useDashboardStats'
+import type { CancelOrderResponse } from '@/shared/types/commerce-outcome.model'
+import { retryManualOrderVerification } from '@/features/orders/api/manualOrderApi'
+import { useStandaloneOrders } from '../hooks/useStandaloneOrders'
+import { useStandaloneDashboardStats } from '../hooks/useStandaloneDashboardStats'
 import type {
   DashboardStatsDateRange,
-  VerificationStatusFilter,
+  OrderItem,
+  StandaloneOrderFilter,
 } from '../model/dashboard.model'
 import type {
-  DashboardSkinProps,
   DateRangeFilterOption,
-  StatusFilterOption,
+  StandaloneDashboardSkinProps,
+  StandaloneOrderFilterOption,
   TestFeedback,
 } from './dashboard.types'
 import { getTestVerificationFeedbackKey } from './testVerificationFeedback'
@@ -28,67 +29,63 @@ interface SendTestVerificationResponse {
   reason?: string
 }
 
-export function useDashboard(): DashboardSkinProps {
+function canMarkCanceled(order: OrderItem): boolean {
+  return (
+    order.lifecycle.status === 'no_reply' &&
+    order.verification?.capabilities.some(
+      (capability) =>
+        capability.action === 'merchant_no_reply_cancellation' &&
+        capability.supported
+    ) === true
+  )
+}
+
+export function useDashboard(): StandaloneDashboardSkinProps {
   const t = useTranslations('dashboard')
-  const [statusFilter, setStatusFilter] =
-    useState<VerificationStatusFilter>('all')
+  const [orderFilter, setOrderFilter] = useState<StandaloneOrderFilter>('all')
   const [dateRangeFilter, setDateRangeFilter] =
     useState<DashboardStatsDateRange>('last_30_days')
-
-  // Test verification state
   const [isSendingTest, setIsSendingTest] = useState(false)
   const [testFeedback, setTestFeedback] = useState<TestFeedback | null>(null)
-  const [confirmingCancelVerificationId, setConfirmingCancelVerificationId] =
-    useState<string | null>(null)
-  const [cancelingVerificationId, setCancelingVerificationId] = useState<
+  const [actionFeedback, setActionFeedback] = useState<TestFeedback | null>(
+    null
+  )
+  const [confirmingCancelOrderId, setConfirmingCancelOrderId] = useState<
     string | null
   >(null)
-  const [cancelOrderErrors, setCancelOrderErrors] = useState<
-    Record<string, string>
-  >({})
+  const [actingOrderId, setActingOrderId] = useState<string | null>(null)
+  const [actionErrors, setActionErrors] = useState<Record<string, string>>({})
 
-  const {
-    verifications,
-    isVerificationsLoading,
-    hasMoreVerifications,
-    isLoadingMoreVerifications,
-    onLoadMoreVerifications,
-    pageContext,
-    refetch: refetchVerifications,
-    error: verificationsError,
-  } = useDashboardData(statusFilter, dateRangeFilter)
-
-  const {
-    stats,
-    isStatsLoading,
-    statsError,
-    refetch: refetchStats,
-  } = useDashboardStats(dateRangeFilter)
-  const isAutoVerifyEnabled = stats?.automation?.is_auto_verify_enabled ?? false
-  const followUpEnabled = stats?.automation?.follow_up_enabled ?? false
-  const quietHoursEnabled = stats?.automation?.quiet_hours_enabled ?? false
+  const orderData = useStandaloneOrders(
+    orderFilter,
+    dateRangeFilter,
+    t('orders.errors.load')
+  )
+  const statsData = useStandaloneDashboardStats(
+    dateRangeFilter,
+    t('orders.errors.metrics')
+  )
+  const refetchOrders = orderData.refetch
+  const refetchStats = statsData.refetch
+  const pageContext = orderData.pageContext
+  const stats = statsData.stats
   const sourceStatus =
-    stats?.source?.status ?? pageContext?.source?.status ?? 'not_connected'
+    stats?.source.status ?? pageContext?.source?.status ?? 'not_connected'
   const canSendTestVerification =
     pageContext?.permissions?.can_send_test_verification === true
   const canCancelOrders = pageContext?.permissions?.can_cancel_orders === true
   const canCreateManualOrder =
     pageContext?.permissions?.can_create_manual_order === true
+  const canRetryVerifications =
+    pageContext?.permissions?.can_retry_verifications === true
 
-  const hasVerifications = verifications?.length > 0
-
-  const statusFilters = useMemo<ReadonlyArray<StatusFilterOption>>(
+  const orderFilters = useMemo<ReadonlyArray<StandaloneOrderFilterOption>>(
     () => [
-      { id: 'all', label: t('filters.status.all') },
-      { id: 'pending', label: t('filters.status.pending') },
-      {
-        id: 'awaiting_response',
-        label: t('filters.status.awaiting_response'),
-      },
-      { id: 'confirmed', label: t('filters.status.confirmed') },
-      { id: 'canceled', label: t('filters.status.canceled') },
-      { id: 'failed', label: t('filters.status.failed') },
-      { id: 'no_reply', label: t('filters.status.no_reply') },
+      { id: 'all', label: t('orders.filters.all') },
+      { id: 'in_progress', label: t('orders.filters.inProgress') },
+      { id: 'needs_attention', label: t('orders.filters.needsAttention') },
+      { id: 'confirmed', label: t('orders.filters.confirmed') },
+      { id: 'canceled', label: t('orders.filters.canceled') },
     ],
     [t]
   )
@@ -106,84 +103,118 @@ export function useDashboard(): DashboardSkinProps {
     [t]
   )
 
-  // Simple conditional — not complex enough for useMemo
-  const emptyVerificationsMessage =
-    statusFilter === 'all' ? t('emptyState.all') : t('emptyState.filtered')
+  const refreshDashboard = useCallback(() => {
+    refetchOrders()
+    refetchStats()
+  }, [refetchOrders, refetchStats])
 
-  // Stable setters from useState are already referentially stable.
-  // Wrapping them in useCallback adds overhead without benefit.
-  const onStatusFilterChange = setStatusFilter
-  const onDateRangeFilterChange = setDateRangeFilter
+  const onDismissTestFeedback = useCallback(() => setTestFeedback(null), [])
+  const onDismissActionFeedback = useCallback(() => setActionFeedback(null), [])
 
-  const onDismissTestFeedback = useCallback(() => {
-    setTestFeedback(null)
-  }, [])
-
-  const onRequestCancelOrder = useCallback((verificationId: string) => {
-    setConfirmingCancelVerificationId(verificationId)
-    setCancelOrderErrors((previous) => {
-      const next = { ...previous }
-      delete next[verificationId]
+  const clearOrderError = useCallback((orderId: string) => {
+    setActionErrors((current) => {
+      const next = { ...current }
+      delete next[orderId]
       return next
     })
   }, [])
 
-  const onDismissCancelOrder = useCallback((verificationId: string) => {
-    setConfirmingCancelVerificationId((current) =>
-      current === verificationId ? null : current
-    )
-    setCancelOrderErrors((previous) => {
-      const next = { ...previous }
-      delete next[verificationId]
-      return next
-    })
-  }, [])
+  const onRequestCancelOrder = useCallback(
+    (orderId: string) => {
+      setConfirmingCancelOrderId(orderId)
+      clearOrderError(orderId)
+    },
+    [clearOrderError]
+  )
+
+  const onDismissCancelOrder = useCallback(
+    (orderId: string) => {
+      setConfirmingCancelOrderId((current) =>
+        current === orderId ? null : current
+      )
+      clearOrderError(orderId)
+    },
+    [clearOrderError]
+  )
 
   const onConfirmCancelOrder = useCallback(
-    async (verificationId: string) => {
-      if (!canCancelOrders || cancelingVerificationId) {
-        return
-      }
-
-      const verification = verifications.find(
-        (item) => item.id === verificationId
+    async (orderId: string) => {
+      if (!canCancelOrders || actingOrderId) return
+      const order = orderData.orders.find(
+        (candidate) => candidate.id === orderId
       )
-      if (!verification || !canCancelOrder(verification)) return
-      setCancelingVerificationId(verificationId)
-      setCancelOrderErrors((previous) => {
-        const next = { ...previous }
-        delete next[verificationId]
-        return next
-      })
-
+      if (!order?.verification || !canMarkCanceled(order)) return
+      setActingOrderId(orderId)
+      clearOrderError(orderId)
+      setActionFeedback(null)
       try {
         await api.post<CancelOrderResponse>(
-          `/api/verifications/${verificationId}/cancel`
+          `/api/verifications/${order.verification.id}/cancel`
         )
-        setConfirmingCancelVerificationId((current) =>
-          current === verificationId ? null : current
-        )
-        refetchVerifications()
-        refetchStats()
+        setConfirmingCancelOrderId(null)
+        setActionFeedback({
+          tone: 'success',
+          message: t('orders.actions.markCanceledSuccess'),
+        })
+        refreshDashboard()
       } catch (error) {
-        logger.error('Failed to cancel order', error)
-        setCancelOrderErrors((previous) => ({
-          ...previous,
-          [verificationId]: t('table.actions.cancelOrderError'),
+        logger.warn('Failed to mark order canceled', {
+          errorName: error instanceof Error ? error.name : 'UnknownError',
+        })
+        setActionErrors((current) => ({
+          ...current,
+          [orderId]: t('orders.actions.markCanceledError'),
         }))
       } finally {
-        setCancelingVerificationId((current) =>
-          current === verificationId ? null : current
-        )
+        setActingOrderId(null)
       }
     },
     [
-      cancelingVerificationId,
+      actingOrderId,
       canCancelOrders,
-      refetchStats,
-      refetchVerifications,
+      clearOrderError,
+      orderData.orders,
+      refreshDashboard,
       t,
-      verifications,
+    ]
+  )
+
+  const onRetryVerification = useCallback(
+    async (orderId: string) => {
+      if (!canRetryVerifications || actingOrderId) return
+      const order = orderData.orders.find(
+        (candidate) => candidate.id === orderId
+      )
+      if (!order?.lifecycle.retryable) return
+      setActingOrderId(orderId)
+      clearOrderError(orderId)
+      setActionFeedback(null)
+      try {
+        await retryManualOrderVerification(orderId)
+        setActionFeedback({
+          tone: 'success',
+          message: t('orders.actions.retrySuccess'),
+        })
+        refreshDashboard()
+      } catch (error) {
+        logger.warn('Failed to retry order verification', {
+          errorName: error instanceof Error ? error.name : 'UnknownError',
+        })
+        setActionErrors((current) => ({
+          ...current,
+          [orderId]: t('orders.actions.retryError'),
+        }))
+      } finally {
+        setActingOrderId(null)
+      }
+    },
+    [
+      actingOrderId,
+      canRetryVerifications,
+      clearOrderError,
+      orderData.orders,
+      refreshDashboard,
+      t,
     ]
   )
 
@@ -204,16 +235,14 @@ export function useDashboard(): DashboardSkinProps {
         })
         return
       }
-
       setIsSendingTest(true)
       setTestFeedback(null)
-
       try {
         const response = await api.post<SendTestVerificationResponse>(
           '/api/verifications/test',
           { customerPhone: normalizedPhone }
         )
-
+        refreshDashboard()
         if (response.skipped) {
           setTestFeedback({
             tone: 'warning',
@@ -224,16 +253,14 @@ export function useDashboard(): DashboardSkinProps {
           })
           return
         }
-
         setTestFeedback({
           tone: 'success',
           message: t('emptyState.onboarding.testSent'),
         })
-
-        refetchVerifications()
-        refetchStats()
       } catch (error) {
-        logger.error('Failed to send test verification', error)
+        logger.warn('Failed to send test verification', {
+          errorName: error instanceof Error ? error.name : 'UnknownError',
+        })
         setTestFeedback({
           tone: 'critical',
           message: t(getTestVerificationFeedbackKey(error)),
@@ -242,53 +269,53 @@ export function useDashboard(): DashboardSkinProps {
         setIsSendingTest(false)
       }
     },
-    [canSendTestVerification, t, refetchVerifications, refetchStats]
+    [canSendTestVerification, refreshDashboard, t]
   )
 
   const error = useMemo(() => {
-    if (verificationsError && statsError) {
-      return `${verificationsError}. ${statsError}.`
+    if (orderData.error && statsData.error) {
+      return `${orderData.error} ${statsData.error}`
     }
-    return verificationsError ?? statsError
-  }, [statsError, verificationsError])
+    return orderData.error ?? statsData.error
+  }, [orderData.error, statsData.error])
 
   return {
     stats,
-    isStatsLoading,
-    isAutoVerifyEnabled,
-    followUpEnabled,
-    quietHoursEnabled,
+    reportingTimezone:
+      stats?.reporting_timezone ?? pageContext?.reporting_timezone ?? 'UTC',
+    isStatsLoading: statsData.isLoading,
+    isAutoVerifyEnabled: stats?.automation.is_auto_verify_enabled ?? false,
     sourceStatus,
     dateRangeFilter,
     dateRangeOptions,
-    onDateRangeFilterChange,
-
-    verifications,
-    isVerificationsLoading,
-    hasMoreVerifications,
-    isLoadingMoreVerifications,
-    onLoadMoreVerifications,
-    hasVerifications,
-    emptyVerificationsMessage,
-    cancelingVerificationId,
-    confirmingCancelVerificationId,
-    cancelOrderErrors,
+    onDateRangeFilterChange: setDateRangeFilter,
+    orders: orderData.orders,
+    totalOrderCount: orderData.totalCount,
+    isOrdersLoading: orderData.isLoading,
+    hasMoreOrders: orderData.hasMore,
+    isLoadingMoreOrders: orderData.isLoadingMore,
+    onLoadMoreOrders: orderData.loadMore,
+    orderFilter,
+    orderFilters,
+    onOrderFilterChange: setOrderFilter,
+    confirmingCancelOrderId,
+    actingOrderId,
+    actionErrors,
     onRequestCancelOrder,
     onDismissCancelOrder,
     onConfirmCancelOrder,
-
-    statusFilter,
-    statusFilters,
-    onStatusFilterChange,
-
-    isSendingTest,
+    onRetryVerification,
     canSendTestVerification,
     canCancelOrders,
     canCreateManualOrder,
+    canRetryVerifications,
+    isSendingTest,
     testFeedback,
+    actionFeedback,
     onSendTestVerification,
     onDismissTestFeedback,
-
+    onDismissActionFeedback,
+    onManualOrderAccepted: refreshDashboard,
     error,
   }
 }

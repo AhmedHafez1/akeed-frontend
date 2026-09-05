@@ -1,10 +1,16 @@
 import { useTranslations } from 'next-intl'
+import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { EmptyState, LoadingSpinner } from '@/shared/ui'
-import { formatDashboardMoney } from '@/features/dashboard/lib/dashboardFormatters'
-import type { DashboardStats } from '@/features/dashboard/model/dashboard.model'
+import {
+  formatDashboardMoney,
+  formatDashboardNumber,
+  formatDashboardPercent,
+} from '@/features/dashboard/lib/dashboardFormatters'
+import type { StandaloneDashboardStats } from '@/features/dashboard/model/dashboard.model'
 
 interface StandaloneStatsSummaryProps {
-  stats: DashboardStats | null
+  stats: StandaloneDashboardStats | null
+  reportingTimezone: string
   isStatsLoading: boolean
 }
 
@@ -60,9 +66,11 @@ function StandaloneMetricCard({ label, value, tone, tooltip }: MetricCard) {
 
 export function StandaloneStatsSummary({
   stats,
+  reportingTimezone,
   isStatsLoading,
 }: StandaloneStatsSummaryProps) {
   const t = useTranslations('dashboard')
+  const { locale } = useLocaleInfo()
   const usagePercent = stats
     ? Math.min(
         100,
@@ -88,32 +96,34 @@ export function StandaloneStatsSummary({
 
   const orderOutcomeMetrics: MetricCard[] = [
     {
-      id: 'confirmed',
-      label: t('metrics.cards.confirmedOrders'),
-      value: stats.totals.confirmed,
+      id: 'total',
+      label: t('orders.metrics.total'),
+      value: formatDashboardNumber(stats.order_totals.total, locale),
       tone: 'success',
-      tooltip: t('tooltips.confirmedOrders'),
     },
     {
-      id: 'customerCanceled',
-      label: t('metrics.cards.customerCanceled'),
-      value: stats.totals.customer_canceled,
+      id: 'inProgress',
+      label: t('orders.metrics.inProgress'),
+      value: formatDashboardNumber(stats.order_totals.in_progress, locale),
+      tone: 'caution',
+    },
+    {
+      id: 'needsAttention',
+      label: t('orders.metrics.needsAttention'),
+      value: formatDashboardNumber(stats.order_totals.needs_attention, locale),
       tone: 'critical',
-      tooltip: t('tooltips.customerCanceled'),
     },
     {
-      id: 'awaitingResponse',
-      label: t('metrics.cards.awaitingResponse'),
-      value: stats.totals.awaiting_reply,
-      tone: 'caution',
-      tooltip: t('tooltips.awaitingReply'),
+      id: 'confirmed',
+      label: t('orders.metrics.confirmed'),
+      value: formatDashboardNumber(stats.order_totals.confirmed, locale),
+      tone: 'success',
     },
     {
-      id: 'pending',
-      label: t('metrics.cards.pending'),
-      value: stats.totals.pending,
-      tone: 'caution',
-      tooltip: t('tooltips.pending'),
+      id: 'canceled',
+      label: t('orders.metrics.canceled'),
+      value: formatDashboardNumber(stats.order_totals.canceled, locale),
+      tone: 'critical',
     },
   ]
 
@@ -121,11 +131,14 @@ export function StandaloneStatsSummary({
     {
       id: 'responseRate',
       label: t('metrics.cards.responseRate'),
-      value: `${stats.totals.reply_rate}%`,
+      value: formatDashboardPercent(
+        stats.verification_totals.reply_rate,
+        locale
+      ),
       tone:
-        stats.totals.reply_rate >= 80
+        stats.verification_totals.reply_rate >= 80
           ? 'success'
-          : stats.totals.reply_rate >= 55
+          : stats.verification_totals.reply_rate >= 55
             ? 'caution'
             : 'critical',
       tooltip: t('tooltips.responseRate'),
@@ -133,11 +146,14 @@ export function StandaloneStatsSummary({
     {
       id: 'confirmationRate',
       label: t('metrics.cards.confirmationRate'),
-      value: `${stats.totals.confirmation_rate}%`,
+      value: formatDashboardPercent(
+        stats.verification_totals.confirmation_rate,
+        locale
+      ),
       tone:
-        stats.totals.confirmation_rate >= 70
+        stats.verification_totals.confirmation_rate >= 70
           ? 'success'
-          : stats.totals.confirmation_rate >= 45
+          : stats.verification_totals.confirmation_rate >= 45
             ? 'caution'
             : 'critical',
       tooltip: t('tooltips.confirmationRate'),
@@ -145,14 +161,17 @@ export function StandaloneStatsSummary({
     {
       id: 'failed',
       label: t('metrics.cards.failed'),
-      value: stats.totals.failed,
+      value: formatDashboardNumber(stats.verification_totals.failed, locale),
       tone: 'critical',
       tooltip: t('tooltips.failed'),
     },
     {
       id: 'followUps',
       label: t('metrics.cards.followUps'),
-      value: stats.totals.follow_ups_sent,
+      value: formatDashboardNumber(
+        stats.verification_totals.follow_ups_sent,
+        locale
+      ),
       tone: 'caution',
       tooltip: t('tooltips.followUps'),
     },
@@ -164,7 +183,7 @@ export function StandaloneStatsSummary({
         <h2 className="text-sm font-semibold text-slate-700">
           {t('metrics.sections.orderOutcomes')}
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
           {orderOutcomeMetrics.map((metric) => (
             <StandaloneMetricCard key={metric.id} {...metric} />
           ))}
@@ -173,7 +192,7 @@ export function StandaloneStatsSummary({
 
       <section className="space-y-3">
         <h2 className="text-sm font-semibold text-slate-700">
-          {t('metrics.sections.needsAttention')}
+          {t('metrics.sections.verificationSummary')}
         </h2>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {needsAttentionMetrics.map((metric) => (
@@ -201,10 +220,10 @@ export function StandaloneStatsSummary({
           {t('metrics.usage.title')}
         </p>
         <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
-          {stats.usage.used}
+          {formatDashboardNumber(stats.usage.used, locale)}
           <span className="text-lg font-normal text-slate-400">
             {' '}
-            / {stats.usage.limit}
+            / {formatDashboardNumber(stats.usage.limit, locale)}
           </span>
         </p>
         <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
@@ -213,6 +232,20 @@ export function StandaloneStatsSummary({
             style={{ width: `${usagePercent}%` }}
           />
         </div>
+        {stats.usage.period_start && stats.usage.period_end ? (
+          <p className="mt-3 text-xs text-slate-500">
+            {t('metrics.usage.period', {
+              start: new Intl.DateTimeFormat(locale, {
+                dateStyle: 'medium',
+                timeZone: reportingTimezone,
+              }).format(new Date(stats.usage.period_start)),
+              end: new Intl.DateTimeFormat(locale, {
+                dateStyle: 'medium',
+                timeZone: reportingTimezone,
+              }).format(new Date(stats.usage.period_end)),
+            })}
+          </p>
+        ) : null}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -225,17 +258,26 @@ export function StandaloneStatsSummary({
               {
                 id: 'sent',
                 label: t('metrics.cards.sent'),
-                value: stats.totals.sent,
+                value: formatDashboardNumber(
+                  stats.verification_totals.sent,
+                  locale
+                ),
               },
               {
                 id: 'delivered',
                 label: t('metrics.cards.delivered'),
-                value: stats.totals.delivered,
+                value: formatDashboardNumber(
+                  stats.verification_totals.delivered,
+                  locale
+                ),
               },
               {
                 id: 'read',
                 label: t('metrics.cards.read'),
-                value: stats.totals.read,
+                value: formatDashboardNumber(
+                  stats.verification_totals.read,
+                  locale
+                ),
               },
             ].map((metric) => (
               <div
@@ -263,7 +305,8 @@ export function StandaloneStatsSummary({
           <p className="text-3xl font-bold tracking-tight text-slate-900">
             {formatDashboardMoney(
               stats.savings.money_saved,
-              stats.savings.currency
+              stats.savings.currency,
+              locale
             )}
           </p>
           <div className="mt-3 border-t border-slate-100 pt-3">
@@ -272,9 +315,15 @@ export function StandaloneStatsSummary({
             </p>
             <p className="mt-0.5 text-xs text-slate-500">
               {t('metrics.moneySaved.breakdownLine', {
-                count: stats.totals.canceled,
-                cost: stats.savings.avg_shipping_cost,
-                currency: stats.savings.currency,
+                count: formatDashboardNumber(
+                  stats.verification_totals.canceled,
+                  locale
+                ),
+                cost: formatDashboardMoney(
+                  stats.savings.avg_shipping_cost,
+                  stats.savings.currency,
+                  locale
+                ),
               })}
             </p>
           </div>

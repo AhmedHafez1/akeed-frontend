@@ -82,7 +82,7 @@ export function AdminSelect({
       <span className="relative block">
         <select
           aria-label={hideLabel ? label : undefined}
-          className="h-10 w-full appearance-none rounded-lg border border-slate-200 bg-white pr-9 pl-3 text-sm text-slate-700 shadow-xs transition-colors outline-none hover:border-slate-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/15 disabled:cursor-not-allowed disabled:opacity-50"
+          className="h-10 w-full appearance-none rounded-lg border border-slate-200 bg-white py-2 ps-3 pe-9 text-sm text-slate-700 shadow-xs transition-colors outline-none hover:border-slate-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/15 disabled:cursor-not-allowed disabled:opacity-50"
           {...props}
         >
           {options.map((option) => (
@@ -92,7 +92,7 @@ export function AdminSelect({
           ))}
         </select>
         <ChevronDown
-          className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-slate-400"
+          className="pointer-events-none absolute end-3 top-1/2 size-4 -translate-y-1/2 text-slate-400"
           aria-hidden="true"
         />
       </span>
