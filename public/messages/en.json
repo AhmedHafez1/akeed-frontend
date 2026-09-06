@@ -1336,7 +1336,72 @@
       "businessName": "Akeed Store"
     },
     "confirmationRate": "Confirmation rate",
-    "confirmationRateHelp": "Percentage of sent verifications that the customer confirmed."
+    "confirmationRateHelp": "Percentage of sent verifications that the customer confirmed.",
+    "standalone": {
+      "eyebrow": "Messaging",
+      "pageTitle": "Message templates",
+      "pageSubtitle": "Choose how your COD confirmation sounds in each customer language.",
+      "languageArabic": "Arabic",
+      "languageEnglish": "English",
+      "languageAuto": "Auto",
+      "storeLanguageTitle": "Store language is {language}",
+      "storeLanguageAutoDescription": "Customers receive Arabic or English based on their phone number's country code.",
+      "storeLanguageFixedDescription": "Customers receive {language} by default. You can still configure both languages here.",
+      "changeInSettings": "Change in Settings",
+      "customerLanguageTitle": "Customer language",
+      "defaultBadge": "Default",
+      "perLanguageStyleHint": "Arabic and English keep separate tone selections.",
+      "toneTitle": "Tone and style",
+      "toneDescription": "Choose from approved WhatsApp templates for this language.",
+      "variantLabels": {
+        "standard": "Standard",
+        "egyptian": "Egyptian",
+        "gulf": "Gulf",
+        "friendly": "Friendly",
+        "professional": "Professional",
+        "direct": "Direct",
+        "short": "Short"
+      },
+      "variantDescriptions": {
+        "standard": "Clear and balanced Modern Standard Arabic.",
+        "egyptian": "Warm, conversational Egyptian Arabic.",
+        "gulf": "Friendly Arabic phrasing for Gulf customers.",
+        "friendly": "Warm and welcoming for everyday orders.",
+        "professional": "Polished and formal while staying clear.",
+        "direct": "Action-focused with a clear request to confirm.",
+        "short": "Fast and concise with only essential details."
+      },
+      "noVariants": "No approved templates are available for this language.",
+      "detailsTitle": "Template details",
+      "channelLabel": "Channel",
+      "whatsappLabel": "WhatsApp",
+      "purposeLabel": "Purpose",
+      "purposeValue": "Order confirmation",
+      "variablesTitle": "Variables",
+      "variableLabels": {
+        "customer": "Customer name",
+        "store": "Business name",
+        "order": "Order number",
+        "total": "Total price"
+      },
+      "variablesUnavailable": "Not provided",
+      "approvalDescription": "Template wording and structure are approved for reliable WhatsApp delivery. Variable values update automatically for each order.",
+      "customerPreviewTitle": "Customer preview",
+      "livePreviewBadge": "Live preview",
+      "previewActions": "Illustrative template actions",
+      "previewFooter": "Customers can confirm or cancel in one tap. Preview actions do not change an order.",
+      "readOnly": "You have read-only access. An owner or admin must change template selections.",
+      "resetButton": "Reset to default",
+      "saveButton": "Save template",
+      "savingButton": "Saving template…",
+      "resetDialog": {
+        "title": "Reset this language template?",
+        "description": "Your unsaved {language} selection will be replaced with the backend default.",
+        "cancel": "Keep selection",
+        "confirm": "Reset to default",
+        "closeLabel": "Close reset confirmation"
+      }
+    }
   },
   "docs": {
     "eyebrow": "Documentation",

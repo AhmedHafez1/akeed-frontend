@@ -16,19 +16,14 @@ import {
   Zap,
 } from 'lucide-react'
 import type {
-  ArabicCodTemplateVariantId,
   AutomationTimezone,
-  EnglishCodTemplateVariantId,
   IntegrationOnboardingLanguage,
   OnboardingBillingPlanId,
 } from '@/features/onboarding'
 import type { SettingsSkinProps } from '@/features/settings/domain/settings.types'
-import {
-  formatTemplatePreviewTimestamp,
-  getTemplatePreviewParagraphs,
-} from '@/features/settings/skins/shared/templatePreview'
 import { Button, Card, Input, Label } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
+import { TemplatesStandaloneSkin } from './TemplatesStandaloneSkin'
 
 const SUBSCRIPTION_SECTION_ID = 'subscription-usage'
 const SETTINGS_SECTION_QUERY_KEY = 'section'
@@ -98,35 +93,6 @@ function NativeSelect<TValue extends string>({
         className="pointer-events-none absolute end-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500"
       />
     </div>
-  )
-}
-
-function SectionCard({
-  id,
-  title,
-  description,
-  children,
-}: {
-  id?: string
-  title: string
-  description?: string
-  children: React.ReactNode
-}) {
-  return (
-    <Card
-      id={id}
-      className="scroll-mt-20 border-slate-200 bg-white p-6 shadow-sm"
-    >
-      <div className="space-y-5">
-        <div className="space-y-1">
-          <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
-          {description && (
-            <p className="text-sm text-slate-500">{description}</p>
-          )}
-        </div>
-        {children}
-      </div>
-    </Card>
   )
 }
 
@@ -967,61 +933,15 @@ export function SettingsStandaloneSkin(
   props: SettingsSkinProps & { view?: 'settings' | 'templates' }
 ) {
   const t = useTranslations('settings')
-  const previewT = useTranslations('messageTemplate')
+  const templateT = useTranslations('messageTemplate.standalone')
   const view = props.view ?? 'settings'
-  const initialLanguage =
-    props.defaultLanguage === 'ar' || props.defaultLanguage === 'en'
-      ? props.defaultLanguage
-      : props.defaultTemplateLanguage
-  const [previewLanguage, setPreviewLanguage] = useState<'ar' | 'en'>(
-    initialLanguage
-  )
-  const selectedVariant =
-    previewLanguage === 'ar'
-      ? props.selectedCodTemplateVariants.ar
-      : props.selectedCodTemplateVariants.en
-  const availableVariants = props.codTemplateVariants[previewLanguage]
-  const selectedDefinition = availableVariants.find(
-    (variant) => variant.variant === selectedVariant
-  )
-  const template =
-    selectedDefinition?.preview ?? props.templatePreviews[previewLanguage]
-  const previewParagraphs = getTemplatePreviewParagraphs(
-    template,
-    props.storeName
-  )
-  const variantOptions = availableVariants.map((variant) => ({
-    label: previewT(`variantLabels.${variant.variant}`),
-    value: variant.variant,
-  }))
-  const defaultVariant = props.codTemplateDefaults[previewLanguage]
-  const isDefaultVariant = selectedVariant === defaultVariant
-  const isStoreLanguageAuto = props.defaultLanguage === 'auto'
-  const storeLanguageLabel =
-    props.defaultLanguage === 'ar'
-      ? previewT('languageArabic')
-      : props.defaultLanguage === 'en'
-        ? previewT('languageEnglish')
-        : previewT('languageAuto')
-  const languageContext = isStoreLanguageAuto
-    ? previewT('storeLanguageAutoHint')
-    : previewT('storeLanguageFixedHint', { language: storeLanguageLabel })
-
-  const handleVariantChange = (value: string) => {
-    if (previewLanguage === 'ar') {
-      props.onCodTemplateArVariantChange(value as ArabicCodTemplateVariantId)
-      return
-    }
-
-    props.onCodTemplateEnVariantChange(value as EnglishCodTemplateVariantId)
-  }
 
   if (props.isLoadError) {
     return (
       <div className="mx-auto max-w-xl py-12">
         <Card className="border-red-200 p-6 text-center">
           <h1 className="text-xl font-bold text-slate-900">
-            {view === 'templates' ? previewT('pageTitle') : t('title')}
+            {view === 'templates' ? templateT('pageTitle') : t('title')}
           </h1>
           <p className="mt-3 text-sm text-red-700">{t('loadError')}</p>
           <Button className="mt-5" onClick={props.onRetry}>
@@ -1036,170 +956,5 @@ export function SettingsStandaloneSkin(
     return <StandaloneSettingsExperience props={props} />
   }
 
-  return (
-    <div className="mx-auto max-w-6xl space-y-6 pb-8">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-            {view === 'templates' ? previewT('pageTitle') : t('title')}
-          </h1>
-          <p className="text-sm text-slate-500">
-            {view === 'templates' ? previewT('pageSubtitle') : t('subtitle')}
-          </p>
-        </div>
-        {props.canUpdateConfiguration && (
-          <Button
-            type="button"
-            disabled={props.isSaving}
-            onClick={() => void props.onSave()}
-          >
-            {props.isSaving ? t('savingButton') : t('saveButton')}
-          </Button>
-        )}
-      </div>
-
-      {props.errorBanner && (
-        <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-          {props.errorBanner}
-        </div>
-      )}
-
-      {props.successBanner && (
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-          {props.successBanner}
-        </div>
-      )}
-
-      {!props.canUpdateConfiguration && (
-        <div
-          role="status"
-          className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800"
-        >
-          {t('readOnly')}
-        </div>
-      )}
-
-      {view === 'templates' && (
-        <SectionCard
-          title={previewT('setupTitle')}
-          description={previewT('setupDescription')}
-        >
-          <div className="space-y-5">
-            <p className="text-sm text-slate-500">{languageContext}</p>
-
-            <div className="grid gap-4 lg:grid-cols-[280px_1fr]">
-              <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
-                <Field label={previewT('languageLabel')}>
-                  <div className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white p-1">
-                    {props.templateLanguages.includes('ar') && (
-                      <Button
-                        type="button"
-                        variant={previewLanguage === 'ar' ? 'default' : 'ghost'}
-                        size="sm"
-                        disabled={!props.canUpdateConfiguration}
-                        onClick={() => setPreviewLanguage('ar')}
-                      >
-                        {previewT('languageArabic')}
-                      </Button>
-                    )}
-                    {props.templateLanguages.includes('en') && (
-                      <Button
-                        type="button"
-                        variant={previewLanguage === 'en' ? 'default' : 'ghost'}
-                        size="sm"
-                        disabled={!props.canUpdateConfiguration}
-                        onClick={() => setPreviewLanguage('en')}
-                      >
-                        {previewT('languageEnglish')}
-                      </Button>
-                    )}
-                  </div>
-                </Field>
-
-                <Field label={previewT('styleLabel')}>
-                  <NativeSelect
-                    value={selectedVariant}
-                    options={variantOptions}
-                    disabled={!props.canUpdateConfiguration}
-                    onChange={handleVariantChange}
-                  />
-                  <p className="mt-2 text-xs text-slate-500">
-                    {previewT('defaultVariantLabel', {
-                      variant: previewT(`variantLabels.${defaultVariant}`),
-                    })}
-                  </p>
-                  <p className="mt-1 text-xs font-semibold text-emerald-700">
-                    {isDefaultVariant
-                      ? previewT('badgeDefault')
-                      : previewT('badgeCustom')}
-                  </p>
-                </Field>
-                <p className="text-xs text-slate-500">
-                  {previewT('perLanguageStyleHint')}
-                </p>
-              </div>
-
-              <div className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                <p className="text-sm text-slate-500">
-                  {previewT('previewDescription')}
-                </p>
-                <div className="mx-auto w-full max-w-[380px] rounded-2xl border border-[#d8d8d8] bg-[#efeae2] bg-[url('/images/landing/wa_chat_bg.png')] bg-cover bg-center p-3 shadow-sm">
-                  <div
-                    dir={previewLanguage === 'ar' ? 'rtl' : 'ltr'}
-                    style={{ fontFamily: 'Segoe UI, Tahoma, sans-serif' }}
-                    className="overflow-hidden rounded-xl border border-[#e7e7e7] bg-white text-[#1e1f21]"
-                  >
-                    <div className="space-y-5 px-4 pt-4 pb-3 text-[15px] leading-6 font-normal">
-                      {previewParagraphs.map((line, index) => (
-                        <p key={index}>{line}</p>
-                      ))}
-                    </div>
-                    <div
-                      className={`px-4 pb-2 text-[14px] text-[#8e8e93] ${
-                        previewLanguage === 'ar' ? 'text-left' : 'text-right'
-                      }`}
-                    >
-                      {formatTemplatePreviewTimestamp(previewLanguage)}
-                    </div>
-                    <div
-                      className={`border-t border-[#ececec] px-4 py-3 text-[#178959] ${
-                        previewLanguage === 'ar' ? 'text-right' : 'text-left'
-                      }`}
-                    >
-                      <span
-                        className={`flex items-center justify-center gap-2 text-[15px] leading-6 font-normal ${
-                          previewLanguage === 'ar'
-                            ? 'flex-row-reverse'
-                            : 'flex-row'
-                        }`}
-                      >
-                        <span className="text-[13px]">↩</span>
-                        {template.confirmButton}
-                      </span>
-                    </div>
-                    <div
-                      className={`border-t border-[#ececec] px-4 py-3 text-[#178959] ${
-                        previewLanguage === 'ar' ? 'text-right' : 'text-left'
-                      }`}
-                    >
-                      <span
-                        className={`flex items-center justify-center gap-2 text-[15px] leading-6 font-normal ${
-                          previewLanguage === 'ar'
-                            ? 'flex-row-reverse'
-                            : 'flex-row'
-                        }`}
-                      >
-                        <span className="text-[13px]">↩</span>
-                        {template.cancelButton}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </SectionCard>
-      )}
-    </div>
-  )
+  return <TemplatesStandaloneSkin props={props} />
 }

@@ -97,6 +97,10 @@ export interface SettingsSkinProps {
     ar: ArabicCodTemplateVariantId
     en: EnglishCodTemplateVariantId
   }
+  savedCodTemplateVariants: {
+    ar: ArabicCodTemplateVariantId
+    en: EnglishCodTemplateVariantId
+  }
   codTemplateVariants: {
     ar: CodTemplateDefinition[]
     en: CodTemplateDefinition[]

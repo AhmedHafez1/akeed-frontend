@@ -1,4 +1,8 @@
 import type { SettingsTemplatePreview } from '@/features/settings/domain/settings.types'
+import type { CodTemplateDefinition } from '@/features/settings/api/settingsApi'
+
+export type TemplatePreviewVariableKey =
+  CodTemplateDefinition['bodyParameterOrder'][number]
 
 const PREVIEW_CUSTOMER_NAME = 'Ahmed'
 const PREVIEW_ORDER_NUMBER = '1009'
@@ -76,4 +80,10 @@ export function getTemplatePreviewParagraphs(
 
 export function formatTemplatePreviewTimestamp(language: 'ar' | 'en'): string {
   return language === 'ar' ? '8:08 ص' : '8:08 AM'
+}
+
+export function getTemplatePreviewVariableKeys(
+  bodyParameterOrder?: ReadonlyArray<TemplatePreviewVariableKey>
+): TemplatePreviewVariableKey[] {
+  return [...new Set(bodyParameterOrder ?? [])]
 }

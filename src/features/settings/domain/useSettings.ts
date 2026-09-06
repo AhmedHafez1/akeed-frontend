@@ -806,6 +806,9 @@ export function useSettings(): {
       defaultTemplateLanguage,
       codTemplateDefaults,
       selectedCodTemplateVariants,
+      savedCodTemplateVariants:
+        savedSettings?.selectedCodTemplateVariants ??
+        selectedCodTemplateVariants,
       codTemplateVariants,
       templatePreviews,
       onStoreNameChange: (value) => {

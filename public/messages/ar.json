@@ -1322,7 +1322,72 @@
       "businessName": "Akeed Store"
     },
     "confirmationRate": "معدل التأكيد",
-    "confirmationRateHelp": "نسبة التأكيدات المرسلة التي أكّدها العميل."
+    "confirmationRateHelp": "نسبة التأكيدات المرسلة التي أكّدها العميل.",
+    "standalone": {
+      "eyebrow": "المراسلات",
+      "pageTitle": "قوالب الرسائل",
+      "pageSubtitle": "اختر أسلوب رسالة تأكيد الدفع عند الاستلام لكل لغة يستخدمها عملاؤك.",
+      "languageArabic": "العربية",
+      "languageEnglish": "الإنجليزية",
+      "languageAuto": "تلقائي",
+      "storeLanguageTitle": "لغة المتجر: {language}",
+      "storeLanguageAutoDescription": "يستلم العميل الرسالة بالعربية أو الإنجليزية حسب رمز دولة رقم هاتفه.",
+      "storeLanguageFixedDescription": "يستلم العميل الرسالة باللغة {language} افتراضيًا. ويمكنك ضبط اللغتين هنا.",
+      "changeInSettings": "التغيير في الإعدادات",
+      "customerLanguageTitle": "لغة العميل",
+      "defaultBadge": "الافتراضي",
+      "perLanguageStyleHint": "يحتفظ القالب العربي والإنجليزي باختيار نمط مستقل.",
+      "toneTitle": "النبرة والأسلوب",
+      "toneDescription": "اختر قالب واتساب معتمدًا لهذه اللغة.",
+      "variantLabels": {
+        "standard": "فصحى",
+        "egyptian": "مصري",
+        "gulf": "خليجي",
+        "friendly": "ودّي",
+        "professional": "رسمي",
+        "direct": "مباشر",
+        "short": "مختصر"
+      },
+      "variantDescriptions": {
+        "standard": "عربية فصحى واضحة ومتوازنة.",
+        "egyptian": "لهجة مصرية دافئة وقريبة من العميل.",
+        "gulf": "صياغة عربية ودّية مناسبة لعملاء الخليج.",
+        "friendly": "نبرة دافئة ومرحّبة للطلبات اليومية.",
+        "professional": "صياغة رسمية وواضحة باحترافية.",
+        "direct": "طلب تأكيد مباشر يركز على الإجراء.",
+        "short": "رسالة سريعة ومختصرة بالتفاصيل الأساسية."
+      },
+      "noVariants": "لا توجد قوالب معتمدة متاحة لهذه اللغة.",
+      "detailsTitle": "تفاصيل القالب",
+      "channelLabel": "القناة",
+      "whatsappLabel": "واتساب",
+      "purposeLabel": "الغرض",
+      "purposeValue": "تأكيد الطلب",
+      "variablesTitle": "المتغيرات",
+      "variableLabels": {
+        "customer": "اسم العميل",
+        "store": "اسم المتجر",
+        "order": "رقم الطلب",
+        "total": "إجمالي السعر"
+      },
+      "variablesUnavailable": "غير متاحة",
+      "approvalDescription": "صياغة القالب وبنيته معتمدتان لضمان موثوقية الإرسال عبر واتساب. تتغير قيم المتغيرات تلقائيًا لكل طلب.",
+      "customerPreviewTitle": "معاينة العميل",
+      "livePreviewBadge": "معاينة مباشرة",
+      "previewActions": "إجراءات توضيحية للقالب",
+      "previewFooter": "يمكن للعميل التأكيد أو الإلغاء بضغطة واحدة. أزرار المعاينة لا تغيّر حالة الطلب.",
+      "readOnly": "لديك صلاحية عرض فقط. يجب أن يغيّر المالك أو المسؤول اختيارات القوالب.",
+      "resetButton": "إعادة الافتراضي",
+      "saveButton": "حفظ القالب",
+      "savingButton": "جارٍ حفظ القالب…",
+      "resetDialog": {
+        "title": "إعادة القالب الافتراضي لهذه اللغة؟",
+        "description": "سيُستبدل اختيار {language} غير المحفوظ بالقالب الافتراضي المحدد من النظام.",
+        "cancel": "الاحتفاظ بالاختيار",
+        "confirm": "إعادة الافتراضي",
+        "closeLabel": "إغلاق تأكيد إعادة القالب"
+      }
+    }
   },
   "docs": {
     "eyebrow": "الدليل",
