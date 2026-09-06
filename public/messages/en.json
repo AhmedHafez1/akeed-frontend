@@ -593,6 +593,17 @@
     "primaryNavigation": "Primary navigation",
     "messageTemplate": "Message template",
     "automationSettings": "Automation",
+    "workspace": "Workspace",
+    "workspaceFallback": "My workspace",
+    "userFallback": "Signed-in user",
+    "identityLoading": "Loading workspace identity",
+    "helpSupport": "Help & support",
+    "search": "Search orders",
+    "searchOrders": "Open order search",
+    "notifications": "Notifications",
+    "breadcrumbs": "Breadcrumbs",
+    "closeNavigation": "Close navigation menu",
+    "navigationDescription": "Navigate between protected Akeed pages.",
     "signOut": "Sign out",
     "signingOut": "Signing out..."
   },
@@ -683,6 +694,66 @@
     "title": "Dashboard",
     "subtitle": "Monitor verification status and recent orders across your channels.",
     "valueProposition": "Akeed confirms cash-on-delivery orders through WhatsApp before fulfillment.",
+    "standalone": {
+      "eyebrow": "Overview",
+      "greeting": "Welcome back, {name}",
+      "greetingLoading": "Loading dashboard greeting",
+      "description": "A clear summary of your COD confirmation performance, usage, and orders that need action.",
+      "kpisLabel": "Primary dashboard metrics",
+      "status": {
+        "active": {
+          "title": "Verification is active",
+          "description": "New COD orders are being confirmed automatically."
+        },
+        "paused": {
+          "title": "Verification is paused",
+          "description": "Automatic confirmation is off. Existing results remain available."
+        },
+        "disconnected": {
+          "title": "Order source is disconnected",
+          "description": "New orders and queued actions are paused until the source is reconnected."
+        },
+        "action": "Review automation"
+      },
+      "performance": {
+        "title": "Confirmation performance",
+        "period": "Available totals for {period}",
+        "confirmationRate": "Confirmation rate",
+        "description": "Based on confirmed outcomes and messages sent during the selected period."
+      },
+      "usage": {
+        "title": "Usage this month",
+        "description": "Confirmations counted in the current billing period.",
+        "usedLabel": "Confirmations used",
+        "percentUsed": "{value}% used",
+        "remaining": "{value} remaining",
+        "exhausted": "No confirmations remaining",
+        "unlimited": "Unlimited",
+        "unlimitedDescription": "This workspace does not have a confirmation limit.",
+        "unavailable": "A monthly limit is not available for this workspace.",
+        "manage": "Manage plan"
+      },
+      "attention": {
+        "title": "Needs attention",
+        "description": "Most recent orders that may require merchant action.",
+        "viewAll": "View all",
+        "emptyTitle": "Nothing needs attention",
+        "emptyDescription": "There are no actionable orders in this period.",
+        "unavailable": "The actionable-order preview is unavailable right now.",
+        "dateUnavailable": "Date unavailable"
+      },
+      "outcomes": {
+        "title": "Outcome breakdown",
+        "description": "Order outcomes for the selected period.",
+        "chartLabel": "Proportional breakdown of order outcomes",
+        "empty": "No order outcomes are available for this period.",
+        "singleOutcome": "Only one outcome has data, so a proportional bar is not shown."
+      },
+      "unavailable": {
+        "title": "Dashboard metrics are unavailable",
+        "description": "Order previews may still be available below. Try again shortly for performance and usage metrics."
+      }
+    },
     "sourceDisconnectedTitle": "Order source disconnected",
     "sourceDisconnectedDescription": "New orders and queued actions are paused. Your order and verification history remains available in the dashboard.",
     "statusCard": {

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
@@ -12,7 +12,16 @@ import {
 } from '@/features/dashboard'
 
 function StandaloneVerificationsPageContent() {
-  const skinProps = useDashboard()
+  const searchParams = useSearchParams()
+  const requestedFilter = searchParams.get('status')
+  const initialFilter =
+    requestedFilter === 'in_progress' ||
+    requestedFilter === 'needs_attention' ||
+    requestedFilter === 'confirmed' ||
+    requestedFilter === 'canceled'
+      ? requestedFilter
+      : 'all'
+  const skinProps = useDashboard(initialFilter)
   return <DashboardVerificationsStandaloneSkin {...skinProps} />
 }
 

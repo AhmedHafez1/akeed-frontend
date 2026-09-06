@@ -112,16 +112,21 @@ function ToggleRow({
 }
 
 function SectionCard({
+  id,
   title,
   description,
   children,
 }: {
+  id?: string
   title: string
   description?: string
   children: React.ReactNode
 }) {
   return (
-    <Card className="border-slate-200 bg-white p-6 shadow-sm">
+    <Card
+      id={id}
+      className="scroll-mt-20 border-slate-200 bg-white p-6 shadow-sm"
+    >
       <div className="space-y-5">
         <div className="space-y-1">
           <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
@@ -406,6 +411,7 @@ export function SettingsStandaloneSkin(
           </SectionCard>
 
           <SectionCard
+            id="automation-settings"
             title={t('automation.heading')}
             description={t('automation.description')}
           >

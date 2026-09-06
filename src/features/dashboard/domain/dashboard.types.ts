@@ -112,5 +112,6 @@ export interface StandaloneDashboardSkinProps {
   onDismissTestFeedback: () => void
   onDismissActionFeedback: () => void
   onManualOrderAccepted: () => void
+  ordersError: string | null
   error: string | null
 }

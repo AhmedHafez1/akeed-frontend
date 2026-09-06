@@ -40,9 +40,12 @@ function canMarkCanceled(order: OrderItem): boolean {
   )
 }
 
-export function useDashboard(): StandaloneDashboardSkinProps {
+export function useDashboard(
+  initialOrderFilter: StandaloneOrderFilter = 'all'
+): StandaloneDashboardSkinProps {
   const t = useTranslations('dashboard')
-  const [orderFilter, setOrderFilter] = useState<StandaloneOrderFilter>('all')
+  const [orderFilter, setOrderFilter] =
+    useState<StandaloneOrderFilter>(initialOrderFilter)
   const [dateRangeFilter, setDateRangeFilter] =
     useState<DashboardStatsDateRange>('last_30_days')
   const [isSendingTest, setIsSendingTest] = useState(false)
@@ -316,6 +319,7 @@ export function useDashboard(): StandaloneDashboardSkinProps {
     onDismissTestFeedback,
     onDismissActionFeedback,
     onManualOrderAccepted: refreshDashboard,
+    ordersError: orderData.error,
     error,
   }
 }

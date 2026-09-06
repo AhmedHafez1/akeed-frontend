@@ -10,7 +10,7 @@ import {
 } from '@/features/dashboard'
 
 function StandaloneDashboardPageContent() {
-  const skinProps = useDashboard()
+  const skinProps = useDashboard('needs_attention')
   return <DashboardStandaloneSkin {...skinProps} />
 }
 
