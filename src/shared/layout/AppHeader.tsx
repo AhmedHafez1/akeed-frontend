@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Globe, LogOut } from 'lucide-react'
+import { Globe, LogOut, Menu, X } from 'lucide-react'
+import { cn } from '@/shared/lib/utils'
 import { useTranslations } from 'next-intl'
 import { auth } from '@/shared/lib/auth'
 import { createLogger } from '@/shared/lib/logger'
@@ -28,6 +29,24 @@ export function AppHeader() {
   const router = useRouter()
   const locale = getLocaleFromPathname(pathname)
   const [isSigningOut, setIsSigningOut] = useState(false)
+  const [isMobileNavigationOpen, setIsMobileNavigationOpen] = useState(false)
+
+  const navigationItems = [
+    { href: '/dashboard', label: t('dashboard') },
+    { href: '/verifications', label: t('verifications') },
+    { href: '/settings', label: t('settings') },
+    { href: '/templates', label: t('templates') },
+  ]
+
+  const isActivePath = (href: string) => pathname === withLocale(href, locale)
+
+  const navigationLinkClassName = (isActive: boolean) =>
+    cn(
+      'rounded-lg px-3 py-2 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2',
+      isActive
+        ? 'bg-emerald-50 text-emerald-800 shadow-sm ring-1 ring-emerald-100'
+        : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+    )
 
   const handleLocaleChange = () => {
     const newLocale: SupportedLocale = locale === 'ar' ? 'en' : 'ar'
@@ -53,7 +72,7 @@ export function AppHeader() {
 
   return (
     <header className="border-b border-slate-200 bg-white">
-      <div className="flex h-14 items-center justify-between px-4 sm:px-6">
+      <div className="flex min-h-16 items-center justify-between px-4 sm:px-6">
         {/* Left: Logo + Nav */}
         <div className="flex items-center gap-6">
           <Link
@@ -63,43 +82,26 @@ export function AppHeader() {
             <Image
               src="/images/akeed-web-logo-horizontal.png"
               alt="Akeed"
-              width={48}
-              height={48}
-              className="object-contain"
+              width={118}
+              height={50}
+              className="h-9 w-auto object-contain"
             />
           </Link>
 
           <nav className="hidden items-center gap-1 sm:flex">
-            <Link
-              href={withLocale('/dashboard', locale)}
-              className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900"
-            >
-              {t('dashboard')}
-            </Link>
-            <Link
-              href={withLocale('/verifications', locale)}
-              className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900"
-            >
-              {t('verifications')}
-            </Link>
-            <Link
-              href={withLocale('/settings', locale)}
-              className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900"
-            >
-              {t('settings')}
-            </Link>
-            <Link
-              href={withLocale('/message-preview', locale)}
-              className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900"
-            >
-              {t('messageTemplate')}
-            </Link>
-            <Link
-              href={withLocale('/automation-settings', locale)}
-              className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900"
-            >
-              {t('automationSettings')}
-            </Link>
+            {navigationItems.map((item) => {
+              const isActive = isActivePath(item.href)
+              return (
+                <Link
+                  key={item.href}
+                  href={withLocale(item.href, locale)}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={navigationLinkClassName(isActive)}
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
           </nav>
         </div>
 
@@ -115,6 +117,20 @@ export function AppHeader() {
           </button>
 
           <button
+            type="button"
+            onClick={() => setIsMobileNavigationOpen((open) => !open)}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 sm:hidden"
+            aria-label={t('navigationMenu')}
+            aria-expanded={isMobileNavigationOpen}
+          >
+            {isMobileNavigationOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </button>
+
+          <button
             onClick={handleSignOut}
             disabled={isSigningOut}
             className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-60"
@@ -126,6 +142,29 @@ export function AppHeader() {
           </button>
         </div>
       </div>
+      {isMobileNavigationOpen && (
+        <nav
+          aria-label={t('primaryNavigation')}
+          className="border-t border-slate-100 px-4 py-3 sm:hidden"
+        >
+          <div className="grid gap-1">
+            {navigationItems.map((item) => {
+              const isActive = isActivePath(item.href)
+              return (
+                <Link
+                  key={item.href}
+                  href={withLocale(item.href, locale)}
+                  aria-current={isActive ? 'page' : undefined}
+                  onClick={() => setIsMobileNavigationOpen(false)}
+                  className={navigationLinkClassName(isActive)}
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
+          </div>
+        </nav>
+      )}
     </header>
   )
 }

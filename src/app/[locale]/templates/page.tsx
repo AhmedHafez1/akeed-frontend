@@ -1,28 +1,22 @@
 'use client'
 
-import { useSearchParams } from 'next/navigation'
 import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
-import { SettingsEmbeddedShellSkeleton } from '@/shared/layout/skeletons'
 import { FullPageLoader } from '@/shared/layout/FullPageLoader'
+import { SettingsEmbeddedShellSkeleton } from '@/shared/layout/skeletons'
 import {
   SettingsEmbeddedTabbedSkin,
   SettingsStandaloneSkin,
   useSettings,
 } from '@/features/settings'
-import { resolveSettingsTab } from '@/features/settings/domain/settingsTabs'
 
-function SettingsPageContent({
-  skeletonVariant,
-}: {
-  skeletonVariant: 'store' | 'confirmation' | 'message-preview' | 'billing'
-}) {
+function TemplatesPageContent() {
   const { mode } = useAkeedMode()
   const { isPageLoading, skinProps } = useSettings()
 
   if (isPageLoading) {
     return mode === 'EMBEDDED' ? (
-      <SettingsEmbeddedShellSkeleton variant={skeletonVariant} />
+      <SettingsEmbeddedShellSkeleton variant="message-preview" />
     ) : (
       <FullPageLoader />
     )
@@ -32,28 +26,24 @@ function SettingsPageContent({
     return <SettingsEmbeddedTabbedSkin {...skinProps} />
   }
 
-  return <SettingsStandaloneSkin {...skinProps} />
+  return <SettingsStandaloneSkin {...skinProps} view="templates" />
 }
 
-export default function SettingsPage() {
+export default function TemplatesPage() {
   const { isEmbedded } = useAkeedMode()
-  const searchParams = useSearchParams()
-  const skeletonVariant = isEmbedded
-    ? resolveSettingsTab(searchParams.get('tab'))
-    : 'store'
 
   return (
     <EmbeddedAuthGate
       fallback={
         isEmbedded ? (
-          <SettingsEmbeddedShellSkeleton variant={skeletonVariant} />
+          <SettingsEmbeddedShellSkeleton variant="message-preview" />
         ) : (
           <FullPageLoader />
         )
       }
       onboardingGate="dashboard"
     >
-      <SettingsPageContent skeletonVariant={skeletonVariant} />
+      <TemplatesPageContent />
     </EmbeddedAuthGate>
   )
 }

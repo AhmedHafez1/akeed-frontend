@@ -241,9 +241,12 @@ function StandalonePlanComparison({
   )
 }
 
-export function SettingsStandaloneSkin(props: SettingsSkinProps) {
+export function SettingsStandaloneSkin(
+  props: SettingsSkinProps & { view?: 'settings' | 'templates' }
+) {
   const t = useTranslations('settings')
   const previewT = useTranslations('messageTemplate')
+  const view = props.view ?? 'settings'
   const initialLanguage =
     props.defaultLanguage === 'ar' || props.defaultLanguage === 'en'
       ? props.defaultLanguage
@@ -300,7 +303,9 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
     return (
       <div className="mx-auto max-w-xl py-12">
         <Card className="border-red-200 p-6 text-center">
-          <h1 className="text-xl font-bold text-slate-900">{t('title')}</h1>
+          <h1 className="text-xl font-bold text-slate-900">
+            {view === 'templates' ? previewT('pageTitle') : t('title')}
+          </h1>
           <p className="mt-3 text-sm text-red-700">{t('loadError')}</p>
           <Button className="mt-5" onClick={props.onRetry}>
             {t('retryButton')}
@@ -315,9 +320,11 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-1">
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-            {t('title')}
+            {view === 'templates' ? previewT('pageTitle') : t('title')}
           </h1>
-          <p className="text-sm text-slate-500">{t('subtitle')}</p>
+          <p className="text-sm text-slate-500">
+            {view === 'templates' ? previewT('pageSubtitle') : t('subtitle')}
+          </p>
         </div>
         {props.canUpdateConfiguration && (
           <Button
@@ -351,349 +358,365 @@ export function SettingsStandaloneSkin(props: SettingsSkinProps) {
         </div>
       )}
 
-      <SectionCard title={t('sourceHeading')}>
-        <p className="text-sm font-medium text-emerald-700">
-          {props.sourcePlatformType === 'standalone'
-            ? t('sourceStandalone')
-            : props.sourcePlatformType}
-        </p>
-        <code
-          dir="ltr"
-          className="block rounded-lg bg-slate-50 p-3 text-xs break-all text-slate-700"
-        >
-          {props.sourceIdentity}
-        </code>
-      </SectionCard>
-
-      <SectionCard title={t('storeConfigurationHeading')}>
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label={t('storeNameLabel')} error={props.storeNameError}>
-            <Input
-              value={props.storeName}
-              disabled={!props.canUpdateConfiguration}
-              onChange={(event) => props.onStoreNameChange(event.target.value)}
-              autoComplete="organization"
-            />
-          </Field>
-
-          <Field label={t('defaultLanguageLabel')}>
-            <NativeSelect<IntegrationOnboardingLanguage>
-              value={props.defaultLanguage}
-              options={props.languageOptions}
-              disabled={!props.canUpdateConfiguration}
-              onChange={props.onDefaultLanguageChange}
-            />
-          </Field>
-        </div>
-        <ToggleRow
-          label={t('codDefaultLabel')}
-          description={t('codDefaultHelp')}
-          checked={props.assumeCodWhenPaymentMissing}
-          disabled={!props.canUpdateConfiguration}
-          onChange={props.onAssumeCodWhenPaymentMissingChange}
-        />
-      </SectionCard>
-
-      <SectionCard
-        title={t('automation.heading')}
-        description={t('automation.description')}
-      >
-        <ToggleRow
-          label={t('autoVerifyLabel')}
-          description={t('autoVerifyDescription')}
-          checked={props.isAutoVerifyEnabled}
-          disabled={!props.canUpdateConfiguration}
-          onChange={props.onAutoVerifyChange}
-        />
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field
-            label={t('automation.sendDelayMinutesLabel')}
-            error={props.sendDelayMinutesError}
-          >
-            <Input
-              type="number"
-              min={0}
-              max={24}
-              step={0.25}
-              disabled={!props.canUpdateConfiguration}
-              value={props.sendDelayMinutes}
-              onChange={(event) =>
-                props.onSendDelayMinutesChange(event.target.value)
-              }
-            />
-          </Field>
-          <Field label={t('automation.timezoneLabel')}>
-            <NativeSelect<AutomationTimezone>
-              value={props.timezone}
-              options={props.timezoneOptions}
-              disabled={!props.canUpdateConfiguration}
-              onChange={props.onTimezoneChange}
-            />
-          </Field>
-        </div>
-        <ToggleRow
-          label={t('automation.followUpEnabledLabel')}
-          description={t('automation.followUpEnabledHelp')}
-          checked={props.followUpEnabled}
-          disabled={!props.canUpdateConfiguration}
-          onChange={props.onFollowUpEnabledChange}
-        />
-        <Field
-          label={t('automation.followUpDelayMinutesLabel')}
-          error={props.followUpDelayMinutesError}
-        >
-          <Input
-            type="number"
-            min={0}
-            max={168}
-            step={0.25}
-            disabled={!props.canUpdateConfiguration || !props.followUpEnabled}
-            value={props.followUpDelayMinutes}
-            onChange={(event) =>
-              props.onFollowUpDelayMinutesChange(event.target.value)
-            }
-          />
-        </Field>
-        <ToggleRow
-          label={t('automation.escalationEnabledLabel')}
-          description={t('automation.escalationEnabledHelp')}
-          checked={props.escalationEnabled}
-          disabled={!props.canUpdateConfiguration}
-          onChange={props.onEscalationEnabledChange}
-        />
-        <Field
-          label={t('automation.escalationDelayMinutesLabel')}
-          error={props.escalationDelayMinutesError}
-        >
-          <Input
-            type="number"
-            min={0}
-            max={168}
-            step={0.25}
-            disabled={!props.canUpdateConfiguration || !props.escalationEnabled}
-            value={props.escalationDelayMinutes}
-            onChange={(event) =>
-              props.onEscalationDelayMinutesChange(event.target.value)
-            }
-          />
-        </Field>
-        <ToggleRow
-          label={t('automation.quietHoursEnabledLabel')}
-          description={t('automation.quietHoursEnabledHelp')}
-          checked={props.quietHoursEnabled}
-          disabled={!props.canUpdateConfiguration}
-          onChange={props.onQuietHoursEnabledChange}
-        />
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field
-            label={t('automation.quietHoursStartLabel')}
-            error={props.quietHoursError}
-          >
-            <Input
-              type="time"
-              disabled={
-                !props.canUpdateConfiguration || !props.quietHoursEnabled
-              }
-              value={props.quietHoursStart}
-              onChange={(event) =>
-                props.onQuietHoursStartChange(event.target.value)
-              }
-            />
-          </Field>
-          <Field label={t('automation.quietHoursEndLabel')}>
-            <Input
-              type="time"
-              disabled={
-                !props.canUpdateConfiguration || !props.quietHoursEnabled
-              }
-              value={props.quietHoursEnd}
-              onChange={(event) =>
-                props.onQuietHoursEndChange(event.target.value)
-              }
-            />
-          </Field>
-        </div>
-      </SectionCard>
-
-      <SectionCard
-        title={
-          props.sourcePlatformType === 'standalone'
-            ? t('pilotAccessHeading')
-            : t('subscriptionHeading')
-        }
-      >
-        <div id={SUBSCRIPTION_SECTION_ID} className="space-y-5">
-          <div className="space-y-1">
-            <p className="text-sm text-slate-700">
-              {props.activePlanName
-                ? t('subscriptionCurrentPlan', { plan: props.activePlanName })
-                : t('subscriptionNoPlan')}
+      {view === 'settings' && (
+        <>
+          <SectionCard title={t('sourceHeading')}>
+            <p className="text-sm font-medium text-emerald-700">
+              {props.sourcePlatformType === 'standalone'
+                ? t('sourceStandalone')
+                : props.sourcePlatformType}
             </p>
-          </div>
+            <code
+              dir="ltr"
+              className="block rounded-lg bg-slate-50 p-3 text-xs break-all text-slate-700"
+            >
+              {props.sourceIdentity}
+            </code>
+          </SectionCard>
 
-          <p className="text-sm text-slate-600">{props.billingStatusLabel}</p>
-
-          {props.usageData && (
-            <StandaloneUsageOverview
-              used={props.usageData.used}
-              limit={props.usageData.limit}
-              usedLabel={props.usageData.usedLabel}
-              limitLabel={props.usageData.limitLabel}
-              upgradePrompt={props.usageData.upgradePrompt}
-            />
-          )}
-
-          {props.canManageBilling && (
-            <StandalonePlanComparison
-              plans={props.planOptions}
-              currentPlanId={props.billingPlanId}
-              selectedPlanId={props.selectedPlanId}
-              disabledPlanIds={props.isFreePlanClaimed ? ['starter'] : []}
-              disabledPlanTooltips={
-                props.isFreePlanClaimed
-                  ? { starter: t('freePlanAlreadyClaimedTooltip') }
-                  : undefined
-              }
-              currentBadgeLabel={t('currentPlanBadge')}
-              onPlanSelect={props.onPlanSelect}
-            />
-          )}
-
-          {canChangePlan && (
-            <div className="flex flex-wrap gap-3">
-              <Button
-                type="button"
-                disabled={props.isChangingPlan}
-                onClick={() => void props.onChangePlan()}
-              >
-                {props.isChangingPlan
-                  ? t('changingPlanButton')
-                  : t('changePlanButton')}
-              </Button>
-            </div>
-          )}
-        </div>
-      </SectionCard>
-
-      <SectionCard
-        title={previewT('setupTitle')}
-        description={previewT('setupDescription')}
-      >
-        <div className="space-y-5">
-          <p className="text-sm text-slate-500">{languageContext}</p>
-
-          <div className="grid gap-4 lg:grid-cols-[280px_1fr]">
-            <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
-              <Field label={previewT('languageLabel')}>
-                <div className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white p-1">
-                  {props.templateLanguages.includes('ar') && (
-                    <Button
-                      type="button"
-                      variant={previewLanguage === 'ar' ? 'default' : 'ghost'}
-                      size="sm"
-                      disabled={!props.canUpdateConfiguration}
-                      onClick={() => setPreviewLanguage('ar')}
-                    >
-                      {previewT('languageArabic')}
-                    </Button>
-                  )}
-                  {props.templateLanguages.includes('en') && (
-                    <Button
-                      type="button"
-                      variant={previewLanguage === 'en' ? 'default' : 'ghost'}
-                      size="sm"
-                      disabled={!props.canUpdateConfiguration}
-                      onClick={() => setPreviewLanguage('en')}
-                    >
-                      {previewT('languageEnglish')}
-                    </Button>
-                  )}
-                </div>
-              </Field>
-
-              <Field label={previewT('styleLabel')}>
-                <NativeSelect
-                  value={selectedVariant}
-                  options={variantOptions}
+          <SectionCard title={t('storeConfigurationHeading')}>
+            <div className="grid gap-4 md:grid-cols-2">
+              <Field label={t('storeNameLabel')} error={props.storeNameError}>
+                <Input
+                  value={props.storeName}
                   disabled={!props.canUpdateConfiguration}
-                  onChange={handleVariantChange}
+                  onChange={(event) =>
+                    props.onStoreNameChange(event.target.value)
+                  }
+                  autoComplete="organization"
                 />
-                <p className="mt-2 text-xs text-slate-500">
-                  {previewT('defaultVariantLabel', {
-                    variant: previewT(`variantLabels.${defaultVariant}`),
-                  })}
-                </p>
-                <p className="mt-1 text-xs font-semibold text-emerald-700">
-                  {isDefaultVariant
-                    ? previewT('badgeDefault')
-                    : previewT('badgeCustom')}
-                </p>
               </Field>
-              <p className="text-xs text-slate-500">
-                {previewT('perLanguageStyleHint')}
-              </p>
-            </div>
 
-            <div className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-              <p className="text-sm text-slate-500">
-                {previewT('previewDescription')}
+              <Field label={t('defaultLanguageLabel')}>
+                <NativeSelect<IntegrationOnboardingLanguage>
+                  value={props.defaultLanguage}
+                  options={props.languageOptions}
+                  disabled={!props.canUpdateConfiguration}
+                  onChange={props.onDefaultLanguageChange}
+                />
+              </Field>
+            </div>
+            <ToggleRow
+              label={t('codDefaultLabel')}
+              description={t('codDefaultHelp')}
+              checked={props.assumeCodWhenPaymentMissing}
+              disabled={!props.canUpdateConfiguration}
+              onChange={props.onAssumeCodWhenPaymentMissingChange}
+            />
+          </SectionCard>
+
+          <SectionCard
+            title={t('automation.heading')}
+            description={t('automation.description')}
+          >
+            <ToggleRow
+              label={t('autoVerifyLabel')}
+              description={t('autoVerifyDescription')}
+              checked={props.isAutoVerifyEnabled}
+              disabled={!props.canUpdateConfiguration}
+              onChange={props.onAutoVerifyChange}
+            />
+            <div className="grid gap-4 md:grid-cols-2">
+              <Field
+                label={t('automation.sendDelayMinutesLabel')}
+                error={props.sendDelayMinutesError}
+              >
+                <Input
+                  type="number"
+                  min={0}
+                  max={24}
+                  step={0.25}
+                  disabled={!props.canUpdateConfiguration}
+                  value={props.sendDelayMinutes}
+                  onChange={(event) =>
+                    props.onSendDelayMinutesChange(event.target.value)
+                  }
+                />
+              </Field>
+              <Field label={t('automation.timezoneLabel')}>
+                <NativeSelect<AutomationTimezone>
+                  value={props.timezone}
+                  options={props.timezoneOptions}
+                  disabled={!props.canUpdateConfiguration}
+                  onChange={props.onTimezoneChange}
+                />
+              </Field>
+            </div>
+            <ToggleRow
+              label={t('automation.followUpEnabledLabel')}
+              description={t('automation.followUpEnabledHelp')}
+              checked={props.followUpEnabled}
+              disabled={!props.canUpdateConfiguration}
+              onChange={props.onFollowUpEnabledChange}
+            />
+            <Field
+              label={t('automation.followUpDelayMinutesLabel')}
+              error={props.followUpDelayMinutesError}
+            >
+              <Input
+                type="number"
+                min={0}
+                max={168}
+                step={0.25}
+                disabled={
+                  !props.canUpdateConfiguration || !props.followUpEnabled
+                }
+                value={props.followUpDelayMinutes}
+                onChange={(event) =>
+                  props.onFollowUpDelayMinutesChange(event.target.value)
+                }
+              />
+            </Field>
+            <ToggleRow
+              label={t('automation.escalationEnabledLabel')}
+              description={t('automation.escalationEnabledHelp')}
+              checked={props.escalationEnabled}
+              disabled={!props.canUpdateConfiguration}
+              onChange={props.onEscalationEnabledChange}
+            />
+            <Field
+              label={t('automation.escalationDelayMinutesLabel')}
+              error={props.escalationDelayMinutesError}
+            >
+              <Input
+                type="number"
+                min={0}
+                max={168}
+                step={0.25}
+                disabled={
+                  !props.canUpdateConfiguration || !props.escalationEnabled
+                }
+                value={props.escalationDelayMinutes}
+                onChange={(event) =>
+                  props.onEscalationDelayMinutesChange(event.target.value)
+                }
+              />
+            </Field>
+            <ToggleRow
+              label={t('automation.quietHoursEnabledLabel')}
+              description={t('automation.quietHoursEnabledHelp')}
+              checked={props.quietHoursEnabled}
+              disabled={!props.canUpdateConfiguration}
+              onChange={props.onQuietHoursEnabledChange}
+            />
+            <div className="grid gap-4 md:grid-cols-2">
+              <Field
+                label={t('automation.quietHoursStartLabel')}
+                error={props.quietHoursError}
+              >
+                <Input
+                  type="time"
+                  disabled={
+                    !props.canUpdateConfiguration || !props.quietHoursEnabled
+                  }
+                  value={props.quietHoursStart}
+                  onChange={(event) =>
+                    props.onQuietHoursStartChange(event.target.value)
+                  }
+                />
+              </Field>
+              <Field label={t('automation.quietHoursEndLabel')}>
+                <Input
+                  type="time"
+                  disabled={
+                    !props.canUpdateConfiguration || !props.quietHoursEnabled
+                  }
+                  value={props.quietHoursEnd}
+                  onChange={(event) =>
+                    props.onQuietHoursEndChange(event.target.value)
+                  }
+                />
+              </Field>
+            </div>
+          </SectionCard>
+
+          <SectionCard
+            title={
+              props.sourcePlatformType === 'standalone'
+                ? t('pilotAccessHeading')
+                : t('subscriptionHeading')
+            }
+          >
+            <div id={SUBSCRIPTION_SECTION_ID} className="space-y-5">
+              <div className="space-y-1">
+                <p className="text-sm text-slate-700">
+                  {props.activePlanName
+                    ? t('subscriptionCurrentPlan', {
+                        plan: props.activePlanName,
+                      })
+                    : t('subscriptionNoPlan')}
+                </p>
+              </div>
+
+              <p className="text-sm text-slate-600">
+                {props.billingStatusLabel}
               </p>
-              <div className="mx-auto w-full max-w-[380px] rounded-2xl border border-[#d8d8d8] bg-[#efeae2] bg-[url('/images/landing/wa_chat_bg.png')] bg-cover bg-center p-3 shadow-sm">
-                <div
-                  dir={previewLanguage === 'ar' ? 'rtl' : 'ltr'}
-                  style={{ fontFamily: 'Segoe UI, Tahoma, sans-serif' }}
-                  className="overflow-hidden rounded-xl border border-[#e7e7e7] bg-white text-[#1e1f21]"
-                >
-                  <div className="space-y-5 px-4 pt-4 pb-3 text-[15px] leading-6 font-normal">
-                    {previewParagraphs.map((line, index) => (
-                      <p key={index}>{line}</p>
-                    ))}
-                  </div>
-                  <div
-                    className={`px-4 pb-2 text-[14px] text-[#8e8e93] ${
-                      previewLanguage === 'ar' ? 'text-left' : 'text-right'
-                    }`}
+
+              {props.usageData && (
+                <StandaloneUsageOverview
+                  used={props.usageData.used}
+                  limit={props.usageData.limit}
+                  usedLabel={props.usageData.usedLabel}
+                  limitLabel={props.usageData.limitLabel}
+                  upgradePrompt={props.usageData.upgradePrompt}
+                />
+              )}
+
+              {props.canManageBilling && (
+                <StandalonePlanComparison
+                  plans={props.planOptions}
+                  currentPlanId={props.billingPlanId}
+                  selectedPlanId={props.selectedPlanId}
+                  disabledPlanIds={props.isFreePlanClaimed ? ['starter'] : []}
+                  disabledPlanTooltips={
+                    props.isFreePlanClaimed
+                      ? { starter: t('freePlanAlreadyClaimedTooltip') }
+                      : undefined
+                  }
+                  currentBadgeLabel={t('currentPlanBadge')}
+                  onPlanSelect={props.onPlanSelect}
+                />
+              )}
+
+              {canChangePlan && (
+                <div className="flex flex-wrap gap-3">
+                  <Button
+                    type="button"
+                    disabled={props.isChangingPlan}
+                    onClick={() => void props.onChangePlan()}
                   >
-                    {formatTemplatePreviewTimestamp(previewLanguage)}
+                    {props.isChangingPlan
+                      ? t('changingPlanButton')
+                      : t('changePlanButton')}
+                  </Button>
+                </div>
+              )}
+            </div>
+          </SectionCard>
+        </>
+      )}
+
+      {view === 'templates' && (
+        <SectionCard
+          title={previewT('setupTitle')}
+          description={previewT('setupDescription')}
+        >
+          <div className="space-y-5">
+            <p className="text-sm text-slate-500">{languageContext}</p>
+
+            <div className="grid gap-4 lg:grid-cols-[280px_1fr]">
+              <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <Field label={previewT('languageLabel')}>
+                  <div className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white p-1">
+                    {props.templateLanguages.includes('ar') && (
+                      <Button
+                        type="button"
+                        variant={previewLanguage === 'ar' ? 'default' : 'ghost'}
+                        size="sm"
+                        disabled={!props.canUpdateConfiguration}
+                        onClick={() => setPreviewLanguage('ar')}
+                      >
+                        {previewT('languageArabic')}
+                      </Button>
+                    )}
+                    {props.templateLanguages.includes('en') && (
+                      <Button
+                        type="button"
+                        variant={previewLanguage === 'en' ? 'default' : 'ghost'}
+                        size="sm"
+                        disabled={!props.canUpdateConfiguration}
+                        onClick={() => setPreviewLanguage('en')}
+                      >
+                        {previewT('languageEnglish')}
+                      </Button>
+                    )}
                   </div>
+                </Field>
+
+                <Field label={previewT('styleLabel')}>
+                  <NativeSelect
+                    value={selectedVariant}
+                    options={variantOptions}
+                    disabled={!props.canUpdateConfiguration}
+                    onChange={handleVariantChange}
+                  />
+                  <p className="mt-2 text-xs text-slate-500">
+                    {previewT('defaultVariantLabel', {
+                      variant: previewT(`variantLabels.${defaultVariant}`),
+                    })}
+                  </p>
+                  <p className="mt-1 text-xs font-semibold text-emerald-700">
+                    {isDefaultVariant
+                      ? previewT('badgeDefault')
+                      : previewT('badgeCustom')}
+                  </p>
+                </Field>
+                <p className="text-xs text-slate-500">
+                  {previewT('perLanguageStyleHint')}
+                </p>
+              </div>
+
+              <div className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <p className="text-sm text-slate-500">
+                  {previewT('previewDescription')}
+                </p>
+                <div className="mx-auto w-full max-w-[380px] rounded-2xl border border-[#d8d8d8] bg-[#efeae2] bg-[url('/images/landing/wa_chat_bg.png')] bg-cover bg-center p-3 shadow-sm">
                   <div
-                    className={`border-t border-[#ececec] px-4 py-3 text-[#178959] ${
-                      previewLanguage === 'ar' ? 'text-right' : 'text-left'
-                    }`}
+                    dir={previewLanguage === 'ar' ? 'rtl' : 'ltr'}
+                    style={{ fontFamily: 'Segoe UI, Tahoma, sans-serif' }}
+                    className="overflow-hidden rounded-xl border border-[#e7e7e7] bg-white text-[#1e1f21]"
                   >
-                    <span
-                      className={`flex items-center justify-center gap-2 text-[15px] leading-6 font-normal ${
-                        previewLanguage === 'ar'
-                          ? 'flex-row-reverse'
-                          : 'flex-row'
+                    <div className="space-y-5 px-4 pt-4 pb-3 text-[15px] leading-6 font-normal">
+                      {previewParagraphs.map((line, index) => (
+                        <p key={index}>{line}</p>
+                      ))}
+                    </div>
+                    <div
+                      className={`px-4 pb-2 text-[14px] text-[#8e8e93] ${
+                        previewLanguage === 'ar' ? 'text-left' : 'text-right'
                       }`}
                     >
-                      <span className="text-[13px]">↩</span>
-                      {template.confirmButton}
-                    </span>
-                  </div>
-                  <div
-                    className={`border-t border-[#ececec] px-4 py-3 text-[#178959] ${
-                      previewLanguage === 'ar' ? 'text-right' : 'text-left'
-                    }`}
-                  >
-                    <span
-                      className={`flex items-center justify-center gap-2 text-[15px] leading-6 font-normal ${
-                        previewLanguage === 'ar'
-                          ? 'flex-row-reverse'
-                          : 'flex-row'
+                      {formatTemplatePreviewTimestamp(previewLanguage)}
+                    </div>
+                    <div
+                      className={`border-t border-[#ececec] px-4 py-3 text-[#178959] ${
+                        previewLanguage === 'ar' ? 'text-right' : 'text-left'
                       }`}
                     >
-                      <span className="text-[13px]">↩</span>
-                      {template.cancelButton}
-                    </span>
+                      <span
+                        className={`flex items-center justify-center gap-2 text-[15px] leading-6 font-normal ${
+                          previewLanguage === 'ar'
+                            ? 'flex-row-reverse'
+                            : 'flex-row'
+                        }`}
+                      >
+                        <span className="text-[13px]">↩</span>
+                        {template.confirmButton}
+                      </span>
+                    </div>
+                    <div
+                      className={`border-t border-[#ececec] px-4 py-3 text-[#178959] ${
+                        previewLanguage === 'ar' ? 'text-right' : 'text-left'
+                      }`}
+                    >
+                      <span
+                        className={`flex items-center justify-center gap-2 text-[15px] leading-6 font-normal ${
+                          previewLanguage === 'ar'
+                            ? 'flex-row-reverse'
+                            : 'flex-row'
+                        }`}
+                      >
+                        <span className="text-[13px]">↩</span>
+                        {template.cancelButton}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </SectionCard>
+        </SectionCard>
+      )}
     </div>
   )
 }

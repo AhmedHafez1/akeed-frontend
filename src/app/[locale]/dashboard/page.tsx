@@ -1,64 +1,32 @@
 'use client'
 
-import { useSearchParams } from 'next/navigation'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import {
   DashboardEmbeddedShellSkeleton,
   DashboardStandaloneSkin,
-  DashboardVerificationsStandaloneSkin,
   MainEmbeddedSkin,
   useDashboard,
 } from '@/features/dashboard'
-import { resolveMainTab } from '@/features/dashboard/domain/mainTabs'
 
-function StandaloneDashboardPageContent({
-  showConfirmations,
-}: {
-  showConfirmations: boolean
-}) {
+function StandaloneDashboardPageContent() {
   const skinProps = useDashboard()
-  return showConfirmations ? (
-    <DashboardVerificationsStandaloneSkin {...skinProps} />
-  ) : (
-    <DashboardStandaloneSkin {...skinProps} />
-  )
-}
-
-function DashboardPageContent({
-  showStandaloneConfirmations,
-}: {
-  showStandaloneConfirmations: boolean
-}) {
-  const { mode } = useAkeedMode()
-
-  if (mode === 'EMBEDDED') {
-    return <MainEmbeddedSkin />
-  }
-
-  return (
-    <StandaloneDashboardPageContent
-      showConfirmations={showStandaloneConfirmations}
-    />
-  )
+  return <DashboardStandaloneSkin {...skinProps} />
 }
 
 export default function DashboardPage() {
-  const searchParams = useSearchParams()
-  const activeTab = resolveMainTab(searchParams.get('tab'))
-  const showStandaloneConfirmations =
-    searchParams.get('tab') === 'confirmations'
-  const skeletonVariant =
-    activeTab === 'confirmations' ? 'verifications' : 'stats'
+  const { mode } = useAkeedMode()
 
   return (
     <EmbeddedAuthGate
-      fallback={<DashboardEmbeddedShellSkeleton variant={skeletonVariant} />}
+      fallback={<DashboardEmbeddedShellSkeleton variant="stats" />}
       onboardingGate="dashboard"
     >
-      <DashboardPageContent
-        showStandaloneConfirmations={showStandaloneConfirmations}
-      />
+      {mode === 'EMBEDDED' ? (
+        <MainEmbeddedSkin />
+      ) : (
+        <StandaloneDashboardPageContent />
+      )}
     </EmbeddedAuthGate>
   )
 }

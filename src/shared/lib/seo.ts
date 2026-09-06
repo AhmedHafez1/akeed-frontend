@@ -41,9 +41,8 @@ export const privateSeoRoutes = [
   '/dashboard',
   '/verifications',
   '/settings',
+  '/templates',
   '/onboarding',
-  '/automation-settings',
-  '/message-preview',
 ] as const
 
 export const ogImagePath = '/images/akeed-app-icon-1200.png'
