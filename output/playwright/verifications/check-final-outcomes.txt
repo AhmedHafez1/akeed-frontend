@@ -1,0 +1,16 @@
+async (page) => {
+  const results = [];
+  for (const locale of ['en','ar']) {
+    await page.setViewportSize({width:1440,height:1080});
+    await page.goto('http://127.0.0.1:3098/'+locale+'/verifications');
+    await page.locator('tbody tr').first().waitFor();
+    for (const order of ['#1047','#1044']) {
+      const row = page.locator('tbody tr').filter({hasText:order});
+      if (await row.locator('ol > li > span.bg-emerald-600').count() !== 3) throw new Error('Incomplete rail for '+locale+' '+order);
+      await row.screenshot({path:'output/playwright/verifications/'+locale+'-'+order.slice(1)+'-completed.png'});
+      results.push(locale+' '+order+': three green circles');
+    }
+    await page.screenshot({path:'output/playwright/verifications/'+locale+'-desktop.png',fullPage:true});
+  }
+  return results;
+}

@@ -907,7 +907,8 @@
         "followUp": "Follow-up",
         "total": "Total",
         "created": "Created",
-        "actions": "Actions"
+        "actions": "Actions",
+        "orderCustomer": "Order & customer"
       },
       "orderFallbackPrefix": "Order",
       "testBadge": "Test",
@@ -935,6 +936,19 @@
         "retryError": "Verification could not be retried. Review the order state and try again.",
         "cancelOrderSuccess": "Order marked canceled in Akeed. No external order system was changed.",
         "dismiss": "Dismiss"
+      },
+      "lifecycle": {
+        "label": "Verification lifecycle",
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "read": "Read",
+        "outcome": "Final outcome",
+        "recorded": "Recorded",
+        "completedBy": {
+          "confirmed": "Completed by customer confirmation",
+          "canceled": "Completed by cancellation recorded in Akeed"
+        },
+        "unrecorded": "Not yet recorded"
       }
     },
     "verificationStatus": {
@@ -973,7 +987,7 @@
     },
     "verifications": {
       "title": "Verifications",
-      "pageSubtitle": "Track every order from the moment it is submitted through the customer outcome.",
+      "pageSubtitle": "Track every order from submission to customer outcome.",
       "subtitle": "{count, plural, =0 {No verifications in this period} one {# verification in this period} other {# verifications in this period}}",
       "loading": "Loading verifications...",
       "loadingMore": "Loading more...",
@@ -996,7 +1010,22 @@
         "canceled": "Canceled"
       },
       "filters": {
-        "label": "Order status"
+        "label": "Order status",
+        "clear": "Clear status filter"
+      },
+      "eyebrow": "Operations",
+      "loaded": "{count, plural, one {# verification loaded} other {# verifications loaded}}",
+      "workload": {
+        "label": "Verification workload",
+        "loading": "Loading workload",
+        "all": "All verifications",
+        "inProgress": "In progress",
+        "needsAttention": "Needs attention",
+        "completed": "Completed",
+        "allHint": "In the selected period",
+        "inProgressHint": "Queued or awaiting a reply",
+        "needsAttentionHint": "Failed, expired or no reply",
+        "completedHint": "Confirmed or canceled"
       }
     }
   },
@@ -1389,8 +1418,17 @@
     "submit": "Verify order",
     "submitting": "Sending for verification...",
     "required": "Required",
+    "optional": "Optional",
     "readOnly": "Only owners and admins can verify orders.",
     "sourceDisconnected": "Order verification is unavailable while the source is disconnected.",
+    "sections": {
+      "customerDetails": "Customer details",
+      "orderDetails": "Order details"
+    },
+    "trust": {
+      "title": "Safe WhatsApp verification",
+      "description": "The order is saved first and then sent for verification. No external order system is updated."
+    },
     "fields": {
       "customerPhone": {
         "label": "Customer phone",
@@ -1398,10 +1436,10 @@
         "help": "Choose the country code and enter a valid mobile number."
       },
       "customerName": {
-        "label": "Customer name (optional)"
+        "label": "Customer name"
       },
       "orderNumber": {
-        "label": "Order reference (optional)"
+        "label": "Order reference"
       },
       "totalPrice": {
         "label": "Order amount",

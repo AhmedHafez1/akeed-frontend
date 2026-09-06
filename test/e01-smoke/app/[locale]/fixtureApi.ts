@@ -9,6 +9,10 @@ import { billingFixtureRequest } from './billingFixture'
 import { adminPilotFixtureRequest } from './adminPilotFixture'
 import { onboardingFixtureRequest } from './onboardingFixture'
 import { manualOrderFixtureRequest } from './manual-order/manualOrderFixture'
+import {
+  isVerificationFixture,
+  verificationFixtureRequest,
+} from './verifications/verificationFixture'
 
 export { resetPilotFixture } from './adminPilotFixture'
 
@@ -224,6 +228,8 @@ function fixtureStats(fixture: FixtureState): DashboardStats {
 
 export const api = {
   async get<T>(url: string): Promise<T> {
+    if (isVerificationFixture())
+      return verificationFixtureRequest<T>('GET', url)
     const fixture = getFixtureState()
     if (url.startsWith('/api/verifications/stats?')) {
       fixture.counts.stats++
@@ -274,6 +280,8 @@ export const api = {
     data?: unknown,
     options: RequestInit = {}
   ): Promise<T> {
+    if (isVerificationFixture())
+      return verificationFixtureRequest<T>('POST', url)
     if (url === '/api/orders') {
       return manualOrderFixtureRequest<T>(data, options)
     }

@@ -1,0 +1,37 @@
+async (page) => {
+  const results = [];
+  const assert = (condition, name) => { if (!condition) throw new Error(name); results.push(name); };
+  const visit = async (query = '') => {
+    await page.goto('http://127.0.0.1:3098/en/verifications' + query);
+    await page.getByRole('button', { name: 'All', exact: true }).waitFor();
+    await page.locator('[aria-busy="true"]').first().waitFor({state:'detached'});
+  };
+  const rows = () => page.locator('tbody tr');
+  const audit = async () => {
+    await page.getByRole('button', {name:'Inspect fixture requests'}).click();
+    return await page.getByLabel('Fixture requests').innerText();
+  };
+  await page.setViewportSize({width:1280,height:1000});
+  await visit();
+  await page.getByRole('button',{name:'Cancel order',exact:true}).click();
+  await page.getByRole('button',{name:'Keep order',exact:true}).waitFor();
+  assert(!(await audit()).includes('POST '), 'Request cancellation only opens inline confirmation');
+  await page.getByRole('button',{name:'Keep order',exact:true}).click();
+  assert(!(await audit()).includes('POST '), 'Keep order submits nothing');
+  await page.getByRole('button',{name:'Cancel order',exact:true}).click();
+  await page.getByRole('button',{name:'Yes, cancel',exact:true}).click();
+  await page.getByRole('button',{name:'Cancel order',exact:true}).waitFor({state:'detached'});
+  assert((await audit()).includes('POST /api/verifications/triage-0/cancel'), 'Confirm invokes existing cancellation endpoint');
+  await page.getByRole('button',{name:'Retry verification',exact:true}).click();
+  await page.getByRole('button',{name:'Retry verification',exact:true}).waitFor({state:'detached'});
+  assert((await audit()).includes('POST /api/orders/triage-order-3/verification/retry'), 'Retry invokes existing order handler');
+  await visit('?scenario=action-error');
+  await page.getByRole('button',{name:'Retry verification',exact:true}).click();
+  await rows().filter({hasText:'#1045'}).getByRole('alert').waitFor();
+  assert(await rows().count() === 6, 'Retry error stays beneath actions and retains records');
+  await page.getByRole('button',{name:'Cancel order',exact:true}).click();
+  await page.getByRole('button',{name:'Yes, cancel',exact:true}).click();
+  await rows().filter({hasText:'#1048'}).getByRole('alert').waitFor();
+  assert(await page.getByRole('button',{name:'Keep order',exact:true}).isVisible(), 'Cancellation error preserves inline recovery');
+  return results;
+}

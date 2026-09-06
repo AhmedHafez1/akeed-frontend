@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
@@ -9,23 +9,12 @@ import {
   DashboardEmbeddedShellSkeleton,
   DashboardVerificationsStandaloneSkin,
   useDashboard,
-  VERIFICATION_STATUS_FILTER_IDS,
 } from '@/features/dashboard'
-import type { VerificationStatusFilter } from '@/features/dashboard'
-
-function isStatusFilter(
-  value: string | null
-): value is VerificationStatusFilter {
-  return (
-    value !== null &&
-    (VERIFICATION_STATUS_FILTER_IDS as readonly string[]).includes(value)
-  )
-}
+import { useVerificationStatusQuery } from '@/features/dashboard/hooks/useVerificationStatusQuery'
 
 function StandaloneVerificationsPageContent() {
-  const searchParams = useSearchParams()
-  const requested = searchParams.get('status')
-  const skinProps = useDashboard(isStatusFilter(requested) ? requested : 'all')
+  const { statusFilter, onStatusFilterChange } = useVerificationStatusQuery()
+  const skinProps = useDashboard(statusFilter, onStatusFilterChange)
   return <DashboardVerificationsStandaloneSkin {...skinProps} />
 }
 

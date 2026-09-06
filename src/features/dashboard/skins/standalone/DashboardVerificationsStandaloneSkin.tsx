@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl'
 import { ChevronDown } from 'lucide-react'
 import { StandaloneFeedbackBanners } from './components/StandaloneFeedbackBanners'
 import { StandaloneVerificationsSection } from './components/StandaloneVerificationsSection'
+import { StandaloneVerificationWorkload } from './components/StandaloneVerificationWorkload'
 import { ManualOrderEntryStandalone } from '@/features/orders'
 import type { DashboardSkinProps } from '../../domain/dashboard.types'
 import type { DashboardStatsDateRange } from '../../model/dashboard.model'
@@ -14,9 +15,12 @@ export function DashboardVerificationsStandaloneSkin(
   const t = useTranslations('dashboard')
 
   return (
-    <div className="mx-auto w-full max-w-[1400px] space-y-8">
+    <div className="mx-auto w-full max-w-[1400px] min-w-0 space-y-6">
       <header className="flex flex-wrap items-end justify-between gap-4">
-        <div className="space-y-1">
+        <div className="space-y-2">
+          <p className="text-xs font-semibold tracking-wide text-emerald-700 uppercase">
+            {t('verifications.eyebrow')}
+          </p>
           <h1 className="text-3xl font-bold tracking-tight text-slate-900">
             {t('verifications.title')}
           </h1>
@@ -50,6 +54,7 @@ export function DashboardVerificationsStandaloneSkin(
           {/* The list's own empty state tells the merchant to verify an order,
             so the action it names has to be reachable from this screen. */}
           <ManualOrderEntryStandalone
+            triggerClassName="h-10 rounded-lg bg-emerald-700 text-white shadow-sm hover:bg-emerald-800"
             canCreate={props.canCreateManualOrder}
             defaultCurrency={props.stats?.savings.currency}
             sourceConnected={props.sourceStatus === 'connected'}
@@ -57,6 +62,14 @@ export function DashboardVerificationsStandaloneSkin(
           />
         </div>
       </header>
+
+      <StandaloneVerificationWorkload
+        dateRangeFilter={props.dateRangeFilter}
+        stats={props.stats}
+        isStatsLoading={props.isStatsLoading}
+        statusFilter={props.statusFilter}
+        onStatusFilterChange={props.onStatusFilterChange}
+      />
 
       <StandaloneFeedbackBanners
         error={props.error}

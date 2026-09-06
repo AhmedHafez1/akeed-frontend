@@ -1,13 +1,14 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { EmptyState, LoadingSpinner } from '@/shared/ui'
+import { EmptyState } from '@/shared/ui'
 import type {
   VerificationItem,
   VerificationStatusFilter,
 } from '@/features/dashboard/model/dashboard.model'
 import type { StatusFilterOption } from '@/features/dashboard/domain/dashboard.types'
 import { VerificationsTableStandalone } from '../VerificationsTableStandalone'
+import { StandaloneVerificationsSkeleton } from './StandaloneVerificationsSkeleton'
 import { StandaloneTestVerificationPanel } from './StandaloneTestVerificationPanel'
 
 interface StandaloneVerificationsSectionProps {
@@ -62,16 +63,25 @@ export function StandaloneVerificationsSection({
   const t = useTranslations('dashboard')
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white shadow-sm">
-      <div className="border-b border-slate-100 px-6 py-5">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <h2 className="text-lg font-semibold text-slate-900">
-              {t('verifications.title')}
+    <section
+      aria-label={t('verifications.subtitle', { count: totalCount })}
+      className="rounded-2xl border border-slate-200 bg-white shadow-sm"
+    >
+      <div className="border-b border-slate-200 px-4 py-5 sm:px-5">
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="text-sm font-semibold text-slate-900">
+              {t('verifications.filters.label')}
             </h2>
-            <p className="mt-1 text-xs text-slate-500">
-              {t('verifications.subtitle', { count: totalCount })}
-            </p>
+            {statusFilter !== 'all' && (
+              <button
+                type="button"
+                onClick={() => onStatusFilterChange('all')}
+                className="text-xs font-medium text-emerald-700 underline-offset-4 hover:underline"
+              >
+                {t('verifications.filters.clear')}
+              </button>
+            )}
           </div>
           <div
             role="group"
@@ -84,9 +94,9 @@ export function StandaloneVerificationsSection({
                 type="button"
                 aria-pressed={statusFilter === filter.id}
                 onClick={() => onStatusFilterChange(filter.id)}
-                className={`rounded-md border px-3 py-1.5 text-xs font-medium transition-colors ${
+                className={`min-h-9 rounded-lg border px-3 py-2 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 ${
                   statusFilter === filter.id
-                    ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                    ? 'border-emerald-500 bg-emerald-50 text-emerald-800'
                     : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
                 }`}
               >
@@ -97,21 +107,20 @@ export function StandaloneVerificationsSection({
         </div>
       </div>
 
-      <div className="px-6 py-5">
-        {!canSendTestVerification &&
+      <div aria-busy={isVerificationsLoading}>
+        {!isVerificationsLoading &&
+          !canSendTestVerification &&
           !canCancelOrders &&
           !canRetryVerifications && (
             <div
               role="status"
-              className="mb-5 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900"
+              className="m-4 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900"
             >
               {t('verifications.readOnlyNotice')}
             </div>
           )}
         {isVerificationsLoading ? (
-          <div className="py-8">
-            <LoadingSpinner message={t('verifications.loading')} />
-          </div>
+          <StandaloneVerificationsSkeleton />
         ) : verifications.length ? (
           <div className="space-y-4">
             <VerificationsTableStandalone
@@ -127,8 +136,11 @@ export function StandaloneVerificationsSection({
               onConfirmCancelOrder={onConfirmCancelOrder}
               onRetryVerification={onRetryVerification}
             />
-            {hasMoreVerifications && (
-              <div className="flex justify-center pt-2">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 px-4 py-4 sm:px-5">
+              <p role="status" className="text-xs text-slate-500">
+                {t('verifications.loaded', { count: verifications.length })}
+              </p>
+              {hasMoreVerifications && (
                 <button
                   type="button"
                   disabled={isLoadingMoreVerifications}
@@ -139,11 +151,11 @@ export function StandaloneVerificationsSection({
                     ? t('verifications.loadingMore')
                     : t('verifications.loadMore')}
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         ) : statusFilter === 'all' ? (
-          <div className="space-y-6 rounded-xl bg-slate-50 p-6">
+          <div className="m-4 space-y-6 rounded-xl bg-slate-50 p-6">
             <div>
               <h3 className="text-lg font-semibold text-slate-900">
                 {t('verifications.empty.title')}
@@ -171,7 +183,9 @@ export function StandaloneVerificationsSection({
             )}
           </div>
         ) : (
-          <EmptyState message={t('verifications.empty.filtered')} />
+          <div className="p-6">
+            <EmptyState message={t('verifications.empty.filtered')} />
+          </div>
         )}
       </div>
     </section>

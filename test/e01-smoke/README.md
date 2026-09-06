@@ -1,5 +1,33 @@
 # E01 isolated cancellation feedback fixture
 
+## Standalone Verifications redesign fixture
+
+Run the same fixture server and open `/en/verifications` or `/ar/verifications`.
+This imports the production skin, dashboard hooks, and URL filter hook, with
+synthetic API responses and no authenticated or provider operations. It covers
+all nine existing statuses over two cursor responses. The confirmed record
+lacks delivery timestamps deliberately: confirmation still fills all three
+circles, with its evidence explained in the accessible lifecycle text. Canceled
+also fills all three green circles using its recorded final outcome.
+
+Use `?scenario=empty`, `readonly`, `disconnected`, `loading`, `stats-error`,
+`action-error`, `cursor-error`, or `slow-cursor`. The last scenario delays Load
+more so a status change can test rejection of a stale cursor response. Add
+`status=failed` to the empty scenario to inspect the filtered empty state.
+Inspect fixture requests displays the intercepted GET/POST history.
+
+Check both locales at 1440, 1024, 768, 390, and 320 px. Verify mirrored columns,
+LTR-isolated phones, mobile cards and inline keyboard confirmation; no page
+should overflow horizontally. Retry and cancellation success/failure must use
+their existing endpoints, keeping errors within the affected row. Keep order
+must submit nothing. After Load more, the no-reply record with absent
+capabilities and the failed record with no retry capability must have no action.
+Verify status refresh/Back/Forward, preserved query parameters, the exact
+Awaiting reply API grouping, date changes, and All clearing the status filter.
+
+These checks validate the actual components with synthetic data. They do not
+prove authenticated sessions, remote cancellations, or actual message delivery.
+
 Run `npm run smoke:e01` from the frontend repository with its existing dependencies. Open `http://127.0.0.1:3098/en` or `/ar` in the browser. Stop this process when finished; do not stop the owner's application servers.
 
 This separate Next.js test application imports the real embedded `useMainConfirmationsTab`, order-centric standalone `useDashboard`, data hooks and both table components. Its Webpack configuration replaces only the authentication/API module with a strict in-memory fixture. The Standalone fixture includes an order without a verification, a retryable synthetic order, reconciled order totals and billing-period usage. No production route, authentication code or service response is changed. It does not load the application's `.env.local`, uses no provider credentials and binds only to loopback. Its CSP blocks external connections, forms and frames. Unexpected API operations throw, including the send-test endpoint; there is no network fallback.

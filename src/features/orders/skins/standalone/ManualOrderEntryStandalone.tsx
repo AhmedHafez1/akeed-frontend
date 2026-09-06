@@ -3,7 +3,7 @@
 import { useCallback } from 'react'
 import Link from 'next/link'
 import { Controller } from 'react-hook-form'
-import { ChevronDown, Plus } from 'lucide-react'
+import { ChevronDown, ClipboardCheck, Plus, ShieldCheck } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
@@ -30,6 +30,7 @@ interface ManualOrderEntryStandaloneProps {
   defaultCurrency?: string
   sourceConnected: boolean
   onAccepted?: () => void
+  triggerClassName?: string
 }
 
 function RequiredMark() {
@@ -37,6 +38,15 @@ function RequiredMark() {
   return (
     <span className="ms-1 text-red-600" aria-label={t('required')}>
       *
+    </span>
+  )
+}
+
+function OptionalBadge() {
+  const t = useTranslations('manualOrder')
+  return (
+    <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-500">
+      {t('optional')}
     </span>
   )
 }
@@ -54,6 +64,7 @@ export function ManualOrderEntryStandalone({
   defaultCurrency,
   sourceConnected,
   onAccepted,
+  triggerClassName,
 }: ManualOrderEntryStandaloneProps) {
   const t = useTranslations('manualOrder')
   const { locale } = useLocaleInfo()
@@ -81,7 +92,11 @@ export function ManualOrderEntryStandalone({
     <Dialog open={entry.isOpen} onOpenChange={entry.onOpenChange}>
       <div className="flex flex-col items-end gap-1">
         <DialogTrigger asChild>
-          <Button type="button" disabled={Boolean(disabledReason)}>
+          <Button
+            type="button"
+            disabled={Boolean(disabledReason)}
+            className={triggerClassName}
+          >
             <Plus aria-hidden="true" />
             {t('open')}
           </Button>
@@ -96,7 +111,7 @@ export function ManualOrderEntryStandalone({
       <DialogContent
         closeLabel={t('close')}
         closeDisabled={entry.isSubmitting}
-        className="max-h-[90vh] overflow-y-auto sm:max-w-2xl"
+        className="max-h-[90vh] overflow-y-auto rounded-[18px] border-stone-200 bg-white p-5 sm:max-w-[640px] sm:p-7"
         onEscapeKeyDown={(event) => {
           if (entry.isSubmitting) event.preventDefault()
         }}
@@ -109,9 +124,16 @@ export function ManualOrderEntryStandalone({
           queueMicrotask(focusCustomerPhone)
         }}
       >
-        <DialogHeader>
-          <DialogTitle>{t('title')}</DialogTitle>
-          <DialogDescription>{t('description')}</DialogDescription>
+        <DialogHeader className="text-start">
+          <div className="flex items-start gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+              <ClipboardCheck className="h-5 w-5" aria-hidden="true" />
+            </span>
+            <div className="space-y-1">
+              <DialogTitle>{t('title')}</DialogTitle>
+              <DialogDescription>{t('description')}</DialogDescription>
+            </div>
+          </div>
         </DialogHeader>
 
         {entry.result ? (
@@ -119,7 +141,7 @@ export function ManualOrderEntryStandalone({
             <div
               role="status"
               aria-live="polite"
-              className="rounded-xl border border-sky-200 bg-sky-50 p-4 text-sky-950"
+              className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-950"
             >
               <span className="inline-flex rounded-full border border-amber-300 bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-900">
                 {t('success.acceptedStatus')}
@@ -129,7 +151,7 @@ export function ManualOrderEntryStandalone({
                   ? t('success.duplicateTitle')
                   : t('success.title')}
               </h3>
-              <p className="mt-1 text-sm text-sky-900">
+              <p className="mt-1 text-sm text-emerald-900">
                 {entry.result.duplicate
                   ? t('success.duplicateDescription')
                   : t('success.description')}
@@ -139,7 +161,7 @@ export function ManualOrderEntryStandalone({
                   <dt className="font-medium">{t('success.orderId')}</dt>
                   <dd
                     dir="ltr"
-                    className="mt-1 font-mono text-xs break-all text-slate-700"
+                    className="mt-1 text-left font-mono text-xs break-all text-slate-700 rtl:text-right"
                   >
                     {entry.result.orderId}
                   </dd>
@@ -147,7 +169,7 @@ export function ManualOrderEntryStandalone({
               </dl>
             </div>
 
-            <DialogFooter>
+            <DialogFooter className="border-t border-stone-200 pt-5">
               <DialogClose asChild>
                 <Button type="button" variant="outline">
                   {t('close')}
@@ -217,154 +239,192 @@ export function ManualOrderEntryStandalone({
               </div>
             )}
 
-            <div>
-              <Label htmlFor="manual-order-phone">
-                {t('fields.customerPhone.label')}
-                <RequiredMark />
-              </Label>
-              <Controller
-                name="customerPhone"
-                control={control}
-                render={({ field }) => (
-                  <InternationalPhoneInput
-                    id="manual-order-phone"
-                    name={field.name}
-                    value={(field.value || undefined) as E164Value | undefined}
-                    onChange={(value) => field.onChange(value ?? '')}
-                    onBlur={field.onBlur}
-                    placeholder={t('fields.customerPhone.placeholder')}
-                    required
-                    disabled={fieldsDisabled}
-                    aria-invalid={Boolean(errors.customerPhone)}
-                    aria-describedby={
-                      errors.customerPhone
-                        ? 'manual-order-phone-error'
-                        : 'manual-order-phone-help'
-                    }
-                    className="mt-2"
-                  />
-                )}
-              />
-              <p
-                id="manual-order-phone-help"
-                className="mt-1 text-xs text-slate-500"
-              >
-                {t('fields.customerPhone.help')}
-              </p>
-              <FieldError
-                id="manual-order-phone-error"
-                message={errors.customerPhone?.message}
-              />
-            </div>
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold text-slate-900">
+                {t('sections.customerDetails')}
+              </h3>
 
-            <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <Label htmlFor="manual-order-name">
-                  {t('fields.customerName.label')}
-                </Label>
-                <Input
-                  id="manual-order-name"
-                  maxLength={255}
-                  disabled={fieldsDisabled}
-                  aria-invalid={Boolean(errors.customerName)}
-                  aria-describedby={
-                    errors.customerName ? 'manual-order-name-error' : undefined
-                  }
-                  className="mt-2"
-                  {...register('customerName')}
-                />
-                <FieldError
-                  id="manual-order-name-error"
-                  message={errors.customerName?.message}
-                />
-              </div>
-              <div>
-                <Label htmlFor="manual-order-reference">
-                  {t('fields.orderNumber.label')}
-                </Label>
-                <Input
-                  id="manual-order-reference"
-                  dir="ltr"
-                  maxLength={100}
-                  disabled={fieldsDisabled}
-                  aria-invalid={Boolean(errors.orderNumber)}
-                  aria-describedby={
-                    errors.orderNumber
-                      ? 'manual-order-reference-error'
-                      : undefined
-                  }
-                  className="mt-2"
-                  {...register('orderNumber')}
-                />
-                <FieldError
-                  id="manual-order-reference-error"
-                  message={errors.orderNumber?.message}
-                />
-              </div>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <Label htmlFor="manual-order-total">
-                  {t('fields.totalPrice.label')}
+                <Label htmlFor="manual-order-phone">
+                  {t('fields.customerPhone.label')}
                   <RequiredMark />
                 </Label>
-                <Input
-                  id="manual-order-total"
-                  dir="ltr"
-                  inputMode="decimal"
-                  placeholder={t('fields.totalPrice.placeholder')}
-                  disabled={fieldsDisabled}
-                  aria-invalid={Boolean(errors.totalPrice)}
-                  aria-describedby={
-                    errors.totalPrice ? 'manual-order-total-error' : undefined
-                  }
-                  className="mt-2"
-                  {...register('totalPrice')}
+                <Controller
+                  name="customerPhone"
+                  control={control}
+                  render={({ field }) => (
+                    <InternationalPhoneInput
+                      id="manual-order-phone"
+                      name={field.name}
+                      value={
+                        (field.value || undefined) as E164Value | undefined
+                      }
+                      onChange={(value) => field.onChange(value ?? '')}
+                      onBlur={field.onBlur}
+                      placeholder={t('fields.customerPhone.placeholder')}
+                      required
+                      disabled={fieldsDisabled}
+                      aria-invalid={Boolean(errors.customerPhone)}
+                      aria-describedby={
+                        errors.customerPhone
+                          ? 'manual-order-phone-error'
+                          : 'manual-order-phone-help'
+                      }
+                      className="mt-2"
+                    />
+                  )}
                 />
+                <p
+                  id="manual-order-phone-help"
+                  className="mt-1 text-xs text-slate-500"
+                >
+                  {t('fields.customerPhone.help')}
+                </p>
                 <FieldError
-                  id="manual-order-total-error"
-                  message={errors.totalPrice?.message}
+                  id="manual-order-phone-error"
+                  message={errors.customerPhone?.message}
                 />
               </div>
-              <div>
-                <Label htmlFor="manual-order-currency">
-                  {t('fields.currency.label')}
-                  <RequiredMark />
-                </Label>
-                <div className="relative mt-2">
-                  <select
-                    id="manual-order-currency"
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <div className="mb-2 flex items-center justify-between gap-2">
+                    <Label htmlFor="manual-order-name">
+                      {t('fields.customerName.label')}
+                    </Label>
+                    <OptionalBadge />
+                  </div>
+                  <Input
+                    id="manual-order-name"
+                    maxLength={255}
                     disabled={fieldsDisabled}
-                    aria-invalid={Boolean(errors.currency)}
+                    aria-invalid={Boolean(errors.customerName)}
                     aria-describedby={
-                      errors.currency
-                        ? 'manual-order-currency-error'
+                      errors.customerName
+                        ? 'manual-order-name-error'
                         : undefined
                     }
-                    className="h-12 w-full appearance-none rounded-lg border-2 border-gray-200 bg-white py-2 ps-4 pe-11 text-base focus:border-emerald-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                    {...register('currency')}
-                  >
-                    <option value="">{t('fields.currency.placeholder')}</option>
-                    {manualOrderCurrencies.map((currency) => (
-                      <option key={currency} value={currency}>
-                        {currency}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown
-                    aria-hidden="true"
-                    className="pointer-events-none absolute end-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500"
+                    {...register('customerName')}
+                  />
+                  <FieldError
+                    id="manual-order-name-error"
+                    message={errors.customerName?.message}
                   />
                 </div>
-                <FieldError
-                  id="manual-order-currency-error"
-                  message={errors.currency?.message}
-                />
+                <div>
+                  <div className="mb-2 flex items-center justify-between gap-2">
+                    <Label htmlFor="manual-order-reference">
+                      {t('fields.orderNumber.label')}
+                    </Label>
+                    <OptionalBadge />
+                  </div>
+                  <Input
+                    id="manual-order-reference"
+                    dir="ltr"
+                    maxLength={100}
+                    disabled={fieldsDisabled}
+                    aria-invalid={Boolean(errors.orderNumber)}
+                    aria-describedby={
+                      errors.orderNumber
+                        ? 'manual-order-reference-error'
+                        : undefined
+                    }
+                    className="text-left rtl:text-right"
+                    {...register('orderNumber')}
+                  />
+                  <FieldError
+                    id="manual-order-reference-error"
+                    message={errors.orderNumber?.message}
+                  />
+                </div>
               </div>
             </div>
 
-            <DialogFooter>
+            <div className="space-y-4 border-t border-stone-200 pt-5">
+              <h3 className="text-sm font-semibold text-slate-900">
+                {t('sections.orderDetails')}
+              </h3>
+
+              <div className="grid gap-4 sm:grid-cols-5">
+                <div className="sm:col-span-3">
+                  <Label htmlFor="manual-order-total">
+                    {t('fields.totalPrice.label')}
+                    <RequiredMark />
+                  </Label>
+                  <Input
+                    id="manual-order-total"
+                    dir="ltr"
+                    inputMode="decimal"
+                    placeholder={t('fields.totalPrice.placeholder')}
+                    disabled={fieldsDisabled}
+                    aria-invalid={Boolean(errors.totalPrice)}
+                    aria-describedby={
+                      errors.totalPrice ? 'manual-order-total-error' : undefined
+                    }
+                    className="mt-2 text-left rtl:text-right"
+                    {...register('totalPrice')}
+                  />
+                  <FieldError
+                    id="manual-order-total-error"
+                    message={errors.totalPrice?.message}
+                  />
+                </div>
+                <div className="sm:col-span-2">
+                  <Label htmlFor="manual-order-currency">
+                    {t('fields.currency.label')}
+                    <RequiredMark />
+                  </Label>
+                  <div className="relative mt-2">
+                    <select
+                      id="manual-order-currency"
+                      dir="ltr"
+                      disabled={fieldsDisabled}
+                      aria-invalid={Boolean(errors.currency)}
+                      aria-describedby={
+                        errors.currency
+                          ? 'manual-order-currency-error'
+                          : undefined
+                      }
+                      className="h-12 w-full appearance-none rounded-lg border-2 border-gray-200 bg-white py-2 ps-4 pe-11 text-left text-base focus:border-emerald-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 rtl:text-right"
+                      {...register('currency')}
+                    >
+                      <option value="">
+                        {t('fields.currency.placeholder')}
+                      </option>
+                      {manualOrderCurrencies.map((currency) => (
+                        <option key={currency} value={currency}>
+                          {currency}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown
+                      aria-hidden="true"
+                      className="pointer-events-none absolute end-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500"
+                    />
+                  </div>
+                  <FieldError
+                    id="manual-order-currency-error"
+                    message={errors.currency?.message}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-start justify-between gap-3 rounded-xl border border-emerald-100 bg-emerald-50 p-3.5">
+              <div>
+                <p className="text-sm font-semibold text-emerald-950">
+                  {t('trust.title')}
+                </p>
+                <p className="mt-0.5 text-xs text-emerald-800">
+                  {t('trust.description')}
+                </p>
+              </div>
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                <ShieldCheck className="h-4 w-4" aria-hidden="true" />
+              </span>
+            </div>
+
+            <DialogFooter className="border-t border-stone-200 pt-5">
               <DialogClose asChild>
                 <Button
                   type="button"

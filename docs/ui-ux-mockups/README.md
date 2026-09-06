@@ -52,6 +52,51 @@ Reference: `standalone-verifications.png`
   numbered pagination without matching backend support. Preserve `Load more`
   until the API provides the required query and pagination contracts.
 
+### Verify order modal
+
+Reference: `standalone-manual-order-modal.png`
+
+- Keep this as one focused modal with the existing five fields. Do not turn it
+  into a wizard or expand it into order management.
+- Make customer phone the primary field, group optional identity fields, and
+  present amount and currency as one coherent financial-input section.
+- Preserve safe idempotent retry, locked uncertain submissions, conflict
+  handling, accepted/duplicate results, field-level errors, and permission and
+  source-connected gates.
+- Align every field label, placeholder, value, helper, and error to the right in
+  Arabic and to the left in English. Phone numbers, references, decimal amounts,
+  and currency codes retain LTR character ordering inside that locale-aligned
+  field.
+
+### Implemented Verifications mapping
+
+- Existing status values and translations remain authoritative. The mockup's
+  Awaiting reply control uses `awaiting_response`, which already requests
+  `sent,delivered,read,no_reply`. Pending remains available alongside Confirmed,
+  Canceled, Failed, and No reply. The selected filter lives in `?status=` and
+  preserves other query parameters through refresh and browser history.
+- Workload groups are defined in `verificationWorkload.ts`: In progress uses
+  `in_progress` (pending/sent/delivered/read); Needs attention uses
+  `needs_attention` (failed/expired/no_reply). Completed is the remaining
+  confirmed/canceled group: `total - in_progress - needs_attention`. This avoids
+  adding timestamp-based outcome counters that can include earlier outcomes.
+  Only All maps exactly to an existing UI filter; the other summary cards are
+  informational. These groups do not introduce verification statuses.
+- Per the final-outcome design refinement, Confirmed and Canceled display three
+  green circles. Missing sending/delivery timestamps are described accessibly as
+  completed by confirmation or cancellation in Akeed. Other rows mark only their recorded
+  events/current lifecycle state; no timestamps are synthesized.
+- Standalone cancellation requires both the existing cancellation helper and
+  explicit server capability, including while its confirmation is open. The
+  embedded legacy-capability presentation and redirect are unchanged.
+- The table becomes cards below 768 px, with LTR-isolated phone numbers in both
+  locales. Cursor responses are discarded when their query has been superseded.
+  Search, additional filters, numbered pagination, and verification details
+  remain outside this implementation.
+
+The isolated `/en/verifications` and `/ar/verifications` fixture and its
+scenarios are documented in `test/e01-smoke/README.md`.
+
 ## Settings
 
 Reference: `standalone-settings.png`

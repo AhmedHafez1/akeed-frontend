@@ -36,6 +36,8 @@ interface SendTestVerificationResponse {
 
 export interface UseVerificationsDashboardOptions {
   initialStatusFilter?: VerificationStatusFilter
+  statusFilter?: VerificationStatusFilter
+  onStatusFilterChange?: (filter: VerificationStatusFilter) => void
   /**
    * Lets a caller drive the date range from outside — the embedded shell shares
    * one selection between its metrics and confirmations tabs. Omitted, the hook
@@ -57,9 +59,10 @@ export function useVerificationsDashboard(
   options: UseVerificationsDashboardOptions = {}
 ): DashboardSkinProps {
   const t = useTranslations('dashboard')
-  const [statusFilter, setStatusFilter] = useState<VerificationStatusFilter>(
+  const [ownStatusFilter, setStatusFilter] = useState<VerificationStatusFilter>(
     options.initialStatusFilter ?? 'all'
   )
+  const statusFilter = options.statusFilter ?? ownStatusFilter
   const [ownDateRange, setOwnDateRange] =
     useState<DashboardStatsDateRange>('last_30_days')
   const dateRangeFilter = options.dateRangeFilter ?? ownDateRange
@@ -350,7 +353,7 @@ export function useVerificationsDashboard(
     onRetryVerification,
     statusFilter,
     statusFilters,
-    onStatusFilterChange: setStatusFilter,
+    onStatusFilterChange: options.onStatusFilterChange ?? setStatusFilter,
     canSendTestVerification,
     canCancelOrders,
     canCreateManualOrder,

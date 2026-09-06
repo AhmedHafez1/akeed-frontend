@@ -1,4 +1,5 @@
 import type {
+  VerificationItem,
   VerificationRowAction,
   VerificationRowCapability,
   VerificationStatus,
@@ -110,3 +111,54 @@ export const EXPLAINED_LIFECYCLE_REASONS = new Set([
 ])
 
 export type { VerificationStatus }
+
+export interface VerificationLifecycleStep {
+  id: 'dispatch' | 'delivery' | 'outcome'
+  label: 'sent' | 'delivered' | 'read' | 'outcome'
+  recorded: boolean
+  completedByOutcome?: 'confirmed' | 'canceled'
+  timestamp: string | null
+}
+
+export function getVerificationLifecycleSteps(
+  verification: VerificationItem
+): VerificationLifecycleStep[] {
+  const outcome =
+    verification.status === 'confirmed' || verification.status === 'canceled'
+      ? verification.status
+      : undefined
+  const sent =
+    Boolean(verification.last_sent_at) || verification.status === 'sent'
+  const read = Boolean(verification.read_at) || verification.status === 'read'
+  const delivered =
+    read ||
+    Boolean(verification.delivered_at) ||
+    verification.status === 'delivered'
+  return [
+    {
+      id: 'dispatch',
+      label: 'sent',
+      recorded: sent || Boolean(outcome),
+      completedByOutcome: sent ? undefined : outcome,
+      timestamp: verification.last_sent_at,
+    },
+    {
+      id: 'delivery',
+      label: read ? 'read' : 'delivered',
+      recorded: delivered || Boolean(outcome),
+      completedByOutcome: delivered ? undefined : outcome,
+      timestamp: verification.read_at ?? verification.delivered_at,
+    },
+    {
+      id: 'outcome',
+      label: 'outcome',
+      recorded: isTerminalLifecycleStatus(verification.status),
+      timestamp:
+        verification.status === 'confirmed'
+          ? verification.confirmed_at
+          : verification.status === 'canceled'
+            ? verification.canceled_at
+            : null,
+    },
+  ]
+}

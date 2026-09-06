@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '@/shared/lib/auth'
 import { isAwaitingOutcome } from '../domain/verificationLifecycle'
 import { buildVerificationsQuery } from '../domain/verificationFilters'
@@ -33,6 +33,7 @@ export function useDashboardData(
   const [resolvedQuery, setResolvedQuery] = useState<string | null>(null)
   const [refetchKey, setRefetchKey] = useState(0)
   const [hasLoadedMore, setHasLoadedMore] = useState(false)
+  const activeRequest = useRef<AbortController | null>(null)
 
   const verificationQuery = useMemo(
     () => buildVerificationsQuery(statusFilter, dateRangeFilter),
@@ -41,6 +42,7 @@ export function useDashboardData(
 
   useEffect(() => {
     const controller = new AbortController()
+    activeRequest.current = controller
 
     api
       .get<VerificationsResponse>(`/api/verifications${verificationQuery}`)
@@ -73,7 +75,14 @@ export function useDashboardData(
     resolvedQuery === verificationQuery ? verificationsError : null
 
   const onLoadMoreVerifications = useCallback(async () => {
-    if (!nextCursor || isLoadingMore || isVerificationsLoading) {
+    const controller = activeRequest.current
+    if (
+      !nextCursor ||
+      isLoadingMore ||
+      isVerificationsLoading ||
+      !controller ||
+      controller.signal.aborted
+    ) {
       return
     }
 
@@ -84,6 +93,7 @@ export function useDashboardData(
       const response = await api.get<VerificationsResponse>(
         `/api/verifications${cursorQuery}`
       )
+      if (controller.signal.aborted) return
 
       setVerifications((previous) => [...previous, ...response.data])
       setHasLoadedMore(true)
@@ -92,6 +102,7 @@ export function useDashboardData(
       setPageContext(response.page_context ?? pageContext)
       setVerificationsError(null)
     } catch (error) {
+      if (controller.signal.aborted) return
       setVerificationsError(
         getErrorMessage(error, 'Failed to load more verifications')
       )

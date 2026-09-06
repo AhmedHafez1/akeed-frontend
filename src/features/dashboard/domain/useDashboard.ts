@@ -10,7 +10,12 @@ import type { VerificationStatusFilter } from '../model/dashboard.model'
  * renders exactly what the embedded dashboard renders.
  */
 export function useDashboard(
-  initialStatusFilter: VerificationStatusFilter = 'all'
+  initialStatusFilter: VerificationStatusFilter = 'all',
+  onStatusFilterChange?: (filter: VerificationStatusFilter) => void
 ) {
-  return useVerificationsDashboard({ initialStatusFilter })
+  return useVerificationsDashboard({
+    initialStatusFilter,
+    statusFilter: onStatusFilterChange ? initialStatusFilter : undefined,
+    onStatusFilterChange,
+  })
 }

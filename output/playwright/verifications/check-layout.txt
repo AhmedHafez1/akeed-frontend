@@ -1,0 +1,39 @@
+async (page) => {
+  const results = [];
+  for (const locale of ['en','ar']) {
+    await page.goto('http://127.0.0.1:3098/' + locale + '/verifications');
+    await page.locator('tbody tr').first().waitFor();
+    for (const width of [1440, 1024, 768, 390, 320]) {
+      await page.setViewportSize({width,height:1000});
+      const geometry = await page.evaluate(() => {
+        const cells = [...document.querySelectorAll('tbody tr:first-child td')].map(cell => ({x:cell.getBoundingClientRect().x,width:cell.getBoundingClientRect().width}));
+        return {
+          width: innerWidth, scrollWidth: document.documentElement.scrollWidth,
+          direction: getComputedStyle(document.documentElement).direction,
+          display: getComputedStyle(document.querySelector('tbody tr')).display,
+          phones: [...document.querySelectorAll('tbody bdi[dir="ltr"]')].every(phone => getComputedStyle(phone).direction === 'ltr' && getComputedStyle(phone).unicodeBidi === 'isolate'),
+          cells
+        };
+      });
+      if (geometry.width !== geometry.scrollWidth) throw new Error(locale + ' overflows at ' + width + ': ' + JSON.stringify(geometry));
+      if (!geometry.phones) throw new Error('Phone isolation failed');
+      if (width >= 768 && geometry.display !== 'table-row') throw new Error('Tablet must remain a table');
+      if (width < 768 && geometry.display !== 'grid') throw new Error('Mobile must use cards');
+      if (width >= 768 && (locale === 'ar' ? geometry.cells[0].x <= geometry.cells[5].x : geometry.cells[0].x >= geometry.cells[5].x)) throw new Error('Columns do not mirror');
+      results.push({locale,width,scrollWidth:geometry.scrollWidth,display:geometry.display,cells:width===1440?geometry.cells:undefined});
+      if ([1440,768,390].includes(width)) {
+        await page.screenshot({path:'output/playwright/verifications/' + locale + '-' + width + '.png',fullPage:true});
+      }
+    }
+    // Keyboard-driven inline cancellation remains inside the card in both locales.
+    const firstRow = page.locator('tbody tr').first();
+    await firstRow.getByRole('button').focus();
+    await page.keyboard.press('Enter');
+    if (await firstRow.getByRole('button').count() !== 2) throw new Error('Missing inline confirmation');
+    await firstRow.screenshot({path:'output/playwright/verifications/' + locale + '-mobile-confirmation.png'});
+    await firstRow.getByRole('button').nth(1).focus();
+    await page.keyboard.press('Enter');
+    if (await firstRow.getByRole('button').count() !== 1) throw new Error('Keep order did not dismiss confirmation');
+  }
+  return results;
+}
