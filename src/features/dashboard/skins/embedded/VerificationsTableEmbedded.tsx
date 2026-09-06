@@ -10,11 +10,14 @@ import {
   canCancelOrder,
   cancellationMessageKey,
 } from '@/features/dashboard/domain/cancellation'
+import {
+  lifecycleTone,
+  type LifecycleTone,
+} from '@/features/dashboard/domain/verificationLifecycle'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import type {
   VerificationItem,
-  VerificationStatus,
 } from '../../model/dashboard.model'
 
 type PolarisBadgeTone =
@@ -25,16 +28,15 @@ type PolarisBadgeTone =
   | 'warning'
   | undefined
 
-const STATUS_TONE_MAP: Record<VerificationStatus, PolarisBadgeTone> = {
-  pending: undefined,
-  confirmed: 'success',
-  sent: 'info',
-  delivered: 'info',
-  read: 'info',
-  canceled: 'critical',
-  failed: 'critical',
-  expired: 'warning',
-  no_reply: 'attention',
+/** Semantic lifecycle tones rendered in the Polaris design system. */
+const TONE_BADGES: Record<LifecycleTone, PolarisBadgeTone> = {
+  neutral: undefined,
+  info: 'info',
+  progress: 'info',
+  success: 'success',
+  warning: 'warning',
+  attention: 'attention',
+  critical: 'critical',
 }
 
 interface VerificationsTableEmbeddedProps {
@@ -223,7 +225,7 @@ export function VerificationsTableEmbedded({
         <IndexTable.Cell>
           <div className={statusCellClassName}>
             <span title={statusTitle || undefined}>
-              <Badge tone={STATUS_TONE_MAP[verification.status]}>
+              <Badge tone={TONE_BADGES[lifecycleTone(verification.status)]}>
                 {t(`verificationStatus.${verification.status}`)}
               </Badge>
             </span>

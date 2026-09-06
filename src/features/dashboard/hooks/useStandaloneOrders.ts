@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { api } from '@/shared/lib/auth'
+import { isAwaitingOutcome } from '../domain/verificationLifecycle'
+import { useOutcomeRefresh } from './useOutcomeRefresh'
 import type {
   DashboardStatsDateRange,
   OrderItem,
@@ -30,6 +32,7 @@ export function useStandaloneOrders(
   const [resolvedQuery, setResolvedQuery] = useState<string | null>(null)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [refetchKey, setRefetchKey] = useState(0)
+  const [hasLoadedMore, setHasLoadedMore] = useState(false)
 
   const query = useMemo(() => {
     const params = new URLSearchParams({ date_range: dateRange })
@@ -49,6 +52,7 @@ export function useStandaloneOrders(
         setPageContext(response.page_context)
         setError(null)
         setResolvedQuery(query)
+        setHasLoadedMore(false)
       })
       .catch(() => {
         if (controller.signal.aborted) return
@@ -70,6 +74,7 @@ export function useStandaloneOrders(
         `/api/orders${query}&cursor=${encodeURIComponent(nextCursor)}`
       )
       setOrders((current) => [...current, ...response.data])
+      setHasLoadedMore(true)
       setTotalCount(response.total_count)
       setNextCursor(response.next_cursor)
       setPageContext(response.page_context ?? pageContext)
@@ -81,6 +86,16 @@ export function useStandaloneOrders(
     }
   }, [fallbackError, isLoading, isLoadingMore, nextCursor, pageContext, query])
 
+  const refetch = useCallback(() => setRefetchKey((key) => key + 1), [])
+
+  // Background refresh reloads the first page, so it stays off once the
+  // merchant has paged further in — their loaded rows must not disappear.
+  useOutcomeRefresh(
+    refetch,
+    !hasLoadedMore &&
+      orders.some((order) => isAwaitingOutcome(order.lifecycle.status))
+  )
+
   return {
     orders,
     totalCount,
@@ -90,6 +105,6 @@ export function useStandaloneOrders(
     hasMore: Boolean(nextCursor),
     isLoadingMore,
     loadMore,
-    refetch: useCallback(() => setRefetchKey((key) => key + 1), []),
+    refetch,
   }
 }

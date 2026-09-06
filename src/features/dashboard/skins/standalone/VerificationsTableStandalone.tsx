@@ -2,10 +2,13 @@
 
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import type {
-  ManualOrderLifecycleStatus,
-  OrderItem,
-} from '../../model/dashboard.model'
+import type { OrderItem } from '../../model/dashboard.model'
+import {
+  canMarkOrderCanceled,
+  EXPLAINED_LIFECYCLE_REASONS,
+  lifecycleTone,
+  type LifecycleTone,
+} from '../../domain/verificationLifecycle'
 
 interface OrdersTableStandaloneProps {
   orders: OrderItem[]
@@ -21,43 +24,21 @@ interface OrdersTableStandaloneProps {
   onRetryVerification: (orderId: string) => Promise<void>
 }
 
-const statusClasses: Record<ManualOrderLifecycleStatus, string> = {
-  accepted: 'border-sky-200 bg-sky-50 text-sky-700',
-  processing: 'border-blue-200 bg-blue-50 text-blue-700',
-  ineligible: 'border-slate-200 bg-slate-50 text-slate-700',
-  blocked: 'border-amber-200 bg-amber-50 text-amber-800',
-  pending: 'border-sky-200 bg-sky-50 text-sky-700',
-  sent: 'border-blue-200 bg-blue-50 text-blue-700',
-  delivered: 'border-blue-200 bg-blue-50 text-blue-700',
-  read: 'border-indigo-200 bg-indigo-50 text-indigo-700',
-  confirmed: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-  canceled: 'border-red-200 bg-red-50 text-red-700',
-  expired: 'border-slate-200 bg-slate-50 text-slate-700',
-  failed: 'border-red-200 bg-red-50 text-red-700',
-  no_reply: 'border-amber-200 bg-amber-50 text-amber-800',
-  review_required: 'border-purple-200 bg-purple-50 text-purple-700',
+/** Semantic lifecycle tones rendered in the standalone design system. */
+const toneClasses: Record<LifecycleTone, string> = {
+  neutral: 'border-slate-200 bg-slate-50 text-slate-700',
+  info: 'border-blue-200 bg-blue-50 text-blue-700',
+  progress: 'border-indigo-200 bg-indigo-50 text-indigo-700',
+  success: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+  warning: 'border-purple-200 bg-purple-50 text-purple-700',
+  attention: 'border-amber-200 bg-amber-50 text-amber-800',
+  critical: 'border-red-200 bg-red-50 text-red-700',
 }
 
-const knownReasons = new Set([
-  'non_cod_payment_method',
-  'missing_payment_signal',
-  'plan_limit_reached',
-  'integration_inactive',
-  'billing_not_active',
-  'provider_not_accepted',
-  'auto_verify_disabled',
-  'onboarding_incomplete',
-  'provider_outcome_unknown',
-])
-
 function canMarkCanceled(order: OrderItem): boolean {
-  return (
-    order.lifecycle.status === 'no_reply' &&
-    order.verification?.capabilities.some(
-      (capability) =>
-        capability.action === 'merchant_no_reply_cancellation' &&
-        capability.supported
-    ) === true
+  return canMarkOrderCanceled(
+    order.lifecycle.status,
+    order.verification?.capabilities ?? []
   )
 }
 
@@ -129,7 +110,7 @@ export function VerificationsTableStandalone({
             const reasonKey = order.lifecycle.reason
             const reason = reasonKey
               ? t(
-                  knownReasons.has(reasonKey)
+                  EXPLAINED_LIFECYCLE_REASONS.has(reasonKey)
                     ? `reasons.${reasonKey}`
                     : 'reasons.generic'
                 )
@@ -161,7 +142,7 @@ export function VerificationsTableStandalone({
                 </td>
                 <td className="max-w-[260px] px-4 py-4">
                   <span
-                    className={`inline-flex rounded-md border px-2.5 py-1 text-xs font-semibold ${statusClasses[order.lifecycle.status]}`}
+                    className={`inline-flex rounded-md border px-2.5 py-1 text-xs font-semibold ${toneClasses[lifecycleTone(order.lifecycle.status)]}`}
                   >
                     {t(`status.${order.lifecycle.status}`)}
                   </span>

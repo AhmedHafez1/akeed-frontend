@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { api } from '@/shared/lib/auth'
+import { isAwaitingOutcome } from '../domain/verificationLifecycle'
+import { useOutcomeRefresh } from './useOutcomeRefresh'
 import type {
   DashboardStatsDateRange,
   VerificationsResponse,
@@ -28,6 +30,7 @@ export function useDashboardData(
   )
   const [resolvedQuery, setResolvedQuery] = useState<string | null>(null)
   const [refetchKey, setRefetchKey] = useState(0)
+  const [hasLoadedMore, setHasLoadedMore] = useState(false)
 
   const verificationQuery = useMemo(() => {
     const queryParams = new URLSearchParams()
@@ -54,6 +57,7 @@ export function useDashboardData(
         setPageContext(response.page_context)
         setVerificationsError(null)
         setResolvedQuery(verificationQuery)
+        setHasLoadedMore(false)
       })
       .catch((err: unknown) => {
         if (controller.signal.aborted) return
@@ -87,6 +91,7 @@ export function useDashboardData(
       )
 
       setVerifications((previous) => [...previous, ...response.data])
+      setHasLoadedMore(true)
       setNextCursor(response.next_cursor)
       setPageContext(response.page_context ?? pageContext)
       setVerificationsError(null)
@@ -105,13 +110,25 @@ export function useDashboardData(
     verificationQuery,
   ])
 
+  const refetch = useCallback(() => setRefetchKey((k) => k + 1), [])
+
+  // Background refresh reloads the first page, so it stays off once the
+  // merchant has paged further in — their loaded rows must not disappear.
+  useOutcomeRefresh(
+    refetch,
+    !hasLoadedMore &&
+      verifications.some((verification) =>
+        isAwaitingOutcome(verification.status)
+      )
+  )
+
   return {
     verifications,
     isVerificationsLoading,
     hasMoreVerifications: Boolean(nextCursor),
     isLoadingMoreVerifications: isLoadingMore,
     onLoadMoreVerifications,
-    refetch: useCallback(() => setRefetchKey((k) => k + 1), []),
+    refetch,
     error: activeError,
     verificationsError: activeError,
     pageContext,

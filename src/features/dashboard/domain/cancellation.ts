@@ -1,15 +1,8 @@
 import type { VerificationItem } from '../model/dashboard.model'
+import { canMarkOrderCanceled } from './verificationLifecycle'
 
 export function canCancelOrder(verification: VerificationItem): boolean {
-  return (
-    verification.status === 'no_reply' &&
-    (verification.capabilities === undefined ||
-      verification.capabilities.some(
-        (capability) =>
-          capability.action === 'merchant_no_reply_cancellation' &&
-          capability.supported
-      ))
-  )
+  return canMarkOrderCanceled(verification.status, verification.capabilities)
 }
 
 export function cancellationMessageKey(
