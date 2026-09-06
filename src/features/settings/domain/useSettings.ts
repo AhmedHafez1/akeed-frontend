@@ -78,6 +78,23 @@ const DEFAULT_COD_TEMPLATE_DEFINITIONS: SettingsSkinProps['codTemplateVariants']
     en: [],
   }
 
+interface EditableSettingsSnapshot {
+  storeName: string
+  defaultLanguage: IntegrationOnboardingLanguage
+  isAutoVerifyEnabled: boolean
+  assumeCodWhenPaymentMissing: boolean
+  followUpEnabled: boolean
+  sendDelayMinutes: string
+  followUpDelayMinutes: string
+  escalationEnabled: boolean
+  escalationDelayMinutes: string
+  quietHoursEnabled: boolean
+  quietHoursStart: string
+  quietHoursEnd: string
+  timezone: AutomationTimezone
+  selectedCodTemplateVariants: SettingsSkinProps['selectedCodTemplateVariants']
+}
+
 function normalizeBillingStatus(status: string | null): string | null {
   if (!status) return null
 
@@ -139,6 +156,30 @@ function formatDelayUnit(hours: number) {
   }
 }
 
+function editableSettingsFromResponse(
+  settingsResponse: SettingsResponse,
+  fallback = { storeName: '', quietHoursStart: '21:00', quietHoursEnd: '09:00' }
+): EditableSettingsSnapshot {
+  const { state, template } = settingsResponse
+
+  return {
+    storeName: state.storeName ?? fallback.storeName,
+    defaultLanguage: state.defaultLanguage,
+    isAutoVerifyEnabled: state.isAutoVerifyEnabled,
+    assumeCodWhenPaymentMissing: state.assumeCodWhenPaymentMissing,
+    followUpEnabled: state.followUpEnabled,
+    sendDelayMinutes: toHoursInput(state.sendDelayMinutes, 0),
+    followUpDelayMinutes: toHoursInput(state.followUpDelayMinutes, 120),
+    escalationEnabled: state.escalationEnabled,
+    escalationDelayMinutes: toHoursInput(state.escalationDelayMinutes, 360),
+    quietHoursEnabled: state.quietHoursEnabled,
+    quietHoursStart: state.quietHoursStart ?? fallback.quietHoursStart,
+    quietHoursEnd: state.quietHoursEnd ?? fallback.quietHoursEnd,
+    timezone: state.timezone,
+    selectedCodTemplateVariants: { ...template.selected },
+  }
+}
+
 export function useSettings(): {
   isPageLoading: boolean
   skinProps: SettingsSkinProps
@@ -156,6 +197,7 @@ export function useSettings(): {
 
   const [isInitialLoading, setIsInitialLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
+  const [saveFailed, setSaveFailed] = useState(false)
   const [retryKey, setRetryKey] = useState(0)
   const [isLoadError, setIsLoadError] = useState(false)
   const [sourcePlatformType, setSourcePlatformType] = useState('')
@@ -228,6 +270,35 @@ export function useSettings(): {
   const [templatePreviews, setTemplatePreviews] = useState<
     SettingsSkinProps['templatePreviews']
   >(DEFAULT_TEMPLATE_PREVIEWS)
+  const [savedSettings, setSavedSettings] =
+    useState<EditableSettingsSnapshot | null>(null)
+
+  const applyEditableSettings = useCallback(
+    (snapshot: EditableSettingsSnapshot) => {
+      setStoreName(snapshot.storeName)
+      setDefaultLanguage(snapshot.defaultLanguage)
+      setIsAutoVerifyEnabled(snapshot.isAutoVerifyEnabled)
+      setAssumeCodWhenPaymentMissing(snapshot.assumeCodWhenPaymentMissing)
+      setFollowUpEnabled(snapshot.followUpEnabled)
+      setSendDelayMinutes(snapshot.sendDelayMinutes)
+      setFollowUpDelayMinutes(snapshot.followUpDelayMinutes)
+      setEscalationEnabled(snapshot.escalationEnabled)
+      setEscalationDelayMinutes(snapshot.escalationDelayMinutes)
+      setQuietHoursEnabled(snapshot.quietHoursEnabled)
+      setQuietHoursStart(snapshot.quietHoursStart)
+      setQuietHoursEnd(snapshot.quietHoursEnd)
+      setTimezone(snapshot.timezone)
+      setSelectedCodTemplateVariants({
+        ...snapshot.selectedCodTemplateVariants,
+      })
+      setStoreNameError(undefined)
+      setSendDelayMinutesError(undefined)
+      setFollowUpDelayMinutesError(undefined)
+      setEscalationDelayMinutesError(undefined)
+      setQuietHoursError(undefined)
+    },
+    []
+  )
 
   const languageOptions = useMemo<
     ReadonlyArray<SettingsSelectOption<IntegrationOnboardingLanguage>>
@@ -258,6 +329,7 @@ export function useSettings(): {
     const loadSettings = async () => {
       setIsInitialLoading(true)
       setErrorBanner(null)
+      setSaveFailed(false)
       setIsLoadError(false)
 
       try {
@@ -271,24 +343,12 @@ export function useSettings(): {
           return
         }
 
-        setStoreName(state.storeName ?? '')
+        const editableSettings = editableSettingsFromResponse(settingsResponse)
+        applyEditableSettings(editableSettings)
+        setSavedSettings(editableSettings)
         setSourcePlatformType(state.source.platformType)
         setSourceIdentity(state.source.identity)
         setCanUpdateConfiguration(state.permissions.canUpdateConfiguration)
-        setDefaultLanguage(state.defaultLanguage)
-        setIsAutoVerifyEnabled(state.isAutoVerifyEnabled)
-        setAssumeCodWhenPaymentMissing(state.assumeCodWhenPaymentMissing)
-        setFollowUpEnabled(state.followUpEnabled)
-        setSendDelayMinutes(toHoursInput(state.sendDelayMinutes, 0))
-        setFollowUpDelayMinutes(toHoursInput(state.followUpDelayMinutes, 120))
-        setEscalationEnabled(state.escalationEnabled)
-        setEscalationDelayMinutes(
-          toHoursInput(state.escalationDelayMinutes, 360)
-        )
-        setQuietHoursEnabled(state.quietHoursEnabled)
-        setQuietHoursStart(state.quietHoursStart ?? '21:00')
-        setQuietHoursEnd(state.quietHoursEnd ?? '09:00')
-        setTimezone(state.timezone)
         setBillingPlanId(state.billingPlanId)
         setBillingStatus(state.billingStatus)
         setBillingManagement(state.billingManagement)
@@ -326,7 +386,49 @@ export function useSettings(): {
     return () => {
       active = false
     }
-  }, [isModeLoading, locale, retryKey, router, t])
+  }, [applyEditableSettings, isModeLoading, locale, retryKey, router, t])
+
+  const currentSettings = useMemo<EditableSettingsSnapshot>(
+    () => ({
+      storeName,
+      defaultLanguage,
+      isAutoVerifyEnabled,
+      assumeCodWhenPaymentMissing,
+      followUpEnabled,
+      sendDelayMinutes,
+      followUpDelayMinutes,
+      escalationEnabled,
+      escalationDelayMinutes,
+      quietHoursEnabled,
+      quietHoursStart,
+      quietHoursEnd,
+      timezone,
+      selectedCodTemplateVariants,
+    }),
+    [
+      assumeCodWhenPaymentMissing,
+      defaultLanguage,
+      escalationDelayMinutes,
+      escalationEnabled,
+      followUpDelayMinutes,
+      followUpEnabled,
+      isAutoVerifyEnabled,
+      quietHoursEnabled,
+      quietHoursEnd,
+      quietHoursStart,
+      selectedCodTemplateVariants,
+      sendDelayMinutes,
+      storeName,
+      timezone,
+    ]
+  )
+
+  const isDirty = useMemo(
+    () =>
+      savedSettings !== null &&
+      JSON.stringify(currentSettings) !== JSON.stringify(savedSettings),
+    [currentSettings, savedSettings]
+  )
 
   useEffect(() => {
     setSelectedPlanId(billingPlanId)
@@ -403,7 +505,10 @@ export function useSettings(): {
   const escalationReviewDescription = useMemo(() => {
     const parsed = parseHourField(escalationDelayMinutes) ?? 6
     const { value, unit } = formatDelayUnit(parsed)
-    return t('automation.escalationReviewDescription', { value, unit })
+    return t('automation.escalationReviewDescription', {
+      value,
+      unit: t(`automation.units.${unit}`),
+    })
   }, [escalationDelayMinutes, t])
 
   const handleChangePlan = useCallback(async () => {
@@ -481,6 +586,8 @@ export function useSettings(): {
         !TIME_PATTERN.test(quietHoursEnd)
       ) {
         nextQuietHoursError = t('automation.validation.quietHoursRequired')
+      } else if (quietHoursStart === quietHoursEnd) {
+        nextQuietHoursError = t('automation.validation.quietHoursDifferent')
       }
     }
 
@@ -547,6 +654,7 @@ export function useSettings(): {
   const handleSave = useCallback(async () => {
     setErrorBanner(null)
     setSuccessBanner(null)
+    setSaveFailed(false)
 
     if (!canUpdateConfiguration) {
       setErrorBanner(t('readOnly'))
@@ -557,23 +665,6 @@ export function useSettings(): {
     if (!validated) return
 
     setIsSaving(true)
-
-    const previous = {
-      storeName,
-      defaultLanguage,
-      isAutoVerifyEnabled,
-      assumeCodWhenPaymentMissing,
-      followUpEnabled,
-      sendDelayMinutes,
-      followUpDelayMinutes,
-      escalationEnabled,
-      escalationDelayMinutes,
-      quietHoursEnabled,
-      quietHoursStart,
-      quietHoursEnd,
-      timezone,
-      selectedCodTemplateVariants,
-    }
 
     try {
       const settingsResponse = await updateSettings({
@@ -599,19 +690,14 @@ export function useSettings(): {
       })
       const { state } = settingsResponse
 
-      setStoreName(state.storeName ?? validated.trimmedStoreName)
-      setDefaultLanguage(state.defaultLanguage)
-      setIsAutoVerifyEnabled(state.isAutoVerifyEnabled)
-      setAssumeCodWhenPaymentMissing(state.assumeCodWhenPaymentMissing)
-      setFollowUpEnabled(state.followUpEnabled)
-      setSendDelayMinutes(toHoursInput(state.sendDelayMinutes, 0))
-      setFollowUpDelayMinutes(toHoursInput(state.followUpDelayMinutes, 120))
-      setEscalationEnabled(state.escalationEnabled)
-      setEscalationDelayMinutes(toHoursInput(state.escalationDelayMinutes, 360))
-      setQuietHoursEnabled(state.quietHoursEnabled)
-      setQuietHoursStart(state.quietHoursStart ?? quietHoursStart)
-      setQuietHoursEnd(state.quietHoursEnd ?? quietHoursEnd)
-      setTimezone(state.timezone)
+      const editableSettings = editableSettingsFromResponse(settingsResponse, {
+        storeName: validated.trimmedStoreName,
+        quietHoursStart,
+        quietHoursEnd,
+      })
+      applyEditableSettings(editableSettings)
+      setSavedSettings(editableSettings)
+
       setBillingPlanId(state.billingPlanId)
       setBillingStatus(state.billingStatus)
       setBillingManagement(state.billingManagement)
@@ -633,48 +719,42 @@ export function useSettings(): {
       setCodTemplateVariants(settingsResponse.template.variants)
       setTemplatePreviews(settingsResponse.template.previews)
       setSuccessBanner(t('saveSuccess'))
+      setSaveFailed(false)
       shopify?.toast.show(t('saveSuccess'))
     } catch (error) {
       logger.error('Failed to save onboarding settings', error)
       setSuccessBanner(null)
       setErrorBanner(t('saveError'))
-      setStoreName(previous.storeName)
-      setDefaultLanguage(previous.defaultLanguage)
-      setIsAutoVerifyEnabled(previous.isAutoVerifyEnabled)
-      setAssumeCodWhenPaymentMissing(previous.assumeCodWhenPaymentMissing)
-      setFollowUpEnabled(previous.followUpEnabled)
-      setSendDelayMinutes(previous.sendDelayMinutes)
-      setFollowUpDelayMinutes(previous.followUpDelayMinutes)
-      setEscalationEnabled(previous.escalationEnabled)
-      setEscalationDelayMinutes(previous.escalationDelayMinutes)
-      setQuietHoursEnabled(previous.quietHoursEnabled)
-      setQuietHoursStart(previous.quietHoursStart)
-      setQuietHoursEnd(previous.quietHoursEnd)
-      setTimezone(previous.timezone)
-      setSelectedCodTemplateVariants(previous.selectedCodTemplateVariants)
+      setSaveFailed(true)
     } finally {
       setIsSaving(false)
     }
   }, [
     assumeCodWhenPaymentMissing,
+    applyEditableSettings,
     canUpdateConfiguration,
     defaultLanguage,
-    escalationDelayMinutes,
     escalationEnabled,
-    followUpDelayMinutes,
     followUpEnabled,
     isAutoVerifyEnabled,
     quietHoursEnabled,
     quietHoursEnd,
     quietHoursStart,
-    sendDelayMinutes,
     shopify,
     selectedCodTemplateVariants,
-    storeName,
     t,
     timezone,
     validateSettings,
   ])
+
+  const handleDiscard = useCallback(() => {
+    if (!savedSettings || isSaving) return
+
+    applyEditableSettings(savedSettings)
+    setErrorBanner(null)
+    setSuccessBanner(null)
+    setSaveFailed(false)
+  }, [applyEditableSettings, isSaving, savedSettings])
 
   const isPageLoading = isModeLoading || isInitialLoading
   useAppBridgeLoading(isEmbedded && isPageLoading)
@@ -708,6 +788,8 @@ export function useSettings(): {
       timezoneOptions,
       escalationReviewDescription,
       isSaving,
+      isDirty,
+      saveFailed,
       errorBanner,
       successBanner,
       activePlanName,
@@ -772,6 +854,7 @@ export function useSettings(): {
         }))
       },
       onSave: handleSave,
+      onDiscard: handleDiscard,
       onPlanSelect: (planId) => {
         if (canManageBilling) setSelectedPlanId(planId)
       },

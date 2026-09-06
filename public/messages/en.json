@@ -1059,6 +1059,62 @@
     "pilotAccessHeading": "Pilot access and usage",
     "readOnly": "You have read-only access. An owner or admin must make configuration changes.",
     "retryButton": "Retry",
+    "standalone": {
+      "eyebrow": "Workspace",
+      "subtitle": "Manage how Akeed confirms orders for your store.",
+      "nav": {
+        "label": "Settings sections",
+        "general": "General",
+        "automation": "Automation",
+        "billing": "Billing & usage"
+      },
+      "saveState": {
+        "allSaved": "All changes saved",
+        "unsaved": "Unsaved changes",
+        "saving": "Saving changes…",
+        "saved": "Changes saved",
+        "failed": "Save failed"
+      },
+      "saveBar": {
+        "pendingHelp": "You have changes that have not been saved yet.",
+        "failedHelp": "Your changes are still here. Review any errors and try saving again.",
+        "discard": "Discard"
+      },
+      "delay": {
+        "immediately": "Immediately",
+        "minutes": "{value} min",
+        "hours": "{value} hr",
+        "custom": "Custom"
+      },
+      "general": {
+        "title": "General",
+        "description": "Manage your order source and store defaults.",
+        "sourceDescription": "The connected source Akeed uses to receive orders.",
+        "storeDescription": "These details are used when Akeed contacts your customers.",
+        "codRiskHelp": "Orders with missing payment information will enter the COD confirmation flow. Enable this only when that matches how your source sends COD orders."
+      },
+      "automation": {
+        "trustTitle": "Official WhatsApp delivery",
+        "trustDescription": "Messages are delivered through the official WhatsApp Cloud API.",
+        "confirmationTitle": "Automatic confirmation",
+        "firstDelayLabel": "First-message delay",
+        "followUpTitle": "Follow-up message",
+        "reviewTitle": "No-reply review",
+        "quietHoursTitle": "Quiet hours",
+        "quietHoursResume": "Messages scheduled during quiet hours resume after {time}. Overnight ranges are supported.",
+        "timeline": {
+          "received": "Order received",
+          "first": "First message · {delay}",
+          "followUp": "Follow-up · {delay} later"
+        }
+      },
+      "billing": {
+        "title": "Billing & usage",
+        "description": "Review access, monthly usage, and available plans.",
+        "plansTitle": "Available plans",
+        "plansDescription": "Choose the monthly confirmation volume that fits your store."
+      }
+    },
     "tabs": {
       "store": "Store",
       "confirmation": "Confirmation",
@@ -1092,7 +1148,13 @@
       "escalationEnabledHelp": "If the customer never responds, mark the order for manual review after the configured delay.",
       "escalationDelayMinutesLabel": "No-reply escalation delay (hours)",
       "escalationDelayMinutesHelp": "Measured from the successful first WhatsApp send.",
-      "escalationReviewDescription": "Orders with no response after {value} {unit} are marked for review.",
+      "escalationReviewDescription": "Orders with no response after {value} {unit} are marked for manual review.",
+      "units": {
+        "hour": "hour",
+        "hours": "hours",
+        "minute": "minute",
+        "minutes": "minutes"
+      },
       "quietHoursEnabledLabel": "Pause sending during quiet hours",
       "quietHoursEnabledHelp": "Akeed shifts scheduled sends to the next allowed local time.",
       "quietHoursStartLabel": "Quiet hours start",
@@ -1103,7 +1165,8 @@
         "followUpDelayMinutes": "Follow-up delay must be from 0 to 168 hours.",
         "escalationDelayMinutes": "No-reply escalation delay must be from 0 to 168 hours.",
         "followUpBeforeEscalation": "No-reply escalation delay must be greater than follow-up delay.",
-        "quietHoursRequired": "Enter quiet-hours start and end times in HH:mm format."
+        "quietHoursRequired": "Enter quiet-hours start and end times in HH:mm format.",
+        "quietHoursDifferent": "Quiet-hours start and end times must be different. Overnight ranges are allowed."
       },
       "timezones": {
         "Asia_Riyadh": "Saudi Arabia (Asia/Riyadh)",

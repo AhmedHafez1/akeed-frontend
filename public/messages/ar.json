@@ -1045,6 +1045,62 @@
     "pilotAccessHeading": "صلاحية البرنامج التجريبي والاستخدام",
     "readOnly": "لديك صلاحية عرض فقط. يجب أن يجري المالك أو المسؤول تغييرات الإعداد.",
     "retryButton": "إعادة المحاولة",
+    "standalone": {
+      "eyebrow": "مساحة العمل",
+      "subtitle": "تحكم في طريقة تأكيد أكيد لطلبات متجرك.",
+      "nav": {
+        "label": "أقسام الإعدادات",
+        "general": "عام",
+        "automation": "الأتمتة",
+        "billing": "الفوترة والاستخدام"
+      },
+      "saveState": {
+        "allSaved": "جميع التغييرات محفوظة",
+        "unsaved": "تغييرات غير محفوظة",
+        "saving": "جارٍ حفظ التغييرات…",
+        "saved": "تم حفظ التغييرات",
+        "failed": "تعذر الحفظ"
+      },
+      "saveBar": {
+        "pendingHelp": "لديك تغييرات لم تُحفظ بعد.",
+        "failedHelp": "ما زالت تغييراتك موجودة. راجع الأخطاء ثم حاول الحفظ مرة أخرى.",
+        "discard": "تجاهل"
+      },
+      "delay": {
+        "immediately": "فورًا",
+        "minutes": "{value} د",
+        "hours": "{value} س",
+        "custom": "مخصص"
+      },
+      "general": {
+        "title": "عام",
+        "description": "تحكم في مصدر الطلبات والإعدادات الافتراضية للمتجر.",
+        "sourceDescription": "المصدر المتصل الذي يستقبل منه أكيد الطلبات.",
+        "storeDescription": "تُستخدم هذه التفاصيل عندما يتواصل أكيد مع عملائك.",
+        "codRiskHelp": "ستدخل الطلبات التي لا تحتوي على معلومات دفع في مسار تأكيد الدفع عند الاستلام. فعّل هذا الخيار فقط إذا كان ذلك يطابق طريقة إرسال مصدر طلباتك."
+      },
+      "automation": {
+        "trustTitle": "إرسال رسمي عبر واتساب",
+        "trustDescription": "تُسلَّم الرسائل عبر واجهة WhatsApp Cloud API الرسمية.",
+        "confirmationTitle": "التأكيد التلقائي",
+        "firstDelayLabel": "تأخير الرسالة الأولى",
+        "followUpTitle": "رسالة المتابعة",
+        "reviewTitle": "مراجعة عدم الرد",
+        "quietHoursTitle": "ساعات الهدوء",
+        "quietHoursResume": "تُستأنف الرسائل المجدولة أثناء ساعات الهدوء بعد {time}. النطاقات الممتدة لليوم التالي مدعومة.",
+        "timeline": {
+          "received": "استلام الطلب",
+          "first": "الرسالة الأولى · {delay}",
+          "followUp": "المتابعة · بعد {delay}"
+        }
+      },
+      "billing": {
+        "title": "الفوترة والاستخدام",
+        "description": "راجع صلاحية الوصول والاستخدام الشهري والخطط المتاحة.",
+        "plansTitle": "الخطط المتاحة",
+        "plansDescription": "اختر حجم التأكيدات الشهري المناسب لمتجرك."
+      }
+    },
     "tabs": {
       "store": "المتجر",
       "confirmation": "التأكيد",
@@ -1078,7 +1134,13 @@
       "escalationEnabledHelp": "إذا لم يرد العميل أبدًا، يتم وضع علامة على الطلب للمراجعة اليدوية بعد التأخير المحدد.",
       "escalationDelayMinutesLabel": "تأخير تصعيد عدم الرد (بالساعات)",
       "escalationDelayMinutesHelp": "يُحسب من وقت نجاح أول إرسال واتساب.",
-      "escalationReviewDescription": "Orders with no response after {value} {unit} are marked for review.",
+      "escalationReviewDescription": "تُوضع الطلبات التي لا تتلقى ردًا بعد {value} {unit} للمراجعة اليدوية.",
+      "units": {
+        "hour": "ساعة",
+        "hours": "ساعات",
+        "minute": "دقيقة",
+        "minutes": "دقائق"
+      },
       "quietHoursEnabledLabel": "إيقاف الإرسال أثناء ساعات الهدوء",
       "quietHoursEnabledHelp": "ينقل أكيد الرسائل المجدولة إلى أول وقت مسموح حسب التوقيت المحلي.",
       "quietHoursStartLabel": "بداية ساعات الهدوء",
@@ -1089,7 +1151,8 @@
         "followUpDelayMinutes": "يجب أن يكون تأخير المتابعة من 0 إلى 168 ساعة.",
         "escalationDelayMinutes": "يجب أن يكون تأخير تصعيد عدم الرد من 0 إلى 168 ساعة.",
         "followUpBeforeEscalation": "يجب أن يكون تأخير تصعيد عدم الرد أكبر من تأخير المتابعة.",
-        "quietHoursRequired": "أدخل بداية ونهاية ساعات الهدوء بصيغة HH:mm."
+        "quietHoursRequired": "أدخل بداية ونهاية ساعات الهدوء بصيغة HH:mm.",
+        "quietHoursDifferent": "يجب أن يختلف وقت بداية ساعات الهدوء عن وقت النهاية. يمكنك استخدام نطاق يمتد لليوم التالي."
       },
       "timezones": {
         "Asia_Riyadh": "السعودية (Asia/Riyadh)",

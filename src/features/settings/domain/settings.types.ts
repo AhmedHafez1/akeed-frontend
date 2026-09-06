@@ -70,6 +70,8 @@ export interface SettingsSkinProps {
   escalationReviewDescription: string
 
   isSaving: boolean
+  isDirty: boolean
+  saveFailed: boolean
   errorBanner: string | null
   successBanner: string | null
 
@@ -117,6 +119,7 @@ export interface SettingsSkinProps {
   onCodTemplateArVariantChange: (value: ArabicCodTemplateVariantId) => void
   onCodTemplateEnVariantChange: (value: EnglishCodTemplateVariantId) => void
   onSave: () => Promise<void>
+  onDiscard: () => void
   onPlanSelect: (planId: OnboardingBillingPlanId) => void
   onChangePlan: () => Promise<void>
   onRetry: () => void
