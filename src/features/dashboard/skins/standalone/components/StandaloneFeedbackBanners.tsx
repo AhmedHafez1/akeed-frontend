@@ -43,7 +43,7 @@ export function StandaloneFeedbackBanners({
           <span>{testFeedback.message}</span>
           <button
             type="button"
-            aria-label={t('orders.actions.dismiss')}
+            aria-label={t('table.actions.dismiss')}
             onClick={onDismissTestFeedback}
             className="ms-3 font-semibold opacity-60 transition hover:opacity-100"
           >
@@ -64,7 +64,7 @@ export function StandaloneFeedbackBanners({
           <span>{actionFeedback.message}</span>
           <button
             type="button"
-            aria-label={t('orders.actions.dismiss')}
+            aria-label={t('table.actions.dismiss')}
             onClick={onDismissActionFeedback}
             className="ms-3 font-semibold opacity-60 transition hover:opacity-100"
           >

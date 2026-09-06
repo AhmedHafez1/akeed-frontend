@@ -1,7 +1,7 @@
 import type {
-  OrderItem,
-  StandaloneDashboardStats,
+  DashboardStats,
   VerificationItem,
+  VerificationStatus,
 } from '@/features/dashboard/model/dashboard.model'
 import type { CancelOrderResponse } from '@/shared/types/commerce-outcome.model'
 import { ApiError } from '@/shared/lib/http'
@@ -28,7 +28,7 @@ type FixtureResult = 'failure' | 'role_denied' | 'success'
 type FixtureRole = 'owner' | 'admin' | 'viewer'
 type FixtureState = {
   order: VerificationItem
-  retryOrderStatus: OrderItem['lifecycle']['status']
+  retryOrderStatus: VerificationStatus | 'blocked'
   result: FixtureResult
   role: FixtureRole
   pending?: () => void
@@ -69,6 +69,7 @@ function getFixtureState(): FixtureState {
       no_reply_at: '2026-05-16T12:00:00Z',
       follow_up_attempts: 1,
       follow_up_sent_at: null,
+      reason: null,
     },
     result: 'failure',
     role: 'owner',
@@ -133,95 +134,50 @@ export function fixtureCounts() {
   return { ...fixture.counts, pending: Boolean(fixture.pending) }
 }
 
-function standaloneOrders(fixture: FixtureState): OrderItem[] {
+function fixtureVerifications(fixture: FixtureState): VerificationItem[] {
   const verification = fixture.order
   const retryPending = fixture.retryOrderStatus === 'pending'
   return [
     {
-      id: verification.order_id,
-      order_number: verification.order_number,
-      external_order_id: 'fixture:no-reply',
-      customer_name: verification.customer_name,
+      ...verification,
       customer_phone: verification.customer_phone ?? '+201000000001',
-      customer_email: null,
-      total_price: verification.total_price,
-      currency: verification.currency,
-      created_at: verification.created_at,
-      is_test: verification.is_test,
-      source: {
-        integration_id: 'fixture-source',
-        platform_type: 'standalone',
-      },
-      verification_status: verification.status,
-      verification: {
-        id: verification.id,
-        status: verification.status,
-        capabilities: verification.capabilities ?? [],
-        cancellation_operation: verification.cancellation_operation,
-        last_sent_at: verification.last_sent_at,
-        delivered_at: verification.delivered_at,
-        read_at: verification.read_at,
-        confirmed_at: verification.confirmed_at,
-        canceled_at: verification.canceled_at,
-        expired_at: verification.expired_at,
-        no_reply_at: verification.no_reply_at,
-        follow_up_attempts: verification.follow_up_attempts,
-        follow_up_sent_at: verification.follow_up_sent_at,
-      },
-      lifecycle: {
-        status: verification.status,
-        reason: null,
-        verification_id: verification.id,
-        retryable: false,
-      },
     },
     {
-      id: 'e01-retry-order',
+      id: 'e01-retry-verification',
+      // `blocked` is a retry-guard state, never a row status: a send that was
+      // refused for a resolvable reason surfaces as `failed` with a reason.
+      status: retryPending ? 'pending' : 'failed',
+      reason: retryPending ? null : 'plan_limit_reached',
+      capabilities: [
+        { action: 'merchant_no_reply_cancellation', supported: false },
+        { action: 'retry_verification', supported: !retryPending },
+      ],
+      order_id: 'e01-retry-order',
       order_number: 'E01-RETRY',
-      external_order_id: 'fixture:retry',
+      is_test: true,
       customer_name: 'Synthetic test customer',
       customer_phone: '+201000000002',
-      customer_email: null,
       total_price: '25.00',
       currency: 'USD',
       created_at: '2026-05-16T12:00:00Z',
-      is_test: true,
-      source: {
-        integration_id: 'fixture-source',
-        platform_type: 'standalone',
-      },
-      verification_status: retryPending ? 'pending' : null,
-      verification: retryPending
-        ? {
-            id: 'e01-retry-verification',
-            status: 'pending',
-            capabilities: [],
-            last_sent_at: null,
-            delivered_at: null,
-            read_at: null,
-            confirmed_at: null,
-            canceled_at: null,
-            expired_at: null,
-            no_reply_at: null,
-            follow_up_attempts: 0,
-            follow_up_sent_at: null,
-          }
-        : null,
-      lifecycle: {
-        status: fixture.retryOrderStatus,
-        reason: retryPending ? null : 'plan_limit_reached',
-        verification_id: retryPending ? 'e01-retry-verification' : null,
-        retryable: !retryPending,
-      },
+      last_sent_at: null,
+      delivered_at: null,
+      read_at: null,
+      confirmed_at: null,
+      canceled_at: null,
+      expired_at: null,
+      no_reply_at: null,
+      follow_up_attempts: 0,
+      follow_up_sent_at: null,
     },
   ]
 }
 
-function standaloneStats(fixture: FixtureState): StandaloneDashboardStats {
-  const dashboardOrders = standaloneOrders(fixture)
-  const countStatuses = (statuses: Array<OrderItem['lifecycle']['status']>) =>
-    dashboardOrders.filter((order) => statuses.includes(order.lifecycle.status))
-      .length
+function fixtureStats(fixture: FixtureState): DashboardStats {
+  const rows = fixtureVerifications(fixture)
+  const countStatuses = (statuses: VerificationStatus[]) =>
+    rows.filter((row) => statuses.includes(row.status)).length
+
   return {
     date_range: 'last_30_days',
     reporting_timezone: 'Africa/Cairo',
@@ -235,33 +191,15 @@ function standaloneStats(fixture: FixtureState): StandaloneDashboardStats {
       follow_up_enabled: true,
       quiet_hours_enabled: false,
     },
-    order_totals: {
-      total: dashboardOrders.length,
-      in_progress: countStatuses([
-        'accepted',
-        'processing',
-        'pending',
-        'sent',
-        'delivered',
-        'read',
-      ]),
-      needs_attention: countStatuses([
-        'ineligible',
-        'blocked',
-        'failed',
-        'expired',
-        'no_reply',
-        'review_required',
-      ]),
+    totals: {
+      total: rows.length,
+      in_progress: countStatuses(['pending', 'sent', 'delivered', 'read']),
+      needs_attention: countStatuses(['failed', 'expired', 'no_reply']),
+      pending: countStatuses(['pending']),
+      failed: countStatuses(['failed']),
+      awaiting_reply: countStatuses(['sent', 'delivered', 'read', 'no_reply']),
       confirmed: countStatuses(['confirmed']),
       canceled: countStatuses(['canceled']),
-    },
-    verification_totals: {
-      pending: fixture.retryOrderStatus === 'pending' ? 1 : 0,
-      failed: 0,
-      awaiting_reply: fixture.order.status === 'no_reply' ? 1 : 0,
-      confirmed: 0,
-      canceled: fixture.order.status === 'canceled' ? 1 : 0,
       customer_canceled: 0,
       sent: 1,
       delivered: 0,
@@ -287,11 +225,11 @@ function standaloneStats(fixture: FixtureState): StandaloneDashboardStats {
 export const api = {
   async get<T>(url: string): Promise<T> {
     const fixture = getFixtureState()
-    if (url.startsWith('/api/orders/stats?')) {
+    if (url.startsWith('/api/verifications/stats?')) {
       fixture.counts.stats++
-      return { stats: standaloneStats(fixture) } as T
+      return { stats: fixtureStats(fixture) } as T
     }
-    if (url.startsWith('/api/orders?')) {
+    if (url.startsWith('/api/verifications?')) {
       fixture.counts.lists++
       const selectedRole = getSelectedRole(fixture)
       const canWrite = selectedRole === 'owner' || selectedRole === 'admin'
@@ -301,15 +239,13 @@ export const api = {
       ).searchParams
         .get('status')
         ?.split(',')
-      const dashboardOrders = standaloneOrders(fixture).filter(
-        (order) =>
-          !requestedStatuses ||
-          requestedStatuses.includes(order.lifecycle.status)
+      const rows = fixtureVerifications(fixture).filter(
+        (row) => !requestedStatuses || requestedStatuses.includes(row.status)
       )
       return {
-        data: dashboardOrders,
+        data: rows,
         next_cursor: null,
-        total_count: dashboardOrders.length,
+        total_count: rows.length,
         page_context: {
           source: {
             status: 'connected',
@@ -327,36 +263,6 @@ export const api = {
             can_cancel_orders: canWrite,
             can_create_manual_order: canWrite,
             can_retry_verifications: canWrite,
-          },
-        },
-      } as T
-    }
-    if (url.startsWith('/api/verifications/stats?')) {
-      fixture.counts.stats++
-      return { stats: null } as T
-    }
-    if (url.startsWith('/api/verifications?')) {
-      fixture.counts.lists++
-      const selectedRole = getSelectedRole(fixture)
-      const canWrite = selectedRole === 'owner' || selectedRole === 'admin'
-      return {
-        data: [{ ...fixture.order }],
-        next_cursor: null,
-        page_context: {
-          source: {
-            status: 'connected',
-            integration_id: 'fixture-source',
-            platform_type: 'standalone',
-          },
-          automation: {
-            is_auto_verify_enabled: true,
-            follow_up_enabled: true,
-            quiet_hours_enabled: false,
-          },
-          permissions: {
-            can_send_test_verification: canWrite,
-            can_cancel_orders: canWrite,
-            can_create_manual_order: canWrite,
           },
         },
       } as T

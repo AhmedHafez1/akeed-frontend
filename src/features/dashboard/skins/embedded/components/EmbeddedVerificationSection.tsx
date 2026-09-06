@@ -49,9 +49,12 @@ interface EmbeddedVerificationSectionProps {
   hasMoreVerifications: boolean
   isLoadingMoreVerifications: boolean
   hasVerifications: boolean
-  cancelingVerificationId: string | null
+  actingVerificationId: string | null
   confirmingCancelVerificationId: string | null
-  cancelOrderErrors: Record<string, string>
+  actionErrors: Record<string, string>
+  reportingTimezone: string
+  canRetryVerifications: boolean
+  onRetryVerification: (verificationId: string) => Promise<void>
   statusFilter: VerificationStatusFilter
   statusFilters: ReadonlyArray<StatusFilterOption>
   isSendingTest: boolean
@@ -72,9 +75,12 @@ export function EmbeddedVerificationSection({
   hasMoreVerifications,
   isLoadingMoreVerifications,
   hasVerifications,
-  cancelingVerificationId,
+  actingVerificationId,
   confirmingCancelVerificationId,
-  cancelOrderErrors,
+  actionErrors,
+  reportingTimezone,
+  canRetryVerifications,
+  onRetryVerification,
   statusFilter,
   statusFilters,
   isSendingTest,
@@ -162,9 +168,12 @@ export function EmbeddedVerificationSection({
           <BlockStack gap="300">
             <VerificationsTableEmbedded
               verifications={verifications}
-              cancelingVerificationId={cancelingVerificationId}
+              actingVerificationId={actingVerificationId}
+              reportingTimezone={reportingTimezone}
+              canRetryVerifications={canRetryVerifications}
+              onRetryVerification={onRetryVerification}
               confirmingCancelVerificationId={confirmingCancelVerificationId}
-              cancelOrderErrors={cancelOrderErrors}
+              actionErrors={actionErrors}
               canCancelOrders={canCancelOrders}
               onRequestCancelOrder={onRequestCancelOrder}
               onDismissCancelOrder={onDismissCancelOrder}

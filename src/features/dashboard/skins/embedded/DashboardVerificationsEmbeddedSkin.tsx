@@ -22,9 +22,12 @@ export function DashboardVerificationsEmbeddedSkin({
   onLoadMoreVerifications,
   hasVerifications,
   emptyVerificationsMessage,
-  cancelingVerificationId,
+  actingVerificationId,
+  reportingTimezone,
+  canRetryVerifications,
+  onRetryVerification,
   confirmingCancelVerificationId,
-  cancelOrderErrors,
+  actionErrors,
   onRequestCancelOrder,
   onDismissCancelOrder,
   onConfirmCancelOrder,
@@ -126,9 +129,12 @@ export function DashboardVerificationsEmbeddedSkin({
               hasMoreVerifications={hasMoreVerifications}
               isLoadingMoreVerifications={isLoadingMoreVerifications}
               hasVerifications={hasVerifications}
-              cancelingVerificationId={cancelingVerificationId}
+              actingVerificationId={actingVerificationId}
+              reportingTimezone={reportingTimezone}
+              canRetryVerifications={canRetryVerifications}
+              onRetryVerification={onRetryVerification}
               confirmingCancelVerificationId={confirmingCancelVerificationId}
-              cancelOrderErrors={cancelOrderErrors}
+              actionErrors={actionErrors}
               statusFilter={statusFilter}
               statusFilters={statusFilters}
               isSendingTest={isSendingTest}

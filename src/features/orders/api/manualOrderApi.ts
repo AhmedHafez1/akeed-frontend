@@ -1,7 +1,5 @@
 import { api } from '@/shared/lib/auth'
 import { ApiError } from '@/shared/lib/http'
-import type { ManualOrderLifecycle } from '@/features/dashboard/model/dashboard.model'
-
 export type ManualOrderCreateInput = {
   customerPhone: string
   customerName?: string
@@ -18,10 +16,21 @@ export type ManualOrderCreateResponse = {
   duplicate: boolean
 }
 
+/**
+ * The backend's retry-guard state. Reported for diagnostics only — the
+ * dashboard renders the verification's own status, never these values.
+ */
+export type RetryGuardState = {
+  status: string
+  reason: string | null
+  verification_id: string | null
+  retryable: boolean
+}
+
 export type ManualOrderVerificationRetryResponse = {
   orderId: string
   verificationId?: string
-  lifecycle: ManualOrderLifecycle
+  lifecycle: RetryGuardState
   duplicate: boolean
 }
 

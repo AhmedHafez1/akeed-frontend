@@ -132,11 +132,14 @@ function MainConfirmationsTab({
               confirmations.isLoadingMoreVerifications
             }
             hasVerifications={confirmations.hasVerifications}
-            cancelingVerificationId={confirmations.cancelingVerificationId}
+            actingVerificationId={confirmations.actingVerificationId}
+            reportingTimezone={confirmations.reportingTimezone}
+            canRetryVerifications={confirmations.canRetryVerifications}
+            onRetryVerification={confirmations.onRetryVerification}
             confirmingCancelVerificationId={
               confirmations.confirmingCancelVerificationId
             }
-            cancelOrderErrors={confirmations.cancelOrderErrors}
+            actionErrors={confirmations.actionErrors}
             statusFilter={confirmations.statusFilter}
             statusFilters={confirmations.statusFilters}
             isSendingTest={confirmations.isSendingTest}

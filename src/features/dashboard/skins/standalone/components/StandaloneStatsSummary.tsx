@@ -14,22 +14,24 @@ import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
 import { Skeleton } from '@/shared/ui'
+import { lifecycleTone } from '@/features/dashboard/domain/verificationLifecycle'
+import { lifecycleToneClasses } from '../lifecycleToneClasses'
 import {
   formatDashboardNumber,
   formatDashboardPercent,
 } from '@/features/dashboard/lib/dashboardFormatters'
 import type {
-  OrderItem,
-  StandaloneDashboardStats,
+  DashboardStats,
+  VerificationItem,
 } from '@/features/dashboard/model/dashboard.model'
 
 interface StandaloneStatsSummaryProps {
-  stats: StandaloneDashboardStats | null
+  stats: DashboardStats | null
   reportingTimezone: string
   isStatsLoading: boolean
-  orders: OrderItem[]
-  isOrdersLoading: boolean
-  ordersError: string | null
+  verifications: VerificationItem[]
+  isVerificationsLoading: boolean
+  verificationsError: string | null
 }
 
 interface DashboardCardProps {
@@ -144,29 +146,20 @@ function formatUsagePeriod(
   return { start: formatter.format(startDate), end: formatter.format(endDate) }
 }
 
-const attentionStatusClasses: Record<string, string> = {
-  failed: 'border-red-200 bg-red-50 text-red-700',
-  blocked: 'border-amber-200 bg-amber-50 text-amber-800',
-  no_reply: 'border-amber-200 bg-amber-50 text-amber-800',
-  expired: 'border-amber-200 bg-amber-50 text-amber-800',
-  review_required: 'border-amber-200 bg-amber-50 text-amber-800',
-  ineligible: 'border-stone-200 bg-stone-50 text-slate-700',
-}
-
 export function StandaloneStatsSummary({
   stats,
   reportingTimezone,
   isStatsLoading,
-  orders,
-  isOrdersLoading,
-  ordersError,
+  verifications,
+  isVerificationsLoading,
+  verificationsError,
 }: StandaloneStatsSummaryProps) {
   const t = useTranslations('dashboard')
   const { locale } = useLocaleInfo()
 
   if (isStatsLoading && !stats) return <DashboardSkeleton />
 
-  const attentionOrders = orders.slice(0, 3)
+  const attentionVerifications = verifications.slice(0, 3)
 
   if (!stats) {
     return (
@@ -180,9 +173,9 @@ export function StandaloneStatsSummary({
           </p>
         </DashboardCard>
         <AttentionPreview
-          orders={attentionOrders}
-          isLoading={isOrdersLoading}
-          error={ordersError}
+          verifications={attentionVerifications}
+          isLoading={isVerificationsLoading}
+          error={verificationsError}
           reportingTimezone={reportingTimezone}
         />
       </div>
@@ -192,32 +185,29 @@ export function StandaloneStatsSummary({
   const metrics = [
     {
       id: 'total',
-      label: t('orders.metrics.total'),
-      value: formatDashboardNumber(stats.order_totals.total, locale),
+      label: t('verifications.metrics.total'),
+      value: formatDashboardNumber(stats.totals.total, locale),
       icon: Package,
       iconClassName: 'border-emerald-100 bg-emerald-50 text-emerald-700',
     },
     {
       id: 'confirmed',
-      label: t('orders.metrics.confirmed'),
-      value: formatDashboardNumber(stats.order_totals.confirmed, locale),
+      label: t('verifications.metrics.confirmed'),
+      value: formatDashboardNumber(stats.totals.confirmed, locale),
       icon: CheckCircle2,
       iconClassName: 'border-emerald-100 bg-emerald-50 text-emerald-700',
     },
     {
       id: 'attention',
-      label: t('orders.metrics.needsAttention'),
-      value: formatDashboardNumber(stats.order_totals.needs_attention, locale),
+      label: t('verifications.metrics.needsAttention'),
+      value: formatDashboardNumber(stats.totals.needs_attention, locale),
       icon: TriangleAlert,
       iconClassName: 'border-amber-200 bg-amber-50 text-amber-700',
     },
     {
       id: 'rate',
       label: t('metrics.cards.confirmationRate'),
-      value: formatDashboardPercent(
-        stats.verification_totals.confirmation_rate,
-        locale
-      ),
+      value: formatDashboardPercent(stats.totals.confirmation_rate, locale),
       icon: CircleGauge,
       iconClassName: 'border-emerald-100 bg-emerald-50 text-emerald-700',
     },
@@ -263,9 +253,9 @@ export function StandaloneStatsSummary({
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
         <AttentionPreview
-          orders={attentionOrders}
-          isLoading={isOrdersLoading}
-          error={ordersError}
+          verifications={attentionVerifications}
+          isLoading={isVerificationsLoading}
+          error={verificationsError}
           reportingTimezone={reportingTimezone}
         />
         <OutcomeBreakdown stats={stats} />
@@ -274,29 +264,29 @@ export function StandaloneStatsSummary({
   )
 }
 
-function PerformanceSummary({ stats }: { stats: StandaloneDashboardStats }) {
+function PerformanceSummary({ stats }: { stats: DashboardStats }) {
   const t = useTranslations('dashboard')
   const { locale } = useLocaleInfo()
   const confirmationRate = Math.min(
     100,
-    Math.max(0, stats.verification_totals.confirmation_rate)
+    Math.max(0, stats.totals.confirmation_rate)
   )
   const periodLabel = t(`filters.dateRange.${stats.date_range}`)
   const detailMetrics = [
     {
       id: 'sent',
       label: t('metrics.cards.sent'),
-      value: stats.verification_totals.sent,
+      value: stats.totals.sent,
     },
     {
       id: 'delivered',
       label: t('metrics.cards.delivered'),
-      value: stats.verification_totals.delivered,
+      value: stats.totals.delivered,
     },
     {
       id: 'read',
       label: t('metrics.cards.read'),
-      value: stats.verification_totals.read,
+      value: stats.totals.read,
     },
   ]
 
@@ -364,7 +354,7 @@ function UsageSummary({
   stats,
   reportingTimezone,
 }: {
-  stats: StandaloneDashboardStats
+  stats: DashboardStats
   reportingTimezone: string
 }) {
   const t = useTranslations('dashboard')
@@ -487,12 +477,12 @@ function UsageSummary({
 }
 
 function AttentionPreview({
-  orders,
+  verifications,
   isLoading,
   error,
   reportingTimezone,
 }: {
-  orders: OrderItem[]
+  verifications: VerificationItem[]
   isLoading: boolean
   error: string | null
   reportingTimezone: string
@@ -512,7 +502,7 @@ function AttentionPreview({
           </p>
         </div>
         <Link
-          href={`${withLocale('/verifications', locale)}?status=needs_attention`}
+          href={`${withLocale('/verifications', locale)}?status=no_reply`}
           className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm font-semibold text-emerald-800 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           {t('standalone.attention.viewAll')}
@@ -531,7 +521,7 @@ function AttentionPreview({
           <p role="status" className="py-8 text-center text-sm text-slate-600">
             {t('standalone.attention.unavailable')}
           </p>
-        ) : orders.length === 0 ? (
+        ) : verifications.length === 0 ? (
           <div className="flex flex-col items-center px-4 py-8 text-center">
             <span className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
               <CheckCircle2 aria-hidden="true" className="h-5 w-5" />
@@ -545,21 +535,21 @@ function AttentionPreview({
           </div>
         ) : (
           <ul className="divide-y divide-stone-100">
-            {orders.map((order) => (
+            {verifications.map((verification) => (
               <li
-                key={order.id}
+                key={verification.id}
                 className="grid gap-2 py-4 sm:grid-cols-[minmax(90px,0.65fr)_minmax(120px,1fr)_auto] sm:items-center sm:gap-4"
               >
                 <div className="min-w-0">
                   <p className="truncate text-sm font-bold text-slate-950">
-                    {order.order_number
-                      ? `#${order.order_number}`
-                      : t('orders.referenceFallback')}
+                    {verification.order_number
+                      ? `#${verification.order_number}`
+                      : t('table.orderFallbackPrefix')}
                   </p>
                   <p className="mt-0.5 flex items-center gap-1 text-xs text-slate-500">
                     <Clock3 aria-hidden="true" className="h-3.5 w-3.5" />
                     {formatOrderDate(
-                      order.created_at,
+                      verification.created_at,
                       locale,
                       reportingTimezone,
                       t('standalone.attention.dateUnavailable')
@@ -567,16 +557,15 @@ function AttentionPreview({
                   </p>
                 </div>
                 <p className="truncate text-sm text-slate-700">
-                  {order.customer_name || t('orders.unknownCustomer')}
+                  {verification.customer_name || t('table.unknownCustomer')}
                 </p>
                 <span
                   className={cn(
                     'w-fit rounded-lg border px-2.5 py-1 text-xs font-semibold',
-                    attentionStatusClasses[order.lifecycle.status] ??
-                      attentionStatusClasses.review_required
+                    lifecycleToneClasses[lifecycleTone(verification.status)]
                   )}
                 >
-                  {t(`orders.status.${order.lifecycle.status}`)}
+                  {t(`verificationStatus.${verification.status}`)}
                 </span>
               </li>
             ))}
@@ -587,7 +576,7 @@ function AttentionPreview({
   )
 }
 
-function OutcomeBreakdown({ stats }: { stats: StandaloneDashboardStats }) {
+function OutcomeBreakdown({ stats }: { stats: DashboardStats }) {
   const t = useTranslations('dashboard')
   const { locale } = useLocaleInfo()
   const outcomes: Array<{
@@ -598,26 +587,26 @@ function OutcomeBreakdown({ stats }: { stats: StandaloneDashboardStats }) {
   }> = [
     {
       id: 'confirmed',
-      label: t('orders.metrics.confirmed'),
-      value: stats.order_totals.confirmed,
+      label: t('verifications.metrics.confirmed'),
+      value: stats.totals.confirmed,
       color: 'bg-emerald-600',
     },
     {
       id: 'canceled',
-      label: t('orders.metrics.canceled'),
-      value: stats.order_totals.canceled,
+      label: t('verifications.metrics.canceled'),
+      value: stats.totals.canceled,
       color: 'bg-red-500',
     },
     {
       id: 'inProgress',
-      label: t('orders.metrics.inProgress'),
-      value: stats.order_totals.in_progress,
+      label: t('verifications.metrics.inProgress'),
+      value: stats.totals.in_progress,
       color: 'bg-slate-400',
     },
     {
       id: 'needsAttention',
-      label: t('orders.metrics.needsAttention'),
-      value: stats.order_totals.needs_attention,
+      label: t('verifications.metrics.needsAttention'),
+      value: stats.totals.needs_attention,
       color: 'bg-amber-500',
     },
   ]

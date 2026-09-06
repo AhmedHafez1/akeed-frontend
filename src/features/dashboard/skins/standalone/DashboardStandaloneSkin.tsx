@@ -5,7 +5,7 @@ import { StandaloneDashboardHeader } from './components/StandaloneDashboardHeade
 import { StandaloneFeedbackBanners } from './components/StandaloneFeedbackBanners'
 import { StandaloneStatsSummary } from './components/StandaloneStatsSummary'
 import { StandaloneStatusPanel } from './components/StandaloneStatusPanel'
-import type { StandaloneDashboardSkinProps } from '../../domain/dashboard.types'
+import type { DashboardSkinProps } from '../../domain/dashboard.types'
 
 export function DashboardStandaloneSkin({
   stats,
@@ -18,15 +18,14 @@ export function DashboardStandaloneSkin({
   sourceStatus,
   testFeedback,
   onDismissTestFeedback,
-  error,
   canCreateManualOrder,
   actionFeedback,
   onDismissActionFeedback,
   onManualOrderAccepted,
-  orders,
-  isOrdersLoading,
-  ordersError,
-}: StandaloneDashboardSkinProps) {
+  verifications,
+  isVerificationsLoading,
+  error: verificationsError,
+}: DashboardSkinProps) {
   const verificationState =
     sourceStatus !== 'connected'
       ? 'disconnected'
@@ -51,7 +50,7 @@ export function DashboardStandaloneSkin({
       />
 
       <StandaloneFeedbackBanners
-        error={error}
+        error={verificationsError}
         testFeedback={testFeedback}
         onDismissTestFeedback={onDismissTestFeedback}
         actionFeedback={actionFeedback}
@@ -64,9 +63,9 @@ export function DashboardStandaloneSkin({
         stats={stats}
         reportingTimezone={reportingTimezone}
         isStatsLoading={isStatsLoading}
-        orders={orders}
-        isOrdersLoading={isOrdersLoading}
-        ordersError={ordersError}
+        verifications={verifications}
+        isVerificationsLoading={isVerificationsLoading}
+        verificationsError={verificationsError}
       />
     </div>
   )

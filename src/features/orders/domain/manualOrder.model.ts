@@ -22,8 +22,14 @@ export interface ManualOrderFormValues {
   orderNumber: string
   totalPrice: string
   currency: string
-  paymentMethod: 'cash_on_delivery'
 }
+
+/**
+ * Every manually verified order is cash on delivery by definition — that is
+ * the only thing Akeed verifies — so the merchant is not asked. The backend
+ * still requires the field, so it is sent as a constant rather than collected.
+ */
+export const MANUAL_ORDER_PAYMENT_METHOD = 'cash_on_delivery' as const
 
 export type ManualOrderRecoveryMode = 'retry' | 'conflict' | null
 

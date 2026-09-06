@@ -788,11 +788,8 @@
       "status": {
         "label": "Status",
         "all": "All",
-        "awaiting_response": "Awaiting reply",
         "pending": "Pending",
-        "sent": "Sent",
-        "delivered": "Delivered",
-        "read": "Read",
+        "awaiting_response": "Awaiting reply",
         "confirmed": "Confirmed",
         "canceled": "Canceled",
         "failed": "Failed",
@@ -931,120 +928,75 @@
         "cancelOrderConfirmDescription": "This requests cancellation from your order source and records a merchant cancellation in Akeed. Processing may continue after acceptance.",
         "cancelOrderPending": "Cancellation accepted; awaiting completion at the order source.",
         "cancelOrderUnsupported": "Cancellation is unavailable for this order source.",
-        "cancelOrderUntracked": "Cancellation request accepted without a tracking reference. Check the order source for completion."
-      }
-    },
-    "verificationStatus": {
-      "confirmed": "Confirmed",
-      "pending": "Pending",
-      "sent": "Sent",
-      "delivered": "Delivered",
-      "read": "Read",
-      "canceled": "Canceled",
-      "failed": "Failed",
-      "expired": "Expired",
-      "no_reply": "No reply"
-    },
-    "orders": {
-      "title": "Orders",
-      "pageSubtitle": "Track every submitted order from acceptance through customer outcome.",
-      "subtitle": "{count, plural, =0 {No orders in this period} one {# order in this period} other {# orders in this period}}",
-      "loading": "Loading orders...",
-      "loadMore": "Load more",
-      "loadingMore": "Loading more...",
-      "readOnlyNotice": "You have read-only access. An owner or admin can retry verification or mark supported orders canceled.",
-      "referenceFallback": "Order",
-      "testBadge": "Test",
-      "unknownCustomer": "Unknown customer",
-      "filters": {
-        "label": "Order status",
-        "all": "All",
-        "inProgress": "In progress",
-        "needsAttention": "Needs attention",
-        "confirmed": "Confirmed",
-        "canceled": "Canceled"
-      },
-      "empty": {
-        "title": "No orders yet",
-        "description": "Create a manual order to start verification. Accepted orders appear here even before a message is created.",
-        "filtered": "No orders match this status and date range."
-      },
-      "metrics": {
-        "total": "Total orders",
-        "inProgress": "In progress",
-        "needsAttention": "Needs attention",
-        "confirmed": "Confirmed",
-        "canceled": "Canceled"
-      },
-      "headings": {
-        "order": "Order",
-        "lifecycle": "Lifecycle",
-        "customer": "Customer",
-        "total": "Total",
-        "created": "Created",
-        "actions": "Actions"
-      },
-      "status": {
-        "accepted": "Accepted",
-        "processing": "Processing",
-        "ineligible": "Ineligible",
-        "blocked": "Blocked",
-        "pending": "Pending",
-        "sent": "Sent",
-        "delivered": "Delivered",
-        "read": "Read",
-        "confirmed": "Confirmed",
-        "canceled": "Canceled",
-        "expired": "Expired",
-        "failed": "Failed",
-        "no_reply": "No reply",
-        "review_required": "Review required"
-      },
-      "descriptions": {
-        "accepted": "The order was accepted and is waiting to be processed.",
-        "processing": "Akeed is checking the order and preparing verification.",
-        "ineligible": "This order is not eligible for verification.",
-        "blocked": "Verification cannot continue until the blocking issue is resolved.",
-        "pending": "Verification is queued and waiting to be sent.",
-        "sent": "The verification request was sent and is awaiting delivery or a reply.",
-        "delivered": "The verification request was delivered and is awaiting a reply.",
-        "read": "The customer opened the verification request and has not replied yet.",
-        "confirmed": "The customer confirmed the order.",
-        "canceled": "The order is recorded as canceled in Akeed.",
-        "expired": "The verification window ended without a final response.",
-        "failed": "Verification could not be completed.",
-        "no_reply": "The customer did not reply within the configured time.",
-        "review_required": "The delivery outcome is uncertain and needs review."
-      },
-      "reasons": {
-        "non_cod_payment_method": "This order is not marked as cash on delivery, so no verification was sent.",
-        "missing_payment_signal": "A payment method could not be confirmed, so no verification was sent.",
-        "plan_limit_reached": "The current verification limit has been reached. Retry after capacity is available.",
-        "integration_inactive": "The order source is inactive. Restore the source before retrying verification.",
-        "billing_not_active": "Verification access is inactive. Ask an owner or Akeed support to review it.",
-        "provider_not_accepted": "The message was not accepted. Check readiness before retrying.",
-        "auto_verify_disabled": "Automatic verification is paused. Enable it before retrying.",
-        "onboarding_incomplete": "Complete Standalone setup before retrying verification.",
-        "provider_outcome_unknown": "Message acceptance could not be confirmed. Contact support before retrying.",
-        "generic": "Verification could not continue. Review setup or contact support."
-      },
-      "actions": {
+        "cancelOrderUntracked": "Cancellation request accepted without a tracking reference. Check the order source for completion.",
         "retry": "Retry verification",
         "retrying": "Retrying...",
         "retrySuccess": "Verification retry accepted. The order lifecycle has been refreshed.",
         "retryError": "Verification could not be retried. Review the order state and try again.",
-        "markCanceled": "Mark canceled",
-        "confirmMarkCanceled": "Yes, mark canceled",
-        "markingCanceled": "Updating...",
-        "keepOrder": "Keep order",
-        "markCanceledDescription": "This marks the order canceled in Akeed only. No external order system is changed.",
-        "markCanceledSuccess": "Order marked canceled in Akeed. No external order system was changed.",
-        "markCanceledError": "The order could not be marked canceled. Refresh and try again.",
-        "dismiss": "Dismiss message"
+        "cancelOrderSuccess": "Order marked canceled in Akeed. No external order system was changed.",
+        "dismiss": "Dismiss"
+      }
+    },
+    "verificationStatus": {
+      "pending": "Pending",
+      "sent": "Sent",
+      "delivered": "Delivered",
+      "read": "Read",
+      "confirmed": "Confirmed",
+      "canceled": "Canceled",
+      "expired": "Expired",
+      "failed": "Failed",
+      "no_reply": "No reply"
+    },
+    "descriptions": {
+      "pending": "Verification is queued and waiting to be sent.",
+      "sent": "The verification request was sent and is awaiting delivery or a reply.",
+      "delivered": "The verification request was delivered and is awaiting a reply.",
+      "read": "The customer opened the verification request and has not replied yet.",
+      "confirmed": "The customer confirmed the order.",
+      "canceled": "The order is recorded as canceled in Akeed.",
+      "expired": "The verification window ended without a final response.",
+      "failed": "Verification could not be completed.",
+      "no_reply": "The customer did not reply within the configured time."
+    },
+    "reasons": {
+      "non_cod_payment_method": "This order is not marked as cash on delivery, so no verification was sent.",
+      "missing_payment_signal": "A payment method could not be confirmed, so no verification was sent.",
+      "plan_limit_reached": "The current verification limit has been reached. Retry after capacity is available.",
+      "integration_inactive": "The order source is inactive. Restore the source before retrying verification.",
+      "billing_not_active": "Verification access is inactive. Ask an owner or Akeed support to review it.",
+      "provider_not_accepted": "The message was not accepted. Check readiness before retrying.",
+      "auto_verify_disabled": "Automatic verification is paused. Enable it before retrying.",
+      "onboarding_incomplete": "Complete Standalone setup before retrying verification.",
+      "provider_outcome_unknown": "Message acceptance could not be confirmed. Contact support before retrying.",
+      "generic": "Verification could not continue. Review setup or contact support."
+    },
+    "verifications": {
+      "title": "Verifications",
+      "pageSubtitle": "Track every order from the moment it is submitted through the customer outcome.",
+      "subtitle": "{count, plural, =0 {No verifications in this period} one {# verification in this period} other {# verifications in this period}}",
+      "loading": "Loading verifications...",
+      "loadingMore": "Loading more...",
+      "loadMore": "Load more",
+      "readOnlyNotice": "You have read-only access. An owner or admin can retry verification or mark supported orders canceled.",
+      "empty": {
+        "title": "No verifications yet",
+        "description": "Verify an order to get started. Orders appear here as soon as a verification is created for them.",
+        "filtered": "No verifications match this status and date range."
       },
       "errors": {
-        "load": "Orders are not available right now. Please try again.",
-        "metrics": "Dashboard metrics are not available right now. Please try again."
+        "load": "We could not load your verifications. Refresh and try again.",
+        "metrics": "We could not load your metrics. Refresh and try again."
+      },
+      "metrics": {
+        "total": "Total verifications",
+        "inProgress": "In progress",
+        "needsAttention": "Needs attention",
+        "confirmed": "Confirmed",
+        "canceled": "Canceled"
+      },
+      "filters": {
+        "label": "Order status"
       }
     }
   },
@@ -1429,16 +1381,16 @@
     "needHelp": "Need help?"
   },
   "manualOrder": {
-    "title": "Create a manual order",
-    "description": "Enter a cash-on-delivery order for verification. Akeed will confirm acceptance before processing begins.",
-    "open": "New order",
+    "title": "Verify an order",
+    "description": "Enter the order details and Akeed will send a cash-on-delivery confirmation to the customer.",
+    "open": "Verify order",
     "close": "Close",
     "cancel": "Cancel",
-    "submit": "Create order",
-    "submitting": "Creating order...",
+    "submit": "Verify order",
+    "submitting": "Sending for verification...",
     "required": "Required",
-    "readOnly": "Only owners and admins can create orders.",
-    "sourceDisconnected": "Order creation is unavailable while the source is disconnected.",
+    "readOnly": "Only owners and admins can verify orders.",
+    "sourceDisconnected": "Order verification is unavailable while the source is disconnected.",
     "fields": {
       "customerPhone": {
         "label": "Customer phone",
@@ -1458,11 +1410,6 @@
       "currency": {
         "label": "Currency",
         "placeholder": "Select currency"
-      },
-      "paymentMethod": {
-        "label": "Payment method",
-        "cod": "Cash on delivery",
-        "help": "This MVP accepts cash-on-delivery verification requests only."
       }
     },
     "validation": {
@@ -1477,8 +1424,7 @@
       "totalPriceInvalid": "Enter an amount greater than zero with no more than two decimal places.",
       "totalPriceServer": "Check the order amount and try again.",
       "currencyRequired": "Select a supported currency.",
-      "currencyServer": "Select a supported currency and try again.",
-      "paymentMethodServer": "Select cash on delivery and try again."
+      "currencyServer": "Select a supported currency and try again."
     },
     "errors": {
       "validation": "Some order details need your attention.",
@@ -1488,13 +1434,13 @@
       "acceptanceFailed": "The server could not durably accept this order. Keep these details unchanged and retry safely.",
       "conflict": "This retry token already belongs to different order details. Do not retry it; start over only after checking that no order was created.",
       "idempotency": "A safe retry token could not be created. Start over and try again.",
-      "role": "Only owners and admins can create manual orders.",
+      "role": "Only owners and admins can verify orders.",
       "sourceUnavailable": "No active Standalone source is available. Check your setup before retrying.",
       "sourceAmbiguous": "More than one active source was found. Contact support before creating orders.",
-      "sourceUnsupported": "Manual order entry is available only for Standalone sources.",
-      "setupIncomplete": "Complete Standalone onboarding before creating an order.",
-      "entitlement": "Manual order creation is not enabled for this workspace. Contact support.",
-      "unexpected": "We could not create the order. Review the details and try again."
+      "sourceUnsupported": "Order verification is available only for Standalone sources.",
+      "setupIncomplete": "Complete Standalone onboarding before verifying an order.",
+      "entitlement": "Order verification is not enabled for this workspace. Contact support.",
+      "unexpected": "We could not submit the order for verification. Review the details and try again."
     },
     "retry": {
       "locked": "These values are locked because the previous result is uncertain. Retrying will reuse the original token and cannot create a second matching order.",
@@ -1506,13 +1452,13 @@
       "keepRetry": "Keep safe retry"
     },
     "success": {
-      "acceptedStatus": "Accepted · Processing pending",
-      "title": "Order accepted",
-      "description": "The order is saved for processing. This does not mean a WhatsApp message was sent or delivered.",
+      "acceptedStatus": "Accepted · Verification pending",
+      "title": "Order accepted for verification",
+      "description": "The order is saved and queued for verification. This does not mean a WhatsApp message was sent or delivered yet.",
       "duplicateTitle": "Order already accepted",
       "duplicateDescription": "Akeed recovered the original order from your safe retry; no duplicate order was created.",
       "orderId": "Order ID",
-      "createAnother": "Create another order",
+      "createAnother": "Verify another order",
       "viewVerifications": "View verifications"
     }
   },

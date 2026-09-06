@@ -15,6 +15,7 @@ import {
 } from '../api/manualOrderApi'
 import {
   isManualOrderCurrency,
+  MANUAL_ORDER_PAYMENT_METHOD,
   type ManualOrderFeedback,
   type ManualOrderFormValues,
   type ManualOrderRecoveryMode,
@@ -28,7 +29,6 @@ const fieldOrder: Array<keyof ManualOrderFormValues> = [
   'orderNumber',
   'totalPrice',
   'currency',
-  'paymentMethod',
 ]
 
 const logger = createLogger('ManualOrder')
@@ -47,7 +47,7 @@ function toPayload(values: ManualOrderFormValues): ManualOrderCreateInput {
     ...(orderNumber ? { orderNumber } : {}),
     totalPrice: values.totalPrice.trim(),
     currency: values.currency,
-    paymentMethod: values.paymentMethod,
+    paymentMethod: MANUAL_ORDER_PAYMENT_METHOD,
   }
 }
 
@@ -79,7 +79,6 @@ export function useManualOrderEntry(
         currency: z
           .string()
           .refine(isManualOrderCurrency, t('validation.currencyRequired')),
-        paymentMethod: z.literal('cash_on_delivery'),
       }),
     [t]
   )
@@ -93,7 +92,6 @@ export function useManualOrderEntry(
       orderNumber: '',
       totalPrice: '',
       currency: isManualOrderCurrency(defaultCurrency) ? defaultCurrency : '',
-      paymentMethod: 'cash_on_delivery',
     },
   })
   const [isOpen, setIsOpen] = useState(false)
@@ -125,7 +123,6 @@ export function useManualOrderEntry(
       orderNumber: '',
       totalPrice: '',
       currency: isManualOrderCurrency(defaultCurrency) ? defaultCurrency : '',
-      paymentMethod: 'cash_on_delivery',
     })
     submissionTokenRef.current = null
     submittedPayloadRef.current = null

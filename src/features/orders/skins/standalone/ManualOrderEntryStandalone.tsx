@@ -364,29 +364,6 @@ export function ManualOrderEntryStandalone({
               </div>
             </div>
 
-            <fieldset disabled={fieldsDisabled}>
-              <legend className="text-sm font-medium text-slate-900">
-                {t('fields.paymentMethod.label')}
-                <RequiredMark />
-              </legend>
-              <label className="mt-2 flex items-start gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4">
-                <input
-                  type="radio"
-                  value="cash_on_delivery"
-                  className="mt-1 h-4 w-4"
-                  {...register('paymentMethod')}
-                />
-                <span>
-                  <span className="block text-sm font-semibold text-slate-900">
-                    {t('fields.paymentMethod.cod')}
-                  </span>
-                  <span className="mt-1 block text-xs text-slate-600">
-                    {t('fields.paymentMethod.help')}
-                  </span>
-                </span>
-              </label>
-            </fieldset>
-
             <DialogFooter>
               <DialogClose asChild>
                 <Button

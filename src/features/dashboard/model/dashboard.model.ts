@@ -1,8 +1,13 @@
-import type {
-  CommerceOutcomeCapability,
-  CommerceOutcomeOperationResult,
-} from '@/shared/types/commerce-outcome.model'
+import type { CommerceOutcomeOperationResult } from '@/shared/types/commerce-outcome.model'
 
+/**
+ * The only status vocabulary the dashboard speaks.
+ *
+ * These are exactly the values the backend's `verification_status` enum can
+ * hold. Both runtime modes read the same `/api/verifications` endpoint, so
+ * there is no second, wider lifecycle to reconcile: an order that has not
+ * reached a verification yet is simply not in the list, in either mode.
+ */
 export type VerificationStatus =
   | 'pending'
   | 'sent'
@@ -14,28 +19,32 @@ export type VerificationStatus =
   | 'failed'
   | 'no_reply'
 
-export type ManualOrderLifecycleStatus =
-  | 'accepted'
-  | 'processing'
-  | 'ineligible'
-  | 'blocked'
-  | VerificationStatus
-  | 'review_required'
+/**
+ * Row actions the API reports as available.
+ *
+ * Rendered from the server's answer rather than inferred from the status, so
+ * an action can never appear in one runtime mode and be missing in the other.
+ */
+export type VerificationRowAction =
+  | 'merchant_no_reply_cancellation'
+  | 'retry_verification'
 
-export type ManualOrderLifecycle = {
-  status: ManualOrderLifecycleStatus
-  reason: string | null
-  verification_id: string | null
-  retryable: boolean
+export type VerificationRowCapability = {
+  action: VerificationRowAction
+  supported: boolean
 }
 
+/**
+ * The filter ids the dashboard actually renders.
+ *
+ * `sent` / `delivered` / `read` are deliberately absent: they are covered by
+ * `awaiting_response`, and the message catalogues carry no labels for them, so
+ * declaring them here would only invite a missing-translation error.
+ */
 export type VerificationStatusFilter =
   | 'all'
-  | 'awaiting_response'
   | 'pending'
-  | 'sent'
-  | 'delivered'
-  | 'read'
+  | 'awaiting_response'
   | 'confirmed'
   | 'canceled'
   | 'failed'
@@ -59,10 +68,15 @@ export type DashboardSourceState = {
 }
 
 export type VerificationItem = {
-  capabilities?: CommerceOutcomeCapability[]
+  capabilities?: VerificationRowCapability[]
   cancellation_operation?: CommerceOutcomeOperationResult
   id: string
   status: VerificationStatus
+  /**
+   * Why the verification is where it is, when the backend recorded a cause.
+   * Carries the explanation without adding a status word for it.
+   */
+  reason: string | null
   order_id: string
   order_number: string | null
   is_test: boolean
@@ -82,77 +96,34 @@ export type VerificationItem = {
   follow_up_sent_at: string | null
 }
 
-export type OrderItem = {
-  id: string
-  order_number: string | null
-  external_order_id: string
-  customer_name: string | null
-  customer_phone: string
-  customer_email: string | null
-  total_price: string | null
-  currency: string | null
-  created_at: string | null
-  is_test: boolean
-  source: {
-    integration_id: string
-    platform_type: string
+export type DashboardPermissions = {
+  can_send_test_verification: boolean
+  can_cancel_orders: boolean
+  can_create_manual_order: boolean
+  can_retry_verifications?: boolean
+}
+
+export type DashboardPageContext = {
+  source?: DashboardSourceState
+  reporting_timezone?: string
+  automation: {
+    is_auto_verify_enabled: boolean
+    follow_up_enabled: boolean
+    quiet_hours_enabled: boolean
   }
-  verification_status: VerificationStatus | null
-  verification: {
-    id: string
-    status: VerificationStatus
-    capabilities: CommerceOutcomeCapability[]
-    cancellation_operation?: CommerceOutcomeOperationResult
-    last_sent_at: string | null
-    delivered_at: string | null
-    read_at: string | null
-    confirmed_at: string | null
-    canceled_at: string | null
-    expired_at: string | null
-    no_reply_at: string | null
-    follow_up_attempts: number
-    follow_up_sent_at: string | null
-  } | null
-  lifecycle: ManualOrderLifecycle
+  permissions?: DashboardPermissions
 }
 
 export type VerificationsResponse = {
   data: VerificationItem[]
   next_cursor: string | null
-  page_context?: {
-    source?: DashboardSourceState
-    automation: {
-      is_auto_verify_enabled: boolean
-      follow_up_enabled: boolean
-      quiet_hours_enabled: boolean
-    }
-    permissions?: {
-      can_send_test_verification: boolean
-      can_cancel_orders: boolean
-      can_create_manual_order: boolean
-      can_retry_verifications?: boolean
-    }
-  }
+  total_count?: number
+  page_context?: DashboardPageContext
 }
-
-export type OrdersResponse = {
-  data: OrderItem[]
-  next_cursor: string | null
-  total_count: number
-  page_context?: VerificationsResponse['page_context'] & {
-    reporting_timezone?: string
-  }
-}
-
-export type StandaloneOrderFilter =
-  | 'all'
-  | 'in_progress'
-  | 'needs_attention'
-  | 'confirmed'
-  | 'canceled'
 
 export type DashboardStats = {
   date_range: DashboardStatsDateRange
+  reporting_timezone?: string
   source?: DashboardSourceState
   automation: {
     is_auto_verify_enabled: boolean
@@ -160,6 +131,9 @@ export type DashboardStats = {
     quiet_hours_enabled: boolean
   }
   totals: {
+    total: number
+    in_progress: number
+    needs_attention: number
     pending: number
     failed: number
     awaiting_reply: number
@@ -176,6 +150,8 @@ export type DashboardStats = {
   usage: {
     used: number
     limit: number
+    period_start: string | null
+    period_end: string | null
   }
   savings: {
     avg_shipping_cost: number
@@ -186,28 +162,4 @@ export type DashboardStats = {
 
 export type DashboardStatsResponse = {
   stats: DashboardStats
-}
-
-export type StandaloneDashboardStats = {
-  date_range: DashboardStatsDateRange
-  reporting_timezone: string
-  source: DashboardSourceState
-  automation: DashboardStats['automation']
-  order_totals: {
-    total: number
-    in_progress: number
-    needs_attention: number
-    confirmed: number
-    canceled: number
-  }
-  verification_totals: DashboardStats['totals']
-  usage: DashboardStats['usage'] & {
-    period_start: string | null
-    period_end: string | null
-  }
-  savings: DashboardStats['savings']
-}
-
-export type StandaloneDashboardStatsResponse = {
-  stats: StandaloneDashboardStats
 }

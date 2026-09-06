@@ -1,9 +1,9 @@
 # Standalone UI/UX mockups
 
 These mockups define the proposed direction for the standalone Dashboard,
-Settings, and Message templates pages. They are implementation references,
-not pixel-perfect specifications. Existing product behavior, permissions,
-API contracts, and localized copy remain authoritative.
+Verifications, Settings, and Message templates pages. They are implementation
+references, not pixel-perfect specifications. Existing product behavior,
+permissions, API contracts, and localized copy remain authoritative.
 
 ## Shared application shell
 
@@ -13,7 +13,7 @@ API contracts, and localized copy remain authoritative.
 - Keep page content on a warm off-white background. Cards remain white with a
   1 px neutral border, restrained shadow, and 12-16 px radius.
 - Keep global destinations in this order: Dashboard, Verifications,
-  Templates, Settings. Verifications is intentionally not redesigned here.
+  Templates, Settings.
 - Keep language, notifications, search, help, and workspace identity in the
   same locations across all protected standalone pages.
 - Treat Arabic as a first-class RTL layout. Mirror directional layout and
@@ -33,6 +33,24 @@ Reference: `standalone-dashboard.png`
   take the user to the later Verifications experience.
 - Use semantic status colors sparingly: emerald for healthy/confirmed, amber
   for waiting or review, and red only for failed/destructive outcomes.
+
+## Verifications
+
+Reference: `standalone-verifications.png`
+
+- Treat this MVP page as a triage workspace: workload overview, filtering,
+  full-width results, then capability-driven inline actions.
+- Do not add a details modal, drawer, expandable row, selected-row state, or
+  order-details route in the MVP.
+- Derive lifecycle steps from timestamps already present on the verification;
+  do not fabricate events or imply delivery/read states that were not recorded.
+- Render retry and cancellation actions only when the server-reported
+  capabilities allow them. Preserve the existing confirmation step for a
+  destructive cancellation.
+- The search and numbered pagination in the visual are directional concepts.
+  Do not ship misleading client-only search across a partial cursor page or
+  numbered pagination without matching backend support. Preserve `Load more`
+  until the API provides the required query and pagination contracts.
 
 ## Settings
 

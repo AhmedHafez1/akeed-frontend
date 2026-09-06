@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { api } from '@/shared/lib/auth'
 import { isAwaitingOutcome } from '../domain/verificationLifecycle'
+import { buildVerificationsQuery } from '../domain/verificationFilters'
 import { useOutcomeRefresh } from './useOutcomeRefresh'
 import type {
   DashboardStatsDateRange,
@@ -21,6 +22,7 @@ export function useDashboardData(
   dateRangeFilter: DashboardStatsDateRange
 ) {
   const [verifications, setVerifications] = useState<VerificationItem[]>([])
+  const [totalCount, setTotalCount] = useState(0)
   const [nextCursor, setNextCursor] = useState<string | null>(null)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [pageContext, setPageContext] =
@@ -32,18 +34,10 @@ export function useDashboardData(
   const [refetchKey, setRefetchKey] = useState(0)
   const [hasLoadedMore, setHasLoadedMore] = useState(false)
 
-  const verificationQuery = useMemo(() => {
-    const queryParams = new URLSearchParams()
-    queryParams.set('date_range', dateRangeFilter)
-
-    if (statusFilter === 'awaiting_response') {
-      queryParams.set('status', 'sent,delivered,read,no_reply')
-    } else if (statusFilter !== 'all') {
-      queryParams.set('status', statusFilter)
-    }
-
-    return `?${queryParams.toString()}`
-  }, [dateRangeFilter, statusFilter])
+  const verificationQuery = useMemo(
+    () => buildVerificationsQuery(statusFilter, dateRangeFilter),
+    [dateRangeFilter, statusFilter]
+  )
 
   useEffect(() => {
     const controller = new AbortController()
@@ -53,6 +47,7 @@ export function useDashboardData(
       .then((response) => {
         if (controller.signal.aborted) return
         setVerifications(response.data)
+        setTotalCount(response.total_count ?? response.data.length)
         setNextCursor(response.next_cursor)
         setPageContext(response.page_context)
         setVerificationsError(null)
@@ -92,6 +87,7 @@ export function useDashboardData(
 
       setVerifications((previous) => [...previous, ...response.data])
       setHasLoadedMore(true)
+      setTotalCount(response.total_count ?? totalCount)
       setNextCursor(response.next_cursor)
       setPageContext(response.page_context ?? pageContext)
       setVerificationsError(null)
@@ -107,6 +103,7 @@ export function useDashboardData(
     isVerificationsLoading,
     nextCursor,
     pageContext,
+    totalCount,
     verificationQuery,
   ])
 
@@ -124,6 +121,7 @@ export function useDashboardData(
 
   return {
     verifications,
+    totalCount,
     isVerificationsLoading,
     hasMoreVerifications: Boolean(nextCursor),
     isLoadingMoreVerifications: isLoadingMore,

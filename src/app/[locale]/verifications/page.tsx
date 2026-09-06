@@ -9,19 +9,23 @@ import {
   DashboardEmbeddedShellSkeleton,
   DashboardVerificationsStandaloneSkin,
   useDashboard,
+  VERIFICATION_STATUS_FILTER_IDS,
 } from '@/features/dashboard'
+import type { VerificationStatusFilter } from '@/features/dashboard'
+
+function isStatusFilter(
+  value: string | null
+): value is VerificationStatusFilter {
+  return (
+    value !== null &&
+    (VERIFICATION_STATUS_FILTER_IDS as readonly string[]).includes(value)
+  )
+}
 
 function StandaloneVerificationsPageContent() {
   const searchParams = useSearchParams()
-  const requestedFilter = searchParams.get('status')
-  const initialFilter =
-    requestedFilter === 'in_progress' ||
-    requestedFilter === 'needs_attention' ||
-    requestedFilter === 'confirmed' ||
-    requestedFilter === 'canceled'
-      ? requestedFilter
-      : 'all'
-  const skinProps = useDashboard(initialFilter)
+  const requested = searchParams.get('status')
+  const skinProps = useDashboard(isStatusFilter(requested) ? requested : 'all')
   return <DashboardVerificationsStandaloneSkin {...skinProps} />
 }
 

@@ -3,62 +3,62 @@
 import { useTranslations } from 'next-intl'
 import { EmptyState, LoadingSpinner } from '@/shared/ui'
 import type {
-  OrderItem,
-  StandaloneOrderFilter,
+  VerificationItem,
+  VerificationStatusFilter,
 } from '@/features/dashboard/model/dashboard.model'
-import type { StandaloneOrderFilterOption } from '@/features/dashboard/domain/dashboard.types'
+import type { StatusFilterOption } from '@/features/dashboard/domain/dashboard.types'
 import { VerificationsTableStandalone } from '../VerificationsTableStandalone'
 import { StandaloneTestVerificationPanel } from './StandaloneTestVerificationPanel'
 
-interface StandaloneOrdersSectionProps {
-  orders: OrderItem[]
+interface StandaloneVerificationsSectionProps {
+  verifications: VerificationItem[]
   reportingTimezone: string
-  totalOrderCount: number
-  isOrdersLoading: boolean
-  hasMoreOrders: boolean
-  isLoadingMoreOrders: boolean
-  orderFilter: StandaloneOrderFilter
-  orderFilters: ReadonlyArray<StandaloneOrderFilterOption>
-  actingOrderId: string | null
-  confirmingCancelOrderId: string | null
+  totalCount: number
+  isVerificationsLoading: boolean
+  hasMoreVerifications: boolean
+  isLoadingMoreVerifications: boolean
+  statusFilter: VerificationStatusFilter
+  statusFilters: ReadonlyArray<StatusFilterOption>
+  actingVerificationId: string | null
+  confirmingCancelVerificationId: string | null
   actionErrors: Record<string, string>
   canSendTestVerification: boolean
   canCancelOrders: boolean
   canRetryVerifications: boolean
   isSendingTest: boolean
-  onOrderFilterChange: (filter: StandaloneOrderFilter) => void
-  onLoadMoreOrders: () => Promise<void>
-  onRequestCancelOrder: (orderId: string) => void
-  onDismissCancelOrder: (orderId: string) => void
-  onConfirmCancelOrder: (orderId: string) => Promise<void>
-  onRetryVerification: (orderId: string) => Promise<void>
+  onStatusFilterChange: (filter: VerificationStatusFilter) => void
+  onLoadMoreVerifications: () => Promise<void>
+  onRequestCancelOrder: (verificationId: string) => void
+  onDismissCancelOrder: (verificationId: string) => void
+  onConfirmCancelOrder: (verificationId: string) => Promise<void>
+  onRetryVerification: (verificationId: string) => Promise<void>
   onSendTestVerification: (customerPhone: string) => Promise<void>
 }
 
 export function StandaloneVerificationsSection({
-  orders,
+  verifications,
   reportingTimezone,
-  totalOrderCount,
-  isOrdersLoading,
-  hasMoreOrders,
-  isLoadingMoreOrders,
-  orderFilter,
-  orderFilters,
-  actingOrderId,
-  confirmingCancelOrderId,
+  totalCount,
+  isVerificationsLoading,
+  hasMoreVerifications,
+  isLoadingMoreVerifications,
+  statusFilter,
+  statusFilters,
+  actingVerificationId,
+  confirmingCancelVerificationId,
   actionErrors,
   canSendTestVerification,
   canCancelOrders,
   canRetryVerifications,
   isSendingTest,
-  onOrderFilterChange,
-  onLoadMoreOrders,
+  onStatusFilterChange,
+  onLoadMoreVerifications,
   onRequestCancelOrder,
   onDismissCancelOrder,
   onConfirmCancelOrder,
   onRetryVerification,
   onSendTestVerification,
-}: StandaloneOrdersSectionProps) {
+}: StandaloneVerificationsSectionProps) {
   const t = useTranslations('dashboard')
 
   return (
@@ -67,25 +67,25 @@ export function StandaloneVerificationsSection({
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <h2 className="text-lg font-semibold text-slate-900">
-              {t('orders.title')}
+              {t('verifications.title')}
             </h2>
             <p className="mt-1 text-xs text-slate-500">
-              {t('orders.subtitle', { count: totalOrderCount })}
+              {t('verifications.subtitle', { count: totalCount })}
             </p>
           </div>
           <div
             role="group"
-            aria-label={t('orders.filters.label')}
+            aria-label={t('verifications.filters.label')}
             className="flex flex-wrap gap-1.5"
           >
-            {orderFilters.map((filter) => (
+            {statusFilters.map((filter) => (
               <button
                 key={filter.id}
                 type="button"
-                aria-pressed={orderFilter === filter.id}
-                onClick={() => onOrderFilterChange(filter.id)}
+                aria-pressed={statusFilter === filter.id}
+                onClick={() => onStatusFilterChange(filter.id)}
                 className={`rounded-md border px-3 py-1.5 text-xs font-medium transition-colors ${
-                  orderFilter === filter.id
+                  statusFilter === filter.id
                     ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
                     : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
                 }`}
@@ -105,20 +105,20 @@ export function StandaloneVerificationsSection({
               role="status"
               className="mb-5 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900"
             >
-              {t('orders.readOnlyNotice')}
+              {t('verifications.readOnlyNotice')}
             </div>
           )}
-        {isOrdersLoading ? (
+        {isVerificationsLoading ? (
           <div className="py-8">
-            <LoadingSpinner message={t('orders.loading')} />
+            <LoadingSpinner message={t('verifications.loading')} />
           </div>
-        ) : orders.length ? (
+        ) : verifications.length ? (
           <div className="space-y-4">
             <VerificationsTableStandalone
-              orders={orders}
+              verifications={verifications}
               reportingTimezone={reportingTimezone}
-              actingOrderId={actingOrderId}
-              confirmingCancelOrderId={confirmingCancelOrderId}
+              actingVerificationId={actingVerificationId}
+              confirmingCancelVerificationId={confirmingCancelVerificationId}
               actionErrors={actionErrors}
               canCancelOrders={canCancelOrders}
               canRetryVerifications={canRetryVerifications}
@@ -127,29 +127,29 @@ export function StandaloneVerificationsSection({
               onConfirmCancelOrder={onConfirmCancelOrder}
               onRetryVerification={onRetryVerification}
             />
-            {hasMoreOrders && (
+            {hasMoreVerifications && (
               <div className="flex justify-center pt-2">
                 <button
                   type="button"
-                  disabled={isLoadingMoreOrders}
-                  onClick={() => void onLoadMoreOrders()}
+                  disabled={isLoadingMoreVerifications}
+                  onClick={() => void onLoadMoreVerifications()}
                   className="rounded-lg border border-slate-200 px-5 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-60"
                 >
-                  {isLoadingMoreOrders
-                    ? t('orders.loadingMore')
-                    : t('orders.loadMore')}
+                  {isLoadingMoreVerifications
+                    ? t('verifications.loadingMore')
+                    : t('verifications.loadMore')}
                 </button>
               </div>
             )}
           </div>
-        ) : orderFilter === 'all' ? (
+        ) : statusFilter === 'all' ? (
           <div className="space-y-6 rounded-xl bg-slate-50 p-6">
             <div>
               <h3 className="text-lg font-semibold text-slate-900">
-                {t('orders.empty.title')}
+                {t('verifications.empty.title')}
               </h3>
               <p className="mt-2 max-w-xl text-sm text-slate-500">
-                {t('orders.empty.description')}
+                {t('verifications.empty.description')}
               </p>
             </div>
             {canSendTestVerification && (
@@ -171,7 +171,7 @@ export function StandaloneVerificationsSection({
             )}
           </div>
         ) : (
-          <EmptyState message={t('orders.empty.filtered')} />
+          <EmptyState message={t('verifications.empty.filtered')} />
         )}
       </div>
     </section>

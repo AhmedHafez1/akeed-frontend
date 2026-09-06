@@ -1,20 +1,16 @@
 import type {
-  ManualOrderLifecycleStatus,
+  VerificationRowAction,
+  VerificationRowCapability,
   VerificationStatus,
 } from '../model/dashboard.model'
 
 /**
  * One lifecycle vocabulary for both runtime modes.
  *
- * `ManualOrderLifecycleStatus` is a superset of `VerificationStatus`: the extra
- * members describe an order that has not reached a verification yet, or one held
- * for review. Embedded renders verification statuses and standalone renders the
- * full lifecycle, but both draw from this single table so the same state never
- * gets two different meanings.
- *
  * Tones are semantic, not visual. Each skin maps them onto its own design
  * system — Polaris badges embedded, Tailwind classes standalone — which keeps
- * mode-branching out of the skin JSX.
+ * mode-branching out of the skin JSX while guaranteeing that the same state
+ * never reads as two different things.
  */
 export type LifecycleTone =
   | 'neutral'
@@ -25,9 +21,7 @@ export type LifecycleTone =
   | 'attention'
   | 'critical'
 
-const LIFECYCLE_TONES: Record<ManualOrderLifecycleStatus, LifecycleTone> = {
-  accepted: 'neutral',
-  processing: 'progress',
+const LIFECYCLE_TONES: Record<VerificationStatus, LifecycleTone> = {
   pending: 'neutral',
   sent: 'info',
   delivered: 'info',
@@ -37,21 +31,14 @@ const LIFECYCLE_TONES: Record<ManualOrderLifecycleStatus, LifecycleTone> = {
   failed: 'critical',
   expired: 'warning',
   no_reply: 'attention',
-  blocked: 'attention',
-  ineligible: 'neutral',
-  review_required: 'warning',
 }
 
-export function lifecycleTone(
-  status: ManualOrderLifecycleStatus
-): LifecycleTone {
+export function lifecycleTone(status: VerificationStatus): LifecycleTone {
   return LIFECYCLE_TONES[status] ?? 'neutral'
 }
 
 /** A customer reply is the final word; nothing further will change on its own. */
-export function isTerminalLifecycleStatus(
-  status: ManualOrderLifecycleStatus
-): boolean {
+export function isTerminalLifecycleStatus(status: VerificationStatus): boolean {
   return status === 'confirmed' || status === 'canceled'
 }
 
@@ -61,12 +48,8 @@ export function isTerminalLifecycleStatus(
  * Drives background refresh: a table showing only settled rows has nothing to
  * poll for, while one awaiting a customer reply must repaint when it arrives.
  */
-export function isAwaitingOutcome(
-  status: ManualOrderLifecycleStatus
-): boolean {
+export function isAwaitingOutcome(status: VerificationStatus): boolean {
   return (
-    status === 'accepted' ||
-    status === 'processing' ||
     status === 'pending' ||
     status === 'sent' ||
     status === 'delivered' ||
@@ -74,9 +57,20 @@ export function isAwaitingOutcome(
   )
 }
 
-interface OutcomeCapability {
-  action: string
-  supported: boolean
+/**
+ * Whether the API reported an action as available on this row.
+ *
+ * The server owns the decision — it knows the platform, the source state and
+ * the failure reason — so neither skin re-derives it from the status.
+ */
+export function hasCapability(
+  capabilities: VerificationRowCapability[] | undefined,
+  action: VerificationRowAction
+): boolean {
+  if (capabilities === undefined) return false
+  return capabilities.some(
+    (capability) => capability.action === action && capability.supported
+  )
 }
 
 /**
@@ -84,16 +78,22 @@ interface OutcomeCapability {
  * when the commerce source can actually carry the outcome back.
  */
 export function canMarkOrderCanceled(
-  status: ManualOrderLifecycleStatus,
-  capabilities: OutcomeCapability[] | undefined
+  status: VerificationStatus,
+  capabilities: VerificationRowCapability[] | undefined
 ): boolean {
   if (status !== 'no_reply') return false
+  // A row loaded before capabilities existed is assumed cancellable; the
+  // server rejects it if not, and hiding the only recovery action would be
+  // worse than showing one that may fail.
   if (capabilities === undefined) return true
-  return capabilities.some(
-    (capability) =>
-      capability.action === 'merchant_no_reply_cancellation' &&
-      capability.supported
-  )
+  return hasCapability(capabilities, 'merchant_no_reply_cancellation')
+}
+
+/** Re-sending is offered only for failures the merchant can actually clear. */
+export function canRetryVerification(
+  capabilities: VerificationRowCapability[] | undefined
+): boolean {
+  return hasCapability(capabilities, 'retry_verification')
 }
 
 /** Reason codes the UI has a localized explanation for. */
@@ -109,4 +109,4 @@ export const EXPLAINED_LIFECYCLE_REASONS = new Set([
   'provider_outcome_unknown',
 ])
 
-export type { ManualOrderLifecycleStatus, VerificationStatus }
+export type { VerificationStatus }
