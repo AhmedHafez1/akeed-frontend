@@ -1,6 +1,9 @@
 'use client'
 
+import { useEffect } from 'react'
+
 import { ManualOrderEntryStandalone } from '@/features/orders'
+import { notify } from '@/shared/ui'
 import { StandaloneDashboardHeader } from './components/StandaloneDashboardHeader'
 import { StandaloneFeedbackBanners } from './components/StandaloneFeedbackBanners'
 import { StandaloneStatsSummary } from './components/StandaloneStatsSummary'
@@ -33,6 +36,22 @@ export function DashboardStandaloneSkin({
         ? 'active'
         : 'paused'
 
+  useEffect(() => {
+    if (!testFeedback || testFeedback.tone === 'critical') return
+    const show =
+      testFeedback.tone === 'success' ? notify.success : notify.warning
+    show({ message: testFeedback.message, id: 'dashboard-test-feedback' })
+    onDismissTestFeedback()
+  }, [onDismissTestFeedback, testFeedback])
+
+  useEffect(() => {
+    if (!actionFeedback) return
+    const show =
+      actionFeedback.tone === 'success' ? notify.success : notify.warning
+    show({ message: actionFeedback.message, id: 'dashboard-action-feedback' })
+    onDismissActionFeedback()
+  }, [actionFeedback, onDismissActionFeedback])
+
   return (
     <div className="mx-auto w-full max-w-[1400px] space-y-6 pb-8">
       <StandaloneDashboardHeader
@@ -51,9 +70,9 @@ export function DashboardStandaloneSkin({
 
       <StandaloneFeedbackBanners
         error={verificationsError}
-        testFeedback={testFeedback}
+        testFeedback={testFeedback?.tone === 'critical' ? testFeedback : null}
         onDismissTestFeedback={onDismissTestFeedback}
-        actionFeedback={actionFeedback}
+        actionFeedback={null}
         onDismissActionFeedback={onDismissActionFeedback}
       />
 

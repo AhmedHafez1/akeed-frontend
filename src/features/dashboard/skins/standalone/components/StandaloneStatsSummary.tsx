@@ -7,6 +7,7 @@ import {
   CircleGauge,
   Clock3,
   Package,
+  ReceiptText,
   TriangleAlert,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -128,26 +129,6 @@ function formatOrderDate(
   }).format(date)
 }
 
-function formatUsagePeriod(
-  start: string | null,
-  end: string | null,
-  locale: string,
-  reportingTimezone: string
-): { start: string; end: string } | null {
-  if (!start || !end) return null
-  const startDate = new Date(start)
-  const endDate = new Date(end)
-  if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
-    return null
-  }
-
-  const formatter = new Intl.DateTimeFormat(locale, {
-    dateStyle: 'medium',
-    timeZone: reportingTimezone,
-  })
-  return { start: formatter.format(startDate), end: formatter.format(endDate) }
-}
-
 export function StandaloneStatsSummary({
   stats,
   reportingTimezone,
@@ -204,11 +185,11 @@ export function StandaloneStatsSummary({
       iconClassName: 'border-emerald-100 bg-emerald-50 text-emerald-700',
     },
     {
-      id: 'confirmed',
-      label: t('verifications.metrics.confirmed'),
-      value: formatDashboardNumber(stats.totals.confirmed, locale),
-      icon: CheckCircle2,
-      iconClassName: 'border-emerald-100 bg-emerald-50 text-emerald-700',
+      id: 'rate',
+      label: t('metrics.cards.confirmationRate'),
+      value: formatDashboardPercent(stats.totals.confirmation_rate, locale),
+      icon: CircleGauge,
+      iconClassName: 'border-blue-100 bg-blue-50 text-blue-700',
     },
     {
       id: 'attention',
@@ -218,11 +199,14 @@ export function StandaloneStatsSummary({
       iconClassName: 'border-amber-200 bg-amber-50 text-amber-700',
     },
     {
-      id: 'rate',
-      label: t('metrics.cards.confirmationRate'),
-      value: formatDashboardPercent(stats.totals.confirmation_rate, locale),
-      icon: CircleGauge,
-      iconClassName: 'border-emerald-100 bg-emerald-50 text-emerald-700',
+      id: 'usage',
+      label: t('standalone.usage.title'),
+      value:
+        stats.usage.limit > 0
+          ? `${formatDashboardNumber(stats.usage.used, locale)} / ${formatDashboardNumber(stats.usage.limit, locale)}`
+          : formatDashboardNumber(stats.usage.used, locale),
+      icon: ReceiptText,
+      iconClassName: 'border-slate-200 bg-slate-50 text-slate-700',
     },
   ]
 
@@ -259,9 +243,8 @@ export function StandaloneStatsSummary({
         })}
       </section>
 
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1.55fr)_minmax(280px,0.75fr)]">
+      <div>
         <PerformanceSummary stats={stats} />
-        <UsageSummary stats={stats} reportingTimezone={reportingTimezone} />
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
@@ -359,132 +342,6 @@ function PerformanceSummary({ stats }: { stats: DashboardStats }) {
           </div>
         ))}
       </dl>
-    </DashboardCard>
-  )
-}
-
-function UsageSummary({
-  stats,
-  reportingTimezone,
-}: {
-  stats: DashboardStats
-  reportingTimezone: string
-}) {
-  const t = useTranslations('dashboard')
-  const { locale } = useLocaleInfo()
-  const used = Number.isFinite(stats.usage.used)
-    ? Math.max(0, stats.usage.used)
-    : 0
-  const limit = stats.usage.limit
-  const isUnlimited = Number.isFinite(limit) && limit < 0
-  const hasLimit = Number.isFinite(limit) && limit > 0
-  const usagePercent = hasLimit
-    ? Math.min(100, Math.max(0, Math.round((used / limit) * 100)))
-    : null
-  const remaining = hasLimit ? Math.max(0, limit - used) : null
-  const isExhausted = hasLimit && remaining === 0
-  const usagePeriod = formatUsagePeriod(
-    stats.usage.period_start,
-    stats.usage.period_end,
-    locale,
-    reportingTimezone
-  )
-  const usageColor = isExhausted
-    ? 'bg-red-600'
-    : (usagePercent ?? 0) >= 80
-      ? 'bg-amber-500'
-      : 'bg-emerald-600'
-
-  return (
-    <DashboardCard className="flex flex-col p-5 sm:p-6">
-      <h2 className="text-base font-bold text-slate-950">
-        {t('standalone.usage.title')}
-      </h2>
-      <p className="mt-1 text-sm text-slate-500">
-        {t('standalone.usage.description')}
-      </p>
-
-      <div className="mt-7">
-        <p className="text-3xl font-bold tracking-tight text-slate-950">
-          {formatDashboardNumber(used, locale)}
-          <span className="text-lg font-medium text-slate-400">
-            {hasLimit
-              ? ` / ${formatDashboardNumber(limit, locale)}`
-              : isUnlimited
-                ? ` / ${t('standalone.usage.unlimited')}`
-                : ''}
-          </span>
-        </p>
-        <p className="mt-1 text-xs font-medium text-slate-500">
-          {t('standalone.usage.usedLabel')}
-        </p>
-      </div>
-
-      {hasLimit && usagePercent !== null ? (
-        <>
-          <div
-            className="mt-5 h-2.5 overflow-hidden rounded-full bg-stone-100"
-            role="progressbar"
-            aria-label={t('standalone.usage.percentUsed', {
-              value: usagePercent,
-            })}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-valuenow={usagePercent}
-          >
-            <div
-              className={cn(
-                'h-full rounded-full transition-[width] duration-500',
-                usageColor
-              )}
-              style={{ width: `${usagePercent}%` }}
-            />
-          </div>
-          <div className="mt-3 flex flex-wrap justify-between gap-2 text-sm">
-            <span
-              className={cn(
-                'font-semibold',
-                isExhausted ? 'text-red-700' : 'text-slate-700'
-              )}
-            >
-              {t('standalone.usage.percentUsed', { value: usagePercent })}
-            </span>
-            <span className="text-slate-500">
-              {t(
-                isExhausted
-                  ? 'standalone.usage.exhausted'
-                  : 'standalone.usage.remaining',
-                { value: formatDashboardNumber(remaining ?? 0, locale) }
-              )}
-            </span>
-          </div>
-        </>
-      ) : (
-        <p className="mt-5 rounded-xl bg-stone-50 p-3 text-sm text-slate-600">
-          {t(
-            isUnlimited
-              ? 'standalone.usage.unlimitedDescription'
-              : 'standalone.usage.unavailable'
-          )}
-        </p>
-      )}
-
-      {usagePeriod ? (
-        <p className="mt-4 text-xs text-slate-500">
-          {t('metrics.usage.period', {
-            start: usagePeriod.start,
-            end: usagePeriod.end,
-          })}
-        </p>
-      ) : null}
-
-      <Link
-        href={`${withLocale('/settings', locale)}#subscription-usage`}
-        className="mt-auto inline-flex w-fit items-center gap-2 rounded-lg pt-5 text-sm font-semibold text-emerald-800 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none"
-      >
-        {t('standalone.usage.manage')}
-        <ArrowRight aria-hidden="true" className="h-4 w-4 rtl:rotate-180" />
-      </Link>
     </DashboardCard>
   )
 }

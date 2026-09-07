@@ -699,7 +699,7 @@
       "eyebrow": "Overview",
       "greeting": "Welcome back, {name}",
       "greetingLoading": "Loading dashboard greeting",
-      "description": "A clear summary of your COD confirmation performance, usage, and orders that need action.",
+      "description": "Confirmation performance and orders that need your attention.",
       "kpisLabel": "Primary dashboard metrics",
       "status": {
         "active": {

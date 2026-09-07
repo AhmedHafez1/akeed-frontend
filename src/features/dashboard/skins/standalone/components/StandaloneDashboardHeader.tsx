@@ -29,10 +29,7 @@ export function StandaloneDashboardHeader({
   return (
     <header className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
       <div className="min-w-0 space-y-1.5">
-        <p className="text-xs font-bold tracking-[0.12em] text-emerald-700 uppercase">
-          {t('standalone.eyebrow')}
-        </p>
-        <h1 className="text-3xl leading-tight font-bold tracking-tight text-slate-950 lg:text-4xl">
+        <h1 className="text-3xl leading-tight font-bold tracking-tight text-slate-950">
           {isIdentityLoading ? (
             <span
               aria-label={t('standalone.greetingLoading')}
