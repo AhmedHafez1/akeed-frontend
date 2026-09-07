@@ -4,7 +4,6 @@ import { useState } from 'react'
 import type { ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { Toaster } from 'react-hot-toast'
 import { isAuthRoute, isPublicRoute } from '@/shared/lib/locale'
 import { WhatsAppButton } from '@/shared/ui/WhatsAppButton'
 import {
@@ -12,6 +11,7 @@ import {
   DialogContent,
   DialogDescription,
   DialogTitle,
+  StandaloneToaster,
 } from '@/shared/ui'
 import { Footer } from './Footer'
 import { Header } from './Header'
@@ -57,16 +57,7 @@ export function StandaloneLayout({ children }: StandaloneLayoutProps) {
         <main className="flex-1">{children}</main>
         <Footer />
         {isLandingPage && <WhatsAppButton offsetForMobileCta />}
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 4000,
-            style: {
-              background: '#333',
-              color: '#fff',
-            },
-          }}
-        />
+        <StandaloneToaster />
       </div>
     )
   }
@@ -87,16 +78,7 @@ export function StandaloneLayout({ children }: StandaloneLayoutProps) {
             />
             <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
             <WhatsAppButton />
-            <Toaster
-              position="top-right"
-              toastOptions={{
-                duration: 4000,
-                style: {
-                  background: '#1e293b',
-                  color: '#fff',
-                },
-              }}
-            />
+            <StandaloneToaster />
           </div>
 
           <Dialog open={isNavigationOpen} onOpenChange={setIsNavigationOpen}>

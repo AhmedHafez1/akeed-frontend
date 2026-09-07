@@ -9,6 +9,8 @@ export * from './separator'
 export * from './skeleton'
 export * from './dialog'
 export * from './accordion'
+export * from './tooltip'
+export * from './notifications'
 
 // Custom components
 export * from './loading-button'
