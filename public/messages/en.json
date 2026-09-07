@@ -912,6 +912,7 @@
         "orderCustomer": "Order & customer"
       },
       "orderFallbackPrefix": "Order",
+      "technicalId": "Technical order ID",
       "testBadge": "Test",
       "unknownCustomer": "Unknown customer",
       "noPhone": "No phone",
@@ -922,6 +923,8 @@
         "notSent": "--"
       },
       "actions": {
+        "details": "View details",
+        "viewDetails": "View details for {order}",
         "cancelOrder": "Cancel order",
         "confirmCancelOrder": "Yes, cancel",
         "keepOrder": "Keep order",

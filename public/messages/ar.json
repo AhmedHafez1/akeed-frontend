@@ -898,6 +898,7 @@
         "orderCustomer": "الطلب والعميل"
       },
       "orderFallbackPrefix": "طلب",
+      "technicalId": "معرّف الطلب التقني",
       "testBadge": "اختبار",
       "unknownCustomer": "عميل غير معروف",
       "noPhone": "لا يوجد رقم",
@@ -908,6 +909,8 @@
         "notSent": "--"
       },
       "actions": {
+        "details": "عرض التفاصيل",
+        "viewDetails": "عرض تفاصيل {order}",
         "cancelOrder": "إلغاء الطلب",
         "confirmCancelOrder": "نعم، ألغِ الطلب",
         "keepOrder": "إبقاء الطلب",
