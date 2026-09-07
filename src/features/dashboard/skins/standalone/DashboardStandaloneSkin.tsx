@@ -7,14 +7,12 @@ import { notify } from '@/shared/ui'
 import { StandaloneDashboardHeader } from './components/StandaloneDashboardHeader'
 import { StandaloneFeedbackBanners } from './components/StandaloneFeedbackBanners'
 import { StandaloneStatsSummary } from './components/StandaloneStatsSummary'
-import { StandaloneStatusPanel } from './components/StandaloneStatusPanel'
 import type { DashboardSkinProps } from '../../domain/dashboard.types'
 
 export function DashboardStandaloneSkin({
   stats,
   reportingTimezone,
   isStatsLoading,
-  isAutoVerifyEnabled,
   dateRangeFilter,
   dateRangeOptions,
   onDateRangeFilterChange,
@@ -29,13 +27,6 @@ export function DashboardStandaloneSkin({
   isVerificationsLoading,
   error: verificationsError,
 }: DashboardSkinProps) {
-  const verificationState =
-    sourceStatus !== 'connected'
-      ? 'disconnected'
-      : isAutoVerifyEnabled
-        ? 'active'
-        : 'paused'
-
   useEffect(() => {
     if (!testFeedback || testFeedback.tone === 'critical') return
     const show =
@@ -75,8 +66,6 @@ export function DashboardStandaloneSkin({
         actionFeedback={null}
         onDismissActionFeedback={onDismissActionFeedback}
       />
-
-      <StandaloneStatusPanel state={verificationState} />
 
       <StandaloneStatsSummary
         stats={stats}
