@@ -699,7 +699,7 @@
       "eyebrow": "Overview",
       "greeting": "Welcome back, {name}",
       "greetingLoading": "Loading dashboard greeting",
-      "description": "Confirmation performance and orders that need your attention.",
+      "description": "Order health, message delivery, and work that needs your attention.",
       "kpisLabel": "Primary dashboard metrics",
       "status": {
         "active": {
@@ -717,10 +717,9 @@
         "action": "Review automation"
       },
       "performance": {
-        "title": "Confirmation performance",
+        "title": "Message delivery",
         "period": "Available totals for {period}",
-        "confirmationRate": "Confirmation rate",
-        "description": "Based on confirmed outcomes and messages sent during the selected period."
+        "description": "Track the delivery path from sent messages to customer reads."
       },
       "usage": {
         "title": "Usage this month",
@@ -1076,7 +1075,11 @@
         "description": "Manage your order source and store defaults.",
         "sourceDescription": "The connected source Akeed uses to receive orders.",
         "storeDescription": "These details are used when Akeed contacts your customers.",
-        "codRiskHelp": "Orders with missing payment information will enter the COD confirmation flow. Enable this only when that matches how your source sends COD orders."
+        "codRiskHelp": "Orders with missing payment information will enter the COD confirmation flow. Enable this only when that matches how your source sends COD orders.",
+        "connectionDetails": "Connection details",
+        "copy": "Copy ID",
+        "copySuccess": "Connection ID copied",
+        "copyError": "Could not copy the connection ID"
       },
       "automation": {
         "trustTitle": "Official WhatsApp delivery",
@@ -1085,6 +1088,7 @@
         "firstDelayLabel": "First-message delay",
         "followUpTitle": "Follow-up message",
         "reviewTitle": "No-reply review",
+        "advancedScheduling": "Advanced scheduling",
         "quietHoursTitle": "Quiet hours",
         "quietHoursResume": "Messages scheduled during quiet hours resume after {time}. Overnight ranges are supported.",
         "timeline": {

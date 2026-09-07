@@ -4,7 +4,6 @@ import Link from 'next/link'
 import {
   ArrowRight,
   CheckCircle2,
-  CircleGauge,
   Clock3,
   Package,
   ReceiptText,
@@ -19,10 +18,7 @@ import { lifecycleTone } from '@/features/dashboard/domain/verificationLifecycle
 import { isAttentionVerification } from '@/features/dashboard/domain/verificationWorkload'
 import { getStatusTimestamp } from '@/features/dashboard/domain/verificationRow'
 import { lifecycleToneClasses } from '../lifecycleToneClasses'
-import {
-  formatDashboardNumber,
-  formatDashboardPercent,
-} from '@/features/dashboard/lib/dashboardFormatters'
+import { formatDashboardNumber } from '@/features/dashboard/lib/dashboardFormatters'
 import type {
   DashboardStats,
   VerificationItem,
@@ -185,11 +181,11 @@ export function StandaloneStatsSummary({
       iconClassName: 'border-emerald-100 bg-emerald-50 text-emerald-700',
     },
     {
-      id: 'rate',
-      label: t('metrics.cards.confirmationRate'),
-      value: formatDashboardPercent(stats.totals.confirmation_rate, locale),
-      icon: CircleGauge,
-      iconClassName: 'border-blue-100 bg-blue-50 text-blue-700',
+      id: 'confirmed',
+      label: t('verifications.metrics.confirmed'),
+      value: formatDashboardNumber(stats.totals.confirmed, locale),
+      icon: CheckCircle2,
+      iconClassName: 'border-emerald-100 bg-emerald-50 text-emerald-700',
     },
     {
       id: 'attention',
@@ -263,10 +259,6 @@ export function StandaloneStatsSummary({
 function PerformanceSummary({ stats }: { stats: DashboardStats }) {
   const t = useTranslations('dashboard')
   const { locale } = useLocaleInfo()
-  const confirmationRate = Math.min(
-    100,
-    Math.max(0, stats.totals.confirmation_rate)
-  )
   const periodLabel = t(`filters.dateRange.${stats.date_range}`)
   const detailMetrics = [
     {
@@ -302,35 +294,11 @@ function PerformanceSummary({ stats }: { stats: DashboardStats }) {
         </span>
       </div>
 
-      <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="text-sm font-medium text-slate-600">
-            {t('standalone.performance.confirmationRate')}
-          </p>
-          <p className="mt-1 text-4xl font-bold tracking-tight text-emerald-700">
-            {formatDashboardPercent(confirmationRate, locale)}
-          </p>
-        </div>
-        <p className="max-w-sm text-sm leading-6 text-slate-500">
-          {t('standalone.performance.description')}
-        </p>
-      </div>
+      <p className="mt-5 max-w-2xl text-sm leading-6 text-slate-500">
+        {t('standalone.performance.description')}
+      </p>
 
-      <div
-        className="mt-5 h-2.5 overflow-hidden rounded-full bg-stone-100"
-        role="progressbar"
-        aria-label={t('standalone.performance.confirmationRate')}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-valuenow={confirmationRate}
-      >
-        <div
-          className="h-full rounded-full bg-emerald-600 transition-[width] duration-500"
-          style={{ width: `${confirmationRate}%` }}
-        />
-      </div>
-
-      <dl className="mt-6 grid grid-cols-3 gap-2 sm:gap-3">
+      <dl className="mt-5 grid grid-cols-3 gap-2 sm:gap-3">
         {detailMetrics.map((metric) => (
           <div key={metric.id} className="rounded-xl bg-stone-50 p-3 sm:p-4">
             <dt className="text-xs font-medium text-slate-500">

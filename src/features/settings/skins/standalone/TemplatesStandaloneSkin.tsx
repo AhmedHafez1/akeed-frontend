@@ -441,60 +441,60 @@ export function TemplatesStandaloneSkin({
               {t('detailsTitle')}
             </summary>
             <div className="px-4 pb-4 sm:px-5 sm:pb-5">
-            <dl className="mt-4 overflow-hidden rounded-xl border border-stone-200">
-              <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] items-center gap-3 border-b border-stone-200 px-4 py-3 text-sm">
-                <dt className="flex items-center gap-2 text-slate-600">
-                  <MessageCircle
-                    aria-hidden="true"
-                    className="h-4 w-4 text-emerald-700"
-                  />
-                  {t('channelLabel')}
-                </dt>
-                <dd className="font-medium text-slate-950">
-                  {t('whatsappLabel')}
-                </dd>
+              <dl className="mt-4 overflow-hidden rounded-xl border border-stone-200">
+                <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] items-center gap-3 border-b border-stone-200 px-4 py-3 text-sm">
+                  <dt className="flex items-center gap-2 text-slate-600">
+                    <MessageCircle
+                      aria-hidden="true"
+                      className="h-4 w-4 text-emerald-700"
+                    />
+                    {t('channelLabel')}
+                  </dt>
+                  <dd className="font-medium text-slate-950">
+                    {t('whatsappLabel')}
+                  </dd>
+                </div>
+                <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] items-center gap-3 border-b border-stone-200 px-4 py-3 text-sm">
+                  <dt className="flex items-center gap-2 text-slate-600">
+                    <Target
+                      aria-hidden="true"
+                      className="h-4 w-4 text-emerald-700"
+                    />
+                    {t('purposeLabel')}
+                  </dt>
+                  <dd className="font-medium text-slate-950">
+                    {t('purposeValue')}
+                  </dd>
+                </div>
+                <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] items-start gap-3 px-4 py-3 text-sm">
+                  <dt className="flex items-center gap-2 text-slate-600">
+                    <Braces
+                      aria-hidden="true"
+                      className="h-4 w-4 text-emerald-700"
+                    />
+                    {t('variablesTitle')}
+                  </dt>
+                  <dd className="flex flex-wrap gap-1.5 font-medium text-slate-950">
+                    {variableKeys.length > 0
+                      ? variableKeys.map((variable) => (
+                          <span
+                            key={variable}
+                            className="rounded-md bg-stone-100 px-2 py-1 text-xs"
+                          >
+                            {t(`variableLabels.${variable}`)}
+                          </span>
+                        ))
+                      : t('variablesUnavailable')}
+                  </dd>
+                </div>
+              </dl>
+              <div className="mt-3 flex gap-3 rounded-xl bg-emerald-50 px-4 py-3 text-sm leading-5 text-emerald-900">
+                <Info
+                  aria-hidden="true"
+                  className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700"
+                />
+                <p>{t('approvalDescription')}</p>
               </div>
-              <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] items-center gap-3 border-b border-stone-200 px-4 py-3 text-sm">
-                <dt className="flex items-center gap-2 text-slate-600">
-                  <Target
-                    aria-hidden="true"
-                    className="h-4 w-4 text-emerald-700"
-                  />
-                  {t('purposeLabel')}
-                </dt>
-                <dd className="font-medium text-slate-950">
-                  {t('purposeValue')}
-                </dd>
-              </div>
-              <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] items-start gap-3 px-4 py-3 text-sm">
-                <dt className="flex items-center gap-2 text-slate-600">
-                  <Braces
-                    aria-hidden="true"
-                    className="h-4 w-4 text-emerald-700"
-                  />
-                  {t('variablesTitle')}
-                </dt>
-                <dd className="flex flex-wrap gap-1.5 font-medium text-slate-950">
-                  {variableKeys.length > 0
-                    ? variableKeys.map((variable) => (
-                        <span
-                          key={variable}
-                          className="rounded-md bg-stone-100 px-2 py-1 text-xs"
-                        >
-                          {t(`variableLabels.${variable}`)}
-                        </span>
-                      ))
-                    : t('variablesUnavailable')}
-                </dd>
-              </div>
-            </dl>
-            <div className="mt-3 flex gap-3 rounded-xl bg-emerald-50 px-4 py-3 text-sm leading-5 text-emerald-900">
-              <Info
-                aria-hidden="true"
-                className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700"
-              />
-              <p>{t('approvalDescription')}</p>
-            </div>
             </div>
           </details>
 
@@ -614,7 +614,9 @@ export function TemplatesStandaloneSkin({
         >
           <DialogHeader>
             <DialogTitle>{t('customerPreviewTitle')}</DialogTitle>
-            <DialogDescription>{languageLabel(previewLanguage)}</DialogDescription>
+            <DialogDescription>
+              {languageLabel(previewLanguage)}
+            </DialogDescription>
           </DialogHeader>
           <TemplatePreview
             language={previewLanguage}

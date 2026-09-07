@@ -50,9 +50,7 @@ const ATTENTION_STATUSES: ReadonlySet<VerificationStatus> = new Set([
   'no_reply',
 ])
 
-export function isAttentionVerification(
-  status: VerificationStatus
-): boolean {
+export function isAttentionVerification(status: VerificationStatus): boolean {
   return ATTENTION_STATUSES.has(status)
 }
 

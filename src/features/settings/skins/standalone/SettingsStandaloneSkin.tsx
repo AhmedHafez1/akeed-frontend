@@ -1,11 +1,10 @@
 'use client'
 
-import { useId, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import {
   AlertCircle,
-  CheckCircle2,
   ChevronDown,
   CircleDollarSign,
   Clock3,
@@ -21,7 +20,7 @@ import type {
   OnboardingBillingPlanId,
 } from '@/features/onboarding'
 import type { SettingsSkinProps } from '@/features/settings/domain/settings.types'
-import { Button, Card, Input, Label } from '@/shared/ui'
+import { Button, Card, Input, Label, notify } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 import { TemplatesStandaloneSkin } from './TemplatesStandaloneSkin'
 
@@ -406,16 +405,7 @@ function SaveStatus({ props }: { props: SettingsSkinProps }) {
     )
   }
 
-  return (
-    <span
-      role="status"
-      aria-live="polite"
-      className="inline-flex items-center gap-2 text-sm font-medium text-emerald-700"
-    >
-      <CheckCircle2 className="h-4 w-4" />
-      {props.successBanner ? t('saveState.saved') : t('saveState.allSaved')}
-    </span>
-  )
+  return null
 }
 
 function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
@@ -436,10 +426,34 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
     props.selectedPlanId !== props.billingPlanId
   const fieldsDisabled = !props.canUpdateConfiguration || props.isSaving
 
+  useEffect(() => {
+    if (props.successBanner && !props.isDirty) {
+      notify.success({
+        id: 'settings-save-success',
+        message: props.successBanner,
+      })
+    }
+  }, [props.isDirty, props.successBanner])
+
   const navigateToSection = (section: SettingsSection) => {
     const nextParams = new URLSearchParams(searchParams.toString())
     nextParams.set(SETTINGS_SECTION_QUERY_KEY, section)
     router.push(`${pathname}?${nextParams.toString()}`, { scroll: false })
+  }
+
+  const copySourceIdentity = async () => {
+    try {
+      await navigator.clipboard.writeText(props.sourceIdentity)
+      notify.success({
+        id: 'settings-source-copied',
+        message: standaloneT('general.copySuccess'),
+      })
+    } catch {
+      notify.error({
+        id: 'settings-source-copy-error',
+        message: standaloneT('general.copyError'),
+      })
+    }
   }
 
   const navigationItems = [
@@ -518,37 +532,35 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
         </div>
       )}
 
-      <div className="grid items-start gap-6 md:grid-cols-[220px_minmax(0,1fr)] lg:gap-8">
-        <aside className="min-w-0 md:sticky md:top-24">
-          <nav
-            aria-label={standaloneT('nav.label')}
-            className="overflow-x-auto rounded-xl border border-slate-200 bg-white p-2 md:overflow-visible md:p-3"
-          >
-            <div className="flex min-w-max gap-1 md:min-w-0 md:flex-col">
-              {navigationItems.map((item) => {
-                const Icon = item.icon
-                const isSelected = selectedSection === item.id
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    aria-current={isSelected ? 'page' : undefined}
-                    onClick={() => navigateToSection(item.id)}
-                    className={cn(
-                      'flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm font-medium whitespace-nowrap transition focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none md:w-full',
-                      isSelected
-                        ? 'bg-emerald-50 text-emerald-800'
-                        : 'text-slate-600 hover:bg-slate-50 hover:text-slate-950'
-                    )}
-                  >
-                    <Icon className="h-5 w-5" aria-hidden="true" />
-                    {item.label}
-                  </button>
-                )
-              })}
-            </div>
-          </nav>
-        </aside>
+      <div className="space-y-6">
+        <nav
+          aria-label={standaloneT('nav.label')}
+          className="overflow-x-auto border-b border-slate-200"
+        >
+          <div className="flex min-w-max gap-6">
+            {navigationItems.map((item) => {
+              const Icon = item.icon
+              const isSelected = selectedSection === item.id
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  aria-current={isSelected ? 'page' : undefined}
+                  onClick={() => navigateToSection(item.id)}
+                  className={cn(
+                    'flex min-h-12 items-center gap-2 border-b-2 px-1 text-sm font-medium whitespace-nowrap transition focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none',
+                    isSelected
+                      ? 'border-emerald-600 text-emerald-800'
+                      : 'border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-950'
+                  )}
+                >
+                  <Icon className="h-5 w-5" aria-hidden="true" />
+                  {item.label}
+                </button>
+              )
+            })}
+          </div>
+        </nav>
 
         <main id={`settings-panel-${selectedSection}`} className="min-w-0">
           {selectedSection === 'general' && (
@@ -566,19 +578,34 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                 title={t('sourceHeading')}
                 description={standaloneT('general.sourceDescription')}
               >
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="inline-flex items-center gap-2 text-sm font-medium text-emerald-800">
+                <div className="space-y-4">
+                  <div className="inline-flex items-center gap-2 text-sm font-medium text-slate-800">
                     <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
                     {props.sourcePlatformType === 'standalone'
                       ? t('sourceStandalone')
                       : props.sourcePlatformType}
                   </div>
-                  <code
-                    dir="ltr"
-                    className="max-w-full rounded-lg bg-slate-50 px-3 py-2 text-xs break-all text-slate-600"
-                  >
-                    {props.sourceIdentity}
-                  </code>
+                  <details className="rounded-lg border border-slate-200 bg-slate-50/70">
+                    <summary className="cursor-pointer px-3 py-2.5 text-sm font-medium text-slate-700 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none">
+                      {standaloneT('general.connectionDetails')}
+                    </summary>
+                    <div className="flex flex-col gap-3 border-t border-slate-200 p-3 sm:flex-row sm:items-center">
+                      <code
+                        dir="ltr"
+                        className="min-w-0 flex-1 text-xs break-all text-slate-600"
+                      >
+                        {props.sourceIdentity}
+                      </code>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => void copySourceIdentity()}
+                      >
+                        {standaloneT('general.copy')}
+                      </Button>
+                    </div>
+                  </details>
                 </div>
               </SettingsCard>
 
@@ -619,10 +646,12 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                 switchDisabled={fieldsDisabled}
                 onCheckedChange={props.onAssumeCodWhenPaymentMissingChange}
               >
-                <div className="flex gap-3 rounded-lg bg-amber-50 p-3 text-sm leading-6 text-amber-900">
-                  <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-                  <p>{standaloneT('general.codRiskHelp')}</p>
-                </div>
+                {props.assumeCodWhenPaymentMissing && (
+                  <div className="flex gap-3 rounded-lg bg-amber-50 p-3 text-sm leading-6 text-amber-900">
+                    <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                    <p>{standaloneT('general.codRiskHelp')}</p>
+                  </div>
+                )}
               </SettingsCard>
             </section>
           )}
@@ -638,8 +667,8 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                 </p>
               </div>
 
-              <div className="flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50/70 px-4 py-3">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-white">
+              <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
                   <ShieldCheck className="h-5 w-5" />
                 </span>
                 <div>
@@ -660,18 +689,20 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                 switchDisabled={fieldsDisabled}
                 onCheckedChange={props.onAutoVerifyChange}
               >
-                <Field label={standaloneT('automation.firstDelayLabel')}>
-                  <DelayPicker
-                    value={props.sendDelayMinutes}
-                    presets={firstDelayPresets}
-                    customLabel={standaloneT('delay.custom')}
-                    inputLabel={t('automation.sendDelayMinutesLabel')}
-                    error={props.sendDelayMinutesError}
-                    disabled={fieldsDisabled || !props.isAutoVerifyEnabled}
-                    max={24}
-                    onChange={props.onSendDelayMinutesChange}
-                  />
-                </Field>
+                {props.isAutoVerifyEnabled && (
+                  <Field label={standaloneT('automation.firstDelayLabel')}>
+                    <DelayPicker
+                      value={props.sendDelayMinutes}
+                      presets={firstDelayPresets}
+                      customLabel={standaloneT('delay.custom')}
+                      inputLabel={t('automation.sendDelayMinutesLabel')}
+                      error={props.sendDelayMinutesError}
+                      disabled={fieldsDisabled || !props.isAutoVerifyEnabled}
+                      max={24}
+                      onChange={props.onSendDelayMinutesChange}
+                    />
+                  </Field>
+                )}
               </SettingsCard>
 
               <SettingsCard
@@ -682,48 +713,50 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                 switchDisabled={fieldsDisabled}
                 onCheckedChange={props.onFollowUpEnabledChange}
               >
-                <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px] xl:items-end">
-                  <div className="rounded-xl bg-slate-50 px-4 py-5">
-                    <div className="relative grid grid-cols-3 text-center">
-                      <span className="absolute top-2.5 right-[16.66%] left-[16.66%] h-px bg-slate-300" />
-                      {[
-                        standaloneT('automation.timeline.received'),
-                        standaloneT('automation.timeline.first', {
-                          delay: formatDelay(props.sendDelayMinutes),
-                        }),
-                        standaloneT('automation.timeline.followUp', {
-                          delay: formatDelay(props.followUpDelayMinutes),
-                        }),
-                      ].map((label, index) => (
-                        <div key={label} className="relative space-y-2 px-1">
-                          <span
-                            className={cn(
-                              'mx-auto block h-5 w-5 rounded-full border-4 border-slate-50',
-                              index === 2 && !props.followUpEnabled
-                                ? 'bg-slate-300'
-                                : 'bg-emerald-500'
-                            )}
-                          />
-                          <p className="text-xs leading-5 text-slate-600">
-                            {label}
-                          </p>
-                        </div>
-                      ))}
+                {props.followUpEnabled && (
+                  <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px] xl:items-end">
+                    <div className="rounded-xl bg-slate-50 px-4 py-5">
+                      <div className="relative grid grid-cols-3 text-center">
+                        <span className="absolute top-2.5 right-[16.66%] left-[16.66%] h-px bg-slate-300" />
+                        {[
+                          standaloneT('automation.timeline.received'),
+                          standaloneT('automation.timeline.first', {
+                            delay: formatDelay(props.sendDelayMinutes),
+                          }),
+                          standaloneT('automation.timeline.followUp', {
+                            delay: formatDelay(props.followUpDelayMinutes),
+                          }),
+                        ].map((label, index) => (
+                          <div key={label} className="relative space-y-2 px-1">
+                            <span
+                              className={cn(
+                                'mx-auto block h-5 w-5 rounded-full border-4 border-slate-50',
+                                index === 2 && !props.followUpEnabled
+                                  ? 'bg-slate-300'
+                                  : 'bg-emerald-500'
+                              )}
+                            />
+                            <p className="text-xs leading-5 text-slate-600">
+                              {label}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
                     </div>
+                    <Field label={t('automation.followUpDelayMinutesLabel')}>
+                      <DelayPicker
+                        value={props.followUpDelayMinutes}
+                        presets={followUpDelayPresets}
+                        customLabel={standaloneT('delay.custom')}
+                        inputLabel={t('automation.followUpDelayMinutesLabel')}
+                        error={props.followUpDelayMinutesError}
+                        disabled={fieldsDisabled || !props.followUpEnabled}
+                        max={168}
+                        onChange={props.onFollowUpDelayMinutesChange}
+                      />
+                    </Field>
                   </div>
-                  <Field label={t('automation.followUpDelayMinutesLabel')}>
-                    <DelayPicker
-                      value={props.followUpDelayMinutes}
-                      presets={followUpDelayPresets}
-                      customLabel={standaloneT('delay.custom')}
-                      inputLabel={t('automation.followUpDelayMinutesLabel')}
-                      error={props.followUpDelayMinutesError}
-                      disabled={fieldsDisabled || !props.followUpEnabled}
-                      max={168}
-                      onChange={props.onFollowUpDelayMinutesChange}
-                    />
-                  </Field>
-                </div>
+                )}
               </SettingsCard>
 
               <SettingsCard
@@ -734,78 +767,97 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                 switchDisabled={fieldsDisabled}
                 onCheckedChange={props.onEscalationEnabledChange}
               >
-                <div className="space-y-4">
-                  <Field label={t('automation.escalationDelayMinutesLabel')}>
-                    <DelayPicker
-                      value={props.escalationDelayMinutes}
-                      presets={escalationDelayPresets}
-                      customLabel={standaloneT('delay.custom')}
-                      inputLabel={t('automation.escalationDelayMinutesLabel')}
-                      error={props.escalationDelayMinutesError}
-                      disabled={fieldsDisabled || !props.escalationEnabled}
-                      max={168}
-                      onChange={props.onEscalationDelayMinutesChange}
-                    />
-                  </Field>
-                  <div className="flex gap-2 text-sm leading-6 text-slate-600">
-                    <Info className="mt-1 h-4 w-4 shrink-0 text-emerald-700" />
-                    <p>{props.escalationReviewDescription}</p>
+                {props.escalationEnabled && (
+                  <div className="space-y-4">
+                    <Field label={t('automation.escalationDelayMinutesLabel')}>
+                      <DelayPicker
+                        value={props.escalationDelayMinutes}
+                        presets={escalationDelayPresets}
+                        customLabel={standaloneT('delay.custom')}
+                        inputLabel={t('automation.escalationDelayMinutesLabel')}
+                        error={props.escalationDelayMinutesError}
+                        disabled={fieldsDisabled || !props.escalationEnabled}
+                        max={168}
+                        onChange={props.onEscalationDelayMinutesChange}
+                      />
+                    </Field>
+                    <div className="flex gap-2 text-sm leading-6 text-slate-600">
+                      <Info className="mt-1 h-4 w-4 shrink-0 text-emerald-700" />
+                      <p>{props.escalationReviewDescription}</p>
+                    </div>
                   </div>
-                </div>
+                )}
               </SettingsCard>
 
-              <SettingsCard
-                title={standaloneT('automation.quietHoursTitle')}
-                description={t('automation.quietHoursEnabledHelp')}
-                checked={props.quietHoursEnabled}
-                switchLabel={t('automation.quietHoursEnabledLabel')}
-                switchDisabled={fieldsDisabled}
-                onCheckedChange={props.onQuietHoursEnabledChange}
-              >
-                <div className="space-y-4">
-                  <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1.5fr]">
-                    <Field
-                      label={t('automation.quietHoursStartLabel')}
-                      error={props.quietHoursError}
-                    >
-                      <Input
-                        type="time"
-                        disabled={fieldsDisabled || !props.quietHoursEnabled}
-                        value={props.quietHoursStart}
-                        onChange={(event) =>
-                          props.onQuietHoursStartChange(event.target.value)
-                        }
-                      />
-                    </Field>
-                    <Field label={t('automation.quietHoursEndLabel')}>
-                      <Input
-                        type="time"
-                        disabled={fieldsDisabled || !props.quietHoursEnabled}
-                        value={props.quietHoursEnd}
-                        onChange={(event) =>
-                          props.onQuietHoursEndChange(event.target.value)
-                        }
-                      />
-                    </Field>
-                    <Field label={t('automation.timezoneLabel')}>
-                      <NativeSelect<AutomationTimezone>
-                        value={props.timezone}
-                        options={props.timezoneOptions}
-                        disabled={fieldsDisabled || !props.quietHoursEnabled}
-                        onChange={props.onTimezoneChange}
-                      />
-                    </Field>
-                  </div>
-                  <div className="flex gap-2 text-sm leading-6 text-slate-600">
-                    <Info className="mt-1 h-4 w-4 shrink-0" />
-                    <p>
-                      {standaloneT('automation.quietHoursResume', {
-                        time: props.quietHoursEnd,
-                      })}
-                    </p>
-                  </div>
+              <details className="rounded-xl border border-slate-200 bg-slate-50/60 p-3">
+                <summary className="cursor-pointer px-2 py-1 text-sm font-semibold text-slate-700 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none">
+                  {standaloneT('automation.advancedScheduling')}
+                </summary>
+                <div className="mt-3">
+                  <SettingsCard
+                    title={standaloneT('automation.quietHoursTitle')}
+                    description={t('automation.quietHoursEnabledHelp')}
+                    checked={props.quietHoursEnabled}
+                    switchLabel={t('automation.quietHoursEnabledLabel')}
+                    switchDisabled={fieldsDisabled}
+                    onCheckedChange={props.onQuietHoursEnabledChange}
+                  >
+                    {props.quietHoursEnabled && (
+                      <div className="space-y-4">
+                        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1.5fr]">
+                          <Field
+                            label={t('automation.quietHoursStartLabel')}
+                            error={props.quietHoursError}
+                          >
+                            <Input
+                              type="time"
+                              disabled={
+                                fieldsDisabled || !props.quietHoursEnabled
+                              }
+                              value={props.quietHoursStart}
+                              onChange={(event) =>
+                                props.onQuietHoursStartChange(
+                                  event.target.value
+                                )
+                              }
+                            />
+                          </Field>
+                          <Field label={t('automation.quietHoursEndLabel')}>
+                            <Input
+                              type="time"
+                              disabled={
+                                fieldsDisabled || !props.quietHoursEnabled
+                              }
+                              value={props.quietHoursEnd}
+                              onChange={(event) =>
+                                props.onQuietHoursEndChange(event.target.value)
+                              }
+                            />
+                          </Field>
+                          <Field label={t('automation.timezoneLabel')}>
+                            <NativeSelect<AutomationTimezone>
+                              value={props.timezone}
+                              options={props.timezoneOptions}
+                              disabled={
+                                fieldsDisabled || !props.quietHoursEnabled
+                              }
+                              onChange={props.onTimezoneChange}
+                            />
+                          </Field>
+                        </div>
+                        <div className="flex gap-2 text-sm leading-6 text-slate-600">
+                          <Info className="mt-1 h-4 w-4 shrink-0" />
+                          <p>
+                            {standaloneT('automation.quietHoursResume', {
+                              time: props.quietHoursEnd,
+                            })}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </SettingsCard>
                 </div>
-              </SettingsCard>
+              </details>
             </section>
           )}
 
@@ -829,7 +881,7 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                 description={props.billingStatusLabel}
               >
                 <div id={SUBSCRIPTION_SECTION_ID} className="space-y-5">
-                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex flex-col gap-2">
                     <p className="text-sm text-slate-700">
                       {props.activePlanName
                         ? t('subscriptionCurrentPlan', {
@@ -837,10 +889,6 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                           })
                         : t('subscriptionNoPlan')}
                     </p>
-                    <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
-                      <CircleDollarSign className="h-3.5 w-3.5" />
-                      {props.billingStatusLabel}
-                    </span>
                   </div>
 
                   {props.usageData && (

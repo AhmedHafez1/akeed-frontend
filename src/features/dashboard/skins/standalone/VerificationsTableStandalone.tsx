@@ -54,8 +54,9 @@ export function VerificationsTableStandalone(
   const { locale } = useLocaleInfo()
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const selected =
-    props.verifications.find((verification) => verification.id === selectedId) ??
-    null
+    props.verifications.find(
+      (verification) => verification.id === selectedId
+    ) ?? null
 
   const closeDetails = () => {
     if (selectedId) props.onDismissCancelOrder(selectedId)
@@ -238,8 +239,10 @@ export function VerificationsTableStandalone(
   )
 }
 
-interface VerificationDetailsProps
-  extends Omit<VerificationsTableStandaloneProps, 'verifications'> {
+interface VerificationDetailsProps extends Omit<
+  VerificationsTableStandaloneProps,
+  'verifications'
+> {
   verification: VerificationItem
 }
 
@@ -248,8 +251,7 @@ function VerificationDetails(props: VerificationDetailsProps) {
   const { locale } = useLocaleInfo()
   const { verification } = props
   const isActing = props.actingVerificationId === verification.id
-  const isConfirming =
-    props.confirmingCancelVerificationId === verification.id
+  const isConfirming = props.confirmingCancelVerificationId === verification.id
   const showRetry =
     props.canRetryVerifications &&
     canRetryVerification(verification.capabilities)
@@ -265,7 +267,7 @@ function VerificationDetails(props: VerificationDetailsProps) {
   return (
     <DialogContent
       closeLabel={t('table.actions.dismiss')}
-      className="!inset-y-0 !top-0 !left-auto [inset-inline-end:0] !h-dvh !w-[min(100vw,520px)] !max-w-none !translate-x-0 !translate-y-0 !overflow-y-auto !rounded-none !border-y-0 !p-0"
+      className="!inset-y-0 [inset-inline-end:0] !top-0 !left-auto !h-dvh !w-[min(100vw,520px)] !max-w-none !translate-x-0 !translate-y-0 !overflow-y-auto !rounded-none !border-y-0 !p-0"
     >
       <DialogHeader className="border-b border-stone-200 px-5 py-5 pe-14">
         <DialogTitle className="text-xl">
@@ -373,7 +375,7 @@ function VerificationDetails(props: VerificationDetailsProps) {
           </div>
           <div className="py-3">
             <dt className="text-slate-600">{t('table.technicalId')}</dt>
-            <dd className="mt-1 break-all font-mono text-xs text-slate-700">
+            <dd className="mt-1 font-mono text-xs break-all text-slate-700">
               {verification.order_id}
             </dd>
           </div>
