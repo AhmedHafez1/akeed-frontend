@@ -23,11 +23,13 @@ const logger = createLogger('AuthGuard')
 interface AuthGuardProps {
   children: React.ReactNode
   requireOrganization?: boolean
+  loadingFallback?: React.ReactNode
 }
 
 export function AuthGuard({
   children,
   requireOrganization = true,
+  loadingFallback,
 }: AuthGuardProps) {
   const router = useRouter()
   const pathname = usePathname()
@@ -178,7 +180,7 @@ export function AuthGuard({
   }
 
   if (!isPublic && !authChecked) {
-    return <FullPageLoader />
+    return loadingFallback ?? <FullPageLoader />
   }
 
   return <>{children}</>

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Bell, ChevronRight, Menu, Search } from 'lucide-react'
+import { ChevronRight, Menu, ShieldCheck } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import {
   getLocaleFromPathname,
@@ -71,19 +71,12 @@ export function StandaloneTopBar({ onOpenNavigation }: StandaloneTopBarProps) {
       <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
         <Link
           href={withLocale('/verifications', locale)}
-          aria-label={t('searchOrders')}
+          aria-label={t('openVerifications')}
           className="inline-flex h-9 items-center gap-2 rounded-lg px-2.5 text-sm text-slate-600 transition-colors hover:bg-stone-50 hover:text-slate-950 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
-          <Search aria-hidden="true" className="h-[18px] w-[18px]" />
-          <span className="hidden xl:inline">{t('search')}</span>
+          <ShieldCheck aria-hidden="true" className="h-[18px] w-[18px]" />
+          <span className="hidden xl:inline">{t('verifications')}</span>
         </Link>
-        <span
-          role="img"
-          aria-label={t('notifications')}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-600"
-        >
-          <Bell aria-hidden="true" className="h-[18px] w-[18px]" />
-        </span>
         <button
           type="button"
           onClick={handleLocaleChange}

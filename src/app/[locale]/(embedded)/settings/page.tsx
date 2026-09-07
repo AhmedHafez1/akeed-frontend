@@ -3,8 +3,10 @@
 import { useSearchParams } from 'next/navigation'
 import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
-import { SettingsEmbeddedShellSkeleton } from '@/shared/layout/skeletons'
-import { FullPageLoader } from '@/shared/layout/FullPageLoader'
+import {
+  SettingsEmbeddedShellSkeleton,
+  StandalonePageSkeleton,
+} from '@/shared/layout/skeletons'
 import {
   SettingsEmbeddedTabbedSkin,
   SettingsStandaloneSkin,
@@ -24,7 +26,7 @@ function SettingsPageContent({
     return mode === 'EMBEDDED' ? (
       <SettingsEmbeddedShellSkeleton variant={skeletonVariant} />
     ) : (
-      <FullPageLoader />
+      <StandalonePageSkeleton variant="settings" />
     )
   }
 
@@ -48,7 +50,7 @@ export default function SettingsPage() {
         isEmbedded ? (
           <SettingsEmbeddedShellSkeleton variant={skeletonVariant} />
         ) : (
-          <FullPageLoader />
+          <StandalonePageSkeleton variant="settings" />
         )
       }
       onboardingGate="dashboard"

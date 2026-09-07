@@ -20,6 +20,7 @@ import { AuthLayout } from './AuthLayout'
 import { StandaloneShellProvider } from './StandaloneShellContext'
 import { StandaloneSidebar } from './StandaloneSidebar'
 import { StandaloneTopBar } from './StandaloneTopBar'
+import { StandalonePageSkeleton } from './skeletons'
 
 interface StandaloneLayoutProps {
   children: ReactNode
@@ -68,7 +69,11 @@ export function StandaloneLayout({ children }: StandaloneLayoutProps) {
 
   // 3. Protected routes — auth required
   return (
-    <AuthGuard>
+    <AuthGuard
+      loadingFallback={
+        <StandalonePageSkeleton variant="dashboard" includeShell />
+      }
+    >
       <StandaloneShellProvider>
         <div className="flex min-h-screen bg-[#f7f7f3] text-slate-950">
           <StandaloneSidebar className="sticky top-0 hidden h-screen lg:flex" />
