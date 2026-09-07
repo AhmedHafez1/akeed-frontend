@@ -2,12 +2,17 @@
 
 import Link from 'next/link'
 import {
+  ArrowDown,
   ArrowRight,
   CheckCircle2,
   Clock3,
+  MessageCircleReply,
   Package,
   ReceiptText,
+  Send,
+  TrendingUp,
   TriangleAlert,
+  XCircle,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
@@ -18,7 +23,10 @@ import { lifecycleTone } from '@/features/dashboard/domain/verificationLifecycle
 import { isAttentionVerification } from '@/features/dashboard/domain/verificationWorkload'
 import { getStatusTimestamp } from '@/features/dashboard/domain/verificationRow'
 import { lifecycleToneClasses } from '../lifecycleToneClasses'
-import { formatDashboardNumber } from '@/features/dashboard/lib/dashboardFormatters'
+import {
+  formatDashboardNumber,
+  formatDashboardPercent,
+} from '@/features/dashboard/lib/dashboardFormatters'
 import type {
   DashboardStats,
   VerificationItem,
@@ -54,8 +62,8 @@ function DashboardCard({ className, children }: DashboardCardProps) {
 function DashboardSkeleton() {
   return (
     <div aria-busy="true" className="space-y-5">
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {[0, 1, 2, 3].map((index) => (
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {[0, 1, 2, 3, 4, 5].map((index) => (
           <DashboardCard key={index} className="p-5">
             <div className="flex items-center gap-4">
               <Skeleton className="h-12 w-12 shrink-0 rounded-xl" />
@@ -67,22 +75,15 @@ function DashboardSkeleton() {
           </DashboardCard>
         ))}
       </div>
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1.55fr)_minmax(280px,0.75fr)]">
-        <DashboardCard className="h-72 p-5">
+      <div>
+        <DashboardCard className="p-5 sm:p-6">
           <Skeleton className="h-5 w-48" />
-          <Skeleton className="mt-8 h-12 w-32" />
-          <Skeleton className="mt-8 h-3 w-full" />
-          <div className="mt-8 grid grid-cols-3 gap-3">
+          <Skeleton className="mt-2 h-4 w-64" />
+          <div className="mt-6 grid items-center gap-3 lg:grid-cols-3">
             {[0, 1, 2].map((index) => (
-              <Skeleton key={index} className="h-16 rounded-xl" />
+              <Skeleton key={index} className="h-28 rounded-2xl" />
             ))}
           </div>
-        </DashboardCard>
-        <DashboardCard className="h-72 p-5">
-          <Skeleton className="h-5 w-32" />
-          <Skeleton className="mt-10 h-10 w-44" />
-          <Skeleton className="mt-6 h-3 w-full" />
-          <Skeleton className="mt-5 h-4 w-40" />
         </DashboardCard>
       </div>
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
@@ -188,6 +189,26 @@ export function StandaloneStatsSummary({
       iconClassName: 'border-emerald-100 bg-emerald-50 text-emerald-700',
     },
     {
+      id: 'confirmationRate',
+      label: t('metrics.cards.confirmationRate'),
+      value: formatDashboardPercent(
+        Math.round(stats.totals.confirmation_rate),
+        locale
+      ),
+      icon: TrendingUp,
+      iconClassName: 'border-blue-100 bg-blue-50 text-blue-700',
+    },
+    {
+      id: 'replyRate',
+      label: t('metrics.cards.responseRate'),
+      value: formatDashboardPercent(
+        Math.round(stats.totals.reply_rate),
+        locale
+      ),
+      icon: MessageCircleReply,
+      iconClassName: 'border-violet-100 bg-violet-50 text-violet-700',
+    },
+    {
       id: 'attention',
       label: t('verifications.metrics.needsAttention'),
       value: formatDashboardNumber(stats.totals.needs_attention, locale),
@@ -210,7 +231,7 @@ export function StandaloneStatsSummary({
     <div className="space-y-5">
       <section
         aria-label={t('standalone.kpisLabel')}
-        className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
+        className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3"
       >
         {metrics.map((metric) => {
           const Icon = metric.icon
@@ -240,7 +261,7 @@ export function StandaloneStatsSummary({
       </section>
 
       <div>
-        <PerformanceSummary stats={stats} />
+        <VerificationFunnel stats={stats} />
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
@@ -256,37 +277,27 @@ export function StandaloneStatsSummary({
   )
 }
 
-function PerformanceSummary({ stats }: { stats: DashboardStats }) {
+function VerificationFunnel({ stats }: { stats: DashboardStats }) {
   const t = useTranslations('dashboard')
   const { locale } = useLocaleInfo()
   const periodLabel = t(`filters.dateRange.${stats.date_range}`)
-  const detailMetrics = [
-    {
-      id: 'sent',
-      label: t('metrics.cards.sent'),
-      value: stats.totals.sent,
-    },
-    {
-      id: 'delivered',
-      label: t('metrics.cards.delivered'),
-      value: stats.totals.delivered,
-    },
-    {
-      id: 'read',
-      label: t('metrics.cards.read'),
-      value: stats.totals.read,
-    },
-  ]
+  const sent = formatDashboardNumber(stats.totals.sent, locale)
+  const awaitingReply = formatDashboardNumber(
+    stats.totals.awaiting_reply,
+    locale
+  )
+  const confirmed = formatDashboardNumber(stats.totals.confirmed, locale)
+  const canceled = formatDashboardNumber(stats.totals.customer_canceled, locale)
 
   return (
     <DashboardCard className="p-5 sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="text-base font-bold text-slate-950">
-            {t('standalone.performance.title')}
+            {t('metrics.funnelTitle')}
           </h2>
           <p className="mt-1 text-sm text-slate-500">
-            {t('standalone.performance.period', { period: periodLabel })}
+            {t('standalone.funnel.period', { period: periodLabel })}
           </p>
         </div>
         <span className="rounded-lg bg-stone-100 px-2.5 py-1 text-xs font-semibold text-slate-600">
@@ -294,23 +305,87 @@ function PerformanceSummary({ stats }: { stats: DashboardStats }) {
         </span>
       </div>
 
-      <p className="mt-5 max-w-2xl text-sm leading-6 text-slate-500">
-        {t('standalone.performance.description')}
+      <p className="sr-only">
+        {t('standalone.funnel.summary', {
+          sent,
+          waiting: awaitingReply,
+          confirmed,
+          canceled,
+        })}
       </p>
 
-      <dl className="mt-5 grid grid-cols-3 gap-2 sm:gap-3">
-        {detailMetrics.map((metric) => (
-          <div key={metric.id} className="rounded-xl bg-stone-50 p-3 sm:p-4">
-            <dt className="text-xs font-medium text-slate-500">
-              {metric.label}
-            </dt>
-            <dd className="mt-1 text-xl font-bold text-slate-950">
-              {formatDashboardNumber(metric.value, locale)}
-            </dd>
+      <div className="mt-6 grid items-stretch gap-3 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1.35fr)] lg:gap-4">
+        <div className="rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-4">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
+            <Send aria-hidden="true" className="h-4.5 w-4.5" />
+          </span>
+          <p className="mt-4 text-sm font-medium text-slate-600">
+            {t('metrics.cards.sent')}
+          </p>
+          <p className="mt-1 text-2xl font-bold tracking-tight text-slate-950">
+            {sent}
+          </p>
+        </div>
+
+        <FunnelConnector />
+
+        <div className="rounded-2xl border border-amber-100 bg-gradient-to-br from-amber-50 to-white p-4">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-100 text-amber-700">
+            <Clock3 aria-hidden="true" className="h-4.5 w-4.5" />
+          </span>
+          <p className="mt-4 text-sm font-medium text-slate-600">
+            {t('standalone.funnel.waitingCustomer')}
+          </p>
+          <p className="mt-1 text-2xl font-bold tracking-tight text-slate-950">
+            {awaitingReply}
+          </p>
+        </div>
+
+        <FunnelConnector />
+
+        <div className="rounded-2xl border border-stone-200 bg-stone-50/80 p-4">
+          <p className="text-sm font-semibold text-slate-700">
+            {t('metrics.cards.confirmedCanceled')}
+          </p>
+          <div className="mt-3 grid grid-cols-2 gap-3">
+            <div className="rounded-xl border border-emerald-100 bg-white p-3 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+                <CheckCircle2 aria-hidden="true" className="h-4 w-4" />
+              </span>
+              <p className="mt-3 text-xs font-medium text-slate-500">
+                {t('metrics.cards.confirmed')}
+              </p>
+              <p className="mt-0.5 text-xl font-bold text-emerald-800">
+                {confirmed}
+              </p>
+            </div>
+            <div className="rounded-xl border border-red-100 bg-white p-3 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-50 text-red-700">
+                <XCircle aria-hidden="true" className="h-4 w-4" />
+              </span>
+              <p className="mt-3 text-xs font-medium text-slate-500">
+                {t('metrics.cards.canceled')}
+              </p>
+              <p className="mt-0.5 text-xl font-bold text-red-800">
+                {canceled}
+              </p>
+            </div>
           </div>
-        ))}
-      </dl>
+        </div>
+      </div>
     </DashboardCard>
+  )
+}
+
+function FunnelConnector() {
+  return (
+    <div
+      aria-hidden="true"
+      className="flex items-center justify-center text-slate-300"
+    >
+      <ArrowDown className="h-5 w-5 lg:hidden" />
+      <ArrowRight className="hidden h-5 w-5 lg:block rtl:rotate-180" />
+    </div>
   )
 }
 

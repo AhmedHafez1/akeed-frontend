@@ -716,10 +716,10 @@
         },
         "action": "Review automation"
       },
-      "performance": {
-        "title": "Message delivery",
-        "period": "Available totals for {period}",
-        "description": "Track the delivery path from sent messages to customer reads."
+      "funnel": {
+        "period": "Customer response flow for {period}",
+        "waitingCustomer": "Waiting for customer",
+        "summary": "Sent: {sent}. Waiting for customer: {waiting}. Confirmed: {confirmed}. Canceled by customer: {canceled}."
       },
       "usage": {
         "title": "Usage this month",
