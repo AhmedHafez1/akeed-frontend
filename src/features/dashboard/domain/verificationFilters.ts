@@ -37,6 +37,7 @@ export const DASHBOARD_DATE_RANGE_IDS = [
  */
 const COMPOSITE_FILTERS: Partial<Record<VerificationStatusFilter, string>> = {
   awaiting_response: 'sent,delivered,read,no_reply',
+  needs_attention: 'failed,expired,no_reply',
 }
 
 /** Build the `/api/verifications` query string for a filter selection. */

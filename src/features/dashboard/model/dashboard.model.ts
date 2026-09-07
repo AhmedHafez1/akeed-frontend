@@ -43,6 +43,7 @@ export type VerificationRowCapability = {
  */
 export type VerificationStatusFilter =
   | 'all'
+  | 'needs_attention'
   | 'pending'
   | 'awaiting_response'
   | 'confirmed'

@@ -15,6 +15,8 @@ import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
 import { Skeleton } from '@/shared/ui'
 import { lifecycleTone } from '@/features/dashboard/domain/verificationLifecycle'
+import { isAttentionVerification } from '@/features/dashboard/domain/verificationWorkload'
+import { getStatusTimestamp } from '@/features/dashboard/domain/verificationRow'
 import { lifecycleToneClasses } from '../lifecycleToneClasses'
 import {
   formatDashboardNumber,
@@ -159,7 +161,18 @@ export function StandaloneStatsSummary({
 
   if (isStatsLoading && !stats) return <DashboardSkeleton />
 
-  const attentionVerifications = verifications.slice(0, 3)
+  const attentionVerifications = verifications
+    .filter((verification) => isAttentionVerification(verification.status))
+    .toSorted((left, right) => {
+      const leftTime = new Date(
+        getStatusTimestamp(left) ?? left.created_at ?? 0
+      ).getTime()
+      const rightTime = new Date(
+        getStatusTimestamp(right) ?? right.created_at ?? 0
+      ).getTime()
+      return rightTime - leftTime
+    })
+    .slice(0, 3)
 
   if (!stats) {
     return (
@@ -502,7 +515,7 @@ function AttentionPreview({
           </p>
         </div>
         <Link
-          href={`${withLocale('/verifications', locale)}?status=no_reply`}
+          href={`${withLocale('/verifications', locale)}?status=needs_attention`}
           className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm font-semibold text-emerald-800 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           {t('standalone.attention.viewAll')}

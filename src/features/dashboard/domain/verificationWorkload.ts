@@ -44,6 +44,18 @@ const WORKLOAD_GROUPS: readonly WorkloadGroup[] = [
   },
 ]
 
+const ATTENTION_STATUSES: ReadonlySet<VerificationStatus> = new Set([
+  'failed',
+  'expired',
+  'no_reply',
+])
+
+export function isAttentionVerification(
+  status: VerificationStatus
+): boolean {
+  return ATTENTION_STATUSES.has(status)
+}
+
 export function getVerificationWorkload(stats: DashboardStats | null) {
   return WORKLOAD_GROUPS.map((group) => ({
     id: group.id,

@@ -10,8 +10,11 @@ export function useVerificationStatusQuery() {
   const searchParams = useSearchParams()
   const requested = searchParams.get('status')
   const statusFilter: VerificationStatusFilter =
-    VERIFICATION_STATUS_FILTER_IDS.find((status) => status === requested) ??
-    'all'
+    requested === 'needs_attention'
+      ? 'needs_attention'
+      : (VERIFICATION_STATUS_FILTER_IDS.find(
+          (status) => status === requested
+        ) ?? 'all')
 
   function onStatusFilterChange(filter: VerificationStatusFilter) {
     const params = new URLSearchParams(searchParams.toString())

@@ -61,6 +61,16 @@ export function StandaloneVerificationsSection({
   onSendTestVerification,
 }: StandaloneVerificationsSectionProps) {
   const t = useTranslations('dashboard')
+  const standaloneFilters =
+    statusFilter === 'needs_attention'
+      ? [
+          {
+            id: 'needs_attention' as const,
+            label: t('verifications.metrics.needsAttention'),
+          },
+          ...statusFilters,
+        ]
+      : statusFilters
 
   return (
     <section
@@ -88,7 +98,7 @@ export function StandaloneVerificationsSection({
             aria-label={t('verifications.filters.label')}
             className="flex flex-wrap gap-1.5"
           >
-            {statusFilters.map((filter) => (
+            {standaloneFilters.map((filter) => (
               <button
                 key={filter.id}
                 type="button"
