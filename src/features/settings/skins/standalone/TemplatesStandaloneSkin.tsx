@@ -1,17 +1,17 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import {
   AlertCircle,
   Braces,
   Check,
-  CheckCircle2,
   ChevronRight,
   Clock3,
   Globe2,
   Info,
+  Eye,
   LoaderCircle,
   MessageCircle,
   RotateCcw,
@@ -40,6 +40,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  notify,
 } from '@/shared/ui'
 
 type TemplateLanguage = 'ar' | 'en'
@@ -90,17 +91,70 @@ function TemplateSaveStatus({ props }: { props: SettingsSkinProps }) {
     )
   }
 
-  if (!props.successBanner) return null
+  return null
+}
+
+interface TemplatePreviewProps {
+  language: TemplateLanguage
+  paragraphs: string[]
+  confirmButton: string
+  cancelButton: string
+}
+
+function TemplatePreview({
+  language,
+  paragraphs,
+  confirmButton,
+  cancelButton,
+}: TemplatePreviewProps) {
+  const t = useTranslations('messageTemplate.standalone')
 
   return (
-    <span
-      role="status"
-      aria-live="polite"
-      className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700"
-    >
-      <CheckCircle2 aria-hidden="true" className="h-4 w-4" />
-      {t('saved')}
-    </span>
+    <>
+      <div className="rounded-xl border border-[#e2ded6] bg-[#efeae2] bg-[url('/images/landing/wa_chat_bg.png')] bg-cover bg-center p-4 sm:p-6">
+        <div
+          dir={language === 'ar' ? 'rtl' : 'ltr'}
+          lang={language}
+          style={{ fontFamily: 'Segoe UI, Tahoma, sans-serif' }}
+          className="mx-auto max-w-[390px]"
+        >
+          <div className="relative rounded-xl bg-white px-4 pt-4 pb-3 text-[#1f2933] shadow-[0_1px_2px_rgba(15,23,42,0.14)] before:absolute before:start-[-7px] before:top-0 before:border-e-[10px] before:border-t-[12px] before:border-e-transparent before:border-t-white">
+            <div className="space-y-3 text-[15px] leading-6">
+              {paragraphs.map((paragraph, index) => (
+                <p key={`${paragraph}-${index}`}>{paragraph}</p>
+              ))}
+            </div>
+            <p
+              className={cn(
+                'mt-2 text-[11px] text-[#667078]',
+                language === 'ar' ? 'text-left' : 'text-right'
+              )}
+            >
+              {formatTemplatePreviewTimestamp(language)}
+            </p>
+          </div>
+          <div className="mt-3 space-y-2" aria-label={t('previewActions')}>
+            <div
+              aria-disabled="true"
+              className="flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[#008f67] px-4 text-sm font-semibold text-white shadow-sm"
+            >
+              <Check aria-hidden="true" className="h-4 w-4" />
+              {confirmButton}
+            </div>
+            <div
+              aria-disabled="true"
+              className="flex min-h-12 items-center justify-center gap-2 rounded-lg border border-[#008f67] bg-white px-4 text-sm font-semibold text-[#007a58] shadow-sm"
+            >
+              <X aria-hidden="true" className="h-4 w-4" />
+              {cancelButton}
+            </div>
+          </div>
+        </div>
+      </div>
+      <p className="mt-4 text-sm leading-5 text-slate-600">
+        {t('previewFooter')}
+      </p>
+    </>
   )
 }
 
@@ -116,6 +170,15 @@ export function TemplatesStandaloneSkin({
   const [previewLanguage, setPreviewLanguage] =
     useState<TemplateLanguage>(initialLanguage)
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false)
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false)
+
+  useEffect(() => {
+    if (!props.successBanner || props.isDirty) return
+    notify.success({
+      message: props.successBanner,
+      id: 'template-save-success',
+    })
+  }, [props.isDirty, props.successBanner])
 
   const selectedVariant = props.selectedCodTemplateVariants[previewLanguage]
   const savedVariant = props.savedCodTemplateVariants[previewLanguage]
@@ -205,15 +268,6 @@ export function TemplatesStandaloneSkin({
         </div>
       )}
 
-      {props.successBanner && !props.isDirty && (
-        <div
-          role="status"
-          className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800"
-        >
-          {props.successBanner}
-        </div>
-      )}
-
       {!props.canUpdateConfiguration && (
         <div
           role="status"
@@ -223,21 +277,14 @@ export function TemplatesStandaloneSkin({
         </div>
       )}
 
-      <Card className="mb-5 border-stone-200 bg-white p-4 shadow-sm sm:p-5">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
-            <Globe2 aria-hidden="true" className="h-5 w-5" />
+      <Card className="mb-5 border-stone-200 bg-white px-4 py-3 shadow-sm">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-50 text-slate-700">
+            <Globe2 aria-hidden="true" className="h-4 w-4" />
           </div>
           <div className="min-w-0 flex-1">
             <p className="font-semibold text-slate-950">
               {t('storeLanguageTitle', { language: storeLanguageLabel })}
-            </p>
-            <p className="mt-1 text-sm leading-5 text-slate-600">
-              {props.defaultLanguage === 'auto'
-                ? t('storeLanguageAutoDescription')
-                : t('storeLanguageFixedDescription', {
-                    language: storeLanguageLabel,
-                  })}
             </p>
           </div>
           <Link
@@ -252,6 +299,16 @@ export function TemplatesStandaloneSkin({
           </Link>
         </div>
       </Card>
+
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => setIsPreviewOpen(true)}
+        className="mb-4 h-11 w-full border-stone-300 text-slate-800 md:hidden"
+      >
+        <Eye aria-hidden="true" />
+        {t('customerPreviewTitle')}
+      </Button>
 
       <div className="grid items-start gap-5 md:grid-cols-[minmax(0,58fr)_minmax(320px,42fr)]">
         <div className="space-y-4">
@@ -361,9 +418,11 @@ export function TemplatesStandaloneSkin({
                               </span>
                             )}
                           </span>
-                          <span className="mt-1 block text-xs leading-5 text-slate-600">
-                            {t(`variantDescriptions.${definition.variant}`)}
-                          </span>
+                          {isSelected && (
+                            <span className="mt-1 block text-xs leading-5 text-slate-600">
+                              {t(`variantDescriptions.${definition.variant}`)}
+                            </span>
+                          )}
                         </span>
                       </label>
                     )
@@ -377,10 +436,11 @@ export function TemplatesStandaloneSkin({
             </fieldset>
           </Card>
 
-          <Card className="border-stone-200 bg-white p-4 shadow-sm sm:p-5">
-            <h2 className="text-base font-semibold text-slate-950">
+          <details className="rounded-xl border border-stone-200 bg-white shadow-sm">
+            <summary className="cursor-pointer px-4 py-4 text-base font-semibold text-slate-950 sm:px-5">
               {t('detailsTitle')}
-            </h2>
+            </summary>
+            <div className="px-4 pb-4 sm:px-5 sm:pb-5">
             <dl className="mt-4 overflow-hidden rounded-xl border border-stone-200">
               <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] items-center gap-3 border-b border-stone-200 px-4 py-3 text-sm">
                 <dt className="flex items-center gap-2 text-slate-600">
@@ -435,7 +495,8 @@ export function TemplatesStandaloneSkin({
               />
               <p>{t('approvalDescription')}</p>
             </div>
-          </Card>
+            </div>
+          </details>
 
           {props.canUpdateConfiguration && (
             <div className="hidden items-center justify-end gap-3 border-t border-stone-200 pt-4 md:flex">
@@ -466,7 +527,7 @@ export function TemplatesStandaloneSkin({
           )}
         </div>
 
-        <Card className="border-stone-200 bg-white p-4 shadow-sm sm:p-5 md:sticky md:top-20">
+        <Card className="hidden border-stone-200 bg-white p-4 shadow-sm sm:p-5 md:sticky md:top-20 md:block">
           <div className="flex items-center justify-between gap-3">
             <h2 className="text-base font-semibold text-slate-950">
               {t('customerPreviewTitle')}
@@ -476,50 +537,14 @@ export function TemplatesStandaloneSkin({
             </span>
           </div>
 
-          <div className="mt-4 rounded-xl border border-[#e2ded6] bg-[#efeae2] bg-[url('/images/landing/wa_chat_bg.png')] bg-cover bg-center p-4 sm:p-6">
-            <div
-              dir={previewLanguage === 'ar' ? 'rtl' : 'ltr'}
-              lang={previewLanguage}
-              style={{ fontFamily: 'Segoe UI, Tahoma, sans-serif' }}
-              className="mx-auto max-w-[390px]"
-            >
-              <div className="relative rounded-xl bg-white px-4 pt-4 pb-3 text-[#1f2933] shadow-[0_1px_2px_rgba(15,23,42,0.14)] before:absolute before:start-[-7px] before:top-0 before:border-e-[10px] before:border-t-[12px] before:border-e-transparent before:border-t-white">
-                <div className="space-y-3 text-[15px] leading-6">
-                  {previewParagraphs.map((paragraph, index) => (
-                    <p key={`${paragraph}-${index}`}>{paragraph}</p>
-                  ))}
-                </div>
-                <p
-                  className={cn(
-                    'mt-2 text-[11px] text-[#8a9197]',
-                    previewLanguage === 'ar' ? 'text-left' : 'text-right'
-                  )}
-                >
-                  {formatTemplatePreviewTimestamp(previewLanguage)}
-                </p>
-              </div>
-
-              <div className="mt-3 space-y-2" aria-label={t('previewActions')}>
-                <div
-                  aria-disabled="true"
-                  className="flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[#008f67] px-4 text-sm font-semibold text-white shadow-sm"
-                >
-                  <Check aria-hidden="true" className="h-4 w-4" />
-                  {template.confirmButton}
-                </div>
-                <div
-                  aria-disabled="true"
-                  className="flex min-h-12 items-center justify-center gap-2 rounded-lg border border-[#008f67] bg-white px-4 text-sm font-semibold text-[#007a58] shadow-sm"
-                >
-                  <X aria-hidden="true" className="h-4 w-4" />
-                  {template.cancelButton}
-                </div>
-              </div>
-            </div>
+          <div className="mt-4">
+            <TemplatePreview
+              language={previewLanguage}
+              paragraphs={previewParagraphs}
+              confirmButton={template.confirmButton}
+              cancelButton={template.cancelButton}
+            />
           </div>
-          <p className="mt-4 text-sm leading-5 text-slate-600">
-            {t('previewFooter')}
-          </p>
         </Card>
       </div>
 
@@ -579,6 +604,24 @@ export function TemplatesStandaloneSkin({
               {t('resetDialog.confirm')}
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
+        <DialogContent
+          closeLabel={t('resetDialog.closeLabel')}
+          className="max-h-[92dvh] overflow-y-auto sm:max-w-xl"
+        >
+          <DialogHeader>
+            <DialogTitle>{t('customerPreviewTitle')}</DialogTitle>
+            <DialogDescription>{languageLabel(previewLanguage)}</DialogDescription>
+          </DialogHeader>
+          <TemplatePreview
+            language={previewLanguage}
+            paragraphs={previewParagraphs}
+            confirmButton={template.confirmButton}
+            cancelButton={template.cancelButton}
+          />
         </DialogContent>
       </Dialog>
     </div>
