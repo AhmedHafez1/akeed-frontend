@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Ellipsis, History } from 'lucide-react'
+import { Ellipsis, Eye, History, RotateCcw, XCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import {
@@ -10,6 +10,11 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 import type { VerificationItem } from '../../model/dashboard.model'
@@ -61,6 +66,15 @@ export function VerificationsTableStandalone(
   const closeDetails = () => {
     if (selectedId) props.onDismissCancelOrder(selectedId)
     setSelectedId(null)
+  }
+
+  const openDetails = (verificationId: string) => {
+    setSelectedId(verificationId)
+  }
+
+  const requestCancel = (verificationId: string) => {
+    setSelectedId(verificationId)
+    props.onRequestCancelOrder(verificationId)
   }
 
   return (
@@ -146,19 +160,12 @@ export function VerificationsTableStandalone(
                 )}
               </td>
               <td className="px-4 py-3 text-center">
-                <button
-                  type="button"
-                  onClick={() => setSelectedId(verification.id)}
-                  aria-label={t('table.actions.viewDetails', {
-                    order: formatOrderTitle(
-                      verification,
-                      t('table.orderFallbackPrefix')
-                    ),
-                  })}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-950 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:outline-none"
-                >
-                  <Ellipsis aria-hidden="true" className="h-5 w-5" />
-                </button>
+                <VerificationActionsMenu
+                  {...props}
+                  verification={verification}
+                  onOpenDetails={openDetails}
+                  onOpenCancel={requestCancel}
+                />
               </td>
             </tr>
           ))}
@@ -217,13 +224,12 @@ export function VerificationsTableStandalone(
                   props.reportingTimezone
                 )}
               </span>
-              <button
-                type="button"
-                onClick={() => setSelectedId(verification.id)}
-                className="shrink-0 rounded-lg px-2 py-1.5 font-semibold text-emerald-800 hover:bg-emerald-50 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:outline-none"
-              >
-                {t('table.actions.details')}
-              </button>
+              <VerificationActionsMenu
+                {...props}
+                verification={verification}
+                onOpenDetails={openDetails}
+                onOpenCancel={requestCancel}
+              />
             </div>
           </li>
         ))}
@@ -236,6 +242,83 @@ export function VerificationsTableStandalone(
         {selected && <VerificationDetails {...props} verification={selected} />}
       </Dialog>
     </>
+  )
+}
+
+interface VerificationActionsMenuProps extends Omit<
+  VerificationsTableStandaloneProps,
+  'verifications'
+> {
+  verification: VerificationItem
+  onOpenDetails: (verificationId: string) => void
+  onOpenCancel: (verificationId: string) => void
+}
+
+function VerificationActionsMenu({
+  verification,
+  onOpenDetails,
+  onOpenCancel,
+  ...props
+}: VerificationActionsMenuProps) {
+  const t = useTranslations('dashboard')
+  const showRetry =
+    props.canRetryVerifications &&
+    canRetryVerification(verification.capabilities)
+  const showCancel =
+    props.canCancelOrders &&
+    hasCapability(
+      verification.capabilities,
+      'merchant_no_reply_cancellation'
+    ) &&
+    canCancelOrder(verification)
+  const isAnyActionRunning = props.actingVerificationId !== null
+  const orderTitle = formatOrderTitle(
+    verification,
+    t('table.orderFallbackPrefix')
+  )
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          aria-label={t('table.actions.openMenu', { order: orderTitle })}
+          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-950 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:outline-none"
+        >
+          <Ellipsis aria-hidden="true" className="h-5 w-5" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onSelect={() => onOpenDetails(verification.id)}>
+          <Eye aria-hidden="true" className="h-4 w-4" />
+          {t('table.actions.details')}
+        </DropdownMenuItem>
+        {showRetry && (
+          <DropdownMenuItem
+            disabled={isAnyActionRunning}
+            onSelect={() => void props.onRetryVerification(verification.id)}
+          >
+            <RotateCcw aria-hidden="true" className="h-4 w-4" />
+            {props.actingVerificationId === verification.id
+              ? t('table.actions.retrying')
+              : t('table.actions.retry')}
+          </DropdownMenuItem>
+        )}
+        {showCancel && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              destructive
+              disabled={isAnyActionRunning}
+              onSelect={() => onOpenCancel(verification.id)}
+            >
+              <XCircle aria-hidden="true" className="h-4 w-4" />
+              {t('table.actions.cancelOrder')}
+            </DropdownMenuItem>
+          </>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 

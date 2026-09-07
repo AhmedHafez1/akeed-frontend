@@ -22,7 +22,6 @@ export function DashboardStandaloneSkin({
   canCreateManualOrder,
   actionFeedback,
   onDismissActionFeedback,
-  onManualOrderAccepted,
   verifications,
   isVerificationsLoading,
   error: verificationsError,
@@ -38,7 +37,11 @@ export function DashboardStandaloneSkin({
   useEffect(() => {
     if (!actionFeedback) return
     const show =
-      actionFeedback.tone === 'success' ? notify.success : notify.warning
+      actionFeedback.tone === 'success'
+        ? notify.success
+        : actionFeedback.tone === 'critical'
+          ? notify.error
+          : notify.warning
     show({ message: actionFeedback.message, id: 'dashboard-action-feedback' })
     onDismissActionFeedback()
   }, [actionFeedback, onDismissActionFeedback])
@@ -52,9 +55,7 @@ export function DashboardStandaloneSkin({
         action={
           <ManualOrderEntryStandalone
             canCreate={canCreateManualOrder}
-            defaultCurrency={stats?.savings.currency}
             sourceConnected={sourceStatus === 'connected'}
-            onAccepted={onManualOrderAccepted}
           />
         }
       />

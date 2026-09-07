@@ -16,6 +16,8 @@ export const manualOrderCurrencies = [
 
 export type ManualOrderCurrency = (typeof manualOrderCurrencies)[number]
 
+export const DEFAULT_MANUAL_ORDER_CURRENCY: ManualOrderCurrency = 'EGP'
+
 export interface ManualOrderFormValues {
   customerPhone: string
   customerName: string

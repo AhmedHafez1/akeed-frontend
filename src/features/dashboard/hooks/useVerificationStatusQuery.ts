@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { VERIFICATION_STATUS_FILTER_IDS } from '../domain/verificationFilters'
+import { WORKLOAD_STATUS_FILTER_IDS } from '../domain/verificationFilters'
 import type { VerificationStatusFilter } from '../model/dashboard.model'
 
 export function useVerificationStatusQuery() {
@@ -10,11 +11,9 @@ export function useVerificationStatusQuery() {
   const searchParams = useSearchParams()
   const requested = searchParams.get('status')
   const statusFilter: VerificationStatusFilter =
-    requested === 'needs_attention'
-      ? 'needs_attention'
-      : (VERIFICATION_STATUS_FILTER_IDS.find(
-          (status) => status === requested
-        ) ?? 'all')
+    [...VERIFICATION_STATUS_FILTER_IDS, ...WORKLOAD_STATUS_FILTER_IDS].find(
+      (status) => status === requested
+    ) ?? 'all'
 
   function onStatusFilterChange(filter: VerificationStatusFilter) {
     const params = new URLSearchParams(searchParams.toString())

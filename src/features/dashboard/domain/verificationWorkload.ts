@@ -13,30 +13,28 @@ export type VerificationWorkloadId =
 interface WorkloadGroup {
   id: VerificationWorkloadId
   statuses: readonly VerificationStatus[]
-  filter: VerificationStatusFilter | null
+  filter: VerificationStatusFilter
   value: (totals: DashboardStats['totals']) => number
 }
 
-// The existing awaiting_response filter also includes no_reply, so it cannot
-// stand in for inProgress. Only All has an exact existing filter.
 const WORKLOAD_GROUPS: readonly WorkloadGroup[] = [
   { id: 'all', statuses: [], filter: 'all', value: (totals) => totals.total },
   {
     id: 'inProgress',
     statuses: ['pending', 'sent', 'delivered', 'read'],
-    filter: null,
+    filter: 'in_progress',
     value: (totals) => totals.in_progress,
   },
   {
     id: 'needsAttention',
     statuses: ['failed', 'expired', 'no_reply'],
-    filter: null,
+    filter: 'needs_attention',
     value: (totals) => totals.needs_attention,
   },
   {
     id: 'completed',
     statuses: ['confirmed', 'canceled'],
-    filter: null,
+    filter: 'completed',
     // These three groups partition the nine current statuses. Timestamp-based
     // confirmed/canceled counters can also include earlier lifecycle outcomes.
     value: (totals) =>

@@ -10,6 +10,7 @@ export * from './skeleton'
 export * from './dialog'
 export * from './accordion'
 export * from './tooltip'
+export * from './dropdown-menu'
 export * from './notifications'
 
 // Custom components

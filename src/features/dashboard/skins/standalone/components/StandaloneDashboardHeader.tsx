@@ -2,7 +2,8 @@
 
 import type { ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Info } from 'lucide-react'
+import { Tooltip } from '@/shared/ui'
 import { useStandaloneShell } from '@/shared/layout/StandaloneShellContext'
 import type { DateRangeFilterOption } from '@/features/dashboard/domain/dashboard.types'
 import type { DashboardStatsDateRange } from '@/features/dashboard/model/dashboard.model'
@@ -29,19 +30,22 @@ export function StandaloneDashboardHeader({
   return (
     <header className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
       <div className="min-w-0 space-y-1.5">
-        <h1 className="text-3xl leading-tight font-bold tracking-tight text-slate-950">
+        <h1 className="flex items-center gap-2 text-3xl leading-tight font-bold tracking-tight text-slate-950">
           {isIdentityLoading ? (
             <span
               aria-label={t('standalone.greetingLoading')}
               className="inline-block h-10 w-64 max-w-full animate-pulse rounded-lg bg-stone-200 align-middle"
             />
           ) : (
-            heading
+            <>
+              {heading}
+              <Tooltip content={t('standalone.description')}>
+                <Info aria-hidden="true" className="size-5 text-slate-400" />
+                <span className="sr-only">{t('standalone.description')}</span>
+              </Tooltip>
+            </>
           )}
         </h1>
-        <p className="max-w-2xl text-sm leading-6 text-slate-600">
-          {t('standalone.description')}
-        </p>
       </div>
 
       <div className="flex w-full flex-wrap items-start gap-3 md:w-auto md:items-end md:justify-end">

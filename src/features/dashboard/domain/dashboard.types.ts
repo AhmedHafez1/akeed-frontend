@@ -82,8 +82,6 @@ export interface DashboardSkinProps {
   onSendTestVerification: (customerPhone: string) => Promise<void>
   onDismissTestFeedback: () => void
   onDismissActionFeedback: () => void
-  onManualOrderAccepted: () => void
-
   // Errors
   error: string | null
 }

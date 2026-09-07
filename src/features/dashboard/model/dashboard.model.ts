@@ -43,7 +43,9 @@ export type VerificationRowCapability = {
  */
 export type VerificationStatusFilter =
   | 'all'
+  | 'in_progress'
   | 'needs_attention'
+  | 'completed'
   | 'pending'
   | 'awaiting_response'
   | 'confirmed'

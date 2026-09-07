@@ -703,9 +703,15 @@
         "action": "مراجعة الأتمتة"
       },
       "funnel": {
-        "period": "مسار استجابة العملاء خلال {period}",
-        "waitingCustomer": "بانتظار العميل",
-        "summary": "تم الإرسال: {sent}. بانتظار العميل: {waiting}. تم التأكيد: {confirmed}. ألغى العميل: {canceled}."
+        "title": "مسار استجابة العملاء",
+        "description": "ما فعله العملاء بعد استلام رسالة تأكيد الطلب.",
+        "responded": "تم الرد",
+        "noResponse": "بدون رد: {count}",
+        "decision": "قرار العميل",
+        "responseShare": "النسب محسوبة من إجمالي ردود العملاء.",
+        "summary": "تم الإرسال: {sent}. تم الرد: {responded}، بنسبة {responseRate}. بدون رد: {noResponse}. تم التأكيد: {confirmed}. ألغى العميل: {canceled}.",
+        "emptyTitle": "لم تُرسل رسائل",
+        "emptyDescription": "لم تُرسل رسائل تأكيد طلبات خلال هذه الفترة."
       },
       "usage": {
         "title": "استخدام هذا الشهر",
@@ -910,6 +916,7 @@
       "actions": {
         "details": "عرض التفاصيل",
         "viewDetails": "عرض تفاصيل {order}",
+        "openMenu": "فتح إجراءات {order}",
         "cancelOrder": "إلغاء الطلب",
         "confirmCancelOrder": "نعم، ألغِ الطلب",
         "keepOrder": "إبقاء الطلب",
@@ -992,11 +999,12 @@
         "metrics": "تعذر تحميل المؤشرات. حدّث الصفحة وحاول مرة أخرى."
       },
       "metrics": {
-        "total": "إجمالي التأكيدات",
+        "total": "إجمالي طلبات التأكيد",
         "inProgress": "قيد التنفيذ",
         "needsAttention": "يحتاج متابعة",
         "confirmed": "مؤكد",
-        "canceled": "ملغى"
+        "canceled": "ملغى",
+        "pending": "قيد الانتظار"
       },
       "filters": {
         "label": "حالة الطلب",
@@ -1415,6 +1423,8 @@
     "optional": "اختياري",
     "readOnly": "يمكن للمالك أو المسؤول فقط تأكيد الطلبات.",
     "sourceDisconnected": "تأكيد الطلبات غير متاح أثناء انقطاع الاتصال بالمصدر.",
+    "availabilityLoading": "جارٍ التحقق من إتاحة تأكيد الطلبات.",
+    "availabilityUnavailable": "تأكيد الطلبات غير متاح مؤقتًا.",
     "sections": {
       "customerDetails": "بيانات العميل",
       "orderDetails": "تفاصيل الطلب"

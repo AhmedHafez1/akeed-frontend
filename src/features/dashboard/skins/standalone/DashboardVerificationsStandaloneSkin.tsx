@@ -1,7 +1,8 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Info } from 'lucide-react'
+import { Tooltip } from '@/shared/ui'
 import { StandaloneFeedbackBanners } from './components/StandaloneFeedbackBanners'
 import { StandaloneVerificationsSection } from './components/StandaloneVerificationsSection'
 import { StandaloneVerificationWorkload } from './components/StandaloneVerificationWorkload'
@@ -21,12 +22,13 @@ export function DashboardVerificationsStandaloneSkin(
           <p className="text-xs font-semibold tracking-wide text-emerald-700 uppercase">
             {t('verifications.eyebrow')}
           </p>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+          <h1 className="flex items-center gap-2 text-3xl font-bold tracking-tight text-slate-900">
             {t('verifications.title')}
+            <Tooltip content={t('verifications.pageSubtitle')}>
+              <Info aria-hidden="true" className="size-5 text-slate-400" />
+              <span className="sr-only">{t('verifications.pageSubtitle')}</span>
+            </Tooltip>
           </h1>
-          <p className="text-sm text-slate-500">
-            {t('verifications.pageSubtitle')}
-          </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <label className="relative flex items-center gap-2 text-sm text-slate-500">
@@ -54,11 +56,8 @@ export function DashboardVerificationsStandaloneSkin(
           {/* The list's own empty state tells the merchant to verify an order,
             so the action it names has to be reachable from this screen. */}
           <ManualOrderEntryStandalone
-            triggerClassName="h-10 rounded-lg bg-emerald-700 text-white shadow-sm hover:bg-emerald-800"
             canCreate={props.canCreateManualOrder}
-            defaultCurrency={props.stats?.savings.currency}
             sourceConnected={props.sourceStatus === 'connected'}
-            onAccepted={props.onManualOrderAccepted}
           />
         </div>
       </header>

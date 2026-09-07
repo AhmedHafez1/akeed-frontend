@@ -7,6 +7,7 @@ import { ChevronDown, ClipboardCheck, Plus, ShieldCheck } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
+import { cn } from '@/shared/lib/utils'
 import {
   Button,
   Dialog,
@@ -27,10 +28,12 @@ import { manualOrderCurrencies } from '../../domain/manualOrder.model'
 
 interface ManualOrderEntryStandaloneProps {
   canCreate: boolean
-  defaultCurrency?: string
   sourceConnected: boolean
   onAccepted?: () => void
   triggerClassName?: string
+  triggerLabelClassName?: string
+  disabledReasonOverride?: string
+  showDisabledReason?: boolean
 }
 
 function RequiredMark() {
@@ -61,31 +64,31 @@ function FieldError({ id, message }: { id: string; message?: string }) {
 
 export function ManualOrderEntryStandalone({
   canCreate,
-  defaultCurrency,
   sourceConnected,
   onAccepted,
   triggerClassName,
+  triggerLabelClassName,
+  disabledReasonOverride,
+  showDisabledReason = true,
 }: ManualOrderEntryStandaloneProps) {
   const t = useTranslations('manualOrder')
   const { locale } = useLocaleInfo()
   const focusCustomerPhone = useCallback(() => {
     document.getElementById('manual-order-phone')?.focus()
   }, [])
-  const entry = useManualOrderEntry(
-    defaultCurrency,
-    focusCustomerPhone,
-    onAccepted
-  )
+  const entry = useManualOrderEntry(focusCustomerPhone, onAccepted)
   const {
     control,
     register,
     formState: { errors },
   } = entry.form
-  const disabledReason = !sourceConnected
-    ? t('sourceDisconnected')
-    : !canCreate
-      ? t('readOnly')
-      : undefined
+  const disabledReason =
+    disabledReasonOverride ??
+    (!sourceConnected
+      ? t('sourceDisconnected')
+      : !canCreate
+        ? t('readOnly')
+        : undefined)
   const fieldsDisabled = entry.isSubmitting || entry.isLocked
 
   return (
@@ -95,13 +98,18 @@ export function ManualOrderEntryStandalone({
           <Button
             type="button"
             disabled={Boolean(disabledReason)}
-            className={triggerClassName}
+            aria-label={t('open')}
+            title={disabledReason}
+            className={cn(
+              'h-10 rounded-lg bg-emerald-700 text-white shadow-sm hover:bg-emerald-800',
+              triggerClassName
+            )}
           >
             <Plus aria-hidden="true" />
-            {t('open')}
+            <span className={triggerLabelClassName}>{t('open')}</span>
           </Button>
         </DialogTrigger>
-        {disabledReason && (
+        {disabledReason && showDisabledReason && (
           <p className="max-w-xs text-end text-xs text-slate-500">
             {disabledReason}
           </p>

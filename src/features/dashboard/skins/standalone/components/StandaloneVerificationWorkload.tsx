@@ -1,8 +1,15 @@
 'use client'
 
-import { CircleAlert, CircleCheck, Clock3, ListChecks } from 'lucide-react'
+import {
+  CircleAlert,
+  CircleCheck,
+  Clock3,
+  Info,
+  ListChecks,
+} from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { Tooltip } from '@/shared/ui'
 import { getVerificationWorkload } from '@/features/dashboard/domain/verificationWorkload'
 import type { VerificationWorkloadId } from '@/features/dashboard/domain/verificationWorkload'
 import type { DashboardSkinProps } from '@/features/dashboard/domain/dashboard.types'
@@ -46,8 +53,8 @@ export function StandaloneVerificationWorkload({
       {getVerificationWorkload(currentStats).map((group) => {
         const Icon = icons[group.id]
         const filter = group.filter
-        const selected = group.filter !== null && statusFilter === group.filter
-        const className = `flex h-full items-start gap-3 rounded-xl border bg-white p-4 text-start shadow-sm ${selected ? 'border-emerald-500 ring-1 ring-emerald-500/10' : 'border-slate-200'}`
+        const selected = statusFilter === group.filter
+        const className = `flex h-full items-start gap-3 rounded-xl border p-4 text-start shadow-sm ${selected ? 'border-emerald-500 bg-emerald-50/70 ring-1 ring-emerald-500/10' : 'border-slate-200 bg-white'}`
         const content = (
           <>
             <span
@@ -56,8 +63,15 @@ export function StandaloneVerificationWorkload({
               <Icon aria-hidden="true" className="size-5" />
             </span>
             <div className="min-w-0">
-              <p className="text-xs font-medium text-slate-700 sm:text-sm">
-                {t(group.id)}
+              <p className="flex items-center gap-1 text-xs font-medium text-slate-700 sm:text-sm">
+                <span className="truncate">{t(group.id)}</span>
+                <Tooltip content={t(`${group.id}Hint`)}>
+                  <Info
+                    aria-hidden="true"
+                    className="size-3.5 shrink-0 text-slate-400"
+                  />
+                  <span className="sr-only">{t(`${group.id}Hint`)}</span>
+                </Tooltip>
               </p>
               {isStatsLoading ? (
                 <span
@@ -71,13 +85,10 @@ export function StandaloneVerificationWorkload({
                     : new Intl.NumberFormat(locale).format(group.value)}
                 </p>
               )}
-              <p className="mt-1 text-[11px] leading-4 text-slate-500">
-                {t(`${group.id}Hint`)}
-              </p>
             </div>
           </>
         )
-        return filter !== null ? (
+        return (
           <button
             key={group.id}
             type="button"
@@ -88,10 +99,6 @@ export function StandaloneVerificationWorkload({
           >
             {content}
           </button>
-        ) : (
-          <div key={group.id} className={className}>
-            {content}
-          </div>
         )
       })}
     </section>

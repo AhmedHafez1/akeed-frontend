@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { ChevronRight, Menu, ShieldCheck } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { ManualOrderTopBarAction } from '@/features/orders'
 import {
   getLocaleFromPathname,
   persistLocalePreference,
@@ -69,6 +70,7 @@ export function StandaloneTopBar({ onOpenNavigation }: StandaloneTopBarProps) {
       </div>
 
       <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+        <ManualOrderTopBarAction />
         <Link
           href={withLocale('/verifications', locale)}
           aria-label={t('openVerifications')}

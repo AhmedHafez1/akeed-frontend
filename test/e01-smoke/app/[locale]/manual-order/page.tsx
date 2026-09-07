@@ -94,7 +94,6 @@ export default function ManualOrderSmokePage() {
       <div style={{ marginTop: 24 }}>
         <ManualOrderEntryStandalone
           canCreate={canCreate}
-          defaultCurrency="EGP"
           sourceConnected={sourceConnected}
         />
       </div>

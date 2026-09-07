@@ -6,6 +6,7 @@ import {
   ArrowRight,
   CheckCircle2,
   Clock3,
+  GitBranch,
   MessageCircleReply,
   Package,
   ReceiptText,
@@ -62,8 +63,8 @@ function DashboardCard({ className, children }: DashboardCardProps) {
 function DashboardSkeleton() {
   return (
     <div aria-busy="true" className="space-y-5">
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {[0, 1, 2, 3, 4, 5].map((index) => (
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {[0, 1, 2, 3, 4, 5, 6, 7].map((index) => (
           <DashboardCard key={index} className="p-5">
             <div className="flex items-center gap-4">
               <Skeleton className="h-12 w-12 shrink-0 rounded-xl" />
@@ -79,9 +80,9 @@ function DashboardSkeleton() {
         <DashboardCard className="p-5 sm:p-6">
           <Skeleton className="h-5 w-48" />
           <Skeleton className="mt-2 h-4 w-64" />
-          <div className="mt-6 grid items-center gap-3 lg:grid-cols-3">
+          <div className="mt-5 grid items-center gap-3 lg:grid-cols-3">
             {[0, 1, 2].map((index) => (
-              <Skeleton key={index} className="h-28 rounded-2xl" />
+              <Skeleton key={index} className="h-24 rounded-2xl" />
             ))}
           </div>
         </DashboardCard>
@@ -179,7 +180,14 @@ export function StandaloneStatsSummary({
       label: t('verifications.metrics.total'),
       value: formatDashboardNumber(stats.totals.total, locale),
       icon: Package,
-      iconClassName: 'border-emerald-100 bg-emerald-50 text-emerald-700',
+      iconClassName: 'border-slate-200 bg-slate-50 text-slate-700',
+    },
+    {
+      id: 'pending',
+      label: t('verifications.metrics.pending'),
+      value: formatDashboardNumber(stats.totals.pending, locale),
+      icon: Clock3,
+      iconClassName: 'border-sky-100 bg-sky-50 text-sky-700',
     },
     {
       id: 'confirmed',
@@ -187,6 +195,13 @@ export function StandaloneStatsSummary({
       value: formatDashboardNumber(stats.totals.confirmed, locale),
       icon: CheckCircle2,
       iconClassName: 'border-emerald-100 bg-emerald-50 text-emerald-700',
+    },
+    {
+      id: 'canceled',
+      label: t('verifications.metrics.canceled'),
+      value: formatDashboardNumber(stats.totals.canceled, locale),
+      icon: XCircle,
+      iconClassName: 'border-red-100 bg-red-50 text-red-700',
     },
     {
       id: 'confirmationRate',
@@ -231,7 +246,7 @@ export function StandaloneStatsSummary({
     <div className="space-y-5">
       <section
         aria-label={t('standalone.kpisLabel')}
-        className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3"
+        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
       >
         {metrics.map((metric) => {
           const Icon = metric.icon
@@ -281,23 +296,43 @@ function VerificationFunnel({ stats }: { stats: DashboardStats }) {
   const t = useTranslations('dashboard')
   const { locale } = useLocaleInfo()
   const periodLabel = t(`filters.dateRange.${stats.date_range}`)
-  const sent = formatDashboardNumber(stats.totals.sent, locale)
-  const awaitingReply = formatDashboardNumber(
-    stats.totals.awaiting_reply,
-    locale
+  const totalCount = Math.max(0, stats.totals.total)
+  const sentCount = Math.max(0, stats.totals.sent)
+  const confirmedCount = Math.max(0, stats.totals.confirmed)
+  const canceledCount = Math.max(0, stats.totals.customer_canceled)
+  const respondedCount = confirmedCount + canceledCount
+  const noResponseCount = Math.max(0, sentCount - respondedCount)
+  const clampPercentage = (value: number) =>
+    Number.isFinite(value) ? Math.min(100, Math.max(0, value)) : 0
+  const sentShareRate = clampPercentage(
+    totalCount > 0 ? (sentCount / totalCount) * 100 : 0
   )
-  const confirmed = formatDashboardNumber(stats.totals.confirmed, locale)
-  const canceled = formatDashboardNumber(stats.totals.customer_canceled, locale)
+  const responseRate = clampPercentage(stats.totals.reply_rate)
+  const confirmedRate = clampPercentage(
+    respondedCount > 0 ? (confirmedCount / respondedCount) * 100 : 0
+  )
+  const canceledRate = clampPercentage(
+    respondedCount > 0 ? (canceledCount / respondedCount) * 100 : 0
+  )
+  const sent = formatDashboardNumber(sentCount, locale)
+  const responded = formatDashboardNumber(respondedCount, locale)
+  const noResponse = formatDashboardNumber(noResponseCount, locale)
+  const confirmed = formatDashboardNumber(confirmedCount, locale)
+  const canceled = formatDashboardNumber(canceledCount, locale)
+  const formattedSentShareRate = formatDashboardPercent(sentShareRate, locale)
+  const formattedResponseRate = formatDashboardPercent(responseRate, locale)
+  const formattedConfirmedRate = formatDashboardPercent(confirmedRate, locale)
+  const formattedCanceledRate = formatDashboardPercent(canceledRate, locale)
 
   return (
-    <DashboardCard className="p-5 sm:p-6">
+    <DashboardCard className="p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="text-base font-bold text-slate-950">
-            {t('metrics.funnelTitle')}
+            {t('standalone.funnel.title')}
           </h2>
           <p className="mt-1 text-sm text-slate-500">
-            {t('standalone.funnel.period', { period: periodLabel })}
+            {t('standalone.funnel.description')}
           </p>
         </div>
         <span className="rounded-lg bg-stone-100 px-2.5 py-1 text-xs font-semibold text-slate-600">
@@ -305,74 +340,159 @@ function VerificationFunnel({ stats }: { stats: DashboardStats }) {
         </span>
       </div>
 
-      <p className="sr-only">
-        {t('standalone.funnel.summary', {
-          sent,
-          waiting: awaitingReply,
-          confirmed,
-          canceled,
-        })}
-      </p>
-
-      <div className="mt-6 grid items-stretch gap-3 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1.35fr)] lg:gap-4">
-        <div className="rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-4">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
-            <Send aria-hidden="true" className="h-4.5 w-4.5" />
+      {sentCount === 0 ? (
+        <div className="mt-6 flex flex-col items-center rounded-2xl border border-dashed border-stone-200 bg-stone-50/70 px-5 py-9 text-center">
+          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-slate-500 shadow-sm ring-1 ring-stone-200">
+            <Send aria-hidden="true" className="h-5 w-5" />
           </span>
-          <p className="mt-4 text-sm font-medium text-slate-600">
-            {t('metrics.cards.sent')}
+          <p className="mt-3 text-sm font-semibold text-slate-900">
+            {t('standalone.funnel.emptyTitle')}
           </p>
-          <p className="mt-1 text-2xl font-bold tracking-tight text-slate-950">
-            {sent}
+          <p className="mt-1 max-w-md text-sm text-slate-500">
+            {t('standalone.funnel.emptyDescription')}
           </p>
         </div>
-
-        <FunnelConnector />
-
-        <div className="rounded-2xl border border-amber-100 bg-gradient-to-br from-amber-50 to-white p-4">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-100 text-amber-700">
-            <Clock3 aria-hidden="true" className="h-4.5 w-4.5" />
-          </span>
-          <p className="mt-4 text-sm font-medium text-slate-600">
-            {t('standalone.funnel.waitingCustomer')}
+      ) : (
+        <>
+          <p className="sr-only">
+            {t('standalone.funnel.summary', {
+              sent,
+              responded,
+              responseRate: formattedResponseRate,
+              noResponse,
+              confirmed,
+              canceled,
+            })}
           </p>
-          <p className="mt-1 text-2xl font-bold tracking-tight text-slate-950">
-            {awaitingReply}
-          </p>
-        </div>
 
-        <FunnelConnector />
+          <div className="mt-5 grid items-stretch gap-3 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1.15fr)_auto_minmax(0,1.5fr)] lg:gap-3">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.03)]">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex min-w-0 items-center gap-2.5">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+                    <Send aria-hidden="true" className="h-4 w-4" />
+                  </span>
+                  <p className="truncate text-sm font-medium text-slate-600">
+                    {t('metrics.cards.sent')}
+                  </p>
+                </div>
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-600">
+                  {formatDashboardNumber(1, locale)}
+                </span>
+              </div>
+              <div className="mt-3 flex flex-wrap items-baseline justify-between gap-3">
+                <p className="text-3xl font-bold tracking-tight text-slate-950">
+                  {sent}
+                </p>
+                <p className="text-sm font-bold text-blue-700">
+                  {formattedSentShareRate}
+                </p>
+              </div>
+            </div>
 
-        <div className="rounded-2xl border border-stone-200 bg-stone-50/80 p-4">
-          <p className="text-sm font-semibold text-slate-700">
-            {t('metrics.cards.confirmedCanceled')}
-          </p>
-          <div className="mt-3 grid grid-cols-2 gap-3">
-            <div className="rounded-xl border border-emerald-100 bg-white p-3 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
-                <CheckCircle2 aria-hidden="true" className="h-4 w-4" />
-              </span>
-              <p className="mt-3 text-xs font-medium text-slate-500">
-                {t('metrics.cards.confirmed')}
-              </p>
-              <p className="mt-0.5 text-xl font-bold text-emerald-800">
-                {confirmed}
+            <FunnelConnector />
+
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.03)]">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex min-w-0 items-center gap-2.5">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-50 text-violet-700">
+                    <MessageCircleReply
+                      aria-hidden="true"
+                      className="h-4 w-4"
+                    />
+                  </span>
+                  <p className="truncate text-sm font-medium text-slate-600">
+                    {t('standalone.funnel.responded')}
+                  </p>
+                </div>
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-600">
+                  {formatDashboardNumber(2, locale)}
+                </span>
+              </div>
+              <div className="mt-3 flex flex-wrap items-baseline justify-between gap-3">
+                <p className="text-3xl font-bold tracking-tight text-slate-950">
+                  {responded}
+                </p>
+                <p className="text-sm font-bold text-violet-700">
+                  {formattedResponseRate}
+                </p>
+              </div>
+              <div
+                aria-hidden="true"
+                className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-100"
+              >
+                <div
+                  className="h-full rounded-full bg-violet-500"
+                  style={{ width: `${responseRate}%` }}
+                />
+              </div>
+              <p className="mt-2 inline-flex rounded-lg bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-800">
+                {t('standalone.funnel.noResponse', { count: noResponse })}
               </p>
             </div>
-            <div className="rounded-xl border border-red-100 bg-white p-3 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-50 text-red-700">
-                <XCircle aria-hidden="true" className="h-4 w-4" />
-              </span>
-              <p className="mt-3 text-xs font-medium text-slate-500">
-                {t('metrics.cards.canceled')}
-              </p>
-              <p className="mt-0.5 text-xl font-bold text-red-800">
-                {canceled}
+
+            <FunnelConnector />
+
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.03)]">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex min-w-0 items-center gap-2.5">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
+                    <GitBranch aria-hidden="true" className="h-4 w-4" />
+                  </span>
+                  <p className="truncate text-sm font-medium text-slate-600">
+                    {t('standalone.funnel.decision')}
+                  </p>
+                </div>
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-600">
+                  {formatDashboardNumber(3, locale)}
+                </span>
+              </div>
+              <div className="mt-2.5 grid grid-cols-2 gap-2.5">
+                <div className="rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+                  <div className="flex items-center gap-2">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white text-emerald-700 ring-1 ring-emerald-100">
+                      <CheckCircle2
+                        aria-hidden="true"
+                        className="h-3.5 w-3.5"
+                      />
+                    </span>
+                    <p className="truncate text-xs font-medium text-slate-500">
+                      {t('metrics.cards.confirmed')}
+                    </p>
+                  </div>
+                  <div className="mt-2 flex flex-wrap items-baseline justify-between gap-1">
+                    <p className="text-xl font-bold text-emerald-800">
+                      {confirmed}
+                    </p>
+                    <p className="text-xs font-semibold text-emerald-700">
+                      {formattedConfirmedRate}
+                    </p>
+                  </div>
+                </div>
+                <div className="rounded-xl border border-red-100 bg-red-50/40 p-3">
+                  <div className="flex items-center gap-2">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white text-red-700 ring-1 ring-red-100">
+                      <XCircle aria-hidden="true" className="h-3.5 w-3.5" />
+                    </span>
+                    <p className="truncate text-xs font-medium text-slate-500">
+                      {t('metrics.cards.canceled')}
+                    </p>
+                  </div>
+                  <div className="mt-2 flex flex-wrap items-baseline justify-between gap-1">
+                    <p className="text-xl font-bold text-red-800">{canceled}</p>
+                    <p className="text-xs font-semibold text-red-700">
+                      {formattedCanceledRate}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <p className="mt-2 text-xs text-slate-500">
+                {t('standalone.funnel.responseShare')}
               </p>
             </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </DashboardCard>
   )
 }

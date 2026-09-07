@@ -54,11 +54,13 @@ export function StandaloneFeedbackBanners({
 
       {actionFeedback && (
         <div
-          role="status"
+          role={actionFeedback.tone === 'critical' ? 'alert' : 'status'}
           className={`flex items-center justify-between rounded-xl border px-4 py-3 text-sm ${
             actionFeedback.tone === 'success'
               ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-              : 'border-amber-200 bg-amber-50 text-amber-800'
+              : actionFeedback.tone === 'warning'
+                ? 'border-amber-200 bg-amber-50 text-amber-800'
+                : 'border-red-200 bg-red-50 text-red-700'
           }`}
         >
           <span>{actionFeedback.message}</span>

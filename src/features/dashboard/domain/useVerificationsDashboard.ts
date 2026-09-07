@@ -1,11 +1,12 @@
 'use client'
 
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { api } from '@/shared/lib/auth'
 import { createLogger } from '@/shared/lib/logger'
 import type { CancelOrderResponse } from '@/shared/types/commerce-outcome.model'
 import { retryManualOrderVerification } from '@/features/orders/api/manualOrderApi'
+import { subscribeToManualOrderAccepted } from '@/features/orders'
 import { useDashboardData } from '../hooks/useDashboardData'
 import { useDashboardStats } from '../hooks/useDashboardStats'
 import { canCancelOrder } from './cancellation'
@@ -130,6 +131,11 @@ export function useVerificationsDashboard(
     refetchStats()
   }, [refetchVerifications, refetchStats])
 
+  useEffect(
+    () => subscribeToManualOrderAccepted(refreshDashboard),
+    [refreshDashboard]
+  )
+
   const onDismissTestFeedback = useCallback(() => setTestFeedback(null), [])
   const onDismissActionFeedback = useCallback(() => setActionFeedback(null), [])
 
@@ -235,6 +241,10 @@ export function useVerificationsDashboard(
           ...current,
           [verificationId]: t('table.actions.retryError'),
         }))
+        setActionFeedback({
+          tone: 'critical',
+          message: t('table.actions.retryError'),
+        })
       } finally {
         setActingVerificationId((current) =>
           current === verificationId ? null : current
@@ -364,7 +374,6 @@ export function useVerificationsDashboard(
     onSendTestVerification,
     onDismissTestFeedback,
     onDismissActionFeedback,
-    onManualOrderAccepted: refreshDashboard,
     error,
   }
 }

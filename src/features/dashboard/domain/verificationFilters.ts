@@ -36,9 +36,17 @@ export const DASHBOARD_DATE_RANGE_IDS = [
  * has its own tab.
  */
 const COMPOSITE_FILTERS: Partial<Record<VerificationStatusFilter, string>> = {
+  in_progress: 'pending,sent,delivered,read',
   awaiting_response: 'sent,delivered,read,no_reply',
   needs_attention: 'failed,expired,no_reply',
+  completed: 'confirmed,canceled',
 }
+
+export const WORKLOAD_STATUS_FILTER_IDS = [
+  'in_progress',
+  'needs_attention',
+  'completed',
+] as const satisfies ReadonlyArray<VerificationStatusFilter>
 
 /** Build the `/api/verifications` query string for a filter selection. */
 export function buildVerificationsQuery(

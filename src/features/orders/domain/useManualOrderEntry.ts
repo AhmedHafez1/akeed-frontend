@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
@@ -14,6 +14,7 @@ import {
   type ManualOrderCreateInput,
 } from '../api/manualOrderApi'
 import {
+  DEFAULT_MANUAL_ORDER_CURRENCY,
   isManualOrderCurrency,
   MANUAL_ORDER_PAYMENT_METHOD,
   type ManualOrderFeedback,
@@ -21,6 +22,7 @@ import {
   type ManualOrderRecoveryMode,
   type ManualOrderResult,
 } from './manualOrder.model'
+import { notifyManualOrderAccepted } from './manualOrderEvents'
 
 const SUBMISSION_TIMEOUT_MS = 30_000
 const fieldOrder: Array<keyof ManualOrderFormValues> = [
@@ -52,7 +54,6 @@ function toPayload(values: ManualOrderFormValues): ManualOrderCreateInput {
 }
 
 export function useManualOrderEntry(
-  defaultCurrency?: string,
   focusCustomerPhone?: () => void,
   onAccepted?: () => void
 ) {
@@ -91,7 +92,7 @@ export function useManualOrderEntry(
       customerName: '',
       orderNumber: '',
       totalPrice: '',
-      currency: isManualOrderCurrency(defaultCurrency) ? defaultCurrency : '',
+      currency: DEFAULT_MANUAL_ORDER_CURRENCY,
     },
   })
   const [isOpen, setIsOpen] = useState(false)
@@ -105,24 +106,13 @@ export function useManualOrderEntry(
   const submittedPayloadRef = useRef<ManualOrderCreateInput | null>(null)
   const requestInFlightRef = useRef(false)
 
-  useEffect(() => {
-    if (
-      isManualOrderCurrency(defaultCurrency) &&
-      !form.formState.dirtyFields.currency &&
-      !result &&
-      recoveryMode === null
-    ) {
-      form.setValue('currency', defaultCurrency)
-    }
-  }, [defaultCurrency, form, recoveryMode, result])
-
   const resetFlow = useCallback(() => {
     form.reset({
       customerPhone: '',
       customerName: '',
       orderNumber: '',
       totalPrice: '',
-      currency: isManualOrderCurrency(defaultCurrency) ? defaultCurrency : '',
+      currency: DEFAULT_MANUAL_ORDER_CURRENCY,
     })
     submissionTokenRef.current = null
     submittedPayloadRef.current = null
@@ -130,7 +120,7 @@ export function useManualOrderEntry(
     setResult(null)
     setRecoveryMode(null)
     setIsConfirmingStartOver(false)
-  }, [defaultCurrency, form])
+  }, [form])
 
   const focusFirstServerError = useCallback(
     (fieldErrors: Record<string, string>) => {
@@ -188,6 +178,7 @@ export function useManualOrderEntry(
         )
         setResult(response)
         setRecoveryMode(null)
+        notifyManualOrderAccepted()
         onAccepted?.()
       } catch (error) {
         logger.error('Submission failed', error)

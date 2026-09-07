@@ -61,16 +61,26 @@ export function StandaloneVerificationsSection({
   onSendTestVerification,
 }: StandaloneVerificationsSectionProps) {
   const t = useTranslations('dashboard')
-  const standaloneFilters =
-    statusFilter === 'needs_attention'
-      ? [
-          {
-            id: 'needs_attention' as const,
-            label: t('verifications.metrics.needsAttention'),
-          },
-          ...statusFilters,
-        ]
-      : statusFilters
+  const workloadFilter =
+    statusFilter === 'in_progress'
+      ? {
+          id: statusFilter,
+          label: t('verifications.workload.inProgress'),
+        }
+      : statusFilter === 'needs_attention'
+        ? {
+            id: statusFilter,
+            label: t('verifications.workload.needsAttention'),
+          }
+        : statusFilter === 'completed'
+          ? {
+              id: statusFilter,
+              label: t('verifications.workload.completed'),
+            }
+          : null
+  const standaloneFilters = workloadFilter
+    ? [workloadFilter, ...statusFilters]
+    : statusFilters
 
   return (
     <section

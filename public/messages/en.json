@@ -717,9 +717,15 @@
         "action": "Review automation"
       },
       "funnel": {
-        "period": "Customer response flow for {period}",
-        "waitingCustomer": "Waiting for customer",
-        "summary": "Sent: {sent}. Waiting for customer: {waiting}. Confirmed: {confirmed}. Canceled by customer: {canceled}."
+        "title": "Customer response funnel",
+        "description": "What customers did after receiving a verification message.",
+        "responded": "Responded",
+        "noResponse": "{count} no response",
+        "decision": "Customer decision",
+        "responseShare": "Percentages are based on customer responses.",
+        "summary": "Sent: {sent}. Responded: {responded}, or {responseRate}. No response: {noResponse}. Confirmed: {confirmed}. Canceled by customer: {canceled}.",
+        "emptyTitle": "No messages sent",
+        "emptyDescription": "No verification messages were sent during this period."
       },
       "usage": {
         "title": "Usage this month",
@@ -924,6 +930,7 @@
       "actions": {
         "details": "View details",
         "viewDetails": "View details for {order}",
+        "openMenu": "Open actions for {order}",
         "cancelOrder": "Cancel order",
         "confirmCancelOrder": "Yes, cancel",
         "keepOrder": "Keep order",
@@ -1010,7 +1017,8 @@
         "inProgress": "In progress",
         "needsAttention": "Needs attention",
         "confirmed": "Confirmed",
-        "canceled": "Canceled"
+        "canceled": "Canceled",
+        "pending": "Pending"
       },
       "filters": {
         "label": "Order status",
@@ -1429,6 +1437,8 @@
     "optional": "Optional",
     "readOnly": "Only owners and admins can verify orders.",
     "sourceDisconnected": "Order verification is unavailable while the source is disconnected.",
+    "availabilityLoading": "Checking whether order verification is available.",
+    "availabilityUnavailable": "Order verification is temporarily unavailable.",
     "sections": {
       "customerDetails": "Customer details",
       "orderDetails": "Order details"
