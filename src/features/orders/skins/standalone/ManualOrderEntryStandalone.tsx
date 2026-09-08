@@ -2,7 +2,7 @@
 
 import { useCallback } from 'react'
 import { Controller } from 'react-hook-form'
-import { ChevronDown, ClipboardCheck, ShieldCheck } from 'lucide-react'
+import { ChevronDown, ClipboardCheck } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/shared/lib/utils'
 import {
@@ -219,10 +219,6 @@ export function ManualOrderEntryStandalone({
             )}
 
             <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-slate-900">
-                {t('sections.customerDetails')}
-              </h3>
-
               <div>
                 <Label htmlFor="manual-order-phone">
                   {t('fields.customerPhone.label')}
@@ -247,18 +243,12 @@ export function ManualOrderEntryStandalone({
                       aria-describedby={
                         errors.customerPhone
                           ? 'manual-order-phone-error'
-                          : 'manual-order-phone-help'
+                          : undefined
                       }
                       className="mt-2"
                     />
                   )}
                 />
-                <p
-                  id="manual-order-phone-help"
-                  className="mt-1 text-xs text-slate-500"
-                >
-                  {t('fields.customerPhone.help')}
-                </p>
                 <FieldError
                   id="manual-order-phone-error"
                   message={errors.customerPhone?.message}
@@ -319,10 +309,6 @@ export function ManualOrderEntryStandalone({
             </div>
 
             <div className="space-y-4 border-t border-stone-200 pt-5">
-              <h3 className="text-sm font-semibold text-slate-900">
-                {t('sections.orderDetails')}
-              </h3>
-
               <div className="grid gap-4 sm:grid-cols-5">
                 <div className="sm:col-span-3">
                   <Label htmlFor="manual-order-total">
@@ -388,20 +374,6 @@ export function ManualOrderEntryStandalone({
               </div>
             </div>
 
-            <div className="flex items-start justify-between gap-3 rounded-xl border border-emerald-100 bg-emerald-50 p-3.5">
-              <div>
-                <p className="text-sm font-semibold text-emerald-950">
-                  {t('trust.title')}
-                </p>
-                <p className="mt-0.5 text-xs text-emerald-800">
-                  {t('trust.description')}
-                </p>
-              </div>
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
-                <ShieldCheck className="h-4 w-4" aria-hidden="true" />
-              </span>
-            </div>
-
             <DialogFooter className="border-t border-stone-200 pt-5">
               <DialogClose asChild>
                 <Button
@@ -421,7 +393,11 @@ export function ManualOrderEntryStandalone({
                   {entry.isSubmitting ? t('retry.retrying') : t('retry.retry')}
                 </Button>
               ) : entry.recoveryMode === 'conflict' ? null : (
-                <Button type="submit" disabled={entry.isSubmitting}>
+                <Button
+                  type="submit"
+                  disabled={entry.isSubmitting}
+                  className="bg-emerald-700 text-white shadow-sm hover:bg-emerald-800"
+                >
                   {entry.isSubmitting ? t('submitting') : t('submit')}
                 </Button>
               )}

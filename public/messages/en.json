@@ -1411,7 +1411,7 @@
   },
   "manualOrder": {
     "title": "Verify an order",
-    "description": "Enter the order details and Akeed will send a cash-on-delivery confirmation to the customer.",
+    "description": "Akeed will send a cash-on-delivery confirmation to the customer.",
     "open": "Verify order",
     "close": "Close",
     "cancel": "Cancel",
@@ -1423,19 +1423,10 @@
     "availabilityLoading": "Checking whether order verification is available.",
     "availabilityUnavailable": "Order verification is temporarily unavailable.",
     "planLimitReasonLabel": "You have used all included verifications for this period.",
-    "sections": {
-      "customerDetails": "Customer details",
-      "orderDetails": "Order details"
-    },
-    "trust": {
-      "title": "Safe WhatsApp verification",
-      "description": "The order is saved first and then sent for verification. No external order system is updated."
-    },
     "fields": {
       "customerPhone": {
         "label": "Customer phone",
-        "placeholder": "+20 100 123 4567",
-        "help": "Choose the country code and enter a valid mobile number."
+        "placeholder": "+20 100 123 4567"
       },
       "customerName": {
         "label": "Customer name"
