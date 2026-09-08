@@ -14,7 +14,7 @@ export default function VerificationFixturePage() {
   )
   const [requests, setRequests] = useState<string[]>([])
   return (
-    <main className="min-h-screen bg-[#f7f7f3] p-4 sm:p-6 lg:px-8 lg:py-8">
+    <main className="akeed-app-canvas min-h-screen p-4 sm:p-6 lg:px-8 lg:py-8">
       <DashboardVerificationsStandaloneSkin {...dashboard} />
       <aside
         className="mx-auto mt-10 max-w-[1400px] border-t p-4 text-xs"

@@ -6,7 +6,6 @@ import {
   ArrowRight,
   CheckCircle2,
   Clock3,
-  GitBranch,
   MessageCircleReply,
   Package,
   ReceiptText,
@@ -296,7 +295,6 @@ function VerificationFunnel({ stats }: { stats: DashboardStats }) {
   const t = useTranslations('dashboard')
   const { locale } = useLocaleInfo()
   const periodLabel = t(`filters.dateRange.${stats.date_range}`)
-  const totalCount = Math.max(0, stats.totals.total)
   const sentCount = Math.max(0, stats.totals.sent)
   const confirmedCount = Math.max(0, stats.totals.confirmed)
   const canceledCount = Math.max(0, stats.totals.customer_canceled)
@@ -304,28 +302,20 @@ function VerificationFunnel({ stats }: { stats: DashboardStats }) {
   const noResponseCount = Math.max(0, sentCount - respondedCount)
   const clampPercentage = (value: number) =>
     Number.isFinite(value) ? Math.min(100, Math.max(0, value)) : 0
-  const sentShareRate = clampPercentage(
-    totalCount > 0 ? (sentCount / totalCount) * 100 : 0
-  )
   const responseRate = clampPercentage(stats.totals.reply_rate)
   const confirmedRate = clampPercentage(
     respondedCount > 0 ? (confirmedCount / respondedCount) * 100 : 0
-  )
-  const canceledRate = clampPercentage(
-    respondedCount > 0 ? (canceledCount / respondedCount) * 100 : 0
   )
   const sent = formatDashboardNumber(sentCount, locale)
   const responded = formatDashboardNumber(respondedCount, locale)
   const noResponse = formatDashboardNumber(noResponseCount, locale)
   const confirmed = formatDashboardNumber(confirmedCount, locale)
   const canceled = formatDashboardNumber(canceledCount, locale)
-  const formattedSentShareRate = formatDashboardPercent(sentShareRate, locale)
   const formattedResponseRate = formatDashboardPercent(responseRate, locale)
   const formattedConfirmedRate = formatDashboardPercent(confirmedRate, locale)
-  const formattedCanceledRate = formatDashboardPercent(canceledRate, locale)
 
   return (
-    <DashboardCard className="p-5">
+    <DashboardCard className="overflow-hidden p-5 sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="text-base font-bold text-slate-950">
@@ -335,7 +325,7 @@ function VerificationFunnel({ stats }: { stats: DashboardStats }) {
             {t('standalone.funnel.description')}
           </p>
         </div>
-        <span className="rounded-lg bg-stone-100 px-2.5 py-1 text-xs font-semibold text-slate-600">
+        <span className="rounded-lg bg-slate-100 px-3 py-2 text-xs font-medium text-slate-600">
           {periodLabel}
         </span>
       </div>
@@ -365,131 +355,80 @@ function VerificationFunnel({ stats }: { stats: DashboardStats }) {
             })}
           </p>
 
-          <div className="mt-5 grid items-stretch gap-3 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1.15fr)_auto_minmax(0,1.5fr)] lg:gap-3">
-            <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.03)]">
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex min-w-0 items-center gap-2.5">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
-                    <Send aria-hidden="true" className="h-4 w-4" />
-                  </span>
-                  <p className="truncate text-sm font-medium text-slate-600">
-                    {t('metrics.cards.sent')}
-                  </p>
-                </div>
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-600">
-                  {formatDashboardNumber(1, locale)}
+          <div className="mt-6 grid items-center gap-3 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1.25fr)] md:gap-4">
+            <div className="flex min-h-40 flex-col justify-center rounded-xl bg-slate-50 p-5">
+              <div className="flex items-center gap-2.5">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-50 text-violet-600">
+                  <Send aria-hidden="true" className="h-4 w-4" />
                 </span>
-              </div>
-              <div className="mt-3 flex flex-wrap items-baseline justify-between gap-3">
-                <p className="text-3xl font-bold tracking-tight text-slate-950">
-                  {sent}
-                </p>
-                <p className="text-sm font-bold text-blue-700">
-                  {formattedSentShareRate}
+                <p className="text-sm font-medium text-slate-600">
+                  {t('metrics.cards.sent')}
                 </p>
               </div>
-            </div>
-
-            <FunnelConnector />
-
-            <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.03)]">
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex min-w-0 items-center gap-2.5">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-50 text-violet-700">
-                    <MessageCircleReply
-                      aria-hidden="true"
-                      className="h-4 w-4"
-                    />
-                  </span>
-                  <p className="truncate text-sm font-medium text-slate-600">
-                    {t('standalone.funnel.responded')}
-                  </p>
-                </div>
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-600">
-                  {formatDashboardNumber(2, locale)}
-                </span>
-              </div>
-              <div className="mt-3 flex flex-wrap items-baseline justify-between gap-3">
-                <p className="text-3xl font-bold tracking-tight text-slate-950">
-                  {responded}
-                </p>
-                <p className="text-sm font-bold text-violet-700">
-                  {formattedResponseRate}
-                </p>
-              </div>
-              <div
-                aria-hidden="true"
-                className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-100"
-              >
-                <div
-                  className="h-full rounded-full bg-violet-500"
-                  style={{ width: `${responseRate}%` }}
-                />
-              </div>
-              <p className="mt-2 inline-flex rounded-lg bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-800">
-                {t('standalone.funnel.noResponse', { count: noResponse })}
+              <p className="mt-3 text-3xl font-medium tracking-tight text-slate-950">
+                {sent}
+              </p>
+              <p className="mt-2 text-sm text-slate-600">
+                {t('standalone.funnel.sentContext')}
               </p>
             </div>
 
             <FunnelConnector />
 
-            <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.03)]">
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex min-w-0 items-center gap-2.5">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
-                    <GitBranch aria-hidden="true" className="h-4 w-4" />
-                  </span>
-                  <p className="truncate text-sm font-medium text-slate-600">
-                    {t('standalone.funnel.decision')}
-                  </p>
-                </div>
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-600">
-                  {formatDashboardNumber(3, locale)}
+            <div className="flex min-h-40 flex-col justify-center rounded-xl bg-slate-50 p-5">
+              <div className="flex items-center gap-2.5">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-50 text-violet-600">
+                  <MessageCircleReply aria-hidden="true" className="h-4 w-4" />
                 </span>
+                <p className="text-sm font-medium text-slate-600">
+                  {t('standalone.funnel.responded')}
+                </p>
               </div>
-              <div className="mt-2.5 grid grid-cols-2 gap-2.5">
-                <div className="rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
-                  <div className="flex items-center gap-2">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white text-emerald-700 ring-1 ring-emerald-100">
-                      <CheckCircle2
-                        aria-hidden="true"
-                        className="h-3.5 w-3.5"
-                      />
-                    </span>
-                    <p className="truncate text-xs font-medium text-slate-500">
-                      {t('metrics.cards.confirmed')}
-                    </p>
-                  </div>
-                  <div className="mt-2 flex flex-wrap items-baseline justify-between gap-1">
-                    <p className="text-xl font-bold text-emerald-800">
-                      {confirmed}
-                    </p>
-                    <p className="text-xs font-semibold text-emerald-700">
-                      {formattedConfirmedRate}
-                    </p>
-                  </div>
-                </div>
-                <div className="rounded-xl border border-red-100 bg-red-50/40 p-3">
-                  <div className="flex items-center gap-2">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white text-red-700 ring-1 ring-red-100">
-                      <XCircle aria-hidden="true" className="h-3.5 w-3.5" />
-                    </span>
-                    <p className="truncate text-xs font-medium text-slate-500">
-                      {t('metrics.cards.canceled')}
-                    </p>
-                  </div>
-                  <div className="mt-2 flex flex-wrap items-baseline justify-between gap-1">
-                    <p className="text-xl font-bold text-red-800">{canceled}</p>
-                    <p className="text-xs font-semibold text-red-700">
-                      {formattedCanceledRate}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <p className="mt-2 text-xs text-slate-500">
-                {t('standalone.funnel.responseShare')}
+              <p className="mt-3 text-3xl font-medium tracking-tight text-slate-950">
+                {responded}
+              </p>
+              <p className="mt-2 text-sm text-slate-600">
+                {t('standalone.funnel.responseRate', {
+                  rate: formattedResponseRate,
+                })}
               </p>
             </div>
+
+            <FunnelConnector />
+
+            <div className="flex min-h-40 flex-col justify-center rounded-xl bg-slate-50 p-5">
+              <p className="text-sm font-medium text-slate-600">
+                {t('standalone.funnel.decision')}
+              </p>
+              <div className="mt-3 space-y-2">
+                <div className="flex items-center justify-between gap-4 rounded-lg bg-emerald-50 px-3 py-2.5 text-emerald-700">
+                  <p className="text-sm font-medium">
+                    {t('metrics.cards.confirmed')}
+                  </p>
+                  <p className="text-sm font-semibold">{confirmed}</p>
+                </div>
+                <div className="flex items-center justify-between gap-4 rounded-lg bg-red-50 px-3 py-2.5 text-red-600">
+                  <p className="text-sm font-medium">
+                    {t('metrics.cards.canceled')}
+                  </p>
+                  <p className="text-sm font-semibold">{canceled}</p>
+                </div>
+              </div>
+              <p className="mt-3 text-xs text-slate-600">
+                {t('standalone.funnel.confirmationShare', {
+                  rate: formattedConfirmedRate,
+                })}
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-5 flex justify-start">
+            <p className="inline-flex items-center gap-2 text-sm font-medium text-amber-700">
+              <Clock3 aria-hidden="true" className="h-4 w-4" />
+              {t('standalone.funnel.awaitingResponse', {
+                count: noResponseCount,
+              })}
+            </p>
           </div>
         </>
       )}
@@ -501,10 +440,10 @@ function FunnelConnector() {
   return (
     <div
       aria-hidden="true"
-      className="flex items-center justify-center text-slate-300"
+      className="flex items-center justify-center text-slate-400"
     >
-      <ArrowDown className="h-5 w-5 lg:hidden" />
-      <ArrowRight className="hidden h-5 w-5 lg:block rtl:rotate-180" />
+      <ArrowDown className="h-5 w-5 md:hidden" />
+      <ArrowRight className="hidden h-5 w-5 md:block rtl:rotate-180" />
     </div>
   )
 }

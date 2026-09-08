@@ -62,7 +62,7 @@ export function StandalonePageSkeleton({
   if (!includeShell) return <ContentSkeleton variant={variant} />
 
   return (
-    <div className="flex min-h-screen bg-[#f7f7f3]">
+    <div className="akeed-app-canvas flex min-h-screen">
       <aside className="hidden h-screen w-[248px] shrink-0 border-e border-stone-200 bg-white p-5 lg:block">
         <Skeleton className="h-10 w-28" />
         <div className="mt-10 space-y-3">

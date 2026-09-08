@@ -718,11 +718,13 @@
       },
       "funnel": {
         "title": "Customer response funnel",
-        "description": "What customers did after receiving a verification message.",
+        "description": "From sending the message to the customer's decision.",
         "responded": "Responded",
-        "noResponse": "{count} no response",
+        "sentContext": "Order confirmation message",
+        "responseRate": "{rate} of sent messages",
         "decision": "Customer decision",
-        "responseShare": "Percentages are based on customer responses.",
+        "confirmationShare": "{rate} of responses were confirmations",
+        "awaitingResponse": "{count, plural, =0 {No messages awaiting response} one {# message awaiting response} other {# messages awaiting response}}",
         "summary": "Sent: {sent}. Responded: {responded}, or {responseRate}. No response: {noResponse}. Confirmed: {confirmed}. Canceled by customer: {canceled}.",
         "emptyTitle": "No messages sent",
         "emptyDescription": "No verification messages were sent during this period."

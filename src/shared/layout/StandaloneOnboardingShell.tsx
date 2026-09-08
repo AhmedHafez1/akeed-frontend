@@ -44,7 +44,7 @@ export function StandaloneOnboardingShell({
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#f7f7f3] text-slate-950">
+    <div className="akeed-app-canvas flex min-h-screen flex-col text-slate-950">
       <a
         href="#onboarding-content"
         className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:m-2 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:ring-2 focus:ring-emerald-600"

@@ -109,6 +109,81 @@ export async function checkCancellation(tab, skin, locale) {
   return { skin, locale, baseline, held, rejected, complete, passed: true }
 }
 
+export async function checkVerificationDetailsDrawer(tab) {
+  if (new URL(await tab.url()).origin !== 'http://127.0.0.1:3098') {
+    throw new Error('Drawer checks are restricted to the loopback fixture')
+  }
+  const page = tab.playwright
+  const ensure = (condition, message) => {
+    if (!condition) throw new Error(message)
+  }
+  const openDrawer = async () => {
+    await page
+      .locator('button[aria-haspopup="menu"]')
+      .filter({ visible: true })
+      .first()
+      .click()
+    await page
+      .locator('[role="menuitem"]')
+      .filter({ visible: true })
+      .first()
+      .click()
+    const dialog = page.getByRole('dialog')
+    await dialog.waitFor({ state: 'visible', timeoutMs: 10000 })
+    return dialog
+  }
+  const assertInteractive = async (label) => {
+    await page
+      .getByRole('dialog')
+      .waitFor({ state: 'hidden', timeoutMs: 10000 })
+    await page.waitForTimeout(250)
+    const state = await page.evaluate(() => ({
+      pointerEvents: getComputedStyle(document.body).pointerEvents,
+      activeLabel: document.activeElement?.getAttribute('aria-label') ?? null,
+    }))
+    ensure(
+      state.pointerEvents !== 'none',
+      `${label} left the page pointer-locked`
+    )
+    ensure(state.activeLabel !== null, `${label} did not restore focus`)
+    const statusControl = page
+      .getByRole('group')
+      .locator('button')
+      .filter({ visible: true })
+      .first()
+    await statusControl.click()
+    ensure(
+      (await statusControl.getAttribute('aria-pressed')) === 'true',
+      'Status filter was not interactive after closing the drawer'
+    )
+    await page.waitForTimeout(250)
+  }
+
+  let dialog = await openDrawer()
+  await dialog.locator('button').last().click()
+  await assertInteractive('Close button')
+
+  dialog = await openDrawer()
+  await dialog.press('Escape', {})
+  await assertInteractive('Escape')
+
+  await openDrawer()
+  const overlay = page.locator('div[data-state="open"].fixed.inset-0').first()
+  await overlay.waitFor({ state: 'visible', timeoutMs: 10000 })
+  const viewport = await page.evaluate(() => ({
+    direction: document.documentElement.dir,
+    height: window.innerHeight,
+    width: window.innerWidth,
+  }))
+  await tab.cua.click({
+    x: viewport.direction === 'rtl' ? viewport.width - 8 : 8,
+    y: Math.round(viewport.height / 2),
+  })
+  await assertInteractive('Overlay dismissal')
+
+  return { passed: true }
+}
+
 export async function checkStandaloneOnboarding(tab, locale) {
   if (new URL(await tab.url()).origin !== 'http://127.0.0.1:3098') {
     throw new Error('Onboarding checks are restricted to the loopback fixture')

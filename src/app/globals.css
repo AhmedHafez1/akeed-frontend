@@ -22,6 +22,7 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 160 84% 39%; /* Emerald-600 */
     --radius: 0.75rem;
+    --akeed-app-canvas: #f5f5f5;
   }
 
   .dark {
@@ -45,6 +46,10 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 160 84% 39%;
   }
+}
+
+.akeed-app-canvas {
+  background-color: var(--akeed-app-canvas);
 }
 
 @layer base {
@@ -96,6 +101,7 @@
 
 .akeed-embedded-content {
   width: 100%;
+  min-height: 100vh;
 }
 
 @media (max-width: 48rem) {

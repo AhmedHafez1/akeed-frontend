@@ -6,7 +6,7 @@ import { Skeleton } from '@/shared/ui'
  */
 export function StandaloneOnboardingShellSkeleton() {
   return (
-    <div aria-busy="true" className="min-h-screen bg-[#f7f7f3]">
+    <div aria-busy="true" className="akeed-app-canvas min-h-screen">
       <div className="flex h-14 items-center justify-between border-b border-stone-200 bg-white px-4 sm:px-6">
         <Skeleton className="h-9 w-24" />
         <div className="flex items-center gap-2">

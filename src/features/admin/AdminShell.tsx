@@ -35,7 +35,7 @@ export function AdminShell({ children }: AdminShellProps) {
 
   return (
     <div
-      className="min-h-screen bg-slate-50 text-slate-950"
+      className="akeed-app-canvas min-h-screen text-slate-950"
       dir={isRTL ? 'rtl' : 'ltr'}
     >
       <header className="sticky top-0 z-30 border-b border-slate-200/90 bg-white/95 backdrop-blur-md">

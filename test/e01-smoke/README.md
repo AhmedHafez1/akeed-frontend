@@ -16,6 +16,13 @@ more so a status change can test rejection of a stale cursor response. Add
 `status=failed` to the empty scenario to inspect the filtered empty state.
 Inspect fixture requests displays the intercepted GET/POST history.
 
+`browser-check.mjs` exports `checkVerificationDetailsDrawer(tab)` to cover the
+details handoff from the row menu. It dismisses the drawer by close button,
+Escape, and overlay, verifies that focus returns and `body` is not left with
+`pointer-events: none`, then clicks the status filter to prove the page remains
+interactive. Run it on both `/en/verifications` and `/ar/verifications`, at a
+desktop width and at a mobile width.
+
 Check both locales at 1440, 1024, 768, 390, and 320 px. Verify mirrored columns,
 LTR-isolated phones, mobile cards and inline keyboard confirmation; no page
 should overflow horizontally. Retry and cancellation success/failure must use

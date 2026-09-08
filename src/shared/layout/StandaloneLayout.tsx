@@ -93,7 +93,7 @@ export function StandaloneLayout({ children }: StandaloneLayoutProps) {
       }
     >
       <StandaloneShellProvider>
-        <div className="flex min-h-screen bg-[#f7f7f3] text-slate-950">
+        <div className="akeed-app-canvas flex min-h-screen text-slate-950">
           <StandaloneSidebar className="sticky top-0 hidden h-screen lg:flex" />
           <div className="flex min-w-0 flex-1 flex-col">
             <StandaloneTopBar

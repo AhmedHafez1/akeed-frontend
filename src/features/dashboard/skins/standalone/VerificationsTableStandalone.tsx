@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Ellipsis, Eye, History, RotateCcw, XCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
@@ -58,6 +58,7 @@ export function VerificationsTableStandalone(
   const t = useTranslations('dashboard')
   const { locale } = useLocaleInfo()
   const [selectedId, setSelectedId] = useState<string | null>(null)
+  const detailsTriggerRef = useRef<HTMLButtonElement | null>(null)
   const selected =
     props.verifications.find(
       (verification) => verification.id === selectedId
@@ -68,11 +69,19 @@ export function VerificationsTableStandalone(
     setSelectedId(null)
   }
 
-  const openDetails = (verificationId: string) => {
+  const openDetails = (
+    verificationId: string,
+    trigger: HTMLButtonElement | null
+  ) => {
+    detailsTriggerRef.current = trigger
     setSelectedId(verificationId)
   }
 
-  const requestCancel = (verificationId: string) => {
+  const requestCancel = (
+    verificationId: string,
+    trigger: HTMLButtonElement | null
+  ) => {
+    detailsTriggerRef.current = trigger
     setSelectedId(verificationId)
     props.onRequestCancelOrder(verificationId)
   }
@@ -239,7 +248,13 @@ export function VerificationsTableStandalone(
         open={selected !== null}
         onOpenChange={(open) => !open && closeDetails()}
       >
-        {selected && <VerificationDetails {...props} verification={selected} />}
+        {selected && (
+          <VerificationDetails
+            {...props}
+            verification={selected}
+            getReturnFocusTarget={() => detailsTriggerRef.current}
+          />
+        )}
       </Dialog>
     </>
   )
@@ -250,8 +265,14 @@ interface VerificationActionsMenuProps extends Omit<
   'verifications'
 > {
   verification: VerificationItem
-  onOpenDetails: (verificationId: string) => void
-  onOpenCancel: (verificationId: string) => void
+  onOpenDetails: (
+    verificationId: string,
+    trigger: HTMLButtonElement | null
+  ) => void
+  onOpenCancel: (
+    verificationId: string,
+    trigger: HTMLButtonElement | null
+  ) => void
 }
 
 function VerificationActionsMenu({
@@ -261,6 +282,7 @@ function VerificationActionsMenu({
   ...props
 }: VerificationActionsMenuProps) {
   const t = useTranslations('dashboard')
+  const triggerRef = useRef<HTMLButtonElement>(null)
   const showRetry =
     props.canRetryVerifications &&
     canRetryVerification(verification.capabilities)
@@ -278,9 +300,10 @@ function VerificationActionsMenu({
   )
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <button
+          ref={triggerRef}
           type="button"
           aria-label={t('table.actions.openMenu', { order: orderTitle })}
           className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-950 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:outline-none"
@@ -289,7 +312,9 @@ function VerificationActionsMenu({
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onSelect={() => onOpenDetails(verification.id)}>
+        <DropdownMenuItem
+          onSelect={() => onOpenDetails(verification.id, triggerRef.current)}
+        >
           <Eye aria-hidden="true" className="h-4 w-4" />
           {t('table.actions.details')}
         </DropdownMenuItem>
@@ -310,7 +335,7 @@ function VerificationActionsMenu({
             <DropdownMenuItem
               destructive
               disabled={isAnyActionRunning}
-              onSelect={() => onOpenCancel(verification.id)}
+              onSelect={() => onOpenCancel(verification.id, triggerRef.current)}
             >
               <XCircle aria-hidden="true" className="h-4 w-4" />
               {t('table.actions.cancelOrder')}
@@ -327,6 +352,7 @@ interface VerificationDetailsProps extends Omit<
   'verifications'
 > {
   verification: VerificationItem
+  getReturnFocusTarget: () => HTMLButtonElement | null
 }
 
 function VerificationDetails(props: VerificationDetailsProps) {
@@ -350,7 +376,11 @@ function VerificationDetails(props: VerificationDetailsProps) {
   return (
     <DialogContent
       closeLabel={t('table.actions.dismiss')}
-      className="!inset-y-0 [inset-inline-end:0] !top-0 !left-auto !h-dvh !w-[min(100vw,520px)] !max-w-none !translate-x-0 !translate-y-0 !overflow-y-auto !rounded-none !border-y-0 !p-0"
+      onCloseAutoFocus={(event) => {
+        event.preventDefault()
+        props.getReturnFocusTarget()?.focus()
+      }}
+      className="!inset-y-0 [inset-inline-end:0] !top-0 !left-auto !h-dvh !w-[calc(100vw-1.5rem)] !max-w-none !translate-x-0 !translate-y-0 !overflow-y-auto !rounded-none !border-y-0 !p-0 sm:!w-[min(100vw,520px)]"
     >
       <DialogHeader className="border-b border-stone-200 px-5 py-5 pe-14">
         <DialogTitle className="text-xl">

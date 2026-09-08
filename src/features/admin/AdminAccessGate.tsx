@@ -36,16 +36,18 @@ export function AdminAccessGate({ children }: AdminAccessGateProps) {
   if (state === 'allowed') return <>{children}</>
   if (state === 'loading') {
     return (
-      <div className="mx-auto flex min-h-screen max-w-7xl flex-col gap-5 p-8">
-        <Skeleton className="h-14 w-full" />
-        <Skeleton className="h-80 w-full" />
+      <div className="akeed-app-canvas min-h-screen">
+        <div className="mx-auto flex max-w-7xl flex-col gap-5 p-8">
+          <Skeleton className="h-14 w-full" />
+          <Skeleton className="h-80 w-full" />
+        </div>
       </div>
     )
   }
 
   return (
     <main
-      className="grid min-h-screen place-items-center bg-slate-50 p-6"
+      className="akeed-app-canvas grid min-h-screen place-items-center p-6"
       dir={isRTL ? 'rtl' : 'ltr'}
     >
       <div className="max-w-md rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">

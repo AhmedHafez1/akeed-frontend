@@ -704,11 +704,13 @@
       },
       "funnel": {
         "title": "مسار استجابة العملاء",
-        "description": "ما فعله العملاء بعد استلام رسالة تأكيد الطلب.",
+        "description": "من إرسال الرسالة إلى قرار العميل",
         "responded": "تم الرد",
-        "noResponse": "بدون رد: {count}",
+        "sentContext": "رسالة تأكيد طلب",
+        "responseRate": "{rate} من الرسائل المرسلة",
         "decision": "قرار العميل",
-        "responseShare": "النسب محسوبة من إجمالي ردود العملاء.",
+        "confirmationShare": "{rate} من الردود تأكيدات",
+        "awaitingResponse": "{count, plural, =0 {لا توجد رسائل بانتظار الرد} =1 {رسالة واحدة بانتظار الرد} =2 {رسالتان بانتظار الرد} few {# رسائل بانتظار الرد} many {# رسالة بانتظار الرد} other {# رسالة بانتظار الرد}}",
         "summary": "تم الإرسال: {sent}. تم الرد: {responded}، بنسبة {responseRate}. بدون رد: {noResponse}. تم التأكيد: {confirmed}. ألغى العميل: {canceled}.",
         "emptyTitle": "لم تُرسل رسائل",
         "emptyDescription": "لم تُرسل رسائل تأكيد طلبات خلال هذه الفترة."
