@@ -703,32 +703,6 @@
         },
         "action": "مراجعة الأتمتة"
       },
-      "funnel": {
-        "title": "مسار استجابة العملاء",
-        "description": "من إرسال الرسالة إلى قرار العميل",
-        "responded": "تم الرد",
-        "sentContext": "رسالة تأكيد طلب",
-        "responseRate": "{rate} من الرسائل المرسلة",
-        "decision": "قرار العميل",
-        "confirmationShare": "{rate} من الردود تأكيدات",
-        "awaitingResponse": "{count, plural, =0 {لا توجد رسائل بانتظار الرد} =1 {رسالة واحدة بانتظار الرد} =2 {رسالتان بانتظار الرد} few {# رسائل بانتظار الرد} many {# رسالة بانتظار الرد} other {# رسالة بانتظار الرد}}",
-        "summary": "تم الإرسال: {sent}. تم الرد: {responded}، بنسبة {responseRate}. بدون رد: {noResponse}. تم التأكيد: {confirmed}. ألغى العميل: {canceled}.",
-        "emptyTitle": "لم تُرسل رسائل",
-        "emptyDescription": "لم تُرسل رسائل تأكيد طلبات خلال هذه الفترة."
-      },
-      "usage": {
-        "title": "استخدام هذا الشهر",
-        "description": "التأكيدات المحتسبة خلال فترة الفوترة الحالية.",
-        "usedLabel": "التأكيدات المستخدمة",
-        "percentUsed": "تم استخدام {value}%",
-        "summary": "استخدام هذا الشهر: {used} من {limit}",
-        "remaining": "متبقي {value}",
-        "exhausted": "لا توجد تأكيدات متبقية",
-        "unlimited": "غير محدود",
-        "unlimitedDescription": "لا يوجد حد لعدد التأكيدات في مساحة العمل هذه.",
-        "unavailable": "الحد الشهري غير متاح لمساحة العمل هذه.",
-        "manage": "إدارة الخطة"
-      },
       "attention": {
         "title": "يحتاج متابعة",
         "description": "أحدث الطلبات التي قد تحتاج إلى إجراء من التاجر.",

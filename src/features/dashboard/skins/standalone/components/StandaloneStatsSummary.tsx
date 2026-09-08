@@ -2,22 +2,18 @@
 
 import Link from 'next/link'
 import {
-  ArrowDown,
   ArrowRight,
   BarChart3,
   CheckCircle2,
   Clock3,
-  Info,
-  MessageCircleReply,
   Package,
-  Send,
   TriangleAlert,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
-import { Progress, Skeleton, Tooltip } from '@/shared/ui'
+import { Progress, Skeleton } from '@/shared/ui'
 import { lifecycleTone } from '@/features/dashboard/domain/verificationLifecycle'
 import { isAttentionVerification } from '@/features/dashboard/domain/verificationWorkload'
 import { getStatusTimestamp } from '@/features/dashboard/domain/verificationRow'
@@ -92,21 +88,6 @@ function DashboardSkeleton() {
             <Skeleton className="h-4 w-full" />
             <Skeleton className="h-4 w-full" />
             <Skeleton className="h-4 w-full" />
-          </div>
-        </DashboardCard>
-      </div>
-      <DashboardCard className="p-5">
-        <Skeleton className="h-4 w-48" />
-        <Skeleton className="mt-3 h-2 w-full" />
-      </DashboardCard>
-      <div>
-        <DashboardCard className="p-5 sm:p-6">
-          <Skeleton className="h-5 w-48" />
-          <Skeleton className="mt-2 h-4 w-64" />
-          <div className="mt-5 grid items-center gap-3 lg:grid-cols-3">
-            {[0, 1, 2].map((index) => (
-              <Skeleton key={index} className="h-24 rounded-2xl" />
-            ))}
           </div>
         </DashboardCard>
       </div>
@@ -197,6 +178,18 @@ export function StandaloneStatsSummary({
     )
   }
 
+  const totalSubmittedToCustomer =
+    stats.totals.confirmed + stats.totals.canceled + stats.totals.in_progress
+  const confirmationRate =
+    totalSubmittedToCustomer > 0
+      ? (stats.totals.confirmed / totalSubmittedToCustomer) * 100
+      : 0
+  const replyRate =
+    totalSubmittedToCustomer > 0
+      ? ((stats.totals.confirmed + stats.totals.canceled) /
+          totalSubmittedToCustomer) *
+        100
+      : 0
   return (
     <div className="space-y-5">
       <section
@@ -205,22 +198,12 @@ export function StandaloneStatsSummary({
       >
         <FollowUpCard count={stats.totals.needs_attention} locale={locale} />
         <ConfirmationPerformanceCard
-          confirmationRate={stats.totals.confirmation_rate}
-          replyRate={stats.totals.reply_rate}
+          confirmationRate={confirmationRate}
+          replyRate={replyRate}
           locale={locale}
         />
         <TotalOrdersCard stats={stats} locale={locale} />
       </section>
-
-      <UsageBar
-        usage={stats.usage}
-        locale={locale}
-        reportingTimezone={reportingTimezone}
-      />
-
-      <div>
-        <VerificationFunnel stats={stats} />
-      </div>
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
         <AttentionPreview
@@ -231,163 +214,6 @@ export function StandaloneStatsSummary({
         />
         <OutcomeBreakdown stats={stats} />
       </div>
-    </div>
-  )
-}
-
-function VerificationFunnel({ stats }: { stats: DashboardStats }) {
-  const t = useTranslations('dashboard')
-  const { locale } = useLocaleInfo()
-  const periodLabel = t(`filters.dateRange.${stats.date_range}`)
-  const sentCount = Math.max(0, stats.totals.sent)
-  const confirmedCount = Math.max(0, stats.totals.confirmed)
-  const canceledCount = Math.max(0, stats.totals.customer_canceled)
-  const respondedCount = confirmedCount + canceledCount
-  const noResponseCount = Math.max(0, sentCount - respondedCount)
-  const clampPercentage = (value: number) =>
-    Number.isFinite(value) ? Math.min(100, Math.max(0, value)) : 0
-  const responseRate = clampPercentage(stats.totals.reply_rate)
-  const confirmedRate = clampPercentage(
-    respondedCount > 0 ? (confirmedCount / respondedCount) * 100 : 0
-  )
-  const sent = formatDashboardNumber(sentCount, locale)
-  const responded = formatDashboardNumber(respondedCount, locale)
-  const noResponse = formatDashboardNumber(noResponseCount, locale)
-  const confirmed = formatDashboardNumber(confirmedCount, locale)
-  const canceled = formatDashboardNumber(canceledCount, locale)
-  const formattedResponseRate = formatDashboardPercent(responseRate, locale)
-  const formattedConfirmedRate = formatDashboardPercent(confirmedRate, locale)
-
-  return (
-    <DashboardCard className="overflow-hidden p-5 sm:p-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h2 className="text-base font-bold text-slate-950">
-            {t('standalone.funnel.title')}
-          </h2>
-          <p className="mt-1 text-sm text-slate-500">
-            {t('standalone.funnel.description')}
-          </p>
-        </div>
-        <span className="rounded-lg bg-slate-100 px-3 py-2 text-xs font-medium text-slate-600">
-          {periodLabel}
-        </span>
-      </div>
-
-      {sentCount === 0 ? (
-        <div className="mt-6 flex flex-col items-center rounded-2xl border border-dashed border-stone-200 bg-stone-50/70 px-5 py-9 text-center">
-          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-slate-500 shadow-sm ring-1 ring-stone-200">
-            <Send aria-hidden="true" className="h-5 w-5" />
-          </span>
-          <p className="mt-3 text-sm font-semibold text-slate-900">
-            {t('standalone.funnel.emptyTitle')}
-          </p>
-          <p className="mt-1 max-w-md text-sm text-slate-500">
-            {t('standalone.funnel.emptyDescription')}
-          </p>
-        </div>
-      ) : (
-        <>
-          <p className="sr-only">
-            {t('standalone.funnel.summary', {
-              sent,
-              responded,
-              responseRate: formattedResponseRate,
-              noResponse,
-              confirmed,
-              canceled,
-            })}
-          </p>
-
-          <div className="mt-6 grid items-center gap-3 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1.25fr)] md:gap-4">
-            <div className="flex min-h-40 flex-col justify-center rounded-xl bg-slate-50 p-5">
-              <div className="flex items-center gap-2.5">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-50 text-violet-600">
-                  <Send aria-hidden="true" className="h-4 w-4" />
-                </span>
-                <p className="text-sm font-medium text-slate-600">
-                  {t('metrics.cards.sent')}
-                </p>
-              </div>
-              <p className="mt-3 text-3xl font-medium tracking-tight text-slate-950">
-                {sent}
-              </p>
-              <p className="mt-2 text-sm text-slate-600">
-                {t('standalone.funnel.sentContext')}
-              </p>
-            </div>
-
-            <FunnelConnector />
-
-            <div className="flex min-h-40 flex-col justify-center rounded-xl bg-slate-50 p-5">
-              <div className="flex items-center gap-2.5">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-50 text-violet-600">
-                  <MessageCircleReply aria-hidden="true" className="h-4 w-4" />
-                </span>
-                <p className="text-sm font-medium text-slate-600">
-                  {t('standalone.funnel.responded')}
-                </p>
-              </div>
-              <p className="mt-3 text-3xl font-medium tracking-tight text-slate-950">
-                {responded}
-              </p>
-              <p className="mt-2 text-sm text-slate-600">
-                {t('standalone.funnel.responseRate', {
-                  rate: formattedResponseRate,
-                })}
-              </p>
-            </div>
-
-            <FunnelConnector />
-
-            <div className="flex min-h-40 flex-col justify-center rounded-xl bg-slate-50 p-5">
-              <p className="text-sm font-medium text-slate-600">
-                {t('standalone.funnel.decision')}
-              </p>
-              <div className="mt-3 space-y-2">
-                <div className="flex items-center justify-between gap-4 rounded-lg bg-emerald-50 px-3 py-2.5 text-emerald-700">
-                  <p className="text-sm font-medium">
-                    {t('metrics.cards.confirmed')}
-                  </p>
-                  <p className="text-sm font-semibold">{confirmed}</p>
-                </div>
-                <div className="flex items-center justify-between gap-4 rounded-lg bg-red-50 px-3 py-2.5 text-red-600">
-                  <p className="text-sm font-medium">
-                    {t('metrics.cards.canceled')}
-                  </p>
-                  <p className="text-sm font-semibold">{canceled}</p>
-                </div>
-              </div>
-              <p className="mt-3 text-xs text-slate-600">
-                {t('standalone.funnel.confirmationShare', {
-                  rate: formattedConfirmedRate,
-                })}
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-5 flex justify-start">
-            <p className="inline-flex items-center gap-2 text-sm font-medium text-amber-700">
-              <Clock3 aria-hidden="true" className="h-4 w-4" />
-              {t('standalone.funnel.awaitingResponse', {
-                count: noResponseCount,
-              })}
-            </p>
-          </div>
-        </>
-      )}
-    </DashboardCard>
-  )
-}
-
-function FunnelConnector() {
-  return (
-    <div
-      aria-hidden="true"
-      className="flex items-center justify-center text-slate-400"
-    >
-      <ArrowDown className="h-5 w-5 md:hidden" />
-      <ArrowRight className="hidden h-5 w-5 md:block rtl:rotate-180" />
     </div>
   )
 }
@@ -727,7 +553,10 @@ function TotalOrdersCard({
             className="flex items-center justify-between text-sm"
           >
             <dt className="flex items-center gap-2 text-slate-600">
-              <span aria-hidden="true" className={cn('h-2 w-2 rounded-full', row.dot)} />
+              <span
+                aria-hidden="true"
+                className={cn('h-2 w-2 rounded-full', row.dot)}
+              />
               {row.label}
             </dt>
             <dd className={cn('font-semibold', row.text)}>
@@ -736,69 +565,6 @@ function TotalOrdersCard({
           </div>
         ))}
       </dl>
-    </DashboardCard>
-  )
-}
-
-function formatPeriodDate(
-  value: string | null,
-  locale: string,
-  reportingTimezone: string
-): string | null {
-  if (!value) return null
-  const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return null
-
-  return new Intl.DateTimeFormat(locale, {
-    day: 'numeric',
-    month: 'short',
-    timeZone: reportingTimezone,
-  }).format(date)
-}
-
-function UsageBar({
-  usage,
-  locale,
-  reportingTimezone,
-}: {
-  usage: DashboardStats['usage']
-  locale: string
-  reportingTimezone: string
-}) {
-  const t = useTranslations('dashboard')
-  const isUnlimited = usage.limit <= 0
-  const percent = isUnlimited
-    ? 0
-    : Math.min(100, Math.round((usage.used / usage.limit) * 100))
-  const periodStart = formatPeriodDate(
-    usage.period_start,
-    locale,
-    reportingTimezone
-  )
-  const periodEnd = formatPeriodDate(usage.period_end, locale, reportingTimezone)
-  const periodLabel =
-    periodStart && periodEnd ? `${periodStart} – ${periodEnd}` : null
-
-  return (
-    <DashboardCard className="p-5">
-      <div className="flex flex-wrap items-center gap-2">
-        <p className="text-sm font-medium text-slate-700">
-          {isUnlimited
-            ? `${t('standalone.usage.title')}: ${t('standalone.usage.unlimited')}`
-            : t('standalone.usage.summary', {
-                used: formatDashboardNumber(usage.used, locale),
-                limit: formatDashboardNumber(usage.limit, locale),
-              })}
-        </p>
-        {!isUnlimited && periodLabel && (
-          <span className="text-xs text-slate-400">({periodLabel})</span>
-        )}
-        <Tooltip content={t('standalone.usage.description')}>
-          <Info aria-hidden="true" className="h-4 w-4 text-slate-400" />
-          <span className="sr-only">{t('standalone.usage.description')}</span>
-        </Tooltip>
-      </div>
-      {!isUnlimited && <Progress value={percent} className="mt-3" />}
     </DashboardCard>
   )
 }
