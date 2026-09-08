@@ -46,6 +46,9 @@ export function StandaloneDashboardHeader({
             </>
           )}
         </h1>
+        {!isIdentityLoading && (
+          <p className="text-sm text-slate-500">{t('standalone.subtitle')}</p>
+        )}
       </div>
 
       <div className="flex w-full flex-wrap items-start gap-3 md:w-auto md:items-end md:justify-end">

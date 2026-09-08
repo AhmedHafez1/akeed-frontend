@@ -700,6 +700,7 @@
       "greeting": "Welcome back, {name}",
       "greetingLoading": "Loading dashboard greeting",
       "description": "Order health, message delivery, and work that needs your attention.",
+      "subtitle": "An overview of your confirmation orders",
       "kpisLabel": "Primary dashboard metrics",
       "status": {
         "active": {
@@ -734,6 +735,7 @@
         "description": "Confirmations counted in the current billing period.",
         "usedLabel": "Confirmations used",
         "percentUsed": "{value}% used",
+        "summary": "Usage this month: {used} of {limit}",
         "remaining": "{value} remaining",
         "exhausted": "No confirmations remaining",
         "unlimited": "Unlimited",
@@ -749,6 +751,12 @@
         "emptyDescription": "There are no actionable orders in this period.",
         "unavailable": "The actionable-order preview is unavailable right now.",
         "dateUnavailable": "Date unavailable"
+      },
+      "followUp": {
+        "description": "Orders that need your review"
+      },
+      "performance": {
+        "title": "Confirmation performance"
       },
       "outcomes": {
         "title": "Outcome breakdown",

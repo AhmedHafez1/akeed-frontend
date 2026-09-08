@@ -4,21 +4,20 @@ import Link from 'next/link'
 import {
   ArrowDown,
   ArrowRight,
+  BarChart3,
   CheckCircle2,
   Clock3,
+  Info,
   MessageCircleReply,
   Package,
-  ReceiptText,
   Send,
-  TrendingUp,
   TriangleAlert,
-  XCircle,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
-import { Skeleton } from '@/shared/ui'
+import { Progress, Skeleton, Tooltip } from '@/shared/ui'
 import { lifecycleTone } from '@/features/dashboard/domain/verificationLifecycle'
 import { isAttentionVerification } from '@/features/dashboard/domain/verificationWorkload'
 import { getStatusTimestamp } from '@/features/dashboard/domain/verificationRow'
@@ -62,19 +61,33 @@ function DashboardCard({ className, children }: DashboardCardProps) {
 function DashboardSkeleton() {
   return (
     <div aria-busy="true" className="space-y-5">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {[0, 1, 2, 3, 4, 5, 6, 7].map((index) => (
-          <DashboardCard key={index} className="p-5">
-            <div className="flex items-center gap-4">
-              <Skeleton className="h-12 w-12 shrink-0 rounded-xl" />
-              <div className="flex-1 space-y-3">
-                <Skeleton className="h-3 w-24" />
-                <Skeleton className="h-8 w-20" />
-              </div>
-            </div>
-          </DashboardCard>
-        ))}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <DashboardCard className="border-amber-100 bg-amber-50 p-5">
+          <Skeleton className="h-9 w-9 rounded-lg" />
+          <Skeleton className="mt-4 h-9 w-16" />
+          <Skeleton className="mt-3 h-3 w-32" />
+        </DashboardCard>
+        <DashboardCard className="p-5">
+          <Skeleton className="h-9 w-9 rounded-lg" />
+          <div className="mt-5 space-y-4">
+            <Skeleton className="h-2 w-full" />
+            <Skeleton className="h-2 w-full" />
+          </div>
+        </DashboardCard>
+        <DashboardCard className="p-5">
+          <Skeleton className="h-9 w-9 rounded-lg" />
+          <Skeleton className="mt-4 h-9 w-16" />
+          <div className="mt-4 space-y-2">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-full" />
+          </div>
+        </DashboardCard>
       </div>
+      <DashboardCard className="p-5">
+        <Skeleton className="h-4 w-48" />
+        <Skeleton className="mt-3 h-2 w-full" />
+      </DashboardCard>
       <div>
         <DashboardCard className="p-5 sm:p-6">
           <Skeleton className="h-5 w-48" />
@@ -173,106 +186,22 @@ export function StandaloneStatsSummary({
     )
   }
 
-  const metrics = [
-    {
-      id: 'total',
-      label: t('verifications.metrics.total'),
-      value: formatDashboardNumber(stats.totals.total, locale),
-      icon: Package,
-      iconClassName: 'border-slate-200 bg-slate-50 text-slate-700',
-    },
-    {
-      id: 'pending',
-      label: t('verifications.metrics.pending'),
-      value: formatDashboardNumber(stats.totals.pending, locale),
-      icon: Clock3,
-      iconClassName: 'border-sky-100 bg-sky-50 text-sky-700',
-    },
-    {
-      id: 'confirmed',
-      label: t('verifications.metrics.confirmed'),
-      value: formatDashboardNumber(stats.totals.confirmed, locale),
-      icon: CheckCircle2,
-      iconClassName: 'border-emerald-100 bg-emerald-50 text-emerald-700',
-    },
-    {
-      id: 'canceled',
-      label: t('verifications.metrics.canceled'),
-      value: formatDashboardNumber(stats.totals.canceled, locale),
-      icon: XCircle,
-      iconClassName: 'border-red-100 bg-red-50 text-red-700',
-    },
-    {
-      id: 'confirmationRate',
-      label: t('metrics.cards.confirmationRate'),
-      value: formatDashboardPercent(
-        Math.round(stats.totals.confirmation_rate),
-        locale
-      ),
-      icon: TrendingUp,
-      iconClassName: 'border-blue-100 bg-blue-50 text-blue-700',
-    },
-    {
-      id: 'replyRate',
-      label: t('metrics.cards.responseRate'),
-      value: formatDashboardPercent(
-        Math.round(stats.totals.reply_rate),
-        locale
-      ),
-      icon: MessageCircleReply,
-      iconClassName: 'border-violet-100 bg-violet-50 text-violet-700',
-    },
-    {
-      id: 'attention',
-      label: t('verifications.metrics.needsAttention'),
-      value: formatDashboardNumber(stats.totals.needs_attention, locale),
-      icon: TriangleAlert,
-      iconClassName: 'border-amber-200 bg-amber-50 text-amber-700',
-    },
-    {
-      id: 'usage',
-      label: t('standalone.usage.title'),
-      value:
-        stats.usage.limit > 0
-          ? `${formatDashboardNumber(stats.usage.used, locale)} / ${formatDashboardNumber(stats.usage.limit, locale)}`
-          : formatDashboardNumber(stats.usage.used, locale),
-      icon: ReceiptText,
-      iconClassName: 'border-slate-200 bg-slate-50 text-slate-700',
-    },
-  ]
-
   return (
     <div className="space-y-5">
       <section
         aria-label={t('standalone.kpisLabel')}
-        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
       >
-        {metrics.map((metric) => {
-          const Icon = metric.icon
-          return (
-            <DashboardCard key={metric.id} className="p-5">
-              <div className="flex items-center gap-4">
-                <span
-                  className={cn(
-                    'flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border',
-                    metric.iconClassName
-                  )}
-                >
-                  <Icon aria-hidden="true" className="h-6 w-6" />
-                </span>
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-slate-600">
-                    {metric.label}
-                  </p>
-                  <p className="mt-1 text-3xl font-bold tracking-tight text-slate-950">
-                    {metric.value}
-                  </p>
-                </div>
-              </div>
-            </DashboardCard>
-          )
-        })}
+        <FollowUpCard count={stats.totals.needs_attention} locale={locale} />
+        <ConfirmationPerformanceCard
+          confirmationRate={stats.totals.confirmation_rate}
+          replyRate={stats.totals.reply_rate}
+          locale={locale}
+        />
+        <TotalOrdersCard stats={stats} locale={locale} />
       </section>
+
+      <UsageBar usage={stats.usage} locale={locale} />
 
       <div>
         <VerificationFunnel stats={stats} />
@@ -641,6 +570,188 @@ function OutcomeBreakdown({ stats }: { stats: DashboardStats }) {
           </div>
         ))}
       </dl>
+    </DashboardCard>
+  )
+}
+
+function FollowUpCard({ count, locale }: { count: number; locale: string }) {
+  const t = useTranslations('dashboard')
+
+  return (
+    <DashboardCard className="border-amber-100 bg-amber-50 p-5">
+      <div className="flex items-center gap-2.5">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-amber-200 bg-white text-amber-700">
+          <TriangleAlert aria-hidden="true" className="h-5 w-5" />
+        </span>
+        <p className="text-sm font-semibold text-amber-900">
+          {t('standalone.attention.title')}
+        </p>
+      </div>
+      <p className="mt-4 text-4xl font-bold tracking-tight text-slate-950">
+        {formatDashboardNumber(count, locale)}
+      </p>
+      <p className="mt-2 text-sm text-amber-800">
+        {t('standalone.followUp.description')}
+      </p>
+    </DashboardCard>
+  )
+}
+
+function ConfirmationPerformanceCard({
+  confirmationRate,
+  replyRate,
+  locale,
+}: {
+  confirmationRate: number
+  replyRate: number
+  locale: string
+}) {
+  const t = useTranslations('dashboard')
+  const confirmationPct = Math.round(confirmationRate)
+  const replyPct = Math.round(replyRate)
+
+  return (
+    <DashboardCard className="p-5">
+      <div className="flex items-center gap-2.5">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-700">
+          <BarChart3 aria-hidden="true" className="h-5 w-5" />
+        </span>
+        <p className="text-sm font-semibold text-slate-950">
+          {t('standalone.performance.title')}
+        </p>
+      </div>
+
+      <div className="mt-5 space-y-4">
+        <div>
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-slate-600">
+              {t('metrics.cards.confirmationRate')}
+            </span>
+            <span className="font-semibold text-slate-950">
+              {formatDashboardPercent(confirmationPct, locale)}
+            </span>
+          </div>
+          <Progress
+            value={confirmationPct}
+            className="mt-2"
+            indicatorClassName="bg-emerald-600"
+          />
+        </div>
+        <div>
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-slate-600">
+              {t('metrics.cards.responseRate')}
+            </span>
+            <span className="font-semibold text-slate-950">
+              {formatDashboardPercent(replyPct, locale)}
+            </span>
+          </div>
+          <Progress
+            value={replyPct}
+            className="mt-2"
+            indicatorClassName="bg-violet-600"
+          />
+        </div>
+      </div>
+    </DashboardCard>
+  )
+}
+
+function TotalOrdersCard({
+  stats,
+  locale,
+}: {
+  stats: DashboardStats
+  locale: string
+}) {
+  const t = useTranslations('dashboard')
+  const rows = [
+    {
+      id: 'confirmed',
+      label: t('verifications.metrics.confirmed'),
+      value: stats.totals.confirmed,
+      dot: 'bg-emerald-600',
+      text: 'text-emerald-700',
+    },
+    {
+      id: 'canceled',
+      label: t('verifications.metrics.canceled'),
+      value: stats.totals.canceled,
+      dot: 'bg-red-500',
+      text: 'text-red-600',
+    },
+    {
+      id: 'inProgress',
+      label: t('verifications.metrics.inProgress'),
+      value: stats.totals.in_progress,
+      dot: 'bg-slate-400',
+      text: 'text-slate-600',
+    },
+  ]
+
+  return (
+    <DashboardCard className="p-5">
+      <div className="flex items-center gap-2.5">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-700">
+          <Package aria-hidden="true" className="h-5 w-5" />
+        </span>
+        <p className="text-sm font-semibold text-slate-950">
+          {t('verifications.metrics.total')}
+        </p>
+      </div>
+      <p className="mt-4 text-4xl font-bold tracking-tight text-slate-950">
+        {formatDashboardNumber(stats.totals.total, locale)}
+      </p>
+      <dl className="mt-4 space-y-2 border-t border-stone-100 pt-3">
+        {rows.map((row) => (
+          <div
+            key={row.id}
+            className="flex items-center justify-between text-sm"
+          >
+            <dt className="flex items-center gap-2 text-slate-600">
+              <span aria-hidden="true" className={cn('h-2 w-2 rounded-full', row.dot)} />
+              {row.label}
+            </dt>
+            <dd className={cn('font-semibold', row.text)}>
+              {formatDashboardNumber(row.value, locale)}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </DashboardCard>
+  )
+}
+
+function UsageBar({
+  usage,
+  locale,
+}: {
+  usage: DashboardStats['usage']
+  locale: string
+}) {
+  const t = useTranslations('dashboard')
+  const isUnlimited = usage.limit <= 0
+  const percent = isUnlimited
+    ? 0
+    : Math.min(100, Math.round((usage.used / usage.limit) * 100))
+
+  return (
+    <DashboardCard className="p-5">
+      <div className="flex items-center gap-2">
+        <p className="text-sm font-medium text-slate-700">
+          {isUnlimited
+            ? `${t('standalone.usage.title')}: ${t('standalone.usage.unlimited')}`
+            : t('standalone.usage.summary', {
+                used: formatDashboardNumber(usage.used, locale),
+                limit: formatDashboardNumber(usage.limit, locale),
+              })}
+        </p>
+        <Tooltip content={t('standalone.usage.description')}>
+          <Info aria-hidden="true" className="h-4 w-4 text-slate-400" />
+          <span className="sr-only">{t('standalone.usage.description')}</span>
+        </Tooltip>
+      </div>
+      {!isUnlimited && <Progress value={percent} className="mt-3" />}
     </DashboardCard>
   )
 }
