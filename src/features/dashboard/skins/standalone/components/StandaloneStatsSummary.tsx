@@ -43,19 +43,30 @@ interface StandaloneStatsSummaryProps {
 interface DashboardCardProps {
   className?: string
   children: React.ReactNode
+  href?: string
 }
 
-function DashboardCard({ className, children }: DashboardCardProps) {
-  return (
-    <section
-      className={cn(
-        'rounded-2xl border border-stone-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]',
-        className
-      )}
-    >
-      {children}
-    </section>
+function DashboardCard({ className, children, href }: DashboardCardProps) {
+  const cardClassName = cn(
+    'rounded-2xl border border-stone-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]',
+    className
   )
+
+  if (href) {
+    return (
+      <Link
+        href={href}
+        className={cn(
+          cardClassName,
+          'block transition hover:border-emerald-200 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none'
+        )}
+      >
+        {children}
+      </Link>
+    )
+  }
+
+  return <section className={cardClassName}>{children}</section>
 }
 
 function DashboardSkeleton() {
@@ -201,7 +212,11 @@ export function StandaloneStatsSummary({
         <TotalOrdersCard stats={stats} locale={locale} />
       </section>
 
-      <UsageBar usage={stats.usage} locale={locale} />
+      <UsageBar
+        usage={stats.usage}
+        locale={locale}
+        reportingTimezone={reportingTimezone}
+      />
 
       <div>
         <VerificationFunnel stats={stats} />
@@ -578,7 +593,10 @@ function FollowUpCard({ count, locale }: { count: number; locale: string }) {
   const t = useTranslations('dashboard')
 
   return (
-    <DashboardCard className="border-amber-100 bg-amber-50 p-5">
+    <DashboardCard
+      className="border-amber-100 bg-amber-50 p-5"
+      href={`${withLocale('/verifications', locale)}?status=needs_attention`}
+    >
       <div className="flex items-center gap-2.5">
         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-amber-200 bg-white text-amber-700">
           <TriangleAlert aria-hidden="true" className="h-5 w-5" />
@@ -722,22 +740,48 @@ function TotalOrdersCard({
   )
 }
 
+function formatPeriodDate(
+  value: string | null,
+  locale: string,
+  reportingTimezone: string
+): string | null {
+  if (!value) return null
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return null
+
+  return new Intl.DateTimeFormat(locale, {
+    day: 'numeric',
+    month: 'short',
+    timeZone: reportingTimezone,
+  }).format(date)
+}
+
 function UsageBar({
   usage,
   locale,
+  reportingTimezone,
 }: {
   usage: DashboardStats['usage']
   locale: string
+  reportingTimezone: string
 }) {
   const t = useTranslations('dashboard')
   const isUnlimited = usage.limit <= 0
   const percent = isUnlimited
     ? 0
     : Math.min(100, Math.round((usage.used / usage.limit) * 100))
+  const periodStart = formatPeriodDate(
+    usage.period_start,
+    locale,
+    reportingTimezone
+  )
+  const periodEnd = formatPeriodDate(usage.period_end, locale, reportingTimezone)
+  const periodLabel =
+    periodStart && periodEnd ? `${periodStart} – ${periodEnd}` : null
 
   return (
     <DashboardCard className="p-5">
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <p className="text-sm font-medium text-slate-700">
           {isUnlimited
             ? `${t('standalone.usage.title')}: ${t('standalone.usage.unlimited')}`
@@ -746,6 +790,9 @@ function UsageBar({
                 limit: formatDashboardNumber(usage.limit, locale),
               })}
         </p>
+        {!isUnlimited && periodLabel && (
+          <span className="text-xs text-slate-400">({periodLabel})</span>
+        )}
         <Tooltip content={t('standalone.usage.description')}>
           <Info aria-hidden="true" className="h-4 w-4 text-slate-400" />
           <span className="sr-only">{t('standalone.usage.description')}</span>

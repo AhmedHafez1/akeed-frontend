@@ -1522,14 +1522,11 @@
       "keepRetry": "Keep safe retry"
     },
     "success": {
-      "acceptedStatus": "Accepted · Verification pending",
       "title": "Order accepted for verification",
       "description": "The order is saved and queued for verification. This does not mean a WhatsApp message was sent or delivered yet.",
       "duplicateTitle": "Order already accepted",
       "duplicateDescription": "Akeed recovered the original order from your safe retry; no duplicate order was created.",
-      "orderId": "Order ID",
-      "createAnother": "Verify another order",
-      "viewVerifications": "View verifications"
+      "createAnother": "Verify another order"
     }
   },
   "standaloneOnboarding": {

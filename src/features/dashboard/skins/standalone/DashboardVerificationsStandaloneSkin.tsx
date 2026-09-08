@@ -6,7 +6,6 @@ import { Tooltip } from '@/shared/ui'
 import { StandaloneFeedbackBanners } from './components/StandaloneFeedbackBanners'
 import { StandaloneVerificationsSection } from './components/StandaloneVerificationsSection'
 import { StandaloneVerificationWorkload } from './components/StandaloneVerificationWorkload'
-import { ManualOrderEntryStandalone } from '@/features/orders'
 import type { DashboardSkinProps } from '../../domain/dashboard.types'
 import type { DashboardStatsDateRange } from '../../model/dashboard.model'
 
@@ -53,13 +52,6 @@ export function DashboardVerificationsStandaloneSkin(
               className="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
             />
           </label>
-          {/* The list's own empty state tells the merchant to verify an order,
-            so the action it names has to be reachable from this screen. */}
-          <ManualOrderEntryStandalone
-            canCreate={props.canCreateManualOrder}
-            sourceConnected={props.sourceStatus === 'connected'}
-            isAtPlanLimit={props.isAtPlanLimit}
-          />
         </div>
       </header>
 

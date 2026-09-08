@@ -1,12 +1,9 @@
 'use client'
 
 import { useCallback } from 'react'
-import Link from 'next/link'
 import { Controller } from 'react-hook-form'
-import { ChevronDown, ClipboardCheck, Plus, ShieldCheck } from 'lucide-react'
+import { ChevronDown, ClipboardCheck, ShieldCheck } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
 import {
   Button,
@@ -65,7 +62,6 @@ export function ManualOrderEntryStandalone({
   showDisabledReason = true,
 }: ManualOrderEntryStandaloneProps) {
   const t = useTranslations('manualOrder')
-  const { locale } = useLocaleInfo()
   const focusCustomerPhone = useCallback(() => {
     document.getElementById('manual-order-phone')?.focus()
   }, [])
@@ -100,7 +96,6 @@ export function ManualOrderEntryStandalone({
               triggerClassName
             )}
           >
-            <Plus aria-hidden="true" />
             <span className={triggerLabelClassName}>{t('open')}</span>
           </Button>
         </DialogTrigger>
@@ -146,10 +141,7 @@ export function ManualOrderEntryStandalone({
               aria-live="polite"
               className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-950"
             >
-              <span className="inline-flex rounded-full border border-amber-300 bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-900">
-                {t('success.acceptedStatus')}
-              </span>
-              <h3 className="mt-3 font-semibold">
+              <h3 className="font-semibold">
                 {entry.result.duplicate
                   ? t('success.duplicateTitle')
                   : t('success.title')}
@@ -159,17 +151,6 @@ export function ManualOrderEntryStandalone({
                   ? t('success.duplicateDescription')
                   : t('success.description')}
               </p>
-              <dl className="mt-4 text-sm">
-                <div>
-                  <dt className="font-medium">{t('success.orderId')}</dt>
-                  <dd
-                    dir="ltr"
-                    className="mt-1 text-left font-mono text-xs break-all text-slate-700 rtl:text-right"
-                  >
-                    {entry.result.orderId}
-                  </dd>
-                </div>
-              </dl>
             </div>
 
             <DialogFooter className="border-t border-stone-200 pt-5">
@@ -180,11 +161,6 @@ export function ManualOrderEntryStandalone({
               </DialogClose>
               <Button type="button" variant="outline" onClick={entry.resetFlow}>
                 {t('success.createAnother')}
-              </Button>
-              <Button asChild>
-                <Link href={withLocale('/verifications', locale)}>
-                  {t('success.viewVerifications')}
-                </Link>
               </Button>
             </DialogFooter>
           </div>

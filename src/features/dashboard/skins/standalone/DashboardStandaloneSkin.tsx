@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react'
 
-import { ManualOrderEntryStandalone } from '@/features/orders'
 import { notify } from '@/shared/ui'
 import { StandaloneDashboardHeader } from './components/StandaloneDashboardHeader'
 import { StandaloneFeedbackBanners } from './components/StandaloneFeedbackBanners'
@@ -16,11 +15,8 @@ export function DashboardStandaloneSkin({
   dateRangeFilter,
   dateRangeOptions,
   onDateRangeFilterChange,
-  sourceStatus,
   testFeedback,
   onDismissTestFeedback,
-  canCreateManualOrder,
-  isAtPlanLimit,
   actionFeedback,
   onDismissActionFeedback,
   verifications,
@@ -53,13 +49,6 @@ export function DashboardStandaloneSkin({
         dateRangeFilter={dateRangeFilter}
         dateRangeOptions={dateRangeOptions}
         onDateRangeFilterChange={onDateRangeFilterChange}
-        action={
-          <ManualOrderEntryStandalone
-            canCreate={canCreateManualOrder}
-            sourceConnected={sourceStatus === 'connected'}
-            isAtPlanLimit={isAtPlanLimit}
-          />
-        }
       />
 
       <StandaloneFeedbackBanners
