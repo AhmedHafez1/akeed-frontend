@@ -1434,7 +1434,6 @@
     "submit": "Verify order",
     "submitting": "Sending for verification...",
     "required": "Required",
-    "optional": "Optional",
     "readOnly": "Only owners and admins can verify orders.",
     "sourceDisconnected": "Order verification is unavailable while the source is disconnected.",
     "availabilityLoading": "Checking whether order verification is available.",
