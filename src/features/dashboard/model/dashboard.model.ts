@@ -106,6 +106,13 @@ export type DashboardPermissions = {
   can_retry_verifications?: boolean
 }
 
+export type DashboardPageUsage = {
+  used: number
+  limit: number
+  remaining: number
+  period_end: string | null
+}
+
 export type DashboardPageContext = {
   source?: DashboardSourceState
   reporting_timezone?: string
@@ -115,6 +122,7 @@ export type DashboardPageContext = {
     quiet_hours_enabled: boolean
   }
   permissions?: DashboardPermissions
+  usage?: DashboardPageUsage
 }
 
 export type VerificationsResponse = {

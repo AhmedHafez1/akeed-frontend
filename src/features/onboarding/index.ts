@@ -8,6 +8,15 @@ export {
 } from './model/onboarding.config'
 export type { EmbeddedStep } from './model/onboarding.config'
 
+export {
+  STANDALONE_FIELD_IDS,
+  STANDALONE_FIELD_ORDER,
+  STANDALONE_FIELD_STEP,
+  STANDALONE_STEPS,
+  STANDALONE_TOTAL_STEPS,
+  getStepDefinition,
+} from './model/onboarding.steps'
+
 export { OnboardingAlerts } from './ui/embedded/components/OnboardingAlerts'
 export { OnboardingStepCounter } from './ui/embedded/components/OnboardingStepCounter'
 export { BillingStep } from './ui/embedded/steps/BillingStep'
@@ -49,4 +58,8 @@ export type {
   OnboardingBillingPlanId,
   OnboardingSettingsPayload,
   StandaloneSetupBlockedReason,
+  StandaloneSetupFieldErrors,
+  StandaloneSetupFieldKey,
+  StandaloneStep,
+  StandaloneStepDefinition,
 } from './domain/onboarding.types'

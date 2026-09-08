@@ -1439,6 +1439,7 @@
     "sourceDisconnected": "Order verification is unavailable while the source is disconnected.",
     "availabilityLoading": "Checking whether order verification is available.",
     "availabilityUnavailable": "Order verification is temporarily unavailable.",
+    "planLimitReasonLabel": "You have used all included verifications for this period.",
     "sections": {
       "customerDetails": "Customer details",
       "orderDetails": "Order details"
@@ -1469,6 +1470,8 @@
       }
     },
     "validation": {
+      "customerNameRequired": "Enter the customer's name.",
+      "orderNumberRequired": "Enter the order reference.",
       "customerPhoneRequired": "Enter the customer's phone number.",
       "customerPhoneInvalid": "Enter a valid phone number with its country code.",
       "customerPhoneServer": "Check the phone number and try again.",
@@ -1483,6 +1486,8 @@
       "currencyServer": "Select a supported currency and try again."
     },
     "errors": {
+      "planLimitReached": "You have used all included verifications for this period.",
+      "autoVerifyDisabled": "Enable automatic verification before verifying an order.",
       "validation": "Some order details need your attention.",
       "timeout": "We could not confirm the result within 30 seconds. Your details and retry token are locked so you can retry safely.",
       "offline": "You appear to be offline. Your details and retry token are locked; reconnect and retry safely.",
@@ -1519,19 +1524,11 @@
     }
   },
   "standaloneOnboarding": {
-    "title": "Set up your Standalone workspace",
-    "subtitle": "Configure how Akeed identifies and verifies your cash-on-delivery orders.",
-    "sourceHeading": "Order source",
+    "title": "Let’s set up your workspace",
+    "subtitle": "Three short steps to start confirming cash-on-delivery orders over WhatsApp.",
     "sourceType": "Standalone / Manual source",
     "copy": "Copy ID",
     "copied": "Copied",
-    "configurationHeading": "Merchant configuration",
-    "merchantName": "Merchant name",
-    "language": "Default message language",
-    "codDefault": "Treat orders with missing payment information as COD",
-    "codDefaultHelp": "Enable only when your source normally omits payment information for cash-on-delivery orders.",
-    "timezone": "Timezone",
-    "advanced": "Advanced automation settings",
     "saveProgress": "Save progress",
     "saving": "Saving…",
     "saved": "Setup progress saved.",
@@ -1550,7 +1547,7 @@
     "retry": "Retry",
     "metaNotice": "Completing setup does not confirm a Meta or WhatsApp connection. Test verification is enabled separately.",
     "validation": {
-      "name": "Merchant name is required.",
+      "name": "Store name is required.",
       "sendDelay": "First-send delay must be between 0 and 24 hours.",
       "followUpDelay": "Follow-up delay must be between 0 and 168 hours.",
       "escalationDelay": "Escalation delay must be between 0 and 168 hours.",
@@ -1560,11 +1557,106 @@
     "blockers": {
       "source_invalid": "A valid active Standalone source is required.",
       "pilot_entitlement_missing": "Pilot access must be activated by Akeed staff.",
-      "merchant_name_missing": "Enter a merchant name.",
+      "merchant_name_missing": "Enter a store name.",
       "language_invalid": "Choose a supported message language.",
       "cod_default_invalid": "Choose how missing payment information should be handled.",
       "automation_invalid": "Review the automation timing settings.",
       "timezone_invalid": "Choose a supported timezone."
+    },
+    "eyebrow": "Welcome to Akeed",
+    "storeName": "Store name",
+    "storeNamePlaceholder": "Example: Akeed Store",
+    "storeNameHelp": "This name appears in the WhatsApp messages your customers receive.",
+    "languageHeading": "Default message language",
+    "languageAutoHelp": "On Auto, Akeed picks the message language from the customer’s phone country code.",
+    "trustNote": "No messages are sent before you complete setup.",
+    "editableLater": "You can change these settings later.",
+    "shell": {
+      "help": "Help",
+      "skipToContent": "Skip to setup"
+    },
+    "steps": {
+      "label": "Setup steps",
+      "progress": "Step {current} of {total}",
+      "completed": "Completed",
+      "storeDetails": {
+        "title": "Store details",
+        "description": "Name, language, and source",
+        "heading": "Tell us about your store",
+        "subheading": "We use these details to personalize the confirmation messages your customers receive."
+      },
+      "confirmationRules": {
+        "title": "Confirmation rules",
+        "description": "Sending and follow-up",
+        "heading": "Set your confirmation rules",
+        "subheading": "Decide when Akeed reaches out, when it follows up, and when an order needs a human."
+      },
+      "review": {
+        "title": "Review and complete",
+        "description": "Confirm, then start",
+        "heading": "Review your setup",
+        "subheading": "Check these details, then complete setup to finish."
+      }
+    },
+    "source": {
+      "heading": "Order source",
+      "ready": "Ready to receive orders",
+      "showId": "Show ID",
+      "hideId": "Hide ID",
+      "idLabel": "Source identifier"
+    },
+    "cod": {
+      "heading": "Treat missing payment information as COD",
+      "help": "When on, an order that arrives without payment information enters the cash-on-delivery confirmation flow. Turn this on only if your source normally omits payment details."
+    },
+    "rules": {
+      "autoVerifyHeading": "Enable automatic verification",
+      "autoVerifyHelp": "When on, Akeed messages every new cash-on-delivery order automatically. When off, nothing is sent until you verify an order yourself.",
+      "timezoneHelp": "Every timing rule below is measured in this timezone.",
+      "firstDelayHeading": "First-message delay",
+      "firstDelayHelp": "How long Akeed waits after an order arrives. Use 0 to send immediately.",
+      "followUpHeading": "Follow-up message",
+      "followUpHelp": "If the customer does not reply, Akeed sends the same message once more.",
+      "escalationHeading": "No-reply escalation",
+      "escalationHelp": "If the customer never replies, the order is marked for manual review.",
+      "quietHoursHeading": "Quiet hours",
+      "quietHoursHelp": "Messages scheduled during quiet hours are moved to the next allowed local time.",
+      "advanced": "Advanced timing",
+      "disabledHint": "Turn on automatic verification to change these rules."
+    },
+    "review": {
+      "storeName": "Store name",
+      "language": "Message language",
+      "source": "Order source",
+      "cod": "Missing payment information",
+      "automation": "Automatic verification",
+      "timezone": "Timezone",
+      "timing": "Timing rules",
+      "edit": "Edit",
+      "editStep": "Edit {step}",
+      "on": "On",
+      "codOn": "Treated as cash on delivery",
+      "codOff": "Not treated as cash on delivery",
+      "firstDelay": "First message after {hours} h",
+      "firstDelayImmediate": "First message sent immediately",
+      "followUp": "Follow-up after {hours} h",
+      "escalation": "Manual review after {hours} h",
+      "quietHours": "Quiet hours {start} – {end}",
+      "noTimingRules": "No timing rules enabled",
+      "automationOff": "Off — no messages are sent automatically"
+    },
+    "actions": {
+      "saveAndContinue": "Save and continue",
+      "continue": "Continue",
+      "back": "Back"
+    },
+    "status": {
+      "stepAnnouncement": "Step {current} of {total}: {title}"
+    },
+    "language": {
+      "auto": "Auto",
+      "arabic": "Arabic",
+      "english": "English"
     }
   },
   "about": {

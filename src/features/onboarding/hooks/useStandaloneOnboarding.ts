@@ -15,7 +15,14 @@ import type {
   IntegrationOnboardingState,
   OnboardingSettingsPayload,
   StandaloneSetupBlockedReason,
+  StandaloneSetupFieldErrors,
+  StandaloneSetupFieldKey,
+  StandaloneStep,
 } from '@/features/onboarding/domain/onboarding.types'
+import {
+  STANDALONE_FIELD_ORDER,
+  STANDALONE_FIELD_STEP,
+} from '@/features/onboarding/model/onboarding.steps'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
 import { createLogger } from '@/shared/lib/logger'
 
@@ -38,16 +45,14 @@ interface StandaloneSetupForm {
   quietHoursEnd: string
 }
 
-type FieldErrors = Partial<
-  Record<
-    | 'storeName'
-    | 'sendDelayHours'
-    | 'followUpDelayHours'
-    | 'escalationDelayHours'
-    | 'quietHours',
-    string
-  >
->
+type FieldErrors = StandaloneSetupFieldErrors
+
+/** Outcome of an attempted save, so the page can react without re-validating. */
+export interface StandaloneSaveResult {
+  state: IntegrationOnboardingState | null
+  firstInvalidField: StandaloneSetupFieldKey | null
+  errorStep: StandaloneStep | null
+}
 
 const defaultForm: StandaloneSetupForm = {
   storeName: '',
@@ -95,6 +100,98 @@ function parseHours(value: string): number | null {
   if (!/^\d+(\.\d{1,2})?$/.test(trimmed)) return null
   const parsed = Number.parseFloat(trimmed)
   return Number.isFinite(parsed) ? parsed : null
+}
+
+function firstErrorField(
+  errors: FieldErrors,
+  step?: StandaloneStep
+): StandaloneSetupFieldKey | null {
+  for (const field of STANDALONE_FIELD_ORDER) {
+    if (!errors[field]) continue
+    if (step !== undefined && STANDALONE_FIELD_STEP[field] !== step) continue
+    return field
+  }
+  return null
+}
+
+/**
+ * Builds the settings payload from the form. Pure: it reports errors instead of
+ * writing them, so the same rules can back both per-step validation and save.
+ * The payload it produces is byte-for-byte what the endpoint accepted before.
+ */
+function buildPayload(
+  form: StandaloneSetupForm,
+  t: (key: string) => string
+): { payload: OnboardingSettingsPayload | null; errors: FieldErrors } {
+  const errors: FieldErrors = {}
+  const sendHours = parseHours(form.sendDelayHours)
+  const followUpHours = parseHours(form.followUpDelayHours)
+  const escalationHours = parseHours(form.escalationDelayHours)
+
+  if (!form.storeName.trim()) errors.storeName = t('validation.name')
+  if (sendHours === null || sendHours < 0 || sendHours > 24) {
+    errors.sendDelayHours = t('validation.sendDelay')
+  }
+  if (
+    form.followUpEnabled &&
+    (followUpHours === null || followUpHours < 0 || followUpHours > 168)
+  ) {
+    errors.followUpDelayHours = t('validation.followUpDelay')
+  }
+  if (
+    form.escalationEnabled &&
+    (escalationHours === null || escalationHours < 0 || escalationHours > 168)
+  ) {
+    errors.escalationDelayHours = t('validation.escalationDelay')
+  }
+  if (
+    form.followUpEnabled &&
+    form.escalationEnabled &&
+    followUpHours !== null &&
+    escalationHours !== null &&
+    followUpHours >= escalationHours
+  ) {
+    errors.followUpDelayHours = t('validation.followUpBeforeEscalation')
+    errors.escalationDelayHours = t('validation.followUpBeforeEscalation')
+  }
+  if (
+    form.quietHoursEnabled &&
+    (!TIME_PATTERN.test(form.quietHoursStart) ||
+      !TIME_PATTERN.test(form.quietHoursEnd))
+  ) {
+    errors.quietHours = t('validation.quietHours')
+  }
+
+  if (Object.keys(errors).length > 0 || sendHours === null) {
+    return { payload: null, errors }
+  }
+
+  return {
+    errors,
+    payload: {
+      storeName: form.storeName.trim(),
+      defaultLanguage: form.defaultLanguage,
+      assumeCodWhenPaymentMissing: form.assumeCodWhenPaymentMissing,
+      isAutoVerifyEnabled: form.isAutoVerifyEnabled,
+      timezone: form.timezone,
+      sendDelayMinutes: Math.round(sendHours * 60),
+      followUpEnabled: form.followUpEnabled,
+      followUpDelayMinutes:
+        form.followUpEnabled && followUpHours !== null
+          ? Math.round(followUpHours * 60)
+          : undefined,
+      escalationEnabled: form.escalationEnabled,
+      escalationDelayMinutes:
+        form.escalationEnabled && escalationHours !== null
+          ? Math.round(escalationHours * 60)
+          : undefined,
+      quietHoursEnabled: form.quietHoursEnabled,
+      quietHoursStart: form.quietHoursEnabled
+        ? form.quietHoursStart
+        : undefined,
+      quietHoursEnd: form.quietHoursEnabled ? form.quietHoursEnd : undefined,
+    },
+  }
 }
 
 export function useStandaloneOnboarding() {
@@ -149,79 +246,38 @@ export function useStandaloneOnboarding() {
     []
   )
 
-  const validate = useCallback((): OnboardingSettingsPayload | null => {
-    const nextErrors: FieldErrors = {}
-    const sendHours = parseHours(form.sendDelayHours)
-    const followUpHours = parseHours(form.followUpDelayHours)
-    const escalationHours = parseHours(form.escalationDelayHours)
+  /** Clears a stale "saved" banner without touching entered values. */
+  const resetSuccess = useCallback(() => setSuccessMessage(null), [])
 
-    if (!form.storeName.trim()) nextErrors.storeName = t('validation.name')
-    if (sendHours === null || sendHours < 0 || sendHours > 24) {
-      nextErrors.sendDelayHours = t('validation.sendDelay')
-    }
-    if (
-      form.followUpEnabled &&
-      (followUpHours === null || followUpHours < 0 || followUpHours > 168)
-    ) {
-      nextErrors.followUpDelayHours = t('validation.followUpDelay')
-    }
-    if (
-      form.escalationEnabled &&
-      (escalationHours === null || escalationHours < 0 || escalationHours > 168)
-    ) {
-      nextErrors.escalationDelayHours = t('validation.escalationDelay')
-    }
-    if (
-      form.followUpEnabled &&
-      form.escalationEnabled &&
-      followUpHours !== null &&
-      escalationHours !== null &&
-      followUpHours >= escalationHours
-    ) {
-      nextErrors.followUpDelayHours = t('validation.followUpBeforeEscalation')
-      nextErrors.escalationDelayHours = t('validation.followUpBeforeEscalation')
-    }
-    if (
-      form.quietHoursEnabled &&
-      (!TIME_PATTERN.test(form.quietHoursStart) ||
-        !TIME_PATTERN.test(form.quietHoursEnd))
-    ) {
-      nextErrors.quietHours = t('validation.quietHours')
-    }
+  /**
+   * Validates the whole form but only reports failures owned by `step`, so a
+   * user cannot be blocked on step one by a field that lives on step two.
+   */
+  const validateStep = useCallback(
+    (step: StandaloneStep) => {
+      const { errors } = buildPayload(form, t)
+      setFieldErrors(errors)
+      const field = firstErrorField(errors, step)
+      return { ok: field === null, firstInvalidField: field }
+    },
+    [form, t]
+  )
 
-    setFieldErrors(nextErrors)
-    if (Object.keys(nextErrors).length > 0 || sendHours === null) return null
-
-    return {
-      storeName: form.storeName.trim(),
-      defaultLanguage: form.defaultLanguage,
-      assumeCodWhenPaymentMissing: form.assumeCodWhenPaymentMissing,
-      isAutoVerifyEnabled: form.isAutoVerifyEnabled,
-      timezone: form.timezone,
-      sendDelayMinutes: Math.round(sendHours * 60),
-      followUpEnabled: form.followUpEnabled,
-      followUpDelayMinutes:
-        form.followUpEnabled && followUpHours !== null
-          ? Math.round(followUpHours * 60)
-          : undefined,
-      escalationEnabled: form.escalationEnabled,
-      escalationDelayMinutes:
-        form.escalationEnabled && escalationHours !== null
-          ? Math.round(escalationHours * 60)
-          : undefined,
-      quietHoursEnabled: form.quietHoursEnabled,
-      quietHoursStart: form.quietHoursEnabled
-        ? form.quietHoursStart
-        : undefined,
-      quietHoursEnd: form.quietHoursEnabled ? form.quietHoursEnd : undefined,
-    }
-  }, [form, t])
-
-  const save = useCallback(async () => {
+  const save = useCallback(async (): Promise<StandaloneSaveResult> => {
     setErrorMessage(null)
     setSuccessMessage(null)
-    const payload = validate()
-    if (!payload) return null
+
+    const { payload, errors } = buildPayload(form, t)
+    setFieldErrors(errors)
+
+    if (!payload) {
+      const field = firstErrorField(errors)
+      return {
+        state: null,
+        firstInvalidField: field,
+        errorStep: field ? STANDALONE_FIELD_STEP[field] : null,
+      }
+    }
 
     setIsSaving(true)
     try {
@@ -229,7 +285,11 @@ export function useStandaloneOnboarding() {
       setState(response.state)
       setForm(stateToForm(response.state))
       setSuccessMessage(t('saved'))
-      return response.state
+      return {
+        state: response.state,
+        firstInvalidField: null,
+        errorStep: null,
+      }
     } catch (error) {
       logger.error('Failed to save Standalone onboarding', error)
       setErrorMessage(
@@ -237,28 +297,29 @@ export function useStandaloneOnboarding() {
           ? t('readOnly')
           : t('saveError')
       )
-      return null
+      return { state: null, firstInvalidField: null, errorStep: null }
     } finally {
       setIsSaving(false)
     }
-  }, [t, validate])
+  }, [form, t])
 
-  const complete = useCallback(async () => {
+  const complete = useCallback(async (): Promise<StandaloneSaveResult> => {
     setErrorMessage(null)
     setSuccessMessage(null)
     setIsCompleting(true)
     try {
-      const savedState = await save()
-      if (!savedState) return
+      const saved = await save()
+      if (!saved.state) return saved
       const response = await completeStandaloneOnboarding()
       setState(response.state)
       router.replace(`/${locale}/dashboard`)
+      return { state: response.state, firstInvalidField: null, errorStep: null }
     } catch (error) {
       logger.error('Failed to complete Standalone onboarding', error)
       if (error instanceof OnboardingApiError) {
         if (error.status === 403) {
           setErrorMessage(t('readOnly'))
-          return
+          return { state: null, firstInvalidField: null, errorStep: null }
         }
         if (error.blockedReasons.length > 0) {
           setState((current) =>
@@ -273,10 +334,11 @@ export function useStandaloneOnboarding() {
               : current
           )
           setErrorMessage(t('blocked'))
-          return
+          return { state: null, firstInvalidField: null, errorStep: null }
         }
       }
       setErrorMessage(t('completeError'))
+      return { state: null, firstInvalidField: null, errorStep: null }
     } finally {
       setIsCompleting(false)
     }
@@ -297,6 +359,8 @@ export function useStandaloneOnboarding() {
       ([] as StandaloneSetupBlockedReason[]),
     canManage: state?.permissions.canUpdateConfiguration === true,
     setField,
+    resetSuccess,
+    validateStep,
     retry: load,
     save,
     complete,
@@ -304,3 +368,4 @@ export function useStandaloneOnboarding() {
 }
 
 export type { StandaloneSetupForm }
+export type UseStandaloneOnboarding = ReturnType<typeof useStandaloneOnboarding>

@@ -12,13 +12,19 @@ interface ManualOrderContextResponse {
   page_context?: {
     source?: { status?: string }
     permissions?: { can_create_manual_order?: boolean }
+    usage?: { limit?: number; remaining?: number }
   }
 }
 
 type Availability =
   | { status: 'loading' }
   | { status: 'unavailable' }
-  | { status: 'ready'; canCreate: boolean; sourceConnected: boolean }
+  | {
+      status: 'ready'
+      canCreate: boolean
+      sourceConnected: boolean
+      isAtPlanLimit: boolean
+    }
 
 export function ManualOrderTopBarAction() {
   const t = useTranslations('manualOrder')
@@ -44,6 +50,9 @@ export function ManualOrderTopBarAction() {
           canCreate:
             response.page_context.permissions?.can_create_manual_order === true,
           sourceConnected: response.page_context.source?.status === 'connected',
+          isAtPlanLimit:
+            (response.page_context.usage?.limit ?? 0) > 0 &&
+            (response.page_context.usage?.remaining ?? 1) <= 0,
         })
       })
       .catch((error: unknown) => {
@@ -71,6 +80,7 @@ export function ManualOrderTopBarAction() {
     <ManualOrderEntryStandalone
       canCreate={isReady && availability.canCreate}
       sourceConnected={isReady && availability.sourceConnected}
+      isAtPlanLimit={isReady && availability.isAtPlanLimit}
       disabledReasonOverride={disabledReasonOverride}
       showDisabledReason={false}
       triggerClassName="h-9 px-2.5"

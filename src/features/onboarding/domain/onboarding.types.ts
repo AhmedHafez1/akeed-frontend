@@ -137,3 +137,28 @@ export interface OnboardingBillingPlansResponse {
   plans: OnboardingBillingPlanConfig[]
   isFreePlanClaimed: boolean
 }
+
+// ─── Standalone onboarding wizard (UI-only) ───────────────────────────────────
+// These types describe the client-side three-step presentation of the existing
+// settings payload. They intentionally do not affect the API contract.
+
+export type StandaloneStep = 1 | 2 | 3
+
+export interface StandaloneStepDefinition {
+  id: StandaloneStep
+  titleKey: string
+  descriptionKey: string
+  headingKey: string
+  subheadingKey: string
+}
+
+export type StandaloneSetupFieldKey =
+  | 'storeName'
+  | 'sendDelayHours'
+  | 'followUpDelayHours'
+  | 'escalationDelayHours'
+  | 'quietHours'
+
+export type StandaloneSetupFieldErrors = Partial<
+  Record<StandaloneSetupFieldKey, string>
+>

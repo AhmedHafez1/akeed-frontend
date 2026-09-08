@@ -40,13 +40,10 @@ function createSubmissionToken(): string {
 }
 
 function toPayload(values: ManualOrderFormValues): ManualOrderCreateInput {
-  const customerName = values.customerName.trim()
-  const orderNumber = values.orderNumber.trim()
-
   return {
     customerPhone: values.customerPhone.trim(),
-    ...(customerName ? { customerName } : {}),
-    ...(orderNumber ? { orderNumber } : {}),
+    customerName: values.customerName.trim(),
+    orderNumber: values.orderNumber.trim(),
     totalPrice: values.totalPrice.trim(),
     currency: values.currency,
     paymentMethod: MANUAL_ORDER_PAYMENT_METHOD,
@@ -68,8 +65,16 @@ export function useManualOrderEntry(
             (value) => !value || isValidPhoneNumber(value),
             t('validation.customerPhoneInvalid')
           ),
-        customerName: z.string().max(255, t('validation.customerNameTooLong')),
-        orderNumber: z.string().max(100, t('validation.orderNumberTooLong')),
+        customerName: z
+          .string()
+          .trim()
+          .min(1, t('validation.customerNameRequired'))
+          .max(255, t('validation.customerNameTooLong')),
+        orderNumber: z
+          .string()
+          .trim()
+          .min(1, t('validation.orderNumberRequired'))
+          .max(100, t('validation.orderNumberTooLong')),
         totalPrice: z
           .string()
           .min(1, t('validation.totalPriceRequired'))
@@ -232,6 +237,8 @@ export function useManualOrderEntry(
             MANUAL_ORDER_SOURCE_UNSUPPORTED: 'sourceUnsupported',
             MANUAL_ORDER_SETUP_INCOMPLETE: 'setupIncomplete',
             MANUAL_ORDER_ENTITLEMENT_REQUIRED: 'entitlement',
+            MANUAL_ORDER_PLAN_LIMIT_REACHED: 'planLimitReached',
+            MANUAL_ORDER_AUTO_VERIFY_DISABLED: 'autoVerifyDisabled',
           }
           const errorKey = error.code ? errorKeys[error.code] : undefined
           setFeedback({

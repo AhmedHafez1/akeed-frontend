@@ -2,8 +2,8 @@ import { api } from '@/shared/lib/auth'
 import { ApiError } from '@/shared/lib/http'
 export type ManualOrderCreateInput = {
   customerPhone: string
-  customerName?: string
-  orderNumber?: string
+  customerName: string
+  orderNumber: string
   totalPrice: string
   currency: string
   paymentMethod: string
@@ -44,6 +44,8 @@ export const manualOrderErrorCodes = [
   'MANUAL_ORDER_SOURCE_UNSUPPORTED',
   'MANUAL_ORDER_SETUP_INCOMPLETE',
   'MANUAL_ORDER_ENTITLEMENT_REQUIRED',
+  'MANUAL_ORDER_AUTO_VERIFY_DISABLED',
+  'MANUAL_ORDER_PLAN_LIMIT_REACHED',
   'MANUAL_ORDER_ACCEPTANCE_FAILED',
 ] as const
 

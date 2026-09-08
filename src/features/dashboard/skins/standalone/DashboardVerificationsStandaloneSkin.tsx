@@ -58,6 +58,7 @@ export function DashboardVerificationsStandaloneSkin(
           <ManualOrderEntryStandalone
             canCreate={props.canCreateManualOrder}
             sourceConnected={props.sourceStatus === 'connected'}
+            isAtPlanLimit={props.isAtPlanLimit}
           />
         </div>
       </header>

@@ -1,9 +1,30 @@
 # Standalone UI/UX mockups
 
 These mockups define the proposed direction for the standalone Dashboard,
-Verifications, Settings, and Message templates pages. They are implementation
-references, not pixel-perfect specifications. Existing product behavior,
-permissions, API contracts, and localized copy remain authoritative.
+Verifications, Settings, Message templates, and onboarding experiences. They
+are implementation references, not pixel-perfect specifications. Existing
+product behavior, permissions, API contracts, and localized copy remain
+authoritative.
+
+## Onboarding
+
+Reference: `standalone-onboarding.png`
+
+- Use a focused shell without the main application sidebar while standalone
+  setup is incomplete.
+- Present setup as three UI steps: store basics, confirmation rules, and review.
+  This is progressive disclosure over the existing payload, not a new backend
+  workflow.
+- Call the identity field Store name / اسم المتجر and persist it through the
+  existing integration `storeName` field; do not present it as Merchant name.
+- Save the complete valid payload with the existing settings endpoint before
+  moving forward. Preserve explicit Save progress and Complete setup actions.
+- Keep source identity available but collapsed by default; most merchants do
+  not need the technical identifier to complete setup.
+- Keep advanced timing controls in step two and show them only when their
+  controlling automation option is enabled.
+- Completion must retain the existing blocked-reason handling and truthful
+  Meta/WhatsApp notice.
 
 ## Shared application shell
 

@@ -20,6 +20,7 @@ export function DashboardStandaloneSkin({
   testFeedback,
   onDismissTestFeedback,
   canCreateManualOrder,
+  isAtPlanLimit,
   actionFeedback,
   onDismissActionFeedback,
   verifications,
@@ -56,6 +57,7 @@ export function DashboardStandaloneSkin({
           <ManualOrderEntryStandalone
             canCreate={canCreateManualOrder}
             sourceConnected={sourceStatus === 'connected'}
+            isAtPlanLimit={isAtPlanLimit}
           />
         }
       />

@@ -107,6 +107,11 @@ export function useVerificationsDashboard(
   const canCancelOrders = permissions?.can_cancel_orders === true
   const canCreateManualOrder = permissions?.can_create_manual_order === true
   const canRetryVerifications = permissions?.can_retry_verifications === true
+  const usageRemaining = pageContext?.usage?.remaining ?? null
+  const isAtPlanLimit =
+    (pageContext?.usage?.limit ?? 0) > 0 &&
+    usageRemaining !== null &&
+    usageRemaining <= 0
 
   const statusFilters = useMemo<ReadonlyArray<StatusFilterOption>>(
     () =>
@@ -368,6 +373,8 @@ export function useVerificationsDashboard(
     canCancelOrders,
     canCreateManualOrder,
     canRetryVerifications,
+    isAtPlanLimit,
+    usageRemaining,
     isSendingTest,
     testFeedback,
     actionFeedback,

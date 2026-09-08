@@ -17,10 +17,14 @@ import { Footer } from './Footer'
 import { Header } from './Header'
 import { AuthGuard } from '../auth/AuthGuard'
 import { AuthLayout } from './AuthLayout'
+import { StandaloneOnboardingShell } from './StandaloneOnboardingShell'
 import { StandaloneShellProvider } from './StandaloneShellContext'
 import { StandaloneSidebar } from './StandaloneSidebar'
 import { StandaloneTopBar } from './StandaloneTopBar'
-import { StandalonePageSkeleton } from './skeletons'
+import {
+  StandaloneOnboardingShellSkeleton,
+  StandalonePageSkeleton,
+} from './skeletons'
 
 interface StandaloneLayoutProps {
   children: ReactNode
@@ -44,6 +48,8 @@ export function StandaloneLayout({ children }: StandaloneLayoutProps) {
   const isLandingPage = publicPath === '/'
   const isAdminRoute =
     publicPath === '/admin' || publicPath.startsWith('/admin/')
+  const isOnboardingRoute =
+    publicPath === '/onboarding' || publicPath.startsWith('/onboarding/')
 
   // 1. Auth routes — minimal auth page shell
   if (isAuthRoute(pathname)) {
@@ -67,7 +73,19 @@ export function StandaloneLayout({ children }: StandaloneLayoutProps) {
     return <AuthGuard requireOrganization={false}>{children}</AuthGuard>
   }
 
-  // 3. Protected routes — auth required
+  // 3. Standalone setup — focused shell without the product navigation.
+  // AuthGuard still runs organization preparation and its own
+  // pending/completed redirects, so route access is unchanged.
+  if (isOnboardingRoute) {
+    return (
+      <AuthGuard loadingFallback={<StandaloneOnboardingShellSkeleton />}>
+        <StandaloneOnboardingShell>{children}</StandaloneOnboardingShell>
+        <StandaloneToaster />
+      </AuthGuard>
+    )
+  }
+
+  // 4. Protected routes — auth required
   return (
     <AuthGuard
       loadingFallback={

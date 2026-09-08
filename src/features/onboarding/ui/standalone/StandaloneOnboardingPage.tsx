@@ -1,75 +1,148 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { ChevronDown } from 'lucide-react'
+import {
+  AlertCircle,
+  ArrowRight,
+  CheckCircle2,
+  ShieldCheck,
+} from 'lucide-react'
 import type {
-  AutomationTimezone,
-  IntegrationOnboardingLanguage,
-  StandaloneSetupBlockedReason,
+  StandaloneSetupFieldKey,
+  StandaloneStep,
 } from '@/features/onboarding/domain/onboarding.types'
 import { useStandaloneOnboarding } from '@/features/onboarding/hooks/useStandaloneOnboarding'
-import { Button, Card, Input, Label } from '@/shared/ui'
-import { FullPageLoader } from '@/shared/layout/FullPageLoader'
+import {
+  getStepDefinition,
+  STANDALONE_FIELD_IDS,
+  STANDALONE_TOTAL_STEPS,
+} from '@/features/onboarding/model/onboarding.steps'
+import { Button, Card } from '@/shared/ui'
+import {
+  OnboardingCardSkeleton,
+  OnboardingStepProgress,
+  OnboardingStepRail,
+} from './components'
+import { ConfirmationRulesStep } from './steps/ConfirmationRulesStep'
+import { ReviewStep } from './steps/ReviewStep'
+import { StoreDetailsStep } from './steps/StoreDetailsStep'
 
-const timezones: AutomationTimezone[] = [
-  'Asia/Riyadh',
-  'Asia/Dubai',
-  'Asia/Qatar',
-  'Asia/Kuwait',
-  'Asia/Bahrain',
-  'Asia/Muscat',
-  'Asia/Amman',
-  'Africa/Cairo',
-  'Africa/Casablanca',
-  'UTC',
-]
-
-function Toggle({
-  label,
-  description,
-  checked,
-  disabled,
-  onChange,
-}: {
-  label: string
-  description: string
-  checked: boolean
-  disabled: boolean
-  onChange: (checked: boolean) => void
-}) {
-  return (
-    <label className="flex gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
-      <input
-        type="checkbox"
-        checked={checked}
-        disabled={disabled}
-        onChange={(event) => onChange(event.target.checked)}
-        className="mt-1 h-4 w-4"
-      />
-      <span>
-        <span className="block text-sm font-semibold text-slate-900">
-          {label}
-        </span>
-        <span className="mt-1 block text-xs text-slate-500">{description}</span>
-      </span>
-    </label>
-  )
-}
-
-function ErrorText({ children }: { children?: string }) {
-  return children ? (
-    <p className="mt-1 text-xs font-medium text-red-600">{children}</p>
-  ) : null
+function focusField(field: StandaloneSetupFieldKey) {
+  const element = document.getElementById(STANDALONE_FIELD_IDS[field])
+  if (element instanceof HTMLElement) {
+    element.focus()
+    element.scrollIntoView({ block: 'center', behavior: 'smooth' })
+  }
 }
 
 export function StandaloneOnboardingPage() {
   const t = useTranslations('standaloneOnboarding')
-  const settingsT = useTranslations('settings')
   const onboarding = useStandaloneOnboarding()
-  const [copied, setCopied] = useState(false)
+  const [currentStep, setCurrentStep] = useState<StandaloneStep>(1)
+  const [completedSteps, setCompletedSteps] = useState<Set<StandaloneStep>>(
+    () => new Set()
+  )
+  const headingRef = useRef<HTMLHeadingElement>(null)
+  const hasMountedRef = useRef(false)
+  /** Field to focus once the step that owns it has rendered. */
+  const pendingFocusRef = useRef<StandaloneSetupFieldKey | null>(null)
 
-  if (onboarding.isLoading) return <FullPageLoader />
+  const { canManage, isSaving, isCompleting, resetSuccess } = onboarding
+  const isBusy = isSaving || isCompleting
+
+  // Move focus to the step heading on every step change except the first
+  // render, so screen-reader users land at the top of the new step.
+  useEffect(() => {
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true
+      return
+    }
+    headingRef.current?.focus()
+  }, [currentStep])
+
+  // Focus the offending control only after its step has mounted.
+  useEffect(() => {
+    const field = pendingFocusRef.current
+    if (!field) return
+    pendingFocusRef.current = null
+    focusField(field)
+  }, [currentStep, onboarding.fieldErrors])
+
+  const canGoToStep = useCallback(
+    (step: StandaloneStep) => {
+      if (!canManage) return true
+      return (
+        step <= currentStep || completedSteps.has((step - 1) as StandaloneStep)
+      )
+    },
+    [canManage, completedSteps, currentStep]
+  )
+
+  const goToStep = useCallback(
+    (step: StandaloneStep) => {
+      if (!canGoToStep(step)) return
+      resetSuccess()
+      setCurrentStep(step)
+    },
+    [canGoToStep, resetSuccess]
+  )
+
+  const markCompleted = useCallback((step: StandaloneStep) => {
+    setCompletedSteps((current) => new Set(current).add(step))
+  }, [])
+
+  const handleSaveProgress = useCallback(async () => {
+    const result = await onboarding.save()
+    if (result.state) return
+    if (result.firstInvalidField && result.errorStep) {
+      pendingFocusRef.current = result.firstInvalidField
+      setCurrentStep(result.errorStep)
+    }
+  }, [onboarding])
+
+  const handlePrimary = useCallback(async () => {
+    // Read-only users may walk the wizard, but nothing is sent or persisted.
+    if (!canManage) {
+      if (currentStep < STANDALONE_TOTAL_STEPS) {
+        setCurrentStep((step) => (step + 1) as StandaloneStep)
+      }
+      return
+    }
+
+    if (currentStep === 3) {
+      const completion = await onboarding.complete()
+      // Completion saves first; if that save is rejected by a field owned by
+      // an earlier step, take the user to it instead of stalling on step 3.
+      if (completion.firstInvalidField && completion.errorStep) {
+        pendingFocusRef.current = completion.firstInvalidField
+        setCurrentStep(completion.errorStep)
+      }
+      return
+    }
+
+    const stepCheck = onboarding.validateStep(currentStep)
+    if (!stepCheck.ok) {
+      if (stepCheck.firstInvalidField) focusField(stepCheck.firstInvalidField)
+      return
+    }
+
+    const result = await onboarding.save()
+    if (!result.state) {
+      // A full-payload failure can belong to another step — go there rather
+      // than blocking the user behind an error they cannot see.
+      if (result.firstInvalidField && result.errorStep) {
+        pendingFocusRef.current = result.firstInvalidField
+        setCurrentStep(result.errorStep)
+      }
+      return
+    }
+
+    markCompleted(currentStep)
+    setCurrentStep((step) => (step + 1) as StandaloneStep)
+  }, [canManage, currentStep, markCompleted, onboarding])
+
+  if (onboarding.isLoading) return <OnboardingCardSkeleton />
 
   if (!onboarding.state) {
     const code = onboarding.loadErrorCode ?? 'UNAVAILABLE'
@@ -88,7 +161,10 @@ export function StandaloneOnboardingPage() {
                   ? t('sourceAmbiguous')
                   : t('loadError')}
           </p>
-          <Button className="mt-5" onClick={() => void onboarding.retry()}>
+          <Button
+            className="mt-5 min-h-11 bg-emerald-600 px-5 text-sm font-semibold text-white hover:bg-emerald-700 focus-visible:ring-emerald-600"
+            onClick={() => void onboarding.retry()}
+          >
             {t('retry')}
           </Button>
         </Card>
@@ -96,300 +172,190 @@ export function StandaloneOnboardingPage() {
     )
   }
 
-  const disabled = !onboarding.canManage
-  const blockerLabel = (reason: StandaloneSetupBlockedReason) =>
-    t(`blockers.${reason}`)
+  const disabled = !canManage
+  const definition = getStepDefinition(currentStep)
+  const primaryLabel = !canManage
+    ? t('actions.continue')
+    : currentStep === 3
+      ? isCompleting
+        ? t('completing')
+        : t('complete')
+      : isSaving
+        ? t('saving')
+        : t('actions.saveAndContinue')
 
   return (
-    <main className="mx-auto max-w-4xl space-y-6 pb-10">
-      <div>
-        <h1 className="text-3xl font-bold text-slate-900">{t('title')}</h1>
-        <p className="mt-2 text-sm text-slate-600">{t('subtitle')}</p>
-      </div>
-
-      {!onboarding.canManage && (
-        <div
-          role="status"
-          className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800"
-        >
-          {t('readOnly')}
-        </div>
-      )}
-      {onboarding.errorMessage && (
-        <div
-          role="alert"
-          className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
-        >
-          {onboarding.errorMessage}
-        </div>
-      )}
-      {onboarding.successMessage && (
-        <div
-          role="status"
-          className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-700"
-        >
-          {onboarding.successMessage}
-        </div>
-      )}
-
-      <Card className="border-slate-200 p-6">
-        <h2 className="text-lg font-semibold text-slate-900">
-          {t('sourceHeading')}
-        </h2>
-        <p className="mt-2 text-sm font-medium text-emerald-700">
-          {t('sourceType')}
+    <main className="mx-auto w-full max-w-[1120px] px-4 py-6 sm:px-6 sm:py-10">
+      <header className="text-start">
+        <p className="text-sm font-semibold text-emerald-700">{t('eyebrow')}</p>
+        <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+          {t('title')}
+        </h1>
+        <p className="mt-2 text-sm text-slate-600 sm:text-base">
+          {t('subtitle')}
         </p>
-        <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg bg-slate-50 p-3">
-          <code
-            dir="ltr"
-            className="min-w-0 flex-1 text-xs break-all text-slate-700"
-          >
-            {onboarding.state.source.identity}
-          </code>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              void navigator.clipboard.writeText(
-                onboarding.state?.source.identity ?? ''
-              )
-              setCopied(true)
-            }}
-          >
-            {copied ? t('copied') : t('copy')}
-          </Button>
-        </div>
-      </Card>
+      </header>
 
-      <Card className="space-y-5 border-slate-200 p-6">
-        <h2 className="text-lg font-semibold text-slate-900">
-          {t('configurationHeading')}
-        </h2>
-        <div className="grid gap-4 md:grid-cols-2">
-          <div>
-            <Label htmlFor="standalone-merchant-name">
-              {t('merchantName')}
-            </Label>
-            <Input
-              id="standalone-merchant-name"
-              className="mt-2"
-              value={onboarding.form.storeName}
-              disabled={disabled}
-              onChange={(event) =>
-                onboarding.setField('storeName', event.target.value)
-              }
-            />
-            <ErrorText>{onboarding.fieldErrors.storeName}</ErrorText>
-          </div>
-          <div>
-            <Label htmlFor="standalone-language">{t('language')}</Label>
-            <div className="relative mt-2">
-              <select
-                id="standalone-language"
-                className="h-10 w-full appearance-none rounded-md border border-slate-200 bg-white py-2 ps-3 pe-10"
-                value={onboarding.form.defaultLanguage}
-                disabled={disabled}
-                onChange={(event) =>
-                  onboarding.setField(
-                    'defaultLanguage',
-                    event.target.value as IntegrationOnboardingLanguage
-                  )
-                }
-              >
-                <option value="auto">{settingsT('languageAuto')}</option>
-                <option value="en">{settingsT('languageEnglish')}</option>
-                <option value="ar">{settingsT('languageArabic')}</option>
-              </select>
-              <ChevronDown
-                aria-hidden="true"
-                className="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
-              />
-            </div>
-          </div>
-        </div>
-
-        <Toggle
-          label={t('codDefault')}
-          description={t('codDefaultHelp')}
-          checked={onboarding.form.assumeCodWhenPaymentMissing}
-          disabled={disabled}
-          onChange={(value) =>
-            onboarding.setField('assumeCodWhenPaymentMissing', value)
-          }
-        />
-        <Toggle
-          label={settingsT('autoVerifyLabel')}
-          description={settingsT('autoVerifyDescription')}
-          checked={onboarding.form.isAutoVerifyEnabled}
-          disabled={disabled}
-          onChange={(value) =>
-            onboarding.setField('isAutoVerifyEnabled', value)
-          }
+      <div className="mt-6 grid gap-6 md:grid-cols-[220px_minmax(0,1fr)] lg:mt-8 lg:grid-cols-[280px_minmax(0,740px)] lg:justify-center lg:gap-8">
+        <OnboardingStepRail
+          currentStep={currentStep}
+          completedSteps={completedSteps}
+          canGoToStep={canGoToStep}
+          onSelectStep={goToStep}
         />
 
-        <div>
-          <Label htmlFor="standalone-timezone">{t('timezone')}</Label>
-          <div className="relative mt-2">
-            <select
-              id="standalone-timezone"
-              className="h-10 w-full appearance-none rounded-md border border-slate-200 bg-white py-2 ps-3 pe-10"
-              value={onboarding.form.timezone}
-              disabled={disabled}
-              onChange={(event) =>
-                onboarding.setField(
-                  'timezone',
-                  event.target.value as AutomationTimezone
-                )
-              }
+        <div className="space-y-4">
+          <OnboardingStepProgress
+            currentStep={currentStep}
+            completedSteps={completedSteps}
+          />
+
+          <p aria-live="polite" className="sr-only">
+            {definition
+              ? t('status.stepAnnouncement', {
+                  current: currentStep,
+                  total: STANDALONE_TOTAL_STEPS,
+                  title: t(definition.titleKey),
+                })
+              : null}
+          </p>
+
+          {disabled && (
+            <div
+              role="status"
+              className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-start text-sm text-amber-800"
             >
-              {timezones.map((timezone) => (
-                <option key={timezone} value={timezone}>
-                  {settingsT(
-                    `automation.timezones.${timezone.replaceAll('/', '_')}`
-                  )}
-                </option>
-              ))}
-            </select>
-            <ChevronDown
-              aria-hidden="true"
-              className="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
-            />
-          </div>
-        </div>
-
-        <details className="rounded-xl border border-slate-200 p-4">
-          <summary className="cursor-pointer font-semibold text-slate-900">
-            {t('advanced')}
-          </summary>
-          <div className="mt-5 space-y-4">
-            <div>
-              <Label>{settingsT('automation.sendDelayMinutesLabel')}</Label>
-              <Input
-                className="mt-2"
-                type="number"
-                min={0}
-                max={24}
-                step={0.25}
-                disabled={disabled}
-                value={onboarding.form.sendDelayHours}
-                onChange={(event) =>
-                  onboarding.setField('sendDelayHours', event.target.value)
-                }
-              />
-              <ErrorText>{onboarding.fieldErrors.sendDelayHours}</ErrorText>
+              {t('readOnly')}
             </div>
-            <Toggle
-              label={settingsT('automation.followUpEnabledLabel')}
-              description={settingsT('automation.followUpEnabledHelp')}
-              checked={onboarding.form.followUpEnabled}
-              disabled={disabled}
-              onChange={(value) =>
-                onboarding.setField('followUpEnabled', value)
-              }
-            />
-            <Input
-              type="number"
-              min={0}
-              max={168}
-              step={0.25}
-              disabled={disabled || !onboarding.form.followUpEnabled}
-              value={onboarding.form.followUpDelayHours}
-              onChange={(event) =>
-                onboarding.setField('followUpDelayHours', event.target.value)
-              }
-            />
-            <ErrorText>{onboarding.fieldErrors.followUpDelayHours}</ErrorText>
-            <Toggle
-              label={settingsT('automation.escalationEnabledLabel')}
-              description={settingsT('automation.escalationEnabledHelp')}
-              checked={onboarding.form.escalationEnabled}
-              disabled={disabled}
-              onChange={(value) =>
-                onboarding.setField('escalationEnabled', value)
-              }
-            />
-            <Input
-              type="number"
-              min={0}
-              max={168}
-              step={0.25}
-              disabled={disabled || !onboarding.form.escalationEnabled}
-              value={onboarding.form.escalationDelayHours}
-              onChange={(event) =>
-                onboarding.setField('escalationDelayHours', event.target.value)
-              }
-            />
-            <ErrorText>{onboarding.fieldErrors.escalationDelayHours}</ErrorText>
-            <Toggle
-              label={settingsT('automation.quietHoursEnabledLabel')}
-              description={settingsT('automation.quietHoursEnabledHelp')}
-              checked={onboarding.form.quietHoursEnabled}
-              disabled={disabled}
-              onChange={(value) =>
-                onboarding.setField('quietHoursEnabled', value)
-              }
-            />
-            <div className="grid gap-3 sm:grid-cols-2">
-              <Input
-                type="time"
-                disabled={disabled || !onboarding.form.quietHoursEnabled}
-                value={onboarding.form.quietHoursStart}
-                onChange={(event) =>
-                  onboarding.setField('quietHoursStart', event.target.value)
-                }
+          )}
+          {onboarding.errorMessage && (
+            <div
+              role="alert"
+              className="flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 p-4 text-start text-sm text-red-700"
+            >
+              <AlertCircle
+                aria-hidden="true"
+                className="mt-px h-4 w-4 shrink-0"
               />
-              <Input
-                type="time"
-                disabled={disabled || !onboarding.form.quietHoursEnabled}
-                value={onboarding.form.quietHoursEnd}
-                onChange={(event) =>
-                  onboarding.setField('quietHoursEnd', event.target.value)
-                }
-              />
+              {onboarding.errorMessage}
             </div>
-            <ErrorText>{onboarding.fieldErrors.quietHours}</ErrorText>
-          </div>
-        </details>
-      </Card>
+          )}
+          {onboarding.successMessage && (
+            <div
+              role="status"
+              className="flex items-start gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-start text-sm text-emerald-700"
+            >
+              <CheckCircle2
+                aria-hidden="true"
+                className="mt-px h-4 w-4 shrink-0"
+              />
+              {onboarding.successMessage}
+            </div>
+          )}
 
-      {onboarding.blockedReasons.length > 0 && (
-        <Card className="border-amber-200 bg-amber-50 p-5">
-          <h2 className="font-semibold text-amber-900">
-            {t('blockedHeading')}
-          </h2>
-          <ul className="mt-2 list-disc space-y-1 ps-5 text-sm text-amber-800">
-            {onboarding.blockedReasons.map((reason) => (
-              <li key={reason}>{blockerLabel(reason)}</li>
-            ))}
-          </ul>
-        </Card>
-      )}
+          <Card className="overflow-hidden border-slate-200 bg-white p-0 shadow-none">
+            <div className="space-y-6 p-5 text-start sm:p-6">
+              <div>
+                <p className="inline-flex rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600 tabular-nums">
+                  {t('steps.progress', {
+                    current: currentStep,
+                    total: STANDALONE_TOTAL_STEPS,
+                  })}
+                </p>
+                <h2
+                  ref={headingRef}
+                  tabIndex={-1}
+                  className="mt-2 text-xl font-bold text-slate-950 focus-visible:outline-none sm:text-2xl"
+                >
+                  {definition ? t(definition.headingKey) : null}
+                </h2>
+                <p className="mt-1.5 text-sm text-slate-500">
+                  {definition ? t(definition.subheadingKey) : null}
+                </p>
+              </div>
 
-      {onboarding.canManage && (
-        <div className="flex flex-wrap justify-end gap-3">
-          <Button
-            type="button"
-            variant="outline"
-            disabled={
-              disabled || onboarding.isSaving || onboarding.isCompleting
-            }
-            onClick={() => void onboarding.save()}
-          >
-            {onboarding.isSaving ? t('saving') : t('saveProgress')}
-          </Button>
-          <Button
-            type="button"
-            disabled={
-              disabled || onboarding.isSaving || onboarding.isCompleting
-            }
-            onClick={() => void onboarding.complete()}
-          >
-            {onboarding.isCompleting ? t('completing') : t('complete')}
-          </Button>
+              {currentStep === 1 && (
+                <StoreDetailsStep
+                  form={onboarding.form}
+                  fieldErrors={onboarding.fieldErrors}
+                  sourceIdentity={onboarding.state.source.identity}
+                  disabled={disabled}
+                  onFieldChange={onboarding.setField}
+                />
+              )}
+              {currentStep === 2 && (
+                <ConfirmationRulesStep
+                  form={onboarding.form}
+                  fieldErrors={onboarding.fieldErrors}
+                  disabled={disabled}
+                  onFieldChange={onboarding.setField}
+                />
+              )}
+              {currentStep === 3 && (
+                <ReviewStep
+                  form={onboarding.form}
+                  blockedReasons={onboarding.blockedReasons}
+                  onEdit={goToStep}
+                />
+              )}
+            </div>
+
+            <div className="flex flex-col gap-4 border-t border-slate-200 bg-white p-5 sm:flex-row-reverse sm:items-center sm:justify-between sm:p-6">
+              <div className="flex flex-col gap-2 sm:flex-row-reverse sm:items-center sm:gap-3">
+                {/* Read-only users have nothing to do past the review step. */}
+                {(canManage || currentStep < STANDALONE_TOTAL_STEPS) && (
+                  <Button
+                    type="button"
+                    disabled={isBusy}
+                    onClick={() => void handlePrimary()}
+                    className="min-h-11 w-full gap-2 bg-emerald-600 px-5 text-sm font-semibold text-white hover:bg-emerald-700 focus-visible:ring-emerald-600 sm:w-auto"
+                  >
+                    {primaryLabel}
+                    {currentStep < 3 && (
+                      <ArrowRight
+                        aria-hidden="true"
+                        className="h-4 w-4 rtl:rotate-180"
+                      />
+                    )}
+                  </Button>
+                )}
+                {canManage && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    disabled={isBusy}
+                    onClick={() => void handleSaveProgress()}
+                    className="min-h-11 w-full px-5 text-sm font-semibold text-slate-700 hover:bg-slate-100 sm:w-auto"
+                  >
+                    {t('saveProgress')}
+                  </Button>
+                )}
+                {currentStep > 1 && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={isBusy}
+                    onClick={() =>
+                      goToStep((currentStep - 1) as StandaloneStep)
+                    }
+                    className="min-h-11 w-full border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 hover:bg-slate-50 sm:w-auto"
+                  >
+                    {t('actions.back')}
+                  </Button>
+                )}
+              </div>
+
+              <p className="flex items-start gap-2 text-start text-xs leading-5 text-slate-500">
+                <ShieldCheck
+                  aria-hidden="true"
+                  className="mt-px h-4 w-4 shrink-0 text-emerald-600"
+                />
+                {t('trustNote')}
+              </p>
+            </div>
+          </Card>
         </div>
-      )}
-      <p className="text-center text-xs text-slate-500">{t('metaNotice')}</p>
+      </div>
     </main>
   )
 }

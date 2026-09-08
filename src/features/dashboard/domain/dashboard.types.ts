@@ -74,6 +74,8 @@ export interface DashboardSkinProps {
   canCancelOrders: boolean
   canCreateManualOrder: boolean
   canRetryVerifications: boolean
+  isAtPlanLimit: boolean
+  usageRemaining: number | null
 
   // Test verification + action feedback
   isSendingTest: boolean

@@ -29,6 +29,7 @@ import { manualOrderCurrencies } from '../../domain/manualOrder.model'
 interface ManualOrderEntryStandaloneProps {
   canCreate: boolean
   sourceConnected: boolean
+  isAtPlanLimit?: boolean
   onAccepted?: () => void
   triggerClassName?: string
   triggerLabelClassName?: string
@@ -45,15 +46,6 @@ function RequiredMark() {
   )
 }
 
-function OptionalBadge() {
-  const t = useTranslations('manualOrder')
-  return (
-    <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-500">
-      {t('optional')}
-    </span>
-  )
-}
-
 function FieldError({ id, message }: { id: string; message?: string }) {
   return message ? (
     <p id={id} role="alert" className="mt-1 text-xs font-medium text-red-600">
@@ -65,6 +57,7 @@ function FieldError({ id, message }: { id: string; message?: string }) {
 export function ManualOrderEntryStandalone({
   canCreate,
   sourceConnected,
+  isAtPlanLimit = false,
   onAccepted,
   triggerClassName,
   triggerLabelClassName,
@@ -88,7 +81,9 @@ export function ManualOrderEntryStandalone({
       ? t('sourceDisconnected')
       : !canCreate
         ? t('readOnly')
-        : undefined)
+        : isAtPlanLimit
+          ? t('planLimitReasonLabel')
+          : undefined)
   const fieldsDisabled = entry.isSubmitting || entry.isLocked
 
   return (
@@ -296,12 +291,10 @@ export function ManualOrderEntryStandalone({
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <div className="mb-2 flex items-center justify-between gap-2">
-                    <Label htmlFor="manual-order-name">
-                      {t('fields.customerName.label')}
-                    </Label>
-                    <OptionalBadge />
-                  </div>
+                  <Label htmlFor="manual-order-name">
+                    {t('fields.customerName.label')}
+                    <RequiredMark />
+                  </Label>
                   <Input
                     id="manual-order-name"
                     maxLength={255}
@@ -312,6 +305,8 @@ export function ManualOrderEntryStandalone({
                         ? 'manual-order-name-error'
                         : undefined
                     }
+                    required
+                    className="mt-2"
                     {...register('customerName')}
                   />
                   <FieldError
@@ -320,12 +315,10 @@ export function ManualOrderEntryStandalone({
                   />
                 </div>
                 <div>
-                  <div className="mb-2 flex items-center justify-between gap-2">
-                    <Label htmlFor="manual-order-reference">
-                      {t('fields.orderNumber.label')}
-                    </Label>
-                    <OptionalBadge />
-                  </div>
+                  <Label htmlFor="manual-order-reference">
+                    {t('fields.orderNumber.label')}
+                    <RequiredMark />
+                  </Label>
                   <Input
                     id="manual-order-reference"
                     dir="ltr"
@@ -337,7 +330,8 @@ export function ManualOrderEntryStandalone({
                         ? 'manual-order-reference-error'
                         : undefined
                     }
-                    className="text-left rtl:text-right"
+                    required
+                    className="mt-2 text-left rtl:text-right"
                     {...register('orderNumber')}
                   />
                   <FieldError
