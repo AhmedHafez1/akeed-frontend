@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { isValidPhoneNumber } from '@/shared/ui/international-phone-input'
+import { creditFeedbackKey } from '@/shared/lib/creditFeedback'
 import { ApiError } from '@/shared/lib/http'
 import { createLogger } from '@/shared/lib/logger'
 import {
@@ -55,6 +56,7 @@ export function useManualOrderEntry(
   onAccepted?: () => void
 ) {
   const t = useTranslations('manualOrder')
+  const tCredits = useTranslations('creditErrors')
   const schema = useMemo(
     () =>
       z.object({
@@ -200,6 +202,13 @@ export function useManualOrderEntry(
           return
         }
 
+        const creditKey =
+          error instanceof ApiError ? creditFeedbackKey(error.code) : undefined
+        if (creditKey) {
+          setFeedback({ tone: 'critical', message: tCredits(creditKey) })
+          setRecoveryMode(null)
+          return
+        }
         if (isManualOrderApiError(error)) {
           if (
             error.code === 'MANUAL_ORDER_VALIDATION_FAILED' &&
@@ -275,7 +284,7 @@ export function useManualOrderEntry(
         setIsSubmitting(false)
       }
     },
-    [applyServerFieldErrors, form, onAccepted, t]
+    [applyServerFieldErrors, form, onAccepted, t, tCredits]
   )
 
   const submit = form.handleSubmit(

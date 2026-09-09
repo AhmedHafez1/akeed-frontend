@@ -1652,5 +1652,12 @@
     "socialTitle": "Connect With Us",
     "socialDescription": "Follow us on social media for updates and news.",
     "backHome": "Back to home"
+  },
+  "creditErrors": {
+    "approvalRequired": "Your account is awaiting staff approval. You can still view existing orders and history.",
+    "suspended": "New message sends are paused for this account. Contact support. Existing orders and history remain available.",
+    "debt": "An outstanding credit balance must be settled before sending new messages. Existing orders and history remain available.",
+    "insufficient": "No message credits are available. New sends can resume when credits are available. Existing orders and history remain available.",
+    "reconciliation": "Message sending is paused while billing is reviewed. Contact support. Existing orders and history remain available."
   }
 }

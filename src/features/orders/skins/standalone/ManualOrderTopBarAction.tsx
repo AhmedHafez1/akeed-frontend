@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
+import { creditFeedbackKey } from '@/shared/lib/creditFeedback'
 import { api } from '@/shared/lib/auth'
 import { createLogger } from '@/shared/lib/logger'
 import { ManualOrderEntryStandalone } from './ManualOrderEntryStandalone'
@@ -12,7 +13,11 @@ interface ManualOrderContextResponse {
   page_context?: {
     source?: { status?: string }
     permissions?: { can_create_manual_order?: boolean }
-    usage?: { limit?: number; remaining?: number }
+    usage?: {
+      limit?: number
+      remaining?: number
+      credit_denial?: string | null
+    }
   }
 }
 
@@ -24,10 +29,12 @@ type Availability =
       canCreate: boolean
       sourceConnected: boolean
       isAtPlanLimit: boolean
+      creditDenial?: string | null
     }
 
 export function ManualOrderTopBarAction() {
   const t = useTranslations('manualOrder')
+  const tCredits = useTranslations('creditErrors')
   const [availability, setAvailability] = useState<Availability>({
     status: 'loading',
   })
@@ -47,8 +54,10 @@ export function ManualOrderTopBarAction() {
         }
         setAvailability({
           status: 'ready',
+          creditDenial: response.page_context.usage?.credit_denial,
           canCreate:
-            response.page_context.permissions?.can_create_manual_order === true,
+            response.page_context.permissions?.can_create_manual_order ===
+              true && !response.page_context.usage?.credit_denial,
           sourceConnected: response.page_context.source?.status === 'connected',
           isAtPlanLimit:
             (response.page_context.usage?.limit ?? 0) > 0 &&
@@ -74,7 +83,9 @@ export function ManualOrderTopBarAction() {
       ? t('availabilityLoading')
       : availability.status === 'unavailable'
         ? t('availabilityUnavailable')
-        : undefined
+        : creditFeedbackKey(availability.creditDenial)
+          ? tCredits(creditFeedbackKey(availability.creditDenial)!)
+          : undefined
 
   return (
     <ManualOrderEntryStandalone

@@ -1,3 +1,4 @@
+import type { CreditDenialCode } from '@/shared/lib/creditFeedback'
 import type { CommerceOutcomeOperationResult } from '@/shared/types/commerce-outcome.model'
 
 /**
@@ -107,6 +108,7 @@ export type DashboardPermissions = {
 }
 
 export type DashboardPageUsage = {
+  credit_denial?: CreditDenialCode | null
   used: number
   limit: number
   remaining: number

@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
+import { ApiError } from '@/shared/lib/http'
+import { creditFeedbackKey } from '@/shared/lib/creditFeedback'
 import { api } from '@/shared/lib/auth'
 import { createLogger } from '@/shared/lib/logger'
 import type { CancelOrderResponse } from '@/shared/types/commerce-outcome.model'
@@ -60,6 +62,7 @@ export function useVerificationsDashboard(
   options: UseVerificationsDashboardOptions = {}
 ): DashboardSkinProps {
   const t = useTranslations('dashboard')
+  const tCredits = useTranslations('creditErrors')
   const [ownStatusFilter, setStatusFilter] = useState<VerificationStatusFilter>(
     options.initialStatusFilter ?? 'all'
   )
@@ -101,12 +104,15 @@ export function useVerificationsDashboard(
     refetch: refetchStats,
   } = useDashboardStats(dateRangeFilter)
 
+  const creditBlocked = Boolean(pageContext?.usage?.credit_denial)
   const permissions = pageContext?.permissions
   const canSendTestVerification =
-    permissions?.can_send_test_verification === true
+    permissions?.can_send_test_verification === true && !creditBlocked
   const canCancelOrders = permissions?.can_cancel_orders === true
-  const canCreateManualOrder = permissions?.can_create_manual_order === true
-  const canRetryVerifications = permissions?.can_retry_verifications === true
+  const canCreateManualOrder =
+    permissions?.can_create_manual_order === true && !creditBlocked
+  const canRetryVerifications =
+    permissions?.can_retry_verifications === true && !creditBlocked
   const usageRemaining = pageContext?.usage?.remaining ?? null
   const isAtPlanLimit =
     (pageContext?.usage?.limit ?? 0) > 0 &&
@@ -242,13 +248,18 @@ export function useVerificationsDashboard(
         logger.warn('Failed to retry verification', {
           errorName: error instanceof Error ? error.name : 'UnknownError',
         })
+        const creditKey =
+          error instanceof ApiError ? creditFeedbackKey(error.code) : undefined
+        const message = creditKey
+          ? tCredits(creditKey)
+          : t('table.actions.retryError')
         setActionErrors((current) => ({
           ...current,
-          [verificationId]: t('table.actions.retryError'),
+          [verificationId]: message,
         }))
         setActionFeedback({
           tone: 'critical',
-          message: t('table.actions.retryError'),
+          message,
         })
       } finally {
         setActingVerificationId((current) =>
@@ -259,6 +270,7 @@ export function useVerificationsDashboard(
     [
       actingVerificationId,
       canRetryVerifications,
+      tCredits,
       clearActionError,
       refreshDashboard,
       t,
@@ -295,8 +307,9 @@ export function useVerificationsDashboard(
         if (response.skipped) {
           setTestFeedback({
             tone: 'warning',
-            message:
-              response.reason === 'plan_limit_reached'
+            message: creditFeedbackKey(response.reason)
+              ? tCredits(creditFeedbackKey(response.reason)!)
+              : response.reason === 'plan_limit_reached'
                 ? t('emptyState.onboarding.testQuotaReached')
                 : t('emptyState.onboarding.testSkipped'),
           })
@@ -312,13 +325,16 @@ export function useVerificationsDashboard(
         })
         setTestFeedback({
           tone: 'critical',
-          message: t(getTestVerificationFeedbackKey(error)),
+          message:
+            error instanceof ApiError && creditFeedbackKey(error.code)
+              ? tCredits(creditFeedbackKey(error.code)!)
+              : t(getTestVerificationFeedbackKey(error)),
         })
       } finally {
         setIsSendingTest(false)
       }
     },
-    [canSendTestVerification, refreshDashboard, t]
+    [canSendTestVerification, refreshDashboard, t, tCredits]
   )
 
   const error = useMemo(() => {
