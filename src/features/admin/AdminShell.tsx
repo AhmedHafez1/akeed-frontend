@@ -22,8 +22,8 @@ export function AdminShell({ children }: AdminShellProps) {
     { href: `/${locale}/admin/stores`, label: t('stores'), icon: Store },
     { href: `/${locale}/admin/funnel`, label: t('funnel'), icon: BarChart3 },
     {
-      href: `/${locale}/admin/standalone-pilots`,
-      label: t('pilots'),
+      href: `/${locale}/admin/standalone-billing`,
+      label: t('billing'),
       icon: Users,
     },
   ]

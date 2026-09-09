@@ -1,7 +1,7 @@
-export type PilotReason =
+export type ApprovalReason =
   | 'create_source'
   | 'activate_source'
-  | 'already_entitled'
+  | 'already_approved'
   | 'organization_missing'
   | 'native_source'
   | 'native_billing_history'
@@ -12,12 +12,22 @@ export type PilotReason =
   | 'source_inactive'
   | 'billing_conflict'
   | 'accounting_anchor_missing'
+  | 'account_missing'
+  | 'account_suspended'
 
-export interface PilotRow {
+export type ApprovalStatus =
+  | 'eligible'
+  | 'already_approved'
+  | 'skipped'
+  | 'ambiguous'
+
+export type CreditAccountStatus = 'pending_approval' | 'active' | 'suspended'
+
+export interface ApprovalRow {
   orgId: string
   organizationName: string | null
-  status: 'eligible' | 'already_entitled' | 'skipped' | 'ambiguous'
-  reason: PilotReason
+  status: ApprovalStatus
+  reason: ApprovalReason
   existingSource: boolean
   source: {
     id: string
@@ -28,52 +38,57 @@ export interface PilotRow {
     billingStatus: string | null
     billingActivatedAt: string | null
   } | null
+  account: {
+    status: CreditAccountStatus
+    postedBalance: number
+    heldCredits: number
+    availableCredits: number
+    version: number
+    approvedAt: string | null
+  } | null
+  freeGrantPresent: boolean
   proposed: {
     createSource: boolean
-    planId: string
-    billingStatus: 'not_required'
-    includedLimit: number
+    freeGrantQuantity: number
+    accountStatus: 'active'
     billingActivatedAt: string | null
   } | null
 }
-export interface PilotCounts {
+export interface ApprovalCounts {
   eligible: number
-  alreadyEntitled: number
+  alreadyApproved: number
   skipped: number
   existingSource: number
   ambiguous: number
 }
-export interface PilotList {
-  rows: PilotRow[]
-  counts: PilotCounts
+export interface CreditAccountList {
+  rows: ApprovalRow[]
+  counts: ApprovalCounts
   nextCursor: string | null
-  activationEnabled: boolean
+  approvalEnabled: boolean
 }
-export interface PilotPreview {
+export interface ApprovalPreview {
   previewId: string
   evaluatedAt: string
-  rows: PilotRow[]
-  counts: PilotCounts
-  activationEnabled: boolean
+  rows: ApprovalRow[]
+  counts: ApprovalCounts
+  approvalEnabled: boolean
 }
-export interface PilotApplyReport {
+export interface ApprovalApplyReport {
   previewId: string
   completedAt: string
   results: {
     orgId: string
     outcome:
-      | 'activated'
+      | 'approved'
       | 'already_applied'
       | 'unchanged'
       | 'skipped'
       | 'changed'
       | 'failed'
-    reason:
-      | PilotReason
-      | 'preview_changed'
-      | 'activation_failed'
-      | 'already_applied'
+    reason: ApprovalReason | 'preview_changed' | 'approval_failed'
     integrationId?: string
     auditId?: string
+    grantedCredits?: number
   }[]
 }

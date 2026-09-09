@@ -3,21 +3,24 @@
 import { useTranslations } from 'next-intl'
 import { Button } from '@/shared/ui'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import { downloadPilotReport, useStandalonePilots } from './useStandalonePilots'
-import type { PilotCounts, PilotRow } from './standalone-pilot.model'
+import {
+  downloadApprovalReport,
+  useStandaloneBilling,
+} from './useStandaloneBilling'
+import type { ApprovalCounts, ApprovalRow } from './standalone-billing.model'
 
-const countKeys: (keyof PilotCounts)[] = [
+const countKeys: (keyof ApprovalCounts)[] = [
   'eligible',
-  'alreadyEntitled',
+  'alreadyApproved',
   'skipped',
   'existingSource',
   'ambiguous',
 ]
 
-export function StandalonePilotsPage() {
-  const t = useTranslations('adminPilots')
+export function StandaloneBillingPage() {
+  const t = useTranslations('adminBilling')
   const { isRTL, locale } = useLocaleInfo()
-  const state = useStandalonePilots()
+  const state = useStandaloneBilling()
   const locked = !!state.busy || state.loading
   const retryApply = state.report?.results.some(
     (result) => result.outcome === 'failed'
@@ -28,28 +31,30 @@ export function StandalonePilotsPage() {
       dateStyle: 'medium',
       timeStyle: 'short',
     }).format(new Date(value))
-  const planLabel = (plan: string | null) => {
-    if (!plan) return t('noPlan')
-    if (['starter', 'basic', 'pro', 'business'].includes(plan))
-      return t(`plans.${plan}`)
-    return t('plans.unknown')
-  }
-  const entitlementLabel = (row: PilotRow) => {
-    if (!row.source?.isActive) return t('sourceStatus.inactive')
-    if (row.source.billingStatus === 'not_required')
-      return t('sourceStatus.manual')
-    return t('sourceStatus.review')
-  }
-  const renderSource = (row: PilotRow) =>
-    row.source ? (
+  const renderAccount = (row: ApprovalRow) =>
+    row.account ? (
       <>
-        <div className="font-mono text-xs break-all" dir="ltr">
-          {row.source.identity}
+        <div className="font-medium">
+          {t(`accountStatus.${row.account.status}`)}
         </div>
         <div className="mt-1 text-xs text-slate-500">
-          {planLabel(row.source.billingPlanId)} · {entitlementLabel(row)}
+          {t('balance', {
+            available: row.account.availableCredits,
+            posted: row.account.postedBalance,
+          })}
         </div>
+        {row.freeGrantPresent && (
+          <div className="mt-1 text-xs text-slate-500">{t('grantPosted')}</div>
+        )}
       </>
+    ) : (
+      <span className="text-slate-500">{t('noAccount')}</span>
+    )
+  const renderSource = (row: ApprovalRow) =>
+    row.source ? (
+      <div className="font-mono text-xs break-all" dir="ltr">
+        {row.source.identity}
+      </div>
     ) : (
       <span className="text-slate-500">{t('noSource')}</span>
     )
@@ -71,7 +76,7 @@ export function StandalonePilotsPage() {
           {t('refresh')}
         </Button>
       </header>
-      {state.page && !state.page.activationEnabled && (
+      {state.page && !state.page.approvalEnabled && (
         <p
           role="status"
           className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950"
@@ -141,6 +146,9 @@ export function StandalonePilotsPage() {
                     {t('source')}
                   </th>
                   <th scope="col" className="p-4 text-start">
+                    {t('creditAccount')}
+                  </th>
+                  <th scope="col" className="p-4 text-start">
                     {t('eligibility')}
                   </th>
                 </tr>
@@ -179,6 +187,7 @@ export function StandalonePilotsPage() {
                       </div>
                     </td>
                     <td className="p-4">{renderSource(row)}</td>
+                    <td className="p-4">{renderAccount(row)}</td>
                     <td className="p-4">
                       <span
                         className={
@@ -223,15 +232,15 @@ export function StandalonePilotsPage() {
       {state.preview && (
         <section
           className="space-y-4 rounded-2xl border border-emerald-200 bg-white p-5"
-          aria-labelledby="pilot-preview-title"
+          aria-labelledby="approval-preview-title"
         >
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 id="pilot-preview-title" className="text-lg font-semibold">
+            <h2 id="approval-preview-title" className="text-lg font-semibold">
               {t('reviewTitle')}
             </h2>
             <Button
               variant="outline"
-              onClick={() => downloadPilotReport(state.preview!)}
+              onClick={() => downloadApprovalReport(state.preview!)}
             >
               {t('downloadPreview')}
             </Button>
@@ -261,31 +270,31 @@ export function StandalonePilotsPage() {
                 </p>
                 {row.proposed && (
                   <p className="mt-1 text-emerald-800">
-                    {t('proposed', { limit: row.proposed.includedLimit })} ·{' '}
-                    {row.proposed.billingActivatedAt
-                      ? t('keepAnchor', {
-                          time: formatTime(row.proposed.billingActivatedAt),
-                        })
-                      : t('newAnchor')}
+                    {t('proposedGrant', {
+                      count: row.proposed.freeGrantQuantity,
+                    })}
                   </p>
                 )}
               </li>
             ))}
           </ul>
-          <label htmlFor="pilot-reason" className="block text-sm font-medium">
+          <label
+            htmlFor="approval-reason"
+            className="block text-sm font-medium"
+          >
             {t('reason')}
           </label>
           <textarea
-            id="pilot-reason"
+            id="approval-reason"
             value={state.reason}
             onChange={(event) => state.setReason(event.target.value)}
             maxLength={500}
             rows={3}
             disabled={!!state.busy}
             className="w-full rounded-lg border border-slate-300 p-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-            aria-describedby="pilot-reason-help"
+            aria-describedby="approval-reason-help"
           />
-          <p id="pilot-reason-help" className="text-xs text-slate-500">
+          <p id="approval-reason-help" className="text-xs text-slate-500">
             {t('reasonHelp')}
           </p>
           <Button
@@ -293,8 +302,8 @@ export function StandalonePilotsPage() {
             disabled={
               locked ||
               completed ||
-              !state.page?.activationEnabled ||
-              !state.preview.activationEnabled ||
+              !state.page?.approvalEnabled ||
+              !state.preview.approvalEnabled ||
               !state.preview.counts.eligible ||
               !state.reason.trim()
             }
@@ -316,7 +325,7 @@ export function StandalonePilotsPage() {
             <h2 className="text-lg font-semibold">{t('results')}</h2>
             <Button
               variant="outline"
-              onClick={() => downloadPilotReport(state.report!)}
+              onClick={() => downloadApprovalReport(state.report!)}
             >
               {t('downloadResults')}
             </Button>
@@ -332,6 +341,9 @@ export function StandalonePilotsPage() {
                 <p className="mt-1">
                   {t(`outcomes.${result.outcome}`)} ·{' '}
                   {t(`reasons.${result.reason}`)}
+                  {result.grantedCredits !== undefined && (
+                    <> · {t('granted', { count: result.grantedCredits })}</>
+                  )}
                 </p>
               </li>
             ))}

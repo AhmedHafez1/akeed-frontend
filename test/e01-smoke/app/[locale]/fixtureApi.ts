@@ -6,7 +6,7 @@ import type {
 import type { CancelOrderResponse } from '@/shared/types/commerce-outcome.model'
 import { ApiError } from '@/shared/lib/http'
 import { billingFixtureRequest } from './billingFixture'
-import { adminPilotFixtureRequest } from './adminPilotFixture'
+import { adminBillingFixtureRequest } from './adminBillingFixture'
 import { onboardingFixtureRequest } from './onboardingFixture'
 import { manualOrderFixtureRequest } from './manual-order/manualOrderFixture'
 import {
@@ -14,7 +14,7 @@ import {
   verificationFixtureRequest,
 } from './verifications/verificationFixture'
 
-export { resetPilotFixture } from './adminPilotFixture'
+export { resetBillingApprovalFixture } from './adminBillingFixture'
 
 export function fetchWithAuth(url: string, options: RequestInit = {}) {
   return [
@@ -24,7 +24,7 @@ export function fetchWithAuth(url: string, options: RequestInit = {}) {
   ].includes(url)
     ? onboardingFixtureRequest(url, options)
     : url.startsWith('/api/admin/')
-      ? adminPilotFixtureRequest(url, options)
+      ? adminBillingFixtureRequest(url, options)
       : billingFixtureRequest(url, options)
 }
 

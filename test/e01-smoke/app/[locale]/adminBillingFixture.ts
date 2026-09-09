@@ -1,29 +1,39 @@
 import type {
-  PilotApplyReport,
-  PilotList,
-  PilotPreview,
-  PilotRow,
-} from '@/features/admin/standalone-pilot.model'
+  ApprovalApplyReport,
+  ApprovalPreview,
+  ApprovalRow,
+  CreditAccountList,
+} from '@/features/admin/standalone-billing.model'
 
+const FREE_GRANT = 30
 const ids = {
   create: '10000000-0000-4000-8000-000000000001',
   activate: '10000000-0000-4000-8000-000000000002',
-  entitled: '10000000-0000-4000-8000-000000000003',
+  approved: '10000000-0000-4000-8000-000000000003',
   review: '10000000-0000-4000-8000-000000000004',
 }
-const rows: PilotRow[] = [
+const pendingAccount = {
+  status: 'pending_approval' as const,
+  postedBalance: 0,
+  heldCredits: 0,
+  availableCredits: 0,
+  version: 0,
+  approvedAt: null,
+}
+const rows: ApprovalRow[] = [
   {
     orgId: ids.create,
-    organizationName: 'Source-free pilot',
+    organizationName: 'Source-free merchant',
     status: 'eligible',
     reason: 'create_source',
     existingSource: false,
     source: null,
+    account: pendingAccount,
+    freeGrantPresent: false,
     proposed: {
       createSource: true,
-      planId: 'starter',
-      billingStatus: 'not_required',
-      includedLimit: 30,
+      freeGrantQuantity: FREE_GRANT,
+      accountStatus: 'active',
       billingActivatedAt: null,
     },
   },
@@ -42,29 +52,39 @@ const rows: PilotRow[] = [
       billingStatus: null,
       billingActivatedAt: null,
     },
+    account: pendingAccount,
+    freeGrantPresent: false,
     proposed: {
       createSource: false,
-      planId: 'starter',
-      billingStatus: 'not_required',
-      includedLimit: 30,
+      freeGrantQuantity: FREE_GRANT,
+      accountStatus: 'active',
       billingActivatedAt: null,
     },
   },
   {
-    orgId: ids.entitled,
-    organizationName: 'Existing manual pilot',
-    status: 'already_entitled',
-    reason: 'already_entitled',
+    orgId: ids.approved,
+    organizationName: 'Already approved merchant',
+    status: 'already_approved',
+    reason: 'already_approved',
     existingSource: true,
     source: {
       id: '20000000-0000-4000-8000-000000000003',
-      identity: `standalone:${ids.entitled}`,
+      identity: `standalone:${ids.approved}`,
       platformType: 'standalone',
       isActive: true,
       billingPlanId: 'starter',
       billingStatus: 'not_required',
       billingActivatedAt: '2026-08-01T00:00:00Z',
     },
+    account: {
+      status: 'active',
+      postedBalance: FREE_GRANT,
+      heldCredits: 1,
+      availableCredits: FREE_GRANT - 1,
+      version: 1,
+      approvedAt: '2026-08-02T09:00:00Z',
+    },
+    freeGrantPresent: true,
     proposed: null,
   },
   {
@@ -74,15 +94,17 @@ const rows: PilotRow[] = [
     reason: 'multiple_owners',
     existingSource: false,
     source: null,
+    account: pendingAccount,
+    freeGrantPresent: false,
     proposed: null,
   },
 ]
 let applyCalls = 0
 
-function counts(selected: PilotRow[]) {
+function counts(selected: ApprovalRow[]) {
   return {
     eligible: selected.filter((row) => row.status === 'eligible').length,
-    alreadyEntitled: selected.filter((row) => row.status === 'already_entitled')
+    alreadyApproved: selected.filter((row) => row.status === 'already_approved')
       .length,
     skipped: selected.filter((row) => row.status === 'skipped').length,
     existingSource: selected.filter((row) => row.existingSource).length,
@@ -90,30 +112,30 @@ function counts(selected: PilotRow[]) {
   }
 }
 
-export function resetPilotFixture() {
+export function resetBillingApprovalFixture() {
   applyCalls = 0
 }
 
-export async function adminPilotFixtureRequest(
+export async function adminBillingFixtureRequest(
   url: string,
   options: RequestInit = {}
 ): Promise<Response> {
   if (url === '/api/admin/session')
     return Response.json({ authenticated: true, role: 'admin' })
   if (
-    url.startsWith('/api/admin/standalone-pilots?') &&
+    url.startsWith('/api/admin/standalone-billing/accounts?') &&
     options.method === undefined
   ) {
-    const response: PilotList = {
+    const response: CreditAccountList = {
       rows,
       counts: counts(rows),
       nextCursor: null,
-      activationEnabled: true,
+      approvalEnabled: true,
     }
     return Response.json(response)
   }
   if (
-    url === '/api/admin/standalone-pilots/preview' &&
+    url === '/api/admin/standalone-billing/approvals/preview' &&
     options.method === 'POST'
   ) {
     const input = JSON.parse(String(options.body)) as {
@@ -121,22 +143,22 @@ export async function adminPilotFixtureRequest(
     }
     const selected = input.organizationIds
       .map((id) => rows.find((row) => row.orgId === id))
-      .filter((row): row is PilotRow => !!row)
-    const response: PilotPreview = {
+      .filter((row): row is ApprovalRow => !!row)
+    const response: ApprovalPreview = {
       previewId: '30000000-0000-4000-8000-000000000001',
       evaluatedAt: '2026-09-03T18:00:00Z',
       rows: selected,
       counts: counts(selected),
-      activationEnabled: true,
+      approvalEnabled: true,
     }
     return Response.json(response)
   }
   if (
-    url === '/api/admin/standalone-pilots/apply' &&
+    url === '/api/admin/standalone-billing/approvals/apply' &&
     options.method === 'POST'
   ) {
     applyCalls++
-    const response: PilotApplyReport = {
+    const response: ApprovalApplyReport = {
       previewId: '30000000-0000-4000-8000-000000000001',
       completedAt: new Date().toISOString(),
       results:
@@ -144,31 +166,33 @@ export async function adminPilotFixtureRequest(
           ? [
               {
                 orgId: ids.create,
-                outcome: 'activated',
+                outcome: 'approved',
                 reason: 'create_source',
+                grantedCredits: FREE_GRANT,
               },
               {
                 orgId: ids.activate,
                 outcome: 'failed',
-                reason: 'activation_failed',
+                reason: 'approval_failed',
               },
             ]
           : [
               {
                 orgId: ids.create,
                 outcome: 'already_applied',
-                reason: 'already_applied',
+                reason: 'already_approved',
               },
               {
                 orgId: ids.activate,
-                outcome: 'activated',
+                outcome: 'approved',
                 reason: 'activate_source',
+                grantedCredits: FREE_GRANT,
               },
             ],
     }
     return Response.json(response)
   }
   throw new Error(
-    `Blocked admin pilot fixture request: ${options.method} ${url}`
+    `Blocked admin billing fixture request: ${options.method} ${url}`
   )
 }

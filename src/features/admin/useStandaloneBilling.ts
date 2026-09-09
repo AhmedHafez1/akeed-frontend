@@ -3,28 +3,28 @@
 import { useCallback, useEffect, useState } from 'react'
 import { AdminApiError, adminRequest } from './adminApi'
 import type {
-  PilotApplyReport,
-  PilotList,
-  PilotPreview,
-} from './standalone-pilot.model'
+  ApprovalApplyReport,
+  ApprovalPreview,
+  CreditAccountList,
+} from './standalone-billing.model'
 
-const path = '/api/admin/standalone-pilots'
+const path = '/api/admin/standalone-billing'
 
-export function useStandalonePilots() {
-  const [page, setPage] = useState<PilotList | null>(null)
+export function useStandaloneBilling() {
+  const [page, setPage] = useState<CreditAccountList | null>(null)
   const [cursors, setCursors] = useState<string[]>([])
   const [revision, setRevision] = useState(0)
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState<'preview' | 'apply' | null>(null)
   const [error, setError] = useState<AdminApiError | null>(null)
   const [selected, setSelected] = useState<string[]>([])
-  const [preview, setPreview] = useState<PilotPreview | null>(null)
-  const [report, setReport] = useState<PilotApplyReport | null>(null)
+  const [preview, setPreview] = useState<ApprovalPreview | null>(null)
+  const [report, setReport] = useState<ApprovalApplyReport | null>(null)
   const [reason, setReason] = useState('')
   const cursor = cursors.at(-1)
 
   const recordError = useCallback((cause: unknown) => {
-    console.error('[Admin] Pilot request failed', cause)
+    console.error('[Admin] Standalone billing request failed', cause)
     setError(
       cause instanceof AdminApiError
         ? cause
@@ -36,8 +36,8 @@ export function useStandalonePilots() {
     let current = true
     setLoading(true)
     setError(null)
-    adminRequest<PilotList>(
-      `${path}?limit=50${cursor ? `&cursor=${cursor}` : ''}`
+    adminRequest<CreditAccountList>(
+      `${path}/accounts?limit=50${cursor ? `&cursor=${cursor}` : ''}`
     )
       .then((response) => {
         if (current) setPage(response)
@@ -77,7 +77,7 @@ export function useStandalonePilots() {
     setReport(null)
     try {
       setPreview(
-        await adminRequest<PilotPreview>(`${path}/preview`, {
+        await adminRequest<ApprovalPreview>(`${path}/approvals/preview`, {
           method: 'POST',
           body: JSON.stringify({ organizationIds: selected }),
         })
@@ -92,8 +92,8 @@ export function useStandalonePilots() {
   async function apply() {
     if (
       busy ||
-      !preview?.activationEnabled ||
-      !page?.activationEnabled ||
+      !preview?.approvalEnabled ||
+      !page?.approvalEnabled ||
       !preview.counts.eligible ||
       !reason.trim()
     )
@@ -102,7 +102,7 @@ export function useStandalonePilots() {
     setError(null)
     try {
       setReport(
-        await adminRequest<PilotApplyReport>(`${path}/apply`, {
+        await adminRequest<ApprovalApplyReport>(`${path}/approvals/apply`, {
           method: 'POST',
           body: JSON.stringify({
             previewId: preview.previewId,
@@ -115,7 +115,7 @@ export function useStandalonePilots() {
       recordError(cause)
       if (cause instanceof AdminApiError && cause.status === 403)
         setPreview((current) =>
-          current ? { ...current, activationEnabled: false } : null
+          current ? { ...current, approvalEnabled: false } : null
         )
     } finally {
       setBusy(null)
@@ -150,13 +150,15 @@ export function useStandalonePilots() {
   }
 }
 
-export function downloadPilotReport(report: PilotPreview | PilotApplyReport) {
+export function downloadApprovalReport(
+  report: ApprovalPreview | ApprovalApplyReport
+) {
   const url = URL.createObjectURL(
     new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' })
   )
   const link = document.createElement('a')
   link.href = url
-  link.download = `standalone-pilots-${report.previewId}-${'results' in report ? 'results' : 'preview'}.json`
+  link.download = `standalone-billing-${report.previewId}-${'results' in report ? 'results' : 'preview'}.json`
   link.click()
   setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
