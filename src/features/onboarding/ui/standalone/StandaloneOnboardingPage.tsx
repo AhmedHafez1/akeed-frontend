@@ -172,6 +172,37 @@ export function StandaloneOnboardingPage() {
     )
   }
 
+  // Staff approval is not something the merchant can act on from here, so the
+  // whole flow is replaced by a waiting state instead of a blocked step.
+  if (
+    onboarding.approvalStatus &&
+    onboarding.approvalStatus !== 'active' &&
+    !onboarding.state.isOnboardingComplete
+  ) {
+    return (
+      <main className="mx-auto flex min-h-[60vh] max-w-xl items-center px-4">
+        <Card className="w-full border-amber-200 p-6 text-center">
+          <ShieldCheck className="mx-auto size-8 text-amber-600" />
+          <h1 className="mt-3 text-xl font-bold text-slate-900">
+            {t('approval.title')}
+          </h1>
+          <p className="mt-2 text-sm text-slate-600">
+            {onboarding.approvalStatus === 'suspended'
+              ? t('approval.suspended')
+              : t('approval.body')}
+          </p>
+          <p className="mt-3 text-xs text-slate-500">{t('approval.note')}</p>
+          <Button
+            className="mt-5 min-h-11 bg-emerald-600 px-5 text-sm font-semibold text-white hover:bg-emerald-700 focus-visible:ring-emerald-600"
+            onClick={() => void onboarding.retry()}
+          >
+            {t('approval.refresh')}
+          </Button>
+        </Card>
+      </main>
+    )
+  }
+
   const disabled = !canManage
   const definition = getStepDefinition(currentStep)
   const primaryLabel = !canManage

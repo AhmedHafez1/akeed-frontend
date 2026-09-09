@@ -58,7 +58,7 @@ function settings(): SettingsResponse {
       },
       standaloneSetup: shopify
         ? null
-        : { canComplete: true, blockedReasons: [] },
+        : { canComplete: true, blockedReasons: [], approvalStatus: null },
     },
     billing: {
       plans:

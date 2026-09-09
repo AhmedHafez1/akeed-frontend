@@ -1470,6 +1470,7 @@
       "sourceUnsupported": "Order verification is available only for Standalone sources.",
       "setupIncomplete": "Complete Standalone onboarding before verifying an order.",
       "entitlement": "Order verification is not enabled for this workspace. Contact support.",
+      "approvalRequired": "Akeed staff have not approved this account yet. Order creation resumes once approval is granted.",
       "unexpected": "We could not submit the order for verification. Review the details and try again."
     },
     "retry": {
@@ -1522,6 +1523,7 @@
     },
     "blockers": {
       "source_invalid": "A valid active Standalone source is required.",
+      "approval_required": "Akeed staff have not approved this account yet.",
       "pilot_entitlement_missing": "Pilot access must be activated by Akeed staff.",
       "merchant_name_missing": "Enter a store name.",
       "language_invalid": "Choose a supported message language.",
@@ -1623,6 +1625,13 @@
       "auto": "Auto",
       "arabic": "Arabic",
       "english": "English"
+    },
+    "approval": {
+      "title": "Waiting for Akeed approval",
+      "body": "Your account is set up and waiting for the Akeed team to approve it. Once approved you get 30 free credits to test real order confirmations, and you can finish setup here.",
+      "suspended": "This account is on hold. Contact Akeed support to review it before continuing setup.",
+      "note": "Nothing is lost while you wait. Your saved settings, orders and history stay exactly as they are.",
+      "refresh": "Check again"
     }
   },
   "about": {

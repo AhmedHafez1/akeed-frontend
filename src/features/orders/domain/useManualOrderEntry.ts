@@ -237,6 +237,7 @@ export function useManualOrderEntry(
             MANUAL_ORDER_SOURCE_UNSUPPORTED: 'sourceUnsupported',
             MANUAL_ORDER_SETUP_INCOMPLETE: 'setupIncomplete',
             MANUAL_ORDER_ENTITLEMENT_REQUIRED: 'entitlement',
+            STANDALONE_APPROVAL_REQUIRED: 'approvalRequired',
             MANUAL_ORDER_PLAN_LIMIT_REACHED: 'planLimitReached',
             MANUAL_ORDER_AUTO_VERIFY_DISABLED: 'autoVerifyDisabled',
           }
