@@ -1,5 +1,9 @@
+import Link from 'next/link'
 import type { TestFeedback } from '@/features/dashboard/domain/dashboard.types'
 import { useTranslations } from 'next-intl'
+import type { CreditDenialCode } from '@/shared/lib/creditFeedback'
+import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { withLocale } from '@/shared/lib/locale'
 
 interface StandaloneFeedbackBannersProps {
   error: string | null
@@ -7,6 +11,7 @@ interface StandaloneFeedbackBannersProps {
   onDismissTestFeedback: () => void
   actionFeedback?: TestFeedback | null
   onDismissActionFeedback?: () => void
+  creditDenialCode?: CreditDenialCode | null
 }
 
 export function StandaloneFeedbackBanners({
@@ -15,10 +20,30 @@ export function StandaloneFeedbackBanners({
   onDismissTestFeedback,
   actionFeedback,
   onDismissActionFeedback,
+  creditDenialCode,
 }: StandaloneFeedbackBannersProps) {
   const t = useTranslations('dashboard')
+  const tCredits = useTranslations('creditErrors')
+  const { locale } = useLocaleInfo()
+  const billingLink = (
+    <Link
+      href={withLocale('/billing', locale)}
+      className="shrink-0 font-semibold underline underline-offset-4"
+    >
+      {tCredits('billingLink')}
+    </Link>
+  )
   return (
     <>
+      {creditDenialCode && (
+        <div
+          role="status"
+          className="flex flex-col gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <span>{tCredits(creditFeedbackMessageKey(creditDenialCode))}</span>
+          {billingLink}
+        </div>
+      )}
       {error && (
         <div
           role="alert"
@@ -40,7 +65,8 @@ export function StandaloneFeedbackBanners({
                 : 'border-red-200 bg-red-50 text-red-700'
           }`}
         >
-          <span>{testFeedback.message}</span>
+          <span className="me-auto">{testFeedback.message}</span>
+          {testFeedback.billingLink && billingLink}
           <button
             type="button"
             aria-label={t('table.actions.dismiss')}
@@ -63,7 +89,8 @@ export function StandaloneFeedbackBanners({
                 : 'border-red-200 bg-red-50 text-red-700'
           }`}
         >
-          <span>{actionFeedback.message}</span>
+          <span className="me-auto">{actionFeedback.message}</span>
+          {actionFeedback.billingLink && billingLink}
           <button
             type="button"
             aria-label={t('table.actions.dismiss')}
@@ -76,4 +103,22 @@ export function StandaloneFeedbackBanners({
       )}
     </>
   )
+}
+
+function creditFeedbackMessageKey(code: CreditDenialCode) {
+  const keys: Record<
+    CreditDenialCode,
+    | 'approvalRequired'
+    | 'suspended'
+    | 'debt'
+    | 'insufficient'
+    | 'reconciliation'
+  > = {
+    STANDALONE_APPROVAL_REQUIRED: 'approvalRequired',
+    CREDIT_ACCOUNT_SUSPENDED: 'suspended',
+    CREDIT_DEBT_OUTSTANDING: 'debt',
+    INSUFFICIENT_CREDITS: 'insufficient',
+    PAYMENT_PENDING_RECONCILIATION: 'reconciliation',
+  }
+  return keys[code]
 }

@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   CircleHelp,
+  CreditCard,
   FileText,
   LayoutDashboard,
   LogOut,
@@ -13,6 +14,7 @@ import {
   ShieldCheck,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { useBillingSummary } from '@/features/billing'
 import { auth } from '@/shared/lib/auth'
 import { createLogger } from '@/shared/lib/logger'
 import { cn } from '@/shared/lib/utils'
@@ -35,11 +37,15 @@ export function StandaloneSidebar({
   const router = useRouter()
   const locale = getLocaleFromPathname(pathname)
   const { identity, isIdentityLoading } = useStandaloneShell()
+  const { summary: billingSummary } = useBillingSummary()
   const [isSigningOut, setIsSigningOut] = useState(false)
   const navigationItems = [
     { href: '/dashboard', label: t('dashboard'), icon: LayoutDashboard },
     { href: '/verifications', label: t('verifications'), icon: ShieldCheck },
     { href: '/templates', label: t('templates'), icon: FileText },
+    ...(billingSummary?.billingEnabled
+      ? [{ href: '/billing', label: t('billing'), icon: CreditCard }]
+      : []),
     { href: '/settings', label: t('settings'), icon: Settings },
   ]
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useId, useState } from 'react'
+import Link from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import {
@@ -17,14 +18,14 @@ import {
 import type {
   AutomationTimezone,
   IntegrationOnboardingLanguage,
-  OnboardingBillingPlanId,
 } from '@/features/onboarding'
+import { useBillingSummary } from '@/features/billing'
 import type { SettingsSkinProps } from '@/features/settings/domain/settings.types'
 import { Button, Card, Input, Label, notify } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
+import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
 import { TemplatesStandaloneSkin } from './TemplatesStandaloneSkin'
 
-const SUBSCRIPTION_SECTION_ID = 'subscription-usage'
 const SETTINGS_SECTION_QUERY_KEY = 'section'
 
 type SettingsSection = 'general' | 'automation' | 'billing'
@@ -91,112 +92,6 @@ function NativeSelect<TValue extends string>({
         aria-hidden="true"
         className="pointer-events-none absolute end-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500"
       />
-    </div>
-  )
-}
-
-function StandaloneUsageOverview({
-  used,
-  limit,
-  usedLabel,
-  limitLabel,
-  upgradePrompt,
-}: {
-  used: number
-  limit: number
-  usedLabel: string
-  limitLabel: string
-  upgradePrompt: string | null
-}) {
-  const safeLimit = Math.max(limit, 1)
-  const usagePercent = Math.min(100, Math.round((used / safeLimit) * 100))
-
-  return (
-    <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-      <div className="mb-3 flex items-center justify-between gap-3 text-sm">
-        <span className="font-semibold text-slate-900">
-          {used} / {limit}
-        </span>
-        <span className="text-slate-500">{limitLabel}</span>
-      </div>
-      <div className="h-2 overflow-hidden rounded-full bg-slate-200">
-        <div
-          className={`h-full rounded-full ${
-            usagePercent >= 80 ? 'bg-amber-500' : 'bg-emerald-500'
-          }`}
-          style={{ width: `${usagePercent}%` }}
-        />
-      </div>
-      <p className="mt-2 text-xs text-slate-500">{usedLabel}</p>
-      {upgradePrompt && (
-        <p className="mt-3 rounded-lg bg-amber-50 p-3 text-sm text-amber-700">
-          {upgradePrompt}
-        </p>
-      )}
-    </div>
-  )
-}
-
-function StandalonePlanComparison({
-  plans,
-  currentPlanId,
-  selectedPlanId,
-  disabledPlanIds = [],
-  disabledPlanTooltips = {},
-  currentBadgeLabel,
-  onPlanSelect,
-}: {
-  plans: SettingsSkinProps['planOptions']
-  currentPlanId: OnboardingBillingPlanId | null
-  selectedPlanId: OnboardingBillingPlanId | null
-  disabledPlanIds?: OnboardingBillingPlanId[]
-  disabledPlanTooltips?: Partial<Record<OnboardingBillingPlanId, string>>
-  currentBadgeLabel: string
-  onPlanSelect: (planId: OnboardingBillingPlanId) => void
-}) {
-  return (
-    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-      {plans.map((plan) => {
-        const isCurrent = plan.id === currentPlanId
-        const isDisabled = disabledPlanIds.includes(plan.id) && !isCurrent
-        const isSelected = plan.id === selectedPlanId && !isDisabled
-
-        return (
-          <button
-            key={plan.id}
-            type="button"
-            disabled={isDisabled}
-            title={isDisabled ? disabledPlanTooltips[plan.id] : undefined}
-            onClick={() => onPlanSelect(plan.id)}
-            className={`rounded-2xl border p-4 text-center transition disabled:cursor-not-allowed disabled:opacity-50 ${
-              isSelected
-                ? 'border-emerald-500 bg-emerald-50 shadow-sm'
-                : 'border-slate-200 bg-white hover:border-slate-300'
-            }`}
-          >
-            <div className="flex min-h-12 flex-col items-center justify-start gap-1">
-              <p className="font-semibold text-slate-900">{plan.name}</p>
-              {isCurrent && (
-                <span className="rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700">
-                  {currentBadgeLabel}
-                </span>
-              )}
-            </div>
-            <p
-              dir="auto"
-              className="mt-3 text-xl leading-7 font-bold text-slate-900 [unicode-bidi:isolate]"
-            >
-              {plan.priceLabel}
-            </p>
-            <p
-              dir="auto"
-              className="mx-auto mt-2 max-w-40 text-sm text-slate-500 [unicode-bidi:isolate]"
-            >
-              {plan.volumeLabel}
-            </p>
-          </button>
-        )
-      })}
     </div>
   )
 }
@@ -413,17 +308,16 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
   const standaloneT = useTranslations('settings.standalone')
   const router = useRouter()
   const pathname = usePathname()
+  const locale = getLocaleFromPathname(pathname)
+  const { summary: billingSummary } = useBillingSummary()
   const searchParams = useSearchParams()
   const requestedSection = searchParams.get(SETTINGS_SECTION_QUERY_KEY)
-  const selectedSection: SettingsSection = SETTINGS_SECTIONS.includes(
-    requestedSection as SettingsSection
-  )
-    ? (requestedSection as SettingsSection)
-    : 'general'
-  const canChangePlan =
-    props.canManageBilling &&
-    props.selectedPlanId !== null &&
-    props.selectedPlanId !== props.billingPlanId
+  const billingSectionEnabled = billingSummary?.billingEnabled === true
+  const selectedSection: SettingsSection =
+    SETTINGS_SECTIONS.includes(requestedSection as SettingsSection) &&
+    (requestedSection !== 'billing' || billingSectionEnabled)
+      ? (requestedSection as SettingsSection)
+      : 'general'
   const fieldsDisabled = !props.canUpdateConfiguration || props.isSaving
 
   useEffect(() => {
@@ -467,11 +361,15 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
       label: standaloneT('nav.automation'),
       icon: Zap,
     },
-    {
-      id: 'billing' as const,
-      label: standaloneT('nav.billing'),
-      icon: CircleDollarSign,
-    },
+    ...(billingSummary?.billingEnabled
+      ? [
+          {
+            id: 'billing' as const,
+            label: standaloneT('nav.billing'),
+            icon: CircleDollarSign,
+          },
+        ]
+      : []),
   ]
 
   const firstDelayPresets = [
@@ -872,72 +770,23 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                 </p>
               </div>
 
-              <SettingsCard
-                title={
-                  props.sourcePlatformType === 'standalone'
-                    ? t('pilotAccessHeading')
-                    : t('subscriptionHeading')
-                }
-                description={props.billingStatusLabel}
-              >
-                <div id={SUBSCRIPTION_SECTION_ID} className="space-y-5">
-                  <div className="flex flex-col gap-2">
-                    <p className="text-sm text-slate-700">
-                      {props.activePlanName
-                        ? t('subscriptionCurrentPlan', {
-                            plan: props.activePlanName,
-                          })
-                        : t('subscriptionNoPlan')}
+              <Card className="border-slate-200 p-6 shadow-sm">
+                <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <h3 className="font-semibold text-slate-950">
+                      {standaloneT('billing.creditPageTitle')}
+                    </h3>
+                    <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+                      {standaloneT('billing.creditPageDescription')}
                     </p>
                   </div>
-
-                  {props.usageData && (
-                    <StandaloneUsageOverview
-                      used={props.usageData.used}
-                      limit={props.usageData.limit}
-                      usedLabel={props.usageData.usedLabel}
-                      limitLabel={props.usageData.limitLabel}
-                      upgradePrompt={props.usageData.upgradePrompt}
-                    />
-                  )}
+                  <Button asChild className="shrink-0">
+                    <Link href={withLocale('/billing', locale)}>
+                      {standaloneT('billing.openCreditPage')}
+                    </Link>
+                  </Button>
                 </div>
-              </SettingsCard>
-
-              {props.canManageBilling && (
-                <SettingsCard
-                  title={standaloneT('billing.plansTitle')}
-                  description={standaloneT('billing.plansDescription')}
-                >
-                  <div className="space-y-5">
-                    <StandalonePlanComparison
-                      plans={props.planOptions}
-                      currentPlanId={props.billingPlanId}
-                      selectedPlanId={props.selectedPlanId}
-                      disabledPlanIds={
-                        props.isFreePlanClaimed ? ['starter'] : []
-                      }
-                      disabledPlanTooltips={
-                        props.isFreePlanClaimed
-                          ? { starter: t('freePlanAlreadyClaimedTooltip') }
-                          : undefined
-                      }
-                      currentBadgeLabel={t('currentPlanBadge')}
-                      onPlanSelect={props.onPlanSelect}
-                    />
-                    {canChangePlan && (
-                      <Button
-                        type="button"
-                        disabled={props.isChangingPlan}
-                        onClick={() => void props.onChangePlan()}
-                      >
-                        {props.isChangingPlan
-                          ? t('changingPlanButton')
-                          : t('changePlanButton')}
-                      </Button>
-                    )}
-                  </div>
-                </SettingsCard>
-              )}
+              </Card>
             </section>
           )}
         </main>

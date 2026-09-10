@@ -38,6 +38,7 @@ export type ManualOrderRecoveryMode = 'retry' | 'conflict' | null
 export interface ManualOrderFeedback {
   tone: 'critical' | 'warning'
   message: string
+  billingLink?: boolean
 }
 
 export type ManualOrderResult = ManualOrderCreateResponse

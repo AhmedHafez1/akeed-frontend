@@ -1,10 +1,13 @@
 'use client'
 
 import { useCallback } from 'react'
+import Link from 'next/link'
 import { Controller } from 'react-hook-form'
 import { ChevronDown, ClipboardCheck } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/shared/lib/utils'
+import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { withLocale } from '@/shared/lib/locale'
 import {
   Button,
   Dialog,
@@ -62,6 +65,8 @@ export function ManualOrderEntryStandalone({
   showDisabledReason = true,
 }: ManualOrderEntryStandaloneProps) {
   const t = useTranslations('manualOrder')
+  const tCredits = useTranslations('creditErrors')
+  const { locale } = useLocaleInfo()
   const focusCustomerPhone = useCallback(() => {
     document.getElementById('manual-order-phone')?.focus()
   }, [])
@@ -176,7 +181,15 @@ export function ManualOrderEntryStandalone({
                     : 'rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700'
                 }
               >
-                {entry.feedback.message}
+                <p>{entry.feedback.message}</p>
+                {entry.feedback.billingLink && (
+                  <Link
+                    href={withLocale('/billing', locale)}
+                    className="mt-2 inline-block font-semibold underline underline-offset-4"
+                  >
+                    {tCredits('billingLink')}
+                  </Link>
+                )}
               </div>
             )}
 

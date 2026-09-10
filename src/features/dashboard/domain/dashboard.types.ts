@@ -5,6 +5,7 @@ import type {
   VerificationItem,
   VerificationStatusFilter,
 } from '../model/dashboard.model'
+import type { CreditDenialCode } from '@/shared/lib/creditFeedback'
 
 export interface StatusFilterOption {
   id: VerificationStatusFilter
@@ -21,6 +22,7 @@ export type TestBannerTone = 'success' | 'critical' | 'warning'
 export interface TestFeedback {
   tone: TestBannerTone
   message: string
+  billingLink?: boolean
 }
 
 /**
@@ -76,6 +78,7 @@ export interface DashboardSkinProps {
   canRetryVerifications: boolean
   isAtPlanLimit: boolean
   usageRemaining: number | null
+  creditDenialCode: CreditDenialCode | null
 
   // Test verification + action feedback
   isSendingTest: boolean

@@ -22,6 +22,7 @@ export function DashboardStandaloneSkin({
   verifications,
   isVerificationsLoading,
   error: verificationsError,
+  creditDenialCode,
 }: DashboardSkinProps) {
   useEffect(() => {
     if (!testFeedback || testFeedback.tone === 'critical') return
@@ -57,6 +58,7 @@ export function DashboardStandaloneSkin({
         onDismissTestFeedback={onDismissTestFeedback}
         actionFeedback={null}
         onDismissActionFeedback={onDismissActionFeedback}
+        creditDenialCode={creditDenialCode}
       />
 
       <StandaloneStatsSummary

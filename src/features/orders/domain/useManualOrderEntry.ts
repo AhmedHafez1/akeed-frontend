@@ -205,7 +205,11 @@ export function useManualOrderEntry(
         const creditKey =
           error instanceof ApiError ? creditFeedbackKey(error.code) : undefined
         if (creditKey) {
-          setFeedback({ tone: 'critical', message: tCredits(creditKey) })
+          setFeedback({
+            tone: 'critical',
+            message: tCredits(creditKey),
+            billingLink: true,
+          })
           setRecoveryMode(null)
           return
         }

@@ -582,6 +582,7 @@
   "appHeader": {
     "dashboard": "Dashboard",
     "verifications": "Verifications",
+    "billing": "Billing & credits",
     "settings": "Settings",
     "templates": "Templates",
     "navigationMenu": "Open navigation menu",
@@ -1085,10 +1086,11 @@
         }
       },
       "billing": {
-        "title": "Billing & usage",
-        "description": "Review access, monthly usage, and available plans.",
-        "plansTitle": "Available plans",
-        "plansDescription": "Choose the monthly confirmation volume that fits your store."
+        "title": "Billing & credits",
+        "description": "Akeed uses message credits instead of monthly confirmation plans.",
+        "creditPageTitle": "Manage message credits",
+        "creditPageDescription": "Review your trusted balance, buy credits, and inspect purchase and ledger history on the dedicated credit page.",
+        "openCreditPage": "Open billing & credits"
       }
     },
     "tabs": {
@@ -1658,6 +1660,173 @@
     "suspended": "New message sends are paused for this account. Contact support. Existing orders and history remain available.",
     "debt": "An outstanding credit balance must be settled before sending new messages. Existing orders and history remain available.",
     "insufficient": "No message credits are available. New sends can resume when credits are available. Existing orders and history remain available.",
-    "reconciliation": "Message sending is paused while billing is reviewed. Contact support. Existing orders and history remain available."
+    "reconciliation": "Message sending is paused while billing is reviewed. Contact support. Existing orders and history remain available.",
+    "billingLink": "Open billing & credits"
+  },
+  "billing": {
+    "eyebrow": "Account billing",
+    "title": "Billing & credits",
+    "description": "See the credits available for WhatsApp order confirmations, buy more securely, and review every account movement.",
+    "threshold": "Low-balance alert at {count} credits",
+    "retry": "Try again",
+    "status": {
+      "active": "Active",
+      "pending_approval": "Pending approval",
+      "suspended": "Suspended",
+      "not_provisioned": "Not provisioned"
+    },
+    "metrics": {
+      "available": "Available credits",
+      "availableHelp": "Ready for new messages",
+      "posted": "Posted balance",
+      "postedHelp": "All confirmed credits",
+      "held": "Held credits",
+      "heldHelp": "Reserved for in-flight sends",
+      "debt": "Debt",
+      "debtHelp": "Credits that must be settled"
+    },
+    "alerts": {
+      "healthyTitle": "Your credit balance is healthy",
+      "healthyDescription": "New order confirmations can continue normally.",
+      "lowTitle": "Only {count} credits remain",
+      "lowDescription": "Top up before reaching the {threshold}-credit threshold to avoid interrupted confirmations.",
+      "zeroTitle": "No credits are available",
+      "zeroDescription": "New messages are blocked until credits are added. Your history remains available.",
+      "debtTitle": "{count} credits are outstanding",
+      "debtDescription": "New messages remain blocked until the outstanding balance is settled.",
+      "pendingTitle": "Your account is awaiting approval",
+      "pendingDescription": "You can review billing history, but purchases and message sends are unavailable until approval.",
+      "suspendedTitle": "Billing is suspended",
+      "suspendedDescription": "Purchases and message sends are unavailable. Contact Akeed support for help.",
+      "notProvisionedTitle": "Credit billing is not provisioned",
+      "notProvisionedDescription": "History remains available while Akeed finishes setting up this account."
+    },
+    "grant": {
+      "title": "Launch credit grant",
+      "granted": "Your one-time {count}-credit grant has been posted.",
+      "pending": "Your {count}-credit launch grant will be posted after approval."
+    },
+    "purchase": {
+      "title": "Buy message credits",
+      "description": "Choose a quantity, confirm the trusted server total, then continue to Paymob.",
+      "disabled": "Credit purchases are currently disabled. Existing billing history remains available.",
+      "readOnly": "You have read-only billing access. An owner or admin can start a purchase.",
+      "quantity": "Credit quantity",
+      "decrease": "Decrease credit quantity",
+      "increase": "Increase credit quantity",
+      "rules": "Choose {min}–{max} credits in steps of {step}.",
+      "credits": "Credits",
+      "unitPrice": "Price per credit",
+      "total": "Total",
+      "paymobTitle": "Secure checkout with Paymob",
+      "paymobDescription": "Pay with a card or Vodafone Cash on Paymob’s hosted checkout. Akeed never asks for or stores your payment details.",
+      "submit": "Create secure checkout",
+      "creating": "Creating checkout…",
+      "continuePaymob": "Continue to Paymob",
+      "startNew": "Start new purchase",
+      "pendingTitle": "This purchase needs a status check",
+      "pendingDescription": "Akeed kept the same purchase reference. Check its canonical status before starting another purchase.",
+      "viewStatus": "View purchase status",
+      "errors": {
+        "whole": "Enter a whole number of credits.",
+        "range": "Choose between {min} and {max} credits.",
+        "step": "Choose a quantity in steps of {step}.",
+        "network": "The checkout request could not be completed. Retry safely with the same purchase attempt.",
+        "api": "Checkout could not be created. Review the quantity or try again."
+      }
+    },
+    "terms": {
+      "title": "How credits work",
+      "accepted": "One credit is charged for each initial or follow-up message accepted for delivery.",
+      "restored": "A confirmed delivery failure restores the charged credit automatically.",
+      "expiry": "Purchased and launch-grant credits do not expire."
+    },
+    "purchaseStatus": {
+      "pending": "Pending",
+      "successful": "Successful",
+      "failed": "Failed",
+      "canceled": "Canceled",
+      "expired": "Expired",
+      "refunded": "Refunded"
+    },
+    "disputeStatus": {
+      "none": "No dispute",
+      "open": "Dispute open",
+      "won": "Dispute won",
+      "lost": "Dispute lost"
+    },
+    "actorType": {
+      "akeed_staff": "Akeed staff",
+      "meta": "Meta",
+      "paymob": "Paymob",
+      "system": "Akeed system"
+    },
+    "ledgerReason": {
+      "chargeback_reinstated": "Chargeback debt reinstated",
+      "chargeback_reversed": "Payment chargeback",
+      "delivery_failure_restored": "Credit restored after delivery failure",
+      "launch_grant": "Launch grant",
+      "message_accepted": "WhatsApp message accepted",
+      "payment_verified": "Payment verified",
+      "refund_reversed": "Purchase refund",
+      "staff_adjustment": "Account adjustment"
+    },
+    "history": {
+      "purchases": "Purchase history",
+      "purchasesDescription": "Trusted payment amounts and their latest status.",
+      "ledger": "Credit ledger",
+      "ledgerDescription": "Every posted credit movement, without recalculating your balance.",
+      "date": "Date",
+      "credits": "Credits",
+      "amount": "Amount",
+      "status": "Status",
+      "reference": "Reference",
+      "refunded": "Refunded amount",
+      "reconciliation": "Review required",
+      "balanceAfter": "Posted balance: {count}",
+      "purchaseEmpty": "No credit purchases yet.",
+      "ledgerEmpty": "No credit movements yet.",
+      "loadMore": "Load more",
+      "error": "Billing history could not be loaded. Your displayed balances were not changed."
+    },
+    "error": {
+      "title": "Billing could not be loaded",
+      "description": "We could not retrieve the trusted credit balance. Try again before taking billing action."
+    },
+    "return": {
+      "eyebrow": "Paymob return status",
+      "reference": "Purchase reference",
+      "status": "Status",
+      "credits": "Credits",
+      "amount": "Trusted amount",
+      "updated": "Last updated",
+      "backToBilling": "Back to billing",
+      "refresh": "Refresh status",
+      "refreshing": "Refreshing…",
+      "invalidTitle": "This purchase link is invalid",
+      "invalidDescription": "Only an Akeed purchase reference can be used here. Return to billing to select a valid purchase.",
+      "errorTitle": "Purchase status is unavailable",
+      "errorDescription": "No new purchase was created. Refresh this purchase or return safely to billing.",
+      "staleTitle": "Payment is still pending",
+      "staleDescription": "Akeed stopped automatic checks for now. You can refresh manually without creating another purchase.",
+      "reconciliationTitle": "Payment needs review",
+      "reconciliationDescription": "Akeed has stopped polling while this payment is reconciled. No action is required unless support contacts you.",
+      "statusTitle": {
+        "pending": "Confirming your payment",
+        "successful": "Credits added successfully",
+        "failed": "Payment was not completed",
+        "canceled": "Payment was canceled",
+        "expired": "Checkout expired",
+        "refunded": "Payment was refunded"
+      },
+      "statusDescription": {
+        "pending": "We are checking the canonical purchase status. Keep this page open or return later.",
+        "successful": "The verified credits are now available in your Akeed account.",
+        "failed": "No credits were added. You may return to billing and deliberately start a new purchase.",
+        "canceled": "No credits were added. You can return to billing when you are ready.",
+        "expired": "This checkout can no longer be used. Return to billing to start a new purchase.",
+        "refunded": "The purchase was refunded and the credit ledger reflects the verified outcome."
+      }
+    }
   }
 }

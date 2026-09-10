@@ -69,6 +69,7 @@ export function DashboardVerificationsStandaloneSkin(
         actionFeedback={props.actionFeedback}
         onDismissTestFeedback={props.onDismissTestFeedback}
         onDismissActionFeedback={props.onDismissActionFeedback}
+        creditDenialCode={props.creditDenialCode}
       />
 
       {props.sourceStatus === 'disconnected' && (

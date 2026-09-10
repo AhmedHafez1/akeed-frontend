@@ -104,7 +104,8 @@ export function useVerificationsDashboard(
     refetch: refetchStats,
   } = useDashboardStats(dateRangeFilter)
 
-  const creditBlocked = Boolean(pageContext?.usage?.credit_denial)
+  const creditDenialCode = pageContext?.usage?.credit_denial ?? null
+  const creditBlocked = Boolean(creditDenialCode)
   const permissions = pageContext?.permissions
   const canSendTestVerification =
     permissions?.can_send_test_verification === true && !creditBlocked
@@ -260,6 +261,7 @@ export function useVerificationsDashboard(
         setActionFeedback({
           tone: 'critical',
           message,
+          billingLink: Boolean(creditKey),
         })
       } finally {
         setActingVerificationId((current) =>
@@ -323,12 +325,14 @@ export function useVerificationsDashboard(
         logger.warn('Failed to send test verification', {
           errorName: error instanceof Error ? error.name : 'UnknownError',
         })
+        const creditKey =
+          error instanceof ApiError ? creditFeedbackKey(error.code) : undefined
         setTestFeedback({
           tone: 'critical',
-          message:
-            error instanceof ApiError && creditFeedbackKey(error.code)
-              ? tCredits(creditFeedbackKey(error.code)!)
-              : t(getTestVerificationFeedbackKey(error)),
+          message: creditKey
+            ? tCredits(creditKey)
+            : t(getTestVerificationFeedbackKey(error)),
+          billingLink: Boolean(creditKey),
         })
       } finally {
         setIsSendingTest(false)
@@ -391,6 +395,7 @@ export function useVerificationsDashboard(
     canRetryVerifications,
     isAtPlanLimit,
     usageRemaining,
+    creditDenialCode,
     isSendingTest,
     testFeedback,
     actionFeedback,
