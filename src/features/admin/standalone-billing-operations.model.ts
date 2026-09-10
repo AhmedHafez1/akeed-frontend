@@ -3,6 +3,7 @@ import type {
   CreditAccountStatus,
   OperationsAccess,
 } from './standalone-billing.model'
+import type { BillingFinding } from './billing-observability.model'
 
 export interface BalanceProjection {
   postedBalance: number
@@ -159,6 +160,7 @@ export interface AccountDetail {
   purchases: DetailPage<PurchaseRow>
   events: DetailPage<ProviderEventRow>
   audit: DetailPage<AuditRow>
+  findings: BillingFinding[]
 }
 
 export interface AdjustmentPreview {

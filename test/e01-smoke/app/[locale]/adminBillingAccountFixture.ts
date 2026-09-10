@@ -453,5 +453,24 @@ export function accountDetailFixture(
     purchases: { items: purchases, truncated: false },
     events: { items: events, truncated: false },
     audit: { items: audit, truncated: true },
+    findings:
+      scenario === 'drift'
+        ? [
+            {
+              id: '00000000-0000-4000-8000-000000000090',
+              code: 'projection_mismatch',
+              severity: 'critical',
+              status: 'open',
+              orgId,
+              purchaseId: null,
+              settlementId: null,
+              retryCount: 0,
+              nextAction: 'repair_projection',
+              firstSeenAt: '2026-09-09T10:00:00Z',
+              lastSeenAt: '2026-09-09T10:15:00Z',
+              nextAttemptAt: null,
+            },
+          ]
+        : [],
   }
 }

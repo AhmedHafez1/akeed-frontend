@@ -16,6 +16,7 @@ import type {
   ApprovalRow,
   CreditAccountRow,
 } from './standalone-billing.model'
+import { StandaloneBillingObservability } from './StandaloneBillingObservability'
 
 const balanceTones = {
   none: 'bg-slate-100 text-slate-600',
@@ -49,6 +50,10 @@ export function StandaloneBillingPage() {
     (result) => result.outcome === 'failed'
   )
   const completed = !!state.report && !retryApply
+  // Staff reads stay open to everyone; billing writes need the enabled flag
+  // and a named operator, as the server enforces.
+  const canOperate =
+    !!state.page?.operations.enabled && !!state.page.operations.operator
   const formatTime = (value: string) =>
     new Intl.DateTimeFormat(locale, {
       dateStyle: 'medium',
@@ -129,6 +134,7 @@ export function StandaloneBillingPage() {
           {t('refresh')}
         </Button>
       </header>
+      <StandaloneBillingObservability canOperate={canOperate} />
       {state.page && !state.page.approvalEnabled && (
         <p
           role="status"

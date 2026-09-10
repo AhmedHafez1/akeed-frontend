@@ -34,6 +34,7 @@ import {
   ResolveSendDialog,
 } from './StandaloneBillingOperations'
 import { useStandaloneBillingAccount } from './useStandaloneBillingAccount'
+import type { BillingFinding } from './billing-observability.model'
 
 interface StandaloneBillingAccountPageProps {
   orgId: string
@@ -119,6 +120,9 @@ function AccountBody({
   return (
     <>
       <AccessNotice detail={detail} />
+      {!!detail.findings.length && (
+        <AccountFindings findings={detail.findings} />
+      )}
       {detail.reconciliation && (
         <ReconciliationBanner report={detail.reconciliation} />
       )}
@@ -286,6 +290,35 @@ function AccountBody({
         <AuditTable audit={detail.audit} locale={locale} />
       </AccountSection>
     </>
+  )
+}
+
+function AccountFindings({ findings }: { findings: BillingFinding[] }) {
+  const t = useTranslations('adminBillingObservability')
+  const { locale } = useLocaleInfo()
+  return (
+    <section className="rounded-2xl border border-amber-200 bg-amber-50 p-4">
+      <h2 className="font-semibold text-amber-950">{t('accountFindings')}</h2>
+      <p className="mt-1 text-sm text-amber-900">
+        {t('accountFindingsDescription')}
+      </p>
+      <ul className="mt-3 divide-y divide-amber-200">
+        {findings.map((finding) => (
+          <li
+            key={finding.id}
+            className="grid gap-1 py-3 text-sm sm:grid-cols-3"
+          >
+            <span className="font-mono text-xs" dir="ltr">
+              {finding.code}
+            </span>
+            <span>{t(`actions.${finding.nextAction}`)}</span>
+            <time className="text-slate-600 sm:text-end">
+              {formatDateTime(finding.lastSeenAt, locale)}
+            </time>
+          </li>
+        ))}
+      </ul>
+    </section>
   )
 }
 

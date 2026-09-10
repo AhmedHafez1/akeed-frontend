@@ -10,6 +10,111 @@ import {
   accountDetailFixture,
   accountOperationFixture,
 } from './adminBillingAccountFixture'
+import type {
+  BillingFinding,
+  BillingFindingsPage,
+  BillingHealth,
+} from '@/features/admin/billing-observability.model'
+
+/**
+ * `?billing=` on the page selects the observability state: `attention`
+ * (default), `healthy`, `critical`, `covered` (complete settlement coverage),
+ * `empty` (no findings), `error` (health unavailable) or `readonly` (staff
+ * without the named-operator role).
+ */
+type ObservabilityScenario =
+  | 'attention'
+  | 'healthy'
+  | 'critical'
+  | 'covered'
+  | 'empty'
+  | 'error'
+  | 'readonly'
+
+function observabilityScenario(): ObservabilityScenario {
+  if (typeof window === 'undefined') return 'attention'
+  const value = new URLSearchParams(window.location.search).get('billing')
+  return value === 'healthy' ||
+    value === 'critical' ||
+    value === 'covered' ||
+    value === 'empty' ||
+    value === 'error' ||
+    value === 'readonly'
+    ? value
+    : 'attention'
+}
+
+/** Every observability request, for the browser check to assert against. */
+const observabilityRequests: Array<{
+  method: string
+  url: string
+  idempotencyKey: string | null
+  body: string | null
+}> = []
+;(
+  globalThis as typeof globalThis & {
+    __akeedBillingObservabilityRequests?: typeof observabilityRequests
+  }
+).__akeedBillingObservabilityRequests = observabilityRequests
+
+const findingRows: BillingFinding[] = [
+  {
+    id: '50000000-0000-4000-8000-000000000001',
+    code: 'credit_debt',
+    severity: 'attention',
+    status: 'open',
+    orgId: '10000000-0000-4000-8000-000000000005',
+    purchaseId: null,
+    settlementId: null,
+    retryCount: 0,
+    nextAction: 'resolve_debt',
+    firstSeenAt: '2026-09-09T20:00:00Z',
+    lastSeenAt: '2026-09-10T00:00:00Z',
+    nextAttemptAt: null,
+  },
+  {
+    id: '50000000-0000-4000-8000-000000000002',
+    code: 'projection_mismatch',
+    severity: 'critical',
+    status: 'open',
+    orgId: '10000000-0000-4000-8000-000000000003',
+    purchaseId: null,
+    settlementId: null,
+    retryCount: 0,
+    nextAction: 'repair_projection',
+    firstSeenAt: '2026-09-09T21:00:00Z',
+    lastSeenAt: '2026-09-10T00:00:00Z',
+    nextAttemptAt: null,
+  },
+  {
+    id: '50000000-0000-4000-8000-000000000003',
+    code: 'provider_inquiry_deferred',
+    severity: 'attention',
+    status: 'open',
+    orgId: '10000000-0000-4000-8000-000000000005',
+    purchaseId: '80000000-0000-4000-8000-000000000001',
+    settlementId: null,
+    retryCount: 2,
+    nextAction: 'retry_provider_inquiry',
+    firstSeenAt: '2026-09-09T22:00:00Z',
+    lastSeenAt: '2026-09-10T00:00:00Z',
+    nextAttemptAt: '2026-09-10T00:30:00Z',
+  },
+  {
+    id: '50000000-0000-4000-8000-000000000004',
+    code: 'settlement_difference',
+    severity: 'attention',
+    status: 'resolved',
+    orgId: null,
+    purchaseId: null,
+    settlementId: '60000000-0000-4000-8000-000000000099',
+    retryCount: 0,
+    nextAction: 'review_settlement',
+    firstSeenAt: '2026-09-08T08:00:00Z',
+    lastSeenAt: '2026-09-08T09:00:00Z',
+    nextAttemptAt: null,
+  },
+]
 
 const FREE_GRANT = 30
 const ids = {
@@ -202,6 +307,136 @@ export async function adminBillingFixtureRequest(
 ): Promise<Response> {
   if (url === '/api/admin/session')
     return Response.json({ authenticated: true, role: 'admin' })
+  if (url.startsWith('/api/admin/standalone-billing/')) {
+    observabilityRequests.push({
+      method: options.method ?? 'GET',
+      url,
+      idempotencyKey:
+        (options.headers as Record<string, string> | undefined)?.[
+          'Idempotency-Key'
+        ] ?? null,
+      body: typeof options.body === 'string' ? options.body : null,
+    })
+  }
+  const scenario = observabilityScenario()
+  if (url.startsWith('/api/admin/standalone-billing/health?')) {
+    if (scenario === 'error')
+      return Response.json(
+        { message: 'Unavailable', requestId: 'req-fixture-health' },
+        { status: 503 }
+      )
+    const query = new URL(url, 'http://fixture').searchParams
+    const healthy = scenario === 'healthy' || scenario === 'covered'
+    const covered = scenario === 'covered'
+    const response: BillingHealth = {
+      evaluatedAt: '2026-09-10T00:00:00Z',
+      range: { from: query.get('from'), to: query.get('to') },
+      health: {
+        status:
+          scenario === 'critical'
+            ? 'critical'
+            : healthy
+              ? 'healthy'
+              : 'attention',
+        latestRun: {
+          id: '40000000-0000-4000-8000-000000000001',
+          status: 'completed',
+          trigger: 'nightly',
+          mode: healthy ? 'active' : 'report_only',
+          startedAt: '2026-09-10T00:30:00Z',
+          completedAt: '2026-09-10T00:31:00Z',
+          createdAt: '2026-09-10T00:30:00Z',
+        },
+        scheduledInquiryEnabled: healthy,
+        reportOnly: !healthy,
+        cron: '30 2 * * *',
+        timezone: 'Africa/Cairo',
+        openFindings: healthy ? 0 : 27,
+        criticalFindings: scenario === 'critical' ? 1 : 0,
+        oldestFindingAgeMinutes: healthy ? 0 : 145,
+        backlogAlert: !healthy,
+        provider: {
+          attempts: 5,
+          failures: healthy ? 0 : 1,
+          slow: healthy ? 0 : 1,
+          averageDurationMs: 1200,
+          errorRatePercent: healthy ? 0 : 20,
+          degraded: !healthy,
+        },
+      },
+      product: {
+        approvedOrganizations: 3,
+        lowBalanceOrganizations: 1,
+        zeroBalanceOrganizations: 1,
+        launchGrants: 3,
+        freeCreditsGranted: 90,
+        freeUtilizationPercent: 62,
+        checkoutStarts: 8,
+        successfulPurchases: 5,
+        firstPurchases: 3,
+        repeatPurchases: 2,
+        averagePurchaseCredits: 180,
+        paidConversionPercent: 62.5,
+        initialConsumption: 40,
+        followUpConsumption: 12,
+        failureReversals: 3,
+      },
+      finance: {
+        purchasedCredits: 900,
+        grossMinor: 180000,
+        refundedMinor: 10000,
+        chargebackMinor: 0,
+        unspentPaidCredits: 410,
+        unspentPaidCreditLiabilityMinor: 82000,
+        feeMinor: covered ? 4500 : null,
+        vatMinor: covered ? 630 : null,
+        netRevenueMinor: covered ? 164870 : null,
+        payingOrganizations: 3,
+        arppuMinor: covered ? 54957 : null,
+        revenuePerAcceptedMessageMinor: covered ? 3171 : null,
+      },
+      settlementCoverage: {
+        complete: covered,
+        reports: covered ? 1 : 0,
+        periodStart: covered ? query.get('from') : null,
+        periodEnd: covered ? query.get('to') : null,
+      },
+    }
+    return Response.json(response)
+  }
+  if (
+    url.startsWith('/api/admin/standalone-billing/reconciliation/findings?')
+  ) {
+    const query = new URL(url, 'http://fixture').searchParams
+    const response: BillingFindingsPage = {
+      rows:
+        scenario === 'empty' || scenario === 'healthy' || scenario === 'covered'
+          ? []
+          : findingRows.filter(
+              (row) =>
+                (!query.get('status') || row.status === query.get('status')) &&
+                (!query.get('severity') ||
+                  row.severity === query.get('severity')) &&
+                (!query.get('code') || row.code.includes(query.get('code')!))
+            ),
+      nextCursor: null,
+    }
+    return Response.json(response)
+  }
+  if (
+    url === '/api/admin/standalone-billing/reconciliation/runs' &&
+    options.method === 'POST'
+  )
+    return scenario === 'readonly'
+      ? Response.json(
+          { message: 'Operator required', requestId: 'req-fixture-operator' },
+          { status: 403 }
+        )
+      : Response.json({
+          runId: '40000000-0000-4000-8000-000000000002',
+          status: 'queued',
+          mode: 'report_only',
+        })
   if (
     url.startsWith('/api/admin/standalone-billing/accounts?') &&
     options.method === undefined
@@ -213,7 +448,7 @@ export async function adminBillingFixtureRequest(
       nextCursor: null,
       approvalEnabled: true,
       lowBalanceThreshold: LOW_BALANCE_THRESHOLD,
-      operations: { enabled: true, operator: true },
+      operations: { enabled: true, operator: scenario !== 'readonly' },
     }
     return Response.json(response)
   }
