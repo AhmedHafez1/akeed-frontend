@@ -145,6 +145,237 @@
       }
     }
   },
+  "adminBillingOps": {
+    "back": "كل حسابات الفوترة",
+    "eyebrow": "حساب فوترة مستقل",
+    "unknownOrganization": "المؤسسة",
+    "refresh": "تحديث",
+    "refreshing": "جارٍ التحديث…",
+    "loading": "جارٍ تحميل حساب الفوترة…",
+    "retry": "إعادة المحاولة",
+    "actions": "الإجراءات",
+    "noAccount": "لا يوجد حساب رصيد لهذه المؤسسة بعد. اعتمدها أولًا من قائمة الحسابات.",
+    "truncated": "يُعرض أحدث {count} صف.",
+    "access": {
+      "disabled": "عمليات الفوترة متوقفة. يمكنك الاطلاع والمعاينة، لكن لا يمكن تطبيق أي تغيير.",
+      "notOperator": "لست من مشغّلي الفوترة المسمَّين. يمكنك الاطلاع والمعاينة، لكن لا يمكن تطبيق أي تغيير."
+    },
+    "accountStatus": {
+      "pending_approval": "بانتظار الاعتماد",
+      "active": "نشط",
+      "suspended": "موقوف"
+    },
+    "balanceStates": {
+      "none": "لم يُعتمد بعد",
+      "ok": "أعلى من حد الرصيد المنخفض ({threshold})",
+      "low": "عند حد الرصيد المنخفض ({threshold}) أو أقل",
+      "zero": "لا يوجد رصيد قابل للصرف",
+      "debt": "عليه مديونية، والإرسالات الجديدة موقوفة"
+    },
+    "balance": {
+      "available": "الرصيد المتاح",
+      "posted": "الرصيد المرحَّل",
+      "held": "الرصيد المحجوز",
+      "heldDetail": "محجوز لرسائل لم تُحسم بعد",
+      "debt": "المديونية",
+      "approvedAt": "اعتُمد {time}",
+      "notApproved": "غير معتمد"
+    },
+    "mismatch": {
+      "title": "الرصيد لا يطابق دفتر الحركات",
+      "contradictory": "سجلات الرصيد متعارضة",
+      "figures": "الرصيد المرحَّل {posted}، بينما مجموع الدفتر {ledger}. الرصيد المحجوز {held}، بينما الحجوزات القائمة {holds}.",
+      "blocked": "التعديلات وحسم الرسائل والاستعلامات وتسجيل الاستردادات أو النزاعات موقوفة حتى يعيد إصلاح موثَّق للرصيد بناءه من دفتر الحركات.",
+      "escalate": "لا يمكن إعادة بناء الرصيد من سجلات متعارضة. كل تغيير موقوف؛ صعِّد الأمر إلى الفريق الهندسي مع مراجع هذه الصفحة."
+    },
+    "contradictions": {
+      "reservation_held_with_ledger": "رصيد محجوز له قيد استهلاك أو استرجاع بالفعل.",
+      "reservation_held_on_settled_dispatch": "رصيد ما زال محجوزًا لرسالة حُسمت بالفعل.",
+      "reservation_consumed_without_consumption": "رصيد مستهلك بلا قيد استهلاك.",
+      "reservation_consumed_with_reversal": "رصيد مستهلك واستُرجع أيضًا.",
+      "reservation_released_unbalanced": "رصيد محرَّر له قيد استهلاك بلا استرجاع، أو العكس.",
+      "purchase_entry_without_success": "مُنح رصيد لعملية شراء غير ناجحة.",
+      "purchase_success_without_entry": "عملية شراء ناجحة بلا قيد منح.",
+      "purchase_reversal_exceeds_grant": "استُرجع رصيد أكثر مما منحته عملية الشراء."
+    },
+    "figures": {
+      "title": "مطابقة دفتر الحركات",
+      "consistent": "مطابق للدفتر",
+      "drifted": "منحرف",
+      "posted": "الرصيد المرحَّل",
+      "held": "الرصيد المحجوز",
+      "ledger": "مجموع الدفتر",
+      "reservations": "الحجوزات القائمة",
+      "comparison": "المسجَّل {projection}، و{sourceLabel} {source}"
+    },
+    "holds": {
+      "title": "رسائل غير محسومة",
+      "description": "رصيد محجوز قبل استدعاء Meta. الرسالة مجهولة النتيجة يبقى رصيدها محجوزًا حتى يحسمها الموظفون بدليل.",
+      "empty": "لا يوجد رصيد محجوز.",
+      "created": "محجوز منذ",
+      "send": "الرسالة",
+      "state": "الحالة",
+      "lastError": "آخر خطأ",
+      "providerId": "معرّف رسالة المزوِّد",
+      "providerIdRecorded": "مسجَّل",
+      "providerIdMissing": "غير مسجَّل",
+      "generation": "المحاولة {count}",
+      "attempts": "{count, plural, zero {لا استدعاءات} one {استدعاء واحد} two {استدعاءان} few {# استدعاءات} many {# استدعاءً} other {# استدعاء}}",
+      "kinds": {
+        "initial": "الرسالة الأولى",
+        "follow_up": "رسالة المتابعة"
+      }
+    },
+    "dispatchStates": {
+      "ready": "جاهزة",
+      "sending": "قيد الإرسال",
+      "accepted": "مقبولة",
+      "rejected": "غير مقبولة",
+      "outcome_unknown": "نتيجة غير معروفة"
+    },
+    "purchases": {
+      "title": "عمليات الشراء",
+      "description": "عمليات شراء Paymob وحالتها الموثَّقة. يمكن للموظفين الاستعلام من Paymob أو تسجيل دليل استرداد أو نزاع؛ ولا يمكن لأحد اعتبار دفعة ناجحة من هنا.",
+      "empty": "لا توجد عمليات شراء بعد.",
+      "reference": "المرجع",
+      "status": "الحالة",
+      "credits": "الرصيد",
+      "total": "الإجمالي",
+      "refunded": "المسترد",
+      "reconciliation": "التسوية",
+      "created": "أُنشئت",
+      "noReconciliation": "لا حاجة",
+      "attempts": "{count, plural, zero {لا استعلامات بعد} one {استعلام واحد} two {استعلامان} few {# استعلامات} many {# استعلامًا} other {# استعلام}}",
+      "providerOrder": "الطلب",
+      "providerTransaction": "المعاملة"
+    },
+    "purchaseStatuses": {
+      "pending": "قيد الانتظار",
+      "successful": "ناجحة",
+      "failed": "فاشلة",
+      "canceled": "ملغاة",
+      "expired": "منتهية",
+      "refunded": "مستردة"
+    },
+    "disputeStatuses": {
+      "none": "لا يوجد نزاع",
+      "open": "رد مبلغ مفتوح",
+      "lost": "رد مبلغ خاسر",
+      "won": "رد مبلغ رابح"
+    },
+    "modes": {
+      "test": "دفعة تجريبية",
+      "live": "دفعة فعلية"
+    },
+    "reconciliationCodes": {
+      "provider_rejected": "رفض Paymob عملية الدفع",
+      "provider_unavailable": "لم يستجب Paymob عند الدفع",
+      "callback_mismatch": "استدعاء لا يطابق عملية الشراء",
+      "partial_refund_not_whole_credit": "استرداد جزئي لا يقابل رصيدًا كاملًا",
+      "refund_without_success": "استرداد لعملية شراء غير مدفوعة",
+      "refund_reference_missing": "استرداد أو نزاع بلا معرّف من المزوِّد",
+      "dispute_open": "رد مبلغ مفتوح",
+      "dispute_lost": "رد مبلغ خاسر",
+      "dispute_without_grant": "نزاع على عملية شراء غير مدفوعة",
+      "credit_invariant_frozen": "الحساب مجمَّد لعدم تطابق الدفتر",
+      "inquiry_unresolved": "لم يحسمها الاستعلام بعد",
+      "staff_evidence_mismatch": "دليل الموظف لا يطابق عملية الشراء"
+    },
+    "ledger": {
+      "title": "دفتر حركات الرصيد",
+      "description": "كل تغيير في الرصيد، الأحدث أولًا. القيود غير قابلة للتعديل؛ والتصحيح يكون بقيد جديد.",
+      "empty": "لا توجد قيود.",
+      "date": "التاريخ",
+      "type": "النوع",
+      "quantity": "الرصيد",
+      "balance": "الرصيد بعد القيد",
+      "reference": "المرجع",
+      "reason": "السبب",
+      "providerReference": "مرجع المزوِّد",
+      "dispatch": "الرسالة",
+      "actor": "الموظف"
+    },
+    "ledgerTypes": {
+      "free_grant": "منحة الإطلاق",
+      "purchase": "شراء",
+      "consumption": "رسالة مقبولة",
+      "failure_reversal": "استرجاع لفشل التسليم",
+      "refund_reversal": "خصم استرداد",
+      "chargeback_reversal": "خصم رد مبلغ",
+      "chargeback_reinstatement": "إعادة رصيد رد المبلغ",
+      "staff_adjustment": "تعديل من الموظفين"
+    },
+    "events": {
+      "title": "أحداث المزوِّد",
+      "description": "ملخصات استدعاءات Paymob وردود الاستعلام وأدلة الموظفين. لا تُخزَّن الحمولات ولا تُعرض.",
+      "empty": "لا توجد أحداث.",
+      "received": "وقت الاستلام",
+      "provider": "المصدر",
+      "purchase": "عملية الشراء",
+      "result": "النتيجة",
+      "verified": "موثَّق من المزوِّد",
+      "staffEvidence": "دليل من الموظفين",
+      "yes": "نعم",
+      "no": "لا"
+    },
+    "audit": {
+      "title": "سجل تدقيق الموظفين",
+      "description": "الاعتمادات والتعديلات وحسم الرسائل والاستعلامات والأدلة والإصلاحات على هذه المؤسسة.",
+      "empty": "لا توجد إجراءات مسجَّلة.",
+      "date": "التاريخ",
+      "action": "الإجراء",
+      "actor": "الموظف",
+      "details": "التفاصيل",
+      "request": "الطلب",
+      "fields": {
+        "reason": "السبب",
+        "evidence": "الدليل",
+        "quantity": "الرصيد",
+        "resolution": "الحسم",
+        "providerAction": "إجراء المزوِّد",
+        "providerReference": "مرجع المزوِّد",
+        "amountMinor": "المبلغ (بالقروش)",
+        "outcome": "النتيجة",
+        "postedDifference": "تغيّر المرحَّل",
+        "heldDifference": "تغيّر المحجوز"
+      }
+    },
+    "auditActions": {
+      "standalone_billing_approve": "اعتماد لفوترة الرصيد",
+      "standalone_billing_adjustment_preview": "معاينة تعديل",
+      "standalone_billing_adjustment_apply": "تطبيق تعديل",
+      "standalone_billing_purchase_reconcile": "استعلام من Paymob",
+      "standalone_billing_purchase_provider_action": "تسجيل استرداد أو نزاع",
+      "standalone_billing_projection_repair_preview": "معاينة إصلاح",
+      "standalone_billing_projection_repair_apply": "إصلاح الرصيد",
+      "message_dispatch_resolve": "حسم رسالة"
+    },
+    "errors": {
+      "STANDALONE_BILLING_OPERATIONS_DISABLED": "عمليات الفوترة متوقفة.",
+      "STANDALONE_BILLING_OPERATOR_REQUIRED": "لا يطبّق هذا إلا مشغّل فوترة مسمًّى.",
+      "BILLING_ACCOUNT_NOT_FOUND": "لا يوجد حساب رصيد لهذه المؤسسة.",
+      "BILLING_ACCOUNT_NOT_APPROVED": "اعتمد المؤسسة قبل تغيير رصيدها.",
+      "CREDIT_PROJECTION_MISMATCH": "الرصيد لا يطابق دفتر الحركات. أصلح الرصيد أولًا.",
+      "CREDIT_SOURCE_CONTRADICTORY": "سجلات الرصيد متعارضة. صعِّد الأمر قبل تغيير هذا الحساب.",
+      "BILLING_PREVIEW_NOT_FOUND": "لم تعد هذه المعاينة موجودة. عاين من جديد.",
+      "BILLING_PREVIEW_STALE": "تغيّر الحساب بعد معاينتك. عاين من جديد وراجع الأرقام الجديدة.",
+      "BILLING_PREVIEW_ALREADY_APPLIED": "طُبّقت هذه المعاينة بالفعل.",
+      "BILLING_IDEMPOTENCY_KEY_REQUIRED": "افتقد الطلب مفتاح عدم التكرار. حاول مجددًا.",
+      "BILLING_IDEMPOTENCY_CONFLICT": "استُخدم مفتاح هذا الطلب لتغيير مختلف. ابدأ معاينة جديدة.",
+      "BILLING_DISPATCH_NOT_FOUND": "هذه الرسالة لا تخص هذه المؤسسة.",
+      "BILLING_DISPATCH_NOT_CREDIT_BILLED": "هذه الرسالة لا تُحاسَب بالرصيد.",
+      "MESSAGE_DISPATCH_RESOLUTION_CONFLICT": "حُسمت هذه الرسالة بشكل مختلف بالفعل.",
+      "BILLING_PURCHASE_NOT_FOUND": "عملية الشراء هذه لا تخص هذه المؤسسة.",
+      "BILLING_PURCHASE_NOT_ELIGIBLE": "لا يُستعلم إلا عن عملية شراء قيد الانتظار، أو عملية معلَّمة قد تنجح لاحقًا.",
+      "REPAIR_SOURCE_CONTRADICTORY": "سجلات الرصيد متعارضة، لذا لا يمكن إعادة بناء الرصيد.",
+      "PAYMENT_PENDING_RECONCILIATION": "محاسبة الرصيد تحتاج إلى تسوية قبل هذا التغيير.",
+      "forbidden": "هذا الإجراء يتطلب صلاحية موظف.",
+      "notFound": "غير موجود.",
+      "invalid": "تحقق من القيم وحاول مجددًا.",
+      "conflict": "تغيّر الحساب. حدِّث الصفحة وحاول مجددًا.",
+      "failed": "تعذّر إكمال الطلب. أعد المحاولة؛ لا يُطبَّق شيء مرتين."
+    }
+  },
   "error": {
     "title": "حدث خطأ غير متوقع",
     "description": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.",

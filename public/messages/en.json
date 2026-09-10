@@ -145,6 +145,237 @@
       }
     }
   },
+  "adminBillingOps": {
+    "back": "All billing accounts",
+    "eyebrow": "Standalone billing account",
+    "unknownOrganization": "Organization",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing…",
+    "loading": "Loading billing account…",
+    "retry": "Retry",
+    "actions": "Actions",
+    "noAccount": "This organization has no credit account yet. Approve it from the account list first.",
+    "truncated": "Showing the latest {count} rows.",
+    "access": {
+      "disabled": "Billing operations are switched off. You can inspect and preview, but nothing can be applied.",
+      "notOperator": "You are not a named billing operator. You can inspect and preview, but nothing can be applied."
+    },
+    "accountStatus": {
+      "pending_approval": "Pending approval",
+      "active": "Active",
+      "suspended": "Suspended"
+    },
+    "balanceStates": {
+      "none": "Not approved yet",
+      "ok": "Above the low-balance threshold of {threshold}",
+      "low": "At or below the low-balance threshold of {threshold}",
+      "zero": "No spendable credits",
+      "debt": "In debt; new sends are blocked"
+    },
+    "balance": {
+      "available": "Available credits",
+      "posted": "Posted balance",
+      "held": "Held credits",
+      "heldDetail": "Reserved for sends not yet settled",
+      "debt": "Debt",
+      "approvedAt": "Approved {time}",
+      "notApproved": "Not approved"
+    },
+    "mismatch": {
+      "title": "The balance does not match its ledger",
+      "contradictory": "Credit records contradict each other",
+      "figures": "Posted balance {posted}, but the ledger adds up to {ledger}. Held credits {held}, but {holds} reservations are held.",
+      "blocked": "Adjustments, send resolutions, inquiries and refund or dispute records are blocked until an audited projection repair rebuilds the balance from the ledger.",
+      "escalate": "The balance cannot be rebuilt from contradictory records. Every change is blocked; escalate to engineering with this page's references."
+    },
+    "contradictions": {
+      "reservation_held_with_ledger": "A held credit already has a consumption or reversal entry.",
+      "reservation_held_on_settled_dispatch": "A credit is still held for a send that was already settled.",
+      "reservation_consumed_without_consumption": "A consumed credit has no consumption entry.",
+      "reservation_consumed_with_reversal": "A consumed credit was also reversed.",
+      "reservation_released_unbalanced": "A released credit has a consumption without its reversal, or the reverse.",
+      "purchase_entry_without_success": "Credits were granted for a purchase that is not successful.",
+      "purchase_success_without_entry": "A successful purchase has no grant entry.",
+      "purchase_reversal_exceeds_grant": "More credits were reversed than the purchase granted."
+    },
+    "figures": {
+      "title": "Ledger reconciliation",
+      "consistent": "Matches the ledger",
+      "drifted": "Drifted",
+      "posted": "Posted balance",
+      "held": "Held credits",
+      "ledger": "ledger total",
+      "reservations": "held reservations",
+      "comparison": "{projection} recorded, {source} by {sourceLabel}"
+    },
+    "holds": {
+      "title": "Unresolved sends",
+      "description": "Credits held before a Meta call. A send whose outcome is unknown keeps its credit held until staff resolve it with evidence.",
+      "empty": "No credits are held.",
+      "created": "Held since",
+      "send": "Send",
+      "state": "State",
+      "lastError": "Last error",
+      "providerId": "Provider message id",
+      "providerIdRecorded": "Recorded",
+      "providerIdMissing": "Not recorded",
+      "generation": "attempt {count}",
+      "attempts": "{count, plural, one {# call} other {# calls}}",
+      "kinds": {
+        "initial": "Initial message",
+        "follow_up": "Follow-up"
+      }
+    },
+    "dispatchStates": {
+      "ready": "Ready",
+      "sending": "Sending",
+      "accepted": "Accepted",
+      "rejected": "Not accepted",
+      "outcome_unknown": "Outcome unknown"
+    },
+    "purchases": {
+      "title": "Purchases",
+      "description": "Paymob purchases and their verified state. Staff can ask Paymob about a purchase or record refund and dispute evidence; nobody can mark a payment successful here.",
+      "empty": "No purchases yet.",
+      "reference": "Reference",
+      "status": "Status",
+      "credits": "Credits",
+      "total": "Total",
+      "refunded": "Refunded",
+      "reconciliation": "Reconciliation",
+      "created": "Created",
+      "noReconciliation": "None needed",
+      "attempts": "{count, plural, =0 {No inquiries yet} one {# inquiry} other {# inquiries}}",
+      "providerOrder": "Order",
+      "providerTransaction": "Transaction"
+    },
+    "purchaseStatuses": {
+      "pending": "Pending",
+      "successful": "Successful",
+      "failed": "Failed",
+      "canceled": "Canceled",
+      "expired": "Expired",
+      "refunded": "Refunded"
+    },
+    "disputeStatuses": {
+      "none": "No dispute",
+      "open": "Chargeback open",
+      "lost": "Chargeback lost",
+      "won": "Chargeback won"
+    },
+    "modes": {
+      "test": "Test payment",
+      "live": "Live payment"
+    },
+    "reconciliationCodes": {
+      "provider_rejected": "Paymob rejected the checkout",
+      "provider_unavailable": "Paymob did not answer at checkout",
+      "callback_mismatch": "A callback did not match this purchase",
+      "partial_refund_not_whole_credit": "Partial refund does not map to whole credits",
+      "refund_without_success": "Refund reported for an unpaid purchase",
+      "refund_reference_missing": "Refund or dispute without a provider id",
+      "dispute_open": "Chargeback open",
+      "dispute_lost": "Chargeback lost",
+      "dispute_without_grant": "Dispute reported for an unpaid purchase",
+      "credit_invariant_frozen": "Account frozen by a ledger mismatch",
+      "inquiry_unresolved": "Inquiry could not settle it yet",
+      "staff_evidence_mismatch": "Staff evidence did not match this purchase"
+    },
+    "ledger": {
+      "title": "Credit ledger",
+      "description": "Every balance change, newest first. Entries are immutable; corrections are new entries.",
+      "empty": "No ledger entries.",
+      "date": "Date",
+      "type": "Type",
+      "quantity": "Credits",
+      "balance": "Balance",
+      "reference": "Reference",
+      "reason": "Reason",
+      "providerReference": "Provider ref",
+      "dispatch": "Send",
+      "actor": "Staff"
+    },
+    "ledgerTypes": {
+      "free_grant": "Launch grant",
+      "purchase": "Purchase",
+      "consumption": "Message accepted",
+      "failure_reversal": "Delivery failure restored",
+      "refund_reversal": "Refund reversal",
+      "chargeback_reversal": "Chargeback reversal",
+      "chargeback_reinstatement": "Chargeback reinstated",
+      "staff_adjustment": "Staff adjustment"
+    },
+    "events": {
+      "title": "Provider events",
+      "description": "Summaries of Paymob callbacks, inquiry answers and staff evidence. Payloads are never stored or shown.",
+      "empty": "No provider events.",
+      "received": "Received",
+      "provider": "Source",
+      "purchase": "Purchase",
+      "result": "Result",
+      "verified": "Verified by provider",
+      "staffEvidence": "Staff evidence",
+      "yes": "Yes",
+      "no": "No"
+    },
+    "audit": {
+      "title": "Staff audit trail",
+      "description": "Approvals, adjustments, resolutions, inquiries, evidence and repairs on this organization.",
+      "empty": "No staff actions recorded.",
+      "date": "Date",
+      "action": "Action",
+      "actor": "Staff member",
+      "details": "Details",
+      "request": "Request",
+      "fields": {
+        "reason": "Reason",
+        "evidence": "Evidence",
+        "quantity": "Credits",
+        "resolution": "Resolution",
+        "providerAction": "Provider action",
+        "providerReference": "Provider ref",
+        "amountMinor": "Amount (minor units)",
+        "outcome": "Outcome",
+        "postedDifference": "Posted change",
+        "heldDifference": "Held change"
+      }
+    },
+    "auditActions": {
+      "standalone_billing_approve": "Approved for credit billing",
+      "standalone_billing_adjustment_preview": "Adjustment previewed",
+      "standalone_billing_adjustment_apply": "Adjustment applied",
+      "standalone_billing_purchase_reconcile": "Paymob inquiry",
+      "standalone_billing_purchase_provider_action": "Refund or dispute recorded",
+      "standalone_billing_projection_repair_preview": "Repair previewed",
+      "standalone_billing_projection_repair_apply": "Projection repaired",
+      "message_dispatch_resolve": "Send resolved"
+    },
+    "errors": {
+      "STANDALONE_BILLING_OPERATIONS_DISABLED": "Billing operations are switched off.",
+      "STANDALONE_BILLING_OPERATOR_REQUIRED": "Only a named billing operator can apply this.",
+      "BILLING_ACCOUNT_NOT_FOUND": "No credit account exists for this organization.",
+      "BILLING_ACCOUNT_NOT_APPROVED": "Approve the organization before changing its credits.",
+      "CREDIT_PROJECTION_MISMATCH": "The balance does not match its ledger. Repair the projection first.",
+      "CREDIT_SOURCE_CONTRADICTORY": "Credit records contradict each other. Escalate before changing this account.",
+      "BILLING_PREVIEW_NOT_FOUND": "That preview no longer exists. Preview again.",
+      "BILLING_PREVIEW_STALE": "The account changed after your preview. Preview again and review the new figures.",
+      "BILLING_PREVIEW_ALREADY_APPLIED": "This preview was already applied.",
+      "BILLING_IDEMPOTENCY_KEY_REQUIRED": "The request was missing its idempotency key. Try again.",
+      "BILLING_IDEMPOTENCY_CONFLICT": "This request key was already used for a different change. Start a new preview.",
+      "BILLING_DISPATCH_NOT_FOUND": "That send does not belong to this organization.",
+      "BILLING_DISPATCH_NOT_CREDIT_BILLED": "That send is not billed through credits.",
+      "MESSAGE_DISPATCH_RESOLUTION_CONFLICT": "That send was already resolved differently.",
+      "BILLING_PURCHASE_NOT_FOUND": "That purchase does not belong to this organization.",
+      "BILLING_PURCHASE_NOT_ELIGIBLE": "Only a pending purchase, or a flagged one that could still succeed, can be inquired.",
+      "REPAIR_SOURCE_CONTRADICTORY": "Credit records contradict each other, so the balance cannot be rebuilt.",
+      "PAYMENT_PENDING_RECONCILIATION": "Credit accounting needs reconciliation before this can change.",
+      "forbidden": "Staff access is required for this action.",
+      "notFound": "Not found.",
+      "invalid": "Check the values and try again.",
+      "conflict": "The account changed. Refresh and try again.",
+      "failed": "The request could not be completed. Retry; nothing is applied twice."
+    }
+  },
   "error": {
     "title": "Something went wrong",
     "description": "An unexpected error occurred. Please try again.",

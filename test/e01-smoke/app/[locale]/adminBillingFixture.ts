@@ -6,6 +6,7 @@ import type {
   CreditAccountList,
   CreditAccountRow,
 } from '@/features/admin/standalone-billing.model'
+import { accountDetailFixture } from './adminBillingAccountFixture'
 
 const FREE_GRANT = 30
 const ids = {
@@ -212,6 +213,22 @@ export async function adminBillingFixtureRequest(
       operations: { enabled: true, operator: true },
     }
     return Response.json(response)
+  }
+  const account =
+    /^\/api\/admin\/standalone-billing\/accounts\/([0-9a-f-]{36})$/.exec(url)
+  if (account && options.method === undefined) {
+    const row = rows.find((candidate) => candidate.orgId === account[1])
+    if (!row)
+      return Response.json(
+        {
+          message: 'Organization not found.',
+          code: 'BILLING_ACCOUNT_NOT_FOUND',
+        },
+        { status: 404 }
+      )
+    return Response.json(
+      accountDetailFixture(row.orgId, row.organizationName ?? row.orgId)
+    )
   }
   if (
     url === '/api/admin/standalone-billing/approvals/preview' &&
