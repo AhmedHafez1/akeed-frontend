@@ -17,6 +17,7 @@ import type {
   CreditAccountRow,
 } from './standalone-billing.model'
 import { StandaloneBillingObservability } from './StandaloneBillingObservability'
+import { StandaloneBillingSettlements } from './StandaloneBillingSettlements'
 
 const balanceTones = {
   none: 'bg-slate-100 text-slate-600',
@@ -135,6 +136,7 @@ export function StandaloneBillingPage() {
         </Button>
       </header>
       <StandaloneBillingObservability canOperate={canOperate} />
+      <StandaloneBillingSettlements canOperate={canOperate} />
       {state.page && !state.page.approvalEnabled && (
         <p
           role="status"

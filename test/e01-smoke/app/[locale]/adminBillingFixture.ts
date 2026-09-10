@@ -14,13 +14,16 @@ import type {
   BillingFinding,
   BillingFindingsPage,
   BillingHealth,
+  BillingSettlement,
+  BillingSettlementsPage,
 } from '@/features/admin/billing-observability.model'
 
 /**
  * `?billing=` on the page selects the observability state: `attention`
  * (default), `healthy`, `critical`, `covered` (complete settlement coverage),
- * `empty` (no findings), `error` (health unavailable) or `readonly` (staff
- * without the named-operator role).
+ * `empty` (no findings), `error` (health unavailable), `readonly` (staff
+ * without the named-operator role) or `flaky` (the first settlement response
+ * is lost).
  */
 type ObservabilityScenario =
   | 'attention'
@@ -30,6 +33,7 @@ type ObservabilityScenario =
   | 'empty'
   | 'error'
   | 'readonly'
+  | 'flaky'
 
 function observabilityScenario(): ObservabilityScenario {
   if (typeof window === 'undefined') return 'attention'
@@ -39,7 +43,8 @@ function observabilityScenario(): ObservabilityScenario {
     value === 'covered' ||
     value === 'empty' ||
     value === 'error' ||
-    value === 'readonly'
+    value === 'readonly' ||
+    value === 'flaky'
     ? value
     : 'attention'
 }
@@ -56,6 +61,10 @@ const observabilityRequests: Array<{
     __akeedBillingObservabilityRequests?: typeof observabilityRequests
   }
 ).__akeedBillingObservabilityRequests = observabilityRequests
+
+const settlements: BillingSettlement[] = []
+const settlementKeys = new Map<string, BillingSettlement>()
+let flakyFailed = false
 
 const findingRows: BillingFinding[] = [
   {
@@ -437,6 +446,65 @@ export async function adminBillingFixtureRequest(
           status: 'queued',
           mode: 'report_only',
         })
+  if (
+    url.startsWith('/api/admin/standalone-billing/settlements?') &&
+    options.method === undefined
+  ) {
+    const response: BillingSettlementsPage = {
+      rows: [...settlements].reverse().map((row) => ({
+        ...row,
+        effective: !settlements.some((other) => other.supersedesId === row.id),
+      })),
+      nextCursor: null,
+    }
+    return Response.json(response)
+  }
+  if (
+    url === '/api/admin/standalone-billing/settlements' &&
+    options.method === 'POST'
+  ) {
+    if (scenario === 'readonly')
+      return Response.json(
+        { message: 'Operator required', requestId: 'req-fixture-operator' },
+        { status: 403 }
+      )
+    const key = (options.headers as Record<string, string>)['Idempotency-Key']
+    // `flaky` loses the first response, as a dropped connection would.
+    if (scenario === 'flaky' && !flakyFailed) {
+      flakyFailed = true
+      return Response.json(
+        { message: 'Gateway timeout', requestId: 'req-fixture-timeout' },
+        { status: 504 }
+      )
+    }
+    const replay = settlementKeys.get(key)
+    if (replay) return Response.json({ ...replay, duplicate: true })
+    const input = JSON.parse(String(options.body)) as Omit<
+      BillingSettlement,
+      'id' | 'revision' | 'actorId' | 'createdAt' | 'effective'
+    >
+    const previous = settlements.find((row) => row.id === input.supersedesId)
+    if (
+      input.supersedesId &&
+      (!previous ||
+        settlements.some((row) => row.supersedesId === input.supersedesId))
+    )
+      return Response.json(
+        { message: 'Conflict', code: 'BILLING_SETTLEMENT_CONFLICT' },
+        { status: 409 }
+      )
+    const row: BillingSettlement = {
+      ...input,
+      id: `60000000-0000-4000-8000-${String(settlements.length + 1).padStart(12, '0')}`,
+      revision: previous ? previous.revision + 1 : 1,
+      actorId: '70000000-0000-4000-8000-000000000001',
+      createdAt: new Date().toISOString(),
+      effective: true,
+    }
+    settlements.push(row)
+    settlementKeys.set(key, row)
+    return Response.json({ ...row, duplicate: false })
+  }
   if (
     url.startsWith('/api/admin/standalone-billing/accounts?') &&
     options.method === undefined
