@@ -100,6 +100,49 @@
       "account_suspended": "حساب الرصيد موقوف ولن يُعتمد من هنا.",
       "preview_changed": "تغيرت بيانات الحساب منذ المعاينة. أنشئ معاينة جديدة.",
       "approval_failed": "لم يتغير هذا الحساب. أعد محاولة الاعتماد."
+    },
+    "creditHealth": "حالة الرصيد",
+    "details": "فتح",
+    "openAccount": "فتح حساب الفوترة الخاص بـ {name}",
+    "debt": "مديونية {count} رصيد",
+    "projectionMismatch": "الرصيد لا يطابق دفتر الحركات",
+    "reconciliationSummary": "يحتاج إلى تسوية: {purchases} عمليات شراء معلّمة، {holds} رسائل غير محسومة",
+    "balanceStates": {
+      "none": "غير معتمد",
+      "ok": "سليم",
+      "low": "رصيد منخفض",
+      "zero": "لا يوجد رصيد",
+      "debt": "عليه مديونية"
+    },
+    "filters": {
+      "label": "تصفية الحسابات",
+      "approval": "الاعتماد",
+      "accountStatus": "حالة الحساب",
+      "balance": "الرصيد",
+      "reconciliation": "التسوية",
+      "all": "الكل",
+      "reset": "مسح عوامل التصفية",
+      "options": {
+        "approval": {
+          "eligible": "مؤهل",
+          "already_approved": "معتمد مسبقًا",
+          "skipped": "متجاوَز",
+          "ambiguous": "يحتاج إلى مراجعة"
+        },
+        "accountStatus": {
+          "pending_approval": "بانتظار الاعتماد",
+          "active": "نشط",
+          "suspended": "موقوف"
+        },
+        "balance": {
+          "low": "رصيد منخفض",
+          "zero": "لا يوجد رصيد",
+          "debt": "عليه مديونية"
+        },
+        "reconciliation": {
+          "required": "يحتاج إلى تسوية"
+        }
+      }
     }
   },
   "error": {

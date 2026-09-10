@@ -1,8 +1,10 @@
 import type {
+  AccountBillingSummary,
   ApprovalApplyReport,
   ApprovalPreview,
   ApprovalRow,
   CreditAccountList,
+  CreditAccountRow,
 } from '@/features/admin/standalone-billing.model'
 
 const FREE_GRANT = 30
@@ -11,7 +13,9 @@ const ids = {
   activate: '10000000-0000-4000-8000-000000000002',
   approved: '10000000-0000-4000-8000-000000000003',
   review: '10000000-0000-4000-8000-000000000004',
+  debt: '10000000-0000-4000-8000-000000000005',
 }
+const LOW_BALANCE_THRESHOLD = 10
 const pendingAccount = {
   status: 'pending_approval' as const,
   postedBalance: 0,
@@ -98,8 +102,80 @@ const rows: ApprovalRow[] = [
     freeGrantPresent: false,
     proposed: null,
   },
+  {
+    orgId: ids.debt,
+    organizationName: 'Refunded merchant in debt',
+    status: 'already_approved',
+    reason: 'already_approved',
+    existingSource: true,
+    source: {
+      id: '20000000-0000-4000-8000-000000000005',
+      identity: `standalone:${ids.debt}`,
+      platformType: 'standalone',
+      isActive: true,
+      billingPlanId: 'starter',
+      billingStatus: 'not_required',
+      billingActivatedAt: '2026-08-01T00:00:00Z',
+    },
+    account: {
+      status: 'active',
+      postedBalance: -12,
+      heldCredits: 1,
+      availableCredits: 0,
+      version: 9,
+      approvedAt: '2026-08-02T09:00:00Z',
+    },
+    freeGrantPresent: true,
+    proposed: null,
+  },
 ]
 let applyCalls = 0
+
+/** The same balance rules the backend applies, for synthetic rows. */
+function billingSummary(row: ApprovalRow): AccountBillingSummary | null {
+  const account = row.account
+  if (!account) return null
+  const available = Math.max(account.postedBalance - account.heldCredits, 0)
+  const balanceState =
+    account.status === 'pending_approval'
+      ? 'none'
+      : account.postedBalance < 0
+        ? 'debt'
+        : available === 0
+          ? 'zero'
+          : available <= LOW_BALANCE_THRESHOLD
+            ? 'low'
+            : 'ok'
+  const flagged = row.orgId === ids.debt
+  return {
+    debtCredits: Math.max(-account.postedBalance, 0),
+    balanceState,
+    projectionConsistent: true,
+    flaggedPurchases: flagged ? 1 : 0,
+    unresolvedHolds: account.heldCredits,
+    reconciliationRequired: flagged || account.heldCredits > 0,
+  }
+}
+
+const accountRows: CreditAccountRow[] = rows.map((row) => ({
+  ...row,
+  billing: billingSummary(row),
+}))
+
+function filterAccounts(query: URLSearchParams) {
+  return accountRows.filter((row) => {
+    const approval = query.get('approval')
+    const accountStatus = query.get('accountStatus')
+    const balance = query.get('balance')
+    const reconciliation = query.get('reconciliation')
+    return (
+      (!approval || row.status === approval) &&
+      (!accountStatus || row.account?.status === accountStatus) &&
+      (!balance || row.billing?.balanceState === balance) &&
+      (!reconciliation || !!row.billing?.reconciliationRequired)
+    )
+  })
+}
 
 function counts(selected: ApprovalRow[]) {
   return {
@@ -126,11 +202,14 @@ export async function adminBillingFixtureRequest(
     url.startsWith('/api/admin/standalone-billing/accounts?') &&
     options.method === undefined
   ) {
+    const page = filterAccounts(new URL(url, 'http://fixture').searchParams)
     const response: CreditAccountList = {
-      rows,
-      counts: counts(rows),
+      rows: page,
+      counts: counts(page),
       nextCursor: null,
       approvalEnabled: true,
+      lowBalanceThreshold: LOW_BALANCE_THRESHOLD,
+      operations: { enabled: true, operator: true },
     }
     return Response.json(response)
   }

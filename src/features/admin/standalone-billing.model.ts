@@ -61,11 +61,41 @@ export interface ApprovalCounts {
   existingSource: number
   ambiguous: number
 }
+export type BalanceState = 'none' | 'ok' | 'low' | 'zero' | 'debt'
+
+/** Billing state the staff list shows beside each approval row. */
+export interface AccountBillingSummary {
+  debtCredits: number
+  balanceState: BalanceState
+  projectionConsistent: boolean
+  flaggedPurchases: number
+  unresolvedHolds: number
+  reconciliationRequired: boolean
+}
+
+export interface OperationsAccess {
+  enabled: boolean
+  operator: boolean
+}
+
+export interface AccountFilters {
+  approval: '' | ApprovalStatus
+  accountStatus: '' | CreditAccountStatus
+  balance: '' | 'low' | 'zero' | 'debt'
+  reconciliation: '' | 'required'
+}
+
+export interface CreditAccountRow extends ApprovalRow {
+  billing: AccountBillingSummary | null
+}
+
 export interface CreditAccountList {
-  rows: ApprovalRow[]
+  rows: CreditAccountRow[]
   counts: ApprovalCounts
   nextCursor: string | null
   approvalEnabled: boolean
+  lowBalanceThreshold: number
+  operations: OperationsAccess
 }
 export interface ApprovalPreview {
   previewId: string

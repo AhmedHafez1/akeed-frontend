@@ -3,12 +3,28 @@
 import { useCallback, useEffect, useState } from 'react'
 import { AdminApiError, adminRequest } from './adminApi'
 import type {
+  AccountFilters,
   ApprovalApplyReport,
   ApprovalPreview,
   CreditAccountList,
 } from './standalone-billing.model'
 
 const path = '/api/admin/standalone-billing'
+
+export const emptyAccountFilters: AccountFilters = {
+  approval: '',
+  accountStatus: '',
+  balance: '',
+  reconciliation: '',
+}
+
+function accountQuery(filters: AccountFilters, cursor: string | undefined) {
+  const query = new URLSearchParams({ limit: '50' })
+  if (cursor) query.set('cursor', cursor)
+  for (const [key, value] of Object.entries(filters))
+    if (value) query.set(key, value)
+  return query.toString()
+}
 
 export function useStandaloneBilling() {
   const [page, setPage] = useState<CreditAccountList | null>(null)
@@ -21,6 +37,8 @@ export function useStandaloneBilling() {
   const [preview, setPreview] = useState<ApprovalPreview | null>(null)
   const [report, setReport] = useState<ApprovalApplyReport | null>(null)
   const [reason, setReason] = useState('')
+  const [filters, setFilterState] =
+    useState<AccountFilters>(emptyAccountFilters)
   const cursor = cursors.at(-1)
 
   const recordError = useCallback((cause: unknown) => {
@@ -37,7 +55,7 @@ export function useStandaloneBilling() {
     setLoading(true)
     setError(null)
     adminRequest<CreditAccountList>(
-      `${path}/accounts?limit=50${cursor ? `&cursor=${cursor}` : ''}`
+      `${path}/accounts?${accountQuery(filters, cursor)}`
     )
       .then((response) => {
         if (current) setPage(response)
@@ -54,7 +72,7 @@ export function useStandaloneBilling() {
     return () => {
       current = false
     }
-  }, [cursor, revision, recordError])
+  }, [cursor, filters, revision, recordError])
 
   function toggle(orgId: string) {
     if (busy || loading) return
@@ -122,8 +140,23 @@ export function useStandaloneBilling() {
     }
   }
 
+  /** A new filter starts again from the first page. */
+  function setFilter<K extends keyof AccountFilters>(
+    key: K,
+    value: AccountFilters[K]
+  ) {
+    setCursors([])
+    setFilterState((current) => ({ ...current, [key]: value }))
+  }
+
   return {
     page,
+    filters,
+    setFilter,
+    resetFilters: () => {
+      setCursors([])
+      setFilterState(emptyAccountFilters)
+    },
     loading,
     busy,
     error,

@@ -100,6 +100,49 @@
       "account_suspended": "The credit account is suspended and will not be approved here.",
       "preview_changed": "Account data changed since preview. Generate a new preview.",
       "approval_failed": "This account was not changed. Retry the approval."
+    },
+    "creditHealth": "Credit health",
+    "details": "Open",
+    "openAccount": "Open billing account for {name}",
+    "debt": "{count} credits of debt",
+    "projectionMismatch": "Balance does not match its ledger",
+    "reconciliationSummary": "Needs reconciliation: {purchases} flagged purchases, {holds} unresolved sends",
+    "balanceStates": {
+      "none": "Not approved",
+      "ok": "Healthy",
+      "low": "Low balance",
+      "zero": "No credits",
+      "debt": "In debt"
+    },
+    "filters": {
+      "label": "Filter accounts",
+      "approval": "Approval",
+      "accountStatus": "Account status",
+      "balance": "Balance",
+      "reconciliation": "Reconciliation",
+      "all": "All",
+      "reset": "Clear filters",
+      "options": {
+        "approval": {
+          "eligible": "Eligible",
+          "already_approved": "Already approved",
+          "skipped": "Skipped",
+          "ambiguous": "Needs review"
+        },
+        "accountStatus": {
+          "pending_approval": "Pending approval",
+          "active": "Active",
+          "suspended": "Suspended"
+        },
+        "balance": {
+          "low": "Low balance",
+          "zero": "No credits",
+          "debt": "In debt"
+        },
+        "reconciliation": {
+          "required": "Needs reconciliation"
+        }
+      }
     }
   },
   "error": {
