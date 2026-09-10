@@ -6,7 +6,10 @@ import type {
   CreditAccountList,
   CreditAccountRow,
 } from '@/features/admin/standalone-billing.model'
-import { accountDetailFixture } from './adminBillingAccountFixture'
+import {
+  accountDetailFixture,
+  accountOperationFixture,
+} from './adminBillingAccountFixture'
 
 const FREE_GRANT = 30
 const ids = {
@@ -230,6 +233,8 @@ export async function adminBillingFixtureRequest(
       accountDetailFixture(row.orgId, row.organizationName ?? row.orgId)
     )
   }
+  const operation = await accountOperationFixture(url, options)
+  if (operation) return operation
   if (
     url === '/api/admin/standalone-billing/approvals/preview' &&
     options.method === 'POST'

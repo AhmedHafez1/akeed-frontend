@@ -160,3 +160,81 @@ export interface AccountDetail {
   events: DetailPage<ProviderEventRow>
   audit: DetailPage<AuditRow>
 }
+
+export interface AdjustmentPreview {
+  previewId: string
+  fingerprint: string
+  orgId: string
+  quantity: number
+  evaluatedAt: string
+  before: BalanceProjection
+  after: BalanceProjection
+}
+
+export interface AdjustmentResult {
+  outcome: 'applied' | 'duplicate'
+  ledgerEntryId: string
+  quantity: number
+  before: BalanceProjection
+  after: BalanceProjection
+  appliedAt: string | null
+}
+
+export interface RepairPreview {
+  outcome: 'repairable' | 'already_consistent' | 'contradictory'
+  previewId: string | null
+  fingerprint: string | null
+  evaluatedAt: string
+  reconciliation: ReconciliationReport
+  ledgerEntries: number
+  before: BalanceProjection
+  after: BalanceProjection
+}
+
+export interface RepairResult {
+  outcome: 'repaired' | 'already_applied'
+  before: BalanceProjection
+  after: BalanceProjection
+}
+
+export type DispatchResolutionChoice = 'accepted' | 'not_accepted'
+
+export interface DispatchResolutionResult {
+  outcome: 'accepted' | 'rejected'
+  dispatchId: string
+  duplicate: boolean
+}
+
+export interface InquiryResult {
+  outcome: 'resolved' | 'expired' | 'deferred' | 'not_eligible' | 'not_due'
+  reference: string
+  ingest: { outcome: string; resultCode: string; errorCode?: string } | null
+  purchase: {
+    status: PurchaseStatus
+    reconciliationRequired: boolean
+    reconciliationCode: string | null
+    reconciliationAttempts: number
+    nextReconciliationAt: string | null
+  } | null
+}
+
+export const PROVIDER_ACTIONS = [
+  'refund',
+  'chargeback_open',
+  'chargeback_lost',
+  'chargeback_won',
+] as const
+export type ProviderAction = (typeof PROVIDER_ACTIONS)[number]
+
+export interface ProviderActionResult {
+  outcome:
+    | 'duplicate'
+    | 'no_change'
+    | 'transitioned'
+    | 'reversed'
+    | 'quarantined'
+  reference: string
+  errorCode?: string
+  reconciliationCode?: string | null
+  reversal?: { type: LedgerType; quantity: number } | null
+}

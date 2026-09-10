@@ -99,3 +99,19 @@ Open `http://127.0.0.1:3098/en/manual-order` and `/ar/manual-order`. This route 
 Use the fixture controls to exercise owner/admin, viewer, connected/disconnected source, success, duplicate replay, held requests, server field errors, role/readiness/entitlement blocks, idempotency conflict, network failure, durable-acceptance failure, an unexpected server failure, and the 30-second timeout. Inspect calls to compare the synthetic `Idempotency-Key` across retries. Ambiguous failures must lock values, safe retry must reuse the key, and confirmed start-over must generate a different key. Unexpected server failures remain distinct and editable. A successful “Create another order” must clear the form and key. Accepted feedback must explicitly remain distinct from sent or delivered.
 
 `browser-check.mjs` exports `checkManualOrder(tab, locale)` for the primary keyboard, validation, pending, success, reset, and same-token retry sequence. Run it once per locale after loading a fresh fixture page. Check the viewer/disconnected controls, long text limits, timeout, server error choices, modal focus trap, and `lang`/`dir` manually or with equivalent browser automation. The timeout intentionally waits 30 seconds and remains separate from the shorter primary helper.
+
+## US-04.5-06 staff billing operations fixture
+
+Open `http://127.0.0.1:3098/en/standalone-billing` and `/ar/standalone-billing`. The account list uses the real staff page with synthetic rows: filter by approval, account status, balance and reconciliation, and follow **Open** on *Refunded merchant in debt* to `/{locale}/admin/standalone-billing/10000000-0000-4000-8000-000000000005`. That route renders the real account detail and operation components; every admin request is answered in memory with the backend's response shapes, and nothing is authenticated, written to a database or sent to Paymob or Meta.
+
+Choose a scenario with `?scenario=`:
+
+- none: a consistent account in debt with one outcome-unknown send, a pending purchase flagged for inquiry and a refunded purchase.
+- `drift`: the projection no longer matches its ledger. The alert must explain the block, every other write must be disabled, and **Preview repair** → reason → **Apply repair** must clear it.
+- `contradictory`: a hold on a settled send. The alert must name the contradiction and repair must refuse.
+- `readonly` / `disabled`: previews stay available; every apply, resolve, inquiry and evidence control is disabled with the read-only notice.
+- `stale`: applying an adjustment answers `BILLING_PREVIEW_STALE`; the panel must offer **Preview again** instead of retrying.
+
+Operation requests are recorded in `window.__akeedAdminBillingCalls`. Check that an adjustment apply carries an `Idempotency-Key` header and a body of only `previewId`, `fingerprint` and `reason`; that a resolve sends a provider message id only for **accepted**; that inquiry sends only `orgId` and `reason`; and that refund evidence converts the entered EGP amount to minor units. Dialogs must trap focus, close on Escape, return focus to their row button and leave the page interactive. Check 1440 and 390 px in both locales for no horizontal document overflow; tables scroll inside their cards.
+
+The fixture proves component behavior only. Authorization, idempotency, locking and ledger effects are proven by the backend PostgreSQL contract suite (`npm run test:contract:billing-operations`).

@@ -7,7 +7,6 @@ import { Button } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { AdminMetricCard } from './AdminUi'
-import type { AdminApiError } from './adminApi'
 import {
   AccountSection,
   AuditTable,
@@ -26,6 +25,14 @@ import {
   formatNumber,
   formatSigned,
 } from './standaloneBillingFormat'
+import { RequestError } from './StandaloneBillingErrors'
+import {
+  AdjustmentPanel,
+  InquiryDialog,
+  ProviderEvidenceDialog,
+  RepairPanel,
+  ResolveSendDialog,
+} from './StandaloneBillingOperations'
 import { useStandaloneBillingAccount } from './useStandaloneBillingAccount'
 
 interface StandaloneBillingAccountPageProps {
@@ -80,15 +87,32 @@ export function StandaloneBillingAccountPage({
           {t('loading')}
         </p>
       )}
-      {detail && <AccountBody detail={detail} />}
+      {detail && (
+        <AccountBody detail={detail} orgId={orgId} onChanged={refresh} />
+      )}
     </section>
   )
 }
 
-function AccountBody({ detail }: { detail: AccountDetail }) {
+function AccountBody({
+  detail,
+  orgId,
+  onChanged,
+}: {
+  detail: AccountDetail
+  orgId: string
+  onChanged: () => void
+}) {
   const t = useTranslations('adminBillingOps')
   const { locale } = useLocaleInfo()
   const account = detail.account
+  const operator = detail.operations.enabled && detail.operations.operator
+  // The backend refuses these anyway; the page only avoids offering them.
+  const canApply = operator && !detail.mutationsBlocked
+  const canPreview =
+    !!account &&
+    account.status !== 'pending_approval' &&
+    !detail.mutationsBlocked
   const limited = (count: number, truncated: boolean) =>
     truncated && t('truncated', { count })
 
@@ -146,6 +170,24 @@ function AccountBody({ detail }: { detail: AccountDetail }) {
       {detail.reconciliation && (
         <ReconciliationFigures report={detail.reconciliation} />
       )}
+      {detail.reconciliation && (
+        <RepairPanel
+          orgId={orgId}
+          locale={locale}
+          report={detail.reconciliation}
+          canApply={operator}
+          onChanged={onChanged}
+        />
+      )}
+      {account && (
+        <AdjustmentPanel
+          orgId={orgId}
+          locale={locale}
+          canPreview={canPreview}
+          canApply={canApply}
+          onChanged={onChanged}
+        />
+      )}
 
       <AccountSection
         id="billing-holds"
@@ -158,7 +200,18 @@ function AccountBody({ detail }: { detail: AccountDetail }) {
           detail.holds.truncated
         )}
       >
-        <HoldsTable holds={detail.holds} locale={locale} />
+        <HoldsTable
+          holds={detail.holds}
+          locale={locale}
+          renderAction={(hold) => (
+            <ResolveSendDialog
+              orgId={orgId}
+              hold={hold}
+              canApply={canApply}
+              onChanged={onChanged}
+            />
+          )}
+        />
       </AccountSection>
       <AccountSection
         id="billing-purchases"
@@ -171,7 +224,27 @@ function AccountBody({ detail }: { detail: AccountDetail }) {
           detail.purchases.truncated
         )}
       >
-        <PurchasesTable purchases={detail.purchases} locale={locale} />
+        <PurchasesTable
+          purchases={detail.purchases}
+          locale={locale}
+          renderActions={(purchase) => (
+            <div className="flex flex-col items-end gap-2">
+              <InquiryDialog
+                orgId={orgId}
+                purchase={purchase}
+                canApply={canApply}
+                onChanged={onChanged}
+              />
+              <ProviderEvidenceDialog
+                orgId={orgId}
+                purchase={purchase}
+                locale={locale}
+                canApply={canApply}
+                onChanged={onChanged}
+              />
+            </div>
+          )}
+        />
       </AccountSection>
       <AccountSection
         id="billing-ledger"
@@ -349,66 +422,4 @@ function ReconciliationFigures({ report }: { report: ReconciliationReport }) {
       </dl>
     </section>
   )
-}
-
-export function RequestError({
-  error,
-  onRetry,
-}: {
-  error: AdminApiError
-  onRetry?: () => void
-}) {
-  const t = useTranslations('adminBillingOps')
-  return (
-    <div
-      role="alert"
-      className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-900"
-    >
-      <p>{errorMessage(t, error)}</p>
-      {error.requestId && (
-        <p className="mt-2">
-          <Mono>{error.requestId}</Mono>
-        </p>
-      )}
-      {onRetry && (
-        <Button className="mt-3" variant="outline" onClick={onRetry}>
-          {t('retry')}
-        </Button>
-      )}
-    </div>
-  )
-}
-
-const ERROR_CODES = [
-  'STANDALONE_BILLING_OPERATIONS_DISABLED',
-  'STANDALONE_BILLING_OPERATOR_REQUIRED',
-  'BILLING_ACCOUNT_NOT_FOUND',
-  'BILLING_ACCOUNT_NOT_APPROVED',
-  'CREDIT_PROJECTION_MISMATCH',
-  'CREDIT_SOURCE_CONTRADICTORY',
-  'BILLING_PREVIEW_NOT_FOUND',
-  'BILLING_PREVIEW_STALE',
-  'BILLING_PREVIEW_ALREADY_APPLIED',
-  'BILLING_IDEMPOTENCY_KEY_REQUIRED',
-  'BILLING_IDEMPOTENCY_CONFLICT',
-  'BILLING_DISPATCH_NOT_FOUND',
-  'BILLING_DISPATCH_NOT_CREDIT_BILLED',
-  'MESSAGE_DISPATCH_RESOLUTION_CONFLICT',
-  'BILLING_PURCHASE_NOT_FOUND',
-  'BILLING_PURCHASE_NOT_ELIGIBLE',
-  'REPAIR_SOURCE_CONTRADICTORY',
-  'PAYMENT_PENDING_RECONCILIATION',
-] as const
-
-export function errorMessage(
-  t: ReturnType<typeof useTranslations<'adminBillingOps'>>,
-  error: AdminApiError
-) {
-  if (error.code && (ERROR_CODES as readonly string[]).includes(error.code))
-    return t(`errors.${error.code as (typeof ERROR_CODES)[number]}`)
-  if (error.status === 403) return t('errors.forbidden')
-  if (error.status === 404) return t('errors.notFound')
-  if (error.status === 400) return t('errors.invalid')
-  if (error.status === 409) return t('errors.conflict')
-  return t('errors.failed')
 }

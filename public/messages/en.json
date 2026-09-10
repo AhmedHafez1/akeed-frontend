@@ -374,6 +374,121 @@
       "invalid": "Check the values and try again.",
       "conflict": "The account changed. Refresh and try again.",
       "failed": "The request could not be completed. Retry; nothing is applied twice."
+    },
+    "ops": {
+      "reason": "Reason",
+      "reasonHelp": "Required, up to 500 characters. Cite the ticket or approval; never include card, wallet or customer details.",
+      "evidence": "Evidence",
+      "evidenceHelp": "Optional. Where you confirmed it, for example a Meta support ticket or delivery report.",
+      "evidenceRequiredHelp": "Required. Where the provider shows this, for example the Paymob dashboard record.",
+      "change": "{before} → {after}",
+      "preview": "Preview",
+      "previewing": "Preparing preview…",
+      "previewAgain": "Preview again",
+      "applying": "Applying…",
+      "applyLocked": "Only a named billing operator can apply this, while operations are switched on.",
+      "close": "Close",
+      "done": "Done",
+      "alreadyDone": "It had already been recorded; nothing changed twice.",
+      "adjustment": {
+        "title": "Credit adjustment",
+        "description": "Add or remove credits with a staff ledger entry. Preview first: the adjustment applies only to the balance you reviewed, and is recorded with your identity and reason.",
+        "quantity": "Credits to add or remove",
+        "quantityHelp": "A whole number between -{max} and {max}, not zero. Use a minus sign to remove credits.",
+        "review": "Review: {quantity} credits",
+        "createsDebt": "This leaves the account in debt, which blocks new sends until it is cleared.",
+        "apply": "Apply {quantity} credits",
+        "outcomes": {
+          "applied": "Posted {quantity} credits. The posted balance is now {posted}.",
+          "duplicate": "This adjustment was already posted ({quantity} credits); nothing was posted twice. The posted balance was {posted}."
+        }
+      },
+      "repair": {
+        "title": "Projection repair",
+        "description": "Rebuilds the posted balance from the immutable ledger and the held count from held reservations. The ledger itself is never changed.",
+        "preview": "Preview repair",
+        "apply": "Apply repair",
+        "outcomes": {
+          "repairable": "The balance can be rebuilt from {entries} ledger entries. Review the change below.",
+          "already_consistent": "The balance already matches the ledger. Nothing to repair.",
+          "contradictory": "Credit records contradict each other, so the balance cannot be rebuilt. Escalate to engineering."
+        },
+        "done": {
+          "repaired": "Repaired. Posted balance {posted}, held credits {held}.",
+          "already_applied": "This repair was already applied. Posted balance {posted}, held credits {held}."
+        }
+      },
+      "resolve": {
+        "trigger": "Resolve",
+        "triggerLabel": "Resolve send {dispatch}",
+        "title": "Resolve an unknown send",
+        "description": "Decide whether Meta accepted this message, using evidence from Meta. The held credit is settled exactly once.",
+        "choice": "What happened to this message?",
+        "choices": {
+          "accepted": "Meta accepted it",
+          "not_accepted": "Meta did not accept it"
+        },
+        "effects": {
+          "accepted": "Consumes the held credit. Requires the provider message id.",
+          "not_accepted": "Releases the held credit and allows the message to be retried."
+        },
+        "providerMessageId": "Meta message id",
+        "providerMessageIdHelp": "Copy it from Meta; it usually starts with wamid.",
+        "confirm": {
+          "accepted": "Confirm accepted",
+          "not_accepted": "Confirm not accepted"
+        },
+        "outcomes": {
+          "accepted": "Recorded as accepted. The held credit was consumed.",
+          "rejected": "Recorded as not accepted. The held credit was released."
+        }
+      },
+      "inquiry": {
+        "trigger": "Ask Paymob",
+        "triggerLabel": "Ask Paymob about purchase {reference}",
+        "title": "Ask Paymob about this purchase",
+        "description": "Akeed asks Paymob using the identifiers it stored. Only Paymob's verified answer can settle the purchase; you cannot mark it successful here.",
+        "confirm": "Ask Paymob now",
+        "asking": "Asking Paymob…",
+        "status": "Purchase status: {status}.",
+        "outcomes": {
+          "resolved": "Paymob answered and the answer was applied.",
+          "expired": "Paymob has no record and the checkout window has closed, so the purchase expired.",
+          "deferred": "Paymob could not settle it yet. It stays flagged and will be asked again.",
+          "not_eligible": "This purchase cannot be inquired.",
+          "not_due": "An inquiry is already scheduled."
+        }
+      },
+      "evidenceAction": {
+        "trigger": "Record refund or dispute",
+        "triggerLabel": "Record refund or dispute for purchase {reference}",
+        "title": "Record refund or dispute evidence",
+        "description": "Copy what Paymob shows. Whole-credit refunds and chargebacks take credits back, and a won chargeback returns them; anything that does not match is flagged for review.",
+        "confirm": "Record evidence",
+        "action": "What Paymob reports",
+        "actions": {
+          "refund": "Refund",
+          "chargeback_open": "Chargeback opened",
+          "chargeback_lost": "Chargeback lost",
+          "chargeback_won": "Chargeback won"
+        },
+        "providerReference": "Paymob refund or dispute id",
+        "refundReferenceHelp": "The refund transaction id from Paymob.",
+        "disputeReferenceHelp": "Use the same dispute id for opened, lost and won.",
+        "refundAmount": "Total refunded so far",
+        "disputeAmount": "Disputed amount",
+        "refundAmountHelp": "The cumulative refunded total Paymob shows, not just this refund. A refund that is not a whole number of credits is flagged instead of applied.",
+        "disputeAmountHelp": "Partial disputes are flagged for finance review.",
+        "currency": "Currency",
+        "notAuthority": "This records evidence. It cannot mark a payment successful or grant credits.",
+        "outcomes": {
+          "duplicate": "This evidence was already recorded; nothing changed twice.",
+          "no_change": "Recorded. The purchase already reflects this, so nothing changed.",
+          "transitioned": "Recorded. The purchase was updated.",
+          "reversed": "Recorded. {quantity} credits were posted to the ledger.",
+          "quarantined": "Recorded and flagged for review. No credits were changed."
+        }
+      }
     }
   },
   "error": {
