@@ -1402,6 +1402,11 @@
       "orderFallbackPrefix": "طلب",
       "technicalId": "معرّف الطلب التقني",
       "testBadge": "اختبار",
+      "optimistic": {
+        "submitting": "جارٍ الإرسال...",
+        "queued": "جارٍ التجهيز...",
+        "hint": "لا يزال هذا الطلب قيد التجهيز وسيتم تحديثه تلقائيًا."
+      },
       "unknownCustomer": "عميل غير معروف",
       "noPhone": "لا يوجد رقم",
       "loadMore": "عرض المزيد",

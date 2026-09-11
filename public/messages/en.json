@@ -1416,6 +1416,11 @@
       "orderFallbackPrefix": "Order",
       "technicalId": "Technical order ID",
       "testBadge": "Test",
+      "optimistic": {
+        "submitting": "Sending...",
+        "queued": "Preparing...",
+        "hint": "This order is still being set up and will update automatically."
+      },
       "unknownCustomer": "Unknown customer",
       "noPhone": "No phone",
       "loadMore": "Load more",

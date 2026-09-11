@@ -4,9 +4,9 @@ import { useState } from 'react'
 import type { ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { BillingProvider } from '@/features/billing'
 import { isAuthRoute, isPublicRoute } from '@/shared/lib/locale'
 import { WhatsAppButton } from '@/shared/ui/WhatsAppButton'
+import { ManualOrderReconciler } from '@/features/orders'
 import {
   Dialog,
   DialogContent,
@@ -94,37 +94,36 @@ export function StandaloneLayout({ children }: StandaloneLayoutProps) {
       }
     >
       <StandaloneShellProvider>
-        <BillingProvider>
-          <div className="akeed-app-canvas flex min-h-screen text-slate-950">
-            <StandaloneSidebar className="sticky top-0 hidden h-screen lg:flex" />
-            <div className="flex min-w-0 flex-1 flex-col">
-              <StandaloneTopBar
-                onOpenNavigation={() => setIsNavigationOpen(true)}
-              />
-              <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
-              <WhatsAppButton />
-              <StandaloneToaster />
-            </div>
-
-            <Dialog open={isNavigationOpen} onOpenChange={setIsNavigationOpen}>
-              <DialogContent
-                closeLabel={t('closeNavigation')}
-                className="!inset-y-0 [inset-inline-start:0] [inset-inline-end:auto] !top-0 !left-auto block !h-dvh !w-[min(88vw,320px)] !max-w-none !translate-x-0 !translate-y-0 !rounded-none !border-0 !p-0"
-              >
-                <DialogTitle className="sr-only">
-                  {t('primaryNavigation')}
-                </DialogTitle>
-                <DialogDescription className="sr-only">
-                  {t('navigationDescription')}
-                </DialogDescription>
-                <StandaloneSidebar
-                  className="w-full"
-                  onNavigate={() => setIsNavigationOpen(false)}
-                />
-              </DialogContent>
-            </Dialog>
+        <div className="akeed-app-canvas flex min-h-screen text-slate-950">
+          <StandaloneSidebar className="sticky top-0 hidden h-screen lg:flex" />
+          <div className="flex min-w-0 flex-1 flex-col">
+            <StandaloneTopBar
+              onOpenNavigation={() => setIsNavigationOpen(true)}
+            />
+            <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+            <WhatsAppButton />
+            <StandaloneToaster />
+            <ManualOrderReconciler />
           </div>
-        </BillingProvider>
+
+          <Dialog open={isNavigationOpen} onOpenChange={setIsNavigationOpen}>
+            <DialogContent
+              closeLabel={t('closeNavigation')}
+              className="!inset-y-0 [inset-inline-start:0] [inset-inline-end:auto] !top-0 !left-auto block !h-dvh !w-[min(88vw,320px)] !max-w-none !translate-x-0 !translate-y-0 !rounded-none !border-0 !p-0"
+            >
+              <DialogTitle className="sr-only">
+                {t('primaryNavigation')}
+              </DialogTitle>
+              <DialogDescription className="sr-only">
+                {t('navigationDescription')}
+              </DialogDescription>
+              <StandaloneSidebar
+                className="w-full"
+                onNavigate={() => setIsNavigationOpen(false)}
+              />
+            </DialogContent>
+          </Dialog>
+        </div>
       </StandaloneShellProvider>
     </AuthGuard>
   )

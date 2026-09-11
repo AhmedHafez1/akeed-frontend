@@ -1,81 +1,36 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import { creditFeedbackKey } from '@/shared/lib/creditFeedback'
-import { api } from '@/shared/lib/auth'
 import { createLogger } from '@/shared/lib/logger'
+import {
+  manualOrderAvailabilityOptions,
+  type ManualOrderAvailability,
+} from '../../api/manualOrderQueries'
 import { ManualOrderEntryStandalone } from './ManualOrderEntryStandalone'
 
 const logger = createLogger('ManualOrder')
 
-interface ManualOrderContextResponse {
-  page_context?: {
-    source?: { status?: string }
-    permissions?: { can_create_manual_order?: boolean }
-    usage?: {
-      limit?: number
-      remaining?: number
-      credit_denial?: string | null
-    }
-  }
-}
-
-type Availability =
-  | { status: 'loading' }
-  | { status: 'unavailable' }
-  | {
-      status: 'ready'
-      canCreate: boolean
-      sourceConnected: boolean
-      isAtPlanLimit: boolean
-      creditDenial?: string | null
-    }
+type Availability = { status: 'loading' } | ManualOrderAvailability
 
 export function ManualOrderTopBarAction() {
   const t = useTranslations('manualOrder')
   const tCredits = useTranslations('creditErrors')
-  const [availability, setAvailability] = useState<Availability>({
-    status: 'loading',
-  })
+  const { data, error } = useQuery(manualOrderAvailabilityOptions())
 
   useEffect(() => {
-    let active = true
+    if (!error) return
+    logger.warn('Unable to load manual-order availability', {
+      errorName: error instanceof Error ? error.name : 'UnknownError',
+    })
+  }, [error])
 
-    api
-      .get<ManualOrderContextResponse>(
-        '/api/verifications?date_range=today&limit=1'
-      )
-      .then((response) => {
-        if (!active) return
-        if (!response.page_context) {
-          setAvailability({ status: 'unavailable' })
-          return
-        }
-        setAvailability({
-          status: 'ready',
-          creditDenial: response.page_context.usage?.credit_denial,
-          canCreate:
-            response.page_context.permissions?.can_create_manual_order ===
-              true && !response.page_context.usage?.credit_denial,
-          sourceConnected: response.page_context.source?.status === 'connected',
-          isAtPlanLimit:
-            (response.page_context.usage?.limit ?? 0) > 0 &&
-            (response.page_context.usage?.remaining ?? 1) <= 0,
-        })
-      })
-      .catch((error: unknown) => {
-        if (!active) return
-        logger.warn('Unable to load manual-order availability', {
-          errorName: error instanceof Error ? error.name : 'UnknownError',
-        })
-        setAvailability({ status: 'unavailable' })
-      })
-
-    return () => {
-      active = false
-    }
-  }, [])
+  // A failed refresh keeps the last known gate; only a gate never loaded is
+  // reported as unavailable.
+  const availability: Availability =
+    data ?? (error ? { status: 'unavailable' } : { status: 'loading' })
 
   const isReady = availability.status === 'ready'
   const disabledReasonOverride =

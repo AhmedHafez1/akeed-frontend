@@ -72,23 +72,25 @@ async function billingRequest<T>(
   )
 }
 
-export function fetchCreditSummary() {
-  return billingRequest<CreditSummary>('/api/billing/credits')
+export function fetchCreditSummary(signal?: AbortSignal) {
+  return billingRequest<CreditSummary>('/api/billing/credits', { signal })
 }
 
-export function fetchLedger(cursor?: string) {
+export function fetchLedger(cursor?: string, signal?: AbortSignal) {
   const query = new URLSearchParams({ limit: '25' })
   if (cursor) query.set('cursor', cursor)
   return billingRequest<PagedResponse<LedgerEntry>>(
-    `/api/billing/credits/ledger?${query}`
+    `/api/billing/credits/ledger?${query}`,
+    { signal }
   )
 }
 
-export function fetchPurchases(cursor?: string) {
+export function fetchPurchases(cursor?: string, signal?: AbortSignal) {
   const query = new URLSearchParams({ limit: '25' })
   if (cursor) query.set('cursor', cursor)
   return billingRequest<PagedResponse<PurchaseSummary>>(
-    `/api/billing/purchases?${query}`
+    `/api/billing/purchases?${query}`,
+    { signal }
   )
 }
 

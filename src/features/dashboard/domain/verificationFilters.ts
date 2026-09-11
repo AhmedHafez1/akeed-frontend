@@ -1,5 +1,6 @@
 import type {
   DashboardStatsDateRange,
+  VerificationStatus,
   VerificationStatusFilter,
 } from '../model/dashboard.model'
 
@@ -47,6 +48,16 @@ export const WORKLOAD_STATUS_FILTER_IDS = [
   'needs_attention',
   'completed',
 ] as const satisfies ReadonlyArray<VerificationStatusFilter>
+
+/** Whether a row in `status` belongs in the list for `filter`. */
+export function filterAdmitsStatus(
+  filter: VerificationStatusFilter,
+  status: VerificationStatus
+): boolean {
+  if (filter === 'all') return true
+  const composite = COMPOSITE_FILTERS[filter]
+  return composite ? composite.split(',').includes(status) : filter === status
+}
 
 /** Build the `/api/verifications` query string for a filter selection. */
 export function buildVerificationsQuery(

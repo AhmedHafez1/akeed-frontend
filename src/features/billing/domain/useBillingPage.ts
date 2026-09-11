@@ -1,18 +1,14 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { BillingApiError, createPurchase } from '../api/billingApi'
 import {
-  BillingApiError,
-  createPurchase,
-  fetchLedger,
-  fetchPurchases,
-} from '../api/billingApi'
-import type {
-  CreatePurchaseResponse,
-  LedgerEntry,
-  PurchaseSummary,
-} from './billing.types'
-import { useBillingSummary } from './BillingProvider'
+  ledgerInfiniteOptions,
+  purchasesInfiniteOptions,
+} from '../api/billingQueries'
+import type { CreatePurchaseResponse } from './billing.types'
+import { useBillingSummary } from './useBillingSummary'
 
 function newIdempotencyKey() {
   return crypto.randomUUID()
@@ -25,12 +21,8 @@ export function useBillingPage() {
     error,
     refresh,
   } = useBillingSummary()
-  const [purchases, setPurchases] = useState<PurchaseSummary[]>([])
-  const [ledger, setLedger] = useState<LedgerEntry[]>([])
-  const [purchaseCursor, setPurchaseCursor] = useState<string | null>(null)
-  const [ledgerCursor, setLedgerCursor] = useState<string | null>(null)
-  const [isHistoryLoading, setIsHistoryLoading] = useState(true)
-  const [historyError, setHistoryError] = useState(false)
+  const purchasesQuery = useInfiniteQuery(purchasesInfiniteOptions())
+  const ledgerQuery = useInfiniteQuery(ledgerInfiniteOptions())
   const [quantityInput, setQuantityInput] = useState('')
   const [isCreating, setIsCreating] = useState(false)
   const [checkout, setCheckout] = useState<CreatePurchaseResponse | null>(null)
@@ -42,28 +34,27 @@ export function useBillingPage() {
     if (summary && !quantityInput) setQuantityInput(String(summary.range.min))
   }, [quantityInput, summary])
 
-  const loadHistory = useCallback(async () => {
-    setIsHistoryLoading(true)
-    setHistoryError(false)
-    try {
-      const [purchasePage, ledgerPage] = await Promise.all([
-        fetchPurchases(),
-        fetchLedger(),
-      ])
-      setPurchases(purchasePage.items)
-      setPurchaseCursor(purchasePage.nextCursor)
-      setLedger(ledgerPage.items)
-      setLedgerCursor(ledgerPage.nextCursor)
-    } catch {
-      setHistoryError(true)
-    } finally {
-      setIsHistoryLoading(false)
-    }
-  }, [])
+  const purchases = useMemo(
+    () => purchasesQuery.data?.pages.flatMap((page) => page.items) ?? [],
+    [purchasesQuery.data]
+  )
+  const ledger = useMemo(
+    () => ledgerQuery.data?.pages.flatMap((page) => page.items) ?? [],
+    [ledgerQuery.data]
+  )
+  const purchaseCursor = purchasesQuery.data?.pages.at(-1)?.nextCursor ?? null
+  const ledgerCursor = ledgerQuery.data?.pages.at(-1)?.nextCursor ?? null
+  const isHistoryLoading = purchasesQuery.isPending || ledgerQuery.isPending
+  // History already on screen survives a failed background refresh.
+  const historyError =
+    (purchasesQuery.isError && purchasesQuery.data === undefined) ||
+    (ledgerQuery.isError && ledgerQuery.data === undefined)
 
-  useEffect(() => {
-    void loadHistory()
-  }, [loadHistory])
+  const { refetch: refetchPurchases } = purchasesQuery
+  const { refetch: refetchLedger } = ledgerQuery
+  const loadHistory = useCallback(async () => {
+    await Promise.all([refetchPurchases(), refetchLedger()])
+  }, [refetchLedger, refetchPurchases])
 
   const quantity = Number(quantityInput)
   const quantityError = useMemo(() => {
@@ -103,19 +94,19 @@ export function useBillingPage() {
     if (summary) setQuantityInput(String(summary.range.min))
   }, [summary])
 
+  const { fetchNextPage: fetchNextPurchases, hasNextPage: hasMorePurchases } =
+    purchasesQuery
   const loadMorePurchases = useCallback(async () => {
-    if (!purchaseCursor) return
-    const page = await fetchPurchases(purchaseCursor)
-    setPurchases((current) => [...current, ...page.items])
-    setPurchaseCursor(page.nextCursor)
-  }, [purchaseCursor])
+    if (!hasMorePurchases) return
+    await fetchNextPurchases()
+  }, [fetchNextPurchases, hasMorePurchases])
 
+  const { fetchNextPage: fetchNextLedger, hasNextPage: hasMoreLedger } =
+    ledgerQuery
   const loadMoreLedger = useCallback(async () => {
-    if (!ledgerCursor) return
-    const page = await fetchLedger(ledgerCursor)
-    setLedger((current) => [...current, ...page.items])
-    setLedgerCursor(page.nextCursor)
-  }, [ledgerCursor])
+    if (!hasMoreLedger) return
+    await fetchNextLedger()
+  }, [fetchNextLedger, hasMoreLedger])
 
   return {
     summary,

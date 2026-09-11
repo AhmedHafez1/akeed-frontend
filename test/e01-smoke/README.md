@@ -1,5 +1,28 @@
 # E01 isolated cancellation feedback fixture
 
+## Order sync fixture
+
+Run the same fixture server and open `/en/order-sync` or `/ar/order-sync`. The
+page mounts the top-bar Verify order dialog, the `ManualOrderReconciler` the
+standalone shell mounts, the verifications table and stats, and the credit
+balance, all reading one query cache. Its in-memory backend answers
+`POST /api/orders` with 202 before the verification exists; a simulated worker
+writes it after the selected delay, holding one credit, and 2.5 seconds later the
+simulated WhatsApp send moves the row to Sent and posts that credit. Stats answer
+slower than the list, as the real aggregate query does.
+
+The totals must never dip or double-count while the list and stats land at
+different moments; Available must drop when the row appears, and Posted and Held
+must follow when it turns Sent.
+
+Create an order and check that the row appears at once as Sending..., becomes
+Preparing... on the 202, and is replaced by the real Pending row with no gap,
+while the totals and credits move in the same render. Acceptance failure (503)
+must withdraw the row and Retry safely must yield one row. Duplicate replay must
+leave no row. With the slow worker, Confirmed must hide the pending row while
+Pending shows it. Never materializes must keep the row for 60 seconds, then
+withdraw it and re-read the list, stats and credits once.
+
 ## Standalone Verifications redesign fixture
 
 Run the same fixture server and open `/en/verifications` or `/ar/verifications`.

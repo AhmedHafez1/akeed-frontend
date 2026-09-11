@@ -1,4 +1,4 @@
-export { BillingProvider, useBillingSummary } from './domain/BillingProvider'
+export { useBillingSummary } from './domain/useBillingSummary'
 export { useBillingPage } from './domain/useBillingPage'
 export { BillingStandalonePage } from './ui/BillingStandalonePage'
 export { BillingReturnPage } from './ui/BillingReturnPage'

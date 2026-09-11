@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { useEmitDomainEvent } from '@/shared/query/domainEvents'
 import { withLocale } from '@/shared/lib/locale'
 import { Button, Card, Skeleton } from '@/shared/ui'
 import { fetchPurchase } from '../api/billingApi'
@@ -21,7 +22,6 @@ import {
   formatMoney,
 } from '../domain/billingFormatters'
 import type { PurchaseDetail } from '../domain/billing.types'
-import { useBillingSummary } from '../domain/BillingProvider'
 
 const PURCHASE_REFERENCE = /^akd_[a-f0-9]{32}$/
 const POLL_INTERVAL_MS = 2000
@@ -44,7 +44,7 @@ export function BillingReturnPage() {
   const searchParams = useSearchParams()
   const purchaseRef = searchParams.get('purchaseRef') ?? ''
   const isValidReference = PURCHASE_REFERENCE.test(purchaseRef)
-  const { refresh: refreshSummary } = useBillingSummary()
+  const emitDomainEvent = useEmitDomainEvent()
   const [state, setState] = useState<ReturnState>(
     isValidReference ? { kind: 'loading' } : { kind: 'invalid' }
   )
@@ -65,7 +65,8 @@ export function BillingReturnPage() {
         if (runId !== runIdRef.current) return
         if (isTerminal(purchase)) {
           setState({ kind: 'purchase', purchase })
-          if (purchase.status === 'successful') void refreshSummary()
+          if (purchase.status === 'successful')
+            void emitDomainEvent('credits.purchased')
           return
         }
         if (pollCount >= MAX_POLL_COUNT) {
@@ -83,7 +84,7 @@ export function BillingReturnPage() {
         if (manual && runId === runIdRef.current) setIsRefreshing(false)
       }
     },
-    [isValidReference, purchaseRef, refreshSummary]
+    [emitDomainEvent, isValidReference, purchaseRef]
   )
 
   useEffect(() => {

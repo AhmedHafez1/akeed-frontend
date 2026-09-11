@@ -3,6 +3,7 @@ import path from 'node:path'
 import type { ReactNode } from 'react'
 import { notFound } from 'next/navigation'
 import { NextIntlClientProvider, type AbstractIntlMessages } from 'next-intl'
+import { FixtureQueryProvider } from './FixtureQueryProvider'
 import '../globals.css'
 
 export default async function SmokeLayout({
@@ -29,7 +30,7 @@ export default async function SmokeLayout({
           }}
         />
         <NextIntlClientProvider locale={locale} messages={messages}>
-          {children}
+          <FixtureQueryProvider>{children}</FixtureQueryProvider>
         </NextIntlClientProvider>
       </body>
     </html>

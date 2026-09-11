@@ -98,6 +98,12 @@ export type VerificationItem = {
   no_reply_at: string | null
   follow_up_attempts: number
   follow_up_sent_at: string | null
+  /**
+   * Client-only: set on a row the UI is showing ahead of the server — an order
+   * the merchant just created whose verification a worker has not written yet.
+   * The API never sends it, and a row carrying it offers no actions.
+   */
+  optimistic?: 'submitting' | 'queued'
 }
 
 export type DashboardPermissions = {

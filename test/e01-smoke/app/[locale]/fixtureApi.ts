@@ -10,6 +10,11 @@ import { adminBillingFixtureRequest } from './adminBillingFixture'
 import { onboardingFixtureRequest } from './onboardingFixture'
 import { manualOrderFixtureRequest } from './manual-order/manualOrderFixture'
 import {
+  isOrderSyncFixture,
+  orderSyncCreditsResponse,
+  orderSyncRequest,
+} from './order-sync/orderSyncFixture'
+import {
   isVerificationFixture,
   verificationFixtureRequest,
 } from './verifications/verificationFixture'
@@ -17,6 +22,8 @@ import {
 export { resetBillingApprovalFixture } from './adminBillingFixture'
 
 export function fetchWithAuth(url: string, options: RequestInit = {}) {
+  if (isOrderSyncFixture() && url === '/api/billing/credits')
+    return orderSyncCreditsResponse()
   return [
     '/api/onboarding/state',
     '/api/onboarding/settings',
@@ -228,6 +235,7 @@ function fixtureStats(fixture: FixtureState): DashboardStats {
 
 export const api = {
   async get<T>(url: string): Promise<T> {
+    if (isOrderSyncFixture()) return orderSyncRequest<T>('GET', url)
     if (isVerificationFixture())
       return verificationFixtureRequest<T>('GET', url)
     const fixture = getFixtureState()
@@ -280,6 +288,7 @@ export const api = {
     data?: unknown,
     options: RequestInit = {}
   ): Promise<T> {
+    if (isOrderSyncFixture()) return orderSyncRequest<T>('POST', url, data)
     if (isVerificationFixture())
       return verificationFixtureRequest<T>('POST', url)
     if (url === '/api/orders') {

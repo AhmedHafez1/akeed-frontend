@@ -10,10 +10,10 @@ import { creditFeedbackKey } from '@/shared/lib/creditFeedback'
 import { ApiError } from '@/shared/lib/http'
 import { createLogger } from '@/shared/lib/logger'
 import {
-  createManualOrder,
   isManualOrderApiError,
   type ManualOrderCreateInput,
 } from '../api/manualOrderApi'
+import { useCreateManualOrderMutation } from '../api/useCreateManualOrderMutation'
 import {
   DEFAULT_MANUAL_ORDER_CURRENCY,
   isManualOrderCurrency,
@@ -23,7 +23,6 @@ import {
   type ManualOrderRecoveryMode,
   type ManualOrderResult,
 } from './manualOrder.model'
-import { notifyManualOrderAccepted } from './manualOrderEvents'
 
 const SUBMISSION_TIMEOUT_MS = 30_000
 const fieldOrder: Array<keyof ManualOrderFormValues> = [
@@ -57,6 +56,7 @@ export function useManualOrderEntry(
 ) {
   const t = useTranslations('manualOrder')
   const tCredits = useTranslations('creditErrors')
+  const { mutateAsync: createOrder } = useCreateManualOrderMutation()
   const schema = useMemo(
     () =>
       z.object({
@@ -178,14 +178,13 @@ export function useManualOrderEntry(
       }, SUBMISSION_TIMEOUT_MS)
 
       try {
-        const response = await createManualOrder(
+        const response = await createOrder({
           payload,
-          token,
-          controller.signal
-        )
+          idempotencyKey: token,
+          signal: controller.signal,
+        })
         setResult(response)
         setRecoveryMode(null)
-        notifyManualOrderAccepted()
         onAccepted?.()
       } catch (error) {
         logger.error('Submission failed', error)
@@ -288,7 +287,7 @@ export function useManualOrderEntry(
         setIsSubmitting(false)
       }
     },
-    [applyServerFieldErrors, form, onAccepted, t, tCredits]
+    [applyServerFieldErrors, createOrder, form, onAccepted, t, tCredits]
   )
 
   const submit = form.handleSubmit(

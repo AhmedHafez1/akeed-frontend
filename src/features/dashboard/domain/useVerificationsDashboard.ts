@@ -1,17 +1,23 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { ApiError } from '@/shared/lib/http'
 import { creditFeedbackKey } from '@/shared/lib/creditFeedback'
-import { api } from '@/shared/lib/auth'
 import { createLogger } from '@/shared/lib/logger'
-import type { CancelOrderResponse } from '@/shared/types/commerce-outcome.model'
-import { retryManualOrderVerification } from '@/features/orders/api/manualOrderApi'
-import { subscribeToManualOrderAccepted } from '@/features/orders'
+import { usePendingManualOrders } from '@/features/orders'
+import {
+  useCancelVerificationMutation,
+  useRetryVerificationMutation,
+  useSendTestVerificationMutation,
+} from '../api/verificationMutations'
 import { useDashboardData } from '../hooks/useDashboardData'
 import { useDashboardStats } from '../hooks/useDashboardStats'
 import { canCancelOrder } from './cancellation'
+import {
+  applyOptimisticTotals,
+  mergeOptimisticRows,
+} from './optimisticVerification'
 import { canRetryVerification } from './verificationLifecycle'
 import {
   DASHBOARD_DATE_RANGE_IDS,
@@ -30,12 +36,6 @@ import type {
 import { getTestVerificationFeedbackKey } from './testVerificationFeedback'
 
 const logger = createLogger('Dashboard')
-
-interface SendTestVerificationResponse {
-  success: boolean
-  skipped?: boolean
-  reason?: string
-}
 
 export interface UseVerificationsDashboardOptions {
   initialStatusFilter?: VerificationStatusFilter
@@ -92,17 +92,36 @@ export function useVerificationsDashboard(
     hasMoreVerifications,
     isLoadingMoreVerifications,
     onLoadMoreVerifications,
-    refetch: refetchVerifications,
     error: verificationsError,
     pageContext,
+    verificationsUpdatedAt,
   } = useDashboardData(statusFilter, dateRangeFilter)
 
-  const {
-    stats,
-    isStatsLoading,
-    statsError,
-    refetch: refetchStats,
-  } = useDashboardStats(dateRangeFilter)
+  const { stats, isStatsLoading, statsError, statsUpdatedAt } =
+    useDashboardStats(dateRangeFilter)
+  const { mutateAsync: cancelVerification } = useCancelVerificationMutation()
+  const { mutateAsync: retryVerification } = useRetryVerificationMutation()
+  const { mutateAsync: sendTestVerification } =
+    useSendTestVerificationMutation()
+  const { pendingOrders } = usePendingManualOrders()
+
+  // What the skins render: server truth plus orders the merchant just created
+  // that the server cannot list yet. Row actions keep reading `verifications`,
+  // so an optimistic row can never be canceled or retried.
+  const displayedVerifications = useMemo(
+    () =>
+      mergeOptimisticRows(
+        verifications,
+        verificationsUpdatedAt,
+        pendingOrders,
+        statusFilter
+      ),
+    [pendingOrders, statusFilter, verifications, verificationsUpdatedAt]
+  )
+  const displayedStats = useMemo(
+    () => applyOptimisticTotals(stats, statsUpdatedAt, pendingOrders),
+    [pendingOrders, stats, statsUpdatedAt]
+  )
 
   const creditDenialCode = pageContext?.usage?.credit_denial ?? null
   const creditBlocked = Boolean(creditDenialCode)
@@ -136,16 +155,6 @@ export function useVerificationsDashboard(
         label: t(`filters.dateRange.${id}`),
       })),
     [t]
-  )
-
-  const refreshDashboard = useCallback(() => {
-    refetchVerifications()
-    refetchStats()
-  }, [refetchVerifications, refetchStats])
-
-  useEffect(
-    () => subscribeToManualOrderAccepted(refreshDashboard),
-    [refreshDashboard]
   )
 
   const onDismissTestFeedback = useCallback(() => setTestFeedback(null), [])
@@ -189,9 +198,7 @@ export function useVerificationsDashboard(
       clearActionError(verificationId)
       setActionFeedback(null)
       try {
-        await api.post<CancelOrderResponse>(
-          `/api/verifications/${verificationId}/cancel`
-        )
+        await cancelVerification(verificationId)
         setConfirmingCancelVerificationId((current) =>
           current === verificationId ? null : current
         )
@@ -199,7 +206,6 @@ export function useVerificationsDashboard(
           tone: 'success',
           message: t('table.actions.cancelOrderSuccess'),
         })
-        refreshDashboard()
       } catch (error) {
         logger.warn('Failed to cancel order', {
           errorName: error instanceof Error ? error.name : 'UnknownError',
@@ -217,8 +223,8 @@ export function useVerificationsDashboard(
     [
       actingVerificationId,
       canCancelOrders,
+      cancelVerification,
       clearActionError,
-      refreshDashboard,
       t,
       verifications,
     ]
@@ -237,14 +243,11 @@ export function useVerificationsDashboard(
       clearActionError(verificationId)
       setActionFeedback(null)
       try {
-        // Retry is addressed to the order, not the verification: the backend
-        // reopens the failed verification rather than creating a second one.
-        await retryManualOrderVerification(verification.order_id)
+        await retryVerification(verification.order_id)
         setActionFeedback({
           tone: 'success',
           message: t('table.actions.retrySuccess'),
         })
-        refreshDashboard()
       } catch (error) {
         logger.warn('Failed to retry verification', {
           errorName: error instanceof Error ? error.name : 'UnknownError',
@@ -274,7 +277,7 @@ export function useVerificationsDashboard(
       canRetryVerifications,
       tCredits,
       clearActionError,
-      refreshDashboard,
+      retryVerification,
       t,
       verifications,
     ]
@@ -301,11 +304,7 @@ export function useVerificationsDashboard(
       setIsSendingTest(true)
       setTestFeedback(null)
       try {
-        const response = await api.post<SendTestVerificationResponse>(
-          '/api/verifications/test',
-          { customerPhone: normalizedPhone }
-        )
-        refreshDashboard()
+        const response = await sendTestVerification(normalizedPhone)
         if (response.skipped) {
           setTestFeedback({
             tone: 'warning',
@@ -338,7 +337,7 @@ export function useVerificationsDashboard(
         setIsSendingTest(false)
       }
     },
-    [canSendTestVerification, refreshDashboard, t, tCredits]
+    [canSendTestVerification, sendTestVerification, t, tCredits]
   )
 
   const error = useMemo(() => {
@@ -349,7 +348,7 @@ export function useVerificationsDashboard(
   }, [verificationsError, statsError])
 
   return {
-    stats,
+    stats: displayedStats,
     isStatsLoading,
     isAutoVerifyEnabled:
       stats?.automation.is_auto_verify_enabled ??
@@ -370,13 +369,14 @@ export function useVerificationsDashboard(
     dateRangeFilter,
     dateRangeOptions,
     onDateRangeFilterChange,
-    verifications,
-    totalCount,
+    verifications: displayedVerifications,
+    totalCount:
+      totalCount + displayedVerifications.length - verifications.length,
     isVerificationsLoading,
     hasMoreVerifications,
     isLoadingMoreVerifications,
     onLoadMoreVerifications,
-    hasVerifications: verifications.length > 0,
+    hasVerifications: displayedVerifications.length > 0,
     emptyVerificationsMessage:
       statusFilter === 'all' ? t('emptyState.all') : t('emptyState.filtered'),
     actingVerificationId,

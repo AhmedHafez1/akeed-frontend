@@ -1,57 +1,31 @@
 'use client'
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
-import { fetchCreditSummary } from '../api/billingApi'
-import type { CreditSummary } from './billing.types'
+import { useCallback } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { creditSummaryOptions } from '../api/billingQueries'
 
-interface BillingContextValue {
-  summary: CreditSummary | null
-  isLoading: boolean
-  error: unknown
-  refresh: () => Promise<void>
-}
-
-const BillingContext = createContext<BillingContextValue | null>(null)
-
-export function BillingProvider({ children }: { children: React.ReactNode }) {
-  const [summary, setSummary] = useState<CreditSummary | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<unknown>(null)
+/**
+ * The organization's credit balance, shared by the sidebar, settings and the
+ * billing page through one cached query.
+ *
+ * Nothing here refreshes on a timer or listens for orders: whatever spends or
+ * adds credits emits a domain event, and the invalidation it triggers is what
+ * brings every consumer up to date.
+ */
+export function useBillingSummary() {
+  const query = useQuery(creditSummaryOptions())
+  const { refetch } = query
 
   const refresh = useCallback(async () => {
-    setError(null)
-    try {
-      setSummary(await fetchCreditSummary())
-    } catch (cause) {
-      setError(cause)
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
+    await refetch()
+  }, [refetch])
 
-  useEffect(() => {
-    void refresh()
-  }, [refresh])
-
-  const value = useMemo(
-    () => ({ summary, isLoading, error, refresh }),
-    [error, isLoading, refresh, summary]
-  )
-
-  return (
-    <BillingContext.Provider value={value}>{children}</BillingContext.Provider>
-  )
-}
-
-export function useBillingSummary() {
-  const value = useContext(BillingContext)
-  if (!value) throw new Error('useBillingSummary requires BillingProvider')
-  return value
+  return {
+    summary: query.data ?? null,
+    isLoading: query.isPending,
+    // A failed background refresh keeps the last balance on screen rather than
+    // replacing it with an error state; only a balance we never had is an error.
+    error: query.data === undefined ? query.error : null,
+    refresh,
+  }
 }

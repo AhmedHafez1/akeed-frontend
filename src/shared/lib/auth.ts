@@ -315,8 +315,8 @@ export const api = {
   /**
    * GET request with auth
    */
-  get<T = unknown>(url: string): Promise<T> {
-    return request<T>('GET', url)
+  get<T = unknown>(url: string, options?: RequestInit): Promise<T> {
+    return request<T>('GET', url, undefined, options)
   },
 
   /**

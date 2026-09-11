@@ -26,9 +26,8 @@ import {
   canRetryVerification,
   getVerificationLifecycleSteps,
   hasCapability,
-  lifecycleTone,
 } from '../../domain/verificationLifecycle'
-import { lifecycleToneClasses } from './lifecycleToneClasses'
+import { VerificationStatusBadge } from './components/VerificationStatusBadge'
 import {
   formatCreatedDate,
   formatCreatedTime,
@@ -114,7 +113,11 @@ export function VerificationsTableStandalone(
           {props.verifications.map((verification) => (
             <tr
               key={verification.id}
-              className="text-slate-700 transition-colors hover:bg-stone-50/70"
+              aria-busy={verification.optimistic ? true : undefined}
+              className={cn(
+                'text-slate-700 transition-colors hover:bg-stone-50/70',
+                verification.optimistic && 'bg-stone-50/60'
+              )}
             >
               <td className="min-w-0 px-4 py-3">
                 <p className="truncate font-semibold text-slate-950">
@@ -144,14 +147,7 @@ export function VerificationsTableStandalone(
                 </p>
               </td>
               <td className="px-4 py-3">
-                <span
-                  className={cn(
-                    'inline-flex rounded-md border px-2 py-1 text-xs font-semibold',
-                    lifecycleToneClasses[lifecycleTone(verification.status)]
-                  )}
-                >
-                  {t(`verificationStatus.${verification.status}`)}
-                </span>
+                <VerificationStatusBadge verification={verification} />
               </td>
               <td className="px-4 py-3 font-medium text-slate-900">
                 <bdi>{formatCurrencyTotal(verification, locale)}</bdi>
@@ -169,12 +165,14 @@ export function VerificationsTableStandalone(
                 )}
               </td>
               <td className="px-4 py-3 text-center">
-                <VerificationActionsMenu
-                  {...props}
-                  verification={verification}
-                  onOpenDetails={openDetails}
-                  onOpenCancel={requestCancel}
-                />
+                {!verification.optimistic && (
+                  <VerificationActionsMenu
+                    {...props}
+                    verification={verification}
+                    onOpenDetails={openDetails}
+                    onOpenCancel={requestCancel}
+                  />
+                )}
               </td>
             </tr>
           ))}
@@ -185,6 +183,7 @@ export function VerificationsTableStandalone(
         {props.verifications.map((verification) => (
           <li
             key={verification.id}
+            aria-busy={verification.optimistic ? true : undefined}
             className="rounded-xl border border-slate-200 bg-white p-4"
           >
             <div className="flex items-start justify-between gap-3">
@@ -195,14 +194,10 @@ export function VerificationsTableStandalone(
                     t('table.orderFallbackPrefix')
                   )}
                 </p>
-                <span
-                  className={cn(
-                    'mt-2 inline-flex rounded-md border px-2 py-1 text-xs font-semibold',
-                    lifecycleToneClasses[lifecycleTone(verification.status)]
-                  )}
-                >
-                  {t(`verificationStatus.${verification.status}`)}
-                </span>
+                <VerificationStatusBadge
+                  verification={verification}
+                  className="mt-2"
+                />
               </div>
               <p className="shrink-0 text-sm font-bold text-slate-950">
                 <bdi>{formatCurrencyTotal(verification, locale)}</bdi>
@@ -233,12 +228,14 @@ export function VerificationsTableStandalone(
                   props.reportingTimezone
                 )}
               </span>
-              <VerificationActionsMenu
-                {...props}
-                verification={verification}
-                onOpenDetails={openDetails}
-                onOpenCancel={requestCancel}
-              />
+              {!verification.optimistic && (
+                <VerificationActionsMenu
+                  {...props}
+                  verification={verification}
+                  onOpenDetails={openDetails}
+                  onOpenCancel={requestCancel}
+                />
+              )}
             </div>
           </li>
         ))}
