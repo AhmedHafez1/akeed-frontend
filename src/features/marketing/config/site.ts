@@ -1,38 +1,3 @@
-import type { Tier } from '@/features/marketing/model/tier.model'
-import { BILLING_PLANS } from '@/shared/config/pricing'
-
-const { starter, basic, pro, business } = BILLING_PLANS
-
-export const pricing: { tiers: Tier[] } = {
-  tiers: [
-    {
-      key: 'starter',
-      orders: starter.includedVerifications,
-      price: starter.price,
-      isFree: starter.isFree,
-      ordersDisplay: '30',
-    },
-    {
-      key: 'basic',
-      orders: basic.includedVerifications,
-      price: basic.price,
-      ordersDisplay: '300',
-    },
-    {
-      key: 'pro',
-      orders: pro.includedVerifications,
-      price: pro.price,
-      ordersDisplay: '1,000',
-    },
-    {
-      key: 'business',
-      orders: business.includedVerifications,
-      price: business.price,
-      ordersDisplay: '3,000',
-    },
-  ],
-}
-
 export const features = {
   problems: [
     { key: 'loss', icon: '💸' },

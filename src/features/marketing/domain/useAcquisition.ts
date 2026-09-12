@@ -2,13 +2,14 @@
 
 import { useMemo } from 'react'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import type { SupportedLocale } from '@/shared/lib/locale'
 import {
   getAcquisitionTargets,
   type AcquisitionTargets,
 } from './acquisitionPaths'
 
 interface UseAcquisitionResult {
-  locale: string
+  locale: SupportedLocale
   isRTL: boolean
   targets: AcquisitionTargets
 }
