@@ -1,20 +1,15 @@
 import type { SupportedLocale } from '@/shared/lib/locale'
 
-export function formatCredits(value: number, locale: SupportedLocale) {
-  return new Intl.NumberFormat(locale).format(value)
-}
-
-export function formatMoney(
-  valueMinor: number,
-  currency: string,
-  locale: SupportedLocale
-) {
-  return new Intl.NumberFormat(locale, {
-    style: 'currency',
-    currency,
-    maximumFractionDigits: 2,
-  }).format(valueMinor / 100)
-}
+/*
+ * Money/credit formatting is shared with the public pricing section, so it
+ * lives in `shared/lib/money`. Re-exported here to keep billing's own imports
+ * pointed at one module.
+ */
+export {
+  formatCredits,
+  formatMoney,
+  formatMoneyFromCredits,
+} from '@/shared/lib/money'
 
 export function formatBillingDate(value: string, locale: SupportedLocale) {
   return new Intl.DateTimeFormat(locale, {
@@ -32,15 +27,6 @@ export function formatShortRef(value: string) {
   const [prefix, ...rest] = value.split('_')
   const body = rest.join('_')
   return body ? `${prefix}_${body.slice(0, 7)}` : value.slice(0, 11)
-}
-
-export function formatMoneyFromCredits(
-  credits: number,
-  unitPriceMinor: number,
-  currency: string,
-  locale: SupportedLocale
-) {
-  return formatMoney(credits * unitPriceMinor, currency, locale)
 }
 
 export function formatDayAndTime(value: string, locale: SupportedLocale) {

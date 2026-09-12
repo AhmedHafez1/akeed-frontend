@@ -139,6 +139,11 @@ const eslintConfig = defineConfig([
               group: ['@/features/onboarding', '@/features/onboarding/**'],
               message: 'Do not couple marketing to onboarding internals.',
             },
+            {
+              group: ['@/features/billing', '@/features/billing/**'],
+              message:
+                'Marketing reads credit constants from @/shared/config/pricing and formatting from @/shared/lib/money, not from the billing feature.',
+            },
           ],
         },
       ],
