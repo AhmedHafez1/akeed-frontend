@@ -103,7 +103,7 @@ export function BillingReturnPage() {
   if (state.kind === 'loading') {
     return (
       <section className="mx-auto max-w-xl py-10" aria-busy>
-        <Skeleton className="h-96 rounded-2xl" />
+        <Skeleton className="rounded-panel h-96" />
       </section>
     )
   }
@@ -120,10 +120,10 @@ export function BillingReturnPage() {
         ? AlertTriangle
         : XCircle
   const tone = successful
-    ? 'bg-emerald-50 text-emerald-700'
+    ? 'bg-primary-subtle text-primary'
     : pending
-      ? 'bg-amber-50 text-amber-800'
-      : 'bg-red-50 text-red-700'
+      ? 'bg-amber-50 text-amber-800 dark:bg-amber-950 dark:text-amber-100'
+      : 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-200'
 
   let title = t('return.errorTitle')
   let description = t('return.errorDescription')
@@ -146,61 +146,63 @@ export function BillingReturnPage() {
       className="mx-auto max-w-xl py-6 sm:py-12"
       dir={isRTL ? 'rtl' : 'ltr'}
     >
-      <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
+      <Card className="overflow-hidden">
         <div className="p-6 text-center sm:p-8">
           <span
             className={`mx-auto grid size-14 place-items-center rounded-full ${tone}`}
           >
             <Icon className="size-7" aria-hidden />
           </span>
-          <p className="mt-5 text-xs font-semibold tracking-[0.16em] text-emerald-700 uppercase">
+          <p className="text-primary text-caption mt-5 font-semibold tracking-[0.16em] uppercase">
             {t('return.eyebrow')}
           </p>
-          <h1 className="mt-2 text-2xl font-semibold text-slate-950">
-            {title}
-          </h1>
-          <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-600">
+          <h1 className="text-h2 text-foreground mt-2">{title}</h1>
+          <p className="text-muted-foreground text-body mx-auto mt-2 max-w-md">
             {description}
           </p>
 
           {purchase && (
-            <dl className="mt-6 grid gap-px overflow-hidden rounded-xl border border-slate-200 bg-slate-200 text-start sm:grid-cols-2">
-              <div className="bg-slate-50 p-4">
-                <dt className="text-xs text-slate-500">
+            <dl className="rounded-card border-border bg-border mt-6 grid gap-px overflow-hidden border text-start sm:grid-cols-2">
+              <div className="bg-muted/40 p-4">
+                <dt className="text-muted-foreground text-xs">
                   {t('return.reference')}
                 </dt>
                 <dd
-                  className="mt-1 truncate font-mono text-xs text-slate-800"
+                  className="text-foreground mt-1 truncate font-mono text-xs"
                   dir="ltr"
                 >
                   <bdi>{purchase.reference}</bdi>
                 </dd>
               </div>
-              <div className="bg-slate-50 p-4">
-                <dt className="text-xs text-slate-500">{t('return.status')}</dt>
-                <dd className="mt-1 font-medium text-slate-900">
+              <div className="bg-muted/40 p-4">
+                <dt className="text-muted-foreground text-xs">
+                  {t('return.status')}
+                </dt>
+                <dd className="text-foreground mt-1 font-medium">
                   {t(`purchaseStatus.${purchase.status}`)}
                 </dd>
               </div>
-              <div className="bg-slate-50 p-4">
-                <dt className="text-xs text-slate-500">
+              <div className="bg-muted/40 p-4">
+                <dt className="text-muted-foreground text-xs">
                   {t('return.credits')}
                 </dt>
-                <dd className="mt-1 font-semibold text-slate-900">
+                <dd className="text-foreground mt-1 font-semibold">
                   {formatCredits(purchase.quantity, locale)}
                 </dd>
               </div>
-              <div className="bg-slate-50 p-4">
-                <dt className="text-xs text-slate-500">{t('return.amount')}</dt>
-                <dd className="mt-1 font-semibold text-slate-900">
+              <div className="bg-muted/40 p-4">
+                <dt className="text-muted-foreground text-xs">
+                  {t('return.amount')}
+                </dt>
+                <dd className="text-foreground mt-1 font-semibold">
                   {formatMoney(purchase.totalMinor, purchase.currency, locale)}
                 </dd>
               </div>
-              <div className="bg-slate-50 p-4 sm:col-span-2">
-                <dt className="text-xs text-slate-500">
+              <div className="bg-muted/40 p-4 sm:col-span-2">
+                <dt className="text-muted-foreground text-xs">
                   {t('return.updated')}
                 </dt>
-                <dd className="mt-1 text-sm text-slate-800">
+                <dd className="text-foreground text-body mt-1">
                   {formatBillingDate(purchase.updatedAt, locale)}
                 </dd>
               </div>
@@ -214,11 +216,7 @@ export function BillingReturnPage() {
               </Link>
             </Button>
             {(pending || state.kind === 'error') && (
-              <Button
-                onClick={manualRefresh}
-                disabled={isRefreshing}
-                className="bg-emerald-700 hover:bg-emerald-800"
-              >
+              <Button onClick={manualRefresh} disabled={isRefreshing}>
                 <RefreshCw className={isRefreshing ? 'animate-spin' : ''} />
                 {isRefreshing ? t('return.refreshing') : t('return.refresh')}
               </Button>

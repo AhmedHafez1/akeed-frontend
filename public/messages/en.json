@@ -2205,7 +2205,14 @@
       "held": "Held credits",
       "heldHelp": "Reserved for in-flight sends",
       "debt": "Debt",
-      "debtHelp": "Credits that must be settled"
+      "debtHelp": "Credits that must be settled",
+      "messages": "Messages this month",
+      "messagesHelp": "Since {date}",
+      "messagesCapped": "Within the last {count} loaded operations",
+      "postedShort": "All confirmed credits",
+      "heldShort": "Held for messages in flight",
+      "debtShort": "Nothing outstanding",
+      "debtOutstanding": "Balance to settle"
     },
     "alerts": {
       "healthyTitle": "Your credit balance is healthy",
@@ -2309,7 +2316,21 @@
       "purchaseEmpty": "No credit purchases yet.",
       "ledgerEmpty": "No credit movements yet.",
       "loadMore": "Load more",
-      "error": "Billing history could not be loaded. Your displayed balances were not changed."
+      "error": "Billing history could not be loaded. Your displayed balances were not changed.",
+      "recentTitle": "Recent activity",
+      "recentDescription": "A quick look at the latest movements on your balance.",
+      "viewLog": "View operations log",
+      "openFullLog": "Open the full log",
+      "operation": "Operation",
+      "balanceAfterColumn": "Balance after",
+      "used": "Used",
+      "posted": "Posted",
+      "kind": {
+        "purchase": "Credit purchase",
+        "usage": "Credit usage",
+        "adjustment": "Credit adjustment"
+      },
+      "empty": "No credit movements yet."
     },
     "error": {
       "title": "Billing could not be loaded",
@@ -2348,6 +2369,72 @@
         "canceled": "No credits were added. You can return to billing when you are ready.",
         "expired": "This checkout can no longer be used. Return to billing to start a new purchase.",
         "refunded": "The purchase was refunded and the credit ledger reflects the verified outcome."
+      }
+    },
+    "hero": {
+      "available": "Available balance",
+      "unit": "credits",
+      "equivalent": "≈ {amount}",
+      "ready": "ready for new messages",
+      "buyCredits": "Buy credits"
+    },
+    "packages": {
+      "stepLabel": "Choose an amount",
+      "customLabel": "Enter the amount you need",
+      "perCredit": "{amount} per credit",
+      "unit": "credits",
+      "totalLabel": "Confirmed total",
+      "pay": "Continue to payment"
+    },
+    "transactions": {
+      "eyebrow": "Account log",
+      "title": "Operations log",
+      "description": "Review every purchase, usage and adjustment on your message credits in one place.",
+      "back": "Back to billing & credits",
+      "summary": {
+        "purchased": "Total purchased",
+        "usedThisMonth": "Used this month",
+        "count": "Operations",
+        "balance": "Available balance"
+      },
+      "listTitle": "All operations",
+      "listDescription": "The last {count} recorded movements on this account.",
+      "filters": {
+        "typeLabel": "Operation type",
+        "all": "All operations",
+        "purchases": "Purchases",
+        "usage": "Usage",
+        "statusLabel": "Status",
+        "allStatuses": "All statuses",
+        "periodLabel": "Period",
+        "periodAll": "All time",
+        "periodThisMonth": "This month",
+        "periodLast30": "Last 30 days",
+        "periodLast90": "Last 90 days",
+        "search": "Search",
+        "searchPlaceholder": "Search by reference or operation",
+        "clear": "Clear filters"
+      },
+      "export": "Export report",
+      "showing": "Showing {from}–{to} of {total} operations",
+      "capped": "Results cover only the last {count} loaded operations.",
+      "loadMore": "Load older operations",
+      "empty": "No credit movements yet.",
+      "emptyFiltered": "No operations match the current filters.",
+      "pagination": {
+        "previous": "Previous",
+        "next": "Next",
+        "page": "Page"
+      },
+      "csv": {
+        "date": "Date",
+        "operation": "Operation",
+        "reason": "Reason",
+        "credits": "Credits",
+        "balanceAfter": "Balance after",
+        "status": "Status",
+        "reference": "Reference",
+        "filename": "operations-log"
       }
     }
   }

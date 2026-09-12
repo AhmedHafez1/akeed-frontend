@@ -2,6 +2,9 @@ import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query'
 import { queryKeys } from '@/shared/query/keys'
 import { fetchCreditSummary, fetchLedger, fetchPurchases } from './billingApi'
 
+/** The server caps `limit` at 100; the operations log drains at that size. */
+export const DRAIN_PAGE_SIZE = 100
+
 export function creditSummaryOptions() {
   return queryOptions({
     queryKey: queryKeys.billing.summary(),
@@ -9,21 +12,21 @@ export function creditSummaryOptions() {
   })
 }
 
-export function ledgerInfiniteOptions() {
+export function ledgerInfiniteOptions(limit = 25) {
   return infiniteQueryOptions({
-    queryKey: queryKeys.billing.ledger(),
+    queryKey: queryKeys.billing.ledger(limit),
     queryFn: ({ pageParam, signal }) =>
-      fetchLedger(pageParam ?? undefined, signal),
+      fetchLedger(pageParam ?? undefined, signal, limit),
     initialPageParam: null as string | null,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   })
 }
 
-export function purchasesInfiniteOptions() {
+export function purchasesInfiniteOptions(limit = 25) {
   return infiniteQueryOptions({
-    queryKey: queryKeys.billing.purchases(),
+    queryKey: queryKeys.billing.purchases(limit),
     queryFn: ({ pageParam, signal }) =>
-      fetchPurchases(pageParam ?? undefined, signal),
+      fetchPurchases(pageParam ?? undefined, signal, limit),
     initialPageParam: null as string | null,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   })

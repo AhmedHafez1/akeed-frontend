@@ -11,6 +11,7 @@ export * from './dialog'
 export * from './accordion'
 export * from './tooltip'
 export * from './dropdown-menu'
+export * from './table'
 export * from './notifications'
 
 // Custom components
@@ -24,3 +25,5 @@ export * from './loading-spinner'
 export * from './empty-state'
 export * from './docs-links'
 export * from './progress'
+export * from './segmented-control'
+export * from './pagination'

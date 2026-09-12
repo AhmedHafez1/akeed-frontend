@@ -76,8 +76,8 @@ export function fetchCreditSummary(signal?: AbortSignal) {
   return billingRequest<CreditSummary>('/api/billing/credits', { signal })
 }
 
-export function fetchLedger(cursor?: string, signal?: AbortSignal) {
-  const query = new URLSearchParams({ limit: '25' })
+export function fetchLedger(cursor?: string, signal?: AbortSignal, limit = 25) {
+  const query = new URLSearchParams({ limit: String(limit) })
   if (cursor) query.set('cursor', cursor)
   return billingRequest<PagedResponse<LedgerEntry>>(
     `/api/billing/credits/ledger?${query}`,
@@ -85,8 +85,12 @@ export function fetchLedger(cursor?: string, signal?: AbortSignal) {
   )
 }
 
-export function fetchPurchases(cursor?: string, signal?: AbortSignal) {
-  const query = new URLSearchParams({ limit: '25' })
+export function fetchPurchases(
+  cursor?: string,
+  signal?: AbortSignal,
+  limit = 25
+) {
+  const query = new URLSearchParams({ limit: String(limit) })
   if (cursor) query.set('cursor', cursor)
   return billingRequest<PagedResponse<PurchaseSummary>>(
     `/api/billing/purchases?${query}`,

@@ -1,13 +1,9 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useInfiniteQuery } from '@tanstack/react-query'
 import { BillingApiError, createPurchase } from '../api/billingApi'
-import {
-  ledgerInfiniteOptions,
-  purchasesInfiniteOptions,
-} from '../api/billingQueries'
 import type { CreatePurchaseResponse } from './billing.types'
+import { derivePackages } from './creditPackages'
 import { useBillingSummary } from './useBillingSummary'
 
 function newIdempotencyKey() {
@@ -21,8 +17,6 @@ export function useBillingPage() {
     error,
     refresh,
   } = useBillingSummary()
-  const purchasesQuery = useInfiniteQuery(purchasesInfiniteOptions())
-  const ledgerQuery = useInfiniteQuery(ledgerInfiniteOptions())
   const [quantityInput, setQuantityInput] = useState('')
   const [isCreating, setIsCreating] = useState(false)
   const [checkout, setCheckout] = useState<CreatePurchaseResponse | null>(null)
@@ -34,28 +28,6 @@ export function useBillingPage() {
     if (summary && !quantityInput) setQuantityInput(String(summary.range.min))
   }, [quantityInput, summary])
 
-  const purchases = useMemo(
-    () => purchasesQuery.data?.pages.flatMap((page) => page.items) ?? [],
-    [purchasesQuery.data]
-  )
-  const ledger = useMemo(
-    () => ledgerQuery.data?.pages.flatMap((page) => page.items) ?? [],
-    [ledgerQuery.data]
-  )
-  const purchaseCursor = purchasesQuery.data?.pages.at(-1)?.nextCursor ?? null
-  const ledgerCursor = ledgerQuery.data?.pages.at(-1)?.nextCursor ?? null
-  const isHistoryLoading = purchasesQuery.isPending || ledgerQuery.isPending
-  // History already on screen survives a failed background refresh.
-  const historyError =
-    (purchasesQuery.isError && purchasesQuery.data === undefined) ||
-    (ledgerQuery.isError && ledgerQuery.data === undefined)
-
-  const { refetch: refetchPurchases } = purchasesQuery
-  const { refetch: refetchLedger } = ledgerQuery
-  const loadHistory = useCallback(async () => {
-    await Promise.all([refetchPurchases(), refetchLedger()])
-  }, [refetchLedger, refetchPurchases])
-
   const quantity = Number(quantityInput)
   const quantityError = useMemo(() => {
     if (!summary) return null
@@ -65,6 +37,53 @@ export function useBillingPage() {
     if (quantity % summary.range.step !== 0) return 'step'
     return null
   }, [quantity, summary])
+
+  const packages = useMemo(
+    () =>
+      summary
+        ? derivePackages(summary.range, summary.price.unitPriceMinor)
+        : [],
+    [summary]
+  )
+
+  /*
+   * Presets and the stepper are two views of one value, not two pieces of
+   * state. Typing an amount that is not a preset simply leaves nothing
+   * selected, which is why this is derived rather than stored.
+   */
+  const selectedPackage = useMemo(
+    () => packages.find((item) => item.credits === quantity)?.credits ?? null,
+    [packages, quantity]
+  )
+
+  const totalMinor =
+    summary && Number.isFinite(quantity)
+      ? quantity * summary.price.unitPriceMinor
+      : 0
+
+  const adjustQuantity = useCallback(
+    (direction: -1 | 1) => {
+      if (!summary) return
+      const { min, max, step } = summary.range
+      const base = Number.isInteger(quantity) ? quantity : min
+      /*
+       * Snap onto the step grid before moving, so stepping away from a
+       * hand-typed amount lands on a quantity the server will actually price
+       * instead of carrying the offset forward.
+       */
+      const grid =
+        direction > 0
+          ? Math.floor(base / step) * step
+          : Math.ceil(base / step) * step
+      const next = Math.min(max, Math.max(min, grid + direction * step))
+      setQuantityInput(String(next))
+    },
+    [quantity, summary]
+  )
+
+  const selectPackage = useCallback((credits: number) => {
+    setQuantityInput(String(credits))
+  }, [])
 
   const createCheckout = useCallback(async () => {
     if (!summary || quantityError || isCreating) return
@@ -94,38 +113,26 @@ export function useBillingPage() {
     if (summary) setQuantityInput(String(summary.range.min))
   }, [summary])
 
-  const { fetchNextPage: fetchNextPurchases, hasNextPage: hasMorePurchases } =
-    purchasesQuery
-  const loadMorePurchases = useCallback(async () => {
-    if (!hasMorePurchases) return
-    await fetchNextPurchases()
-  }, [fetchNextPurchases, hasMorePurchases])
-
-  const { fetchNextPage: fetchNextLedger, hasNextPage: hasMoreLedger } =
-    ledgerQuery
-  const loadMoreLedger = useCallback(async () => {
-    if (!hasMoreLedger) return
-    await fetchNextLedger()
-  }, [fetchNextLedger, hasMoreLedger])
+  /** A checkout in flight freezes the amount it was priced for. */
+  const isLocked = !!checkout || !!pendingReference
+  const canPurchase = !!summary?.canPurchase && !!summary?.billingEnabled
 
   return {
     summary,
     isSummaryLoading,
     summaryError: error,
     refreshSummary: refresh,
-    purchases,
-    ledger,
-    purchaseCursor,
-    ledgerCursor,
-    isHistoryLoading,
-    historyError,
-    reloadHistory: loadHistory,
-    loadMorePurchases,
-    loadMoreLedger,
+    packages,
+    selectedPackage,
+    selectPackage,
     quantityInput,
     setQuantityInput,
     quantity,
     quantityError,
+    totalMinor,
+    adjustQuantity,
+    canPurchase,
+    isLocked,
     isCreating,
     checkout,
     pendingReference,

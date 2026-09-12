@@ -88,28 +88,87 @@ function merchantPurchase(
   } satisfies PurchaseSummary
 }
 
-const merchantLedger: LedgerEntry[] = [
-  {
-    id: 'ledger-payment',
-    type: 'purchase',
-    quantity: 100,
-    actorType: 'paymob',
-    reasonCode: 'payment_verified',
-    postedBalanceAfter: 110,
-    createdAt: '2026-09-10T12:01:00.000Z',
-    purchaseRef,
-  },
-  {
+const merchantLedger: LedgerEntry[] = buildMerchantLedger()
+
+/**
+ * A ledger wide enough to exercise the operations log: two months of mixed
+ * movement, so the type/period/status filters, the pager and the derived
+ * "used this month" total all have something to act on. The two named entries
+ * stay first and unchanged — they are the rows the billing page preview and
+ * the Paymob return flow are read against.
+ */
+function buildMerchantLedger(): LedgerEntry[] {
+  /*
+   * Walked oldest-to-newest from a single opening balance so every row
+   * satisfies the ledger's own invariant — `balanceAfter - quantity` equals
+   * the previous row's `balanceAfter` — then reversed into the newest-first
+   * order the API returns. Two months of mixed movement gives the operations
+   * log's type, period and status filters, its pager and the derived
+   * "used this month" total something real to act on.
+   */
+  const entries: LedgerEntry[] = []
+  let balance = 12
+
+  for (let index = 25; index >= 0; index--) {
+    const day = new Date(Date.UTC(2026, 8, 8) - index * 86_400_000)
+    const isPurchase = index % 7 === 3
+    const isReversal = !isPurchase && index % 11 === 5
+    const hex = ((index + 1) * 2654435761).toString(16).slice(-8)
+    balance += isPurchase ? 50 : isReversal ? 1 : -1
+    entries.push(
+      isPurchase
+        ? {
+            id: `${hex}-4c1a-8f2b-a90d-purchase`,
+            type: 'purchase',
+            quantity: 50,
+            actorType: 'paymob',
+            reasonCode: 'payment_verified',
+            postedBalanceAfter: balance,
+            createdAt: day.toISOString(),
+            purchaseRef: `akd_${hex}${'c'.repeat(24)}`,
+          }
+        : {
+            id: `${hex}-4c1a-8f2b-a90d-${isReversal ? 'restore' : 'send'}`,
+            type: isReversal ? 'failure_reversal' : 'consumption',
+            quantity: isReversal ? 1 : -1,
+            actorType: isReversal ? 'system' : 'meta',
+            reasonCode: isReversal
+              ? 'delivery_failure_restored'
+              : 'message_accepted',
+            postedBalanceAfter: balance,
+            createdAt: day.toISOString(),
+            purchaseRef: null,
+          }
+    )
+  }
+
+  // The two rows the billing preview and the Paymob return flow are read
+  // against stay newest, and continue the same running balance.
+  balance -= 1
+  entries.push({
     id: 'ledger-send',
     type: 'consumption',
     quantity: -1,
     actorType: 'meta',
     reasonCode: 'message_accepted',
-    postedBalanceAfter: 10,
+    postedBalanceAfter: balance,
     createdAt: '2026-09-09T08:00:00.000Z',
     purchaseRef: null,
-  },
-]
+  })
+  balance += 100
+  entries.push({
+    id: 'ledger-payment',
+    type: 'purchase',
+    quantity: 100,
+    actorType: 'paymob',
+    reasonCode: 'payment_verified',
+    postedBalanceAfter: balance,
+    createdAt: '2026-09-10T12:01:00.000Z',
+    purchaseRef,
+  })
+
+  return entries.reverse()
+}
 
 function settings(): SettingsResponse {
   const mode =
@@ -266,8 +325,21 @@ export async function billingFixtureRequest(
     )
     if (history === 'dispute') purchase.disputeStatus = 'open'
     if (history === 'reconciliation') purchase.reconciliationRequired = true
+    /*
+     * The operations log joins each purchase ledger entry to its summary by
+     * reference, so every generated `purchaseRef` needs one here — otherwise
+     * those rows would render without a settlement status.
+     */
+    const joined = merchantLedger
+      .filter((entry) => entry.purchaseRef && entry.purchaseRef !== purchaseRef)
+      .map((entry, index) =>
+        merchantPurchase(
+          index % 5 === 2 ? 'pending' : 'successful',
+          entry.purchaseRef as string
+        )
+      )
     return Response.json({
-      items: history === 'empty' ? [] : [purchase],
+      items: history === 'empty' ? [] : [purchase, ...joined],
       nextCursor: history === 'paged' && !cursor ? 'purchase-page-2' : null,
       limit: 25,
     })
