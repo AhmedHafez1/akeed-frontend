@@ -63,7 +63,7 @@ export function RechargePanel({ state, id }: RechargePanelProps) {
             <Button
               variant="outline"
               size="icon"
-              className="bg-background h-12 rounded-e-none"
+              className="bg-background h-16 w-16 rounded-e-none"
               onClick={() => state.adjustQuantity(-1)}
               disabled={controlsDisabled}
               aria-label={t('purchase.decrease')}
@@ -73,7 +73,7 @@ export function RechargePanel({ state, id }: RechargePanelProps) {
             <Input
               id="credit-quantity"
               dir="ltr"
-              className="bg-background h-12 rounded-none text-center text-lg font-semibold tabular-nums"
+              className="bg-background h-16 rounded-none border-1 text-center text-2xl font-semibold"
               inputMode="numeric"
               value={state.quantityInput}
               onChange={(event) => state.setQuantityInput(event.target.value)}
@@ -83,7 +83,7 @@ export function RechargePanel({ state, id }: RechargePanelProps) {
             <Button
               variant="outline"
               size="icon"
-              className="bg-background h-12 rounded-s-none"
+              className="bg-background h-16 w-16 rounded-s-none"
               onClick={() => state.adjustQuantity(1)}
               disabled={controlsDisabled}
               aria-label={t('purchase.increase')}

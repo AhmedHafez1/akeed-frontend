@@ -30,13 +30,13 @@ export function CheckoutSummaryCard({ state }: CheckoutSummaryCardProps) {
         </p>
         <p
           dir="ltr"
-          className="text-primary mt-1 text-3xl font-bold tabular-nums"
+          className="text-primary mt-1 text-4xl font-bold tabular-nums"
         >
           {formatMoney(totalMinor, currency, locale)}
         </p>
       </div>
 
-      <div className="border-border space-y-4 border-t p-5">
+      <div className="border-border space-y-6 border-t p-6">
         {state.checkoutError && (
           <p
             className="rounded-control text-body bg-red-50 p-3 text-red-900 dark:bg-red-950 dark:text-red-100"
@@ -103,8 +103,8 @@ export function CheckoutSummaryCard({ state }: CheckoutSummaryCardProps) {
           )}
         </div>
 
-        <p className="text-muted-foreground text-caption flex items-start gap-2">
-          <ShieldCheck className="text-primary mt-0.5 size-4 shrink-0" />
+        <p className="text-muted-foreground text-caption flex items-center gap-2">
+          <ShieldCheck className="text-primary mt-0.5 size-12 shrink-0" />
           <span>
             <span className="text-foreground font-medium">
               {t('purchase.paymobTitle')}

@@ -2370,15 +2370,15 @@
     },
     "hero": {
       "available": "Available balance",
-      "unit": "credits",
+      "unit": "message credits",
       "equivalent": "≈ {amount}",
       "ready": "ready for new messages",
       "buyCredits": "Buy credits"
     },
     "packages": {
       "stepLabel": "Choose an amount",
-      "customLabel": "Enter the amount you need",
-      "unit": "credits",
+      "customLabel": "or enter the amount you need",
+      "unit": "message credits",
       "totalLabel": "Confirmed total",
       "pay": "Continue to payment"
     },

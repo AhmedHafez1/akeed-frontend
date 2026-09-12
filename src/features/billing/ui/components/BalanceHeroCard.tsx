@@ -54,28 +54,14 @@ export function BalanceHeroCard({ summary, onBuyClick }: BalanceHeroCardProps) {
               {t('hero.unit')}
             </span>
           </p>
-          <p className="mt-2 text-sm text-white/75">
-            {t('hero.equivalent', { amount: equivalent })} · {t('hero.ready')}
-          </p>
         </div>
-        <span
-          className="rounded-card hidden size-14 shrink-0 place-items-center bg-white/15 text-white ring-1 ring-white/20 sm:grid"
-          aria-hidden
-        >
-          <WalletCards className="size-6" />
-        </span>
       </div>
 
       <div className="flex flex-col items-start gap-4">
-        <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white ring-1 ring-white/25">
-          <span className="size-1.5 rounded-full bg-current" aria-hidden />
-          {t(`status.${summary.status}`)}
-        </span>
         <Button
           onClick={onBuyClick}
-          className="text-primary hover:text-primary-hover bg-white shadow-none hover:bg-white"
+          className="text-primary hover:text-primary-hover bg-white p-6 text-lg shadow-none hover:bg-white"
         >
-          <Plus aria-hidden />
           {t('hero.buyCredits')}
         </Button>
       </div>
