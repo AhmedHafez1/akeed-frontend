@@ -643,6 +643,8 @@
     "docs": "Docs",
     "faq": "FAQ",
     "cta": "Install on Shopify",
+    "cta_shopify": "Install on Shopify",
+    "cta_standalone": "Own store",
     "sign_in": "Open Shopify app"
   },
   "hero": {
@@ -659,6 +661,9 @@
     "join_social_proof": "Join <bold>85+</bold> MENA merchants on the waitlist",
     "rating": "5.0 rating",
     "cta": "Install on Shopify",
+    "cta_shopify": "Install on Shopify",
+    "cta_standalone": "I have my own store",
+    "cta_standalone_note": "Early access — accounts are activated after review.",
     "learn_more": "See Live Demo",
     "scroll_down": "See it in action",
     "benefit_1": "No credit card required",
@@ -924,9 +929,13 @@
     "message": "Hi, I want to try Akeed service"
   },
   "mobile_cta": {
-    "eyebrow": "Now live on Shopify",
+    "eyebrow": "Get started with Akeed",
     "title": "Launch your WhatsApp confirmation flow",
-    "primary": "Install on Shopify"
+    "primary": "Install on Shopify",
+    "primary_shopify": "Shopify store",
+    "primary_standalone": "Own store",
+    "aria_shopify": "Install Akeed on Shopify",
+    "aria_standalone": "Request a standalone account"
   },
   "post_faq_cta": {
     "eyebrow": "Final Step",

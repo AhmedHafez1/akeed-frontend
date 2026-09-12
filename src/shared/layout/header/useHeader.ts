@@ -1,6 +1,9 @@
 import { type MouseEvent, useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+// Deep import on purpose: `@/features/marketing` re-exports HomePage, so the
+// barrel would pull the entire landing tree into every public-chrome route.
+import { getAcquisitionTargets } from '@/features/marketing/domain/acquisitionPaths'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
 import { HeaderNavItem } from './header.model'
 
@@ -62,6 +65,11 @@ export function useHeader() {
     [locale, t]
   )
 
+  const acquisitionTargets = useMemo(
+    () => getAcquisitionTargets(locale),
+    [locale]
+  )
+
   useEffect(() => {
     if (!isHomePage) return
 
@@ -120,6 +128,7 @@ export function useHeader() {
     locale,
     homeHref,
     navigation,
+    acquisitionTargets,
     isScrolled,
     isMobileMenuOpen,
     setIsMobileMenuOpen,

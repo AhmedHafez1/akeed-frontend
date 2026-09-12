@@ -636,6 +636,8 @@
     "docs": "الدليل",
     "faq": "الأسئلة الشائعة",
     "cta": "ثبّت على Shopify",
+    "cta_shopify": "ثبّت على Shopify",
+    "cta_standalone": "متجر مستقل",
     "sign_in": "افتح التطبيق على Shopify"
   },
   "hero": {
@@ -652,6 +654,9 @@
     "social_proof": "قلّل خسائر الشحن القابلة للتفادي في أسواق المنطقة",
     "rating": "تقييم 5.0 من المتاجر",
     "cta": "ثبّت على Shopify",
+    "cta_shopify": "ثبّت على Shopify",
+    "cta_standalone": "لدي متجر مستقل",
+    "cta_standalone_note": "وصول مبكر — يتم تفعيل الحساب بعد المراجعة.",
     "learn_more": "شاهد التجربة",
     "scroll_down": "شاهد الطريقة",
     "benefit_1": "بدون بطاقة ائتمان",
@@ -910,9 +915,13 @@
     "message": "مرحباً، أريد تجربة خدمة أكيد"
   },
   "mobile_cta": {
-    "eyebrow": "متاح الآن على Shopify",
+    "eyebrow": "ابدأ مع أكيد",
     "title": "فعّل تدفق تأكيد واتساب لمتجرك",
-    "primary": "ثبّت على Shopify"
+    "primary": "ثبّت على Shopify",
+    "primary_shopify": "متجر Shopify",
+    "primary_standalone": "متجر مستقل",
+    "aria_shopify": "ثبّت أكيد على Shopify",
+    "aria_standalone": "اطلب حسابًا لمتجر مستقل"
   },
   "post_faq_cta": {
     "eyebrow": "الخطوة الأخيرة",

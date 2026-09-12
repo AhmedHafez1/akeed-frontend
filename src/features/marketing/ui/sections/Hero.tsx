@@ -7,14 +7,13 @@ import {
   ChevronRight,
   Clock3,
   CreditCard,
-  Play,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
+import { useAcquisition } from '@/features/marketing/domain/useAcquisition'
+import { AcquisitionCta } from '@/features/marketing/ui/components/AcquisitionCta'
 import { PlatformAvailability } from '@/features/marketing/ui/components/PlatformAvailability'
-import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import { SHOPIFY_APP_STORE_LISTING_URL } from '@/shared/lib/shopify-auth'
 
 const ChatInterface = dynamic(
   () =>
@@ -26,7 +25,7 @@ const ChatInterface = dynamic(
 
 function Hero() {
   const t = useTranslations('hero')
-  const { isRTL } = useLocaleInfo()
+  const { isRTL, targets } = useAcquisition()
   const shouldReduceMotion = useReducedMotion()
 
   const proofItems = [
@@ -90,11 +89,11 @@ function Hero() {
     duration: shouldReduceMotion ? 0 : 0.6,
   }
 
-  const scrollToHowItWorks = () => {
-    document
-      .getElementById('how-it-works')
-      ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
+  const ctaChevron = isRTL ? (
+    <ChevronLeft className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
+  ) : (
+    <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+  )
 
   return (
     <section className="relative overflow-hidden px-4 pt-28 pb-16 sm:px-6 sm:pt-32 sm:pb-20 lg:px-10 lg:pt-34 lg:pb-22">
@@ -191,40 +190,32 @@ function Hero() {
             transition={{ ...baseTransition, delay: 0.3 }}
             className="flex w-full max-w-2xl flex-col items-stretch justify-center gap-3 sm:flex-row lg:justify-start"
           >
-            <a
-              href={SHOPIFY_APP_STORE_LISTING_URL}
-              className="group rounded-control bg-primary text-primary-foreground shadow-brand hover:bg-primary-hover focus-visible:ring-ring focus-visible:ring-offset-background relative flex h-19 w-full items-center justify-center gap-4 px-7 text-xl font-medium transition-[background-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto sm:min-w-76"
-              suppressHydrationWarning
-            >
-              <span className="bg-card/95 shadow-raised flex h-11 w-11 shrink-0 items-center justify-center rounded-full">
-                <Image
-                  src="/images/landing/logos/shopify_icon_1.png"
-                  alt={t('shopify_available')}
-                  width={32}
-                  height={32}
-                  unoptimized
-                  className="h-8 w-8 object-contain"
-                />
-              </span>
-              <span>{t('cta')}</span>
-              {isRTL ? (
-                <ChevronLeft className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
-              ) : (
-                <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-              )}
-            </a>
-            <button
-              type="button"
-              onClick={scrollToHowItWorks}
-              className={`flex ${isRTL ? 'flex-row-reverse' : ''} rounded-control bg-card/90 text-foreground shadow-card ring-border hover:bg-primary-subtle/70 hover:text-primary-subtle-foreground hover:ring-primary-border focus-visible:ring-ring focus-visible:ring-offset-background h-19 w-full items-center justify-center gap-3 px-7 text-lg font-medium ring-1 transition-[background-color,box-shadow,transform,color] duration-200 ease-out hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto sm:min-w-56`}
-            >
-              {isRTL ? (
-                <Play className="fill-primary text-primary h-5 w-5 rotate-180" />
-              ) : (
-                <Play className="fill-primary text-primary h-5 w-5" />
-              )}
-              {t('secondary_cta')}
-            </button>
+            <AcquisitionCta
+              target={targets.shopify}
+              label={t('cta_shopify')}
+              variant="primary"
+              className="w-full sm:w-auto sm:min-w-76"
+              leading={
+                <span className="bg-card/95 shadow-raised flex h-11 w-11 shrink-0 items-center justify-center rounded-full">
+                  <Image
+                    src="/images/landing/logos/shopify_icon_1.png"
+                    alt={t('shopify_available')}
+                    width={32}
+                    height={32}
+                    unoptimized
+                    className="h-8 w-8 object-contain"
+                  />
+                </span>
+              }
+              trailing={ctaChevron}
+            />
+            <AcquisitionCta
+              target={targets.standalone}
+              label={t('cta_standalone')}
+              note={t('cta_standalone_note')}
+              variant="secondary"
+              className="w-full sm:w-auto sm:min-w-56"
+            />
           </motion.div>
         </div>
 

@@ -13,6 +13,7 @@ export function Header() {
     locale,
     homeHref,
     navigation,
+    acquisitionTargets,
     isScrolled,
     isMobileMenuOpen,
     setIsMobileMenuOpen,
@@ -41,7 +42,9 @@ export function Header() {
             {/* CTA + Language */}
             <HeaderActions
               locale={locale}
-              ctaLabel={t('cta')}
+              targets={acquisitionTargets}
+              ctaShopifyLabel={t('cta_shopify')}
+              ctaStandaloneLabel={t('cta_standalone')}
               onLocaleChange={handleLocaleChange}
             />
 
@@ -58,7 +61,9 @@ export function Header() {
           isOpen={isMobileMenuOpen}
           items={navigation}
           locale={locale}
-          ctaLabel={t('cta')}
+          targets={acquisitionTargets}
+          ctaShopifyLabel={t('cta_shopify')}
+          ctaStandaloneLabel={t('cta_standalone')}
           onNavigate={scrollToSection}
           onLocaleChange={handleLocaleChange}
           onClose={() => setIsMobileMenuOpen(false)}
