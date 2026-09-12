@@ -68,12 +68,12 @@ export function CreditPriceCard() {
         <Gift className="text-primary mt-0.5 h-5 w-5 shrink-0" />
         <div>
           <p className="text-foreground text-sm font-semibold">
-            {t('grant_title')}
-          </p>
-          <p className="text-muted-foreground mt-1 text-sm leading-6">
-            {t('grant_body', {
+            {t('grant_title', {
               count: formatCredits(CREDIT_FREE_GRANT, locale),
             })}
+          </p>
+          <p className="text-muted-foreground mt-1 text-sm leading-6">
+            {t('grant_body')}
           </p>
         </div>
       </div>

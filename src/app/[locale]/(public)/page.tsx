@@ -8,6 +8,10 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { HomePage } from '@/features/marketing'
+import {
+  DEFAULT_ACQUISITION_PATH,
+  isAcquisitionPath,
+} from '@/features/marketing/domain/acquisitionPaths'
 import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import { faqs } from '@/features/marketing/config/site'
 import type { Locale } from '@/i18n'
@@ -71,7 +75,7 @@ async function getHomeStructuredData(locale: Locale) {
         '@type': 'UnitPriceSpecification',
         price: unitPrice,
         priceCurrency: CREDIT_CURRENCY,
-        unitText: pricing('unit_price_label'),
+        unitText: pricing('unit_text'),
       },
     },
   }
@@ -94,11 +98,23 @@ async function getHomeStructuredData(locale: Locale) {
 
 export default async function Home({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
   const { locale } = await params
   const structuredData = await getHomeStructuredData(locale as Locale)
+
+  /*
+   * `?path=` lets a campaign link open the page on the matching flow. Resolved
+   * on the server so the right tab is in the initial HTML — this route is
+   * already server-rendered on demand, so reading searchParams costs nothing.
+   */
+  const requestedPath = (await searchParams).path
+  const initialPath = isAcquisitionPath(requestedPath)
+    ? requestedPath
+    : DEFAULT_ACQUISITION_PATH
 
   return (
     <>
@@ -106,7 +122,7 @@ export default async function Home({
         <JsonLd key={data['@type'] as string} data={data} />
       ))}
       <EmbeddedAuthGate onboardingGate="landing">
-        <HomePage />
+        <HomePage initialPath={initialPath} />
       </EmbeddedAuthGate>
     </>
   )

@@ -1,5 +1,9 @@
 'use client'
 
+import {
+  DEFAULT_ACQUISITION_PATH,
+  type AcquisitionPath,
+} from '@/features/marketing/domain/acquisitionPaths'
 import { StickyMobileCta } from '@/features/marketing/ui/components/StickyMobileCta'
 import {
   landingSectionBackgroundClass,
@@ -17,7 +21,14 @@ import Trust from '@/features/marketing/ui/sections/Trust'
 import FAQ from '@/features/marketing/ui/sections/FAQ'
 import FinalCta from '@/features/marketing/ui/sections/FinalCta'
 
-export function HomePage() {
+interface HomePageProps {
+  /** Resolved from `?path=` on the server so campaign links land on the right flow. */
+  initialPath?: AcquisitionPath
+}
+
+export function HomePage({
+  initialPath = DEFAULT_ACQUISITION_PATH,
+}: HomePageProps) {
   return (
     <main className="flex min-h-screen flex-col gap-0">
       <section className={`w-full ${landingSectionBackgroundClass}`}>
@@ -35,7 +46,7 @@ export function HomePage() {
       </section>
       <section className={`w-full ${landingSectionChromeAltClass}`}>
         <Reveal>
-          <HowItWorks />
+          <HowItWorks initialPath={initialPath} />
         </Reveal>
       </section>
       <section className={`w-full ${landingSectionChromeClass}`}>

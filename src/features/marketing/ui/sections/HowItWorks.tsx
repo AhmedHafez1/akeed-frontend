@@ -2,11 +2,10 @@
 
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
-import { useState, useSyncExternalStore } from 'react'
+import { useState } from 'react'
 import { howItWorksByPath } from '@/features/marketing/config/site'
 import {
   DEFAULT_ACQUISITION_PATH,
-  isAcquisitionPath,
   type AcquisitionPath,
 } from '@/features/marketing/domain/acquisitionPaths'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
@@ -15,31 +14,22 @@ import { Section } from '@/shared/ui/section'
 import { PathTabs } from './howItWorks/PathTabs'
 import { StepGrid } from './howItWorks/StepGrid'
 
-/*
- * `?path=` seeds the tab for campaign deep-links.
- *
- * Read through `useSyncExternalStore` rather than `useSearchParams()`: this is a
- * client component under a statically rendered route, where that hook would
- * force a Suspense boundary or fail the prerender. The store never notifies —
- * nothing writes the param back to history, since pushState here would fight
- * the header's hash handling — so this is a one-time read that still hydrates
- * cleanly.
- */
-const subscribe = () => () => {}
-
-function getPathFromUrl(): AcquisitionPath {
-  const requested = new URLSearchParams(window.location.search).get('path')
-  return isAcquisitionPath(requested) ? requested : DEFAULT_ACQUISITION_PATH
+interface HowItWorksProps {
+  /*
+   * Resolved from `?path=` by the server component, so a campaign link renders
+   * the matching flow in the initial HTML. Reading it here instead would mean
+   * `useSearchParams()` (a Suspense boundary on this route) or a post-mount
+   * setState — both worse, and neither puts the right tab in the markup.
+   */
+  initialPath?: AcquisitionPath
 }
 
-const getServerPath = () => DEFAULT_ACQUISITION_PATH
-
-function HowItWorks() {
+function HowItWorks({
+  initialPath = DEFAULT_ACQUISITION_PATH,
+}: HowItWorksProps) {
   const t = useTranslations('how_it_works')
   const { isRTL } = useLocaleInfo()
-  const urlPath = useSyncExternalStore(subscribe, getPathFromUrl, getServerPath)
-  const [selected, setSelected] = useState<AcquisitionPath | null>(null)
-  const path = selected ?? urlPath
+  const [path, setPath] = useState<AcquisitionPath>(initialPath)
 
   const tabLabels: Record<AcquisitionPath, string> = {
     shopify: t('tabs.shopify'),
@@ -75,7 +65,7 @@ function HowItWorks() {
             value={path}
             labels={tabLabels}
             ariaLabel={t('tabs_label')}
-            onChange={setSelected}
+            onChange={setPath}
           />
         </div>
 

@@ -922,6 +922,7 @@
     "title": "Pay for what you use. <highlight>No monthly subscription.</highlight>",
     "subtitle": "For independent stores: buy credits and use them whenever you need. Shopify stores subscribe and are billed inside Shopify.",
     "unit_price_label": "Price per credit",
+    "unit_text": "WhatsApp message",
     "unit_price_note": "One credit is one WhatsApp message sent to your customer.",
     "credit_is_message_title": "A credit is a message",
     "credit_is_message_body": "One credit is used when a confirmation message is sent to your customer on WhatsApp.",
