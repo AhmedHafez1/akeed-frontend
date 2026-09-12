@@ -12,21 +12,31 @@ type OnboardingMessageKey =
   | 'planStarterName'
   | 'planStarterPrice'
   | 'planStarterVolume'
+  | 'planStarterSubtitle'
+  | 'planStarterCta'
   | 'planBasicName'
   | 'planBasicPrice'
   | 'planBasicVolume'
+  | 'planBasicSubtitle'
+  | 'planBasicCta'
   | 'planProName'
   | 'planProPrice'
   | 'planProVolume'
+  | 'planProSubtitle'
+  | 'planProCta'
   | 'planBusinessName'
   | 'planBusinessPrice'
   | 'planBusinessVolume'
+  | 'planBusinessSubtitle'
+  | 'planBusinessCta'
 
 interface PlanDefinition {
   id: OnboardingBillingPlanId
   nameKey: OnboardingMessageKey
   priceKey: OnboardingMessageKey
   volumeKey: OnboardingMessageKey
+  subtitleKey: OnboardingMessageKey
+  ctaKey: OnboardingMessageKey
 }
 
 export const LANGUAGE_OPTION_DEFINITIONS = [
@@ -52,23 +62,31 @@ export const BILLING_PLAN_DEFINITIONS: PlanDefinition[] = [
     nameKey: 'planStarterName',
     priceKey: 'planStarterPrice',
     volumeKey: 'planStarterVolume',
+    subtitleKey: 'planStarterSubtitle',
+    ctaKey: 'planStarterCta',
   },
   {
     id: 'basic',
     nameKey: 'planBasicName',
     priceKey: 'planBasicPrice',
     volumeKey: 'planBasicVolume',
+    subtitleKey: 'planBasicSubtitle',
+    ctaKey: 'planBasicCta',
   },
   {
     id: 'pro',
     nameKey: 'planProName',
     priceKey: 'planProPrice',
     volumeKey: 'planProVolume',
+    subtitleKey: 'planProSubtitle',
+    ctaKey: 'planProCta',
   },
   {
     id: 'business',
     nameKey: 'planBusinessName',
     priceKey: 'planBusinessPrice',
     volumeKey: 'planBusinessVolume',
+    subtitleKey: 'planBusinessSubtitle',
+    ctaKey: 'planBusinessCta',
   },
 ]

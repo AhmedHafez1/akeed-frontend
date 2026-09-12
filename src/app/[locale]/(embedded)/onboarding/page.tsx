@@ -58,7 +58,6 @@ const EMBEDDED_PLAN_FEATURE_KEYS = {
 export default function OnboardingPage() {
   const t = useTranslations('onboarding')
   const tEmbedded = useTranslations('embeddedOnboarding')
-  const tPricing = useTranslations('pricing')
   const { isEmbedded, isLoading: isModeLoading, hostParam } = useAkeedMode()
 
   const router = useRouter()
@@ -209,11 +208,11 @@ export default function OnboardingPage() {
               : runtimePlan
                 ? formatPlanVolumeLabel(runtimePlan.includedVerifications)
                 : tEmbedded(planDefinition.volumeKey),
-          subtitle: tPricing(`${planId}_subtitle`),
+          subtitle: tEmbedded(planDefinition.subtitleKey),
           features: EMBEDDED_PLAN_FEATURE_KEYS[planId].map((featureKey) =>
             tEmbedded(featureKey)
           ),
-          ctaLabel: tPricing(`${planId}_cta`),
+          ctaLabel: tEmbedded(planDefinition.ctaKey),
         }
       }),
     [
@@ -221,7 +220,6 @@ export default function OnboardingPage() {
       formatPlanPriceLabel,
       formatPlanVolumeLabel,
       tEmbedded,
-      tPricing,
     ]
   )
 

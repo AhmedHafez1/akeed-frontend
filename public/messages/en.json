@@ -1760,6 +1760,8 @@
     "planStarterFeature2": "Automatic COD confirmation on WhatsApp",
     "planStarterFeature3": "Automatically update orders in Shopify",
     "planStarterFeature4": "Dashboard with confirmation insights",
+    "planStarterSubtitle": "Try Akeed for free.",
+    "planStarterCta": "Start free",
     "planBasicName": "Basic",
     "planBasicPrice": "$9.99 / month",
     "planBasicVolume": "300 WhatsApp confirmations",
@@ -1768,6 +1770,8 @@
     "planBasicFeature3": "Rule-based order confirmation",
     "planBasicFeature4": "via Our official WhatsApp numbers (zero setup)",
     "planBasicFeature5": "No extra costs",
+    "planBasicSubtitle": "For growing stores confirming COD orders regularly.",
+    "planBasicCta": "Choose Basic",
     "planProName": "Pro",
     "planProPrice": "$22.99 / month",
     "planProVolume": "1,000 WhatsApp confirmations",
@@ -1775,6 +1779,8 @@
     "planProFeature2": "1,000 WhatsApp confirmations",
     "planProFeature3": "Quiet hours configuration to avoid messaging customers at night",
     "planProFeature4": "Message scheduling based on your store timezone",
+    "planProSubtitle": "For stores with many COD orders every day.",
+    "planProCta": "Choose Pro",
     "planBusinessName": "Scale",
     "planBusinessPrice": "$49.99 / month",
     "planBusinessVolume": "2,500 WhatsApp confirmations",
@@ -1782,7 +1788,9 @@
     "planBusinessFeature2": "2,500 WhatsApp confirmations",
     "planBusinessFeature3": "Priority support",
     "planBusinessFeature4": "One setup call to configure your confirmation workflow",
-    "planBusinessFeature5": "Built for higher-volume COD stores"
+    "planBusinessFeature5": "Built for higher-volume COD stores",
+    "planBusinessSubtitle": "For higher-volume COD operations.",
+    "planBusinessCta": "Choose Scale"
   },
   "messageTemplate": {
     "pageTitle": "Message template",

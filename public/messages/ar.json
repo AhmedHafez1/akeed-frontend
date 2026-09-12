@@ -1746,6 +1746,8 @@
     "planStarterFeature2": "تأكيد تلقائي لطلبات الدفع عند الاستلام عبر واتساب",
     "planStarterFeature3": "تحديث الطلبات تلقائياً في شوبيفاي",
     "planStarterFeature4": "لوحة تحكم مع مؤشرات التأكيد",
+    "planStarterSubtitle": "جرّب Akeed مجاناً.",
+    "planStarterCta": "ابدأ مجاناً",
     "planBasicName": "الأساسية",
     "planBasicPrice": "9.99$ / شهر",
     "planBasicVolume": "300 رسالة تأكيد واتساب",
@@ -1754,6 +1756,8 @@
     "planBasicFeature3": "أتمتة تأكيد الطلبات بناءً على القواعد",
     "planBasicFeature4": "عبر أرقام واتساب الرسمية لأكيد (بدون إعداد من طرفك)",
     "planBasicFeature5": "بدون تكاليف اضافية",
+    "planBasicSubtitle": "للمتاجر النامية التي تؤكد طلبات الدفع عند الاستلام بانتظام.",
+    "planBasicCta": "اختر Basic",
     "planProName": "الاحترافية",
     "planProPrice": "22.99$ / شهر",
     "planProVolume": "1,000 رسالة تأكيد واتساب",
@@ -1761,6 +1765,8 @@
     "planProFeature2": "1,000 رسالة تأكيد واتساب",
     "planProFeature3": "إعداد ساعات الهدوء لتجنب مراسلة العملاء ليلاً",
     "planProFeature4": "جدولة الرسائل حسب توقيت متجرك",
+    "planProSubtitle": "للمتاجر التي لديها العديد من طلبات الدفع عند الاستلام يومياً.",
+    "planProCta": "اختر Pro",
     "planBusinessName": "Scale",
     "planBusinessPrice": "49.99$ / شهر",
     "planBusinessVolume": "2,500 رسالة تأكيد واتساب",
@@ -1768,7 +1774,9 @@
     "planBusinessFeature2": "2,500 رسالة تأكيد واتساب مضمّنة",
     "planBusinessFeature3": "دعم بأولوية أعلى",
     "planBusinessFeature4": "مكالمة إعداد لضبط سير عمل التأكيد",
-    "planBusinessFeature5": "مصممة لمتاجر الدفع عند الاستلام ذات الحجم الأعلى"
+    "planBusinessFeature5": "مصممة لمتاجر الدفع عند الاستلام ذات الحجم الأعلى",
+    "planBusinessSubtitle": "لعمليات الدفع عند الاستلام ذات الحجم الأعلى.",
+    "planBusinessCta": "اختر Scale"
   },
   "messageTemplate": {
     "pageTitle": "معاينة الرسالة",
