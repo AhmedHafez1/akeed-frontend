@@ -115,8 +115,8 @@ export function VerificationsTableStandalone(
               key={verification.id}
               aria-busy={verification.optimistic ? true : undefined}
               className={cn(
-                'text-slate-700 transition-colors hover:bg-stone-50/70',
-                verification.optimistic && 'bg-stone-50/60'
+                'hover:bg-muted/70 text-slate-700 transition-colors',
+                verification.optimistic && 'bg-muted/60'
               )}
             >
               <td className="min-w-0 px-4 py-3">
@@ -379,7 +379,7 @@ function VerificationDetails(props: VerificationDetailsProps) {
       }}
       className="!inset-y-0 [inset-inline-end:0] !top-0 !left-auto !h-dvh !w-[calc(100vw-1.5rem)] !max-w-none !translate-x-0 !translate-y-0 !overflow-y-auto !rounded-none !border-y-0 !p-0 sm:!w-[min(100vw,520px)]"
     >
-      <DialogHeader className="border-b border-stone-200 px-5 py-5 pe-14">
+      <DialogHeader className="border-border border-b px-5 py-5 pe-14">
         <DialogTitle className="text-xl">
           {formatOrderTitle(verification, t('table.orderFallbackPrefix'))}
         </DialogTitle>
@@ -389,7 +389,7 @@ function VerificationDetails(props: VerificationDetailsProps) {
       </DialogHeader>
 
       <div className="space-y-6 p-5">
-        <div className="grid grid-cols-2 gap-4 rounded-xl bg-stone-50 p-4 text-sm">
+        <div className="bg-muted grid grid-cols-2 gap-4 rounded-xl p-4 text-sm">
           <div>
             <p className="text-xs text-slate-600">
               {t('table.headings.customer')}
@@ -435,7 +435,7 @@ function VerificationDetails(props: VerificationDetailsProps) {
                     className={cn(
                       'mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full border',
                       step.recorded
-                        ? 'border-emerald-600 bg-emerald-600'
+                        ? 'bg-primary border-emerald-600'
                         : 'border-slate-300 bg-white'
                     )}
                   />
@@ -460,7 +460,7 @@ function VerificationDetails(props: VerificationDetailsProps) {
           </ol>
         </section>
 
-        <dl className="divide-y divide-stone-100 rounded-xl border border-stone-200 px-4 text-sm">
+        <dl className="divide-border border-border divide-y rounded-xl border px-4 text-sm">
           <div className="flex justify-between gap-4 py-3">
             <dt className="text-slate-600">{t('table.headings.followUp')}</dt>
             <dd className="text-end font-medium text-slate-900">

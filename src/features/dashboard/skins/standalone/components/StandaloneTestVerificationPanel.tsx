@@ -78,7 +78,7 @@ export function StandaloneTestVerificationPanel({
           type="button"
           disabled={!isPhoneValid || isSendingTest}
           onClick={() => void handleSendTest()}
-          className="rounded-lg bg-emerald-600 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="bg-primary text-primary-foreground hover:bg-primary rounded-lg px-5 py-3 text-sm font-medium shadow-sm transition disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isSendingTest ? sendingLabel : sendLabel}
         </button>

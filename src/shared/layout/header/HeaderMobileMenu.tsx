@@ -63,7 +63,7 @@ export function HeaderMobileMenu({
                 <a
                   href={SHOPIFY_APP_STORE_LISTING_URL}
                   onClick={onClose}
-                  className="block w-full rounded-xl bg-emerald-600 px-4 py-3 text-center text-base font-bold text-white shadow-[0_14px_30px_rgba(5,150,105,0.28)] transition-colors hover:bg-emerald-500"
+                  className="bg-primary text-primary-foreground shadow-brand block w-full rounded-xl px-4 py-3 text-center text-base font-bold transition-colors hover:bg-emerald-500"
                 >
                   {ctaLabel}
                 </a>

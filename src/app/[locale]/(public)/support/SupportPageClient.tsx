@@ -41,7 +41,7 @@ export function SupportPageClient() {
         >
           <a
             href={`mailto:${email}`}
-            className="inline-flex h-11 items-center justify-center rounded-xl bg-emerald-600 px-5 text-sm font-bold text-white shadow-sm shadow-emerald-900/10 transition-all hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="bg-primary text-primary-foreground hover:bg-primary inline-flex h-11 items-center justify-center rounded-xl px-5 text-sm font-bold shadow-sm shadow-emerald-900/10 transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
             dir="ltr"
           >
             {email}
@@ -55,7 +55,7 @@ export function SupportPageClient() {
         >
           <a
             href={`tel:${businessPhone}`}
-            className="inline-flex h-11 items-center justify-center rounded-xl bg-emerald-600 px-5 text-sm font-bold text-white shadow-sm shadow-emerald-900/10 transition-all hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="bg-primary text-primary-foreground hover:bg-primary inline-flex h-11 items-center justify-center rounded-xl px-5 text-sm font-bold shadow-sm shadow-emerald-900/10 transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
             dir="ltr"
           >
             {t('phoneNumber')}
@@ -90,7 +90,7 @@ export function SupportPageClient() {
                 key={key}
                 className="flex gap-3 text-sm leading-relaxed text-slate-600"
               >
-                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+                <CheckCircle2 className="text-primary mt-0.5 h-4 w-4 shrink-0" />
                 <span>{t(key)}</span>
               </li>
             ))}
@@ -110,7 +110,7 @@ export function SupportPageClient() {
       <div className="mt-10 flex justify-center">
         <Link
           href={withLocale('/', locale)}
-          className="inline-flex h-11 items-center justify-center rounded-xl border border-emerald-100 bg-white px-6 text-sm font-bold text-slate-700 transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:text-emerald-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="hover:text-primary-hover inline-flex h-11 items-center justify-center rounded-xl border border-emerald-100 bg-white px-6 text-sm font-bold text-slate-700 transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           {t('backHome')}
         </Link>

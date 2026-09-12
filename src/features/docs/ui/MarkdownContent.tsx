@@ -58,8 +58,14 @@ export function MarkdownContent({
       const id = nextHeadingId(extractText(children))
 
       return (
-        <h1 id={id} className="group mt-8 mb-4 scroll-mt-28 text-3xl font-bold text-slate-900 first:mt-0">
-          <a href={`#${id}`} className="inline-flex items-center gap-2 hover:text-emerald-700">
+        <h1
+          id={id}
+          className="group mt-8 mb-4 scroll-mt-28 text-3xl font-bold text-slate-900 first:mt-0"
+        >
+          <a
+            href={`#${id}`}
+            className="hover:text-primary-hover inline-flex items-center gap-2"
+          >
             {children}
             <span className="text-sm text-slate-400 opacity-0 transition-opacity group-hover:opacity-100">
               #
@@ -72,8 +78,14 @@ export function MarkdownContent({
       const id = nextHeadingId(extractText(children))
 
       return (
-        <h2 id={id} className="group mt-8 mb-3 scroll-mt-28 border-t border-slate-100 pt-6 text-2xl font-bold text-slate-900 first:border-t-0 first:pt-0">
-          <a href={`#${id}`} className="inline-flex items-center gap-2 hover:text-emerald-700">
+        <h2
+          id={id}
+          className="group mt-8 mb-3 scroll-mt-28 border-t border-slate-100 pt-6 text-2xl font-bold text-slate-900 first:border-t-0 first:pt-0"
+        >
+          <a
+            href={`#${id}`}
+            className="hover:text-primary-hover inline-flex items-center gap-2"
+          >
             {children}
             <span className="text-sm text-slate-400 opacity-0 transition-opacity group-hover:opacity-100">
               #
@@ -86,8 +98,14 @@ export function MarkdownContent({
       const id = nextHeadingId(extractText(children))
 
       return (
-        <h3 id={id} className="group mt-6 mb-2 scroll-mt-28 text-xl font-semibold text-slate-900">
-          <a href={`#${id}`} className="inline-flex items-center gap-2 hover:text-emerald-700">
+        <h3
+          id={id}
+          className="group mt-6 mb-2 scroll-mt-28 text-xl font-semibold text-slate-900"
+        >
+          <a
+            href={`#${id}`}
+            className="hover:text-primary-hover inline-flex items-center gap-2"
+          >
             {children}
             <span className="text-sm text-slate-400 opacity-0 transition-opacity group-hover:opacity-100">
               #
@@ -100,8 +118,14 @@ export function MarkdownContent({
       const id = nextHeadingId(extractText(children))
 
       return (
-        <h4 id={id} className="group mt-5 mb-2 scroll-mt-28 text-lg font-semibold text-slate-900">
-          <a href={`#${id}`} className="inline-flex items-center gap-2 hover:text-emerald-700">
+        <h4
+          id={id}
+          className="group mt-5 mb-2 scroll-mt-28 text-lg font-semibold text-slate-900"
+        >
+          <a
+            href={`#${id}`}
+            className="hover:text-primary-hover inline-flex items-center gap-2"
+          >
             {children}
             <span className="text-sm text-slate-400 opacity-0 transition-opacity group-hover:opacity-100">
               #
@@ -111,7 +135,9 @@ export function MarkdownContent({
       )
     },
     p: ({ children }) => (
-      <p className="my-3 text-sm leading-7 text-slate-700 md:text-base">{children}</p>
+      <p className="my-3 text-sm leading-7 text-slate-700 md:text-base">
+        {children}
+      </p>
     ),
     ul: ({ children }) => (
       <ul className="my-4 list-disc space-y-2 ps-6 text-sm leading-7 md:text-base">
@@ -123,7 +149,7 @@ export function MarkdownContent({
         {children}
       </ol>
     ),
-    li: ({ children }) => <li className="marker:text-emerald-600">{children}</li>,
+    li: ({ children }) => <li className="marker:text-primary">{children}</li>,
     hr: () => <hr className="my-8 border-slate-200" />,
     blockquote: ({ children }) => {
       const nodes = Array.isArray(children) ? children : [children]
@@ -242,7 +268,10 @@ export function MarkdownContent({
 
   return (
     <div className="docs-markdown text-slate-700">
-      <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={markdownComponents}
+      >
         {content}
       </ReactMarkdown>
     </div>

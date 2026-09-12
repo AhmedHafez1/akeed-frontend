@@ -25,7 +25,7 @@ export function DocsLayout({
         <button
           type="button"
           onClick={() => setIsSidebarOpen(true)}
-          className="inline-flex h-10 items-center gap-2 rounded-xl border border-emerald-100 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:border-emerald-200 hover:text-emerald-700"
+          className="hover:text-primary-hover inline-flex h-10 items-center gap-2 rounded-xl border border-emerald-100 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:border-emerald-200"
         >
           <Menu className="h-4 w-4" />
           {t('openContents')}

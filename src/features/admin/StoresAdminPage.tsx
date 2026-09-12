@@ -516,7 +516,7 @@ export function StoresAdminPage() {
                 <Filter />
                 Advanced
                 {advancedCount > 0 && (
-                  <span className="grid size-5 place-items-center rounded-full bg-emerald-700 text-[11px] text-white">
+                  <span className="bg-primary text-primary-foreground grid size-5 place-items-center rounded-full text-[11px]">
                     {advancedCount}
                   </span>
                 )}

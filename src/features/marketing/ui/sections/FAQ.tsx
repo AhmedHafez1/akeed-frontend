@@ -22,7 +22,7 @@ function FAQ() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="landing-section-title max-w-4xl"
+            className="text-h1 text-foreground max-w-4xl text-balance"
           >
             {tFaq('section_title')}
           </motion.h2>
@@ -31,7 +31,7 @@ function FAQ() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="landing-subtitle max-w-3xl"
+            className="text-lead text-muted-foreground max-w-3xl text-pretty"
           >
             {tFaq('section_description')}
           </motion.p>

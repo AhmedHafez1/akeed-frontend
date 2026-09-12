@@ -22,11 +22,14 @@ export function DocsBreadcrumbs({ items }: DocsBreadcrumbsProps) {
           const label = item.label === 'docs' ? t('docsCrumb') : item.label
 
           return (
-            <li key={`${item.label}-${index}`} className="flex items-center gap-2">
+            <li
+              key={`${item.label}-${index}`}
+              className="flex items-center gap-2"
+            >
               {item.href && !isLast ? (
                 <Link
                   href={item.href}
-                  className="font-medium text-slate-600 hover:text-emerald-700"
+                  className="hover:text-primary-hover font-medium text-slate-600"
                 >
                   {label}
                 </Link>

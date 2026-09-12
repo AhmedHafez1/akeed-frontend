@@ -37,7 +37,7 @@ export function Tooltip({ children, content, className }: TooltipProps) {
         <span
           id={tooltipId}
           role="tooltip"
-          className="absolute start-1/2 bottom-full z-50 mb-2 w-max max-w-64 -translate-x-1/2 rounded-lg bg-slate-900 px-2.5 py-1.5 text-xs leading-5 font-medium text-white shadow-lg rtl:translate-x-1/2"
+          className="rounded-control bg-foreground text-background shadow-overlay absolute start-1/2 bottom-full z-50 mb-2 w-max max-w-64 -translate-x-1/2 px-2.5 py-1.5 text-xs leading-5 font-medium rtl:translate-x-1/2"
         >
           {content}
         </span>

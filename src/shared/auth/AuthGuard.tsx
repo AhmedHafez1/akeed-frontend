@@ -147,7 +147,7 @@ export function AuthGuard({
   // Show loading state while checking auth (only for protected routes)
   if (!isPublic && bootstrapFailed) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+      <main className="bg-muted flex min-h-screen items-center justify-center px-4">
         <div
           role="alert"
           className="w-full max-w-md rounded-2xl border border-red-200 bg-white p-6 text-center shadow-sm"
@@ -162,7 +162,7 @@ export function AuthGuard({
             <button
               type="button"
               onClick={() => setRetryKey((value) => value + 1)}
-              className="rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-700 focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="bg-primary text-primary-foreground hover:bg-primary rounded-xl px-5 py-2.5 text-sm font-semibold transition focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               {t('retryOrganizationSetup')}
             </button>

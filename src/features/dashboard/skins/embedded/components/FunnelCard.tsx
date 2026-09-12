@@ -60,7 +60,7 @@ export function FunnelCard({ title, subtitle, steps, isRTL }: FunnelCardProps) {
                 >
                   <BlockStack gap="200">
                     <InlineStack gap="200" blockAlign="center">
-                      <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] leading-none font-medium text-[#8a8a8a] shadow-[inset_0_0_0_1px_#d4d4d4]">
+                      <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] leading-none font-medium text-[#8a8a8a] ring-1 ring-[#d4d4d4]">
                         {index + 1}
                       </span>
                       <Text
@@ -76,7 +76,7 @@ export function FunnelCard({ title, subtitle, steps, isRTL }: FunnelCardProps) {
                         {step.branches.map((branch) => (
                           <div
                             key={branch.id}
-                            className="rounded-lg bg-white px-3 py-2 shadow-[inset_0_0_0_1px_#e3e3e3]"
+                            className="rounded-lg bg-white px-3 py-2 ring-1 ring-[#e3e3e3]"
                           >
                             <Text variant="bodyXs" tone="subdued" as="p">
                               {branch.label}

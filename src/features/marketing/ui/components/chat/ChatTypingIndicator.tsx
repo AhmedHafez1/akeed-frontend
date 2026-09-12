@@ -18,7 +18,7 @@ export function ChatTypingIndicator() {
                 repeat: Infinity,
                 delay,
               }}
-              className="h-2 w-2 rounded-full bg-gray-400"
+              className="bg-muted-foreground h-2 w-2 rounded-full"
             />
           ))}
         </div>

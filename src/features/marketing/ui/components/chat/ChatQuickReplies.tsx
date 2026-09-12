@@ -25,18 +25,18 @@ export function ChatQuickReplies({
         const isPast = messageIndex < totalMessages - 1
 
         let buttonStyle =
-          'bg-white text-emerald-600 hover:bg-cyan-50 shadow-sm border-emerald-600'
+          'bg-white text-primary hover:bg-cyan-50 shadow-sm border-emerald-600'
 
         if (isPast) {
           if (isSelected) {
             buttonStyle =
-              'bg-gray-100 text-gray-500 shadow-none ring-1 ring-gray-200 border-gray-200'
+              'bg-muted text-muted-foreground shadow-none ring-1 ring-border border-border'
           }
         } else if (!isTyping && messageIndex === totalMessages - 1) {
           buttonStyle =
-            'bg-white text-emerald-600 hover:bg-cyan-50 shadow-sm border-emerald-600'
+            'bg-white text-primary hover:bg-cyan-50 shadow-sm border-emerald-600'
         } else {
-          buttonStyle = 'bg-white text-emerald-600 opacity-0 border-emerald-600'
+          buttonStyle = 'bg-white text-primary opacity-0 border-emerald-600'
         }
 
         return (

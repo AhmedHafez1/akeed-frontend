@@ -52,7 +52,7 @@ function NativeSelect<TValue extends string>({
       <select
         value={value}
         onChange={(event) => onChange(event.target.value as TValue)}
-        className="h-12 w-full appearance-none rounded-lg border-2 border-gray-200 bg-white py-2 ps-4 pe-11 text-base transition-colors outline-none focus:border-emerald-500"
+        className="border-border h-12 w-full appearance-none rounded-lg border-2 bg-white py-2 ps-4 pe-11 text-base transition-colors outline-none focus:border-emerald-500"
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>
@@ -62,7 +62,7 @@ function NativeSelect<TValue extends string>({
       </select>
       <ChevronDown
         aria-hidden="true"
-        className="pointer-events-none absolute end-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500"
+        className="text-muted-foreground pointer-events-none absolute end-4 top-1/2 h-5 w-5 -translate-y-1/2"
       />
     </div>
   )
@@ -85,7 +85,7 @@ function ToggleRow({
         type="checkbox"
         checked={checked}
         onChange={(event) => onChange(event.target.checked)}
-        className="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+        className="text-primary mt-1 h-4 w-4 rounded border-slate-300 focus:ring-emerald-500"
       />
       <span className="space-y-1">
         <span className="flex items-center gap-2 text-sm font-semibold text-slate-900">

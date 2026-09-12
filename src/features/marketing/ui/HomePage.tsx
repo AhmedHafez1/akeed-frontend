@@ -3,8 +3,10 @@
 import { StickyMobileCta } from '@/features/marketing/ui/components/StickyMobileCta'
 import {
   landingSectionBackgroundClass,
+  landingSectionChromeAltClass,
   landingSectionChromeClass,
 } from '@/features/marketing/ui/components/LandingPrimitives'
+import { Reveal } from '@/features/marketing/ui/components/Reveal'
 import Hero from '@/features/marketing/ui/sections/Hero'
 import Problem from '@/features/marketing/ui/sections/Problem'
 import HowItWorks from '@/features/marketing/ui/sections/HowItWorks'
@@ -18,20 +20,30 @@ export function HomePage() {
       <section className={`w-full ${landingSectionBackgroundClass}`}>
         <Hero />
       </section>
-      <section className={`w-full ${landingSectionChromeClass}`}>
-        <Problem />
+      <section className={`w-full ${landingSectionChromeAltClass}`}>
+        <Reveal>
+          <Problem />
+        </Reveal>
       </section>
       <section className={`w-full ${landingSectionChromeClass}`}>
-        <Solution />
+        <Reveal>
+          <Solution />
+        </Reveal>
+      </section>
+      <section className={`w-full ${landingSectionChromeAltClass}`}>
+        <Reveal>
+          <HowItWorks />
+        </Reveal>
       </section>
       <section className={`w-full ${landingSectionChromeClass}`}>
-        <HowItWorks />
+        <Reveal>
+          <Pricing />
+        </Reveal>
       </section>
-      <section className={`w-full ${landingSectionChromeClass}`}>
-        <Pricing />
-      </section>
-      <section className={`w-full ${landingSectionChromeClass}`}>
-        <FAQ />
+      <section className={`w-full ${landingSectionChromeAltClass}`}>
+        <Reveal>
+          <FAQ />
+        </Reveal>
       </section>
       <StickyMobileCta />
     </main>

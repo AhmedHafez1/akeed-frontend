@@ -46,7 +46,7 @@ export function LegalDocumentPage({
     >
       <article className="overflow-hidden rounded-2xl border border-emerald-100 bg-white shadow-sm transition-all duration-300 hover:border-emerald-200 hover:shadow-md">
         <div className="border-b border-emerald-100 bg-emerald-50/50 px-6 py-5 text-center md:px-8">
-          <p className="text-sm font-medium leading-relaxed text-slate-600">
+          <p className="text-sm leading-relaxed font-medium text-slate-600">
             {companyLine}
           </p>
         </div>
@@ -73,13 +73,13 @@ export function LegalDocumentPage({
       >
         <Link
           href={withLocale('/', locale)}
-          className="inline-flex h-11 items-center justify-center rounded-xl bg-emerald-600 px-6 text-sm font-bold text-white shadow-sm shadow-emerald-900/10 transition-all hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="bg-primary text-primary-foreground hover:bg-primary inline-flex h-11 items-center justify-center rounded-xl px-6 text-sm font-bold shadow-sm shadow-emerald-900/10 transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           {primaryLinkLabel}
         </Link>
         <Link
           href={withLocale(secondaryLinkHref, locale)}
-          className="inline-flex h-11 items-center justify-center rounded-xl border border-emerald-100 bg-white px-6 text-sm font-bold text-slate-700 transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:text-emerald-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="hover:text-primary-hover inline-flex h-11 items-center justify-center rounded-xl border border-emerald-100 bg-white px-6 text-sm font-bold text-slate-700 transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           {secondaryLinkLabel}
         </Link>

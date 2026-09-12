@@ -74,15 +74,15 @@ function Hero() {
   const microcopyItems = [
     {
       label: t('microcopy_free'),
-      icon: <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />,
+      icon: <CheckCircle2 className="text-primary h-3.5 w-3.5" />,
     },
     {
       label: t('microcopy_no_card'),
-      icon: <CreditCard className="h-3.5 w-3.5 text-emerald-600" />,
+      icon: <CreditCard className="text-primary h-3.5 w-3.5" />,
     },
     {
       label: t('microcopy_setup'),
-      icon: <Clock3 className="h-3.5 w-3.5 text-emerald-600" />,
+      icon: <Clock3 className="text-primary h-3.5 w-3.5" />,
     },
   ] as const
 
@@ -108,10 +108,10 @@ function Hero() {
             className="mb-6 flex max-w-4xl flex-col items-center gap-2.5 lg:items-start"
           >
             <h1
-              className={`${isRTL ? 'text-right' : 'text-left'} max-w-5xl text-4xl leading-[1.08] font-extrabold tracking-normal text-slate-950 sm:text-5xl lg:text-5xl xl:text-6xl`}
+              className={`${isRTL ? 'text-right' : 'text-left'} text-display text-foreground max-w-5xl text-balance`}
             >
               {t('title')}{' '}
-              <span className="bg-linear-to-r from-emerald-700 to-emerald-500 bg-clip-text text-transparent">
+              <span className="from-primary-hover to-primary bg-linear-to-r bg-clip-text text-transparent">
                 {t('highlight')}
               </span>
             </h1>
@@ -125,7 +125,7 @@ function Hero() {
             className="mb-8 max-w-2xl"
           >
             <p
-              className={`${isRTL ? 'text-right leading-8 lg:leading-9' : 'text-left leading-7 lg:leading-8'} text-base font-medium text-slate-600 sm:text-lg`}
+              className={`${isRTL ? 'text-right' : 'text-left'} text-lead text-muted-foreground text-pretty`}
             >
               {t('subtitle')}
             </p>
@@ -141,12 +141,12 @@ function Hero() {
             {proofItems.map((item) => (
               <div
                 key={item.label}
-                className="flex min-h-17 items-center gap-4 rounded-2xl bg-white/95 px-5 shadow-[0_14px_32px_rgba(15,23,42,0.07)] ring-1 ring-slate-100/80"
+                className="rounded-card bg-card/95 shadow-card ring-border/70 flex min-h-17 items-center gap-4 px-5 ring-1"
               >
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 shadow-inner ring-1 shadow-white ring-emerald-100/70">
+                <span className="rounded-control bg-primary-subtle ring-primary-border/70 flex h-11 w-11 shrink-0 items-center justify-center ring-1">
                   {item.icon}
                 </span>
-                <span className="text-start text-sm leading-5 font-medium text-slate-950">
+                <span className="text-foreground text-start text-sm leading-5 font-medium">
                   {item.label}
                 </span>
               </div>
@@ -158,7 +158,7 @@ function Hero() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...baseTransition, delay: 0.35 }}
-            className="text-md mb-8 flex w-full flex-wrap content-center items-center justify-center gap-x-7 gap-y-4 font-medium text-slate-500"
+            className="text-muted-foreground text-md mb-8 flex w-full flex-wrap content-center items-center justify-center gap-x-7 gap-y-4 font-medium"
           >
             {microcopyItems.map((item) => (
               <span
@@ -193,10 +193,10 @@ function Hero() {
           >
             <a
               href={SHOPIFY_APP_STORE_LISTING_URL}
-              className="group relative flex h-19 w-full items-center justify-center gap-4 rounded-2xl bg-emerald-700 px-7 text-xl font-medium text-white shadow-[0_6px_12px_rgba(5,150,105,0.28)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-emerald-800 hover:shadow-[0_12px_24px_rgba(5,150,105,0.34)] focus-visible:ring-2 focus-visible:ring-emerald-200 focus-visible:outline-none sm:w-auto sm:min-w-76"
+              className="group rounded-control bg-primary text-primary-foreground shadow-brand hover:bg-primary-hover focus-visible:ring-ring focus-visible:ring-offset-background relative flex h-19 w-full items-center justify-center gap-4 px-7 text-xl font-medium transition-[background-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto sm:min-w-76"
               suppressHydrationWarning
             >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/95 shadow-sm">
+              <span className="bg-card/95 shadow-raised flex h-11 w-11 shrink-0 items-center justify-center rounded-full">
                 <Image
                   src="/images/landing/logos/shopify_icon_1.png"
                   alt={t('shopify_available')}
@@ -216,12 +216,12 @@ function Hero() {
             <button
               type="button"
               onClick={scrollToHowItWorks}
-              className={`flex ${isRTL ? 'flex-row-reverse' : ''} h-19 w-full items-center justify-center gap-3 rounded-2xl bg-white/90 px-7 text-lg font-medium text-slate-900 shadow-[0_12px_28px_rgba(15,23,42,0.08)] ring-1 ring-slate-100 transition-all duration-200 hover:-translate-y-0.5 hover:bg-emerald-50/70 hover:text-emerald-800 hover:ring-emerald-100 focus-visible:ring-2 focus-visible:ring-emerald-100 focus-visible:outline-none sm:w-auto sm:min-w-56`}
+              className={`flex ${isRTL ? 'flex-row-reverse' : ''} rounded-control bg-card/90 text-foreground shadow-card ring-border hover:bg-primary-subtle/70 hover:text-primary-subtle-foreground hover:ring-primary-border focus-visible:ring-ring focus-visible:ring-offset-background h-19 w-full items-center justify-center gap-3 px-7 text-lg font-medium ring-1 transition-[background-color,box-shadow,transform,color] duration-200 ease-out hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto sm:min-w-56`}
             >
               {isRTL ? (
-                <Play className="h-5 w-5 rotate-180 fill-emerald-600 text-emerald-600" />
+                <Play className="fill-primary text-primary h-5 w-5 rotate-180" />
               ) : (
-                <Play className="h-5 w-5 fill-emerald-600 text-emerald-600" />
+                <Play className="fill-primary text-primary h-5 w-5" />
               )}
               {t('secondary_cta')}
             </button>

@@ -138,7 +138,7 @@ export default function SignupPage() {
           </p>
           <Link
             href={auth.getLoginPath(locale)}
-            className="mt-6 inline-flex rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-700 focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="bg-primary text-primary-foreground hover:bg-primary mt-6 inline-flex rounded-xl px-5 py-2.5 text-sm font-semibold transition focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             {t('auth.backToSignIn')}
           </Link>
@@ -157,7 +157,7 @@ export default function SignupPage() {
           {t('auth.alreadyHaveAccount')}{' '}
           <Link
             href={auth.getLoginPath(locale)}
-            className="font-semibold text-emerald-600 transition-colors hover:text-emerald-700 focus-visible:underline focus-visible:outline-none"
+            className="text-primary hover:text-primary-hover font-semibold transition-colors focus-visible:underline focus-visible:outline-none"
           >
             {t('auth.signIn')}
           </Link>
@@ -415,13 +415,13 @@ export default function SignupPage() {
               name="terms"
               type="checkbox"
               required
-              className="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus-visible:ring-2 focus-visible:ring-emerald-500/40"
+              className="text-primary mt-1 h-4 w-4 rounded border-slate-300 focus-visible:ring-2 focus-visible:ring-emerald-500/40"
             />
             <span>
               {t('auth.agreeToTerms')}{' '}
               <Link
                 href={withLocale('/terms', locale)}
-                className="font-semibold text-emerald-600 transition-colors hover:text-emerald-700 focus-visible:underline focus-visible:outline-none"
+                className="text-primary hover:text-primary-hover font-semibold transition-colors focus-visible:underline focus-visible:outline-none"
                 target="_blank"
               >
                 {t('auth.termsOfService')}
@@ -429,7 +429,7 @@ export default function SignupPage() {
               {t('auth.and')}{' '}
               <Link
                 href={withLocale('/privacy', locale)}
-                className="font-semibold text-emerald-600 transition-colors hover:text-emerald-700 focus-visible:underline focus-visible:outline-none"
+                className="text-primary hover:text-primary-hover font-semibold transition-colors focus-visible:underline focus-visible:outline-none"
                 target="_blank"
               >
                 {t('auth.privacyPolicy')}
@@ -440,7 +440,7 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="relative flex w-full items-center justify-center rounded-xl bg-emerald-600 px-4 py-3 text-sm font-bold text-white shadow-sm shadow-emerald-900/10 transition-all hover:bg-emerald-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-70"
+            className="bg-primary text-primary-foreground hover:bg-primary relative flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-bold shadow-sm shadow-emerald-900/10 transition-all hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-70"
           >
             {isLoading && (
               <svg
@@ -472,10 +472,10 @@ export default function SignupPage() {
       <div className="space-y-4">
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-slate-200" />
+            <div className="border-border w-full border-t" />
           </div>
-          <div className="relative flex justify-center text-xs tracking-widest text-slate-400 uppercase">
-            <span className="bg-gray-150 px-3">{t('auth.orSignUpWith')}</span>
+          <div className="text-muted-foreground relative flex justify-center text-xs tracking-widest uppercase">
+            <span className="bg-background px-3">{t('auth.orSignUpWith')}</span>
           </div>
         </div>
 

@@ -19,9 +19,9 @@ export interface NotificationInput {
 type NotificationTone = 'success' | 'warning' | 'error'
 
 const toneClasses: Record<NotificationTone, string> = {
-  success: 'border-emerald-200 bg-white text-slate-800',
-  warning: 'border-amber-200 bg-white text-slate-800',
-  error: 'border-red-200 bg-white text-slate-800',
+  success: 'border-emerald-200 bg-white text-foreground',
+  warning: 'border-amber-200 bg-white text-foreground',
+  error: 'border-red-200 bg-white text-foreground',
 }
 
 const toneDots: Record<NotificationTone, string> = {

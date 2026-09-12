@@ -44,7 +44,7 @@ export function AdminShell({ children }: AdminShellProps) {
             href={`/${locale}/admin/stores`}
             className="flex shrink-0 items-center gap-3 rounded-lg focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none"
           >
-            <span className="grid size-9 place-items-center rounded-xl bg-emerald-600 text-sm font-bold text-white shadow-sm shadow-emerald-700/20">
+            <span className="bg-primary text-primary-foreground grid size-9 place-items-center rounded-xl text-sm font-bold shadow-sm shadow-emerald-700/20">
               A
             </span>
             <span>

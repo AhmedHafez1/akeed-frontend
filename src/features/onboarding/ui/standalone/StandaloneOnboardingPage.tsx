@@ -162,7 +162,7 @@ export function StandaloneOnboardingPage() {
                   : t('loadError')}
           </p>
           <Button
-            className="mt-5 min-h-11 bg-emerald-600 px-5 text-sm font-semibold text-white hover:bg-emerald-700 focus-visible:ring-emerald-600"
+            className="bg-primary text-primary-foreground hover:bg-primary mt-5 min-h-11 px-5 text-sm font-semibold focus-visible:ring-emerald-600"
             onClick={() => void onboarding.retry()}
           >
             {t('retry')}
@@ -193,7 +193,7 @@ export function StandaloneOnboardingPage() {
           </p>
           <p className="mt-3 text-xs text-slate-500">{t('approval.note')}</p>
           <Button
-            className="mt-5 min-h-11 bg-emerald-600 px-5 text-sm font-semibold text-white hover:bg-emerald-700 focus-visible:ring-emerald-600"
+            className="bg-primary text-primary-foreground hover:bg-primary mt-5 min-h-11 px-5 text-sm font-semibold focus-visible:ring-emerald-600"
             onClick={() => void onboarding.retry()}
           >
             {t('approval.refresh')}
@@ -339,7 +339,7 @@ export function StandaloneOnboardingPage() {
                     type="button"
                     disabled={isBusy}
                     onClick={() => void handlePrimary()}
-                    className="min-h-11 w-full gap-2 bg-emerald-600 px-5 text-sm font-semibold text-white hover:bg-emerald-700 focus-visible:ring-emerald-600 sm:w-auto"
+                    className="bg-primary text-primary-foreground hover:bg-primary min-h-11 w-full gap-2 px-5 text-sm font-semibold focus-visible:ring-emerald-600 sm:w-auto"
                   >
                     {primaryLabel}
                     {currentStep < 3 && (
@@ -379,7 +379,7 @@ export function StandaloneOnboardingPage() {
               <p className="flex items-start gap-2 text-start text-xs leading-5 text-slate-500">
                 <ShieldCheck
                   aria-hidden="true"
-                  className="mt-px h-4 w-4 shrink-0 text-emerald-600"
+                  className="text-primary mt-px h-4 w-4 shrink-0"
                 />
                 {t('trustNote')}
               </p>

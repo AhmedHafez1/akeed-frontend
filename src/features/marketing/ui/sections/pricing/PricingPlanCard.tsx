@@ -70,10 +70,10 @@ export function PricingPlanCard({
         landingCardClass,
         'flex h-full min-h-115 flex-col overflow-visible text-left',
         isPopular
-          ? 'border-emerald-500/60 bg-linear-to-b from-emerald-50 to-white shadow-[0_22px_40px_rgba(16,185,129,0.18)]'
+          ? 'shadow-brand border-emerald-500/60 bg-linear-to-b from-emerald-50 to-white'
           : '',
         isBusiness
-          ? 'border-slate-300 bg-linear-to-b from-slate-100 to-white shadow-[0_18px_34px_rgba(15,23,42,0.12)]'
+          ? 'shadow-overlay border-slate-300 bg-linear-to-b from-slate-100 to-white'
           : '',
         isRTL ? 'text-right' : 'text-left'
       )}
@@ -82,7 +82,7 @@ export function PricingPlanCard({
         <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
           <span
             className={cn(
-              'inline-flex items-center gap-2 rounded-4xl bg-emerald-600 px-4 text-xs font-semibold text-white shadow-[0_3px_8px_rgba(16,185,129,0.24)]',
+              'bg-primary text-primary-foreground shadow-card inline-flex items-center gap-2 rounded-4xl px-4 text-xs font-semibold',
               isRTL
                 ? 'py-1 tracking-normal sm:text-sm'
                 : 'py-2 tracking-normal uppercase'
@@ -113,7 +113,7 @@ export function PricingPlanCard({
       <div className="mb-6 border-b border-slate-200/80 pb-6">
         <p
           className={cn(
-            'text-xs font-semibold text-slate-400',
+            'text-muted-foreground text-xs font-semibold',
             isRTL ? 'tracking-normal' : 'tracking-normal uppercase'
           )}
         >
@@ -121,7 +121,7 @@ export function PricingPlanCard({
         </p>
 
         {tier.isFree ? (
-          <p className="mt-3 text-4xl leading-none font-bold tracking-normal text-emerald-600">
+          <p className="text-primary mt-3 text-4xl leading-none font-bold tracking-normal">
             {priceLabel}
           </p>
         ) : (
@@ -139,7 +139,9 @@ export function PricingPlanCard({
               <span className="text-3xl">$</span>
               <span>{amountLabel}</span>
             </span>
-            <span className="text-3xl font-semibold text-slate-400">/</span>
+            <span className="text-muted-foreground text-3xl font-semibold">
+              /
+            </span>
             <span className="text-2xl leading-none font-semibold text-slate-900">
               {periodLabel}
             </span>
@@ -148,7 +150,7 @@ export function PricingPlanCard({
       </div>
 
       <div className="mb-6 border-b border-slate-200/80 pb-6">
-        <p className="mb-3 text-xs font-semibold tracking-normal text-slate-400 uppercase">
+        <p className="text-muted-foreground mb-3 text-xs font-semibold tracking-normal uppercase">
           {t('plan_features')}
         </p>
         <ul
@@ -167,10 +169,10 @@ export function PricingPlanCard({
         className={cn(
           'mt-auto h-14 w-full rounded-2xl border text-base font-semibold shadow-none',
           isPopular
-            ? 'border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700 hover:text-white'
+            ? 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground border-emerald-600'
             : isBusiness
               ? 'border-slate-700 bg-slate-700 text-white hover:bg-slate-800 hover:text-white'
-              : 'border-emerald-600 bg-white text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700'
+              : 'hover:text-primary-hover border-emerald-600 bg-white text-emerald-700 hover:bg-emerald-50'
         )}
       >
         {ctaLabel}

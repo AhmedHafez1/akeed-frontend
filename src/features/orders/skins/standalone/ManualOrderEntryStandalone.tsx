@@ -97,7 +97,7 @@ export function ManualOrderEntryStandalone({
             aria-label={t('open')}
             title={disabledReason}
             className={cn(
-              'h-10 rounded-lg bg-emerald-700 text-white shadow-sm hover:bg-emerald-800',
+              'bg-primary text-primary-foreground hover:bg-primary-hover h-10 rounded-lg shadow-sm',
               triggerClassName
             )}
           >
@@ -114,7 +114,7 @@ export function ManualOrderEntryStandalone({
       <DialogContent
         closeLabel={t('close')}
         closeDisabled={entry.isSubmitting}
-        className="max-h-[90vh] overflow-y-auto rounded-[18px] border-stone-200 bg-white p-5 sm:max-w-[640px] sm:p-7"
+        className="border-border max-h-[90vh] overflow-y-auto rounded-[18px] bg-white p-5 sm:max-w-[640px] sm:p-7"
         onEscapeKeyDown={(event) => {
           if (entry.isSubmitting) event.preventDefault()
         }}
@@ -129,7 +129,7 @@ export function ManualOrderEntryStandalone({
       >
         <DialogHeader className="text-start">
           <div className="flex items-start gap-3">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+            <span className="text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50">
               <ClipboardCheck className="h-5 w-5" aria-hidden="true" />
             </span>
             <div className="space-y-1">
@@ -158,7 +158,7 @@ export function ManualOrderEntryStandalone({
               </p>
             </div>
 
-            <DialogFooter className="border-t border-stone-200 pt-5">
+            <DialogFooter className="border-border border-t pt-5">
               <DialogClose asChild>
                 <Button type="button" variant="outline">
                   {t('close')}
@@ -321,7 +321,7 @@ export function ManualOrderEntryStandalone({
               </div>
             </div>
 
-            <div className="space-y-4 border-t border-stone-200 pt-5">
+            <div className="border-border space-y-4 border-t pt-5">
               <div className="grid gap-4 sm:grid-cols-5">
                 <div className="sm:col-span-3">
                   <Label htmlFor="manual-order-total">
@@ -362,7 +362,7 @@ export function ManualOrderEntryStandalone({
                           ? 'manual-order-currency-error'
                           : undefined
                       }
-                      className="h-12 w-full appearance-none rounded-lg border-2 border-gray-200 bg-white py-2 ps-4 pe-11 text-left text-base focus:border-emerald-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 rtl:text-right"
+                      className="border-border h-12 w-full appearance-none rounded-lg border-2 bg-white py-2 ps-4 pe-11 text-left text-base focus:border-emerald-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 rtl:text-right"
                       {...register('currency')}
                     >
                       <option value="">
@@ -376,7 +376,7 @@ export function ManualOrderEntryStandalone({
                     </select>
                     <ChevronDown
                       aria-hidden="true"
-                      className="pointer-events-none absolute end-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500"
+                      className="text-muted-foreground pointer-events-none absolute end-4 top-1/2 h-5 w-5 -translate-y-1/2"
                     />
                   </div>
                   <FieldError
@@ -387,7 +387,7 @@ export function ManualOrderEntryStandalone({
               </div>
             </div>
 
-            <DialogFooter className="border-t border-stone-200 pt-5">
+            <DialogFooter className="border-border border-t pt-5">
               <DialogClose asChild>
                 <Button
                   type="button"
@@ -409,7 +409,7 @@ export function ManualOrderEntryStandalone({
                 <Button
                   type="submit"
                   disabled={entry.isSubmitting}
-                  className="bg-emerald-700 text-white shadow-sm hover:bg-emerald-800"
+                  className="bg-primary text-primary-foreground hover:bg-primary-hover shadow-sm"
                 >
                   {entry.isSubmitting ? t('submitting') : t('submit')}
                 </Button>

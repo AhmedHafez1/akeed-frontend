@@ -44,7 +44,7 @@ interface DashboardCardProps {
 
 function DashboardCard({ className, children, href }: DashboardCardProps) {
   const cardClassName = cn(
-    'rounded-2xl border border-stone-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]',
+    'rounded-2xl border border-border bg-white shadow-raised',
     className
   )
 
@@ -234,7 +234,7 @@ function AttentionPreview({
 
   return (
     <DashboardCard>
-      <div className="flex items-center justify-between gap-3 border-b border-stone-100 px-5 py-4">
+      <div className="border-border flex items-center justify-between gap-3 border-b px-5 py-4">
         <div>
           <h2 className="text-base font-bold text-slate-950">
             {t('standalone.attention.title')}
@@ -276,7 +276,7 @@ function AttentionPreview({
             </p>
           </div>
         ) : (
-          <ul className="divide-y divide-stone-100">
+          <ul className="divide-border divide-y">
             {verifications.map((verification) => (
               <li
                 key={verification.id}
@@ -368,7 +368,7 @@ function OutcomeBreakdown({ stats }: { stats: DashboardStats }) {
 
       {showStackedBar ? (
         <div
-          className="mt-5 flex h-3 overflow-hidden rounded-full bg-stone-100"
+          className="bg-muted mt-5 flex h-3 overflow-hidden rounded-full"
           aria-label={t('standalone.outcomes.chartLabel')}
           role="img"
         >
@@ -383,7 +383,7 @@ function OutcomeBreakdown({ stats }: { stats: DashboardStats }) {
           )}
         </div>
       ) : (
-        <p className="mt-5 rounded-xl bg-stone-50 p-3 text-sm text-slate-600">
+        <p className="bg-muted mt-5 rounded-xl p-3 text-sm text-slate-600">
           {t(
             outcomeTotal === 0
               ? 'standalone.outcomes.empty'
@@ -392,7 +392,7 @@ function OutcomeBreakdown({ stats }: { stats: DashboardStats }) {
         </p>
       )}
 
-      <dl className="mt-5 divide-y divide-stone-100">
+      <dl className="divide-border mt-5 divide-y">
         {outcomes.map((outcome) => (
           <div
             key={outcome.id}
@@ -546,7 +546,7 @@ function TotalOrdersCard({
       <p className="mt-4 text-4xl font-bold tracking-tight text-slate-950">
         {formatDashboardNumber(stats.totals.total, locale)}
       </p>
-      <dl className="mt-4 space-y-2 border-t border-stone-100 pt-3">
+      <dl className="border-border mt-4 space-y-2 border-t pt-3">
         {rows.map((row) => (
           <div
             key={row.id}

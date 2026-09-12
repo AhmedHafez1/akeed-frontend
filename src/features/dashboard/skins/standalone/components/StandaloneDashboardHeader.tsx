@@ -34,7 +34,7 @@ export function StandaloneDashboardHeader({
           {isIdentityLoading ? (
             <span
               aria-label={t('standalone.greetingLoading')}
-              className="inline-block h-10 w-64 max-w-full animate-pulse rounded-lg bg-stone-200 align-middle"
+              className="bg-border inline-block h-10 w-64 max-w-full animate-pulse rounded-lg align-middle"
             />
           ) : (
             <>
@@ -61,7 +61,7 @@ export function StandaloneDashboardHeader({
                 event.target.value as DashboardStatsDateRange
               )
             }
-            className="h-10 w-full appearance-none rounded-lg border border-stone-300 bg-white py-2 ps-3 pe-10 text-sm font-medium text-slate-700 shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none sm:w-auto"
+            className="border-input h-10 w-full appearance-none rounded-lg border bg-white py-2 ps-3 pe-10 text-sm font-medium text-slate-700 shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none sm:w-auto"
           >
             {dateRangeOptions.map((option) => (
               <option key={option.id} value={option.id}>

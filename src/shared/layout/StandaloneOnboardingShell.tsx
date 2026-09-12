@@ -52,7 +52,7 @@ export function StandaloneOnboardingShell({
         {t('shell.skipToContent')}
       </a>
 
-      <header className="flex min-h-14 items-center justify-between gap-3 border-b border-stone-200 bg-white px-4 sm:px-6">
+      <header className="border-border flex min-h-14 items-center justify-between gap-3 border-b bg-white px-4 sm:px-6">
         <Image
           src="/images/akeed-web-logo-horizontal.png"
           alt="Akeed"
@@ -66,7 +66,7 @@ export function StandaloneOnboardingShell({
           <button
             type="button"
             onClick={handleLocaleChange}
-            className="inline-flex h-9 items-center rounded-lg border border-stone-200 bg-white px-3 text-xs font-semibold text-slate-700 transition-colors hover:bg-stone-50 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="border-border hover:bg-muted inline-flex h-9 items-center rounded-lg border bg-white px-3 text-xs font-semibold text-slate-700 transition-colors focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none"
             suppressHydrationWarning
           >
             {locale === 'ar' ? 'EN' : 'العربية'}
@@ -75,7 +75,7 @@ export function StandaloneOnboardingShell({
             href={withLocale('/support', locale)}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex h-9 items-center gap-2 rounded-lg px-2.5 text-sm text-slate-600 transition-colors hover:bg-stone-50 hover:text-slate-950 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="hover:bg-muted inline-flex h-9 items-center gap-2 rounded-lg px-2.5 text-sm text-slate-600 transition-colors hover:text-slate-950 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             <CircleHelp aria-hidden="true" className="h-[18px] w-[18px]" />
             <span className="hidden sm:inline">{t('shell.help')}</span>

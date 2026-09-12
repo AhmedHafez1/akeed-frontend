@@ -55,7 +55,7 @@ export function SegmentedControl<TValue extends string>({
           >
             {option.label}
             {isSelected && (
-              <Check aria-hidden="true" className="h-4 w-4 text-emerald-600" />
+              <Check aria-hidden="true" className="text-primary h-4 w-4" />
             )}
           </button>
         )

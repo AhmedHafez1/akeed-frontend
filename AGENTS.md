@@ -56,6 +56,46 @@ src/
   types/                  # TypeScript type/model definitions (*.model.ts)
 ```
 
+## Design Tokens & Styling
+
+**Tailwind v4 does not read `tailwind.config.*`.** The single theme surface is
+the `@theme` block in `src/app/globals.css`. A `tailwind.config.ts` existed here
+until it was removed; because v4 silently ignored it, every semantic utility
+(`bg-primary`, `text-muted-foreground`, `border-input`, `animate-accordion-*`)
+emitted no CSS, and the codebase drifted to ~1,700 raw palette classes. If a
+utility needs to exist, declare it in `globals.css` — nowhere else.
+
+Use the token, not the literal:
+
+| Instead of | Use |
+| --- | --- |
+| `bg-emerald-600` / `bg-emerald-700` | `bg-primary`, `hover:bg-primary-hover` |
+| `text-emerald-600` | `text-primary` |
+| `bg-emerald-50` + `ring-emerald-100` | `bg-primary-subtle` + `ring-primary-border` |
+| `text-slate-500` | `text-muted-foreground` |
+| `border-slate-200` / `border-gray-200` | `border-border` |
+| `shadow-[0_14px_32px_rgba(...)]` | `shadow-raised` / `shadow-card` / `shadow-overlay` / `shadow-brand` / `shadow-sticky` |
+| `text-4xl sm:text-5xl xl:text-6xl` | `text-display` / `text-h1` / `text-h2` / `text-h3` / `text-lead` / `text-body` |
+| `rounded-xl` / `rounded-2xl` ad hoc | `rounded-control` / `rounded-card` / `rounded-panel` |
+
+- **slate is the only neutral family.** stone/zinc/gray are lint errors outside
+  `src/shared/ui/**`, which is where tokens are defined in concrete terms.
+- **Contrast:** `--primary` is emerald-700, not emerald-600 — white on
+  emerald-600 is 3.35:1 and fails WCAG AA. Never pair `text-white` with a fill
+  lighter than `--primary`, including on `hover:`.
+- **Arabic is the default locale.** Never apply `tracking-tight` or
+  `leading-none` to Arabic text — tightening breaks joined letterforms and
+  `leading-none` clips descenders. Both are neutralised under `[lang='ar']` in
+  `globals.css`, but prefer the type scale, which already carries per-script
+  line-height via `--leading-*`.
+- Use logical properties (`ps-`/`pe-`/`ms-`/`me-`/`start-`/`end-`), never
+  `pl-`/`pr-`/`left-`/`right-`, so RTL works without a conditional.
+- Motion goes through `--ease-out-quint` / `--ease-spring`. Scroll-reveal on
+  marketing sections uses `features/marketing/ui/components/Reveal.tsx`, which
+  already honours `prefers-reduced-motion` — don't hand-roll another.
+- Polaris CSS is imported only inside the embedded layout shell. Embedded skins
+  should look like Shopify Admin; do not apply these tokens there.
+
 ## Code Style
 
 ### Formatting (Prettier)

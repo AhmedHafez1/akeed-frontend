@@ -26,7 +26,7 @@ export function Header() {
       <header
         className={`fixed top-0 z-50 w-full transition-all duration-400 ${
           isScrolled
-            ? 'border-b border-white/10 bg-slate-950/92 shadow-[0_16px_40px_rgba(2,6,23,0.22)] backdrop-blur-md'
+            ? 'shadow-overlay border-b border-white/10 bg-slate-950/92 backdrop-blur-md'
             : 'bg-slate-950/88 backdrop-blur'
         }`}
       >

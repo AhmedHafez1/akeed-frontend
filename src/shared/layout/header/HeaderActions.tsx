@@ -24,7 +24,7 @@ export function HeaderActions({
       </button>
       <a
         href={SHOPIFY_APP_STORE_LISTING_URL}
-        className="group relative overflow-hidden rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white shadow-[0_12px_26px_rgba(5,150,105,0.26)] transition-all hover:-translate-y-0.5 hover:bg-emerald-500 hover:shadow-[0_16px_34px_rgba(5,150,105,0.32)]"
+        className="group rounded-control bg-primary text-primary-foreground shadow-brand hover:bg-primary-hover relative overflow-hidden px-5 py-2.5 text-sm font-bold transition-all hover:-translate-y-0.5"
         suppressHydrationWarning
       >
         <span className="relative z-10">{ctaLabel}</span>

@@ -51,7 +51,7 @@ function Problem() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="landing-section-title max-w-5xl"
+            className="text-h1 text-foreground max-w-5xl text-balance"
           >
             {t('title')}
           </motion.h2>
@@ -60,7 +60,7 @@ function Problem() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="landing-subtitle max-w-3xl"
+            className="text-lead text-muted-foreground max-w-3xl text-pretty"
           >
             {t('subtitle')}
           </motion.p>
@@ -88,7 +88,7 @@ function Problem() {
                   tone={problemCards[index % problemCards.length].tone}
                   size="sm"
                 />
-                <span className="text-xs font-bold tracking-[0.12em] text-slate-300">
+                <span className="text-muted-foreground text-xs font-bold tracking-[0.12em]">
                   {String(index + 1).padStart(2, '0')}
                 </span>
               </div>
@@ -116,7 +116,7 @@ function Problem() {
             <p className="text-base leading-relaxed text-slate-700 sm:text-lg md:text-xl">
               {t('reality')}
             </p>
-            <p className="text-xl font-medium text-emerald-600 sm:text-2xl md:text-3xl">
+            <p className="text-primary text-xl font-medium sm:text-2xl md:text-3xl">
               {t('reality_highlight')}
             </p>
           </div>

@@ -94,7 +94,7 @@ export default function LoginPage() {
           {t('auth.dontHaveAccount')}{' '}
           <Link
             href={auth.getSignupPath(locale)}
-            className="font-semibold text-emerald-600 transition-colors hover:text-emerald-700 focus-visible:underline focus-visible:outline-none"
+            className="text-primary hover:text-primary-hover font-semibold transition-colors focus-visible:underline focus-visible:outline-none"
           >
             {t('auth.signUp')}
           </Link>
@@ -229,14 +229,14 @@ export default function LoginPage() {
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus-visible:ring-2 focus-visible:ring-emerald-500/40"
+                className="text-primary h-4 w-4 rounded border-slate-300 focus-visible:ring-2 focus-visible:ring-emerald-500/40"
               />
               {t('auth.rememberMe')}
             </label>
 
             <Link
               href={withLocale('/forgot-password', locale)}
-              className="text-sm font-semibold text-slate-600 transition-colors hover:text-emerald-700 focus-visible:underline focus-visible:outline-none"
+              className="hover:text-primary-hover text-sm font-semibold text-slate-600 transition-colors focus-visible:underline focus-visible:outline-none"
             >
               {t('auth.forgotPassword')}
             </Link>
@@ -245,7 +245,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="relative flex w-full items-center justify-center rounded-xl bg-emerald-600 px-4 py-3 text-sm font-bold text-white shadow-sm shadow-emerald-900/10 transition-all hover:bg-emerald-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-70"
+            className="bg-primary text-primary-foreground hover:bg-primary relative flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-bold shadow-sm shadow-emerald-900/10 transition-all hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-70"
           >
             {isLoading && (
               <svg
@@ -277,10 +277,12 @@ export default function LoginPage() {
       <div className="space-y-4">
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-slate-200" />
+            <div className="border-border w-full border-t" />
           </div>
-          <div className="relative flex justify-center text-xs tracking-widest text-slate-400 uppercase">
-            <span className="bg-gray-150 px-3">{t('auth.orContinueWith')}</span>
+          <div className="text-muted-foreground relative flex justify-center text-xs tracking-widest uppercase">
+            <span className="bg-background px-3">
+              {t('auth.orContinueWith')}
+            </span>
           </div>
         </div>
 
@@ -355,7 +357,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={handleShopifyConnect}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#96bf48] px-4 py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#7ea93e] hover:shadow-md focus-visible:ring-2 focus-visible:ring-[#96bf48]/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="rounded-control shadow-raised flex w-full items-center justify-center gap-2 bg-[#008060] px-4 py-3 text-sm font-bold text-white transition-all hover:bg-[#006e52] hover:shadow-md focus-visible:ring-2 focus-visible:ring-[#008060]/40 focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               <svg
                 className="h-5 w-5"

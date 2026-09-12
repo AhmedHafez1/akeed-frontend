@@ -68,7 +68,7 @@ function AutomationSkeleton() {
         <SkeletonBodyText lines={2} />
         <FieldSkeleton />
 
-        <div className="h-px bg-gray-200" />
+        <div className="bg-border h-px" />
 
         <SkeletonBodyText lines={2} />
         <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
@@ -76,7 +76,7 @@ function AutomationSkeleton() {
           <FieldSkeleton />
         </InlineGrid>
 
-        <div className="h-px bg-gray-200" />
+        <div className="bg-border h-px" />
 
         <SkeletonBodyText lines={2} />
         <InlineGrid columns={{ xs: 1, md: 3 }} gap="400">
@@ -123,13 +123,13 @@ function SubscriptionSkeleton() {
               <SkeletonBodyText lines={1} />
             </div>
           </InlineStack>
-          <div className="h-2 rounded-full bg-gray-200" />
+          <div className="bg-border h-2 rounded-full" />
           <SkeletonBodyText lines={1} />
         </BlockStack>
 
         <InlineGrid columns={{ xs: 1, md: 2, xl: 4 }} gap="300">
           {Array.from({ length: 4 }).map((_, index) => (
-            <div key={index} className="rounded-lg border border-gray-200 p-4">
+            <div key={index} className="border-border rounded-lg border p-4">
               <BlockStack gap="300">
                 <SkeletonBodyText lines={1} />
                 <SkeletonDisplayText size="small" />

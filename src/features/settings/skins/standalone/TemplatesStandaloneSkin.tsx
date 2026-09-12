@@ -118,7 +118,7 @@ function TemplatePreview({
           style={{ fontFamily: 'Segoe UI, Tahoma, sans-serif' }}
           className="mx-auto max-w-[390px]"
         >
-          <div className="relative rounded-xl bg-white px-4 pt-4 pb-3 text-[#1f2933] shadow-[0_1px_2px_rgba(15,23,42,0.14)] before:absolute before:start-[-7px] before:top-0 before:border-e-[10px] before:border-t-[12px] before:border-e-transparent before:border-t-white">
+          <div className="shadow-raised relative rounded-xl bg-white px-4 pt-4 pb-3 text-[#1f2933] before:absolute before:start-[-7px] before:top-0 before:border-e-[10px] before:border-t-[12px] before:border-e-transparent before:border-t-white">
             <div className="space-y-3 text-[15px] leading-6">
               {paragraphs.map((paragraph, index) => (
                 <p key={`${paragraph}-${index}`}>{paragraph}</p>
@@ -277,7 +277,7 @@ export function TemplatesStandaloneSkin({
         </div>
       )}
 
-      <Card className="mb-5 border-stone-200 bg-white px-4 py-3 shadow-sm">
+      <Card className="border-border mb-5 bg-white px-4 py-3 shadow-sm">
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-50 text-slate-700">
             <Globe2 aria-hidden="true" className="h-4 w-4" />
@@ -304,7 +304,7 @@ export function TemplatesStandaloneSkin({
         type="button"
         variant="outline"
         onClick={() => setIsPreviewOpen(true)}
-        className="mb-4 h-11 w-full border-stone-300 text-slate-800 md:hidden"
+        className="border-input mb-4 h-11 w-full text-slate-800 md:hidden"
       >
         <Eye aria-hidden="true" />
         {t('customerPreviewTitle')}
@@ -312,7 +312,7 @@ export function TemplatesStandaloneSkin({
 
       <div className="grid items-start gap-5 md:grid-cols-[minmax(0,58fr)_minmax(320px,42fr)]">
         <div className="space-y-4">
-          <Card className="border-stone-200 bg-white p-4 shadow-sm sm:p-5">
+          <Card className="border-border bg-white p-4 shadow-sm sm:p-5">
             <fieldset>
               <legend className="text-base font-semibold text-slate-950">
                 {t('customerLanguageTitle')}
@@ -320,7 +320,7 @@ export function TemplatesStandaloneSkin({
               <div
                 role="tablist"
                 aria-label={t('customerLanguageTitle')}
-                className="mt-4 grid grid-cols-2 overflow-hidden rounded-xl border border-stone-200 bg-stone-50 p-1"
+                className="border-border bg-muted mt-4 grid grid-cols-2 overflow-hidden rounded-xl border p-1"
               >
                 {props.templateLanguages.map((language) => {
                   const isSelected = previewLanguage === language
@@ -356,7 +356,7 @@ export function TemplatesStandaloneSkin({
             </fieldset>
           </Card>
 
-          <Card className="border-stone-200 bg-white p-4 shadow-sm sm:p-5">
+          <Card className="border-border bg-white p-4 shadow-sm sm:p-5">
             <fieldset
               disabled={!props.canUpdateConfiguration || props.isSaving}
             >
@@ -382,7 +382,7 @@ export function TemplatesStandaloneSkin({
                           'relative flex min-h-20 cursor-pointer gap-3 rounded-xl border p-3.5 transition-colors focus-within:ring-2 focus-within:ring-emerald-600 focus-within:ring-offset-2',
                           isSelected
                             ? 'border-emerald-500 bg-emerald-50'
-                            : 'border-stone-200 bg-white hover:border-stone-300 hover:bg-stone-50',
+                            : 'border-border hover:border-input hover:bg-muted bg-white',
                           (!props.canUpdateConfiguration || props.isSaving) &&
                             'cursor-not-allowed opacity-65'
                         )}
@@ -403,8 +403,8 @@ export function TemplatesStandaloneSkin({
                           className={cn(
                             'mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2',
                             isSelected
-                              ? 'border-emerald-600 bg-emerald-600 text-white'
-                              : 'border-stone-300 bg-white text-transparent'
+                              ? 'bg-primary text-primary-foreground border-emerald-600'
+                              : 'border-input bg-white text-transparent'
                           )}
                         >
                           <Check className="h-4 w-4" strokeWidth={3} />
@@ -429,20 +429,20 @@ export function TemplatesStandaloneSkin({
                   })}
                 </div>
               ) : (
-                <p className="mt-4 rounded-xl bg-stone-50 px-4 py-3 text-sm text-slate-600">
+                <p className="bg-muted mt-4 rounded-xl px-4 py-3 text-sm text-slate-600">
                   {t('noVariants')}
                 </p>
               )}
             </fieldset>
           </Card>
 
-          <details className="rounded-xl border border-stone-200 bg-white shadow-sm">
+          <details className="border-border rounded-xl border bg-white shadow-sm">
             <summary className="cursor-pointer px-4 py-4 text-base font-semibold text-slate-950 sm:px-5">
               {t('detailsTitle')}
             </summary>
             <div className="px-4 pb-4 sm:px-5 sm:pb-5">
-              <dl className="mt-4 overflow-hidden rounded-xl border border-stone-200">
-                <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] items-center gap-3 border-b border-stone-200 px-4 py-3 text-sm">
+              <dl className="border-border mt-4 overflow-hidden rounded-xl border">
+                <div className="border-border grid grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] items-center gap-3 border-b px-4 py-3 text-sm">
                   <dt className="flex items-center gap-2 text-slate-600">
                     <MessageCircle
                       aria-hidden="true"
@@ -454,7 +454,7 @@ export function TemplatesStandaloneSkin({
                     {t('whatsappLabel')}
                   </dd>
                 </div>
-                <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] items-center gap-3 border-b border-stone-200 px-4 py-3 text-sm">
+                <div className="border-border grid grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] items-center gap-3 border-b px-4 py-3 text-sm">
                   <dt className="flex items-center gap-2 text-slate-600">
                     <Target
                       aria-hidden="true"
@@ -479,7 +479,7 @@ export function TemplatesStandaloneSkin({
                       ? variableKeys.map((variable) => (
                           <span
                             key={variable}
-                            className="rounded-md bg-stone-100 px-2 py-1 text-xs"
+                            className="bg-muted rounded-md px-2 py-1 text-xs"
                           >
                             {t(`variableLabels.${variable}`)}
                           </span>
@@ -499,7 +499,7 @@ export function TemplatesStandaloneSkin({
           </details>
 
           {props.canUpdateConfiguration && (
-            <div className="hidden items-center justify-end gap-3 border-t border-stone-200 pt-4 md:flex">
+            <div className="border-border hidden items-center justify-end gap-3 border-t pt-4 md:flex">
               <Button
                 type="button"
                 variant="outline"
@@ -514,7 +514,7 @@ export function TemplatesStandaloneSkin({
                 type="button"
                 disabled={!props.isDirty || props.isSaving}
                 onClick={() => void props.onSave()}
-                className="h-11 bg-emerald-700 px-5 text-white hover:bg-emerald-800"
+                className="bg-primary text-primary-foreground hover:bg-primary-hover h-11 px-5"
               >
                 {props.isSaving ? (
                   <LoaderCircle aria-hidden="true" className="animate-spin" />
@@ -527,7 +527,7 @@ export function TemplatesStandaloneSkin({
           )}
         </div>
 
-        <Card className="hidden border-stone-200 bg-white p-4 shadow-sm sm:p-5 md:sticky md:top-20 md:block">
+        <Card className="border-border hidden bg-white p-4 shadow-sm sm:p-5 md:sticky md:top-20 md:block">
           <div className="flex items-center justify-between gap-3">
             <h2 className="text-base font-semibold text-slate-950">
               {t('customerPreviewTitle')}
@@ -549,7 +549,7 @@ export function TemplatesStandaloneSkin({
       </div>
 
       {props.canUpdateConfiguration && props.isDirty && (
-        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-stone-200 bg-white/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_24px_rgba(15,23,42,0.08)] backdrop-blur md:hidden">
+        <div className="border-border shadow-sticky fixed inset-x-0 bottom-0 z-40 border-t bg-white/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur md:hidden">
           <div className="flex gap-3">
             <Button
               type="button"
@@ -565,7 +565,7 @@ export function TemplatesStandaloneSkin({
               type="button"
               disabled={props.isSaving}
               onClick={() => void props.onSave()}
-              className="h-11 flex-1 bg-emerald-700 text-white hover:bg-emerald-800"
+              className="bg-primary text-primary-foreground hover:bg-primary-hover h-11 flex-1"
             >
               {props.isSaving ? (
                 <LoaderCircle aria-hidden="true" className="animate-spin" />
@@ -599,7 +599,7 @@ export function TemplatesStandaloneSkin({
             <Button
               type="button"
               onClick={resetToDefault}
-              className="bg-emerald-700 text-white hover:bg-emerald-800"
+              className="bg-primary text-primary-foreground hover:bg-primary-hover"
             >
               {t('resetDialog.confirm')}
             </Button>

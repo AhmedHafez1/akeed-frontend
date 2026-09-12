@@ -63,7 +63,7 @@ export function StandalonePageSkeleton({
 
   return (
     <div className="akeed-app-canvas flex min-h-screen">
-      <aside className="hidden h-screen w-[248px] shrink-0 border-e border-stone-200 bg-white p-5 lg:block">
+      <aside className="border-border hidden h-screen w-[248px] shrink-0 border-e bg-white p-5 lg:block">
         <Skeleton className="h-10 w-28" />
         <div className="mt-10 space-y-3">
           {[0, 1, 2, 3].map((item) => (
@@ -72,7 +72,7 @@ export function StandalonePageSkeleton({
         </div>
       </aside>
       <div className="min-w-0 flex-1">
-        <div className="flex h-14 items-center justify-between border-b border-stone-200 bg-white px-4 sm:px-6">
+        <div className="border-border flex h-14 items-center justify-between border-b bg-white px-4 sm:px-6">
           <Skeleton className="h-4 w-28" />
           <Skeleton className="h-9 w-16 rounded-lg" />
         </div>

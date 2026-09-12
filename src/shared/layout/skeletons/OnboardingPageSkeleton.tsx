@@ -22,7 +22,7 @@ function StepCounterSkeleton() {
       <InlineStack gap="200" wrap>
         {Array.from({ length: 4 }).map((_, index) => (
           <InlineStack key={index} gap="200" blockAlign="center">
-            <div className="w-24 rounded-md border border-gray-200 px-3 py-1">
+            <div className="border-border w-24 rounded-md border px-3 py-1">
               <SkeletonBodyText lines={1} />
             </div>
             {index < 3 && (
@@ -49,7 +49,7 @@ function ConfigurationStepSkeleton() {
           <SkeletonBodyText lines={1} />
         </BlockStack>
       ))}
-      <div className="rounded-lg border border-gray-200 p-4">
+      <div className="border-border rounded-lg border p-4">
         <SkeletonBodyText lines={3} />
       </div>
       <InlineStack align="end">
@@ -69,7 +69,7 @@ function BillingStepSkeleton() {
         <SkeletonBodyText lines={2} />
       </BlockStack>
 
-      <div className="rounded-lg border border-gray-200 p-4">
+      <div className="border-border rounded-lg border p-4">
         <SkeletonBodyText lines={5} />
       </div>
 
@@ -79,7 +79,7 @@ function BillingStepSkeleton() {
 
       <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
         {Array.from({ length: 4 }).map((_, index) => (
-          <div key={index} className="rounded-lg border border-gray-200 p-4">
+          <div key={index} className="border-border rounded-lg border p-4">
             <BlockStack gap="300">
               <SkeletonBodyText lines={1} />
               <SkeletonDisplayText size="small" />

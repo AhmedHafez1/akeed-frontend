@@ -18,7 +18,7 @@ const stateStyles: Record<
   { surface: string; icon: string }
 > = {
   active: {
-    surface: 'border-stone-200 bg-white',
+    surface: 'border-border bg-white',
     icon: 'border-emerald-200 bg-emerald-50 text-emerald-700',
   },
   paused: {

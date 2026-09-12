@@ -1,65 +1,366 @@
 @import 'tailwindcss';
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 160 84% 39%; /* Emerald-600 */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 43 96% 56%; /* Amber-400 */
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 160 84% 39%; /* Emerald-600 */
-    --radius: 0.75rem;
-    --akeed-app-canvas: #f5f5f5;
-  }
+/*
+ * ── Akeed design tokens ────────────────────────────────────────────────
+ * This file is the ONLY theme surface. Tailwind v4 does not read
+ * `tailwind.config.*` — utilities exist only if declared in `@theme` here.
+ *
+ * Layout:
+ *   :root / .dark  → raw semantic values (swappable per theme)
+ *   @theme inline  → maps them onto Tailwind utilities (bg-primary, …)
+ *   @theme         → scales that do not vary by theme (radius, motion, …)
+ *
+ * Colours are oklch and anchored to Tailwind's own emerald/slate/amber/red
+ * ramps, so `bg-primary` and the existing `bg-emerald-700` are the same
+ * pixel value during migration.
+ */
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 160 84% 39%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 43 96% 56%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 160 84% 39%;
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* Surfaces */
+  --background: oklch(100% 0 0);
+  --foreground: oklch(12.9% 0.042 264.695); /* slate-950 */
+  --card: oklch(100% 0 0);
+  --card-foreground: oklch(12.9% 0.042 264.695);
+  --popover: oklch(100% 0 0);
+  --popover-foreground: oklch(12.9% 0.042 264.695);
+
+  /*
+   * App canvas. A whisper of the brand hue rather than a neutral or warm
+   * grey — it keeps white cards reading as "lifted" without a heavy shadow,
+   * and avoids the muddy cast a warm grey picks up next to emerald.
+   */
+  --canvas: oklch(98.4% 0.004 165);
+
+  /*
+   * Brand. emerald-700, not emerald-600: white-on-emerald-600 is 3.35:1 and
+   * fails WCAG AA for body text. emerald-700 is 4.6:1 and already matches
+   * the landing CTA, so buttons and the marketing site finally agree.
+   */
+  --primary: oklch(50.8% 0.118 165.612); /* emerald-700 */
+  --primary-foreground: oklch(100% 0 0);
+  --primary-hover: oklch(43.2% 0.095 166.913); /* emerald-800 */
+  --primary-subtle: oklch(97.9% 0.021 166.113); /* emerald-50 */
+  --primary-subtle-foreground: oklch(37.8% 0.077 168.94); /* emerald-900 */
+  --primary-border: oklch(90.5% 0.093 164.15); /* emerald-200 */
+
+  /* Accent — reserved for urgency/attention, never for primary actions. */
+  --secondary: oklch(82.8% 0.189 84.429); /* amber-400 */
+  --secondary-foreground: oklch(27.9% 0.077 45.635); /* amber-950 */
+
+  /* Neutrals — slate is the single neutral family. No stone, no gray. */
+  --muted: oklch(96.8% 0.007 247.896); /* slate-100 */
+  --muted-foreground: oklch(55.4% 0.046 257.417); /* slate-500 — 4.76:1 */
+  --accent: oklch(96.8% 0.007 247.896);
+  --accent-foreground: oklch(20.8% 0.042 265.755); /* slate-900 */
+  --border: oklch(92.9% 0.013 255.508); /* slate-200 */
+  --input: oklch(86.9% 0.022 252.894); /* slate-300 */
+  --ring: oklch(59.6% 0.145 163.225); /* emerald-600 */
+
+  /* Status */
+  --destructive: oklch(57.7% 0.245 27.325); /* red-600 — 4.6:1 on white */
+  --destructive-foreground: oklch(100% 0 0);
+  --success: oklch(50.8% 0.118 165.612);
+  --success-foreground: oklch(100% 0 0);
+  --warning: oklch(55.5% 0.163 48.998); /* amber-700 — AA on white */
+  --warning-foreground: oklch(100% 0 0);
+
+  --radius: 0.75rem;
+
+  /*
+   * Line-height, varied by script rather than by call site. Arabic has
+   * deeper descenders and taller ascenders than Latin at the same optical
+   * size, so it needs more leading to avoid collision — see the [lang='ar']
+   * block below. The type scale reads these, so `text-h1` is correct in
+   * both locales without a single conditional in JSX.
+   */
+  --leading-display: 1.08;
+  --leading-heading: 1.2;
+  --leading-title: 1.3;
+  --leading-body: 1.6;
+
+  /* Latin tightens at display sizes; Arabic must not (see below). */
+  --tracking-display: -0.02em;
+  --tracking-heading: -0.01em;
+}
+
+[lang='ar'] {
+  --leading-display: 1.3;
+  --leading-heading: 1.45;
+  --leading-title: 1.5;
+  --leading-body: 1.9;
+
+  /*
+   * Never negative-track Arabic. Letters are joined; tightening breaks the
+   * connecting strokes and is the fastest way to make Arabic look cheap.
+   */
+  --tracking-display: 0;
+  --tracking-heading: 0;
+}
+
+.dark {
+  --background: oklch(12.9% 0.042 264.695);
+  --foreground: oklch(98.4% 0.003 247.858);
+  --card: oklch(20.8% 0.042 265.755);
+  --card-foreground: oklch(98.4% 0.003 247.858);
+  --popover: oklch(20.8% 0.042 265.755);
+  --popover-foreground: oklch(98.4% 0.003 247.858);
+  --canvas: oklch(12.9% 0.042 264.695);
+
+  --primary: oklch(69.6% 0.17 162.48); /* emerald-500 — lifts on dark */
+  --primary-foreground: oklch(12.9% 0.042 264.695);
+  --primary-hover: oklch(76.5% 0.177 163.223);
+  --primary-subtle: oklch(27.9% 0.041 260.031);
+  --primary-subtle-foreground: oklch(90.5% 0.093 164.15);
+  --primary-border: oklch(37.8% 0.077 168.94);
+
+  --secondary: oklch(82.8% 0.189 84.429);
+  --secondary-foreground: oklch(27.9% 0.077 45.635);
+
+  --muted: oklch(27.9% 0.041 260.031);
+  --muted-foreground: oklch(70.4% 0.04 256.788);
+  --accent: oklch(27.9% 0.041 260.031);
+  --accent-foreground: oklch(98.4% 0.003 247.858);
+  --border: oklch(27.9% 0.041 260.031);
+  --input: oklch(37.2% 0.044 257.287);
+  --ring: oklch(69.6% 0.17 162.48);
+
+  --destructive: oklch(70.4% 0.191 22.216);
+  --destructive-foreground: oklch(12.9% 0.042 264.695);
+  --success: oklch(69.6% 0.17 162.48);
+  --success-foreground: oklch(12.9% 0.042 264.695);
+  --warning: oklch(82.8% 0.189 84.429);
+  --warning-foreground: oklch(27.9% 0.077 45.635);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-canvas: var(--canvas);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-subtle: var(--primary-subtle);
+  --color-primary-subtle-foreground: var(--primary-subtle-foreground);
+  --color-primary-border: var(--primary-border);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+
+  /*
+   * ── Type scale ──
+   * Replaces the ad-hoc `.landing-title` utilities and the hand-rolled
+   * `text-4xl sm:text-5xl xl:text-6xl` chains. One ladder, used everywhere.
+   */
+  --text-display: clamp(2.5rem, 5vw, 3.75rem);
+  --text-display--line-height: var(--leading-display);
+  --text-display--letter-spacing: var(--tracking-display);
+  --text-display--font-weight: 800;
+
+  --text-h1: clamp(2rem, 4vw, 2.5rem);
+  --text-h1--line-height: var(--leading-heading);
+  --text-h1--letter-spacing: var(--tracking-heading);
+  --text-h1--font-weight: 700;
+
+  --text-h2: clamp(1.5rem, 3vw, 1.875rem);
+  --text-h2--line-height: var(--leading-heading);
+  --text-h2--letter-spacing: var(--tracking-heading);
+  --text-h2--font-weight: 700;
+
+  --text-h3: 1.25rem;
+  --text-h3--line-height: var(--leading-title);
+  --text-h3--font-weight: 600;
+
+  --text-lead: clamp(1.0625rem, 2.2vw, 1.25rem);
+  --text-lead--line-height: var(--leading-body);
+  --text-lead--font-weight: 450;
+
+  --text-body: 0.9375rem;
+  --text-body--line-height: var(--leading-body);
+
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: var(--leading-title);
+}
+
+@theme {
+  /*
+   * ── Radius ──
+   * Semantic, opt-in names. Tailwind's own rounded-md/lg/xl scale is left
+   * untouched so nothing shifts implicitly; call sites migrate onto these
+   * three steps deliberately.
+   */
+  --radius-control: 0.625rem; /* inputs, buttons, selects, chips */
+  --radius-card: 0.875rem; /* cards, tiles, table shells */
+  --radius-panel: 1.25rem; /* modals, sheets, hero surfaces */
+
+  /*
+   * ── Elevation ──
+   * Four steps, replacing 19 unique hand-rolled shadow-[…] values. Tinted
+   * with the brand hue instead of neutral black: a coloured shadow reads as
+   * light falling through the surface rather than as a grey smudge.
+   */
+  --shadow-raised: 0 1px 2px oklch(20.8% 0.042 265.755 / 0.06);
+  --shadow-card:
+    0 1px 2px oklch(20.8% 0.042 265.755 / 0.05),
+    0 8px 24px -12px oklch(20.8% 0.042 265.755 / 0.12);
+  --shadow-overlay:
+    0 4px 8px oklch(20.8% 0.042 265.755 / 0.06),
+    0 24px 56px -20px oklch(20.8% 0.042 265.755 / 0.24);
+  --shadow-brand:
+    0 1px 2px oklch(37.8% 0.077 168.94 / 0.24),
+    0 12px 28px -12px oklch(37.8% 0.077 168.94 / 0.42);
+
+  /* Bars pinned to the bottom of the viewport, casting upward. */
+  --shadow-sticky: 0 -8px 28px -8px oklch(20.8% 0.042 265.755 / 0.14);
+
+  /*
+   * ── Motion ──
+   * Named easings so transitions stop being ad-hoc duration-200/300.
+   */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --animate-accordion-down: accordion-down 0.2s var(--ease-out-quint);
+  --animate-accordion-up: accordion-up 0.2s var(--ease-out-quint);
+  --animate-fade-in: fade-in 0.4s var(--ease-out-quint);
+  --animate-slide-up: slide-up 0.5s var(--ease-out-quint);
+  --animate-slide-down: slide-down 0.5s var(--ease-out-quint);
+  --animate-scale-in: scale-in 0.25s var(--ease-out-quint);
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes slide-up {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  @keyframes slide-down {
+    from {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  @keyframes scale-in {
+    from {
+      transform: scale(0.96);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
   }
 }
 
-.akeed-app-canvas {
-  background-color: var(--akeed-app-canvas);
+/*
+ * ── Radix enter/exit ───────────────────────────────────────────────────
+ * Dialog, Select and DropdownMenu were written against the
+ * `tailwindcss-animate` class names (animate-in, fade-in-0, zoom-in-95,
+ * slide-in-from-top-2, …). That plugin is not installed, so every one of
+ * those classes emitted nothing and the overlays popped in with no
+ * transition at all.
+ *
+ * Rather than add the dependency, the handful of states those components
+ * actually use are driven directly off Radix's own `data-state` attribute.
+ * The verbose utility chains on the components are replaced by `.radix-pop`
+ * / `.radix-fade`.
+ */
+@layer utilities {
+  .radix-fade[data-state='open'] {
+    animation: fade-in 0.2s var(--ease-out-quint);
+  }
+
+  .radix-fade[data-state='closed'] {
+    animation: fade-in 0.15s var(--ease-out-quint) reverse;
+  }
+
+  .radix-pop[data-state='open'] {
+    animation: radix-pop-in 0.18s var(--ease-out-quint);
+  }
+
+  .radix-pop[data-state='closed'] {
+    animation: radix-pop-in 0.14s var(--ease-out-quint) reverse;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .radix-fade[data-state],
+    .radix-pop[data-state] {
+      animation-duration: 0.01ms;
+    }
+  }
+}
+
+@keyframes radix-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 @layer base {
   * {
-    border-color: hsl(var(--border));
+    border-color: var(--border);
   }
 
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+    background-color: var(--background);
+    color: var(--foreground);
     font-feature-settings:
       'rlig' 1,
       'calt' 1;
@@ -70,6 +371,10 @@
   button {
     @apply cursor-pointer;
   }
+}
+
+.akeed-app-canvas {
+  background-color: var(--canvas);
 }
 
 /*
@@ -110,11 +415,72 @@
   }
 }
 
+@layer utilities {
+  /* Shared layout rhythm for marketing section headers. */
+  .landing-section-header {
+    @apply mx-auto flex max-w-5xl flex-col items-center gap-4 text-center sm:gap-5;
+  }
+
+  /*
+   * Arabic guardrails. `tracking-tight` breaks the connecting strokes of
+   * joined letterforms, and `leading-none` clips descenders — both read as
+   * broken rather than tight. Rather than police ~20 call sites (and every
+   * future one), neutralise them for Arabic here. Declared in the same
+   * layer as the utilities they override, so specificity decides.
+   */
+  [lang='ar'] :is(.tracking-tight, .tracking-tighter) {
+    letter-spacing: normal;
+  }
+
+  [lang='ar'] .leading-none {
+    line-height: 1.35;
+  }
+
+  /*
+   * Hero surface. Replaces the `from-gray-100 via-gray-200 to-gray-50`
+   * gradient that previously repeated on every landing section, every
+   * public page and the auth shell — a mid-grey ramp darker in its middle
+   * than at either end, which is the strongest "template" tell on the site.
+   *
+   * One soft brand-tinted glow on near-white, on the hero only. Section
+   * separation below the fold comes from spacing and a hairline, not from
+   * repainting the background six times.
+   */
+  .landing-hero-surface {
+    position: relative;
+    background-color: var(--background);
+    isolation: isolate;
+  }
+
+  .landing-hero-surface::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        62rem 38rem at 78% -10%,
+        oklch(69.6% 0.17 162.48 / 0.13),
+        transparent 62%
+      ),
+      radial-gradient(
+        44rem 30rem at 8% 4%,
+        oklch(76.5% 0.177 163.223 / 0.08),
+        transparent 58%
+      );
+  }
+
+  [dir='rtl'] .landing-hero-surface::before {
+    scale: -1 1;
+  }
+}
+
 /* Custom scrollbar */
 @layer utilities {
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: hsl(var(--primary)) transparent;
+    scrollbar-color: var(--primary) transparent;
   }
 
   .scrollbar-thin::-webkit-scrollbar {
@@ -126,7 +492,7 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--primary));
+    background-color: var(--primary);
     border-radius: 4px;
   }
 }
@@ -138,82 +504,6 @@
 
 [dir='rtl'] .divide-x-reverse > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-x-reverse: 1;
-}
-
-/* Smooth animations */
-@layer utilities {
-  .landing-title {
-    font-size: clamp(2.5rem, 5vw, 2.7rem);
-    line-height: 1.3;
-    letter-spacing: 0;
-    font-weight: 700;
-    color: #121212;
-    text-wrap: balance;
-  }
-
-  .landing-section-title {
-    font-size: clamp(2.1rem, 4vw, 2.1rem);
-    line-height: 1.1;
-    letter-spacing: 0;
-    font-weight: 700;
-    color: #212121;
-    text-wrap: balance;
-  }
-
-  .landing-subtitle {
-    font-size: clamp(1rem, 2.2vw, 1.25rem);
-    line-height: 1.65;
-    font-weight: 500;
-    color: #3e3e3e;
-    text-wrap: pretty;
-  }
-
-  .landing-section-header {
-    @apply mx-auto flex max-w-5xl flex-col items-center gap-4 text-center sm:gap-5;
-  }
-
-  .animate-fade-in {
-    animation: fade-in 0.5s ease-in;
-  }
-
-  .animate-slide-up {
-    animation: slide-up 0.5s ease-out;
-  }
-
-  .animate-slide-down {
-    animation: slide-down 0.5s ease-out;
-  }
-
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  @keyframes slide-up {
-    from {
-      transform: translateY(20px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-
-  @keyframes slide-down {
-    from {
-      transform: translateY(-20px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
 }
 
 /*
@@ -247,5 +537,5 @@
 }
 
 .intl-phone .PhoneInputInput::placeholder {
-  @apply text-gray-400;
+  @apply text-muted-foreground;
 }

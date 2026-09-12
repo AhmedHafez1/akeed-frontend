@@ -68,9 +68,9 @@ export function OnboardingStepRail({
                   className={cn(
                     'relative z-10 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-sm font-semibold tabular-nums',
                     isCompleted
-                      ? 'border-emerald-600 bg-emerald-600 text-white'
+                      ? 'bg-primary text-primary-foreground border-emerald-600'
                       : isCurrent
-                        ? 'border-emerald-600 bg-emerald-600 text-white'
+                        ? 'bg-primary text-primary-foreground border-emerald-600'
                         : 'border-slate-200 bg-white text-slate-500'
                   )}
                 >
@@ -104,7 +104,7 @@ export function OnboardingStepRail({
       <p className="mt-6 flex items-start gap-2 border-t border-slate-200 pt-4 text-xs leading-5 text-slate-500">
         <ShieldCheck
           aria-hidden="true"
-          className="mt-px h-4 w-4 shrink-0 text-emerald-600"
+          className="text-primary mt-px h-4 w-4 shrink-0"
         />
         {t('editableLater')}
       </p>

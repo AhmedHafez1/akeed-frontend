@@ -23,27 +23,27 @@ export function PublicPageShell({
   return (
     <section
       className={cn(
-        'min-h-[calc(100svh-4rem)] border-t border-slate-200/70 bg-linear-to-b from-gray-100 via-gray-200 to-gray-50 px-4 pt-24 pb-16 sm:px-6 md:pt-28 md:pb-20 lg:px-8',
+        'border-border bg-canvas min-h-[calc(100svh-4rem)] border-t px-4 pt-24 pb-16 sm:px-6 md:pt-28 md:pb-20 lg:px-8',
         className
       )}
     >
       <div className="mx-auto max-w-5xl">
         <header className="landing-section-header mb-10 sm:mb-12 lg:mb-14">
           {eyebrow && (
-            <p className="text-sm font-semibold tracking-wide text-emerald-600 uppercase">
+            <p className="text-primary text-sm font-semibold tracking-wide uppercase">
               {eyebrow}
             </p>
           )}
-          <h1 className="landing-section-title max-w-5xl">
+          <h1 className="text-h1 text-foreground max-w-5xl text-balance">
             {title}
           </h1>
           {meta && (
-            <div className="inline-flex rounded-full border border-emerald-100 bg-emerald-50 px-4 py-1.5 text-sm font-semibold text-emerald-700">
+            <div className="border-primary-border bg-primary-subtle text-primary-subtle-foreground inline-flex rounded-full border px-4 py-1.5 text-sm font-semibold">
               {meta}
             </div>
           )}
           {description && (
-            <p className="landing-subtitle max-w-3xl">
+            <p className="text-lead text-muted-foreground max-w-3xl text-pretty">
               {description}
             </p>
           )}
@@ -73,22 +73,20 @@ export function PublicInfoCard({
   return (
     <article
       className={cn(
-        'group relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-md md:p-7',
+        'group rounded-card border-border bg-card shadow-card hover:border-primary-border hover:shadow-overlay relative overflow-hidden border p-6 transition-[border-color,box-shadow,transform] duration-300 ease-out hover:-translate-y-1 md:p-7',
         className
       )}
     >
       <div className="flex items-start gap-4">
         {icon && (
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100">
+          <div className="bg-primary-subtle text-primary ring-primary-border flex h-12 w-12 shrink-0 items-center justify-center rounded-full ring-1">
             {icon}
           </div>
         )}
         <div className="min-w-0 flex-1">
-          <h2 className="text-lg font-bold text-slate-800">
-            {title}
-          </h2>
+          <h2 className="text-h3">{title}</h2>
           {description && (
-            <p className="mt-2 text-sm leading-relaxed text-slate-600">
+            <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
               {description}
             </p>
           )}
