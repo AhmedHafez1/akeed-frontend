@@ -1239,18 +1239,21 @@
         "unavailable": "The actionable-order preview is unavailable right now.",
         "dateUnavailable": "Date unavailable"
       },
-      "followUp": {
-        "description": "Orders that need your review"
-      },
       "performance": {
-        "title": "Confirmation performance"
+        "title": "Confirmation performance",
+        "basis": "Measured across {count, plural, one {# order} other {# orders}} that reached the customer and settled.",
+        "basisEmpty": "No orders have settled in this period yet, so the rates are not calculated.",
+        "silent": "No reply",
+        "silentHint": "Orders that reached the customer and went unanswered. Counted in the rates above — they are the main reason a reply rate drops.",
+        "undelivered": "Undelivered",
+        "undeliveredHint": "Orders that never reached the customer. Excluded from the rates, because nobody declined to answer a message they never received."
       },
       "outcomes": {
         "title": "Outcome breakdown",
         "description": "Order outcomes for the selected period.",
         "chartLabel": "Proportional breakdown of order outcomes",
         "empty": "No order outcomes are available for this period.",
-        "singleOutcome": "Only one outcome has data, so a proportional bar is not shown."
+        "shareOfTotal": "{percent} of total"
       },
       "unavailable": {
         "title": "Dashboard metrics are unavailable",
