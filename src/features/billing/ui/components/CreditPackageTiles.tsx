@@ -9,7 +9,6 @@ import type { CreditPackage } from '../../domain/creditPackages'
 interface CreditPackageTilesProps {
   packages: CreditPackage[]
   selected: number | null
-  unitPriceMinor: number
   currency: string
   disabled: boolean
   onSelect: (credits: number) => void
@@ -18,7 +17,6 @@ interface CreditPackageTilesProps {
 export function CreditPackageTiles({
   packages,
   selected,
-  unitPriceMinor,
   currency,
   disabled,
   onSelect,
@@ -68,11 +66,6 @@ export function CreditPackageTiles({
             </span>
             <span className="text-foreground mt-2 block font-semibold">
               {formatMoney(item.totalMinor, currency, locale)}
-            </span>
-            <span className="text-muted-foreground mt-0.5 block text-xs">
-              {t('packages.perCredit', {
-                amount: formatMoney(unitPriceMinor, currency, locale),
-              })}
             </span>
           </button>
         )

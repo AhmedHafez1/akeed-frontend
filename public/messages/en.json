@@ -2264,12 +2264,6 @@
         "api": "Checkout could not be created. Review the quantity or try again."
       }
     },
-    "terms": {
-      "title": "How credits work",
-      "accepted": "One credit is charged for each initial or follow-up message accepted for delivery.",
-      "restored": "A confirmed delivery failure restores the charged credit automatically.",
-      "expiry": "Purchased and launch-grant credits do not expire."
-    },
     "purchaseStatus": {
       "pending": "Pending",
       "successful": "Successful",
@@ -2381,7 +2375,6 @@
     "packages": {
       "stepLabel": "Choose an amount",
       "customLabel": "Enter the amount you need",
-      "perCredit": "{amount} per credit",
       "unit": "credits",
       "totalLabel": "Confirmed total",
       "pay": "Continue to payment"
