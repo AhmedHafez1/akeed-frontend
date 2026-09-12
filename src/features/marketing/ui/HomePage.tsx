@@ -12,7 +12,10 @@ import Problem from '@/features/marketing/ui/sections/Problem'
 import HowItWorks from '@/features/marketing/ui/sections/HowItWorks'
 import Solution from '@/features/marketing/ui/sections/Solution'
 import Pricing from '@/features/marketing/ui/sections/Pricing'
+import WhoItsFor from '@/features/marketing/ui/sections/WhoItsFor'
+import Trust from '@/features/marketing/ui/sections/Trust'
 import FAQ from '@/features/marketing/ui/sections/FAQ'
+import FinalCta from '@/features/marketing/ui/sections/FinalCta'
 
 export function HomePage() {
   return (
@@ -42,7 +45,22 @@ export function HomePage() {
       </section>
       <section className={`w-full ${landingSectionChromeAltClass}`}>
         <Reveal>
+          <WhoItsFor />
+        </Reveal>
+      </section>
+      <section className={`w-full ${landingSectionChromeClass}`}>
+        <Reveal>
+          <Trust />
+        </Reveal>
+      </section>
+      <section className={`w-full ${landingSectionChromeAltClass}`}>
+        <Reveal>
           <FAQ />
+        </Reveal>
+      </section>
+      <section className={`w-full ${landingSectionChromeClass}`}>
+        <Reveal>
+          <FinalCta />
         </Reveal>
       </section>
       <StickyMobileCta />

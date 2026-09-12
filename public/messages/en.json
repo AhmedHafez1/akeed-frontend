@@ -93,7 +93,10 @@
       "action": "Next action",
       "seen": "Last seen"
     },
-    "severity": { "attention": "Attention", "critical": "Critical" },
+    "severity": {
+      "attention": "Attention",
+      "critical": "Critical"
+    },
     "actions": {
       "repair_projection": "Preview and apply projection repair",
       "investigate_sources": "Investigate contradictory sources",
@@ -625,67 +628,34 @@
     "tryAgain": "Try again"
   },
   "metadata": {
-    "title": "Akeed | COD Order Confirmation",
-    "description": "Automate COD order confirmation on WhatsApp with official Meta WhatsApp Cloud APIs. Cut wasted shipping costs and get faster customer responses with Akeed's rule-based workflows and clear, branded messages.",
-    "tagline": "Smart Verification",
-    "features": "Features",
-    "demo": "Demo",
-    "pricing": "Pricing",
-    "faq": "FAQ",
-    "cta": "Install on Shopify",
-    "sign_in": "Open Shopify app"
+    "title": "Akeed | COD Order Confirmation on WhatsApp",
+    "description": "Automatically confirm cash-on-delivery orders on official WhatsApp before you ship. Works with Shopify stores and independent stores, priced by usage."
   },
   "header": {
-    "tagline": "Smart Verification",
     "features": "Features",
-    "demo": "Demo",
     "pricing": "Pricing",
+    "how_it_works": "How it works",
+    "audience": "Who it's for",
     "docs": "Docs",
     "faq": "FAQ",
-    "cta": "Install on Shopify",
     "cta_shopify": "Install on Shopify",
-    "cta_standalone": "Own store",
-    "sign_in": "Open Shopify app"
+    "cta_standalone": "Own store"
   },
   "hero": {
     "title": "Stop Wasting Shipping Costs.",
     "highlight": "Confirm COD Orders on WhatsApp.",
-    "subtitle": "Install Akeed from the Shopify App Store and automate COD confirmation through official Meta WhatsApp Cloud APIs.",
-    "subtitle_bullet_1": "✅ <strong>Official Meta WhatsApp Cloud APIs</strong> for reliable delivery",
-    "subtitle_bullet_2": "✅ <strong>No WhatsApp number or API setup required</strong>",
-    "subtitle_bullet_3": "✅ <strong>Branded Arabic and English</strong> confirmation messages",
-    "subtitle_bullet_4": "✅ <strong>Clear dashboard</strong> for confirmed, canceled, and pending orders",
-    "subtitle_bullet_5": "✅ <strong>Fast setup</strong> for Shopify and leading MENA platforms",
-    "urgency": "Special Offer: First 20 stores get 50 confirmations FREE",
-    "social_proof": "Cut avoidable COD shipping losses across MENA",
-    "join_social_proof": "Join <bold>85+</bold> MENA merchants on the waitlist",
-    "rating": "5.0 rating",
-    "cta": "Install on Shopify",
+    "subtitle": "Send an automatic WhatsApp confirmation before you ship — whether your store runs on Shopify or on its own.",
     "cta_shopify": "Install on Shopify",
     "cta_standalone": "I have my own store",
     "cta_standalone_note": "Early access — accounts are activated after review.",
-    "learn_more": "See Live Demo",
-    "scroll_down": "See it in action",
-    "benefit_1": "No credit card required",
-    "benefit_2": "14-day free trial",
-    "benefit_3": "Cancel anytime",
-    "easy_integrated": "Shopify is live now. More platforms are coming next.",
-    "no_credit_card": "Free plan available. Installs from the Shopify App Store. No credit card needed.",
-    "launch_badge": "Now live on Shopify",
-    "secondary_cta": "See how it works",
     "proof_shopify": "Approved by Shopify",
     "proof_meta": "Official WhatsApp Cloud API",
     "proof_built": "Built for Shopify",
     "microcopy_free": "Free to install.",
     "microcopy_no_card": "No credit card needed.",
     "microcopy_setup": "2-minute setup.",
-    "shopify_store_badge": "Now available on the Shopify App Store",
     "shopify_available": "Shopify",
-    "platform_live_badge": "Live now",
-    "shopify_available_note": "Install Akeed directly from Shopify to start confirming COD orders on WhatsApp.",
-    "platform_coming_soon_badge": "coming soon",
-    "platform_coming_soon": "Salla, Zid, WooCommerce, ExpandCart, and EasyOrder are planned next.",
-    "platform_note": "<strong>Live on Shopify now.</strong> More platforms coming soon."
+    "platform_note": "<strong>Available now for Shopify and independent stores.</strong> More integrations coming soon."
   },
   "demo": {
     "badge": "Live Demo",
@@ -757,21 +727,103 @@
   },
   "how_it_works": {
     "section_title": "How Akeed Works",
-    "main_title": "Three simple steps to safer COD shipping.",
-    "steps": {
-      "connect": {
-        "title": "Install Akeed on Shopify in minutes",
-        "description": "Install Akeed on your Shopify store in minutes with few clicks. No custom WhatsApp setup is required."
-      },
-      "automation": {
-        "title": "Akeed sends the confirmation automatically",
-        "description": "As soon as a COD order is created, Akeed sends a branded WhatsApp confirmation flow through official Meta APIs and captures a clear customer response."
-      },
-      "ship": {
-        "title": "Ship only verified COD orders",
-        "description": "Confirmed and unconfirmed orders are synced back to your dashboard, so your team ships with more confidence and avoids wasted shipping costs."
+    "main_title": "Pick how your store runs — the rest is automatic.",
+    "tabs_label": "Choose how your store runs",
+    "tabs": {
+      "shopify": "Shopify store",
+      "standalone": "Own store"
+    },
+    "shopify": {
+      "footnote": "Installation and billing happen inside Shopify, and no WhatsApp setup is needed on your side.",
+      "steps": {
+        "connect": {
+          "title": "Install Akeed on Shopify in minutes",
+          "description": "Install Akeed on your Shopify store with a few clicks. No custom WhatsApp setup is required."
+        },
+        "automation": {
+          "title": "Akeed sends the confirmation automatically",
+          "description": "As soon as a COD order is created, Akeed sends a branded WhatsApp confirmation through official Meta APIs and captures a clear customer response."
+        },
+        "ship": {
+          "title": "Ship only verified COD orders",
+          "description": "Confirmed and unconfirmed orders are synced back to your dashboard, so your team ships with more confidence and avoids wasted shipping costs."
+        }
+      }
+    },
+    "standalone": {
+      "footnote": "Approval is a real step during early access — every account is reviewed before sending is enabled.",
+      "steps": {
+        "request": {
+          "title": "Request your account",
+          "description": "Create an Akeed account with your store details. Signing up is free and needs no credit card."
+        },
+        "approve": {
+          "title": "We review and activate it",
+          "description": "The Akeed team reviews your request manually. On approval, your launch credits are added once."
+        },
+        "create": {
+          "title": "Add your orders",
+          "description": "Create orders inside Akeed or import them — no particular store platform required."
+        },
+        "send": {
+          "title": "Send and track replies",
+          "description": "Akeed sends the confirmation on WhatsApp, and you track every order — confirmed, canceled, or awaiting a reply — from one dashboard."
+        }
       }
     }
+  },
+  "who_its_for": {
+    "section_title": "Akeed is for you if…",
+    "section_description": "Whether your store runs on Shopify or you handle orders yourself, the goal is the same: never ship an order before you know the customer is ready to receive it.",
+    "shopify": {
+      "title": "You run a Shopify store",
+      "description": "Connect your store and let Akeed handle COD confirmation automatically.",
+      "cta": "Install from Shopify"
+    },
+    "own_store": {
+      "title": "You have your own store or site",
+      "description": "Add your orders to Akeed and manage confirmation on WhatsApp without Shopify.",
+      "cta": "Request your account"
+    },
+    "manual": {
+      "title": "You take orders manually",
+      "description": "Orders from Instagram, WhatsApp, or phone calls? Collect them in Akeed and confirm from one place.",
+      "cta": "Request your account"
+    },
+    "high_cod": {
+      "title": "Cash on delivery is most of your volume",
+      "description": "Every unconfirmed order is wasted shipping and wasted time. Confirming first cuts returns.",
+      "cta": "Request your account"
+    },
+    "not_for": "Akeed for independent stores is still in early access and accounts are approved manually. If your store is on Shopify, you can install it right now."
+  },
+  "trust": {
+    "section_title": "Built on channels you can trust",
+    "section_description": "Akeed runs on official platforms and is designed for commerce in the region — no unofficial numbers, no workarounds.",
+    "official_whatsapp": {
+      "title": "Official WhatsApp from Meta",
+      "description": "Messages are sent through the official WhatsApp Business Platform, not unapproved numbers or tools."
+    },
+    "shopify_approved": {
+      "title": "Listed on the Shopify App Store",
+      "description": "Installation and subscription happen within Shopify's ecosystem and policies."
+    },
+    "arabic_first": {
+      "title": "Arabic first",
+      "description": "Interface and messages in Arabic with full right-to-left support, and English available."
+    },
+    "data_protection": {
+      "title": "Your store data is protected",
+      "description": "Integration credentials are encrypted, and customer data is used only to complete the confirmation."
+    }
+  },
+  "final_cta": {
+    "eyebrow": "Next step",
+    "title": "Confirm your orders before you ship them",
+    "description": "Start the way that fits your store — install directly on Shopify, or request a standalone account.",
+    "cta_shopify": "Install on Shopify",
+    "cta_standalone": "Request your account",
+    "cta_standalone_note": "Early access — accounts are activated after review."
   },
   "solution": {
     "title": "Built for Merchants Who Want Clear, Reliable COD Confirmation",
@@ -824,70 +876,13 @@
       "description": "Most merchants can start with Akeed's shared WhatsApp infrastructure. Larger merchants can later move to their own number if needed."
     }
   },
-  "pricing": {
-    "eyebrow": "Simple. Transparent. Built for growth",
-    "title": "Simple Monthly Plans for <highlight>Every Store Size</highlight>",
-    "subtitle": "Choose the included WhatsApp confirmations you need. No surprise charges.",
-    "check_3": "Transparent monthly limits",
-    "orders_label": "WhatsApp confirmations",
-    "currency": "USD",
-    "free_badge": "30 confirmations included",
-    "free": "Free",
-    "total_price": "Monthly price",
-    "without_price": "Without price",
-    "tier": "Tier",
-    "saving": "Save",
-    "most_popular": "Most popular",
-    "cta_recharge": "Get Started",
-    "plan_features": "Plan features",
-    "starter_price": "Free",
-    "starter_subtitle": "Try Akeed for free.",
-    "starter_cta": "Start free",
-    "starter_feature_1": "30 WhatsApp confirmations",
-    "starter_feature_2": "Automatic COD confirmation on WhatsApp",
-    "starter_feature_3": "Automatically update orders in Shopify",
-    "starter_feature_4": "Dashboard with confirmation insights",
-    "basic_price": "$9.99 / month",
-    "basic_subtitle": "For growing stores confirming COD orders regularly.",
-    "basic_cta": "Choose Basic",
-    "basic_feature_1": "300 WhatsApp confirmations",
-    "basic_feature_2": "Automated follow-up reminders to customers who don't reply",
-    "basic_feature_3": "Rule-based order confirmation automation",
-    "basic_feature_4": "via Our official WhatsApp numbers (zero setup)",
-    "basic_feature_5": "No extra costs",
-    "pro_price": "$22.99 / month",
-    "pro_subtitle": "For stores with many COD orders every day.",
-    "pro_cta": "Choose Pro",
-    "pro_feature_1": "1,000 WhatsApp confirmations",
-    "pro_feature_2": "Everything in Basic",
-    "pro_feature_3": "Advanced rule-based order confirmation automation",
-    "pro_feature_4": "Quiet hours configuration",
-    "pro_feature_5": "Message scheduling based on your store timezone",
-    "pro_feature_6": "No extra costs",
-    "business_price": "$49.99 / month",
-    "business_subtitle": "For higher-volume COD operations.",
-    "business_cta": "Choose Scale",
-    "business_feature_1": "2,500 WhatsApp confirmations",
-    "business_feature_2": "Everything in Pro",
-    "business_feature_3": "Priority support",
-    "business_feature_4": "Setup call",
-    "business_feature_5": "Built for higher-volume COD stores",
-    "business_feature_6": "No extra costs",
-    "tiers": {
-      "starter": "Starter",
-      "basic": "Basic",
-      "pro": "Pro",
-      "business": "Scale",
-      "corporate": "Corporate"
-    }
-  },
   "faq": {
     "section_title": "Frequently Asked Questions",
     "section_description": "Quick answers to common setup, WhatsApp, and plan questions. For the full list, see General FAQ in Docs.",
     "title": "Frequently Asked Questions",
     "supported_platforms": {
       "question": "Which platforms does Akeed support?",
-      "answer": "Akeed supports Shopify directly and can be connected to other commerce setups through the available integration flow."
+      "answer": "Akeed supports Shopify directly through an app you install from the App Store. Independent stores can also use Akeed without any particular platform, by creating orders inside Akeed and sending confirmations on WhatsApp."
     },
     "setup_time": {
       "question": "How long does setup take?",
@@ -909,20 +904,14 @@
       "question": "What happens if the customer does not reply?",
       "answer": "The order stays unconfirmed so your team can hold it, follow up, or skip shipping based on your process."
     },
-    "plan_limit": {
-      "question": "What happens when I reach my monthly confirmation limit?",
-      "answer": "New confirmations pause until your billing cycle renews or you upgrade your plan."
+    "standalone_approval": {
+      "question": "Can I start right away if my store is independent?",
+      "answer": "You can sign up immediately, but Akeed for independent stores is in early access: our team reviews each account manually, and once approved your launch credits are added and you can buy and send. Shopify stores can start as soon as they install."
+    },
+    "credit_usage": {
+      "question": "How exactly are credits counted?",
+      "answer": "One credit is used per WhatsApp message sent to a customer, not per order. If you send a follow-up to a customer who hasn't replied, that uses a second credit. Messages the provider cannot deliver are refunded automatically."
     }
-  },
-  "roi_calculator": {
-    "section_title": "Calculate for yourself... How much can Akeed save you monthly?",
-    "orders": "Orders per month",
-    "returns_without": "Avg. returns (without Akeed)",
-    "returns_with": "Avg. returns (with Akeed)",
-    "savings": "Expected monthly shipping savings",
-    "reduction_label": "lower return volume",
-    "currency": "EGP",
-    "note": "Note: Average shipping cost burned per order is around 60 EGP (round trip)."
   },
   "whatsapp_button": {
     "text": "Try it on your phone first",
@@ -956,22 +945,10 @@
   },
   "mobile_cta": {
     "eyebrow": "Get started with Akeed",
-    "title": "Launch your WhatsApp confirmation flow",
-    "primary": "Install on Shopify",
     "primary_shopify": "Shopify store",
     "primary_standalone": "Own store",
     "aria_shopify": "Install Akeed on Shopify",
     "aria_standalone": "Request a standalone account"
-  },
-  "post_faq_cta": {
-    "eyebrow": "Final Step",
-    "title": "Start with shared WhatsApp infrastructure today",
-    "subtitle": "Get your COD confirmation workflow live in minutes with official Meta WhatsApp Cloud APIs, then scale to your own number later if needed.",
-    "point_1": "No business verification required to start",
-    "point_2": "Rule-based automation, no AI uncertainty",
-    "point_3": "Built for Shopify and MENA commerce stacks",
-    "primary": "Create account and start",
-    "secondary": "Review the problem we solve"
   },
   "auth": {
     "signInToAccount": "Sign in to your account",

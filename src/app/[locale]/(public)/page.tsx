@@ -12,6 +12,10 @@ import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import { faqs } from '@/features/marketing/config/site'
 import type { Locale } from '@/i18n'
 import {
+  CREDIT_CURRENCY,
+  CREDIT_UNIT_PRICE_MINOR,
+} from '@/shared/config/pricing'
+import {
   createPublicPageMetadata,
   getCanonicalUrl,
   getOrganizationSchema,
@@ -36,8 +40,13 @@ export async function generateMetadata({
 
 async function getHomeStructuredData(locale: Locale) {
   const metadata = await getTranslations({ locale, namespace: 'metadata' })
-  const hero = await getTranslations({ locale, namespace: 'hero' })
+  const pricing = await getTranslations({
+    locale,
+    namespace: 'pricing_credits',
+  })
   const faq = await getTranslations({ locale, namespace: 'faq' })
+
+  const unitPrice = (CREDIT_UNIT_PRICE_MINOR / 100).toFixed(2)
 
   const softwareApplication = {
     '@context': 'https://schema.org',
@@ -47,11 +56,23 @@ async function getHomeStructuredData(locale: Locale) {
     operatingSystem: 'Web',
     url: getCanonicalUrl(locale),
     description: metadata('description'),
+    /*
+     * Metered, not a subscription: the product is priced per WhatsApp message,
+     * so a flat Offer would misdescribe it. `PreOrder` is the honest
+     * availability while standalone accounts require manual approval.
+     */
     offers: {
       '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
-      description: hero('no_credit_card'),
+      price: unitPrice,
+      priceCurrency: CREDIT_CURRENCY,
+      availability: 'https://schema.org/PreOrder',
+      description: pricing('unit_price_note'),
+      priceSpecification: {
+        '@type': 'UnitPriceSpecification',
+        price: unitPrice,
+        priceCurrency: CREDIT_CURRENCY,
+        unitText: pricing('unit_price_label'),
+      },
     },
   }
 
