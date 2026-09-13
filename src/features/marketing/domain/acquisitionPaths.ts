@@ -5,9 +5,8 @@ import { SHOPIFY_APP_STORE_LISTING_URL } from '@/shared/lib/shopify-auth'
  * The two ways a visitor can start using Akeed.
  *
  * `shopify` installs the embedded app from the App Store, where Shopify also
- * presents its own subscription pricing. `standalone` creates a portal account;
- * its credit account starts `pending_approval`, so the landing page frames it as
- * early access rather than instant self-serve.
+ * presents its own subscription pricing. `standalone` creates a portal account
+ * that is active with its launch credits once the email address is verified.
  */
 export type AcquisitionPath = 'shopify' | 'standalone'
 

@@ -108,13 +108,9 @@ export function StandaloneFeedbackBanners({
 function creditFeedbackMessageKey(code: CreditDenialCode) {
   const keys: Record<
     CreditDenialCode,
-    | 'approvalRequired'
-    | 'suspended'
-    | 'debt'
-    | 'insufficient'
-    | 'reconciliation'
+    'notProvisioned' | 'suspended' | 'debt' | 'insufficient' | 'reconciliation'
   > = {
-    STANDALONE_APPROVAL_REQUIRED: 'approvalRequired',
+    CREDIT_ACCOUNT_NOT_PROVISIONED: 'notProvisioned',
     CREDIT_ACCOUNT_SUSPENDED: 'suspended',
     CREDIT_DEBT_OUTSTANDING: 'debt',
     INSUFFICIENT_CREDITS: 'insufficient',

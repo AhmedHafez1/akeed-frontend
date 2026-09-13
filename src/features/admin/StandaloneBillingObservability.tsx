@@ -161,8 +161,11 @@ export function StandaloneBillingObservability({
 
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <AdminMetricCard
-              label={t('metrics.approved')}
-              value={formatNumber(health.product.approvedOrganizations, locale)}
+              label={t('metrics.activated')}
+              value={formatNumber(
+                health.product.activatedOrganizations,
+                locale
+              )}
               detail={t('metrics.balanceDetail', {
                 low: health.product.lowBalanceOrganizations,
                 zero: health.product.zeroBalanceOrganizations,

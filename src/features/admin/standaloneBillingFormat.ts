@@ -24,6 +24,7 @@ export const DISPATCH_STATES = [
 ] as const
 
 export const AUDIT_ACTIONS = [
+  // Retired staff approvals still appear in older audit trails.
   'standalone-billing.approve',
   'standalone-billing.adjustment.preview',
   'standalone-billing.adjustment.apply',

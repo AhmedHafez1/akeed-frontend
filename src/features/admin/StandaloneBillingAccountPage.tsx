@@ -110,10 +110,7 @@ function AccountBody({
   const operator = detail.operations.enabled && detail.operations.operator
   // The backend refuses these anyway; the page only avoids offering them.
   const canApply = operator && !detail.mutationsBlocked
-  const canPreview =
-    !!account &&
-    account.status !== 'pending_approval' &&
-    !detail.mutationsBlocked
+  const canPreview = !!account && !detail.mutationsBlocked
   const limited = (count: number, truncated: boolean) =>
     truncated && t('truncated', { count })
 
@@ -156,11 +153,11 @@ function AccountBody({
             label={t('balance.debt')}
             value={formatNumber(account.debtCredits, locale)}
             detail={
-              account.approvedAt
-                ? t('balance.approvedAt', {
-                    time: formatDateTime(account.approvedAt, locale),
+              account.activatedAt
+                ? t('balance.activatedAt', {
+                    time: formatDateTime(account.activatedAt, locale),
                   })
-                : t('balance.notApproved')
+                : t('balance.notActivated')
             }
             tone={account.debtCredits > 0 ? 'red' : 'neutral'}
           />

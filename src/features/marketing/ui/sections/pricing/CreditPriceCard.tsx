@@ -1,6 +1,6 @@
 'use client'
 
-import { Gift, Info } from 'lucide-react'
+import { Gift } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useAcquisition } from '@/features/marketing/domain/useAcquisition'
 import { AcquisitionCta } from '@/features/marketing/ui/components/AcquisitionCta'
@@ -85,18 +85,6 @@ export function CreditPriceCard() {
           step: formatCredits(CREDIT_PURCHASE_STEP, locale),
         })}
       </p>
-
-      {/*
-       * The approval gate sits next to the price rather than in its own block:
-       * standalone credit accounts start `pending_approval`, so it must not be
-       * skippable.
-       */}
-      <div className="bg-primary-subtle ring-primary-border/70 relative flex items-start gap-3 rounded-2xl p-4 ring-1">
-        <Info className="text-primary mt-0.5 h-5 w-5 shrink-0" />
-        <p className="text-primary-subtle-foreground text-sm leading-6">
-          {t('approval_notice')}
-        </p>
-      </div>
 
       <AcquisitionCta
         target={targets.standalone}

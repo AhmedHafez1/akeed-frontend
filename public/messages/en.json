@@ -44,7 +44,7 @@
     "noRuns": "No reconciliation run has completed yet.",
     "coverageWarning": "Settlement coverage is incomplete for this period. Net revenue, ARPPU, and revenue per accepted message are unavailable.",
     "metrics": {
-      "approved": "Approved organizations",
+      "activated": "Active organizations",
       "balanceDetail": "{low} low balance; {zero} zero balance",
       "conversion": "Checkout conversion",
       "purchaseDetail": "{first} first purchases; {repeat} repeat purchases",
@@ -146,25 +146,16 @@
     }
   },
   "adminBilling": {
-    "title": "Standalone credit approval",
-    "description": "Select accounts, review a preview, then approve. Approval activates the credit account and posts one launch grant per organization, recorded with your staff identity and reason. Onboarding progress, orders and existing usage are preserved.",
+    "title": "Standalone credit accounts",
+    "description": "Every Standalone account opens active with its one-time launch grant when the merchant verifies their email. Filter by status, balance and reconciliation, then open an account to inspect or correct it.",
     "refresh": "Refresh",
-    "disabled": "Approval is disabled. You can review accounts and generate previews while release checks are pending.",
-    "accessDenied": "Staff access or approval permission is unavailable. Refresh to check current access.",
-    "invalidRequest": "Check your selection and reason, then create a new preview.",
-    "requestFailed": "The request could not be completed. Retry the preview or approval; approved accounts are never granted twice.",
+    "accessDenied": "Staff access is unavailable. Refresh to check current access.",
+    "requestFailed": "The account list could not be loaded. Retry.",
     "retry": "Retry",
-    "selected": "{count} of 50 accounts selected",
-    "clear": "Clear selection",
-    "preview": "Preview selected accounts",
-    "previewing": "Preparing preview…",
     "loading": "Loading accounts…",
-    "select": "Select",
     "organization": "Organization",
     "source": "Source",
     "creditAccount": "Credit account",
-    "eligibility": "Eligibility",
-    "selectOrganization": "Select {name}",
     "missingOrganization": "Organization unavailable",
     "empty": "No organizations on this page.",
     "previous": "Previous",
@@ -173,64 +164,9 @@
     "noAccount": "No credit account",
     "balance": "{available} available of {posted} posted",
     "grantPosted": "Launch grant already posted",
-    "reviewTitle": "Review credit approval",
-    "downloadPreview": "Download preview",
-    "evaluatedAt": "Evaluated {time}",
-    "existingSourceNote": "Existing-source count overlaps the eligibility categories.",
-    "proposedGrant": "Activate the credit account and post {count} launch credits, once.",
-    "granted": "{count} credits granted",
-    "reason": "Approval reason",
-    "reasonHelp": "Required, up to 500 characters. Use an approval or support reference; do not include secrets or customer details.",
-    "apply": "Approve {count} eligible accounts",
-    "applying": "Applying approvals…",
-    "retryApply": "Retry incomplete approvals",
-    "results": "Approval results",
-    "downloadResults": "Download results",
-    "resultHelp": "Approved accounts are preserved on retry and never granted twice. Changed or ambiguous accounts need a new preview or staff review. Approval does not complete onboarding or send messages.",
     "accountStatus": {
-      "pending_approval": "Pending approval",
       "active": "Active",
       "suspended": "Suspended"
-    },
-    "counts": {
-      "eligible": "Eligible",
-      "alreadyApproved": "Already approved",
-      "skipped": "Skipped",
-      "existingSource": "Existing source",
-      "ambiguous": "Needs review"
-    },
-    "statuses": {
-      "eligible": "Eligible",
-      "already_approved": "Already approved",
-      "skipped": "Skipped",
-      "ambiguous": "Needs review"
-    },
-    "outcomes": {
-      "approved": "Approved",
-      "already_applied": "Previously completed",
-      "unchanged": "Unchanged",
-      "skipped": "Skipped",
-      "changed": "Preview is outdated",
-      "failed": "Approval failed"
-    },
-    "reasons": {
-      "create_source": "Create a Standalone source, activate the credit account and post the launch grant.",
-      "activate_source": "Activate the credit account on the existing Standalone source and post the launch grant.",
-      "already_approved": "This organization is already approved; the launch grant is not repeated.",
-      "organization_missing": "The organization no longer exists.",
-      "native_source": "A native commerce source exists; this organization will not be converted.",
-      "native_billing_history": "Retained native billing history prevents conversion.",
-      "owner_missing": "No owner membership was found.",
-      "multiple_owners": "Multiple owner memberships require review.",
-      "multiple_owned_organizations": "The owner has multiple organizations; resolve account ownership first.",
-      "source_conflict": "The source identity or source ownership is conflicting.",
-      "source_inactive": "The Standalone source is disconnected and will not be reactivated.",
-      "billing_conflict": "Existing billing or source fields require staff review.",
-      "accounting_anchor_missing": "Accounting history exists without a reliable activation date.",
-      "account_missing": "No credit account exists for this organization; run the billing migration check first.",
-      "account_suspended": "The credit account is suspended and will not be approved here.",
-      "preview_changed": "Account data changed since preview. Generate a new preview.",
-      "approval_failed": "This account was not changed. Retry the approval."
     },
     "creditHealth": "Credit health",
     "details": "Open",
@@ -239,7 +175,7 @@
     "projectionMismatch": "Balance does not match its ledger",
     "reconciliationSummary": "Needs reconciliation: {purchases} flagged purchases, {holds} unresolved sends",
     "balanceStates": {
-      "none": "Not approved",
+      "none": "No credit account",
       "ok": "Healthy",
       "low": "Low balance",
       "zero": "No credits",
@@ -247,21 +183,13 @@
     },
     "filters": {
       "label": "Filter accounts",
-      "approval": "Approval",
       "accountStatus": "Account status",
       "balance": "Balance",
       "reconciliation": "Reconciliation",
       "all": "All",
       "reset": "Clear filters",
       "options": {
-        "approval": {
-          "eligible": "Eligible",
-          "already_approved": "Already approved",
-          "skipped": "Skipped",
-          "ambiguous": "Needs review"
-        },
         "accountStatus": {
-          "pending_approval": "Pending approval",
           "active": "Active",
           "suspended": "Suspended"
         },
@@ -285,19 +213,18 @@
     "loading": "Loading billing account…",
     "retry": "Retry",
     "actions": "Actions",
-    "noAccount": "This organization has no credit account yet. Approve it from the account list first.",
+    "noAccount": "This organization has no credit account. Accounts open automatically at verified signup; escalate to engineering if one is missing.",
     "truncated": "Showing the latest {count} rows.",
     "access": {
       "disabled": "Billing operations are switched off. You can inspect and preview, but nothing can be applied.",
       "notOperator": "You are not a named billing operator. You can inspect and preview, but nothing can be applied."
     },
     "accountStatus": {
-      "pending_approval": "Pending approval",
       "active": "Active",
       "suspended": "Suspended"
     },
     "balanceStates": {
-      "none": "Not approved yet",
+      "none": "No credit account",
       "ok": "Above the low-balance threshold of {threshold}",
       "low": "At or below the low-balance threshold of {threshold}",
       "zero": "No spendable credits",
@@ -309,8 +236,8 @@
       "held": "Held credits",
       "heldDetail": "Reserved for sends not yet settled",
       "debt": "Debt",
-      "approvedAt": "Approved {time}",
-      "notApproved": "Not approved"
+      "activatedAt": "Activated {time}",
+      "notActivated": "No launch grant posted"
     },
     "mismatch": {
       "title": "The balance does not match its ledger",
@@ -451,7 +378,7 @@
     },
     "audit": {
       "title": "Staff audit trail",
-      "description": "Approvals, adjustments, resolutions, inquiries, evidence and repairs on this organization.",
+      "description": "Adjustments, resolutions, inquiries, evidence, repairs and past approvals on this organization.",
       "empty": "No staff actions recorded.",
       "date": "Date",
       "action": "Action",
@@ -485,7 +412,6 @@
       "STANDALONE_BILLING_OPERATIONS_DISABLED": "Billing operations are switched off.",
       "STANDALONE_BILLING_OPERATOR_REQUIRED": "Only a named billing operator can apply this.",
       "BILLING_ACCOUNT_NOT_FOUND": "No credit account exists for this organization.",
-      "BILLING_ACCOUNT_NOT_APPROVED": "Approve the organization before changing its credits.",
       "CREDIT_PROJECTION_MISMATCH": "The balance does not match its ledger. Repair the projection first.",
       "CREDIT_SOURCE_CONTRADICTORY": "Credit records contradict each other. Escalate before changing this account.",
       "BILLING_PREVIEW_NOT_FOUND": "That preview no longer exists. Preview again.",
@@ -508,7 +434,7 @@
     },
     "ops": {
       "reason": "Reason",
-      "reasonHelp": "Required, up to 500 characters. Cite the ticket or approval; never include card, wallet or customer details.",
+      "reasonHelp": "Required, up to 500 characters. Cite the ticket; never include card, wallet or customer details.",
       "evidence": "Evidence",
       "evidenceHelp": "Optional. Where you confirmed it, for example a Meta support ticket or delivery report.",
       "evidenceRequiredHelp": "Required. Where the provider shows this, for example the Paymob dashboard record.",
@@ -647,7 +573,7 @@
     "subtitle": "Send an automatic WhatsApp confirmation before you ship — whether your store runs on Shopify or on its own.",
     "cta_shopify": "Install on Shopify",
     "cta_standalone": "I have my own store",
-    "cta_standalone_note": "Early access — accounts are activated after review.",
+    "cta_standalone_note": "Verify your email and start with 30 free credits.",
     "proof_shopify": "Approved by Shopify",
     "proof_meta": "Official WhatsApp Cloud API",
     "proof_built": "Built for Shopify",
@@ -751,15 +677,11 @@
       }
     },
     "standalone": {
-      "footnote": "Approval is a real step during early access — every account is reviewed before sending is enabled.",
+      "footnote": "Your account is active as soon as your email is verified, with launch credits ready to use.",
       "steps": {
         "request": {
-          "title": "Request your account",
-          "description": "Create an Akeed account with your store details. Signing up is free and needs no credit card."
-        },
-        "approve": {
-          "title": "We review and activate it",
-          "description": "The Akeed team reviews your request manually. On approval, your launch credits are added once."
+          "title": "Create your account",
+          "description": "Sign up with your store details and verify your email. Your account is activated right away with free launch credits, and no credit card is required."
         },
         "create": {
           "title": "Add your orders",
@@ -783,19 +705,19 @@
     "own_store": {
       "title": "You have your own store or site",
       "description": "Add your orders to Akeed and manage confirmation on WhatsApp without Shopify.",
-      "cta": "Request your account"
+      "cta": "Create your account"
     },
     "manual": {
       "title": "You take orders manually",
       "description": "Orders from Instagram, WhatsApp, or phone calls? Collect them in Akeed and confirm from one place.",
-      "cta": "Request your account"
+      "cta": "Create your account"
     },
     "high_cod": {
       "title": "Cash on delivery is most of your volume",
       "description": "Every unconfirmed order is wasted shipping and wasted time. Confirming first cuts returns.",
-      "cta": "Request your account"
+      "cta": "Create your account"
     },
-    "not_for": "Akeed for independent stores is still in early access and accounts are approved manually. If your store is on Shopify, you can install it right now."
+    "not_for": "Akeed for independent stores is self-serve: create an account, verify your email and start sending. If your store is on Shopify, install it from the App Store instead."
   },
   "trust": {
     "section_title": "Built on channels you can trust",
@@ -820,10 +742,10 @@
   "final_cta": {
     "eyebrow": "Next step",
     "title": "Confirm your orders before you ship them",
-    "description": "Start the way that fits your store — install directly on Shopify, or request a standalone account.",
+    "description": "Start the way that fits your store — install directly on Shopify, or create a standalone account.",
     "cta_shopify": "Install on Shopify",
-    "cta_standalone": "Request your account",
-    "cta_standalone_note": "Early access — accounts are activated after review."
+    "cta_standalone": "Create your account",
+    "cta_standalone_note": "Verify your email and start with 30 free credits."
   },
   "solution": {
     "title": "Built for Merchants Who Want Clear, Reliable COD Confirmation",
@@ -904,9 +826,9 @@
       "question": "What happens if the customer does not reply?",
       "answer": "The order stays unconfirmed so your team can hold it, follow up, or skip shipping based on your process."
     },
-    "standalone_approval": {
+    "standalone_start": {
       "question": "Can I start right away if my store is independent?",
-      "answer": "You can sign up immediately, but Akeed for independent stores is in early access: our team reviews each account manually, and once approved your launch credits are added and you can buy and send. Shopify stores can start as soon as they install."
+      "answer": "Yes. Create an account and verify your email, and it is activated immediately with your launch credits, so you can create orders and send confirmations straight away. Shopify stores can start as soon as they install."
     },
     "credit_usage": {
       "question": "How exactly are credits counted?",
@@ -931,10 +853,9 @@
     "rejected_title": "Failed sends are refunded",
     "rejected_body": "If the provider cannot deliver the message, the credit is returned to your account automatically.",
     "grant_title": "{count} credits to start",
-    "grant_body": "Added to your account once, after the Akeed team approves it.",
+    "grant_body": "Added to your account once, as soon as you verify your email.",
     "purchase_rules": "Buy from {min} to {max} credits, in multiples of {step}.",
-    "approval_notice": "Akeed for independent stores is in early access. Requests are reviewed manually, and purchasing and sending begin once your account is approved.",
-    "cta": "Request your account",
+    "cta": "Create your account",
     "cta_note": "Signing up is free. No credit card needed yet.",
     "presets_title": "Example top-ups",
     "presets_note": "Not fixed packages — you can buy any amount within the limits above.",
@@ -942,14 +863,14 @@
     "shopify_title": "Store on Shopify?",
     "shopify_body": "Subscription and billing happen inside Shopify. Install Akeed from the App Store to see current plans and pricing.",
     "shopify_cta": "See plans on Shopify",
-    "authoritative_note": "Prices are shown in Egyptian pounds and may change. The authoritative price is the one shown on your billing page after approval."
+    "authoritative_note": "Prices are shown in Egyptian pounds and may change. The authoritative price is the one shown on your billing page."
   },
   "mobile_cta": {
     "eyebrow": "Get started with Akeed",
     "primary_shopify": "Shopify store",
     "primary_standalone": "Own store",
     "aria_shopify": "Install Akeed on Shopify",
-    "aria_standalone": "Request a standalone account"
+    "aria_standalone": "Create a standalone account"
   },
   "auth": {
     "signInToAccount": "Sign in to your account",
@@ -2018,7 +1939,7 @@
       "sourceUnsupported": "Order verification is available only for Standalone sources.",
       "setupIncomplete": "Complete Standalone onboarding before verifying an order.",
       "entitlement": "Order verification is not enabled for this workspace. Contact support.",
-      "approvalRequired": "Akeed staff have not approved this account yet. Order creation resumes once approval is granted.",
+      "notProvisioned": "This account's credits are not set up yet. Refresh, or contact Akeed support if this continues.",
       "unexpected": "We could not submit the order for verification. Review the details and try again."
     },
     "retry": {
@@ -2071,7 +1992,7 @@
     },
     "blockers": {
       "source_invalid": "A valid active Standalone source is required.",
-      "approval_required": "Akeed staff have not approved this account yet.",
+      "account_suspended": "This account is suspended. Contact Akeed support.",
       "pilot_entitlement_missing": "Pilot access must be activated by Akeed staff.",
       "merchant_name_missing": "Enter a store name.",
       "language_invalid": "Choose a supported message language.",
@@ -2174,11 +2095,10 @@
       "arabic": "Arabic",
       "english": "English"
     },
-    "approval": {
-      "title": "Waiting for Akeed approval",
-      "body": "Your account is set up and waiting for the Akeed team to approve it. Once approved you get 30 free credits to test real order confirmations, and you can finish setup here.",
-      "suspended": "This account is on hold. Contact Akeed support to review it before continuing setup.",
-      "note": "Nothing is lost while you wait. Your saved settings, orders and history stay exactly as they are.",
+    "suspended": {
+      "title": "This account is on hold",
+      "body": "Contact Akeed support to review this account before continuing setup.",
+      "note": "Nothing is lost while the account is on hold. Your saved settings, orders and history stay exactly as they are.",
       "refresh": "Check again"
     }
   },
@@ -2202,7 +2122,7 @@
     "backHome": "Back to home"
   },
   "creditErrors": {
-    "approvalRequired": "Your account is awaiting staff approval. You can still view existing orders and history.",
+    "notProvisioned": "This account's credits are not set up yet. Refresh, or contact Akeed support if this continues. Existing orders and history remain available.",
     "suspended": "New message sends are paused for this account. Contact support. Existing orders and history remain available.",
     "debt": "An outstanding credit balance must be settled before sending new messages. Existing orders and history remain available.",
     "insufficient": "No message credits are available. New sends can resume when credits are available. Existing orders and history remain available.",
@@ -2217,7 +2137,6 @@
     "retry": "Try again",
     "status": {
       "active": "Active",
-      "pending_approval": "Pending approval",
       "suspended": "Suspended",
       "not_provisioned": "Not provisioned"
     },
@@ -2247,8 +2166,6 @@
       "zeroDescription": "New messages are blocked until credits are added. Your history remains available.",
       "debtTitle": "{count} credits are outstanding",
       "debtDescription": "New messages remain blocked until the outstanding balance is settled.",
-      "pendingTitle": "Your account is awaiting approval",
-      "pendingDescription": "You can review billing history, but purchases and message sends are unavailable until approval.",
       "suspendedTitle": "Billing is suspended",
       "suspendedDescription": "Purchases and message sends are unavailable. Contact Akeed support for help.",
       "notProvisionedTitle": "Credit billing is not provisioned",
@@ -2257,7 +2174,7 @@
     "grant": {
       "title": "Launch credit grant",
       "granted": "Your one-time {count}-credit grant has been posted.",
-      "pending": "Your {count}-credit launch grant will be posted after approval."
+      "pending": "Your one-time {count}-credit grant is posted when your account is created."
     },
     "purchase": {
       "title": "Buy message credits",

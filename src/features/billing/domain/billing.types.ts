@@ -1,8 +1,4 @@
-export type CreditAccountStatus =
-  | 'active'
-  | 'not_provisioned'
-  | 'pending_approval'
-  | 'suspended'
+export type CreditAccountStatus = 'active' | 'not_provisioned' | 'suspended'
 
 export type PurchaseStatus =
   | 'canceled'

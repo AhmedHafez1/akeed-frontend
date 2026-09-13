@@ -102,7 +102,7 @@ export const EXPLAINED_LIFECYCLE_REASONS = new Set([
   'non_cod_payment_method',
   'missing_payment_signal',
   'plan_limit_reached',
-  'STANDALONE_APPROVAL_REQUIRED',
+  'CREDIT_ACCOUNT_NOT_PROVISIONED',
   'CREDIT_ACCOUNT_SUSPENDED',
   'CREDIT_DEBT_OUTSTANDING',
   'INSUFFICIENT_CREDITS',

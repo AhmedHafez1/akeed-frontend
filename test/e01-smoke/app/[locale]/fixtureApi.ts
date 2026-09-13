@@ -19,8 +19,6 @@ import {
   verificationFixtureRequest,
 } from './verifications/verificationFixture'
 
-export { resetBillingApprovalFixture } from './adminBillingFixture'
-
 export function fetchWithAuth(url: string, options: RequestInit = {}) {
   if (isOrderSyncFixture() && url === '/api/billing/credits')
     return orderSyncCreditsResponse()

@@ -172,11 +172,10 @@ export function StandaloneOnboardingPage() {
     )
   }
 
-  // Staff approval is not something the merchant can act on from here, so the
-  // whole flow is replaced by a waiting state instead of a blocked step.
+  // A suspended account is not something the merchant can act on from here,
+  // so the whole flow is replaced by a notice instead of a blocked step.
   if (
-    onboarding.approvalStatus &&
-    onboarding.approvalStatus !== 'active' &&
+    onboarding.accountStatus === 'suspended' &&
     !onboarding.state.isOnboardingComplete
   ) {
     return (
@@ -184,19 +183,15 @@ export function StandaloneOnboardingPage() {
         <Card className="w-full border-amber-200 p-6 text-center">
           <ShieldCheck className="mx-auto size-8 text-amber-600" />
           <h1 className="mt-3 text-xl font-bold text-slate-900">
-            {t('approval.title')}
+            {t('suspended.title')}
           </h1>
-          <p className="mt-2 text-sm text-slate-600">
-            {onboarding.approvalStatus === 'suspended'
-              ? t('approval.suspended')
-              : t('approval.body')}
-          </p>
-          <p className="mt-3 text-xs text-slate-500">{t('approval.note')}</p>
+          <p className="mt-2 text-sm text-slate-600">{t('suspended.body')}</p>
+          <p className="mt-3 text-xs text-slate-500">{t('suspended.note')}</p>
           <Button
             className="bg-primary text-primary-foreground hover:bg-primary mt-5 min-h-11 px-5 text-sm font-semibold focus-visible:ring-emerald-600"
             onClick={() => void onboarding.retry()}
           >
-            {t('approval.refresh')}
+            {t('suspended.refresh')}
           </Button>
         </Card>
       </main>

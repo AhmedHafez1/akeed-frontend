@@ -6,14 +6,9 @@ import { Button } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { AdminSelect } from './AdminUi'
-import {
-  downloadApprovalReport,
-  useStandaloneBilling,
-} from './useStandaloneBilling'
+import { useStandaloneBilling } from './useStandaloneBilling'
 import type {
   AccountFilters,
-  ApprovalCounts,
-  ApprovalRow,
   CreditAccountRow,
 } from './standalone-billing.model'
 import { StandaloneBillingObservability } from './StandaloneBillingObservability'
@@ -28,39 +23,21 @@ const balanceTones = {
 } as const
 
 const filterOptions: Record<keyof AccountFilters, readonly string[]> = {
-  approval: ['', 'eligible', 'already_approved', 'skipped', 'ambiguous'],
-  accountStatus: ['', 'pending_approval', 'active', 'suspended'],
+  accountStatus: ['', 'active', 'suspended'],
   balance: ['', 'low', 'zero', 'debt'],
   reconciliation: ['', 'required'],
 }
-
-const countKeys: (keyof ApprovalCounts)[] = [
-  'eligible',
-  'alreadyApproved',
-  'skipped',
-  'existingSource',
-  'ambiguous',
-]
 
 export function StandaloneBillingPage() {
   const t = useTranslations('adminBilling')
   const { isRTL, locale } = useLocaleInfo()
   const state = useStandaloneBilling()
-  const locked = !!state.busy || state.loading
-  const retryApply = state.report?.results.some(
-    (result) => result.outcome === 'failed'
-  )
-  const completed = !!state.report && !retryApply
+  const locked = state.loading
   // Staff reads stay open to everyone; billing writes need the enabled flag
   // and a named operator, as the server enforces.
   const canOperate =
     !!state.page?.operations.enabled && !!state.page.operations.operator
-  const formatTime = (value: string) =>
-    new Intl.DateTimeFormat(locale, {
-      dateStyle: 'medium',
-      timeStyle: 'short',
-    }).format(new Date(value))
-  const renderAccount = (row: ApprovalRow) =>
+  const renderAccount = (row: CreditAccountRow) =>
     row.account ? (
       <>
         <div className="font-medium">
@@ -109,7 +86,7 @@ export function StandaloneBillingPage() {
     ) : (
       <span className="text-slate-500">{t('noAccount')}</span>
     )
-  const renderSource = (row: ApprovalRow) =>
+  const renderSource = (row: CreditAccountRow) =>
     row.source ? (
       <div className="font-mono text-xs break-all" dir="ltr">
         {row.source.identity}
@@ -137,14 +114,6 @@ export function StandaloneBillingPage() {
       </header>
       <StandaloneBillingObservability canOperate={canOperate} />
       <StandaloneBillingSettlements canOperate={canOperate} />
-      {state.page && !state.page.approvalEnabled && (
-        <p
-          role="status"
-          className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950"
-        >
-          {t('disabled')}
-        </p>
-      )}
       {state.error && (
         <div
           role="alert"
@@ -153,9 +122,7 @@ export function StandaloneBillingPage() {
           <p>
             {state.error.status === 403
               ? t('accessDenied')
-              : state.error.status === 400
-                ? t('invalidRequest')
-                : t('requestFailed')}
+              : t('requestFailed')}
           </p>
           {state.error.requestId && (
             <p className="mt-2 font-mono" dir="ltr">
@@ -171,7 +138,7 @@ export function StandaloneBillingPage() {
       )}
       <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
         <div
-          className="grid gap-3 border-b border-slate-100 p-4 sm:grid-cols-2 lg:grid-cols-5"
+          className="grid gap-3 border-b border-slate-100 p-4 sm:grid-cols-2 lg:grid-cols-4"
           role="group"
           aria-label={t('filters.label')}
         >
@@ -208,24 +175,6 @@ export function StandaloneBillingPage() {
             </Button>
           </div>
         </div>
-        <div className="flex flex-wrap items-center gap-3 border-b border-slate-100 p-4">
-          <p className="me-auto text-sm" aria-live="polite">
-            {t('selected', { count: state.selected.length })}
-          </p>
-          <Button
-            variant="ghost"
-            disabled={locked || !state.selected.length}
-            onClick={state.clearSelection}
-          >
-            {t('clear')}
-          </Button>
-          <Button
-            disabled={locked || !state.selected.length}
-            onClick={state.createPreview}
-          >
-            {state.busy === 'preview' ? t('previewing') : t('preview')}
-          </Button>
-        </div>
         {state.loading ? (
           <p role="status" className="p-8 text-center text-slate-500">
             {t('loading')}
@@ -235,9 +184,6 @@ export function StandaloneBillingPage() {
             <table className="w-full text-start text-sm">
               <thead className="bg-slate-50 text-xs text-slate-600">
                 <tr>
-                  <th scope="col" className="p-4 text-start">
-                    {t('select')}
-                  </th>
                   <th scope="col" className="p-4 text-start">
                     {t('organization')}
                   </th>
@@ -251,9 +197,6 @@ export function StandaloneBillingPage() {
                     {t('creditHealth')}
                   </th>
                   <th scope="col" className="p-4 text-start">
-                    {t('eligibility')}
-                  </th>
-                  <th scope="col" className="p-4 text-start">
                     <span className="sr-only">{t('details')}</span>
                   </th>
                 </tr>
@@ -264,22 +207,6 @@ export function StandaloneBillingPage() {
                     key={row.orgId}
                     className="border-t border-slate-100 align-top"
                   >
-                    <td className="p-4">
-                      <input
-                        type="checkbox"
-                        className="size-4 accent-emerald-600"
-                        aria-label={t('selectOrganization', {
-                          name: row.organizationName ?? row.orgId,
-                        })}
-                        checked={state.selected.includes(row.orgId)}
-                        disabled={
-                          locked ||
-                          (!state.selected.includes(row.orgId) &&
-                            state.selected.length >= 50)
-                        }
-                        onChange={() => state.toggle(row.orgId)}
-                      />
-                    </td>
                     <td className="p-4">
                       <div className="font-medium">
                         {row.organizationName ?? t('missingOrganization')}
@@ -294,22 +221,6 @@ export function StandaloneBillingPage() {
                     <td className="p-4">{renderSource(row)}</td>
                     <td className="p-4">{renderAccount(row)}</td>
                     <td className="p-4">{renderBilling(row)}</td>
-                    <td className="p-4">
-                      <span
-                        className={
-                          row.status === 'eligible'
-                            ? 'font-medium text-emerald-700'
-                            : row.status === 'ambiguous'
-                              ? 'font-medium text-amber-800'
-                              : 'font-medium text-slate-600'
-                        }
-                      >
-                        {t(`statuses.${row.status}`)}
-                      </span>
-                      <p className="mt-1 max-w-sm text-xs text-slate-500">
-                        {t(`reasons.${row.reason}`)}
-                      </p>
-                    </td>
                     <td className="p-4">
                       <Link
                         href={`/${locale}/admin/standalone-billing/${row.orgId}`}
@@ -346,127 +257,6 @@ export function StandaloneBillingPage() {
           </Button>
         </div>
       </div>
-      {state.preview && (
-        <section
-          className="space-y-4 rounded-2xl border border-emerald-200 bg-white p-5"
-          aria-labelledby="approval-preview-title"
-        >
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 id="approval-preview-title" className="text-lg font-semibold">
-              {t('reviewTitle')}
-            </h2>
-            <Button
-              variant="outline"
-              onClick={() => downloadApprovalReport(state.preview!)}
-            >
-              {t('downloadPreview')}
-            </Button>
-          </div>
-          <p className="text-xs text-slate-500">
-            {t('evaluatedAt', { time: formatTime(state.preview.evaluatedAt) })}
-          </p>
-          <dl className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-            {countKeys.map((key) => (
-              <div key={key} className="rounded-lg bg-slate-50 p-3">
-                <dt className="text-xs text-slate-500">{t(`counts.${key}`)}</dt>
-                <dd className="mt-1 text-xl font-semibold">
-                  {state.preview!.counts[key]}
-                </dd>
-              </div>
-            ))}
-          </dl>
-          <p className="text-xs text-slate-500">{t('existingSourceNote')}</p>
-          <ul className="divide-y divide-slate-100">
-            {state.preview.rows.map((row) => (
-              <li className="py-3 text-sm" key={row.orgId}>
-                <span className="font-medium">
-                  {row.organizationName ?? row.orgId}
-                </span>
-                <p className="mt-1 text-slate-600">
-                  {t(`reasons.${row.reason}`)}
-                </p>
-                {row.proposed && (
-                  <p className="mt-1 text-emerald-800">
-                    {t('proposedGrant', {
-                      count: row.proposed.freeGrantQuantity,
-                    })}
-                  </p>
-                )}
-              </li>
-            ))}
-          </ul>
-          <label
-            htmlFor="approval-reason"
-            className="block text-sm font-medium"
-          >
-            {t('reason')}
-          </label>
-          <textarea
-            id="approval-reason"
-            value={state.reason}
-            onChange={(event) => state.setReason(event.target.value)}
-            maxLength={500}
-            rows={3}
-            disabled={!!state.busy}
-            className="w-full rounded-lg border border-slate-300 p-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-            aria-describedby="approval-reason-help"
-          />
-          <p id="approval-reason-help" className="text-xs text-slate-500">
-            {t('reasonHelp')}
-          </p>
-          <Button
-            onClick={state.apply}
-            disabled={
-              locked ||
-              completed ||
-              !state.page?.approvalEnabled ||
-              !state.preview.approvalEnabled ||
-              !state.preview.counts.eligible ||
-              !state.reason.trim()
-            }
-          >
-            {state.busy === 'apply'
-              ? t('applying')
-              : retryApply
-                ? t('retryApply')
-                : t('apply', { count: state.preview.counts.eligible })}
-          </Button>
-        </section>
-      )}
-      {state.report && (
-        <section
-          className="space-y-3 rounded-2xl border border-slate-200 bg-white p-5"
-          aria-live="polite"
-        >
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-lg font-semibold">{t('results')}</h2>
-            <Button
-              variant="outline"
-              onClick={() => downloadApprovalReport(state.report!)}
-            >
-              {t('downloadResults')}
-            </Button>
-          </div>
-          <p className="text-sm text-slate-600">{t('resultHelp')}</p>
-          <ul className="divide-y divide-slate-100">
-            {state.report.results.map((result) => (
-              <li className="py-3 text-sm" key={result.orgId}>
-                <span className="font-medium">
-                  {state.preview?.rows.find((row) => row.orgId === result.orgId)
-                    ?.organizationName ?? result.orgId}
-                </span>
-                <p className="mt-1">
-                  {t(`outcomes.${result.outcome}`)} ·{' '}
-                  {t(`reasons.${result.reason}`)}
-                  {result.grantedCredits !== undefined && (
-                    <> · {t('granted', { count: result.grantedCredits })}</>
-                  )}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
     </section>
   )
 }

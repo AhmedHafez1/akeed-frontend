@@ -62,14 +62,14 @@ async function getHomeStructuredData(locale: Locale) {
     description: metadata('description'),
     /*
      * Metered, not a subscription: the product is priced per WhatsApp message,
-     * so a flat Offer would misdescribe it. `PreOrder` is the honest
-     * availability while standalone accounts require manual approval.
+     * so a flat Offer would misdescribe it. Standalone accounts are
+     * self-serve, so it is available now.
      */
     offers: {
       '@type': 'Offer',
       price: unitPrice,
       priceCurrency: CREDIT_CURRENCY,
-      availability: 'https://schema.org/PreOrder',
+      availability: 'https://schema.org/InStock',
       description: pricing('unit_price_note'),
       priceSpecification: {
         '@type': 'UnitPriceSpecification',

@@ -1,5 +1,5 @@
 const creditFeedbackKeys = {
-  STANDALONE_APPROVAL_REQUIRED: 'approvalRequired',
+  CREDIT_ACCOUNT_NOT_PROVISIONED: 'notProvisioned',
   CREDIT_ACCOUNT_SUSPENDED: 'suspended',
   CREDIT_DEBT_OUTSTANDING: 'debt',
   INSUFFICIENT_CREDITS: 'insufficient',

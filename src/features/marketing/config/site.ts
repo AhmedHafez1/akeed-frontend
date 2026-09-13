@@ -41,10 +41,9 @@ export interface HowItWorksStep {
 }
 
 /*
- * The two flows are deliberately different lengths. Standalone has a real
- * approval step before anything can be sent, and collapsing it to match
- * Shopify's three would hide the one thing an early-access visitor most needs
- * to know.
+ * Both flows are three steps. Standalone accounts are active with their launch
+ * credits as soon as the email address is verified, so there is no waiting
+ * step to show.
  */
 export const howItWorksByPath: Record<AcquisitionPath, HowItWorksStep[]> = {
   shopify: [
@@ -54,7 +53,6 @@ export const howItWorksByPath: Record<AcquisitionPath, HowItWorksStep[]> = {
   ],
   standalone: [
     { key: 'request', icon: UserPlus },
-    { key: 'approve', icon: BadgeCheck },
     { key: 'create', icon: ClipboardList },
     { key: 'send', icon: Send },
   ],
@@ -88,7 +86,7 @@ export const trustPoints: TrustPoint[] = [
 export const faqs = [
   { key: 'supported_platforms' },
   { key: 'setup_time' },
-  { key: 'standalone_approval' },
+  { key: 'standalone_start' },
   { key: 'own_whatsapp_number' },
   { key: 'official_apis' },
   { key: 'customize_messages' },

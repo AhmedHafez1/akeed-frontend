@@ -35,7 +35,7 @@ export type ManualOrderVerificationRetryResponse = {
 }
 
 export const manualOrderErrorCodes = [
-  'STANDALONE_APPROVAL_REQUIRED',
+  'CREDIT_ACCOUNT_NOT_PROVISIONED',
   'CREDIT_ACCOUNT_SUSPENDED',
   'CREDIT_DEBT_OUTSTANDING',
   'INSUFFICIENT_CREDITS',

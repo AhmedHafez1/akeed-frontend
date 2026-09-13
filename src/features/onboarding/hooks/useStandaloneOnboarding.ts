@@ -322,9 +322,7 @@ export function useStandaloneOnboarding() {
           return { state: null, firstInvalidField: null, errorStep: null }
         }
         if (error.blockedReasons.length > 0) {
-          const awaitingApproval =
-            error.code === 'STANDALONE_APPROVAL_REQUIRED' ||
-            error.blockedReasons.includes('approval_required')
+          const suspended = error.blockedReasons.includes('account_suspended')
           setState((current) =>
             current
               ? {
@@ -332,17 +330,16 @@ export function useStandaloneOnboarding() {
                   standaloneSetup: {
                     canComplete: false,
                     blockedReasons: error.blockedReasons,
-                    approvalStatus: awaitingApproval
-                      ? (current.standaloneSetup?.approvalStatus ??
-                        'pending_approval')
-                      : (current.standaloneSetup?.approvalStatus ?? null),
+                    accountStatus: suspended
+                      ? 'suspended'
+                      : (current.standaloneSetup?.accountStatus ?? null),
                   },
                 }
               : current
           )
-          // Waiting for staff is not the merchant's error to fix, so the page
-          // switches to the approval state instead of showing a red banner.
-          if (!awaitingApproval) setErrorMessage(t('blocked'))
+          // A suspension is not the merchant's error to fix, so the page
+          // switches to the suspended state instead of showing a red banner.
+          if (!suspended) setErrorMessage(t('blocked'))
           return { state: null, firstInvalidField: null, errorStep: null }
         }
       }
@@ -366,7 +363,7 @@ export function useStandaloneOnboarding() {
     blockedReasons:
       state?.standaloneSetup?.blockedReasons ??
       ([] as StandaloneSetupBlockedReason[]),
-    approvalStatus: state?.standaloneSetup?.approvalStatus ?? null,
+    accountStatus: state?.standaloneSetup?.accountStatus ?? null,
     canManage: state?.permissions.canUpdateConfiguration === true,
     setField,
     resetSuccess,

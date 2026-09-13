@@ -30,8 +30,6 @@ const TONE_ICON = {
  * implementation — only the presentation changed.
  */
 function resolve(summary: CreditSummary) {
-  if (summary.status === 'pending_approval')
-    return { tone: 'warning' as Tone, key: 'pending' }
   if (summary.status === 'suspended')
     return { tone: 'danger' as Tone, key: 'suspended' }
   if (summary.status === 'not_provisioned')

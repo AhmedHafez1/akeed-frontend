@@ -31,13 +31,11 @@ function merchantCreditSummary(): CreditSummary {
   const account = search.get('account') ?? 'low'
   const viewer = search.get('role') === 'viewer'
   const status =
-    account === 'pending'
-      ? 'pending_approval'
-      : account === 'suspended'
-        ? 'suspended'
-        : account === 'not-provisioned'
-          ? 'not_provisioned'
-          : 'active'
+    account === 'suspended'
+      ? 'suspended'
+      : account === 'not-provisioned'
+        ? 'not_provisioned'
+        : 'active'
   const posted = account === 'zero' ? 2 : account === 'debt' ? -4 : 10
   const held = account === 'zero' || account === 'debt' ? 2 : 2
   return {
@@ -60,8 +58,8 @@ function merchantCreditSummary(): CreditSummary {
       ? 'BILLING_PURCHASE_ROLE_REQUIRED'
       : account === 'disabled'
         ? 'BILLING_DISABLED'
-        : status === 'pending_approval'
-          ? 'STANDALONE_APPROVAL_REQUIRED'
+        : status === 'not_provisioned'
+          ? 'CREDIT_ACCOUNT_NOT_PROVISIONED'
           : status === 'suspended'
             ? 'CREDIT_ACCOUNT_SUSPENDED'
             : null,
@@ -221,7 +219,7 @@ function settings(): SettingsResponse {
       },
       standaloneSetup: shopify
         ? null
-        : { canComplete: true, blockedReasons: [], approvalStatus: null },
+        : { canComplete: true, blockedReasons: [], accountStatus: null },
     },
     billing: {
       plans:

@@ -19,11 +19,11 @@ export type EnglishCodTemplateVariantId =
 
 export type IntegrationOnboardingStatus = 'pending' | 'completed'
 
-export type CreditAccountStatus = 'pending_approval' | 'active' | 'suspended'
+export type CreditAccountStatus = 'active' | 'suspended'
 
 export type StandaloneSetupBlockedReason =
   | 'source_invalid'
-  | 'approval_required'
+  | 'account_suspended'
   | 'pilot_entitlement_missing'
   | 'merchant_name_missing'
   | 'language_invalid'
@@ -76,7 +76,7 @@ export interface IntegrationOnboardingState {
   standaloneSetup: {
     canComplete: boolean
     blockedReasons: StandaloneSetupBlockedReason[]
-    approvalStatus: CreditAccountStatus | null
+    accountStatus: CreditAccountStatus | null
   } | null
 }
 

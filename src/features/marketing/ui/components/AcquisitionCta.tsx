@@ -31,7 +31,7 @@ const variantClasses: Record<AcquisitionCtaVariant, string> = {
 interface AcquisitionCtaProps {
   target: AcquisitionTarget
   label: string
-  /** Rendered under the control — use for the standalone approval caveat. */
+  /** Rendered under the control — e.g. the standalone launch-credit note. */
   note?: string
   variant?: AcquisitionCtaVariant
   leading?: ReactNode

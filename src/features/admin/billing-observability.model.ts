@@ -36,7 +36,7 @@ export interface BillingHealth {
     }
   }
   product: {
-    approvedOrganizations: number
+    activatedOrganizations: number
     lowBalanceOrganizations: number
     zeroBalanceOrganizations: number
     launchGrants: number

@@ -421,7 +421,7 @@ export function accountDetailFixture(
       ...projection(postedBalance, heldCredits),
       balanceState,
       version: 9,
-      approvedAt: '2026-08-02T09:00:00Z',
+      activatedAt: '2026-08-02T09:00:00Z',
       updatedAt: '2026-09-09T10:15:00Z',
     },
     lowBalanceThreshold: 10,

@@ -147,7 +147,7 @@ export interface AccountDetail {
         status: CreditAccountStatus
         balanceState: BalanceState
         version: number
-        approvedAt: string | null
+        activatedAt: string | null
         updatedAt: string
       })
     | null

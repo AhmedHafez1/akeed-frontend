@@ -13,7 +13,7 @@ function currentScenario() {
   const params = new URLSearchParams(window.location.search)
   return `${params.get('role') ?? 'owner'}:${
     params.get('entitlement') ?? 'active'
-  }:${params.get('backend') ?? 'available'}:${params.get('approval') ?? 'none'}`
+  }:${params.get('backend') ?? 'available'}:${params.get('account') ?? 'active'}`
 }
 
 function initialize() {
@@ -26,12 +26,8 @@ function initialize() {
   const params = new URLSearchParams(window.location.search)
   const role = params.get('role') ?? 'owner'
   const entitled = params.get('entitlement') !== 'blocked'
-  const approvalStatus =
-    params.get('approval') === 'pending'
-      ? ('pending_approval' as const)
-      : params.get('approval') === 'suspended'
-        ? ('suspended' as const)
-        : null
+  const accountStatus =
+    params.get('account') === 'suspended' ? ('suspended' as const) : null
   const canManage = role === 'owner' || role === 'admin'
   state = {
     integrationId: 'e03-onboarding-source',
@@ -65,12 +61,12 @@ function initialize() {
     },
     standaloneSetup: {
       canComplete: false,
-      blockedReasons: approvalStatus
-        ? ['approval_required']
+      blockedReasons: accountStatus
+        ? ['account_suspended']
         : entitled
           ? ['merchant_name_missing']
           : ['pilot_entitlement_missing', 'merchant_name_missing'],
-      approvalStatus,
+      accountStatus,
     },
   }
 }
@@ -119,7 +115,7 @@ export async function onboardingFixtureRequest(
           state.billingStatus === 'not_required'
             ? []
             : ['pilot_entitlement_missing'],
-        approvalStatus: state.standaloneSetup?.approvalStatus ?? null,
+        accountStatus: state.standaloneSetup?.accountStatus ?? null,
       },
     }
     return Response.json({ state })
