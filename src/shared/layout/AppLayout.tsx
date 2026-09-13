@@ -3,6 +3,7 @@
 import { type ReactNode, Suspense } from 'react'
 import dynamic from 'next/dynamic'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
+import { QueryProvider } from '@/shared/query/QueryProvider'
 import { StandaloneLayout } from './StandaloneLayout'
 
 const EmbeddedLayout = dynamic(
@@ -48,8 +49,10 @@ function AppLayoutInner({ children }: AppLayoutProps) {
  */
 export function AppLayout({ children }: AppLayoutProps) {
   return (
-    <Suspense fallback={null}>
-      <AppLayoutInner>{children}</AppLayoutInner>
-    </Suspense>
+    <QueryProvider>
+      <Suspense fallback={null}>
+        <AppLayoutInner>{children}</AppLayoutInner>
+      </Suspense>
+    </QueryProvider>
   )
 }

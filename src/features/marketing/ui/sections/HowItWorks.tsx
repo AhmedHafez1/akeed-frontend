@@ -1,112 +1,91 @@
 'use client'
 
-import { BotMessageSquare, PlugZap, Truck } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
-
+import { useState } from 'react'
+import { howItWorksByPath } from '@/features/marketing/config/site'
 import {
-  LandingIconBadge,
-  landingCardClass,
-  landingCardGlowClass,
-} from '@/features/marketing/ui/components/LandingPrimitives'
-import { cn } from '@/shared/lib/utils'
+  DEFAULT_ACQUISITION_PATH,
+  type AcquisitionPath,
+} from '@/features/marketing/domain/acquisitionPaths'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { Container } from '@/shared/ui/container'
 import { Section } from '@/shared/ui/section'
-import { features } from '@/features/marketing/config/site'
+import { PathTabs } from './howItWorks/PathTabs'
+import { StepGrid } from './howItWorks/StepGrid'
 
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.12,
-    },
-  },
+interface HowItWorksProps {
+  /*
+   * Resolved from `?path=` by the server component, so a campaign link renders
+   * the matching flow in the initial HTML. Reading it here instead would mean
+   * `useSearchParams()` (a Suspense boundary on this route) or a post-mount
+   * setState — both worse, and neither puts the right tab in the markup.
+   */
+  initialPath?: AcquisitionPath
 }
 
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0 },
-}
-
-const stepCards = [
-  { icon: PlugZap, tone: 'emerald' },
-  { icon: BotMessageSquare, tone: 'teal' },
-  { icon: Truck, tone: 'cyan' },
-] as const
-
-function HowItWorks() {
+function HowItWorks({
+  initialPath = DEFAULT_ACQUISITION_PATH,
+}: HowItWorksProps) {
   const t = useTranslations('how_it_works')
   const { isRTL } = useLocaleInfo()
+  const [path, setPath] = useState<AcquisitionPath>(initialPath)
+
+  const tabLabels: Record<AcquisitionPath, string> = {
+    shopify: t('tabs.shopify'),
+    standalone: t('tabs.standalone'),
+  }
 
   return (
-    <>
-      <Section id="how-it-works" className="relative px-4 sm:px-6 lg:px-10">
-        <Container className="relative z-10 max-w-351.5">
-          {/* Section Header */}
-          <div className="landing-section-header mb-10 sm:mb-12 lg:mb-14">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="landing-section-title max-w-5xl"
-            >
-              {t('section_title')}
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="landing-subtitle max-w-3xl"
-            >
-              {t('main_title')}
-            </motion.p>
-          </div>
-
-          {/* Steps Grid */}
-          <motion.div
-            variants={container}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: '-50px' }}
-            className="mb-8 grid grid-cols-1 gap-4 sm:mb-10 sm:gap-6 md:grid-cols-3 md:gap-8 lg:mb-12 lg:gap-16"
+    <Section id="how-it-works" className="relative px-4 sm:px-6 lg:px-10">
+      <Container className="relative z-10 max-w-351.5">
+        <div className="landing-section-header mb-8 sm:mb-10">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-h1 text-foreground max-w-5xl text-balance"
           >
-            {features.howItWorks.map((step, index) => (
-              <motion.article
-                key={step.key}
-                variants={item}
-                className={landingCardClass}
-              >
-                <div className={landingCardGlowClass} />
+            {t('section_title')}
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-lead text-muted-foreground max-w-3xl text-pretty"
+          >
+            {t('main_title')}
+          </motion.p>
+        </div>
 
-                <div className="relative mb-6 flex items-center justify-between">
-                  <LandingIconBadge
-                    icon={stepCards[index % stepCards.length].icon}
-                    tone={stepCards[index % stepCards.length].tone}
-                    size="sm"
-                  />
-                  <span className="text-xs font-bold tracking-[0.12em] text-slate-300">
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                </div>
+        <div className="mb-8 sm:mb-10">
+          <PathTabs
+            value={path}
+            labels={tabLabels}
+            ariaLabel={t('tabs_label')}
+            onChange={setPath}
+          />
+        </div>
 
-                <div className={cn(isRTL ? 'text-right' : 'text-left')}>
-                  <h3 className="my-4 text-lg font-bold text-slate-800">
-                    {t(`steps.${step.key}.title`)}
-                  </h3>
-                  <p className="text-sm leading-relaxed text-slate-600">
-                    {t(`steps.${step.key}.description`)}
-                  </p>
-                </div>
-              </motion.article>
-            ))}
-          </motion.div>
-        </Container>
-      </Section>
-    </>
+        <div
+          role="tabpanel"
+          id={`how-it-works-panel-${path}`}
+          aria-labelledby={`how-it-works-tab-${path}`}
+        >
+          <StepGrid
+            key={path}
+            steps={howItWorksByPath[path]}
+            isRTL={isRTL}
+            t={(key) => t(`${path}.steps.${key}`)}
+          />
+          <p className="text-muted-foreground mt-6 text-sm leading-6">
+            {t(`${path}.footnote`)}
+          </p>
+        </div>
+      </Container>
+    </Section>
   )
 }
 

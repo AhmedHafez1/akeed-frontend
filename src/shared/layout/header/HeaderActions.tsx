@@ -1,15 +1,20 @@
 import { Globe } from 'lucide-react'
-import { SHOPIFY_APP_STORE_LISTING_URL } from '@/shared/lib/shopify-auth'
+import type { AcquisitionTargets } from '@/features/marketing/domain/acquisitionPaths'
+import { AcquisitionCta } from '@/features/marketing/ui/components/AcquisitionCta'
 
 interface HeaderActionsProps {
   locale: string
-  ctaLabel: string
+  targets: AcquisitionTargets
+  ctaShopifyLabel: string
+  ctaStandaloneLabel: string
   onLocaleChange: () => void
 }
 
 export function HeaderActions({
   locale,
-  ctaLabel,
+  targets,
+  ctaShopifyLabel,
+  ctaStandaloneLabel,
   onLocaleChange,
 }: HeaderActionsProps) {
   return (
@@ -22,13 +27,16 @@ export function HeaderActions({
         <Globe className="h-4 w-4" />
         <span>{locale === 'ar' ? 'EN' : 'عربي'}</span>
       </button>
-      <a
-        href={SHOPIFY_APP_STORE_LISTING_URL}
-        className="group relative overflow-hidden rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white shadow-[0_12px_26px_rgba(5,150,105,0.26)] transition-all hover:-translate-y-0.5 hover:bg-emerald-500 hover:shadow-[0_16px_34px_rgba(5,150,105,0.32)]"
-        suppressHydrationWarning
-      >
-        <span className="relative z-10">{ctaLabel}</span>
-      </a>
+      <AcquisitionCta
+        target={targets.standalone}
+        label={ctaStandaloneLabel}
+        variant="ghost"
+      />
+      <AcquisitionCta
+        target={targets.shopify}
+        label={ctaShopifyLabel}
+        variant="compact"
+      />
     </div>
   )
 }

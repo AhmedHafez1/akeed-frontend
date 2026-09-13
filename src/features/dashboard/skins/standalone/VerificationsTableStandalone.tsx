@@ -1,256 +1,573 @@
 'use client'
 
+import { useRef, useState } from 'react'
+import { Ellipsis, Eye, History, RotateCcw, XCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { StatusBadge } from '../../ui/shared/StatusBadge'
-import type { VerificationItem } from '../../model/dashboard.model'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/shared/ui'
+import { cn } from '@/shared/lib/utils'
+import type { VerificationItem } from '../../model/dashboard.model'
+import {
+  canCancelOrder,
+  cancellationMessageKey,
+} from '../../domain/cancellation'
+import {
+  canRetryVerification,
+  getVerificationLifecycleSteps,
+  hasCapability,
+} from '../../domain/verificationLifecycle'
+import { VerificationStatusBadge } from './components/VerificationStatusBadge'
+import {
+  formatCreatedDate,
+  formatCreatedTime,
+  formatCurrencyTotal,
+  formatOrderTitle,
+  formatTooltipDateTime,
+  resolveRowDescriptionKey,
+} from '../../domain/verificationRow'
 
 interface VerificationsTableStandaloneProps {
   verifications: VerificationItem[]
-  cancelingVerificationId: string | null
+  reportingTimezone: string
+  actingVerificationId: string | null
   confirmingCancelVerificationId: string | null
-  cancelOrderErrors: Record<string, string>
+  actionErrors: Record<string, string>
+  canCancelOrders: boolean
+  canRetryVerifications: boolean
   onRequestCancelOrder: (verificationId: string) => void
   onDismissCancelOrder: (verificationId: string) => void
   onConfirmCancelOrder: (verificationId: string) => Promise<void>
+  onRetryVerification: (verificationId: string) => Promise<void>
 }
 
-function formatCurrency(price: string | null, currency: string | null): string {
-  if (!price) return '—'
-  const cur = currency ?? 'SAR'
-  try {
-    return new Intl.NumberFormat(undefined, {
-      style: 'currency',
-      currency: cur,
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(Number(price))
-  } catch {
-    return `${price} ${cur}`
+export function VerificationsTableStandalone(
+  props: VerificationsTableStandaloneProps
+) {
+  const t = useTranslations('dashboard')
+  const { locale } = useLocaleInfo()
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const detailsTriggerRef = useRef<HTMLButtonElement | null>(null)
+  const selected =
+    props.verifications.find(
+      (verification) => verification.id === selectedId
+    ) ?? null
+
+  const closeDetails = () => {
+    if (selectedId) props.onDismissCancelOrder(selectedId)
+    setSelectedId(null)
   }
-}
 
-function formatDate(value: string | null): string {
-  if (!value) return '—'
-  return new Date(value).toLocaleDateString(undefined, {
-    month: 'short',
-    day: 'numeric',
-  })
-}
-
-function formatTime(value: string | null): string {
-  if (!value) return ''
-  return new Date(value).toLocaleTimeString(undefined, {
-    hour: '2-digit',
-    minute: '2-digit',
-  })
-}
-
-function formatTooltipDateTime(value: string | null, locale: string): string {
-  if (!value) return ''
-
-  const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return ''
-
-  return new Intl.DateTimeFormat(locale, {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  }).format(date)
-}
-
-function getStatusTimestamp(verification: VerificationItem): string | null {
-  switch (verification.status) {
-    case 'sent':
-      return verification.last_sent_at
-    case 'delivered':
-      return verification.delivered_at
-    case 'read':
-      return verification.read_at
-    case 'confirmed':
-      return verification.confirmed_at
-    case 'canceled':
-      return verification.canceled_at
-    case 'expired':
-      return verification.expired_at
-    case 'no_reply':
-      return verification.no_reply_at
-    default:
-      return null
+  const openDetails = (
+    verificationId: string,
+    trigger: HTMLButtonElement | null
+  ) => {
+    detailsTriggerRef.current = trigger
+    setSelectedId(verificationId)
   }
-}
 
-export function VerificationsTableStandalone({
-  verifications,
-  cancelingVerificationId,
-  confirmingCancelVerificationId,
-  cancelOrderErrors,
-  onRequestCancelOrder,
-  onDismissCancelOrder,
-  onConfirmCancelOrder,
-}: VerificationsTableStandaloneProps) {
-  const t = useTranslations('dashboard.table')
-  const { isRTL, locale } = useLocaleInfo()
-  const alignEnd = isRTL ? 'text-left' : 'text-right'
+  const requestCancel = (
+    verificationId: string,
+    trigger: HTMLButtonElement | null
+  ) => {
+    detailsTriggerRef.current = trigger
+    setSelectedId(verificationId)
+    props.onRequestCancelOrder(verificationId)
+  }
 
   return (
-    <div className="-mx-6 overflow-x-auto sm:mx-0">
-      <table className="w-full min-w-[720px] text-start text-sm">
+    <>
+      <table className="hidden w-full table-fixed text-start text-sm md:table">
+        <caption className="sr-only">{t('verifications.title')}</caption>
         <thead>
-          <tr className="border-b border-slate-200 text-[11px] font-semibold tracking-wider text-slate-400 uppercase">
-            <th className="px-4 py-3 text-start">{t('headings.order')}</th>
-            <th className="px-4 py-3 text-start">{t('headings.status')}</th>
-            <th className="px-4 py-3 text-start">{t('headings.followUp')}</th>
-            <th className="px-4 py-3 text-start">{t('headings.customer')}</th>
-            <th className={`px-4 py-3 ${alignEnd}`}>{t('headings.total')}</th>
-            <th className={`px-4 py-3 ${alignEnd}`}>{t('headings.created')}</th>
-            <th className="px-4 py-3 text-start">{t('headings.actions')}</th>
+          <tr className="border-b border-slate-200 bg-slate-50/60 text-xs font-medium text-slate-600">
+            {[
+              ['order', 'w-[17%]'],
+              ['customer', 'w-[25%]'],
+              ['status', 'w-[18%]'],
+              ['total', 'w-[15%]'],
+              ['created', 'w-[17%]'],
+              ['actions', 'w-[8%]'],
+            ].map(([heading, width]) => (
+              <th
+                key={heading}
+                scope="col"
+                className={cn('px-4 py-3 text-start', width)}
+              >
+                {t(`table.headings.${heading}`)}
+              </th>
+            ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-50">
-          {verifications.map((verification) => {
-            const isConfirming =
-              confirmingCancelVerificationId === verification.id
-            const isCanceling = cancelingVerificationId === verification.id
-            const cancelError = cancelOrderErrors[verification.id]
-            const statusTitle = formatTooltipDateTime(
-              getStatusTimestamp(verification),
-              locale
-            )
-            const followUpTitle = formatTooltipDateTime(
-              verification.follow_up_sent_at,
-              locale
-            )
-            const followUpLabel = verification.follow_up_sent_at
-              ? t('followUp.sent')
-              : t('followUp.notSent')
-
-            return (
-              <tr
-                key={verification.id}
-                className="text-slate-700 transition-colors hover:bg-slate-50/60"
-              >
-                {/* Order */}
-                <td className="px-4 py-3.5">
-                  <p className="font-semibold text-slate-900">
-                    {verification.order_number
-                      ? `#${verification.order_number}`
-                      : '—'}
-                  </p>
-                  <p className="mt-0.5 font-mono text-[10px] leading-none text-slate-400">
-                    {verification.order_id.slice(0, 12)}
-                  </p>
-                </td>
-
-                {/* Status */}
-                <td className="px-4 py-3.5">
-                  <span title={statusTitle || undefined}>
-                    <StatusBadge status={verification.status} />
-                  </span>
-                </td>
-
-                {/* Follow-up */}
-                <td className="px-4 py-3.5">
-                  <span
-                    title={followUpTitle || undefined}
-                    className={
-                      verification.follow_up_sent_at
-                        ? 'font-medium text-slate-700'
-                        : 'text-slate-400'
-                    }
-                  >
-                    {followUpLabel}
-                  </span>
-                </td>
-
-                {/* Customer */}
-                <td className="px-4 py-3.5">
-                  <p className="font-medium text-slate-900">
-                    {verification.customer_name || t('unknownCustomer')}
-                  </p>
-                  <p className="mt-0.5 text-xs text-slate-400">
-                    {verification.customer_phone || t('noPhone')}
-                  </p>
-                </td>
-
-                {/* Total */}
-                <td className={`px-4 py-3.5 ${alignEnd}`}>
-                  <p className="font-semibold text-slate-900 tabular-nums">
-                    {formatCurrency(
-                      verification.total_price,
-                      verification.currency
+        <tbody className="divide-y divide-slate-100 bg-white">
+          {props.verifications.map((verification) => (
+            <tr
+              key={verification.id}
+              aria-busy={verification.optimistic ? true : undefined}
+              className={cn(
+                'hover:bg-muted/70 text-slate-700 transition-colors',
+                verification.optimistic && 'bg-muted/60'
+              )}
+            >
+              <td className="min-w-0 px-4 py-3">
+                <p className="truncate font-semibold text-slate-950">
+                  <bdi>
+                    {formatOrderTitle(
+                      verification,
+                      t('table.orderFallbackPrefix')
                     )}
-                  </p>
-                </td>
-
-                {/* Created */}
-                <td className={`px-4 py-3.5 ${alignEnd}`}>
-                  <p className="text-xs text-slate-600">
-                    {formatDate(verification.created_at)}
-                  </p>
-                  <p className="mt-0.5 text-[11px] text-slate-400">
-                    {formatTime(verification.created_at)}
-                  </p>
-                </td>
-
-                {/* Actions */}
-                <td className="px-4 py-3.5">
-                  {verification.status === 'no_reply' ? (
-                    <div className="max-w-[260px] space-y-2">
-                      {isConfirming ? (
-                        <div className="space-y-2">
-                          <p className="text-xs text-slate-500">
-                            {t('actions.cancelOrderConfirmDescription')}
-                          </p>
-                          <div className="flex flex-wrap gap-2">
-                            <button
-                              type="button"
-                              disabled={isCanceling}
-                              onClick={() =>
-                                void onConfirmCancelOrder(verification.id)
-                              }
-                              className="rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
-                            >
-                              {isCanceling
-                                ? t('actions.cancelingOrder')
-                                : t('actions.confirmCancelOrder')}
-                            </button>
-                            <button
-                              type="button"
-                              disabled={isCanceling}
-                              onClick={() =>
-                                onDismissCancelOrder(verification.id)
-                              }
-                              className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
-                            >
-                              {t('actions.keepOrder')}
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() => onRequestCancelOrder(verification.id)}
-                          className="rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700 transition hover:bg-red-100"
-                        >
-                          {t('actions.cancelOrder')}
-                        </button>
-                      )}
-
-                      {cancelError && (
-                        <p className="text-xs font-medium text-red-600">
-                          {cancelError}
-                        </p>
-                      )}
-                    </div>
+                  </bdi>
+                </p>
+                {verification.is_test && (
+                  <span className="mt-1 inline-flex rounded-full bg-blue-50 px-2 py-0.5 text-[11px] font-semibold text-blue-700">
+                    {t('table.testBadge')}
+                  </span>
+                )}
+              </td>
+              <td className="min-w-0 px-4 py-3">
+                <p className="truncate font-medium text-slate-900">
+                  {verification.customer_name || t('table.unknownCustomer')}
+                </p>
+                <p className="mt-0.5 truncate text-xs text-slate-600">
+                  {verification.customer_phone ? (
+                    <bdi dir="ltr">{verification.customer_phone}</bdi>
                   ) : (
-                    <span className="text-xs text-slate-300">—</span>
+                    t('table.noPhone')
                   )}
-                </td>
-              </tr>
-            )
-          })}
+                </p>
+              </td>
+              <td className="px-4 py-3">
+                <VerificationStatusBadge verification={verification} />
+              </td>
+              <td className="px-4 py-3 font-medium text-slate-900">
+                <bdi>{formatCurrencyTotal(verification, locale)}</bdi>
+              </td>
+              <td className="px-4 py-3 text-xs text-slate-600">
+                {formatCreatedDate(
+                  verification.created_at,
+                  locale,
+                  props.reportingTimezone
+                )}{' '}
+                {formatCreatedTime(
+                  verification.created_at,
+                  locale,
+                  props.reportingTimezone
+                )}
+              </td>
+              <td className="px-4 py-3 text-center">
+                {!verification.optimistic && (
+                  <VerificationActionsMenu
+                    {...props}
+                    verification={verification}
+                    onOpenDetails={openDetails}
+                    onOpenCancel={requestCancel}
+                  />
+                )}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
-    </div>
+
+      <ul className="grid gap-3 bg-slate-50/60 p-3 md:hidden">
+        {props.verifications.map((verification) => (
+          <li
+            key={verification.id}
+            aria-busy={verification.optimistic ? true : undefined}
+            className="rounded-xl border border-slate-200 bg-white p-4"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <p className="truncate font-bold text-slate-950">
+                  {formatOrderTitle(
+                    verification,
+                    t('table.orderFallbackPrefix')
+                  )}
+                </p>
+                <VerificationStatusBadge
+                  verification={verification}
+                  className="mt-2"
+                />
+              </div>
+              <p className="shrink-0 text-sm font-bold text-slate-950">
+                <bdi>{formatCurrencyTotal(verification, locale)}</bdi>
+              </p>
+            </div>
+            <div className="mt-3 border-t border-slate-100 pt-3">
+              <p className="truncate text-sm font-medium text-slate-900">
+                {verification.customer_name || t('table.unknownCustomer')}
+              </p>
+              <p className="mt-0.5 text-xs text-slate-600">
+                {verification.customer_phone ? (
+                  <bdi dir="ltr">{verification.customer_phone}</bdi>
+                ) : (
+                  t('table.noPhone')
+                )}
+              </p>
+            </div>
+            <div className="mt-3 flex items-center justify-between gap-3 text-xs text-slate-600">
+              <span>
+                {formatCreatedDate(
+                  verification.created_at,
+                  locale,
+                  props.reportingTimezone
+                )}{' '}
+                {formatCreatedTime(
+                  verification.created_at,
+                  locale,
+                  props.reportingTimezone
+                )}
+              </span>
+              {!verification.optimistic && (
+                <VerificationActionsMenu
+                  {...props}
+                  verification={verification}
+                  onOpenDetails={openDetails}
+                  onOpenCancel={requestCancel}
+                />
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <Dialog
+        open={selected !== null}
+        onOpenChange={(open) => !open && closeDetails()}
+      >
+        {selected && (
+          <VerificationDetails
+            {...props}
+            verification={selected}
+            getReturnFocusTarget={() => detailsTriggerRef.current}
+          />
+        )}
+      </Dialog>
+    </>
+  )
+}
+
+interface VerificationActionsMenuProps extends Omit<
+  VerificationsTableStandaloneProps,
+  'verifications'
+> {
+  verification: VerificationItem
+  onOpenDetails: (
+    verificationId: string,
+    trigger: HTMLButtonElement | null
+  ) => void
+  onOpenCancel: (
+    verificationId: string,
+    trigger: HTMLButtonElement | null
+  ) => void
+}
+
+function VerificationActionsMenu({
+  verification,
+  onOpenDetails,
+  onOpenCancel,
+  ...props
+}: VerificationActionsMenuProps) {
+  const t = useTranslations('dashboard')
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const showRetry =
+    props.canRetryVerifications &&
+    canRetryVerification(verification.capabilities)
+  const showCancel =
+    props.canCancelOrders &&
+    hasCapability(
+      verification.capabilities,
+      'merchant_no_reply_cancellation'
+    ) &&
+    canCancelOrder(verification)
+  const isAnyActionRunning = props.actingVerificationId !== null
+  const orderTitle = formatOrderTitle(
+    verification,
+    t('table.orderFallbackPrefix')
+  )
+
+  return (
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger asChild>
+        <button
+          ref={triggerRef}
+          type="button"
+          aria-label={t('table.actions.openMenu', { order: orderTitle })}
+          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-950 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:outline-none"
+        >
+          <Ellipsis aria-hidden="true" className="h-5 w-5" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem
+          onSelect={() => onOpenDetails(verification.id, triggerRef.current)}
+        >
+          <Eye aria-hidden="true" className="h-4 w-4" />
+          {t('table.actions.details')}
+        </DropdownMenuItem>
+        {showRetry && (
+          <DropdownMenuItem
+            disabled={isAnyActionRunning}
+            onSelect={() => void props.onRetryVerification(verification.id)}
+          >
+            <RotateCcw aria-hidden="true" className="h-4 w-4" />
+            {props.actingVerificationId === verification.id
+              ? t('table.actions.retrying')
+              : t('table.actions.retry')}
+          </DropdownMenuItem>
+        )}
+        {showCancel && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              destructive
+              disabled={isAnyActionRunning}
+              onSelect={() => onOpenCancel(verification.id, triggerRef.current)}
+            >
+              <XCircle aria-hidden="true" className="h-4 w-4" />
+              {t('table.actions.cancelOrder')}
+            </DropdownMenuItem>
+          </>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+interface VerificationDetailsProps extends Omit<
+  VerificationsTableStandaloneProps,
+  'verifications'
+> {
+  verification: VerificationItem
+  getReturnFocusTarget: () => HTMLButtonElement | null
+}
+
+function VerificationDetails(props: VerificationDetailsProps) {
+  const t = useTranslations('dashboard')
+  const { locale } = useLocaleInfo()
+  const { verification } = props
+  const isActing = props.actingVerificationId === verification.id
+  const isConfirming = props.confirmingCancelVerificationId === verification.id
+  const showRetry =
+    props.canRetryVerifications &&
+    canRetryVerification(verification.capabilities)
+  const showCancel =
+    props.canCancelOrders &&
+    hasCapability(
+      verification.capabilities,
+      'merchant_no_reply_cancellation'
+    ) &&
+    canCancelOrder(verification)
+  const unavailableKey = cancellationMessageKey(verification)
+
+  return (
+    <DialogContent
+      closeLabel={t('table.actions.dismiss')}
+      onCloseAutoFocus={(event) => {
+        event.preventDefault()
+        props.getReturnFocusTarget()?.focus()
+      }}
+      className="!inset-y-0 [inset-inline-end:0] !top-0 !left-auto !h-dvh !w-[calc(100vw-1.5rem)] !max-w-none !translate-x-0 !translate-y-0 !overflow-y-auto !rounded-none !border-y-0 !p-0 sm:!w-[min(100vw,520px)]"
+    >
+      <DialogHeader className="border-border border-b px-5 py-5 pe-14">
+        <DialogTitle className="text-xl">
+          {formatOrderTitle(verification, t('table.orderFallbackPrefix'))}
+        </DialogTitle>
+        <DialogDescription>
+          {t(resolveRowDescriptionKey(verification))}
+        </DialogDescription>
+      </DialogHeader>
+
+      <div className="space-y-6 p-5">
+        <div className="bg-muted grid grid-cols-2 gap-4 rounded-xl p-4 text-sm">
+          <div>
+            <p className="text-xs text-slate-600">
+              {t('table.headings.customer')}
+            </p>
+            <p className="mt-1 font-semibold text-slate-950">
+              {verification.customer_name || t('table.unknownCustomer')}
+            </p>
+            <p className="mt-0.5 text-xs text-slate-600">
+              <bdi dir="ltr">
+                {verification.customer_phone || t('table.noPhone')}
+              </bdi>
+            </p>
+          </div>
+          <div>
+            <p className="text-xs text-slate-600">
+              {t('table.headings.total')}
+            </p>
+            <p className="mt-1 font-semibold text-slate-950">
+              <bdi>{formatCurrencyTotal(verification, locale)}</bdi>
+            </p>
+          </div>
+        </div>
+
+        <section aria-labelledby="verification-history-title">
+          <h3
+            id="verification-history-title"
+            className="flex items-center gap-2 font-semibold text-slate-950"
+          >
+            <History aria-hidden="true" className="h-4 w-4" />
+            {t('table.lifecycle.label')}
+          </h3>
+          <ol className="mt-3 space-y-3">
+            {getVerificationLifecycleSteps(verification).map((step) => {
+              const stateKey = step.completedByOutcome
+                ? `table.lifecycle.completedBy.${step.completedByOutcome}`
+                : step.recorded
+                  ? 'table.lifecycle.recorded'
+                  : 'table.lifecycle.unrecorded'
+              return (
+                <li key={step.id} className="flex items-start gap-3 text-sm">
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      'mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full border',
+                      step.recorded
+                        ? 'bg-primary border-emerald-600'
+                        : 'border-slate-300 bg-white'
+                    )}
+                  />
+                  <div>
+                    <p className="font-medium text-slate-900">
+                      {t(`table.lifecycle.${step.label}`)}
+                    </p>
+                    <p className="mt-0.5 text-xs text-slate-600">
+                      {t(stateKey)}
+                      {step.timestamp
+                        ? ` · ${formatTooltipDateTime(
+                            step.timestamp,
+                            locale,
+                            props.reportingTimezone
+                          )}`
+                        : ''}
+                    </p>
+                  </div>
+                </li>
+              )
+            })}
+          </ol>
+        </section>
+
+        <dl className="divide-border border-border divide-y rounded-xl border px-4 text-sm">
+          <div className="flex justify-between gap-4 py-3">
+            <dt className="text-slate-600">{t('table.headings.followUp')}</dt>
+            <dd className="text-end font-medium text-slate-900">
+              {verification.follow_up_sent_at
+                ? `${t('table.followUp.sent')} · ${formatTooltipDateTime(
+                    verification.follow_up_sent_at,
+                    locale,
+                    props.reportingTimezone
+                  )}`
+                : t('table.followUp.notSent')}
+            </dd>
+          </div>
+          <div className="flex justify-between gap-4 py-3">
+            <dt className="text-slate-600">{t('table.headings.created')}</dt>
+            <dd className="text-end font-medium text-slate-900">
+              {formatTooltipDateTime(
+                verification.created_at,
+                locale,
+                props.reportingTimezone
+              )}
+            </dd>
+          </div>
+          <div className="py-3">
+            <dt className="text-slate-600">{t('table.technicalId')}</dt>
+            <dd className="mt-1 font-mono text-xs break-all text-slate-700">
+              {verification.order_id}
+            </dd>
+          </div>
+        </dl>
+
+        {(showRetry || showCancel || unavailableKey) && (
+          <section aria-labelledby="verification-actions-title">
+            <h3
+              id="verification-actions-title"
+              className="font-semibold text-slate-950"
+            >
+              {t('table.headings.actions')}
+            </h3>
+            {isConfirming && showCancel ? (
+              <div className="mt-3 rounded-xl border border-red-200 bg-red-50 p-4">
+                <p className="text-sm leading-6 text-red-900">
+                  {t('table.actions.cancelOrderConfirmDescription')}
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    disabled={props.actingVerificationId !== null}
+                    onClick={() =>
+                      void props.onConfirmCancelOrder(verification.id)
+                    }
+                    className="rounded-lg bg-red-600 px-3 py-2 text-xs font-semibold text-white hover:bg-red-700 disabled:opacity-60"
+                  >
+                    {isActing
+                      ? t('table.actions.cancelingOrder')
+                      : t('table.actions.confirmCancelOrder')}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={props.actingVerificationId !== null}
+                    onClick={() => props.onDismissCancelOrder(verification.id)}
+                    className="rounded-lg border border-red-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 disabled:opacity-60"
+                  >
+                    {t('table.actions.keepOrder')}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {showRetry && (
+                  <button
+                    type="button"
+                    disabled={props.actingVerificationId !== null}
+                    onClick={() =>
+                      void props.onRetryVerification(verification.id)
+                    }
+                    className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-900 hover:bg-amber-100 disabled:opacity-60"
+                  >
+                    {isActing
+                      ? t('table.actions.retrying')
+                      : t('table.actions.retry')}
+                  </button>
+                )}
+                {showCancel && (
+                  <button
+                    type="button"
+                    disabled={props.actingVerificationId !== null}
+                    onClick={() => props.onRequestCancelOrder(verification.id)}
+                    className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-800 hover:bg-red-100 disabled:opacity-60"
+                  >
+                    {t('table.actions.cancelOrder')}
+                  </button>
+                )}
+              </div>
+            )}
+            {unavailableKey && (
+              <p className="mt-3 text-xs leading-5 text-slate-600">
+                {t(`table.actions.${unavailableKey}`)}
+              </p>
+            )}
+            {props.actionErrors[verification.id] && (
+              <p role="alert" className="mt-3 text-sm text-red-700">
+                {props.actionErrors[verification.id]}
+              </p>
+            )}
+          </section>
+        )}
+      </div>
+    </DialogContent>
   )
 }

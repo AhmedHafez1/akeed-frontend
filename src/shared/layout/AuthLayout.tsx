@@ -15,7 +15,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
   const locale = getLocaleFromPathname(pathname)
 
   return (
-    <div className="flex min-h-screen flex-col bg-linear-to-b from-gray-100 via-gray-200 to-gray-50">
+    <div className="landing-hero-surface flex min-h-screen flex-col">
       {/* Minimal header with logo */}
       <header className="flex h-16 shrink-0 items-center px-6">
         <Link

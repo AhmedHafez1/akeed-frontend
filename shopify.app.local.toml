@@ -9,7 +9,7 @@ embedded = true
 
 [build]
 automatically_update_urls_on_dev = false
-dev_store_url = "zamalek-store-2.myshopify.com"
+dev_store_url = "aahi-9681.myshopify.com"
 
 [webhooks]
 api_version = "2026-01"
@@ -20,4 +20,4 @@ optional_scopes = [ ]
 use_legacy_install_flow = false
 
 [auth]
-redirect_urls = [ "https://localhost:3458/api/auth/shopify/callback" ]
+redirect_urls = [ "https://unmasticatory-dihydroxy-brittny.ngrok-free.dev/api/auth/shopify/callback" ]

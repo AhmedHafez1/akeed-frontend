@@ -78,7 +78,7 @@ export function Solution() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="landing-section-title max-w-5xl"
+            className="text-h1 text-foreground max-w-5xl text-balance"
           >
             {t('title')}
           </motion.h2>
@@ -108,7 +108,7 @@ export function Solution() {
                     tone={solution.iconTone}
                     size="sm"
                   />
-                  <span className="text-xs font-bold tracking-[0.12em] text-slate-300">
+                  <span className="text-muted-foreground text-xs font-bold tracking-[0.12em]">
                     {String(index + 1).padStart(2, '0')}
                   </span>
                 </div>

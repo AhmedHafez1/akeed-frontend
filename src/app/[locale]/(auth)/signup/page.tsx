@@ -31,6 +31,9 @@ export default function SignupPage() {
     companyName: '',
   })
   const [error, setError] = useState('')
+  const [verificationEmail, setVerificationEmail] = useState<string | null>(
+    null
+  )
   const [isLoading, setIsLoading] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<{
     password?: string
@@ -71,10 +74,21 @@ export default function SignupPage() {
 
     try {
       // Create user account
-      await auth.signUp(formData.email, formData.password, {
-        full_name: formData.fullName,
-        company_name: formData.companyName,
+      const data = await auth.signUp(formData.email, formData.password, {
+        metadata: {
+          full_name: formData.fullName,
+          company_name: formData.companyName,
+        },
+        emailRedirectTo: new URL(
+          auth.getDashboardPath(locale),
+          window.location.origin
+        ).toString(),
       })
+
+      if (!data.session) {
+        setVerificationEmail(formData.email)
+        return
+      }
 
       // Redirect to standalone dashboard
       router.push(auth.getDashboardPath(locale))
@@ -96,6 +110,43 @@ export default function SignupPage() {
     ? 'pointer-events-none absolute inset-y-0 left-3 flex items-center'
     : 'pointer-events-none absolute inset-y-0 right-3 flex items-center'
 
+  if (verificationEmail) {
+    return (
+      <div className="space-y-6 text-center">
+        <div className="rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+            <svg
+              className="h-6 w-6"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              aria-hidden="true"
+            >
+              <path d="M4 4h16v16H4z" />
+              <path d="m4 6 8 6 8-6" />
+            </svg>
+          </div>
+          <h1 className="mt-4 text-2xl font-bold text-slate-900">
+            {t('auth.verifyEmailTitle')}
+          </h1>
+          <p className="mt-2 text-sm text-slate-600">
+            {t('auth.verifyEmailMessage', { email: verificationEmail })}
+          </p>
+          <p className="mt-3 text-xs text-slate-500">
+            {t('auth.verifyEmailHint')}
+          </p>
+          <Link
+            href={auth.getLoginPath(locale)}
+            className="bg-primary text-primary-foreground hover:bg-primary mt-6 inline-flex rounded-xl px-5 py-2.5 text-sm font-semibold transition focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+          >
+            {t('auth.backToSignIn')}
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6">
       <div className="space-y-2 text-center">
@@ -106,7 +157,7 @@ export default function SignupPage() {
           {t('auth.alreadyHaveAccount')}{' '}
           <Link
             href={auth.getLoginPath(locale)}
-            className="font-semibold text-emerald-600 transition-colors hover:text-emerald-700 focus-visible:underline focus-visible:outline-none"
+            className="text-primary hover:text-primary-hover font-semibold transition-colors focus-visible:underline focus-visible:outline-none"
           >
             {t('auth.signIn')}
           </Link>
@@ -144,6 +195,45 @@ export default function SignupPage() {
                   placeholder={t('auth.fullName')}
                 />
                 {formData.fullName ? (
+                  <span className={`${iconEndClass} text-emerald-500`}>
+                    <svg
+                      className="h-4 w-4"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-7.07 7.07a1 1 0 01-1.414 0L3.293 9.848a1 1 0 011.414-1.414l4.102 4.102 6.364-6.364a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                ) : null}
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="companyName"
+                className="text-sm font-medium text-slate-700"
+              >
+                {t('auth.companyName')}
+              </label>
+              <div className="relative mt-2">
+                <input
+                  id="companyName"
+                  name="companyName"
+                  type="text"
+                  autoComplete="organization"
+                  required
+                  maxLength={120}
+                  value={formData.companyName}
+                  onChange={handleChange}
+                  className={`${inputBaseClass} ${inputDefaultClass}`}
+                  placeholder={t('auth.companyName')}
+                />
+                {formData.companyName ? (
                   <span className={`${iconEndClass} text-emerald-500`}>
                     <svg
                       className="h-4 w-4"
@@ -325,13 +415,13 @@ export default function SignupPage() {
               name="terms"
               type="checkbox"
               required
-              className="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus-visible:ring-2 focus-visible:ring-emerald-500/40"
+              className="text-primary mt-1 h-4 w-4 rounded border-slate-300 focus-visible:ring-2 focus-visible:ring-emerald-500/40"
             />
             <span>
               {t('auth.agreeToTerms')}{' '}
               <Link
                 href={withLocale('/terms', locale)}
-                className="font-semibold text-emerald-600 transition-colors hover:text-emerald-700 focus-visible:underline focus-visible:outline-none"
+                className="text-primary hover:text-primary-hover font-semibold transition-colors focus-visible:underline focus-visible:outline-none"
                 target="_blank"
               >
                 {t('auth.termsOfService')}
@@ -339,7 +429,7 @@ export default function SignupPage() {
               {t('auth.and')}{' '}
               <Link
                 href={withLocale('/privacy', locale)}
-                className="font-semibold text-emerald-600 transition-colors hover:text-emerald-700 focus-visible:underline focus-visible:outline-none"
+                className="text-primary hover:text-primary-hover font-semibold transition-colors focus-visible:underline focus-visible:outline-none"
                 target="_blank"
               >
                 {t('auth.privacyPolicy')}
@@ -350,7 +440,7 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="relative flex w-full items-center justify-center rounded-xl bg-emerald-600 px-4 py-3 text-sm font-bold text-white shadow-sm shadow-emerald-900/10 transition-all hover:bg-emerald-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-70"
+            className="bg-primary text-primary-foreground hover:bg-primary relative flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-bold shadow-sm shadow-emerald-900/10 transition-all hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-70"
           >
             {isLoading && (
               <svg
@@ -374,7 +464,7 @@ export default function SignupPage() {
                 />
               </svg>
             )}
-            {t('auth.createAccount')}
+            {isLoading ? t('auth.creatingAccount') : t('auth.createAccount')}
           </button>
         </form>
       </div>
@@ -382,10 +472,10 @@ export default function SignupPage() {
       <div className="space-y-4">
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-slate-200" />
+            <div className="border-border w-full border-t" />
           </div>
-          <div className="relative flex justify-center text-xs tracking-widest text-slate-400 uppercase">
-            <span className="bg-gray-150 px-3">{t('auth.orSignUpWith')}</span>
+          <div className="text-muted-foreground relative flex justify-center text-xs tracking-widest uppercase">
+            <span className="bg-background px-3">{t('auth.orSignUpWith')}</span>
           </div>
         </div>
 

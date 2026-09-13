@@ -11,24 +11,47 @@ export async function parseJsonResponse<T>(response: Response): Promise<T> {
   }
 }
 
-export async function getErrorMessage(response: Response): Promise<string> {
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+    readonly code?: string,
+    readonly fieldErrors?: Record<string, string>
+  ) {
+    super(message)
+    this.name = 'ApiError'
+  }
+}
+
+export async function createApiError(response: Response): Promise<ApiError> {
   const fallback = `Request failed with status ${response.status}`
 
   try {
-    const data = (await parseJsonResponse<Record<string, unknown>>(
-      response
-    )) as { message?: string | string[] }
-
-    if (Array.isArray(data.message) && data.message.length > 0) {
-      return data.message.join(', ')
-    }
-
-    if (typeof data.message === 'string' && data.message.trim().length > 0) {
-      return data.message
-    }
+    const data = await parseJsonResponse<Record<string, unknown>>(response)
+    const message = Array.isArray(data.message)
+      ? data.message
+          .filter((item): item is string => typeof item === 'string')
+          .join(', ')
+      : typeof data.message === 'string' && data.message.trim().length > 0
+        ? data.message
+        : fallback
+    const code = typeof data.code === 'string' ? data.code : undefined
+    const fieldErrors =
+      data.fieldErrors &&
+      typeof data.fieldErrors === 'object' &&
+      !Array.isArray(data.fieldErrors)
+        ? Object.fromEntries(
+            Object.entries(data.fieldErrors).filter(
+              (entry): entry is [string, string] => typeof entry[1] === 'string'
+            )
+          )
+        : undefined
+    return new ApiError(message, response.status, code, fieldErrors)
   } catch {
-    return fallback
+    return new ApiError(fallback, response.status)
   }
+}
 
-  return fallback
+export async function getErrorMessage(response: Response): Promise<string> {
+  return (await createApiError(response)).message
 }

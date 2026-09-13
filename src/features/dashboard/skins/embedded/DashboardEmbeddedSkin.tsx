@@ -12,6 +12,7 @@ export function DashboardEmbeddedSkin({
   dateRangeFilter,
   dateRangeOptions,
   onDateRangeFilterChange,
+  sourceStatus,
   testFeedback,
   onDismissTestFeedback,
   error,
@@ -30,6 +31,12 @@ export function DashboardEmbeddedSkin({
         {testFeedback && (
           <Banner tone={testFeedback.tone} onDismiss={onDismissTestFeedback}>
             <p>{testFeedback.message}</p>
+          </Banner>
+        )}
+
+        {sourceStatus === 'disconnected' && (
+          <Banner tone="warning" title={t('sourceDisconnectedTitle')}>
+            <p>{t('sourceDisconnectedDescription')}</p>
           </Banner>
         )}
 

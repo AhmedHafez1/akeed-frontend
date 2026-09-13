@@ -1,0 +1,52 @@
+async (page) => {
+  const results = [];
+  const assert = (condition, name) => { if (!condition) throw new Error(name); results.push(name); };
+  const visit = async (query = '') => {
+    await page.goto('http://127.0.0.1:3098/en/verifications' + query);
+    await page.getByRole('button', { name: 'All', exact: true }).waitFor();
+    await page.locator('[aria-busy="true"]').first().waitFor({state:'detached'});
+  };
+  const rows = () => page.locator('tbody tr');
+  const audit = async () => {
+    await page.getByRole('button', {name:'Inspect fixture requests'}).click();
+    return await page.getByLabel('Fixture requests').innerText();
+  };
+  await page.setViewportSize({width:1280,height:1000});
+  await visit('?preserved=yes');
+  assert(await rows().count() === 6, 'First cursor page contains six rows');
+  assert((await audit()).split('\n').every(line => !line.startsWith('POST')), 'Initial render submits no actions');
+  const confirmed = rows().filter({hasText:'#1047'});
+  assert(await confirmed.getByTitle('Delivered: Completed by customer confirmation', {exact:true}).count() === 1, 'Confirmation completes missing delivery evidence without a fabricated timestamp');
+  assert(await confirmed.locator('ol > li > span.bg-emerald-600').count() === 3, 'Confirmed shows three filled green circles');
+  assert(await rows().filter({hasText:'#1044'}).locator('ol > li > span.bg-emerald-600').count() === 3, 'Canceled shows three filled green circles');
+  assert(await confirmed.getByRole('button').count() === 0, 'Settled row has no actions');
+  await page.getByRole('button', {name:'Load more',exact:true}).click();
+  await page.getByText('11 verifications loaded',{exact:true}).waitFor();
+  assert(await rows().count() === 11, 'Load more appends all remaining rows');
+  assert(await rows().filter({hasText:'#1039'}).getByRole('button').count() === 0, 'No-reply without capabilities cannot cancel');
+  assert(await rows().filter({hasText:'#1038'}).getByRole('button').count() === 0, 'Failed without capabilities cannot retry');
+  await page.getByRole('button', {name:'Failed',exact:true}).click();
+  await page.getByText('2 verifications loaded',{exact:true}).waitFor();
+  assert(page.url().includes('status=failed') && page.url().includes('preserved=yes'), 'Filter is URL-backed and preserves other query parameters');
+  await page.reload();
+  await page.getByText('2 verifications loaded',{exact:true}).waitFor();
+  assert(await page.getByRole('button',{name:'Failed',exact:true}).getAttribute('aria-pressed') === 'true', 'Refresh restores status');
+  await page.getByRole('button',{name:'Confirmed',exact:true}).click();
+  await page.getByText('1 verification loaded',{exact:true}).waitFor();
+  await page.goBack();
+  await page.getByText('2 verifications loaded',{exact:true}).waitFor();
+  assert(await page.getByRole('button',{name:'Failed',exact:true}).getAttribute('aria-pressed') === 'true', 'Browser back restores status');
+  await page.goForward();
+  await page.getByText('1 verification loaded',{exact:true}).waitFor();
+  assert(await page.getByRole('button',{name:'Confirmed',exact:true}).getAttribute('aria-pressed') === 'true', 'Browser forward restores status');
+  await page.getByRole('button',{name:'All verifications',exact:true}).click();
+  await page.getByText('6 verifications loaded',{exact:true}).waitFor();
+  assert(!page.url().includes('status='), 'All summary clears status');
+  await page.getByRole('button',{name:'Awaiting reply',exact:true}).click();
+  await page.getByText('5 verifications loaded',{exact:true}).waitFor();
+  assert((await audit()).includes('status=sent%2Cdelivered%2Cread%2Cno_reply'), 'Awaiting reply uses unchanged API grouping');
+  await page.getByRole('combobox',{name:'Date range'}).selectOption('today');
+  await page.locator('[aria-busy="true"]').first().waitFor({state:'detached'});
+  assert((await audit()).includes('date_range=today'), 'Date range reaches API');
+  return results;
+}

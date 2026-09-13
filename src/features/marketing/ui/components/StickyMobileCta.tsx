@@ -1,14 +1,15 @@
 'use client'
 
-import { ArrowUpRight } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
-import { SHOPIFY_APP_STORE_LISTING_URL } from '@/shared/lib/shopify-auth'
+import { useAcquisition } from '@/features/marketing/domain/useAcquisition'
+import { AcquisitionCta } from '@/features/marketing/ui/components/AcquisitionCta'
 
 const STICKY_CTA_SCROLL_THRESHOLD = 520
 
 export function StickyMobileCta() {
   const t = useTranslations('mobile_cta')
+  const { targets } = useAcquisition()
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -27,24 +28,31 @@ export function StickyMobileCta() {
   }
 
   return (
-    <div className="fixed right-0 bottom-0 left-0 z-50 border-t border-slate-200/80 bg-white/95 px-3 py-3 shadow-[0_-10px_30px_rgba(15,23,42,0.08)] backdrop-blur md:hidden">
-      <div className="mx-auto flex max-w-md items-center gap-3">
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-xs font-semibold text-slate-500">
-            {t('eyebrow')}
-          </p>
-          <p className="truncate text-sm font-bold text-slate-800">
-            {t('title')}
-          </p>
+    <div className="shadow-sticky fixed inset-x-0 bottom-0 z-50 border-t border-slate-200/80 bg-white/95 px-3 py-3 backdrop-blur md:hidden">
+      <div className="mx-auto max-w-md">
+        {/*
+         * The eyebrow carries the verb — the two buttons below are path names,
+         * so without it they read as labels rather than actions.
+         */}
+        <p className="mb-2 truncate text-center text-xs font-semibold text-slate-500">
+          {t('eyebrow')}
+        </p>
+        <div className="grid grid-cols-2 gap-2">
+          <AcquisitionCta
+            target={targets.shopify}
+            label={t('primary_shopify')}
+            ariaLabel={t('aria_shopify')}
+            variant="compact"
+            className="h-11 w-full px-3"
+          />
+          <AcquisitionCta
+            target={targets.standalone}
+            label={t('primary_standalone')}
+            ariaLabel={t('aria_standalone')}
+            variant="compactSecondary"
+            className="h-11 w-full px-3"
+          />
         </div>
-        <a
-          href={SHOPIFY_APP_STORE_LISTING_URL}
-          className="inline-flex h-11 shrink-0 items-center gap-1 rounded-xl bg-linear-to-r from-emerald-700 to-emerald-600 px-4 text-sm font-bold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow"
-          suppressHydrationWarning
-        >
-          {t('primary')}
-          <ArrowUpRight className="h-4 w-4" />
-        </a>
       </div>
     </div>
   )

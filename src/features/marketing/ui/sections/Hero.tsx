@@ -7,14 +7,13 @@ import {
   ChevronRight,
   Clock3,
   CreditCard,
-  Play,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
+import { useAcquisition } from '@/features/marketing/domain/useAcquisition'
+import { AcquisitionCta } from '@/features/marketing/ui/components/AcquisitionCta'
 import { PlatformAvailability } from '@/features/marketing/ui/components/PlatformAvailability'
-import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import { SHOPIFY_APP_STORE_LISTING_URL } from '@/shared/lib/shopify-auth'
 
 const ChatInterface = dynamic(
   () =>
@@ -26,7 +25,7 @@ const ChatInterface = dynamic(
 
 function Hero() {
   const t = useTranslations('hero')
-  const { isRTL } = useLocaleInfo()
+  const { isRTL, targets } = useAcquisition()
   const shouldReduceMotion = useReducedMotion()
 
   const proofItems = [
@@ -74,15 +73,15 @@ function Hero() {
   const microcopyItems = [
     {
       label: t('microcopy_free'),
-      icon: <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />,
+      icon: <CheckCircle2 className="text-primary h-3.5 w-3.5" />,
     },
     {
       label: t('microcopy_no_card'),
-      icon: <CreditCard className="h-3.5 w-3.5 text-emerald-600" />,
+      icon: <CreditCard className="text-primary h-3.5 w-3.5" />,
     },
     {
       label: t('microcopy_setup'),
-      icon: <Clock3 className="h-3.5 w-3.5 text-emerald-600" />,
+      icon: <Clock3 className="text-primary h-3.5 w-3.5" />,
     },
   ] as const
 
@@ -90,11 +89,11 @@ function Hero() {
     duration: shouldReduceMotion ? 0 : 0.6,
   }
 
-  const scrollToHowItWorks = () => {
-    document
-      .getElementById('how-it-works')
-      ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
+  const ctaChevron = isRTL ? (
+    <ChevronLeft className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
+  ) : (
+    <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+  )
 
   return (
     <section className="relative overflow-hidden px-4 pt-28 pb-16 sm:px-6 sm:pt-32 sm:pb-20 lg:px-10 lg:pt-34 lg:pb-22">
@@ -108,10 +107,10 @@ function Hero() {
             className="mb-6 flex max-w-4xl flex-col items-center gap-2.5 lg:items-start"
           >
             <h1
-              className={`${isRTL ? 'text-right' : 'text-left'} max-w-5xl text-4xl leading-[1.08] font-extrabold tracking-normal text-slate-950 sm:text-5xl lg:text-5xl xl:text-6xl`}
+              className={`${isRTL ? 'text-right' : 'text-left'} text-display text-foreground max-w-5xl text-balance`}
             >
               {t('title')}{' '}
-              <span className="bg-linear-to-r from-emerald-700 to-emerald-500 bg-clip-text text-transparent">
+              <span className="from-primary-hover to-primary bg-linear-to-r bg-clip-text text-transparent">
                 {t('highlight')}
               </span>
             </h1>
@@ -125,7 +124,7 @@ function Hero() {
             className="mb-8 max-w-2xl"
           >
             <p
-              className={`${isRTL ? 'text-right leading-8 lg:leading-9' : 'text-left leading-7 lg:leading-8'} text-base font-medium text-slate-600 sm:text-lg`}
+              className={`${isRTL ? 'text-right' : 'text-left'} text-lead text-muted-foreground text-pretty`}
             >
               {t('subtitle')}
             </p>
@@ -141,12 +140,12 @@ function Hero() {
             {proofItems.map((item) => (
               <div
                 key={item.label}
-                className="flex min-h-17 items-center gap-4 rounded-2xl bg-white/95 px-5 shadow-[0_14px_32px_rgba(15,23,42,0.07)] ring-1 ring-slate-100/80"
+                className="rounded-card bg-card/95 shadow-card ring-border/70 flex min-h-17 items-center gap-4 px-5 ring-1"
               >
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 shadow-inner ring-1 shadow-white ring-emerald-100/70">
+                <span className="rounded-control bg-primary-subtle ring-primary-border/70 flex h-11 w-11 shrink-0 items-center justify-center ring-1">
                   {item.icon}
                 </span>
-                <span className="text-start text-sm leading-5 font-medium text-slate-950">
+                <span className="text-foreground text-start text-sm leading-5 font-medium">
                   {item.label}
                 </span>
               </div>
@@ -158,7 +157,7 @@ function Hero() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...baseTransition, delay: 0.35 }}
-            className="text-md mb-8 flex w-full flex-wrap content-center items-center justify-center gap-x-7 gap-y-4 font-medium text-slate-500"
+            className="text-muted-foreground text-md mb-8 flex w-full flex-wrap content-center items-center justify-center gap-x-7 gap-y-4 font-medium"
           >
             {microcopyItems.map((item) => (
               <span
@@ -191,40 +190,32 @@ function Hero() {
             transition={{ ...baseTransition, delay: 0.3 }}
             className="flex w-full max-w-2xl flex-col items-stretch justify-center gap-3 sm:flex-row lg:justify-start"
           >
-            <a
-              href={SHOPIFY_APP_STORE_LISTING_URL}
-              className="group relative flex h-19 w-full items-center justify-center gap-4 rounded-2xl bg-emerald-700 px-7 text-xl font-medium text-white shadow-[0_6px_12px_rgba(5,150,105,0.28)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-emerald-800 hover:shadow-[0_12px_24px_rgba(5,150,105,0.34)] focus-visible:ring-2 focus-visible:ring-emerald-200 focus-visible:outline-none sm:w-auto sm:min-w-76"
-              suppressHydrationWarning
-            >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/95 shadow-sm">
-                <Image
-                  src="/images/landing/logos/shopify_icon_1.png"
-                  alt={t('shopify_available')}
-                  width={32}
-                  height={32}
-                  unoptimized
-                  className="h-8 w-8 object-contain"
-                />
-              </span>
-              <span>{t('cta')}</span>
-              {isRTL ? (
-                <ChevronLeft className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
-              ) : (
-                <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-              )}
-            </a>
-            <button
-              type="button"
-              onClick={scrollToHowItWorks}
-              className={`flex ${isRTL ? 'flex-row-reverse' : ''} h-19 w-full items-center justify-center gap-3 rounded-2xl bg-white/90 px-7 text-lg font-medium text-slate-900 shadow-[0_12px_28px_rgba(15,23,42,0.08)] ring-1 ring-slate-100 transition-all duration-200 hover:-translate-y-0.5 hover:bg-emerald-50/70 hover:text-emerald-800 hover:ring-emerald-100 focus-visible:ring-2 focus-visible:ring-emerald-100 focus-visible:outline-none sm:w-auto sm:min-w-56`}
-            >
-              {isRTL ? (
-                <Play className="h-5 w-5 rotate-180 fill-emerald-600 text-emerald-600" />
-              ) : (
-                <Play className="h-5 w-5 fill-emerald-600 text-emerald-600" />
-              )}
-              {t('secondary_cta')}
-            </button>
+            <AcquisitionCta
+              target={targets.shopify}
+              label={t('cta_shopify')}
+              variant="primary"
+              className="w-full sm:w-auto sm:min-w-76"
+              leading={
+                <span className="bg-card/95 shadow-raised flex h-11 w-11 shrink-0 items-center justify-center rounded-full">
+                  <Image
+                    src="/images/landing/logos/shopify_icon_1.png"
+                    alt={t('shopify_available')}
+                    width={32}
+                    height={32}
+                    unoptimized
+                    className="h-8 w-8 object-contain"
+                  />
+                </span>
+              }
+              trailing={ctaChevron}
+            />
+            <AcquisitionCta
+              target={targets.standalone}
+              label={t('cta_standalone')}
+              note={t('cta_standalone_note')}
+              variant="secondary"
+              className="w-full sm:w-auto sm:min-w-56"
+            />
           </motion.div>
         </div>
 

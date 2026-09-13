@@ -21,16 +21,22 @@ import {
 } from '@/shared/lib/seo'
 import '../globals.css'
 
+/*
+ * Both families are loaded on their variable axis (no `weight` array), so a
+ * single file covers every weight instead of shipping one static file per
+ * weight. Arabic glyph sets are large, which makes this matter most on the
+ * default `ar` locale.
+ */
 const cairo = Cairo({
   subsets: ['arabic', 'latin'],
-  weight: ['400', '600', '700', '900'],
   display: 'swap',
+  adjustFontFallback: true,
 })
 
 const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800', '900'],
   display: 'swap',
+  adjustFontFallback: true,
 })
 
 export async function generateMetadata({

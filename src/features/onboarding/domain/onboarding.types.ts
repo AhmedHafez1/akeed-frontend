@@ -1,3 +1,8 @@
+export interface BillingManagement {
+  mode: 'shopify' | 'manual'
+  canManageBilling: boolean
+}
+
 export type IntegrationOnboardingLanguage = 'auto' | 'en' | 'ar'
 
 export type ArabicCodTemplateVariantId =
@@ -14,6 +19,18 @@ export type EnglishCodTemplateVariantId =
 
 export type IntegrationOnboardingStatus = 'pending' | 'completed'
 
+export type CreditAccountStatus = 'active' | 'suspended'
+
+export type StandaloneSetupBlockedReason =
+  | 'source_invalid'
+  | 'account_suspended'
+  | 'pilot_entitlement_missing'
+  | 'merchant_name_missing'
+  | 'language_invalid'
+  | 'cod_default_invalid'
+  | 'automation_invalid'
+  | 'timezone_invalid'
+
 export type AutomationTimezone =
   | 'Asia/Riyadh'
   | 'Asia/Dubai'
@@ -28,15 +45,21 @@ export type AutomationTimezone =
 
 export interface IntegrationOnboardingState {
   integrationId: string
+  source: {
+    platformType: string
+    identity: string
+  }
   onboardingStatus: IntegrationOnboardingStatus
   isOnboardingComplete: boolean
   storeName: string | null
   defaultLanguage: IntegrationOnboardingLanguage
   isAutoVerifyEnabled: boolean
+  assumeCodWhenPaymentMissing: boolean
   shippingCurrency: string
   avgShippingCost: number
   billingPlanId: OnboardingBillingPlanId | null
   billingStatus: string | null
+  billingManagement?: BillingManagement
   followUpEnabled: boolean
   followUpDelayMinutes: number
   escalationEnabled: boolean
@@ -46,6 +69,15 @@ export interface IntegrationOnboardingState {
   quietHoursEnd: string | null
   timezone: AutomationTimezone
   sendDelayMinutes: number
+  permissions: {
+    canUpdateConfiguration: boolean
+    canCompleteOnboarding: boolean
+  }
+  standaloneSetup: {
+    canComplete: boolean
+    blockedReasons: StandaloneSetupBlockedReason[]
+    accountStatus: CreditAccountStatus | null
+  } | null
 }
 
 export interface OnboardingStateResponse {
@@ -56,6 +88,7 @@ export interface OnboardingSettingsPayload {
   storeName: string
   defaultLanguage: IntegrationOnboardingLanguage
   isAutoVerifyEnabled: boolean
+  assumeCodWhenPaymentMissing?: boolean
   shippingCurrency?: string
   avgShippingCost?: number
   followUpEnabled?: boolean
@@ -104,6 +137,32 @@ export interface OnboardingBillingPlanConfig {
 }
 
 export interface OnboardingBillingPlansResponse {
+  billingManagement?: BillingManagement
   plans: OnboardingBillingPlanConfig[]
   isFreePlanClaimed: boolean
 }
+
+// ─── Standalone onboarding wizard (UI-only) ───────────────────────────────────
+// These types describe the client-side three-step presentation of the existing
+// settings payload. They intentionally do not affect the API contract.
+
+export type StandaloneStep = 1 | 2 | 3
+
+export interface StandaloneStepDefinition {
+  id: StandaloneStep
+  titleKey: string
+  descriptionKey: string
+  headingKey: string
+  subheadingKey: string
+}
+
+export type StandaloneSetupFieldKey =
+  | 'storeName'
+  | 'sendDelayHours'
+  | 'followUpDelayHours'
+  | 'escalationDelayHours'
+  | 'quietHours'
+
+export type StandaloneSetupFieldErrors = Partial<
+  Record<StandaloneSetupFieldKey, string>
+>

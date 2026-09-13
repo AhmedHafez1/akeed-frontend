@@ -1,26 +1,51 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
+import { useEffect } from 'react'
+
+import { notify } from '@/shared/ui'
 import { StandaloneDashboardHeader } from './components/StandaloneDashboardHeader'
 import { StandaloneFeedbackBanners } from './components/StandaloneFeedbackBanners'
 import { StandaloneStatsSummary } from './components/StandaloneStatsSummary'
-import { StandaloneStatusPanel } from './components/StandaloneStatusPanel'
 import type { DashboardSkinProps } from '../../domain/dashboard.types'
 
 export function DashboardStandaloneSkin({
   stats,
+  reportingTimezone,
   isStatsLoading,
   dateRangeFilter,
   dateRangeOptions,
   onDateRangeFilterChange,
   testFeedback,
   onDismissTestFeedback,
-  error,
+  actionFeedback,
+  onDismissActionFeedback,
+  verifications,
+  isVerificationsLoading,
+  error: verificationsError,
+  creditDenialCode,
 }: DashboardSkinProps) {
-  const t = useTranslations('dashboard')
+  useEffect(() => {
+    if (!testFeedback || testFeedback.tone === 'critical') return
+    const show =
+      testFeedback.tone === 'success' ? notify.success : notify.warning
+    show({ message: testFeedback.message, id: 'dashboard-test-feedback' })
+    onDismissTestFeedback()
+  }, [onDismissTestFeedback, testFeedback])
+
+  useEffect(() => {
+    if (!actionFeedback) return
+    const show =
+      actionFeedback.tone === 'success'
+        ? notify.success
+        : actionFeedback.tone === 'critical'
+          ? notify.error
+          : notify.warning
+    show({ message: actionFeedback.message, id: 'dashboard-action-feedback' })
+    onDismissActionFeedback()
+  }, [actionFeedback, onDismissActionFeedback])
 
   return (
-    <div className="mx-auto w-full max-w-[1400px] space-y-8">
+    <div className="mx-auto w-full max-w-[1400px] space-y-6 pb-8">
       <StandaloneDashboardHeader
         dateRangeFilter={dateRangeFilter}
         dateRangeOptions={dateRangeOptions}
@@ -28,22 +53,22 @@ export function DashboardStandaloneSkin({
       />
 
       <StandaloneFeedbackBanners
-        error={error}
-        testFeedback={testFeedback}
+        error={verificationsError}
+        testFeedback={testFeedback?.tone === 'critical' ? testFeedback : null}
         onDismissTestFeedback={onDismissTestFeedback}
+        actionFeedback={null}
+        onDismissActionFeedback={onDismissActionFeedback}
+        creditDenialCode={creditDenialCode}
       />
 
-      <StandaloneStatusPanel
-        activeLabel={t('statusCard.activeLabel')}
-        title={t('statusCard.title')}
-        description={t('statusCard.description')}
-        workflowTitle={t('statusCard.workflowTitle')}
-        workflowDescription={t('statusCard.workflowDescription')}
-        reviewTitle={t('statusCard.reviewTitle')}
-        reviewDescription={t('statusCard.reviewDescription')}
+      <StandaloneStatsSummary
+        stats={stats}
+        reportingTimezone={reportingTimezone}
+        isStatsLoading={isStatsLoading}
+        verifications={verifications}
+        isVerificationsLoading={isVerificationsLoading}
+        verificationsError={verificationsError}
       />
-
-      <StandaloneStatsSummary stats={stats} isStatsLoading={isStatsLoading} />
     </div>
   )
 }

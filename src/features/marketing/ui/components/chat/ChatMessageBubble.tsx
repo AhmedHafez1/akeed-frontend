@@ -23,7 +23,7 @@ export function ChatMessageBubble({
       </div>
 
       <div
-        className={`mt-1 flex items-center justify-end gap-1 px-1 text-xs text-gray-400`}
+        className={`text-muted-foreground mt-1 flex items-center justify-end gap-1 px-1 text-xs`}
       >
         <span>{timeLabel}</span>
         {message.type === 'user' && <CheckCheck className="h-3 w-3" />}

@@ -1,6 +1,10 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
+import { ChevronDown, Info } from 'lucide-react'
+import { Tooltip } from '@/shared/ui'
+import { useStandaloneShell } from '@/shared/layout/StandaloneShellContext'
 import type { DateRangeFilterOption } from '@/features/dashboard/domain/dashboard.types'
 import type { DashboardStatsDateRange } from '@/features/dashboard/model/dashboard.model'
 
@@ -8,42 +12,70 @@ interface StandaloneDashboardHeaderProps {
   dateRangeFilter: DashboardStatsDateRange
   dateRangeOptions: ReadonlyArray<DateRangeFilterOption>
   onDateRangeFilterChange: (filter: DashboardStatsDateRange) => void
+  action?: ReactNode
 }
 
 export function StandaloneDashboardHeader({
   dateRangeFilter,
   dateRangeOptions,
   onDateRangeFilterChange,
+  action,
 }: StandaloneDashboardHeaderProps) {
   const t = useTranslations('dashboard')
+  const { identity, isIdentityLoading } = useStandaloneShell()
+  const heading = identity.fullName
+    ? t('standalone.greeting', { name: identity.fullName })
+    : t('title')
 
   return (
-    <header className="flex flex-wrap items-end justify-between gap-4">
-      <div className="space-y-1">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-          {t('title')}
+    <header className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+      <div className="min-w-0 space-y-1.5">
+        <h1 className="flex items-center gap-2 text-3xl leading-tight font-bold tracking-tight text-slate-950">
+          {isIdentityLoading ? (
+            <span
+              aria-label={t('standalone.greetingLoading')}
+              className="bg-border inline-block h-10 w-64 max-w-full animate-pulse rounded-lg align-middle"
+            />
+          ) : (
+            <>
+              {heading}
+              <Tooltip content={t('standalone.description')}>
+                <Info aria-hidden="true" className="size-5 text-slate-400" />
+                <span className="sr-only">{t('standalone.description')}</span>
+              </Tooltip>
+            </>
+          )}
         </h1>
-        <p className="text-sm text-slate-500">{t('valueProposition')}</p>
+        {!isIdentityLoading && (
+          <p className="text-sm text-slate-500">{t('standalone.subtitle')}</p>
+        )}
       </div>
 
-      <label className="flex items-center gap-2 text-sm text-slate-500">
-        <span className="sr-only">{t('filters.dateRange.label')}</span>
-        <select
-          value={dateRangeFilter}
-          onChange={(event) =>
-            onDateRangeFilterChange(
-              event.target.value as DashboardStatsDateRange
-            )
-          }
-          className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 focus:outline-none"
-        >
-          {dateRangeOptions.map((option) => (
-            <option key={option.id} value={option.id}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </label>
+      <div className="flex w-full flex-wrap items-start gap-3 md:w-auto md:items-end md:justify-end">
+        <label className="relative min-w-0 flex-1 text-sm text-slate-500 sm:flex-none">
+          <span className="sr-only">{t('filters.dateRange.label')}</span>
+          <select
+            value={dateRangeFilter}
+            onChange={(event) =>
+              onDateRangeFilterChange(
+                event.target.value as DashboardStatsDateRange
+              )
+            }
+            className="border-input h-10 w-full appearance-none rounded-lg border bg-white py-2 ps-3 pe-10 text-sm font-medium text-slate-700 shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none sm:w-auto"
+          >
+            {dateRangeOptions.map((option) => (
+              <option key={option.id} value={option.id}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <ChevronDown
+            aria-hidden="true"
+            className="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
+          />
+        </label>
+        {action}
+      </div>
     </header>
   )
 }

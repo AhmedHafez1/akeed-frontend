@@ -111,6 +111,7 @@ export function useEmbeddedOnboarding({
 
   // ── Sub-hook: step-3 billing ─────────────────────────────────────────────
   const billing = useOnboardingBilling({
+    canManageBilling: init.canManageBilling,
     hostParam,
     billingActivationErrorMessage: messages.billingActivationError,
     setErrorBanner: stableSetErrorBanner,
@@ -137,6 +138,7 @@ export function useEmbeddedOnboarding({
     handleStoreNameChange: settings.handleStoreNameChange,
     handleContinueToBilling: settings.handleContinueToBilling,
     // Billing
+    canManageBilling: init.canManageBilling,
     billingPlanConfigsById: init.billingPlanConfigsById,
     isFreePlanClaimed: init.isFreePlanClaimed,
     selectedPlanId: billing.selectedPlanId,

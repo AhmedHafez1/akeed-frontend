@@ -7,6 +7,22 @@
 
 // Domain
 export { useDashboard } from './domain/useDashboard'
+export { useVerificationsDashboard } from './domain/useVerificationsDashboard'
+export {
+  DASHBOARD_DATE_RANGE_IDS,
+  VERIFICATION_STATUS_FILTER_IDS,
+  buildVerificationsQuery,
+} from './domain/verificationFilters'
+export {
+  canMarkOrderCanceled,
+  canRetryVerification,
+  hasCapability,
+  isAwaitingOutcome,
+  isTerminalLifecycleStatus,
+  lifecycleTone,
+  EXPLAINED_LIFECYCLE_REASONS,
+} from './domain/verificationLifecycle'
+export type { LifecycleTone } from './domain/verificationLifecycle'
 export type {
   DashboardSkinProps,
   StatusFilterOption,
@@ -17,6 +33,8 @@ export type {
   DashboardStatsDateRange,
   DashboardStatsResponse,
   VerificationItem,
+  VerificationRowAction,
+  VerificationRowCapability,
   VerificationStatus,
   VerificationStatusFilter,
   VerificationsResponse,

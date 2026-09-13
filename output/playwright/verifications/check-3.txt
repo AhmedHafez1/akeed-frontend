@@ -1,0 +1,34 @@
+async (page) => {
+  const results = [];
+  const assert = (condition, name) => { if (!condition) throw new Error(name); results.push(name); };
+  const visit = async (query = '') => {
+    await page.goto('http://127.0.0.1:3098/en/verifications' + query);
+    await page.getByRole('button', { name: 'All', exact: true }).waitFor();
+    await page.locator('[aria-busy="true"]').first().waitFor({state:'detached'});
+  };
+  const rows = () => page.locator('tbody tr');
+  const audit = async () => {
+    await page.getByRole('button', {name:'Inspect fixture requests'}).click();
+    return await page.getByLabel('Fixture requests').innerText();
+  };
+  await page.setViewportSize({width:1280,height:1000});
+  await visit('?scenario=cursor-error');
+  await page.getByRole('button',{name:'Load more',exact:true}).click();
+  await page.getByText('Synthetic cursor failure',{exact:true}).waitFor();
+  assert(await rows().count() === 6 && await page.getByRole('button',{name:'Load more',exact:true}).isEnabled(), 'Cursor failure retains rows and allows retry');
+  await visit('?scenario=readonly');
+  assert(await page.getByText(/You have read-only access/).isVisible() && await rows().getByRole('button').count() === 0, 'Read-only notice and no row actions');
+  assert(await page.getByRole('button',{name:'Verify order',exact:true}).isDisabled(), 'Read-only prevents manual entry');
+  await visit('?scenario=disconnected');
+  assert(await page.getByRole('button',{name:'Verify order',exact:true}).isDisabled(), 'Disconnected source prevents manual entry');
+  await visit('?scenario=empty');
+  assert(await page.getByRole('heading',{name:'No verifications yet',exact:true}).isVisible(), 'First-use empty state');
+  assert(await page.locator('input[type="tel"]').count() > 0, 'First-use test verification panel retained');
+  await page.getByRole('button',{name:'Failed',exact:true}).click();
+  await page.getByText('No verifications match this status and date range.',{exact:true}).waitFor();
+  assert(await page.locator('input[type="tel"]').count() === 0, 'Filtered empty state remains distinct');
+  await visit('?scenario=stats-error');
+  assert(await rows().count() === 6, 'Stats failure retains loaded records');
+  assert(!(await page.getByRole('region',{name:'Verification workload'}).innerText()).includes('NaN'), 'Unavailable metrics are not fabricated');
+  return results;
+}

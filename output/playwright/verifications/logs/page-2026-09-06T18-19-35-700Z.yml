@@ -1,0 +1,56 @@
+- generic [active] [ref=f1e1]:
+  - main [ref=f1e2]:
+    - generic [ref=f1e3]:
+      - generic [ref=f1e4]:
+        - generic [ref=f1e5]:
+          - paragraph [ref=f1e6]: العمليات
+          - heading "التأكيدات" [level=1] [ref=f1e7]
+          - paragraph [ref=f1e8]: تابع كل طلب من لحظة تسجيله حتى رد العميل.
+        - generic [ref=f1e9]:
+          - generic [ref=f1e10]:
+            - generic [ref=f1e11]: الفترة الزمنية
+            - combobox "الفترة الزمنية" [ref=f1e12]:
+              - option "اليوم"
+              - option "آخر 7 أيام"
+              - option "آخر 30 يوماً" [selected]
+              - option "آخر 3 أشهر"
+          - generic [ref=f1e13]:
+            - button "تأكيد طلب" [disabled]
+            - paragraph [ref=f1e14]: تأكيد الطلبات غير متاح أثناء انقطاع الاتصال بالمصدر.
+      - region "ملخص التأكيدات" [ref=f1e15]:
+        - button "كل التأكيدات" [pressed] [ref=f1e16] [cursor=pointer]:
+          - generic [ref=f1e21]:
+            - paragraph [ref=f1e22]: كل التأكيدات
+            - generic "جارٍ تحميل الملخص" [ref=f1e23]
+            - paragraph [ref=f1e24]: خلال الفترة المحددة
+        - generic [ref=f1e30]:
+          - paragraph [ref=f1e31]: قيد التنفيذ
+          - generic "جارٍ تحميل الملخص" [ref=f1e32]
+          - paragraph [ref=f1e33]: في قائمة الانتظار أو بانتظار الرد
+        - generic [ref=f1e38]:
+          - paragraph [ref=f1e39]: تحتاج إلى متابعة
+          - generic "جارٍ تحميل الملخص" [ref=f1e40]
+          - paragraph [ref=f1e41]: فشلت أو انتهت مهلتها أو دون رد
+        - generic [ref=f1e47]:
+          - paragraph [ref=f1e48]: مكتملة
+          - generic "جارٍ تحميل الملخص" [ref=f1e49]
+          - paragraph [ref=f1e50]: مؤكدة أو ملغاة
+      - region "لا توجد تأكيدات في هذه الفترة" [ref=f1e51]:
+        - generic [ref=f1e53]:
+          - heading "حالة الطلب" [level=2] [ref=f1e55]
+          - group "حالة الطلب" [ref=f1e56]:
+            - button "الكل" [pressed] [ref=f1e57] [cursor=pointer]
+            - button "معلّقة" [ref=f1e58] [cursor=pointer]
+            - button "بانتظار الرد" [ref=f1e59] [cursor=pointer]
+            - button "تم التأكيد" [ref=f1e60] [cursor=pointer]
+            - button "تم الإلغاء" [ref=f1e61] [cursor=pointer]
+            - button "فشل" [ref=f1e62] [cursor=pointer]
+            - button "لم يتم الرد" [ref=f1e63] [cursor=pointer]
+        - generic [ref=f1e64]:
+          - status [ref=f1e65]: لديك صلاحية عرض فقط. يمكن للمالك أو المسؤول إعادة محاولة التأكيد أو تعليم الطلبات المدعومة كملغاة.
+          - status "جارٍ تحميل التأكيدات..." [ref=f1e66]
+    - complementary [ref=f1e171]:
+      - paragraph [ref=f1e172]: "Isolated fixture: synthetic data, no authentication or provider requests."
+      - button "Inspect fixture requests" [ref=f1e173] [cursor=pointer]
+      - generic "Fixture requests"
+  - button "Open Next.js Dev Tools" [ref=f1e179] [cursor=pointer]

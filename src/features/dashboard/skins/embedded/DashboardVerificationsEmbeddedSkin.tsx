@@ -13,6 +13,7 @@ export function DashboardVerificationsEmbeddedSkin({
   isAutoVerifyEnabled,
   followUpEnabled,
   quietHoursEnabled,
+  sourceStatus,
   verifications,
   isVerificationsLoading,
   isStatsLoading,
@@ -21,9 +22,12 @@ export function DashboardVerificationsEmbeddedSkin({
   onLoadMoreVerifications,
   hasVerifications,
   emptyVerificationsMessage,
-  cancelingVerificationId,
+  actingVerificationId,
+  reportingTimezone,
+  canRetryVerifications,
+  onRetryVerification,
   confirmingCancelVerificationId,
-  cancelOrderErrors,
+  actionErrors,
   onRequestCancelOrder,
   onDismissCancelOrder,
   onConfirmCancelOrder,
@@ -31,6 +35,8 @@ export function DashboardVerificationsEmbeddedSkin({
   statusFilters,
   onStatusFilterChange,
   isSendingTest,
+  canSendTestVerification,
+  canCancelOrders,
   testFeedback,
   onSendTestVerification,
   onDismissTestFeedback,
@@ -53,6 +59,12 @@ export function DashboardVerificationsEmbeddedSkin({
         {testFeedback && (
           <Banner tone={testFeedback.tone} onDismiss={onDismissTestFeedback}>
             <p>{testFeedback.message}</p>
+          </Banner>
+        )}
+
+        {sourceStatus === 'disconnected' && (
+          <Banner tone="warning" title={t('sourceDisconnectedTitle')}>
+            <p>{t('sourceDisconnectedDescription')}</p>
           </Banner>
         )}
 
@@ -91,6 +103,7 @@ export function DashboardVerificationsEmbeddedSkin({
                 loadingMore: t('table.loadingMore'),
                 loadMore: t('table.loadMore'),
                 emptyMessage: emptyVerificationsMessage,
+                readOnlyNotice: t('readOnlyNotice'),
                 emptyState: {
                   heading: t('emptyState.onboarding.heading'),
                   activeDescription: t(
@@ -116,12 +129,17 @@ export function DashboardVerificationsEmbeddedSkin({
               hasMoreVerifications={hasMoreVerifications}
               isLoadingMoreVerifications={isLoadingMoreVerifications}
               hasVerifications={hasVerifications}
-              cancelingVerificationId={cancelingVerificationId}
+              actingVerificationId={actingVerificationId}
+              reportingTimezone={reportingTimezone}
+              canRetryVerifications={canRetryVerifications}
+              onRetryVerification={onRetryVerification}
               confirmingCancelVerificationId={confirmingCancelVerificationId}
-              cancelOrderErrors={cancelOrderErrors}
+              actionErrors={actionErrors}
               statusFilter={statusFilter}
               statusFilters={statusFilters}
               isSendingTest={isSendingTest}
+              canSendTestVerification={canSendTestVerification}
+              canCancelOrders={canCancelOrders}
               onRequestCancelOrder={onRequestCancelOrder}
               onDismissCancelOrder={onDismissCancelOrder}
               onConfirmCancelOrder={onConfirmCancelOrder}

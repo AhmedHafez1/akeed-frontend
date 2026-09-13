@@ -1,13 +1,24 @@
 import { type MouseEvent, useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+// Deep import on purpose: `@/features/marketing` re-exports HomePage, so the
+// barrel would pull the entire landing tree into every public-chrome route.
+import { getAcquisitionTargets } from '@/features/marketing/domain/acquisitionPaths'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
 import { HeaderNavItem } from './header.model'
 
 const SCROLL_THRESHOLD = 20
 const SCROLL_OFFSET = 80
 const MOBILE_SCROLL_DELAY = 100
-const SCROLLABLE_SECTIONS = new Set(['solution', 'pricing', 'faq'])
+// Every in-page nav anchor must be listed here, or the link falls through to a
+// full navigation instead of smooth-scrolling.
+const SCROLLABLE_SECTIONS = new Set([
+  'solution',
+  'how-it-works',
+  'pricing',
+  'who-its-for',
+  'faq',
+])
 
 function getPathWithoutLocale(pathname: string): string {
   return '/' + pathname.split('/').slice(2).join('/')
@@ -52,14 +63,29 @@ export function useHeader() {
         id: 'solution',
       },
       {
+        href: withLocale('/#how-it-works', locale),
+        label: t('how_it_works'),
+        id: 'how-it-works',
+      },
+      {
         href: withLocale('/#pricing', locale),
         label: t('pricing'),
         id: 'pricing',
+      },
+      {
+        href: withLocale('/#who-its-for', locale),
+        label: t('audience'),
+        id: 'who-its-for',
       },
       { href: withLocale('/docs', locale), label: t('docs'), id: 'docs' },
       { href: withLocale('/#faq', locale), label: t('faq'), id: 'faq' },
     ],
     [locale, t]
+  )
+
+  const acquisitionTargets = useMemo(
+    () => getAcquisitionTargets(locale),
+    [locale]
   )
 
   useEffect(() => {
@@ -120,6 +146,7 @@ export function useHeader() {
     locale,
     homeHref,
     navigation,
+    acquisitionTargets,
     isScrolled,
     isMobileMenuOpen,
     setIsMobileMenuOpen,

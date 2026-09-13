@@ -61,172 +61,188 @@ export function AutomationSettingsEmbeddedSkin(props: SettingsSkinProps) {
               </Banner>
             )}
 
-            <Card>
-              <BlockStack gap="400">
-                <InlineStack align="space-between" blockAlign="start" gap="400">
-                  <BlockStack gap="150">
-                    <InlineStack gap="150" blockAlign="center">
-                      <Text as="h2" variant="headingMd">
-                        {t('automation.heading')}
-                      </Text>
-                      <HelpIcon content={t('automation.description')} />
-                    </InlineStack>
+            {!props.canUpdateConfiguration && (
+              <Banner tone="info">
+                <p>{t('readOnly')}</p>
+              </Banner>
+            )}
+
+            <fieldset disabled={!props.canUpdateConfiguration}>
+              <Card>
+                <BlockStack gap="400">
+                  <InlineStack
+                    align="space-between"
+                    blockAlign="start"
+                    gap="400"
+                  >
+                    <BlockStack gap="150">
+                      <InlineStack gap="150" blockAlign="center">
+                        <Text as="h2" variant="headingMd">
+                          {t('automation.heading')}
+                        </Text>
+                        <HelpIcon content={t('automation.description')} />
+                      </InlineStack>
+                    </BlockStack>
+
+                    {props.canUpdateConfiguration && (
+                      <Button
+                        variant="primary"
+                        loading={props.isSaving}
+                        onClick={() => void props.onSave()}
+                      >
+                        {props.isSaving ? t('savingButton') : t('saveButton')}
+                      </Button>
+                    )}
+                  </InlineStack>
+
+                  <Divider />
+
+                  <Checkbox
+                    label={
+                      <InlineStack gap="100" blockAlign="center">
+                        <Text as="span">{t('autoVerifyLabel')}</Text>
+                        <HelpIcon content={t('autoVerifyDescription')} />
+                      </InlineStack>
+                    }
+                    checked={props.isAutoVerifyEnabled}
+                    onChange={props.onAutoVerifyChange}
+                  />
+
+                  <BlockStack gap="100">
+                    <FieldLabel
+                      label={t('automation.sendDelayMinutesLabel')}
+                      help={t('automation.sendDelayMinutesHelp')}
+                    />
+                    <TextField
+                      label={t('automation.sendDelayMinutesLabel')}
+                      labelHidden
+                      type="number"
+                      autoComplete="off"
+                      min={0}
+                      max={720}
+                      step={0.25}
+                      value={props.sendDelayMinutes}
+                      onChange={props.onSendDelayMinutesChange}
+                      error={props.sendDelayMinutesError}
+                    />
                   </BlockStack>
 
-                  <Button
-                    variant="primary"
-                    loading={props.isSaving}
-                    onClick={() => void props.onSave()}
-                  >
-                    {props.isSaving ? t('savingButton') : t('saveButton')}
-                  </Button>
-                </InlineStack>
+                  <Divider />
 
-                <Divider />
-
-                <Checkbox
-                  label={
-                    <InlineStack gap="100" blockAlign="center">
-                      <Text as="span">{t('autoVerifyLabel')}</Text>
-                      <HelpIcon content={t('autoVerifyDescription')} />
-                    </InlineStack>
-                  }
-                  checked={props.isAutoVerifyEnabled}
-                  onChange={props.onAutoVerifyChange}
-                />
-
-                <BlockStack gap="100">
-                  <FieldLabel
-                    label={t('automation.sendDelayMinutesLabel')}
-                    help={t('automation.sendDelayMinutesHelp')}
-                  />
-                  <TextField
-                    label={t('automation.sendDelayMinutesLabel')}
-                    labelHidden
-                    type="number"
-                    autoComplete="off"
-                    min={0}
-                    max={720}
-                    step={0.25}
-                    value={props.sendDelayMinutes}
-                    onChange={props.onSendDelayMinutesChange}
-                    error={props.sendDelayMinutesError}
-                  />
-                </BlockStack>
-
-                <Divider />
-
-                <Checkbox
-                  label={
-                    <InlineStack gap="100" blockAlign="center">
-                      <Text as="span">
-                        {t('automation.followUpEnabledLabel')}
-                      </Text>
-                      <HelpIcon content={t('automation.followUpEnabledHelp')} />
-                    </InlineStack>
-                  }
-                  checked={props.followUpEnabled}
-                  onChange={props.onFollowUpEnabledChange}
-                />
-
-                <BlockStack gap="100">
-                  <TextField
-                    label={t('automation.followUpDelayMinutesLabel')}
-                    type="number"
-                    autoComplete="off"
-                    min={0}
-                    max={720}
-                    step={0.25}
-                    value={props.followUpDelayMinutes}
-                    onChange={props.onFollowUpDelayMinutesChange}
-                    error={props.followUpDelayMinutesError}
-                    disabled={!props.followUpEnabled}
-                  />
-                </BlockStack>
-
-                <Divider />
-
-                <Checkbox
-                  label={
-                    <InlineStack gap="100" blockAlign="center">
-                      <Text as="span">
-                        {t('automation.escalationEnabledLabel')}
-                      </Text>
-                      <HelpIcon
-                        content={t('automation.escalationEnabledHelp')}
-                      />
-                    </InlineStack>
-                  }
-                  checked={props.escalationEnabled}
-                  onChange={props.onEscalationEnabledChange}
-                />
-
-                <BlockStack gap="100">
-                  <FieldLabel
-                    label={t('automation.escalationDelayMinutesLabel')}
-                    help={t('automation.escalationDelayMinutesHelp')}
-                  />
-                  <TextField
-                    label={t('automation.escalationDelayMinutesLabel')}
-                    labelHidden
-                    type="number"
-                    autoComplete="off"
-                    min={0}
-                    max={720}
-                    step={0.25}
-                    value={props.escalationDelayMinutes}
-                    onChange={props.onEscalationDelayMinutesChange}
-                    error={props.escalationDelayMinutesError}
-                    disabled={!props.escalationEnabled}
-                  />
-                </BlockStack>
-
-                <Divider />
-
-                <Checkbox
-                  label={
-                    <InlineStack gap="100" blockAlign="center">
-                      <Text as="span">
-                        {t('automation.quietHoursEnabledLabel')}
-                      </Text>
-                      <HelpIcon
-                        content={t('automation.quietHoursEnabledHelp')}
-                      />
-                    </InlineStack>
-                  }
-                  checked={props.quietHoursEnabled}
-                  onChange={props.onQuietHoursEnabledChange}
-                />
-
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                  <TextField
-                    label={t('automation.quietHoursStartLabel')}
-                    type="time"
-                    autoComplete="off"
-                    value={props.quietHoursStart}
-                    onChange={props.onQuietHoursStartChange}
-                    disabled={!props.quietHoursEnabled}
-                    error={props.quietHoursError}
-                  />
-                  <TextField
-                    label={t('automation.quietHoursEndLabel')}
-                    type="time"
-                    autoComplete="off"
-                    value={props.quietHoursEnd}
-                    onChange={props.onQuietHoursEndChange}
-                    disabled={!props.quietHoursEnabled}
-                  />
-                  <Select
-                    label={t('automation.timezoneLabel')}
-                    options={[...props.timezoneOptions]}
-                    value={props.timezone}
-                    onChange={(value) =>
-                      props.onTimezoneChange(value as AutomationTimezone)
+                  <Checkbox
+                    label={
+                      <InlineStack gap="100" blockAlign="center">
+                        <Text as="span">
+                          {t('automation.followUpEnabledLabel')}
+                        </Text>
+                        <HelpIcon
+                          content={t('automation.followUpEnabledHelp')}
+                        />
+                      </InlineStack>
                     }
+                    checked={props.followUpEnabled}
+                    onChange={props.onFollowUpEnabledChange}
                   />
-                </div>
-              </BlockStack>
-            </Card>
+
+                  <BlockStack gap="100">
+                    <TextField
+                      label={t('automation.followUpDelayMinutesLabel')}
+                      type="number"
+                      autoComplete="off"
+                      min={0}
+                      max={720}
+                      step={0.25}
+                      value={props.followUpDelayMinutes}
+                      onChange={props.onFollowUpDelayMinutesChange}
+                      error={props.followUpDelayMinutesError}
+                      disabled={!props.followUpEnabled}
+                    />
+                  </BlockStack>
+
+                  <Divider />
+
+                  <Checkbox
+                    label={
+                      <InlineStack gap="100" blockAlign="center">
+                        <Text as="span">
+                          {t('automation.escalationEnabledLabel')}
+                        </Text>
+                        <HelpIcon
+                          content={t('automation.escalationEnabledHelp')}
+                        />
+                      </InlineStack>
+                    }
+                    checked={props.escalationEnabled}
+                    onChange={props.onEscalationEnabledChange}
+                  />
+
+                  <BlockStack gap="100">
+                    <FieldLabel
+                      label={t('automation.escalationDelayMinutesLabel')}
+                      help={t('automation.escalationDelayMinutesHelp')}
+                    />
+                    <TextField
+                      label={t('automation.escalationDelayMinutesLabel')}
+                      labelHidden
+                      type="number"
+                      autoComplete="off"
+                      min={0}
+                      max={720}
+                      step={0.25}
+                      value={props.escalationDelayMinutes}
+                      onChange={props.onEscalationDelayMinutesChange}
+                      error={props.escalationDelayMinutesError}
+                      disabled={!props.escalationEnabled}
+                    />
+                  </BlockStack>
+
+                  <Divider />
+
+                  <Checkbox
+                    label={
+                      <InlineStack gap="100" blockAlign="center">
+                        <Text as="span">
+                          {t('automation.quietHoursEnabledLabel')}
+                        </Text>
+                        <HelpIcon
+                          content={t('automation.quietHoursEnabledHelp')}
+                        />
+                      </InlineStack>
+                    }
+                    checked={props.quietHoursEnabled}
+                    onChange={props.onQuietHoursEnabledChange}
+                  />
+
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                    <TextField
+                      label={t('automation.quietHoursStartLabel')}
+                      type="time"
+                      autoComplete="off"
+                      value={props.quietHoursStart}
+                      onChange={props.onQuietHoursStartChange}
+                      disabled={!props.quietHoursEnabled}
+                      error={props.quietHoursError}
+                    />
+                    <TextField
+                      label={t('automation.quietHoursEndLabel')}
+                      type="time"
+                      autoComplete="off"
+                      value={props.quietHoursEnd}
+                      onChange={props.onQuietHoursEndChange}
+                      disabled={!props.quietHoursEnabled}
+                    />
+                    <Select
+                      label={t('automation.timezoneLabel')}
+                      options={[...props.timezoneOptions]}
+                      value={props.timezone}
+                      onChange={(value) =>
+                        props.onTimezoneChange(value as AutomationTimezone)
+                      }
+                    />
+                  </div>
+                </BlockStack>
+              </Card>
+            </fieldset>
           </BlockStack>
         </Layout.Section>
       </Layout>

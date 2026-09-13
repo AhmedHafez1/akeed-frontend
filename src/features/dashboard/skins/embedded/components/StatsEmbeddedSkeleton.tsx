@@ -20,7 +20,7 @@ export function StatsEmbeddedSkeleton() {
               <Card key={`${rowIndex}-${cardIndex}`}>
                 <BlockStack gap="300">
                   <InlineStack gap="200" blockAlign="center">
-                    <div className="h-2 w-2 rounded-full bg-gray-200" />
+                    <div className="bg-border h-2 w-2 rounded-full" />
                     <div className="w-28">
                       <SkeletonBodyText lines={1} />
                     </div>
@@ -44,11 +44,11 @@ export function StatsEmbeddedSkeleton() {
             {Array.from({ length: 4 }).map((_, index) => (
               <div
                 key={index}
-                className="rounded-lg border border-gray-200 bg-gray-50 p-3"
+                className="border-border bg-muted rounded-lg border p-3"
               >
                 <BlockStack gap="200">
                   <InlineStack gap="200" blockAlign="center">
-                    <div className="h-4 w-4 rounded-full bg-gray-200" />
+                    <div className="bg-border h-4 w-4 rounded-full" />
                     <SkeletonBodyText lines={1} />
                   </InlineStack>
                   <SkeletonDisplayText size="small" />

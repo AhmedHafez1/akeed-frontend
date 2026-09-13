@@ -1,96 +1,110 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { ChevronDown, Info } from 'lucide-react'
+import { Tooltip } from '@/shared/ui'
 import { StandaloneFeedbackBanners } from './components/StandaloneFeedbackBanners'
 import { StandaloneVerificationsSection } from './components/StandaloneVerificationsSection'
+import { StandaloneVerificationWorkload } from './components/StandaloneVerificationWorkload'
 import type { DashboardSkinProps } from '../../domain/dashboard.types'
 import type { DashboardStatsDateRange } from '../../model/dashboard.model'
 
-export function DashboardVerificationsStandaloneSkin({
-  dateRangeFilter,
-  dateRangeOptions,
-  onDateRangeFilterChange,
-  verifications,
-  isVerificationsLoading,
-  hasMoreVerifications,
-  isLoadingMoreVerifications,
-  onLoadMoreVerifications,
-  hasVerifications,
-  emptyVerificationsMessage,
-  cancelingVerificationId,
-  confirmingCancelVerificationId,
-  cancelOrderErrors,
-  onRequestCancelOrder,
-  onDismissCancelOrder,
-  onConfirmCancelOrder,
-  statusFilter,
-  statusFilters,
-  onStatusFilterChange,
-  isSendingTest,
-  testFeedback,
-  onSendTestVerification,
-  onDismissTestFeedback,
-  error,
-}: DashboardSkinProps) {
+export function DashboardVerificationsStandaloneSkin(
+  props: DashboardSkinProps
+) {
   const t = useTranslations('dashboard')
 
   return (
-    <div className="mx-auto w-full max-w-[1400px] space-y-8">
+    <div className="mx-auto w-full max-w-[1400px] min-w-0 space-y-6">
       <header className="flex flex-wrap items-end justify-between gap-4">
-        <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-            {t('verificationSection.title')}
-          </h1>
-          <p className="text-sm text-slate-500">
-            {t('verificationSection.subtitle')}
+        <div className="space-y-2">
+          <p className="text-xs font-semibold tracking-wide text-emerald-700 uppercase">
+            {t('verifications.eyebrow')}
           </p>
+          <h1 className="flex items-center gap-2 text-3xl font-bold tracking-tight text-slate-900">
+            {t('verifications.title')}
+            <Tooltip content={t('verifications.pageSubtitle')}>
+              <Info aria-hidden="true" className="size-5 text-slate-400" />
+              <span className="sr-only">{t('verifications.pageSubtitle')}</span>
+            </Tooltip>
+          </h1>
         </div>
-
-        <label className="flex items-center gap-2 text-sm text-slate-500">
-          <span className="sr-only">{t('filters.dateRange.label')}</span>
-          <select
-            value={dateRangeFilter}
-            onChange={(event) =>
-              onDateRangeFilterChange(
-                event.target.value as DashboardStatsDateRange
-              )
-            }
-            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 focus:outline-none"
-          >
-            {dateRangeOptions.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className="flex flex-wrap items-center gap-3">
+          <label className="relative flex items-center gap-2 text-sm text-slate-500">
+            <span className="sr-only">{t('filters.dateRange.label')}</span>
+            <select
+              value={props.dateRangeFilter}
+              onChange={(event) =>
+                props.onDateRangeFilterChange(
+                  event.target.value as DashboardStatsDateRange
+                )
+              }
+              className="appearance-none rounded-lg border border-slate-200 bg-white py-2 ps-3 pe-10 text-sm text-slate-700 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 focus:outline-none"
+            >
+              {props.dateRangeOptions.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <ChevronDown
+              aria-hidden="true"
+              className="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
+            />
+          </label>
+        </div>
       </header>
 
-      <StandaloneFeedbackBanners
-        error={error}
-        testFeedback={testFeedback}
-        onDismissTestFeedback={onDismissTestFeedback}
+      <StandaloneVerificationWorkload
+        dateRangeFilter={props.dateRangeFilter}
+        stats={props.stats}
+        isStatsLoading={props.isStatsLoading}
+        statusFilter={props.statusFilter}
+        onStatusFilterChange={props.onStatusFilterChange}
       />
 
+      <StandaloneFeedbackBanners
+        error={props.error}
+        testFeedback={props.testFeedback}
+        actionFeedback={props.actionFeedback}
+        onDismissTestFeedback={props.onDismissTestFeedback}
+        onDismissActionFeedback={props.onDismissActionFeedback}
+        creditDenialCode={props.creditDenialCode}
+      />
+
+      {props.sourceStatus === 'disconnected' && (
+        <div
+          role="status"
+          className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900"
+        >
+          <p className="font-semibold">{t('sourceDisconnectedTitle')}</p>
+          <p className="mt-1 text-sm">{t('sourceDisconnectedDescription')}</p>
+        </div>
+      )}
+
       <StandaloneVerificationsSection
-        verifications={verifications}
-        isVerificationsLoading={isVerificationsLoading}
-        hasMoreVerifications={hasMoreVerifications}
-        isLoadingMoreVerifications={isLoadingMoreVerifications}
-        hasVerifications={hasVerifications}
-        emptyVerificationsMessage={emptyVerificationsMessage}
-        cancelingVerificationId={cancelingVerificationId}
-        confirmingCancelVerificationId={confirmingCancelVerificationId}
-        cancelOrderErrors={cancelOrderErrors}
-        statusFilter={statusFilter}
-        statusFilters={statusFilters}
-        isSendingTest={isSendingTest}
-        onRequestCancelOrder={onRequestCancelOrder}
-        onDismissCancelOrder={onDismissCancelOrder}
-        onConfirmCancelOrder={onConfirmCancelOrder}
-        onStatusFilterChange={onStatusFilterChange}
-        onLoadMoreVerifications={onLoadMoreVerifications}
-        onSendTestVerification={onSendTestVerification}
+        verifications={props.verifications}
+        reportingTimezone={props.reportingTimezone}
+        totalCount={props.totalCount}
+        isVerificationsLoading={props.isVerificationsLoading}
+        hasMoreVerifications={props.hasMoreVerifications}
+        isLoadingMoreVerifications={props.isLoadingMoreVerifications}
+        statusFilter={props.statusFilter}
+        statusFilters={props.statusFilters}
+        actingVerificationId={props.actingVerificationId}
+        confirmingCancelVerificationId={props.confirmingCancelVerificationId}
+        actionErrors={props.actionErrors}
+        canSendTestVerification={props.canSendTestVerification}
+        canCancelOrders={props.canCancelOrders}
+        canRetryVerifications={props.canRetryVerifications}
+        isSendingTest={props.isSendingTest}
+        onStatusFilterChange={props.onStatusFilterChange}
+        onLoadMoreVerifications={props.onLoadMoreVerifications}
+        onRequestCancelOrder={props.onRequestCancelOrder}
+        onDismissCancelOrder={props.onDismissCancelOrder}
+        onConfirmCancelOrder={props.onConfirmCancelOrder}
+        onRetryVerification={props.onRetryVerification}
+        onSendTestVerification={props.onSendTestVerification}
       />
     </div>
   )

@@ -1,3 +1,14 @@
+import type { CreditDenialCode } from '@/shared/lib/creditFeedback'
+import type { CommerceOutcomeOperationResult } from '@/shared/types/commerce-outcome.model'
+
+/**
+ * The only status vocabulary the dashboard speaks.
+ *
+ * These are exactly the values the backend's `verification_status` enum can
+ * hold. Both runtime modes read the same `/api/verifications` endpoint, so
+ * there is no second, wider lifecycle to reconcile: an order that has not
+ * reached a verification yet is simply not in the list, in either mode.
+ */
 export type VerificationStatus =
   | 'pending'
   | 'sent'
@@ -9,13 +20,35 @@ export type VerificationStatus =
   | 'failed'
   | 'no_reply'
 
+/**
+ * Row actions the API reports as available.
+ *
+ * Rendered from the server's answer rather than inferred from the status, so
+ * an action can never appear in one runtime mode and be missing in the other.
+ */
+export type VerificationRowAction =
+  | 'merchant_no_reply_cancellation'
+  | 'retry_verification'
+
+export type VerificationRowCapability = {
+  action: VerificationRowAction
+  supported: boolean
+}
+
+/**
+ * The filter ids the dashboard actually renders.
+ *
+ * `sent` / `delivered` / `read` are deliberately absent: they are covered by
+ * `awaiting_response`, and the message catalogues carry no labels for them, so
+ * declaring them here would only invite a missing-translation error.
+ */
 export type VerificationStatusFilter =
   | 'all'
-  | 'awaiting_response'
+  | 'in_progress'
+  | 'needs_attention'
+  | 'completed'
   | 'pending'
-  | 'sent'
-  | 'delivered'
-  | 'read'
+  | 'awaiting_response'
   | 'confirmed'
   | 'canceled'
   | 'failed'
@@ -27,11 +60,30 @@ export type DashboardStatsDateRange =
   | 'last_30_days'
   | 'last_3_months'
 
+export type DashboardSourceStatus =
+  | 'connected'
+  | 'disconnected'
+  | 'not_connected'
+
+export type DashboardSourceState = {
+  status: DashboardSourceStatus
+  integration_id: string | null
+  platform_type: string | null
+}
+
 export type VerificationItem = {
+  capabilities?: VerificationRowCapability[]
+  cancellation_operation?: CommerceOutcomeOperationResult
   id: string
   status: VerificationStatus
+  /**
+   * Why the verification is where it is, when the backend recorded a cause.
+   * Carries the explanation without adding a status word for it.
+   */
+  reason: string | null
   order_id: string
   order_number: string | null
+  is_test: boolean
   customer_name: string | null
   customer_phone: string | null
   total_price: string | null
@@ -46,45 +98,61 @@ export type VerificationItem = {
   no_reply_at: string | null
   follow_up_attempts: number
   follow_up_sent_at: string | null
+  /**
+   * Client-only: set on a row the UI is showing ahead of the server — an order
+   * the merchant just created whose verification a worker has not written yet.
+   * The API never sends it, and a row carrying it offers no actions.
+   */
+  optimistic?: 'submitting' | 'queued'
 }
 
-export type OrderItem = {
-  id: string
-  order_number: string | null
-  external_order_id: string
-  customer_name: string | null
-  customer_phone: string
-  customer_email: string | null
-  total_price: string | null
-  currency: string | null
-  created_at: string | null
-  verification_status: VerificationStatus | null
+export type DashboardPermissions = {
+  can_send_test_verification: boolean
+  can_cancel_orders: boolean
+  can_create_manual_order: boolean
+  can_retry_verifications?: boolean
+}
+
+export type DashboardPageUsage = {
+  credit_denial?: CreditDenialCode | null
+  used: number
+  limit: number
+  remaining: number
+  period_end: string | null
+}
+
+export type DashboardPageContext = {
+  source?: DashboardSourceState
+  reporting_timezone?: string
+  automation: {
+    is_auto_verify_enabled: boolean
+    follow_up_enabled: boolean
+    quiet_hours_enabled: boolean
+  }
+  permissions?: DashboardPermissions
+  usage?: DashboardPageUsage
 }
 
 export type VerificationsResponse = {
   data: VerificationItem[]
   next_cursor: string | null
-  page_context?: {
-    automation: {
-      is_auto_verify_enabled: boolean
-      follow_up_enabled: boolean
-      quiet_hours_enabled: boolean
-    }
-  }
-}
-
-export type OrdersResponse = {
-  orders: OrderItem[]
+  total_count?: number
+  page_context?: DashboardPageContext
 }
 
 export type DashboardStats = {
   date_range: DashboardStatsDateRange
+  reporting_timezone?: string
+  source?: DashboardSourceState
   automation: {
     is_auto_verify_enabled: boolean
     follow_up_enabled: boolean
     quiet_hours_enabled: boolean
   }
   totals: {
+    total: number
+    in_progress: number
+    needs_attention: number
     pending: number
     failed: number
     awaiting_reply: number
@@ -101,6 +169,8 @@ export type DashboardStats = {
   usage: {
     used: number
     limit: number
+    period_start: string | null
+    period_end: string | null
   }
   savings: {
     avg_shipping_cost: number

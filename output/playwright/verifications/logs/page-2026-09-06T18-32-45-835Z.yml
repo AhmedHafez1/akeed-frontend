@@ -1,0 +1,115 @@
+- generic [active] [ref=f24e1]:
+  - main [ref=f24e2]:
+    - heading "E01 isolated cancellation fixture — no provider network" [level=1] [ref=f24e3]
+    - paragraph [ref=f24e4]: Authentication and full layouts are checked separately in the real apps.
+    - generic [ref=f24e5]:
+      - text: Fixture role
+      - combobox "Fixture role" [ref=f24e6]:
+        - option "Owner" [selected]
+        - option "Admin"
+        - option "Viewer"
+    - generic [ref=f24e7]:
+      - text: Fixture skin
+      - combobox "Fixture skin" [ref=f24e8]:
+        - option "Embedded" [selected]
+        - option "Standalone"
+    - generic [ref=f24e9]:
+      - text: Fixture result
+      - combobox "Fixture result" [ref=f24e10]:
+        - option "Failure" [selected]
+        - option "Role denied (stale 403)"
+        - option "Success"
+    - generic [ref=f24e11]:
+      - text: Fixture capability
+      - combobox "Fixture capability" [ref=f24e12]:
+        - option "Supported" [selected]
+        - option "Unsupported"
+        - option "Legacy response"
+    - button "Resolve pending fixture request" [ref=f24e13] [cursor=pointer]
+    - button "Inspect fixture calls" [ref=f24e14] [cursor=pointer]
+    - status "Fixture calls" [ref=f24e15]: "{\"cancellations\":0,\"lists\":0,\"retries\":0,\"stats\":0,\"pending\":false}"
+    - generic [ref=f24e16]:
+      - generic [ref=f24e17]:
+        - status:
+          - paragraph [ref=f24e18]: Order Verifications. This page is ready
+        - generic [ref=f24e21]:
+          - heading "Order Verifications" [level=1] [ref=f24e23]
+          - paragraph [ref=f24e25]: Latest COD verifications across your store.
+      - generic [ref=f24e27]:
+        - generic [ref=f24e28]:
+          - generic [ref=f24e29]:
+            - generic [ref=f24e30]:
+              - generic [ref=f24e31]: Attention
+              - generic [ref=f24e32]: Auto-confirmation is off
+            - generic [ref=f24e33]:
+              - generic [ref=f24e34]: Read-only
+              - generic [ref=f24e35]: Follow-up reminder is off
+            - generic [ref=f24e36]:
+              - generic [ref=f24e37]: Read-only
+              - generic [ref=f24e38]: Quiet hours are disabled
+          - generic [ref=f24e39]:
+            - generic [ref=f24e40]: Date range
+            - combobox "Date range" [ref=f24e44]
+        - generic [ref=f24e56]:
+          - status [ref=f24e57]:
+            - paragraph [ref=f24e72]: You have read-only access. An owner or admin can send tests or cancel orders.
+          - generic [ref=f24e73]:
+            - generic [ref=f24e74]:
+              - heading "Order Verifications" [level=2] [ref=f24e75]
+              - paragraph [ref=f24e76]: Latest COD verifications across your store.
+            - generic [ref=f24e77]:
+              - button "All" [pressed] [ref=f24e79] [cursor=pointer]
+              - button "Pending" [ref=f24e82] [cursor=pointer]
+              - button "Awaiting reply" [ref=f24e85] [cursor=pointer]
+              - button "Confirmed" [ref=f24e88] [cursor=pointer]
+              - button "Canceled" [ref=f24e91] [cursor=pointer]
+              - button "Failed" [ref=f24e94] [cursor=pointer]
+              - generic "Orders where the customer did not respond after the configured follow-up and escalation window." [ref=f24e96]:
+                - button "No reply. Orders where the customer did not respond after the configured follow-up and escalation window." [ref=f24e97] [cursor=pointer]:
+                  - generic [ref=f24e98]: No reply
+          - table [ref=f24e102]:
+            - rowgroup [ref=f24e103]:
+              - row [ref=f24e104]:
+                - columnheader [ref=f24e105]
+                - columnheader [ref=f24e106]
+                - columnheader [ref=f24e107]
+                - columnheader [ref=f24e108]
+                - columnheader [ref=f24e109]
+                - columnheader [ref=f24e110]
+            - rowgroup [ref=f24e111]:
+              - row [ref=f24e112]:
+                - cell [ref=f24e113]
+                - cell [ref=f24e117]
+                - cell [ref=f24e121]
+                - cell [ref=f24e124]
+                - cell [ref=f24e127]
+                - cell [ref=f24e131]
+              - row [ref=f24e134]:
+                - cell [ref=f24e135]
+                - cell [ref=f24e139]
+                - cell [ref=f24e143]
+                - cell [ref=f24e146]
+                - cell [ref=f24e149]
+                - cell [ref=f24e153]
+              - row [ref=f24e156]:
+                - cell [ref=f24e157]
+                - cell [ref=f24e161]
+                - cell [ref=f24e165]
+                - cell [ref=f24e168]
+                - cell [ref=f24e171]
+                - cell [ref=f24e175]
+              - row [ref=f24e178]:
+                - cell [ref=f24e179]
+                - cell [ref=f24e183]
+                - cell [ref=f24e187]
+                - cell [ref=f24e190]
+                - cell [ref=f24e193]
+                - cell [ref=f24e197]
+              - row [ref=f24e200]:
+                - cell [ref=f24e201]
+                - cell [ref=f24e205]
+                - cell [ref=f24e209]
+                - cell [ref=f24e212]
+                - cell [ref=f24e215]
+                - cell [ref=f24e219]
+  - button "Open Next.js Dev Tools" [ref=f24e227] [cursor=pointer]

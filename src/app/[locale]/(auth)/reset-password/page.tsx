@@ -129,7 +129,7 @@ export default function ResetPasswordPage() {
             </div>
             <Link
               href={withLocale('/login', locale)}
-              className="inline-flex text-sm font-semibold text-emerald-600 transition-colors hover:text-emerald-700 focus-visible:underline focus-visible:outline-none"
+              className="text-primary hover:text-primary-hover inline-flex text-sm font-semibold transition-colors focus-visible:underline focus-visible:outline-none"
             >
               {t('auth.backToSignIn')}
             </Link>
@@ -197,7 +197,7 @@ export default function ResetPasswordPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="relative flex w-full items-center justify-center rounded-xl bg-emerald-600 px-4 py-3 text-sm font-bold text-white shadow-sm shadow-emerald-900/10 transition-all hover:bg-emerald-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-70"
+              className="bg-primary text-primary-foreground hover:bg-primary relative flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-bold shadow-sm shadow-emerald-900/10 transition-all hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-70"
             >
               {isLoading && (
                 <svg
@@ -229,7 +229,7 @@ export default function ResetPasswordPage() {
             <div className="text-center">
               <Link
                 href={withLocale('/login', locale)}
-                className="text-sm font-semibold text-slate-600 transition-colors hover:text-emerald-700 focus-visible:underline focus-visible:outline-none"
+                className="hover:text-primary-hover text-sm font-semibold text-slate-600 transition-colors focus-visible:underline focus-visible:outline-none"
               >
                 {t('auth.backToSignIn')}
               </Link>

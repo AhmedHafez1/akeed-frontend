@@ -1,0 +1,11 @@
+async (page) => {
+  await page.goto('http://127.0.0.1:3098/en/verifications?scenario=slow-cursor');
+  await page.getByText('6 verifications loaded', {exact:true}).waitFor();
+  await page.getByRole('button', {name:'Load more',exact:true}).click();
+  await page.getByRole('button', {name:'Failed',exact:true}).click();
+  await page.getByText('2 verifications loaded', {exact:true}).waitFor();
+  await page.waitForTimeout(2800);
+  const count = await page.locator('tbody tr').count();
+  if (count !== 2) throw new Error('Stale cursor response appended ' + count + ' rows to Failed filter');
+  return 'Changing status during Load more discards the old cursor response';
+}

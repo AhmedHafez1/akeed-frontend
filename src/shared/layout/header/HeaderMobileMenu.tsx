@@ -2,14 +2,17 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Globe } from 'lucide-react'
 import Link from 'next/link'
 import type { MouseEvent } from 'react'
-import { SHOPIFY_APP_STORE_LISTING_URL } from '@/shared/lib/shopify-auth'
+import type { AcquisitionTargets } from '@/features/marketing/domain/acquisitionPaths'
+import { AcquisitionCta } from '@/features/marketing/ui/components/AcquisitionCta'
 import type { HeaderNavItem } from './header.model'
 
 interface HeaderMobileMenuProps {
   isOpen: boolean
   items: HeaderNavItem[]
   locale: string
-  ctaLabel: string
+  targets: AcquisitionTargets
+  ctaShopifyLabel: string
+  ctaStandaloneLabel: string
   onNavigate: (id: string, event: MouseEvent<HTMLAnchorElement>) => void
   onLocaleChange: () => void
   onClose: () => void
@@ -19,7 +22,9 @@ export function HeaderMobileMenu({
   isOpen,
   items,
   locale,
-  ctaLabel,
+  targets,
+  ctaShopifyLabel,
+  ctaStandaloneLabel,
   onNavigate,
   onLocaleChange,
   onClose,
@@ -60,13 +65,20 @@ export function HeaderMobileMenu({
                   <Globe className="h-5 w-5" />
                   {locale === 'ar' ? 'English' : 'عربي'}
                 </button>
-                <a
-                  href={SHOPIFY_APP_STORE_LISTING_URL}
-                  onClick={onClose}
-                  className="block w-full rounded-xl bg-emerald-600 px-4 py-3 text-center text-base font-bold text-white shadow-[0_14px_30px_rgba(5,150,105,0.28)] transition-colors hover:bg-emerald-500"
-                >
-                  {ctaLabel}
-                </a>
+                <AcquisitionCta
+                  target={targets.shopify}
+                  label={ctaShopifyLabel}
+                  variant="compact"
+                  className="w-full px-4 py-3 text-base"
+                  onNavigate={onClose}
+                />
+                <AcquisitionCta
+                  target={targets.standalone}
+                  label={ctaStandaloneLabel}
+                  variant="ghost"
+                  className="w-full px-4 py-3 text-base"
+                  onNavigate={onClose}
+                />
               </div>
             </nav>
           </div>

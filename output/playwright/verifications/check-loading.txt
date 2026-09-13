@@ -1,0 +1,11 @@
+async (page) => {
+  for (const locale of ['en','ar']) {
+    await page.setViewportSize({width:1280,height:1000});
+    await page.goto('http://127.0.0.1:3098/' + locale + '/verifications?scenario=loading');
+    await page.locator('[aria-busy="true"]').first().waitFor();
+    if (await page.locator('[aria-busy="true"]').count() !== 2) throw new Error('Both summary and results must load with skeletons');
+    if (await page.locator('tbody tr').count() !== 0) throw new Error('Loading should not show unrelated results');
+    await page.screenshot({path:'output/playwright/verifications/'+locale+'-loading.png'});
+  }
+  return 'Summary and results skeletons verified in both locales';
+}

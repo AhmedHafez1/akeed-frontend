@@ -1,15 +1,31 @@
 'use client'
 
+import { useState } from 'react'
 import type { ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
-import { Toaster } from 'react-hot-toast'
+import { useTranslations } from 'next-intl'
 import { isAuthRoute, isPublicRoute } from '@/shared/lib/locale'
 import { WhatsAppButton } from '@/shared/ui/WhatsAppButton'
-import { AppHeader } from './AppHeader'
+import { ManualOrderReconciler } from '@/features/orders'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  StandaloneToaster,
+} from '@/shared/ui'
 import { Footer } from './Footer'
 import { Header } from './Header'
 import { AuthGuard } from '../auth/AuthGuard'
 import { AuthLayout } from './AuthLayout'
+import { StandaloneOnboardingShell } from './StandaloneOnboardingShell'
+import { StandaloneShellProvider } from './StandaloneShellContext'
+import { StandaloneSidebar } from './StandaloneSidebar'
+import { StandaloneTopBar } from './StandaloneTopBar'
+import {
+  StandaloneOnboardingShellSkeleton,
+  StandalonePageSkeleton,
+} from './skeletons'
 
 interface StandaloneLayoutProps {
   children: ReactNode
@@ -21,16 +37,20 @@ interface StandaloneLayoutProps {
  * Three-way branch:
  *  1. Auth routes (login, signup, forgot-password, reset-password) → AuthLayout
  *  2. Public routes (landing, terms, privacy, support) → marketing Header, no auth guard
- *  3. Protected routes (dashboard, etc.) → AppHeader + AuthGuard
+ *  3. Protected routes (dashboard, etc.) → standalone sidebar shell + AuthGuard
  */
 export function StandaloneLayout({ children }: StandaloneLayoutProps) {
   const pathname = usePathname()
+  const t = useTranslations('appHeader')
+  const [isNavigationOpen, setIsNavigationOpen] = useState(false)
   const publicPath = pathname
     ? `/${pathname.split('/').slice(2).join('/')}`
     : ''
   const isLandingPage = publicPath === '/'
   const isAdminRoute =
     publicPath === '/admin' || publicPath.startsWith('/admin/')
+  const isOnboardingRoute =
+    publicPath === '/onboarding' || publicPath.startsWith('/onboarding/')
 
   // 1. Auth routes — minimal auth page shell
   if (isAuthRoute(pathname)) {
@@ -45,44 +65,66 @@ export function StandaloneLayout({ children }: StandaloneLayoutProps) {
         <main className="flex-1">{children}</main>
         <Footer />
         {isLandingPage && <WhatsAppButton offsetForMobileCta />}
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 4000,
-            style: {
-              background: '#333',
-              color: '#fff',
-            },
-          }}
-        />
+        <StandaloneToaster />
       </div>
     )
   }
 
   if (isAdminRoute) {
-    return <AuthGuard>{children}</AuthGuard>
+    return <AuthGuard requireOrganization={false}>{children}</AuthGuard>
   }
 
-  // 3. Protected routes — auth required
+  // 3. Standalone setup — focused shell without the product navigation.
+  // AuthGuard still runs organization preparation and its own
+  // pending/completed redirects, so route access is unchanged.
+  if (isOnboardingRoute) {
+    return (
+      <AuthGuard loadingFallback={<StandaloneOnboardingShellSkeleton />}>
+        <StandaloneOnboardingShell>{children}</StandaloneOnboardingShell>
+        <StandaloneToaster />
+      </AuthGuard>
+    )
+  }
+
+  // 4. Protected routes — auth required
   return (
-    <AuthGuard>
-      <div className="flex h-screen bg-gray-50">
-        <div className="flex flex-1 flex-col overflow-hidden">
-          <AppHeader />
-          <main className="flex-1 overflow-y-auto p-6">{children}</main>
-          <WhatsAppButton />
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: '#333',
-                color: '#fff',
-              },
-            }}
-          />
+    <AuthGuard
+      loadingFallback={
+        <StandalonePageSkeleton variant="dashboard" includeShell />
+      }
+    >
+      <StandaloneShellProvider>
+        <div className="akeed-app-canvas flex min-h-screen text-slate-950">
+          <StandaloneSidebar className="sticky top-0 hidden h-screen lg:flex" />
+          <div className="flex min-w-0 flex-1 flex-col">
+            <StandaloneTopBar
+              onOpenNavigation={() => setIsNavigationOpen(true)}
+            />
+            <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+            <WhatsAppButton />
+            <StandaloneToaster />
+            <ManualOrderReconciler />
+          </div>
+
+          <Dialog open={isNavigationOpen} onOpenChange={setIsNavigationOpen}>
+            <DialogContent
+              closeLabel={t('closeNavigation')}
+              className="!inset-y-0 [inset-inline-start:0] [inset-inline-end:auto] !top-0 !left-auto block !h-dvh !w-[min(88vw,320px)] !max-w-none !translate-x-0 !translate-y-0 !rounded-none !border-0 !p-0"
+            >
+              <DialogTitle className="sr-only">
+                {t('primaryNavigation')}
+              </DialogTitle>
+              <DialogDescription className="sr-only">
+                {t('navigationDescription')}
+              </DialogDescription>
+              <StandaloneSidebar
+                className="w-full"
+                onNavigate={() => setIsNavigationOpen(false)}
+              />
+            </DialogContent>
+          </Dialog>
         </div>
-      </div>
+      </StandaloneShellProvider>
     </AuthGuard>
   )
 }

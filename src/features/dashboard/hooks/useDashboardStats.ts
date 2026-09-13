@@ -1,12 +1,11 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
-import { api } from '@/shared/lib/auth'
-import type {
-  DashboardStats,
-  DashboardStatsDateRange,
-  DashboardStatsResponse,
-} from '../model/dashboard.model'
+import { useCallback } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { verificationStatsOptions } from '../api/verificationQueries'
+import type { DashboardStatsDateRange } from '../model/dashboard.model'
+
+const IN_PROGRESS_POLL_INTERVAL_MS = 30_000
 
 function getErrorMessage(error: unknown, fallback: string): string {
   if (error instanceof Error) return error.message
@@ -14,44 +13,34 @@ function getErrorMessage(error: unknown, fallback: string): string {
 }
 
 export function useDashboardStats(dateRange: DashboardStatsDateRange) {
-  const [stats, setStats] = useState<DashboardStats | null>(null)
-  const [statsError, setStatsError] = useState<string | null>(null)
-  const [resolvedQuery, setResolvedQuery] = useState<string | null>(null)
-  const [refetchKey, setRefetchKey] = useState(0)
+  const {
+    data: stats,
+    dataUpdatedAt,
+    error,
+    isPending,
+    refetch: refetchQuery,
+  } = useQuery({
+    ...verificationStatsOptions(dateRange),
+    // Counts move with the rows: while any verification is still in progress
+    // the totals can change without the merchant doing anything.
+    refetchInterval: (current) =>
+      (current.state.data?.stats.totals.in_progress ?? 0) > 0
+        ? IN_PROGRESS_POLL_INTERVAL_MS
+        : false,
+  })
 
-  const statsQuery = `?date_range=${encodeURIComponent(dateRange)}`
-
-  useEffect(() => {
-    const controller = new AbortController()
-
-    api
-      .get<DashboardStatsResponse>(`/api/verifications/stats${statsQuery}`)
-      .then((response) => {
-        if (controller.signal.aborted) return
-        setStats(response.stats)
-        setStatsError(null)
-        setResolvedQuery(statsQuery)
-      })
-      .catch((error: unknown) => {
-        if (controller.signal.aborted) return
-        setStatsError(
-          getErrorMessage(error, 'Failed to load dashboard metrics')
-        )
-        setResolvedQuery(statsQuery)
-      })
-
-    return () => {
-      controller.abort()
-    }
-  }, [statsQuery, refetchKey])
-
-  const isStatsLoading = resolvedQuery !== statsQuery
-  const activeError = resolvedQuery === statsQuery ? statsError : null
+  const refetch = useCallback(() => {
+    void refetchQuery()
+  }, [refetchQuery])
 
   return {
-    stats,
-    isStatsLoading,
-    statsError: activeError,
-    refetch: useCallback(() => setRefetchKey((k) => k + 1), []),
+    stats: stats ?? null,
+    isStatsLoading: isPending,
+    statsError: error
+      ? getErrorMessage(error, 'Failed to load dashboard metrics')
+      : null,
+    refetch,
+    /** When the totals were last fetched; lets optimistic counts hand over. */
+    statsUpdatedAt: dataUpdatedAt,
   }
 }

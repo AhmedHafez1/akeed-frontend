@@ -1,0 +1,97 @@
+import { api } from '@/shared/lib/auth'
+import { ApiError } from '@/shared/lib/http'
+export type ManualOrderCreateInput = {
+  customerPhone: string
+  customerName: string
+  orderNumber: string
+  totalPrice: string
+  currency: string
+  paymentMethod: string
+}
+
+export type ManualOrderCreateResponse = {
+  orderId: string
+  verificationId?: string
+  status: 'accepted'
+  duplicate: boolean
+}
+
+/**
+ * The backend's retry-guard state. Reported for diagnostics only — the
+ * dashboard renders the verification's own status, never these values.
+ */
+export type RetryGuardState = {
+  status: string
+  reason: string | null
+  verification_id: string | null
+  retryable: boolean
+}
+
+export type ManualOrderVerificationRetryResponse = {
+  orderId: string
+  verificationId?: string
+  lifecycle: RetryGuardState
+  duplicate: boolean
+}
+
+export const manualOrderErrorCodes = [
+  'CREDIT_ACCOUNT_NOT_PROVISIONED',
+  'CREDIT_ACCOUNT_SUSPENDED',
+  'CREDIT_DEBT_OUTSTANDING',
+  'INSUFFICIENT_CREDITS',
+  'PAYMENT_PENDING_RECONCILIATION',
+  'MANUAL_ORDER_VALIDATION_FAILED',
+  'MANUAL_ORDER_IDEMPOTENCY_KEY_REQUIRED',
+  'MANUAL_ORDER_IDEMPOTENCY_CONFLICT',
+  'MANUAL_ORDER_ROLE_REQUIRED',
+  'MANUAL_ORDER_SOURCE_UNAVAILABLE',
+  'MANUAL_ORDER_SOURCE_AMBIGUOUS',
+  'MANUAL_ORDER_SOURCE_UNSUPPORTED',
+  'MANUAL_ORDER_SETUP_INCOMPLETE',
+  'MANUAL_ORDER_ENTITLEMENT_REQUIRED',
+  'MANUAL_ORDER_AUTO_VERIFY_DISABLED',
+  'MANUAL_ORDER_PLAN_LIMIT_REACHED',
+  'MANUAL_ORDER_ACCEPTANCE_FAILED',
+] as const
+
+export type ManualOrderErrorCode = (typeof manualOrderErrorCodes)[number]
+
+const manualOrderErrorCodeSet: ReadonlySet<string> = new Set(
+  manualOrderErrorCodes
+)
+
+export type ManualOrderApiError = ApiError & {
+  code?: ManualOrderErrorCode
+  fieldErrors?: Record<string, string>
+}
+
+export function createManualOrder(
+  input: ManualOrderCreateInput,
+  idempotencyKey: string,
+  signal?: AbortSignal
+): Promise<ManualOrderCreateResponse> {
+  return api.post<ManualOrderCreateResponse>('/api/orders', input, {
+    headers: { 'Idempotency-Key': idempotencyKey },
+    signal,
+  })
+}
+
+export function retryManualOrderVerification(
+  orderId: string,
+  signal?: AbortSignal
+): Promise<ManualOrderVerificationRetryResponse> {
+  return api.post<ManualOrderVerificationRetryResponse>(
+    `/api/orders/${encodeURIComponent(orderId)}/verification/retry`,
+    undefined,
+    { signal }
+  )
+}
+
+export function isManualOrderApiError(
+  error: unknown
+): error is ManualOrderApiError {
+  return (
+    error instanceof ApiError &&
+    (error.code === undefined || manualOrderErrorCodeSet.has(error.code))
+  )
+}

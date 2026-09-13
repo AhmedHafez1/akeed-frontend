@@ -67,7 +67,9 @@ function getExcerpt(content: string): string {
     .replace(/\s+/g, ' ')
     .trim()
 
-  return stripped.length > 220 ? `${stripped.slice(0, 220).trim()}...` : stripped
+  return stripped.length > 220
+    ? `${stripped.slice(0, 220).trim()}...`
+    : stripped
 }
 
 export default async function DocPage({
@@ -91,7 +93,9 @@ export default async function DocPage({
   const pager = await getDocPager(safeLocale, doc.slug)
   const breadcrumbs = getDocsBreadcrumbs(safeLocale, doc.title)
 
-  const desktopSidebar = <DocsSidebar items={docsNavItems} activeSlug={doc.slug} />
+  const desktopSidebar = (
+    <DocsSidebar items={docsNavItems} activeSlug={doc.slug} />
+  )
   const mobileSidebar = (
     <DocsSidebar items={docsNavItems} activeSlug={doc.slug} showTitle={false} />
   )
@@ -141,7 +145,7 @@ export default async function DocPage({
           <div className="mt-6 flex justify-center">
             <Link
               href={`/${safeLocale}/docs`}
-              className="inline-flex h-11 items-center justify-center rounded-xl border border-emerald-100 bg-white px-6 text-sm font-bold text-slate-700 transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:text-emerald-700 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="hover:text-primary-hover inline-flex h-11 items-center justify-center rounded-xl border border-emerald-100 bg-white px-6 text-sm font-bold text-slate-700 transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               {t('backToDocs')}
             </Link>

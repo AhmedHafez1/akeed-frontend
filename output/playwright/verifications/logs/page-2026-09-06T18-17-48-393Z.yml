@@ -1,0 +1,56 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - paragraph [ref=e6]: Operations
+          - heading "Verifications" [level=1] [ref=e7]
+          - paragraph [ref=e8]: Track every order from submission to customer outcome.
+        - generic [ref=e9]:
+          - generic [ref=e10]:
+            - generic [ref=e11]: Date range
+            - combobox "Date range" [ref=e12]:
+              - option "Today"
+              - option "Last 7 days"
+              - option "Last 30 days" [selected]
+              - option "Last 3 months"
+          - generic [ref=e13]:
+            - button "Verify order" [disabled]
+            - paragraph [ref=e14]: Order verification is unavailable while the source is disconnected.
+      - region "Verification workload" [ref=e15]:
+        - button "All verifications Loading workload In the selected period" [pressed] [ref=e16] [cursor=pointer]:
+          - generic [ref=e21]:
+            - paragraph [ref=e22]: All verifications
+            - generic "Loading workload" [ref=e23]
+            - paragraph [ref=e24]: In the selected period
+        - generic [ref=e30]:
+          - paragraph [ref=e31]: In progress
+          - generic "Loading workload" [ref=e32]
+          - paragraph [ref=e33]: Queued or awaiting a reply
+        - generic [ref=e38]:
+          - paragraph [ref=e39]: Needs attention
+          - generic "Loading workload" [ref=e40]
+          - paragraph [ref=e41]: Failed, expired or no reply
+        - generic [ref=e47]:
+          - paragraph [ref=e48]: Completed
+          - generic "Loading workload" [ref=e49]
+          - paragraph [ref=e50]: Confirmed or canceled
+      - region "No verifications in this period" [ref=e51]:
+        - generic [ref=e53]:
+          - heading "Order status" [level=2] [ref=e55]
+          - group "Order status" [ref=e56]:
+            - button "All" [pressed] [ref=e57] [cursor=pointer]
+            - button "Pending" [ref=e58] [cursor=pointer]
+            - button "Awaiting reply" [ref=e59] [cursor=pointer]
+            - button "Confirmed" [ref=e60] [cursor=pointer]
+            - button "Canceled" [ref=e61] [cursor=pointer]
+            - button "Failed" [ref=e62] [cursor=pointer]
+            - button "No reply" [ref=e63] [cursor=pointer]
+        - generic [ref=e64]:
+          - status [ref=e65]: You have read-only access. An owner or admin can retry verification or mark supported orders canceled.
+          - status "Loading verifications..." [ref=e66]
+    - complementary [ref=e171]:
+      - paragraph [ref=e172]: "Isolated fixture: synthetic data, no authentication or provider requests."
+      - button "Inspect fixture requests" [ref=e173] [cursor=pointer]
+      - generic "Fixture requests"
+  - button "Open Next.js Dev Tools" [ref=e179] [cursor=pointer]

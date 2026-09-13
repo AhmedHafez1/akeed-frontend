@@ -3,23 +3,29 @@
 import type { ComponentType, HTMLAttributes, ReactNode, SVGProps } from 'react'
 import { cn } from '@/shared/lib/utils'
 
-export const landingSectionBackgroundClass =
-  'bg-linear-to-b from-gray-100 via-gray-200 to-gray-50'
+/* Hero only — the single brand-tinted surface on the page. */
+export const landingSectionBackgroundClass = 'landing-hero-surface'
 
-export const landingSectionChromeClass =
-  'border-t border-slate-200/70 bg-linear-to-b from-gray-100 via-gray-200 to-gray-50'
+/*
+ * Sections below the fold alternate plain white and the faint brand-tinted
+ * canvas. Rhythm comes from that alternation plus a hairline, rather than
+ * from repainting a grey gradient on every band.
+ */
+export const landingSectionChromeClass = 'border-border border-t bg-background'
+
+export const landingSectionChromeAltClass = 'border-border border-t bg-canvas'
 
 export const landingCardClass =
-  'group relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-md'
+  'group rounded-card border-border bg-card shadow-card hover:border-primary-border hover:shadow-overlay relative overflow-hidden border p-8 transition-[border-color,box-shadow,transform] duration-300 ease-out hover:-translate-y-1'
 
 export const landingCardGlowClass =
-  'absolute -right-10 -bottom-10 h-28 w-28 rounded-full bg-emerald-200/30 opacity-50 blur-3xl transition-opacity group-hover:opacity-90'
+  'bg-primary/20 absolute -right-10 -bottom-10 h-28 w-28 rounded-full opacity-50 blur-3xl transition-opacity group-hover:opacity-90'
 
 export const landingInsetCardClass =
-  'rounded-2xl border border-emerald-100 bg-white transition-all duration-300 hover:border-emerald-200 hover:shadow-md'
+  'rounded-card border-border bg-card hover:border-primary-border hover:shadow-card border transition-[border-color,box-shadow] duration-300 ease-out'
 
 const iconToneClasses = {
-  emerald: 'bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100',
+  emerald: 'bg-primary-subtle text-primary ring-primary-border ring-1',
   teal: 'bg-teal-50 text-teal-600 ring-1 ring-teal-100',
   cyan: 'bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100',
   sky: 'bg-sky-50 text-sky-600 ring-1 ring-sky-100',

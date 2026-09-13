@@ -1,20 +1,48 @@
 'use client'
 
 import { useEffect } from 'react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
+import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
+import {
+  DashboardEmbeddedShellSkeleton,
+  DashboardVerificationsStandaloneSkin,
+  useDashboard,
+} from '@/features/dashboard'
+import { useVerificationStatusQuery } from '@/features/dashboard/hooks/useVerificationStatusQuery'
 
-export default function VerificationsPage() {
-  const router = useRouter()
+function StandaloneVerificationsPageContent() {
+  const { statusFilter, onStatusFilterChange } = useVerificationStatusQuery()
+  const skinProps = useDashboard(statusFilter, onStatusFilterChange)
+  return <DashboardVerificationsStandaloneSkin {...skinProps} />
+}
+
+function EmbeddedVerificationsRedirect() {
   const pathname = usePathname()
-  const searchParams = useSearchParams()
+  const router = useRouter()
   const locale = getLocaleFromPathname(pathname ?? '')
 
   useEffect(() => {
-    const nextParams = new URLSearchParams(searchParams.toString())
-    nextParams.set('tab', 'confirmations')
-    router.replace(`/${locale}/dashboard?${nextParams.toString()}`)
-  }, [locale, router, searchParams])
+    router.replace(`/${locale}/dashboard?tab=confirmations`)
+  }, [locale, router])
 
   return null
+}
+
+export default function VerificationsPage() {
+  const { mode } = useAkeedMode()
+
+  return (
+    <EmbeddedAuthGate
+      fallback={<DashboardEmbeddedShellSkeleton variant="verifications" />}
+      onboardingGate="dashboard"
+    >
+      {mode === 'EMBEDDED' ? (
+        <EmbeddedVerificationsRedirect />
+      ) : (
+        <StandaloneVerificationsPageContent />
+      )}
+    </EmbeddedAuthGate>
+  )
 }

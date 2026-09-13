@@ -1,6 +1,6 @@
 'use client'
 
-import { type ReactNode, useCallback, useEffect, useMemo } from 'react'
+import { type ReactNode, useCallback, useMemo } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { BlockStack, Card, Layout, Page } from '@shopify/polaris'
@@ -14,6 +14,7 @@ import {
   OnboardingStepCounter,
   BillingStep,
   ConfigurationStep,
+  StandaloneOnboardingPage,
   useEmbeddedOnboarding,
   type EmbeddedStep,
   type OnboardingBillingPlan,
@@ -57,22 +58,11 @@ const EMBEDDED_PLAN_FEATURE_KEYS = {
 export default function OnboardingPage() {
   const t = useTranslations('onboarding')
   const tEmbedded = useTranslations('embeddedOnboarding')
-  const tPricing = useTranslations('pricing')
   const { isEmbedded, isLoading: isModeLoading, hostParam } = useAkeedMode()
 
   const router = useRouter()
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname ?? '')
-
-  useEffect(() => {
-    if (isModeLoading) {
-      return
-    }
-
-    if (!isEmbedded) {
-      router.replace(`/${locale}/dashboard`)
-    }
-  }, [isEmbedded, isModeLoading, locale, router])
 
   const languageOptions = useMemo(
     () =>
@@ -172,6 +162,7 @@ export default function OnboardingPage() {
     setSelectedPlanId,
     billingPlanConfigsById,
     isFreePlanClaimed,
+    canManageBilling,
     isAutoVerifyEnabled,
     setIsAutoVerifyEnabled,
     isSavingSettings,
@@ -217,11 +208,11 @@ export default function OnboardingPage() {
               : runtimePlan
                 ? formatPlanVolumeLabel(runtimePlan.includedVerifications)
                 : tEmbedded(planDefinition.volumeKey),
-          subtitle: tPricing(`${planId}_subtitle`),
+          subtitle: tEmbedded(planDefinition.subtitleKey),
           features: EMBEDDED_PLAN_FEATURE_KEYS[planId].map((featureKey) =>
             tEmbedded(featureKey)
           ),
-          ctaLabel: tPricing(`${planId}_cta`),
+          ctaLabel: tEmbedded(planDefinition.ctaKey),
         }
       }),
     [
@@ -229,7 +220,6 @@ export default function OnboardingPage() {
       formatPlanPriceLabel,
       formatPlanVolumeLabel,
       tEmbedded,
-      tPricing,
     ]
   )
 
@@ -261,7 +251,9 @@ export default function OnboardingPage() {
     2: (
       <BillingStep
         heading={tEmbedded('billingHeading')}
-        plans={billingPlans}
+        canManageBilling={canManageBilling}
+        unavailableMessage={tEmbedded('billingManagementUnavailable')}
+        plans={canManageBilling ? billingPlans : []}
         selectedPlanId={selectedPlanId}
         isActivating={isActivatingPlan}
         disabledPlanIds={isFreePlanClaimed ? ['starter'] : []}
@@ -285,6 +277,10 @@ export default function OnboardingPage() {
 
   const isPageLoading = !isEmbedded || isModeLoading || isInitialLoading
   useAppBridgeLoading(isPageLoading || isBillingRedirecting)
+
+  if (!isModeLoading && !isEmbedded) {
+    return <StandaloneOnboardingPage />
+  }
 
   if (isPageLoading || isBillingRedirecting) {
     return (

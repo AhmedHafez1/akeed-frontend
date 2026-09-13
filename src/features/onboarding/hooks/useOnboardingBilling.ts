@@ -10,6 +10,7 @@ const logger = createLogger('Onboarding')
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface UseOnboardingBillingParams {
+  canManageBilling: boolean
   hostParam: string | null
   billingActivationErrorMessage: string
   setErrorBanner: (message: string | null) => void
@@ -25,6 +26,7 @@ export interface UseOnboardingBillingParams {
  * in the same banner as init/settings errors without duplicating state.
  */
 export function useOnboardingBilling({
+  canManageBilling,
   hostParam,
   billingActivationErrorMessage,
   setErrorBanner,
@@ -36,6 +38,7 @@ export function useOnboardingBilling({
   const [isBillingRedirecting, setIsBillingRedirecting] = useState(false)
 
   const handleActivatePlan = useCallback(async () => {
+    if (!canManageBilling) return
     setErrorBanner(null)
     setIsActivatingPlan(true)
 
@@ -54,6 +57,7 @@ export function useOnboardingBilling({
       setIsActivatingPlan(false)
     }
   }, [
+    canManageBilling,
     billingActivationErrorMessage,
     hostParam,
     onBillingConfirmation,

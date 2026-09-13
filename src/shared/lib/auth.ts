@@ -1,7 +1,8 @@
 'use client'
 import { createClient } from '@supabase/supabase-js'
+import type { User } from '@supabase/supabase-js'
 import { resolveEmbeddedContextFromWindow } from '@/shared/lib/embedded-context'
-import { getErrorMessage, parseJsonResponse } from '@/shared/lib/http'
+import { createApiError, parseJsonResponse } from '@/shared/lib/http'
 import { createLogger } from '@/shared/lib/logger'
 import { withLocale } from '@/shared/lib/locale'
 
@@ -98,6 +99,28 @@ interface SessionTokenCache {
 
 let sessionTokenCache: SessionTokenCache | null = null
 
+interface StandaloneOrganization {
+  id: string
+  name: string
+  slug: string
+  plan_type: string | null
+  wa_phone_number_id: string | null
+  wa_business_account_id: string | null
+  wa_access_token_configured: boolean
+}
+
+interface StandaloneOrganizationProvisioningResponse {
+  organization: StandaloneOrganization
+  created: boolean
+}
+
+interface StandaloneBootstrapCache {
+  userId: string
+  promise: Promise<StandaloneOrganizationProvisioningResponse>
+}
+
+let standaloneBootstrapCache: StandaloneBootstrapCache | null = null
+
 /** Fallback TTL when the JWT `exp` claim cannot be parsed. */
 const SESSION_TOKEN_FALLBACK_TTL_MS = 30_000
 
@@ -121,6 +144,21 @@ function getJwtExpiry(token: string): number | null {
   }
 }
 
+/**
+ * Reuse a session token already issued by App Bridge during embedded startup.
+ * This avoids an unnecessary second App Bridge round-trip before the first
+ * authenticated API request.
+ */
+export function primeShopifySessionToken(token: string): void {
+  const expSec = getJwtExpiry(token)
+  sessionTokenCache = {
+    token,
+    expiresAt: expSec
+      ? expSec * 1000 - SESSION_TOKEN_EXPIRY_MARGIN_MS
+      : Date.now() + SESSION_TOKEN_FALLBACK_TTL_MS,
+  }
+}
+
 /** Clear the cached session token so the next call fetches a fresh one. */
 function clearSessionTokenCache(): void {
   sessionTokenCache = null
@@ -135,20 +173,16 @@ async function getShopifySessionToken(): Promise<string | null> {
     const shopify = window.shopify
 
     if (!shopify) {
-      logger.error('window.shopify not available - App Bridge CDN script may not be loaded')
+      logger.error(
+        'window.shopify not available - App Bridge CDN script may not be loaded'
+      )
       return null
     }
 
     const token = await shopify.idToken()
 
     if (token) {
-      const expSec = getJwtExpiry(token)
-      sessionTokenCache = {
-        token,
-        expiresAt: expSec
-          ? expSec * 1000 - SESSION_TOKEN_EXPIRY_MARGIN_MS
-          : Date.now() + SESSION_TOKEN_FALLBACK_TTL_MS,
-      }
+      primeShopifySessionToken(token)
     }
 
     return token
@@ -208,7 +242,12 @@ export async function fetchWithAuth(
   }
 
   // Make request
-  const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url}`
+  const { isEmbedded } = resolveEmbeddedContextFromWindow()
+  const fullUrl = url.startsWith('http')
+    ? url
+    : isEmbedded
+      ? url
+      : `${API_BASE_URL}${url}`
 
   const response = await fetch(fullUrl, {
     ...options,
@@ -217,8 +256,6 @@ export async function fetchWithAuth(
 
   // Handle 401 Unauthorized
   if (response.status === 401) {
-    const { isEmbedded } = resolveEmbeddedContextFromWindow()
-
     if (isEmbedded) {
       // In embedded mode, a 401 likely means the cached session token
       // expired. Clear the cache, fetch a fresh token, and retry once.
@@ -258,15 +295,17 @@ type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 async function request<T>(
   method: HttpMethod,
   url: string,
-  data?: unknown
+  data?: unknown,
+  options: RequestInit = {}
 ): Promise<T> {
   const response = await fetchWithAuth(url, {
+    ...options,
     method,
     body: data ? JSON.stringify(data) : undefined,
   })
 
   if (!response.ok) {
-    throw new Error(await getErrorMessage(response))
+    throw await createApiError(response)
   }
 
   return parseJsonResponse<T>(response)
@@ -276,15 +315,19 @@ export const api = {
   /**
    * GET request with auth
    */
-  get<T = unknown>(url: string): Promise<T> {
-    return request<T>('GET', url)
+  get<T = unknown>(url: string, options?: RequestInit): Promise<T> {
+    return request<T>('GET', url, undefined, options)
   },
 
   /**
    * POST request with auth
    */
-  post<T = unknown>(url: string, data?: unknown): Promise<T> {
-    return request<T>('POST', url, data)
+  post<T = unknown>(
+    url: string,
+    data?: unknown,
+    options?: RequestInit
+  ): Promise<T> {
+    return request<T>('POST', url, data, options)
   },
 
   /**
@@ -307,6 +350,49 @@ export const api = {
   delete<T = unknown>(url: string): Promise<T> {
     return request<T>('DELETE', url)
   },
+}
+
+function getUserMetadataString(user: User, key: string): string | null {
+  const value = user.user_metadata?.[key]
+  if (typeof value !== 'string') return null
+
+  const trimmed = value.trim()
+  return trimmed.length > 0 ? trimmed : null
+}
+
+export function getStandaloneOrganizationName(user: User): string {
+  const companyName = getUserMetadataString(user, 'company_name')
+  const fullName = getUserMetadataString(user, 'full_name')
+  const emailName = user.email?.split('@')[0]?.trim()
+
+  return (companyName ?? fullName ?? emailName ?? 'Workspace').slice(0, 120)
+}
+
+export function clearStandaloneOrganizationBootstrap(): void {
+  standaloneBootstrapCache = null
+}
+
+export async function ensureStandaloneOrganization(
+  user: User
+): Promise<StandaloneOrganizationProvisioningResponse> {
+  if (standaloneBootstrapCache?.userId === user.id) {
+    return standaloneBootstrapCache.promise
+  }
+
+  const promise = api.post<StandaloneOrganizationProvisioningResponse>(
+    '/api/organizations',
+    { name: getStandaloneOrganizationName(user) }
+  )
+  standaloneBootstrapCache = { userId: user.id, promise }
+
+  try {
+    return await promise
+  } catch (error) {
+    if (standaloneBootstrapCache?.promise === promise) {
+      standaloneBootstrapCache = null
+    }
+    throw error
+  }
 }
 
 /**
@@ -373,14 +459,18 @@ export const auth = {
   async signUp(
     email: string,
     password: string,
-    metadata?: Record<string, number | string>
+    options?: {
+      metadata?: Record<string, number | string>
+      emailRedirectTo?: string
+    }
   ) {
     const supabase = getSupabaseClient()
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: metadata,
+        data: options?.metadata,
+        emailRedirectTo: options?.emailRedirectTo,
       },
     })
 
@@ -413,6 +503,7 @@ export const auth = {
    */
   async signOut() {
     const supabase = getSupabaseClient()
+    clearStandaloneOrganizationBootstrap()
     const { error } = await supabase.auth.signOut()
     if (error) throw error
   },

@@ -8,9 +8,17 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { HomePage } from '@/features/marketing'
+import {
+  DEFAULT_ACQUISITION_PATH,
+  isAcquisitionPath,
+} from '@/features/marketing/domain/acquisitionPaths'
 import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import { faqs } from '@/features/marketing/config/site'
 import type { Locale } from '@/i18n'
+import {
+  CREDIT_CURRENCY,
+  CREDIT_UNIT_PRICE_MINOR,
+} from '@/shared/config/pricing'
 import {
   createPublicPageMetadata,
   getCanonicalUrl,
@@ -36,8 +44,13 @@ export async function generateMetadata({
 
 async function getHomeStructuredData(locale: Locale) {
   const metadata = await getTranslations({ locale, namespace: 'metadata' })
-  const hero = await getTranslations({ locale, namespace: 'hero' })
+  const pricing = await getTranslations({
+    locale,
+    namespace: 'pricing_credits',
+  })
   const faq = await getTranslations({ locale, namespace: 'faq' })
+
+  const unitPrice = (CREDIT_UNIT_PRICE_MINOR / 100).toFixed(2)
 
   const softwareApplication = {
     '@context': 'https://schema.org',
@@ -47,11 +60,23 @@ async function getHomeStructuredData(locale: Locale) {
     operatingSystem: 'Web',
     url: getCanonicalUrl(locale),
     description: metadata('description'),
+    /*
+     * Metered, not a subscription: the product is priced per WhatsApp message,
+     * so a flat Offer would misdescribe it. Standalone accounts are
+     * self-serve, so it is available now.
+     */
     offers: {
       '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
-      description: hero('no_credit_card'),
+      price: unitPrice,
+      priceCurrency: CREDIT_CURRENCY,
+      availability: 'https://schema.org/InStock',
+      description: pricing('unit_price_note'),
+      priceSpecification: {
+        '@type': 'UnitPriceSpecification',
+        price: unitPrice,
+        priceCurrency: CREDIT_CURRENCY,
+        unitText: pricing('unit_text'),
+      },
     },
   }
 
@@ -73,11 +98,23 @@ async function getHomeStructuredData(locale: Locale) {
 
 export default async function Home({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
   const { locale } = await params
   const structuredData = await getHomeStructuredData(locale as Locale)
+
+  /*
+   * `?path=` lets a campaign link open the page on the matching flow. Resolved
+   * on the server so the right tab is in the initial HTML — this route is
+   * already server-rendered on demand, so reading searchParams costs nothing.
+   */
+  const requestedPath = (await searchParams).path
+  const initialPath = isAcquisitionPath(requestedPath)
+    ? requestedPath
+    : DEFAULT_ACQUISITION_PATH
 
   return (
     <>
@@ -85,7 +122,7 @@ export default async function Home({
         <JsonLd key={data['@type'] as string} data={data} />
       ))}
       <EmbeddedAuthGate onboardingGate="landing">
-        <HomePage />
+        <HomePage initialPath={initialPath} />
       </EmbeddedAuthGate>
     </>
   )
