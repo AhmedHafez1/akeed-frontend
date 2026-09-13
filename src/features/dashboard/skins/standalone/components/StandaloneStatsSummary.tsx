@@ -62,15 +62,17 @@ function DashboardCard({ className, children, href }: DashboardCardProps) {
 function DashboardSkeleton() {
   return (
     <div aria-busy="true" className="space-y-4">
-      <div className="rounded-panel border-border shadow-card border bg-white p-5 sm:p-6">
-        <Skeleton className="h-9 w-9 rounded-lg" />
-        <Skeleton className="mt-5 h-14 w-28" />
-        <Skeleton className="mt-5 h-3 w-full rounded-full" />
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {[0, 1, 2, 3].map((index) => (
-            <Skeleton key={index} className="h-14 w-full" />
-          ))}
+      <div className="rounded-panel border-border shadow-card flex flex-col gap-6 border bg-white p-5 sm:flex-row sm:items-center sm:p-6">
+        <div className="min-w-0 flex-1">
+          <Skeleton className="h-9 w-9 rounded-lg" />
+          <Skeleton className="mt-5 h-14 w-28" />
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[0, 1, 2, 3].map((index) => (
+              <Skeleton key={index} className="h-14 w-full" />
+            ))}
+          </div>
         </div>
+        <Skeleton className="mx-auto h-40 w-40 shrink-0 rounded-full sm:mx-10 sm:h-52 sm:w-52 lg:mx-14" />
       </div>
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)]">
         <DashboardCard className="h-64 p-5">
@@ -209,15 +211,15 @@ interface OutcomeSlice {
   label: string
   value: number
   filter: VerificationStatusFilter
-  bar: string
+  stroke: string
   dot: string
 }
 
 /**
- * Total, proportional bar and per-outcome figures as a single statement.
+ * Total, outcome donut and per-outcome figures as a single statement.
  *
  * These were two cards side by side printing the same three counts: a total
- * with a breakdown, next to a breakdown with a bar. One surface, read once —
+ * with a breakdown, next to a breakdown with a chart. One surface, read once —
  * and the only element on the screen at display scale, so the eye has
  * somewhere to land before it starts scanning.
  */
@@ -231,7 +233,7 @@ function OutcomeHero({ stats }: { stats: DashboardStats }) {
       label: t('verifications.metrics.confirmed'),
       value: stats.totals.confirmed,
       filter: 'confirmed',
-      bar: 'bg-emerald-600',
+      stroke: 'stroke-emerald-600',
       dot: 'bg-emerald-600',
     },
     {
@@ -239,7 +241,7 @@ function OutcomeHero({ stats }: { stats: DashboardStats }) {
       label: t('verifications.metrics.canceled'),
       value: stats.totals.canceled,
       filter: 'canceled',
-      bar: 'bg-red-500',
+      stroke: 'stroke-red-500',
       dot: 'bg-red-500',
     },
     {
@@ -247,7 +249,7 @@ function OutcomeHero({ stats }: { stats: DashboardStats }) {
       label: t('verifications.metrics.inProgress'),
       value: stats.totals.in_progress,
       filter: 'in_progress',
-      bar: 'bg-slate-300',
+      stroke: 'stroke-slate-300',
       dot: 'bg-slate-400',
     },
     {
@@ -255,7 +257,7 @@ function OutcomeHero({ stats }: { stats: DashboardStats }) {
       label: t('verifications.metrics.needsAttention'),
       value: stats.totals.needs_attention,
       filter: 'needs_attention',
-      bar: 'bg-amber-500',
+      stroke: 'stroke-amber-500',
       dot: 'bg-amber-500',
     },
   ]
@@ -265,64 +267,146 @@ function OutcomeHero({ stats }: { stats: DashboardStats }) {
   return (
     <section
       aria-label={t('standalone.kpisLabel')}
-      className="rounded-panel border-border shadow-card overflow-hidden border bg-gradient-to-b from-emerald-50/70 to-white"
+      className="rounded-panel border-border shadow-card grid overflow-hidden border bg-gradient-to-b from-emerald-50/70 to-white sm:grid-cols-[minmax(0,1fr)_auto]"
     >
-      <div className="px-5 pt-5 sm:px-6 sm:pt-6">
-        <div className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-emerald-200 bg-white text-emerald-700">
-            <Package aria-hidden="true" className="h-5 w-5" />
-          </span>
-          <div className="min-w-0">
-            <h2 className="text-base font-bold text-slate-950">
-              {t('verifications.metrics.total')}
-            </h2>
-            <p className="text-caption text-slate-500">
-              {t('standalone.outcomes.description')}
-            </p>
+      <div className="flex min-w-0 flex-col">
+        <div className="px-5 py-5 sm:px-6 sm:pt-6">
+          <div className="flex items-center gap-2.5">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-emerald-200 bg-white text-emerald-700">
+              <Package aria-hidden="true" className="h-5 w-5" />
+            </span>
+            <div className="min-w-0">
+              <h2 className="text-base font-bold text-slate-950">
+                {t('verifications.metrics.total')}
+              </h2>
+              <p className="text-caption text-slate-500">
+                {t('standalone.outcomes.description')}
+              </p>
+            </div>
           </div>
+
+          <p className="mt-5 text-5xl font-extrabold text-slate-950 tabular-nums sm:text-6xl">
+            {formatDashboardNumber(stats.totals.total, locale)}
+          </p>
+
+          {outcomeTotal === 0 && (
+            <p className="bg-muted mt-5 rounded-xl p-3 text-sm text-slate-600">
+              {t('standalone.outcomes.empty')}
+            </p>
+          )}
         </div>
 
-        <p className="mt-5 text-5xl font-extrabold text-slate-950 tabular-nums sm:text-6xl">
-          {formatDashboardNumber(stats.totals.total, locale)}
-        </p>
-
-        {outcomeTotal > 0 ? (
-          <div
-            className="bg-muted mt-5 flex h-3 gap-0.5 overflow-hidden rounded-full"
-            aria-label={t('standalone.outcomes.chartLabel')}
-            role="img"
-          >
-            {outcomes.map((outcome) =>
-              outcome.value > 0 ? (
-                <span
-                  key={outcome.id}
-                  className={cn(
-                    'h-full first:rounded-s-full last:rounded-e-full',
-                    outcome.bar
-                  )}
-                  style={{ width: `${(outcome.value / outcomeTotal) * 100}%` }}
-                />
-              ) : null
-            )}
-          </div>
-        ) : (
-          <p className="bg-muted mt-5 rounded-xl p-3 text-sm text-slate-600">
-            {t('standalone.outcomes.empty')}
-          </p>
-        )}
+        <dl className="mt-auto grid gap-px border-t border-emerald-100 bg-emerald-100/70 sm:grid-cols-2 lg:grid-cols-4">
+          {outcomes.map((outcome) => (
+            <OutcomeFigure
+              key={outcome.id}
+              outcome={outcome}
+              total={outcomeTotal}
+              locale={locale}
+            />
+          ))}
+        </dl>
       </div>
 
-      <dl className="mt-5 grid gap-px border-t border-emerald-100 bg-emerald-100/70 sm:grid-cols-2 lg:grid-cols-4">
-        {outcomes.map((outcome) => (
-          <OutcomeFigure
-            key={outcome.id}
-            outcome={outcome}
-            total={outcomeTotal}
-            locale={locale}
-          />
-        ))}
-      </dl>
+      <div className="flex items-center justify-center border-t border-emerald-100 p-5 sm:border-t-0 sm:border-s sm:px-10 sm:py-6 lg:px-14">
+        <OutcomeDonut
+          outcomes={outcomes}
+          total={outcomeTotal}
+          label={t('standalone.outcomes.chartLabel')}
+          locale={locale}
+        />
+      </div>
     </section>
+  )
+}
+
+/**
+ * The outcome split as a donut beside the total.
+ *
+ * Each slice is a stroke-dash arc on a circle whose circumference is 100, so a
+ * slice's share maps straight onto its dash length. With nothing to split the
+ * ring stays as a quiet track rather than disappearing and shifting the layout.
+ */
+function OutcomeDonut({
+  outcomes,
+  total,
+  label,
+  locale,
+}: {
+  outcomes: OutcomeSlice[]
+  total: number
+  label: string
+  locale: string
+}) {
+  const radius = 100 / (2 * Math.PI)
+  const visible = outcomes.filter((outcome) => outcome.value > 0)
+  // A hairline gap between slices; a single slice closes the ring.
+  const gap = visible.length > 1 ? 1 : 0
+
+  const shares = visible.map((outcome) => (outcome.value / total) * 100)
+  const slices = visible.map((outcome, index) => ({
+    outcome,
+    share: shares[index],
+    start: shares.slice(0, index).reduce((sum, share) => sum + share, 0),
+    length: Math.max(shares[index] - gap, 0),
+  }))
+
+  // The ring's radius as a share of the box, for placing the HTML labels
+  // centred on each arc.
+  const labelRadius = (radius / 42) * 100
+
+  return (
+    <div className="relative h-40 w-40 shrink-0 sm:h-52 sm:w-52">
+      <svg
+        viewBox="0 0 42 42"
+        role="img"
+        aria-label={label}
+        className="h-full w-full -rotate-90"
+      >
+        <circle
+          cx="21"
+          cy="21"
+          r={radius}
+          fill="none"
+          strokeWidth="3"
+          className="stroke-slate-100"
+        />
+        {slices.map(({ outcome, start, length }) => (
+          <circle
+            key={outcome.id}
+            cx="21"
+            cy="21"
+            r={radius}
+            fill="none"
+            strokeWidth="3"
+            strokeDasharray={`${length} ${100 - length}`}
+            strokeDashoffset={-start}
+            className={cn('transition-[stroke-dasharray]', outcome.stroke)}
+          >
+            <title>{`${outcome.label}: ${outcome.value}`}</title>
+          </circle>
+        ))}
+      </svg>
+
+      {slices.map(({ outcome, share, start }) => {
+        // Too narrow a slice has no room for a badge; its figure is below.
+        if (share < 5) return null
+        const angle = ((start + share / 2) / 100) * 2 * Math.PI
+        return (
+          <span
+            key={outcome.id}
+            aria-hidden="true"
+            className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border border-slate-200 bg-white px-1.5 py-0.5 text-[11px] leading-none font-bold text-slate-900 tabular-nums shadow-sm"
+            style={{
+              left: `${50 + labelRadius * Math.sin(angle)}%`,
+              top: `${50 - labelRadius * Math.cos(angle)}%`,
+            }}
+          >
+            {formatDashboardPercent(Math.round(share), locale)}
+          </span>
+        )
+      })}
+    </div>
   )
 }
 
