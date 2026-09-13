@@ -15,7 +15,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
   const locale = getLocaleFromPathname(pathname)
 
   return (
-    <div className="landing-hero-surface flex min-h-screen flex-col">
+    <div className="auth-hero-surface flex min-h-screen flex-col">
       {/* Minimal header with logo */}
       <header className="flex h-16 shrink-0 items-center px-6">
         <Link
@@ -33,8 +33,8 @@ export function AuthLayout({ children }: AuthLayoutProps) {
       </header>
 
       {/* Centered form area */}
-      <main className="flex flex-1 items-center justify-center px-4 py-8 sm:px-6">
-        <div className="w-full max-w-md">{children}</div>
+      <main className="flex flex-1 items-center justify-center px-4 py-10 sm:px-6 sm:py-12">
+        <div className="w-full max-w-lg">{children}</div>
       </main>
     </div>
   )

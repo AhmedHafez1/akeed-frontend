@@ -3,10 +3,14 @@
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
+import { CheckCircle2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { getSupabaseClient } from '@/shared/lib/auth'
 import { createLogger } from '@/shared/lib/logger'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
-import { useTranslations } from 'next-intl'
+import { AuthPanel } from '@/shared/auth/AuthPanel'
+import { PasswordInput } from '@/shared/auth/PasswordInput'
+import { Label, LoadingButton } from '@/shared/ui'
 
 /**
  * Reset Password Page - Standalone Mode Only
@@ -20,7 +24,6 @@ export default function ResetPasswordPage() {
   const t = useTranslations()
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname ?? '')
-  const isRtl = locale === 'ar'
 
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -94,149 +97,102 @@ export default function ResetPasswordPage() {
   // If the recovery session is not ready, show a waiting state
   if (!sessionReady) {
     return (
-      <div className="space-y-6">
-        <div className="space-y-2 text-center">
-          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
-            {t('auth.resetPasswordTitle')}
-          </h1>
-          <p className="text-sm text-slate-600">
-            {t('auth.resetPasswordProcessing')}
+      <AuthPanel
+        title={t('auth.resetPasswordTitle')}
+        description={t('auth.resetPasswordProcessing')}
+      />
+    )
+  }
+
+  if (success) {
+    return (
+      <AuthPanel title={t('auth.resetPasswordTitle')}>
+        <div className="space-y-6 text-center">
+          <div className="bg-primary-subtle text-primary mx-auto flex h-12 w-12 items-center justify-center rounded-full">
+            <CheckCircle2 className="h-6 w-6" aria-hidden="true" />
+          </div>
+          <p role="status" className="text-muted-foreground text-sm">
+            {t('auth.resetPasswordSuccess')}
           </p>
+          <Link
+            href={withLocale('/login', locale)}
+            className="text-primary hover:text-primary-hover inline-flex text-sm font-semibold transition-colors focus-visible:underline focus-visible:outline-none"
+          >
+            {t('auth.backToSignIn')}
+          </Link>
         </div>
-      </div>
+      </AuthPanel>
     )
   }
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-2 text-center">
-        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
-          {t('auth.resetPasswordTitle')}
-        </h1>
-        <p className="text-sm text-slate-600">
-          {t('auth.resetPasswordSubtitle')}
-        </p>
-      </div>
-
-      <div className="rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm transition-all duration-300 hover:border-emerald-200 hover:shadow-md">
-        {success ? (
-          <div className="space-y-4">
-            <div
-              role="status"
-              className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700"
-            >
-              {t('auth.resetPasswordSuccess')}
-            </div>
-            <Link
-              href={withLocale('/login', locale)}
-              className="text-primary hover:text-primary-hover inline-flex text-sm font-semibold transition-colors focus-visible:underline focus-visible:outline-none"
-            >
-              {t('auth.backToSignIn')}
-            </Link>
+    <AuthPanel
+      title={t('auth.resetPasswordTitle')}
+      description={t('auth.resetPasswordSubtitle')}
+    >
+      <form className="space-y-6" onSubmit={handleSubmit} noValidate>
+        {error && (
+          <div
+            role="alert"
+            className="rounded-control border-destructive/30 bg-destructive/10 text-destructive px-4 py-3 text-sm"
+          >
+            {error}
           </div>
-        ) : (
-          <form className="space-y-5" onSubmit={handleSubmit}>
-            {error && (
-              <div
-                role="alert"
-                className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
-              >
-                {error}
-              </div>
-            )}
-
-            <div>
-              <label
-                htmlFor="password"
-                className="text-sm font-medium text-slate-700"
-              >
-                {t('auth.newPassword')}
-              </label>
-              <div className="relative mt-2">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="new-password"
-                  required
-                  minLength={8}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 shadow-sm transition placeholder:text-slate-400 focus-visible:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
-                  placeholder={t('auth.newPassword')}
-                />
-              </div>
-              <p className="mt-1 text-xs text-slate-500">
-                {t('auth.passwordRequirement')}
-              </p>
-            </div>
-
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="text-sm font-medium text-slate-700"
-              >
-                {t('auth.confirmPassword')}
-              </label>
-              <div className="relative mt-2">
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  autoComplete="new-password"
-                  required
-                  minLength={8}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="block w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 shadow-sm transition placeholder:text-slate-400 focus-visible:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
-                  placeholder={t('auth.confirmPassword')}
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="bg-primary text-primary-foreground hover:bg-primary relative flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-bold shadow-sm shadow-emerald-900/10 transition-all hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-70"
-            >
-              {isLoading && (
-                <svg
-                  className={`absolute ${isRtl ? 'right-4' : 'left-4'} h-4 w-4 animate-spin`}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  aria-hidden="true"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
-              )}
-              {isLoading
-                ? t('auth.resettingPassword')
-                : t('auth.resetPassword')}
-            </button>
-
-            <div className="text-center">
-              <Link
-                href={withLocale('/login', locale)}
-                className="hover:text-primary-hover text-sm font-semibold text-slate-600 transition-colors focus-visible:underline focus-visible:outline-none"
-              >
-                {t('auth.backToSignIn')}
-              </Link>
-            </div>
-          </form>
         )}
-      </div>
-    </div>
+
+        <div className="space-y-5">
+          <div className="space-y-2">
+            <Label htmlFor="password">{t('auth.newPassword')}</Label>
+            <PasswordInput
+              id="password"
+              name="password"
+              autoComplete="new-password"
+              required
+              minLength={8}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              aria-describedby="password-hint"
+              placeholder={t('auth.newPassword')}
+            />
+            <p id="password-hint" className="text-muted-foreground text-xs">
+              {t('auth.passwordRequirement')}
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="confirmPassword">{t('auth.confirmPassword')}</Label>
+            <PasswordInput
+              id="confirmPassword"
+              name="confirmPassword"
+              autoComplete="new-password"
+              required
+              minLength={8}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder={t('auth.confirmPassword')}
+            />
+          </div>
+        </div>
+
+        <LoadingButton
+          type="submit"
+          size="lg"
+          className="auth-gradient-button w-full"
+          loading={isLoading}
+          loadingText={t('auth.resettingPassword')}
+        >
+          {t('auth.resetPassword')}
+        </LoadingButton>
+
+        <p className="text-center">
+          <Link
+            href={withLocale('/login', locale)}
+            className="text-muted-foreground hover:text-primary text-sm font-semibold transition-colors focus-visible:underline focus-visible:outline-none"
+          >
+            {t('auth.backToSignIn')}
+          </Link>
+        </p>
+      </form>
+    </AuthPanel>
   )
 }

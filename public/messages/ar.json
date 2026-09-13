@@ -872,6 +872,8 @@
     "signUp": "أنشئ حساباً",
     "email": "البريد الإلكتروني",
     "password": "كلمة المرور",
+    "showPassword": "إظهار كلمة المرور",
+    "hidePassword": "إخفاء كلمة المرور",
     "rememberMe": "تذكرني",
     "forgotPassword": "نسيت كلمة المرور؟",
     "signingIn": "جارٍ تسجيل الدخول...",

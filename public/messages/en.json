@@ -878,6 +878,8 @@
     "signUp": "Sign up",
     "email": "Email",
     "password": "Password",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
     "rememberMe": "Remember me",
     "forgotPassword": "Forgot password?",
     "signingIn": "Signing in...",
