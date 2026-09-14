@@ -601,6 +601,10 @@
       "merchants_body": "Whatever your store, Akeed for you."
     }
   },
+  "ecosystem": {
+    "eyebrow": "Built for how you sell",
+    "independent": "Independent"
+  },
   "demo": {
     "badge": "Live Demo",
     "title": "See the confirmation flow in",

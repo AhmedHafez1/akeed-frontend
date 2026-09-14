@@ -1,12 +1,7 @@
 'use client'
 
 import { motion, useReducedMotion } from 'framer-motion'
-import {
-  ArrowRight,
-  CheckCircle2,
-  CirclePlay,
-  CreditCard,
-} from 'lucide-react'
+import { ArrowRight, CheckCircle2, CirclePlay, CreditCard } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import dynamic from 'next/dynamic'
 import type { MouseEvent } from 'react'
@@ -15,6 +10,7 @@ import { AcquisitionCta } from '@/features/marketing/ui/components/AcquisitionCt
 import { HeroFlowSteps } from '@/features/marketing/ui/components/hero/HeroFlowSteps'
 import { HeroValueProps } from '@/features/marketing/ui/components/hero/HeroValueProps'
 import { scrollToElement } from '@/shared/lib/scroll'
+import Ecosystem from './Ecosystem'
 
 const ChatInterface = dynamic(
   () =>
@@ -62,7 +58,9 @@ function Hero() {
               className="text-display text-foreground mb-13 text-balance lg:text-[3.5rem] lg:leading-[1.04] xl:text-[4.25rem] rtl:lg:text-[3.25rem] rtl:lg:leading-tight rtl:xl:text-[3.75rem]"
             >
               {/* Arabic runs longer, so only the LTR line is held to one row. */}
-              <span className="block ltr:lg:whitespace-nowrap">{t('title')}</span>
+              <span className="block ltr:lg:whitespace-nowrap">
+                {t('title')}
+              </span>
               <span className="text-primary block">{t('highlight')}</span>
             </motion.h1>
 
@@ -127,6 +125,8 @@ function Hero() {
           </motion.div>
         </div>
       </div>
+
+      <Ecosystem />
     </section>
   )
 }

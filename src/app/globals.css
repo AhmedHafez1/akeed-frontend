@@ -247,6 +247,7 @@
   --animate-slide-up: slide-up 0.5s var(--ease-out-quint);
   --animate-slide-down: slide-down 0.5s var(--ease-out-quint);
   --animate-scale-in: scale-in 0.25s var(--ease-out-quint);
+  --animate-marquee: marquee 48s linear infinite;
 
   @keyframes accordion-down {
     from {
@@ -300,6 +301,15 @@
     to {
       transform: scale(1);
       opacity: 1;
+    }
+  }
+  /* Track holds two identical halves, so -50% loops seamlessly. */
+  @keyframes marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
     }
   }
 }

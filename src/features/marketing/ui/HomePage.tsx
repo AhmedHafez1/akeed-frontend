@@ -12,6 +12,7 @@ import {
 } from '@/features/marketing/ui/components/LandingPrimitives'
 import { Reveal } from '@/features/marketing/ui/components/Reveal'
 import Hero from '@/features/marketing/ui/sections/Hero'
+import Ecosystem from '@/features/marketing/ui/sections/Ecosystem'
 import Problem from '@/features/marketing/ui/sections/Problem'
 import HowItWorks from '@/features/marketing/ui/sections/HowItWorks'
 import Solution from '@/features/marketing/ui/sections/Solution'
