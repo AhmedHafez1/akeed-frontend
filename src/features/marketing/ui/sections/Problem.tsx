@@ -4,38 +4,22 @@ import { BarChart3, Clock3, MapPinned, Wallet } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 
+import { problems } from '@/features/marketing/config/site'
 import {
-  LandingIconBadge,
-  landingCardClass,
-  landingCardGlowClass,
+  LandingFeatureCard,
+  landingCardGridVariants,
+} from '@/features/marketing/ui/components/LandingFeatureCard'
+import {
+  LANDING_CARD_TONES,
+  landingPanelClass,
 } from '@/features/marketing/ui/components/LandingPrimitives'
-import { cn } from '@/shared/lib/utils'
+import { LandingSectionHeading } from '@/features/marketing/ui/components/LandingSectionHeading'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { cn } from '@/shared/lib/utils'
 import { Container } from '@/shared/ui/container'
 import { Section } from '@/shared/ui/section'
-import { problems } from '@/features/marketing/config/site'
 
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.12,
-    },
-  },
-}
-
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0 },
-}
-
-const problemCards = [
-  { icon: Wallet, tone: 'emerald' },
-  { icon: Clock3, tone: 'teal' },
-  { icon: BarChart3, tone: 'cyan' },
-  { icon: MapPinned, tone: 'sky' },
-] as const
+const problemIcons = [Wallet, Clock3, BarChart3, MapPinned] as const
 
 function Problem() {
   const t = useTranslations('problems')
@@ -44,83 +28,56 @@ function Problem() {
   return (
     <Section id="problem" className="relative px-4 sm:px-6 lg:px-10">
       <Container className="relative z-10 max-w-351.5">
-        {/* Section Header */}
-        <div className="landing-section-header mb-10 sm:mb-12 lg:mb-14">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-h1 text-foreground max-w-5xl text-balance"
-          >
-            {t('title')}
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-lead text-muted-foreground max-w-3xl text-pretty"
-          >
-            {t('subtitle')}
-          </motion.p>
-        </div>
+        <LandingSectionHeading
+          title={t('title')}
+          description={t('subtitle')}
+          isRTL={isRTL}
+        />
 
-        {/* Problems Grid */}
+        {/*
+         * Four cards on one row at `lg`, matching the WhoItsFor grid. The old
+         * `lg:grid-cols-3 xl:grid-cols-4` left a 3+1 orphan row for most of the
+         * desktop range, and its `gap-4 → gap-10` ramp grew the gutters wider
+         * than any other grid on the page.
+         */}
         <motion.div
-          variants={container}
+          variants={landingCardGridVariants}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: '-50px' }}
-          className="mb-8 grid grid-cols-1 gap-4 sm:mb-10 sm:grid-cols-2 sm:gap-6 md:gap-8 lg:mb-12 lg:grid-cols-3 lg:gap-10 xl:grid-cols-4"
+          className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6"
         >
           {problems.map((problem, index) => (
-            <motion.article
+            <LandingFeatureCard
               key={problem.key}
-              variants={item}
-              className={landingCardClass}
-            >
-              <div className={landingCardGlowClass} />
-
-              <div className="relative mb-8 flex items-center justify-between">
-                <LandingIconBadge
-                  icon={problemCards[index % problemCards.length].icon}
-                  tone={problemCards[index % problemCards.length].tone}
-                  size="sm"
-                />
-                <span className="text-muted-foreground text-xs font-bold tracking-[0.12em]">
-                  {String(index + 1).padStart(2, '0')}
-                </span>
-              </div>
-
-              <div className={cn(isRTL ? 'text-right' : 'text-left')}>
-                <h3 className="my-4 text-lg font-bold text-slate-800">
-                  {t(`${problem.key}.title`)}
-                </h3>
-                <p className="text-sm leading-relaxed text-slate-600">
-                  {t(`${problem.key}.description`)}
-                </p>
-              </div>
-            </motion.article>
+              icon={problemIcons[index % problemIcons.length]}
+              tone={LANDING_CARD_TONES[index % LANDING_CARD_TONES.length]}
+              title={t(`${problem.key}.title`)}
+              description={t(`${problem.key}.description`)}
+              isRTL={isRTL}
+            />
           ))}
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="relative mx-4 overflow-hidden sm:mx-6 lg:mx-8"
+        {/*
+         * The closing beat. Previously a bare centred block with its own
+         * `mx-4 sm:mx-6 lg:mx-8` inset — so it sat narrower than the grid above
+         * it at every breakpoint — and three ad-hoc font ramps. It is a
+         * statement, so it gets the page's card surface and the type scale.
+         */}
+        <div
+          className={cn(
+            landingPanelClass,
+            'mt-10 flex flex-col items-center gap-3 p-8 text-center'
+          )}
         >
-          <div className="mb-4 space-y-4 text-center">
-            <p className="text-base leading-relaxed text-slate-700 sm:text-lg md:text-xl">
-              {t('reality')}
-            </p>
-            <p className="text-primary text-xl font-medium sm:text-2xl md:text-3xl">
-              {t('reality_highlight')}
-            </p>
-          </div>
-        </motion.div>
+          <p className="text-lead text-muted-foreground max-w-2xl text-pretty">
+            {t('reality')}
+          </p>
+          <p className="text-h2 text-primary max-w-2xl text-balance">
+            {t('reality_highlight')}
+          </p>
+        </div>
       </Container>
     </Section>
   )

@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import { audiences } from '@/features/marketing/config/site'
+import { LandingSectionHeading } from '@/features/marketing/ui/components/LandingSectionHeading'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
 import { Container } from '@/shared/ui/container'
@@ -15,14 +16,11 @@ function WhoItsFor() {
   return (
     <Section id="who-its-for" className="relative px-4 sm:px-6 lg:px-10">
       <Container className="relative z-10 max-w-351.5">
-        <div className={cn('mb-10', isRTL ? 'text-right' : 'text-left')}>
-          <h2 className="text-h1 text-foreground max-w-5xl text-balance">
-            {t('section_title')}
-          </h2>
-          <p className="text-lead text-muted-foreground mt-4 max-w-3xl text-pretty">
-            {t('section_description')}
-          </p>
-        </div>
+        <LandingSectionHeading
+          title={t('section_title')}
+          description={t('section_description')}
+          isRTL={isRTL}
+        />
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {audiences.map((audience) => (

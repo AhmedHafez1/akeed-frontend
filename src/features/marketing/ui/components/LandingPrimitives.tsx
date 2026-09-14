@@ -24,6 +24,14 @@ export const landingCardGlowClass =
 export const landingInsetCardClass =
   'rounded-card border-border bg-card hover:border-primary-border hover:shadow-card border transition-[border-color,box-shadow] duration-300 ease-out'
 
+/*
+ * Same surface as the inset card, minus the hover response — for panels that
+ * hold a statement rather than something to click. Reusing the inset card here
+ * would light the border up under the cursor and promise an interaction that
+ * does not exist.
+ */
+export const landingPanelClass = 'rounded-card border-border bg-card border'
+
 const iconToneClasses = {
   emerald: 'bg-primary-subtle text-primary ring-primary-border ring-1',
   teal: 'bg-teal-50 text-teal-600 ring-1 ring-teal-100',
@@ -32,7 +40,14 @@ const iconToneClasses = {
   slate: 'bg-slate-50 text-slate-600 ring-1 ring-slate-100',
 } as const
 
-type LandingIconTone = keyof typeof iconToneClasses
+export type LandingIconTone = keyof typeof iconToneClasses
+
+/*
+ * Accent ramp for card grids, cycled by index so a row reads as a sequence
+ * rather than repeating one accent six times. `slate` sits outside the ramp on
+ * purpose — it stays the neutral choice for a lone, unsequenced badge.
+ */
+export const LANDING_CARD_TONES = ['emerald', 'teal', 'cyan', 'sky'] as const
 
 type LandingIconComponent = ComponentType<SVGProps<SVGSVGElement>>
 

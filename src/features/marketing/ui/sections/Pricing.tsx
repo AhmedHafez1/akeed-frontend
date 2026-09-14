@@ -1,10 +1,11 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { LandingSectionHeading } from '@/features/marketing/ui/components/LandingSectionHeading'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { cn } from '@/shared/lib/utils'
 import { Container } from '@/shared/ui/container'
 import { Section } from '@/shared/ui/section'
-import { cn } from '@/shared/lib/utils'
 import { CreditModelExplainer } from './pricing/CreditModelExplainer'
 import { CreditPresetLadder } from './pricing/CreditPresetLadder'
 import { CreditPriceCard } from './pricing/CreditPriceCard'
@@ -15,24 +16,22 @@ export default function Pricing() {
   const { isRTL } = useLocaleInfo()
 
   return (
-    <Section
-      id="pricing"
-      className="relative overflow-hidden px-4 sm:px-6 lg:px-10"
-    >
+    // No `overflow-hidden` here: the cards below lift and cast a wider shadow
+    // on hover, and clipping to the section bounds shears it off at the edges.
+    <Section id="pricing" className="relative px-4 sm:px-6 lg:px-10">
       <Container className="relative z-10 max-w-351.5">
-        <div className={cn('mb-10', isRTL ? 'text-right' : 'text-left')}>
-          <p className="text-primary text-sm font-semibold">{t('eyebrow')}</p>
-          <h2 className="text-foreground mt-3 text-3xl font-bold text-balance sm:text-4xl">
-            {t.rich('title', {
-              highlight: (chunks) => (
-                <span className="text-[#119764]">{chunks}</span>
-              ),
-            })}
-          </h2>
-          <p className="text-muted-foreground mt-4 max-w-2xl text-base leading-7 text-pretty">
-            {t('subtitle')}
-          </p>
-        </div>
+        <LandingSectionHeading
+          eyebrow={t('eyebrow')}
+          title={t.rich('title', {
+            // Was a literal `#119764`, which ignored the theme entirely. The
+            // token is the same emerald and follows the palette.
+            highlight: (chunks) => (
+              <span className="text-primary">{chunks}</span>
+            ),
+          })}
+          description={t('subtitle')}
+          isRTL={isRTL}
+        />
 
         <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
           <CreditPriceCard />
@@ -47,7 +46,12 @@ export default function Pricing() {
           <CreditPresetLadder />
         </div>
 
-        <p className="text-muted-foreground mt-8 text-xs leading-5">
+        <p
+          className={cn(
+            'text-muted-foreground mt-8 text-sm leading-6',
+            isRTL ? 'text-right' : 'text-left'
+          )}
+        >
           {t('authoritative_note')}
         </p>
       </Container>

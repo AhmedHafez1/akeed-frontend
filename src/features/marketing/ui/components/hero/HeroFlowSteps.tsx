@@ -3,7 +3,6 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import {
   CheckCircle2,
-  ChevronRight,
   ShoppingCart,
   UserRound,
 } from 'lucide-react'
@@ -17,8 +16,6 @@ interface FlowStep {
   title: string
   meta: string
   icon: ReactNode
-  /** The entry step points onward; the rest show a completed check. */
-  isEntry?: boolean
 }
 
 const STEP_STAGGER = 0.18
@@ -37,7 +34,6 @@ export function HeroFlowSteps() {
       title: t('order_title'),
       meta: t('order_meta'),
       icon: <ShoppingCart />,
-      isEntry: true,
     },
     {
       id: 'message',
@@ -115,7 +111,7 @@ export function HeroFlowSteps() {
                   damping: 18,
                   delay: delay + (shouldReduceMotion ? 0 : 0.3),
                 }}
-                className="bg-primary text-primary-foreground flex h-7 w-7 shrink-0 items-center justify-center rounded-full"
+                className="bg-slate-500 text-primary-foreground flex h-7 w-7 shrink-0 items-center justify-center rounded-full"
               >
                 {index + 1}
               </motion.span>

@@ -2,8 +2,9 @@
 
 import { useTranslations } from 'next-intl'
 import { trustPoints } from '@/features/marketing/config/site'
+import { LANDING_CARD_TONES } from '@/features/marketing/ui/components/LandingPrimitives'
+import { LandingSectionHeading } from '@/features/marketing/ui/components/LandingSectionHeading'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import { cn } from '@/shared/lib/utils'
 import { Container } from '@/shared/ui/container'
 import { Section } from '@/shared/ui/section'
 import { TrustPoint } from './trust/TrustPoint'
@@ -15,18 +16,20 @@ function Trust() {
   return (
     <Section id="trust" className="relative px-4 sm:px-6 lg:px-10">
       <Container className="relative z-10 max-w-351.5">
-        <div className={cn('mb-10', isRTL ? 'text-right' : 'text-left')}>
-          <h2 className="text-h1 text-foreground max-w-5xl text-balance">
-            {t('section_title')}
-          </h2>
-          <p className="text-lead text-muted-foreground mt-4 max-w-3xl text-pretty">
-            {t('section_description')}
-          </p>
-        </div>
+        <LandingSectionHeading
+          title={t('section_title')}
+          description={t('section_description')}
+          isRTL={isRTL}
+        />
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {trustPoints.map((point) => (
-            <TrustPoint key={point.key} point={point} isRTL={isRTL} />
+          {trustPoints.map((point, index) => (
+            <TrustPoint
+              key={point.key}
+              point={point}
+              tone={LANDING_CARD_TONES[index % LANDING_CARD_TONES.length]}
+              isRTL={isRTL}
+            />
           ))}
         </div>
       </Container>
