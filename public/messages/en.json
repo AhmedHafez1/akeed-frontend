@@ -753,6 +753,14 @@
       "title": "Listed on the Shopify App Store",
       "description": "Installation and subscription happen within Shopify's ecosystem and policies."
     },
+    "independent_stores": {
+      "title": "Built for independent stores",
+      "description": "Create orders directly in Akeed and send WhatsApp confirmations without depending on a specific store platform."
+    },
+    "automated_confirmation": {
+      "title": "Automated order confirmation",
+      "description": "Send confirmation messages automatically and keep every customer response in one clear workflow."
+    },
     "arabic_first": {
       "title": "Arabic first",
       "description": "Interface and messages in Arabic with full right-to-left support, and English available."
@@ -769,57 +777,6 @@
     "cta_shopify": "Install on Shopify",
     "cta_standalone": "Create your account",
     "cta_standalone_note": "Verify your email and start with 30 free credits."
-  },
-  "solution": {
-    "title": "Built for Merchants Who Want Clear, Reliable COD Confirmation",
-    "steps": {
-      "1": {
-        "title": "New Order Arrives",
-        "description": "Akeed receives the order automatically from your store platform as soon as it is placed."
-      },
-      "2": {
-        "title": "Instant WhatsApp Send",
-        "description": "A branded WhatsApp confirmation message reaches the customer within seconds to confirm order details."
-      },
-      "3": {
-        "title": "Automatic Confirmation",
-        "description": "Akeed captures the customer response and updates the order status to confirmed, canceled, or pending review."
-      }
-    },
-    "auto": {
-      "title": "Rule-Based Automation 24/7",
-      "description": "Reliable confirmation workflows run around the clock with consistent logic for every COD order."
-    },
-    "response": {
-      "title": "Fast WhatsApp Reach",
-      "description": "Messages are sent in seconds while order intent is still fresh, helping teams get faster customer responses."
-    },
-    "natural": {
-      "title": "Clear, Customer-Friendly Messages",
-      "description": "Use clear, simple messages that customers understand and can easily respond to"
-    },
-    "analytics": {
-      "title": "Advanced Analytics",
-      "description": "Track confirmation rates, cancellation reasons, and operational performance from one dashboard."
-    },
-    "testimonial_1": "After using Akeed, our confirmation rate jumped from 55% to 89%, and we cut wasted shipping costs every month.",
-    "orders_monthly": "orders monthly",
-    "fast-confirm": {
-      "title": "Faster Confirmation",
-      "description": "Customers receive a clear branded message quickly, which helps them confirm while purchase intent is still high."
-    },
-    "location": {
-      "title": "Official Meta API Delivery",
-      "description": "Akeed runs on official Meta WhatsApp Cloud APIs, giving merchants a more stable and trustworthy infrastructure than unofficial workarounds."
-    },
-    "save-time": {
-      "title": "Save Your Time & Effort",
-      "description": "Replace repetitive confirmation calls with automated workflows so your team can focus on support, fulfillment, and growth."
-    },
-    "integration": {
-      "title": "No WhatsApp Setup for Most Stores",
-      "description": "Most merchants can start with Akeed's shared WhatsApp infrastructure. Larger merchants can later move to their own number if needed."
-    }
   },
   "faq": {
     "section_title": "Frequently Asked Questions",

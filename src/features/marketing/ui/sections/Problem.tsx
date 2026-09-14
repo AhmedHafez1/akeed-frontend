@@ -13,7 +13,7 @@ import { cn } from '@/shared/lib/utils'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { Container } from '@/shared/ui/container'
 import { Section } from '@/shared/ui/section'
-import { features } from '@/features/marketing/config/site'
+import { problems } from '@/features/marketing/config/site'
 
 const container = {
   hidden: { opacity: 0 },
@@ -74,7 +74,7 @@ function Problem() {
           viewport={{ once: true, margin: '-50px' }}
           className="mb-8 grid grid-cols-1 gap-4 sm:mb-10 sm:grid-cols-2 sm:gap-6 md:gap-8 lg:mb-12 lg:grid-cols-3 lg:gap-10 xl:grid-cols-4"
         >
-          {features.problems.map((problem, index) => (
+          {problems.map((problem, index) => (
             <motion.article
               key={problem.key}
               variants={item}

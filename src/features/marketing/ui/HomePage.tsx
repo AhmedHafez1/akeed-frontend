@@ -12,10 +12,8 @@ import {
 } from '@/features/marketing/ui/components/LandingPrimitives'
 import { Reveal } from '@/features/marketing/ui/components/Reveal'
 import Hero from '@/features/marketing/ui/sections/Hero'
-import Ecosystem from '@/features/marketing/ui/sections/Ecosystem'
 import Problem from '@/features/marketing/ui/sections/Problem'
 import HowItWorks from '@/features/marketing/ui/sections/HowItWorks'
-import Solution from '@/features/marketing/ui/sections/Solution'
 import Pricing from '@/features/marketing/ui/sections/Pricing'
 import WhoItsFor from '@/features/marketing/ui/sections/WhoItsFor'
 import Trust from '@/features/marketing/ui/sections/Trust'
@@ -42,7 +40,7 @@ export function HomePage({
       </section>
       <section className={`w-full ${landingSectionChromeClass}`}>
         <Reveal>
-          <Solution />
+          <Trust />
         </Reveal>
       </section>
       <section className={`w-full ${landingSectionChromeAltClass}`}>
@@ -62,15 +60,10 @@ export function HomePage({
       </section>
       <section className={`w-full ${landingSectionChromeClass}`}>
         <Reveal>
-          <Trust />
-        </Reveal>
-      </section>
-      <section className={`w-full ${landingSectionChromeAltClass}`}>
-        <Reveal>
           <FAQ />
         </Reveal>
       </section>
-      <section className={`w-full ${landingSectionChromeClass}`}>
+      <section className={`w-full ${landingSectionChromeAltClass}`}>
         <Reveal>
           <FinalCta />
         </Reveal>

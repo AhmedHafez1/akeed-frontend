@@ -16,24 +16,12 @@ import {
 } from 'lucide-react'
 import type { AcquisitionPath } from '@/features/marketing/domain/acquisitionPaths'
 
-export const features = {
-  problems: [
-    { key: 'loss', icon: '💸' },
-    { key: 'time', icon: '⏰' },
-    { key: 'scale', icon: '📈' },
-    { key: 'address', icon: '📍' },
-  ],
-  solutions: [
-    { key: 'auto', icon: '⚙️' },
-    { key: 'response', icon: '⚡' },
-    { key: 'fast-confirm', icon: '🚀' },
-    { key: 'location', icon: '🛡️' },
-    { key: 'save-time', icon: '⌛' },
-    { key: 'integration', icon: '📲' },
-    { key: 'natural', icon: '💬' },
-    { key: 'analytics', icon: '📊' },
-  ],
-}
+export const problems = [
+  { key: 'loss', icon: '💸' },
+  { key: 'time', icon: '⏰' },
+  { key: 'scale', icon: '📈' },
+  { key: 'address', icon: '📍' },
+]
 
 export interface HowItWorksStep {
   key: string
@@ -79,6 +67,8 @@ export interface TrustPoint {
 export const trustPoints: TrustPoint[] = [
   { key: 'official_whatsapp', icon: ShieldCheck },
   { key: 'shopify_approved', icon: BadgeCheck },
+  { key: 'independent_stores', icon: Building2 },
+  { key: 'automated_confirmation', icon: MessageCircle },
   { key: 'arabic_first', icon: Languages },
   { key: 'data_protection', icon: Lock },
 ]

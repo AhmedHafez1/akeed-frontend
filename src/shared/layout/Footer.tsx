@@ -22,7 +22,7 @@ const footerLinkGroups = [
     links: [
       { href: '/', labelKey: 'home' },
       { href: '/about', labelKey: 'about' },
-      { href: '/#solution', labelKey: 'features' },
+      { href: '/#trust', labelKey: 'features' },
       { href: '/#pricing', labelKey: 'pricing' },
       { href: '/docs', labelKey: 'docs' },
     ],
