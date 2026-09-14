@@ -341,7 +341,7 @@ export function useVerificationsDashboard(
   )
 
   const error = useMemo(() => {
-    if (verificationsError && statsError) {
+    if (verificationsError && statsError && verificationsError !== statsError) {
       return `${verificationsError} ${statsError}`
     }
     return verificationsError ?? statsError

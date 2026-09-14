@@ -1,6 +1,9 @@
 'use client'
 
-import { fetchOnboardingState } from '@/features/onboarding/api/onboardingApi'
+import {
+  fetchOnboardingState,
+  OnboardingApiError,
+} from '@/features/onboarding/api/onboardingApi'
 import type { IntegrationOnboardingStatus } from '@/features/onboarding/domain/onboarding.types'
 
 export type EmbeddedOnboardingGate =
@@ -190,6 +193,11 @@ export async function checkEmbeddedInstall(
  * Identifies onboarding fetch errors that are likely transient and worth retrying.
  */
 function isRetryableOnboardingError(error: unknown): boolean {
+  // 5xx here is usually the dev proxy failing while the backend restarts.
+  if (error instanceof OnboardingApiError && error.status >= 500) {
+    return true
+  }
+
   const message =
     error instanceof Error ? error.message.toLowerCase().trim() : ''
 

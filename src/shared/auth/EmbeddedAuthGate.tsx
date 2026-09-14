@@ -204,7 +204,10 @@ export function EmbeddedAuthGate({
           setIsEmbeddedReady(true)
         }
       } catch (error) {
-        logger.error('Failed embedded auth checks', error)
+        logger.error('Failed embedded auth checks', error, {
+          shopDomain,
+          onboardingGate,
+        })
         if (active) {
           clearEmbeddedAuthCaches()
           setIsEmbeddedReady(false)
