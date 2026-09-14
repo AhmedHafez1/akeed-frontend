@@ -5,7 +5,6 @@ import {
   ArrowRight,
   CheckCircle2,
   CirclePlay,
-  Clock3,
   CreditCard,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -14,7 +13,6 @@ import type { MouseEvent } from 'react'
 import { useAcquisition } from '@/features/marketing/domain/useAcquisition'
 import { AcquisitionCta } from '@/features/marketing/ui/components/AcquisitionCta'
 import { HeroFlowSteps } from '@/features/marketing/ui/components/hero/HeroFlowSteps'
-import { HeroIntegrations } from '@/features/marketing/ui/components/hero/HeroIntegrations'
 import { HeroValueProps } from '@/features/marketing/ui/components/hero/HeroValueProps'
 import { scrollToElement } from '@/shared/lib/scroll'
 
@@ -95,7 +93,7 @@ function Hero() {
             {/* Microcopy */}
             <motion.ul
               {...fadeUp(0.32)}
-              className="text-muted-foreground mb-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm font-light lg:justify-start"
+              className="text-muted-foreground mb-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm font-light lg:justify-start"
             >
               {microcopyItems.map(({ label, icon: Icon }) => (
                 <li key={label} className="inline-flex items-center gap-2">
@@ -105,9 +103,9 @@ function Hero() {
               ))}
             </motion.ul>
 
-            {/* Integrations */}
+            {/* Value props */}
             <motion.div {...fadeUp(0.4)} className="w-full">
-              <HeroIntegrations />
+              <HeroValueProps />
             </motion.div>
           </div>
 
@@ -127,11 +125,6 @@ function Hero() {
               <ChatInterface />
             </div>
           </motion.div>
-        </div>
-
-        {/* Value props */}
-        <div className="mt-20 lg:mt-24">
-          <HeroValueProps />
         </div>
       </div>
     </section>

@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, useReducedMotion } from 'framer-motion'
-import { MessageCircle, ShieldCheck, Store, Zap } from 'lucide-react'
+import { MessageCircle, Package, PackageCheck, ShieldCheck, Store, Zap } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import type { LucideIcon } from 'lucide-react'
 
@@ -11,18 +11,18 @@ interface ValueProp {
 }
 
 const VALUE_PROPS: ValueProp[] = [
-  { id: 'returns', icon: ShieldCheck },
+  { id: 'returns', icon: Package },
   { id: 'shipping', icon: Zap },
-  { id: 'api', icon: MessageCircle },
+  { id: 'api', icon: ShieldCheck },
   { id: 'merchants', icon: Store },
 ]
-
+  
 export function HeroValueProps() {
   const t = useTranslations('hero.values')
   const shouldReduceMotion = useReducedMotion()
 
   return (
-    <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+    <ul className="grid gap-x-2 gap-y-8 sm:grid-cols-2">
       {VALUE_PROPS.map(({ id, icon: Icon }, index) => (
         <motion.li
           key={id}
@@ -35,15 +35,19 @@ export function HeroValueProps() {
           }}
           className="flex flex-col items-center text-center sm:items-start sm:text-start"
         >
-          <span className="bg-primary-subtle text-primary ring-primary-border/60 mb-5 flex h-14 w-14 items-center justify-center rounded-2xl ring-1">
-            <Icon className="h-7 w-7" strokeWidth={1.75} />
-          </span>
-          <h3 className="text-foreground mb-2 text-lg font-semibold">
-            {t(`${id}_title`)}
-          </h3>
-          <p className="text-muted-foreground max-w-60 text-[0.9375rem] leading-relaxed">
-            {t(`${id}_body`)}
-          </p>
+          <div className="flex gap-3">
+            <div className="bg-primary-subtle text-primary ring-primary-border/60 mb-5 flex h-14 w-14 items-center justify-center rounded-2xl ring-1">
+              <Icon className="h-7 w-7" strokeWidth={1.5} />
+            </div>
+            <div className="flex flex-col">
+              <h3 className="text-foreground text-md font-semibold">
+                {t(`${id}_title`)}
+              </h3>
+              <p className="text-muted-foreground max-w-60 text-sm leading-relaxed">
+                {t(`${id}_body`)}
+              </p>
+            </div>
+          </div>
         </motion.li>
       ))}
     </ul>

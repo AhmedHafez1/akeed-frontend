@@ -592,13 +592,13 @@
     },
     "values": {
       "returns_title": "Reduce returns",
-      "returns_body": "Confirm with your customers before you ship.",
+      "returns_body": "Confirm before you ship.",
       "shipping_title": "Save on shipping costs",
-      "shipping_body": "Avoid failed deliveries and wasted shipments.",
+      "shipping_body": "Avoid wasted shipments.",
       "api_title": "Official WhatsApp API",
       "api_body": "Reliable, secure and no risk of bans.",
       "merchants_title": "Built for every merchant",
-      "merchants_body": "Shopify, independent stores and more."
+      "merchants_body": "Whatever your store, Akeed for you."
     }
   },
   "demo": {

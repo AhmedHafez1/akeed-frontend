@@ -592,13 +592,13 @@
     },
     "values": {
       "returns_title": "مرتجعات أقل",
-      "returns_body": "أكّد مع عملائك قبل ما تشحن.",
+      "returns_body": "أكّد قبل ما تشحن.",
       "shipping_title": "وفّر تكاليف الشحن",
-      "shipping_body": "تجنّب التوصيلات الفاشلة والشحنات الضائعة.",
+      "shipping_body": "تجنّب الشحنات الضائعة.",
       "api_title": "واجهة واتساب الرسمية",
       "api_body": "موثوقة وآمنة وبدون خطر الحظر.",
       "merchants_title": "مصمم لكل تاجر",
-      "merchants_body": "Shopify والمتاجر المستقلة والمزيد."
+      "merchants_body": "أيا كان متجرك، أكيد يعمل معك."
     }
   },
   "demo": {
