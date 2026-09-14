@@ -42,11 +42,8 @@ export function useDemoChat(t: (key: string) => string) {
       //   text: t('chat.user_2'),
       //   delay: 2500,
       // },
-      {
-        type: 'bot',
-        text: t('chat.bot_5'),
-        delay: 2000,
-      },
+      // The hero phone ends on the customer's confirmation; the flow cards
+      // beside it show the store update, so a closing bot message is omitted.
     ],
     [t]
   )

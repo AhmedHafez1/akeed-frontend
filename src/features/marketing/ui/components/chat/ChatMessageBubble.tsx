@@ -10,23 +10,23 @@ export function ChatMessageBubble({
   message,
   timeLabel,
 }: ChatMessageBubbleProps) {
+  const isUser = message.type === 'user'
+
   return (
     <div
-      className={`rounded-2xl p-2 shadow-sm ${
-        message.type === 'user'
-          ? 'rounded-br-md bg-[#dcf8c6] text-slate-800' // real whatsapp bg
-          : 'rounded-bl-md bg-white text-slate-800'
+      className={`rounded-xl px-1 py-1 shadow-sm ${
+        isUser
+          ? 'rounded-se-sm bg-[#d9fdd3] text-slate-800' // WhatsApp outgoing
+          : 'rounded-ss-sm bg-white text-slate-800'
       }`}
     >
-      <div className="px-2 py-1 text-sm leading-relaxed whitespace-pre-line">
+      <div className="px-2 pt-1 text-[0.8125rem] leading-relaxed whitespace-pre-line">
         {message.text}
       </div>
 
-      <div
-        className={`text-muted-foreground mt-1 flex items-center justify-end gap-1 px-1 text-xs`}
-      >
+      <div className="flex items-center justify-end gap-1 px-1.5 text-[0.625rem] text-slate-500">
         <span>{timeLabel}</span>
-        {message.type === 'user' && <CheckCheck className="h-3 w-3" />}
+        {isUser && <CheckCheck className="h-3 w-3 text-sky-500" />}
       </div>
     </div>
   )

@@ -5,10 +5,10 @@ import { useTranslations } from 'next-intl'
 // barrel would pull the entire landing tree into every public-chrome route.
 import { getAcquisitionTargets } from '@/features/marketing/domain/acquisitionPaths'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
+import { scrollToElement } from '@/shared/lib/scroll'
 import { HeaderNavItem } from './header.model'
 
 const SCROLL_THRESHOLD = 20
-const SCROLL_OFFSET = 80
 const MOBILE_SCROLL_DELAY = 100
 // Every in-page nav anchor must be listed here, or the link falls through to a
 // full navigation instead of smooth-scrolling.
@@ -22,17 +22,6 @@ const SCROLLABLE_SECTIONS = new Set([
 
 function getPathWithoutLocale(pathname: string): string {
   return '/' + pathname.split('/').slice(2).join('/')
-}
-
-function scrollToElement(id: string): boolean {
-  const element = document.getElementById(id)
-
-  if (!element) return false
-
-  const elementPosition = element.getBoundingClientRect().top
-  const offsetPosition = elementPosition + window.scrollY - SCROLL_OFFSET
-  window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
-  return true
 }
 
 export function useHeader() {
@@ -73,15 +62,24 @@ export function useHeader() {
         id: 'pricing',
       },
       {
-        href: withLocale('/#who-its-for', locale),
-        label: t('audience'),
-        id: 'who-its-for',
+        href: withLocale('/docs', locale),
+        label: t('resources'),
+        id: 'resources',
+        children: [
+          {
+            href: withLocale('/#who-its-for', locale),
+            label: t('audience'),
+            id: 'who-its-for',
+          },
+          { href: withLocale('/docs', locale), label: t('docs'), id: 'docs' },
+          { href: withLocale('/#faq', locale), label: t('faq'), id: 'faq' },
+        ],
       },
-      { href: withLocale('/docs', locale), label: t('docs'), id: 'docs' },
-      { href: withLocale('/#faq', locale), label: t('faq'), id: 'faq' },
     ],
     [locale, t]
   )
+
+  const loginHref = withLocale('/login', locale)
 
   const acquisitionTargets = useMemo(
     () => getAcquisitionTargets(locale),
@@ -145,6 +143,7 @@ export function useHeader() {
     t,
     locale,
     homeHref,
+    loginHref,
     navigation,
     acquisitionTargets,
     isScrolled,

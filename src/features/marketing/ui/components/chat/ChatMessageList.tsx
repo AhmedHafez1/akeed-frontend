@@ -19,7 +19,7 @@ export function ChatMessageList({
   return (
     <div
       ref={scrollRef}
-      className="h-110 space-y-3 overflow-y-auto scroll-smooth p-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      className="h-88 space-y-3 overflow-y-auto scroll-smooth px-3 py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
     >
       <AnimatePresence>
         {messages.map((message, index) => (
@@ -30,10 +30,16 @@ export function ChatMessageList({
             transition={{ duration: 0.2 }}
             className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
           >
-            <div className="flex max-w-[85%] flex-col gap-1">
+            <div
+              className={`flex flex-col gap-1 ${
+                message.buttons
+                  ? 'w-[92%] rounded-xl rounded-ss-sm bg-white pb-2 shadow-sm [&>div:first-child]:shadow-none [&>div:last-child]:px-2'
+                  : 'max-w-[85%]'
+              }`}
+            >
               <ChatMessageBubble
                 message={message}
-                timeLabel={`09:4${(index % 5) + 1}`}
+                timeLabel={`10:2${(index * 3 + 4) % 10}`}
               />
 
               <ChatQuickReplies

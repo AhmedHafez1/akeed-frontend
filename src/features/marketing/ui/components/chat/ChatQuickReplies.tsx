@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { SquareCheck, X } from 'lucide-react'
 import { DemoMessage } from './demo-message.model'
 
 interface ChatQuickRepliesProps {
@@ -18,39 +19,39 @@ export function ChatQuickReplies({
     return null
   }
 
+  const isPast = messageIndex < totalMessages - 1
+  const isHidden = !isPast && isTyping
+
   return (
-    <div className="flex w-full flex-col gap-1">
+    <div className="flex w-full flex-col gap-1.5 pt-0.5">
       {message.buttons.map((btn, idx) => {
+        const isPrimary = btn.action === 'confirm'
         const isSelected = message.selectedAction === btn.action
-        const isPast = messageIndex < totalMessages - 1
 
-        let buttonStyle =
-          'bg-white text-primary hover:bg-cyan-50 shadow-sm border-emerald-600'
-
-        if (isPast) {
-          if (isSelected) {
-            buttonStyle =
-              'bg-muted text-muted-foreground shadow-none ring-1 ring-border border-border'
-          }
-        } else if (!isTyping && messageIndex === totalMessages - 1) {
-          buttonStyle =
-            'bg-white text-primary hover:bg-cyan-50 shadow-sm border-emerald-600'
-        } else {
-          buttonStyle = 'bg-white text-primary opacity-0 border-emerald-600'
-        }
+        const toneClass = isPrimary
+          ? 'bg-primary text-white shadow-sm'
+          : 'bg-white text-primary ring-1 ring-slate-200 shadow-sm'
 
         return (
           <motion.button
             key={idx}
+            type="button"
+            tabIndex={-1}
             initial={{ opacity: 0, y: 5 }}
             animate={{
-              opacity: isPast && !isSelected ? 0.6 : 1,
+              opacity: isHidden ? 0 : isPast && !isSelected ? 0.55 : 1,
               y: 0,
             }}
             transition={{ delay: idx * 0.1 }}
-            className={`w-full rounded-sm py-2.5 text-center text-sm font-medium transition-all active:scale-95 ${buttonStyle}`}
+            className={`flex w-full items-center justify-center gap-1.5 rounded-lg py-2 text-[0.8125rem] font-medium ${toneClass}`}
             disabled={isPast}
+            aria-hidden
           >
+            {isPrimary ? (
+              <SquareCheck className="h-4 w-4" />
+            ) : (
+              <X className="h-3.5 w-3.5" />
+            )}
             {btn.text}
           </motion.button>
         )

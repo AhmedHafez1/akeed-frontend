@@ -1,9 +1,10 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { Globe } from 'lucide-react'
+import { ArrowRight, Globe } from 'lucide-react'
 import Link from 'next/link'
 import type { MouseEvent } from 'react'
 import type { AcquisitionTargets } from '@/features/marketing/domain/acquisitionPaths'
 import { AcquisitionCta } from '@/features/marketing/ui/components/AcquisitionCta'
+import { headerOutlineControlClass } from './HeaderActions'
 import type { HeaderNavItem } from './header.model'
 
 interface HeaderMobileMenuProps {
@@ -11,20 +12,25 @@ interface HeaderMobileMenuProps {
   items: HeaderNavItem[]
   locale: string
   targets: AcquisitionTargets
-  ctaShopifyLabel: string
-  ctaStandaloneLabel: string
+  ctaLabel: string
+  loginLabel: string
+  loginHref: string
   onNavigate: (id: string, event: MouseEvent<HTMLAnchorElement>) => void
   onLocaleChange: () => void
   onClose: () => void
 }
+
+const mobileLinkClass =
+  'block w-full rounded-lg px-4 py-3 text-start text-base font-semibold text-slate-100 transition-colors hover:bg-white/8 hover:text-white'
 
 export function HeaderMobileMenu({
   isOpen,
   items,
   locale,
   targets,
-  ctaShopifyLabel,
-  ctaStandaloneLabel,
+  ctaLabel,
+  loginLabel,
+  loginHref,
   onNavigate,
   onLocaleChange,
   onClose,
@@ -37,7 +43,7 @@ export function HeaderMobileMenu({
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.3 }}
-          className="overflow-hidden border-t border-white/10 bg-slate-950/96 backdrop-blur-xl md:hidden"
+          className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-white/10 bg-slate-950/96 backdrop-blur-xl lg:hidden"
         >
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <nav className="space-y-1 py-6">
@@ -48,36 +54,56 @@ export function HeaderMobileMenu({
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
                 >
-                  <Link
-                    href={item.href}
-                    onClick={(event) => onNavigate(item.id, event)}
-                    className="block w-full rounded-lg px-4 py-3 text-start text-base font-semibold text-slate-100 transition-colors hover:bg-white/8 hover:text-white"
-                  >
-                    {item.label}
-                  </Link>
+                  {item.children ? (
+                    <div className="pt-2">
+                      <p className="px-4 pb-1 text-xs font-semibold tracking-wider text-slate-400 uppercase">
+                        {item.label}
+                      </p>
+                      {item.children.map((child) => (
+                        <Link
+                          key={child.id}
+                          href={child.href}
+                          onClick={(event) => onNavigate(child.id, event)}
+                          className={mobileLinkClass}
+                        >
+                          {child.label}
+                        </Link>
+                      ))}
+                    </div>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      onClick={(event) => onNavigate(item.id, event)}
+                      className={mobileLinkClass}
+                    >
+                      {item.label}
+                    </Link>
+                  )}
                 </motion.div>
               ))}
               <div className="mt-4 space-y-3 border-t border-white/10 pt-4">
                 <button
+                  type="button"
                   onClick={onLocaleChange}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-white/8 px-4 py-3 text-base font-semibold text-slate-100 ring-1 ring-white/10 transition-colors hover:bg-white/12 hover:text-white"
+                  className={`${headerOutlineControlClass} w-full px-4 py-3 text-base`}
                 >
                   <Globe className="h-5 w-5" />
                   {locale === 'ar' ? 'English' : 'عربي'}
                 </button>
+                <Link
+                  href={loginHref}
+                  onClick={onClose}
+                  className={`${headerOutlineControlClass} w-full px-4 py-3 text-base`}
+                >
+                  {loginLabel}
+                </Link>
                 <AcquisitionCta
-                  target={targets.shopify}
-                  label={ctaShopifyLabel}
+                  target={targets.standalone}
+                  label={ctaLabel}
                   variant="compact"
                   className="w-full px-4 py-3 text-base"
                   onNavigate={onClose}
-                />
-                <AcquisitionCta
-                  target={targets.standalone}
-                  label={ctaStandaloneLabel}
-                  variant="ghost"
-                  className="w-full px-4 py-3 text-base"
-                  onNavigate={onClose}
+                  trailing={<ArrowRight className="h-4 w-4 rtl:-scale-x-100" />}
                 />
               </div>
             </nav>

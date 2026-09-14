@@ -13,7 +13,7 @@ export function HeaderLogo({ href, onClick }: HeaderLogoProps) {
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
-      className="group flex items-center gap-3"
+      className="group flex shrink-0 items-center gap-3"
     >
       <Link href={href} onClick={onClick} aria-label="Akeed home">
         <Image
@@ -21,7 +21,8 @@ export function HeaderLogo({ href, onClick }: HeaderLogoProps) {
           alt="Akeed Logo"
           width={130}
           height={70}
-          className="h-auto object-contain"
+          priority
+          className="h-auto w-[120px] object-contain lg:w-[130px]"
         />
       </Link>
     </motion.div>
