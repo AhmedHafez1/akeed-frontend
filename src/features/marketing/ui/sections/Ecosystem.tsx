@@ -12,8 +12,6 @@ interface Channel {
   mark: ReactNode
   /** Wide marks need a wider box to read at the same optical size. */
   markClassName?: string
-  /** Shopify is the only native integration — it gets the quiet pill. */
-  native?: boolean
 }
 
 function FacebookMark() {
@@ -45,15 +43,11 @@ function ChannelItem({
   label,
   mark,
   markClassName,
-  native,
 }: Omit<Channel, 'id'>) {
   return (
     <div
       className={cn(
-        'flex shrink-0 items-center gap-2.5 rounded-full px-3.5 py-1.5 whitespace-nowrap',
-        native
-          ? 'bg-card text-foreground shadow-card ring-border font-semibold ring-1'
-          : 'text-foreground/75 font-medium'
+        'flex shrink-0 items-center gap-2.5 rounded-full px-3.5 py-1.5 whitespace-nowrap text-foreground/75 font-medium'
       )}
     >
       <span
@@ -76,15 +70,14 @@ function Ecosystem() {
     {
       id: 'shopify',
       label: 'Shopify',
-      native: true,
       mark: <PngMark src="/images/landing/logos/shopify_icon_1.png" />,
     },
     {
       id: 'independent',
       label: t('independent'),
       mark: (
-        <span className="bg-muted text-muted-foreground flex h-6 w-6 items-center justify-center rounded-full">
-          <Store className="h-3.5 w-3.5" strokeWidth={2} />
+        <span className="bg-muted flex h-7 w-7 items-center justify-center rounded-full text-slate-700">
+          <Store className="h-6 w-6" strokeWidth={2} />
         </span>
       ),
     },

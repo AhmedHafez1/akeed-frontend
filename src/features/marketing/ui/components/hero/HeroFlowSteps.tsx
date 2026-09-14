@@ -1,7 +1,12 @@
 'use client'
 
 import { motion, useReducedMotion } from 'framer-motion'
-import { CheckCircle2, ChevronRight, ShoppingCart, UserRound } from 'lucide-react'
+import {
+  CheckCircle2,
+  ChevronRight,
+  ShoppingCart,
+  UserRound,
+} from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import type { ReactNode } from 'react'
@@ -42,10 +47,10 @@ export function HeroFlowSteps() {
         <Image
           src="/images/landing/logos/wa_icon_1.png"
           alt=""
-          width={28}
-          height={28}
+          width={36}
+          height={36}
           unoptimized
-          className="h-7 w-7 object-contain"
+          className="h-9 w-9 object-contain"
         />
       ),
     },
@@ -87,11 +92,11 @@ export function HeroFlowSteps() {
             <div className="rounded-card bg-card/95 shadow-card ring-border/60 flex items-center gap-3 px-3.5 py-3 ring-1 backdrop-blur">
               <LandingIconBadge
                 size="sm"
-                className="h-11 w-11 [&_svg]:h-5 [&_svg]:w-5"
+                className="h-11 w-11 [&_svg]:h-6 [&_svg]:w-6"
+                tone='slate'
               >
                 {step.icon}
               </LandingIconBadge>
-
               <div className="min-w-0 flex-1">
                 <p className="text-foreground truncate text-sm font-semibold">
                   {step.title}
@@ -101,32 +106,19 @@ export function HeroFlowSteps() {
                 </p>
               </div>
 
-              {step.isEntry ? (
-                <ChevronRight className="text-muted-foreground h-4 w-4 shrink-0 rtl:-scale-x-100" />
-              ) : (
-                <motion.span
-                  initial={{ scale: shouldReduceMotion ? 1 : 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{
-                    type: 'spring',
-                    stiffness: 420,
-                    damping: 18,
-                    delay: delay + (shouldReduceMotion ? 0 : 0.3),
-                  }}
-                  className="bg-primary text-primary-foreground flex h-5 w-5 shrink-0 items-center justify-center rounded-full"
-                >
-                  <svg viewBox="0 0 12 12" className="h-3 w-3" aria-hidden>
-                    <path
-                      d="M2.5 6.2 5 8.5l4.5-5"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </motion.span>
-              )}
+              <motion.span
+                initial={{ scale: shouldReduceMotion ? 1 : 0 }}
+                animate={{ scale: 1 }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 420,
+                  damping: 18,
+                  delay: delay + (shouldReduceMotion ? 0 : 0.3),
+                }}
+                className="bg-primary text-primary-foreground flex h-7 w-7 shrink-0 items-center justify-center rounded-full"
+              >
+                {index + 1}
+              </motion.span>
             </div>
           </motion.li>
         )

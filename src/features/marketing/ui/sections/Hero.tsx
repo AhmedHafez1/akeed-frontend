@@ -48,7 +48,7 @@ function Hero() {
   }
 
   return (
-    <section className="relative overflow-hidden px-4 pt-28 pb-16 sm:px-6 sm:pt-32 sm:pb-20 lg:px-10 lg:pt-36 lg:pb-24">
+    <section className="relative overflow-hidden px-4 pt-28 sm:px-6 sm:pt-32 lg:px-10 lg:pt-36 pb-54 rtl:pb-50">
       <div className="mx-auto w-full max-w-7xl">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-8">
           <div className="flex w-full flex-col items-center text-center lg:items-start lg:text-start">
@@ -69,6 +69,14 @@ function Hero() {
               {...fadeUp(0.24)}
               className="mb-4 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center lg:justify-start"
             >
+              <a
+                href={`#${HOW_IT_WORKS_ID}`}
+                onClick={handleSeeHowItWorks}
+                className="group rounded-control bg-card/90 text-foreground shadow-card ring-border hover:ring-primary-border hover:text-primary focus-visible:ring-ring inline-flex h-14 items-center justify-center gap-2.5 px-7 text-base font-semibold ring-1 transition-[box-shadow,color,transform] duration-200 hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:outline-none"
+              >
+                <CirclePlay className="text-primary h-5 w-5" />
+                {t('cta_secondary')}
+              </a>
               <AcquisitionCta
                 target={targets.standalone}
                 label={t('cta_primary')}
@@ -78,14 +86,6 @@ function Hero() {
                   <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
                 }
               />
-              <a
-                href={`#${HOW_IT_WORKS_ID}`}
-                onClick={handleSeeHowItWorks}
-                className="group rounded-control bg-card/90 text-foreground shadow-card ring-border hover:ring-primary-border hover:text-primary focus-visible:ring-ring inline-flex h-14 items-center justify-center gap-2.5 px-7 text-base font-semibold ring-1 transition-[box-shadow,color,transform] duration-200 hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:outline-none"
-              >
-                <CirclePlay className="text-primary h-5 w-5" />
-                {t('cta_secondary')}
-              </a>
             </motion.div>
 
             {/* Microcopy */}
@@ -126,7 +126,9 @@ function Hero() {
         </div>
       </div>
 
-      <Ecosystem />
+      <div className='absolute bottom-0 w-full'>
+        <Ecosystem />
+      </div>
     </section>
   )
 }
