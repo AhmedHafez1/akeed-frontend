@@ -23,11 +23,12 @@ export function AuthLayout({ children }: AuthLayoutProps) {
           className="flex items-center transition-opacity hover:opacity-80"
         >
           <Image
-            src="/images/akeed-web-logo-horizontal.png"
+            src="/images/akeed-web-logo-horizontal-white.png"
             alt="Akeed"
-            width={48}
-            height={48}
-            className="object-contain"
+            width={130}
+            height={70}
+            priority
+            className="h-auto w-[120px] object-contain lg:w-[130px]"
           />
         </Link>
       </header>
