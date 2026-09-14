@@ -569,16 +569,12 @@
     "cta_primary": "ابدأ مجانًا"
   },
   "hero": {
-    "eyebrow": "منصة تأكيد طلبات الدفع عند الاستلام",
-    "eyebrow_note": "للمتاجر الإلكترونية، عبر واتساب.",
     "title": "أكّد طلبات الدفع عند الاستلام",
     "highlight": "قبل ما تشحن.",
-    "subtitle": "أكيد يؤكد طلبات الدفع عند الاستلام مع عملائك تلقائيًا عبر واتساب — ويساعدك تقلل تكاليف الشحن الضائعة والمرتجعات.",
     "cta_primary": "ابدأ مجانًا",
     "cta_secondary": "شاهد كيف يعمل",
-    "microcopy_credits": "30 رصيدًا مجانيًا",
+    "microcopy_credits": "30 رسالة مجانًا",
     "microcopy_no_card": "بدون بطاقة ائتمان",
-    "microcopy_setup": "إعداد خلال دقيقتين",
     "integrations_title": "يعمل مع متجرك.",
     "integrations_note": "اربط متجرك خلال دقائق.",
     "integration_shopify": "Shopify",

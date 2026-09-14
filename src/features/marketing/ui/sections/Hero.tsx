@@ -36,7 +36,6 @@ function Hero() {
   const microcopyItems = [
     { label: t('microcopy_credits'), icon: CheckCircle2 },
     { label: t('microcopy_no_card'), icon: CreditCard },
-    { label: t('microcopy_setup'), icon: Clock3 },
   ] as const
 
   const fadeUp = (delay: number) => ({
@@ -57,43 +56,22 @@ function Hero() {
   return (
     <section className="relative overflow-hidden px-4 pt-28 pb-16 sm:px-6 sm:pt-32 sm:pb-20 lg:px-10 lg:pt-36 lg:pb-24">
       <div className="mx-auto w-full max-w-7xl">
-        <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-6">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-8">
           <div className="flex w-full flex-col items-center text-center lg:items-start lg:text-start">
-            {/* Eyebrow */}
-            <motion.p
-              {...fadeUp(0)}
-              className="mb-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 lg:justify-start"
-            >
-              <span className="bg-primary-subtle text-primary-subtle-foreground ring-primary-border/70 rounded-full px-3.5 py-1.5 text-sm font-semibold ring-1">
-                {t('eyebrow')}
-              </span>
-              <span className="text-muted-foreground text-sm sm:text-base">
-                {t('eyebrow_note')}
-              </span>
-            </motion.p>
-
             {/* Headline */}
             <motion.h1
               {...fadeUp(0.08)}
-              className="text-display text-foreground mb-6 text-balance lg:text-[3.5rem] lg:leading-[1.04] xl:text-[4.25rem] rtl:lg:text-[3.25rem] rtl:lg:leading-[1.25] rtl:xl:text-[3.75rem]"
+              className="text-display text-foreground mb-13 text-balance lg:text-[3.5rem] lg:leading-[1.04] xl:text-[4.25rem] rtl:lg:text-[3.25rem] rtl:lg:leading-tight rtl:xl:text-[3.75rem]"
             >
               {/* Arabic runs longer, so only the LTR line is held to one row. */}
               <span className="block ltr:lg:whitespace-nowrap">{t('title')}</span>
               <span className="text-primary block">{t('highlight')}</span>
             </motion.h1>
 
-            {/* Subtitle */}
-            <motion.p
-              {...fadeUp(0.16)}
-              className="text-lead text-muted-foreground mb-9 max-w-xl text-pretty"
-            >
-              {t('subtitle')}
-            </motion.p>
-
             {/* CTA row */}
             <motion.div
               {...fadeUp(0.24)}
-              className="mb-7 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center lg:justify-start"
+              className="mb-4 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center lg:justify-start"
             >
               <AcquisitionCta
                 target={targets.standalone}
@@ -117,11 +95,11 @@ function Hero() {
             {/* Microcopy */}
             <motion.ul
               {...fadeUp(0.32)}
-              className="text-muted-foreground mb-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm font-medium lg:justify-start"
+              className="text-muted-foreground mb-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm font-light lg:justify-start"
             >
               {microcopyItems.map(({ label, icon: Icon }) => (
                 <li key={label} className="inline-flex items-center gap-2">
-                  <Icon className="text-primary h-4 w-4" />
+                  <Icon className="h-4 w-4" />
                   {label}
                 </li>
               ))}
@@ -140,7 +118,7 @@ function Hero() {
           >
             <div
               aria-hidden
-              className="bg-primary-subtle/80 pointer-events-none absolute end-0 top-1/2 h-[30rem] w-[30rem] -translate-y-1/2 rounded-full xl:-end-8"
+              className="bg-primary-subtle/80 pointer-events-none absolute end-0 top-1/2 h-120 w-120 -translate-y-1/2 rounded-full xl:-end-8"
             />
             <div className="relative z-10 me-5 xl:me-7">
               <HeroFlowSteps />

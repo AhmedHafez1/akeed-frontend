@@ -569,16 +569,12 @@
     "cta_primary": "Get started free"
   },
   "hero": {
-    "eyebrow": "COD Confirmation Platform",
-    "eyebrow_note": "for online merchants, powered by WhatsApp.",
     "title": "Confirm COD orders",
     "highlight": "before you ship.",
-    "subtitle": "Akeed automatically confirms Cash on Delivery orders with your customers on WhatsApp — and helps you reduce wasted shipping costs and returns.",
     "cta_primary": "Get started free",
     "cta_secondary": "See how it works",
-    "microcopy_credits": "30 free credits",
+    "microcopy_credits": "30 free messages",
     "microcopy_no_card": "No credit card required",
-    "microcopy_setup": "2-minute setup",
     "integrations_title": "Works with your store.",
     "integrations_note": "Connect your business in minutes.",
     "integration_shopify": "Shopify",
