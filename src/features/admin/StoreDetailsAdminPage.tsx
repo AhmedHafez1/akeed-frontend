@@ -622,7 +622,7 @@ function LifecycleCard({ milestones }: { milestones: AdminStoreMilestone[] }) {
                 >
                   {milestoneLabels[milestone.key] ?? titleCase(milestone.key)}
                 </p>
-                <p className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
+                <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
                   {reached ? formatDateTime(milestone.at) : 'Not reached'}
                   {milestone.estimated && (
                     <Badge
@@ -632,7 +632,7 @@ function LifecycleCard({ milestones }: { milestones: AdminStoreMilestone[] }) {
                       Estimated
                     </Badge>
                   )}
-                </p>
+                </div>
               </div>
             </li>
           )
