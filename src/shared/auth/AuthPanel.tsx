@@ -19,7 +19,7 @@ export function AuthPanel({
     <Card
       variant="elevated"
       className={cn(
-        'rounded-panel border-primary-border bg-card shadow-card p-6 sm:p-8',
+        'rounded-panel border-primary-border bg-card shadow-card p-6 sm:p-7',
         className
       )}
     >
@@ -32,7 +32,7 @@ export function AuthPanel({
         ) : null}
       </div>
 
-      {children ? <div className="mt-8">{children}</div> : null}
+      {children ? <div className="mt-5">{children}</div> : null}
     </Card>
   )
 }

@@ -130,7 +130,7 @@ export default function SignupPage() {
 
   return (
     <AuthPanel title={t('auth.createAccount')}>
-      <form className="space-y-6" onSubmit={handleSubmit} noValidate>
+      <form className="space-y-5" onSubmit={handleSubmit} noValidate>
         {error && (
           <div
             role="alert"
@@ -140,35 +140,37 @@ export default function SignupPage() {
           </div>
         )}
 
-        <div className="space-y-5">
-          <div className="space-y-2">
-            <Label htmlFor="fullName">{t('auth.fullName')}</Label>
-            <Input
-              id="fullName"
-              name="fullName"
-              type="text"
-              required
-              value={formData.fullName}
-              onChange={handleChange}
-              className="rounded-control"
-              placeholder={t('auth.fullName')}
-            />
-          </div>
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="fullName">{t('auth.fullName')}</Label>
+              <Input
+                id="fullName"
+                name="fullName"
+                type="text"
+                required
+                value={formData.fullName}
+                onChange={handleChange}
+                className="rounded-control"
+                placeholder={t('auth.fullName')}
+              />
+            </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="companyName">{t('auth.companyName')}</Label>
-            <Input
-              id="companyName"
-              name="companyName"
-              type="text"
-              autoComplete="organization"
-              required
-              maxLength={120}
-              value={formData.companyName}
-              onChange={handleChange}
-              className="rounded-control"
-              placeholder={t('auth.companyName')}
-            />
+            <div className="space-y-2">
+              <Label htmlFor="companyName">{t('auth.companyName')}</Label>
+              <Input
+                id="companyName"
+                name="companyName"
+                type="text"
+                autoComplete="organization"
+                required
+                maxLength={120}
+                value={formData.companyName}
+                onChange={handleChange}
+                className="rounded-control"
+                placeholder={t('auth.companyName')}
+              />
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -186,52 +188,58 @@ export default function SignupPage() {
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="password">{t('auth.password')}</Label>
-            <PasswordInput
-              id="password"
-              name="password"
-              autoComplete="new-password"
-              required
-              value={formData.password}
-              onChange={handleChange}
-              aria-describedby="password-hint"
-              aria-invalid={Boolean(fieldErrors.password)}
-              className={
-                fieldErrors.password
-                  ? 'border-destructive focus:border-destructive'
-                  : undefined
-              }
-            />
-            <p id="password-hint" className="text-muted-foreground text-xs">
-              {t('auth.passwordRequirement')}
-            </p>
-            {fieldErrors.password && (
-              <p className="text-destructive text-xs">{fieldErrors.password}</p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">{t('auth.confirmPassword')}</Label>
-            <PasswordInput
-              id="confirmPassword"
-              name="confirmPassword"
-              autoComplete="new-password"
-              required
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              aria-invalid={Boolean(fieldErrors.confirmPassword)}
-              className={
-                fieldErrors.confirmPassword
-                  ? 'border-destructive focus:border-destructive'
-                  : undefined
-              }
-            />
-            {fieldErrors.confirmPassword && (
-              <p className="text-destructive text-xs">
-                {fieldErrors.confirmPassword}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="password">{t('auth.password')}</Label>
+              <PasswordInput
+                id="password"
+                name="password"
+                autoComplete="new-password"
+                required
+                value={formData.password}
+                onChange={handleChange}
+                aria-describedby="password-hint"
+                aria-invalid={Boolean(fieldErrors.password)}
+                className={
+                  fieldErrors.password
+                    ? 'border-destructive focus:border-destructive'
+                    : undefined
+                }
+              />
+              <p id="password-hint" className="text-muted-foreground text-xs">
+                {t('auth.passwordRequirement')}
               </p>
-            )}
+              {fieldErrors.password && (
+                <p className="text-destructive text-xs">
+                  {fieldErrors.password}
+                </p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">
+                {t('auth.confirmPassword')}
+              </Label>
+              <PasswordInput
+                id="confirmPassword"
+                name="confirmPassword"
+                autoComplete="new-password"
+                required
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                aria-invalid={Boolean(fieldErrors.confirmPassword)}
+                className={
+                  fieldErrors.confirmPassword
+                    ? 'border-destructive focus:border-destructive'
+                    : undefined
+                }
+              />
+              {fieldErrors.confirmPassword && (
+                <p className="text-destructive text-xs">
+                  {fieldErrors.confirmPassword}
+                </p>
+              )}
+            </div>
           </div>
         </div>
 
@@ -284,7 +292,7 @@ export default function SignupPage() {
         </p>
       </form>
 
-      <div className="mt-8 space-y-4">
+      <div className="mt-5 space-y-3">
         <div className="relative flex items-center">
           <Separator className="flex-1" />
           <span className="text-muted-foreground px-3 text-xs font-semibold tracking-widest uppercase">
