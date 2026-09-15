@@ -648,32 +648,6 @@
     "feature_4": "Real-time order status updates",
     "feature_5": "Shared WhatsApp infrastructure for faster setup"
   },
-  "problems": {
-    "title": "Customer not responding? Burning money on shipping?",
-    "subtitle": "These problems happen daily with COD orders",
-    "loss": {
-      "title": "Massive Financial Losses",
-      "description": "30-40% of COD orders can return without confirmation, draining budget on failed delivery attempts and reverse shipping."
-    },
-    "time": {
-      "title": "Wasted Time on Calls",
-      "description": "Your team loses hours every week calling customers to confirm COD orders instead of growing the business."
-    },
-    "customer": {
-      "title": "Poor Customer Experience",
-      "description": "Customers get annoyed by repeated calls and abandon their orders, affecting your store's reputation"
-    },
-    "scale": {
-      "title": "Difficulty Scaling",
-      "description": "As order volume grows across markets, manual confirmation becomes slower, more expensive, and harder to manage."
-    },
-    "address": {
-      "title": "Unclear Delivery Details",
-      "description": "Unconfirmed addresses and missing customer replies lead to failed deliveries, extra courier calls, and preventable COD returns."
-    },
-    "reality": "This is not just a customer problem. It is an operations problem.",
-    "reality_highlight": "Akeed is built to solve these problems"
-  },
   "how_it_works": {
     "section_title": "How Akeed Works",
     "main_title": "Pick how your store runs — the rest is automatic.",

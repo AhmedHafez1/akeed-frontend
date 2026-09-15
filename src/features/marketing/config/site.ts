@@ -16,13 +16,6 @@ import {
 } from 'lucide-react'
 import type { AcquisitionPath } from '@/features/marketing/domain/acquisitionPaths'
 
-export const problems = [
-  { key: 'loss', icon: '💸' },
-  { key: 'time', icon: '⏰' },
-  { key: 'scale', icon: '📈' },
-  { key: 'address', icon: '📍' },
-]
-
 export interface HowItWorksStep {
   key: string
   icon: LucideIcon
