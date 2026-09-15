@@ -151,7 +151,7 @@ function SettingsCard({
     checked !== undefined && switchLabel !== undefined && onCheckedChange
 
   return (
-    <Card className="overflow-hidden border-slate-200 bg-white shadow-none">
+    <Card variant="flat" className="overflow-hidden">
       <div className="flex items-start justify-between gap-4 p-5 sm:p-6">
         <div className="space-y-1">
           <h3 className="font-semibold text-slate-950">{title}</h3>
@@ -167,7 +167,7 @@ function SettingsCard({
         )}
       </div>
       {children && (
-        <div className="border-t border-slate-200 p-5 sm:p-6">{children}</div>
+        <div className="border-border border-t p-5 sm:p-6">{children}</div>
       )}
     </Card>
   )
@@ -565,7 +565,7 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                 </p>
               </div>
 
-              <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+              <div className="rounded-card border-border bg-card flex items-center gap-3 border px-4 py-3">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
                   <ShieldCheck className="h-5 w-5" />
                 </span>
@@ -770,7 +770,7 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                 </p>
               </div>
 
-              <Card className="border-slate-200 p-6 shadow-sm">
+              <Card className="p-6">
                 <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <h3 className="font-semibold text-slate-950">
@@ -793,7 +793,7 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
       </div>
 
       {props.canUpdateConfiguration && props.isDirty && (
-        <div className="fixed inset-x-4 bottom-4 z-40 rounded-xl border border-slate-200 bg-white/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-xl backdrop-blur sm:px-5 lg:start-[280px] lg:end-8">
+        <div className="rounded-card border-border bg-card/95 shadow-sticky fixed inset-x-4 bottom-4 z-40 border px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur sm:px-5 lg:start-[280px] lg:end-8">
           <div className="mx-auto flex max-w-7xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-slate-600">
               {props.saveFailed

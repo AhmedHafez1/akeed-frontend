@@ -109,7 +109,7 @@ export function VerificationsTableStandalone(
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-100 bg-white">
+        <tbody className="divide-border bg-card divide-y">
           {props.verifications.map((verification) => (
             <tr
               key={verification.id}
@@ -184,7 +184,7 @@ export function VerificationsTableStandalone(
           <li
             key={verification.id}
             aria-busy={verification.optimistic ? true : undefined}
-            className="rounded-xl border border-slate-200 bg-white p-4"
+            className="rounded-card border-border bg-card border p-4"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">

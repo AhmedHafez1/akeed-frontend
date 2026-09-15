@@ -277,7 +277,7 @@ export function TemplatesStandaloneSkin({
         </div>
       )}
 
-      <Card className="border-border mb-5 bg-white px-4 py-3 shadow-sm">
+      <Card className="mb-5 px-4 py-3">
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-50 text-slate-700">
             <Globe2 aria-hidden="true" className="h-4 w-4" />
@@ -312,7 +312,7 @@ export function TemplatesStandaloneSkin({
 
       <div className="grid items-start gap-5 md:grid-cols-[minmax(0,58fr)_minmax(320px,42fr)]">
         <div className="space-y-4">
-          <Card className="border-border bg-white p-4 shadow-sm sm:p-5">
+          <Card className="p-4 sm:p-5">
             <fieldset>
               <legend className="text-base font-semibold text-slate-950">
                 {t('customerLanguageTitle')}
@@ -356,7 +356,7 @@ export function TemplatesStandaloneSkin({
             </fieldset>
           </Card>
 
-          <Card className="border-border bg-white p-4 shadow-sm sm:p-5">
+          <Card className="p-4 sm:p-5">
             <fieldset
               disabled={!props.canUpdateConfiguration || props.isSaving}
             >
@@ -436,7 +436,7 @@ export function TemplatesStandaloneSkin({
             </fieldset>
           </Card>
 
-          <details className="border-border rounded-xl border bg-white shadow-sm">
+          <details className="border-border bg-card rounded-card border">
             <summary className="cursor-pointer px-4 py-4 text-base font-semibold text-slate-950 sm:px-5">
               {t('detailsTitle')}
             </summary>
@@ -527,7 +527,7 @@ export function TemplatesStandaloneSkin({
           )}
         </div>
 
-        <Card className="border-border hidden bg-white p-4 shadow-sm sm:p-5 md:sticky md:top-20 md:block">
+        <Card className="hidden p-4 sm:p-5 md:sticky md:top-20 md:block">
           <div className="flex items-center justify-between gap-3">
             <h2 className="text-base font-semibold text-slate-950">
               {t('customerPreviewTitle')}
@@ -549,7 +549,7 @@ export function TemplatesStandaloneSkin({
       </div>
 
       {props.canUpdateConfiguration && props.isDirty && (
-        <div className="border-border shadow-sticky fixed inset-x-0 bottom-0 z-40 border-t bg-white/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur md:hidden">
+        <div className="border-border shadow-sticky bg-card/95 fixed inset-x-0 bottom-0 z-40 border-t px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur md:hidden">
           <div className="flex gap-3">
             <Button
               type="button"

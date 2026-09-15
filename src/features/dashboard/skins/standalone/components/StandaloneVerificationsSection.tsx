@@ -85,9 +85,9 @@ export function StandaloneVerificationsSection({
   return (
     <section
       aria-label={t('verifications.subtitle', { count: totalCount })}
-      className="rounded-2xl border border-slate-200 bg-white shadow-sm"
+      className="rounded-card border-border bg-card shadow-card border"
     >
-      <div className="border-b border-slate-200 px-4 py-5 sm:px-5">
+      <div className="border-border border-b px-4 py-5 sm:px-5">
         <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="text-sm font-semibold text-slate-900">
@@ -156,7 +156,7 @@ export function StandaloneVerificationsSection({
               onConfirmCancelOrder={onConfirmCancelOrder}
               onRetryVerification={onRetryVerification}
             />
-            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 px-4 py-4 sm:px-5">
+            <div className="border-border flex flex-wrap items-center justify-between gap-3 border-t px-4 py-4 sm:px-5">
               <p role="status" className="text-xs text-slate-500">
                 {t('verifications.loaded', { count: verifications.length })}
               </p>

@@ -179,7 +179,7 @@ export function ConfirmationRulesStep({
         </OnboardingField>
       </OnboardingCard>
 
-      <div className="rounded-xl border border-slate-200 bg-white">
+      <div className="rounded-card border-border bg-card border">
         <button
           type="button"
           aria-expanded={showAdvanced}

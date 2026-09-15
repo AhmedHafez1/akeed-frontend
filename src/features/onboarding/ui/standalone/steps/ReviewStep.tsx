@@ -60,7 +60,7 @@ export function ReviewStep({ form, blockedReasons, onEdit }: ReviewStepProps) {
 
   return (
     <div className="space-y-6">
-      <dl className="rounded-xl border border-slate-200 bg-white px-4 py-1 sm:px-5">
+      <dl className="rounded-card border-border bg-card border px-4 py-1 sm:px-5">
         <SummaryRow
           label={t('review.storeName')}
           value={form.storeName}

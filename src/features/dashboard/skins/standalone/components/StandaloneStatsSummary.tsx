@@ -38,7 +38,7 @@ interface DashboardCardProps {
 
 function DashboardCard({ className, children, href }: DashboardCardProps) {
   const cardClassName = cn(
-    'rounded-card border-border shadow-raised border bg-white',
+    'rounded-card border-border shadow-raised bg-card border',
     className
   )
 
@@ -62,7 +62,7 @@ function DashboardCard({ className, children, href }: DashboardCardProps) {
 function DashboardSkeleton() {
   return (
     <div aria-busy="true" className="space-y-4">
-      <div className="rounded-panel border-border shadow-card flex flex-col gap-6 border bg-white p-5 sm:flex-row sm:items-center sm:p-6">
+      <div className="rounded-panel border-border shadow-card bg-card flex flex-col gap-6 border p-5 sm:flex-row sm:items-center sm:p-6">
         <div className="min-w-0 flex-1">
           <Skeleton className="h-9 w-9 rounded-lg" />
           <Skeleton className="mt-5 h-14 w-28" />
@@ -468,13 +468,13 @@ function OutcomeFigure({
   )
 
   if (isEmpty) {
-    return <div className="bg-white px-5 py-3.5 sm:px-6 sm:py-4">{body}</div>
+    return <div className="bg-card px-5 py-3.5 sm:px-6 sm:py-4">{body}</div>
   }
 
   return (
     <Link
       href={`${withLocale('/verifications', locale)}?status=${outcome.filter}`}
-      className="bg-white px-5 py-3.5 transition hover:bg-emerald-50/70 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:outline-none focus-visible:ring-inset sm:px-6 sm:py-4"
+      className="bg-card px-5 py-3.5 transition hover:bg-emerald-50/70 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:outline-none focus-visible:ring-inset sm:px-6 sm:py-4"
     >
       {body}
     </Link>

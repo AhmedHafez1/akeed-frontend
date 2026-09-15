@@ -28,7 +28,7 @@ export function OnboardingStepRail({
   return (
     <nav
       aria-label={t('steps.label')}
-      className="hidden rounded-xl border border-slate-200 bg-white p-5 text-start md:block"
+      className="rounded-card border-border bg-card hidden border p-5 text-start md:block"
     >
       <h2 className="text-sm font-semibold text-slate-950">
         {t('steps.label')}

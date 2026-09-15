@@ -18,7 +18,7 @@ const stateStyles: Record<
   { surface: string; icon: string }
 > = {
   active: {
-    surface: 'border-border bg-white',
+    surface: 'border-border bg-card',
     icon: 'border-emerald-200 bg-emerald-50 text-emerald-700',
   },
   paused: {
@@ -42,7 +42,7 @@ export function StandaloneStatusPanel({ state }: StandaloneStatusPanelProps) {
     <section
       aria-labelledby="verification-status-title"
       className={cn(
-        'flex flex-col gap-3 rounded-xl border px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5',
+        'rounded-card flex flex-col gap-3 border px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5',
         styles.surface
       )}
     >
