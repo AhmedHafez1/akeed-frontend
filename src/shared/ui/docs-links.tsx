@@ -47,7 +47,7 @@ export function HelpButton({
       article={article}
       hash={hash}
       className={cn(
-        'inline-flex h-9 items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 text-xs font-semibold text-emerald-700 transition-colors hover:border-emerald-300 hover:bg-emerald-100',
+        'inline-flex h-9 items-center gap-1.5 rounded-lg border border-input bg-muted px-3 text-xs font-semibold text-foreground transition-colors hover:border-input hover:bg-accent',
         className
       )}
     >

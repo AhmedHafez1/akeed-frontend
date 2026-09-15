@@ -116,7 +116,7 @@ export function StandaloneVerificationsSection({
                 onClick={() => onStatusFilterChange(filter.id)}
                 className={`min-h-9 rounded-lg border px-3 py-2 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 ${
                   statusFilter === filter.id
-                    ? 'border-emerald-500 bg-emerald-50 text-emerald-800'
+                    ? 'border-transparent bg-muted text-foreground'
                     : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
                 }`}
               >

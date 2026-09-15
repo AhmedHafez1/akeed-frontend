@@ -45,7 +45,7 @@ export function DashboardStandaloneSkin({
   }, [actionFeedback, onDismissActionFeedback])
 
   return (
-    <div className="mx-auto w-full max-w-[1400px] space-y-6 pb-8">
+    <div className="mx-auto w-full max-w-350 space-y-6 pb-8">
       <StandaloneDashboardHeader
         dateRangeFilter={dateRangeFilter}
         dateRangeOptions={dateRangeOptions}

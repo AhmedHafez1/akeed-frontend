@@ -27,11 +27,10 @@
   --popover-foreground: oklch(12.9% 0.042 264.695);
 
   /*
-   * App canvas. A whisper of the brand hue rather than a neutral or warm
-   * grey — it keeps white cards reading as "lifted" without a heavy shadow,
-   * and avoids the muddy cast a warm grey picks up next to emerald.
+   * App canvas. A light neutral grey — it keeps white cards reading as
+   * "lifted" without a heavy shadow.
    */
-  --canvas: oklch(98.4% 0.004 165);
+  --canvas: #F6F6F7;
 
   /*
    * Brand. emerald-700, not emerald-600: white-on-emerald-600 is 3.35:1 and
@@ -380,6 +379,25 @@
 
   button {
     @apply cursor-pointer;
+  }
+
+  /*
+   * Browser autofill paints its own background (often a pale blue) that
+   * ignores our input styling, so a filled field looks like a different
+   * component from an untouched one. Force it back to the input's own
+   * surface color via the long-transition trick, since `background-color`
+   * on autofilled fields can't be overridden directly.
+   */
+  input:autofill,
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px white inset;
+    box-shadow: 0 0 0 1000px white inset;
+    -webkit-text-fill-color: var(--foreground);
+    caret-color: var(--foreground);
+    transition: background-color 9999s ease-in-out 0s;
   }
 }
 

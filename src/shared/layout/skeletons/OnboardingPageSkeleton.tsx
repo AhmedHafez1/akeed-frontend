@@ -73,7 +73,7 @@ function BillingStepSkeleton() {
         <SkeletonBodyText lines={5} />
       </div>
 
-      <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3">
+      <div className="rounded-lg border border-input bg-muted p-3">
         <SkeletonBodyText lines={1} />
       </div>
 

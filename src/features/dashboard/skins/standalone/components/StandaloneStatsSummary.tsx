@@ -48,7 +48,7 @@ function DashboardCard({ className, children, href }: DashboardCardProps) {
         href={href}
         className={cn(
           cardClassName,
-          'hover:shadow-card block transition hover:border-emerald-200 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none'
+          'hover:shadow-card block transition hover:border-input focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none'
         )}
       >
         {children}
@@ -267,12 +267,12 @@ function OutcomeHero({ stats }: { stats: DashboardStats }) {
   return (
     <section
       aria-label={t('standalone.kpisLabel')}
-      className="rounded-panel border-border shadow-card grid overflow-hidden border bg-gradient-to-b from-emerald-50/70 to-white sm:grid-cols-[minmax(0,1fr)_auto]"
+      className="rounded-panel border-border shadow-card grid overflow-hidden border bg-linear-to-b from-muted/70 to-white sm:grid-cols-[minmax(0,1fr)_auto]"
     >
       <div className="flex min-w-0 flex-col">
         <div className="px-5 py-5 sm:px-6 sm:pt-6">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-emerald-200 bg-white text-emerald-700">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-input bg-white text-foreground">
               <Package aria-hidden="true" className="h-5 w-5" />
             </span>
             <div className="min-w-0">
@@ -296,7 +296,7 @@ function OutcomeHero({ stats }: { stats: DashboardStats }) {
           )}
         </div>
 
-        <dl className="mt-auto grid gap-px border-t border-emerald-100 bg-emerald-100/70 sm:grid-cols-2 lg:grid-cols-4">
+        <dl className="mt-auto grid gap-px border-t border-border bg-muted sm:grid-cols-2 lg:grid-cols-4">
           {outcomes.map((outcome) => (
             <OutcomeFigure
               key={outcome.id}
@@ -308,7 +308,7 @@ function OutcomeHero({ stats }: { stats: DashboardStats }) {
         </dl>
       </div>
 
-      <div className="flex items-center justify-center border-t border-emerald-100 p-5 sm:border-t-0 sm:border-s sm:px-10 sm:py-6 lg:px-14">
+      <div className="flex items-center justify-center border-t border-border p-5 sm:border-t-0 sm:border-s sm:px-10 sm:py-6 lg:px-14">
         <OutcomeDonut
           outcomes={outcomes}
           total={outcomeTotal}
@@ -340,16 +340,13 @@ function OutcomeDonut({
 }) {
   const radius = 100 / (2 * Math.PI)
   const visible = outcomes.filter((outcome) => outcome.value > 0)
-  // A hairline gap between slices; a single slice closes the ring.
-  const gap = visible.length > 1 ? 1 : 0
 
   const shares = visible.map((outcome) => (outcome.value / total) * 100)
-  const slices = visible.map((outcome, index) => ({
-    outcome,
-    share: shares[index],
-    start: shares.slice(0, index).reduce((sum, share) => sum + share, 0),
-    length: Math.max(shares[index] - gap, 0),
-  }))
+  const slices = visible.map((outcome, index) => {
+    const share = shares[index]
+    const start = shares.slice(0, index).reduce((sum, prior) => sum + prior, 0)
+    return { outcome, share, start }
+  })
 
   // The ring's radius as a share of the box, for placing the HTML labels
   // centred on each arc.
@@ -368,18 +365,18 @@ function OutcomeDonut({
           cy="21"
           r={radius}
           fill="none"
-          strokeWidth="3"
+          strokeWidth="8"
           className="stroke-slate-100"
         />
-        {slices.map(({ outcome, start, length }) => (
+        {slices.map(({ outcome, start, share }) => (
           <circle
             key={outcome.id}
             cx="21"
             cy="21"
             r={radius}
             fill="none"
-            strokeWidth="3"
-            strokeDasharray={`${length} ${100 - length}`}
+            strokeWidth="8"
+            strokeDasharray={`${share} ${100 - share}`}
             strokeDashoffset={-start}
             className={cn('transition-[stroke-dasharray]', outcome.stroke)}
           >
@@ -396,7 +393,7 @@ function OutcomeDonut({
           <span
             key={outcome.id}
             aria-hidden="true"
-            className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border border-slate-200 bg-white px-1.5 py-0.5 text-[11px] leading-none font-bold text-slate-900 tabular-nums shadow-sm"
+            className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border border-slate-200 bg-white px-1.5 py-0.5 text-[10px] leading-none font-bold text-slate-900 tabular-nums shadow-sm"
             style={{
               left: `${50 + labelRadius * Math.sin(angle)}%`,
               top: `${50 - labelRadius * Math.cos(angle)}%`,
@@ -441,7 +438,7 @@ function OutcomeFigure({
         <span
           aria-hidden="true"
           className={cn(
-            'h-2.5 w-2.5 shrink-0 rounded-full',
+            'h-4 w-4 shrink-0 rounded-full',
             isEmpty ? 'bg-slate-300' : outcome.dot
           )}
         />
@@ -474,7 +471,7 @@ function OutcomeFigure({
   return (
     <Link
       href={`${withLocale('/verifications', locale)}?status=${outcome.filter}`}
-      className="bg-card px-5 py-3.5 transition hover:bg-emerald-50/70 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:outline-none focus-visible:ring-inset sm:px-6 sm:py-4"
+      className="bg-card px-5 py-3.5 transition hover:bg-muted/70 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:outline-none focus-visible:ring-inset sm:px-6 sm:py-4"
     >
       {body}
     </Link>

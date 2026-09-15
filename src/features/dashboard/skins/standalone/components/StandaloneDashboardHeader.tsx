@@ -2,8 +2,7 @@
 
 import type { ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
-import { ChevronDown, Info } from 'lucide-react'
-import { Tooltip } from '@/shared/ui'
+import { ChevronDown } from 'lucide-react'
 import { useStandaloneShell } from '@/shared/layout/StandaloneShellContext'
 import type { DateRangeFilterOption } from '@/features/dashboard/domain/dashboard.types'
 import type { DashboardStatsDateRange } from '@/features/dashboard/model/dashboard.model'
@@ -39,16 +38,9 @@ export function StandaloneDashboardHeader({
           ) : (
             <>
               {heading}
-              <Tooltip content={t('standalone.description')}>
-                <Info aria-hidden="true" className="size-5 text-slate-400" />
-                <span className="sr-only">{t('standalone.description')}</span>
-              </Tooltip>
             </>
           )}
         </h1>
-        {!isIdentityLoading && (
-          <p className="text-sm text-slate-500">{t('standalone.subtitle')}</p>
-        )}
       </div>
 
       <div className="flex w-full flex-wrap items-start gap-3 md:w-auto md:items-end md:justify-end">

@@ -336,7 +336,7 @@ export function TemplatesStandaloneSkin({
                       className={cn(
                         'flex min-h-10 items-center justify-center gap-2 rounded-lg px-3 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-1 focus-visible:outline-none',
                         isSelected
-                          ? 'border border-emerald-300 bg-emerald-50 text-emerald-800 shadow-sm'
+                          ? 'bg-muted text-foreground shadow-sm'
                           : 'text-slate-600 hover:bg-white hover:text-slate-950'
                       )}
                     >
@@ -381,7 +381,7 @@ export function TemplatesStandaloneSkin({
                         className={cn(
                           'relative flex min-h-20 cursor-pointer gap-3 rounded-xl border p-3.5 transition-colors focus-within:ring-2 focus-within:ring-emerald-600 focus-within:ring-offset-2',
                           isSelected
-                            ? 'border-emerald-500 bg-emerald-50'
+                            ? 'border-transparent bg-muted'
                             : 'border-border hover:border-input hover:bg-muted bg-white',
                           (!props.canUpdateConfiguration || props.isSaving) &&
                             'cursor-not-allowed opacity-65'

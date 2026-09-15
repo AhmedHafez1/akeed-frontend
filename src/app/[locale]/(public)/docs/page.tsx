@@ -50,12 +50,12 @@ export default async function DocsIndexPage({
       contentClassName="mx-auto max-w-6xl"
     >
       <DocsLayout sidebar={desktopSidebar} mobileSidebar={mobileSidebar}>
-        <div className="mb-5 rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
+        <div className="mb-5 rounded-2xl border border-border bg-white p-4 shadow-sm">
           <DocsSearch locale={safeLocale} entries={searchEntries} />
         </div>
 
         {docs.length === 0 ? (
-          <div className="rounded-2xl border border-emerald-100 bg-white p-8 text-center text-slate-600 shadow-sm">
+          <div className="rounded-2xl border border-border bg-white p-8 text-center text-slate-600 shadow-sm">
             {t('empty')}
           </div>
         ) : (
@@ -64,9 +64,9 @@ export default async function DocsIndexPage({
               <Link
                 key={doc.slug}
                 href={doc.href}
-                className="group rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md"
+                className="group rounded-2xl border border-border bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-input hover:shadow-md"
               >
-                <h2 className="text-lg font-bold text-slate-800 transition-colors group-hover:text-emerald-700">
+                <h2 className="text-lg font-bold text-slate-800 transition-colors group-hover:text-foreground">
                   {doc.title}
                 </h2>
                 {doc.description ? (

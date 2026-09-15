@@ -214,7 +214,7 @@ function DelayPicker({
               className={cn(
                 '-ms-px min-h-10 border border-slate-200 px-4 text-sm first:ms-0 first:rounded-s-lg last:rounded-e-lg focus:z-10 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
                 isSelected
-                  ? 'z-10 border-emerald-500 bg-emerald-50 font-medium text-emerald-800'
+                  ? 'z-10 bg-muted font-medium text-foreground'
                   : 'bg-white text-slate-700 hover:bg-slate-50'
               )}
             >
@@ -230,7 +230,7 @@ function DelayPicker({
           className={cn(
             '-ms-px min-h-10 rounded-e-lg border border-slate-200 px-4 text-sm focus:z-10 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
             isCustomOpen
-              ? 'z-10 border-emerald-500 bg-emerald-50 font-medium text-emerald-800'
+              ? 'z-10 bg-muted font-medium text-foreground'
               : 'bg-white text-slate-700 hover:bg-slate-50'
           )}
         >

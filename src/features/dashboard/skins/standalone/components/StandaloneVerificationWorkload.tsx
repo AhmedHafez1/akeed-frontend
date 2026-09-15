@@ -54,7 +54,7 @@ export function StandaloneVerificationWorkload({
         const Icon = icons[group.id]
         const filter = group.filter
         const selected = statusFilter === group.filter
-        const className = `flex h-full items-start gap-3 rounded-xl border p-4 text-start shadow-sm ${selected ? 'border-emerald-500 bg-emerald-50/70 ring-1 ring-emerald-500/10' : 'border-slate-200 bg-white'}`
+        const className = `flex h-full items-start gap-3 rounded-xl border p-4 text-start shadow-sm ${selected ? 'border-transparent bg-muted' : 'border-slate-200 bg-white'}`
         const content = (
           <>
             <span
@@ -95,7 +95,7 @@ export function StandaloneVerificationWorkload({
             aria-pressed={selected}
             aria-label={t(group.id)}
             onClick={() => onStatusFilterChange(filter)}
-            className={`${className} transition-colors hover:bg-emerald-50/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600`}
+            className={`${className} transition-colors hover:bg-muted/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600`}
           >
             {content}
           </button>

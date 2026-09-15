@@ -7,7 +7,7 @@ export function ChatTypingIndicator() {
       animate={{ opacity: 1, y: 0 }}
       className="flex justify-start"
     >
-      <div className="rounded-2xl rounded-bl-md border border-emerald-100 bg-white px-4 py-3 shadow-sm">
+      <div className="rounded-2xl rounded-bl-md border border-border bg-white px-4 py-3 shadow-sm">
         <div className="flex gap-1">
           {[0, 0.2, 0.4].map((delay, i) => (
             <motion.div
