@@ -1,5 +1,10 @@
 import { fetchWithAuth } from '@/shared/lib/auth'
-import type { AdminFunnelResponse, AdminStoresResponse } from './admin.model'
+import type {
+  AdminFunnelResponse,
+  AdminStoreDetailResponse,
+  AdminStoresResponse,
+  AdminStoreVerificationsResponse,
+} from './admin.model'
 
 export class AdminApiError extends Error {
   constructor(
@@ -58,6 +63,21 @@ export function getAdminSession() {
 
 export function getAdminStores(query: string) {
   return adminRequest<AdminStoresResponse>(`/api/admin/stores?${query}`)
+}
+
+export function getAdminStore(integrationId: string) {
+  return adminRequest<AdminStoreDetailResponse>(
+    `/api/admin/stores/${encodeURIComponent(integrationId)}`
+  )
+}
+
+export function getAdminStoreVerifications(
+  integrationId: string,
+  query: string
+) {
+  return adminRequest<AdminStoreVerificationsResponse>(
+    `/api/admin/stores/${encodeURIComponent(integrationId)}/verifications?${query}`
+  )
 }
 
 export function getAdminFunnel(query: string) {

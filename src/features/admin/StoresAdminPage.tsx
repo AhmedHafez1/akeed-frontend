@@ -17,15 +17,26 @@ import {
   Store as StoreIcon,
   X,
 } from 'lucide-react'
-import { Badge, Button, Input, Skeleton } from '@/shared/ui'
+import Link from 'next/link'
+import { Button, Input, Skeleton } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
-import type {
-  AdminHealthStatus,
-  AdminStore,
-  AdminStoresResponse,
-} from './admin.model'
+import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import type { AdminStore, AdminStoresResponse } from './admin.model'
 import { AdminApiError, getAdminStores } from './adminApi'
 import { AdminErrorPanel } from './AdminErrorPanel'
+import {
+  BillingCell,
+  formatDate,
+  formatDateTime,
+  HealthBadge,
+  isInstalledPlatform,
+  LifecycleBadge,
+  PlanCell,
+  PlatformBadge,
+  platformLabel,
+  storeSubtitle,
+  titleCase,
+} from './AdminStoreUi'
 import {
   AdminEmptyState,
   AdminMetricCard,
@@ -49,6 +60,12 @@ const healthOptions = [
   { value: 'critical', label: 'Critical' },
 ]
 
+const platformOptions = [
+  { value: '', label: 'All platforms' },
+  { value: 'shopify', label: 'Shopify' },
+  { value: 'standalone', label: 'Standalone' },
+]
+
 const planOptions = [
   { value: '', label: 'All plans' },
   { value: 'starter', label: 'Starter' },
@@ -68,6 +85,7 @@ const sortOptions = [
 
 const filterLabels: Record<string, string> = {
   search: 'Search',
+  platform: 'Platform',
   lifecycle_status: 'Lifecycle',
   health_status: 'Health',
   plan: 'Plan',
@@ -92,28 +110,6 @@ const advancedKeys = [
 type AdvancedKey = (typeof advancedKeys)[number]
 type AdvancedFilters = Record<AdvancedKey, string>
 
-const formatDate = (value: string | null) =>
-  value
-    ? new Intl.DateTimeFormat('en', { dateStyle: 'medium' }).format(
-        new Date(value)
-      )
-    : 'Unknown'
-
-const formatDateTime = (value: string | null) =>
-  value
-    ? new Intl.DateTimeFormat('en', {
-        dateStyle: 'medium',
-        timeStyle: 'short',
-      }).format(new Date(value))
-    : 'Unknown'
-
-const titleCase = (value: string | null) =>
-  value
-    ? value
-        .replaceAll('_', ' ')
-        .replace(/\b\w/g, (letter) => letter.toUpperCase())
-    : 'Unknown'
-
 function advancedFromParams(params: URLSearchParams): AdvancedFilters {
   return {
     onboarding_status: params.get('onboarding_status') ?? '',
@@ -123,52 +119,6 @@ function advancedFromParams(params: URLSearchParams): AdvancedFilters {
     last_activity_from: params.get('last_activity_from') ?? '',
     last_activity_to: params.get('last_activity_to') ?? '',
   }
-}
-
-function HealthBadge({ status }: { status: AdminHealthStatus }) {
-  return (
-    <Badge
-      variant="outline"
-      className={cn(
-        'gap-1.5 whitespace-nowrap',
-        status === 'healthy' &&
-          'border-emerald-200 bg-emerald-50 text-emerald-700',
-        status === 'attention_required' &&
-          'border-amber-200 bg-amber-50 text-amber-800',
-        status === 'critical' && 'border-red-200 bg-red-50 text-red-700'
-      )}
-    >
-      <span
-        className={cn(
-          'size-1.5 rounded-full',
-          status === 'healthy' && 'bg-emerald-500',
-          status === 'attention_required' && 'bg-amber-500',
-          status === 'critical' && 'bg-red-500'
-        )}
-        aria-hidden="true"
-      />
-      {titleCase(status)}
-    </Badge>
-  )
-}
-
-function LifecycleBadge({ status }: { status: string }) {
-  return (
-    <Badge
-      variant="outline"
-      className={cn(
-        'border-slate-200 bg-slate-50 whitespace-nowrap text-slate-700',
-        status === 'active' &&
-          'border-emerald-200 bg-emerald-50 text-emerald-700',
-        status === 'onboarding' && 'border-blue-200 bg-blue-50 text-blue-700',
-        status === 'inactive' && 'border-amber-200 bg-amber-50 text-amber-800',
-        status === 'uninstalled' &&
-          'border-slate-200 bg-slate-100 text-slate-600'
-      )}
-    >
-      {titleCase(status)}
-    </Badge>
-  )
 }
 
 function StoresSkeleton() {
@@ -446,7 +396,7 @@ export function StoresAdminPage() {
           </section>
 
           <section className="rounded-2xl border border-slate-200 bg-white shadow-xs">
-            <div className="grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-[minmax(260px,1.7fr)_repeat(3,minmax(150px,1fr))_minmax(160px,1fr)_auto_auto]">
+            <div className="grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-[minmax(240px,1.6fr)_repeat(4,minmax(130px,1fr))_minmax(150px,1fr)_auto_auto]">
               <label className="relative block">
                 <span className="sr-only">Search stores</span>
                 <Search className="absolute top-3 left-3 size-4 text-slate-400" />
@@ -457,6 +407,13 @@ export function StoresAdminPage() {
                   onChange={(event) => setSearch(event.target.value)}
                 />
               </label>
+              <AdminSelect
+                label="Platform"
+                hideLabel
+                value={searchParams.get('platform') ?? ''}
+                onChange={(event) => setFilter('platform', event.target.value)}
+                options={platformOptions}
+              />
               <AdminSelect
                 label="Lifecycle"
                 hideLabel
@@ -623,7 +580,9 @@ export function StoresAdminPage() {
                     aria-label={`Remove ${filter.label} filter`}
                   >
                     <span className="font-medium">{filter.label}:</span>
-                    {titleCase(filter.value)}
+                    {filter.key === 'platform'
+                      ? platformLabel(filter.value)
+                      : titleCase(filter.value)}
                     <X className="size-3" aria-hidden="true" />
                   </button>
                 ))}
@@ -658,7 +617,7 @@ export function StoresAdminPage() {
               description={
                 activeFilters.length > 0
                   ? 'Adjust or clear the filters to broaden the results.'
-                  : 'Installed Shopify stores will appear here.'
+                  : 'Stores will appear here once they connect.'
               }
               action={
                 activeFilters.length > 0 ? (
@@ -752,7 +711,12 @@ function StoresResults({
   direction,
   onSort,
 }: StoresResultsProps) {
+  const { locale } = useLocaleInfo()
+  const searchParams = useSearchParams()
+  const listQuery = searchParams.toString()
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
+  const storeHref = (store: AdminStore) =>
+    `/${locale}/admin/stores/${store.integration_id}${listQuery ? `?from=${encodeURIComponent(listQuery)}` : ''}`
 
   const toggle = (id: string) => {
     setExpanded((current) => {
@@ -824,12 +788,18 @@ function StoresResults({
                         isExpanded && 'bg-slate-50/70'
                       )}
                     >
-                      <td className="max-w-64 px-4 py-4">
-                        <p className="truncate font-semibold text-slate-900">
-                          {store.store_name}
-                        </p>
+                      <td className="max-w-72 px-4 py-4">
+                        <div className="flex min-w-0 items-center gap-2">
+                          <Link
+                            href={storeHref(store)}
+                            className="truncate rounded font-semibold text-slate-900 hover:text-emerald-700 hover:underline focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none"
+                          >
+                            {store.store_name}
+                          </Link>
+                          <PlatformBadge platform={store.platform} />
+                        </div>
                         <p className="mt-1 truncate text-xs text-slate-500">
-                          {store.shop_domain}
+                          {storeSubtitle(store)}
                         </p>
                       </td>
                       <td className="px-4 py-4">
@@ -839,15 +809,10 @@ function StoresResults({
                         {formatDate(store.installed_at)}
                       </td>
                       <td className="px-4 py-4">
-                        <p className="font-medium text-slate-800">
-                          {titleCase(store.plan)}
-                        </p>
-                        <p className="mt-1 text-xs text-slate-500">
-                          {titleCase(store.subscription_status)}
-                        </p>
+                        <PlanCell store={store} />
                       </td>
                       <td className="min-w-40 px-4 py-4">
-                        <UsageMeter store={store} />
+                        <BillingCell store={store} />
                       </td>
                       <td className="px-4 py-4 text-xs whitespace-nowrap text-slate-600">
                         {formatDateTime(store.last_activity_at)}
@@ -882,7 +847,7 @@ function StoresResults({
                     {isExpanded && (
                       <tr id={detailId}>
                         <td colSpan={8} className="bg-slate-50 px-5 py-5">
-                          <StoreDetails store={store} />
+                          <StoreDetails store={store} href={storeHref(store)} />
                         </td>
                       </tr>
                     )}
@@ -906,11 +871,19 @@ function StoresResults({
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <h3 className="truncate font-semibold text-slate-950">
-                    {store.store_name}
+                    <Link
+                      href={storeHref(store)}
+                      className="rounded hover:text-emerald-700 hover:underline focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none"
+                    >
+                      {store.store_name}
+                    </Link>
                   </h3>
-                  <p className="mt-1 truncate text-xs text-slate-500">
-                    {store.shop_domain}
-                  </p>
+                  <div className="mt-1 flex min-w-0 items-center gap-2">
+                    <PlatformBadge platform={store.platform} />
+                    <p className="truncate text-xs text-slate-500">
+                      {storeSubtitle(store)}
+                    </p>
+                  </div>
                 </div>
                 <HealthBadge status={store.health.status} />
               </div>
@@ -923,16 +896,22 @@ function StoresResults({
                 </div>
                 <div>
                   <p className="text-slate-500">Plan</p>
-                  <p className="mt-1.5 font-medium text-slate-800">
-                    {titleCase(store.plan)}
-                  </p>
+                  <div className="mt-1.5">
+                    <PlanCell store={store} />
+                  </div>
                 </div>
                 <div className="col-span-2">
-                  <p className="mb-1.5 text-slate-500">Usage</p>
-                  <UsageMeter store={store} />
+                  <p className="mb-1.5 text-slate-500">
+                    {store.billing.model === 'credits' ? 'Credits' : 'Usage'}
+                  </p>
+                  <BillingCell store={store} />
                 </div>
                 <div>
-                  <p className="text-slate-500">Installed</p>
+                  <p className="text-slate-500">
+                    {isInstalledPlatform(store.platform)
+                      ? 'Installed'
+                      : 'Created'}
+                  </p>
                   <p className="mt-1 font-medium text-slate-800">
                     {formatDate(store.installed_at)}
                   </p>
@@ -966,7 +945,7 @@ function StoresResults({
                   id={detailId}
                   className="mt-4 border-t border-slate-100 pt-4"
                 >
-                  <StoreDetails store={store} />
+                  <StoreDetails store={store} href={storeHref(store)} />
                 </div>
               )}
             </article>
@@ -1018,46 +997,15 @@ function SortableHeader({
   )
 }
 
-function UsageMeter({ store }: { store: AdminStore }) {
-  const width = Math.min(Math.max(store.usage.percent, 0), 100)
-  return (
-    <div>
-      <div className="flex items-center justify-between gap-2 text-xs">
-        <span className="font-medium text-slate-800 tabular-nums">
-          {store.usage.used.toLocaleString('en')} /{' '}
-          {store.usage.limit
-            ? store.usage.limit.toLocaleString('en')
-            : 'Unknown'}
-        </span>
-        {store.usage.limit > 0 && (
-          <span className="text-slate-500 tabular-nums">
-            {store.usage.percent}%
-          </span>
-        )}
-      </div>
-      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100">
-        <div
-          className={cn(
-            'h-full rounded-full',
-            store.usage.percent >= 100
-              ? 'bg-red-500'
-              : store.usage.percent >= 80
-                ? 'bg-amber-500'
-                : 'bg-emerald-500'
-          )}
-          style={{ width: `${width}%` }}
-        />
-      </div>
-    </div>
-  )
-}
-
-function StoreDetails({ store }: { store: AdminStore }) {
+function StoreDetails({ store, href }: { store: AdminStore; href: string }) {
   const details = [
+    ['Platform', platformLabel(store.platform)],
     ['Country', store.country_code ?? 'Unknown'],
     ['Timezone', store.timezone ?? 'Unknown'],
     ['Onboarding', titleCase(store.onboarding_status)],
-    ['Subscription', titleCase(store.subscription_status)],
+    store.billing.model === 'credits'
+      ? ['Credit account', titleCase(store.billing.account_status)]
+      : ['Subscription', titleCase(store.billing.subscription_status)],
     ['Automation', store.auto_confirmation_enabled ? 'Enabled' : 'Disabled'],
     ['Test message', titleCase(store.test_message_status)],
     ['First eligible COD', formatDateTime(store.first_eligible_real_order_at)],
@@ -1077,15 +1025,25 @@ function StoreDetails({ store }: { store: AdminStore }) {
   ]
 
   return (
-    <dl className="grid gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-5">
-      {details.map(([label, value]) => (
-        <div key={label} className="min-w-0">
-          <dt className="text-xs font-medium text-slate-500">{label}</dt>
-          <dd className="mt-1 text-sm font-medium break-words text-slate-800">
-            {value}
-          </dd>
-        </div>
-      ))}
-    </dl>
+    <div className="space-y-4">
+      <dl className="grid gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
+        {details.map(([label, value]) => (
+          <div key={label} className="min-w-0">
+            <dt className="text-xs font-medium text-slate-500">{label}</dt>
+            <dd className="mt-1 text-sm font-medium break-words text-slate-800">
+              {value}
+            </dd>
+          </div>
+        ))}
+      </dl>
+      <div className="flex justify-end">
+        <Button asChild variant="outline" size="sm">
+          <Link href={href}>
+            View store details
+            <ChevronRight className="rtl:rotate-180" aria-hidden="true" />
+          </Link>
+        </Button>
+      </div>
+    </div>
   )
 }
