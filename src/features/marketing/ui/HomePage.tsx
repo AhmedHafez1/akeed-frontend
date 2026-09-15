@@ -17,7 +17,6 @@ import Pricing from '@/features/marketing/ui/sections/Pricing'
 import WhoItsFor from '@/features/marketing/ui/sections/WhoItsFor'
 import Trust from '@/features/marketing/ui/sections/Trust'
 import FAQ from '@/features/marketing/ui/sections/FAQ'
-import FinalCta from '@/features/marketing/ui/sections/FinalCta'
 
 interface HomePageProps {
   /** Resolved from `?path=` on the server so campaign links land on the right flow. */
@@ -55,11 +54,6 @@ export function HomePage({
       <section className={`w-full ${landingSectionChromeAltClass}`}>
         <Reveal>
           <FAQ />
-        </Reveal>
-      </section>
-      <section className={`w-full ${landingSectionChromeClass}`}>
-        <Reveal>
-          <FinalCta />
         </Reveal>
       </section>
       <StickyMobileCta />

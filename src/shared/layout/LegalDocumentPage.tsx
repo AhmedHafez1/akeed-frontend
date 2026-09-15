@@ -13,7 +13,6 @@ interface LegalDocumentPageProps {
   eyebrow: string
   title: string
   lastUpdated: string
-  companyLine: string
   intro: string
   sections: LegalSection[]
   locale: SupportedLocale
@@ -27,7 +26,6 @@ export function LegalDocumentPage({
   eyebrow,
   title,
   lastUpdated,
-  companyLine,
   intro,
   sections,
   locale,
@@ -45,12 +43,6 @@ export function LegalDocumentPage({
       contentClassName="mx-auto max-w-3xl"
     >
       <article className="overflow-hidden rounded-2xl border border-border bg-white shadow-sm transition-all duration-300 hover:border-input hover:shadow-md">
-        <div className="border-b border-border bg-muted/50 px-6 py-5 text-center md:px-8">
-          <p className="text-sm leading-relaxed font-medium text-slate-600">
-            {companyLine}
-          </p>
-        </div>
-
         <div className="divide-y divide-slate-100 px-6 text-start md:px-8">
           {sections.map((section) => (
             <section key={section.title} className="py-7 md:py-8">

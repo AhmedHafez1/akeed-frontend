@@ -562,6 +562,66 @@
   [dir='rtl'] .landing-hero-surface::before {
     scale: -1 1;
   }
+
+  /*
+   * Pricing slider on the dark ink panel. A native range input keeps keyboard,
+   * touch and assistive-technology behaviour for free; only the paint changes.
+   * The filled portion is a gradient stop driven by `--fill` (0–100%), set
+   * inline. The slider is always rendered `dir="ltr"` — a quantity scale reads
+   * low-to-high left-to-right in Arabic UIs too, matching the digits beside it.
+   */
+  .akeed-range {
+    --fill: 0%;
+    --range-accent: oklch(69.6% 0.17 162.48); /* emerald-500 — legible on ink */
+    appearance: none;
+    width: 100%;
+    height: 0.5rem;
+    border-radius: 9999px;
+    background: linear-gradient(
+      to right,
+      var(--range-accent) 0 var(--fill),
+      oklch(100% 0 0 / 0.12) var(--fill) 100%
+    );
+    cursor: pointer;
+    outline: none;
+  }
+
+  .akeed-range::-webkit-slider-thumb {
+    appearance: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 9999px;
+    background: oklch(100% 0 0);
+    border: 5px solid var(--range-accent);
+    box-shadow: 0 0 0 6px oklch(69.6% 0.17 162.48 / 0.18);
+    transition: box-shadow 200ms ease-out, transform 200ms ease-out;
+  }
+
+  .akeed-range::-moz-range-thumb {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 9999px;
+    background: oklch(100% 0 0);
+    border: 5px solid var(--range-accent);
+    box-shadow: 0 0 0 6px oklch(69.6% 0.17 162.48 / 0.18);
+    transition: box-shadow 200ms ease-out, transform 200ms ease-out;
+  }
+
+  .akeed-range::-moz-range-track {
+    background: transparent;
+  }
+
+  .akeed-range:hover::-webkit-slider-thumb,
+  .akeed-range:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 0 0 9px oklch(69.6% 0.17 162.48 / 0.28);
+    transform: scale(1.06);
+  }
+
+  .akeed-range:hover::-moz-range-thumb,
+  .akeed-range:focus-visible::-moz-range-thumb {
+    box-shadow: 0 0 0 9px oklch(69.6% 0.17 162.48 / 0.28);
+    transform: scale(1.06);
+  }
 }
 
 /* Custom scrollbar */

@@ -41,7 +41,6 @@ export default async function TermsPage({
       eyebrow={t('termsEyebrow')}
       title={t('termsTitle')}
       lastUpdated={t('termsLastUpdated')}
-      companyLine={t('legalCompanyLine')}
       intro={t('termsIntro')}
       sections={sections.map((section) => ({
         title: t(`termsSection${section}Title`),

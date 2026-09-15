@@ -1,14 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import {
-  AtSign,
-  Building2,
-  FileCheck,
-  Globe,
-  MapPin,
-  Phone,
-} from 'lucide-react'
+import { AtSign, Globe, Phone } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
@@ -17,9 +10,6 @@ import {
   youtubeProfileUrl,
   instagramProfileUrl,
   supportEmail,
-  legalName,
-  commercialRegistrationNumber,
-  registeredAddress,
   businessPhone,
 } from '@/shared/lib/seo'
 import {
@@ -47,42 +37,6 @@ export function AboutPageClient() {
             {t('missionBody')}
           </p>
         </section>
-
-        <div className="grid gap-5 md:grid-cols-2">
-          <PublicInfoCard
-            icon={<Building2 className="h-5 w-5" />}
-            title={t('legalTitle')}
-            description={t('legalDescription')}
-          >
-            <div className="space-y-2 text-sm text-slate-600">
-              <p
-                className="font-medium text-slate-800"
-                style={{ unicodeBidi: 'plaintext' }}
-              >
-                {legalName}
-              </p>
-              <div className="flex items-start gap-2">
-                <FileCheck className="text-primary mt-0.5 h-4 w-4 shrink-0" />
-                <span>
-                  {t('registrationLabel')}: {commercialRegistrationNumber}
-                </span>
-              </div>
-            </div>
-          </PublicInfoCard>
-
-          <PublicInfoCard
-            icon={<MapPin className="h-5 w-5" />}
-            title={t('addressTitle')}
-            description={t('addressDescription')}
-          >
-            <p
-              className="text-sm leading-relaxed whitespace-pre-line text-slate-600"
-              style={{ unicodeBidi: 'plaintext' }}
-            >
-              {registeredAddress}
-            </p>
-          </PublicInfoCard>
-        </div>
 
         <div className="grid gap-5 md:grid-cols-2">
           <PublicInfoCard
