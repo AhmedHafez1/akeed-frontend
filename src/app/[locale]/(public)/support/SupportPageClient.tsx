@@ -71,7 +71,7 @@ export function SupportPageClient() {
             href={whatsappHref}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50 px-5 text-sm font-bold text-emerald-700 transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:bg-emerald-100 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-border bg-muted px-5 text-sm font-bold text-foreground transition-all hover:-translate-y-0.5 hover:border-input hover:bg-accent hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             {t('whatsappCta')}
             <ArrowUpRight className="h-4 w-4" />
@@ -80,7 +80,7 @@ export function SupportPageClient() {
       </div>
 
       <div className="mt-5 grid gap-5 md:grid-cols-[1.1fr_0.9fr]">
-        <section className="rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm transition-all duration-300 hover:border-emerald-200 hover:shadow-md md:p-7">
+        <section className="rounded-2xl border border-border bg-white p-6 shadow-sm transition-all duration-300 hover:border-input hover:shadow-md md:p-7">
           <h2 className="text-lg font-bold text-slate-800">
             {t('detailsTitle')}
           </h2>
@@ -110,7 +110,7 @@ export function SupportPageClient() {
       <div className="mt-10 flex justify-center">
         <Link
           href={withLocale('/', locale)}
-          className="hover:text-primary-hover inline-flex h-11 items-center justify-center rounded-xl border border-emerald-100 bg-white px-6 text-sm font-bold text-slate-700 transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="hover:text-primary-hover inline-flex h-11 items-center justify-center rounded-xl border border-border bg-white px-6 text-sm font-bold text-slate-700 transition-all hover:-translate-y-0.5 hover:border-input hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           {t('backHome')}
         </Link>

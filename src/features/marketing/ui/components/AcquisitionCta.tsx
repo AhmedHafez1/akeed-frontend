@@ -11,6 +11,7 @@ export type AcquisitionCtaVariant =
   | 'compact'
   | 'compactSecondary'
   | 'ghost'
+  | 'link'
 
 const baseClass =
   'group focus-visible:ring-ring focus-visible:ring-offset-background inline-flex items-center justify-center transition-[background-color,box-shadow,transform,color] duration-200 ease-out focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none'
@@ -26,6 +27,7 @@ const variantClasses: Record<AcquisitionCtaVariant, string> = {
     'rounded-control bg-card text-foreground shadow-card ring-border hover:bg-primary-subtle/70 hover:text-primary-subtle-foreground hover:ring-primary-border gap-2 px-5 py-2.5 text-sm font-bold ring-1',
   ghost:
     'rounded-control text-slate-100 ring-1 ring-white/10 bg-white/8 hover:bg-white/12 hover:text-white hover:ring-primary-border gap-2 px-5 py-2.5 text-sm font-bold',
+  link: 'rounded-sm text-primary hover:text-primary-hover gap-2 text-base font-semibold underline-offset-4 hover:underline',
 }
 
 interface AcquisitionCtaProps {

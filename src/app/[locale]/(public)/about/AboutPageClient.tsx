@@ -1,14 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import {
-  AtSign,
-  Building2,
-  FileCheck,
-  Globe,
-  MapPin,
-  Phone,
-} from 'lucide-react'
+import { AtSign, Globe, Phone } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
@@ -17,9 +10,6 @@ import {
   youtubeProfileUrl,
   instagramProfileUrl,
   supportEmail,
-  legalName,
-  commercialRegistrationNumber,
-  registeredAddress,
   businessPhone,
 } from '@/shared/lib/seo'
 import {
@@ -39,7 +29,7 @@ export function AboutPageClient() {
       contentClassName="mx-auto max-w-4xl"
     >
       <div className="space-y-8">
-        <section className="rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm transition-all duration-300 hover:border-emerald-200 hover:shadow-md md:p-8">
+        <section className="rounded-2xl border border-border bg-white p-6 shadow-sm transition-all duration-300 hover:border-input hover:shadow-md md:p-8">
           <h2 className="text-xl font-bold text-slate-800">
             {t('missionTitle')}
           </h2>
@@ -47,42 +37,6 @@ export function AboutPageClient() {
             {t('missionBody')}
           </p>
         </section>
-
-        <div className="grid gap-5 md:grid-cols-2">
-          <PublicInfoCard
-            icon={<Building2 className="h-5 w-5" />}
-            title={t('legalTitle')}
-            description={t('legalDescription')}
-          >
-            <div className="space-y-2 text-sm text-slate-600">
-              <p
-                className="font-medium text-slate-800"
-                style={{ unicodeBidi: 'plaintext' }}
-              >
-                {legalName}
-              </p>
-              <div className="flex items-start gap-2">
-                <FileCheck className="text-primary mt-0.5 h-4 w-4 shrink-0" />
-                <span>
-                  {t('registrationLabel')}: {commercialRegistrationNumber}
-                </span>
-              </div>
-            </div>
-          </PublicInfoCard>
-
-          <PublicInfoCard
-            icon={<MapPin className="h-5 w-5" />}
-            title={t('addressTitle')}
-            description={t('addressDescription')}
-          >
-            <p
-              className="text-sm leading-relaxed whitespace-pre-line text-slate-600"
-              style={{ unicodeBidi: 'plaintext' }}
-            >
-              {registeredAddress}
-            </p>
-          </PublicInfoCard>
-        </div>
 
         <div className="grid gap-5 md:grid-cols-2">
           <PublicInfoCard
@@ -124,7 +78,7 @@ export function AboutPageClient() {
               href={facebookProfileUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50 px-4 text-sm font-bold text-emerald-700 transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:bg-emerald-100 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-border bg-muted px-4 text-sm font-bold text-foreground transition-all hover:-translate-y-0.5 hover:border-input hover:bg-accent hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               Facebook
             </a>
@@ -132,7 +86,7 @@ export function AboutPageClient() {
               href={youtubeProfileUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50 px-4 text-sm font-bold text-emerald-700 transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:bg-emerald-100 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-border bg-muted px-4 text-sm font-bold text-foreground transition-all hover:-translate-y-0.5 hover:border-input hover:bg-accent hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               YouTube
             </a>
@@ -140,7 +94,7 @@ export function AboutPageClient() {
               href={instagramProfileUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50 px-4 text-sm font-bold text-emerald-700 transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:bg-emerald-100 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-border bg-muted px-4 text-sm font-bold text-foreground transition-all hover:-translate-y-0.5 hover:border-input hover:bg-accent hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               Instagram
             </a>
@@ -151,7 +105,7 @@ export function AboutPageClient() {
       <div className="mt-10 flex justify-center">
         <Link
           href={withLocale('/', locale)}
-          className="hover:text-primary-hover inline-flex h-11 items-center justify-center rounded-xl border border-emerald-100 bg-white px-6 text-sm font-bold text-slate-700 transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="hover:text-primary-hover inline-flex h-11 items-center justify-center rounded-xl border border-border bg-white px-6 text-sm font-bold text-slate-700 transition-all hover:-translate-y-0.5 hover:border-input hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           {t('backHome')}
         </Link>

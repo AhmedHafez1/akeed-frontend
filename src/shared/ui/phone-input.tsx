@@ -44,7 +44,6 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
           dir="ltr"
           className={cn(
             'transition-colors',
-            isValid === true && 'border-green-500 focus-visible:ring-green-500',
             isValid === false && 'border-red-500 focus-visible:ring-red-500',
             className
           )}

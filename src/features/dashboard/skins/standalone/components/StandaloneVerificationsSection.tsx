@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import { EmptyState } from '@/shared/ui'
+import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll'
 import type {
   VerificationItem,
   VerificationStatusFilter,
@@ -18,6 +19,7 @@ interface StandaloneVerificationsSectionProps {
   isVerificationsLoading: boolean
   hasMoreVerifications: boolean
   isLoadingMoreVerifications: boolean
+  hasLoadMoreError: boolean
   statusFilter: VerificationStatusFilter
   statusFilters: ReadonlyArray<StatusFilterOption>
   actingVerificationId: string | null
@@ -43,6 +45,7 @@ export function StandaloneVerificationsSection({
   isVerificationsLoading,
   hasMoreVerifications,
   isLoadingMoreVerifications,
+  hasLoadMoreError,
   statusFilter,
   statusFilters,
   actingVerificationId,
@@ -61,6 +64,12 @@ export function StandaloneVerificationsSection({
   onSendTestVerification,
 }: StandaloneVerificationsSectionProps) {
   const t = useTranslations('dashboard')
+  const { rootRef, sentinelRef } = useInfiniteScroll({
+    hasMore: hasMoreVerifications,
+    isLoading: isLoadingMoreVerifications,
+    hasError: hasLoadMoreError,
+    onLoadMore: onLoadMoreVerifications,
+  })
   const workloadFilter =
     statusFilter === 'in_progress'
       ? {
@@ -85,9 +94,9 @@ export function StandaloneVerificationsSection({
   return (
     <section
       aria-label={t('verifications.subtitle', { count: totalCount })}
-      className="rounded-2xl border border-slate-200 bg-white shadow-sm"
+      className="rounded-card border-border bg-card shadow-card border"
     >
-      <div className="border-b border-slate-200 px-4 py-5 sm:px-5">
+      <div className="border-border border-b px-4 py-5 sm:px-5">
         <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="text-sm font-semibold text-slate-900">
@@ -116,7 +125,7 @@ export function StandaloneVerificationsSection({
                 onClick={() => onStatusFilterChange(filter.id)}
                 className={`min-h-9 rounded-lg border px-3 py-2 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 ${
                   statusFilter === filter.id
-                    ? 'border-emerald-500 bg-emerald-50 text-emerald-800'
+                    ? 'bg-muted text-foreground border-transparent'
                     : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
                 }`}
               >
@@ -143,33 +152,63 @@ export function StandaloneVerificationsSection({
           <StandaloneVerificationsSkeleton />
         ) : verifications.length ? (
           <div className="space-y-4">
-            <VerificationsTableStandalone
-              verifications={verifications}
-              reportingTimezone={reportingTimezone}
-              actingVerificationId={actingVerificationId}
-              confirmingCancelVerificationId={confirmingCancelVerificationId}
-              actionErrors={actionErrors}
-              canCancelOrders={canCancelOrders}
-              canRetryVerifications={canRetryVerifications}
-              onRequestCancelOrder={onRequestCancelOrder}
-              onDismissCancelOrder={onDismissCancelOrder}
-              onConfirmCancelOrder={onConfirmCancelOrder}
-              onRetryVerification={onRetryVerification}
-            />
-            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 px-4 py-4 sm:px-5">
-              <p role="status" className="text-xs text-slate-500">
-                {t('verifications.loaded', { count: verifications.length })}
+            {/*
+             * The rows scroll, not the page: the list grows as the merchant
+             * reaches the end of it, and the filters above and the count below
+             * have to stay put while that happens. `tabIndex` is what makes the
+             * region scrollable by keyboard as well as by pointer.
+             */}
+            <div
+              ref={rootRef}
+              role="region"
+              aria-label={t('verifications.title')}
+              tabIndex={0}
+              className="max-h-[60vh] overflow-y-auto overscroll-contain focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+            >
+              <VerificationsTableStandalone
+                verifications={verifications}
+                reportingTimezone={reportingTimezone}
+                actingVerificationId={actingVerificationId}
+                confirmingCancelVerificationId={confirmingCancelVerificationId}
+                actionErrors={actionErrors}
+                canCancelOrders={canCancelOrders}
+                canRetryVerifications={canRetryVerifications}
+                onRequestCancelOrder={onRequestCancelOrder}
+                onDismissCancelOrder={onDismissCancelOrder}
+                onConfirmCancelOrder={onConfirmCancelOrder}
+                onRetryVerification={onRetryVerification}
+              />
+              {/* Crossing into view is what asks for the next page. */}
+              <div ref={sentinelRef} aria-hidden="true" className="h-px" />
+              {isLoadingMoreVerifications && (
+                <p className="px-4 py-3 text-xs text-slate-500">
+                  {t('verifications.loadingMore')}
+                </p>
+              )}
+            </div>
+            <div className="border-border flex flex-wrap items-center justify-between gap-3 border-t px-4 py-4 sm:px-5">
+              <p
+                role="status"
+                aria-live="polite"
+                className="text-xs text-slate-500"
+              >
+                {t('verifications.showing', {
+                  loaded: verifications.length,
+                  total: totalCount,
+                })}
               </p>
-              {hasMoreVerifications && (
+              {/*
+               * The only button left: scrolling loads the next page on its own,
+               * but a failed page disarms the sentinel, and without this the
+               * list would be stranded at whatever it had already loaded.
+               */}
+              {hasLoadMoreError && (
                 <button
                   type="button"
-                  disabled={isLoadingMoreVerifications}
                   onClick={() => void onLoadMoreVerifications()}
-                  className="rounded-lg border border-slate-200 px-5 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-60"
+                  className="rounded-lg border border-slate-200 px-5 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
                 >
-                  {isLoadingMoreVerifications
-                    ? t('verifications.loadingMore')
-                    : t('verifications.loadMore')}
+                  {t('verifications.loadMoreRetry')}
                 </button>
               )}
             </div>

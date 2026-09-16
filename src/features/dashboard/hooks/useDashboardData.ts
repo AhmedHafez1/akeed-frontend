@@ -100,6 +100,14 @@ export function useDashboardData(
     isVerificationsLoading: isPending,
     hasMoreVerifications: hasNextPage,
     isLoadingMoreVerifications: isFetchingNextPage,
+    /**
+     * Whether the last page fetch failed.
+     *
+     * Reported separately from `error` because the list loads on scroll: the
+     * sentinel has to stop arming itself on a failure, and the merchant needs
+     * something to press to get going again.
+     */
+    hasLoadMoreError: isFetchNextPageError,
     onLoadMoreVerifications,
     refetch,
     error: activeError,

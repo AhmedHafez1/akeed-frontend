@@ -21,7 +21,7 @@ export function DocsSidebar({
   const t = useTranslations('docs')
 
   return (
-    <aside className="rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
+    <aside className="rounded-2xl border border-border bg-white p-4 shadow-sm">
       {showTitle ? (
         <h2 className="px-2 text-sm font-bold tracking-wide text-slate-700 uppercase">
           {t('sidebarTitle')}

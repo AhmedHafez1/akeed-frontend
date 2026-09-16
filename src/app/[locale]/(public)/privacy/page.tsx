@@ -41,7 +41,6 @@ export default async function PrivacyPage({
       eyebrow={t('privacyEyebrow')}
       title={t('privacyTitle')}
       lastUpdated={t('privacyLastUpdated')}
-      companyLine={t('legalCompanyLine')}
       intro={t('privacyIntro')}
       sections={sections.map((section) => ({
         title: t(`privacySection${section}Title`),

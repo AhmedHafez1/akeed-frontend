@@ -12,14 +12,11 @@ import {
 } from '@/features/marketing/ui/components/LandingPrimitives'
 import { Reveal } from '@/features/marketing/ui/components/Reveal'
 import Hero from '@/features/marketing/ui/sections/Hero'
-import Problem from '@/features/marketing/ui/sections/Problem'
 import HowItWorks from '@/features/marketing/ui/sections/HowItWorks'
-import Solution from '@/features/marketing/ui/sections/Solution'
 import Pricing from '@/features/marketing/ui/sections/Pricing'
 import WhoItsFor from '@/features/marketing/ui/sections/WhoItsFor'
 import Trust from '@/features/marketing/ui/sections/Trust'
 import FAQ from '@/features/marketing/ui/sections/FAQ'
-import FinalCta from '@/features/marketing/ui/sections/FinalCta'
 
 interface HomePageProps {
   /** Resolved from `?path=` on the server so campaign links land on the right flow. */
@@ -36,42 +33,27 @@ export function HomePage({
       </section>
       <section className={`w-full ${landingSectionChromeAltClass}`}>
         <Reveal>
-          <Problem />
+          <Trust />
         </Reveal>
       </section>
       <section className={`w-full ${landingSectionChromeClass}`}>
-        <Reveal>
-          <Solution />
-        </Reveal>
-      </section>
-      <section className={`w-full ${landingSectionChromeAltClass}`}>
         <Reveal>
           <HowItWorks initialPath={initialPath} />
         </Reveal>
       </section>
-      <section className={`w-full ${landingSectionChromeClass}`}>
+      <section className={`w-full ${landingSectionChromeAltClass}`}>
         <Reveal>
           <Pricing />
         </Reveal>
       </section>
-      <section className={`w-full ${landingSectionChromeAltClass}`}>
-        <Reveal>
-          <WhoItsFor />
-        </Reveal>
-      </section>
       <section className={`w-full ${landingSectionChromeClass}`}>
         <Reveal>
-          <Trust />
+          <WhoItsFor />
         </Reveal>
       </section>
       <section className={`w-full ${landingSectionChromeAltClass}`}>
         <Reveal>
           <FAQ />
-        </Reveal>
-      </section>
-      <section className={`w-full ${landingSectionChromeClass}`}>
-        <Reveal>
-          <FinalCta />
         </Reveal>
       </section>
       <StickyMobileCta />

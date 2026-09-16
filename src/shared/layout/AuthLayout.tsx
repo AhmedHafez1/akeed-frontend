@@ -15,26 +15,27 @@ export function AuthLayout({ children }: AuthLayoutProps) {
   const locale = getLocaleFromPathname(pathname)
 
   return (
-    <div className="landing-hero-surface flex min-h-screen flex-col">
+    <div className="auth-hero-surface flex min-h-screen flex-col">
       {/* Minimal header with logo */}
-      <header className="flex h-16 shrink-0 items-center px-6">
+      <header className="flex h-14 shrink-0 items-center px-6">
         <Link
           href={withLocale('/', locale)}
           className="flex items-center transition-opacity hover:opacity-80"
         >
           <Image
-            src="/images/akeed-web-logo-horizontal.png"
+            src="/images/akeed-web-logo-horizontal-white.png"
             alt="Akeed"
-            width={48}
-            height={48}
-            className="object-contain"
+            width={130}
+            height={70}
+            priority
+            className="h-auto w-[120px] object-contain lg:w-[130px]"
           />
         </Link>
       </header>
 
       {/* Centered form area */}
-      <main className="flex flex-1 items-center justify-center px-4 py-8 sm:px-6">
-        <div className="w-full max-w-md">{children}</div>
+      <main className="flex flex-1 items-center justify-center px-4 py-5 sm:px-6 sm:py-6">
+        <div className="w-full max-w-lg sm:max-w-xl">{children}</div>
       </main>
     </div>
   )

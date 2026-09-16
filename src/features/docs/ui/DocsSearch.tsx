@@ -144,7 +144,7 @@ export function DocsSearch({ locale, entries }: DocsSearchProps) {
           aria-activedescendant={activeDescendant}
           aria-autocomplete="list"
           placeholder={t('searchPlaceholder')}
-          className="h-11 w-full rounded-xl border border-emerald-100 bg-white pr-10 pl-9 text-sm text-slate-700 shadow-sm transition-colors focus:border-emerald-300 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+          className="h-11 w-full rounded-xl border border-border bg-white pr-10 pl-9 text-sm text-slate-700 shadow-sm transition-colors focus:border-emerald-300 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
         />
         {query ? (
           <button
@@ -164,7 +164,7 @@ export function DocsSearch({ locale, entries }: DocsSearchProps) {
           id="docs-search-results"
           role="listbox"
           aria-label={t('searchResultsLabel')}
-          className="absolute z-40 mt-2 max-h-96 w-full overflow-y-auto rounded-xl border border-emerald-100 bg-white p-2 shadow-lg"
+          className="absolute z-40 mt-2 max-h-96 w-full overflow-y-auto rounded-xl border border-border bg-white p-2 shadow-lg"
         >
           {results.length === 0 ? (
             <p className="px-2 py-3 text-sm text-slate-500">{t('searchNoResults')}</p>
@@ -183,7 +183,7 @@ export function DocsSearch({ locale, entries }: DocsSearchProps) {
                       onMouseEnter={() => setActiveIndex(index)}
                       className={`block rounded-lg px-3 py-2 transition-colors ${
                         isActive
-                          ? 'bg-emerald-50 text-emerald-900'
+                          ? 'bg-accent text-foreground'
                           : 'text-slate-700 hover:bg-slate-50'
                       }`}
                     >

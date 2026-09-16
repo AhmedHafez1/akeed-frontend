@@ -91,6 +91,7 @@ export function useVerificationsDashboard(
     isVerificationsLoading,
     hasMoreVerifications,
     isLoadingMoreVerifications,
+    hasLoadMoreError,
     onLoadMoreVerifications,
     error: verificationsError,
     pageContext,
@@ -341,7 +342,7 @@ export function useVerificationsDashboard(
   )
 
   const error = useMemo(() => {
-    if (verificationsError && statsError) {
+    if (verificationsError && statsError && verificationsError !== statsError) {
       return `${verificationsError} ${statsError}`
     }
     return verificationsError ?? statsError
@@ -375,6 +376,7 @@ export function useVerificationsDashboard(
     isVerificationsLoading,
     hasMoreVerifications,
     isLoadingMoreVerifications,
+    hasLoadMoreError,
     onLoadMoreVerifications,
     hasVerifications: displayedVerifications.length > 0,
     emptyVerificationsMessage:

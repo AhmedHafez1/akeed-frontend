@@ -564,24 +564,46 @@
     "audience": "Who it's for",
     "docs": "Docs",
     "faq": "FAQ",
-    "cta_shopify": "Install on Shopify",
-    "cta_standalone": "Own store"
+    "resources": "Resources",
+    "login": "Login",
+    "cta_primary": "Get started free"
   },
   "hero": {
-    "title": "Stop Wasting Shipping Costs.",
-    "highlight": "Confirm COD Orders on WhatsApp.",
-    "subtitle": "Send an automatic WhatsApp confirmation before you ship — whether your store runs on Shopify or on its own.",
-    "cta_shopify": "Install on Shopify",
-    "cta_standalone": "I have my own store",
-    "cta_standalone_note": "Verify your email and start with 30 free credits.",
-    "proof_shopify": "Approved by Shopify",
-    "proof_meta": "Official WhatsApp Cloud API",
-    "proof_built": "Built for Shopify",
-    "microcopy_free": "Free to install.",
-    "microcopy_no_card": "No credit card needed.",
-    "microcopy_setup": "2-minute setup.",
-    "shopify_available": "Shopify",
-    "platform_note": "<strong>Available now for Shopify and independent stores.</strong> More integrations coming soon."
+    "title": "Confirm COD orders",
+    "highlight": "before you ship.",
+    "cta_primary": "Get started free",
+    "cta_secondary": "See how it works",
+    "microcopy_credits": "30 free messages",
+    "microcopy_no_card": "No credit card required",
+    "integrations_title": "Works with your store.",
+    "integrations_note": "Connect your business in minutes.",
+    "integration_shopify": "Shopify",
+    "integration_independent": "Independent stores",
+    "integration_more": "+ more integrations",
+    "flow": {
+      "order_title": "New COD Order",
+      "order_meta": "#10482 · EGP 1,250",
+      "message_title": "WhatsApp message",
+      "message_meta": "Sent automatically",
+      "confirm_title": "Customer confirms",
+      "confirm_meta": "In seconds",
+      "updated_title": "Order updated",
+      "updated_meta": "In your store"
+    },
+    "values": {
+      "returns_title": "Reduce returns",
+      "returns_body": "Confirm before you ship.",
+      "shipping_title": "Save on shipping costs",
+      "shipping_body": "Avoid wasted shipments.",
+      "api_title": "Official WhatsApp API",
+      "api_body": "Reliable, secure and no risk of bans.",
+      "merchants_title": "Built for every merchant",
+      "merchants_body": "Whatever your store, Akeed for you."
+    }
+  },
+  "ecosystem": {
+    "eyebrow": "Built for how you sell",
+    "independent": "Independent"
   },
   "demo": {
     "badge": "Live Demo",
@@ -590,20 +612,21 @@
     "subtitle": "Watch Akeed run a branded, rule-based WhatsApp confirmation flow that verifies the order details and updates the result automatically.",
     "phone_status": "Online",
     "chat": {
-      "bot_1": "Hello Ahmed! 👋\nThanks for your order.\nWe just need to confirm the details before shipping.\n\n📦 Order #12847\n🛍️ iPhone 15 Pro - Space Black\n💰 Total: 45,999 EGP\n\n✅ Would you like us to confirm this order?",
-      "user_1": "Confirmed",
+      "bot_1": "Hi Ahmed 👋\nYour COD order #10482 is ready.\nTotal: EGP 1,250\n\nPlease confirm your order so we can proceed with shipping.",
+      "user_1": "Confirmed ✅",
       "bot_3": "📍 Delivery Address:\n12 King Fahd Road\nRiyadh, Saudi Arabia\n\nIs this delivery address correct?",
       "user_2": "Yes, the address is correct",
       "bot_5": "Perfect ✅ Your order is now confirmed and marked ready for shipping.",
       "bot_6": "We'll keep your store updated automatically. Thank you for shopping with us.",
       "buttons": {
-        "confirm": "Confirm",
-        "cancel": "Cancel",
+        "confirm": "Confirm Order",
+        "cancel": "Cancel Order",
         "will_confirm_later": "Confirm Later",
         "correct_address": "Yes, address is correct"
       }
     },
     "bot_name": "Akeed Confirmation",
+    "bot_name_short": "Akeed",
     "typing_placeholder": "Type a message...",
     "stats_title": "Real-Time Performance",
     "stat_1_label": "Orders Confirmed",
@@ -624,32 +647,6 @@
     "feature_3": "Rule-based flows your team can control",
     "feature_4": "Real-time order status updates",
     "feature_5": "Shared WhatsApp infrastructure for faster setup"
-  },
-  "problems": {
-    "title": "Customer not responding? Burning money on shipping?",
-    "subtitle": "These problems happen daily with COD orders",
-    "loss": {
-      "title": "Massive Financial Losses",
-      "description": "30-40% of COD orders can return without confirmation, draining budget on failed delivery attempts and reverse shipping."
-    },
-    "time": {
-      "title": "Wasted Time on Calls",
-      "description": "Your team loses hours every week calling customers to confirm COD orders instead of growing the business."
-    },
-    "customer": {
-      "title": "Poor Customer Experience",
-      "description": "Customers get annoyed by repeated calls and abandon their orders, affecting your store's reputation"
-    },
-    "scale": {
-      "title": "Difficulty Scaling",
-      "description": "As order volume grows across markets, manual confirmation becomes slower, more expensive, and harder to manage."
-    },
-    "address": {
-      "title": "Unclear Delivery Details",
-      "description": "Unconfirmed addresses and missing customer replies lead to failed deliveries, extra courier calls, and preventable COD returns."
-    },
-    "reality": "This is not just a customer problem. It is an operations problem.",
-    "reality_highlight": "Akeed is built to solve these problems"
   },
   "how_it_works": {
     "section_title": "How Akeed Works",
@@ -730,6 +727,14 @@
       "title": "Listed on the Shopify App Store",
       "description": "Installation and subscription happen within Shopify's ecosystem and policies."
     },
+    "independent_stores": {
+      "title": "Built for independent stores",
+      "description": "Create orders directly in Akeed and send WhatsApp confirmations without depending on a specific store platform."
+    },
+    "automated_confirmation": {
+      "title": "Automated order confirmation",
+      "description": "Send confirmation messages automatically and keep every customer response in one clear workflow."
+    },
     "arabic_first": {
       "title": "Arabic first",
       "description": "Interface and messages in Arabic with full right-to-left support, and English available."
@@ -737,65 +742,6 @@
     "data_protection": {
       "title": "Your store data is protected",
       "description": "Integration credentials are encrypted, and customer data is used only to complete the confirmation."
-    }
-  },
-  "final_cta": {
-    "eyebrow": "Next step",
-    "title": "Confirm your orders before you ship them",
-    "description": "Start the way that fits your store — install directly on Shopify, or create a standalone account.",
-    "cta_shopify": "Install on Shopify",
-    "cta_standalone": "Create your account",
-    "cta_standalone_note": "Verify your email and start with 30 free credits."
-  },
-  "solution": {
-    "title": "Built for Merchants Who Want Clear, Reliable COD Confirmation",
-    "steps": {
-      "1": {
-        "title": "New Order Arrives",
-        "description": "Akeed receives the order automatically from your store platform as soon as it is placed."
-      },
-      "2": {
-        "title": "Instant WhatsApp Send",
-        "description": "A branded WhatsApp confirmation message reaches the customer within seconds to confirm order details."
-      },
-      "3": {
-        "title": "Automatic Confirmation",
-        "description": "Akeed captures the customer response and updates the order status to confirmed, canceled, or pending review."
-      }
-    },
-    "auto": {
-      "title": "Rule-Based Automation 24/7",
-      "description": "Reliable confirmation workflows run around the clock with consistent logic for every COD order."
-    },
-    "response": {
-      "title": "Fast WhatsApp Reach",
-      "description": "Messages are sent in seconds while order intent is still fresh, helping teams get faster customer responses."
-    },
-    "natural": {
-      "title": "Clear, Customer-Friendly Messages",
-      "description": "Use clear, simple messages that customers understand and can easily respond to"
-    },
-    "analytics": {
-      "title": "Advanced Analytics",
-      "description": "Track confirmation rates, cancellation reasons, and operational performance from one dashboard."
-    },
-    "testimonial_1": "After using Akeed, our confirmation rate jumped from 55% to 89%, and we cut wasted shipping costs every month.",
-    "orders_monthly": "orders monthly",
-    "fast-confirm": {
-      "title": "Faster Confirmation",
-      "description": "Customers receive a clear branded message quickly, which helps them confirm while purchase intent is still high."
-    },
-    "location": {
-      "title": "Official Meta API Delivery",
-      "description": "Akeed runs on official Meta WhatsApp Cloud APIs, giving merchants a more stable and trustworthy infrastructure than unofficial workarounds."
-    },
-    "save-time": {
-      "title": "Save Your Time & Effort",
-      "description": "Replace repetitive confirmation calls with automated workflows so your team can focus on support, fulfillment, and growth."
-    },
-    "integration": {
-      "title": "No WhatsApp Setup for Most Stores",
-      "description": "Most merchants can start with Akeed's shared WhatsApp infrastructure. Larger merchants can later move to their own number if needed."
     }
   },
   "faq": {
@@ -843,26 +789,25 @@
     "eyebrow": "Pricing",
     "title": "Pay for what you use. <highlight>No monthly subscription.</highlight>",
     "subtitle": "For independent stores: buy credits and use them whenever you need. Shopify stores subscribe and are billed inside Shopify.",
-    "unit_price_label": "Price per credit",
     "unit_text": "WhatsApp message",
     "unit_price_note": "One credit is one WhatsApp message sent to your customer.",
-    "credit_is_message_title": "A credit is a message",
-    "credit_is_message_body": "One credit is used when a confirmation message is sent to your customer on WhatsApp.",
+    "per_message": "per WhatsApp message",
+    "grant_pill": "{count} free messages on sign-up",
+    "slider_label": "How many messages do you need?",
+    "slider_value": "{count} credits",
+    "total_label": "Total",
+    "calculator_orders": "Covers {low}–{high} orders",
+    "how_title": "How credits are used",
+    "credit_is_message_title": "A credit is one message",
+    "credit_is_message_body": "Every WhatsApp message uses exactly one credit.",
     "followup_title": "Follow-ups count too",
-    "followup_body": "If a customer does not reply and you send a follow-up, that message uses a second credit.",
+    "followup_body": "If a customer does not reply, the reminder uses another credit.",
     "rejected_title": "Failed sends are refunded",
-    "rejected_body": "If the provider cannot deliver the message, the credit is returned to your account automatically.",
-    "grant_title": "{count} credits to start",
-    "grant_body": "Added to your account once, as soon as you verify your email.",
-    "purchase_rules": "Buy from {min} to {max} credits, in multiples of {step}.",
-    "cta": "Create your account",
-    "cta_note": "Signing up is free. No credit card needed yet.",
-    "presets_title": "Example top-ups",
-    "presets_note": "Not fixed packages — you can buy any amount within the limits above.",
-    "presets_unit": "credits",
+    "rejected_body": "If a send fails, the credit returns to your account automatically.",
+    "cta": "Create your free account",
+    "cta_note": "No credit card needed",
     "shopify_title": "Store on Shopify?",
-    "shopify_body": "Subscription and billing happen inside Shopify. Install Akeed from the App Store to see current plans and pricing.",
-    "shopify_cta": "See plans on Shopify",
+    "shopify_cta": "See plans",
     "authoritative_note": "Prices are shown in Egyptian pounds and may change. The authoritative price is the one shown on your billing page."
   },
   "mobile_cta": {
@@ -878,6 +823,8 @@
     "signUp": "Sign up",
     "email": "Email",
     "password": "Password",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
     "rememberMe": "Remember me",
     "forgotPassword": "Forgot password?",
     "signingIn": "Signing in...",
@@ -900,7 +847,7 @@
     "and": "and",
     "privacyPolicy": "Privacy Policy",
     "creatingAccount": "Creating account...",
-    "orSignUpWith": "Or sign up with",
+    "orSignUpWith": "Or continue with",
     "signInFailed": "Failed to sign in. Please check your credentials.",
     "emailNotConfirmed": "Your email address has not been confirmed. Check your inbox and confirm your email before signing in.",
     "signUpFailed": "Failed to create account. Please try again.",
@@ -929,7 +876,6 @@
     "resettingPassword": "Resetting..."
   },
   "legal": {
-    "legalCompanyLine": "Akeed is operated by : لصاحبها أحمد عبد الغني حافظ ابراهيم Akeed Digital Solutions أكيد للحلول الرقمية",
     "termsEyebrow": "Legal",
     "termsTitle": "Terms of Service",
     "termsLastUpdated": "Last updated: March 2026",
@@ -988,12 +934,6 @@
     "facebook": "Facebook",
     "youtube": "YouTube",
     "instagram": "Instagram",
-    "legalLine": "Operated by : لصاحبها أحمد عبد الغني حافظ ابراهيم Akeed Digital Solutions أكيد للحلول الرقمية",
-    "businessInfoTitle": "Business Information",
-    "legalNameLabel": "Legal business name",
-    "registrationLabel": "Commercial Registration",
-    "addressLabel": "Registered address",
-    "phoneLabel": "Business phone",
     "ctaTitle": "Get started with Akeed",
     "ctaDescription": "Join teams that are saving time and moving work forward.",
     "ctaLabel": "Create account",
@@ -1247,7 +1187,6 @@
       "metrics": "Metrics",
       "confirmations": "Confirmations"
     },
-    "readOnlyNotice": "You have read-only access. An owner or admin can send tests or cancel orders.",
     "emptyState": {
       "all": "No verifications yet. Once an order is received, verification requests will appear here.",
       "filtered": "No verifications match the selected status.",
@@ -1360,7 +1299,6 @@
       },
       "unknownCustomer": "Unknown customer",
       "noPhone": "No phone",
-      "loadMore": "Load more",
       "loadingMore": "Loading more...",
       "followUp": {
         "sent": "Sent",
@@ -1440,7 +1378,7 @@
       "subtitle": "{count, plural, =0 {No verifications in this period} one {# verification in this period} other {# verifications in this period}}",
       "loading": "Loading verifications...",
       "loadingMore": "Loading more...",
-      "loadMore": "Load more",
+      "loadMoreRetry": "Try again",
       "readOnlyNotice": "You have read-only access. An owner or admin can retry verification or mark supported orders canceled.",
       "empty": {
         "title": "No verifications yet",
@@ -1464,7 +1402,7 @@
         "clear": "Clear status filter"
       },
       "eyebrow": "Operations",
-      "loaded": "{count, plural, one {# verification loaded} other {# verifications loaded}}",
+      "showing": "Showing {loaded} of {total}",
       "workload": {
         "label": "Verification workload",
         "loading": "Loading workload",
@@ -2108,11 +2046,6 @@
     "intro": "Learn about Akeed Digital Solutions, our mission, and how we help e-commerce merchants reduce wasted shipping costs.",
     "missionTitle": "Our Mission",
     "missionBody": "Akeed Digital Solutions builds tools that help e-commerce merchants across the MENA region reduce wasted shipping costs on cash-on-delivery orders. Our flagship product automates order confirmation through official Meta WhatsApp Cloud APIs, helping merchants verify orders before fulfillment and avoid failed delivery attempts.",
-    "legalTitle": "Business Information",
-    "legalDescription": "Registered business details and legal information.",
-    "registrationLabel": "Commercial Registration",
-    "addressTitle": "Registered Address",
-    "addressDescription": "Our official business address.",
     "phoneTitle": "Contact Phone",
     "phoneDescription": "Reach us directly by phone during business hours.",
     "emailTitle": "Email",

@@ -12,6 +12,7 @@ export function Header() {
     t,
     locale,
     homeHref,
+    loginHref,
     navigation,
     acquisitionTargets,
     isScrolled,
@@ -25,26 +26,27 @@ export function Header() {
   return (
     <>
       <header
-        className={`fixed top-0 z-50 w-full transition-all duration-400 ${
+        className={`fixed top-0 z-50 w-full border-b transition-[background-color,border-color,box-shadow] duration-300 ${
           isScrolled
-            ? 'shadow-overlay border-b border-white/10 bg-slate-950/92 backdrop-blur-md'
-            : 'bg-slate-950/88 backdrop-blur'
+            ? 'shadow-overlay border-white/10 bg-slate-950/95 backdrop-blur-md'
+            : 'border-transparent bg-slate-950'
         }`}
       >
-        <div className="px-4 sm:px-6 lg:px-8 xl:mx-46">
-          <div className="flex h-16 items-center justify-between">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10">
+          <div className="flex h-16 items-center justify-between gap-6 lg:h-17">
             {/* Logo */}
             <HeaderLogo href={homeHref} onClick={handleHomeClick} />
 
             {/* Desktop Navigation */}
             <HeaderNav items={navigation} onNavigate={scrollToSection} />
 
-            {/* CTA + Language */}
+            {/* Language + Login + CTA */}
             <HeaderActions
               locale={locale}
               targets={acquisitionTargets}
-              ctaShopifyLabel={t('cta_shopify')}
-              ctaStandaloneLabel={t('cta_standalone')}
+              ctaLabel={t('cta_primary')}
+              loginLabel={t('login')}
+              loginHref={loginHref}
               onLocaleChange={handleLocaleChange}
             />
 
@@ -62,8 +64,9 @@ export function Header() {
           items={navigation}
           locale={locale}
           targets={acquisitionTargets}
-          ctaShopifyLabel={t('cta_shopify')}
-          ctaStandaloneLabel={t('cta_standalone')}
+          ctaLabel={t('cta_primary')}
+          loginLabel={t('login')}
+          loginHref={loginHref}
           onNavigate={scrollToSection}
           onLocaleChange={handleLocaleChange}
           onClose={() => setIsMobileMenuOpen(false)}

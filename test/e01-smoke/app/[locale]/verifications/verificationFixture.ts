@@ -59,6 +59,21 @@ let rows: VerificationItem[] = statuses.map((status, index) => ({
   follow_up_attempts: index === 2 ? 1 : 0,
 }))
 
+/*
+ * The eleven rows above carry the scenarios (cancel, retry, every status);
+ * these exist only so the list is longer than one page at the size the app
+ * actually asks for, which is what makes scroll-loading observable here.
+ */
+rows = rows.concat(
+  Array.from({ length: 34 }, (_, index) => ({
+    ...rows[index % rows.length],
+    id: `triage-filler-${index}`,
+    order_id: `triage-filler-order-${index}`,
+    order_number: `${900 - index}`,
+    capabilities: [],
+  }))
+)
+
 export const verificationRequests: string[] = []
 export function isVerificationFixture() {
   return (
@@ -142,10 +157,14 @@ export async function verificationFixtureRequest<T>(
       (row) => !matching || matching.includes(row.status)
     )
     const offset = Number(query.searchParams.get('cursor') ?? '0')
+    // Honour the page size the client asks for, so the fixture reports what
+    // the real endpoint would rather than a size of its own choosing.
+    const limit = Number(query.searchParams.get('limit') ?? '6')
     const response: VerificationsResponse = {
-      data: filtered.slice(offset, offset + 6),
+      data: filtered.slice(offset, offset + limit),
       total_count: filtered.length,
-      next_cursor: offset + 6 < filtered.length ? String(offset + 6) : null,
+      next_cursor:
+        offset + limit < filtered.length ? String(offset + limit) : null,
       page_context: {
         source,
         automation,

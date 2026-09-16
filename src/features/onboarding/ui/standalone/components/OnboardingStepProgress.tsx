@@ -24,7 +24,7 @@ export function OnboardingStepProgress({
   return (
     <div
       aria-label={t('steps.label')}
-      className="rounded-xl border border-slate-200 bg-white p-4 text-start md:hidden"
+      className="rounded-card border-border bg-card border p-4 text-start md:hidden"
     >
       <p className="text-xs font-medium text-slate-500 tabular-nums">
         {t('steps.progress', {

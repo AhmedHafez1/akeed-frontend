@@ -170,7 +170,7 @@ export function MarkdownContent({
       }
 
       return (
-        <blockquote className="my-4 rounded-r-xl border-s-4 border-emerald-300 bg-emerald-50/50 px-4 py-3 text-sm leading-7 text-slate-700 md:text-base">
+        <blockquote className="my-4 rounded-r-xl border-s-4 border-input bg-muted/50 px-4 py-3 text-sm leading-7 text-slate-700 md:text-base">
           {children}
         </blockquote>
       )
@@ -240,7 +240,7 @@ export function MarkdownContent({
 
       if (isInlineCode) {
         return (
-          <code className="rounded bg-emerald-50 px-1.5 py-0.5 text-[0.92em] font-medium text-emerald-800">
+          <code className="rounded bg-muted px-1.5 py-0.5 text-[0.92em] font-medium text-foreground">
             {children}
           </code>
         )

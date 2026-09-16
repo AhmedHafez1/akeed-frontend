@@ -12,8 +12,11 @@ export function HeaderMobileToggle({
 }: HeaderMobileToggleProps) {
   return (
     <button
+      type="button"
       onClick={onToggle}
-      className="rounded-xl p-2 text-slate-100 transition-colors hover:bg-white/10 hover:text-white md:hidden"
+      aria-expanded={isOpen}
+      aria-label="Toggle menu"
+      className="rounded-xl p-2 text-slate-100 transition-colors hover:bg-white/10 hover:text-white lg:hidden"
       suppressHydrationWarning
     >
       <AnimatePresence mode="wait">

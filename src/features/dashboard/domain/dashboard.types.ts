@@ -53,6 +53,8 @@ export interface DashboardSkinProps {
   isVerificationsLoading: boolean
   hasMoreVerifications: boolean
   isLoadingMoreVerifications: boolean
+  /** The last page fetch failed; the scroll sentinel is disarmed until retried. */
+  hasLoadMoreError: boolean
   onLoadMoreVerifications: () => Promise<void>
   hasVerifications: boolean
   emptyVerificationsMessage: string

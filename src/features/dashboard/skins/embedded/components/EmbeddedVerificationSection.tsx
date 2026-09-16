@@ -1,6 +1,5 @@
 import {
   BlockStack,
-  Banner,
   Box,
   Button,
   Card,
@@ -9,6 +8,7 @@ import {
   Text,
 } from '@shopify/polaris'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll'
 import type { StatusFilterOption } from '@/features/dashboard/domain/dashboard.types'
 import type {
   VerificationItem,
@@ -24,9 +24,10 @@ interface EmbeddedVerificationMessages {
   statusFilterLabel: string
   noReplyTooltip: string
   loadingMore: string
-  loadMore: string
+  loadMoreRetry: string
+  /** Interpolated by the parent -- this section resolves no copy itself. */
+  showing: string
   emptyMessage: string
-  readOnlyNotice: string
   emptyState: {
     heading: string
     activeDescription: string
@@ -48,6 +49,7 @@ interface EmbeddedVerificationSectionProps {
   isVerificationsLoading: boolean
   hasMoreVerifications: boolean
   isLoadingMoreVerifications: boolean
+  hasLoadMoreError: boolean
   hasVerifications: boolean
   actingVerificationId: string | null
   confirmingCancelVerificationId: string | null
@@ -74,6 +76,7 @@ export function EmbeddedVerificationSection({
   isVerificationsLoading,
   hasMoreVerifications,
   isLoadingMoreVerifications,
+  hasLoadMoreError,
   hasVerifications,
   actingVerificationId,
   confirmingCancelVerificationId,
@@ -95,15 +98,16 @@ export function EmbeddedVerificationSection({
 }: EmbeddedVerificationSectionProps) {
   const { isRTL } = useLocaleInfo()
   const shouldShowEmptyState = !hasVerifications
+  const { rootRef, sentinelRef } = useInfiniteScroll({
+    hasMore: hasMoreVerifications,
+    isLoading: isLoadingMoreVerifications,
+    hasError: hasLoadMoreError,
+    onLoadMore: onLoadMoreVerifications,
+  })
 
   return (
     <Card>
       <BlockStack gap="400">
-        {!canSendTestVerification && !canCancelOrders && (
-          <Banner tone="info">
-            <p>{messages.readOnlyNotice}</p>
-          </Banner>
-        )}
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <BlockStack gap="050">
             <Text variant={isRTL ? 'headingMd' : 'headingSm'} as="h2">
@@ -166,31 +170,57 @@ export function EmbeddedVerificationSection({
           <VerificationsTableSkeleton />
         ) : hasVerifications ? (
           <BlockStack gap="300">
-            <VerificationsTableEmbedded
-              verifications={verifications}
-              actingVerificationId={actingVerificationId}
-              reportingTimezone={reportingTimezone}
-              canRetryVerifications={canRetryVerifications}
-              onRetryVerification={onRetryVerification}
-              confirmingCancelVerificationId={confirmingCancelVerificationId}
-              actionErrors={actionErrors}
-              canCancelOrders={canCancelOrders}
-              onRequestCancelOrder={onRequestCancelOrder}
-              onDismissCancelOrder={onDismissCancelOrder}
-              onConfirmCancelOrder={onConfirmCancelOrder}
-            />
-            {hasMoreVerifications && (
-              <InlineStack align="center">
-                <Button
-                  onClick={onLoadMoreVerifications}
-                  loading={isLoadingMoreVerifications}
-                >
-                  {isLoadingMoreVerifications
-                    ? messages.loadingMore
-                    : messages.loadMore}
+            {/*
+             * The rows scroll, not the page: the list grows as the merchant
+             * reaches the end of it, and the filters above and the count below
+             * have to stay put while that happens. `tabIndex` is what makes the
+             * region scrollable by keyboard as well as by pointer.
+             */}
+            <div
+              ref={rootRef}
+              role="region"
+              aria-label={messages.title}
+              tabIndex={0}
+              className="max-h-[60vh] overflow-y-auto overscroll-contain"
+            >
+              <VerificationsTableEmbedded
+                verifications={verifications}
+                actingVerificationId={actingVerificationId}
+                reportingTimezone={reportingTimezone}
+                canRetryVerifications={canRetryVerifications}
+                onRetryVerification={onRetryVerification}
+                confirmingCancelVerificationId={confirmingCancelVerificationId}
+                actionErrors={actionErrors}
+                canCancelOrders={canCancelOrders}
+                onRequestCancelOrder={onRequestCancelOrder}
+                onDismissCancelOrder={onDismissCancelOrder}
+                onConfirmCancelOrder={onConfirmCancelOrder}
+              />
+              {/* Crossing into view is what asks for the next page. */}
+              <div ref={sentinelRef} aria-hidden="true" className="h-px" />
+              {isLoadingMoreVerifications && (
+                <Box padding="300">
+                  <Text as="p" variant="bodySm" tone="subdued">
+                    {messages.loadingMore}
+                  </Text>
+                </Box>
+              )}
+            </div>
+            <InlineStack align="space-between" blockAlign="center" gap="300">
+              <Text as="p" variant="bodySm" tone="subdued">
+                {messages.showing}
+              </Text>
+              {/*
+               * The only button left: scrolling loads the next page on its own,
+               * but a failed page disarms the sentinel, and without this the
+               * list would be stranded at whatever it had already loaded.
+               */}
+              {hasLoadMoreError && (
+                <Button onClick={onLoadMoreVerifications}>
+                  {messages.loadMoreRetry}
                 </Button>
-              </InlineStack>
-            )}
+              )}
+            </InlineStack>
           </BlockStack>
         ) : shouldShowEmptyState && statusFilter === 'all' ? (
           <DashboardEmptyState

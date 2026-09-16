@@ -1,6 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import { howItWorksByPath } from '@/features/marketing/config/site'
@@ -8,6 +7,7 @@ import {
   DEFAULT_ACQUISITION_PATH,
   type AcquisitionPath,
 } from '@/features/marketing/domain/acquisitionPaths'
+import { LandingSectionHeading } from '@/features/marketing/ui/components/LandingSectionHeading'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { Container } from '@/shared/ui/container'
 import { Section } from '@/shared/ui/section'
@@ -39,26 +39,11 @@ function HowItWorks({
   return (
     <Section id="how-it-works" className="relative px-4 sm:px-6 lg:px-10">
       <Container className="relative z-10 max-w-351.5">
-        <div className="landing-section-header mb-8 sm:mb-10">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-h1 text-foreground max-w-5xl text-balance"
-          >
-            {t('section_title')}
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-lead text-muted-foreground max-w-3xl text-pretty"
-          >
-            {t('main_title')}
-          </motion.p>
-        </div>
+        <LandingSectionHeading
+          title={t('section_title')}
+          description={t('main_title')}
+          isRTL={isRTL}
+        />
 
         <div className="mb-8 sm:mb-10">
           <PathTabs

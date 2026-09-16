@@ -26,6 +26,42 @@ export function formatMoney(
   }).format(valueMinor / 100)
 }
 
+/**
+ * Same output as `formatMoney`, split so a display can size the amount and
+ * the currency independently. Derived from `formatToParts` of the very same
+ * formatter, so the digits cannot drift from the in-app rendering.
+ */
+export function formatMoneyParts(
+  valueMinor: number,
+  currency: string,
+  locale: SupportedLocale
+) {
+  const parts = new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency,
+    maximumFractionDigits: 2,
+  }).formatToParts(valueMinor / 100)
+
+  // Strip the spacing and bidi marks Intl places around the currency symbol.
+  const clean = (value: string) =>
+    value.replace(/[\s‎‏؜]+/g, ' ').trim()
+
+  return {
+    amount: clean(
+      parts
+        .filter((part) => part.type !== 'currency')
+        .map((part) => part.value)
+        .join('')
+    ),
+    currency: clean(
+      parts
+        .filter((part) => part.type === 'currency')
+        .map((part) => part.value)
+        .join('')
+    ),
+  }
+}
+
 export function formatMoneyFromCredits(
   credits: number,
   unitPriceMinor: number,

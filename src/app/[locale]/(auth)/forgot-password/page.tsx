@@ -3,10 +3,13 @@
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
+import { MailCheck } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { getSupabaseClient } from '@/shared/lib/auth'
 import { createLogger } from '@/shared/lib/logger'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
-import { useTranslations } from 'next-intl'
+import { AuthPanel } from '@/shared/auth/AuthPanel'
+import { Input, Label, LoadingButton } from '@/shared/ui'
 
 /**
  * Forgot Password Page - Standalone Mode Only
@@ -19,7 +22,6 @@ export default function ForgotPasswordPage() {
   const t = useTranslations()
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname ?? '')
-  const isRtl = locale === 'ar'
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -51,107 +53,76 @@ export default function ForgotPasswordPage() {
     }
   }
 
-  return (
-    <div className="space-y-6">
-      <div className="space-y-2 text-center">
-        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
-          {t('auth.forgotPasswordTitle')}
-        </h1>
-        <p className="text-sm text-slate-600">
-          {t('auth.forgotPasswordSubtitle')}
-        </p>
-      </div>
-
-      <div className="rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm transition-all duration-300 hover:border-emerald-200 hover:shadow-md">
-        {success ? (
-          <div className="space-y-4">
-            <div
-              role="status"
-              className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700"
-            >
-              {t('auth.resetLinkSent')}
-            </div>
-            <Link
-              href={withLocale('/login', locale)}
-              className="text-primary hover:text-primary-hover inline-flex text-sm font-semibold transition-colors focus-visible:underline focus-visible:outline-none"
-            >
-              {t('auth.backToSignIn')}
-            </Link>
+  if (success) {
+    return (
+      <AuthPanel title={t('auth.forgotPasswordTitle')}>
+        <div className="space-y-6 text-center">
+          <div className="bg-primary-subtle text-primary mx-auto flex h-12 w-12 items-center justify-center rounded-full">
+            <MailCheck className="h-6 w-6" aria-hidden="true" />
           </div>
-        ) : (
-          <form className="space-y-5" onSubmit={handleSubmit}>
-            {error && (
-              <div
-                role="alert"
-                className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
-              >
-                {error}
-              </div>
-            )}
+          <p role="status" className="text-muted-foreground text-sm">
+            {t('auth.resetLinkSent')}
+          </p>
+          <Link
+            href={withLocale('/login', locale)}
+            className="text-primary hover:text-primary-hover inline-flex text-sm font-semibold transition-colors focus-visible:underline focus-visible:outline-none"
+          >
+            {t('auth.backToSignIn')}
+          </Link>
+        </div>
+      </AuthPanel>
+    )
+  }
 
-            <div>
-              <label
-                htmlFor="email"
-                className="text-sm font-medium text-slate-700"
-              >
-                {t('auth.email')}
-              </label>
-              <div className="relative mt-2">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 shadow-sm transition placeholder:text-slate-400 focus-visible:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
-                  placeholder={t('auth.email')}
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="bg-primary text-primary-foreground hover:bg-primary relative flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-bold shadow-sm shadow-emerald-900/10 transition-all hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-70"
-            >
-              {isLoading && (
-                <svg
-                  className={`absolute ${isRtl ? 'right-4' : 'left-4'} h-4 w-4 animate-spin`}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  aria-hidden="true"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
-              )}
-              {isLoading ? t('auth.sendingResetLink') : t('auth.sendResetLink')}
-            </button>
-
-            <div className="text-center">
-              <Link
-                href={withLocale('/login', locale)}
-                className="hover:text-primary-hover text-sm font-semibold text-slate-600 transition-colors focus-visible:underline focus-visible:outline-none"
-              >
-                {t('auth.backToSignIn')}
-              </Link>
-            </div>
-          </form>
+  return (
+    <AuthPanel
+      title={t('auth.forgotPasswordTitle')}
+      description={t('auth.forgotPasswordSubtitle')}
+    >
+      <form className="space-y-6" onSubmit={handleSubmit} noValidate>
+        {error && (
+          <div
+            role="alert"
+            className="rounded-control border-destructive/30 bg-destructive/10 text-destructive px-4 py-3 text-sm"
+          >
+            {error}
+          </div>
         )}
-      </div>
-    </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="email">{t('auth.email')}</Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="rounded-control"
+            placeholder={t('auth.email')}
+          />
+        </div>
+
+        <LoadingButton
+          type="submit"
+          size="lg"
+          className="auth-gradient-button w-full"
+          loading={isLoading}
+          loadingText={t('auth.sendingResetLink')}
+        >
+          {t('auth.sendResetLink')}
+        </LoadingButton>
+
+        <p className="text-center">
+          <Link
+            href={withLocale('/login', locale)}
+            className="text-muted-foreground hover:text-primary text-sm font-semibold transition-colors focus-visible:underline focus-visible:outline-none"
+          >
+            {t('auth.backToSignIn')}
+          </Link>
+        </p>
+      </form>
+    </AuthPanel>
   )
 }

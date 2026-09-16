@@ -1,49 +1,38 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Container } from '@/shared/ui/container'
-import { Section } from '@/shared/ui/section'
-import { motion } from 'framer-motion'
-import { Accordion } from '@/shared/ui/accordion'
-import { FAQItem } from '@/shared/ui/faq-item'
-import { LearnMoreLink } from '@/shared/ui/docs-links'
 import { faqs } from '@/features/marketing/config/site'
 import { landingInsetCardClass } from '@/features/marketing/ui/components/LandingPrimitives'
+import { LandingSectionHeading } from '@/features/marketing/ui/components/LandingSectionHeading'
+import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { cn } from '@/shared/lib/utils'
+import { Accordion } from '@/shared/ui/accordion'
+import { Container } from '@/shared/ui/container'
+import { LearnMoreLink } from '@/shared/ui/docs-links'
+import { FAQItem } from '@/shared/ui/faq-item'
+import { Section } from '@/shared/ui/section'
 
 function FAQ() {
   const tFaq = useTranslations('faq')
+  const { isRTL } = useLocaleInfo()
 
   return (
     <Section id="faq" className="relative px-4 sm:px-6 lg:px-10">
-      <Container>
-        <div className="landing-section-header mb-10 sm:mb-12 lg:mb-14">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-h1 text-foreground max-w-4xl text-balance"
-          >
-            {tFaq('section_title')}
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-lead text-muted-foreground max-w-3xl text-pretty"
-          >
-            {tFaq('section_description')}
-          </motion.p>
-        </div>
+      {/* Was the only section without the shared max width, so its gutters
+          drifted from the rest of the page at wide viewports. */}
+      <Container className="relative z-10 max-w-351.5">
+        <LandingSectionHeading
+          title={tFaq('section_title')}
+          description={tFaq('section_description')}
+          isRTL={isRTL}
+        />
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className={`mx-auto max-w-3xl p-6 ${landingInsetCardClass}`}
-        >
+        {/*
+         * The panel keeps its reading measure — long answers should not run the
+         * full grid width — but it now starts under the heading instead of
+         * being centred beneath a start-aligned title.
+         */}
+        <div className={cn(landingInsetCardClass, 'max-w-3xl p-6')}>
           <Accordion type="single" collapsible className="space-y-3">
             {faqs.map((faq, index) => (
               <FAQItem
@@ -55,10 +44,12 @@ function FAQ() {
             ))}
           </Accordion>
 
-          <div className="mt-6 flex justify-center">
+          <div
+            className={cn('mt-6 flex', isRTL ? 'justify-end' : 'justify-start')}
+          >
             <LearnMoreLink article="generalFaq" />
           </div>
-        </motion.div>
+        </div>
       </Container>
     </Section>
   )

@@ -1,19 +1,16 @@
 'use client'
 
 import { motion, useReducedMotion } from 'framer-motion'
-import {
-  CheckCircle2,
-  ChevronLeft,
-  ChevronRight,
-  Clock3,
-  CreditCard,
-} from 'lucide-react'
+import { ArrowRight, CheckCircle2, CirclePlay, CreditCard } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import Image from 'next/image'
 import dynamic from 'next/dynamic'
+import type { MouseEvent } from 'react'
 import { useAcquisition } from '@/features/marketing/domain/useAcquisition'
 import { AcquisitionCta } from '@/features/marketing/ui/components/AcquisitionCta'
-import { PlatformAvailability } from '@/features/marketing/ui/components/PlatformAvailability'
+import { HeroFlowSteps } from '@/features/marketing/ui/components/hero/HeroFlowSteps'
+import { HeroValueProps } from '@/features/marketing/ui/components/hero/HeroValueProps'
+import { scrollToElement } from '@/shared/lib/scroll'
+import Ecosystem from './Ecosystem'
 
 const ChatInterface = dynamic(
   () =>
@@ -23,211 +20,114 @@ const ChatInterface = dynamic(
   { ssr: false }
 )
 
+const HOW_IT_WORKS_ID = 'how-it-works'
+
 function Hero() {
   const t = useTranslations('hero')
-  const { isRTL, targets } = useAcquisition()
+  const { targets } = useAcquisition()
   const shouldReduceMotion = useReducedMotion()
 
-  const proofItems = [
-    {
-      label: t('proof_shopify'),
-      icon: (
-        <Image
-          src="/images/landing/logos/shopify_icon_1.png"
-          alt={t('proof_shopify')}
-          width={32}
-          height={32}
-          unoptimized
-          className="h-7 w-7 object-contain"
-        />
-      ),
-    },
-    {
-      label: t('proof_meta'),
-      icon: (
-        <Image
-          src="/images/landing/logos/wa_icon_1.png"
-          alt={t('proof_meta')}
-          width={32}
-          height={32}
-          unoptimized
-          className="h-7 w-7 object-contain"
-        />
-      ),
-    },
-    {
-      label: t('proof_built'),
-      icon: (
-        <Image
-          src="/images/landing/logos/built_icon.jpg"
-          alt={t('proof_built')}
-          width={32}
-          height={32}
-          unoptimized
-          className="h-7 w-7 rounded-sm object-cover"
-        />
-      ),
-    },
-  ]
-
   const microcopyItems = [
-    {
-      label: t('microcopy_free'),
-      icon: <CheckCircle2 className="text-primary h-3.5 w-3.5" />,
-    },
-    {
-      label: t('microcopy_no_card'),
-      icon: <CreditCard className="text-primary h-3.5 w-3.5" />,
-    },
-    {
-      label: t('microcopy_setup'),
-      icon: <Clock3 className="text-primary h-3.5 w-3.5" />,
-    },
+    { label: t('microcopy_credits'), icon: CheckCircle2 },
+    { label: t('microcopy_no_card'), icon: CreditCard },
   ] as const
 
-  const baseTransition = {
-    duration: shouldReduceMotion ? 0 : 0.6,
+  const fadeUp = (delay: number) => ({
+    initial: { opacity: 0, y: 12 },
+    animate: { opacity: 1, y: 0 },
+    transition: {
+      duration: shouldReduceMotion ? 0 : 0.6,
+      delay: shouldReduceMotion ? 0 : delay,
+    },
+  })
+
+  const handleSeeHowItWorks = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (scrollToElement(HOW_IT_WORKS_ID)) {
+      event.preventDefault()
+    }
   }
 
-  const ctaChevron = isRTL ? (
-    <ChevronLeft className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
-  ) : (
-    <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-  )
-
   return (
-    <section className="relative overflow-hidden px-4 pt-28 pb-16 sm:px-6 sm:pt-32 sm:pb-20 lg:px-10 lg:pt-34 lg:pb-22">
-      <div className="mx-auto grid w-full max-w-7xl items-center gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.75fr)] lg:gap-10 xl:gap-12">
-        <div className="flex w-full max-w-3xl flex-col items-center text-center lg:items-start lg:text-left">
-          {/* Main Headline */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ ...baseTransition, delay: 0.1 }}
-            className="mb-6 flex max-w-4xl flex-col items-center gap-2.5 lg:items-start"
-          >
-            <h1
-              className={`${isRTL ? 'text-right' : 'text-left'} text-display text-foreground max-w-5xl text-balance`}
+    <section className="relative overflow-hidden px-4 pt-28 sm:px-6 sm:pt-32 lg:px-10 lg:pt-36 pb-54 rtl:pb-50">
+      <div className="mx-auto w-full max-w-7xl">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-8">
+          <div className="flex w-full flex-col items-center text-center lg:items-start lg:text-start">
+            {/* Headline */}
+            <motion.h1
+              {...fadeUp(0.08)}
+              className="text-display text-foreground mb-13 text-balance lg:text-[3.5rem] lg:leading-[1.04] xl:text-[4.25rem] rtl:lg:text-[3.25rem] rtl:lg:leading-tight rtl:xl:text-[3.75rem]"
             >
-              {t('title')}{' '}
-              <span className="from-primary-hover to-primary bg-linear-to-r bg-clip-text text-transparent">
-                {t('highlight')}
+              {/* Arabic runs longer, so only the LTR line is held to one row. */}
+              <span className="block ltr:lg:whitespace-nowrap">
+                {t('title')}
               </span>
-            </h1>
-          </motion.div>
+              <span className="text-primary block">{t('highlight')}</span>
+            </motion.h1>
 
-          {/* Subtitle */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ ...baseTransition, delay: 0.2 }}
-            className="mb-8 max-w-2xl"
-          >
-            <p
-              className={`${isRTL ? 'text-right' : 'text-left'} text-lead text-muted-foreground text-pretty`}
+            {/* CTA row */}
+            <motion.div
+              {...fadeUp(0.24)}
+              className="mb-4 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center lg:justify-start"
             >
-              {t('subtitle')}
-            </p>
-          </motion.div>
-
-          {/* Trust proof */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ ...baseTransition, delay: 0.25 }}
-            className="mb-10 grid w-full grid-cols-1 gap-3 sm:grid-cols-3"
-          >
-            {proofItems.map((item) => (
-              <div
-                key={item.label}
-                className="rounded-card bg-card/95 shadow-card ring-border/70 flex min-h-17 items-center gap-4 px-5 ring-1"
+              <a
+                href={`#${HOW_IT_WORKS_ID}`}
+                onClick={handleSeeHowItWorks}
+                className="group rounded-control bg-card/90 text-foreground shadow-card ring-border hover:ring-primary-border hover:text-primary focus-visible:ring-ring inline-flex h-14 items-center justify-center gap-2.5 px-7 text-base font-semibold ring-1 transition-[box-shadow,color,transform] duration-200 hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:outline-none"
               >
-                <span className="rounded-control bg-primary-subtle ring-primary-border/70 flex h-11 w-11 shrink-0 items-center justify-center ring-1">
-                  {item.icon}
-                </span>
-                <span className="text-foreground text-start text-sm leading-5 font-medium">
-                  {item.label}
-                </span>
-              </div>
-            ))}
-          </motion.div>
+                <CirclePlay className="text-primary h-5 w-5" />
+                {t('cta_secondary')}
+              </a>
+              <AcquisitionCta
+                target={targets.standalone}
+                label={t('cta_primary')}
+                variant="primary"
+                className="h-14 gap-3 px-8 text-lg font-semibold"
+                trailing={
+                  <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
+                }
+              />
+            </motion.div>
 
-          {/* Microcopy */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ ...baseTransition, delay: 0.35 }}
-            className="text-muted-foreground text-md mb-8 flex w-full flex-wrap content-center items-center justify-center gap-x-7 gap-y-4 font-medium"
-          >
-            {microcopyItems.map((item) => (
-              <span
-                key={item.label}
-                className="inline-flex items-center gap-2 whitespace-nowrap"
-              >
-                {item.icon}
-                {item.label}
-              </span>
-            ))}
-          </motion.div>
+            {/* Microcopy */}
+            <motion.ul
+              {...fadeUp(0.32)}
+              className="text-muted-foreground mb-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm font-light lg:justify-start"
+            >
+              {microcopyItems.map(({ label, icon: Icon }) => (
+                <li key={label} className="inline-flex items-center gap-2">
+                  <Icon className="h-4 w-4" />
+                  {label}
+                </li>
+              ))}
+            </motion.ul>
 
-          {/* Platform availability */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: shouldReduceMotion ? 0 : 0.8,
-              delay: 0.45,
-            }}
-            className="mb-4 w-full"
-          >
-            <PlatformAvailability isRTL={isRTL} />
-          </motion.div>
+            {/* Value props */}
+            <motion.div {...fadeUp(0.4)} className="w-full">
+              <HeroValueProps />
+            </motion.div>
+          </div>
 
-          {/* CTA row */}
+          {/* Product visual: flow steps beside the WhatsApp phone */}
           <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ ...baseTransition, delay: 0.3 }}
-            className="flex w-full max-w-2xl flex-col items-stretch justify-center gap-3 sm:flex-row lg:justify-start"
+            {...fadeUp(0.3)}
+            className="relative hidden items-center justify-end lg:flex"
           >
-            <AcquisitionCta
-              target={targets.shopify}
-              label={t('cta_shopify')}
-              variant="primary"
-              className="w-full sm:w-auto sm:min-w-76"
-              leading={
-                <span className="bg-card/95 shadow-raised flex h-11 w-11 shrink-0 items-center justify-center rounded-full">
-                  <Image
-                    src="/images/landing/logos/shopify_icon_1.png"
-                    alt={t('shopify_available')}
-                    width={32}
-                    height={32}
-                    unoptimized
-                    className="h-8 w-8 object-contain"
-                  />
-                </span>
-              }
-              trailing={ctaChevron}
+            <div
+              aria-hidden
+              className="bg-primary-subtle/80 pointer-events-none absolute end-0 top-1/2 h-120 w-120 -translate-y-1/2 rounded-full xl:-end-8"
             />
-            <AcquisitionCta
-              target={targets.standalone}
-              label={t('cta_standalone')}
-              note={t('cta_standalone_note')}
-              variant="secondary"
-              className="w-full sm:w-auto sm:min-w-56"
-            />
+            <div className="relative z-10 me-5 xl:me-7">
+              <HeroFlowSteps />
+            </div>
+            <div className="relative">
+              <ChatInterface />
+            </div>
           </motion.div>
         </div>
+      </div>
 
-        {/* Chat Interface */}
-        <motion.div
-          initial={{ opacity: 0, x: isRTL ? -20 : 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ ...baseTransition, delay: 0.35 }}
-          className="relative hidden items-center justify-center lg:flex"
-        >
-          <ChatInterface />
-        </motion.div>
+      <div className='absolute bottom-0 w-full'>
+        <Ecosystem />
       </div>
     </section>
   )

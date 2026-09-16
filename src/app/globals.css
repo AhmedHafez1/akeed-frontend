@@ -27,11 +27,10 @@
   --popover-foreground: oklch(12.9% 0.042 264.695);
 
   /*
-   * App canvas. A whisper of the brand hue rather than a neutral or warm
-   * grey — it keeps white cards reading as "lifted" without a heavy shadow,
-   * and avoids the muddy cast a warm grey picks up next to emerald.
+   * App canvas. A light neutral grey — it keeps white cards reading as
+   * "lifted" without a heavy shadow.
    */
-  --canvas: oklch(98.4% 0.004 165);
+  --canvas: #F6F6F7;
 
   /*
    * Brand. emerald-700, not emerald-600: white-on-emerald-600 is 3.35:1 and
@@ -247,6 +246,7 @@
   --animate-slide-up: slide-up 0.5s var(--ease-out-quint);
   --animate-slide-down: slide-down 0.5s var(--ease-out-quint);
   --animate-scale-in: scale-in 0.25s var(--ease-out-quint);
+  --animate-marquee: marquee 48s linear infinite;
 
   @keyframes accordion-down {
     from {
@@ -300,6 +300,15 @@
     to {
       transform: scale(1);
       opacity: 1;
+    }
+  }
+  /* Track holds two identical halves, so -50% loops seamlessly. */
+  @keyframes marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
     }
   }
 }
@@ -370,6 +379,25 @@
 
   button {
     @apply cursor-pointer;
+  }
+
+  /*
+   * Browser autofill paints its own background (often a pale blue) that
+   * ignores our input styling, so a filled field looks like a different
+   * component from an untouched one. Force it back to the input's own
+   * surface color via the long-transition trick, since `background-color`
+   * on autofilled fields can't be overridden directly.
+   */
+  input:autofill,
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px white inset;
+    box-shadow: 0 0 0 1000px white inset;
+    -webkit-text-fill-color: var(--foreground);
+    caret-color: var(--foreground);
+    transition: background-color 9999s ease-in-out 0s;
   }
 }
 
@@ -452,6 +480,66 @@
     isolation: isolate;
   }
 
+  .auth-hero-surface {
+    position: relative;
+    background-color: var(--background);
+    isolation: isolate;
+  }
+
+  .auth-hero-surface::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        58rem 58rem at 12% 8%,
+        oklch(42% 0.08 255 / 0.7),
+        transparent 60%
+      ),
+      radial-gradient(
+        52rem 52rem at 88% 28%,
+        oklch(69.6% 0.17 162.48 / 0.34),
+        transparent 55%
+      ),
+      linear-gradient(
+        135deg,
+        oklch(14% 0.035 255) 0%,
+        oklch(22% 0.045 255) 48%,
+        oklch(40% 0.12 162) 100%
+      );
+  }
+
+  [dir='rtl'] .auth-hero-surface::before {
+    scale: -1 1;
+  }
+
+  /*
+   * Reference-inspired blue-to-emerald gradient for auth CTAs. Painted as a
+   * background-image over the shared Button's `bg-primary` color, so it
+   * stays additive and scoped to auth call sites only.
+   */
+  .auth-gradient-button {
+    background-image: linear-gradient(
+      135deg,
+      oklch(52% 0.19 258),
+      var(--primary)
+    );
+    transition: filter 200ms ease-out;
+  }
+
+  .auth-gradient-button:hover {
+    filter: brightness(1.08);
+  }
+
+  .auth-gradient-text {
+    background-image: linear-gradient(135deg, oklch(42% 0.08 255), var(--primary));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
   .landing-hero-surface::before {
     content: '';
     position: absolute;
@@ -473,6 +561,66 @@
 
   [dir='rtl'] .landing-hero-surface::before {
     scale: -1 1;
+  }
+
+  /*
+   * Pricing slider on the dark ink panel. A native range input keeps keyboard,
+   * touch and assistive-technology behaviour for free; only the paint changes.
+   * The filled portion is a gradient stop driven by `--fill` (0–100%), set
+   * inline. The slider is always rendered `dir="ltr"` — a quantity scale reads
+   * low-to-high left-to-right in Arabic UIs too, matching the digits beside it.
+   */
+  .akeed-range {
+    --fill: 0%;
+    --range-accent: oklch(69.6% 0.17 162.48); /* emerald-500 — legible on ink */
+    appearance: none;
+    width: 100%;
+    height: 0.5rem;
+    border-radius: 9999px;
+    background: linear-gradient(
+      to right,
+      var(--range-accent) 0 var(--fill),
+      oklch(100% 0 0 / 0.12) var(--fill) 100%
+    );
+    cursor: pointer;
+    outline: none;
+  }
+
+  .akeed-range::-webkit-slider-thumb {
+    appearance: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 9999px;
+    background: oklch(100% 0 0);
+    border: 5px solid var(--range-accent);
+    box-shadow: 0 0 0 6px oklch(69.6% 0.17 162.48 / 0.18);
+    transition: box-shadow 200ms ease-out, transform 200ms ease-out;
+  }
+
+  .akeed-range::-moz-range-thumb {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 9999px;
+    background: oklch(100% 0 0);
+    border: 5px solid var(--range-accent);
+    box-shadow: 0 0 0 6px oklch(69.6% 0.17 162.48 / 0.18);
+    transition: box-shadow 200ms ease-out, transform 200ms ease-out;
+  }
+
+  .akeed-range::-moz-range-track {
+    background: transparent;
+  }
+
+  .akeed-range:hover::-webkit-slider-thumb,
+  .akeed-range:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 0 0 9px oklch(69.6% 0.17 162.48 / 0.28);
+    transform: scale(1.06);
+  }
+
+  .akeed-range:hover::-moz-range-thumb,
+  .akeed-range:focus-visible::-moz-range-thumb {
+    box-shadow: 0 0 0 9px oklch(69.6% 0.17 162.48 / 0.28);
+    transform: scale(1.06);
   }
 }
 

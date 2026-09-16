@@ -50,7 +50,7 @@ export interface InternationalPhoneInputProps {
  *
  * • Outputs a valid **E.164** formatted string.
  * • Excludes blocked territories from the country list.
- * • Provides real-time validation feedback (green/red border).
+ * • Provides real-time validation feedback (red border on error).
  * • Mobile-friendly with large touch targets.
  */
 export const InternationalPhoneInput = React.forwardRef<
@@ -104,8 +104,6 @@ export const InternationalPhoneInput = React.forwardRef<
         className={cn(
           'intl-phone border-input relative flex h-12 w-full items-center rounded-lg border-2 bg-white px-3 transition-colors rtl:justify-end',
           'focus-within:border-ring focus-within:bg-muted',
-          isValid === true &&
-            'border-green-600 focus-within:border-green-600 focus-within:ring-1 focus-within:ring-green-600',
           hasError &&
             'border-red-500 focus-within:border-red-500 focus-within:ring-1 focus-within:ring-red-500',
           disabled && 'cursor-not-allowed opacity-50'

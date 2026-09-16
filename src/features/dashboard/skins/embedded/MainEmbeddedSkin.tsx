@@ -104,9 +104,13 @@ function MainConfirmationsTab({
               statusFilterLabel: t('filters.status.label'),
               noReplyTooltip: t('tooltips.noReply'),
               loadingMore: t('table.loadingMore'),
-              loadMore: t('table.loadMore'),
+              loadMoreRetry: t('verifications.loadMoreRetry'),
+              showing: t('verifications.showing', {
+                loaded: confirmations.verifications.length,
+                total: confirmations.totalCount,
+              }),
               emptyMessage: confirmations.emptyVerificationsMessage,
-              readOnlyNotice: t('readOnlyNotice'),
+
               emptyState: {
                 heading: t('emptyState.onboarding.heading'),
                 activeDescription: t('emptyState.onboarding.activeDescription'),
@@ -128,6 +132,7 @@ function MainConfirmationsTab({
             verifications={confirmations.verifications}
             isVerificationsLoading={confirmations.isVerificationsLoading}
             hasMoreVerifications={confirmations.hasMoreVerifications}
+            hasLoadMoreError={confirmations.hasLoadMoreError}
             isLoadingMoreVerifications={
               confirmations.isLoadingMoreVerifications
             }

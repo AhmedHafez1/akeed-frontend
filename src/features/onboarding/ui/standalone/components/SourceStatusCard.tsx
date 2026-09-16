@@ -31,7 +31,7 @@ export function SourceStatusCard({ identity }: SourceStatusCardProps) {
   }
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 text-start">
+    <div className="rounded-card border-border bg-card border p-4 text-start">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex min-w-0 items-start gap-2.5">
           <span

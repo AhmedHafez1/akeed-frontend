@@ -107,7 +107,11 @@ export function createLogger(moduleName: string) {
       const normalized =
         error === undefined ? undefined : normalizeError(error)
 
-      emit('error', `${tag} ${message}`, {
+      // Include the error text in the message: Next's dev overlay renders the
+      // context object as `{}`.
+      const summary = normalized ? `: ${normalized.errorMessage}` : ''
+
+      emit('error', `${tag} ${message}${summary}`, {
         ...context,
         ...normalized,
       })

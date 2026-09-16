@@ -13,7 +13,7 @@ export function verificationListInfiniteOptions(
   statusFilter: VerificationStatusFilter,
   dateRange: DashboardStatsDateRange
 ) {
-  const query = buildVerificationsQuery(statusFilter, dateRange)
+  const query = buildVerificationsQuery({ statusFilter, dateRange })
 
   return infiniteQueryOptions({
     queryKey: queryKeys.verifications.list({ status: statusFilter, dateRange }),

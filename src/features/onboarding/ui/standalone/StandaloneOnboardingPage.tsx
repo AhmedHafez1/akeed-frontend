@@ -279,7 +279,7 @@ export function StandaloneOnboardingPage() {
             </div>
           )}
 
-          <Card className="overflow-hidden border-slate-200 bg-white p-0 shadow-none">
+          <Card variant="flat" className="overflow-hidden p-0">
             <div className="space-y-6 p-5 text-start sm:p-6">
               <div>
                 <p className="inline-flex rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600 tabular-nums">
@@ -326,7 +326,7 @@ export function StandaloneOnboardingPage() {
               )}
             </div>
 
-            <div className="flex flex-col gap-4 border-t border-slate-200 bg-white p-5 sm:flex-row-reverse sm:items-center sm:justify-between sm:p-6">
+            <div className="border-border bg-card flex flex-col gap-4 border-t p-5 sm:flex-row-reverse sm:items-center sm:justify-between sm:p-6">
               <div className="flex flex-col gap-2 sm:flex-row-reverse sm:items-center sm:gap-3">
                 {/* Read-only users have nothing to do past the review step. */}
                 {(canManage || currentStep < STANDALONE_TOTAL_STEPS) && (

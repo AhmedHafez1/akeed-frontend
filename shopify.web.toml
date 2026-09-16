@@ -1,4 +1,4 @@
 name = "frontend"
 roles = ["frontend"]
-port = 3002
+port = 3001
 commands = { dev = "node ./node_modules/next/dist/bin/next dev" }
