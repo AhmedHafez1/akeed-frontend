@@ -90,7 +90,13 @@ export function VerificationsTableStandalone(
       <table className="hidden w-full table-fixed text-start text-sm md:table">
         <caption className="sr-only">{t('verifications.title')}</caption>
         <thead>
-          <tr className="border-b border-slate-200 bg-slate-50/60 text-xs font-medium text-slate-600">
+          {/*
+           * The header pins to the top of the scroll container the section
+           * wraps this table in, so the background has to be opaque -- rows
+           * would otherwise show through the translucent one this row used to
+           * carry. The bottom rule moved onto the cells with it.
+           */}
+          <tr className="text-xs font-medium text-slate-600">
             {[
               ['order', 'w-[17%]'],
               ['customer', 'w-[25%]'],
@@ -102,7 +108,14 @@ export function VerificationsTableStandalone(
               <th
                 key={heading}
                 scope="col"
-                className={cn('px-4 py-3 text-start', width)}
+                className={cn(
+                  'sticky top-0 z-10 bg-slate-50 px-4 py-3 text-start',
+                  // The bottom rule is drawn by a pseudo-element rather than a
+                  // border: under `border-collapse`, a border on a sticky cell
+                  // is dropped by WebKit while the container scrolls.
+                  "after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-slate-200 after:content-['']",
+                  width
+                )}
               >
                 {t(`table.headings.${heading}`)}
               </th>

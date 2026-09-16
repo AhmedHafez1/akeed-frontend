@@ -59,12 +59,39 @@ export function filterAdmitsStatus(
   return composite ? composite.split(',').includes(status) : filter === status
 }
 
-/** Build the `/api/verifications` query string for a filter selection. */
-export function buildVerificationsQuery(
-  statusFilter: VerificationStatusFilter,
+/**
+ * Rows fetched per request.
+ *
+ * Sent explicitly rather than left to the server's default so the size the
+ * table pages by is decided where the table is, and cannot drift when the
+ * server's default moves. A screenful: the list grows by Load-more, and each
+ * row carries its order with it.
+ */
+export const VERIFICATIONS_PAGE_SIZE = 20
+
+/**
+ * What narrows a listing request.
+ *
+ * An options object rather than positional arguments because this is the seam
+ * sorting and search arrive through — each is one more optional field here and
+ * one more `params.set`, with no call site to re-thread.
+ */
+export interface VerificationsQueryParams {
+  statusFilter: VerificationStatusFilter
   dateRange: DashboardStatsDateRange
-): string {
-  const params = new URLSearchParams({ date_range: dateRange })
+  limit?: number
+}
+
+/** Build the `/api/verifications` query string for a filter selection. */
+export function buildVerificationsQuery({
+  statusFilter,
+  dateRange,
+  limit = VERIFICATIONS_PAGE_SIZE,
+}: VerificationsQueryParams): string {
+  const params = new URLSearchParams({
+    date_range: dateRange,
+    limit: String(limit),
+  })
   const composite = COMPOSITE_FILTERS[statusFilter]
 
   if (composite) {

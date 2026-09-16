@@ -15,10 +15,12 @@ export function DashboardVerificationsEmbeddedSkin({
   quietHoursEnabled,
   sourceStatus,
   verifications,
+  totalCount,
   isVerificationsLoading,
   isStatsLoading,
   hasMoreVerifications,
   isLoadingMoreVerifications,
+  hasLoadMoreError,
   onLoadMoreVerifications,
   hasVerifications,
   emptyVerificationsMessage,
@@ -101,7 +103,11 @@ export function DashboardVerificationsEmbeddedSkin({
                 statusFilterLabel: t('filters.status.label'),
                 noReplyTooltip: t('tooltips.noReply'),
                 loadingMore: t('table.loadingMore'),
-                loadMore: t('table.loadMore'),
+                loadMoreRetry: t('verifications.loadMoreRetry'),
+                showing: t('verifications.showing', {
+                  loaded: verifications.length,
+                  total: totalCount,
+                }),
                 emptyMessage: emptyVerificationsMessage,
                 readOnlyNotice: t('readOnlyNotice'),
                 emptyState: {
@@ -125,9 +131,11 @@ export function DashboardVerificationsEmbeddedSkin({
                 },
               }}
               verifications={verifications}
+              totalCount={totalCount}
               isVerificationsLoading={isVerificationsLoading}
               hasMoreVerifications={hasMoreVerifications}
               isLoadingMoreVerifications={isLoadingMoreVerifications}
+              hasLoadMoreError={hasLoadMoreError}
               hasVerifications={hasVerifications}
               actingVerificationId={actingVerificationId}
               reportingTimezone={reportingTimezone}

@@ -91,6 +91,7 @@ export function useVerificationsDashboard(
     isVerificationsLoading,
     hasMoreVerifications,
     isLoadingMoreVerifications,
+    hasLoadMoreError,
     onLoadMoreVerifications,
     error: verificationsError,
     pageContext,
@@ -375,6 +376,7 @@ export function useVerificationsDashboard(
     isVerificationsLoading,
     hasMoreVerifications,
     isLoadingMoreVerifications,
+    hasLoadMoreError,
     onLoadMoreVerifications,
     hasVerifications: displayedVerifications.length > 0,
     emptyVerificationsMessage:

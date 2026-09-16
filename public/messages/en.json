@@ -1300,7 +1300,6 @@
       },
       "unknownCustomer": "Unknown customer",
       "noPhone": "No phone",
-      "loadMore": "Load more",
       "loadingMore": "Loading more...",
       "followUp": {
         "sent": "Sent",
@@ -1380,7 +1379,7 @@
       "subtitle": "{count, plural, =0 {No verifications in this period} one {# verification in this period} other {# verifications in this period}}",
       "loading": "Loading verifications...",
       "loadingMore": "Loading more...",
-      "loadMore": "Load more",
+      "loadMoreRetry": "Try again",
       "readOnlyNotice": "You have read-only access. An owner or admin can retry verification or mark supported orders canceled.",
       "empty": {
         "title": "No verifications yet",
@@ -1404,7 +1403,7 @@
         "clear": "Clear status filter"
       },
       "eyebrow": "Operations",
-      "loaded": "{count, plural, one {# verification loaded} other {# verifications loaded}}",
+      "showing": "Showing {loaded} of {total}",
       "workload": {
         "label": "Verification workload",
         "loading": "Loading workload",

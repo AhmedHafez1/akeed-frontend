@@ -23,6 +23,13 @@ export function DashboardVerificationsStandaloneSkin(
           </p>
           <h1 className="flex items-center gap-2 text-3xl font-bold tracking-tight text-slate-900">
             {t('verifications.title')}
+            {/* Held back until the first response lands, so the merchant is
+                never shown a zero that is really "not known yet". */}
+            {!props.isVerificationsLoading && (
+              <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-sm font-semibold text-emerald-800 tabular-nums">
+                {props.totalCount}
+              </span>
+            )}
             <Tooltip content={t('verifications.pageSubtitle')}>
               <Info aria-hidden="true" className="size-5 text-slate-400" />
               <span className="sr-only">{t('verifications.pageSubtitle')}</span>
@@ -89,6 +96,7 @@ export function DashboardVerificationsStandaloneSkin(
         isVerificationsLoading={props.isVerificationsLoading}
         hasMoreVerifications={props.hasMoreVerifications}
         isLoadingMoreVerifications={props.isLoadingMoreVerifications}
+        hasLoadMoreError={props.hasLoadMoreError}
         statusFilter={props.statusFilter}
         statusFilters={props.statusFilters}
         actingVerificationId={props.actingVerificationId}
