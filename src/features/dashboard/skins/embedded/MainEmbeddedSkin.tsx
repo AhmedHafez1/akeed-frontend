@@ -110,7 +110,7 @@ function MainConfirmationsTab({
                 total: confirmations.totalCount,
               }),
               emptyMessage: confirmations.emptyVerificationsMessage,
-              readOnlyNotice: t('readOnlyNotice'),
+
               emptyState: {
                 heading: t('emptyState.onboarding.heading'),
                 activeDescription: t('emptyState.onboarding.activeDescription'),
@@ -130,7 +130,6 @@ function MainConfirmationsTab({
               },
             }}
             verifications={confirmations.verifications}
-            totalCount={confirmations.totalCount}
             isVerificationsLoading={confirmations.isVerificationsLoading}
             hasMoreVerifications={confirmations.hasMoreVerifications}
             hasLoadMoreError={confirmations.hasLoadMoreError}

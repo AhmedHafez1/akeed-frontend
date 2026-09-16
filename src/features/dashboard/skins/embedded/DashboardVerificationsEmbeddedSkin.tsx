@@ -109,7 +109,7 @@ export function DashboardVerificationsEmbeddedSkin({
                   total: totalCount,
                 }),
                 emptyMessage: emptyVerificationsMessage,
-                readOnlyNotice: t('readOnlyNotice'),
+
                 emptyState: {
                   heading: t('emptyState.onboarding.heading'),
                   activeDescription: t(
@@ -131,7 +131,6 @@ export function DashboardVerificationsEmbeddedSkin({
                 },
               }}
               verifications={verifications}
-              totalCount={totalCount}
               isVerificationsLoading={isVerificationsLoading}
               hasMoreVerifications={hasMoreVerifications}
               isLoadingMoreVerifications={isLoadingMoreVerifications}

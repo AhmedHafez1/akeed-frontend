@@ -1,7 +1,5 @@
 import {
   BlockStack,
-  Badge,
-  Banner,
   Box,
   Button,
   Card,
@@ -30,7 +28,6 @@ interface EmbeddedVerificationMessages {
   /** Interpolated by the parent -- this section resolves no copy itself. */
   showing: string
   emptyMessage: string
-  readOnlyNotice: string
   emptyState: {
     heading: string
     activeDescription: string
@@ -49,7 +46,6 @@ interface EmbeddedVerificationMessages {
 interface EmbeddedVerificationSectionProps {
   messages: EmbeddedVerificationMessages
   verifications: VerificationItem[]
-  totalCount: number
   isVerificationsLoading: boolean
   hasMoreVerifications: boolean
   isLoadingMoreVerifications: boolean
@@ -77,7 +73,6 @@ interface EmbeddedVerificationSectionProps {
 export function EmbeddedVerificationSection({
   messages,
   verifications,
-  totalCount,
   isVerificationsLoading,
   hasMoreVerifications,
   isLoadingMoreVerifications,
@@ -113,18 +108,11 @@ export function EmbeddedVerificationSection({
   return (
     <Card>
       <BlockStack gap="400">
-        {!canSendTestVerification && !canCancelOrders && (
-          <Banner tone="info">
-            <p>{messages.readOnlyNotice}</p>
-          </Banner>
-        )}
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <BlockStack gap="050">
-            <InlineStack gap="200" blockAlign="center">
-              <Text variant={isRTL ? 'headingMd' : 'headingSm'} as="h2">
-                {messages.title}
-              </Text>
-            </InlineStack>
+            <Text variant={isRTL ? 'headingMd' : 'headingSm'} as="h2">
+              {messages.title}
+            </Text>
             <Text variant={isRTL ? 'bodySm' : 'bodyXs'} tone="subdued" as="p">
               {messages.subtitle}
             </Text>
