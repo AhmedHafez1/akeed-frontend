@@ -163,7 +163,7 @@ export function StandaloneVerificationsSection({
               role="region"
               aria-label={t('verifications.title')}
               tabIndex={0}
-              className="max-h-[60vh] overflow-y-auto overscroll-contain focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+              className="max-h-[60vh] overflow-x-hidden overflow-y-auto overscroll-contain focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
             >
               <VerificationsTableStandalone
                 verifications={verifications}
