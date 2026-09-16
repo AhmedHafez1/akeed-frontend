@@ -166,9 +166,6 @@ export function VerificationsTableEmbedded({
                   </Badge>
                 </span>
               </div>
-              <Text variant="bodySm" tone="subdued" as="p">
-                {t(resolveRowDescriptionKey(verification))}
-              </Text>
             </BlockStack>
           </div>
         </IndexTable.Cell>
