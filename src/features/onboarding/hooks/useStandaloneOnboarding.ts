@@ -312,6 +312,12 @@ export function useStandaloneOnboarding() {
       if (!saved.state) return saved
       const response = await completeStandaloneOnboarding()
       setState(response.state)
+      try {
+        window.sessionStorage.setItem('akeed:onboarding-just-completed', '1')
+      } catch {
+        // Storage may be unavailable (private mode, disabled cookies) — the
+        // welcome modal simply won't show. No impact on onboarding itself.
+      }
       router.replace(`/${locale}/dashboard`)
       return { state: response.state, firstInvalidField: null, errorStep: null }
     } catch (error) {

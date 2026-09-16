@@ -46,8 +46,8 @@ export function OnboardingStepRail({
                 <span
                   aria-hidden="true"
                   className={cn(
-                    'absolute [inset-inline-start:1rem] top-11 bottom-1 w-px',
-                    isCompleted ? 'bg-emerald-500' : 'bg-slate-200'
+                    'absolute [inset-inline-start:calc(1rem-1px)] top-11 bottom-1 w-0.5 rounded-full',
+                    isCompleted ? 'bg-emerald-500' : 'bg-slate-300'
                   )}
                 />
               )}

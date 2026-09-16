@@ -304,7 +304,6 @@ export function StandaloneOnboardingPage() {
                 <StoreDetailsStep
                   form={onboarding.form}
                   fieldErrors={onboarding.fieldErrors}
-                  sourceIdentity={onboarding.state.source.identity}
                   disabled={disabled}
                   onFieldChange={onboarding.setField}
                 />
