@@ -181,7 +181,7 @@ export function EmbeddedVerificationSection({
               role="region"
               aria-label={messages.title}
               tabIndex={0}
-              className="max-h-[60vh] overflow-y-auto overscroll-contain"
+              className="max-h-[60vh] overflow-x-hidden overflow-y-auto overscroll-contain"
             >
               <VerificationsTableEmbedded
                 verifications={verifications}
