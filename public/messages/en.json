@@ -1082,6 +1082,12 @@
     "title": "Dashboard",
     "subtitle": "Monitor verification status and recent orders across your channels.",
     "valueProposition": "Akeed confirms cash-on-delivery orders through WhatsApp before fulfillment.",
+    "welcomeModal": {
+      "title": "Welcome to Akeed!",
+      "body": "You're all set. We've added {count} free credits to your account so you can start confirming orders right away.",
+      "bodyFallback": "You're all set. We've added free credits to your account so you can start confirming orders right away.",
+      "cta": "Get started"
+    },
     "standalone": {
       "eyebrow": "Overview",
       "greeting": "Welcome back, {name}",
@@ -1900,9 +1906,6 @@
   "standaloneOnboarding": {
     "title": "Let’s set up your workspace",
     "subtitle": "Three short steps to start confirming cash-on-delivery orders over WhatsApp.",
-    "sourceType": "Standalone / Manual source",
-    "copy": "Copy ID",
-    "copied": "Copied",
     "saveProgress": "Save progress",
     "saving": "Saving…",
     "saved": "Setup progress saved.",
@@ -1956,7 +1959,7 @@
       "completed": "Completed",
       "storeDetails": {
         "title": "Store details",
-        "description": "Name, language, and source",
+        "description": "Name and language",
         "heading": "Tell us about your store",
         "subheading": "We use these details to personalize the confirmation messages your customers receive."
       },
@@ -1972,17 +1975,6 @@
         "heading": "Review your setup",
         "subheading": "Check these details, then complete setup to finish."
       }
-    },
-    "source": {
-      "heading": "Order source",
-      "ready": "Ready to receive orders",
-      "showId": "Show ID",
-      "hideId": "Hide ID",
-      "idLabel": "Source identifier"
-    },
-    "cod": {
-      "heading": "Treat missing payment information as COD",
-      "help": "When on, an order that arrives without payment information enters the cash-on-delivery confirmation flow. Turn this on only if your source normally omits payment details."
     },
     "rules": {
       "autoVerifyHeading": "Enable automatic verification",
@@ -2002,16 +1994,12 @@
     "review": {
       "storeName": "Store name",
       "language": "Message language",
-      "source": "Order source",
-      "cod": "Missing payment information",
       "automation": "Automatic verification",
       "timezone": "Timezone",
       "timing": "Timing rules",
       "edit": "Edit",
       "editStep": "Edit {step}",
       "on": "On",
-      "codOn": "Treated as cash on delivery",
-      "codOff": "Not treated as cash on delivery",
       "firstDelay": "First message after {hours} h",
       "firstDelayImmediate": "First message sent immediately",
       "followUp": "Follow-up after {hours} h",
@@ -2245,6 +2233,9 @@
       "equivalent": "≈ {amount}",
       "ready": "ready for new messages",
       "buyCredits": "Buy credits"
+    },
+    "badge": {
+      "label": "credits"
     },
     "packages": {
       "stepLabel": "Choose an amount",

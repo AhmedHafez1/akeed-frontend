@@ -75,18 +75,6 @@ export function ReviewStep({ form, blockedReasons, onEdit }: ReviewStepProps) {
           editStepTitle={t('steps.storeDetails.title')}
           onEdit={onEdit}
         />
-        <SummaryRow label={t('review.source')} value={t('sourceType')} />
-        <SummaryRow
-          label={t('review.cod')}
-          value={
-            form.assumeCodWhenPaymentMissing
-              ? t('review.codOn')
-              : t('review.codOff')
-          }
-          editStep={1}
-          editStepTitle={t('steps.storeDetails.title')}
-          onEdit={onEdit}
-        />
         <SummaryRow
           label={t('review.automation')}
           value={

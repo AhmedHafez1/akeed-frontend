@@ -10,17 +10,11 @@ import type { StandaloneSetupForm } from '@/features/onboarding/hooks/useStandal
 import { STANDALONE_FIELD_IDS } from '@/features/onboarding/model/onboarding.steps'
 import { Input } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
-import {
-  OnboardingCard,
-  OnboardingField,
-  SegmentedControl,
-  SourceStatusCard,
-} from '../components'
+import { OnboardingField, SegmentedControl } from '../components'
 
 interface StoreDetailsStepProps {
   form: StandaloneSetupForm
   fieldErrors: StandaloneSetupFieldErrors
-  sourceIdentity: string
   disabled: boolean
   onFieldChange: <TKey extends keyof StandaloneSetupForm>(
     key: TKey,
@@ -31,7 +25,6 @@ interface StoreDetailsStepProps {
 export function StoreDetailsStep({
   form,
   fieldErrors,
-  sourceIdentity,
   disabled,
   onFieldChange,
 }: StoreDetailsStepProps) {
@@ -96,24 +89,6 @@ export function StoreDetailsStep({
           {t('languageAutoHelp')}
         </p>
       </div>
-
-      <div className="space-y-2 border-t border-slate-100 pt-6 text-start">
-        <p className="text-sm font-medium text-slate-900">
-          {t('source.heading')}
-        </p>
-        <SourceStatusCard identity={sourceIdentity} />
-      </div>
-
-      <OnboardingCard
-        title={t('cod.heading')}
-        description={t('cod.help')}
-        checked={form.assumeCodWhenPaymentMissing}
-        switchLabel={t('cod.heading')}
-        switchDisabled={disabled}
-        onCheckedChange={(value) =>
-          onFieldChange('assumeCodWhenPaymentMissing', value)
-        }
-      />
     </div>
   )
 }

@@ -1,11 +1,13 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { notify } from '@/shared/ui'
+import { CreditsBadge } from '@/features/billing/ui/components/CreditsBadge'
 import { StandaloneDashboardHeader } from './components/StandaloneDashboardHeader'
 import { StandaloneFeedbackBanners } from './components/StandaloneFeedbackBanners'
 import { StandaloneStatsSummary } from './components/StandaloneStatsSummary'
+import { WelcomeCreditsModal } from './components/WelcomeCreditsModal'
 import type { DashboardSkinProps } from '../../domain/dashboard.types'
 
 export function DashboardStandaloneSkin({
@@ -24,6 +26,28 @@ export function DashboardStandaloneSkin({
   error: verificationsError,
   creditDenialCode,
 }: DashboardSkinProps) {
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false)
+
+  // Deliberately deferred to an effect (rather than a lazy useState
+  // initializer) so the first client render matches the server-rendered
+  // markup and hydration never sees a dialog that's already open.
+  useEffect(() => {
+    try {
+      const justCompleted = window.sessionStorage.getItem(
+        'akeed:onboarding-just-completed'
+      )
+      if (justCompleted) {
+        window.sessionStorage.removeItem('akeed:onboarding-just-completed')
+        // One-shot consumption of a flag set just before the redirect into
+        // this page; there's no prop/state to derive this from during render.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setShowWelcomeModal(true)
+      }
+    } catch {
+      // Storage unavailable — modal just doesn't show.
+    }
+  }, [])
+
   useEffect(() => {
     if (!testFeedback || testFeedback.tone === 'critical') return
     const show =
@@ -50,6 +74,7 @@ export function DashboardStandaloneSkin({
         dateRangeFilter={dateRangeFilter}
         dateRangeOptions={dateRangeOptions}
         onDateRangeFilterChange={onDateRangeFilterChange}
+        action={<CreditsBadge />}
       />
 
       <StandaloneFeedbackBanners
@@ -68,6 +93,11 @@ export function DashboardStandaloneSkin({
         verifications={verifications}
         isVerificationsLoading={isVerificationsLoading}
         verificationsError={verificationsError}
+      />
+
+      <WelcomeCreditsModal
+        open={showWelcomeModal}
+        onOpenChange={setShowWelcomeModal}
       />
     </div>
   )

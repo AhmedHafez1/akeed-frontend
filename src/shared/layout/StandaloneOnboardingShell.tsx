@@ -1,17 +1,21 @@
 'use client'
 
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { CircleHelp } from 'lucide-react'
+import { CircleHelp, LogOut } from 'lucide-react'
+import { auth } from '@/shared/lib/auth'
+import { createLogger } from '@/shared/lib/logger'
 import {
   getLocaleFromPathname,
   persistLocalePreference,
   withLocale,
 } from '@/shared/lib/locale'
 import type { SupportedLocale } from '@/shared/lib/locale'
+
+const logger = createLogger('Auth')
 
 interface StandaloneOnboardingShellProps {
   children: ReactNode
@@ -29,9 +33,22 @@ export function StandaloneOnboardingShell({
   children,
 }: StandaloneOnboardingShellProps) {
   const t = useTranslations('standaloneOnboarding')
+  const tHeader = useTranslations('appHeader')
   const pathname = usePathname() ?? ''
   const router = useRouter()
   const locale = getLocaleFromPathname(pathname)
+  const [isSigningOut, setIsSigningOut] = useState(false)
+
+  const handleSignOut = async () => {
+    setIsSigningOut(true)
+    try {
+      await auth.signOut()
+      router.push(auth.getLoginPath(locale))
+    } catch (error) {
+      logger.error('Sign out failed', error)
+      setIsSigningOut(false)
+    }
+  }
 
   const handleLocaleChange = () => {
     const nextLocale: SupportedLocale = locale === 'ar' ? 'en' : 'ar'
@@ -80,6 +97,17 @@ export function StandaloneOnboardingShell({
             <CircleHelp aria-hidden="true" className="h-[18px] w-[18px]" />
             <span className="hidden sm:inline">{t('shell.help')}</span>
           </Link>
+          <button
+            type="button"
+            onClick={() => void handleSignOut()}
+            disabled={isSigningOut}
+            className="hover:bg-muted inline-flex h-9 items-center gap-2 rounded-lg px-2.5 text-sm text-slate-600 transition-colors hover:text-red-600 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-60"
+          >
+            <LogOut aria-hidden="true" className="h-[18px] w-[18px]" />
+            <span className="hidden sm:inline">
+              {isSigningOut ? tHeader('signingOut') : tHeader('signOut')}
+            </span>
+          </button>
         </div>
       </header>
 

@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl'
 import { ChevronDown, Info } from 'lucide-react'
 import { Tooltip } from '@/shared/ui'
+import { CreditsBadge } from '@/features/billing/ui/components/CreditsBadge'
 import { StandaloneFeedbackBanners } from './components/StandaloneFeedbackBanners'
 import { StandaloneVerificationsSection } from './components/StandaloneVerificationsSection'
 import { StandaloneVerificationWorkload } from './components/StandaloneVerificationWorkload'
@@ -37,6 +38,7 @@ export function DashboardVerificationsStandaloneSkin(
           </h1>
         </div>
         <div className="flex flex-wrap items-center gap-3">
+          <CreditsBadge />
           <label className="relative flex items-center gap-2 text-sm text-slate-500">
             <span className="sr-only">{t('filters.dateRange.label')}</span>
             <select
