@@ -5,16 +5,19 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
+  BookOpen,
   CircleHelp,
   CreditCard,
   FileText,
   LayoutDashboard,
   LogOut,
   Settings,
+  Shield,
   ShieldCheck,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useBillingSummary } from '@/features/billing'
+import { useIsAdmin } from '@/features/admin/useIsAdmin'
 import { auth } from '@/shared/lib/auth'
 import { createLogger } from '@/shared/lib/logger'
 import { cn } from '@/shared/lib/utils'
@@ -38,6 +41,7 @@ export function StandaloneSidebar({
   const locale = getLocaleFromPathname(pathname)
   const { identity, isIdentityLoading } = useStandaloneShell()
   const { summary: billingSummary } = useBillingSummary()
+  const isAdmin = useIsAdmin()
   const [isSigningOut, setIsSigningOut] = useState(false)
   const navigationItems = [
     { href: '/dashboard', label: t('dashboard'), icon: LayoutDashboard },
@@ -118,6 +122,24 @@ export function StandaloneSidebar({
       </nav>
 
       <div className="mt-auto space-y-3 pt-8">
+        {isAdmin && (
+          <Link
+            href={withLocale('/admin', locale)}
+            onClick={onNavigate}
+            className="hover:bg-muted flex min-h-11 items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:text-slate-950 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none"
+          >
+            <Shield aria-hidden="true" className="h-5 w-5" />
+            {t('admin')}
+          </Link>
+        )}
+        <Link
+          href={withLocale('/docs', locale)}
+          onClick={onNavigate}
+          className="hover:bg-muted flex min-h-11 items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:text-slate-950 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none"
+        >
+          <BookOpen aria-hidden="true" className="h-5 w-5" />
+          {t('docs')}
+        </Link>
         <Link
           href={withLocale('/support', locale)}
           onClick={onNavigate}

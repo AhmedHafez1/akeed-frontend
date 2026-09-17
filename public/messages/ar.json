@@ -777,7 +777,7 @@
   },
   "whatsapp_button": {
     "text": "جرّب الخدمة من موبايلك أولاً",
-    "message": "مرحباً، أريد تجربة خدمة أكيد"
+    "message": "مرحباً، أريد تجربة أكيد"
   },
   "pricing_credits": {
     "eyebrow": "الأسعار",
@@ -979,6 +979,8 @@
     "userFallback": "المستخدم المسجل",
     "identityLoading": "جارٍ تحميل بيانات مساحة العمل",
     "helpSupport": "المساعدة والدعم",
+    "docs": "الدليل",
+    "admin": "الإدارة",
     "search": "البحث في الطلبات",
     "searchOrders": "فتح البحث في الطلبات",
     "openVerifications": "فتح التأكيدات",

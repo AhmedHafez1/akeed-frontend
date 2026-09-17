@@ -783,7 +783,7 @@
   },
   "whatsapp_button": {
     "text": "Try it on your phone first",
-    "message": "Hi, I want to try Akeed service"
+    "message": "Hi, I want to try Akeed"
   },
   "pricing_credits": {
     "eyebrow": "Pricing",
@@ -985,6 +985,8 @@
     "userFallback": "Signed-in user",
     "identityLoading": "Loading workspace identity",
     "helpSupport": "Help & support",
+    "docs": "Docs",
+    "admin": "Admin",
     "search": "Search orders",
     "searchOrders": "Open order search",
     "openVerifications": "Open verifications",
