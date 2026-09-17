@@ -80,7 +80,7 @@ function ToggleRow({
   onChange: (checked: boolean) => void
 }) {
   return (
-    <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 transition-colors hover:bg-slate-100">
+    <label className="rounded-card border-border bg-muted hover:bg-muted/70 flex cursor-pointer items-start gap-3 border p-4 transition-colors">
       <input
         type="checkbox"
         checked={checked}

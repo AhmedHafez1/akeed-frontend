@@ -10,11 +10,11 @@ const cardVariants = cva(
       variant: {
         /* Dense surfaces — admin tables, list rows. Separation by line only. */
         flat: '',
-        /* Dashboard panels and tiles. */
-        elevated: 'shadow-card',
+        /* Dashboard panels and tiles. Border only, no resting shadow. */
+        elevated: '',
         /* Feature/marketing surfaces that should lift on hover. */
         interactive:
-          'shadow-card hover:border-primary-border hover:shadow-overlay transition-[border-color,box-shadow,transform] duration-300 ease-out hover:-translate-y-0.5',
+          'hover:border-primary-border hover:shadow-overlay transition-[border-color,box-shadow,transform] duration-300 ease-out hover:-translate-y-0.5',
       },
     },
     defaultVariants: {

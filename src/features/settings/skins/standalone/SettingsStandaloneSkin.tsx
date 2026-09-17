@@ -483,11 +483,11 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                       ? t('sourceStandalone')
                       : props.sourcePlatformType}
                   </div>
-                  <details className="rounded-lg border border-slate-200 bg-slate-50/70">
+                  <details className="rounded-card border-border bg-muted/70 border">
                     <summary className="cursor-pointer px-3 py-2.5 text-sm font-medium text-slate-700 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none">
                       {standaloneT('general.connectionDetails')}
                     </summary>
-                    <div className="flex flex-col gap-3 border-t border-slate-200 p-3 sm:flex-row sm:items-center">
+                    <div className="border-border flex flex-col gap-3 border-t p-3 sm:flex-row sm:items-center">
                       <code
                         dir="ltr"
                         className="min-w-0 flex-1 text-xs break-all text-slate-600"
@@ -565,7 +565,7 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                 </p>
               </div>
 
-              <div className="rounded-card border-border bg-card flex items-center gap-3 border px-4 py-3">
+              <Card variant="flat" className="flex items-center gap-3 px-4 py-3">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
                   <ShieldCheck className="h-5 w-5" />
                 </span>
@@ -577,7 +577,7 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                     {standaloneT('automation.trustDescription')}
                   </p>
                 </div>
-              </div>
+              </Card>
 
               <SettingsCard
                 title={standaloneT('automation.confirmationTitle')}
@@ -687,7 +687,7 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                 )}
               </SettingsCard>
 
-              <details className="rounded-xl border border-slate-200 bg-slate-50/60 p-3">
+              <details className="rounded-card border-border bg-muted/60 border p-3">
                 <summary className="cursor-pointer px-2 py-1 text-sm font-semibold text-slate-700 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none">
                   {standaloneT('automation.advancedScheduling')}
                 </summary>

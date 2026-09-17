@@ -19,7 +19,7 @@ export function AuthPanel({
     <Card
       variant="elevated"
       className={cn(
-        'rounded-panel border-primary-border bg-card shadow-card p-6 sm:p-7',
+        'rounded-panel border-primary-border bg-card p-6 sm:p-7',
         className
       )}
     >

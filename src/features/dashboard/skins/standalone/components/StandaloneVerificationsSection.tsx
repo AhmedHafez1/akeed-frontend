@@ -94,7 +94,7 @@ export function StandaloneVerificationsSection({
   return (
     <section
       aria-label={t('verifications.subtitle', { count: totalCount })}
-      className="rounded-card border-border bg-card shadow-card border"
+      className="rounded-card border-border bg-card border"
     >
       {statusFilter !== 'all' && (
         <div className="border-border flex flex-wrap items-center justify-between gap-x-4 gap-y-3 border-b px-4 py-3 sm:px-5">

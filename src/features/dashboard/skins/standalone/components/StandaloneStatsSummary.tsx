@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
-import { Progress, Skeleton, Tooltip } from '@/shared/ui'
+import { Card, Progress, Skeleton, Tooltip } from '@/shared/ui'
 import { lifecycleTone } from '@/features/dashboard/domain/verificationLifecycle'
 import { filterAdmitsStatus } from '@/features/dashboard/domain/verificationFilters'
 import { getStatusTimestamp } from '@/features/dashboard/domain/verificationRow'
@@ -30,39 +30,10 @@ interface StandaloneStatsSummaryProps {
   verificationsError: string | null
 }
 
-interface DashboardCardProps {
-  className?: string
-  children: React.ReactNode
-  href?: string
-}
-
-function DashboardCard({ className, children, href }: DashboardCardProps) {
-  const cardClassName = cn(
-    'rounded-card border-border shadow-raised bg-card border',
-    className
-  )
-
-  if (href) {
-    return (
-      <Link
-        href={href}
-        className={cn(
-          cardClassName,
-          'hover:shadow-card block transition hover:border-input focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none'
-        )}
-      >
-        {children}
-      </Link>
-    )
-  }
-
-  return <section className={cardClassName}>{children}</section>
-}
-
 function DashboardSkeleton() {
   return (
     <div aria-busy="true" className="space-y-4">
-      <div className="rounded-panel border-border shadow-card bg-card flex flex-col gap-6 border p-5 sm:flex-row sm:items-center sm:p-6">
+      <Card className="flex flex-col gap-6 p-5 sm:flex-row sm:items-center sm:p-6">
         <div className="min-w-0 flex-1">
           <Skeleton className="h-9 w-9 rounded-lg" />
           <Skeleton className="mt-5 h-14 w-28" />
@@ -73,24 +44,24 @@ function DashboardSkeleton() {
           </div>
         </div>
         <Skeleton className="mx-auto h-40 w-40 shrink-0 rounded-full sm:mx-10 sm:h-52 sm:w-52 lg:mx-14" />
-      </div>
+      </Card>
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)]">
-        <DashboardCard className="h-64 p-5">
+        <Card className="h-64 p-5">
           <Skeleton className="h-5 w-36" />
           <div className="mt-5 space-y-4">
             {[0, 1, 2].map((index) => (
               <Skeleton key={index} className="h-12 w-full" />
             ))}
           </div>
-        </DashboardCard>
-        <DashboardCard className="h-64 p-5">
+        </Card>
+        <Card className="h-64 p-5">
           <Skeleton className="h-5 w-40" />
           <div className="mt-6 space-y-6">
             {[0, 1].map((index) => (
               <Skeleton key={index} className="h-10 w-full" />
             ))}
           </div>
-        </DashboardCard>
+        </Card>
       </div>
     </div>
   )
@@ -171,14 +142,14 @@ export function StandaloneStatsSummary({
   if (!stats) {
     return (
       <div className="space-y-4">
-        <DashboardCard className="p-6">
+        <Card className="p-6">
           <h2 className="font-semibold text-slate-950">
             {t('standalone.unavailable.title')}
           </h2>
           <p className="mt-2 text-sm text-slate-600">
             {t('standalone.unavailable.description')}
           </p>
-        </DashboardCard>
+        </Card>
         <AttentionPreview
           verifications={attentionVerifications}
           count={null}
@@ -229,7 +200,7 @@ function AttentionPreview({
   const { locale } = useLocaleInfo()
 
   return (
-    <DashboardCard>
+    <Card>
       <div className="border-border flex items-center justify-between gap-3 border-b px-5 py-4">
         <div className="min-w-0">
           <h2 className="flex items-center gap-2 text-base font-bold text-slate-950">
@@ -315,7 +286,7 @@ function AttentionPreview({
           </ul>
         )}
       </div>
-    </DashboardCard>
+    </Card>
   )
 }
 
@@ -341,7 +312,7 @@ function ConfirmationPerformanceCard({ stats }: { stats: DashboardStats }) {
   ]
 
   return (
-    <DashboardCard className="flex flex-col p-5">
+    <Card className="flex flex-col p-5">
       <div className="flex items-center gap-2.5">
         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-700">
           <Gauge aria-hidden="true" className="h-5 w-5" />
@@ -396,7 +367,7 @@ function ConfirmationPerformanceCard({ stats }: { stats: DashboardStats }) {
           </div>
         </>
       )}
-    </DashboardCard>
+    </Card>
   )
 }
 

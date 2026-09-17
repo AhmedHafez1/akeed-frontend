@@ -441,7 +441,7 @@ export function TemplatesStandaloneSkin({
               {t('detailsTitle')}
             </summary>
             <div className="px-4 pb-4 sm:px-5 sm:pb-5">
-              <dl className="border-border mt-4 overflow-hidden rounded-xl border">
+              <dl className="border-border mt-4 overflow-hidden rounded-card border">
                 <div className="border-border grid grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] items-center gap-3 border-b px-4 py-3 text-sm">
                   <dt className="flex items-center gap-2 text-slate-600">
                     <MessageCircle

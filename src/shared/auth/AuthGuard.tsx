@@ -150,7 +150,7 @@ export function AuthGuard({
       <main className="bg-muted flex min-h-screen items-center justify-center px-4">
         <div
           role="alert"
-          className="rounded-card bg-card shadow-card w-full max-w-md border border-red-200 p-6 text-center"
+          className="rounded-card bg-card w-full max-w-md border border-red-200 p-6 text-center"
         >
           <h1 className="text-xl font-bold text-slate-900">
             {t('organizationSetupFailedTitle')}
