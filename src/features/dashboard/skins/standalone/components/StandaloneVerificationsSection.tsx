@@ -1,16 +1,29 @@
 'use client'
 
+import { X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { EmptyState } from '@/shared/ui'
+import { EmptyState, SegmentedControl } from '@/shared/ui'
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll'
+import {
+  OUTCOME_STAGES,
+  VERIFICATION_STATUS_FILTER_IDS,
+  outcomeOfFilter,
+} from '@/features/dashboard/domain/verificationFilters'
 import type {
   VerificationItem,
   VerificationStatusFilter,
 } from '@/features/dashboard/model/dashboard.model'
-import type { StatusFilterOption } from '@/features/dashboard/domain/dashboard.types'
 import { VerificationsTableStandalone } from '../VerificationsTableStandalone'
 import { StandaloneVerificationsSkeleton } from './StandaloneVerificationsSkeleton'
 import { StandaloneTestVerificationPanel } from './StandaloneTestVerificationPanel'
+import { OUTCOME_LABEL_KEYS } from './VerificationOutcomePanel'
+
+/** Whether `filters.status.*` carries a label for this filter. */
+function isLabelledStatusFilter(
+  filter: VerificationStatusFilter
+): filter is (typeof VERIFICATION_STATUS_FILTER_IDS)[number] {
+  return (VERIFICATION_STATUS_FILTER_IDS as readonly string[]).includes(filter)
+}
 
 interface StandaloneVerificationsSectionProps {
   verifications: VerificationItem[]
@@ -21,7 +34,6 @@ interface StandaloneVerificationsSectionProps {
   isLoadingMoreVerifications: boolean
   hasLoadMoreError: boolean
   statusFilter: VerificationStatusFilter
-  statusFilters: ReadonlyArray<StatusFilterOption>
   actingVerificationId: string | null
   confirmingCancelVerificationId: string | null
   actionErrors: Record<string, string>
@@ -47,7 +59,6 @@ export function StandaloneVerificationsSection({
   isLoadingMoreVerifications,
   hasLoadMoreError,
   statusFilter,
-  statusFilters,
   actingVerificationId,
   confirmingCancelVerificationId,
   actionErrors,
@@ -70,71 +81,59 @@ export function StandaloneVerificationsSection({
     hasError: hasLoadMoreError,
     onLoadMore: onLoadMoreVerifications,
   })
-  const workloadFilter =
-    statusFilter === 'in_progress'
-      ? {
-          id: statusFilter,
-          label: t('verifications.workload.inProgress'),
-        }
-      : statusFilter === 'needs_attention'
-        ? {
-            id: statusFilter,
-            label: t('verifications.workload.needsAttention'),
-          }
-        : statusFilter === 'completed'
-          ? {
-              id: statusFilter,
-              label: t('verifications.workload.completed'),
-            }
-          : null
-  const standaloneFilters = workloadFilter
-    ? [workloadFilter, ...statusFilters]
-    : statusFilters
+  // The outcome panel above picks the status; this bar only says what the list
+  // is narrowed to and, where the outcome has stages, narrows it further.
+  const outcome = outcomeOfFilter(statusFilter)
+  const stages = outcome ? OUTCOME_STAGES[outcome] : []
+  const activeLabel = outcome
+    ? t(OUTCOME_LABEL_KEYS[outcome])
+    : isLabelledStatusFilter(statusFilter)
+      ? t(`filters.status.${statusFilter}`)
+      : null
 
   return (
     <section
       aria-label={t('verifications.subtitle', { count: totalCount })}
-      className="rounded-card border-border bg-card shadow-card border"
+      className="rounded-card border-border bg-card border"
     >
-      <div className="border-border border-b px-4 py-5 sm:px-5">
-        <div className="space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <h2 className="text-sm font-semibold text-slate-900">
-              {t('verifications.filters.label')}
-            </h2>
-            {statusFilter !== 'all' && (
-              <button
-                type="button"
-                onClick={() => onStatusFilterChange('all')}
-                className="text-xs font-medium text-emerald-700 underline-offset-4 hover:underline"
-              >
-                {t('verifications.filters.clear')}
-              </button>
+      {statusFilter !== 'all' && (
+        <div className="border-border flex flex-wrap items-center justify-between gap-x-4 gap-y-3 border-b px-4 py-3 sm:px-5">
+          <div className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-3">
+            {activeLabel && (
+              <h2 className="text-sm font-semibold text-slate-900">
+                {activeLabel}
+              </h2>
+            )}
+            {outcome && stages.length > 0 && activeLabel && (
+              // Wraps rather than scrolls: a stage pushed off the edge of a
+              // phone has nothing to say it is there.
+              <SegmentedControl<VerificationStatusFilter>
+                aria-label={t('verifications.filters.stage', {
+                  outcome: activeLabel,
+                })}
+                value={statusFilter}
+                onChange={onStatusFilterChange}
+                options={[
+                  { value: outcome, label: t('filters.status.all') },
+                  ...stages.map((stage) => ({
+                    value: stage,
+                    label: t(`verificationStatus.${stage}`),
+                  })),
+                ]}
+                className="max-w-full flex-wrap"
+              />
             )}
           </div>
-          <div
-            role="group"
-            aria-label={t('verifications.filters.label')}
-            className="flex flex-wrap gap-1.5"
+          <button
+            type="button"
+            onClick={() => onStatusFilterChange('all')}
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm font-medium text-emerald-800 hover:bg-emerald-50 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:outline-none"
           >
-            {standaloneFilters.map((filter) => (
-              <button
-                key={filter.id}
-                type="button"
-                aria-pressed={statusFilter === filter.id}
-                onClick={() => onStatusFilterChange(filter.id)}
-                className={`min-h-9 rounded-lg border px-3 py-2 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 ${
-                  statusFilter === filter.id
-                    ? 'bg-muted text-foreground border-transparent'
-                    : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
-                }`}
-              >
-                {filter.label}
-              </button>
-            ))}
-          </div>
+            <X aria-hidden="true" className="h-4 w-4" />
+            {t('verifications.filters.clear')}
+          </button>
         </div>
-      </div>
+      )}
 
       <div aria-busy={isVerificationsLoading}>
         {!isVerificationsLoading &&

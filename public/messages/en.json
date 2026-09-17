@@ -783,7 +783,7 @@
   },
   "whatsapp_button": {
     "text": "Try it on your phone first",
-    "message": "Hi, I want to try Akeed service"
+    "message": "Hi, I want to try Akeed"
   },
   "pricing_credits": {
     "eyebrow": "Pricing",
@@ -985,6 +985,8 @@
     "userFallback": "Signed-in user",
     "identityLoading": "Loading workspace identity",
     "helpSupport": "Help & support",
+    "docs": "Docs",
+    "admin": "Admin",
     "search": "Search orders",
     "searchOrders": "Open order search",
     "openVerifications": "Open verifications",
@@ -992,6 +994,7 @@
     "breadcrumbs": "Breadcrumbs",
     "closeNavigation": "Close navigation menu",
     "navigationDescription": "Navigate between protected Akeed pages.",
+    "changeLocale": "Change language",
     "signOut": "Sign out",
     "signingOut": "Signing out..."
   },
@@ -1404,22 +1407,13 @@
         "pending": "Pending"
       },
       "filters": {
-        "label": "Order status",
-        "clear": "Clear status filter"
+        "clear": "Clear status filter",
+        "stage": "{outcome} by stage"
       },
       "eyebrow": "Operations",
       "showing": "Showing {loaded} of {total}",
       "workload": {
-        "label": "Verification workload",
-        "loading": "Loading workload",
-        "all": "All verifications",
-        "inProgress": "In progress",
-        "needsAttention": "Needs attention",
-        "completed": "Completed",
-        "allHint": "In the selected period",
-        "inProgressHint": "Queued or awaiting a reply",
-        "needsAttentionHint": "Failed, expired or no reply",
-        "completedHint": "Confirmed or canceled"
+        "label": "Verification outcomes"
       }
     }
   },
@@ -2235,7 +2229,7 @@
       "buyCredits": "Buy credits"
     },
     "badge": {
-      "label": "credits"
+      "label": "message credits"
     },
     "packages": {
       "stepLabel": "Choose an amount",

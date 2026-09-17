@@ -24,7 +24,7 @@ export function SummaryRow({
   const t = useTranslations('standaloneOnboarding')
 
   return (
-    <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-1 border-b border-slate-100 py-3 text-start last:border-b-0">
+    <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-1 border-b border-slate-100 py-4 text-start last:border-b-0">
       <dt className="text-sm text-slate-500">{label}</dt>
       <dd className="flex min-w-0 items-center gap-2 text-sm font-medium text-slate-950">
         <span className="min-w-0 text-start">{value}</span>

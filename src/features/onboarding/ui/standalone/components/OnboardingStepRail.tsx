@@ -33,7 +33,7 @@ export function OnboardingStepRail({
       <h2 className="text-sm font-semibold text-slate-950">
         {t('steps.label')}
       </h2>
-      <ol className="mt-5 space-y-1">
+      <ol className="mt-5 space-y-6">
         {STANDALONE_STEPS.map((definition, index) => {
           const isCompleted = completedSteps.has(definition.id)
           const isCurrent = definition.id === currentStep
@@ -46,7 +46,7 @@ export function OnboardingStepRail({
                 <span
                   aria-hidden="true"
                   className={cn(
-                    'absolute [inset-inline-start:calc(1rem-1px)] top-11 bottom-1 w-0.5 rounded-full',
+                    'absolute start-5.75 top-11 bottom-2 w-0.5 h-10 rounded-full',
                     isCompleted ? 'bg-emerald-500' : 'bg-slate-300'
                   )}
                 />

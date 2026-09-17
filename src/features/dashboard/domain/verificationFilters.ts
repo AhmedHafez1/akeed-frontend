@@ -29,25 +29,76 @@ export const DASHBOARD_DATE_RANGE_IDS = [
   'last_3_months',
 ] as const satisfies ReadonlyArray<DashboardStatsDateRange>
 
+export type OutcomeFilter =
+  | 'confirmed'
+  | 'canceled'
+  | 'in_progress'
+  | 'needs_attention'
+
+/**
+ * The four outcomes a verification lands in, and the lifecycle stages each
+ * one can be narrowed to.
+ *
+ * The stages partition their outcome exactly — every status belongs to one
+ * outcome and no stage reaches outside it — so narrowing a list never shows a
+ * row the outcome above it did not already count. `awaiting_response` is not
+ * a stage for that reason: it includes `no_reply`, which is needs-attention.
+ */
+export const OUTCOME_STAGES: Readonly<
+  Record<OutcomeFilter, readonly VerificationStatus[]>
+> = {
+  confirmed: [],
+  canceled: [],
+  in_progress: ['pending', 'sent', 'delivered', 'read'],
+  needs_attention: ['failed', 'expired', 'no_reply'],
+}
+
+export const OUTCOME_FILTER_IDS = [
+  'confirmed',
+  'canceled',
+  'in_progress',
+  'needs_attention',
+] as const satisfies ReadonlyArray<OutcomeFilter>
+
+/** Every filter the standalone list can be deep-linked to. */
+export const STANDALONE_STATUS_FILTER_IDS: ReadonlyArray<VerificationStatusFilter> =
+  [
+    ...new Set<VerificationStatusFilter>([
+      ...VERIFICATION_STATUS_FILTER_IDS,
+      ...OUTCOME_FILTER_IDS,
+      ...OUTCOME_FILTER_IDS.flatMap((outcome) => OUTCOME_STAGES[outcome]),
+    ]),
+  ]
+
+/**
+ * The outcome a filter sits under: itself for an outcome, the parent for a
+ * stage, and null for `all` or a filter that spans outcomes.
+ */
+export function outcomeOfFilter(
+  filter: VerificationStatusFilter
+): OutcomeFilter | null {
+  return (
+    OUTCOME_FILTER_IDS.find(
+      (outcome) =>
+        outcome === filter ||
+        (OUTCOME_STAGES[outcome] as readonly string[]).includes(filter)
+    ) ?? null
+  )
+}
+
 /**
  * Filters that stand for several underlying statuses.
  *
  * `awaiting_response` covers everything sent but unanswered, including a
  * no-reply escalation, which is still awaiting an answer even though it also
- * has its own tab.
+ * has its own tab. The two outcome composites are spelled from their stages so
+ * the list an outcome filters to can never drift from what it narrows into.
  */
 const COMPOSITE_FILTERS: Partial<Record<VerificationStatusFilter, string>> = {
-  in_progress: 'pending,sent,delivered,read',
+  in_progress: OUTCOME_STAGES.in_progress.join(','),
   awaiting_response: 'sent,delivered,read,no_reply',
-  needs_attention: 'failed,expired,no_reply',
-  completed: 'confirmed,canceled',
+  needs_attention: OUTCOME_STAGES.needs_attention.join(','),
 }
-
-export const WORKLOAD_STATUS_FILTER_IDS = [
-  'in_progress',
-  'needs_attention',
-  'completed',
-] as const satisfies ReadonlyArray<VerificationStatusFilter>
 
 /** Whether a row in `status` belongs in the list for `filter`. */
 export function filterAdmitsStatus(

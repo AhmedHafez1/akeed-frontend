@@ -36,23 +36,19 @@ export type VerificationRowCapability = {
 }
 
 /**
- * The filter ids the dashboard actually renders.
+ * The filter ids the dashboard renders.
  *
- * `sent` / `delivered` / `read` are deliberately absent: they are covered by
- * `awaiting_response`, and the message catalogues carry no labels for them, so
- * declaring them here would only invite a missing-translation error.
+ * Every single status is a filter — the standalone list narrows an outcome
+ * down to its lifecycle stages, labelled from `verificationStatus.*` — plus
+ * the composites that stand for several statuses at once. Only the ids in
+ * `VERIFICATION_STATUS_FILTER_IDS` carry `filters.status.*` labels.
  */
 export type VerificationStatusFilter =
   | 'all'
   | 'in_progress'
   | 'needs_attention'
-  | 'completed'
-  | 'pending'
   | 'awaiting_response'
-  | 'confirmed'
-  | 'canceled'
-  | 'failed'
-  | 'no_reply'
+  | VerificationStatus
 
 export type DashboardStatsDateRange =
   | 'today'

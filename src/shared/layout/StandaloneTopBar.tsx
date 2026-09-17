@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { ChevronRight, Menu, ShieldCheck } from 'lucide-react'
+import { ChevronRight, Globe, Menu, ShieldCheck } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { ManualOrderTopBarAction } from '@/features/orders'
 import {
@@ -48,7 +48,7 @@ export function StandaloneTopBar({ onOpenNavigation }: StandaloneTopBarProps) {
           type="button"
           onClick={onOpenNavigation}
           aria-label={t('navigationMenu')}
-          className="border-border hover:bg-muted inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border text-slate-700 transition-colors focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none lg:hidden"
+          className="border-border hover:bg-muted inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border text-slate-700 transition-colors focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none lg:hidden"
         >
           <Menu aria-hidden="true" className="h-5 w-5" />
         </button>
@@ -69,23 +69,27 @@ export function StandaloneTopBar({ onOpenNavigation }: StandaloneTopBarProps) {
         </nav>
       </div>
 
-      <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+      <div className="flex shrink-0 items-center gap-1 sm:gap-2">
         <ManualOrderTopBarAction />
         <Link
           href={withLocale('/verifications', locale)}
           aria-label={t('openVerifications')}
-          className="hover:bg-muted inline-flex h-9 items-center gap-2 rounded-lg px-2.5 text-sm text-slate-600 transition-colors hover:text-slate-950 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="hover:bg-muted inline-flex h-10 w-10 items-center justify-center gap-2 rounded-lg text-slate-600 transition-colors hover:text-slate-950 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none xl:w-auto xl:px-3"
         >
-          <ShieldCheck aria-hidden="true" className="h-[18px] w-[18px]" />
+          <ShieldCheck aria-hidden="true" className="h-[18px] w-[18px] shrink-0" />
           <span className="hidden xl:inline">{t('verifications')}</span>
         </Link>
         <button
           type="button"
           onClick={handleLocaleChange}
-          className="border-border hover:bg-muted inline-flex h-9 items-center rounded-lg border bg-white px-3 text-xs font-semibold text-slate-700 transition-colors focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none"
+          aria-label={t('changeLocale')}
+          className="border-border hover:bg-muted inline-flex h-10 w-10 items-center justify-center gap-1.5 rounded-lg border bg-white text-xs font-semibold text-slate-700 transition-colors focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto sm:px-3"
           suppressHydrationWarning
         >
-          {locale === 'ar' ? 'EN' : 'العربية'}
+          <Globe aria-hidden="true" className="h-4 w-4 shrink-0" />
+          <span className="hidden sm:inline">
+            {locale === 'ar' ? 'EN' : 'العربية'}
+          </span>
         </button>
       </div>
     </header>

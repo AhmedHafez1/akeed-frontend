@@ -2,6 +2,7 @@
 
 import type { ReactNode } from 'react'
 import { useId } from 'react'
+import { Card } from '@/shared/ui'
 import { OnboardingSwitch } from './OnboardingSwitch'
 
 interface OnboardingCardProps {
@@ -33,7 +34,7 @@ export function OnboardingCard({
     checked !== undefined && switchLabel !== undefined && !!onCheckedChange
 
   return (
-    <section className="rounded-card border-border bg-card overflow-hidden border">
+    <Card variant="flat" className="overflow-hidden">
       <div className="flex items-start justify-between gap-4 p-4 text-start sm:p-5">
         <div className="space-y-1">
           <h3 className="text-sm font-semibold text-slate-950">{title}</h3>
@@ -58,6 +59,6 @@ export function OnboardingCard({
           {children}
         </div>
       )}
-    </section>
+    </Card>
   )
 }

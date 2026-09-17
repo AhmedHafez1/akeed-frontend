@@ -211,10 +211,10 @@ export function StandaloneOnboardingPage() {
         : t('actions.saveAndContinue')
 
   return (
-    <main className="mx-auto w-full max-w-[1120px] px-4 py-6 sm:px-6 sm:py-10">
+    <main className="mx-auto w-full max-w-280 px-4 py-6 sm:px-6 sm:py-10">
       <header className="text-start">
         <p className="text-sm font-semibold text-emerald-700">{t('eyebrow')}</p>
-        <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+        <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
           {t('title')}
         </h1>
         <p className="mt-2 text-sm text-slate-600 sm:text-base">
@@ -291,7 +291,7 @@ export function StandaloneOnboardingPage() {
                 <h2
                   ref={headingRef}
                   tabIndex={-1}
-                  className="mt-2 text-xl font-bold text-slate-950 focus-visible:outline-none sm:text-2xl"
+                  className="mt-3 text-xl font-bold text-slate-950 focus-visible:outline-none sm:text-2xl"
                 >
                   {definition ? t(definition.headingKey) : null}
                 </h2>
@@ -369,14 +369,6 @@ export function StandaloneOnboardingPage() {
                   </Button>
                 )}
               </div>
-
-              <p className="flex items-start gap-2 text-start text-xs leading-5 text-slate-500">
-                <ShieldCheck
-                  aria-hidden="true"
-                  className="text-primary mt-px h-4 w-4 shrink-0"
-                />
-                {t('trustNote')}
-              </p>
             </div>
           </Card>
         </div>

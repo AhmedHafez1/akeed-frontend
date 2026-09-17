@@ -45,7 +45,7 @@ export function CreditPackageTiles({
             className={cn(
               'rounded-card focus-visible:ring-ring relative border p-4 text-center transition-[border-color,box-shadow] focus-visible:ring-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60',
               isSelected
-                ? 'border-primary ring-primary shadow-card ring-1'
+                ? 'border-primary ring-primary ring-1'
                 : 'border-border hover:border-primary-border'
             )}
           >

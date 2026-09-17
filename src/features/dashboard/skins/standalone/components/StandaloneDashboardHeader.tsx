@@ -11,14 +11,14 @@ interface StandaloneDashboardHeaderProps {
   dateRangeFilter: DashboardStatsDateRange
   dateRangeOptions: ReadonlyArray<DateRangeFilterOption>
   onDateRangeFilterChange: (filter: DashboardStatsDateRange) => void
-  action?: ReactNode
+  availableCredit?: ReactNode
 }
 
 export function StandaloneDashboardHeader({
   dateRangeFilter,
   dateRangeOptions,
   onDateRangeFilterChange,
-  action,
+  availableCredit,
 }: StandaloneDashboardHeaderProps) {
   const t = useTranslations('dashboard')
   const { identity, isIdentityLoading } = useStandaloneShell()
@@ -36,14 +36,12 @@ export function StandaloneDashboardHeader({
               className="bg-border inline-block h-10 w-64 max-w-full animate-pulse rounded-lg align-middle"
             />
           ) : (
-            <>
-              {heading}
-            </>
+            <>{heading}</>
           )}
         </h1>
       </div>
 
-      <div className="flex w-full flex-wrap items-start gap-3 md:w-auto md:items-end md:justify-end">
+      <div className="flex flex-wrap items-center gap-3">
         <label className="relative min-w-0 flex-1 text-sm text-slate-500 sm:flex-none">
           <span className="sr-only">{t('filters.dateRange.label')}</span>
           <select
@@ -66,7 +64,7 @@ export function StandaloneDashboardHeader({
             className="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
           />
         </label>
-        {action}
+        {availableCredit}
       </div>
     </header>
   )

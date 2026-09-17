@@ -66,7 +66,7 @@ export function StoreDetailsStep({
         )}
       </OnboardingField>
 
-      <div className="space-y-2 text-start">
+      <div className="space-y-2 text-start mt-7">
         <p className="text-sm font-medium text-slate-900" id="language-label">
           {t('languageHeading')}
         </p>
@@ -80,7 +80,7 @@ export function StoreDetailsStep({
         />
         <p
           id="language-help"
-          className="flex items-start gap-2 rounded-lg bg-slate-50 px-3 py-2.5 text-xs leading-5 text-slate-600"
+          className="flex items-start gap-2 py-2.5 text-xs leading-5 text-slate-600"
         >
           <Globe
             aria-hidden="true"
