@@ -36,14 +36,12 @@ export function StandaloneDashboardHeader({
               className="bg-border inline-block h-10 w-64 max-w-full animate-pulse rounded-lg align-middle"
             />
           ) : (
-            <>
-              {heading}
-            </>
+            <>{heading}</>
           )}
         </h1>
       </div>
 
-      <div className="flex w-full flex-wrap items-start gap-3 md:w-auto md:items-end md:justify-end">
+      <div className="flex flex-wrap items-start gap-3 md:items-end md:justify-end">
         <label className="relative min-w-0 flex-1 text-sm text-slate-500 sm:flex-none">
           <span className="sr-only">{t('filters.dateRange.label')}</span>
           <select

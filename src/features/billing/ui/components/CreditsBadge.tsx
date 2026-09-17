@@ -40,7 +40,7 @@ export function CreditsBadge({ className }: CreditsBadgeProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-sm font-semibold text-emerald-800 tabular-nums',
+        'inline-flex items-center gap-1.5 rounded-lg bg-slate-200 px-3 py-2.5 text-sm font-semibold text-emerald-900 tabular-nums',
         className
       )}
     >
