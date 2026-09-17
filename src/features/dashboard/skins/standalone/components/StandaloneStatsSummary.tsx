@@ -1,16 +1,17 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowRight, CheckCircle2, Clock3, Gauge, Package } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Clock3, Gauge } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
 import { Progress, Skeleton, Tooltip } from '@/shared/ui'
 import { lifecycleTone } from '@/features/dashboard/domain/verificationLifecycle'
-import { isAttentionVerification } from '@/features/dashboard/domain/verificationWorkload'
+import { filterAdmitsStatus } from '@/features/dashboard/domain/verificationFilters'
 import { getStatusTimestamp } from '@/features/dashboard/domain/verificationRow'
 import { lifecycleToneClasses } from '../lifecycleToneClasses'
+import { VerificationOutcomePanel } from './VerificationOutcomePanel'
 import {
   formatDashboardNumber,
   formatDashboardPercent,
@@ -18,7 +19,6 @@ import {
 import type {
   DashboardStats,
   VerificationItem,
-  VerificationStatusFilter,
 } from '@/features/dashboard/model/dashboard.model'
 
 interface StandaloneStatsSummaryProps {
@@ -154,7 +154,9 @@ export function StandaloneStatsSummary({
   if (isStatsLoading && !stats) return <DashboardSkeleton />
 
   const attentionVerifications = verifications
-    .filter((verification) => isAttentionVerification(verification.status))
+    .filter((verification) =>
+      filterAdmitsStatus('needs_attention', verification.status)
+    )
     .toSorted((left, right) => {
       const leftTime = new Date(
         getStatusTimestamp(left) ?? left.created_at ?? 0
@@ -190,7 +192,11 @@ export function StandaloneStatsSummary({
 
   return (
     <div className="space-y-4">
-      <OutcomeHero stats={stats} />
+      <VerificationOutcomePanel
+        stats={stats}
+        label={t('standalone.kpisLabel')}
+        showChart
+      />
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)]">
         <AttentionPreview
@@ -203,278 +209,6 @@ export function StandaloneStatsSummary({
         <ConfirmationPerformanceCard stats={stats} />
       </div>
     </div>
-  )
-}
-
-interface OutcomeSlice {
-  id: string
-  label: string
-  value: number
-  filter: VerificationStatusFilter
-  stroke: string
-  dot: string
-}
-
-/**
- * Total, outcome donut and per-outcome figures as a single statement.
- *
- * These were two cards side by side printing the same three counts: a total
- * with a breakdown, next to a breakdown with a chart. One surface, read once —
- * and the only element on the screen at display scale, so the eye has
- * somewhere to land before it starts scanning.
- */
-function OutcomeHero({ stats }: { stats: DashboardStats }) {
-  const t = useTranslations('dashboard')
-  const { locale } = useLocaleInfo()
-
-  const outcomes: OutcomeSlice[] = [
-    {
-      id: 'confirmed',
-      label: t('verifications.metrics.confirmed'),
-      value: stats.totals.confirmed,
-      filter: 'confirmed',
-      stroke: 'stroke-emerald-600',
-      dot: 'bg-emerald-600',
-    },
-    {
-      id: 'canceled',
-      label: t('verifications.metrics.canceled'),
-      value: stats.totals.canceled,
-      filter: 'canceled',
-      stroke: 'stroke-red-500',
-      dot: 'bg-red-500',
-    },
-    {
-      id: 'inProgress',
-      label: t('verifications.metrics.inProgress'),
-      value: stats.totals.in_progress,
-      filter: 'in_progress',
-      stroke: 'stroke-slate-300',
-      dot: 'bg-slate-400',
-    },
-    {
-      id: 'needsAttention',
-      label: t('verifications.metrics.needsAttention'),
-      value: stats.totals.needs_attention,
-      filter: 'needs_attention',
-      stroke: 'stroke-amber-500',
-      dot: 'bg-amber-500',
-    },
-  ]
-
-  const outcomeTotal = outcomes.reduce((sum, outcome) => sum + outcome.value, 0)
-
-  return (
-    <section
-      aria-label={t('standalone.kpisLabel')}
-      className="rounded-panel border-border shadow-card grid overflow-hidden border bg-linear-to-b from-muted/70 to-white sm:grid-cols-[minmax(0,1fr)_auto]"
-    >
-      <div className="flex min-w-0 flex-col">
-        <div className="px-5 py-5 sm:px-6 sm:pt-6">
-          <div className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-input bg-white text-foreground">
-              <Package aria-hidden="true" className="h-5 w-5" />
-            </span>
-            <div className="min-w-0">
-              <h2 className="text-base font-bold text-slate-950">
-                {t('verifications.metrics.total')}
-              </h2>
-              <p className="text-caption text-slate-500">
-                {t('standalone.outcomes.description')}
-              </p>
-            </div>
-          </div>
-
-          <p className="mt-5 text-5xl font-extrabold text-slate-950 tabular-nums sm:text-6xl">
-            {formatDashboardNumber(stats.totals.total, locale)}
-          </p>
-
-          {outcomeTotal === 0 && (
-            <p className="bg-muted mt-5 rounded-xl p-3 text-sm text-slate-600">
-              {t('standalone.outcomes.empty')}
-            </p>
-          )}
-        </div>
-
-        <dl className="mt-auto grid gap-px border-t border-border bg-muted sm:grid-cols-2 lg:grid-cols-4">
-          {outcomes.map((outcome) => (
-            <OutcomeFigure
-              key={outcome.id}
-              outcome={outcome}
-              total={outcomeTotal}
-              locale={locale}
-            />
-          ))}
-        </dl>
-      </div>
-
-      <div className="flex items-center justify-center border-t border-border p-5 sm:border-t-0 sm:border-s sm:px-10 sm:py-6 lg:px-14">
-        <OutcomeDonut
-          outcomes={outcomes}
-          total={outcomeTotal}
-          label={t('standalone.outcomes.chartLabel')}
-          locale={locale}
-        />
-      </div>
-    </section>
-  )
-}
-
-/**
- * The outcome split as a donut beside the total.
- *
- * Each slice is a stroke-dash arc on a circle whose circumference is 100, so a
- * slice's share maps straight onto its dash length. With nothing to split the
- * ring stays as a quiet track rather than disappearing and shifting the layout.
- */
-function OutcomeDonut({
-  outcomes,
-  total,
-  label,
-  locale,
-}: {
-  outcomes: OutcomeSlice[]
-  total: number
-  label: string
-  locale: string
-}) {
-  const radius = 100 / (2 * Math.PI)
-  const visible = outcomes.filter((outcome) => outcome.value > 0)
-
-  const shares = visible.map((outcome) => (outcome.value / total) * 100)
-  const slices = visible.map((outcome, index) => {
-    const share = shares[index]
-    const start = shares.slice(0, index).reduce((sum, prior) => sum + prior, 0)
-    return { outcome, share, start }
-  })
-
-  // The ring's radius as a share of the box, for placing the HTML labels
-  // centred on each arc.
-  const labelRadius = (radius / 42) * 100
-
-  return (
-    <div className="relative h-40 w-40 shrink-0 sm:h-52 sm:w-52">
-      <svg
-        viewBox="0 0 42 42"
-        role="img"
-        aria-label={label}
-        className="h-full w-full -rotate-90"
-      >
-        <circle
-          cx="21"
-          cy="21"
-          r={radius}
-          fill="none"
-          strokeWidth="8"
-          className="stroke-slate-100"
-        />
-        {slices.map(({ outcome, start, share }) => (
-          <circle
-            key={outcome.id}
-            cx="21"
-            cy="21"
-            r={radius}
-            fill="none"
-            strokeWidth="8"
-            strokeDasharray={`${share} ${100 - share}`}
-            strokeDashoffset={-start}
-            className={cn('transition-[stroke-dasharray]', outcome.stroke)}
-          >
-            <title>{`${outcome.label}: ${outcome.value}`}</title>
-          </circle>
-        ))}
-      </svg>
-
-      {slices.map(({ outcome, share, start }) => {
-        // Too narrow a slice has no room for a badge; its figure is below.
-        if (share < 5) return null
-        const angle = ((start + share / 2) / 100) * 2 * Math.PI
-        return (
-          <span
-            key={outcome.id}
-            aria-hidden="true"
-            className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border border-slate-200 bg-white px-1.5 py-0.5 text-[10px] leading-none font-bold text-slate-900 tabular-nums shadow-sm"
-            style={{
-              left: `${50 + labelRadius * Math.sin(angle)}%`,
-              top: `${50 - labelRadius * Math.cos(angle)}%`,
-            }}
-          >
-            {formatDashboardPercent(Math.round(share), locale)}
-          </span>
-        )
-      })}
-    </div>
-  )
-}
-
-/**
- * One outcome as a figure, linked to the list it stands for.
- *
- * A zero is rendered quiet and inert on purpose: an outcome with nothing behind
- * it should neither compete for attention nor promise a page of rows that turns
- * out to be empty.
- */
-function OutcomeFigure({
-  outcome,
-  total,
-  locale,
-}: {
-  outcome: OutcomeSlice
-  total: number
-  locale: string
-}) {
-  const t = useTranslations('dashboard')
-  const isEmpty = outcome.value === 0
-  // Rounded, because the exact count sits right beside it: the share is here to
-  // be compared at a glance, and "58.7%" reads slower than "59%" for that.
-  const share = total > 0 ? Math.round((outcome.value / total) * 100) : 0
-
-  const body = (
-    // One line per outcome on a phone, a stacked figure once there is room
-    // for four side by side — the same content at the density each width can
-    // carry without turning the legend into four screens of scrolling.
-    <div className="flex items-center justify-between gap-3 sm:block">
-      <dt className="flex items-center gap-2 text-sm text-slate-600">
-        <span
-          aria-hidden="true"
-          className={cn(
-            'h-4 w-4 shrink-0 rounded-full',
-            isEmpty ? 'bg-slate-300' : outcome.dot
-          )}
-        />
-        {outcome.label}
-      </dt>
-      <dd className="flex flex-wrap items-baseline gap-x-2 sm:mt-1.5">
-        <span
-          className={cn(
-            'text-2xl font-bold tabular-nums',
-            isEmpty ? 'text-slate-400' : 'text-slate-950'
-          )}
-        >
-          {formatDashboardNumber(outcome.value, locale)}
-        </span>
-        {!isEmpty && total > 0 && (
-          <span className="text-caption text-slate-500 tabular-nums">
-            {t('standalone.outcomes.shareOfTotal', {
-              percent: formatDashboardPercent(share, locale),
-            })}
-          </span>
-        )}
-      </dd>
-    </div>
-  )
-
-  if (isEmpty) {
-    return <div className="bg-card px-5 py-3.5 sm:px-6 sm:py-4">{body}</div>
-  }
-
-  return (
-    <Link
-      href={`${withLocale('/verifications', locale)}?status=${outcome.filter}`}
-      className="bg-card px-5 py-3.5 transition hover:bg-muted/70 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:outline-none focus-visible:ring-inset sm:px-6 sm:py-4"
-    >
-      {body}
-    </Link>
   )
 }
 

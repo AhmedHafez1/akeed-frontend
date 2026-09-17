@@ -1401,22 +1401,13 @@
         "pending": "قيد الانتظار"
       },
       "filters": {
-        "label": "حالة الطلب",
-        "clear": "مسح فلتر الحالة"
+        "clear": "مسح فلتر الحالة",
+        "stage": "مراحل «{outcome}»"
       },
       "eyebrow": "العمليات",
       "showing": "عرض {loaded} من {total}",
       "workload": {
-        "label": "ملخص التأكيدات",
-        "loading": "جارٍ تحميل الملخص",
-        "all": "كل التأكيدات",
-        "inProgress": "قيد التنفيذ",
-        "needsAttention": "تحتاج إلى متابعة",
-        "completed": "مكتملة",
-        "allHint": "خلال الفترة المحددة",
-        "inProgressHint": "في قائمة الانتظار أو بانتظار الرد",
-        "needsAttentionHint": "فشلت أو انتهت مهلتها أو دون رد",
-        "completedHint": "مؤكدة أو ملغاة"
+        "label": "ملخص التأكيدات"
       }
     }
   },

@@ -1407,22 +1407,13 @@
         "pending": "Pending"
       },
       "filters": {
-        "label": "Order status",
-        "clear": "Clear status filter"
+        "clear": "Clear status filter",
+        "stage": "{outcome} by stage"
       },
       "eyebrow": "Operations",
       "showing": "Showing {loaded} of {total}",
       "workload": {
-        "label": "Verification workload",
-        "loading": "Loading workload",
-        "all": "All verifications",
-        "inProgress": "In progress",
-        "needsAttention": "Needs attention",
-        "completed": "Completed",
-        "allHint": "In the selected period",
-        "inProgressHint": "Queued or awaiting a reply",
-        "needsAttentionHint": "Failed, expired or no reply",
-        "completedHint": "Confirmed or canceled"
+        "label": "Verification outcomes"
       }
     }
   },

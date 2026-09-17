@@ -6,7 +6,7 @@ import { Tooltip } from '@/shared/ui'
 import { CreditsBadge } from '@/features/billing/ui/components/CreditsBadge'
 import { StandaloneFeedbackBanners } from './components/StandaloneFeedbackBanners'
 import { StandaloneVerificationsSection } from './components/StandaloneVerificationsSection'
-import { StandaloneVerificationWorkload } from './components/StandaloneVerificationWorkload'
+import { VerificationOutcomePanel } from './components/VerificationOutcomePanel'
 import type { DashboardSkinProps } from '../../domain/dashboard.types'
 import type { DashboardStatsDateRange } from '../../model/dashboard.model'
 
@@ -24,13 +24,6 @@ export function DashboardVerificationsStandaloneSkin(
           </p>
           <h1 className="flex items-center gap-2 text-3xl leading-tight font-bold tracking-tight text-slate-950">
             {t('verifications.title')}
-            {/* Held back until the first response lands, so the merchant is
-                never shown a zero that is really "not known yet". */}
-            {!props.isVerificationsLoading && (
-              <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-sm font-semibold text-emerald-800 tabular-nums">
-                {props.totalCount}
-              </span>
-            )}
             <Tooltip content={t('verifications.pageSubtitle')}>
               <Info aria-hidden="true" className="size-5 text-slate-400" />
               <span className="sr-only">{t('verifications.pageSubtitle')}</span>
@@ -64,10 +57,14 @@ export function DashboardVerificationsStandaloneSkin(
         </div>
       </header>
 
-      <StandaloneVerificationWorkload
-        dateRangeFilter={props.dateRangeFilter}
+      {/* The period total lives here, not beside the title: the list's own
+          count follows the status filter, and printing both up top put two
+          different totals a few centimetres apart. */}
+      <VerificationOutcomePanel
         stats={props.stats}
-        isStatsLoading={props.isStatsLoading}
+        label={t('verifications.workload.label')}
+        dateRangeFilter={props.dateRangeFilter}
+        isLoading={props.isStatsLoading}
         statusFilter={props.statusFilter}
         onStatusFilterChange={props.onStatusFilterChange}
       />
@@ -100,7 +97,6 @@ export function DashboardVerificationsStandaloneSkin(
         isLoadingMoreVerifications={props.isLoadingMoreVerifications}
         hasLoadMoreError={props.hasLoadMoreError}
         statusFilter={props.statusFilter}
-        statusFilters={props.statusFilters}
         actingVerificationId={props.actingVerificationId}
         confirmingCancelVerificationId={props.confirmingCancelVerificationId}
         actionErrors={props.actionErrors}
