@@ -147,7 +147,7 @@ export function isAuthRoute(pathname: string | null | undefined): boolean {
 
 /**
  * Public route paths (without locale prefix) — accessible without auth,
- * rendered with the marketing Header instead of AppHeader.
+ * rendered with the marketing Header instead of the authenticated layout.
  */
 export const PUBLIC_ROUTES = ['/', '/about', '/terms', '/privacy', '/support', '/docs'] as const
 

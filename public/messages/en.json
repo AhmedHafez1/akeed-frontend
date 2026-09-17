@@ -994,6 +994,7 @@
     "breadcrumbs": "Breadcrumbs",
     "closeNavigation": "Close navigation menu",
     "navigationDescription": "Navigate between protected Akeed pages.",
+    "changeLocale": "Change language",
     "signOut": "Sign out",
     "signingOut": "Signing out..."
   },

@@ -49,8 +49,8 @@ export function ManualOrderTopBarAction() {
       isAtPlanLimit={isReady && availability.isAtPlanLimit}
       disabledReasonOverride={disabledReasonOverride}
       showDisabledReason={false}
-      triggerClassName="h-9 px-2.5"
-      triggerLabelClassName="hidden xl:inline"
+      triggerClassName="h-8 justify-center px-0 xl:w-auto xl:justify-start xl:gap-2 xl:px-3.5"
+      triggerLabelClassName="text-xs px-2 xl:text-sm inline"
     />
   )
 }
