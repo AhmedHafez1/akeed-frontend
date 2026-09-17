@@ -16,7 +16,7 @@ export function DashboardVerificationsStandaloneSkin(
   const t = useTranslations('dashboard')
 
   return (
-    <div className="mx-auto w-full max-w-[1400px] min-w-0 space-y-6">
+    <div className="mx-auto w-full max-w-350 min-w-0 space-y-6">
       <header className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
         <div className="min-w-0 space-y-1.5">
           <p className="text-xs font-semibold tracking-wide text-emerald-700 uppercase">
