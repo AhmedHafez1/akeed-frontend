@@ -74,7 +74,7 @@ export function DashboardStandaloneSkin({
         dateRangeFilter={dateRangeFilter}
         dateRangeOptions={dateRangeOptions}
         onDateRangeFilterChange={onDateRangeFilterChange}
-        action={<CreditsBadge />}
+        availableCredit={<CreditsBadge />}
       />
 
       <StandaloneFeedbackBanners

@@ -49,7 +49,7 @@ export function SegmentedControl<TValue extends string>({
             className={cn(
               '-ms-px inline-flex min-h-11 flex-1 items-center justify-center gap-2 border border-slate-200 px-4 text-sm transition-colors first:ms-0 first:rounded-s-lg last:rounded-e-lg focus:z-10 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
               isSelected
-                ? 'z-10 border-primary bg-primary font-medium text-primary-foreground'
+                ? 'z-10 border-primary bg-emerald-100 font-bold text-primary'
                 : 'bg-white text-slate-700 hover:bg-slate-50'
             )}
           >
@@ -57,7 +57,7 @@ export function SegmentedControl<TValue extends string>({
             {isSelected && (
               <Check
                 aria-hidden="true"
-                className="h-4 w-4 text-primary-foreground"
+                className="h-5 w-5 text-primary"
               />
             )}
           </button>

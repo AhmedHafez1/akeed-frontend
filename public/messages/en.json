@@ -2238,7 +2238,7 @@
       "buyCredits": "Buy credits"
     },
     "badge": {
-      "label": "credits"
+      "label": "message credits"
     },
     "packages": {
       "stepLabel": "Choose an amount",

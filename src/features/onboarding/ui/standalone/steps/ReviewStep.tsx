@@ -60,7 +60,7 @@ export function ReviewStep({ form, blockedReasons, onEdit }: ReviewStepProps) {
 
   return (
     <div className="space-y-6">
-      <dl className="rounded-card border-border bg-card border px-4 py-1 sm:px-5">
+      <dl className="rounded-card border-border bg-card border px-4 py-2 sm:px-5">
         <SummaryRow
           label={t('review.storeName')}
           value={form.storeName}
@@ -113,14 +113,6 @@ export function ReviewStep({ form, blockedReasons, onEdit }: ReviewStepProps) {
       </dl>
 
       <BlockedReasonsPanel reasons={blockedReasons} />
-
-      <p className="flex items-start gap-2 rounded-lg bg-slate-50 px-3 py-3 text-start text-xs leading-5 text-slate-600">
-        <ShieldCheck
-          aria-hidden="true"
-          className="mt-px h-4 w-4 shrink-0 text-slate-400"
-        />
-        {t('metaNotice')}
-      </p>
     </div>
   )
 }
