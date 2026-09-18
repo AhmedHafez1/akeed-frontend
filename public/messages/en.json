@@ -1020,6 +1020,14 @@
   "common": {
     "loading": "Loading Akeed..."
   },
+  "theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "appearanceTitle": "Appearance",
+    "appearanceDescription": "Choose how Akeed looks. System follows your device setting."
+  },
   "onboarding": {
     "organization": "Organization",
     "platform": "Platform",

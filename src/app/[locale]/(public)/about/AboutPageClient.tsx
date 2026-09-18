@@ -29,11 +29,11 @@ export function AboutPageClient() {
       contentClassName="mx-auto max-w-4xl"
     >
       <div className="space-y-8">
-        <section className="rounded-2xl border border-border bg-white p-6 shadow-sm transition-all duration-300 hover:border-input hover:shadow-md md:p-8">
-          <h2 className="text-xl font-bold text-slate-800">
+        <section className="border-border bg-card hover:border-input rounded-2xl border p-6 shadow-sm transition-all duration-300 hover:shadow-md md:p-8">
+          <h2 className="text-foreground text-xl font-bold">
             {t('missionTitle')}
           </h2>
-          <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base sm:leading-8">
+          <p className="text-foreground/70 mt-4 text-sm leading-relaxed sm:text-base sm:leading-8">
             {t('missionBody')}
           </p>
         </section>
@@ -46,7 +46,7 @@ export function AboutPageClient() {
           >
             <a
               href={`tel:${businessPhone}`}
-              className="bg-primary text-primary-foreground hover:bg-primary inline-flex h-11 items-center justify-center rounded-xl px-5 text-sm font-bold shadow-sm shadow-emerald-900/10 transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="bg-primary text-primary-foreground hover:bg-primary focus-visible:ring-ring/40 inline-flex h-11 items-center justify-center rounded-xl px-5 text-sm font-bold shadow-sm shadow-emerald-900/10 transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
               dir="ltr"
             >
               {businessPhone}
@@ -60,7 +60,7 @@ export function AboutPageClient() {
           >
             <a
               href={`mailto:${supportEmail}`}
-              className="bg-primary text-primary-foreground hover:bg-primary inline-flex h-11 items-center justify-center rounded-xl px-5 text-sm font-bold shadow-sm shadow-emerald-900/10 transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="bg-primary text-primary-foreground hover:bg-primary focus-visible:ring-ring/40 inline-flex h-11 items-center justify-center rounded-xl px-5 text-sm font-bold shadow-sm shadow-emerald-900/10 transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
               dir="ltr"
             >
               {supportEmail}
@@ -78,7 +78,7 @@ export function AboutPageClient() {
               href={facebookProfileUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-border bg-muted px-4 text-sm font-bold text-foreground transition-all hover:-translate-y-0.5 hover:border-input hover:bg-accent hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="border-border bg-muted text-foreground hover:border-input hover:bg-accent focus-visible:ring-ring/40 inline-flex h-10 items-center justify-center gap-2 rounded-xl border px-4 text-sm font-bold transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               Facebook
             </a>
@@ -86,7 +86,7 @@ export function AboutPageClient() {
               href={youtubeProfileUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-border bg-muted px-4 text-sm font-bold text-foreground transition-all hover:-translate-y-0.5 hover:border-input hover:bg-accent hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="border-border bg-muted text-foreground hover:border-input hover:bg-accent focus-visible:ring-ring/40 inline-flex h-10 items-center justify-center gap-2 rounded-xl border px-4 text-sm font-bold transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               YouTube
             </a>
@@ -94,7 +94,7 @@ export function AboutPageClient() {
               href={instagramProfileUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-border bg-muted px-4 text-sm font-bold text-foreground transition-all hover:-translate-y-0.5 hover:border-input hover:bg-accent hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="border-border bg-muted text-foreground hover:border-input hover:bg-accent focus-visible:ring-ring/40 inline-flex h-10 items-center justify-center gap-2 rounded-xl border px-4 text-sm font-bold transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               Instagram
             </a>
@@ -105,7 +105,7 @@ export function AboutPageClient() {
       <div className="mt-10 flex justify-center">
         <Link
           href={withLocale('/', locale)}
-          className="hover:text-primary-hover inline-flex h-11 items-center justify-center rounded-xl border border-border bg-white px-6 text-sm font-bold text-slate-700 transition-all hover:-translate-y-0.5 hover:border-input hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="hover:text-primary-hover border-border bg-card text-foreground/80 hover:border-input focus-visible:ring-ring/40 inline-flex h-11 items-center justify-center rounded-xl border px-6 text-sm font-bold transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           {t('backHome')}
         </Link>

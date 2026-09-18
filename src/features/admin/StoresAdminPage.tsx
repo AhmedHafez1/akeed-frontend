@@ -311,16 +311,16 @@ export function StoresAdminPage() {
               <div>
                 <h2
                   id="store-metrics-heading"
-                  className="text-sm font-semibold text-slate-900"
+                  className="text-foreground text-sm font-semibold"
                 >
                   Operational summary
                 </h2>
-                <p className="mt-0.5 text-xs text-slate-500">
+                <p className="text-muted-foreground mt-0.5 text-xs">
                   Select a status card to filter the store list.
                 </p>
               </div>
               {loading && (
-                <span className="flex items-center gap-1.5 text-xs text-slate-500">
+                <span className="text-muted-foreground flex items-center gap-1.5 text-xs">
                   <Loader2 className="size-3.5 animate-spin" /> Updating
                 </span>
               )}
@@ -395,13 +395,13 @@ export function StoresAdminPage() {
             </div>
           </section>
 
-          <section className="rounded-2xl border border-slate-200 bg-white shadow-xs">
+          <section className="border-border bg-card rounded-2xl border shadow-xs">
             <div className="grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-[minmax(240px,1.6fr)_repeat(4,minmax(130px,1fr))_minmax(150px,1fr)_auto_auto]">
               <label className="relative block">
                 <span className="sr-only">Search stores</span>
-                <Search className="absolute top-3 left-3 size-4 text-slate-400" />
+                <Search className="text-muted-foreground/70 absolute top-3 left-3 size-4" />
                 <Input
-                  className="h-10 rounded-lg border pl-9 text-sm focus:bg-white"
+                  className="focus:bg-card h-10 rounded-lg border pl-9 text-sm"
                   placeholder="Search store, domain, or organization"
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
@@ -464,7 +464,7 @@ export function StoresAdminPage() {
                 className={cn(
                   'h-10 px-3',
                   (advancedOpen || advancedCount > 0) &&
-                    'border-emerald-200 bg-emerald-50 text-emerald-800'
+                    'border-primary-border bg-primary-subtle text-primary-subtle-foreground'
                 )}
                 onClick={() => setAdvancedOpen((value) => !value)}
                 aria-expanded={advancedOpen}
@@ -483,7 +483,7 @@ export function StoresAdminPage() {
             {advancedOpen && (
               <div
                 id="advanced-store-filters"
-                className="border-t border-slate-200 bg-slate-50/70 p-4"
+                className="border-border bg-muted/40 border-t p-4"
               >
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
                   <AdminSelect
@@ -501,10 +501,10 @@ export function StoresAdminPage() {
                       { value: 'completed', label: 'Completed' },
                     ]}
                   />
-                  <label className="block text-xs font-medium text-slate-600">
+                  <label className="text-foreground/70 block text-xs font-medium">
                     Country
                     <Input
-                      className="mt-1.5 h-10 rounded-lg border text-sm uppercase focus:bg-white"
+                      className="focus:bg-card mt-1.5 h-10 rounded-lg border text-sm uppercase"
                       placeholder="e.g. EG"
                       maxLength={2}
                       value={advanced.country}
@@ -567,15 +567,15 @@ export function StoresAdminPage() {
             )}
 
             {activeFilters.length > 0 && (
-              <div className="flex flex-wrap items-center gap-2 border-t border-slate-100 px-4 py-3">
-                <span className="text-xs font-medium text-slate-500">
+              <div className="border-border flex flex-wrap items-center gap-2 border-t px-4 py-3">
+                <span className="text-muted-foreground text-xs font-medium">
                   Active filters
                 </span>
                 {activeFilters.map((filter) => (
                   <button
                     key={filter.key}
                     type="button"
-                    className="inline-flex h-7 items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 text-xs text-slate-700 hover:border-slate-300 hover:bg-slate-100 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none"
+                    className="border-border bg-muted/50 text-foreground/80 hover:border-input hover:bg-muted focus-visible:ring-ring inline-flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-xs focus-visible:ring-2 focus-visible:outline-none"
                     onClick={() => removeFilter(filter.key)}
                     aria-label={`Remove ${filter.label} filter`}
                   >
@@ -588,7 +588,7 @@ export function StoresAdminPage() {
                 ))}
                 <button
                   type="button"
-                  className="ml-auto text-xs font-medium text-emerald-700 hover:text-emerald-800 hover:underline focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none"
+                  className="text-primary hover:text-primary-hover focus-visible:ring-ring ml-auto text-xs font-medium hover:underline focus-visible:ring-2 focus-visible:outline-none"
                   onClick={clearFilters}
                 >
                   Clear all
@@ -646,8 +646,8 @@ export function StoresAdminPage() {
             />
           )}
 
-          <div className="flex flex-col items-center gap-3 border-t border-slate-200 pt-4 sm:flex-row sm:justify-between">
-            <p className="text-xs text-slate-500">
+          <div className="border-border flex flex-col items-center gap-3 border-t pt-4 sm:flex-row sm:justify-between">
+            <p className="text-muted-foreground text-xs">
               {response.data.length.toLocaleString('en')} stores loaded
               {response.next_cursor ? ' · More available' : ' · End of results'}
             </p>
@@ -686,10 +686,10 @@ function AdvancedDate({
   onChange: (value: string) => void
 }) {
   return (
-    <label className="block text-xs font-medium text-slate-600">
+    <label className="text-foreground/70 block text-xs font-medium">
       {label}
       <Input
-        className="mt-1.5 h-10 rounded-lg border text-sm focus:bg-white"
+        className="focus:bg-card mt-1.5 h-10 rounded-lg border text-sm"
         type="date"
         value={value}
         onChange={(event) => onChange(event.target.value)}
@@ -729,10 +729,10 @@ function StoresResults({
 
   return (
     <section aria-label="Store results">
-      <div className="hidden overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs md:block">
+      <div className="border-border bg-card hidden overflow-hidden rounded-2xl border shadow-xs md:block">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[1120px] text-left text-sm">
-            <thead className="border-b border-slate-200 bg-slate-50/80 text-xs font-semibold tracking-wide text-slate-500 uppercase">
+            <thead className="border-border bg-muted/40 text-muted-foreground border-b text-xs font-semibold tracking-wide uppercase">
               <tr>
                 <SortableHeader
                   label="Store"
@@ -776,7 +776,7 @@ function StoresResults({
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-border divide-y">
               {stores.map((store) => {
                 const isExpanded = expanded.has(store.integration_id)
                 const detailId = `store-details-${store.integration_id}`
@@ -784,28 +784,28 @@ function StoresResults({
                   <Fragment key={store.integration_id}>
                     <tr
                       className={cn(
-                        'align-middle transition-colors hover:bg-slate-50/80',
-                        isExpanded && 'bg-slate-50/70'
+                        'hover:bg-muted/40 align-middle transition-colors',
+                        isExpanded && 'bg-muted/40'
                       )}
                     >
                       <td className="max-w-72 px-4 py-4">
                         <div className="flex min-w-0 items-center gap-2">
                           <Link
                             href={storeHref(store)}
-                            className="truncate rounded font-semibold text-slate-900 hover:text-emerald-700 hover:underline focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none"
+                            className="text-foreground hover:text-primary focus-visible:ring-ring truncate rounded font-semibold hover:underline focus-visible:ring-2 focus-visible:outline-none"
                           >
                             {store.store_name}
                           </Link>
                           <PlatformBadge platform={store.platform} />
                         </div>
-                        <p className="mt-1 truncate text-xs text-slate-500">
+                        <p className="text-muted-foreground mt-1 truncate text-xs">
                           {storeSubtitle(store)}
                         </p>
                       </td>
                       <td className="px-4 py-4">
                         <LifecycleBadge status={store.lifecycle_status} />
                       </td>
-                      <td className="px-4 py-4 text-xs whitespace-nowrap text-slate-600">
+                      <td className="text-foreground/70 px-4 py-4 text-xs whitespace-nowrap">
                         {formatDate(store.installed_at)}
                       </td>
                       <td className="px-4 py-4">
@@ -814,13 +814,13 @@ function StoresResults({
                       <td className="min-w-40 px-4 py-4">
                         <BillingCell store={store} />
                       </td>
-                      <td className="px-4 py-4 text-xs whitespace-nowrap text-slate-600">
+                      <td className="text-foreground/70 px-4 py-4 text-xs whitespace-nowrap">
                         {formatDateTime(store.last_activity_at)}
                       </td>
                       <td className="px-4 py-4">
                         <HealthBadge status={store.health.status} />
                         {store.health.top_signal && (
-                          <p className="mt-1 max-w-36 truncate text-xs text-slate-500">
+                          <p className="text-muted-foreground mt-1 max-w-36 truncate text-xs">
                             {titleCase(store.health.top_signal)}
                           </p>
                         )}
@@ -846,7 +846,7 @@ function StoresResults({
                     </tr>
                     {isExpanded && (
                       <tr id={detailId}>
-                        <td colSpan={8} className="bg-slate-50 px-5 py-5">
+                        <td colSpan={8} className="bg-muted/50 px-5 py-5">
                           <StoreDetails store={store} href={storeHref(store)} />
                         </td>
                       </tr>
@@ -866,21 +866,21 @@ function StoresResults({
           return (
             <article
               key={store.integration_id}
-              className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs"
+              className="border-border bg-card rounded-2xl border p-4 shadow-xs"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <h3 className="truncate font-semibold text-slate-950">
+                  <h3 className="text-foreground truncate font-semibold">
                     <Link
                       href={storeHref(store)}
-                      className="rounded hover:text-emerald-700 hover:underline focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none"
+                      className="hover:text-primary focus-visible:ring-ring rounded hover:underline focus-visible:ring-2 focus-visible:outline-none"
                     >
                       {store.store_name}
                     </Link>
                   </h3>
                   <div className="mt-1 flex min-w-0 items-center gap-2">
                     <PlatformBadge platform={store.platform} />
-                    <p className="truncate text-xs text-slate-500">
+                    <p className="text-muted-foreground truncate text-xs">
                       {storeSubtitle(store)}
                     </p>
                   </div>
@@ -889,43 +889,43 @@ function StoresResults({
               </div>
               <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
                 <div>
-                  <p className="text-slate-500">Lifecycle</p>
+                  <p className="text-muted-foreground">Lifecycle</p>
                   <div className="mt-1.5">
                     <LifecycleBadge status={store.lifecycle_status} />
                   </div>
                 </div>
                 <div>
-                  <p className="text-slate-500">Plan</p>
+                  <p className="text-muted-foreground">Plan</p>
                   <div className="mt-1.5">
                     <PlanCell store={store} />
                   </div>
                 </div>
                 <div className="col-span-2">
-                  <p className="mb-1.5 text-slate-500">
+                  <p className="text-muted-foreground mb-1.5">
                     {store.billing.model === 'credits' ? 'Credits' : 'Usage'}
                   </p>
                   <BillingCell store={store} />
                 </div>
                 <div>
-                  <p className="text-slate-500">
+                  <p className="text-muted-foreground">
                     {isInstalledPlatform(store.platform)
                       ? 'Installed'
                       : 'Created'}
                   </p>
-                  <p className="mt-1 font-medium text-slate-800">
+                  <p className="text-foreground mt-1 font-medium">
                     {formatDate(store.installed_at)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-slate-500">Last activity</p>
-                  <p className="mt-1 font-medium text-slate-800">
+                  <p className="text-muted-foreground">Last activity</p>
+                  <p className="text-foreground mt-1 font-medium">
                     {formatDate(store.last_activity_at)}
                   </p>
                 </div>
               </div>
               <Button
                 variant="ghost"
-                className="mt-3 h-9 w-full justify-between border-t border-slate-100 px-1 pt-3"
+                className="border-border mt-3 h-9 w-full justify-between border-t px-1 pt-3"
                 onClick={() => toggle(store.integration_id)}
                 aria-expanded={isExpanded}
                 aria-controls={detailId}
@@ -941,10 +941,7 @@ function StoresResults({
                 />
               </Button>
               {isExpanded && (
-                <div
-                  id={detailId}
-                  className="mt-4 border-t border-slate-100 pt-4"
-                >
+                <div id={detailId} className="border-border mt-4 border-t pt-4">
                   <StoreDetails store={store} href={storeHref(store)} />
                 </div>
               )}
@@ -979,15 +976,15 @@ function SortableHeader({
     >
       <button
         type="button"
-        className="inline-flex items-center gap-1 rounded focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none"
+        className="focus-visible:ring-ring inline-flex items-center gap-1 rounded focus-visible:ring-2 focus-visible:outline-none"
         onClick={() => onSort(sortKey)}
       >
         {label}
         {active ? (
           direction === 'asc' ? (
-            <ArrowUp className="size-3.5 text-emerald-700" />
+            <ArrowUp className="text-primary size-3.5" />
           ) : (
-            <ArrowDown className="size-3.5 text-emerald-700" />
+            <ArrowDown className="text-primary size-3.5" />
           )
         ) : (
           <ArrowDown className="size-3.5 opacity-30" />
@@ -1029,8 +1026,10 @@ function StoreDetails({ store, href }: { store: AdminStore; href: string }) {
       <dl className="grid gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
         {details.map(([label, value]) => (
           <div key={label} className="min-w-0">
-            <dt className="text-xs font-medium text-slate-500">{label}</dt>
-            <dd className="mt-1 text-sm font-medium break-words text-slate-800">
+            <dt className="text-muted-foreground text-xs font-medium">
+              {label}
+            </dt>
+            <dd className="text-foreground mt-1 text-sm font-medium break-words">
               {value}
             </dd>
           </div>

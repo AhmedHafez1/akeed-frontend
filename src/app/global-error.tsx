@@ -1,5 +1,12 @@
 'use client'
 
+const GLOBAL_ERROR_COLORS = `
+  :root { color-scheme: light dark; --ge-bg: #fafafa; --ge-fg: #171717; --ge-muted: #737373; --ge-faint: #a3a3a3; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ge-bg: #0b1120; --ge-fg: #f8fafc; --ge-muted: #94a3b8; --ge-faint: #64748b; }
+  }
+`
+
 export default function GlobalError({
   error,
   reset,
@@ -9,6 +16,10 @@ export default function GlobalError({
 }) {
   return (
     <html lang="en">
+      <head>
+        {/* Renders outside the app theme, so it follows the OS scheme directly. */}
+        <style>{GLOBAL_ERROR_COLORS}</style>
+      </head>
       <body
         style={{
           fontFamily:
@@ -18,8 +29,8 @@ export default function GlobalError({
           justifyContent: 'center',
           minHeight: '100vh',
           margin: 0,
-          backgroundColor: '#fafafa',
-          color: '#171717',
+          backgroundColor: 'var(--ge-bg)',
+          color: 'var(--ge-fg)',
         }}
       >
         <div style={{ textAlign: 'center', padding: '2rem' }}>
@@ -29,7 +40,7 @@ export default function GlobalError({
           <p
             style={{
               fontSize: '0.95rem',
-              color: '#737373',
+              color: 'var(--ge-muted)',
               marginBottom: '1.5rem',
               maxWidth: '400px',
             }}
@@ -40,7 +51,7 @@ export default function GlobalError({
             <p
               style={{
                 fontSize: '0.75rem',
-                color: '#a3a3a3',
+                color: 'var(--ge-faint)',
                 marginBottom: '1rem',
               }}
             >
@@ -53,8 +64,8 @@ export default function GlobalError({
               padding: '0.5rem 1.5rem',
               fontSize: '0.875rem',
               fontWeight: 500,
-              backgroundColor: '#171717',
-              color: '#fff',
+              backgroundColor: 'var(--ge-fg)',
+              color: 'var(--ge-bg)',
               border: 'none',
               borderRadius: '0.375rem',
               cursor: 'pointer',

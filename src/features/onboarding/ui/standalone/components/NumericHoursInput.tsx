@@ -47,7 +47,7 @@ export function NumericHoursInput({
       className={cn(
         'max-w-40 tabular-nums',
         isRTL ? 'text-right' : 'text-left',
-        invalid && 'border-red-400 focus:border-red-500'
+        invalid && 'border-destructive focus:border-destructive'
       )}
     />
   )

@@ -18,7 +18,7 @@ function HelpIcon({ content }: { content: string }) {
   return (
     <span
       title={content}
-      className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 text-[10px] font-semibold text-slate-500"
+      className="border-input text-muted-foreground inline-flex h-4 w-4 items-center justify-center rounded-full border text-[10px] font-semibold"
     >
       ?
     </span>
@@ -33,7 +33,7 @@ function Field({ label, error, helpText, children }: FieldProps) {
         {helpText ? <HelpIcon content={helpText} /> : null}
       </div>
       {children}
-      {error && <p className="text-xs font-medium text-red-600">{error}</p>}
+      {error && <p className="text-destructive text-xs font-medium">{error}</p>}
     </div>
   )
 }
@@ -52,7 +52,7 @@ function NativeSelect<TValue extends string>({
       <select
         value={value}
         onChange={(event) => onChange(event.target.value as TValue)}
-        className="border-border h-12 w-full appearance-none rounded-lg border-2 bg-white py-2 ps-4 pe-11 text-base transition-colors outline-none focus:border-emerald-500"
+        className="border-border bg-card focus:border-primary h-12 w-full appearance-none rounded-lg border-2 py-2 ps-4 pe-11 text-base transition-colors outline-none"
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>
@@ -85,10 +85,10 @@ function ToggleRow({
         type="checkbox"
         checked={checked}
         onChange={(event) => onChange(event.target.checked)}
-        className="text-primary mt-1 h-4 w-4 rounded border-slate-300 focus:ring-emerald-500"
+        className="text-primary border-input focus:ring-ring mt-1 h-4 w-4 rounded"
       />
       <span className="space-y-1">
-        <span className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+        <span className="text-foreground flex items-center gap-2 text-sm font-semibold">
           {label}
           <HelpIcon content={description} />
         </span>
@@ -103,20 +103,22 @@ export function AutomationSettingsStandaloneSkin(props: SettingsSkinProps) {
   return (
     <div className="mx-auto max-w-6xl space-y-6 pb-8">
       <div className="space-y-1">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+        <h1 className="text-foreground text-2xl font-bold tracking-tight">
           {t('automation.title')}
         </h1>
-        <p className="text-sm text-slate-500">{t('automation.subtitle')}</p>
+        <p className="text-muted-foreground text-sm">
+          {t('automation.subtitle')}
+        </p>
       </div>
 
       {props.errorBanner && (
-        <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <div className="border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground rounded-xl border px-4 py-3 text-sm">
           {props.errorBanner}
         </div>
       )}
 
       {props.successBanner && (
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+        <div className="border-primary-border bg-primary-subtle text-primary rounded-xl border px-4 py-3 text-sm">
           {props.successBanner}
         </div>
       )}
@@ -124,7 +126,7 @@ export function AutomationSettingsStandaloneSkin(props: SettingsSkinProps) {
       {!props.canUpdateConfiguration && (
         <div
           role="status"
-          className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800"
+          className="border-warning-border bg-warning-subtle text-warning-subtle-foreground rounded-xl border px-4 py-3 text-sm"
         >
           {t('readOnly')}
         </div>
@@ -136,13 +138,13 @@ export function AutomationSettingsStandaloneSkin(props: SettingsSkinProps) {
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <h2 className="text-lg font-semibold text-slate-900">
+                  <h2 className="text-foreground text-lg font-semibold">
                     {t('automation.heading')}
                   </h2>
                   <HelpIcon content={t('automation.description')} />
                 </div>
                 <HelpButton article="automationRules" />
-                <p className="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
+                <p className="border-primary-border bg-primary-subtle text-primary inline-flex rounded-full border px-3 py-1 text-xs font-medium">
                   {t('automation.trustSignal')}
                 </p>
               </div>
@@ -182,7 +184,7 @@ export function AutomationSettingsStandaloneSkin(props: SettingsSkinProps) {
               />
             </Field>
 
-            <div className="border-t border-slate-100 pt-5">
+            <div className="border-border border-t pt-5">
               <ToggleRow
                 label={t('automation.followUpEnabledLabel')}
                 description={t('automation.followUpEnabledHelp')}
@@ -208,7 +210,7 @@ export function AutomationSettingsStandaloneSkin(props: SettingsSkinProps) {
               />
             </Field>
 
-            <div className="border-t border-slate-100 pt-5">
+            <div className="border-border border-t pt-5">
               <ToggleRow
                 label={t('automation.escalationEnabledLabel')}
                 description={t('automation.escalationEnabledHelp')}
@@ -235,7 +237,7 @@ export function AutomationSettingsStandaloneSkin(props: SettingsSkinProps) {
               />
             </Field>
 
-            <div className="border-t border-slate-100 pt-5">
+            <div className="border-border border-t pt-5">
               <ToggleRow
                 label={t('automation.quietHoursEnabledLabel')}
                 description={t('automation.quietHoursEnabledHelp')}

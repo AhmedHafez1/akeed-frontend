@@ -20,13 +20,13 @@ export function BlockedReasonsPanel({ reasons }: BlockedReasonsPanelProps) {
   return (
     <div
       role="status"
-      className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-start"
+      className="border-warning-border bg-warning-subtle rounded-xl border p-4 text-start"
     >
-      <h3 className="flex items-center gap-2 text-sm font-semibold text-amber-900">
+      <h3 className="text-warning-subtle-foreground flex items-center gap-2 text-sm font-semibold">
         <AlertTriangle aria-hidden="true" className="h-4 w-4" />
         {t('blockedHeading')}
       </h3>
-      <ul className="mt-2 list-disc space-y-1 ps-5 text-sm text-amber-800">
+      <ul className="text-warning-subtle-foreground mt-2 list-disc space-y-1 ps-5 text-sm">
         {reasons.map((reason) => (
           <li key={reason}>{t(`blockers.${reason}`)}</li>
         ))}

@@ -122,7 +122,7 @@ export function DocsSearch({ locale, entries }: DocsSearchProps) {
         {t('searchLabel')}
       </label>
       <div className="relative">
-        <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <Search className="text-muted-foreground/70 pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
         <input
           id="docs-search-input"
           ref={inputRef}
@@ -144,7 +144,7 @@ export function DocsSearch({ locale, entries }: DocsSearchProps) {
           aria-activedescendant={activeDescendant}
           aria-autocomplete="list"
           placeholder={t('searchPlaceholder')}
-          className="h-11 w-full rounded-xl border border-border bg-white pr-10 pl-9 text-sm text-slate-700 shadow-sm transition-colors focus:border-emerald-300 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+          className="border-border bg-card text-foreground/80 focus:border-primary-border focus:ring-ring/20 h-11 w-full rounded-xl border pr-10 pl-9 text-sm shadow-sm transition-colors focus:ring-2 focus:outline-none"
         />
         {query ? (
           <button
@@ -152,7 +152,7 @@ export function DocsSearch({ locale, entries }: DocsSearchProps) {
             onMouseDown={(event) => event.preventDefault()}
             onClick={clearSearch}
             aria-label={t('clearSearch')}
-            className="absolute top-1/2 right-2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+            className="text-muted-foreground hover:bg-muted hover:text-foreground/80 absolute top-1/2 right-2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-md"
           >
             <X className="h-4 w-4" />
           </button>
@@ -164,10 +164,12 @@ export function DocsSearch({ locale, entries }: DocsSearchProps) {
           id="docs-search-results"
           role="listbox"
           aria-label={t('searchResultsLabel')}
-          className="absolute z-40 mt-2 max-h-96 w-full overflow-y-auto rounded-xl border border-border bg-white p-2 shadow-lg"
+          className="border-border bg-card absolute z-40 mt-2 max-h-96 w-full overflow-y-auto rounded-xl border p-2 shadow-lg"
         >
           {results.length === 0 ? (
-            <p className="px-2 py-3 text-sm text-slate-500">{t('searchNoResults')}</p>
+            <p className="text-muted-foreground px-2 py-3 text-sm">
+              {t('searchNoResults')}
+            </p>
           ) : (
             <ul className="space-y-1">
               {results.map((result, index) => {
@@ -184,11 +186,15 @@ export function DocsSearch({ locale, entries }: DocsSearchProps) {
                       className={`block rounded-lg px-3 py-2 transition-colors ${
                         isActive
                           ? 'bg-accent text-foreground'
-                          : 'text-slate-700 hover:bg-slate-50'
+                          : 'text-foreground/80 hover:bg-muted/50'
                       }`}
                     >
-                      <p className="text-sm font-semibold">{result.item.title}</p>
-                      <p className="mt-1 text-xs text-slate-500">{result.item.excerpt}</p>
+                      <p className="text-sm font-semibold">
+                        {result.item.title}
+                      </p>
+                      <p className="text-muted-foreground mt-1 text-xs">
+                        {result.item.excerpt}
+                      </p>
                     </Link>
                   </li>
                 )
@@ -198,7 +204,7 @@ export function DocsSearch({ locale, entries }: DocsSearchProps) {
         </div>
       ) : null}
 
-      <p className="mt-2 text-xs text-slate-500">{t('searchHint')}</p>
+      <p className="text-muted-foreground mt-2 text-xs">{t('searchHint')}</p>
     </div>
   )
 }

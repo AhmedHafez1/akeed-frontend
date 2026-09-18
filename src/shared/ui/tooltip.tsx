@@ -28,7 +28,7 @@ export function Tooltip({ children, content, className }: TooltipProps) {
       onMouseLeave={() => setIsOpen(false)}
       onKeyDown={handleKeyDown}
       className={cn(
-        'relative inline-flex rounded-sm focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none',
+        'focus-visible:ring-ring relative inline-flex rounded-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
         className
       )}
     >

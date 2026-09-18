@@ -50,18 +50,18 @@ export function AdminAccessGate({ children }: AdminAccessGateProps) {
       className="akeed-app-canvas grid min-h-screen place-items-center p-6"
       dir={isRTL ? 'rtl' : 'ltr'}
     >
-      <div className="max-w-md rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
-        <ShieldX className="mx-auto mb-4 size-10 text-slate-500" />
-        <h1 className="text-xl font-semibold text-slate-950">
+      <div className="border-border bg-card max-w-md rounded-2xl border p-8 text-center shadow-sm">
+        <ShieldX className="text-muted-foreground mx-auto mb-4 size-10" />
+        <h1 className="text-foreground text-xl font-semibold">
           {state === 'forbidden' ? t('accessRequired') : t('accessError')}
         </h1>
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="text-foreground/70 mt-2 text-sm">
           {state === 'forbidden'
             ? t('accessRequiredBody')
             : t('accessErrorBody')}
         </p>
         {requestId && (
-          <p className="mt-3 font-mono text-xs text-slate-500">
+          <p className="text-muted-foreground mt-3 font-mono text-xs">
             {t('requestId', { id: requestId })}
           </p>
         )}

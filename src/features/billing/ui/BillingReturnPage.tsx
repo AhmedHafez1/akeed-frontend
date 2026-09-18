@@ -122,8 +122,8 @@ export function BillingReturnPage() {
   const tone = successful
     ? 'bg-primary-subtle text-primary'
     : pending
-      ? 'bg-amber-50 text-amber-800 dark:bg-amber-950 dark:text-amber-100'
-      : 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-200'
+      ? 'bg-warning-subtle text-warning-subtle-foreground'
+      : 'bg-destructive-subtle text-destructive-subtle-foreground'
 
   let title = t('return.errorTitle')
   let description = t('return.errorDescription')

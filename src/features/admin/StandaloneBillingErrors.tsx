@@ -16,7 +16,7 @@ export function RequestError({
   return (
     <div
       role="alert"
-      className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-900"
+      className="border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground rounded-xl border p-4 text-sm"
     >
       <p>{errorMessage(t, error)}</p>
       {error.requestId && (

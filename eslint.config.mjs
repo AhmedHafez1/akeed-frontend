@@ -46,19 +46,60 @@ const restrictedLegacyPaths = [
  * `src/shared/ui/**` and LandingPrimitives.tsx are exempt: they are where
  * tokens get *defined* in terms of concrete values.
  */
+const tokenGuardSelectors = [
+  {
+    selector: String.raw`Literal[value=/(^|\s)shadow-\[/]`,
+    message:
+      'Use an elevation token (shadow-raised / shadow-card / shadow-overlay / shadow-brand) instead of a one-off shadow-[...] value. Defined in src/app/globals.css.',
+  },
+  {
+    selector: String.raw`Literal[value=/(^|\s)(hover:|focus:|active:|group-hover:)?(text|bg|border|ring|divide)-(stone|gray|zinc)-[0-9]/]`,
+    message:
+      'slate is the single neutral family. Prefer a semantic token (text-muted-foreground, bg-muted, border-border, bg-canvas) over stone/gray/zinc.',
+  },
+]
+
+/*
+ * Dark mode is token-driven: a raw `bg-white` or `text-slate-600` stays the
+ * same colour in both themes. Themed surfaces must use the semantic tokens
+ * (bg-card, text-foreground, text-muted-foreground, border-border,
+ * bg-primary-subtle, bg-warning-subtle, …) so the `.dark` values apply.
+ */
+const themedPaletteGuardSelector = {
+  selector: String.raw`Literal[value=/(^|\s)([a-z-]+:)*(bg-white(\s|$)|text-slate-(400|500|600|700|800|900|950)|(bg|border|ring|divide)-slate-(50|100|200|300)|(bg|border|ring)-(red|amber)-|(bg|border)-emerald-(50|100|200|500|600|700)|text-emerald-(600|700|800|900|950))/]`,
+  message:
+    'Use a semantic token so the class follows the theme (see src/app/globals.css): text-foreground, text-muted-foreground, bg-card, bg-muted, border-border, bg-primary(-subtle), bg-warning-subtle, bg-destructive-subtle. Genuinely fixed surfaces belong in the ink-surface allowlist in eslint.config.mjs.',
+}
+
+/*
+ * Always-dark ("ink") or brand-fixed surfaces that intentionally do not
+ * follow the theme: public header/footer, auth hero, pricing panel, the
+ * WhatsApp chat mockups and the balance hero.
+ */
+const inkSurfaceFiles = [
+  'src/shared/layout/Header.tsx',
+  'src/shared/layout/Footer.tsx',
+  'src/shared/layout/AuthLayout.tsx',
+  'src/shared/layout/header/**/*.{ts,tsx}',
+  'src/features/marketing/ui/sections/pricing/CreditPriceCard.tsx',
+  'src/features/marketing/ui/sections/pricing/CreditSlider.tsx',
+  'src/features/marketing/ui/components/AcquisitionCta.tsx',
+  'src/features/marketing/ui/components/ChatInterface.tsx',
+  'src/features/marketing/ui/components/chat/**/*.{ts,tsx}',
+  'src/features/billing/ui/components/BalanceHeroCard.tsx',
+  'src/features/settings/skins/standalone/TemplatesStandaloneSkin.tsx',
+  'src/features/docs/ui/MarkdownContent.tsx',
+]
+
 const tokenGuardRules = {
+  'no-restricted-syntax': ['error', ...tokenGuardSelectors],
+}
+
+const themedTokenGuardRules = {
   'no-restricted-syntax': [
     'error',
-    {
-      selector: String.raw`Literal[value=/(^|\s)shadow-\[/]`,
-      message:
-        'Use an elevation token (shadow-raised / shadow-card / shadow-overlay / shadow-brand) instead of a one-off shadow-[...] value. Defined in src/app/globals.css.',
-    },
-    {
-      selector: String.raw`Literal[value=/(^|\s)(hover:|focus:|active:|group-hover:)?(text|bg|border|ring|divide)-(stone|gray|zinc)-[0-9]/]`,
-      message:
-        'slate is the single neutral family. Prefer a semantic token (text-muted-foreground, bg-muted, border-border, bg-canvas) over stone/gray/zinc.',
-    },
+    ...tokenGuardSelectors,
+    themedPaletteGuardSelector,
   ],
 }
 
@@ -83,6 +124,23 @@ const eslintConfig = defineConfig([
       'src/features/marketing/ui/components/LandingPrimitives.tsx',
     ],
     rules: tokenGuardRules,
+  },
+  {
+    files: [
+      'src/features/**/*.{ts,tsx}',
+      'src/shared/**/*.{ts,tsx}',
+      'src/app/**/*.{ts,tsx}',
+    ],
+    ignores: [
+      'src/shared/ui/**/*.{ts,tsx}',
+      'src/shared/theme/**/*.{ts,tsx}',
+      'src/features/marketing/ui/components/LandingPrimitives.tsx',
+      'src/features/**/embedded/**/*.{ts,tsx}',
+      'src/features/**/*Embedded*.{ts,tsx}',
+      'src/app/global-error.tsx',
+      ...inkSurfaceFiles,
+    ],
+    rules: themedTokenGuardRules,
   },
   {
     files: ['src/shared/{lib,hooks,types,ui}/**/*.{ts,tsx}'],

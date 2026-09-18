@@ -16,7 +16,7 @@ export function DocsBreadcrumbs({ items }: DocsBreadcrumbsProps) {
 
   return (
     <nav aria-label={t('breadcrumbsLabel')}>
-      <ol className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
+      <ol className="text-muted-foreground flex flex-wrap items-center gap-2 text-sm">
         {items.map((item, index) => {
           const isLast = index === items.length - 1
           const label = item.label === 'docs' ? t('docsCrumb') : item.label
@@ -29,17 +29,17 @@ export function DocsBreadcrumbs({ items }: DocsBreadcrumbsProps) {
               {item.href && !isLast ? (
                 <Link
                   href={item.href}
-                  className="hover:text-primary-hover font-medium text-slate-600"
+                  className="hover:text-primary-hover text-foreground/70 font-medium"
                 >
                   {label}
                 </Link>
               ) : (
-                <span className={isLast ? 'font-semibold text-slate-800' : ''}>
+                <span className={isLast ? 'text-foreground font-semibold' : ''}>
                   {label}
                 </span>
               )}
               {!isLast ? (
-                <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                <ChevronRight className="text-muted-foreground/70 h-3.5 w-3.5" />
               ) : null}
             </li>
           )

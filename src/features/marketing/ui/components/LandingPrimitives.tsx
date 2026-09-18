@@ -34,10 +34,10 @@ export const landingPanelClass = 'rounded-card border-border bg-card border'
 
 const iconToneClasses = {
   emerald: 'bg-primary-subtle text-primary ring-primary-border ring-1',
-  teal: 'bg-teal-50 text-teal-600 ring-1 ring-teal-100',
-  cyan: 'bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100',
-  sky: 'bg-sky-50 text-sky-600 ring-1 ring-sky-100',
-  slate: 'bg-slate-50 text-slate-600 ring-1 ring-slate-100',
+  teal: 'bg-teal-50 text-teal-600 ring-1 ring-teal-100 dark:bg-teal-500/10 dark:text-teal-300 dark:ring-teal-400/20',
+  cyan: 'bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100 dark:bg-cyan-500/10 dark:text-cyan-300 dark:ring-cyan-400/20',
+  sky: 'bg-sky-50 text-sky-600 ring-1 ring-sky-100 dark:bg-sky-500/10 dark:text-sky-300 dark:ring-sky-400/20',
+  slate: 'bg-muted text-muted-foreground ring-border ring-1',
 } as const
 
 export type LandingIconTone = keyof typeof iconToneClasses

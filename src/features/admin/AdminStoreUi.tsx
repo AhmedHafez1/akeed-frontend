@@ -55,18 +55,19 @@ export function HealthBadge({ status }: { status: AdminHealthStatus }) {
       className={cn(
         'gap-1.5 whitespace-nowrap',
         status === 'healthy' &&
-          'border-emerald-200 bg-emerald-50 text-emerald-700',
+          'border-primary-border bg-primary-subtle text-primary',
         status === 'attention_required' &&
-          'border-amber-200 bg-amber-50 text-amber-800',
-        status === 'critical' && 'border-red-200 bg-red-50 text-red-700'
+          'border-warning-border bg-warning-subtle text-warning-subtle-foreground',
+        status === 'critical' &&
+          'border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground'
       )}
     >
       <span
         className={cn(
           'size-1.5 rounded-full',
-          status === 'healthy' && 'bg-emerald-500',
-          status === 'attention_required' && 'bg-amber-500',
-          status === 'critical' && 'bg-red-500'
+          status === 'healthy' && 'bg-primary',
+          status === 'attention_required' && 'bg-secondary',
+          status === 'critical' && 'bg-destructive'
         )}
         aria-hidden="true"
       />
@@ -80,13 +81,14 @@ export function LifecycleBadge({ status }: { status: string }) {
     <Badge
       variant="outline"
       className={cn(
-        'border-slate-200 bg-slate-50 whitespace-nowrap text-slate-700',
+        'border-border bg-muted/50 text-foreground/80 whitespace-nowrap',
         status === 'active' &&
-          'border-emerald-200 bg-emerald-50 text-emerald-700',
-        status === 'onboarding' && 'border-blue-200 bg-blue-50 text-blue-700',
-        status === 'inactive' && 'border-amber-200 bg-amber-50 text-amber-800',
-        status === 'uninstalled' &&
-          'border-slate-200 bg-slate-100 text-slate-600'
+          'border-primary-border bg-primary-subtle text-primary',
+        status === 'onboarding' &&
+          'border-info-border bg-info-subtle text-info-subtle-foreground',
+        status === 'inactive' &&
+          'border-warning-border bg-warning-subtle text-warning-subtle-foreground',
+        status === 'uninstalled' && 'border-border bg-muted text-foreground/70'
       )}
     >
       {titleCase(status)}
@@ -99,11 +101,11 @@ export function PlatformBadge({ platform }: { platform: string }) {
     <Badge
       variant="outline"
       className={cn(
-        'border-slate-200 bg-white px-1.5 py-0 text-[11px] font-medium whitespace-nowrap text-slate-600',
+        'border-border bg-card text-foreground/70 px-1.5 py-0 text-[11px] font-medium whitespace-nowrap',
         platform === 'shopify' &&
-          'border-emerald-200 bg-emerald-50/60 text-emerald-800',
+          'border-primary-border bg-primary-subtle/60 text-primary-subtle-foreground',
         platform === 'standalone' &&
-          'border-violet-200 bg-violet-50 text-violet-700'
+          'border-info-border bg-info-subtle text-info-subtle-foreground'
       )}
     >
       {platformLabel(platform)}
@@ -128,11 +130,13 @@ export function CreditBalanceBadge({
     <Badge
       variant="outline"
       className={cn(
-        'border-slate-200 bg-slate-50 whitespace-nowrap text-slate-600',
-        state === 'ok' && 'border-emerald-200 bg-emerald-50 text-emerald-700',
-        state === 'low' && 'border-amber-200 bg-amber-50 text-amber-800',
+        'border-border bg-muted/50 text-foreground/70 whitespace-nowrap',
+        state === 'ok' &&
+          'border-primary-border bg-primary-subtle text-primary',
+        state === 'low' &&
+          'border-warning-border bg-warning-subtle text-warning-subtle-foreground',
         (state === 'zero' || state === 'debt') &&
-          'border-red-200 bg-red-50 text-red-700'
+          'border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground'
       )}
     >
       {balanceStateLabels[state]}
@@ -145,23 +149,25 @@ export function UsageMeter({ usage }: { usage: AdminUsage }) {
   return (
     <div>
       <div className="flex items-center justify-between gap-2 text-xs">
-        <span className="font-medium text-slate-800 tabular-nums">
+        <span className="text-foreground font-medium tabular-nums">
           {usage.used.toLocaleString('en')} /{' '}
           {usage.limit ? usage.limit.toLocaleString('en') : 'Unknown'}
         </span>
         {usage.limit > 0 && (
-          <span className="text-slate-500 tabular-nums">{usage.percent}%</span>
+          <span className="text-muted-foreground tabular-nums">
+            {usage.percent}%
+          </span>
         )}
       </div>
-      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100">
+      <div className="bg-muted mt-2 h-1.5 overflow-hidden rounded-full">
         <div
           className={cn(
             'h-full rounded-full',
             usage.percent >= 100
-              ? 'bg-red-500'
+              ? 'bg-destructive'
               : usage.percent >= 80
-                ? 'bg-amber-500'
-                : 'bg-emerald-500'
+                ? 'bg-secondary'
+                : 'bg-primary'
           )}
           style={{ width: `${width}%` }}
         />
@@ -174,7 +180,7 @@ export function BillingCell({ store }: { store: AdminStore }) {
   if (store.billing.model === 'credits') {
     return (
       <div>
-        <p className="text-xs font-medium text-slate-800 tabular-nums">
+        <p className="text-foreground text-xs font-medium tabular-nums">
           {store.billing.available.toLocaleString('en')} credits
         </p>
         <div className="mt-1.5">
@@ -190,8 +196,8 @@ export function PlanCell({ store }: { store: AdminStore }) {
   if (store.billing.model === 'credits') {
     return (
       <>
-        <p className="font-medium text-slate-800">Prepaid credits</p>
-        <p className="mt-1 text-xs text-slate-500">
+        <p className="text-foreground font-medium">Prepaid credits</p>
+        <p className="text-muted-foreground mt-1 text-xs">
           {titleCase(store.billing.account_status)}
         </p>
       </>
@@ -199,10 +205,10 @@ export function PlanCell({ store }: { store: AdminStore }) {
   }
   return (
     <>
-      <p className="font-medium text-slate-800">
+      <p className="text-foreground font-medium">
         {titleCase(store.billing.plan)}
       </p>
-      <p className="mt-1 text-xs text-slate-500">
+      <p className="text-muted-foreground mt-1 text-xs">
         {titleCase(store.billing.subscription_status)}
       </p>
     </>

@@ -38,7 +38,7 @@ export function StandaloneFeedbackBanners({
       {creditDenialCode && (
         <div
           role="status"
-          className="flex flex-col gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950 sm:flex-row sm:items-center sm:justify-between"
+          className="border-warning-border bg-warning-subtle text-warning-subtle-foreground flex flex-col gap-3 rounded-xl border px-4 py-3 text-sm sm:flex-row sm:items-center sm:justify-between"
         >
           <span>{tCredits(creditFeedbackMessageKey(creditDenialCode))}</span>
           {billingLink}
@@ -47,7 +47,7 @@ export function StandaloneFeedbackBanners({
       {error && (
         <div
           role="alert"
-          className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+          className="border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground rounded-xl border px-4 py-3 text-sm"
         >
           {error}
         </div>
@@ -59,10 +59,10 @@ export function StandaloneFeedbackBanners({
           aria-live="polite"
           className={`flex items-center justify-between rounded-xl border px-4 py-3 text-sm ${
             testFeedback.tone === 'success'
-              ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+              ? 'bg-primary-subtle border-primary-border text-primary'
               : testFeedback.tone === 'warning'
-                ? 'border-amber-200 bg-amber-50 text-amber-700'
-                : 'border-red-200 bg-red-50 text-red-700'
+                ? 'bg-warning-subtle border-warning-border text-warning'
+                : 'bg-destructive-subtle border-destructive-border text-destructive-subtle-foreground'
           }`}
         >
           <span className="me-auto">{testFeedback.message}</span>
@@ -83,10 +83,10 @@ export function StandaloneFeedbackBanners({
           role={actionFeedback.tone === 'critical' ? 'alert' : 'status'}
           className={`flex items-center justify-between rounded-xl border px-4 py-3 text-sm ${
             actionFeedback.tone === 'success'
-              ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+              ? 'bg-primary-subtle border-primary-border text-primary'
               : actionFeedback.tone === 'warning'
-                ? 'border-amber-200 bg-amber-50 text-amber-800'
-                : 'border-red-200 bg-red-50 text-red-700'
+                ? 'bg-warning-subtle border-warning-border text-warning-subtle-foreground'
+                : 'bg-destructive-subtle border-destructive-border text-destructive-subtle-foreground'
           }`}
         >
           <span className="me-auto">{actionFeedback.message}</span>

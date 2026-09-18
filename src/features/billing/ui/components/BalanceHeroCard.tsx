@@ -36,7 +36,7 @@ export function BalanceHeroCard({ summary, onBuyClick }: BalanceHeroCardProps) {
        * start edge (right in Arabic, left in English) and the account controls
        * fall to the far side, without a single RTL conditional.
        */
-      className="rounded-panel shadow-brand flex flex-col gap-6 overflow-hidden bg-[linear-gradient(to_bottom_left,var(--primary-subtle-foreground),var(--primary))] p-6 text-white sm:flex-row sm:items-center sm:justify-between sm:p-8"
+      className="rounded-panel shadow-brand flex flex-col gap-6 overflow-hidden bg-linear-to-bl from-emerald-900 to-emerald-700 p-6 text-white sm:flex-row sm:items-center sm:justify-between sm:p-8"
     >
       <div className="flex items-center gap-4 sm:gap-5">
         <div>
@@ -60,7 +60,7 @@ export function BalanceHeroCard({ summary, onBuyClick }: BalanceHeroCardProps) {
       <div className="flex flex-col items-start gap-4">
         <Button
           onClick={onBuyClick}
-          className="text-primary hover:text-primary-hover bg-white p-6 text-lg shadow-none hover:bg-white"
+          className="bg-white p-6 text-lg text-emerald-700 shadow-none hover:bg-white hover:text-emerald-800"
         >
           {t('hero.buyCredits')}
         </Button>

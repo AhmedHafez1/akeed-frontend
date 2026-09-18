@@ -52,10 +52,10 @@ export function StandaloneTestVerificationPanel({
   }
 
   return (
-    <div className="space-y-3 border-t border-slate-200 pt-5">
+    <div className="border-border space-y-3 border-t pt-5">
       <div className="space-y-1">
-        <h4 className="text-sm font-semibold text-slate-800">{heading}</h4>
-        <p className="text-xs text-slate-500">{hint}</p>
+        <h4 className="text-foreground text-sm font-semibold">{heading}</h4>
+        <p className="text-muted-foreground text-xs">{hint}</p>
       </div>
 
       <div className="flex flex-wrap items-end gap-3">
@@ -69,7 +69,7 @@ export function StandaloneTestVerificationPanel({
             disabled={isSendingTest}
           />
           {testPhone && !isPhoneValid && (
-            <p role="alert" className="mt-1.5 text-xs text-red-600">
+            <p role="alert" className="text-destructive mt-1.5 text-xs">
               {invalidPhoneMessage}
             </p>
           )}

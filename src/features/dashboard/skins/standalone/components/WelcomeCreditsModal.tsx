@@ -41,7 +41,7 @@ export function WelcomeCreditsModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent closeLabel={t('cta')}>
         <DialogHeader className="items-center text-center sm:items-center sm:text-center">
-          <span className="mb-2 inline-flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+          <span className="bg-primary-subtle text-primary mb-2 inline-flex h-12 w-12 items-center justify-center rounded-full">
             <PartyPopper aria-hidden="true" className="h-6 w-6" />
           </span>
           <DialogTitle>{t('title')}</DialogTitle>

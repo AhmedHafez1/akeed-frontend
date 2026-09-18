@@ -96,7 +96,7 @@ export function VerificationsTableStandalone(
            * would otherwise show through the translucent one this row used to
            * carry. The bottom rule moved onto the cells with it.
            */}
-          <tr className="text-xs font-medium text-slate-600">
+          <tr className="text-foreground/70 text-xs font-medium">
             {[
               ['order', 'w-[17%]'],
               ['customer', 'w-[25%]'],
@@ -109,11 +109,11 @@ export function VerificationsTableStandalone(
                 key={heading}
                 scope="col"
                 className={cn(
-                  'sticky top-0 z-10 bg-slate-50 px-4 py-3 text-start',
+                  'bg-muted/50 sticky top-0 z-10 px-4 py-3 text-start',
                   // The bottom rule is drawn by a pseudo-element rather than a
                   // border: under `border-collapse`, a border on a sticky cell
                   // is dropped by WebKit while the container scrolls.
-                  "after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-slate-200 after:content-['']",
+                  "after:bg-border after:absolute after:inset-x-0 after:bottom-0 after:h-px after:content-['']",
                   width
                 )}
               >
@@ -128,12 +128,12 @@ export function VerificationsTableStandalone(
               key={verification.id}
               aria-busy={verification.optimistic ? true : undefined}
               className={cn(
-                'hover:bg-muted/70 text-slate-700 transition-colors',
+                'hover:bg-muted/70 text-foreground/80 transition-colors',
                 verification.optimistic && 'bg-muted/60'
               )}
             >
               <td className="min-w-0 px-4 py-3">
-                <p className="truncate font-semibold text-slate-950">
+                <p className="text-foreground truncate font-semibold">
                   <bdi>
                     {formatOrderTitle(
                       verification,
@@ -142,16 +142,16 @@ export function VerificationsTableStandalone(
                   </bdi>
                 </p>
                 {verification.is_test && (
-                  <span className="mt-1 inline-flex rounded-full bg-blue-50 px-2 py-0.5 text-[11px] font-semibold text-blue-700">
+                  <span className="bg-info-subtle text-info-subtle-foreground mt-1 inline-flex rounded-full px-2 py-0.5 text-[11px] font-semibold">
                     {t('table.testBadge')}
                   </span>
                 )}
               </td>
               <td className="min-w-0 px-4 py-3">
-                <p className="truncate font-medium text-slate-900">
+                <p className="text-foreground truncate font-medium">
                   {verification.customer_name || t('table.unknownCustomer')}
                 </p>
-                <p className="mt-0.5 truncate text-xs text-slate-600">
+                <p className="text-foreground/70 mt-0.5 truncate text-xs">
                   {verification.customer_phone ? (
                     <bdi dir="ltr">{verification.customer_phone}</bdi>
                   ) : (
@@ -162,10 +162,10 @@ export function VerificationsTableStandalone(
               <td className="px-4 py-3">
                 <VerificationStatusBadge verification={verification} />
               </td>
-              <td className="px-4 py-3 font-medium text-slate-900">
+              <td className="text-foreground px-4 py-3 font-medium">
                 <bdi>{formatCurrencyTotal(verification, locale)}</bdi>
               </td>
-              <td className="px-4 py-3 text-xs text-slate-600">
+              <td className="text-foreground/70 px-4 py-3 text-xs">
                 {formatCreatedDate(
                   verification.created_at,
                   locale,
@@ -192,7 +192,7 @@ export function VerificationsTableStandalone(
         </tbody>
       </table>
 
-      <ul className="grid gap-3 bg-slate-50/60 p-3 md:hidden">
+      <ul className="bg-muted/40 grid gap-3 p-3 md:hidden">
         {props.verifications.map((verification) => (
           <li
             key={verification.id}
@@ -201,7 +201,7 @@ export function VerificationsTableStandalone(
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <p className="truncate font-bold text-slate-950">
+                <p className="text-foreground truncate font-bold">
                   {formatOrderTitle(
                     verification,
                     t('table.orderFallbackPrefix')
@@ -212,15 +212,15 @@ export function VerificationsTableStandalone(
                   className="mt-2"
                 />
               </div>
-              <p className="shrink-0 text-sm font-bold text-slate-950">
+              <p className="text-foreground shrink-0 text-sm font-bold">
                 <bdi>{formatCurrencyTotal(verification, locale)}</bdi>
               </p>
             </div>
-            <div className="mt-3 border-t border-slate-100 pt-3">
-              <p className="truncate text-sm font-medium text-slate-900">
+            <div className="border-border mt-3 border-t pt-3">
+              <p className="text-foreground truncate text-sm font-medium">
                 {verification.customer_name || t('table.unknownCustomer')}
               </p>
-              <p className="mt-0.5 text-xs text-slate-600">
+              <p className="text-foreground/70 mt-0.5 text-xs">
                 {verification.customer_phone ? (
                   <bdi dir="ltr">{verification.customer_phone}</bdi>
                 ) : (
@@ -228,7 +228,7 @@ export function VerificationsTableStandalone(
                 )}
               </p>
             </div>
-            <div className="mt-3 flex items-center justify-between gap-3 text-xs text-slate-600">
+            <div className="text-foreground/70 mt-3 flex items-center justify-between gap-3 text-xs">
               <span>
                 {formatCreatedDate(
                   verification.created_at,
@@ -316,7 +316,7 @@ function VerificationActionsMenu({
           ref={triggerRef}
           type="button"
           aria-label={t('table.actions.openMenu', { order: orderTitle })}
-          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-950 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:outline-none"
+          className="text-foreground/70 hover:bg-muted hover:text-foreground focus-visible:ring-ring inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg focus-visible:ring-2 focus-visible:outline-none"
         >
           <Ellipsis aria-hidden="true" className="h-5 w-5" />
         </button>
@@ -404,23 +404,23 @@ function VerificationDetails(props: VerificationDetailsProps) {
       <div className="space-y-6 p-5">
         <div className="bg-muted grid grid-cols-2 gap-4 rounded-xl p-4 text-sm">
           <div>
-            <p className="text-xs text-slate-600">
+            <p className="text-foreground/70 text-xs">
               {t('table.headings.customer')}
             </p>
-            <p className="mt-1 font-semibold text-slate-950">
+            <p className="text-foreground mt-1 font-semibold">
               {verification.customer_name || t('table.unknownCustomer')}
             </p>
-            <p className="mt-0.5 text-xs text-slate-600">
+            <p className="text-foreground/70 mt-0.5 text-xs">
               <bdi dir="ltr">
                 {verification.customer_phone || t('table.noPhone')}
               </bdi>
             </p>
           </div>
           <div>
-            <p className="text-xs text-slate-600">
+            <p className="text-foreground/70 text-xs">
               {t('table.headings.total')}
             </p>
-            <p className="mt-1 font-semibold text-slate-950">
+            <p className="text-foreground mt-1 font-semibold">
               <bdi>{formatCurrencyTotal(verification, locale)}</bdi>
             </p>
           </div>
@@ -429,7 +429,7 @@ function VerificationDetails(props: VerificationDetailsProps) {
         <section aria-labelledby="verification-history-title">
           <h3
             id="verification-history-title"
-            className="flex items-center gap-2 font-semibold text-slate-950"
+            className="text-foreground flex items-center gap-2 font-semibold"
           >
             <History aria-hidden="true" className="h-4 w-4" />
             {t('table.lifecycle.label')}
@@ -448,15 +448,15 @@ function VerificationDetails(props: VerificationDetailsProps) {
                     className={cn(
                       'mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full border',
                       step.recorded
-                        ? 'bg-primary border-emerald-600'
-                        : 'border-slate-300 bg-white'
+                        ? 'bg-primary border-primary'
+                        : 'border-input bg-card'
                     )}
                   />
                   <div>
-                    <p className="font-medium text-slate-900">
+                    <p className="text-foreground font-medium">
                       {t(`table.lifecycle.${step.label}`)}
                     </p>
-                    <p className="mt-0.5 text-xs text-slate-600">
+                    <p className="text-foreground/70 mt-0.5 text-xs">
                       {t(stateKey)}
                       {step.timestamp
                         ? ` · ${formatTooltipDateTime(
@@ -475,8 +475,10 @@ function VerificationDetails(props: VerificationDetailsProps) {
 
         <dl className="divide-border border-border divide-y rounded-xl border px-4 text-sm">
           <div className="flex justify-between gap-4 py-3">
-            <dt className="text-slate-600">{t('table.headings.followUp')}</dt>
-            <dd className="text-end font-medium text-slate-900">
+            <dt className="text-foreground/70">
+              {t('table.headings.followUp')}
+            </dt>
+            <dd className="text-foreground text-end font-medium">
               {verification.follow_up_sent_at
                 ? `${t('table.followUp.sent')} · ${formatTooltipDateTime(
                     verification.follow_up_sent_at,
@@ -487,8 +489,10 @@ function VerificationDetails(props: VerificationDetailsProps) {
             </dd>
           </div>
           <div className="flex justify-between gap-4 py-3">
-            <dt className="text-slate-600">{t('table.headings.created')}</dt>
-            <dd className="text-end font-medium text-slate-900">
+            <dt className="text-foreground/70">
+              {t('table.headings.created')}
+            </dt>
+            <dd className="text-foreground text-end font-medium">
               {formatTooltipDateTime(
                 verification.created_at,
                 locale,
@@ -497,8 +501,8 @@ function VerificationDetails(props: VerificationDetailsProps) {
             </dd>
           </div>
           <div className="py-3">
-            <dt className="text-slate-600">{t('table.technicalId')}</dt>
-            <dd className="mt-1 font-mono text-xs break-all text-slate-700">
+            <dt className="text-foreground/70">{t('table.technicalId')}</dt>
+            <dd className="text-foreground/80 mt-1 font-mono text-xs break-all">
               {verification.order_id}
             </dd>
           </div>
@@ -508,13 +512,13 @@ function VerificationDetails(props: VerificationDetailsProps) {
           <section aria-labelledby="verification-actions-title">
             <h3
               id="verification-actions-title"
-              className="font-semibold text-slate-950"
+              className="text-foreground font-semibold"
             >
               {t('table.headings.actions')}
             </h3>
             {isConfirming && showCancel ? (
-              <div className="mt-3 rounded-xl border border-red-200 bg-red-50 p-4">
-                <p className="text-sm leading-6 text-red-900">
+              <div className="border-destructive-border bg-destructive-subtle mt-3 rounded-xl border p-4">
+                <p className="text-destructive-subtle-foreground text-sm leading-6">
                   {t('table.actions.cancelOrderConfirmDescription')}
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
@@ -524,7 +528,7 @@ function VerificationDetails(props: VerificationDetailsProps) {
                     onClick={() =>
                       void props.onConfirmCancelOrder(verification.id)
                     }
-                    className="rounded-lg bg-red-600 px-3 py-2 text-xs font-semibold text-white hover:bg-red-700 disabled:opacity-60"
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90 rounded-lg px-3 py-2 text-xs font-semibold disabled:opacity-60"
                   >
                     {isActing
                       ? t('table.actions.cancelingOrder')
@@ -534,7 +538,7 @@ function VerificationDetails(props: VerificationDetailsProps) {
                     type="button"
                     disabled={props.actingVerificationId !== null}
                     onClick={() => props.onDismissCancelOrder(verification.id)}
-                    className="rounded-lg border border-red-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 disabled:opacity-60"
+                    className="border-destructive-border bg-card text-foreground/80 rounded-lg border px-3 py-2 text-xs font-semibold disabled:opacity-60"
                   >
                     {t('table.actions.keepOrder')}
                   </button>
@@ -549,7 +553,7 @@ function VerificationDetails(props: VerificationDetailsProps) {
                     onClick={() =>
                       void props.onRetryVerification(verification.id)
                     }
-                    className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-900 hover:bg-amber-100 disabled:opacity-60"
+                    className="border-warning-border bg-warning-subtle text-warning-subtle-foreground hover:bg-warning-subtle rounded-lg border px-3 py-2 text-xs font-semibold disabled:opacity-60"
                   >
                     {isActing
                       ? t('table.actions.retrying')
@@ -561,7 +565,7 @@ function VerificationDetails(props: VerificationDetailsProps) {
                     type="button"
                     disabled={props.actingVerificationId !== null}
                     onClick={() => props.onRequestCancelOrder(verification.id)}
-                    className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-800 hover:bg-red-100 disabled:opacity-60"
+                    className="border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground hover:bg-destructive-subtle rounded-lg border px-3 py-2 text-xs font-semibold disabled:opacity-60"
                   >
                     {t('table.actions.cancelOrder')}
                   </button>
@@ -569,12 +573,15 @@ function VerificationDetails(props: VerificationDetailsProps) {
               </div>
             )}
             {unavailableKey && (
-              <p className="mt-3 text-xs leading-5 text-slate-600">
+              <p className="text-foreground/70 mt-3 text-xs leading-5">
                 {t(`table.actions.${unavailableKey}`)}
               </p>
             )}
             {props.actionErrors[verification.id] && (
-              <p role="alert" className="mt-3 text-sm text-red-700">
+              <p
+                role="alert"
+                className="text-destructive-subtle-foreground mt-3 text-sm"
+              >
                 {props.actionErrors[verification.id]}
               </p>
             )}

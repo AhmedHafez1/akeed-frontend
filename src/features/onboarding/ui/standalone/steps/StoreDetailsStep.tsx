@@ -60,14 +60,15 @@ export function StoreDetailsStep({
             onChange={(event) => onFieldChange('storeName', event.target.value)}
             className={cn(
               'text-start',
-              fieldErrors.storeName && 'border-red-400 focus:border-red-500'
+              fieldErrors.storeName &&
+                'border-destructive focus:border-destructive'
             )}
           />
         )}
       </OnboardingField>
 
-      <div className="space-y-2 text-start mt-7">
-        <p className="text-sm font-medium text-slate-900" id="language-label">
+      <div className="mt-7 space-y-2 text-start">
+        <p className="text-foreground text-sm font-medium" id="language-label">
           {t('languageHeading')}
         </p>
         <SegmentedControl
@@ -80,11 +81,11 @@ export function StoreDetailsStep({
         />
         <p
           id="language-help"
-          className="flex items-start gap-2 py-2.5 text-xs leading-5 text-slate-600"
+          className="text-foreground/70 flex items-start gap-2 py-2.5 text-xs leading-5"
         >
           <Globe
             aria-hidden="true"
-            className="mt-px h-4 w-4 shrink-0 text-slate-400"
+            className="text-muted-foreground/70 mt-px h-4 w-4 shrink-0"
           />
           {t('languageAutoHelp')}
         </p>

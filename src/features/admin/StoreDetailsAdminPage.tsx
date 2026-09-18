@@ -115,7 +115,7 @@ export function StoreDetailsAdminPage({
     <div className="space-y-6" aria-busy={loading}>
       <Link
         href={backHref}
-        className="inline-flex items-center gap-1.5 rounded-lg text-sm font-medium text-emerald-700 hover:underline focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none"
+        className="text-primary focus-visible:ring-ring inline-flex items-center gap-1.5 rounded-lg text-sm font-medium hover:underline focus-visible:ring-2 focus-visible:outline-none"
       >
         <ArrowLeft className="size-4 rtl:rotate-180" aria-hidden="true" />
         Back to stores
@@ -215,16 +215,16 @@ function StoreHeader({
       : null
 
   return (
-    <header className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-xs sm:p-6 lg:flex-row lg:items-start lg:justify-between">
+    <header className="border-border bg-card flex flex-col gap-4 rounded-2xl border p-5 shadow-xs sm:p-6 lg:flex-row lg:items-start lg:justify-between">
       <div className="flex min-w-0 items-start gap-4">
-        <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-700">
+        <span className="bg-primary-subtle text-primary grid size-12 shrink-0 place-items-center rounded-xl">
           <StoreIcon className="size-6" aria-hidden="true" />
         </span>
         <div className="min-w-0">
-          <p className="text-xs font-semibold tracking-[0.16em] text-emerald-700 uppercase">
+          <p className="text-primary text-xs font-semibold tracking-[0.16em] uppercase">
             Store details
           </p>
-          <h1 className="mt-1 truncate text-2xl font-semibold text-slate-950">
+          <h1 className="text-foreground mt-1 truncate text-2xl font-semibold">
             {store.store_name}
           </h1>
           <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -232,13 +232,13 @@ function StoreHeader({
             <LifecycleBadge status={store.lifecycle_status} />
             <HealthBadge status={store.health.status} />
           </div>
-          <p className="mt-2 flex min-w-0 items-center gap-1.5 text-xs text-slate-500">
+          <p className="text-muted-foreground mt-2 flex min-w-0 items-center gap-1.5 text-xs">
             {shopUrl ? (
               <a
                 href={shopUrl}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="inline-flex min-w-0 items-center gap-1 rounded font-mono hover:text-emerald-700 hover:underline focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none"
+                className="hover:text-primary focus-visible:ring-ring inline-flex min-w-0 items-center gap-1 rounded font-mono hover:underline focus-visible:ring-2 focus-visible:outline-none"
               >
                 <span className="truncate">{store.shop_domain}</span>
                 <ExternalLink className="size-3 shrink-0" aria-hidden="true" />
@@ -252,7 +252,7 @@ function StoreHeader({
         </div>
       </div>
       <div className="flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center lg:flex-col lg:items-end">
-        <span className="text-xs text-slate-500">
+        <span className="text-muted-foreground text-xs">
           Last updated {formatDateTime(evaluatedAt)}
         </span>
         <div className="flex flex-wrap gap-2">
@@ -366,11 +366,11 @@ function DetailCard({
   return (
     <section
       className={cn(
-        'rounded-2xl border border-slate-200 bg-white p-5 shadow-xs',
+        'border-border bg-card rounded-2xl border p-5 shadow-xs',
         className
       )}
     >
-      <h2 className="text-sm font-semibold text-slate-900">{title}</h2>
+      <h2 className="text-foreground text-sm font-semibold">{title}</h2>
       <div className="mt-4">{children}</div>
     </section>
   )
@@ -382,14 +382,14 @@ function DetailList({
   items: ReadonlyArray<[string, React.ReactNode]>
 }) {
   return (
-    <dl className="divide-y divide-slate-100">
+    <dl className="divide-border divide-y">
       {items.map(([label, value]) => (
         <div
           key={label}
           className="flex items-start justify-between gap-4 py-2 first:pt-0 last:pb-0"
         >
-          <dt className="shrink-0 text-xs text-slate-500">{label}</dt>
-          <dd className="min-w-0 text-end text-sm font-medium break-words text-slate-800">
+          <dt className="text-muted-foreground shrink-0 text-xs">{label}</dt>
+          <dd className="text-foreground min-w-0 text-end text-sm font-medium break-words">
             {value}
           </dd>
         </div>
@@ -427,10 +427,10 @@ function BillingCard({ store }: { store: AdminStoreDetail }) {
       <DetailCard title="Billing · Prepaid credits">
         <div className="mb-4 flex items-end justify-between gap-3">
           <div>
-            <p className="text-2xl font-semibold text-slate-950 tabular-nums">
+            <p className="text-foreground text-2xl font-semibold tabular-nums">
               {numberFormat.format(billing.available)}
             </p>
-            <p className="text-xs text-slate-500">credits available</p>
+            <p className="text-muted-foreground text-xs">credits available</p>
           </div>
           <CreditBalanceBadge state={billing.balance_state} />
         </div>
@@ -441,7 +441,7 @@ function BillingCard({ store }: { store: AdminStoreDetail }) {
             [
               'Debt',
               billing.debt > 0 ? (
-                <span className="text-red-700">
+                <span className="text-destructive-subtle-foreground">
                   {numberFormat.format(billing.debt)}
                 </span>
               ) : (
@@ -457,7 +457,7 @@ function BillingCard({ store }: { store: AdminStoreDetail }) {
     <DetailCard title="Billing · Plan">
       <div className="mb-4">
         <UsageMeter usage={billing.usage} />
-        <p className="mt-1.5 text-xs text-slate-500">
+        <p className="text-muted-foreground mt-1.5 text-xs">
           {numberFormat.format(billing.usage.remaining)} verifications remaining
           this period
         </p>
@@ -479,13 +479,13 @@ function OnOff({ enabled, detail }: { enabled: boolean; detail?: string }) {
       <span
         className={cn(
           'size-1.5 rounded-full',
-          enabled ? 'bg-emerald-500' : 'bg-slate-300'
+          enabled ? 'bg-primary' : 'bg-input'
         )}
         aria-hidden="true"
       />
       {enabled ? 'On' : 'Off'}
       {enabled && detail && (
-        <span className="font-normal text-slate-500">· {detail}</span>
+        <span className="text-muted-foreground font-normal">· {detail}</span>
       )}
     </span>
   )
@@ -546,7 +546,7 @@ function HealthCard({ store }: { store: AdminStoreDetail }) {
     <DetailCard title="Health">
       <div className="flex items-center justify-between gap-3">
         <HealthBadge status={store.health.status} />
-        <span className="text-xs text-slate-500">
+        <span className="text-muted-foreground text-xs">
           {signals.length === 0
             ? 'No active signals'
             : `${signals.length} active signal${signals.length === 1 ? '' : 's'}`}
@@ -557,10 +557,10 @@ function HealthCard({ store }: { store: AdminStoreDetail }) {
           {signals.map((signal) => (
             <li
               key={signal}
-              className="flex items-start gap-2 rounded-lg bg-slate-50 px-3 py-2 text-sm text-slate-700"
+              className="bg-muted/50 text-foreground/80 flex items-start gap-2 rounded-lg px-3 py-2 text-sm"
             >
               <CircleAlert
-                className="mt-0.5 size-4 shrink-0 text-amber-600"
+                className="text-warning mt-0.5 size-4 shrink-0"
                 aria-hidden="true"
               />
               {signalLabels[signal] ?? titleCase(signal)}
@@ -568,13 +568,13 @@ function HealthCard({ store }: { store: AdminStoreDetail }) {
           ))}
         </ul>
       ) : (
-        <p className="mt-4 flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+        <p className="bg-primary-subtle text-primary-subtle-foreground mt-4 flex items-center gap-2 rounded-lg px-3 py-2 text-sm">
           <ShieldCheck className="size-4" aria-hidden="true" />
           Everything looks good.
         </p>
       )}
       {store.data_quality.length > 0 && (
-        <p className="mt-3 text-xs text-slate-500">
+        <p className="text-muted-foreground mt-3 text-xs">
           Some milestones are estimated from retained records.
         </p>
       )}
@@ -597,7 +597,7 @@ function LifecycleCard({ milestones }: { milestones: AdminStoreMilestone[] }) {
                 <span
                   className={cn(
                     'absolute start-[7px] top-5 -bottom-4 w-px',
-                    reached ? 'bg-emerald-200' : 'bg-slate-200'
+                    reached ? 'bg-primary-border' : 'bg-border'
                   )}
                   aria-hidden="true"
                 />
@@ -607,9 +607,9 @@ function LifecycleCard({ milestones }: { milestones: AdminStoreMilestone[] }) {
                   'relative mt-1 size-3.5 shrink-0 rounded-full border-2',
                   reached
                     ? milestone.key === 'uninstalled'
-                      ? 'border-slate-500 bg-slate-500'
-                      : 'border-emerald-500 bg-emerald-500'
-                    : 'border-slate-300 bg-white'
+                      ? 'border-muted-foreground bg-muted-foreground'
+                      : 'border-primary bg-primary'
+                    : 'border-input bg-card'
                 )}
                 aria-hidden="true"
               />
@@ -617,17 +617,19 @@ function LifecycleCard({ milestones }: { milestones: AdminStoreMilestone[] }) {
                 <p
                   className={cn(
                     'text-sm',
-                    reached ? 'font-medium text-slate-900' : 'text-slate-500'
+                    reached
+                      ? 'text-foreground font-medium'
+                      : 'text-muted-foreground'
                   )}
                 >
                   {milestoneLabels[milestone.key] ?? titleCase(milestone.key)}
                 </p>
-                <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
+                <div className="text-muted-foreground mt-0.5 flex flex-wrap items-center gap-1.5 text-xs">
                   {reached ? formatDateTime(milestone.at) : 'Not reached'}
                   {milestone.estimated && (
                     <Badge
                       variant="outline"
-                      className="border-amber-200 bg-amber-50 px-1.5 py-0 text-[10px] text-amber-800"
+                      className="border-warning-border bg-warning-subtle text-warning-subtle-foreground px-1.5 py-0 text-[10px]"
                     >
                       Estimated
                     </Badge>
@@ -643,15 +645,19 @@ function LifecycleCard({ milestones }: { milestones: AdminStoreMilestone[] }) {
 }
 
 const statusTones: Record<string, string> = {
-  confirmed: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-  canceled: 'border-red-200 bg-red-50 text-red-700',
-  failed: 'border-red-200 bg-red-50 text-red-700',
-  expired: 'border-amber-200 bg-amber-50 text-amber-800',
-  no_reply: 'border-amber-200 bg-amber-50 text-amber-800',
-  pending: 'border-slate-200 bg-slate-50 text-slate-700',
-  sent: 'border-blue-200 bg-blue-50 text-blue-700',
-  delivered: 'border-blue-200 bg-blue-50 text-blue-700',
-  read: 'border-blue-200 bg-blue-50 text-blue-700',
+  confirmed: 'border-primary-border bg-primary-subtle text-primary',
+  canceled:
+    'border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground',
+  failed:
+    'border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground',
+  expired:
+    'border-warning-border bg-warning-subtle text-warning-subtle-foreground',
+  no_reply:
+    'border-warning-border bg-warning-subtle text-warning-subtle-foreground',
+  pending: 'border-border bg-muted/50 text-foreground/80',
+  sent: 'border-info-border bg-info-subtle text-info-subtle-foreground',
+  delivered: 'border-info-border bg-info-subtle text-info-subtle-foreground',
+  read: 'border-info-border bg-info-subtle text-info-subtle-foreground',
 }
 
 function VerificationStatusBadge({ status }: { status: string }) {
@@ -660,7 +666,7 @@ function VerificationStatusBadge({ status }: { status: string }) {
       variant="outline"
       className={cn(
         'whitespace-nowrap',
-        statusTones[status] ?? 'border-slate-200 bg-slate-50 text-slate-700'
+        statusTones[status] ?? 'border-border bg-muted/50 text-foreground/80'
       )}
     >
       {titleCase(status)}
@@ -732,17 +738,17 @@ function VerificationsSection({
   return (
     <section
       aria-labelledby="store-verifications-heading"
-      className="rounded-2xl border border-slate-200 bg-white shadow-xs"
+      className="border-border bg-card rounded-2xl border shadow-xs"
     >
-      <div className="flex flex-col gap-3 border-b border-slate-200 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+      <div className="border-border flex flex-col gap-3 border-b p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
         <div>
           <h2
             id="store-verifications-heading"
-            className="text-sm font-semibold text-slate-900"
+            className="text-foreground text-sm font-semibold"
           >
             Verifications
           </h2>
-          <p className="mt-0.5 text-xs text-slate-500">
+          <p className="text-muted-foreground mt-0.5 text-xs">
             {response
               ? `${numberFormat.format(response.total_count)} matching · customer phones are masked`
               : 'Customer phones are masked'}
@@ -751,14 +757,14 @@ function VerificationsSection({
         <div className="flex flex-wrap items-center gap-3">
           {loading && response && (
             <Loader2
-              className="size-4 animate-spin text-slate-400"
+              className="text-muted-foreground/70 size-4 animate-spin"
               aria-label="Updating"
             />
           )}
-          <label className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-lg border border-slate-200 px-3 text-sm text-slate-700 hover:border-slate-300">
+          <label className="border-border text-foreground/80 hover:border-input inline-flex h-10 cursor-pointer items-center gap-2 rounded-lg border px-3 text-sm">
             <input
               type="checkbox"
-              className="size-4 accent-emerald-700"
+              className="accent-primary size-4"
               checked={filters.includeTest}
               onChange={(event) =>
                 setFilters((current) => ({
@@ -768,7 +774,7 @@ function VerificationsSection({
               }
             />
             <FlaskConical
-              className="size-4 text-slate-400"
+              className="text-muted-foreground/70 size-4"
               aria-hidden="true"
             />
             Include test orders
@@ -844,7 +850,7 @@ function VerificationsSection({
         <>
           <div className="hidden overflow-x-auto md:block">
             <table className="w-full min-w-[960px] text-start text-sm">
-              <thead className="border-b border-slate-200 bg-slate-50/80 text-xs font-semibold tracking-wide text-slate-500 uppercase">
+              <thead className="border-border bg-muted/40 text-muted-foreground border-b text-xs font-semibold tracking-wide uppercase">
                 <tr>
                   <th className="px-4 py-3 text-start">Order</th>
                   <th className="px-4 py-3 text-start">Customer</th>
@@ -858,7 +864,7 @@ function VerificationsSection({
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-border divide-y">
                 {response.data.map((verification) => {
                   const isExpanded = expanded.has(verification.id)
                   const detailId = `verification-${verification.id}`
@@ -866,13 +872,13 @@ function VerificationsSection({
                     <Fragment key={verification.id}>
                       <tr
                         className={cn(
-                          'align-middle transition-colors hover:bg-slate-50/80',
-                          isExpanded && 'bg-slate-50/70'
+                          'hover:bg-muted/40 align-middle transition-colors',
+                          isExpanded && 'bg-muted/40'
                         )}
                       >
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2">
-                            <span className="font-medium text-slate-900">
+                            <span className="text-foreground font-medium">
                               {verification.order_number ??
                                 verification.external_order_id}
                             </span>
@@ -880,17 +886,17 @@ function VerificationsSection({
                           </div>
                         </td>
                         <td className="max-w-56 px-4 py-3">
-                          <p className="truncate text-slate-800">
+                          <p className="text-foreground truncate">
                             {verification.customer_name ?? 'Unknown'}
                           </p>
                           <p
-                            className="mt-0.5 font-mono text-xs text-slate-500"
+                            className="text-muted-foreground mt-0.5 font-mono text-xs"
                             dir="ltr"
                           >
                             {verification.customer_phone_masked || '—'}
                           </p>
                         </td>
-                        <td className="px-4 py-3 text-end font-medium whitespace-nowrap text-slate-800 tabular-nums">
+                        <td className="text-foreground px-4 py-3 text-end font-medium whitespace-nowrap tabular-nums">
                           {formatAmount(verification)}
                         </td>
                         <td className="px-4 py-3">
@@ -898,13 +904,13 @@ function VerificationsSection({
                             status={verification.status}
                           />
                         </td>
-                        <td className="px-4 py-3 text-end text-slate-700 tabular-nums">
+                        <td className="text-foreground/80 px-4 py-3 text-end tabular-nums">
                           {verification.attempts}
                         </td>
-                        <td className="px-4 py-3 text-xs whitespace-nowrap text-slate-600">
+                        <td className="text-foreground/70 px-4 py-3 text-xs whitespace-nowrap">
                           {formatDateTime(verification.created_at)}
                         </td>
-                        <td className="px-4 py-3 text-xs whitespace-nowrap text-slate-600">
+                        <td className="text-foreground/70 px-4 py-3 text-xs whitespace-nowrap">
                           {formatDateTime(latestUpdate(verification))}
                         </td>
                         <td className="px-3 py-3 text-end">
@@ -928,7 +934,7 @@ function VerificationsSection({
                       </tr>
                       {isExpanded && (
                         <tr id={detailId}>
-                          <td colSpan={8} className="bg-slate-50 px-5 py-4">
+                          <td colSpan={8} className="bg-muted/50 px-5 py-4">
                             <VerificationDetails verification={verification} />
                           </td>
                         </tr>
@@ -940,7 +946,7 @@ function VerificationsSection({
             </table>
           </div>
 
-          <ul className="divide-y divide-slate-100 md:hidden">
+          <ul className="divide-border divide-y md:hidden">
             {response.data.map((verification) => {
               const isExpanded = expanded.has(verification.id)
               const detailId = `mobile-verification-${verification.id}`
@@ -949,13 +955,13 @@ function VerificationsSection({
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className="truncate font-medium text-slate-900">
+                        <p className="text-foreground truncate font-medium">
                           {verification.order_number ??
                             verification.external_order_id}
                         </p>
                         {verification.is_test && <TestBadge />}
                       </div>
-                      <p className="mt-0.5 truncate text-xs text-slate-500">
+                      <p className="text-muted-foreground mt-0.5 truncate text-xs">
                         {verification.customer_name ?? 'Unknown'} ·{' '}
                         <span className="font-mono" dir="ltr">
                           {verification.customer_phone_masked || '—'}
@@ -964,8 +970,8 @@ function VerificationsSection({
                     </div>
                     <VerificationStatusBadge status={verification.status} />
                   </div>
-                  <div className="mt-3 flex items-center justify-between text-xs text-slate-600">
-                    <span className="font-medium text-slate-800 tabular-nums">
+                  <div className="text-foreground/70 mt-3 flex items-center justify-between text-xs">
+                    <span className="text-foreground font-medium tabular-nums">
                       {formatAmount(verification)}
                     </span>
                     <span>{formatDateTime(verification.created_at)}</span>
@@ -989,7 +995,7 @@ function VerificationsSection({
                   {isExpanded && (
                     <div
                       id={detailId}
-                      className="mt-2 rounded-lg bg-slate-50 p-3"
+                      className="bg-muted/50 mt-2 rounded-lg p-3"
                     >
                       <VerificationDetails verification={verification} />
                     </div>
@@ -999,8 +1005,8 @@ function VerificationsSection({
             })}
           </ul>
 
-          <div className="flex flex-col items-center gap-3 border-t border-slate-200 p-4 sm:flex-row sm:justify-between">
-            <p className="text-xs text-slate-500">
+          <div className="border-border flex flex-col items-center gap-3 border-t p-4 sm:flex-row sm:justify-between">
+            <p className="text-muted-foreground text-xs">
               Showing {numberFormat.format(response.data.length)} of{' '}
               {numberFormat.format(response.total_count)}
             </p>
@@ -1035,7 +1041,7 @@ function TestBadge() {
   return (
     <Badge
       variant="outline"
-      className="border-violet-200 bg-violet-50 px-1.5 py-0 text-[10px] text-violet-700"
+      className="border-info-border bg-info-subtle text-info-subtle-foreground px-1.5 py-0 text-[10px]"
     >
       Test
     </Badge>
@@ -1076,7 +1082,7 @@ function VerificationDetails({
   return (
     <div className="grid gap-5 md:grid-cols-2">
       <div>
-        <h3 className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
+        <h3 className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
           Timeline
         </h3>
         <ol className="mt-2 space-y-1.5">
@@ -1085,8 +1091,8 @@ function VerificationDetails({
               key={label}
               className="flex items-center justify-between gap-4 text-sm"
             >
-              <span className="text-slate-600">{label}</span>
-              <span className="text-xs text-slate-800 tabular-nums">
+              <span className="text-foreground/70">{label}</span>
+              <span className="text-foreground text-xs tabular-nums">
                 {formatDateTime(value)}
               </span>
             </li>
@@ -1094,7 +1100,7 @@ function VerificationDetails({
         </ol>
       </div>
       <div>
-        <h3 className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
+        <h3 className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
           Message
         </h3>
         <dl className="mt-2 space-y-1.5">
@@ -1103,8 +1109,8 @@ function VerificationDetails({
               key={label}
               className="flex items-center justify-between gap-4 text-sm"
             >
-              <dt className="text-slate-600">{label}</dt>
-              <dd className="min-w-0 truncate text-end text-slate-800">
+              <dt className="text-foreground/70">{label}</dt>
+              <dd className="text-foreground min-w-0 truncate text-end">
                 {value}
               </dd>
             </div>

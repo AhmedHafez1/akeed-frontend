@@ -37,9 +37,12 @@ export function OnboardingCard({
     <Card variant="flat" className="overflow-hidden">
       <div className="flex items-start justify-between gap-4 p-4 text-start sm:p-5">
         <div className="space-y-1">
-          <h3 className="text-sm font-semibold text-slate-950">{title}</h3>
+          <h3 className="text-foreground text-sm font-semibold">{title}</h3>
           {description && (
-            <p id={descriptionId} className="text-sm leading-6 text-slate-500">
+            <p
+              id={descriptionId}
+              className="text-muted-foreground text-sm leading-6"
+            >
               {description}
             </p>
           )}

@@ -22,9 +22,11 @@ interface MarkdownContentProps {
 type CalloutTone = 'info' | 'warning' | 'success'
 
 const CALLOUT_STYLES: Record<CalloutTone, string> = {
-  info: 'border-sky-200 bg-sky-50 text-sky-900',
-  warning: 'border-amber-200 bg-amber-50 text-amber-900',
-  success: 'border-emerald-200 bg-emerald-50 text-emerald-900',
+  info: 'border-info-border bg-info-subtle text-info-subtle-foreground',
+  warning:
+    'border-warning-border bg-warning-subtle text-warning-subtle-foreground',
+  success:
+    'border-primary-border bg-primary-subtle text-primary-subtle-foreground',
 }
 
 function parseCalloutLabel(value: string): CalloutTone | null {
@@ -60,14 +62,14 @@ export function MarkdownContent({
       return (
         <h1
           id={id}
-          className="group mt-8 mb-4 scroll-mt-28 text-3xl font-bold text-slate-900 first:mt-0"
+          className="group text-foreground mt-8 mb-4 scroll-mt-28 text-3xl font-bold first:mt-0"
         >
           <a
             href={`#${id}`}
             className="hover:text-primary-hover inline-flex items-center gap-2"
           >
             {children}
-            <span className="text-sm text-slate-400 opacity-0 transition-opacity group-hover:opacity-100">
+            <span className="text-muted-foreground/70 text-sm opacity-0 transition-opacity group-hover:opacity-100">
               #
             </span>
           </a>
@@ -80,14 +82,14 @@ export function MarkdownContent({
       return (
         <h2
           id={id}
-          className="group mt-8 mb-3 scroll-mt-28 border-t border-slate-100 pt-6 text-2xl font-bold text-slate-900 first:border-t-0 first:pt-0"
+          className="group border-border text-foreground mt-8 mb-3 scroll-mt-28 border-t pt-6 text-2xl font-bold first:border-t-0 first:pt-0"
         >
           <a
             href={`#${id}`}
             className="hover:text-primary-hover inline-flex items-center gap-2"
           >
             {children}
-            <span className="text-sm text-slate-400 opacity-0 transition-opacity group-hover:opacity-100">
+            <span className="text-muted-foreground/70 text-sm opacity-0 transition-opacity group-hover:opacity-100">
               #
             </span>
           </a>
@@ -100,14 +102,14 @@ export function MarkdownContent({
       return (
         <h3
           id={id}
-          className="group mt-6 mb-2 scroll-mt-28 text-xl font-semibold text-slate-900"
+          className="group text-foreground mt-6 mb-2 scroll-mt-28 text-xl font-semibold"
         >
           <a
             href={`#${id}`}
             className="hover:text-primary-hover inline-flex items-center gap-2"
           >
             {children}
-            <span className="text-sm text-slate-400 opacity-0 transition-opacity group-hover:opacity-100">
+            <span className="text-muted-foreground/70 text-sm opacity-0 transition-opacity group-hover:opacity-100">
               #
             </span>
           </a>
@@ -120,14 +122,14 @@ export function MarkdownContent({
       return (
         <h4
           id={id}
-          className="group mt-5 mb-2 scroll-mt-28 text-lg font-semibold text-slate-900"
+          className="group text-foreground mt-5 mb-2 scroll-mt-28 text-lg font-semibold"
         >
           <a
             href={`#${id}`}
             className="hover:text-primary-hover inline-flex items-center gap-2"
           >
             {children}
-            <span className="text-sm text-slate-400 opacity-0 transition-opacity group-hover:opacity-100">
+            <span className="text-muted-foreground/70 text-sm opacity-0 transition-opacity group-hover:opacity-100">
               #
             </span>
           </a>
@@ -135,7 +137,7 @@ export function MarkdownContent({
       )
     },
     p: ({ children }) => (
-      <p className="my-3 text-sm leading-7 text-slate-700 md:text-base">
+      <p className="text-foreground/80 my-3 text-sm leading-7 md:text-base">
         {children}
       </p>
     ),
@@ -150,7 +152,7 @@ export function MarkdownContent({
       </ol>
     ),
     li: ({ children }) => <li className="marker:text-primary">{children}</li>,
-    hr: () => <hr className="my-8 border-slate-200" />,
+    hr: () => <hr className="border-border my-8" />,
     blockquote: ({ children }) => {
       const nodes = Array.isArray(children) ? children : [children]
       const firstChild = nodes[0]
@@ -170,7 +172,7 @@ export function MarkdownContent({
       }
 
       return (
-        <blockquote className="my-4 rounded-r-xl border-s-4 border-input bg-muted/50 px-4 py-3 text-sm leading-7 text-slate-700 md:text-base">
+        <blockquote className="border-input bg-muted/50 text-foreground/80 my-4 rounded-r-xl border-s-4 px-4 py-3 text-sm leading-7 md:text-base">
           {children}
         </blockquote>
       )
@@ -185,7 +187,7 @@ export function MarkdownContent({
             href={resolvedHref}
             target="_blank"
             rel="noreferrer"
-            className="font-medium text-emerald-700 underline underline-offset-2 hover:text-emerald-800"
+            className="text-primary hover:text-primary-hover font-medium underline underline-offset-2"
           >
             {children}
           </a>
@@ -196,7 +198,7 @@ export function MarkdownContent({
         return (
           <a
             href={resolvedHref}
-            className="font-medium text-emerald-700 underline underline-offset-2 hover:text-emerald-800"
+            className="text-primary hover:text-primary-hover font-medium underline underline-offset-2"
           >
             {children}
           </a>
@@ -206,32 +208,34 @@ export function MarkdownContent({
       return (
         <Link
           href={resolvedHref}
-          className="font-medium text-emerald-700 underline underline-offset-2 hover:text-emerald-800"
+          className="text-primary hover:text-primary-hover font-medium underline underline-offset-2"
         >
           {children}
         </Link>
       )
     },
     table: ({ children }) => (
-      <div className="my-5 overflow-x-auto rounded-xl border border-slate-200">
+      <div className="border-border my-5 overflow-x-auto rounded-xl border">
         <table className="min-w-full border-collapse text-sm">{children}</table>
       </div>
     ),
-    thead: ({ children }) => <thead className="bg-slate-50">{children}</thead>,
+    thead: ({ children }) => <thead className="bg-muted/50">{children}</thead>,
     tbody: ({ children }) => <tbody>{children}</tbody>,
     tr: ({ children }) => (
-      <tr className="border-b border-slate-100 last:border-b-0">{children}</tr>
+      <tr className="border-border border-b last:border-b-0">{children}</tr>
     ),
     th: ({ children }) => (
-      <th className="px-3 py-2 text-start text-xs font-semibold tracking-wide text-slate-700 uppercase">
+      <th className="text-foreground/80 px-3 py-2 text-start text-xs font-semibold tracking-wide uppercase">
         {children}
       </th>
     ),
     td: ({ children }) => (
-      <td className="px-3 py-2 align-top text-sm text-slate-700">{children}</td>
+      <td className="text-foreground/80 px-3 py-2 align-top text-sm">
+        {children}
+      </td>
     ),
     pre: ({ children }) => (
-      <pre className="my-5 overflow-x-auto rounded-xl border border-slate-200 bg-slate-950 p-4 text-sm leading-6 text-slate-100">
+      <pre className="border-border my-5 overflow-x-auto rounded-xl border bg-slate-950 p-4 text-sm leading-6 text-slate-100">
         {children}
       </pre>
     ),
@@ -240,7 +244,7 @@ export function MarkdownContent({
 
       if (isInlineCode) {
         return (
-          <code className="rounded bg-muted px-1.5 py-0.5 text-[0.92em] font-medium text-foreground">
+          <code className="bg-muted text-foreground rounded px-1.5 py-0.5 text-[0.92em] font-medium">
             {children}
           </code>
         )
@@ -260,14 +264,14 @@ export function MarkdownContent({
           src={resolvedSrc}
           alt={alt}
           loading="lazy"
-          className="my-6 w-full rounded-xl border border-slate-200 bg-white object-contain"
+          className="border-border bg-card my-6 w-full rounded-xl border object-contain"
         />
       )
     },
   }
 
   return (
-    <div className="docs-markdown text-slate-700">
+    <div className="docs-markdown text-foreground/80">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={markdownComponents}

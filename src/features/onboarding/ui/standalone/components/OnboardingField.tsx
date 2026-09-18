@@ -33,22 +33,22 @@ export function OnboardingField({
 
   return (
     <div className="space-y-2 text-start">
-      <Label htmlFor={htmlFor} className="text-sm font-medium text-slate-900">
+      <Label htmlFor={htmlFor} className="text-foreground text-sm font-medium">
         {label}
         {required && (
-          <span aria-hidden="true" className="ms-1 text-red-600">
+          <span aria-hidden="true" className="text-destructive ms-1">
             *
           </span>
         )}
       </Label>
       {children({ describedBy })}
       {helpText && (
-        <p id={helpId} className="text-xs leading-5 text-slate-500">
+        <p id={helpId} className="text-muted-foreground text-xs leading-5">
           {helpText}
         </p>
       )}
       {error && (
-        <p id={errorId} className="text-xs font-medium text-red-600">
+        <p id={errorId} className="text-destructive text-xs font-medium">
           {error}
         </p>
       )}

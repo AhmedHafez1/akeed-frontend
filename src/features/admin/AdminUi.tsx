@@ -20,13 +20,15 @@ export function AdminPageHeader({
   return (
     <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div className="max-w-3xl">
-        <p className="text-xs font-semibold tracking-[0.16em] text-emerald-700 uppercase">
+        <p className="text-primary text-xs font-semibold tracking-[0.16em] uppercase">
           {eyebrow}
         </p>
-        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
+        <h1 className="text-foreground mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
           {title}
         </h1>
-        <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
+        <p className="text-foreground/70 mt-2 text-sm leading-6">
+          {description}
+        </p>
       </div>
       <div className="flex shrink-0 items-center gap-3">
         {evaluatedAt && <AdminUpdatedTime value={evaluatedAt} />}
@@ -44,7 +46,7 @@ export function AdminUpdatedTime({ value }: { value: string }) {
 
   return (
     <span
-      className="inline-flex items-center gap-1.5 text-xs text-slate-500"
+      className="text-muted-foreground inline-flex items-center gap-1.5 text-xs"
       title={formatted}
     >
       <Clock3 className="size-3.5" aria-hidden="true" />
@@ -73,7 +75,7 @@ export function AdminSelect({
     <label className={cn('block min-w-0', className)}>
       <span
         className={cn(
-          'mb-1.5 block text-xs font-medium text-slate-600',
+          'text-foreground/70 mb-1.5 block text-xs font-medium',
           hideLabel && 'sr-only'
         )}
       >
@@ -82,7 +84,7 @@ export function AdminSelect({
       <span className="relative block">
         <select
           aria-label={hideLabel ? label : undefined}
-          className="h-10 w-full appearance-none rounded-lg border border-slate-200 bg-white py-2 ps-3 pe-9 text-sm text-slate-700 shadow-xs transition-colors outline-none hover:border-slate-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/15 disabled:cursor-not-allowed disabled:opacity-50"
+          className="border-border bg-card text-foreground/80 hover:border-input focus:border-primary focus:ring-ring/15 h-10 w-full appearance-none rounded-lg border py-2 ps-3 pe-9 text-sm shadow-xs transition-colors outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-50"
           {...props}
         >
           {options.map((option) => (
@@ -92,7 +94,7 @@ export function AdminSelect({
           ))}
         </select>
         <ChevronDown
-          className="pointer-events-none absolute end-3 top-1/2 size-4 -translate-y-1/2 text-slate-400"
+          className="text-muted-foreground/70 pointer-events-none absolute end-3 top-1/2 size-4 -translate-y-1/2"
           aria-hidden="true"
         />
       </span>
@@ -111,11 +113,11 @@ interface AdminMetricCardProps {
 }
 
 const metricTones = {
-  neutral: 'bg-slate-100 text-slate-600',
-  emerald: 'bg-emerald-50 text-emerald-700',
-  amber: 'bg-amber-50 text-amber-700',
-  red: 'bg-red-50 text-red-700',
-  blue: 'bg-blue-50 text-blue-700',
+  neutral: 'bg-muted text-foreground/70',
+  emerald: 'bg-primary-subtle text-primary',
+  amber: 'bg-warning-subtle text-warning',
+  red: 'bg-destructive-subtle text-destructive-subtle-foreground',
+  blue: 'bg-info-subtle text-info-subtle-foreground',
 }
 
 export function AdminMetricCard({
@@ -130,7 +132,7 @@ export function AdminMetricCard({
   const content = (
     <>
       <div className="flex items-start justify-between gap-3">
-        <p className="text-xs font-medium text-slate-500">{label}</p>
+        <p className="text-muted-foreground text-xs font-medium">{label}</p>
         {Icon && (
           <span
             className={cn(
@@ -142,19 +144,17 @@ export function AdminMetricCard({
           </span>
         )}
       </div>
-      <p className="mt-3 text-2xl font-semibold tracking-tight text-slate-950 tabular-nums">
+      <p className="text-foreground mt-3 text-2xl font-semibold tracking-tight tabular-nums">
         {value}
       </p>
-      {detail && <p className="mt-1 text-xs text-slate-500">{detail}</p>}
+      {detail && <p className="text-muted-foreground mt-1 text-xs">{detail}</p>}
     </>
   )
   const classes = cn(
-    'relative rounded-xl border bg-white p-4 text-left shadow-xs transition-all',
-    active
-      ? 'border-emerald-500 ring-2 ring-emerald-500/15'
-      : 'border-slate-200',
+    'relative rounded-xl border bg-card p-4 text-left shadow-xs transition-all',
+    active ? 'border-primary ring-2 ring-ring/15' : 'border-border',
     onClick &&
-      'cursor-pointer hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:outline-none'
+      'cursor-pointer hover:-translate-y-0.5 hover:border-input hover:shadow-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none'
   )
 
   if (onClick) {
@@ -182,12 +182,12 @@ export function AdminEmptyState({
   action,
 }: AdminEmptyStateProps) {
   return (
-    <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center shadow-xs">
-      <span className="mx-auto grid size-11 place-items-center rounded-xl bg-slate-100 text-slate-500">
+    <div className="border-input bg-card rounded-2xl border border-dashed px-6 py-16 text-center shadow-xs">
+      <span className="bg-muted text-muted-foreground mx-auto grid size-11 place-items-center rounded-xl">
         <Icon className="size-5" aria-hidden="true" />
       </span>
-      <h2 className="mt-4 font-semibold text-slate-950">{title}</h2>
-      <p className="mx-auto mt-1 max-w-md text-sm text-slate-500">
+      <h2 className="text-foreground mt-4 font-semibold">{title}</h2>
+      <p className="text-muted-foreground mx-auto mt-1 max-w-md text-sm">
         {description}
       </p>
       {action && <div className="mt-5">{action}</div>}

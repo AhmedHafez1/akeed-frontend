@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, type ReactNode } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
@@ -14,6 +13,7 @@ import {
   withLocale,
 } from '@/shared/lib/locale'
 import type { SupportedLocale } from '@/shared/lib/locale'
+import { AkeedLogo } from './AkeedLogo'
 
 const logger = createLogger('Auth')
 
@@ -61,29 +61,22 @@ export function StandaloneOnboardingShell({
   }
 
   return (
-    <div className="akeed-app-canvas flex min-h-screen flex-col text-slate-950">
+    <div className="akeed-app-canvas text-foreground flex min-h-screen flex-col">
       <a
         href="#onboarding-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:m-2 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:ring-2 focus:ring-emerald-600"
+        className="focus:bg-card focus:ring-ring sr-only focus:not-sr-only focus:absolute focus:z-50 focus:m-2 focus:rounded-lg focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:ring-2"
       >
         {t('shell.skipToContent')}
       </a>
 
-      <header className="border-border flex min-h-14 items-center justify-between gap-3 border-b bg-white px-4 sm:px-6">
-        <Image
-          src="/images/akeed-web-logo-horizontal.png"
-          alt="Akeed"
-          width={118}
-          height={50}
-          priority
-          className="h-9 w-auto object-contain"
-        />
+      <header className="border-border bg-card flex min-h-14 items-center justify-between gap-3 border-b px-4 sm:px-6">
+        <AkeedLogo className="h-9" />
 
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <button
             type="button"
             onClick={handleLocaleChange}
-            className="border-border hover:bg-muted inline-flex h-9 items-center rounded-lg border bg-white px-3 text-xs font-semibold text-slate-700 transition-colors focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="border-border hover:bg-muted bg-card text-foreground/80 focus-visible:ring-ring inline-flex h-9 items-center rounded-lg border px-3 text-xs font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
             suppressHydrationWarning
           >
             {locale === 'ar' ? 'EN' : 'العربية'}
@@ -92,7 +85,7 @@ export function StandaloneOnboardingShell({
             href={withLocale('/support', locale)}
             target="_blank"
             rel="noreferrer"
-            className="hover:bg-muted inline-flex h-9 items-center gap-2 rounded-lg px-2.5 text-sm text-slate-600 transition-colors hover:text-slate-950 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="hover:bg-muted text-foreground/70 hover:text-foreground focus-visible:ring-ring inline-flex h-9 items-center gap-2 rounded-lg px-2.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             <CircleHelp aria-hidden="true" className="h-[18px] w-[18px]" />
             <span className="hidden sm:inline">{t('shell.help')}</span>
@@ -101,7 +94,7 @@ export function StandaloneOnboardingShell({
             type="button"
             onClick={() => void handleSignOut()}
             disabled={isSigningOut}
-            className="hover:bg-muted inline-flex h-9 items-center gap-2 rounded-lg px-2.5 text-sm text-slate-600 transition-colors hover:text-red-600 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-60"
+            className="hover:bg-muted text-foreground/70 hover:text-destructive focus-visible:ring-ring inline-flex h-9 items-center gap-2 rounded-lg px-2.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-60"
           >
             <LogOut aria-hidden="true" className="h-[18px] w-[18px]" />
             <span className="hidden sm:inline">

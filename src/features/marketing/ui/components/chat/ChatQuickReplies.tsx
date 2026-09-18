@@ -29,8 +29,8 @@ export function ChatQuickReplies({
         const isSelected = message.selectedAction === btn.action
 
         const toneClass = isPrimary
-          ? 'bg-primary text-white shadow-sm'
-          : 'bg-white text-primary ring-1 ring-slate-200 shadow-sm'
+          ? 'bg-primary text-primary-foreground shadow-sm'
+          : 'bg-card text-primary ring-1 ring-border shadow-sm dark:bg-[#2a3942] dark:ring-0'
 
         return (
           <motion.button

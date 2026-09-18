@@ -150,26 +150,26 @@ export function AuthGuard({
       <main className="bg-muted flex min-h-screen items-center justify-center px-4">
         <div
           role="alert"
-          className="rounded-card bg-card w-full max-w-md border border-red-200 p-6 text-center"
+          className="rounded-card bg-card border-destructive-border w-full max-w-md border p-6 text-center"
         >
-          <h1 className="text-xl font-bold text-slate-900">
+          <h1 className="text-foreground text-xl font-bold">
             {t('organizationSetupFailedTitle')}
           </h1>
-          <p className="mt-2 text-sm text-slate-600">
+          <p className="text-foreground/70 mt-2 text-sm">
             {t('organizationSetupFailedMessage')}
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
             <button
               type="button"
               onClick={() => setRetryKey((value) => value + 1)}
-              className="bg-primary text-primary-foreground hover:bg-primary rounded-xl px-5 py-2.5 text-sm font-semibold transition focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="bg-primary text-primary-foreground hover:bg-primary focus-visible:ring-ring/40 rounded-xl px-5 py-2.5 text-sm font-semibold transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               {t('retryOrganizationSetup')}
             </button>
             <button
               type="button"
               onClick={() => void handleSignOut()}
-              className="rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-slate-400/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="border-border bg-card text-foreground/80 hover:bg-muted/50 focus-visible:ring-ring/40 rounded-xl border px-5 py-2.5 text-sm font-semibold transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               {t('signOut')}
             </button>

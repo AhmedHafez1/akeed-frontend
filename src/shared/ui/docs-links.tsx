@@ -17,7 +17,12 @@ interface DocsLinkProps {
   children?: ReactNode
 }
 
-export function DocsLink({ article, hash, className, children }: DocsLinkProps) {
+export function DocsLink({
+  article,
+  hash,
+  className,
+  children,
+}: DocsLinkProps) {
   const t = useTranslations('docsHelp')
   const { locale } = useLocaleInfo()
   const { isEmbedded } = useAkeedMode()
@@ -47,7 +52,7 @@ export function HelpButton({
       article={article}
       hash={hash}
       className={cn(
-        'inline-flex h-9 items-center gap-1.5 rounded-lg border border-input bg-muted px-3 text-xs font-semibold text-foreground transition-colors hover:border-input hover:bg-accent',
+        'border-input bg-muted text-foreground hover:border-input hover:bg-accent inline-flex h-9 items-center gap-1.5 rounded-lg border px-3 text-xs font-semibold transition-colors',
         className
       )}
     >
@@ -70,7 +75,7 @@ export function LearnMoreLink({
       article={article}
       hash={hash}
       className={cn(
-        'inline-flex items-center gap-1 text-sm font-medium text-emerald-700 underline underline-offset-2 hover:text-emerald-800',
+        'text-primary hover:text-primary-hover inline-flex items-center gap-1 text-sm font-medium underline underline-offset-2',
         className
       )}
     >
@@ -92,7 +97,7 @@ export function ContextualDocsLink({
       article={article}
       hash={hash}
       className={cn(
-        'inline-flex items-center gap-1 text-xs font-medium text-emerald-700 hover:text-emerald-800',
+        'text-primary hover:text-primary-hover inline-flex items-center gap-1 text-xs font-medium',
         className
       )}
     >

@@ -49,15 +49,15 @@ export function AccountSection({
   return (
     <section
       aria-labelledby={id}
-      className="rounded-2xl border border-slate-200 bg-white shadow-sm"
+      className="border-border bg-card rounded-2xl border shadow-sm"
     >
-      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-slate-100 p-4">
+      <div className="border-border flex flex-wrap items-start justify-between gap-3 border-b p-4">
         <div>
-          <h2 id={id} className="text-base font-semibold text-slate-950">
+          <h2 id={id} className="text-foreground text-base font-semibold">
             {title}
           </h2>
           {description && (
-            <p className="mt-1 max-w-3xl text-xs text-slate-500">
+            <p className="text-muted-foreground mt-1 max-w-3xl text-xs">
               {description}
             </p>
           )}
@@ -69,10 +69,10 @@ export function AccountSection({
         // instead of widening the page in RTL.
         <div className="relative overflow-x-auto">{children}</div>
       ) : (
-        <p className="p-6 text-center text-sm text-slate-500">{empty}</p>
+        <p className="text-muted-foreground p-6 text-center text-sm">{empty}</p>
       )}
       {truncatedNote && (
-        <p className="border-t border-slate-100 px-4 py-3 text-xs text-slate-500">
+        <p className="border-border text-muted-foreground border-t px-4 py-3 text-xs">
           {truncatedNote}
         </p>
       )}
@@ -102,14 +102,14 @@ function Table({ children }: { children: ReactNode }) {
 
 function Head({ children }: { children: ReactNode }) {
   return (
-    <thead className="bg-slate-50 text-xs text-slate-600">
+    <thead className="bg-muted/50 text-foreground/70 text-xs">
       <tr>{children}</tr>
     </thead>
   )
 }
 
 function Row({ children }: { children: ReactNode }) {
-  return <tr className="border-t border-slate-100 align-top">{children}</tr>
+  return <tr className="border-border border-t align-top">{children}</tr>
 }
 
 function Td({
@@ -182,7 +182,7 @@ export function HoldsTable({
                 {t(`holds.kinds.${hold.kind}`)} ·{' '}
                 {t('holds.generation', { count: hold.generation })}
               </div>
-              <div className="mt-1 text-slate-500">
+              <div className="text-muted-foreground mt-1">
                 <Mono>{hold.dispatchId}</Mono>
               </div>
             </Td>
@@ -191,14 +191,14 @@ export function HoldsTable({
                 className={cn(
                   'font-medium',
                   hold.dispatchState === 'outcome_unknown'
-                    ? 'text-amber-900'
-                    : 'text-slate-700'
+                    ? 'text-warning-subtle-foreground'
+                    : 'text-foreground/80'
                 )}
               >
                 {label.dispatchState(hold.dispatchState)}
               </span>
               {hold.attemptCount !== null && (
-                <div className="mt-1 text-xs text-slate-500">
+                <div className="text-muted-foreground mt-1 text-xs">
                   {t('holds.attempts', { count: hold.attemptCount })}
                 </div>
               )}
@@ -250,7 +250,7 @@ export function PurchasesTable({
             <Td>
               <Mono>{purchase.reference}</Mono>
               {(purchase.providerOrderId || purchase.providerTransactionId) && (
-                <div className="mt-1 text-xs text-slate-500">
+                <div className="text-muted-foreground mt-1 text-xs">
                   {purchase.providerOrderId && (
                     <div>
                       {t('purchases.providerOrder')}{' '}
@@ -271,11 +271,11 @@ export function PurchasesTable({
                 {t(`purchaseStatuses.${purchase.status}`)}
               </div>
               {purchase.disputeStatus !== 'none' && (
-                <div className="mt-1 text-xs text-red-800">
+                <div className="text-destructive-subtle-foreground mt-1 text-xs">
                   {t(`disputeStatuses.${purchase.disputeStatus}`)}
                 </div>
               )}
-              <div className="mt-1 text-xs text-slate-500">
+              <div className="text-muted-foreground mt-1 text-xs">
                 {t(`modes.${purchase.mode === 'live' ? 'live' : 'test'}`)}
               </div>
             </Td>
@@ -292,7 +292,7 @@ export function PurchasesTable({
             </Td>
             <Td>
               {purchase.reconciliationRequired ? (
-                <div className="text-amber-900">
+                <div className="text-warning-subtle-foreground">
                   <div className="font-medium">
                     {label.reconciliation(purchase.reconciliationCode)}
                   </div>
@@ -303,7 +303,7 @@ export function PurchasesTable({
                   </div>
                 </div>
               ) : (
-                <span className="text-slate-500">
+                <span className="text-muted-foreground">
                   {t('purchases.noReconciliation')}
                 </span>
               )}
@@ -347,7 +347,9 @@ export function LedgerTable({
             <Td
               className={cn(
                 'font-medium tabular-nums',
-                entry.quantity < 0 ? 'text-red-800' : 'text-emerald-800'
+                entry.quantity < 0
+                  ? 'text-destructive-subtle-foreground'
+                  : 'text-primary-subtle-foreground'
               )}
             >
               <span dir="ltr">{formatSigned(entry.quantity, locale)}</span>
@@ -365,13 +367,13 @@ export function LedgerTable({
                 </div>
               )}
               {entry.sourceReference && (
-                <div className="text-xs text-slate-500">
+                <div className="text-muted-foreground text-xs">
                   {t('ledger.providerReference')}{' '}
                   <Mono>{entry.sourceReference}</Mono>
                 </div>
               )}
               {entry.dispatchId && (
-                <div className="text-xs text-slate-500">
+                <div className="text-muted-foreground text-xs">
                   {t('ledger.dispatch')} <Mono>{entry.dispatchId}</Mono>
                 </div>
               )}
@@ -380,7 +382,7 @@ export function LedgerTable({
             <Td>
               <div className="max-w-xs break-words">{entry.reason}</div>
               {entry.actorId && (
-                <div className="mt-1 text-xs text-slate-500">
+                <div className="text-muted-foreground mt-1 text-xs">
                   {t('ledger.actor')} <Mono>{entry.actorId}</Mono>
                 </div>
               )}
@@ -428,7 +430,7 @@ export function EventsTable({
             <Td>
               <Mono>{event.resultCode}</Mono>
               {event.errorCode && (
-                <div className="mt-1 text-xs text-amber-900">
+                <div className="text-warning-subtle-foreground mt-1 text-xs">
                   <Mono>{event.errorCode}</Mono>
                 </div>
               )}
@@ -481,7 +483,7 @@ export function AuditTable({
             <Td>
               {row.actorId ? <Mono>{row.actorId}</Mono> : '—'}
               {row.requestId && (
-                <div className="mt-1 text-xs text-slate-500">
+                <div className="text-muted-foreground mt-1 text-xs">
                   {t('audit.request')} <Mono>{row.requestId}</Mono>
                 </div>
               )}
@@ -494,10 +496,10 @@ export function AuditTable({
                     row.summary[field] !== null
                 ).map((field) => (
                   <div key={field} className="contents">
-                    <dt className="text-slate-500">
+                    <dt className="text-muted-foreground">
                       {t(`audit.fields.${field}`)}
                     </dt>
-                    <dd className="break-words text-slate-800">
+                    <dd className="text-foreground break-words">
                       {String(row.summary[field])}
                     </dd>
                   </div>

@@ -24,6 +24,7 @@ import type { SettingsSkinProps } from '@/features/settings/domain/settings.type
 import { Button, Card, Input, Label, notify } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
+import { ThemeSelector } from '@/shared/theme'
 import { TemplatesStandaloneSkin } from './TemplatesStandaloneSkin'
 
 const SETTINGS_SECTION_QUERY_KEY = 'section'
@@ -51,14 +52,14 @@ function Field({ label, error, helpText, children }: FieldProps) {
         {helpText && (
           <span
             title={helpText}
-            className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 text-[10px] font-semibold text-slate-500"
+            className="border-input text-muted-foreground inline-flex h-4 w-4 items-center justify-center rounded-full border text-[10px] font-semibold"
           >
             ?
           </span>
         )}
       </div>
       {children}
-      {error && <p className="text-xs font-medium text-red-600">{error}</p>}
+      {error && <p className="text-destructive text-xs font-medium">{error}</p>}
     </div>
   )
 }
@@ -80,7 +81,7 @@ function NativeSelect<TValue extends string>({
         value={value}
         disabled={disabled}
         onChange={(event) => onChange(event.target.value as TValue)}
-        className="border-border h-12 w-full appearance-none rounded-lg border-2 bg-white py-2 ps-4 pe-11 text-base transition-colors outline-none focus:border-emerald-500"
+        className="border-border bg-card focus:border-primary h-12 w-full appearance-none rounded-lg border-2 py-2 ps-4 pe-11 text-base transition-colors outline-none"
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>
@@ -116,13 +117,13 @@ function SettingsSwitch({
       disabled={disabled}
       onClick={() => onChange(!checked)}
       className={cn(
-        'relative h-6 w-11 shrink-0 rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
-        checked ? 'bg-emerald-600' : 'bg-slate-300'
+        'focus-visible:ring-ring relative h-6 w-11 shrink-0 rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+        checked ? 'bg-primary' : 'bg-input'
       )}
     >
       <span
         className={cn(
-          'absolute top-0.5 h-5 w-5 rounded-full bg-white shadow-sm transition-[inset-inline-start]',
+          'bg-card absolute top-0.5 h-5 w-5 rounded-full shadow-sm transition-[inset-inline-start]',
           checked ? 'start-[22px]' : 'start-0.5'
         )}
       />
@@ -154,8 +155,10 @@ function SettingsCard({
     <Card variant="flat" className="overflow-hidden">
       <div className="flex items-start justify-between gap-4 p-5 sm:p-6">
         <div className="space-y-1">
-          <h3 className="font-semibold text-slate-950">{title}</h3>
-          <p className="text-sm leading-6 text-slate-500">{description}</p>
+          <h3 className="text-foreground font-semibold">{title}</h3>
+          <p className="text-muted-foreground text-sm leading-6">
+            {description}
+          </p>
         </div>
         {hasSwitch && (
           <SettingsSwitch
@@ -212,10 +215,10 @@ function DelayPicker({
                 onChange(preset.value)
               }}
               className={cn(
-                '-ms-px min-h-10 border border-slate-200 px-4 text-sm first:ms-0 first:rounded-s-lg last:rounded-e-lg focus:z-10 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+                'border-border focus-visible:ring-ring -ms-px min-h-10 border px-4 text-sm first:ms-0 first:rounded-s-lg last:rounded-e-lg focus:z-10 focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
                 isSelected
-                  ? 'z-10 bg-muted font-medium text-foreground'
-                  : 'bg-white text-slate-700 hover:bg-slate-50'
+                  ? 'bg-muted text-foreground z-10 font-medium'
+                  : 'bg-card text-foreground/80 hover:bg-muted/50'
               )}
             >
               {preset.label}
@@ -228,10 +231,10 @@ function DelayPicker({
           disabled={disabled}
           onClick={() => setIsCustomOpen(true)}
           className={cn(
-            '-ms-px min-h-10 rounded-e-lg border border-slate-200 px-4 text-sm focus:z-10 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+            'border-border focus-visible:ring-ring -ms-px min-h-10 rounded-e-lg border px-4 text-sm focus:z-10 focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
             isCustomOpen
-              ? 'z-10 bg-muted font-medium text-foreground'
-              : 'bg-white text-slate-700 hover:bg-slate-50'
+              ? 'bg-muted text-foreground z-10 font-medium'
+              : 'bg-card text-foreground/80 hover:bg-muted/50'
           )}
         >
           {customLabel}
@@ -253,7 +256,7 @@ function DelayPicker({
           />
         </div>
       )}
-      {error && <p className="text-xs font-medium text-red-600">{error}</p>}
+      {error && <p className="text-destructive text-xs font-medium">{error}</p>}
     </div>
   )
 }
@@ -266,7 +269,7 @@ function SaveStatus({ props }: { props: SettingsSkinProps }) {
       <span
         role="status"
         aria-live="polite"
-        className="inline-flex items-center gap-2 text-sm text-slate-600"
+        className="text-foreground/70 inline-flex items-center gap-2 text-sm"
       >
         <LoaderCircle className="h-4 w-4 animate-spin" />
         {t('saveState.saving')}
@@ -279,7 +282,7 @@ function SaveStatus({ props }: { props: SettingsSkinProps }) {
       <span
         role="status"
         aria-live="polite"
-        className="inline-flex items-center gap-2 text-sm font-medium text-red-700"
+        className="text-destructive-subtle-foreground inline-flex items-center gap-2 text-sm font-medium"
       >
         <AlertCircle className="h-4 w-4" />
         {t('saveState.failed')}
@@ -292,7 +295,7 @@ function SaveStatus({ props }: { props: SettingsSkinProps }) {
       <span
         role="status"
         aria-live="polite"
-        className="inline-flex items-center gap-2 text-sm font-medium text-amber-700"
+        className="text-warning inline-flex items-center gap-2 text-sm font-medium"
       >
         <Clock3 className="h-4 w-4" />
         {t('saveState.unsaved')}
@@ -306,6 +309,7 @@ function SaveStatus({ props }: { props: SettingsSkinProps }) {
 function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
   const t = useTranslations('settings')
   const standaloneT = useTranslations('settings.standalone')
+  const themeT = useTranslations('theme')
   const router = useRouter()
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname)
@@ -401,13 +405,15 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
     <div className={cn('mx-auto max-w-7xl', props.isDirty && 'pb-28')}>
       <header className="mb-7 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-1">
-          <p className="text-xs font-semibold tracking-wider text-emerald-700 uppercase">
+          <p className="text-primary text-xs font-semibold tracking-wider uppercase">
             {standaloneT('eyebrow')}
           </p>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-950">
+          <h1 className="text-foreground text-2xl font-bold tracking-tight">
             {t('title')}
           </h1>
-          <p className="text-sm text-slate-500">{standaloneT('subtitle')}</p>
+          <p className="text-muted-foreground text-sm">
+            {standaloneT('subtitle')}
+          </p>
         </div>
         <SaveStatus props={props} />
       </header>
@@ -415,7 +421,7 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
       {props.errorBanner && (
         <div
           role="alert"
-          className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"
+          className="border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground mb-5 rounded-xl border px-4 py-3 text-sm"
         >
           {props.errorBanner}
         </div>
@@ -424,7 +430,7 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
       {!props.canUpdateConfiguration && (
         <div
           role="status"
-          className="mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900"
+          className="border-warning-border bg-warning-subtle text-warning-subtle-foreground mb-5 rounded-xl border px-4 py-3 text-sm"
         >
           {t('readOnly')}
         </div>
@@ -433,7 +439,7 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
       <div className="space-y-6">
         <nav
           aria-label={standaloneT('nav.label')}
-          className="overflow-x-auto border-b border-slate-200"
+          className="border-border overflow-x-auto border-b"
         >
           <div className="flex min-w-max gap-6">
             {navigationItems.map((item) => {
@@ -446,10 +452,10 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                   aria-current={isSelected ? 'page' : undefined}
                   onClick={() => navigateToSection(item.id)}
                   className={cn(
-                    'flex min-h-12 items-center gap-2 border-b-2 px-1 text-sm font-medium whitespace-nowrap transition focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none',
+                    'focus-visible:ring-ring flex min-h-12 items-center gap-2 border-b-2 px-1 text-sm font-medium whitespace-nowrap transition focus-visible:ring-2 focus-visible:outline-none',
                     isSelected
-                      ? 'border-emerald-600 text-emerald-800'
-                      : 'border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-950'
+                      ? 'border-primary text-primary-subtle-foreground'
+                      : 'text-foreground/70 hover:border-input hover:text-foreground border-transparent'
                   )}
                 >
                   <Icon className="h-5 w-5" aria-hidden="true" />
@@ -464,10 +470,10 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
           {selectedSection === 'general' && (
             <section className="space-y-5">
               <div>
-                <h2 className="text-xl font-bold text-slate-950">
+                <h2 className="text-foreground text-xl font-bold">
                   {standaloneT('general.title')}
                 </h2>
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="text-muted-foreground mt-1 text-sm">
                   {standaloneT('general.description')}
                 </p>
               </div>
@@ -477,20 +483,20 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                 description={standaloneT('general.sourceDescription')}
               >
                 <div className="space-y-4">
-                  <div className="inline-flex items-center gap-2 text-sm font-medium text-slate-800">
-                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+                  <div className="text-foreground inline-flex items-center gap-2 text-sm font-medium">
+                    <span className="bg-primary h-2.5 w-2.5 rounded-full" />
                     {props.sourcePlatformType === 'standalone'
                       ? t('sourceStandalone')
                       : props.sourcePlatformType}
                   </div>
                   <details className="rounded-card border-border bg-muted/70 border">
-                    <summary className="cursor-pointer px-3 py-2.5 text-sm font-medium text-slate-700 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none">
+                    <summary className="text-foreground/80 focus-visible:ring-ring cursor-pointer px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:outline-none">
                       {standaloneT('general.connectionDetails')}
                     </summary>
                     <div className="border-border flex flex-col gap-3 border-t p-3 sm:flex-row sm:items-center">
                       <code
                         dir="ltr"
-                        className="min-w-0 flex-1 text-xs break-all text-slate-600"
+                        className="text-foreground/70 min-w-0 flex-1 text-xs break-all"
                       >
                         {props.sourceIdentity}
                       </code>
@@ -537,6 +543,13 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
               </SettingsCard>
 
               <SettingsCard
+                title={themeT('appearanceTitle')}
+                description={themeT('appearanceDescription')}
+              >
+                <ThemeSelector />
+              </SettingsCard>
+
+              <SettingsCard
                 title={t('codDefaultLabel')}
                 description={t('codDefaultHelp')}
                 checked={props.assumeCodWhenPaymentMissing}
@@ -545,7 +558,7 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                 onCheckedChange={props.onAssumeCodWhenPaymentMissingChange}
               >
                 {props.assumeCodWhenPaymentMissing && (
-                  <div className="flex gap-3 rounded-lg bg-amber-50 p-3 text-sm leading-6 text-amber-900">
+                  <div className="bg-warning-subtle text-warning-subtle-foreground flex gap-3 rounded-lg p-3 text-sm leading-6">
                     <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
                     <p>{standaloneT('general.codRiskHelp')}</p>
                   </div>
@@ -557,23 +570,26 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
           {selectedSection === 'automation' && (
             <section className="space-y-5">
               <div>
-                <h2 className="text-xl font-bold text-slate-950">
+                <h2 className="text-foreground text-xl font-bold">
                   {t('automation.heading')}
                 </h2>
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="text-muted-foreground mt-1 text-sm">
                   {t('automation.subtitle')}
                 </p>
               </div>
 
-              <Card variant="flat" className="flex items-center gap-3 px-4 py-3">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
+              <Card
+                variant="flat"
+                className="flex items-center gap-3 px-4 py-3"
+              >
+                <span className="bg-muted text-foreground/70 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg">
                   <ShieldCheck className="h-5 w-5" />
                 </span>
                 <div>
-                  <p className="text-sm font-semibold text-slate-950">
+                  <p className="text-foreground text-sm font-semibold">
                     {standaloneT('automation.trustTitle')}
                   </p>
-                  <p className="text-xs leading-5 text-slate-600">
+                  <p className="text-foreground/70 text-xs leading-5">
                     {standaloneT('automation.trustDescription')}
                   </p>
                 </div>
@@ -613,9 +629,9 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
               >
                 {props.followUpEnabled && (
                   <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px] xl:items-end">
-                    <div className="rounded-xl bg-slate-50 px-4 py-5">
+                    <div className="bg-muted/50 rounded-xl px-4 py-5">
                       <div className="relative grid grid-cols-3 text-center">
-                        <span className="absolute top-2.5 right-[16.66%] left-[16.66%] h-px bg-slate-300" />
+                        <span className="bg-input absolute top-2.5 right-[16.66%] left-[16.66%] h-px" />
                         {[
                           standaloneT('automation.timeline.received'),
                           standaloneT('automation.timeline.first', {
@@ -628,13 +644,13 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                           <div key={label} className="relative space-y-2 px-1">
                             <span
                               className={cn(
-                                'mx-auto block h-5 w-5 rounded-full border-4 border-slate-50',
+                                'border-border mx-auto block h-5 w-5 rounded-full border-4',
                                 index === 2 && !props.followUpEnabled
-                                  ? 'bg-slate-300'
-                                  : 'bg-emerald-500'
+                                  ? 'bg-input'
+                                  : 'bg-primary'
                               )}
                             />
-                            <p className="text-xs leading-5 text-slate-600">
+                            <p className="text-foreground/70 text-xs leading-5">
                               {label}
                             </p>
                           </div>
@@ -679,8 +695,8 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                         onChange={props.onEscalationDelayMinutesChange}
                       />
                     </Field>
-                    <div className="flex gap-2 text-sm leading-6 text-slate-600">
-                      <Info className="mt-1 h-4 w-4 shrink-0 text-emerald-700" />
+                    <div className="text-foreground/70 flex gap-2 text-sm leading-6">
+                      <Info className="text-primary mt-1 h-4 w-4 shrink-0" />
                       <p>{props.escalationReviewDescription}</p>
                     </div>
                   </div>
@@ -688,7 +704,7 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
               </SettingsCard>
 
               <details className="rounded-card border-border bg-muted/60 border p-3">
-                <summary className="cursor-pointer px-2 py-1 text-sm font-semibold text-slate-700 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none">
+                <summary className="text-foreground/80 focus-visible:ring-ring cursor-pointer px-2 py-1 text-sm font-semibold focus-visible:ring-2 focus-visible:outline-none">
                   {standaloneT('automation.advancedScheduling')}
                 </summary>
                 <div className="mt-3">
@@ -743,7 +759,7 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
                             />
                           </Field>
                         </div>
-                        <div className="flex gap-2 text-sm leading-6 text-slate-600">
+                        <div className="text-foreground/70 flex gap-2 text-sm leading-6">
                           <Info className="mt-1 h-4 w-4 shrink-0" />
                           <p>
                             {standaloneT('automation.quietHoursResume', {
@@ -762,10 +778,10 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
           {selectedSection === 'billing' && (
             <section className="space-y-5">
               <div>
-                <h2 className="text-xl font-bold text-slate-950">
+                <h2 className="text-foreground text-xl font-bold">
                   {standaloneT('billing.title')}
                 </h2>
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="text-muted-foreground mt-1 text-sm">
                   {standaloneT('billing.description')}
                 </p>
               </div>
@@ -773,10 +789,10 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
               <Card className="p-6">
                 <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <h3 className="font-semibold text-slate-950">
+                    <h3 className="text-foreground font-semibold">
                       {standaloneT('billing.creditPageTitle')}
                     </h3>
-                    <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+                    <p className="text-foreground/70 mt-2 max-w-2xl text-sm leading-6">
                       {standaloneT('billing.creditPageDescription')}
                     </p>
                   </div>
@@ -795,7 +811,7 @@ function StandaloneSettingsExperience({ props }: { props: SettingsSkinProps }) {
       {props.canUpdateConfiguration && props.isDirty && (
         <div className="rounded-card border-border bg-card/95 shadow-sticky fixed inset-x-4 bottom-4 z-40 border px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur sm:px-5 lg:start-[280px] lg:end-8">
           <div className="mx-auto flex max-w-7xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-slate-600">
+            <p className="text-foreground/70 text-sm">
               {props.saveFailed
                 ? standaloneT('saveBar.failedHelp')
                 : standaloneT('saveBar.pendingHelp')}
@@ -836,11 +852,13 @@ export function SettingsStandaloneSkin(
   if (props.isLoadError) {
     return (
       <div className="mx-auto max-w-xl py-12">
-        <Card className="border-red-200 p-6 text-center">
-          <h1 className="text-xl font-bold text-slate-900">
+        <Card className="border-destructive-border p-6 text-center">
+          <h1 className="text-foreground text-xl font-bold">
             {view === 'templates' ? templateT('pageTitle') : t('title')}
           </h1>
-          <p className="mt-3 text-sm text-red-700">{t('loadError')}</p>
+          <p className="text-destructive-subtle-foreground mt-3 text-sm">
+            {t('loadError')}
+          </p>
           <Button className="mt-5" onClick={props.onRetry}>
             {t('retryButton')}
           </Button>

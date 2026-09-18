@@ -96,7 +96,7 @@ export function ConfirmationRulesStep({
       </OnboardingCard>
 
       {automationOff && (
-        <p className="rounded-lg bg-slate-50 px-3 py-2.5 text-start text-xs leading-5 text-slate-600">
+        <p className="bg-muted/50 text-foreground/70 rounded-lg px-3 py-2.5 text-start text-xs leading-5">
           {t('rules.disabledHint')}
         </p>
       )}
@@ -185,13 +185,13 @@ export function ConfirmationRulesStep({
           aria-expanded={showAdvanced}
           aria-controls="onboarding-advanced-timing"
           onClick={() => setIsAdvancedOpen((current) => !current)}
-          className="flex w-full items-center justify-between gap-3 p-4 text-start focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none sm:p-5"
+          className="focus-visible:ring-ring flex w-full items-center justify-between gap-3 p-4 text-start focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none sm:p-5"
         >
           <span>
-            <span className="block text-sm font-semibold text-slate-950">
+            <span className="text-foreground block text-sm font-semibold">
               {t('rules.advanced')}
             </span>
-            <span className="mt-0.5 block text-xs text-slate-500">
+            <span className="text-muted-foreground mt-0.5 block text-xs">
               {form.quietHoursEnabled
                 ? t('review.quietHours', {
                     start: form.quietHoursStart,
@@ -203,7 +203,7 @@ export function ConfirmationRulesStep({
           <ChevronDown
             aria-hidden="true"
             className={cn(
-              'h-5 w-5 shrink-0 text-slate-500 transition-transform',
+              'text-muted-foreground h-5 w-5 shrink-0 transition-transform',
               showAdvanced && 'rotate-180'
             )}
           />
@@ -211,7 +211,7 @@ export function ConfirmationRulesStep({
         {showAdvanced && (
           <div
             id="onboarding-advanced-timing"
-            className="border-t border-slate-200 p-4 text-start sm:p-5"
+            className="border-border border-t p-4 text-start sm:p-5"
           >
             <OnboardingCard
               title={t('rules.quietHoursHeading')}
@@ -244,7 +244,7 @@ export function ConfirmationRulesStep({
                         'tabular-nums',
                         isRTL ? 'text-right' : 'text-left',
                         fieldErrors.quietHours &&
-                          'border-red-400 focus:border-red-500'
+                          'border-destructive focus:border-destructive'
                       )}
                     />
                   )}
@@ -269,14 +269,14 @@ export function ConfirmationRulesStep({
                         'tabular-nums',
                         isRTL ? 'text-right' : 'text-left',
                         fieldErrors.quietHours &&
-                          'border-red-400 focus:border-red-500'
+                          'border-destructive focus:border-destructive'
                       )}
                     />
                   )}
                 </OnboardingField>
               </div>
               {fieldErrors.quietHours && (
-                <p className="mt-3 text-xs font-medium text-red-600">
+                <p className="text-destructive mt-3 text-xs font-medium">
                   {fieldErrors.quietHours}
                 </p>
               )}

@@ -39,7 +39,7 @@ export function CheckoutSummaryCard({ state }: CheckoutSummaryCardProps) {
       <div className="border-border space-y-6 border-t p-6">
         {state.checkoutError && (
           <p
-            className="rounded-control text-body bg-red-50 p-3 text-red-900 dark:bg-red-950 dark:text-red-100"
+            className="rounded-control text-body bg-destructive-subtle text-destructive-subtle-foreground p-3"
             role="alert"
           >
             {t(`purchase.errors.${state.checkoutError}`)}
@@ -47,10 +47,10 @@ export function CheckoutSummaryCard({ state }: CheckoutSummaryCardProps) {
         )}
 
         {state.pendingReference && (
-          <div className="rounded-card border border-amber-200 bg-amber-50 p-4 text-amber-950 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-100">
+          <div className="rounded-card border-warning-border bg-warning-subtle text-warning-subtle-foreground border p-4">
             <p className="font-semibold">{t('purchase.pendingTitle')}</p>
             <p className="text-body mt-1">{t('purchase.pendingDescription')}</p>
-            <Button asChild variant="outline" className="mt-3 bg-white">
+            <Button asChild variant="outline" className="bg-card mt-3">
               <Link
                 href={withLocale(
                   `/billing/return?purchaseRef=${encodeURIComponent(state.pendingReference)}`,

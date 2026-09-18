@@ -19,15 +19,15 @@ export interface NotificationInput {
 type NotificationTone = 'success' | 'warning' | 'error'
 
 const toneClasses: Record<NotificationTone, string> = {
-  success: 'border-emerald-200 bg-white text-foreground',
-  warning: 'border-amber-200 bg-white text-foreground',
-  error: 'border-red-200 bg-white text-foreground',
+  success: 'border-success-border bg-card text-foreground',
+  warning: 'border-warning-border bg-card text-foreground',
+  error: 'border-destructive-border bg-card text-foreground',
 }
 
 const toneDots: Record<NotificationTone, string> = {
-  success: 'bg-emerald-600',
-  warning: 'bg-amber-500',
-  error: 'bg-red-600',
+  success: 'bg-success',
+  warning: 'bg-warning',
+  error: 'bg-destructive',
 }
 
 function showNotification(
@@ -53,7 +53,7 @@ function showNotification(
               action.onClick()
               toast.dismiss(instance.id)
             }}
-            className="shrink-0 rounded-md px-2 py-1 font-semibold text-emerald-800 hover:bg-emerald-50 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:outline-none"
+            className="text-primary hover:bg-primary-subtle focus-visible:ring-ring shrink-0 rounded-md px-2 py-1 font-semibold focus-visible:ring-2 focus-visible:outline-none"
           >
             {action.label}
           </button>

@@ -19,19 +19,22 @@ export function DashboardVerificationsStandaloneSkin(
     <div className="mx-auto w-full max-w-350 min-w-0 space-y-6">
       <header className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
         <div className="min-w-0 space-y-1.5">
-          <p className="text-xs font-semibold tracking-wide text-emerald-700 uppercase">
+          <p className="text-primary text-xs font-semibold tracking-wide uppercase">
             {t('verifications.eyebrow')}
           </p>
-          <h1 className="flex items-center gap-2 text-3xl leading-tight font-bold tracking-tight text-slate-950">
+          <h1 className="text-foreground flex items-center gap-2 text-3xl leading-tight font-bold tracking-tight">
             {t('verifications.title')}
             <Tooltip content={t('verifications.pageSubtitle')}>
-              <Info aria-hidden="true" className="size-5 text-slate-400" />
+              <Info
+                aria-hidden="true"
+                className="text-muted-foreground/70 size-5"
+              />
               <span className="sr-only">{t('verifications.pageSubtitle')}</span>
             </Tooltip>
           </h1>
         </div>
         <div className="flex flex-wrap items-start gap-3 md:items-end md:justify-end">
-          <label className="relative min-w-0 flex-1 text-sm text-slate-500 sm:flex-none">
+          <label className="text-muted-foreground relative min-w-0 flex-1 text-sm sm:flex-none">
             <span className="sr-only">{t('filters.dateRange.label')}</span>
             <select
               value={props.dateRangeFilter}
@@ -40,7 +43,7 @@ export function DashboardVerificationsStandaloneSkin(
                   event.target.value as DashboardStatsDateRange
                 )
               }
-              className="border-input h-10 w-full appearance-none rounded-lg border bg-white py-2 ps-3 pe-10 text-sm font-medium text-slate-700 shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none sm:w-auto"
+              className="border-input bg-card text-foreground/80 focus:border-primary focus:ring-primary-border h-10 w-full appearance-none rounded-lg border py-2 ps-3 pe-10 text-sm font-medium shadow-sm transition focus:ring-2 focus:outline-none sm:w-auto"
             >
               {props.dateRangeOptions.map((option) => (
                 <option key={option.id} value={option.id}>
@@ -50,7 +53,7 @@ export function DashboardVerificationsStandaloneSkin(
             </select>
             <ChevronDown
               aria-hidden="true"
-              className="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
+              className="text-muted-foreground pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2"
             />
           </label>
           <CreditsBadge />
@@ -81,7 +84,7 @@ export function DashboardVerificationsStandaloneSkin(
       {props.sourceStatus === 'disconnected' && (
         <div
           role="status"
-          className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900"
+          className="border-warning-border bg-warning-subtle text-warning-subtle-foreground rounded-xl border px-4 py-3"
         >
           <p className="font-semibold">{t('sourceDisconnectedTitle')}</p>
           <p className="mt-1 text-sm">{t('sourceDisconnectedDescription')}</p>

@@ -42,7 +42,7 @@ export function SupportPageClient() {
         >
           <a
             href={`mailto:${email}`}
-            className="bg-primary text-primary-foreground hover:bg-primary inline-flex h-11 items-center justify-center rounded-xl px-5 text-sm font-bold shadow-sm shadow-emerald-900/10 transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="bg-primary text-primary-foreground hover:bg-primary focus-visible:ring-ring/40 inline-flex h-11 items-center justify-center rounded-xl px-5 text-sm font-bold shadow-sm shadow-emerald-900/10 transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
             dir="ltr"
           >
             {email}
@@ -56,7 +56,7 @@ export function SupportPageClient() {
         >
           <a
             href={`tel:${businessPhone}`}
-            className="bg-primary text-primary-foreground hover:bg-primary inline-flex h-11 items-center justify-center rounded-xl px-5 text-sm font-bold shadow-sm shadow-emerald-900/10 transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="bg-primary text-primary-foreground hover:bg-primary focus-visible:ring-ring/40 inline-flex h-11 items-center justify-center rounded-xl px-5 text-sm font-bold shadow-sm shadow-emerald-900/10 transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
             dir="ltr"
           >
             {t('phoneNumber')}
@@ -68,7 +68,7 @@ export function SupportPageClient() {
           title={t('addressTitle')}
           description={t('addressDescription')}
         >
-          <p className="text-sm leading-relaxed whitespace-pre-line text-slate-700">
+          <p className="text-foreground/80 text-sm leading-relaxed whitespace-pre-line">
             {registeredAddress}
           </p>
         </PublicInfoCard>
@@ -82,7 +82,7 @@ export function SupportPageClient() {
             href={whatsappHref}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-border bg-muted px-5 text-sm font-bold text-foreground transition-all hover:-translate-y-0.5 hover:border-input hover:bg-accent hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="border-border bg-muted text-foreground hover:border-input hover:bg-accent focus-visible:ring-ring/40 inline-flex h-11 items-center justify-center gap-2 rounded-xl border px-5 text-sm font-bold transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             {t('whatsappCta')}
             <ArrowUpRight className="h-4 w-4" />
@@ -91,15 +91,15 @@ export function SupportPageClient() {
       </div>
 
       <div className="mt-5 grid gap-5 md:grid-cols-[1.1fr_0.9fr]">
-        <section className="rounded-2xl border border-border bg-white p-6 shadow-sm transition-all duration-300 hover:border-input hover:shadow-md md:p-7">
-          <h2 className="text-lg font-bold text-slate-800">
+        <section className="border-border bg-card hover:border-input rounded-2xl border p-6 shadow-sm transition-all duration-300 hover:shadow-md md:p-7">
+          <h2 className="text-foreground text-lg font-bold">
             {t('detailsTitle')}
           </h2>
           <ul className="mt-5 space-y-3">
             {detailKeys.map((key) => (
               <li
                 key={key}
-                className="flex gap-3 text-sm leading-relaxed text-slate-600"
+                className="text-foreground/70 flex gap-3 text-sm leading-relaxed"
               >
                 <CheckCircle2 className="text-primary mt-0.5 h-4 w-4 shrink-0" />
                 <span>{t(key)}</span>
@@ -108,11 +108,9 @@ export function SupportPageClient() {
           </ul>
         </section>
 
-        <section className="rounded-2xl border border-orange-200/80 bg-orange-50/60 p-6 shadow-sm transition-all duration-300 hover:shadow-md md:p-7">
-          <p className="text-sm font-bold text-orange-700">
-            {t('responseTitle')}
-          </p>
-          <p className="mt-3 text-sm leading-relaxed text-slate-600">
+        <section className="border-warning-border bg-warning-subtle/60 rounded-2xl border p-6 shadow-sm transition-all duration-300 hover:shadow-md md:p-7">
+          <p className="text-warning text-sm font-bold">{t('responseTitle')}</p>
+          <p className="text-foreground/70 mt-3 text-sm leading-relaxed">
             {t('responseBody')}
           </p>
         </section>
@@ -121,7 +119,7 @@ export function SupportPageClient() {
       <div className="mt-10 flex justify-center">
         <Link
           href={withLocale('/', locale)}
-          className="hover:text-primary-hover inline-flex h-11 items-center justify-center rounded-xl border border-border bg-white px-6 text-sm font-bold text-slate-700 transition-all hover:-translate-y-0.5 hover:border-input hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="hover:text-primary-hover border-border bg-card text-foreground/80 hover:border-input focus-visible:ring-ring/40 inline-flex h-11 items-center justify-center rounded-xl border px-6 text-sm font-bold transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           {t('backHome')}
         </Link>

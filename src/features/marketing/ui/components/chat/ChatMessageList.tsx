@@ -33,7 +33,7 @@ export function ChatMessageList({
             <div
               className={`flex flex-col gap-1 ${
                 message.buttons
-                  ? 'w-[92%] rounded-xl rounded-ss-sm bg-white pb-2 shadow-sm [&>div:first-child]:shadow-none [&>div:last-child]:px-2'
+                  ? 'w-[92%] rounded-xl rounded-ss-sm bg-white pb-2 shadow-sm dark:bg-[#202c33] [&>div:first-child]:shadow-none [&>div:last-child]:px-2'
                   : 'max-w-[85%]'
               }`}
             >

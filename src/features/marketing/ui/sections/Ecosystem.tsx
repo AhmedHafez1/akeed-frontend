@@ -39,15 +39,11 @@ function PngMark({ src, className }: { src: string; className?: string }) {
   )
 }
 
-function ChannelItem({
-  label,
-  mark,
-  markClassName,
-}: Omit<Channel, 'id'>) {
+function ChannelItem({ label, mark, markClassName }: Omit<Channel, 'id'>) {
   return (
     <div
       className={cn(
-        'flex shrink-0 items-center gap-2.5 rounded-full px-3.5 py-1.5 whitespace-nowrap text-foreground/75 font-medium'
+        'text-foreground/75 flex shrink-0 items-center gap-2.5 rounded-full px-3.5 py-1.5 font-medium whitespace-nowrap'
       )}
     >
       <span
@@ -76,7 +72,7 @@ function Ecosystem() {
       id: 'independent',
       label: t('independent'),
       mark: (
-        <span className="bg-muted flex h-7 w-7 items-center justify-center rounded-full text-slate-700">
+        <span className="bg-muted text-foreground/80 flex h-7 w-7 items-center justify-center rounded-full">
           <Store className="h-6 w-6" strokeWidth={2} />
         </span>
       ),

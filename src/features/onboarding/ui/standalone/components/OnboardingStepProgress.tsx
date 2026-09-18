@@ -26,13 +26,13 @@ export function OnboardingStepProgress({
       aria-label={t('steps.label')}
       className="rounded-card border-border bg-card border p-4 text-start md:hidden"
     >
-      <p className="text-xs font-medium text-slate-500 tabular-nums">
+      <p className="text-muted-foreground text-xs font-medium tabular-nums">
         {t('steps.progress', {
           current: currentStep,
           total: STANDALONE_TOTAL_STEPS,
         })}
       </p>
-      <p className="mt-1 text-sm font-semibold text-slate-950">
+      <p className="text-foreground mt-1 text-sm font-semibold">
         {definition ? t(definition.titleKey) : null}
       </p>
       <div aria-hidden="true" className="mt-3 flex gap-1.5">
@@ -42,10 +42,10 @@ export function OnboardingStepProgress({
             className={cn(
               'h-1.5 flex-1 rounded-full',
               step.id === currentStep
-                ? 'bg-emerald-600'
+                ? 'bg-primary'
                 : completedSteps.has(step.id)
-                  ? 'bg-emerald-300'
-                  : 'bg-slate-200'
+                  ? 'bg-primary-border'
+                  : 'bg-border'
             )}
           />
         ))}

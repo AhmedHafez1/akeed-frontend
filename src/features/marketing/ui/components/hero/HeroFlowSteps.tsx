@@ -1,11 +1,7 @@
 'use client'
 
 import { motion, useReducedMotion } from 'framer-motion'
-import {
-  CheckCircle2,
-  ShoppingCart,
-  UserRound,
-} from 'lucide-react'
+import { CheckCircle2, ShoppingCart, UserRound } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import type { ReactNode } from 'react'
@@ -89,7 +85,7 @@ export function HeroFlowSteps() {
               <LandingIconBadge
                 size="sm"
                 className="h-11 w-11 [&_svg]:h-6 [&_svg]:w-6"
-                tone='slate'
+                tone="slate"
               >
                 {step.icon}
               </LandingIconBadge>
@@ -111,7 +107,7 @@ export function HeroFlowSteps() {
                   damping: 18,
                   delay: delay + (shouldReduceMotion ? 0 : 0.3),
                 }}
-                className="bg-slate-500 text-primary-foreground flex h-7 w-7 shrink-0 items-center justify-center rounded-full"
+                className="bg-muted-foreground text-background flex h-7 w-7 shrink-0 items-center justify-center rounded-full"
               >
                 {index + 1}
               </motion.span>

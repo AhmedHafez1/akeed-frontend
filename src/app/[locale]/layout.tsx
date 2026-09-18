@@ -19,6 +19,7 @@ import {
   ogImagePath,
   siteName,
 } from '@/shared/lib/seo'
+import { ThemeProvider, themeInitScript } from '@/shared/theme'
 import '../globals.css'
 
 /*
@@ -117,6 +118,8 @@ export default async function LocaleLayout({
       suppressHydrationWarning
     >
       <head>
+        {/* Sets the `dark` class before first paint to avoid a light flash. */}
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         {/*
           Marketing scripts (Facebook Pixel, Google Analytics) are loaded
           ONLY in standalone mode. They are suppressed in Shopify embedded
@@ -129,7 +132,9 @@ export default async function LocaleLayout({
       <body className={bodyFontClassName} suppressHydrationWarning>
         <ShopifyAppBridgeScript />
         <NextIntlClientProvider messages={messages}>
-          <AppLayout>{children}</AppLayout>
+          <ThemeProvider>
+            <AppLayout>{children}</AppLayout>
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>
