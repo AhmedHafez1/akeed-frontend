@@ -5,6 +5,7 @@ import {
   ArrowUpRight,
   AtSign,
   CheckCircle2,
+  MapPin,
   MessageCircle,
   Phone,
 } from 'lucide-react'
@@ -12,7 +13,7 @@ import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
 import { createAkeedWhatsAppUrl } from '@/shared/lib/whatsapp'
-import { businessPhone } from '@/shared/lib/seo'
+import { businessPhone, registeredAddress } from '@/shared/lib/seo'
 import {
   PublicInfoCard,
   PublicPageShell,
@@ -60,6 +61,16 @@ export function SupportPageClient() {
           >
             {t('phoneNumber')}
           </a>
+        </PublicInfoCard>
+
+        <PublicInfoCard
+          icon={<MapPin className="h-5 w-5" />}
+          title={t('addressTitle')}
+          description={t('addressDescription')}
+        >
+          <p className="text-sm leading-relaxed whitespace-pre-line text-slate-700">
+            {registeredAddress}
+          </p>
         </PublicInfoCard>
 
         <PublicInfoCard

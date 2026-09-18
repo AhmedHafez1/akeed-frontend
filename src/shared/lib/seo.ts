@@ -8,10 +8,10 @@ import { defaultLocale, locales } from '@/i18n'
 export const siteName = 'Akeed'
 export const supportEmail = 'support@getakeed.com'
 export const legalName = 'أكيد للحلول الرقمية - Akeed Digital Solutions'
-export const commercialRegistrationNumber = '5813'
+export const commercialRegistrationNumber = '58130'
 export const businessPhone = '+201148675077'
 export const registeredAddressStreet =
-  'الجيزة - الأهرام - شقة ١٣ الدور الثالث - قطعة ٤٧٣ منطقة ( أ ) - هضبة الأهرام'
+  'الجيزة - الأهرام - شقة ١٢ الدور الثالث - قطعة ٤٧٣ منطقة ( أ ) - هضبة الأهرام'
 export const registeredAddressLocality = 'الأهرام'
 export const registeredAddressRegion = 'الجيزة'
 export const registeredAddressPostalCode = '12556'
@@ -30,6 +30,7 @@ export const publicSeoRoutes = [
   '/support',
   '/privacy',
   '/terms',
+  '/refund-policy',
   '/docs',
 ] as const
 

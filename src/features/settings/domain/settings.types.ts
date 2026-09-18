@@ -24,7 +24,7 @@ export interface SettingsUsageData {
   used: number
   limit: number
   periodStart: string
-  periodEnd: string
+  periodEnd: string | null
   usedLabel: string
   limitLabel: string
   upgradePrompt: string | null
