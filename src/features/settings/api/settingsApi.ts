@@ -39,7 +39,7 @@ export interface SettingsResponse {
       used: number
       limit: number
       periodStart: string
-      periodEnd: string
+      periodEnd: string | null
     }
   }
   template: {

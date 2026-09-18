@@ -469,7 +469,9 @@ export function useSettings(): {
               })
           : formatPlanId(id),
         volumeLabel: config
-          ? t('planVolumePerMonth', { count: config.includedVerifications })
+          ? t(config.amount === 0 ? 'planVolumeOneTime' : 'planVolumePerMonth', {
+              count: config.includedVerifications,
+            })
           : '',
       }
     })
@@ -482,6 +484,8 @@ export function useSettings(): {
     const safeLimit = Math.max(limit, 1)
     const usageRatio = used / safeLimit
     const percent = Math.min(100, Math.round(usageRatio * 100))
+    // The backend reports no period end for a one-time allowance (Starter).
+    const isOneTime = periodEnd === null
 
     return {
       used,
@@ -489,13 +493,17 @@ export function useSettings(): {
       periodStart,
       periodEnd,
       usedLabel: t('usageUsedPercent', { value: percent }),
-      limitLabel: t('usageMonthlyLimit'),
+      limitLabel: t(isOneTime ? 'usageOneTimeLimit' : 'usageMonthlyLimit'),
       upgradePrompt: !canManageBilling
         ? used >= limit
           ? t('usageManualLimitReached')
           : null
         : used >= limit
-          ? t('usageLimitReachedPrompt')
+          ? t(
+              isOneTime
+                ? 'usageOneTimeLimitReachedPrompt'
+                : 'usageLimitReachedPrompt'
+            )
           : usageRatio >= 0.8
             ? t('usageUpgradePrompt')
             : null,

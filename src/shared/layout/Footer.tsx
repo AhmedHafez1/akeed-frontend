@@ -36,6 +36,7 @@ const footerLinkGroups = [
     links: [
       { href: '/privacy', labelKey: 'privacyPolicy' },
       { href: '/terms', labelKey: 'termsOfService' },
+      { href: '/refund-policy', labelKey: 'refundPolicy' },
       { href: '/privacy', labelKey: 'security' },
     ],
   },
@@ -131,9 +132,12 @@ export function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-6 border-t border-white/10 pt-8 text-center md:mt-14 md:flex-row md:text-start">
-          <p className="md:text-md text-sm text-slate-400">
-            {t('copyright', { year })}
-          </p>
+          <div className="flex flex-col items-center gap-1 md:items-start">
+            <p className="md:text-md text-sm text-slate-400">
+              {t('copyright', { year })}
+            </p>
+            <p className="text-xs text-slate-500">{t('registeredAddress')}</p>
+          </div>
           <div className="md:text-md flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
             <Link
               href={withLocale('/privacy', locale)}
@@ -147,6 +151,13 @@ export function Footer() {
               className="font-medium text-slate-300 underline underline-offset-2 transition-colors hover:text-emerald-300"
             >
               {t('termsOfService')}
+            </Link>
+            <span className="h-6 w-px bg-white/20" aria-hidden="true" />
+            <Link
+              href={withLocale('/refund-policy', locale)}
+              className="font-medium text-slate-300 underline underline-offset-2 transition-colors hover:text-emerald-300"
+            >
+              {t('refundPolicy')}
             </Link>
           </div>
         </div>
