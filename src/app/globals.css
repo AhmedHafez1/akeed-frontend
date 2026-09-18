@@ -30,7 +30,7 @@
    * App canvas. A light neutral grey — it keeps white cards reading as
    * "lifted" without a heavy shadow.
    */
-  --canvas: #F6F6F7;
+  --canvas: #ededed;
 
   /*
    * Brand. emerald-700, not emerald-600: white-on-emerald-600 is 3.35:1 and
