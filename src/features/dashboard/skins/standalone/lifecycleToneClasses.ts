@@ -8,11 +8,14 @@ import type { LifecycleTone } from '../../domain/verificationLifecycle'
  * Polaris. Two maps, one per design system, rather than one per component.
  */
 export const lifecycleToneClasses: Record<LifecycleTone, string> = {
-  neutral: 'border-slate-200 bg-slate-50 text-slate-700',
+  neutral: 'border-border bg-muted/50 text-foreground/80',
   info: 'border-blue-200 bg-blue-50 text-blue-700',
   progress: 'border-indigo-200 bg-indigo-50 text-indigo-700',
-  success: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-  warning: 'border-amber-200 bg-amber-50 text-amber-800',
-  attention: 'border-amber-200 bg-amber-50 text-amber-800',
-  critical: 'border-red-200 bg-red-50 text-red-700',
+  success: 'border-primary-border bg-primary-subtle text-primary',
+  warning:
+    'border-warning-border bg-warning-subtle text-warning-subtle-foreground',
+  attention:
+    'border-warning-border bg-warning-subtle text-warning-subtle-foreground',
+  critical:
+    'border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground',
 }

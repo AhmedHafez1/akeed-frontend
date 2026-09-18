@@ -47,18 +47,15 @@ export function SegmentedControl<TValue extends string>({
             disabled={disabled}
             onClick={() => onChange(option.value)}
             className={cn(
-              '-ms-px inline-flex min-h-11 flex-1 items-center justify-center gap-2 border border-slate-200 px-4 text-sm transition-colors first:ms-0 first:rounded-s-lg last:rounded-e-lg focus:z-10 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+              'border-border focus-visible:ring-ring -ms-px inline-flex min-h-11 flex-1 items-center justify-center gap-2 border px-4 text-sm transition-colors first:ms-0 first:rounded-s-lg last:rounded-e-lg focus:z-10 focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
               isSelected
-                ? 'z-10 border-primary bg-emerald-100 font-bold text-primary'
-                : 'bg-white text-slate-700 hover:bg-slate-50'
+                ? 'border-primary bg-primary-subtle text-primary z-10 font-bold'
+                : 'bg-card text-foreground/80 hover:bg-muted/50'
             )}
           >
             {option.label}
             {isSelected && (
-              <Check
-                aria-hidden="true"
-                className="h-5 w-5 text-primary"
-              />
+              <Check aria-hidden="true" className="text-primary h-5 w-5" />
             )}
           </button>
         )

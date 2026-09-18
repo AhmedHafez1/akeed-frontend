@@ -29,7 +29,7 @@ export function StandaloneDashboardHeader({
   return (
     <header className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
       <div className="min-w-0 space-y-1.5">
-        <h1 className="flex items-center gap-2 text-3xl leading-tight font-bold tracking-tight text-slate-950">
+        <h1 className="text-foreground flex items-center gap-2 text-3xl leading-tight font-bold tracking-tight">
           {isIdentityLoading ? (
             <span
               aria-label={t('standalone.greetingLoading')}
@@ -42,7 +42,7 @@ export function StandaloneDashboardHeader({
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <label className="relative min-w-0 flex-1 text-sm text-slate-500 sm:flex-none">
+        <label className="text-muted-foreground relative min-w-0 flex-1 text-sm sm:flex-none">
           <span className="sr-only">{t('filters.dateRange.label')}</span>
           <select
             value={dateRangeFilter}
@@ -51,7 +51,7 @@ export function StandaloneDashboardHeader({
                 event.target.value as DashboardStatsDateRange
               )
             }
-            className="border-input h-10 w-full appearance-none rounded-lg border bg-white py-2 ps-3 pe-10 text-sm font-medium text-slate-700 shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none sm:w-auto"
+            className="border-input bg-card text-foreground/80 focus:border-primary focus:ring-primary-border h-10 w-full appearance-none rounded-lg border py-2 ps-3 pe-10 text-sm font-medium shadow-sm transition focus:ring-2 focus:outline-none sm:w-auto"
           >
             {dateRangeOptions.map((option) => (
               <option key={option.id} value={option.id}>
@@ -61,7 +61,7 @@ export function StandaloneDashboardHeader({
           </select>
           <ChevronDown
             aria-hidden="true"
-            className="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
+            className="text-muted-foreground pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2"
           />
         </label>
         {availableCredit}

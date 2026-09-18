@@ -60,7 +60,7 @@ export function StandaloneLayout({ children }: StandaloneLayoutProps) {
   // 2. Public marketing routes — no auth required
   if (isPublicRoute(pathname)) {
     return (
-      <div className="flex min-h-screen flex-col bg-white">
+      <div className="bg-card flex min-h-screen flex-col">
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
@@ -94,7 +94,7 @@ export function StandaloneLayout({ children }: StandaloneLayoutProps) {
       }
     >
       <StandaloneShellProvider>
-        <div className="akeed-app-canvas flex min-h-screen text-slate-950">
+        <div className="akeed-app-canvas text-foreground flex min-h-screen">
           <StandaloneSidebar className="sticky top-0 hidden h-screen lg:flex" />
           <div className="flex min-w-0 flex-1 flex-col">
             <StandaloneTopBar

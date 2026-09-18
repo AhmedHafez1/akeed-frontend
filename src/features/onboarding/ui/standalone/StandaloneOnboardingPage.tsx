@@ -148,11 +148,11 @@ export function StandaloneOnboardingPage() {
     const code = onboarding.loadErrorCode ?? 'UNAVAILABLE'
     return (
       <main className="mx-auto flex min-h-[60vh] max-w-xl items-center px-4">
-        <Card className="w-full border-red-200 p-6 text-center">
-          <h1 className="text-xl font-bold text-slate-900">
+        <Card className="border-destructive-border w-full p-6 text-center">
+          <h1 className="text-foreground text-xl font-bold">
             {t('loadErrorTitle')}
           </h1>
-          <p className="mt-2 text-sm text-slate-600">
+          <p className="text-foreground/70 mt-2 text-sm">
             {code === 'ONBOARDING_SOURCE_MISSING'
               ? t('sourceMissing')
               : code === 'ONBOARDING_SOURCE_INACTIVE'
@@ -162,7 +162,7 @@ export function StandaloneOnboardingPage() {
                   : t('loadError')}
           </p>
           <Button
-            className="bg-primary text-primary-foreground hover:bg-primary mt-5 min-h-11 px-5 text-sm font-semibold focus-visible:ring-emerald-600"
+            className="bg-primary text-primary-foreground hover:bg-primary focus-visible:ring-ring mt-5 min-h-11 px-5 text-sm font-semibold"
             onClick={() => void onboarding.retry()}
           >
             {t('retry')}
@@ -180,15 +180,19 @@ export function StandaloneOnboardingPage() {
   ) {
     return (
       <main className="mx-auto flex min-h-[60vh] max-w-xl items-center px-4">
-        <Card className="w-full border-amber-200 p-6 text-center">
-          <ShieldCheck className="mx-auto size-8 text-amber-600" />
-          <h1 className="mt-3 text-xl font-bold text-slate-900">
+        <Card className="border-warning-border w-full p-6 text-center">
+          <ShieldCheck className="text-warning mx-auto size-8" />
+          <h1 className="text-foreground mt-3 text-xl font-bold">
             {t('suspended.title')}
           </h1>
-          <p className="mt-2 text-sm text-slate-600">{t('suspended.body')}</p>
-          <p className="mt-3 text-xs text-slate-500">{t('suspended.note')}</p>
+          <p className="text-foreground/70 mt-2 text-sm">
+            {t('suspended.body')}
+          </p>
+          <p className="text-muted-foreground mt-3 text-xs">
+            {t('suspended.note')}
+          </p>
           <Button
-            className="bg-primary text-primary-foreground hover:bg-primary mt-5 min-h-11 px-5 text-sm font-semibold focus-visible:ring-emerald-600"
+            className="bg-primary text-primary-foreground hover:bg-primary focus-visible:ring-ring mt-5 min-h-11 px-5 text-sm font-semibold"
             onClick={() => void onboarding.retry()}
           >
             {t('suspended.refresh')}
@@ -213,11 +217,11 @@ export function StandaloneOnboardingPage() {
   return (
     <main className="mx-auto w-full max-w-280 px-4 py-6 sm:px-6 sm:py-10">
       <header className="text-start">
-        <p className="text-sm font-semibold text-emerald-700">{t('eyebrow')}</p>
-        <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+        <p className="text-primary text-sm font-semibold">{t('eyebrow')}</p>
+        <h1 className="text-foreground mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
           {t('title')}
         </h1>
-        <p className="mt-2 text-sm text-slate-600 sm:text-base">
+        <p className="text-foreground/70 mt-2 text-sm sm:text-base">
           {t('subtitle')}
         </p>
       </header>
@@ -249,7 +253,7 @@ export function StandaloneOnboardingPage() {
           {disabled && (
             <div
               role="status"
-              className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-start text-sm text-amber-800"
+              className="border-warning-border bg-warning-subtle text-warning-subtle-foreground rounded-xl border p-4 text-start text-sm"
             >
               {t('readOnly')}
             </div>
@@ -257,7 +261,7 @@ export function StandaloneOnboardingPage() {
           {onboarding.errorMessage && (
             <div
               role="alert"
-              className="flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 p-4 text-start text-sm text-red-700"
+              className="border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground flex items-start gap-2 rounded-xl border p-4 text-start text-sm"
             >
               <AlertCircle
                 aria-hidden="true"
@@ -269,7 +273,7 @@ export function StandaloneOnboardingPage() {
           {onboarding.successMessage && (
             <div
               role="status"
-              className="flex items-start gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-start text-sm text-emerald-700"
+              className="border-primary-border bg-primary-subtle text-primary flex items-start gap-2 rounded-xl border p-4 text-start text-sm"
             >
               <CheckCircle2
                 aria-hidden="true"
@@ -282,7 +286,7 @@ export function StandaloneOnboardingPage() {
           <Card variant="flat" className="overflow-hidden p-0">
             <div className="space-y-6 p-5 text-start sm:p-6">
               <div>
-                <p className="inline-flex rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600 tabular-nums">
+                <p className="bg-muted text-foreground/70 inline-flex rounded-md px-2 py-1 text-xs font-medium tabular-nums">
                   {t('steps.progress', {
                     current: currentStep,
                     total: STANDALONE_TOTAL_STEPS,
@@ -291,11 +295,11 @@ export function StandaloneOnboardingPage() {
                 <h2
                   ref={headingRef}
                   tabIndex={-1}
-                  className="mt-3 text-xl font-bold text-slate-950 focus-visible:outline-none sm:text-2xl"
+                  className="text-foreground mt-3 text-xl font-bold focus-visible:outline-none sm:text-2xl"
                 >
                   {definition ? t(definition.headingKey) : null}
                 </h2>
-                <p className="mt-1.5 text-sm text-slate-500">
+                <p className="text-muted-foreground mt-1.5 text-sm">
                   {definition ? t(definition.subheadingKey) : null}
                 </p>
               </div>
@@ -333,7 +337,7 @@ export function StandaloneOnboardingPage() {
                     type="button"
                     disabled={isBusy}
                     onClick={() => void handlePrimary()}
-                    className="bg-primary text-primary-foreground hover:bg-primary min-h-11 w-full gap-2 px-5 text-sm font-semibold focus-visible:ring-emerald-600 sm:w-auto"
+                    className="bg-primary text-primary-foreground hover:bg-primary focus-visible:ring-ring min-h-11 w-full gap-2 px-5 text-sm font-semibold sm:w-auto"
                   >
                     {primaryLabel}
                     {currentStep < 3 && (
@@ -350,7 +354,7 @@ export function StandaloneOnboardingPage() {
                     variant="ghost"
                     disabled={isBusy}
                     onClick={() => void handleSaveProgress()}
-                    className="min-h-11 w-full px-5 text-sm font-semibold text-slate-700 hover:bg-slate-100 sm:w-auto"
+                    className="text-foreground/80 hover:bg-muted min-h-11 w-full px-5 text-sm font-semibold sm:w-auto"
                   >
                     {t('saveProgress')}
                   </Button>
@@ -363,7 +367,7 @@ export function StandaloneOnboardingPage() {
                     onClick={() =>
                       goToStep((currentStep - 1) as StandaloneStep)
                     }
-                    className="min-h-11 w-full border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 hover:bg-slate-50 sm:w-auto"
+                    className="border-border bg-card text-foreground/80 hover:bg-muted/50 min-h-11 w-full px-5 text-sm font-semibold sm:w-auto"
                   >
                     {t('actions.back')}
                   </Button>

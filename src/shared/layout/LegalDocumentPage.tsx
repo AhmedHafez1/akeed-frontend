@@ -42,14 +42,14 @@ export function LegalDocumentPage({
       description={intro}
       contentClassName="mx-auto max-w-3xl"
     >
-      <article className="overflow-hidden rounded-2xl border border-border bg-white shadow-sm transition-all duration-300 hover:border-input hover:shadow-md">
-        <div className="divide-y divide-slate-100 px-6 text-start md:px-8">
+      <article className="border-border bg-card hover:border-input overflow-hidden rounded-2xl border shadow-sm transition-all duration-300 hover:shadow-md">
+        <div className="divide-border divide-y px-6 text-start md:px-8">
           {sections.map((section) => (
             <section key={section.title} className="py-7 md:py-8">
-              <h2 className="text-lg font-bold text-slate-800">
+              <h2 className="text-foreground text-lg font-bold">
                 {section.title}
               </h2>
-              <p className="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base sm:leading-8">
+              <p className="text-foreground/70 mt-3 text-sm leading-relaxed sm:text-base sm:leading-8">
                 {section.body}
               </p>
             </section>
@@ -65,13 +65,13 @@ export function LegalDocumentPage({
       >
         <Link
           href={withLocale('/', locale)}
-          className="bg-primary text-primary-foreground hover:bg-primary inline-flex h-11 items-center justify-center rounded-xl px-6 text-sm font-bold shadow-sm shadow-emerald-900/10 transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="bg-primary text-primary-foreground hover:bg-primary focus-visible:ring-ring/40 inline-flex h-11 items-center justify-center rounded-xl px-6 text-sm font-bold shadow-sm shadow-emerald-900/10 transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           {primaryLinkLabel}
         </Link>
         <Link
           href={withLocale(secondaryLinkHref, locale)}
-          className="hover:text-primary-hover inline-flex h-11 items-center justify-center rounded-xl border border-border bg-white px-6 text-sm font-bold text-slate-700 transition-all hover:-translate-y-0.5 hover:border-input hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="hover:text-primary-hover border-border bg-card text-foreground/80 hover:border-input focus-visible:ring-ring/40 inline-flex h-11 items-center justify-center rounded-xl border px-6 text-sm font-bold transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           {secondaryLinkLabel}
         </Link>

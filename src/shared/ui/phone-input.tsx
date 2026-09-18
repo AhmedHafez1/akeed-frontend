@@ -15,7 +15,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value
-      
+
       // Only allow digits
       const cleaned = value.replace(/\D/g, '')
       e.target.value = cleaned
@@ -44,19 +44,20 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
           dir="ltr"
           className={cn(
             'transition-colors',
-            isValid === false && 'border-red-500 focus-visible:ring-red-500',
+            isValid === false &&
+              'border-destructive focus-visible:ring-destructive',
             className
           )}
           onChange={handleChange}
           {...props}
         />
         {isValid === true && (
-          <span className="absolute end-3 top-1/2 -translate-y-1/2 text-green-500">
+          <span className="text-success absolute end-3 top-1/2 -translate-y-1/2">
             ✓
           </span>
         )}
         {isValid === false && (
-          <span className="absolute end-3 top-1/2 -translate-y-1/2 text-red-500">
+          <span className="text-destructive absolute end-3 top-1/2 -translate-y-1/2">
             ✗
           </span>
         )}

@@ -11,9 +11,9 @@ const TONE_CLASS: Record<Tone, string> = {
   healthy:
     'border-primary-border bg-primary-subtle text-primary-subtle-foreground',
   warning:
-    'border-amber-200 bg-amber-50 text-amber-950 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-100',
+    'border-warning-border bg-warning-subtle text-warning-subtle-foreground',
   danger:
-    'border-red-200 bg-red-50 text-red-950 dark:border-red-900 dark:bg-red-950 dark:text-red-100',
+    'border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground',
   muted: 'border-border bg-muted text-foreground',
 }
 

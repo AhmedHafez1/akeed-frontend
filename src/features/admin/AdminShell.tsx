@@ -35,14 +35,14 @@ export function AdminShell({ children }: AdminShellProps) {
 
   return (
     <div
-      className="akeed-app-canvas min-h-screen text-slate-950"
+      className="akeed-app-canvas text-foreground min-h-screen"
       dir={isRTL ? 'rtl' : 'ltr'}
     >
-      <header className="sticky top-0 z-30 border-b border-slate-200/90 bg-white/95 backdrop-blur-md">
+      <header className="border-border bg-card/95 sticky top-0 z-30 border-b backdrop-blur-md">
         <div className="mx-auto flex min-h-16 max-w-[1600px] flex-wrap items-center gap-x-6 gap-y-2 px-4 py-2 sm:flex-nowrap sm:px-6 lg:px-8">
           <Link
             href={`/${locale}/admin/stores`}
-            className="flex shrink-0 items-center gap-3 rounded-lg focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none"
+            className="focus-visible:ring-ring flex shrink-0 items-center gap-3 rounded-lg focus-visible:ring-2 focus-visible:outline-none"
           >
             <span className="bg-primary text-primary-foreground grid size-9 place-items-center rounded-xl text-sm font-bold shadow-sm shadow-emerald-700/20">
               A
@@ -51,13 +51,13 @@ export function AdminShell({ children }: AdminShellProps) {
               <span className="block text-sm font-semibold tracking-tight">
                 {t('title')}
               </span>
-              <span className="block text-[11px] leading-4 text-slate-500">
+              <span className="text-muted-foreground block text-[11px] leading-4">
                 {t('subtitle')}
               </span>
             </span>
           </Link>
           <nav
-            className="order-3 flex w-full items-center gap-1 overflow-x-auto border-t border-slate-100 pt-2 sm:order-none sm:w-auto sm:flex-1 sm:border-0 sm:pt-0"
+            className="border-border order-3 flex w-full items-center gap-1 overflow-x-auto border-t pt-2 sm:order-none sm:w-auto sm:flex-1 sm:border-0 sm:pt-0"
             aria-label={t('navigation')}
           >
             {navigation.map((item) => {
@@ -69,10 +69,10 @@ export function AdminShell({ children }: AdminShellProps) {
                   href={item.href}
                   aria-current={active ? 'page' : undefined}
                   className={cn(
-                    'flex shrink-0 items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none',
+                    'focus-visible:ring-ring flex shrink-0 items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none',
                     active
-                      ? 'bg-emerald-50 text-emerald-800'
-                      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-950'
+                      ? 'bg-primary-subtle text-primary-subtle-foreground'
+                      : 'text-foreground/70 hover:bg-muted hover:text-foreground'
                   )}
                 >
                   <Icon className="size-4" />
@@ -84,7 +84,7 @@ export function AdminShell({ children }: AdminShellProps) {
           <Button
             variant="ghost"
             size="sm"
-            className="ms-auto text-slate-600"
+            className="text-foreground/70 ms-auto"
             onClick={signOut}
             aria-label={t('signOut')}
           >

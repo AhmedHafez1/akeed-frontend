@@ -26,7 +26,7 @@ export function ChatInterface() {
           {/* Notch */}
           <div className="absolute top-2 left-1/2 z-20 h-5 w-24 -translate-x-1/2 rounded-full bg-slate-900" />
 
-          <div className="relative overflow-hidden rounded-[2.1rem] bg-[#efeae2] bg-[url('/images/landing/wa_chat_bg.png')] bg-cover bg-center">
+          <div className="relative overflow-hidden rounded-[2.1rem] bg-[#efeae2] bg-[url('/images/landing/wa_chat_bg.png')] bg-cover bg-center dark:bg-[#0b141a] dark:bg-none">
             <ChatHeader
               name={t('bot_name_short')}
               statusLabel={t('phone_status')}

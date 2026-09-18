@@ -8,7 +8,7 @@ interface ChatHeaderProps {
 
 export function ChatHeader({ name, statusLabel }: ChatHeaderProps) {
   return (
-    <div className="bg-primary flex items-center justify-between px-3 pt-9 pb-3 text-white">
+    <div className="bg-primary flex items-center justify-between px-3 pt-9 pb-3 text-white dark:bg-[#202c33]">
       <div className="flex min-w-0 items-center gap-2">
         <ChevronLeft className="h-5 w-5 shrink-0 text-white/90 rtl:-scale-x-100" />
         <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white shadow-md">

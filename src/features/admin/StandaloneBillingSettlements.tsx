@@ -210,11 +210,11 @@ export function StandaloneBillingSettlements({
   ]
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <section className="border-border bg-card rounded-2xl border p-4 shadow-sm">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="text-xl font-semibold">{t('title')}</h2>
-          <p className="mt-1 max-w-3xl text-sm text-slate-600">
+          <p className="text-foreground/70 mt-1 max-w-3xl text-sm">
             {t('description')}
           </p>
         </div>
@@ -227,7 +227,7 @@ export function StandaloneBillingSettlements({
       {!canOperate && (
         <p
           role="status"
-          className="mt-4 rounded-xl bg-slate-50 p-3 text-sm text-slate-700"
+          className="bg-muted/50 text-foreground/80 mt-4 rounded-xl p-3 text-sm"
         >
           {t('readOnly')}
         </p>
@@ -237,12 +237,12 @@ export function StandaloneBillingSettlements({
           disabled={!canOperate || saving}
           className="min-w-0 space-y-4"
         >
-          <p className="text-xs text-slate-500">{t('periodHint')}</p>
+          <p className="text-muted-foreground text-xs">{t('periodHint')}</p>
           <div className="grid min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {fields.map((field) => (
               <label
                 key={field.key}
-                className="min-w-0 text-xs font-medium text-slate-600"
+                className="text-foreground/70 min-w-0 text-xs font-medium"
               >
                 {t(field.label ?? field.key)}
                 <Input
@@ -264,7 +264,10 @@ export function StandaloneBillingSettlements({
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             {(['evidence', 'reason'] as const).map((key) => (
-              <label key={key} className="text-xs font-medium text-slate-600">
+              <label
+                key={key}
+                className="text-foreground/70 text-xs font-medium"
+              >
                 {t(key)}
                 <Input
                   className="mt-1.5"
@@ -277,7 +280,10 @@ export function StandaloneBillingSettlements({
             ))}
           </div>
           {error && (
-            <p role="alert" className="text-sm text-red-700">
+            <p
+              role="alert"
+              className="text-destructive-subtle-foreground text-sm"
+            >
               {error.status === 403
                 ? t('operatorRequired')
                 : error.status === 409
@@ -291,7 +297,7 @@ export function StandaloneBillingSettlements({
             </p>
           )}
           {saved && (
-            <p role="status" className="text-sm text-emerald-700">
+            <p role="status" className="text-primary text-sm">
               {t('saved')}
             </p>
           )}
@@ -299,9 +305,9 @@ export function StandaloneBillingSettlements({
         </fieldset>
       </form>
 
-      <div className="mt-6 max-h-72 overflow-auto overscroll-contain rounded-xl border border-slate-200">
+      <div className="border-border mt-6 max-h-72 overflow-auto overscroll-contain rounded-xl border">
         {page?.rows.length ? (
-          <ul className="divide-y divide-slate-100">
+          <ul className="divide-border divide-y">
             {page.rows.map((report) => (
               <li
                 key={report.id}
@@ -311,7 +317,7 @@ export function StandaloneBillingSettlements({
                   <p className="font-mono text-xs break-all" dir="ltr">
                     {report.providerReportId}
                   </p>
-                  <p className="mt-1 text-xs text-slate-500">
+                  <p className="text-muted-foreground mt-1 text-xs">
                     {t('revision', { revision: report.revision })} ·{' '}
                     {report.effective ? t('effective') : t('superseded')} ·{' '}
                     {formatDateTime(report.settledAt, locale)}
@@ -333,7 +339,7 @@ export function StandaloneBillingSettlements({
         ) : (
           <p
             role={loadFailed ? 'alert' : undefined}
-            className="p-6 text-center text-sm text-slate-500"
+            className="text-muted-foreground p-6 text-center text-sm"
           >
             {loading ? t('loading') : loadFailed ? t('loadError') : t('empty')}
           </p>

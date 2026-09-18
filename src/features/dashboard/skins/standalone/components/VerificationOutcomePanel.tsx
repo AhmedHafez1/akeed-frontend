@@ -43,24 +43,24 @@ const OUTCOME_TONES: Readonly<
   Record<OutcomeFilter, { stroke: string; dot: string; bar: string }>
 > = {
   confirmed: {
-    stroke: 'stroke-emerald-600',
-    dot: 'bg-emerald-600',
-    bar: 'before:bg-emerald-600',
+    stroke: 'stroke-primary',
+    dot: 'bg-primary',
+    bar: 'before:bg-primary',
   },
   canceled: {
-    stroke: 'stroke-red-500',
-    dot: 'bg-red-500',
-    bar: 'before:bg-red-500',
+    stroke: 'stroke-destructive',
+    dot: 'bg-destructive',
+    bar: 'before:bg-destructive',
   },
   in_progress: {
-    stroke: 'stroke-slate-300',
-    dot: 'bg-slate-400',
-    bar: 'before:bg-slate-400',
+    stroke: 'stroke-input',
+    dot: 'bg-muted-foreground',
+    bar: 'before:bg-muted-foreground',
   },
   needs_attention: {
-    stroke: 'stroke-amber-500',
-    dot: 'bg-amber-500',
-    bar: 'before:bg-amber-500',
+    stroke: 'stroke-secondary',
+    dot: 'bg-secondary',
+    bar: 'before:bg-secondary',
   },
 }
 
@@ -145,21 +145,21 @@ export function VerificationOutcomePanel({
       aria-label={label}
       aria-busy={isPending}
       className={cn(
-        'rounded-panel from-muted/70 grid overflow-hidden border bg-linear-to-b to-white',
+        'rounded-panel from-muted/40 to-card grid overflow-hidden border bg-linear-to-b',
         chartStats && 'sm:grid-cols-[minmax(0,1fr)_auto]'
       )}
     >
       <div className="flex min-w-0 flex-col">
         <div className="px-5 py-5 sm:px-6 sm:pt-6">
           <div className="flex items-center gap-2.5">
-            <span className="border-input text-foreground flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border bg-white">
+            <span className="border-input text-foreground bg-card flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border">
               <Package aria-hidden="true" className="h-5 w-5" />
             </span>
             <div className="min-w-0">
-              <h2 className="text-base font-bold text-slate-950">
+              <h2 className="text-foreground text-base font-bold">
                 {t('verifications.metrics.total')}
               </h2>
-              <p className="text-caption text-slate-500">
+              <p className="text-caption text-muted-foreground">
                 {t('standalone.outcomes.description')}
               </p>
             </div>
@@ -168,7 +168,7 @@ export function VerificationOutcomePanel({
           {isPending ? (
             <Skeleton className="mt-5 h-12 w-24 sm:h-15 sm:w-32" />
           ) : (
-            <p className="mt-5 text-5xl font-extrabold text-slate-950 tabular-nums sm:text-6xl">
+            <p className="text-foreground mt-5 text-5xl font-extrabold tabular-nums sm:text-6xl">
               {current
                 ? formatDashboardNumber(current.totals.total, locale)
                 : '—'}
@@ -176,7 +176,7 @@ export function VerificationOutcomePanel({
           )}
 
           {current && outcomeTotal === 0 && (
-            <p className="bg-muted mt-5 rounded-xl p-3 text-sm text-slate-600">
+            <p className="bg-muted text-foreground/70 mt-5 rounded-xl p-3 text-sm">
               {t('standalone.outcomes.empty')}
             </p>
           )}
@@ -272,7 +272,7 @@ function OutcomeDonut({
           r={radius}
           fill="none"
           strokeWidth="8"
-          className="stroke-slate-100"
+          className="stroke-border"
         />
         {slices.map(({ outcome, value, start, share }) => (
           <circle
@@ -299,7 +299,7 @@ function OutcomeDonut({
           <span
             key={outcome.filter}
             aria-hidden="true"
-            className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border border-slate-200 bg-white px-1.5 py-0.5 text-[10px] leading-none font-bold text-slate-900 tabular-nums shadow-sm"
+            className="border-border bg-card text-foreground absolute -translate-x-1/2 -translate-y-1/2 rounded-full border px-1.5 py-0.5 text-[10px] leading-none font-bold tabular-nums shadow-sm"
             style={{
               left: `${50 + labelRadius * Math.sin(angle)}%`,
               top: `${50 - labelRadius * Math.cos(angle)}%`,
@@ -315,7 +315,7 @@ function OutcomeDonut({
 
 const figurePadding = 'px-5 py-3.5 sm:px-6 sm:py-4'
 const figureInteraction =
-  'transition hover:bg-muted/70 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:outline-none focus-visible:ring-inset'
+  'transition hover:bg-muted/70 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-inset'
 
 /**
  * One outcome as a figure, linked to — or filtering — the list it stands for.
@@ -359,14 +359,14 @@ function OutcomeFigure({
       <Box
         className={cn(
           'flex items-center gap-2 text-sm',
-          selected ? 'font-semibold text-slate-900' : 'text-slate-600'
+          selected ? 'text-foreground font-semibold' : 'text-foreground/70'
         )}
       >
         <span
           aria-hidden="true"
           className={cn(
             'h-4 w-4 shrink-0 rounded-full',
-            isEmpty ? 'bg-slate-300' : outcome.dot
+            isEmpty ? 'bg-input' : outcome.dot
           )}
         />
         {outcome.label}
@@ -378,7 +378,7 @@ function OutcomeFigure({
           <span
             className={cn(
               'text-2xl font-bold tabular-nums',
-              isEmpty ? 'text-slate-400' : 'text-slate-950'
+              isEmpty ? 'text-muted-foreground/70' : 'text-foreground'
             )}
           >
             {outcome.value === null
@@ -387,7 +387,7 @@ function OutcomeFigure({
           </span>
         )}
         {outcome.value !== null && !isEmpty && total > 0 && (
-          <span className="text-caption text-slate-500 tabular-nums">
+          <span className="text-caption text-muted-foreground tabular-nums">
             {t('standalone.outcomes.shareOfTotal', {
               percent: formatDashboardPercent(share, locale),
             })}

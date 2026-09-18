@@ -100,7 +100,7 @@ export function StandaloneVerificationsSection({
         <div className="border-border flex flex-wrap items-center justify-between gap-x-4 gap-y-3 border-b px-4 py-3 sm:px-5">
           <div className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-3">
             {activeLabel && (
-              <h2 className="text-sm font-semibold text-slate-900">
+              <h2 className="text-foreground text-sm font-semibold">
                 {activeLabel}
               </h2>
             )}
@@ -127,7 +127,7 @@ export function StandaloneVerificationsSection({
           <button
             type="button"
             onClick={() => onStatusFilterChange('all')}
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm font-medium text-emerald-800 hover:bg-emerald-50 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:outline-none"
+            className="text-primary-subtle-foreground hover:bg-primary-subtle focus-visible:ring-ring inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm font-medium focus-visible:ring-2 focus-visible:outline-none"
           >
             <X aria-hidden="true" className="h-4 w-4" />
             {t('verifications.filters.clear')}
@@ -142,7 +142,7 @@ export function StandaloneVerificationsSection({
           !canRetryVerifications && (
             <div
               role="status"
-              className="m-4 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900"
+              className="border-info-border bg-info-subtle text-info-subtle-foreground m-4 rounded-xl border px-4 py-3 text-sm"
             >
               {t('verifications.readOnlyNotice')}
             </div>
@@ -162,7 +162,7 @@ export function StandaloneVerificationsSection({
               role="region"
               aria-label={t('verifications.title')}
               tabIndex={0}
-              className="max-h-[60vh] overflow-x-hidden overflow-y-auto overscroll-contain focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+              className="focus-visible:outline-ring max-h-[60vh] overflow-x-hidden overflow-y-auto overscroll-contain focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               <VerificationsTableStandalone
                 verifications={verifications}
@@ -180,7 +180,7 @@ export function StandaloneVerificationsSection({
               {/* Crossing into view is what asks for the next page. */}
               <div ref={sentinelRef} aria-hidden="true" className="h-px" />
               {isLoadingMoreVerifications && (
-                <p className="px-4 py-3 text-xs text-slate-500">
+                <p className="text-muted-foreground px-4 py-3 text-xs">
                   {t('verifications.loadingMore')}
                 </p>
               )}
@@ -189,7 +189,7 @@ export function StandaloneVerificationsSection({
               <p
                 role="status"
                 aria-live="polite"
-                className="text-xs text-slate-500"
+                className="text-muted-foreground text-xs"
               >
                 {t('verifications.showing', {
                   loaded: verifications.length,
@@ -205,7 +205,7 @@ export function StandaloneVerificationsSection({
                 <button
                   type="button"
                   onClick={() => void onLoadMoreVerifications()}
-                  className="rounded-lg border border-slate-200 px-5 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                  className="border-border text-foreground/80 hover:bg-muted/50 rounded-lg border px-5 py-2 text-sm font-medium"
                 >
                   {t('verifications.loadMoreRetry')}
                 </button>
@@ -213,12 +213,12 @@ export function StandaloneVerificationsSection({
             </div>
           </div>
         ) : statusFilter === 'all' ? (
-          <div className="m-4 space-y-6 rounded-xl bg-slate-50 p-6">
+          <div className="bg-muted/50 m-4 space-y-6 rounded-xl p-6">
             <div>
-              <h3 className="text-lg font-semibold text-slate-900">
+              <h3 className="text-foreground text-lg font-semibold">
                 {t('verifications.empty.title')}
               </h3>
-              <p className="mt-2 max-w-xl text-sm text-slate-500">
+              <p className="text-muted-foreground mt-2 max-w-xl text-sm">
                 {t('verifications.empty.description')}
               </p>
             </div>

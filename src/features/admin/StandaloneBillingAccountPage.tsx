@@ -60,20 +60,20 @@ export function StandaloneBillingAccountPage({
     >
       <Link
         href={`/${locale}/admin/standalone-billing`}
-        className="inline-flex items-center gap-1.5 rounded-lg text-sm font-medium text-emerald-700 hover:underline focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none"
+        className="text-primary focus-visible:ring-ring inline-flex items-center gap-1.5 rounded-lg text-sm font-medium hover:underline focus-visible:ring-2 focus-visible:outline-none"
       >
         <Back className="size-4" aria-hidden="true" />
         {t('back')}
       </Link>
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold tracking-[0.16em] text-emerald-700 uppercase">
+          <p className="text-primary text-xs font-semibold tracking-[0.16em] uppercase">
             {t('eyebrow')}
           </p>
           <h1 className="mt-2 text-2xl font-semibold">
             {detail?.organization?.name ?? t('unknownOrganization')}
           </h1>
-          <p className="mt-1 text-slate-500">
+          <p className="text-muted-foreground mt-1">
             <Mono>{orgId}</Mono>
           </p>
         </div>
@@ -84,7 +84,7 @@ export function StandaloneBillingAccountPage({
 
       {error && <RequestError error={error} onRetry={refresh} />}
       {loading && !detail && (
-        <p role="status" className="p-8 text-center text-slate-500">
+        <p role="status" className="text-muted-foreground p-8 text-center">
           {t('loading')}
         </p>
       )}
@@ -163,7 +163,7 @@ function AccountBody({
           />
         </div>
       ) : (
-        <p className="rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-600">
+        <p className="border-border bg-card text-foreground/70 rounded-xl border p-4 text-sm">
           {t('noAccount')}
         </p>
       )}
@@ -294,12 +294,14 @@ function AccountFindings({ findings }: { findings: BillingFinding[] }) {
   const t = useTranslations('adminBillingObservability')
   const { locale } = useLocaleInfo()
   return (
-    <section className="rounded-2xl border border-amber-200 bg-amber-50 p-4">
-      <h2 className="font-semibold text-amber-950">{t('accountFindings')}</h2>
-      <p className="mt-1 text-sm text-amber-900">
+    <section className="border-warning-border bg-warning-subtle rounded-2xl border p-4">
+      <h2 className="text-warning-subtle-foreground font-semibold">
+        {t('accountFindings')}
+      </h2>
+      <p className="text-warning-subtle-foreground mt-1 text-sm">
         {t('accountFindingsDescription')}
       </p>
-      <ul className="mt-3 divide-y divide-amber-200">
+      <ul className="divide-warning-border mt-3 divide-y">
         {findings.map((finding) => (
           <li
             key={finding.id}
@@ -309,7 +311,7 @@ function AccountFindings({ findings }: { findings: BillingFinding[] }) {
               {finding.code}
             </span>
             <span>{t(`actions.${finding.nextAction}`)}</span>
-            <time className="text-slate-600 sm:text-end">
+            <time className="text-foreground/70 sm:text-end">
               {formatDateTime(finding.lastSeenAt, locale)}
             </time>
           </li>
@@ -330,7 +332,7 @@ function AccessNotice({ detail }: { detail: AccountDetail }) {
   return (
     <p
       role="status"
-      className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700"
+      className="border-border bg-muted/50 text-foreground/80 rounded-xl border p-4 text-sm"
     >
       {message}
     </p>
@@ -353,8 +355,8 @@ function ReconciliationBanner({ report }: { report: ReconciliationReport }) {
       className={cn(
         'flex gap-3 rounded-xl border p-4 text-sm',
         contradictory
-          ? 'border-red-300 bg-red-50 text-red-950'
-          : 'border-amber-300 bg-amber-50 text-amber-950'
+          ? 'border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground'
+          : 'border-warning-border bg-warning-subtle text-warning-subtle-foreground'
       )}
     >
       <Icon className="mt-0.5 size-5 shrink-0" aria-hidden="true" />
@@ -414,7 +416,7 @@ function ReconciliationFigures({ report }: { report: ReconciliationReport }) {
   return (
     <section
       aria-labelledby="billing-reconciliation"
-      className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+      className="border-border bg-card rounded-2xl border p-4 shadow-sm"
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 id="billing-reconciliation" className="text-base font-semibold">
@@ -424,8 +426,8 @@ function ReconciliationFigures({ report }: { report: ReconciliationReport }) {
           className={cn(
             'rounded-full px-2.5 py-0.5 text-xs font-medium',
             report.consistent
-              ? 'bg-emerald-50 text-emerald-800'
-              : 'bg-amber-100 text-amber-900'
+              ? 'bg-primary-subtle text-primary-subtle-foreground'
+              : 'bg-warning-subtle text-warning-subtle-foreground'
           )}
         >
           {report.consistent ? t('figures.consistent') : t('figures.drifted')}
@@ -433,8 +435,8 @@ function ReconciliationFigures({ report }: { report: ReconciliationReport }) {
       </div>
       <dl className="mt-3 grid gap-3 sm:grid-cols-2">
         {rows.map((row) => (
-          <div key={row.label} className="rounded-lg bg-slate-50 p-3">
-            <dt className="text-xs text-slate-500">{row.label}</dt>
+          <div key={row.label} className="bg-muted/50 rounded-lg p-3">
+            <dt className="text-muted-foreground text-xs">{row.label}</dt>
             <dd className="mt-1 text-sm tabular-nums">
               {t('figures.comparison', {
                 projection: formatNumber(row.projection, locale),
@@ -442,7 +444,10 @@ function ReconciliationFigures({ report }: { report: ReconciliationReport }) {
                 sourceLabel: row.sourceLabel,
               })}
               {row.difference !== 0 && (
-                <span className="ms-2 font-semibold text-amber-900" dir="ltr">
+                <span
+                  className="text-warning-subtle-foreground ms-2 font-semibold"
+                  dir="ltr"
+                >
                   ({formatSigned(row.difference, locale)})
                 </span>
               )}

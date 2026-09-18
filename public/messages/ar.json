@@ -1014,6 +1014,14 @@
   "common": {
     "loading": "جارٍ تحميل أكيد..."
   },
+  "theme": {
+    "label": "المظهر",
+    "light": "فاتح",
+    "dark": "داكن",
+    "system": "حسب الجهاز",
+    "appearanceTitle": "المظهر",
+    "appearanceDescription": "اختر شكل أكيد. خيار «حسب الجهاز» يتبع إعدادات جهازك."
+  },
   "onboarding": {
     "organization": "النشاط",
     "platform": "المنصات",

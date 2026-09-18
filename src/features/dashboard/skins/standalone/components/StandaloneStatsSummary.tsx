@@ -143,10 +143,10 @@ export function StandaloneStatsSummary({
     return (
       <div className="space-y-4">
         <Card className="p-6">
-          <h2 className="font-semibold text-slate-950">
+          <h2 className="text-foreground font-semibold">
             {t('standalone.unavailable.title')}
           </h2>
-          <p className="mt-2 text-sm text-slate-600">
+          <p className="text-foreground/70 mt-2 text-sm">
             {t('standalone.unavailable.description')}
           </p>
         </Card>
@@ -203,21 +203,21 @@ function AttentionPreview({
     <Card>
       <div className="border-border flex items-center justify-between gap-3 border-b px-5 py-4">
         <div className="min-w-0">
-          <h2 className="flex items-center gap-2 text-base font-bold text-slate-950">
+          <h2 className="text-foreground flex items-center gap-2 text-base font-bold">
             {t('standalone.attention.title')}
             {count !== null && count > 0 && (
-              <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-900 tabular-nums">
+              <span className="bg-warning-subtle text-warning-subtle-foreground rounded-full px-2 py-0.5 text-xs font-bold tabular-nums">
                 {formatDashboardNumber(count, locale)}
               </span>
             )}
           </h2>
-          <p className="mt-0.5 text-xs text-slate-500">
+          <p className="text-muted-foreground mt-0.5 text-xs">
             {t('standalone.attention.description')}
           </p>
         </div>
         <Link
           href={`${withLocale('/verifications', locale)}?status=needs_attention`}
-          className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm font-semibold text-emerald-800 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="text-primary-subtle-foreground focus-visible:ring-ring inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm font-semibold focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           {t('standalone.attention.viewAll')}
           <ArrowRight aria-hidden="true" className="h-4 w-4 rtl:rotate-180" />
@@ -232,18 +232,21 @@ function AttentionPreview({
             ))}
           </div>
         ) : error ? (
-          <p role="status" className="py-8 text-center text-sm text-slate-600">
+          <p
+            role="status"
+            className="text-foreground/70 py-8 text-center text-sm"
+          >
             {t('standalone.attention.unavailable')}
           </p>
         ) : verifications.length === 0 ? (
           <div className="flex flex-col items-center px-4 py-8 text-center">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+            <span className="bg-primary-subtle text-primary flex h-10 w-10 items-center justify-center rounded-full">
               <CheckCircle2 aria-hidden="true" className="h-5 w-5" />
             </span>
-            <p className="mt-3 text-sm font-semibold text-slate-900">
+            <p className="text-foreground mt-3 text-sm font-semibold">
               {t('standalone.attention.emptyTitle')}
             </p>
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="text-muted-foreground mt-1 text-xs">
               {t('standalone.attention.emptyDescription')}
             </p>
           </div>
@@ -255,12 +258,12 @@ function AttentionPreview({
                 className="grid gap-2 py-4 sm:grid-cols-[minmax(90px,0.65fr)_minmax(120px,1fr)_auto] sm:items-center sm:gap-4"
               >
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-bold text-slate-950">
+                  <p className="text-foreground truncate text-sm font-bold">
                     {verification.order_number
                       ? `#${verification.order_number}`
                       : t('table.orderFallbackPrefix')}
                   </p>
-                  <p className="mt-0.5 flex items-center gap-1 text-xs text-slate-500">
+                  <p className="text-muted-foreground mt-0.5 flex items-center gap-1 text-xs">
                     <Clock3 aria-hidden="true" className="h-3.5 w-3.5" />
                     {formatOrderDate(
                       verification.created_at,
@@ -270,7 +273,7 @@ function AttentionPreview({
                     )}
                   </p>
                 </div>
-                <p className="truncate text-sm text-slate-700">
+                <p className="text-foreground/80 truncate text-sm">
                   {verification.customer_name || t('table.unknownCustomer')}
                 </p>
                 <span
@@ -301,29 +304,29 @@ function ConfirmationPerformanceCard({ stats }: { stats: DashboardStats }) {
       id: 'confirmation',
       label: t('metrics.cards.confirmationRate'),
       value: Math.round(confirmationRate),
-      indicator: 'bg-emerald-600',
+      indicator: 'bg-primary',
     },
     {
       id: 'reply',
       label: t('metrics.cards.responseRate'),
       value: Math.round(replyRate),
-      indicator: 'bg-violet-600',
+      indicator: 'bg-info',
     },
   ]
 
   return (
     <Card className="flex flex-col p-5">
       <div className="flex items-center gap-2.5">
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-700">
+        <span className="border-border bg-muted/50 text-foreground/80 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border">
           <Gauge aria-hidden="true" className="h-5 w-5" />
         </span>
-        <h2 className="text-base font-bold text-slate-950">
+        <h2 className="text-foreground text-base font-bold">
           {t('standalone.performance.title')}
         </h2>
       </div>
 
       {settled === 0 ? (
-        <p className="bg-muted mt-5 rounded-xl p-3 text-sm text-slate-600">
+        <p className="bg-muted text-foreground/70 mt-5 rounded-xl p-3 text-sm">
           {t('standalone.performance.basisEmpty')}
         </p>
       ) : (
@@ -332,8 +335,10 @@ function ConfirmationPerformanceCard({ stats }: { stats: DashboardStats }) {
             {rates.map((rate) => (
               <div key={rate.id}>
                 <div className="flex items-baseline justify-between gap-3">
-                  <span className="text-sm text-slate-600">{rate.label}</span>
-                  <span className="text-xl font-bold text-slate-950 tabular-nums">
+                  <span className="text-foreground/70 text-sm">
+                    {rate.label}
+                  </span>
+                  <span className="text-foreground text-xl font-bold tabular-nums">
                     {formatDashboardPercent(rate.value, locale)}
                   </span>
                 </div>
@@ -347,21 +352,25 @@ function ConfirmationPerformanceCard({ stats }: { stats: DashboardStats }) {
           </div>
 
           <div className="border-border mt-auto space-y-2.5 border-t pt-4">
-            <p className="text-caption text-slate-500">
+            <p className="text-caption text-muted-foreground">
               {t('standalone.performance.basis', { count: settled })}
             </p>
             <PerformanceFootnote
               label={t('standalone.performance.silent')}
               hint={t('standalone.performance.silentHint')}
               value={formatDashboardNumber(silent, locale)}
-              tone={silent > 0 ? 'text-amber-800' : 'text-slate-400'}
+              tone={
+                silent > 0
+                  ? 'text-warning-subtle-foreground'
+                  : 'text-muted-foreground/70'
+              }
             />
             {undelivered > 0 && (
               <PerformanceFootnote
                 label={t('standalone.performance.undelivered')}
                 hint={t('standalone.performance.undeliveredHint')}
                 value={formatDashboardNumber(undelivered, locale)}
-                tone="text-slate-600"
+                tone="text-foreground/70"
               />
             )}
           </div>
@@ -391,7 +400,7 @@ function PerformanceFootnote({
   return (
     <div className="flex items-center justify-between gap-3 text-sm">
       <Tooltip content={hint}>
-        <span className="cursor-help text-slate-600 underline decoration-dotted underline-offset-4">
+        <span className="text-foreground/70 cursor-help underline decoration-dotted underline-offset-4">
           {label}
         </span>
       </Tooltip>

@@ -40,7 +40,7 @@ interface ManualOrderEntryStandaloneProps {
 function RequiredMark() {
   const t = useTranslations('manualOrder')
   return (
-    <span className="ms-1 text-red-600" aria-label={t('required')}>
+    <span className="text-destructive ms-1" aria-label={t('required')}>
       *
     </span>
   )
@@ -48,7 +48,11 @@ function RequiredMark() {
 
 function FieldError({ id, message }: { id: string; message?: string }) {
   return message ? (
-    <p id={id} role="alert" className="mt-1 text-xs font-medium text-red-600">
+    <p
+      id={id}
+      role="alert"
+      className="text-destructive mt-1 text-xs font-medium"
+    >
       {message}
     </p>
   ) : null
@@ -105,7 +109,7 @@ export function ManualOrderEntryStandalone({
           </Button>
         </DialogTrigger>
         {disabledReason && showDisabledReason && (
-          <p className="max-w-xs text-end text-xs text-slate-500">
+          <p className="text-muted-foreground max-w-xs text-end text-xs">
             {disabledReason}
           </p>
         )}
@@ -114,7 +118,7 @@ export function ManualOrderEntryStandalone({
       <DialogContent
         closeLabel={t('close')}
         closeDisabled={entry.isSubmitting}
-        className="border-border max-h-[90vh] overflow-y-auto rounded-[18px] bg-white p-5 sm:max-w-[640px] sm:p-7"
+        className="border-border bg-card max-h-[90vh] overflow-y-auto rounded-[18px] p-5 sm:max-w-[640px] sm:p-7"
         onEscapeKeyDown={(event) => {
           if (entry.isSubmitting) event.preventDefault()
         }}
@@ -129,7 +133,7 @@ export function ManualOrderEntryStandalone({
       >
         <DialogHeader className="text-start">
           <div className="flex items-start gap-3">
-            <span className="text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50">
+            <span className="text-primary bg-primary-subtle flex h-10 w-10 shrink-0 items-center justify-center rounded-xl">
               <ClipboardCheck className="h-5 w-5" aria-hidden="true" />
             </span>
             <div className="space-y-1">
@@ -144,14 +148,14 @@ export function ManualOrderEntryStandalone({
             <div
               role="status"
               aria-live="polite"
-              className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-950"
+              className="border-primary-border bg-primary-subtle text-primary-subtle-foreground rounded-xl border p-4"
             >
               <h3 className="font-semibold">
                 {entry.result.duplicate
                   ? t('success.duplicateTitle')
                   : t('success.title')}
               </h3>
-              <p className="mt-1 text-sm text-emerald-900">
+              <p className="text-primary-subtle-foreground mt-1 text-sm">
                 {entry.result.duplicate
                   ? t('success.duplicateDescription')
                   : t('success.description')}
@@ -177,8 +181,8 @@ export function ManualOrderEntryStandalone({
                 aria-live="assertive"
                 className={
                   entry.feedback.tone === 'warning'
-                    ? 'rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900'
-                    : 'rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700'
+                    ? 'border-warning-border bg-warning-subtle text-warning-subtle-foreground rounded-xl border p-3 text-sm'
+                    : 'border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground rounded-xl border p-3 text-sm'
                 }
               >
                 <p>{entry.feedback.message}</p>
@@ -194,19 +198,19 @@ export function ManualOrderEntryStandalone({
             )}
 
             {entry.isLocked && (
-              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+              <div className="border-border bg-muted/50 text-foreground/80 rounded-xl border p-3 text-sm">
                 <p>{t('retry.locked')}</p>
                 {!entry.isConfirmingStartOver ? (
                   <Button
                     type="button"
                     variant="link"
-                    className="mt-2 h-auto p-0 text-amber-800"
+                    className="text-warning-subtle-foreground mt-2 h-auto p-0"
                     onClick={() => entry.setIsConfirmingStartOver(true)}
                   >
                     {t('retry.startOver')}
                   </Button>
                 ) : (
-                  <div className="mt-3 space-y-3 rounded-lg border border-amber-200 bg-amber-50 p-3">
+                  <div className="border-warning-border bg-warning-subtle mt-3 space-y-3 rounded-lg border p-3">
                     <p>{t('retry.startOverWarning')}</p>
                     <div className="flex flex-wrap gap-2">
                       <Button
@@ -362,7 +366,7 @@ export function ManualOrderEntryStandalone({
                           ? 'manual-order-currency-error'
                           : undefined
                       }
-                      className="border-border h-12 w-full appearance-none rounded-lg border-2 bg-white py-2 ps-4 pe-11 text-left text-base focus:border-emerald-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 rtl:text-right"
+                      className="border-border bg-card focus:border-primary h-12 w-full appearance-none rounded-lg border-2 py-2 ps-4 pe-11 text-left text-base focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 rtl:text-right"
                       {...register('currency')}
                     >
                       <option value="">

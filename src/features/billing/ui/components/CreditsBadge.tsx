@@ -40,12 +40,15 @@ export function CreditsBadge({ className }: CreditsBadgeProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-lg bg-primary-subtle px-3 py-1.5 text-sm font-semibold text-primary-subtle-foreground tabular-nums',
+        'bg-primary-subtle text-primary-subtle-foreground inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold tabular-nums',
         className
       )}
     >
       <Coins aria-hidden="true" className="h-4 w-4" />
-      <span className="font-bold text-lg">{formatCredits(summary.availableCredits, locale)}</span> {t('badge.label')}
+      <span className="text-lg font-bold">
+        {formatCredits(summary.availableCredits, locale)}
+      </span>{' '}
+      {t('badge.label')}
     </span>
   )
 }

@@ -15,11 +15,11 @@ import { StandaloneBillingObservability } from './StandaloneBillingObservability
 import { StandaloneBillingSettlements } from './StandaloneBillingSettlements'
 
 const balanceTones = {
-  none: 'bg-slate-100 text-slate-600',
-  ok: 'bg-emerald-50 text-emerald-800',
-  low: 'bg-amber-50 text-amber-900',
-  zero: 'bg-orange-50 text-orange-900',
-  debt: 'bg-red-50 text-red-800',
+  none: 'bg-muted text-foreground/70',
+  ok: 'bg-primary-subtle text-primary-subtle-foreground',
+  low: 'bg-warning-subtle text-warning-subtle-foreground',
+  zero: 'bg-warning-subtle text-warning-subtle-foreground',
+  debt: 'bg-destructive-subtle text-destructive-subtle-foreground',
 } as const
 
 const filterOptions: Record<keyof AccountFilters, readonly string[]> = {
@@ -43,18 +43,20 @@ export function StandaloneBillingPage() {
         <div className="font-medium">
           {t(`accountStatus.${row.account.status}`)}
         </div>
-        <div className="mt-1 text-xs text-slate-500">
+        <div className="text-muted-foreground mt-1 text-xs">
           {t('balance', {
             available: row.account.availableCredits,
             posted: row.account.postedBalance,
           })}
         </div>
         {row.freeGrantPresent && (
-          <div className="mt-1 text-xs text-slate-500">{t('grantPosted')}</div>
+          <div className="text-muted-foreground mt-1 text-xs">
+            {t('grantPosted')}
+          </div>
         )}
       </>
     ) : (
-      <span className="text-slate-500">{t('noAccount')}</span>
+      <span className="text-muted-foreground">{t('noAccount')}</span>
     )
   const renderBilling = (row: CreditAccountRow) =>
     row.billing ? (
@@ -68,12 +70,12 @@ export function StandaloneBillingPage() {
           {t(`balanceStates.${row.billing.balanceState}`)}
         </span>
         {row.billing.debtCredits > 0 && (
-          <p className="text-xs text-red-800">
+          <p className="text-destructive-subtle-foreground text-xs">
             {t('debt', { count: row.billing.debtCredits })}
           </p>
         )}
         {row.billing.reconciliationRequired && (
-          <p className="text-xs font-medium text-amber-900">
+          <p className="text-warning-subtle-foreground text-xs font-medium">
             {!row.billing.projectionConsistent
               ? t('projectionMismatch')
               : t('reconciliationSummary', {
@@ -84,7 +86,7 @@ export function StandaloneBillingPage() {
         )}
       </div>
     ) : (
-      <span className="text-slate-500">{t('noAccount')}</span>
+      <span className="text-muted-foreground">{t('noAccount')}</span>
     )
   const renderSource = (row: CreditAccountRow) =>
     row.source ? (
@@ -92,7 +94,7 @@ export function StandaloneBillingPage() {
         {row.source.identity}
       </div>
     ) : (
-      <span className="text-slate-500">{t('noSource')}</span>
+      <span className="text-muted-foreground">{t('noSource')}</span>
     )
 
   return (
@@ -104,7 +106,7 @@ export function StandaloneBillingPage() {
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold">{t('title')}</h1>
-          <p className="mt-2 max-w-3xl text-sm text-slate-600">
+          <p className="text-foreground/70 mt-2 max-w-3xl text-sm">
             {t('description')}
           </p>
         </div>
@@ -117,7 +119,7 @@ export function StandaloneBillingPage() {
       {state.error && (
         <div
           role="alert"
-          className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-900"
+          className="border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground rounded-xl border p-4 text-sm"
         >
           <p>
             {state.error.status === 403
@@ -136,9 +138,9 @@ export function StandaloneBillingPage() {
           )}
         </div>
       )}
-      <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div className="border-border bg-card rounded-2xl border shadow-sm">
         <div
-          className="grid gap-3 border-b border-slate-100 p-4 sm:grid-cols-2 lg:grid-cols-4"
+          className="border-border grid gap-3 border-b p-4 sm:grid-cols-2 lg:grid-cols-4"
           role="group"
           aria-label={t('filters.label')}
         >
@@ -176,13 +178,13 @@ export function StandaloneBillingPage() {
           </div>
         </div>
         {state.loading ? (
-          <p role="status" className="p-8 text-center text-slate-500">
+          <p role="status" className="text-muted-foreground p-8 text-center">
             {t('loading')}
           </p>
         ) : state.page?.rows.length ? (
           <div className="relative overflow-x-auto">
             <table className="w-full text-start text-sm">
-              <thead className="bg-slate-50 text-xs text-slate-600">
+              <thead className="bg-muted/50 text-foreground/70 text-xs">
                 <tr>
                   <th scope="col" className="p-4 text-start">
                     {t('organization')}
@@ -205,14 +207,14 @@ export function StandaloneBillingPage() {
                 {state.page.rows.map((row) => (
                   <tr
                     key={row.orgId}
-                    className="border-t border-slate-100 align-top"
+                    className="border-border border-t align-top"
                   >
                     <td className="p-4">
                       <div className="font-medium">
                         {row.organizationName ?? t('missingOrganization')}
                       </div>
                       <div
-                        className="mt-1 font-mono text-xs break-all text-slate-500"
+                        className="text-muted-foreground mt-1 font-mono text-xs break-all"
                         dir="ltr"
                       >
                         {row.orgId}
@@ -224,7 +226,7 @@ export function StandaloneBillingPage() {
                     <td className="p-4">
                       <Link
                         href={`/${locale}/admin/standalone-billing/${row.orgId}`}
-                        className="inline-flex rounded-lg px-2 py-1 text-sm font-medium whitespace-nowrap text-emerald-700 hover:bg-emerald-50 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none"
+                        className="text-primary hover:bg-primary-subtle focus-visible:ring-ring inline-flex rounded-lg px-2 py-1 text-sm font-medium whitespace-nowrap focus-visible:ring-2 focus-visible:outline-none"
                         aria-label={t('openAccount', {
                           name: row.organizationName ?? row.orgId,
                         })}
@@ -238,9 +240,9 @@ export function StandaloneBillingPage() {
             </table>
           </div>
         ) : (
-          <p className="p-8 text-center text-slate-500">{t('empty')}</p>
+          <p className="text-muted-foreground p-8 text-center">{t('empty')}</p>
         )}
-        <div className="flex justify-end gap-2 border-t border-slate-100 p-4">
+        <div className="border-border flex justify-end gap-2 border-t p-4">
           <Button
             variant="outline"
             disabled={locked || !state.hasPrevious}

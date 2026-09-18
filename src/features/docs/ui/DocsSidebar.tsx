@@ -21,9 +21,9 @@ export function DocsSidebar({
   const t = useTranslations('docs')
 
   return (
-    <aside className="rounded-2xl border border-border bg-white p-4 shadow-sm">
+    <aside className="border-border bg-card rounded-2xl border p-4 shadow-sm">
       {showTitle ? (
-        <h2 className="px-2 text-sm font-bold tracking-wide text-slate-700 uppercase">
+        <h2 className="text-foreground/80 px-2 text-sm font-bold tracking-wide uppercase">
           {t('sidebarTitle')}
         </h2>
       ) : null}
@@ -41,8 +41,8 @@ export function DocsSidebar({
                   className={cn(
                     'block rounded-xl px-3 py-2 text-sm transition-colors',
                     isActive
-                      ? 'bg-emerald-50 font-semibold text-emerald-700 ring-1 ring-emerald-200'
-                      : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                      ? 'bg-primary-subtle text-primary ring-primary-border font-semibold ring-1'
+                      : 'text-foreground/70 hover:bg-muted/50 hover:text-foreground'
                   )}
                 >
                   {item.title}

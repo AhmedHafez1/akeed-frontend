@@ -39,7 +39,7 @@ export function BillingStandalonePage() {
   if (!state.summary || state.summaryError) {
     return (
       <section className="mx-auto max-w-2xl py-16 text-center" role="alert">
-        <div className="text-destructive mx-auto grid size-12 place-items-center rounded-full bg-red-50 dark:bg-red-950">
+        <div className="text-destructive bg-destructive-subtle mx-auto grid size-12 place-items-center rounded-full">
           <AlertTriangle />
         </div>
         <h1 className="text-h3 mt-4">{t('error.title')}</h1>

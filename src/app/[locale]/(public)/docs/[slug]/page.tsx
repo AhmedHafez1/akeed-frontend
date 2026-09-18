@@ -126,13 +126,13 @@ export default async function DocPage({
         contentClassName="mx-auto max-w-6xl"
       >
         <DocsLayout sidebar={desktopSidebar} mobileSidebar={mobileSidebar}>
-          <div className="mb-4 rounded-2xl border border-border bg-white p-4 shadow-sm">
+          <div className="border-border bg-card mb-4 rounded-2xl border p-4 shadow-sm">
             <DocsSearch locale={safeLocale} entries={searchEntries} />
           </div>
 
           <DocsBreadcrumbs items={breadcrumbs} />
 
-          <article className="mt-4 rounded-2xl border border-border bg-white p-6 shadow-sm md:p-8">
+          <article className="border-border bg-card mt-4 rounded-2xl border p-6 shadow-sm md:p-8">
             <MarkdownContent
               content={doc.content.trim()}
               locale={safeLocale}
@@ -145,7 +145,7 @@ export default async function DocPage({
           <div className="mt-6 flex justify-center">
             <Link
               href={`/${safeLocale}/docs`}
-              className="hover:text-primary-hover inline-flex h-11 items-center justify-center rounded-xl border border-border bg-white px-6 text-sm font-bold text-slate-700 transition-all hover:-translate-y-0.5 hover:border-input hover:shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="hover:text-primary-hover border-border bg-card text-foreground/80 hover:border-input focus-visible:ring-ring/40 inline-flex h-11 items-center justify-center rounded-xl border px-6 text-sm font-bold transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               {t('backToDocs')}
             </Link>

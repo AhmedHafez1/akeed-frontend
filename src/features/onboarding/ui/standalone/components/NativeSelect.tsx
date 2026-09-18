@@ -28,7 +28,7 @@ export function NativeSelect<TValue extends string>({
         disabled={disabled}
         aria-describedby={describedBy}
         onChange={(event) => onChange(event.target.value as TValue)}
-        className="border-border h-12 w-full appearance-none rounded-lg border-2 bg-white py-2 ps-4 pe-11 text-start text-base transition-colors outline-none focus:border-emerald-500 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:opacity-60"
+        className="border-border bg-card focus:border-primary disabled:bg-muted/50 h-12 w-full appearance-none rounded-lg border-2 py-2 ps-4 pe-11 text-start text-base transition-colors outline-none disabled:cursor-not-allowed disabled:opacity-60"
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>

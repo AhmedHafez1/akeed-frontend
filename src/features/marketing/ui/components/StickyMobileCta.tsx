@@ -28,13 +28,13 @@ export function StickyMobileCta() {
   }
 
   return (
-    <div className="shadow-sticky fixed inset-x-0 bottom-0 z-50 border-t border-slate-200/80 bg-white/95 px-3 py-3 backdrop-blur md:hidden">
+    <div className="shadow-sticky border-border bg-card/95 fixed inset-x-0 bottom-0 z-50 border-t px-3 py-3 backdrop-blur md:hidden">
       <div className="mx-auto max-w-md">
         {/*
          * The eyebrow carries the verb — the two buttons below are path names,
          * so without it they read as labels rather than actions.
          */}
-        <p className="mb-2 truncate text-center text-xs font-semibold text-slate-500">
+        <p className="text-muted-foreground mb-2 truncate text-center text-xs font-semibold">
           {t('eyebrow')}
         </p>
         <div className="grid grid-cols-2 gap-2">

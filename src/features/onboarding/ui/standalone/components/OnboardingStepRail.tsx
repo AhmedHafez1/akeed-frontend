@@ -30,7 +30,7 @@ export function OnboardingStepRail({
       aria-label={t('steps.label')}
       className="rounded-card border-border bg-card hidden border p-5 text-start md:block"
     >
-      <h2 className="text-sm font-semibold text-slate-950">
+      <h2 className="text-foreground text-sm font-semibold">
         {t('steps.label')}
       </h2>
       <ol className="mt-5 space-y-6">
@@ -46,8 +46,8 @@ export function OnboardingStepRail({
                 <span
                   aria-hidden="true"
                   className={cn(
-                    'absolute start-5.75 top-11 bottom-2 w-0.5 h-10 rounded-full',
-                    isCompleted ? 'bg-emerald-500' : 'bg-slate-300'
+                    'absolute start-5.75 top-11 bottom-2 h-10 w-0.5 rounded-full',
+                    isCompleted ? 'bg-primary' : 'bg-input'
                   )}
                 />
               )}
@@ -57,9 +57,9 @@ export function OnboardingStepRail({
                 aria-current={isCurrent ? 'step' : undefined}
                 onClick={() => onSelectStep(definition.id)}
                 className={cn(
-                  'flex w-full items-start gap-3 rounded-lg p-2 text-start transition-colors focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none',
+                  'focus-visible:ring-ring flex w-full items-start gap-3 rounded-lg p-2 text-start transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
                   isSelectable
-                    ? 'cursor-pointer hover:bg-slate-50'
+                    ? 'hover:bg-muted/50 cursor-pointer'
                     : 'cursor-default'
                 )}
               >
@@ -68,10 +68,10 @@ export function OnboardingStepRail({
                   className={cn(
                     'relative z-10 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-sm font-semibold tabular-nums',
                     isCompleted
-                      ? 'bg-primary text-primary-foreground border-emerald-600'
+                      ? 'bg-primary text-primary-foreground border-primary'
                       : isCurrent
-                        ? 'bg-primary text-primary-foreground border-emerald-600'
-                        : 'border-slate-200 bg-white text-slate-500'
+                        ? 'bg-primary text-primary-foreground border-primary'
+                        : 'border-border bg-card text-muted-foreground'
                   )}
                 >
                   {isCompleted && !isCurrent ? (
@@ -84,12 +84,12 @@ export function OnboardingStepRail({
                   <span
                     className={cn(
                       'block text-sm font-semibold',
-                      isCurrent ? 'text-emerald-700' : 'text-slate-900'
+                      isCurrent ? 'text-primary' : 'text-foreground'
                     )}
                   >
                     {t(definition.titleKey)}
                   </span>
-                  <span className="mt-0.5 block text-xs text-slate-500">
+                  <span className="text-muted-foreground mt-0.5 block text-xs">
                     {t(definition.descriptionKey)}
                   </span>
                   {isCompleted && !isCurrent && (
@@ -101,7 +101,7 @@ export function OnboardingStepRail({
           )
         })}
       </ol>
-      <p className="mt-6 flex items-start gap-2 border-t border-slate-200 pt-4 text-xs leading-5 text-slate-500">
+      <p className="border-border text-muted-foreground mt-6 flex items-start gap-2 border-t pt-4 text-xs leading-5">
         <ShieldCheck
           aria-hidden="true"
           className="text-primary mt-px h-4 w-4 shrink-0"

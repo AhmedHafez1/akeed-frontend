@@ -19,15 +19,15 @@ const stateStyles: Record<
 > = {
   active: {
     surface: 'border-border bg-card',
-    icon: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+    icon: 'border-primary-border bg-primary-subtle text-primary',
   },
   paused: {
-    surface: 'border-amber-200 bg-amber-50/80',
-    icon: 'border-amber-200 bg-white text-amber-700',
+    surface: 'border-warning-border bg-warning-subtle/80',
+    icon: 'border-warning-border bg-card text-warning',
   },
   disconnected: {
-    surface: 'border-red-200 bg-red-50/70',
-    icon: 'border-red-200 bg-white text-red-700',
+    surface: 'border-destructive-border bg-destructive-subtle/70',
+    icon: 'border-destructive-border bg-card text-destructive-subtle-foreground',
   },
 }
 
@@ -58,11 +58,11 @@ export function StandaloneStatusPanel({ state }: StandaloneStatusPanelProps) {
         <div className="min-w-0">
           <h2
             id="verification-status-title"
-            className="text-sm font-bold text-slate-950"
+            className="text-foreground text-sm font-bold"
           >
             {t(`${state}.title`)}
           </h2>
-          <p className="mt-0.5 text-sm leading-5 text-slate-600">
+          <p className="text-foreground/70 mt-0.5 text-sm leading-5">
             {t(`${state}.description`)}
           </p>
         </div>
@@ -70,7 +70,7 @@ export function StandaloneStatusPanel({ state }: StandaloneStatusPanelProps) {
 
       <Link
         href={`${withLocale('/settings', locale)}#automation-settings`}
-        className="inline-flex shrink-0 items-center gap-2 self-start rounded-lg px-2 py-1.5 text-sm font-semibold text-emerald-800 transition-colors hover:bg-white/70 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 focus-visible:outline-none sm:self-auto"
+        className="text-primary-subtle-foreground hover:bg-card/70 focus-visible:ring-ring inline-flex shrink-0 items-center gap-2 self-start rounded-lg px-2 py-1.5 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none sm:self-auto"
       >
         {t('action')}
         <ArrowRight aria-hidden="true" className="h-4 w-4 rtl:rotate-180" />

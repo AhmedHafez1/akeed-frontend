@@ -56,7 +56,7 @@ const PREVIEW_ENDING_CODES = new Set([
 ])
 
 const inputClass =
-  'w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-60'
+  'w-full rounded-lg border border-input bg-card px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:outline-none disabled:cursor-not-allowed disabled:opacity-60'
 
 /** One staff operation's request lifecycle. */
 function useOperation<T>() {
@@ -92,7 +92,7 @@ function OperationError({ error }: { error: AdminApiError | null }) {
   return (
     <p
       role="alert"
-      className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-900"
+      className="border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground rounded-lg border p-3 text-sm"
     >
       {errorMessage(t, error)}
       {error.requestId && (
@@ -122,7 +122,7 @@ function Field({
       </label>
       {children}
       {help && (
-        <p id={`${htmlFor}-help`} className="text-xs text-slate-500">
+        <p id={`${htmlFor}-help`} className="text-muted-foreground text-xs">
           {help}
         </p>
       )}
@@ -183,12 +183,12 @@ function ProjectionChange({
   return (
     <dl className="grid gap-2 sm:grid-cols-2">
       {rows.map(([label, key]) => (
-        <div key={key} className="rounded-lg bg-slate-50 p-3">
-          <dt className="text-xs text-slate-500">{label}</dt>
+        <div key={key} className="bg-muted/50 rounded-lg p-3">
+          <dt className="text-muted-foreground text-xs">{label}</dt>
           <dd
             className={cn(
               'mt-1 text-sm tabular-nums',
-              before[key] !== after[key] && 'font-semibold text-slate-950'
+              before[key] !== after[key] && 'text-foreground font-semibold'
             )}
           >
             {t('ops.change', {
@@ -267,13 +267,13 @@ export function AdjustmentPanel({
   return (
     <section
       aria-labelledby="billing-adjustment"
-      className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+      className="border-border bg-card space-y-4 rounded-2xl border p-4 shadow-sm"
     >
       <div>
         <h2 id="billing-adjustment" className="text-base font-semibold">
           {t('ops.adjustment.title')}
         </h2>
-        <p className="mt-1 max-w-3xl text-xs text-slate-500">
+        <p className="text-muted-foreground mt-1 max-w-3xl text-xs">
           {t('ops.adjustment.description')}
         </p>
       </div>
@@ -316,7 +316,7 @@ export function AdjustmentPanel({
       <OperationError error={previewing.error} />
       {preview && (
         <div
-          className="space-y-3 rounded-xl border border-emerald-200 p-4"
+          className="border-primary-border space-y-3 rounded-xl border p-4"
           aria-live="polite"
         >
           <p className="text-sm font-medium">
@@ -330,13 +330,13 @@ export function AdjustmentPanel({
             locale={locale}
           />
           {preview.after.debtCredits > preview.before.debtCredits && (
-            <p className="text-sm text-red-800">
+            <p className="text-destructive-subtle-foreground text-sm">
               {t('ops.adjustment.createsDebt')}
             </p>
           )}
           <ReasonField value={reason} onChange={setReason} disabled={busy} />
           {!canApply && (
-            <p className="text-sm text-slate-600">{t('ops.applyLocked')}</p>
+            <p className="text-foreground/70 text-sm">{t('ops.applyLocked')}</p>
           )}
           <OperationError error={applying.error} />
           {previewEnded ? (
@@ -360,7 +360,7 @@ export function AdjustmentPanel({
       {applied && (
         <p
           role="status"
-          className="rounded-lg bg-emerald-50 p-3 text-sm text-emerald-900"
+          className="bg-primary-subtle text-primary-subtle-foreground rounded-lg p-3 text-sm"
         >
           {t(`ops.adjustment.outcomes.${applied.outcome}`, {
             quantity: formatSigned(applied.quantity, locale),
@@ -412,13 +412,13 @@ export function RepairPanel({
   return (
     <section
       aria-labelledby="billing-repair"
-      className="space-y-4 rounded-2xl border border-amber-300 bg-white p-4 shadow-sm"
+      className="border-warning-border bg-card space-y-4 rounded-2xl border p-4 shadow-sm"
     >
       <div>
         <h2 id="billing-repair" className="text-base font-semibold">
           {t('ops.repair.title')}
         </h2>
-        <p className="mt-1 max-w-3xl text-xs text-slate-500">
+        <p className="text-muted-foreground mt-1 max-w-3xl text-xs">
           {t('ops.repair.description')}
         </p>
       </div>
@@ -453,7 +453,9 @@ export function RepairPanel({
                 disabled={busy}
               />
               {!canApply && (
-                <p className="text-sm text-slate-600">{t('ops.applyLocked')}</p>
+                <p className="text-foreground/70 text-sm">
+                  {t('ops.applyLocked')}
+                </p>
               )}
               <OperationError error={applying.error} />
               <Button
@@ -469,7 +471,7 @@ export function RepairPanel({
       {applying.result && (
         <p
           role="status"
-          className="rounded-lg bg-emerald-50 p-3 text-sm text-emerald-900"
+          className="bg-primary-subtle text-primary-subtle-foreground rounded-lg p-3 text-sm"
         >
           {t(`ops.repair.done.${applying.result.outcome}`, {
             posted: formatNumber(applying.result.after.postedBalance, locale),
@@ -626,13 +628,13 @@ export function ResolveSendDialog({
       }
     >
       {operation.result ? (
-        <p role="status" className="rounded-lg bg-emerald-50 p-3 text-sm">
+        <p role="status" className="bg-primary-subtle rounded-lg p-3 text-sm">
           {t(`ops.resolve.outcomes.${operation.result.outcome}`)}
           {operation.result.duplicate && ` ${t('ops.alreadyDone')}`}
         </p>
       ) : (
         <div className="space-y-4">
-          <p className="text-xs text-slate-500">
+          <p className="text-muted-foreground text-xs">
             <Mono>{hold.dispatchId}</Mono>
           </p>
           <fieldset className="space-y-2">
@@ -648,13 +650,13 @@ export function ResolveSendDialog({
                   checked={resolution === choice}
                   onChange={() => setResolution(choice)}
                   disabled={operation.busy}
-                  className="mt-1 size-4 accent-emerald-600"
+                  className="accent-primary mt-1 size-4"
                 />
                 <span>
                   <span className="font-medium">
                     {t(`ops.resolve.choices.${choice}`)}
                   </span>
-                  <span className="block text-xs text-slate-500">
+                  <span className="text-muted-foreground block text-xs">
                     {t(`ops.resolve.effects.${choice}`)}
                   </span>
                 </span>
@@ -759,7 +761,7 @@ export function InquiryDialog({
       }
     >
       {operation.result ? (
-        <p role="status" className="rounded-lg bg-slate-50 p-3 text-sm">
+        <p role="status" className="bg-muted/50 rounded-lg p-3 text-sm">
           {t(`ops.inquiry.outcomes.${operation.result.outcome}`)}
           {operation.result.purchase && (
             <span className="mt-1 block">
@@ -773,7 +775,7 @@ export function InquiryDialog({
         </p>
       ) : (
         <div className="space-y-4">
-          <p className="text-xs text-slate-500">
+          <p className="text-muted-foreground text-xs">
             <Mono>{purchase.reference}</Mono>
           </p>
           <ReasonField
@@ -891,8 +893,8 @@ export function ProviderEvidenceDialog({
           className={cn(
             'rounded-lg p-3 text-sm',
             result.outcome === 'quarantined'
-              ? 'bg-amber-50 text-amber-950'
-              : 'bg-emerald-50 text-emerald-950'
+              ? 'bg-warning-subtle text-warning-subtle-foreground'
+              : 'bg-primary-subtle text-primary-subtle-foreground'
           )}
         >
           {t(`ops.evidenceAction.outcomes.${result.outcome}`, {
@@ -903,7 +905,7 @@ export function ProviderEvidenceDialog({
         </p>
       ) : (
         <div className="space-y-4">
-          <p className="text-xs text-slate-500">
+          <p className="text-muted-foreground text-xs">
             <Mono>{purchase.reference}</Mono>
           </p>
           <Field htmlFor={ids.action} label={t('ops.evidenceAction.action')}>
@@ -1008,7 +1010,7 @@ export function ProviderEvidenceDialog({
             onChange={setReason}
             disabled={operation.busy}
           />
-          <p className="text-xs text-slate-500">
+          <p className="text-muted-foreground text-xs">
             {t('ops.evidenceAction.notAuthority')}
           </p>
           <OperationError error={operation.error} />

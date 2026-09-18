@@ -17,9 +17,12 @@ import type {
 
 const rangeOptions = ['7', '30', '90', 'all'] as const
 const healthTone: Record<BillingHealthStatus, string> = {
-  healthy: 'border-emerald-200 bg-emerald-50 text-emerald-950',
-  attention: 'border-amber-200 bg-amber-50 text-amber-950',
-  critical: 'border-red-200 bg-red-50 text-red-950',
+  healthy:
+    'border-primary-border bg-primary-subtle text-primary-subtle-foreground',
+  attention:
+    'border-warning-border bg-warning-subtle text-warning-subtle-foreground',
+  critical:
+    'border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground',
 }
 
 export function StandaloneBillingObservability({
@@ -54,7 +57,7 @@ export function StandaloneBillingObservability({
           <h2 id="billing-health-title" className="text-xl font-semibold">
             {t('title')}
           </h2>
-          <p className="mt-1 text-sm text-slate-600">{t('description')}</p>
+          <p className="text-foreground/70 mt-1 text-sm">{t('description')}</p>
         </div>
         <div className="flex flex-wrap gap-2" aria-label={t('rangeLabel')}>
           {rangeOptions.map((range) => (
@@ -74,7 +77,7 @@ export function StandaloneBillingObservability({
       {state.error && (
         <p
           role="alert"
-          className="rounded-xl bg-red-50 p-4 text-sm text-red-900"
+          className="bg-destructive-subtle text-destructive-subtle-foreground rounded-xl p-4 text-sm"
         >
           {state.error.status === 403 ? t('operatorRequired') : t('loadError')}
           {state.error.requestId && (
@@ -96,7 +99,7 @@ export function StandaloneBillingObservability({
       {state.loading && !health ? (
         <p
           role="status"
-          className="rounded-xl bg-slate-50 p-6 text-center text-sm"
+          className="bg-muted/50 rounded-xl p-6 text-center text-sm"
         >
           {t('loading')}
         </p>
@@ -153,7 +156,7 @@ export function StandaloneBillingObservability({
           {!health.settlementCoverage.complete && (
             <p
               role="status"
-              className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950"
+              className="border-warning-border bg-warning-subtle text-warning-subtle-foreground rounded-xl border p-4 text-sm"
             >
               {t('coverageWarning')}
             </p>
@@ -223,8 +226,8 @@ export function StandaloneBillingObservability({
         </>
       ) : null}
 
-      <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <div className="flex flex-wrap items-end gap-3 border-b border-slate-100 p-4">
+      <div className="border-border bg-card rounded-2xl border shadow-sm">
+        <div className="border-border flex flex-wrap items-end gap-3 border-b p-4">
           <AdminSelect
             label={t('filters.status')}
             value={state.filters.status}
@@ -254,7 +257,7 @@ export function StandaloneBillingObservability({
               label: t(`filters.severities.${value || 'all'}`),
             }))}
           />
-          <label className="min-w-48 flex-1 text-xs font-medium text-slate-600">
+          <label className="text-foreground/70 min-w-48 flex-1 text-xs font-medium">
             {t('filters.code')}
             <Input
               className="mt-1.5"
@@ -286,13 +289,15 @@ export function StandaloneBillingObservability({
             </Button>
           </div>
           {!canOperate && (
-            <p className="w-full text-xs text-slate-600">{t('runReadOnly')}</p>
+            <p className="text-foreground/70 w-full text-xs">
+              {t('runReadOnly')}
+            </p>
           )}
         </div>
         <div className="max-h-96 overflow-auto overscroll-contain">
           {state.findings?.rows.length ? (
             <table className="w-full min-w-3xl text-sm">
-              <thead className="sticky top-0 bg-slate-50 text-xs text-slate-600">
+              <thead className="bg-muted/50 text-foreground/70 sticky top-0 text-xs">
                 <tr>
                   <th className="p-3 text-start">{t('queue.severity')}</th>
                   <th className="p-3 text-start">{t('queue.code')}</th>
@@ -305,7 +310,7 @@ export function StandaloneBillingObservability({
                 {state.findings.rows.map((finding) => (
                   <tr
                     key={finding.id}
-                    className="border-t border-slate-100 align-top"
+                    className="border-border border-t align-top"
                   >
                     <td className="p-3">{t(`severity.${finding.severity}`)}</td>
                     <td className="p-3 font-mono text-xs" dir="ltr">
@@ -314,7 +319,7 @@ export function StandaloneBillingObservability({
                     <td className="p-3">
                       {finding.orgId ? (
                         <Link
-                          className="font-mono text-xs text-emerald-700 hover:underline"
+                          className="text-primary font-mono text-xs hover:underline"
                           dir="ltr"
                           href={`/${locale}/admin/standalone-billing/${finding.orgId}`}
                         >
@@ -335,7 +340,7 @@ export function StandaloneBillingObservability({
               </tbody>
             </table>
           ) : (
-            <p className="p-8 text-center text-sm text-slate-500">
+            <p className="text-muted-foreground p-8 text-center text-sm">
               {state.loading ? t('loadingQueue') : t('emptyQueue')}
             </p>
           )}

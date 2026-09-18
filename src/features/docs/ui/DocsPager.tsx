@@ -24,13 +24,17 @@ export function DocsPager({ previous, next }: DocsPagerProps) {
       {previous ? (
         <Link
           href={previous.href}
-          className="group rounded-xl border border-border bg-white p-4 transition-all hover:border-input hover:shadow-sm"
+          className="group border-border bg-card hover:border-input rounded-xl border p-4 transition-all hover:shadow-sm"
         >
-          <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
+          <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
             {t('previous')}
           </p>
-          <div className="mt-1 flex items-center gap-2 text-sm font-semibold text-slate-800 group-hover:text-foreground">
-            {isRTL ? <ArrowRight className="h-4 w-4" /> : <ArrowLeft className="h-4 w-4" />}
+          <div className="text-foreground group-hover:text-foreground mt-1 flex items-center gap-2 text-sm font-semibold">
+            {isRTL ? (
+              <ArrowRight className="h-4 w-4" />
+            ) : (
+              <ArrowLeft className="h-4 w-4" />
+            )}
             <span>{previous.title}</span>
           </div>
         </Link>
@@ -41,14 +45,18 @@ export function DocsPager({ previous, next }: DocsPagerProps) {
       {next ? (
         <Link
           href={next.href}
-          className="group rounded-xl border border-border bg-white p-4 transition-all hover:border-input hover:shadow-sm"
+          className="group border-border bg-card hover:border-input rounded-xl border p-4 transition-all hover:shadow-sm"
         >
-          <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
+          <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
             {t('next')}
           </p>
-          <div className="mt-1 flex items-center justify-end gap-2 text-sm font-semibold text-slate-800 group-hover:text-foreground">
+          <div className="text-foreground group-hover:text-foreground mt-1 flex items-center justify-end gap-2 text-sm font-semibold">
             <span>{next.title}</span>
-            {isRTL ? <ArrowLeft className="h-4 w-4" /> : <ArrowRight className="h-4 w-4" />}
+            {isRTL ? (
+              <ArrowLeft className="h-4 w-4" />
+            ) : (
+              <ArrowRight className="h-4 w-4" />
+            )}
           </div>
         </Link>
       ) : null}
