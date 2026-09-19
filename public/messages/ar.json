@@ -2317,5 +2317,36 @@
         "filename": "سجل-العمليات"
       }
     }
+  },
+  "orderImport": {
+    "issues": {
+      "PHONE_MISSING": "رقم الهاتف غير موجود.",
+      "PHONE_INVALID": "رقم الهاتف غير صحيح.",
+      "PHONE_NOT_MOBILE": "هذا رقم أرضي، وواتساب يحتاج إلى رقم جوال.",
+      "PHONE_MULTIPLE": "الخلية تحتوي على أكثر من رقم هاتف. اترك رقمًا واحدًا.",
+      "PHONE_SCIENTIFIC_NOTATION": "حوّل Excel رقم الهاتف إلى صيغة مثل 2.01E+11 وفقد بعض الأرقام. اجعل العمود نصًا وصدّر الملف مرة أخرى.",
+      "NAME_MISSING": "اسم العميل غير موجود.",
+      "NAME_TOO_LONG": "اسم العميل أطول من 255 حرفًا.",
+      "NAME_NOT_TEXT": "اسم العميل لا يحتوي على حروف.",
+      "AMOUNT_MISSING": "مبلغ الطلب غير موجود.",
+      "AMOUNT_INVALID": "مبلغ الطلب ليس رقمًا.",
+      "AMOUNT_NOT_POSITIVE": "يجب أن يكون مبلغ الطلب أكبر من صفر.",
+      "AMOUNT_TOO_LARGE": "مبلغ الطلب كبير جدًا.",
+      "AMOUNT_AMBIGUOUS": "لا يمكننا معرفة ما إذا كانت الفاصلة للكسور العشرية أم للآلاف.",
+      "AMOUNT_TOO_PRECISE": "مبلغ الطلب يحتوي على أكثر من خانتين عشريتين.",
+      "CURRENCY_UNSUPPORTED": "هذه العملة غير مدعومة.",
+      "PAYMENT_NOT_COD": "الطلب ليس دفعًا عند الاستلام، لذلك لن يتم تأكيده.",
+      "PAYMENT_UNKNOWN_EXCLUDED": "لا توجد طريقة دفع، ومتجرك لا يعتبر الطلب بلا طريقة دفع دفعًا عند الاستلام.",
+      "ORDER_REF_TOO_LONG": "رقم الطلب أطول من 100 حرف.",
+      "ORDER_REF_CONFLICT_IN_FILE": "يوجد صف آخر بنفس رقم الطلب لكن برقم هاتف أو مبلغ مختلف.",
+      "DUPLICATE_IN_FILE": "نفس الطلب الموجود في الصف {rowNumber}.",
+      "ALREADY_IMPORTED": "تم استيراد هذا الطلب من قبل.",
+      "POSSIBLE_DUPLICATE": "{match, select, order_number {الطلب {orderNumber} بتاريخ {date} له نفس رقم الطلب.} other {الطلب {orderNumber} بتاريخ {date} له نفس رقم الهاتف والمبلغ.}}",
+      "ORDER_DATE_INVALID": "لا يمكننا قراءة تاريخ الطلب.",
+      "ORDER_DATE_FUTURE": "تاريخ الطلب في المستقبل.",
+      "ORDER_TOO_OLD": "مرّ على الطلب أكثر من {maxAgeDays, plural, one {يوم واحد} two {يومين} few {# أيام} many {# يومًا} other {# يوم}}، وهذا متأخر جدًا لتأكيده.",
+      "FIELD_TOO_LONG": "كانت إحدى الخلايا أطول من 1000 حرف وتم قصّها.",
+      "CSV_MALFORMED_QUOTE": "هذا الصف يحتوي على علامة اقتباس غير مكتملة، لذلك قد تكون خلاياه منزاحة."
+    }
   }
 }

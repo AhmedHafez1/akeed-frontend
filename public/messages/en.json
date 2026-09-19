@@ -2323,5 +2323,36 @@
         "filename": "operations-log"
       }
     }
+  },
+  "orderImport": {
+    "issues": {
+      "PHONE_MISSING": "Phone number is missing.",
+      "PHONE_INVALID": "This isn't a valid phone number.",
+      "PHONE_NOT_MOBILE": "This is a landline. WhatsApp needs a mobile number.",
+      "PHONE_MULTIPLE": "The cell has more than one phone number. Keep one.",
+      "PHONE_SCIENTIFIC_NOTATION": "Excel turned this phone into a number like 2.01E+11 and lost digits. Format the column as text and export again.",
+      "NAME_MISSING": "Customer name is missing.",
+      "NAME_TOO_LONG": "Customer name is longer than 255 characters.",
+      "NAME_NOT_TEXT": "Customer name has no letters.",
+      "AMOUNT_MISSING": "Order amount is missing.",
+      "AMOUNT_INVALID": "Order amount isn't a number.",
+      "AMOUNT_NOT_POSITIVE": "Order amount must be more than zero.",
+      "AMOUNT_TOO_LARGE": "Order amount is too large.",
+      "AMOUNT_AMBIGUOUS": "We can't tell whether the comma separates decimals or thousands.",
+      "AMOUNT_TOO_PRECISE": "Order amount has more than 2 decimal places.",
+      "CURRENCY_UNSUPPORTED": "This currency isn't supported.",
+      "PAYMENT_NOT_COD": "Not cash on delivery, so it won't be confirmed.",
+      "PAYMENT_UNKNOWN_EXCLUDED": "No payment method, and your store doesn't treat a missing payment method as cash on delivery.",
+      "ORDER_REF_TOO_LONG": "Order number is longer than 100 characters.",
+      "ORDER_REF_CONFLICT_IN_FILE": "Another row has this order number with a different phone or amount.",
+      "DUPLICATE_IN_FILE": "Same order as row {rowNumber}.",
+      "ALREADY_IMPORTED": "This order was already imported.",
+      "POSSIBLE_DUPLICATE": "{match, select, order_number {Order {orderNumber} from {date} has the same order number.} other {Order {orderNumber} from {date} has the same phone and amount.}}",
+      "ORDER_DATE_INVALID": "We can't read this order date.",
+      "ORDER_DATE_FUTURE": "Order date is in the future.",
+      "ORDER_TOO_OLD": "Order is more than {maxAgeDays, plural, one {# day} other {# days}} old, too late to confirm.",
+      "FIELD_TOO_LONG": "A cell was longer than 1,000 characters and was cut short.",
+      "CSV_MALFORMED_QUOTE": "This row has a broken quote mark, so its cells may be shifted."
+    }
   }
 }
