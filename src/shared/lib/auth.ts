@@ -215,6 +215,44 @@ async function getSupabaseToken(): Promise<string | null> {
 }
 
 /**
+ * Bodies the browser must describe itself. A `FormData` upload needs the
+ * multipart boundary the browser generates, so forcing a Content-Type would
+ * make the server unable to read the file.
+ */
+export function isBrowserEncodedBody(
+  body: RequestInit['body'] | undefined
+): boolean {
+  return (
+    (typeof FormData !== 'undefined' && body instanceof FormData) ||
+    (typeof Blob !== 'undefined' && body instanceof Blob) ||
+    (typeof URLSearchParams !== 'undefined' && body instanceof URLSearchParams)
+  )
+}
+
+/**
+ * Headers for every authenticated request. JSON stays the default Content-Type
+ * for every other request, exactly as before; only browser-encoded bodies keep
+ * the header the browser sets.
+ */
+export function buildRequestHeaders(
+  options: RequestInit,
+  token: string | null
+): Headers {
+  const headers = new Headers(options.headers)
+  if (isBrowserEncodedBody(options.body)) {
+    headers.delete('Content-Type')
+  } else {
+    headers.set('Content-Type', 'application/json')
+  }
+  // Bypass Ngrok browser warning
+  headers.set('ngrok-skip-browser-warning', 'true')
+  if (token) {
+    headers.set('Authorization', `Bearer ${token}`)
+  }
+  return headers
+}
+
+/**
  * Enhanced fetch with automatic authentication
  *
  * Usage:
@@ -229,15 +267,8 @@ export async function fetchWithAuth(
   // Get authentication token
   const token = await getAuthToken()
 
-  // Prepare headers
-  const headers = new Headers(options.headers)
-  headers.set('Content-Type', 'application/json')
-  // Bypass Ngrok browser warning
-  headers.set('ngrok-skip-browser-warning', 'true')
-
-  if (token) {
-    headers.set('Authorization', `Bearer ${token}`)
-  } else {
+  const headers = buildRequestHeaders(options, token)
+  if (!token) {
     logger.warn('No authentication token available')
   }
 
@@ -263,10 +294,7 @@ export async function fetchWithAuth(
       const freshToken = await getShopifySessionToken()
 
       if (freshToken) {
-        const retryHeaders = new Headers(options.headers)
-        retryHeaders.set('Content-Type', 'application/json')
-        retryHeaders.set('ngrok-skip-browser-warning', 'true')
-        retryHeaders.set('Authorization', `Bearer ${freshToken}`)
+        const retryHeaders = buildRequestHeaders(options, freshToken)
 
         const retryResponse = await fetch(fullUrl, {
           ...options,
