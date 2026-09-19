@@ -2325,6 +2325,307 @@
     }
   },
   "orderImport": {
+    "page": {
+      "title": "Import orders",
+      "subtitle": "Upload a CSV or Excel file from your store, marketplace or spreadsheet. Akeed prepares the orders for WhatsApp confirmation, and nothing is sent until you start.",
+      "back": "Back to orders"
+    },
+    "entry": {
+      "newImport": "Import from file"
+    },
+    "steps": {
+      "label": "Import steps",
+      "completed": "Completed",
+      "progress": "Step {current} of {total}",
+      "upload": "Upload",
+      "map": "Map columns",
+      "review": "Review"
+    },
+    "nothingSent": {
+      "banner": "Nothing has been sent to customers.",
+      "short": "No message will be sent now."
+    },
+    "viewer": "Only owners and admins can import orders. You can view this import but not change it.",
+    "upload": {
+      "heading": "Upload your file",
+      "dropTitle": "Drag your file here",
+      "dropActive": "Drop the file to upload it",
+      "helper": "CSV or Excel (.xlsx) · up to 5 MB · up to 5,000 orders",
+      "choose": "Choose file",
+      "cancel": "Cancel",
+      "progressLabel": "Upload progress",
+      "uploading": "Uploading… {percent}%",
+      "reading": "Reading your orders…",
+      "templatePrompt": "Don't have a file ready? Download template:",
+      "templateCsv": "CSV",
+      "templateExcel": "Excel",
+      "templateFailed": "The template could not be downloaded. Try again."
+    },
+    "fileErrors": {
+      "actions": {
+        "chooseAnother": "Choose another file",
+        "retry": "Try again",
+        "openSettings": "Finish setup",
+        "contactSupport": "Contact support",
+        "backToOrders": "Back to orders"
+      },
+      "IMPORT_FILE_REQUIRED": {
+        "title": "No file was received",
+        "body": "Choose one CSV or Excel file and upload it again."
+      },
+      "IMPORT_FILE_TOO_LARGE": {
+        "title": "This file is larger than 5 MB",
+        "body": "Remove extra columns or split the file into smaller parts, then upload again."
+      },
+      "IMPORT_FILE_TYPE_UNSUPPORTED": {
+        "title": "This file type isn't supported",
+        "body": "Save it as Excel Workbook (.xlsx) or CSV UTF-8 and upload it again. Older .xls files and files with macros can't be read."
+      },
+      "IMPORT_FILE_PROTECTED": {
+        "title": "This file is password-protected",
+        "body": "Remove the password in Excel (File → Info → Protect workbook) and upload it again."
+      },
+      "IMPORT_FILE_UNREADABLE": {
+        "title": "This file couldn't be read",
+        "body": "It may be damaged or not really a spreadsheet. Open it, save it again as .xlsx or CSV UTF-8, and upload it again."
+      },
+      "IMPORT_FILE_EMPTY": {
+        "title": "This file has no orders",
+        "body": "Add your orders under the header row and upload it again."
+      },
+      "IMPORT_ROW_LIMIT_EXCEEDED": {
+        "title": "This file has too many orders",
+        "body": "Split the file into parts of up to 5,000 orders and upload each part."
+      },
+      "IMPORT_COLUMN_LIMIT_EXCEEDED": {
+        "title": "This file has too many columns",
+        "body": "Keep up to 100 columns. Delete the columns you don't need and upload it again."
+      },
+      "IMPORT_TOO_MANY_DRAFTS": {
+        "title": "You have too many unfinished imports",
+        "body": "Resume or discard one of the imports below before uploading another file."
+      },
+      "IMPORT_RATE_LIMITED": {
+        "title": "Too many uploads in a short time",
+        "body": "Wait a minute, then try again."
+      },
+      "IMPORT_DISABLED": {
+        "title": "Importing orders isn't available",
+        "body": "Importing orders from a file isn't turned on for your account yet."
+      },
+      "IMPORT_ROLE_REQUIRED": {
+        "title": "Only owners and admins can import orders",
+        "body": "Ask an owner or admin of your account to import this file."
+      },
+      "IMPORT_SOURCE_UNSUPPORTED": {
+        "title": "Importing isn't available for this store",
+        "body": "File import works only for Akeed stores that aren't connected to Shopify. Contact support if you think this is wrong."
+      },
+      "IMPORT_SETUP_INCOMPLETE": {
+        "title": "Finish setting up your store first",
+        "body": "Complete your store setup, then come back to import orders."
+      },
+      "generic": {
+        "title": "The file couldn't be uploaded",
+        "body": "Something went wrong. Try again, or contact support and quote this reference.",
+        "reference": "Reference:",
+        "copy": "Copy reference",
+        "copied": "Reference copied."
+      }
+    },
+    "duplicate": {
+      "banner": "You uploaded this same file {time}.",
+      "view": "View earlier import",
+      "continue": "Continue anyway"
+    },
+    "drafts": {
+      "title": "Open drafts",
+      "meta": "{rows, plural, one {# row} other {# rows}} · {time}",
+      "resume": "Resume",
+      "view": "View",
+      "discard": "Discard",
+      "resumeLabel": "Resume {name}",
+      "discardLabel": "Discard {name}"
+    },
+    "discard": {
+      "title": "Discard this import?",
+      "body": "The uploaded rows will be deleted. Nothing was sent to customers.",
+      "confirm": "Discard import",
+      "cancel": "Keep it",
+      "done": "Import discarded.",
+      "failed": "The import couldn't be discarded. Try again."
+    },
+    "map": {
+      "heading": "Match your columns",
+      "description": "Tell Akeed which column of <file></file> holds each detail.",
+      "fieldHeader": "Akeed field",
+      "columnHeader": "Column in your file",
+      "statusHeader": "Status",
+      "required": "required",
+      "notProvided": "— Not provided",
+      "addSecondName": "Name is split in two columns? Add the last name column",
+      "secondName": "Last name column",
+      "samples": "Examples:",
+      "sampleSeparator": ", ",
+      "noSamples": "No values in the first rows.",
+      "fields": {
+        "phone": "Customer phone",
+        "customerName": "Customer name",
+        "amount": "Amount",
+        "orderReference": "Order reference",
+        "currency": "Currency",
+        "paymentMethod": "Payment method",
+        "orderDate": "Order date",
+        "city": "City",
+        "address": "Address",
+        "notes": "Notes"
+      },
+      "status": {
+        "detected": "Detected",
+        "saved": "From saved mapping",
+        "chosen": "Chosen by you",
+        "attention": "Needs attention",
+        "chooseDateFormat": "Choose date format",
+        "missing": "Not provided"
+      },
+      "errors": {
+        "required": "Choose the column that holds this detail.",
+        "duplicateColumn": "This column is already used for another detail.",
+        "dateFormatRequired": "Choose how to read the dates.",
+        "paymentUnresolved": "Choose COD or Not COD for every value."
+      },
+      "fixBeforeContinue": "Fix the highlighted items to continue.",
+      "ignored": "{count, plural, one {# column won't be imported} other {# columns won't be imported}}",
+      "back": "Back",
+      "continue": "Continue to review",
+      "saving": "Checking your orders…",
+      "saveFailed": "The mapping couldn't be saved. Try again."
+    },
+    "settings": {
+      "title": "Import settings",
+      "country": "Phone country",
+      "countryHelp": "Used for numbers written without a country code.",
+      "currency": "Default currency",
+      "currencyHelp": "Used when a row has no currency.",
+      "dateFormat": "Date format",
+      "dateFormatHelp": "Dates like 05/06/2026 can be read either way.",
+      "DMY": "Day/Month/Year",
+      "MDY": "Month/Day/Year"
+    },
+    "payment": {
+      "title": "Payment values",
+      "description": "Only cash-on-delivery orders are confirmed. The others are excluded.",
+      "cod": "COD",
+      "notCod": "Not COD",
+      "choose": "Is {value} cash on delivery?",
+      "toggle": "{value} is cash on delivery",
+      "recheck": "Akeed reads this column's values when you continue.",
+      "blank": "{count, plural, one {# row has} other {# rows have}} no payment value.",
+      "truncated": "Only the 50 most common values are listed. The rest are classified automatically."
+    },
+    "review": {
+      "heading": "Review your orders",
+      "tiles": {
+        "ready": {
+          "label": "Ready to import",
+          "hint": "Will be imported and held until you start."
+        },
+        "invalid": {
+          "label": "Need fixing",
+          "hint": "Fix these rows in your file and upload it again."
+        },
+        "duplicate": {
+          "label": "Duplicates skipped",
+          "hint": "Already imported, or repeated in this file."
+        },
+        "excluded": {
+          "label": "Excluded",
+          "hint": "Not cash on delivery, too old, or a possible duplicate."
+        }
+      },
+      "banners": {
+        "dateRange": "Orders from {min} to {max}.",
+        "noDate": "No order date column. Only import recent orders you intend to confirm.",
+        "oldOrders": "{count, plural, one {# order is} other {# orders are}} older than 7 days and won't be imported."
+      },
+      "tabsLabel": "Show rows by outcome",
+      "tabs": {
+        "ready": "Ready",
+        "invalid": "Need fixing",
+        "duplicate": "Duplicates",
+        "excluded": "Excluded"
+      },
+      "outcome": {
+        "ready": "Ready",
+        "invalid": "Needs fixing",
+        "duplicate": "Duplicate",
+        "excluded": "Excluded",
+        "imported": "Imported"
+      },
+      "table": {
+        "row": "Row",
+        "customer": "Customer",
+        "phone": "Phone",
+        "amount": "Amount",
+        "reference": "Order",
+        "status": "Status",
+        "rowNumber": "Row {number}",
+        "empty": "No rows here.",
+        "loadMore": "Load more",
+        "loading": "Loading rows…",
+        "error": "The rows couldn't be loaded.",
+        "retry": "Try again"
+      },
+      "includeAnyway": "Include anyway",
+      "includeFailed": "The change couldn't be saved. Try again.",
+      "downloadErrors": "Download {count, plural, one {# row} other {# rows}} to fix",
+      "downloadErrorsHelp": "Fix these rows in your file and upload it again. Orders already imported will be skipped automatically.",
+      "downloadSoon": "The download becomes available in an upcoming update.",
+      "import": "Import {count, plural, =0 {orders} one {# order} other {# orders}}",
+      "nothingReady": "No orders are ready to import.",
+      "importSoon": "Importing becomes available in an upcoming update.",
+      "backToMapping": "Back to mapping",
+      "discard": "Discard"
+    },
+    "states": {
+      "notFound": {
+        "title": "Import not found",
+        "body": "This import doesn't exist or belongs to another account.",
+        "action": "Start a new import"
+      },
+      "expired": {
+        "title": "This import expired",
+        "body": "This import expired after 24 hours. Upload the file again.",
+        "action": "Upload again"
+      },
+      "unavailable": {
+        "title": "This import can't be changed here",
+        "body": "Its status is: {status}.",
+        "action": "Start a new import"
+      },
+      "disabled": {
+        "title": "Importing orders isn't available",
+        "body": "Importing orders from a file isn't turned on for your account yet.",
+        "action": "Back to orders"
+      },
+      "loadFailed": {
+        "title": "This import couldn't be loaded",
+        "body": "Check your connection and try again.",
+        "action": "Try again"
+      }
+    },
+    "batchStatus": {
+      "draft": "Draft",
+      "committing": "Importing",
+      "awaiting_start": "Awaiting start",
+      "releasing": "Sending confirmations",
+      "paused": "Paused",
+      "completed": "Completed",
+      "stopped": "Stopped",
+      "not_started": "Not started",
+      "expired": "Expired",
+      "failed": "Failed"
+    },
     "issues": {
       "PHONE_MISSING": "Phone number is missing.",
       "PHONE_INVALID": "This isn't a valid phone number.",
@@ -2352,7 +2653,8 @@
       "ORDER_DATE_FUTURE": "Order date is in the future.",
       "ORDER_TOO_OLD": "Order is more than {maxAgeDays, plural, one {# day} other {# days}} old, too late to confirm.",
       "FIELD_TOO_LONG": "A cell was longer than 1,000 characters and was cut short.",
-      "CSV_MALFORMED_QUOTE": "This row has a broken quote mark, so its cells may be shifted."
+      "CSV_MALFORMED_QUOTE": "This row has a broken quote mark, so its cells may be shifted.",
+      "unknown": "This row has a problem Akeed can't describe yet."
     }
   }
 }

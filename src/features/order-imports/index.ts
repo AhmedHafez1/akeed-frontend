@@ -1,4 +1,9 @@
 export {
+  OrderImportBatchStandalone,
+  OrderImportNewStandalone,
+} from './skins/standalone/OrderImportPagesStandalone'
+export { NewImportLink } from './skins/standalone/NewImportLink'
+export {
   discardOrderImport,
   downloadOrderImportTemplate,
   isOrderImportApiError,
@@ -7,6 +12,7 @@ export {
 } from './api/orderImportsApi'
 export type {
   OrderImportApiError,
+  OrderImportBatchDetail,
   OrderImportDuplicateFile,
   OrderImportErrorCode,
   OrderImportFormat,

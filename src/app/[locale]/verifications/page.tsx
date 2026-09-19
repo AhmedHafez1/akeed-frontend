@@ -11,11 +11,17 @@ import {
   useDashboard,
 } from '@/features/dashboard'
 import { useVerificationStatusQuery } from '@/features/dashboard/hooks/useVerificationStatusQuery'
+import { NewImportLink } from '@/features/order-imports'
 
 function StandaloneVerificationsPageContent() {
   const { statusFilter, onStatusFilterChange } = useVerificationStatusQuery()
   const skinProps = useDashboard(statusFilter, onStatusFilterChange)
-  return <DashboardVerificationsStandaloneSkin {...skinProps} />
+  return (
+    <DashboardVerificationsStandaloneSkin
+      {...skinProps}
+      headerAction={<NewImportLink />}
+    />
+  )
 }
 
 function EmbeddedVerificationsRedirect() {

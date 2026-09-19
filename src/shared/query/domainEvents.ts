@@ -24,6 +24,8 @@ export type DomainEvent =
   | 'verification.retried'
   | 'verification.testSent'
   | 'credits.purchased'
+  /** A file import was uploaded, re-mapped, changed or discarded. Nothing was sent. */
+  | 'orderImport.changed'
 
 /**
  * The only place that knows the cross-screen consequences of a change.
@@ -59,6 +61,7 @@ const AFFECTED_QUERIES: Record<DomainEvent, ReadonlyArray<QueryKey>> = {
     queryKeys.billing.all,
     queryKeys.verifications.pageContext(),
   ],
+  'orderImport.changed': [queryKeys.orderImports.all],
 }
 
 export function useEmitDomainEvent() {

@@ -16,11 +16,23 @@ import {
   orderSyncRequest,
 } from './order-sync/orderSyncFixture'
 import {
+  isOrderImportFixture,
+  orderImportCreditSummary,
+  orderImportFixtureRequest,
+  orderImportFixtureUpload,
+} from './imports/orderImportFixture'
+import {
   isVerificationFixture,
   verificationFixtureRequest,
 } from './verifications/verificationFixture'
 
 export function fetchWithAuth(url: string, options: RequestInit = {}) {
+  if (url.startsWith('/api/order-imports'))
+    return orderImportFixtureRequest(url, options)
+  if (isOrderImportFixture() && url === '/api/billing/credits')
+    return billingFixtureRequest(url, options)
+      .then((response) => response.json() as Promise<Record<string, unknown>>)
+      .then((summary) => Response.json(orderImportCreditSummary(summary)))
   if (isOrderSyncFixture() && url === '/api/billing/credits')
     return orderSyncCreditsResponse()
   return [
@@ -230,6 +242,19 @@ function fixtureStats(fixture: FixtureState): DashboardStats {
       money_saved: fixture.order.status === 'canceled' ? 3 : 0,
     },
   }
+}
+
+export function uploadWithAuth(
+  url: string,
+  options: {
+    body: FormData
+    signal?: AbortSignal
+    onUploadProgress?: (fraction: number) => void
+  }
+) {
+  if (url !== '/api/order-imports')
+    throw new Error(`Unexpected fixture upload: ${url}`)
+  return orderImportFixtureUpload(options)
 }
 
 export const api = {

@@ -24,7 +24,7 @@ import {
 } from '@/shared/ui'
 import type { E164Value } from '@/shared/ui'
 import { useManualOrderEntry } from '../../domain/useManualOrderEntry'
-import { manualOrderCurrencies } from '../../domain/manualOrder.model'
+import { orderCurrencies } from '@/shared/commerce/orderCommerce'
 
 interface ManualOrderEntryStandaloneProps {
   canCreate: boolean
@@ -372,7 +372,7 @@ export function ManualOrderEntryStandalone({
                       <option value="">
                         {t('fields.currency.placeholder')}
                       </option>
-                      {manualOrderCurrencies.map((currency) => (
+                      {orderCurrencies.map((currency) => (
                         <option key={currency} value={currency}>
                           {currency}
                         </option>

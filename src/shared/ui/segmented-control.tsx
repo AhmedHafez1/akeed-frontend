@@ -89,8 +89,9 @@ export function SegmentedControl<T extends string>({
           >
             {option.label}
             {option.count !== undefined && (
-              <span className="ms-1.5 tabular-nums opacity-70" dir="ltr">
-                {option.count}
+              // The margin sits outside the LTR isolate so it keeps the label side in RTL.
+              <span className="ms-1.5 tabular-nums opacity-70">
+                <bdi dir="ltr">{option.count}</bdi>
               </span>
             )}
           </button>

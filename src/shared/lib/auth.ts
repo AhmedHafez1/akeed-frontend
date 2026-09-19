@@ -252,17 +252,21 @@ export function buildRequestHeaders(
   return headers
 }
 
+function resolveRequestUrl(url: string, isEmbedded: boolean): string {
+  if (url.startsWith('http') || isEmbedded) return url
+  return `${API_BASE_URL}${url}`
+}
+
+type Transport = (fullUrl: string, headers: Headers) => Promise<Response>
+
 /**
- * Enhanced fetch with automatic authentication
- *
- * Usage:
- * ```ts
- * const data = await fetchWithAuth('/api/orders');
- * ```
+ * Authenticates one request and sends it through `transport`, with the same
+ * token, URL and 401 handling whether it goes out as `fetch` or as an XHR.
  */
-export async function fetchWithAuth(
+async function sendWithAuth(
   url: string,
-  options: RequestInit = {}
+  options: RequestInit,
+  transport: Transport
 ): Promise<Response> {
   // Get authentication token
   const token = await getAuthToken()
@@ -274,16 +278,9 @@ export async function fetchWithAuth(
 
   // Make request
   const { isEmbedded } = resolveEmbeddedContextFromWindow()
-  const fullUrl = url.startsWith('http')
-    ? url
-    : isEmbedded
-      ? url
-      : `${API_BASE_URL}${url}`
+  const fullUrl = resolveRequestUrl(url, isEmbedded)
 
-  const response = await fetch(fullUrl, {
-    ...options,
-    headers,
-  })
+  const response = await transport(fullUrl, headers)
 
   // Handle 401 Unauthorized
   if (response.status === 401) {
@@ -296,14 +293,9 @@ export async function fetchWithAuth(
       if (freshToken) {
         const retryHeaders = buildRequestHeaders(options, freshToken)
 
-        const retryResponse = await fetch(fullUrl, {
-          ...options,
-          headers: retryHeaders,
-        })
-
         // If the retry also fails with 401, fall through to return it
         // without another retry (no infinite loop).
-        return retryResponse
+        return transport(fullUrl, retryHeaders)
       }
     } else if (typeof window !== 'undefined') {
       // Standalone mode: redirect to login
@@ -313,6 +305,95 @@ export async function fetchWithAuth(
   }
 
   return response
+}
+
+/**
+ * Enhanced fetch with automatic authentication
+ *
+ * Usage:
+ * ```ts
+ * const data = await fetchWithAuth('/api/orders');
+ * ```
+ */
+export async function fetchWithAuth(
+  url: string,
+  options: RequestInit = {}
+): Promise<Response> {
+  return sendWithAuth(url, options, (fullUrl, headers) =>
+    fetch(fullUrl, { ...options, headers })
+  )
+}
+
+export interface UploadWithAuthOptions {
+  body: FormData
+  method?: 'POST' | 'PUT'
+  signal?: AbortSignal
+  /** Fraction of the request body sent so far, 0 to 1. */
+  onUploadProgress?: (fraction: number) => void
+}
+
+function xhrTransport({
+  body,
+  method = 'POST',
+  signal,
+  onUploadProgress,
+}: UploadWithAuthOptions): Transport {
+  return (fullUrl, headers) =>
+    new Promise<Response>((resolve, reject) => {
+      if (signal?.aborted) {
+        reject(new DOMException('The upload was aborted.', 'AbortError'))
+        return
+      }
+      const xhr = new XMLHttpRequest()
+      xhr.open(method, fullUrl)
+      headers.forEach((value, name) => xhr.setRequestHeader(name, value))
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable && event.total > 0)
+          onUploadProgress?.(event.loaded / event.total)
+      }
+      const abort = () => xhr.abort()
+      signal?.addEventListener('abort', abort, { once: true })
+      const settle = () => signal?.removeEventListener('abort', abort)
+      xhr.onload = () => {
+        settle()
+        const nullBody = [101, 204, 205, 304].includes(xhr.status)
+        resolve(
+          new Response(nullBody ? null : xhr.responseText, {
+            status: xhr.status,
+            headers: {
+              'Content-Type':
+                xhr.getResponseHeader('Content-Type') ?? 'text/plain',
+            },
+          })
+        )
+      }
+      // The same rejections `fetch` gives, so callers handle both alike.
+      xhr.onerror = () => {
+        settle()
+        reject(new TypeError('Failed to fetch'))
+      }
+      xhr.onabort = () => {
+        settle()
+        reject(new DOMException('The upload was aborted.', 'AbortError'))
+      }
+      xhr.send(body)
+    })
+}
+
+/**
+ * An authenticated multipart upload that reports progress, which `fetch`
+ * cannot. It resolves to a `Response` so callers read errors exactly as they
+ * do for `fetchWithAuth`.
+ */
+export async function uploadWithAuth(
+  url: string,
+  options: UploadWithAuthOptions
+): Promise<Response> {
+  return sendWithAuth(
+    url,
+    { method: options.method ?? 'POST', body: options.body },
+    xhrTransport(options)
+  )
 }
 
 /**

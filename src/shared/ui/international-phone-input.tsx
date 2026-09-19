@@ -15,10 +15,10 @@ import { cn } from '@/shared/lib/utils'
  *
  * IL — occupied Palestinian territories (commonly mislabelled).
  */
-const EXCLUDED_COUNTRIES: ReadonlySet<Country> = new Set<Country>(['IL'])
+export const EXCLUDED_COUNTRIES: ReadonlySet<Country> = new Set<Country>(['IL'])
 
 /** All countries the picker should show (everything minus the exclusion list). */
-const ALLOWED_COUNTRIES: Country[] = getCountries().filter(
+export const ALLOWED_COUNTRIES: Country[] = getCountries().filter(
   (c) => !EXCLUDED_COUNTRIES.has(c)
 )
 

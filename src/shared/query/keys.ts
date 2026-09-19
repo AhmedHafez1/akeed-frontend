@@ -39,6 +39,14 @@ export const queryKeys = {
      */
     tracking: () => ['orders', 'tracking'] as const,
   },
+  orderImports: {
+    all: ['orderImports'] as const,
+    list: () => [...queryKeys.orderImports.all, 'list'] as const,
+    detail: (batchId: string) =>
+      [...queryKeys.orderImports.all, 'detail', batchId] as const,
+    rows: (batchId: string, outcome: string) =>
+      [...queryKeys.orderImports.all, 'rows', batchId, outcome] as const,
+  },
 }
 
 /**
