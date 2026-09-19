@@ -1,5 +1,6 @@
 import type {
   DashboardStatsDateRange,
+  LifecycleStatus,
   VerificationStatus,
   VerificationStatusFilter,
 } from '../model/dashboard.model'
@@ -103,7 +104,7 @@ const COMPOSITE_FILTERS: Partial<Record<VerificationStatusFilter, string>> = {
 /** Whether a row in `status` belongs in the list for `filter`. */
 export function filterAdmitsStatus(
   filter: VerificationStatusFilter,
-  status: VerificationStatus
+  status: LifecycleStatus
 ): boolean {
   if (filter === 'all') return true
   const composite = COMPOSITE_FILTERS[filter]

@@ -2,12 +2,10 @@ import type { CreditDenialCode } from '@/shared/lib/creditFeedback'
 import type { CommerceOutcomeOperationResult } from '@/shared/types/commerce-outcome.model'
 
 /**
- * The only status vocabulary the dashboard speaks.
+ * The values the backend's `verification_status` enum can hold.
  *
- * These are exactly the values the backend's `verification_status` enum can
- * hold. Both runtime modes read the same `/api/verifications` endpoint, so
- * there is no second, wider lifecycle to reconcile: an order that has not
- * reached a verification yet is simply not in the list, in either mode.
+ * Both runtime modes read the same `/api/verifications` endpoint, so there is
+ * no second lifecycle to reconcile. The filter vocabulary is built from these.
  */
 export type VerificationStatus =
   | 'pending'
@@ -19,6 +17,16 @@ export type VerificationStatus =
   | 'expired'
   | 'failed'
   | 'no_reply'
+
+/**
+ * An order that exists but was held before any message: `awaiting_start`
+ * until the merchant starts it, `not_started` if it was withdrawn instead.
+ * Nothing has been sent in either state.
+ */
+export type HoldLifecycleStatus = 'awaiting_start' | 'not_started'
+
+/** Every status a dashboard row can be rendered in. */
+export type LifecycleStatus = VerificationStatus | HoldLifecycleStatus
 
 /**
  * Row actions the API reports as available.
@@ -71,7 +79,7 @@ export type VerificationItem = {
   capabilities?: VerificationRowCapability[]
   cancellation_operation?: CommerceOutcomeOperationResult
   id: string
-  status: VerificationStatus
+  status: LifecycleStatus
   /**
    * Why the verification is where it is, when the backend recorded a cause.
    * Carries the explanation without adding a status word for it.

@@ -1,4 +1,5 @@
 import type {
+  LifecycleStatus,
   VerificationItem,
   VerificationRowAction,
   VerificationRowCapability,
@@ -21,8 +22,13 @@ export type LifecycleTone =
   | 'warning'
   | 'attention'
   | 'critical'
+  | 'muted'
 
-const LIFECYCLE_TONES: Record<VerificationStatus, LifecycleTone> = {
+const LIFECYCLE_TONES: Record<LifecycleStatus, LifecycleTone> = {
+  // Held before any message: waiting on the merchant, not on the customer.
+  awaiting_start: 'neutral',
+  // Withdrawn before release; nothing was or will be sent.
+  not_started: 'muted',
   pending: 'neutral',
   sent: 'info',
   delivered: 'info',
@@ -34,12 +40,12 @@ const LIFECYCLE_TONES: Record<VerificationStatus, LifecycleTone> = {
   no_reply: 'attention',
 }
 
-export function lifecycleTone(status: VerificationStatus): LifecycleTone {
+export function lifecycleTone(status: LifecycleStatus): LifecycleTone {
   return LIFECYCLE_TONES[status] ?? 'neutral'
 }
 
 /** A customer reply is the final word; nothing further will change on its own. */
-export function isTerminalLifecycleStatus(status: VerificationStatus): boolean {
+export function isTerminalLifecycleStatus(status: LifecycleStatus): boolean {
   return status === 'confirmed' || status === 'canceled'
 }
 
@@ -49,7 +55,7 @@ export function isTerminalLifecycleStatus(status: VerificationStatus): boolean {
  * Drives background refresh: a table showing only settled rows has nothing to
  * poll for, while one awaiting a customer reply must repaint when it arrives.
  */
-export function isAwaitingOutcome(status: VerificationStatus): boolean {
+export function isAwaitingOutcome(status: LifecycleStatus): boolean {
   return (
     status === 'pending' ||
     status === 'sent' ||
@@ -79,7 +85,7 @@ export function hasCapability(
  * when the commerce source can actually carry the outcome back.
  */
 export function canMarkOrderCanceled(
-  status: VerificationStatus,
+  status: LifecycleStatus,
   capabilities: VerificationRowCapability[] | undefined
 ): boolean {
   if (status !== 'no_reply') return false
@@ -116,7 +122,7 @@ export const EXPLAINED_LIFECYCLE_REASONS = new Set([
   'provider_outcome_unknown',
 ])
 
-export type { VerificationStatus }
+export type { LifecycleStatus, VerificationStatus }
 
 export interface VerificationLifecycleStep {
   id: 'dispatch' | 'delivery' | 'outcome'

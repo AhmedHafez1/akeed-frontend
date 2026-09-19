@@ -1383,7 +1383,9 @@
       "canceled": "Canceled",
       "expired": "Expired",
       "failed": "Failed",
-      "no_reply": "No reply"
+      "no_reply": "No reply",
+      "awaiting_start": "Awaiting start",
+      "not_started": "Not started"
     },
     "descriptions": {
       "pending": "Verification is queued and waiting to be sent.",
@@ -1394,7 +1396,9 @@
       "canceled": "The order is recorded as canceled in Akeed.",
       "expired": "The verification window ended without a final response.",
       "failed": "Verification could not be completed.",
-      "no_reply": "The customer did not reply within the configured time."
+      "no_reply": "The customer did not reply within the configured time.",
+      "awaiting_start": "Imported and held. No message is sent until you start confirmation.",
+      "not_started": "The import was not started, so no message was sent."
     },
     "reasons": {
       "non_cod_payment_method": "This order is not marked as cash on delivery, so no verification was sent.",

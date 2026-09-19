@@ -1,6 +1,7 @@
 import type {
   DashboardStats,
   VerificationItem,
+  LifecycleStatus,
   VerificationStatus,
 } from '@/features/dashboard/model/dashboard.model'
 import type { CancelOrderResponse } from '@/shared/types/commerce-outcome.model'
@@ -184,7 +185,7 @@ function fixtureVerifications(fixture: FixtureState): VerificationItem[] {
 
 function fixtureStats(fixture: FixtureState): DashboardStats {
   const rows = fixtureVerifications(fixture)
-  const countStatuses = (statuses: VerificationStatus[]) =>
+  const countStatuses = (statuses: LifecycleStatus[]) =>
     rows.filter((row) => statuses.includes(row.status)).length
 
   return {

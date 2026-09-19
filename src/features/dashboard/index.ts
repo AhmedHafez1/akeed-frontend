@@ -32,6 +32,8 @@ export type {
   DashboardStats,
   DashboardStatsDateRange,
   DashboardStatsResponse,
+  HoldLifecycleStatus,
+  LifecycleStatus,
   VerificationItem,
   VerificationRowAction,
   VerificationRowCapability,

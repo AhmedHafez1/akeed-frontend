@@ -2,6 +2,7 @@ import type {
   DashboardStats,
   DashboardStatsDateRange,
   VerificationItem,
+  LifecycleStatus,
   VerificationStatus,
 } from '@/features/dashboard/model/dashboard.model'
 import type { CreditSummary } from '@/features/billing/domain/billing.types'
@@ -164,7 +165,7 @@ function stats(
   rows: VerificationItem[],
   dateRange: DashboardStatsDateRange
 ): DashboardStats {
-  const count = (...matching: VerificationStatus[]) =>
+  const count = (...matching: LifecycleStatus[]) =>
     rows.filter((row) => matching.includes(row.status)).length
   return {
     date_range: dateRange,
