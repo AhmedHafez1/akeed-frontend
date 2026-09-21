@@ -13,9 +13,21 @@ import {
 import { useLocale, useTranslations } from 'next-intl'
 import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
-import { Button, notify, SegmentedControl, Tooltip } from '@/shared/ui'
-import { useDiscardOrderImport } from '../../api/orderImportMutations'
-import type { OrderImportBatchDetail } from '../../api/orderImportsApi'
+import {
+  Button,
+  LoadingButton,
+  notify,
+  SegmentedControl,
+  Tooltip,
+} from '@/shared/ui'
+import {
+  useCommitOrderImport,
+  useDiscardOrderImport,
+} from '../../api/orderImportMutations'
+import {
+  isOrderImportApiError,
+  type OrderImportBatchDetail,
+} from '../../api/orderImportsApi'
 import { formatImportDate } from '../../domain/format'
 import {
   countOf,
@@ -72,6 +84,32 @@ export function ReviewStep({
   const locale = useLocale()
   const router = useRouter()
   const discard = useDiscardOrderImport()
+  const commit = useCommitOrderImport(detail.batchId)
+
+  /**
+   * The mutation writes the returned batch into the detail cache, so the
+   * page moves to the committing view on its own. A refusal means another
+   * tab got there first or the draft lapsed, which the refetch resolves.
+   */
+  const startImport = () => {
+    commit.mutate(undefined, {
+      onError: (error) => {
+        // Each refusal has a different next step, so each gets its own
+        // line rather than one generic failure.
+        const code = isOrderImportApiError(error) ? error.code : undefined
+        notify.error({
+          message:
+            code === 'IMPORT_NOTHING_TO_IMPORT'
+              ? t('review.nothingReady')
+              : code === 'IMPORT_BATCH_STATE_CONFLICT'
+                ? t('commit.alreadyStarted')
+                : code === 'IMPORT_BATCH_EXPIRED'
+                  ? t('states.expired.body')
+                  : t('review.importFailed'),
+        })
+      },
+    })
+  }
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const [outcome, setOutcomeState] = useState<ReviewOutcome>(() => {
@@ -235,14 +273,10 @@ export function ReviewStep({
           )
         }
         primary={
-          canEdit && (
-            // TODO(US-04.6-06): call POST /api/order-imports/:id/commit with an
-            // Idempotency-Key and move to the committing view. Until the commit
-            // endpoint exists the action stays disabled.
+          canEdit &&
+          (ready === 0 ? (
             <Tooltip
-              content={
-                ready === 0 ? t('review.nothingReady') : t('review.importSoon')
-              }
+              content={t('review.nothingReady')}
               className="w-full md:w-auto"
             >
               <Button
@@ -254,7 +288,17 @@ export function ReviewStep({
                 {t('review.import', { count: ready })}
               </Button>
             </Tooltip>
-          )
+          ) : (
+            <LoadingButton
+              type="button"
+              size="lg"
+              className="w-full md:w-auto"
+              loading={commit.isPending}
+              onClick={startImport}
+            >
+              {t('review.import', { count: ready })}
+            </LoadingButton>
+          ))
         }
         note={ready === 0 ? t('review.nothingReady') : t('nothingSent.short')}
       />

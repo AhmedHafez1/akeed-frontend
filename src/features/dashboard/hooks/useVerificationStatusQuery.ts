@@ -11,6 +11,8 @@ export function useVerificationStatusQuery() {
   const requested = searchParams.get('status')
   const statusFilter: VerificationStatusFilter =
     STANDALONE_STATUS_FILTER_IDS.find((status) => status === requested) ?? 'all'
+  // Set when the merchant arrives from an import; cleared by its chip.
+  const importBatchId = searchParams.get('importBatchId') ?? undefined
 
   function onStatusFilterChange(filter: VerificationStatusFilter) {
     const params = new URLSearchParams(searchParams.toString())
@@ -20,5 +22,17 @@ export function useVerificationStatusQuery() {
     router.push(`${pathname}${query ? `?${query}` : ''}`, { scroll: false })
   }
 
-  return { statusFilter, onStatusFilterChange }
+  function onClearImportBatch() {
+    const params = new URLSearchParams(searchParams.toString())
+    params.delete('importBatchId')
+    const query = params.toString()
+    router.push(`${pathname}${query ? `?${query}` : ''}`, { scroll: false })
+  }
+
+  return {
+    statusFilter,
+    onStatusFilterChange,
+    importBatchId,
+    onClearImportBatch,
+  }
 }

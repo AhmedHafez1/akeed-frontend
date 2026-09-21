@@ -11,12 +11,23 @@ import type {
 
 export function verificationListInfiniteOptions(
   statusFilter: VerificationStatusFilter,
-  dateRange: DashboardStatsDateRange
+  dateRange: DashboardStatsDateRange,
+  importBatchId?: string
 ) {
-  const query = buildVerificationsQuery({ statusFilter, dateRange })
+  const query = buildVerificationsQuery({
+    statusFilter,
+    dateRange,
+    importBatchId,
+  })
 
   return infiniteQueryOptions({
-    queryKey: queryKeys.verifications.list({ status: statusFilter, dateRange }),
+    // The batch belongs in the key: two filters must not share a cache
+    // entry, or clearing the chip would show the filtered page.
+    queryKey: queryKeys.verifications.list({
+      status: statusFilter,
+      dateRange,
+      importBatchId,
+    }),
     queryFn: ({ pageParam, signal }) =>
       api.get<VerificationsResponse>(
         pageParam

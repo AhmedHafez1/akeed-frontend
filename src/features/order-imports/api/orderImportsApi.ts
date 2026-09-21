@@ -124,6 +124,8 @@ export type OrderImportCounts = {
   duplicate?: number
   excluded?: number
   imported?: number
+  /** Ready rows at the moment the commit was claimed: the progress total. */
+  readyAtCommit?: number
 }
 
 export type OrderImportBatchStatus =
@@ -157,6 +159,10 @@ export type OrderImportBatchDetail = OrderImportMappingState & {
   orderDateMax: string | null
   oldOrderCount: number
   duplicateFileOf?: OrderImportDuplicateFile
+  /** Set once the commit job finishes. */
+  committedAt?: string | null
+  /** Confirmation must be started before this, or the orders lapse. */
+  startDeadlineAt?: string | null
   permissions: { canEdit: boolean }
 }
 
@@ -255,6 +261,9 @@ export const orderImportErrorCodes = [
   'IMPORT_BATCH_STATE_CONFLICT',
   'IMPORT_MAPPING_INCOMPLETE',
   'IMPORT_VALIDATION_FAILED',
+  'IMPORT_IDEMPOTENCY_KEY_REQUIRED',
+  'IMPORT_IDEMPOTENCY_CONFLICT',
+  'IMPORT_NOTHING_TO_IMPORT',
 ] as const
 
 export type OrderImportErrorCode = (typeof orderImportErrorCodes)[number]
@@ -435,6 +444,30 @@ export async function discardOrderImport(
     signal,
   })
   if (!response.ok) throw await toOrderImportError(response)
+}
+
+/**
+ * The key is derived from the batch, not minted per click.
+ *
+ * A double-click, a refresh and a retry after a timeout therefore all send
+ * the same key, which the server answers as a replay rather than a second
+ * import. There is nothing to store and nothing to lose on reload.
+ */
+export function commitIdempotencyKey(batchId: string): string {
+  return `commit-${batchId}`
+}
+
+/** `POST /api/order-imports/:id/commit`: 202 with the batch as it now is. */
+export async function commitOrderImport(
+  batchId: string,
+  signal?: AbortSignal
+): Promise<OrderImportBatchDetail> {
+  const response = await fetchWithAuth(`${batchPath(batchId)}/commit`, {
+    method: 'POST',
+    headers: { 'Idempotency-Key': commitIdempotencyKey(batchId) },
+    signal,
+  })
+  return readJson<OrderImportBatchDetail>(response)
 }
 
 export type OrderImportTemplateFile = {

@@ -45,10 +45,15 @@ function flattenPages(
  */
 export function useDashboardData(
   statusFilter: VerificationStatusFilter,
-  dateRangeFilter: DashboardStatsDateRange
+  dateRangeFilter: DashboardStatsDateRange,
+  importBatchId?: string
 ) {
   const query = useInfiniteQuery({
-    ...verificationListInfiniteOptions(statusFilter, dateRangeFilter),
+    ...verificationListInfiniteOptions(
+      statusFilter,
+      dateRangeFilter,
+      importBatchId
+    ),
     refetchInterval: (current) =>
       current.state.data?.pages.some((page) =>
         page.data.some((row) => isAwaitingOutcome(row.status))

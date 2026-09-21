@@ -11,11 +11,13 @@ import type { VerificationStatusFilter } from '../model/dashboard.model'
  */
 export function useDashboard(
   initialStatusFilter: VerificationStatusFilter = 'all',
-  onStatusFilterChange?: (filter: VerificationStatusFilter) => void
+  onStatusFilterChange?: (filter: VerificationStatusFilter) => void,
+  importBatchId?: string
 ) {
   return useVerificationsDashboard({
     initialStatusFilter,
     statusFilter: onStatusFilterChange ? initialStatusFilter : undefined,
     onStatusFilterChange,
+    importBatchId,
   })
 }

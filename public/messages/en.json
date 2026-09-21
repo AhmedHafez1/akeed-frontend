@@ -2585,7 +2585,9 @@
       "nothingReady": "No orders are ready to import.",
       "importSoon": "Importing becomes available in an upcoming update.",
       "backToMapping": "Back to mapping",
-      "discard": "Discard"
+      "discard": "Discard",
+      "importFailed": "The import could not be started. Try again.",
+      "clearImportFilter": "Clear the import filter"
     },
     "states": {
       "notFound": {
@@ -2655,6 +2657,36 @@
       "FIELD_TOO_LONG": "A cell was longer than 1,000 characters and was cut short.",
       "CSV_MALFORMED_QUOTE": "This row has a broken quote mark, so its cells may be shifted.",
       "unknown": "This row has a problem Akeed can't describe yet."
-    }
+    },
+    "commit": {
+      "heading": "Importing your orders",
+      "progress": "Importing your orders… {done} of {total}",
+      "leavePage": "You can leave this page — the import continues in the background.",
+      "back": "Back to imports",
+      "alreadyStarted": "This import was already started somewhere else. Refreshing it now."
+    },
+    "imported": {
+      "heading": "{count, plural, =0 {No orders imported} one {# order imported} other {# orders imported}}",
+      "nothingSent": "Nothing has been sent to customers yet.",
+      "pills": {
+        "awaitingStart": "Awaiting start",
+        "invalid": "Need fixing",
+        "duplicate": "Duplicates",
+        "excluded": "Excluded",
+        "alreadyImported": "Already imported during import"
+      },
+      "deadline": "Start before {deadline} or these orders won't be confirmed.",
+      "start": "Start WhatsApp confirmation",
+      "startSoon": "Starting confirmation is coming in the next release.",
+      "reviewOrders": "Review orders",
+      "downloadReport": "Download report"
+    },
+    "partial": {
+      "heading": "This import did not finish",
+      "title": "Some orders could not be imported",
+      "body": "Imported {imported} of {attempted}. {missing} could not be imported.",
+      "reupload": "Upload the rest"
+    },
+    "verificationsChip": "From import: {file}"
   }
 }

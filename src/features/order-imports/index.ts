@@ -3,6 +3,7 @@ export {
   OrderImportNewStandalone,
 } from './skins/standalone/OrderImportPagesStandalone'
 export { NewImportLink } from './skins/standalone/NewImportLink'
+export { ImportFilterChip } from './skins/standalone/ImportFilterChip'
 export {
   discardOrderImport,
   downloadOrderImportTemplate,

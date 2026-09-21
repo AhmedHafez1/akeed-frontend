@@ -132,6 +132,8 @@ export interface VerificationsQueryParams {
   statusFilter: VerificationStatusFilter
   dateRange: DashboardStatsDateRange
   limit?: number
+  /** Narrow the list to the orders one import batch created. */
+  importBatchId?: string
 }
 
 /** Build the `/api/verifications` query string for a filter selection. */
@@ -139,6 +141,7 @@ export function buildVerificationsQuery({
   statusFilter,
   dateRange,
   limit = VERIFICATIONS_PAGE_SIZE,
+  importBatchId,
 }: VerificationsQueryParams): string {
   const params = new URLSearchParams({
     date_range: dateRange,
@@ -151,6 +154,7 @@ export function buildVerificationsQuery({
   } else if (statusFilter !== 'all') {
     params.set('status', statusFilter)
   }
+  if (importBatchId) params.set('importBatchId', importBatchId)
 
   return `?${params.toString()}`
 }

@@ -26,6 +26,12 @@ export type DomainEvent =
   | 'credits.purchased'
   /** A file import was uploaded, re-mapped, changed or discarded. Nothing was sent. */
   | 'orderImport.changed'
+  /**
+   * An import finished creating its held orders. Unlike a manual order, those
+   * orders are listable the moment they exist -- held, not waiting on a
+   * worker -- so the lists can be refreshed straight away.
+   */
+  | 'orderImport.committed'
 
 /**
  * The only place that knows the cross-screen consequences of a change.
@@ -62,6 +68,11 @@ const AFFECTED_QUERIES: Record<DomainEvent, ReadonlyArray<QueryKey>> = {
     queryKeys.verifications.pageContext(),
   ],
   'orderImport.changed': [queryKeys.orderImports.all],
+  'orderImport.committed': [
+    queryKeys.orderImports.all,
+    queryKeys.verifications.all,
+    queryKeys.billing.all,
+  ],
 }
 
 export function useEmitDomainEvent() {

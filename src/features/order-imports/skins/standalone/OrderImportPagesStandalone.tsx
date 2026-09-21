@@ -12,6 +12,9 @@ import { isOrderImportApiError } from '../../api/orderImportsApi'
 import { viewForBatch } from '../../domain/importStep'
 import { useBulkImportAvailability } from '../../domain/useBulkImportAvailability'
 import { BatchStateNotice } from './BatchStateNotice'
+import { CommittingView } from './CommittingView'
+import { ImportedView } from './ImportedView'
+import { PartialImportView } from './PartialImportView'
 import { DuplicateFileBanner } from './DuplicateFileBanner'
 import { ImportWizardShell } from './ImportWizardShell'
 import { MapStep } from './MapStep'
@@ -109,6 +112,24 @@ export function OrderImportBatchStandalone({ batchId }: { batchId: string }) {
     return (
       <ImportWizardShell step={null} canEdit={canEdit}>
         <BatchStateNotice state="expired" />
+      </ImportWizardShell>
+    )
+  if (view.kind === 'committing')
+    return (
+      <ImportWizardShell step={null} canEdit={canEdit}>
+        <CommittingView detail={batch} />
+      </ImportWizardShell>
+    )
+  if (view.kind === 'imported')
+    return (
+      <ImportWizardShell step={null} canEdit={canEdit}>
+        <ImportedView detail={batch} />
+      </ImportWizardShell>
+    )
+  if (view.kind === 'partial')
+    return (
+      <ImportWizardShell step={null} canEdit={canEdit}>
+        <PartialImportView detail={batch} />
       </ImportWizardShell>
     )
   if (view.kind === 'unavailable')

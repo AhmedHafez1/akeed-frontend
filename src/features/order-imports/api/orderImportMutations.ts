@@ -9,6 +9,7 @@ import { useEmitDomainEvent } from '@/shared/query/domainEvents'
 import { queryKeys } from '@/shared/query/keys'
 import { countsAfterInclude } from '../domain/reviewSummary'
 import {
+  commitOrderImport,
   discardOrderImport,
   saveOrderImportMapping,
   setOrderImportRowInclude,
@@ -156,6 +157,33 @@ export function useSetOrderImportRowInclude(
           query.queryKey[1] === 'rows' &&
           query.queryKey[2] === batchId &&
           query.queryKey[3] !== outcome,
+      })
+    },
+  })
+}
+
+/**
+ * Start the import.
+ *
+ * The 202 carries the batch as it now stands, so writing it into the detail
+ * cache moves the page to the committing view and starts its poll without
+ * waiting for a refetch.
+ */
+export function useCommitOrderImport(batchId: string) {
+  const queryClient = useQueryClient()
+  const emitDomainEvent = useEmitDomainEvent()
+  return useMutation<OrderImportBatchDetail, Error, void>({
+    mutationFn: () => commitOrderImport(batchId),
+    onSuccess: (batch) => {
+      queryClient.setQueryData(queryKeys.orderImports.detail(batchId), batch)
+      void emitDomainEvent('orderImport.changed')
+    },
+    onError: () => {
+      // A refusal means the server knows something this page does not --
+      // another tab committed it, or the draft lapsed. Re-read rather than
+      // guessing which.
+      void queryClient.invalidateQueries({
+        queryKey: queryKeys.orderImports.detail(batchId),
       })
     },
   })

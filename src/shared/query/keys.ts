@@ -10,8 +10,11 @@ export const queryKeys = {
   verifications: {
     all: ['verifications'] as const,
     lists: () => [...queryKeys.verifications.all, 'list'] as const,
-    list: (filters: { status: string; dateRange: string }) =>
-      [...queryKeys.verifications.lists(), filters] as const,
+    list: (filters: {
+      status: string
+      dateRange: string
+      importBatchId?: string
+    }) => [...queryKeys.verifications.lists(), filters] as const,
     stats: (dateRange: string) =>
       [...queryKeys.verifications.all, 'stats', dateRange] as const,
     pageContext: () =>
