@@ -1,5 +1,6 @@
 export { useBillingSummary } from './domain/useBillingSummary'
 export { useBillingPage } from './domain/useBillingPage'
+export { billingPurchaseHref } from './domain/billingReturnTo'
 export { useTransactions } from './domain/useTransactions'
 export { useTransactionsLog } from './domain/useTransactionsLog'
 export { BillingStandalonePage } from './ui/BillingStandalonePage'

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import { Skeleton } from '@/shared/ui'
@@ -14,7 +15,9 @@ import { useBulkImportAvailability } from '../../domain/useBulkImportAvailabilit
 import { BatchStateNotice } from './BatchStateNotice'
 import { CommittingView } from './CommittingView'
 import { ImportedView } from './ImportedView'
+import { ImportNotice } from './ImportNotice'
 import { PartialImportView } from './PartialImportView'
+import { ReleaseView } from './ReleaseView'
 import { DuplicateFileBanner } from './DuplicateFileBanner'
 import { ImportWizardShell } from './ImportWizardShell'
 import { MapStep } from './MapStep'
@@ -75,6 +78,11 @@ export function OrderImportBatchStandalone({ batchId }: { batchId: string }) {
   })
   // "Back to mapping" is the one move the server's status does not make.
   const [editingMapping, setEditingMapping] = useState(false)
+  // `?start=1` is where Buy credits returns to: reopen the start dialog.
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const pathname = usePathname()
+  const reopenStart = searchParams.get('start') === '1'
 
   if (availability === 'disabled' || isRefusal(detail.error, 'IMPORT_DISABLED'))
     return (
@@ -123,7 +131,32 @@ export function OrderImportBatchStandalone({ batchId }: { batchId: string }) {
   if (view.kind === 'imported')
     return (
       <ImportWizardShell step={null} canEdit={canEdit}>
-        <ImportedView detail={batch} />
+        <ImportedView
+          detail={batch}
+          canEdit={canEdit}
+          openStartOnLoad={reopenStart}
+          onStartClosed={() => {
+            if (reopenStart) router.replace(pathname)
+          }}
+        />
+      </ImportWizardShell>
+    )
+  if (view.kind === 'release')
+    return (
+      <ImportWizardShell step={null} canEdit={canEdit}>
+        <ReleaseView detail={batch} canEdit={canEdit} />
+      </ImportWizardShell>
+    )
+  if (view.kind === 'notStarted')
+    return (
+      <ImportWizardShell step={null} canEdit={canEdit}>
+        <ImportNotice
+          tone="neutral"
+          role="status"
+          title={t('release.notStartedTitle')}
+        >
+          {t('release.notStartedBody')}
+        </ImportNotice>
       </ImportWizardShell>
     )
   if (view.kind === 'partial')

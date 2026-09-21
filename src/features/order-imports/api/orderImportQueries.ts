@@ -1,9 +1,10 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query'
 import { queryKeys } from '@/shared/query/keys'
-import { BATCH_POLL_INTERVAL_MS, isTransitional } from '../domain/importStep'
+import { pollIntervalFor } from '../domain/importStep'
 import {
   getOrderImport,
   getOrderImportRows,
+  getOrderImportStartQuote,
   isOrderImportApiError,
   listOpenOrderImportDrafts,
   type OrderImportRowOutcome,
@@ -28,12 +29,23 @@ export function orderImportDetailOptions(batchId: string) {
     queryKey: queryKeys.orderImports.detail(batchId),
     queryFn: ({ signal }) => getOrderImport(batchId, signal),
     retry: retryUnlessRefused,
-    // Only statuses the server moves on its own are polled; a draft waits
-    // for the merchant.
     refetchInterval: (query) =>
-      query.state.data && isTransitional(query.state.data.status)
-        ? BATCH_POLL_INTERVAL_MS
-        : false,
+      query.state.data ? pollIntervalFor(query.state.data.status) : false,
+  })
+}
+
+/**
+ * The start quote is only ever read fresh: it prices the balance of this
+ * moment, and its token expires after 10 minutes.
+ */
+export function orderImportStartQuoteOptions(batchId: string) {
+  return queryOptions({
+    queryKey: queryKeys.orderImports.startQuote(batchId),
+    queryFn: ({ signal }) => getOrderImportStartQuote(batchId, signal),
+    retry: retryUnlessRefused,
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnWindowFocus: true,
   })
 }
 

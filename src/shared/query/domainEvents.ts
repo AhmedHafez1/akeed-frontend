@@ -32,6 +32,13 @@ export type DomainEvent =
    * worker -- so the lists can be refreshed straight away.
    */
   | 'orderImport.committed'
+  /**
+   * The merchant started (or resumed) sending an import's held orders. They
+   * now move through the shared verification lifecycle and spend credits.
+   */
+  | 'orderImport.started'
+  /** The merchant stopped an import; its unsent orders are now not started. */
+  | 'orderImport.stopped'
 
 /**
  * The only place that knows the cross-screen consequences of a change.
@@ -63,12 +70,24 @@ const AFFECTED_QUERIES: Record<DomainEvent, ReadonlyArray<QueryKey>> = {
     queryKeys.verifications.all,
     queryKeys.billing.summary(),
   ],
+  // An import's start quote reads the balance, so it re-quotes too.
   'credits.purchased': [
     queryKeys.billing.all,
     queryKeys.verifications.pageContext(),
+    queryKeys.orderImports.all,
   ],
   'orderImport.changed': [queryKeys.orderImports.all],
   'orderImport.committed': [
+    queryKeys.orderImports.all,
+    queryKeys.verifications.all,
+    queryKeys.billing.all,
+  ],
+  'orderImport.started': [
+    queryKeys.orderImports.all,
+    queryKeys.verifications.all,
+    queryKeys.billing.all,
+  ],
+  'orderImport.stopped': [
     queryKeys.orderImports.all,
     queryKeys.verifications.all,
     queryKeys.billing.all,

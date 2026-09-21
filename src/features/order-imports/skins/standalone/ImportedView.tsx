@@ -1,15 +1,16 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { CheckCircle2, Clock } from 'lucide-react'
 import { useFormatter, useLocale, useTranslations } from 'next-intl'
 import { withLocale } from '@/shared/lib/locale'
 import { useEmitDomainEvent } from '@/shared/query/domainEvents'
-import { Button, Tooltip } from '@/shared/ui'
+import { Button } from '@/shared/ui'
 import type { OrderImportBatchDetail } from '../../api/orderImportsApi'
 import { IMPORT_STEP_HEADING_ID } from './ImportWizardShell'
 import { ImportNotice } from './ImportNotice'
+import { StartConfirmationDialog } from './StartConfirmationDialog'
 
 /** The five counts the merchant is shown, in the order M6 frame B lists them. */
 const pills = [
@@ -27,11 +28,23 @@ const pills = [
  * screen, so the reassurance line and the deadline are as prominent as the
  * count, and the only emerald action is the one the merchant has not taken.
  */
-export function ImportedView({ detail }: { detail: OrderImportBatchDetail }) {
+export function ImportedView({
+  detail,
+  canEdit,
+  openStartOnLoad = false,
+  onStartClosed,
+}: {
+  detail: OrderImportBatchDetail
+  canEdit: boolean
+  /** Back from buying credits: reopen the dialog, which re-quotes. */
+  openStartOnLoad?: boolean
+  onStartClosed?: () => void
+}) {
   const t = useTranslations('orderImport')
   const locale = useLocale()
   const format = useFormatter()
   const emitDomainEvent = useEmitDomainEvent()
+  const [startOpen, setStartOpen] = useState(openStartOnLoad && canEdit)
 
   const counts = detail.counts
   const imported = counts.imported ?? 0
@@ -120,13 +133,21 @@ export function ImportedView({ detail }: { detail: OrderImportBatchDetail }) {
             {t('imported.reviewOrders')}
           </Link>
         </Button>
-        {/* TODO(US-04.6-07): enable once POST /:id/start exists. */}
-        <Tooltip content={t('imported.startSoon')}>
-          <Button size="lg" disabled>
+        {canEdit && (
+          <Button size="lg" onClick={() => setStartOpen(true)}>
             {t('imported.start')}
           </Button>
-        </Tooltip>
+        )}
       </div>
+
+      <StartConfirmationDialog
+        batchId={detail.batchId}
+        open={startOpen}
+        onOpenChange={(open) => {
+          setStartOpen(open)
+          if (!open) onStartClosed?.()
+        }}
+      />
     </section>
   )
 }

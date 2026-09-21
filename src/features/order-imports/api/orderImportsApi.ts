@@ -163,7 +163,91 @@ export type OrderImportBatchDetail = OrderImportMappingState & {
   committedAt?: string | null
   /** Confirmation must be started before this, or the orders lapse. */
   startDeadlineAt?: string | null
+  /** Release progress, present once the batch is committed (US-04.6-07). */
+  startedAt?: string | null
+  /** A blocker code, or `staff_paused`, while the batch is paused. */
+  pausedReason?: string | null
+  /** While quiet hours hold sending back: when it resumes. */
+  quietHoursUntil?: string | null
+  stoppedAt?: string | null
+  completedAt?: string | null
+  ratePerMinute?: number
+  storeTimezone?: string | null
+  release?: OrderImportReleaseCounts
+  lifecycle?: OrderImportLifecycleCounts
   permissions: { canEdit: boolean }
+}
+
+/** Where the batch's orders are in the hold: sent on, still held, or given up. */
+export type OrderImportReleaseCounts = {
+  total: number
+  held: number
+  released: number
+  withdrawn: number
+}
+
+/** The verification lifecycle of the batch's orders, as the M8 pills group it. */
+export type OrderImportLifecycleCounts = {
+  queued: number
+  sent: number
+  confirmed: number
+  canceled: number
+  noReply: number
+  failed: number
+}
+
+export type OrderImportCreditDenialCode =
+  | 'INSUFFICIENT_CREDITS'
+  | 'CREDIT_DEBT_OUTSTANDING'
+  | 'CREDIT_ACCOUNT_SUSPENDED'
+  | 'CREDIT_ACCOUNT_NOT_PROVISIONED'
+  | 'PAYMENT_PENDING_RECONCILIATION'
+
+export type OrderImportStartBlockerCode =
+  | 'IMPORT_AUTO_VERIFY_DISABLED'
+  | 'IMPORT_SETUP_INCOMPLETE'
+  | 'IMPORT_PLAN_LIMIT_REACHED'
+  | 'IMPORT_START_WINDOW_EXPIRED'
+  | OrderImportCreditDenialCode
+
+/** One reason the batch cannot start or resume right now. */
+export type OrderImportStartBlocker = {
+  code: OrderImportStartBlockerCode
+  reason?: string
+  shortfall?: number
+  suggestedPurchaseCredits?: number
+  slotsRemaining?: number
+}
+
+/** `GET /api/order-imports/:id/start-quote` (M7). */
+export type OrderImportStartQuote = {
+  batchId: string
+  orders: number
+  accountingMode: 'prepaid_credit' | 'periodic_plan'
+  creditsAvailable: number | null
+  slotsRemaining: number | null
+  estimatedCreditsMin: number
+  estimatedCreditsMax: number
+  ratePerMinute: number
+  estimatedDurationMinutes: number
+  quietHours: {
+    enabled: boolean
+    start: string | null
+    end: string | null
+    timezone: string
+  }
+  startDeadlineAt: string | null
+  blockers: OrderImportStartBlocker[]
+  quoteToken: string
+  quoteExpiresAt: string
+  attestation: { version: string; text: { en: string; ar: string } }
+}
+
+export type OrderImportStopResult = {
+  batchId: string
+  status: 'stopped'
+  released: number
+  withdrawn: number
 }
 
 /** Listed with `IMPORT_TOO_MANY_DRAFTS`, and by the open-drafts list. */
@@ -264,6 +348,17 @@ export const orderImportErrorCodes = [
   'IMPORT_IDEMPOTENCY_KEY_REQUIRED',
   'IMPORT_IDEMPOTENCY_CONFLICT',
   'IMPORT_NOTHING_TO_IMPORT',
+  'IMPORT_ATTESTATION_REQUIRED',
+  'IMPORT_QUOTE_STALE',
+  'IMPORT_START_WINDOW_EXPIRED',
+  'IMPORT_AUTO_VERIFY_DISABLED',
+  'IMPORT_PLAN_LIMIT_REACHED',
+  // Start and resume answer the shared credit codes unchanged.
+  'INSUFFICIENT_CREDITS',
+  'CREDIT_DEBT_OUTSTANDING',
+  'CREDIT_ACCOUNT_SUSPENDED',
+  'CREDIT_ACCOUNT_NOT_PROVISIONED',
+  'PAYMENT_PENDING_RECONCILIATION',
 ] as const
 
 export type OrderImportErrorCode = (typeof orderImportErrorCodes)[number]
@@ -278,6 +373,10 @@ type OrderImportErrorExtras = {
   /** Recomputed checks, on `IMPORT_MAPPING_INCOMPLETE`. */
   paymentValues?: OrderImportPaymentValues | null
   dateFormat?: OrderImportDateCheck | null
+  /** A fresh quote, on `IMPORT_QUOTE_STALE`. */
+  quote?: OrderImportStartQuote
+  /** Every blocker, on a refused start or resume. */
+  blockers?: OrderImportStartBlocker[]
 }
 
 export type OrderImportApiError = ApiError &
@@ -315,13 +414,12 @@ async function toOrderImportError(
   const error: ApiError & OrderImportErrorExtras = await createApiError(
     response.clone()
   )
-  if (
-    error.code !== 'IMPORT_TOO_MANY_DRAFTS' &&
-    error.code !== 'IMPORT_MAPPING_INCOMPLETE'
-  )
-    return error
   try {
     const body = await parseJsonResponse<Record<string, unknown>>(response)
+    if (Array.isArray(body.blockers))
+      error.blockers = body.blockers as OrderImportStartBlocker[]
+    if (body.quote && typeof body.quote === 'object')
+      error.quote = body.quote as OrderImportStartQuote
     if (Array.isArray(body.drafts))
       error.drafts = body.drafts.filter(isOpenDraft)
     if ('paymentValues' in body)
@@ -465,6 +563,62 @@ export async function commitOrderImport(
   const response = await fetchWithAuth(`${batchPath(batchId)}/commit`, {
     method: 'POST',
     headers: { 'Idempotency-Key': commitIdempotencyKey(batchId) },
+    signal,
+  })
+  return readJson<OrderImportBatchDetail>(response)
+}
+
+/** `GET /api/order-imports/:id/start-quote`: count, cost, pace and blockers. */
+export async function getOrderImportStartQuote(
+  batchId: string,
+  signal?: AbortSignal
+): Promise<OrderImportStartQuote> {
+  const response = await fetchWithAuth(`${batchPath(batchId)}/start-quote`, {
+    method: 'GET',
+    signal,
+  })
+  return readJson<OrderImportStartQuote>(response)
+}
+
+/** Derived from the batch, like the commit key, so a double click replays. */
+export function startIdempotencyKey(batchId: string): string {
+  return `start-${batchId}`
+}
+
+/** `POST /api/order-imports/:id/start`: 202 with the releasing batch. */
+export async function startOrderImport(
+  batchId: string,
+  body: { attestationVersion: string; quoteToken: string },
+  signal?: AbortSignal
+): Promise<OrderImportBatchDetail> {
+  const response = await fetchWithAuth(`${batchPath(batchId)}/start`, {
+    method: 'POST',
+    headers: { 'Idempotency-Key': startIdempotencyKey(batchId) },
+    body: JSON.stringify(body),
+    signal,
+  })
+  return readJson<OrderImportBatchDetail>(response)
+}
+
+/** `POST /api/order-imports/:id/stop`: withdraws every order not yet sent. */
+export async function stopOrderImport(
+  batchId: string,
+  signal?: AbortSignal
+): Promise<OrderImportStopResult> {
+  const response = await fetchWithAuth(`${batchPath(batchId)}/stop`, {
+    method: 'POST',
+    signal,
+  })
+  return readJson<OrderImportStopResult>(response)
+}
+
+/** `POST /api/order-imports/:id/resume`: continues a paused batch. */
+export async function resumeOrderImport(
+  batchId: string,
+  signal?: AbortSignal
+): Promise<OrderImportBatchDetail> {
+  const response = await fetchWithAuth(`${batchPath(batchId)}/resume`, {
+    method: 'POST',
     signal,
   })
   return readJson<OrderImportBatchDetail>(response)

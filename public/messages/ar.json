@@ -2247,7 +2247,8 @@
         "canceled": "لم يُضف رصيد. يمكنك العودة إلى الفوترة عندما تكون جاهزًا.",
         "expired": "لم يعد رابط الدفع صالحًا. ارجع إلى الفوترة لبدء عملية جديدة.",
         "refunded": "تم استرداد الدفعة ويعرض سجل الرصيد النتيجة المؤكدة."
-      }
+      },
+      "backToImport": "متابعة الاستيراد"
     },
     "hero": {
       "available": "الرصيد المتاح الآن",
@@ -2671,7 +2672,6 @@
       },
       "deadline": "ابدأ قبل {deadline} وإلا لن يتم تأكيد هذه الطلبات.",
       "start": "ابدأ التأكيد عبر واتساب",
-      "startSoon": "بدء التأكيد سيتوفر في الإصدار القادم.",
       "reviewOrders": "مراجعة الطلبات",
       "downloadReport": "تنزيل التقرير"
     },
@@ -2681,6 +2681,81 @@
       "body": "تم استيراد {imported} من {attempted}. تعذر استيراد {missing}.",
       "reupload": "ارفع الباقي"
     },
-    "verificationsChip": "من الاستيراد: {file}"
+    "verificationsChip": "من الاستيراد: {file}",
+    "start": {
+      "title": "ابدأ التأكيد عبر واتساب",
+      "description": "راجع من سيتلقى الرسائل وكم ستكلف قبل إرسال أي شيء.",
+      "loading": "جارٍ تجهيز الملخص…",
+      "loadFailed": "تعذّر تجهيز الملخص.",
+      "retry": "حاول مرة أخرى",
+      "customers": "العملاء الذين ستُرسل إليهم رسائل",
+      "pace": "وتيرة الإرسال",
+      "paceValue": "نحو {rate, number} في الدقيقة · المدة المتوقعة {duration}",
+      "quietNote": "(يتوقف خلال ساعات الهدوء {window})",
+      "credits": "الرصيد المطلوب",
+      "creditsValue": "{min, number} الآن · حتى {max, number} مع رسائل المتابعة",
+      "creditsValueNoFollowUp": "{min, number} الآن",
+      "planUsage": "تأكيدات الباقة",
+      "planUsageValue": "{min, number} الآن · متبقٍّ {slots, number} في هذه الفترة",
+      "balance": "رصيدك",
+      "balanceValue": "{available, number} ← {after, number} بعد الرسائل الأولى",
+      "balanceShort": "{available, number} رصيد · ينقص {shortfall, number}",
+      "attestationLabel": "موافقة العملاء",
+      "cancel": "إلغاء",
+      "confirm": "ابدأ الإرسال إلى {count, plural, zero {# عميل} one {عميل واحد} two {عميلين} few {# عملاء} many {# عميلًا} other {# عميل}}",
+      "buy": "اشترِ {credits, number} رصيد",
+      "shortfallTitle": "اشترِ رصيدًا للبدء.",
+      "shortfallBody": "لن يُرسل أي شيء حتى يغطي رصيدك جميع الطلبات وعددها {count, number}.",
+      "autoVerifyTitle": "التأكيد التلقائي متوقف",
+      "openSettings": "فتح الإعدادات",
+      "blocked": {
+        "IMPORT_SETUP_INCOMPLETE": "يحتاج إعداد متجرك إلى مراجعة قبل بدء التأكيد.",
+        "IMPORT_PLAN_LIMIT_REACHED": "تبقّى في باقتك {slots, number} تأكيد في هذه الفترة، وهو أقل من عدد هذه الطلبات.",
+        "IMPORT_START_WINDOW_EXPIRED": "انتهت مهلة بدء هذا الاستيراد. ارفع الطلبات مرة أخرى لتأكيدها."
+      },
+      "stale": "تغيّر العدد أو رصيدك. راجع الملخص المحدّث وأكّد مرة أخرى.",
+      "failed": "تعذّر بدء التأكيد. حاول مرة أخرى.",
+      "durationMinutes": "{minutes, number} د",
+      "durationHours": "{hours, number} س {minutes, number} د"
+    },
+    "release": {
+      "startedAt": "بدأ {time}",
+      "progress": "أُرسل {released, number} من {total, number}",
+      "timeLeft": "متبقٍّ نحو {duration}",
+      "rate": "نحو {rate, number} رسالة في الدقيقة",
+      "pills": {
+        "queued": "في الانتظار",
+        "sent": "أُرسلت",
+        "confirmed": "مؤكدة",
+        "canceled": "ملغاة",
+        "noReply": "بلا رد",
+        "failed": "فشلت"
+      },
+      "quietHours": "ساعات الهدوء — يُستأنف الإرسال عند {time} ({timezone}).",
+      "pausedTitle": "متوقف مؤقتًا — {reason}",
+      "waiting": "في الانتظار: {count, number} عميل.",
+      "pausedReason": {
+        "IMPORT_AUTO_VERIFY_DISABLED": "أُوقف التأكيد التلقائي.",
+        "IMPORT_SETUP_INCOMPLETE": "يحتاج إعداد متجرك إلى مراجعة.",
+        "IMPORT_PLAN_LIMIT_REACHED": "لم يتبقَّ في باقتك تأكيدات لهذه الفترة.",
+        "other": "الإرسال معلّق."
+      },
+      "staffPaused": "أوقفه فريق دعم أكيد مؤقتًا. تواصل مع الدعم لمتابعة الإرسال.",
+      "resume": "استئناف",
+      "resumeFailed": "تعذّر استئناف الإرسال.",
+      "buyCredits": "شراء رصيد",
+      "stop": "إيقاف المتبقي",
+      "stopped": "تم الإيقاف. تواصلنا مع {sent, number} عميل، ولم نتواصل مع {withdrawn, number} ولن نفعل. تستمر الطلبات التي أُرسلت بشكل طبيعي.",
+      "completed": "اكتمل الإرسال إلى جميع العملاء ({count, number}). تستمر الردود في الوصول إلى قائمة طلباتك.",
+      "notStartedTitle": "لم يبدأ هذا الاستيراد",
+      "notStartedBody": "انتهت مهلة البدء، فلم تُرسل هذه الطلبات. ارفعها مرة أخرى لتأكيدها."
+    },
+    "stop": {
+      "title": "إيقاف الطلبات المتبقية؟",
+      "body": "لم نتواصل مع {count, number} عميل ولن نفعل. تستمر الطلبات التي أُرسلت بشكل طبيعي.",
+      "cancel": "متابعة الإرسال",
+      "confirm": "إيقاف المتبقي",
+      "failed": "تعذّر إيقاف الإرسال. حاول مرة أخرى."
+    }
   }
 }

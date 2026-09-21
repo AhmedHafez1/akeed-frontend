@@ -11,6 +11,9 @@ import { countsAfterInclude } from '../domain/reviewSummary'
 import {
   commitOrderImport,
   discardOrderImport,
+  resumeOrderImport,
+  startOrderImport,
+  stopOrderImport,
   saveOrderImportMapping,
   setOrderImportRowInclude,
   uploadOrderImport,
@@ -18,6 +21,7 @@ import {
   type OrderImportMappingSaved,
   type OrderImportRow,
   type OrderImportRowOutcome,
+  type OrderImportStopResult,
   type OrderImportRowsPage,
   type OrderImportRowUpdate,
   type OrderImportUploadResponse,
@@ -185,6 +189,55 @@ export function useCommitOrderImport(batchId: string) {
       void queryClient.invalidateQueries({
         queryKey: queryKeys.orderImports.detail(batchId),
       })
+    },
+  })
+}
+
+/**
+ * Start sending the batch's held orders. The 202 carries the releasing batch,
+ * so the page moves to the release panel without waiting for a refetch.
+ */
+export function useStartOrderImport(batchId: string) {
+  const queryClient = useQueryClient()
+  const emitDomainEvent = useEmitDomainEvent()
+  return useMutation<
+    OrderImportBatchDetail,
+    Error,
+    { attestationVersion: string; quoteToken: string }
+  >({
+    mutationFn: (body) => startOrderImport(batchId, body),
+    onSuccess: (batch) => {
+      queryClient.setQueryData(queryKeys.orderImports.detail(batchId), batch)
+      void emitDomainEvent('orderImport.started')
+    },
+  })
+}
+
+/** Continue a paused batch; the start's attestation still covers it. */
+export function useResumeOrderImport(batchId: string) {
+  const queryClient = useQueryClient()
+  const emitDomainEvent = useEmitDomainEvent()
+  return useMutation<OrderImportBatchDetail, Error, void>({
+    mutationFn: () => resumeOrderImport(batchId),
+    onSuccess: (batch) => {
+      queryClient.setQueryData(queryKeys.orderImports.detail(batchId), batch)
+      void emitDomainEvent('orderImport.started')
+    },
+    onError: () => {
+      void queryClient.invalidateQueries({
+        queryKey: queryKeys.orderImports.detail(batchId),
+      })
+    },
+  })
+}
+
+/** Withdraw every order not yet sent. Safe to repeat. */
+export function useStopOrderImport(batchId: string) {
+  const emitDomainEvent = useEmitDomainEvent()
+  return useMutation<OrderImportStopResult, Error, void>({
+    mutationFn: () => stopOrderImport(batchId),
+    onSettled: () => {
+      void emitDomainEvent('orderImport.stopped')
     },
   })
 }

@@ -2253,7 +2253,8 @@
         "canceled": "No credits were added. You can return to billing when you are ready.",
         "expired": "This checkout can no longer be used. Return to billing to start a new purchase.",
         "refunded": "The purchase was refunded and the credit ledger reflects the verified outcome."
-      }
+      },
+      "backToImport": "Continue your import"
     },
     "hero": {
       "available": "Available balance",
@@ -2677,7 +2678,6 @@
       },
       "deadline": "Start before {deadline} or these orders won't be confirmed.",
       "start": "Start WhatsApp confirmation",
-      "startSoon": "Starting confirmation is coming in the next release.",
       "reviewOrders": "Review orders",
       "downloadReport": "Download report"
     },
@@ -2687,6 +2687,81 @@
       "body": "Imported {imported} of {attempted}. {missing} could not be imported.",
       "reupload": "Upload the rest"
     },
-    "verificationsChip": "From import: {file}"
+    "verificationsChip": "From import: {file}",
+    "start": {
+      "title": "Start WhatsApp confirmation",
+      "description": "Check who will be messaged and what it will cost before anything is sent.",
+      "loading": "Preparing the summary…",
+      "loadFailed": "We couldn't prepare the summary.",
+      "retry": "Try again",
+      "customers": "Customers to message",
+      "pace": "Sending pace",
+      "paceValue": "About {rate, number} per minute · est. {duration}",
+      "quietNote": "(pauses {window} quiet hours)",
+      "credits": "Credits",
+      "creditsValue": "{min, number} now · up to {max, number} with follow-ups",
+      "creditsValueNoFollowUp": "{min, number} now",
+      "planUsage": "Plan confirmations",
+      "planUsageValue": "{min, number} now · {slots, number} left this period",
+      "balance": "Your balance",
+      "balanceValue": "{available, number} → {after, number} after first messages",
+      "balanceShort": "{available, number} credits · {shortfall, number} short",
+      "attestationLabel": "Customer consent",
+      "cancel": "Cancel",
+      "confirm": "Start sending to {count, plural, one {# customer} other {# customers}}",
+      "buy": "Buy {credits, number} credits",
+      "shortfallTitle": "Buy credits to start.",
+      "shortfallBody": "Nothing will be sent until your balance covers all {count, number} orders.",
+      "autoVerifyTitle": "Automatic confirmation is turned off",
+      "openSettings": "Open settings",
+      "blocked": {
+        "IMPORT_SETUP_INCOMPLETE": "Your store setup needs attention before confirmation can start.",
+        "IMPORT_PLAN_LIMIT_REACHED": "Your plan has {slots, number} confirmations left this period, fewer than these orders.",
+        "IMPORT_START_WINDOW_EXPIRED": "The time to start this import has passed. Upload the orders again to confirm them."
+      },
+      "stale": "The count or your balance changed. Review the updated summary and confirm again.",
+      "failed": "Confirmation couldn't be started. Try again.",
+      "durationMinutes": "{minutes, plural, one {# min} other {# min}}",
+      "durationHours": "{hours, number} h {minutes, number} min"
+    },
+    "release": {
+      "startedAt": "Started {time}",
+      "progress": "Sent {released, number} of {total, number}",
+      "timeLeft": "about {duration} left",
+      "rate": "About {rate, number} messages per minute",
+      "pills": {
+        "queued": "Queued",
+        "sent": "Sent",
+        "confirmed": "Confirmed",
+        "canceled": "Canceled",
+        "noReply": "No reply",
+        "failed": "Failed"
+      },
+      "quietHours": "Quiet hours — sending resumes at {time} ({timezone}).",
+      "pausedTitle": "Paused — {reason}",
+      "waiting": "{count, plural, one {# customer is} other {# customers are}} waiting.",
+      "pausedReason": {
+        "IMPORT_AUTO_VERIFY_DISABLED": "automatic confirmation was turned off.",
+        "IMPORT_SETUP_INCOMPLETE": "your store setup needs attention.",
+        "IMPORT_PLAN_LIMIT_REACHED": "your plan has no confirmations left this period.",
+        "other": "sending is on hold."
+      },
+      "staffPaused": "Paused by Akeed support. Contact support to continue sending.",
+      "resume": "Resume",
+      "resumeFailed": "Sending couldn't be resumed.",
+      "buyCredits": "Buy credits",
+      "stop": "Stop remaining",
+      "stopped": "Stopped. {sent, plural, one {# customer was} other {# customers were}} contacted; {withdrawn, plural, one {# was} other {# were}} not and won't be. Orders already sent continue normally.",
+      "completed": "Finished sending to all {count, plural, one {# customer} other {# customers}}. Replies keep arriving in your orders list.",
+      "notStartedTitle": "This import was never started",
+      "notStartedBody": "The time to start it passed, so these orders weren't sent. Upload them again to confirm them."
+    },
+    "stop": {
+      "title": "Stop the remaining orders?",
+      "body": "{count, plural, one {# customer hasn't} other {# customers haven't}} been contacted and won't be. Orders already sent continue normally.",
+      "cancel": "Keep sending",
+      "confirm": "Stop remaining",
+      "failed": "Sending couldn't be stopped. Try again."
+    }
   }
 }

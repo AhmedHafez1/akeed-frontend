@@ -49,6 +49,8 @@ export const queryKeys = {
       [...queryKeys.orderImports.all, 'detail', batchId] as const,
     rows: (batchId: string, outcome: string) =>
       [...queryKeys.orderImports.all, 'rows', batchId, outcome] as const,
+    startQuote: (batchId: string) =>
+      [...queryKeys.orderImports.all, 'startQuote', batchId] as const,
   },
 }
 

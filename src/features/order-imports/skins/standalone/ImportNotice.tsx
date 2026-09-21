@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import {
   AlertTriangle,
   CheckCircle2,
+  CircleStop,
   Info,
   ShieldCheck,
   XCircle,
@@ -15,6 +16,7 @@ export type ImportNoticeTone =
   | 'warning'
   | 'critical'
   | 'safe'
+  | 'neutral'
 
 const toneClasses: Record<ImportNoticeTone, string> = {
   info: 'border-info-border bg-info-subtle text-info-subtle-foreground',
@@ -25,6 +27,7 @@ const toneClasses: Record<ImportNoticeTone, string> = {
   critical:
     'border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground',
   safe: 'border-primary-border bg-primary-subtle text-primary-subtle-foreground',
+  neutral: 'border-border bg-muted text-foreground',
 }
 
 const toneIcons: Record<ImportNoticeTone, LucideIcon> = {
@@ -33,6 +36,7 @@ const toneIcons: Record<ImportNoticeTone, LucideIcon> = {
   warning: AlertTriangle,
   critical: XCircle,
   safe: ShieldCheck,
+  neutral: CircleStop,
 }
 
 interface ImportNoticeProps {
