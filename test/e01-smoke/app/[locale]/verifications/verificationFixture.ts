@@ -6,6 +6,7 @@ import type {
   VerificationStatus,
   VerificationsResponse,
 } from '@/features/dashboard/model/dashboard.model'
+import { isImportReplay, replayVerifications } from '../imports/importReplay'
 
 const timestamp = '2026-09-06T07:42:00Z'
 const statuses: VerificationStatus[] = [
@@ -153,14 +154,21 @@ export async function verificationFixtureRequest<T>(
     quiet_hours_enabled: false,
   }
   const importBatchId = query.searchParams.get('importBatchId')
+  // US-04.6-10: the batch the release-gate replay imported, as the backend
+  // listed it.
+  const replayed = isImportReplay()
+    ? (replayVerifications(url) as { data: VerificationItem[] } | undefined)
+    : undefined
   const dataset =
     scenario === 'empty'
       ? []
-      : importBatchId
-        ? IMPORT_BATCH_IDS.has(importBatchId)
-          ? importRows
-          : []
-        : rows
+      : replayed
+        ? replayed.data
+        : importBatchId
+          ? IMPORT_BATCH_IDS.has(importBatchId)
+            ? importRows
+            : []
+          : rows
   if (method === 'GET' && query.pathname === '/api/verifications/stats') {
     if (scenario === 'stats-error') throw new Error('Synthetic metrics failure')
     const count = (...matching: LifecycleStatus[]) =>

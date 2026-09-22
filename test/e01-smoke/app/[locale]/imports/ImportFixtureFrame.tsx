@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type ReactNode } from 'react'
 import { applyResolvedTheme } from '@/shared/theme/theme.dom'
+import { e2eTheme } from './importReplay'
 import { orderImportFixtureCalls } from './orderImportFixture'
 
 /**
@@ -14,7 +15,9 @@ export function ImportFixtureFrame({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
-    applyResolvedTheme(params.get('theme') === 'dark' ? 'dark' : 'light')
+    applyResolvedTheme(
+      (params.get('theme') ?? e2eTheme()) === 'dark' ? 'dark' : 'light'
+    )
     const drop = params.get('drop')
     if (!drop) return
     const timer = window.setInterval(() => {

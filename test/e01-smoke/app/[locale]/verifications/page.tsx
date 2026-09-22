@@ -6,6 +6,7 @@ import { useVerificationStatusQuery } from '@/features/dashboard/hooks/useVerifi
 import { DashboardVerificationsStandaloneSkin } from '@/features/dashboard/skins/standalone/DashboardVerificationsStandaloneSkin'
 import { ImportFilterChip, NewImportLink } from '@/features/order-imports'
 import { applyResolvedTheme } from '@/shared/theme/theme.dom'
+import { e2eTheme } from '../imports/importReplay'
 import { verificationRequests } from './verificationFixture'
 
 export default function VerificationFixturePage() {
@@ -18,7 +19,8 @@ export default function VerificationFixturePage() {
   const [requests, setRequests] = useState<string[]>([])
   // `?theme=dark`, as on the import fixture pages.
   useEffect(() => {
-    const theme = new URLSearchParams(window.location.search).get('theme')
+    const theme =
+      new URLSearchParams(window.location.search).get('theme') ?? e2eTheme()
     applyResolvedTheme(theme === 'dark' ? 'dark' : 'light')
   }, [])
   return (

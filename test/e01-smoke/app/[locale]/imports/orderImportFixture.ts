@@ -16,6 +16,8 @@
  * but no order of it is visible in Verifications); any other id answers 404.
  */
 
+import { isImportReplay, replayRequest, replayUpload } from './importReplay'
+
 type Json = Record<string, unknown>
 
 const HOUR = 3_600_000
@@ -563,6 +565,7 @@ export async function orderImportFixtureRequest(
   url: string,
   options: RequestInit = {}
 ): Promise<Response> {
+  if (isImportReplay()) return replayRequest(url, options)
   const method = (options.method ?? 'GET').toUpperCase()
   const fixture = state()
   fixture.calls.push(`${method} ${url}`)
@@ -705,6 +708,7 @@ export async function orderImportFixtureUpload(options: {
   signal?: AbortSignal
   onUploadProgress?: (fraction: number) => void
 }): Promise<Response> {
+  if (isImportReplay()) return replayUpload()
   const fixture = state()
   fixture.calls.push('POST /api/order-imports')
   const scenario = params().get('scenario')
