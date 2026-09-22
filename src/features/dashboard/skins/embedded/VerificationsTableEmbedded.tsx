@@ -45,6 +45,7 @@ const TONE_BADGES: Record<LifecycleTone, PolarisBadgeTone> = {
   warning: 'warning',
   attention: 'attention',
   critical: 'critical',
+  muted: undefined,
 }
 
 interface VerificationsTableEmbeddedProps {

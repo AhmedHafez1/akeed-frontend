@@ -1,8 +1,10 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { BillingApiError, createPurchase } from '../api/billingApi'
 import type { CreatePurchaseResponse } from './billing.types'
+import { prefilledQuantity, rememberReturnTo } from './billingReturnTo'
 import { derivePackages } from './creditPackages'
 import { useBillingSummary } from './useBillingSummary'
 
@@ -23,10 +25,24 @@ export function useBillingPage() {
   const [pendingReference, setPendingReference] = useState<string | null>(null)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
   const idempotencyKeyRef = useRef<string | null>(null)
+  const searchParams = useSearchParams()
+  const requestedCredits = searchParams.get('credits')
+  const returnTo = searchParams.get('returnTo')
+
+  // Another screen may ask for an amount (its shortfall) and a way back.
+  useEffect(() => {
+    rememberReturnTo(returnTo)
+  }, [returnTo])
 
   useEffect(() => {
-    if (summary && !quantityInput) setQuantityInput(String(summary.range.min))
-  }, [quantityInput, summary])
+    if (summary && !quantityInput)
+      setQuantityInput(
+        String(
+          prefilledQuantity(requestedCredits, summary.range) ??
+            summary.range.min
+        )
+      )
+  }, [quantityInput, requestedCredits, summary])
 
   const quantity = Number(quantityInput)
   const quantityError = useMemo(() => {

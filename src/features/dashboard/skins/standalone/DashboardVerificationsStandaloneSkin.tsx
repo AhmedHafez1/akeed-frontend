@@ -1,5 +1,6 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import { ChevronDown, Info } from 'lucide-react'
 import { Tooltip } from '@/shared/ui'
@@ -11,7 +12,10 @@ import type { DashboardSkinProps } from '../../domain/dashboard.types'
 import type { DashboardStatsDateRange } from '../../model/dashboard.model'
 
 export function DashboardVerificationsStandaloneSkin(
-  props: DashboardSkinProps
+  props: DashboardSkinProps & {
+    /** Extra header action composed by the page (the import entry). */
+    headerAction?: ReactNode
+  }
 ) {
   const t = useTranslations('dashboard')
 
@@ -56,6 +60,7 @@ export function DashboardVerificationsStandaloneSkin(
               className="text-muted-foreground pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2"
             />
           </label>
+          {props.headerAction}
           <CreditsBadge />
         </div>
       </header>

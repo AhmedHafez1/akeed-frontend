@@ -15,14 +15,16 @@ import {
 } from '../api/manualOrderApi'
 import { useCreateManualOrderMutation } from '../api/useCreateManualOrderMutation'
 import {
-  DEFAULT_MANUAL_ORDER_CURRENCY,
-  isManualOrderCurrency,
-  MANUAL_ORDER_PAYMENT_METHOD,
   type ManualOrderFeedback,
   type ManualOrderFormValues,
   type ManualOrderRecoveryMode,
   type ManualOrderResult,
 } from './manualOrder.model'
+import {
+  COD_PAYMENT_METHOD,
+  DEFAULT_ORDER_CURRENCY,
+  isOrderCurrency,
+} from '@/shared/commerce/orderCommerce'
 
 const SUBMISSION_TIMEOUT_MS = 30_000
 const fieldOrder: Array<keyof ManualOrderFormValues> = [
@@ -46,7 +48,7 @@ function toPayload(values: ManualOrderFormValues): ManualOrderCreateInput {
     orderNumber: values.orderNumber.trim(),
     totalPrice: values.totalPrice.trim(),
     currency: values.currency,
-    paymentMethod: MANUAL_ORDER_PAYMENT_METHOD,
+    paymentMethod: COD_PAYMENT_METHOD,
   }
 }
 
@@ -86,7 +88,7 @@ export function useManualOrderEntry(
           ),
         currency: z
           .string()
-          .refine(isManualOrderCurrency, t('validation.currencyRequired')),
+          .refine(isOrderCurrency, t('validation.currencyRequired')),
       }),
     [t]
   )
@@ -99,7 +101,7 @@ export function useManualOrderEntry(
       customerName: '',
       orderNumber: '',
       totalPrice: '',
-      currency: DEFAULT_MANUAL_ORDER_CURRENCY,
+      currency: DEFAULT_ORDER_CURRENCY,
     },
   })
   const [isOpen, setIsOpen] = useState(false)
@@ -119,7 +121,7 @@ export function useManualOrderEntry(
       customerName: '',
       orderNumber: '',
       totalPrice: '',
-      currency: DEFAULT_MANUAL_ORDER_CURRENCY,
+      currency: DEFAULT_ORDER_CURRENCY,
     })
     submissionTokenRef.current = null
     submittedPayloadRef.current = null

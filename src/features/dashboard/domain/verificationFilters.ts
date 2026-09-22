@@ -1,5 +1,6 @@
 import type {
   DashboardStatsDateRange,
+  LifecycleStatus,
   VerificationStatus,
   VerificationStatusFilter,
 } from '../model/dashboard.model'
@@ -103,7 +104,7 @@ const COMPOSITE_FILTERS: Partial<Record<VerificationStatusFilter, string>> = {
 /** Whether a row in `status` belongs in the list for `filter`. */
 export function filterAdmitsStatus(
   filter: VerificationStatusFilter,
-  status: VerificationStatus
+  status: LifecycleStatus
 ): boolean {
   if (filter === 'all') return true
   const composite = COMPOSITE_FILTERS[filter]
@@ -131,6 +132,8 @@ export interface VerificationsQueryParams {
   statusFilter: VerificationStatusFilter
   dateRange: DashboardStatsDateRange
   limit?: number
+  /** Narrow the list to the orders one import batch created. */
+  importBatchId?: string
 }
 
 /** Build the `/api/verifications` query string for a filter selection. */
@@ -138,6 +141,7 @@ export function buildVerificationsQuery({
   statusFilter,
   dateRange,
   limit = VERIFICATIONS_PAGE_SIZE,
+  importBatchId,
 }: VerificationsQueryParams): string {
   const params = new URLSearchParams({
     date_range: dateRange,
@@ -150,6 +154,7 @@ export function buildVerificationsQuery({
   } else if (statusFilter !== 'all') {
     params.set('status', statusFilter)
   }
+  if (importBatchId) params.set('importBatchId', importBatchId)
 
   return `?${params.toString()}`
 }

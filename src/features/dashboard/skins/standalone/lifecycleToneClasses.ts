@@ -18,4 +18,5 @@ export const lifecycleToneClasses: Record<LifecycleTone, string> = {
     'border-warning-border bg-warning-subtle text-warning-subtle-foreground',
   critical:
     'border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground',
+  muted: 'border-border bg-muted text-muted-foreground',
 }

@@ -40,7 +40,9 @@
     ".next/shopify/dev/types/**/*.ts",
     "**/*.mts",
     ".next/e01-validation-build/types/**/*.ts",
-    ".next/e01-validation-build/dev/types/**/*.ts"
+    ".next/e01-validation-build/dev/types/**/*.ts",
+    ".next-us0465-build/types/**/*.ts",
+    ".next-us0465-build/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",

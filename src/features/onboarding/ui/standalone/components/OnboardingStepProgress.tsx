@@ -6,7 +6,7 @@ import {
   STANDALONE_STEPS,
   STANDALONE_TOTAL_STEPS,
 } from '@/features/onboarding/model/onboarding.steps'
-import { cn } from '@/shared/lib/utils'
+import { StepProgress } from '@/shared/ui/stepper'
 
 interface OnboardingStepProgressProps {
   currentStep: StandaloneStep
@@ -19,37 +19,21 @@ export function OnboardingStepProgress({
   completedSteps,
 }: OnboardingStepProgressProps) {
   const t = useTranslations('standaloneOnboarding')
-  const definition = STANDALONE_STEPS.find((step) => step.id === currentStep)
 
   return (
-    <div
-      aria-label={t('steps.label')}
-      className="rounded-card border-border bg-card border p-4 text-start md:hidden"
-    >
-      <p className="text-muted-foreground text-xs font-medium tabular-nums">
-        {t('steps.progress', {
-          current: currentStep,
-          total: STANDALONE_TOTAL_STEPS,
-        })}
-      </p>
-      <p className="text-foreground mt-1 text-sm font-semibold">
-        {definition ? t(definition.titleKey) : null}
-      </p>
-      <div aria-hidden="true" className="mt-3 flex gap-1.5">
-        {STANDALONE_STEPS.map((step) => (
-          <span
-            key={step.id}
-            className={cn(
-              'h-1.5 flex-1 rounded-full',
-              step.id === currentStep
-                ? 'bg-primary'
-                : completedSteps.has(step.id)
-                  ? 'bg-primary-border'
-                  : 'bg-border'
-            )}
-          />
-        ))}
-      </div>
-    </div>
+    <StepProgress
+      steps={STANDALONE_STEPS.map((definition) => ({
+        id: definition.id,
+        marker: definition.id,
+        title: t(definition.titleKey),
+      }))}
+      currentStep={currentStep}
+      completedSteps={completedSteps}
+      label={t('steps.label')}
+      progressLabel={t('steps.progress', {
+        current: currentStep,
+        total: STANDALONE_TOTAL_STEPS,
+      })}
+    />
   )
 }

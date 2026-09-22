@@ -1,6 +1,7 @@
 import type {
   DashboardStats,
   DashboardStatsDateRange,
+  LifecycleStatus,
   VerificationItem,
   VerificationStatus,
   VerificationsResponse,
@@ -113,7 +114,7 @@ export async function verificationFixtureRequest<T>(
   const dataset = scenario === 'empty' ? [] : rows
   if (method === 'GET' && query.pathname === '/api/verifications/stats') {
     if (scenario === 'stats-error') throw new Error('Synthetic metrics failure')
-    const count = (...matching: VerificationStatus[]) =>
+    const count = (...matching: LifecycleStatus[]) =>
       dataset.filter((row) => matching.includes(row.status)).length
     const stats: DashboardStats = {
       date_range: query.searchParams.get(

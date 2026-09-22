@@ -48,6 +48,8 @@ export interface UseVerificationsDashboardOptions {
    */
   dateRangeFilter?: DashboardStatsDateRange
   onDateRangeFilterChange?: (filter: DashboardStatsDateRange) => void
+  /** Narrows the list to the orders one import batch created. */
+  importBatchId?: string
 }
 
 /**
@@ -96,7 +98,7 @@ export function useVerificationsDashboard(
     error: verificationsError,
     pageContext,
     verificationsUpdatedAt,
-  } = useDashboardData(statusFilter, dateRangeFilter)
+  } = useDashboardData(statusFilter, dateRangeFilter, options.importBatchId)
 
   const { stats, isStatsLoading, statsError, statsUpdatedAt } =
     useDashboardStats(dateRangeFilter)

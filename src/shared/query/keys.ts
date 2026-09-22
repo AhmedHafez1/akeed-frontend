@@ -10,8 +10,11 @@ export const queryKeys = {
   verifications: {
     all: ['verifications'] as const,
     lists: () => [...queryKeys.verifications.all, 'list'] as const,
-    list: (filters: { status: string; dateRange: string }) =>
-      [...queryKeys.verifications.lists(), filters] as const,
+    list: (filters: {
+      status: string
+      dateRange: string
+      importBatchId?: string
+    }) => [...queryKeys.verifications.lists(), filters] as const,
     stats: (dateRange: string) =>
       [...queryKeys.verifications.all, 'stats', dateRange] as const,
     pageContext: () =>
@@ -38,6 +41,16 @@ export const queryKeys = {
      * whole family, and must not cancel the very read that made it.
      */
     tracking: () => ['orders', 'tracking'] as const,
+  },
+  orderImports: {
+    all: ['orderImports'] as const,
+    list: () => [...queryKeys.orderImports.all, 'list'] as const,
+    detail: (batchId: string) =>
+      [...queryKeys.orderImports.all, 'detail', batchId] as const,
+    rows: (batchId: string, outcome: string) =>
+      [...queryKeys.orderImports.all, 'rows', batchId, outcome] as const,
+    startQuote: (batchId: string) =>
+      [...queryKeys.orderImports.all, 'startQuote', batchId] as const,
   },
 }
 

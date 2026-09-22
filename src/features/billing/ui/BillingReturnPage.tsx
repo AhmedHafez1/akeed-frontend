@@ -22,6 +22,7 @@ import {
   formatMoney,
 } from '../domain/billingFormatters'
 import type { PurchaseDetail } from '../domain/billing.types'
+import { forgetReturnTo, readReturnTo } from '../domain/billingReturnTo'
 
 const PURCHASE_REFERENCE = /^akd_[a-f0-9]{32}$/
 const POLL_INTERVAL_MS = 2000
@@ -50,6 +51,11 @@ export function BillingReturnPage() {
   )
   const [isRefreshing, setIsRefreshing] = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  // Read after mount: session storage has no server value to hydrate from.
+  const [returnTo, setReturnTo] = useState<string | null>(null)
+  useEffect(() => {
+    setReturnTo(readReturnTo())
+  }, [])
   const runIdRef = useRef(0)
 
   const load = useCallback(
@@ -215,6 +221,16 @@ export function BillingReturnPage() {
                 {t('return.backToBilling')}
               </Link>
             </Button>
+            {successful && returnTo && (
+              <Button asChild>
+                <Link
+                  href={withLocale(returnTo, locale)}
+                  onClick={forgetReturnTo}
+                >
+                  {t('return.backToImport')}
+                </Link>
+              </Button>
+            )}
             {(pending || state.kind === 'error') && (
               <Button onClick={manualRefresh} disabled={isRefreshing}>
                 <RefreshCw className={isRefreshing ? 'animate-spin' : ''} />

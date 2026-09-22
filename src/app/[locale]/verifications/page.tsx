@@ -11,11 +11,36 @@ import {
   useDashboard,
 } from '@/features/dashboard'
 import { useVerificationStatusQuery } from '@/features/dashboard/hooks/useVerificationStatusQuery'
+import { ImportFilterChip, NewImportLink } from '@/features/order-imports'
 
 function StandaloneVerificationsPageContent() {
-  const { statusFilter, onStatusFilterChange } = useVerificationStatusQuery()
-  const skinProps = useDashboard(statusFilter, onStatusFilterChange)
-  return <DashboardVerificationsStandaloneSkin {...skinProps} />
+  const {
+    statusFilter,
+    onStatusFilterChange,
+    importBatchId,
+    onClearImportBatch,
+  } = useVerificationStatusQuery()
+  const skinProps = useDashboard(
+    statusFilter,
+    onStatusFilterChange,
+    importBatchId
+  )
+  return (
+    <DashboardVerificationsStandaloneSkin
+      {...skinProps}
+      headerAction={
+        <div className="flex flex-wrap items-center gap-2">
+          {importBatchId && (
+            <ImportFilterChip
+              batchId={importBatchId}
+              onClear={onClearImportBatch}
+            />
+          )}
+          <NewImportLink />
+        </div>
+      }
+    />
+  )
 }
 
 function EmbeddedVerificationsRedirect() {

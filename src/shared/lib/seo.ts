@@ -175,10 +175,8 @@ export function getOrganizationSchema(locale: Locale) {
     sameAs: [facebookProfileUrl, youtubeProfileUrl, instagramProfileUrl],
     address: {
       '@type': 'PostalAddress',
-      streetAddress: registeredAddressStreet,
-      addressLocality: registeredAddressLocality,
-      addressRegion: registeredAddressRegion,
-      postalCode: registeredAddressPostalCode,
+      addressLocality: 'Giza',
+      addressRegion: 'Giza',
       addressCountry: 'EG',
     },
     contactPoint: [
