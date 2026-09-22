@@ -11,8 +11,12 @@
  * - theme=dark: dark tokens (applied by the fixture pages).
  * Batch ids: b-map (unconfirmed, ambiguous dates, an unknown payment value,
  * uploaded twice), b-review (confirmed), b-empty (nothing ready), b-expired;
- * any other id answers 404.
+ * committed batches for US-04.6-08: b-imported (awaiting_start), b-releasing,
+ * b-paused (out of credits), b-stopped, b-completed, and b-none (completed,
+ * but no order of it is visible in Verifications); any other id answers 404.
  */
+
+import { isImportReplay, replayRequest, replayUpload } from './importReplay'
 
 type Json = Record<string, unknown>
 
@@ -232,6 +236,45 @@ const REVIEW_COUNTS = {
   excluded: 14,
 }
 
+/** A committed batch: 970 orders imported and held, then (maybe) released. */
+function committed(
+  batchId: string,
+  overrides: Partial<FixtureBatch>
+): FixtureBatch {
+  return batch(batchId, {
+    mappingConfirmed: true,
+    counts: { ...REVIEW_COUNTS, imported: 970, readyAtCommit: 970 },
+    committedAt: iso(-90 * 60_000),
+    storeTimezone: 'Africa/Cairo',
+    ...overrides,
+  })
+}
+
+/** Started: when, how fast, and where the 970 orders are now. */
+function started(
+  status: string,
+  release: Record<string, number>,
+  lifecycle: Record<string, number>,
+  overrides: Partial<FixtureBatch> = {}
+): Partial<FixtureBatch> {
+  return {
+    status,
+    startedAt: iso(-45 * 60_000),
+    ratePerMinute: 20,
+    release: { total: 970, withdrawn: 0, ...release },
+    lifecycle: {
+      queued: 0,
+      sent: 0,
+      confirmed: 0,
+      canceled: 0,
+      noReply: 0,
+      failed: 0,
+      ...lifecycle,
+    },
+    ...overrides,
+  }
+}
+
 const fixtureGlobal = globalThis as typeof globalThis & {
   __akeedOrderImportFixture?: {
     batches: Map<string, FixtureBatch>
@@ -286,6 +329,76 @@ function state() {
         }),
       ],
       ['b-expired', batch('b-expired', { status: 'expired' })],
+      [
+        'b-imported',
+        committed('b-imported', {
+          status: 'awaiting_start',
+          startDeadlineAt: iso(70 * HOUR),
+        }),
+      ],
+      [
+        'b-releasing',
+        committed(
+          'b-releasing',
+          started(
+            'releasing',
+            { held: 610, released: 360 },
+            { queued: 20, sent: 140, confirmed: 150, canceled: 12, noReply: 38 }
+          )
+        ),
+      ],
+      [
+        'b-paused',
+        committed(
+          'b-paused',
+          started(
+            'paused',
+            { held: 470, released: 500 },
+            { sent: 180, confirmed: 250, canceled: 20, noReply: 46, failed: 4 },
+            { pausedReason: 'INSUFFICIENT_CREDITS' }
+          )
+        ),
+      ],
+      [
+        'b-stopped',
+        committed(
+          'b-stopped',
+          started(
+            'stopped',
+            { held: 0, released: 400, withdrawn: 570 },
+            { sent: 60, confirmed: 270, canceled: 24, noReply: 46 },
+            { stoppedAt: iso(-10 * 60_000) }
+          )
+        ),
+      ],
+      [
+        'b-completed',
+        committed(
+          'b-completed',
+          started(
+            'completed',
+            { held: 0, released: 970 },
+            { confirmed: 780, canceled: 64, noReply: 118, failed: 8 },
+            { completedAt: iso(-5 * 60_000) }
+          )
+        ),
+      ],
+      [
+        'b-none',
+        committed(
+          'b-none',
+          started(
+            'completed',
+            { total: 0, held: 0, released: 0 },
+            {},
+            {
+              fileName: 'orders-empty.csv',
+              counts: { ...REVIEW_COUNTS, imported: 0, readyAtCommit: 0 },
+              completedAt: iso(-5 * 60_000),
+            }
+          )
+        ),
+      ],
     ]),
     includes: new Map(),
     drafts: [
@@ -452,6 +565,7 @@ export async function orderImportFixtureRequest(
   url: string,
   options: RequestInit = {}
 ): Promise<Response> {
+  if (isImportReplay()) return replayRequest(url, options)
   const method = (options.method ?? 'GET').toUpperCase()
   const fixture = state()
   fixture.calls.push(`${method} ${url}`)
@@ -594,6 +708,7 @@ export async function orderImportFixtureUpload(options: {
   signal?: AbortSignal
   onUploadProgress?: (fraction: number) => void
 }): Promise<Response> {
+  if (isImportReplay()) return replayUpload()
   const fixture = state()
   fixture.calls.push('POST /api/order-imports')
   const scenario = params().get('scenario')

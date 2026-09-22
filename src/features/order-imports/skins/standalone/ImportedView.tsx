@@ -8,6 +8,7 @@ import { withLocale } from '@/shared/lib/locale'
 import { useEmitDomainEvent } from '@/shared/query/domainEvents'
 import { Button } from '@/shared/ui'
 import type { OrderImportBatchDetail } from '../../api/orderImportsApi'
+import { importOrdersPath } from '../../domain/importRoutes'
 import { IMPORT_STEP_HEADING_ID } from './ImportWizardShell'
 import { ImportNotice } from './ImportNotice'
 import { StartConfirmationDialog } from './StartConfirmationDialog'
@@ -124,12 +125,7 @@ export function ImportedView({
           {t('imported.downloadReport')}
         </Button>
         <Button asChild variant="outline">
-          <Link
-            href={withLocale(
-              `/verifications?importBatchId=${encodeURIComponent(detail.batchId)}`,
-              locale
-            )}
-          >
+          <Link href={withLocale(importOrdersPath(detail.batchId), locale)}>
             {t('imported.reviewOrders')}
           </Link>
         </Button>

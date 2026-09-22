@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import {
   fetchOnboardingBillingPlans,
@@ -101,6 +101,7 @@ export function useOnboardingInit({
   >({})
   const [canManageBilling, setCanManageBilling] = useState(false)
   const [isFreePlanClaimed, setIsFreePlanClaimed] = useState(false)
+  const markFreePlanClaimed = useCallback(() => setIsFreePlanClaimed(true), [])
   const [prefillWarning, setPrefillWarning] = useState<string | null>(null)
   const {
     billingStatusPending,
@@ -237,6 +238,7 @@ export function useOnboardingInit({
     initialIsAutoVerifyEnabled,
     billingPlanConfigsById,
     isFreePlanClaimed,
+    markFreePlanClaimed,
     canManageBilling,
     prefillWarning,
     hasCompletedInitRef,

@@ -351,3 +351,75 @@ export async function checkManualOrder(tab, locale) {
 
   return { locale, pending, retried, passed: true }
 }
+
+const importLinkLabelsByLocale = {
+  en: {
+    reviewOrders: 'Review orders',
+    chip: 'From import: orders-sept.xlsx',
+    clear: 'Clear the import filter',
+    empty: 'No verifications yet',
+  },
+  ar: {
+    reviewOrders: 'مراجعة الطلبات',
+    chip: 'من الاستيراد: orders-sept.xlsx',
+    clear: 'إزالة تصفية الاستيراد',
+    empty: 'لا توجد تأكيدات بعد',
+  },
+}
+
+/**
+ * US-04.6-08: every batch state links to its orders in the existing
+ * Verifications list. For each state: one link with the filtered href, the
+ * chip on arrival, and rows from the same table. b-none lands on the existing
+ * empty state. Clearing the chip keeps any other filter.
+ */
+export async function checkImportOrderLinks(tab, locale) {
+  const origin = 'http://127.0.0.1:3098'
+  if (new URL(await tab.url()).origin !== origin) {
+    throw new Error(
+      'Import link checks are restricted to the isolated loopback fixture'
+    )
+  }
+  const page = tab.playwright
+  const labels = importLinkLabelsByLocale[locale]
+  const visible = { state: 'visible', timeoutMs: 10000 }
+  const checked = []
+
+  for (const batchId of [
+    'b-imported',
+    'b-releasing',
+    'b-paused',
+    'b-stopped',
+    'b-completed',
+    'b-none',
+  ]) {
+    await page.goto(`${origin}/${locale}/imports/${batchId}`)
+    const link = page.getByRole('link', { name: labels.reviewOrders })
+    await link.waitFor(visible)
+    if ((await link.count()) !== 1)
+      throw new Error(`${batchId}: expected exactly one orders link`)
+    const href = await link.getAttribute('href')
+    if (href !== `/${locale}/verifications?importBatchId=${batchId}`)
+      throw new Error(`${batchId}: unexpected href ${href}`)
+    await link.click()
+    await page.waitForURL(`**/verifications?importBatchId=${batchId}`)
+    if (batchId === 'b-none') {
+      await page.getByText(labels.empty, { exact: true }).waitFor(visible)
+    } else {
+      await page.getByText(labels.chip, { exact: true }).waitFor(visible)
+      await page.getByText('IMP-K7Q2XM-2').first().waitFor(visible)
+    }
+    checked.push(batchId)
+  }
+
+  await page.goto(
+    `${origin}/${locale}/verifications?status=confirmed&importBatchId=b-releasing`
+  )
+  await page.getByText(labels.chip, { exact: true }).waitFor(visible)
+  await page.getByRole('button', { name: labels.clear }).click()
+  await page.waitForURL((url) => !url.searchParams.has('importBatchId'))
+  if (new URL(page.url()).searchParams.get('status') !== 'confirmed')
+    throw new Error('Clearing the import chip dropped the status filter')
+
+  return { locale, checked, passed: true }
+}

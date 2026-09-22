@@ -27,6 +27,7 @@ export {
   completeStandaloneOnboarding,
   fetchOnboardingBillingPlans,
   fetchOnboardingState,
+  isFreePlanAlreadyClaimedError,
   updateOnboardingSettings,
 } from './api/onboardingApi'
 export { OnboardingApiError } from './api/onboardingApi'
