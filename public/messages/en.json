@@ -954,7 +954,7 @@
     "ctaDescription": "Join teams that are saving time and moving work forward.",
     "ctaLabel": "Create account",
     "copyright": "© {year} Akeed. All rights reserved.",
-    "registeredAddress": "Haram, Giza, Egypt"
+    "registeredAddress": "Giza, Egypt"
   },
   "support": {
     "eyebrow": "Public support",
@@ -967,6 +967,7 @@
     "phoneDescription": "Call us directly for immediate assistance with your account or setup.",
     "phoneNumber": "+201148675077",
     "addressTitle": "Registered address",
+    "registeredAddress": "Giza, Egypt",
     "addressDescription": "Our officially registered business address in Egypt.",
     "whatsappTitle": "WhatsApp support",
     "whatsappDescription": "Prefer a quick chat? Send us a WhatsApp message and we will guide you from there.",

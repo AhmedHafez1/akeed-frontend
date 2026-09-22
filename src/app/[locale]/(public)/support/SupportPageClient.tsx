@@ -13,7 +13,7 @@ import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
 import { createAkeedWhatsAppUrl } from '@/shared/lib/whatsapp'
-import { businessPhone, registeredAddress } from '@/shared/lib/seo'
+import { businessPhone } from '@/shared/lib/seo'
 import {
   PublicInfoCard,
   PublicPageShell,
@@ -69,7 +69,7 @@ export function SupportPageClient() {
           description={t('addressDescription')}
         >
           <p className="text-foreground/80 text-sm leading-relaxed whitespace-pre-line">
-            {registeredAddress}
+            {t('registeredAddress')}
           </p>
         </PublicInfoCard>
 
