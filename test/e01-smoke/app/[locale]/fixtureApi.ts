@@ -29,7 +29,10 @@ import {
 export function fetchWithAuth(url: string, options: RequestInit = {}) {
   if (url.startsWith('/api/order-imports'))
     return orderImportFixtureRequest(url, options)
-  if (isOrderImportFixture() && url === '/api/billing/credits')
+  if (
+    (isOrderImportFixture() || isVerificationFixture()) &&
+    url === '/api/billing/credits'
+  )
     return billingFixtureRequest(url, options)
       .then((response) => response.json() as Promise<Record<string, unknown>>)
       .then((summary) => Response.json(orderImportCreditSummary(summary)))

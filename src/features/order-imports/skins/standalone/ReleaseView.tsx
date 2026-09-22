@@ -18,6 +18,7 @@ import {
   type OrderImportLifecycleCounts,
   type OrderImportStartBlocker,
 } from '../../api/orderImportsApi'
+import { importOrdersPath } from '../../domain/importRoutes'
 import {
   importReturnPath,
   isWaitingOutQuietHours,
@@ -144,12 +145,7 @@ export function ReleaseView({
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
         <Button asChild variant="outline">
-          <Link
-            href={withLocale(
-              `/verifications?importBatchId=${encodeURIComponent(detail.batchId)}`,
-              locale
-            )}
-          >
+          <Link href={withLocale(importOrdersPath(detail.batchId), locale)}>
             {tImport('imported.reviewOrders')}
           </Link>
         </Button>

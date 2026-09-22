@@ -75,6 +75,47 @@ rows = rows.concat(
   }))
 )
 
+/*
+ * US-04.6-08: the orders of an import, as `?importBatchId=` filters them.
+ * The M9 mix of held and confirmed outcomes, rendered by the same table as
+ * every other order. `b-none`, and any id the import fixture does not know,
+ * has no visible order, which is the existing empty state.
+ */
+const IMPORT_BATCH_IDS = new Set([
+  'b-imported',
+  'b-releasing',
+  'b-paused',
+  'b-stopped',
+  'b-completed',
+])
+const importStatuses: LifecycleStatus[] = [
+  'awaiting_start',
+  'confirmed',
+  'no_reply',
+  'confirmed',
+  'canceled',
+  'awaiting_start',
+  'confirmed',
+  'no_reply',
+]
+const importRows: VerificationItem[] = importStatuses.map((status, index) => ({
+  ...rows[index],
+  id: `import-${index}`,
+  order_id: `import-order-${index}`,
+  order_number: `IMP-K7Q2XM-${index + 2}`,
+  status,
+  reason: null,
+  is_test: false,
+  capabilities: [],
+  last_sent_at: status === 'awaiting_start' ? null : timestamp,
+  delivered_at: null,
+  read_at: null,
+  confirmed_at: status === 'confirmed' ? timestamp : null,
+  canceled_at: status === 'canceled' ? timestamp : null,
+  expired_at: null,
+  no_reply_at: status === 'no_reply' ? timestamp : null,
+}))
+
 export const verificationRequests: string[] = []
 export function isVerificationFixture() {
   return (
@@ -111,7 +152,15 @@ export async function verificationFixtureRequest<T>(
     follow_up_enabled: true,
     quiet_hours_enabled: false,
   }
-  const dataset = scenario === 'empty' ? [] : rows
+  const importBatchId = query.searchParams.get('importBatchId')
+  const dataset =
+    scenario === 'empty'
+      ? []
+      : importBatchId
+        ? IMPORT_BATCH_IDS.has(importBatchId)
+          ? importRows
+          : []
+        : rows
   if (method === 'GET' && query.pathname === '/api/verifications/stats') {
     if (scenario === 'stats-error') throw new Error('Synthetic metrics failure')
     const count = (...matching: LifecycleStatus[]) =>
