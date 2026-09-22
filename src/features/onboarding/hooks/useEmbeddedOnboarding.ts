@@ -25,6 +25,7 @@ interface EmbeddedOnboardingMessages {
   storeNameRequired: string
   settingsSaveError: string
   billingActivationError: string
+  freePlanAlreadyClaimedError: string
   billingStatusPending: string
   billingStatusDeclined: string
   billingStatusFrozen: string
@@ -114,6 +115,8 @@ export function useEmbeddedOnboarding({
     canManageBilling: init.canManageBilling,
     hostParam,
     billingActivationErrorMessage: messages.billingActivationError,
+    freePlanAlreadyClaimedMessage: messages.freePlanAlreadyClaimedError,
+    onFreePlanAlreadyClaimed: init.markFreePlanClaimed,
     setErrorBanner: stableSetErrorBanner,
     onBillingConfirmation,
   })

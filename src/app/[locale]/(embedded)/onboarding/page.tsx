@@ -129,6 +129,7 @@ export default function OnboardingPage() {
       storeNameRequired: tEmbedded('storeNameRequired'),
       settingsSaveError: tEmbedded('settingsSaveError'),
       billingActivationError: tEmbedded('billingActivationError'),
+      freePlanAlreadyClaimedError: tEmbedded('freePlanAlreadyClaimedError'),
       billingStatusPending: tEmbedded('billingStatusPending'),
       billingStatusDeclined: tEmbedded('billingStatusDeclined'),
       billingStatusFrozen: tEmbedded('billingStatusFrozen'),

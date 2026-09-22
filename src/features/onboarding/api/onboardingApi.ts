@@ -23,6 +23,14 @@ export class OnboardingApiError extends Error {
   }
 }
 
+/** The store already used the one-time free (starter) plan. */
+export function isFreePlanAlreadyClaimedError(error: unknown): boolean {
+  return (
+    error instanceof OnboardingApiError &&
+    error.code === 'BILLING_FREE_PLAN_ALREADY_CLAIMED'
+  )
+}
+
 async function getOnboardingApiError(response: Response) {
   let message = `Request failed with status ${response.status}`
   let code: string | null = null
@@ -94,7 +102,7 @@ export async function createOnboardingBilling(
   })
 
   if (!response.ok) {
-    throw new Error(await getErrorMessage(response))
+    throw await getOnboardingApiError(response)
   }
 
   return parseJsonResponse<OnboardingBillingResponse>(response)

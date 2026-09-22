@@ -1617,7 +1617,8 @@
     "planPricePerMonth": "{price} / شهر",
     "planVolumePerMonth": "حتى {count} رسالة تأكيد واتساب شهرياً",
     "planVolumeOneTime": "{count} رسالة تأكيد واتساب (مرة واحدة)",
-    "freePlanAlreadyClaimedTooltip": "لقد استخدمت الخطة المجانية من قبل. يمكن اختيار الخطة المجانية مرة واحدة فقط."
+    "freePlanAlreadyClaimedTooltip": "لقد استخدمت الخطة المجانية من قبل. يمكن اختيار الخطة المجانية مرة واحدة فقط.",
+    "freePlanAlreadyClaimedError": "استخدم هذا المتجر الخطة المجانية من قبل. اختر خطة مدفوعة."
   },
   "embeddedOnboarding": {
     "prefillWarning": "لم نتمكن من تعبئة بيانات Shopify تلقائياً. أدخل اسم المتجر يدوياً.",
@@ -1644,6 +1645,7 @@
     "planPricePerMonth": "{price}/شهر",
     "planVolumePerMonth": "حتى {count} رسالة تأكيد واتساب شهرياً",
     "freePlanAlreadyClaimedTooltip": "لقد استخدمت الخطة المجانية من قبل. يمكن اختيار الخطة المجانية مرة واحدة فقط.",
+    "freePlanAlreadyClaimedError": "استخدم هذا المتجر الخطة المجانية من قبل. اختر خطة مدفوعة.",
     "freePlanUsedBadge": "مستخدمة",
     "planStarterName": "البداية",
     "planStarterPrice": "مجاناً",

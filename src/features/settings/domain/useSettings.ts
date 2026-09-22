@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import {
   createOnboardingBilling,
+  isFreePlanAlreadyClaimedError,
   ONBOARDING_BILLING_PLAN_IDS,
   type AutomationTimezone,
   type IntegrationOnboardingLanguage,
@@ -544,7 +545,13 @@ export function useSettings(): {
       }
     } catch (error) {
       logger.error('Failed to change plan', error)
-      setErrorBanner(t('changePlanError'))
+      if (isFreePlanAlreadyClaimedError(error)) {
+        setIsFreePlanClaimed(true)
+        setSelectedPlanId(billingPlanId)
+        setErrorBanner(t('freePlanAlreadyClaimedError'))
+      } else {
+        setErrorBanner(t('changePlanError'))
+      }
     } finally {
       setIsChangingPlan(false)
     }

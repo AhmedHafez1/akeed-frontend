@@ -1623,7 +1623,8 @@
     "planPricePerMonth": "{price} / month",
     "planVolumePerMonth": "Up to {count} WhatsApp confirmations / month",
     "planVolumeOneTime": "{count} WhatsApp confirmations (one-time)",
-    "freePlanAlreadyClaimedTooltip": "You already used the free plan before. Free plan can only be selected once."
+    "freePlanAlreadyClaimedTooltip": "You already used the free plan before. Free plan can only be selected once.",
+    "freePlanAlreadyClaimedError": "This store already used the free plan. Please choose a paid plan."
   },
   "embeddedOnboarding": {
     "prefillWarning": "We could not prefill Shopify store details. Please enter the store name manually.",
@@ -1650,6 +1651,7 @@
     "planPricePerMonth": "{price} / month",
     "planVolumePerMonth": "Up to {count} WhatsApp confirmations / month",
     "freePlanAlreadyClaimedTooltip": "You already used the free plan before. Free plan can only be selected once.",
+    "freePlanAlreadyClaimedError": "This store already used the free plan. Please choose a paid plan.",
     "freePlanUsedBadge": "Used",
     "planStarterName": "Starter",
     "planStarterPrice": "Free",

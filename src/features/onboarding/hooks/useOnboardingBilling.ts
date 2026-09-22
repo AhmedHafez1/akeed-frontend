@@ -1,7 +1,10 @@
 'use client'
 
 import { useCallback, useState } from 'react'
-import { createOnboardingBilling } from '@/features/onboarding/api/onboardingApi'
+import {
+  createOnboardingBilling,
+  isFreePlanAlreadyClaimedError,
+} from '@/features/onboarding/api/onboardingApi'
 import { createLogger } from '@/shared/lib/logger'
 import type { OnboardingBillingPlanId } from '@/features/onboarding/domain/onboarding.types'
 
@@ -13,6 +16,8 @@ export interface UseOnboardingBillingParams {
   canManageBilling: boolean
   hostParam: string | null
   billingActivationErrorMessage: string
+  freePlanAlreadyClaimedMessage: string
+  onFreePlanAlreadyClaimed: () => void
   setErrorBanner: (message: string | null) => void
   onBillingConfirmation: (confirmationUrl: string) => void
 }
@@ -29,6 +34,8 @@ export function useOnboardingBilling({
   canManageBilling,
   hostParam,
   billingActivationErrorMessage,
+  freePlanAlreadyClaimedMessage,
+  onFreePlanAlreadyClaimed,
   setErrorBanner,
   onBillingConfirmation,
 }: UseOnboardingBillingParams) {
@@ -51,7 +58,14 @@ export function useOnboardingBilling({
       onBillingConfirmation(confirmationUrl)
     } catch (error) {
       logger.error('Failed to activate billing', error)
-      setErrorBanner(billingActivationErrorMessage)
+      if (isFreePlanAlreadyClaimedError(error)) {
+        // Disable the starter card and move the selection to a paid plan.
+        onFreePlanAlreadyClaimed()
+        setSelectedPlanId('basic')
+        setErrorBanner(freePlanAlreadyClaimedMessage)
+      } else {
+        setErrorBanner(billingActivationErrorMessage)
+      }
       setIsBillingRedirecting(false)
     } finally {
       setIsActivatingPlan(false)
@@ -59,6 +73,8 @@ export function useOnboardingBilling({
   }, [
     canManageBilling,
     billingActivationErrorMessage,
+    freePlanAlreadyClaimedMessage,
+    onFreePlanAlreadyClaimed,
     hostParam,
     onBillingConfirmation,
     selectedPlanId,
