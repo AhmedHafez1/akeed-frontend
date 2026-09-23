@@ -38,11 +38,18 @@ export function buildActivationChecklist(
   ]
 }
 
-/** The first-run panel stays until a real order has been confirmed. */
-export function isActivationComplete(
+/**
+ * The first-run panel belongs to installs that went through setup, and stays
+ * until their first real order is confirmed. Stores installed before setup
+ * existed never finish it, so they never see it.
+ */
+export function shouldShowActivation(
   state: DashboardActivationState | undefined
 ): boolean {
-  return !!state?.activation?.firstRealConfirmedAt
+  return (
+    !!state?.activation?.setupCompletedAt &&
+    !state.activation.firstRealConfirmedAt
+  )
 }
 
 /** Free messages are only shown while the store is on the Starter plan. */

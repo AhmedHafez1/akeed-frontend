@@ -196,7 +196,7 @@ export function MainEmbeddedSkin() {
   const selected = MAIN_TABS.indexOf(activeTab)
 
   const activation = useDashboardActivation()
-  const showActivation = activation.isLoaded && !activation.isComplete
+  const showActivation = activation.isLoaded && activation.isFirstRun
 
   const tabs = [
     { id: 'metrics', content: t('tabs.metrics') },

@@ -6,8 +6,8 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { activationStateOptions } from '../api/activationQueries'
 import {
   buildActivationChecklist,
-  isActivationComplete,
   resolveFreeMessagesLeft,
+  shouldShowActivation,
 } from '../model/activation.model'
 
 /**
@@ -43,7 +43,7 @@ export function useDashboardActivation() {
     isLoaded: activationQuery.isSuccess,
     state,
     checklist,
-    isComplete: isActivationComplete(state),
+    isFirstRun: shouldShowActivation(state),
     isLive: state?.activation?.isLive ?? false,
     needsPlan: state?.activation?.needsPlan ?? false,
     freeMessagesLeft: resolveFreeMessagesLeft(state),

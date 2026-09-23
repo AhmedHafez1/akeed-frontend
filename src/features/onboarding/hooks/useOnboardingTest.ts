@@ -139,7 +139,9 @@ export function useOnboardingTest({
 
   useEffect(() => {
     if (!data || hasReportedConfirmRef.current) return
-    if (data.test?.status === 'confirmed') {
+    // testConfirmedAt also counts a tap on an earlier message of this install,
+    // which the displayed (latest) test never reflects.
+    if (data.test?.status === 'confirmed' || data.testConfirmedAt) {
       hasReportedConfirmRef.current = true
       onConfirmed()
     }

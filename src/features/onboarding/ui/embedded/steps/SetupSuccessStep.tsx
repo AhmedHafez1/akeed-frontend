@@ -65,7 +65,7 @@ export function SetupSuccessStep({
                 {index > 0 && (
                   <li
                     aria-hidden
-                    className="flex justify-center py-1 text-(--p-color-icon-secondary)"
+                    className="flex justify-center py-4 text-(--p-color-icon-secondary)"
                   >
                     <span className="h-5 w-5">
                       <Icon source={ArrowDownIcon} tone="inherit" />
@@ -103,29 +103,6 @@ export function SetupSuccessStep({
               </Fragment>
             ))}
           </ol>
-        </Card>
-      </div>
-
-      <div className="w-full max-w-120">
-        <Card padding="400">
-          <BlockStack gap="300">
-            <Text as="h2" variant="headingSm" tone="subdued">
-              {messages.exampleTitle}
-            </Text>
-            <InlineStack align="space-between" blockAlign="center" gap="200">
-              <InlineStack gap="300" blockAlign="center">
-                <span dir="ltr">
-                  <Text as="span" variant="headingSm">
-                    {messages.exampleOrderNumber}
-                  </Text>
-                </span>
-                <Text as="span" variant="bodySm" tone="subdued">
-                  {messages.exampleOrderDetails}
-                </Text>
-              </InlineStack>
-              <Badge tone="success">{messages.exampleTag}</Badge>
-            </InlineStack>
-          </BlockStack>
         </Card>
       </div>
 
