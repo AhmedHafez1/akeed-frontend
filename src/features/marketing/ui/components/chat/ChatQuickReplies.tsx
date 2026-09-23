@@ -1,5 +1,8 @@
 import { motion } from 'framer-motion'
-import { SquareCheck, X } from 'lucide-react'
+import {
+  WhatsAppQuickReplyIcon,
+  whatsAppQuickReplyClassName,
+} from '@/shared/ui/whatsapp'
 import { DemoMessage } from './demo-message.model'
 
 interface ChatQuickRepliesProps {
@@ -25,12 +28,8 @@ export function ChatQuickReplies({
   return (
     <div className="flex w-full flex-col gap-1.5 pt-0.5">
       {message.buttons.map((btn, idx) => {
-        const isPrimary = btn.action === 'confirm'
+        const tone = btn.action === 'confirm' ? 'confirm' : 'cancel'
         const isSelected = message.selectedAction === btn.action
-
-        const toneClass = isPrimary
-          ? 'bg-primary text-primary-foreground shadow-sm'
-          : 'bg-card text-primary ring-1 ring-border shadow-sm dark:bg-[#2a3942] dark:ring-0'
 
         return (
           <motion.button
@@ -43,15 +42,11 @@ export function ChatQuickReplies({
               y: 0,
             }}
             transition={{ delay: idx * 0.1 }}
-            className={`flex w-full items-center justify-center gap-1.5 rounded-lg py-2 text-[0.8125rem] font-medium ${toneClass}`}
+            className={whatsAppQuickReplyClassName(tone)}
             disabled={isPast}
             aria-hidden
           >
-            {isPrimary ? (
-              <SquareCheck className="h-4 w-4" />
-            ) : (
-              <X className="h-3.5 w-3.5" />
-            )}
+            <WhatsAppQuickReplyIcon tone={tone} />
             {btn.text}
           </motion.button>
         )

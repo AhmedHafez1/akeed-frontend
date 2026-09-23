@@ -1,43 +1,21 @@
-import type { OnboardingBillingPlanId } from '@/features/onboarding/domain/onboarding.types'
-import type { SupportedLocale } from '@/shared/lib/locale'
+/**
+ * Onboarding v2 has two visible steps (quick setup, test message) and a
+ * success screen that closes them. There is no plan step: Starter is granted
+ * when setup is saved, and plans are offered later from the dashboard.
+ */
+export type EmbeddedStep = 'setup' | 'test' | 'success'
 
-export const TOTAL_STEPS = 2
+export const ONBOARDING_FLOW_STEPS = ['setup', 'test'] as const
 
-export type EmbeddedStep = 1 | 2
+export const TOTAL_STEPS = ONBOARDING_FLOW_STEPS.length
+
+/** How often the test step re-reads delivery status while it waits. */
+export const ONBOARDING_TEST_POLL_INTERVAL_MS = 2500
 
 type OnboardingMessageKey =
   | 'languageAuto'
   | 'languageEnglish'
   | 'languageArabic'
-  | 'planStarterName'
-  | 'planStarterPrice'
-  | 'planStarterVolume'
-  | 'planStarterSubtitle'
-  | 'planStarterCta'
-  | 'planBasicName'
-  | 'planBasicPrice'
-  | 'planBasicVolume'
-  | 'planBasicSubtitle'
-  | 'planBasicCta'
-  | 'planProName'
-  | 'planProPrice'
-  | 'planProVolume'
-  | 'planProSubtitle'
-  | 'planProCta'
-  | 'planBusinessName'
-  | 'planBusinessPrice'
-  | 'planBusinessVolume'
-  | 'planBusinessSubtitle'
-  | 'planBusinessCta'
-
-interface PlanDefinition {
-  id: OnboardingBillingPlanId
-  nameKey: OnboardingMessageKey
-  priceKey: OnboardingMessageKey
-  volumeKey: OnboardingMessageKey
-  subtitleKey: OnboardingMessageKey
-  ctaKey: OnboardingMessageKey
-}
 
 export const LANGUAGE_OPTION_DEFINITIONS = [
   { labelKey: 'languageAuto', value: 'auto' },
@@ -47,46 +25,3 @@ export const LANGUAGE_OPTION_DEFINITIONS = [
   labelKey: OnboardingMessageKey
   value: 'auto' | 'en' | 'ar'
 }>
-
-export const APP_LANGUAGE_OPTION_DEFINITIONS = [
-  { labelKey: 'languageEnglish', value: 'en' },
-  { labelKey: 'languageArabic', value: 'ar' },
-] as const satisfies ReadonlyArray<{
-  labelKey: OnboardingMessageKey
-  value: SupportedLocale
-}>
-
-export const BILLING_PLAN_DEFINITIONS: PlanDefinition[] = [
-  {
-    id: 'starter',
-    nameKey: 'planStarterName',
-    priceKey: 'planStarterPrice',
-    volumeKey: 'planStarterVolume',
-    subtitleKey: 'planStarterSubtitle',
-    ctaKey: 'planStarterCta',
-  },
-  {
-    id: 'basic',
-    nameKey: 'planBasicName',
-    priceKey: 'planBasicPrice',
-    volumeKey: 'planBasicVolume',
-    subtitleKey: 'planBasicSubtitle',
-    ctaKey: 'planBasicCta',
-  },
-  {
-    id: 'pro',
-    nameKey: 'planProName',
-    priceKey: 'planProPrice',
-    volumeKey: 'planProVolume',
-    subtitleKey: 'planProSubtitle',
-    ctaKey: 'planProCta',
-  },
-  {
-    id: 'business',
-    nameKey: 'planBusinessName',
-    priceKey: 'planBusinessPrice',
-    volumeKey: 'planBusinessVolume',
-    subtitleKey: 'planBusinessSubtitle',
-    ctaKey: 'planBusinessCta',
-  },
-]

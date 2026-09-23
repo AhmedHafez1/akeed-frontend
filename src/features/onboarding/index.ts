@@ -1,12 +1,13 @@
 export { useEmbeddedOnboarding } from './hooks/useEmbeddedOnboarding'
+export type { OnboardingTestError } from './hooks/useOnboardingTest'
 
 export {
-  APP_LANGUAGE_OPTION_DEFINITIONS,
-  BILLING_PLAN_DEFINITIONS,
   LANGUAGE_OPTION_DEFINITIONS,
+  ONBOARDING_FLOW_STEPS,
   TOTAL_STEPS,
 } from './model/onboarding.config'
 export type { EmbeddedStep } from './model/onboarding.config'
+export { buildTestTimeline } from './model/onboardingTest'
 
 export {
   STANDALONE_FIELD_IDS,
@@ -19,8 +20,9 @@ export {
 
 export { OnboardingAlerts } from './ui/embedded/components/OnboardingAlerts'
 export { OnboardingStepCounter } from './ui/embedded/components/OnboardingStepCounter'
-export { BillingStep } from './ui/embedded/steps/BillingStep'
-export { ConfigurationStep } from './ui/embedded/steps/ConfigurationStep'
+export { QuickSetupStep } from './ui/embedded/steps/QuickSetupStep'
+export { TestMessageStep } from './ui/embedded/steps/TestMessageStep'
+export { SetupSuccessStep } from './ui/embedded/steps/SetupSuccessStep'
 
 export {
   createOnboardingBilling,
@@ -54,6 +56,7 @@ export type {
   EnglishCodTemplateVariantId,
   IntegrationOnboardingLanguage,
   IntegrationOnboardingState,
+  OnboardingActivation,
   OnboardingBillingPlan,
   OnboardingBillingPlanConfig,
   OnboardingBillingPlanId,

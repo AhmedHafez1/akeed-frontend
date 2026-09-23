@@ -33,6 +33,11 @@ export const queryKeys = {
     purchases: (limit = 25) =>
       [...queryKeys.billing.all, 'purchases', limit] as const,
   },
+  onboarding: {
+    all: ['onboarding'] as const,
+    state: () => [...queryKeys.onboarding.all, 'state'] as const,
+    test: () => [...queryKeys.onboarding.all, 'test'] as const,
+  },
   orders: {
     /**
      * What has been observed on the server for each just-created order.

@@ -1,66 +1,78 @@
-import { Text } from '@shopify/polaris'
+import { Icon, Text } from '@shopify/polaris'
+import { CheckIcon } from '@shopify/polaris-icons'
 
 interface OnboardingStepCounterProps {
-  currentStep: number
-  steps: string[]
+  /** Zero-based index of the step being worked on. */
+  currentIndex: number
+  steps: ReadonlyArray<string>
 }
 
-function getStepState(currentStep: number, stepNumber: number) {
-  if (stepNumber < currentStep) return 'completed'
-  if (stepNumber === currentStep) return 'active'
+type StepState = 'completed' | 'active' | 'pending'
+
+function getStepState(currentIndex: number, index: number): StepState {
+  if (index < currentIndex) return 'completed'
+  if (index === currentIndex) return 'active'
   return 'pending'
 }
 
+const MARKER_CLASS: Record<StepState, string> = {
+  completed:
+    'border-(--p-color-bg-fill-success) bg-(--p-color-bg-fill-success) text-(--p-color-text-inverse)',
+  active:
+    'border-(--p-color-bg-fill-success) bg-(--p-color-bg-fill-success) text-(--p-color-text-inverse)',
+  pending:
+    'border-(--p-color-border) bg-(--p-color-bg-surface) text-(--p-color-text-secondary)',
+}
+
 export function OnboardingStepCounter({
-  currentStep,
+  currentIndex,
   steps,
 }: OnboardingStepCounterProps) {
   return (
-    <div className="w-full">
-      <div className="flex items-start">
-        {steps.map((stepLabel, index) => {
-          const stepNumber = index + 1
-          const state = getStepState(currentStep, stepNumber)
-          const isActive = state === 'active'
-          const isCompleted = state === 'completed'
+    <ol className="flex w-full items-center">
+      {steps.map((stepLabel, index) => {
+        const state = getStepState(currentIndex, index)
+        const isLast = index === steps.length - 1
 
-          return (
-            <div
-              key={stepLabel}
-              className="flex min-w-0 flex-1 items-start last:flex-none"
-            >
-              <div className="flex min-w-0 flex-col items-center gap-2">
-                <span
-                  className={`flex h-7 w-7 items-center justify-center rounded-full border text-xs font-semibold ${
-                    isActive || isCompleted
-                      ? 'border-[#008060] bg-[#008060] text-white'
-                      : 'border-[#c9cccf] bg-white text-[#6d7175]'
-                  }`}
-                >
-                  {stepNumber}
-                </span>
-                <Text
-                  as="span"
-                  variant="bodySm"
-                  fontWeight={isActive ? 'semibold' : 'medium'}
-                  tone={isActive || isCompleted ? undefined : 'subdued'}
-                  alignment="center"
-                >
-                  {stepLabel}
-                </Text>
-              </div>
+        return (
+          <li
+            key={stepLabel}
+            aria-current={state === 'active' ? 'step' : undefined}
+            className={`flex min-w-0 items-center ${isLast ? '' : 'flex-1'}`}
+          >
+            <span className="flex shrink-0 items-center gap-2">
+              <span
+                className={`flex h-7 w-7 items-center justify-center rounded-full border text-xs font-semibold ${MARKER_CLASS[state]}`}
+              >
+                {state === 'completed' ? (
+                  <Icon source={CheckIcon} tone="inherit" />
+                ) : (
+                  index + 1
+                )}
+              </span>
+              <Text
+                as="span"
+                variant="bodyMd"
+                fontWeight={state === 'active' ? 'semibold' : 'regular'}
+                tone={state === 'pending' ? 'subdued' : undefined}
+              >
+                {stepLabel}
+              </Text>
+            </span>
 
-              {index < steps.length - 1 && (
-                <div
-                  className={`mx-3 mt-3 h-px min-w-8 flex-1 ${
-                    isCompleted ? 'bg-[#008060]' : 'bg-[#d9d9d9]'
-                  }`}
-                />
-              )}
-            </div>
-          )
-        })}
-      </div>
-    </div>
+            {!isLast && (
+              <span
+                aria-hidden
+                className={`mx-3 h-0.5 min-w-8 flex-1 rounded-full ${
+                  state === 'completed'
+                    ? 'bg-(--p-color-bg-fill-success)'
+                    : 'bg-(--p-color-border)'
+                }`}
+              />
+            )}
+          </li>
+        )
+      })}
+    </ol>
   )
 }

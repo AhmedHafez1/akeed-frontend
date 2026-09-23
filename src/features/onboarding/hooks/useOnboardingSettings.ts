@@ -2,48 +2,53 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import type { RefObject } from 'react'
-import { updateOnboardingSettings } from '@/features/onboarding/api/onboardingApi'
+import {
+  completeOnboardingSetup,
+  OnboardingApiError,
+  updateOnboardingSettings,
+} from '@/features/onboarding/api/onboardingApi'
+import { setCachedOnboardingStatus } from '@/features/onboarding/lib/embeddedAuth'
 import { createLogger } from '@/shared/lib/logger'
+import { isValidPhoneNumber } from '@/shared/ui/international-phone-input'
 import type { IntegrationOnboardingLanguage } from '@/features/onboarding/domain/onboarding.types'
 import type { EmbeddedStep } from '../model/onboarding.config'
 
 const logger = createLogger('Onboarding')
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+export interface SetupFormMessages {
+  storeNameRequired: string
+  phoneInvalid: string
+  setupSaveError: string
+}
 
 export interface UseOnboardingSettingsParams {
   step: EmbeddedStep
   setStep: (step: EmbeddedStep) => void
   setErrorBanner: (message: string | null) => void
-  storeNameRequiredMessage: string
-  settingsSaveErrorMessage: string
-  /** Ref from useOnboardingInit — prevents auto-save before init completes */
+  messages: SetupFormMessages
+  /** Ref from useOnboardingInit: no autosave before init completes. */
   hasCompletedInitRef: RefObject<boolean>
-  /** Initial values seeded from the server by useOnboardingInit */
   initialStoreName: string
   initialDefaultLanguage: IntegrationOnboardingLanguage
   initialIsAutoVerifyEnabled: boolean
+  initialMerchantPhone: string
 }
 
-// ─── Hook ─────────────────────────────────────────────────────────────────────
-
 /**
- * Manages step-1 settings form state (store name, language, auto-verify)
- * and the debounced auto-save effect.
- *
- * Receives `setStep` and `setErrorBanner` from the coordinator so it can
- * advance the flow and surface errors without owning those state variables.
+ * Quick setup form: store name, customer message language, the merchant's own
+ * WhatsApp number and auto-confirm. Drafts autosave; submitting saves setup,
+ * which takes the store live, and moves on to the test message.
  */
 export function useOnboardingSettings({
   step,
   setStep,
   setErrorBanner,
-  storeNameRequiredMessage,
-  settingsSaveErrorMessage,
+  messages,
   hasCompletedInitRef,
   initialStoreName,
   initialDefaultLanguage,
   initialIsAutoVerifyEnabled,
+  initialMerchantPhone,
 }: UseOnboardingSettingsParams) {
   const [storeName, setStoreName] = useState(initialStoreName)
   const [storeNameError, setStoreNameError] = useState<string | undefined>()
@@ -52,24 +57,26 @@ export function useOnboardingSettings({
   const [isAutoVerifyEnabled, setIsAutoVerifyEnabled] = useState(
     initialIsAutoVerifyEnabled
   )
-  const [isSavingSettings, setIsSavingSettings] = useState(false)
+  const [merchantPhone, setMerchantPhone] = useState(initialMerchantPhone)
+  const [phoneError, setPhoneError] = useState<string | undefined>()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Sync initial values once init data lands (they arrive async from the server)
-  useEffect(() => {
-    setStoreName(initialStoreName)
-  }, [initialStoreName])
+  useEffect(() => setStoreName(initialStoreName), [initialStoreName])
+  useEffect(
+    () => setDefaultLanguage(initialDefaultLanguage),
+    [initialDefaultLanguage]
+  )
+  useEffect(
+    () => setIsAutoVerifyEnabled(initialIsAutoVerifyEnabled),
+    [initialIsAutoVerifyEnabled]
+  )
+  useEffect(
+    () => setMerchantPhone(initialMerchantPhone),
+    [initialMerchantPhone]
+  )
 
   useEffect(() => {
-    setDefaultLanguage(initialDefaultLanguage)
-  }, [initialDefaultLanguage])
-
-  useEffect(() => {
-    setIsAutoVerifyEnabled(initialIsAutoVerifyEnabled)
-  }, [initialIsAutoVerifyEnabled])
-
-  // Debounced auto-save: persist step-2 field changes to the backend
-  useEffect(() => {
-    if (!hasCompletedInitRef.current || step !== 1) return
+    if (!hasCompletedInitRef.current || step !== 'setup') return
 
     const trimmed = storeName.trim()
     if (!trimmed) return
@@ -79,6 +86,9 @@ export function useOnboardingSettings({
         storeName: trimmed,
         defaultLanguage,
         isAutoVerifyEnabled,
+        ...(isValidPhoneNumber(merchantPhone)
+          ? { merchantWhatsappPhone: merchantPhone }
+          : {}),
       }).catch((error: unknown) => {
         logger.error('Auto-save failed', error)
       })
@@ -90,49 +100,61 @@ export function useOnboardingSettings({
     storeName,
     defaultLanguage,
     isAutoVerifyEnabled,
+    merchantPhone,
     hasCompletedInitRef,
   ])
 
   const handleStoreNameChange = useCallback((value: string) => {
     setStoreName(value)
-    if (value.trim().length > 0) {
-      setStoreNameError(undefined)
-    }
+    if (value.trim().length > 0) setStoreNameError(undefined)
   }, [])
 
-  const handleContinueToBilling = useCallback(async () => {
+  const handleMerchantPhoneChange = useCallback((value: string) => {
+    setMerchantPhone(value)
+    setPhoneError(undefined)
+  }, [])
+
+  const handleSubmitSetup = useCallback(async () => {
     setErrorBanner(null)
 
     const trimmedStoreName = storeName.trim()
-    if (!trimmedStoreName) {
-      setStoreNameError(storeNameRequiredMessage)
-      return
-    }
+    const storeNameMissing = !trimmedStoreName
+    const phoneInvalid = !isValidPhoneNumber(merchantPhone)
+    setStoreNameError(storeNameMissing ? messages.storeNameRequired : undefined)
+    setPhoneError(phoneInvalid ? messages.phoneInvalid : undefined)
+    if (storeNameMissing || phoneInvalid) return
 
-    setStoreNameError(undefined)
-    setIsSavingSettings(true)
-
+    setIsSubmitting(true)
     try {
-      await updateOnboardingSettings({
+      await completeOnboardingSetup({
         storeName: trimmedStoreName,
         defaultLanguage,
         isAutoVerifyEnabled,
+        merchantWhatsappPhone: merchantPhone,
       })
-      setStep(2)
+      setCachedOnboardingStatus('completed')
+      setStep('test')
     } catch (error) {
-      logger.error('Failed to save settings', error)
-      setErrorBanner(settingsSaveErrorMessage)
+      logger.error('Failed to complete setup', error)
+      if (
+        error instanceof OnboardingApiError &&
+        error.code === 'ONBOARDING_INVALID_PHONE'
+      ) {
+        setPhoneError(messages.phoneInvalid)
+      } else {
+        setErrorBanner(messages.setupSaveError)
+      }
     } finally {
-      setIsSavingSettings(false)
+      setIsSubmitting(false)
     }
   }, [
     defaultLanguage,
     isAutoVerifyEnabled,
-    settingsSaveErrorMessage,
-    storeNameRequiredMessage,
-    storeName,
-    setStep,
+    merchantPhone,
+    messages,
     setErrorBanner,
+    setStep,
+    storeName,
   ])
 
   return {
@@ -142,8 +164,11 @@ export function useOnboardingSettings({
     setDefaultLanguage,
     isAutoVerifyEnabled,
     setIsAutoVerifyEnabled,
-    isSavingSettings,
+    merchantPhone,
+    phoneError,
+    isSubmitting,
     handleStoreNameChange,
-    handleContinueToBilling,
+    handleMerchantPhoneChange,
+    handleSubmitSetup,
   }
 }

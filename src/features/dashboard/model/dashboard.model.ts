@@ -102,6 +102,8 @@ export type VerificationItem = {
   no_reply_at: string | null
   follow_up_attempts: number
   follow_up_sent_at: string | null
+  /** Set while a pending row waits for quiet hours or a send delay. */
+  scheduled_for?: string | null
   /**
    * Client-only: set on a row the UI is showing ahead of the server — an order
    * the merchant just created whose verification a worker has not written yet.
@@ -175,6 +177,9 @@ export type DashboardStats = {
     limit: number
     period_start: string | null
     period_end: string | null
+    /** Real orders Akeed confirmed since the usage period started. */
+    confirmed_in_period?: number
+    confirmed_value_in_period?: string
   }
   savings: {
     avg_shipping_cost: number

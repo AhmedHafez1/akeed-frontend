@@ -7,6 +7,7 @@ export { BillingStandalonePage } from './ui/BillingStandalonePage'
 export { BillingReturnPage } from './ui/BillingReturnPage'
 export { TransactionsPage } from './ui/TransactionsPage'
 export { StandaloneBillingRoute } from './ui/StandaloneBillingRoute'
+export { UpgradePlansModal } from './ui/embedded/UpgradePlansModal'
 export type * from './domain/billing.types'
 export type {
   Transaction,

@@ -69,6 +69,10 @@ export interface IntegrationOnboardingState {
   quietHoursEnd: string | null
   timezone: AutomationTimezone
   sendDelayMinutes: number
+  /** The merchant's own number for the free test; prefilled from the shop. */
+  merchantWhatsappPhone?: string | null
+  activation?: OnboardingActivation
+  usage?: OnboardingUsage | null
   permissions: {
     canUpdateConfiguration: boolean
     canCompleteOnboarding: boolean
@@ -80,8 +84,82 @@ export interface IntegrationOnboardingState {
   } | null
 }
 
+export interface OnboardingActivation {
+  setupCompletedAt: string | null
+  testSentAt: string | null
+  testConfirmedAt: string | null
+  testSkippedAt: string | null
+  firstRealConfirmedAt: string | null
+  isLive: boolean
+  needsPlan: boolean
+}
+
+export interface OnboardingUsage {
+  used: number
+  limit: number
+  remaining: number
+}
+
 export interface OnboardingStateResponse {
   state: IntegrationOnboardingState
+}
+
+export interface CompleteOnboardingSetupPayload {
+  storeName: string
+  defaultLanguage: IntegrationOnboardingLanguage
+  isAutoVerifyEnabled: boolean
+  merchantWhatsappPhone: string
+}
+
+export type OnboardingClientEvent = 'setup_started' | 'onboarding_exited'
+
+export type OnboardingTestStatus =
+  | 'pending'
+  | 'sent'
+  | 'delivered'
+  | 'read'
+  | 'confirmed'
+  | 'canceled'
+  | 'expired'
+  | 'failed'
+  | 'no_reply'
+
+export interface OnboardingTestAttempt {
+  verificationId: string
+  status: OnboardingTestStatus
+  sentAt: string | null
+  deliveredAt: string | null
+  readAt: string | null
+  confirmedAt: string | null
+  canceledAt: string | null
+}
+
+export interface OnboardingTestTemplatePreview {
+  greeting: string
+  body: string
+  totalLabel: string
+  ending: string
+  confirmButton: string
+  cancelButton: string
+}
+
+/** GET/POST /api/onboarding/test: everything the test step renders. */
+export interface OnboardingTestState {
+  phone: string | null
+  language: 'ar' | 'en'
+  preview: OnboardingTestTemplatePreview
+  sample: {
+    customerName: string
+    orderNumber: string
+    total: string
+    currency: string
+    storeName: string
+  }
+  test: OnboardingTestAttempt | null
+  resendAvailableAt: string | null
+  sendsRemainingToday: number
+  testConfirmedAt: string | null
+  testSkippedAt: string | null
 }
 
 export interface OnboardingSettingsPayload {
@@ -102,6 +180,7 @@ export interface OnboardingSettingsPayload {
   sendDelayMinutes?: number
   codTemplateArVariant?: ArabicCodTemplateVariantId
   codTemplateEnVariant?: EnglishCodTemplateVariantId
+  merchantWhatsappPhone?: string
 }
 
 export const ONBOARDING_BILLING_PLAN_IDS = [

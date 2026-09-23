@@ -2,23 +2,23 @@ import type { KeyboardEvent } from 'react'
 import { Badge, BlockStack, Divider, Icon, Text } from '@shopify/polaris'
 import { InfoIcon } from '@shopify/polaris-icons'
 import type {
-  OnboardingBillingPlan,
-  OnboardingBillingPlanId,
-} from '@/features/onboarding/domain/onboarding.types'
+  ShopifyPlanCard,
+  ShopifyPlanId,
+} from '@/features/billing/domain/shopifyPlans'
 import { FeatureRow } from './FeatureRow'
 
 interface PlanCardProps {
-  plan: OnboardingBillingPlan
+  plan: ShopifyPlanCard
   isDisabled: boolean
   isSelected: boolean
   isRecommended: boolean
   disabledReason?: string
   recommendedBadgeLabel?: string
   freePlanUsedLabel: string
-  onSelect: (planId: OnboardingBillingPlanId) => void
+  onSelect: (planId: ShopifyPlanId) => void
   onKeyboardSelect: (
     event: KeyboardEvent<HTMLDivElement>,
-    planId: OnboardingBillingPlanId
+    planId: ShopifyPlanId
   ) => void
 }
 

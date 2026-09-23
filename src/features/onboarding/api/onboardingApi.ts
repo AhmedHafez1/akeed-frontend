@@ -3,6 +3,9 @@
 import { fetchWithAuth } from '@/shared/lib/auth'
 import { getErrorMessage, parseJsonResponse } from '@/shared/lib/http'
 import type {
+  CompleteOnboardingSetupPayload,
+  OnboardingClientEvent,
+  OnboardingTestState,
   OnboardingBillingPlanConfig,
   OnboardingBillingPlanId,
   OnboardingBillingPlansResponse,
@@ -78,6 +81,80 @@ export async function updateOnboardingSettings(
   }
 
   return parseJsonResponse<OnboardingStateResponse>(response)
+}
+
+export async function completeOnboardingSetup(
+  payload: CompleteOnboardingSetupPayload
+): Promise<OnboardingStateResponse> {
+  const response = await fetchWithAuth('/api/onboarding/setup', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+
+  if (!response.ok) {
+    throw await getOnboardingApiError(response)
+  }
+
+  return parseJsonResponse<OnboardingStateResponse>(response)
+}
+
+export async function fetchOnboardingTest(): Promise<OnboardingTestState> {
+  const response = await fetchWithAuth('/api/onboarding/test', {
+    method: 'GET',
+    cache: 'no-store',
+  })
+
+  if (!response.ok) {
+    throw await getOnboardingApiError(response)
+  }
+
+  return parseJsonResponse<OnboardingTestState>(response)
+}
+
+export async function sendOnboardingTest(options: {
+  resend: boolean
+}): Promise<OnboardingTestState> {
+  const response = await fetchWithAuth('/api/onboarding/test', {
+    method: 'POST',
+    body: JSON.stringify({ resend: options.resend }),
+  })
+
+  if (!response.ok) {
+    throw await getOnboardingApiError(response)
+  }
+
+  return parseJsonResponse<OnboardingTestState>(response)
+}
+
+export async function skipOnboardingTest(): Promise<OnboardingTestState> {
+  const response = await fetchWithAuth('/api/onboarding/test/skip', {
+    method: 'POST',
+  })
+
+  if (!response.ok) {
+    throw await getOnboardingApiError(response)
+  }
+
+  return parseJsonResponse<OnboardingTestState>(response)
+}
+
+/**
+ * Funnel events the browser alone can observe. Best effort: `keepalive` lets
+ * an exit event outlive the page, and a failure never reaches the merchant.
+ */
+export async function postOnboardingEvent(
+  name: OnboardingClientEvent,
+  step?: 'setup' | 'test' | 'success'
+): Promise<void> {
+  try {
+    await fetchWithAuth('/api/onboarding/events', {
+      method: 'POST',
+      body: JSON.stringify(step ? { name, step } : { name }),
+      keepalive: true,
+    })
+  } catch {
+    // Observability only; the merchant's flow must not depend on it.
+  }
 }
 
 export async function completeStandaloneOnboarding(): Promise<OnboardingStateResponse> {

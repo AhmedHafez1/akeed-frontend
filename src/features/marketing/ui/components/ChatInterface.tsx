@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { useDemoChat } from '@/features/marketing/ui/components/chat/useDemoChat'
-import { ChatHeader } from './chat/ChatHeader'
+import { WhatsAppChatHeader, WhatsAppPhoneFrame } from '@/shared/ui/whatsapp'
 import { ChatInputBar } from './chat/ChatInputBar'
 import { ChatMessageList } from './chat/ChatMessageList'
 
@@ -19,29 +19,21 @@ export function ChatInterface() {
       transition={{ delay: 0.3 }}
       className="relative w-full md:w-auto"
     >
-      <div className="relative mx-auto w-full max-w-75 md:w-75">
-        <div className="pointer-events-none absolute inset-x-8 -bottom-6 h-14 rounded-full bg-slate-900/15 blur-2xl" />
+      <WhatsAppPhoneFrame className="md:w-75">
+        <WhatsAppChatHeader
+          name={t('bot_name_short')}
+          statusLabel={t('phone_status')}
+          avatarAlt="Akeed Logo"
+        />
 
-        <div className="shadow-overlay relative rounded-[2.75rem] border-[10px] border-slate-900 bg-slate-900 ring-1 ring-slate-700/60">
-          {/* Notch */}
-          <div className="absolute top-2 left-1/2 z-20 h-5 w-24 -translate-x-1/2 rounded-full bg-slate-900" />
+        <ChatMessageList
+          messages={messages}
+          isTyping={isTyping}
+          scrollRef={scrollAreaRef}
+        />
 
-          <div className="relative overflow-hidden rounded-[2.1rem] bg-[#efeae2] bg-[url('/images/landing/wa_chat_bg.png')] bg-cover bg-center dark:bg-[#0b141a] dark:bg-none">
-            <ChatHeader
-              name={t('bot_name_short')}
-              statusLabel={t('phone_status')}
-            />
-
-            <ChatMessageList
-              messages={messages}
-              isTyping={isTyping}
-              scrollRef={scrollAreaRef}
-            />
-
-            <ChatInputBar placeholder={t('typing_placeholder')} />
-          </div>
-        </div>
-      </div>
+        <ChatInputBar placeholder={t('typing_placeholder')} />
+      </WhatsAppPhoneFrame>
     </motion.div>
   )
 }

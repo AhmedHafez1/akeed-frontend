@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import {
+  Badge,
   Banner,
   BlockStack,
   Layout,
@@ -20,18 +21,33 @@ import { StatsEmbedded } from './StatsEmbedded'
 import { ConfirmationStatusFlags } from './components/ConfirmationStatusFlags'
 import { EmbeddedVerificationSection } from './components/EmbeddedVerificationSection'
 import { StatsEmbeddedSkeletonHeader } from './components/StatsEmbeddedSkeletonHeader'
+import { DashboardActivationSection } from './components/DashboardActivationSection'
+import { MetricsPlaceholder } from './components/MetricsPlaceholder'
+import { useDashboardActivation } from '../../domain/useDashboardActivation'
 
 function MainMetricsTab({
   dateRangeFilter,
   dateRangeOptions,
   onDateRangeFilterChange,
+  showPlaceholder,
 }: {
   dateRangeFilter: DashboardStatsDateRange
   dateRangeOptions: ReadonlyArray<DateRangeFilterOption>
   onDateRangeFilterChange: (filter: DashboardStatsDateRange) => void
+  showPlaceholder: boolean
 }) {
+  const t = useTranslations('dashboard')
   const metrics = useMainMetricsTab(dateRangeFilter)
   const [isErrorDismissed, setIsErrorDismissed] = useState(false)
+
+  if (showPlaceholder) {
+    return (
+      <MetricsPlaceholder
+        title={t('activation.metricsPlaceholder.title')}
+        body={t('activation.metricsPlaceholder.body')}
+      />
+    )
+  }
 
   return (
     <BlockStack gap="500">
@@ -61,8 +77,11 @@ function MainMetricsTab({
 
 function MainConfirmationsTab({
   dateRangeFilter,
+  isFirstRun,
 }: {
   dateRangeFilter: DashboardStatsDateRange
+  /** The first-run panel already offers the (free) onboarding test. */
+  isFirstRun: boolean
 }) {
   const t = useTranslations('dashboard')
   const confirmations = useMainConfirmationsTab(dateRangeFilter)
@@ -148,7 +167,9 @@ function MainConfirmationsTab({
             statusFilter={confirmations.statusFilter}
             statusFilters={confirmations.statusFilters}
             isSendingTest={confirmations.isSendingTest}
-            canSendTestVerification={confirmations.canSendTestVerification}
+            canSendTestVerification={
+              confirmations.canSendTestVerification && !isFirstRun
+            }
             canCancelOrders={confirmations.canCancelOrders}
             onRequestCancelOrder={confirmations.onRequestCancelOrder}
             onDismissCancelOrder={confirmations.onDismissCancelOrder}
@@ -173,6 +194,9 @@ export function MainEmbeddedSkin() {
   const tabParam = searchParams.get('tab')
   const activeTab = resolveMainTab(tabParam)
   const selected = MAIN_TABS.indexOf(activeTab)
+
+  const activation = useDashboardActivation()
+  const showActivation = activation.isLoaded && !activation.isComplete
 
   const tabs = [
     { id: 'metrics', content: t('tabs.metrics') },
@@ -199,8 +223,23 @@ export function MainEmbeddedSkin() {
   }
 
   return (
-    <Page title={t('mainTitle')} subtitle={t('mainSubtitle')}>
+    <Page
+      title={t('mainTitle')}
+      subtitle={t('mainSubtitle')}
+      titleMetadata={
+        activation.freeMessagesLeft !== null ? (
+          <Badge tone="success">
+            {t('activation.freeMessagesLeft', {
+              count: activation.freeMessagesLeft,
+            })}
+          </Badge>
+        ) : undefined
+      }
+    >
       <BlockStack gap="500">
+        {showActivation && (
+          <DashboardActivationSection activation={activation} />
+        )}
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div className="min-w-0 flex-1">
             <Tabs tabs={tabs} selected={selected} onSelect={handleTabSelect} />
@@ -223,9 +262,13 @@ export function MainEmbeddedSkin() {
             dateRangeFilter={dateRangeFilter}
             dateRangeOptions={dateRangeOptions}
             onDateRangeFilterChange={setDateRangeFilter}
+            showPlaceholder={showActivation}
           />
         ) : (
-          <MainConfirmationsTab dateRangeFilter={dateRangeFilter} />
+          <MainConfirmationsTab
+            dateRangeFilter={dateRangeFilter}
+            isFirstRun={showActivation}
+          />
         )}
       </BlockStack>
     </Page>

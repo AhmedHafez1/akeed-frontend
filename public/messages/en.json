@@ -1060,22 +1060,21 @@
       "storeSetup": "Store setup",
       "messageTemplate": "Message template",
       "plan": "Plan",
-      "dashboard": "Dashboard"
+      "dashboard": "Dashboard",
+      "quickSetup": "Quick setup",
+      "tryMessage": "Try the message"
     },
     "welcomeHeading": "Confirm COD orders on WhatsApp before fulfillment",
     "welcomeBody": "Set up Akeed to send WhatsApp confirmation requests, record customer responses, and update Shopify order status.",
     "startSetup": "Start setup",
-    "configurationHeading": "Store configuration",
     "storeNameLabel": "Store name",
     "storeNameRequired": "Store name is required.",
     "defaultLanguageLabel": "Default messages language",
-    "appLanguageLabel": "App language",
     "languageAuto": "Auto, based on customer phone country",
     "languageEnglish": "English",
     "languageArabic": "Arabic",
     "autoVerifyLabel": "Enable auto-verification?",
     "autoVerifyDescription": "When enabled, Akeed will automatically send WhatsApp confirmation messages for new COD orders.",
-    "continueToBilling": "Continue to billing",
     "billingManagementUnavailable": "Billing management is unavailable. Contact support to review your access.",
     "billingHeading": "Billing activation",
     "billingBody": "To start verifying orders, please activate your plan.",
@@ -1105,7 +1104,85 @@
     "billingStatusExpired": "Your subscription expired. Please reactivate a plan to continue verifying orders.",
     "billingStatusCanceled": "Your subscription is canceled. Please choose a plan and activate billing to continue.",
     "billingStatusError": "We could not verify your billing status. Please try activating your plan again.",
-    "billingStatusNeedsAttention": "Your billing status needs attention. Please activate or update your plan to continue."
+    "billingStatusNeedsAttention": "Your billing status needs attention. Please activate or update your plan to continue.",
+    "setup": {
+      "heading": "Welcome to Akeed",
+      "subheading": "One minute, and you start confirming cash-on-delivery orders on WhatsApp.",
+      "freePlanTitle": "Your free plan is active: 30 confirmation messages",
+      "freePlanDescription": "No card needed. Choose a plan later, only when you need more messages.",
+      "freePlanUsedTitle": "The test message is always free",
+      "freePlanUsedDescription": "This store already used its free plan. Finish setup and try the message; you can choose a plan from the dashboard to confirm real orders.",
+      "storeNameLabel": "Store name as it appears in the message",
+      "languageLabel": "Customer message language",
+      "phoneLabel": "Your WhatsApp number",
+      "phoneHelp": "Taken from your store details. We'll send a test message to it in the next step so you see what your customers see.",
+      "autoVerifyLabel": "Automatically confirm every new cash-on-delivery order",
+      "autoVerifyDescription": "The customer reply updates the order in Shopify automatically. You can change timing and quiet hours in settings.",
+      "autoVerifyConsent": "After setup, Akeed starts confirming new cash-on-delivery orders automatically. You can turn this off anytime in settings.",
+      "submit": "Next: send a test message",
+      "durationHint": "About 60 seconds",
+      "storeNameRequired": "Enter your store name.",
+      "phoneInvalid": "Enter a valid WhatsApp number, including the country code.",
+      "saveError": "We couldn't save your setup. Try again.",
+      "prefillWarning": "We couldn't load your store details. Fill the fields in and continue."
+    },
+    "test": {
+      "heading": "See what your customer will see",
+      "subheading": "We sent a test confirmation to your WhatsApp. Open it and tap \"Confirm order\" on your phone.",
+      "sentTo": "Sent to",
+      "changeNumber": "Change number",
+      "freeNote": "The test message is free, is not deducted from your balance, and is sent right away even during quiet hours.",
+      "resend": "Didn't get it? Resend",
+      "resendIn": "Resend in {seconds} seconds",
+      "skip": "Skip the test. You can try it later from the dashboard",
+      "failed": "WhatsApp couldn't deliver the test. Check the number and resend, or change it.",
+      "timeline": {
+        "sending": "Sending the message…",
+        "sent": "Message sent",
+        "awaitingDelivery": "Open WhatsApp on your phone",
+        "delivered": "Arrived on your phone",
+        "tapConfirm": "Tap \"Confirm order\"",
+        "confirmed": "You confirmed the order",
+        "canceledNote": "You tapped \"Cancel order\", which is what a customer cancellation looks like. Tap \"Confirm order\" to finish, or resend.",
+        "autoDetect": "We'll detect your reply automatically"
+      },
+      "errors": {
+        "cooldown": "Wait a few seconds before resending.",
+        "dailyLimit": "You've reached today's limit for test messages. Try again tomorrow or skip for now.",
+        "phoneMissing": "Add your WhatsApp number first.",
+        "sendFailed": "We couldn't send the test message. Try again.",
+        "skipFailed": "We couldn't skip the test. Try again."
+      },
+      "phone": {
+        "senderName": "Akeed",
+        "senderStatus": "Business account",
+        "avatarAlt": "Akeed",
+        "today": "Today"
+      }
+    },
+    "success": {
+      "eyebrow": "Setup complete ✓",
+      "heading": "Your confirmation arrived. This is how Akeed works",
+      "subheading": "Akeed is now live on your store. Here's what happens with every cash-on-delivery order:",
+      "pipeline": {
+        "order": {
+          "title": "A new order arrives",
+          "description": "Any cash-on-delivery order in your store."
+        },
+        "message": {
+          "title": "Your customer gets a message",
+          "description": "The same message you just saw, plus one reminder if they don’t reply."
+        },
+        "update": {
+          "title": "The order updates itself",
+          "description": "A confirmed or canceled tag is added in Shopify, with no work from you."
+        }
+      },
+      "exampleTitle": "Example: how the order looks in Shopify",
+      "exampleOrderDetails": "{customer} · {total} · Cash on delivery",
+      "dashboardCta": "Go to dashboard",
+      "editMessageCta": "Edit message text"
+    }
   },
   "dashboard": {
     "mainTitle": "Dashboard",
@@ -1307,7 +1384,12 @@
         "used": "{value}% used",
         "warningNearLimit": "You're approaching your included message limit. Upgrade before you run out to keep confirmations sending.",
         "warningAtLimit": "You've used your included messages. Upgrade or wait for renewal to keep sending confirmations.",
-        "manageCta": "Review in Settings"
+        "manageCta": "Review in Settings",
+        "outcomeTitle": "Akeed confirmed {count} orders for you 🎉",
+        "outcomeNearLimit": "Your free messages are running out. Choose a plan to keep confirming without a break.",
+        "outcomeAtLimit": "Your messages are almost used up. Choose a plan so new orders keep getting confirmed.",
+        "choosePlanCta": "Choose your plan",
+        "plansModalTitle": "Choose your plan"
       },
       "unavailable": "Metrics are not available right now."
     },
@@ -1373,7 +1455,8 @@
           "canceled": "Completed by cancellation recorded in Akeed"
         },
         "unrecorded": "Not yet recorded"
-      }
+      },
+      "scheduledBadge": "Scheduled · sends {time}"
     },
     "verificationStatus": {
       "pending": "Pending",
@@ -1446,6 +1529,43 @@
       "showing": "Showing {loaded} of {total}",
       "workload": {
         "label": "Verification outcomes"
+      }
+    },
+    "activation": {
+      "liveBanner": "Akeed is live. Your next cash-on-delivery order will be confirmed automatically.",
+      "pausedBanner": "Auto-confirm is off. Turn it on in settings so Akeed confirms your new orders.",
+      "needsPlanTitle": "Choose a plan so Akeed confirms your real orders",
+      "needsPlanBody": "This store already used its free plan. Test messages stay free.",
+      "choosePlan": "Choose your plan",
+      "settings": "Settings",
+      "plansModalTitle": "Choose your plan",
+      "freeMessagesLeft": "{count} free messages left",
+      "checklist": {
+        "title": "Start with confidence",
+        "progress": "{done} of {total}",
+        "setup": "Store setup",
+        "test": "Try the message on your phone",
+        "testHint": "See exactly what your customers receive. It is free.",
+        "tryTest": "Try it now",
+        "firstOrder": "Waiting for your first real order",
+        "firstOrderHint": "When your first cash-on-delivery order arrives, Akeed confirms it automatically."
+      },
+      "quietHours": {
+        "onTitle": "Quiet hours on ({start} – {end})",
+        "onBody": "Night orders are sent at {end} and show here as \"Scheduled\".",
+        "offTitle": "Quiet hours off",
+        "offBody": "Messages go out as soon as an order arrives, at any hour.",
+        "change": "Change timing",
+        "enable": "Turn on quiet hours"
+      },
+      "help": {
+        "title": "Need help with setup?",
+        "body": "Talk to the Akeed team on WhatsApp. We usually reply within an hour.",
+        "action": "Contact us"
+      },
+      "metricsPlaceholder": {
+        "title": "Your metrics appear here after the first order",
+        "body": "Confirmation rate, reply rate, and orders that need follow-up."
       }
     }
   },
