@@ -609,7 +609,11 @@
   }
 
   .auth-gradient-text {
-    background-image: linear-gradient(135deg, oklch(42% 0.08 255), var(--primary));
+    background-image: linear-gradient(
+      135deg,
+      oklch(42% 0.08 255),
+      var(--primary)
+    );
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
@@ -669,7 +673,9 @@
     background: oklch(100% 0 0);
     border: 5px solid var(--range-accent);
     box-shadow: 0 0 0 6px oklch(69.6% 0.17 162.48 / 0.18);
-    transition: box-shadow 200ms ease-out, transform 200ms ease-out;
+    transition:
+      box-shadow 200ms ease-out,
+      transform 200ms ease-out;
   }
 
   .akeed-range::-moz-range-thumb {
@@ -679,7 +685,9 @@
     background: oklch(100% 0 0);
     border: 5px solid var(--range-accent);
     box-shadow: 0 0 0 6px oklch(69.6% 0.17 162.48 / 0.18);
-    transition: box-shadow 200ms ease-out, transform 200ms ease-out;
+    transition:
+      box-shadow 200ms ease-out,
+      transform 200ms ease-out;
   }
 
   .akeed-range::-moz-range-track {
@@ -761,4 +769,17 @@
 
 .intl-phone .PhoneInputInput::placeholder {
   @apply text-muted-foreground;
+}
+
+/*
+ * RTL: flip the flag/number group to the end of the field so it reads as a
+ * right-aligned unit, while the number itself keeps rendering left-to-right
+ * (direction: ltr above).
+ */
+[dir='rtl'] .intl-phone .PhoneInput {
+  flex-direction: row-reverse;
+}
+
+[dir='rtl'] .intl-phone .PhoneInputInput {
+  text-align: right;
 }

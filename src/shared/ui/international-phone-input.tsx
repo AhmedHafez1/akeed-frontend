@@ -102,7 +102,7 @@ export const InternationalPhoneInput = React.forwardRef<
         ref={containerRef}
         dir="ltr"
         className={cn(
-          'intl-phone border-input bg-background relative flex h-12 w-full items-center rounded-lg border-2 px-3 transition-colors rtl:justify-end',
+          'intl-phone border-input bg-background relative flex h-12 w-full items-center rounded-lg border-2 px-3 transition-colors',
           'focus-within:border-ring focus-within:bg-muted',
           hasError &&
             'border-destructive focus-within:border-destructive focus-within:ring-destructive focus-within:ring-1',
