@@ -144,7 +144,7 @@ export function QuickSetupStep({
           </BlockStack>
 
           <Box
-            padding="400"
+            padding="200"
             borderWidth="025"
             borderColor="border"
             borderRadius="300"
@@ -153,11 +153,13 @@ export function QuickSetupStep({
               label={messages.autoVerifyLabel}
               checked={isAutoVerifyEnabled}
               onChange={onAutoVerifyChange}
+              
               helpText={
                 <BlockStack gap="100">
-                  <span>{messages.autoVerifyDescription}</span>
                   {isAutoVerifyEnabled && (
-                    <span>{messages.autoVerifyConsent}</span>
+                    <span className="px-2 py-1 text-success">
+                      {messages.autoVerifyConsent}
+                    </span>
                   )}
                 </BlockStack>
               }
