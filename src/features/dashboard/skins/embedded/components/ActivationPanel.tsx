@@ -133,9 +133,6 @@ export function ActivationPanel({
                             variant="bodyMd"
                             fontWeight={item.isDone ? 'regular' : 'semibold'}
                             tone={item.isDone ? 'subdued' : undefined}
-                            textDecorationLine={
-                              item.isDone ? 'line-through' : undefined
-                            }
                           >
                             {copy.title}
                           </Text>

@@ -50,7 +50,7 @@ export function WhatsAppPhonePreview({
         </div>
         <div
           dir={messageDir}
-          className="w-[92%] overflow-hidden rounded-xl rounded-ss-sm bg-white shadow-sm dark:bg-[#202c33]"
+          className="mx-auto my-8 w-[92%] overflow-hidden rounded-xl rounded-ss-sm bg-white shadow-sm dark:bg-[#202c33]"
         >
           <WhatsAppMessageBubble
             direction="incoming"
