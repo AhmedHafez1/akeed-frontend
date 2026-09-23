@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import {
   Badge,
@@ -34,10 +34,8 @@ import {
   SETTINGS_TABS,
   resolveSettingsTab,
 } from '@/features/settings/domain/settingsTabs'
-import {
-  formatTemplatePreviewTimestamp,
-  getTemplatePreviewParagraphs,
-} from '@/features/settings/skins/shared/templatePreview'
+import { getTemplatePreviewParagraphs } from '@/features/settings/skins/shared/templatePreview'
+import { TemplatePhonePreview } from '@/features/settings/skins/shared/TemplatePhonePreview'
 import { ContextualDocsLink } from '@/shared/ui'
 
 const SUBSCRIPTION_SECTION_ID = 'subscription-usage'
@@ -376,7 +374,6 @@ function MessageTemplateTab({ props }: { props: SettingsSkinProps }) {
   )
   const template =
     selectedDefinition?.preview ?? props.templatePreviews[language]
-  const isRtl = language === 'ar'
 
   const variantOptions = availableVariants.map((variant) => ({
     label: t(`variantLabels.${variant.variant}`),
@@ -467,57 +464,12 @@ function MessageTemplateTab({ props }: { props: SettingsSkinProps }) {
               </Text>
               <Box padding="300">
                 <InlineStack align="center">
-                  <div className="w-full max-w-[380px] rounded-2xl border border-[#d8d8d8] bg-[#efeae2] bg-[url('/images/landing/wa_chat_bg.png')] bg-cover bg-center p-3 shadow-sm">
-                    <div
-                      dir={isRtl ? 'rtl' : 'ltr'}
-                      style={{ fontFamily: 'Segoe UI, Tahoma, sans-serif' }}
-                      className="overflow-hidden rounded-xl border border-[#e7e7e7] bg-white text-[#1e1f21]"
-                    >
-                      <div className="space-y-5 px-4 pt-4 pb-3 text-[14px] leading-6 font-normal">
-                        {previewParagraphs.map((line, index) => (
-                          <Fragment key={index}>
-                            <p>{line}</p>
-                            {index < previewParagraphs.length - 1 && <br />}
-                          </Fragment>
-                        ))}
-                      </div>
-                      <div
-                        className={`px-4 pb-2 text-[14px] text-[#8e8e93] ${
-                          isRtl ? 'text-left' : 'text-right'
-                        }`}
-                      >
-                        {formatTemplatePreviewTimestamp(language)}
-                      </div>
-                      <div
-                        className={`border-t border-[#ececec] px-4 py-3 text-[#178959] ${
-                          isRtl ? 'text-right' : 'text-left'
-                        }`}
-                      >
-                        <span
-                          className={`flex items-center justify-center gap-2 text-[15px] leading-6 font-normal ${
-                            isRtl ? 'flex-row-reverse' : 'flex-row'
-                          }`}
-                        >
-                          <span className="text-[13px]">↩</span>
-                          {template.confirmButton}
-                        </span>
-                      </div>
-                      <div
-                        className={`border-t border-[#ececec] px-4 py-3 text-[#178959] ${
-                          isRtl ? 'text-right' : 'text-left'
-                        }`}
-                      >
-                        <span
-                          className={`flex items-center justify-center gap-2 text-[15px] leading-6 font-normal ${
-                            isRtl ? 'flex-row-reverse' : 'flex-row'
-                          }`}
-                        >
-                          <span className="text-[13px]">↩</span>
-                          {template.cancelButton}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                  <TemplatePhonePreview
+                    language={language}
+                    paragraphs={previewParagraphs}
+                    confirmButton={template.confirmButton}
+                    cancelButton={template.cancelButton}
+                  />
                 </InlineStack>
               </Box>
             </BlockStack>
