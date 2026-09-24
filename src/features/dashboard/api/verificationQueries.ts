@@ -1,8 +1,14 @@
-import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query'
+import {
+  infiniteQueryOptions,
+  keepPreviousData,
+  queryOptions,
+} from '@tanstack/react-query'
 import { api } from '@/shared/lib/auth'
 import { queryKeys } from '@/shared/query/keys'
 import { buildVerificationsQuery } from '../domain/verificationFilters'
 import type {
+  ConfirmationsTab,
+  DashboardOverviewResponse,
   DashboardStatsDateRange,
   DashboardStatsResponse,
   VerificationsResponse,
@@ -52,6 +58,67 @@ export function verificationStatsOptions(dateRange: DashboardStatsDateRange) {
         { signal }
       ),
     select: (response) => response.stats,
+    refetchOnWindowFocus: 'always',
+  })
+}
+
+/** Rows per page of the embedded confirmations table. */
+export const CONFIRMATIONS_PAGE_SIZE = 20
+
+export interface ConfirmationsPageParams {
+  tab: ConfirmationsTab
+  dateRange: DashboardStatsDateRange
+  search: string
+  cursor: string | null
+}
+
+/**
+ * One page of the embedded confirmations table: tab, search and paging are
+ * all answered by the server, and the previous page stays on screen while the
+ * next one loads.
+ */
+export function confirmationsPageOptions({
+  tab,
+  dateRange,
+  search,
+  cursor,
+}: ConfirmationsPageParams) {
+  const params = new URLSearchParams({
+    date_range: dateRange,
+    limit: String(CONFIRMATIONS_PAGE_SIZE),
+  })
+  if (tab !== 'all') params.set('tab', tab)
+  if (search) params.set('q', search)
+  if (cursor) params.set('cursor', cursor)
+
+  return queryOptions({
+    queryKey: queryKeys.verifications.list({
+      status: `tab:${tab}`,
+      dateRange,
+      search,
+      cursor,
+    }),
+    queryFn: ({ signal }) =>
+      api.get<VerificationsResponse>(`/api/verifications?${params}`, {
+        signal,
+      }),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: 'always',
+  })
+}
+
+/** Everything the embedded dashboard shows, from one request. */
+export function verificationOverviewOptions(
+  dateRange: DashboardStatsDateRange
+) {
+  return queryOptions({
+    queryKey: queryKeys.verifications.overview(dateRange),
+    queryFn: ({ signal }) =>
+      api.get<DashboardOverviewResponse>(
+        `/api/verifications/overview?date_range=${encodeURIComponent(dateRange)}`,
+        { signal }
+      ),
+    select: (response) => response.overview,
     refetchOnWindowFocus: 'always',
   })
 }

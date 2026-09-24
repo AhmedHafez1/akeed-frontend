@@ -1,273 +1,132 @@
 'use client'
 
-import { useMemo, useState } from 'react'
-import {
-  Badge,
-  Banner,
-  BlockStack,
-  Layout,
-  Page,
-  Select,
-  Tabs,
-} from '@shopify/polaris'
+import { useCallback, useMemo } from 'react'
+import { Badge, BlockStack, Page, Tabs } from '@shopify/polaris'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { useMainConfirmationsTab } from '../../domain/useMainConfirmationsTab'
-import { useMainMetricsTab } from '../../domain/useMainMetricsTab'
 import { MAIN_TABS, resolveMainTab } from '../../domain/mainTabs'
-import type { DashboardStatsDateRange } from '../../model/dashboard.model'
+import { DASHBOARD_DATE_RANGE_IDS } from '../../domain/verificationFilters'
+import type {
+  ConfirmationsTab,
+  DashboardStatsDateRange,
+} from '../../model/dashboard.model'
 import type { DateRangeFilterOption } from '../../domain/dashboard.types'
-import { StatsEmbedded } from './StatsEmbedded'
-import { ConfirmationStatusFlags } from './components/ConfirmationStatusFlags'
-import { EmbeddedVerificationSection } from './components/EmbeddedVerificationSection'
-import { StatsEmbeddedSkeletonHeader } from './components/StatsEmbeddedSkeletonHeader'
 import { DashboardActivationSection } from './components/DashboardActivationSection'
 import { MetricsPlaceholder } from './components/MetricsPlaceholder'
 import { useDashboardActivation } from '../../domain/useDashboardActivation'
+import { OverviewEmbedded } from './OverviewEmbedded'
+import {
+  CONFIRMATIONS_TABS,
+  ConfirmationsEmbedded,
+} from './ConfirmationsEmbedded'
 
-function MainMetricsTab({
-  dateRangeFilter,
-  dateRangeOptions,
-  onDateRangeFilterChange,
-  showPlaceholder,
-}: {
-  dateRangeFilter: DashboardStatsDateRange
-  dateRangeOptions: ReadonlyArray<DateRangeFilterOption>
-  onDateRangeFilterChange: (filter: DashboardStatsDateRange) => void
-  showPlaceholder: boolean
-}) {
-  const t = useTranslations('dashboard')
-  const metrics = useMainMetricsTab(dateRangeFilter)
-  const [isErrorDismissed, setIsErrorDismissed] = useState(false)
+const DEFAULT_RANGE: DashboardStatsDateRange = 'last_30_days'
 
-  if (showPlaceholder) {
-    return (
-      <MetricsPlaceholder
-        title={t('activation.metricsPlaceholder.title')}
-        body={t('activation.metricsPlaceholder.body')}
-      />
-    )
-  }
-
-  return (
-    <BlockStack gap="500">
-      {metrics.error && !isErrorDismissed && (
-        <Banner tone="critical" onDismiss={() => setIsErrorDismissed(true)}>
-          <p>{metrics.error}</p>
-        </Banner>
-      )}
-      <Layout>
-        <Layout.Section>
-          <StatsEmbedded
-            stats={metrics.stats}
-            isStatsLoading={metrics.isStatsLoading}
-            isAutoVerifyEnabled={metrics.isAutoVerifyEnabled}
-            followUpEnabled={metrics.followUpEnabled}
-            quietHoursEnabled={metrics.quietHoursEnabled}
-            dateRangeFilter={dateRangeFilter}
-            dateRangeOptions={dateRangeOptions}
-            onDateRangeFilterChange={onDateRangeFilterChange}
-            showDateRangeSelector={false}
-          />
-        </Layout.Section>
-      </Layout>
-    </BlockStack>
-  )
+function resolveRange(value: string | null): DashboardStatsDateRange {
+  return (DASHBOARD_DATE_RANGE_IDS as readonly string[]).includes(value ?? '')
+    ? (value as DashboardStatsDateRange)
+    : DEFAULT_RANGE
 }
 
-function MainConfirmationsTab({
-  dateRangeFilter,
-  isFirstRun,
-}: {
-  dateRangeFilter: DashboardStatsDateRange
-  /** The first-run panel already offers the (free) onboarding test. */
-  isFirstRun: boolean
-}) {
-  const t = useTranslations('dashboard')
-  const confirmations = useMainConfirmationsTab(dateRangeFilter)
-  const [isErrorDismissed, setIsErrorDismissed] = useState(false)
-
-  return (
-    <BlockStack gap="500">
-      {confirmations.error && !isErrorDismissed && (
-        <Banner tone="critical" onDismiss={() => setIsErrorDismissed(true)}>
-          <p>{confirmations.error}</p>
-        </Banner>
-      )}
-      {confirmations.testFeedback && (
-        <Banner
-          tone={confirmations.testFeedback.tone}
-          onDismiss={confirmations.onDismissTestFeedback}
-        >
-          <p>{confirmations.testFeedback.message}</p>
-        </Banner>
-      )}
-
-      {confirmations.isVerificationsLoading ? (
-        <StatsEmbeddedSkeletonHeader />
-      ) : (
-        <div className="flex flex-col gap-3 md:flex-row md:items-center">
-          <ConfirmationStatusFlags
-            autoConfirmStatus={confirmations.isAutoVerifyEnabled}
-            followUpStatus={confirmations.followUpEnabled}
-            quietHoursConfigured={confirmations.quietHoursEnabled}
-          />
-        </div>
-      )}
-      <Layout>
-        <Layout.Section>
-          <EmbeddedVerificationSection
-            messages={{
-              title: t('verificationSection.title'),
-              subtitle: t('verificationSection.subtitle'),
-              statusFilterLabel: t('filters.status.label'),
-              noReplyTooltip: t('tooltips.noReply'),
-              loadingMore: t('table.loadingMore'),
-              loadMoreRetry: t('verifications.loadMoreRetry'),
-              showing: t('verifications.showing', {
-                loaded: confirmations.verifications.length,
-                total: confirmations.totalCount,
-              }),
-              emptyMessage: confirmations.emptyVerificationsMessage,
-
-              emptyState: {
-                heading: t('emptyState.onboarding.heading'),
-                activeDescription: t('emptyState.onboarding.activeDescription'),
-                step1: t('emptyState.onboarding.step1'),
-                step2: t('emptyState.onboarding.step2'),
-                step3: t('emptyState.onboarding.step3'),
-                testSectionHeading: t(
-                  'emptyState.onboarding.testSectionHeading'
-                ),
-                testPhoneLabel: t('emptyState.onboarding.testPhoneLabel'),
-                testPhonePlaceholder: t(
-                  'emptyState.onboarding.testPhonePlaceholder'
-                ),
-                testSendLabel: t('emptyState.onboarding.testSendLabel'),
-                testSendingLabel: t('emptyState.onboarding.testSendingLabel'),
-                nextStepHint: t('emptyState.onboarding.nextStepHint'),
-              },
-            }}
-            verifications={confirmations.verifications}
-            isVerificationsLoading={confirmations.isVerificationsLoading}
-            hasMoreVerifications={confirmations.hasMoreVerifications}
-            hasLoadMoreError={confirmations.hasLoadMoreError}
-            isLoadingMoreVerifications={
-              confirmations.isLoadingMoreVerifications
-            }
-            hasVerifications={confirmations.hasVerifications}
-            actingVerificationId={confirmations.actingVerificationId}
-            reportingTimezone={confirmations.reportingTimezone}
-            canRetryVerifications={confirmations.canRetryVerifications}
-            onRetryVerification={confirmations.onRetryVerification}
-            confirmingCancelVerificationId={
-              confirmations.confirmingCancelVerificationId
-            }
-            actionErrors={confirmations.actionErrors}
-            statusFilter={confirmations.statusFilter}
-            statusFilters={confirmations.statusFilters}
-            isSendingTest={confirmations.isSendingTest}
-            canSendTestVerification={
-              confirmations.canSendTestVerification && !isFirstRun
-            }
-            canCancelOrders={confirmations.canCancelOrders}
-            onRequestCancelOrder={confirmations.onRequestCancelOrder}
-            onDismissCancelOrder={confirmations.onDismissCancelOrder}
-            onConfirmCancelOrder={confirmations.onConfirmCancelOrder}
-            onStatusFilterChange={confirmations.onStatusFilterChange}
-            onLoadMoreVerifications={confirmations.onLoadMoreVerifications}
-            onSendTestVerification={confirmations.onSendTestVerification}
-          />
-        </Layout.Section>
-      </Layout>
-    </BlockStack>
-  )
+function resolveConfirmationsTab(value: string | null): ConfirmationsTab {
+  return (CONFIRMATIONS_TABS as readonly string[]).includes(value ?? '')
+    ? (value as ConfirmationsTab)
+    : 'all'
 }
 
+/**
+ * The embedded app's main page: the dashboard and the confirmations list as
+ * two tabs sharing one period. Tab, period and the confirmations filter live
+ * in the URL, so "كل الطلبات" can link straight to the needs-action list and a
+ * reload lands where the merchant was.
+ */
 export function MainEmbeddedSkin() {
   const t = useTranslations('dashboard')
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const [dateRangeFilter, setDateRangeFilter] =
-    useState<DashboardStatsDateRange>('last_30_days')
-  const tabParam = searchParams.get('tab')
-  const activeTab = resolveMainTab(tabParam)
-  const selected = MAIN_TABS.indexOf(activeTab)
+  const activeTab = resolveMainTab(searchParams.get('tab'))
+  const period = resolveRange(searchParams.get('range'))
+  const confirmationsTab = resolveConfirmationsTab(searchParams.get('filter'))
 
   const activation = useDashboardActivation()
   const showActivation = activation.isLoaded && activation.isFirstRun
+
+  const updateParams = useCallback(
+    (changes: Record<string, string | null>) => {
+      const next = new URLSearchParams(searchParams.toString())
+      for (const [key, value] of Object.entries(changes)) {
+        if (value === null) next.delete(key)
+        else next.set(key, value)
+      }
+      router.push(`${pathname}?${next.toString()}`)
+    },
+    [pathname, router, searchParams]
+  )
+
+  const periodOptions = useMemo<ReadonlyArray<DateRangeFilterOption>>(
+    () =>
+      DASHBOARD_DATE_RANGE_IDS.map((id) => ({
+        id,
+        label: t(`filters.dateRange.${id}`),
+      })),
+    [t]
+  )
+
+  const onPeriodChange = (next: DashboardStatsDateRange) =>
+    updateParams({ range: next === DEFAULT_RANGE ? null : next })
 
   const tabs = [
     { id: 'metrics', content: t('tabs.metrics') },
     { id: 'confirmations', content: t('tabs.confirmations') },
   ]
-
-  const dateRangeOptions = useMemo<ReadonlyArray<DateRangeFilterOption>>(
-    () => [
-      { id: 'today', label: t('filters.dateRange.today') },
-      { id: 'last_7_days', label: t('filters.dateRange.last_7_days') },
-      { id: 'last_30_days', label: t('filters.dateRange.last_30_days') },
-      {
-        id: 'last_3_months',
-        label: t('filters.dateRange.last_3_months'),
-      },
-    ],
-    [t]
-  )
-
-  const handleTabSelect = (index: number) => {
-    const nextParams = new URLSearchParams(searchParams.toString())
-    nextParams.set('tab', MAIN_TABS[index])
-    router.push(`${pathname}?${nextParams.toString()}`)
-  }
+  const freeMessagesBadge =
+    activation.freeMessagesLeft !== null ? (
+      <Badge tone="success">
+        {t('activation.freeMessagesLeft', {
+          count: activation.freeMessagesLeft,
+        })}
+      </Badge>
+    ) : undefined
 
   return (
-    <Page
-      title={t('mainTitle')}
-      subtitle={t('mainSubtitle')}
-      titleMetadata={
-        activation.freeMessagesLeft !== null ? (
-          <Badge tone="success">
-            {t('activation.freeMessagesLeft', {
-              count: activation.freeMessagesLeft,
-            })}
-          </Badge>
-        ) : undefined
-      }
-    >
+    <Page>
       <BlockStack gap="500">
         {showActivation && (
           <DashboardActivationSection activation={activation} />
         )}
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div className="min-w-0 flex-1">
-            <Tabs tabs={tabs} selected={selected} onSelect={handleTabSelect} />
-          </div>
-          <Select
-            label={t('filters.dateRange.label')}
-            labelHidden
-            options={dateRangeOptions.map((option) => ({
-              label: option.label,
-              value: option.id,
-            }))}
-            value={dateRangeFilter}
-            onChange={(value) =>
-              setDateRangeFilter(value as DashboardStatsDateRange)
-            }
-          />
-        </div>
+        <Tabs
+          tabs={tabs}
+          selected={MAIN_TABS.indexOf(activeTab)}
+          onSelect={(index) => updateParams({ tab: MAIN_TABS[index] })}
+        />
         {activeTab === 'metrics' ? (
-          <MainMetricsTab
-            dateRangeFilter={dateRangeFilter}
-            dateRangeOptions={dateRangeOptions}
-            onDateRangeFilterChange={setDateRangeFilter}
-            showPlaceholder={showActivation}
-          />
+          showActivation ? (
+            <MetricsPlaceholder
+              title={t('activation.metricsPlaceholder.title')}
+              body={t('activation.metricsPlaceholder.body')}
+            />
+          ) : (
+            <OverviewEmbedded
+              period={period}
+              periodOptions={periodOptions}
+              onPeriodChange={onPeriodChange}
+              titleMetadata={freeMessagesBadge}
+              onEditSettings={activation.openQuietHours}
+              onViewNeedsAction={() =>
+                updateParams({ tab: 'confirmations', filter: 'needs_action' })
+              }
+            />
+          )
         ) : (
-          <MainConfirmationsTab
-            dateRangeFilter={dateRangeFilter}
-            isFirstRun={showActivation}
+          <ConfirmationsEmbedded
+            period={period}
+            periodOptions={periodOptions}
+            onPeriodChange={onPeriodChange}
+            tab={confirmationsTab}
+            onTabChange={(next) =>
+              updateParams({ filter: next === 'all' ? null : next })
+            }
           />
         )}
       </BlockStack>

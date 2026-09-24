@@ -57,3 +57,27 @@ export function useSendTestVerificationMutation() {
     },
   })
 }
+
+export interface ConfirmVerificationResponse {
+  success: true
+  verificationId: string
+  status: 'confirmed'
+  alreadyConfirmed?: boolean
+}
+
+/**
+ * The merchant confirms an order by hand. The server runs the same path as a
+ * customer's confirm reply, so the store gets the same tag.
+ */
+export function useConfirmVerificationMutation() {
+  const emitDomainEvent = useEmitDomainEvent()
+  return useMutation({
+    mutationFn: (verificationId: string) =>
+      api.post<ConfirmVerificationResponse>(
+        `/api/verifications/${encodeURIComponent(verificationId)}/confirm`
+      ),
+    onSuccess: () => {
+      void emitDomainEvent('verification.confirmed')
+    },
+  })
+}

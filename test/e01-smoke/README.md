@@ -152,3 +152,15 @@ Check at 1440 and 390 px in both locales and themes: the map step blocks Continu
 Committed batches: `/{locale}/imports/b-imported` (awaiting start), `/b-releasing`, `/b-paused` (out of credits), `/b-stopped`, `/b-completed` and `/b-none` (completed, no order visible). Each renders its real batch view with a **Review orders** link to `/{locale}/verifications?importBatchId=<id>`. The `/verifications` fixture mounts the real page's header action (the "From import: {file}" chip and **Import from file**), answers `?importBatchId=` with a mix of awaiting-start, confirmed, no-reply and canceled rows, returns no rows for `b-none` or an unknown id (the existing empty state), and honours `?theme=dark`.
 
 `browser-check.mjs` exports `checkImportOrderLinks(tab, locale)`. It opens every batch, asserts one link with the filtered href, follows it and checks the chip and rows (or the empty state for `b-none`), then clears the chip on `?status=confirmed&importBatchId=b-releasing` and asserts `status` is kept.
+
+## Embedded dashboard and confirmations fixture
+
+Run the same fixture server and open `/ar/embedded-dashboard` or
+`/en/embedded-dashboard` (`?tab=metrics` or `?tab=confirmations`). It mounts the
+production `MainEmbeddedSkin` over a synthetic backend shaped like the redesign
+mockups: 28 orders, 19 confirmed, 6 canceled and 3 needing action, served one
+page of 20 at a time with tab, search and cursor paging. "تأكيد يدوي" confirms
+the row in memory.
+
+Use `?scenario=empty`, `error`, `limit` (plan used up), `quiet` (usage under
+80%) or `viewer` (no manual confirmation).

@@ -14,9 +14,13 @@ export const queryKeys = {
       status: string
       dateRange: string
       importBatchId?: string
+      search?: string
+      cursor?: string | null
     }) => [...queryKeys.verifications.lists(), filters] as const,
     stats: (dateRange: string) =>
       [...queryKeys.verifications.all, 'stats', dateRange] as const,
+    overview: (dateRange: string) =>
+      [...queryKeys.verifications.all, 'overview', dateRange] as const,
     pageContext: () =>
       [...queryKeys.verifications.all, 'page-context'] as const,
   },

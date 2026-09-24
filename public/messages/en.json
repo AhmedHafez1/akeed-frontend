@@ -1298,7 +1298,7 @@
       }
     },
     "tabs": {
-      "metrics": "Metrics",
+      "metrics": "Dashboard",
       "confirmations": "Confirmations"
     },
     "emptyState": {
@@ -1566,6 +1566,169 @@
       "metricsPlaceholder": {
         "title": "Your metrics appear here after the first order",
         "body": "Confirmation rate, reply rate, and orders that need follow-up."
+      }
+    },
+    "overview": {
+      "title": "Dashboard",
+      "periodLabel": "Period",
+      "settings": {
+        "label": "Confirmation settings",
+        "on": "On",
+        "off": "Off",
+        "autoConfirm": "Auto-confirm",
+        "autoConfirmOff": "Auto-confirm off",
+        "followUpHours": "Reminder after {count, plural, one {# hour} other {# hours}}",
+        "followUpMinutes": "Reminder after {count, plural, one {# minute} other {# minutes}}",
+        "followUpOff": "Reminder off",
+        "quietHours": "Quiet {window}",
+        "quietHoursOff": "No quiet hours",
+        "edit": "Edit",
+        "editLabel": "Edit confirmation settings"
+      },
+      "credits": {
+        "warning": "You've used {used} of {limit} messages. Confirmations stop when they run out.",
+        "exhausted": "You've used all {limit} messages. Confirmations have stopped until you choose a plan.",
+        "progressLabel": "Message usage",
+        "cta": "Choose a plan",
+        "plansModalTitle": "Choose your plan"
+      },
+      "kpis": {
+        "confirmed": {
+          "title": "Confirmed orders",
+          "value": "Worth <amount></amount>, ready to ship",
+          "none": "No confirmed orders in this period"
+        },
+        "canceled": {
+          "title": "Canceled before shipping",
+          "body": "{count, plural, =0 {No wasted shipments this period} one {# shipment and return you didn’t pay for} other {# shipments and returns you didn’t pay for}}"
+        },
+        "rate": {
+          "title": "Confirmation rate",
+          "body": "{confirmed} of {sent} orders we messaged",
+          "none": "No messages sent in this period yet"
+        }
+      },
+      "needsAction": {
+        "title": "Needs your action",
+        "countLabel": "{count, plural, one {# order needs action} other {# orders need action}}",
+        "allOrders": "All orders",
+        "empty": "Nothing needs your action",
+        "emptyBody": "Every order in this period is confirmed or waiting for the customer.",
+        "reason": {
+          "no_reply_after_follow_up": "No reply since {date} · Reminder sent",
+          "no_reply": "No reply since {date}",
+          "read_no_reply": "Read, no reply · {hours, plural, one {# hour} other {# hours}} ago",
+          "delivery_failed": "Not delivered: {reason}"
+        },
+        "actions": {
+          "whatsapp": "WhatsApp them",
+          "whatsappLabel": "Message {customer} on WhatsApp (opens in a new tab)",
+          "manualConfirm": "Confirm manually",
+          "manualConfirmLabel": "Confirm order {order} manually"
+        },
+        "confirmDialog": {
+          "title": "Confirm order {order} manually?",
+          "body": "Akeed will record the order as confirmed and tag it “Akeed: Verified” in Shopify, just as if the customer had confirmed. No more messages will be sent.",
+          "confirm": "Yes, confirm order",
+          "cancel": "Go back",
+          "success": "Order {order} confirmed.",
+          "error": "Couldn’t confirm the order. Please try again."
+        }
+      },
+      "flow": {
+        "title": "Message flow",
+        "subtitle": "From sending the message to the customer’s reply",
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "read": "Read",
+        "replied": "Customer replied",
+        "legendConfirmed": "Confirmed {count}",
+        "legendCanceled": "Canceled {count}",
+        "legendNoReply": "No reply yet {count}",
+        "empty": "No messages sent in this period yet."
+      },
+      "error": {
+        "title": "Couldn’t load the dashboard",
+        "retry": "Try again"
+      },
+      "unavailable": "The dashboard is unavailable right now."
+    },
+    "confirmations": {
+      "title": "Confirmations",
+      "subtitle": "Every cash-on-delivery order we messaged, and what happened next.",
+      "tabs": {
+        "all": "All",
+        "needs_action": "Needs action",
+        "confirmed": "Confirmed",
+        "canceled": "Canceled",
+        "failed": "Failed to send"
+      },
+      "search": {
+        "label": "Search by order number or phone",
+        "placeholder": "Order number or phone",
+        "invalid": "Use only order or phone digits."
+      },
+      "headings": {
+        "order": "Order",
+        "customer": "Customer",
+        "status": "Status",
+        "total": "Total",
+        "updated": "Last update",
+        "action": "Action"
+      },
+      "resource": {
+        "singular": "confirmation",
+        "plural": "confirmations"
+      },
+      "noName": "No name",
+      "openOrderLabel": "Open order {order} in Shopify",
+      "status": {
+        "confirmed": "Confirmed",
+        "canceledByCustomer": "Canceled by customer",
+        "canceledNoReply": "Canceled, no reply",
+        "failed": "Failed to send",
+        "scheduled": "Scheduled",
+        "sending": "Sending",
+        "awaitingReply": "Awaiting reply",
+        "noReply": "No reply",
+        "awaitingStart": "Awaiting start",
+        "notStarted": "Not started",
+        "sub": {
+          "afterFollowUp": "After reminder",
+          "manual": "Confirmed manually",
+          "canceledInStore": "Canceled in Shopify",
+          "followUpSent": "Reminder sent",
+          "sendsAt": "Sends {time}"
+        },
+        "failure": {
+          "notOnWhatsApp": "number isn’t on WhatsApp",
+          "invalidNumber": "invalid phone number",
+          "reengagement": "conversation window expired",
+          "notDelivered": "WhatsApp couldn’t deliver it",
+          "generic": "message not delivered",
+          "notSent": "message not sent"
+        }
+      },
+      "pagination": {
+        "label": "{from}–{to} of {total}",
+        "previous": "Previous page",
+        "next": "Next page"
+      },
+      "empty": {
+        "all": "No confirmations in this period yet.",
+        "needs_action": "Nothing needs your action. Nice work!",
+        "confirmed": "No confirmed orders in this period.",
+        "canceled": "No customer canceled in this period.",
+        "failed": "Every message in this period was delivered.",
+        "search": "No results for “{query}”."
+      },
+      "error": {
+        "title": "Couldn’t load confirmations",
+        "retry": "Try again"
+      },
+      "actions": {
+        "more": "More actions for order {order}",
+        "cancelTitle": "Cancel order {order}?"
       }
     }
   },

@@ -1292,7 +1292,7 @@
       }
     },
     "tabs": {
-      "metrics": "المؤشرات",
+      "metrics": "لوحة التحكم",
       "confirmations": "التأكيدات"
     },
     "emptyState": {
@@ -1560,6 +1560,169 @@
       "metricsPlaceholder": {
         "title": "ستظهر مؤشراتك هنا بعد أول طلب",
         "body": "معدل التأكيد، معدل الرد، والطلبات التي تحتاج متابعة."
+      }
+    },
+    "overview": {
+      "title": "لوحة التحكم",
+      "periodLabel": "الفترة",
+      "settings": {
+        "label": "إعدادات التأكيد",
+        "on": "مفعّل",
+        "off": "متوقف",
+        "autoConfirm": "التأكيد التلقائي",
+        "autoConfirmOff": "التأكيد التلقائي متوقف",
+        "followUpHours": "تذكير بعد {count, plural, one {ساعة} two {ساعتين} few {# ساعات} many {# ساعة} other {# ساعة}}",
+        "followUpMinutes": "تذكير بعد {count, plural, one {دقيقة} two {دقيقتين} few {# دقائق} many {# دقيقة} other {# دقيقة}}",
+        "followUpOff": "التذكير متوقف",
+        "quietHours": "هدوء {window}",
+        "quietHoursOff": "بدون ساعات هدوء",
+        "edit": "تعديل",
+        "editLabel": "تعديل إعدادات التأكيد"
+      },
+      "credits": {
+        "warning": "استخدمت {used} من {limit} رسالة. بعد نفادها تتوقف التأكيدات.",
+        "exhausted": "استخدمت كل رسائلك ({limit} من {limit}). توقفت التأكيدات حتى تختار باقة.",
+        "progressLabel": "استهلاك الرسائل",
+        "cta": "اختر باقة",
+        "plansModalTitle": "اختر باقتك"
+      },
+      "kpis": {
+        "confirmed": {
+          "title": "طلبات مؤكدة",
+          "value": "قيمتها <amount></amount> جاهزة للشحن",
+          "none": "لا توجد طلبات مؤكدة في هذه الفترة"
+        },
+        "canceled": {
+          "title": "أُلغيت قبل الشحن",
+          "body": "{count, plural, zero {لا شحنات ضائعة في هذه الفترة} one {شحنة واحدة لم تدفع تكلفتها} two {شحنتان ومرتجعهما لم تدفع تكلفتهما} few {# شحنات ومرتجعات لم تدفع تكلفتها} many {# شحنة ومرتجعاً لم تدفع تكلفتها} other {# شحنة ومرتجع لم تدفع تكلفتها}}"
+        },
+        "rate": {
+          "title": "معدل التأكيد",
+          "body": "{confirmed} من {sent} طلباً أرسلنا لها رسالة",
+          "none": "لم نرسل رسائل في هذه الفترة بعد"
+        }
+      },
+      "needsAction": {
+        "title": "تحتاج إجراءك",
+        "countLabel": "{count, plural, zero {لا طلبات تحتاج إجراء} one {طلب واحد يحتاج إجراء} two {طلبان يحتاجان إجراء} few {# طلبات تحتاج إجراء} many {# طلباً يحتاج إجراء} other {# طلب يحتاج إجراء}}",
+        "allOrders": "كل الطلبات",
+        "empty": "لا توجد طلبات تحتاج إجراء",
+        "emptyBody": "كل طلبات هذه الفترة مؤكدة أو بانتظار رد العميل.",
+        "reason": {
+          "no_reply_after_follow_up": "لم يرد منذ {date} · أُرسل التذكير",
+          "no_reply": "لم يرد منذ {date}",
+          "read_no_reply": "قرأ الرسالة ولم يرد · منذ {hours, plural, one {ساعة} two {ساعتين} few {# ساعات} many {# ساعة} other {# ساعة}}",
+          "delivery_failed": "لم تصل الرسالة: {reason}"
+        },
+        "actions": {
+          "whatsapp": "راسله واتساب",
+          "whatsappLabel": "راسل {customer} على واتساب (يفتح في نافذة جديدة)",
+          "manualConfirm": "تأكيد يدوي",
+          "manualConfirmLabel": "تأكيد الطلب {order} يدوياً"
+        },
+        "confirmDialog": {
+          "title": "تأكيد الطلب {order} يدوياً؟",
+          "body": "سيُسجَّل الطلب مؤكداً في أكيد ويُضاف له وسم «Akeed: Verified» في شوبيفاي، كما لو أكّده العميل. لن تُرسل له رسائل أخرى.",
+          "confirm": "نعم، أكّد الطلب",
+          "cancel": "تراجع",
+          "success": "تم تأكيد الطلب {order}.",
+          "error": "تعذّر تأكيد الطلب. حاول مرة أخرى."
+        }
+      },
+      "flow": {
+        "title": "مسار الرسائل",
+        "subtitle": "من إرسال الرسالة حتى ردّ العميل",
+        "sent": "أُرسلت",
+        "delivered": "وصلت",
+        "read": "قُرئت",
+        "replied": "ردّ العميل",
+        "legendConfirmed": "أكّد {count}",
+        "legendCanceled": "ألغى {count}",
+        "legendNoReply": "لم يرد بعد {count}",
+        "empty": "لم تُرسل رسائل في هذه الفترة بعد."
+      },
+      "error": {
+        "title": "تعذّر تحميل لوحة التحكم",
+        "retry": "إعادة المحاولة"
+      },
+      "unavailable": "لوحة التحكم غير متاحة حالياً."
+    },
+    "confirmations": {
+      "title": "التأكيدات",
+      "subtitle": "كل طلب دفع عند الاستلام أرسلنا له رسالة، وما حدث بعدها.",
+      "tabs": {
+        "all": "الكل",
+        "needs_action": "تحتاج إجراء",
+        "confirmed": "مؤكد",
+        "canceled": "ملغي",
+        "failed": "فشل الإرسال"
+      },
+      "search": {
+        "label": "بحث برقم الطلب أو الهاتف",
+        "placeholder": "رقم الطلب أو الهاتف",
+        "invalid": "اكتب أرقام الطلب أو الهاتف فقط."
+      },
+      "headings": {
+        "order": "الطلب",
+        "customer": "العميل",
+        "status": "الحالة",
+        "total": "الإجمالي",
+        "updated": "آخر تحديث",
+        "action": "إجراء"
+      },
+      "resource": {
+        "singular": "تأكيد",
+        "plural": "تأكيدات"
+      },
+      "noName": "بدون اسم",
+      "openOrderLabel": "فتح الطلب {order} في شوبيفاي",
+      "status": {
+        "confirmed": "مؤكد",
+        "canceledByCustomer": "ألغاه العميل",
+        "canceledNoReply": "أُلغي لعدم الرد",
+        "failed": "فشل الإرسال",
+        "scheduled": "مجدول",
+        "sending": "قيد الإرسال",
+        "awaitingReply": "بانتظار الرد",
+        "noReply": "لم يرد",
+        "awaitingStart": "بانتظار البدء",
+        "notStarted": "لم يبدأ",
+        "sub": {
+          "afterFollowUp": "بعد التذكير",
+          "manual": "تأكيد يدوي",
+          "canceledInStore": "أُلغي في شوبيفاي",
+          "followUpSent": "أُرسل التذكير",
+          "sendsAt": "يُرسل {time}"
+        },
+        "failure": {
+          "notOnWhatsApp": "الرقم غير مسجل على واتساب",
+          "invalidNumber": "رقم الهاتف غير صحيح",
+          "reengagement": "انتهت نافذة المحادثة مع العميل",
+          "notDelivered": "لم يسلّمها واتساب",
+          "generic": "لم تصل الرسالة",
+          "notSent": "لم تُرسل الرسالة"
+        }
+      },
+      "pagination": {
+        "label": "{from}–{to} من {total}",
+        "previous": "الصفحة السابقة",
+        "next": "الصفحة التالية"
+      },
+      "empty": {
+        "all": "لا توجد تأكيدات في هذه الفترة بعد.",
+        "needs_action": "لا توجد طلبات تحتاج إجراء. أحسنت!",
+        "confirmed": "لا توجد طلبات مؤكدة في هذه الفترة.",
+        "canceled": "لم يُلغِ أي عميل طلبه في هذه الفترة.",
+        "failed": "وصلت كل الرسائل في هذه الفترة.",
+        "search": "لا توجد نتائج لـ «{query}»."
+      },
+      "error": {
+        "title": "تعذّر تحميل التأكيدات",
+        "retry": "إعادة المحاولة"
+      },
+      "actions": {
+        "more": "مزيد من الإجراءات للطلب {order}",
+        "cancelTitle": "إلغاء الطلب {order}؟"
       }
     }
   },

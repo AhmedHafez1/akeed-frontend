@@ -17,15 +17,19 @@ npm run shopify:dev    # Shopify embedded app dev
 
 ### Testing
 
-No test runner is configured yet. If tests are added (e.g., Vitest):
+Unit and component tests use Vitest (`vitest.config.mts`, jsdom, setup in
+`test/vitest/setup.ts`). Test files live next to the code as `*.test.ts(x)`.
 
 ```bash
-npx vitest run                          # Run all tests
-npx vitest run src/lib/utils.test.ts    # Run a single test file
-npx vitest run -t "test name"           # Run a single test by name
+npm run test                                              # Run all tests
+npx vitest run src/features/dashboard/lib/orderDisplay.test.ts   # One file
+npx vitest run -t "test name"                             # One test by name
 ```
 
-Until a runner exists, validate changes with `npm run build && npm run lint`.
+Embedded components render inside Polaris `AppProvider` and `NextIntlClientProvider`
+with the real message files (see `renderEmbedded` in
+`src/features/dashboard/skins/embedded/components/embeddedTestUtils.tsx`).
+Also validate changes with `npm run build && npm run lint`.
 
 ## Project Overview
 

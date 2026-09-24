@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start -p 3001",
     "lint": "eslint",
+    "test": "vitest run",
     "smoke:e01": "npm --prefix test/e01-smoke run dev",
     "smoke:e02": "npm --prefix test/e01-smoke run dev",
     "smoke:e02:typecheck": "tsc --noEmit --incremental false -p test/e01-smoke/tsconfig.json",
@@ -53,17 +54,21 @@
     "@playwright/test": "1.63.0",
     "@shopify/cli": "4.7.0",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
     "@types/google-libphonenumber": "^7.4.30",
     "@types/node": "^20.19.26",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
+    "jsdom": "^29.1.1",
     "postcss": "^8.5.6",
     "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.7"
   },
   "overrides": {
     "@shopify/polaris": {
