@@ -1736,7 +1736,6 @@
   },
   "settings": {
     "title": "الإعدادات",
-    "embeddedSubtitle": "تحكم في إعدادات المتجر والتأكيد والرسائل من مكان واحد.",
     "subtitle": "تحكم في إعدادات المتجر والفوترة من مكان واحد.",
     "sourceHeading": "مصدر الطلبات",
     "sourceStandalone": "مصدر مستقل / يدوي",
@@ -1806,12 +1805,6 @@
         "creditPageDescription": "راجع رصيدك الموثوق واشترِ المزيد واطلع على سجل المشتريات وحركات الرصيد من الصفحة المخصصة.",
         "openCreditPage": "فتح الفوترة والرصيد"
       }
-    },
-    "tabs": {
-      "store": "المتجر",
-      "confirmation": "التأكيد",
-      "messageTemplate": "قالب الرسالة",
-      "billing": "الفوترة"
     },
     "storeConfigurationHeading": "إعدادات المتجر",
     "storeNameLabel": "اسم المتجر",
@@ -1909,7 +1902,165 @@
     "planVolumePerMonth": "حتى {count} رسالة تأكيد واتساب شهرياً",
     "planVolumeOneTime": "{count} رسالة تأكيد واتساب (مرة واحدة)",
     "freePlanAlreadyClaimedTooltip": "لقد استخدمت الخطة المجانية من قبل. يمكن اختيار الخطة المجانية مرة واحدة فقط.",
-    "freePlanAlreadyClaimedError": "استخدم هذا المتجر الخطة المجانية من قبل. اختر خطة مدفوعة."
+    "freePlanAlreadyClaimedError": "استخدم هذا المتجر الخطة المجانية من قبل. اختر خطة مدفوعة.",
+    "embedded": {
+      "title": "الإعدادات",
+      "tabs": {
+        "message": "الرسالة",
+        "timing": "التوقيت والمتابعة",
+        "plan": "الباقة"
+      },
+      "save": "حفظ",
+      "discard": "تجاهل",
+      "saveSuccess": "تم حفظ الإعدادات",
+      "saveError": "تعذّر حفظ الإعدادات. راجع الحقول المحددة وحاول مرة أخرى.",
+      "saveInvalid": "بعض الحقول تحتاج إلى مراجعة قبل الحفظ.",
+      "readOnly": "لديك صلاحية عرض فقط. يجب أن يجري المالك أو المسؤول تغييرات الإعدادات.",
+      "loadError": "تعذّر تحميل الإعدادات.",
+      "retry": "حاول مرة أخرى",
+      "unsavedElsewhere": "لديك تغييرات غير محفوظة في تبويب آخر. ارجع إليه لحفظها أو تجاهلها.",
+      "reviewChanges": "مراجعة التغييرات",
+      "testSendSuccess": "أُرسلت الرسالة التجريبية إلى واتساب",
+      "testSendCooldown": "انتظر بضع ثوانٍ قبل إرسال رسالة تجريبية أخرى.",
+      "testSendDailyLimit": "وصلت إلى الحد اليومي للرسائل التجريبية.",
+      "testSendPhoneMissing": "أضف رقم واتساب الخاص بك في الإعداد لاستقبال الرسائل التجريبية.",
+      "testSendError": "تعذّر إرسال الرسالة التجريبية. حاول مرة أخرى.",
+      "message": {
+        "identityHeading": "هوية الرسالة",
+        "storeNameLabel": "اسم المتجر",
+        "storeNameHelp": "يظهر في كل رسالة: «شكراً لطلبك من {name}».",
+        "storeNameRequired": "أدخل اسم المتجر.",
+        "storeNameTooLong": "استخدم {max} حرفاً أو أقل.",
+        "languageHeading": "لغة الرسالة",
+        "languageAuto": "تلقائي حسب رقم العميل",
+        "languageAutoHelp": "العربية لأرقام الدول العربية، والإنجليزية لبقية الدول.",
+        "recommended": "موصى به",
+        "languageArabic": "العربية دائماً",
+        "languageEnglish": "English دائماً",
+        "styleHeading": "أسلوب الرسالة",
+        "styleLanguageHint": "لكل لغة أسلوبها المحفوظ. هذه أساليب {language}؛ غيّر لغة المعاينة لتعديل اللغة الأخرى.",
+        "languageNames": {
+          "ar": "العربية",
+          "en": "الإنجليزية"
+        },
+        "variantLabels": {
+          "standard": "فصحى",
+          "egyptian": "مصري",
+          "gulf": "خليجي",
+          "friendly": "ودّي",
+          "professional": "رسمي",
+          "direct": "مباشر",
+          "short": "مختصر"
+        },
+        "previewHeading": "المعاينة",
+        "previewLanguageGroup": "لغة المعاينة",
+        "previewAria": "معاينة رسالة واتساب باللغة {language}",
+        "testSend": "إرسال رسالة تجريبية إلى واتساب",
+        "testSendHelp": "تُرسل إلى <phone></phone> باللغة {language}. الرسائل التجريبية مجانية.",
+        "testSendHelpNoPhone": "تُرسل إلى رقم واتساب الخاص بك باللغة {language}. الرسائل التجريبية مجانية.",
+        "testSendSaveFirst": "احفظ التغييرات أولاً لتجربتها.",
+        "templatesNote": "القوالب معتمدة من واتساب، لذا يتغيّر الأسلوب واللغة فقط."
+      },
+      "timing": {
+        "timelineHeading": "ماذا يحدث مع كل طلب دفع عند الاستلام",
+        "steps": {
+          "newOrder": "طلب جديد",
+          "confirmation": "رسالة التأكيد",
+          "reminder": "تذكير إن لم يرد",
+          "needsAction": "«تحتاج إجراءك»"
+        },
+        "delayImmediate": "فوراً",
+        "delayAfter": "بعد {duration}",
+        "delayAfterMore": "بعد {duration} أخرى",
+        "stepOff": "متوقف",
+        "hours": "{count, plural, one {ساعة} two {ساعتين} few {# ساعات} many {# ساعة} other {# ساعة}}",
+        "minutes": "{count, plural, one {دقيقة} two {دقيقتين} few {# دقائق} many {# دقيقة} other {# دقيقة}}",
+        "quietLine": "الرسائل التي يحين موعدها بين {start} و{end} تُرسل الساعة {end}.",
+        "autoHeading": "التأكيد التلقائي",
+        "autoDescription": "متى نرسل رسالة التأكيد لطلبات الدفع عند الاستلام.",
+        "autoLabel": "إرسال رسالة تأكيد لكل طلب جديد",
+        "autoHelp": "عند الإيقاف لن تُرسل أي رسائل.",
+        "sendTimeLabel": "وقت الإرسال",
+        "sendPresets": {
+          "now": "فوراً",
+          "after15m": "بعد 15 دقيقة",
+          "after1h": "بعد ساعة",
+          "custom": "مخصص"
+        },
+        "sendTimeHelp": "اختر تأخيراً إذا كنت تراجع الطلبات يدوياً قبل التأكيد.",
+        "customDelayLabel": "مدة التأخير بالدقائق",
+        "customDelaySuffix": "دقيقة",
+        "customDelayError": "أدخل عدد دقائق صحيحاً من 0 إلى 1440.",
+        "followHeading": "المتابعة",
+        "followDescription": "ماذا نفعل عندما لا يرد العميل.",
+        "reminderLabel": "إرسال تذكير واحد",
+        "reminderHelp": "إذا لم يرد العميل على الرسالة الأولى.",
+        "after": "بعد",
+        "hoursShort": "{count} س",
+        "fromFirstMessage": "من الرسالة الأولى",
+        "fromReminder": "من التذكير",
+        "reminderGroup": "مدة انتظار التذكير",
+        "alertGroup": "مدة انتظار التنبيه",
+        "alertLabel": "تنبيهي بالطلبات بدون رد",
+        "alertHelp": "ينتقل الطلب إلى «تحتاج إجراءك» ويُضاف الوسم <tag></tag> في شوبيفاي. لا نلغي الطلب تلقائياً.",
+        "quietHeading": "ساعات الهدوء",
+        "quietDescription": "لا نرسل رسائل ليلاً. ما يحين موعده خلالها يُرسل عند انتهائها.",
+        "quietLabel": "إيقاف الإرسال أثناء ساعات الهدوء",
+        "quietFrom": "من",
+        "quietTo": "إلى",
+        "timezoneLabel": "المنطقة الزمنية",
+        "storeTime": "{zone} (توقيت المتجر)",
+        "timeValue": "{time} {period}",
+        "am": "صباحاً",
+        "pm": "مساءً",
+        "quietErrors": {
+          "sameStartEnd": "لا يمكن أن يتطابق وقت البداية مع وقت النهاية.",
+          "invalidTime": "اختر وقت البداية والنهاية.",
+          "unsupportedTimezone": "اختر منطقة زمنية من القائمة."
+        }
+      },
+      "plan": {
+        "warningTitle": "متبقي {remaining, plural, one {رسالة واحدة} two {رسالتان} few {# رسائل} many {# رسالة} other {# رسالة}}",
+        "warningTitleFree": "متبقي {remaining, plural, one {رسالة مجانية واحدة} two {رسالتان مجانيتان} few {# رسائل مجانية} many {# رسالة مجانية} other {# رسالة مجانية}}",
+        "warningBody": "عند نفادها تتوقف رسائل التأكيد للطلبات الجديدة. طلباتك وبياناتك تبقى كما هي.",
+        "criticalTitle": "استخدمت كل رسائلك",
+        "criticalBody": "رسائل التأكيد متوقفة للطلبات الجديدة. طلباتك وبياناتك محفوظة. اختر باقة لاستئنافها.",
+        "currentPlan": "باقتك الحالية: {plan}",
+        "noPlan": "لا توجد باقة فعّالة",
+        "badgeFree": "مجانية",
+        "badgeMonthly": "شهرية",
+        "used": "استخدمت {used} من {limit} رسالة",
+        "oneTime": "رصيد لمرة واحدة، لا يتجدد",
+        "renews": "يتجدد في {date}",
+        "usageAria": "الرسائل المستخدمة",
+        "perMonth": "/ شهرياً",
+        "allowance": "{count} رسالة شهرياً",
+        "recommended": "مقترحة لك",
+        "recommendationReason": "أرسلت {count} رسالة في آخر 30 يوماً، فهذه الباقة تكفي نموّك لعدة أشهر.",
+        "subscribe": "اشترك في {plan}",
+        "currentPlanButton": "باقتك الحالية",
+        "footer": "الدفع عبر فاتورة شوبيفاي. يمكنك التغيير أو الإلغاء في أي وقت.",
+        "billingManaged": "تتم إدارة باقتك من فريق أكيد. تواصل مع الدعم لتغييرها.",
+        "subscribeError": "تعذّر فتح صفحة الموافقة في شوبيفاي. حاول مرة أخرى.",
+        "freePlanClaimedError": "استخدم هذا المتجر الباقة المجانية من قبل. اختر باقة مدفوعة.",
+        "features": {
+          "basic": [
+            "تذكير متابعة تلقائي",
+            "تحديث الطلبات في شوبيفاي",
+            "رقم واتساب رسمي بدون إعداد"
+          ],
+          "pro": [
+            "كل ما في Basic",
+            "جدولة حسب توقيت متجرك"
+          ],
+          "business": [
+            "كل ما في Pro",
+            "دعم بأولوية",
+            "مكالمة إعداد لضبط سير التأكيد"
+          ]
+        }
+      }
+    }
   },
   "embeddedOnboarding": {
     "prefillWarning": "لم نتمكن من تعبئة بيانات Shopify تلقائياً. أدخل اسم المتجر يدوياً.",

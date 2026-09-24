@@ -1,5 +1,6 @@
 import type {
   LifecycleStatus,
+  NeedsActionReason,
   VerificationItem,
   VerificationRowAction,
   VerificationRowCapability,
@@ -81,14 +82,19 @@ export function hasCapability(
 }
 
 /**
- * Merchant cancellation is offered only after a no-reply escalation, and only
- * when the commerce source can actually carry the outcome back.
+ * Merchant cancellation is offered once the customer has gone unanswered —
+ * escalated to no-reply, or already flagged for the merchant for a no-reply
+ * reason — and only when the commerce source can carry the outcome back.
  */
 export function canMarkOrderCanceled(
   status: LifecycleStatus,
+  actionReason: NeedsActionReason | null | undefined,
   capabilities: VerificationRowCapability[] | undefined
 ): boolean {
-  if (status !== 'no_reply') return false
+  const unanswered =
+    status === 'no_reply' ||
+    (Boolean(actionReason) && actionReason !== 'delivery_failed')
+  if (!unanswered) return false
   // A row loaded before capabilities existed is assumed cancellable; the
   // server rejects it if not, and hiding the only recovery action would be
   // worse than showing one that may fail.

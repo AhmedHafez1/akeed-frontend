@@ -67,10 +67,15 @@ export interface IntegrationOnboardingState {
   quietHoursEnabled: boolean
   quietHoursStart: string | null
   quietHoursEnd: string | null
-  timezone: AutomationTimezone
+  /** A curated zone, or the store's own Shopify zone (`shopTimezone`). */
+  timezone: string
+  /** The Shopify store's IANA zone, offered first as "store time". */
+  shopTimezone?: string | null
   sendDelayMinutes: number
   /** The merchant's own number for the free test; prefilled from the shop. */
   merchantWhatsappPhone?: string | null
+  /** Template language the merchant's own test message is sent in. */
+  testSendLanguage?: 'ar' | 'en'
   activation?: OnboardingActivation
   usage?: OnboardingUsage | null
   permissions: {
@@ -176,7 +181,7 @@ export interface OnboardingSettingsPayload {
   quietHoursEnabled?: boolean
   quietHoursStart?: string
   quietHoursEnd?: string
-  timezone?: AutomationTimezone
+  timezone?: string
   sendDelayMinutes?: number
   codTemplateArVariant?: ArabicCodTemplateVariantId
   codTemplateEnVariant?: EnglishCodTemplateVariantId

@@ -30,6 +30,7 @@ export {
   fetchOnboardingBillingPlans,
   fetchOnboardingState,
   isFreePlanAlreadyClaimedError,
+  sendOnboardingTest,
   updateOnboardingSettings,
 } from './api/onboardingApi'
 export { OnboardingApiError } from './api/onboardingApi'

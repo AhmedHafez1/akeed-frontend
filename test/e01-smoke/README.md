@@ -87,7 +87,7 @@ US-02-03 extends the fixture with per-order capabilities and a neutral pending-o
 
 ## US-02-04 billing fixture
 
-Open `http://127.0.0.1:3098/en/billing?entitlement=manual&skin=standalone`. Use `/ar/billing` for Arabic. This route imports the real `useSettings` hook and Standalone/embedded tabbed skins. The layout supplies a synthetic no-op App Bridge `loading` method; there are no session tokens or real authentication. All API operations remain intercepted, with unexpected requests rejected.
+Open `http://127.0.0.1:3098/en/billing?entitlement=manual&skin=standalone`. Use `/ar/billing` for Arabic. This route imports the real `useSettings` hook and Standalone skin, and the embedded Settings page (`SettingsEmbeddedPage`, which loads through its own hook). The layout supplies a synthetic no-op App Bridge `loading` method; there are no session tokens or real authentication. All API operations remain intercepted, with unexpected requests rejected.
 
 Use `skin=embedded&tab=billing&shop=synthetic.myshopify.com&host=c3ludGhldGljLm15c2hvcGlmeS5jb20vYWRtaW4%3D` to exercise embedded mode. The `entitlement` parameter independently selects `manual`, `shopify`, `blocked`, or `missing`; shell mode does not choose the billing provider.
 
@@ -96,7 +96,7 @@ For each locale and shell:
 1. Wait for **Billing fixture state** to report `ready:true`. For `manual`, verify the translated pilot status, Starter plan, 30/30 quota, and support message. There must be no plan-purchase controls.
 2. Click **Select upgrade through hook**, then **Invoke billing handler**. Verify `selectedPlanId` remains `starter`, `canManageBilling:false`, and `billingPosts:0`. These English-labeled buttons are test tooling outside the shipped application.
 3. Repeat with `entitlement=missing` and `entitlement=blocked`. Missing capability deliberately includes stale plan data; it must still expose no purchase controls. Blocked status must remain visible.
-4. With `entitlement=shopify`, verify four existing plans and `canManageBilling:true`, select Pro, and use the translated plan-change button. The real hook redirects to the same loopback page with `approved=1`; this is a synthetic confirmation destination, not a subscription purchase. The embedded Billing tab also adds `tab=billing` to the URL. Do not test these actions against a live merchant.
+4. With `entitlement=shopify`, verify four existing plans and `canManageBilling:true`, select Pro, and use the translated plan-change button. The real hook redirects to the same loopback page with `approved=1`; this is a synthetic confirmation destination, not a subscription purchase. In the embedded skin the old `tab=billing` is replaced with `tab=plan`, and each paid plan card has its own subscribe button. Do not test these actions against a live merchant.
 5. Confirm native Enter-key plan selection and Arabic `lang=ar`/`dir=rtl`. **Inspect billing calls** refreshes counters without changing application state.
 
 The fixture does not simulate onboarding activation or staff provisioning. Its template previews are synthetic. Authenticated layout, live Shopify approval, and staff/audit validation remain separate release gates. See `akeed-backend/docs/US-02-04-PROVIDER-NEUTRAL-ENTITLEMENTS-EVIDENCE.md` for dated results and the unrun PostgreSQL gate.

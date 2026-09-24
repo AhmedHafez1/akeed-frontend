@@ -176,7 +176,8 @@ function editableSettingsFromResponse(
     quietHoursEnabled: state.quietHoursEnabled,
     quietHoursStart: state.quietHoursStart ?? fallback.quietHoursStart,
     quietHoursEnd: state.quietHoursEnd ?? fallback.quietHoursEnd,
-    timezone: state.timezone,
+    // Standalone sources have no platform zone, so the value is a curated one.
+    timezone: state.timezone as AutomationTimezone,
     selectedCodTemplateVariants: { ...template.selected },
   }
 }
@@ -470,9 +471,12 @@ export function useSettings(): {
               })
           : formatPlanId(id),
         volumeLabel: config
-          ? t(config.amount === 0 ? 'planVolumeOneTime' : 'planVolumePerMonth', {
-              count: config.includedVerifications,
-            })
+          ? t(
+              config.amount === 0 ? 'planVolumeOneTime' : 'planVolumePerMonth',
+              {
+                count: config.includedVerifications,
+              }
+            )
           : '',
       }
     })

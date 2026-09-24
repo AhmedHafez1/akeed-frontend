@@ -1742,7 +1742,6 @@
   },
   "settings": {
     "title": "Settings",
-    "embeddedSubtitle": "Manage storefront, confirmation, and message preferences.",
     "subtitle": "Manage your storefront and billing preferences.",
     "sourceHeading": "Order source",
     "sourceStandalone": "Standalone / Manual source",
@@ -1812,12 +1811,6 @@
         "creditPageDescription": "Review your trusted balance, buy credits, and inspect purchase and ledger history on the dedicated credit page.",
         "openCreditPage": "Open billing & credits"
       }
-    },
-    "tabs": {
-      "store": "Store",
-      "confirmation": "Confirmation",
-      "messageTemplate": "Message template",
-      "billing": "Billing"
     },
     "storeConfigurationHeading": "Store configuration",
     "storeNameLabel": "Store name",
@@ -1915,7 +1908,165 @@
     "planVolumePerMonth": "Up to {count} WhatsApp confirmations / month",
     "planVolumeOneTime": "{count} WhatsApp confirmations (one-time)",
     "freePlanAlreadyClaimedTooltip": "You already used the free plan before. Free plan can only be selected once.",
-    "freePlanAlreadyClaimedError": "This store already used the free plan. Please choose a paid plan."
+    "freePlanAlreadyClaimedError": "This store already used the free plan. Please choose a paid plan.",
+    "embedded": {
+      "title": "Settings",
+      "tabs": {
+        "message": "Message",
+        "timing": "Timing & follow-up",
+        "plan": "Plan"
+      },
+      "save": "Save",
+      "discard": "Discard",
+      "saveSuccess": "Settings saved",
+      "saveError": "We couldn't save your settings. Check the highlighted fields and try again.",
+      "saveInvalid": "Some fields need your attention before saving.",
+      "readOnly": "You have read-only access. An owner or admin must make configuration changes.",
+      "loadError": "We couldn't load your settings.",
+      "retry": "Try again",
+      "unsavedElsewhere": "You have unsaved changes on another tab. Go back to save or discard them.",
+      "reviewChanges": "Review changes",
+      "testSendSuccess": "Test message sent to your WhatsApp",
+      "testSendCooldown": "Wait a few seconds before sending another test.",
+      "testSendDailyLimit": "You've reached today's limit of test messages.",
+      "testSendPhoneMissing": "Add your WhatsApp number in setup to receive test messages.",
+      "testSendError": "The test message couldn't be sent. Try again.",
+      "message": {
+        "identityHeading": "Message identity",
+        "storeNameLabel": "Store name",
+        "storeNameHelp": "Appears in every message: “Thank you for your order from {name}.”",
+        "storeNameRequired": "Enter your store name.",
+        "storeNameTooLong": "Use {max} characters or fewer.",
+        "languageHeading": "Message language",
+        "languageAuto": "Automatic, by customer number",
+        "languageAutoHelp": "Arabic for numbers in Arab countries, English everywhere else.",
+        "recommended": "Recommended",
+        "languageArabic": "Always Arabic",
+        "languageEnglish": "Always English",
+        "styleHeading": "Message style",
+        "styleLanguageHint": "Arabic and English each keep their own style. These are the {language} styles; switch the preview language to edit the other.",
+        "languageNames": {
+          "ar": "Arabic",
+          "en": "English"
+        },
+        "variantLabels": {
+          "standard": "Modern Standard",
+          "egyptian": "Egyptian",
+          "gulf": "Gulf",
+          "friendly": "Friendly",
+          "professional": "Professional",
+          "direct": "Direct",
+          "short": "Short"
+        },
+        "previewHeading": "Preview",
+        "previewLanguageGroup": "Preview language",
+        "previewAria": "WhatsApp message preview in {language}",
+        "testSend": "Send a test message to WhatsApp",
+        "testSendHelp": "Sent to <phone></phone> in {language}. Test messages are free.",
+        "testSendHelpNoPhone": "Sent to your own WhatsApp number in {language}. Test messages are free.",
+        "testSendSaveFirst": "Save your changes first to test them.",
+        "templatesNote": "Templates are approved by WhatsApp, so only the style and language change."
+      },
+      "timing": {
+        "timelineHeading": "What happens with each COD order",
+        "steps": {
+          "newOrder": "New order",
+          "confirmation": "Confirmation message",
+          "reminder": "Reminder if no reply",
+          "needsAction": "“Needs your action”"
+        },
+        "delayImmediate": "Immediately",
+        "delayAfter": "After {duration}",
+        "delayAfterMore": "{duration} later",
+        "stepOff": "Off",
+        "hours": "{count, plural, one {# hour} other {# hours}}",
+        "minutes": "{count, plural, one {# minute} other {# minutes}}",
+        "quietLine": "Messages due between {start} and {end} are sent at {end}.",
+        "autoHeading": "Auto-confirmation",
+        "autoDescription": "When we send the confirmation message for COD orders.",
+        "autoLabel": "Send a confirmation message for every new order",
+        "autoHelp": "When off, no messages are sent.",
+        "sendTimeLabel": "Send time",
+        "sendPresets": {
+          "now": "Immediately",
+          "after15m": "After 15 minutes",
+          "after1h": "After 1 hour",
+          "custom": "Custom"
+        },
+        "sendTimeHelp": "Pick a delay if you review orders manually before they are confirmed.",
+        "customDelayLabel": "Delay in minutes",
+        "customDelaySuffix": "min",
+        "customDelayError": "Enter whole minutes from 0 to 1,440.",
+        "followHeading": "Follow-up",
+        "followDescription": "What we do when a customer doesn't reply.",
+        "reminderLabel": "Send one reminder",
+        "reminderHelp": "If the customer doesn't reply to the first message.",
+        "after": "After",
+        "hoursShort": "{count} h",
+        "fromFirstMessage": "after the first message",
+        "fromReminder": "after the reminder",
+        "reminderGroup": "Reminder delay",
+        "alertGroup": "No-reply alert delay",
+        "alertLabel": "Alert me about orders with no reply",
+        "alertHelp": "The order moves to “Needs your action” and gets the <tag></tag> tag in Shopify. We never cancel orders automatically.",
+        "quietHeading": "Quiet hours",
+        "quietDescription": "No messages at night. Anything due during quiet hours is sent when they end.",
+        "quietLabel": "Pause sending during quiet hours",
+        "quietFrom": "From",
+        "quietTo": "To",
+        "timezoneLabel": "Time zone",
+        "storeTime": "{zone} (store time)",
+        "timeValue": "{time} {period}",
+        "am": "AM",
+        "pm": "PM",
+        "quietErrors": {
+          "sameStartEnd": "Start and end can't be the same time.",
+          "invalidTime": "Choose a start and end time.",
+          "unsupportedTimezone": "Choose a time zone from the list."
+        }
+      },
+      "plan": {
+        "warningTitle": "{remaining, plural, one {# message left} other {# messages left}}",
+        "warningTitleFree": "{remaining, plural, one {# free message left} other {# free messages left}}",
+        "warningBody": "When they run out, confirmation messages stop for new orders. Your orders and data stay as they are.",
+        "criticalTitle": "You've used all your messages",
+        "criticalBody": "Confirmation messages are paused for new orders. Your orders and data are kept. Choose a plan to resume.",
+        "currentPlan": "Your current plan: {plan}",
+        "noPlan": "No active plan",
+        "badgeFree": "Free",
+        "badgeMonthly": "Monthly",
+        "used": "Used {used} of {limit} messages",
+        "oneTime": "One-time credit, doesn't renew",
+        "renews": "Renews on {date}",
+        "usageAria": "Messages used",
+        "perMonth": "/ month",
+        "allowance": "{count} messages / month",
+        "recommended": "Recommended for you",
+        "recommendationReason": "You sent {count} messages in the last 30 days, so this plan covers your growth for months.",
+        "subscribe": "Subscribe to {plan}",
+        "currentPlanButton": "Your current plan",
+        "footer": "Billed through your Shopify invoice. Change or cancel any time.",
+        "billingManaged": "Your plan is managed by the Akeed team. Contact support to change it.",
+        "subscribeError": "We couldn't open Shopify's approval page. Try again.",
+        "freePlanClaimedError": "This store already used the free plan. Choose a paid plan.",
+        "features": {
+          "basic": [
+            "Automatic follow-up reminder",
+            "Order updates in Shopify",
+            "Official WhatsApp number, no setup"
+          ],
+          "pro": [
+            "Everything in Basic",
+            "Scheduling in your store's time zone"
+          ],
+          "business": [
+            "Everything in Pro",
+            "Priority support",
+            "Setup call to tune your confirmation flow"
+          ]
+        }
+      }
+    }
   },
   "embeddedOnboarding": {
     "prefillWarning": "We could not prefill Shopify store details. Please enter the store name manually.",

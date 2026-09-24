@@ -83,7 +83,8 @@ function stateToForm(state: IntegrationOnboardingState): StandaloneSetupForm {
     defaultLanguage: state.defaultLanguage,
     assumeCodWhenPaymentMissing: state.assumeCodWhenPaymentMissing,
     isAutoVerifyEnabled: state.isAutoVerifyEnabled,
-    timezone: state.timezone,
+    // Standalone sources have no platform zone, so the value is a curated one.
+    timezone: state.timezone as AutomationTimezone,
     sendDelayHours: minutesToHours(state.sendDelayMinutes),
     followUpEnabled: state.followUpEnabled,
     followUpDelayHours: minutesToHours(state.followUpDelayMinutes),

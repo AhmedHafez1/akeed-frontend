@@ -44,6 +44,18 @@ interface ShopifyGlobal {
       options?: { duration?: number; isError?: boolean }
     ): void
   }
+
+  /**
+   * Contextual save bar (`<ui-save-bar>`). While shown, Shopify Admin blocks
+   * navigation away from the app and asks the merchant to save or discard.
+   */
+  saveBar: {
+    show(id: string): Promise<void>
+    hide(id: string): Promise<void>
+    toggle(id: string): Promise<void>
+    /** Resolves when navigation may continue; shakes the bar otherwise. */
+    leaveConfirmation(): Promise<void>
+  }
 }
 
 declare global {

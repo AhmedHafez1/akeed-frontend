@@ -37,6 +37,10 @@ export const queryKeys = {
     purchases: (limit = 25) =>
       [...queryKeys.billing.all, 'purchases', limit] as const,
   },
+  settings: {
+    all: ['settings'] as const,
+    detail: () => [...queryKeys.settings.all, 'detail'] as const,
+  },
   onboarding: {
     all: ['onboarding'] as const,
     state: () => [...queryKeys.onboarding.all, 'state'] as const,

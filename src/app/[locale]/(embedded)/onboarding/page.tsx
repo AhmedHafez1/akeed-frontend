@@ -137,7 +137,7 @@ export default function OnboardingPage() {
   const handleEditMessage = useCallback(() => {
     const search = new URLSearchParams(window.location.search)
     search.delete('step')
-    search.set('tab', 'message-preview')
+    search.set('tab', 'message')
     router.push(`/${locale}/settings?${search.toString()}`)
   }, [locale, router])
 

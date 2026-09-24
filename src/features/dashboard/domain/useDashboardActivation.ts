@@ -47,8 +47,8 @@ export function useDashboardActivation() {
     isLive: state?.activation?.isLive ?? false,
     needsPlan: state?.activation?.needsPlan ?? false,
     freeMessagesLeft: resolveFreeMessagesLeft(state),
-    openSettings: () => navigate('/settings', { tab: 'store' }),
-    openQuietHours: () => navigate('/settings', { tab: 'confirmation' }),
+    openSettings: () => navigate('/settings', { tab: 'message' }),
+    openQuietHours: () => navigate('/settings', { tab: 'timing' }),
     openTest: () => navigate('/onboarding', { step: 'test' }),
   }
 }

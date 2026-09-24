@@ -24,4 +24,12 @@ if (!window.matchMedia) {
     }) as MediaQueryList
 }
 
+// Polaris Tabs measures its overflow with ResizeObserver, which jsdom lacks.
+const globals = globalThis as { ResizeObserver?: unknown }
+globals.ResizeObserver ??= class {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
 afterEach(() => cleanup())

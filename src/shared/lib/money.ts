@@ -43,8 +43,7 @@ export function formatMoneyParts(
   }).formatToParts(valueMinor / 100)
 
   // Strip the spacing and bidi marks Intl places around the currency symbol.
-  const clean = (value: string) =>
-    value.replace(/[\s‎‏؜]+/g, ' ').trim()
+  const clean = (value: string) => value.replace(/[\s‎‏؜]+/g, ' ').trim()
 
   return {
     amount: clean(
@@ -60,6 +59,25 @@ export function formatMoneyParts(
         .join('')
     ),
   }
+}
+
+/**
+ * A subscription price as one left-to-right token, e.g. `US$ 9.99`, for the
+ * same string in both locales. `Intl` in `ar` emits `\u200F9.99\u00A0US$`;
+ * the leading RLM and the trailing neutral `$` reorder in an RTL paragraph
+ * and read as `$US 9.99`. Render the result inside `<bdi dir="ltr">`.
+ */
+export function formatPlanPrice(amount: number, currency: string) {
+  const symbol =
+    new Intl.NumberFormat('ar-u-nu-latn', { style: 'currency', currency })
+      .formatToParts(amount)
+      .find((part) => part.type === 'currency')
+      ?.value.replace(/[\s\u200E\u200F\u061C]+/g, '') ?? currency
+  const value = new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: Number.isInteger(amount) ? 0 : 2,
+    maximumFractionDigits: 2,
+  }).format(amount)
+  return `${symbol} ${value}`
 }
 
 export function formatMoneyFromCredits(

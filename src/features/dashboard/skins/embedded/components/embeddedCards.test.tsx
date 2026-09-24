@@ -441,6 +441,83 @@ describe('ConfirmationsTable', () => {
       '#1138'
     )
   })
+
+  it('offers cancel for an unanswered order before it escalates', () => {
+    const onRequestCancel = vi.fn()
+    const cancelCapabilities = [
+      ...confirmCapability,
+      { action: 'merchant_no_reply_cancellation' as const, supported: true },
+    ]
+    renderEmbedded(
+      <ConfirmationsTable
+        rows={[
+          listRow({
+            id: 'v-3',
+            order_number: '1138',
+            status: 'read',
+            confirmed_at: null,
+            action_reason: 'no_reply_after_follow_up',
+            capabilities: cancelCapabilities,
+          }),
+          listRow({
+            id: 'v-4',
+            order_number: '1139',
+            status: 'failed',
+            confirmed_at: null,
+            action_reason: 'delivery_failed',
+            capabilities: cancelCapabilities,
+          }),
+        ]}
+        {...tableProps}
+        handlers={{ ...tableProps.handlers, onRequestCancel }}
+      />
+    )
+    fireEvent.click(
+      screen.getByRole('button', { name: 'مزيد من الإجراءات للطلب #1138' })
+    )
+    fireEvent.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: 'إلغاء الطلب',
+      })
+    )
+    expect(onRequestCancel).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 'v-3' }),
+      '#1138'
+    )
+  })
+  it('keeps cancel away from an order whose message never arrived', () => {
+    renderEmbedded(
+      <ConfirmationsTable
+        rows={[
+          listRow({
+            id: 'v-4',
+            order_number: '1139',
+            status: 'failed',
+            confirmed_at: null,
+            action_reason: 'delivery_failed',
+            capabilities: [
+              ...confirmCapability,
+              {
+                action: 'merchant_no_reply_cancellation' as const,
+                supported: true,
+              },
+            ],
+          }),
+        ]}
+        {...tableProps}
+      />
+    )
+    fireEvent.click(
+      screen.getByRole('button', { name: 'مزيد من الإجراءات للطلب #1139' })
+    )
+    const sheet = screen.getByRole('dialog')
+    expect(
+      within(sheet).getByRole('button', { name: 'تأكيد يدوي' })
+    ).toBeTruthy()
+    expect(
+      within(sheet).queryByRole('button', { name: 'إلغاء الطلب' })
+    ).toBeNull()
+  })
 })
 
 describe('ConfirmationsCardList', () => {
