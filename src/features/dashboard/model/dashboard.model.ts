@@ -37,6 +37,7 @@ export type LifecycleStatus = VerificationStatus | HoldLifecycleStatus
 export type VerificationRowAction =
   | 'merchant_no_reply_cancellation'
   | 'retry_verification'
+  | 'merchant_manual_confirmation'
 
 export type VerificationRowCapability = {
   action: VerificationRowAction
@@ -102,6 +103,20 @@ export type VerificationItem = {
   no_reply_at: string | null
   follow_up_attempts: number
   follow_up_sent_at: string | null
+  /** Set while a pending row waits for quiet hours or a send delay. */
+  scheduled_for?: string | null
+  /** The order's id on its platform, for linking to it in the store admin. */
+  external_order_id?: string | null
+  platform?: string | null
+  /** Why the merchant should act; decided by the server, never re-derived. */
+  action_reason?: NeedsActionReason | null
+  /** WhatsApp error code when delivery failed, e.g. 131026. */
+  failure_code?: string | null
+  confirmation_source?: 'customer' | 'merchant_manual' | null
+  cancellation_source?: string | null
+  /** Akeed also canceled the order in the store. */
+  canceled_in_store?: boolean
+  updated_at?: string | null
   /**
    * Client-only: set on a row the UI is showing ahead of the server — an order
    * the merchant just created whose verification a worker has not written yet.
@@ -135,6 +150,8 @@ export type DashboardPageContext = {
   }
   permissions?: DashboardPermissions
   usage?: DashboardPageUsage
+  /** Rows per confirmations tab for the period, search ignored. */
+  tab_counts?: Record<ConfirmationsTab, number>
 }
 
 export type VerificationsResponse = {
@@ -175,6 +192,9 @@ export type DashboardStats = {
     limit: number
     period_start: string | null
     period_end: string | null
+    /** Real orders Akeed confirmed since the usage period started. */
+    confirmed_in_period?: number
+    confirmed_value_in_period?: string
   }
   savings: {
     avg_shipping_cost: number
@@ -185,4 +205,98 @@ export type DashboardStats = {
 
 export type DashboardStatsResponse = {
   stats: DashboardStats
+}
+
+/** Why the server says a row needs the merchant. */
+export type NeedsActionReason =
+  | 'delivery_failed'
+  | 'no_reply_after_follow_up'
+  | 'read_no_reply'
+  | 'no_reply'
+
+/** Tabs of the embedded confirmations list, each a server-side filter. */
+export type ConfirmationsTab =
+  | 'all'
+  | 'needs_action'
+  | 'confirmed'
+  | 'canceled'
+  | 'failed'
+
+export type FunnelStep = {
+  count: number
+  /** Share of sent, 0-100; null when nothing was sent. */
+  percent_of_sent: number | null
+}
+
+export type NeedsActionItem = {
+  verification_id: string
+  order_id: string
+  external_order_id: string | null
+  platform: string | null
+  order_number: string | null
+  customer_name: string | null
+  customer_phone: string | null
+  total_price: string | null
+  currency: string | null
+  reason: {
+    type: NeedsActionReason
+    since: string | null
+    hours: number | null
+    failure_code: string | null
+  }
+  capabilities: VerificationRowCapability[]
+}
+
+export type UsageState = 'ok' | 'warning' | 'exhausted'
+
+/** GET /api/verifications/overview: everything the embedded dashboard shows. */
+export type DashboardOverview = {
+  date_range: DashboardStatsDateRange
+  reporting_timezone: string
+  source: DashboardSourceState
+  settings: {
+    auto_verify_enabled: boolean
+    follow_up_enabled: boolean
+    follow_up_delay_minutes: number
+    quiet_hours_enabled: boolean
+    quiet_hours_start: string | null
+    quiet_hours_end: string | null
+  }
+  usage: {
+    used: number
+    limit: number
+    percent: number
+    state: UsageState
+  } | null
+  kpis: {
+    confirmed: {
+      count: number
+      value: Array<{ currency: string; amount: string }>
+    }
+    canceled_before_shipping: { count: number }
+    confirmation_rate: {
+      rate: number | null
+      confirmed: number
+      sent: number
+    }
+  }
+  funnel: {
+    sent: FunnelStep
+    delivered: FunnelStep
+    read: FunnelStep
+    replied: FunnelStep
+    confirmed: number
+    customer_canceled: number
+    no_reply_yet: number
+  }
+  needs_action: {
+    count: number
+    items: NeedsActionItem[]
+  }
+  /** Whether this user may confirm orders by hand (viewers may not). */
+  permissions?: { can_confirm_orders: boolean }
+}
+
+export type DashboardOverviewResponse = {
+  overview: DashboardOverview
 }

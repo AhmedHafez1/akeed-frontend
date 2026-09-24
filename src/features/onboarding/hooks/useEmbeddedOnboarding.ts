@@ -1,154 +1,108 @@
 'use client'
 
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useOnboardingInit } from './useOnboardingInit'
-import { useOnboardingSettings } from './useOnboardingSettings'
-import { useOnboardingBilling } from './useOnboardingBilling'
+import {
+  useOnboardingSettings,
+  type SetupFormMessages,
+} from './useOnboardingSettings'
+import { useOnboardingTest } from './useOnboardingTest'
+import { useOnboardingFunnelEvents } from './useOnboardingFunnelEvents'
 import type { EmbeddedStep } from '../model/onboarding.config'
 
-/**
- * Embedded Onboarding — Coordinator Hook
- *
- * Owns only the shared cross-concern state (`step`, `errorBanner`) and
- * delegates all domain logic to three focused sub-hooks:
- *
- *   useOnboardingInit      — initial data load + resume step resolution
- *   useOnboardingSettings  — step-2 form state + debounced auto-save
- *   useOnboardingBilling   — step-3 plan selection + activation
- *
- * The public return shape is unchanged — no call-site changes needed.
- */
-
-interface EmbeddedOnboardingMessages {
+interface EmbeddedOnboardingMessages extends SetupFormMessages {
   prefillWarning: string
-  storeNameRequired: string
-  settingsSaveError: string
-  billingActivationError: string
-  freePlanAlreadyClaimedError: string
-  billingStatusPending: string
-  billingStatusDeclined: string
-  billingStatusFrozen: string
-  billingStatusExpired: string
-  billingStatusCanceled: string
-  billingStatusError: string
-  billingStatusNeedsAttention: string
 }
 
 interface UseEmbeddedOnboardingParams {
   isEmbedded: boolean
   isModeLoading: boolean
   locale: string
-  hostParam: string | null
+  requestedStep: string | null
   router: AppRouterInstance
   messages: EmbeddedOnboardingMessages
-  onBillingConfirmation: (confirmationUrl: string) => void
 }
 
+/**
+ * Embedded onboarding v2 coordinator. Owns the current step and the error
+ * banner, and wires the focused hooks together:
+ *
+ *   useOnboardingInit          load state, pick the resume step
+ *   useOnboardingSettings      quick setup form and submit (goes live)
+ *   useOnboardingTest          free test message: send, poll, resend, skip
+ *   useOnboardingFunnelEvents  setup_started / onboarding_exited
+ */
 export function useEmbeddedOnboarding({
   isEmbedded,
   isModeLoading,
   locale,
-  hostParam,
+  requestedStep,
   router,
   messages,
-  onBillingConfirmation,
 }: UseEmbeddedOnboardingParams) {
-  // Shared state: written by multiple sub-hooks, read by the page
-  const [step, setStep] = useState<EmbeddedStep>(1)
+  const [step, setStep] = useState<EmbeddedStep>('setup')
   const [errorBanner, setErrorBanner] = useState<string | null>(null)
 
-  // Stable callback refs for setters passed into sub-hooks
-  const stableSetStep = useCallback((s: EmbeddedStep) => setStep(s), [])
+  const freshSendRequestedRef = useRef(false)
+  const stableSetStep = useCallback((next: EmbeddedStep) => setStep(next), [])
+  const completeSetupStep = useCallback((next: EmbeddedStep) => {
+    if (next === 'test') freshSendRequestedRef.current = true
+    setStep(next)
+  }, [])
   const stableSetErrorBanner = useCallback(
-    (msg: string | null) => setErrorBanner(msg),
+    (message: string | null) => setErrorBanner(message),
     []
   )
-  const billingStatusMessages = useMemo(
-    () => ({
-      billingStatusPending: messages.billingStatusPending,
-      billingStatusDeclined: messages.billingStatusDeclined,
-      billingStatusFrozen: messages.billingStatusFrozen,
-      billingStatusExpired: messages.billingStatusExpired,
-      billingStatusCanceled: messages.billingStatusCanceled,
-      billingStatusError: messages.billingStatusError,
-      billingStatusNeedsAttention: messages.billingStatusNeedsAttention,
-    }),
-    [
-      messages.billingStatusPending,
-      messages.billingStatusDeclined,
-      messages.billingStatusFrozen,
-      messages.billingStatusExpired,
-      messages.billingStatusCanceled,
-      messages.billingStatusError,
-      messages.billingStatusNeedsAttention,
-    ]
-  )
 
-  // ── Sub-hook: initial data load ──────────────────────────────────────────
   const init = useOnboardingInit({
     isEmbedded,
     isModeLoading,
     locale,
     router,
+    requestedStep,
     prefillWarningMessage: messages.prefillWarning,
-    billingStatusMessages,
     setStep: stableSetStep,
-    setErrorBanner: stableSetErrorBanner,
   })
 
-  // ── Sub-hook: step-2 settings form + auto-save ───────────────────────────
   const settings = useOnboardingSettings({
     step,
-    setStep: stableSetStep,
+    setStep: completeSetupStep,
     setErrorBanner: stableSetErrorBanner,
-    storeNameRequiredMessage: messages.storeNameRequired,
-    settingsSaveErrorMessage: messages.settingsSaveError,
+    messages,
     hasCompletedInitRef: init.hasCompletedInitRef,
     initialStoreName: init.initialStoreName,
     initialDefaultLanguage: init.initialDefaultLanguage,
     initialIsAutoVerifyEnabled: init.initialIsAutoVerifyEnabled,
+    initialMerchantPhone: init.initialMerchantPhone,
   })
 
-  // ── Sub-hook: step-3 billing ─────────────────────────────────────────────
-  const billing = useOnboardingBilling({
-    canManageBilling: init.canManageBilling,
-    hostParam,
-    billingActivationErrorMessage: messages.billingActivationError,
-    freePlanAlreadyClaimedMessage: messages.freePlanAlreadyClaimedError,
-    onFreePlanAlreadyClaimed: init.markFreePlanClaimed,
-    setErrorBanner: stableSetErrorBanner,
-    onBillingConfirmation,
+  const goToDashboard = useCallback(() => {
+    router.push(`/${locale}/dashboard${window.location.search}`)
+  }, [locale, router])
+
+  const handleTestConfirmed = useCallback(() => setStep('success'), [])
+
+  const test = useOnboardingTest({
+    isActive: !init.isInitialLoading && step !== 'setup',
+    freshSendRequestedRef,
+    onConfirmed: handleTestConfirmed,
+    onSkipped: goToDashboard,
   })
+
+  useOnboardingFunnelEvents(step, isEmbedded && !init.isInitialLoading)
+
+  const handleChangeNumber = useCallback(() => setStep('setup'), [])
 
   return {
-    // Loader gate
     isInitialLoading: init.isInitialLoading,
-    // Step navigation
     step,
-    setStep,
-    // Alerts
     errorBanner,
     prefillWarning: init.prefillWarning,
-    // Setup settings
-    storeName: settings.storeName,
-    storeNameError: settings.storeNameError,
-    defaultLanguage: settings.defaultLanguage,
-    setDefaultLanguage: settings.setDefaultLanguage,
-    isAutoVerifyEnabled: settings.isAutoVerifyEnabled,
-    setIsAutoVerifyEnabled: settings.setIsAutoVerifyEnabled,
-    isSavingSettings: settings.isSavingSettings,
-    handleStoreNameChange: settings.handleStoreNameChange,
-    handleContinueToBilling: settings.handleContinueToBilling,
-    // Billing
-    canManageBilling: init.canManageBilling,
-    billingPlanConfigsById: init.billingPlanConfigsById,
-    isFreePlanClaimed: init.isFreePlanClaimed,
-    selectedPlanId: billing.selectedPlanId,
-    setSelectedPlanId: billing.setSelectedPlanId,
-    isActivatingPlan: billing.isActivatingPlan,
-    isBillingRedirecting: billing.isBillingRedirecting,
-    handleActivatePlan: billing.handleActivatePlan,
-    handleRetryBilling: billing.handleRetryBilling,
+    isFreePlanAvailable: init.isFreePlanAvailable,
+    settings,
+    test,
+    goToDashboard,
+    handleChangeNumber,
   }
 }

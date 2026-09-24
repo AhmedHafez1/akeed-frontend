@@ -1,8 +1,8 @@
+import { useState } from 'react'
 import { BlockStack, Card, Text } from '@shopify/polaris'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import { withLocale } from '@/shared/lib/locale'
 import { formatDashboardNumber } from '@/features/dashboard/lib/dashboardFormatters'
 import { FunnelCard, type FunnelStep } from './components/FunnelCard'
 import { StatsEmbeddedHeader } from './components/StatsEmbeddedHeader'
@@ -13,6 +13,8 @@ import {
   type TopMetric,
 } from './components/TopMetricGrid'
 import { UsageWarningBanner } from './components/UsageWarningBanner'
+import { UpgradePlansModal } from '@/features/billing'
+import { resolveEmbeddedContextFromSearch } from '@/shared/lib/embedded-context'
 import type { DateRangeFilterOption } from '../../domain/dashboard.types'
 import type {
   DashboardStats,
@@ -55,7 +57,6 @@ export function StatsEmbedded({
   onDateRangeFilterChange,
   showDateRangeSelector = true,
 }: StatsEmbeddedProps) {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const t = useTranslations('dashboard')
   const { isRTL, locale } = useLocaleInfo()
@@ -66,10 +67,6 @@ export function StatsEmbedded({
   const confirmationRateTone = stats
     ? resolveConfirmationRateTone(stats.totals.confirmation_rate)
     : 'caution'
-  const settingsParams = new URLSearchParams(searchParams.toString())
-  settingsParams.set('tab', 'billing')
-  const settingsQuery = settingsParams.toString()
-  const settingsHref = `${withLocale('/settings', locale)}${settingsQuery ? `?${settingsQuery}` : ''}`
 
   const countMetrics: TopMetric[] = stats
     ? [
@@ -184,6 +181,9 @@ export function StatsEmbedded({
     : 0
 
   const showUsageWarning = Boolean(stats) && usagePercent >= 80
+  const confirmedInPeriod = stats?.usage.confirmed_in_period ?? 0
+  const [isPlansOpen, setIsPlansOpen] = useState(false)
+  const embeddedContext = resolveEmbeddedContextFromSearch(searchParams)
 
   return (
     <BlockStack gap="400">
@@ -229,17 +229,29 @@ export function StatsEmbedded({
 
           {showUsageWarning && (
             <UsageWarningBanner
-              title={t('metrics.usage.title')}
+              title={
+                confirmedInPeriod > 0
+                  ? t('metrics.usage.outcomeTitle', {
+                      count: confirmedInPeriod,
+                    })
+                  : t('metrics.usage.title')
+              }
               message={
                 usagePercent >= 95
-                  ? t('metrics.usage.warningAtLimit')
-                  : t('metrics.usage.warningNearLimit')
+                  ? t('metrics.usage.outcomeAtLimit')
+                  : t('metrics.usage.outcomeNearLimit')
               }
-              manageLabel={t('metrics.usage.manageCta')}
+              manageLabel={t('metrics.usage.choosePlanCta')}
               isAtLimit={usagePercent >= 95}
-              onManage={() => router.push(settingsHref)}
+              onManage={() => setIsPlansOpen(true)}
             />
           )}
+          <UpgradePlansModal
+            open={isPlansOpen}
+            title={t('metrics.usage.plansModalTitle')}
+            hostParam={embeddedContext.hostParam}
+            onClose={() => setIsPlansOpen(false)}
+          />
         </BlockStack>
       ) : (
         <Card>

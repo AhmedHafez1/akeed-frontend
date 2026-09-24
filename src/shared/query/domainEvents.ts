@@ -21,6 +21,8 @@ export type DomainEvent =
   /** An accepted order was never seen to materialize within the reconcile window. */
   | 'order.reconcileExpired'
   | 'verification.canceled'
+  /** The merchant confirmed an order by hand from the dashboard. */
+  | 'verification.confirmed'
   | 'verification.retried'
   | 'verification.testSent'
   | 'credits.purchased'
@@ -62,6 +64,7 @@ const AFFECTED_QUERIES: Record<DomainEvent, ReadonlyArray<QueryKey>> = {
     queryKeys.billing.all,
   ],
   'verification.canceled': [queryKeys.verifications.all],
+  'verification.confirmed': [queryKeys.verifications.all],
   'verification.retried': [
     queryKeys.verifications.all,
     queryKeys.billing.summary(),

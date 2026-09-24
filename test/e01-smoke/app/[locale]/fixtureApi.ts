@@ -25,6 +25,10 @@ import {
   isVerificationFixture,
   verificationFixtureRequest,
 } from './verifications/verificationFixture'
+import {
+  embeddedDashboardRequest,
+  isEmbeddedDashboardFixture,
+} from './embedded-dashboard/embeddedDashboardFixture'
 
 export function fetchWithAuth(url: string, options: RequestInit = {}) {
   if (url.startsWith('/api/order-imports'))
@@ -262,6 +266,8 @@ export function uploadWithAuth(
 
 export const api = {
   async get<T>(url: string): Promise<T> {
+    if (isEmbeddedDashboardFixture())
+      return embeddedDashboardRequest<T>('GET', url)
     if (isOrderSyncFixture()) return orderSyncRequest<T>('GET', url)
     if (isVerificationFixture())
       return verificationFixtureRequest<T>('GET', url)
@@ -315,6 +321,8 @@ export const api = {
     data?: unknown,
     options: RequestInit = {}
   ): Promise<T> {
+    if (isEmbeddedDashboardFixture())
+      return embeddedDashboardRequest<T>('POST', url)
     if (isOrderSyncFixture()) return orderSyncRequest<T>('POST', url, data)
     if (isVerificationFixture())
       return verificationFixtureRequest<T>('POST', url)

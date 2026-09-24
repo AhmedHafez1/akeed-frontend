@@ -475,35 +475,15 @@
 }
 
 /*
- * Embedded Shopify app polish.
- * Keep overrides scoped to Akeed's embedded content so standalone pages and
- * Shopify Admin chrome keep their native styling.
+ * Embedded Shopify app: native Polaris only. No brand colour overrides and no
+ * web fonts, so every screen looks like Shopify Admin. The body carries the
+ * standalone Cairo/Inter class (the mode is only known on the client), so the
+ * Polaris font stack is restored here for everything inside the app frame.
  */
-.akeed-polaris-polish {
-  --p-color-bg-fill-brand: #008060;
-  --p-color-bg-fill-brand-hover: #006e52;
-  --p-color-bg-fill-brand-active: #005c45;
-  --p-color-bg-fill-brand-selected: #005c45;
-  --p-color-text-brand-on-bg-fill: #ffffff;
-  --p-color-button-gradient-bg-fill: none;
-  --p-shadow-button-primary: 0 0 0 1px rgba(0, 128, 96, 1) inset;
-  --p-shadow-button-primary-hover: 0 0 0 1px rgba(0, 110, 82, 1) inset;
-  --p-shadow-button-primary-inset: 0 0 0 1px rgba(0, 92, 69, 1) inset;
-}
-
-.akeed-polaris-polish .Polaris-Button--variantPrimary {
-  --pc-button-bg-gradient: none;
-}
-
-.akeed-polaris-polish .Polaris-Button--pressed {
-  --pc-button-bg_pressed: #eaf7f1;
-  --pc-button-color_pressed: #005c45;
-  --pc-button-box-shadow_pressed: 0 0 0 1px rgba(0, 128, 96, 0.35) inset;
-}
-
 .akeed-embedded-content {
   width: 100%;
   min-height: 100vh;
+  font-family: var(--p-font-family-sans);
 }
 
 @media (max-width: 48rem) {
@@ -609,7 +589,11 @@
   }
 
   .auth-gradient-text {
-    background-image: linear-gradient(135deg, oklch(42% 0.08 255), var(--primary));
+    background-image: linear-gradient(
+      135deg,
+      oklch(42% 0.08 255),
+      var(--primary)
+    );
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
@@ -669,7 +653,9 @@
     background: oklch(100% 0 0);
     border: 5px solid var(--range-accent);
     box-shadow: 0 0 0 6px oklch(69.6% 0.17 162.48 / 0.18);
-    transition: box-shadow 200ms ease-out, transform 200ms ease-out;
+    transition:
+      box-shadow 200ms ease-out,
+      transform 200ms ease-out;
   }
 
   .akeed-range::-moz-range-thumb {
@@ -679,7 +665,9 @@
     background: oklch(100% 0 0);
     border: 5px solid var(--range-accent);
     box-shadow: 0 0 0 6px oklch(69.6% 0.17 162.48 / 0.18);
-    transition: box-shadow 200ms ease-out, transform 200ms ease-out;
+    transition:
+      box-shadow 200ms ease-out,
+      transform 200ms ease-out;
   }
 
   .akeed-range::-moz-range-track {
@@ -761,4 +749,17 @@
 
 .intl-phone .PhoneInputInput::placeholder {
   @apply text-muted-foreground;
+}
+
+/*
+ * RTL: flip the flag/number group to the end of the field so it reads as a
+ * right-aligned unit, while the number itself keeps rendering left-to-right
+ * (direction: ltr above).
+ */
+[dir='rtl'] .intl-phone .PhoneInput {
+  flex-direction: row-reverse;
+}
+
+[dir='rtl'] .intl-phone .PhoneInputInput {
+  text-align: right;
 }

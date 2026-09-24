@@ -16,7 +16,6 @@ import {
   MessageCircle,
   RotateCcw,
   Target,
-  X,
 } from 'lucide-react'
 import type {
   ArabicCodTemplateVariantId,
@@ -24,10 +23,10 @@ import type {
 } from '@/features/onboarding'
 import type { SettingsSkinProps } from '@/features/settings/domain/settings.types'
 import {
-  formatTemplatePreviewTimestamp,
   getTemplatePreviewParagraphs,
   getTemplatePreviewVariableKeys,
 } from '@/features/settings/skins/shared/templatePreview'
+import { TemplatePhonePreview } from '@/features/settings/skins/shared/TemplatePhonePreview'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
@@ -92,70 +91,6 @@ function TemplateSaveStatus({ props }: { props: SettingsSkinProps }) {
   }
 
   return null
-}
-
-interface TemplatePreviewProps {
-  language: TemplateLanguage
-  paragraphs: string[]
-  confirmButton: string
-  cancelButton: string
-}
-
-function TemplatePreview({
-  language,
-  paragraphs,
-  confirmButton,
-  cancelButton,
-}: TemplatePreviewProps) {
-  const t = useTranslations('messageTemplate.standalone')
-
-  return (
-    <>
-      <div className="rounded-xl border border-[#e2ded6] bg-[#efeae2] bg-[url('/images/landing/wa_chat_bg.png')] bg-cover bg-center p-4 sm:p-6">
-        <div
-          dir={language === 'ar' ? 'rtl' : 'ltr'}
-          lang={language}
-          style={{ fontFamily: 'Segoe UI, Tahoma, sans-serif' }}
-          className="mx-auto max-w-[390px]"
-        >
-          <div className="shadow-raised relative rounded-xl bg-white px-4 pt-4 pb-3 text-[#1f2933] before:absolute before:start-[-7px] before:top-0 before:border-e-[10px] before:border-t-[12px] before:border-e-transparent before:border-t-white">
-            <div className="space-y-3 text-[15px] leading-6">
-              {paragraphs.map((paragraph, index) => (
-                <p key={`${paragraph}-${index}`}>{paragraph}</p>
-              ))}
-            </div>
-            <p
-              className={cn(
-                'mt-2 text-[11px] text-[#667078]',
-                language === 'ar' ? 'text-left' : 'text-right'
-              )}
-            >
-              {formatTemplatePreviewTimestamp(language)}
-            </p>
-          </div>
-          <div className="mt-3 space-y-2" aria-label={t('previewActions')}>
-            <div
-              aria-disabled="true"
-              className="flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[#008f67] px-4 text-sm font-semibold text-white shadow-sm"
-            >
-              <Check aria-hidden="true" className="h-4 w-4" />
-              {confirmButton}
-            </div>
-            <div
-              aria-disabled="true"
-              className="flex min-h-12 items-center justify-center gap-2 rounded-lg border border-[#008f67] bg-white px-4 text-sm font-semibold text-[#007a58] shadow-sm"
-            >
-              <X aria-hidden="true" className="h-4 w-4" />
-              {cancelButton}
-            </div>
-          </div>
-        </div>
-      </div>
-      <p className="text-foreground/70 mt-4 text-sm leading-5">
-        {t('previewFooter')}
-      </p>
-    </>
-  )
 }
 
 export function TemplatesStandaloneSkin({
@@ -538,7 +473,7 @@ export function TemplatesStandaloneSkin({
           </div>
 
           <div className="mt-4">
-            <TemplatePreview
+            <TemplatePhonePreview
               language={previewLanguage}
               paragraphs={previewParagraphs}
               confirmButton={template.confirmButton}
@@ -618,7 +553,7 @@ export function TemplatesStandaloneSkin({
               {languageLabel(previewLanguage)}
             </DialogDescription>
           </DialogHeader>
-          <TemplatePreview
+          <TemplatePhonePreview
             language={previewLanguage}
             paragraphs={previewParagraphs}
             confirmButton={template.confirmButton}

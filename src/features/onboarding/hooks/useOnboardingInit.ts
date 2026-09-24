@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import {
   fetchOnboardingBillingPlans,
@@ -10,85 +10,53 @@ import { createLogger } from '@/shared/lib/logger'
 import type {
   IntegrationOnboardingLanguage,
   IntegrationOnboardingState,
-  OnboardingBillingPlanConfig,
-  OnboardingBillingPlanId,
 } from '@/features/onboarding/domain/onboarding.types'
 import type { EmbeddedStep } from '../model/onboarding.config'
 
 const logger = createLogger('Onboarding')
-
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-interface BillingStatusMessages {
-  billingStatusPending: string
-  billingStatusDeclined: string
-  billingStatusFrozen: string
-  billingStatusExpired: string
-  billingStatusCanceled: string
-  billingStatusError: string
-  billingStatusNeedsAttention: string
-}
 
 export interface UseOnboardingInitParams {
   isEmbedded: boolean
   isModeLoading: boolean
   locale: string
   router: AppRouterInstance
+  /** `?step=test` reopens the test from the dashboard checklist. */
+  requestedStep: string | null
   prefillWarningMessage: string
-  billingStatusMessages: BillingStatusMessages
   setStep: (step: EmbeddedStep) => void
-  setErrorBanner: (message: string | null) => void
 }
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function normalizeBillingStatus(status: string | null): string | null {
-  if (!status) return null
-  const normalized = status.trim().toLowerCase()
-  return normalized.length > 0 ? normalized : null
-}
-
-function resolveBillingRecoveryMessage(
-  status: string,
-  messages: BillingStatusMessages
-): string | null {
-  if (status === 'active' || status === 'not_required') return null
-  if (status === 'pending') return messages.billingStatusPending
-  if (status === 'declined') return messages.billingStatusDeclined
-  if (status === 'frozen') return messages.billingStatusFrozen
-  if (status === 'expired') return messages.billingStatusExpired
-  if (status === 'cancelled' || status === 'canceled')
-    return messages.billingStatusCanceled
-  if (status === 'error') return messages.billingStatusError
-  return messages.billingStatusNeedsAttention
-}
-
-function resolveResumeStep(state: IntegrationOnboardingState): EmbeddedStep {
-  const hasBillingActivity =
-    state.billingPlanId !== null || state.billingStatus !== null
-  if (hasBillingActivity) return 2
-
-  return 1
-}
-
-// ─── Hook ─────────────────────────────────────────────────────────────────────
 
 /**
- * Handles the initial data-load for the embedded onboarding flow.
- *
- * Fetches onboarding state and billing plans on mount, resolves the correct
- * resume step, and surfaces prefill warnings or billing recovery errors.
- * Sets initial field values for Settings and Billing to consume.
+ * Where a returning merchant lands. Setup not saved yet: setup. Saved but the
+ * test was neither confirmed nor skipped: the test. Otherwise onboarding is
+ * over and the dashboard is home, unless the checklist asked for the test.
+ */
+export function resolveResumeStep(
+  state: IntegrationOnboardingState,
+  requestedStep: string | null
+): EmbeddedStep | 'dashboard' {
+  if (state.onboardingStatus !== 'completed') return 'setup'
+  if (requestedStep === 'test') return 'test'
+  const activation = state.activation
+  if (activation && !activation.testConfirmedAt && !activation.testSkippedAt) {
+    return 'test'
+  }
+  return 'dashboard'
+}
+
+/**
+ * Loads onboarding state once, picks the resume step and seeds the setup
+ * form. Also reads whether the store's one free Starter claim is still
+ * available, which decides the free-plan banner on the setup screen.
  */
 export function useOnboardingInit({
   isEmbedded,
   isModeLoading,
   locale,
   router,
+  requestedStep,
   prefillWarningMessage,
-  billingStatusMessages,
   setStep,
-  setErrorBanner,
 }: UseOnboardingInitParams) {
   const [isInitialLoading, setIsInitialLoading] = useState(true)
   const [initialStoreName, setInitialStoreName] = useState('')
@@ -96,27 +64,11 @@ export function useOnboardingInit({
     useState<IntegrationOnboardingLanguage>('auto')
   const [initialIsAutoVerifyEnabled, setInitialIsAutoVerifyEnabled] =
     useState(true)
-  const [billingPlanConfigsById, setBillingPlanConfigsById] = useState<
-    Partial<Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>>
-  >({})
-  const [canManageBilling, setCanManageBilling] = useState(false)
-  const [isFreePlanClaimed, setIsFreePlanClaimed] = useState(false)
-  const markFreePlanClaimed = useCallback(() => setIsFreePlanClaimed(true), [])
+  const [initialMerchantPhone, setInitialMerchantPhone] = useState('')
+  const [isFreePlanAvailable, setIsFreePlanAvailable] = useState(true)
   const [prefillWarning, setPrefillWarning] = useState<string | null>(null)
-  const {
-    billingStatusPending,
-    billingStatusDeclined,
-    billingStatusFrozen,
-    billingStatusExpired,
-    billingStatusCanceled,
-    billingStatusError,
-    billingStatusNeedsAttention,
-  } = billingStatusMessages
 
-  /**
-   * Ref used by useOnboardingSettings to know whether to skip auto-save
-   * on the very first render (before init has populated field values).
-   */
+  /** Keeps the setup autosave from firing before the server values land. */
   const hasCompletedInitRef = useRef(false)
 
   useEffect(() => {
@@ -131,25 +83,19 @@ export function useOnboardingInit({
 
     const load = async () => {
       setIsInitialLoading(true)
-      setErrorBanner(null)
 
       try {
-        const [stateResponse, billingPlansResponse] = await Promise.all([
+        const [{ state }, billingPlans] = await Promise.all([
           fetchOnboardingState(),
-          fetchOnboardingBillingPlans().catch((error) => {
+          fetchOnboardingBillingPlans().catch((error: unknown) => {
             logger.error('Failed to load billing plans', error)
             return null
           }),
         ])
-
-        const { state } = stateResponse
         if (!active) return
-        setCanManageBilling(
-          state.billingManagement?.mode === 'shopify' &&
-            state.billingManagement.canManageBilling === true
-        )
 
-        if (state.onboardingStatus === 'completed') {
+        const resumeStep = resolveResumeStep(state, requestedStep)
+        if (resumeStep === 'dashboard') {
           router.replace(`/${locale}/dashboard${window.location.search}`)
           return
         }
@@ -157,50 +103,14 @@ export function useOnboardingInit({
         setInitialStoreName(state.storeName ?? '')
         setInitialDefaultLanguage(state.defaultLanguage)
         setInitialIsAutoVerifyEnabled(state.isAutoVerifyEnabled)
-
-        const normalizedBillingStatus = normalizeBillingStatus(
-          state.billingStatus
+        setInitialMerchantPhone(state.merchantWhatsappPhone ?? '')
+        setIsFreePlanAvailable(
+          billingPlans ? !billingPlans.isFreePlanClaimed : true
         )
-        const billingRecoveryMessage = normalizedBillingStatus
-          ? resolveBillingRecoveryMessage(normalizedBillingStatus, {
-              billingStatusPending,
-              billingStatusDeclined,
-              billingStatusFrozen,
-              billingStatusExpired,
-              billingStatusCanceled,
-              billingStatusError,
-              billingStatusNeedsAttention,
-            })
-          : null
-
-        if (billingRecoveryMessage) {
-          setErrorBanner(billingRecoveryMessage)
-          setStep(2)
-        } else {
-          const resumeStep = resolveResumeStep(state)
-          if (resumeStep !== 1) setStep(resumeStep)
-        }
-
-        if (billingPlansResponse) {
-          const plansById: Partial<
-            Record<OnboardingBillingPlanId, OnboardingBillingPlanConfig>
-          > = {}
-          for (const plan of billingPlansResponse.plans) {
-            plansById[plan.id] = plan
-          }
-          setBillingPlanConfigsById(plansById)
-          setIsFreePlanClaimed(billingPlansResponse.isFreePlanClaimed)
-        } else {
-          setBillingPlanConfigsById({})
-        }
+        setStep(resumeStep)
       } catch (error) {
         logger.error('Failed to load state', error)
-
-        if (active) {
-          setPrefillWarning(prefillWarningMessage)
-          setInitialDefaultLanguage('auto')
-          setInitialIsAutoVerifyEnabled(true)
-        }
+        if (active) setPrefillWarning(prefillWarningMessage)
       } finally {
         if (active) {
           setIsInitialLoading(false)
@@ -219,16 +129,9 @@ export function useOnboardingInit({
     isModeLoading,
     locale,
     prefillWarningMessage,
-    billingStatusPending,
-    billingStatusDeclined,
-    billingStatusFrozen,
-    billingStatusExpired,
-    billingStatusCanceled,
-    billingStatusError,
-    billingStatusNeedsAttention,
+    requestedStep,
     router,
     setStep,
-    setErrorBanner,
   ])
 
   return {
@@ -236,10 +139,8 @@ export function useOnboardingInit({
     initialStoreName,
     initialDefaultLanguage,
     initialIsAutoVerifyEnabled,
-    billingPlanConfigsById,
-    isFreePlanClaimed,
-    markFreePlanClaimed,
-    canManageBilling,
+    initialMerchantPhone,
+    isFreePlanAvailable,
     prefillWarning,
     hasCompletedInitRef,
   }

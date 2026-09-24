@@ -87,7 +87,6 @@ const inkSurfaceFiles = [
   'src/features/marketing/ui/components/ChatInterface.tsx',
   'src/features/marketing/ui/components/chat/**/*.{ts,tsx}',
   'src/features/billing/ui/components/BalanceHeroCard.tsx',
-  'src/features/settings/skins/standalone/TemplatesStandaloneSkin.tsx',
   'src/features/docs/ui/MarkdownContent.tsx',
 ]
 

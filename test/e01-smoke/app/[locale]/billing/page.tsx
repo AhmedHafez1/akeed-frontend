@@ -7,7 +7,7 @@ import enTranslations from '@shopify/polaris/locales/en.json'
 import '@shopify/polaris/build/esm/styles.css'
 import { useSettings } from '@/features/settings/domain/useSettings'
 import { SettingsStandaloneSkin } from '@/features/settings/skins/standalone/SettingsStandaloneSkin'
-import { SettingsEmbeddedTabbedSkin } from '@/features/settings/skins/embedded/SettingsEmbeddedTabbedSkin'
+import { SettingsEmbeddedPage } from '@/features/settings/skins/embedded/settings-page/SettingsEmbeddedPage'
 import { billingFixtureCounts } from '../billingFixture'
 
 export default function BillingFixturePage() {
@@ -47,7 +47,7 @@ export default function BillingFixturePage() {
         </button>
         {!isPageLoading &&
           (embedded ? (
-            <SettingsEmbeddedTabbedSkin {...skinProps} />
+            <SettingsEmbeddedPage />
           ) : (
             <SettingsStandaloneSkin {...skinProps} />
           ))}

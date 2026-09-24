@@ -1,44 +1,45 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
+import { StandalonePageSkeleton } from '@/shared/layout/skeletons'
 import {
-  SettingsEmbeddedShellSkeleton,
-  StandalonePageSkeleton,
-} from '@/shared/layout/skeletons'
-import {
-  SettingsEmbeddedTabbedSkin,
+  SettingsEmbeddedPage,
+  SettingsEmbeddedSkeleton,
   SettingsStandaloneSkin,
   useSettings,
 } from '@/features/settings'
 
-function TemplatesPageContent() {
-  const { mode } = useAkeedMode()
+function StandaloneTemplatesContent() {
   const { isPageLoading, skinProps } = useSettings()
 
   if (isPageLoading) {
-    return mode === 'EMBEDDED' ? (
-      <SettingsEmbeddedShellSkeleton variant="message-preview" />
-    ) : (
-      <StandalonePageSkeleton variant="templates" />
-    )
-  }
-
-  if (mode === 'EMBEDDED') {
-    return <SettingsEmbeddedTabbedSkin {...skinProps} />
+    return <StandalonePageSkeleton variant="templates" />
   }
 
   return <SettingsStandaloneSkin {...skinProps} view="templates" />
 }
 
+function TemplatesPageContent() {
+  const { mode } = useAkeedMode()
+  // Embedded: the Message tab (the default tab) holds the template settings.
+  return mode === 'EMBEDDED' ? (
+    <SettingsEmbeddedPage />
+  ) : (
+    <StandaloneTemplatesContent />
+  )
+}
+
 export default function TemplatesPage() {
   const { isEmbedded } = useAkeedMode()
+  const t = useTranslations('settings.embedded')
 
   return (
     <EmbeddedAuthGate
       fallback={
         isEmbedded ? (
-          <SettingsEmbeddedShellSkeleton variant="message-preview" />
+          <SettingsEmbeddedSkeleton title={t('title')} />
         ) : (
           <StandalonePageSkeleton variant="templates" />
         )

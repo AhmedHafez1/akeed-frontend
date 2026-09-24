@@ -1,61 +1,51 @@
 'use client'
 
-import { useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
+import { StandalonePageSkeleton } from '@/shared/layout/skeletons'
 import {
-  SettingsEmbeddedShellSkeleton,
-  StandalonePageSkeleton,
-} from '@/shared/layout/skeletons'
-import {
-  SettingsEmbeddedTabbedSkin,
+  SettingsEmbeddedPage,
+  SettingsEmbeddedSkeleton,
   SettingsStandaloneSkin,
   useSettings,
 } from '@/features/settings'
-import { resolveSettingsTab } from '@/features/settings/domain/settingsTabs'
 
-function SettingsPageContent({
-  skeletonVariant,
-}: {
-  skeletonVariant: 'store' | 'confirmation' | 'message-preview' | 'billing'
-}) {
-  const { mode } = useAkeedMode()
+function StandaloneSettingsContent() {
   const { isPageLoading, skinProps } = useSettings()
 
   if (isPageLoading) {
-    return mode === 'EMBEDDED' ? (
-      <SettingsEmbeddedShellSkeleton variant={skeletonVariant} />
-    ) : (
-      <StandalonePageSkeleton variant="settings" />
-    )
-  }
-
-  if (mode === 'EMBEDDED') {
-    return <SettingsEmbeddedTabbedSkin {...skinProps} />
+    return <StandalonePageSkeleton variant="settings" />
   }
 
   return <SettingsStandaloneSkin {...skinProps} />
 }
 
+function SettingsPageContent() {
+  const { mode } = useAkeedMode()
+  return mode === 'EMBEDDED' ? (
+    <SettingsEmbeddedPage />
+  ) : (
+    <StandaloneSettingsContent />
+  )
+}
+
 export default function SettingsPage() {
   const { isEmbedded } = useAkeedMode()
-  const searchParams = useSearchParams()
-  const skeletonVariant = isEmbedded
-    ? resolveSettingsTab(searchParams.get('tab'))
-    : 'store'
+  const t = useTranslations('settings.embedded')
 
   return (
     <EmbeddedAuthGate
       fallback={
         isEmbedded ? (
-          <SettingsEmbeddedShellSkeleton variant={skeletonVariant} />
+          <SettingsEmbeddedSkeleton title={t('title')} />
         ) : (
           <StandalonePageSkeleton variant="settings" />
         )
       }
       onboardingGate="dashboard"
     >
-      <SettingsPageContent skeletonVariant={skeletonVariant} />
+      <SettingsPageContent />
     </EmbeddedAuthGate>
   )
 }

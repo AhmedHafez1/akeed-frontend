@@ -16,9 +16,16 @@ type SLinkProps = DetailedHTMLProps<
 >
 
 // Legacy components (kept for backwards compatibility during migration)
-type UiNavMenuProps = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>
+type UiNavMenuProps = DetailedHTMLProps<
+  HTMLAttributes<HTMLElement>,
+  HTMLElement
+>
 type UiTitleBarProps = DetailedHTMLProps<
   HTMLAttributes<HTMLElement>,
+  HTMLElement
+>
+type UiSaveBarProps = DetailedHTMLProps<
+  HTMLAttributes<HTMLElement> & { discardConfirmation?: boolean },
   HTMLElement
 >
 
@@ -29,6 +36,7 @@ declare module 'react' {
       's-link': SLinkProps
       'ui-nav-menu': UiNavMenuProps
       'ui-title-bar': UiTitleBarProps
+      'ui-save-bar': UiSaveBarProps
     }
   }
 }

@@ -161,11 +161,25 @@ export function VerificationsTableEmbedded({
           <div className={dataCellClassName}>
             <BlockStack gap="100">
               <div className={statusCellClassName}>
-                <span title={statusTitle || undefined}>
-                  <Badge tone={TONE_BADGES[lifecycleTone(verification.status)]}>
-                    {t(`verificationStatus.${verification.status}`)}
+                {verification.scheduled_for ? (
+                  <Badge tone="attention">
+                    {t('table.scheduledBadge', {
+                      time: formatCreatedTime(
+                        verification.scheduled_for,
+                        locale,
+                        reportingTimezone
+                      ),
+                    })}
                   </Badge>
-                </span>
+                ) : (
+                  <span title={statusTitle || undefined}>
+                    <Badge
+                      tone={TONE_BADGES[lifecycleTone(verification.status)]}
+                    >
+                      {t(`verificationStatus.${verification.status}`)}
+                    </Badge>
+                  </span>
+                )}
               </div>
             </BlockStack>
           </div>

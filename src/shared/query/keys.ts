@@ -14,9 +14,13 @@ export const queryKeys = {
       status: string
       dateRange: string
       importBatchId?: string
+      search?: string
+      cursor?: string | null
     }) => [...queryKeys.verifications.lists(), filters] as const,
     stats: (dateRange: string) =>
       [...queryKeys.verifications.all, 'stats', dateRange] as const,
+    overview: (dateRange: string) =>
+      [...queryKeys.verifications.all, 'overview', dateRange] as const,
     pageContext: () =>
       [...queryKeys.verifications.all, 'page-context'] as const,
   },
@@ -32,6 +36,15 @@ export const queryKeys = {
       [...queryKeys.billing.all, 'ledger', limit] as const,
     purchases: (limit = 25) =>
       [...queryKeys.billing.all, 'purchases', limit] as const,
+  },
+  settings: {
+    all: ['settings'] as const,
+    detail: () => [...queryKeys.settings.all, 'detail'] as const,
+  },
+  onboarding: {
+    all: ['onboarding'] as const,
+    state: () => [...queryKeys.onboarding.all, 'state'] as const,
+    test: () => [...queryKeys.onboarding.all, 'test'] as const,
   },
   orders: {
     /**
