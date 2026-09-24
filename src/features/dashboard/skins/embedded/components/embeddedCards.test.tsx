@@ -10,6 +10,7 @@ import { KpiCards } from './overview/KpiCards'
 import { MessageFlowCard } from './overview/MessageFlowCard'
 import { NeedsActionCard } from './overview/NeedsActionCard'
 import { SettingsStatusLine } from './overview/SettingsStatusLine'
+import { ConfirmationsCardList } from './confirmations/ConfirmationsCardList'
 import { ConfirmationsTable } from './confirmations/ConfirmationsTable'
 import { renderEmbedded } from './embeddedTestUtils'
 
@@ -390,5 +391,103 @@ describe('ConfirmationsTable', () => {
     const chats = screen.getAllByRole('link', { name: /واتساب/ })
     expect(chats).toHaveLength(1)
     expect(screen.getByLabelText('الصفحة السابقة')).toBeTruthy()
+  })
+
+  it('offers confirmed orders a WhatsApp link with the shipping message typed in', () => {
+    renderEmbedded(
+      <ConfirmationsTable
+        rows={[
+          listRow({ customer_name: 'Ahmed' }),
+          listRow({ id: 'v-test', order_number: '1139', is_test: true }),
+        ]}
+        {...tableProps}
+      />
+    )
+    const links = screen.getAllByRole('link', { name: /بيانات الشحن/ })
+    expect(links).toHaveLength(1)
+    const href = links[0].getAttribute('href') ?? ''
+    expect(href.startsWith('https://wa.me/201148675077?text=')).toBe(true)
+    const text = decodeURIComponent(href.split('?text=')[1])
+    expect(text).toContain('Ahmed')
+    expect(text).toContain('#1137')
+    expect(text).toContain('رقم التتبع')
+  })
+
+  it('opens the more actions in a sheet and runs the chosen one', () => {
+    const onRequestConfirm = vi.fn()
+    renderEmbedded(
+      <ConfirmationsTable
+        rows={[
+          listRow({
+            id: 'v-3',
+            order_number: '1138',
+            status: 'read',
+            confirmed_at: null,
+            action_reason: 'no_reply_after_follow_up',
+            capabilities: confirmCapability,
+          }),
+        ]}
+        {...tableProps}
+        handlers={{ ...tableProps.handlers, onRequestConfirm }}
+      />
+    )
+    fireEvent.click(
+      screen.getByRole('button', { name: 'مزيد من الإجراءات للطلب #1138' })
+    )
+    const sheet = screen.getByRole('dialog')
+    fireEvent.click(within(sheet).getByRole('button', { name: 'تأكيد يدوي' }))
+    expect(onRequestConfirm).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 'v-3' }),
+      '#1138'
+    )
+  })
+})
+
+describe('ConfirmationsCardList', () => {
+  it('shows each order as a card with its status, total and actions', () => {
+    renderEmbedded(
+      <ConfirmationsCardList
+        rows={[
+          listRow({ customer_name: 'Ahmed' }),
+          listRow({
+            id: 'v-3',
+            order_number: '1138',
+            status: 'read',
+            confirmed_at: null,
+            action_reason: 'no_reply_after_follow_up',
+          }),
+        ]}
+        timeZone="UTC"
+        canWrite
+        canRetry
+        actingId={null}
+        handlers={{
+          onRequestConfirm: vi.fn(),
+          onRequestCancel: vi.fn(),
+          onRetry: vi.fn(),
+        }}
+        pagination={{
+          label: '1–2 من 2',
+          hasNext: false,
+          hasPrevious: false,
+          onNext: vi.fn(),
+          onPrevious: vi.fn(),
+          previousLabel: 'الصفحة السابقة',
+          nextLabel: 'الصفحة التالية',
+        }}
+      />
+    )
+    const cards = screen.getAllByRole('listitem')
+    expect(cards).toHaveLength(2)
+    expect(within(cards[0]).getByText('مؤكد')).toBeTruthy()
+    expect(within(cards[0]).getByText('US$ 49.95')).toBeTruthy()
+    expect(
+      within(cards[0]).getByRole('link', { name: /بيانات الشحن/ })
+    ).toBeTruthy()
+    expect(within(cards[1]).getByText('لم يرد')).toBeTruthy()
+    expect(
+      within(cards[1]).getByRole('link', { name: /راسل .* على واتساب/ })
+    ).toBeTruthy()
+    expect(screen.getByLabelText('الصفحة التالية')).toBeTruthy()
   })
 })

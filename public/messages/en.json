@@ -1728,7 +1728,15 @@
       },
       "actions": {
         "more": "More actions for order {order}",
-        "cancelTitle": "Cancel order {order}?"
+        "cancelTitle": "Cancel order {order}?",
+        "menuTitle": "Actions for order {order}",
+        "close": "Close",
+        "sendShipping": "Send shipping info",
+        "sendShippingLabel": "Send shipping info to {customer} on WhatsApp (opens in a new window)"
+      },
+      "shipping": {
+        "message": "Hi {customer}, your order {order} ({total}) is confirmed and being prepared for shipping.\nCarrier: \nTracking number: ",
+        "customerFallback": "there"
       }
     }
   },

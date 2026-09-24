@@ -1722,7 +1722,15 @@
       },
       "actions": {
         "more": "مزيد من الإجراءات للطلب {order}",
-        "cancelTitle": "إلغاء الطلب {order}؟"
+        "cancelTitle": "إلغاء الطلب {order}؟",
+        "menuTitle": "إجراءات الطلب {order}",
+        "close": "إغلاق",
+        "sendShipping": "أرسل بيانات الشحن",
+        "sendShippingLabel": "أرسل بيانات الشحن إلى {customer} على واتساب (يفتح في نافذة جديدة)"
+      },
+      "shipping": {
+        "message": "مرحباً {customer}، تم تأكيد طلبك {order} بقيمة {total} وجارٍ تجهيزه للشحن.\nشركة الشحن: \nرقم التتبع: ",
+        "customerFallback": "عميلنا العزيز"
       }
     }
   },

@@ -12,6 +12,7 @@ import {
   Tabs,
   Text,
   TextField,
+  useBreakpoints,
 } from '@shopify/polaris'
 import { SearchIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
@@ -25,6 +26,7 @@ import type {
   DashboardStatsDateRange,
   VerificationItem,
 } from '../../model/dashboard.model'
+import { ConfirmationsCardList } from './components/confirmations/ConfirmationsCardList'
 import { ConfirmationsTable } from './components/confirmations/ConfirmationsTable'
 import { EmbeddedPageHeader } from './components/overview/EmbeddedPageHeader'
 import { ManualConfirmModal } from './components/shared/ManualConfirmModal'
@@ -60,6 +62,9 @@ export function ConfirmationsEmbedded({
   const { locale } = useLocaleInfo()
   const list = useEmbeddedConfirmations({ dateRange: period, tab })
   const confirmation = useManualConfirmation()
+  // Six columns do not fit a phone; below md each order becomes a card.
+  const { mdUp } = useBreakpoints({ defaults: { mdUp: true } })
+  const ConfirmationsList = mdUp ? ConfirmationsTable : ConfirmationsCardList
   const [cancelTarget, setCancelTarget] = useState<{
     row: VerificationItem
     orderLabel: string
@@ -197,7 +202,7 @@ export function ConfirmationsEmbedded({
               </Text>
             </Box>
           ) : (
-            <ConfirmationsTable
+            <ConfirmationsList
               rows={list.rows}
               timeZone={list.reportingTimezone}
               canWrite={list.canWrite}

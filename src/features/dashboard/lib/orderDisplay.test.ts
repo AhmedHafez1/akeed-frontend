@@ -75,6 +75,16 @@ describe('links', () => {
     expect(whatsAppChatUrl(null)).toBeNull()
   })
 
+  it('prefills an encoded message when given text', () => {
+    expect(whatsAppChatUrl('+201007611456', 'طلبك #1150\nتم')).toBe(
+      `https://wa.me/201007611456?text=${encodeURIComponent('طلبك #1150\nتم')}`
+    )
+    expect(whatsAppChatUrl('+201007611456', '')).toBe(
+      'https://wa.me/201007611456'
+    )
+    expect(whatsAppChatUrl('123', 'hi')).toBeNull()
+  })
+
   it('links only Shopify orders with a numeric id', () => {
     expect(shopifyOrderAdminUrl('shopify', '5551234')).toBe(
       'shopify://admin/orders/5551234'

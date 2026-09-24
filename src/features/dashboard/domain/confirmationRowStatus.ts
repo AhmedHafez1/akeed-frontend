@@ -85,3 +85,11 @@ export function resolveRowStatus(row: VerificationItem): RowStatusView {
 export function isNeedsActionRow(row: VerificationItem): boolean {
   return Boolean(row.action_reason)
 }
+
+/**
+ * A real confirmed order the merchant can follow up with shipping details.
+ * The phone check stays with the link builder, which returns null without one.
+ */
+export function canSendShippingInfo(row: VerificationItem): boolean {
+  return row.status === 'confirmed' && !row.is_test
+}

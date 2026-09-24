@@ -110,10 +110,18 @@ export function formatPhoneInternational(phone: string | null | undefined) {
   }
 }
 
-/** A `wa.me` chat link, or null when the phone has no digits to dial. */
-export function whatsAppChatUrl(phone: string | null | undefined) {
+/**
+ * A `wa.me` chat link, or null when the phone has no digits to dial. With
+ * `text`, WhatsApp opens with that message typed in, ready to edit and send.
+ */
+export function whatsAppChatUrl(
+  phone: string | null | undefined,
+  text?: string
+) {
   const digits = phone?.replace(/\D/g, '') ?? ''
-  return digits.length >= 8 ? `https://wa.me/${digits}` : null
+  if (digits.length < 8) return null
+  const url = `https://wa.me/${digits}`
+  return text ? `${url}?text=${encodeURIComponent(text)}` : url
 }
 
 /**
