@@ -13,6 +13,8 @@ export function Header() {
     locale,
     homeHref,
     loginHref,
+    dashboardHref,
+    isAuthenticated,
     navigation,
     acquisitionTargets,
     isScrolled,
@@ -47,6 +49,9 @@ export function Header() {
               ctaLabel={t('cta_primary')}
               loginLabel={t('login')}
               loginHref={loginHref}
+              dashboardLabel={t('dashboard')}
+              dashboardHref={dashboardHref}
+              isAuthenticated={isAuthenticated}
               onLocaleChange={handleLocaleChange}
             />
 
@@ -67,6 +72,9 @@ export function Header() {
           ctaLabel={t('cta_primary')}
           loginLabel={t('login')}
           loginHref={loginHref}
+          dashboardLabel={t('dashboard')}
+          dashboardHref={dashboardHref}
+          isAuthenticated={isAuthenticated}
           onNavigate={scrollToSection}
           onLocaleChange={handleLocaleChange}
           onClose={() => setIsMobileMenuOpen(false)}

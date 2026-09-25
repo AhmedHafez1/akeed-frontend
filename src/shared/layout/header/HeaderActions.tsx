@@ -9,6 +9,9 @@ interface HeaderActionsProps {
   ctaLabel: string
   loginLabel: string
   loginHref: string
+  dashboardLabel: string
+  dashboardHref: string
+  isAuthenticated: boolean
   onLocaleChange: () => void
 }
 
@@ -21,6 +24,9 @@ export function HeaderActions({
   ctaLabel,
   loginLabel,
   loginHref,
+  dashboardLabel,
+  dashboardHref,
+  isAuthenticated,
   onLocaleChange,
 }: HeaderActionsProps) {
   return (
@@ -34,8 +40,11 @@ export function HeaderActions({
         <Globe className="h-4 w-4" />
         <span>{locale === 'ar' ? 'EN' : 'عربي'}</span>
       </button>
-      <Link href={loginHref} className={`${headerOutlineControlClass} h-10 px-5`}>
-        {loginLabel}
+      <Link
+        href={isAuthenticated ? dashboardHref : loginHref}
+        className={`${headerOutlineControlClass} h-10 px-5`}
+      >
+        {isAuthenticated ? dashboardLabel : loginLabel}
       </Link>
       <AcquisitionCta
         target={targets.standalone}

@@ -15,6 +15,9 @@ interface HeaderMobileMenuProps {
   ctaLabel: string
   loginLabel: string
   loginHref: string
+  dashboardLabel: string
+  dashboardHref: string
+  isAuthenticated: boolean
   onNavigate: (id: string, event: MouseEvent<HTMLAnchorElement>) => void
   onLocaleChange: () => void
   onClose: () => void
@@ -31,6 +34,9 @@ export function HeaderMobileMenu({
   ctaLabel,
   loginLabel,
   loginHref,
+  dashboardLabel,
+  dashboardHref,
+  isAuthenticated,
   onNavigate,
   onLocaleChange,
   onClose,
@@ -91,11 +97,11 @@ export function HeaderMobileMenu({
                   {locale === 'ar' ? 'English' : 'عربي'}
                 </button>
                 <Link
-                  href={loginHref}
+                  href={isAuthenticated ? dashboardHref : loginHref}
                   onClick={onClose}
                   className={`${headerOutlineControlClass} w-full px-4 py-3 text-base`}
                 >
-                  {loginLabel}
+                  {isAuthenticated ? dashboardLabel : loginLabel}
                 </Link>
                 <AcquisitionCta
                   target={targets.standalone}
