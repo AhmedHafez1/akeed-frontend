@@ -7,7 +7,10 @@ import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
 import { Card, Progress, Skeleton, Tooltip } from '@/shared/ui'
-import { lifecycleTone } from '@/features/dashboard/domain/verificationLifecycle'
+import {
+  displayedLifecycleStatus,
+  lifecycleTone,
+} from '@/features/dashboard/domain/verificationLifecycle'
 import { filterAdmitsStatus } from '@/features/dashboard/domain/verificationFilters'
 import { getStatusTimestamp } from '@/features/dashboard/domain/verificationRow'
 import { lifecycleToneClasses } from '../lifecycleToneClasses'
@@ -279,10 +282,14 @@ function AttentionPreview({
                 <span
                   className={cn(
                     'w-fit rounded-lg border px-2.5 py-1 text-xs font-semibold',
-                    lifecycleToneClasses[lifecycleTone(verification.status)]
+                    lifecycleToneClasses[
+                      lifecycleTone(displayedLifecycleStatus(verification))
+                    ]
                   )}
                 >
-                  {t(`verificationStatus.${verification.status}`)}
+                  {t(
+                    `verificationStatus.${displayedLifecycleStatus(verification)}`
+                  )}
                 </span>
               </li>
             ))}

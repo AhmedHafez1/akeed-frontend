@@ -1,6 +1,5 @@
 'use client'
 
-import type { ReactNode } from 'react'
 import type { UseQueryResult } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import { Skeleton } from '@/shared/ui'
@@ -16,8 +15,8 @@ import { BatchStateNotice } from '../BatchStateNotice'
 import { CheckStep } from '../check/CheckStep'
 import { DuplicateFileBanner } from '../DuplicateFileBanner'
 import { ImportNotice } from '../ImportNotice'
-import { PartialImportView } from '../PartialImportView'
-import { ReleaseView } from '../ReleaseView'
+import { PartialImportView } from '../send/PartialImportView'
+import { SendProgressView } from '../send/SendProgressView'
 import { SendStep } from '../send/SendStep'
 import { UploadStep } from '../UploadStep'
 import { ModalStepLayout } from './ModalStepLayout'
@@ -30,17 +29,6 @@ export function ImportContentSkeleton() {
         <Skeleton className="h-64 w-full" />
       </div>
     </ModalStepLayout>
-  )
-}
-
-/**
- * The views from before the modal redesign (review, import, release): they
- * bring their own footer, which is fixed to the dialog's bottom on phones.
- * Phases 4 and 6 replace them.
- */
-function LegacyStep({ children }: { children: ReactNode }) {
-  return (
-    <ModalStepLayout bodyClassName="max-md:pb-32">{children}</ModalStepLayout>
   )
 }
 
@@ -146,11 +134,7 @@ export function ImportBatchContent({
     case 'imported':
       return sendStep
     case 'release':
-      return (
-        <LegacyStep>
-          <ReleaseView detail={batch} canEdit={canEdit} />
-        </LegacyStep>
-      )
+      return <SendProgressView detail={batch} canEdit={canEdit} />
     case 'notStarted':
       return (
         <ModalStepLayout>
@@ -164,11 +148,7 @@ export function ImportBatchContent({
         </ModalStepLayout>
       )
     case 'partial':
-      return (
-        <LegacyStep>
-          <PartialImportView detail={batch} />
-        </LegacyStep>
-      )
+      return <PartialImportView detail={batch} />
     case 'unavailable':
       return (
         <ModalStepLayout>

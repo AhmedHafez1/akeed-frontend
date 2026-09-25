@@ -1,5 +1,6 @@
 export { ImportModalHost } from './skins/standalone/modal/ImportModal'
 export { ImportTopBarAction } from './skins/standalone/ImportTopBarAction'
+export { ImportProgressChip } from './skins/standalone/ImportProgressChip'
 export { ImportRouteRedirect } from './skins/standalone/ImportRouteRedirect'
 export { ImportFilterChip } from './skins/standalone/ImportFilterChip'
 export { importModalPath } from './domain/importRoutes'

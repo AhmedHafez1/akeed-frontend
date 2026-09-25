@@ -240,14 +240,6 @@ export type OrderImportStartQuote = {
   blockers: OrderImportStartBlocker[]
   quoteToken: string
   quoteExpiresAt: string
-  attestation: { version: string; text: { en: string; ar: string } }
-}
-
-export type OrderImportStopResult = {
-  batchId: string
-  status: 'stopped'
-  released: number
-  withdrawn: number
 }
 
 /** Listed with `IMPORT_TOO_MANY_DRAFTS`, and by the open-drafts list. */
@@ -263,6 +255,16 @@ export type OrderImportDraftList = {
   drafts: OrderImportOpenDraft[]
   permissions: { canEdit: boolean }
 }
+
+/** A started import the top bar reports on; its counts come from `GET /:id`. */
+export type OrderImportStartedBatch = {
+  batchId: string
+  fileName: string
+  status: OrderImportBatchStatus
+  startedAt: string | null
+}
+
+export type OrderImportActiveList = { batches: OrderImportStartedBatch[] }
 
 export type OrderImportRowOutcome =
   | 'ready'
@@ -348,6 +350,8 @@ export const orderImportErrorCodes = [
   'IMPORT_IDEMPOTENCY_KEY_REQUIRED',
   'IMPORT_IDEMPOTENCY_CONFLICT',
   'IMPORT_NOTHING_TO_IMPORT',
+  'IMPORT_ROW_NOT_EDITABLE',
+  'IMPORT_ROW_PHONE_INVALID',
   'IMPORT_ATTESTATION_REQUIRED',
   'IMPORT_QUOTE_STALE',
   'IMPORT_START_WINDOW_EXPIRED',
@@ -377,6 +381,8 @@ type OrderImportErrorExtras = {
   quote?: OrderImportStartQuote
   /** Every blocker, on a refused start or resume. */
   blockers?: OrderImportStartBlocker[]
+  /** The phone issue code (`PHONE_INVALID`, …), on `IMPORT_ROW_PHONE_INVALID`. */
+  issue?: string
 }
 
 export type OrderImportApiError = ApiError &
@@ -426,6 +432,7 @@ async function toOrderImportError(
       error.paymentValues = body.paymentValues as OrderImportPaymentValues
     if ('dateFormat' in body)
       error.dateFormat = body.dateFormat as OrderImportDateCheck
+    if (typeof body.issue === 'string') error.issue = body.issue
   } catch {
     // The code alone is enough to show the refusal.
   }
@@ -471,6 +478,20 @@ export async function listOpenOrderImportDrafts(
     signal,
   })
   return readJson<OrderImportDraftList>(response)
+}
+
+/**
+ * `GET /api/order-imports?status=active`: imports still sending, and those
+ * that finished handing orders over in the last day.
+ */
+export async function listActiveOrderImports(
+  signal?: AbortSignal
+): Promise<OrderImportActiveList> {
+  const response = await fetchWithAuth('/api/order-imports?status=active', {
+    method: 'GET',
+    signal,
+  })
+  return readJson<OrderImportActiveList>(response)
 }
 
 export async function getOrderImport(
@@ -532,6 +553,23 @@ export async function setOrderImportRowInclude(
   return readJson<OrderImportRowUpdate>(response)
 }
 
+/**
+ * `PATCH /api/order-imports/:id/rows/:rowNumber/phone`: the number a row's
+ * phone issue asked for. The server checks it, validates the batch again and
+ * answers the row and counts; a bad number is `IMPORT_ROW_PHONE_INVALID`.
+ */
+export async function fixOrderImportRowPhone(
+  batchId: string,
+  rowNumber: number,
+  phone: string
+): Promise<OrderImportRowUpdate> {
+  const response = await fetchWithAuth(
+    `${batchPath(batchId)}/rows/${rowNumber}/phone`,
+    { method: 'PATCH', body: JSON.stringify({ phone }) }
+  )
+  return readJson<OrderImportRowUpdate>(response)
+}
+
 /** Discards a draft and its rows. Answers 204, so there is no body to parse. */
 export async function discardOrderImport(
   batchId: string,
@@ -588,7 +626,7 @@ export function startIdempotencyKey(batchId: string): string {
 /** `POST /api/order-imports/:id/start`: 202 with the releasing batch. */
 export async function startOrderImport(
   batchId: string,
-  body: { attestationVersion: string; quoteToken: string },
+  body: { quoteToken: string },
   signal?: AbortSignal
 ): Promise<OrderImportBatchDetail> {
   const response = await fetchWithAuth(`${batchPath(batchId)}/start`, {
@@ -598,18 +636,6 @@ export async function startOrderImport(
     signal,
   })
   return readJson<OrderImportBatchDetail>(response)
-}
-
-/** `POST /api/order-imports/:id/stop`: withdraws every order not yet sent. */
-export async function stopOrderImport(
-  batchId: string,
-  signal?: AbortSignal
-): Promise<OrderImportStopResult> {
-  const response = await fetchWithAuth(`${batchPath(batchId)}/stop`, {
-    method: 'POST',
-    signal,
-  })
-  return readJson<OrderImportStopResult>(response)
 }
 
 /** `POST /api/order-imports/:id/resume`: continues a paused batch. */

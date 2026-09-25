@@ -7,6 +7,7 @@ import {
   getOrderImportRows,
   getOrderImportStartQuote,
   isOrderImportApiError,
+  listActiveOrderImports,
   listOpenOrderImportDrafts,
   type OrderImportRowOutcome,
 } from './orderImportsApi'
@@ -22,6 +23,22 @@ export function openDraftsOptions() {
     queryKey: queryKeys.orderImports.list(),
     queryFn: ({ signal }) => listOpenOrderImportDrafts(signal),
     retry: retryUnlessRefused,
+  })
+}
+
+/** How often the top bar looks for a newly started import elsewhere. */
+export const ACTIVE_IMPORTS_POLL_MS = 30_000
+
+/**
+ * The started imports for the top bar. A start in this tab refetches it at
+ * once (`orderImport.started`); another tab's is picked up by the poll.
+ */
+export function activeImportsOptions() {
+  return queryOptions({
+    queryKey: queryKeys.orderImports.active(),
+    queryFn: ({ signal }) => listActiveOrderImports(signal),
+    retry: retryUnlessRefused,
+    refetchInterval: ACTIVE_IMPORTS_POLL_MS,
   })
 }
 

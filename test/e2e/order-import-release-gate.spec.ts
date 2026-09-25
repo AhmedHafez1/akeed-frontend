@@ -4,11 +4,12 @@ import { join, resolve } from 'node:path'
 
 /*
  * US-04.6-10 AC2, the browser half: arabic-excel.xlsx through the real
- * wizard (upload → map → review → import → start → release) and into the
- * Verifications list for the batch, in Arabic and English, light and dark,
- * at 1440 and 390 px. The fixture app answers with what the real backend
- * returned in akeed-backend's PostgreSQL end-to-end test, so the screens
- * show that run's data, and the UI's own requests are checked here.
+ * import modal (الملف → الفحص → الإرسال), the top bar's progress, and into
+ * the Verifications list for the batch, in Arabic and English, light and
+ * dark, at 1440 and 390 px. The fixture app answers with what the real
+ * backend returned in akeed-backend's PostgreSQL end-to-end test, so the
+ * screens show that run's data, and the UI's own requests are checked here.
+ * Nothing reaches a provider: every answer is replayed.
  */
 
 const ROOT = resolve(__dirname, '../..')
@@ -71,11 +72,26 @@ async function replayCalls(page: Page): Promise<ReplayCall[]> {
   )
 }
 
+const posts = (calls: ReplayCall[], path: string) =>
+  calls.filter((call) => call.method === 'POST' && call.url.endsWith(path))
+
 async function prepare(page: Page, theme: 'light' | 'dark') {
   await page.addInitScript((value) => {
     window.sessionStorage.setItem('akeed:e2e-replay', 'arabic-excel')
     window.sessionStorage.setItem('akeed:e2e-theme', value)
   }, theme)
+}
+
+/** Opens the modal on a fresh replay and uploads the real workbook. */
+async function upload(page: Page, locale: Locale) {
+  await page.goto(`/${locale}/imports/new`)
+  await page.evaluate(() =>
+    window.sessionStorage.removeItem('akeed:e2e-replay-stage')
+  )
+  await page
+    .locator('input[type="file"]')
+    .setInputFiles(join(REPLAY, 'arabic-excel.xlsx'))
+  await page.waitForURL(new RegExp(`[?&]import=${recording.batchId}`))
 }
 
 const COMBINATIONS = (['ar', 'en'] as const).flatMap((locale) =>
@@ -87,7 +103,7 @@ const COMBINATIONS = (['ar', 'en'] as const).flatMap((locale) =>
 mkdirSync(SHOTS, { recursive: true })
 
 for (const { locale, theme, width } of COMBINATIONS) {
-  test(`arabic-excel.xlsx upload → map → review → import → start → release → Verifications (${locale}, ${theme}, ${width})`, async ({
+  test(`arabic-excel.xlsx file → check → import and send → progress → Verifications (${locale}, ${theme}, ${width})`, async ({
     page,
   }) => {
     await page.setViewportSize({ width, height: width === 390 ? 844 : 900 })
@@ -97,87 +113,67 @@ for (const { locale, theme, width } of COMBINATIONS) {
         path: join(SHOTS, `${locale}-${theme}-${width}-${step}.png`),
         fullPage: true,
       })
+    const dialog = page.getByRole('dialog')
 
-    // Upload the real workbook the backend imported.
-    await page.goto(`/${locale}/imports/new`)
-    await page.evaluate(() =>
-      window.sessionStorage.removeItem('akeed:e2e-replay-stage')
-    )
-    await page
-      .locator('input[type="file"]')
-      .setInputFiles(join(REPLAY, 'arabic-excel.xlsx'))
-    await page.waitForURL(new RegExp(`[?&]import=${recording.batchId}`))
+    await upload(page, locale)
 
-    // Map: every column was detected; Continue sends that mapping unchanged.
-    await expect(
-      page.getByRole('button', {
-        name: label(locale, 'orderImport.map.continue'),
-      })
-    ).toBeVisible()
-    await shot('1-map')
-    await page
-      .getByRole('button', { name: label(locale, 'orderImport.map.continue') })
-      .click()
-
-    // Review: the manifest's split, and nothing sent.
-    await expect(
-      page.getByText(message(locale, 'orderImport.nothingSent.banner'))
-    ).toBeVisible()
-    const importButton = page.getByRole('button', {
-      name: label(locale, 'orderImport.review.import'),
+    // Check: every column was detected; Continue sends that mapping unchanged.
+    const next = dialog.getByRole('button', {
+      name: message(locale, 'orderImport.check.footer.continue'),
     })
-    await expect(importButton).toBeEnabled()
-    await shot('2-review')
-    const mapping = (await replayCalls(page)).find(
+    await expect(next).toBeEnabled()
+    await shot('1-check')
+    await next.click()
+
+    // Send: the ready orders priced before anything is imported, no consent
+    // box, and nothing sent yet.
+    const send = dialog.getByRole('button', {
+      name: label(locale, 'orderImport.send.importAndSend'),
+    })
+    await expect(send).toBeEnabled()
+    // Said once per layout: the footer line on desktop, under the buttons on phones.
+    await expect(
+      dialog
+        .getByText(message(locale, 'orderImport.send.reassure'))
+        .filter({ visible: true })
+    ).toHaveCount(1)
+    await expect(dialog.getByRole('checkbox')).toHaveCount(0)
+    await shot('2-send')
+    const beforeSend = await replayCalls(page)
+    const mapping = beforeSend.find(
       (call) => call.method === 'PUT' && call.url.endsWith('/mapping')
     )
     expect(
       (mapping?.body as { mapping: Record<string, unknown> }).mapping
     ).toMatchObject(manifest.mapping)
-    await importButton.click()
+    expect(posts(beforeSend, '/commit')).toEqual([])
+    expect(posts(beforeSend, '/start')).toEqual([])
 
-    // Imported and held: still nothing sent, and no start request yet.
+    // One press imports, then starts with the token of the quote shown.
+    await send.click()
     await expect(
-      page.getByText(message(locale, 'orderImport.imported.nothingSent'))
-    ).toBeVisible()
-    await shot('3-imported')
-    expect(
-      (await replayCalls(page)).filter((call) => call.url.endsWith('/start'))
-    ).toEqual([])
-
-    // Start: the quote, the consent attestation, then the one start call.
-    await page
-      .getByRole('button', {
-        name: label(locale, 'orderImport.imported.start'),
-      })
-      .click()
-    const dialog = page.getByRole('dialog')
-    await expect(dialog).toBeVisible()
-    await dialog.getByRole('checkbox').check()
-    await shot('4-start-dialog')
-    await dialog
-      .getByRole('button', { name: label(locale, 'orderImport.start.confirm') })
-      .click()
-    await expect(
-      page
-        .getByText(message(locale, 'orderImport.batchStatus.completed'))
-        .first()
+      page.getByText(label(locale, 'orderImport.send.done.sent'))
     ).toBeVisible({ timeout: 30_000 })
-    await shot('5-completed')
-    const starts = (await replayCalls(page)).filter(
-      (call) => call.method === 'POST' && call.url.endsWith('/start')
-    )
+    await expect(dialog).toBeHidden()
+    const afterSend = await replayCalls(page)
+    expect(posts(afterSend, '/commit')).toHaveLength(1)
+    const starts = posts(afterSend, '/start')
     expect(starts).toHaveLength(1)
-    expect(starts[0].body).toMatchObject({
-      attestationVersion: 'bulk-import-consent-v1',
+    expect(starts[0].body).toEqual({
+      quoteToken: recorded('start-quote').quoteToken,
     })
+    await shot('3-sent')
 
-    // The results are the existing Verifications list, filtered to the batch.
-    await page
-      .getByRole('link', {
-        name: message(locale, 'orderImport.imported.reviewOrders'),
-      })
-      .click()
+    // The top bar follows the sends to their outcome, from the same counts
+    // the list shows.
+    const chip = page.getByRole('link', {
+      name: label(locale, 'orderImport.progress.done'),
+    })
+    await expect(chip).toBeVisible({ timeout: 30_000 })
+    await shot('4-progress')
+
+    // It opens the existing Verifications list, filtered to the batch.
+    await chip.click()
     await page.waitForURL(/\/verifications\?importBatchId=/)
     const results = recorded('verifications:results').data as {
       order_number: string
@@ -192,7 +188,7 @@ for (const { locale, theme, width } of COMBINATIONS) {
           .filter({ visible: true })
           .first()
       ).toBeVisible()
-    await shot('6-verifications')
+    await shot('5-verifications')
 
     // The list shows exactly the manifest's imported rows and outcomes.
     const byNumber = Object.fromEntries(
@@ -218,38 +214,41 @@ test('resumes each step from the batch URL after a refresh', async ({
   page,
 }) => {
   await prepare(page, 'light')
-  await page.goto('/en/imports/new')
-  await page.evaluate(() =>
-    window.sessionStorage.removeItem('akeed:e2e-replay-stage')
-  )
-  await page
-    .locator('input[type="file"]')
-    .setInputFiles(join(REPLAY, 'arabic-excel.xlsx'))
-  await page.waitForURL(new RegExp(`[?&]import=${recording.batchId}`))
-  await page.reload()
-  await expect(
-    page.getByRole('button', { name: label('en', 'orderImport.map.continue') })
-  ).toBeVisible()
+  const dialog = page.getByRole('dialog')
+  const next = dialog.getByRole('button', {
+    name: message('en', 'orderImport.check.footer.continue'),
+  })
+  const send = dialog.getByRole('button', {
+    name: label('en', 'orderImport.send.importAndSend'),
+  })
 
-  await page
-    .getByRole('button', { name: label('en', 'orderImport.map.continue') })
+  await upload(page, 'en')
+  await page.reload()
+  await expect(next).toBeVisible()
+
+  await next.click()
+  await expect(send).toBeVisible()
+  await page.reload()
+  await expect(send).toBeVisible()
+
+  // Import only: the orders are held, the modal closes, nothing is sent.
+  await dialog
+    .getByRole('button', { name: message('en', 'orderImport.send.importOnly') })
     .click()
   await expect(
-    page.getByRole('button', { name: label('en', 'orderImport.review.import') })
-  ).toBeVisible()
-  await page.reload()
-  await expect(
-    page.getByRole('button', { name: label('en', 'orderImport.review.import') })
-  ).toBeVisible()
+    page.getByText(label('en', 'orderImport.send.done.imported'))
+  ).toBeVisible({ timeout: 30_000 })
+  expect(posts(await replayCalls(page), '/start')).toEqual([])
 
-  await page
-    .getByRole('button', { name: label('en', 'orderImport.review.import') })
-    .click()
+  // Opened again, the imported batch offers to send now.
+  await page.goto(`/en/imports/${recording.batchId}`)
+  const sendNow = page.getByRole('dialog').getByRole('button', {
+    name: label('en', 'orderImport.send.sendNow'),
+  })
+  await expect(sendNow).toBeVisible()
   await expect(
-    page.getByText(message('en', 'orderImport.imported.nothingSent'))
+    page.getByText(message('en', 'orderImport.send.importedNotice'))
   ).toBeVisible()
   await page.reload()
-  await expect(
-    page.getByText(message('en', 'orderImport.imported.nothingSent'))
-  ).toBeVisible()
+  await expect(sendNow).toBeVisible()
 })

@@ -1,24 +1,19 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import { Moon } from 'lucide-react'
 import { useFormatter, useLocale, useTranslations } from 'next-intl'
 import { billingPurchaseHref } from '@/features/billing'
 import { creditFeedbackKey } from '@/shared/lib/creditFeedback'
 import { withLocale } from '@/shared/lib/locale'
-import { Badge, Button, LoadingButton, Progress } from '@/shared/ui'
-import {
-  useResumeOrderImport,
-  useStopOrderImport,
-} from '../../api/orderImportMutations'
+import { Button, LoadingButton, Progress } from '@/shared/ui'
+import { useResumeOrderImport } from '../../../api/orderImportMutations'
 import {
   isOrderImportApiError,
   type OrderImportBatchDetail,
-  type OrderImportLifecycleCounts,
   type OrderImportStartBlocker,
-} from '../../api/orderImportsApi'
-import { importOrdersPath } from '../../domain/importRoutes'
+} from '../../../api/orderImportsApi'
+import { importOrdersPath } from '../../../domain/importRoutes'
 import {
   importReturnPath,
   isSettling,
@@ -27,32 +22,18 @@ import {
   releaseProgress,
   splitDuration,
   type ReleaseProgress,
-} from '../../domain/releaseSummary'
-import { useReleaseOutcomeSync } from '../../domain/useReleaseOutcomeSync'
-import { IMPORT_STEP_HEADING_ID } from './importHeading'
-import { ImportNotice } from './ImportNotice'
-import { StopImportDialog } from './StopImportDialog'
-import { useBlockerText } from './useBlockerText'
-
-/** M8 pills, in order, with the badge tone the lifecycle uses elsewhere. */
-const pills: ReadonlyArray<{
-  key: keyof OrderImportLifecycleCounts
-  variant: 'neutral' | 'info' | 'success' | 'danger' | 'warning'
-}> = [
-  { key: 'queued', variant: 'neutral' },
-  { key: 'sent', variant: 'info' },
-  { key: 'confirmed', variant: 'success' },
-  { key: 'canceled', variant: 'danger' },
-  { key: 'noReply', variant: 'warning' },
-  { key: 'failed', variant: 'danger' },
-]
+} from '../../../domain/releaseSummary'
+import { IMPORT_STEP_HEADING_ID } from '../importHeading'
+import { ImportNotice } from '../ImportNotice'
+import { ModalStepLayout } from '../modal/ModalStepLayout'
+import { useBlockerText } from '../useBlockerText'
 
 /**
- * M8: a started import. Progress and live counts while it releases, the
- * reason and the way out while it is paused, and the final tally once it is
- * stopped or finished. The page polls every 5 seconds while anything moves.
+ * A started import, opened again (a link, the paused chip, a return from
+ * billing). How far sending got and why it waits; the rows themselves live
+ * in the confirmations list. A pause is the only state with a way out here.
  */
-export function ReleaseView({
+export function SendProgressView({
   detail,
   canEdit,
 }: {
@@ -64,19 +45,28 @@ export function ReleaseView({
   const locale = useLocale()
   const format = useFormatter()
   const progress = releaseProgress(detail)
-  useReleaseOutcomeSync(detail)
-  const lifecycle = detail.lifecycle
-  const stop = useStopOrderImport(detail.batchId)
-  const [stopOpen, setStopOpen] = useState(false)
-  const active = detail.status === 'releasing' || detail.status === 'paused'
   const { hours, minutes } = splitDuration(minutesLeft(detail))
   const timeLeft =
     hours > 0
       ? tImport('start.durationHours', { hours, minutes })
       : tImport('start.durationMinutes', { minutes })
+  const progressLabel = t('progress', {
+    settled: progress.settled,
+    total: progress.total,
+  })
 
   return (
-    <section className="space-y-6">
+    <ModalStepLayout
+      footer={
+        <div className="flex justify-end">
+          <Button asChild variant="outline" className="h-11 w-full sm:w-auto">
+            <Link href={withLocale(importOrdersPath(detail.batchId), locale)}>
+              {tImport('imported.reviewOrders')}
+            </Link>
+          </Button>
+        </div>
+      }
+    >
       <header className="space-y-1">
         <h2
           id={IMPORT_STEP_HEADING_ID}
@@ -103,86 +93,27 @@ export function ReleaseView({
 
       <StatusBanner detail={detail} progress={progress} canEdit={canEdit} />
 
-      <div className="rounded-card border-border bg-card space-y-3 border p-5">
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <p className="text-foreground text-sm font-semibold">
-            {t('progress', {
-              settled: progress.settled,
-              total: progress.total,
-            })}
-            {detail.status === 'releasing' && progress.held > 0 && (
-              <span className="text-muted-foreground font-normal">
-                {' · '}
-                {t('timeLeft', { duration: timeLeft })}
-              </span>
-            )}
-          </p>
-          {active && detail.ratePerMinute !== undefined && (
-            <p className="text-muted-foreground text-xs">
-              {t('rate', { rate: detail.ratePerMinute })}
-            </p>
+      <div
+        role="status"
+        aria-live="polite"
+        className="rounded-card border-border bg-card space-y-3 border p-5"
+      >
+        <p className="text-foreground text-sm font-semibold">
+          {progressLabel}
+          {detail.status === 'releasing' && progress.held > 0 && (
+            <span className="text-muted-foreground font-normal">
+              {' · '}
+              {t('timeLeft', { duration: timeLeft })}
+            </span>
           )}
-        </div>
-        <Progress
-          value={progress.percent}
-          aria-label={t('progress', {
-            settled: progress.settled,
-            total: progress.total,
-          })}
-        />
+        </p>
+        <Progress value={progress.percent} aria-label={progressLabel} />
       </div>
-
-      {lifecycle && (
-        <ul className="flex flex-wrap gap-2">
-          {pills.map((pill) => (
-            <li key={pill.key}>
-              <Badge variant={pill.variant} className="gap-1.5 px-3 py-1">
-                <span>{t(`pills.${pill.key}`)}</span>
-                <bdi className="font-semibold tabular-nums">
-                  {lifecycle[pill.key].toLocaleString(locale)}
-                </bdi>
-              </Badge>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
-        <Button asChild variant="outline">
-          <Link href={withLocale(importOrdersPath(detail.batchId), locale)}>
-            {tImport('imported.reviewOrders')}
-          </Link>
-        </Button>
-        {active && canEdit && (
-          <Button
-            type="button"
-            variant="outline"
-            className="border-destructive-border text-destructive hover:bg-destructive-subtle hover:text-destructive-subtle-foreground"
-            onClick={() => {
-              stop.reset()
-              setStopOpen(true)
-            }}
-          >
-            {t('stop')}
-          </Button>
-        )}
-      </div>
-
-      <StopImportDialog
-        open={stopOpen}
-        pending={stop.isPending}
-        failed={stop.isError}
-        remaining={progress.held}
-        onOpenChange={setStopOpen}
-        onConfirm={() =>
-          stop.mutate(undefined, { onSuccess: () => setStopOpen(false) })
-        }
-      />
-    </section>
+    </ModalStepLayout>
   )
 }
 
-/** The one banner that explains the batch's state and offers the way out. */
+/** The one notice that explains the batch's state and offers the way out. */
 function StatusBanner({
   detail,
   progress,

@@ -54,10 +54,6 @@ function quote(
     blockers: [],
     quoteToken: 'draft-token',
     quoteExpiresAt: '2026-09-25T10:10:00Z',
-    attestation: {
-      version: 'bulk-import-consent-v1',
-      text: { en: 'I confirm…', ar: 'أؤكد…' },
-    },
     ...overrides,
   }
 }
@@ -84,18 +80,23 @@ beforeEach(() => {
 })
 
 describe('useSendStep', () => {
-  it('prices the draft and waits for consent before sending', async () => {
+  it('prices the draft, then sends without asking for consent', async () => {
+    const { result } = setup(detail())
+    expect(result.current.canSend).toBe(false)
+    await waitFor(() => expect(result.current.quote.data).toBeDefined())
+    expect(result.current.canSend).toBe(true)
+    expect(result.current.canImportOnly).toBe(true)
+  })
+
+  it('never sends while a blocker stands', async () => {
+    api.getOrderImportStartQuote.mockResolvedValue(
+      quote({
+        blockers: [{ code: 'IMPORT_AUTO_VERIFY_DISABLED' }] as never,
+      })
+    )
     const { result } = setup(detail())
     await waitFor(() => expect(result.current.quote.data).toBeDefined())
     expect(result.current.canSend).toBe(false)
-    expect(result.current.canImportOnly).toBe(true)
-    act(() => result.current.setAgreed(true))
-    expect(result.current.canSend).toBe(true)
-  })
-
-  it('never sends without consent', async () => {
-    const { result } = setup(detail())
-    await waitFor(() => expect(result.current.quote.data).toBeDefined())
     act(() => result.current.submit(true))
     expect(api.commitOrderImport).not.toHaveBeenCalled()
   })
@@ -123,7 +124,6 @@ describe('useSendStep', () => {
     )
     const { result, rerender, onDone } = setup(detail())
     await waitFor(() => expect(result.current.quote.data).toBeDefined())
-    act(() => result.current.setAgreed(true))
     act(() => result.current.submit(true))
     await waitFor(() => expect(api.commitOrderImport).toHaveBeenCalled())
     rerender({
@@ -131,7 +131,6 @@ describe('useSendStep', () => {
     })
     await waitFor(() =>
       expect(api.startOrderImport).toHaveBeenCalledWith(BATCH, {
-        attestationVersion: 'bulk-import-consent-v1',
         quoteToken: 'draft-token',
       })
     )
@@ -140,7 +139,7 @@ describe('useSendStep', () => {
     )
   })
 
-  it('shows the fresh quote and asks again when the import changed N', async () => {
+  it('shows the fresh quote and waits when the import changed N', async () => {
     api.commitOrderImport.mockResolvedValue(detail({ status: 'committing' }))
     const fresh = quote({ orders: 4, quoteToken: 'fresh-token' })
     api.startOrderImport.mockRejectedValue(
@@ -150,7 +149,6 @@ describe('useSendStep', () => {
     )
     const { result, rerender, onDone } = setup(detail())
     await waitFor(() => expect(result.current.quote.data).toBeDefined())
-    act(() => result.current.setAgreed(true))
     act(() => result.current.submit(true))
     await waitFor(() => expect(api.commitOrderImport).toHaveBeenCalled())
     // Imported, the server now prices the four held orders.
@@ -158,7 +156,6 @@ describe('useSendStep', () => {
     rerender({ batch: detail({ status: 'awaiting_start' }) })
     await waitFor(() => expect(result.current.notice).toBe('stale'))
     expect(result.current.phase).toBe('review')
-    expect(result.current.agreed).toBe(false)
     expect(result.current.quote.data?.orders).toBe(4)
     expect(onDone).not.toHaveBeenCalled()
   })

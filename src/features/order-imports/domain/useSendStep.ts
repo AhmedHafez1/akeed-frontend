@@ -20,10 +20,10 @@ export type SendNotice = 'stale' | 'startFailed' | 'importFailed' | null
 /** How the step ended: the modal closes and says so. */
 export type SendOutcome = { kind: 'sent' | 'imported'; count: number }
 
-type PendingStart = { quoteToken: string; attestationVersion: string }
+type PendingStart = { quoteToken: string }
 
 /**
- * Step 3 (الإرسال): the quote, the consent tick, and the two endings --
+ * Step 3 (الإرسال): the quote and the two endings --
  * "استيراد فقط" (commit) and "استيراد وإرسال" (commit, then start as soon as
  * the orders are held). A draft is priced before its import; that quote's
  * token carries over to the start, and if the import changed N the server
@@ -48,7 +48,6 @@ export function useSendStep(
   })
   const commit = useCommitOrderImport(batchId)
   const start = useStartOrderImport(batchId)
-  const [agreed, setAgreed] = useState(false)
   const [notice, setNotice] = useState<SendNotice>(null)
   // Set when the merchant pressed "استيراد وإرسال"; null for "import only"
   // and for an import this tab did not start (a refresh mid-commit).
@@ -61,8 +60,7 @@ export function useSendStep(
   const ready = detail.counts.ready ?? 0
   const sendBlocked =
     !current || current.blockers.length > 0 || current.orders === 0
-  const canSend =
-    !sendBlocked && agreed && flow.phase === 'review' && !quote.isFetching
+  const canSend = !sendBlocked && flow.phase === 'review' && !quote.isFetching
   const canImportOnly =
     detail.status === 'draft' && flow.phase === 'review' && ready > 0
 
@@ -77,7 +75,6 @@ export function useSendStep(
           count: batch.counts.imported ?? batch.release?.total ?? ready,
         }),
       onError: (error) => {
-        setAgreed(false)
         backToReview()
         if (
           isOrderImportApiError(error) &&
@@ -108,12 +105,7 @@ export function useSendStep(
     if (send && (!canSend || !current)) return
     if (!send && !canImportOnly) return
     setNotice(null)
-    const pending = send
-      ? {
-          quoteToken: current!.quoteToken,
-          attestationVersion: current!.attestation.version,
-        }
-      : null
+    const pending = send ? { quoteToken: current!.quoteToken } : null
     if (imported) {
       if (!pending) return
       dispatch({ type: 'sendStarted' })
@@ -158,8 +150,6 @@ export function useSendStep(
     sendAfterImport: flow.sendAfterImport,
     quote,
     imported,
-    agreed,
-    setAgreed,
     notice,
     canSend,
     sendBlocked,

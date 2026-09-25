@@ -27,6 +27,7 @@ import {
   getVerificationLifecycleSteps,
   hasCapability,
 } from '../../domain/verificationLifecycle'
+import { FailedRowNote } from './components/FailedRowNote'
 import { VerificationStatusBadge } from './components/VerificationStatusBadge'
 import {
   formatCreatedDate,
@@ -161,6 +162,13 @@ export function VerificationsTableStandalone(
               </td>
               <td className="px-4 py-3">
                 <VerificationStatusBadge verification={verification} />
+                <FailedRowNote
+                  verification={verification}
+                  canRetryVerifications={props.canRetryVerifications}
+                  acting={props.actingVerificationId !== null}
+                  onRetry={(id) => void props.onRetryVerification(id)}
+                  onOpenDetails={openDetails}
+                />
               </td>
               <td className="text-foreground px-4 py-3 font-medium">
                 <bdi dir="ltr">{formatOrderTotal(verification, locale)}</bdi>
@@ -210,6 +218,13 @@ export function VerificationsTableStandalone(
                 <VerificationStatusBadge
                   verification={verification}
                   className="mt-2"
+                />
+                <FailedRowNote
+                  verification={verification}
+                  canRetryVerifications={props.canRetryVerifications}
+                  acting={props.actingVerificationId !== null}
+                  onRetry={(id) => void props.onRetryVerification(id)}
+                  onOpenDetails={openDetails}
                 />
               </div>
               <p className="text-foreground shrink-0 text-sm font-bold">

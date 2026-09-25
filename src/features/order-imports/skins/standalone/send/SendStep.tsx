@@ -20,7 +20,6 @@ import { IMPORT_STEP_HEADING_ID } from '../importHeading'
 import { ImportNotice } from '../ImportNotice'
 import { ModalStepLayout } from '../modal/ModalStepLayout'
 import { useBlockerText } from '../useBlockerText'
-import { ConsentBox } from './ConsentBox'
 import { CostStrip } from './CostStrip'
 import { ReadyPreview } from './ReadyPreview'
 import { SkippedLines } from './SkippedLines'
@@ -35,7 +34,7 @@ interface SendStepProps {
 
 /**
  * Step 3 (الإرسال): how many orders will be confirmed, what stays out and
- * why, what it costs, and the consent -- then "استيراد فقط" or "استيراد
+ * why and what it costs -- then "استيراد فقط" or "استيراد
  * وإرسال". The reassurance that nothing is sent yet is said once, here.
  */
 export function SendStep({ detail, canEdit, onBack, onDone }: SendStepProps) {
@@ -49,11 +48,6 @@ export function SendStep({ detail, canEdit, onBack, onDone }: SendStepProps) {
   const draft = detail.status === 'draft'
   const busy = send.phase === 'importing' || send.phase === 'sending'
   const hours = hoursLeftToStart(detail, now)
-  const statement = quote
-    ? locale === 'ar'
-      ? quote.attestation.text.ar
-      : quote.attestation.text.en
-    : null
 
   return (
     <ModalStepLayout
@@ -127,14 +121,6 @@ export function SendStep({ detail, canEdit, onBack, onDone }: SendStepProps) {
                 <Clock aria-hidden="true" className="mt-1 size-4 shrink-0" />
                 {t('deadline', { hours })}
               </p>
-            )}
-            {statement && canEdit && (
-              <ConsentBox
-                statement={statement}
-                checked={send.agreed}
-                disabled={send.sendBlocked}
-                onChange={send.setAgreed}
-              />
             )}
           </>
         )
@@ -324,7 +310,6 @@ function SendFooter({
       size="lg"
       className="h-12 w-full sm:h-11 sm:w-auto"
       disabled={!canSend || busy}
-      aria-describedby={!canSend && !busy ? 'order-import-send-why' : undefined}
       loading={
         phase === 'sending' || (phase === 'importing' && sendAfterImport)
       }
@@ -353,9 +338,6 @@ function SendFooter({
         )}
         <p className="text-muted-foreground text-sm">{t('send.reassure')}</p>
       </div>
-      <p id="order-import-send-why" className="sr-only">
-        {t('send.consentFirst')}
-      </p>
       <div className="flex flex-col gap-2 sm:flex-row-reverse sm:items-center sm:gap-3">
         {ready > 0 && primary}
         {draft && (

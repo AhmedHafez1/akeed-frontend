@@ -30,6 +30,9 @@ const LIFECYCLE_TONES: Record<LifecycleStatus, LifecycleTone> = {
   awaiting_start: 'neutral',
   // Withdrawn before release; nothing was or will be sent.
   not_started: 'muted',
+  // In line behind a started import, then on its way.
+  queued: 'neutral',
+  sending: 'info',
   pending: 'neutral',
   sent: 'info',
   delivered: 'info',
@@ -45,6 +48,17 @@ export function lifecycleTone(status: LifecycleStatus): LifecycleTone {
   return LIFECYCLE_TONES[status] ?? 'neutral'
 }
 
+/**
+ * The status a row reads as. A pending verification with no send time is
+ * being sent right now, the same words as an order released without one;
+ * with a send time it keeps its own (scheduled) reading.
+ */
+export function displayedLifecycleStatus(
+  row: Pick<VerificationItem, 'status' | 'scheduled_for'>
+): LifecycleStatus {
+  return row.status === 'pending' && !row.scheduled_for ? 'sending' : row.status
+}
+
 /** A customer reply is the final word; nothing further will change on its own. */
 export function isTerminalLifecycleStatus(status: LifecycleStatus): boolean {
   return status === 'confirmed' || status === 'canceled'
@@ -58,6 +72,8 @@ export function isTerminalLifecycleStatus(status: LifecycleStatus): boolean {
  */
 export function isAwaitingOutcome(status: LifecycleStatus): boolean {
   return (
+    status === 'queued' ||
+    status === 'sending' ||
     status === 'pending' ||
     status === 'sent' ||
     status === 'delivered' ||

@@ -3,7 +3,10 @@
 import { usePathname } from 'next/navigation'
 import { ChevronRight, Menu } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { ImportTopBarAction } from '@/features/order-imports'
+import {
+  ImportProgressChip,
+  ImportTopBarAction,
+} from '@/features/order-imports'
 import { ManualOrderTopBarAction } from '@/features/orders'
 import { ThemeToggle } from '@/shared/theme'
 import { LocaleToggle } from './LocaleToggle'
@@ -13,8 +16,8 @@ interface StandaloneTopBarProps {
 }
 
 /**
- * Breadcrumb on the start, the two order actions and the display controls on
- * the end. Below 640px the actions are 44px icons and theme and language move
+ * Breadcrumb on the start; a started import's progress, the two order actions
+ * and the display controls on the end. Below 640px the actions are 44px icons and theme and language move
  * into the navigation menu.
  */
 export function StandaloneTopBar({ onOpenNavigation }: StandaloneTopBarProps) {
@@ -60,6 +63,7 @@ export function StandaloneTopBar({ onOpenNavigation }: StandaloneTopBarProps) {
       </div>
 
       <div className="flex shrink-0 items-center gap-2">
+        <ImportProgressChip />
         <ImportTopBarAction />
         <ManualOrderTopBarAction />
         <span

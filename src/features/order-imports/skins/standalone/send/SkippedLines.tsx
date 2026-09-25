@@ -14,11 +14,13 @@ import {
   type SkipGroup,
 } from '../../../domain/sendSummary'
 import { useIssueText } from '../useIssueText'
+import { hasPhoneIssue, RowPhoneFix } from './RowPhoneFix'
 
 /**
  * The rows that stay out, one line per reason ("4 مستبعدة لأنها مدفوعة
  * مسبقًا"). A payment reason goes back to the check; the others open their
- * rows, where a possible duplicate can still be included.
+ * rows, where a possible duplicate can still be included and a bad phone
+ * fixed in place.
  */
 export function SkippedLines({
   batchId,
@@ -110,6 +112,7 @@ function SkippedLine({
           batchId={batchId}
           rows={rows.filter((row) => group.rowNumbers.includes(row.rowNumber))}
           includable={group.reason === 'possibleDuplicate' && canEdit}
+          phoneFixable={canEdit}
         />
       )}
     </li>
@@ -121,11 +124,13 @@ function SkippedRows({
   batchId,
   rows,
   includable,
+  phoneFixable,
 }: {
   id: string
   batchId: string
   rows: readonly OrderImportRow[]
   includable: boolean
+  phoneFixable: boolean
 }) {
   const t = useTranslations('orderImport.review')
   const issueText = useIssueText()
@@ -163,6 +168,9 @@ function SkippedRows({
                 <li key={issue.code}>{issueText(issue)}</li>
               ))}
           </ul>
+          {phoneFixable && hasPhoneIssue(row) && (
+            <RowPhoneFix batchId={batchId} row={row} />
+          )}
           {includable && (
             <label className="text-foreground mt-2 flex min-h-11 cursor-pointer items-center gap-2 text-sm sm:min-h-0">
               <input

@@ -11,9 +11,9 @@ import { countsAfterInclude } from '../domain/reviewSummary'
 import {
   commitOrderImport,
   discardOrderImport,
+  fixOrderImportRowPhone,
   resumeOrderImport,
   startOrderImport,
-  stopOrderImport,
   saveOrderImportMapping,
   setOrderImportRowInclude,
   uploadOrderImport,
@@ -21,7 +21,6 @@ import {
   type OrderImportMappingSaved,
   type OrderImportRow,
   type OrderImportRowOutcome,
-  type OrderImportStopResult,
   type OrderImportRowsPage,
   type OrderImportRowUpdate,
   type OrderImportUploadResponse,
@@ -167,6 +166,42 @@ export function useSetOrderImportRowInclude(
 }
 
 /**
+ * Fix one row's phone. Not optimistic: only the server knows whether the
+ * number reads, and a fix can also change in-file duplicates. The answer's
+ * row and counts land at once; everything else about the batch refetches.
+ */
+export function useFixOrderImportRowPhone(batchId: string) {
+  const queryClient = useQueryClient()
+  const emitDomainEvent = useEmitDomainEvent()
+  return useMutation<
+    OrderImportRowUpdate,
+    Error,
+    { rowNumber: number; phone: string }
+  >({
+    mutationFn: ({ rowNumber, phone }) =>
+      fixOrderImportRowPhone(batchId, rowNumber, phone),
+    onSuccess: ({ row, counts }) => {
+      // The send step reads every row as one page.
+      queryClient.setQueryData<OrderImportRowsPage>(
+        queryKeys.orderImports.rows(batchId, 'all'),
+        (page) =>
+          page && {
+            ...page,
+            rows: page.rows.map((each) =>
+              each.rowNumber === row.rowNumber ? row : each
+            ),
+          }
+      )
+      queryClient.setQueryData<OrderImportBatchDetail>(
+        queryKeys.orderImports.detail(batchId),
+        (detail) => (detail ? { ...detail, counts } : detail)
+      )
+      void emitDomainEvent('orderImport.changed')
+    },
+  })
+}
+
+/**
  * Start the import.
  *
  * The 202 carries the batch as it now stands, so writing it into the detail
@@ -200,11 +235,7 @@ export function useCommitOrderImport(batchId: string) {
 export function useStartOrderImport(batchId: string) {
   const queryClient = useQueryClient()
   const emitDomainEvent = useEmitDomainEvent()
-  return useMutation<
-    OrderImportBatchDetail,
-    Error,
-    { attestationVersion: string; quoteToken: string }
-  >({
+  return useMutation<OrderImportBatchDetail, Error, { quoteToken: string }>({
     mutationFn: (body) => startOrderImport(batchId, body),
     onSuccess: (batch) => {
       queryClient.setQueryData(queryKeys.orderImports.detail(batchId), batch)
@@ -213,7 +244,7 @@ export function useStartOrderImport(batchId: string) {
   })
 }
 
-/** Continue a paused batch; the start's attestation still covers it. */
+/** Continue a paused batch. */
 export function useResumeOrderImport(batchId: string) {
   const queryClient = useQueryClient()
   const emitDomainEvent = useEmitDomainEvent()
@@ -227,17 +258,6 @@ export function useResumeOrderImport(batchId: string) {
       void queryClient.invalidateQueries({
         queryKey: queryKeys.orderImports.detail(batchId),
       })
-    },
-  })
-}
-
-/** Withdraw every order not yet sent. Safe to repeat. */
-export function useStopOrderImport(batchId: string) {
-  const emitDomainEvent = useEmitDomainEvent()
-  return useMutation<OrderImportStopResult, Error, void>({
-    mutationFn: () => stopOrderImport(batchId),
-    onSettled: () => {
-      void emitDomainEvent('orderImport.stopped')
     },
   })
 }

@@ -3,12 +3,9 @@ import type {
   OrderImportBatchStatus,
 } from '../api/orderImportsApi'
 
-export const importSteps = ['upload', 'map', 'review'] as const
-export type ImportStep = (typeof importSteps)[number]
-
-/** What the batch page renders for the batch as the server reports it. */
+/** What the import modal renders for the batch as the server reports it. */
 export type BatchView =
-  | { kind: 'step'; step: Exclude<ImportStep, 'upload'> }
+  | { kind: 'step'; step: 'map' | 'review' }
   | { kind: 'committing' }
   | { kind: 'imported' }
   | { kind: 'partial' }
@@ -102,8 +99,4 @@ export function pollIntervalFor(
   if (status === 'completed' && (detail.lifecycle?.queued ?? 0) > 0)
     return RELEASE_POLL_INTERVAL_MS
   return false
-}
-
-export function completedStepsBefore(step: ImportStep): Set<ImportStep> {
-  return new Set(importSteps.slice(0, importSteps.indexOf(step)))
 }
