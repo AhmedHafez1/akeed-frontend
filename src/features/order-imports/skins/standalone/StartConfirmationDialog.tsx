@@ -16,7 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
   LoadingButton,
-  LoadingSpinner,
+  Skeleton,
 } from '@/shared/ui'
 import type { OrderImportStartQuote } from '../../api/orderImportsApi'
 import {
@@ -71,12 +71,11 @@ export function StartConfirmationDialog({
         </DialogHeader>
 
         {quote.isPending ? (
-          <div
-            role="status"
-            className="text-muted-foreground flex items-center gap-3 py-8 text-sm"
-          >
-            <LoadingSpinner />
-            {t('loading')}
+          // No count is rendered before the quote exists: a `0` would flash.
+          <div role="status" aria-live="polite" className="space-y-3 py-2">
+            <span className="sr-only">{t('loading')}</span>
+            <Skeleton className="rounded-card h-40 w-full" />
+            <Skeleton className="h-5 w-3/4" />
           </div>
         ) : quote.isError ? (
           <ImportNotice
@@ -127,6 +126,11 @@ export function StartConfirmationDialog({
                 {t('buy', { credits: purchaseCredits })}
               </Link>
             </Button>
+          ) : !quote.data ? (
+            <Skeleton
+              aria-hidden="true"
+              className="rounded-control h-10 w-44"
+            />
           ) : (
             <LoadingButton
               type="button"
@@ -139,7 +143,7 @@ export function StartConfirmationDialog({
                 })
               }
             >
-              {t('confirm', { count: quote.data?.orders ?? 0 })}
+              {t('confirm', { count: quote.data.orders })}
             </LoadingButton>
           )}
         </DialogFooter>

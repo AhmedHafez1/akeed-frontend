@@ -30,7 +30,7 @@ export function orderImportDetailOptions(batchId: string) {
     queryFn: ({ signal }) => getOrderImport(batchId, signal),
     retry: retryUnlessRefused,
     refetchInterval: (query) =>
-      query.state.data ? pollIntervalFor(query.state.data.status) : false,
+      query.state.data ? pollIntervalFor(query.state.data) : false,
   })
 }
 

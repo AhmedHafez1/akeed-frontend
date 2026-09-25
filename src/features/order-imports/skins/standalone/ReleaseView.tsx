@@ -21,11 +21,14 @@ import {
 import { importOrdersPath } from '../../domain/importRoutes'
 import {
   importReturnPath,
+  isSettling,
   isWaitingOutQuietHours,
   minutesLeft,
   releaseProgress,
   splitDuration,
+  type ReleaseProgress,
 } from '../../domain/releaseSummary'
+import { useReleaseOutcomeSync } from '../../domain/useReleaseOutcomeSync'
 import { IMPORT_STEP_HEADING_ID } from './ImportWizardShell'
 import { ImportNotice } from './ImportNotice'
 import { StopImportDialog } from './StopImportDialog'
@@ -61,6 +64,7 @@ export function ReleaseView({
   const locale = useLocale()
   const format = useFormatter()
   const progress = releaseProgress(detail)
+  useReleaseOutcomeSync(detail)
   const lifecycle = detail.lifecycle
   const stop = useStopOrderImport(detail.batchId)
   const [stopOpen, setStopOpen] = useState(false)
@@ -97,13 +101,13 @@ export function ReleaseView({
         </p>
       </header>
 
-      <StatusBanner detail={detail} canEdit={canEdit} />
+      <StatusBanner detail={detail} progress={progress} canEdit={canEdit} />
 
       <div className="rounded-card border-border bg-card space-y-3 border p-5">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <p className="text-foreground text-sm font-semibold">
             {t('progress', {
-              released: progress.released,
+              settled: progress.settled,
               total: progress.total,
             })}
             {detail.status === 'releasing' && progress.held > 0 && (
@@ -122,7 +126,7 @@ export function ReleaseView({
         <Progress
           value={progress.percent}
           aria-label={t('progress', {
-            released: progress.released,
+            settled: progress.settled,
             total: progress.total,
           })}
         />
@@ -181,9 +185,11 @@ export function ReleaseView({
 /** The one banner that explains the batch's state and offers the way out. */
 function StatusBanner({
   detail,
+  progress,
   canEdit,
 }: {
   detail: OrderImportBatchDetail
+  progress: ReleaseProgress
   canEdit: boolean
 }) {
   const t = useTranslations('orderImport.release')
@@ -195,21 +201,37 @@ function StatusBanner({
   const resume = useResumeOrderImport(detail.batchId)
   const release = detail.release
 
-  if (detail.status === 'stopped')
+  // Handed over is not sent: until every send has an outcome, say so.
+  if (isSettling(detail))
     return (
-      <ImportNotice tone="neutral" role="status">
-        {t('stopped', {
-          sent: release?.released ?? 0,
-          withdrawn: release?.withdrawn ?? 0,
-        })}
+      <ImportNotice tone="info" role="status">
+        {t('settling', { count: progress.queued })}
       </ImportNotice>
     )
 
-  if (detail.status === 'completed')
+  if (detail.status === 'stopped' || detail.status === 'completed')
     return (
-      <ImportNotice tone="success" role="status">
-        {t('completed', { count: release?.released ?? 0 })}
-      </ImportNotice>
+      <div className="space-y-3">
+        {detail.status === 'stopped' ? (
+          <ImportNotice tone="neutral" role="status">
+            {t('stopped', {
+              sent: progress.delivered,
+              withdrawn: release?.withdrawn ?? 0,
+            })}
+          </ImportNotice>
+        ) : (
+          progress.delivered > 0 && (
+            <ImportNotice tone="success" role="status">
+              {t('completed', { count: progress.delivered })}
+            </ImportNotice>
+          )
+        )}
+        {progress.failed > 0 && (
+          <ImportNotice tone="critical" role="alert">
+            {t('failedSome', { count: progress.failed })}
+          </ImportNotice>
+        )}
+      </div>
     )
 
   if (isWaitingOutQuietHours(detail))

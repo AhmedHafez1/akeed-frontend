@@ -188,7 +188,7 @@ export function ReviewRows({ batchId, outcome, canEdit }: ReviewRowsProps) {
                   )}
                 </TableCell>
                 <TableCell className="tabular-nums">
-                  {view.amount ? <bdi>{view.amount}</bdi> : '—'}
+                  {view.amount ? <bdi dir="ltr">{view.amount}</bdi> : '—'}
                 </TableCell>
                 <TableCell>
                   <ReferenceCell view={view} />
@@ -224,7 +224,11 @@ export function ReviewRows({ batchId, outcome, canEdit }: ReviewRowsProps) {
                   {view.phone}
                 </bdi>
               )}
-              {view.amount && <bdi className="tabular-nums">{view.amount}</bdi>}
+              {view.amount && (
+                <bdi dir="ltr" className="tabular-nums">
+                  {view.amount}
+                </bdi>
+              )}
             </p>
             <ReferenceCell view={view} />
             <RowIssues row={view.row} />
@@ -254,7 +258,9 @@ function ReferenceCell({ view }: { view: RowView }) {
   return (
     <span className="text-muted-foreground block text-sm">
       {view.reference && (
-        <bdi className="text-foreground block">{view.reference}</bdi>
+        <bdi dir="ltr" className="text-foreground block">
+          {view.reference}
+        </bdi>
       )}
       {view.date && <span className="block text-xs">{view.date}</span>}
     </span>

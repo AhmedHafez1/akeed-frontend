@@ -1,5 +1,6 @@
 import type {
   OrderImportBatchDetail,
+  OrderImportLifecycleCounts,
   OrderImportStartBlocker,
   OrderImportStartQuote,
 } from '../api/orderImportsApi'
@@ -32,26 +33,68 @@ export function balanceAfterFirstMessages(
     : quote.creditsAvailable - quote.estimatedCreditsMin
 }
 
-/** Released of those still meant to be sent; withdrawn orders never count. */
-export function releaseProgress(detail: OrderImportBatchDetail): {
-  released: number
+export type ReleaseProgress = {
+  /** Orders whose send has an outcome: sent (or later) or failed. */
+  settled: number
+  /** Orders that reached WhatsApp; `settled` minus the failures. */
+  delivered: number
+  failed: number
+  /** Still held, or released but not yet sent by the worker. */
+  queued: number
   total: number
+  /** Still held back by the paced release; what a stop would withdraw. */
   held: number
   percent: number
-} {
-  const release = detail.release ?? {
-    total: 0,
-    held: 0,
-    released: 0,
-    withdrawn: 0,
-  }
-  const total = release.released + release.held
+}
+
+const emptyLifecycle: OrderImportLifecycleCounts = {
+  queued: 0,
+  sent: 0,
+  confirmed: 0,
+  canceled: 0,
+  noReply: 0,
+  failed: 0,
+}
+
+/**
+ * Progress counts send outcomes from the same lifecycle projection the
+ * confirmations list shows, never the hold release: a released order has
+ * only been handed to the queue, and its send can still fail (bug 3.1).
+ * Withdrawn orders are never counted.
+ */
+export function releaseProgress(
+  detail: Pick<OrderImportBatchDetail, 'lifecycle' | 'release'>
+): ReleaseProgress {
+  const lifecycle = detail.lifecycle ?? emptyLifecycle
+  const delivered =
+    lifecycle.sent +
+    lifecycle.confirmed +
+    lifecycle.canceled +
+    lifecycle.noReply
+  const settled = delivered + lifecycle.failed
+  const total = settled + lifecycle.queued
   return {
-    released: release.released,
+    settled,
+    delivered,
+    failed: lifecycle.failed,
+    queued: lifecycle.queued,
     total,
-    held: release.held,
-    percent: total === 0 ? 0 : Math.round((release.released / total) * 100),
+    held: detail.release?.held ?? 0,
+    percent: total === 0 ? 0 : Math.round((settled / total) * 100),
   }
+}
+
+/**
+ * The release finished handing orders over, but some sends have no outcome
+ * yet. The batch reads `completed` or `stopped` while this is true.
+ */
+export function isSettling(
+  detail: Pick<OrderImportBatchDetail, 'status' | 'lifecycle'>
+): boolean {
+  return (
+    (detail.status === 'completed' || detail.status === 'stopped') &&
+    (detail.lifecycle?.queued ?? 0) > 0
+  )
 }
 
 /** Minutes left at the organization's pace, ignoring future quiet hours. */

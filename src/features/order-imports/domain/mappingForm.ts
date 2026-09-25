@@ -1,4 +1,7 @@
-import type { OrderCurrency } from '@/shared/commerce/orderCommerce'
+import {
+  currencyForCountry,
+  type OrderCurrency,
+} from '@/shared/commerce/orderCommerce'
 import {
   orderImportFields,
   type OrderImportDateCheck,
@@ -37,6 +40,21 @@ export type MappingForm = {
 export type MappingChecks = {
   paymentValues: OrderImportPaymentValues | null
   dateFormat: OrderImportDateCheck | null
+}
+
+/**
+ * A new phone country brings its own currency along, unless the merchant had
+ * already picked a currency other than the previous country's.
+ */
+export function countryChange(
+  form: Pick<MappingForm, 'country' | 'currency'>,
+  country: string
+): Pick<MappingForm, 'country'> & Partial<Pick<MappingForm, 'currency'>> {
+  const next = currencyForCountry(country)
+  const followsCountry =
+    form.currency === currencyForCountry(form.country) ||
+    form.currency === 'USD'
+  return next && followsCountry ? { country, currency: next } : { country }
 }
 
 export function initialMappingForm(

@@ -2774,7 +2774,7 @@
     "page": {
       "title": "Import orders",
       "subtitle": "Upload a CSV or Excel file from your store, marketplace or spreadsheet. Akeed prepares the orders for WhatsApp confirmation, and nothing is sent until you start.",
-      "back": "Back to orders"
+      "back": "Back to Verifications"
     },
     "entry": {
       "newImport": "Import from file"
@@ -2813,7 +2813,7 @@
         "retry": "Try again",
         "openSettings": "Finish setup",
         "contactSupport": "Contact support",
-        "backToOrders": "Back to orders"
+        "backToOrders": "Back to Verifications"
       },
       "IMPORT_FILE_REQUIRED": {
         "title": "No file was received",
@@ -3054,7 +3054,7 @@
       "disabled": {
         "title": "Importing orders isn't available",
         "body": "Importing orders from a file isn't turned on for your account yet.",
-        "action": "Back to orders"
+        "action": "Back to Verifications"
       },
       "loadFailed": {
         "title": "This import couldn't be loaded",
@@ -3171,7 +3171,7 @@
     },
     "release": {
       "startedAt": "Started {time}",
-      "progress": "Sent {released, number} of {total, number}",
+      "progress": "{settled, number} of {total, number} processed",
       "timeLeft": "about {duration} left",
       "rate": "About {rate, number} messages per minute",
       "pills": {
@@ -3196,10 +3196,12 @@
       "resumeFailed": "Sending couldn't be resumed.",
       "buyCredits": "Buy credits",
       "stop": "Stop remaining",
-      "stopped": "Stopped. {sent, plural, one {# customer was} other {# customers were}} contacted; {withdrawn, plural, one {# was} other {# were}} not and won't be. Orders already sent continue normally.",
-      "completed": "Finished sending to all {count, plural, one {# customer} other {# customers}}. Replies keep arriving in your orders list.",
+      "stopped": "Stopped. Messages reached {sent, plural, one {# customer} other {# customers}}; {withdrawn, plural, one {# customer} other {# customers}} won't be contacted. Orders already sent continue normally.",
+      "completed": "Messages reached {count, plural, one {# customer} other {# customers}}. Replies keep arriving in your confirmations list.",
       "notStartedTitle": "This import was never started",
-      "notStartedBody": "The time to start it passed, so these orders weren't sent. Upload them again to confirm them."
+      "notStartedBody": "The time to start it passed, so these orders weren't sent. Upload them again to confirm them.",
+      "settling": "Sending now. {count, plural, one {# order is} other {# orders are}} in line.",
+      "failedSome": "Couldn't send to {count, plural, one {# customer} other {# customers}}. The reason is next to each order in your confirmations list."
     },
     "stop": {
       "title": "Stop the remaining orders?",

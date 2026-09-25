@@ -31,7 +31,7 @@ import { VerificationStatusBadge } from './components/VerificationStatusBadge'
 import {
   formatCreatedDate,
   formatCreatedTime,
-  formatCurrencyTotal,
+  formatOrderTotal,
   formatOrderTitle,
   formatTooltipDateTime,
   resolveRowDescriptionKey,
@@ -163,7 +163,7 @@ export function VerificationsTableStandalone(
                 <VerificationStatusBadge verification={verification} />
               </td>
               <td className="text-foreground px-4 py-3 font-medium">
-                <bdi>{formatCurrencyTotal(verification, locale)}</bdi>
+                <bdi dir="ltr">{formatOrderTotal(verification, locale)}</bdi>
               </td>
               <td className="text-foreground/70 px-4 py-3 text-xs">
                 {formatCreatedDate(
@@ -213,7 +213,7 @@ export function VerificationsTableStandalone(
                 />
               </div>
               <p className="text-foreground shrink-0 text-sm font-bold">
-                <bdi>{formatCurrencyTotal(verification, locale)}</bdi>
+                <bdi dir="ltr">{formatOrderTotal(verification, locale)}</bdi>
               </p>
             </div>
             <div className="border-border mt-3 border-t pt-3">
@@ -421,7 +421,7 @@ function VerificationDetails(props: VerificationDetailsProps) {
               {t('table.headings.total')}
             </p>
             <p className="text-foreground mt-1 font-semibold">
-              <bdi>{formatCurrencyTotal(verification, locale)}</bdi>
+              <bdi dir="ltr">{formatOrderTotal(verification, locale)}</bdi>
             </p>
           </div>
         </div>

@@ -56,10 +56,14 @@ export const RELEASE_POLL_INTERVAL_MS = 5_000
  * A draft or an unstarted import waits for the merchant.
  */
 export function pollIntervalFor(
-  status: OrderImportBatchStatus
+  detail: Pick<OrderImportBatchDetail, 'status' | 'lifecycle'>
 ): number | false {
+  const { status } = detail
   if (status === 'committing') return BATCH_POLL_INTERVAL_MS
   if (status === 'releasing' || status === 'paused' || status === 'stopped')
+    return RELEASE_POLL_INTERVAL_MS
+  // `completed` means every order was handed to the send queue, not sent.
+  if (status === 'completed' && (detail.lifecycle?.queued ?? 0) > 0)
     return RELEASE_POLL_INTERVAL_MS
   return false
 }

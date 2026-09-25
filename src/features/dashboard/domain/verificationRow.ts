@@ -1,4 +1,6 @@
 import type { VerificationItem } from '../model/dashboard.model'
+import { formatAmount } from '@/shared/lib/money'
+import type { SupportedLocale } from '@/shared/lib/locale'
 import { EXPLAINED_LIFECYCLE_REASONS } from './verificationLifecycle'
 
 /**
@@ -35,6 +37,25 @@ export function formatCurrencyTotal(
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(Number(verification.total_price))
+  } catch {
+    return `${verification.total_price} ${currency}`
+  }
+}
+
+/**
+ * The standalone list's total: Latin digits, and in Arabic the currency after
+ * the amount (`500.00 ج.م`). Render inside `<bdi dir="ltr">`.
+ */
+export function formatOrderTotal(
+  verification: VerificationItem,
+  locale: SupportedLocale
+): string {
+  if (!verification.total_price) return '-'
+  const value = Number(verification.total_price)
+  const currency = verification.currency ?? 'SAR'
+  if (!Number.isFinite(value)) return '-'
+  try {
+    return formatAmount(value, currency, locale)
   } catch {
     return `${verification.total_price} ${currency}`
   }

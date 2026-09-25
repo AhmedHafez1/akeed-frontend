@@ -11,6 +11,7 @@ import { Button, Switch } from '@/shared/ui'
 import { ALLOWED_COUNTRIES } from '@/shared/ui/international-phone-input'
 import type { OrderImportDateFormat } from '../../api/orderImportsApi'
 import {
+  countryChange,
   paymentChoice,
   paymentValuesFor,
   showsDateFormat,
@@ -77,7 +78,9 @@ export function ImportSettingsPanel({
             value={form.country}
             disabled={disabled}
             aria-describedby="order-import-country-help"
-            onChange={(event) => onChange({ country: event.target.value })}
+            onChange={(event) =>
+              onChange(countryChange(form, event.target.value))
+            }
             className={selectClasses}
           >
             {countries.map((country) => (

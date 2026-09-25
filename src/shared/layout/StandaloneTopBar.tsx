@@ -24,7 +24,8 @@ export function StandaloneTopBar({ onOpenNavigation }: StandaloneTopBarProps) {
   const locale = getLocaleFromPathname(pathname)
   const routeName = pathname.split('/')[2] ?? 'dashboard'
   const breadcrumbLabel =
-    routeName === 'verifications'
+    // An import is part of the confirmations page, not a page of its own.
+    routeName === 'verifications' || routeName === 'imports'
       ? t('verifications')
       : routeName === 'templates'
         ? t('templates')
