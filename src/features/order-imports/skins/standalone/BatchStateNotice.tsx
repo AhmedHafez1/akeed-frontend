@@ -11,6 +11,7 @@ import {
 import { useLocale, useTranslations } from 'next-intl'
 import { withLocale } from '@/shared/lib/locale'
 import { Button } from '@/shared/ui'
+import { importModalPath } from '../../domain/importRoutes'
 
 export type BatchState =
   | 'notFound'
@@ -46,7 +47,7 @@ export function BatchStateNotice({
   const target =
     state === 'disabled'
       ? withLocale('/verifications', locale)
-      : withLocale('/imports/new', locale)
+      : withLocale(importModalPath('new'), locale)
 
   return (
     <div

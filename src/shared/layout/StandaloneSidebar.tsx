@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
@@ -29,11 +29,14 @@ const logger = createLogger('Auth')
 interface StandaloneSidebarProps {
   className?: string
   onNavigate?: () => void
+  /** Display controls the top bar has no room for (the phone menu). */
+  preferences?: ReactNode
 }
 
 export function StandaloneSidebar({
   className,
   onNavigate,
+  preferences,
 }: StandaloneSidebarProps) {
   const t = useTranslations('appHeader')
   const pathname = usePathname() ?? ''
@@ -115,6 +118,7 @@ export function StandaloneSidebar({
       </nav>
 
       <div className="mt-auto space-y-3 pt-8">
+        {preferences}
         {isAdmin && (
           <Link
             href={withLocale('/admin', locale)}

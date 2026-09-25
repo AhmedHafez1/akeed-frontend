@@ -3,7 +3,12 @@ import type {
   OrderImportBatchStatus,
   OrderImportLifecycleCounts,
 } from '../api/orderImportsApi'
-import { pollIntervalFor, RELEASE_POLL_INTERVAL_MS } from './importStep'
+import {
+  completedModalStepsBefore,
+  modalStepFor,
+  pollIntervalFor,
+  RELEASE_POLL_INTERVAL_MS,
+} from './importStep'
 import { isSettling, releaseProgress } from './releaseSummary'
 
 function lifecycle(
@@ -103,5 +108,22 @@ describe('isSettling and polling', () => {
     expect(pollIntervalFor(detail('releasing', 5))).toBe(
       RELEASE_POLL_INTERVAL_MS
     )
+  })
+})
+
+describe('modalStepFor', () => {
+  it('maps the flow onto the three modal steps', () => {
+    expect(modalStepFor({ kind: 'new' })).toBe('file')
+    expect(modalStepFor({ kind: 'step', step: 'map' })).toBe('check')
+    expect(modalStepFor({ kind: 'step', step: 'review' })).toBe('send')
+    expect(modalStepFor({ kind: 'step', step: 'review' }, true)).toBe('check')
+    expect(modalStepFor({ kind: 'committing' })).toBe('send')
+    expect(modalStepFor({ kind: 'release' })).toBe('send')
+    expect(modalStepFor({ kind: 'expired' })).toBeNull()
+  })
+
+  it('completes every step before the current one', () => {
+    expect([...completedModalStepsBefore('send')]).toEqual(['file', 'check'])
+    expect(completedModalStepsBefore(null).size).toBe(0)
   })
 })

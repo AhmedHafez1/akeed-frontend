@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useDashboard } from '@/features/dashboard/domain/useDashboard'
 import { useVerificationStatusQuery } from '@/features/dashboard/hooks/useVerificationStatusQuery'
 import { DashboardVerificationsStandaloneSkin } from '@/features/dashboard/skins/standalone/DashboardVerificationsStandaloneSkin'
-import { ImportFilterChip, NewImportLink } from '@/features/order-imports'
+import { ImportFilterChip } from '@/features/order-imports'
 import { applyResolvedTheme } from '@/shared/theme/theme.dom'
 import { e2eTheme } from '../imports/importReplay'
 import { verificationRequests } from './verificationFixture'
@@ -29,15 +29,12 @@ export default function VerificationFixturePage() {
       <DashboardVerificationsStandaloneSkin
         {...dashboard}
         headerAction={
-          <div className="flex flex-wrap items-center gap-2">
-            {filters.importBatchId && (
-              <ImportFilterChip
-                batchId={filters.importBatchId}
-                onClear={filters.onClearImportBatch}
-              />
-            )}
-            <NewImportLink />
-          </div>
+          filters.importBatchId && (
+            <ImportFilterChip
+              batchId={filters.importBatchId}
+              onClear={filters.onClearImportBatch}
+            />
+          )
         }
       />
       <aside

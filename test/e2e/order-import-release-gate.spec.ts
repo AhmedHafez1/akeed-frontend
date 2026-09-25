@@ -106,7 +106,7 @@ for (const { locale, theme, width } of COMBINATIONS) {
     await page
       .locator('input[type="file"]')
       .setInputFiles(join(REPLAY, 'arabic-excel.xlsx'))
-    await page.waitForURL(new RegExp(`/imports/${recording.batchId}`))
+    await page.waitForURL(new RegExp(`[?&]import=${recording.batchId}`))
 
     // Map: every column was detected; Continue sends that mapping unchanged.
     await expect(
@@ -225,7 +225,7 @@ test('resumes each step from the batch URL after a refresh', async ({
   await page
     .locator('input[type="file"]')
     .setInputFiles(join(REPLAY, 'arabic-excel.xlsx'))
-  await page.waitForURL(new RegExp(`/imports/${recording.batchId}`))
+  await page.waitForURL(new RegExp(`[?&]import=${recording.batchId}`))
   await page.reload()
   await expect(
     page.getByRole('button', { name: label('en', 'orderImport.map.continue') })

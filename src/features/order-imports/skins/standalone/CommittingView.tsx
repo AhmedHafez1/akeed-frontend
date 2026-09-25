@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { withLocale } from '@/shared/lib/locale'
 import { Button, LoadingSpinner, Progress } from '@/shared/ui'
 import type { OrderImportBatchDetail } from '../../api/orderImportsApi'
-import { IMPORT_STEP_HEADING_ID } from './ImportWizardShell'
+import { IMPORT_STEP_HEADING_ID } from './importHeading'
 import { ImportNotice } from './ImportNotice'
 
 /**

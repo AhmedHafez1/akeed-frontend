@@ -9,7 +9,7 @@ import { useEmitDomainEvent } from '@/shared/query/domainEvents'
 import { Button } from '@/shared/ui'
 import type { OrderImportBatchDetail } from '../../api/orderImportsApi'
 import { importOrdersPath } from '../../domain/importRoutes'
-import { IMPORT_STEP_HEADING_ID } from './ImportWizardShell'
+import { IMPORT_STEP_HEADING_ID } from './importHeading'
 import { ImportNotice } from './ImportNotice'
 import { StartConfirmationDialog } from './StartConfirmationDialog'
 

@@ -29,7 +29,7 @@ import {
   type ReleaseProgress,
 } from '../../domain/releaseSummary'
 import { useReleaseOutcomeSync } from '../../domain/useReleaseOutcomeSync'
-import { IMPORT_STEP_HEADING_ID } from './ImportWizardShell'
+import { IMPORT_STEP_HEADING_ID } from './importHeading'
 import { ImportNotice } from './ImportNotice'
 import { StopImportDialog } from './StopImportDialog'
 import { useBlockerText } from './useBlockerText'

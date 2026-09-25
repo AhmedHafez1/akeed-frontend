@@ -3,7 +3,7 @@
 import { useCallback } from 'react'
 import Link from 'next/link'
 import { Controller } from 'react-hook-form'
-import { ChevronDown, ClipboardCheck } from 'lucide-react'
+import { ChevronDown, CircleCheck, ClipboardCheck } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/shared/lib/utils'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
@@ -105,6 +105,7 @@ export function ManualOrderEntryStandalone({
               triggerClassName
             )}
           >
+            <CircleCheck aria-hidden="true" className="size-[18px] shrink-0" />
             <span className={triggerLabelClassName}>{t('open')}</span>
           </Button>
         </DialogTrigger>

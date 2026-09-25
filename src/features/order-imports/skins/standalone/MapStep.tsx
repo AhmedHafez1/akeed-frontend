@@ -36,11 +36,12 @@ import {
   type MappingError,
   type MappingForm,
 } from '../../domain/mappingForm'
-import { IMPORT_STEP_HEADING_ID } from './ImportWizardShell'
+import { IMPORT_STEP_HEADING_ID } from './importHeading'
 import { ImportNotice } from './ImportNotice'
 import { ImportSettingsPanel, PaymentValuesPanel } from './MappingPanels'
 import { selectClasses } from './styles'
 import { WizardFooter } from './WizardFooter'
+import { importModalPath } from '../../domain/importRoutes'
 
 const statusIcons: Record<FieldStatus, LucideIcon> = {
   detected: CheckCircle2,
@@ -373,7 +374,7 @@ export function MapStep({ detail, canEdit, onSaved }: MapStepProps) {
       <WizardFooter
         secondary={
           <Button asChild variant="outline">
-            <Link href={withLocale('/imports/new', locale)}>
+            <Link href={withLocale(importModalPath('new'), locale)}>
               {t('map.back')}
             </Link>
           </Button>

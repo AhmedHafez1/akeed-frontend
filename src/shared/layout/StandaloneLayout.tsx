@@ -14,7 +14,9 @@ import {
   DialogTitle,
   StandaloneToaster,
 } from '@/shared/ui'
+import { ThemeToggle } from '@/shared/theme'
 import { Footer } from './Footer'
+import { LocaleToggle } from './LocaleToggle'
 import { Header } from './Header'
 import { AuthGuard } from '../auth/AuthGuard'
 import { AuthLayout } from './AuthLayout'
@@ -119,6 +121,12 @@ export function StandaloneLayout({ children }: StandaloneLayoutProps) {
               <StandaloneSidebar
                 className="w-full"
                 onNavigate={() => setIsNavigationOpen(false)}
+                preferences={
+                  <div className="flex items-center gap-2 px-1 sm:hidden">
+                    <ThemeToggle />
+                    <LocaleToggle className="h-11 flex-1" />
+                  </div>
+                }
               />
             </DialogContent>
           </Dialog>

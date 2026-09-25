@@ -11,7 +11,7 @@ import {
   useDashboard,
 } from '@/features/dashboard'
 import { useVerificationStatusQuery } from '@/features/dashboard/hooks/useVerificationStatusQuery'
-import { ImportFilterChip, NewImportLink } from '@/features/order-imports'
+import { ImportFilterChip, ImportModalHost } from '@/features/order-imports'
 
 function StandaloneVerificationsPageContent() {
   const {
@@ -26,20 +26,21 @@ function StandaloneVerificationsPageContent() {
     importBatchId
   )
   return (
-    <DashboardVerificationsStandaloneSkin
-      {...skinProps}
-      headerAction={
-        <div className="flex flex-wrap items-center gap-2">
-          {importBatchId && (
+    <>
+      <DashboardVerificationsStandaloneSkin
+        {...skinProps}
+        headerAction={
+          importBatchId && (
             <ImportFilterChip
               batchId={importBatchId}
               onClear={onClearImportBatch}
             />
-          )}
-          <NewImportLink />
-        </div>
-      }
-    />
+          )
+        }
+      />
+      {/* "استيراد من ملف" in the top bar opens it through the URL. */}
+      <ImportModalHost />
+    </>
   )
 }
 

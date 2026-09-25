@@ -1009,7 +1009,6 @@
     "admin": "Admin",
     "search": "Search orders",
     "searchOrders": "Open order search",
-    "openVerifications": "Open verifications",
     "notifications": "Notifications",
     "breadcrumbs": "Breadcrumbs",
     "closeNavigation": "Close navigation menu",
@@ -3209,6 +3208,26 @@
       "cancel": "Keep sending",
       "confirm": "Stop remaining",
       "failed": "Sending couldn't be stopped. Try again."
+    },
+    "modal": {
+      "title": "Import orders from a file",
+      "description": "Upload your orders file, check it, then send confirmations over WhatsApp.",
+      "close": "Close",
+      "stepsLabel": "Import steps",
+      "completed": "completed",
+      "steps": {
+        "file": "File",
+        "check": "Check",
+        "send": "Send"
+      },
+      "stepOf": "{current, number} of {total, number} · {label}"
+    },
+    "resume": {
+      "title": "Pick up where you left off",
+      "continue": "Continue",
+      "dismiss": "Discard",
+      "continueLabel": "Continue {name}",
+      "dismissLabel": "Discard the draft of {name}"
     }
   }
 }

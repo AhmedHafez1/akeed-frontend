@@ -46,6 +46,42 @@ const releaseStatuses: ReadonlySet<OrderImportBatchStatus> = new Set([
   'completed',
 ])
 
+/** The modal's three steps: الملف · الفحص · الإرسال. */
+export const modalSteps = ['file', 'check', 'send'] as const
+export type ModalStep = (typeof modalSteps)[number]
+
+/**
+ * Which modal step a batch view belongs to. Mapping is the check; from the
+ * review on, everything leads to sending. States outside the flow (expired,
+ * not found) show no current step.
+ */
+export function modalStepFor(
+  view: BatchView | { kind: 'new' },
+  editingMapping = false
+): ModalStep | null {
+  switch (view.kind) {
+    case 'new':
+      return 'file'
+    case 'step':
+      return view.step === 'map' || editingMapping ? 'check' : 'send'
+    case 'committing':
+    case 'imported':
+    case 'partial':
+    case 'release':
+      return 'send'
+    default:
+      return null
+  }
+}
+
+export function completedModalStepsBefore(
+  step: ModalStep | null
+): Set<ModalStep> {
+  return step === null
+    ? new Set()
+    : new Set(modalSteps.slice(0, modalSteps.indexOf(step)))
+}
+
 export const BATCH_POLL_INTERVAL_MS = 2_000
 /** M8: the release panels refresh their live counts every 5 seconds. */
 export const RELEASE_POLL_INTERVAL_MS = 5_000

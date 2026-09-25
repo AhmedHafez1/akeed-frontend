@@ -2,7 +2,6 @@
 
 import { useRef, useState, type ChangeEvent, type DragEvent } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { Copy, FileSpreadsheet, UploadCloud, X } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { downloadBlob } from '@/shared/lib/download'
@@ -19,9 +18,9 @@ import {
 import { describeFileError } from '../../domain/fileErrors'
 import { formatFileSize } from '../../domain/format'
 import { IMPORT_FILE_ACCEPT, preCheckImportFile } from '../../domain/preCheck'
-import { IMPORT_STEP_HEADING_ID } from './ImportWizardShell'
+import { IMPORT_STEP_HEADING_ID } from './importHeading'
 import { ImportNotice } from './ImportNotice'
-import { OpenDraftsCard } from './OpenDraftsCard'
+import { newestDraft, ResumeDraftBanner } from './ResumeDraftBanner'
 
 type UploadState =
   | { phase: 'idle' }
@@ -38,6 +37,9 @@ type UploadState =
 interface UploadStepProps {
   canEdit: boolean
   drafts: readonly OrderImportOpenDraft[]
+  /** The file is a draft batch now: the modal moves on to checking it. */
+  onUploaded: (batchId: string) => void
+  onResume: (batchId: string) => void
 }
 
 function referenceFor(error: unknown): string {
@@ -46,10 +48,14 @@ function referenceFor(error: unknown): string {
 }
 
 /** Step 1 (M1, M2): pick one file, check it, send it with progress. */
-export function UploadStep({ canEdit, drafts }: UploadStepProps) {
+export function UploadStep({
+  canEdit,
+  drafts,
+  onUploaded,
+  onResume,
+}: UploadStepProps) {
   const t = useTranslations('orderImport')
   const locale = useLocale() as SupportedLocale
-  const router = useRouter()
   const upload = useUploadOrderImport()
   const inputRef = useRef<HTMLInputElement>(null)
   const abortRef = useRef<AbortController | null>(null)
@@ -80,8 +86,7 @@ export function UploadStep({ canEdit, drafts }: UploadStepProps) {
           ),
       },
       {
-        onSuccess: (response) =>
-          router.push(withLocale(`/imports/${response.batchId}`, locale)),
+        onSuccess: (response) => onUploaded(response.batchId),
         onError: (error) => {
           if (controller.signal.aborted) {
             setState({ phase: 'idle' })
@@ -127,6 +132,8 @@ export function UploadStep({ canEdit, drafts }: UploadStepProps) {
     state.phase === 'refused' && state.code === 'IMPORT_TOO_MANY_DRAFTS'
       ? (state.drafts ?? drafts)
       : null
+  // Only the newest draft is offered; discarding it brings up the next.
+  const resumable = busy ? undefined : newestDraft(refusedDrafts ?? drafts)
 
   return (
     <section aria-labelledby={IMPORT_STEP_HEADING_ID} className="space-y-5">
@@ -147,6 +154,15 @@ export function UploadStep({ canEdit, drafts }: UploadStepProps) {
         aria-hidden="true"
         onChange={onInputChange}
       />
+
+      {resumable && (
+        <ResumeDraftBanner
+          draft={resumable}
+          canEdit={canEdit}
+          highlighted={refusedDrafts !== null}
+          onResume={onResume}
+        />
+      )}
 
       {!canEdit ? null : state.phase === 'refused' ? (
         <FileErrorCard
@@ -223,12 +239,6 @@ export function UploadStep({ canEdit, drafts }: UploadStepProps) {
           {t('upload.templateExcel')}
         </Button>
       </p>
-
-      <OpenDraftsCard
-        drafts={refusedDrafts ?? drafts}
-        canEdit={canEdit}
-        highlighted={refusedDrafts !== null}
-      />
     </section>
   )
 }

@@ -1003,7 +1003,6 @@
     "admin": "الإدارة",
     "search": "البحث في الطلبات",
     "searchOrders": "فتح البحث في الطلبات",
-    "openVerifications": "فتح التأكيدات",
     "notifications": "الإشعارات",
     "breadcrumbs": "مسار التنقل",
     "closeNavigation": "إغلاق قائمة التنقل",
@@ -3203,6 +3202,26 @@
       "cancel": "متابعة الإرسال",
       "confirm": "إيقاف المتبقي",
       "failed": "تعذّر إيقاف الإرسال. حاول مرة أخرى."
+    },
+    "modal": {
+      "title": "استيراد طلبات من ملف",
+      "description": "ارفع ملف طلباتك وافحصه، ثم أرسل التأكيدات عبر واتساب.",
+      "close": "إغلاق",
+      "stepsLabel": "خطوات الاستيراد",
+      "completed": "مكتملة",
+      "steps": {
+        "file": "الملف",
+        "check": "الفحص",
+        "send": "الإرسال"
+      },
+      "stepOf": "{current, number} من {total, number} · {label}"
+    },
+    "resume": {
+      "title": "أكمل من حيث توقفت",
+      "continue": "متابعة",
+      "dismiss": "تجاهل",
+      "continueLabel": "متابعة {name}",
+      "dismissLabel": "تجاهل {name} وحذف مسودته"
     }
   }
 }

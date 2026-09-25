@@ -5,8 +5,8 @@ import { useLocale, useTranslations } from 'next-intl'
 import { withLocale } from '@/shared/lib/locale'
 import { Button } from '@/shared/ui'
 import type { OrderImportBatchDetail } from '../../api/orderImportsApi'
-import { importOrdersPath } from '../../domain/importRoutes'
-import { IMPORT_STEP_HEADING_ID } from './ImportWizardShell'
+import { importModalPath, importOrdersPath } from '../../domain/importRoutes'
+import { IMPORT_STEP_HEADING_ID } from './importHeading'
 import { ImportNotice } from './ImportNotice'
 
 /**
@@ -53,7 +53,7 @@ export function PartialImportView({
           </Link>
         </Button>
         <Button asChild>
-          <Link href={withLocale('/imports/new', locale)}>
+          <Link href={withLocale(importModalPath('new'), locale)}>
             {t('partial.reupload')}
           </Link>
         </Button>

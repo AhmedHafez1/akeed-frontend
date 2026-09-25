@@ -37,10 +37,11 @@ import {
   type ReviewOutcome,
 } from '../../domain/reviewSummary'
 import { DiscardImportDialog } from './DiscardImportDialog'
-import { IMPORT_STEP_HEADING_ID } from './ImportWizardShell'
+import { IMPORT_STEP_HEADING_ID } from './importHeading'
 import { ImportNotice } from './ImportNotice'
 import { ReviewRows } from './ReviewRows'
 import { WizardFooter } from './WizardFooter'
+import { importModalPath } from '../../domain/importRoutes'
 
 const tileStyles: Record<
   ReviewOutcome,
@@ -136,7 +137,7 @@ export function ReviewStep({
     discard.mutate(detail.batchId, {
       onSuccess: () => {
         notify.success({ message: t('discard.done') })
-        router.push(withLocale('/imports/new', locale))
+        router.push(withLocale(importModalPath('new'), locale))
       },
       onError: () => notify.error({ message: t('discard.failed') }),
     })
