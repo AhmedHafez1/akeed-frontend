@@ -39,26 +39,32 @@ Also validate changes with `npm run build && npm run lint`.
 - i18n: next-intl (locales: `ar` default, `en`). Messages in `public/messages/{locale}.json`
 - Auth: Dual-mode — Supabase (standalone) / Shopify App Bridge (embedded)
 - State: React hooks only (no external state library)
-- API client: `fetchWithAuth` / `api.*` in `src/lib/auth.ts`
+- API client: `fetchWithAuth` / `api.*` in `src/shared/lib/auth.ts`
 
 ## Source Layout
 
 ```text
 src/
-  app/[locale]/           # Next.js App Router pages (locale-prefixed)
-  components/
-    ui/                   # Reusable primitives (shadcn-style, barrel-exported via index.ts)
-    layout/               # Shell components (AppLayout, Header, Sidebar, EmbeddedLayout)
-    sections/             # Marketing page sections (Hero, Pricing, FAQ, etc.)
-    forms/                # Form components
+  app/
+    globals.css           # The only theme surface (tokens, @theme, type scale)
+    [locale]/             # Locale-prefixed routes: (public) (auth) (embedded) dashboard billing ...
+  features/<name>/        # admin billing dashboard docs marketing onboarding order-imports orders settings
+                          # api/ hooks/ model/ ui/ skins/{standalone,embedded} + index.ts barrel
+  shared/
+    ui/                   # Primitives (shadcn-style, CVA + Radix), barrel-exported via index.ts
+    layout/               # Shells (AppLayout, StandaloneLayout, EmbeddedLayout, Header, Footer, AkeedLogo)
+    theme/                # Light/dark/system theme provider, storage, no-flash script
     auth/                 # AuthGuard, EmbeddedAuthGate
-    onboarding/           # Onboarding wizard steps and container
-    pages/                # Page-level composition components
-  hooks/                  # Custom React hooks (useAkeedMode, useOnboarding, etc.)
-  lib/                    # Utilities (auth, http, locale, utils, strings)
-  config/                 # Static config objects (site, roi, onboarding)
-  types/                  # TypeScript type/model definitions (*.model.ts)
+    hooks/                # Cross-feature hooks (useAkeedMode, useLocaleInfo, ...)
+    lib/                  # auth (api client), http, locale, embedded-context, utils (cn), money, seo
+    query/                # QueryProvider
+    config/ types/        # Shared config and *.model.ts types
 ```
+
+Module boundaries are enforced by ESLint: `shared/{lib,hooks,types,ui}` never
+import `features`; features never import `shared/layout` or `shared/auth`;
+`marketing`, `onboarding` and `dashboard` do not import each other. The legacy
+`@/components`, `@/lib`, `@/hooks`, `@/types`, `@/config` aliases are banned.
 
 ## Design Tokens & Styling
 
@@ -117,7 +123,7 @@ Use the token, not the literal:
 - Use `type` imports for type-only values: `import type { Foo } from '...'`
 - Prefer interfaces for component props, `type` aliases for unions/intersections
 - Avoid `any`; use `unknown` and narrow with type guards
-- Model files live in `src/types/` with `.model.ts` suffix
+- Model files use the `.model.ts` suffix and live in the feature (`src/features/<name>/model/`) or, when shared, in `src/shared/types/`
 
 ### Imports
 
@@ -127,7 +133,7 @@ Use the token, not the literal:
   1. React / Next.js / third-party packages
   2. `@/` internal imports (lib, hooks, components, types, config)
   3. Relative sibling/child imports
-- UI primitives can be imported from the barrel: `import { Button, Input } from '@/components/ui'`
+- UI primitives can be imported from the barrel: `import { Button, Input } from '@/shared/ui'`
 
 ### Components
 
@@ -135,8 +141,8 @@ Use the token, not the literal:
 - Page components (`page.tsx`, `layout.tsx`) may use default exports
 - Section components use default exports (dynamic import pattern)
 - Client components must have `'use client'` directive at the top
-- Separate domain logic into custom hooks (`src/hooks/use*.ts`), keep components thin
-- Use `cn()` from `@/lib/utils` for conditional Tailwind classes
+- Separate domain logic into custom hooks (`src/features/<name>/hooks/use*.ts`, or `src/shared/hooks/` when cross-feature), keep components thin
+- Use `cn()` from `@/shared/lib/utils` for conditional Tailwind classes
 - Use `forwardRef` for primitive UI components that wrap HTML elements
 - Set `displayName` on `forwardRef` components
 
@@ -150,7 +156,7 @@ Use the token, not the literal:
 
 ### Error Handling
 
-- API errors: use `getErrorMessage()` from `src/lib/http.ts` to extract backend messages
+- API errors: use `getErrorMessage()` from `src/shared/lib/http.ts` to extract backend messages
 - Form validation: Zod schemas + `@hookform/resolvers/zod` with react-hook-form
 - Async errors in hooks: catch, log with `console.error('[Context] message:', error)`, set error state
 - Use bracket-prefixed log tags: `[Auth]`, `[Akeed]`, `[Onboarding]`
@@ -184,7 +190,7 @@ Rules:
 
 ## API & Auth
 
-- All authenticated requests go through `src/lib/auth.ts` (`api.get`, `api.post`, etc.)
+- All authenticated requests go through `src/shared/lib/auth.ts` (`api.get`, `api.post`, etc.)
 - Backend base URL: `NEXT_PUBLIC_API_URL` env var (defaults to `http://localhost:3000`)
 - Shopify auth paths are proxied via `next.config.ts` rewrites
 - On 401, standalone mode auto-redirects to login; embedded mode logs error only
@@ -201,7 +207,6 @@ Never commit `.env.local` or files containing secrets.
 
 ## Common Pitfalls
 
-- Embedded navigation registers a Settings link, but `/settings` route is not implemented yet
 - Polaris CSS is imported only inside `EmbeddedLayout` — never import it globally
 - `suppressHydrationWarning` is used on interactive elements; keep this when wrapping Radix primitives
 - Dynamic imports (`next/dynamic` with `{ ssr: false }`) are used for modals and heavy client components
