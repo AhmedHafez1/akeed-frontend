@@ -19,6 +19,7 @@ import {
 import type { ImportModalTarget } from '../../../domain/importRoutes'
 import { modalStepFor, viewForBatch } from '../../../domain/importStep'
 import { useBulkImportAvailability } from '../../../domain/useBulkImportAvailability'
+import { useDiscardDraftOnLeave } from '../../../domain/useDiscardDraftOnLeave'
 import { useImportModalUrl } from '../../../domain/useImportModalUrl'
 import { ImportNotice } from '../ImportNotice'
 import { useStepHeadingFocus } from '../importHeading'
@@ -27,8 +28,9 @@ import { ImportStepBar, ImportStepMeter, ImportStepper } from './ImportStepper'
 
 /**
  * Mounted on Verifications: opens the import modal whenever the URL asks for
- * it (`?import=new|<batchId>`). Closing it only closes it -- an uploaded file
- * is already a draft on the server, offered again on the next open.
+ * it (`?import=new|<batchId>`). Closing it while the batch is still a draft
+ * discards that draft, so the next open starts fresh; an import past draft is
+ * only closed.
  */
 export function ImportModalHost() {
   const url = useImportModalUrl()
@@ -73,6 +75,13 @@ function ImportModal({
   // it belongs to the batch it was made on.
   const [editingFor, setEditingFor] = useState<string | null>(null)
   const editingMapping = editingFor !== null && editingFor === batchId
+  const discardDraft = useDiscardDraftOnLeave(
+    target.kind === 'batch' ? detail.data : undefined
+  )
+  const close = () => {
+    discardDraft()
+    onClose()
+  }
 
   const step =
     target.kind === 'new'
@@ -94,7 +103,7 @@ function ImportModal({
       : (detail.data?.permissions.canEdit ?? true)
 
   return (
-    <Dialog open onOpenChange={(open) => !open && onClose()}>
+    <Dialog open onOpenChange={(open) => !open && close()}>
       <DialogContent size="wide" hideClose>
         <header className="border-border shrink-0 border-b">
           <div className="flex items-center gap-4 px-4 py-3 sm:px-6 sm:py-4">
@@ -131,7 +140,6 @@ function ImportModal({
               availability={availability}
               drafts={drafts}
               onUploaded={(id) => onOpen({ kind: 'batch', batchId: id })}
-              onResume={(id) => onOpen({ kind: 'batch', batchId: id })}
             />
           ) : (
             <ImportBatchContent
@@ -141,7 +149,11 @@ function ImportModal({
               onEditingMappingChange={(editing) =>
                 setEditingFor(editing ? batchId : null)
               }
-              onChangeFile={() => onOpen({ kind: 'new' })}
+              onChangeFile={() => {
+                // A new file is a new draft; this one would only be left over.
+                discardDraft()
+                onOpen({ kind: 'new' })
+              }}
               onDone={(outcome) => {
                 notify.success({
                   message: t(`send.done.${outcome.kind}`, {

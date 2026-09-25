@@ -570,7 +570,10 @@ export async function fixOrderImportRowPhone(
   return readJson<OrderImportRowUpdate>(response)
 }
 
-/** Discards a draft and its rows. Answers 204, so there is no body to parse. */
+/**
+ * Discards a draft and its rows. Answers 204, also for a draft already gone,
+ * so there is no body to parse. A batch past draft is refused with 409.
+ */
 export async function discardOrderImport(
   batchId: string,
   signal?: AbortSignal

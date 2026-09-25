@@ -36,17 +36,19 @@ function isRefusal(error: unknown, code: string): boolean {
   return isOrderImportApiError(error) && error.code === code
 }
 
-/** Step 1: choose a file, or resume the newest draft. */
+/**
+ * Step 1: choose a file. Always a fresh start: closing the modal discards an
+ * unfinished draft, so there is nothing to resume.
+ */
 export function ImportNewContent({
   availability,
   drafts,
   onUploaded,
-  onResume,
 }: {
   availability: BulkImportAvailability
+  /** Read for the caller's permissions and the kill switch only. */
   drafts: UseQueryResult<OrderImportDraftList>
   onUploaded: (batchId: string) => void
-  onResume: (batchId: string) => void
 }) {
   if (availability === 'disabled' || isRefusal(drafts.error, 'IMPORT_DISABLED'))
     return (
@@ -59,14 +61,7 @@ export function ImportNewContent({
 
   // If the list cannot be read, uploading still works; the server decides.
   const canEdit = drafts.data?.permissions.canEdit ?? true
-  return (
-    <UploadStep
-      canEdit={canEdit}
-      drafts={drafts.data?.drafts ?? []}
-      onUploaded={onUploaded}
-      onResume={onResume}
-    />
-  )
+  return <UploadStep canEdit={canEdit} onUploaded={onUploaded} />
 }
 
 /** Steps 2 and 3 for one batch, as the server's status places it. */

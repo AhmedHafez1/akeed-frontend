@@ -2848,8 +2848,8 @@
         "body": "Keep up to 100 columns. Delete the columns you don't need and upload it again."
       },
       "IMPORT_TOO_MANY_DRAFTS": {
-        "title": "You have too many unfinished imports",
-        "body": "Resume or discard one of the imports below before uploading another file."
+        "title": "Too many imports in progress",
+        "body": "Your team has several imports in progress. Wait for one of them to finish, then try again."
       },
       "IMPORT_RATE_LIMITED": {
         "title": "Too many uploads in a short time",
@@ -2883,14 +2883,6 @@
       "banner": "You uploaded this same file {time}.",
       "view": "View earlier import",
       "continue": "Continue anyway"
-    },
-    "drafts": {
-      "meta": "{rows, plural, one {# row} other {# rows}} · {time}",
-      "view": "View"
-    },
-    "discard": {
-      "done": "Import discarded.",
-      "failed": "The import couldn't be discarded. Try again."
     },
     "map": {
       "heading": "Match your columns",
@@ -3114,13 +3106,6 @@
       },
       "stepOf": "{current, number} of {total, number} · {label}",
       "cancel": "Cancel"
-    },
-    "resume": {
-      "title": "Pick up where you left off",
-      "continue": "Continue",
-      "dismiss": "Discard",
-      "continueLabel": "Continue {name}",
-      "dismissLabel": "Discard the draft of {name}"
     },
     "check": {
       "heading": "Check your file",

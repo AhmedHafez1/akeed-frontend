@@ -1,6 +1,12 @@
 'use client'
 
-import { useRef, useState, type ChangeEvent, type DragEvent } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type DragEvent,
+} from 'react'
 import Link from 'next/link'
 import { Copy, FileSpreadsheet, Info, Upload, X } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
@@ -13,7 +19,6 @@ import {
   downloadOrderImportTemplate,
   isOrderImportApiError,
   type OrderImportFormat,
-  type OrderImportOpenDraft,
 } from '../../api/orderImportsApi'
 import { describeFileError } from '../../domain/fileErrors'
 import { formatFileSize } from '../../domain/format'
@@ -25,7 +30,6 @@ import {
 import { IMPORT_STEP_HEADING_ID } from './importHeading'
 import { ImportNotice } from './ImportNotice'
 import { ModalStepLayout } from './modal/ModalStepLayout'
-import { newestDraft, ResumeDraftBanner } from './ResumeDraftBanner'
 
 type UploadState =
   | { phase: 'idle' }
@@ -35,16 +39,13 @@ type UploadState =
       phase: 'refused'
       code: string | undefined
       reference: string
-      drafts?: OrderImportOpenDraft[]
       file?: File
     }
 
 interface UploadStepProps {
   canEdit: boolean
-  drafts: readonly OrderImportOpenDraft[]
   /** The file is a draft batch now: the modal moves on to checking it. */
   onUploaded: (batchId: string) => void
-  onResume: (batchId: string) => void
 }
 
 function referenceFor(error: unknown): string {
@@ -53,12 +54,7 @@ function referenceFor(error: unknown): string {
 }
 
 /** Step 1 (M1, M2): pick one file, check it, send it with progress. */
-export function UploadStep({
-  canEdit,
-  drafts,
-  onUploaded,
-  onResume,
-}: UploadStepProps) {
+export function UploadStep({ canEdit, onUploaded }: UploadStepProps) {
   const t = useTranslations('orderImport')
   const locale = useLocale() as SupportedLocale
   const upload = useUploadOrderImport()
@@ -67,6 +63,11 @@ export function UploadStep({
   const [state, setState] = useState<UploadState>({ phase: 'idle' })
   const [dragging, setDragging] = useState(false)
   const busy = state.phase === 'sending' || state.phase === 'reading'
+
+  // Closing the modal mid-upload abandons the file: no draft should land for
+  // a modal nobody is looking at. One that already reached the server is
+  // replaced by the merchant's next upload.
+  useEffect(() => () => abortRef.current?.abort(), [])
 
   const chooseFile = () => inputRef.current?.click()
 
@@ -100,7 +101,6 @@ export function UploadStep({
           setState({
             phase: 'refused',
             code: isOrderImportApiError(error) ? error.code : undefined,
-            drafts: isOrderImportApiError(error) ? error.drafts : undefined,
             reference: referenceFor(error),
             file,
           })
@@ -132,13 +132,6 @@ export function UploadStep({
       notify.error({ message: t('upload.templateFailed') })
     }
   }
-
-  const refusedDrafts =
-    state.phase === 'refused' && state.code === 'IMPORT_TOO_MANY_DRAFTS'
-      ? (state.drafts ?? drafts)
-      : null
-  // Only the newest draft is offered; discarding it brings up the next.
-  const resumable = busy ? undefined : newestDraft(refusedDrafts ?? drafts)
 
   return (
     <ModalStepLayout
@@ -172,15 +165,6 @@ export function UploadStep({
         aria-hidden="true"
         onChange={onInputChange}
       />
-
-      {resumable && (
-        <ResumeDraftBanner
-          draft={resumable}
-          canEdit={canEdit}
-          highlighted={refusedDrafts !== null}
-          onResume={onResume}
-        />
-      )}
 
       {!canEdit ? null : state.phase === 'refused' ? (
         <FileErrorCard
@@ -334,12 +318,6 @@ function FileErrorCard({
         return (
           <Button type="button" onClick={onRetry}>
             {t('fileErrors.actions.retry')}
-          </Button>
-        )
-      case 'showDrafts':
-        return (
-          <Button type="button" variant="outline" onClick={onChooseAnother}>
-            {t('fileErrors.actions.chooseAnother')}
           </Button>
         )
       case 'openSettings':
