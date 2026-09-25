@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import {
+  notify,
   Dialog,
   DialogClose,
   DialogContent,
@@ -81,6 +82,12 @@ function ImportModal({
         : null
   useStepHeadingFocus(step)
 
+  // Buy credits returned to this batch (`?start=1`): the send step is where
+  // the merchant picks up, so the flag has done its job.
+  useEffect(() => {
+    if (reopenStart) onStartClosed()
+  }, [reopenStart, onStartClosed])
+
   const canEdit =
     target.kind === 'new'
       ? (drafts.data?.permissions.canEdit ?? true)
@@ -135,8 +142,14 @@ function ImportModal({
                 setEditingFor(editing ? batchId : null)
               }
               onChangeFile={() => onOpen({ kind: 'new' })}
-              reopenStart={reopenStart}
-              onStartClosed={onStartClosed}
+              onDone={(outcome) => {
+                notify.success({
+                  message: t(`send.done.${outcome.kind}`, {
+                    count: outcome.count,
+                  }),
+                })
+                onClose()
+              }}
             />
           )}
         </div>

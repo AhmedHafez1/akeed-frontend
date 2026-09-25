@@ -10,16 +10,15 @@ import {
   type OrderImportDraftList,
 } from '../../../api/orderImportsApi'
 import { viewForBatch } from '../../../domain/importStep'
+import type { SendOutcome } from '../../../domain/useSendStep'
 import type { BulkImportAvailability } from '../../../domain/useBulkImportAvailability'
 import { BatchStateNotice } from '../BatchStateNotice'
 import { CheckStep } from '../check/CheckStep'
-import { CommittingView } from '../CommittingView'
 import { DuplicateFileBanner } from '../DuplicateFileBanner'
-import { ImportedView } from '../ImportedView'
 import { ImportNotice } from '../ImportNotice'
 import { PartialImportView } from '../PartialImportView'
 import { ReleaseView } from '../ReleaseView'
-import { ReviewStep } from '../ReviewStep'
+import { SendStep } from '../send/SendStep'
 import { UploadStep } from '../UploadStep'
 import { ModalStepLayout } from './ModalStepLayout'
 
@@ -89,16 +88,14 @@ export function ImportBatchContent({
   editingMapping,
   onEditingMappingChange,
   onChangeFile,
-  reopenStart,
-  onStartClosed,
+  onDone,
 }: {
   availability: BulkImportAvailability
   detail: UseQueryResult<OrderImportBatchDetail>
   editingMapping: boolean
   onEditingMappingChange: (editing: boolean) => void
   onChangeFile: () => void
-  reopenStart: boolean
-  onStartClosed: () => void
+  onDone: (outcome: SendOutcome) => void
 }) {
   const t = useTranslations('orderImport')
 
@@ -127,6 +124,16 @@ export function ImportBatchContent({
   const batch = detail.data
   const canEdit = batch.permissions.canEdit
   const view = viewForBatch(batch)
+  // One element across review, import and start: its state survives them.
+  const sendStep = (
+    <SendStep
+      key={batch.batchId}
+      detail={batch}
+      canEdit={canEdit}
+      onBack={() => onEditingMappingChange(true)}
+      onDone={onDone}
+    />
+  )
 
   switch (view.kind) {
     case 'expired':
@@ -136,24 +143,8 @@ export function ImportBatchContent({
         </ModalStepLayout>
       )
     case 'committing':
-      return (
-        <LegacyStep>
-          <CommittingView detail={batch} />
-        </LegacyStep>
-      )
     case 'imported':
-      return (
-        <LegacyStep>
-          <ImportedView
-            detail={batch}
-            canEdit={canEdit}
-            openStartOnLoad={reopenStart}
-            onStartClosed={() => {
-              if (reopenStart) onStartClosed()
-            }}
-          />
-        </LegacyStep>
-      )
+      return sendStep
     case 'release':
       return (
         <LegacyStep>
@@ -206,13 +197,5 @@ export function ImportBatchContent({
       />
     )
 
-  return (
-    <LegacyStep>
-      <ReviewStep
-        detail={batch}
-        canEdit={canEdit}
-        onBackToMapping={() => onEditingMappingChange(true)}
-      />
-    </LegacyStep>
-  )
+  return sendStep
 }

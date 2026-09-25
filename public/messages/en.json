@@ -3302,6 +3302,64 @@
         "blockedMany": "Choose the required columns to continue",
         "fixErrors": "Fix the highlighted fields to continue"
       }
+    },
+    "send": {
+      "heading": "{count, plural, one {order ready to confirm on WhatsApp} other {orders ready to confirm on WhatsApp}}",
+      "from": "From {file}",
+      "clean": "No duplicates, no errors",
+      "nothingReady": "This file has no orders we can confirm. See the reasons below, or change the file.",
+      "showAll": "Show all orders ({count, number})",
+      "showFewer": "Show fewer",
+      "previewLabel": "Ready orders",
+      "skipped": {
+        "notCod": "{count, plural, one {# excluded because it's paid in advance} other {# excluded because they're paid in advance}}",
+        "noPayment": "{count, plural, one {# excluded because it has no payment method} other {# excluded because they have no payment method}}",
+        "tooOld": "{count, plural, one {# too old to confirm} other {# too old to confirm}}",
+        "possibleDuplicate": "{count, plural, one {# may duplicate an earlier order} other {# may duplicate earlier orders}}",
+        "duplicate": "{count, plural, one {# duplicate, won't be imported} other {# duplicates, won't be imported}}",
+        "invalid": "{count, plural, one {# needs fixing and won't be imported} other {# need fixing and won't be imported}}",
+        "excluded": "{count, plural, one {# excluded} other {# excluded}}",
+        "change": "Change",
+        "show": "Show",
+        "hide": "Hide"
+      },
+      "cost": {
+        "label": "Cost and timing",
+        "messages": "Messages now",
+        "upTo": "Up to {max, number} with follow-ups",
+        "noFollowUp": "No follow-up messages",
+        "balance": "Your balance after sending",
+        "of": "of {available, number}",
+        "short": "{shortfall, number} short",
+        "plan": "Left in your plan",
+        "planOf": "of {slots, number} this period",
+        "duration": "Expected time",
+        "minutes": "{minutes, plural, =0 {Under a minute} one {About a minute} other {About # minutes}}",
+        "hours": "{hours, plural, =0 {Under an hour} one {About an hour} other {About # hours}}",
+        "rate": "About {rate, number} messages a minute",
+        "quiet": "Pauses during quiet hours {window}",
+        "loading": "Working out the cost…"
+      },
+      "deadline": "Start sending within {hours, plural, =0 {the hour} one {# hour} other {# hours}} so these orders stay eligible.",
+      "consentLabel": "Customer consent",
+      "reassure": "Nothing is sent until you press send.",
+      "importOnly": "Import only",
+      "importAndSend": "Import and send to {count, plural, one {# customer} other {# customers}}",
+      "sendNow": "Send to {count, plural, one {# customer} other {# customers}}",
+      "consentFirst": "Confirm customer consent to send",
+      "importing": "Importing your orders…",
+      "importProgress": "{imported, number} of {total, number} imported",
+      "starting": "Starting to send…",
+      "importedNotice": "The orders are imported. Nothing has been sent yet.",
+      "notice": {
+        "stale": "The number of orders or your balance changed. Check the updated numbers and confirm again.",
+        "startFailed": "Sending couldn't start. Your orders are imported; try sending again.",
+        "importFailed": "The orders couldn't be imported. Nothing was sent; try again."
+      },
+      "done": {
+        "sent": "Imported {count, plural, one {# order} other {# orders}} — we're sending the confirmations now. Follow each order's status here.",
+        "imported": "Imported {count, plural, one {# order} other {# orders}}. Nothing is sent until you start sending."
+      }
     }
   }
 }
