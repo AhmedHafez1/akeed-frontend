@@ -17,7 +17,7 @@ interface PaymentBucketsPanelProps {
   column: string | undefined
   /** The server's count of that column; null until a new column is saved. */
   values: OrderImportPaymentValues | null
-  form: Pick<MappingForm, 'payment'>
+  form: Pick<MappingForm, 'payment' | 'blankPayment'>
   assumeCodWhenBlank: boolean
   open: boolean
   canEdit: boolean
@@ -250,8 +250,7 @@ function Chip({
     chip.blank && 'border-dashed'
   )
 
-  // Blank cells follow the store setting; they are shown, not moved.
-  if (chip.blank || !canEdit)
+  if (!canEdit)
     return (
       <span className={classes}>
         {body}
@@ -264,9 +263,9 @@ function Chip({
       type="button"
       // Pressed = these orders are confirmed; pressing moves them across.
       aria-pressed={confirm}
-      aria-label={`${t('confirmValue', { value: chip.label })} · ${t('orders', {
-        count: chip.count,
-      })}`}
+      aria-label={`${t('confirmValue', {
+        value: chip.blank ? t('blank') : chip.label,
+      })} · ${t('orders', { count: chip.count })}`}
       onClick={() => onMove(chip)}
       className={cn(
         classes,

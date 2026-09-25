@@ -3,6 +3,7 @@ import type {
   OrderImportField,
   OrderImportFieldSuggestion,
   OrderImportMappingState,
+  OrderImportPaymentClass,
   OrderImportSampleRow,
 } from '../api/orderImportsApi'
 import {
@@ -61,7 +62,8 @@ function suggestion(
 
 function state(
   fields: OrderImportFieldSuggestion[],
-  paymentValues: OrderImportMappingState['paymentValues'] = null
+  paymentValues: OrderImportMappingState['paymentValues'] = null,
+  blankPaymentClass?: OrderImportPaymentClass
 ): OrderImportMappingState {
   return {
     suggestions: { fields, unmappedColumns: [] },
@@ -69,6 +71,7 @@ function state(
       country: 'EG',
       defaultCurrency: 'EGP',
       dateFormat: 'auto',
+      blankPaymentClass,
       paymentValueMap: {},
     },
     paymentValues,
@@ -195,9 +198,24 @@ describe('unclassified payment values', () => {
     const list = [...matched, suggestion('paymentMethod', ['Payment'])]
     const form = initialMappingForm(state(list, payment))
     expect(form.payment.instapay).toBe('cod')
+    expect(form.blankPayment).toBeUndefined()
     expect(
       toSaveBody(form, { paymentValues: payment, dateFormat: null }).options
         .paymentValueMap
     ).toEqual({ instapay: 'cod' })
+    expect(
+      toSaveBody(form, { paymentValues: payment, dateFormat: null }).options
+        .blankPaymentClass
+    ).toBeUndefined()
+  })
+
+  it('restores and saves an explicit blank-payment choice for the batch', () => {
+    const list = [...matched, suggestion('paymentMethod', ['Payment'])]
+    const form = initialMappingForm(state(list, payment, 'not_cod'))
+    expect(form.blankPayment).toBe('not_cod')
+    expect(
+      toSaveBody(form, { paymentValues: payment, dateFormat: null }).options
+        .blankPaymentClass
+    ).toBe('not_cod')
   })
 })

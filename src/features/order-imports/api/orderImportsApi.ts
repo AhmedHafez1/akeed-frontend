@@ -59,6 +59,8 @@ export type OrderImportOptions = {
   country: string
   defaultCurrency: OrderCurrency
   dateFormat: OrderImportDateFormat
+  /** Explicit blank-payment choice for this import batch only. */
+  blankPaymentClass?: OrderImportPaymentClass
   /** Keyed by the value's normalized form. */
   paymentValueMap: Record<string, OrderImportPaymentClass>
 }

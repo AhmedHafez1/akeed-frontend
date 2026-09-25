@@ -14,7 +14,7 @@ export type PaymentChip = {
   label: string
   count: number
   bucket: PaymentBucket
-  /** Blank cells follow the store's setting, not this file's choices. */
+  /** Blank cells can use a per-import choice. */
   blank: boolean
 }
 
@@ -30,11 +30,11 @@ export type PaymentBuckets = {
  * The payment column's values split into the two buckets, with live counts.
  * A value the merchant has not decided and the server could not classify
  * starts in "نؤكدها" (cash on delivery is what the merchant imports for).
- * Blank cells are decided by the store's `assumeCodWhenPaymentMissing`.
+ * Blank cells use the explicit import choice, then the store default.
  */
 export function paymentBuckets(
   values: OrderImportPaymentValues,
-  form: Pick<MappingForm, 'payment'>,
+  form: Pick<MappingForm, 'payment' | 'blankPayment'>,
   assumeCodWhenBlank: boolean
 ): PaymentBuckets {
   const chips: PaymentChip[] = values.values.map((entry) => ({
@@ -50,7 +50,7 @@ export function paymentBuckets(
       key: '',
       label: '',
       count: values.blankCount,
-      bucket: assumeCodWhenBlank ? 'cod' : 'not_cod',
+      bucket: form.blankPayment ?? (assumeCodWhenBlank ? 'cod' : 'not_cod'),
       blank: true,
     })
   const cod = chips.filter((chip) => chip.bucket === 'cod')
@@ -60,16 +60,21 @@ export function paymentBuckets(
   return { cod, notCod, codRows: rows(cod), excludedRows: rows(notCod) }
 }
 
-/** Tapping a chip moves it to the other bucket. Blank chips do not move. */
+/** Tapping a chip moves it to the other bucket. */
 export function moveChip(
-  form: Pick<MappingForm, 'payment'>,
+  form: Pick<MappingForm, 'payment' | 'blankPayment'>,
   chip: PaymentChip
-): Pick<MappingForm, 'payment'> {
-  if (chip.blank) return { payment: form.payment }
+): Pick<MappingForm, 'payment' | 'blankPayment'> {
+  if (chip.blank)
+    return {
+      payment: form.payment,
+      blankPayment: chip.bucket === 'cod' ? 'not_cod' : 'cod',
+    }
   return {
     payment: {
       ...form.payment,
       [chip.key]: chip.bucket === 'cod' ? 'not_cod' : 'cod',
     },
+    blankPayment: form.blankPayment,
   }
 }

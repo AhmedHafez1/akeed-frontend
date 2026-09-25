@@ -34,6 +34,8 @@ export type MappingForm = {
   dateFormat: OrderImportDateFormat
   /** Keyed by normalized value; only the merchant's or saved choices. */
   payment: Record<string, OrderImportPaymentClass>
+  /** Explicit choice for blank payment cells in this import. */
+  blankPayment?: OrderImportPaymentClass
 }
 
 /** The server's view of the mapped payment and date columns. */
@@ -77,6 +79,7 @@ export function initialMappingForm(
     currency: state.options.defaultCurrency,
     dateFormat: state.options.dateFormat,
     payment,
+    blankPayment: state.options.blankPaymentClass,
   }
 }
 
@@ -219,6 +222,7 @@ export function toSaveBody(
       country: form.country,
       defaultCurrency: form.currency,
       dateFormat: form.dateFormat,
+      blankPaymentClass: form.blankPayment,
       // Only choices for values the merchant was shown; the server keys them.
       paymentValueMap: payment
         ? Object.fromEntries(

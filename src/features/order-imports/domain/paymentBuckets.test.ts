@@ -50,6 +50,16 @@ describe('paymentBuckets', () => {
     expect(buckets.codRows).toBe(8)
   })
 
+  it('uses the explicit blank choice before the store setting', () => {
+    const buckets = paymentBuckets(
+      values,
+      { payment: {}, blankPayment: 'cod' },
+      false
+    )
+    expect(buckets.cod.at(-1)).toMatchObject({ blank: true, count: 4 })
+    expect(buckets.codRows).toBe(8)
+  })
+
   it("lets the merchant's choice win over the server's", () => {
     const buckets = paymentBuckets(
       values,
@@ -82,10 +92,18 @@ describe('moveChip', () => {
     expect(back.payment.cash).toBe('cod')
   })
 
-  it('never moves the blank chip', () => {
+  it('moves the blank chip between buckets and back', () => {
     const blank = paymentBuckets(values, { payment: {} }, false).notCod.find(
       (chip) => chip.blank
     )!
-    expect(moveChip({ payment: {} }, blank)).toEqual({ payment: {} })
+    const moved = moveChip({ payment: {} }, blank)
+    expect(moved.blankPayment).toBe('cod')
+    expect(paymentBuckets(values, moved, false).codRows).toBe(8)
+
+    const movedBack = moveChip(
+      moved,
+      paymentBuckets(values, moved, false).cod.find((chip) => chip.blank)!
+    )
+    expect(movedBack.blankPayment).toBe('not_cod')
   })
 })

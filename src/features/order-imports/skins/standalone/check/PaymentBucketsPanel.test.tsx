@@ -35,28 +35,35 @@ const values: OrderImportPaymentValues = {
   truncated: false,
 }
 
-function Harness() {
+function Harness({ canEdit = true }: { canEdit?: boolean }) {
   const [payment, setPayment] = useState<
     Record<string, OrderImportPaymentClass>
   >({ cash: 'cod', visa: 'not_cod' })
+  const [blankPayment, setBlankPayment] = useState<
+    OrderImportPaymentClass | undefined
+  >()
   return (
     <PaymentBucketsPanel
       column="Payment"
       values={values}
-      form={{ payment }}
+      form={{ payment, blankPayment }}
       assumeCodWhenBlank={false}
       open
-      canEdit
+      canEdit={canEdit}
       onOpen={() => undefined}
-      onMove={(chip) => setPayment(moveChip({ payment }, chip).payment)}
+      onMove={(chip) => {
+        const next = moveChip({ payment, blankPayment }, chip)
+        setPayment(next.payment)
+        setBlankPayment(next.blankPayment)
+      }}
     />
   )
 }
 
-function renderPanel() {
+function renderPanel(canEdit = true) {
   return render(
     <NextIntlClientProvider locale="en" messages={en} timeZone="UTC">
-      <Harness />
+      <Harness canEdit={canEdit} />
     </NextIntlClientProvider>
   )
 }
@@ -74,8 +81,11 @@ describe('PaymentBucketsPanel', () => {
     expect(within(confirmGroup()).getByText('3 orders')).toBeTruthy()
     const visa = within(skipGroup()).getByRole('button', { name: /Visa/ })
     expect(visa.getAttribute('aria-pressed')).toBe('false')
-    // Blank cells: excluded by the store setting, shown but not movable.
-    expect(within(skipGroup()).getByText('No value')).toBeTruthy()
+    expect(
+      within(skipGroup()).getByRole('button', {
+        name: /No payment method/,
+      })
+    ).toBeTruthy()
     expect(within(skipGroup()).getByText('3 orders')).toBeTruthy()
   })
 
@@ -88,5 +98,31 @@ describe('PaymentBucketsPanel', () => {
     expect(cash.getAttribute('aria-pressed')).toBe('false')
     expect(within(confirmGroup()).getByText('0 orders')).toBeTruthy()
     expect(within(skipGroup()).getByText('6 orders')).toBeTruthy()
+  })
+
+  it('moves blank-payment orders and updates both bucket counts', () => {
+    renderPanel()
+    fireEvent.click(
+      within(skipGroup()).getByRole('button', {
+        name: /No payment method/,
+      })
+    )
+    expect(
+      within(confirmGroup()).getByRole('button', {
+        name: /No payment method/,
+      })
+    ).toBeTruthy()
+    expect(within(confirmGroup()).getByText('4 orders')).toBeTruthy()
+    expect(within(skipGroup()).getByText('2 orders')).toBeTruthy()
+  })
+
+  it('keeps the blank chip non-interactive when read-only', () => {
+    renderPanel(false)
+    expect(within(skipGroup()).getByText('No payment method')).toBeTruthy()
+    expect(
+      within(skipGroup()).queryByRole('button', {
+        name: /No payment method/,
+      })
+    ).toBeNull()
   })
 })
