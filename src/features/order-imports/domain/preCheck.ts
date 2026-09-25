@@ -1,5 +1,7 @@
 /** The upload limits the server enforces; checked here only for instant feedback. */
 export const MAX_IMPORT_FILE_BYTES = 5 * 1024 * 1024
+/** Orders per file; mirrors the backend BULK_IMPORT_MAX_ROWS ceiling. */
+export const MAX_IMPORT_ROWS = 100
 export const ACCEPTED_IMPORT_EXTENSIONS = ['.csv', '.xlsx'] as const
 export const IMPORT_FILE_ACCEPT = ACCEPTED_IMPORT_EXTENSIONS.join(',')
 

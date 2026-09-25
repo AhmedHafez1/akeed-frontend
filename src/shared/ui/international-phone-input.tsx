@@ -136,7 +136,10 @@ InternationalPhoneInput.displayName = 'InternationalPhoneInput'
  * Thin validation helper re-exported for convenience so consumers don't need
  * a direct dependency on `react-phone-number-input`.
  */
-export { isValidPhoneNumber } from 'react-phone-number-input'
+export {
+  getCountryCallingCode,
+  isValidPhoneNumber,
+} from 'react-phone-number-input'
 export type {
   Value as E164Value,
   Country as PhoneCountry,

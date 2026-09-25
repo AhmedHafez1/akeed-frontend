@@ -2792,19 +2792,20 @@
     },
     "viewer": "Only owners and admins can import orders. You can view this import but not change it.",
     "upload": {
-      "heading": "Upload your file",
-      "dropTitle": "Drag your file here",
+      "heading": "Choose your orders file",
+      "dropTitle": "Drag and drop your orders file here",
       "dropActive": "Drop the file to upload it",
-      "helper": "CSV or Excel (.xlsx) · up to 5 MB · up to 5,000 orders",
-      "choose": "Choose file",
+      "helper": "CSV or Excel · up to {rows, plural, one {# order} other {# orders}} · 5 MB max",
+      "choose": "Choose a file from your device",
       "cancel": "Cancel",
       "progressLabel": "Upload progress",
       "uploading": "Uploading… {percent}%",
       "reading": "Reading your orders…",
-      "templatePrompt": "Don't have a file ready? Download template:",
+      "templatePrompt": "No file ready? Download the template:",
       "templateCsv": "CSV",
       "templateExcel": "Excel",
-      "templateFailed": "The template could not be downloaded. Try again."
+      "templateFailed": "The template could not be downloaded. Try again.",
+      "autoAdvance": "As soon as you choose a file, we move on to checking it."
     },
     "fileErrors": {
       "actions": {
@@ -2840,7 +2841,7 @@
       },
       "IMPORT_ROW_LIMIT_EXCEEDED": {
         "title": "This file has too many orders",
-        "body": "Split the file into parts of up to 5,000 orders and upload each part."
+        "body": "Split the file into parts of up to 100 orders and upload each part."
       },
       "IMPORT_COLUMN_LIMIT_EXCEEDED": {
         "title": "This file has too many columns",
@@ -3220,7 +3221,8 @@
         "check": "Check",
         "send": "Send"
       },
-      "stepOf": "{current, number} of {total, number} · {label}"
+      "stepOf": "{current, number} of {total, number} · {label}",
+      "cancel": "Cancel"
     },
     "resume": {
       "title": "Pick up where you left off",
@@ -3228,6 +3230,78 @@
       "dismiss": "Discard",
       "continueLabel": "Continue {name}",
       "dismissLabel": "Discard the draft of {name}"
+    },
+    "check": {
+      "heading": "Check your file",
+      "rows": "{count, plural, one {# row} other {# rows}}",
+      "changeFile": "Change file",
+      "country": "Phone number country",
+      "currency": "Currency",
+      "matched": {
+        "title": "We matched your file's columns",
+        "edit": "Edit matching",
+        "chip": "{field}: column {column}",
+        "missing": "Not in your file (optional): {fields}.",
+        "noDate": "Without an order date, every order counts as recent."
+      },
+      "attention": {
+        "one": "We need your help with one column: {detail}",
+        "many": "We need your help with {count, plural, one {# column} other {# columns}} before you continue.",
+        "why": {
+          "phone": "we're not sure which column has the phone numbers.",
+          "customerName": "we're not sure which column has the customer names.",
+          "amount": "we're not sure which column has the amounts."
+        }
+      },
+      "table": {
+        "field": "Field in Akeed",
+        "column": "Column in your file",
+        "status": "Status"
+      },
+      "choose": "Choose a column…",
+      "notInFile": "Not in the file",
+      "status": {
+        "matched": "Matched",
+        "required": "Required",
+        "check": "Check this"
+      },
+      "samples": "e.g. {values}",
+      "suggestion": {
+        "question": "Is it “{column}”?",
+        "use": "Use it",
+        "useLabel": "Use column {column} for {field}"
+      },
+      "optional": {
+        "title": "Optional fields",
+        "mapped": "{field}: matched",
+        "missing": "{field}: not in the file"
+      },
+      "payment": {
+        "question": "Which orders do we confirm?",
+        "intro": "We only confirm cash-on-delivery orders. Tap a value to move it to the other group.",
+        "confirm": "Confirm · cash on delivery",
+        "ignore": "Skip · paid in advance",
+        "orders": "{count, plural, one {# order} other {# orders}}",
+        "blank": "No value",
+        "blankHint": "Orders with no payment method follow your store setting “Treat as cash on delivery”.",
+        "confirmValue": "Confirm “{value}” orders",
+        "empty": "No values here",
+        "remember": "We'll remember this for your next files.",
+        "summary": "{confirm} → confirm · {ignore} → skip",
+        "summaryConfirmOnly": "{confirm} → confirm",
+        "edit": "Edit",
+        "noColumnAssume": "There's no payment column, so every order counts as cash on delivery, per your store setting.",
+        "noColumnSkip": "There's no payment column, and your store setting doesn't confirm orders without a payment method. Choose the payment column so we know which orders are cash on delivery.",
+        "recount": "We count this column's values when you continue."
+      },
+      "footer": {
+        "ready": "{count, plural, one {# ready} other {# ready}}",
+        "excluded": "{count, plural, one {# excluded} other {# excluded}}",
+        "continue": "Continue to send",
+        "blockedOne": "Choose the {field} column to continue",
+        "blockedMany": "Choose the required columns to continue",
+        "fixErrors": "Fix the highlighted fields to continue"
+      }
     }
   }
 }

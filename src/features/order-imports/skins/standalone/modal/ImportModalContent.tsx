@@ -1,5 +1,6 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import type { UseQueryResult } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import { Skeleton } from '@/shared/ui'
@@ -11,22 +12,36 @@ import {
 import { viewForBatch } from '../../../domain/importStep'
 import type { BulkImportAvailability } from '../../../domain/useBulkImportAvailability'
 import { BatchStateNotice } from '../BatchStateNotice'
+import { CheckStep } from '../check/CheckStep'
 import { CommittingView } from '../CommittingView'
 import { DuplicateFileBanner } from '../DuplicateFileBanner'
 import { ImportedView } from '../ImportedView'
 import { ImportNotice } from '../ImportNotice'
-import { MapStep } from '../MapStep'
 import { PartialImportView } from '../PartialImportView'
 import { ReleaseView } from '../ReleaseView'
 import { ReviewStep } from '../ReviewStep'
 import { UploadStep } from '../UploadStep'
+import { ModalStepLayout } from './ModalStepLayout'
 
 export function ImportContentSkeleton() {
   return (
-    <div className="space-y-4" aria-busy="true">
-      <Skeleton className="h-16 w-full" />
-      <Skeleton className="h-64 w-full" />
-    </div>
+    <ModalStepLayout>
+      <div className="space-y-4" aria-busy="true">
+        <Skeleton className="h-16 w-full" />
+        <Skeleton className="h-64 w-full" />
+      </div>
+    </ModalStepLayout>
+  )
+}
+
+/**
+ * The views from before the modal redesign (review, import, release): they
+ * bring their own footer, which is fixed to the dialog's bottom on phones.
+ * Phases 4 and 6 replace them.
+ */
+function LegacyStep({ children }: { children: ReactNode }) {
+  return (
+    <ModalStepLayout bodyClassName="max-md:pb-32">{children}</ModalStepLayout>
   )
 }
 
@@ -47,7 +62,11 @@ export function ImportNewContent({
   onResume: (batchId: string) => void
 }) {
   if (availability === 'disabled' || isRefusal(drafts.error, 'IMPORT_DISABLED'))
-    return <BatchStateNotice state="disabled" />
+    return (
+      <ModalStepLayout>
+        <BatchStateNotice state="disabled" />
+      </ModalStepLayout>
+    )
   if (availability === 'loading' || drafts.isPending)
     return <ImportContentSkeleton />
 
@@ -69,6 +88,7 @@ export function ImportBatchContent({
   detail,
   editingMapping,
   onEditingMappingChange,
+  onChangeFile,
   reopenStart,
   onStartClosed,
 }: {
@@ -76,23 +96,32 @@ export function ImportBatchContent({
   detail: UseQueryResult<OrderImportBatchDetail>
   editingMapping: boolean
   onEditingMappingChange: (editing: boolean) => void
+  onChangeFile: () => void
   reopenStart: boolean
   onStartClosed: () => void
 }) {
   const t = useTranslations('orderImport')
 
   if (availability === 'disabled' || isRefusal(detail.error, 'IMPORT_DISABLED'))
-    return <BatchStateNotice state="disabled" />
+    return (
+      <ModalStepLayout>
+        <BatchStateNotice state="disabled" />
+      </ModalStepLayout>
+    )
   if (availability === 'loading' || detail.isPending)
     return <ImportContentSkeleton />
   if (detail.isError)
-    return isRefusal(detail.error, 'IMPORT_BATCH_NOT_FOUND') ? (
-      <BatchStateNotice state="notFound" />
-    ) : (
-      <BatchStateNotice
-        state="loadFailed"
-        onRetry={() => void detail.refetch()}
-      />
+    return (
+      <ModalStepLayout>
+        {isRefusal(detail.error, 'IMPORT_BATCH_NOT_FOUND') ? (
+          <BatchStateNotice state="notFound" />
+        ) : (
+          <BatchStateNotice
+            state="loadFailed"
+            onRetry={() => void detail.refetch()}
+          />
+        )}
+      </ModalStepLayout>
     )
 
   const batch = detail.data
@@ -101,64 +130,89 @@ export function ImportBatchContent({
 
   switch (view.kind) {
     case 'expired':
-      return <BatchStateNotice state="expired" />
+      return (
+        <ModalStepLayout>
+          <BatchStateNotice state="expired" />
+        </ModalStepLayout>
+      )
     case 'committing':
-      return <CommittingView detail={batch} />
+      return (
+        <LegacyStep>
+          <CommittingView detail={batch} />
+        </LegacyStep>
+      )
     case 'imported':
       return (
-        <ImportedView
-          detail={batch}
-          canEdit={canEdit}
-          openStartOnLoad={reopenStart}
-          onStartClosed={() => {
-            if (reopenStart) onStartClosed()
-          }}
-        />
+        <LegacyStep>
+          <ImportedView
+            detail={batch}
+            canEdit={canEdit}
+            openStartOnLoad={reopenStart}
+            onStartClosed={() => {
+              if (reopenStart) onStartClosed()
+            }}
+          />
+        </LegacyStep>
       )
     case 'release':
-      return <ReleaseView detail={batch} canEdit={canEdit} />
+      return (
+        <LegacyStep>
+          <ReleaseView detail={batch} canEdit={canEdit} />
+        </LegacyStep>
+      )
     case 'notStarted':
       return (
-        <ImportNotice
-          tone="neutral"
-          role="status"
-          title={t('release.notStartedTitle')}
-        >
-          {t('release.notStartedBody')}
-        </ImportNotice>
+        <ModalStepLayout>
+          <ImportNotice
+            tone="neutral"
+            role="status"
+            title={t('release.notStartedTitle')}
+          >
+            {t('release.notStartedBody')}
+          </ImportNotice>
+        </ModalStepLayout>
       )
     case 'partial':
-      return <PartialImportView detail={batch} />
+      return (
+        <LegacyStep>
+          <PartialImportView detail={batch} />
+        </LegacyStep>
+      )
     case 'unavailable':
       return (
-        <BatchStateNotice
-          state="unavailable"
-          status={t(`batchStatus.${view.status}`)}
-        />
+        <ModalStepLayout>
+          <BatchStateNotice
+            state="unavailable"
+            status={t(`batchStatus.${view.status}`)}
+          />
+        </ModalStepLayout>
       )
   }
 
-  const mapping = view.step === 'map' || (editingMapping && canEdit)
+  if (view.step === 'map' || (editingMapping && canEdit))
+    return (
+      <CheckStep
+        // A fresh form each time the merchant comes back to it.
+        key={`check-${batch.mappingConfirmed}`}
+        detail={batch}
+        canEdit={canEdit}
+        onSaved={() => onEditingMappingChange(false)}
+        onChangeFile={onChangeFile}
+        notice={
+          batch.duplicateFileOf && (
+            <DuplicateFileBanner duplicate={batch.duplicateFileOf} />
+          )
+        }
+      />
+    )
+
   return (
-    <div className="space-y-5">
-      {batch.duplicateFileOf && mapping && (
-        <DuplicateFileBanner duplicate={batch.duplicateFileOf} />
-      )}
-      {mapping ? (
-        <MapStep
-          // A fresh form each time the merchant comes back to it.
-          key={`map-${batch.mappingConfirmed}`}
-          detail={batch}
-          canEdit={canEdit}
-          onSaved={() => onEditingMappingChange(false)}
-        />
-      ) : (
-        <ReviewStep
-          detail={batch}
-          canEdit={canEdit}
-          onBackToMapping={() => onEditingMappingChange(true)}
-        />
-      )}
-    </div>
+    <LegacyStep>
+      <ReviewStep
+        detail={batch}
+        canEdit={canEdit}
+        onBackToMapping={() => onEditingMappingChange(true)}
+      />
+    </LegacyStep>
   )
 }

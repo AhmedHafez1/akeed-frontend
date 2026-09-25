@@ -2,12 +2,12 @@
 
 import { useRef, useState, type ChangeEvent, type DragEvent } from 'react'
 import Link from 'next/link'
-import { Copy, FileSpreadsheet, UploadCloud, X } from 'lucide-react'
+import { Copy, FileSpreadsheet, Info, Upload, X } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { downloadBlob } from '@/shared/lib/download'
 import { withLocale, type SupportedLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
-import { Button, notify, Progress } from '@/shared/ui'
+import { Button, DialogClose, notify, Progress } from '@/shared/ui'
 import { useUploadOrderImport } from '../../api/orderImportMutations'
 import {
   downloadOrderImportTemplate,
@@ -17,9 +17,14 @@ import {
 } from '../../api/orderImportsApi'
 import { describeFileError } from '../../domain/fileErrors'
 import { formatFileSize } from '../../domain/format'
-import { IMPORT_FILE_ACCEPT, preCheckImportFile } from '../../domain/preCheck'
+import {
+  IMPORT_FILE_ACCEPT,
+  MAX_IMPORT_ROWS,
+  preCheckImportFile,
+} from '../../domain/preCheck'
 import { IMPORT_STEP_HEADING_ID } from './importHeading'
 import { ImportNotice } from './ImportNotice'
+import { ModalStepLayout } from './modal/ModalStepLayout'
 import { newestDraft, ResumeDraftBanner } from './ResumeDraftBanner'
 
 type UploadState =
@@ -136,11 +141,24 @@ export function UploadStep({
   const resumable = busy ? undefined : newestDraft(refusedDrafts ?? drafts)
 
   return (
-    <section aria-labelledby={IMPORT_STEP_HEADING_ID} className="space-y-5">
+    <ModalStepLayout
+      footer={
+        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-muted-foreground text-sm">
+            {t('upload.autoAdvance')}
+          </p>
+          <DialogClose asChild>
+            <Button type="button" variant="outline" className="h-11 sm:h-10">
+              {t('modal.cancel')}
+            </Button>
+          </DialogClose>
+        </div>
+      }
+    >
       <h2
         id={IMPORT_STEP_HEADING_ID}
         tabIndex={-1}
-        className="text-foreground text-h3 font-semibold focus:outline-none"
+        className="sr-only focus:outline-none"
       >
         {t('upload.heading')}
       </h2>
@@ -188,58 +206,59 @@ export function UploadStep({
           onDragLeave={() => setDragging(false)}
           onDrop={onDrop}
           className={cn(
-            'rounded-panel flex flex-col items-center gap-4 border-2 border-dashed px-6 py-12 text-center transition-colors',
+            'rounded-card flex flex-col items-center gap-4 border border-dashed px-6 py-10 text-center transition-colors motion-reduce:transition-none sm:py-14',
             dragging
               ? 'border-primary bg-primary-subtle'
-              : 'border-border bg-card'
+              : 'border-border bg-muted/30'
           )}
         >
-          <span className="bg-primary-subtle text-primary inline-flex size-14 items-center justify-center rounded-full">
-            <UploadCloud aria-hidden="true" className="size-7" />
+          <span className="bg-primary-subtle text-primary inline-flex size-16 items-center justify-center rounded-full">
+            <Upload aria-hidden="true" className="size-7" />
           </span>
           <div className="space-y-1">
-            <p className="text-foreground text-lg font-semibold">
+            <p className="text-foreground text-lg font-bold">
               {dragging ? t('upload.dropActive') : t('upload.dropTitle')}
             </p>
             <p className="text-muted-foreground text-sm">
-              {t('upload.helper')}
+              {t('upload.helper', { rows: MAX_IMPORT_ROWS })}
             </p>
           </div>
           <Button
             type="button"
             size="lg"
+            className="h-12 w-full sm:w-auto"
             disabled={!canEdit}
             onClick={chooseFile}
           >
-            <FileSpreadsheet aria-hidden="true" className="size-4" />
             {t('upload.choose')}
           </Button>
         </div>
       )}
 
       <p className="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+        <Info aria-hidden="true" className="size-4 shrink-0" />
         <span>{t('upload.templatePrompt')}</span>
         <Button
           type="button"
           variant="link"
           size="sm"
-          className="h-auto p-0"
-          onClick={() => void downloadTemplate('csv')}
+          className="h-auto min-h-11 p-0 sm:min-h-0"
+          onClick={() => void downloadTemplate('xlsx')}
         >
-          {t('upload.templateCsv')}
+          {t('upload.templateExcel')}
         </Button>
         <span aria-hidden="true">·</span>
         <Button
           type="button"
           variant="link"
           size="sm"
-          className="h-auto p-0"
-          onClick={() => void downloadTemplate('xlsx')}
+          className="h-auto min-h-11 p-0 sm:min-h-0"
+          onClick={() => void downloadTemplate('csv')}
         >
-          {t('upload.templateExcel')}
+          {t('upload.templateCsv')}
         </Button>
       </p>
-    </section>
+    </ModalStepLayout>
   )
 }
 

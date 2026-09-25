@@ -111,11 +111,13 @@ function ImportModal({
           </DialogDescription>
         </header>
 
-        <div className="min-h-0 flex-1 space-y-5 overflow-y-auto px-4 py-5 max-md:pb-32 sm:px-6 sm:py-6">
+        <div className="flex min-h-0 flex-1 flex-col">
           {!canEdit && (
-            <ImportNotice tone="info" role="status">
-              {t('viewer')}
-            </ImportNotice>
+            <div className="shrink-0 px-4 pt-4 sm:px-6">
+              <ImportNotice tone="info" role="status">
+                {t('viewer')}
+              </ImportNotice>
+            </div>
           )}
           {target.kind === 'new' ? (
             <ImportNewContent
@@ -132,6 +134,7 @@ function ImportModal({
               onEditingMappingChange={(editing) =>
                 setEditingFor(editing ? batchId : null)
               }
+              onChangeFile={() => onOpen({ kind: 'new' })}
               reopenStart={reopenStart}
               onStartClosed={onStartClosed}
             />
