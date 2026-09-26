@@ -6,8 +6,8 @@ import type { OrderImportBatchDetail } from '../api/orderImportsApi'
  *
  * The server's batch status stays the source of truth for where a batch is
  * (a refresh lands on the same step, see `flowFromBatch`); this holds what
- * the server does not know -- a file being read, the check's open panels, a
- * merchant going back to the mapping, and whether "import" should also send.
+ * the server does not know -- a file being read, the check's open panels, and
+ * a merchant going back to the mapping.
  */
 export type FlowPhase =
   | 'idle'
@@ -23,8 +23,6 @@ export type FlowState = {
   mappingOpen: boolean
   /** The payment buckets are open instead of their one-line summary. */
   paymentOpen: boolean
-  /** "استيراد وإرسال": start sending as soon as the import is in. */
-  sendAfterImport: boolean
 }
 
 export type FlowEvent =
@@ -35,7 +33,7 @@ export type FlowEvent =
   | { type: 'editPayment' }
   | { type: 'mappingSaved' }
   | { type: 'backToCheck' }
-  | { type: 'import'; send: boolean }
+  | { type: 'import' }
   | { type: 'importFailed' }
   | { type: 'imported' }
   | { type: 'sendStarted' }
@@ -45,7 +43,6 @@ export const initialFlow: FlowState = {
   phase: 'idle',
   mappingOpen: false,
   paymentOpen: true,
-  sendAfterImport: false,
 }
 
 /**
@@ -81,16 +78,12 @@ export function flowReducer(state: FlowState, event: FlowEvent): FlowState {
         ? { ...state, phase: 'check', mappingOpen: true, paymentOpen: true }
         : state
     case 'import':
-      return state.phase === 'review'
-        ? { ...state, phase: 'importing', sendAfterImport: event.send }
-        : state
+      return state.phase === 'review' ? { ...state, phase: 'importing' } : state
     case 'importFailed':
-      return state.phase === 'importing'
-        ? { ...state, phase: 'review', sendAfterImport: false }
-        : state
+      return state.phase === 'importing' ? { ...state, phase: 'review' } : state
     case 'imported':
       return state.phase === 'importing'
-        ? { ...state, phase: state.sendAfterImport ? 'sending' : 'review' }
+        ? { ...state, phase: 'sending' }
         : state
     case 'sendStarted':
       return { ...state, phase: 'sending' }

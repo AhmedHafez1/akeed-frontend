@@ -16,21 +16,10 @@ describe('flowReducer', () => {
       { type: 'fileChosen' },
       { type: 'checkOpened', allMatched: true },
       { type: 'mappingSaved' },
-      { type: 'import', send: true },
+      { type: 'import' },
       { type: 'imported' },
     ])
     expect(state.phase).toBe('sending')
-  })
-
-  it('stops after importing when the merchant chose "import only"', () => {
-    const state = run([
-      { type: 'fileChosen' },
-      { type: 'checkOpened', allMatched: true },
-      { type: 'mappingSaved' },
-      { type: 'import', send: false },
-      { type: 'imported' },
-    ])
-    expect(state).toMatchObject({ phase: 'review', sendAfterImport: false })
   })
 
   it('opens the check collapsed only when everything matched', () => {
@@ -73,14 +62,14 @@ describe('flowReducer', () => {
     const failed = run([
       { type: 'checkOpened', allMatched: true },
       { type: 'mappingSaved' },
-      { type: 'import', send: true },
+      { type: 'import' },
       { type: 'importFailed' },
     ])
-    expect(failed).toMatchObject({ phase: 'review', sendAfterImport: false })
+    expect(failed.phase).toBe('review')
   })
 
   it('ignores events that do not fit the phase', () => {
-    expect(run([{ type: 'import', send: true }])).toBe(initialFlow)
+    expect(run([{ type: 'import' }])).toBe(initialFlow)
     expect(run([{ type: 'mappingSaved' }])).toBe(initialFlow)
   })
 })

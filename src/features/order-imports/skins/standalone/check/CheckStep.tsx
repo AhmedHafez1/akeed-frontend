@@ -7,7 +7,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useAssumeCodWhenPaymentMissing } from '@/features/settings'
 import { orderCurrencies } from '@/shared/commerce/orderCommerce'
 import { queryKeys } from '@/shared/query/keys'
-import { Button, LoadingButton, notify } from '@/shared/ui'
+import { Button, DialogClose, LoadingButton, notify } from '@/shared/ui'
 import {
   ALLOWED_COUNTRIES,
   getCountryCallingCode,
@@ -438,14 +438,21 @@ function CheckFooter({
   const t = useTranslations('orderImport')
   return (
     <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <Button
-        type="button"
-        variant="outline"
-        className="h-11 sm:h-10"
-        onClick={onBack}
-      >
-        {t('map.back')}
-      </Button>
+      <div className="flex flex-col-reverse gap-2 sm:flex-row">
+        <Button
+          type="button"
+          variant="outline"
+          className="h-11 sm:h-10"
+          onClick={onBack}
+        >
+          {t('map.back')}
+        </Button>
+        <DialogClose asChild>
+          <Button type="button" variant="outline" className="h-11 sm:h-10">
+            {t('modal.cancel')}
+          </Button>
+        </DialogClose>
+      </div>
       {canEdit && (
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:gap-4">
           {blockedReason ? (

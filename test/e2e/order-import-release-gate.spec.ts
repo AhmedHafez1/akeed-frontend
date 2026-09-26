@@ -103,7 +103,7 @@ const COMBINATIONS = (['ar', 'en'] as const).flatMap((locale) =>
 mkdirSync(SHOTS, { recursive: true })
 
 for (const { locale, theme, width } of COMBINATIONS) {
-  test(`arabic-excel.xlsx file → check → import and send → progress → Verifications (${locale}, ${theme}, ${width})`, async ({
+  test(`arabic-excel.xlsx file → check → send → progress → Verifications (${locale}, ${theme}, ${width})`, async ({
     page,
   }) => {
     await page.setViewportSize({ width, height: width === 390 ? 844 : 900 })
@@ -114,8 +114,12 @@ for (const { locale, theme, width } of COMBINATIONS) {
         fullPage: true,
       })
     const dialog = page.getByRole('dialog')
+    const cancel = dialog.getByRole('button', {
+      name: message(locale, 'orderImport.modal.cancel'),
+    })
 
     await upload(page, locale)
+    await expect(cancel).toBeVisible()
 
     // Check: every column was detected; Continue sends that mapping unchanged.
     const next = dialog.getByRole('button', {
@@ -128,15 +132,10 @@ for (const { locale, theme, width } of COMBINATIONS) {
     // Send: the ready orders priced before anything is imported, no consent
     // box, and nothing sent yet.
     const send = dialog.getByRole('button', {
-      name: label(locale, 'orderImport.send.importAndSend'),
+      name: label(locale, 'orderImport.send.sendNow'),
     })
     await expect(send).toBeEnabled()
-    // Said once per layout: the footer line on desktop, under the buttons on phones.
-    await expect(
-      dialog
-        .getByText(message(locale, 'orderImport.send.reassure'))
-        .filter({ visible: true })
-    ).toHaveCount(1)
+    await expect(cancel).toBeVisible()
     await expect(dialog.getByRole('checkbox')).toHaveCount(0)
     await shot('2-send')
     const beforeSend = await replayCalls(page)
@@ -219,7 +218,7 @@ test('resumes each step from the batch URL after a refresh', async ({
     name: message('en', 'orderImport.check.footer.continue'),
   })
   const send = dialog.getByRole('button', {
-    name: label('en', 'orderImport.send.importAndSend'),
+    name: label('en', 'orderImport.send.sendNow'),
   })
 
   await upload(page, 'en')
@@ -231,24 +230,18 @@ test('resumes each step from the batch URL after a refresh', async ({
   await page.reload()
   await expect(send).toBeVisible()
 
-  // Import only: the orders are held, the modal closes, nothing is sent.
-  await dialog
-    .getByRole('button', { name: message('en', 'orderImport.send.importOnly') })
-    .click()
-  await expect(
-    page.getByText(label('en', 'orderImport.send.done.imported'))
-  ).toBeVisible({ timeout: 30_000 })
+  // The resumed quote still requires the single send action.
+  expect(posts(await replayCalls(page), '/commit')).toEqual([])
   expect(posts(await replayCalls(page), '/start')).toEqual([])
-
-  // Opened again, the imported batch offers to send now.
-  await page.goto(`/en/imports/${recording.batchId}`)
-  const sendNow = page.getByRole('dialog').getByRole('button', {
-    name: label('en', 'orderImport.send.sendNow'),
-  })
-  await expect(sendNow).toBeVisible()
+  await send.click()
   await expect(
-    page.getByText(message('en', 'orderImport.send.importedNotice'))
-  ).toBeVisible()
-  await page.reload()
-  await expect(sendNow).toBeVisible()
+    page.getByText(label('en', 'orderImport.send.done.sent'))
+  ).toBeVisible({ timeout: 30_000 })
+  const calls = await replayCalls(page)
+  expect(posts(calls, '/commit')).toHaveLength(1)
+  const starts = posts(calls, '/start')
+  expect(starts).toHaveLength(1)
+  expect(starts[0].body).toEqual({
+    quoteToken: recorded('start-quote').quoteToken,
+  })
 })

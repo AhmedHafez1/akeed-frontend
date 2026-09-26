@@ -104,7 +104,11 @@ function ImportModal({
 
   return (
     <Dialog open onOpenChange={(open) => !open && close()}>
-      <DialogContent size="wide" hideClose>
+      <DialogContent
+        size="wide"
+        hideClose
+        onPointerDownOutside={(event) => event.preventDefault()}
+      >
         <header className="border-border shrink-0 border-b">
           <div className="flex items-center gap-4 px-4 py-3 sm:px-6 sm:py-4">
             <div className="min-w-0 flex-1 space-y-0.5">

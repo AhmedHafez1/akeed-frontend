@@ -100,6 +100,15 @@ beforeEach(() => {
 })
 
 describe('ImportModal leaving a batch', () => {
+  it('does not close or discard a draft when the user clicks outside', async () => {
+    await openBatch('draft')
+    fireEvent.pointerDown(document.body)
+
+    expect(closeButton()).toBeTruthy()
+    expect(url.close).not.toHaveBeenCalled()
+    expect(api.discardOrderImport).not.toHaveBeenCalled()
+  })
+
   it('discards a draft when the modal is closed', async () => {
     await openBatch('draft')
     fireEvent.click(closeButton())

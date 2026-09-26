@@ -3217,9 +3217,6 @@
         "loading": "Working out the cost…"
       },
       "deadline": "Start sending within {hours, plural, =0 {the hour} one {# hour} other {# hours}} so these orders stay eligible.",
-      "reassure": "Nothing is sent until you press send.",
-      "importOnly": "Import only",
-      "importAndSend": "Import and send to {count, plural, one {# customer} other {# customers}}",
       "sendNow": "Send to {count, plural, one {# customer} other {# customers}}",
       "importing": "Importing your orders…",
       "importProgress": "{imported, number} of {total, number} imported",
@@ -3231,8 +3228,7 @@
         "importFailed": "The orders couldn't be imported. Nothing was sent; try again."
       },
       "done": {
-        "sent": "Imported {count, plural, one {# order} other {# orders}} — we're sending the confirmations now. Follow each order's status here.",
-        "imported": "Imported {count, plural, one {# order} other {# orders}}. Nothing is sent until you start sending."
+        "sent": "Imported {count, plural, one {# order} other {# orders}} — we're sending the confirmations now. Follow each order's status here."
       },
       "phoneFix": {
         "label": "New phone number for row {number}",

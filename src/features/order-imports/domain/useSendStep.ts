@@ -18,16 +18,14 @@ import { flowFromBatch, flowReducer, initialFlow } from './importFlow'
 export type SendNotice = 'stale' | 'startFailed' | 'importFailed' | null
 
 /** How the step ended: the modal closes and says so. */
-export type SendOutcome = { kind: 'sent' | 'imported'; count: number }
+export type SendOutcome = { kind: 'sent'; count: number }
 
 type PendingStart = { quoteToken: string }
 
 /**
- * Step 3 (الإرسال): the quote and the two endings --
- * "استيراد فقط" (commit) and "استيراد وإرسال" (commit, then start as soon as
- * the orders are held). A draft is priced before its import; that quote's
- * token carries over to the start, and if the import changed N the server
- * answers with a fresh quote, which the merchant confirms again.
+ * Step 3 (الإرسال): review the quote, then commit and start. A draft is
+ * priced before import; its quote token carries over to start, and if the
+ * import changed N the server returns a fresh quote for confirmation.
  */
 export function useSendStep(
   detail: OrderImportBatchDetail,
@@ -49,10 +47,8 @@ export function useSendStep(
   const commit = useCommitOrderImport(batchId)
   const start = useStartOrderImport(batchId)
   const [notice, setNotice] = useState<SendNotice>(null)
-  // Set when the merchant pressed "استيراد وإرسال"; null for "import only"
-  // and for an import this tab did not start (a refresh mid-commit).
+  // A refresh mid-commit has no token, so it must not start automatically.
   const pendingStart = useRef<PendingStart | null>(null)
-  const importedHere = useRef(false)
   const done = useRef(onDone)
   done.current = onDone
 
@@ -61,8 +57,6 @@ export function useSendStep(
   const sendBlocked =
     !current || current.blockers.length > 0 || current.orders === 0
   const canSend = !sendBlocked && flow.phase === 'review' && !quote.isFetching
-  const canImportOnly =
-    detail.status === 'draft' && flow.phase === 'review' && ready > 0
 
   const backToReview = () =>
     dispatch({ type: 'restore', state: { ...initialFlow, phase: 'review' } })
@@ -100,21 +94,17 @@ export function useSendStep(
     })
   }
 
-  /** "استيراد وإرسال" (send) or "استيراد فقط"; once imported, only send. */
-  const submit = (send: boolean) => {
-    if (send && (!canSend || !current)) return
-    if (!send && !canImportOnly) return
+  const submit = () => {
+    if (!canSend || !current) return
     setNotice(null)
-    const pending = send ? { quoteToken: current!.quoteToken } : null
+    const pending = { quoteToken: current.quoteToken }
     if (imported) {
-      if (!pending) return
       dispatch({ type: 'sendStarted' })
       startSending(pending)
       return
     }
     pendingStart.current = pending
-    importedHere.current = true
-    dispatch({ type: 'import', send })
+    dispatch({ type: 'import' })
     commit.mutate(undefined, {
       onError: () => {
         pendingStart.current = null
@@ -127,33 +117,25 @@ export function useSendStep(
   // The commit runs in the background; the batch is polled until it is in.
   useEffect(() => {
     if (flow.phase !== 'importing' || detail.status !== 'awaiting_start') return
-    if (!importedHere.current) {
+    const pending = pendingStart.current
+    pendingStart.current = null
+    if (!pending) {
       backToReview()
       return
     }
-    const pending = pendingStart.current
-    pendingStart.current = null
     dispatch({ type: 'imported' })
-    if (pending) startSending(pending)
-    else
-      done.current({
-        kind: 'imported',
-        count: detail.counts.imported ?? ready,
-      })
+    startSending(pending)
     // Runs once per arrival at awaiting_start while importing.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flow.phase, detail.status])
 
   return {
     phase: flow.phase,
-    /** The running import will also start sending. */
-    sendAfterImport: flow.sendAfterImport,
     quote,
     imported,
     notice,
     canSend,
     sendBlocked,
-    canImportOnly,
     submit,
   }
 }

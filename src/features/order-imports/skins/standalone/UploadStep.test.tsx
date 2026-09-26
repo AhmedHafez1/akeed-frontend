@@ -47,6 +47,7 @@ describe('upload step', () => {
     )
 
     expect(screen.getByTestId('order-import-dropzone')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Cancel' })).toBeTruthy()
     expect(screen.queryByText('akeed-orders-temp-1.xlsx')).toBeNull()
     expect(screen.queryByRole('button', { name: /continue/i })).toBeNull()
     expect(

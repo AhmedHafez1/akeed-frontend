@@ -85,7 +85,6 @@ describe('useSendStep', () => {
     expect(result.current.canSend).toBe(false)
     await waitFor(() => expect(result.current.quote.data).toBeDefined())
     expect(result.current.canSend).toBe(true)
-    expect(result.current.canImportOnly).toBe(true)
   })
 
   it('never sends while a blocker stands', async () => {
@@ -97,24 +96,8 @@ describe('useSendStep', () => {
     const { result } = setup(detail())
     await waitFor(() => expect(result.current.quote.data).toBeDefined())
     expect(result.current.canSend).toBe(false)
-    act(() => result.current.submit(true))
+    act(() => result.current.submit())
     expect(api.commitOrderImport).not.toHaveBeenCalled()
-  })
-
-  it('imports only, then reports the import', async () => {
-    api.commitOrderImport.mockResolvedValue(detail({ status: 'committing' }))
-    const { result, rerender, onDone } = setup(detail())
-    await waitFor(() => expect(result.current.quote.data).toBeDefined())
-    act(() => result.current.submit(false))
-    await waitFor(() => expect(api.commitOrderImport).toHaveBeenCalled())
-    expect(result.current.phase).toBe('importing')
-    rerender({
-      batch: detail({ status: 'awaiting_start', counts: { imported: 5 } }),
-    })
-    await waitFor(() =>
-      expect(onDone).toHaveBeenCalledWith({ kind: 'imported', count: 5 })
-    )
-    expect(api.startOrderImport).not.toHaveBeenCalled()
   })
 
   it('imports, then starts with the token the merchant saw', async () => {
@@ -124,7 +107,7 @@ describe('useSendStep', () => {
     )
     const { result, rerender, onDone } = setup(detail())
     await waitFor(() => expect(result.current.quote.data).toBeDefined())
-    act(() => result.current.submit(true))
+    act(() => result.current.submit())
     await waitFor(() => expect(api.commitOrderImport).toHaveBeenCalled())
     rerender({
       batch: detail({ status: 'awaiting_start', counts: { imported: 5 } }),
@@ -149,7 +132,7 @@ describe('useSendStep', () => {
     )
     const { result, rerender, onDone } = setup(detail())
     await waitFor(() => expect(result.current.quote.data).toBeDefined())
-    act(() => result.current.submit(true))
+    act(() => result.current.submit())
     await waitFor(() => expect(api.commitOrderImport).toHaveBeenCalled())
     // Imported, the server now prices the four held orders.
     api.getOrderImportStartQuote.mockResolvedValue(fresh)
@@ -158,6 +141,31 @@ describe('useSendStep', () => {
     expect(result.current.phase).toBe('review')
     expect(result.current.quote.data?.orders).toBe(4)
     expect(onDone).not.toHaveBeenCalled()
+  })
+
+  it('retries a held batch with the fresh quote token', async () => {
+    api.getOrderImportStartQuote.mockResolvedValue(
+      quote({ quoteToken: 'held-token' })
+    )
+    api.startOrderImport.mockResolvedValue(
+      detail({ status: 'releasing', counts: { imported: 5 } })
+    )
+    const { result, onDone } = setup(
+      detail({ status: 'awaiting_start', counts: { imported: 5 } })
+    )
+
+    await waitFor(() => expect(result.current.quote.data).toBeDefined())
+    act(() => result.current.submit())
+
+    await waitFor(() =>
+      expect(api.startOrderImport).toHaveBeenCalledWith(BATCH, {
+        quoteToken: 'held-token',
+      })
+    )
+    expect(api.commitOrderImport).not.toHaveBeenCalled()
+    await waitFor(() =>
+      expect(onDone).toHaveBeenCalledWith({ kind: 'sent', count: 5 })
+    )
   })
 
   it('does not start a batch another tab imported', async () => {

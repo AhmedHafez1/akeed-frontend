@@ -7,7 +7,13 @@ import { Clock, FileSpreadsheet, Send } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { billingPurchaseHref } from '@/features/billing'
 import { withLocale, type SupportedLocale } from '@/shared/lib/locale'
-import { Button, LoadingButton, Progress, Skeleton } from '@/shared/ui'
+import {
+  Button,
+  DialogClose,
+  LoadingButton,
+  Progress,
+  Skeleton,
+} from '@/shared/ui'
 import { orderImportAllRowsOptions } from '../../../api/orderImportQueries'
 import type {
   OrderImportBatchDetail,
@@ -34,8 +40,7 @@ interface SendStepProps {
 
 /**
  * Step 3 (الإرسال): how many orders will be confirmed, what stays out and
- * why and what it costs -- then "استيراد فقط" or "استيراد
- * وإرسال". The reassurance that nothing is sent yet is said once, here.
+ * why and what it costs before the merchant sends the batch.
  */
 export function SendStep({ detail, canEdit, onBack, onDone }: SendStepProps) {
   const t = useTranslations('orderImport.send')
@@ -52,21 +57,18 @@ export function SendStep({ detail, canEdit, onBack, onDone }: SendStepProps) {
   return (
     <ModalStepLayout
       footer={
-        canEdit && (
-          <SendFooter
-            draft={draft}
-            ready={quote?.orders ?? ready}
-            phase={send.phase}
-            sendAfterImport={send.sendAfterImport}
-            canSend={send.canSend}
-            canImportOnly={send.canImportOnly}
-            quote={quote}
-            batchId={detail.batchId}
-            locale={locale}
-            onBack={onBack}
-            onSubmit={send.submit}
-          />
-        )
+        <SendFooter
+          canEdit={canEdit}
+          draft={draft}
+          ready={quote?.orders ?? ready}
+          phase={send.phase}
+          canSend={send.canSend}
+          quote={quote}
+          batchId={detail.batchId}
+          locale={locale}
+          onBack={onBack}
+          onSubmit={send.submit}
+        />
       }
     >
       <h2
@@ -259,36 +261,32 @@ function ImportProgress({
 }
 
 function SendFooter({
+  canEdit,
   draft,
   ready,
   phase,
-  sendAfterImport,
   canSend,
-  canImportOnly,
   quote,
   batchId,
   locale,
   onBack,
   onSubmit,
 }: {
+  canEdit: boolean
   draft: boolean
   ready: number
   phase: string
-  sendAfterImport: boolean
   canSend: boolean
-  canImportOnly: boolean
   quote: OrderImportStartQuote | undefined
   batchId: string
   locale: SupportedLocale
   onBack: () => void
-  onSubmit: (send: boolean) => void
+  onSubmit: () => void
 }) {
   const t = useTranslations('orderImport')
   const busy = phase === 'importing' || phase === 'sending'
   const shortfall = quote ? shortfallOf(quote) : undefined
-  const sendLabel = draft
-    ? t('send.importAndSend', { count: ready })
-    : t('send.sendNow', { count: ready })
+  const sendLabel = t('send.sendNow', { count: ready })
 
   const primary = shortfall ? (
     <Button asChild size="lg" className="h-12 w-full sm:h-11 sm:w-auto">
@@ -310,10 +308,8 @@ function SendFooter({
       size="lg"
       className="h-12 w-full sm:h-11 sm:w-auto"
       disabled={!canSend || busy}
-      loading={
-        phase === 'sending' || (phase === 'importing' && sendAfterImport)
-      }
-      onClick={() => onSubmit(true)}
+      loading={phase === 'sending' || phase === 'importing'}
+      onClick={onSubmit}
     >
       <Send aria-hidden="true" className="size-4 rtl:-scale-x-100" />
       {sendLabel}
@@ -324,9 +320,9 @@ function SendFooter({
   )
 
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <div className="hidden items-center gap-4 sm:flex">
-        {draft && (
+    <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center">
+        {canEdit && draft && (
           <Button
             type="button"
             variant="outline"
@@ -336,25 +332,14 @@ function SendFooter({
             {t('map.back')}
           </Button>
         )}
-        <p className="text-muted-foreground text-sm">{t('send.reassure')}</p>
+        <DialogClose asChild>
+          <Button type="button" variant="outline" className="h-11 sm:h-10">
+            {t('modal.cancel')}
+          </Button>
+        </DialogClose>
       </div>
       <div className="flex flex-col gap-2 sm:flex-row-reverse sm:items-center sm:gap-3">
-        {ready > 0 && primary}
-        {draft && (
-          <LoadingButton
-            type="button"
-            variant="outline"
-            className="max-sm:text-primary h-11 max-sm:border-0 max-sm:bg-transparent max-sm:shadow-none sm:h-11"
-            disabled={!canImportOnly || busy}
-            loading={phase === 'importing' && !sendAfterImport}
-            onClick={() => onSubmit(false)}
-          >
-            {t('send.importOnly')}
-          </LoadingButton>
-        )}
-        <p className="text-muted-foreground text-center text-xs sm:hidden">
-          {t('send.reassure')}
-        </p>
+        {canEdit && ready > 0 && primary}
       </div>
     </div>
   )
