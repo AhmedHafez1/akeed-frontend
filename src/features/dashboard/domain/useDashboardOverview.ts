@@ -7,12 +7,12 @@ import type { DashboardStatsDateRange } from '../model/dashboard.model'
 const AWAITING_POLL_INTERVAL_MS = 30_000
 
 /**
- * The embedded dashboard's numbers, from the one aggregate endpoint.
+ * The dashboard overview's numbers, from the one aggregate endpoint.
  *
  * Replies arrive by webhook, so while anything is still waiting on a customer
  * the dashboard re-reads every 30 seconds; a settled period is left alone.
  */
-export function useEmbeddedOverview(dateRange: DashboardStatsDateRange) {
+export function useDashboardOverview(dateRange: DashboardStatsDateRange) {
   const query = useQuery({
     ...verificationOverviewOptions(dateRange),
     refetchInterval: (current) => {

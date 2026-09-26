@@ -54,39 +54,6 @@ export const OUTCOME_STAGES: Readonly<
   needs_attention: ['failed', 'expired', 'no_reply'],
 }
 
-export const OUTCOME_FILTER_IDS = [
-  'confirmed',
-  'canceled',
-  'in_progress',
-  'needs_attention',
-] as const satisfies ReadonlyArray<OutcomeFilter>
-
-/** Every filter the standalone list can be deep-linked to. */
-export const STANDALONE_STATUS_FILTER_IDS: ReadonlyArray<VerificationStatusFilter> =
-  [
-    ...new Set<VerificationStatusFilter>([
-      ...VERIFICATION_STATUS_FILTER_IDS,
-      ...OUTCOME_FILTER_IDS,
-      ...OUTCOME_FILTER_IDS.flatMap((outcome) => OUTCOME_STAGES[outcome]),
-    ]),
-  ]
-
-/**
- * The outcome a filter sits under: itself for an outcome, the parent for a
- * stage, and null for `all` or a filter that spans outcomes.
- */
-export function outcomeOfFilter(
-  filter: VerificationStatusFilter
-): OutcomeFilter | null {
-  return (
-    OUTCOME_FILTER_IDS.find(
-      (outcome) =>
-        outcome === filter ||
-        (OUTCOME_STAGES[outcome] as readonly string[]).includes(filter)
-    ) ?? null
-  )
-}
-
 /**
  * Filters that stand for several underlying statuses.
  *

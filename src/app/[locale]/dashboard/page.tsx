@@ -6,12 +6,20 @@ import {
   DashboardEmbeddedShellSkeleton,
   DashboardStandaloneSkin,
   MainEmbeddedSkin,
-  useDashboard,
+  useStandaloneDashboardUrlState,
 } from '@/features/dashboard'
 
 function StandaloneDashboardPageContent() {
-  const skinProps = useDashboard()
-  return <DashboardStandaloneSkin {...skinProps} />
+  const { period, periodOptions, onPeriodChange, confirmationsHref } =
+    useStandaloneDashboardUrlState()
+  return (
+    <DashboardStandaloneSkin
+      period={period}
+      periodOptions={periodOptions}
+      onPeriodChange={onPeriodChange}
+      needsActionHref={confirmationsHref('needs_action')}
+    />
+  )
 }
 
 export default function DashboardPage() {

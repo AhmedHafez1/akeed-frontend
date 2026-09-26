@@ -8,32 +8,26 @@ import { getLocaleFromPathname } from '@/shared/lib/locale'
 import {
   DashboardEmbeddedShellSkeleton,
   DashboardVerificationsStandaloneSkin,
-  useDashboard,
+  useStandaloneDashboardUrlState,
 } from '@/features/dashboard'
-import { useVerificationStatusQuery } from '@/features/dashboard/hooks/useVerificationStatusQuery'
 import { ImportFilterChip, ImportModalHost } from '@/features/order-imports'
 
 function StandaloneVerificationsPageContent() {
-  const {
-    statusFilter,
-    onStatusFilterChange,
-    importBatchId,
-    onClearImportBatch,
-  } = useVerificationStatusQuery()
-  const skinProps = useDashboard(
-    statusFilter,
-    onStatusFilterChange,
-    importBatchId
-  )
+  const url = useStandaloneDashboardUrlState()
   return (
     <>
       <DashboardVerificationsStandaloneSkin
-        {...skinProps}
+        period={url.period}
+        periodOptions={url.periodOptions}
+        onPeriodChange={url.onPeriodChange}
+        tab={url.tab}
+        onTabChange={url.onTabChange}
+        importBatchId={url.importBatchId}
         headerAction={
-          importBatchId && (
+          url.importBatchId && (
             <ImportFilterChip
-              batchId={importBatchId}
-              onClear={onClearImportBatch}
+              batchId={url.importBatchId}
+              onClear={url.onClearImportBatch}
             />
           )
         }

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { AppProvider } from '@shopify/polaris'
 import enTranslations from '@shopify/polaris/locales/en.json'
 import '@shopify/polaris/build/esm/styles.css'
-import { useDashboard } from '@/features/dashboard/domain/useDashboard'
+import { useStandaloneDashboardUrlState } from '@/features/dashboard/hooks/useStandaloneDashboardUrlState'
 import { useMainConfirmationsTab } from '@/features/dashboard/domain/useMainConfirmationsTab'
 import { DashboardVerificationsEmbeddedSkin } from '@/features/dashboard/skins/embedded/DashboardVerificationsEmbeddedSkin'
 import { DashboardVerificationsStandaloneSkin } from '@/features/dashboard/skins/standalone/DashboardVerificationsStandaloneSkin'
@@ -17,8 +17,17 @@ import {
 } from './fixtureApi'
 
 function StandaloneFixture() {
-  const dashboard = useDashboard()
-  return <DashboardVerificationsStandaloneSkin {...dashboard} />
+  const url = useStandaloneDashboardUrlState()
+  return (
+    <DashboardVerificationsStandaloneSkin
+      period={url.period}
+      periodOptions={url.periodOptions}
+      onPeriodChange={url.onPeriodChange}
+      tab={url.tab}
+      onTabChange={url.onTabChange}
+      importBatchId={url.importBatchId}
+    />
+  )
 }
 
 function EmbeddedFixture() {

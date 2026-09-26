@@ -993,7 +993,7 @@
   },
   "appHeader": {
     "dashboard": "Dashboard",
-    "verifications": "Verifications",
+    "verifications": "Confirmations",
     "billing": "Billing & credits",
     "settings": "Settings",
     "templates": "Templates",
@@ -1197,55 +1197,13 @@
       "cta": "Get started"
     },
     "standalone": {
-      "eyebrow": "Overview",
       "greeting": "Welcome back, {name}",
       "greetingLoading": "Loading dashboard greeting",
-      "description": "Order health, message delivery, and work that needs your attention.",
-      "subtitle": "An overview of your confirmation orders",
-      "kpisLabel": "Primary dashboard metrics",
-      "status": {
-        "active": {
-          "title": "Verification is active",
-          "description": "New COD orders are being confirmed automatically."
-        },
-        "paused": {
-          "title": "Verification is paused",
-          "description": "Automatic confirmation is off. Existing results remain available."
-        },
-        "disconnected": {
-          "title": "Order source is disconnected",
-          "description": "New orders and queued actions are paused until the source is reconnected."
-        },
-        "action": "Review automation"
-      },
-      "attention": {
-        "title": "Needs attention",
-        "description": "Most recent orders that may require merchant action.",
-        "viewAll": "View all",
-        "emptyTitle": "Nothing needs attention",
-        "emptyDescription": "There are no actionable orders in this period.",
-        "unavailable": "The actionable-order preview is unavailable right now.",
-        "dateUnavailable": "Date unavailable"
-      },
-      "performance": {
-        "title": "Confirmation performance",
-        "basis": "Measured across {count, plural, one {# order} other {# orders}} that reached the customer and settled.",
-        "basisEmpty": "No orders have settled in this period yet, so the rates are not calculated.",
-        "silent": "No reply",
-        "silentHint": "Orders that reached the customer and went unanswered. Counted in the rates above — they are the main reason a reply rate drops.",
-        "undelivered": "Undelivered",
-        "undeliveredHint": "Orders that never reached the customer. Excluded from the rates, because nobody declined to answer a message they never received."
-      },
-      "outcomes": {
-        "title": "Outcome breakdown",
-        "description": "Order outcomes for the selected period.",
-        "chartLabel": "Proportional breakdown of order outcomes",
-        "empty": "No order outcomes are available for this period.",
-        "shareOfTotal": "{percent} of total"
-      },
-      "unavailable": {
-        "title": "Dashboard metrics are unavailable",
-        "description": "Order previews may still be available below. Try again shortly for performance and usage metrics."
+      "manualConfirmBody": "Akeed will record the order as confirmed, just as if the customer had confirmed. No more messages will be sent.",
+      "credits": {
+        "warning": "You've used {used} of {limit} credits. Confirmations stop when they run out.",
+        "exhausted": "You've used all your credits. Confirmations have stopped until you top up.",
+        "cta": "Buy credits"
       }
     },
     "sourceDisconnectedTitle": "Order source disconnected",
@@ -1501,39 +1459,14 @@
       "generic": "Verification could not continue. Review setup or contact support."
     },
     "verifications": {
-      "title": "Verifications",
-      "pageSubtitle": "Track every order from submission to customer outcome.",
-      "subtitle": "{count, plural, =0 {No verifications in this period} one {# verification in this period} other {# verifications in this period}}",
       "loading": "Loading verifications...",
-      "loadingMore": "Loading more...",
       "loadMoreRetry": "Try again",
       "readOnlyNotice": "You have read-only access. An owner or admin can retry verification or mark supported orders canceled.",
       "empty": {
-        "title": "No verifications yet",
-        "description": "Verify an order to get started. Orders appear here as soon as a verification is created for them.",
-        "filtered": "No verifications match this status and date range."
+        "title": "No confirmations yet",
+        "description": "Verify an order to get started. Orders appear here as soon as a verification is created for them."
       },
-      "errors": {
-        "load": "We could not load your verifications. Refresh and try again.",
-        "metrics": "We could not load your metrics. Refresh and try again."
-      },
-      "metrics": {
-        "total": "Total verifications",
-        "inProgress": "In progress",
-        "needsAttention": "Needs attention",
-        "confirmed": "Confirmed",
-        "canceled": "Canceled",
-        "pending": "Pending"
-      },
-      "filters": {
-        "clear": "Clear status filter",
-        "stage": "{outcome} by stage"
-      },
-      "eyebrow": "Operations",
-      "showing": "Showing {loaded} of {total}",
-      "workload": {
-        "label": "Verification outcomes"
-      }
+      "showing": "Showing {loaded} of {total}"
     },
     "activation": {
       "liveBanner": "Akeed is live. Your next cash-on-delivery order will be confirmed automatically.",
@@ -1670,7 +1603,8 @@
       "search": {
         "label": "Search by order number or phone",
         "placeholder": "Order number or phone",
-        "invalid": "Use only order or phone digits."
+        "invalid": "Use only order or phone digits.",
+        "clear": "Clear search"
       },
       "headings": {
         "order": "Order",
@@ -1741,7 +1675,8 @@
       "shipping": {
         "message": "Hi {customer}, your order {order} ({total}) is confirmed and being prepared for shipping.\nCarrier: \nTracking number: ",
         "customerFallback": "there"
-      }
+      },
+      "tabsLabel": "Filter confirmations by outcome"
     },
     "failedRow": {
       "reason": {

@@ -15,7 +15,7 @@ import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { UpgradePlansModal } from '@/features/billing'
 import { resolveEmbeddedContextFromSearch } from '@/shared/lib/embedded-context'
-import { useEmbeddedOverview } from '../../domain/useEmbeddedOverview'
+import { useDashboardOverview } from '../../domain/useDashboardOverview'
 import { useManualConfirmation } from '../../domain/useManualConfirmation'
 import type { DateRangeFilterOption } from '../../domain/dashboard.types'
 import type { DashboardStatsDateRange } from '../../model/dashboard.model'
@@ -71,7 +71,7 @@ export function OverviewEmbedded({
 }: OverviewEmbeddedProps) {
   const t = useTranslations('dashboard.overview')
   const searchParams = useSearchParams()
-  const { overview, isLoading, isError, retry } = useEmbeddedOverview(period)
+  const { overview, isLoading, isError, retry } = useDashboardOverview(period)
   const confirmation = useManualConfirmation()
   const [isPlansOpen, setIsPlansOpen] = useState(false)
   const embeddedContext = resolveEmbeddedContextFromSearch(searchParams)

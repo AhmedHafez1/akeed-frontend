@@ -2,26 +2,17 @@ import { useState } from 'react'
 import { BlockStack, Button, InlineStack, Modal } from '@shopify/polaris'
 import { MenuHorizontalIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
-import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import { canCancelOrder } from '../../../../domain/cancellation'
-import { canSendShippingInfo } from '../../../../domain/confirmationRowStatus'
 import {
-  canRetryVerification,
-  hasCapability,
-} from '../../../../domain/verificationLifecycle'
+  planConfirmationRowActions,
+  type ConfirmationRowActionHandlers,
+} from '../../../../domain/confirmationRowActions'
 import {
-  customerDisplayName,
-  formatOrderAmount,
-  formatPhoneInternational,
-  whatsAppChatUrl,
-} from '../../../../lib/orderDisplay'
+  useConfirmationRowLink,
+  type ConfirmationRowLink,
+} from '../../../../domain/useConfirmationRowLink'
 import type { VerificationItem } from '../../../../model/dashboard.model'
 
-export interface ConfirmationRowActionHandlers {
-  onRequestConfirm: (row: VerificationItem, orderLabel: string) => void
-  onRequestCancel: (row: VerificationItem, orderLabel: string) => void
-  onRetry: (row: VerificationItem) => void
-}
+export type { ConfirmationRowActionHandlers }
 
 interface RowActionItem {
   id: string
@@ -30,16 +21,9 @@ interface RowActionItem {
   onAction: () => void
 }
 
-interface RowLink {
-  url: string
-  content: string
-  accessibilityLabel: string
-}
-
 /**
- * Which actions a row offers: one WhatsApp link up front (a chat for a row
- * waiting on the merchant, shipping details for a confirmed order) and the
- * less common actions for the "more" sheet.
+ * Which actions a row offers, as the shared plan decides: one WhatsApp link
+ * up front and the less common actions for the "more" sheet.
  */
 function useConfirmationRowActions({
   row,
@@ -53,62 +37,27 @@ function useConfirmationRowActions({
   canWrite: boolean
   canRetry: boolean
   handlers: ConfirmationRowActionHandlers
-}): { link: RowLink | null; items: RowActionItem[] } {
+}): { link: ConfirmationRowLink | null; items: RowActionItem[] } {
   const t = useTranslations('dashboard')
-  const { locale } = useLocaleInfo()
-  const name = customerDisplayName(row.customer_name)
-  const customer = name ?? formatPhoneInternational(row.customer_phone)
-
-  let link: RowLink | null = null
-  if (row.action_reason && row.action_reason !== 'delivery_failed') {
-    const url = whatsAppChatUrl(row.customer_phone)
-    link = url
-      ? {
-          url,
-          content: t('overview.needsAction.actions.whatsapp'),
-          accessibilityLabel: t('overview.needsAction.actions.whatsappLabel', {
-            customer,
-          }),
-        }
-      : null
-  } else if (canSendShippingInfo(row)) {
-    const message = t('confirmations.shipping.message', {
-      customer: name ?? t('confirmations.shipping.customerFallback'),
-      order: orderLabel,
-      total: formatOrderAmount(row.total_price, row.currency, locale),
-    })
-    const url = whatsAppChatUrl(row.customer_phone, message)
-    link = url
-      ? {
-          url,
-          content: t('confirmations.actions.sendShipping'),
-          accessibilityLabel: t('confirmations.actions.sendShippingLabel', {
-            customer,
-          }),
-        }
-      : null
-  }
+  const plan = planConfirmationRowActions(row, { canWrite, canRetry })
+  const link = useConfirmationRowLink(row, orderLabel, plan.primary)
 
   const items: RowActionItem[] = []
-  if (
-    canWrite &&
-    row.action_reason &&
-    hasCapability(row.capabilities, 'merchant_manual_confirmation')
-  ) {
+  if (plan.canConfirm) {
     items.push({
       id: 'confirm',
       content: t('overview.needsAction.actions.manualConfirm'),
       onAction: () => handlers.onRequestConfirm(row, orderLabel),
     })
   }
-  if (canRetry && canRetryVerification(row.capabilities)) {
+  if (plan.canRetry) {
     items.push({
       id: 'retry',
       content: t('table.actions.retry'),
       onAction: () => handlers.onRetry(row),
     })
   }
-  if (canWrite && canCancelOrder(row)) {
+  if (plan.canCancel) {
     items.push({
       id: 'cancel',
       content: t('table.actions.cancelOrder'),

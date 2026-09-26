@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useDashboard } from '@/features/dashboard/domain/useDashboard'
-import { useVerificationStatusQuery } from '@/features/dashboard/hooks/useVerificationStatusQuery'
+import { useStandaloneDashboardUrlState } from '@/features/dashboard/hooks/useStandaloneDashboardUrlState'
 import { DashboardVerificationsStandaloneSkin } from '@/features/dashboard/skins/standalone/DashboardVerificationsStandaloneSkin'
 import { ImportFilterChip } from '@/features/order-imports'
 import { applyResolvedTheme } from '@/shared/theme/theme.dom'
@@ -10,12 +9,7 @@ import { e2eTheme } from '../imports/importReplay'
 import { verificationRequests } from './verificationFixture'
 
 export default function VerificationFixturePage() {
-  const filters = useVerificationStatusQuery()
-  const dashboard = useDashboard(
-    filters.statusFilter,
-    filters.onStatusFilterChange,
-    filters.importBatchId
-  )
+  const url = useStandaloneDashboardUrlState()
   const [requests, setRequests] = useState<string[]>([])
   // `?theme=dark`, as on the import fixture pages.
   useEffect(() => {
@@ -27,12 +21,17 @@ export default function VerificationFixturePage() {
     <main className="akeed-app-canvas min-h-screen p-4 sm:p-6 lg:px-8 lg:py-8">
       {/* The same header action as src/app/[locale]/verifications/page.tsx. */}
       <DashboardVerificationsStandaloneSkin
-        {...dashboard}
+        period={url.period}
+        periodOptions={url.periodOptions}
+        onPeriodChange={url.onPeriodChange}
+        tab={url.tab}
+        onTabChange={url.onTabChange}
+        importBatchId={url.importBatchId}
         headerAction={
-          filters.importBatchId && (
+          url.importBatchId && (
             <ImportFilterChip
-              batchId={filters.importBatchId}
-              onClear={filters.onClearImportBatch}
+              batchId={url.importBatchId}
+              onClear={url.onClearImportBatch}
             />
           )
         }
