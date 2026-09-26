@@ -95,7 +95,7 @@ export function StatusCell({
       {sub && (
         <span
           className={cn(
-            'text-xs',
+            'text-caption',
             view.tone === 'critical' && row.status === 'failed'
               ? 'text-destructive-subtle-foreground'
               : 'text-muted-foreground'
@@ -123,7 +123,7 @@ export function CustomerCell({
       <p className="text-foreground truncate text-sm font-semibold">
         {name ?? phoneText}
       </p>
-      <p className="text-muted-foreground truncate text-xs">
+      <p className="text-muted-foreground text-caption truncate">
         {name ? phoneText : t('confirmations.noName')}
       </p>
     </div>

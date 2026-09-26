@@ -22,11 +22,13 @@ function KpiCard({
 }) {
   return (
     <Card className="flex flex-col gap-2 p-5">
-      <h2 className="text-muted-foreground text-sm font-medium">{title}</h2>
+      <h2 className="text-muted-foreground text-caption font-medium">
+        {title}
+      </h2>
       <p className="text-foreground text-3xl font-bold tabular-nums">
         <bdi dir="ltr">{value}</bdi>
       </p>
-      <p className="text-muted-foreground text-sm">{body}</p>
+      <p className="text-muted-foreground text-body">{body}</p>
     </Card>
   )
 }

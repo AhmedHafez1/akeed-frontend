@@ -52,7 +52,7 @@ function TableRow({ row, timeZone, actingId, ...rest }: RowProps) {
       <td className="px-4 py-3 align-middle">
         <AmountText amount={view.amount} isCanceled={view.isCanceled} />
       </td>
-      <td className="text-muted-foreground px-4 py-3 align-middle text-xs">
+      <td className="text-muted-foreground text-caption px-4 py-3 align-middle">
         {updatedAt}
       </td>
       <td className="px-4 py-3 align-middle">

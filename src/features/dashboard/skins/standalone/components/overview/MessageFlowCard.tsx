@@ -39,7 +39,7 @@ function FlowRow({
 
   return (
     <li className="grid grid-cols-[4.5rem_minmax(0,1fr)_auto] items-center gap-3 sm:grid-cols-[6.5rem_minmax(0,1fr)_5.5rem] sm:gap-4">
-      <span className="text-foreground text-xs sm:text-sm">{label}</span>
+      <span className="text-foreground text-caption sm:text-sm">{label}</span>
       <div
         aria-hidden="true"
         className="bg-muted flex h-6 w-full gap-0.5 overflow-hidden rounded-md"
@@ -84,7 +84,7 @@ function LegendItem({
         aria-hidden="true"
         className={cn('inline-block size-2.5 rounded-sm', className)}
       />
-      <span className="text-muted-foreground text-xs">{label}</span>
+      <span className="text-muted-foreground text-caption">{label}</span>
     </li>
   )
 }

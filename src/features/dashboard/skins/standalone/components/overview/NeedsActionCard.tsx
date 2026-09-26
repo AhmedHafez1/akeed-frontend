@@ -60,7 +60,7 @@ function NeedsActionRow({
         </p>
         <p
           className={cn(
-            'text-xs',
+            'text-caption',
             reason.isCritical
               ? 'text-destructive-subtle-foreground'
               : 'text-muted-foreground'

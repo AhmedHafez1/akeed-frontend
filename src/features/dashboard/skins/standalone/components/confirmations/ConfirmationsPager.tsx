@@ -38,7 +38,7 @@ export function ConfirmationsPager({
       <p
         role="status"
         aria-live="polite"
-        className="text-muted-foreground text-xs tabular-nums"
+        className="text-muted-foreground text-caption tabular-nums"
       >
         <bdi dir="ltr">{label}</bdi>
       </p>
