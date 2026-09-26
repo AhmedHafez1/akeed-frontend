@@ -3207,7 +3207,6 @@
         "quiet": "يتوقف خلال ساعات الهدوء {window}",
         "loading": "نحسب التكلفة…"
       },
-      "deadline": "ابدأ الإرسال خلال {hours, plural, zero {أقل من ساعة} one {ساعة واحدة} two {ساعتين} few {# ساعات} many {# ساعة} other {# ساعة}} حتى تبقى هذه الطلبات مؤهلة للتأكيد.",
       "sendNow": "إرسال إلى {count, plural, zero {# عميل} one {عميل واحد} two {عميلين} few {# عملاء} many {# عميلًا} other {# عميل}}",
       "importing": "نستورد طلباتك…",
       "importProgress": "استُورد {imported, number} من {total, number}",

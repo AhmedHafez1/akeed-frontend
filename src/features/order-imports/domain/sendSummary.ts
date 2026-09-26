@@ -66,22 +66,3 @@ export function isPaymentReason(reason: SkipReason): boolean {
 export function isCleanFile(counts: OrderImportBatchDetail['counts']): boolean {
   return (counts.invalid ?? 0) === 0 && (counts.duplicate ?? 0) === 0
 }
-
-/**
- * Whole hours left to start before these orders lapse: a draft expires, an
- * imported batch has a start window. Null when neither applies.
- */
-export function hoursLeftToStart(
-  detail: Pick<
-    OrderImportBatchDetail,
-    'status' | 'expiresAt' | 'startDeadlineAt'
-  >,
-  now: Date
-): number | null {
-  const deadline =
-    detail.status === 'draft' ? detail.expiresAt : detail.startDeadlineAt
-  if (!deadline) return null
-  const ms = Date.parse(deadline) - now.getTime()
-  if (!Number.isFinite(ms)) return null
-  return Math.max(0, Math.floor(ms / 3_600_000))
-}

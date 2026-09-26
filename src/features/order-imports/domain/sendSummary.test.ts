@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { OrderImportRow } from '../api/orderImportsApi'
 import {
-  hoursLeftToStart,
   isCleanFile,
   isPaymentReason,
   skipGroups,
@@ -70,51 +69,5 @@ describe('isCleanFile', () => {
     expect(isCleanFile({ ready: 5, excluded: 4 })).toBe(true)
     expect(isCleanFile({ ready: 5, invalid: 1 })).toBe(false)
     expect(isCleanFile({ ready: 5, duplicate: 2 })).toBe(false)
-  })
-})
-
-describe('hoursLeftToStart', () => {
-  const now = new Date('2026-09-25T10:00:00Z')
-
-  it('counts down to the draft expiry, then to the start window', () => {
-    expect(
-      hoursLeftToStart(
-        {
-          status: 'draft',
-          expiresAt: '2026-09-26T09:30:00Z',
-          startDeadlineAt: null,
-        },
-        now
-      )
-    ).toBe(23)
-    expect(
-      hoursLeftToStart(
-        {
-          status: 'awaiting_start',
-          expiresAt: '2026-09-26T09:30:00Z',
-          startDeadlineAt: '2026-09-28T10:00:00Z',
-        },
-        now
-      )
-    ).toBe(72)
-  })
-
-  it('never goes below zero and is null without a deadline', () => {
-    expect(
-      hoursLeftToStart(
-        {
-          status: 'awaiting_start',
-          expiresAt: '2026-09-20T00:00:00Z',
-          startDeadlineAt: '2026-09-20T00:00:00Z',
-        },
-        now
-      )
-    ).toBe(0)
-    expect(
-      hoursLeftToStart(
-        { status: 'awaiting_start', expiresAt: '', startDeadlineAt: null },
-        now
-      )
-    ).toBeNull()
   })
 })

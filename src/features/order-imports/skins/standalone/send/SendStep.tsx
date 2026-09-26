@@ -1,9 +1,8 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
-import { Clock, FileSpreadsheet, Send } from 'lucide-react'
+import { FileSpreadsheet, Send } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { billingPurchaseHref } from '@/features/billing'
 import { withLocale, type SupportedLocale } from '@/shared/lib/locale'
@@ -20,7 +19,7 @@ import type {
   OrderImportStartQuote,
 } from '../../../api/orderImportsApi'
 import { importReturnPath, shortfallOf } from '../../../domain/releaseSummary'
-import { hoursLeftToStart, isCleanFile } from '../../../domain/sendSummary'
+import { isCleanFile } from '../../../domain/sendSummary'
 import { useSendStep, type SendOutcome } from '../../../domain/useSendStep'
 import { IMPORT_STEP_HEADING_ID } from '../importHeading'
 import { ImportNotice } from '../ImportNotice'
@@ -47,12 +46,10 @@ export function SendStep({ detail, canEdit, onBack, onDone }: SendStepProps) {
   const locale = useLocale() as SupportedLocale
   const send = useSendStep(detail, onDone)
   const rows = useQuery(orderImportAllRowsOptions(detail.batchId))
-  const [now] = useState(() => new Date())
   const quote = send.quote.data
   const ready = detail.counts.ready ?? 0
   const draft = detail.status === 'draft'
   const busy = send.phase === 'importing' || send.phase === 'sending'
-  const hours = hoursLeftToStart(detail, now)
 
   return (
     <ModalStepLayout
@@ -118,12 +115,6 @@ export function SendStep({ detail, canEdit, onBack, onDone }: SendStepProps) {
           <>
             {quote && <Blockers quote={quote} locale={locale} />}
             <CostStrip quote={quote} />
-            {hours !== null && (
-              <p className="text-warning-subtle-foreground flex items-start gap-2 text-sm leading-6">
-                <Clock aria-hidden="true" className="mt-1 size-4 shrink-0" />
-                {t('deadline', { hours })}
-              </p>
-            )}
           </>
         )
       )}

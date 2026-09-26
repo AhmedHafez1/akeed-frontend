@@ -3216,7 +3216,6 @@
         "quiet": "Pauses during quiet hours {window}",
         "loading": "Working out the cost…"
       },
-      "deadline": "Start sending within {hours, plural, =0 {the hour} one {# hour} other {# hours}} so these orders stay eligible.",
       "sendNow": "Send to {count, plural, one {# customer} other {# customers}}",
       "importing": "Importing your orders…",
       "importProgress": "{imported, number} of {total, number} imported",
