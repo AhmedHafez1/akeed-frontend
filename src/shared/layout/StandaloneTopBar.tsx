@@ -4,8 +4,8 @@ import { usePathname } from 'next/navigation'
 import { ChevronRight, Menu } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import {
-  ImportProgressChip,
   ImportTopBarAction,
+  useImportOutcomeSync,
 } from '@/features/order-imports'
 import { ManualOrderTopBarAction } from '@/features/orders'
 import { ThemeToggle } from '@/shared/theme'
@@ -16,12 +16,13 @@ interface StandaloneTopBarProps {
 }
 
 /**
- * Breadcrumb on the start; a started import's progress, the two order actions
- * and the display controls on the end. Below 640px the actions are 44px icons and theme and language move
+ * Breadcrumb on the start; the two order actions and display controls on the
+ * end. Below 640px the actions are 44px icons and theme and language move
  * into the navigation menu.
  */
 export function StandaloneTopBar({ onOpenNavigation }: StandaloneTopBarProps) {
   const t = useTranslations('appHeader')
+  useImportOutcomeSync()
   const pathname = usePathname() ?? ''
   const routeName = pathname.split('/')[2] ?? 'dashboard'
   const breadcrumbLabel =
@@ -63,7 +64,6 @@ export function StandaloneTopBar({ onOpenNavigation }: StandaloneTopBarProps) {
       </div>
 
       <div className="flex shrink-0 items-center gap-2">
-        <ImportProgressChip />
         <ImportTopBarAction />
         <ManualOrderTopBarAction />
         <span

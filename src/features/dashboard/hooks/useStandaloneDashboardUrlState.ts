@@ -82,7 +82,6 @@ export function useStandaloneDashboardUrlState() {
     onTabChange: (next: ConfirmationsTab) =>
       updateParams({ tab: next === 'all' ? null : next, status: null }),
     importBatchId,
-    onClearImportBatch: () => updateParams({ importBatchId: null }),
     confirmationsHref,
   }
 }

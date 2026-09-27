@@ -10,7 +10,7 @@ import {
   DashboardVerificationsStandaloneSkin,
   useStandaloneDashboardUrlState,
 } from '@/features/dashboard'
-import { ImportFilterChip, ImportModalHost } from '@/features/order-imports'
+import { ImportModalHost } from '@/features/order-imports'
 
 function StandaloneVerificationsPageContent() {
   const url = useStandaloneDashboardUrlState()
@@ -23,14 +23,6 @@ function StandaloneVerificationsPageContent() {
         tab={url.tab}
         onTabChange={url.onTabChange}
         importBatchId={url.importBatchId}
-        headerAction={
-          url.importBatchId && (
-            <ImportFilterChip
-              batchId={url.importBatchId}
-              onClear={url.onClearImportBatch}
-            />
-          )
-        }
       />
       {/* "استيراد من ملف" in the top bar opens it through the URL. */}
       <ImportModalHost />

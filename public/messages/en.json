@@ -1626,6 +1626,7 @@
         "canceledNoReply": "Canceled, no reply",
         "failed": "Failed to send",
         "scheduled": "Scheduled",
+        "pending": "Pending",
         "sending": "Sending",
         "awaitingReply": "Awaiting reply",
         "noReply": "No reply",
@@ -2885,8 +2886,7 @@
         "rowNumber": "Row {number}"
       },
       "includeAnyway": "Include anyway",
-      "includeFailed": "The change couldn't be saved. Try again.",
-      "clearImportFilter": "Clear the import filter"
+      "includeFailed": "The change couldn't be saved. Try again."
     },
     "states": {
       "notFound": {
@@ -2967,7 +2967,6 @@
       "body": "Imported {imported} of {attempted}. {missing} could not be imported.",
       "reupload": "Upload the rest"
     },
-    "verificationsChip": "From import: {file}",
     "start": {
       "title": "Start WhatsApp confirmation",
       "description": "Check who will be messaged and what it will cost before anything is sent.",
@@ -3170,13 +3169,6 @@
         "save": "Save",
         "failed": "The number couldn't be saved. Try again."
       }
-    },
-    "progress": {
-      "sending": "Sending {settled, number} of {total, number}",
-      "paused": "Sending paused",
-      "done": "Sent {delivered, number} of {total, number}",
-      "doneFailed": "{failed, number} failed",
-      "dismiss": "Dismiss"
     }
   }
 }

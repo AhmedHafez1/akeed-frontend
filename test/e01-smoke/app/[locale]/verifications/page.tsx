@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { useStandaloneDashboardUrlState } from '@/features/dashboard/hooks/useStandaloneDashboardUrlState'
 import { DashboardVerificationsStandaloneSkin } from '@/features/dashboard/skins/standalone/DashboardVerificationsStandaloneSkin'
-import { ImportFilterChip } from '@/features/order-imports'
 import { applyResolvedTheme } from '@/shared/theme/theme.dom'
 import { e2eTheme } from '../imports/importReplay'
 import { verificationRequests } from './verificationFixture'
@@ -19,7 +18,6 @@ export default function VerificationFixturePage() {
   }, [])
   return (
     <main className="akeed-app-canvas min-h-screen p-4 sm:p-6 lg:px-8 lg:py-8">
-      {/* The same header action as src/app/[locale]/verifications/page.tsx. */}
       <DashboardVerificationsStandaloneSkin
         period={url.period}
         periodOptions={url.periodOptions}
@@ -27,14 +25,6 @@ export default function VerificationFixturePage() {
         tab={url.tab}
         onTabChange={url.onTabChange}
         importBatchId={url.importBatchId}
-        headerAction={
-          url.importBatchId && (
-            <ImportFilterChip
-              batchId={url.importBatchId}
-              onClear={url.onClearImportBatch}
-            />
-          )
-        }
       />
       <aside
         className="mx-auto mt-10 max-w-[1400px] border-t p-4 text-xs"

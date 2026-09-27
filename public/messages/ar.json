@@ -1620,6 +1620,7 @@
         "canceledNoReply": "أُلغي لعدم الرد",
         "failed": "فشل الإرسال",
         "scheduled": "مجدول",
+        "pending": "قيد الانتظار",
         "sending": "قيد الإرسال",
         "awaitingReply": "بانتظار الرد",
         "noReply": "لم يرد",
@@ -2876,8 +2877,7 @@
         "rowNumber": "الصف {number}"
       },
       "includeAnyway": "تضمينه على أي حال",
-      "includeFailed": "تعذّر حفظ التغيير. حاول مرة أخرى.",
-      "clearImportFilter": "إزالة تصفية الاستيراد"
+      "includeFailed": "تعذّر حفظ التغيير. حاول مرة أخرى."
     },
     "states": {
       "notFound": {
@@ -2958,7 +2958,6 @@
       "body": "تم استيراد {imported} من {attempted}. تعذر استيراد {missing}.",
       "reupload": "ارفع الباقي"
     },
-    "verificationsChip": "من الاستيراد: {file}",
     "start": {
       "title": "ابدأ التأكيد عبر واتساب",
       "description": "راجع من سيتلقى الرسائل وكم ستكلف قبل إرسال أي شيء.",
@@ -3161,13 +3160,6 @@
         "save": "حفظ",
         "failed": "تعذّر حفظ الرقم. حاول مرة أخرى."
       }
-    },
-    "progress": {
-      "sending": "يُرسل {settled, number} من {total, number}",
-      "paused": "الإرسال متوقف مؤقتًا",
-      "done": "أُرسل {delivered, number} من {total, number}",
-      "doneFailed": "فشل {failed, number}",
-      "dismiss": "إخفاء"
     }
   }
 }

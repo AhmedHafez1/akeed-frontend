@@ -54,6 +54,8 @@ export function resolveRowStatus(row: VerificationItem): RowStatusView {
             ? `failure.${deliveryFailureKey(row.failure_code)}`
             : 'failure.notSent',
       }
+    case 'queued':
+    case 'sending':
     case 'pending':
       return row.scheduled_for
         ? {
@@ -62,7 +64,7 @@ export function resolveRowStatus(row: VerificationItem): RowStatusView {
             sub: 'sub.sendsAt',
             subTime: row.scheduled_for,
           }
-        : { badge: 'sending', tone: 'neutral' }
+        : { badge: 'pending', tone: 'neutral' }
     case 'awaiting_start':
       return { badge: 'awaitingStart', tone: 'neutral' }
     case 'not_started':

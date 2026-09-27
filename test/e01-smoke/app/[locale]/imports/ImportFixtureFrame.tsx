@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState, type ReactNode } from 'react'
-import { ImportProgressChip } from '@/features/order-imports'
 import { StandaloneToaster } from '@/shared/ui/notifications'
 import { applyResolvedTheme } from '@/shared/theme/theme.dom'
 import { e2eTheme } from './importReplay'
@@ -10,8 +9,7 @@ import { orderImportFixtureCalls } from './orderImportFixture'
 /**
  * Test tooling around the real import pages: the app canvas, `?theme=dark`,
  * and `?drop=<file name>` to drop a synthetic file on the dropzone so the
- * uploading and refusal frames can be captured headless. The strip stands in
- * for the app's top bar (the progress chip) and the toaster is the app's.
+ * uploading and refusal frames can be captured headless.
  */
 export function ImportFixtureFrame({ children }: { children: ReactNode }) {
   const [calls, setCalls] = useState<string[]>([])
@@ -54,9 +52,6 @@ export function ImportFixtureFrame({ children }: { children: ReactNode }) {
           Inspect import calls
         </button>
         <output aria-label="Import fixture calls">{calls.join(' | ')}</output>
-        <span className="ms-auto">
-          <ImportProgressChip />
-        </span>
       </aside>
       <main className="p-4 sm:p-6 lg:p-8">{children}</main>
       <StandaloneToaster />

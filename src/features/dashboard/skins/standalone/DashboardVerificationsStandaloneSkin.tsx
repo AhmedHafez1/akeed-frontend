@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { creditFeedbackKey } from '@/shared/lib/creditFeedback'
@@ -35,8 +35,6 @@ export interface DashboardVerificationsStandaloneSkinProps {
   onTabChange: (tab: ConfirmationsTab) => void
   /** Narrows the list to the orders one import batch created. */
   importBatchId?: string
-  /** Extra header action composed by the page (the import filter chip). */
-  headerAction?: ReactNode
 }
 
 /**
@@ -51,7 +49,6 @@ export function DashboardVerificationsStandaloneSkin({
   tab,
   onTabChange,
   importBatchId,
-  headerAction,
 }: DashboardVerificationsStandaloneSkinProps) {
   const t = useTranslations('dashboard')
   const tCredits = useTranslations('creditErrors')
@@ -148,12 +145,7 @@ export function DashboardVerificationsStandaloneSkin({
         period={period}
         periodOptions={periodOptions}
         onPeriodChange={onPeriodChange}
-        actions={
-          <>
-            {headerAction}
-            <CreditsBadge />
-          </>
-        }
+        actions={<CreditsBadge />}
       />
 
       <StandaloneFeedbackBanners

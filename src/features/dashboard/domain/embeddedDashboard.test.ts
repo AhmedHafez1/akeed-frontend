@@ -121,7 +121,19 @@ describe('resolveRowStatus', () => {
     expect(resolveRowStatus(row({ status: 'no_reply' })).badge).toBe('noReply')
   })
 
-  it('awaiting a reply otherwise, and scheduled while held by quiet hours', () => {
+  it('shows pending until a send time exists, then shows scheduled', () => {
+    expect(resolveRowStatus(row({ status: 'queued' }))).toEqual({
+      badge: 'pending',
+      tone: 'neutral',
+    })
+    expect(resolveRowStatus(row({ status: 'sending' }))).toEqual({
+      badge: 'pending',
+      tone: 'neutral',
+    })
+    expect(resolveRowStatus(row({ status: 'pending' }))).toEqual({
+      badge: 'pending',
+      tone: 'neutral',
+    })
     expect(resolveRowStatus(row({ status: 'delivered' }))).toEqual({
       badge: 'awaitingReply',
       tone: 'neutral',
@@ -136,7 +148,6 @@ describe('resolveRowStatus', () => {
       sub: 'sub.sendsAt',
       subTime: '2026-09-21T06:00:00Z',
     })
-    expect(resolveRowStatus(row({ status: 'pending' })).badge).toBe('sending')
   })
 
   it('never decides needs-action itself', () => {
