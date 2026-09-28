@@ -5,7 +5,6 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
 import {
-  legacyStatusToTab,
   rangeParam,
   resolveConfirmationsTab,
   resolveDashboardRange,
@@ -21,8 +20,6 @@ import type {
  * The standalone dashboard and confirmations pages keep their period, tab and
  * import filter in the URL, as the embedded app does, so a reload lands where
  * the merchant was and a link can open the needs-action list directly.
- *
- * `?tab=` wins over an old `?status=` link, which is mapped to the nearest tab.
  */
 export function useStandaloneDashboardUrlState() {
   const t = useTranslations('dashboard')
@@ -35,7 +32,7 @@ export function useStandaloneDashboardUrlState() {
   const tabParam = searchParams.get('tab')
   const tab: ConfirmationsTab = tabParam
     ? resolveConfirmationsTab(tabParam)
-    : legacyStatusToTab(searchParams.get('status'))
+    : 'all'
   const importBatchId = searchParams.get('importBatchId') ?? undefined
 
   const updateParams = useCallback(

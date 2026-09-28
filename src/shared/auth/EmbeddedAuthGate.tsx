@@ -144,7 +144,7 @@ export function EmbeddedAuthGate({
               }
             } catch (exchangeError) {
               logger.warn(
-                'Token exchange failed, falling back to legacy flow',
+                'Token exchange failed, falling back to install check',
                 {
                   error:
                     exchangeError instanceof Error
@@ -155,7 +155,7 @@ export function EmbeddedAuthGate({
             }
           }
 
-          // -- Fallback: Legacy install check + OAuth redirect
+          // -- Fallback: install check + OAuth redirect
           if (!isInstalled) {
             isInstalled = await checkEmbeddedInstall(shopDomain)
           }

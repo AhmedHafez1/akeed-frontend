@@ -36,26 +36,6 @@ export function resolveConfirmationsTab(
     : 'all'
 }
 
-/**
- * The tab an old `?status=` link meant. The standalone list used to filter by
- * outcome; links to it (bookmarks, emails) should still land somewhere
- * sensible rather than on an unfiltered list.
- */
-const LEGACY_STATUS_TABS: Readonly<Record<string, ConfirmationsTab>> = {
-  needs_attention: 'needs_action',
-  no_reply: 'needs_action',
-  expired: 'needs_action',
-  confirmed: 'confirmed',
-  canceled: 'canceled',
-  failed: 'failed',
-}
-
-export function legacyStatusToTab(
-  status: string | null | undefined
-): ConfirmationsTab {
-  return (status && LEGACY_STATUS_TABS[status]) || 'all'
-}
-
 /** The URL value for a range, omitted when it is the default. */
 export function rangeParam(range: DashboardStatsDateRange): string | null {
   return range === DEFAULT_DASHBOARD_RANGE ? null : range

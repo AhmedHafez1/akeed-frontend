@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 import {
-  legacyStatusToTab,
   rangeParam,
   resolveConfirmationsTab,
   resolveDashboardRange,
@@ -28,18 +27,3 @@ describe('resolveConfirmationsTab', () => {
   })
 })
 
-describe('legacyStatusToTab', () => {
-  it('sends old outcome links to the matching tab', () => {
-    expect(legacyStatusToTab('needs_attention')).toBe('needs_action')
-    expect(legacyStatusToTab('no_reply')).toBe('needs_action')
-    expect(legacyStatusToTab('confirmed')).toBe('confirmed')
-    expect(legacyStatusToTab('canceled')).toBe('canceled')
-    expect(legacyStatusToTab('failed')).toBe('failed')
-  })
-
-  it('opens everything for a status no tab stands for', () => {
-    expect(legacyStatusToTab('in_progress')).toBe('all')
-    expect(legacyStatusToTab('pending')).toBe('all')
-    expect(legacyStatusToTab(null)).toBe('all')
-  })
-})

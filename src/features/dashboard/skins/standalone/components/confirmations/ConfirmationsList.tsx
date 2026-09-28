@@ -49,7 +49,7 @@ function TableRow({ row, timeZone, actingId, ...rest }: RowProps) {
         if (openDetails && !isControlClick(event)) openDetails()
       }}
       className={cn(
-        'h-[60px] transition-colors',
+        'h-15 transition-colors',
         row.optimistic
           ? 'bg-surface-sunken'
           : 'hover:bg-surface-sunken cursor-pointer'
@@ -162,7 +162,7 @@ export function ConfirmationsList({
   return (
     <>
       <div className="hidden overflow-x-auto md:block">
-        <table className="bg-card w-full min-w-[1080px] table-fixed text-start">
+        <table className="bg-card w-full min-w-270 table-fixed text-start">
           <caption className="sr-only">
             {t('title')}. {tTable('sortedBy')}
           </caption>

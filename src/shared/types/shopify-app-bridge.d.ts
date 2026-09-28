@@ -15,11 +15,6 @@ type SLinkProps = DetailedHTMLProps<
   HTMLElement
 >
 
-// Legacy components (kept for backwards compatibility during migration)
-type UiNavMenuProps = DetailedHTMLProps<
-  HTMLAttributes<HTMLElement>,
-  HTMLElement
->
 type UiTitleBarProps = DetailedHTMLProps<
   HTMLAttributes<HTMLElement>,
   HTMLElement
@@ -34,7 +29,6 @@ declare module 'react' {
     interface IntrinsicElements {
       's-app-nav': SAppNavProps
       's-link': SLinkProps
-      'ui-nav-menu': UiNavMenuProps
       'ui-title-bar': UiTitleBarProps
       'ui-save-bar': UiSaveBarProps
     }
