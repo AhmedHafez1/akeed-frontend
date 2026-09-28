@@ -1251,9 +1251,6 @@
         "moreManual": "{count, plural, one {وطلب آخر أُكّد يدوياً} two {وطلبان آخران أُكّدا يدوياً} few {و# طلبات أخرى أُكّدت يدوياً} many {و# طلباً آخر أُكّد يدوياً} other {و# طلب آخر أُكّد يدوياً}}",
         "barLabel": "{label}: {count} من {sent} مُرسلة"
       },
-      "status": {
-        "needsAction": "تحتاج إجراء"
-      },
       "table": {
         "searchPlaceholder": "ابحث برقم الطلب أو الهاتف",
         "searchShortcut": "اضغط / للبحث",
