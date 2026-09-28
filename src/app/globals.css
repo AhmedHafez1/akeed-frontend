@@ -88,6 +88,39 @@
   --info-subtle-foreground: oklch(43.2% 0.232 292.759); /* violet-800 */
   --info-border: oklch(89.4% 0.057 293.283); /* violet-200 */
 
+  /*
+   * ── Akeed app surfaces (dashboard pages) ──
+   * The Akeed design system palette, used by the standalone Overview and
+   * Confirmations pages. Deliberately separate from the semantic tokens above
+   * (which marketing, auth and billing still read) so those pages don't move;
+   * other app pages can migrate onto these one at a time. `ak-` prefixes the
+   * status names the older set already owns (info, warning, destructive).
+   */
+  --surface: #eeefef;
+  --surface-raised: #ffffff;
+  --surface-sunken: #f7f8f9;
+  --line: #e3e6e9;
+  --line-strong: #d3d8dd;
+  --control-border: #8a949e;
+  --ink: #0f1720;
+  --ink-muted: #5b6573;
+  --brand: #0b6e4f;
+  --brand-hover: #084f39;
+  --brand-soft: #e7f5ef;
+  --brand-line: #b8e0cd;
+  --brand-ink: #0a5a40;
+  --ak-info: #1d4f99;
+  --ak-info-soft: #eaf1fc;
+  --ak-warning: #8a4b00;
+  --ak-warning-soft: #fff6e5;
+  --ak-warning-line: #f2d9a6;
+  --ak-danger: #a1201a;
+  --ak-danger-soft: #fef0ee;
+  --neutral-soft: #f1f3f5;
+  --inverse: #0f1720;
+  --inverse-foreground: #ffffff;
+  --shadow-ak-card: 0 1px 2px #0f17200f, 0 0 0 1px #0f17200a;
+
   --radius: 0.75rem;
 
   /*
@@ -105,6 +138,8 @@
   /* Latin tightens at display sizes; Arabic must not (see below). */
   --tracking-display: -0.02em;
   --tracking-heading: -0.01em;
+  --tracking-ak-title: -0.015em;
+  --tracking-ak-kpi: -0.02em;
 }
 
 [lang='ar'] {
@@ -119,6 +154,8 @@
    */
   --tracking-display: 0;
   --tracking-heading: 0;
+  --tracking-ak-title: 0;
+  --tracking-ak-kpi: 0;
 }
 
 .dark {
@@ -171,6 +208,36 @@
   --info-subtle: oklch(28.3% 0.141 291.089); /* violet-950 */
   --info-subtle-foreground: oklch(89.4% 0.057 293.283); /* violet-200 */
   --info-border: oklch(38% 0.189 293.745); /* violet-900 */
+
+  /*
+   * Akeed app surfaces, dark. Same hues as light; every text-on-soft pair
+   * clears AA (brand-ink on brand-soft 9.2:1, ak-info 7.5:1, ak-warning
+   * 8.7:1, ak-danger 7.0:1, ink-muted on raised 6.9:1).
+   */
+  --surface: #0b1117;
+  --surface-raised: #141b23;
+  --surface-sunken: #10161d;
+  --line: #252e38;
+  --line-strong: #34404c;
+  --control-border: #5f6b78;
+  --ink: #e8edf2;
+  --ink-muted: #9aa5b1;
+  --brand: #3fbf8f;
+  --brand-hover: #5fd0a4;
+  --brand-soft: #0f2a21;
+  --brand-line: #1f5a44;
+  --brand-ink: #7ddbb5;
+  --ak-info: #8fb5f0;
+  --ak-info-soft: #14233a;
+  --ak-warning: #f0b45a;
+  --ak-warning-soft: #2b1f0c;
+  --ak-warning-line: #5a4119;
+  --ak-danger: #f58a80;
+  --ak-danger-soft: #331514;
+  --neutral-soft: #1c242d;
+  --inverse: #e8edf2;
+  --inverse-foreground: #0f1720;
+  --shadow-ak-card: 0 1px 2px #00000066, 0 0 0 1px #ffffff0a;
 
   /*
    * Elevation on a dark surface: the light-mode shadows are tinted slate at
@@ -236,6 +303,64 @@
   --color-info-subtle-foreground: var(--info-subtle-foreground);
   --color-info-border: var(--info-border);
 
+  /* Akeed app surfaces — see the :root block. */
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-control-border: var(--control-border);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-line: var(--brand-line);
+  --color-brand-ink: var(--brand-ink);
+  --color-ak-info: var(--ak-info);
+  --color-ak-info-soft: var(--ak-info-soft);
+  --color-ak-warning: var(--ak-warning);
+  --color-ak-warning-soft: var(--ak-warning-soft);
+  --color-ak-warning-line: var(--ak-warning-line);
+  --color-ak-danger: var(--ak-danger);
+  --color-ak-danger-soft: var(--ak-danger-soft);
+  --color-neutral-soft: var(--neutral-soft);
+  --color-inverse: var(--inverse);
+  --color-inverse-foreground: var(--inverse-foreground);
+  --shadow-ak-card: var(--shadow-ak-card);
+
+  /*
+   * One stack for both scripts: Inter draws Latin and digits, IBM Plex Sans
+   * Arabic draws Arabic. The variables come from next/font in the locale
+   * layout.
+   */
+  --font-sans:
+    var(--font-inter), var(--font-plex-arabic), system-ui, sans-serif;
+
+  /*
+   * ── Akeed app type scale ── (size / line-height / weight)
+   * Fixed pixel steps for dense app screens, unlike the fluid marketing
+   * ladder below. Tracking reads per-script vars so Arabic stays at 0.
+   */
+  --text-ak-title: 1.5rem;
+  --text-ak-title--line-height: 2rem;
+  --text-ak-title--font-weight: 600;
+  --text-ak-title--letter-spacing: var(--tracking-ak-title);
+  --text-ak-section: 1.0625rem;
+  --text-ak-section--line-height: 1.625rem;
+  --text-ak-section--font-weight: 600;
+  --text-ak-body: 0.875rem;
+  --text-ak-body--line-height: 1.5rem;
+  --text-ak-caption: 0.8125rem;
+  --text-ak-caption--line-height: 1.25rem;
+  --text-ak-label: 0.75rem;
+  --text-ak-label--line-height: 1.125rem;
+  --text-ak-label--font-weight: 700;
+  --text-ak-kpi: 2rem;
+  --text-ak-kpi--line-height: 2.375rem;
+  --text-ak-kpi--font-weight: 600;
+  --text-ak-kpi--letter-spacing: var(--tracking-ak-kpi);
+
   /*
    * ── Type scale ──
    * Replaces the ad-hoc `.landing-title` utilities and the hand-rolled
@@ -281,6 +406,9 @@
   --radius-control: 0.625rem; /* inputs, buttons, selects, chips */
   --radius-card: 0.875rem; /* cards, tiles, table shells */
   --radius-panel: 1.25rem; /* modals, sheets, hero surfaces */
+  /* Akeed app surfaces: cards and controls on the dashboard pages. */
+  --radius-ak-card: 0.75rem;
+  --radius-ak-control: 0.625rem;
 
   /*
    * ── Elevation ──
@@ -316,6 +444,14 @@
   --animate-slide-down: slide-down 0.5s var(--ease-out-quint);
   --animate-scale-in: scale-in 0.25s var(--ease-out-quint);
   --animate-marquee: marquee 48s linear infinite;
+  --animate-ak-grow: ak-grow 0.7s var(--ease-out-quint);
+
+  /* A bar segment growing from zero to its inline width, once. */
+  @keyframes ak-grow {
+    from {
+      width: 0;
+    }
+  }
 
   @keyframes accordion-down {
     from {
@@ -380,6 +516,34 @@
       transform: translate3d(-50%, 0, 0);
     }
   }
+}
+
+/*
+ * ── Akeed app utilities ────────────────────────────────────────────────
+ * `ak-focus`: the one focus treatment for every interactive element on the
+ * dashboard pages — a surface-coloured gap, then a brand ring. Box-shadow
+ * rather than outline so it follows the element's radius.
+ *
+ * `ak-stripe`: the diagonal hatch on "canceled" bar segments and swatches,
+ * so they are told apart from "confirmed" by pattern as well as colour.
+ */
+@utility ak-focus {
+  outline: none;
+
+  &:focus-visible {
+    box-shadow:
+      0 0 0 2px var(--surface-raised),
+      0 0 0 4px var(--brand);
+  }
+}
+
+@utility ak-stripe {
+  background-color: var(--ak-danger);
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent 0 3px,
+    oklch(100% 0 0 / 0.28) 3px 5px
+  );
 }
 
 /*
@@ -477,8 +641,9 @@
 /*
  * Embedded Shopify app: native Polaris only. No brand colour overrides and no
  * web fonts, so every screen looks like Shopify Admin. The body carries the
- * standalone Cairo/Inter class (the mode is only known on the client), so the
- * Polaris font stack is restored here for everything inside the app frame.
+ * standalone Inter / IBM Plex Sans Arabic stack (the mode is only known on
+ * the client), so the Polaris font stack is restored here for everything
+ * inside the app frame.
  */
 .akeed-embedded-content {
   width: 100%;

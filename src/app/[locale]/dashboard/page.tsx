@@ -17,7 +17,7 @@ function StandaloneDashboardPageContent() {
       period={period}
       periodOptions={periodOptions}
       onPeriodChange={onPeriodChange}
-      needsActionHref={confirmationsHref('needs_action')}
+      confirmationsHref={confirmationsHref}
     />
   )
 }

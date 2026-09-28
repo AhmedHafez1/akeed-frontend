@@ -17,17 +17,19 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  buttonVariants,
 } from '@/shared/ui'
 import { planConfirmationRowActions } from '@/features/dashboard/domain/confirmationRowActions'
 import { useConfirmationRowLink } from '@/features/dashboard/domain/useConfirmationRowLink'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
+import { akButton } from '../shared/akStyles'
 import type { ConfirmationsListProps } from './confirmationCells'
 
 /**
- * The main WhatsApp link up front, when the row has one, and everything else
- * — details, manual confirm, retry, cancel — in one labelled "more" menu. The
- * shared plan decides which actions exist, so both modes offer the same ones.
+ * In the table: an inline "Confirm" for rows waiting on the merchant, the
+ * row's WhatsApp link as an icon button, and everything else — details,
+ * manual confirm, retry, cancel — in one labelled "more" menu. On a card the
+ * link keeps its words. The shared plan decides which actions exist, so both
+ * modes offer the same ones.
  */
 export function ConfirmationRowActions({
   row,
@@ -50,6 +52,7 @@ export function ConfirmationRowActions({
   layout?: 'inline' | 'stacked'
 }) {
   const t = useTranslations('dashboard')
+  const tTable = useTranslations('dashboard.standalone.table')
   const plan = planConfirmationRowActions(row, { canWrite, canRetry })
   const link = useConfirmationRowLink(row, orderLabel, plan.primary)
 
@@ -57,26 +60,42 @@ export function ConfirmationRowActions({
   if (row.optimistic) return null
   const LinkIcon = plan.primary === 'shipping' ? Truck : MessageCircle
 
+  const inline = layout === 'inline'
+
   return (
-    <div
-      className={cn(
-        'flex items-center gap-2',
-        layout === 'inline' && 'justify-end'
+    <div className={cn('flex items-center gap-2', inline && 'justify-end')}>
+      {plan.canConfirm && (
+        <button
+          type="button"
+          disabled={isAnyActing}
+          aria-label={t('overview.needsAction.actions.manualConfirmLabel', {
+            order: orderLabel,
+          })}
+          onClick={() => handlers.onRequestConfirm(row, orderLabel)}
+          className={akButton({
+            variant: 'tinted',
+            size: inline ? 'table' : 'row',
+          })}
+        >
+          {tTable('confirm')}
+        </button>
       )}
-    >
       {link && (
         <a
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
           aria-label={link.accessibilityLabel}
+          title={inline ? link.content : undefined}
           className={cn(
-            buttonVariants({ variant: 'outline', size: 'sm' }),
-            layout === 'stacked' && 'min-w-0 flex-1'
+            inline
+              ? akButton({ variant: 'ghost', size: 'iconTable' })
+              : akButton({ variant: 'secondary', size: 'row' }),
+            !inline && 'min-w-0 flex-1'
           )}
         >
           <LinkIcon aria-hidden="true" />
-          {link.content}
+          {!inline && link.content}
         </a>
       )}
       <DropdownMenu modal={false}>
@@ -85,10 +104,10 @@ export function ConfirmationRowActions({
             type="button"
             aria-label={t('confirmations.actions.more', { order: orderLabel })}
             aria-busy={isActing || undefined}
-            className={cn(
-              buttonVariants({ variant: 'ghost', size: 'icon' }),
-              'text-muted-foreground hover:text-foreground size-8 shrink-0'
-            )}
+            className={akButton({
+              variant: 'ghost',
+              size: inline ? 'iconTable' : 'iconRow',
+            })}
           >
             <Ellipsis
               aria-hidden="true"

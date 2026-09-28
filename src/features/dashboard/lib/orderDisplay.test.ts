@@ -2,7 +2,10 @@ import { describe, expect, it } from 'vitest'
 import {
   customerDisplayName,
   formatCount,
+  customerInitials,
+  formatDayAndClock,
   formatOrderAmount,
+  waitingAge,
   formatOrderNumber,
   formatPercent,
   formatPhoneInternational,
@@ -16,6 +19,15 @@ const BIDI = new RegExp(
 )
 
 describe('formatOrderAmount', () => {
+  it('can put the Arabic currency after the number', () => {
+    expect(formatOrderAmount('751', 'EGP', 'ar', { currencyAfter: true })).toBe(
+      '751.00 ج.م.'
+    )
+    expect(formatOrderAmount('751', 'EGP', 'en', { currencyAfter: true })).toBe(
+      'EGP 751.00'
+    )
+  })
+
   it('puts the symbol first with Latin digits and no bidi marks in Arabic', () => {
     const value = formatOrderAmount('2629.95', 'USD', 'ar')
     expect(value).toBe('US$ 2,629.95')
@@ -122,5 +134,34 @@ describe('formatUpdatedAt', () => {
 
   it('shows a dash when there is no date', () => {
     expect(formatUpdatedAt(null, 'en', 'UTC')).toBe('—')
+  })
+})
+
+describe('waitingAge', () => {
+  it('reads hours for the first day and whole days after', () => {
+    expect(waitingAge(null)).toBeNull()
+    expect(waitingAge(0)).toEqual({ unit: 'lessThanHour' })
+    expect(waitingAge(5)).toEqual({ unit: 'hours', count: 5 })
+    expect(waitingAge(24)).toEqual({ unit: 'days', count: 1 })
+    expect(waitingAge(15 * 24 + 7)).toEqual({ unit: 'days', count: 15 })
+  })
+})
+
+describe('customerInitials', () => {
+  it('takes the first and last word in either script', () => {
+    expect(customerInitials('Ahmed Abdelghany Hafez')).toBe('AH')
+    expect(customerInitials('ahmed zaid')).toBe('AZ')
+    expect(customerInitials('أحمد تامر')).toBe('أت')
+    expect(customerInitials('Omar')).toBe('O')
+    expect(customerInitials('  ')).toBe('')
+  })
+})
+
+describe('formatDayAndClock', () => {
+  it('joins the day and the time with a middle dot', () => {
+    expect(
+      formatDayAndClock('2026-09-27T13:41:00Z', 'en', 'Africa/Cairo')
+    ).toBe('Sep 27 · 4:41 PM')
+    expect(formatDayAndClock(null, 'en', 'UTC')).toBe('—')
   })
 })

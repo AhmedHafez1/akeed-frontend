@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 
-import { Cairo, Inter } from 'next/font/google'
+import { IBM_Plex_Sans_Arabic, Inter } from 'next/font/google'
 
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
@@ -23,21 +23,24 @@ import { ThemeProvider, themeInitScript } from '@/shared/theme'
 import '../globals.css'
 
 /*
- * Both families are loaded on their variable axis (no `weight` array), so a
- * single file covers every weight instead of shipping one static file per
- * weight. Arabic glyph sets are large, which makes this matter most on the
- * default `ar` locale.
+ * Inter carries Latin (and every digit, since numbers render Western in both
+ * locales); IBM Plex Sans Arabic carries Arabic. Both sit in one stack on the
+ * body — see `--font-sans` in globals.css — so a Latin name inside Arabic copy
+ * renders in Inter and vice versa. Inter is variable (one file for every
+ * weight); Plex Arabic is static, so only the four weights the UI uses load.
  */
-const cairo = Cairo({
-  subsets: ['arabic', 'latin'],
-  display: 'swap',
-  adjustFontFallback: true,
-})
-
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   adjustFontFallback: true,
+  variable: '--font-inter',
+})
+
+const plexArabic = IBM_Plex_Sans_Arabic({
+  subsets: ['arabic'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-plex-arabic',
 })
 
 export async function generateMetadata({
@@ -109,7 +112,6 @@ export default async function LocaleLayout({
 }) {
   const { locale } = await params
   const messages = await getMessages()
-  const bodyFontClassName = locale === 'ar' ? cairo.className : inter.className
 
   return (
     <html
@@ -129,7 +131,10 @@ export default async function LocaleLayout({
           <MarketingScripts />
         </Suspense>
       </head>
-      <body className={bodyFontClassName} suppressHydrationWarning>
+      <body
+        className={`${inter.variable} ${plexArabic.variable} font-sans`}
+        suppressHydrationWarning
+      >
         <ShopifyAppBridgeScript />
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>

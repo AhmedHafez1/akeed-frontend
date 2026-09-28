@@ -18,12 +18,17 @@ function latinLocale(locale: string): string {
 
 /**
  * `US$ 2,629.95` in Arabic, `$2,629.95` in English: Latin digits in both, the
- * currency symbol always before the amount.
+ * currency symbol before the amount.
+ *
+ * `currencyAfter` puts the Arabic symbol after the number instead —
+ * `751.00 ج.م.`, the way Arabic readers expect it — which the standalone
+ * dashboard uses. English is unaffected.
  */
 export function formatOrderAmount(
   amount: string | number | null | undefined,
   currency: string | null | undefined,
-  locale: string
+  locale: string,
+  { currencyAfter = false }: { currencyAfter?: boolean } = {}
 ): string {
   if (amount === null || amount === undefined || amount === '') return '—'
   const value = Number(amount)
@@ -50,7 +55,8 @@ export function formatOrderAmount(
       .filter((part) => part.type !== 'currency' && part.type !== 'literal')
       .map((part) => part.value)
       .join('')
-    return `${symbol} ${number}`.replace(BIDI_MARKS, '').trim()
+    const text = currencyAfter ? `${number} ${symbol}` : `${symbol} ${number}`
+    return text.replace(BIDI_MARKS, '').trim()
   } catch {
     return `${code} ${value.toFixed(2)}`
   }
@@ -178,4 +184,48 @@ export function formatClockTime(
   })
     .format(date)
     .replace(BIDI_MARKS, '')
+}
+
+/** `Sep 27 · 3:41 PM` / `27 سبتمبر · 3:41 م`, in the shop's reporting zone. */
+export function formatDayAndClock(
+  value: string | null | undefined,
+  locale: string,
+  timeZone: string
+): string {
+  const day = formatShortDate(value, locale, timeZone)
+  if (!day || !value) return '—'
+  return `${day} · ${formatClockTime(value, locale, timeZone)}`
+}
+
+export type WaitingAge =
+  | { unit: 'lessThanHour' }
+  | { unit: 'hours' | 'days'; count: number }
+
+/**
+ * How long an order has waited, from the server's whole-hour count (so the
+ * page never disagrees with itself between server and client clocks): hours
+ * for the first day, whole days after that.
+ */
+export function waitingAge(
+  hours: number | null | undefined
+): WaitingAge | null {
+  if (hours === null || hours === undefined || !Number.isFinite(hours))
+    return null
+  const safe = Math.max(Math.floor(hours), 0)
+  if (safe < 1) return { unit: 'lessThanHour' }
+  if (safe < 24) return { unit: 'hours', count: safe }
+  return { unit: 'days', count: Math.floor(safe / 24) }
+}
+
+/**
+ * Up to two initials for an avatar: first letters of the first and last
+ * words (`Ahmed Abdelghany Hafez` → `AH`, `أحمد تامر` → `أت`). Latin initials
+ * are upper-cased; Arabic has no case.
+ */
+export function customerInitials(name: string | null | undefined): string {
+  const words = (name ?? '').trim().split(/\s+/).filter(Boolean)
+  if (words.length === 0) return ''
+  const first = Array.from(words[0])[0] ?? ''
+  const last = words.length > 1 ? (Array.from(words.at(-1)!)[0] ?? '') : ''
+  return `${first}${last}`.toLocaleUpperCase('en')
 }

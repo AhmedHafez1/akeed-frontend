@@ -6,8 +6,8 @@ import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
-import { buttonVariants } from '@/shared/ui'
 import type { DashboardOverview } from '@/features/dashboard/model/dashboard.model'
+import { akButton } from '../shared/akStyles'
 
 /**
  * Credit usage, shown only from 80%: amber while credits remain, red once
@@ -29,20 +29,18 @@ export function UsageBar({
     <div
       role={exhausted ? 'alert' : 'status'}
       className={cn(
-        'rounded-card flex flex-col gap-3 border p-4 md:flex-row md:items-center md:gap-6',
+        'rounded-ak-card flex flex-col gap-3 border px-6 py-4 md:flex-row md:items-center md:gap-6',
         exhausted
-          ? 'border-destructive-border bg-destructive-subtle'
-          : 'border-warning-border bg-warning-subtle'
+          ? 'border-ak-danger/30 bg-ak-danger-soft'
+          : 'border-ak-warning-line bg-ak-warning-soft'
       )}
     >
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <p
           id={labelId}
           className={cn(
-            'text-sm font-semibold',
-            exhausted
-              ? 'text-destructive-subtle-foreground'
-              : 'text-warning-subtle-foreground'
+            'text-ak-body font-semibold',
+            exhausted ? 'text-ak-danger' : 'text-ak-warning'
           )}
         >
           {exhausted
@@ -55,12 +53,12 @@ export function UsageBar({
           aria-valuemin={0}
           aria-valuemax={usage.limit}
           aria-valuenow={Math.min(usage.used, usage.limit)}
-          className="bg-card h-1.5 w-full overflow-hidden rounded-full"
+          className="bg-surface-raised h-1.5 w-full overflow-hidden rounded-full"
         >
           <div
             className={cn(
-              'h-full rounded-full',
-              exhausted ? 'bg-destructive' : 'bg-warning'
+              'h-full',
+              exhausted ? 'bg-ak-danger' : 'bg-ak-warning'
             )}
             style={{ width: `${Math.min(usage.percent, 100)}%` }}
           />
@@ -68,7 +66,7 @@ export function UsageBar({
       </div>
       <Link
         href={withLocale('/billing', locale)}
-        className={cn(buttonVariants(), 'shrink-0')}
+        className={akButton({ variant: 'tinted', size: 'row' })}
       >
         {t('cta')}
       </Link>

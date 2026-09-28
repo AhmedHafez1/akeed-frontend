@@ -1,15 +1,17 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { cn } from '@/shared/lib/utils'
-import { buttonVariants } from '@/shared/ui'
+import { akButton } from '../shared/akStyles'
 
 /**
- * "1–20 of 28" with previous/next. The API pages by cursor, so there are no
- * page numbers to jump to — only the next page and the ones already seen.
+ * "Showing 1–10 of 38 orders" with previous/next. The API pages by cursor,
+ * so there are no page numbers to jump to — only the next page and the ones
+ * already seen.
  */
 export function ConfirmationsPager({
   label,
+  summary,
   hasPrevious,
   hasNext,
   onPrevious,
@@ -17,7 +19,10 @@ export function ConfirmationsPager({
   previousLabel,
   nextLabel,
 }: {
+  /** Plain-text range, naming the navigation landmark. */
   label: string
+  /** The visible range, with its numbers emphasised. */
+  summary: ReactNode
   hasPrevious: boolean
   hasNext: boolean
   onPrevious: () => void
@@ -25,22 +30,19 @@ export function ConfirmationsPager({
   previousLabel: string
   nextLabel: string
 }) {
-  const step = cn(
-    buttonVariants({ variant: 'outline', size: 'icon' }),
-    'size-9 shadow-none'
-  )
+  const step = akButton({ variant: 'secondary', size: 'table' })
 
   return (
     <nav
       aria-label={label}
-      className="border-border flex items-center justify-between gap-3 border-t px-4 py-3"
+      className="border-line bg-surface-sunken flex flex-wrap items-center justify-between gap-3 border-t px-4 py-3 sm:px-6"
     >
       <p
         role="status"
         aria-live="polite"
-        className="text-muted-foreground text-caption tabular-nums"
+        className="text-ak-body text-ink-muted tabular-nums"
       >
-        <bdi dir="ltr">{label}</bdi>
+        {summary}
       </p>
       <div className="flex items-center gap-2">
         {/* Chevrons point along the reading direction. */}
@@ -49,18 +51,18 @@ export function ConfirmationsPager({
           className={step}
           onClick={onPrevious}
           disabled={!hasPrevious}
-          aria-label={previousLabel}
         >
-          <ChevronLeft aria-hidden="true" className="rtl:rotate-180" />
+          <ChevronLeft aria-hidden="true" className="rtl:-scale-x-100" />
+          {previousLabel}
         </button>
         <button
           type="button"
           className={step}
           onClick={onNext}
           disabled={!hasNext}
-          aria-label={nextLabel}
         >
-          <ChevronRight aria-hidden="true" className="rtl:rotate-180" />
+          {nextLabel}
+          <ChevronRight aria-hidden="true" className="rtl:-scale-x-100" />
         </button>
       </div>
     </nav>

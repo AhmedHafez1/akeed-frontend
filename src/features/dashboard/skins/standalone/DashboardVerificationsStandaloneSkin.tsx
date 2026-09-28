@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { creditFeedbackKey } from '@/shared/lib/creditFeedback'
-import { Button, notify } from '@/shared/ui'
-import { CreditsBadge } from '@/features/billing/ui/components/CreditsBadge'
+import { cn } from '@/shared/lib/utils'
+import { notify } from '@/shared/ui'
 import { useConfirmationsList } from '../../domain/useConfirmationsList'
 import { useManualConfirmation } from '../../domain/useManualConfirmation'
 import { useTestVerificationSend } from '../../domain/useTestVerificationSend'
@@ -25,7 +25,8 @@ import { ConfirmationsList } from './components/confirmations/ConfirmationsList'
 import { ConfirmationsPager } from './components/confirmations/ConfirmationsPager'
 import { ConfirmationsToolbar } from './components/confirmations/ConfirmationsToolbar'
 import { VerificationDetailsSheet } from './components/confirmations/VerificationDetailsSheet'
-import { StandalonePageHeader } from './components/overview/StandalonePageHeader'
+import { PageHeader } from './components/shared/PageHeader'
+import { akButton, akCard } from './components/shared/akStyles'
 
 export interface DashboardVerificationsStandaloneSkinProps {
   period: DashboardStatsDateRange
@@ -51,6 +52,9 @@ export function DashboardVerificationsStandaloneSkin({
   importBatchId,
 }: DashboardVerificationsStandaloneSkinProps) {
   const t = useTranslations('dashboard')
+  const tTable = useTranslations('dashboard.standalone.table')
+  const tabIdPrefix = useId()
+  const panelId = `${tabIdPrefix}-panel`
   const tCredits = useTranslations('creditErrors')
   const { locale } = useLocaleInfo()
   const list = useConfirmationsList({
@@ -137,15 +141,14 @@ export function DashboardVerificationsStandaloneSkin({
     tab === 'all' && !list.search && !importBatchId && list.rows.length === 0
 
   return (
-    <div className="mx-auto w-full max-w-350 min-w-0 space-y-6 pb-8">
-      <StandalonePageHeader
+    <div className="mx-auto w-full max-w-[1180px] min-w-0 space-y-6 pt-2 pb-8">
+      <PageHeader
         title={t('confirmations.title')}
         subtitle={t('confirmations.subtitle')}
         periodLabel={t('overview.periodLabel')}
         period={period}
         periodOptions={periodOptions}
         onPeriodChange={onPeriodChange}
-        actions={<CreditsBadge />}
       />
 
       <StandaloneFeedbackBanners
@@ -160,17 +163,21 @@ export function DashboardVerificationsStandaloneSkin({
       {list.sourceStatus === 'disconnected' && (
         <div
           role="status"
-          className="border-warning-border bg-warning-subtle text-warning-subtle-foreground rounded-card border px-4 py-3"
+          className="border-ak-warning-line bg-ak-warning-soft text-ak-warning rounded-ak-card border px-6 py-4"
         >
-          <p className="font-semibold">{t('sourceDisconnectedTitle')}</p>
-          <p className="mt-1 text-sm">{t('sourceDisconnectedDescription')}</p>
+          <p className="text-ak-body font-semibold">
+            {t('sourceDisconnectedTitle')}
+          </p>
+          <p className="text-ak-body mt-1">
+            {t('sourceDisconnectedDescription')}
+          </p>
         </div>
       )}
 
       {isReadOnly && (
         <div
           role="status"
-          className="border-info-border bg-info-subtle text-info-subtle-foreground rounded-card border px-4 py-3 text-sm"
+          className="border-ak-info/20 bg-ak-info-soft text-ak-info rounded-ak-card text-ak-body border px-6 py-4"
         >
           {t('verifications.readOnlyNotice')}
         </div>
@@ -178,12 +185,14 @@ export function DashboardVerificationsStandaloneSkin({
 
       <section
         aria-label={t('confirmations.title')}
-        className="rounded-card border-border bg-card overflow-hidden border"
+        className={cn(akCard, 'overflow-hidden')}
       >
         <ConfirmationsToolbar
           tab={tab}
           tabCounts={list.tabCounts}
           onTabChange={onTabChange}
+          panelId={panelId}
+          tabIdPrefix={tabIdPrefix}
           searchInput={list.searchInput}
           isSearchValid={list.isSearchValid}
           onSearchChange={list.onSearchChange}
@@ -191,8 +200,9 @@ export function DashboardVerificationsStandaloneSkin({
         />
 
         <div
-          role="region"
-          aria-label={t(`confirmations.tabs.${tab}`)}
+          id={panelId}
+          role="tabpanel"
+          aria-labelledby={`${tabIdPrefix}-${tab}`}
           aria-busy={list.isFetching}
         >
           {list.isLoading ? (
@@ -202,21 +212,25 @@ export function DashboardVerificationsStandaloneSkin({
               role="alert"
               className="flex flex-col items-center gap-3 px-6 py-10 text-center"
             >
-              <p className="text-foreground font-semibold">
+              <p className="text-ak-body text-ink font-semibold">
                 {t('confirmations.error.title')}
               </p>
-              <Button variant="outline" size="sm" onClick={list.retry}>
+              <button
+                type="button"
+                onClick={list.retry}
+                className={akButton({ variant: 'secondary', size: 'row' })}
+              >
                 {t('confirmations.error.retry')}
-              </Button>
+              </button>
             </div>
           ) : list.rows.length === 0 ? (
             isOnboarding ? (
-              <div className="bg-muted/50 m-4 space-y-6 rounded-xl p-6">
+              <div className="bg-surface-sunken rounded-ak-card m-4 space-y-6 p-6">
                 <div>
-                  <h2 className="text-foreground text-lg font-semibold">
+                  <h2 className="text-ak-section text-ink">
                     {t('verifications.empty.title')}
                   </h2>
-                  <p className="text-muted-foreground mt-2 max-w-xl text-sm">
+                  <p className="text-ak-body text-ink-muted mt-2 max-w-xl">
                     {t('verifications.empty.description')}
                   </p>
                 </div>
@@ -239,7 +253,7 @@ export function DashboardVerificationsStandaloneSkin({
                 )}
               </div>
             ) : (
-              <p className="text-muted-foreground px-6 py-12 text-center text-sm">
+              <p className="text-ak-body text-ink-muted px-6 py-12 text-center">
                 {list.search
                   ? t('confirmations.empty.search', { query: list.search })
                   : t(`confirmations.empty.${tab}`)}
@@ -271,12 +285,20 @@ export function DashboardVerificationsStandaloneSkin({
                   to: formatCount(list.range.to, locale),
                   total: formatCount(list.range.total, locale),
                 })}
+                summary={tTable.rich('showing', {
+                  from: formatCount(list.range.from, locale),
+                  to: formatCount(list.range.to, locale),
+                  total: list.range.total,
+                  b: (chunks) => (
+                    <bdi className="text-ink font-semibold">{chunks}</bdi>
+                  ),
+                })}
                 hasPrevious={list.hasPreviousPage}
                 hasNext={list.hasNextPage}
                 onPrevious={list.onPreviousPage}
                 onNext={list.onNextPage}
-                previousLabel={t('confirmations.pagination.previous')}
-                nextLabel={t('confirmations.pagination.next')}
+                previousLabel={tTable('previous')}
+                nextLabel={tTable('next')}
               />
             </>
           )}
