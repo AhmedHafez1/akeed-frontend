@@ -18,7 +18,6 @@ import {
   formatPhoneInternational,
 } from '@/features/dashboard/lib/orderDisplay'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
-import { InitialsAvatar } from '../shared/InitialsAvatar'
 import { StatusBadge } from '../shared/StatusBadge'
 
 /** What the table and the card list both take. */
@@ -149,9 +148,14 @@ export function FollowUpCell({
   if (!row.follow_up_sent_at) return null
 
   const sentAt = formatDayAndClock(row.follow_up_sent_at, locale, timeZone)
+  const sentAtTitle = formatTooltipDateTime(
+    row.follow_up_sent_at,
+    locale,
+    timeZone
+  )
   return (
     <div className="flex min-w-0 flex-col items-start gap-1">
-      <StatusBadge kind="confirmed" title={sentAt}>
+      <StatusBadge kind="confirmed" title={sentAtTitle || undefined}>
         {t('sent')}
       </StatusBadge>
       {showTime && (
@@ -182,7 +186,6 @@ export function CustomerCell({
   )
   return (
     <div className="flex min-w-0 items-center gap-3">
-      <InitialsAvatar name={name} size={32} />
       <div className="min-w-0">
         <p className="text-ak-body text-ink truncate font-semibold">
           {name ? <bdi>{name}</bdi> : phoneText}

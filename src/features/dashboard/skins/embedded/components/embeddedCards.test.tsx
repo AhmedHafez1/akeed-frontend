@@ -356,13 +356,19 @@ describe('ConfirmationsTable', () => {
 
   it('shows the status timestamp on the badge and omits the updated column', () => {
     renderEmbedded(
-      <ConfirmationsTable rows={[listRow()]} {...tableProps} />,
+      <ConfirmationsTable
+        rows={[listRow({ follow_up_sent_at: '2026-09-16T07:00:00Z' })]}
+        {...tableProps}
+      />,
       'en'
     )
 
     expect(
       screen.getByText('Confirmed').closest('[title]')?.getAttribute('title')
-    ).toContain('7:00 AM')
+    ).toBe('Sep 16, 2026, 7:00 AM')
+    expect(
+      screen.getByText('Sent').closest('[title]')?.getAttribute('title')
+    ).toBe('Sep 16, 2026, 7:00 AM')
     expect(
       screen.queryByRole('columnheader', { name: 'Last update' })
     ).toBeNull()
@@ -415,8 +421,8 @@ describe('ConfirmationsTable', () => {
     expect(screen.getByText('لم يرد')).toBeTruthy()
     expect(screen.queryByText('أُرسل التذكير')).toBeNull()
     const followUpBadge = screen.getByText('تم الإرسال')
-    expect(followUpBadge.closest('[title]')?.getAttribute('title')).toContain(
-      '17 سبتمبر'
+    expect(followUpBadge.closest('[title]')?.getAttribute('title')).toMatch(
+      /2026.*6:49/
     )
     const chats = screen.getAllByRole('link', { name: /واتساب/ })
     expect(chats).toHaveLength(1)

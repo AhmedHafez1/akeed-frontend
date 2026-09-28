@@ -39,7 +39,6 @@ import type {
   DashboardOverview,
   NeedsActionItem,
 } from '@/features/dashboard/model/dashboard.model'
-import { InitialsAvatar } from '../shared/InitialsAvatar'
 import { StatusBadge } from '../shared/StatusBadge'
 import { akButton, akCard, akLink } from '../shared/akStyles'
 
@@ -118,12 +117,11 @@ function NeedsActionRow({
 
   return (
     <li className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-3 px-6 py-4 lg:grid-cols-[6.5rem_minmax(0,1.25fr)_minmax(0,1fr)_auto_auto] lg:gap-x-6">
-      <p className="text-ak-body text-ink order-1 font-semibold tabular-nums lg:order-none">
+      <p className="text-ak-body text-ink order-1 font-semibold tabular-nums lg:order-0">
         <bdi dir="ltr">{orderLabel}</bdi>
       </p>
 
-      <div className="order-3 col-span-2 flex min-w-0 items-center gap-3 lg:order-none lg:col-span-1">
-        <InitialsAvatar name={name} />
+      <div className="order-3 col-span-2 flex min-w-0 items-center gap-3 lg:order-0 lg:col-span-1">
         <div className="min-w-0">
           <p className="text-ak-body text-ink truncate font-semibold">
             {name ? <bdi>{name}</bdi> : <bdi dir="ltr">{phone}</bdi>}
@@ -136,7 +134,7 @@ function NeedsActionRow({
         </div>
       </div>
 
-      <div className="order-4 col-span-2 flex min-w-0 flex-col items-start gap-1 lg:order-none lg:col-span-1">
+      <div className="order-4 col-span-2 flex min-w-0 flex-col items-start gap-1 lg:order-0 lg:col-span-1">
         <StatusBadge
           kind={reason.kind}
           icon={reason.kind === 'needsAction' ? Clock : undefined}
@@ -151,7 +149,7 @@ function NeedsActionRow({
         )}
       </div>
 
-      <p className="text-ak-body text-ink order-2 text-end font-semibold whitespace-nowrap tabular-nums lg:order-none">
+      <p className="text-ak-body text-ink order-2 text-end font-semibold whitespace-nowrap tabular-nums lg:order-0">
         <bdi dir="ltr">
           {formatOrderAmount(item.total_price, item.currency, locale, {
             currencyAfter: true,
@@ -159,7 +157,7 @@ function NeedsActionRow({
         </bdi>
       </p>
 
-      <div className="order-5 col-span-2 flex flex-wrap items-center gap-2 lg:order-none lg:col-span-1 lg:flex-nowrap lg:justify-end">
+      <div className="order-5 col-span-2 flex flex-wrap items-center gap-2 lg:order-0 lg:col-span-1 lg:flex-nowrap lg:justify-end">
         {chatUrl && (
           <a
             href={chatUrl}

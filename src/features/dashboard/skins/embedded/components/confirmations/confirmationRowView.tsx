@@ -123,9 +123,14 @@ export function FollowUpCell({
   if (!row.follow_up_sent_at) return null
 
   const sentAt = formatDayAndClock(row.follow_up_sent_at, locale, timeZone)
+  const sentAtTitle = formatTooltipDateTime(
+    row.follow_up_sent_at,
+    locale,
+    timeZone
+  )
   return (
     <BlockStack gap="100">
-      <span title={sentAt}>
+      <span title={sentAtTitle || undefined}>
         <Badge tone="success">{t('sent')}</Badge>
       </span>
       {showTime && (

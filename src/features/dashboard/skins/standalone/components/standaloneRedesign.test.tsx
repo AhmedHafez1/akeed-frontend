@@ -123,13 +123,14 @@ describe('StatusCell', () => {
       follow_up_sent_at: '2026-09-28T10:00:00Z',
     } as VerificationItem
     const { unmount } = renderStandalone(
-      <FollowUpCell row={sentRow} timeZone="UTC" />,
+      <FollowUpCell row={sentRow} timeZone="UTC" showTime />,
       'en'
     )
 
     expect(screen.getByText('Sent').parentElement?.getAttribute('title')).toBe(
-      'Sep 28 · 10:00 AM'
+      'Sep 28, 2026, 10:00 AM'
     )
+    expect(screen.getByText('Sep 28 · 10:00 AM')).toBeTruthy()
     unmount()
     renderStandalone(
       <FollowUpCell
