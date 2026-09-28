@@ -1,6 +1,13 @@
 @import 'tailwindcss';
 
 /*
+ * Scan all of src explicitly. Tailwind's automatic detection skips anything a
+ * gitignore matches — including a developer's global gitignore — which
+ * silently drops utilities used only in the skipped files.
+ */
+@source '../';
+
+/*
  * ── Akeed design tokens ────────────────────────────────────────────────
  * This file is the ONLY theme surface. Tailwind v4 does not read
  * `tailwind.config.*` — utilities exist only if declared in `@theme` here.
