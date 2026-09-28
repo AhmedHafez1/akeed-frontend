@@ -5,7 +5,11 @@ import type {
   DashboardOverview,
   VerificationItem,
 } from '@/features/dashboard/model/dashboard.model'
-import { OrderCell, StatusCell } from './confirmations/confirmationCells'
+import {
+  FollowUpCell,
+  OrderCell,
+  StatusCell,
+} from './confirmations/confirmationCells'
 import { ConfirmationsToolbar } from './confirmations/ConfirmationsToolbar'
 import { MessageFlowCard } from './overview/MessageFlowCard'
 import { NeedsActionCard } from './overview/NeedsActionCard'
@@ -89,8 +93,32 @@ describe('StatusCell', () => {
     renderStandalone(<StatusCell row={row} timeZone="UTC" />, 'en')
 
     expect(screen.getByText('No reply')).toBeTruthy()
-    expect(screen.getByText('Reminder sent')).toBeTruthy()
+    expect(screen.queryByText('Reminder sent')).toBeNull()
     expect(screen.queryByText('Needs action')).toBeNull()
+  })
+
+  it('shows the follow-up timestamp on a sent badge and nothing when unsent', () => {
+    const sentRow = {
+      status: 'no_reply',
+      follow_up_sent_at: '2026-09-28T10:00:00Z',
+    } as VerificationItem
+    const { unmount } = renderStandalone(
+      <FollowUpCell row={sentRow} timeZone="UTC" />,
+      'en'
+    )
+
+    expect(screen.getByText('Sent').parentElement?.getAttribute('title')).toBe(
+      'Sep 28 · 10:00 AM'
+    )
+    unmount()
+    renderStandalone(
+      <FollowUpCell
+        row={{ ...sentRow, follow_up_sent_at: null }}
+        timeZone="UTC"
+      />,
+      'en'
+    )
+    expect(screen.queryByText('Sent')).toBeNull()
   })
 })
 

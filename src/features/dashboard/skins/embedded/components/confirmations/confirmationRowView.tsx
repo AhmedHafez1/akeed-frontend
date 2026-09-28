@@ -8,6 +8,7 @@ import {
 import {
   customerDisplayName,
   formatClockTime,
+  formatDayAndClock,
   formatOrderAmount,
   formatOrderNumber,
   formatPhoneInternational,
@@ -91,6 +92,34 @@ export function StatusCell({
           }
         >
           {sub}
+        </Text>
+      )}
+    </BlockStack>
+  )
+}
+
+export function FollowUpCell({
+  row,
+  timeZone,
+  showTime = false,
+}: {
+  row: VerificationItem
+  timeZone: string
+  showTime?: boolean
+}) {
+  const t = useTranslations('dashboard.table.followUp')
+  const { locale } = useLocaleInfo()
+  if (!row.follow_up_sent_at) return null
+
+  const sentAt = formatDayAndClock(row.follow_up_sent_at, locale, timeZone)
+  return (
+    <BlockStack gap="100">
+      <span title={sentAt}>
+        <Badge tone="success">{t('sent')}</Badge>
+      </span>
+      {showTime && (
+        <Text as="span" variant="bodySm" tone="subdued">
+          {sentAt}
         </Text>
       )}
     </BlockStack>

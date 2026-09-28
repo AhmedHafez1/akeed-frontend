@@ -1673,6 +1673,7 @@
         "order": "Order",
         "customer": "Customer",
         "status": "Status",
+        "followUp": "Follow-up",
         "total": "Total",
         "updated": "Last update",
         "action": "Action"

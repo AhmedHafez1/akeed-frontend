@@ -8,6 +8,7 @@ import type { ConfirmationRowActionHandlers } from '@/features/dashboard/domain/
 import {
   customerDisplayName,
   formatClockTime,
+  formatDayAndClock,
   formatOrderAmount,
   formatOrderNumber,
   formatPhoneInternational,
@@ -108,9 +109,7 @@ export function StatusCell({
 
   return (
     <div className="flex min-w-0 flex-col items-start gap-1">
-      <StatusBadge kind={view.kind}>
-        {t(view.badge)}
-      </StatusBadge>
+      <StatusBadge kind={view.kind}>{t(view.badge)}</StatusBadge>
       {sub && (
         <span
           className={cn(
@@ -119,6 +118,34 @@ export function StatusCell({
           )}
         >
           {sub}
+        </span>
+      )}
+    </div>
+  )
+}
+
+export function FollowUpCell({
+  row,
+  timeZone,
+  showTime = false,
+}: {
+  row: VerificationItem
+  timeZone: string
+  showTime?: boolean
+}) {
+  const t = useTranslations('dashboard.table.followUp')
+  const { locale } = useLocaleInfo()
+  if (!row.follow_up_sent_at) return null
+
+  const sentAt = formatDayAndClock(row.follow_up_sent_at, locale, timeZone)
+  return (
+    <div className="flex min-w-0 flex-col items-start gap-1">
+      <StatusBadge kind="confirmed" title={sentAt}>
+        {t('sent')}
+      </StatusBadge>
+      {showTime && (
+        <span className="text-ak-caption text-ink-muted whitespace-nowrap tabular-nums">
+          <bdi>{sentAt}</bdi>
         </span>
       )}
     </div>

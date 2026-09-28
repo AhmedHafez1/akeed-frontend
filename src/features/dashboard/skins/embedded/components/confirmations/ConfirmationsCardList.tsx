@@ -16,6 +16,7 @@ import { ConfirmationRowActions } from './ConfirmationRowActions'
 import {
   AmountText,
   CustomerCell,
+  FollowUpCell,
   StatusCell,
   useConfirmationRowView,
   type ConfirmationsListProps,
@@ -61,7 +62,10 @@ function ConfirmationCard({
 
         <InlineStack align="space-between" blockAlign="start" gap="300">
           <CustomerCell name={view.name} phone={view.phone} />
-          <StatusCell row={row} timeZone={timeZone} />
+          <BlockStack gap="200">
+            <StatusCell row={row} timeZone={timeZone} />
+            <FollowUpCell row={row} timeZone={timeZone} showTime />
+          </BlockStack>
         </InlineStack>
 
         <Text as="p" variant="bodySm" tone="subdued">

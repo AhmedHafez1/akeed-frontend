@@ -387,7 +387,11 @@ describe('ConfirmationsTable', () => {
     )
     expect(screen.getByText('ألغاه العميل')).toBeTruthy()
     expect(screen.getByText('لم يرد')).toBeTruthy()
-    expect(screen.getByText('أُرسل التذكير')).toBeTruthy()
+    expect(screen.queryByText('أُرسل التذكير')).toBeNull()
+    const followUpBadge = screen.getByText('تم الإرسال')
+    expect(followUpBadge.closest('[title]')?.getAttribute('title')).toContain(
+      '17 سبتمبر'
+    )
     const chats = screen.getAllByRole('link', { name: /واتساب/ })
     expect(chats).toHaveLength(1)
     expect(screen.getByLabelText('الصفحة السابقة')).toBeTruthy()
@@ -532,6 +536,7 @@ describe('ConfirmationsCardList', () => {
             status: 'read',
             confirmed_at: null,
             action_reason: 'no_reply_after_follow_up',
+            follow_up_sent_at: '2026-09-17T06:49:00Z',
           }),
         ]}
         timeZone="UTC"
@@ -562,6 +567,8 @@ describe('ConfirmationsCardList', () => {
       within(cards[0]).getByRole('link', { name: /بيانات الشحن/ })
     ).toBeTruthy()
     expect(within(cards[1]).getByText('لم يرد')).toBeTruthy()
+    expect(within(cards[1]).getByText('تم الإرسال')).toBeTruthy()
+    expect(within(cards[1]).getByText(/17 سبتمبر/)).toBeTruthy()
     expect(
       within(cards[1]).getByRole('link', { name: /راسل .* على واتساب/ })
     ).toBeTruthy()

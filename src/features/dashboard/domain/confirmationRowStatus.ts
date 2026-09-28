@@ -102,7 +102,6 @@ export function resolveRowStatus(
       badge: 'noReply',
       tone: 'warning',
       kind: 'needsAction',
-      sub: row.follow_up_sent_at ? 'sub.followUpSent' : undefined,
     }
   }
   return { badge: 'awaitingReply', tone: 'neutral', kind: 'pending' }
