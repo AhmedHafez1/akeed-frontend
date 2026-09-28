@@ -96,7 +96,6 @@ export function StatusCell({
   timeZone: string
 }) {
   const t = useTranslations('dashboard.confirmations.status')
-  const tStatus = useTranslations('dashboard.standalone.status')
   const { locale } = useLocaleInfo()
   const view = resolveRowStatus(row)
   const sub = view.sub
@@ -110,7 +109,7 @@ export function StatusCell({
   return (
     <div className="flex min-w-0 flex-col items-start gap-1">
       <StatusBadge kind={view.kind}>
-        {view.kind === 'needsAction' ? tStatus('needsAction') : t(view.badge)}
+        {t(view.badge)}
       </StatusBadge>
       {sub && (
         <span

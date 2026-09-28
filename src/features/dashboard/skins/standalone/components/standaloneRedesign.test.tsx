@@ -3,8 +3,9 @@ import { fireEvent, screen, within } from '@testing-library/react'
 import type {
   ConfirmationsTab,
   DashboardOverview,
+  VerificationItem,
 } from '@/features/dashboard/model/dashboard.model'
-import { OrderCell } from './confirmations/confirmationCells'
+import { OrderCell, StatusCell } from './confirmations/confirmationCells'
 import { ConfirmationsToolbar } from './confirmations/ConfirmationsToolbar'
 import { MessageFlowCard } from './overview/MessageFlowCard'
 import { NeedsActionCard } from './overview/NeedsActionCard'
@@ -74,6 +75,22 @@ describe('OrderCell', () => {
     expect(orderButton.getAttribute('title')).toBe(orderLabel)
     expect(orderButton.className).toContain('max-w-[10ch]')
     expect(screen.getByText('Test')).toBeTruthy()
+  })
+})
+
+describe('StatusCell', () => {
+  it('names an escalated order "No reply", the same word as the Shopify table', () => {
+    const row = {
+      status: 'no_reply',
+      action_reason: 'no_reply_after_follow_up',
+      follow_up_sent_at: '2026-09-28T10:00:00Z',
+      is_test: false,
+    } as VerificationItem
+    renderStandalone(<StatusCell row={row} timeZone="UTC" />, 'en')
+
+    expect(screen.getByText('No reply')).toBeTruthy()
+    expect(screen.getByText('Reminder sent')).toBeTruthy()
+    expect(screen.queryByText('Needs action')).toBeNull()
   })
 })
 

@@ -1257,9 +1257,6 @@
         "moreManual": "{count, plural, one {# more confirmed manually} other {# more confirmed manually}}",
         "barLabel": "{label}: {count} of {sent} sent"
       },
-      "status": {
-        "needsAction": "Needs action"
-      },
       "table": {
         "searchPlaceholder": "Search order number or phone",
         "searchShortcut": "Press / to search",
