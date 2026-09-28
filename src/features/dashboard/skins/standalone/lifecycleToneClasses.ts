@@ -9,8 +9,11 @@ import type { LifecycleTone } from '../../domain/verificationLifecycle'
  */
 export const lifecycleToneClasses: Record<LifecycleTone, string> = {
   neutral: 'border-border bg-muted/50 text-foreground/80',
-  info: 'border-blue-200 bg-blue-50 text-blue-700',
-  progress: 'border-indigo-200 bg-indigo-50 text-indigo-700',
+  info: 'border-info-border bg-info-subtle text-info-subtle-foreground',
+  // Read is further along than sent, but the same family: the info trio,
+  // emphasized, rather than a second hue.
+  progress:
+    'border-info-border bg-info-subtle text-info-subtle-foreground ring-info-border ring-1 ring-inset',
   success: 'border-primary-border bg-primary-subtle text-primary',
   warning:
     'border-warning-border bg-warning-subtle text-warning-subtle-foreground',

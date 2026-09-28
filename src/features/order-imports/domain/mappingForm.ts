@@ -1,4 +1,7 @@
-import type { OrderCurrency } from '@/shared/commerce/orderCommerce'
+import {
+  currencyForCountry,
+  type OrderCurrency,
+} from '@/shared/commerce/orderCommerce'
 import {
   orderImportFields,
   type OrderImportDateCheck,
@@ -31,12 +34,29 @@ export type MappingForm = {
   dateFormat: OrderImportDateFormat
   /** Keyed by normalized value; only the merchant's or saved choices. */
   payment: Record<string, OrderImportPaymentClass>
+  /** Explicit choice for blank payment cells in this import. */
+  blankPayment?: OrderImportPaymentClass
 }
 
 /** The server's view of the mapped payment and date columns. */
 export type MappingChecks = {
   paymentValues: OrderImportPaymentValues | null
   dateFormat: OrderImportDateCheck | null
+}
+
+/**
+ * A new phone country brings its own currency along, unless the merchant had
+ * already picked a currency other than the previous country's.
+ */
+export function countryChange(
+  form: Pick<MappingForm, 'country' | 'currency'>,
+  country: string
+): Pick<MappingForm, 'country'> & Partial<Pick<MappingForm, 'currency'>> {
+  const next = currencyForCountry(country)
+  const followsCountry =
+    form.currency === currencyForCountry(form.country) ||
+    form.currency === 'USD'
+  return next && followsCountry ? { country, currency: next } : { country }
 }
 
 export function initialMappingForm(
@@ -47,16 +67,19 @@ export function initialMappingForm(
   ) as unknown as Record<OrderImportField, string[]>
   for (const suggestion of state.suggestions.fields)
     columns[suggestion.field] = [...suggestion.columns]
+  // A value the server could not classify starts as cash on delivery: the
+  // merchant sees it in "نؤكدها" and one tap moves it out.
   const payment: Record<string, OrderImportPaymentClass> = {}
   for (const entry of state.paymentValues?.values ?? [])
-    if (entry.classification !== 'unknown')
-      payment[entry.normalizedValue] = entry.classification
+    payment[entry.normalizedValue] =
+      entry.classification === 'unknown' ? 'cod' : entry.classification
   return {
     columns,
     country: state.options.country,
     currency: state.options.defaultCurrency,
     dateFormat: state.options.dateFormat,
     payment,
+    blankPayment: state.options.blankPaymentClass,
   }
 }
 
@@ -133,15 +156,7 @@ export function mappingErrors(
   }
   if (showsDateFormat(form, checks) && form.dateFormat === 'auto')
     errors.dateFormat = 'dateFormatRequired'
-  const payment = paymentValuesFor(form, checks)
-  if (
-    payment?.values.some(
-      (entry) =>
-        entry.classification === 'unknown' &&
-        !form.payment[entry.normalizedValue]
-    )
-  )
-    errors.payment = 'paymentUnresolved'
+  // Payment never blocks: an unclassified value counts as cash on delivery.
   return errors
 }
 
@@ -173,7 +188,7 @@ export function paymentValuesFor(
 }
 
 export function paymentChoice(
-  form: MappingForm,
+  form: Pick<MappingForm, 'payment'>,
   normalizedValue: string,
   classification: OrderImportPaymentClass | 'unknown'
 ): OrderImportPaymentClass | null {
@@ -207,16 +222,18 @@ export function toSaveBody(
       country: form.country,
       defaultCurrency: form.currency,
       dateFormat: form.dateFormat,
+      blankPaymentClass: form.blankPayment,
       // Only choices for values the merchant was shown; the server keys them.
       paymentValueMap: payment
         ? Object.fromEntries(
             payment.values.flatMap((entry) => {
-              const choice = paymentChoice(
-                form,
-                entry.normalizedValue,
-                entry.classification
-              )
-              return choice ? [[entry.normalizedValue, choice]] : []
+              const choice =
+                paymentChoice(
+                  form,
+                  entry.normalizedValue,
+                  entry.classification
+                ) ?? 'cod'
+              return [[entry.normalizedValue, choice]]
             })
           )
         : {},
@@ -224,7 +241,7 @@ export function toSaveBody(
   }
 }
 
-/** Up to two non-empty example values from the chosen columns. */
+/** Up to two distinct, non-empty example values from the chosen columns. */
 export function sampleValues(
   rows: readonly OrderImportSampleRow[],
   columns: readonly string[],
@@ -237,8 +254,100 @@ export function sampleValues(
       .map((column) => row.raw[column]?.trim() ?? '')
       .filter(Boolean)
       .join(' ')
-    if (value) values.push(value)
+    if (value && !values.includes(value)) values.push(value)
     if (values.length === limit) break
   }
   return values
+}
+
+/** The rows the check always shows; the rest fold under "حقول اختيارية". */
+export const primaryImportFields: readonly OrderImportField[] = [
+  'phone',
+  'customerName',
+  'amount',
+  'orderReference',
+  'paymentMethod',
+]
+
+export const optionalImportFields: readonly OrderImportField[] =
+  orderedImportFields.filter((field) => !primaryImportFields.includes(field))
+
+const confirmedStatuses: ReadonlySet<FieldStatus> = new Set([
+  'detected',
+  'saved',
+  'chosen',
+])
+
+/**
+ * Required fields the merchant has to look at: nothing chosen, or a guess
+ * the matcher was not sure of.
+ */
+export function attentionFields(
+  suggestions: ReadonlyMap<OrderImportField, OrderImportFieldSuggestion>,
+  form: MappingForm,
+  checks: MappingChecks
+): OrderImportField[] {
+  return orderedImportFields.filter(
+    (field) =>
+      requiredImportFields.has(field) &&
+      !confirmedStatuses.has(
+        fieldStatus(field, suggestions.get(field), form, checks)
+      )
+  )
+}
+
+/**
+ * Every required column was matched with confidence and nothing blocks the
+ * save: the check opens collapsed, as one panel of chips (auto-advance).
+ */
+export function isAllMatched(
+  suggestions: ReadonlyMap<OrderImportField, OrderImportFieldSuggestion>,
+  form: MappingForm,
+  checks: MappingChecks
+): boolean {
+  return (
+    attentionFields(suggestions, form, checks).length === 0 &&
+    Object.keys(mappingErrors(form, checks)).length === 0
+  )
+}
+
+const PHONE_LIKE = /^\+?[\d\s\-().]{7,}$/
+const AMOUNT_LIKE = /^[^\d-]{0,4}-?[\d.,\s]+[^\d]{0,4}$/
+
+function mostlyMatch(values: readonly string[], pattern: RegExp): boolean {
+  const present = values.filter(Boolean)
+  if (present.length === 0) return false
+  const matching = present.filter((value) => pattern.test(value)).length
+  return matching / present.length >= 0.6
+}
+
+/**
+ * A column to offer for an unmatched field ("هل هو «رقم التواصل»؟"): the
+ * matcher's first unused alternative, else -- for the phone and the amount --
+ * an unused column whose sample values look like one.
+ */
+export function suggestColumn(
+  field: OrderImportField,
+  suggestion: OrderImportFieldSuggestion | undefined,
+  headers: readonly string[],
+  rows: readonly OrderImportSampleRow[],
+  used: ReadonlySet<string>
+): string | null {
+  const alternative = suggestion?.alternatives.find(
+    (column) => !used.has(column)
+  )
+  if (alternative) return alternative
+  const pattern =
+    field === 'phone' ? PHONE_LIKE : field === 'amount' ? AMOUNT_LIKE : null
+  if (!pattern) return null
+  return (
+    headers.find(
+      (header) =>
+        !used.has(header) &&
+        mostlyMatch(
+          rows.map((row) => row.raw[header]?.trim() ?? ''),
+          pattern
+        )
+    ) ?? null
+  )
 }

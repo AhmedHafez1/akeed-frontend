@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useBillingSummary } from '@/features/billing'
-import { useDashboard } from '@/features/dashboard/domain/useDashboard'
+import { useStandaloneDashboardUrlState } from '@/features/dashboard/hooks/useStandaloneDashboardUrlState'
 import { DashboardVerificationsStandaloneSkin } from '@/features/dashboard/skins/standalone/DashboardVerificationsStandaloneSkin'
 import {
   ManualOrderReconciler,
@@ -16,7 +16,7 @@ import { orderSyncSnapshot, resetOrderSyncFixture } from './orderSyncFixture'
  * stats, and the credit balance — each reading the shared query cache.
  */
 export default function OrderSyncFixturePage() {
-  const dashboard = useDashboard()
+  const url = useStandaloneDashboardUrlState()
   const { summary } = useBillingSummary()
   const [snapshot, setSnapshot] = useState(orderSyncSnapshot)
 
@@ -70,7 +70,14 @@ export default function OrderSyncFixturePage() {
         </button>
         <ManualOrderTopBarAction />
       </div>
-      <DashboardVerificationsStandaloneSkin {...dashboard} />
+      <DashboardVerificationsStandaloneSkin
+        period={url.period}
+        periodOptions={url.periodOptions}
+        onPeriodChange={url.onPeriodChange}
+        tab={url.tab}
+        onTabChange={url.onTabChange}
+        importBatchId={url.importBatchId}
+      />
       <pre
         aria-label="Order sync fixture state"
         className="mx-auto mt-8 max-w-[1400px] text-xs break-all whitespace-pre-wrap"

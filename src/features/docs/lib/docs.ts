@@ -120,6 +120,3 @@ export async function getDocList(localeInput: string): Promise<DocListItem[]> {
   }))
 }
 
-export function getDocsRootPath(): string {
-  return DOCS_ROOT
-}

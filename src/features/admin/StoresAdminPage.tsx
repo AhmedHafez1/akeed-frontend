@@ -731,7 +731,7 @@ function StoresResults({
     <section aria-label="Store results">
       <div className="border-border bg-card hidden overflow-hidden rounded-2xl border shadow-xs md:block">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[1120px] text-left text-sm">
+          <table className="bg-card w-full min-w-[1120px] text-left text-sm">
             <thead className="border-border bg-muted/40 text-muted-foreground border-b text-xs font-semibold tracking-wide uppercase">
               <tr>
                 <SortableHeader

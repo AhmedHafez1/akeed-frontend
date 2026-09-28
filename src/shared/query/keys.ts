@@ -58,6 +58,7 @@ export const queryKeys = {
   orderImports: {
     all: ['orderImports'] as const,
     list: () => [...queryKeys.orderImports.all, 'list'] as const,
+    active: () => [...queryKeys.orderImports.all, 'active'] as const,
     detail: (batchId: string) =>
       [...queryKeys.orderImports.all, 'detail', batchId] as const,
     rows: (batchId: string, outcome: string) =>

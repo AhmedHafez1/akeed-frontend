@@ -49,8 +49,9 @@ export function ManualOrderTopBarAction() {
       isAtPlanLimit={isReady && availability.isAtPlanLimit}
       disabledReasonOverride={disabledReasonOverride}
       showDisabledReason={false}
-      triggerClassName="h-8 justify-center px-0 xl:w-auto xl:justify-start xl:gap-2 xl:px-3.5"
-      triggerLabelClassName="text-xs px-2 xl:text-sm inline"
+      // A 44px icon on phones; labelled from 640px (the primary action).
+      triggerClassName="size-11 gap-2 px-0 sm:h-10 sm:w-auto sm:px-3.5"
+      triggerLabelClassName="hidden text-sm sm:inline"
     />
   )
 }

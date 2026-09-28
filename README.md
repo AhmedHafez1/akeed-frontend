@@ -21,13 +21,16 @@ The app runs on `http://localhost:3001`.
 ## Full Local Stack (VS Code)
 
 Open the parent `Akeed` folder in VS Code and run the
-`Full Stack: Backend + Standalone + Shopify` launch compound.
+`Full Stack: Backend + Frontend` launch compound.
 
-- Redis runs in Docker on `localhost:6379`.
-- NestJS runs on `http://localhost:3000` and uses the backend `.env`.
-- The standalone frontend runs on `http://localhost:3001`.
-- The Shopify frontend process runs on `http://localhost:3002`; Shopify's
+- ngrok tunnels `http://localhost:3000` (`ngrok http 3000`).
+- Redis runs in Docker on `localhost:6379` (started by the backend's pre-launch task).
+- NestJS runs on `http://localhost:3000` (debugger on port 9230) and uses the backend `.env`.
+- The frontend runs through the Shopify CLI (`npm run shopify:dev`); Shopify's
   localhost HTTPS proxy uses `https://localhost:3458`.
+
+For standalone mode only, run `npm run dev` (port 3001) instead of the Shopify
+CLI launch.
 
 Docker Desktop must be running with virtualization enabled. The backend
 `SHOPIFY_API_KEY` and `SHOPIFY_API_SECRET` must belong to the app identified in

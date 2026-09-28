@@ -8,6 +8,10 @@
  *
  * Every request, with its body, is kept in `window.__akeedImportReplay.calls`
  * so the Playwright flow can assert what the UI sent and when.
+ *
+ * Two answers are derived rather than recorded: the send step reads every
+ * row in one page (the recorded pages, merged in row order), and the top
+ * bar's started-imports list (the batch, once started, as its detail says).
  */
 import recording from './replay/arabic-excel.recording.json'
 
@@ -95,6 +99,22 @@ export async function replayRequest(
 
   if (url === '/api/order-imports?status=draft')
     return json({ drafts: [], permissions: { canEdit: true } })
+  if (url === '/api/order-imports?status=active') {
+    const current = stage()
+    if (current !== 'releasing' && current !== 'completed')
+      return json({ batches: [] })
+    const detail = body('detail:completed') as Json
+    return json({
+      batches: [
+        {
+          batchId: replayBatchId,
+          fileName: detail.fileName,
+          status: current === 'completed' ? 'completed' : 'releasing',
+          startedAt: detail.startedAt ?? null,
+        },
+      ],
+    })
+  }
 
   const match = /^\/api\/order-imports\/([^/?]+)(\/[^?]*)?(\?.*)?$/.exec(url)
   if (!match || match[1] !== replayBatchId)
@@ -129,9 +149,12 @@ export async function replayRequest(
     return json(body('mapping'))
   }
   if (method === 'GET' && rest === '/rows') {
-    const outcome =
-      new URLSearchParams(query.slice(1)).get('outcome') ?? 'ready'
-    return json(body(`rows:${outcome}`))
+    const outcome = new URLSearchParams(query.slice(1)).get('outcome')
+    if (outcome) return json(body(`rows:${outcome}`))
+    const rows = ['ready', 'invalid', 'duplicate', 'excluded']
+      .flatMap((each) => (body(`rows:${each}`) as { rows: Json[] }).rows)
+      .sort((a, b) => (a.rowNumber as number) - (b.rowNumber as number))
+    return json({ rows, nextCursor: null })
   }
   if (method === 'POST' && rest === '/commit') {
     setStage('committed')
@@ -153,10 +176,18 @@ export function replayVerifications(url: string): unknown | undefined {
   if (query.searchParams.get('importBatchId') !== replayBatchId)
     return undefined
   record('GET', url)
+  const current = stage()
   const list = body(
-    stage() === 'completed' ? 'verifications:results' : 'verifications:held'
+    current === 'completed' ? 'verifications:results' : 'verifications:held'
   ) as Json
-  return list
+  if (current !== 'releasing') return list
+  // Started, not yet sent: the held rows are in line behind the release.
+  return {
+    ...list,
+    data: (list.data as Json[]).map((row) =>
+      row.status === 'awaiting_start' ? { ...row, status: 'queued' } : row
+    ),
+  }
 }
 
 /** The release-gate flow's theme, kept across in-app navigation. */

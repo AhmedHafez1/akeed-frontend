@@ -17,7 +17,8 @@ import {
 import { SearchIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import { useEmbeddedConfirmations } from '../../domain/useEmbeddedConfirmations'
+import { CONFIRMATIONS_TABS } from '../../domain/confirmationsUrlState'
+import { useConfirmationsList } from '../../domain/useConfirmationsList'
 import { useManualConfirmation } from '../../domain/useManualConfirmation'
 import { formatCount } from '../../lib/orderDisplay'
 import type { DateRangeFilterOption } from '../../domain/dashboard.types'
@@ -31,14 +32,6 @@ import { ConfirmationsTable } from './components/confirmations/ConfirmationsTabl
 import { EmbeddedPageHeader } from './components/overview/EmbeddedPageHeader'
 import { ManualConfirmModal } from './components/shared/ManualConfirmModal'
 import { VerificationsTableSkeleton } from './components/VerificationsTableSkeleton'
-
-export const CONFIRMATIONS_TABS: ConfirmationsTab[] = [
-  'all',
-  'needs_action',
-  'confirmed',
-  'canceled',
-  'failed',
-]
 
 type Feedback = { tone: 'success' | 'critical'; message: string }
 
@@ -60,7 +53,7 @@ export function ConfirmationsEmbedded({
 }: ConfirmationsEmbeddedProps) {
   const t = useTranslations('dashboard')
   const { locale } = useLocaleInfo()
-  const list = useEmbeddedConfirmations({ dateRange: period, tab })
+  const list = useConfirmationsList({ dateRange: period, tab })
   const confirmation = useManualConfirmation()
   // Six columns do not fit a phone; below md each order becomes a card.
   const { mdUp } = useBreakpoints({ defaults: { mdUp: true } })
@@ -89,7 +82,7 @@ export function ConfirmationsEmbedded({
     setFeedback(null)
     const result = await list.onRetry(row.id, row.order_id)
     setFeedback(
-      result === 'success'
+      result.status === 'success'
         ? { tone: 'success', message: t('table.actions.retrySuccess') }
         : { tone: 'critical', message: t('table.actions.retryError') }
     )
@@ -100,7 +93,7 @@ export function ConfirmationsEmbedded({
     const result = await list.onCancel(cancelTarget.row.id)
     setCancelTarget(null)
     setFeedback(
-      result === 'success'
+      result.status === 'success'
         ? { tone: 'success', message: t('table.actions.cancelOrderSuccess') }
         : { tone: 'critical', message: t('table.actions.cancelOrderError') }
     )

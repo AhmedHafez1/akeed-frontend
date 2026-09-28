@@ -8,10 +8,10 @@ const labelsByLocale = {
       error: 'We could not cancel this order. Please try again.',
     },
     standalone: {
-      cancel: 'Mark canceled',
-      confirm: 'Yes, mark canceled',
-      loading: 'Updating...',
-      error: 'The order could not be marked canceled. Refresh and try again.',
+      cancel: 'Cancel order',
+      confirm: 'Yes, cancel',
+      loading: 'Canceling...',
+      error: 'We could not cancel this order. Please try again.',
     },
   },
   ar: {
@@ -23,10 +23,10 @@ const labelsByLocale = {
       error: 'تعذر إلغاء هذا الطلب. حاول مرة أخرى.',
     },
     standalone: {
-      cancel: 'تعليم كملغى',
-      confirm: 'نعم، تعليم كملغى',
-      loading: 'جارٍ التحديث...',
-      error: 'تعذر تعليم الطلب كملغى. حدّث الصفحة وحاول مرة أخرى.',
+      cancel: 'إلغاء الطلب',
+      confirm: 'نعم، ألغِ الطلب',
+      loading: 'جارٍ الإلغاء...',
+      error: 'تعذر إلغاء هذا الطلب. حاول مرة أخرى.',
     },
   },
 }
@@ -57,15 +57,35 @@ export async function checkCancellation(tab, skin, locale) {
   await page
     .getByRole('combobox', { name: 'Fixture skin', exact: true })
     .selectOption(skin, {})
-  await button(labels.cancel).waitFor({ state: 'visible', timeoutMs: 10000 })
+  // Standalone keeps cancel in the row's "more" menu and asks in a dialog
+  // that closes on any answer; the legacy embedded skin shows it inline.
+  const cancelTrigger = async () => {
+    if (skin !== 'standalone') return button(labels.cancel)
+    await page
+      .locator('button[aria-haspopup="menu"]')
+      .filter({ visible: true })
+      .first()
+      .click()
+    return page.getByRole('menuitem', { name: labels.cancel, exact: true })
+  }
+  const requestCancel = async () => (await cancelTrigger()).click()
+  if (skin === 'standalone') {
+    await page
+      .locator('button[aria-haspopup="menu"]')
+      .filter({ visible: true })
+      .first()
+      .waitFor({ state: 'visible', timeoutMs: 10000 })
+  } else {
+    await button(labels.cancel).waitFor({ state: 'visible', timeoutMs: 10000 })
+  }
   const baseline = await counts()
-  await button(labels.cancel).click()
+  await requestCancel()
   await button(labels.keep).click()
   ensure(
     (await counts()).cancellations === 0,
     'Dismissal submitted a cancellation'
   )
-  await button(labels.cancel).click()
+  await requestCancel()
   await button(labels.confirm).click()
   await button(labels.loading).waitFor({ state: 'visible', timeoutMs: 10000 })
   ensure(
@@ -87,6 +107,7 @@ export async function checkCancellation(tab, skin, locale) {
   await page
     .getByRole('combobox', { name: 'Fixture result', exact: true })
     .selectOption('success', {})
+  if (skin === 'standalone') await requestCancel()
   await button(labels.confirm).click()
   await button(labels.loading).waitFor({ state: 'visible', timeoutMs: 10000 })
   await button('Resolve pending fixture request').click()
@@ -102,10 +123,19 @@ export async function checkCancellation(tab, skin, locale) {
       : complete.stats > baseline.stats,
     'Unexpected statistics refresh behavior'
   )
-  ensure(
-    (await button(labels.cancel).count()) === 0,
-    'Canceled row still exposes cancellation'
-  )
+  if (skin === 'standalone') {
+    const trigger = await cancelTrigger()
+    ensure(
+      (await trigger.count()) === 0,
+      'Canceled row still exposes cancellation'
+    )
+    await page.keyboard.press('Escape')
+  } else {
+    ensure(
+      (await button(labels.cancel).count()) === 0,
+      'Canceled row still exposes cancellation'
+    )
+  }
   return { skin, locale, baseline, held, rejected, complete, passed: true }
 }
 
@@ -146,14 +176,15 @@ export async function checkVerificationDetailsDrawer(tab) {
       `${label} left the page pointer-locked`
     )
     ensure(state.activeLabel !== null, `${label} did not restore focus`)
+    // The outcome filter is a radio group; pick the second option.
     const statusControl = page
-      .getByRole('group')
-      .locator('button')
+      .getByRole('radiogroup')
+      .getByRole('radio')
       .filter({ visible: true })
-      .first()
+      .nth(1)
     await statusControl.click()
     ensure(
-      (await statusControl.getAttribute('aria-pressed')) === 'true',
+      (await statusControl.getAttribute('aria-checked')) === 'true',
       'Status filter was not interactive after closing the drawer'
     )
     await page.waitForTimeout(250)
@@ -357,13 +388,13 @@ const importLinkLabelsByLocale = {
     reviewOrders: 'Review orders',
     chip: 'From import: orders-sept.xlsx',
     clear: 'Clear the import filter',
-    empty: 'No verifications yet',
+    empty: 'No confirmations in this period yet.',
   },
   ar: {
     reviewOrders: 'مراجعة الطلبات',
     chip: 'من الاستيراد: orders-sept.xlsx',
     clear: 'إزالة تصفية الاستيراد',
-    empty: 'لا توجد تأكيدات بعد',
+    empty: 'لا توجد تأكيدات في هذه الفترة بعد.',
   },
 }
 

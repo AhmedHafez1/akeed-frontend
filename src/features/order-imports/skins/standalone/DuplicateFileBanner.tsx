@@ -7,6 +7,7 @@ import { withLocale } from '@/shared/lib/locale'
 import { Button } from '@/shared/ui'
 import type { OrderImportDuplicateFile } from '../../api/orderImportsApi'
 import { ImportNotice } from './ImportNotice'
+import { importModalPath } from '../../domain/importRoutes'
 
 /**
  * The same file was uploaded in the last 24 hours (story AC3). A warning,
@@ -33,7 +34,7 @@ export function DuplicateFileBanner({
       actions={
         <>
           <Button asChild variant="outline" size="sm">
-            <Link href={withLocale(`/imports/${duplicate.batchId}`, locale)}>
+            <Link href={withLocale(importModalPath(duplicate.batchId), locale)}>
               {t('view')}
             </Link>
           </Button>

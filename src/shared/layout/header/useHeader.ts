@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl'
 // Deep import on purpose: `@/features/marketing` re-exports HomePage, so the
 // barrel would pull the entire landing tree into every public-chrome route.
 import { getAcquisitionTargets } from '@/features/marketing/domain/acquisitionPaths'
+import { auth, getSupabaseClient } from '@/shared/lib/auth'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
 import { scrollToElement } from '@/shared/lib/scroll'
 import { HeaderNavItem } from './header.model'
@@ -34,6 +35,27 @@ export function useHeader() {
 
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+
+  useEffect(() => {
+    const supabase = getSupabaseClient()
+    let active = true
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (active) setIsAuthenticated(Boolean(session))
+    })
+
+    void supabase.auth.getSession().then(({ data: { session } }) => {
+      if (active) setIsAuthenticated(Boolean(session))
+    })
+
+    return () => {
+      active = false
+      subscription.unsubscribe()
+    }
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -80,6 +102,7 @@ export function useHeader() {
   )
 
   const loginHref = withLocale('/login', locale)
+  const dashboardHref = auth.getDashboardPath(locale)
 
   const acquisitionTargets = useMemo(
     () => getAcquisitionTargets(locale),
@@ -144,6 +167,8 @@ export function useHeader() {
     locale,
     homeHref,
     loginHref,
+    dashboardHref,
+    isAuthenticated,
     navigation,
     acquisitionTargets,
     isScrolled,

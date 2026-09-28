@@ -62,7 +62,7 @@ export function verificationStatsOptions(dateRange: DashboardStatsDateRange) {
   })
 }
 
-/** Rows per page of the embedded confirmations table. */
+/** Rows per page of the confirmations table, in both modes. */
 export const CONFIRMATIONS_PAGE_SIZE = 20
 
 export interface ConfirmationsPageParams {
@@ -70,11 +70,13 @@ export interface ConfirmationsPageParams {
   dateRange: DashboardStatsDateRange
   search: string
   cursor: string | null
+  /** Narrows the list to the orders one import batch created. */
+  importBatchId?: string
 }
 
 /**
- * One page of the embedded confirmations table: tab, search and paging are
- * all answered by the server, and the previous page stays on screen while the
+ * One page of the confirmations table: tab, search and paging are all
+ * answered by the server, and the previous page stays on screen while the
  * next one loads.
  */
 export function confirmationsPageOptions({
@@ -82,6 +84,7 @@ export function confirmationsPageOptions({
   dateRange,
   search,
   cursor,
+  importBatchId,
 }: ConfirmationsPageParams) {
   const params = new URLSearchParams({
     date_range: dateRange,
@@ -90,6 +93,7 @@ export function confirmationsPageOptions({
   if (tab !== 'all') params.set('tab', tab)
   if (search) params.set('q', search)
   if (cursor) params.set('cursor', cursor)
+  if (importBatchId) params.set('importBatchId', importBatchId)
 
   return queryOptions({
     queryKey: queryKeys.verifications.list({
@@ -97,6 +101,7 @@ export function confirmationsPageOptions({
       dateRange,
       search,
       cursor,
+      importBatchId,
     }),
     queryFn: ({ signal }) =>
       api.get<VerificationsResponse>(`/api/verifications?${params}`, {
@@ -107,7 +112,7 @@ export function confirmationsPageOptions({
   })
 }
 
-/** Everything the embedded dashboard shows, from one request. */
+/** Everything the dashboard overview shows, from one request. */
 export function verificationOverviewOptions(
   dateRange: DashboardStatsDateRange
 ) {

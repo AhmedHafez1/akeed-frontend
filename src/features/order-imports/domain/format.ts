@@ -1,4 +1,4 @@
-import { formatMoney } from '@/shared/lib/money'
+import { formatAmount } from '@/shared/lib/money'
 import type { SupportedLocale } from '@/shared/lib/locale'
 
 /** "412 KB", "1.2 MB", in the page locale. */
@@ -18,8 +18,8 @@ export function formatFileSize(bytes: number, locale: string): string {
 }
 
 /**
- * A normalized `750.00` amount in its currency, with the same formatter as
- * billing so digits match the rest of the app.
+ * A normalized `750.00` amount in its currency, as the confirmations list
+ * writes it (`750.00 ج.م`). Render inside `<Ltr>`.
  */
 export function formatImportAmount(
   totalPrice: string | undefined,
@@ -30,7 +30,7 @@ export function formatImportAmount(
   const value = Number(totalPrice)
   if (!Number.isFinite(value)) return null
   try {
-    return formatMoney(Math.round(value * 100), currency, locale)
+    return formatAmount(value, currency, locale)
   } catch {
     return `${totalPrice} ${currency}`
   }

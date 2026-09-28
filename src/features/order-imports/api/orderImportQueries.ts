@@ -1,11 +1,13 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query'
 import { queryKeys } from '@/shared/query/keys'
 import { pollIntervalFor } from '../domain/importStep'
+import { MAX_IMPORT_ROWS } from '../domain/preCheck'
 import {
   getOrderImport,
   getOrderImportRows,
   getOrderImportStartQuote,
   isOrderImportApiError,
+  listActiveOrderImports,
   listOpenOrderImportDrafts,
   type OrderImportRowOutcome,
 } from './orderImportsApi'
@@ -24,13 +26,29 @@ export function openDraftsOptions() {
   })
 }
 
+/** How often the top bar looks for a newly started import elsewhere. */
+export const ACTIVE_IMPORTS_POLL_MS = 30_000
+
+/**
+ * The started imports for the top bar. A start in this tab refetches it at
+ * once (`orderImport.started`); another tab's is picked up by the poll.
+ */
+export function activeImportsOptions() {
+  return queryOptions({
+    queryKey: queryKeys.orderImports.active(),
+    queryFn: ({ signal }) => listActiveOrderImports(signal),
+    retry: retryUnlessRefused,
+    refetchInterval: ACTIVE_IMPORTS_POLL_MS,
+  })
+}
+
 export function orderImportDetailOptions(batchId: string) {
   return queryOptions({
     queryKey: queryKeys.orderImports.detail(batchId),
     queryFn: ({ signal }) => getOrderImport(batchId, signal),
     retry: retryUnlessRefused,
     refetchInterval: (query) =>
-      query.state.data ? pollIntervalFor(query.state.data.status) : false,
+      query.state.data ? pollIntervalFor(query.state.data) : false,
   })
 }
 
@@ -59,6 +77,21 @@ export function orderImportRowsOptions(
       getOrderImportRows(batchId, { outcome, cursor: pageParam }, signal),
     initialPageParam: null as string | null,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
+    retry: retryUnlessRefused,
+  })
+}
+
+/**
+ * Every row of the batch in one page: a file holds at most 100 orders, the
+ * page size ceiling. The send step previews the ready rows and groups the
+ * rest by reason from it. Including a row re-reads it (the `all` key is not
+ * the toggled outcome's).
+ */
+export function orderImportAllRowsOptions(batchId: string) {
+  return queryOptions({
+    queryKey: queryKeys.orderImports.rows(batchId, 'all'),
+    queryFn: ({ signal }) =>
+      getOrderImportRows(batchId, { limit: MAX_IMPORT_ROWS }, signal),
     retry: retryUnlessRefused,
   })
 }

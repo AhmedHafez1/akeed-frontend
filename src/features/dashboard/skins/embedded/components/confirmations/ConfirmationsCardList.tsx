@@ -4,18 +4,16 @@ import {
   Box,
   InlineStack,
   Pagination,
-  Text,
 } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
-import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { isNeedsActionRow } from '../../../../domain/confirmationRowStatus'
-import { formatUpdatedAt } from '../../../../lib/orderDisplay'
 import type { VerificationItem } from '../../../../model/dashboard.model'
 import { OrderNumberLink } from '../shared/OrderNumberLink'
 import { ConfirmationRowActions } from './ConfirmationRowActions'
 import {
   AmountText,
   CustomerCell,
+  FollowUpCell,
   StatusCell,
   useConfirmationRowView,
   type ConfirmationsListProps,
@@ -34,7 +32,6 @@ function ConfirmationCard({
   handlers,
 }: CardProps) {
   const t = useTranslations('dashboard')
-  const { locale } = useLocaleInfo()
   const view = useConfirmationRowView(row)
 
   return (
@@ -61,12 +58,11 @@ function ConfirmationCard({
 
         <InlineStack align="space-between" blockAlign="start" gap="300">
           <CustomerCell name={view.name} phone={view.phone} />
-          <StatusCell row={row} timeZone={timeZone} />
+          <BlockStack gap="200">
+            <StatusCell row={row} timeZone={timeZone} />
+            <FollowUpCell row={row} timeZone={timeZone} showTime />
+          </BlockStack>
         </InlineStack>
-
-        <Text as="p" variant="bodySm" tone="subdued">
-          {formatUpdatedAt(row.updated_at ?? row.created_at, locale, timeZone)}
-        </Text>
 
         <ConfirmationRowActions
           row={row}

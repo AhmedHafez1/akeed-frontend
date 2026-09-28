@@ -296,7 +296,7 @@ export function StandaloneBillingObservability({
         </div>
         <div className="max-h-96 overflow-auto overscroll-contain">
           {state.findings?.rows.length ? (
-            <table className="w-full min-w-3xl text-sm">
+            <table className="bg-card w-full min-w-3xl text-sm">
               <thead className="bg-muted/50 text-foreground/70 sticky top-0 text-xs">
                 <tr>
                   <th className="p-3 text-start">{t('queue.severity')}</th>

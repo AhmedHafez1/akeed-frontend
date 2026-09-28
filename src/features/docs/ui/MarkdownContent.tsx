@@ -216,7 +216,9 @@ export function MarkdownContent({
     },
     table: ({ children }) => (
       <div className="border-border my-5 overflow-x-auto rounded-xl border">
-        <table className="min-w-full border-collapse text-sm">{children}</table>
+        <table className="bg-card min-w-full border-collapse text-sm">
+          {children}
+        </table>
       </div>
     ),
     thead: ({ children }) => <thead className="bg-muted/50">{children}</thead>,

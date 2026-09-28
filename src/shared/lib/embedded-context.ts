@@ -110,19 +110,3 @@ export function resolveEmbeddedContextFromWindow(): EmbeddedContext {
   return resolveEmbeddedContextFromSearch(searchParams)
 }
 
-export function appendEmbeddedParamsToPath(params: {
-  path: string
-  shopDomain: string | null
-  hostParam: string | null
-}): string {
-  const { path, shopDomain, hostParam } = params
-  if (!shopDomain || !hostParam) {
-    return path
-  }
-
-  const url = new URL(path, window.location.origin)
-  url.searchParams.set('shop', shopDomain)
-  url.searchParams.set('host', hostParam)
-
-  return `${url.pathname}${url.search}`
-}

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, type ReactNode } from 'react'
+import { StandaloneToaster } from '@/shared/ui/notifications'
 import { applyResolvedTheme } from '@/shared/theme/theme.dom'
 import { e2eTheme } from './importReplay'
 import { orderImportFixtureCalls } from './orderImportFixture'
@@ -53,6 +54,7 @@ export function ImportFixtureFrame({ children }: { children: ReactNode }) {
         <output aria-label="Import fixture calls">{calls.join(' | ')}</output>
       </aside>
       <main className="p-4 sm:p-6 lg:p-8">{children}</main>
+      <StandaloneToaster />
     </div>
   )
 }

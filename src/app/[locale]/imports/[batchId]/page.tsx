@@ -4,9 +4,10 @@ import { useParams } from 'next/navigation'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import { StandalonePageSkeleton } from '@/shared/layout/skeletons'
-import { OrderImportBatchStandalone } from '@/features/order-imports'
+import { ImportRouteRedirect } from '@/features/order-imports'
 import { EmbeddedImportsRedirect } from '../EmbeddedImportsRedirect'
 
+/** The import is a modal on Verifications now; this keeps old links working. */
 export default function OrderImportBatchPage() {
   const { mode } = useAkeedMode()
   const { batchId } = useParams<{ batchId: string }>()
@@ -19,7 +20,7 @@ export default function OrderImportBatchPage() {
       {mode === 'EMBEDDED' ? (
         <EmbeddedImportsRedirect />
       ) : (
-        <OrderImportBatchStandalone batchId={batchId} />
+        <ImportRouteRedirect batchId={batchId} />
       )}
     </EmbeddedAuthGate>
   )

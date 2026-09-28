@@ -5,34 +5,19 @@ import { Badge, BlockStack, Page, Tabs } from '@shopify/polaris'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { MAIN_TABS, resolveMainTab } from '../../domain/mainTabs'
+import {
+  rangeParam,
+  resolveConfirmationsTab,
+  resolveDashboardRange,
+} from '../../domain/confirmationsUrlState'
 import { DASHBOARD_DATE_RANGE_IDS } from '../../domain/verificationFilters'
-import type {
-  ConfirmationsTab,
-  DashboardStatsDateRange,
-} from '../../model/dashboard.model'
+import type { DashboardStatsDateRange } from '../../model/dashboard.model'
 import type { DateRangeFilterOption } from '../../domain/dashboard.types'
 import { DashboardActivationSection } from './components/DashboardActivationSection'
 import { MetricsPlaceholder } from './components/MetricsPlaceholder'
 import { useDashboardActivation } from '../../domain/useDashboardActivation'
 import { OverviewEmbedded } from './OverviewEmbedded'
-import {
-  CONFIRMATIONS_TABS,
-  ConfirmationsEmbedded,
-} from './ConfirmationsEmbedded'
-
-const DEFAULT_RANGE: DashboardStatsDateRange = 'last_30_days'
-
-function resolveRange(value: string | null): DashboardStatsDateRange {
-  return (DASHBOARD_DATE_RANGE_IDS as readonly string[]).includes(value ?? '')
-    ? (value as DashboardStatsDateRange)
-    : DEFAULT_RANGE
-}
-
-function resolveConfirmationsTab(value: string | null): ConfirmationsTab {
-  return (CONFIRMATIONS_TABS as readonly string[]).includes(value ?? '')
-    ? (value as ConfirmationsTab)
-    : 'all'
-}
+import { ConfirmationsEmbedded } from './ConfirmationsEmbedded'
 
 /**
  * The embedded app's main page: the dashboard and the confirmations list as
@@ -46,7 +31,7 @@ export function MainEmbeddedSkin() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const activeTab = resolveMainTab(searchParams.get('tab'))
-  const period = resolveRange(searchParams.get('range'))
+  const period = resolveDashboardRange(searchParams.get('range'))
   const confirmationsTab = resolveConfirmationsTab(searchParams.get('filter'))
 
   const activation = useDashboardActivation()
@@ -74,7 +59,7 @@ export function MainEmbeddedSkin() {
   )
 
   const onPeriodChange = (next: DashboardStatsDateRange) =>
-    updateParams({ range: next === DEFAULT_RANGE ? null : next })
+    updateParams({ range: rangeParam(next) })
 
   const tabs = [
     { id: 'metrics', content: t('tabs.metrics') },

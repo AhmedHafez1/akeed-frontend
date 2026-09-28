@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import type { VerificationItem } from '../model/dashboard.model'
-import { canCancelOrder, cancellationMessageKey } from './cancellation'
+import type {
+  NeedsActionItem,
+  VerificationItem,
+} from '../model/dashboard.model'
+import {
+  canCancelNeedsActionItem,
+  canCancelOrder,
+  cancellationMessageKey,
+} from './cancellation'
 
 const supported = [
   { action: 'merchant_no_reply_cancellation' as const, supported: true },
@@ -52,5 +59,21 @@ describe('cancellationMessageKey', () => {
     expect(
       cancellationMessageKey(row({ capabilities: unsupported }))
     ).toBeUndefined()
+  })
+})
+
+describe('canCancelNeedsActionItem', () => {
+  const item = (
+    type: NeedsActionItem['reason']['type'],
+    capabilities = supported
+  ) => ({ reason: { type }, capabilities }) as unknown as NeedsActionItem
+
+  it('follows the reason and the source capability', () => {
+    expect(canCancelNeedsActionItem(item('no_reply_after_follow_up'))).toBe(
+      true
+    )
+    expect(canCancelNeedsActionItem(item('read_no_reply'))).toBe(true)
+    expect(canCancelNeedsActionItem(item('delivery_failed'))).toBe(false)
+    expect(canCancelNeedsActionItem(item('no_reply', unsupported))).toBe(false)
   })
 })

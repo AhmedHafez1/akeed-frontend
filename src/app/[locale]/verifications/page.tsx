@@ -8,38 +8,25 @@ import { getLocaleFromPathname } from '@/shared/lib/locale'
 import {
   DashboardEmbeddedShellSkeleton,
   DashboardVerificationsStandaloneSkin,
-  useDashboard,
+  useStandaloneDashboardUrlState,
 } from '@/features/dashboard'
-import { useVerificationStatusQuery } from '@/features/dashboard/hooks/useVerificationStatusQuery'
-import { ImportFilterChip, NewImportLink } from '@/features/order-imports'
+import { ImportModalHost } from '@/features/order-imports'
 
 function StandaloneVerificationsPageContent() {
-  const {
-    statusFilter,
-    onStatusFilterChange,
-    importBatchId,
-    onClearImportBatch,
-  } = useVerificationStatusQuery()
-  const skinProps = useDashboard(
-    statusFilter,
-    onStatusFilterChange,
-    importBatchId
-  )
+  const url = useStandaloneDashboardUrlState()
   return (
-    <DashboardVerificationsStandaloneSkin
-      {...skinProps}
-      headerAction={
-        <div className="flex flex-wrap items-center gap-2">
-          {importBatchId && (
-            <ImportFilterChip
-              batchId={importBatchId}
-              onClear={onClearImportBatch}
-            />
-          )}
-          <NewImportLink />
-        </div>
-      }
-    />
+    <>
+      <DashboardVerificationsStandaloneSkin
+        period={url.period}
+        periodOptions={url.periodOptions}
+        onPeriodChange={url.onPeriodChange}
+        tab={url.tab}
+        onTabChange={url.onTabChange}
+        importBatchId={url.importBatchId}
+      />
+      {/* "استيراد من ملف" in the top bar opens it through the URL. */}
+      <ImportModalHost />
+    </>
   )
 }
 

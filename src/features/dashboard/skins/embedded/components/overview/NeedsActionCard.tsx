@@ -13,16 +13,15 @@ import {
 import { CheckCircleIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import { deliveryFailureKey } from '../../../../domain/deliveryFailure'
 import { hasCapability } from '../../../../domain/verificationLifecycle'
 import type { ManualConfirmationTarget } from '../../../../domain/useManualConfirmation'
+import { useNeedsActionReason } from '../../../../domain/useNeedsActionReason'
 import {
   customerDisplayName,
   formatCount,
   formatOrderAmount,
   formatOrderNumber,
   formatPhoneInternational,
-  formatShortDate,
   whatsAppChatUrl,
 } from '../../../../lib/orderDisplay'
 import type {
@@ -38,29 +37,10 @@ function ReasonLine({
   item: NeedsActionItem
   timeZone: string
 }) {
-  const t = useTranslations('dashboard.overview.needsAction.reason')
-  const tFailure = useTranslations('dashboard.confirmations.status.failure')
-  const { locale } = useLocaleInfo()
-  const { reason } = item
-
-  if (reason.type === 'delivery_failed') {
-    return (
-      <Text as="p" variant="bodySm" tone="critical">
-        {t('delivery_failed', {
-          reason: tFailure(deliveryFailureKey(reason.failure_code)),
-        })}
-      </Text>
-    )
-  }
-  const message =
-    reason.type === 'read_no_reply'
-      ? t('read_no_reply', { hours: reason.hours ?? 0 })
-      : t(reason.type, {
-          date: formatShortDate(reason.since, locale, timeZone),
-        })
+  const { text, isCritical } = useNeedsActionReason(item.reason, timeZone)
   return (
-    <Text as="p" variant="bodySm" tone="subdued">
-      {message}
+    <Text as="p" variant="bodySm" tone={isCritical ? 'critical' : 'subdued'}>
+      {text}
     </Text>
   )
 }

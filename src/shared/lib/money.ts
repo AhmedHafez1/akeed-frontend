@@ -80,6 +80,46 @@ export function formatPlanPrice(amount: number, currency: string) {
   return `${symbol} ${value}`
 }
 
+const BIDI_MARKS = new RegExp(
+  `[${String.fromCharCode(0x200e, 0x200f, 0x061c)}]`,
+  'g'
+)
+
+/**
+ * An order amount (major units) with Latin digits: `500.00 ج.م` in Arabic,
+ * `EGP 500.00` / `$500.00` in English. The string carries no bidi marks and is
+ * built left to right, so render it inside `<Ltr>` (`<bdi dir="ltr">`): in an
+ * RTL paragraph that keeps the amount first and the symbol after it, instead
+ * of the `$US 500.00` a bare `Intl` string reorders into.
+ */
+export function formatAmount(
+  value: number,
+  currency: string,
+  locale: SupportedLocale
+): string {
+  const formatter = new Intl.NumberFormat(`${locale}-u-nu-latn`, {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })
+  if (locale !== 'ar')
+    return formatter.format(value).replace(BIDI_MARKS, '').replace(/\s+/g, ' ')
+  const parts = formatter.formatToParts(value)
+  const number = parts
+    .filter((part) => part.type !== 'currency' && part.type !== 'literal')
+    .map((part) => part.value)
+    .join('')
+  // CLDR writes `ج.م.`; the trailing dot reads as a sentence end.
+  const symbol = parts
+    .filter((part) => part.type === 'currency')
+    .map((part) => part.value)
+    .join('')
+    .replace(BIDI_MARKS, '')
+    .replace(/\.$/, '')
+  return `${number} ${symbol}`
+}
+
 export function formatMoneyFromCredits(
   credits: number,
   unitPriceMinor: number,

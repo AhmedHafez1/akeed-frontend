@@ -12,10 +12,17 @@ import type {
  * `limit` (plan used up), `quiet` (usage under 80%), `viewer` (read-only role).
  */
 
+/** The standalone pages read the same synthetic backend as the embedded one. */
+const FIXTURE_PATHS = [
+  '/embedded-dashboard',
+  '/standalone-dashboard',
+  '/standalone-confirmations',
+]
+
 export function isEmbeddedDashboardFixture() {
   return (
     typeof window !== 'undefined' &&
-    window.location.pathname.endsWith('/embedded-dashboard')
+    FIXTURE_PATHS.some((path) => window.location.pathname.endsWith(path))
   )
 }
 

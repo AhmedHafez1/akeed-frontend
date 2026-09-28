@@ -1,4 +1,5 @@
 export { useSettings } from './domain/useSettings'
+export { useAssumeCodWhenPaymentMissing } from './domain/useAssumeCodWhenPaymentMissing'
 export type {
   SettingsSkinProps,
   SettingsTemplatePreview,

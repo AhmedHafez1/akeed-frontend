@@ -1,12 +1,12 @@
 'use client'
 
-import { OrderImportNewStandalone } from '@/features/order-imports'
+import { FixtureImportModal } from '../FixtureImportModal'
 import { ImportFixtureFrame } from '../ImportFixtureFrame'
 
 export default function OrderImportNewFixturePage() {
   return (
     <ImportFixtureFrame>
-      <OrderImportNewStandalone />
+      <FixtureImportModal initial="new" />
     </ImportFixtureFrame>
   )
 }

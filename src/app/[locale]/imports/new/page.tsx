@@ -3,9 +3,10 @@
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import { StandalonePageSkeleton } from '@/shared/layout/skeletons'
-import { OrderImportNewStandalone } from '@/features/order-imports'
+import { ImportRouteRedirect } from '@/features/order-imports'
 import { EmbeddedImportsRedirect } from '../EmbeddedImportsRedirect'
 
+/** The import is a modal on Verifications now; this keeps old links working. */
 export default function NewOrderImportPage() {
   const { mode } = useAkeedMode()
 
@@ -17,7 +18,7 @@ export default function NewOrderImportPage() {
       {mode === 'EMBEDDED' ? (
         <EmbeddedImportsRedirect />
       ) : (
-        <OrderImportNewStandalone />
+        <ImportRouteRedirect />
       )}
     </EmbeddedAuthGate>
   )

@@ -3,12 +3,9 @@ import type {
   OrderImportBatchStatus,
 } from '../api/orderImportsApi'
 
-export const importSteps = ['upload', 'map', 'review'] as const
-export type ImportStep = (typeof importSteps)[number]
-
-/** What the batch page renders for the batch as the server reports it. */
+/** What the import modal renders for the batch as the server reports it. */
 export type BatchView =
-  | { kind: 'step'; step: Exclude<ImportStep, 'upload'> }
+  | { kind: 'step'; step: 'map' | 'review' }
   | { kind: 'committing' }
   | { kind: 'imported' }
   | { kind: 'partial' }
@@ -46,6 +43,42 @@ const releaseStatuses: ReadonlySet<OrderImportBatchStatus> = new Set([
   'completed',
 ])
 
+/** The modal's three steps: الملف · الفحص · الإرسال. */
+export const modalSteps = ['file', 'check', 'send'] as const
+export type ModalStep = (typeof modalSteps)[number]
+
+/**
+ * Which modal step a batch view belongs to. Mapping is the check; from the
+ * review on, everything leads to sending. States outside the flow (expired,
+ * not found) show no current step.
+ */
+export function modalStepFor(
+  view: BatchView | { kind: 'new' },
+  editingMapping = false
+): ModalStep | null {
+  switch (view.kind) {
+    case 'new':
+      return 'file'
+    case 'step':
+      return view.step === 'map' || editingMapping ? 'check' : 'send'
+    case 'committing':
+    case 'imported':
+    case 'partial':
+    case 'release':
+      return 'send'
+    default:
+      return null
+  }
+}
+
+export function completedModalStepsBefore(
+  step: ModalStep | null
+): Set<ModalStep> {
+  return step === null
+    ? new Set()
+    : new Set(modalSteps.slice(0, modalSteps.indexOf(step)))
+}
+
 export const BATCH_POLL_INTERVAL_MS = 2_000
 /** M8: the release panels refresh their live counts every 5 seconds. */
 export const RELEASE_POLL_INTERVAL_MS = 5_000
@@ -56,14 +89,14 @@ export const RELEASE_POLL_INTERVAL_MS = 5_000
  * A draft or an unstarted import waits for the merchant.
  */
 export function pollIntervalFor(
-  status: OrderImportBatchStatus
+  detail: Pick<OrderImportBatchDetail, 'status' | 'lifecycle'>
 ): number | false {
+  const { status } = detail
   if (status === 'committing') return BATCH_POLL_INTERVAL_MS
   if (status === 'releasing' || status === 'paused' || status === 'stopped')
     return RELEASE_POLL_INTERVAL_MS
+  // `completed` means every order was handed to the send queue, not sent.
+  if (status === 'completed' && (detail.lifecycle?.queued ?? 0) > 0)
+    return RELEASE_POLL_INTERVAL_MS
   return false
-}
-
-export function completedStepsBefore(step: ImportStep): Set<ImportStep> {
-  return new Set(importSteps.slice(0, importSteps.indexOf(step)))
 }

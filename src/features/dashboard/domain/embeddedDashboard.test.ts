@@ -51,7 +51,12 @@ describe('resolveRowStatus', () => {
           confirmed_at: '2026-09-20T13:00:00Z',
         })
       )
-    ).toEqual({ badge: 'confirmed', tone: 'success', sub: 'sub.afterFollowUp' })
+    ).toEqual({
+      badge: 'confirmed',
+      tone: 'success',
+      kind: 'confirmed',
+      sub: 'sub.afterFollowUp',
+    })
     expect(
       resolveRowStatus(
         row({ status: 'confirmed', confirmed_at: '2026-09-20T11:00:00Z' })
@@ -71,6 +76,7 @@ describe('resolveRowStatus', () => {
     expect(resolveRowStatus(row({ status: 'canceled' }))).toEqual({
       badge: 'canceledByCustomer',
       tone: 'critical',
+      kind: 'canceled',
       sub: undefined,
     })
     expect(
@@ -80,10 +86,21 @@ describe('resolveRowStatus', () => {
           cancellation_source: 'merchant_no_reply',
           canceled_in_store: true,
         })
+      ).sub
+    ).toBeUndefined()
+    expect(
+      resolveRowStatus(
+        row({
+          status: 'canceled',
+          cancellation_source: 'merchant_no_reply',
+          canceled_in_store: true,
+        }),
+        { showStoreCancellation: true }
       )
     ).toEqual({
       badge: 'canceledNoReply',
       tone: 'critical',
+      kind: 'canceled',
       sub: 'sub.canceledInStore',
     })
   })
@@ -100,6 +117,7 @@ describe('resolveRowStatus', () => {
     ).toEqual({
       badge: 'failed',
       tone: 'critical',
+      kind: 'failed',
       sub: 'failure.notOnWhatsApp',
     })
     expect(
@@ -117,14 +135,35 @@ describe('resolveRowStatus', () => {
           follow_up_sent_at: '2026-09-20T12:00:00Z',
         })
       )
-    ).toEqual({ badge: 'noReply', tone: 'warning', sub: 'sub.followUpSent' })
+    ).toEqual({
+      badge: 'noReply',
+      tone: 'warning',
+      kind: 'needsAction',
+      sub: 'sub.followUpSent',
+    })
     expect(resolveRowStatus(row({ status: 'no_reply' })).badge).toBe('noReply')
   })
 
-  it('awaiting a reply otherwise, and scheduled while held by quiet hours', () => {
+  it('shows pending until a send time exists, then shows scheduled', () => {
+    expect(resolveRowStatus(row({ status: 'queued' }))).toEqual({
+      badge: 'pending',
+      tone: 'neutral',
+      kind: 'pending',
+    })
+    expect(resolveRowStatus(row({ status: 'sending' }))).toEqual({
+      badge: 'pending',
+      tone: 'neutral',
+      kind: 'pending',
+    })
+    expect(resolveRowStatus(row({ status: 'pending' }))).toEqual({
+      badge: 'pending',
+      tone: 'neutral',
+      kind: 'pending',
+    })
     expect(resolveRowStatus(row({ status: 'delivered' }))).toEqual({
       badge: 'awaitingReply',
       tone: 'neutral',
+      kind: 'pending',
     })
     expect(
       resolveRowStatus(
@@ -133,10 +172,10 @@ describe('resolveRowStatus', () => {
     ).toEqual({
       badge: 'scheduled',
       tone: 'neutral',
+      kind: 'scheduled',
       sub: 'sub.sendsAt',
       subTime: '2026-09-21T06:00:00Z',
     })
-    expect(resolveRowStatus(row({ status: 'pending' })).badge).toBe('sending')
   })
 
   it('never decides needs-action itself', () => {

@@ -136,8 +136,8 @@ export function resolveOnboardingRedirect(params: {
  * redirecting out of the iframe.
  *
  * @returns `true` when the shop is installed (or was just installed).
- *          `false` when the exchange failed (caller should fall back to
- *          legacy OAuth).
+ *          `false` when the exchange failed (caller should fall back to the
+ *          install check).
  */
 export async function performTokenExchange(
   sessionToken: string

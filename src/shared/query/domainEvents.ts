@@ -39,8 +39,11 @@ export type DomainEvent =
    * now move through the shared verification lifecycle and spend credits.
    */
   | 'orderImport.started'
-  /** The merchant stopped an import; its unsent orders are now not started. */
-  | 'orderImport.stopped'
+  /**
+   * More of a started import's sends got an outcome (sent or failed), so its
+   * rows in the lists changed status and credits were posted or released.
+   */
+  | 'orderImport.progressed'
 
 /**
  * The only place that knows the cross-screen consequences of a change.
@@ -90,8 +93,8 @@ const AFFECTED_QUERIES: Record<DomainEvent, ReadonlyArray<QueryKey>> = {
     queryKeys.verifications.all,
     queryKeys.billing.all,
   ],
-  'orderImport.stopped': [
-    queryKeys.orderImports.all,
+  // The batch detail already polled its way here; only the others repaint.
+  'orderImport.progressed': [
     queryKeys.verifications.all,
     queryKeys.billing.all,
   ],

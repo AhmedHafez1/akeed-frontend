@@ -3,7 +3,6 @@ import type { OrderImportErrorCode } from '../api/orderImportsApi'
 /** The one thing the merchant can do about a refused file. */
 export type FileErrorAction =
   | 'chooseAnother'
-  | 'showDrafts'
   | 'retry'
   | 'openSettings'
   | 'backToOrders'
@@ -27,7 +26,9 @@ const fileErrorActions = {
   IMPORT_FILE_EMPTY: 'chooseAnother',
   IMPORT_ROW_LIMIT_EXCEEDED: 'chooseAnother',
   IMPORT_COLUMN_LIMIT_EXCEEDED: 'chooseAnother',
-  IMPORT_TOO_MANY_DRAFTS: 'showDrafts',
+  // Only other members' drafts count (an upload replaces the caller's own),
+  // so the way out is waiting for them.
+  IMPORT_TOO_MANY_DRAFTS: 'retry',
   IMPORT_RATE_LIMITED: 'retry',
   IMPORT_DISABLED: 'backToOrders',
   IMPORT_ROLE_REQUIRED: 'backToOrders',

@@ -566,6 +566,7 @@
     "faq": "FAQ",
     "resources": "Resources",
     "login": "Login",
+    "dashboard": "Dashboard",
     "cta_primary": "Get started free"
   },
   "hero": {
@@ -992,7 +993,7 @@
   },
   "appHeader": {
     "dashboard": "Dashboard",
-    "verifications": "Verifications",
+    "verifications": "Confirmations",
     "billing": "Billing & credits",
     "settings": "Settings",
     "templates": "Templates",
@@ -1009,7 +1010,6 @@
     "admin": "Admin",
     "search": "Search orders",
     "searchOrders": "Open order search",
-    "openVerifications": "Open verifications",
     "notifications": "Notifications",
     "breadcrumbs": "Breadcrumbs",
     "closeNavigation": "Close navigation menu",
@@ -1197,55 +1197,76 @@
       "cta": "Get started"
     },
     "standalone": {
-      "eyebrow": "Overview",
-      "greeting": "Welcome back, {name}",
-      "greetingLoading": "Loading dashboard greeting",
-      "description": "Order health, message delivery, and work that needs your attention.",
-      "subtitle": "An overview of your confirmation orders",
-      "kpisLabel": "Primary dashboard metrics",
-      "status": {
-        "active": {
-          "title": "Verification is active",
-          "description": "New COD orders are being confirmed automatically."
+      "manualConfirmBody": "Akeed will record the order as confirmed, just as if the customer had confirmed. No more messages will be sent.",
+      "credits": {
+        "warning": "You've used {used} of {limit} credits. Confirmations stop when they run out.",
+        "exhausted": "You've used all your credits. Confirmations have stopped until you top up.",
+        "cta": "Buy credits"
+      },
+      "header": {
+        "credits": "{count, plural, one {message credit} other {message credits}}",
+        "creditsLabel": "{count, plural, one {# message credit left} other {# message credits left}}",
+        "topUp": "Top up",
+        "topUpLabel": "Top up message credits"
+      },
+      "settings": {
+        "autoConfirm": "Auto-confirm",
+        "reminder": "Reminder after",
+        "reminderOff": "Reminder",
+        "quietHours": "Quiet hours",
+        "on": "On",
+        "off": "Off",
+        "minutes": "{count, plural, one {# min} other {# min}}",
+        "hours": "{count, plural, one {# hour} other {# hours}}",
+        "edit": "Edit settings"
+      },
+      "kpis": {
+        "confirmed": "Confirmed",
+        "canceled": "Canceled before shipping",
+        "canceledDetail": "Shipping saved",
+        "rate": "Confirmation rate",
+        "rateDetail": "{confirmed}/{sent}",
+        "rateDetailLabel": "{confirmed} of {sent} messaged orders confirmed"
+      },
+      "needsAction": {
+        "countPill": "{count, plural, one {# order} other {# orders}}",
+        "noReply": "No reply · {age}",
+        "readNoReply": "Read, no reply · {age}",
+        "notDelivered": "Not delivered",
+        "messaged": "Messaged {date}",
+        "read": "Read {date}",
+        "age": {
+          "lessThanHour": "under 1 hour",
+          "hours": "{count, plural, one {# hour} other {# hours}}",
+          "days": "{count, plural, one {# day} other {# days}}"
         },
-        "paused": {
-          "title": "Verification is paused",
-          "description": "Automatic confirmation is off. Existing results remain available."
-        },
-        "disconnected": {
-          "title": "Order source is disconnected",
-          "description": "New orders and queued actions are paused until the source is reconnected."
-        },
-        "action": "Review automation"
+        "whatsapp": "WhatsApp",
+        "confirm": "Confirm manually",
+        "more": "More actions for order {order}",
+        "viewInList": "View in confirmations",
+        "cancel": "Cancel order"
       },
-      "attention": {
-        "title": "Needs attention",
-        "description": "Most recent orders that may require merchant action.",
-        "viewAll": "View all",
-        "emptyTitle": "Nothing needs attention",
-        "emptyDescription": "There are no actionable orders in this period.",
-        "unavailable": "The actionable-order preview is unavailable right now.",
-        "dateUnavailable": "Date unavailable"
+      "flow": {
+        "replied": "Replied",
+        "deliveryRate": "Delivery rate",
+        "replyRate": "Reply rate",
+        "legendLabel": "Replies by outcome",
+        "confirmed": "Confirmed",
+        "canceled": "Canceled",
+        "noReply": "No reply yet",
+        "moreManual": "{count, plural, one {# more confirmed manually} other {# more confirmed manually}}",
+        "barLabel": "{label}: {count} of {sent} sent"
       },
-      "performance": {
-        "title": "Confirmation performance",
-        "basis": "Measured across {count, plural, one {# order} other {# orders}} that reached the customer and settled.",
-        "basisEmpty": "No orders have settled in this period yet, so the rates are not calculated.",
-        "silent": "No reply",
-        "silentHint": "Orders that reached the customer and went unanswered. Counted in the rates above — they are the main reason a reply rate drops.",
-        "undelivered": "Undelivered",
-        "undeliveredHint": "Orders that never reached the customer. Excluded from the rates, because nobody declined to answer a message they never received."
-      },
-      "outcomes": {
-        "title": "Outcome breakdown",
-        "description": "Order outcomes for the selected period.",
-        "chartLabel": "Proportional breakdown of order outcomes",
-        "empty": "No order outcomes are available for this period.",
-        "shareOfTotal": "{percent} of total"
-      },
-      "unavailable": {
-        "title": "Dashboard metrics are unavailable",
-        "description": "Order previews may still be available below. Try again shortly for performance and usage metrics."
+      "table": {
+        "searchPlaceholder": "Search order number or phone",
+        "searchShortcut": "Press / to search",
+        "sortedBy": "Sorted by last update, newest first",
+        "confirm": "Confirm",
+        "message": "Message",
+        "showing": "Showing <b>{from}–{to}</b> of <b>{total}</b> {total, plural, one {order} other {orders}}",
+        "previous": "Previous",
+        "next": "Next",
+        "openDetails": "Open details for order {order}"
       }
     },
     "sourceDisconnectedTitle": "Order source disconnected",
@@ -1469,7 +1490,9 @@
       "failed": "Failed",
       "no_reply": "No reply",
       "awaiting_start": "Awaiting start",
-      "not_started": "Not started"
+      "not_started": "Not started",
+      "queued": "Queued",
+      "sending": "Sending…"
     },
     "descriptions": {
       "pending": "Verification is queued and waiting to be sent.",
@@ -1482,7 +1505,9 @@
       "failed": "Verification could not be completed.",
       "no_reply": "The customer did not reply within the configured time.",
       "awaiting_start": "Imported and held. No message is sent until you start confirmation.",
-      "not_started": "The import was not started, so no message was sent."
+      "not_started": "The import was not started, so no message was sent.",
+      "queued": "Sending has started and this order is in line. Its message goes out within minutes.",
+      "sending": "The confirmation request is being sent to the customer now."
     },
     "reasons": {
       "non_cod_payment_method": "This order is not marked as cash on delivery, so no verification was sent.",
@@ -1497,39 +1522,14 @@
       "generic": "Verification could not continue. Review setup or contact support."
     },
     "verifications": {
-      "title": "Verifications",
-      "pageSubtitle": "Track every order from submission to customer outcome.",
-      "subtitle": "{count, plural, =0 {No verifications in this period} one {# verification in this period} other {# verifications in this period}}",
       "loading": "Loading verifications...",
-      "loadingMore": "Loading more...",
       "loadMoreRetry": "Try again",
       "readOnlyNotice": "You have read-only access. An owner or admin can retry verification or mark supported orders canceled.",
       "empty": {
-        "title": "No verifications yet",
-        "description": "Verify an order to get started. Orders appear here as soon as a verification is created for them.",
-        "filtered": "No verifications match this status and date range."
+        "title": "No confirmations yet",
+        "description": "Verify an order to get started. Orders appear here as soon as a verification is created for them."
       },
-      "errors": {
-        "load": "We could not load your verifications. Refresh and try again.",
-        "metrics": "We could not load your metrics. Refresh and try again."
-      },
-      "metrics": {
-        "total": "Total verifications",
-        "inProgress": "In progress",
-        "needsAttention": "Needs attention",
-        "confirmed": "Confirmed",
-        "canceled": "Canceled",
-        "pending": "Pending"
-      },
-      "filters": {
-        "clear": "Clear status filter",
-        "stage": "{outcome} by stage"
-      },
-      "eyebrow": "Operations",
-      "showing": "Showing {loaded} of {total}",
-      "workload": {
-        "label": "Verification outcomes"
-      }
+      "showing": "Showing {loaded} of {total}"
     },
     "activation": {
       "liveBanner": "Akeed is live. Your next cash-on-delivery order will be confirmed automatically.",
@@ -1666,12 +1666,14 @@
       "search": {
         "label": "Search by order number or phone",
         "placeholder": "Order number or phone",
-        "invalid": "Use only order or phone digits."
+        "invalid": "Use only order or phone digits.",
+        "clear": "Clear search"
       },
       "headings": {
         "order": "Order",
         "customer": "Customer",
         "status": "Status",
+        "followUp": "Follow-up",
         "total": "Total",
         "updated": "Last update",
         "action": "Action"
@@ -1688,6 +1690,7 @@
         "canceledNoReply": "Canceled, no reply",
         "failed": "Failed to send",
         "scheduled": "Scheduled",
+        "pending": "Pending",
         "sending": "Sending",
         "awaitingReply": "Awaiting reply",
         "noReply": "No reply",
@@ -1737,6 +1740,19 @@
       "shipping": {
         "message": "Hi {customer}, your order {order} ({total}) is confirmed and being prepared for shipping.\nCarrier: \nTracking number: ",
         "customerFallback": "there"
+      },
+      "tabsLabel": "Filter confirmations by outcome"
+    },
+    "failedRow": {
+      "reason": {
+        "noCredits": "Not enough credits",
+        "autoVerifyOff": "Automatic confirmation is off",
+        "rejected": "WhatsApp rejected the message"
+      },
+      "action": {
+        "buyCredits": "Buy credits",
+        "openSettings": "Open settings",
+        "details": "Details"
       }
     }
   },
@@ -2771,41 +2787,25 @@
     }
   },
   "orderImport": {
-    "page": {
-      "title": "Import orders",
-      "subtitle": "Upload a CSV or Excel file from your store, marketplace or spreadsheet. Akeed prepares the orders for WhatsApp confirmation, and nothing is sent until you start.",
-      "back": "Back to orders"
-    },
     "entry": {
       "newImport": "Import from file"
     },
-    "steps": {
-      "label": "Import steps",
-      "completed": "Completed",
-      "progress": "Step {current} of {total}",
-      "upload": "Upload",
-      "map": "Map columns",
-      "review": "Review"
-    },
-    "nothingSent": {
-      "banner": "Nothing has been sent to customers.",
-      "short": "No message will be sent now."
-    },
     "viewer": "Only owners and admins can import orders. You can view this import but not change it.",
     "upload": {
-      "heading": "Upload your file",
-      "dropTitle": "Drag your file here",
+      "heading": "Choose your orders file",
+      "dropTitle": "Drag and drop your orders file here",
       "dropActive": "Drop the file to upload it",
-      "helper": "CSV or Excel (.xlsx) · up to 5 MB · up to 5,000 orders",
-      "choose": "Choose file",
+      "helper": "CSV or Excel · up to {rows, plural, one {# order} other {# orders}} · 5 MB max",
+      "choose": "Choose a file from your device",
       "cancel": "Cancel",
       "progressLabel": "Upload progress",
       "uploading": "Uploading… {percent}%",
       "reading": "Reading your orders…",
-      "templatePrompt": "Don't have a file ready? Download template:",
+      "templatePrompt": "No file ready? Download the template:",
       "templateCsv": "CSV",
       "templateExcel": "Excel",
-      "templateFailed": "The template could not be downloaded. Try again."
+      "templateFailed": "The template could not be downloaded. Try again.",
+      "autoAdvance": "As soon as you choose a file, we move on to checking it."
     },
     "fileErrors": {
       "actions": {
@@ -2813,7 +2813,7 @@
         "retry": "Try again",
         "openSettings": "Finish setup",
         "contactSupport": "Contact support",
-        "backToOrders": "Back to orders"
+        "backToOrders": "Back to Verifications"
       },
       "IMPORT_FILE_REQUIRED": {
         "title": "No file was received",
@@ -2841,15 +2841,15 @@
       },
       "IMPORT_ROW_LIMIT_EXCEEDED": {
         "title": "This file has too many orders",
-        "body": "Split the file into parts of up to 5,000 orders and upload each part."
+        "body": "Split the file into parts of up to 100 orders and upload each part."
       },
       "IMPORT_COLUMN_LIMIT_EXCEEDED": {
         "title": "This file has too many columns",
         "body": "Keep up to 100 columns. Delete the columns you don't need and upload it again."
       },
       "IMPORT_TOO_MANY_DRAFTS": {
-        "title": "You have too many unfinished imports",
-        "body": "Resume or discard one of the imports below before uploading another file."
+        "title": "Too many imports in progress",
+        "body": "Your team has several imports in progress. Wait for one of them to finish, then try again."
       },
       "IMPORT_RATE_LIMITED": {
         "title": "Too many uploads in a short time",
@@ -2884,23 +2884,6 @@
       "view": "View earlier import",
       "continue": "Continue anyway"
     },
-    "drafts": {
-      "title": "Open drafts",
-      "meta": "{rows, plural, one {# row} other {# rows}} · {time}",
-      "resume": "Resume",
-      "view": "View",
-      "discard": "Discard",
-      "resumeLabel": "Resume {name}",
-      "discardLabel": "Discard {name}"
-    },
-    "discard": {
-      "title": "Discard this import?",
-      "body": "The uploaded rows will be deleted. Nothing was sent to customers.",
-      "confirm": "Discard import",
-      "cancel": "Keep it",
-      "done": "Import discarded.",
-      "failed": "The import couldn't be discarded. Try again."
-    },
     "map": {
       "heading": "Match your columns",
       "description": "Tell Akeed which column of <file></file> holds each detail.",
@@ -2926,19 +2909,8 @@
         "address": "Address",
         "notes": "Notes"
       },
-      "status": {
-        "detected": "Detected",
-        "saved": "From saved mapping",
-        "chosen": "Chosen by you",
-        "attention": "Needs attention",
-        "chooseDateFormat": "Choose date format",
-        "missing": "Not provided"
-      },
       "errors": {
-        "required": "Choose the column that holds this detail.",
-        "duplicateColumn": "This column is already used for another detail.",
-        "dateFormatRequired": "Choose how to read the dates.",
-        "paymentUnresolved": "Choose COD or Not COD for every value."
+        "duplicateColumn": "This column is already used for another detail."
       },
       "fixBeforeContinue": "Fix the highlighted items to continue.",
       "ignored": "{count, plural, one {# column won't be imported} other {# columns won't be imported}}",
@@ -2970,70 +2942,15 @@
       "truncated": "Only the 50 most common values are listed. The rest are classified automatically."
     },
     "review": {
-      "heading": "Review your orders",
-      "tiles": {
-        "ready": {
-          "label": "Ready to import",
-          "hint": "Will be imported and held until you start."
-        },
-        "invalid": {
-          "label": "Need fixing",
-          "hint": "Fix these rows in your file and upload it again."
-        },
-        "duplicate": {
-          "label": "Duplicates skipped",
-          "hint": "Already imported, or repeated in this file."
-        },
-        "excluded": {
-          "label": "Excluded",
-          "hint": "Not cash on delivery, too old, or a possible duplicate."
-        }
-      },
-      "banners": {
-        "dateRange": "Orders from {min} to {max}.",
-        "noDate": "No order date column. Only import recent orders you intend to confirm.",
-        "oldOrders": "{count, plural, one {# order is} other {# orders are}} older than 7 days and won't be imported."
-      },
-      "tabsLabel": "Show rows by outcome",
-      "tabs": {
-        "ready": "Ready",
-        "invalid": "Need fixing",
-        "duplicate": "Duplicates",
-        "excluded": "Excluded"
-      },
-      "outcome": {
-        "ready": "Ready",
-        "invalid": "Needs fixing",
-        "duplicate": "Duplicate",
-        "excluded": "Excluded",
-        "imported": "Imported"
-      },
       "table": {
-        "row": "Row",
         "customer": "Customer",
         "phone": "Phone",
         "amount": "Amount",
         "reference": "Order",
-        "status": "Status",
-        "rowNumber": "Row {number}",
-        "empty": "No rows here.",
-        "loadMore": "Load more",
-        "loading": "Loading rows…",
-        "error": "The rows couldn't be loaded.",
-        "retry": "Try again"
+        "rowNumber": "Row {number}"
       },
       "includeAnyway": "Include anyway",
-      "includeFailed": "The change couldn't be saved. Try again.",
-      "downloadErrors": "Download {count, plural, one {# row} other {# rows}} to fix",
-      "downloadErrorsHelp": "Fix these rows in your file and upload it again. Orders already imported will be skipped automatically.",
-      "downloadSoon": "The download becomes available in an upcoming update.",
-      "import": "Import {count, plural, =0 {orders} one {# order} other {# orders}}",
-      "nothingReady": "No orders are ready to import.",
-      "importSoon": "Importing becomes available in an upcoming update.",
-      "backToMapping": "Back to mapping",
-      "discard": "Discard",
-      "importFailed": "The import could not be started. Try again.",
-      "clearImportFilter": "Clear the import filter"
+      "includeFailed": "The change couldn't be saved. Try again."
     },
     "states": {
       "notFound": {
@@ -3054,7 +2971,7 @@
       "disabled": {
         "title": "Importing orders isn't available",
         "body": "Importing orders from a file isn't turned on for your account yet.",
-        "action": "Back to orders"
+        "action": "Back to Verifications"
       },
       "loadFailed": {
         "title": "This import couldn't be loaded",
@@ -3104,27 +3021,9 @@
       "CSV_MALFORMED_QUOTE": "This row has a broken quote mark, so its cells may be shifted.",
       "unknown": "This row has a problem Akeed can't describe yet."
     },
-    "commit": {
-      "heading": "Importing your orders",
-      "progress": "Importing your orders… {done} of {total}",
-      "leavePage": "You can leave this page — the import continues in the background.",
-      "back": "Back to imports",
-      "alreadyStarted": "This import was already started somewhere else. Refreshing it now."
-    },
     "imported": {
-      "heading": "{count, plural, =0 {No orders imported} one {# order imported} other {# orders imported}}",
       "nothingSent": "Nothing has been sent to customers yet.",
-      "pills": {
-        "awaitingStart": "Awaiting start",
-        "invalid": "Need fixing",
-        "duplicate": "Duplicates",
-        "excluded": "Excluded",
-        "alreadyImported": "Already imported during import"
-      },
-      "deadline": "Start before {deadline} or these orders won't be confirmed.",
-      "start": "Start WhatsApp confirmation",
-      "reviewOrders": "Review orders",
-      "downloadReport": "Download report"
+      "reviewOrders": "Review orders"
     },
     "partial": {
       "heading": "This import did not finish",
@@ -3132,7 +3031,6 @@
       "body": "Imported {imported} of {attempted}. {missing} could not be imported.",
       "reupload": "Upload the rest"
     },
-    "verificationsChip": "From import: {file}",
     "start": {
       "title": "Start WhatsApp confirmation",
       "description": "Check who will be messaged and what it will cost before anything is sent.",
@@ -3171,17 +3069,8 @@
     },
     "release": {
       "startedAt": "Started {time}",
-      "progress": "Sent {released, number} of {total, number}",
+      "progress": "{settled, number} of {total, number} processed",
       "timeLeft": "about {duration} left",
-      "rate": "About {rate, number} messages per minute",
-      "pills": {
-        "queued": "Queued",
-        "sent": "Sent",
-        "confirmed": "Confirmed",
-        "canceled": "Canceled",
-        "noReply": "No reply",
-        "failed": "Failed"
-      },
       "quietHours": "Quiet hours — sending resumes at {time} ({timezone}).",
       "pausedTitle": "Paused — {reason}",
       "waiting": "{count, plural, one {# customer is} other {# customers are}} waiting.",
@@ -3195,18 +3084,155 @@
       "resume": "Resume",
       "resumeFailed": "Sending couldn't be resumed.",
       "buyCredits": "Buy credits",
-      "stop": "Stop remaining",
-      "stopped": "Stopped. {sent, plural, one {# customer was} other {# customers were}} contacted; {withdrawn, plural, one {# was} other {# were}} not and won't be. Orders already sent continue normally.",
-      "completed": "Finished sending to all {count, plural, one {# customer} other {# customers}}. Replies keep arriving in your orders list.",
+      "stopped": "Stopped. Messages reached {sent, plural, one {# customer} other {# customers}}; {withdrawn, plural, one {# customer} other {# customers}} won't be contacted. Orders already sent continue normally.",
+      "completed": "Messages reached {count, plural, one {# customer} other {# customers}}. Replies keep arriving in your confirmations list.",
       "notStartedTitle": "This import was never started",
-      "notStartedBody": "The time to start it passed, so these orders weren't sent. Upload them again to confirm them."
+      "notStartedBody": "The time to start it passed, so these orders weren't sent. Upload them again to confirm them.",
+      "settling": "Sending now. {count, plural, one {# order is} other {# orders are}} in line.",
+      "failedSome": "Couldn't send to {count, plural, one {# customer} other {# customers}}. The reason is next to each order in your confirmations list."
     },
-    "stop": {
-      "title": "Stop the remaining orders?",
-      "body": "{count, plural, one {# customer hasn't} other {# customers haven't}} been contacted and won't be. Orders already sent continue normally.",
-      "cancel": "Keep sending",
-      "confirm": "Stop remaining",
-      "failed": "Sending couldn't be stopped. Try again."
+    "modal": {
+      "title": "Import orders from a file",
+      "description": "Upload your orders file, check it, then send confirmations over WhatsApp.",
+      "close": "Close",
+      "stepsLabel": "Import steps",
+      "completed": "completed",
+      "steps": {
+        "file": "File",
+        "check": "Check",
+        "send": "Send"
+      },
+      "stepOf": "{current, number} of {total, number} · {label}",
+      "cancel": "Cancel"
+    },
+    "check": {
+      "heading": "Check your file",
+      "rows": "{count, plural, one {# row} other {# rows}}",
+      "changeFile": "Change file",
+      "country": "Phone number country",
+      "currency": "Currency",
+      "matched": {
+        "title": "We matched your file's columns",
+        "edit": "Edit matching",
+        "chip": "{field}: column {column}",
+        "missing": "Not in your file (optional): {fields}.",
+        "noDate": "Without an order date, every order counts as recent."
+      },
+      "attention": {
+        "one": "We need your help with one column: {detail}",
+        "many": "We need your help with {count, plural, one {# column} other {# columns}} before you continue.",
+        "why": {
+          "phone": "we're not sure which column has the phone numbers.",
+          "customerName": "we're not sure which column has the customer names.",
+          "amount": "we're not sure which column has the amounts."
+        }
+      },
+      "table": {
+        "field": "Field in Akeed",
+        "column": "Column in your file",
+        "status": "Status"
+      },
+      "choose": "Choose a column…",
+      "notInFile": "Not in the file",
+      "status": {
+        "matched": "Matched",
+        "required": "Required",
+        "check": "Check this"
+      },
+      "samples": "e.g. {values}",
+      "suggestion": {
+        "question": "Is it “{column}”?",
+        "use": "Use it",
+        "useLabel": "Use column {column} for {field}"
+      },
+      "optional": {
+        "title": "Optional fields",
+        "mapped": "{field}: matched",
+        "missing": "{field}: not in the file"
+      },
+      "payment": {
+        "question": "Which orders do we confirm?",
+        "intro": "We only confirm cash-on-delivery orders. Tap a value to move it to the other group.",
+        "confirm": "Confirm · cash on delivery",
+        "ignore": "Skip · paid in advance",
+        "orders": "{count, plural, one {# order} other {# orders}}",
+        "blank": "No payment method",
+        "blankHint": "Move orders without a payment method to the right bucket for this import. If unchanged, they follow your store setting.",
+        "confirmValue": "Confirm “{value}” orders",
+        "empty": "No values here",
+        "remember": "We'll remember this for your next files.",
+        "summary": "{confirm} → confirm · {ignore} → skip",
+        "summaryConfirmOnly": "{confirm} → confirm",
+        "edit": "Edit",
+        "noColumnAssume": "There's no payment column, so every order counts as cash on delivery, per your store setting.",
+        "noColumnSkip": "There's no payment column, and your store setting doesn't confirm orders without a payment method. Choose the payment column so we know which orders are cash on delivery.",
+        "recount": "We count this column's values when you continue."
+      },
+      "footer": {
+        "ready": "{count, plural, one {# ready} other {# ready}}",
+        "excluded": "{count, plural, one {# excluded} other {# excluded}}",
+        "continue": "Continue to send",
+        "blockedOne": "Choose the {field} column to continue",
+        "blockedMany": "Choose the required columns to continue",
+        "fixErrors": "Fix the highlighted fields to continue"
+      }
+    },
+    "send": {
+      "heading": "{count, plural, one {order ready to confirm on WhatsApp} other {orders ready to confirm on WhatsApp}}",
+      "from": "From {file}",
+      "clean": "No duplicates, no errors",
+      "nothingReady": "This file has no orders we can confirm. See the reasons below, or change the file.",
+      "showAll": "Show all orders ({count, number})",
+      "showFewer": "Show fewer",
+      "previewLabel": "Ready orders",
+      "skipped": {
+        "notCod": "{count, plural, one {# excluded because it's paid in advance} other {# excluded because they're paid in advance}}",
+        "noPayment": "{count, plural, one {# excluded because it has no payment method} other {# excluded because they have no payment method}}",
+        "tooOld": "{count, plural, one {# too old to confirm} other {# too old to confirm}}",
+        "possibleDuplicate": "{count, plural, one {# may duplicate an earlier order} other {# may duplicate earlier orders}}",
+        "duplicate": "{count, plural, one {# duplicate, won't be imported} other {# duplicates, won't be imported}}",
+        "invalid": "{count, plural, one {# needs fixing and won't be imported} other {# need fixing and won't be imported}}",
+        "excluded": "{count, plural, one {# excluded} other {# excluded}}",
+        "change": "Change",
+        "show": "Show",
+        "hide": "Hide"
+      },
+      "cost": {
+        "label": "Cost and timing",
+        "messages": "Messages now",
+        "upTo": "Up to {max, number} with follow-ups",
+        "noFollowUp": "No follow-up messages",
+        "balance": "Your balance after sending",
+        "of": "of {available, number}",
+        "short": "{shortfall, number} short",
+        "plan": "Left in your plan",
+        "planOf": "of {slots, number} this period",
+        "duration": "Expected time",
+        "minutes": "{minutes, plural, =0 {Under a minute} one {About a minute} other {About # minutes}}",
+        "hours": "{hours, plural, =0 {Under an hour} one {About an hour} other {About # hours}}",
+        "rate": "About {rate, number} messages a minute",
+        "quiet": "Pauses during quiet hours {window}",
+        "loading": "Working out the cost…"
+      },
+      "sendNow": "Send to {count, plural, one {# customer} other {# customers}}",
+      "importing": "Importing your orders…",
+      "importProgress": "{imported, number} of {total, number} imported",
+      "starting": "Starting to send…",
+      "importedNotice": "The orders are imported. Nothing has been sent yet.",
+      "notice": {
+        "stale": "The number of orders or your balance changed. Check the updated numbers and confirm again.",
+        "startFailed": "Sending couldn't start. Your orders are imported; try sending again.",
+        "importFailed": "The orders couldn't be imported. Nothing was sent; try again."
+      },
+      "done": {
+        "sent": "Imported {count, plural, one {# order} other {# orders}} — we're sending the confirmations now. Follow each order's status here."
+      },
+      "phoneFix": {
+        "label": "New phone number for row {number}",
+        "placeholder": "Mobile number",
+        "save": "Save",
+        "failed": "The number couldn't be saved. Try again."
+      }
     }
   }
 }

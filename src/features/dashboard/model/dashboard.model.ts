@@ -19,11 +19,16 @@ export type VerificationStatus =
   | 'no_reply'
 
 /**
- * An order that exists but was held before any message: `awaiting_start`
- * until the merchant starts it, `not_started` if it was withdrawn instead.
- * Nothing has been sent in either state.
+ * An imported order that has no verification yet: `awaiting_start` until
+ * the merchant starts it, `not_started` if it was withdrawn instead,
+ * `queued` behind a release that has started, and `sending` once released
+ * to the worker. Nothing has reached the customer in any of them.
  */
-export type HoldLifecycleStatus = 'awaiting_start' | 'not_started'
+export type HoldLifecycleStatus =
+  | 'awaiting_start'
+  | 'not_started'
+  | 'queued'
+  | 'sending'
 
 /** Every status a dashboard row can be rendered in. */
 export type LifecycleStatus = VerificationStatus | HoldLifecycleStatus
