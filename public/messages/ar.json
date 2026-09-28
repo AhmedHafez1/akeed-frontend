@@ -1198,6 +1198,76 @@
         "warning": "استخدمت {used} من رصيدك البالغ {limit}. عند نفاده تتوقف التأكيدات.",
         "exhausted": "نفد رصيدك. توقفت التأكيدات حتى تشحن رصيدك.",
         "cta": "اشحن رصيدك"
+      },
+      "header": {
+        "credits": "{count, plural, zero {رسالة متاحة} one {رسالة متاحة} two {رسالة متاحة} few {رسائل متاحة} many {رسالة متاحة} other {رسالة متاحة}}",
+        "creditsLabel": "{count, plural, zero {لا رسائل متاحة} one {رسالة واحدة متاحة} two {رسالتان متاحتان} few {# رسائل متاحة} many {# رسالة متاحة} other {# رسالة متاحة}}",
+        "topUp": "اشحن",
+        "topUpLabel": "اشحن رصيد الرسائل"
+      },
+      "settings": {
+        "autoConfirm": "التأكيد التلقائي",
+        "reminder": "تذكير بعد",
+        "reminderOff": "التذكير",
+        "quietHours": "ساعات الهدوء",
+        "on": "مفعّل",
+        "off": "متوقف",
+        "minutes": "{count, plural, one {دقيقة} two {دقيقتين} few {# دقائق} many {# دقيقة} other {# دقيقة}}",
+        "hours": "{count, plural, one {ساعة} two {ساعتين} few {# ساعات} many {# ساعة} other {# ساعة}}",
+        "edit": "تعديل الإعدادات"
+      },
+      "kpis": {
+        "confirmed": "طلبات مؤكدة",
+        "canceled": "أُلغيت قبل الشحن",
+        "canceledDetail": "وفّرت تكلفة الشحن",
+        "rate": "نسبة التأكيد",
+        "rateDetail": "{confirmed} من {sent}",
+        "rateDetailLabel": "أُكّد {confirmed} من {sent} طلباً أرسلنا لها رسالة"
+      },
+      "needsAction": {
+        "countPill": "{count, plural, zero {لا طلبات} one {طلب واحد} two {طلبان} few {# طلبات} many {# طلباً} other {# طلب}}",
+        "helper": "لم يردّوا بعد التذكير. راسلهم بنفسك أو أكّد الطلب نيابةً عنهم.",
+        "noReply": "لم يرد · {age}",
+        "readNoReply": "قرأ ولم يرد · {age}",
+        "notDelivered": "لم تصل الرسالة",
+        "reminderSent": "أُرسل التذكير {date}",
+        "messaged": "أُرسلت الرسالة {date}",
+        "read": "قُرئت {date}",
+        "age": {
+          "lessThanHour": "أقل من ساعة",
+          "hours": "{count, plural, one {ساعة} two {ساعتان} few {# ساعات} many {# ساعة} other {# ساعة}}",
+          "days": "{count, plural, one {يوم} two {يومان} few {# أيام} many {# يوماً} other {# يوم}}"
+        },
+        "whatsapp": "واتساب",
+        "confirm": "تأكيد يدوي",
+        "more": "إجراءات أخرى للطلب {order}",
+        "viewInList": "عرض في التأكيدات",
+        "cancel": "إلغاء الطلب"
+      },
+      "flow": {
+        "replied": "ردّ العميل",
+        "deliveryRate": "نسبة الوصول",
+        "replyRate": "نسبة الرد",
+        "legendLabel": "الردود حسب النتيجة",
+        "confirmed": "أكّد",
+        "canceled": "ألغى",
+        "noReply": "لم يرد بعد",
+        "moreManual": "{count, plural, one {وطلب آخر أُكّد يدوياً} two {وطلبان آخران أُكّدا يدوياً} few {و# طلبات أخرى أُكّدت يدوياً} many {و# طلباً آخر أُكّد يدوياً} other {و# طلب آخر أُكّد يدوياً}}",
+        "barLabel": "{label}: {count} من {sent} مُرسلة"
+      },
+      "status": {
+        "needsAction": "تحتاج إجراء"
+      },
+      "table": {
+        "searchPlaceholder": "ابحث برقم الطلب أو الهاتف",
+        "searchShortcut": "اضغط / للبحث",
+        "sortedBy": "مرتبة حسب آخر تحديث، الأحدث أولاً",
+        "confirm": "تأكيد",
+        "message": "مراسلة",
+        "showing": "عرض <b>{from}–{to}</b> من <b>{total}</b> {total, plural, zero {طلب} one {طلب} two {طلب} few {طلبات} many {طلباً} other {طلب}}",
+        "previous": "السابق",
+        "next": "التالي",
+        "openDetails": "فتح تفاصيل الطلب {order}"
       }
     },
     "sourceDisconnectedTitle": "مصدر الطلبات غير متصل",

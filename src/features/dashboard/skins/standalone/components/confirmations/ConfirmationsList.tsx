@@ -1,10 +1,11 @@
 'use client'
 
+import type { MouseEvent } from 'react'
+import { ArrowDown } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
-import { isNeedsActionRow } from '@/features/dashboard/domain/confirmationRowStatus'
-import { formatUpdatedAt } from '@/features/dashboard/lib/orderDisplay'
+import { formatDayAndClock } from '@/features/dashboard/lib/orderDisplay'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
 import { ConfirmationRowActions } from './ConfirmationRowActions'
 import {
@@ -20,42 +21,59 @@ type RowProps = Omit<ConfirmationsListProps, 'rows'> & {
   row: VerificationItem
 }
 
-/** Amber for rows waiting on the merchant; muted for rows not saved yet. */
-function rowTone(row: VerificationItem) {
-  if (row.optimistic) return 'bg-muted/60'
-  return isNeedsActionRow(row) ? 'bg-warning-subtle/60' : undefined
-}
-
 function useUpdatedAt(row: VerificationItem, timeZone: string) {
   const { locale } = useLocaleInfo()
-  return formatUpdatedAt(row.updated_at ?? row.created_at, locale, timeZone)
+  return formatDayAndClock(row.updated_at ?? row.created_at, locale, timeZone)
+}
+
+/** A click on the row's own controls is theirs, not the row's. */
+function isControlClick(event: MouseEvent) {
+  return (event.target as HTMLElement).closest(
+    'a, button, input, [role="menuitem"]'
+  )
 }
 
 function TableRow({ row, timeZone, actingId, ...rest }: RowProps) {
   const view = useConfirmationRowView(row)
   const updatedAt = useUpdatedAt(row, timeZone)
+  // The Order cell's button is the keyboard route to the same details.
+  const openDetails = row.optimistic
+    ? undefined
+    : () => rest.handlers.onOpenDetails(row)
 
   return (
     <tr
       aria-busy={row.optimistic ? true : undefined}
-      className={cn('hover:bg-muted/50 transition-colors', rowTone(row))}
+      onClick={(event) => {
+        if (openDetails && !isControlClick(event)) openDetails()
+      }}
+      className={cn(
+        'h-[60px] transition-colors',
+        row.optimistic
+          ? 'bg-surface-sunken'
+          : 'hover:bg-surface-sunken cursor-pointer'
+      )}
     >
-      <td className="px-4 py-3 align-middle">
-        <OrderCell orderLabel={view.orderLabel} isTest={row.is_test} />
+      <td className="px-4 py-2.5 align-middle first:ps-6">
+        <OrderCell
+          orderLabel={view.orderLabel}
+          isTest={row.is_test}
+          onOpen={openDetails}
+        />
       </td>
-      <td className="max-w-0 px-4 py-3 align-middle">
+      <td className="px-4 py-2.5 align-middle">
         <CustomerCell name={view.name} phone={view.phone} />
       </td>
-      <td className="px-4 py-3 align-middle">
+      <td className="px-4 py-2.5 align-middle">
         <StatusCell row={row} timeZone={timeZone} />
       </td>
-      <td className="px-4 py-3 align-middle">
+      <td className="px-4 py-2.5 text-end align-middle">
         <AmountText amount={view.amount} isCanceled={view.isCanceled} />
       </td>
-      <td className="text-muted-foreground text-caption px-4 py-3 align-middle">
-        {updatedAt}
+      <td className="text-ak-body text-ink-muted px-4 py-2.5 align-middle whitespace-nowrap tabular-nums">
+        <bdi>{updatedAt}</bdi>
       </td>
-      <td className="px-4 py-3 align-middle">
+      <td className="px-4 py-2.5 align-middle last:pe-6">
         <ConfirmationRowActions
           row={row}
           orderLabel={view.orderLabel}
@@ -75,17 +93,28 @@ function CardRow({ row, timeZone, actingId, ...rest }: RowProps) {
   return (
     <li
       aria-busy={row.optimistic ? true : undefined}
-      className={cn('space-y-3 px-4 py-4', rowTone(row))}
+      className={cn(
+        'space-y-3 px-4 py-4',
+        row.optimistic && 'bg-surface-sunken'
+      )}
     >
       <div className="flex items-center justify-between gap-3">
-        <OrderCell orderLabel={view.orderLabel} isTest={row.is_test} />
+        <OrderCell
+          orderLabel={view.orderLabel}
+          isTest={row.is_test}
+          onOpen={
+            row.optimistic ? undefined : () => rest.handlers.onOpenDetails(row)
+          }
+        />
         <AmountText amount={view.amount} isCanceled={view.isCanceled} />
       </div>
-      <div className="flex items-start justify-between gap-3">
-        <CustomerCell name={view.name} phone={view.phone} />
+      <CustomerCell name={view.name} phone={view.phone} />
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <StatusCell row={row} timeZone={timeZone} />
+        <p className="text-ak-caption text-ink-muted tabular-nums">
+          <bdi>{updatedAt}</bdi>
+        </p>
       </div>
-      <p className="text-muted-foreground text-xs">{updatedAt}</p>
       <ConfirmationRowActions
         row={row}
         orderLabel={view.orderLabel}
@@ -98,13 +127,18 @@ function CardRow({ row, timeZone, actingId, ...rest }: RowProps) {
   )
 }
 
+/*
+ * Share of the table per column. The table is fixed-layout with a minimum
+ * width, so a narrow window scrolls it sideways instead of squeezing the
+ * phone or the action buttons onto a second line.
+ */
 const HEADINGS = [
-  ['order', 'w-[10%]'],
-  ['customer', 'w-[22%]'],
-  ['status', 'w-[19%]'],
-  ['total', 'w-[12%]'],
-  ['updated', 'w-[13%]'],
-  ['action', 'w-[24%] text-end'],
+  ['order', 'w-[13%]'],
+  ['customer', 'w-[24%]'],
+  ['status', 'w-[20%]'],
+  ['total', 'w-[12%] text-end'],
+  ['updated', 'w-[15%]'],
+  ['action', 'w-[16%] text-end'],
 ] as const
 
 /**
@@ -117,32 +151,52 @@ export function ConfirmationsList({
   ...rowProps
 }: ConfirmationsListProps) {
   const t = useTranslations('dashboard.confirmations')
+  const tTable = useTranslations('dashboard.standalone.table')
 
   return (
     <>
-      <table className="hidden w-full table-fixed text-start md:table">
-        <caption className="sr-only">{t('title')}</caption>
-        <thead>
-          <tr className="border-border bg-muted/50 text-muted-foreground border-b text-xs font-medium">
-            {HEADINGS.map(([heading, width]) => (
-              <th
-                key={heading}
-                scope="col"
-                className={cn('px-4 py-3 text-start', width)}
-              >
-                {t(`headings.${heading}`)}
-              </th>
+      <div className="hidden overflow-x-auto md:block">
+        <table className="w-full min-w-[980px] table-fixed text-start">
+          <caption className="sr-only">
+            {t('title')}. {tTable('sortedBy')}
+          </caption>
+          <thead>
+            <tr className="border-line bg-surface-sunken text-ak-label text-ink-muted border-b">
+              {HEADINGS.map(([heading, width]) => {
+                const sorted = heading === 'updated'
+                return (
+                  <th
+                    key={heading}
+                    scope="col"
+                    aria-sort={sorted ? 'descending' : undefined}
+                    className={cn(
+                      'h-11 px-4 text-start font-bold whitespace-nowrap first:ps-6 last:pe-6',
+                      width,
+                      sorted && 'text-ink'
+                    )}
+                  >
+                    {sorted ? (
+                      <span className="inline-flex items-center gap-1">
+                        {t(`headings.${heading}`)}
+                        <ArrowDown aria-hidden="true" className="size-3.5" />
+                      </span>
+                    ) : (
+                      t(`headings.${heading}`)
+                    )}
+                  </th>
+                )
+              })}
+            </tr>
+          </thead>
+          <tbody className="divide-line divide-y">
+            {rows.map((row) => (
+              <TableRow key={row.id} row={row} {...rowProps} />
             ))}
-          </tr>
-        </thead>
-        <tbody className="divide-border divide-y">
-          {rows.map((row) => (
-            <TableRow key={row.id} row={row} {...rowProps} />
-          ))}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
 
-      <ul className="divide-border divide-y md:hidden">
+      <ul className="divide-line divide-y md:hidden">
         {rows.map((row) => (
           <CardRow key={row.id} row={row} {...rowProps} />
         ))}

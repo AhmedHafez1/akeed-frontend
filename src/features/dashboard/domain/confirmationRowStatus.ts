@@ -4,6 +4,19 @@ import { deliveryFailureKey } from './deliveryFailure'
 export type RowStatusTone = 'success' | 'critical' | 'warning' | 'neutral'
 
 /**
+ * Which of the standalone badge styles a status wears. Finer than the tone:
+ * "awaiting reply" (info) and "scheduled" (neutral) share a tone but not a
+ * look, and "canceled" and "failed" share one but not an icon.
+ */
+export type RowStatusKind =
+  | 'pending'
+  | 'needsAction'
+  | 'confirmed'
+  | 'canceled'
+  | 'failed'
+  | 'scheduled'
+
+/**
  * What the status column shows for a row: one badge and an optional sub-line.
  *
  * Keys are relative to `dashboard.confirmations.status`; the sub-line may
@@ -13,6 +26,7 @@ export type RowStatusTone = 'success' | 'critical' | 'warning' | 'neutral'
 export interface RowStatusView {
   badge: string
   tone: RowStatusTone
+  kind: RowStatusKind
   sub?: string
   /** An ISO time the sub-line interpolates as `{time}`. */
   subTime?: string
@@ -29,6 +43,7 @@ export function resolveRowStatus(row: VerificationItem): RowStatusView {
       return {
         badge: 'confirmed',
         tone: 'success',
+        kind: 'confirmed',
         sub:
           row.confirmation_source === 'merchant_manual'
             ? 'sub.manual'
@@ -43,12 +58,14 @@ export function resolveRowStatus(row: VerificationItem): RowStatusView {
             ? 'canceledNoReply'
             : 'canceledByCustomer',
         tone: 'critical',
+        kind: 'canceled',
         sub: row.canceled_in_store ? 'sub.canceledInStore' : undefined,
       }
     case 'failed':
       return {
         badge: 'failed',
         tone: 'critical',
+        kind: 'failed',
         sub:
           row.reason === 'provider_delivery_failed'
             ? `failure.${deliveryFailureKey(row.failure_code)}`
@@ -61,14 +78,15 @@ export function resolveRowStatus(row: VerificationItem): RowStatusView {
         ? {
             badge: 'scheduled',
             tone: 'neutral',
+            kind: 'scheduled',
             sub: 'sub.sendsAt',
             subTime: row.scheduled_for,
           }
-        : { badge: 'pending', tone: 'neutral' }
+        : { badge: 'pending', tone: 'neutral', kind: 'pending' }
     case 'awaiting_start':
-      return { badge: 'awaitingStart', tone: 'neutral' }
+      return { badge: 'awaitingStart', tone: 'neutral', kind: 'scheduled' }
     case 'not_started':
-      return { badge: 'notStarted', tone: 'neutral' }
+      return { badge: 'notStarted', tone: 'neutral', kind: 'scheduled' }
     default:
       break
   }
@@ -77,10 +95,11 @@ export function resolveRowStatus(row: VerificationItem): RowStatusView {
     return {
       badge: 'noReply',
       tone: 'warning',
+      kind: 'needsAction',
       sub: row.follow_up_sent_at ? 'sub.followUpSent' : undefined,
     }
   }
-  return { badge: 'awaitingReply', tone: 'neutral' }
+  return { badge: 'awaitingReply', tone: 'neutral', kind: 'pending' }
 }
 
 /** A row the merchant should act on gets the amber highlight. */

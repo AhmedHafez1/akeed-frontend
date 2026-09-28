@@ -1204,6 +1204,76 @@
         "warning": "You've used {used} of {limit} credits. Confirmations stop when they run out.",
         "exhausted": "You've used all your credits. Confirmations have stopped until you top up.",
         "cta": "Buy credits"
+      },
+      "header": {
+        "credits": "{count, plural, one {message credit} other {message credits}}",
+        "creditsLabel": "{count, plural, one {# message credit left} other {# message credits left}}",
+        "topUp": "Top up",
+        "topUpLabel": "Top up message credits"
+      },
+      "settings": {
+        "autoConfirm": "Auto-confirm",
+        "reminder": "Reminder after",
+        "reminderOff": "Reminder",
+        "quietHours": "Quiet hours",
+        "on": "On",
+        "off": "Off",
+        "minutes": "{count, plural, one {# min} other {# min}}",
+        "hours": "{count, plural, one {# hour} other {# hours}}",
+        "edit": "Edit settings"
+      },
+      "kpis": {
+        "confirmed": "Confirmed",
+        "canceled": "Canceled before shipping",
+        "canceledDetail": "Shipping saved",
+        "rate": "Confirmation rate",
+        "rateDetail": "{confirmed}/{sent}",
+        "rateDetailLabel": "{confirmed} of {sent} messaged orders confirmed"
+      },
+      "needsAction": {
+        "countPill": "{count, plural, one {# order} other {# orders}}",
+        "helper": "No reply after the reminder. Message them yourself or confirm on their behalf.",
+        "noReply": "No reply · {age}",
+        "readNoReply": "Read, no reply · {age}",
+        "notDelivered": "Not delivered",
+        "reminderSent": "Reminder sent {date}",
+        "messaged": "Messaged {date}",
+        "read": "Read {date}",
+        "age": {
+          "lessThanHour": "under 1 hour",
+          "hours": "{count, plural, one {# hour} other {# hours}}",
+          "days": "{count, plural, one {# day} other {# days}}"
+        },
+        "whatsapp": "WhatsApp",
+        "confirm": "Confirm manually",
+        "more": "More actions for order {order}",
+        "viewInList": "View in confirmations",
+        "cancel": "Cancel order"
+      },
+      "flow": {
+        "replied": "Replied",
+        "deliveryRate": "Delivery rate",
+        "replyRate": "Reply rate",
+        "legendLabel": "Replies by outcome",
+        "confirmed": "Confirmed",
+        "canceled": "Canceled",
+        "noReply": "No reply yet",
+        "moreManual": "{count, plural, one {# more confirmed manually} other {# more confirmed manually}}",
+        "barLabel": "{label}: {count} of {sent} sent"
+      },
+      "status": {
+        "needsAction": "Needs action"
+      },
+      "table": {
+        "searchPlaceholder": "Search order number or phone",
+        "searchShortcut": "Press / to search",
+        "sortedBy": "Sorted by last update, newest first",
+        "confirm": "Confirm",
+        "message": "Message",
+        "showing": "Showing <b>{from}–{to}</b> of <b>{total}</b> {total, plural, one {order} other {orders}}",
+        "previous": "Previous",
+        "next": "Next",
+        "openDetails": "Open details for order {order}"
       }
     },
     "sourceDisconnectedTitle": "Order source disconnected",

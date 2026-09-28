@@ -18,7 +18,7 @@ export default function StandaloneDashboardFixturePage() {
         period={url.period}
         periodOptions={url.periodOptions}
         onPeriodChange={url.onPeriodChange}
-        needsActionHref={url.confirmationsHref('needs_action')}
+        confirmationsHref={url.confirmationsHref}
       />
     </main>
   )

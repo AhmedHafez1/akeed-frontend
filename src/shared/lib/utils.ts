@@ -1,5 +1,26 @@
 import { type ClassValue, clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
+import { extendTailwindMerge } from 'tailwind-merge'
+
+/*
+ * tailwind-merge only knows Tailwind's own font sizes; any other `text-*` it
+ * reads as a colour, so `text-ak-label text-ak-warning` would lose the size.
+ * The Akeed app type scale (globals.css) is registered so size and colour
+ * merge independently.
+ */
+const twMerge = extendTailwindMerge({
+  extend: {
+    theme: {
+      text: [
+        'ak-title',
+        'ak-section',
+        'ak-body',
+        'ak-caption',
+        'ak-label',
+        'ak-kpi',
+      ],
+    },
+  },
+})
 
 /**
  * Merge Tailwind classes without conflicts
