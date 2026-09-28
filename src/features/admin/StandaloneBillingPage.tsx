@@ -183,7 +183,7 @@ export function StandaloneBillingPage() {
           </p>
         ) : state.page?.rows.length ? (
           <div className="relative overflow-x-auto">
-            <table className="w-full text-start text-sm">
+            <table className="bg-card w-full text-start text-sm">
               <thead className="bg-muted/50 text-foreground/70 text-xs">
                 <tr>
                   <th scope="col" className="p-4 text-start">

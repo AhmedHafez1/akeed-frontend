@@ -1197,8 +1197,6 @@
       "cta": "Get started"
     },
     "standalone": {
-      "greeting": "Welcome back, {name}",
-      "greetingLoading": "Loading dashboard greeting",
       "manualConfirmBody": "Akeed will record the order as confirmed, just as if the customer had confirmed. No more messages will be sent.",
       "credits": {
         "warning": "You've used {used} of {limit} credits. Confirmations stop when they run out.",
@@ -1232,11 +1230,9 @@
       },
       "needsAction": {
         "countPill": "{count, plural, one {# order} other {# orders}}",
-        "helper": "No reply after the reminder. Message them yourself or confirm on their behalf.",
         "noReply": "No reply · {age}",
         "readNoReply": "Read, no reply · {age}",
         "notDelivered": "Not delivered",
-        "reminderSent": "Reminder sent {date}",
         "messaged": "Messaged {date}",
         "read": "Read {date}",
         "age": {

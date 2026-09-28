@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { useStandaloneShell } from '@/shared/layout/StandaloneShellContext'
 import { cn } from '@/shared/lib/utils'
 import { Skeleton, notify } from '@/shared/ui'
 import { useCancelVerificationMutation } from '../../api/verificationMutations'
@@ -74,7 +73,6 @@ export function DashboardStandaloneSkin({
   confirmationsHref,
 }: DashboardStandaloneSkinProps) {
   const t = useTranslations('dashboard')
-  const { identity, isIdentityLoading } = useStandaloneShell()
   const { overview, isLoading, isError, retry } = useDashboardOverview(period)
   const confirmation = useManualConfirmation()
   const { feedback, dismissFeedback } = confirmation
@@ -144,16 +142,7 @@ export function DashboardStandaloneSkin({
     })
   }
 
-  const title = isIdentityLoading ? (
-    <span
-      aria-label={t('standalone.greetingLoading')}
-      className="bg-neutral-soft inline-block h-8 w-64 max-w-full animate-pulse rounded-lg align-middle"
-    />
-  ) : identity.fullName ? (
-    t('standalone.greeting', { name: identity.fullName })
-  ) : (
-    t('overview.title')
-  )
+  const title = t('overview.title')
 
   return (
     <div className="mx-auto w-full max-w-[1180px] space-y-6 pt-2 pb-8">

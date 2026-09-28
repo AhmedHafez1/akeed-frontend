@@ -2,13 +2,13 @@ import { cva, type VariantProps } from 'class-variance-authority'
 
 /*
  * The Akeed app look for the standalone dashboard pages, in one place. Every
- * class reads a token from globals.css (bg-surface-raised, border-line,
+ * class reads a token from globals.css (bg-card, border-line,
  * text-brand-ink, …); nothing here carries a literal colour.
  */
 
 /** Cards: 12px radius, hairline border, the two-layer resting shadow. */
 export const akCard =
-  'rounded-ak-card border border-line bg-surface-raised text-ink shadow-ak-card'
+  'rounded-ak-card border border-line bg-card text-ink shadow-ak-card'
 
 /**
  * Buttons and button-looking links. They never wrap (`whitespace-nowrap`),

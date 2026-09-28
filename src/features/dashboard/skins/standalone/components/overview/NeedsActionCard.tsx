@@ -76,11 +76,9 @@ function useReasonView(item: NeedsActionItem, timeZone: string) {
       : t('noReply', { age: ageText })
   const sub = !date
     ? null
-    : reason.type === 'no_reply_after_follow_up'
-      ? t('reminderSent', { date })
-      : reason.type === 'read_no_reply'
-        ? t('read', { date })
-        : t('messaged', { date })
+    : reason.type === 'read_no_reply'
+      ? t('read', { date })
+      : t('messaged', { date })
 
   return { kind: 'needsAction' as const, badge, sub, exact }
 }
@@ -269,9 +267,6 @@ export function NeedsActionCard({
               </span>
             )}
           </h2>
-          {hasItems && (
-            <p className="text-ak-body text-ink-muted">{tCard('helper')}</p>
-          )}
         </div>
         <Link href={viewAllHref} className={cn(akLink, 'text-ak-body mt-0.5')}>
           {t('allOrders')}

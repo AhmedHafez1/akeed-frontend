@@ -15,7 +15,7 @@ const Table = React.forwardRef<
     <table
       ref={ref}
       className={cn(
-        'text-body w-full caption-bottom border-collapse',
+        'text-body bg-card w-full caption-bottom border-collapse',
         className
       )}
       {...props}

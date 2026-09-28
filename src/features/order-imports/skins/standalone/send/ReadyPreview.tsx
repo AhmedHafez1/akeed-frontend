@@ -39,7 +39,7 @@ export function ReadyPreview({ rows }: { rows: readonly OrderImportRow[] }) {
           expanded ? 'max-h-[min(24rem,50dvh)] overflow-y-auto' : undefined
         }
       >
-        <table className="hidden w-full text-sm sm:table">
+        <table className="bg-card hidden w-full text-sm sm:table">
           <caption className="sr-only">{t('send.previewLabel')}</caption>
           <thead className="bg-muted/50 text-muted-foreground text-xs">
             <tr>

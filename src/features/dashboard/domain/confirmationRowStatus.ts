@@ -37,7 +37,10 @@ function isAfter(later: string | null, earlier: string | null): boolean {
   return new Date(later).getTime() > new Date(earlier).getTime()
 }
 
-export function resolveRowStatus(row: VerificationItem): RowStatusView {
+export function resolveRowStatus(
+  row: VerificationItem,
+  options: { showStoreCancellation?: boolean } = {}
+): RowStatusView {
   switch (row.status) {
     case 'confirmed':
       return {
@@ -59,7 +62,10 @@ export function resolveRowStatus(row: VerificationItem): RowStatusView {
             : 'canceledByCustomer',
         tone: 'critical',
         kind: 'canceled',
-        sub: row.canceled_in_store ? 'sub.canceledInStore' : undefined,
+        sub:
+          options.showStoreCancellation && row.canceled_in_store
+            ? 'sub.canceledInStore'
+            : undefined,
       }
     case 'failed':
       return {

@@ -1191,8 +1191,6 @@
       "cta": "ابدأ الآن"
     },
     "standalone": {
-      "greeting": "مرحباً بعودتك، {name}",
-      "greetingLoading": "جارٍ تحميل ترحيب لوحة التحكم",
       "manualConfirmBody": "سيُسجَّل الطلب مؤكداً في أكيد، كما لو أكّده العميل. لن تُرسل له رسائل أخرى.",
       "credits": {
         "warning": "استخدمت {used} من رصيدك البالغ {limit}. عند نفاده تتوقف التأكيدات.",
@@ -1226,11 +1224,9 @@
       },
       "needsAction": {
         "countPill": "{count, plural, zero {لا طلبات} one {طلب واحد} two {طلبان} few {# طلبات} many {# طلباً} other {# طلب}}",
-        "helper": "لم يردّوا بعد التذكير. راسلهم بنفسك أو أكّد الطلب نيابةً عنهم.",
         "noReply": "لم يرد · {age}",
         "readNoReply": "قرأ ولم يرد · {age}",
         "notDelivered": "لم تصل الرسالة",
-        "reminderSent": "أُرسل التذكير {date}",
         "messaged": "أُرسلت الرسالة {date}",
         "read": "قُرئت {date}",
         "age": {

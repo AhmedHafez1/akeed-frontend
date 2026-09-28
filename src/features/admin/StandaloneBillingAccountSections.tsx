@@ -97,7 +97,7 @@ function Th({ children }: { children?: ReactNode }) {
 }
 
 function Table({ children }: { children: ReactNode }) {
-  return <table className="w-full text-start text-sm">{children}</table>
+  return <table className="bg-card w-full text-start text-sm">{children}</table>
 }
 
 function Head({ children }: { children: ReactNode }) {

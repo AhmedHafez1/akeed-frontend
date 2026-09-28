@@ -86,6 +86,16 @@ describe('resolveRowStatus', () => {
           cancellation_source: 'merchant_no_reply',
           canceled_in_store: true,
         })
+      ).sub
+    ).toBeUndefined()
+    expect(
+      resolveRowStatus(
+        row({
+          status: 'canceled',
+          cancellation_source: 'merchant_no_reply',
+          canceled_in_store: true,
+        }),
+        { showStoreCancellation: true }
       )
     ).toEqual({
       badge: 'canceledNoReply',

@@ -225,7 +225,7 @@ export function DashboardVerificationsStandaloneSkin({
             </div>
           ) : list.rows.length === 0 ? (
             isOnboarding ? (
-              <div className="bg-surface-sunken rounded-ak-card m-4 space-y-6 p-6">
+              <div className="bg-card rounded-ak-card m-4 space-y-6 p-6">
                 <div>
                   <h2 className="text-ak-section text-ink">
                     {t('verifications.empty.title')}

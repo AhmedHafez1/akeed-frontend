@@ -68,7 +68,7 @@ export function StatusCell({
 }) {
   const t = useTranslations('dashboard.confirmations.status')
   const { locale } = useLocaleInfo()
-  const view = resolveRowStatus(row)
+  const view = resolveRowStatus(row, { showStoreCancellation: true })
   const sub = view.sub
     ? t(view.sub, {
         time: view.subTime

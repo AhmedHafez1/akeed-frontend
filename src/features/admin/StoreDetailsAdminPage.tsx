@@ -849,7 +849,7 @@ function VerificationsSection({
       ) : response ? (
         <>
           <div className="hidden overflow-x-auto md:block">
-            <table className="w-full min-w-[960px] text-start text-sm">
+            <table className="bg-card w-full min-w-[960px] text-start text-sm">
               <thead className="border-border bg-muted/40 text-muted-foreground border-b text-xs font-semibold tracking-wide uppercase">
                 <tr>
                   <th className="px-4 py-3 text-start">Order</th>

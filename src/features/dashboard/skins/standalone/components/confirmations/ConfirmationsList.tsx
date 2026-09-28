@@ -156,7 +156,7 @@ export function ConfirmationsList({
   return (
     <>
       <div className="hidden overflow-x-auto md:block">
-        <table className="w-full min-w-[980px] table-fixed text-start">
+        <table className="bg-card w-full min-w-[980px] table-fixed text-start">
           <caption className="sr-only">
             {t('title')}. {tTable('sortedBy')}
           </caption>

@@ -106,7 +106,7 @@ describe('NeedsActionCard', () => {
     ).toBeTruthy()
   })
 
-  it('names the wait and the reminder in English', () => {
+  it('names the wait without the reminder date in English', () => {
     renderStandalone(
       <NeedsActionCard
         needsAction={needsAction}
@@ -120,7 +120,12 @@ describe('NeedsActionCard', () => {
     )
     expect(screen.getByText('2 orders')).toBeTruthy()
     expect(screen.getByText('No reply · 1 day')).toBeTruthy()
-    expect(screen.getByText('Reminder sent Sep 27')).toBeTruthy()
+    expect(screen.queryByText('Reminder sent Sep 27')).toBeNull()
+    expect(
+      screen.queryByText(
+        'No reply after the reminder. Message them yourself or confirm on their behalf.'
+      )
+    ).toBeNull()
     expect(screen.getByRole('button', { name: /Confirm order/ })).toBeTruthy()
   })
 })
