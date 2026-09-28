@@ -48,6 +48,7 @@ export function SendStep({ detail, canEdit, onBack, onDone }: SendStepProps) {
   const rows = useQuery(orderImportAllRowsOptions(detail.batchId))
   const quote = send.quote.data
   const ready = detail.counts.ready ?? 0
+  const heroReady = quote?.orders ?? ready
   const draft = detail.status === 'draft'
   const busy = send.phase === 'importing' || send.phase === 'sending'
 
@@ -90,7 +91,7 @@ export function SendStep({ detail, canEdit, onBack, onDone }: SendStepProps) {
         </ImportNotice>
       )}
 
-      <Hero detail={detail} ready={ready} />
+      <Hero detail={detail} ready={heroReady} />
 
       {rows.isPending ? (
         <Skeleton className="rounded-card h-40 w-full" />
@@ -131,6 +132,7 @@ function Hero({
   ready: number
 }) {
   const t = useTranslations('orderImport.send')
+  if (ready === 0 && detail.status !== 'draft') return null
   if (ready === 0)
     return (
       <ImportNotice tone="warning" role="status">
