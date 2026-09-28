@@ -87,7 +87,7 @@ function ConfirmationTabs({
             tabIndex={selected ? 0 : -1}
             onClick={() => onTabChange(id)}
             className={cn(
-              'ak-focus text-ak-body inline-flex h-9 items-center gap-2 rounded-[8px] px-3 font-semibold whitespace-nowrap transition-colors',
+              'ak-focus text-ak-body inline-flex h-9 items-center gap-2 rounded-lg px-3 font-semibold whitespace-nowrap transition-colors',
               selected
                 ? 'bg-inverse text-inverse-foreground'
                 : 'text-ink-muted hover:bg-surface-raised hover:text-ink'
@@ -174,7 +174,7 @@ export function ConfirmationsToolbar({
         <div className="relative">
           <Search
             aria-hidden="true"
-            className="text-ink-muted pointer-events-none absolute start-3 top-1/2 size-[18px] -translate-y-1/2"
+            className="text-ink-muted pointer-events-none absolute start-3 top-1/2 size-4.5 -translate-y-1/2"
           />
           <input
             ref={inputRef}

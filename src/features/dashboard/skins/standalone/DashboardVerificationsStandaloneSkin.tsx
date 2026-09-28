@@ -141,7 +141,7 @@ export function DashboardVerificationsStandaloneSkin({
     tab === 'all' && !list.search && !importBatchId && list.rows.length === 0
 
   return (
-    <div className="mx-auto w-full max-w-[1180px] min-w-0 space-y-6 pt-2 pb-8">
+    <div className="mx-auto w-full max-w-295 min-w-0 space-y-6 pt-2 pb-8">
       <PageHeader
         title={t('confirmations.title')}
         subtitle={t('confirmations.subtitle')}
