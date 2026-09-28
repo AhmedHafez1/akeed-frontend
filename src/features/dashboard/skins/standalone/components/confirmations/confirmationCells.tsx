@@ -59,18 +59,22 @@ export function OrderCell({
   const tTable = useTranslations('dashboard.standalone.table')
   const label = <bdi dir="ltr">{orderLabel}</bdi>
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="flex max-w-full min-w-0 flex-wrap items-center gap-2">
       {onOpen ? (
         <button
           type="button"
           onClick={onOpen}
           aria-label={tTable('openDetails', { order: orderLabel })}
-          className="ak-focus text-ak-body text-ink rounded-sm font-semibold whitespace-nowrap tabular-nums underline-offset-4 hover:underline"
+          title={orderLabel}
+          className="ak-focus text-ak-body text-ink max-w-[10ch] min-w-0 truncate rounded-sm font-semibold tabular-nums underline-offset-4 hover:underline"
         >
           {label}
         </button>
       ) : (
-        <span className="text-ak-body text-ink font-semibold whitespace-nowrap tabular-nums">
+        <span
+          title={orderLabel}
+          className="text-ak-body text-ink max-w-[10ch] min-w-0 truncate font-semibold tabular-nums"
+        >
           {label}
         </span>
       )}

@@ -4,6 +4,7 @@ import type {
   ConfirmationsTab,
   DashboardOverview,
 } from '@/features/dashboard/model/dashboard.model'
+import { OrderCell } from './confirmations/confirmationCells'
 import { ConfirmationsToolbar } from './confirmations/ConfirmationsToolbar'
 import { MessageFlowCard } from './overview/MessageFlowCard'
 import { NeedsActionCard } from './overview/NeedsActionCard'
@@ -56,6 +57,23 @@ describe('ConfirmationsToolbar', () => {
     expect(onTabChange).toHaveBeenCalledWith('needs_action')
     fireEvent.keyDown(document.body, { key: '/' })
     expect(document.activeElement).toBe(screen.getByRole('searchbox'))
+  })
+})
+
+describe('OrderCell', () => {
+  it('truncates long order numbers visually and keeps the full label available', () => {
+    const orderLabel = '#AKEED-TEST-1789293921'
+    renderStandalone(
+      <OrderCell orderLabel={orderLabel} isTest onOpen={vi.fn()} />,
+      'en'
+    )
+
+    const orderButton = screen.getByRole('button', {
+      name: `Open details for order ${orderLabel}`,
+    })
+    expect(orderButton.getAttribute('title')).toBe(orderLabel)
+    expect(orderButton.className).toContain('max-w-[10ch]')
+    expect(screen.getByText('Test')).toBeTruthy()
   })
 })
 
