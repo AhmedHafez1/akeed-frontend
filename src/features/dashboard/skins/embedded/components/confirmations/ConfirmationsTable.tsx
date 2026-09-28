@@ -1,8 +1,7 @@
-import { Badge, IndexTable, Text } from '@shopify/polaris'
+import { Badge, IndexTable } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { isNeedsActionRow } from '../../../../domain/confirmationRowStatus'
-import { formatUpdatedAt } from '../../../../lib/orderDisplay'
 import type { VerificationItem } from '../../../../model/dashboard.model'
 import { OrderNumberLink } from '../shared/OrderNumberLink'
 import { ConfirmationRowActions } from './ConfirmationRowActions'
@@ -32,7 +31,6 @@ function ConfirmationsTableRow({
   handlers,
 }: RowProps) {
   const t = useTranslations('dashboard')
-  const { locale } = useLocaleInfo()
   const view = useConfirmationRowView(row)
 
   return (
@@ -81,18 +79,6 @@ function ConfirmationsTableRow({
 
       <IndexTable.Cell>
         <div className={cellClassName}>
-          <Text as="span" variant="bodySm" tone="subdued">
-            {formatUpdatedAt(
-              row.updated_at ?? row.created_at,
-              locale,
-              timeZone
-            )}
-          </Text>
-        </div>
-      </IndexTable.Cell>
-
-      <IndexTable.Cell>
-        <div className={cellClassName}>
           <ConfirmationRowActions
             row={row}
             orderLabel={view.orderLabel}
@@ -127,7 +113,6 @@ export function ConfirmationsTable({
     { title: t('confirmations.headings.status'), alignment },
     { title: t('table.headings.followUp'), alignment },
     { title: t('confirmations.headings.total'), alignment },
-    { title: t('confirmations.headings.updated'), alignment },
     { title: t('confirmations.headings.action'), alignment },
   ] as const
 

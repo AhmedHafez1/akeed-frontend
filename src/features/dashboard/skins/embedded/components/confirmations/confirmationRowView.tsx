@@ -6,6 +6,10 @@ import {
   type RowStatusTone,
 } from '../../../../domain/confirmationRowStatus'
 import {
+  formatTooltipDateTime,
+  getStatusTimestamp,
+} from '../../../../domain/verificationRow'
+import {
   customerDisplayName,
   formatClockTime,
   formatDayAndClock,
@@ -70,6 +74,11 @@ export function StatusCell({
   const t = useTranslations('dashboard.confirmations.status')
   const { locale } = useLocaleInfo()
   const view = resolveRowStatus(row, { showStoreCancellation: true })
+  const statusTitle = formatTooltipDateTime(
+    getStatusTimestamp(row),
+    locale,
+    timeZone
+  )
   const sub = view.sub
     ? t(view.sub, {
         time: view.subTime
@@ -80,7 +89,9 @@ export function StatusCell({
 
   return (
     <BlockStack gap="100" inlineAlign="start">
-      <Badge tone={BADGE_TONES[view.tone]}>{t(view.badge)}</Badge>
+      <span title={statusTitle || undefined}>
+        <Badge tone={BADGE_TONES[view.tone]}>{t(view.badge)}</Badge>
+      </span>
       {sub && (
         <Text
           as="span"

@@ -10,6 +10,7 @@ import {
   OrderCell,
   StatusCell,
 } from './confirmations/confirmationCells'
+import { ConfirmationsList } from './confirmations/ConfirmationsList'
 import { ConfirmationsToolbar } from './confirmations/ConfirmationsToolbar'
 import { MessageFlowCard } from './overview/MessageFlowCard'
 import { NeedsActionCard } from './overview/NeedsActionCard'
@@ -83,6 +84,25 @@ describe('OrderCell', () => {
 })
 
 describe('StatusCell', () => {
+  it('shows the current status timestamp on the badge', () => {
+    const row = {
+      status: 'confirmed',
+      confirmed_at: '2026-09-16T07:00:00Z',
+    } as VerificationItem
+    renderStandalone(<StatusCell row={row} timeZone="UTC" />, 'en')
+
+    expect(
+      screen.getByText('Confirmed').closest('[title]')?.getAttribute('title')
+    ).toBe('Sep 16, 2026, 7:00 AM')
+  })
+
+  it('does not show a tooltip when the status has no lifecycle timestamp', () => {
+    const row = { status: 'failed' } as VerificationItem
+    renderStandalone(<StatusCell row={row} timeZone="UTC" />, 'en')
+
+    expect(screen.getByText(/failed/i).closest('[title]')).toBeNull()
+  })
+
   it('names an escalated order "No reply", the same word as the Shopify table', () => {
     const row = {
       status: 'no_reply',
@@ -119,6 +139,57 @@ describe('StatusCell', () => {
       'en'
     )
     expect(screen.queryByText('Sent')).toBeNull()
+  })
+})
+
+describe('ConfirmationsList', () => {
+  it('omits the updated column and updated date from its card layout', () => {
+    renderStandalone(
+      <ConfirmationsList
+        rows={[
+          {
+            id: 'v-1',
+            status: 'confirmed',
+            reason: null,
+            order_id: 'o-1',
+            order_number: '1137',
+            is_test: false,
+            customer_name: 'Guest',
+            customer_phone: '+201148675077',
+            total_price: '49.95',
+            currency: 'USD',
+            last_sent_at: '2026-09-16T06:49:00Z',
+            delivered_at: null,
+            read_at: null,
+            confirmed_at: '2026-09-16T07:00:00Z',
+            canceled_at: null,
+            expired_at: null,
+            no_reply_at: null,
+            follow_up_attempts: 0,
+            created_at: '2026-09-16T06:49:00Z',
+            updated_at: '2026-09-16T06:49:00Z',
+            follow_up_sent_at: null,
+            optimistic: 'queued',
+          } as VerificationItem,
+        ]}
+        timeZone="UTC"
+        canWrite
+        canRetry
+        actingId={null}
+        handlers={{
+          onOpenDetails: vi.fn(),
+          onRequestConfirm: vi.fn(),
+          onRequestCancel: vi.fn(),
+          onRetry: vi.fn(),
+        }}
+      />,
+      'en'
+    )
+
+    expect(
+      screen.queryByRole('columnheader', { name: 'Last update' })
+    ).toBeNull()
+    expect(screen.queryByText(/Sep 16/)).toBeNull()
   })
 })
 

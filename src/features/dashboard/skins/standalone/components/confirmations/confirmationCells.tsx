@@ -4,6 +4,10 @@ import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
 import { resolveRowStatus } from '@/features/dashboard/domain/confirmationRowStatus'
+import {
+  formatTooltipDateTime,
+  getStatusTimestamp,
+} from '@/features/dashboard/domain/verificationRow'
 import type { ConfirmationRowActionHandlers } from '@/features/dashboard/domain/confirmationRowActions'
 import {
   customerDisplayName,
@@ -99,6 +103,11 @@ export function StatusCell({
   const t = useTranslations('dashboard.confirmations.status')
   const { locale } = useLocaleInfo()
   const view = resolveRowStatus(row)
+  const statusTitle = formatTooltipDateTime(
+    getStatusTimestamp(row),
+    locale,
+    timeZone
+  )
   const sub = view.sub
     ? t(view.sub, {
         time: view.subTime
@@ -109,7 +118,9 @@ export function StatusCell({
 
   return (
     <div className="flex min-w-0 flex-col items-start gap-1">
-      <StatusBadge kind={view.kind}>{t(view.badge)}</StatusBadge>
+      <StatusBadge kind={view.kind} title={statusTitle || undefined}>
+        {t(view.badge)}
+      </StatusBadge>
       {sub && (
         <span
           className={cn(

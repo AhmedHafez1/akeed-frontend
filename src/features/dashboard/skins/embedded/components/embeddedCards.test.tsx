@@ -354,6 +354,32 @@ describe('ConfirmationsTable', () => {
     },
   }
 
+  it('shows the status timestamp on the badge and omits the updated column', () => {
+    renderEmbedded(
+      <ConfirmationsTable rows={[listRow()]} {...tableProps} />,
+      'en'
+    )
+
+    expect(
+      screen.getByText('Confirmed').closest('[title]')?.getAttribute('title')
+    ).toContain('7:00 AM')
+    expect(
+      screen.queryByRole('columnheader', { name: 'Last update' })
+    ).toBeNull()
+  })
+
+  it('does not show a status tooltip when no lifecycle timestamp exists', () => {
+    renderEmbedded(
+      <ConfirmationsTable
+        rows={[listRow({ status: 'failed', confirmed_at: null })]}
+        {...tableProps}
+      />,
+      'en'
+    )
+
+    expect(screen.getByText(/failed/i).closest('[title]')).toBeNull()
+  })
+
   it('shows the phone as the name line and "بدون اسم" below when nameless', () => {
     renderEmbedded(<ConfirmationsTable rows={[listRow()]} {...tableProps} />)
     expect(screen.getByText('+20 114 867 5077')).toBeTruthy()
@@ -525,6 +551,35 @@ describe('ConfirmationsTable', () => {
 })
 
 describe('ConfirmationsCardList', () => {
+  it('omits the updated date from cards', () => {
+    renderEmbedded(
+      <ConfirmationsCardList
+        rows={[listRow()]}
+        timeZone="UTC"
+        canWrite
+        canRetry
+        actingId={null}
+        handlers={{
+          onRequestConfirm: vi.fn(),
+          onRequestCancel: vi.fn(),
+          onRetry: vi.fn(),
+        }}
+        pagination={{
+          label: '1 of 1',
+          hasNext: false,
+          hasPrevious: false,
+          onNext: vi.fn(),
+          onPrevious: vi.fn(),
+          previousLabel: 'Previous page',
+          nextLabel: 'Next page',
+        }}
+      />,
+      'en'
+    )
+
+    expect(screen.getByRole('listitem').textContent).not.toContain('6:49 AM')
+  })
+
   it('shows each order as a card with its status, total and actions', () => {
     renderEmbedded(
       <ConfirmationsCardList
