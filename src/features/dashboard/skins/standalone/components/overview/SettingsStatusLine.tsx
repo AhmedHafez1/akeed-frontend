@@ -6,12 +6,12 @@ import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
+import { akLink } from '@/shared/ui'
 import {
   describeDelay,
   formatQuietWindow,
 } from '@/features/dashboard/domain/settingsSummary'
 import type { DashboardOverview } from '@/features/dashboard/model/dashboard.model'
-import { akLink } from '../shared/akStyles'
 
 /**
  * One setting as a quiet pill: icon, what it is, and its state as a word —

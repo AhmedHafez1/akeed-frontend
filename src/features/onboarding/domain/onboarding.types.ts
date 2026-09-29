@@ -31,17 +31,20 @@ export type StandaloneSetupBlockedReason =
   | 'automation_invalid'
   | 'timezone_invalid'
 
-export type AutomationTimezone =
-  | 'Asia/Riyadh'
-  | 'Asia/Dubai'
-  | 'Asia/Qatar'
-  | 'Asia/Kuwait'
-  | 'Asia/Bahrain'
-  | 'Asia/Muscat'
-  | 'Asia/Amman'
-  | 'Africa/Cairo'
-  | 'Africa/Casablanca'
-  | 'UTC'
+export const AUTOMATION_TIMEZONES = [
+  'Asia/Riyadh',
+  'Asia/Dubai',
+  'Asia/Qatar',
+  'Asia/Kuwait',
+  'Asia/Bahrain',
+  'Asia/Muscat',
+  'Asia/Amman',
+  'Africa/Cairo',
+  'Africa/Casablanca',
+  'UTC',
+] as const
+
+export type AutomationTimezone = (typeof AUTOMATION_TIMEZONES)[number]
 
 export interface IntegrationOnboardingState {
   integrationId: string

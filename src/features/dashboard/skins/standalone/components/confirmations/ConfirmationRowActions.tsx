@@ -17,11 +17,11 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  akButton,
 } from '@/shared/ui'
 import { planConfirmationRowActions } from '@/features/dashboard/domain/confirmationRowActions'
 import { useConfirmationRowLink } from '@/features/dashboard/domain/useConfirmationRowLink'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
-import { akButton } from '../shared/akStyles'
 import type { ConfirmationsListProps } from './confirmationCells'
 
 /**

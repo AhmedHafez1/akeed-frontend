@@ -6,8 +6,8 @@ import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
+import { akButton } from '@/shared/ui'
 import type { DashboardOverview } from '@/features/dashboard/model/dashboard.model'
-import { akButton } from '../shared/akStyles'
 
 /**
  * Credit usage, shown only from 80%: amber while credits remain, red once

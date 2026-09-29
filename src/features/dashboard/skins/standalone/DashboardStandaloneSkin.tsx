@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/shared/lib/utils'
-import { Skeleton, notify } from '@/shared/ui'
+import { Skeleton, akButton, akCard, notify } from '@/shared/ui'
 import { useCancelVerificationMutation } from '../../api/verificationMutations'
 import { manualConfirmationsAfterSend } from '../../domain/overviewMetrics'
 import { useDashboardOverview } from '../../domain/useDashboardOverview'
@@ -23,7 +23,6 @@ import { SettingsStatusLine } from './components/overview/SettingsStatusLine'
 import { UsageBar } from './components/overview/UsageBar'
 import { CancelOrderDialog } from './components/confirmations/CancelOrderDialog'
 import { PageHeader } from './components/shared/PageHeader'
-import { akButton, akCard } from './components/shared/akStyles'
 
 export interface DashboardStandaloneSkinProps {
   period: DashboardStatsDateRange
@@ -145,7 +144,7 @@ export function DashboardStandaloneSkin({
   const title = t('overview.title')
 
   return (
-    <div className="mx-auto w-full max-w-[1180px] space-y-6 pt-2 pb-8">
+    <div className="mx-auto w-full max-w-295 space-y-6 pt-2 pb-8">
       <PageHeader
         title={title}
         subtitle={

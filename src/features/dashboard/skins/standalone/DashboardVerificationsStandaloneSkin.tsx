@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { creditFeedbackKey } from '@/shared/lib/creditFeedback'
 import { cn } from '@/shared/lib/utils'
-import { notify } from '@/shared/ui'
+import { akButton, akCard, notify } from '@/shared/ui'
 import { useConfirmationsList } from '../../domain/useConfirmationsList'
 import { useManualConfirmation } from '../../domain/useManualConfirmation'
 import { useTestVerificationSend } from '../../domain/useTestVerificationSend'
@@ -26,7 +26,6 @@ import { ConfirmationsPager } from './components/confirmations/ConfirmationsPage
 import { ConfirmationsToolbar } from './components/confirmations/ConfirmationsToolbar'
 import { VerificationDetailsSheet } from './components/confirmations/VerificationDetailsSheet'
 import { PageHeader } from './components/shared/PageHeader'
-import { akButton, akCard } from './components/shared/akStyles'
 
 export interface DashboardVerificationsStandaloneSkinProps {
   period: DashboardStatsDateRange

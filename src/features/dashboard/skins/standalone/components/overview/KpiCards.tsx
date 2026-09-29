@@ -6,13 +6,13 @@ import { Activity, CircleCheck, Package, type LucideIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
+import { akCard } from '@/shared/ui'
 import {
   formatCount,
   formatOrderAmount,
   formatPercent,
 } from '@/features/dashboard/lib/orderDisplay'
 import type { DashboardOverview } from '@/features/dashboard/model/dashboard.model'
-import { akCard } from '../shared/akStyles'
 
 /**
  * One number and one short detail under a small label. With `href` the whole

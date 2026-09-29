@@ -15,6 +15,7 @@ export * from './table'
 export * from './notifications'
 
 // Custom components
+export * from './ak-styles'
 export * from './loading-button'
 export * from './phone-input'
 export * from './international-phone-input'

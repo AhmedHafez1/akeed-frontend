@@ -2497,6 +2497,21 @@
       "noTimingRules": "No timing rules enabled",
       "automationOff": "Off — no messages are sent automatically"
     },
+    "test": {
+      "timeline": {
+        "sending": "Sending the message…",
+        "sent": "Message sent",
+        "awaitingDelivery": "Open WhatsApp on your phone",
+        "delivered": "Arrived on your phone",
+        "tapConfirm": "Tap \"Confirm order\"",
+        "confirmed": "You confirmed the order",
+        "canceledNote": "You tapped \"Cancel order\", which is what a customer cancellation looks like. Tap \"Confirm order\" to finish, or resend.",
+        "autoDetect": "We'll detect your reply automatically"
+      }
+    },
+    "defaultsWell": {
+      "change": "Change"
+    },
     "actions": {
       "saveAndContinue": "Save and continue",
       "continue": "Continue",
