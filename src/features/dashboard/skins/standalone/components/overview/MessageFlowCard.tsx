@@ -4,13 +4,13 @@ import { Clock } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
+import { akCard } from '@/shared/ui'
 import {
   formatCount,
   formatPercent,
 } from '@/features/dashboard/lib/orderDisplay'
 import type { DashboardOverview } from '@/features/dashboard/model/dashboard.model'
-import { StatusBadge } from '../shared/StatusBadge'
-import { akCard } from '../shared/akStyles'
+import { StatusBadge } from '@/shared/ui/status-badge'
 
 type Funnel = DashboardOverview['funnel']
 

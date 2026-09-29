@@ -6,6 +6,7 @@ import type {
   CompleteOnboardingSetupPayload,
   OnboardingClientEvent,
   OnboardingTestState,
+  OnboardingTestTemplatePreview,
   OnboardingBillingPlanConfig,
   OnboardingBillingPlanId,
   OnboardingBillingPlansResponse,
@@ -136,6 +137,33 @@ export async function skipOnboardingTest(): Promise<OnboardingTestState> {
   }
 
   return parseJsonResponse<OnboardingTestState>(response)
+}
+
+export interface OnboardingTemplatePreviews {
+  ar: OnboardingTestTemplatePreview
+  en: OnboardingTestTemplatePreview
+}
+
+/**
+ * The merchant's selected confirmation template in both languages, so the
+ * setup preview can follow the language the merchant is choosing before
+ * anything is saved. Read from the settings endpoint, which serves pending
+ * sources too.
+ */
+export async function fetchTemplatePreviews(): Promise<OnboardingTemplatePreviews> {
+  const response = await fetchWithAuth('/api/settings', {
+    method: 'GET',
+    cache: 'no-store',
+  })
+
+  if (!response.ok) {
+    throw await getOnboardingApiError(response)
+  }
+
+  const body = await parseJsonResponse<{
+    template: { previews: OnboardingTemplatePreviews }
+  }>(response)
+  return body.template.previews
 }
 
 /**

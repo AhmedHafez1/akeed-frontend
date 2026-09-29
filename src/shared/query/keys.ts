@@ -45,6 +45,9 @@ export const queryKeys = {
     all: ['onboarding'] as const,
     state: () => [...queryKeys.onboarding.all, 'state'] as const,
     test: () => [...queryKeys.onboarding.all, 'test'] as const,
+    /** Both languages' confirmation templates, for the setup preview. */
+    templatePreviews: () =>
+      [...queryKeys.onboarding.all, 'template-previews'] as const,
   },
   orders: {
     /**

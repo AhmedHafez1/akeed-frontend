@@ -1,32 +1,26 @@
 import { Skeleton } from '@/shared/ui'
 
 /**
- * AuthGuard fallback for the focused onboarding shell — a slim bar plus the
- * rail/card grid, so nothing shifts when the guard resolves.
+ * AuthGuard fallback for the focused onboarding shell: the bar with its
+ * centred stepper, then the setup card and phone preview, so nothing shifts
+ * when the guard resolves.
  */
 export function StandaloneOnboardingShellSkeleton() {
   return (
     <div aria-busy="true" className="akeed-app-canvas min-h-screen">
-      <div className="border-border bg-card flex h-14 items-center justify-between border-b px-4 sm:px-6">
+      <div className="border-border bg-card grid min-h-16 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border-b px-4 sm:px-6">
         <Skeleton className="h-9 w-24" />
+        <div className="flex justify-start sm:justify-center">
+          <Skeleton className="h-5 w-32 sm:h-8 sm:w-96" />
+        </div>
         <div className="flex items-center gap-2">
-          <Skeleton className="h-9 w-16 rounded-lg" />
-          <Skeleton className="h-9 w-20 rounded-lg" />
+          <Skeleton className="size-11 rounded-lg sm:h-9 sm:w-20" />
+          <Skeleton className="hidden h-9 w-20 rounded-lg sm:block" />
         </div>
       </div>
-      <div className="mx-auto w-full max-w-[1120px] space-y-6 px-4 py-6 sm:px-6 sm:py-10">
-        <div className="space-y-3">
-          <Skeleton className="h-3 w-28" />
-          <Skeleton className="h-9 w-80 max-w-full" />
-          <Skeleton className="h-4 w-[28rem] max-w-full" />
-        </div>
-        <div className="grid gap-6 md:grid-cols-[220px_minmax(0,1fr)] lg:grid-cols-[280px_minmax(0,740px)]">
-          <Skeleton className="hidden h-72 rounded-xl md:block" />
-          <div className="space-y-4">
-            <Skeleton className="h-24 rounded-xl md:hidden" />
-            <Skeleton className="h-[30rem] rounded-xl" />
-          </div>
-        </div>
+      <div className="mx-auto grid w-full max-w-[1120px] items-start gap-8 px-4 py-6 sm:px-6 sm:py-12 lg:grid-cols-[minmax(0,1fr)_300px] xl:gap-16">
+        <Skeleton className="h-[36rem] rounded-xl" />
+        <Skeleton className="hidden h-[36rem] rounded-[2.75rem] lg:block" />
       </div>
     </div>
   )

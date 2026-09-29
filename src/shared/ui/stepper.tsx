@@ -1,147 +1,86 @@
-'use client'
-
 import type { ReactNode } from 'react'
 import { Check } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
 
-export interface StepDefinition<Id extends string | number> {
-  id: Id
-  /** Shown in the step circle while the step is not completed. */
-  marker: ReactNode
+export type StepperStepState = 'done' | 'current' | 'upcoming'
+
+export interface StepperStep {
+  id: string
   title: ReactNode
-  description?: ReactNode
+  state: StepperStepState
 }
 
-interface StepRailProps<Id extends string | number> {
-  steps: readonly StepDefinition<Id>[]
-  currentStep: Id
-  completedSteps: ReadonlySet<Id>
-  /** Accessible name of the rail; the vertical rail also shows it as a heading. */
+interface StepperProps {
+  steps: readonly StepperStep[]
+  /** Accessible name of the list, e.g. "Setup progress". */
   label: string
   /** Screen-reader text after a completed step's title. */
   completedLabel: string
-  canGoToStep?: (step: Id) => boolean
-  onSelectStep?: (step: Id) => void
-  footer?: ReactNode
-  orientation?: 'vertical' | 'horizontal'
   className?: string
 }
 
-const circleClasses = (isCompleted: boolean, isCurrent: boolean) =>
-  cn(
-    'relative z-10 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-sm font-semibold tabular-nums',
-    isCompleted || isCurrent
-      ? 'bg-primary text-primary-foreground border-primary'
-      : 'border-border bg-card text-muted-foreground'
-  )
-
 /**
- * Step rail shown from the tablet breakpoint up. Vertical is the onboarding
- * side rail; horizontal is a top rail. Steps render in DOM order, so the
- * first step sits on the inline start edge in both directions.
+ * The design-system progress stepper: numbered discs joined by a connector,
+ * a check once a step is done and a soft halo on the current one. It only
+ * reports progress; steps are never clickable. Steps render in DOM order, so
+ * the first step sits on the inline start edge in both directions.
  */
-export function StepRail<Id extends string | number>({
+export function Stepper({
   steps,
-  currentStep,
-  completedSteps,
   label,
   completedLabel,
-  canGoToStep = () => false,
-  onSelectStep,
-  footer,
-  orientation = 'vertical',
   className,
-}: StepRailProps<Id>) {
-  const horizontal = orientation === 'horizontal'
-
+}: StepperProps) {
   return (
-    <nav
-      aria-label={label}
-      className={cn(
-        'rounded-card border-border bg-card hidden border text-start md:block',
-        horizontal ? 'px-5 py-4' : 'p-5',
-        className
-      )}
-    >
-      {!horizontal && (
-        <h2 className="text-foreground text-sm font-semibold">{label}</h2>
-      )}
-      <ol
-        className={cn(
-          horizontal ? 'flex items-center gap-3' : 'mt-5 space-y-6'
-        )}
-      >
-        {steps.map((definition, index) => {
-          const isCompleted = completedSteps.has(definition.id)
-          const isCurrent = definition.id === currentStep
-          const isSelectable = canGoToStep(definition.id) && !isCurrent
+    <nav aria-label={label} className={className}>
+      <ol className="flex items-center gap-3">
+        {steps.map((step, index) => {
           const isLast = index === steps.length - 1
-
           return (
             <li
-              key={definition.id}
-              className={cn(
-                'relative',
-                horizontal && 'flex min-w-0 flex-1 items-center gap-3'
-              )}
+              key={step.id}
+              aria-current={step.state === 'current' ? 'step' : undefined}
+              className="flex items-center gap-3"
             >
-              {!isLast && !horizontal && (
+              <span className="flex items-center gap-2">
                 <span
                   aria-hidden="true"
                   className={cn(
-                    'absolute start-5.75 top-11 bottom-2 h-10 w-0.5 rounded-full',
-                    isCompleted ? 'bg-primary' : 'bg-input'
+                    'inline-flex size-7 shrink-0 items-center justify-center rounded-full text-sm font-semibold tabular-nums',
+                    step.state === 'upcoming'
+                      ? 'border-line-strong text-ink-muted border-2'
+                      : 'bg-primary text-primary-foreground',
+                    step.state === 'current' && 'ring-brand-soft ring-4'
                   )}
-                />
-              )}
-              <button
-                type="button"
-                disabled={!isSelectable}
-                aria-current={isCurrent ? 'step' : undefined}
-                onClick={() => onSelectStep?.(definition.id)}
-                className={cn(
-                  'focus-visible:ring-ring flex items-start gap-3 rounded-lg p-2 text-start transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
-                  horizontal ? 'min-w-0 shrink-0 items-center' : 'w-full',
-                  isSelectable
-                    ? 'hover:bg-muted/50 cursor-pointer'
-                    : 'cursor-default'
-                )}
-              >
-                <span
-                  aria-hidden="true"
-                  className={circleClasses(isCompleted, isCurrent)}
                 >
-                  {isCompleted && !isCurrent ? (
-                    <Check className="h-4 w-4" />
+                  {step.state === 'done' ? (
+                    <Check className="size-4" strokeWidth={3} />
                   ) : (
-                    definition.marker
+                    index + 1
                   )}
                 </span>
-                <span className={cn('min-w-0', !horizontal && 'pt-0.5')}>
-                  <span
-                    className={cn(
-                      'block text-sm font-semibold',
-                      isCurrent ? 'text-primary' : 'text-foreground'
-                    )}
-                  >
-                    {definition.title}
-                  </span>
-                  {definition.description && (
-                    <span className="text-muted-foreground mt-0.5 block text-xs">
-                      {definition.description}
-                    </span>
+                <span
+                  className={cn(
+                    'text-sm whitespace-nowrap',
+                    step.state === 'current'
+                      ? 'text-brand-ink font-semibold'
+                      : step.state === 'done'
+                        ? 'text-ink font-medium'
+                        : 'text-ink-muted'
                   )}
-                  {isCompleted && !isCurrent && (
-                    <span className="sr-only">{completedLabel}</span>
+                >
+                  {step.title}
+                  {step.state === 'done' && (
+                    <span className="sr-only"> ({completedLabel})</span>
                   )}
                 </span>
-              </button>
-              {!isLast && horizontal && (
+              </span>
+              {!isLast && (
                 <span
                   aria-hidden="true"
                   className={cn(
-                    'h-0.5 min-w-6 flex-1 rounded-full',
-                    isCompleted ? 'bg-primary' : 'bg-input'
+                    'h-0.5 w-8 rounded-full',
+                    step.state === 'done' ? 'bg-primary' : 'bg-line-strong'
                   )}
                 />
               )}
@@ -149,61 +88,44 @@ export function StepRail<Id extends string | number>({
           )
         })}
       </ol>
-      {footer}
     </nav>
   )
 }
 
-interface StepProgressProps<Id extends string | number> {
-  steps: readonly StepDefinition<Id>[]
-  currentStep: Id
-  completedSteps: ReadonlySet<Id>
-  label: string
-  /** "Step 2 of 3", already localized. */
+interface StepperCompactProps {
+  /** "3 of 3 · Try the message", already localized. */
   progressLabel: string
+  /** 0–1, the share of the bar that is filled. */
+  progress: number
   className?: string
 }
 
-/** Compact indicator used below the tablet breakpoint in place of the rail. */
-export function StepProgress<Id extends string | number>({
-  steps,
-  currentStep,
-  completedSteps,
-  label,
+/**
+ * The phone-width form of the stepper: one line of text plus a 3px bar,
+ * used where the full stepper would not fit.
+ */
+export function StepperCompact({
   progressLabel,
+  progress,
   className,
-}: StepProgressProps<Id>) {
-  const definition = steps.find((step) => step.id === currentStep)
-
+}: StepperCompactProps) {
+  const percent = Math.round(Math.min(1, Math.max(0, progress)) * 100)
   return (
-    <div
-      aria-label={label}
-      className={cn(
-        'rounded-card border-border bg-card border p-4 text-start md:hidden',
-        className
-      )}
-    >
-      <p className="text-muted-foreground text-xs font-medium tabular-nums">
-        {progressLabel}
-      </p>
-      <p className="text-foreground mt-1 text-sm font-semibold">
-        {definition?.title ?? null}
-      </p>
-      <div aria-hidden="true" className="mt-3 flex gap-1.5">
-        {steps.map((step) => (
-          <span
-            key={step.id}
-            className={cn(
-              'h-1.5 flex-1 rounded-full',
-              step.id === currentStep
-                ? 'bg-primary'
-                : completedSteps.has(step.id)
-                  ? 'bg-primary-border'
-                  : 'bg-border'
-            )}
-          />
-        ))}
-      </div>
-    </div>
+    <p className={cn('text-ink-muted text-sm tabular-nums', className)}>
+      {progressLabel}
+      <span
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={percent}
+        aria-label={progressLabel}
+        className="bg-line absolute inset-x-0 bottom-0 block h-[3px]"
+      >
+        <span
+          className="bg-primary block h-full transition-[width] duration-300"
+          style={{ width: `${percent}%` }}
+        />
+      </span>
+    </p>
   )
 }

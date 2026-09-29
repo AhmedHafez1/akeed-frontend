@@ -1,13 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/shared/lib/utils'
-import { Skeleton, notify } from '@/shared/ui'
+import { Skeleton, akButton, akCard, notify } from '@/shared/ui'
 import { useCancelVerificationMutation } from '../../api/verificationMutations'
 import { manualConfirmationsAfterSend } from '../../domain/overviewMetrics'
 import { useDashboardOverview } from '../../domain/useDashboardOverview'
 import { useManualConfirmation } from '../../domain/useManualConfirmation'
+import { useStandaloneFirstRun } from '../../domain/useStandaloneFirstRun'
 import type { ManualConfirmationTarget } from '../../domain/useManualConfirmation'
 import type { DateRangeFilterOption } from '../../domain/dashboard.types'
 import type {
@@ -15,7 +16,7 @@ import type {
   DashboardStatsDateRange,
 } from '../../model/dashboard.model'
 import { ManualConfirmDialog } from './components/ManualConfirmDialog'
-import { WelcomeCreditsModal } from './components/WelcomeCreditsModal'
+import { FirstRunOverview } from './components/firstRun/FirstRunOverview'
 import { KpiCards } from './components/overview/KpiCards'
 import { MessageFlowCard } from './components/overview/MessageFlowCard'
 import { NeedsActionCard } from './components/overview/NeedsActionCard'
@@ -23,7 +24,6 @@ import { SettingsStatusLine } from './components/overview/SettingsStatusLine'
 import { UsageBar } from './components/overview/UsageBar'
 import { CancelOrderDialog } from './components/confirmations/CancelOrderDialog'
 import { PageHeader } from './components/shared/PageHeader'
-import { akButton, akCard } from './components/shared/akStyles'
 
 export interface DashboardStandaloneSkinProps {
   period: DashboardStatsDateRange
@@ -31,6 +31,13 @@ export interface DashboardStandaloneSkinProps {
   onPeriodChange: (period: DashboardStatsDateRange) => void
   /** The confirmations list for a tab, in the same period. */
   confirmationsHref: (tab: ConfirmationsTab) => string
+  /** The merchant's first name for the first-run greeting. */
+  firstName?: string | null
+  /**
+   * "Send it to my phone" (the free onboarding test), supplied by the page:
+   * it belongs to the onboarding feature, which this one does not import.
+   */
+  phoneTestAction?: ReactNode
 }
 
 function OverviewSkeleton() {
@@ -64,42 +71,25 @@ function OverviewSkeleton() {
 /**
  * The standalone dashboard: settings, usage, three KPIs, the orders waiting
  * on the merchant, and the message funnel — the same story, in the same
- * order, as the embedded dashboard.
+ * order, as the embedded dashboard. Before the first real order it is the
+ * first-run overview instead: one card to add that order, no zeros.
  */
 export function DashboardStandaloneSkin({
   period,
   periodOptions,
   onPeriodChange,
   confirmationsHref,
+  firstName,
+  phoneTestAction,
 }: DashboardStandaloneSkinProps) {
   const t = useTranslations('dashboard')
   const { overview, isLoading, isError, retry } = useDashboardOverview(period)
+  const firstRun = useStandaloneFirstRun()
   const confirmation = useManualConfirmation()
   const { feedback, dismissFeedback } = confirmation
   const cancelMutation = useCancelVerificationMutation()
   const [cancelTarget, setCancelTarget] =
     useState<ManualConfirmationTarget | null>(null)
-  const [showWelcomeModal, setShowWelcomeModal] = useState(false)
-
-  // Deliberately deferred to an effect (rather than a lazy useState
-  // initializer) so the first client render matches the server-rendered
-  // markup and hydration never sees a dialog that's already open.
-  useEffect(() => {
-    try {
-      const justCompleted = window.sessionStorage.getItem(
-        'akeed:onboarding-just-completed'
-      )
-      if (justCompleted) {
-        window.sessionStorage.removeItem('akeed:onboarding-just-completed')
-        // One-shot consumption of a flag set just before the redirect into
-        // this page; there's no prop/state to derive this from during render.
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setShowWelcomeModal(true)
-      }
-    } catch {
-      // Storage unavailable — modal just doesn't show.
-    }
-  }, [])
 
   useEffect(() => {
     if (!feedback) return
@@ -144,8 +134,25 @@ export function DashboardStandaloneSkin({
 
   const title = t('overview.title')
 
+  if (firstRun.status === 'first-run') {
+    return (
+      <div className="mx-auto w-full max-w-295 pt-2 pb-8">
+        <FirstRunOverview
+          firstName={firstName}
+          settings={overview?.settings ?? null}
+          showSkippedTestReminder={firstRun.showSkippedTestReminder}
+          phoneTestAction={
+            overview?.permissions?.can_confirm_orders === false
+              ? undefined
+              : phoneTestAction
+          }
+        />
+      </div>
+    )
+  }
+
   return (
-    <div className="mx-auto w-full max-w-[1180px] space-y-6 pt-2 pb-8">
+    <div className="mx-auto w-full max-w-295 space-y-6 pt-2 pb-8">
       <PageHeader
         title={title}
         subtitle={
@@ -159,7 +166,7 @@ export function DashboardStandaloneSkin({
         onPeriodChange={onPeriodChange}
       />
 
-      {isLoading ? (
+      {isLoading || firstRun.status === 'loading' ? (
         <OverviewSkeleton />
       ) : isError || !overview ? (
         <div
@@ -216,10 +223,6 @@ export function DashboardStandaloneSkin({
         isCanceling={cancelMutation.isPending}
         onConfirm={() => void handleCancel()}
         onDismiss={() => setCancelTarget(null)}
-      />
-      <WelcomeCreditsModal
-        open={showWelcomeModal}
-        onOpenChange={setShowWelcomeModal}
       />
     </div>
   )

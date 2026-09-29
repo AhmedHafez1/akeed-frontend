@@ -505,6 +505,13 @@ export async function ensureStandaloneOrganization(
 }
 
 /**
+ * Where the signup confirmation link sends the merchant: straight into setup.
+ */
+export function getEmailRedirectUrl(locale: string, origin: string): string {
+  return new URL(withLocale('/onboarding', locale), origin).toString()
+}
+
+/**
  * Auth helpers for standalone mode
  */
 export const auth = {
@@ -530,6 +537,13 @@ export const auth = {
    */
   getDashboardPath(locale?: string) {
     return withLocale('/dashboard', locale)
+  },
+
+  /**
+   * Get localized onboarding path, where email-confirmation links land
+   */
+  getOnboardingPath(locale?: string) {
+    return withLocale('/onboarding', locale)
   },
 
   /**
@@ -588,6 +602,23 @@ export const auth = {
       throw error
     }
     return data
+  },
+
+  /**
+   * Send the signup confirmation email again
+   */
+  async resendSignupEmail(email: string, emailRedirectTo: string) {
+    const supabase = getSupabaseClient()
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email,
+      options: { emailRedirectTo },
+    })
+
+    if (error) {
+      logger.error('Resend signup email failed', error)
+      throw error
+    }
   },
 
   /**

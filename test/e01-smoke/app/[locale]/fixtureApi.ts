@@ -8,7 +8,10 @@ import type { CancelOrderResponse } from '@/shared/types/commerce-outcome.model'
 import { ApiError } from '@/shared/lib/http'
 import { billingFixtureRequest } from './billingFixture'
 import { adminBillingFixtureRequest } from './adminBillingFixture'
-import { onboardingFixtureRequest } from './onboardingFixture'
+import {
+  isOnboardingFixture,
+  onboardingFixtureRequest,
+} from './onboardingFixture'
 import { manualOrderFixtureRequest } from './manual-order/manualOrderFixture'
 import {
   isOrderSyncFixture,
@@ -29,8 +32,21 @@ import {
   embeddedDashboardRequest,
   isEmbeddedDashboardFixture,
 } from './embedded-dashboard/embeddedDashboardFixture'
+import {
+  firstRunApiGet,
+  firstRunFetch,
+  isFirstRunFixture,
+} from './first-run/firstRunFixture'
 
 export function fetchWithAuth(url: string, options: RequestInit = {}) {
+  if (isFirstRunFixture()) return firstRunFetch(url, options)
+  if (url.startsWith('/api/onboarding/'))
+    return onboardingFixtureRequest(url, options)
+  if (
+    isOnboardingFixture() &&
+    (url === '/api/settings' || url === '/api/billing/credits')
+  )
+    return onboardingFixtureRequest(url, options)
   if (url.startsWith('/api/order-imports'))
     return orderImportFixtureRequest(url, options)
   if (
@@ -42,15 +58,24 @@ export function fetchWithAuth(url: string, options: RequestInit = {}) {
       .then((summary) => Response.json(orderImportCreditSummary(summary)))
   if (isOrderSyncFixture() && url === '/api/billing/credits')
     return orderSyncCreditsResponse()
-  return [
-    '/api/onboarding/state',
-    '/api/onboarding/settings',
-    '/api/onboarding/complete',
-  ].includes(url)
-    ? onboardingFixtureRequest(url, options)
-    : url.startsWith('/api/admin/')
-      ? adminBillingFixtureRequest(url, options)
-      : billingFixtureRequest(url, options)
+  return url.startsWith('/api/admin/')
+    ? adminBillingFixtureRequest(url, options)
+    : billingFixtureRequest(url, options)
+}
+
+/**
+ * The onboarding shell's sign-out, inert here: the fixture has no session.
+ * It only returns to the fixture index.
+ */
+export const auth = {
+  signOut: async () => undefined,
+  getLoginPath: (locale: string) => `/${locale}`,
+  getDashboardPath: (locale: string) => `/${locale}/dashboard`,
+  // The standalone shell's identity, for the first-run greeting and sidebar.
+  getCurrentUser: async () => ({
+    email: 'ahmed@noorstore.com',
+    user_metadata: { full_name: 'أحمد حافظ', company_name: 'متجر نور' },
+  }),
 }
 
 type FixtureResult = 'failure' | 'role_denied' | 'success'
@@ -266,6 +291,7 @@ export function uploadWithAuth(
 
 export const api = {
   async get<T>(url: string): Promise<T> {
+    if (isFirstRunFixture()) return firstRunApiGet<T>(url)
     if (isEmbeddedDashboardFixture())
       return embeddedDashboardRequest<T>('GET', url)
     if (isOrderSyncFixture()) return orderSyncRequest<T>('GET', url)

@@ -14,7 +14,7 @@ import { ConfirmationsList } from './confirmations/ConfirmationsList'
 import { ConfirmationsToolbar } from './confirmations/ConfirmationsToolbar'
 import { MessageFlowCard } from './overview/MessageFlowCard'
 import { NeedsActionCard } from './overview/NeedsActionCard'
-import { StatusBadge } from './shared/StatusBadge'
+import { StatusBadge } from '@/shared/ui/status-badge'
 import { renderStandalone } from './shared/standaloneTestUtils'
 
 const counts: Record<ConfirmationsTab, number> = {

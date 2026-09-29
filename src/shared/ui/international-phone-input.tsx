@@ -43,6 +43,15 @@ export interface InternationalPhoneInputProps {
   'aria-describedby'?: string
   'aria-invalid'?: boolean
   onBlur?: React.FocusEventHandler<HTMLInputElement>
+  /** Called when the merchant picks another country in the dropdown. */
+  onCountryChange?: (country: Country | undefined) => void
+  /**
+   * Flag an invalid number while it is being typed. Forms that validate on
+   * submit turn this off and drive the state through `aria-invalid`.
+   */
+  validateWhileTyping?: boolean
+  /** Border colour of the invalid state; forms asking for a fix use warning. */
+  errorTone?: 'destructive' | 'warning'
 }
 
 /**
@@ -71,6 +80,9 @@ export const InternationalPhoneInput = React.forwardRef<
     'aria-describedby': ariaDescribedBy,
     'aria-invalid': ariaInvalid,
     onBlur,
+    onCountryChange,
+    validateWhileTyping = true,
+    errorTone = 'destructive',
   },
   ref
 ) {
@@ -78,7 +90,8 @@ export const InternationalPhoneInput = React.forwardRef<
   const inputId = id ?? generatedId
   const containerRef = React.useRef<HTMLDivElement>(null)
   const isValid = value ? isValidPhoneNumber(value) : null
-  const hasError = ariaInvalid === true || isValid === false
+  const hasError =
+    ariaInvalid === true || (validateWhileTyping && isValid === false)
 
   React.useImperativeHandle(ref, () => {
     const input = containerRef.current?.querySelector('input')
@@ -105,7 +118,11 @@ export const InternationalPhoneInput = React.forwardRef<
           'intl-phone border-input bg-background relative flex h-12 w-full items-center rounded-lg border-2 px-3 transition-colors',
           'focus-within:border-ring focus-within:bg-muted',
           hasError &&
+            errorTone === 'destructive' &&
             'border-destructive focus-within:border-destructive focus-within:ring-destructive focus-within:ring-1',
+          hasError &&
+            errorTone === 'warning' &&
+            'border-ak-warning ring-ak-warning-soft focus-within:border-ak-warning ring-4',
           disabled && 'cursor-not-allowed opacity-50'
         )}
       >
@@ -124,6 +141,7 @@ export const InternationalPhoneInput = React.forwardRef<
           placeholder={placeholder}
           disabled={disabled}
           onBlur={onBlur}
+          onCountryChange={onCountryChange}
         />
       </div>
     </div>

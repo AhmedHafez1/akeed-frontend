@@ -20,6 +20,9 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  akButton,
+  akCard,
+  akLink,
 } from '@/shared/ui'
 import { canCancelNeedsActionItem } from '@/features/dashboard/domain/cancellation'
 import { deliveryFailureKey } from '@/features/dashboard/domain/deliveryFailure'
@@ -39,8 +42,7 @@ import type {
   DashboardOverview,
   NeedsActionItem,
 } from '@/features/dashboard/model/dashboard.model'
-import { StatusBadge } from '../shared/StatusBadge'
-import { akButton, akCard, akLink } from '../shared/akStyles'
+import { StatusBadge } from '@/shared/ui/status-badge'
 
 /** What a row's badge and the line under it say, from the server's reason. */
 function useReasonView(item: NeedsActionItem, timeZone: string) {

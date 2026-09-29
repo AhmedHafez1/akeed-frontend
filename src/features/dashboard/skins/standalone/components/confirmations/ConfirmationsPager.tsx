@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { akButton } from '../shared/akStyles'
+import { akButton } from '@/shared/ui'
 
 /**
  * "Showing 1–10 of 38 orders" with previous/next. The API pages by cursor,

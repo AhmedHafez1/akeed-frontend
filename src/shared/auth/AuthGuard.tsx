@@ -14,6 +14,7 @@ import {
   isPublicRoute,
   getLocaleFromPathname,
 } from '@/shared/lib/locale'
+import { getLoginRedirectPath } from '@/shared/lib/authErrors'
 import { createLogger } from '@/shared/lib/logger'
 import { FullPageLoader } from '@/shared/layout/FullPageLoader'
 import { fetchOnboardingState } from '@/features/onboarding'
@@ -63,7 +64,7 @@ export function AuthGuard({
         if (!session) {
           activeUserIdRef.current = null
           clearStandaloneOrganizationBootstrap()
-          router.replace(auth.getLoginPath(locale))
+          router.replace(getLoginRedirectPath(locale, window.location))
           return
         }
 
@@ -112,7 +113,7 @@ export function AuthGuard({
       if (!session && !isPublic) {
         activeUserIdRef.current = null
         clearStandaloneOrganizationBootstrap()
-        router.replace(auth.getLoginPath(locale))
+        router.replace(getLoginRedirectPath(locale, window.location))
         return
       }
 

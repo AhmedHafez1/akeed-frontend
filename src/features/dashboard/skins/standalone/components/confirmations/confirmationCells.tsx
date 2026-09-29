@@ -18,7 +18,7 @@ import {
   formatPhoneInternational,
 } from '@/features/dashboard/lib/orderDisplay'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
-import { StatusBadge } from '../shared/StatusBadge'
+import { StatusBadge } from '@/shared/ui/status-badge'
 
 /** What the table and the card list both take. */
 export interface ConfirmationsListProps {

@@ -105,9 +105,15 @@ The fixture does not simulate onboarding activation or staff provisioning. Its t
 
 Open `http://127.0.0.1:3098/en/pilots` and `/ar/pilots`. This route imports the real Standalone pilot page and intercepts every admin API request. Select the first two eligible accounts, preview them, enter a non-secret synthetic reason, and apply. The first result deliberately activates one row and fails one; retry must report the first row as previously completed and activate the second. Verify translated labels, native keyboard controls, disabled in-flight actions, report downloads, and Arabic `lang=ar`, `dir=rtl`. No authentication, database write, merchant activation, or provider call occurs.
 
-## US-03-03 Standalone onboarding fixture
+## Standalone onboarding v2 fixture
 
-Open `http://127.0.0.1:3098/en/onboarding?role=owner` and `/ar/onboarding?role=owner`. Enter a merchant name, save progress, reload, and complete setup; the fixture redirects to its synthetic dashboard. Use `role=admin` for the same write path, `role=viewer` to verify every configuration action is read-only, `entitlement=blocked` to verify progress persists while completion reports pilot activation, and `backend=unavailable` to verify the localized retry state. Inspect the call counter before and after actions. The fixture uses the real Standalone onboarding hook and skin but synthetic in-memory state; it performs no authentication, database write, provider call, Meta connection, or message send.
+Open `http://127.0.0.1:3098/ar/onboarding` or `/en/onboarding`. The page renders the real `StandaloneOnboardingShell` (stepper, language, help, sign out) around the real `StandaloneOnboardingPage`, over an in-memory backend in `onboardingFixture.ts`: onboarding state, settings, the free test (`GET/POST /api/onboarding/test`, `/test/skip`), `/complete`, the credit summary and the template previews. The store name starts as «متجر نور», as the backend prefills it from signup.
+
+Walk store → test → done: enter a WhatsApp number and submit. The fixture records the settings write, "sends" the test (it moves to delivered about two seconds later) and the page moves to `?step=test`. Use **Simulate tap Confirm** to stand in for the merchant's tap; the page calls `/complete` and renders `?step=done` in place. Browser Back from the test returns to the form with its values; **Change number** does the same without sending.
+
+Scenarios, as query parameters: `backend=unavailable` (Akeed's WhatsApp is down: `POST /test` answers 502 `TEST_VERIFICATION_PROVIDER_FAILED`; **Continue to dashboard** completes and leaves), `backend=down` (every call fails: the load-error screen), `role=viewer` (read-only notice, no actions, writes answer 403), `entitlement=blocked` (`/complete` answers 409 with blockers), `account=suspended`, `phone=saved` (resume on the test step without sending), `slow=state` (the loading state). Inspect the call counter before and after actions. Set `NEXT_PUBLIC_AKEED_WHATSAPP_NUMBER` when starting the fixture to see the phone-only **Open WhatsApp** button.
+
+`onboarding-v2-check.mjs` drives all of this in Chromium for both locales at 1280 and 390 px and writes screenshots to `test/screenshots/standalone-onboarding-v2/`: start the fixture, then run `node test/e01-smoke/onboarding-v2-check.mjs` from the frontend root. The fixture performs no authentication, database write, provider call or message send.
 
 ## US-03-05 role and stale-page fixture
 
