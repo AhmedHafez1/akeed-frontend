@@ -147,7 +147,9 @@ export function useOnboardingTest({
     }
     if (hasAutoSentRef.current || !autoSend) return
     hasAutoSentRef.current = true
-    if (data.testConfirmedAt) return
+    // testConfirmedAt comes from the Shopify install lifecycle and is always
+    // null for standalone, so a confirmed latest test counts too.
+    if (data.testConfirmedAt || data.test?.status === 'confirmed') return
     const sentAt = data.test?.sentAt ? new Date(data.test.sentAt).getTime() : 0
     const isRecentAndOpen =
       !!data.test &&
@@ -157,14 +159,16 @@ export function useOnboardingTest({
   }, [autoSend, data, freshSendRequestedRef, isActive, send])
 
   useEffect(() => {
-    if (!data || hasReportedConfirmRef.current) return
+    // The query cache is shared: an inactive observer must not react to a
+    // confirmation another flow is polling for.
+    if (!isActive || !data || hasReportedConfirmRef.current) return
     // testConfirmedAt also counts a tap on an earlier message of this install,
     // which the displayed (latest) test never reflects.
     if (data.test?.status === 'confirmed' || data.testConfirmedAt) {
       hasReportedConfirmRef.current = true
       onConfirmed()
     }
-  }, [data, onConfirmed])
+  }, [data, isActive, onConfirmed])
 
   const resend = useCallback(() => send(true), [send])
   const skip = useCallback(() => skipMutation.mutate(), [skipMutation])

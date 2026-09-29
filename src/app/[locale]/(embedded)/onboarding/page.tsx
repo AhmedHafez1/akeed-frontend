@@ -32,9 +32,20 @@ const TEST_ERROR_KEYS: Record<OnboardingTestError, string> = {
   skip_failed: 'test.errors.skipFailed',
 }
 
+/**
+ * One route, two flows. Only the flow for the current mode is mounted: the
+ * embedded hooks share the onboarding-test query with standalone, and left
+ * running they would react to a standalone confirmation and send again.
+ */
 export default function OnboardingPage() {
-  const t = useTranslations('onboarding')
   const { isEmbedded, isLoading: isModeLoading } = useAkeedMode()
+
+  if (isModeLoading) return <OnboardingPageSkeleton variant="setup" />
+  return isEmbedded ? <EmbeddedOnboarding /> : <StandaloneOnboardingPage />
+}
+
+function EmbeddedOnboarding() {
+  const t = useTranslations('onboarding')
 
   const router = useRouter()
   const pathname = usePathname()
@@ -71,8 +82,8 @@ export default function OnboardingPage() {
     goToDashboard,
     handleChangeNumber,
   } = useEmbeddedOnboarding({
-    isEmbedded,
-    isModeLoading,
+    isEmbedded: true,
+    isModeLoading: false,
     locale,
     requestedStep: searchParams.get('step'),
     router,
@@ -141,14 +152,9 @@ export default function OnboardingPage() {
     router.push(`/${locale}/settings?${search.toString()}`)
   }, [locale, router])
 
-  const isPageLoading = !isEmbedded || isModeLoading || isInitialLoading
-  useAppBridgeLoading(isPageLoading)
+  useAppBridgeLoading(isInitialLoading)
 
-  if (!isModeLoading && !isEmbedded) {
-    return <StandaloneOnboardingPage />
-  }
-
-  if (isPageLoading) {
+  if (isInitialLoading) {
     return <OnboardingPageSkeleton variant="setup" />
   }
 
