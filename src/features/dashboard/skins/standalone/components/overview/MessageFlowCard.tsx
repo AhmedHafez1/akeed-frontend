@@ -10,7 +10,7 @@ import {
   formatPercent,
 } from '@/features/dashboard/lib/orderDisplay'
 import type { DashboardOverview } from '@/features/dashboard/model/dashboard.model'
-import { StatusBadge } from '../shared/StatusBadge'
+import { StatusBadge } from '@/shared/ui/status-badge'
 
 type Funnel = DashboardOverview['funnel']
 

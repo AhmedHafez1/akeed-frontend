@@ -42,6 +42,8 @@ function countryFromPhone(phoneE164: string): string | undefined {
 
 export interface RegionalDefaultsInput {
   phoneE164?: string
+  /** ISO country to fall back on while the number cannot be parsed yet. */
+  countryHint?: string
   browserTimeZone?: string
 }
 
@@ -58,9 +60,12 @@ export interface RegionalDefaults {
  */
 export function inferRegionalDefaults({
   phoneE164,
+  countryHint,
   browserTimeZone,
 }: RegionalDefaultsInput): RegionalDefaults {
-  const country = phoneE164 ? countryFromPhone(phoneE164) : undefined
+  const country =
+    (phoneE164 ? countryFromPhone(phoneE164) : undefined) ??
+    countryHint?.toUpperCase()
   const currency = country
     ? (currencyForCountry(country) ?? FALLBACK_CURRENCY)
     : FALLBACK_CURRENCY

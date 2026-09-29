@@ -125,4 +125,22 @@ describe('inferRegionalDefaults', () => {
     expect(result.currency).toBe('USD')
     expect(result.timezone).toBe('Asia/Riyadh')
   })
+
+  it('uses the country hint while the number is blank or unparseable', () => {
+    expect(inferRegionalDefaults({ countryHint: 'ae' })).toMatchObject({
+      country: 'AE',
+      currency: 'AED',
+      timezone: 'Asia/Dubai',
+    })
+    expect(
+      inferRegionalDefaults({ phoneE164: '+2', countryHint: 'EG' }).currency
+    ).toBe('EGP')
+  })
+
+  it('prefers the number over the hint', () => {
+    expect(
+      inferRegionalDefaults({ phoneE164: '+966512345678', countryHint: 'EG' })
+        .currency
+    ).toBe('SAR')
+  })
 })

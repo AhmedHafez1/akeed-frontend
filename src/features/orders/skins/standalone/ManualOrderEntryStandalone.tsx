@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { Controller } from 'react-hook-form'
 import { ChevronDown, CircleCheck, ClipboardCheck } from 'lucide-react'
@@ -35,6 +35,10 @@ interface ManualOrderEntryStandaloneProps {
   triggerLabelClassName?: string
   disabledReasonOverride?: string
   showDisabledReason?: boolean
+  /** Open the dialog once, e.g. when a link asks for a new order. */
+  autoOpen?: boolean
+  /** Called right after `autoOpen` opened the dialog. */
+  onAutoOpened?: () => void
 }
 
 function RequiredMark() {
@@ -67,6 +71,8 @@ export function ManualOrderEntryStandalone({
   triggerLabelClassName,
   disabledReasonOverride,
   showDisabledReason = true,
+  autoOpen = false,
+  onAutoOpened,
 }: ManualOrderEntryStandaloneProps) {
   const t = useTranslations('manualOrder')
   const tCredits = useTranslations('creditErrors')
@@ -75,6 +81,14 @@ export function ManualOrderEntryStandalone({
     document.getElementById('manual-order-phone')?.focus()
   }, [])
   const entry = useManualOrderEntry(focusCustomerPhone, onAccepted)
+  const { onOpenChange } = entry
+  const hasAutoOpenedRef = useRef(false)
+  useEffect(() => {
+    if (!autoOpen || hasAutoOpenedRef.current) return
+    hasAutoOpenedRef.current = true
+    onOpenChange(true)
+    onAutoOpened?.()
+  }, [autoOpen, onAutoOpened, onOpenChange])
   const {
     control,
     register,

@@ -36,13 +36,21 @@ export type OnboardingTestError =
   | 'send_failed'
   | 'skip_failed'
 
-function toTestError(error: unknown): OnboardingTestError {
+export function toTestError(error: unknown): OnboardingTestError {
   if (error instanceof OnboardingApiError) {
     if (error.code === 'ONBOARDING_TEST_COOLDOWN') return 'cooldown'
     if (error.code === 'ONBOARDING_TEST_DAILY_LIMIT') return 'daily_limit'
     if (error.code === 'ONBOARDING_TEST_PHONE_MISSING') return 'phone_missing'
   }
   return 'send_failed'
+}
+
+/** Akeed's own WhatsApp sender failed: the problem is ours, not the number. */
+export function isTestProviderUnavailable(error: unknown): boolean {
+  return (
+    error instanceof OnboardingApiError &&
+    (error.code === 'TEST_VERIFICATION_PROVIDER_FAILED' || error.status >= 500)
+  )
 }
 
 interface UseOnboardingTestParams {
@@ -54,6 +62,11 @@ interface UseOnboardingTestParams {
   freshSendRequestedRef: RefObject<boolean>
   onConfirmed: () => void
   onSkipped: () => void
+  /**
+   * Send a test on arrival when none is open. Standalone sends from its setup
+   * submit instead, and a resumed test step waits for the merchant.
+   */
+  autoSend?: boolean
 }
 
 /**
@@ -66,9 +79,11 @@ export function useOnboardingTest({
   freshSendRequestedRef,
   onConfirmed,
   onSkipped,
+  autoSend = true,
 }: UseOnboardingTestParams) {
   const queryClient = useQueryClient()
   const [error, setError] = useState<OnboardingTestError | null>(null)
+  const [isUnavailable, setIsUnavailable] = useState(false)
   const hasAutoSentRef = useRef(false)
   const hasReportedConfirmRef = useRef(false)
 
@@ -92,11 +107,15 @@ export function useOnboardingTest({
 
   const sendMutation = useMutation({
     mutationFn: (resend: boolean) => sendOnboardingTest({ resend }),
-    onMutate: () => setError(null),
+    onMutate: () => {
+      setError(null)
+      setIsUnavailable(false)
+    },
     onSuccess: storeResult,
     onError: (sendError: unknown) => {
       logger.error('Failed to send onboarding test', sendError)
       setError(toTestError(sendError))
+      setIsUnavailable(isTestProviderUnavailable(sendError))
       void queryClient.invalidateQueries({
         queryKey: queryKeys.onboarding.test(),
       })
@@ -126,7 +145,7 @@ export function useOnboardingTest({
       send(false)
       return
     }
-    if (hasAutoSentRef.current) return
+    if (hasAutoSentRef.current || !autoSend) return
     hasAutoSentRef.current = true
     if (data.testConfirmedAt) return
     const sentAt = data.test?.sentAt ? new Date(data.test.sentAt).getTime() : 0
@@ -135,7 +154,7 @@ export function useOnboardingTest({
       !SETTLED_STATUSES.has(data.test.status) &&
       Date.now() - sentAt < RESUME_WINDOW_MS
     if (!isRecentAndOpen) send(false)
-  }, [data, freshSendRequestedRef, isActive, send])
+  }, [autoSend, data, freshSendRequestedRef, isActive, send])
 
   useEffect(() => {
     if (!data || hasReportedConfirmRef.current) return
@@ -156,6 +175,7 @@ export function useOnboardingTest({
     isSending: sendMutation.isPending,
     isSkipping: skipMutation.isPending,
     error,
+    isUnavailable,
     resend,
     skip,
   }

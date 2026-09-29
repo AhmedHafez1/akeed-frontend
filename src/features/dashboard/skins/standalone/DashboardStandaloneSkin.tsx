@@ -15,7 +15,6 @@ import type {
   DashboardStatsDateRange,
 } from '../../model/dashboard.model'
 import { ManualConfirmDialog } from './components/ManualConfirmDialog'
-import { WelcomeCreditsModal } from './components/WelcomeCreditsModal'
 import { KpiCards } from './components/overview/KpiCards'
 import { MessageFlowCard } from './components/overview/MessageFlowCard'
 import { NeedsActionCard } from './components/overview/NeedsActionCard'
@@ -78,27 +77,6 @@ export function DashboardStandaloneSkin({
   const cancelMutation = useCancelVerificationMutation()
   const [cancelTarget, setCancelTarget] =
     useState<ManualConfirmationTarget | null>(null)
-  const [showWelcomeModal, setShowWelcomeModal] = useState(false)
-
-  // Deliberately deferred to an effect (rather than a lazy useState
-  // initializer) so the first client render matches the server-rendered
-  // markup and hydration never sees a dialog that's already open.
-  useEffect(() => {
-    try {
-      const justCompleted = window.sessionStorage.getItem(
-        'akeed:onboarding-just-completed'
-      )
-      if (justCompleted) {
-        window.sessionStorage.removeItem('akeed:onboarding-just-completed')
-        // One-shot consumption of a flag set just before the redirect into
-        // this page; there's no prop/state to derive this from during render.
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setShowWelcomeModal(true)
-      }
-    } catch {
-      // Storage unavailable — modal just doesn't show.
-    }
-  }, [])
 
   useEffect(() => {
     if (!feedback) return
@@ -215,10 +193,6 @@ export function DashboardStandaloneSkin({
         isCanceling={cancelMutation.isPending}
         onConfirm={() => void handleCancel()}
         onDismiss={() => setCancelTarget(null)}
-      />
-      <WelcomeCreditsModal
-        open={showWelcomeModal}
-        onOpenChange={setShowWelcomeModal}
       />
     </div>
   )

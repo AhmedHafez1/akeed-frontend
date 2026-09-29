@@ -8,7 +8,10 @@ import type { CancelOrderResponse } from '@/shared/types/commerce-outcome.model'
 import { ApiError } from '@/shared/lib/http'
 import { billingFixtureRequest } from './billingFixture'
 import { adminBillingFixtureRequest } from './adminBillingFixture'
-import { onboardingFixtureRequest } from './onboardingFixture'
+import {
+  isOnboardingFixture,
+  onboardingFixtureRequest,
+} from './onboardingFixture'
 import { manualOrderFixtureRequest } from './manual-order/manualOrderFixture'
 import {
   isOrderSyncFixture,
@@ -31,6 +34,13 @@ import {
 } from './embedded-dashboard/embeddedDashboardFixture'
 
 export function fetchWithAuth(url: string, options: RequestInit = {}) {
+  if (url.startsWith('/api/onboarding/'))
+    return onboardingFixtureRequest(url, options)
+  if (
+    isOnboardingFixture() &&
+    (url === '/api/settings' || url === '/api/billing/credits')
+  )
+    return onboardingFixtureRequest(url, options)
   if (url.startsWith('/api/order-imports'))
     return orderImportFixtureRequest(url, options)
   if (
@@ -42,15 +52,19 @@ export function fetchWithAuth(url: string, options: RequestInit = {}) {
       .then((summary) => Response.json(orderImportCreditSummary(summary)))
   if (isOrderSyncFixture() && url === '/api/billing/credits')
     return orderSyncCreditsResponse()
-  return [
-    '/api/onboarding/state',
-    '/api/onboarding/settings',
-    '/api/onboarding/complete',
-  ].includes(url)
-    ? onboardingFixtureRequest(url, options)
-    : url.startsWith('/api/admin/')
-      ? adminBillingFixtureRequest(url, options)
-      : billingFixtureRequest(url, options)
+  return url.startsWith('/api/admin/')
+    ? adminBillingFixtureRequest(url, options)
+    : billingFixtureRequest(url, options)
+}
+
+/**
+ * The onboarding shell's sign-out, inert here: the fixture has no session.
+ * It only returns to the fixture index.
+ */
+export const auth = {
+  signOut: async () => undefined,
+  getLoginPath: (locale: string) => `/${locale}`,
+  getDashboardPath: (locale: string) => `/${locale}/dashboard`,
 }
 
 type FixtureResult = 'failure' | 'role_denied' | 'success'

@@ -203,6 +203,13 @@ Required variables (see `.env.local`):
 - `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` — Supabase auth
 - `NEXT_PUBLIC_SHOPIFY_API_KEY` — Shopify App Bridge
 
+Optional:
+
+- `NEXT_PUBLIC_AKEED_WHATSAPP_NUMBER` — Akeed's own WhatsApp sender number in
+  international format, digits only (e.g. `201001234567`, no `+`). Standalone
+  onboarding's test step deep-links to `https://wa.me/<number>` from its
+  phone-only "Open WhatsApp" button; when unset, the button is hidden.
+
 Never commit `.env.local` or files containing secrets.
 
 ## Common Pitfalls

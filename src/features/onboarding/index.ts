@@ -10,13 +10,10 @@ export type { EmbeddedStep } from './model/onboarding.config'
 export { buildTestTimeline } from './model/onboardingTest'
 
 export {
-  STANDALONE_FIELD_IDS,
-  STANDALONE_FIELD_ORDER,
-  STANDALONE_FIELD_STEP,
-  STANDALONE_STEPS,
+  STANDALONE_STEP_NUMBER,
   STANDALONE_TOTAL_STEPS,
-  getStepDefinition,
-} from './model/onboarding.steps'
+  parseStandaloneStep,
+} from './model/standaloneStore'
 
 export { OnboardingAlerts } from './ui/embedded/components/OnboardingAlerts'
 export { OnboardingStepCounter } from './ui/embedded/components/OnboardingStepCounter'
@@ -63,8 +60,7 @@ export type {
   OnboardingBillingPlanId,
   OnboardingSettingsPayload,
   StandaloneSetupBlockedReason,
-  StandaloneSetupFieldErrors,
-  StandaloneSetupFieldKey,
   StandaloneStep,
-  StandaloneStepDefinition,
+  StandaloneStoreFieldErrors,
+  StandaloneStoreFieldKey,
 } from './domain/onboarding.types'

@@ -9,22 +9,31 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
-import type { RowStatusKind } from '@/features/dashboard/domain/confirmationRowStatus'
 
-const STYLES: Record<RowStatusKind, { className: string; Icon: LucideIcon }> = {
-  pending: { className: 'bg-ak-info-soft text-ak-info', Icon: Send },
-  needsAction: {
-    className: 'bg-ak-warning-soft text-ak-warning',
-    Icon: AlertCircle,
-  },
-  confirmed: { className: 'bg-brand-soft text-brand-ink', Icon: Check },
-  canceled: { className: 'bg-ak-danger-soft text-ak-danger', Icon: X },
-  failed: {
-    className: 'bg-ak-danger-soft text-ak-danger',
-    Icon: AlertTriangle,
-  },
-  scheduled: { className: 'bg-neutral-soft text-ink-muted', Icon: Clock },
-}
+/** The status families a badge can show; dashboard rows map onto these. */
+export type StatusBadgeKind =
+  | 'pending'
+  | 'needsAction'
+  | 'confirmed'
+  | 'canceled'
+  | 'failed'
+  | 'scheduled'
+
+const STYLES: Record<StatusBadgeKind, { className: string; Icon: LucideIcon }> =
+  {
+    pending: { className: 'bg-ak-info-soft text-ak-info', Icon: Send },
+    needsAction: {
+      className: 'bg-ak-warning-soft text-ak-warning',
+      Icon: AlertCircle,
+    },
+    confirmed: { className: 'bg-brand-soft text-brand-ink', Icon: Check },
+    canceled: { className: 'bg-ak-danger-soft text-ak-danger', Icon: X },
+    failed: {
+      className: 'bg-ak-danger-soft text-ak-danger',
+      Icon: AlertTriangle,
+    },
+    scheduled: { className: 'bg-neutral-soft text-ink-muted', Icon: Clock },
+  }
 
 /**
  * The one status pill for the standalone pages: always an icon and a word,
@@ -38,7 +47,7 @@ export function StatusBadge({
   title,
   size = 'sm',
 }: {
-  kind: RowStatusKind
+  kind: StatusBadgeKind
   children: ReactNode
   /** Overrides the kind's icon, e.g. a clock on a "no reply" age. */
   icon?: LucideIcon

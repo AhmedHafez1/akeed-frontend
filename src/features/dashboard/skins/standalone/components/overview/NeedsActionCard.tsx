@@ -42,7 +42,7 @@ import type {
   DashboardOverview,
   NeedsActionItem,
 } from '@/features/dashboard/model/dashboard.model'
-import { StatusBadge } from '../shared/StatusBadge'
+import { StatusBadge } from '@/shared/ui/status-badge'
 
 /** What a row's badge and the line under it say, from the server's reason. */
 function useReasonView(item: NeedsActionItem, timeZone: string) {

@@ -28,12 +28,12 @@ export function OnboardingField({
   const helpId = htmlFor ? `${htmlFor}-help` : undefined
   const errorId = htmlFor ? `${htmlFor}-error` : undefined
   const describedBy =
-    [error && errorId, helpText && helpId].filter(Boolean).join(' ') ||
+    [error ? errorId : helpText && helpId].filter(Boolean).join(' ') ||
     undefined
 
   return (
     <div className="space-y-2 text-start">
-      <Label htmlFor={htmlFor} className="text-foreground text-sm font-medium">
+      <Label htmlFor={htmlFor} className="text-ink text-sm font-semibold">
         {label}
         {required && (
           <span aria-hidden="true" className="text-destructive ms-1">
@@ -42,13 +42,13 @@ export function OnboardingField({
         )}
       </Label>
       {children({ describedBy })}
-      {helpText && (
-        <p id={helpId} className="text-muted-foreground text-xs leading-5">
+      {helpText && !error && (
+        <p id={helpId} className="text-ink-muted text-sm">
           {helpText}
         </p>
       )}
       {error && (
-        <p id={errorId} className="text-destructive text-xs font-medium">
+        <p id={errorId} className="text-ak-warning text-sm font-medium">
           {error}
         </p>
       )}

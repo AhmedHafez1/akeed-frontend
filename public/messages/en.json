@@ -1190,12 +1190,6 @@
     "title": "Dashboard",
     "subtitle": "Monitor verification status and recent orders across your channels.",
     "valueProposition": "Akeed confirms cash-on-delivery orders through WhatsApp before fulfillment.",
-    "welcomeModal": {
-      "title": "Welcome to Akeed!",
-      "body": "You're all set. We've added {count} free credits to your account so you can start confirming orders right away.",
-      "bodyFallback": "You're all set. We've added free credits to your account so you can start confirming orders right away.",
-      "cta": "Get started"
-    },
     "standalone": {
       "manualConfirmBody": "Akeed will record the order as confirmed, just as if the customer had confirmed. No more messages will be sent.",
       "credits": {
@@ -2393,17 +2387,8 @@
     }
   },
   "standaloneOnboarding": {
-    "title": "Let’s set up your workspace",
-    "subtitle": "Three short steps to start confirming cash-on-delivery orders over WhatsApp.",
-    "saveProgress": "Save progress",
-    "saving": "Saving…",
-    "saved": "Setup progress saved.",
-    "complete": "Complete setup",
-    "completing": "Completing…",
     "blockedHeading": "Setup still needs attention",
-    "blocked": "Your progress was saved, but setup cannot be completed yet.",
     "readOnly": "You have read-only access. Ask an owner or admin to update or complete setup.",
-    "saveError": "We could not save your setup. Please try again.",
     "completeError": "We could not complete setup. Please try again.",
     "loadErrorTitle": "Setup is unavailable",
     "loadError": "We could not load setup. Check the backend and try again.",
@@ -2411,15 +2396,6 @@
     "sourceInactive": "Your order source is inactive. Contact support before continuing.",
     "sourceAmbiguous": "Multiple active order sources require staff review.",
     "retry": "Retry",
-    "metaNotice": "Completing setup does not confirm a Meta or WhatsApp connection. Test verification is enabled separately.",
-    "validation": {
-      "name": "Store name is required.",
-      "sendDelay": "First-send delay must be between 0 and 24 hours.",
-      "followUpDelay": "Follow-up delay must be between 0 and 168 hours.",
-      "escalationDelay": "Escalation delay must be between 0 and 168 hours.",
-      "followUpBeforeEscalation": "Escalation must happen after the follow-up.",
-      "quietHours": "Enter valid quiet-hours start and end times."
-    },
     "blockers": {
       "source_invalid": "A valid active Standalone source is required.",
       "account_suspended": "This account is suspended. Contact Akeed support.",
@@ -2430,72 +2406,9 @@
       "automation_invalid": "Review the automation timing settings.",
       "timezone_invalid": "Choose a supported timezone."
     },
-    "eyebrow": "Welcome to Akeed",
-    "storeName": "Store name",
-    "storeNamePlaceholder": "Example: Akeed Store",
-    "storeNameHelp": "This name appears in the WhatsApp messages your customers receive.",
-    "languageHeading": "Default message language",
-    "languageAutoHelp": "On Auto, Akeed picks the message language from the customer’s phone country code.",
-    "trustNote": "No messages are sent before you complete setup.",
-    "editableLater": "You can change these settings later.",
     "shell": {
       "help": "Help",
       "skipToContent": "Skip to setup"
-    },
-    "steps": {
-      "label": "Setup steps",
-      "progress": "Step {current} of {total}",
-      "completed": "Completed",
-      "storeDetails": {
-        "title": "Store details",
-        "description": "Name and language",
-        "heading": "Tell us about your store",
-        "subheading": "We use these details to personalize the confirmation messages your customers receive."
-      },
-      "confirmationRules": {
-        "title": "Confirmation rules",
-        "description": "Sending and follow-up",
-        "heading": "Set your confirmation rules",
-        "subheading": "Decide when Akeed reaches out, when it follows up, and when an order needs a human."
-      },
-      "review": {
-        "title": "Review and complete",
-        "description": "Confirm, then start",
-        "heading": "Review your setup",
-        "subheading": "Check these details, then complete setup to finish."
-      }
-    },
-    "rules": {
-      "autoVerifyHeading": "Enable automatic verification",
-      "autoVerifyHelp": "When on, Akeed messages every new cash-on-delivery order automatically. When off, nothing is sent until you verify an order yourself.",
-      "timezoneHelp": "Every timing rule below is measured in this timezone.",
-      "firstDelayHeading": "First-message delay",
-      "firstDelayHelp": "How long Akeed waits after an order arrives. Use 0 to send immediately.",
-      "followUpHeading": "Follow-up message",
-      "followUpHelp": "If the customer does not reply, Akeed sends the same message once more.",
-      "escalationHeading": "No-reply escalation",
-      "escalationHelp": "If the customer never replies, the order is marked for manual review.",
-      "quietHoursHeading": "Quiet hours",
-      "quietHoursHelp": "Messages scheduled during quiet hours are moved to the next allowed local time.",
-      "advanced": "Advanced timing",
-      "disabledHint": "Turn on automatic verification to change these rules."
-    },
-    "review": {
-      "storeName": "Store name",
-      "language": "Message language",
-      "automation": "Automatic verification",
-      "timezone": "Timezone",
-      "timing": "Timing rules",
-      "edit": "Edit",
-      "editStep": "Edit {step}",
-      "on": "On",
-      "firstDelay": "First message after {hours} h",
-      "firstDelayImmediate": "First message sent immediately",
-      "followUp": "Follow-up after {hours} h",
-      "escalation": "Manual review after {hours} h",
-      "quietHours": "Quiet hours {start} – {end}",
-      "noTimingRules": "No timing rules enabled",
-      "automationOff": "Off — no messages are sent automatically"
     },
     "test": {
       "timeline": {
@@ -2507,29 +2420,138 @@
         "confirmed": "You confirmed the order",
         "canceledNote": "You tapped \"Cancel order\", which is what a customer cancellation looks like. Tap \"Confirm order\" to finish, or resend.",
         "autoDetect": "We'll detect your reply automatically"
+      },
+      "tapConfirmOnPhone": "Tap \"Confirm order\" on your phone",
+      "tapNote": "This is exactly what your customer will do.",
+      "autoDetectNext": "We'll detect your reply and move on automatically",
+      "mobile": {
+        "subheading": "We sent a test message to WhatsApp on this phone. Open it and tap \"Confirm order\".",
+        "tapConfirm": "Tap \"Confirm order\" in WhatsApp",
+        "autoDetect": "Come back here; we'll have picked up your reply"
+      },
+      "freeNote": "The test message is free and isn't deducted from your balance.",
+      "resendIn": "Didn't get it? Resend in {seconds}s",
+      "send": "Send the test message",
+      "skip": "Skip for now, try it later",
+      "openWhatsApp": "Open WhatsApp",
+      "completing": "Finishing setup…",
+      "unavailable": {
+        "title": "We can't reach WhatsApp right now",
+        "body": "The problem is on our side, not your number. Your setup is saved, and nothing was deducted from your balance.",
+        "subheading": "We send a test message to your WhatsApp so you see what your customers get.",
+        "numberLabel": "Number",
+        "badge": "Not sent",
+        "previewEmpty": "No message yet",
+        "continue": "Continue to dashboard",
+        "retry": "Try again"
       }
     },
     "defaultsWell": {
       "change": "Change"
     },
-    "actions": {
-      "saveAndContinue": "Save and continue",
-      "continue": "Continue",
-      "back": "Back"
-    },
     "status": {
       "stepAnnouncement": "Step {current} of {total}: {title}"
-    },
-    "language": {
-      "auto": "Auto",
-      "arabic": "Arabic",
-      "english": "English"
     },
     "suspended": {
       "title": "This account is on hold",
       "body": "Contact Akeed support to review this account before continuing setup.",
       "note": "Nothing is lost while the account is on hold. Your saved settings, orders and history stay exactly as they are.",
       "refresh": "Check again"
+    },
+    "flow": {
+      "label": "Setup progress",
+      "completed": "completed",
+      "account": "Account",
+      "store": "Your store",
+      "test": "Try the message",
+      "compact": "{current} of {total} · {title}",
+      "menu": "Menu"
+    },
+    "store": {
+      "heading": "Get your confirmation message ready",
+      "subheading": "We need one WhatsApp number to send you a test. We picked the rest for you.",
+      "credits": {
+        "title": "You have {count} free confirmation messages",
+        "body": "No payment card needed. After that, only {price} per message sent."
+      },
+      "storeName": {
+        "label": "Store name as it appears in the message",
+        "hint": "We took it from your sign-up details.",
+        "placeholder": "e.g. Noor Store"
+      },
+      "phone": {
+        "label": "Your WhatsApp number",
+        "hint": "We'll send a free test message to it now. Your customers never see it."
+      },
+      "defaults": {
+        "heading": "Picked for you",
+        "language": "Message language",
+        "currency": "Currency",
+        "timezone": "Time zone",
+        "caption": "Based on your phone number and browser language. You can also change them later in Settings."
+      },
+      "languageOptions": {
+        "auto": "Automatic, by the customer's number",
+        "ar": "Arabic",
+        "en": "English"
+      },
+      "timezones": {
+        "Asia_Riyadh": "Riyadh",
+        "Asia_Dubai": "Dubai",
+        "Asia_Qatar": "Doha",
+        "Asia_Kuwait": "Kuwait City",
+        "Asia_Bahrain": "Manama",
+        "Asia_Muscat": "Muscat",
+        "Asia_Amman": "Amman",
+        "Africa_Cairo": "Cairo",
+        "Africa_Casablanca": "Casablanca",
+        "UTC": "UTC"
+      },
+      "footerCaption": "We won't send anything to your customers until you add an order.",
+      "submit": "Next: send a test message",
+      "submitting": "Saving and sending…",
+      "loading": "Getting your store ready…",
+      "saveError": "We couldn't save your store details. Everything you typed is still here; try again.",
+      "validation": {
+        "storeName": "Enter your store name the way your customers know it.",
+        "phone": "The number is incomplete. Enter {digits} digits after {code}, e.g. {example}"
+      },
+      "preview": {
+        "label": "How your customer receives it"
+      }
+    },
+    "done": {
+      "badge": "Akeed is live",
+      "heading": "Your confirmation arrived. This is how Akeed works with every order",
+      "pipelineLabel": "How Akeed works with every order",
+      "pipeline": {
+        "add": {
+          "title": "You add the order",
+          "description": "One order from WhatsApp, Instagram or a phone call, or many at once from an Excel file."
+        },
+        "send": {
+          "title": "We message your customer",
+          "description": "The same message you just tried, in your store's name."
+        },
+        "reply": {
+          "title": "You see the reply in Confirmations",
+          "description": "Confirmed or canceled, and we gather who didn't reply so you can follow up."
+        }
+      },
+      "stats": {
+        "balanceLabel": "Your balance now",
+        "balanceValue": "{count} messages",
+        "balanceCaption": "Free, no payment card",
+        "priceLabel": "After the free credits",
+        "priceCaption": "per confirmation message sent",
+        "testLabel": "The test message",
+        "testValue": "Free",
+        "testCaption": "Not deducted from your balance"
+      },
+      "addOrder": "Add your first order",
+      "importFile": "Import from a file",
+      "dashboard": "Go to the dashboard",
+      "caption": "We send the confirmation to your customer as soon as you add the order."
     }
   },
   "about": {
