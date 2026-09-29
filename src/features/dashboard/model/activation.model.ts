@@ -11,6 +11,8 @@ export interface DashboardActivationState {
     testConfirmedAt: string | null
     testSkippedAt: string | null
     firstRealConfirmedAt: string | null
+    /** The organization has a real (non-test) order. Absent on older APIs. */
+    hasRealOrders?: boolean
     isLive: boolean
     needsPlan: boolean
   }
@@ -58,4 +60,25 @@ export function resolveFreeMessagesLeft(
 ): number | null {
   if (state?.billingPlanId !== 'starter' || !state.usage) return null
   return state.usage.remaining
+}
+
+export type StandaloneFirstRunStatus = 'loading' | 'first-run' | 'active'
+
+/**
+ * The standalone dashboard is in first run until the organization has a real
+ * order. Only an explicit `false` counts: an API that does not report it yet
+ * leaves the merchant on the full dashboard rather than stuck in first run.
+ */
+export function resolveStandaloneFirstRun(
+  state: DashboardActivationState | undefined
+): StandaloneFirstRunStatus {
+  if (!state) return 'loading'
+  return state.activation?.hasRealOrders === false ? 'first-run' : 'active'
+}
+
+/** The merchant skipped the onboarding test and has not tried it since. */
+export function shouldShowSkippedTestReminder(
+  activation: DashboardActivationState['activation']
+): boolean {
+  return !!activation?.testSkippedAt && !activation.testConfirmedAt
 }

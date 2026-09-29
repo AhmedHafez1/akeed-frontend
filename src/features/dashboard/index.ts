@@ -9,6 +9,7 @@
 export { useDashboard } from './domain/useDashboard'
 export { useVerificationsDashboard } from './domain/useVerificationsDashboard'
 export { useStandaloneDashboardUrlState } from './hooks/useStandaloneDashboardUrlState'
+export { useStandaloneFirstRun } from './domain/useStandaloneFirstRun'
 export {
   DASHBOARD_DATE_RANGE_IDS,
   VERIFICATION_STATUS_FILTER_IDS,

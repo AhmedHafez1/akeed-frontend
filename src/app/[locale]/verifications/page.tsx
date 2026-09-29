@@ -11,6 +11,7 @@ import {
   useStandaloneDashboardUrlState,
 } from '@/features/dashboard'
 import { ImportModalHost } from '@/features/order-imports'
+import { SendTestToPhoneAction } from '@/features/onboarding'
 
 function StandaloneVerificationsPageContent() {
   const url = useStandaloneDashboardUrlState()
@@ -23,6 +24,7 @@ function StandaloneVerificationsPageContent() {
         tab={url.tab}
         onTabChange={url.onTabChange}
         importBatchId={url.importBatchId}
+        phoneTestAction={<SendTestToPhoneAction variant="outline" />}
       />
       {/* "استيراد من ملف" in the top bar opens it through the URL. */}
       <ImportModalHost />

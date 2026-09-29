@@ -56,9 +56,11 @@ const AFFECTED_QUERIES: Record<DomainEvent, ReadonlyArray<QueryKey>> = {
   // Lists and stats are left alone on acceptance: a worker creates the
   // verification after the 202, so a refetch now would come back without it.
   // The optimistic row stands in until `order.materialized` refreshes them.
+  // The first real order ends the standalone dashboard's first run.
   'order.created': [
     queryKeys.verifications.pageContext(),
     queryKeys.billing.summary(),
+    queryKeys.onboarding.state(),
   ],
   'order.materialized': [queryKeys.verifications.all, queryKeys.billing.all],
   'order.dispatched': [queryKeys.verifications.all, queryKeys.billing.all],
@@ -89,6 +91,7 @@ const AFFECTED_QUERIES: Record<DomainEvent, ReadonlyArray<QueryKey>> = {
     queryKeys.billing.all,
   ],
   'orderImport.started': [
+    queryKeys.onboarding.state(),
     queryKeys.orderImports.all,
     queryKeys.verifications.all,
     queryKeys.billing.all,

@@ -1320,9 +1320,9 @@
       "all": "No verifications yet. Once an order is received, verification requests will appear here.",
       "filtered": "No verifications match the selected status.",
       "onboarding": {
-        "heading": "Waiting for COD orders...",
-        "activeDescription": "Akeed is active and monitoring your store. As soon as a new cash-on-delivery order is placed, a WhatsApp verification will be sent automatically.",
-        "step1": "A customer places a COD order in your store.",
+        "heading": "Waiting for your first order...",
+        "activeDescription": "Akeed is ready. As soon as a cash-on-delivery order reaches Akeed, your customer gets a WhatsApp confirmation automatically.",
+        "step1": "A cash-on-delivery order reaches Akeed.",
         "step2": "Akeed sends a WhatsApp verification message to the customer.",
         "step3": "The customer confirms or cancels - results appear here in real time.",
         "testSectionHeading": "Send a test verification",
@@ -1521,7 +1521,9 @@
       "readOnlyNotice": "You have read-only access. An owner or admin can retry verification or mark supported orders canceled.",
       "empty": {
         "title": "No confirmations yet",
-        "description": "Verify an order to get started. Orders appear here as soon as a verification is created for them."
+        "description": "Each order's status shows here as soon as you add it.",
+        "testHeading": "Try the message on your phone",
+        "testHint": "We send a free test message to the WhatsApp number saved on your account. It isn't deducted from your balance."
       },
       "showing": "Showing {loaded} of {total}"
     },
@@ -1747,6 +1749,42 @@
         "buyCredits": "Buy credits",
         "openSettings": "Open settings",
         "details": "Details"
+      }
+    },
+    "firstRun": {
+      "greeting": "Welcome, {name}",
+      "greetingNoName": "Welcome",
+      "firstOrder": {
+        "title": "Send your first confirmation to a real customer",
+        "subtitle": "Choose how your orders reach Akeed. We send the confirmation as soon as you add an order, and it uses one message from your balance.",
+        "manual": {
+          "title": "One order",
+          "body": "For WhatsApp, Instagram and phone orders. Just the customer number, order number and amount."
+        },
+        "file": {
+          "title": "Excel or CSV file",
+          "body": "For many orders at once. We match the columns for you, and you review before anything is sent."
+        },
+        "storeLinkSoon": "Connecting your online store so every order arrives automatically: coming soon.",
+        "zeroBalance": {
+          "title": "Your balance is {count} messages",
+          "body": "Each confirmation uses one message from your balance. Top up to send your first one.",
+          "action": "Top up balance"
+        }
+      },
+      "skippedTest": {
+        "title": "You haven't tried the message yet",
+        "body": "See it on your phone before your first customer does. One minute, and free."
+      },
+      "confirmations": {
+        "title": "Confirmations",
+        "empty": "No orders yet. Each order's status will show here as it happens.",
+        "examplesLabel": "Example order statuses:",
+        "examples": {
+          "sent": "Sent · awaiting reply",
+          "confirmed": "Confirmed",
+          "canceled": "Canceled"
+        }
       }
     }
   },
@@ -2552,6 +2590,12 @@
       "importFile": "Import from a file",
       "dashboard": "Go to the dashboard",
       "caption": "We send the confirmation to your customer as soon as you add the order."
+    },
+    "phoneTest": {
+      "action": "Send it to my phone",
+      "title": "A test message to your phone",
+      "description": "We send you the same message your customers get. Open it in WhatsApp and tap \"Confirm order\".",
+      "close": "Close"
     }
   },
   "about": {
@@ -2821,6 +2865,10 @@
         "reference": "Reference",
         "filename": "operations-log"
       }
+    },
+    "balanceChip": {
+      "label": "Balance: {count} messages",
+      "value": "Balance <strong>{count}</strong> messages"
     }
   },
   "orderImport": {

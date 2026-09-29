@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useId, useState } from 'react'
+import { useEffect, useId, useState, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { creditFeedbackKey } from '@/shared/lib/creditFeedback'
@@ -8,7 +8,6 @@ import { cn } from '@/shared/lib/utils'
 import { akButton, akCard, notify } from '@/shared/ui'
 import { useConfirmationsList } from '../../domain/useConfirmationsList'
 import { useManualConfirmation } from '../../domain/useManualConfirmation'
-import { useTestVerificationSend } from '../../domain/useTestVerificationSend'
 import type { DateRangeFilterOption } from '../../domain/dashboard.types'
 import { formatCount } from '../../lib/orderDisplay'
 import type {
@@ -18,7 +17,6 @@ import type {
 } from '../../model/dashboard.model'
 import { ManualConfirmDialog } from './components/ManualConfirmDialog'
 import { StandaloneFeedbackBanners } from './components/StandaloneFeedbackBanners'
-import { StandaloneTestVerificationPanel } from './components/StandaloneTestVerificationPanel'
 import { StandaloneVerificationsSkeleton } from './components/StandaloneVerificationsSkeleton'
 import { CancelOrderDialog } from './components/confirmations/CancelOrderDialog'
 import { ConfirmationsList } from './components/confirmations/ConfirmationsList'
@@ -35,12 +33,18 @@ export interface DashboardVerificationsStandaloneSkinProps {
   onTabChange: (tab: ConfirmationsTab) => void
   /** Narrows the list to the orders one import batch created. */
   importBatchId?: string
+  /**
+   * "Send it to my phone" (the free onboarding test), supplied by the page:
+   * it belongs to the onboarding feature, which this one does not import.
+   */
+  phoneTestAction?: ReactNode
 }
 
 /**
  * Every order Akeed messaged, by outcome, searchable and paged — the same
  * list, filters and row actions as the embedded confirmations tab, plus what
- * only standalone has: imports, orders created by hand, and a test send.
+ * only standalone has: imports, orders created by hand, and a free test to
+ * the merchant's own phone while the list is still empty.
  */
 export function DashboardVerificationsStandaloneSkin({
   period,
@@ -49,6 +53,7 @@ export function DashboardVerificationsStandaloneSkin({
   tab,
   onTabChange,
   importBatchId,
+  phoneTestAction,
 }: DashboardVerificationsStandaloneSkinProps) {
   const t = useTranslations('dashboard')
   const tTable = useTranslations('dashboard.standalone.table')
@@ -63,7 +68,6 @@ export function DashboardVerificationsStandaloneSkin({
     showPendingOrders: true,
   })
   const confirmation = useManualConfirmation()
-  const test = useTestVerificationSend(list.canSendTest)
   const [cancelTarget, setCancelTarget] = useState<{
     row: VerificationItem
     orderLabel: string
@@ -90,16 +94,6 @@ export function DashboardVerificationsStandaloneSkin({
     }
     dismissFeedback()
   }, [dismissFeedback, feedback, t])
-
-  // A sent or skipped test is a passing note; a failed one stays on screen.
-  const { testFeedback, onDismissTestFeedback } = test
-  useEffect(() => {
-    if (!testFeedback || testFeedback.tone === 'critical') return
-    const show =
-      testFeedback.tone === 'success' ? notify.success : notify.warning
-    show({ message: testFeedback.message, id: 'confirmations-test-feedback' })
-    onDismissTestFeedback()
-  }, [onDismissTestFeedback, testFeedback])
 
   const handleRetry = async (row: VerificationItem) => {
     const result = await list.onRetry(row.id, row.order_id)
@@ -152,10 +146,8 @@ export function DashboardVerificationsStandaloneSkin({
 
       <StandaloneFeedbackBanners
         error={null}
-        testFeedback={
-          test.testFeedback?.tone === 'critical' ? test.testFeedback : null
-        }
-        onDismissTestFeedback={test.onDismissTestFeedback}
+        testFeedback={null}
+        onDismissTestFeedback={() => undefined}
         creditDenialCode={list.creditDenialCode}
       />
 
@@ -233,22 +225,18 @@ export function DashboardVerificationsStandaloneSkin({
                     {t('verifications.empty.description')}
                   </p>
                 </div>
-                {list.canSendTest && (
-                  <StandaloneTestVerificationPanel
-                    heading={t('emptyState.onboarding.testSectionHeading')}
-                    hint={t('emptyState.onboarding.nextStepHint')}
-                    phoneLabel={t('emptyState.onboarding.testPhoneLabel')}
-                    phonePlaceholder={t(
-                      'emptyState.onboarding.testPhonePlaceholder'
-                    )}
-                    invalidPhoneMessage={t(
-                      'emptyState.onboarding.testPhoneInvalid'
-                    )}
-                    sendLabel={t('emptyState.onboarding.testSendLabel')}
-                    sendingLabel={t('emptyState.onboarding.testSendingLabel')}
-                    isSendingTest={test.isSendingTest}
-                    onSendTestVerification={test.onSendTestVerification}
-                  />
+                {list.canSendTest && phoneTestAction && (
+                  <div className="border-line space-y-3 border-t pt-5">
+                    <div className="space-y-1">
+                      <h3 className="text-ink text-sm font-semibold">
+                        {t('verifications.empty.testHeading')}
+                      </h3>
+                      <p className="text-ink-muted text-sm">
+                        {t('verifications.empty.testHint')}
+                      </p>
+                    </div>
+                    {phoneTestAction}
+                  </div>
                 )}
               </div>
             ) : (

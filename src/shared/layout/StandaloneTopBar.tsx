@@ -7,6 +7,8 @@ import {
   ImportTopBarAction,
   useImportOutcomeSync,
 } from '@/features/order-imports'
+import { CreditBalanceChip } from '@/features/billing'
+import { useStandaloneFirstRun } from '@/features/dashboard'
 import { ManualOrderTopBarAction } from '@/features/orders'
 import { ThemeToggle } from '@/shared/theme'
 import { LocaleToggle } from './LocaleToggle'
@@ -16,13 +18,17 @@ interface StandaloneTopBarProps {
 }
 
 /**
- * Breadcrumb on the start; the two order actions and display controls on the
- * end. Below 640px the actions are 44px icons and theme and language move
- * into the navigation menu.
+ * Breadcrumb on the start; the balance, the two order actions and display
+ * controls on the end. Below 640px the actions are 44px icons and theme and
+ * language move into the navigation menu. Until the first real order the
+ * dashboard's first-order card owns Import and Confirm order, so they stay
+ * hidden here (also while that is still loading, so they never flash).
  */
 export function StandaloneTopBar({ onOpenNavigation }: StandaloneTopBarProps) {
   const t = useTranslations('appHeader')
   useImportOutcomeSync()
+  const { status: firstRunStatus } = useStandaloneFirstRun()
+  const showOrderActions = firstRunStatus === 'active'
   const pathname = usePathname() ?? ''
   const routeName = pathname.split('/')[2] ?? 'dashboard'
   const breadcrumbLabel =
@@ -64,8 +70,13 @@ export function StandaloneTopBar({ onOpenNavigation }: StandaloneTopBarProps) {
       </div>
 
       <div className="flex shrink-0 items-center gap-2">
-        <ImportTopBarAction />
-        <ManualOrderTopBarAction />
+        <CreditBalanceChip />
+        {showOrderActions && (
+          <>
+            <ImportTopBarAction />
+            <ManualOrderTopBarAction />
+          </>
+        )}
         <span
           aria-hidden="true"
           className="bg-border mx-1 hidden h-6 w-px sm:block"

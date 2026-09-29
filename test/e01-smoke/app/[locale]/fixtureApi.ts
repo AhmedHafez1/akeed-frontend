@@ -32,8 +32,14 @@ import {
   embeddedDashboardRequest,
   isEmbeddedDashboardFixture,
 } from './embedded-dashboard/embeddedDashboardFixture'
+import {
+  firstRunApiGet,
+  firstRunFetch,
+  isFirstRunFixture,
+} from './first-run/firstRunFixture'
 
 export function fetchWithAuth(url: string, options: RequestInit = {}) {
+  if (isFirstRunFixture()) return firstRunFetch(url, options)
   if (url.startsWith('/api/onboarding/'))
     return onboardingFixtureRequest(url, options)
   if (
@@ -65,6 +71,11 @@ export const auth = {
   signOut: async () => undefined,
   getLoginPath: (locale: string) => `/${locale}`,
   getDashboardPath: (locale: string) => `/${locale}/dashboard`,
+  // The standalone shell's identity, for the first-run greeting and sidebar.
+  getCurrentUser: async () => ({
+    email: 'ahmed@noorstore.com',
+    user_metadata: { full_name: 'أحمد حافظ', company_name: 'متجر نور' },
+  }),
 }
 
 type FixtureResult = 'failure' | 'role_denied' | 'success'
@@ -280,6 +291,7 @@ export function uploadWithAuth(
 
 export const api = {
   async get<T>(url: string): Promise<T> {
+    if (isFirstRunFixture()) return firstRunApiGet<T>(url)
     if (isEmbeddedDashboardFixture())
       return embeddedDashboardRequest<T>('GET', url)
     if (isOrderSyncFixture()) return orderSyncRequest<T>('GET', url)

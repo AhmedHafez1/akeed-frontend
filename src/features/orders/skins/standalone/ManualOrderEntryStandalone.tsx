@@ -33,6 +33,8 @@ interface ManualOrderEntryStandaloneProps {
   onAccepted?: () => void
   triggerClassName?: string
   triggerLabelClassName?: string
+  /** Classes for the trigger's wrapper, e.g. `w-full` inside a card. */
+  triggerWrapperClassName?: string
   disabledReasonOverride?: string
   showDisabledReason?: boolean
   /** Open the dialog once, e.g. when a link asks for a new order. */
@@ -69,6 +71,7 @@ export function ManualOrderEntryStandalone({
   onAccepted,
   triggerClassName,
   triggerLabelClassName,
+  triggerWrapperClassName,
   disabledReasonOverride,
   showDisabledReason = true,
   autoOpen = false,
@@ -107,7 +110,9 @@ export function ManualOrderEntryStandalone({
 
   return (
     <Dialog open={entry.isOpen} onOpenChange={entry.onOpenChange}>
-      <div className="flex flex-col items-end gap-1">
+      <div
+        className={cn('flex flex-col items-end gap-1', triggerWrapperClassName)}
+      >
         <DialogTrigger asChild>
           <Button
             type="button"

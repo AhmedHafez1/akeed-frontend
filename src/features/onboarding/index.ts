@@ -32,6 +32,7 @@ export {
 } from './api/onboardingApi'
 export { OnboardingApiError } from './api/onboardingApi'
 export { StandaloneOnboardingPage } from './ui/standalone/StandaloneOnboardingPage'
+export { SendTestToPhoneAction } from './ui/standalone/components/SendTestToPhoneAction'
 
 export {
   checkEmbeddedInstall,
