@@ -34,6 +34,11 @@ const logger = createLogger('Auth')
 
 interface StandaloneOnboardingShellProps {
   children: ReactNode
+  /**
+   * Signed up but the email is not confirmed yet: the account step is the
+   * current one and there is no session, so there is nothing to sign out of.
+   */
+  accountPending?: boolean
 }
 
 /**
@@ -48,6 +53,7 @@ interface StandaloneOnboardingShellProps {
  */
 export function StandaloneOnboardingShell({
   children,
+  accountPending = false,
 }: StandaloneOnboardingShellProps) {
   const t = useTranslations('standaloneOnboarding')
   const tHeader = useTranslations('appHeader')
@@ -73,7 +79,8 @@ export function StandaloneOnboardingShell({
     const segments = pathname.split('/')
     if (segments.length > 1) {
       segments[1] = nextLocale
-      router.push(segments.join('/') || '/')
+      // Keep ?step (and signup's ?sent&email) so the same screen reopens.
+      router.push(`${segments.join('/') || '/'}${window.location.search}`)
     }
   }
 
@@ -93,9 +100,13 @@ export function StandaloneOnboardingShell({
         <AkeedLogo className="h-9" />
 
         <div className="flex min-w-0 justify-start sm:justify-center">
-          <Suspense fallback={null}>
-            <OnboardingProgress />
-          </Suspense>
+          {accountPending ? (
+            <AccountPendingProgress />
+          ) : (
+            <Suspense fallback={null}>
+              <OnboardingProgress />
+            </Suspense>
+          )}
         </div>
 
         <div className="hidden shrink-0 items-center gap-1.5 sm:flex sm:gap-2">
@@ -116,15 +127,17 @@ export function StandaloneOnboardingShell({
             <CircleHelp aria-hidden="true" className="h-[18px] w-[18px]" />
             <span className="sr-only lg:not-sr-only">{t('shell.help')}</span>
           </Link>
-          <button
-            type="button"
-            onClick={() => void handleSignOut()}
-            disabled={isSigningOut}
-            className="hover:bg-muted text-foreground/70 hover:text-destructive focus-visible:ring-ring inline-flex h-9 items-center gap-2 rounded-lg px-2.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-60"
-          >
-            <LogOut aria-hidden="true" className="h-[18px] w-[18px]" />
-            <span className="sr-only lg:not-sr-only">{signOutLabel}</span>
-          </button>
+          {!accountPending && (
+            <button
+              type="button"
+              onClick={() => void handleSignOut()}
+              disabled={isSigningOut}
+              className="hover:bg-muted text-foreground/70 hover:text-destructive focus-visible:ring-ring inline-flex h-9 items-center gap-2 rounded-lg px-2.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-60"
+            >
+              <LogOut aria-hidden="true" className="h-[18px] w-[18px]" />
+              <span className="sr-only lg:not-sr-only">{signOutLabel}</span>
+            </button>
+          )}
         </div>
 
         <DropdownMenu>
@@ -152,14 +165,18 @@ export function StandaloneOnboardingShell({
                 {t('shell.help')}
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              disabled={isSigningOut}
-              onSelect={() => void handleSignOut()}
-            >
-              <LogOut aria-hidden="true" />
-              {signOutLabel}
-            </DropdownMenuItem>
+            {!accountPending && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  disabled={isSigningOut}
+                  onSelect={() => void handleSignOut()}
+                >
+                  <LogOut aria-hidden="true" />
+                  {signOutLabel}
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </header>
@@ -171,6 +188,36 @@ export function StandaloneOnboardingShell({
         {children}
       </main>
     </div>
+  )
+}
+
+/** Before the email is confirmed: step 1 of 3, the account, is current. */
+function AccountPendingProgress() {
+  const t = useTranslations('standaloneOnboarding.flow')
+  const steps: StepperStep[] = [
+    { id: 'account', title: t('account'), state: 'current' },
+    { id: 'store', title: t('store'), state: 'upcoming' },
+    { id: 'test', title: t('test'), state: 'upcoming' },
+  ]
+
+  return (
+    <>
+      <Stepper
+        steps={steps}
+        label={t('label')}
+        completedLabel={t('completed')}
+        className="hidden sm:block"
+      />
+      <StepperCompact
+        className="sm:hidden"
+        progress={1 / STANDALONE_TOTAL_STEPS}
+        progressLabel={t('compact', {
+          current: 1,
+          total: STANDALONE_TOTAL_STEPS,
+          title: t('account'),
+        })}
+      />
+    </>
   )
 }
 

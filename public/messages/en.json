@@ -837,24 +837,10 @@
     "shopifyStoreSuffix": ".myshopify.com",
     "shopifyStoreRequired": "Please enter your store name",
     "connectShopify": "Connect Shopify Store",
-    "createAccount": "Create account",
-    "alreadyHaveAccount": "Already have an account?",
-    "fullName": "Full name",
-    "companyName": "Company name",
     "passwordRequirement": "At least 8 characters",
     "confirmPassword": "Confirm password",
-    "agreeToTerms": "I agree to the",
-    "termsOfService": "Terms of Service",
-    "and": "and",
-    "privacyPolicy": "Privacy Policy",
-    "creatingAccount": "Creating account...",
-    "orSignUpWith": "Or continue with",
     "signInFailed": "Failed to sign in. Please check your credentials.",
     "emailNotConfirmed": "Your email address has not been confirmed. Check your inbox and confirm your email before signing in.",
-    "signUpFailed": "Failed to create account. Please try again.",
-    "verifyEmailTitle": "Check your email",
-    "verifyEmailMessage": "We sent a confirmation link to {email}.",
-    "verifyEmailHint": "Confirm your email to finish setting up your account and organization.",
     "organizationSetupFailedTitle": "We couldn't prepare your organization and source",
     "organizationSetupFailedMessage": "Your account is signed in, but organization and commerce source setup did not finish. Please try again.",
     "retryOrganizationSetup": "Try again",
@@ -874,7 +860,86 @@
     "resetPasswordFailed": "Failed to update password. Please try again or request a new reset link.",
     "newPassword": "New password",
     "resetPassword": "Reset password",
-    "resettingPassword": "Resetting..."
+    "resettingPassword": "Resetting...",
+    "signup": {
+      "heading": "Create your account",
+      "subheading": "Two minutes and you're confirming cash-on-delivery orders on WhatsApp.",
+      "fullName": {
+        "label": "Your name"
+      },
+      "storeName": {
+        "label": "Store name",
+        "hint": "Shown in the confirmation messages your customers receive."
+      },
+      "email": {
+        "label": "Email"
+      },
+      "password": {
+        "label": "Password",
+        "hint": "At least 8 characters."
+      },
+      "terms": "I agree to the <terms>Terms of Use</terms> and <privacy>Privacy Policy</privacy>",
+      "submit": "Create account",
+      "submitting": "Creating account…",
+      "haveAccount": "Have an account?",
+      "signIn": "Sign in",
+      "shopifyDivider": "Selling on Shopify?",
+      "shopifyCta": "Install Akeed from the Shopify App Store",
+      "errors": {
+        "fullNameRequired": "Enter your name.",
+        "storeNameRequired": "Enter your store name as your customers know it.",
+        "emailRequired": "Enter your email.",
+        "emailInvalid": "Enter a valid email, like name@store.com",
+        "emailRegistered": "This email is already registered. <link>Sign in instead</link>",
+        "passwordTooShort": "Password is too short. Use at least 8 characters.",
+        "passwordWeak": "This password is easy to guess. Add numbers or symbols.",
+        "termsRequired": "Accept the terms to create your account.",
+        "rateLimited": "Too many attempts in a short time. Wait a minute and try again.",
+        "failed": "We couldn't create your account. Please try again."
+      },
+      "benefits": {
+        "heading": "What you get",
+        "credits": {
+          "title": "{count, plural, one {1 free confirmation message} other {{formatted} free confirmation messages}}",
+          "body": "Added to your balance as soon as you verify your email. No card needed."
+        },
+        "test": {
+          "title": "Try the message on your phone first",
+          "body": "See exactly what your customer will get before any real order."
+        },
+        "price": {
+          "title": "Pay only for what's sent",
+          "body": "{price} per confirmation after the free credits. No monthly subscription."
+        }
+      }
+    },
+    "verifyEmail": {
+      "heading": "Open your inbox to activate your account",
+      "body": "We sent the activation link to <email></email>. Open it and you'll come straight back here to finish setup.",
+      "steps": {
+        "verify": "Verify your email from the link",
+        "whatsapp": "Add your WhatsApp number",
+        "test": "Try the confirmation message on your phone"
+      },
+      "caption": "About two minutes to your first message. Your free credits are ready as soon as you verify.",
+      "changeEmail": "Change email",
+      "spamHint": "Didn't get it? Check your spam folder.",
+      "resend": "Resend",
+      "resending": "Sending…",
+      "resendIn": "Resend in {seconds}s",
+      "resent": "We sent a new link. Use the most recent email in your inbox.",
+      "resendFailed": "We couldn't send the link right now. Try again in a moment."
+    },
+    "linkError": {
+      "link_expired": "This activation link has expired or was already used. Send a new one to your email.",
+      "unknown": "We couldn't verify that link. Send a new one to your email.",
+      "resend": "Send a new link",
+      "resending": "Sending…",
+      "resendIn": "Resend in {seconds}s",
+      "sent": "We sent a new link. Open the most recent email in your inbox.",
+      "failed": "We couldn't send the link right now. Try again in a moment.",
+      "emailMissing": "Enter your email so we can send the link."
+    }
   },
   "legal": {
     "termsEyebrow": "Legal",
