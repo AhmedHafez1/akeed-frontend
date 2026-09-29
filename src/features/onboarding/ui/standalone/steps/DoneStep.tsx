@@ -57,12 +57,14 @@ export function DoneStep({ headingRef }: DoneStepProps) {
         {PIPELINE.map((stage, index) => (
           <Fragment key={stage}>
             <li className="space-y-2">
-              <span className="bg-brand-soft text-brand-ink inline-flex size-8 items-center justify-center rounded-full text-sm font-semibold">
-                {index + 1}
-              </span>
-              <p className="text-ink font-semibold">
-                {t(`pipeline.${stage}.title`)}
-              </p>
+              <div className="flex items-center gap-3">
+                <span className="bg-brand-soft text-brand-ink inline-flex size-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold">
+                  {index + 1}
+                </span>
+                <p className="text-ink font-semibold">
+                  {t(`pipeline.${stage}.title`)}
+                </p>
+              </div>
               <p className="text-ink-muted text-sm">
                 {t(`pipeline.${stage}.description`)}
               </p>
@@ -70,9 +72,9 @@ export function DoneStep({ headingRef }: DoneStepProps) {
             {index < PIPELINE.length - 1 && (
               <li
                 aria-hidden="true"
-                className="text-ink-muted hidden pt-1.5 sm:block"
+                className="text-ink-muted hidden items-center justify-center px-2 sm:flex"
               >
-                <ArrowLeft className="size-5 ltr:rotate-180" />
+                <ArrowLeft className="size-7 ltr:rotate-180" />
               </li>
             )}
           </Fragment>
