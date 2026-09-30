@@ -257,7 +257,7 @@ describe('CreditsBar', () => {
 })
 
 describe('KpiCards', () => {
-  it('shows the confirmed value as an LTR amount and the rate breakdown', () => {
+  it('shows the three counts as LTR numbers', () => {
     renderEmbedded(
       <KpiCards
         kpis={{
@@ -270,14 +270,13 @@ describe('KpiCards', () => {
         }}
       />
     )
-    const amount = screen.getByText('US$ 4,500.50')
-    expect(amount.closest('bdi')?.getAttribute('dir')).toBe('ltr')
+    const confirmed = screen.getByText('19')
+    expect(confirmed.closest('bdi')?.getAttribute('dir')).toBe('ltr')
+    expect(screen.getByText('6')).toBeTruthy()
     expect(screen.getByText('68%')).toBeTruthy()
-    expect(screen.getByText('19 من 28 طلباً أرسلنا لها رسالة')).toBeTruthy()
-    expect(screen.getByText('6 شحنات ومرتجعات لم تدفع تكلفتها')).toBeTruthy()
   })
 
-  it('reads an empty period as a dash, not 0%', () => {
+  it('reads an empty rate as a dash, not 0%', () => {
     renderEmbedded(
       <KpiCards
         kpis={{
@@ -289,7 +288,6 @@ describe('KpiCards', () => {
       'en'
     )
     expect(screen.getByText('—')).toBeTruthy()
-    expect(screen.getByText('No messages sent in this period yet')).toBeTruthy()
   })
 })
 

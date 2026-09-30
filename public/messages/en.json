@@ -1471,7 +1471,7 @@
         "order": "Order",
         "customer": "Customer",
         "status": "Status",
-        "followUp": "Follow-up",
+        "followUp": "Reminder",
         "total": "Total",
         "created": "Created",
         "actions": "Actions",
@@ -1725,7 +1725,7 @@
         "customer": "Customer",
         "phone": "Phone",
         "status": "Status",
-        "followUp": "Follow-up",
+        "followUp": "Reminder",
         "total": "Total",
         "updated": "Last update",
         "action": "Action"

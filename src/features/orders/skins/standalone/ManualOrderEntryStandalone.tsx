@@ -120,7 +120,7 @@ export function ManualOrderEntryStandalone({
             aria-label={t('open')}
             title={disabledReason}
             className={cn(
-              'bg-primary text-primary-foreground hover:bg-primary-hover rounded-lg shadow-sm',
+              'bg-primary text-primary-foreground hover:bg-primary-hover border rounded-lg shadow-sm',
               triggerClassName
             )}
           >

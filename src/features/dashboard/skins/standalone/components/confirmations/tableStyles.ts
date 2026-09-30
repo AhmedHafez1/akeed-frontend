@@ -29,4 +29,4 @@ export const TABLE_AMOUNT_CELL = 'py-2.5 ps-4 pe-6 text-end align-middle'
 export const NEEDS_ACTION_ROW = 'bg-ak-warning-soft hover:bg-ak-warning-line/40'
 
 /** A phone-width card per order, with room for the needs-action edge. */
-export const CARD_ROW = 'space-y-3 border-s-[3px] px-4 py-4'
+export const CARD_ROW = 'space-y-3 px-4 py-4'

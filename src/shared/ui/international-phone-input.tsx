@@ -70,7 +70,7 @@ export const InternationalPhoneInput = React.forwardRef<
     value,
     onChange,
     placeholder = '+20 123 456 7890',
-    defaultCountry = 'EG',
+    defaultCountry: requestedCountry = 'EG',
     label,
     disabled = false,
     className,
@@ -86,6 +86,9 @@ export const InternationalPhoneInput = React.forwardRef<
   },
   ref
 ) {
+  const defaultCountry = EXCLUDED_COUNTRIES.has(requestedCountry)
+    ? 'EG'
+    : requestedCountry
   const generatedId = React.useId()
   const inputId = id ?? generatedId
   const containerRef = React.useRef<HTMLDivElement>(null)

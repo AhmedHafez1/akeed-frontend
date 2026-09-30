@@ -139,7 +139,6 @@ describe('resolveRowStatus', () => {
       badge: 'noReply',
       tone: 'warning',
       kind: 'needsAction',
-      sub: 'sub.followUpSent',
     })
     expect(resolveRowStatus(row({ status: 'no_reply' })).badge).toBe('noReply')
   })

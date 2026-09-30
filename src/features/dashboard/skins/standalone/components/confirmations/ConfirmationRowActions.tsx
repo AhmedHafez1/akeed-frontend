@@ -1,7 +1,6 @@
 'use client'
 
 import {
-  Check,
   CheckCircle2,
   Ellipsis,
   Eye,
@@ -28,8 +27,8 @@ import type { ConfirmationsListProps } from './confirmationCells'
 /**
  * In the table: one labelled "more" menu holds every action — details, the
  * WhatsApp or shipping link, manual confirm, retry, cancel — so rows stay
- * quiet. On a card, Confirm and the link sit up front as 40px buttons that
- * share the width, and the menu keeps the rest. The shared plan decides
+ * quiet. On a card only the link sits up front as a 40px button, and the
+ * menu keeps the rest, Confirm included. The shared plan decides
  * which actions exist, so both modes offer the same ones.
  */
 export function ConfirmationRowActions({
@@ -53,7 +52,6 @@ export function ConfirmationRowActions({
   layout?: 'inline' | 'stacked'
 }) {
   const t = useTranslations('dashboard')
-  const tTable = useTranslations('dashboard.standalone.table')
   const plan = planConfirmationRowActions(row, { canWrite, canRetry })
   const link = useConfirmationRowLink(row, orderLabel, plan.primary)
 
@@ -64,24 +62,9 @@ export function ConfirmationRowActions({
   const inline = layout === 'inline'
 
   return (
-    <div className={cn('flex items-center gap-2', inline && 'justify-end')}>
-      {!inline && plan.canConfirm && (
-        <button
-          type="button"
-          disabled={isAnyActing}
-          aria-label={t('overview.needsAction.actions.manualConfirmLabel', {
-            order: orderLabel,
-          })}
-          onClick={() => handlers.onRequestConfirm(row, orderLabel)}
-          className={cn(
-            akButton({ variant: 'tinted', size: 'md' }),
-            'min-w-0 flex-1'
-          )}
-        >
-          <Check aria-hidden="true" strokeWidth={2.5} />
-          {tTable('confirm')}
-        </button>
-      )}
+    <div
+      className={cn('flex items-center gap-2', inline ? 'justify-end' : 'pt-1')}
+    >
       {!inline && link && (
         <a
           href={link.url}
@@ -132,7 +115,7 @@ export function ConfirmationRowActions({
               </a>
             </DropdownMenuItem>
           )}
-          {inline && plan.canConfirm && (
+          {plan.canConfirm && (
             <DropdownMenuItem
               disabled={isAnyActing}
               onSelect={() => handlers.onRequestConfirm(row, orderLabel)}

@@ -104,7 +104,7 @@ function TableRow({ row, timeZone, actingId, ...rest }: RowProps) {
 /**
  * One order on a phone: order and amount, then who, then what happened (the
  * badge and a plain-words note under it), then the actions. Orders waiting on
- * the merchant carry an amber edge. A tap outside a control opens the
+ * the merchant carry an amber background. A tap outside a control opens the
  * details; the order number stays the keyboard route.
  */
 function CardRow({ row, timeZone, actingId, ...rest }: RowProps) {
@@ -121,7 +121,6 @@ function CardRow({ row, timeZone, actingId, ...rest }: RowProps) {
       }}
       className={cn(
         CARD_ROW,
-        isNeedsActionRow(row) ? 'border-ak-warning' : 'border-transparent',
         row.optimistic
           ? 'bg-surface-sunken'
           : cn('cursor-pointer', isNeedsActionRow(row) && NEEDS_ACTION_ROW)
@@ -135,10 +134,12 @@ function CardRow({ row, timeZone, actingId, ...rest }: RowProps) {
         />
         <AmountText amount={view.amount} isCanceled={view.isCanceled} />
       </div>
-      <CustomerCell name={view.name} phone={view.phone} />
-      <div className="flex min-w-0 flex-col items-start gap-1.5">
-        <StatusCell row={row} timeZone={timeZone} />
-        <StatusNote row={row} timeZone={timeZone} />
+      <div className="flex items-start justify-between gap-3">
+        <CustomerCell name={view.name} phone={view.phone} />
+        <div className="flex min-w-0 shrink-0 flex-col items-end gap-1.5 text-end">
+          <StatusCell row={row} timeZone={timeZone} />
+          <StatusNote row={row} timeZone={timeZone} />
+        </div>
       </div>
       <ConfirmationRowActions
         row={row}

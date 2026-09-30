@@ -919,6 +919,27 @@
   @apply absolute inset-0 z-10 cursor-pointer opacity-0;
 }
 
+/*
+ * The list is drawn by the browser from the select's own colours (the select
+ * is invisible, but its background, text and colour scheme still style the
+ * popup), so give the select and its options the theme's colours.
+ */
+.intl-phone .PhoneInputCountrySelect {
+  background-color: var(--card);
+  color: var(--foreground);
+  color-scheme: light;
+}
+
+.dark .intl-phone .PhoneInputCountrySelect {
+  color-scheme: dark;
+}
+
+.intl-phone .PhoneInputCountrySelect option,
+.intl-phone .PhoneInputCountrySelect optgroup {
+  background-color: var(--card);
+  color: var(--foreground);
+}
+
 .intl-phone .PhoneInputInput {
   @apply min-w-0 flex-1 border-none bg-transparent p-0 text-base leading-normal text-inherit outline-none;
   direction: ltr;
