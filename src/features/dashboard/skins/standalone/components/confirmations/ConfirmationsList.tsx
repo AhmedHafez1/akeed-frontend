@@ -3,6 +3,7 @@
 import type { MouseEvent } from 'react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/shared/lib/utils'
+import { isNeedsActionRow } from '@/features/dashboard/domain/confirmationRowStatus'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
 import { ConfirmationRowActions } from './ConfirmationRowActions'
 import {
@@ -13,6 +14,7 @@ import {
   OrderCell,
   PhoneCell,
   StatusCell,
+  StatusNote,
   useConfirmationRowView,
   type ConfirmationsListProps,
 } from './confirmationCells'
@@ -67,7 +69,7 @@ function TableRow({ row, timeZone, actingId, ...rest }: RowProps) {
       <td className="px-4 py-2.5 align-middle">
         <FollowUpCell row={row} timeZone={timeZone} />
       </td>
-      <td className="px-4 py-2.5 text-end align-middle">
+      <td className="py-2.5 ps-4 pe-6 text-end align-middle">
         <AmountText amount={view.amount} isCanceled={view.isCanceled} />
       </td>
       <td className="px-4 py-2.5 align-middle last:pe-6">
@@ -83,31 +85,42 @@ function TableRow({ row, timeZone, actingId, ...rest }: RowProps) {
   )
 }
 
+/**
+ * One order on a phone: order and amount, then who, then what happened (the
+ * badge and a plain-words note under it), then the actions. Orders waiting on
+ * the merchant carry an amber edge. A tap outside a control opens the
+ * details; the order number stays the keyboard route.
+ */
 function CardRow({ row, timeZone, actingId, ...rest }: RowProps) {
   const view = useConfirmationRowView(row)
+  const openDetails = row.optimistic
+    ? undefined
+    : () => rest.handlers.onOpenDetails(row)
 
   return (
     <li
       aria-busy={row.optimistic ? true : undefined}
+      onClick={(event) => {
+        if (openDetails && !isControlClick(event)) openDetails()
+      }}
       className={cn(
-        'space-y-3 px-4 py-4',
-        row.optimistic && 'bg-surface-sunken'
+        'space-y-3 border-s-[3px] px-4 py-4',
+        isNeedsActionRow(row) ? 'border-ak-warning' : 'border-transparent',
+        row.optimistic ? 'bg-surface-sunken' : 'cursor-pointer'
       )}
     >
       <div className="flex items-center justify-between gap-3">
         <OrderCell
           orderLabel={view.orderLabel}
           isTest={row.is_test}
-          onOpen={
-            row.optimistic ? undefined : () => rest.handlers.onOpenDetails(row)
-          }
+          onOpen={openDetails}
         />
         <AmountText amount={view.amount} isCanceled={view.isCanceled} />
       </div>
       <CustomerCell name={view.name} phone={view.phone} />
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      <div className="flex min-w-0 flex-col items-start gap-1.5">
         <StatusCell row={row} timeZone={timeZone} />
-        <FollowUpCell row={row} timeZone={timeZone} showTime />
+        <StatusNote row={row} timeZone={timeZone} />
       </div>
       <ConfirmationRowActions
         row={row}
@@ -128,12 +141,12 @@ function CardRow({ row, timeZone, actingId, ...rest }: RowProps) {
  */
 const HEADINGS = [
   ['order', 'w-[12%]'],
-  ['customer', 'w-[18%]'],
+  ['customer', 'w-[20%]'],
   ['phone', 'w-[18%]'],
-  ['status', 'w-[17%]'],
+  ['status', 'w-[18%]'],
   ['followUp', 'w-[12%]'],
-  ['total', 'w-[11%] text-end'],
-  ['action', 'w-[12%] text-end'],
+  ['total', 'w-[12%] text-end'],
+  ['action', 'w-[8%] text-end'],
 ] as const
 
 /**

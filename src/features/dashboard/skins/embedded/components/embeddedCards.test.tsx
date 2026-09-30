@@ -403,7 +403,7 @@ describe('ConfirmationsTable', () => {
     expect(link.getAttribute('href')).toBe('shopify://admin/orders/5551137')
   })
 
-  it('strikes through a canceled amount and offers chat only when action is needed', () => {
+  it('strikes through a canceled amount and keeps chat in the sheet of the row that needs it', () => {
     renderEmbedded(
       <ConfirmationsTable
         rows={[
@@ -424,15 +424,23 @@ describe('ConfirmationsTable', () => {
         {...tableProps}
       />
     )
-    expect(screen.getByText('ألغاه العميل')).toBeTruthy()
+    expect(screen.getByText('ملغي')).toBeTruthy()
     expect(screen.getByText('لم يرد')).toBeTruthy()
     expect(screen.queryByText('أُرسل التذكير')).toBeNull()
     const followUpBadge = screen.getByText('تم الإرسال')
     expect(followUpBadge.closest('[title]')?.getAttribute('title')).toMatch(
       /2026.*6:49/
     )
-    const chats = screen.getAllByRole('link', { name: /واتساب/ })
-    expect(chats).toHaveLength(1)
+    // No action sits outside the "more" sheet, and only 1138 has one.
+    expect(screen.queryAllByRole('link', { name: /واتساب/ })).toHaveLength(0)
+    const more = screen.getAllByRole('button', { name: /مزيد من الإجراءات/ })
+    expect(more).toHaveLength(1)
+    fireEvent.click(more[0])
+    expect(
+      within(screen.getByRole('dialog')).getAllByRole('link', {
+        name: /واتساب/,
+      })
+    ).toHaveLength(1)
     expect(screen.getByLabelText('الصفحة السابقة')).toBeTruthy()
   })
 
@@ -446,7 +454,12 @@ describe('ConfirmationsTable', () => {
         {...tableProps}
       />
     )
-    const links = screen.getAllByRole('link', { name: /بيانات الشحن/ })
+    const more = screen.getAllByRole('button', { name: /مزيد من الإجراءات/ })
+    expect(more).toHaveLength(1)
+    fireEvent.click(more[0])
+    const links = within(screen.getByRole('dialog')).getAllByRole('link', {
+      name: /بيانات الشحن/,
+    })
     expect(links).toHaveLength(1)
     const href = links[0].getAttribute('href') ?? ''
     expect(href.startsWith('https://wa.me/201148675077?text=')).toBe(true)
@@ -635,8 +648,7 @@ describe('ConfirmationsCardList', () => {
       within(cards[0]).getByRole('link', { name: /بيانات الشحن/ })
     ).toBeTruthy()
     expect(within(cards[1]).getByText('لم يرد')).toBeTruthy()
-    expect(within(cards[1]).getByText('تم الإرسال')).toBeTruthy()
-    expect(within(cards[1]).getByText(/17 سبتمبر/)).toBeTruthy()
+    expect(within(cards[1]).getByText(/أُرسل التذكير .*17 سبتمبر/)).toBeTruthy()
     expect(
       within(cards[1]).getByRole('link', { name: /راسل .* على واتساب/ })
     ).toBeTruthy()

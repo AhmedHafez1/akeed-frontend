@@ -1501,7 +1501,8 @@
       "loadingMore": "Loading more...",
       "followUp": {
         "sent": "Sent",
-        "notSent": "--"
+        "notSent": "--",
+        "sentAt": "Reminder sent {time}"
       },
       "actions": {
         "details": "View details",
@@ -1722,7 +1723,7 @@
         "needs_action": "Needs action",
         "confirmed": "Confirmed",
         "canceled": "Canceled",
-        "failed": "Failed to send"
+        "failed": "Failed"
       },
       "search": {
         "label": "Search by order number or phone",
@@ -1748,8 +1749,7 @@
       "openOrderLabel": "Open order {order} in Shopify",
       "status": {
         "confirmed": "Confirmed",
-        "canceledByCustomer": "Canceled by customer",
-        "canceledNoReply": "Canceled, no reply",
+        "canceled": "Canceled",
         "failed": "Failed to send",
         "scheduled": "Scheduled",
         "pending": "Pending",
@@ -1762,6 +1762,8 @@
           "afterFollowUp": "After reminder",
           "manual": "Confirmed manually",
           "canceledInStore": "Canceled in Shopify",
+          "canceledByCustomer": "By the customer",
+          "canceledNoReply": "No reply from the customer",
           "followUpSent": "Reminder sent",
           "sendsAt": "Sends {time}"
         },

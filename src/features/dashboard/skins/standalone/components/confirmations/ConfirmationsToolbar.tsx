@@ -160,7 +160,7 @@ export function ConfirmationsToolbar({
 
   return (
     <div className="border-line flex flex-col gap-3 border-b px-4 py-4 sm:px-6 lg:flex-row lg:items-start lg:justify-between">
-      <div className="-mx-4 min-w-0 overflow-x-auto px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0">
+      <div className="-mx-4 min-w-0 overflow-x-auto px-4 [scrollbar-width:none] sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 [&::-webkit-scrollbar]:hidden">
         <ConfirmationTabs
           tab={tab}
           tabCounts={tabCounts}

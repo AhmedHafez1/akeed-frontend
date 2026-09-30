@@ -1,9 +1,10 @@
-import { Badge, BlockStack, Text } from '@shopify/polaris'
+import { Badge, BlockStack, InlineStack, Icon, Text } from '@shopify/polaris'
+import { NotificationIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import {
   resolveRowStatus,
-  type RowStatusTone,
+  type RowStatusKind,
 } from '../../../../domain/confirmationRowStatus'
 import {
   formatTooltipDateTime,
@@ -38,14 +39,20 @@ export interface ConfirmationsListProps {
   }
 }
 
+/**
+ * Each status kind wears the same colour family as the standalone
+ * `StatusBadge` (words only in both), so the two modes read alike.
+ */
 const BADGE_TONES: Record<
-  RowStatusTone,
-  'success' | 'critical' | 'attention' | undefined
+  RowStatusKind,
+  'info' | 'warning' | 'success' | 'critical' | undefined
 > = {
-  success: 'success',
-  critical: 'critical',
-  warning: 'attention',
-  neutral: undefined,
+  pending: 'info',
+  needsAction: 'warning',
+  confirmed: 'success',
+  canceled: 'critical',
+  failed: 'critical',
+  scheduled: undefined,
 }
 
 /** The row's display values, derived once for the table and the cards. */
@@ -81,7 +88,7 @@ export function StatusCell({
   return (
     <BlockStack gap="100" inlineAlign="start">
       <span title={statusTitle || undefined}>
-        <Badge tone={BADGE_TONES[view.tone]}>{t(view.badge)}</Badge>
+        <Badge tone={BADGE_TONES[view.kind]}>{t(view.badge)}</Badge>
       </span>
     </BlockStack>
   )
@@ -106,17 +113,25 @@ export function FollowUpCell({
     locale,
     timeZone
   )
-  return (
-    <BlockStack gap="100">
+  // On a card a lone "Sent" says nothing; spell out what went out and when.
+  if (showTime) {
+    return (
       <span title={sentAtTitle || undefined}>
-        <Badge tone="success">{t('sent')}</Badge>
+        <InlineStack gap="100" blockAlign="center" wrap={false}>
+          <span>
+            <Icon source={NotificationIcon} tone="subdued" />
+          </span>
+          <Text as="span" variant="bodySm" tone="subdued">
+            {t('sentAt', { time: sentAt })}
+          </Text>
+        </InlineStack>
       </span>
-      {showTime && (
-        <Text as="span" variant="bodySm" tone="subdued">
-          {sentAt}
-        </Text>
-      )}
-    </BlockStack>
+    )
+  }
+  return (
+    <span title={sentAtTitle || undefined}>
+      <Badge tone="success">{t('sent')}</Badge>
+    </span>
   )
 }
 
@@ -145,11 +160,7 @@ export function CustomerCell({
 export function CustomerNameCell({ name }: { name: string | null }) {
   const t = useTranslations('dashboard')
   return (
-    <Text
-      as="span"
-      variant="bodyMd"
-      tone='subdued'
-    >
+    <Text as="span" variant="bodyMd" tone="subdued">
       {name ? <bdi>{name}</bdi> : t('confirmations.noName')}
     </Text>
   )

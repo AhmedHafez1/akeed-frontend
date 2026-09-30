@@ -1495,7 +1495,8 @@
       "loadingMore": "جارٍ تحميل المزيد...",
       "followUp": {
         "sent": "تم الإرسال",
-        "notSent": "--"
+        "notSent": "--",
+        "sentAt": "أُرسل التذكير {time}"
       },
       "actions": {
         "details": "عرض التفاصيل",
@@ -1716,7 +1717,7 @@
         "needs_action": "تحتاج إجراء",
         "confirmed": "مؤكد",
         "canceled": "ملغي",
-        "failed": "فشل الإرسال"
+        "failed": "فشل"
       },
       "search": {
         "label": "بحث برقم الطلب أو الهاتف",
@@ -1742,8 +1743,7 @@
       "openOrderLabel": "فتح الطلب {order} في شوبيفاي",
       "status": {
         "confirmed": "مؤكد",
-        "canceledByCustomer": "ألغاه العميل",
-        "canceledNoReply": "أُلغي لعدم الرد",
+        "canceled": "ملغي",
         "failed": "فشل الإرسال",
         "scheduled": "مجدول",
         "pending": "قيد الانتظار",
@@ -1756,6 +1756,8 @@
           "afterFollowUp": "بعد التذكير",
           "manual": "تأكيد يدوي",
           "canceledInStore": "أُلغي في شوبيفاي",
+          "canceledByCustomer": "ألغاه العميل",
+          "canceledNoReply": "لم يرد العميل",
           "followUpSent": "أُرسل التذكير",
           "sendsAt": "يُرسل {time}"
         },

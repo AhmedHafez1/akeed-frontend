@@ -9,6 +9,7 @@ import {
   FollowUpCell,
   OrderCell,
   StatusCell,
+  StatusNote,
 } from './confirmations/confirmationCells'
 import { ConfirmationsList } from './confirmations/ConfirmationsList'
 import { ConfirmationsToolbar } from './confirmations/ConfirmationsToolbar'
@@ -53,8 +54,8 @@ describe('ConfirmationsToolbar', () => {
     expect(tabs[0].getAttribute('aria-controls')).toBe('panel')
     expect(tabs[1].getAttribute('aria-selected')).toBe('false')
     expect(tabs[1].textContent).toBe('Needs action2')
-    // "Failed to send" has no rows, so no bubble.
-    expect(tabs[4].textContent).toBe('Failed to send')
+    // "Failed" has no rows, so no bubble.
+    expect(tabs[4].textContent).toBe('Failed')
   })
 
   it('moves with the arrow keys and focuses search on "/"', () => {
@@ -123,14 +124,13 @@ describe('StatusCell', () => {
       follow_up_sent_at: '2026-09-28T10:00:00Z',
     } as VerificationItem
     const { unmount } = renderStandalone(
-      <FollowUpCell row={sentRow} timeZone="UTC" showTime />,
+      <FollowUpCell row={sentRow} timeZone="UTC" />,
       'en'
     )
 
     expect(screen.getByText('Sent').parentElement?.getAttribute('title')).toBe(
       'Sep 28, 2026, 10:00 AM'
     )
-    expect(screen.getByText('Sep 28 · 10:00 AM')).toBeTruthy()
     unmount()
     renderStandalone(
       <FollowUpCell
@@ -140,6 +140,44 @@ describe('StatusCell', () => {
       'en'
     )
     expect(screen.queryByText('Sent')).toBeNull()
+  })
+})
+
+describe('StatusNote', () => {
+  it('says the reminder went out and when, instead of a bare "Sent"', () => {
+    const row = {
+      status: 'no_reply',
+      follow_up_sent_at: '2026-09-28T10:00:00Z',
+    } as VerificationItem
+    renderStandalone(<StatusNote row={row} timeZone="UTC" />, 'en')
+
+    const note = screen.getByText('Reminder sent Sep 28 · 10:00 AM')
+    expect(note.closest('[title]')?.getAttribute('title')).toBe(
+      'Sep 28, 2026, 10:00 AM'
+    )
+  })
+
+  it('falls back to the status sub-line, and to nothing', () => {
+    const manual = {
+      status: 'confirmed',
+      confirmation_source: 'merchant_manual',
+      follow_up_sent_at: null,
+    } as VerificationItem
+    const { unmount } = renderStandalone(
+      <StatusNote row={manual} timeZone="UTC" />,
+      'en'
+    )
+    expect(screen.getByText('Confirmed manually')).toBeTruthy()
+    unmount()
+
+    const { container } = renderStandalone(
+      <StatusNote
+        row={{ status: 'sent', follow_up_sent_at: null } as VerificationItem}
+        timeZone="UTC"
+      />,
+      'en'
+    )
+    expect(container.textContent).toBe('')
   })
 })
 

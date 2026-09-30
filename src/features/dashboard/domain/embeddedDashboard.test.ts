@@ -72,12 +72,12 @@ describe('resolveRowStatus', () => {
     ).toBe('sub.manual')
   })
 
-  it('canceled by the customer, noting when the store order was canceled too', () => {
+  it('says "Canceled" and puts who canceled it, or the store, in the sub-line', () => {
     expect(resolveRowStatus(row({ status: 'canceled' }))).toEqual({
-      badge: 'canceledByCustomer',
+      badge: 'canceled',
       tone: 'critical',
       kind: 'canceled',
-      sub: undefined,
+      sub: 'sub.canceledByCustomer',
     })
     expect(
       resolveRowStatus(
@@ -87,7 +87,7 @@ describe('resolveRowStatus', () => {
           canceled_in_store: true,
         })
       ).sub
-    ).toBeUndefined()
+    ).toBe('sub.canceledNoReply')
     expect(
       resolveRowStatus(
         row({
@@ -98,7 +98,7 @@ describe('resolveRowStatus', () => {
         { showStoreCancellation: true }
       )
     ).toEqual({
-      badge: 'canceledNoReply',
+      badge: 'canceled',
       tone: 'critical',
       kind: 'canceled',
       sub: 'sub.canceledInStore',

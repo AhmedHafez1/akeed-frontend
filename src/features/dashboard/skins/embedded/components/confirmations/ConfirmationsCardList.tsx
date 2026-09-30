@@ -56,13 +56,12 @@ function ConfirmationCard({
           <AmountText amount={view.amount} isCanceled={view.isCanceled} />
         </InlineStack>
 
-        <InlineStack align="space-between" blockAlign="start" gap="300">
-          <CustomerCell name={view.name} phone={view.phone} />
-          <BlockStack gap="200">
-            <StatusCell row={row} timeZone={timeZone} />
-            <FollowUpCell row={row} timeZone={timeZone} showTime />
-          </BlockStack>
-        </InlineStack>
+        <CustomerCell name={view.name} phone={view.phone} />
+
+        <BlockStack gap="150" inlineAlign="start">
+          <StatusCell row={row} timeZone={timeZone} />
+          <FollowUpCell row={row} timeZone={timeZone} showTime />
+        </BlockStack>
 
         <ConfirmationRowActions
           row={row}

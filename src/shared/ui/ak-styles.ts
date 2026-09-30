@@ -34,6 +34,7 @@ export const akButton = cva(
         /** 32px: table-row actions. */
         table: 'text-ak-caption h-8 px-3 [&_svg]:size-4',
         /** Square icon buttons; always paired with an aria-label. */
+        iconMd: 'size-10 [&_svg]:size-[18px]',
         iconRow: 'size-9 [&_svg]:size-[18px]',
         iconTable: 'size-8 [&_svg]:size-[18px]',
       },
