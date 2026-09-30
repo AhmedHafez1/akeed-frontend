@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { Upload } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
+import { useBillingSummary } from '@/features/billing'
 import { withLocale, type SupportedLocale } from '@/shared/lib/locale'
 import { Button } from '@/shared/ui'
 import { importModalPath, withImportTarget } from '../../domain/importRoutes'
@@ -23,8 +24,10 @@ export function ImportTopBarAction() {
   const router = useRouter()
   const tooltipId = useId()
   const availability = useBulkImportAvailability()
+  const { summary } = useBillingSummary()
   if (availability !== 'enabled') return null
 
+  const isDisabled = !summary || summary.availableCredits <= 0
   const href = withLocale(importModalPath('new'), locale)
   const onVerifications = pathname === withLocale('/verifications', locale)
 
@@ -40,19 +43,24 @@ export function ImportTopBarAction() {
   return (
     <span className="group relative inline-flex">
       <Button
-        asChild
+        asChild={!isDisabled}
+        disabled={isDisabled}
+        aria-label={t('newImport')}
+        aria-describedby={tooltipId}
         variant="outline"
         className="size-11 gap-2 rounded-lg px-0 sm:size-10 lg:w-auto lg:px-3.5"
       >
-        <Link
-          href={href}
-          onClick={open}
-          aria-label={t('newImport')}
-          aria-describedby={tooltipId}
-        >
-          <Upload aria-hidden="true" className="size-[18px] shrink-0" />
-          <span className="hidden lg:inline">{t('newImport')}</span>
-        </Link>
+        {isDisabled ? (
+          <>
+            <Upload aria-hidden="true" className="size-4.5 shrink-0" />
+            <span className="hidden lg:inline">{t('newImport')}</span>
+          </>
+        ) : (
+          <Link href={href} onClick={open}>
+            <Upload aria-hidden="true" className="size-4.5 shrink-0" />
+            <span className="hidden lg:inline">{t('newImport')}</span>
+          </Link>
+        )}
       </Button>
       <span
         id={tooltipId}

@@ -1,6 +1,6 @@
 'use client'
 
-import { CircleCheck } from 'lucide-react'
+import { CheckCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Skeleton } from '@/shared/ui'
 import { useCreditOffer } from '@/features/onboarding/hooks/useCreditOffer'
@@ -19,7 +19,7 @@ export function CreditsBanner() {
       <Skeleton
         aria-hidden="true"
         data-testid="credits-banner-skeleton"
-        className="rounded-panel h-[76px] w-full"
+        className="rounded-panel h-19 w-full"
       />
     ) : null
   }
@@ -29,7 +29,7 @@ export function CreditsBanner() {
       role="status"
       className="border-brand-line bg-brand-soft rounded-panel flex items-start gap-3 border p-4 text-start"
     >
-      <CircleCheck
+      <CheckCircle
         aria-hidden="true"
         className="text-brand-ink mt-0.5 size-5 shrink-0"
       />

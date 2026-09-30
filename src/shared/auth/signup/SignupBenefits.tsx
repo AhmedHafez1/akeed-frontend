@@ -1,6 +1,6 @@
 'use client'
 
-import { CircleCheck, CreditCard, Phone, type LucideIcon } from 'lucide-react'
+import { CheckCircle, CreditCard, Phone, type LucideIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import {
   CREDIT_CURRENCY,
@@ -39,7 +39,7 @@ export function SignupBenefits({ locale }: SignupBenefitsProps) {
   const benefits: Benefit[] = [
     {
       id: 'credits',
-      icon: CircleCheck,
+      icon: CheckCircle,
       title: t('credits.title', {
         count: CREDIT_FREE_GRANT,
         formatted: formatCredits(CREDIT_FREE_GRANT, locale),

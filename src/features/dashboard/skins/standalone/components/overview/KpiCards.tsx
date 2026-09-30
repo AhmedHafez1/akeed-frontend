@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Activity, CircleCheck, Package, type LucideIcon } from 'lucide-react'
+import { Activity, CheckCheck, Package, type LucideIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
@@ -30,7 +30,7 @@ function KpiCard({
   const body = (
     <>
       <h2 className="text-ak-body text-ink-muted flex items-center gap-2">
-        <Icon aria-hidden="true" className="text-brand size-[18px] shrink-0" />
+        <Icon aria-hidden="true" className="text-brand size-4.5 shrink-0" />
         <span className="truncate">{label}</span>
       </h2>
       <div className="mt-3 flex min-w-0 items-end gap-4">
@@ -73,7 +73,7 @@ export function KpiCards({
   return (
     <div className="grid gap-4 md:grid-cols-3">
       <KpiCard
-        icon={CircleCheck}
+        icon={CheckCheck}
         label={t('confirmed')}
         value={formatCount(kpis.confirmed.count, locale)}
         href={confirmedHref}

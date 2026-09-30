@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowRight, CircleCheck } from 'lucide-react'
+import { ArrowRight, CheckCheck } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/shared/ui'
 import type { OrderImportField } from '../../../api/orderImportsApi'
@@ -33,7 +33,7 @@ export function MatchedPanel({
           id="order-import-matched"
           className="text-foreground flex items-center gap-2 text-sm font-semibold sm:text-base"
         >
-          <CircleCheck aria-hidden="true" className="text-primary size-5" />
+          <CheckCheck aria-hidden="true" className="text-primary size-5" />
           {t('check.matched.title')}
         </h3>
         {canEdit && (
