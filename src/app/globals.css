@@ -670,8 +670,11 @@
  * is made sticky instead and the clone is hidden. The table's own horizontal
  * scroller is released so the box scrolls both ways.
  *
- * The height is also capped in absolute terms: Shopify Admin can size the app
- * frame to its content, and then a viewport-relative height is never reached.
+ * Its height is the room left under the chrome above it, measured by
+ * `LoadMoreFooter` into `--akeed-scroll-fit`, so the page itself never scrolls
+ * as well; the `20rem` guess only covers the first paint. The height is also
+ * capped in absolute terms: Shopify Admin can size the app frame to its
+ * content, and then a viewport-relative height is never reached.
  */
 /*
  * The page under a scroll box is no longer forced to a full viewport: with
@@ -683,7 +686,7 @@
 }
 
 .akeed-embedded-scroll {
-  max-height: min(calc(100dvh - 20rem), 44rem);
+  max-height: min(var(--akeed-scroll-fit, calc(100dvh - 20rem)), 60rem);
   min-height: 16rem;
   overflow: auto;
 }
