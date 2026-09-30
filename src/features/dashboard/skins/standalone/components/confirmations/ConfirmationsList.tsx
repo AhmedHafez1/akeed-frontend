@@ -3,14 +3,29 @@
 import type { MouseEvent } from 'react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/shared/lib/utils'
+import { isNeedsActionRow } from '@/features/dashboard/domain/confirmationRowStatus'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
 import { ConfirmationRowActions } from './ConfirmationRowActions'
 import {
+  CARD_ROW,
+  NEEDS_ACTION_ROW,
+  TABLE,
+  TABLE_AMOUNT_CELL,
+  TABLE_BODY,
+  TABLE_CELL,
+  TABLE_HEAD_CELL,
+  TABLE_HEAD_ROW,
+  TABLE_ROW,
+} from './tableStyles'
+import {
   AmountText,
   CustomerCell,
+  CustomerNameCell,
   FollowUpCell,
   OrderCell,
+  PhoneCell,
   StatusCell,
+  StatusNote,
   useConfirmationRowView,
   type ConfirmationsListProps,
 } from './confirmationCells'
@@ -40,32 +55,40 @@ function TableRow({ row, timeZone, actingId, ...rest }: RowProps) {
         if (openDetails && !isControlClick(event)) openDetails()
       }}
       className={cn(
-        'h-15 transition-colors',
+        TABLE_ROW,
         row.optimistic
           ? 'bg-surface-sunken'
-          : 'hover:bg-surface-sunken cursor-pointer'
+          : cn(
+              'cursor-pointer',
+              isNeedsActionRow(row)
+                ? NEEDS_ACTION_ROW
+                : 'hover:bg-surface-sunken'
+            )
       )}
     >
-      <td className="px-4 py-2.5 align-middle first:ps-6">
+      <td className={TABLE_CELL}>
         <OrderCell
           orderLabel={view.orderLabel}
           isTest={row.is_test}
           onOpen={openDetails}
         />
       </td>
-      <td className="px-4 py-2.5 align-middle">
-        <CustomerCell name={view.name} phone={view.phone} />
+      <td className={TABLE_CELL}>
+        <CustomerNameCell name={view.name} />
       </td>
-      <td className="px-4 py-2.5 align-middle">
+      <td className={TABLE_CELL}>
+        <PhoneCell phone={view.phone} />
+      </td>
+      <td className={TABLE_CELL}>
         <StatusCell row={row} timeZone={timeZone} />
       </td>
-      <td className="px-4 py-2.5 align-middle">
+      <td className={TABLE_CELL}>
         <FollowUpCell row={row} timeZone={timeZone} />
       </td>
-      <td className="px-4 py-2.5 text-end align-middle">
+      <td className={TABLE_AMOUNT_CELL}>
         <AmountText amount={view.amount} isCanceled={view.isCanceled} />
       </td>
-      <td className="px-4 py-2.5 align-middle last:pe-6">
+      <td className={TABLE_CELL}>
         <ConfirmationRowActions
           row={row}
           orderLabel={view.orderLabel}
@@ -78,31 +101,44 @@ function TableRow({ row, timeZone, actingId, ...rest }: RowProps) {
   )
 }
 
+/**
+ * One order on a phone: order and amount, then who, then what happened (the
+ * badge and a plain-words note under it), then the actions. Orders waiting on
+ * the merchant carry an amber edge. A tap outside a control opens the
+ * details; the order number stays the keyboard route.
+ */
 function CardRow({ row, timeZone, actingId, ...rest }: RowProps) {
   const view = useConfirmationRowView(row)
+  const openDetails = row.optimistic
+    ? undefined
+    : () => rest.handlers.onOpenDetails(row)
 
   return (
     <li
       aria-busy={row.optimistic ? true : undefined}
+      onClick={(event) => {
+        if (openDetails && !isControlClick(event)) openDetails()
+      }}
       className={cn(
-        'space-y-3 px-4 py-4',
-        row.optimistic && 'bg-surface-sunken'
+        CARD_ROW,
+        isNeedsActionRow(row) ? 'border-ak-warning' : 'border-transparent',
+        row.optimistic
+          ? 'bg-surface-sunken'
+          : cn('cursor-pointer', isNeedsActionRow(row) && NEEDS_ACTION_ROW)
       )}
     >
       <div className="flex items-center justify-between gap-3">
         <OrderCell
           orderLabel={view.orderLabel}
           isTest={row.is_test}
-          onOpen={
-            row.optimistic ? undefined : () => rest.handlers.onOpenDetails(row)
-          }
+          onOpen={openDetails}
         />
         <AmountText amount={view.amount} isCanceled={view.isCanceled} />
       </div>
       <CustomerCell name={view.name} phone={view.phone} />
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      <div className="flex min-w-0 flex-col items-start gap-1.5">
         <StatusCell row={row} timeZone={timeZone} />
-        <FollowUpCell row={row} timeZone={timeZone} showTime />
+        <StatusNote row={row} timeZone={timeZone} />
       </div>
       <ConfirmationRowActions
         row={row}
@@ -122,16 +158,17 @@ function CardRow({ row, timeZone, actingId, ...rest }: RowProps) {
  * phone or the action buttons onto a second line.
  */
 const HEADINGS = [
-  ['order', 'w-[14%]'],
-  ['customer', 'w-[24%]'],
-  ['status', 'w-[19%]'],
-  ['followUp', 'w-[13%]'],
-  ['total', 'w-[14%] text-end'],
-  ['action', 'w-[16%] text-end'],
+  ['order', 'w-[12%]'],
+  ['customer', 'w-[20%]'],
+  ['phone', 'w-[18%]'],
+  ['status', 'w-[18%]'],
+  ['followUp', 'w-[12%]'],
+  ['total', 'w-[12%] text-end'],
+  ['action', 'w-[8%] text-end'],
 ] as const
 
 /**
- * The confirmations list: a six-column table from `md`, one card per order
+ * The confirmations list: a seven-column table from `md`, one card per order
  * below it — the same values and actions either way. Switched in CSS rather
  * than by a width hook, so server and first client render always match.
  */
@@ -144,25 +181,22 @@ export function ConfirmationsList({
   return (
     <>
       <div className="hidden overflow-x-auto md:block">
-        <table className="bg-card w-full min-w-270 table-fixed text-start">
+        <table className={cn(TABLE, 'min-w-270')}>
           <caption className="sr-only">{t('title')}</caption>
           <thead>
-            <tr className="border-line bg-surface-sunken text-ak-label text-ink-muted border-b">
+            <tr className={TABLE_HEAD_ROW}>
               {HEADINGS.map(([heading, width]) => (
                 <th
                   key={heading}
                   scope="col"
-                  className={cn(
-                    'h-11 px-4 text-start font-bold whitespace-nowrap first:ps-6 last:pe-6',
-                    width
-                  )}
+                  className={cn(TABLE_HEAD_CELL, width)}
                 >
                   {t(`headings.${heading}`)}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-line divide-y">
+          <tbody className={TABLE_BODY}>
             {rows.map((row) => (
               <TableRow key={row.id} row={row} {...rowProps} />
             ))}

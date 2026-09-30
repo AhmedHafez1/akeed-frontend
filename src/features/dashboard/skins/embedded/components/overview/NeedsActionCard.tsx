@@ -2,134 +2,218 @@ import {
   Badge,
   BlockStack,
   Box,
-  Button,
   Card,
   Divider,
   Icon,
+  IndexTable,
   InlineStack,
   Link,
   Text,
+  useBreakpoints,
 } from '@shopify/polaris'
 import { CheckCircleIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import { hasCapability } from '../../../../domain/verificationLifecycle'
 import type { ManualConfirmationTarget } from '../../../../domain/useManualConfirmation'
-import { useNeedsActionReason } from '../../../../domain/useNeedsActionReason'
+import { NEEDS_ACTION_CARD_LIMIT } from '../../../../domain/needsActionRow'
+import { useNeedsActionRow } from '../../../../domain/useNeedsActionRow'
 import {
   customerDisplayName,
   formatCount,
   formatOrderAmount,
-  formatOrderNumber,
   formatPhoneInternational,
-  whatsAppChatUrl,
 } from '../../../../lib/orderDisplay'
 import type {
   DashboardOverview,
   NeedsActionItem,
 } from '../../../../model/dashboard.model'
+import {
+  AmountText,
+  BADGE_TONES,
+  CustomerCell,
+  CustomerNameCell,
+  PhoneCell,
+} from '../confirmations/confirmationRowView'
 import { OrderNumberLink } from '../shared/OrderNumberLink'
+import { NeedsActionRowActions } from './NeedsActionRowActions'
 
-function ReasonLine({
-  item,
-  timeZone,
-}: {
-  item: NeedsActionItem
-  timeZone: string
-}) {
-  const { text, isCritical } = useNeedsActionReason(item.reason, timeZone)
-  return (
-    <Text as="p" variant="bodySm" tone={isCritical ? 'critical' : 'subdued'}>
-      {text}
-    </Text>
-  )
-}
-
-function NeedsActionRow({
-  item,
-  timeZone,
-  canConfirm,
-  onRequestConfirm,
-}: {
+interface RowProps {
   item: NeedsActionItem
   timeZone: string
   canConfirm: boolean
   onRequestConfirm: (target: ManualConfirmationTarget) => void
-}) {
-  const t = useTranslations('dashboard.overview.needsAction.actions')
-  const tTable = useTranslations('dashboard.table')
+  onViewAll: () => void
+}
+
+/** Everything a row and a card show, from one item. */
+function useRowView({ item, timeZone, canConfirm }: RowProps) {
   const { locale } = useLocaleInfo()
+  const row = useNeedsActionRow(item, timeZone, canConfirm)
   const name = customerDisplayName(item.customer_name)
   const phone = formatPhoneInternational(item.customer_phone)
-  const orderLabel =
-    formatOrderNumber(item.order_number) ??
-    `${tTable('orderFallbackPrefix')} ${item.order_id.slice(0, 8)}`
-  const chatUrl =
-    item.reason.type === 'delivery_failed'
-      ? null
-      : whatsAppChatUrl(item.customer_phone)
-  const confirmable =
-    canConfirm &&
-    hasCapability(item.capabilities, 'merchant_manual_confirmation')
+  return {
+    row,
+    name,
+    phone,
+    amount: formatOrderAmount(item.total_price, item.currency, locale),
+    target: {
+      verificationId: item.verification_id,
+      orderLabel: row.orderLabel,
+    },
+  }
+}
+
+/** The status column: the table's words and tones, why it waits on hover. */
+function NeedsActionStatus({
+  row,
+}: {
+  row: ReturnType<typeof useNeedsActionRow>
+}) {
+  return (
+    <span title={row.reasonText}>
+      <Badge tone={BADGE_TONES[row.status.kind]}>{row.badgeText}</Badge>
+    </span>
+  )
+}
+
+function OrderLabel({
+  item,
+  fallback,
+}: {
+  item: NeedsActionItem
+  fallback: string
+}) {
+  return (
+    <OrderNumberLink
+      orderNumber={item.order_number}
+      platform={item.platform}
+      externalOrderId={item.external_order_id}
+      fallback={fallback}
+    />
+  )
+}
+
+function TableRow({
+  index,
+  cellClassName,
+  ...props
+}: RowProps & { index: number; cellClassName: string }) {
+  const { row, name, phone, amount, target } = useRowView(props)
+  const cells = [
+    <OrderLabel key="order" item={props.item} fallback={row.orderLabel} />,
+    <CustomerNameCell key="customer" name={name} />,
+    <PhoneCell key="phone" phone={phone} />,
+    <NeedsActionStatus key="status" row={row} />,
+    <AmountText key="total" amount={amount} isCanceled={false} />,
+    <NeedsActionRowActions
+      key="action"
+      row={row}
+      target={target}
+      customerLabel={name ?? phone}
+      onRequestConfirm={props.onRequestConfirm}
+      onViewAll={props.onViewAll}
+    />,
+  ]
+  return (
+    <IndexTable.Row
+      id={props.item.verification_id}
+      position={index}
+      tone="warning"
+    >
+      {cells.map((cell) => (
+        <IndexTable.Cell key={cell.key}>
+          <div className={cellClassName}>{cell}</div>
+        </IndexTable.Cell>
+      ))}
+    </IndexTable.Row>
+  )
+}
+
+/** The Confirmations page's narrow-screen card, with the reason written out. */
+function CardRow(props: RowProps) {
+  const { row, name, phone, amount, target } = useRowView(props)
+  return (
+    <Box
+      as="li"
+      padding="400"
+      borderBlockEndWidth="025"
+      borderColor="border"
+      background="bg-surface-warning"
+    >
+      <BlockStack gap="300">
+        <InlineStack align="space-between" blockAlign="center" wrap={false}>
+          <OrderLabel item={props.item} fallback={row.orderLabel} />
+          <AmountText amount={amount} isCanceled={false} />
+        </InlineStack>
+        <CustomerCell name={name} phone={phone} />
+        <BlockStack gap="150" inlineAlign="start">
+          <NeedsActionStatus row={row} />
+          <Text as="p" variant="bodySm" tone="subdued">
+            {row.reasonText}
+          </Text>
+        </BlockStack>
+        <NeedsActionRowActions
+          row={row}
+          target={target}
+          customerLabel={name ?? phone}
+          onRequestConfirm={props.onRequestConfirm}
+          onViewAll={props.onViewAll}
+          layout="stacked"
+        />
+      </BlockStack>
+    </Box>
+  )
+}
+
+const HEADINGS = [
+  'order',
+  'customer',
+  'phone',
+  'status',
+  'total',
+  'action',
+] as const
+
+/** The confirmations table's columns, less Follow-up: every row here waits. */
+function NeedsActionTable({
+  items,
+  ...rowProps
+}: Omit<RowProps, 'item'> & { items: NeedsActionItem[] }) {
+  const t = useTranslations('dashboard.confirmations')
+  const { isRTL } = useLocaleInfo()
+  const alignment = isRTL ? ('end' as const) : undefined
+  const cellClassName = isRTL ? 'w-full text-right' : 'w-full'
+  const [first, ...rest] = HEADINGS.map((heading) => ({
+    title: t(`headings.${heading}`),
+    alignment,
+  }))
 
   return (
-    <li>
-      <Box padding="400">
-        <div className="grid grid-cols-1 items-center gap-3 md:grid-cols-[6rem_minmax(0,1fr)_auto_auto] md:gap-6">
-          <OrderNumberLink
-            orderNumber={item.order_number}
-            platform={item.platform}
-            externalOrderId={item.external_order_id}
-            fallback={orderLabel}
-          />
-          <BlockStack gap="050">
-            <Text as="p" variant="bodyMd" fontWeight="semibold">
-              {name ?? <bdi dir="ltr">{phone}</bdi>}
-            </Text>
-            <ReasonLine item={item} timeZone={timeZone} />
-          </BlockStack>
-          <Text as="p" variant="bodyLg" fontWeight="semibold">
-            <bdi dir="ltr">
-              {formatOrderAmount(item.total_price, item.currency, locale)}
-            </bdi>
-          </Text>
-          <InlineStack gap="200" wrap={false}>
-            {chatUrl && (
-              <Button
-                url={chatUrl}
-                target="_blank"
-                accessibilityLabel={t('whatsappLabel', {
-                  customer: name ?? phone,
-                })}
-              >
-                {t('whatsapp')}
-              </Button>
-            )}
-            {confirmable && (
-              <Button
-                accessibilityLabel={t('manualConfirmLabel', {
-                  order: orderLabel,
-                })}
-                onClick={() =>
-                  onRequestConfirm({
-                    verificationId: item.verification_id,
-                    orderLabel,
-                  })
-                }
-              >
-                {t('manualConfirm')}
-              </Button>
-            )}
-          </InlineStack>
-        </div>
-      </Box>
-    </li>
+    <IndexTable
+      resourceName={{
+        singular: t('resource.singular'),
+        plural: t('resource.plural'),
+      }}
+      itemCount={items.length}
+      headings={[first, ...rest]}
+      selectable={false}
+    >
+      {items.map((item, index) => (
+        <TableRow
+          key={item.verification_id}
+          item={item}
+          index={index}
+          cellClassName={cellClassName}
+          {...rowProps}
+        />
+      ))}
+    </IndexTable>
   )
 }
 
 /**
- * The orders waiting on the merchant, highest value first (at most five), with
- * the one or two things they can do about each.
+ * The orders waiting on the merchant, highest value first (at most three), in
+ * the confirmations table's columns and words; narrow screens get its cards.
  */
 export function NeedsActionCard({
   needsAction,
@@ -146,6 +230,10 @@ export function NeedsActionCard({
 }) {
   const t = useTranslations('dashboard.overview.needsAction')
   const { locale } = useLocaleInfo()
+  // Six columns do not fit a phone; below md each order becomes a card.
+  const { mdUp } = useBreakpoints({ defaults: { mdUp: true } })
+  const rowProps = { timeZone, canConfirm, onRequestConfirm, onViewAll }
+  const items = needsAction.items.slice(0, NEEDS_ACTION_CARD_LIMIT)
 
   return (
     <Card padding="0">
@@ -168,7 +256,7 @@ export function NeedsActionCard({
         </InlineStack>
       </Box>
       <Divider />
-      {needsAction.items.length === 0 ? (
+      {items.length === 0 ? (
         <Box padding="600">
           <BlockStack gap="200" inlineAlign="center">
             <span aria-hidden="true">
@@ -182,16 +270,12 @@ export function NeedsActionCard({
             </Text>
           </BlockStack>
         </Box>
+      ) : mdUp ? (
+        <NeedsActionTable items={items} {...rowProps} />
       ) : (
-        <ul className="m-0 list-none divide-y divide-[var(--p-color-border-secondary)] p-0">
-          {needsAction.items.map((item) => (
-            <NeedsActionRow
-              key={item.verification_id}
-              item={item}
-              timeZone={timeZone}
-              canConfirm={canConfirm}
-              onRequestConfirm={onRequestConfirm}
-            />
+        <ul className="m-0 list-none p-0">
+          {items.map((item) => (
+            <CardRow key={item.verification_id} item={item} {...rowProps} />
           ))}
         </ul>
       )}

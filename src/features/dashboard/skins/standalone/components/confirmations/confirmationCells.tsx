@@ -1,17 +1,15 @@
 'use client'
 
+import { Bell, BellRing } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
 import { resolveRowStatus } from '@/features/dashboard/domain/confirmationRowStatus'
-import {
-  formatTooltipDateTime,
-  getStatusTimestamp,
-} from '@/features/dashboard/domain/verificationRow'
+import { formatTooltipDateTime } from '@/features/dashboard/domain/verificationRow'
+import { useStatusTooltip } from '@/features/dashboard/domain/useStatusTooltip'
 import type { ConfirmationRowActionHandlers } from '@/features/dashboard/domain/confirmationRowActions'
 import {
   customerDisplayName,
-  formatClockTime,
   formatDayAndClock,
   formatOrderAmount,
   formatOrderNumber,
@@ -100,54 +98,29 @@ export function StatusCell({
   timeZone: string
 }) {
   const t = useTranslations('dashboard.confirmations.status')
-  const { locale } = useLocaleInfo()
   const view = resolveRowStatus(row)
-  const statusTitle = formatTooltipDateTime(
-    getStatusTimestamp(row),
-    locale,
-    timeZone
-  )
-  const sub = view.sub
-    ? t(view.sub, {
-        time: view.subTime
-          ? formatClockTime(view.subTime, locale, timeZone)
-          : '',
-      })
-    : null
-
+  const statusTitle = useStatusTooltip(row, timeZone)
   return (
     <div className="flex min-w-0 flex-col items-start gap-1">
-      <StatusBadge kind={view.kind} title={statusTitle || undefined}>
+      <StatusBadge kind={view.kind} icon={false} title={statusTitle}>
         {t(view.badge)}
       </StatusBadge>
-      {sub && (
-        <span
-          className={cn(
-            'text-ak-caption max-w-full truncate first-letter:uppercase',
-            view.kind === 'failed' ? 'text-ak-danger' : 'text-ink-muted'
-          )}
-        >
-          {sub}
-        </span>
-      )}
     </div>
   )
 }
 
+/** The table's Follow-up column: "Sent", with the time in its tooltip. */
 export function FollowUpCell({
   row,
   timeZone,
-  showTime = false,
 }: {
   row: VerificationItem
   timeZone: string
-  showTime?: boolean
 }) {
   const t = useTranslations('dashboard.table.followUp')
   const { locale } = useLocaleInfo()
   if (!row.follow_up_sent_at) return null
 
-  const sentAt = formatDayAndClock(row.follow_up_sent_at, locale, timeZone)
   const sentAtTitle = formatTooltipDateTime(
     row.follow_up_sent_at,
     locale,
@@ -155,15 +128,85 @@ export function FollowUpCell({
   )
   return (
     <div className="flex min-w-0 flex-col items-start gap-1">
-      <StatusBadge kind="confirmed" title={sentAtTitle || undefined}>
+      <StatusBadge
+        kind="confirmed"
+        icon={false}
+        title={sentAtTitle || undefined}
+      >
         {t('sent')}
       </StatusBadge>
-      {showTime && (
-        <span className="text-ak-caption text-ink-muted whitespace-nowrap tabular-nums">
-          <bdi>{sentAt}</bdi>
-        </span>
-      )}
     </div>
+  )
+}
+
+/**
+ * The card's explanation under the status badge: when the reminder went out,
+ * or else the status's own sub-line ("Confirmed manually", "Sends 6:40 AM",
+ * why a message failed). Nothing when there is nothing to add.
+ */
+export function StatusNote({
+  row,
+  timeZone,
+}: {
+  row: VerificationItem
+  timeZone: string
+}) {
+  const tStatus = useTranslations('dashboard.confirmations.status')
+  const tFollowUp = useTranslations('dashboard.table.followUp')
+  const { locale } = useLocaleInfo()
+
+  if (row.follow_up_sent_at) {
+    const sentAt = formatDayAndClock(row.follow_up_sent_at, locale, timeZone)
+    return (
+      <p
+        title={
+          formatTooltipDateTime(row.follow_up_sent_at, locale, timeZone) ||
+          undefined
+        }
+        className="text-ak-caption text-ink-muted flex min-w-0 items-center gap-1.5"
+      >
+        <BellRing aria-hidden="true" className="size-3.5 shrink-0" />
+        <span className="truncate">
+          {tFollowUp('sentAt', { time: sentAt })}
+        </span>
+      </p>
+    )
+  }
+
+  if (row.follow_up_scheduled_for) {
+    const dueAt = formatDayAndClock(
+      row.follow_up_scheduled_for,
+      locale,
+      timeZone
+    )
+    return (
+      <p
+        title={
+          formatTooltipDateTime(
+            row.follow_up_scheduled_for,
+            locale,
+            timeZone
+          ) || undefined
+        }
+        className="text-ak-caption text-ink-muted flex min-w-0 items-center gap-1.5"
+      >
+        <Bell aria-hidden="true" className="size-3.5 shrink-0" />
+        <span className="truncate">
+          {tStatus('tooltip.reminderAt', { time: dueAt })}
+        </span>
+      </p>
+    )
+  }
+
+  const view = resolveRowStatus(row)
+  if (!view.sub) return null
+  const time = view.subTime
+    ? formatDayAndClock(view.subTime, locale, timeZone)
+    : ''
+  return (
+    <p className="text-ak-caption text-ink-muted truncate">
+      {tStatus(view.sub, { time })}
+    </p>
   )
 }
 
@@ -187,7 +230,7 @@ export function CustomerCell({
   return (
     <div className="flex min-w-0 items-center gap-3">
       <div className="min-w-0">
-        <p className="text-ak-body text-ink truncate font-semibold">
+        <p className="text-ak-body text-ink truncate font-medium">
           {name ? <bdi>{name}</bdi> : phoneText}
         </p>
         <p className="text-ak-caption text-ink-muted whitespace-nowrap">
@@ -195,6 +238,28 @@ export function CustomerCell({
         </p>
       </div>
     </div>
+  )
+}
+
+export function CustomerNameCell({ name }: { name: string | null }) {
+  const t = useTranslations('dashboard')
+  return (
+    <span
+      className={cn('text-ak-body text-ink-muted block max-w-full truncate')}
+    >
+      {name ? <bdi>{name}</bdi> : t('confirmations.noName')}
+    </span>
+  )
+}
+
+export function PhoneCell({ phone }: { phone: string }) {
+  const t = useTranslations('dashboard')
+  return (
+    <span className="text-ak-caption text-ink block max-w-full truncate font-semibold whitespace-nowrap">
+      <bdi dir="ltr" className="tabular-nums">
+        {phone || t('table.noPhone')}
+      </bdi>
+    </span>
   )
 }
 

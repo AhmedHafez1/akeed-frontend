@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  Check,
   CheckCircle2,
   Ellipsis,
   Eye,
@@ -25,11 +26,11 @@ import type { VerificationItem } from '@/features/dashboard/model/dashboard.mode
 import type { ConfirmationsListProps } from './confirmationCells'
 
 /**
- * In the table: an inline "Confirm" for rows waiting on the merchant, the
- * row's WhatsApp link as an icon button, and everything else — details,
- * manual confirm, retry, cancel — in one labelled "more" menu. On a card the
- * link keeps its words. The shared plan decides which actions exist, so both
- * modes offer the same ones.
+ * In the table: one labelled "more" menu holds every action — details, the
+ * WhatsApp or shipping link, manual confirm, retry, cancel — so rows stay
+ * quiet. On a card, Confirm and the link sit up front as 40px buttons that
+ * share the width, and the menu keeps the rest. The shared plan decides
+ * which actions exist, so both modes offer the same ones.
  */
 export function ConfirmationRowActions({
   row,
@@ -64,7 +65,7 @@ export function ConfirmationRowActions({
 
   return (
     <div className={cn('flex items-center gap-2', inline && 'justify-end')}>
-      {plan.canConfirm && (
+      {!inline && plan.canConfirm && (
         <button
           type="button"
           disabled={isAnyActing}
@@ -72,30 +73,28 @@ export function ConfirmationRowActions({
             order: orderLabel,
           })}
           onClick={() => handlers.onRequestConfirm(row, orderLabel)}
-          className={akButton({
-            variant: 'tinted',
-            size: inline ? 'table' : 'row',
-          })}
+          className={cn(
+            akButton({ variant: 'tinted', size: 'md' }),
+            'min-w-0 flex-1'
+          )}
         >
+          <Check aria-hidden="true" strokeWidth={2.5} />
           {tTable('confirm')}
         </button>
       )}
-      {link && (
+      {!inline && link && (
         <a
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
           aria-label={link.accessibilityLabel}
-          title={inline ? link.content : undefined}
           className={cn(
-            inline
-              ? akButton({ variant: 'ghost', size: 'iconTable' })
-              : akButton({ variant: 'secondary', size: 'row' }),
-            !inline && 'min-w-0 flex-1'
+            akButton({ variant: 'secondary', size: 'md' }),
+            'min-w-0 flex-1'
           )}
         >
           <LinkIcon aria-hidden="true" />
-          {!inline && link.content}
+          <span className="truncate">{link.content}</span>
         </a>
       )}
       <DropdownMenu modal={false}>
@@ -105,8 +104,8 @@ export function ConfirmationRowActions({
             aria-label={t('confirmations.actions.more', { order: orderLabel })}
             aria-busy={isActing || undefined}
             className={akButton({
-              variant: 'ghost',
-              size: inline ? 'iconTable' : 'iconRow',
+              variant: inline ? 'ghost' : 'secondary',
+              size: inline ? 'iconTable' : 'iconMd',
             })}
           >
             <Ellipsis
@@ -120,7 +119,20 @@ export function ConfirmationRowActions({
             <Eye aria-hidden="true" className="size-4" />
             {t('table.actions.details')}
           </DropdownMenuItem>
-          {plan.canConfirm && (
+          {inline && link && (
+            <DropdownMenuItem asChild>
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={link.accessibilityLabel}
+              >
+                <LinkIcon aria-hidden="true" className="size-4" />
+                {link.content}
+              </a>
+            </DropdownMenuItem>
+          )}
+          {inline && plan.canConfirm && (
             <DropdownMenuItem
               disabled={isAnyActing}
               onSelect={() => handlers.onRequestConfirm(row, orderLabel)}

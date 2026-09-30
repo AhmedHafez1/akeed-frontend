@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { BlockStack, Button, InlineStack, Modal } from '@shopify/polaris'
-import { MenuHorizontalIcon } from '@shopify/polaris-icons'
+import { CheckIcon, MenuHorizontalIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import {
   planConfirmationRowActions,
@@ -70,8 +70,10 @@ function useConfirmationRowActions({
 }
 
 /**
- * Nothing for rows that need nothing. The main WhatsApp link sits up front;
- * the rest open in a small sheet behind one labelled "more" button.
+ * Nothing for rows that need nothing. In the table every action, the WhatsApp
+ * link included, sits in a small sheet behind one labelled "more" button, so
+ * rows stay quiet. On a card, Confirm and the link sit up front and share the
+ * width; the sheet keeps the rest.
  *
  * The sheet is a Modal, not a Popover: Polaris' popover keeps the window in
  * its props, and React's dev profiler walks it into the cross-origin Shopify
@@ -107,22 +109,44 @@ export function ConfirmationRowActions({
 
   if (!link && items.length === 0) return null
   const isStacked = layout === 'stacked'
+  const confirmItem = items.find((item) => item.id === 'confirm')
+  // A card shows Confirm up front, so its sheet leaves it out.
+  const sheetItems = isStacked
+    ? items.filter((item) => item.id !== 'confirm')
+    : items
+  const showSheet = sheetItems.length > 0 || (!isStacked && link !== null)
 
   return (
     <InlineStack gap="200" wrap={false} blockAlign="center">
-      {link && (
-        <div className={isStacked ? 'min-w-0 flex-1' : undefined}>
+      {isStacked && confirmItem && (
+        <div className="min-w-0 flex-1">
+          <Button
+            icon={CheckIcon}
+            fullWidth
+            disabled={isActing}
+            accessibilityLabel={t(
+              'overview.needsAction.actions.manualConfirmLabel',
+              { order: orderLabel }
+            )}
+            onClick={confirmItem.onAction}
+          >
+            {confirmItem.content}
+          </Button>
+        </div>
+      )}
+      {isStacked && link && (
+        <div className="min-w-0 flex-1">
           <Button
             url={link.url}
             target="_blank"
-            fullWidth={isStacked}
+            fullWidth
             accessibilityLabel={link.accessibilityLabel}
           >
             {link.content}
           </Button>
         </div>
       )}
-      {items.length > 0 && (
+      {showSheet && (
         <>
           <Button
             icon={MenuHorizontalIcon}
@@ -147,7 +171,18 @@ export function ConfirmationRowActions({
           >
             <Modal.Section>
               <BlockStack gap="200">
-                {items.map((item) => (
+                {!isStacked && link && (
+                  <Button
+                    fullWidth
+                    url={link.url}
+                    target="_blank"
+                    accessibilityLabel={link.accessibilityLabel}
+                    onClick={() => setIsSheetOpen(false)}
+                  >
+                    {link.content}
+                  </Button>
+                )}
+                {sheetItems.map((item) => (
                   <Button
                     key={item.id}
                     fullWidth

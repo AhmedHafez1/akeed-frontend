@@ -55,17 +55,17 @@ export function resolveRowStatus(
               : undefined,
       }
     case 'canceled':
+      // The badge is just "Canceled"; who canceled it is the sub-line.
       return {
-        badge:
-          row.cancellation_source === 'merchant_no_reply'
-            ? 'canceledNoReply'
-            : 'canceledByCustomer',
+        badge: 'canceled',
         tone: 'critical',
         kind: 'canceled',
         sub:
           options.showStoreCancellation && row.canceled_in_store
             ? 'sub.canceledInStore'
-            : undefined,
+            : row.cancellation_source === 'merchant_no_reply'
+              ? 'sub.canceledNoReply'
+              : 'sub.canceledByCustomer',
       }
     case 'failed':
       return {

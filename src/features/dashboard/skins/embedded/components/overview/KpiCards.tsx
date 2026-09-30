@@ -12,11 +12,9 @@ import type { DashboardOverview } from '../../../../model/dashboard.model'
 function KpiCard({
   title,
   value,
-  body,
 }: {
   title: string
   value: string
-  body: ReactNode
 }) {
   return (
     <Card>
@@ -26,9 +24,6 @@ function KpiCard({
         </Text>
         <Text as="p" variant="heading2xl">
           <bdi dir="ltr">{value}</bdi>
-        </Text>
-        <Text as="p" variant="bodyMd" tone="subdued">
-          {body}
         </Text>
       </BlockStack>
     </Card>
@@ -47,37 +42,14 @@ export function KpiCards({ kpis }: { kpis: DashboardOverview['kpis'] }) {
       <KpiCard
         title={t('confirmed.title')}
         value={formatCount(kpis.confirmed.count, locale)}
-        body={
-          topValue
-            ? t.rich('confirmed.value', {
-                amount: () => (
-                  <bdi dir="ltr" className="font-semibold">
-                    {formatOrderAmount(
-                      topValue.amount,
-                      topValue.currency,
-                      locale
-                    )}
-                  </bdi>
-                ),
-              })
-            : t('confirmed.none')
-        }
       />
       <KpiCard
         title={t('canceled.title')}
         value={formatCount(kpis.canceled_before_shipping.count, locale)}
-        body={t('canceled.body', {
-          count: kpis.canceled_before_shipping.count,
-        })}
       />
       <KpiCard
         title={t('rate.title')}
         value={formatPercent(rate.rate, locale)}
-        body={
-          rate.sent > 0
-            ? t('rate.body', { confirmed: rate.confirmed, sent: rate.sent })
-            : t('rate.none')
-        }
       />
     </InlineGrid>
   )

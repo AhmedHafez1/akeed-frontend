@@ -67,6 +67,10 @@ describe('NeedsActionCard', () => {
     )
     const row = screen.getByRole('listitem')
     expect(within(row).getByText('#1138')).toBeTruthy()
+    // The table's word on the badge; why it waits on hover and in the note.
+    expect(
+      within(row).getByText('لم يرد').closest('[title]')?.getAttribute('title')
+    ).toBe('لم يرد منذ 22 سبتمبر · أُرسل التذكير')
     expect(
       within(row).getByText('لم يرد منذ 22 سبتمبر · أُرسل التذكير')
     ).toBeTruthy()
@@ -103,11 +107,52 @@ describe('NeedsActionCard', () => {
         {...props}
       />
     )
+    expect(screen.getByText('فشل الإرسال')).toBeTruthy()
     expect(
       screen.getByText('لم تصل الرسالة: الرقم غير مسجل على واتساب')
     ).toBeTruthy()
     expect(screen.getByText('+20 100 761 1456')).toBeTruthy()
     expect(screen.queryByRole('link', { name: /واتساب/ })).toBeNull()
+  })
+
+  it('explains a message that never went out', () => {
+    renderEmbedded(
+      <NeedsActionCard
+        needsAction={{
+          count: 1,
+          items: [
+            item({
+              reason: {
+                type: 'send_failed',
+                since: null,
+                hours: null,
+                failure_code: null,
+              },
+            }),
+          ],
+        }}
+        {...props}
+      />,
+      'en'
+    )
+    expect(screen.getByText('Failed to send')).toBeTruthy()
+    expect(screen.getByText('Message not sent')).toBeTruthy()
+    expect(screen.queryByRole('link', { name: /WhatsApp/ })).toBeNull()
+  })
+
+  it('lists at most three orders', () => {
+    renderEmbedded(
+      <NeedsActionCard
+        needsAction={{
+          count: 5,
+          items: [1, 2, 3, 4, 5].map((n) =>
+            item({ verification_id: `v-${n}`, order_number: `${n}` })
+          ),
+        }}
+        {...props}
+      />
+    )
+    expect(screen.getAllByRole('listitem')).toHaveLength(3)
   })
 
   it('hides manual confirmation from viewers', () => {
@@ -386,17 +431,24 @@ describe('ConfirmationsTable', () => {
     expect(screen.getByText(/failed/i).closest('[title]')).toBeNull()
   })
 
-  it('shows the phone as the name line and "بدون اسم" below when nameless', () => {
+  it('shows nameless customers and phone in separate one-line table cells', () => {
     renderEmbedded(<ConfirmationsTable rows={[listRow()]} {...tableProps} />)
-    expect(screen.getByText('+20 114 867 5077')).toBeTruthy()
-    expect(screen.getByText('بدون اسم')).toBeTruthy()
+    const table = screen.getByRole('table')
+    expect(
+      within(table).getByRole('columnheader', { name: 'الهاتف' })
+    ).toBeTruthy()
+    const row = within(table).getAllByRole('row')[1]
+    const cells = within(row).getAllByRole('cell')
+    expect(cells[1].textContent).toBe('بدون اسم')
+    expect(cells[2].textContent).toBe('+20 114 867 5077')
+    expect(cells[1].querySelectorAll('p')).toHaveLength(0)
     expect(screen.queryByText('Guest')).toBeNull()
     expect(screen.getByText('مؤكد')).toBeTruthy()
     const link = screen.getByRole('link', { name: /#1137/ })
     expect(link.getAttribute('href')).toBe('shopify://admin/orders/5551137')
   })
 
-  it('strikes through a canceled amount and offers chat only when action is needed', () => {
+  it('strikes through a canceled amount and keeps chat in the sheet of the row that needs it', () => {
     renderEmbedded(
       <ConfirmationsTable
         rows={[
@@ -417,16 +469,50 @@ describe('ConfirmationsTable', () => {
         {...tableProps}
       />
     )
-    expect(screen.getByText('ألغاه العميل')).toBeTruthy()
+    expect(screen.getByText('ملغي')).toBeTruthy()
     expect(screen.getByText('لم يرد')).toBeTruthy()
     expect(screen.queryByText('أُرسل التذكير')).toBeNull()
     const followUpBadge = screen.getByText('تم الإرسال')
     expect(followUpBadge.closest('[title]')?.getAttribute('title')).toMatch(
       /2026.*6:49/
     )
-    const chats = screen.getAllByRole('link', { name: /واتساب/ })
-    expect(chats).toHaveLength(1)
+    // No action sits outside the "more" sheet, and only 1138 has one.
+    expect(screen.queryAllByRole('link', { name: /واتساب/ })).toHaveLength(0)
+    const more = screen.getAllByRole('button', { name: /مزيد من الإجراءات/ })
+    expect(more).toHaveLength(1)
+    fireEvent.click(more[0])
+    expect(
+      within(screen.getByRole('dialog')).getAllByRole('link', {
+        name: /واتساب/,
+      })
+    ).toHaveLength(1)
     expect(screen.getByLabelText('الصفحة السابقة')).toBeTruthy()
+  })
+
+  it('names a held-back message "Scheduled" and says when it goes out', () => {
+    renderEmbedded(
+      <ConfirmationsTable
+        rows={[
+          listRow({
+            status: 'pending',
+            confirmed_at: null,
+            scheduled_for: '2026-10-01T06:00:00Z',
+          }),
+          listRow({
+            id: 'v-2',
+            order_number: '1138',
+            status: 'pending',
+            confirmed_at: null,
+            scheduled_for: null,
+          }),
+        ]}
+        {...tableProps}
+      />
+    )
+    expect(
+      screen.getByText('مجدول').closest('[title]')?.getAttribute('title')
+    ).toMatch(/^مجدول في /)
+    expect(screen.getByText('قيد الانتظار').closest('[title]')).toBeNull()
   })
 
   it('offers confirmed orders a WhatsApp link with the shipping message typed in', () => {
@@ -439,7 +525,12 @@ describe('ConfirmationsTable', () => {
         {...tableProps}
       />
     )
-    const links = screen.getAllByRole('link', { name: /بيانات الشحن/ })
+    const more = screen.getAllByRole('button', { name: /مزيد من الإجراءات/ })
+    expect(more).toHaveLength(1)
+    fireEvent.click(more[0])
+    const links = within(screen.getByRole('dialog')).getAllByRole('link', {
+      name: /بيانات الشحن/,
+    })
     expect(links).toHaveLength(1)
     const href = links[0].getAttribute('href') ?? ''
     expect(href.startsWith('https://wa.me/201148675077?text=')).toBe(true)
@@ -628,8 +719,7 @@ describe('ConfirmationsCardList', () => {
       within(cards[0]).getByRole('link', { name: /بيانات الشحن/ })
     ).toBeTruthy()
     expect(within(cards[1]).getByText('لم يرد')).toBeTruthy()
-    expect(within(cards[1]).getByText('تم الإرسال')).toBeTruthy()
-    expect(within(cards[1]).getByText(/17 سبتمبر/)).toBeTruthy()
+    expect(within(cards[1]).getByText(/أُرسل التذكير .*17 سبتمبر/)).toBeTruthy()
     expect(
       within(cards[1]).getByRole('link', { name: /راسل .* على واتساب/ })
     ).toBeTruthy()

@@ -75,46 +75,50 @@ export function MainEmbeddedSkin() {
     ) : undefined
 
   return (
-    <Page>
-      <BlockStack gap="500">
-        {showActivation && (
-          <DashboardActivationSection activation={activation} />
-        )}
-        <Tabs
-          tabs={tabs}
-          selected={MAIN_TABS.indexOf(activeTab)}
-          onSelect={(index) => updateParams({ tab: MAIN_TABS[index] })}
-        />
-        {activeTab === 'metrics' ? (
-          showActivation ? (
-            <MetricsPlaceholder
-              title={t('activation.metricsPlaceholder.title')}
-              body={t('activation.metricsPlaceholder.body')}
-            />
+    // Polaris caps a page at 998px, which crowds the seven-column table; a
+    // little more room (1200px) spreads it without sprawling on wide screens.
+    <Page fullWidth>
+      <div className="mx-auto w-full max-w-300">
+        <BlockStack gap="500">
+          {showActivation && (
+            <DashboardActivationSection activation={activation} />
+          )}
+          <Tabs
+            tabs={tabs}
+            selected={MAIN_TABS.indexOf(activeTab)}
+            onSelect={(index) => updateParams({ tab: MAIN_TABS[index] })}
+          />
+          {activeTab === 'metrics' ? (
+            showActivation ? (
+              <MetricsPlaceholder
+                title={t('activation.metricsPlaceholder.title')}
+                body={t('activation.metricsPlaceholder.body')}
+              />
+            ) : (
+              <OverviewEmbedded
+                period={period}
+                periodOptions={periodOptions}
+                onPeriodChange={onPeriodChange}
+                titleMetadata={freeMessagesBadge}
+                onEditSettings={activation.openQuietHours}
+                onViewNeedsAction={() =>
+                  updateParams({ tab: 'confirmations', filter: 'needs_action' })
+                }
+              />
+            )
           ) : (
-            <OverviewEmbedded
+            <ConfirmationsEmbedded
               period={period}
               periodOptions={periodOptions}
               onPeriodChange={onPeriodChange}
-              titleMetadata={freeMessagesBadge}
-              onEditSettings={activation.openQuietHours}
-              onViewNeedsAction={() =>
-                updateParams({ tab: 'confirmations', filter: 'needs_action' })
+              tab={confirmationsTab}
+              onTabChange={(next) =>
+                updateParams({ filter: next === 'all' ? null : next })
               }
             />
-          )
-        ) : (
-          <ConfirmationsEmbedded
-            period={period}
-            periodOptions={periodOptions}
-            onPeriodChange={onPeriodChange}
-            tab={confirmationsTab}
-            onTabChange={(next) =>
-              updateParams({ filter: next === 'all' ? null : next })
-            }
-          />
-        )}
-      </BlockStack>
+          )}
+        </BlockStack>
+      </div>
     </Page>
   )
 }

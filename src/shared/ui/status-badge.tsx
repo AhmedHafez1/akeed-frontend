@@ -36,8 +36,9 @@ const STYLES: Record<StatusBadgeKind, { className: string; Icon: LucideIcon }> =
   }
 
 /**
- * The one status pill for the standalone pages: always an icon and a word,
- * so no status is told apart by colour alone. 24px high, fully rounded.
+ * The one status pill for the standalone pages: a word, and an icon unless
+ * the caller drops it. The word always carries the meaning, so no status is
+ * told apart by colour alone. 24px high, fully rounded.
  */
 export function StatusBadge({
   kind,
@@ -49,15 +50,18 @@ export function StatusBadge({
 }: {
   kind: StatusBadgeKind
   children: ReactNode
-  /** Overrides the kind's icon, e.g. a clock on a "no reply" age. */
-  icon?: LucideIcon
+  /**
+   * Overrides the kind's icon, e.g. a clock on a "no reply" age; `false`
+   * drops it where a column of words reads cleaner (the status columns).
+   */
+  icon?: LucideIcon | false
   className?: string
   title?: string
   /** `sm` is the 24px table badge; `md` the 32px legend chip. */
   size?: 'sm' | 'md'
 }) {
   const { className: tone, Icon } = STYLES[kind]
-  const Glyph = icon ?? Icon
+  const Glyph = icon === false ? null : (icon ?? Icon)
   return (
     <span
       title={title}
@@ -70,11 +74,13 @@ export function StatusBadge({
         className
       )}
     >
-      <Glyph
-        aria-hidden="true"
-        strokeWidth={2.25}
-        className={cn('shrink-0', size === 'sm' ? 'size-3' : 'size-3.5')}
-      />
+      {Glyph && (
+        <Glyph
+          aria-hidden="true"
+          strokeWidth={2.25}
+          className={cn('shrink-0', size === 'sm' ? 'size-3' : 'size-3.5')}
+        />
+      )}
       <span className="truncate">{children}</span>
     </span>
   )

@@ -1289,17 +1289,6 @@
       },
       "needsAction": {
         "countPill": "{count, plural, one {# order} other {# orders}}",
-        "noReply": "No reply · {age}",
-        "readNoReply": "Read, no reply · {age}",
-        "notDelivered": "Not delivered",
-        "messaged": "Messaged {date}",
-        "read": "Read {date}",
-        "age": {
-          "lessThanHour": "under 1 hour",
-          "hours": "{count, plural, one {# hour} other {# hours}}",
-          "days": "{count, plural, one {# day} other {# days}}"
-        },
-        "whatsapp": "WhatsApp",
         "confirm": "Confirm manually",
         "more": "More actions for order {order}",
         "viewInList": "View in confirmations",
@@ -1501,7 +1490,8 @@
       "loadingMore": "Loading more...",
       "followUp": {
         "sent": "Sent",
-        "notSent": "--"
+        "notSent": "--",
+        "sentAt": "Reminder sent {time}"
       },
       "actions": {
         "details": "View details",
@@ -1679,7 +1669,8 @@
           "no_reply_after_follow_up": "No reply since {date} · Reminder sent",
           "no_reply": "No reply since {date}",
           "read_no_reply": "Read, no reply · {hours, plural, one {# hour} other {# hours}} ago",
-          "delivery_failed": "Not delivered: {reason}"
+          "delivery_failed": "Not delivered: {reason}",
+          "send_failed": "Message not sent"
         },
         "actions": {
           "whatsapp": "WhatsApp them",
@@ -1721,8 +1712,7 @@
         "all": "All",
         "needs_action": "Needs action",
         "confirmed": "Confirmed",
-        "canceled": "Canceled",
-        "failed": "Failed to send"
+        "canceled": "Canceled"
       },
       "search": {
         "label": "Search by order number or phone",
@@ -1733,6 +1723,7 @@
       "headings": {
         "order": "Order",
         "customer": "Customer",
+        "phone": "Phone",
         "status": "Status",
         "followUp": "Follow-up",
         "total": "Total",
@@ -1747,8 +1738,7 @@
       "openOrderLabel": "Open order {order} in Shopify",
       "status": {
         "confirmed": "Confirmed",
-        "canceledByCustomer": "Canceled by customer",
-        "canceledNoReply": "Canceled, no reply",
+        "canceled": "Canceled",
         "failed": "Failed to send",
         "scheduled": "Scheduled",
         "pending": "Pending",
@@ -1761,8 +1751,14 @@
           "afterFollowUp": "After reminder",
           "manual": "Confirmed manually",
           "canceledInStore": "Canceled in Shopify",
+          "canceledByCustomer": "By the customer",
+          "canceledNoReply": "No reply from the customer",
           "followUpSent": "Reminder sent",
           "sendsAt": "Sends {time}"
+        },
+        "tooltip": {
+          "scheduledFor": "Scheduled for {time}",
+          "reminderAt": "Reminder scheduled for {time}"
         },
         "failure": {
           "notOnWhatsApp": "number isn’t on WhatsApp",
@@ -1783,7 +1779,6 @@
         "needs_action": "Nothing needs your action. Nice work!",
         "confirmed": "No confirmed orders in this period.",
         "canceled": "No customer canceled in this period.",
-        "failed": "Every message in this period was delivered.",
         "search": "No results for “{query}”."
       },
       "error": {

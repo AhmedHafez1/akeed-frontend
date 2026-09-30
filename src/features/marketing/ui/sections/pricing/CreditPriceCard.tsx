@@ -33,7 +33,7 @@ export function CreditPriceCard() {
     <div className="relative isolate overflow-hidden bg-slate-950 p-8 sm:p-10 lg:p-12">
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-24 -end-24 -z-10 h-72 w-72 rounded-full bg-emerald-500/25 blur-3xl"
+        className="pointer-events-none absolute -end-24 -top-24 -z-10 h-72 w-72 rounded-full bg-emerald-500/25 blur-3xl"
       />
 
       <span className="inline-flex items-center gap-2 rounded-full bg-emerald-400/10 px-4 py-1.5 text-sm font-semibold text-white ring-1 ring-emerald-400/50">
@@ -49,7 +49,7 @@ export function CreditPriceCard() {
       <p className="mt-8 flex items-baseline gap-3">
         <span
           dir="ltr"
-          className="text-6xl leading-none font-extrabold text-white tabular-nums sm:text-7xl"
+          className="text-6xl leading-none font-bold text-white tabular-nums sm:text-7xl"
         >
           {price.amount}
         </span>

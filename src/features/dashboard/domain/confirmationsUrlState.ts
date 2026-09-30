@@ -15,7 +15,6 @@ export const CONFIRMATIONS_TABS: ConfirmationsTab[] = [
   'needs_action',
   'confirmed',
   'canceled',
-  'failed',
 ]
 
 export const DEFAULT_DASHBOARD_RANGE: DashboardStatsDateRange = 'last_30_days'
@@ -28,9 +27,14 @@ export function resolveDashboardRange(
     : DEFAULT_DASHBOARD_RANGE
 }
 
+/**
+ * Failed rows moved under "Needs action" when the Failed tab went away, so an
+ * old `?tab=failed` link lands there.
+ */
 export function resolveConfirmationsTab(
   value: string | null | undefined
 ): ConfirmationsTab {
+  if (value === 'failed') return 'needs_action'
   return (CONFIRMATIONS_TABS as readonly string[]).includes(value ?? '')
     ? (value as ConfirmationsTab)
     : 'all'

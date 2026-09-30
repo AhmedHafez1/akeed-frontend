@@ -110,6 +110,8 @@ export type VerificationItem = {
   follow_up_sent_at: string | null
   /** Set while a pending row waits for quiet hours or a send delay. */
   scheduled_for?: string | null
+  /** When the reminder for a sent, unanswered message is due to go out. */
+  follow_up_scheduled_for?: string | null
   /** The order's id on its platform, for linking to it in the store admin. */
   external_order_id?: string | null
   platform?: string | null
@@ -215,17 +217,13 @@ export type DashboardStatsResponse = {
 /** Why the server says a row needs the merchant. */
 export type NeedsActionReason =
   | 'delivery_failed'
+  | 'send_failed'
   | 'no_reply_after_follow_up'
   | 'read_no_reply'
   | 'no_reply'
 
 /** Tabs of the embedded confirmations list, each a server-side filter. */
-export type ConfirmationsTab =
-  | 'all'
-  | 'needs_action'
-  | 'confirmed'
-  | 'canceled'
-  | 'failed'
+export type ConfirmationsTab = 'all' | 'needs_action' | 'confirmed' | 'canceled'
 
 export type FunnelStep = {
   count: number
