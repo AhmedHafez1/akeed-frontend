@@ -26,6 +26,9 @@ export function useNeedsActionReason(
       isCritical: true,
     }
   }
+  if (reason.type === 'send_failed') {
+    return { text: t('send_failed'), isCritical: true }
+  }
   return {
     text:
       reason.type === 'read_no_reply'

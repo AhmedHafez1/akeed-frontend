@@ -7,6 +7,17 @@ import { isNeedsActionRow } from '@/features/dashboard/domain/confirmationRowSta
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
 import { ConfirmationRowActions } from './ConfirmationRowActions'
 import {
+  CARD_ROW,
+  NEEDS_ACTION_ROW,
+  TABLE,
+  TABLE_AMOUNT_CELL,
+  TABLE_BODY,
+  TABLE_CELL,
+  TABLE_HEAD_CELL,
+  TABLE_HEAD_ROW,
+  TABLE_ROW,
+} from './tableStyles'
+import {
   AmountText,
   CustomerCell,
   CustomerNameCell,
@@ -44,35 +55,40 @@ function TableRow({ row, timeZone, actingId, ...rest }: RowProps) {
         if (openDetails && !isControlClick(event)) openDetails()
       }}
       className={cn(
-        'h-15 transition-colors',
+        TABLE_ROW,
         row.optimistic
           ? 'bg-surface-sunken'
-          : 'hover:bg-surface-sunken cursor-pointer'
+          : cn(
+              'cursor-pointer',
+              isNeedsActionRow(row)
+                ? NEEDS_ACTION_ROW
+                : 'hover:bg-surface-sunken'
+            )
       )}
     >
-      <td className="px-4 py-2.5 align-middle first:ps-6">
+      <td className={TABLE_CELL}>
         <OrderCell
           orderLabel={view.orderLabel}
           isTest={row.is_test}
           onOpen={openDetails}
         />
       </td>
-      <td className="px-4 py-2.5 align-middle">
+      <td className={TABLE_CELL}>
         <CustomerNameCell name={view.name} />
       </td>
-      <td className="px-4 py-2.5 align-middle">
+      <td className={TABLE_CELL}>
         <PhoneCell phone={view.phone} />
       </td>
-      <td className="px-4 py-2.5 align-middle">
+      <td className={TABLE_CELL}>
         <StatusCell row={row} timeZone={timeZone} />
       </td>
-      <td className="px-4 py-2.5 align-middle">
+      <td className={TABLE_CELL}>
         <FollowUpCell row={row} timeZone={timeZone} />
       </td>
-      <td className="py-2.5 ps-4 pe-6 text-end align-middle">
+      <td className={TABLE_AMOUNT_CELL}>
         <AmountText amount={view.amount} isCanceled={view.isCanceled} />
       </td>
-      <td className="px-4 py-2.5 align-middle last:pe-6">
+      <td className={TABLE_CELL}>
         <ConfirmationRowActions
           row={row}
           orderLabel={view.orderLabel}
@@ -104,9 +120,11 @@ function CardRow({ row, timeZone, actingId, ...rest }: RowProps) {
         if (openDetails && !isControlClick(event)) openDetails()
       }}
       className={cn(
-        'space-y-3 border-s-[3px] px-4 py-4',
+        CARD_ROW,
         isNeedsActionRow(row) ? 'border-ak-warning' : 'border-transparent',
-        row.optimistic ? 'bg-surface-sunken' : 'cursor-pointer'
+        row.optimistic
+          ? 'bg-surface-sunken'
+          : cn('cursor-pointer', isNeedsActionRow(row) && NEEDS_ACTION_ROW)
       )}
     >
       <div className="flex items-center justify-between gap-3">
@@ -163,25 +181,22 @@ export function ConfirmationsList({
   return (
     <>
       <div className="hidden overflow-x-auto md:block">
-        <table className="bg-card w-full min-w-270 table-fixed text-start">
+        <table className={cn(TABLE, 'min-w-270')}>
           <caption className="sr-only">{t('title')}</caption>
           <thead>
-            <tr className="border-line bg-surface-sunken text-ak-label text-ink-muted border-b">
+            <tr className={TABLE_HEAD_ROW}>
               {HEADINGS.map(([heading, width]) => (
                 <th
                   key={heading}
                   scope="col"
-                  className={cn(
-                    'h-11 px-4 text-start font-bold whitespace-nowrap first:ps-6 last:pe-6',
-                    width
-                  )}
+                  className={cn(TABLE_HEAD_CELL, width)}
                 >
                   {t(`headings.${heading}`)}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-line divide-y">
+          <tbody className={TABLE_BODY}>
             {rows.map((row) => (
               <TableRow key={row.id} row={row} {...rowProps} />
             ))}

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  CONFIRMATIONS_TABS,
   rangeParam,
   resolveConfirmationsTab,
   resolveDashboardRange,
@@ -25,5 +26,14 @@ describe('resolveConfirmationsTab', () => {
     expect(resolveConfirmationsTab('in_progress')).toBe('all')
     expect(resolveConfirmationsTab(undefined)).toBe('all')
   })
-})
 
+  it('sends an old Failed-tab link to Needs action', () => {
+    expect(resolveConfirmationsTab('failed')).toBe('needs_action')
+    expect(CONFIRMATIONS_TABS).toEqual([
+      'all',
+      'needs_action',
+      'confirmed',
+      'canceled',
+    ])
+  })
+})

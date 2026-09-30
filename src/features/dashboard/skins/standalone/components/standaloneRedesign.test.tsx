@@ -23,7 +23,6 @@ const counts: Record<ConfirmationsTab, number> = {
   needs_action: 2,
   confirmed: 18,
   canceled: 4,
-  failed: 0,
 }
 
 function renderToolbar(onTabChange = vi.fn()) {
@@ -49,13 +48,13 @@ describe('ConfirmationsToolbar', () => {
     renderToolbar()
     const tabs = screen.getAllByRole('tab')
     expect(screen.getByRole('tablist')).toBeTruthy()
-    expect(tabs).toHaveLength(5)
+    expect(tabs).toHaveLength(4)
     expect(tabs[0].getAttribute('aria-selected')).toBe('true')
     expect(tabs[0].getAttribute('aria-controls')).toBe('panel')
     expect(tabs[1].getAttribute('aria-selected')).toBe('false')
     expect(tabs[1].textContent).toBe('Needs action2')
-    // "Failed" has no rows, so no bubble.
-    expect(tabs[4].textContent).toBe('Failed')
+    // Failed rows live under "Needs action"; there is no Failed tab.
+    expect(tabs.map((tab) => tab.textContent)).not.toContain('Failed')
   })
 
   it('moves with the arrow keys and focuses search on "/"', () => {
@@ -143,7 +142,57 @@ describe('StatusCell', () => {
   })
 })
 
+describe('StatusCell scheduling', () => {
+  it('names a held-back message "Scheduled" and says when it goes out', () => {
+    const row = {
+      status: 'pending',
+      scheduled_for: '2026-10-01T06:00:00Z',
+    } as VerificationItem
+    renderStandalone(<StatusCell row={row} timeZone="UTC" />, 'en')
+
+    expect(
+      screen.getByText('Scheduled').closest('[title]')?.getAttribute('title')
+    ).toBe('Scheduled for Oct 1, 2026, 6:00 AM')
+  })
+
+  it('keeps a just-created message "Pending" with nothing to hover', () => {
+    const row = { status: 'pending', scheduled_for: null } as VerificationItem
+    renderStandalone(<StatusCell row={row} timeZone="UTC" />, 'en')
+
+    expect(screen.getByText('Pending').closest('[title]')).toBeNull()
+  })
+
+  it('shows the reminder time on an unanswered message', () => {
+    const row = {
+      status: 'delivered',
+      delivered_at: '2026-09-30T06:00:00Z',
+      follow_up_scheduled_for: '2026-09-30T08:00:00Z',
+    } as VerificationItem
+    renderStandalone(<StatusCell row={row} timeZone="UTC" />, 'en')
+
+    expect(
+      screen
+        .getByText('Awaiting reply')
+        .closest('[title]')
+        ?.getAttribute('title')
+    ).toBe('Reminder scheduled for Sep 30, 2026, 8:00 AM')
+  })
+})
+
 describe('StatusNote', () => {
+  it('says when the reminder is due while it waits', () => {
+    const row = {
+      status: 'delivered',
+      follow_up_sent_at: null,
+      follow_up_scheduled_for: '2026-09-30T08:00:00Z',
+    } as VerificationItem
+    renderStandalone(<StatusNote row={row} timeZone="UTC" />, 'en')
+
+    expect(
+      screen.getByText('Reminder scheduled for Sep 30 · 8:00 AM')
+    ).toBeTruthy()
+  })
+
   it('says the reminder went out and when, instead of a bare "Sent"', () => {
     const row = {
       status: 'no_reply',
@@ -242,6 +291,53 @@ describe('ConfirmationsList', () => {
     ).toBeNull()
     expect(screen.queryByText(/Sep 16/)).toBeNull()
   })
+
+  it('tints the rows waiting on the merchant, in the table and on the card', () => {
+    const base = {
+      id: 'v-1',
+      status: 'confirmed',
+      reason: null,
+      order_id: 'o-1',
+      order_number: '1137',
+      is_test: false,
+      customer_name: 'Ahmed Zaid',
+      customer_phone: '+201148675077',
+      total_price: '49.95',
+      currency: 'USD',
+      last_sent_at: '2026-09-16T06:49:00Z',
+      created_at: '2026-09-16T06:49:00Z',
+      updated_at: '2026-09-16T06:49:00Z',
+      follow_up_attempts: 0,
+    } as VerificationItem
+    const failed = {
+      ...base,
+      id: 'v-2',
+      status: 'failed',
+      action_reason: 'send_failed',
+    } as VerificationItem
+    renderStandalone(
+      <ConfirmationsList
+        rows={[base, failed]}
+        timeZone="UTC"
+        canWrite
+        canRetry
+        actingId={null}
+        handlers={{
+          onOpenDetails: vi.fn(),
+          onRequestConfirm: vi.fn(),
+          onRequestCancel: vi.fn(),
+          onRetry: vi.fn(),
+        }}
+      />,
+      'en'
+    )
+    const tableRows = within(screen.getByRole('table')).getAllByRole('row')
+    expect(tableRows[1].className).not.toContain('bg-ak-warning-soft')
+    expect(tableRows[2].className).toContain('bg-ak-warning-soft')
+    const cards = screen.getAllByRole('listitem')
+    expect(cards[0].className).not.toContain('bg-ak-warning-soft')
+    expect(cards[1].className).toContain('bg-ak-warning-soft')
+  })
 })
 
 describe('NeedsActionCard', () => {
@@ -273,7 +369,7 @@ describe('NeedsActionCard', () => {
   } as DashboardOverview['needs_action']
 
   it('uses the Arabic dual for two orders and puts the currency after', () => {
-    renderStandalone(
+    const { container } = renderStandalone(
       <NeedsActionCard
         needsAction={needsAction}
         timeZone="UTC"
@@ -284,11 +380,48 @@ describe('NeedsActionCard', () => {
       />
     )
     expect(screen.getByText('طلبان')).toBeTruthy()
-    expect(screen.getByText('لم يرد · يوم')).toBeTruthy()
-    expect(screen.getByText('751.00 ج.م.')).toBeTruthy()
+    const table = within(screen.getByRole('table'))
+    expect(table.getByRole('columnheader', { name: 'الحالة' })).toBeTruthy()
+    // The table's word on the badge, the reason on hover.
     expect(
-      screen.getByRole('button', { name: 'إجراءات أخرى للطلب #EG-2032' })
-    ).toBeTruthy()
+      table.getByText('لم يرد').closest('[title]')?.getAttribute('title')
+    ).toMatch(/^لم يرد منذ/)
+    expect(table.getByText('751.00 ج.م.')).toBeTruthy()
+    // In the table every action sits in the menu.
+    expect(
+      table.getAllByRole('button').map((b) => b.getAttribute('aria-label'))
+    ).toEqual(['إجراءات أخرى للطلب #EG-2032'])
+    expect(table.queryByRole('link', { name: /واتساب/ })).toBeNull()
+    expect(container.querySelector('ul')).toBeTruthy()
+  })
+
+  it('lists at most three orders, all tinted; "All orders" has the rest', () => {
+    const item = needsAction.items[0]
+    renderStandalone(
+      <NeedsActionCard
+        needsAction={{
+          count: 5,
+          items: [1, 2, 3, 4, 5].map((n) => ({
+            ...item,
+            verification_id: `v${n}`,
+            order_number: `EG-${n}`,
+          })),
+        }}
+        timeZone="UTC"
+        canConfirm
+        onRequestConfirm={vi.fn()}
+        onRequestCancel={vi.fn()}
+        viewAllHref="/en/verifications"
+      />,
+      'en'
+    )
+    const bodyRows = within(screen.getByRole('table'))
+      .getAllByRole('row')
+      .slice(1)
+    expect(bodyRows).toHaveLength(3)
+    expect(bodyRows[0].className).toContain('bg-ak-warning-soft')
+    expect(screen.getAllByRole('listitem')).toHaveLength(3)
+    expect(screen.getByText('5 orders')).toBeTruthy()
   })
 
   it('names the wait without the reminder date in English', () => {
@@ -304,14 +437,17 @@ describe('NeedsActionCard', () => {
       'en'
     )
     expect(screen.getByText('2 orders')).toBeTruthy()
-    expect(screen.getByText('No reply · 1 day')).toBeTruthy()
-    expect(screen.queryByText('Reminder sent Sep 27')).toBeNull()
+    // The phone card puts Confirm and WhatsApp up front, like the list's.
+    const card = within(screen.getByRole('listitem'))
+    expect(card.getByText('No reply')).toBeTruthy()
+    expect(card.getByText(/^No reply since Sep 27/)).toBeTruthy()
+    expect(card.getByRole('link', { name: /WhatsApp/ })).toBeTruthy()
     expect(
       screen.queryByText(
         'No reply after the reminder. Message them yourself or confirm on their behalf.'
       )
     ).toBeNull()
-    expect(screen.getByRole('button', { name: /Confirm order/ })).toBeTruthy()
+    expect(card.getByRole('button', { name: /Confirm order/ })).toBeTruthy()
   })
 })
 

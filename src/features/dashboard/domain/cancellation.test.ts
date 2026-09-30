@@ -42,6 +42,9 @@ describe('canCancelOrder', () => {
       )
     ).toBe(false)
     expect(
+      canCancelOrder(row({ status: 'failed', action_reason: 'send_failed' }))
+    ).toBe(false)
+    expect(
       canCancelOrder(
         row({ action_reason: 'read_no_reply', capabilities: unsupported })
       )
@@ -74,6 +77,7 @@ describe('canCancelNeedsActionItem', () => {
     )
     expect(canCancelNeedsActionItem(item('read_no_reply'))).toBe(true)
     expect(canCancelNeedsActionItem(item('delivery_failed'))).toBe(false)
+    expect(canCancelNeedsActionItem(item('send_failed'))).toBe(false)
     expect(canCancelNeedsActionItem(item('no_reply', unsupported))).toBe(false)
   })
 })

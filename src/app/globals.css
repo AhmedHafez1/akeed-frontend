@@ -337,12 +337,16 @@
   --shadow-ak-card: var(--shadow-ak-card);
 
   /*
-   * One stack for both scripts: Inter draws Latin and digits, IBM Plex Sans
-   * Arabic draws Arabic. The variables come from next/font in the locale
-   * layout.
+   * One stack for both scripts: the Latin face draws Latin and digits, the
+   * Arabic face draws Arabic, chosen glyph by glyph. The families are named
+   * only in src/shared/theme/fonts.ts, which defines these two variables;
+   * swap a font there, never here. Mono is the system stack on purpose (IDs,
+   * hashes); it is declared so it has one home too.
    */
-  --font-sans:
-    var(--font-inter), var(--font-plex-arabic), system-ui, sans-serif;
+  --font-sans: var(--font-latin), var(--font-arabic), system-ui, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
 
   /*
    * ── Akeed app type scale ── (size / line-height / weight)
@@ -376,7 +380,8 @@
   --text-display: clamp(2.5rem, 5vw, 3.75rem);
   --text-display--line-height: var(--leading-display);
   --text-display--letter-spacing: var(--tracking-display);
-  --text-display--font-weight: 800;
+  /* 700 is the heaviest weight either brand family ships (see fonts.ts). */
+  --text-display--font-weight: 700;
 
   --text-h1: clamp(2rem, 4vw, 2.5rem);
   --text-h1--line-height: var(--leading-heading);
@@ -648,9 +653,9 @@
 /*
  * Embedded Shopify app: native Polaris only. No brand colour overrides and no
  * web fonts, so every screen looks like Shopify Admin. The body carries the
- * standalone Inter / IBM Plex Sans Arabic stack (the mode is only known on
- * the client), so the Polaris font stack is restored here for everything
- * inside the app frame.
+ * standalone brand stack (the mode is only known on the client), so the
+ * Polaris font stack is restored here for everything inside the app frame.
+ * This is the one intentional exception to `--font-sans`.
  */
 .akeed-embedded-content {
   width: 100%;

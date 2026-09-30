@@ -67,6 +67,10 @@ describe('NeedsActionCard', () => {
     )
     const row = screen.getByRole('listitem')
     expect(within(row).getByText('#1138')).toBeTruthy()
+    // The table's word on the badge; why it waits on hover and in the note.
+    expect(
+      within(row).getByText('لم يرد').closest('[title]')?.getAttribute('title')
+    ).toBe('لم يرد منذ 22 سبتمبر · أُرسل التذكير')
     expect(
       within(row).getByText('لم يرد منذ 22 سبتمبر · أُرسل التذكير')
     ).toBeTruthy()
@@ -103,11 +107,52 @@ describe('NeedsActionCard', () => {
         {...props}
       />
     )
+    expect(screen.getByText('فشل الإرسال')).toBeTruthy()
     expect(
       screen.getByText('لم تصل الرسالة: الرقم غير مسجل على واتساب')
     ).toBeTruthy()
     expect(screen.getByText('+20 100 761 1456')).toBeTruthy()
     expect(screen.queryByRole('link', { name: /واتساب/ })).toBeNull()
+  })
+
+  it('explains a message that never went out', () => {
+    renderEmbedded(
+      <NeedsActionCard
+        needsAction={{
+          count: 1,
+          items: [
+            item({
+              reason: {
+                type: 'send_failed',
+                since: null,
+                hours: null,
+                failure_code: null,
+              },
+            }),
+          ],
+        }}
+        {...props}
+      />,
+      'en'
+    )
+    expect(screen.getByText('Failed to send')).toBeTruthy()
+    expect(screen.getByText('Message not sent')).toBeTruthy()
+    expect(screen.queryByRole('link', { name: /WhatsApp/ })).toBeNull()
+  })
+
+  it('lists at most three orders', () => {
+    renderEmbedded(
+      <NeedsActionCard
+        needsAction={{
+          count: 5,
+          items: [1, 2, 3, 4, 5].map((n) =>
+            item({ verification_id: `v-${n}`, order_number: `${n}` })
+          ),
+        }}
+        {...props}
+      />
+    )
+    expect(screen.getAllByRole('listitem')).toHaveLength(3)
   })
 
   it('hides manual confirmation from viewers', () => {
@@ -442,6 +487,32 @@ describe('ConfirmationsTable', () => {
       })
     ).toHaveLength(1)
     expect(screen.getByLabelText('الصفحة السابقة')).toBeTruthy()
+  })
+
+  it('names a held-back message "Scheduled" and says when it goes out', () => {
+    renderEmbedded(
+      <ConfirmationsTable
+        rows={[
+          listRow({
+            status: 'pending',
+            confirmed_at: null,
+            scheduled_for: '2026-10-01T06:00:00Z',
+          }),
+          listRow({
+            id: 'v-2',
+            order_number: '1138',
+            status: 'pending',
+            confirmed_at: null,
+            scheduled_for: null,
+          }),
+        ]}
+        {...tableProps}
+      />
+    )
+    expect(
+      screen.getByText('مجدول').closest('[title]')?.getAttribute('title')
+    ).toMatch(/^مجدول في /)
+    expect(screen.getByText('قيد الانتظار').closest('[title]')).toBeNull()
   })
 
   it('offers confirmed orders a WhatsApp link with the shipping message typed in', () => {

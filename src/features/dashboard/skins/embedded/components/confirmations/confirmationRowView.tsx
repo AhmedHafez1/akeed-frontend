@@ -6,10 +6,8 @@ import {
   resolveRowStatus,
   type RowStatusKind,
 } from '../../../../domain/confirmationRowStatus'
-import {
-  formatTooltipDateTime,
-  getStatusTimestamp,
-} from '../../../../domain/verificationRow'
+import { formatTooltipDateTime } from '../../../../domain/verificationRow'
+import { useStatusTooltip } from '../../../../domain/useStatusTooltip'
 import {
   customerDisplayName,
   formatDayAndClock,
@@ -43,7 +41,7 @@ export interface ConfirmationsListProps {
  * Each status kind wears the same colour family as the standalone
  * `StatusBadge` (words only in both), so the two modes read alike.
  */
-const BADGE_TONES: Record<
+export const BADGE_TONES: Record<
   RowStatusKind,
   'info' | 'warning' | 'success' | 'critical' | undefined
 > = {
@@ -78,16 +76,11 @@ export function StatusCell({
   timeZone: string
 }) {
   const t = useTranslations('dashboard.confirmations.status')
-  const { locale } = useLocaleInfo()
   const view = resolveRowStatus(row, { showStoreCancellation: true })
-  const statusTitle = formatTooltipDateTime(
-    getStatusTimestamp(row),
-    locale,
-    timeZone
-  )
+  const statusTitle = useStatusTooltip(row, timeZone)
   return (
     <BlockStack gap="100" inlineAlign="start">
-      <span title={statusTitle || undefined}>
+      <span title={statusTitle}>
         <Badge tone={BADGE_TONES[view.kind]}>{t(view.badge)}</Badge>
       </span>
     </BlockStack>

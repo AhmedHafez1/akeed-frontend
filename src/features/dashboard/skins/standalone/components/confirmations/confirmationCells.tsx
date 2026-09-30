@@ -1,14 +1,12 @@
 'use client'
 
-import { BellRing } from 'lucide-react'
+import { Bell, BellRing } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
 import { resolveRowStatus } from '@/features/dashboard/domain/confirmationRowStatus'
-import {
-  formatTooltipDateTime,
-  getStatusTimestamp,
-} from '@/features/dashboard/domain/verificationRow'
+import { formatTooltipDateTime } from '@/features/dashboard/domain/verificationRow'
+import { useStatusTooltip } from '@/features/dashboard/domain/useStatusTooltip'
 import type { ConfirmationRowActionHandlers } from '@/features/dashboard/domain/confirmationRowActions'
 import {
   customerDisplayName,
@@ -100,20 +98,11 @@ export function StatusCell({
   timeZone: string
 }) {
   const t = useTranslations('dashboard.confirmations.status')
-  const { locale } = useLocaleInfo()
   const view = resolveRowStatus(row)
-  const statusTitle = formatTooltipDateTime(
-    getStatusTimestamp(row),
-    locale,
-    timeZone
-  )
+  const statusTitle = useStatusTooltip(row, timeZone)
   return (
     <div className="flex min-w-0 flex-col items-start gap-1">
-      <StatusBadge
-        kind={view.kind}
-        icon={false}
-        title={statusTitle || undefined}
-      >
+      <StatusBadge kind={view.kind} icon={false} title={statusTitle}>
         {t(view.badge)}
       </StatusBadge>
     </div>
@@ -179,6 +168,31 @@ export function StatusNote({
         <BellRing aria-hidden="true" className="size-3.5 shrink-0" />
         <span className="truncate">
           {tFollowUp('sentAt', { time: sentAt })}
+        </span>
+      </p>
+    )
+  }
+
+  if (row.follow_up_scheduled_for) {
+    const dueAt = formatDayAndClock(
+      row.follow_up_scheduled_for,
+      locale,
+      timeZone
+    )
+    return (
+      <p
+        title={
+          formatTooltipDateTime(
+            row.follow_up_scheduled_for,
+            locale,
+            timeZone
+          ) || undefined
+        }
+        className="text-ak-caption text-ink-muted flex min-w-0 items-center gap-1.5"
+      >
+        <Bell aria-hidden="true" className="size-3.5 shrink-0" />
+        <span className="truncate">
+          {tStatus('tooltip.reminderAt', { time: dueAt })}
         </span>
       </p>
     )

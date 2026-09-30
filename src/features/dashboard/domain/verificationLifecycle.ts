@@ -109,7 +109,9 @@ export function canMarkOrderCanceled(
 ): boolean {
   const unanswered =
     status === 'no_reply' ||
-    (Boolean(actionReason) && actionReason !== 'delivery_failed')
+    (Boolean(actionReason) &&
+      actionReason !== 'delivery_failed' &&
+      actionReason !== 'send_failed')
   if (!unanswered) return false
   // A row loaded before capabilities existed is assumed cancellable; the
   // server rejects it if not, and hiding the only recovery action would be

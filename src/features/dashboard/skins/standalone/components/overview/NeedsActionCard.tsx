@@ -1,234 +1,162 @@
 'use client'
 
 import Link from 'next/link'
-import {
-  ArrowRight,
-  Check,
-  CheckCircle2,
-  Clock,
-  Ellipsis,
-  List,
-  MessageCircle,
-  XCircle,
-} from 'lucide-react'
+import { ArrowRight, CheckCircle2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  akButton,
-  akCard,
-  akLink,
-} from '@/shared/ui'
-import { canCancelNeedsActionItem } from '@/features/dashboard/domain/cancellation'
-import { deliveryFailureKey } from '@/features/dashboard/domain/deliveryFailure'
-import { hasCapability } from '@/features/dashboard/domain/verificationLifecycle'
+import { akCard, akLink } from '@/shared/ui'
+import { StatusBadge } from '@/shared/ui/status-badge'
 import type { ManualConfirmationTarget } from '@/features/dashboard/domain/useManualConfirmation'
+import { NEEDS_ACTION_CARD_LIMIT } from '@/features/dashboard/domain/needsActionRow'
+import { useNeedsActionRow } from '@/features/dashboard/domain/useNeedsActionRow'
 import {
   customerDisplayName,
-  formatDayAndClock,
   formatOrderAmount,
-  formatOrderNumber,
   formatPhoneInternational,
-  formatShortDate,
-  waitingAge,
-  whatsAppChatUrl,
 } from '@/features/dashboard/lib/orderDisplay'
 import type {
   DashboardOverview,
   NeedsActionItem,
 } from '@/features/dashboard/model/dashboard.model'
-import { StatusBadge } from '@/shared/ui/status-badge'
+import {
+  AmountText,
+  CustomerCell,
+  CustomerNameCell,
+  OrderCell,
+  PhoneCell,
+} from '../confirmations/confirmationCells'
+import {
+  CARD_ROW,
+  NEEDS_ACTION_ROW,
+  TABLE,
+  TABLE_AMOUNT_CELL,
+  TABLE_BODY,
+  TABLE_CELL,
+  TABLE_HEAD_CELL,
+  TABLE_HEAD_ROW,
+  TABLE_ROW,
+} from '../confirmations/tableStyles'
+import { NeedsActionRowActions } from './NeedsActionRowActions'
 
-/** What a row's badge and the line under it say, from the server's reason. */
-function useReasonView(item: NeedsActionItem, timeZone: string) {
-  const t = useTranslations('dashboard.standalone.needsAction')
-  const tStatus = useTranslations('dashboard.confirmations.status')
-  const { locale } = useLocaleInfo()
-  const { reason } = item
-  const date = formatShortDate(reason.since, locale, timeZone)
-  const exact = reason.since
-    ? formatDayAndClock(reason.since, locale, timeZone)
-    : undefined
-
-  if (reason.type === 'delivery_failed') {
-    return {
-      kind: 'failed' as const,
-      badge: t('notDelivered'),
-      sub: tStatus(`failure.${deliveryFailureKey(reason.failure_code)}`),
-      exact,
-    }
-  }
-
-  const age = waitingAge(reason.hours)
-  const ageText = age
-    ? age.unit === 'lessThanHour'
-      ? t('age.lessThanHour')
-      : t(`age.${age.unit}`, { count: age.count })
-    : null
-  const badge = !ageText
-    ? tStatus('noReply')
-    : reason.type === 'read_no_reply'
-      ? t('readNoReply', { age: ageText })
-      : t('noReply', { age: ageText })
-  const sub = !date
-    ? null
-    : reason.type === 'read_no_reply'
-      ? t('read', { date })
-      : t('messaged', { date })
-
-  return { kind: 'needsAction' as const, badge, sub, exact }
-}
-
-function NeedsActionRow({
-  item,
-  timeZone,
-  canAct,
-  onRequestConfirm,
-  onRequestCancel,
-  listHref,
-}: {
+interface RowProps {
   item: NeedsActionItem
   timeZone: string
   canAct: boolean
   onRequestConfirm: (target: ManualConfirmationTarget) => void
   onRequestCancel: (target: ManualConfirmationTarget) => void
   listHref: string
-}) {
-  const t = useTranslations('dashboard')
-  const tRow = useTranslations('dashboard.standalone.needsAction')
+}
+
+/** Everything a row and a card show, from one item. */
+function useRowView({ item, timeZone, canAct }: RowProps) {
   const { locale } = useLocaleInfo()
-  const reason = useReasonView(item, timeZone)
+  const row = useNeedsActionRow(item, timeZone, canAct)
   const name = customerDisplayName(item.customer_name)
   const phone = formatPhoneInternational(item.customer_phone)
-  const orderLabel =
-    formatOrderNumber(item.order_number) ??
-    `${t('table.orderFallbackPrefix')} ${item.order_id.slice(0, 8)}`
-  const target = { verificationId: item.verification_id, orderLabel }
-  const chatUrl =
-    item.reason.type === 'delivery_failed'
-      ? null
-      : whatsAppChatUrl(item.customer_phone)
-  const confirmable =
-    canAct && hasCapability(item.capabilities, 'merchant_manual_confirmation')
-  const cancelable = canAct && canCancelNeedsActionItem(item)
+  return {
+    row,
+    name,
+    phone,
+    amount: formatOrderAmount(item.total_price, item.currency, locale, {
+      currencyAfter: true,
+    }),
+    target: {
+      verificationId: item.verification_id,
+      orderLabel: row.orderLabel,
+    },
+  }
+}
 
+/** The status column: the table's words, with why the order waits on hover. */
+function NeedsActionStatus({
+  row,
+}: {
+  row: ReturnType<typeof useNeedsActionRow>
+}) {
   return (
-    <li className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-3 px-6 py-4 lg:grid-cols-[6.5rem_minmax(0,1.25fr)_minmax(0,1fr)_auto_auto] lg:gap-x-6">
-      <p className="text-ak-body text-ink order-1 font-semibold tabular-nums lg:order-0">
-        <bdi dir="ltr">{orderLabel}</bdi>
-      </p>
+    <StatusBadge kind={row.status.kind} icon={false} title={row.reasonText}>
+      {row.badgeText}
+    </StatusBadge>
+  )
+}
 
-      <div className="order-3 col-span-2 flex min-w-0 items-center gap-3 lg:order-0 lg:col-span-1">
-        <div className="min-w-0">
-          <p className="text-ak-body text-ink truncate font-semibold">
-            {name ? <bdi>{name}</bdi> : <bdi dir="ltr">{phone}</bdi>}
-          </p>
-          {name && phone && (
-            <p className="text-ak-caption text-ink-muted whitespace-nowrap tabular-nums">
-              <bdi dir="ltr">{phone}</bdi>
-            </p>
-          )}
-        </div>
+function TableRow(props: RowProps) {
+  const { row, name, phone, amount, target } = useRowView(props)
+  return (
+    <tr className={cn(TABLE_ROW, NEEDS_ACTION_ROW)}>
+      <td className={TABLE_CELL}>
+        <OrderCell orderLabel={row.orderLabel} isTest={false} />
+      </td>
+      <td className={TABLE_CELL}>
+        <CustomerNameCell name={name} />
+      </td>
+      <td className={TABLE_CELL}>
+        <PhoneCell phone={phone} />
+      </td>
+      <td className={TABLE_CELL}>
+        <NeedsActionStatus row={row} />
+      </td>
+      <td className={TABLE_AMOUNT_CELL}>
+        <AmountText amount={amount} isCanceled={false} />
+      </td>
+      <td className={TABLE_CELL}>
+        <NeedsActionRowActions
+          row={row}
+          target={target}
+          customerLabel={name ?? phone}
+          listHref={props.listHref}
+          onRequestConfirm={props.onRequestConfirm}
+          onRequestCancel={props.onRequestCancel}
+        />
+      </td>
+    </tr>
+  )
+}
+
+/** The Confirmations page's phone card, with the reason written out. */
+function CardRow(props: RowProps) {
+  const { row, name, phone, amount, target } = useRowView(props)
+  return (
+    <li className={cn(CARD_ROW, NEEDS_ACTION_ROW, 'border-ak-warning')}>
+      <div className="flex items-center justify-between gap-3">
+        <OrderCell orderLabel={row.orderLabel} isTest={false} />
+        <AmountText amount={amount} isCanceled={false} />
       </div>
-
-      <div className="order-4 col-span-2 flex min-w-0 flex-col items-start gap-1 lg:order-0 lg:col-span-1">
-        <StatusBadge
-          kind={reason.kind}
-          icon={reason.kind === 'needsAction' ? Clock : undefined}
-          title={reason.exact}
-        >
-          {reason.badge}
-        </StatusBadge>
-        {reason.sub && (
-          <p className="text-ak-caption text-ink-muted max-w-full truncate first-letter:uppercase">
-            {reason.sub}
-          </p>
-        )}
+      <CustomerCell name={name} phone={phone} />
+      <div className="flex min-w-0 flex-col items-start gap-1.5">
+        <NeedsActionStatus row={row} />
+        <p className="text-ak-caption text-ink-muted max-w-full truncate">
+          {row.reasonText}
+        </p>
       </div>
-
-      <p className="text-ak-body text-ink order-2 text-end font-semibold whitespace-nowrap tabular-nums lg:order-0">
-        <bdi dir="ltr">
-          {formatOrderAmount(item.total_price, item.currency, locale, {
-            currencyAfter: true,
-          })}
-        </bdi>
-      </p>
-
-      <div className="order-5 col-span-2 flex flex-wrap items-center gap-2 lg:order-0 lg:col-span-1 lg:flex-nowrap lg:justify-end">
-        {chatUrl && (
-          <a
-            href={chatUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={t('overview.needsAction.actions.whatsappLabel', {
-              customer: name ?? phone,
-            })}
-            className={akButton({ variant: 'secondary', size: 'row' })}
-          >
-            <MessageCircle aria-hidden="true" />
-            {tRow('whatsapp')}
-          </a>
-        )}
-        {confirmable && (
-          <button
-            type="button"
-            aria-label={t('overview.needsAction.actions.manualConfirmLabel', {
-              order: orderLabel,
-            })}
-            onClick={() => onRequestConfirm(target)}
-            className={akButton({ variant: 'tinted', size: 'row' })}
-          >
-            <Check aria-hidden="true" />
-            {tRow('confirm')}
-          </button>
-        )}
-        <DropdownMenu modal={false}>
-          <DropdownMenuTrigger asChild>
-            <button
-              type="button"
-              aria-label={tRow('more', { order: orderLabel })}
-              className={cn(
-                akButton({ variant: 'ghost', size: 'iconRow' }),
-                'ms-auto lg:ms-0'
-              )}
-            >
-              <Ellipsis aria-hidden="true" />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem asChild>
-              <Link href={listHref}>
-                <List aria-hidden="true" className="size-4" />
-                {tRow('viewInList')}
-              </Link>
-            </DropdownMenuItem>
-            {cancelable && (
-              <>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  destructive
-                  onSelect={() => onRequestCancel(target)}
-                >
-                  <XCircle aria-hidden="true" className="size-4" />
-                  {tRow('cancel')}
-                </DropdownMenuItem>
-              </>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+      <NeedsActionRowActions
+        row={row}
+        target={target}
+        customerLabel={name ?? phone}
+        listHref={props.listHref}
+        onRequestConfirm={props.onRequestConfirm}
+        onRequestCancel={props.onRequestCancel}
+        layout="stacked"
+      />
     </li>
   )
 }
 
+/* The confirmations table's columns, less Follow-up: every row here waits. */
+const HEADINGS = [
+  ['order', 'w-[12%]'],
+  ['customer', 'w-[24%]'],
+  ['phone', 'w-[18%]'],
+  ['status', 'w-[22%]'],
+  ['total', 'w-[16%] text-end'],
+  ['action', 'w-[8%] text-end'],
+] as const
+
 /**
- * The orders waiting on the merchant, highest value first (at most five), with
- * the one or two things they can do about each and the rest behind "more".
+ * The orders waiting on the merchant, highest value first (at most three), in
+ * the confirmations table's columns and words: a table from `md`, the same
+ * phone cards below it. Switched in CSS so server and client render match.
  */
 export function NeedsActionCard({
   needsAction,
@@ -247,7 +175,16 @@ export function NeedsActionCard({
 }) {
   const t = useTranslations('dashboard.overview.needsAction')
   const tCard = useTranslations('dashboard.standalone.needsAction')
-  const hasItems = needsAction.items.length > 0
+  const tHeadings = useTranslations('dashboard.confirmations.headings')
+  const items = needsAction.items.slice(0, NEEDS_ACTION_CARD_LIMIT)
+  const hasItems = items.length > 0
+  const rowProps = {
+    timeZone,
+    canAct: canConfirm,
+    onRequestConfirm,
+    onRequestCancel,
+    listHref: viewAllHref,
+  }
 
   return (
     <section
@@ -284,19 +221,40 @@ export function NeedsActionCard({
           <p className="text-ak-body text-ink-muted mt-1">{t('emptyBody')}</p>
         </div>
       ) : (
-        <ul className="divide-line divide-y">
-          {needsAction.items.map((item) => (
-            <NeedsActionRow
-              key={item.verification_id}
-              item={item}
-              timeZone={timeZone}
-              canAct={canConfirm}
-              onRequestConfirm={onRequestConfirm}
-              onRequestCancel={onRequestCancel}
-              listHref={viewAllHref}
-            />
-          ))}
-        </ul>
+        <>
+          <div className="hidden overflow-x-auto md:block">
+            <table className={cn(TABLE, 'min-w-200')}>
+              <caption className="sr-only">{t('title')}</caption>
+              <thead>
+                <tr className={TABLE_HEAD_ROW}>
+                  {HEADINGS.map(([heading, width]) => (
+                    <th
+                      key={heading}
+                      scope="col"
+                      className={cn(TABLE_HEAD_CELL, width)}
+                    >
+                      {tHeadings(heading)}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className={TABLE_BODY}>
+                {items.map((item) => (
+                  <TableRow
+                    key={item.verification_id}
+                    item={item}
+                    {...rowProps}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <ul className="divide-line divide-y md:hidden">
+            {items.map((item) => (
+              <CardRow key={item.verification_id} item={item} {...rowProps} />
+            ))}
+          </ul>
+        </>
       )}
     </section>
   )

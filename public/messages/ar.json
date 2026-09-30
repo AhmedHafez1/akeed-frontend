@@ -1283,17 +1283,6 @@
       },
       "needsAction": {
         "countPill": "{count, plural, zero {لا طلبات} one {طلب واحد} two {طلبان} few {# طلبات} many {# طلباً} other {# طلب}}",
-        "noReply": "لم يرد · {age}",
-        "readNoReply": "قرأ ولم يرد · {age}",
-        "notDelivered": "لم تصل الرسالة",
-        "messaged": "أُرسلت الرسالة {date}",
-        "read": "قُرئت {date}",
-        "age": {
-          "lessThanHour": "أقل من ساعة",
-          "hours": "{count, plural, one {ساعة} two {ساعتان} few {# ساعات} many {# ساعة} other {# ساعة}}",
-          "days": "{count, plural, one {يوم} two {يومان} few {# أيام} many {# يوماً} other {# يوم}}"
-        },
-        "whatsapp": "واتساب",
         "confirm": "تأكيد يدوي",
         "more": "إجراءات أخرى للطلب {order}",
         "viewInList": "عرض في التأكيدات",
@@ -1674,7 +1663,8 @@
           "no_reply_after_follow_up": "لم يرد منذ {date} · أُرسل التذكير",
           "no_reply": "لم يرد منذ {date}",
           "read_no_reply": "قرأ الرسالة ولم يرد · منذ {hours, plural, one {ساعة} two {ساعتين} few {# ساعات} many {# ساعة} other {# ساعة}}",
-          "delivery_failed": "لم تصل الرسالة: {reason}"
+          "delivery_failed": "لم تصل الرسالة: {reason}",
+          "send_failed": "لم تُرسل الرسالة"
         },
         "actions": {
           "whatsapp": "راسله واتساب",
@@ -1716,8 +1706,7 @@
         "all": "الكل",
         "needs_action": "تحتاج إجراء",
         "confirmed": "مؤكد",
-        "canceled": "ملغي",
-        "failed": "فشل"
+        "canceled": "ملغي"
       },
       "search": {
         "label": "بحث برقم الطلب أو الهاتف",
@@ -1761,6 +1750,10 @@
           "followUpSent": "أُرسل التذكير",
           "sendsAt": "يُرسل {time}"
         },
+        "tooltip": {
+          "scheduledFor": "مجدول في {time}",
+          "reminderAt": "التذكير مجدول في {time}"
+        },
         "failure": {
           "notOnWhatsApp": "الرقم غير مسجل على واتساب",
           "invalidNumber": "رقم الهاتف غير صحيح",
@@ -1780,7 +1773,6 @@
         "needs_action": "لا توجد طلبات تحتاج إجراء. أحسنت!",
         "confirmed": "لا توجد طلبات مؤكدة في هذه الفترة.",
         "canceled": "لم يُلغِ أي عميل طلبه في هذه الفترة.",
-        "failed": "وصلت كل الرسائل في هذه الفترة.",
         "search": "لا توجد نتائج لـ «{query}»."
       },
       "error": {
