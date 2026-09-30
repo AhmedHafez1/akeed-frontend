@@ -386,10 +386,17 @@ describe('ConfirmationsTable', () => {
     expect(screen.getByText(/failed/i).closest('[title]')).toBeNull()
   })
 
-  it('shows the phone as the name line and "بدون اسم" below when nameless', () => {
+  it('shows nameless customers and phone in separate one-line table cells', () => {
     renderEmbedded(<ConfirmationsTable rows={[listRow()]} {...tableProps} />)
-    expect(screen.getByText('+20 114 867 5077')).toBeTruthy()
-    expect(screen.getByText('بدون اسم')).toBeTruthy()
+    const table = screen.getByRole('table')
+    expect(
+      within(table).getByRole('columnheader', { name: 'الهاتف' })
+    ).toBeTruthy()
+    const row = within(table).getAllByRole('row')[1]
+    const cells = within(row).getAllByRole('cell')
+    expect(cells[1].textContent).toBe('بدون اسم')
+    expect(cells[2].textContent).toBe('+20 114 867 5077')
+    expect(cells[1].querySelectorAll('p')).toHaveLength(0)
     expect(screen.queryByText('Guest')).toBeNull()
     expect(screen.getByText('مؤكد')).toBeTruthy()
     const link = screen.getByRole('link', { name: /#1137/ })

@@ -8,8 +8,10 @@ import { ConfirmationRowActions } from './ConfirmationRowActions'
 import {
   AmountText,
   CustomerCell,
+  CustomerNameCell,
   FollowUpCell,
   OrderCell,
+  PhoneCell,
   StatusCell,
   useConfirmationRowView,
   type ConfirmationsListProps,
@@ -54,7 +56,10 @@ function TableRow({ row, timeZone, actingId, ...rest }: RowProps) {
         />
       </td>
       <td className="px-4 py-2.5 align-middle">
-        <CustomerCell name={view.name} phone={view.phone} />
+        <CustomerNameCell name={view.name} />
+      </td>
+      <td className="px-4 py-2.5 align-middle">
+        <PhoneCell phone={view.phone} />
       </td>
       <td className="px-4 py-2.5 align-middle">
         <StatusCell row={row} timeZone={timeZone} />
@@ -122,16 +127,17 @@ function CardRow({ row, timeZone, actingId, ...rest }: RowProps) {
  * phone or the action buttons onto a second line.
  */
 const HEADINGS = [
-  ['order', 'w-[14%]'],
-  ['customer', 'w-[24%]'],
-  ['status', 'w-[19%]'],
-  ['followUp', 'w-[13%]'],
-  ['total', 'w-[14%] text-end'],
-  ['action', 'w-[16%] text-end'],
+  ['order', 'w-[12%]'],
+  ['customer', 'w-[18%]'],
+  ['phone', 'w-[18%]'],
+  ['status', 'w-[17%]'],
+  ['followUp', 'w-[12%]'],
+  ['total', 'w-[11%] text-end'],
+  ['action', 'w-[12%] text-end'],
 ] as const
 
 /**
- * The confirmations list: a six-column table from `md`, one card per order
+ * The confirmations list: a seven-column table from `md`, one card per order
  * below it — the same values and actions either way. Switched in CSS rather
  * than by a width hook, so server and first client render always match.
  */

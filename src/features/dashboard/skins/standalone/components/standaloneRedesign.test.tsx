@@ -144,35 +144,34 @@ describe('StatusCell', () => {
 })
 
 describe('ConfirmationsList', () => {
-  it('omits the updated column and updated date from its card layout', () => {
+  it('shows name and phone in separate single-line table cells', () => {
+    const row = {
+      id: 'v-1',
+      status: 'confirmed',
+      reason: null,
+      order_id: 'o-1',
+      order_number: '1137',
+      is_test: false,
+      customer_name: 'Ahmed Zaid',
+      customer_phone: '+201148675077',
+      total_price: '49.95',
+      currency: 'USD',
+      last_sent_at: '2026-09-16T06:49:00Z',
+      delivered_at: null,
+      read_at: null,
+      confirmed_at: '2026-09-16T07:00:00Z',
+      canceled_at: null,
+      expired_at: null,
+      no_reply_at: null,
+      follow_up_attempts: 0,
+      created_at: '2026-09-16T06:49:00Z',
+      updated_at: '2026-09-16T06:49:00Z',
+      follow_up_sent_at: null,
+      optimistic: 'queued',
+    } as VerificationItem
     renderStandalone(
       <ConfirmationsList
-        rows={[
-          {
-            id: 'v-1',
-            status: 'confirmed',
-            reason: null,
-            order_id: 'o-1',
-            order_number: '1137',
-            is_test: false,
-            customer_name: 'Guest',
-            customer_phone: '+201148675077',
-            total_price: '49.95',
-            currency: 'USD',
-            last_sent_at: '2026-09-16T06:49:00Z',
-            delivered_at: null,
-            read_at: null,
-            confirmed_at: '2026-09-16T07:00:00Z',
-            canceled_at: null,
-            expired_at: null,
-            no_reply_at: null,
-            follow_up_attempts: 0,
-            created_at: '2026-09-16T06:49:00Z',
-            updated_at: '2026-09-16T06:49:00Z',
-            follow_up_sent_at: null,
-            optimistic: 'queued',
-          } as VerificationItem,
-        ]}
+        rows={[row, { ...row, id: 'v-2', customer_name: null }]}
         timeZone="UTC"
         canWrite
         canRetry
@@ -186,6 +185,19 @@ describe('ConfirmationsList', () => {
       />,
       'en'
     )
+
+    const table = screen.getByRole('table')
+    expect(
+      within(table).getByRole('columnheader', { name: 'Phone' })
+    ).toBeTruthy()
+    const tableRows = within(table).getAllByRole('row')
+    const namedCells = within(tableRows[1]).getAllByRole('cell')
+    const namelessCells = within(tableRows[2]).getAllByRole('cell')
+    expect(namedCells[1].textContent).toBe('Ahmed Zaid')
+    expect(namedCells[2].textContent).toBe('+20 114 867 5077')
+    expect(namelessCells[1].textContent).toBe('No name')
+    expect(namelessCells[2].textContent).toBe('+20 114 867 5077')
+    expect(namedCells[1].querySelectorAll('p')).toHaveLength(0)
 
     expect(
       screen.queryByRole('columnheader', { name: 'Last update' })

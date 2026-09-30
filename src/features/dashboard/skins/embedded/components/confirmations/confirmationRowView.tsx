@@ -11,7 +11,6 @@ import {
 } from '../../../../domain/verificationRow'
 import {
   customerDisplayName,
-  formatClockTime,
   formatDayAndClock,
   formatOrderAmount,
   formatOrderNumber,
@@ -79,32 +78,11 @@ export function StatusCell({
     locale,
     timeZone
   )
-  const sub = view.sub
-    ? t(view.sub, {
-        time: view.subTime
-          ? formatClockTime(view.subTime, locale, timeZone)
-          : '',
-      })
-    : null
-
   return (
     <BlockStack gap="100" inlineAlign="start">
       <span title={statusTitle || undefined}>
         <Badge tone={BADGE_TONES[view.tone]}>{t(view.badge)}</Badge>
       </span>
-      {sub && (
-        <Text
-          as="span"
-          variant="bodySm"
-          tone={
-            view.tone === 'critical' && row.status === 'failed'
-              ? 'critical'
-              : 'subdued'
-          }
-        >
-          {sub}
-        </Text>
-      )}
     </BlockStack>
   )
 }
@@ -161,6 +139,28 @@ export function CustomerCell({
         {name ? phoneText : t('confirmations.noName')}
       </Text>
     </BlockStack>
+  )
+}
+
+export function CustomerNameCell({ name }: { name: string | null }) {
+  const t = useTranslations('dashboard')
+  return (
+    <Text
+      as="span"
+      variant="bodyMd"
+      tone='subdued'
+    >
+      {name ? <bdi>{name}</bdi> : t('confirmations.noName')}
+    </Text>
+  )
+}
+
+export function PhoneCell({ phone }: { phone: string }) {
+  const t = useTranslations('dashboard')
+  return (
+    <Text as="span" variant="bodySm" fontWeight="semibold" truncate>
+      <bdi dir="ltr">{phone || t('table.noPhone')}</bdi>
+    </Text>
   )
 }
 

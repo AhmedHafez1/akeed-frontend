@@ -38,7 +38,7 @@ export function CreditBalanceChip() {
         {t.rich('value', {
           count,
           strong: (chunks) => (
-            <strong className="font-semibold">{chunks}</strong>
+            <strong className="font-semibold text-lg">{chunks}</strong>
           ),
         })}
       </span>

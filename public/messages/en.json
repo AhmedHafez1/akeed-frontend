@@ -1733,6 +1733,7 @@
       "headings": {
         "order": "Order",
         "customer": "Customer",
+        "phone": "Phone",
         "status": "Status",
         "followUp": "Follow-up",
         "total": "Total",

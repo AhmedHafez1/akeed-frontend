@@ -11,7 +11,6 @@ import {
 import type { ConfirmationRowActionHandlers } from '@/features/dashboard/domain/confirmationRowActions'
 import {
   customerDisplayName,
-  formatClockTime,
   formatDayAndClock,
   formatOrderAmount,
   formatOrderNumber,
@@ -107,29 +106,11 @@ export function StatusCell({
     locale,
     timeZone
   )
-  const sub = view.sub
-    ? t(view.sub, {
-        time: view.subTime
-          ? formatClockTime(view.subTime, locale, timeZone)
-          : '',
-      })
-    : null
-
   return (
     <div className="flex min-w-0 flex-col items-start gap-1">
       <StatusBadge kind={view.kind} title={statusTitle || undefined}>
         {t(view.badge)}
       </StatusBadge>
-      {sub && (
-        <span
-          className={cn(
-            'text-ak-caption max-w-full truncate first-letter:uppercase',
-            view.kind === 'failed' ? 'text-ak-danger' : 'text-ink-muted'
-          )}
-        >
-          {sub}
-        </span>
-      )}
     </div>
   )
 }
@@ -195,6 +176,30 @@ export function CustomerCell({
         </p>
       </div>
     </div>
+  )
+}
+
+export function CustomerNameCell({ name }: { name: string | null }) {
+  const t = useTranslations('dashboard')
+  return (
+    <span
+      className={cn(
+        'text-ak-body block max-w-full truncate text-ink-muted'
+      )}
+    >
+      {name ? <bdi>{name}</bdi> : t('confirmations.noName')}
+    </span>
+  )
+}
+
+export function PhoneCell({ phone }: { phone: string }) {
+  const t = useTranslations('dashboard')
+  return (
+    <span className="text-ak-caption text-ink font-semibold block max-w-full truncate whitespace-nowrap">
+      <bdi dir="ltr" className="tabular-nums">
+        {phone || t('table.noPhone')}
+      </bdi>
+    </span>
   )
 }
 

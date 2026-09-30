@@ -7,8 +7,9 @@ import { OrderNumberLink } from '../shared/OrderNumberLink'
 import { ConfirmationRowActions } from './ConfirmationRowActions'
 import {
   AmountText,
-  CustomerCell,
+  CustomerNameCell,
   FollowUpCell,
+  PhoneCell,
   StatusCell,
   useConfirmationRowView,
   type ConfirmationsListProps,
@@ -55,7 +56,13 @@ function ConfirmationsTableRow({
 
       <IndexTable.Cell>
         <div className={cellClassName}>
-          <CustomerCell name={view.name} phone={view.phone} />
+          <CustomerNameCell name={view.name} />
+        </div>
+      </IndexTable.Cell>
+
+      <IndexTable.Cell>
+        <div className={cellClassName}>
+          <PhoneCell phone={view.phone} />
         </div>
       </IndexTable.Cell>
 
@@ -94,8 +101,8 @@ function ConfirmationsTableRow({
 }
 
 /**
- * The confirmations table: seven columns, lifecycle sub-lines kept with
- * status, needs-action rows tinted amber, and paging. Narrow screens get cards.
+ * The confirmations table: seven one-line columns, needs-action rows tinted
+ * amber, and paging. Narrow screens get cards.
  */
 export function ConfirmationsTable({
   rows,
@@ -110,6 +117,7 @@ export function ConfirmationsTable({
   const headings = [
     { title: t('confirmations.headings.order'), alignment },
     { title: t('confirmations.headings.customer'), alignment },
+    { title: t('confirmations.headings.phone'), alignment },
     { title: t('confirmations.headings.status'), alignment },
     { title: t('table.headings.followUp'), alignment },
     { title: t('confirmations.headings.total'), alignment },

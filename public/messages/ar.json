@@ -1727,6 +1727,7 @@
       "headings": {
         "order": "الطلب",
         "customer": "العميل",
+        "phone": "الهاتف",
         "status": "الحالة",
         "followUp": "المتابعة",
         "total": "الإجمالي",
