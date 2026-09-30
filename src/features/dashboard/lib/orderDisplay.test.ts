@@ -21,7 +21,7 @@ const BIDI = new RegExp(
 describe('formatOrderAmount', () => {
   it('can put the currency after the number', () => {
     expect(formatOrderAmount('751', 'EGP', 'ar', { currencyAfter: true })).toBe(
-      '751.00 ج.م.'
+      `ج.م${String.fromCharCode(0x200e)} 751.00`
     )
     expect(formatOrderAmount('751', 'EGP', 'en', { currencyAfter: true })).toBe(
       '751.00 EGP'

@@ -21,6 +21,13 @@ export interface UseInfiniteScrollOptions {
   onLoadMore: () => void | Promise<void>
   /** Distance before the end at which to start loading. */
   prefetchMargin?: string
+  /**
+   * What the sentinel is measured against. `element` (the default) is the
+   * `rootRef` container, for a list with its own scrollbar. `viewport` is for
+   * a list that lets the page scroll: an element root that grows with its
+   * content would always report the sentinel as visible and load every page.
+   */
+  scrollRoot?: 'element' | 'viewport'
 }
 
 export interface InfiniteScrollRefs<
@@ -49,6 +56,7 @@ export function useInfiniteScroll<
   hasError = false,
   onLoadMore,
   prefetchMargin = DEFAULT_PREFETCH_MARGIN,
+  scrollRoot = 'element',
 }: UseInfiniteScrollOptions): InfiniteScrollRefs<TRoot, TSentinel> {
   const rootRef = useRef<TRoot>(null)
   const sentinelRef = useRef<TSentinel>(null)
@@ -73,12 +81,15 @@ export function useInfiniteScroll<
           void onLoadMoreRef.current()
         }
       },
-      { root: rootRef.current, rootMargin: prefetchMargin }
+      {
+        root: scrollRoot === 'element' ? rootRef.current : null,
+        rootMargin: prefetchMargin,
+      }
     )
     observer.observe(sentinel)
 
     return () => observer.disconnect()
-  }, [isArmed, prefetchMargin])
+  }, [isArmed, prefetchMargin, scrollRoot])
 
   useEffect(attach, [attach])
 

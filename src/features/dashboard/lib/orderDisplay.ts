@@ -7,6 +7,8 @@
  * `$US 2,629.95` in the Arabic table.
  */
 
+import { symbolThenAmount } from '@/shared/lib/money'
+
 const BIDI_MARKS = new RegExp(
   `[${String.fromCharCode(0x200e, 0x200f, 0x061c)}]`,
   'g'
@@ -20,8 +22,10 @@ function latinLocale(locale: string): string {
  * `US$ 2,629.95` in Arabic, `$2,629.95` in English: Latin digits in both, the
  * currency symbol before the amount.
  *
- * `currencyAfter` puts the symbol after the number in either language —
- * `751.00 ج.م.`, `3,051.50 EGP` — which the order tables use.
+ * `currencyAfter` puts the symbol after the number as the reader meets it —
+ * `3,051.50 EGP` in English, and in Arabic `ج.م 751.00` written left to right,
+ * so an Arabic reader (right to left) sees the amount first — which the order
+ * tables use.
  */
 export function formatOrderAmount(
   amount: string | number | null | undefined,
@@ -46,7 +50,7 @@ export function formatOrderAmount(
         .replace(BIDI_MARKS, '')
         .replace(/\s+/g, ' ')
     const parts = formatter.formatToParts(value)
-    const symbol = parts
+    const symbolRaw = parts
       .filter((part) => part.type === 'currency')
       .map((part) => part.value)
       .join('')
@@ -54,8 +58,14 @@ export function formatOrderAmount(
       .filter((part) => part.type !== 'currency' && part.type !== 'literal')
       .map((part) => part.value)
       .join('')
-    const text = currencyAfter ? `${number} ${symbol}` : `${symbol} ${number}`
-    return text.replace(BIDI_MARKS, '').trim()
+    const symbolClean = symbolRaw.replace(BIDI_MARKS, '')
+    // The island is left to right, so the symbol goes first to read second.
+    if (currencyAfter && locale === 'ar')
+      return symbolThenAmount(symbolClean, number)
+    const text = currencyAfter
+      ? `${number} ${symbolClean}`
+      : `${symbolClean} ${number}`
+    return text.trim()
   } catch {
     return `${code} ${value.toFixed(2)}`
   }

@@ -394,7 +394,9 @@ describe('NeedsActionCard', () => {
     expect(
       table.getByText('لم يرد').closest('[title]')?.getAttribute('title')
     ).toMatch(/^لم يرد منذ/)
-    expect(table.getByText('751.00 ج.م.')).toBeTruthy()
+    expect(
+      table.getByText(`ج.م${String.fromCharCode(0x200e)} 751.00`)
+    ).toBeTruthy()
     // In the table every action sits in the menu.
     expect(
       table.getAllByRole('button').map((b) => b.getAttribute('aria-label'))

@@ -4,6 +4,7 @@ import type { MouseEvent } from 'react'
 import { Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll'
+import { useMediaQuery } from '@/shared/hooks/useMediaQuery'
 import { cn } from '@/shared/lib/utils'
 import { isNeedsActionRow } from '@/features/dashboard/domain/confirmationRowStatus'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
@@ -170,8 +171,16 @@ const HEADINGS = [
   ['action', 'w-[8%] text-end'],
 ] as const
 
-/** The list's own scroll area: tall enough to fill a screen, never taller. */
-const SCROLL_AREA = 'max-h-[calc(100dvh-20rem)] min-h-64 overflow-auto'
+/**
+ * The table's own scroll area from `md`: tall enough to fill a screen, never
+ * taller. On a phone the cards flow and the page scrolls: the header, tabs and
+ * search already use most of the screen, so a capped box there would be a
+ * second, small scroller inside the page.
+ */
+const SCROLL_AREA = 'md:max-h-[calc(100dvh-20rem)] md:min-h-64 md:overflow-auto'
+
+/** Tailwind's `md` breakpoint, where the table replaces the cards. */
+const TABLE_QUERY = '(min-width: 48rem)'
 
 interface ConfirmationsScrollProps {
   hasMore: boolean
@@ -186,9 +195,9 @@ interface ConfirmationsScrollProps {
  * below it — the same values and actions either way. Switched in CSS rather
  * than by a width hook, so server and first client render always match.
  *
- * The rows scroll inside the card so the headings stay in view, and the next
- * page loads when the end comes near. `tabIndex` makes the area scrollable
- * from the keyboard.
+ * The table rows scroll inside the card so the headings stay in view; the cards
+ * scroll with the page. Either way the next page loads when the end comes
+ * near. `tabIndex` makes the table's area scrollable from the keyboard.
  */
 export function ConfirmationsList({
   rows,
@@ -199,16 +208,18 @@ export function ConfirmationsList({
   ...rowProps
 }: ConfirmationsListProps & ConfirmationsScrollProps) {
   const t = useTranslations('dashboard.confirmations')
+  const isTableLayout = useMediaQuery(TABLE_QUERY)
   const { rootRef, sentinelRef } = useInfiniteScroll({
     hasMore,
     isLoading: isLoadingMore,
     onLoadMore,
+    scrollRoot: isTableLayout ? 'element' : 'viewport',
   })
 
   return (
     <div
       ref={rootRef}
-      tabIndex={0}
+      tabIndex={isTableLayout ? 0 : undefined}
       role="region"
       aria-label={t('title')}
       className={cn(SCROLL_AREA, 'ak-focus')}

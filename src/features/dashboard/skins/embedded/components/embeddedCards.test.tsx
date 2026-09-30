@@ -684,7 +684,7 @@ describe('ConfirmationsCardList', () => {
     const cards = screen.getAllByRole('listitem')
     expect(cards).toHaveLength(2)
     expect(within(cards[0]).getByText('مؤكد')).toBeTruthy()
-    expect(within(cards[0]).getByText('49.95 US$')).toBeTruthy()
+    expect(within(cards[0]).getByText('US$ 49.95')).toBeTruthy()
     expect(
       within(cards[0]).getByRole('link', { name: /بيانات الشحن/ })
     ).toBeTruthy()
