@@ -19,7 +19,7 @@ export function formatFileSize(bytes: number, locale: string): string {
 
 /**
  * A normalized `750.00` amount in its currency, as the confirmations list
- * writes it (`750.00 ج.م`). Render inside `<Ltr>`.
+ * writes it (`ج.م 750.00`). Render inside `<Ltr>`.
  */
 export function formatImportAmount(
   totalPrice: string | undefined,

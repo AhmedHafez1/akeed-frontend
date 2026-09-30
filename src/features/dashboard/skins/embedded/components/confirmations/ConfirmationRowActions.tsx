@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { BlockStack, Button, InlineStack, Modal } from '@shopify/polaris'
-import { CheckIcon, MenuHorizontalIcon } from '@shopify/polaris-icons'
+import { BlockStack, Box, Button, InlineStack, Modal } from '@shopify/polaris'
+import { MenuHorizontalIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import {
   planConfirmationRowActions,
@@ -72,8 +72,8 @@ function useConfirmationRowActions({
 /**
  * Nothing for rows that need nothing. In the table every action, the WhatsApp
  * link included, sits in a small sheet behind one labelled "more" button, so
- * rows stay quiet. On a card, Confirm and the link sit up front and share the
- * width; the sheet keeps the rest.
+ * rows stay quiet. On a card only the link sits up front; the sheet keeps the
+ * rest, Confirm included.
  *
  * The sheet is a Modal, not a Popover: Polaris' popover keeps the window in
  * its props, and React's dev profiler walks it into the cross-origin Shopify
@@ -109,97 +109,80 @@ export function ConfirmationRowActions({
 
   if (!link && items.length === 0) return null
   const isStacked = layout === 'stacked'
-  const confirmItem = items.find((item) => item.id === 'confirm')
-  // A card shows Confirm up front, so its sheet leaves it out.
-  const sheetItems = isStacked
-    ? items.filter((item) => item.id !== 'confirm')
-    : items
-  const showSheet = sheetItems.length > 0 || (!isStacked && link !== null)
+  const showSheet = items.length > 0 || (!isStacked && link !== null)
 
   return (
-    <InlineStack gap="200" wrap={false} blockAlign="center">
-      {isStacked && confirmItem && (
-        <div className="min-w-0 flex-1">
-          <Button
-            icon={CheckIcon}
-            fullWidth
-            disabled={isActing}
-            accessibilityLabel={t(
-              'overview.needsAction.actions.manualConfirmLabel',
-              { order: orderLabel }
-            )}
-            onClick={confirmItem.onAction}
-          >
-            {confirmItem.content}
-          </Button>
-        </div>
-      )}
-      {isStacked && link && (
-        <div className="min-w-0 flex-1">
-          <Button
-            url={link.url}
-            target="_blank"
-            fullWidth
-            accessibilityLabel={link.accessibilityLabel}
-          >
-            {link.content}
-          </Button>
-        </div>
-      )}
-      {showSheet && (
-        <>
-          <Button
-            icon={MenuHorizontalIcon}
-            disabled={isActing}
-            loading={isActing}
-            accessibilityLabel={t('confirmations.actions.more', {
-              order: orderLabel,
-            })}
-            onClick={() => setIsSheetOpen(true)}
-          />
-          <Modal
-            open={isSheetOpen}
-            onClose={() => setIsSheetOpen(false)}
-            title={t('confirmations.actions.menuTitle', { order: orderLabel })}
-            size="small"
-            secondaryActions={[
-              {
-                content: t('confirmations.actions.close'),
-                onAction: () => setIsSheetOpen(false),
-              },
-            ]}
-          >
-            <Modal.Section>
-              <BlockStack gap="200">
-                {!isStacked && link && (
-                  <Button
-                    fullWidth
-                    url={link.url}
-                    target="_blank"
-                    accessibilityLabel={link.accessibilityLabel}
-                    onClick={() => setIsSheetOpen(false)}
-                  >
-                    {link.content}
-                  </Button>
-                )}
-                {sheetItems.map((item) => (
-                  <Button
-                    key={item.id}
-                    fullWidth
-                    tone={item.destructive ? 'critical' : undefined}
-                    onClick={() => {
-                      setIsSheetOpen(false)
-                      item.onAction()
-                    }}
-                  >
-                    {item.content}
-                  </Button>
-                ))}
-              </BlockStack>
-            </Modal.Section>
-          </Modal>
-        </>
-      )}
-    </InlineStack>
+    <Box paddingBlockStart={isStacked ? '100' : '0'}>
+      <InlineStack gap="200" wrap={false} blockAlign="center">
+        {isStacked && link && (
+          <div className="min-w-0 flex-1">
+            <Button
+              url={link.url}
+              target="_blank"
+              fullWidth
+              accessibilityLabel={link.accessibilityLabel}
+            >
+              {link.content}
+            </Button>
+          </div>
+        )}
+        {showSheet && (
+          <>
+            <Button
+              icon={MenuHorizontalIcon}
+              disabled={isActing}
+              loading={isActing}
+              accessibilityLabel={t('confirmations.actions.more', {
+                order: orderLabel,
+              })}
+              onClick={() => setIsSheetOpen(true)}
+            />
+            <Modal
+              open={isSheetOpen}
+              onClose={() => setIsSheetOpen(false)}
+              title={t('confirmations.actions.menuTitle', {
+                order: orderLabel,
+              })}
+              size="small"
+              secondaryActions={[
+                {
+                  content: t('confirmations.actions.close'),
+                  onAction: () => setIsSheetOpen(false),
+                },
+              ]}
+            >
+              <Modal.Section>
+                <BlockStack gap="200">
+                  {!isStacked && link && (
+                    <Button
+                      fullWidth
+                      url={link.url}
+                      target="_blank"
+                      accessibilityLabel={link.accessibilityLabel}
+                      onClick={() => setIsSheetOpen(false)}
+                    >
+                      {link.content}
+                    </Button>
+                  )}
+                  {items.map((item) => (
+                    <Button
+                      key={item.id}
+                      fullWidth
+                      tone={item.destructive ? 'critical' : undefined}
+                      onClick={() => {
+                        setIsSheetOpen(false)
+                        item.onAction()
+                      }}
+                    >
+                      {item.content}
+                    </Button>
+                  ))}
+                </BlockStack>
+              </Modal.Section>
+            </Modal>
+          </>
+        )}
+      </InlineStack>
+    </Box>
   )
 }

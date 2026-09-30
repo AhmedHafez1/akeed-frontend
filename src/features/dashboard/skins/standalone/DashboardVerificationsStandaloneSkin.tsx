@@ -20,7 +20,6 @@ import { StandaloneFeedbackBanners } from './components/StandaloneFeedbackBanner
 import { StandaloneVerificationsSkeleton } from './components/StandaloneVerificationsSkeleton'
 import { CancelOrderDialog } from './components/confirmations/CancelOrderDialog'
 import { ConfirmationsList } from './components/confirmations/ConfirmationsList'
-import { ConfirmationsPager } from './components/confirmations/ConfirmationsPager'
 import { ConfirmationsToolbar } from './components/confirmations/ConfirmationsToolbar'
 import { VerificationDetailsSheet } from './components/confirmations/VerificationDetailsSheet'
 import { PageHeader } from './components/shared/PageHeader'
@@ -56,7 +55,6 @@ export function DashboardVerificationsStandaloneSkin({
   phoneTestAction,
 }: DashboardVerificationsStandaloneSkinProps) {
   const t = useTranslations('dashboard')
-  const tTable = useTranslations('dashboard.standalone.table')
   const tabIdPrefix = useId()
   const panelId = `${tabIdPrefix}-panel`
   const tCredits = useTranslations('creditErrors')
@@ -254,6 +252,13 @@ export function DashboardVerificationsStandaloneSkin({
                 canWrite={list.canWrite}
                 canRetry={list.canRetry}
                 actingId={list.actingId}
+                hasMore={list.hasNextPage}
+                isLoadingMore={list.isFetchingNextPage}
+                onLoadMore={list.onLoadMore}
+                loadedLabel={t('confirmations.loaded', {
+                  loaded: formatCount(list.rows.length, locale),
+                  total: formatCount(list.total, locale),
+                })}
                 handlers={{
                   onOpenDetails: (row) => setDetailsId(row.id),
                   onRequestConfirm: (row, orderLabel) =>
@@ -265,27 +270,6 @@ export function DashboardVerificationsStandaloneSkin({
                     setCancelTarget({ row, orderLabel }),
                   onRetry: (row) => void handleRetry(row),
                 }}
-              />
-              <ConfirmationsPager
-                label={t('confirmations.pagination.label', {
-                  from: formatCount(list.range.from, locale),
-                  to: formatCount(list.range.to, locale),
-                  total: formatCount(list.range.total, locale),
-                })}
-                summary={tTable.rich('showing', {
-                  from: formatCount(list.range.from, locale),
-                  to: formatCount(list.range.to, locale),
-                  total: list.range.total,
-                  b: (chunks) => (
-                    <bdi className="text-ink font-semibold">{chunks}</bdi>
-                  ),
-                })}
-                hasPrevious={list.hasPreviousPage}
-                hasNext={list.hasNextPage}
-                onPrevious={list.onPreviousPage}
-                onNext={list.onNextPage}
-                previousLabel={tTable('previous')}
-                nextLabel={tTable('next')}
               />
             </>
           )}

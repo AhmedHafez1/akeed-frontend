@@ -1,7 +1,10 @@
 'use client'
 
 import type { MouseEvent } from 'react'
+import { Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll'
+import { useMediaQuery } from '@/shared/hooks/useMediaQuery'
 import { cn } from '@/shared/lib/utils'
 import { isNeedsActionRow } from '@/features/dashboard/domain/confirmationRowStatus'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
@@ -104,7 +107,7 @@ function TableRow({ row, timeZone, actingId, ...rest }: RowProps) {
 /**
  * One order on a phone: order and amount, then who, then what happened (the
  * badge and a plain-words note under it), then the actions. Orders waiting on
- * the merchant carry an amber edge. A tap outside a control opens the
+ * the merchant carry an amber background. A tap outside a control opens the
  * details; the order number stays the keyboard route.
  */
 function CardRow({ row, timeZone, actingId, ...rest }: RowProps) {
@@ -121,7 +124,6 @@ function CardRow({ row, timeZone, actingId, ...rest }: RowProps) {
       }}
       className={cn(
         CARD_ROW,
-        isNeedsActionRow(row) ? 'border-ak-warning' : 'border-transparent',
         row.optimistic
           ? 'bg-surface-sunken'
           : cn('cursor-pointer', isNeedsActionRow(row) && NEEDS_ACTION_ROW)
@@ -135,10 +137,12 @@ function CardRow({ row, timeZone, actingId, ...rest }: RowProps) {
         />
         <AmountText amount={view.amount} isCanceled={view.isCanceled} />
       </div>
-      <CustomerCell name={view.name} phone={view.phone} />
-      <div className="flex min-w-0 flex-col items-start gap-1.5">
-        <StatusCell row={row} timeZone={timeZone} />
-        <StatusNote row={row} timeZone={timeZone} />
+      <div className="flex items-start justify-between gap-3">
+        <CustomerCell name={view.name} phone={view.phone} />
+        <div className="flex min-w-0 shrink-0 flex-col items-end gap-1.5 text-end">
+          <StatusCell row={row} timeZone={timeZone} />
+          <StatusNote row={row} timeZone={timeZone} />
+        </div>
       </div>
       <ConfirmationRowActions
         row={row}
@@ -168,19 +172,59 @@ const HEADINGS = [
 ] as const
 
 /**
+ * The table's own scroll area from `md`: tall enough to fill a screen, never
+ * taller. On a phone the cards flow and the page scrolls: the header, tabs and
+ * search already use most of the screen, so a capped box there would be a
+ * second, small scroller inside the page.
+ */
+const SCROLL_AREA = 'md:max-h-[calc(100dvh-20rem)] md:min-h-64 md:overflow-auto'
+
+/** Tailwind's `md` breakpoint, where the table replaces the cards. */
+const TABLE_QUERY = '(min-width: 48rem)'
+
+interface ConfirmationsScrollProps {
+  hasMore: boolean
+  isLoadingMore: boolean
+  onLoadMore: () => void
+  /** Rows loaded and rows in all, announced to screen readers as it grows. */
+  loadedLabel: string
+}
+
+/**
  * The confirmations list: a seven-column table from `md`, one card per order
  * below it — the same values and actions either way. Switched in CSS rather
  * than by a width hook, so server and first client render always match.
+ *
+ * The table rows scroll inside the card so the headings stay in view; the cards
+ * scroll with the page. Either way the next page loads when the end comes
+ * near. `tabIndex` makes the table's area scrollable from the keyboard.
  */
 export function ConfirmationsList({
   rows,
+  hasMore,
+  isLoadingMore,
+  onLoadMore,
+  loadedLabel,
   ...rowProps
-}: ConfirmationsListProps) {
+}: ConfirmationsListProps & ConfirmationsScrollProps) {
   const t = useTranslations('dashboard.confirmations')
+  const isTableLayout = useMediaQuery(TABLE_QUERY)
+  const { rootRef, sentinelRef } = useInfiniteScroll({
+    hasMore,
+    isLoading: isLoadingMore,
+    onLoadMore,
+    scrollRoot: isTableLayout ? 'element' : 'viewport',
+  })
 
   return (
-    <>
-      <div className="hidden overflow-x-auto md:block">
+    <div
+      ref={rootRef}
+      tabIndex={isTableLayout ? 0 : undefined}
+      role="region"
+      aria-label={t('title')}
+      className={cn(SCROLL_AREA, 'ak-focus')}
+    >
+      <div className="hidden md:block">
         <table className={cn(TABLE, 'min-w-270')}>
           <caption className="sr-only">{t('title')}</caption>
           <thead>
@@ -209,6 +253,20 @@ export function ConfirmationsList({
           <CardRow key={row.id} row={row} {...rowProps} />
         ))}
       </ul>
-    </>
+
+      <p role="status" className="sr-only">
+        {loadedLabel}
+      </p>
+      <div ref={sentinelRef} aria-hidden="true" className="h-px" />
+      {isLoadingMore && (
+        <div
+          role="status"
+          className="text-ink-muted flex items-center justify-center gap-2 py-3"
+        >
+          <Loader2 aria-hidden="true" className="size-4 animate-spin" />
+          <span className="text-ak-caption">{t('loadingMore')}</span>
+        </div>
+      )}
+    </div>
   )
 }

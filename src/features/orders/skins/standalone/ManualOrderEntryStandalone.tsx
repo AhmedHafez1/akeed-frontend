@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { Controller } from 'react-hook-form'
-import { ChevronDown, CircleCheck, ClipboardCheck } from 'lucide-react'
+import { CheckCircle, ChevronDown, ClipboardCheck } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/shared/lib/utils'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
@@ -120,11 +120,11 @@ export function ManualOrderEntryStandalone({
             aria-label={t('open')}
             title={disabledReason}
             className={cn(
-              'bg-primary text-primary-foreground hover:bg-primary-hover h-10 rounded-lg shadow-sm',
+              'bg-primary text-primary-foreground hover:bg-primary-hover border rounded-lg shadow-sm',
               triggerClassName
             )}
           >
-            <CircleCheck aria-hidden="true" className="size-[18px] shrink-0" />
+            <CheckCircle aria-hidden="true" className="size-4.5 shrink-0" />
             <span className={triggerLabelClassName}>{t('open')}</span>
           </Button>
         </DialogTrigger>
@@ -138,7 +138,7 @@ export function ManualOrderEntryStandalone({
       <DialogContent
         closeLabel={t('close')}
         closeDisabled={entry.isSubmitting}
-        className="border-border bg-card max-h-[90vh] overflow-y-auto rounded-[18px] p-5 sm:max-w-[640px] sm:p-7"
+        className="border-border bg-card max-h-[90vh] overflow-y-auto rounded-[18px] p-5 sm:max-w-160 sm:p-7"
         onEscapeKeyDown={(event) => {
           if (entry.isSubmitting) event.preventDefault()
         }}

@@ -80,17 +80,38 @@ export function formatPlanPrice(amount: number, currency: string) {
   return `${symbol} ${value}`
 }
 
+const LRM = String.fromCharCode(0x200e)
+const ARABIC_LETTER = new RegExp(
+  `[${String.fromCharCode(0x0600)}-${String.fromCharCode(0x06ff)}]`
+)
 const BIDI_MARKS = new RegExp(
   `[${String.fromCharCode(0x200e, 0x200f, 0x061c)}]`,
   'g'
 )
 
 /**
- * An order amount (major units) with Latin digits: `500.00 ج.م` in Arabic,
- * `EGP 500.00` / `$500.00` in English. The string carries no bidi marks and is
- * built left to right, so render it inside `<Ltr>` (`<bdi dir="ltr">`): in an
- * RTL paragraph that keeps the amount first and the symbol after it, instead
- * of the `$US 500.00` a bare `Intl` string reorders into.
+ * Writes an Arabic-locale order amount left to right, symbol first: `ج.م 500.00`.
+ * An Arabic reader (right to left) meets the amount first and the currency
+ * after it.
+ *
+ * CLDR's trailing dot (`ج.م.`) would read as a sentence end, so it is dropped.
+ * An Arabic symbol beside digits also needs anchoring: the bidi algorithm joins
+ * the digits to the symbol's right-to-left run and shows `500.00 ج.م`, so a
+ * left-to-right mark follows an Arabic symbol to keep the amount on its right.
+ * Latin symbols (`US$`) are left-to-right already and get no mark.
+ */
+export function symbolThenAmount(symbol: string, number: string): string {
+  const clean = symbol.replace(BIDI_MARKS, '').replace(/\.$/, '')
+  const anchor = ARABIC_LETTER.test(clean) ? LRM : ''
+  return `${clean}${anchor} ${number}`.trim()
+}
+
+/**
+ * An order amount (major units) with Latin digits: `ج.م 500.00` in Arabic,
+ * `EGP 500.00` / `$500.00` in English. Render it inside `<Ltr>`
+ * (`<bdi dir="ltr">`) to avoid the `$US 500.00` a bare `Intl` string
+ * reorders into. English carries no bidi marks; see `symbolThenAmount` for the
+ * one mark the Arabic form uses.
  */
 export function formatAmount(
   value: number,
@@ -110,14 +131,11 @@ export function formatAmount(
     .filter((part) => part.type !== 'currency' && part.type !== 'literal')
     .map((part) => part.value)
     .join('')
-  // CLDR writes `ج.م.`; the trailing dot reads as a sentence end.
   const symbol = parts
     .filter((part) => part.type === 'currency')
     .map((part) => part.value)
     .join('')
-    .replace(BIDI_MARKS, '')
-    .replace(/\.$/, '')
-  return `${number} ${symbol}`
+  return symbolThenAmount(symbol, number)
 }
 
 export function formatMoneyFromCredits(

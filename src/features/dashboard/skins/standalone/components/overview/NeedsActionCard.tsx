@@ -118,7 +118,13 @@ function TableRow(props: RowProps) {
 function CardRow(props: RowProps) {
   const { row, name, phone, amount, target } = useRowView(props)
   return (
-    <li className={cn(CARD_ROW, NEEDS_ACTION_ROW, 'border-ak-warning')}>
+    <li
+      className={cn(
+        CARD_ROW,
+        NEEDS_ACTION_ROW,
+        'border-ak-warning border-s-[3px]'
+      )}
+    >
       <div className="flex items-center justify-between gap-3">
         <OrderCell orderLabel={row.orderLabel} isTest={false} />
         <AmountText amount={amount} isCanceled={false} />

@@ -1471,7 +1471,7 @@
         "order": "Order",
         "customer": "Customer",
         "status": "Status",
-        "followUp": "Follow-up",
+        "followUp": "Reminder",
         "total": "Total",
         "created": "Created",
         "actions": "Actions",
@@ -1725,7 +1725,7 @@
         "customer": "Customer",
         "phone": "Phone",
         "status": "Status",
-        "followUp": "Follow-up",
+        "followUp": "Reminder",
         "total": "Total",
         "updated": "Last update",
         "action": "Action"
@@ -1769,11 +1769,8 @@
           "notSent": "message not sent"
         }
       },
-      "pagination": {
-        "label": "{from}–{to} of {total}",
-        "previous": "Previous page",
-        "next": "Next page"
-      },
+      "loadingMore": "Loading more orders…",
+      "loaded": "Showing {loaded} of {total} orders",
       "empty": {
         "all": "No confirmations in this period yet.",
         "needs_action": "Nothing needs your action. Nice work!",

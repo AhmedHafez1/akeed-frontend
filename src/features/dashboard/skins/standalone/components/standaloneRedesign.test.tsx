@@ -258,6 +258,10 @@ describe('ConfirmationsList', () => {
     } as VerificationItem
     renderStandalone(
       <ConfirmationsList
+        hasMore={false}
+        isLoadingMore={false}
+        onLoadMore={vi.fn()}
+        loadedLabel=""
         rows={[row, { ...row, id: 'v-2', customer_name: null }]}
         timeZone="UTC"
         canWrite
@@ -317,6 +321,10 @@ describe('ConfirmationsList', () => {
     } as VerificationItem
     renderStandalone(
       <ConfirmationsList
+        hasMore={false}
+        isLoadingMore={false}
+        onLoadMore={vi.fn()}
+        loadedLabel=""
         rows={[base, failed]}
         timeZone="UTC"
         canWrite
@@ -386,7 +394,9 @@ describe('NeedsActionCard', () => {
     expect(
       table.getByText('لم يرد').closest('[title]')?.getAttribute('title')
     ).toMatch(/^لم يرد منذ/)
-    expect(table.getByText('751.00 ج.م.')).toBeTruthy()
+    expect(
+      table.getByText(`ج.م${String.fromCharCode(0x200e)} 751.00`)
+    ).toBeTruthy()
     // In the table every action sits in the menu.
     expect(
       table.getAllByRole('button').map((b) => b.getAttribute('aria-label'))

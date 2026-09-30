@@ -62,51 +62,53 @@ export function verificationStatsOptions(dateRange: DashboardStatsDateRange) {
   })
 }
 
-/** Rows per page of the confirmations table, in both modes. */
-export const CONFIRMATIONS_PAGE_SIZE = 20
+/** Rows fetched per request by the confirmations table, in both modes. */
+export const CONFIRMATIONS_PAGE_SIZE = 30
 
-export interface ConfirmationsPageParams {
+export interface ConfirmationsListParams {
   tab: ConfirmationsTab
   dateRange: DashboardStatsDateRange
   search: string
-  cursor: string | null
   /** Narrows the list to the orders one import batch created. */
   importBatchId?: string
 }
 
 /**
- * One page of the confirmations table: tab, search and paging are all
- * answered by the server, and the previous page stays on screen while the
- * next one loads.
+ * The confirmations table as one growing list: tab and search are answered by
+ * the server, and each further page is fetched with the previous page's
+ * cursor as the merchant scrolls.
  */
-export function confirmationsPageOptions({
+export function confirmationsListOptions({
   tab,
   dateRange,
   search,
-  cursor,
   importBatchId,
-}: ConfirmationsPageParams) {
+}: ConfirmationsListParams) {
   const params = new URLSearchParams({
     date_range: dateRange,
     limit: String(CONFIRMATIONS_PAGE_SIZE),
   })
   if (tab !== 'all') params.set('tab', tab)
   if (search) params.set('q', search)
-  if (cursor) params.set('cursor', cursor)
   if (importBatchId) params.set('importBatchId', importBatchId)
 
-  return queryOptions({
+  return infiniteQueryOptions({
     queryKey: queryKeys.verifications.list({
       status: `tab:${tab}`,
       dateRange,
       search,
-      cursor,
       importBatchId,
+      infinite: true,
     }),
-    queryFn: ({ signal }) =>
-      api.get<VerificationsResponse>(`/api/verifications?${params}`, {
+    queryFn: ({ pageParam, signal }) => {
+      const page = new URLSearchParams(params)
+      if (pageParam) page.set('cursor', pageParam)
+      return api.get<VerificationsResponse>(`/api/verifications?${page}`, {
         signal,
-      }),
+      })
+    },
+    initialPageParam: null as string | null,
+    getNextPageParam: (lastPage) => lastPage.next_cursor,
     placeholderData: keepPreviousData,
     refetchOnWindowFocus: 'always',
   })

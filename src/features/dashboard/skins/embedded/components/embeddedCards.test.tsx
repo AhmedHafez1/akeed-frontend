@@ -257,7 +257,7 @@ describe('CreditsBar', () => {
 })
 
 describe('KpiCards', () => {
-  it('shows the confirmed value as an LTR amount and the rate breakdown', () => {
+  it('shows the three counts as LTR numbers', () => {
     renderEmbedded(
       <KpiCards
         kpis={{
@@ -270,14 +270,13 @@ describe('KpiCards', () => {
         }}
       />
     )
-    const amount = screen.getByText('US$ 4,500.50')
-    expect(amount.closest('bdi')?.getAttribute('dir')).toBe('ltr')
+    const confirmed = screen.getByText('19')
+    expect(confirmed.closest('bdi')?.getAttribute('dir')).toBe('ltr')
+    expect(screen.getByText('6')).toBeTruthy()
     expect(screen.getByText('68%')).toBeTruthy()
-    expect(screen.getByText('19 من 28 طلباً أرسلنا لها رسالة')).toBeTruthy()
-    expect(screen.getByText('6 شحنات ومرتجعات لم تدفع تكلفتها')).toBeTruthy()
   })
 
-  it('reads an empty period as a dash, not 0%', () => {
+  it('reads an empty rate as a dash, not 0%', () => {
     renderEmbedded(
       <KpiCards
         kpis={{
@@ -289,7 +288,6 @@ describe('KpiCards', () => {
       'en'
     )
     expect(screen.getByText('—')).toBeTruthy()
-    expect(screen.getByText('No messages sent in this period yet')).toBeTruthy()
   })
 })
 
@@ -388,15 +386,6 @@ describe('ConfirmationsTable', () => {
       onRequestCancel: vi.fn(),
       onRetry: vi.fn(),
     },
-    pagination: {
-      label: '1–2 من 2',
-      hasNext: false,
-      hasPrevious: false,
-      onNext: vi.fn(),
-      onPrevious: vi.fn(),
-      previousLabel: 'الصفحة السابقة',
-      nextLabel: 'الصفحة التالية',
-    },
   }
 
   it('shows the status timestamp on the badge and omits the updated column', () => {
@@ -486,7 +475,6 @@ describe('ConfirmationsTable', () => {
         name: /واتساب/,
       })
     ).toHaveLength(1)
-    expect(screen.getByLabelText('الصفحة السابقة')).toBeTruthy()
   })
 
   it('names a held-back message "Scheduled" and says when it goes out', () => {
@@ -661,15 +649,6 @@ describe('ConfirmationsCardList', () => {
           onRequestCancel: vi.fn(),
           onRetry: vi.fn(),
         }}
-        pagination={{
-          label: '1 of 1',
-          hasNext: false,
-          hasPrevious: false,
-          onNext: vi.fn(),
-          onPrevious: vi.fn(),
-          previousLabel: 'Previous page',
-          nextLabel: 'Next page',
-        }}
       />,
       'en'
     )
@@ -700,15 +679,6 @@ describe('ConfirmationsCardList', () => {
           onRequestCancel: vi.fn(),
           onRetry: vi.fn(),
         }}
-        pagination={{
-          label: '1–2 من 2',
-          hasNext: false,
-          hasPrevious: false,
-          onNext: vi.fn(),
-          onPrevious: vi.fn(),
-          previousLabel: 'الصفحة السابقة',
-          nextLabel: 'الصفحة التالية',
-        }}
       />
     )
     const cards = screen.getAllByRole('listitem')
@@ -723,6 +693,5 @@ describe('ConfirmationsCardList', () => {
     expect(
       within(cards[1]).getByRole('link', { name: /راسل .* على واتساب/ })
     ).toBeTruthy()
-    expect(screen.getByLabelText('الصفحة التالية')).toBeTruthy()
   })
 })

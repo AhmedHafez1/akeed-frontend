@@ -44,7 +44,8 @@ export function formatCurrencyTotal(
 
 /**
  * The standalone list's total: Latin digits, and in Arabic the currency after
- * the amount (`500.00 ج.م`). Render inside `<bdi dir="ltr">`.
+ * the amount as an Arabic reader meets it (`ج.م 500.00` left to right). Render
+ * inside `<bdi dir="ltr">`.
  */
 export function formatOrderTotal(
   verification: VerificationItem,
