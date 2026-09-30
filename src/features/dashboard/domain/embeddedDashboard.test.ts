@@ -1,13 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { VerificationItem } from '../model/dashboard.model'
 import { isNeedsActionRow, resolveRowStatus } from './confirmationRowStatus'
-import {
-  FIRST_PAGE,
-  currentCursor,
-  nextPage,
-  pageRange,
-  previousPage,
-} from './confirmationsPaging'
 import { deliveryFailureKey } from './deliveryFailure'
 import {
   describeDelay,
@@ -210,35 +203,5 @@ describe('settings summary', () => {
   it('treats a half-configured window as none', () => {
     expect(formatQuietWindow('21:00', null, 'en')).toBeNull()
     expect(formatQuietHour('25:00', 'en')).toBeNull()
-  })
-})
-
-describe('confirmations paging', () => {
-  it('walks forward and back over server cursors', () => {
-    const second = nextPage(FIRST_PAGE, 'c1')
-    const third = nextPage(second, 'c2')
-    expect(currentCursor(FIRST_PAGE)).toBeNull()
-    expect(currentCursor(third)).toBe('c2')
-    expect(previousPage(third)).toEqual(second)
-    expect(previousPage(FIRST_PAGE)).toBe(FIRST_PAGE)
-    expect(nextPage(second, null)).toBe(second)
-  })
-
-  it('labels the rows shown', () => {
-    expect(pageRange(FIRST_PAGE, 20, 8, 8)).toEqual({
-      from: 1,
-      to: 8,
-      total: 8,
-    })
-    expect(pageRange(nextPage(FIRST_PAGE, 'c1'), 20, 8, 28)).toEqual({
-      from: 21,
-      to: 28,
-      total: 28,
-    })
-    expect(pageRange(FIRST_PAGE, 20, 0, 0)).toEqual({
-      from: 0,
-      to: 0,
-      total: 0,
-    })
   })
 })

@@ -663,6 +663,46 @@
   font-family: var(--p-font-family-sans);
 }
 
+/*
+ * The embedded list scrolls inside its own box so the headings stay in view.
+ * Polaris' IndexTable pins its header with a clone that follows the window
+ * scroll, which never fires inside a bounded box, so here the real header row
+ * is made sticky instead and the clone is hidden. The table's own horizontal
+ * scroller is released so the box scrolls both ways.
+ *
+ * The height is also capped in absolute terms: Shopify Admin can size the app
+ * frame to its content, and then a viewport-relative height is never reached.
+ */
+/*
+ * The page under a scroll box is no longer forced to a full viewport: with
+ * the box inside it, that minimum plus the frame's own chrome is what made the
+ * page itself scroll a little as well.
+ */
+.akeed-embedded-content:has(.akeed-embedded-scroll) {
+  min-height: 0;
+}
+
+.akeed-embedded-scroll {
+  max-height: min(calc(100dvh - 20rem), 44rem);
+  min-height: 16rem;
+  overflow: auto;
+}
+
+.akeed-embedded-scroll .Polaris-IndexTable-ScrollContainer {
+  overflow: visible;
+}
+
+.akeed-embedded-scroll .Polaris-IndexTable__StickyTable,
+.akeed-embedded-scroll .Polaris-IndexTable__ScrollBarContainer {
+  display: none;
+}
+
+.akeed-embedded-scroll .Polaris-IndexTable__TableHeading {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
 @media (max-width: 48rem) {
   .akeed-embedded-content {
     padding-inline: 0.75rem;

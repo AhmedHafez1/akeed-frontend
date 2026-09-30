@@ -102,11 +102,10 @@ function ConfirmationsTableRow({
 
 /**
  * The confirmations table: seven one-line columns, needs-action rows tinted
- * amber, and paging. Narrow screens get cards.
+ * amber, and more rows loaded as the page scrolls. Narrow screens get cards.
  */
 export function ConfirmationsTable({
   rows,
-  pagination,
   ...rowProps
 }: ConfirmationsListProps) {
   const t = useTranslations('dashboard')
@@ -133,17 +132,6 @@ export function ConfirmationsTable({
       itemCount={rows.length}
       headings={[...headings]}
       selectable={false}
-      pagination={{
-        label: pagination.label,
-        hasNext: pagination.hasNext,
-        hasPrevious: pagination.hasPrevious,
-        onNext: pagination.onNext,
-        onPrevious: pagination.onPrevious,
-        accessibilityLabels: {
-          previous: pagination.previousLabel,
-          next: pagination.nextLabel,
-        },
-      }}
     >
       {rows.map((row, index) => (
         <ConfirmationsTableRow

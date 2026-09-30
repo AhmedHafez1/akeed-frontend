@@ -1,10 +1,4 @@
-import {
-  Badge,
-  BlockStack,
-  Box,
-  InlineStack,
-  Pagination,
-} from '@shopify/polaris'
+import { Badge, BlockStack, Box, InlineStack } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
 import { isNeedsActionRow } from '../../../../domain/confirmationRowStatus'
 import type { VerificationItem } from '../../../../model/dashboard.model'
@@ -19,7 +13,7 @@ import {
   type ConfirmationsListProps,
 } from './confirmationRowView'
 
-type CardProps = Omit<ConfirmationsListProps, 'rows' | 'pagination'> & {
+type CardProps = Omit<ConfirmationsListProps, 'rows'> & {
   row: VerificationItem
 }
 
@@ -80,35 +74,17 @@ function ConfirmationCard({
 
 /**
  * The confirmations list for narrow screens: one card per order with the
- * same values and actions as a table row, and the same paging.
+ * same values and actions as a table row.
  */
 export function ConfirmationsCardList({
   rows,
-  pagination,
   ...cardProps
 }: ConfirmationsListProps) {
   return (
-    <BlockStack>
-      <Box as="ul">
-        {rows.map((row) => (
-          <ConfirmationCard key={row.id} row={row} {...cardProps} />
-        ))}
-      </Box>
-      <Box padding="300">
-        <InlineStack align="center">
-          <Pagination
-            label={pagination.label}
-            hasNext={pagination.hasNext}
-            hasPrevious={pagination.hasPrevious}
-            onNext={pagination.onNext}
-            onPrevious={pagination.onPrevious}
-            accessibilityLabels={{
-              previous: pagination.previousLabel,
-              next: pagination.nextLabel,
-            }}
-          />
-        </InlineStack>
-      </Box>
-    </BlockStack>
+    <Box as="ul">
+      {rows.map((row) => (
+        <ConfirmationCard key={row.id} row={row} {...cardProps} />
+      ))}
+    </Box>
   )
 }

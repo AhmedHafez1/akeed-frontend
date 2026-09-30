@@ -1,7 +1,9 @@
 'use client'
 
 import type { MouseEvent } from 'react'
+import { Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll'
 import { cn } from '@/shared/lib/utils'
 import { isNeedsActionRow } from '@/features/dashboard/domain/confirmationRowStatus'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
@@ -168,20 +170,50 @@ const HEADINGS = [
   ['action', 'w-[8%] text-end'],
 ] as const
 
+/** The list's own scroll area: tall enough to fill a screen, never taller. */
+const SCROLL_AREA = 'max-h-[calc(100dvh-20rem)] min-h-64 overflow-auto'
+
+interface ConfirmationsScrollProps {
+  hasMore: boolean
+  isLoadingMore: boolean
+  onLoadMore: () => void
+  /** Rows loaded and rows in all, announced to screen readers as it grows. */
+  loadedLabel: string
+}
+
 /**
  * The confirmations list: a seven-column table from `md`, one card per order
  * below it — the same values and actions either way. Switched in CSS rather
  * than by a width hook, so server and first client render always match.
+ *
+ * The rows scroll inside the card so the headings stay in view, and the next
+ * page loads when the end comes near. `tabIndex` makes the area scrollable
+ * from the keyboard.
  */
 export function ConfirmationsList({
   rows,
+  hasMore,
+  isLoadingMore,
+  onLoadMore,
+  loadedLabel,
   ...rowProps
-}: ConfirmationsListProps) {
+}: ConfirmationsListProps & ConfirmationsScrollProps) {
   const t = useTranslations('dashboard.confirmations')
+  const { rootRef, sentinelRef } = useInfiniteScroll({
+    hasMore,
+    isLoading: isLoadingMore,
+    onLoadMore,
+  })
 
   return (
-    <>
-      <div className="hidden overflow-x-auto md:block">
+    <div
+      ref={rootRef}
+      tabIndex={0}
+      role="region"
+      aria-label={t('title')}
+      className={cn(SCROLL_AREA, 'ak-focus')}
+    >
+      <div className="hidden md:block">
         <table className={cn(TABLE, 'min-w-270')}>
           <caption className="sr-only">{t('title')}</caption>
           <thead>
@@ -210,6 +242,20 @@ export function ConfirmationsList({
           <CardRow key={row.id} row={row} {...rowProps} />
         ))}
       </ul>
-    </>
+
+      <p role="status" className="sr-only">
+        {loadedLabel}
+      </p>
+      <div ref={sentinelRef} aria-hidden="true" className="h-px" />
+      {isLoadingMore && (
+        <div
+          role="status"
+          className="text-ink-muted flex items-center justify-center gap-2 py-3"
+        >
+          <Loader2 aria-hidden="true" className="size-4 animate-spin" />
+          <span className="text-ak-caption">{t('loadingMore')}</span>
+        </div>
+      )}
+    </div>
   )
 }

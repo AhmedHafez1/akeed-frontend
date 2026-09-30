@@ -386,15 +386,6 @@ describe('ConfirmationsTable', () => {
       onRequestCancel: vi.fn(),
       onRetry: vi.fn(),
     },
-    pagination: {
-      label: '1–2 من 2',
-      hasNext: false,
-      hasPrevious: false,
-      onNext: vi.fn(),
-      onPrevious: vi.fn(),
-      previousLabel: 'الصفحة السابقة',
-      nextLabel: 'الصفحة التالية',
-    },
   }
 
   it('shows the status timestamp on the badge and omits the updated column', () => {
@@ -484,7 +475,6 @@ describe('ConfirmationsTable', () => {
         name: /واتساب/,
       })
     ).toHaveLength(1)
-    expect(screen.getByLabelText('الصفحة السابقة')).toBeTruthy()
   })
 
   it('names a held-back message "Scheduled" and says when it goes out', () => {
@@ -659,15 +649,6 @@ describe('ConfirmationsCardList', () => {
           onRequestCancel: vi.fn(),
           onRetry: vi.fn(),
         }}
-        pagination={{
-          label: '1 of 1',
-          hasNext: false,
-          hasPrevious: false,
-          onNext: vi.fn(),
-          onPrevious: vi.fn(),
-          previousLabel: 'Previous page',
-          nextLabel: 'Next page',
-        }}
       />,
       'en'
     )
@@ -698,21 +679,12 @@ describe('ConfirmationsCardList', () => {
           onRequestCancel: vi.fn(),
           onRetry: vi.fn(),
         }}
-        pagination={{
-          label: '1–2 من 2',
-          hasNext: false,
-          hasPrevious: false,
-          onNext: vi.fn(),
-          onPrevious: vi.fn(),
-          previousLabel: 'الصفحة السابقة',
-          nextLabel: 'الصفحة التالية',
-        }}
       />
     )
     const cards = screen.getAllByRole('listitem')
     expect(cards).toHaveLength(2)
     expect(within(cards[0]).getByText('مؤكد')).toBeTruthy()
-    expect(within(cards[0]).getByText('US$ 49.95')).toBeTruthy()
+    expect(within(cards[0]).getByText('49.95 US$')).toBeTruthy()
     expect(
       within(cards[0]).getByRole('link', { name: /بيانات الشحن/ })
     ).toBeTruthy()
@@ -721,6 +693,5 @@ describe('ConfirmationsCardList', () => {
     expect(
       within(cards[1]).getByRole('link', { name: /راسل .* على واتساب/ })
     ).toBeTruthy()
-    expect(screen.getByLabelText('الصفحة التالية')).toBeTruthy()
   })
 })

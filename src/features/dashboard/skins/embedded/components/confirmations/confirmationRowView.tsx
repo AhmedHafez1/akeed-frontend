@@ -26,15 +26,6 @@ export interface ConfirmationsListProps {
   canRetry: boolean
   actingId: string | null
   handlers: ConfirmationRowActionHandlers
-  pagination: {
-    label: string
-    hasNext: boolean
-    hasPrevious: boolean
-    onNext: () => void
-    onPrevious: () => void
-    previousLabel: string
-    nextLabel: string
-  }
 }
 
 /**
@@ -63,7 +54,9 @@ export function useConfirmationRowView(row: VerificationItem) {
     orderLabel:
       formatOrderNumber(row.order_number) ??
       `${t('table.orderFallbackPrefix')} ${row.order_id.slice(0, 8)}`,
-    amount: formatOrderAmount(row.total_price, row.currency, locale),
+    amount: formatOrderAmount(row.total_price, row.currency, locale, {
+      currencyAfter: true,
+    }),
     isCanceled: row.status === 'canceled',
   }
 }
@@ -123,7 +116,7 @@ export function FollowUpCell({
   }
   return (
     <span title={sentAtTitle || undefined}>
-      <Badge tone="success">{t('sent')}</Badge>
+      <Badge tone="info">{t('sent')}</Badge>
     </span>
   )
 }

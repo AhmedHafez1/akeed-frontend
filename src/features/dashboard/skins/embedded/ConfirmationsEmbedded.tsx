@@ -28,6 +28,7 @@ import type {
   VerificationItem,
 } from '../../model/dashboard.model'
 import { ConfirmationsCardList } from './components/confirmations/ConfirmationsCardList'
+import { LoadMoreFooter } from './components/confirmations/LoadMoreFooter'
 import { ConfirmationsTable } from './components/confirmations/ConfirmationsTable'
 import { EmbeddedPageHeader } from './components/overview/EmbeddedPageHeader'
 import { ManualConfirmModal } from './components/shared/ManualConfirmModal'
@@ -195,33 +196,30 @@ export function ConfirmationsEmbedded({
               </Text>
             </Box>
           ) : (
-            <ConfirmationsList
-              rows={list.rows}
-              timeZone={list.reportingTimezone}
-              canWrite={list.canWrite}
-              canRetry={list.canRetry}
-              actingId={list.actingId}
-              handlers={{
-                onRequestConfirm: (row, orderLabel) =>
-                  confirmation.request({ verificationId: row.id, orderLabel }),
-                onRequestCancel: (row, orderLabel) =>
-                  setCancelTarget({ row, orderLabel }),
-                onRetry: (row) => void handleRetry(row),
-              }}
-              pagination={{
-                label: t('confirmations.pagination.label', {
-                  from: formatCount(list.range.from, locale),
-                  to: formatCount(list.range.to, locale),
-                  total: formatCount(list.range.total, locale),
-                }),
-                hasNext: list.hasNextPage,
-                hasPrevious: list.hasPreviousPage,
-                onNext: list.onNextPage,
-                onPrevious: list.onPreviousPage,
-                previousLabel: t('confirmations.pagination.previous'),
-                nextLabel: t('confirmations.pagination.next'),
-              }}
-            />
+            <LoadMoreFooter
+              hasMore={list.hasNextPage}
+              isLoadingMore={list.isFetchingNextPage}
+              onLoadMore={list.onLoadMore}
+              loadingLabel={t('confirmations.loadingMore')}
+            >
+              <ConfirmationsList
+                rows={list.rows}
+                timeZone={list.reportingTimezone}
+                canWrite={list.canWrite}
+                canRetry={list.canRetry}
+                actingId={list.actingId}
+                handlers={{
+                  onRequestConfirm: (row, orderLabel) =>
+                    confirmation.request({
+                      verificationId: row.id,
+                      orderLabel,
+                    }),
+                  onRequestCancel: (row, orderLabel) =>
+                    setCancelTarget({ row, orderLabel }),
+                  onRetry: (row) => void handleRetry(row),
+                }}
+              />
+            </LoadMoreFooter>
           )}
         </div>
       </Card>

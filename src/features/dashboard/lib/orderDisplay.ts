@@ -20,9 +20,8 @@ function latinLocale(locale: string): string {
  * `US$ 2,629.95` in Arabic, `$2,629.95` in English: Latin digits in both, the
  * currency symbol before the amount.
  *
- * `currencyAfter` puts the Arabic symbol after the number instead —
- * `751.00 ج.م.`, the way Arabic readers expect it — which the standalone
- * dashboard uses. English is unaffected.
+ * `currencyAfter` puts the symbol after the number in either language —
+ * `751.00 ج.م.`, `3,051.50 EGP` — which the order tables use.
  */
 export function formatOrderAmount(
   amount: string | number | null | undefined,
@@ -41,7 +40,7 @@ export function formatOrderAmount(
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     })
-    if (locale !== 'ar')
+    if (locale !== 'ar' && !currencyAfter)
       return formatter
         .format(value)
         .replace(BIDI_MARKS, '')

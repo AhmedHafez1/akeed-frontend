@@ -1769,11 +1769,8 @@
           "notSent": "message not sent"
         }
       },
-      "pagination": {
-        "label": "{from}–{to} of {total}",
-        "previous": "Previous page",
-        "next": "Next page"
-      },
+      "loadingMore": "Loading more orders…",
+      "loaded": "Showing {loaded} of {total} orders",
       "empty": {
         "all": "No confirmations in this period yet.",
         "needs_action": "Nothing needs your action. Nice work!",

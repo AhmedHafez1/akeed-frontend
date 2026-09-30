@@ -16,6 +16,8 @@ export const queryKeys = {
       importBatchId?: string
       search?: string
       cursor?: string | null
+      /** A growing list (infinite query), not a single page. */
+      infinite?: boolean
     }) => [...queryKeys.verifications.lists(), filters] as const,
     stats: (dateRange: string) =>
       [...queryKeys.verifications.all, 'stats', dateRange] as const,

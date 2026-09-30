@@ -1,26 +1,15 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { ApiError } from '@/shared/lib/http'
 import { createLogger } from '@/shared/lib/logger'
 import { usePendingManualOrders } from '@/features/orders'
-import {
-  CONFIRMATIONS_PAGE_SIZE,
-  confirmationsPageOptions,
-} from '../api/verificationQueries'
+import { confirmationsListOptions } from '../api/verificationQueries'
 import {
   useCancelVerificationMutation,
   useRetryVerificationMutation,
 } from '../api/verificationMutations'
-import {
-  FIRST_PAGE,
-  currentCursor,
-  nextPage,
-  pageRange,
-  previousPage,
-  type CursorStack,
-} from './confirmationsPaging'
 import { mergeOptimisticRows } from './optimisticVerification'
 import { isAwaitingOutcome } from './verificationLifecycle'
 import type {
@@ -54,8 +43,9 @@ export interface UseConfirmationsListOptions {
 }
 
 /**
- * The confirmations table in both modes: tab, search and previous/next
- * paging, all answered by the server for the selected period.
+ * The confirmations table in both modes: tab and search answered by
+ * the server for the selected period, and further rows loaded as the merchant
+ * scrolls.
  */
 export function useConfirmationsList({
   dateRange,
@@ -76,37 +66,28 @@ export function useConfirmationsList({
     return () => clearTimeout(timer)
   }, [isSearchValid, trimmedInput])
 
-  // Any change to what is being listed starts again from page one.
-  const listKey = `${tab}|${dateRange}|${search}|${importBatchId ?? ''}`
-  const [paging, setPaging] = useState<{ key: string; stack: CursorStack }>({
-    key: listKey,
-    stack: FIRST_PAGE,
-  })
-  const stack = paging.key === listKey ? paging.stack : FIRST_PAGE
-
-  const query = useQuery({
-    ...confirmationsPageOptions({
-      tab,
-      dateRange,
-      search,
-      cursor: currentCursor(stack),
-      importBatchId,
-    }),
+  const query = useInfiniteQuery({
+    ...confirmationsListOptions({ tab, dateRange, search, importBatchId }),
     refetchInterval: (current) =>
-      current.state.data?.data.some((row) => isAwaitingOutcome(row.status))
+      current.state.data?.pages.some((page) =>
+        page.data.some((row) => isAwaitingOutcome(row.status))
+      )
         ? AWAITING_POLL_INTERVAL_MS
         : false,
   })
 
-  const page = query.data
-  const serverRows = useMemo(() => page?.data ?? [], [page])
+  const pages = query.data?.pages
+  const page = pages?.[0]
+  const serverRows = useMemo(
+    () => (pages ? pages.flatMap((entry) => entry.data) : []),
+    [pages]
+  )
 
   // Orders the merchant just created are layered on at read time, never
   // written into the cache, and only where a new pending order would appear:
-  // the first page of "all", unsearched.
+  // the top of "all", unsearched.
   const { pendingOrders } = usePendingManualOrders()
-  const admitsPending =
-    showPendingOrders && tab === 'all' && !search && stack.length === 1
+  const admitsPending = showPendingOrders && tab === 'all' && !search
   const rows = useMemo(
     () =>
       admitsPending
@@ -122,7 +103,6 @@ export function useConfirmationsList({
   const pendingCount = rows.length - serverRows.length
 
   const total = (page?.total_count ?? serverRows.length) + pendingCount
-  const range = pageRange(stack, CONFIRMATIONS_PAGE_SIZE, rows.length, total)
   const pageContext = page?.page_context
   const permissions = pageContext?.permissions
   const creditDenialCode = pageContext?.usage?.credit_denial ?? null
@@ -133,15 +113,10 @@ export function useConfirmationsList({
     return { ...counts, all: counts.all + pendingCount }
   }, [pageContext?.tab_counts, pendingCount])
 
-  const onNextPage = useCallback(() => {
-    const cursor = page?.next_cursor ?? null
-    if (!cursor) return
-    setPaging({ key: listKey, stack: nextPage(stack, cursor) })
-  }, [listKey, page?.next_cursor, stack])
-
-  const onPreviousPage = useCallback(() => {
-    setPaging({ key: listKey, stack: previousPage(stack) })
-  }, [listKey, stack])
+  const { hasNextPage, isFetchingNextPage, fetchNextPage } = query
+  const onLoadMore = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) void fetchNextPage()
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
 
   const { mutateAsync: retryVerification } = useRetryVerificationMutation()
   const { mutateAsync: cancelVerification } = useCancelVerificationMutation()
@@ -186,7 +161,7 @@ export function useConfirmationsList({
 
   return {
     rows,
-    range,
+    total,
     tabCounts,
     reportingTimezone: pageContext?.reporting_timezone ?? 'UTC',
     sourceStatus: pageContext?.source?.status ?? null,
@@ -199,10 +174,9 @@ export function useConfirmationsList({
     isFetching: query.isFetching,
     isError: query.isError && !page,
     retry: () => void query.refetch(),
-    hasNextPage: Boolean(page?.next_cursor),
-    hasPreviousPage: stack.length > 1,
-    onNextPage,
-    onPreviousPage,
+    hasNextPage,
+    isFetchingNextPage,
+    onLoadMore,
     searchInput,
     search,
     isSearchValid,

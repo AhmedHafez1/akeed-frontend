@@ -128,11 +128,7 @@ export function FollowUpCell({
   )
   return (
     <div className="flex min-w-0 flex-col items-start gap-1">
-      <StatusBadge
-        kind="confirmed"
-        icon={false}
-        title={sentAtTitle || undefined}
-      >
+      <StatusBadge kind="pending" icon={false} title={sentAtTitle || undefined}>
         {t('sent')}
       </StatusBadge>
     </div>
@@ -274,7 +270,8 @@ export function AmountText({
     <span
       className={cn(
         'text-ak-body font-semibold whitespace-nowrap tabular-nums',
-        isCanceled ? 'text-ink-muted line-through' : 'text-ink'
+        isCanceled ? 'line-through' : null,
+        'text-ink-muted'
       )}
     >
       <bdi dir="ltr">{amount}</bdi>

@@ -258,6 +258,10 @@ describe('ConfirmationsList', () => {
     } as VerificationItem
     renderStandalone(
       <ConfirmationsList
+        hasMore={false}
+        isLoadingMore={false}
+        onLoadMore={vi.fn()}
+        loadedLabel=""
         rows={[row, { ...row, id: 'v-2', customer_name: null }]}
         timeZone="UTC"
         canWrite
@@ -317,6 +321,10 @@ describe('ConfirmationsList', () => {
     } as VerificationItem
     renderStandalone(
       <ConfirmationsList
+        hasMore={false}
+        isLoadingMore={false}
+        onLoadMore={vi.fn()}
+        loadedLabel=""
         rows={[base, failed]}
         timeZone="UTC"
         canWrite
