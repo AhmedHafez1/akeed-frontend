@@ -1858,6 +1858,43 @@
     "standalone": {
       "eyebrow": "Workspace",
       "subtitle": "Manage how Akeed confirms orders for your store.",
+      "page": {
+        "title": "Settings",
+        "subtitle": "Control your confirmation message, its timing, and where your orders come from.",
+        "tabs": {
+          "message": "Message",
+          "timing": "Timing & follow-up",
+          "store": "Store"
+        },
+        "unsavedShort": "Unsaved changes",
+        "dismiss": "Dismiss",
+        "loadError": {
+          "title": "We couldn’t load your settings",
+          "body": "Check your connection, then try again.",
+          "retry": "Try again"
+        },
+        "saveBar": {
+          "label": "Unsaved changes",
+          "unsaved": "You have unsaved changes",
+          "unsavedIn": "Unsaved changes in: {tabs}",
+          "separator": ", ",
+          "discard": "Discard",
+          "save": "Save",
+          "saving": "Saving…"
+        },
+        "message": {
+          "identityDesc": "The name your customers see in every message.",
+          "storeNameHelp": "Appears in every message: “Thank you for your order from {name}.”",
+          "languageDesc": "Which language each customer gets the confirmation in.",
+          "languageArabic": "Always Arabic",
+          "languageEnglish": "Always English",
+          "styleHint": "Each language keeps its own style. These are the {language} styles; switch the preview language to edit the other.",
+          "defaultBadge": "Default",
+          "businessAccount": "Verified business account",
+          "testSend": "Send a test message",
+          "testSendSaveFirst": "Save your changes first to test them."
+        }
+      },
       "nav": {
         "label": "Settings sections",
         "general": "General",

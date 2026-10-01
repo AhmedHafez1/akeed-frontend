@@ -83,6 +83,22 @@ export function resolveStandaloneSettingsTab(params: {
   }
 }
 
+/**
+ * True when a standalone Settings URL needs no rewrite: no leftover
+ * `?section=`, and `?tab=` either absent or one of the current tabs.
+ */
+export function isCanonicalStandaloneSettingsUrl(params: {
+  tab?: string | null
+  section?: string | null
+}): boolean {
+  if (params.section !== null && params.section !== undefined) return false
+  return (
+    params.tab === null ||
+    params.tab === undefined ||
+    STANDALONE_SETTINGS_TABS.includes(params.tab as StandaloneSettingsTabId)
+  )
+}
+
 /** True when the URL already names a current tab, so no redirect is needed. */
 export function isCanonicalSettingsTab(
   tabParam: string | null | undefined

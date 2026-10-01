@@ -127,6 +127,15 @@
   --inverse: #0f1720;
   --inverse-foreground: #ffffff;
   --shadow-ak-card: 0 1px 2px #0f17200f, 0 0 0 1px #0f17200a;
+  /* The logo mint: the save bar's button and the preview's logo disc. */
+  --mint: #19b884;
+  --mint-foreground: #0f1720;
+  /* The switch knob at rest; when on it reads `inverse-foreground`. */
+  --ak-knob: #ffffff;
+  /* WhatsApp's own quick-reply blue, inside the message preview only. */
+  --wa-action: #027eb5;
+  --shadow-ak-segment: 0 1px 2px #0f172014, 0 0 0 1px #0f17200f;
+  --shadow-ak-float: 0 16px 40px #0f17204d;
 
   --radius: 0.75rem;
 
@@ -245,6 +254,10 @@
   --inverse: #e8edf2;
   --inverse-foreground: #0f1720;
   --shadow-ak-card: 0 1px 2px #00000066, 0 0 0 1px #ffffff0a;
+  --ak-knob: #e8edf2;
+  --wa-action: #53bdeb;
+  --shadow-ak-segment: 0 1px 2px #00000066, 0 0 0 1px #ffffff0f;
+  --shadow-ak-float: 0 16px 40px #000000b3;
 
   /*
    * Elevation on a dark surface: the light-mode shadows are tinted slate at
@@ -335,6 +348,12 @@
   --color-inverse: var(--inverse);
   --color-inverse-foreground: var(--inverse-foreground);
   --shadow-ak-card: var(--shadow-ak-card);
+  --color-mint: var(--mint);
+  --color-mint-foreground: var(--mint-foreground);
+  --color-ak-knob: var(--ak-knob);
+  --color-wa-action: var(--wa-action);
+  --shadow-ak-segment: var(--shadow-ak-segment);
+  --shadow-ak-float: var(--shadow-ak-float);
 
   /*
    * One stack for both scripts: the Latin face draws Latin and digits, the

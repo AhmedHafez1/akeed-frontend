@@ -49,5 +49,19 @@ export type AkButtonProps = VariantProps<typeof akButton>
 export const akLink =
   'ak-focus inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm font-semibold text-brand-ink underline-offset-4 hover:underline'
 
+/** Small word pills beside a title: "Recommended", "Default". 22px high. */
+export const akPill = cva(
+  'text-ak-label inline-flex h-5.5 shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2',
+  {
+    variants: {
+      tone: {
+        brand: 'bg-brand-soft text-brand-ink',
+        neutral: 'bg-neutral-soft text-ink-muted',
+      },
+    },
+    defaultVariants: { tone: 'neutral' },
+  }
+)
+
 /** Numbers, IDs and phones line up column to column. */
 export const akNumeric = 'tabular-nums'

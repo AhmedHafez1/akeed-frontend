@@ -14,7 +14,10 @@ import {
 
 const standaloneAdapter: SettingsModelAdapter = {
   notifySuccess: (message) => notify.success({ message }),
-  notifyError: (message) => notify.error({ message }),
+  // A failed save is already shown in the page's banner.
+  notifyError: (message, source) => {
+    if (source === 'testSend') notify.error({ message })
+  },
 }
 
 /**

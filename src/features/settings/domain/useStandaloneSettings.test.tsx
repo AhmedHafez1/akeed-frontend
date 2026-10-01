@@ -89,7 +89,7 @@ describe('useStandaloneSettings', () => {
     expect(toast.error).not.toHaveBeenCalled()
   })
 
-  it('toasts the failure when the save request fails', async () => {
+  it('leaves a failed save to the page banner, without a toast', async () => {
     api.saveSettings.mockRejectedValue(new ApiError('boom', 500))
     const { result } = await setupLoaded()
 
@@ -97,7 +97,7 @@ describe('useStandaloneSettings', () => {
       await result.current.save()
     })
 
-    expect(toast.error).toHaveBeenCalledWith({ message: copy.saveError })
+    expect(toast.error).not.toHaveBeenCalled()
     expect(result.current.saveError).toBe(copy.saveError)
   })
 

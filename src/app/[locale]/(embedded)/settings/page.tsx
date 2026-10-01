@@ -3,30 +3,19 @@
 import { useTranslations } from 'next-intl'
 import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
-import { StandalonePageSkeleton } from '@/shared/layout/skeletons'
 import {
   SettingsEmbeddedPage,
   SettingsEmbeddedSkeleton,
-  SettingsStandaloneSkin,
-  useSettings,
+  SettingsStandalonePage,
+  SettingsStandaloneSkeleton,
 } from '@/features/settings'
-
-function StandaloneSettingsContent() {
-  const { isPageLoading, skinProps } = useSettings()
-
-  if (isPageLoading) {
-    return <StandalonePageSkeleton variant="settings" />
-  }
-
-  return <SettingsStandaloneSkin {...skinProps} />
-}
 
 function SettingsPageContent() {
   const { mode } = useAkeedMode()
   return mode === 'EMBEDDED' ? (
     <SettingsEmbeddedPage />
   ) : (
-    <StandaloneSettingsContent />
+    <SettingsStandalonePage />
   )
 }
 
@@ -40,7 +29,7 @@ export default function SettingsPage() {
         isEmbedded ? (
           <SettingsEmbeddedSkeleton title={t('title')} />
         ) : (
-          <StandalonePageSkeleton variant="settings" />
+          <SettingsStandaloneSkeleton />
         )
       }
       onboardingGate="dashboard"

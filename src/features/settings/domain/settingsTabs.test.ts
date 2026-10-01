@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   isCanonicalSettingsTab,
+  isCanonicalStandaloneSettingsUrl,
   resolveSettingsTab,
   resolveStandaloneSettingsTab,
 } from './settingsTabs'
@@ -38,6 +39,23 @@ describe('resolveStandaloneSettingsTab', () => {
     [{ tab: 'plan', section: 'general' }],
   ] as const)('sends %o to the billing page', (params) => {
     expect(resolveStandaloneSettingsTab(params)).toEqual({ kind: 'billing' })
+  })
+})
+
+describe('isCanonicalStandaloneSettingsUrl', () => {
+  it.each([
+    [{}, true],
+    [{ tab: null, section: null }, true],
+    [{ tab: 'message' }, true],
+    [{ tab: 'store' }, true],
+    // Legacy ids, the billing aliases and any `?section=` get rewritten.
+    [{ tab: 'templates' }, false],
+    [{ tab: 'plan' }, false],
+    [{ tab: '' }, false],
+    [{ section: 'general' }, false],
+    [{ tab: 'timing', section: 'automation' }, false],
+  ] as const)('reports %o as canonical: %s', (params, canonical) => {
+    expect(isCanonicalStandaloneSettingsUrl(params)).toBe(canonical)
   })
 })
 
