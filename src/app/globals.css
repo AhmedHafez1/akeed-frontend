@@ -712,6 +712,47 @@
   }
 }
 
+/*
+ * Polaris draws a segmented ButtonGroup with physical left/right radii and a
+ * `margin-left` overlap, so in RTL the first (right-most) button is rounded on
+ * its inner edge and square on its outer one. Restore the full radius and
+ * re-apply the squared sides and the seam overlap logically. Unlayered and
+ * `[dir]`-prefixed so it outranks the unlayered Polaris rules.
+ */
+[dir='rtl']
+  [data-buttongroup-variant='segmented']
+  > *:not(:only-child)
+  .Polaris-Button {
+  border-radius: var(--p-border-radius-200);
+}
+
+[dir='rtl']
+  [data-buttongroup-variant='segmented']
+  > *:not(:first-child)
+  .Polaris-Button {
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+}
+
+[dir='rtl']
+  [data-buttongroup-variant='segmented']
+  > *:not(:last-child)
+  .Polaris-Button {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+[dir='rtl']
+  .Polaris-ButtonGroup--variantSegmented
+  .Polaris-ButtonGroup__Item:not(:first-child),
+[dir='rtl']
+  [data-buttongroup-variant='segmented']
+  > *:not(:first-child)
+  .Polaris-Button:is(.Polaris-Button--variantPrimary) {
+  margin-left: 0;
+  margin-inline-start: calc(var(--p-space-025) * -1);
+}
+
 @layer utilities {
   /* Shared layout rhythm for marketing section headers. */
   .landing-section-header {
