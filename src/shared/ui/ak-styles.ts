@@ -21,7 +21,7 @@ export const akButton = cva(
       variant: {
         /** The view's one primary action. */
         primary:
-          'border-transparent bg-brand text-inverse-foreground hover:bg-brand-hover',
+          'border-transparent bg-brand text-brand-foreground hover:bg-brand-hover',
         secondary:
           'border-line-strong bg-surface-raised text-ink hover:bg-surface-sunken',
         tinted:

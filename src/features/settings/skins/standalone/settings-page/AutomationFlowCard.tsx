@@ -41,7 +41,7 @@ const STEP_LOOK: Record<
 const MARKER_TONE: Record<StepTone, string> = {
   neutral: 'bg-neutral-soft text-ink-muted',
   // The halo marks the steps where Akeed acts on the order.
-  brand: 'bg-brand text-inverse-foreground ring-ak-halo ring-4',
+  brand: 'bg-brand text-brand-foreground ring-ak-halo ring-4',
   warning: 'bg-ak-warning-soft text-ak-warning ring-ak-warning-line ring-4',
 }
 

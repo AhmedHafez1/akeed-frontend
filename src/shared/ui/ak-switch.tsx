@@ -39,7 +39,7 @@ export const AkSwitch = React.forwardRef<HTMLButtonElement, AkSwitchProps>(
         aria-hidden="true"
         className={cn(
           'absolute top-0.75 size-4.5 rounded-full shadow-sm motion-safe:transition-[inset-inline-start] motion-safe:duration-200',
-          checked ? 'bg-inverse-foreground start-4.75' : 'bg-ak-knob start-0.75'
+          checked ? 'bg-brand-foreground start-4.75' : 'bg-ak-knob start-0.75'
         )}
       />
     </button>
