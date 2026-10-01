@@ -85,6 +85,15 @@ describe('dirtyTabs', () => {
     )
   })
 
+  it('attributes the order-source default to the Store tab', () => {
+    const saved = formFor()
+    const current = { ...saved, assumeCodWhenPaymentMissing: true }
+    expect([...dirtyTabs(current, saved)]).toEqual(['store'])
+    expect(
+      [...dirtyTabs({ ...current, storeName: 'New' }, saved)].sort()
+    ).toEqual(['message', 'store'])
+  })
+
   it('ignores a UI-only switch to "custom" with the same minutes', () => {
     const saved = formFor()
     const current = {

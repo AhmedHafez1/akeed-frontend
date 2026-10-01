@@ -1,4 +1,13 @@
 export { useSettings } from './domain/useSettings'
+export {
+  useStandaloneSettings,
+  type StandaloneSettingsModel,
+} from './domain/useStandaloneSettings'
+export {
+  resolveStandaloneSettingsTab,
+  type StandaloneSettingsDestination,
+  type StandaloneSettingsTabId,
+} from './domain/settingsTabs'
 export { useAssumeCodWhenPaymentMissing } from './domain/useAssumeCodWhenPaymentMissing'
 export type {
   SettingsSkinProps,

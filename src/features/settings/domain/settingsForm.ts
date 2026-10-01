@@ -125,6 +125,20 @@ const MESSAGE_TAB_FIELDS = [
   'codTemplateEnVariant',
 ] as const satisfies ReadonlyArray<keyof OnboardingSettingsPayload>
 
+/** The standalone Store tab; the embedded app has no control for it. */
+const STORE_TAB_FIELDS = [
+  'assumeCodWhenPaymentMissing',
+] as const satisfies ReadonlyArray<keyof OnboardingSettingsPayload>
+
+/** The tabs that hold form fields (the embedded Plan tab has none). */
+export type SettingsEditableTab = 'message' | 'timing' | 'store'
+
+function tabOfField(key: string): SettingsEditableTab {
+  if ((MESSAGE_TAB_FIELDS as readonly string[]).includes(key)) return 'message'
+  if ((STORE_TAB_FIELDS as readonly string[]).includes(key)) return 'store'
+  return 'timing'
+}
+
 /**
  * Which editable tabs differ from the saved values. Compared on the payload,
  * so a UI-only change (for example opening "custom" on the same delay) is not
@@ -133,10 +147,10 @@ const MESSAGE_TAB_FIELDS = [
 export function dirtyTabs(
   current: SettingsFormValues,
   saved: SettingsFormValues
-): Set<Exclude<SettingsTabId, 'plan'>> {
+): Set<SettingsEditableTab> {
   const next = toSettingsPayload(current)
   const base = toSettingsPayload(saved)
-  const tabs = new Set<Exclude<SettingsTabId, 'plan'>>()
+  const tabs = new Set<SettingsEditableTab>()
   const keys = new Set([...Object.keys(next), ...Object.keys(base)]) as Set<
     keyof OnboardingSettingsPayload
   >
@@ -144,11 +158,7 @@ export function dirtyTabs(
   if (resolvedSendDelayMinutes(current) === null) tabs.add('timing')
   for (const key of keys) {
     if (next[key] === base[key]) continue
-    tabs.add(
-      (MESSAGE_TAB_FIELDS as readonly string[]).includes(key)
-        ? 'message'
-        : 'timing'
-    )
+    tabs.add(tabOfField(key))
   }
   return tabs
 }

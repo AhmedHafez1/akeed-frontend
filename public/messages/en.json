@@ -1876,6 +1876,17 @@
         "failedHelp": "Your changes are still here. Review any errors and try saving again.",
         "discard": "Discard"
       },
+      "messages": {
+        "saveSuccess": "Settings saved",
+        "saveInvalid": "Some fields need your attention before saving.",
+        "saveError": "We couldn't save your settings. Check the highlighted fields and try again.",
+        "readOnly": "You have read-only access. An owner or admin must make configuration changes.",
+        "testSendSuccess": "Test message sent to your WhatsApp",
+        "testSendCooldown": "Wait a few seconds before sending another test.",
+        "testSendDailyLimit": "You've reached today's limit of test messages.",
+        "testSendPhoneMissing": "Add your WhatsApp number in setup to receive test messages.",
+        "testSendError": "The test message couldn't be sent. Try again."
+      },
       "delay": {
         "immediately": "Immediately",
         "minutes": "{value} min",
