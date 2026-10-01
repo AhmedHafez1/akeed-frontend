@@ -172,13 +172,17 @@ const HEADINGS = [
 ] as const
 
 /**
- * The table's own scroll area from `md`: tall enough to fill a screen, never
- * taller. On a phone the cards flow and the page scrolls: the header, tabs and
+ * The table's own scroll area from `md`: it takes the height the page leaves
+ * it (the page is one screen tall there) and shrinks to its rows when they are
+ * few. On a phone the cards flow and the page scrolls: the header, tabs and
  * search already use most of the screen, so a capped box there would be a
  * second, small scroller inside the page.
+ *
+ * `relative` keeps the `sr-only` text of the rows inside the scroll area. It
+ * is absolutely positioned, so without a positioned ancestor here it would sit
+ * at its unscrolled offset in the page and stretch the document below the card.
  */
-const SCROLL_AREA =
-  'md:max-h-[calc(100dvh-19rem+10px)] md:min-h-64 md:overflow-auto'
+const SCROLL_AREA = 'relative md:min-h-64 md:overflow-auto'
 
 /** Tailwind's `md` breakpoint, where the table replaces the cards. */
 const TABLE_QUERY = '(min-width: 48rem)'

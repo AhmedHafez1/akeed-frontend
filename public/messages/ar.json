@@ -582,7 +582,7 @@
     "integration_independent": "المتاجر المستقلة",
     "integration_more": "+ تكاملات أخرى قريبًا",
     "flow": {
-      "order_title": "طلب دفع عند الاستلام جديد",
+      "order_title": "طلب دفع عند الاستلام",
       "order_meta": "#10482 · 1,250 ج.م",
       "message_title": "رسالة واتساب",
       "message_meta": "تُرسل تلقائيًا",
