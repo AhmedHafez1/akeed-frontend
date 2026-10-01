@@ -22,34 +22,22 @@ import {
   hourPresetOptions,
   REMINDER_PRESET_HOURS,
   SEND_DELAY_PRESETS,
-  sendDelayPresetMinutes,
   type SendDelayChoice,
 } from '@/features/settings/domain/delayPresets'
 import { quietTimeValues } from '@/features/settings/domain/quietHours'
 import {
-  resolvedSendDelayMinutes,
+  sendDelayChoicePatch,
   SETTINGS_FIELD_ID,
+  timelineInputFromForm,
 } from '@/features/settings/domain/settingsForm'
+import { buildTimezoneOptions } from '@/features/settings/domain/timezoneOptions'
 import type { EmbeddedSettingsModel } from '@/features/settings/domain/useEmbeddedSettings'
+import { formatQuietTime } from '@/features/settings/skins/shared/settingsFormatters'
 import { AutomationTimelineCard } from './AutomationTimelineCard'
 import { SegmentedButtons } from './SegmentedButtons'
-import { formatQuietTime, timezonePlaceName } from './settingsFormatters'
 
 /** The Shopify tag the no-reply alert adds (`shopify-outcome.adapter.ts`). */
 const NO_REPLY_TAG = 'Akeed: No Reply'
-
-const CURATED_TIMEZONES = [
-  'Asia/Riyadh',
-  'Asia/Dubai',
-  'Asia/Qatar',
-  'Asia/Kuwait',
-  'Asia/Bahrain',
-  'Asia/Muscat',
-  'Asia/Amman',
-  'Africa/Cairo',
-  'Africa/Casablanca',
-  'UTC',
-] as const
 
 interface TimingTabProps {
   model: EmbeddedSettingsModel
@@ -63,40 +51,21 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
   const values = model.values
   const shopTimezone = data.state.shopTimezone ?? null
 
-  const timezoneOptions = useMemo(() => {
-    const curatedLabel = (zone: string) =>
-      (CURATED_TIMEZONES as readonly string[]).includes(zone)
-        ? tSettings(`automation.timezones.${zone.replaceAll('/', '_')}`)
-        : timezonePlaceName(zone)
-    const options = CURATED_TIMEZONES.filter(
-      (zone) => zone !== shopTimezone
-    ).map((zone) => ({ value: zone as string, label: curatedLabel(zone) }))
-    if (shopTimezone) {
-      options.unshift({
-        value: shopTimezone,
-        label: t('storeTime', { zone: curatedLabel(shopTimezone) }),
-      })
-    }
-    const current = values?.timezone
-    if (current && !options.some((option) => option.value === current)) {
-      options.push({ value: current, label: curatedLabel(current) })
-    }
-    return options
-  }, [shopTimezone, t, tSettings, values?.timezone])
+  const timezoneOptions = useMemo(
+    () =>
+      buildTimezoneOptions({
+        shopTimezone,
+        currentTimezone: values?.timezone,
+        curatedLabel: (zone) =>
+          tSettings(`automation.timezones.${zone.replaceAll('/', '_')}`),
+        storeTimeLabel: (zone) => t('storeTime', { zone }),
+      }),
+    [shopTimezone, t, tSettings, values?.timezone]
+  )
 
   if (!values) return null
 
-  const timeline = buildAutomationTimeline({
-    isAutoVerifyEnabled: values.isAutoVerifyEnabled,
-    sendDelayMinutes: resolvedSendDelayMinutes(values),
-    followUpEnabled: values.followUpEnabled,
-    followUpDelayMinutes: values.followUpDelayMinutes,
-    escalationEnabled: values.escalationEnabled,
-    escalationGapMinutes: values.escalationGapMinutes,
-    quietHoursEnabled: values.quietHoursEnabled,
-    quietHoursStart: values.quietHoursStart,
-    quietHoursEnd: values.quietHoursEnd,
-  })
+  const timeline = buildAutomationTimeline(timelineInputFromForm(values))
 
   const sendChoices: ReadonlyArray<{ value: SendDelayChoice; label: string }> =
     [
@@ -107,20 +76,8 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
       { value: 'custom', label: t('sendPresets.custom') },
     ]
 
-  const handleSendChoice = (choice: SendDelayChoice) => {
-    if (choice === 'custom') {
-      const current = resolvedSendDelayMinutes(values)
-      model.update({
-        sendDelayChoice: 'custom',
-        sendDelayCustom: String(current ?? 0),
-      })
-      return
-    }
-    model.update({
-      sendDelayChoice: choice,
-      sendDelayCustom: String(sendDelayPresetMinutes(choice)),
-    })
-  }
+  const handleSendChoice = (choice: SendDelayChoice) =>
+    model.update(sendDelayChoicePatch(values, choice))
 
   const hourOptions = (presets: readonly number[], currentMinutes: number) =>
     hourPresetOptions(presets, currentMinutes).map((option) => ({

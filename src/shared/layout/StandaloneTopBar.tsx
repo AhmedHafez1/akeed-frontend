@@ -35,11 +35,9 @@ export function StandaloneTopBar({ onOpenNavigation }: StandaloneTopBarProps) {
     // An import is part of the confirmations page, not a page of its own.
     routeName === 'verifications' || routeName === 'imports'
       ? t('verifications')
-      : routeName === 'templates'
-        ? t('templates')
-        : routeName === 'settings'
-          ? t('settings')
-          : t('dashboard')
+      : routeName === 'settings'
+        ? t('settings')
+        : t('dashboard')
 
   return (
     <header className="border-border bg-card/95 sticky top-0 z-30 flex min-h-14 items-center justify-between gap-3 border-b px-4 backdrop-blur sm:px-6">

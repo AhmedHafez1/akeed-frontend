@@ -7,7 +7,6 @@ import {
   BookOpen,
   CircleHelp,
   CreditCard,
-  FileText,
   LayoutDashboard,
   LogOut,
   Settings,
@@ -49,7 +48,6 @@ export function StandaloneSidebar({
   const navigationItems = [
     { href: '/dashboard', label: t('dashboard'), icon: LayoutDashboard },
     { href: '/verifications', label: t('verifications'), icon: ShieldCheck },
-    { href: '/templates', label: t('templates'), icon: FileText },
     ...(billingSummary?.billingEnabled
       ? [{ href: '/billing', label: t('billing'), icon: CreditCard }]
       : []),

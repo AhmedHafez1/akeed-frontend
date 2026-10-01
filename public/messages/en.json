@@ -1061,7 +1061,6 @@
     "verifications": "Confirmations",
     "billing": "Billing & credits",
     "settings": "Settings",
-    "templates": "Templates",
     "navigationMenu": "Open navigation menu",
     "primaryNavigation": "Primary navigation",
     "messageTemplate": "Message template",
@@ -1090,9 +1089,7 @@
     "label": "Theme",
     "light": "Light",
     "dark": "Dark",
-    "system": "System",
-    "appearanceTitle": "Appearance",
-    "appearanceDescription": "Choose how Akeed looks. System follows your device setting."
+    "system": "System"
   },
   "onboarding": {
     "organization": "Organization",
@@ -1856,8 +1853,6 @@
     "readOnly": "You have read-only access. An owner or admin must make configuration changes.",
     "retryButton": "Retry",
     "standalone": {
-      "eyebrow": "Workspace",
-      "subtitle": "Manage how Akeed confirms orders for your store.",
       "page": {
         "title": "Settings",
         "subtitle": "Control your confirmation message, its timing, and where your orders come from.",
@@ -1893,25 +1888,30 @@
           "businessAccount": "Verified business account",
           "testSend": "Send a test message",
           "testSendSaveFirst": "Save your changes first to test them."
+        },
+        "timing": {
+          "flowDesc": "This updates as you edit, before you save.",
+          "autoHelp": "When off, no messages are sent.",
+          "customDelayLabel": "Delay",
+          "reminderHelp": "We send the same message again if the customer hasn’t replied.",
+          "alertHelp": "The order moves to “Needs your action” so you can follow up. We never cancel orders automatically.",
+          "quietDesc": "No messages at night.",
+          "quietHelp": "Anything due during quiet hours is sent when they end."
+        },
+        "store": {
+          "sourceDesc": "Where Akeed receives your orders from.",
+          "sourceHelp": "Orders you import from a file or add by hand.",
+          "connected": "Connected",
+          "connectionId": "Connection ID",
+          "copy": "Copy",
+          "copied": "Copied",
+          "copyError": "Couldn’t copy the connection ID. Copy it by hand.",
+          "codHeading": "Missing payment info",
+          "codDesc": "How we treat orders that don’t say how they were paid.",
+          "codLabel": "Treat them as cash on delivery",
+          "codHelp": "Turn on only if your order source usually leaves the payment method out of COD orders.",
+          "codRisk": "Prepaid orders with missing payment info will also get a confirmation message and use credits."
         }
-      },
-      "nav": {
-        "label": "Settings sections",
-        "general": "General",
-        "automation": "Automation",
-        "billing": "Billing & usage"
-      },
-      "saveState": {
-        "allSaved": "All changes saved",
-        "unsaved": "Unsaved changes",
-        "saving": "Saving changes…",
-        "saved": "Changes saved",
-        "failed": "Save failed"
-      },
-      "saveBar": {
-        "pendingHelp": "You have changes that have not been saved yet.",
-        "failedHelp": "Your changes are still here. Review any errors and try saving again.",
-        "discard": "Discard"
       },
       "messages": {
         "saveSuccess": "Settings saved",
@@ -1923,46 +1923,6 @@
         "testSendDailyLimit": "You've reached today's limit of test messages.",
         "testSendPhoneMissing": "Add your WhatsApp number in setup to receive test messages.",
         "testSendError": "The test message couldn't be sent. Try again."
-      },
-      "delay": {
-        "immediately": "Immediately",
-        "minutes": "{value} min",
-        "hours": "{value} hr",
-        "custom": "Custom"
-      },
-      "general": {
-        "title": "General",
-        "description": "Manage your order source and store defaults.",
-        "sourceDescription": "The connected source Akeed uses to receive orders.",
-        "storeDescription": "These details are used when Akeed contacts your customers.",
-        "codRiskHelp": "Orders with missing payment information will enter the COD confirmation flow. Enable this only when that matches how your source sends COD orders.",
-        "connectionDetails": "Connection details",
-        "copy": "Copy ID",
-        "copySuccess": "Connection ID copied",
-        "copyError": "Could not copy the connection ID"
-      },
-      "automation": {
-        "trustTitle": "Official WhatsApp delivery",
-        "trustDescription": "Messages are delivered through the official WhatsApp Cloud API.",
-        "confirmationTitle": "Automatic confirmation",
-        "firstDelayLabel": "First-message delay",
-        "followUpTitle": "Follow-up message",
-        "reviewTitle": "No-reply review",
-        "advancedScheduling": "Advanced scheduling",
-        "quietHoursTitle": "Quiet hours",
-        "quietHoursResume": "Messages scheduled during quiet hours resume after {time}. Overnight ranges are supported.",
-        "timeline": {
-          "received": "Order received",
-          "first": "First message · {delay}",
-          "followUp": "Follow-up · {delay} later"
-        }
-      },
-      "billing": {
-        "title": "Billing & credits",
-        "description": "Akeed uses message credits instead of monthly confirmation plans.",
-        "creditPageTitle": "Manage message credits",
-        "creditPageDescription": "Review your trusted balance, buy credits, and inspect purchase and ledger history on the dedicated credit page.",
-        "openCreditPage": "Open billing & credits"
       }
     },
     "storeConfigurationHeading": "Store configuration",
@@ -2351,72 +2311,7 @@
       "businessName": "Akeed Store"
     },
     "confirmationRate": "Confirmation rate",
-    "confirmationRateHelp": "Percentage of sent verifications that the customer confirmed.",
-    "standalone": {
-      "eyebrow": "Messaging",
-      "pageTitle": "Message templates",
-      "pageSubtitle": "Choose how your COD confirmation sounds in each customer language.",
-      "languageArabic": "Arabic",
-      "languageEnglish": "English",
-      "languageAuto": "Auto",
-      "storeLanguageTitle": "Store language is {language}",
-      "storeLanguageAutoDescription": "Customers receive Arabic or English based on their phone number's country code.",
-      "storeLanguageFixedDescription": "Customers receive {language} by default. You can still configure both languages here.",
-      "changeInSettings": "Change in Settings",
-      "customerLanguageTitle": "Customer language",
-      "defaultBadge": "Default",
-      "perLanguageStyleHint": "Arabic and English keep separate tone selections.",
-      "toneTitle": "Tone and style",
-      "toneDescription": "Choose from approved WhatsApp templates for this language.",
-      "variantLabels": {
-        "standard": "Standard",
-        "egyptian": "Egyptian",
-        "gulf": "Gulf",
-        "friendly": "Friendly",
-        "professional": "Professional",
-        "direct": "Direct",
-        "short": "Short"
-      },
-      "variantDescriptions": {
-        "standard": "Clear and balanced Modern Standard Arabic.",
-        "egyptian": "Warm, conversational Egyptian Arabic.",
-        "gulf": "Friendly Arabic phrasing for Gulf customers.",
-        "friendly": "Warm and welcoming for everyday orders.",
-        "professional": "Polished and formal while staying clear.",
-        "direct": "Action-focused with a clear request to confirm.",
-        "short": "Fast and concise with only essential details."
-      },
-      "noVariants": "No approved templates are available for this language.",
-      "detailsTitle": "Template details",
-      "channelLabel": "Channel",
-      "whatsappLabel": "WhatsApp",
-      "purposeLabel": "Purpose",
-      "purposeValue": "Order confirmation",
-      "variablesTitle": "Variables",
-      "variableLabels": {
-        "customer": "Customer name",
-        "store": "Business name",
-        "order": "Order number",
-        "total": "Total price"
-      },
-      "variablesUnavailable": "Not provided",
-      "approvalDescription": "Template wording and structure are approved for reliable WhatsApp delivery. Variable values update automatically for each order.",
-      "customerPreviewTitle": "Customer preview",
-      "livePreviewBadge": "Live preview",
-      "previewActions": "Illustrative template actions",
-      "previewFooter": "Customers can confirm or cancel in one tap. Preview actions do not change an order.",
-      "readOnly": "You have read-only access. An owner or admin must change template selections.",
-      "resetButton": "Reset to default",
-      "saveButton": "Save template",
-      "savingButton": "Saving template…",
-      "resetDialog": {
-        "title": "Reset this language template?",
-        "description": "Your unsaved {language} selection will be replaced with the backend default.",
-        "cancel": "Keep selection",
-        "confirm": "Reset to default",
-        "closeLabel": "Close reset confirmation"
-      }
-    }
+    "confirmationRateHelp": "Percentage of sent verifications that the customer confirmed."
   },
   "docs": {
     "eyebrow": "Documentation",

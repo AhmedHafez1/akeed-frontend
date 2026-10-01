@@ -6,6 +6,7 @@ import type {
   OnboardingSettingsPayload,
 } from '@/features/onboarding'
 import type { SettingsResponse } from '../api/settingsApi'
+import type { TimelineInput } from './automationTimeline'
 import {
   escalationGapFromStored,
   escalationStoredFromGap,
@@ -86,6 +87,38 @@ export function resolvedSendDelayMinutes(
   return values.sendDelayChoice === 'custom'
     ? parseCustomDelayMinutes(values.sendDelayCustom)
     : sendDelayPresetMinutes(values.sendDelayChoice)
+}
+
+/**
+ * What picking a send-time segment changes. "Custom" opens on the delay the
+ * form currently means, so the field never starts empty.
+ */
+export function sendDelayChoicePatch(
+  values: SettingsFormValues,
+  choice: SendDelayChoice
+): Pick<SettingsFormValues, 'sendDelayChoice' | 'sendDelayCustom'> {
+  const minutes =
+    choice === 'custom'
+      ? (resolvedSendDelayMinutes(values) ?? 0)
+      : sendDelayPresetMinutes(choice)
+  return { sendDelayChoice: choice, sendDelayCustom: String(minutes) }
+}
+
+/** The timeline of the form as it stands, saved or not. */
+export function timelineInputFromForm(
+  values: SettingsFormValues
+): TimelineInput {
+  return {
+    isAutoVerifyEnabled: values.isAutoVerifyEnabled,
+    sendDelayMinutes: resolvedSendDelayMinutes(values),
+    followUpEnabled: values.followUpEnabled,
+    followUpDelayMinutes: values.followUpDelayMinutes,
+    escalationEnabled: values.escalationEnabled,
+    escalationGapMinutes: values.escalationGapMinutes,
+    quietHoursEnabled: values.quietHoursEnabled,
+    quietHoursStart: values.quietHoursStart,
+    quietHoursEnd: values.quietHoursEnd,
+  }
 }
 
 /**

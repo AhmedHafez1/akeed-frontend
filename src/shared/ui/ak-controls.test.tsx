@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { AkChoiceCard, AkChoiceGroup } from './ak-choice-card'
 import { AkSegmented } from './ak-segmented'
+import { AkSelect } from './ak-select'
 import { AkSwitch } from './ak-switch'
 
 describe('AkSwitch', () => {
@@ -65,6 +66,36 @@ describe('AkSegmented', () => {
 
     fireEvent.click(english)
     expect(onValueChange).toHaveBeenCalledWith('en')
+  })
+})
+
+describe('AkSelect', () => {
+  it('is a labelled native select that reports the picked value', () => {
+    const onChange = vi.fn()
+    render(
+      <div dir="rtl">
+        <label htmlFor="zone">المنطقة الزمنية</label>
+        <AkSelect
+          id="zone"
+          value="Africa/Cairo"
+          onChange={(event) => onChange(event.target.value)}
+          aria-invalid
+          options={[
+            { value: 'Africa/Cairo', label: 'مصر' },
+            { value: 'Asia/Riyadh', label: 'السعودية' },
+          ]}
+        />
+      </div>
+    )
+
+    const select = screen.getByLabelText('المنطقة الزمنية') as HTMLSelectElement
+    expect(select.tagName).toBe('SELECT')
+    expect(select.value).toBe('Africa/Cairo')
+    expect(select.getAttribute('aria-invalid')).toBe('true')
+    expect(screen.getAllByRole('option')).toHaveLength(2)
+
+    fireEvent.change(select, { target: { value: 'Asia/Riyadh' } })
+    expect(onChange).toHaveBeenCalledWith('Asia/Riyadh')
   })
 })
 

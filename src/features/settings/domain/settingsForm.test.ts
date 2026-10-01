@@ -5,7 +5,9 @@ import {
   fieldErrorFromApiCode,
   firstInvalidField,
   formFromSettings,
+  sendDelayChoicePatch,
   suggestedTimezoneOnEnable,
+  timelineInputFromForm,
   toSettingsPayload,
   validateSettingsForm,
 } from './settingsForm'
@@ -203,5 +205,57 @@ describe('suggestedTimezoneOnEnable', () => {
         shopTimezone: 'Europe/Istanbul',
       })
     ).toBeNull()
+  })
+})
+
+describe('sendDelayChoicePatch', () => {
+  it('opens "custom" on the delay the form currently means', () => {
+    const form = { ...formFor(), sendDelayChoice: 'after1h' as const }
+    expect(sendDelayChoicePatch(form, 'custom')).toEqual({
+      sendDelayChoice: 'custom',
+      sendDelayCustom: '60',
+    })
+  })
+
+  it('falls back to 0 when the custom value is not a valid delay', () => {
+    const form = {
+      ...formFor(),
+      sendDelayChoice: 'custom' as const,
+      sendDelayCustom: 'abc',
+    }
+    expect(sendDelayChoicePatch(form, 'custom').sendDelayCustom).toBe('0')
+  })
+
+  it('writes the minutes of a preset', () => {
+    expect(sendDelayChoicePatch(formFor(), 'after15m')).toEqual({
+      sendDelayChoice: 'after15m',
+      sendDelayCustom: '15',
+    })
+  })
+})
+
+describe('timelineInputFromForm', () => {
+  it('carries the gap the tab shows and the resolved send delay', () => {
+    const input = timelineInputFromForm({
+      ...formFor(),
+      sendDelayChoice: 'after15m',
+    })
+    expect(input).toMatchObject({
+      isAutoVerifyEnabled: true,
+      sendDelayMinutes: 15,
+      followUpDelayMinutes: 360,
+      escalationGapMinutes: 720,
+      quietHoursStart: '21:00',
+      quietHoursEnd: '09:00',
+    })
+  })
+
+  it('reports an invalid custom delay as null', () => {
+    const input = timelineInputFromForm({
+      ...formFor(),
+      sendDelayChoice: 'custom',
+      sendDelayCustom: '9999',
+    })
+    expect(input.sendDelayMinutes).toBeNull()
   })
 })

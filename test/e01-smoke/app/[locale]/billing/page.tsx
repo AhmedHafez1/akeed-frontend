@@ -5,14 +5,22 @@ import { useSearchParams } from 'next/navigation'
 import { AppProvider } from '@shopify/polaris'
 import enTranslations from '@shopify/polaris/locales/en.json'
 import '@shopify/polaris/build/esm/styles.css'
-import { useSettings } from '@/features/settings/domain/useSettings'
-import { SettingsStandaloneSkin } from '@/features/settings/skins/standalone/SettingsStandaloneSkin'
+import { useQuery } from '@tanstack/react-query'
+import { fetchSettings } from '@/features/settings/api/settingsApi'
 import { SettingsEmbeddedPage } from '@/features/settings/skins/embedded/settings-page/SettingsEmbeddedPage'
+import { SettingsStandalonePage } from '@/features/settings/skins/standalone/settings-page/SettingsStandalonePage'
+import { queryKeys } from '@/shared/query/keys'
 import { billingFixtureCounts } from '../billingFixture'
 
 export default function BillingFixturePage() {
   const search = useSearchParams()
-  const { skinProps, isPageLoading } = useSettings()
+  // The same cache entry both Settings pages read; no extra request.
+  const { data } = useQuery({
+    queryKey: queryKeys.settings.detail(),
+    queryFn: fetchSettings,
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+  })
   const [counts, setCounts] = useState(billingFixtureCounts())
   const embedded = search.get('skin') === 'embedded'
   return (
@@ -25,32 +33,17 @@ export default function BillingFixturePage() {
         </p>
         <output aria-label="Billing fixture state">
           {JSON.stringify({
-            ready: !isPageLoading,
-            canManageBilling: skinProps.canManageBilling,
-            selectedPlanId: skinProps.selectedPlanId,
+            ready: data !== undefined,
+            canManageBilling:
+              data?.state.billingManagement?.canManageBilling ?? false,
+            billingPlanId: data?.state.billingPlanId ?? null,
             ...counts,
           })}
         </output>
-        <button onClick={() => skinProps.onPlanSelect('pro')}>
-          Select upgrade through hook
-        </button>
-        <button
-          onClick={async () => {
-            await skinProps.onChangePlan()
-            setCounts(billingFixtureCounts())
-          }}
-        >
-          Invoke billing handler
-        </button>
         <button onClick={() => setCounts(billingFixtureCounts())}>
           Inspect billing calls
         </button>
-        {!isPageLoading &&
-          (embedded ? (
-            <SettingsEmbeddedPage />
-          ) : (
-            <SettingsStandaloneSkin {...skinProps} />
-          ))}
+        {embedded ? <SettingsEmbeddedPage /> : <SettingsStandalonePage />}
       </main>
     </AppProvider>
   )

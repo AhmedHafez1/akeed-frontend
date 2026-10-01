@@ -136,6 +136,8 @@
   --wa-action: #027eb5;
   --shadow-ak-segment: 0 1px 2px #0f172014, 0 0 0 1px #0f17200f;
   --shadow-ak-float: 0 16px 40px #0f17204d;
+  /* The soft ring around a live step of the Settings automation flow. */
+  --ak-halo: #d6efe4;
 
   --radius: 0.75rem;
 
@@ -258,6 +260,7 @@
   --wa-action: #53bdeb;
   --shadow-ak-segment: 0 1px 2px #00000066, 0 0 0 1px #ffffff0f;
   --shadow-ak-float: 0 16px 40px #000000b3;
+  --ak-halo: var(--brand-line);
 
   /*
    * Elevation on a dark surface: the light-mode shadows are tinted slate at
@@ -354,6 +357,7 @@
   --color-wa-action: var(--wa-action);
   --shadow-ak-segment: var(--shadow-ak-segment);
   --shadow-ak-float: var(--shadow-ak-float);
+  --color-ak-halo: var(--ak-halo);
 
   /*
    * One stack for both scripts: the Latin face draws Latin and digits, the

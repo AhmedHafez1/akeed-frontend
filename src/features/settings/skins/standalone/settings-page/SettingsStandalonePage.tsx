@@ -21,14 +21,15 @@ import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
 import { akButton, akCard } from '@/shared/ui'
 import { MessageTab } from './MessageTab'
-import { StoreTabPlaceholder, TimingTabPlaceholder } from './PlaceholderTabs'
 import { SettingsSaveBar } from './SettingsSaveBar'
 import { SettingsStandaloneSkeleton } from './SettingsStandaloneSkeleton'
+import { StoreTab } from './StoreTab'
 import {
   settingsPanelDomId,
   settingsTabDomId,
   SettingsTabs,
 } from './SettingsTabs'
+import { TimingTab } from './TimingTab'
 
 function PageShell({
   title,
@@ -210,10 +211,10 @@ export function SettingsStandalonePage() {
           <MessageTab model={model} data={data} readOnly={readOnly} />
         )}
         {activeTab === 'timing' && (
-          <TimingTabPlaceholder model={model} readOnly={readOnly} />
+          <TimingTab model={model} data={data} readOnly={readOnly} />
         )}
         {activeTab === 'store' && (
-          <StoreTabPlaceholder model={model} readOnly={readOnly} />
+          <StoreTab model={model} data={data} readOnly={readOnly} />
         )}
       </div>
 

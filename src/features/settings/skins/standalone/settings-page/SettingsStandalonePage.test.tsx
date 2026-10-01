@@ -117,7 +117,7 @@ describe('SettingsStandalonePage tabs', () => {
 
   it('follows ?tab= and pushes the chosen tab without scrolling', async () => {
     renderPage({ tab: 'timing' })
-    await screen.findByRole('switch')
+    await screen.findAllByRole('switch')
 
     expect(tab('التوقيت والمتابعة').getAttribute('aria-selected')).toBe('true')
     fireEvent.click(tab('المتجر'))
@@ -199,7 +199,7 @@ describe('SettingsStandalonePage unsaved changes', () => {
     fireEvent.change(await storeNameInput(), { target: { value: 'متجر نور' } })
 
     goTo('timing')
-    fireEvent.click(await screen.findByRole('switch'))
+    fireEvent.click((await screen.findAllByRole('switch'))[0])
 
     expect(
       within(saveBar()!).getByText(
@@ -232,7 +232,7 @@ describe('SettingsStandalonePage unsaved changes', () => {
     const { goTo } = renderPage()
     fireEvent.change(await storeNameInput(), { target: { value: '   ' } })
     goTo('timing')
-    await screen.findByRole('switch')
+    await screen.findAllByRole('switch')
 
     fireEvent.click(screen.getByRole('button', { name: 'حفظ' }))
 

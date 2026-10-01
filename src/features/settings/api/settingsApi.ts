@@ -78,26 +78,11 @@ export async function fetchSettings(): Promise<SettingsResponse> {
 }
 
 /**
- * Same request as `updateSettings`, but rejects with the `ApiError` from
- * `api.*` so callers can map a stable `code` to an inline field error.
+ * Rejects with the `ApiError` from `api.*`, so callers can map a stable
+ * `code` to an inline field error.
  */
 export function saveSettings(
   payload: OnboardingSettingsPayload
 ): Promise<SettingsResponse> {
   return api.patch<SettingsResponse>('/api/settings', payload)
-}
-
-export async function updateSettings(
-  payload: OnboardingSettingsPayload
-): Promise<SettingsResponse> {
-  const response = await fetchWithAuth('/api/settings', {
-    method: 'PATCH',
-    body: JSON.stringify(payload),
-  })
-
-  if (!response.ok) {
-    throw new Error(await getErrorMessage(response))
-  }
-
-  return parseJsonResponse<SettingsResponse>(response)
 }

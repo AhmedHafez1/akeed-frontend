@@ -1,24 +1,28 @@
 'use client'
 
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
-import { StandalonePageSkeleton } from '@/shared/layout/skeletons'
+import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { withLocale } from '@/shared/lib/locale'
 import {
   SettingsEmbeddedPage,
   SettingsEmbeddedSkeleton,
-  SettingsStandaloneSkin,
-  useSettings,
+  SettingsStandaloneSkeleton,
 } from '@/features/settings'
 
-function StandaloneTemplatesContent() {
-  const { isPageLoading, skinProps } = useSettings()
+/** Standalone templates now live on the Settings page's Message tab. */
+function StandaloneTemplatesRedirect() {
+  const router = useRouter()
+  const { locale } = useLocaleInfo()
 
-  if (isPageLoading) {
-    return <StandalonePageSkeleton variant="templates" />
-  }
+  useEffect(() => {
+    router.replace(withLocale('/settings?tab=message', locale))
+  }, [locale, router])
 
-  return <SettingsStandaloneSkin {...skinProps} view="templates" />
+  return <SettingsStandaloneSkeleton />
 }
 
 function TemplatesPageContent() {
@@ -27,7 +31,7 @@ function TemplatesPageContent() {
   return mode === 'EMBEDDED' ? (
     <SettingsEmbeddedPage />
   ) : (
-    <StandaloneTemplatesContent />
+    <StandaloneTemplatesRedirect />
   )
 }
 
@@ -41,7 +45,7 @@ export default function TemplatesPage() {
         isEmbedded ? (
           <SettingsEmbeddedSkeleton title={t('title')} />
         ) : (
-          <StandalonePageSkeleton variant="templates" />
+          <SettingsStandaloneSkeleton />
         )
       }
       onboardingGate="dashboard"
