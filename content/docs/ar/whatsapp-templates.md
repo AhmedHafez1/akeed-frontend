@@ -1,7 +1,7 @@
 ---
 title: قوالب رسائل واتساب
 description: اختر أسلوب الرسالة واللغة المناسبة حتى العميل يفهم بسرعة ويرد بدون تردد.
-order: 4
+order: 6
 slug: whatsapp-templates
 ---
 

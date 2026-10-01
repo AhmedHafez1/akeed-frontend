@@ -1,6 +1,6 @@
 # Akeed Frontend
 
-Next.js 16 frontend for Akeed (embedded Shopify + standalone SaaS modes).
+Next.js 16 frontend for Akeed, COD confirmation infrastructure for merchants. It runs in two modes: embedded in Shopify Admin, and a standalone SaaS for merchants without Shopify (manual orders, CSV/XLSX bulk import, prepaid credits bought through Paymob). Merchant help articles live in `content/docs/{en,ar}`.
 
 ## Setup
 

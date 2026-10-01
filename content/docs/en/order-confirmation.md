@@ -1,7 +1,7 @@
 ---
 title: Order Confirmation
 description: Learn how Akeed confirms COD orders on WhatsApp and how to act on each status in your daily shipping workflow.
-order: 2
+order: 4
 slug: order-confirmation
 ---
 
@@ -12,6 +12,8 @@ Akeed helps you confirm cash-on-delivery (COD) orders before shipping.
 When a new eligible COD order is created, Akeed sends a WhatsApp confirmation message to the customer, waits for a response, then updates the order status in your dashboard.
 
 This gives your team a clear “ship” or “hold” signal.
+
+Orders can come from Shopify, from an order you add by hand, or from a file you import. After the first message, they all follow the same flow. See [Using Akeed Without Shopify](/docs/standalone-platform) and [Bulk Order Import](/docs/bulk-order-import).
 
 ## Why It Matters
 
@@ -37,6 +39,7 @@ Order confirmation helps reduce both.
 
 | Status | Meaning | Recommended Action |
 | --- | --- | --- |
+| Awaiting start | Imported from a file and held. No message has been sent yet. | Start confirmation from the import screen, or upload the file again if the 24-hour window passed. |
 | Pending | Verification exists but first message has not been sent yet. | Wait briefly, then review delay settings if it stays pending too long. |
 | Sent | Message was sent successfully. | Wait for customer response. |
 | Delivered | WhatsApp reports delivery. | Keep monitoring for response. |
@@ -44,7 +47,7 @@ Order confirmation helps reduce both.
 | Confirmed | Customer confirmed the order. | Prioritize for fulfillment. |
 | Canceled | Customer canceled (or merchant canceled after no reply). | Do not ship. |
 | No reply | No response within your configured escalation window. | Review quickly and follow your cancellation policy. |
-| Failed | Send failed or was blocked. | Check phone quality, usage limits, and settings. |
+| Failed | Send failed or was blocked. | Check phone quality, plan usage or credit balance, and settings. |
 
 ## Practical Merchant Workflow
 
@@ -86,7 +89,7 @@ A failed send is an operational signal, not just a dashboard number.
 ### Failed confirmations increase
 
 - Verify phone number quality and country code formatting.
-- Check current plan usage.
+- Check current plan usage or credit balance.
 - Send a test confirmation to a known-valid number.
 
 ## FAQ

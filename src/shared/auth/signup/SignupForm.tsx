@@ -78,7 +78,6 @@ export function SignupForm({
     <div className="space-y-6">
       <header className="space-y-2 text-start">
         <h1 className="text-ink text-h2 font-bold">{t('heading')}</h1>
-        <p className="text-ink-muted text-body">{t('subheading')}</p>
       </header>
 
       <form

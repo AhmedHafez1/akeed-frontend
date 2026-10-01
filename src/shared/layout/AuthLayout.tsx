@@ -1,12 +1,13 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
+import { ThemeToggle } from '@/shared/theme'
 import { AkeedLogo } from './AkeedLogo'
+import { LocaleToggle } from './LocaleToggle'
 
 interface AuthLayoutProps {
   children: ReactNode
@@ -30,54 +31,27 @@ export function AuthLayout({ children }: AuthLayoutProps) {
 
 interface AuthFrameProps {
   children: ReactNode
-  /**
-   * `hero`: the dark brand gradient of sign-in and password pages.
-   * `app`: the light app canvas signup shares with the onboarding steps that
-   * follow it, so the account step looks like the start of setup.
-   */
-  surface?: 'hero' | 'app'
   className?: string
 }
 
-export function AuthFrame({
-  children,
-  surface = 'hero',
-  className,
-}: AuthFrameProps) {
+/** Themed illustration backdrop, logo, and theme and language controls. */
+export function AuthFrame({ children, className }: AuthFrameProps) {
   const pathname = usePathname() ?? ''
   const locale = getLocaleFromPathname(pathname)
-  const isApp = surface === 'app'
 
   return (
-    <div
-      className={cn(
-        'flex min-h-screen flex-col',
-        isApp ? 'akeed-app-canvas text-foreground' : 'auth-hero-surface'
-      )}
-    >
-      <header
-        className={cn(
-          'flex shrink-0 items-center px-6',
-          isApp ? 'justify-center pt-10 pb-2' : 'h-14'
-        )}
-      >
+    <div className="auth-surface text-foreground flex min-h-dvh flex-col">
+      <header className="flex shrink-0 items-center justify-between gap-3 px-4 pt-4 sm:px-6 sm:pt-5">
         <Link
           href={withLocale('/', locale)}
           className="focus-visible:ring-ring flex items-center rounded-lg transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:outline-none"
         >
-          {isApp ? (
-            <AkeedLogo className="h-10" />
-          ) : (
-            <Image
-              src="/images/akeed-web-logo-horizontal-white.png"
-              alt="Akeed"
-              width={130}
-              height={70}
-              priority
-              className="h-auto w-[120px] object-contain lg:w-[130px]"
-            />
-          )}
+          <AkeedLogo className="h-9 sm:h-10" />
         </Link>
+        <div className="flex items-center gap-2">
+          <LocaleToggle />
+          <ThemeToggle />
+        </div>
       </header>
 
       <main className="flex flex-1 items-center justify-center px-4 py-5 sm:px-6 sm:py-6">
