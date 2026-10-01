@@ -26,7 +26,7 @@ import { Card } from '@/shared/ui'
  */
 export default function SignupPage() {
   return (
-    <Suspense fallback={<AuthFrame surface="app">{null}</AuthFrame>}>
+    <Suspense fallback={<AuthFrame>{null}</AuthFrame>}>
       <SignupFlow />
     </Suspense>
   )
@@ -80,7 +80,7 @@ function SignupFlow() {
   }
 
   return (
-    <AuthFrame surface="app">
+    <AuthFrame>
       <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,36rem)_minmax(0,22rem)] lg:justify-center xl:gap-16">
         <Card
           variant="elevated"

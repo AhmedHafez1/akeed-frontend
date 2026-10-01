@@ -749,38 +749,45 @@
     isolation: isolate;
   }
 
-  .auth-hero-surface {
+  /*
+   * Auth pages sit on a themed illustration: light artwork in the light theme,
+   * dark artwork in the dark theme. Painted on a viewport-fixed pseudo-element
+   * (a long page never stretches it) so the card stays above it, with a portrait crop for phones so the corner artwork is
+   * not cropped away. The artwork has no text, so RTL just mirrors it.
+   */
+  .auth-surface {
     position: relative;
     background-color: var(--background);
     isolation: isolate;
   }
 
-  .auth-hero-surface::before {
+  .auth-surface::before {
     content: '';
-    position: absolute;
+    position: fixed;
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background:
-      radial-gradient(
-        58rem 58rem at 12% 8%,
-        oklch(42% 0.08 255 / 0.7),
-        transparent 60%
-      ),
-      radial-gradient(
-        52rem 52rem at 88% 28%,
-        oklch(69.6% 0.17 162.48 / 0.34),
-        transparent 55%
-      ),
-      linear-gradient(
-        135deg,
-        oklch(14% 0.035 255) 0%,
-        oklch(22% 0.045 255) 48%,
-        oklch(40% 0.12 162) 100%
-      );
+    background-image: url('/images/auth/auth-bg-light-desktop.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
-  [dir='rtl'] .auth-hero-surface::before {
+  .dark .auth-surface::before {
+    background-image: url('/images/auth/auth-bg-dark-desktop.webp');
+  }
+
+  @media (max-width: 40rem), (orientation: portrait) {
+    .auth-surface::before {
+      background-image: url('/images/auth/auth-bg-light-mobile.webp');
+    }
+
+    .dark .auth-surface::before {
+      background-image: url('/images/auth/auth-bg-dark-mobile.webp');
+    }
+  }
+
+  [dir='rtl'] .auth-surface::before {
     scale: -1 1;
   }
 

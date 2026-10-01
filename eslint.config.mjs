@@ -79,7 +79,6 @@ const themedPaletteGuardSelector = {
 const inkSurfaceFiles = [
   'src/shared/layout/Header.tsx',
   'src/shared/layout/Footer.tsx',
-  'src/shared/layout/AuthLayout.tsx',
   'src/shared/layout/header/**/*.{ts,tsx}',
   'src/features/marketing/ui/sections/pricing/CreditPriceCard.tsx',
   'src/features/marketing/ui/sections/pricing/CreditSlider.tsx',
