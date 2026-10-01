@@ -42,7 +42,6 @@ export const privateSeoRoutes = [
   '/dashboard',
   '/verifications',
   '/settings',
-  '/templates',
   '/onboarding',
 ] as const
 

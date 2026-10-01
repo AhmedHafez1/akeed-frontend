@@ -1063,8 +1063,6 @@
     "settings": "Settings",
     "navigationMenu": "Open navigation menu",
     "primaryNavigation": "Primary navigation",
-    "messageTemplate": "Message template",
-    "automationSettings": "Automation",
     "workspace": "Workspace",
     "workspaceFallback": "My workspace",
     "userFallback": "Signed-in user",

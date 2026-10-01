@@ -230,9 +230,7 @@ function StatusBanner({
               )}
               {reason === 'IMPORT_AUTO_VERIFY_DISABLED' && (
                 <Button asChild size="sm">
-                  <Link
-                    href={`${withLocale('/settings', locale)}#automation-settings`}
-                  >
+                  <Link href={withLocale('/settings?tab=timing', locale)}>
                     {tStart('openSettings')}
                   </Link>
                 </Button>

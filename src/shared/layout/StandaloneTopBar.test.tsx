@@ -3,6 +3,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useStandaloneFirstRun } from '@/features/dashboard'
 import { StandaloneTopBar } from './StandaloneTopBar'
 
+const route = vi.hoisted(() => ({ pathname: '/ar/dashboard' }))
+
+vi.mock('next/navigation', () => ({ usePathname: () => route.pathname }))
+
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
 }))
@@ -29,9 +33,27 @@ function mockFirstRun(status: 'loading' | 'first-run' | 'active') {
   })
 }
 
-beforeEach(() => mockFirstRun('active'))
+beforeEach(() => {
+  route.pathname = '/ar/dashboard'
+  mockFirstRun('active')
+})
 
 describe('StandaloneTopBar', () => {
+  it.each([
+    ['/ar/dashboard', 'dashboard'],
+    ['/ar/verifications', 'verifications'],
+    ['/ar/imports/new', 'verifications'],
+    ['/ar/settings', 'settings'],
+    // Templates is a tab of Settings now, so it has no title of its own.
+    ['/ar/templates', 'dashboard'],
+  ])('titles %s as %s', (pathname, title) => {
+    route.pathname = pathname
+    render(<StandaloneTopBar onOpenNavigation={vi.fn()} />)
+
+    const breadcrumb = screen.getByRole('navigation', { name: 'breadcrumbs' })
+    expect(breadcrumb.textContent).toBe(`workspace${title}`)
+  })
+
   it('shows both order actions once the first real order exists', () => {
     render(<StandaloneTopBar onOpenNavigation={vi.fn()} />)
 

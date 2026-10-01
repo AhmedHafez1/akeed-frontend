@@ -100,7 +100,7 @@ export function SettingsStatusLine({
         />
       </ul>
       <Link
-        href={withLocale('/settings', locale)}
+        href={withLocale('/settings?tab=timing', locale)}
         aria-label={tLabel('editLabel')}
         className={cn(akLink, 'text-ak-caption h-8 px-2')}
       >
