@@ -1,7 +1,7 @@
 import { Skeleton } from '@/shared/ui'
 
 interface StandalonePageSkeletonProps {
-  variant?: 'dashboard' | 'verifications' | 'settings' | 'templates'
+  variant?: 'dashboard' | 'verifications' | 'settings'
   includeShell?: boolean
 }
 
@@ -9,7 +9,7 @@ function ContentSkeleton({
   variant = 'dashboard',
 }: Pick<StandalonePageSkeletonProps, 'variant'>) {
   const isList = variant === 'verifications'
-  const isForm = variant === 'settings' || variant === 'templates'
+  const isForm = variant === 'settings'
 
   return (
     <div

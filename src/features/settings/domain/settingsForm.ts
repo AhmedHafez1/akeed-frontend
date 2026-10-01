@@ -6,6 +6,7 @@ import type {
   OnboardingSettingsPayload,
 } from '@/features/onboarding'
 import type { SettingsResponse } from '../api/settingsApi'
+import type { TimelineInput } from './automationTimeline'
 import {
   escalationGapFromStored,
   escalationStoredFromGap,
@@ -89,6 +90,38 @@ export function resolvedSendDelayMinutes(
 }
 
 /**
+ * What picking a send-time segment changes. "Custom" opens on the delay the
+ * form currently means, so the field never starts empty.
+ */
+export function sendDelayChoicePatch(
+  values: SettingsFormValues,
+  choice: SendDelayChoice
+): Pick<SettingsFormValues, 'sendDelayChoice' | 'sendDelayCustom'> {
+  const minutes =
+    choice === 'custom'
+      ? (resolvedSendDelayMinutes(values) ?? 0)
+      : sendDelayPresetMinutes(choice)
+  return { sendDelayChoice: choice, sendDelayCustom: String(minutes) }
+}
+
+/** The timeline of the form as it stands, saved or not. */
+export function timelineInputFromForm(
+  values: SettingsFormValues
+): TimelineInput {
+  return {
+    isAutoVerifyEnabled: values.isAutoVerifyEnabled,
+    sendDelayMinutes: resolvedSendDelayMinutes(values),
+    followUpEnabled: values.followUpEnabled,
+    followUpDelayMinutes: values.followUpDelayMinutes,
+    escalationEnabled: values.escalationEnabled,
+    escalationGapMinutes: values.escalationGapMinutes,
+    quietHoursEnabled: values.quietHoursEnabled,
+    quietHoursStart: values.quietHoursStart,
+    quietHoursEnd: values.quietHoursEnd,
+  }
+}
+
+/**
  * The PATCH body. Every automation field is sent, including those under a
  * checkbox that is off, so turning one back on restores the same values.
  */
@@ -125,6 +158,20 @@ const MESSAGE_TAB_FIELDS = [
   'codTemplateEnVariant',
 ] as const satisfies ReadonlyArray<keyof OnboardingSettingsPayload>
 
+/** The standalone Store tab; the embedded app has no control for it. */
+const STORE_TAB_FIELDS = [
+  'assumeCodWhenPaymentMissing',
+] as const satisfies ReadonlyArray<keyof OnboardingSettingsPayload>
+
+/** The tabs that hold form fields (the embedded Plan tab has none). */
+export type SettingsEditableTab = 'message' | 'timing' | 'store'
+
+function tabOfField(key: string): SettingsEditableTab {
+  if ((MESSAGE_TAB_FIELDS as readonly string[]).includes(key)) return 'message'
+  if ((STORE_TAB_FIELDS as readonly string[]).includes(key)) return 'store'
+  return 'timing'
+}
+
 /**
  * Which editable tabs differ from the saved values. Compared on the payload,
  * so a UI-only change (for example opening "custom" on the same delay) is not
@@ -133,10 +180,10 @@ const MESSAGE_TAB_FIELDS = [
 export function dirtyTabs(
   current: SettingsFormValues,
   saved: SettingsFormValues
-): Set<Exclude<SettingsTabId, 'plan'>> {
+): Set<SettingsEditableTab> {
   const next = toSettingsPayload(current)
   const base = toSettingsPayload(saved)
-  const tabs = new Set<Exclude<SettingsTabId, 'plan'>>()
+  const tabs = new Set<SettingsEditableTab>()
   const keys = new Set([...Object.keys(next), ...Object.keys(base)]) as Set<
     keyof OnboardingSettingsPayload
   >
@@ -144,11 +191,7 @@ export function dirtyTabs(
   if (resolvedSendDelayMinutes(current) === null) tabs.add('timing')
   for (const key of keys) {
     if (next[key] === base[key]) continue
-    tabs.add(
-      (MESSAGE_TAB_FIELDS as readonly string[]).includes(key)
-        ? 'message'
-        : 'timing'
-    )
+    tabs.add(tabOfField(key))
   }
   return tabs
 }

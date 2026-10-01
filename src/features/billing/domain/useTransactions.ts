@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import {
   useInfiniteQuery,
   type UseInfiniteQueryResult,
@@ -10,32 +10,20 @@ import {
   ledgerInfiniteOptions,
   purchasesInfiniteOptions,
 } from '../api/billingQueries'
-import type { PagedResponse } from './billing.types'
+import type { PagedResponse, PurchaseSummary } from './billing.types'
 import {
   buildTransactions,
-  coversCurrentMonth,
+  coversSince,
   type Transaction,
 } from './transactions'
+import { usageWindowStart } from './usageInsights'
 
 /**
- * How many 100-row pages to pull before handing control back to the merchant.
- *
- * Filtering, search and paging all happen in the browser, so they are only
- * honest over data that has actually been fetched. Draining to 1,000 entries
- * covers every real account we have seen; past that the UI says so and offers
- * to keep going rather than quietly filtering a window.
+ * The most 100-row pages to pull while reading back to the start of the
+ * billing page's window. A tenant that spends more than 1,000 entries inside
+ * it gets no usage total rather than an under-count.
  */
-const PAGES_PER_BATCH = 10
-
-/**
- * How far back a caller needs to read.
- *
- * `month` is for the billing page, which only shows the five newest movements
- * and the current month's usage total — draining an active tenant's whole
- * ledger for that would cost ten round trips on every visit. `full` is for the
- * operations log, where the filters really do span the account.
- */
-export type TransactionScope = 'month' | 'full'
+const MAX_PAGES = 10
 
 type InfiniteResult<T> = UseInfiniteQueryResult<
   { pages: PagedResponse<T>[] },
@@ -74,42 +62,56 @@ function useDrain<T>(
 
 export interface UseTransactionsResult {
   transactions: Transaction[]
-  /** False while more pages exist beyond the drain cap. */
+  /** The purchases loaded so far, newest first, whatever their status. */
+  purchases: PurchaseSummary[]
+  /** False when the drain stopped at its cap with pages still unread. */
   isComplete: boolean
+  /**
+   * True once the loaded ledger reaches back past the billing page's window
+   * (`usageWindowStart`), so this month's usage and the 14-day chart are whole.
+   */
+  isWindowCovered: boolean
   isLoading: boolean
   isDraining: boolean
   error: boolean
-  loadMore: () => void
   reload: () => Promise<void>
 }
 
-export function useTransactions(
-  scope: TransactionScope = 'full'
-): UseTransactionsResult {
-  const [cap, setCap] = useState(PAGES_PER_BATCH)
-
+/**
+ * The ledger and the purchases behind the billing page's usage figures, read
+ * back only as far as its window: this month's total and the 14-day chart.
+ */
+export function useTransactions(): UseTransactionsResult {
   const ledgerQuery = useInfiniteQuery(ledgerInfiniteOptions(DRAIN_PAGE_SIZE))
   const purchasesQuery = useInfiniteQuery(
     purchasesInfiniteOptions(DRAIN_PAGE_SIZE)
+  )
+
+  const purchases = useMemo(
+    () => purchasesQuery.data?.pages.flatMap((page) => page.items) ?? [],
+    [purchasesQuery.data]
   )
 
   const transactions = useMemo(
     () =>
       buildTransactions(
         ledgerQuery.data?.pages.flatMap((page) => page.items) ?? [],
-        purchasesQuery.data?.pages.flatMap((page) => page.items) ?? []
+        purchases
       ),
-    [ledgerQuery.data, purchasesQuery.data]
+    [ledgerQuery.data, purchases]
   )
 
   /*
    * Both feeds arrive newest-first, so once the oldest loaded row predates the
-   * 1st there is nothing left in this month to find and the walk can stop.
+   * window there is nothing left in it to find and the walk can stop.
    */
-  const satisfied = scope === 'month' && coversCurrentMonth(transactions, false)
+  const windowStart = usageWindowStart()
+  const satisfied = coversSince(transactions, false, windowStart)
+  const isLedgerExhausted =
+    ledgerQuery.data !== undefined && !ledgerQuery.hasNextPage
 
-  const ledgerDrain = useDrain(ledgerQuery, cap, satisfied)
-  const purchasesDrain = useDrain(purchasesQuery, cap, satisfied)
+  const ledgerDrain = useDrain(ledgerQuery, MAX_PAGES, satisfied)
+  const purchasesDrain = useDrain(purchasesQuery, MAX_PAGES, satisfied)
 
   const { refetch: refetchLedger } = ledgerQuery
   const { refetch: refetchPurchases } = purchasesQuery
@@ -117,14 +119,11 @@ export function useTransactions(
     await Promise.all([refetchLedger(), refetchPurchases()])
   }, [refetchLedger, refetchPurchases])
 
-  const loadMore = useCallback(
-    () => setCap((current) => current + PAGES_PER_BATCH),
-    []
-  )
-
   return {
     transactions,
+    purchases,
     isComplete: !ledgerDrain.reachedCap && !purchasesDrain.reachedCap,
+    isWindowCovered: coversSince(transactions, isLedgerExhausted, windowStart),
     isLoading: ledgerQuery.isPending || purchasesQuery.isPending,
     isDraining:
       ledgerQuery.isFetchingNextPage || purchasesQuery.isFetchingNextPage,
@@ -132,7 +131,6 @@ export function useTransactions(
     error:
       (ledgerQuery.isError && ledgerQuery.data === undefined) ||
       (purchasesQuery.isError && purchasesQuery.data === undefined),
-    loadMore,
     reload,
   }
 }

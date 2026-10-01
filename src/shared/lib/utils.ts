@@ -17,6 +17,7 @@ const twMerge = extendTailwindMerge({
         'ak-caption',
         'ak-label',
         'ak-kpi',
+        'ak-hero',
       ],
     },
   },

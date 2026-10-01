@@ -113,6 +113,8 @@
   --ink-muted: #5b6573;
   --brand: #0b6e4f;
   --brand-hover: #084f39;
+  /* Text, icons and the switch knob on a brand fill (canvas `--on-brand`). */
+  --brand-foreground: #ffffff;
   --brand-soft: #e7f5ef;
   --brand-line: #b8e0cd;
   --brand-ink: #0a5a40;
@@ -127,6 +129,24 @@
   --inverse: #0f1720;
   --inverse-foreground: #ffffff;
   --shadow-ak-card: 0 1px 2px #0f17200f, 0 0 0 1px #0f17200a;
+  /* The logo mint: the save bar's button and the preview's logo disc. */
+  --mint: #19b884;
+  --mint-foreground: #0f1720;
+  /*
+   * Ink surfaces: the marketing header, footer and pricing panel, and the
+   * phone mockup's body. Dark in both themes; only the hue follows the theme,
+   * so they sit in the dark theme's green-grey instead of navy.
+   */
+  --ink-panel: oklch(12.9% 0.042 264.695); /* slate-950 */
+  --ink-device: oklch(20.8% 0.042 265.755); /* slate-900 */
+  /* The switch knob at rest; when on it reads `brand-foreground`. */
+  --ak-knob: #ffffff;
+  /* WhatsApp's own quick-reply blue, inside the message preview only. */
+  --wa-action: #027eb5;
+  --shadow-ak-segment: 0 1px 2px #0f172014, 0 0 0 1px #0f17200f;
+  --shadow-ak-float: 0 16px 40px #0f17204d;
+  /* The soft ring around a live step of the Settings automation flow. */
+  --ak-halo: #d6efe4;
 
   --radius: 0.75rem;
 
@@ -168,88 +188,109 @@
 .dark {
   color-scheme: dark;
 
-  --background: oklch(12.9% 0.042 264.695);
-  --foreground: oklch(98.4% 0.003 247.858);
-  --card: oklch(20.8% 0.042 265.755);
-  --card-foreground: oklch(98.4% 0.003 247.858);
-  --popover: oklch(20.8% 0.042 265.755);
-  --popover-foreground: oklch(98.4% 0.003 247.858);
-  --canvas: oklch(12.9% 0.042 264.695);
+  /*
+   * The dark theme is one green-grey family: the palette of the design
+   * canvas (`.ak-root[data-theme="dark"]`), held by the Akeed app-surface
+   * tokens further down. The semantic tokens here point at those, so the
+   * shell (sidebar, top bar, dialogs) and the pages cannot drift apart.
+   * Only hues the canvas has no value for keep their Tailwind ramp.
+   */
+  --background: var(--surface);
+  --foreground: var(--ink);
+  --card: var(--surface-raised);
+  --card-foreground: var(--ink);
+  --popover: var(--surface-raised);
+  --popover-foreground: var(--ink);
+  --canvas: var(--surface);
 
-  --primary: oklch(69.6% 0.17 162.48); /* emerald-500 — lifts on dark */
-  --primary-foreground: oklch(12.9% 0.042 264.695);
-  --primary-hover: oklch(76.5% 0.177 163.223);
-  --primary-subtle: oklch(27.9% 0.041 260.031);
-  --primary-subtle-foreground: oklch(90.5% 0.093 164.15);
-  --primary-border: oklch(37.8% 0.077 168.94);
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-foreground);
+  --primary-hover: var(--brand-hover);
+  --primary-subtle: var(--brand-soft);
+  --primary-subtle-foreground: var(--brand-ink);
+  --primary-border: var(--brand-line);
 
-  --secondary: oklch(82.8% 0.189 84.429);
-  --secondary-foreground: oklch(27.9% 0.077 45.635);
+  --secondary: oklch(82.8% 0.189 84.429); /* amber-400 */
+  --secondary-foreground: oklch(27.9% 0.077 45.635); /* amber-950 */
 
-  --muted: oklch(27.9% 0.041 260.031);
-  --muted-foreground: oklch(70.4% 0.04 256.788);
-  --accent: oklch(27.9% 0.041 260.031);
-  --accent-foreground: oklch(98.4% 0.003 247.858);
-  --border: oklch(27.9% 0.041 260.031);
-  --input: oklch(37.2% 0.044 257.287);
-  --ring: oklch(69.6% 0.17 162.48);
+  --muted: var(--neutral-soft);
+  --muted-foreground: var(--ink-muted); /* 6.3:1 on muted */
+  --accent: var(--neutral-soft);
+  --accent-foreground: var(--ink);
+  --border: var(--line);
+  --input: var(--line-strong);
+  --ring: var(--brand);
 
-  --destructive: oklch(70.4% 0.191 22.216);
-  --destructive-foreground: oklch(12.9% 0.042 264.695);
-  --success: oklch(69.6% 0.17 162.48);
-  --success-foreground: oklch(12.9% 0.042 264.695);
-  --warning: oklch(82.8% 0.189 84.429);
-  --warning-foreground: oklch(27.9% 0.077 45.635);
-  --info: oklch(70.2% 0.183 293.541); /* violet-400 */
-  --info-foreground: oklch(12.9% 0.042 264.695);
+  --destructive: var(--ak-danger);
+  --destructive-foreground: var(--surface); /* 8.6:1 on destructive */
+  --success: var(--brand);
+  --success-foreground: var(--brand-foreground);
+  --warning: var(--ak-warning);
+  --warning-foreground: oklch(27.9% 0.077 45.635); /* amber-950 — 8.1:1 */
+  --info: oklch(70.2% 0.183 293.541); /* violet-400 — 5.9:1 on card */
+  --info-foreground: var(--surface); /* 6.5:1 on info */
 
-  --success-subtle: oklch(26.2% 0.051 172.552); /* emerald-950 */
-  --success-subtle-foreground: oklch(84.5% 0.143 164.978); /* emerald-300 */
-  --success-border: oklch(43.2% 0.095 166.913); /* emerald-800 */
-  --warning-subtle: oklch(27.9% 0.077 45.635); /* amber-950 */
-  --warning-subtle-foreground: oklch(87.9% 0.169 91.605); /* amber-300 */
-  --warning-border: oklch(47.3% 0.137 46.201); /* amber-800 */
-  --destructive-subtle: oklch(25.8% 0.092 26.042); /* red-950 */
-  --destructive-subtle-foreground: oklch(80.8% 0.114 19.571); /* red-300 */
+  --success-subtle: var(--brand-soft);
+  --success-subtle-foreground: var(--brand-ink);
+  --success-border: var(--brand-line);
+  --warning-subtle: var(--ak-warning-soft);
+  --warning-subtle-foreground: var(--ak-warning);
+  --warning-border: var(--ak-warning-line);
+  --destructive-subtle: var(--ak-danger-soft);
+  --destructive-subtle-foreground: var(--ak-danger);
   --destructive-border: oklch(44.4% 0.177 26.899); /* red-800 */
   --info-subtle: oklch(28.3% 0.141 291.089); /* violet-950 */
-  --info-subtle-foreground: oklch(89.4% 0.057 293.283); /* violet-200 */
+  --info-subtle-foreground: oklch(89.4% 0.057 293.283); /* violet-200 — 11:1 */
   --info-border: oklch(38% 0.189 293.745); /* violet-900 */
 
   /*
-   * Akeed app surfaces, dark. Same hues as light; every text-on-soft pair
-   * clears AA (brand-ink on brand-soft 9.2:1, ak-info 7.5:1, ak-warning
-   * 8.7:1, ak-danger 7.0:1, ink-muted on raised 6.9:1).
+   * Akeed app surfaces, dark. Values are the design canvas's dark palette
+   * (`.ak-root[data-theme="dark"]`), unchanged. Contrast, WCAG 2:
+   *   ink        on surface 16.2:1, raised 14.7:1, sunken 13.6:1
+   *   ink-muted  on surface 8.2:1, raised 7.4:1, sunken 6.9:1
+   *   brand-ink on brand-soft 5.4:1; ak-info 7.3:1, ak-warning 7.8:1 and
+   *   ak-danger 7.2:1 on their soft fills
+   *   brand-foreground on brand 7.6:1, on brand-hover 9.1:1
+   *   inverse-foreground on inverse 15.8:1, on mint 7.1:1
+   *   control-border against raised 3.8:1 (surface 4.2:1, sunken 3.5:1)
    */
-  --surface: #0b1117;
-  --surface-raised: #141b23;
-  --surface-sunken: #10161d;
-  --line: #252e38;
-  --line-strong: #34404c;
-  --control-border: #5f6b78;
-  --ink: #e8edf2;
-  --ink-muted: #9aa5b1;
-  --brand: #3fbf8f;
-  --brand-hover: #5fd0a4;
-  --brand-soft: #0f2a21;
-  --brand-line: #1f5a44;
-  --brand-ink: #7ddbb5;
-  --ak-info: #8fb5f0;
-  --ak-info-soft: #14233a;
-  --ak-warning: #f0b45a;
-  --ak-warning-soft: #2b1f0c;
-  --ak-warning-line: #5a4119;
-  --ak-danger: #f58a80;
-  --ak-danger-soft: #331514;
-  --neutral-soft: #1c242d;
-  --inverse: #e8edf2;
+  --surface: #0f1513;
+  --surface-raised: #171f1c;
+  --surface-sunken: #1d2622;
+  --line: #2b3531;
+  --line-strong: #3e4a45;
+  --control-border: #6e7b75;
+  --ink: #ecf1ef;
+  --ink-muted: #a3afaa;
+  --brand: #3cc596;
+  --brand-hover: #62d4ac;
+  --brand-foreground: #05241a; /* canvas `--on-brand` */
+  --brand-soft: #123f30;
+  --brand-line: #1f5c46;
+  --brand-ink: #3cc596;
+  --ak-info: #8db6f2;
+  --ak-info-soft: #16263f;
+  --ak-warning: #f0b45e;
+  --ak-warning-soft: #36280f;
+  --ak-warning-line: #5e4518;
+  --ak-danger: #f59791;
+  --ak-danger-soft: #3f1816;
+  --neutral-soft: #232c28;
+  --inverse: #ecf1ef;
   --inverse-foreground: #0f1720;
-  --shadow-ak-card: 0 1px 2px #00000066, 0 0 0 1px #ffffff0a;
+  --shadow-ak-card: 0 1px 2px #00000066;
+  --ink-panel: var(--surface-raised); /* as the app's top bar and sidebar */
+  --ink-device: var(--neutral-soft);
+  --ak-knob: #ecf1ef;
+  --wa-action: #53bdeb;
+  --shadow-ak-segment: 0 1px 2px #00000066, 0 0 0 1px #ffffff0f;
+  --shadow-ak-float: 0 16px 40px #000000b3;
+  --ak-halo: var(--brand-line);
 
   /*
    * Elevation on a dark surface: the light-mode shadows are tinted slate at
-   * ~5-24% alpha and vanish against slate-950. Pure black at higher alpha
-   * keeps the same four steps readable.
+   * ~5-24% alpha and vanish against the dark surface. Pure black at higher
+   * alpha keeps the same four steps readable, and carries no hue of its own.
    */
   --shadow-raised: 0 1px 2px oklch(0% 0 0 / 0.4);
   --shadow-card:
@@ -321,6 +362,7 @@
   --color-ink-muted: var(--ink-muted);
   --color-brand: var(--brand);
   --color-brand-hover: var(--brand-hover);
+  --color-brand-foreground: var(--brand-foreground);
   --color-brand-soft: var(--brand-soft);
   --color-brand-line: var(--brand-line);
   --color-brand-ink: var(--brand-ink);
@@ -335,6 +377,15 @@
   --color-inverse: var(--inverse);
   --color-inverse-foreground: var(--inverse-foreground);
   --shadow-ak-card: var(--shadow-ak-card);
+  --color-mint: var(--mint);
+  --color-mint-foreground: var(--mint-foreground);
+  --color-ink-panel: var(--ink-panel);
+  --color-ink-device: var(--ink-device);
+  --color-ak-knob: var(--ak-knob);
+  --color-wa-action: var(--wa-action);
+  --shadow-ak-segment: var(--shadow-ak-segment);
+  --shadow-ak-float: var(--shadow-ak-float);
+  --color-ak-halo: var(--ak-halo);
 
   /*
    * One stack for both scripts: the Latin face draws Latin and digits, the
@@ -371,6 +422,11 @@
   --text-ak-kpi--line-height: 2.375rem;
   --text-ak-kpi--font-weight: 600;
   --text-ak-kpi--letter-spacing: var(--tracking-ak-kpi);
+  /* The one hero number of a view (the billing balance). */
+  --text-ak-hero: 3.25rem;
+  --text-ak-hero--line-height: 3.5rem;
+  --text-ak-hero--font-weight: 700;
+  --text-ak-hero--letter-spacing: var(--tracking-ak-kpi);
 
   /*
    * ── Type scale ──
@@ -686,7 +742,10 @@
 }
 
 .akeed-embedded-scroll {
-  max-height: min(var(--akeed-scroll-fit, calc(100dvh - 20rem)), 60rem);
+  max-height: min(
+    var(--akeed-scroll-fit, calc(100dvh - 20rem - 30px)),
+    calc(60rem - 30px)
+  );
   min-height: 16rem;
   overflow: auto;
 }
@@ -710,6 +769,59 @@
   .akeed-embedded-content {
     padding-inline: 0.75rem;
   }
+
+  /*
+   * Below md the table gives way to the card list (`ConfirmationsEmbedded`),
+   * which has no sticky header to protect, so the bounded scroll box is no
+   * longer worth a second, nested scrollbar on a phone. Let the list flow
+   * and the page itself scroll instead.
+   */
+  .akeed-embedded-scroll {
+    max-height: none;
+    min-height: 0;
+    overflow: visible;
+  }
+}
+
+/*
+ * Polaris draws a segmented ButtonGroup with physical left/right radii and a
+ * `margin-left` overlap, so in RTL the first (right-most) button is rounded on
+ * its inner edge and square on its outer one. Restore the full radius and
+ * re-apply the squared sides and the seam overlap logically. Unlayered and
+ * `[dir]`-prefixed so it outranks the unlayered Polaris rules.
+ */
+[dir='rtl']
+  [data-buttongroup-variant='segmented']
+  > *:not(:only-child)
+  .Polaris-Button {
+  border-radius: var(--p-border-radius-200);
+}
+
+[dir='rtl']
+  [data-buttongroup-variant='segmented']
+  > *:not(:first-child)
+  .Polaris-Button {
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+}
+
+[dir='rtl']
+  [data-buttongroup-variant='segmented']
+  > *:not(:last-child)
+  .Polaris-Button {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+[dir='rtl']
+  .Polaris-ButtonGroup--variantSegmented
+  .Polaris-ButtonGroup__Item:not(:first-child),
+[dir='rtl']
+  [data-buttongroup-variant='segmented']
+  > *:not(:first-child)
+  .Polaris-Button:is(.Polaris-Button--variantPrimary) {
+  margin-left: 0;
+  margin-inline-start: calc(var(--p-space-025) * -1);
 }
 
 @layer utilities {

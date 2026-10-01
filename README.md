@@ -51,8 +51,8 @@ npm run start
 
 ## Branded Message Templates
 
-- Message preview and template selection live in Settings (`/settings?tab=message-preview`).
-- `/message-preview` route redirects to the Settings message preview tab.
+- Message preview and template selection live on the Message tab of Settings (`/settings?tab=message`).
+- The old `/templates` and `/message-preview` routes redirect to that tab and keep their query params.
 - Merchants can select template variants per language:
   - Arabic: `standard`, `egyptian`, `gulf`, `short`
   - English: `friendly`, `professional`, `direct`, `short`

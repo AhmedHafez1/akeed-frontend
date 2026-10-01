@@ -30,9 +30,9 @@ export const queryKeys = {
     all: ['billing'] as const,
     summary: () => [...queryKeys.billing.all, 'summary'] as const,
     /*
-     * The page size is part of the key: the billing page reads short pages and
-     * the operations log drains long ones, and sharing a cache between them
-     * would make whichever mounted second re-page the other's entries.
+     * The page size is part of the key: a short page and the 100-row pages the
+     * usage figures drain must not share a cache, or whichever mounted second
+     * would re-page the other's entries.
      */
     ledger: (limit = 25) =>
       [...queryKeys.billing.all, 'ledger', limit] as const,

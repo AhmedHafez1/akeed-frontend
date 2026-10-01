@@ -14,7 +14,10 @@ import type {
   AutomationTimeline,
   TimelineStep,
 } from '@/features/settings/domain/automationTimeline'
-import { formatDuration, formatQuietTime } from './settingsFormatters'
+import {
+  formatQuietTime,
+  formatStepDelay,
+} from '@/features/settings/skins/shared/settingsFormatters'
 
 function StepMarker({ step, index }: { step: TimelineStep; index: number }) {
   if (step.id === 'newOrder') {
@@ -70,22 +73,6 @@ export function AutomationTimelineCard({
 }) {
   const t = useTranslations('settings.embedded.timing')
 
-  const delayText = (step: TimelineStep): string | null => {
-    if (!step.isOn) return t('stepOff')
-    switch (step.delay.kind) {
-      case 'none':
-        return null
-      case 'immediate':
-        return t('delayImmediate')
-      case 'after': {
-        const duration = formatDuration(t, step.delay.minutes)
-        return step.delay.relativeTo === 'reminder'
-          ? t('delayAfterMore', { duration })
-          : t('delayAfter', { duration })
-      }
-    }
-  }
-
   return (
     <Card>
       <BlockStack gap="500">
@@ -94,7 +81,7 @@ export function AutomationTimelineCard({
         </Text>
         <InlineStack as="ol" align="space-around" gap="400">
           {timeline.steps.map((step, index) => {
-            const delay = delayText(step)
+            const delay = formatStepDelay(t, step)
             return (
               <BlockStack as="li" key={step.id} gap="200" inlineAlign="center">
                 <StepMarker step={step} index={index} />

@@ -323,7 +323,7 @@ function FileErrorCard({
       case 'openSettings':
         return (
           <Button asChild>
-            <Link href={withLocale('/settings', locale)}>
+            <Link href={withLocale('/onboarding', locale)}>
               {t('fileErrors.actions.openSettings')}
             </Link>
           </Button>

@@ -36,10 +36,12 @@ vi.mock('@/shared/ui', () => ({
 
 vi.mock('../ImportNotice', () => ({
   ImportNotice: ({
+    actions,
     children,
     role,
     title,
   }: {
+    actions?: ReactNode
     children?: ReactNode
     role?: string
     title?: string
@@ -47,6 +49,7 @@ vi.mock('../ImportNotice', () => ({
     <div role={role}>
       {title}
       {children}
+      {actions}
     </div>
   ),
 }))
@@ -152,5 +155,23 @@ describe('SendStep empty-ready message', () => {
     )
     expect(heroHeading.textContent).toContain('13')
     expect(screen.getByText(en.orderImport.send.importing)).toBeTruthy()
+  })
+})
+
+describe('SendStep blockers', () => {
+  it('links to the Timing tab when automatic confirmation is off', () => {
+    const state = sendState('review', 5)
+    state.quote.data = {
+      ...quote(5),
+      blockers: [{ code: 'IMPORT_AUTO_VERIFY_DISABLED' }],
+    }
+    vi.mocked(useSendStep).mockReturnValue(state)
+    renderStep(detail('draft', { ready: 5 }))
+
+    expect(
+      screen
+        .getByRole('link', { name: en.orderImport.start.openSettings })
+        .getAttribute('href')
+    ).toBe('/en/settings?tab=timing')
   })
 })

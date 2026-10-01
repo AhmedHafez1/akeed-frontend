@@ -1,84 +1,104 @@
 'use client'
 
-import { useCallback } from 'react'
-import { AlertTriangle, RefreshCw } from 'lucide-react'
+import type { ReactNode } from 'react'
+import { AlertTriangle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { Button, Skeleton } from '@/shared/ui'
+import { cn } from '@/shared/lib/utils'
+import { akButton, akCard, Skeleton } from '@/shared/ui'
 import { useBillingPage } from '../domain/useBillingPage'
-import { useTransactions } from '../domain/useTransactions'
-import { AccountNotice } from './components/AccountNotice'
-import { BalanceHeroCard } from './components/BalanceHeroCard'
+import { useBillingUsage } from '../domain/useBillingUsage'
+import { BalanceCard } from './components/BalanceCard'
+import { BillingAlert } from './components/BillingAlert'
 import { CheckoutSummaryCard } from './components/CheckoutSummaryCard'
 import { RechargePanel } from './components/RechargePanel'
-import { RecentActivityCard } from './components/RecentActivityCard'
 
-const RECHARGE_ANCHOR = 'recharge'
+/** One column below 1100px; the amount beside a 360px summary from there up. */
+const buyGrid =
+  'grid items-start gap-6 min-[1100px]:grid-cols-[minmax(0,1fr)_360px]'
 
+function PageShell({
+  children,
+  busy,
+}: {
+  children: ReactNode
+  busy?: boolean
+}) {
+  const t = useTranslations('billing')
+  return (
+    <div
+      className="mx-auto w-full max-w-295 space-y-6 pt-2 pb-8"
+      aria-busy={busy || undefined}
+    >
+      <header className="space-y-1">
+        <h1 className="text-ak-title text-ink">{t('title')}</h1>
+        <p className="text-ak-body text-ink-muted">{t('subtitle')}</p>
+      </header>
+      {children}
+    </div>
+  )
+}
+
+/**
+ * Billing & credits: the balance and its state, one alert when the balance
+ * needs attention, then the amount to buy beside the order summary. Pay is
+ * the page's one primary action.
+ */
 export function BillingStandalonePage() {
   const t = useTranslations('billing')
   const state = useBillingPage()
-  // The billing page only needs this month: the five newest rows and the
-  // month's usage total. Reading further would cost round trips it never shows.
-  const history = useTransactions('month')
-
-  const scrollToRecharge = useCallback(() => {
-    document
-      .getElementById(RECHARGE_ANCHOR)
-      ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }, [])
+  const usage = useBillingUsage()
 
   if (state.isSummaryLoading) {
     return (
-      <section className="mx-auto max-w-[1400px] space-y-6" aria-busy>
-        <Skeleton className="rounded-panel h-40" />
-        <Skeleton className="rounded-card h-96" />
-      </section>
+      <PageShell busy>
+        <Skeleton className="rounded-ak-card h-60" />
+        <div className={buyGrid}>
+          <Skeleton className="rounded-ak-card h-80" />
+          <Skeleton className="rounded-ak-card h-80" />
+        </div>
+      </PageShell>
     )
   }
 
   if (!state.summary || state.summaryError) {
     return (
-      <section className="mx-auto max-w-2xl py-16 text-center" role="alert">
-        <div className="text-destructive bg-destructive-subtle mx-auto grid size-12 place-items-center rounded-full">
-          <AlertTriangle />
+      <PageShell>
+        <div
+          role="alert"
+          className={cn(
+            akCard,
+            'mx-auto flex max-w-md flex-col items-center gap-4 px-6 py-10 text-center'
+          )}
+        >
+          <span className="bg-ak-danger-soft text-ak-danger flex size-10 items-center justify-center rounded-full">
+            <AlertTriangle aria-hidden="true" className="size-5" />
+          </span>
+          <div className="space-y-1">
+            <p className="text-ak-section text-ink">{t('error.title')}</p>
+            <p className="text-ak-body text-ink-muted">
+              {t('error.description')}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => void state.refreshSummary()}
+            className={akButton({ variant: 'secondary' })}
+          >
+            {t('retry')}
+          </button>
         </div>
-        <h1 className="text-h3 mt-4">{t('error.title')}</h1>
-        <p className="text-muted-foreground text-body mt-2">
-          {t('error.description')}
-        </p>
-        <Button className="mt-5" onClick={() => void state.refreshSummary()}>
-          <RefreshCw /> {t('retry')}
-        </Button>
-      </section>
+      </PageShell>
     )
   }
 
-  const summary = state.summary
-
   return (
-    <section className="mx-auto max-w-[1400px] space-y-6 pb-8">
-      <header>
-        <p className="text-primary text-caption font-semibold tracking-[0.18em] uppercase">
-          {t('eyebrow')}
-        </p>
-        <h1 className="text-h1 text-foreground mt-2">{t('title')}</h1>
-      </header>
-
-      <BalanceHeroCard summary={summary} onBuyClick={scrollToRecharge} />
-
-      <AccountNotice summary={summary} />
-
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)]">
-        <RechargePanel state={state} id={RECHARGE_ANCHOR} />
+    <PageShell>
+      <BalanceCard summary={state.summary} usage={usage} />
+      <BillingAlert summary={state.summary} />
+      <div className={buyGrid}>
+        <RechargePanel state={state} />
         <CheckoutSummaryCard state={state} />
       </div>
-
-      <RecentActivityCard
-        items={history.transactions}
-        isLoading={history.isLoading}
-        error={history.error}
-        onRetry={() => void history.reload()}
-      />
-    </section>
+    </PageShell>
   )
 }

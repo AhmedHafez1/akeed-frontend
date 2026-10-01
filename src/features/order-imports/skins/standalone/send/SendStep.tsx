@@ -192,9 +192,7 @@ function Blockers({
           title={t('autoVerifyTitle')}
           actions={
             <Button asChild variant="outline" size="sm">
-              <Link
-                href={`${withLocale('/settings', locale)}#automation-settings`}
-              >
+              <Link href={withLocale('/settings?tab=timing', locale)}>
                 {t('openSettings')}
               </Link>
             </Button>

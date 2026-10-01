@@ -1060,12 +1060,10 @@
     "dashboard": "Dashboard",
     "verifications": "Confirmations",
     "billing": "Billing & credits",
+    "paymentStatus": "Payment status",
     "settings": "Settings",
-    "templates": "Templates",
     "navigationMenu": "Open navigation menu",
     "primaryNavigation": "Primary navigation",
-    "messageTemplate": "Message template",
-    "automationSettings": "Automation",
     "workspace": "Workspace",
     "workspaceFallback": "My workspace",
     "userFallback": "Signed-in user",
@@ -1090,9 +1088,7 @@
     "label": "Theme",
     "light": "Light",
     "dark": "Dark",
-    "system": "System",
-    "appearanceTitle": "Appearance",
-    "appearanceDescription": "Choose how Akeed looks. System follows your device setting."
+    "system": "System"
   },
   "onboarding": {
     "organization": "Organization",
@@ -1856,65 +1852,76 @@
     "readOnly": "You have read-only access. An owner or admin must make configuration changes.",
     "retryButton": "Retry",
     "standalone": {
-      "eyebrow": "Workspace",
-      "subtitle": "Manage how Akeed confirms orders for your store.",
-      "nav": {
-        "label": "Settings sections",
-        "general": "General",
-        "automation": "Automation",
-        "billing": "Billing & usage"
-      },
-      "saveState": {
-        "allSaved": "All changes saved",
-        "unsaved": "Unsaved changes",
-        "saving": "Saving changes…",
-        "saved": "Changes saved",
-        "failed": "Save failed"
-      },
-      "saveBar": {
-        "pendingHelp": "You have changes that have not been saved yet.",
-        "failedHelp": "Your changes are still here. Review any errors and try saving again.",
-        "discard": "Discard"
-      },
-      "delay": {
-        "immediately": "Immediately",
-        "minutes": "{value} min",
-        "hours": "{value} hr",
-        "custom": "Custom"
-      },
-      "general": {
-        "title": "General",
-        "description": "Manage your order source and store defaults.",
-        "sourceDescription": "The connected source Akeed uses to receive orders.",
-        "storeDescription": "These details are used when Akeed contacts your customers.",
-        "codRiskHelp": "Orders with missing payment information will enter the COD confirmation flow. Enable this only when that matches how your source sends COD orders.",
-        "connectionDetails": "Connection details",
-        "copy": "Copy ID",
-        "copySuccess": "Connection ID copied",
-        "copyError": "Could not copy the connection ID"
-      },
-      "automation": {
-        "trustTitle": "Official WhatsApp delivery",
-        "trustDescription": "Messages are delivered through the official WhatsApp Cloud API.",
-        "confirmationTitle": "Automatic confirmation",
-        "firstDelayLabel": "First-message delay",
-        "followUpTitle": "Follow-up message",
-        "reviewTitle": "No-reply review",
-        "advancedScheduling": "Advanced scheduling",
-        "quietHoursTitle": "Quiet hours",
-        "quietHoursResume": "Messages scheduled during quiet hours resume after {time}. Overnight ranges are supported.",
-        "timeline": {
-          "received": "Order received",
-          "first": "First message · {delay}",
-          "followUp": "Follow-up · {delay} later"
+      "page": {
+        "title": "Settings",
+        "subtitle": "Control your confirmation message, its timing, and where your orders come from.",
+        "tabs": {
+          "message": "Message",
+          "timing": "Timing & follow-up",
+          "store": "Store"
+        },
+        "unsavedShort": "Unsaved changes",
+        "dismiss": "Dismiss",
+        "loadError": {
+          "title": "We couldn’t load your settings",
+          "body": "Check your connection, then try again.",
+          "retry": "Try again"
+        },
+        "saveBar": {
+          "label": "Unsaved changes",
+          "unsaved": "You have unsaved changes",
+          "unsavedIn": "Unsaved changes in: {tabs}",
+          "separator": ", ",
+          "discard": "Discard",
+          "save": "Save",
+          "saving": "Saving…"
+        },
+        "message": {
+          "identityDesc": "The name your customers see in every message.",
+          "storeNameHelp": "Appears in every message: “Thank you for your order from {name}.”",
+          "languageDesc": "Which language each customer gets the confirmation in.",
+          "languageArabic": "Always Arabic",
+          "languageEnglish": "Always English",
+          "styleHint": "Each language keeps its own style. These are the {language} styles; switch the preview language to edit the other.",
+          "defaultBadge": "Default",
+          "businessAccount": "Verified business account",
+          "testSend": "Send a test message",
+          "testSendSaveFirst": "Save your changes first to test them."
+        },
+        "timing": {
+          "flowDesc": "This updates as you edit, before you save.",
+          "autoHelp": "When off, no messages are sent.",
+          "customDelayLabel": "Delay",
+          "reminderHelp": "We send the same message again if the customer hasn’t replied.",
+          "alertHelp": "The order moves to “Needs your action” so you can follow up. We never cancel orders automatically.",
+          "quietDesc": "No messages at night.",
+          "quietHelp": "Anything due during quiet hours is sent when they end."
+        },
+        "store": {
+          "sourceDesc": "Where Akeed receives your orders from.",
+          "sourceHelp": "Orders you import from a file or add by hand.",
+          "connected": "Connected",
+          "connectionId": "Connection ID",
+          "copy": "Copy",
+          "copied": "Copied",
+          "copyError": "Couldn’t copy the connection ID. Copy it by hand.",
+          "codHeading": "Missing payment info",
+          "codDesc": "How we treat orders that don’t say how they were paid.",
+          "codLabel": "Treat them as cash on delivery",
+          "codHelp": "Turn on only if your order source usually leaves the payment method out of COD orders.",
+          "codRisk": "Prepaid orders with missing payment info will also get a confirmation message and use credits."
         }
       },
-      "billing": {
-        "title": "Billing & credits",
-        "description": "Akeed uses message credits instead of monthly confirmation plans.",
-        "creditPageTitle": "Manage message credits",
-        "creditPageDescription": "Review your trusted balance, buy credits, and inspect purchase and ledger history on the dedicated credit page.",
-        "openCreditPage": "Open billing & credits"
+      "messages": {
+        "saveSuccess": "Settings saved",
+        "saveInvalid": "Some fields need your attention before saving.",
+        "saveError": "We couldn't save your settings. Check the highlighted fields and try again.",
+        "readOnly": "You have read-only access. An owner or admin must make configuration changes.",
+        "testSendSuccess": "Test message sent to your WhatsApp",
+        "testSendCooldown": "Wait a few seconds before sending another test.",
+        "testSendDailyLimit": "You've reached today's limit of test messages.",
+        "testSendPhoneMissing": "Add your WhatsApp number in setup to receive test messages.",
+        "testSendError": "The test message couldn't be sent. Try again."
       }
     },
     "storeConfigurationHeading": "Store configuration",
@@ -2303,72 +2310,7 @@
       "businessName": "Akeed Store"
     },
     "confirmationRate": "Confirmation rate",
-    "confirmationRateHelp": "Percentage of sent verifications that the customer confirmed.",
-    "standalone": {
-      "eyebrow": "Messaging",
-      "pageTitle": "Message templates",
-      "pageSubtitle": "Choose how your COD confirmation sounds in each customer language.",
-      "languageArabic": "Arabic",
-      "languageEnglish": "English",
-      "languageAuto": "Auto",
-      "storeLanguageTitle": "Store language is {language}",
-      "storeLanguageAutoDescription": "Customers receive Arabic or English based on their phone number's country code.",
-      "storeLanguageFixedDescription": "Customers receive {language} by default. You can still configure both languages here.",
-      "changeInSettings": "Change in Settings",
-      "customerLanguageTitle": "Customer language",
-      "defaultBadge": "Default",
-      "perLanguageStyleHint": "Arabic and English keep separate tone selections.",
-      "toneTitle": "Tone and style",
-      "toneDescription": "Choose from approved WhatsApp templates for this language.",
-      "variantLabels": {
-        "standard": "Standard",
-        "egyptian": "Egyptian",
-        "gulf": "Gulf",
-        "friendly": "Friendly",
-        "professional": "Professional",
-        "direct": "Direct",
-        "short": "Short"
-      },
-      "variantDescriptions": {
-        "standard": "Clear and balanced Modern Standard Arabic.",
-        "egyptian": "Warm, conversational Egyptian Arabic.",
-        "gulf": "Friendly Arabic phrasing for Gulf customers.",
-        "friendly": "Warm and welcoming for everyday orders.",
-        "professional": "Polished and formal while staying clear.",
-        "direct": "Action-focused with a clear request to confirm.",
-        "short": "Fast and concise with only essential details."
-      },
-      "noVariants": "No approved templates are available for this language.",
-      "detailsTitle": "Template details",
-      "channelLabel": "Channel",
-      "whatsappLabel": "WhatsApp",
-      "purposeLabel": "Purpose",
-      "purposeValue": "Order confirmation",
-      "variablesTitle": "Variables",
-      "variableLabels": {
-        "customer": "Customer name",
-        "store": "Business name",
-        "order": "Order number",
-        "total": "Total price"
-      },
-      "variablesUnavailable": "Not provided",
-      "approvalDescription": "Template wording and structure are approved for reliable WhatsApp delivery. Variable values update automatically for each order.",
-      "customerPreviewTitle": "Customer preview",
-      "livePreviewBadge": "Live preview",
-      "previewActions": "Illustrative template actions",
-      "previewFooter": "Customers can confirm or cancel in one tap. Preview actions do not change an order.",
-      "readOnly": "You have read-only access. An owner or admin must change template selections.",
-      "resetButton": "Reset to default",
-      "saveButton": "Save template",
-      "savingButton": "Saving template…",
-      "resetDialog": {
-        "title": "Reset this language template?",
-        "description": "Your unsaved {language} selection will be replaced with the backend default.",
-        "cancel": "Keep selection",
-        "confirm": "Reset to default",
-        "closeLabel": "Close reset confirmation"
-      }
-    }
+    "confirmationRateHelp": "Percentage of sent verifications that the customer confirmed."
   },
   "docs": {
     "eyebrow": "Documentation",
@@ -2678,11 +2620,32 @@
     "billingLink": "Open billing & credits"
   },
   "billing": {
-    "eyebrow": "Account billing",
     "title": "Billing & credits",
+    "subtitle": "You only pay for the confirmation messages we send. No monthly plan.",
     "description": "See the credits available for WhatsApp order confirmations, buy more securely, and review every account movement.",
     "threshold": "Low-balance alert at {count} credits",
     "retry": "Try again",
+    "balance": {
+      "available": "Available balance",
+      "unit": "messages",
+      "state": {
+        "healthy": "Healthy balance",
+        "low": "Running low",
+        "zero": "Out of credits",
+        "debt": "Out of credits",
+        "suspended": "Billing suspended",
+        "notProvisioned": "Not set up"
+      },
+      "runway": "{count, plural, =0 {Lasts less than a day at this month’s pace.} one {Lasts about 1 day at this month’s pace.} other {Lasts about {days} days at this month’s pace.}}",
+      "runwayPaused": "New orders aren’t being confirmed until you top up.",
+      "chartLabel": "Last 14 days",
+      "chartFrom": "14 days ago",
+      "chartToday": "Today",
+      "usedThisMonth": "Used this month",
+      "lastPurchase": "Last purchase",
+      "noPurchase": "No purchases yet",
+      "unitPrice": "Price per message"
+    },
     "status": {
       "active": "Active",
       "suspended": "Suspended",
@@ -2706,18 +2669,16 @@
       "debtOutstanding": "Balance to settle"
     },
     "alerts": {
-      "healthyTitle": "Your credit balance is healthy",
-      "healthyDescription": "New order confirmations can continue normally.",
-      "lowTitle": "Only {count} credits remain",
-      "lowDescription": "Top up before reaching the {threshold}-credit threshold to avoid interrupted confirmations.",
-      "zeroTitle": "No credits are available",
-      "zeroDescription": "New messages are blocked until credits are added. Your history remains available.",
-      "debtTitle": "{count} credits are outstanding",
-      "debtDescription": "New messages remain blocked until the outstanding balance is settled.",
+      "lowTitle": "{count, plural, one {Only 1 message left} other {Only {formatted} messages left}}",
+      "lowDescription": "Top up before you run out so new orders keep getting confirmed.",
+      "zeroTitle": "You’re out of message credits",
+      "zeroDescription": "We aren’t confirming new orders right now. Your orders and data are safe, and messages resume as soon as you top up.",
+      "debtTitle": "{count, plural, one {You owe 1 message} other {You owe {formatted} messages}}",
+      "debtDescription": "We aren’t confirming new orders until this is settled. Top up to clear it and resume messages.",
       "suspendedTitle": "Billing is suspended",
-      "suspendedDescription": "Purchases and message sends are unavailable. Contact Akeed support for help.",
-      "notProvisionedTitle": "Credit billing is not provisioned",
-      "notProvisionedDescription": "History remains available while Akeed finishes setting up this account."
+      "suspendedDescription": "Purchases and message sends are unavailable. Contact Akeed support.",
+      "notProvisionedTitle": "Credit billing isn’t set up yet",
+      "notProvisionedDescription": "We’re finishing your account setup. Purchases and message sends are unavailable until then."
     },
     "grant": {
       "title": "Launch credit grant",
@@ -2725,32 +2686,43 @@
       "pending": "Your one-time {count}-credit grant is posted when your account is created."
     },
     "purchase": {
-      "title": "Buy message credits",
-      "description": "Choose a quantity, confirm the trusted server total, then continue to Paymob.",
-      "disabled": "Credit purchases are currently disabled. Existing billing history remains available.",
-      "readOnly": "You have read-only billing access. An owner or admin can start a purchase.",
+      "title": "Buy credits",
+      "description": "Choose how many messages. One flat price per message, and credits never expire.",
       "quantity": "Credit quantity",
-      "decrease": "Decrease credit quantity",
-      "increase": "Increase credit quantity",
-      "rules": "Choose {min}–{max} credits in steps of {step}.",
+      "decrease": "Decrease amount",
+      "increase": "Increase amount",
+      "rules": "{min} to {max} messages, in steps of {step}.",
       "credits": "Credits",
-      "unitPrice": "Price per credit",
+      "unitPrice": "Price per message",
       "total": "Total",
-      "paymobTitle": "Secure checkout with Paymob",
-      "paymobDescription": "Pay with a card or Vodafone Cash on Paymob’s hosted checkout. Akeed never asks for or stores your payment details.",
       "submit": "Create secure checkout",
       "creating": "Creating checkout…",
       "continuePaymob": "Continue to Paymob",
       "startNew": "Start new purchase",
-      "pendingTitle": "This purchase needs a status check",
-      "pendingDescription": "Akeed kept the same purchase reference. Check its canonical status before starting another purchase.",
+      "pendingTitle": "A purchase is still being checked",
+      "pendingDescription": "Check its status before starting a new one so you don’t pay twice.",
       "viewStatus": "View purchase status",
       "errors": {
-        "whole": "Enter a whole number of credits.",
-        "range": "Choose between {min} and {max} credits.",
-        "step": "Choose a quantity in steps of {step}.",
+        "whole": "Enter a whole number of messages.",
+        "range": "Choose between {min} and {max}.",
+        "step": "Choose a multiple of {step}.",
         "network": "The checkout request could not be completed. Retry safely with the same purchase attempt.",
         "api": "Checkout could not be created. Review the quantity or try again."
+      },
+      "chooseAmount": "Choose an amount",
+      "customLabel": "Or enter another amount",
+      "unit": "messages",
+      "summaryTitle": "Order summary",
+      "messages": "Messages",
+      "balanceAfter": "Balance after purchase: <b>{count}</b> messages",
+      "pay": "Pay <amount>{value}</amount>",
+      "payEmpty": "Pay",
+      "paymobNote": "You finish paying on Paymob’s secure page by card or Vodafone Cash. Akeed never sees or stores your payment details.",
+      "blocked": {
+        "disabled": "Credit purchases are switched off right now.",
+        "suspended": "Purchases are unavailable while billing is suspended.",
+        "notProvisioned": "Purchases are unavailable until we finish setting up your account.",
+        "readOnly": "You have view-only access. An owner or admin can buy credits."
       }
     },
     "purchaseStatus": {
@@ -2767,161 +2739,49 @@
       "won": "Dispute won",
       "lost": "Dispute lost"
     },
-    "actorType": {
-      "akeed_staff": "Akeed staff",
-      "meta": "Meta",
-      "paymob": "Paymob",
-      "system": "Akeed system"
-    },
-    "ledgerReason": {
-      "chargeback_reinstated": "Chargeback debt reinstated",
-      "chargeback_reversed": "Payment chargeback",
-      "delivery_failure_restored": "Credit restored after delivery failure",
-      "launch_grant": "Launch grant",
-      "message_accepted": "WhatsApp message accepted",
-      "payment_verified": "Payment verified",
-      "refund_reversed": "Purchase refund",
-      "staff_adjustment": "Account adjustment"
-    },
-    "history": {
-      "purchases": "Purchase history",
-      "purchasesDescription": "Trusted payment amounts and their latest status.",
-      "ledger": "Credit ledger",
-      "ledgerDescription": "Every posted credit movement, without recalculating your balance.",
-      "date": "Date",
-      "credits": "Credits",
-      "amount": "Amount",
-      "status": "Status",
-      "reference": "Reference",
-      "refunded": "Refunded amount",
-      "reconciliation": "Review required",
-      "balanceAfter": "Posted balance: {count}",
-      "purchaseEmpty": "No credit purchases yet.",
-      "ledgerEmpty": "No credit movements yet.",
-      "loadMore": "Load more",
-      "error": "Billing history could not be loaded. Your displayed balances were not changed.",
-      "recentTitle": "Recent activity",
-      "recentDescription": "A quick look at the latest movements on your balance.",
-      "viewLog": "View operations log",
-      "openFullLog": "Open the full log",
-      "operation": "Operation",
-      "balanceAfterColumn": "Balance after",
-      "used": "Used",
-      "posted": "Posted",
-      "kind": {
-        "purchase": "Credit purchase",
-        "usage": "Credit usage",
-        "adjustment": "Credit adjustment"
-      },
-      "empty": "No credit movements yet."
-    },
     "error": {
       "title": "Billing could not be loaded",
       "description": "We could not retrieve the trusted credit balance. Try again before taking billing action."
     },
     "return": {
-      "eyebrow": "Paymob return status",
-      "reference": "Purchase reference",
+      "credits": "Messages",
+      "amount": "Amount",
       "status": "Status",
-      "credits": "Credits",
-      "amount": "Trusted amount",
       "updated": "Last updated",
+      "reference": "Purchase reference",
       "backToBilling": "Back to billing",
+      "backToImport": "Continue import",
+      "newPurchase": "Start a new purchase",
       "refresh": "Refresh status",
       "refreshing": "Refreshing…",
-      "invalidTitle": "This purchase link is invalid",
-      "invalidDescription": "Only an Akeed purchase reference can be used here. Return to billing to select a valid purchase.",
-      "errorTitle": "Purchase status is unavailable",
-      "errorDescription": "No new purchase was created. Refresh this purchase or return safely to billing.",
-      "staleTitle": "Payment is still pending",
-      "staleDescription": "Akeed stopped automatic checks for now. You can refresh manually without creating another purchase.",
-      "reconciliationTitle": "Payment needs review",
-      "reconciliationDescription": "Akeed has stopped polling while this payment is reconciled. No action is required unless support contacts you.",
-      "statusTitle": {
-        "pending": "Confirming your payment",
-        "successful": "Credits added successfully",
-        "failed": "Payment was not completed",
-        "canceled": "Payment was canceled",
-        "expired": "Checkout expired",
-        "refunded": "Payment was refunded"
+      "successTitle": "{count, plural, one {We added <n>{value}</n> message to your balance} other {We added <n>{value}</n> messages to your balance}}",
+      "successBody": "{count, plural, one {Your balance is now <n>{value}</n> message, and new orders keep getting confirmed as usual.} other {Your balance is now <n>{value}</n> messages, and new orders keep getting confirmed as usual.}}",
+      "successBodyNoBalance": "The messages are in your balance now.",
+      "title": {
+        "pending": "Checking your payment",
+        "stale": "Still waiting for the payment to confirm",
+        "failed": "The payment didn’t go through",
+        "canceled": "The payment was canceled",
+        "expired": "This payment link expired",
+        "refunded": "This payment was refunded",
+        "reconciliation": "We’re reviewing this payment",
+        "invalid": "This payment link isn’t valid",
+        "error": "We couldn’t load the payment status"
       },
-      "statusDescription": {
-        "pending": "We are checking the canonical purchase status. Keep this page open or return later.",
-        "successful": "The verified credits are now available in your Akeed account.",
-        "failed": "No credits were added. You may return to billing and deliberately start a new purchase.",
-        "canceled": "No credits were added. You can return to billing when you are ready.",
-        "expired": "This checkout can no longer be used. Return to billing to start a new purchase.",
-        "refunded": "The purchase was refunded and the credit ledger reflects the verified outcome."
-      },
-      "backToImport": "Continue your import"
-    },
-    "hero": {
-      "available": "Available balance",
-      "unit": "message credits",
-      "equivalent": "≈ {amount}",
-      "ready": "ready for new messages",
-      "buyCredits": "Buy credits"
+      "body": {
+        "pending": "We’re waiting for Paymob to confirm. Keep this page open or come back later — we won’t start a new charge.",
+        "stale": "We paused automatic checks. Refresh whenever you like; we won’t start a new charge.",
+        "failed": "No credits were added to your account. You can start a new purchase whenever you’re ready.",
+        "canceled": "No credits were added to your account. You can start a new purchase whenever you’re ready.",
+        "expired": "No credits were added. Start a new purchase from the billing page.",
+        "refunded": "The amount was returned, and your balance reflects it.",
+        "reconciliation": "We’re matching this payment with Paymob. You don’t need to do anything unless support contacts you.",
+        "invalid": "This link doesn’t carry a valid purchase reference. Go back to billing.",
+        "error": "We didn’t start a new charge. Refresh the status or go back to billing."
+      }
     },
     "badge": {
       "label": "message credits"
-    },
-    "packages": {
-      "stepLabel": "Choose an amount",
-      "customLabel": "or enter the amount you need",
-      "unit": "message credits",
-      "totalLabel": "Confirmed total",
-      "pay": "Continue to payment"
-    },
-    "transactions": {
-      "eyebrow": "Account log",
-      "title": "Operations log",
-      "description": "Review every purchase, usage and adjustment on your message credits in one place.",
-      "back": "Back to billing & credits",
-      "summary": {
-        "purchased": "Total purchased",
-        "usedThisMonth": "Used this month",
-        "count": "Operations",
-        "balance": "Available balance"
-      },
-      "listTitle": "All operations",
-      "listDescription": "The last {count} recorded movements on this account.",
-      "filters": {
-        "typeLabel": "Operation type",
-        "all": "All operations",
-        "purchases": "Purchases",
-        "usage": "Usage",
-        "statusLabel": "Status",
-        "allStatuses": "All statuses",
-        "periodLabel": "Period",
-        "periodAll": "All time",
-        "periodThisMonth": "This month",
-        "periodLast30": "Last 30 days",
-        "periodLast90": "Last 90 days",
-        "search": "Search",
-        "searchPlaceholder": "Search by reference or operation",
-        "clear": "Clear filters"
-      },
-      "export": "Export report",
-      "showing": "Showing {from}–{to} of {total} operations",
-      "capped": "Results cover only the last {count} loaded operations.",
-      "loadMore": "Load older operations",
-      "empty": "No credit movements yet.",
-      "emptyFiltered": "No operations match the current filters.",
-      "pagination": {
-        "previous": "Previous",
-        "next": "Next",
-        "page": "Page"
-      },
-      "csv": {
-        "date": "Date",
-        "operation": "Operation",
-        "reason": "Reason",
-        "credits": "Credits",
-        "balanceAfter": "Balance after",
-        "status": "Status",
-        "reference": "Reference",
-        "filename": "operations-log"
-      }
     },
     "balanceChip": {
       "label": "Balance: {count} messages",

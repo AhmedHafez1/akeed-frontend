@@ -131,8 +131,14 @@ export function DashboardVerificationsStandaloneSkin({
   const isOnboarding =
     tab === 'all' && !list.search && !importBatchId && list.rows.length === 0
 
+  /*
+   * From `md` the page is exactly one screen tall and only the table scrolls:
+   * the viewport less the top bar (3.5rem) and the shell's padding around
+   * `main` (3rem, 4rem from `lg`). The floor lets a very short window scroll
+   * the page instead of squeezing the table away.
+   */
   return (
-    <div className="mx-auto w-full max-w-295 min-w-0 space-y-6 pt-2 pb-8">
+    <div className="mx-auto w-full max-w-295 min-w-0 space-y-6 pt-2 pb-8 md:flex md:h-[calc(100dvh-6.5rem)] md:min-h-128 md:flex-col md:pb-0 lg:h-[calc(100dvh-7.5rem)]">
       <PageHeader
         title={t('confirmations.title')}
         subtitle={t('confirmations.subtitle')}
@@ -174,7 +180,7 @@ export function DashboardVerificationsStandaloneSkin({
 
       <section
         aria-label={t('confirmations.title')}
-        className={cn(akCard, 'overflow-hidden')}
+        className={cn(akCard, 'overflow-hidden md:flex md:min-h-0 md:flex-col')}
       >
         <ConfirmationsToolbar
           tab={tab}
@@ -193,6 +199,7 @@ export function DashboardVerificationsStandaloneSkin({
           role="tabpanel"
           aria-labelledby={`${tabIdPrefix}-${tab}`}
           aria-busy={list.isFetching}
+          className="md:flex md:min-h-0 md:flex-col"
         >
           {list.isLoading ? (
             <StandaloneVerificationsSkeleton />

@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import { creditFeedbackKey } from '@/shared/lib/creditFeedback'
 import { createLogger } from '@/shared/lib/logger'
+import { cn } from '@/shared/lib/utils'
 import {
   manualOrderAvailabilityOptions,
   type ManualOrderAvailability,
@@ -31,8 +32,15 @@ const TRIGGER_STYLES = {
   },
 } as const
 
+/** The quiet look, for a page whose own primary action is something else. */
+const SECONDARY_TRIGGER =
+  'border-line-strong bg-surface-raised text-ink hover:bg-surface-sunken shadow-none'
+
+export type ManualOrderEmphasis = 'primary' | 'secondary'
+
 interface ManualOrderActionProps {
   variant?: keyof typeof TRIGGER_STYLES
+  emphasis?: ManualOrderEmphasis
 }
 
 /**
@@ -42,6 +50,7 @@ interface ManualOrderActionProps {
  */
 export function ManualOrderAction({
   variant = 'topbar',
+  emphasis = 'primary',
 }: ManualOrderActionProps) {
   const t = useTranslations('manualOrder')
   const tCredits = useTranslations('creditErrors')
@@ -83,7 +92,10 @@ export function ManualOrderAction({
       isAtPlanLimit={isReady && availability.isAtPlanLimit}
       disabledReasonOverride={disabledReasonOverride}
       showDisabledReason={false}
-      triggerClassName={styles.trigger}
+      triggerClassName={cn(
+        styles.trigger,
+        emphasis === 'secondary' && SECONDARY_TRIGGER
+      )}
       triggerLabelClassName={styles.label}
       triggerWrapperClassName={variant === 'tile' ? 'w-full' : undefined}
       autoOpen={newOrder.shouldAutoOpen}
@@ -92,6 +104,10 @@ export function ManualOrderAction({
   )
 }
 
-export function ManualOrderTopBarAction() {
-  return <ManualOrderAction variant="topbar" />
+export function ManualOrderTopBarAction({
+  emphasis,
+}: {
+  emphasis?: ManualOrderEmphasis
+}) {
+  return <ManualOrderAction variant="topbar" emphasis={emphasis} />
 }

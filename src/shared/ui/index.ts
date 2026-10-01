@@ -16,6 +16,10 @@ export * from './notifications'
 
 // Custom components
 export * from './ak-styles'
+export * from './ak-switch'
+export * from './ak-segmented'
+export * from './ak-select'
+export * from './ak-choice-card'
 export * from './loading-button'
 export * from './phone-input'
 export * from './international-phone-input'

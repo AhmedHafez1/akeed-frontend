@@ -26,6 +26,9 @@ export function useBillingSummary() {
     // A failed background refresh keeps the last balance on screen rather than
     // replacing it with an error state; only a balance we never had is an error.
     error: query.data === undefined ? query.error : null,
+    isFetching: query.isFetching,
+    /** When the balance on screen was read, in epoch ms; 0 before any read. */
+    updatedAt: query.dataUpdatedAt,
     refresh,
   }
 }
