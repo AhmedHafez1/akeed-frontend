@@ -1,7 +1,7 @@
 ---
 title: WhatsApp Templates
 description: Choose the right confirmation message style and language so customers reply faster and with less confusion.
-order: 4
+order: 6
 slug: whatsapp-templates
 ---
 

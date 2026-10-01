@@ -1,7 +1,7 @@
 ---
 title: Analytics
 description: Understand your key COD confirmation metrics and use them to improve shipping quality and reduce losses.
-order: 5
+order: 7
 slug: analytics
 ---
 
@@ -23,7 +23,7 @@ Not every number has the same operational value. Focus on these first:
 | Reply rate | Shows whether customers are engaging with your messages. |
 | No-reply volume | Shows possible timing/message fit issues. |
 | Failed sends | Highlights delivery or configuration issues. |
-| Usage progress | Protects you from unexpectedly hitting plan limits. |
+| Usage progress | Protects you from unexpectedly hitting your plan limit or running out of credits. |
 
 ## Metric Definitions (Merchant View)
 
@@ -57,12 +57,12 @@ Track this daily. Even a small failure spike can quietly reduce your effective c
 
 ### Usage (Used / Limit)
 
-Shows progress against your plan’s included confirmations.
+On Shopify, this shows progress against your plan’s included confirmations. On a standalone account, watch your credit balance instead.
 
 Use this as an operations signal, not only billing info.
 
 > [!WARNING]
-> If usage reaches your limit, new confirmations may stop until renewal or upgrade.
+> If usage reaches your limit or your credits run out, new confirmations may stop until renewal, upgrade or a credit purchase.
 
 ## How To Read Trends (Weekly)
 
@@ -83,7 +83,7 @@ Do not optimize based on one day only.
 | Reply rate drop | Down >10% vs prior period | Review template tone and send timing. |
 | No-reply increase | Up >15% week-over-week | Enable/retune follow-up and escalation windows. |
 | Failed sends | Sudden spike | Verify phone quality and settings. |
-| Usage pressure | 80% and 95% | Plan upgrade discussion before limit hit. |
+| Usage pressure | 80% and 95% of your plan, or a low credit balance | Upgrade your plan or buy credits before the limit hits. |
 
 ## Common Mistakes
 
@@ -115,7 +115,7 @@ Do not optimize based on one day only.
 ### Usage near limit with strong performance
 
 - Good problem: demand is healthy.
-- Plan capacity upgrade before sends stop.
+- Upgrade your plan or buy credits before sends stop.
 
 ## FAQ
 

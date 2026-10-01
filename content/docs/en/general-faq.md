@@ -1,7 +1,7 @@
 ---
 title: General FAQ
-description: Quick answers to common merchant questions about setup, messaging, plans, and support.
-order: 7
+description: Quick answers to common merchant questions about setup, importing orders, messaging, plans, credits, and support.
+order: 9
 slug: general-faq
 ---
 
@@ -15,7 +15,7 @@ If you are just starting, read [Getting Started](/en/docs/getting-started) first
 
 ### Which platforms does Akeed support?
 
-Akeed supports Shopify and can be connected to other commerce stacks through the available integration flow.
+Akeed works with Shopify stores, which install it from Shopify and receive orders automatically. It also works for merchants without Shopify: you add orders manually or import them from a CSV or Excel file. See [Using Akeed Without Shopify](/docs/standalone-platform).
 
 ### How long does setup usually take?
 
@@ -23,7 +23,11 @@ Most merchants can complete the first setup in a few minutes, then send a test c
 
 ### Do I need technical work to begin?
 
-For the standard Shopify path, setup is designed for non-technical teams. You can install, configure, and start confirming COD orders without custom development.
+No. Both the Shopify path and the standalone path are designed for non-technical teams. You can install or sign up, configure, and start confirming COD orders without custom development.
+
+### Can I import orders from a spreadsheet?
+
+Yes, on standalone accounts. Upload a CSV or Excel file of up to 100 orders, check the preview, and start WhatsApp confirmation. Nothing is sent until you press **Send**. See [Bulk Order Import](/docs/bulk-order-import).
 
 ## WhatsApp and Messaging
 
@@ -53,21 +57,29 @@ The order stays unconfirmed, and your team can hold it, follow up, or skip shipp
 
 No. The core flow focuses on COD order verification.
 
-## Plans and Limits
+## Plans, Credits and Limits
 
-### What happens when I reach my monthly confirmation limit?
+### How do I pay for Akeed?
 
-New confirmations pause until your cycle renews or you upgrade the plan.
+Shopify stores subscribe to a monthly plan billed through Shopify. Standalone accounts pay for what they use with credits, bought through Paymob with a card or Vodafone Cash. See [Using Akeed Without Shopify](/docs/standalone-platform).
+
+### How are credits counted?
+
+One credit is one WhatsApp message sent to a customer. A follow-up to a customer who has not replied uses a second credit. If WhatsApp does not accept a message, the credit is returned automatically.
+
+### What happens when I reach my monthly confirmation limit or run out of credits?
+
+New confirmations pause until your cycle renews, you upgrade the plan, or you buy more credits.
 
 ### Are there automatic extra charges after the limit?
 
-No. You can choose to upgrade, but usage does not silently continue with surprise charges.
+No. You can choose to upgrade or buy credits, but usage does not silently continue with surprise charges.
 
 ## Troubleshooting and Support
 
 ### Where should I start if messages are not sent?
 
-Check auto-confirmation status, plan usage, and phone number formatting first. Then review [Troubleshooting](/en/docs/troubleshooting).
+Check auto-confirmation status, plan usage or credit balance, and phone number formatting first. Then review [Troubleshooting](/en/docs/troubleshooting).
 
 ### When should I contact support?
 
@@ -76,6 +88,8 @@ Contact support when sends fail repeatedly, statuses look inconsistent, or your 
 ## Related Guides
 
 - [Getting Started](/en/docs/getting-started)
+- [Using Akeed Without Shopify](/en/docs/standalone-platform)
+- [Bulk Order Import](/en/docs/bulk-order-import)
 - [Order Confirmation](/en/docs/order-confirmation)
 - [Automation Rules](/en/docs/automation-rules)
 - [Troubleshooting](/en/docs/troubleshooting)

@@ -1,7 +1,7 @@
 ---
 title: Troubleshooting
 description: Fix common COD confirmation issues quickly with clear checks and next actions.
-order: 6
+order: 8
 slug: troubleshooting
 ---
 
@@ -14,7 +14,8 @@ Use it when:
 - orders are not getting confirmed,
 - messages are delayed or not sent,
 - too many orders move to no-reply,
-- plan usage blocks new sends.
+- plan usage or an empty credit balance blocks new sends,
+- a file import does not behave as expected.
 
 ## Quick Triage Checklist
 
@@ -22,7 +23,7 @@ Before deep troubleshooting, check these first:
 
 1. Auto-confirmation is enabled.
 2. Order is COD-eligible.
-3. Plan usage has not reached the limit.
+3. Plan usage has not reached the limit, or your credit balance (standalone accounts) is not empty.
 4. Quiet hours are not delaying sends.
 5. Phone number format includes country code.
 
@@ -53,7 +54,7 @@ These five checks solve most issues.
 
 ### What to do
 
-1. If usage is near/full, upgrade plan or wait for next cycle.
+1. If usage is near/full, upgrade plan or wait for next cycle. On a standalone account, buy credits in **Billing & credits**.
 2. If failed status appears, verify customer phone quality.
 3. If delayed, check quiet hours and timezone settings.
 
@@ -118,12 +119,31 @@ These five checks solve most issues.
 2. Narrow quiet-hours window if needed.
 3. Re-test with a live order and watch status timing.
 
+## Issue: Imported orders are not confirmed
+
+### What to check
+
+- Did you press **Send** after the preview? Importing alone sends nothing.
+- Are the orders still **Awaiting start**? They must be started within 24 hours.
+- Is the import paused because credits ran out?
+- Were some rows skipped as invalid, duplicate or excluded?
+
+### What to do
+
+1. Open the import screen and read the reason next to each skipped group.
+2. If **Send** is blocked, buy credits or turn on automatic confirmation, then press **Send** again.
+3. If the import is paused, buy credits and choose **Resume**.
+4. If the window passed or the import expired, upload the file again. Orders with an order number that were already imported are recognized and not duplicated, and look-alike orders are flagged for your review.
+
+For file and column problems, see the troubleshooting table in [Bulk Order Import](/docs/bulk-order-import).
+
 ## Issue: Billing or plan change problems
 
 ### What to check
 
 - Current billing status in settings.
-- Whether plan change was approved in Shopify.
+- Whether plan change was approved in Shopify (Shopify stores).
+- Whether your Paymob payment was completed and your credit balance updated (standalone accounts).
 - Usage level vs included limit.
 
 ### What to do
@@ -131,6 +151,7 @@ These five checks solve most issues.
 1. Retry plan change if approval was not completed.
 2. Keep current active plan if upgrade was declined.
 3. Upgrade before reaching hard usage limit in busy periods.
+4. On a standalone account, if a payment shows as pending, wait a moment and check **Billing & credits** before paying again.
 
 ## When to Contact Support
 
@@ -138,11 +159,11 @@ Contact support when:
 
 - issue persists after checklist + issue-specific steps,
 - test message also fails repeatedly,
-- billing status appears inconsistent with Shopify approval.
+- billing status appears inconsistent with Shopify approval, or a Paymob payment does not show in your credit balance.
 
 When contacting support, include:
 
-- shop name,
+- shop or store name,
 - affected order number,
 - screenshot of status,
 - timestamp of issue,

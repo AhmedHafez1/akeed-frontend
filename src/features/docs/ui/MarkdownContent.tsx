@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
+import { Children, cloneElement, isValidElement } from 'react'
+import type { ReactNode } from 'react'
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 import type { Components } from 'react-markdown'
@@ -29,13 +31,55 @@ const CALLOUT_STYLES: Record<CalloutTone, string> = {
     'border-primary-border bg-primary-subtle text-primary-subtle-foreground',
 }
 
-function parseCalloutLabel(value: string): CalloutTone | null {
-  const normalized = value.trim().toUpperCase()
+const CALLOUT_LABEL_REGEX = /^\s*\[!(INFO|WARNING|SUCCESS)\]\s*/i
 
-  if (normalized === '[!INFO]') return 'info'
-  if (normalized === '[!WARNING]') return 'warning'
-  if (normalized === '[!SUCCESS]') return 'success'
-  return null
+function parseCalloutLabel(value: string): CalloutTone | null {
+  const match = CALLOUT_LABEL_REGEX.exec(value)
+
+  if (!match) return null
+  return match[1].toLowerCase() as CalloutTone
+}
+
+function isBlankText(node: ReactNode): boolean {
+  return typeof node === 'string' && node.trim() === ''
+}
+
+function stripCalloutLabel(node: ReactNode): ReactNode {
+  if (typeof node === 'string') {
+    return node.replace(CALLOUT_LABEL_REGEX, '')
+  }
+
+  if (Array.isArray(node)) {
+    const [first, ...rest] = Children.toArray(node)
+    return [stripCalloutLabel(first), ...rest]
+  }
+
+  if (isValidElement<{ children?: ReactNode }>(node)) {
+    return cloneElement(node, {
+      children: stripCalloutLabel(node.props.children),
+    })
+  }
+
+  return node
+}
+
+/**
+ * Splits a `> [!INFO]` style blockquote into its tone and body. The label may
+ * share a paragraph with the text (`> [!INFO]\n> Text`) or stand on its own.
+ */
+function parseCallout(
+  children: ReactNode
+): { tone: CalloutTone; body: ReactNode[] } | null {
+  const nodes = Children.toArray(children).filter((node) => !isBlankText(node))
+  const [first, ...rest] = nodes
+  const tone = parseCalloutLabel(extractText(first))
+
+  if (!tone) return null
+
+  const firstBody = stripCalloutLabel(first)
+  const hasFirstBody = extractText(firstBody).trim() !== ''
+
+  return { tone, body: hasFirstBody ? [firstBody, ...rest] : rest }
 }
 
 function createHeadingIdFactory() {
@@ -154,19 +198,14 @@ export function MarkdownContent({
     li: ({ children }) => <li className="marker:text-primary">{children}</li>,
     hr: () => <hr className="border-border my-8" />,
     blockquote: ({ children }) => {
-      const nodes = Array.isArray(children) ? children : [children]
-      const firstChild = nodes[0]
-      const firstChildText = extractText(firstChild).trim()
-      const calloutTone = parseCalloutLabel(firstChildText)
+      const callout = parseCallout(children)
 
-      if (calloutTone) {
-        const rest = nodes.slice(1)
-
+      if (callout) {
         return (
           <div
-            className={`my-5 rounded-xl border px-4 py-3 text-sm leading-7 md:text-base ${CALLOUT_STYLES[calloutTone]}`}
+            className={`my-5 rounded-xl border px-4 py-3 text-sm leading-7 md:text-base ${CALLOUT_STYLES[callout.tone]}`}
           >
-            {rest.length > 0 ? rest : null}
+            {callout.body.length > 0 ? callout.body : null}
           </div>
         )
       }
