@@ -49,7 +49,6 @@ describe('StandaloneTopBar', () => {
     ['/ar/imports/new', 'verifications'],
     ['/ar/settings', 'settings'],
     ['/ar/billing', 'billing'],
-    ['/ar/billing/return', 'billing'],
     // Templates is a tab of Settings now, so it has no title of its own.
     ['/ar/templates', 'dashboard'],
   ])('titles %s as %s', (pathname, title) => {
@@ -58,6 +57,17 @@ describe('StandaloneTopBar', () => {
 
     const breadcrumb = screen.getByRole('navigation', { name: 'breadcrumbs' })
     expect(breadcrumb.textContent).toBe(`workspace${title}`)
+  })
+
+  it('puts the payment return page under a link back to Billing', () => {
+    route.pathname = '/ar/billing/return'
+    render(<StandaloneTopBar onOpenNavigation={vi.fn()} />)
+
+    const breadcrumb = screen.getByRole('navigation', { name: 'breadcrumbs' })
+    expect(breadcrumb.textContent).toBe('billingpaymentStatus')
+    expect(
+      screen.getByRole('link', { name: 'billing' }).getAttribute('href')
+    ).toBe('/ar/billing')
   })
 
   it('shows both order actions once the first real order exists', () => {

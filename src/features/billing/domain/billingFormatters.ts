@@ -54,28 +54,35 @@ export function formatShortDate(
   }).format(date)
 }
 
+/**
+ * When a purchase last changed: `1 أكتوبر 2026 · 8:52 ص` /
+ * `Oct 1, 2026 · 8:52 AM`, with Western digits in both locales.
+ * It holds Arabic words, so render it in `<bdi>` rather than forcing LTR.
+ */
 export function formatBillingDate(value: string, locale: SupportedLocale) {
-  return new Intl.DateTimeFormat(locale, {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  }).format(new Date(value))
+  const date = new Date(value)
+  const tag = `${locale}-u-nu-latn`
+  const day = new Intl.DateTimeFormat(tag, {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  }).format(date)
+  const time = new Intl.DateTimeFormat(tag, {
+    hour: 'numeric',
+    minute: '2-digit',
+  }).format(date)
+  return `${day} · ${time}`
 }
 
 /**
- * Purchase references are `akd_` + 32 hex characters — far too long for a
- * table cell, and the merchant only ever uses them to match a row against a
- * receipt, so the leading bytes are enough to be unambiguous in practice.
+ * Purchase references are `akd_` + 32 hex characters, too long to read. The
+ * merchant only matches one against a receipt, so the first and last four are
+ * enough: `akd_4e1f…9b07`. Anything shorter is returned whole.
  */
 export function formatShortRef(value: string) {
-  const [prefix, ...rest] = value.split('_')
-  const body = rest.join('_')
-  return body ? `${prefix}_${body.slice(0, 7)}` : value.slice(0, 11)
-}
-
-export function formatDayAndTime(value: string, locale: SupportedLocale) {
-  const date = new Date(value)
-  return {
-    day: new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(date),
-    time: new Intl.DateTimeFormat(locale, { timeStyle: 'short' }).format(date),
-  }
+  const separator = value.indexOf('_')
+  const prefix = value.slice(0, separator + 1)
+  const body = value.slice(separator + 1)
+  if (body.length <= 9) return value
+  return `${prefix}${body.slice(0, 4)}…${body.slice(-4)}`
 }

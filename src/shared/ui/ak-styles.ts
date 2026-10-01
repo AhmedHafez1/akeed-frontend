@@ -65,6 +65,7 @@ export const akPill = cva(
       tone: {
         brand: 'bg-brand-soft text-brand-ink',
         neutral: 'bg-neutral-soft text-ink-muted',
+        info: 'bg-ak-info-soft text-ak-info',
         warning: 'bg-ak-warning-soft text-ak-warning',
         danger: 'bg-ak-danger-soft text-ak-danger',
       },
@@ -72,6 +73,8 @@ export const akPill = cva(
     defaultVariants: { tone: 'neutral' },
   }
 )
+
+export type AkPillProps = VariantProps<typeof akPill>
 
 /**
  * The ground of a radio card or tile. Checked is a brand border with an inset

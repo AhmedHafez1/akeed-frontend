@@ -89,9 +89,9 @@ function merchantPurchase(
 const merchantLedger: LedgerEntry[] = buildMerchantLedger()
 
 /**
- * A ledger wide enough to exercise the operations log: two months of mixed
- * movement, so the type/period/status filters, the pager and the derived
- * "used this month" total all have something to act on. The two named entries
+ * A ledger wide enough to exercise the usage figures: two months of mixed
+ * movement, so the derived "used this month" total and the 14-day chart both
+ * have something to act on. The two named entries
  * stay first and unchanged — they are the rows the billing page preview and
  * the Paymob return flow are read against.
  */
@@ -324,9 +324,8 @@ export async function billingFixtureRequest(
     if (history === 'dispute') purchase.disputeStatus = 'open'
     if (history === 'reconciliation') purchase.reconciliationRequired = true
     /*
-     * The operations log joins each purchase ledger entry to its summary by
-     * reference, so every generated `purchaseRef` needs one here — otherwise
-     * those rows would render without a settlement status.
+     * Each purchase ledger entry is joined to its summary by reference, so
+     * every generated `purchaseRef` needs one here.
      */
     const joined = merchantLedger
       .filter((entry) => entry.purchaseRef && entry.purchaseRef !== purchaseRef)

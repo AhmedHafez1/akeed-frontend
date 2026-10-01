@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ChevronRight, Menu } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -10,6 +11,7 @@ import {
 import { CreditBalanceChip } from '@/features/billing'
 import { useStandaloneFirstRun } from '@/features/dashboard'
 import { ManualOrderTopBarAction } from '@/features/orders'
+import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
 import { ThemeToggle } from '@/shared/theme'
 import { LocaleToggle } from './LocaleToggle'
 
@@ -24,7 +26,8 @@ interface StandaloneTopBarProps {
  * dashboard's first-order card owns Import and Confirm order, so they stay
  * hidden here (also while that is still loading, so they never flash). On
  * Billing, Pay is the page's primary action, so Confirm order steps down to
- * secondary.
+ * secondary. The payment return page sits under Billing, so its breadcrumb
+ * starts with a link back there instead of the workspace.
  */
 export function StandaloneTopBar({ onOpenNavigation }: StandaloneTopBarProps) {
   const t = useTranslations('appHeader')
@@ -42,6 +45,8 @@ export function StandaloneTopBar({ onOpenNavigation }: StandaloneTopBarProps) {
         : routeName === 'billing'
           ? t('billing')
           : t('dashboard')
+  const isPaymentReturn =
+    routeName === 'billing' && pathname.split('/')[3] === 'return'
 
   return (
     <header className="border-border bg-card/95 sticky top-0 z-30 flex min-h-14 items-center justify-between gap-3 border-b px-4 backdrop-blur sm:px-6">
@@ -58,15 +63,24 @@ export function StandaloneTopBar({ onOpenNavigation }: StandaloneTopBarProps) {
           aria-label={t('breadcrumbs')}
           className="flex min-w-0 items-center gap-2 text-sm"
         >
-          <span className="text-muted-foreground hidden sm:inline">
-            {t('workspace')}
-          </span>
+          {isPaymentReturn ? (
+            <Link
+              href={withLocale('/billing', getLocaleFromPathname(pathname))}
+              className="ak-focus text-muted-foreground hover:text-foreground hidden rounded-sm transition-colors sm:inline"
+            >
+              {breadcrumbLabel}
+            </Link>
+          ) : (
+            <span className="text-muted-foreground hidden sm:inline">
+              {t('workspace')}
+            </span>
+          )}
           <ChevronRight
             aria-hidden="true"
             className="text-muted-foreground hidden h-4 w-4 sm:block rtl:rotate-180"
           />
           <span className="text-foreground truncate font-semibold">
-            {breadcrumbLabel}
+            {isPaymentReturn ? t('paymentStatus') : breadcrumbLabel}
           </span>
         </nav>
       </div>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { coversSince, type Transaction } from './transactions'
+import { coversSince, usedThisMonth, type Transaction } from './transactions'
 
 function entryAt(createdAt: string): Transaction {
   return {
@@ -40,5 +40,43 @@ describe('coversSince', () => {
 
   it('is not covered before anything has loaded', () => {
     expect(coversSince([], false, since)).toBe(false)
+  })
+})
+
+describe('usedThisMonth', () => {
+  // Local wall-clock dates, so the suite passes in any time zone.
+  const now = new Date(2026, 9, 20, 12)
+  const used = (at: Date, quantity: number): Transaction => ({
+    ...entryAt(at.toISOString()),
+    quantity,
+  })
+
+  it('adds up the messages spent since the first of the month', () => {
+    const items = [
+      used(new Date(2026, 9, 19, 9), -3),
+      used(new Date(2026, 9, 1, 0, 0), -2),
+      used(new Date(2026, 8, 30, 23, 59), -40),
+    ]
+    expect(usedThisMonth(items, now)).toBe(5)
+  })
+
+  it('counts only consumption, not grants or reversals', () => {
+    const grant: Transaction = {
+      ...used(new Date(2026, 9, 5), 500),
+      kind: 'purchase',
+      ledgerType: 'purchase',
+    }
+    const restored: Transaction = {
+      ...used(new Date(2026, 9, 6), 1),
+      kind: 'adjustment',
+      ledgerType: 'failure_reversal',
+    }
+    expect(
+      usedThisMonth([grant, restored, used(new Date(2026, 9, 7), -4)], now)
+    ).toBe(4)
+  })
+
+  it('is zero with nothing loaded', () => {
+    expect(usedThisMonth([], now)).toBe(0)
   })
 })

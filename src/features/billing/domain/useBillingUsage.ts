@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 import type { PurchaseSummary } from './billing.types'
-import { summarize } from './transactions'
+import { usedThisMonth } from './transactions'
 import { dailyUsage, latestSuccessfulPurchase } from './usageInsights'
 import { useTransactions } from './useTransactions'
 
@@ -23,12 +23,12 @@ export type BillingUsage =
  * back past the whole window, so a half-read total never shows as the answer.
  */
 export function useBillingUsage(): BillingUsage {
-  const history = useTransactions('month')
+  const history = useTransactions()
   const { transactions, purchases } = history
 
   const figures = useMemo(
     () => ({
-      usedThisMonth: summarize(transactions).usedThisMonth,
+      usedThisMonth: usedThisMonth(transactions),
       daily: dailyUsage(transactions),
       lastPurchase: latestSuccessfulPurchase(purchases),
     }),

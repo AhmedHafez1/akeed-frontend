@@ -1060,6 +1060,7 @@
     "dashboard": "Dashboard",
     "verifications": "Confirmations",
     "billing": "Billing & credits",
+    "paymentStatus": "Payment status",
     "settings": "Settings",
     "navigationMenu": "Open navigation menu",
     "primaryNavigation": "Primary navigation",
@@ -2738,143 +2739,49 @@
       "won": "Dispute won",
       "lost": "Dispute lost"
     },
-    "actorType": {
-      "akeed_staff": "Akeed staff",
-      "meta": "Meta",
-      "paymob": "Paymob",
-      "system": "Akeed system"
-    },
-    "ledgerReason": {
-      "chargeback_reinstated": "Chargeback debt reinstated",
-      "chargeback_reversed": "Payment chargeback",
-      "delivery_failure_restored": "Credit restored after delivery failure",
-      "launch_grant": "Launch grant",
-      "message_accepted": "WhatsApp message accepted",
-      "payment_verified": "Payment verified",
-      "refund_reversed": "Purchase refund",
-      "staff_adjustment": "Account adjustment"
-    },
-    "history": {
-      "purchases": "Purchase history",
-      "purchasesDescription": "Trusted payment amounts and their latest status.",
-      "ledger": "Credit ledger",
-      "ledgerDescription": "Every posted credit movement, without recalculating your balance.",
-      "date": "Date",
-      "credits": "Credits",
-      "amount": "Amount",
-      "status": "Status",
-      "reference": "Reference",
-      "refunded": "Refunded amount",
-      "reconciliation": "Review required",
-      "balanceAfter": "Posted balance: {count}",
-      "purchaseEmpty": "No credit purchases yet.",
-      "ledgerEmpty": "No credit movements yet.",
-      "loadMore": "Load more",
-      "error": "Billing history could not be loaded. Your displayed balances were not changed.",
-      "operation": "Operation",
-      "balanceAfterColumn": "Balance after",
-      "used": "Used",
-      "posted": "Posted",
-      "kind": {
-        "purchase": "Credit purchase",
-        "usage": "Credit usage",
-        "adjustment": "Credit adjustment"
-      },
-      "empty": "No credit movements yet."
-    },
     "error": {
       "title": "Billing could not be loaded",
       "description": "We could not retrieve the trusted credit balance. Try again before taking billing action."
     },
     "return": {
-      "eyebrow": "Paymob return status",
-      "reference": "Purchase reference",
+      "credits": "Messages",
+      "amount": "Amount",
       "status": "Status",
-      "credits": "Credits",
-      "amount": "Trusted amount",
       "updated": "Last updated",
+      "reference": "Purchase reference",
       "backToBilling": "Back to billing",
+      "backToImport": "Continue import",
+      "newPurchase": "Start a new purchase",
       "refresh": "Refresh status",
       "refreshing": "Refreshing…",
-      "invalidTitle": "This purchase link is invalid",
-      "invalidDescription": "Only an Akeed purchase reference can be used here. Return to billing to select a valid purchase.",
-      "errorTitle": "Purchase status is unavailable",
-      "errorDescription": "No new purchase was created. Refresh this purchase or return safely to billing.",
-      "staleTitle": "Payment is still pending",
-      "staleDescription": "Akeed stopped automatic checks for now. You can refresh manually without creating another purchase.",
-      "reconciliationTitle": "Payment needs review",
-      "reconciliationDescription": "Akeed has stopped polling while this payment is reconciled. No action is required unless support contacts you.",
-      "statusTitle": {
-        "pending": "Confirming your payment",
-        "successful": "Credits added successfully",
-        "failed": "Payment was not completed",
-        "canceled": "Payment was canceled",
-        "expired": "Checkout expired",
-        "refunded": "Payment was refunded"
+      "successTitle": "{count, plural, one {We added <n>{value}</n> message to your balance} other {We added <n>{value}</n> messages to your balance}}",
+      "successBody": "{count, plural, one {Your balance is now <n>{value}</n> message, and new orders keep getting confirmed as usual.} other {Your balance is now <n>{value}</n> messages, and new orders keep getting confirmed as usual.}}",
+      "successBodyNoBalance": "The messages are in your balance now.",
+      "title": {
+        "pending": "Checking your payment",
+        "stale": "Still waiting for the payment to confirm",
+        "failed": "The payment didn’t go through",
+        "canceled": "The payment was canceled",
+        "expired": "This payment link expired",
+        "refunded": "This payment was refunded",
+        "reconciliation": "We’re reviewing this payment",
+        "invalid": "This payment link isn’t valid",
+        "error": "We couldn’t load the payment status"
       },
-      "statusDescription": {
-        "pending": "We are checking the canonical purchase status. Keep this page open or return later.",
-        "successful": "The verified credits are now available in your Akeed account.",
-        "failed": "No credits were added. You may return to billing and deliberately start a new purchase.",
-        "canceled": "No credits were added. You can return to billing when you are ready.",
-        "expired": "This checkout can no longer be used. Return to billing to start a new purchase.",
-        "refunded": "The purchase was refunded and the credit ledger reflects the verified outcome."
-      },
-      "backToImport": "Continue your import"
+      "body": {
+        "pending": "We’re waiting for Paymob to confirm. Keep this page open or come back later — we won’t start a new charge.",
+        "stale": "We paused automatic checks. Refresh whenever you like; we won’t start a new charge.",
+        "failed": "No credits were added to your account. You can start a new purchase whenever you’re ready.",
+        "canceled": "No credits were added to your account. You can start a new purchase whenever you’re ready.",
+        "expired": "No credits were added. Start a new purchase from the billing page.",
+        "refunded": "The amount was returned, and your balance reflects it.",
+        "reconciliation": "We’re matching this payment with Paymob. You don’t need to do anything unless support contacts you.",
+        "invalid": "This link doesn’t carry a valid purchase reference. Go back to billing.",
+        "error": "We didn’t start a new charge. Refresh the status or go back to billing."
+      }
     },
     "badge": {
       "label": "message credits"
-    },
-    "transactions": {
-      "eyebrow": "Account log",
-      "title": "Operations log",
-      "description": "Review every purchase, usage and adjustment on your message credits in one place.",
-      "back": "Back to billing & credits",
-      "summary": {
-        "purchased": "Total purchased",
-        "usedThisMonth": "Used this month",
-        "count": "Operations",
-        "balance": "Available balance"
-      },
-      "listTitle": "All operations",
-      "listDescription": "The last {count} recorded movements on this account.",
-      "filters": {
-        "typeLabel": "Operation type",
-        "all": "All operations",
-        "purchases": "Purchases",
-        "usage": "Usage",
-        "statusLabel": "Status",
-        "allStatuses": "All statuses",
-        "periodLabel": "Period",
-        "periodAll": "All time",
-        "periodThisMonth": "This month",
-        "periodLast30": "Last 30 days",
-        "periodLast90": "Last 90 days",
-        "search": "Search",
-        "searchPlaceholder": "Search by reference or operation",
-        "clear": "Clear filters"
-      },
-      "export": "Export report",
-      "showing": "Showing {from}–{to} of {total} operations",
-      "capped": "Results cover only the last {count} loaded operations.",
-      "loadMore": "Load older operations",
-      "empty": "No credit movements yet.",
-      "emptyFiltered": "No operations match the current filters.",
-      "pagination": {
-        "previous": "Previous",
-        "next": "Next",
-        "page": "Page"
-      },
-      "csv": {
-        "date": "Date",
-        "operation": "Operation",
-        "reason": "Reason",
-        "credits": "Credits",
-        "balanceAfter": "Balance after",
-        "status": "Status",
-        "reference": "Reference",
-        "filename": "operations-log"
-      }
     },
     "balanceChip": {
       "label": "Balance: {count} messages",

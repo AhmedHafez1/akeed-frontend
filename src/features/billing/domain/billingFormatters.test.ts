@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { formatMoney, formatShortDate } from './billingFormatters'
+import {
+  formatBillingDate,
+  formatMoney,
+  formatShortDate,
+  formatShortRef,
+} from './billingFormatters'
 
 const BIDI_MARK = new RegExp(`[${String.fromCharCode(0x200e, 0x200f, 0x061c)}]`)
 const ARABIC_INDIC_DIGIT = new RegExp(
@@ -40,5 +45,36 @@ describe('formatShortDate', () => {
     const lastYear = new Date(2025, 8, 12, 12).toISOString()
     expect(formatShortDate(lastYear, 'ar', now)).toBe('12 سبتمبر 2025')
     expect(formatShortDate(lastYear, 'en', now)).toBe('Sep 12, 2025')
+  })
+})
+
+describe('formatBillingDate', () => {
+  // Local wall-clock time, so the suite passes in any time zone.
+  const updated = new Date(2026, 9, 1, 8, 52).toISOString()
+
+  it('writes the day, then the time, in each locale', () => {
+    expect(formatBillingDate(updated, 'ar')).toBe('1 أكتوبر 2026 · 8:52 ص')
+    expect(formatBillingDate(updated, 'en')).toBe('Oct 1, 2026 · 8:52 AM')
+  })
+
+  it('uses Western digits in Arabic', () => {
+    expect(formatBillingDate(updated, 'ar')).not.toMatch(ARABIC_INDIC_DIGIT)
+  })
+})
+
+describe('formatShortRef', () => {
+  it('keeps the prefix with the first and last four characters', () => {
+    expect(formatShortRef('akd_4e1f0123456789abcdef012345679b07')).toBe(
+      'akd_4e1f…9b07'
+    )
+  })
+
+  it('returns a reference whole when there is nothing to save', () => {
+    expect(formatShortRef('akd_4e1f9b07')).toBe('akd_4e1f9b07')
+    expect(formatShortRef('4e1f9b07')).toBe('4e1f9b07')
+  })
+
+  it('shortens a reference that has no prefix', () => {
+    expect(formatShortRef('0123456789abcdef')).toBe('0123…cdef')
   })
 })
