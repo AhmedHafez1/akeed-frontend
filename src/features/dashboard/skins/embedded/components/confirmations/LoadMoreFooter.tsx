@@ -21,6 +21,10 @@ interface LoadMoreFooterProps {
  * on what sits around the box, never on the box's own height, so it settles in
  * one pass. Without `ResizeObserver` the CSS fallback applies.
  */
+// Leaves 30px of breathing room under the box on large screens, where it
+// still scrolls inside its own bounded height (see `.akeed-embedded-scroll`).
+const FIT_MARGIN_PX = 30
+
 function useFitToWindow(boxRef: React.RefObject<HTMLDivElement | null>) {
   useEffect(() => {
     const box = boxRef.current
@@ -35,7 +39,8 @@ function useFitToWindow(boxRef: React.RefObject<HTMLDivElement | null>) {
         const boxRect = box.getBoundingClientRect()
         const above = boxRect.top + window.scrollY
         const below = content.getBoundingClientRect().bottom - boxRect.bottom
-        const room = Math.floor(window.innerHeight - above - below)
+        const room =
+          Math.floor(window.innerHeight - above - below) - FIT_MARGIN_PX
         box.style.setProperty('--akeed-scroll-fit', `${room}px`)
       })
     }

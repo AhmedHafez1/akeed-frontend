@@ -177,7 +177,8 @@ const HEADINGS = [
  * search already use most of the screen, so a capped box there would be a
  * second, small scroller inside the page.
  */
-const SCROLL_AREA = 'md:max-h-[calc(100dvh-20rem)] md:min-h-64 md:overflow-auto'
+const SCROLL_AREA =
+  'md:max-h-[calc(100dvh-19rem+10px)] md:min-h-64 md:overflow-auto'
 
 /** Tailwind's `md` breakpoint, where the table replaces the cards. */
 const TABLE_QUERY = '(min-width: 48rem)'

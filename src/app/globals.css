@@ -714,7 +714,10 @@
 }
 
 .akeed-embedded-scroll {
-  max-height: min(var(--akeed-scroll-fit, calc(100dvh - 20rem)), 60rem);
+  max-height: min(
+    var(--akeed-scroll-fit, calc(100dvh - 20rem - 30px)),
+    calc(60rem - 30px)
+  );
   min-height: 16rem;
   overflow: auto;
 }
@@ -737,6 +740,18 @@
 @media (max-width: 48rem) {
   .akeed-embedded-content {
     padding-inline: 0.75rem;
+  }
+
+  /*
+   * Below md the table gives way to the card list (`ConfirmationsEmbedded`),
+   * which has no sticky header to protect, so the bounded scroll box is no
+   * longer worth a second, nested scrollbar on a phone. Let the list flow
+   * and the page itself scroll instead.
+   */
+  .akeed-embedded-scroll {
+    max-height: none;
+    min-height: 0;
+    overflow: visible;
   }
 }
 
