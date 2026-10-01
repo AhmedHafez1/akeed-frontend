@@ -15,7 +15,7 @@ import { CreditSlider } from './CreditSlider'
 /**
  * The ink panel: the one focal point of the pricing section.
  *
- * Dark on an otherwise white band, reusing the header's `slate-950`, so the
+ * Dark on an otherwise white band, reusing the header's `ink-panel`, so the
  * price reads as the section's single statement instead of one card among
  * five. Emerald is the only accent, and the only decoration is a corner glow.
  */
@@ -30,7 +30,7 @@ export function CreditPriceCard() {
   )
 
   return (
-    <div className="relative isolate overflow-hidden bg-slate-950 p-8 sm:p-10 lg:p-12">
+    <div className="bg-ink-panel relative isolate overflow-hidden p-8 sm:p-10 lg:p-12">
       <div
         aria-hidden
         className="pointer-events-none absolute -end-24 -top-24 -z-10 h-72 w-72 rounded-full bg-emerald-500/25 blur-3xl"

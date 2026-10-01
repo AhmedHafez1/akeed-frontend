@@ -132,6 +132,13 @@
   /* The logo mint: the save bar's button and the preview's logo disc. */
   --mint: #19b884;
   --mint-foreground: #0f1720;
+  /*
+   * Ink surfaces: the marketing header, footer and pricing panel, and the
+   * phone mockup's body. Dark in both themes; only the hue follows the theme,
+   * so they sit in the dark theme's green-grey instead of navy.
+   */
+  --ink-panel: oklch(12.9% 0.042 264.695); /* slate-950 */
+  --ink-device: oklch(20.8% 0.042 265.755); /* slate-900 */
   /* The switch knob at rest; when on it reads `brand-foreground`. */
   --ak-knob: #ffffff;
   /* WhatsApp's own quick-reply blue, inside the message preview only. */
@@ -272,6 +279,8 @@
   --inverse: #ecf1ef;
   --inverse-foreground: #0f1720;
   --shadow-ak-card: 0 1px 2px #00000066;
+  --ink-panel: var(--surface-raised); /* as the app's top bar and sidebar */
+  --ink-device: var(--neutral-soft);
   --ak-knob: #ecf1ef;
   --wa-action: #53bdeb;
   --shadow-ak-segment: 0 1px 2px #00000066, 0 0 0 1px #ffffff0f;
@@ -370,6 +379,8 @@
   --shadow-ak-card: var(--shadow-ak-card);
   --color-mint: var(--mint);
   --color-mint-foreground: var(--mint-foreground);
+  --color-ink-panel: var(--ink-panel);
+  --color-ink-device: var(--ink-device);
   --color-ak-knob: var(--ak-knob);
   --color-wa-action: var(--wa-action);
   --shadow-ak-segment: var(--shadow-ak-segment);

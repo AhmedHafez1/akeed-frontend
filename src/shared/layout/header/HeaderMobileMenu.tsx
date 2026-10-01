@@ -49,7 +49,7 @@ export function HeaderMobileMenu({
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.3 }}
-          className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-white/10 bg-slate-950/96 backdrop-blur-xl lg:hidden"
+          className="bg-ink-panel/96 max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-white/10 backdrop-blur-xl lg:hidden"
         >
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <nav className="space-y-1 py-6">

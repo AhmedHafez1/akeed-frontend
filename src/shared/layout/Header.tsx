@@ -30,8 +30,8 @@ export function Header() {
       <header
         className={`fixed top-0 z-50 w-full border-b transition-[background-color,border-color,box-shadow] duration-300 ${
           isScrolled
-            ? 'shadow-overlay border-white/10 bg-slate-950/95 backdrop-blur-md'
-            : 'border-transparent bg-slate-950'
+            ? 'shadow-overlay bg-ink-panel/95 border-white/10 backdrop-blur-md'
+            : 'bg-ink-panel border-transparent'
         }`}
       >
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10">
