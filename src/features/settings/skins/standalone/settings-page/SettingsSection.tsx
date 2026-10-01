@@ -43,6 +43,10 @@ export function AnnotatedSection({
   )
 }
 
+/** The name of one row of a settings card: 15px, between body and section. */
+export const settingsRowTitle =
+  'text-ink text-[0.9375rem] leading-6 font-semibold'
+
 /** The padding every row of a settings card shares. */
 export const settingsRowPadding = 'px-4 py-4 sm:px-6 sm:py-5'
 
@@ -77,7 +81,7 @@ export function SwitchSetting({
         )}
       >
         <div className="min-w-0">
-          <h3 id={titleId} className="text-ak-body text-ink font-semibold">
+          <h3 id={titleId} className={settingsRowTitle}>
             {title}
           </h3>
           <p id={helpId} className="text-ak-caption text-ink-muted mt-0.5">

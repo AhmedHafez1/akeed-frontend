@@ -30,14 +30,45 @@ function AkSegmentedInner<T extends string>(
     size = 'md',
     disabled = false,
     className,
+    onKeyDown,
     ...props
   }: AkSegmentedProps<T>,
   ref: React.ForwardedRef<HTMLDivElement>
 ) {
+  // With nothing pressed, the first option keeps the group reachable.
+  const tabStop = options.some((option) => option.value === value)
+    ? value
+    : options[0]?.value
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    onKeyDown?.(event)
+    if (event.defaultPrevented) return
+    const buttons = Array.from(
+      event.currentTarget.querySelectorAll<HTMLButtonElement>(
+        'button:not(:disabled)'
+      )
+    )
+    const index = buttons.indexOf(document.activeElement as HTMLButtonElement)
+    if (index < 0) return
+    const rtl = getComputedStyle(event.currentTarget).direction === 'rtl'
+    const targets: Record<string, number> = {
+      [rtl ? 'ArrowLeft' : 'ArrowRight']: (index + 1) % buttons.length,
+      [rtl ? 'ArrowRight' : 'ArrowLeft']:
+        (index - 1 + buttons.length) % buttons.length,
+      Home: 0,
+      End: buttons.length - 1,
+    }
+    const next = targets[event.key]
+    if (next === undefined) return
+    event.preventDefault()
+    buttons[next].focus()
+  }
+
   return (
     <div
       ref={ref}
       role="group"
+      onKeyDown={handleKeyDown}
       className={cn(
         'bg-neutral-soft rounded-ak-control inline-flex flex-wrap gap-0.5 p-0.75',
         className
@@ -51,6 +82,7 @@ function AkSegmentedInner<T extends string>(
             key={option.value}
             type="button"
             aria-pressed={pressed}
+            tabIndex={option.value === tabStop ? 0 : -1}
             disabled={disabled}
             onClick={() => onValueChange(option.value)}
             className={cn(
@@ -73,8 +105,10 @@ function AkSegmentedInner<T extends string>(
 
 /**
  * A short set of exclusive choices as toggle buttons (`aria-pressed`) in a
- * sunken track: the preview language, a delay preset. Every option stays in
- * the tab order, as toggle buttons do.
+ * sunken track: the preview language, a delay preset.
+ * One tab stop for the group (the pressed option); the arrow keys, following
+ * the writing direction, and Home / End move focus between options, and Space
+ * or Enter picks the focused one.
  */
 export const AkSegmented = React.forwardRef(AkSegmentedInner) as (<
   T extends string,

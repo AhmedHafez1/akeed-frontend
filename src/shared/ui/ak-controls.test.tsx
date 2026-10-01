@@ -67,6 +67,67 @@ describe('AkSegmented', () => {
     fireEvent.click(english)
     expect(onValueChange).toHaveBeenCalledWith('en')
   })
+
+  it.each([
+    ['rtl', 'ArrowLeft', 'ArrowRight'],
+    ['ltr', 'ArrowRight', 'ArrowLeft'],
+  ] as const)(
+    'is one tab stop whose arrows follow the %s reading direction',
+    (direction, forward, backward) => {
+      const onValueChange = vi.fn()
+      render(
+        // jsdom does not inherit `direction`, so it is set on the group itself.
+        <AkSegmented
+          aria-label="مدة انتظار التذكير"
+          style={{ direction }}
+          value="6"
+          onValueChange={onValueChange}
+          options={[
+            { value: '2', label: '2 س' },
+            { value: '6', label: '6 س' },
+            { value: '12', label: '12 س' },
+          ]}
+        />
+      )
+      const group = screen.getByRole('group')
+      const [two, six, twelve] = screen.getAllByRole('button')
+      expect([two, six, twelve].map((button) => button.tabIndex)).toEqual([
+        -1, 0, -1,
+      ])
+
+      six.focus()
+      fireEvent.keyDown(group, { key: forward })
+      expect(document.activeElement).toBe(twelve)
+      fireEvent.keyDown(group, { key: forward })
+      expect(document.activeElement).toBe(two)
+      fireEvent.keyDown(group, { key: backward })
+      expect(document.activeElement).toBe(twelve)
+      fireEvent.keyDown(group, { key: 'Home' })
+      expect(document.activeElement).toBe(two)
+      fireEvent.keyDown(group, { key: 'End' })
+      expect(document.activeElement).toBe(twelve)
+      // Moving focus picks nothing; Space or Enter does (a native click).
+      expect(onValueChange).not.toHaveBeenCalled()
+    }
+  )
+
+  it('keeps the group reachable when no option is pressed', () => {
+    render(
+      <AkSegmented
+        aria-label="x"
+        value="none"
+        onValueChange={() => undefined}
+        options={[
+          { value: 'a', label: 'A' },
+          { value: 'b', label: 'B' },
+        ]}
+      />
+    )
+
+    expect(
+      screen.getAllByRole('button').map((button) => button.tabIndex)
+    ).toEqual([0, -1])
+  })
 })
 
 describe('AkSelect', () => {

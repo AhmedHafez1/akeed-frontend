@@ -37,9 +37,15 @@ import {
   firstRunFetch,
   isFirstRunFixture,
 } from './first-run/firstRunFixture'
+import {
+  isSettingsBillingFixture,
+  settingsBillingApi,
+  settingsBillingFetch,
+} from './settingsBillingFixture'
 
 export function fetchWithAuth(url: string, options: RequestInit = {}) {
   if (isFirstRunFixture()) return firstRunFetch(url, options)
+  if (isSettingsBillingFixture()) return settingsBillingFetch(url, options)
   if (url.startsWith('/api/onboarding/'))
     return onboardingFixtureRequest(url, options)
   if (
@@ -290,8 +296,14 @@ export function uploadWithAuth(
 }
 
 export const api = {
+  async patch<T>(url: string, data?: unknown): Promise<T> {
+    if (isSettingsBillingFixture())
+      return settingsBillingApi<T>('PATCH', url, data)
+    throw new Error(`Blocked fixture PATCH: ${url}`)
+  },
   async get<T>(url: string): Promise<T> {
     if (isFirstRunFixture()) return firstRunApiGet<T>(url)
+    if (isSettingsBillingFixture()) return settingsBillingApi<T>('GET', url)
     if (isEmbeddedDashboardFixture())
       return embeddedDashboardRequest<T>('GET', url)
     if (isOrderSyncFixture()) return orderSyncRequest<T>('GET', url)

@@ -21,7 +21,7 @@ import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
 import { akButton, akCard } from '@/shared/ui'
 import { MessageTab } from './MessageTab'
-import { SettingsSaveBar } from './SettingsSaveBar'
+import { SettingsSaveBar, settingsSaveBarClearance } from './SettingsSaveBar'
 import { SettingsStandaloneSkeleton } from './SettingsStandaloneSkeleton'
 import { StoreTab } from './StoreTab'
 import {
@@ -34,15 +34,22 @@ import { TimingTab } from './TimingTab'
 function PageShell({
   title,
   subtitle,
+  hasSaveBar = false,
   children,
 }: {
   title: string
   subtitle: string
+  /** Leaves room under the last card for the fixed save bar. */
+  hasSaveBar?: boolean
   children: ReactNode
 }) {
   return (
-    // The bottom padding keeps the last card clear of the save bar.
-    <div className="mx-auto w-full max-w-295 space-y-6 pt-2 pb-36">
+    <div
+      className={cn(
+        'mx-auto w-full max-w-295 space-y-6 pt-2',
+        hasSaveBar ? settingsSaveBarClearance : 'pb-8'
+      )}
+    >
       <header className="space-y-1">
         <h1 className="text-ak-title text-ink">{title}</h1>
         <p className="text-ak-body text-ink-muted">{subtitle}</p>
@@ -161,8 +168,14 @@ export function SettingsStandalonePage() {
     model.dirtyTabs.has(tab)
   ).map((tab) => labels[tab])
 
+  const showSaveBar = model.isDirty && !readOnly
+
   return (
-    <PageShell title={t('title')} subtitle={t('subtitle')}>
+    <PageShell
+      title={t('title')}
+      subtitle={t('subtitle')}
+      hasSaveBar={showSaveBar}
+    >
       <SettingsTabs
         label={t('title')}
         active={activeTab}
@@ -218,7 +231,7 @@ export function SettingsStandalonePage() {
         )}
       </div>
 
-      {model.isDirty && !readOnly && (
+      {showSaveBar && (
         <SettingsSaveBar
           label={t('saveBar.label')}
           message={

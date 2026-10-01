@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, type KeyboardEvent } from 'react'
+import type { KeyboardEvent } from 'react'
 import {
   STANDALONE_SETTINGS_TABS,
   type StandaloneSettingsTabId,
@@ -35,11 +35,16 @@ export function SettingsTabs({
   unsavedLabel,
   onSelect,
 }: SettingsTabsProps) {
-  const listRef = useRef<HTMLDivElement>(null)
-
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     const count = STANDALONE_SETTINGS_TABS.length
-    const index = STANDALONE_SETTINGS_TABS.indexOf(active)
+    const tabs = Array.from(
+      event.currentTarget.querySelectorAll<HTMLButtonElement>('[role="tab"]')
+    )
+    // From the focused tab, not the selected one: the selection follows the
+    // URL, which can still be catching up with the previous key press.
+    const focused = tabs.indexOf(document.activeElement as HTMLButtonElement)
+    const index =
+      focused >= 0 ? focused : STANDALONE_SETTINGS_TABS.indexOf(active)
     const rtl = getComputedStyle(event.currentTarget).direction === 'rtl'
     const targets: Record<string, number> = {
       [rtl ? 'ArrowLeft' : 'ArrowRight']: (index + 1) % count,
@@ -51,9 +56,7 @@ export function SettingsTabs({
     if (next === undefined) return
     event.preventDefault()
     onSelect(STANDALONE_SETTINGS_TABS[next])
-    listRef.current
-      ?.querySelectorAll<HTMLButtonElement>('[role="tab"]')
-      [next]?.focus()
+    tabs[next]?.focus()
   }
 
   return (
@@ -65,7 +68,6 @@ export function SettingsTabs({
       />
       {/* The padding gives the focus ring room inside the scroll box. */}
       <div
-        ref={listRef}
         role="tablist"
         aria-label={label}
         onKeyDown={onKeyDown}

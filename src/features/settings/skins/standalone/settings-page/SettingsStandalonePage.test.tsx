@@ -140,6 +140,25 @@ describe('SettingsStandalonePage tabs', () => {
     expect(document.activeElement).toBe(tab('المتجر'))
   })
 
+  it('steps from the focused tab while the URL has not caught up', async () => {
+    renderPage()
+    await storeNameInput()
+    const tablist = screen.getByRole('tablist')
+    // jsdom does not inherit `direction`, so it is set on the list itself.
+    tablist.style.direction = 'rtl'
+    tab('الرسالة').focus()
+
+    // In Arabic the left arrow moves forward. `?tab=` stays on Message.
+    fireEvent.keyDown(tablist, { key: 'ArrowLeft' })
+    fireEvent.keyDown(tablist, { key: 'ArrowLeft' })
+
+    expect(nav.push.mock.calls.map(([href]) => href)).toEqual([
+      '/ar/settings?tab=timing',
+      '/ar/settings?tab=store',
+    ])
+    expect(document.activeElement).toBe(tab('المتجر'))
+  })
+
   it.each([
     [{ section: 'automation' }, 'timing'],
     [{ section: 'general' }, 'message'],
@@ -192,6 +211,19 @@ describe('SettingsStandalonePage unsaved changes', () => {
       within(tab(/الرسالة/)).queryByText(copy.page.unsavedShort)
     ).toBeNull()
     expect(input.value).toBe('Togo_Test_A')
+  })
+
+  it('leaves room under the last card only while the save bar shows', async () => {
+    const { container } = renderPage()
+    const input = await storeNameInput()
+    const page = container.firstElementChild as HTMLElement
+    expect(page.className).toContain('pb-8')
+
+    fireEvent.change(input, { target: { value: 'متجر نور' } })
+
+    expect(page.className).toContain('pb-44')
+    expect(page.className).toContain('sm:pb-36')
+    expect(page.className).not.toContain('pb-8')
   })
 
   it('names the tabs when more than one holds changes', async () => {

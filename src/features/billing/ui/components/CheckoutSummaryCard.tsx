@@ -74,7 +74,7 @@ export function CheckoutSummaryCard({ state }: CheckoutSummaryCardProps) {
           </div>
           <div className="border-line mt-1.5 flex items-baseline justify-between gap-3 border-t pt-3.5">
             <dt className="font-semibold">{t('total')}</dt>
-            <dd className="text-ak-kpi">
+            <dd className="text-[1.75rem] leading-9 font-semibold">
               {isQuantityValid ? (
                 <bdi className="tabular-nums">{total}</bdi>
               ) : (

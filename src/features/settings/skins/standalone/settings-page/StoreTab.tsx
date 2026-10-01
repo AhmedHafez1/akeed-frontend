@@ -12,6 +12,7 @@ import {
   AnnotatedSection,
   AnnotatedSections,
   settingsRowPadding,
+  settingsRowTitle,
   SwitchSetting,
 } from './SettingsSection'
 
@@ -67,7 +68,7 @@ function ConnectionId({ identity }: { identity: string }) {
         </span>
         <code
           dir="ltr"
-          className="bg-neutral-soft text-ink text-ak-caption rounded-md px-1.5 py-px font-mono break-all tabular-nums"
+          className="bg-neutral-soft text-ink text-ak-label rounded-md px-1.5 py-px font-mono font-normal break-all tabular-nums"
         >
           {identity}
         </code>
@@ -115,9 +116,7 @@ export function StoreTab({ model, data, readOnly }: StoreTabProps) {
               <FileText aria-hidden="true" className="size-4.5" />
             </span>
             <div className="min-w-0">
-              <h3 className="text-ak-body text-ink font-semibold">
-                {sourceName}
-              </h3>
+              <h3 className={settingsRowTitle}>{sourceName}</h3>
               <p className="text-ak-caption text-ink-muted mt-0.5">
                 {t('sourceHelp')}
               </p>
