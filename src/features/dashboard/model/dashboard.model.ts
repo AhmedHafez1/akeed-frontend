@@ -289,6 +289,8 @@ export type DashboardOverview = {
     read: FunnelStep
     replied: FunnelStep
     confirmed: number
+    /** Merchant manual confirmations, including failed sends. Absent on older payloads. */
+    manually_confirmed?: number
     customer_canceled: number
     no_reply_yet: number
   }

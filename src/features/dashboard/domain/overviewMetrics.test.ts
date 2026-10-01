@@ -2,20 +2,20 @@ import { describe, expect, it } from 'vitest'
 import type { DashboardOverview } from '../model/dashboard.model'
 import { manualConfirmationsAfterSend } from './overviewMetrics'
 
-function overview(rateConfirmed: number, flowConfirmed: number) {
+function overview(manuallyConfirmed?: number) {
   return {
-    kpis: { confirmation_rate: { confirmed: rateConfirmed } },
-    funnel: { confirmed: flowConfirmed },
-  } as unknown as Pick<DashboardOverview, 'kpis' | 'funnel'>
+    funnel: { manually_confirmed: manuallyConfirmed },
+  } as unknown as Pick<DashboardOverview, 'funnel'>
 }
 
 describe('manualConfirmationsAfterSend', () => {
-  it('is the gap between confirmed-after-send and customer replies', () => {
-    expect(manualConfirmationsAfterSend(overview(17, 15))).toBe(2)
-    expect(manualConfirmationsAfterSend(overview(15, 15))).toBe(0)
+  it('reads the backend manual confirmation count', () => {
+    expect(manualConfirmationsAfterSend(overview(8))).toBe(8)
+    expect(manualConfirmationsAfterSend(overview(0))).toBe(0)
   })
 
-  it('never goes negative', () => {
-    expect(manualConfirmationsAfterSend(overview(3, 5))).toBe(0)
+  it('is zero when the payload lacks the field or it is negative', () => {
+    expect(manualConfirmationsAfterSend(overview())).toBe(0)
+    expect(manualConfirmationsAfterSend(overview(-2))).toBe(0)
   })
 })
