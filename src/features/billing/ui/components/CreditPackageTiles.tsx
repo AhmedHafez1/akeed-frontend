@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
+import { akChoiceSurface, AkChoiceGroup } from '@/shared/ui'
 import { formatCredits, formatMoney } from '../../domain/billingFormatters'
 import type { CreditPackage } from '../../domain/creditPackages'
 
@@ -14,6 +15,10 @@ interface CreditPackageTilesProps {
   onSelect: (credits: number) => void
 }
 
+/**
+ * The preset amounts as radio tiles. A typed amount that is not a preset
+ * leaves none checked; the first tile then keeps the group's tab stop.
+ */
 export function CreditPackageTiles({
   packages,
   selected,
@@ -21,55 +26,55 @@ export function CreditPackageTiles({
   disabled,
   onSelect,
 }: CreditPackageTilesProps) {
-  const t = useTranslations('billing')
+  const t = useTranslations('billing.purchase')
   const { locale } = useLocaleInfo()
 
   if (packages.length === 0) return null
 
   return (
-    <div
-      role="radiogroup"
-      aria-label={t('packages.stepLabel')}
-      className="grid grid-cols-2 gap-3 lg:grid-cols-4"
+    <AkChoiceGroup
+      aria-label={t('chooseAmount')}
+      className="grid-cols-2 gap-3 lg:grid-cols-4"
     >
-      {packages.map((item) => {
-        const isSelected = item.credits === selected
+      {packages.map((item, index) => {
+        const checked = item.credits === selected
+        const isTabStop = checked || (selected === null && index === 0)
         return (
           <button
             key={item.credits}
             type="button"
             role="radio"
-            aria-checked={isSelected}
+            aria-checked={checked}
+            tabIndex={isTabStop ? 0 : -1}
             disabled={disabled}
             onClick={() => onSelect(item.credits)}
             className={cn(
-              'rounded-card focus-visible:ring-ring relative border p-4 text-center transition-[border-color,box-shadow] focus-visible:ring-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60',
-              isSelected
-                ? 'border-primary ring-primary ring-1'
-                : 'border-border hover:border-primary-border'
+              'ak-focus rounded-ak-card text-ink relative flex cursor-pointer flex-col items-start gap-0.5 border p-4 text-start disabled:cursor-not-allowed disabled:opacity-60 motion-safe:transition-colors motion-safe:duration-150',
+              akChoiceSurface(checked)
             )}
           >
-            {isSelected && (
-              <span
-                className="bg-primary absolute end-3 top-3 size-2 rounded-full"
-                aria-hidden
-              />
-            )}
+            <span
+              aria-hidden="true"
+              className={cn(
+                'bg-surface-raised absolute end-3.5 top-3.5 grid size-4.5 place-items-center rounded-full border-[1.5px]',
+                checked ? 'border-brand' : 'border-control-border'
+              )}
+            >
+              {checked && <span className="bg-brand size-2 rounded-full" />}
+            </span>
             <span
               dir="ltr"
-              className="text-foreground block text-2xl font-bold tabular-nums"
+              className="text-[1.375rem] leading-7.5 font-semibold tabular-nums"
             >
               {formatCredits(item.credits, locale)}
             </span>
-            <span className="text-muted-foreground text-caption block">
-              {t('packages.unit')}
-            </span>
-            <span className="text-foreground mt-2 block font-semibold">
+            <span className="text-ak-caption text-ink-muted">{t('unit')}</span>
+            <bdi className="text-ak-caption mt-2 font-semibold tabular-nums">
               {formatMoney(item.totalMinor, currency, locale)}
-            </span>
+            </bdi>
           </button>
         )
       })}
-    </div>
+    </AkChoiceGroup>
   )
 }

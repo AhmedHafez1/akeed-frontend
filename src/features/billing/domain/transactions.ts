@@ -202,20 +202,20 @@ export function summarize(
 }
 
 /**
- * True when the loaded window definitely covers the whole current month, i.e.
- * every consumption entry in it has been seen. Without this check the month
- * total would silently under-report as soon as the drain hit its cap.
+ * True when the loaded rows definitely reach back to `since`, i.e. every
+ * entry from then on has been seen: either the feed is exhausted, or its
+ * oldest loaded row is older still. Without this check a usage total would
+ * silently under-report as soon as the drain stopped short.
  */
-export function coversCurrentMonth(
+export function coversSince(
   items: Transaction[],
-  isComplete: boolean,
-  now: Date = new Date()
+  isExhausted: boolean,
+  since: number
 ): boolean {
-  if (isComplete) return true
+  if (isExhausted) return true
   const oldest = items.at(-1)
   if (!oldest) return false
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime()
-  return Date.parse(oldest.createdAt) < monthStart
+  return Date.parse(oldest.createdAt) < since
 }
 
 function csvCell(value: string) {

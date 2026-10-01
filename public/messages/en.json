@@ -2619,11 +2619,32 @@
     "billingLink": "Open billing & credits"
   },
   "billing": {
-    "eyebrow": "Account billing",
     "title": "Billing & credits",
+    "subtitle": "You only pay for the confirmation messages we send. No monthly plan.",
     "description": "See the credits available for WhatsApp order confirmations, buy more securely, and review every account movement.",
     "threshold": "Low-balance alert at {count} credits",
     "retry": "Try again",
+    "balance": {
+      "available": "Available balance",
+      "unit": "messages",
+      "state": {
+        "healthy": "Healthy balance",
+        "low": "Running low",
+        "zero": "Out of credits",
+        "debt": "Out of credits",
+        "suspended": "Billing suspended",
+        "notProvisioned": "Not set up"
+      },
+      "runway": "{count, plural, =0 {Lasts less than a day at this month’s pace.} one {Lasts about 1 day at this month’s pace.} other {Lasts about {days} days at this month’s pace.}}",
+      "runwayPaused": "New orders aren’t being confirmed until you top up.",
+      "chartLabel": "Last 14 days",
+      "chartFrom": "14 days ago",
+      "chartToday": "Today",
+      "usedThisMonth": "Used this month",
+      "lastPurchase": "Last purchase",
+      "noPurchase": "No purchases yet",
+      "unitPrice": "Price per message"
+    },
     "status": {
       "active": "Active",
       "suspended": "Suspended",
@@ -2647,18 +2668,16 @@
       "debtOutstanding": "Balance to settle"
     },
     "alerts": {
-      "healthyTitle": "Your credit balance is healthy",
-      "healthyDescription": "New order confirmations can continue normally.",
-      "lowTitle": "Only {count} credits remain",
-      "lowDescription": "Top up before reaching the {threshold}-credit threshold to avoid interrupted confirmations.",
-      "zeroTitle": "No credits are available",
-      "zeroDescription": "New messages are blocked until credits are added. Your history remains available.",
-      "debtTitle": "{count} credits are outstanding",
-      "debtDescription": "New messages remain blocked until the outstanding balance is settled.",
+      "lowTitle": "{count, plural, one {Only 1 message left} other {Only {formatted} messages left}}",
+      "lowDescription": "Top up before you run out so new orders keep getting confirmed.",
+      "zeroTitle": "You’re out of message credits",
+      "zeroDescription": "We aren’t confirming new orders right now. Your orders and data are safe, and messages resume as soon as you top up.",
+      "debtTitle": "{count, plural, one {You owe 1 message} other {You owe {formatted} messages}}",
+      "debtDescription": "We aren’t confirming new orders until this is settled. Top up to clear it and resume messages.",
       "suspendedTitle": "Billing is suspended",
-      "suspendedDescription": "Purchases and message sends are unavailable. Contact Akeed support for help.",
-      "notProvisionedTitle": "Credit billing is not provisioned",
-      "notProvisionedDescription": "History remains available while Akeed finishes setting up this account."
+      "suspendedDescription": "Purchases and message sends are unavailable. Contact Akeed support.",
+      "notProvisionedTitle": "Credit billing isn’t set up yet",
+      "notProvisionedDescription": "We’re finishing your account setup. Purchases and message sends are unavailable until then."
     },
     "grant": {
       "title": "Launch credit grant",
@@ -2666,32 +2685,43 @@
       "pending": "Your one-time {count}-credit grant is posted when your account is created."
     },
     "purchase": {
-      "title": "Buy message credits",
-      "description": "Choose a quantity, confirm the trusted server total, then continue to Paymob.",
-      "disabled": "Credit purchases are currently disabled. Existing billing history remains available.",
-      "readOnly": "You have read-only billing access. An owner or admin can start a purchase.",
+      "title": "Buy credits",
+      "description": "Choose how many messages. One flat price per message, and credits never expire.",
       "quantity": "Credit quantity",
-      "decrease": "Decrease credit quantity",
-      "increase": "Increase credit quantity",
-      "rules": "Choose {min}–{max} credits in steps of {step}.",
+      "decrease": "Decrease amount",
+      "increase": "Increase amount",
+      "rules": "{min} to {max} messages, in steps of {step}.",
       "credits": "Credits",
-      "unitPrice": "Price per credit",
+      "unitPrice": "Price per message",
       "total": "Total",
-      "paymobTitle": "Secure checkout with Paymob",
-      "paymobDescription": "Pay with a card or Vodafone Cash on Paymob’s hosted checkout. Akeed never asks for or stores your payment details.",
       "submit": "Create secure checkout",
       "creating": "Creating checkout…",
       "continuePaymob": "Continue to Paymob",
       "startNew": "Start new purchase",
-      "pendingTitle": "This purchase needs a status check",
-      "pendingDescription": "Akeed kept the same purchase reference. Check its canonical status before starting another purchase.",
+      "pendingTitle": "A purchase is still being checked",
+      "pendingDescription": "Check its status before starting a new one so you don’t pay twice.",
       "viewStatus": "View purchase status",
       "errors": {
-        "whole": "Enter a whole number of credits.",
-        "range": "Choose between {min} and {max} credits.",
-        "step": "Choose a quantity in steps of {step}.",
+        "whole": "Enter a whole number of messages.",
+        "range": "Choose between {min} and {max}.",
+        "step": "Choose a multiple of {step}.",
         "network": "The checkout request could not be completed. Retry safely with the same purchase attempt.",
         "api": "Checkout could not be created. Review the quantity or try again."
+      },
+      "chooseAmount": "Choose an amount",
+      "customLabel": "Or enter another amount",
+      "unit": "messages",
+      "summaryTitle": "Order summary",
+      "messages": "Messages",
+      "balanceAfter": "Balance after purchase: <b>{count}</b> messages",
+      "pay": "Pay <amount>{value}</amount>",
+      "payEmpty": "Pay",
+      "paymobNote": "You finish paying on Paymob’s secure page by card or Vodafone Cash. Akeed never sees or stores your payment details.",
+      "blocked": {
+        "disabled": "Credit purchases are switched off right now.",
+        "suspended": "Purchases are unavailable while billing is suspended.",
+        "notProvisioned": "Purchases are unavailable until we finish setting up your account.",
+        "readOnly": "You have view-only access. An owner or admin can buy credits."
       }
     },
     "purchaseStatus": {
@@ -2741,10 +2771,6 @@
       "ledgerEmpty": "No credit movements yet.",
       "loadMore": "Load more",
       "error": "Billing history could not be loaded. Your displayed balances were not changed.",
-      "recentTitle": "Recent activity",
-      "recentDescription": "A quick look at the latest movements on your balance.",
-      "viewLog": "View operations log",
-      "openFullLog": "Open the full log",
       "operation": "Operation",
       "balanceAfterColumn": "Balance after",
       "used": "Used",
@@ -2796,22 +2822,8 @@
       },
       "backToImport": "Continue your import"
     },
-    "hero": {
-      "available": "Available balance",
-      "unit": "message credits",
-      "equivalent": "≈ {amount}",
-      "ready": "ready for new messages",
-      "buyCredits": "Buy credits"
-    },
     "badge": {
       "label": "message credits"
-    },
-    "packages": {
-      "stepLabel": "Choose an amount",
-      "customLabel": "or enter the amount you need",
-      "unit": "message credits",
-      "totalLabel": "Confirmed total",
-      "pay": "Continue to payment"
     },
     "transactions": {
       "eyebrow": "Account log",

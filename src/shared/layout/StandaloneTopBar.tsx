@@ -22,7 +22,9 @@ interface StandaloneTopBarProps {
  * controls on the end. Below 640px the actions are 44px icons and theme and
  * language move into the navigation menu. Until the first real order the
  * dashboard's first-order card owns Import and Confirm order, so they stay
- * hidden here (also while that is still loading, so they never flash).
+ * hidden here (also while that is still loading, so they never flash). On
+ * Billing, Pay is the page's primary action, so Confirm order steps down to
+ * secondary.
  */
 export function StandaloneTopBar({ onOpenNavigation }: StandaloneTopBarProps) {
   const t = useTranslations('appHeader')
@@ -37,7 +39,9 @@ export function StandaloneTopBar({ onOpenNavigation }: StandaloneTopBarProps) {
       ? t('verifications')
       : routeName === 'settings'
         ? t('settings')
-        : t('dashboard')
+        : routeName === 'billing'
+          ? t('billing')
+          : t('dashboard')
 
   return (
     <header className="border-border bg-card/95 sticky top-0 z-30 flex min-h-14 items-center justify-between gap-3 border-b px-4 backdrop-blur sm:px-6">
@@ -72,7 +76,9 @@ export function StandaloneTopBar({ onOpenNavigation }: StandaloneTopBarProps) {
         {showOrderActions && (
           <>
             <ImportTopBarAction />
-            <ManualOrderTopBarAction />
+            <ManualOrderTopBarAction
+              emphasis={routeName === 'billing' ? 'secondary' : 'primary'}
+            />
           </>
         )}
         <span

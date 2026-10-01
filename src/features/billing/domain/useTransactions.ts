@@ -10,12 +10,13 @@ import {
   ledgerInfiniteOptions,
   purchasesInfiniteOptions,
 } from '../api/billingQueries'
-import type { PagedResponse } from './billing.types'
+import type { PagedResponse, PurchaseSummary } from './billing.types'
 import {
   buildTransactions,
-  coversCurrentMonth,
+  coversSince,
   type Transaction,
 } from './transactions'
+import { usageWindowStart } from './usageInsights'
 
 /**
  * How many 100-row pages to pull before handing control back to the merchant.
@@ -30,9 +31,9 @@ const PAGES_PER_BATCH = 10
 /**
  * How far back a caller needs to read.
  *
- * `month` is for the billing page, which only shows the five newest movements
- * and the current month's usage total — draining an active tenant's whole
- * ledger for that would cost ten round trips on every visit. `full` is for the
+ * `month` is for the billing page, which only shows the current month's usage
+ * total and the last 14 days — draining an active tenant's whole ledger for
+ * that would cost ten round trips on every visit. `full` is for the
  * operations log, where the filters really do span the account.
  */
 export type TransactionScope = 'month' | 'full'
@@ -74,8 +75,15 @@ function useDrain<T>(
 
 export interface UseTransactionsResult {
   transactions: Transaction[]
+  /** The purchases loaded so far, newest first, whatever their status. */
+  purchases: PurchaseSummary[]
   /** False while more pages exist beyond the drain cap. */
   isComplete: boolean
+  /**
+   * True once the loaded ledger reaches back past the billing page's window
+   * (`usageWindowStart`), so this month's usage and the 14-day chart are whole.
+   */
+  isWindowCovered: boolean
   isLoading: boolean
   isDraining: boolean
   error: boolean
@@ -93,20 +101,29 @@ export function useTransactions(
     purchasesInfiniteOptions(DRAIN_PAGE_SIZE)
   )
 
+  const purchases = useMemo(
+    () => purchasesQuery.data?.pages.flatMap((page) => page.items) ?? [],
+    [purchasesQuery.data]
+  )
+
   const transactions = useMemo(
     () =>
       buildTransactions(
         ledgerQuery.data?.pages.flatMap((page) => page.items) ?? [],
-        purchasesQuery.data?.pages.flatMap((page) => page.items) ?? []
+        purchases
       ),
-    [ledgerQuery.data, purchasesQuery.data]
+    [ledgerQuery.data, purchases]
   )
 
   /*
    * Both feeds arrive newest-first, so once the oldest loaded row predates the
-   * 1st there is nothing left in this month to find and the walk can stop.
+   * window there is nothing left in it to find and the walk can stop.
    */
-  const satisfied = scope === 'month' && coversCurrentMonth(transactions, false)
+  const windowStart = usageWindowStart()
+  const satisfied =
+    scope === 'month' && coversSince(transactions, false, windowStart)
+  const isLedgerExhausted =
+    ledgerQuery.data !== undefined && !ledgerQuery.hasNextPage
 
   const ledgerDrain = useDrain(ledgerQuery, cap, satisfied)
   const purchasesDrain = useDrain(purchasesQuery, cap, satisfied)
@@ -124,7 +141,9 @@ export function useTransactions(
 
   return {
     transactions,
+    purchases,
     isComplete: !ledgerDrain.reachedCap && !purchasesDrain.reachedCap,
+    isWindowCovered: coversSince(transactions, isLedgerExhausted, windowStart),
     isLoading: ledgerQuery.isPending || purchasesQuery.isPending,
     isDraining:
       ledgerQuery.isFetchingNextPage || purchasesQuery.isFetchingNextPage,

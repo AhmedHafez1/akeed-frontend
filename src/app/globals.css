@@ -394,6 +394,11 @@
   --text-ak-kpi--line-height: 2.375rem;
   --text-ak-kpi--font-weight: 600;
   --text-ak-kpi--letter-spacing: var(--tracking-ak-kpi);
+  /* The one hero number of a view (the billing balance). */
+  --text-ak-hero: 3.25rem;
+  --text-ak-hero--line-height: 3.5rem;
+  --text-ak-hero--font-weight: 700;
+  --text-ak-hero--letter-spacing: var(--tracking-ak-kpi);
 
   /*
    * ── Type scale ──

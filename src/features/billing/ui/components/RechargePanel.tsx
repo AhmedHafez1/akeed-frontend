@@ -1,49 +1,50 @@
 'use client'
 
-import { Minus, Plus } from 'lucide-react'
+import { useId } from 'react'
 import { useTranslations } from 'next-intl'
-import { Badge, Button, Card, Input } from '@/shared/ui'
+import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { akCard } from '@/shared/ui'
+import { formatCredits } from '../../domain/billingFormatters'
 import type { useBillingPage } from '../../domain/useBillingPage'
 import { CreditPackageTiles } from './CreditPackageTiles'
+import { QuantityStepper } from './QuantityStepper'
 
 interface RechargePanelProps {
   state: ReturnType<typeof useBillingPage>
-  id: string
 }
 
-export function RechargePanel({ state, id }: RechargePanelProps) {
-  const t = useTranslations('billing')
+/**
+ * Choosing the amount: the preset tiles, or any other amount through the
+ * stepper. Both edit the one quantity the summary card prices.
+ */
+export function RechargePanel({ state }: RechargePanelProps) {
+  const t = useTranslations('billing.purchase')
+  const { locale } = useLocaleInfo()
+  const headingId = useId()
+  const quantityId = useId()
+  const rulesId = useId()
   const { summary } = state
   if (!summary) return null
 
   const controlsDisabled = !state.canPurchase || state.isLocked
+  const range = {
+    min: formatCredits(summary.range.min, locale),
+    max: formatCredits(summary.range.max, locale),
+    step: formatCredits(summary.range.step, locale),
+  }
 
   return (
-    <Card id={id} className="scroll-mt-24 overflow-hidden">
-      <div className="border-border flex items-start justify-between gap-3 border-b p-5 sm:p-6">
-        <div>
-          <h2 className="text-h3 text-foreground">{t('purchase.title')}</h2>
-          <p className="text-muted-foreground text-body mt-1">
-            {t('purchase.description')}
-          </p>
-        </div>
-        <Badge variant="neutral" className="shrink-0">
-          {t('packages.stepLabel')}
-        </Badge>
+    <section className={akCard} aria-labelledby={headingId}>
+      <div className="px-4 py-4 sm:px-6 sm:py-5">
+        <h2 id={headingId} className="text-ak-section text-ink">
+          {t('title')}
+        </h2>
+        <p className="text-ak-caption text-ink-muted mt-0.5">
+          {t('description')}
+        </p>
       </div>
 
-      <div className="space-y-5 p-5 sm:p-6">
-        {!summary.billingEnabled && (
-          <p className="rounded-control bg-muted text-body text-foreground p-3">
-            {t('purchase.disabled')}
-          </p>
-        )}
-        {summary.billingEnabled && !summary.canPurchase && (
-          <p className="rounded-control bg-muted text-body text-foreground p-3">
-            {t('purchase.readOnly')}
-          </p>
-        )}
-
+      <div className="flex flex-col gap-5 px-4 pb-4 sm:px-6 sm:pb-6">
         <CreditPackageTiles
           packages={state.packages}
           selected={state.selectedPackage}
@@ -52,63 +53,39 @@ export function RechargePanel({ state, id }: RechargePanelProps) {
           onSelect={state.selectPackage}
         />
 
-        <div className="border-border bg-muted/30 rounded-card border p-5">
+        <div className="border-line flex flex-col gap-2 border-t pt-5">
           <label
-            className="text-body text-foreground font-medium"
-            htmlFor="credit-quantity"
+            htmlFor={quantityId}
+            className="text-ak-caption text-ink font-semibold"
           >
-            {t('packages.customLabel')}
+            {t('customLabel')}
           </label>
-          <div className="mt-3 flex items-stretch">
-            <Button
-              variant="outline"
-              size="icon"
-              className="bg-background h-16 w-16 rounded-e-none"
-              onClick={() => state.adjustQuantity(-1)}
-              disabled={controlsDisabled}
-              aria-label={t('purchase.decrease')}
-            >
-              <Minus />
-            </Button>
-            <Input
-              id="credit-quantity"
-              dir="ltr"
-              className="bg-background h-16 rounded-none border-1 text-center text-2xl font-semibold"
-              inputMode="numeric"
+          <div className="flex flex-wrap items-center gap-3">
+            <QuantityStepper
+              id={quantityId}
               value={state.quantityInput}
-              onChange={(event) => state.setQuantityInput(event.target.value)}
+              onChange={state.setQuantityInput}
+              onStep={state.adjustQuantity}
               disabled={controlsDisabled}
-              aria-invalid={!!state.quantityError}
+              invalid={!!state.quantityError}
+              describedBy={rulesId}
+              decreaseLabel={t('decrease')}
+              increaseLabel={t('increase')}
             />
-            <Button
-              variant="outline"
-              size="icon"
-              className="bg-background h-16 w-16 rounded-s-none"
-              onClick={() => state.adjustQuantity(1)}
-              disabled={controlsDisabled}
-              aria-label={t('purchase.increase')}
-            >
-              <Plus />
-            </Button>
+            <span id={rulesId} className="text-ak-caption text-ink-muted">
+              {t('rules', range)}
+            </span>
           </div>
-          <p className="text-muted-foreground text-caption mt-2">
-            {t('purchase.rules', {
-              min: summary.range.min,
-              max: summary.range.max,
-              step: summary.range.step,
-            })}
-          </p>
           {state.quantityError && (
-            <p className="text-destructive text-body mt-2" role="alert">
-              {t(`purchase.errors.${state.quantityError}`, {
-                min: summary.range.min,
-                max: summary.range.max,
-                step: summary.range.step,
-              })}
+            <p
+              role="alert"
+              className="text-ak-caption text-ak-warning font-semibold"
+            >
+              {t(`errors.${state.quantityError}`, range)}
             </p>
           )}
         </div>
       </div>
-    </Card>
+    </section>
   )
 }

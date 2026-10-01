@@ -3,6 +3,7 @@
 import * as React from 'react'
 
 import { cn } from '@/shared/lib/utils'
+import { akChoiceSurface } from './ak-styles'
 
 export interface AkChoiceGroupProps extends Omit<
   React.HTMLAttributes<HTMLDivElement>,
@@ -106,9 +107,7 @@ export const AkChoiceCard = React.forwardRef<
       onClick={onSelect}
       className={cn(
         'ak-focus rounded-ak-card text-ink flex w-full cursor-pointer items-start gap-3 border px-4 py-3.5 text-start disabled:cursor-not-allowed disabled:opacity-60 motion-safe:transition-colors motion-safe:duration-150',
-        checked
-          ? 'border-brand bg-brand-soft shadow-[inset_0_0_0_1px_var(--brand)]'
-          : 'border-line-strong bg-surface-raised hover:border-control-border',
+        akChoiceSurface(checked),
         className
       )}
       {...props}
