@@ -10,6 +10,7 @@ import {
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { NextIntlClientProvider } from 'next-intl'
 import ar from '../../../../../../public/messages/ar.json'
+import en from '../../../../../../public/messages/en.json'
 import { ApiError } from '@/shared/lib/http'
 import type {
   IntegrationApiKey,
@@ -147,6 +148,35 @@ describe('ApiKeysTab', () => {
     })
   })
 
+  it('shows when each key was last used and when it was revoked', async () => {
+    api.get.mockResolvedValue(
+      listOf([
+        key(),
+        key({
+          id: 'dddddddd-dddd-4ddd-8ddd-dddddddddddd',
+          name: 'الخادم القديم',
+          prefix: 'ak_live_old00000',
+          status: 'revoked',
+          lastUsedAt: '2026-10-02T08:30:00.000Z',
+          revokedAt: '2026-10-02T09:00:00.000Z',
+        }),
+      ])
+    )
+    renderTab()
+
+    const list = await screen.findByRole('list', { name: copy.listLabel })
+    const [unused, revoked] = within(list).getAllByRole('listitem')
+    const lastUsedLabel = copy.lastUsedAt.replace('{date}', '').trim()
+    const revokedLabel = copy.revokedAt.replace('{date}', '').trim()
+
+    expect(within(unused).getByText(copy.neverUsed)).toBeTruthy()
+    expect(unused.textContent).not.toContain(lastUsedLabel)
+    expect(unused.textContent).not.toContain(revokedLabel)
+    expect(revoked.textContent).toContain(lastUsedLabel)
+    expect(revoked.textContent).toContain(revokedLabel)
+    expect(within(revoked).queryByText(copy.neverUsed)).toBeNull()
+  })
+
   it('creates a key, shows it once, copies it and forgets it on close', async () => {
     const setItem = vi.spyOn(Storage.prototype, 'setItem')
     api.post.mockResolvedValue({
@@ -245,6 +275,28 @@ describe('ApiKeysTab', () => {
     const dialog = await openCreateAndSubmit('API')
 
     expect(await within(dialog).findByText(copy.errors[code])).toBeTruthy()
+  })
+
+  it('explains an uncoded 429 in Arabic', async () => {
+    api.post.mockRejectedValue(new ApiError('Too Many Requests', 429))
+    renderTab()
+    await screen.findByRole('list', { name: copy.listLabel })
+
+    const dialog = await openCreateAndSubmit('API')
+
+    expect(
+      await within(dialog).findByText(copy.errors.RATE_LIMITED)
+    ).toBeTruthy()
+  })
+
+  it('has every key-management error in both locales', () => {
+    const english = en.settings.standalone.page.apiKeys.errors
+    expect(Object.keys(english).sort()).toEqual(Object.keys(copy.errors).sort())
+    for (const text of [
+      ...Object.values(english),
+      ...Object.values(copy.errors),
+    ])
+      expect(text.trim()).not.toBe('')
   })
 
   it('disables creating at the active-key limit', async () => {

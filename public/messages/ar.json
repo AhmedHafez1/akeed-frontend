@@ -1918,6 +1918,8 @@
           "retry": "إعادة المحاولة",
           "createdAt": "أُنشئ في {date}",
           "revokedAt": "أُلغي في {date}",
+          "lastUsedAt": "آخر استخدام {date}",
+          "neverUsed": "لم يُستخدم بعد",
           "revokeButton": "إلغاء",
           "revokeLabel": "إلغاء {name}",
           "status": {
@@ -1959,6 +1961,7 @@
             "API_KEY_LIMIT_REACHED": "وصلت إلى الحد الأقصى للمفاتيح النشطة. ألغِ أحدها أولًا.",
             "API_KEY_NOT_FOUND": "هذا المفتاح لم يعد موجودًا. حدّث الصفحة.",
             "API_KEY_VALIDATION_FAILED": "راجع اسم المفتاح وحاول مرة أخرى.",
+            "RATE_LIMITED": "طلبات كثيرة في وقت قصير. انتظر دقيقة ثم حاول مرة أخرى.",
             "generic": "حدث خطأ ما. حاول مرة أخرى."
           }
         }

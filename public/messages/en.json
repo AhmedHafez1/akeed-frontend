@@ -1924,6 +1924,8 @@
           "retry": "Try again",
           "createdAt": "Created {date}",
           "revokedAt": "Revoked {date}",
+          "lastUsedAt": "Last used {date}",
+          "neverUsed": "Never used",
           "revokeButton": "Revoke",
           "revokeLabel": "Revoke {name}",
           "status": {
@@ -1965,6 +1967,7 @@
             "API_KEY_LIMIT_REACHED": "You’ve reached the limit of active keys. Revoke one first.",
             "API_KEY_NOT_FOUND": "This key no longer exists. Refresh the page.",
             "API_KEY_VALIDATION_FAILED": "Check the key name and try again.",
+            "RATE_LIMITED": "Too many requests. Wait a minute and try again.",
             "generic": "Something went wrong. Try again."
           }
         }

@@ -14,6 +14,7 @@ const INTEGRATION_KEY_ERROR_CODES = [
 
 export type IntegrationKeyErrorKey =
   | (typeof INTEGRATION_KEY_ERROR_CODES)[number]
+  | 'RATE_LIMITED'
   | 'generic'
 
 /** The `apiKeys.errors.*` key for a failed key request. */
@@ -23,5 +24,7 @@ export function integrationKeyErrorKey(error: unknown): IntegrationKeyErrorKey {
   if (known) return known
   if (error.status === 403) return 'API_KEY_ROLE_REQUIRED'
   if (error.status === 404) return 'API_KEY_NOT_FOUND'
+  // The app-wide throttler answers 429 without a code.
+  if (error.status === 429) return 'RATE_LIMITED'
   return 'generic'
 }

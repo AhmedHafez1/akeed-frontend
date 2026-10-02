@@ -65,6 +65,12 @@ export function ApiKeysTab({ readOnly }: ApiKeysTabProps) {
   const formatDate = (value: string) =>
     format.dateTime(new Date(value), { dateStyle: 'medium' })
 
+  const formatDateTime = (value: string) =>
+    format.dateTime(new Date(value), {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    })
+
   return (
     <>
       <AnnotatedSections>
@@ -179,6 +185,13 @@ export function ApiKeysTab({ readOnly }: ApiKeysTabProps) {
                         </code>
                         <span>
                           {t('createdAt', { date: formatDate(key.createdAt) })}
+                        </span>
+                        <span>
+                          {key.lastUsedAt
+                            ? t('lastUsedAt', {
+                                date: formatDateTime(key.lastUsedAt),
+                              })
+                            : t('neverUsed')}
                         </span>
                         {key.revokedAt && (
                           <span>
