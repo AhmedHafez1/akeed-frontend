@@ -37,7 +37,6 @@ const messages: SettingsModelMessages = {
   testSendSuccess: 'testSendSuccess',
   testSendCooldown: 'testSendCooldown',
   testSendDailyLimit: 'testSendDailyLimit',
-  testSendPhoneMissing: 'testSendPhoneMissing',
   testSendError: 'testSendError',
 }
 
@@ -322,10 +321,12 @@ describe('useSettingsModel', () => {
       )
       const { result } = await setupLoaded()
 
+      let outcome: unknown
       await act(async () => {
-        await result.current.sendTest()
+        outcome = await result.current.sendTest()
       })
 
+      expect(outcome).toBe('sent')
       expect(sendOnboardingTest).toHaveBeenCalledWith({ resend: true })
       expect(adapter.notifySuccess).toHaveBeenCalledWith('testSendSuccess')
       expect(result.current.isSendingTest).toBe(false)
@@ -334,7 +335,6 @@ describe('useSettingsModel', () => {
     it.each([
       ['ONBOARDING_TEST_COOLDOWN', 'testSendCooldown'],
       ['ONBOARDING_TEST_DAILY_LIMIT', 'testSendDailyLimit'],
-      ['ONBOARDING_TEST_PHONE_MISSING', 'testSendPhoneMissing'],
       ['SOMETHING_ELSE', 'testSendError'],
       [null, 'testSendError'],
     ])('reports %s as %s', async (code, message) => {
@@ -343,13 +343,86 @@ describe('useSettingsModel', () => {
       )
       const { result } = await setupLoaded()
 
+      let outcome: unknown
       await act(async () => {
-        await result.current.sendTest()
+        outcome = await result.current.sendTest()
       })
 
+      expect(outcome).toBe('failed')
       expect(adapter.notifyError).toHaveBeenCalledWith(message, 'testSend')
       expect(adapter.notifySuccess).not.toHaveBeenCalled()
       expect(result.current.isSendingTest).toBe(false)
+    })
+
+    it('leaves a missing number to the skin instead of reporting it', async () => {
+      sendOnboardingTest.mockRejectedValue(
+        new onboardingApi.OnboardingApiError(
+          'failed',
+          400,
+          'ONBOARDING_TEST_PHONE_MISSING'
+        )
+      )
+      const { result } = await setupLoaded()
+
+      let outcome: unknown
+      await act(async () => {
+        outcome = await result.current.sendTest()
+      })
+
+      expect(outcome).toBe('phoneMissing')
+      expect(adapter.notifyError).not.toHaveBeenCalled()
+      expect(result.current.isSendingTest).toBe(false)
+    })
+  })
+
+  describe('test number', () => {
+    it('saves the number with the saved settings and updates the cache', async () => {
+      api.saveSettings.mockImplementation(async (payload) =>
+        settingsResponseFixture({
+          state: { merchantWhatsappPhone: payload.merchantWhatsappPhone },
+        })
+      )
+      const { result, queryClient } = await setupLoaded()
+      act(() => result.current.update({ storeName: 'Unsaved edit' }))
+
+      let outcome: unknown
+      await act(async () => {
+        outcome = await result.current.saveTestPhone('+966501234567')
+      })
+
+      expect(outcome).toEqual({ ok: true })
+      expect(api.saveSettings).toHaveBeenCalledWith(
+        expect.objectContaining({
+          storeName: 'Togo_Test_A',
+          merchantWhatsappPhone: '+966501234567',
+        })
+      )
+      expect(
+        queryClient.getQueryData<settingsApi.SettingsResponse>(
+          queryKeys.settings.detail()
+        )?.state.merchantWhatsappPhone
+      ).toBe('+966501234567')
+      // The working copy is untouched and nothing is announced.
+      expect(result.current.values?.storeName).toBe('Unsaved edit')
+      expect(adapter.notifySuccess).not.toHaveBeenCalled()
+    })
+
+    it.each([
+      [new ApiError('bad', 400, 'ONBOARDING_INVALID_PHONE'), 'invalid'],
+      [new ApiError('forbidden', 403), 'readOnly'],
+      [new ApiError('boom', 500), 'saveFailed'],
+      [new Error('offline'), 'saveFailed'],
+    ])('reports %s as %s', async (error, reason) => {
+      api.saveSettings.mockRejectedValue(error)
+      const { result } = await setupLoaded()
+
+      let outcome: unknown
+      await act(async () => {
+        outcome = await result.current.saveTestPhone('+966501234567')
+      })
+
+      expect(outcome).toEqual({ ok: false, reason })
+      expect(adapter.notifyError).not.toHaveBeenCalled()
     })
   })
 })

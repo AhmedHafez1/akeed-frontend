@@ -7,7 +7,7 @@ import type { MessageTemplatePreview } from '@/features/settings/api/settingsApi
 import type { PreviewSample } from '@/features/settings/domain/messagePreview'
 import { formatPhoneInternational } from '@/shared/lib/phone'
 import { cn } from '@/shared/lib/utils'
-import { AkSegmented, akButton, akCard } from '@/shared/ui'
+import { AkSegmented, akButton, akCard, akLink } from '@/shared/ui'
 import { WhatsAppMessagePreview } from './WhatsAppMessagePreview'
 
 interface MessagePreviewPanelProps {
@@ -21,6 +21,7 @@ interface MessagePreviewPanelProps {
   isDirty: boolean
   isSendingTest: boolean
   onSendTest: () => void
+  onChangePhone: () => void
 }
 
 /**
@@ -40,6 +41,7 @@ export function MessagePreviewPanel({
   isDirty,
   isSendingTest,
   onSendTest,
+  onChangePhone,
 }: MessagePreviewPanelProps) {
   const t = useTranslations('settings.standalone.page.message')
   const tShared = useTranslations('settings.embedded.message')
@@ -100,25 +102,37 @@ export function MessagePreviewPanel({
             )}
             {t('testSend')}
           </button>
-          <p id={captionId} className="text-ak-caption text-ink-muted">
-            {isDirty
-              ? t('testSendSaveFirst')
-              : phone
-                ? tShared.rich('testSendHelp', {
-                    phone: () => (
-                      <bdi
-                        dir="ltr"
-                        className="text-ink font-semibold tabular-nums"
-                      >
-                        {phone}
-                      </bdi>
-                    ),
-                    language: testLanguageName,
-                  })
-                : tShared('testSendHelpNoPhone', {
-                    language: testLanguageName,
-                  })}
-          </p>
+          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+            <p id={captionId} className="text-ak-caption text-ink-muted">
+              {isDirty
+                ? t('testSendSaveFirst')
+                : phone
+                  ? tShared.rich('testSendHelp', {
+                      phone: () => (
+                        <bdi
+                          dir="ltr"
+                          className="text-ink font-semibold tabular-nums"
+                        >
+                          {phone}
+                        </bdi>
+                      ),
+                      language: testLanguageName,
+                    })
+                  : tShared('testSendHelpNoPhone', {
+                      language: testLanguageName,
+                    })}
+            </p>
+            {!isDirty && phone && (
+              <button
+                type="button"
+                onClick={onChangePhone}
+                disabled={isSendingTest}
+                className={cn(akLink, 'text-ak-caption')}
+              >
+                {tShared('testPhone.change')}
+              </button>
+            )}
+          </div>
         </div>
       )}
 

@@ -20,6 +20,8 @@ const api = vi.hoisted(() => ({
   saveSettings: vi.fn(),
 }))
 
+const onboarding = vi.hoisted(() => ({ sendOnboardingTest: vi.fn() }))
+
 const shopify = vi.hoisted(() => ({
   saveBar: {
     show: vi.fn(() => Promise.resolve()),
@@ -54,7 +56,15 @@ vi.mock('@/shared/hooks/useAppBridgeLoading', () => ({
 
 vi.mock('../../../api/settingsApi', () => api)
 
+vi.mock('@/features/onboarding/api/onboardingApi', async (importOriginal) => ({
+  ...(await importOriginal<
+    typeof import('@/features/onboarding/api/onboardingApi')
+  >()),
+  sendOnboardingTest: onboarding.sendOnboardingTest,
+}))
+
 const SAVE_BAR_ID = 'akeed-settings-save-bar'
+const messageCopy = ar.settings.embedded.message
 
 function renderPage(tab: string | null = 'message') {
   nav.search = new URLSearchParams(tab ? { tab } : {})
@@ -224,6 +234,97 @@ describe('SettingsEmbeddedPage', () => {
     expect(screen.getAllByText('مقترحة لك')).toHaveLength(1)
     expect(screen.getByText(/أرسلت 28 رسالة في آخر 30 يوماً/)).toBeTruthy()
     expect(shopify.saveBar.show).not.toHaveBeenCalled()
+  })
+
+  it('sends a test straight to a saved number', async () => {
+    onboarding.sendOnboardingTest.mockResolvedValue({})
+    renderPage()
+    await storeNameInput()
+
+    await act(async () => {
+      fireEvent.click(
+        screen.getByRole('button', { name: messageCopy.testSend })
+      )
+    })
+
+    expect(onboarding.sendOnboardingTest).toHaveBeenCalledWith({
+      resend: true,
+    })
+    expect(shopify.toast.show).toHaveBeenCalledWith(
+      ar.settings.embedded.testSendSuccess
+    )
+    expect(screen.queryByLabelText(messageCopy.testPhone.label)).toBeNull()
+    expect(api.saveSettings).not.toHaveBeenCalled()
+  })
+
+  it('asks for the number in the card when none is saved, from the store phone', async () => {
+    onboarding.sendOnboardingTest.mockResolvedValue({})
+    api.fetchSettings.mockResolvedValue(
+      settingsResponseFixture({
+        state: { merchantWhatsappPhone: null, shopPhone: '+201001234567' },
+      })
+    )
+    api.saveSettings.mockImplementation(async (payload) =>
+      settingsResponseFixture({
+        state: { merchantWhatsappPhone: payload.merchantWhatsappPhone },
+      })
+    )
+    renderPage()
+    await storeNameInput()
+
+    fireEvent.click(screen.getByRole('button', { name: messageCopy.testSend }))
+
+    const field = (await screen.findByLabelText(
+      messageCopy.testPhone.label
+    )) as HTMLInputElement
+    expect(onboarding.sendOnboardingTest).not.toHaveBeenCalled()
+    expect(field.value.replace(/\s/g, '')).toBe('+201001234567')
+    expect(screen.getByText(messageCopy.testPhone.suggested)).toBeTruthy()
+
+    await act(async () => {
+      fireEvent.click(
+        screen.getByRole('button', { name: messageCopy.testPhone.submit })
+      )
+    })
+
+    expect(api.saveSettings).toHaveBeenCalledWith(
+      expect.objectContaining({
+        storeName: 'Togo_Test_A',
+        merchantWhatsappPhone: '+201001234567',
+      })
+    )
+    expect(onboarding.sendOnboardingTest).toHaveBeenCalledWith({
+      resend: true,
+    })
+    expect(shopify.toast.show).toHaveBeenCalledWith(
+      ar.settings.embedded.testSendSuccess
+    )
+    await waitFor(() =>
+      expect(screen.queryByLabelText(messageCopy.testPhone.label)).toBeNull()
+    )
+    expect(
+      screen.getByRole('button', { name: messageCopy.testPhone.change })
+    ).toBeTruthy()
+  })
+
+  it('refuses an invalid number in place', async () => {
+    api.fetchSettings.mockResolvedValue(
+      settingsResponseFixture({ state: { merchantWhatsappPhone: null } })
+    )
+    renderPage()
+    await storeNameInput()
+    fireEvent.click(screen.getByRole('button', { name: messageCopy.testSend }))
+    await screen.findByLabelText(messageCopy.testPhone.label)
+
+    await act(async () => {
+      fireEvent.click(
+        screen.getByRole('button', { name: messageCopy.testPhone.submit })
+      )
+    })
+
+    expect(screen.getByText(messageCopy.testPhone.invalid)).toBeTruthy()
+    expect(api.saveSettings).not.toHaveBeenCalled()
+    expect(onboarding.sendOnboardingTest).not.toHaveBeenCalled()
   })
 
   it('does not redirect a current tab id', async () => {

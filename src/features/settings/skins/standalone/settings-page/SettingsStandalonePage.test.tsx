@@ -24,6 +24,8 @@ const api = vi.hoisted(() => ({
   saveSettings: vi.fn(),
 }))
 
+const onboarding = vi.hoisted(() => ({ sendOnboardingTest: vi.fn() }))
+
 const toast = vi.hoisted(() => ({ success: vi.fn(), error: vi.fn() }))
 
 vi.mock('next/navigation', () => ({
@@ -49,7 +51,15 @@ vi.mock('@/shared/ui', async (importOriginal) => ({
 
 vi.mock('../../../api/settingsApi', () => api)
 
+vi.mock('@/features/onboarding/api/onboardingApi', async (importOriginal) => ({
+  ...(await importOriginal<
+    typeof import('@/features/onboarding/api/onboardingApi')
+  >()),
+  sendOnboardingTest: onboarding.sendOnboardingTest,
+}))
+
 const copy = ar.settings.standalone
+const promptCopy = ar.settings.embedded.message.testPhone
 const standaloneSource = {
   platformType: 'standalone',
   identity: 'org-1',
@@ -363,6 +373,138 @@ describe('SettingsStandalonePage message tab', () => {
     expect(send.disabled).toBe(true)
     expect(screen.getByText(copy.page.message.testSendSaveFirst)).toBeTruthy()
     expect(screen.queryByText('+20 100 123 4567')).toBeNull()
+    expect(screen.queryByRole('button', { name: promptCopy.change })).toBeNull()
+  })
+
+  it('sends straight to a saved number', async () => {
+    onboarding.sendOnboardingTest.mockResolvedValue({})
+    renderPage()
+    await storeNameInput()
+
+    fireEvent.click(
+      screen.getByRole('button', { name: copy.page.message.testSend })
+    )
+
+    await waitFor(() =>
+      expect(toast.success).toHaveBeenCalledWith({
+        message: copy.messages.testSendSuccess,
+      })
+    )
+    expect(screen.queryByRole('dialog')).toBeNull()
+    expect(api.saveSettings).not.toHaveBeenCalled()
+  })
+
+  it('asks for the number when none is saved, then saves and sends', async () => {
+    // The empty field opens on the browser's country.
+    vi.spyOn(navigator, 'languages', 'get').mockReturnValue(['ar-EG'])
+    onboarding.sendOnboardingTest.mockResolvedValue({})
+    api.fetchSettings.mockResolvedValue(
+      settingsResponseFixture({
+        state: { source: standaloneSource, merchantWhatsappPhone: null },
+      })
+    )
+    api.saveSettings.mockImplementation(async (payload) =>
+      settingsResponseFixture({
+        state: {
+          source: standaloneSource,
+          merchantWhatsappPhone: payload.merchantWhatsappPhone,
+        },
+      })
+    )
+    renderPage()
+    await storeNameInput()
+    expect(
+      screen.getByText(ar.settings.embedded.message.testSendHelpNoPhone)
+    ).toBeTruthy()
+
+    fireEvent.click(
+      screen.getByRole('button', { name: copy.page.message.testSend })
+    )
+
+    const dialog = await screen.findByRole('dialog')
+    expect(onboarding.sendOnboardingTest).not.toHaveBeenCalled()
+    const field = within(dialog).getByLabelText(
+      promptCopy.label
+    ) as HTMLInputElement
+    expect(within(dialog).queryByText(promptCopy.suggested)).toBeNull()
+
+    // An empty number is refused in place.
+    fireEvent.click(
+      within(dialog).getByRole('button', { name: promptCopy.submit })
+    )
+    expect(within(dialog).getByRole('alert').textContent).toBe(
+      promptCopy.invalid
+    )
+    expect(api.saveSettings).not.toHaveBeenCalled()
+
+    fireEvent.change(field, { target: { value: '+20 100 123 4567' } })
+    fireEvent.click(
+      within(dialog).getByRole('button', { name: promptCopy.submit })
+    )
+
+    await waitFor(() =>
+      expect(toast.success).toHaveBeenCalledWith({
+        message: copy.messages.testSendSuccess,
+      })
+    )
+    expect(api.saveSettings).toHaveBeenCalledWith(
+      expect.objectContaining({
+        storeName: 'Togo_Test_A',
+        merchantWhatsappPhone: '+201001234567',
+      })
+    )
+    expect(onboarding.sendOnboardingTest).toHaveBeenCalledWith({
+      resend: true,
+    })
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+    // The panel now names the saved number.
+    expect(screen.getByText('+20 100 123 4567').tagName).toBe('BDI')
+  })
+
+  it('starts from the store phone when there is one', async () => {
+    api.fetchSettings.mockResolvedValue(
+      settingsResponseFixture({
+        state: {
+          source: standaloneSource,
+          merchantWhatsappPhone: null,
+          shopPhone: '+971501234567',
+        },
+      })
+    )
+    renderPage()
+    await storeNameInput()
+
+    fireEvent.click(
+      screen.getByRole('button', { name: copy.page.message.testSend })
+    )
+
+    const dialog = await screen.findByRole('dialog')
+    const field = within(dialog).getByLabelText(
+      promptCopy.label
+    ) as HTMLInputElement
+    expect(field.value.replace(/\s/g, '')).toBe('+971501234567')
+    expect(within(dialog).getByText(promptCopy.suggested)).toBeTruthy()
+  })
+
+  it('changes a saved number from the panel', async () => {
+    renderPage()
+    await storeNameInput()
+
+    fireEvent.click(screen.getByRole('button', { name: promptCopy.change }))
+
+    const dialog = await screen.findByRole('dialog')
+    const field = within(dialog).getByLabelText(
+      promptCopy.label
+    ) as HTMLInputElement
+    expect(field.value.replace(/\s/g, '')).toBe('+201001234567')
+
+    fireEvent.click(
+      within(dialog).getByRole('button', { name: promptCopy.cancel })
+    )
+
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+    expect(api.saveSettings).not.toHaveBeenCalled()
+    expect(onboarding.sendOnboardingTest).not.toHaveBeenCalled()
   })
 
   it('previews the message in the language picked in the panel', async () => {

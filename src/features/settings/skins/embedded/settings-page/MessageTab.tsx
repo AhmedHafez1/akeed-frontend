@@ -29,6 +29,7 @@ import {
   STORE_NAME_MAX_LENGTH,
 } from '@/features/settings/domain/settingsForm'
 import type { EmbeddedSettingsModel } from '@/features/settings/domain/useEmbeddedSettings'
+import { useTestPhonePrompt } from '@/features/settings/domain/useTestPhonePrompt'
 import { formatPlanPrice } from '@/shared/lib/money'
 import { MessagePreviewCard } from './MessagePreviewCard'
 
@@ -52,6 +53,12 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
   const [previewLanguage, setPreviewLanguage] = useState<'ar' | 'en'>(() =>
     initialPreviewLanguage(data)
   )
+  const phonePrompt = useTestPhonePrompt({
+    savedPhone: data.state.merchantWhatsappPhone ?? null,
+    shopPhone: data.state.shopPhone ?? null,
+    sendTest: model.sendTest,
+    saveTestPhone: model.saveTestPhone,
+  })
   if (!values) return null
 
   const storeName = values.storeName.trim() || 'Akeed Store'
@@ -200,7 +207,7 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
           canSendTest={!readOnly}
           isDirty={model.isDirty}
           isSendingTest={model.isSendingTest}
-          onSendTest={() => void model.sendTest()}
+          phonePrompt={phonePrompt}
         />
       </Layout.Section>
     </Layout>

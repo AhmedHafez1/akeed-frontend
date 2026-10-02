@@ -20,10 +20,12 @@ import {
   STORE_NAME_MAX_LENGTH,
 } from '@/features/settings/domain/settingsForm'
 import type { StandaloneSettingsModel } from '@/features/settings/domain/useStandaloneSettings'
+import { useTestPhonePrompt } from '@/features/settings/domain/useTestPhonePrompt'
 import { formatAmount } from '@/shared/lib/money'
 import { cn } from '@/shared/lib/utils'
 import { AkChoiceCard, AkChoiceGroup, akCard, akPill } from '@/shared/ui'
 import { MessagePreviewPanel } from './MessagePreviewPanel'
+import { TestPhoneDialog } from './TestPhoneDialog'
 
 interface MessageTabProps {
   model: StandaloneSettingsModel
@@ -82,6 +84,12 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
   const [previewLanguage, setPreviewLanguage] = useState<'ar' | 'en'>(() =>
     initialPreviewLanguage(data)
   )
+  const phonePrompt = useTestPhonePrompt({
+    savedPhone: data.state.merchantWhatsappPhone ?? null,
+    shopPhone: data.state.shopPhone ?? null,
+    sendTest: model.sendTest,
+    saveTestPhone: model.saveTestPhone,
+  })
   const values = model.values
   if (!values) return null
 
@@ -270,8 +278,10 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
         canSendTest={!readOnly}
         isDirty={model.isDirty}
         isSendingTest={model.isSendingTest}
-        onSendTest={() => void model.sendTest()}
+        onSendTest={() => void phonePrompt.requestSend()}
+        onChangePhone={phonePrompt.openToChange}
       />
+      <TestPhoneDialog prompt={phonePrompt} />
     </div>
   )
 }

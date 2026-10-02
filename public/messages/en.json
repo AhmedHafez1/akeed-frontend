@@ -1920,7 +1920,6 @@
         "testSendSuccess": "Test message sent to your WhatsApp",
         "testSendCooldown": "Wait a few seconds before sending another test.",
         "testSendDailyLimit": "You've reached today's limit of test messages.",
-        "testSendPhoneMissing": "Add your WhatsApp number in setup to receive test messages.",
         "testSendError": "The test message couldn't be sent. Try again."
       }
     },
@@ -2041,7 +2040,6 @@
       "testSendSuccess": "Test message sent to your WhatsApp",
       "testSendCooldown": "Wait a few seconds before sending another test.",
       "testSendDailyLimit": "You've reached today's limit of test messages.",
-      "testSendPhoneMissing": "Add your WhatsApp number in setup to receive test messages.",
       "testSendError": "The test message couldn't be sent. Try again.",
       "message": {
         "identityHeading": "Message identity",
@@ -2075,8 +2073,21 @@
         "previewAria": "WhatsApp message preview in {language}",
         "testSend": "Send a test message to WhatsApp",
         "testSendHelp": "Sent to <phone></phone> in {language}. Test messages are free.",
-        "testSendHelpNoPhone": "Sent to your own WhatsApp number in {language}. Test messages are free.",
+        "testSendHelpNoPhone": "We'll ask for your WhatsApp number when you send. Test messages are free.",
         "testSendSaveFirst": "Save your changes first to test them.",
+        "testPhone": {
+          "change": "Change",
+          "title": "Your WhatsApp number",
+          "description": "The test message is sent to this number. It's saved for your next tests.",
+          "label": "WhatsApp number",
+          "suggested": "This is your store's phone number. Check that it's on WhatsApp.",
+          "invalid": "Enter a valid WhatsApp number, including the country code.",
+          "readOnly": "Your account can't change this number.",
+          "saveFailed": "The number couldn't be saved. Try again.",
+          "submit": "Save and send",
+          "cancel": "Cancel",
+          "close": "Close"
+        },
         "templatesNote": "Templates are approved by WhatsApp, so only the style and language change."
       },
       "timing": {

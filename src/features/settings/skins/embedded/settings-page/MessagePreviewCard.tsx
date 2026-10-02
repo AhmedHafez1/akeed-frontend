@@ -1,17 +1,20 @@
 'use client'
 
-import { Fragment } from 'react'
+import { Fragment, useId } from 'react'
 import {
   BlockStack,
   Box,
   Button,
   Card,
+  Collapsible,
   Divider,
+  InlineError,
   InlineStack,
   Text,
 } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
 import type { MessageTemplatePreview } from '@/features/settings/api/settingsApi'
+import type { TestPhonePrompt } from '@/features/settings/domain/useTestPhonePrompt'
 import {
   buildPreviewLines,
   isLtrVariable,
@@ -21,6 +24,10 @@ import {
 } from '@/features/settings/domain/messagePreview'
 import { formatTemplatePreviewTimestamp } from '@/features/settings/skins/shared/templatePreview'
 import { formatPlanPrice } from '@/shared/lib/money'
+import {
+  InternationalPhoneInput,
+  type E164Value,
+} from '@/shared/ui/international-phone-input'
 import { SegmentedButtons } from './SegmentedButtons'
 
 interface MessagePreviewCardProps {
@@ -34,7 +41,8 @@ interface MessagePreviewCardProps {
   canSendTest: boolean
   isDirty: boolean
   isSendingTest: boolean
-  onSendTest: () => void
+  /** Sends the test, asking for the merchant's number first when needed. */
+  phonePrompt: TestPhonePrompt
 }
 
 export function MessagePreviewCard({
@@ -48,9 +56,14 @@ export function MessagePreviewCard({
   canSendTest,
   isDirty,
   isSendingTest,
-  onSendTest,
+  phonePrompt,
 }: MessagePreviewCardProps) {
   const t = useTranslations('settings.embedded.message')
+  const promptId = useId()
+  const fieldId = useId()
+  const noteId = useId()
+  // The test sends the saved settings, so the prompt waits for a clean form.
+  const isPromptOpen = phonePrompt.isOpen && !isDirty
   const lines = buildPreviewLines(template, {
     customer: PREVIEW_CUSTOMER_NAMES[language],
     store: storeName.trim() || 'Akeed Store',
@@ -147,20 +160,90 @@ export function MessagePreviewCard({
               fullWidth
               loading={isSendingTest}
               disabled={isDirty}
-              onClick={onSendTest}
+              onClick={() => void phonePrompt.requestSend()}
             >
               {t('testSend')}
             </Button>
-            <Text as="p" variant="bodySm" tone="subdued">
-              {isDirty
-                ? t('testSendSaveFirst')
-                : testSendPhone
-                  ? t.rich('testSendHelp', {
-                      phone: () => <bdi dir="ltr">{testSendPhone}</bdi>,
-                      language: testLanguageName,
-                    })
-                  : t('testSendHelpNoPhone', { language: testLanguageName })}
-            </Text>
+            <InlineStack gap="200" blockAlign="baseline">
+              <Text as="p" variant="bodySm" tone="subdued">
+                {isDirty
+                  ? t('testSendSaveFirst')
+                  : testSendPhone
+                    ? t.rich('testSendHelp', {
+                        phone: () => <bdi dir="ltr">{testSendPhone}</bdi>,
+                        language: testLanguageName,
+                      })
+                    : t('testSendHelpNoPhone', { language: testLanguageName })}
+              </Text>
+              {!isDirty && testSendPhone && !isPromptOpen && (
+                <Button
+                  variant="plain"
+                  disabled={isSendingTest}
+                  onClick={phonePrompt.openToChange}
+                >
+                  {t('testPhone.change')}
+                </Button>
+              )}
+            </InlineStack>
+            <Collapsible id={promptId} open={isPromptOpen}>
+              {/* Mounted per opening, so the country follows the number. */}
+              {isPromptOpen && (
+                <Box paddingBlockStart="300">
+                  <BlockStack gap="300">
+                    <BlockStack gap="100">
+                      <InternationalPhoneInput
+                        label={t('testPhone.label')}
+                        value={
+                          (phonePrompt.phone || undefined) as
+                            | E164Value
+                            | undefined
+                        }
+                        defaultCountry={phonePrompt.defaultCountry}
+                        onChange={(value) => phonePrompt.setPhone(value ?? '')}
+                        disabled={phonePrompt.isSubmitting}
+                        aria-invalid={
+                          phonePrompt.error === 'invalid' ? true : undefined
+                        }
+                        aria-describedby={
+                          phonePrompt.error
+                            ? `${noteId} ${fieldId}Error`
+                            : noteId
+                        }
+                        validateWhileTyping={false}
+                      />
+                      <span id={noteId}>
+                        <Text as="span" variant="bodySm" tone="subdued">
+                          {phonePrompt.isSuggested
+                            ? t('testPhone.suggested')
+                            : t('testPhone.description')}
+                        </Text>
+                      </span>
+                      {phonePrompt.error && (
+                        <InlineError
+                          message={t(`testPhone.${phonePrompt.error}`)}
+                          fieldID={fieldId}
+                        />
+                      )}
+                    </BlockStack>
+                    <InlineStack gap="200">
+                      <Button
+                        variant="primary"
+                        loading={phonePrompt.isSubmitting}
+                        onClick={() => void phonePrompt.submit()}
+                      >
+                        {t('testPhone.submit')}
+                      </Button>
+                      <Button
+                        disabled={phonePrompt.isSubmitting}
+                        onClick={phonePrompt.close}
+                      >
+                        {t('testPhone.cancel')}
+                      </Button>
+                    </InlineStack>
+                  </BlockStack>
+                </Box>
+              )}
+            </Collapsible>
           </BlockStack>
         )}
 

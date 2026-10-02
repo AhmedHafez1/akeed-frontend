@@ -103,7 +103,9 @@ export function useOnboardingInit({
         setInitialStoreName(state.storeName ?? '')
         setInitialDefaultLanguage(state.defaultLanguage)
         setInitialIsAutoVerifyEnabled(state.isAutoVerifyEnabled)
-        setInitialMerchantPhone(state.merchantWhatsappPhone ?? '')
+        setInitialMerchantPhone(
+          state.merchantWhatsappPhone ?? state.shopPhone ?? ''
+        )
         setIsFreePlanAvailable(
           billingPlans ? !billingPlans.isFreePlanClaimed : true
         )
