@@ -43,6 +43,10 @@ export const queryKeys = {
     all: ['settings'] as const,
     detail: () => [...queryKeys.settings.all, 'detail'] as const,
   },
+  integrationKeys: {
+    all: ['integration-keys'] as const,
+    list: () => [...queryKeys.integrationKeys.all, 'list'] as const,
+  },
   onboarding: {
     all: ['onboarding'] as const,
     state: () => [...queryKeys.onboarding.all, 'state'] as const,

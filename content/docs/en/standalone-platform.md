@@ -31,6 +31,8 @@ This is called the **standalone** way of using Akeed. The confirmation flow is t
 
 Both ways send the same WhatsApp confirmation and use the same follow-up and no-reply rules. Imported orders appear in your **Confirmations** list together with every other order.
 
+If you have your own website or order system, it can also send orders to Akeed automatically. See [Server API](/docs/server-api).
+
 > [!INFO]
 > Only owners and admins can add or import orders. Viewers can see orders and results but cannot change anything.
 
@@ -106,6 +108,7 @@ Yes. Owners and admins can add and import orders. Viewers have read-only access.
 ## Related Guides
 
 - [Bulk Order Import](/docs/bulk-order-import)
+- [Server API](/docs/server-api)
 - [Getting Started](/docs/getting-started)
 - [Order Confirmation](/docs/order-confirmation)
 - [General FAQ](/docs/general-faq)

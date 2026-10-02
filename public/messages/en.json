@@ -1858,7 +1858,8 @@
         "tabs": {
           "message": "Message",
           "timing": "Timing & follow-up",
-          "store": "Store"
+          "store": "Store",
+          "apiKeys": "API keys"
         },
         "unsavedShort": "Unsaved changes",
         "dismiss": "Dismiss",
@@ -1910,6 +1911,73 @@
           "codLabel": "Treat them as cash on delivery",
           "codHelp": "Turn on only if your order source usually leaves the payment method out of COD orders.",
           "codRisk": "Prepaid orders with missing payment info will also get a confirmation message and use credits."
+        },
+        "apiKeys": {
+          "heading": "API keys",
+          "description": "Let your own website or back end send orders to Akeed.",
+          "serverOnlyTitle": "For your server only",
+          "serverOnly": "Keep keys on your server. Never put a key in a website page, a mobile app or anywhere a customer can see it: anyone with the key can send orders to your store.",
+          "createButton": "Create key",
+          "limitReached": "You can have up to {max} active keys. Revoke one to create another.",
+          "empty": "No API keys yet.",
+          "listLabel": "API keys",
+          "retry": "Try again",
+          "createdAt": "Created {date}",
+          "revokedAt": "Revoked {date}",
+          "lastUsedAt": "Last used {date}",
+          "neverUsed": "Never used",
+          "revokeButton": "Revoke",
+          "revokeLabel": "Revoke {name}",
+          "status": {
+            "active": "Active",
+            "revoked": "Revoked"
+          },
+          "create": {
+            "title": "Create an API key",
+            "description": "Name the key after the server that will use it, so you know which one to revoke later.",
+            "nameLabel": "Key name",
+            "namePlaceholder": "e.g. Store website",
+            "nameHelp": "Up to 60 characters. Only your team sees it.",
+            "nameRequired": "Enter a name for the key.",
+            "cancel": "Cancel",
+            "submit": "Create key"
+          },
+          "reveal": {
+            "title": "Copy your API key",
+            "description": "Add this key to your server’s settings.",
+            "once": "This is the only time you’ll see this key. Copy it now. If you lose it, revoke it and create a new one.",
+            "keyLabel": "API key",
+            "copy": "Copy",
+            "copied": "Copied",
+            "copyError": "Couldn’t copy the key. Select it and copy it by hand.",
+            "done": "I’ve saved it"
+          },
+          "revoke": {
+            "title": "Revoke “{name}”?",
+            "description": "Requests that use this key will be refused right away. Orders it already sent are kept. This can’t be undone.",
+            "keep": "Keep key",
+            "confirm": "Revoke key"
+          },
+          "connect": {
+            "endpointLabel": "Send orders to",
+            "copy": "Copy",
+            "copied": "Copied",
+            "copyError": "Couldn’t copy the address. Select it and copy it by hand.",
+            "guideLink": "Read the Server API guide",
+            "newTab": "opens in a new tab"
+          },
+          "errors": {
+            "API_KEY_ROLE_REQUIRED": "Only an owner or admin can manage API keys.",
+            "API_KEY_SOURCE_UNAVAILABLE": "Connect your store before creating an API key.",
+            "API_KEY_SOURCE_AMBIGUOUS": "Your account has more than one active store. Contact support to create an API key.",
+            "API_KEY_SOURCE_UNSUPPORTED": "API keys are available for Standalone stores only.",
+            "API_KEY_SETUP_INCOMPLETE": "Finish setting up your store before creating an API key.",
+            "API_KEY_LIMIT_REACHED": "You’ve reached the limit of active keys. Revoke one first.",
+            "API_KEY_NOT_FOUND": "This key no longer exists. Refresh the page.",
+            "API_KEY_VALIDATION_FAILED": "Check the key name and try again.",
+            "RATE_LIMITED": "Too many requests. Wait a minute and try again.",
+            "generic": "Something went wrong. Try again."
+          }
         }
       },
       "messages": {

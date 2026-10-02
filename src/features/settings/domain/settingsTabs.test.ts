@@ -13,6 +13,7 @@ describe('resolveStandaloneSettingsTab', () => {
     [{ tab: 'message' }, 'message'],
     [{ tab: 'timing' }, 'timing'],
     [{ tab: 'store' }, 'store'],
+    [{ tab: 'api-keys' }, 'api-keys'],
     // The previous layout's `?section=` ids.
     [{ section: 'general' }, 'message'],
     [{ section: 'automation' }, 'timing'],
@@ -48,6 +49,7 @@ describe('isCanonicalStandaloneSettingsUrl', () => {
     [{ tab: null, section: null }, true],
     [{ tab: 'message' }, true],
     [{ tab: 'store' }, true],
+    [{ tab: 'api-keys' }, true],
     // Legacy ids, the billing aliases and any `?section=` get rewritten.
     [{ tab: 'templates' }, false],
     [{ tab: 'plan' }, false],
@@ -74,6 +76,8 @@ describe('resolveSettingsTab', () => {
     ['confirmation-config', 'timing'],
     ['billing', 'plan'],
     ['unknown', 'message'],
+    // The API keys tab exists only in the standalone app.
+    ['api-keys', 'message'],
   ] as const)('maps %s to %s', (param, tab) => {
     expect(resolveSettingsTab(param)).toBe(tab)
   })

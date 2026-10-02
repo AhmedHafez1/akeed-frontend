@@ -8,6 +8,31 @@ function renderDoc(content: string) {
   )
 }
 
+describe('MarkdownContent code blocks', () => {
+  it('keeps a code block left to right on an Arabic page', () => {
+    const { container } = render(
+      <MarkdownContent
+        content={'```bash\ncurl -i "$AKEED_API_URL/api/v1/orders"\n```'}
+        locale="ar"
+        currentSlug="server-api"
+      />
+    )
+
+    const block = container.querySelector('pre')
+    expect(block?.getAttribute('dir')).toBe('ltr')
+    expect(block?.textContent).toContain('curl -i')
+  })
+
+  it('prints a placeholder in angle brackets as text', () => {
+    const { container } = renderDoc(
+      '```http\nX-Correlation-Id: <CORRELATION_ID>\n```\n\nSend `<ORDER_ID>` to support.'
+    )
+
+    expect(container.textContent).toContain('<CORRELATION_ID>')
+    expect(container.textContent).toContain('<ORDER_ID>')
+  })
+})
+
 describe('MarkdownContent callouts', () => {
   it('renders a label followed by text in the same blockquote paragraph', () => {
     const { container } = renderDoc('> [!INFO]\n> Akeed is built for COD.')

@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
 import { AlertTriangle, Check, FileText } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import type { SettingsResponse } from '@/features/settings/api/settingsApi'
+import { useCopyToClipboard } from '@/features/settings/domain/useCopyToClipboard'
 import type { StandaloneSettingsModel } from '@/features/settings/domain/useStandaloneSettings'
 import { createLogger } from '@/shared/lib/logger'
 import { cn } from '@/shared/lib/utils'
@@ -18,9 +18,6 @@ import {
 
 const logger = createLogger('Settings')
 
-/** How long the copy button reads "Copied". */
-const COPIED_FEEDBACK_MS = 2000
-
 interface StoreTabProps {
   model: StandaloneSettingsModel
   data: SettingsResponse
@@ -30,30 +27,10 @@ interface StoreTabProps {
 /** The connection's id, left to right, with a button that copies it. */
 function ConnectionId({ identity }: { identity: string }) {
   const t = useTranslations('settings.standalone.page.store')
-  const [copied, setCopied] = useState(false)
-  const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  useEffect(
-    () => () => {
-      if (resetTimer.current) clearTimeout(resetTimer.current)
-    },
-    []
-  )
-
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(identity)
-      setCopied(true)
-      if (resetTimer.current) clearTimeout(resetTimer.current)
-      resetTimer.current = setTimeout(
-        () => setCopied(false),
-        COPIED_FEEDBACK_MS
-      )
-    } catch (error) {
-      logger.error('Failed to copy the connection id', error)
-      notify.error({ message: t('copyError') })
-    }
-  }
+  const { copied, copy } = useCopyToClipboard((error) => {
+    logger.error('Failed to copy the connection id', error)
+    notify.error({ message: t('copyError') })
+  })
 
   return (
     <div
@@ -75,7 +52,7 @@ function ConnectionId({ identity }: { identity: string }) {
       </div>
       <button
         type="button"
-        onClick={() => void copy()}
+        onClick={() => void copy(identity)}
         className={cn(akLink, 'text-ak-caption min-h-8 cursor-pointer px-1')}
       >
         <span aria-live="polite">{copied ? t('copied') : t('copy')}</span>

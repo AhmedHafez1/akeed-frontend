@@ -144,10 +144,11 @@ describe('SettingsStandalonePage tabs', () => {
 
     fireEvent.keyDown(screen.getByRole('tablist'), { key: 'End' })
 
-    expect(nav.push).toHaveBeenCalledWith('/ar/settings?tab=store', {
+    // API keys is the last tab (US-05-01).
+    expect(nav.push).toHaveBeenCalledWith('/ar/settings?tab=api-keys', {
       scroll: false,
     })
-    expect(document.activeElement).toBe(tab('المتجر'))
+    expect(document.activeElement).toBe(tab('مفاتيح API'))
   })
 
   it('steps from the focused tab while the URL has not caught up', async () => {

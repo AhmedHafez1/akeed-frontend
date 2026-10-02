@@ -275,8 +275,12 @@ export function MarkdownContent({
         {children}
       </td>
     ),
+    // Code reads left to right in every locale.
     pre: ({ children }) => (
-      <pre className="border-border my-5 overflow-x-auto rounded-xl border bg-slate-950 p-4 text-sm leading-6 text-slate-100">
+      <pre
+        dir="ltr"
+        className="border-border my-5 overflow-x-auto rounded-xl border bg-slate-950 p-4 text-sm leading-6 text-slate-100"
+      >
         {children}
       </pre>
     ),

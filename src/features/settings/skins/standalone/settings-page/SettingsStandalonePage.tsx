@@ -20,6 +20,7 @@ import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
 import { akButton, akCard } from '@/shared/ui'
+import { ApiKeysTab } from './ApiKeysTab'
 import { MessageTab } from './MessageTab'
 import { SettingsSaveBar, settingsSaveBarClearance } from './SettingsSaveBar'
 import { SettingsStandaloneSkeleton } from './SettingsStandaloneSkeleton'
@@ -60,7 +61,7 @@ function PageShell({
 }
 
 /**
- * The standalone Settings page: the header, the Message / Timing / Store tabs
+ * The standalone Settings page: the header, the Message / Timing / Store / API keys tabs
  * driven by `?tab=`, and one save bar for the whole form. Edits survive a tab
  * switch; a tab holding unsaved changes is marked.
  */
@@ -163,9 +164,12 @@ export function SettingsStandalonePage() {
     message: t('tabs.message'),
     timing: t('tabs.timing'),
     store: t('tabs.store'),
+    'api-keys': t('tabs.apiKeys'),
   }
+  // The API keys tab holds no form fields, so it is never dirty.
+  const dirtyTabs: ReadonlySet<StandaloneSettingsTabId> = model.dirtyTabs
   const dirtyTabLabels = STANDALONE_SETTINGS_TABS.filter((tab) =>
-    model.dirtyTabs.has(tab)
+    dirtyTabs.has(tab)
   ).map((tab) => labels[tab])
 
   const showSaveBar = model.isDirty && !readOnly
@@ -229,6 +233,7 @@ export function SettingsStandalonePage() {
         {activeTab === 'store' && (
           <StoreTab model={model} data={data} readOnly={readOnly} />
         )}
+        {activeTab === 'api-keys' && <ApiKeysTab readOnly={readOnly} />}
       </div>
 
       {showSaveBar && (
