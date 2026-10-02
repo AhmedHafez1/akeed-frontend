@@ -49,13 +49,16 @@ export interface MappingTableProps {
   canEdit: boolean
   errorText: (key: OrderImportField | 'dateFormat') => string | null
   onColumns: (field: OrderImportField, columns: string[]) => void
+  /** The merchant confirms a column we were not sure of. */
+  onAccept: (field: OrderImportField) => void
   onDateFormat: (format: OrderImportDateFormat) => void
 }
 
 /**
  * The focused mapping: the required fields, the order number and the
  * payment column, each with real example values; the optional fields fold
- * away. An empty required field is highlighted and offered a likely column.
+ * away. An empty required field is highlighted and offered a likely column;
+ * a column we only guessed asks for one tap to confirm it.
  */
 export function MappingTable(props: MappingTableProps) {
   const t = useTranslations('orderImport')
@@ -106,13 +109,19 @@ function FieldRow({
   canEdit,
   errorText,
   onColumns,
+  onAccept,
   onDateFormat,
 }: MappingTableProps & { field: OrderImportField }) {
   const t = useTranslations('orderImport')
   const selectId = `order-import-map-${field}`
   const columns = form.columns[field]
+  const fieldName = t(`map.fields.${field}`)
   const status = rowStatus(field, suggestions.get(field), form, checks)
   const needsColumn = status === 'required'
+  // "Check this" is also the date-format question, which has its own choice.
+  const needsConfirm =
+    status === 'check' &&
+    !(field === 'orderDate' && showsDateFormat(form, checks))
   const error = errorText(field)
   const samples = sampleValues(sampleRows, columns)
   const used = new Set(Object.values(form.columns).flat())
@@ -142,7 +151,7 @@ function FieldRow({
         htmlFor={selectId}
         className="text-foreground pt-2.5 text-sm font-semibold"
       >
-        {t(`map.fields.${field}`)}
+        {fieldName}
         {requiredImportFields.has(field) && (
           <>
             <span aria-hidden="true" className="text-destructive">
@@ -194,10 +203,28 @@ function FieldRow({
         </p>
         {suggested && canEdit && (
           <SuggestionCard
-            column={suggested}
+            question={t('check.suggestion.question', { column: suggested })}
             samples={sampleValues(sampleRows, [suggested])}
-            fieldName={t(`map.fields.${field}`)}
+            action={t('check.suggestion.use')}
+            actionLabel={t('check.suggestion.useLabel', {
+              column: suggested,
+              field: fieldName,
+            })}
             onUse={() => choose(suggested)}
+          />
+        )}
+        {needsConfirm && canEdit && (
+          <SuggestionCard
+            question={t('check.confirm.question', {
+              column: columns.join(' + '),
+            })}
+            samples={[]}
+            action={t('check.confirm.yes')}
+            actionLabel={t('check.confirm.yesLabel', {
+              column: columns.join(' + '),
+              field: fieldName,
+            })}
+            onUse={() => onAccept(field)}
           />
         )}
         {field === 'orderDate' && showsDateFormat(form, checks) && (
@@ -245,25 +272,28 @@ function RowStatusLabel({ status }: { status: RowStatus }) {
   )
 }
 
-/** «هل هو «رقم التواصل»؟ مثل: …» with one tap to use it. */
+/**
+ * «هل هو «رقم التواصل»؟ مثل: …» with one tap to answer yes: to use a column
+ * we found for an empty field, or to confirm one we only guessed.
+ */
 function SuggestionCard({
-  column,
+  question,
   samples,
-  fieldName,
+  action,
+  actionLabel,
   onUse,
 }: {
-  column: string
+  question: string
   samples: readonly string[]
-  fieldName: string
+  action: string
+  actionLabel: string
   onUse: () => void
 }) {
   const t = useTranslations('orderImport')
   return (
     <div className="border-warning-border bg-card flex flex-wrap items-center gap-3 rounded-lg border border-dashed p-3">
       <p className="text-foreground min-w-0 flex-1 text-sm">
-        <span className="font-semibold">
-          {t('check.suggestion.question', { column })}
-        </span>
+        <span className="font-semibold">{question}</span>
         {samples.length > 0 && (
           <span className="text-muted-foreground">
             {' '}
@@ -277,13 +307,10 @@ function SuggestionCard({
         variant="outline"
         size="sm"
         className="min-h-11 sm:min-h-0"
-        aria-label={t('check.suggestion.useLabel', {
-          column,
-          field: fieldName,
-        })}
+        aria-label={actionLabel}
         onClick={onUse}
       >
-        {t('check.suggestion.use')}
+        {action}
       </Button>
     </div>
   )

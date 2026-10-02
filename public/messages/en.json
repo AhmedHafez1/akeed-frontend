@@ -3147,6 +3147,11 @@
         "use": "Use it",
         "useLabel": "Use column {column} for {field}"
       },
+      "confirm": {
+        "question": "Is “{column}” the right column?",
+        "yes": "Yes, it's right",
+        "yesLabel": "Confirm column {column} for {field}"
+      },
       "optional": {
         "title": "Optional fields",
         "mapped": "{field}: matched",
@@ -3175,6 +3180,7 @@
         "excluded": "{count, plural, one {# excluded} other {# excluded}}",
         "continue": "Continue to send",
         "blockedOne": "Choose the {field} column to continue",
+        "confirmOne": "Confirm the {field} column to continue",
         "blockedMany": "Choose the required columns to continue",
         "fixErrors": "Fix the highlighted fields to continue"
       }

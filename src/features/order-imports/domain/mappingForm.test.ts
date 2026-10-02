@@ -7,7 +7,9 @@ import type {
   OrderImportSampleRow,
 } from '../api/orderImportsApi'
 import {
+  acceptColumns,
   attentionFields,
+  chooseColumns,
   countryChange,
   initialMappingForm,
   isAllMatched,
@@ -116,6 +118,47 @@ describe('isAllMatched', () => {
     ]
     const form = initialMappingForm(state(list))
     expect(isAllMatched(bySuggestion(list), form, noChecks)).toBe(false)
+  })
+})
+
+describe('a guess the matcher was not sure of', () => {
+  const list = [
+    suggestion('phone', ['Phone']),
+    suggestion('customerName', ['Name']),
+    suggestion('amount', ['Total amount'], 'partial'),
+  ]
+  const suggestions = bySuggestion(list)
+  const form = initialMappingForm(state(list))
+
+  it('blocks until the merchant confirms the column as it is', () => {
+    expect(attentionFields(suggestions, form, noChecks)).toEqual(['amount'])
+    const confirmed = { ...form, ...acceptColumns(form, 'amount') }
+    expect(confirmed.columns.amount).toEqual(['Total amount'])
+    expect(attentionFields(suggestions, confirmed, noChecks)).toEqual([])
+    expect(isAllMatched(suggestions, confirmed, noChecks)).toBe(true)
+  })
+
+  it('is confirmed by picking it again after trying another column', () => {
+    const other = { ...form, ...chooseColumns(form, 'amount', ['Price']) }
+    const back = {
+      ...other,
+      ...chooseColumns(other, 'amount', ['Total amount']),
+    }
+    expect(attentionFields(suggestions, back, noChecks)).toEqual([])
+  })
+
+  it('asks again when the column is cleared', () => {
+    const confirmed = { ...form, ...acceptColumns(form, 'amount') }
+    const cleared = {
+      ...confirmed,
+      ...chooseColumns(confirmed, 'amount', []),
+    }
+    expect(attentionFields(suggestions, cleared, noChecks)).toEqual(['amount'])
+  })
+
+  it('sends the same mapping whether or not it was confirmed', () => {
+    const confirmed = { ...form, ...acceptColumns(form, 'amount') }
+    expect(toSaveBody(confirmed, noChecks)).toEqual(toSaveBody(form, noChecks))
   })
 })
 

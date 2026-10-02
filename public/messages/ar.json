@@ -3138,6 +3138,11 @@
         "use": "استخدمه",
         "useLabel": "استخدم العمود {column} لـ{field}"
       },
+      "confirm": {
+        "question": "هل «{column}» هو العمود الصحيح؟",
+        "yes": "نعم، صحيح",
+        "yesLabel": "تأكيد العمود {column} لـ{field}"
+      },
       "optional": {
         "title": "حقول اختيارية",
         "mapped": "{field}: مطابق",
@@ -3166,6 +3171,7 @@
         "excluded": "{count, plural, zero {لا مستبعدة} one {طلب واحد مستبعد} two {طلبان مستبعدان} few {# مستبعدة} many {# مستبعدًا} other {# مستبعد}}",
         "continue": "متابعة للإرسال",
         "blockedOne": "اختر عمود {field} للمتابعة",
+        "confirmOne": "أكّد عمود {field} للمتابعة",
         "blockedMany": "اختر الأعمدة المطلوبة للمتابعة",
         "fixErrors": "صحّح الحقول المميزة للمتابعة"
       }
