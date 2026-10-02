@@ -35,13 +35,21 @@ export function resolveSettingsTab(
   return SETTINGS_TAB_ALIASES[tabParam] ?? 'message'
 }
 
-/** The standalone app has no plan tab; its third tab holds the order source. */
-export type StandaloneSettingsTabId = 'message' | 'timing' | 'store'
+/**
+ * The standalone app has no plan tab; its third tab holds the order source and
+ * its fourth the server API keys. Only the first three hold form fields.
+ */
+export type StandaloneSettingsTabId =
+  | 'message'
+  | 'timing'
+  | 'store'
+  | 'api-keys'
 
 export const STANDALONE_SETTINGS_TABS: StandaloneSettingsTabId[] = [
   'message',
   'timing',
   'store',
+  'api-keys',
 ]
 
 /** Where a standalone Settings URL leads: one of its tabs, or `/billing`. */
