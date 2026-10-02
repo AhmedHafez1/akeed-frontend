@@ -20,7 +20,9 @@ import {
 } from '../../../api/orderImportsApi'
 import { flowReducer, initialFlow } from '../../../domain/importFlow'
 import {
+  acceptColumns,
   attentionFields,
+  chooseColumns,
   countryChange,
   initialMappingForm,
   isAllMatched,
@@ -187,9 +189,13 @@ export function CheckStep({
           saving={save.isPending}
           blockedReason={
             attention.length === 1
-              ? t('check.footer.blockedOne', {
-                  field: t(`map.fields.${attention[0]}`),
-                })
+              ? t(
+                  // A guess we were not sure of is confirmed, not chosen.
+                  form.columns[attention[0]].length > 0
+                    ? 'check.footer.confirmOne'
+                    : 'check.footer.blockedOne',
+                  { field: t(`map.fields.${attention[0]}`) }
+                )
               : attention.length > 1
                 ? t('check.footer.blockedMany')
                 : blocked
@@ -254,8 +260,9 @@ export function CheckStep({
             canEdit={canEdit}
             errorText={errorText}
             onColumns={(field, columns) =>
-              update({ columns: { ...form.columns, [field]: columns } })
+              update(chooseColumns(form, field, columns))
             }
+            onAccept={(field) => update(acceptColumns(form, field))}
             onDateFormat={(dateFormat) => update({ dateFormat })}
           />
         </div>

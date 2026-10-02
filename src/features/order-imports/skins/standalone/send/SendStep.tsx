@@ -324,7 +324,12 @@ function SendFooter({
           </Button>
         )}
         <DialogClose asChild>
-          <Button type="button" variant="outline" className="h-11 sm:h-10">
+          <Button
+            type="button"
+            variant="outline"
+            className="h-11 sm:h-10"
+            disabled={busy}
+          >
             {t('modal.cancel')}
           </Button>
         </DialogClose>

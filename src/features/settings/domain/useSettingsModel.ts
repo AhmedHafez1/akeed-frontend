@@ -30,18 +30,23 @@ const logger = createLogger('Settings')
 type TestSendErrorKey =
   | 'testSendCooldown'
   | 'testSendDailyLimit'
-  | 'testSendPhoneMissing'
   | 'testSendError'
 
 const TEST_SEND_ERROR_KEYS: Partial<Record<string, TestSendErrorKey>> = {
   ONBOARDING_TEST_COOLDOWN: 'testSendCooldown',
   ONBOARDING_TEST_DAILY_LIMIT: 'testSendDailyLimit',
-  ONBOARDING_TEST_PHONE_MISSING: 'testSendPhoneMissing',
 }
 
 export type SaveOutcome =
   | { ok: true }
   | { ok: false; invalidField: SettingsFieldKey | null }
+
+/** `phoneMissing` is not reported: the skin asks for the number instead. */
+export type TestSendOutcome = 'sent' | 'phoneMissing' | 'failed'
+
+export type SaveTestPhoneOutcome =
+  | { ok: true }
+  | { ok: false; reason: 'invalid' | 'readOnly' | 'saveFailed' }
 
 /** The model's messages, already translated from the skin's own namespace. */
 export interface SettingsModelMessages extends Record<
@@ -211,22 +216,53 @@ export function useSettingsModel({
     setSaveError(null)
   }, [isSaving, saved])
 
-  const sendTest = useCallback(async () => {
+  const sendTest = useCallback(async (): Promise<TestSendOutcome> => {
     setIsSendingTest(true)
     try {
       await sendOnboardingTest({ resend: true })
       adapter.notifySuccess(messages.testSendSuccess)
+      return 'sent'
     } catch (error) {
+      const code = error instanceof OnboardingApiError ? error.code : null
+      if (code === 'ONBOARDING_TEST_PHONE_MISSING') return 'phoneMissing'
       logger.error('Failed to send test message', error)
       const key =
-        (error instanceof OnboardingApiError && error.code
-          ? TEST_SEND_ERROR_KEYS[error.code]
-          : undefined) ?? 'testSendError'
+        (code ? TEST_SEND_ERROR_KEYS[code] : undefined) ?? 'testSendError'
       adapter.notifyError(messages[key], 'testSend')
+      return 'failed'
     } finally {
       setIsSendingTest(false)
     }
   }, [adapter, messages])
+
+  /**
+   * Saves the number the free test goes to. It is sent with the saved
+   * settings, not the working copy, so unsaved edits are neither stored nor
+   * lost.
+   */
+  const saveTestPhone = useCallback(
+    async (phone: string): Promise<SaveTestPhoneOutcome> => {
+      if (!saved) return { ok: false, reason: 'saveFailed' }
+      try {
+        const response = await saveSettings({
+          ...toSettingsPayload(saved),
+          merchantWhatsappPhone: phone,
+        })
+        queryClient.setQueryData(queryKeys.settings.detail(), response)
+        return { ok: true }
+      } catch (error) {
+        logger.error('Failed to save the test number', error)
+        if (error instanceof ApiError) {
+          if (error.code === 'ONBOARDING_INVALID_PHONE') {
+            return { ok: false, reason: 'invalid' }
+          }
+          if (error.status === 403) return { ok: false, reason: 'readOnly' }
+        }
+        return { ok: false, reason: 'saveFailed' }
+      }
+    },
+    [queryClient, saved]
+  )
 
   // Setup is not finished: the skin redirects, so there is no form to show.
   const isPageLoading =
@@ -261,6 +297,7 @@ export function useSettingsModel({
     discard,
     isSendingTest,
     sendTest,
+    saveTestPhone,
   }
 }
 

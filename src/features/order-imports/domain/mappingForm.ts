@@ -29,6 +29,8 @@ export const orderedImportFields: readonly OrderImportField[] = [
 
 export type MappingForm = {
   columns: Record<OrderImportField, string[]>
+  /** Fields whose column the merchant chose or confirmed in this form. */
+  accepted: OrderImportField[]
   country: string
   currency: OrderCurrency
   dateFormat: OrderImportDateFormat
@@ -59,6 +61,33 @@ export function countryChange(
   return next && followsCountry ? { country, currency: next } : { country }
 }
 
+/**
+ * The merchant says a field's column is right. An unsure guess has no other
+ * way out: picking the same option again changes nothing in a select.
+ */
+export function acceptColumns(
+  form: Pick<MappingForm, 'accepted'>,
+  field: OrderImportField
+): Pick<MappingForm, 'accepted'> {
+  return {
+    accepted: form.accepted.includes(field)
+      ? form.accepted
+      : [...form.accepted, field],
+  }
+}
+
+/** A column the merchant picked is one they accept, whichever it is. */
+export function chooseColumns(
+  form: Pick<MappingForm, 'columns' | 'accepted'>,
+  field: OrderImportField,
+  columns: string[]
+): Pick<MappingForm, 'columns' | 'accepted'> {
+  return {
+    columns: { ...form.columns, [field]: columns },
+    ...acceptColumns(form, field),
+  }
+}
+
 export function initialMappingForm(
   state: OrderImportMappingState
 ): MappingForm {
@@ -75,6 +104,7 @@ export function initialMappingForm(
       entry.classification === 'unknown' ? 'cod' : entry.classification
   return {
     columns,
+    accepted: [],
     country: state.options.country,
     currency: state.options.defaultCurrency,
     dateFormat: state.options.dateFormat,
@@ -108,6 +138,7 @@ export function fieldStatus(
     form.dateFormat === 'auto'
   )
     return 'chooseDateFormat'
+  if (form.accepted.includes(field)) return 'chosen'
   const unchanged =
     suggestion !== undefined && sameColumns(suggestion.columns, chosen)
   if (!unchanged || suggestion.source === 'merchant') return 'chosen'

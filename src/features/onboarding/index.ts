@@ -12,6 +12,8 @@ export { buildTestTimeline } from './model/onboardingTest'
 export {
   STANDALONE_STEP_NUMBER,
   STANDALONE_TOTAL_STEPS,
+  countryFromLanguages,
+  countryFromPhone,
   parseStandaloneStep,
 } from './model/standaloneStore'
 

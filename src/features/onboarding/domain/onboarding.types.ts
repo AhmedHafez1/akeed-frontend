@@ -75,8 +75,10 @@ export interface IntegrationOnboardingState {
   /** The Shopify store's IANA zone, offered first as "store time". */
   shopTimezone?: string | null
   sendDelayMinutes: number
-  /** The merchant's own number for the free test; prefilled from the shop. */
+  /** The merchant's saved number for the free test; null until one is saved. */
   merchantWhatsappPhone?: string | null
+  /** The Shopify store's phone, offered as a prefill for that number. */
+  shopPhone?: string | null
   /** Template language the merchant's own test message is sent in. */
   testSendLanguage?: 'ar' | 'en'
   activation?: OnboardingActivation
