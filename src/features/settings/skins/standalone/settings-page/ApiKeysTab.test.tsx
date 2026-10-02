@@ -356,6 +356,58 @@ describe('ApiKeysTab', () => {
     expect(screen.getByText(copy.serverOnly)).toBeTruthy()
   })
 
+  it('links to the server API guide in the reader’s language, in a new tab', async () => {
+    renderTab()
+    await screen.findByRole('list', { name: copy.listLabel })
+
+    const link = screen.getByRole('link', {
+      name: new RegExp(copy.connect.guideLink),
+    })
+    expect(link.getAttribute('href')).toBe('/ar/docs/server-api')
+    expect(link.getAttribute('target')).toBe('_blank')
+    expect(link.getAttribute('rel')).toBe('noreferrer')
+    expect(link.textContent).toContain(copy.connect.newTab)
+  })
+
+  it('shows where to send orders, left to right, and copies the address', async () => {
+    renderTab()
+    await screen.findByRole('list', { name: copy.listLabel })
+
+    const address = screen.getByText(/\/api\/v1\/orders$/)
+    expect(address.textContent).toMatch(/^https?:\/\/[^/]+\/api\/v1\/orders$/)
+    expect(address.closest('[dir]')?.getAttribute('dir')).toBe('ltr')
+    expect(screen.getByText(copy.connect.endpointLabel)).toBeTruthy()
+
+    fireEvent.click(screen.getByRole('button', { name: copy.connect.copy }))
+
+    await waitFor(() =>
+      expect(writeText).toHaveBeenCalledWith(address.textContent)
+    )
+    expect(await screen.findByText(copy.connect.copied)).toBeTruthy()
+  })
+
+  it('shows a viewer the guide link and the address', async () => {
+    renderTab(true)
+    await screen.findByRole('list', { name: copy.listLabel })
+
+    expect(
+      screen.getByRole('link', { name: new RegExp(copy.connect.guideLink) })
+    ).toBeTruthy()
+    expect(screen.getByText(/\/api\/v1\/orders$/)).toBeTruthy()
+  })
+
+  it('has the connection copy in both locales', () => {
+    const english = en.settings.standalone.page.apiKeys.connect
+    expect(Object.keys(english).sort()).toEqual(
+      Object.keys(copy.connect).sort()
+    )
+    for (const text of [
+      ...Object.values(english),
+      ...Object.values(copy.connect),
+    ])
+      expect(text.trim()).not.toBe('')
+  })
+
   it('shows an empty state', async () => {
     api.get.mockResolvedValue(listOf([]))
     renderTab()

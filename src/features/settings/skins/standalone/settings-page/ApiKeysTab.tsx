@@ -13,6 +13,7 @@ import { integrationKeyErrorKey } from '@/features/settings/domain/integrationKe
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { cn } from '@/shared/lib/utils'
 import { akButton, akPill, Skeleton } from '@/shared/ui'
+import { ApiConnectionGuide } from './ApiConnectionGuide'
 import { CreateApiKeyDialog } from './CreateApiKeyDialog'
 import { RevokeApiKeyDialog } from './RevokeApiKeyDialog'
 import {
@@ -220,6 +221,7 @@ export function ApiKeysTab({ readOnly }: ApiKeysTabProps) {
               </ul>
             )}
           </div>
+          <ApiConnectionGuide />
         </AnnotatedSection>
       </AnnotatedSections>
 

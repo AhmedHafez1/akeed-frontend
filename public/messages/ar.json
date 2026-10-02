@@ -1952,6 +1952,14 @@
             "keep": "الإبقاء على المفتاح",
             "confirm": "إلغاء المفتاح"
           },
+          "connect": {
+            "endpointLabel": "أرسل الطلبات إلى",
+            "copy": "نسخ",
+            "copied": "تم النسخ",
+            "copyError": "تعذّر نسخ العنوان. حدّده وانسخه يدويًا.",
+            "guideLink": "اقرأ دليل ربط الخادم",
+            "newTab": "يفتح في تبويب جديد"
+          },
           "errors": {
             "API_KEY_ROLE_REQUIRED": "يدير مفاتيح API المالك أو المسؤول فقط.",
             "API_KEY_SOURCE_UNAVAILABLE": "اربط متجرك قبل إنشاء مفتاح API.",

@@ -1958,6 +1958,14 @@
             "keep": "Keep key",
             "confirm": "Revoke key"
           },
+          "connect": {
+            "endpointLabel": "Send orders to",
+            "copy": "Copy",
+            "copied": "Copied",
+            "copyError": "Couldn’t copy the address. Select it and copy it by hand.",
+            "guideLink": "Read the Server API guide",
+            "newTab": "opens in a new tab"
+          },
           "errors": {
             "API_KEY_ROLE_REQUIRED": "Only an owner or admin can manage API keys.",
             "API_KEY_SOURCE_UNAVAILABLE": "Connect your store before creating an API key.",

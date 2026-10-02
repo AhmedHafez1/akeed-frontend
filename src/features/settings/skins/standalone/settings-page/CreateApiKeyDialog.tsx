@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useId, useRef, useState, type FormEvent } from 'react'
+import { useId, useState, type FormEvent } from 'react'
 import { AlertTriangle, Check, Copy, KeyRound, Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useCreateIntegrationKeyMutation } from '@/features/settings/api/integrationKeysApi'
@@ -8,6 +8,7 @@ import {
   integrationKeyErrorKey,
   type IntegrationKeyErrorKey,
 } from '@/features/settings/domain/integrationKeyErrors'
+import { useCopyToClipboard } from '@/features/settings/domain/useCopyToClipboard'
 import { createLogger } from '@/shared/lib/logger'
 import { cn } from '@/shared/lib/utils'
 import {
@@ -26,8 +27,6 @@ const logger = createLogger('Settings')
 
 /** Mirrors the backend's name limit. */
 const NAME_MAX_LENGTH = 60
-/** How long the copy button reads "Copied". */
-const COPIED_FEEDBACK_MS = 2000
 
 interface CreateApiKeyDialogProps {
   open: boolean
@@ -51,15 +50,14 @@ export function CreateApiKeyDialog({ open, onClose }: CreateApiKeyDialogProps) {
   const [error, setError] = useState<
     IntegrationKeyErrorKey | 'nameRequired' | null
   >(null)
-  const [copied, setCopied] = useState(false)
-  const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  useEffect(
-    () => () => {
-      if (resetTimer.current) clearTimeout(resetTimer.current)
-    },
-    []
-  )
+  const {
+    copied,
+    copy,
+    reset: resetCopied,
+  } = useCopyToClipboard((caught) => {
+    logger.error('Failed to copy the API key', caught)
+    notify.error({ message: t('reveal.copyError') })
+  })
 
   const isCreating = create.isPending
   const isRevealing = secret !== null
@@ -69,7 +67,7 @@ export function CreateApiKeyDialog({ open, onClose }: CreateApiKeyDialogProps) {
     setSecret(null)
     setName('')
     setError(null)
-    setCopied(false)
+    resetCopied()
     onClose()
   }
 
@@ -89,22 +87,6 @@ export function CreateApiKeyDialog({ open, onClose }: CreateApiKeyDialogProps) {
     } finally {
       // The settled mutation would otherwise keep the secret as its `data`.
       create.reset()
-    }
-  }
-
-  const copy = async () => {
-    if (!secret) return
-    try {
-      await navigator.clipboard.writeText(secret)
-      setCopied(true)
-      if (resetTimer.current) clearTimeout(resetTimer.current)
-      resetTimer.current = setTimeout(
-        () => setCopied(false),
-        COPIED_FEEDBACK_MS
-      )
-    } catch (caught) {
-      logger.error('Failed to copy the API key', caught)
-      notify.error({ message: t('reveal.copyError') })
     }
   }
 
@@ -158,7 +140,7 @@ export function CreateApiKeyDialog({ open, onClose }: CreateApiKeyDialogProps) {
                 </code>
                 <button
                   type="button"
-                  onClick={() => void copy()}
+                  onClick={() => void copy(secret)}
                   className={akButton({ variant: 'secondary', size: 'table' })}
                 >
                   {copied ? (

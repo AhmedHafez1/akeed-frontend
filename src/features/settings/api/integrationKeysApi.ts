@@ -3,8 +3,13 @@ import {
   useMutation,
   useQueryClient,
 } from '@tanstack/react-query'
-import { api } from '@/shared/lib/auth'
+import { api, getApiBaseUrl } from '@/shared/lib/auth'
 import { queryKeys } from '@/shared/query/keys'
+
+/** Where a merchant's server sends orders with an API key (version 1). */
+export function getOrderApiEndpoint(): string {
+  return `${getApiBaseUrl()}/api/v1/orders`
+}
 
 /** Key metadata. The API never returns the secret or its hash here. */
 export interface IntegrationApiKey {
