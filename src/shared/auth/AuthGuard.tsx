@@ -14,10 +14,15 @@ import {
   isPublicRoute,
   getLocaleFromPathname,
 } from '@/shared/lib/locale'
+import { resolveOrganizationSourceMode } from '@/shared/config/commerceSources'
 import { getLoginRedirectPath } from '@/shared/lib/authErrors'
 import { createLogger } from '@/shared/lib/logger'
 import { FullPageLoader } from '@/shared/layout/FullPageLoader'
-import { fetchOnboardingState } from '@/features/onboarding'
+import {
+  clearKnownOnboardingSource,
+  fetchOnboardingState,
+  OnboardingApiError,
+} from '@/features/onboarding'
 
 const logger = createLogger('AuthGuard')
 
@@ -64,6 +69,7 @@ export function AuthGuard({
         if (!session) {
           activeUserIdRef.current = null
           clearStandaloneOrganizationBootstrap()
+          clearKnownOnboardingSource()
           router.replace(getLoginRedirectPath(locale, window.location))
           return
         }
@@ -73,17 +79,44 @@ export function AuthGuard({
           activeUserIdRef.current !== session.user.id
         ) {
           clearStandaloneOrganizationBootstrap()
+          clearKnownOnboardingSource()
         }
         activeUserIdRef.current = session.user.id
 
         if (requireOrganization) {
           await ensureStandaloneOrganization(session.user)
-          const { state } = await fetchOnboardingState()
           const routeWithoutLocale = `/${(pathname ?? '')
             .split('/')
             .slice(2)
             .join('/')}`
           const isOnboardingRoute = routeWithoutLocale.startsWith('/onboarding')
+          const state = await fetchOnboardingState().then(
+            (response) => response.state,
+            (error: unknown) => {
+              // An organization that chose at signup to connect a store
+              // platform has no source until that install finishes. Setup is
+              // where it connects, so it is the only place it may be.
+              if (
+                error instanceof OnboardingApiError &&
+                error.code === 'ONBOARDING_SOURCE_MISSING' &&
+                resolveOrganizationSourceMode(
+                  session.user.user_metadata?.signup_source
+                ) === 'connect'
+              ) {
+                return null
+              }
+              throw error
+            }
+          )
+          if (!active) return
+          if (!state) {
+            if (!isOnboardingRoute) {
+              router.replace(`/${locale}/onboarding`)
+              return
+            }
+            setAuthChecked(true)
+            return
+          }
           if (state.onboardingStatus === 'pending' && !isOnboardingRoute) {
             router.replace(`/${locale}/onboarding`)
             return
@@ -113,6 +146,7 @@ export function AuthGuard({
       if (!session && !isPublic) {
         activeUserIdRef.current = null
         clearStandaloneOrganizationBootstrap()
+        clearKnownOnboardingSource()
         router.replace(getLoginRedirectPath(locale, window.location))
         return
       }
@@ -124,6 +158,7 @@ export function AuthGuard({
       ) {
         activeUserIdRef.current = session.user.id
         clearStandaloneOrganizationBootstrap()
+        clearKnownOnboardingSource()
         setAuthChecked(false)
         setRetryKey((value) => value + 1)
       }

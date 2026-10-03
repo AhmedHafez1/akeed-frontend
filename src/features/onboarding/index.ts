@@ -32,7 +32,12 @@ export {
   sendOnboardingTest,
   updateOnboardingSettings,
 } from './api/onboardingApi'
-export { OnboardingApiError } from './api/onboardingApi'
+export {
+  OnboardingApiError,
+  clearKnownOnboardingSource,
+} from './api/onboardingApi'
+export { useOnboardingSourceSkin } from './hooks/useOnboardingSourceSkin'
+export { EasyOrdersConnectPage } from './skins/easyorders/EasyOrdersConnectPage'
 export { StandaloneOnboardingPage } from './ui/standalone/StandaloneOnboardingPage'
 export { SendTestToPhoneAction } from './ui/standalone/components/SendTestToPhoneAction'
 

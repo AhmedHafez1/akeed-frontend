@@ -9,6 +9,7 @@ import { useAppBridgeLoading } from '@/shared/hooks/useAppBridgeLoading'
 import { useCooldown } from '@/shared/hooks/useCooldown'
 import { fillTemplatePreview } from '@/shared/lib/templatePreview'
 import {
+  EasyOrdersConnectPage,
   LANGUAGE_OPTION_DEFINITIONS,
   ONBOARDING_FLOW_STEPS,
   OnboardingAlerts,
@@ -19,6 +20,7 @@ import {
   TestMessageStep,
   buildTestTimeline,
   useEmbeddedOnboarding,
+  useOnboardingSourceSkin,
   type OnboardingTestError,
 } from '@/features/onboarding'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
@@ -41,7 +43,18 @@ export default function OnboardingPage() {
   const { isEmbedded, isLoading: isModeLoading } = useAkeedMode()
 
   if (isModeLoading) return <OnboardingPageSkeleton variant="setup" />
-  return isEmbedded ? <EmbeddedOnboarding /> : <StandaloneOnboardingPage />
+  return isEmbedded ? <EmbeddedOnboarding /> : <SourceOnboarding />
+}
+
+/** Non-embedded setup, in the skin of the organization's order source. */
+function SourceOnboarding() {
+  const skin = useOnboardingSourceSkin()
+
+  return skin === 'easyorders' ? (
+    <EasyOrdersConnectPage />
+  ) : (
+    <StandaloneOnboardingPage />
+  )
 }
 
 function EmbeddedOnboarding() {

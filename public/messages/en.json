@@ -911,6 +911,19 @@
           "title": "Pay only for what's sent",
           "body": "{price} per confirmation after the free credits. No monthly subscription."
         }
+      },
+      "source": {
+        "label": "Where do your orders come from?",
+        "options": {
+          "standalone": {
+            "title": "My own website or orders I add myself",
+            "description": "Add orders by hand, from a file, or through the API."
+          },
+          "easyorders": {
+            "title": "EasyOrders",
+            "description": "Connect your EasyOrders store after you sign up."
+          }
+        }
       }
     },
     "verifyEmail": {
@@ -3319,6 +3332,106 @@
         "placeholder": "Mobile number",
         "save": "Save",
         "failed": "The number couldn't be saved. Try again."
+      }
+    }
+  },
+  "easyOrdersConnect": {
+    "eyebrow": "EasyOrders",
+    "loading": "Loading your EasyOrders connection…",
+    "readOnly": "You have read-only access. Ask an owner or admin to connect EasyOrders.",
+    "cleanup": "If you chose Accept in EasyOrders, it may have created an API key and webhooks named Akeed. Delete them in EasyOrders under Settings → Public API before you try again.",
+    "loadError": {
+      "title": "We couldn't load your EasyOrders connection",
+      "body": "Check your internet connection and try again.",
+      "retry": "Try again"
+    },
+    "unavailable": {
+      "title": "EasyOrders isn't available yet",
+      "body": "Connecting an EasyOrders store is not open yet. We will let you know as soon as it is."
+    },
+    "pilotRequired": {
+      "title": "Your EasyOrders access is being prepared",
+      "body": "EasyOrders is open to a small group of stores for now. The Akeed team will approve your account and tell you when you can connect.",
+      "refresh": "Check again"
+    },
+    "sourceExists": {
+      "title": "This account already has an order source",
+      "body": "An account has one order source, and this one is already set up. Contact Akeed support if you need EasyOrders instead."
+    },
+    "connect": {
+      "title": "Connect {store} to EasyOrders",
+      "titleNoStore": "Connect your store to EasyOrders",
+      "body": "Akeed will confirm your cash-on-delivery orders from EasyOrders over WhatsApp. You approve the connection once, in EasyOrders.",
+      "permissionsTitle": "Akeed asks EasyOrders for two permissions only:",
+      "permissions": {
+        "read": "Read your new orders",
+        "update": "Update an order’s status when your customer confirms or cancels"
+      },
+      "sender": "Confirmation messages reach your customers from Akeed’s WhatsApp number.",
+      "cta": "Connect EasyOrders",
+      "starting": "Opening EasyOrders…",
+      "note": "EasyOrders opens in a new tab. Sign in to the store you want to connect, then choose Accept."
+    },
+    "waiting": {
+      "title": "Finish in EasyOrders",
+      "body": "Choose Accept in the EasyOrders tab. This page updates by itself.",
+      "expires": "This request expires at {time}.",
+      "restart": "Open EasyOrders again",
+      "cancelled": "I didn’t accept"
+    },
+    "denied": {
+      "title": "EasyOrders wasn’t connected",
+      "body": "The request wasn’t accepted, or it expired. Nothing was connected to your Akeed account.",
+      "retry": "Try again"
+    },
+    "error": {
+      "title": "We couldn’t connect EasyOrders",
+      "retry": "Try again",
+      "codes": {
+        "EASYORDERS_KEY_REJECTED": "EasyOrders did not accept the API key it created for Akeed. Nothing was connected.",
+        "EASYORDERS_PROVIDER_UNAVAILABLE": "We couldn’t reach EasyOrders to check the connection. Nothing was connected. Try again in a few minutes.",
+        "EASYORDERS_STORE_UNAVAILABLE": "This EasyOrders store is already connected to another Akeed account.",
+        "EASYORDERS_SOURCE_EXISTS": "This Akeed account already has an order source, so EasyOrders can’t be added.",
+        "EASYORDERS_CALLBACK_INVALID": "EasyOrders sent an incomplete response. Nothing was connected.",
+        "EASYORDERS_PILOT_REQUIRED": "Your account isn’t approved for EasyOrders yet.",
+        "EASYORDERS_CONNECT_UNAVAILABLE": "Connecting EasyOrders isn’t available right now.",
+        "EASYORDERS_ROLE_REQUIRED": "Only an owner or admin can connect EasyOrders.",
+        "default": "Something went wrong. Nothing was connected."
+      }
+    },
+    "success": {
+      "badge": "Connected",
+      "title": "{store} is connected to EasyOrders",
+      "titleNoStore": "Your store is connected to EasyOrders",
+      "storeIdLabel": "EasyOrders store ID",
+      "storeUnverified": "We’ll confirm this is your store when its first order arrives.",
+      "inactive": {
+        "title": "Your EasyOrders store isn’t active.",
+        "body": "EasyOrders reports it as inactive or overdue. Orders won’t reach Akeed until it is active again."
+      },
+      "next": "Order import from EasyOrders is being switched on store by store. We’ll tell you when your orders start arriving in Akeed.",
+      "secrets": {
+        "title": "One more step: add your webhook secrets",
+        "replaceTitle": "Webhook secrets",
+        "body": "EasyOrders shows a secret next to each webhook, and Akeed needs both to trust the orders it receives. In EasyOrders, open Settings → Public API → Webhooks and find the two Akeed webhooks whose address ends in <hint></hint>.",
+        "warning": "Orders placed before you add the secrets are not imported later.",
+        "ordersSecret": {
+          "label": "Orders webhook secret",
+          "hint": "The webhook whose address contains <path></path>."
+        },
+        "statusSecret": {
+          "label": "Order status webhook secret",
+          "hint": "The webhook whose address contains <path></path>."
+        },
+        "save": "Save secrets",
+        "replace": "Replace secrets",
+        "saving": "Saving…",
+        "saved": "Webhook secrets saved. They are stored encrypted and are not shown again.",
+        "errors": {
+          "required": "Paste both secrets.",
+          "invalid": "A secret is at least 8 characters with no spaces. Copy it again from EasyOrders.",
+          "failed": "We couldn’t save the secrets. Try again."
+        }
       }
     }
   }

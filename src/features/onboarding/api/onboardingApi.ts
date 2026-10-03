@@ -56,6 +56,23 @@ async function getOnboardingApiError(response: Response) {
   return new OnboardingApiError(message, response.status, code, blockedReasons)
 }
 
+/**
+ * The organization's source as the last state read saw it: its platform,
+ * `missing` when it has none yet, or `null` before any read.
+ */
+export type KnownOnboardingSource = { platformType: string } | 'missing' | null
+
+let knownOnboardingSource: KnownOnboardingSource = null
+
+/** Lets setup pick its skin without a second read after the route guard's. */
+export function getKnownOnboardingSource(): KnownOnboardingSource {
+  return knownOnboardingSource
+}
+
+export function clearKnownOnboardingSource(): void {
+  knownOnboardingSource = null
+}
+
 export async function fetchOnboardingState(): Promise<OnboardingStateResponse> {
   const response = await fetchWithAuth('/api/onboarding/state', {
     method: 'GET',
@@ -63,10 +80,16 @@ export async function fetchOnboardingState(): Promise<OnboardingStateResponse> {
   })
 
   if (!response.ok) {
-    throw await getOnboardingApiError(response)
+    const error = await getOnboardingApiError(response)
+    if (error.code === 'ONBOARDING_SOURCE_MISSING') {
+      knownOnboardingSource = 'missing'
+    }
+    throw error
   }
 
-  return parseJsonResponse<OnboardingStateResponse>(response)
+  const result = await parseJsonResponse<OnboardingStateResponse>(response)
+  knownOnboardingSource = { platformType: result.state.source.platformType }
+  return result
 }
 
 export async function updateOnboardingSettings(

@@ -905,6 +905,19 @@
           "title": "تدفع مقابل ما يُرسل فقط",
           "body": "{price} لكل رسالة تأكيد بعد الرصيد المجاني. لا اشتراك شهري."
         }
+      },
+      "source": {
+        "label": "من أين تأتي طلباتك؟",
+        "options": {
+          "standalone": {
+            "title": "موقعي الخاص أو طلبات أضيفها بنفسي",
+            "description": "أضف الطلبات يدويًا أو من ملف أو عبر الـ API."
+          },
+          "easyorders": {
+            "title": "EasyOrders",
+            "description": "اربط متجرك على EasyOrders بعد إنشاء الحساب."
+          }
+        }
       }
     },
     "verifyEmail": {
@@ -3310,6 +3323,106 @@
         "placeholder": "رقم الموبايل",
         "save": "حفظ",
         "failed": "تعذّر حفظ الرقم. حاول مرة أخرى."
+      }
+    }
+  },
+  "easyOrdersConnect": {
+    "eyebrow": "EasyOrders",
+    "loading": "جارٍ تحميل حالة الربط مع EasyOrders…",
+    "readOnly": "صلاحيتك للعرض فقط. اطلب من مالك الحساب أو أحد المشرفين ربط EasyOrders.",
+    "cleanup": "إذا اخترت «قبول» في EasyOrders فقد يكون أنشأ مفتاح API وويب هوك باسم Akeed. احذفها من EasyOrders من الإعدادات ← Public API قبل المحاولة مرة أخرى.",
+    "loadError": {
+      "title": "تعذّر تحميل حالة الربط مع EasyOrders",
+      "body": "تحقق من اتصالك بالإنترنت ثم حاول مرة أخرى.",
+      "retry": "حاول مرة أخرى"
+    },
+    "unavailable": {
+      "title": "الربط مع EasyOrders غير متاح بعد",
+      "body": "ربط متاجر EasyOrders لم يُفتح بعد. سنخبرك فور إتاحته."
+    },
+    "pilotRequired": {
+      "title": "نجهّز لك الربط مع EasyOrders",
+      "body": "الربط مع EasyOrders متاح حاليًا لعدد محدود من المتاجر. سيوافق فريق أكيد على حسابك ويخبرك عندما يصبح الربط متاحًا لك.",
+      "refresh": "تحقق مرة أخرى"
+    },
+    "sourceExists": {
+      "title": "هذا الحساب لديه مصدر طلبات بالفعل",
+      "body": "لكل حساب مصدر طلبات واحد، وهذا الحساب مُعدّ بالفعل. تواصل مع دعم أكيد إذا كنت تريد EasyOrders بدلًا منه."
+    },
+    "connect": {
+      "title": "اربط {store} مع EasyOrders",
+      "titleNoStore": "اربط متجرك مع EasyOrders",
+      "body": "سيؤكد أكيد طلبات الدفع عند الاستلام القادمة من EasyOrders عبر واتساب. توافق على الربط مرة واحدة من داخل EasyOrders.",
+      "permissionsTitle": "يطلب أكيد من EasyOrders صلاحيتين فقط:",
+      "permissions": {
+        "read": "قراءة طلباتك الجديدة",
+        "update": "تحديث حالة الطلب عندما يؤكد العميل أو يلغي"
+      },
+      "sender": "تصل رسائل التأكيد إلى عملائك من رقم واتساب الخاص بأكيد.",
+      "cta": "ربط EasyOrders",
+      "starting": "جارٍ فتح EasyOrders…",
+      "note": "سيُفتح EasyOrders في تبويب جديد. سجّل الدخول إلى المتجر الذي تريد ربطه ثم اختر «قبول»."
+    },
+    "waiting": {
+      "title": "أكمل الخطوة في EasyOrders",
+      "body": "اختر «قبول» في تبويب EasyOrders. هذه الصفحة تتحدّث تلقائيًا.",
+      "expires": "تنتهي صلاحية هذا الطلب الساعة {time}.",
+      "restart": "افتح EasyOrders مرة أخرى",
+      "cancelled": "لم أوافق"
+    },
+    "denied": {
+      "title": "لم يتم ربط EasyOrders",
+      "body": "لم تتم الموافقة على الطلب أو انتهت صلاحيته. لم يُربط أي شيء بحسابك في أكيد.",
+      "retry": "حاول مرة أخرى"
+    },
+    "error": {
+      "title": "تعذّر ربط EasyOrders",
+      "retry": "حاول مرة أخرى",
+      "codes": {
+        "EASYORDERS_KEY_REJECTED": "لم يقبل EasyOrders مفتاح الـ API الذي أنشأه لأكيد. لم يُربط أي شيء.",
+        "EASYORDERS_PROVIDER_UNAVAILABLE": "تعذّر الوصول إلى EasyOrders للتحقق من الربط. لم يُربط أي شيء. حاول بعد بضع دقائق.",
+        "EASYORDERS_STORE_UNAVAILABLE": "هذا المتجر على EasyOrders مربوط بالفعل بحساب آخر في أكيد.",
+        "EASYORDERS_SOURCE_EXISTS": "هذا الحساب في أكيد لديه مصدر طلبات بالفعل، لذا لا يمكن إضافة EasyOrders.",
+        "EASYORDERS_CALLBACK_INVALID": "أرسل EasyOrders ردًا غير مكتمل. لم يُربط أي شيء.",
+        "EASYORDERS_PILOT_REQUIRED": "لم تتم الموافقة على حسابك للربط مع EasyOrders بعد.",
+        "EASYORDERS_CONNECT_UNAVAILABLE": "الربط مع EasyOrders غير متاح الآن.",
+        "EASYORDERS_ROLE_REQUIRED": "ربط EasyOrders متاح لمالك الحساب أو المشرف فقط.",
+        "default": "حدث خطأ. لم يُربط أي شيء."
+      }
+    },
+    "success": {
+      "badge": "تم الربط",
+      "title": "تم ربط {store} مع EasyOrders",
+      "titleNoStore": "تم ربط متجرك مع EasyOrders",
+      "storeIdLabel": "معرّف المتجر في EasyOrders",
+      "storeUnverified": "سنتأكد أن هذا متجرك عند وصول أول طلب منه.",
+      "inactive": {
+        "title": "متجرك على EasyOrders غير نشط.",
+        "body": "يفيد EasyOrders بأن المتجر غير نشط أو عليه مستحقات. لن تصل الطلبات إلى أكيد حتى يعود نشطًا."
+      },
+      "next": "نفعّل استيراد الطلبات من EasyOrders متجرًا بعد متجر. سنخبرك عندما تبدأ طلباتك بالوصول إلى أكيد.",
+      "secrets": {
+        "title": "خطوة أخيرة: أضف مفاتيح الويب هوك السرية",
+        "replaceTitle": "مفاتيح الويب هوك السرية",
+        "body": "يعرض EasyOrders مفتاحًا سريًا بجانب كل ويب هوك، ويحتاج أكيد المفتاحين ليثق في الطلبات التي تصله. في EasyOrders افتح الإعدادات ← Public API ← Webhooks وابحث عن الويب هوك الخاصين بأكيد اللذين ينتهي عنوانهما بـ <hint></hint>.",
+        "warning": "الطلبات التي تُنشأ قبل إضافة المفتاحين لا تُستورد لاحقًا.",
+        "ordersSecret": {
+          "label": "المفتاح السري لويب هوك الطلبات",
+          "hint": "الويب هوك الذي يحتوي عنوانه على <path></path>."
+        },
+        "statusSecret": {
+          "label": "المفتاح السري لويب هوك حالة الطلب",
+          "hint": "الويب هوك الذي يحتوي عنوانه على <path></path>."
+        },
+        "save": "حفظ المفتاحين",
+        "replace": "استبدال المفتاحين",
+        "saving": "جارٍ الحفظ…",
+        "saved": "تم حفظ المفتاحين. يُخزَّنان مشفّرين ولا يُعرضان مرة أخرى.",
+        "errors": {
+          "required": "الصق المفتاحين.",
+          "invalid": "المفتاح 8 أحرف على الأقل وبدون مسافات. انسخه مرة أخرى من EasyOrders.",
+          "failed": "تعذّر حفظ المفتاحين. حاول مرة أخرى."
+        }
       }
     }
   }
