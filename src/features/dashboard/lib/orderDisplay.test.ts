@@ -10,6 +10,7 @@ import {
   formatPercent,
   formatPhoneInternational,
   formatUpdatedAt,
+  orderSourceLabelKey,
   shopifyOrderAdminUrl,
   whatsAppChatUrl,
 } from './orderDisplay'
@@ -98,6 +99,19 @@ describe('links', () => {
       'https://wa.me/201007611456'
     )
     expect(whatsAppChatUrl('123', 'hi')).toBeNull()
+  })
+
+  it.each([
+    ['shopify', 'sources.shopify'],
+    ['standalone', 'sources.standalone'],
+    ['easyorders', 'sources.easyorders'],
+    ['woocommerce', 'sources.woocommerce'],
+    ['a_platform_added_later', 'sources.other'],
+    [null, null],
+    [undefined, null],
+    ['', null],
+  ])('names the order source %j as %j', (platform, key) => {
+    expect(orderSourceLabelKey(platform)).toBe(key)
   })
 
   it('links only Shopify orders with a numeric id', () => {

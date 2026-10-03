@@ -5,6 +5,7 @@ import { ApiError } from '@/shared/lib/http'
 import { createLogger } from '@/shared/lib/logger'
 import {
   fetchEasyOrdersConnection,
+  saveEasyOrdersOrderSettings,
   saveEasyOrdersWebhookSecrets,
   startEasyOrdersInstall,
 } from './easyOrdersApi'
@@ -12,6 +13,7 @@ import {
   resolveEasyOrdersConnectView,
   type EasyOrdersConnectionStatus,
   type EasyOrdersConnectView,
+  type EasyOrdersOrderSettings,
   type EasyOrdersWebhookSecrets,
 } from './easyOrders.types'
 
@@ -40,6 +42,11 @@ export interface EasyOrdersConnectionController {
   markCancelled: () => void
   reload: () => Promise<void>
   saveSecrets: (secrets: EasyOrdersWebhookSecrets) => Promise<boolean>
+  isSavingSettings: boolean
+  settingsErrorCode: string | null
+  /** True right after a successful save, until the next one starts. */
+  settingsSaved: boolean
+  saveSettings: (settings: EasyOrdersOrderSettings) => Promise<boolean>
 }
 
 /**
@@ -61,6 +68,11 @@ export function useEasyOrdersConnection(
   const [isSavingSecrets, setIsSavingSecrets] = useState(false)
   const [secretsErrorCode, setSecretsErrorCode] = useState<string | null>(null)
   const [secretsSaved, setSecretsSaved] = useState(false)
+  const [isSavingSettings, setIsSavingSettings] = useState(false)
+  const [settingsErrorCode, setSettingsErrorCode] = useState<string | null>(
+    null
+  )
+  const [settingsSaved, setSettingsSaved] = useState(false)
   const activeRef = useRef(true)
 
   const reload = useCallback(async () => {
@@ -149,6 +161,31 @@ export function useEasyOrdersConnection(
     }
   }, [])
 
+  const saveSettings = useCallback(
+    async (settings: EasyOrdersOrderSettings) => {
+      setIsSavingSettings(true)
+      setSettingsErrorCode(null)
+      setSettingsSaved(false)
+      try {
+        const next = await saveEasyOrdersOrderSettings(settings)
+        if (!activeRef.current) return true
+        setStatus(next)
+        setSettingsSaved(true)
+        return true
+      } catch (error) {
+        logger.error(
+          'Failed to save the EasyOrders order settings',
+          errorCode(error)
+        )
+        if (activeRef.current) setSettingsErrorCode(errorCode(error))
+        return false
+      } finally {
+        if (activeRef.current) setIsSavingSettings(false)
+      }
+    },
+    []
+  )
+
   return {
     view: resolveEasyOrdersConnectView(status, {
       isLoading,
@@ -166,5 +203,9 @@ export function useEasyOrdersConnection(
     markCancelled,
     reload,
     saveSecrets,
+    isSavingSettings,
+    settingsErrorCode,
+    settingsSaved,
+    saveSettings,
   }
 }

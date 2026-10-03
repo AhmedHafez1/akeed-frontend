@@ -1488,6 +1488,7 @@
       },
       "orderFallbackPrefix": "Order",
       "technicalId": "Technical order ID",
+      "source": "Order source",
       "testBadge": "Test",
       "optimistic": {
         "submitting": "Sending...",
@@ -1567,6 +1568,15 @@
       "queued": "Sending has started and this order is in line. Its message goes out within minutes.",
       "sending": "The confirmation request is being sent to the customer now."
     },
+    "sources": {
+      "shopify": "Shopify",
+      "standalone": "Added in Akeed",
+      "easyorders": "EasyOrders",
+      "woocommerce": "WooCommerce",
+      "salla": "Salla",
+      "zid": "Zid",
+      "other": "Another source"
+    },
     "reasons": {
       "non_cod_payment_method": "This order is not marked as cash on delivery, so no verification was sent.",
       "missing_payment_signal": "A payment method could not be confirmed, so no verification was sent.",
@@ -1577,6 +1587,17 @@
       "auto_verify_disabled": "Automatic verification is paused. Enable it before retrying.",
       "onboarding_incomplete": "Complete Standalone setup before retrying verification.",
       "provider_outcome_unknown": "Message acceptance could not be confirmed. Contact support before retrying.",
+      "CREDIT_ACCOUNT_NOT_PROVISIONED": "This account's credits are not set up yet, so no message was sent. Contact Akeed support if this continues.",
+      "CREDIT_ACCOUNT_SUSPENDED": "New message sends are paused for this account. Contact support.",
+      "CREDIT_DEBT_OUTSTANDING": "An outstanding credit balance must be settled before new messages are sent.",
+      "INSUFFICIENT_CREDITS": "No message credits were available, so no message was sent. Add credits, then retry.",
+      "PAYMENT_PENDING_RECONCILIATION": "Message sending is paused while billing is reviewed. Contact support.",
+      "provider_delivery_failed": "WhatsApp could not deliver the message to this customer.",
+      "missing_currency": "The store currency has not been chosen yet, so this order was not confirmed. Choose it in the store connection settings.",
+      "missing_phone_country": "The country for customer phone numbers has not been chosen yet, so this order was not confirmed. Choose it in the store connection settings.",
+      "invalid_phone": "The customer's phone number is not a valid mobile number, so no message was sent.",
+      "invalid_amount": "The order total could not be read, so no message was sent.",
+      "incomplete_payload": "The order arrived without the details needed to confirm it, so no message was sent.",
       "generic": "Verification could not continue. Review setup or contact support."
     },
     "verifications": {
@@ -3409,7 +3430,34 @@
         "title": "Your EasyOrders store isn’t active.",
         "body": "EasyOrders reports it as inactive or overdue. Orders won’t reach Akeed until it is active again."
       },
+      "keyRejected": {
+        "title": "EasyOrders no longer accepts Akeed’s access.",
+        "body": "Orders can’t be checked until the store is connected again. Contact Akeed support."
+      },
+      "rejectedDeliveries": "{count, plural, one {# order from EasyOrders was refused because its webhook secret didn’t match.} other {# orders from EasyOrders were refused because their webhook secret didn’t match.}} Check the secrets below.",
       "next": "Order import from EasyOrders is being switched on store by store. We’ll tell you when your orders start arriving in Akeed.",
+      "orderSettings": {
+        "title": "Tell us your store’s country and currency",
+        "body": "EasyOrders sends order totals without a currency and phone numbers without a country code, so Akeed needs both to message your customers correctly.",
+        "warning": "Orders are not confirmed until you choose both.",
+        "phoneCountry": {
+          "label": "Customer phone country",
+          "placeholder": "Choose a country",
+          "hint": "Numbers written without a country code are read as numbers in this country."
+        },
+        "currency": {
+          "label": "Store currency",
+          "placeholder": "Choose a currency",
+          "hint": "Shown to the customer next to the order total."
+        },
+        "save": "Save",
+        "saving": "Saving…",
+        "saved": "Saved. New orders use these settings.",
+        "errors": {
+          "required": "Choose a country and a currency.",
+          "failed": "We couldn’t save your choices. Try again."
+        }
+      },
       "secrets": {
         "title": "One more step: add your webhook secrets",
         "replaceTitle": "Webhook secrets",

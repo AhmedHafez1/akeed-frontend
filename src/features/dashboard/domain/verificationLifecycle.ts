@@ -144,6 +144,12 @@ export const EXPLAINED_LIFECYCLE_REASONS = new Set([
   'auto_verify_disabled',
   'onboarding_incomplete',
   'provider_outcome_unknown',
+  // Why an order from a connected store was not taken in.
+  'missing_currency',
+  'missing_phone_country',
+  'invalid_phone',
+  'invalid_amount',
+  'incomplete_payload',
 ])
 
 export type { LifecycleStatus, VerificationStatus }

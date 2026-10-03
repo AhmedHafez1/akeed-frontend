@@ -25,6 +25,7 @@ import {
   type EasyOrdersConnectView,
 } from './easyOrders.types'
 import { useEasyOrdersConnection } from './useEasyOrdersConnection'
+import { OrderSettingsForm } from './OrderSettingsForm'
 import { WebhookSecretsForm } from './WebhookSecretsForm'
 
 const PERMISSIONS = ['read', 'update'] as const
@@ -272,8 +273,43 @@ export function EasyOrdersConnectPage() {
                 {t('success.inactive.body')}
               </Notice>
             )}
+            {status.connection.health === 'credentials_rejected' && (
+              <Notice
+                tone="destructive"
+                icon={<AlertCircle aria-hidden="true" />}
+              >
+                <span className="font-semibold">
+                  {t('success.keyRejected.title')}
+                </span>{' '}
+                {t('success.keyRejected.body')}
+              </Notice>
+            )}
+            {status.connection.rejectedDeliveries > 0 && (
+              <Notice
+                tone="warning"
+                icon={<AlertCircle aria-hidden="true" />}
+                role="status"
+              >
+                {t('success.rejectedDeliveries', {
+                  count: status.connection.rejectedDeliveries,
+                })}
+              </Notice>
+            )}
             <p className="text-ink-muted text-sm">{t('success.next')}</p>
           </Panel>
+
+          <div className={cn(akCard, 'space-y-4 p-6 sm:p-8')}>
+            {readOnly}
+            <OrderSettingsForm
+              currency={status.connection.currency}
+              phoneCountry={status.connection.phoneCountry}
+              canManage={canManage}
+              isSaving={connection.isSavingSettings}
+              saved={connection.settingsSaved}
+              failed={connection.settingsErrorCode !== null}
+              onSave={connection.saveSettings}
+            />
+          </div>
 
           <div className={cn(akCard, 'space-y-4 p-6 sm:p-8')}>
             {readOnly}

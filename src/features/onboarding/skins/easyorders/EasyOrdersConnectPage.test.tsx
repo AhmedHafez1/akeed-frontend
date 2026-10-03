@@ -4,6 +4,7 @@ import { renderOnboardingStandalone } from '@/features/onboarding/ui/standalone/
 import { ApiError } from '@/shared/lib/http'
 import {
   fetchEasyOrdersConnection,
+  saveEasyOrdersOrderSettings,
   saveEasyOrdersWebhookSecrets,
   startEasyOrdersInstall,
 } from './easyOrdersApi'
@@ -15,12 +16,14 @@ import {
 
 vi.mock('./easyOrdersApi', () => ({
   fetchEasyOrdersConnection: vi.fn(),
+  saveEasyOrdersOrderSettings: vi.fn(),
   saveEasyOrdersWebhookSecrets: vi.fn(),
   startEasyOrdersInstall: vi.fn(),
 }))
 
 const fetchStatus = vi.mocked(fetchEasyOrdersConnection)
 const saveSecrets = vi.mocked(saveEasyOrdersWebhookSecrets)
+const saveSettings = vi.mocked(saveEasyOrdersOrderSettings)
 const startInstall = vi.mocked(startEasyOrdersInstall)
 
 const INSTALL_URL =
@@ -54,6 +57,9 @@ const connected = (
       webhookUrlHint: 'aB3_xZ',
       ordersSecretSet: false,
       statusSecretSet: false,
+      currency: null,
+      phoneCountry: null,
+      rejectedDeliveries: 0,
       connectedAt: '2026-10-03T10:00:00.000Z',
       ...connection,
     },
@@ -325,6 +331,142 @@ describe('EasyOrdersConnectPage', () => {
       expect(document.body.textContent).toContain(
         'متجرك على EasyOrders غير نشط.'
       )
+    })
+
+    it('says when EasyOrders no longer accepts the key', async () => {
+      await renderPage(connected({ health: 'credentials_rejected' }), 'en')
+
+      expect(document.body.textContent).toContain(
+        'EasyOrders no longer accepts Akeed’s access.'
+      )
+    })
+
+    it.each([
+      [
+        'en',
+        1,
+        '1 order from EasyOrders was refused because its webhook secret didn’t match.',
+      ],
+      [
+        'en',
+        4,
+        '4 orders from EasyOrders were refused because their webhook secret didn’t match.',
+      ],
+      [
+        'ar',
+        2,
+        'رُفض طلبان من EasyOrders لأن المفتاح السري للويب هوك غير مطابق.',
+      ],
+    ] as const)(
+      'makes refused deliveries visible in %s (%i)',
+      async (locale, rejectedDeliveries, sentence) => {
+        await renderPage(connected({ rejectedDeliveries }), locale)
+
+        expect(document.body.textContent).toContain(sentence)
+      }
+    )
+
+    it('says nothing about refused deliveries when there are none', async () => {
+      await renderPage(connected(), 'en')
+
+      expect(document.body.textContent).not.toContain('refused')
+    })
+
+    describe('order settings', () => {
+      const country = () =>
+        document.getElementById('easyorders-phone-country') as HTMLSelectElement
+      const currency = () =>
+        document.getElementById('easyorders-currency') as HTMLSelectElement
+      const form = () => country().closest('form') as HTMLFormElement
+
+      it('warns that orders wait for the country and the currency', async () => {
+        await renderPage(connected(), 'en')
+
+        expect(form().textContent).toContain(
+          'Orders are not confirmed until you choose both.'
+        )
+        expect(country().value).toBe('')
+        expect(currency().value).toBe('')
+      })
+
+      it('suggests the country’s own currency and saves both', async () => {
+        await renderPage(connected(), 'en')
+        saveSettings.mockResolvedValue(
+          connected({ currency: 'EGP', phoneCountry: 'EG' })
+        )
+
+        fireEvent.change(country(), { target: { value: 'EG' } })
+        expect(currency().value).toBe('EGP')
+        fireEvent.submit(form())
+
+        await waitFor(() =>
+          expect(saveSettings).toHaveBeenCalledWith({
+            currency: 'EGP',
+            phoneCountry: 'EG',
+          })
+        )
+        expect(
+          await screen.findByText('Saved. New orders use these settings.')
+        ).toBeTruthy()
+        expect(form().textContent).not.toContain(
+          'Orders are not confirmed until you choose both.'
+        )
+      })
+
+      it('keeps a currency the merchant already chose when the country changes', async () => {
+        await renderPage(connected(), 'en')
+
+        fireEvent.change(currency(), { target: { value: 'USD' } })
+        fireEvent.change(country(), { target: { value: 'SA' } })
+
+        expect(currency().value).toBe('USD')
+      })
+
+      it('shows what is stored, in Arabic', async () => {
+        await renderPage(connected({ currency: 'SAR', phoneCountry: 'SA' }))
+
+        expect(country().value).toBe('SA')
+        expect(currency().value).toBe('SAR')
+        expect(form().textContent).toContain('حدّد دولة متجرك وعملته')
+        expect(form().textContent).not.toContain(
+          'لا تُؤكَّد الطلبات حتى تختار الاثنين.'
+        )
+      })
+
+      it('asks for both before sending anything', async () => {
+        await renderPage(connected(), 'en')
+
+        fireEvent.submit(form())
+
+        expect(
+          await screen.findByText('Choose a country and a currency.')
+        ).toBeTruthy()
+        expect(saveSettings).not.toHaveBeenCalled()
+        expect(document.activeElement).toBe(country())
+      })
+
+      it('reports a failed save', async () => {
+        await renderPage(
+          connected({ currency: 'EGP', phoneCountry: 'EG' }),
+          'en'
+        )
+        saveSettings.mockRejectedValue(
+          new ApiError('invalid', 400, 'EASYORDERS_ORDER_SETTINGS_INVALID')
+        )
+
+        fireEvent.submit(form())
+
+        expect(
+          await screen.findByText('We couldn’t save your choices. Try again.')
+        ).toBeTruthy()
+      })
+
+      it('is read-only for a viewer', async () => {
+        await renderPage({ ...connected(), canManage: false }, 'en')
+
+        expect(country().disabled).toBe(true)
+        expect(currency().disabled).toBe(true)
+      })
     })
 
     it('saves both secrets, then empties the masked fields and never shows them', async () => {

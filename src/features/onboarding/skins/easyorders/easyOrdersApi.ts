@@ -4,6 +4,7 @@ import { api } from '@/shared/lib/auth'
 import type {
   EasyOrdersConnectionStatus,
   EasyOrdersInstallStarted,
+  EasyOrdersOrderSettings,
   EasyOrdersWebhookSecrets,
 } from './easyOrders.types'
 
@@ -23,6 +24,16 @@ export function startEasyOrdersInstall(
   return api.post<EasyOrdersInstallStarted>('/api/easyorders/install', {
     locale,
   })
+}
+
+/** The store's currency and the country its local phone numbers are read in. */
+export function saveEasyOrdersOrderSettings(
+  settings: EasyOrdersOrderSettings
+): Promise<EasyOrdersConnectionStatus> {
+  return api.put<EasyOrdersConnectionStatus>(
+    '/api/easyorders/connection/order-settings',
+    settings
+  )
 }
 
 /** Write-only: the response says the secrets are set, never what they are. */

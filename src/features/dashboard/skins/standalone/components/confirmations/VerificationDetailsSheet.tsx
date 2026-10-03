@@ -19,6 +19,7 @@ import {
   formatTooltipDateTime,
   resolveRowDescriptionKey,
 } from '@/features/dashboard/domain/verificationRow'
+import { orderSourceLabelKey } from '@/features/dashboard/lib/orderDisplay'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
 
 /**
@@ -64,6 +65,7 @@ function DetailsBody({
   const t = useTranslations('dashboard')
   const { locale } = useLocaleInfo()
   const unavailableKey = cancellationMessageKey(verification)
+  const sourceKey = orderSourceLabelKey(verification.platform)
 
   return (
     <>
@@ -151,6 +153,14 @@ function DetailsBody({
         </section>
 
         <dl className="divide-border border-border divide-y rounded-xl border px-4 text-sm">
+          {sourceKey && (
+            <div className="flex justify-between gap-4 py-3">
+              <dt className="text-muted-foreground">{t('table.source')}</dt>
+              <dd className="text-foreground text-end font-medium">
+                {t(sourceKey)}
+              </dd>
+            </div>
+          )}
           <div className="flex justify-between gap-4 py-3">
             <dt className="text-muted-foreground">
               {t('table.headings.followUp')}

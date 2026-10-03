@@ -112,6 +112,30 @@ export function whatsAppChatUrl(
   return text ? `${url}?text=${encodeURIComponent(text)}` : url
 }
 
+/** Sources with their own name under `dashboard.sources`. */
+const NAMED_ORDER_SOURCES: ReadonlySet<string> = new Set([
+  'shopify',
+  'standalone',
+  'easyorders',
+  'woocommerce',
+  'salla',
+  'zid',
+])
+
+/**
+ * The message key naming where an order came from, or null when the row does
+ * not say. A source this build has no name for reads as "another source"
+ * instead of showing a raw code.
+ */
+export function orderSourceLabelKey(
+  platform: string | null | undefined
+): string | null {
+  if (!platform) return null
+  return NAMED_ORDER_SOURCES.has(platform)
+    ? `sources.${platform}`
+    : 'sources.other'
+}
+
 /**
  * The order's page in Shopify admin.
  *

@@ -12,11 +12,17 @@ export interface EasyOrdersConnectionDetails {
   storeId: string
   /** False until an order fetched with the key carries the same store id. */
   storeVerified: boolean
-  health: 'ok' | 'store_inactive'
+  health: 'ok' | 'store_inactive' | 'credentials_rejected'
   /** Last characters of the webhook addresses, to find them in EasyOrders. */
   webhookUrlHint: string
   ordersSecretSet: boolean
   statusSecretSet: boolean
+  /** Currency of every order from the store; null until chosen. */
+  currency: string | null
+  /** Country local phone numbers are read in; null until chosen. */
+  phoneCountry: string | null
+  /** Orders EasyOrders sent that were refused for a wrong webhook secret. */
+  rejectedDeliveries: number
   connectedAt: string
 }
 
@@ -38,6 +44,11 @@ export interface EasyOrdersInstallStarted {
 export interface EasyOrdersWebhookSecrets {
   ordersSecret: string
   statusSecret: string
+}
+
+export interface EasyOrdersOrderSettings {
+  currency: string
+  phoneCountry: string
 }
 
 /** What the connect screen shows; one of these at a time. */
