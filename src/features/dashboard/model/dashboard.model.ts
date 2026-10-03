@@ -1,5 +1,8 @@
 import type { CreditDenialCode } from '@/shared/lib/creditFeedback'
-import type { CommerceOutcomeOperationResult } from '@/shared/types/commerce-outcome.model'
+import type {
+  CommerceOutcomeOperationResult,
+  RemoteSync,
+} from '@/shared/types/commerce-outcome.model'
 
 /**
  * The values the backend's `verification_status` enum can hold.
@@ -84,6 +87,8 @@ export type DashboardSourceState = {
 export type VerificationItem = {
   capabilities?: VerificationRowCapability[]
   cancellation_operation?: CommerceOutcomeOperationResult
+  /** Whether the store has this row's result; null when the source has none. */
+  remote_sync?: RemoteSync | null
   id: string
   status: LifecycleStatus
   /**

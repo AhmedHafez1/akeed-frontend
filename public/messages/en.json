@@ -1489,6 +1489,39 @@
       "orderFallbackPrefix": "Order",
       "technicalId": "Technical order ID",
       "source": "Order source",
+      "storeSync": {
+        "title": "Store update",
+        "separate": "This is about your store only. The order's result above is saved in Akeed either way.",
+        "updatedAt": "Last checked {time}",
+        "state": {
+          "succeeded": "Updated in your store",
+          "pending": "Updating your store",
+          "failed": "Not updated in your store",
+          "unsupported": "Not sent to your store"
+        },
+        "row": {
+          "pending": "Updating your store",
+          "failed": "Store not updated"
+        },
+        "guidance": {
+          "pending": "We are still trying to update this order in your store. There is nothing you need to do yet.",
+          "failed": "We could not update this order in your store. Try again, or change the order's status in your store yourself.",
+          "stateConflict": "This order had already moved to another status in your store, so we left it as it is. Change it in your store if you need to.",
+          "orderNotFound": "We could not find this order in your store. It may have been deleted there.",
+          "reconnect": "Your store did not accept Akeed's access. Check the store connection, then try again.",
+          "storeInactive": "Your store is not active right now, so it cannot be updated. Reactivate it, then try again.",
+          "noReplyLocalOnly": "The customer did not reply. That is recorded in Akeed only: the order in your store is unchanged and was not canceled.",
+          "notSwitchedOn": "Updating orders in your store is not switched on yet. Change the order's status in your store yourself."
+        },
+        "retry": "Try the store update again",
+        "retrying": "Updating your store...",
+        "retryResult": {
+          "updated": "Your store has been updated.",
+          "pending": "We are trying again. This page will show the result.",
+          "failed": "Your store still could not be updated. Open the order to see why.",
+          "error": "We could not start the update. Try again in a moment."
+        }
+      },
       "testBadge": "Test",
       "optimistic": {
         "submitting": "Sending...",

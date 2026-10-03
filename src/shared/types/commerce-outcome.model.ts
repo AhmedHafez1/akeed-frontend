@@ -21,8 +21,40 @@ export type CommerceOutcomeOperationResult =
       status: 'pending_provider_operation'
       providerOperationId: string
     }
-  | { status: 'retryable_failure'; errorCode: string }
-  | { status: 'permanent_failure'; errorCode: string }
+  | { status: 'retryable_failure'; errorCode: string; retryAfterMs?: number }
+  | {
+      status: 'permanent_failure'
+      errorCode: string
+      requiresAssistance?: boolean
+    }
+
+export type CommerceOutcomeSyncState =
+  | 'pending'
+  | 'succeeded'
+  | 'failed'
+  | 'unsupported'
+
+/**
+ * Whether the store has a verification's result yet. Separate from the
+ * verification status, which is always the local result. Sources that do not
+ * report it send `null`.
+ */
+export interface RemoteSync {
+  state: CommerceOutcomeSyncState
+  action: CommerceOutcomeAction
+  /** A stable code; the dashboard maps it to a sentence. */
+  error_code: string | null
+  /** Only the merchant can clear it (a rejected key, say). */
+  requires_assistance: boolean
+  retryable: boolean
+  updated_at: string
+}
+
+export interface OutcomeSyncRetryResponse {
+  success: true
+  verificationId: string
+  remote_sync: RemoteSync | null
+}
 
 export type CommerceOutcomeDispatchResult = CommerceOutcomeOperationResult & {
   orgId: string

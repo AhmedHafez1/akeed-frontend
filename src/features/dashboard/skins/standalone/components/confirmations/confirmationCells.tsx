@@ -1,10 +1,11 @@
 'use client'
 
-import { Bell, BellRing } from 'lucide-react'
+import { Bell, BellRing, Store } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
 import { resolveRowStatus } from '@/features/dashboard/domain/confirmationRowStatus'
+import { remoteSyncView } from '@/features/dashboard/domain/remoteSync'
 import { formatTooltipDateTime } from '@/features/dashboard/domain/verificationRow'
 import { useStatusTooltip } from '@/features/dashboard/domain/useStatusTooltip'
 import type { ConfirmationRowActionHandlers } from '@/features/dashboard/domain/confirmationRowActions'
@@ -98,13 +99,23 @@ export function StatusCell({
   timeZone: string
 }) {
   const t = useTranslations('dashboard.confirmations.status')
+  const tSync = useTranslations('dashboard.table.storeSync')
   const view = resolveRowStatus(row)
   const statusTitle = useStatusTooltip(row, timeZone)
+  // The badge stays the local result; a store that does not have it yet is a
+  // second line, never a different badge.
+  const syncNote = remoteSyncView(row)?.rowNoteKey
   return (
     <div className="flex min-w-0 flex-col items-start gap-1">
       <StatusBadge kind={view.kind} icon={false} title={statusTitle}>
         {t(view.badge)}
       </StatusBadge>
+      {syncNote && (
+        <p className="text-ak-caption text-ink-muted flex min-w-0 items-center gap-1.5">
+          <Store aria-hidden="true" className="size-3.5 shrink-0" />
+          <span className="truncate">{tSync(syncNote)}</span>
+        </p>
+      )}
     </div>
   )
 }
