@@ -10,7 +10,7 @@ import {
   MessageCircle,
   Send,
 } from 'lucide-react'
-import type { StandaloneSetupBlockedReason } from '@/features/onboarding/domain/onboarding.types'
+import type { SetupBlockedReason } from '@/features/onboarding/domain/onboarding.types'
 import type { OnboardingTestError } from '@/features/onboarding/hooks/useOnboardingTest'
 import type { StandaloneOnboardingFlow } from '@/features/onboarding/hooks/useStandaloneOnboardingFlow'
 import {
@@ -48,7 +48,7 @@ function akeedWhatsAppHref(): string | null {
 interface TestStepProps {
   test: StandaloneOnboardingFlow['test']
   completion: StandaloneOnboardingFlow['completion']
-  blockedReasons: readonly StandaloneSetupBlockedReason[]
+  blockedReasons: readonly SetupBlockedReason[]
   /** The saved number, shown until the test state reports its own. */
   phone: string
   storeName: string

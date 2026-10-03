@@ -1,12 +1,16 @@
 'use client'
 
-import { AlertTriangle, Check, FileText } from 'lucide-react'
+import { useCallback } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { AlertTriangle, Check, FileText, Unplug } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import type { SettingsResponse } from '@/features/settings/api/settingsApi'
+import { resolveSettingsSourceSkin } from '@/features/settings/domain/sourceSkins'
 import { useCopyToClipboard } from '@/features/settings/domain/useCopyToClipboard'
 import type { StandaloneSettingsModel } from '@/features/settings/domain/useStandaloneSettings'
 import { createLogger } from '@/shared/lib/logger'
 import { cn } from '@/shared/lib/utils'
+import { queryKeys } from '@/shared/query/keys'
 import { akLink, akPill, notify } from '@/shared/ui'
 import {
   AnnotatedSection,
@@ -15,6 +19,7 @@ import {
   settingsRowTitle,
   SwitchSetting,
 } from './SettingsSection'
+import { SourceHealthCard } from './SourceHealthCard'
 
 const logger = createLogger('Settings')
 
@@ -64,17 +69,29 @@ function ConnectionId({ identity }: { identity: string }) {
 /**
  * Where the orders come from and how to read an order that does not say how
  * it was paid. The source is fixed by how the account was set up, so it is
- * shown, not edited.
+ * shown, not edited; a source the merchant connects also gets its connection
+ * controls and its health, chosen by platform in `sourceSkins`.
  */
 export function StoreTab({ model, data, readOnly }: StoreTabProps) {
   const t = useTranslations('settings.standalone.page.store')
   const tSettings = useTranslations('settings')
+  const queryClient = useQueryClient()
+  // The connection moved (disconnect, reconnect, new secrets): the state and
+  // the health shown here are stale.
+  const refreshSource = useCallback(
+    () =>
+      void queryClient.invalidateQueries({ queryKey: queryKeys.settings.all }),
+    [queryClient]
+  )
   const values = model.values
   if (!values) return null
 
   const { platformType, identity } = data.state.source
-  const sourceName =
-    platformType === 'standalone' ? tSettings('sourceStandalone') : platformType
+  const skin = resolveSettingsSourceSkin(platformType)
+  const sourceName = skin ? tSettings(skin.nameKey) : platformType
+  const disconnected =
+    data.state.sourceSetup?.connectionState === 'disconnected'
+  const SourcePanel = skin?.Panel
 
   return (
     <AnnotatedSections>
@@ -95,17 +112,42 @@ export function StoreTab({ model, data, readOnly }: StoreTabProps) {
             <div className="min-w-0">
               <h3 className={settingsRowTitle}>{sourceName}</h3>
               <p className="text-ak-caption text-ink-muted mt-0.5">
-                {t('sourceHelp')}
+                {t(skin?.helpKey ?? 'sourceHelp')}
               </p>
             </div>
           </div>
-          <span className={akPill({ tone: 'brand' })}>
-            <Check aria-hidden="true" className="size-3" />
-            {t('connected')}
-          </span>
+          {disconnected ? (
+            <span className={akPill({ tone: 'neutral' })}>
+              <Unplug aria-hidden="true" className="size-3" />
+              {t('disconnected')}
+            </span>
+          ) : (
+            <span className={akPill({ tone: 'brand' })}>
+              <Check aria-hidden="true" className="size-3" />
+              {t('connected')}
+            </span>
+          )}
         </div>
         <ConnectionId identity={identity} />
       </AnnotatedSection>
+
+      {SourcePanel && (
+        <AnnotatedSection
+          title={t('connectionHeading')}
+          description={t('connectionDesc')}
+        >
+          <SourcePanel onChanged={refreshSource} />
+        </AnnotatedSection>
+      )}
+
+      {skin?.showsHealth && (
+        <AnnotatedSection
+          title={t('health.heading')}
+          description={t('health.desc')}
+        >
+          <SourceHealthCard />
+        </AnnotatedSection>
+      )}
 
       <AnnotatedSection title={t('codHeading')} description={t('codDesc')}>
         <SwitchSetting

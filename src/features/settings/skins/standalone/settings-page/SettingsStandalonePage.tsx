@@ -159,7 +159,11 @@ export function SettingsStandalonePage() {
   }
 
   const data = model.data
-  const readOnly = !model.canUpdateConfiguration
+  // A disconnected source keeps its settings readable; nothing can be saved
+  // until it is reconnected, which the order-source tab offers.
+  const disconnected =
+    data.state.sourceSetup?.connectionState === 'disconnected'
+  const readOnly = !model.canUpdateConfiguration || disconnected
   const labels: Record<StandaloneSettingsTabId, string> = {
     message: t('tabs.message'),
     timing: t('tabs.timing'),
@@ -189,7 +193,16 @@ export function SettingsStandalonePage() {
         onSelect={goToTab}
       />
 
-      {readOnly && (
+      {disconnected && (
+        <div
+          role="status"
+          className="border-ak-info/30 bg-ak-info-soft text-ak-info text-ak-body rounded-ak-card flex items-start gap-3 border px-4 py-3"
+        >
+          <Lock aria-hidden="true" className="mt-0.5 size-4.5 shrink-0" />
+          <p>{tMessages('sourceDisconnected')}</p>
+        </div>
+      )}
+      {!model.canUpdateConfiguration && (
         <div
           role="status"
           className="border-ak-info/30 bg-ak-info-soft text-ak-info text-ak-body rounded-ak-card flex items-start gap-3 border px-4 py-3"

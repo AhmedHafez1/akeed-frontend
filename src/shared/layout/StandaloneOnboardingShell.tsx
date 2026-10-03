@@ -6,9 +6,11 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { CircleHelp, Languages, LogOut, Menu } from 'lucide-react'
 import {
+  ONBOARDING_STORE_STEP_TITLE,
   parseStandaloneStep,
   STANDALONE_STEP_NUMBER,
   STANDALONE_TOTAL_STEPS,
+  useOnboardingSourceSkin,
 } from '@/features/onboarding'
 import { auth } from '@/shared/lib/auth'
 import { createLogger } from '@/shared/lib/logger'
@@ -223,18 +225,20 @@ function AccountPendingProgress() {
 
 /**
  * Account · Your store · Try the message, driven by the page's `?step`. The
- * account step is always done: nobody reaches this shell without one.
+ * account step is always done: nobody reaches this shell without one. The
+ * middle step is named by the source being set up.
  */
 function OnboardingProgress() {
   const t = useTranslations('standaloneOnboarding.flow')
   const searchParams = useSearchParams()
   const step = parseStandaloneStep(searchParams?.get('step')) ?? 'store'
+  const storeTitle = t(ONBOARDING_STORE_STEP_TITLE[useOnboardingSourceSkin()])
 
   const steps: StepperStep[] = [
     { id: 'account', title: t('account'), state: 'done' },
     {
       id: 'store',
-      title: t('store'),
+      title: storeTitle,
       state: step === 'store' ? 'current' : 'done',
     },
     {
@@ -245,7 +249,7 @@ function OnboardingProgress() {
     },
   ]
   const current = STANDALONE_STEP_NUMBER[step]
-  const title = step === 'store' ? t('store') : t('test')
+  const title = step === 'store' ? storeTitle : t('test')
 
   return (
     <>

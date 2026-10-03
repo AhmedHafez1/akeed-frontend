@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { ApiError } from '@/shared/lib/http'
 import { createLogger } from '@/shared/lib/logger'
 import {
+  disconnectEasyOrders,
   fetchEasyOrdersConnection,
   saveEasyOrdersOrderSettings,
   saveEasyOrdersWebhookSecrets,
@@ -47,6 +48,11 @@ export interface EasyOrdersConnectionController {
   /** True right after a successful save, until the next one starts. */
   settingsSaved: boolean
   saveSettings: (settings: EasyOrdersOrderSettings) => Promise<boolean>
+  isDisconnecting: boolean
+  disconnectErrorCode: string | null
+  /** Resolves true once the source is disconnected. Reconnect is `connect`. */
+  disconnect: () => Promise<boolean>
+  clearDisconnectError: () => void
 }
 
 /**
@@ -73,6 +79,10 @@ export function useEasyOrdersConnection(
     null
   )
   const [settingsSaved, setSettingsSaved] = useState(false)
+  const [isDisconnecting, setIsDisconnecting] = useState(false)
+  const [disconnectErrorCode, setDisconnectErrorCode] = useState<string | null>(
+    null
+  )
   const activeRef = useRef(true)
 
   const reload = useCallback(async () => {
@@ -186,6 +196,31 @@ export function useEasyOrdersConnection(
     []
   )
 
+  const disconnect = useCallback(async () => {
+    setIsDisconnecting(true)
+    setDisconnectErrorCode(null)
+    try {
+      const next = await disconnectEasyOrders()
+      if (!activeRef.current) return true
+      setStatus(next)
+      setCancelled(false)
+      setSecretsSaved(false)
+      setSettingsSaved(false)
+      return true
+    } catch (error) {
+      logger.error('Failed to disconnect EasyOrders', errorCode(error))
+      if (activeRef.current) setDisconnectErrorCode(errorCode(error))
+      return false
+    } finally {
+      if (activeRef.current) setIsDisconnecting(false)
+    }
+  }, [])
+
+  const clearDisconnectError = useCallback(
+    () => setDisconnectErrorCode(null),
+    []
+  )
+
   return {
     view: resolveEasyOrdersConnectView(status, {
       isLoading,
@@ -207,5 +242,9 @@ export function useEasyOrdersConnection(
     settingsErrorCode,
     settingsSaved,
     saveSettings,
+    isDisconnecting,
+    disconnectErrorCode,
+    disconnect,
+    clearDisconnectError,
   }
 }

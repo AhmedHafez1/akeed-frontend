@@ -1,17 +1,21 @@
 'use client'
 
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
+import Link from 'next/link'
 import { useLocale, useTranslations } from 'next-intl'
 import {
   AlertCircle,
   Check,
   Clock,
   Eye,
+  KeyRound,
   Link2,
   Loader2,
   ShieldCheck,
+  Unplug,
   XCircle,
 } from 'lucide-react'
+import { TestStep } from '@/features/onboarding/ui/standalone/steps/TestStep'
 import { cn } from '@/shared/lib/utils'
 import {
   Button,
@@ -20,37 +24,56 @@ import {
   StatusBadge,
   akCard,
 } from '@/shared/ui'
+import { DisconnectEasyOrdersDialog } from './DisconnectEasyOrdersDialog'
 import {
+  isEasyOrdersReconnect,
   toEasyOrdersErrorKey,
   type EasyOrdersConnectView,
 } from './easyOrders.types'
-import { useEasyOrdersConnection } from './useEasyOrdersConnection'
+import { EasyOrdersSetupChecklist } from './EasyOrdersSetupChecklist'
+import { Frame, Notice, Panel } from './easyOrdersUi'
 import { OrderSettingsForm } from './OrderSettingsForm'
+import { ProviderRemovalSteps } from './ProviderRemovalSteps'
+import { useEasyOrdersConnection } from './useEasyOrdersConnection'
+import { useEasyOrdersSetupFlow } from './useEasyOrdersSetupFlow'
 import { WebhookSecretsForm } from './WebhookSecretsForm'
 
 const PERMISSIONS = ['read', 'update'] as const
 
 /**
- * Connecting an EasyOrders store: connect, waiting, not completed, error and
- * connected, one at a time. The install link, the API key and the webhook
- * secrets never appear on this screen.
+ * Connecting an EasyOrders store and finishing its setup: connect, waiting,
+ * not completed, error, connected (with the setup checklist, then the free
+ * test), revoked and disconnected, one at a time. The install link, the API
+ * key and the webhook secrets never appear on this screen.
  */
 export function EasyOrdersConnectPage() {
   const t = useTranslations('easyOrdersConnect')
   const locale = useLocale() === 'en' ? 'en' : 'ar'
   const connection = useEasyOrdersConnection(locale)
   const { view, status, canManage } = connection
+  const setup = useEasyOrdersSetupFlow(
+    status?.connection ?? null,
+    view === 'success'
+  )
+  const [confirmingDisconnect, setConfirmingDisconnect] = useState(false)
   const headingRef = useRef<HTMLHeadingElement>(null)
-  const shownViewRef = useRef<EasyOrdersConnectView | null>(null)
+  const shownRef = useRef<string | null>(null)
+  // The connected screen has steps of its own; each is a new place to land.
+  const shown: EasyOrdersConnectView | `success:${string}` =
+    view === 'success' ? `success:${setup.step}` : view
 
   // Land keyboard and screen-reader users on each new state, not on load.
   useEffect(() => {
-    if (view === 'loading') return
-    if (shownViewRef.current !== null && shownViewRef.current !== view) {
+    if (shown === 'loading') return
+    if (shownRef.current !== null && shownRef.current !== shown) {
       headingRef.current?.focus()
     }
-    shownViewRef.current = view
-  }, [view])
+    shownRef.current = shown
+  }, [shown])
+
+  const confirmDisconnect = async () => {
+    if (await connection.disconnect()) setConfirmingDisconnect(false)
+  }
 
   if (view === 'loading') {
     return (
@@ -99,6 +122,60 @@ export function EasyOrdersConnectPage() {
     </Notice>
   )
   const cleanup = <p className="text-ink-muted text-sm">{t('cleanup')}</p>
+  const reconnecting = isEasyOrdersReconnect(status)
+  const reconnectNote = reconnecting && (
+    <p className="text-ink-muted text-sm">{t('disconnected.sameStore')}</p>
+  )
+  const disconnectDialog = (
+    <DisconnectEasyOrdersDialog
+      open={confirmingDisconnect}
+      isDisconnecting={connection.isDisconnecting}
+      error={
+        connection.disconnectErrorCode
+          ? t(
+              `error.codes.${toEasyOrdersErrorKey(connection.disconnectErrorCode)}`
+            )
+          : null
+      }
+      onConfirm={() => void confirmDisconnect()}
+      onDismiss={() => {
+        setConfirmingDisconnect(false)
+        connection.clearDisconnectError()
+      }}
+    />
+  )
+
+  if (view === 'success' && setup.step === 'test' && setup.state) {
+    return (
+      <div className="mx-auto w-full max-w-[1120px] px-4 py-6 sm:px-6 sm:py-12">
+        <TestStep
+          test={setup.test}
+          completion={setup.completion}
+          blockedReasons={setup.blockedReasons}
+          phone={setup.state.merchantWhatsappPhone ?? setup.phone.value}
+          storeName={setup.state.storeName ?? store ?? ''}
+          canManage={setup.canManage}
+          headingRef={headingRef}
+        />
+      </div>
+    )
+  }
+
+  if (view === 'success' && setup.step === 'done') {
+    return (
+      <Frame>
+        <Panel icon={<Check aria-hidden="true" strokeWidth={3} />} tone="brand">
+          <StatusBadge kind="confirmed">{t('done.badge')}</StatusBadge>
+          {heading(t('done.title'))}
+          <p className="text-ink-muted text-sm">{t('done.body')}</p>
+          <p className="text-ink-muted text-sm">{t('success.next')}</p>
+          <Button asChild size="lg" className="font-semibold">
+            <Link href={setup.dashboardPath}>{t('done.dashboard')}</Link>
+          </Button>
+        </Panel>
+      </Frame>
+    )
+  }
 
   return (
     <Frame>
@@ -190,6 +267,7 @@ export function EasyOrdersConnectPage() {
           <p role="status" className="text-ink-muted text-sm">
             {t('waiting.body')}
           </p>
+          {reconnectNote}
           {status?.expiresAt && (
             <p className="text-ink-muted text-sm">
               {t('waiting.expires', {
@@ -218,6 +296,7 @@ export function EasyOrdersConnectPage() {
         <Panel icon={<XCircle aria-hidden="true" />} tone="muted">
           {heading(t('denied.title'))}
           <p className="text-ink-muted text-sm">{t('denied.body')}</p>
+          {reconnectNote}
           {cleanup}
           {readOnly}
           {startError}
@@ -231,6 +310,7 @@ export function EasyOrdersConnectPage() {
           <p role="alert" className="text-ink text-sm">
             {t(`error.codes.${toEasyOrdersErrorKey(status?.lastErrorCode)}`)}
           </p>
+          {reconnectNote}
           {cleanup}
           {readOnly}
           {startError}
@@ -273,17 +353,6 @@ export function EasyOrdersConnectPage() {
                 {t('success.inactive.body')}
               </Notice>
             )}
-            {status.connection.health === 'credentials_rejected' && (
-              <Notice
-                tone="destructive"
-                icon={<AlertCircle aria-hidden="true" />}
-              >
-                <span className="font-semibold">
-                  {t('success.keyRejected.title')}
-                </span>{' '}
-                {t('success.keyRejected.body')}
-              </Notice>
-            )}
             {status.connection.rejectedDeliveries > 0 && (
               <Notice
                 tone="warning"
@@ -295,7 +364,6 @@ export function EasyOrdersConnectPage() {
                 })}
               </Notice>
             )}
-            <p className="text-ink-muted text-sm">{t('success.next')}</p>
           </Panel>
 
           <div className={cn(akCard, 'space-y-4 p-6 sm:p-8')}>
@@ -314,7 +382,7 @@ export function EasyOrdersConnectPage() {
           <div className={cn(akCard, 'space-y-4 p-6 sm:p-8')}>
             {readOnly}
             <WebhookSecretsForm
-              webhookUrlHint={status.connection.webhookUrlHint}
+              webhookUrlHint={status.connection.webhookUrlHint ?? ''}
               alreadySet={
                 status.connection.ordersSecretSet &&
                 status.connection.statusSecretSet
@@ -325,81 +393,73 @@ export function EasyOrdersConnectPage() {
               failed={connection.secretsErrorCode !== null}
               onSave={connection.saveSecrets}
             />
+            <p className="text-ink-muted text-sm">
+              {t('success.secrets.duplicates')}
+            </p>
+          </div>
+
+          <EasyOrdersSetupChecklist setup={setup} />
+        </>
+      )}
+
+      {view === 'revoked' && (
+        <Panel icon={<KeyRound aria-hidden="true" />} tone="destructive">
+          {heading(t('revoked.title'))}
+          <p role="alert" className="text-ink text-sm">
+            {t('revoked.body')}
+          </p>
+          <p className="text-ink-muted text-sm">{t('revoked.recovery')}</p>
+          <p className="text-ink-muted text-sm">{t('revoked.lastSeen')}</p>
+          {readOnly}
+          <Button
+            size="lg"
+            variant="outline"
+            className="gap-2 font-semibold"
+            disabled={!canManage}
+            onClick={() => setConfirmingDisconnect(true)}
+          >
+            <Unplug aria-hidden="true" />
+            {t('disconnect.button')}
+          </Button>
+        </Panel>
+      )}
+
+      {view === 'disconnected' && (
+        <>
+          <Panel icon={<Unplug aria-hidden="true" />} tone="muted">
+            {heading(
+              store
+                ? t('disconnected.title', { store })
+                : t('disconnected.titleNoStore')
+            )}
+            <p className="text-ink-muted text-sm">{t('disconnected.body')}</p>
+            <p className="text-ink-muted text-sm">
+              {t('disconnected.historyKept')}
+            </p>
+            {status?.connection && (
+              <dl className="text-sm">
+                <dt className="text-ink-muted">{t('success.storeIdLabel')}</dt>
+                <dd>
+                  <bdi dir="ltr" className="text-ink font-mono font-semibold">
+                    {status.connection.storeId}
+                  </bdi>
+                </dd>
+              </dl>
+            )}
+            <p className="text-ink-muted text-sm">
+              {t('disconnected.reconnectBody')}
+            </p>
+            {readOnly}
+            {startError}
+            {connectButton(t('disconnected.reconnect'))}
+          </Panel>
+          <div className={cn(akCard, 'p-6 sm:p-8')}>
+            <ProviderRemovalSteps />
           </div>
         </>
       )}
+
+      {disconnectDialog}
     </Frame>
-  )
-}
-
-function Frame({ children }: { children: ReactNode }) {
-  return (
-    <div className="mx-auto w-full max-w-2xl space-y-4 px-4 py-6 sm:px-6 sm:py-12">
-      {children}
-    </div>
-  )
-}
-
-type Tone = 'brand' | 'muted' | 'destructive'
-
-const ICON_TONES: Record<Tone, string> = {
-  brand: 'bg-brand-soft text-brand-ink',
-  muted: 'bg-muted text-muted-foreground',
-  destructive: 'bg-destructive-subtle text-destructive-subtle-foreground',
-}
-
-function Panel({
-  icon,
-  tone,
-  children,
-}: {
-  icon: ReactNode
-  tone: Tone
-  children: ReactNode
-}) {
-  return (
-    <section className={cn(akCard, 'space-y-4 p-6 text-start sm:p-8')}>
-      <span
-        className={cn(
-          'flex size-12 items-center justify-center rounded-full [&_svg]:size-6',
-          ICON_TONES[tone]
-        )}
-      >
-        {icon}
-      </span>
-      {children}
-    </section>
-  )
-}
-
-const NOTICE_TONES = {
-  warning:
-    'border-warning-border bg-warning-subtle text-warning-subtle-foreground',
-  destructive:
-    'border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground',
-} as const
-
-function Notice({
-  tone,
-  icon,
-  role = 'alert',
-  children,
-}: {
-  tone: keyof typeof NOTICE_TONES
-  icon: ReactNode
-  role?: 'alert' | 'status'
-  children: ReactNode
-}) {
-  return (
-    <div
-      role={role}
-      className={cn(
-        'rounded-panel flex items-start gap-2 border p-3 text-start text-sm [&_svg]:mt-0.5 [&_svg]:size-4 [&_svg]:shrink-0',
-        NOTICE_TONES[tone]
-      )}
-    >
-      {icon}
-      <span>{children}</span>
-    </div>
   )
 }

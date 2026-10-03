@@ -7,14 +7,19 @@ export type EasyOrdersConnectionState =
   | 'failed'
   | 'expired'
   | 'connected'
+  /** Disconnected by an owner or admin; only the same store can reconnect. */
+  | 'disconnected'
 
 export interface EasyOrdersConnectionDetails {
   storeId: string
   /** False until an order fetched with the key carries the same store id. */
   storeVerified: boolean
   health: 'ok' | 'store_inactive' | 'credentials_rejected'
-  /** Last characters of the webhook addresses, to find them in EasyOrders. */
-  webhookUrlHint: string
+  /**
+   * Last characters of the webhook addresses, to find them in EasyOrders.
+   * Null once disconnected: the address is retired.
+   */
+  webhookUrlHint: string | null
   ordersSecretSet: boolean
   statusSecretSet: boolean
   /** Currency of every order from the store; null until chosen. */
@@ -24,6 +29,8 @@ export interface EasyOrdersConnectionDetails {
   /** Orders EasyOrders sent that were refused for a wrong webhook secret. */
   rejectedDeliveries: number
   connectedAt: string
+  /** Set while disconnected, including while a reconnect is under way. */
+  disconnectedAt: string | null
 }
 
 /** Never carries a key, a token or a webhook secret. */
@@ -63,6 +70,9 @@ export type EasyOrdersConnectView =
   | 'denied'
   | 'error'
   | 'success'
+  /** Connected, but EasyOrders no longer accepts the stored key. */
+  | 'revoked'
+  | 'disconnected'
 
 /**
  * `cancelled` is the merchant saying they did not accept. EasyOrders sends no
@@ -79,7 +89,11 @@ export function resolveEasyOrdersConnectView(
   }
   switch (status.state) {
     case 'connected':
-      return 'success'
+      return status.connection?.health === 'credentials_rejected'
+        ? 'revoked'
+        : 'success'
+    case 'disconnected':
+      return 'disconnected'
     case 'unavailable':
       return 'unavailable'
     case 'pilot_required':
@@ -102,6 +116,8 @@ export const EASYORDERS_ERROR_CODES = [
   'EASYORDERS_KEY_REJECTED',
   'EASYORDERS_PROVIDER_UNAVAILABLE',
   'EASYORDERS_STORE_UNAVAILABLE',
+  'EASYORDERS_RECONNECT_STORE_MISMATCH',
+  'EASYORDERS_NOT_CONNECTED',
   'EASYORDERS_SOURCE_EXISTS',
   'EASYORDERS_CALLBACK_INVALID',
   'EASYORDERS_PILOT_REQUIRED',
@@ -117,9 +133,57 @@ export function toEasyOrdersErrorKey(
   return EASYORDERS_ERROR_CODES.find((known) => known === code) ?? 'default'
 }
 
+/** True while a reconnect of a disconnected source is waiting or was refused. */
+export function isEasyOrdersReconnect(
+  status: EasyOrdersConnectionStatus | null
+): boolean {
+  return Boolean(status?.connection?.disconnectedAt)
+}
+
 /** EasyOrders secrets are printable, without spaces; 16 characters today. */
 const WEBHOOK_SECRET_PATTERN = /^[\x21-\x7E]{8,128}$/
 
 export function isValidWebhookSecret(value: string): boolean {
   return WEBHOOK_SECRET_PATTERN.test(value.trim())
+}
+
+export const EASYORDERS_CHECKLIST_ITEMS = [
+  'store',
+  'orderDefaults',
+  'secrets',
+  'sender',
+] as const
+
+export type EasyOrdersChecklistItemId =
+  (typeof EASYORDERS_CHECKLIST_ITEMS)[number]
+
+export interface EasyOrdersChecklistItem {
+  id: EasyOrdersChecklistItemId
+  done: boolean
+}
+
+/**
+ * What must be in place before the test message, each on its own row. The
+ * sender is Akeed's, so an unknown status does not hold the merchant back;
+ * only a deployment that reports it is not configured does.
+ */
+export function buildEasyOrdersChecklist(
+  connection: Pick<
+    EasyOrdersConnectionDetails,
+    'currency' | 'phoneCountry' | 'ordersSecretSet' | 'statusSecretSet'
+  >,
+  senderStatus: 'configured' | 'not_configured' | 'unknown'
+): EasyOrdersChecklistItem[] {
+  return [
+    { id: 'store', done: true },
+    {
+      id: 'orderDefaults',
+      done: Boolean(connection.currency && connection.phoneCountry),
+    },
+    {
+      id: 'secrets',
+      done: connection.ordersSecretSet && connection.statusSecretSet,
+    },
+    { id: 'sender', done: senderStatus !== 'not_configured' },
+  ]
 }

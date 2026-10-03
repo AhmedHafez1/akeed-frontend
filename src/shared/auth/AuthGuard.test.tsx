@@ -123,6 +123,56 @@ describe('AuthGuard with a source-less organization', () => {
     expect(screen.queryByTestId('protected')).toBeNull()
   })
 
+  it.each([
+    ['a finished account with nothing to fix', undefined, '/ar/dashboard'],
+    [
+      'a finished account whose source reports nothing blocking',
+      { blockedReasons: [] },
+      '/ar/dashboard',
+    ],
+    [
+      'a reconnected source that still needs its webhook secrets',
+      { blockedReasons: ['webhook_secrets_missing'] },
+      '/ar/settings?tab=store',
+    ],
+    [
+      'a disconnected source',
+      { blockedReasons: ['source_disconnected'] },
+      '/ar/settings?tab=store',
+    ],
+  ])(
+    'sends %s away from setup to where it belongs',
+    async (_label, sourceSetup, destination) => {
+      pathname = '/ar/onboarding'
+      mockedMode.mockReturnValue('connect')
+      mockedState.mockResolvedValue({
+        state: { onboardingStatus: 'completed', sourceSetup },
+      } as never)
+
+      renderGuard()
+
+      await waitFor(() =>
+        expect(router.replace).toHaveBeenCalledWith(destination)
+      )
+    }
+  )
+
+  it('leaves a finished account with a source to fix on the page it asked for', async () => {
+    pathname = '/ar/dashboard'
+    mockedMode.mockReturnValue('connect')
+    mockedState.mockResolvedValue({
+      state: {
+        onboardingStatus: 'completed',
+        sourceSetup: { blockedReasons: ['source_disconnected'] },
+      },
+    } as never)
+
+    renderGuard()
+
+    await screen.findByTestId('protected')
+    expect(router.replace).not.toHaveBeenCalled()
+  })
+
   it('keeps the existing redirects for an account that has a source', async () => {
     mockedMode.mockReturnValue('standalone')
     mockedState.mockResolvedValue({

@@ -13,7 +13,7 @@ import type {
   OnboardingBillingResponse,
   OnboardingSettingsPayload,
   OnboardingStateResponse,
-  StandaloneSetupBlockedReason,
+  SetupBlockedReason,
 } from '@/features/onboarding/domain/onboarding.types'
 
 export class OnboardingApiError extends Error {
@@ -21,7 +21,7 @@ export class OnboardingApiError extends Error {
     message: string,
     readonly status: number,
     readonly code: string | null,
-    readonly blockedReasons: StandaloneSetupBlockedReason[] = []
+    readonly blockedReasons: SetupBlockedReason[] = []
   ) {
     super(message)
   }
@@ -38,12 +38,12 @@ export function isFreePlanAlreadyClaimedError(error: unknown): boolean {
 async function getOnboardingApiError(response: Response) {
   let message = `Request failed with status ${response.status}`
   let code: string | null = null
-  let blockedReasons: StandaloneSetupBlockedReason[] = []
+  let blockedReasons: SetupBlockedReason[] = []
   try {
     const body = await parseJsonResponse<{
       message?: string | string[]
       code?: string
-      blockedReasons?: StandaloneSetupBlockedReason[]
+      blockedReasons?: SetupBlockedReason[]
     }>(response)
     message = Array.isArray(body.message)
       ? body.message.join(', ')

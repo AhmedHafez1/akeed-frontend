@@ -26,6 +26,14 @@ export function startEasyOrdersInstall(
   })
 }
 
+/**
+ * Stops the source on Akeed's side and wipes the stored credentials. Nothing
+ * is removed at EasyOrders: the merchant deletes the key and webhooks there.
+ */
+export function disconnectEasyOrders(): Promise<EasyOrdersConnectionStatus> {
+  return api.delete<EasyOrdersConnectionStatus>('/api/easyorders/connection')
+}
+
 /** The store's currency and the country its local phone numbers are read in. */
 export function saveEasyOrdersOrderSettings(
   settings: EasyOrdersOrderSettings

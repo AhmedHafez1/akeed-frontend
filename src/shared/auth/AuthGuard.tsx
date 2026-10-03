@@ -122,7 +122,14 @@ export function AuthGuard({
             return
           }
           if (state.onboardingStatus === 'completed' && isOnboardingRoute) {
-            router.replace(auth.getDashboardPath(locale))
+            // A finished account whose source still needs something (a
+            // reconnect, new webhook secrets) is sent to where it is fixed.
+            // This is also where the source's own redirect lands.
+            router.replace(
+              (state.sourceSetup?.blockedReasons.length ?? 0) > 0
+                ? `/${locale}/settings?tab=store`
+                : auth.getDashboardPath(locale)
+            )
             return
           }
         }

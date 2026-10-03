@@ -1,11 +1,10 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useQueryClient } from '@tanstack/react-query'
 import {
-  completeStandaloneOnboarding,
   fetchOnboardingState,
   OnboardingApiError,
   sendOnboardingTest,
@@ -15,6 +14,8 @@ import type {
   AutomationTimezone,
   IntegrationOnboardingLanguage,
   IntegrationOnboardingState,
+  SetupBlockedReason,
+  StandaloneSetupBlockedReason,
   StandaloneStep,
   StandaloneStoreFieldErrors,
   StandaloneStoreFieldKey,
@@ -31,12 +32,11 @@ import {
   validateStoreForm,
   type StandaloneStoreForm,
 } from '@/features/onboarding/model/standaloneStore'
+import { isTestProviderUnavailable, toTestError } from './useOnboardingTest'
 import {
-  isTestProviderUnavailable,
-  toTestError,
-  useOnboardingTest,
-  type OnboardingTestError,
-} from './useOnboardingTest'
+  useOnboardingTestCompletion,
+  type OnboardingTestSendError,
+} from './useOnboardingTestCompletion'
 import {
   isOrderCurrency,
   type OrderCurrency,
@@ -51,7 +51,7 @@ const logger = createLogger('Onboarding')
 type DefaultKey = 'language' | 'currency' | 'timezone'
 type TouchedDefaults = Record<DefaultKey, boolean>
 
-export type StandaloneTestSendError = OnboardingTestError | 'unavailable'
+export type StandaloneTestSendError = OnboardingTestSendError
 
 export interface SubmitStoreResult {
   ok: boolean
@@ -162,20 +162,57 @@ export function useStandaloneOnboardingFlow() {
   const [fieldErrors, setFieldErrors] = useState<StandaloneStoreFieldErrors>({})
   const [saveError, setSaveError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitTestError, setSubmitTestError] =
-    useState<StandaloneTestSendError | null>(null)
-  const [isCompleting, setIsCompleting] = useState(false)
-  const [completeError, setCompleteError] = useState<string | null>(null)
-  const [isDone, setIsDone] = useState(false)
 
   const requestedStep = parseStandaloneStep(searchParams?.get('step'))
-  const step: StandaloneStep = isDone
+  const dashboardPath = `/${locale}/dashboard`
+
+  const goToStep = useCallback((next: StandaloneStep) => {
+    window.history.pushState(null, '', urlWithStep(next))
+  }, [])
+
+  // A blocked /complete replaces what the state said could be completed.
+  const showBlockedReasons = useCallback((reasons: SetupBlockedReason[]) => {
+    const suspended = reasons.includes('account_suspended')
+    setState((current) =>
+      current
+        ? {
+            ...current,
+            standaloneSetup: {
+              canComplete: false,
+              blockedReasons: reasons as StandaloneSetupBlockedReason[],
+              accountStatus: suspended
+                ? 'suspended'
+                : (current.standaloneSetup?.accountStatus ?? null),
+            },
+          }
+        : current
+    )
+  }, [])
+  const backToStore = useCallback(() => goToStep('store'), [goToStep])
+  const doneUrl = useCallback(() => urlWithStep('done'), [])
+  const readOnlyMessage = t('readOnly')
+  const completeErrorMessage = t('completeError')
+
+  const completion = useOnboardingTestCompletion({
+    isTestStep:
+      !!state && resolveStandaloneStep(state, requestedStep) === 'test',
+    dashboardPath,
+    doneUrl,
+    messages: {
+      readOnly: readOnlyMessage,
+      completeError: completeErrorMessage,
+    },
+    onCompleted: setState,
+    onBlocked: showBlockedReasons,
+    onChangeNumber: backToStore,
+  })
+  const { setSubmitTestError } = completion
+
+  const step: StandaloneStep = completion.isDone
     ? 'done'
     : state
       ? resolveStandaloneStep(state, requestedStep)
       : (requestedStep ?? 'store')
-
-  const dashboardPath = `/${locale}/dashboard`
 
   const load = useCallback(async () => {
     setIsLoading(true)
@@ -211,10 +248,6 @@ export function useStandaloneOnboardingFlow() {
     if (!state || requestedStep === step) return
     window.history.replaceState(null, '', urlWithStep(step))
   }, [requestedStep, state, step])
-
-  const goToStep = useCallback((next: StandaloneStep) => {
-    window.history.pushState(null, '', urlWithStep(next))
-  }, [])
 
   // ── Your store ────────────────────────────────────────────────────────────
 
@@ -332,111 +365,7 @@ export function useStandaloneOnboardingFlow() {
     } finally {
       setIsSubmitting(false)
     }
-  }, [canManage, form, goToStep, queryClient, t])
-
-  // ── Completion ────────────────────────────────────────────────────────────
-
-  const complete = useCallback(async (): Promise<boolean> => {
-    setCompleteError(null)
-    setIsCompleting(true)
-    try {
-      const response = await completeStandaloneOnboarding()
-      setState(response.state)
-      return true
-    } catch (error) {
-      logger.error('Failed to complete standalone onboarding', error)
-      if (error instanceof OnboardingApiError) {
-        if (error.status === 403) {
-          setCompleteError(t('readOnly'))
-          return false
-        }
-        if (error.blockedReasons.length > 0) {
-          const suspended = error.blockedReasons.includes('account_suspended')
-          setState((current) =>
-            current
-              ? {
-                  ...current,
-                  standaloneSetup: {
-                    canComplete: false,
-                    blockedReasons: error.blockedReasons,
-                    accountStatus: suspended
-                      ? 'suspended'
-                      : (current.standaloneSetup?.accountStatus ?? null),
-                  },
-                }
-              : current
-          )
-          return false
-        }
-      }
-      setCompleteError(t('completeError'))
-      return false
-    } finally {
-      setIsCompleting(false)
-    }
-  }, [t])
-
-  const stepRef = useRef(step)
-  useEffect(() => {
-    stepRef.current = step
-  }, [step])
-  /** What a failed /complete was finishing, so its retry repeats it. */
-  const completionIntentRef = useRef<'confirmed' | 'leave' | null>(null)
-
-  const finishConfirmed = useCallback(async () => {
-    completionIntentRef.current = 'confirmed'
-    if (!(await complete())) return
-    setIsDone(true)
-    window.history.replaceState(null, '', urlWithStep('done'))
-  }, [complete])
-
-  const handleTestConfirmed = useCallback(() => {
-    if (stepRef.current !== 'test') return
-    void finishConfirmed()
-  }, [finishConfirmed])
-
-  const leaveToDashboard = useCallback(async () => {
-    completionIntentRef.current = 'leave'
-    if (await complete()) router.replace(dashboardPath)
-  }, [complete, dashboardPath, router])
-
-  const handleSkipped = useCallback(() => {
-    void leaveToDashboard()
-  }, [leaveToDashboard])
-
-  const retryCompletion = useCallback(() => {
-    if (completionIntentRef.current === 'confirmed') void finishConfirmed()
-    else if (completionIntentRef.current === 'leave') void leaveToDashboard()
-  }, [finishConfirmed, leaveToDashboard])
-
-  const neverFreshSendRef = useRef(false)
-  const test = useOnboardingTest({
-    isActive: !!state && step === 'test',
-    freshSendRequestedRef: neverFreshSendRef,
-    onConfirmed: handleTestConfirmed,
-    onSkipped: handleSkipped,
-    autoSend: false,
-  })
-
-  const { resend } = test
-  const retryTest = useCallback(() => {
-    setSubmitTestError(null)
-    resend()
-  }, [resend])
-
-  const changeNumber = useCallback(() => {
-    setSubmitTestError(null)
-    setCompleteError(null)
-    goToStep('store')
-  }, [goToStep])
-
-  const testError =
-    test.error ??
-    (submitTestError && submitTestError !== 'unavailable'
-      ? submitTestError
-      : null)
-  const isTestUnavailable =
-    test.isUnavailable || submitTestError === 'unavailable'
+  }, [canManage, form, goToStep, queryClient, setSubmitTestError, t])
 
   return {
     step,
@@ -460,37 +389,8 @@ export function useStandaloneOnboardingFlow() {
       setTimezone,
       submit: submitStore,
     },
-    test: useMemo(
-      () => ({
-        testState: test.testState,
-        isLoading: test.isLoading,
-        isSending: test.isSending,
-        isSkipping: test.isSkipping,
-        error: testError,
-        isUnavailable: isTestUnavailable,
-        retry: retryTest,
-        skip: test.skip,
-        changeNumber,
-        continueToDashboard: () => void leaveToDashboard(),
-      }),
-      [
-        changeNumber,
-        isTestUnavailable,
-        leaveToDashboard,
-        retryTest,
-        test.isLoading,
-        test.isSending,
-        test.isSkipping,
-        test.skip,
-        test.testState,
-        testError,
-      ]
-    ),
-    completion: {
-      isCompleting,
-      error: completeError,
-      retry: retryCompletion,
-    },
+    test: completion.test,
+    completion: completion.completion,
   }
 }
 

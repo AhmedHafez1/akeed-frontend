@@ -1977,7 +1977,76 @@
           "codDesc": "How we treat orders that don’t say how they were paid.",
           "codLabel": "Treat them as cash on delivery",
           "codHelp": "Turn on only if your order source usually leaves the payment method out of COD orders.",
-          "codRisk": "Prepaid orders with missing payment info will also get a confirmation message and use credits."
+          "codRisk": "Prepaid orders with missing payment info will also get a confirmation message and use credits.",
+          "sourceHelpEasyOrders": "Orders arrive from your EasyOrders store by themselves.",
+          "disconnected": "Disconnected",
+          "connectionHeading": "Connection",
+          "connectionDesc": "The link between Akeed and your store.",
+          "health": {
+            "heading": "Connection health",
+            "desc": "What Akeed last saw from your store, one signal at a time.",
+            "loading": "Loading connection health…",
+            "loadError": "We couldn’t load the connection health.",
+            "retry": "Try again",
+            "credentials": {
+              "title": "Access to your store",
+              "ok": "Accepted",
+              "store_inactive": "Accepted, but the platform reports the store as inactive or overdue",
+              "rejected": "Rejected by the store",
+              "removed": "Removed when the store was disconnected",
+              "note": "This is the answer the store gave the last time Akeed used its key, not a live check."
+            },
+            "lastEvent": {
+              "title": "Last order event received",
+              "none": "No events yet",
+              "noneNote": "Nothing is wrong with that by itself: an event arrives when your store gets an order.",
+              "recent": "{count, plural, one {# event} other {# events}} in the last {days} days."
+            },
+            "delivery": {
+              "title": "Events refused before processing",
+              "secretsMissing": "Every event is refused until the webhook secrets are added",
+              "rejected": "{count, plural, one {# event was refused for a wrong webhook secret} other {# events were refused for a wrong webhook secret}}",
+              "none": "None",
+              "lastRejected": "Last refused: {when}."
+            },
+            "processing": {
+              "title": "Processing failures",
+              "failed": "{count, plural, one {# event failed} other {# events failed}} in the last {days} days",
+              "none": "None in the last {days} days",
+              "lastFailed": "Last failure: {when}."
+            },
+            "backlog": {
+              "title": "Waiting to be processed",
+              "waiting": "{count, plural, one {# event waiting} other {# events waiting}}",
+              "none": "Nothing waiting",
+              "oldest": "Oldest received: {when}."
+            },
+            "remoteSync": {
+              "title": "Order status updates in your store",
+              "failed": "{count, plural, one {# update was not applied} other {# updates were not applied}} in the last {days} days",
+              "none": "No failed updates in the last {days} days",
+              "pending": "{count, plural, one {# update is still being tried.} other {# updates are still being tried.}}",
+              "assistance": "At least one needs you: the store rejected Akeed’s access. The confirmation result is kept in Akeed either way.",
+              "note": "The confirmation result is kept in Akeed even when the store doesn’t take the update."
+            },
+            "capabilities": {
+              "title": "What Akeed updates in your store",
+              "some": "Order status updates are on",
+              "none": "Order status updates are not switched on for this store yet",
+              "disconnected": "Nothing while the store is disconnected",
+              "supported": "Updated in your store: {list}.",
+              "unsupported": "Kept in Akeed only: {list}.",
+              "separator": ", ",
+              "note": "Results are always recorded in Akeed.",
+              "actions": {
+                "customer_confirmation": "customer confirmations",
+                "customer_cancellation": "customer cancellations",
+                "merchant_no_reply_cancellation": "cancellations you make after no reply",
+                "merchant_cancellation_tagging": "cancellation tags",
+                "automatic_no_reply_tagging": "automatic no-reply marks"
+              }
+            }
+          }
         },
         "apiKeys": {
           "heading": "API keys",
@@ -2055,7 +2124,8 @@
         "testSendSuccess": "Test message sent to your WhatsApp",
         "testSendCooldown": "Wait a few seconds before sending another test.",
         "testSendDailyLimit": "You've reached today's limit of test messages.",
-        "testSendError": "The test message couldn't be sent. Try again."
+        "testSendError": "The test message couldn't be sent. Try again.",
+        "sourceDisconnected": "Your order source is disconnected, so settings can’t be changed. You can reconnect it on the order source tab."
       }
     },
     "storeConfigurationHeading": "Store configuration",
@@ -2324,7 +2394,8 @@
           ]
         }
       }
-    }
+    },
+    "sourceEasyOrders": "EasyOrders"
   },
   "embeddedOnboarding": {
     "prefillWarning": "We could not prefill Shopify store details. Please enter the store name manually.",
@@ -2587,7 +2658,11 @@
       "language_invalid": "Choose a supported message language.",
       "cod_default_invalid": "Choose how missing payment information should be handled.",
       "automation_invalid": "Review the automation timing settings.",
-      "timezone_invalid": "Choose a supported timezone."
+      "timezone_invalid": "Choose a supported timezone.",
+      "order_defaults_missing": "Choose your store’s country and currency.",
+      "webhook_secrets_missing": "Add both webhook secrets.",
+      "credentials_rejected": "The store no longer accepts Akeed’s access. Disconnect it, then connect it again.",
+      "source_disconnected": "The store is disconnected. Reconnect it to continue."
     },
     "shell": {
       "help": "Help",
@@ -2648,7 +2723,8 @@
       "store": "Your store",
       "test": "Try the message",
       "compact": "{current} of {total} · {title}",
-      "menu": "Menu"
+      "menu": "Menu",
+      "connectStore": "Connect your store"
     },
     "store": {
       "heading": "Get your confirmation message ready",
@@ -3450,7 +3526,9 @@
         "EASYORDERS_PILOT_REQUIRED": "Your account isn’t approved for EasyOrders yet.",
         "EASYORDERS_CONNECT_UNAVAILABLE": "Connecting EasyOrders isn’t available right now.",
         "EASYORDERS_ROLE_REQUIRED": "Only an owner or admin can connect EasyOrders.",
-        "default": "Something went wrong. Nothing was connected."
+        "default": "Something went wrong. Nothing was connected.",
+        "EASYORDERS_RECONNECT_STORE_MISMATCH": "That is a different EasyOrders store. Only the store that was connected before can be reconnected. Nothing was changed.",
+        "EASYORDERS_NOT_CONNECTED": "EasyOrders isn’t connected to this account."
       }
     },
     "success": {
@@ -3512,8 +3590,106 @@
           "required": "Paste both secrets.",
           "invalid": "A secret is at least 8 characters with no spaces. Copy it again from EasyOrders.",
           "failed": "We couldn’t save the secrets. Try again."
-        }
+        },
+        "duplicates": "Keep exactly one orders webhook and one order-status webhook for Akeed in EasyOrders. If an address appears twice, delete the extra one: its orders arrive with a secret Akeed doesn’t have and are refused."
       }
+    },
+    "checklist": {
+      "title": "Finish setting up",
+      "body": "Akeed starts confirming your EasyOrders orders once everything below is ready and you have tried the message yourself.",
+      "loading": "Loading your setup…",
+      "loadError": "We couldn’t load your setup. Check your internet connection and try again.",
+      "retry": "Try again",
+      "done": "done",
+      "todo": "still needed",
+      "notReady": "Complete the items above to send the test message.",
+      "items": {
+        "store": {
+          "title": "Store connected",
+          "done": "Your EasyOrders store is connected to Akeed.",
+          "todo": "Connect your EasyOrders store."
+        },
+        "orderDefaults": {
+          "title": "Country and currency",
+          "done": "Chosen above. Every order uses them.",
+          "todo": "Choose your store’s country and currency above."
+        },
+        "secrets": {
+          "title": "Webhook secrets",
+          "done": "Saved. Akeed can trust the orders it receives.",
+          "todo": "Paste both webhook secrets above. Until then, orders from EasyOrders are refused."
+        },
+        "sender": {
+          "title": "Akeed WhatsApp sender"
+        }
+      },
+      "sender": {
+        "configured": "Messages go out from Akeed’s WhatsApp number. You don’t need a number of your own.",
+        "not_configured": "Akeed’s WhatsApp sender isn’t ready on our side. Contact Akeed support; there is nothing to change in your store.",
+        "unknown": "Messages go out from Akeed’s WhatsApp number. We couldn’t check it just now; the test message will show whether it works."
+      },
+      "automation": {
+        "title": "How confirmations will run",
+        "autoConfirmOn": "A confirmation message is sent for every new cash-on-delivery order.",
+        "autoConfirmOff": "Automatic confirmation is off. No message is sent until you turn it on in Settings.",
+        "reminderOn": "A reminder after {minutes} minutes without a reply.",
+        "reminderOff": "No reminder.",
+        "noReplyOn": "Marked as no reply after {minutes} minutes. Akeed never cancels the order in EasyOrders by itself.",
+        "noReplyOff": "Orders are not marked as no reply automatically.",
+        "quietHoursOn": "No messages between {start} and {end}.",
+        "quietHoursOff": "No quiet hours.",
+        "changeLater": "You can change these in Settings after setup."
+      }
+    },
+    "revoked": {
+      "title": "EasyOrders no longer accepts Akeed’s access",
+      "body": "The last time Akeed used its API key, EasyOrders rejected it. New orders can’t be checked and order statuses can’t be updated in your store.",
+      "recovery": "To fix it, disconnect EasyOrders here, then connect the same store again. Reconnecting creates a new key and new webhooks, and you paste the two webhook secrets again.",
+      "lastSeen": "This is the last answer EasyOrders gave, not a live check. If you didn’t remove the key yourself, contact Akeed support before you disconnect."
+    },
+    "disconnected": {
+      "title": "{store} is disconnected from EasyOrders",
+      "titleNoStore": "Your store is disconnected from EasyOrders",
+      "body": "Akeed has stopped receiving orders from EasyOrders, sending messages for them, and updating their status in your store.",
+      "historyKept": "Your earlier orders and their confirmation results are kept and still appear in your reports.",
+      "reconnectBody": "You can connect the same EasyOrders store again. A different store can’t be connected to this account; contact Akeed support if you need that.",
+      "reconnect": "Reconnect EasyOrders",
+      "sameStore": "You are reconnecting a store. Sign in to the same EasyOrders store as before; a different store is refused."
+    },
+    "disconnect": {
+      "button": "Disconnect EasyOrders",
+      "title": "Disconnect EasyOrders?",
+      "description": "Akeed stops working with this store on its side right away.",
+      "keep": "Keep connected",
+      "confirm": "Disconnect",
+      "effects": {
+        "stops": "New orders from EasyOrders are no longer received, and messages or status updates that were waiting are not sent.",
+        "history": "Your orders, confirmation results and usage history are kept.",
+        "provider": "EasyOrders keeps the API key and webhooks it created for Akeed until you delete them there.",
+        "reconnect": "Reconnecting later takes a few steps: you approve again in EasyOrders and paste the webhook secrets again. Orders placed while disconnected are not imported."
+      }
+    },
+    "removal": {
+      "title": "Remove Akeed from EasyOrders",
+      "intro": "Disconnecting here doesn’t delete anything in EasyOrders. Do it yourself so EasyOrders stops calling Akeed:",
+      "steps": {
+        "openSettings": "In EasyOrders, open Settings → Public API.",
+        "deleteKey": "Delete the API key named Akeed.",
+        "deleteWebhooks": "Under Webhooks, delete every webhook named Akeed."
+      },
+      "oldWebhooks": "Until you delete them, EasyOrders keeps sending orders to an address Akeed no longer accepts. Nothing is stored from those calls.",
+      "support": "If something in EasyOrders can’t be deleted, contact EasyOrders support at info@easy-orders.net. For anything on the Akeed side, contact Akeed support."
+    },
+    "done": {
+      "badge": "Setup complete",
+      "title": "Your store is set up",
+      "body": "Akeed is ready to confirm your EasyOrders cash-on-delivery orders over WhatsApp.",
+      "dashboard": "Go to the dashboard"
+    },
+    "panel": {
+      "readOnly": "You have read-only access. An owner or admin manages the EasyOrders connection.",
+      "disconnectHelp": "Disconnecting stops Akeed for this store and keeps your history.",
+      "disconnectedTitle": "EasyOrders is disconnected"
     }
   }
 }

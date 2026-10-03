@@ -1,8 +1,12 @@
-import { act, fireEvent, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import * as onboardingApi from '@/features/onboarding/api/onboardingApi'
+import type { IntegrationOnboardingState } from '@/features/onboarding/domain/onboarding.types'
 import { renderOnboardingStandalone } from '@/features/onboarding/ui/standalone/components/onboardingTestUtils'
 import { ApiError } from '@/shared/lib/http'
 import {
+  disconnectEasyOrders,
   fetchEasyOrdersConnection,
   saveEasyOrdersOrderSettings,
   saveEasyOrdersWebhookSecrets,
@@ -10,17 +14,38 @@ import {
 } from './easyOrdersApi'
 import { EasyOrdersConnectPage } from './EasyOrdersConnectPage'
 import {
+  buildEasyOrdersChecklist,
   resolveEasyOrdersConnectView,
   type EasyOrdersConnectionStatus,
 } from './easyOrders.types'
 
 vi.mock('./easyOrdersApi', () => ({
+  disconnectEasyOrders: vi.fn(),
   fetchEasyOrdersConnection: vi.fn(),
   saveEasyOrdersOrderSettings: vi.fn(),
   saveEasyOrdersWebhookSecrets: vi.fn(),
   startEasyOrdersInstall: vi.fn(),
 }))
 
+// The connected screen reads the onboarding state for its setup checklist.
+vi.mock('@/features/onboarding/api/onboardingApi', async (importOriginal) => {
+  const original =
+    await importOriginal<
+      typeof import('@/features/onboarding/api/onboardingApi')
+    >()
+  return {
+    ...original,
+    fetchOnboardingState: vi.fn(),
+    updateOnboardingSettings: vi.fn(),
+    sendOnboardingTest: vi.fn(),
+    fetchOnboardingTest: vi.fn(),
+    skipOnboardingTest: vi.fn(),
+    completeStandaloneOnboarding: vi.fn(),
+  }
+})
+
+const onboarding = vi.mocked(onboardingApi)
+const disconnect = vi.mocked(disconnectEasyOrders)
 const fetchStatus = vi.mocked(fetchEasyOrdersConnection)
 const saveSecrets = vi.mocked(saveEasyOrdersWebhookSecrets)
 const saveSettings = vi.mocked(saveEasyOrdersOrderSettings)
@@ -61,16 +86,99 @@ const connected = (
       phoneCountry: null,
       rejectedDeliveries: 0,
       connectedAt: '2026-10-03T10:00:00.000Z',
+      disconnectedAt: null,
       ...connection,
     },
   })
+
+const ready = { currency: 'EGP', phoneCountry: 'EG' } as const
+const withSecrets = { ordersSecretSet: true, statusSecretSet: true } as const
+
+/** What a disconnect leaves: the store, no address and no secrets. */
+const disconnected = (overrides: Partial<EasyOrdersConnectionStatus> = {}) => ({
+  ...connected({
+    ...ready,
+    webhookUrlHint: null,
+    disconnectedAt: '2026-10-03T12:00:00.000Z',
+  }),
+  state: 'disconnected' as const,
+  ...overrides,
+})
+
+function onboardingState(
+  overrides: Partial<IntegrationOnboardingState> = {}
+): IntegrationOnboardingState {
+  return {
+    integrationId: 'source-1',
+    source: { platformType: 'easyorders', identity: 'easyorders:org' },
+    onboardingStatus: 'pending',
+    isOnboardingComplete: false,
+    storeName: 'متجر نور',
+    defaultLanguage: 'auto',
+    isAutoVerifyEnabled: true,
+    assumeCodWhenPaymentMissing: false,
+    shippingCurrency: 'USD',
+    avgShippingCost: 0,
+    billingPlanId: 'starter',
+    billingStatus: 'not_required',
+    followUpEnabled: true,
+    followUpDelayMinutes: 120,
+    escalationEnabled: true,
+    escalationDelayMinutes: 360,
+    quietHoursEnabled: false,
+    quietHoursStart: null,
+    quietHoursEnd: null,
+    timezone: 'Africa/Cairo',
+    sendDelayMinutes: 0,
+    merchantWhatsappPhone: null,
+    permissions: { canUpdateConfiguration: true, canCompleteOnboarding: true },
+    standaloneSetup: null,
+    sourceSetup: {
+      connectionState: 'connected',
+      disconnectedAt: null,
+      store: { reference: 'store-7f3a', verified: false },
+      orderDefaults: { currency: null, phoneCountry: null },
+      sender: { sender: 'akeed_shared', status: 'configured' },
+      canComplete: false,
+      blockedReasons: ['order_defaults_missing', 'webhook_secrets_missing'],
+    },
+    ...overrides,
+  }
+}
+
+const readySetup = (
+  sender: 'configured' | 'not_configured' | 'unknown' = 'configured'
+) =>
+  onboardingState({
+    sourceSetup: {
+      connectionState: 'connected',
+      disconnectedAt: null,
+      store: { reference: 'store-7f3a', verified: false },
+      orderDefaults: { currency: 'EGP', phoneCountry: 'EG' },
+      sender: { sender: 'akeed_shared', status: sender },
+      canComplete: true,
+      blockedReasons: [],
+    },
+  })
+
+function mountPage(locale: 'ar' | 'en' = 'ar') {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
+  })
+  return renderOnboardingStandalone(
+    <QueryClientProvider client={queryClient}>
+      <EasyOrdersConnectPage />
+    </QueryClientProvider>,
+    locale
+  )
+}
 
 async function renderPage(
   initial: EasyOrdersConnectionStatus,
   locale: 'ar' | 'en' = 'ar'
 ) {
   fetchStatus.mockResolvedValue(initial)
-  const view = renderOnboardingStandalone(<EasyOrdersConnectPage />, locale)
+  const view = mountPage(locale)
   await screen.findByRole('heading', { level: 1 })
   return view
 }
@@ -91,6 +199,9 @@ describe('EasyOrdersConnectPage', () => {
     }
     vi.spyOn(window, 'open').mockReturnValue(openedTab as unknown as Window)
     vi.spyOn(console, 'error').mockImplementation(() => undefined)
+    onboarding.fetchOnboardingState.mockResolvedValue({
+      state: onboardingState(),
+    })
   })
 
   afterEach(() => {
@@ -291,7 +402,7 @@ describe('EasyOrdersConnectPage', () => {
 
     it('offers a retry when the status cannot be loaded', async () => {
       fetchStatus.mockRejectedValue(new Error('network'))
-      renderOnboardingStandalone(<EasyOrdersConnectPage />)
+      mountPage()
 
       await screen.findByRole('heading', {
         level: 1,
@@ -333,11 +444,11 @@ describe('EasyOrdersConnectPage', () => {
       )
     })
 
-    it('says when EasyOrders no longer accepts the key', async () => {
-      await renderPage(connected({ health: 'credentials_rejected' }), 'en')
+    it('tells the seller to keep one webhook of each kind', async () => {
+      await renderPage(connected(), 'en')
 
       expect(document.body.textContent).toContain(
-        'EasyOrders no longer accepts Akeed’s access.'
+        'Keep exactly one orders webhook and one order-status webhook for Akeed in EasyOrders.'
       )
     })
 
@@ -369,7 +480,7 @@ describe('EasyOrdersConnectPage', () => {
     it('says nothing about refused deliveries when there are none', async () => {
       await renderPage(connected(), 'en')
 
-      expect(document.body.textContent).not.toContain('refused')
+      expect(document.body.textContent).not.toContain('refused because')
     })
 
     describe('order settings', () => {
@@ -555,6 +666,433 @@ describe('EasyOrdersConnectPage', () => {
   })
 })
 
+describe('EasyOrdersConnectPage setup, revoked and disconnected', () => {
+  let openedTab: {
+    opener: unknown
+    location: { replace: ReturnType<typeof vi.fn> }
+    close: ReturnType<typeof vi.fn>
+  }
+
+  beforeEach(() => {
+    vi.clearAllMocks()
+    openedTab = {
+      opener: window,
+      location: { replace: vi.fn() },
+      close: vi.fn(),
+    }
+    vi.spyOn(window, 'open').mockReturnValue(openedTab as unknown as Window)
+    vi.spyOn(console, 'error').mockImplementation(() => undefined)
+    onboarding.fetchOnboardingState.mockResolvedValue({
+      state: onboardingState(),
+    })
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  const checklist = async () =>
+    (
+      await screen.findByRole('heading', {
+        level: 2,
+        name: /Finish setting up|أكمل الإعداد/,
+      })
+    ).closest('section') as HTMLElement
+  const sendTest = (section: HTMLElement) =>
+    within(section).getByRole('button', {
+      name: /send a test message|أرسل رسالة تجريبية|رسالة/i,
+    }) as HTMLButtonElement
+
+  describe('setup checklist', () => {
+    it('lists what is still needed and holds the test until it is done', async () => {
+      await renderPage(connected(), 'en')
+      const section = await checklist()
+
+      expect(section.textContent).toContain(
+        'Choose your store’s country and currency above.'
+      )
+      expect(section.textContent).toContain(
+        'Paste both webhook secrets above. Until then, orders from EasyOrders are refused.'
+      )
+      expect(section.textContent).toContain(
+        'Complete the items above to send the test message.'
+      )
+      expect(sendTest(section).disabled).toBe(true)
+    })
+
+    it('shows the automation that will run and the Akeed sender, in Arabic', async () => {
+      onboarding.fetchOnboardingState.mockResolvedValue({
+        state: readySetup(),
+      })
+      await renderPage(connected({ ...ready, ...withSecrets }))
+      const section = await checklist()
+
+      expect(document.documentElement.dir).toBe('rtl')
+      expect(section.textContent).toContain(
+        'تُرسل رسالة تأكيد لكل طلب دفع عند الاستلام جديد.'
+      )
+      expect(section.textContent).toContain('تذكير بعد 120 دقيقة من دون رد.')
+      expect(section.textContent).toContain(
+        'تُرسل الرسائل من رقم واتساب الخاص بأكيد. لا تحتاج إلى رقم خاص بك.'
+      )
+      expect(section.textContent).not.toContain('أكمل البنود أعلاه')
+      expect(sendTest(section).disabled).toBe(false)
+    })
+
+    it.each([
+      [
+        'not_configured',
+        'Akeed’s WhatsApp sender isn’t ready on our side.',
+        true,
+      ],
+      ['unknown', 'We couldn’t check it just now', false],
+    ] as const)(
+      'says what it knows about the sender when it is %s',
+      async (sender, sentence, held) => {
+        onboarding.fetchOnboardingState.mockResolvedValue({
+          state: readySetup(sender),
+        })
+        await renderPage(connected({ ...ready, ...withSecrets }), 'en')
+        const section = await checklist()
+
+        expect(section.textContent).toContain(sentence)
+        expect(sendTest(section).disabled).toBe(held)
+      }
+    )
+
+    it('re-reads what blocks the finish after a setup input is saved', async () => {
+      await renderPage(connected(), 'en')
+      await checklist()
+      expect(onboarding.fetchOnboardingState).toHaveBeenCalledTimes(1)
+      saveSettings.mockResolvedValue(connected(ready))
+
+      const country = screen.getByLabelText(
+        'Customer phone country'
+      ) as HTMLSelectElement
+      fireEvent.change(country, { target: { value: 'EG' } })
+      fireEvent.submit(country.closest('form') as HTMLFormElement)
+
+      await waitFor(() =>
+        expect(onboarding.fetchOnboardingState).toHaveBeenCalledTimes(2)
+      )
+    })
+
+    it('asks for a valid number before saving or sending anything', async () => {
+      onboarding.fetchOnboardingState.mockResolvedValue({
+        state: readySetup(),
+      })
+      await renderPage(connected({ ...ready, ...withSecrets }), 'en')
+      const section = await checklist()
+
+      fireEvent.click(sendTest(section))
+
+      expect(
+        await within(section).findByText(/The number is incomplete/)
+      ).toBeTruthy()
+      expect(onboarding.updateOnboardingSettings).not.toHaveBeenCalled()
+      expect(onboarding.sendOnboardingTest).not.toHaveBeenCalled()
+    })
+
+    it('keeps the checklist read-only for a viewer', async () => {
+      onboarding.fetchOnboardingState.mockResolvedValue({
+        state: {
+          ...readySetup(),
+          permissions: {
+            canUpdateConfiguration: false,
+            canCompleteOnboarding: false,
+          },
+        },
+      })
+      await renderPage(
+        { ...connected({ ...ready, ...withSecrets }), canManage: false },
+        'en'
+      )
+
+      expect(sendTest(await checklist()).disabled).toBe(true)
+    })
+
+    it('offers a retry when the setup cannot be loaded', async () => {
+      onboarding.fetchOnboardingState.mockRejectedValueOnce(
+        new Error('offline')
+      )
+      await renderPage(connected(), 'en')
+
+      fireEvent.click(await screen.findByRole('button', { name: 'Try again' }))
+
+      await checklist()
+      expect(onboarding.fetchOnboardingState).toHaveBeenCalledTimes(2)
+    })
+  })
+
+  describe('revoked', () => {
+    it.each([
+      [
+        'en',
+        'EasyOrders no longer accepts Akeed’s access',
+        'To fix it, disconnect EasyOrders here, then connect the same store again.',
+        'not a live check',
+      ],
+      [
+        'ar',
+        'لم يعد EasyOrders يقبل وصول أكيد',
+        'لإصلاح ذلك افصل EasyOrders من هنا ثم اربط المتجر نفسه من جديد.',
+        'ليس فحصًا مباشرًا',
+      ],
+    ] as const)(
+      'replaces setup with what happened and the way back, in %s',
+      async (locale, title, recovery, caveat) => {
+        await renderPage(
+          connected({
+            ...ready,
+            ...withSecrets,
+            health: 'credentials_rejected',
+          }),
+          locale
+        )
+
+        expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(
+          title
+        )
+        expect(document.body.textContent).toContain(recovery)
+        expect(document.body.textContent).toContain(caveat)
+        // No setup while the key is rejected, and no promise of a quick fix.
+        expect(onboarding.fetchOnboardingState).not.toHaveBeenCalled()
+        expect(document.body.textContent).not.toMatch(/instantly|فورًا تعود/)
+      }
+    )
+
+    it('disconnects only after the merchant confirms, and says what is kept', async () => {
+      await renderPage(
+        connected({ ...ready, ...withSecrets, health: 'credentials_rejected' }),
+        'en'
+      )
+      disconnect.mockResolvedValue(disconnected())
+
+      fireEvent.click(
+        screen.getByRole('button', { name: 'Disconnect EasyOrders' })
+      )
+      const dialog = await screen.findByRole('dialog')
+      expect(dialog.textContent).toContain(
+        'Your orders, confirmation results and usage history are kept.'
+      )
+      expect(dialog.textContent).toContain(
+        'EasyOrders keeps the API key and webhooks it created for Akeed until you delete them there.'
+      )
+      expect(disconnect).not.toHaveBeenCalled()
+
+      fireEvent.click(
+        within(dialog).getByRole('button', { name: 'Disconnect' })
+      )
+
+      expect(
+        await screen.findByRole('heading', {
+          level: 1,
+          name: 'متجر نور is disconnected from EasyOrders',
+        })
+      ).toBeTruthy()
+      expect(disconnect).toHaveBeenCalledTimes(1)
+    })
+
+    it('keeps the connection when the merchant backs out', async () => {
+      await renderPage(
+        connected({ ...ready, ...withSecrets, health: 'credentials_rejected' }),
+        'en'
+      )
+
+      fireEvent.click(
+        screen.getByRole('button', { name: 'Disconnect EasyOrders' })
+      )
+      const dialog = await screen.findByRole('dialog')
+      fireEvent.click(
+        within(dialog).getAllByRole('button', { name: 'Keep connected' })[0]
+      )
+
+      await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+      expect(disconnect).not.toHaveBeenCalled()
+    })
+
+    it('reports a failed disconnect inside the dialog and stays connected', async () => {
+      await renderPage(
+        connected({ ...ready, ...withSecrets, health: 'credentials_rejected' }),
+        'en'
+      )
+      disconnect.mockRejectedValue(
+        new ApiError('forbidden', 403, 'EASYORDERS_ROLE_REQUIRED')
+      )
+
+      fireEvent.click(
+        screen.getByRole('button', { name: 'Disconnect EasyOrders' })
+      )
+      const dialog = await screen.findByRole('dialog')
+      fireEvent.click(
+        within(dialog).getByRole('button', { name: 'Disconnect' })
+      )
+
+      expect(
+        await within(dialog).findByText(
+          'Only an owner or admin can connect EasyOrders.'
+        )
+      ).toBeTruthy()
+      // The open dialog hides the page from the accessibility tree.
+      expect(document.querySelector('h1')?.textContent).toBe(
+        'EasyOrders no longer accepts Akeed’s access'
+      )
+    })
+
+    it('does not let a viewer disconnect', async () => {
+      await renderPage(
+        {
+          ...connected({ health: 'credentials_rejected' }),
+          canManage: false,
+        },
+        'en'
+      )
+
+      expect(
+        (
+          screen.getByRole('button', {
+            name: 'Disconnect EasyOrders',
+          }) as HTMLButtonElement
+        ).disabled
+      ).toBe(true)
+    })
+  })
+
+  describe('disconnected', () => {
+    it.each([
+      [
+        'en',
+        'متجر نور is disconnected from EasyOrders',
+        'Your earlier orders and their confirmation results are kept',
+        'Delete the API key named Akeed.',
+        'info@easy-orders.net',
+        'Reconnect EasyOrders',
+      ],
+      [
+        'ar',
+        'تم فصل متجر نور عن EasyOrders',
+        'طلباتك السابقة ونتائج تأكيدها محفوظة',
+        'احذف مفتاح API المسمّى Akeed.',
+        'info@easy-orders.net',
+        'إعادة ربط EasyOrders',
+      ],
+    ] as const)(
+      'says what stopped, what is kept and what to remove at EasyOrders, in %s',
+      async (locale, title, kept, removal, support, reconnect) => {
+        await renderPage(disconnected(), locale)
+
+        expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(
+          title
+        )
+        expect(document.body.textContent).toContain(kept)
+        expect(document.body.textContent).toContain(removal)
+        expect(document.body.textContent).toContain(support)
+        expect(screen.getByText('store-7f3a')).toBeTruthy()
+        expect(screen.getByRole('button', { name: reconnect })).toBeTruthy()
+        // No webhook address, secret form or setup for a disconnected store.
+        expect(document.body.textContent).not.toContain('aB3_xZ')
+        expect(document.querySelector('input[type="password"]')).toBeNull()
+        expect(onboarding.fetchOnboardingState).not.toHaveBeenCalled()
+      }
+    )
+
+    it('reconnects through EasyOrders and says it must be the same store', async () => {
+      await renderPage(disconnected(), 'en')
+      startInstall.mockResolvedValue({
+        installUrl: INSTALL_URL,
+        expiresAt: '2026-10-03T12:15:00.000Z',
+      })
+      fetchStatus.mockResolvedValue(
+        disconnected({
+          state: 'pending',
+          expiresAt: '2026-10-03T12:15:00.000Z',
+        })
+      )
+
+      fireEvent.click(
+        screen.getByRole('button', { name: 'Reconnect EasyOrders' })
+      )
+
+      expect(
+        await screen.findByRole('heading', {
+          level: 1,
+          name: 'Finish in EasyOrders',
+        })
+      ).toBeTruthy()
+      expect(openedTab.location.replace).toHaveBeenCalledWith(INSTALL_URL)
+      expect(document.body.textContent).toContain(
+        'Sign in to the same EasyOrders store as before; a different store is refused.'
+      )
+      expect(document.body.textContent).not.toContain('CALLBACK-TOKEN-VALUE')
+    })
+
+    it.each([
+      [
+        'en',
+        'That is a different EasyOrders store. Only the store that was connected before can be reconnected. Nothing was changed.',
+      ],
+      [
+        'ar',
+        'هذا متجر EasyOrders مختلف. لا يمكن إعادة ربط إلا المتجر الذي كان مربوطًا من قبل. لم يتغيّر شيء.',
+      ],
+    ] as const)(
+      'explains a reconnect refused for another store, in %s',
+      async (locale, message) => {
+        await renderPage(
+          disconnected({
+            state: 'failed',
+            lastErrorCode: 'EASYORDERS_RECONNECT_STORE_MISMATCH',
+          }),
+          locale
+        )
+
+        expect(screen.getByRole('alert').textContent).toBe(message)
+      }
+    )
+
+    it('keeps a viewer read-only', async () => {
+      await renderPage({ ...disconnected(), canManage: false }, 'en')
+
+      expect(
+        (
+          screen.getByRole('button', {
+            name: 'Reconnect EasyOrders',
+          }) as HTMLButtonElement
+        ).disabled
+      ).toBe(true)
+    })
+  })
+})
+
+describe('buildEasyOrdersChecklist', () => {
+  const base = {
+    currency: 'EGP',
+    phoneCountry: 'EG',
+    ordersSecretSet: true,
+    statusSecretSet: true,
+  }
+  const todo = (
+    connection: Parameters<typeof buildEasyOrdersChecklist>[0],
+    sender: Parameters<typeof buildEasyOrdersChecklist>[1] = 'configured'
+  ) =>
+    buildEasyOrdersChecklist(connection, sender)
+      .filter((item) => !item.done)
+      .map((item) => item.id)
+
+  it.each([
+    [base, 'configured', []],
+    [{ ...base, currency: null }, 'configured', ['orderDefaults']],
+    [{ ...base, phoneCountry: null }, 'configured', ['orderDefaults']],
+    [{ ...base, statusSecretSet: false }, 'configured', ['secrets']],
+    [{ ...base, ordersSecretSet: false }, 'unknown', ['secrets']],
+    [base, 'not_configured', ['sender']],
+    // An unknown sender status does not hold the merchant back.
+    [base, 'unknown', []],
+  ] as const)('%#', (connection, sender, expected) => {
+    expect(todo(connection, sender)).toEqual(expected)
+  })
+})
+
 describe('resolveEasyOrdersConnectView', () => {
   const idle = { isLoading: false, loadFailed: false, cancelled: false }
 
@@ -569,6 +1107,13 @@ describe('resolveEasyOrdersConnectView', () => {
     [status({ state: 'failed' }), idle, 'error'],
     // A connection wins over a stale "I didn't accept".
     [connected(), { ...idle, cancelled: true }, 'success'],
+    [connected({ health: 'credentials_rejected' }), idle, 'revoked'],
+    [connected({ health: 'store_inactive' }), idle, 'success'],
+    [disconnected(), idle, 'disconnected'],
+    // A reconnect under way shows as any other install does.
+    [disconnected({ state: 'pending' }), idle, 'waiting'],
+    [disconnected({ state: 'failed' }), idle, 'error'],
+    [disconnected({ state: 'expired' }), idle, 'denied'],
     [status({ state: 'pilot_required' }), idle, 'pilotRequired'],
     [status({ state: 'unavailable' }), idle, 'unavailable'],
     [status({ state: 'source_exists' }), idle, 'sourceExists'],

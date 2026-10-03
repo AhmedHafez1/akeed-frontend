@@ -42,6 +42,7 @@ export const queryKeys = {
   settings: {
     all: ['settings'] as const,
     detail: () => [...queryKeys.settings.all, 'detail'] as const,
+    sourceHealth: () => [...queryKeys.settings.all, 'source-health'] as const,
   },
   integrationKeys: {
     all: ['integration-keys'] as const,

@@ -31,6 +31,37 @@ export type StandaloneSetupBlockedReason =
   | 'automation_invalid'
   | 'timezone_invalid'
 
+/** Setup blockers only a connected source can have (US-06-05). */
+export type SourceSetupBlockedReason =
+  | 'order_defaults_missing'
+  | 'webhook_secrets_missing'
+  | 'credentials_rejected'
+  | 'source_disconnected'
+
+export type SetupBlockedReason =
+  | StandaloneSetupBlockedReason
+  | SourceSetupBlockedReason
+
+/**
+ * Whether this deployment holds the shared Akeed sender's credentials. It
+ * says nothing about delivery, template approval or number quality.
+ */
+export interface MessagingSenderStatus {
+  sender: 'akeed_shared'
+  status: 'configured' | 'not_configured' | 'unknown'
+}
+
+/** The connection of a source whose platform describes one. */
+export interface SourceSetup {
+  connectionState: 'connected' | 'disconnected'
+  disconnectedAt: string | null
+  store: { reference: string | null; verified: boolean }
+  orderDefaults: { currency: string | null; phoneCountry: string | null }
+  sender: MessagingSenderStatus
+  canComplete: boolean
+  blockedReasons: SetupBlockedReason[]
+}
+
 export const AUTOMATION_TIMEZONES = [
   'Asia/Riyadh',
   'Asia/Dubai',
@@ -92,6 +123,8 @@ export interface IntegrationOnboardingState {
     blockedReasons: StandaloneSetupBlockedReason[]
     accountStatus: CreditAccountStatus | null
   } | null
+  /** Absent for a source with no connection of its own to describe. */
+  sourceSetup?: SourceSetup
 }
 
 export interface OnboardingActivation {
