@@ -1635,6 +1635,8 @@
       "invalid_phone": "The customer's phone number is not a valid mobile number, so no message was sent.",
       "invalid_amount": "The order total could not be read, so no message was sent.",
       "incomplete_payload": "The order arrived without the details needed to confirm it, so no message was sent.",
+      "order_predates_connection": "This order was placed before the store was connected to Akeed, so no confirmation was sent.",
+      "order_not_placed": "This order has not been placed yet, or its status is one Akeed does not confirm, so no message was sent.",
       "generic": "Verification could not continue. Review setup or contact support."
     },
     "verifications": {

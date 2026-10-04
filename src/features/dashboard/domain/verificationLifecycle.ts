@@ -150,6 +150,8 @@ export const EXPLAINED_LIFECYCLE_REASONS = new Set([
   'invalid_phone',
   'invalid_amount',
   'incomplete_payload',
+  'order_predates_connection',
+  'order_not_placed',
 ])
 
 export type { LifecycleStatus, VerificationStatus }
