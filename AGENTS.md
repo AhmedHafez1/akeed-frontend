@@ -215,6 +215,10 @@ Optional:
   else leaves signup as it was. Turn the backend `EASYORDERS_CONNECT_ENABLED`
   on first.
 
+- `NEXT_PUBLIC_WOOCOMMERCE_CONNECT_ENABLED` — `true` adds WooCommerce to the
+  order-source picker on signup (US-07-02). Unset or anything else leaves it
+  out. Turn the backend `WOOCOMMERCE_CONNECT_ENABLED` on first.
+
 Never commit `.env.local` or files containing secrets.
 
 ## Common Pitfalls

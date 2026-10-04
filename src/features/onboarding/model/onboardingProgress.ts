@@ -11,4 +11,5 @@ export const ONBOARDING_STORE_STEP_TITLE: Record<
 > = {
   standalone: 'store',
   easyorders: 'connectStore',
+  woocommerce: 'connectStore',
 }

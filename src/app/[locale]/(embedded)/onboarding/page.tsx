@@ -18,6 +18,7 @@ import {
   SetupSuccessStep,
   StandaloneOnboardingPage,
   TestMessageStep,
+  WooCommerceConnectPage,
   buildTestTimeline,
   useEmbeddedOnboarding,
   useOnboardingSourceSkin,
@@ -51,6 +52,7 @@ export default function OnboardingPage() {
 const SOURCE_SETUP_PAGES: Record<OnboardingSourceSkin, ComponentType> = {
   standalone: StandaloneOnboardingPage,
   easyorders: EasyOrdersConnectPage,
+  woocommerce: WooCommerceConnectPage,
 }
 
 /** Non-embedded setup, in the skin of the organization's order source. */

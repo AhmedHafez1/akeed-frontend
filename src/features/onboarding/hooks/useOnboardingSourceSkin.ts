@@ -7,11 +7,12 @@ import {
   type KnownOnboardingSource,
 } from '@/features/onboarding/api/onboardingApi'
 
-export type OnboardingSourceSkin = 'standalone' | 'easyorders'
+export type OnboardingSourceSkin = 'standalone' | 'easyorders' | 'woocommerce'
 
 /** Sources with their own setup skin; every other source uses Standalone's. */
 const SKIN_BY_PLATFORM = new Map<string, OnboardingSourceSkin>([
   ['easyorders', 'easyorders'],
+  ['woocommerce', 'woocommerce'],
 ])
 
 /**
@@ -21,6 +22,7 @@ const SKIN_BY_PLATFORM = new Map<string, OnboardingSourceSkin>([
  */
 const CONNECT_SKIN_BY_SIGNUP_SOURCE = new Map<string, OnboardingSourceSkin>([
   ['easyorders', 'easyorders'],
+  ['woocommerce', 'woocommerce'],
 ])
 const DEFAULT_CONNECT_SKIN: OnboardingSourceSkin = 'easyorders'
 

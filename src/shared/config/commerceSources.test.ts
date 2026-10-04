@@ -38,6 +38,39 @@ describe('signup sources', () => {
     expect(resolveOrganizationSourceMode('easyorders')).toBe('connect')
   })
 
+  it.each([
+    ['false', false],
+    ['true', true],
+  ])(
+    'offers WooCommerce only when its own switch is on (EasyOrders %s)',
+    async (easyOrdersFlag, easyOrdersOn) => {
+      vi.stubEnv('NEXT_PUBLIC_WOOCOMMERCE_CONNECT_ENABLED', 'true')
+      const { getSignupSources, resolveOrganizationSourceMode } =
+        await loadSources(easyOrdersFlag)
+
+      expect(getSignupSources()).toEqual([
+        { id: 'standalone', organizationSourceMode: 'standalone' },
+        ...(easyOrdersOn
+          ? [{ id: 'easyorders', organizationSourceMode: 'connect' }]
+          : []),
+        { id: 'woocommerce', organizationSourceMode: 'connect' },
+      ])
+      expect(resolveOrganizationSourceMode('woocommerce')).toBe('connect')
+    }
+  )
+
+  it('keeps WooCommerce out while its switch is off', async () => {
+    vi.stubEnv('NEXT_PUBLIC_WOOCOMMERCE_CONNECT_ENABLED', 'false')
+    const { getSignupSources, resolveOrganizationSourceMode } =
+      await loadSources('true')
+
+    expect(getSignupSources().map((source) => source.id)).toEqual([
+      'standalone',
+      'easyorders',
+    ])
+    expect(resolveOrganizationSourceMode('woocommerce')).toBe('standalone')
+  })
+
   it.each([undefined, null, '', 'standalone', 'shopify', 42, { id: 'x' }])(
     'provisions Standalone for the saved choice %p',
     async (saved) => {

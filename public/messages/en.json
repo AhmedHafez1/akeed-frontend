@@ -922,6 +922,10 @@
           "easyorders": {
             "title": "EasyOrders",
             "description": "Connect your EasyOrders store after you sign up."
+          },
+          "woocommerce": {
+            "title": "WooCommerce",
+            "description": "Connect your WooCommerce store after you sign up."
           }
         }
       }
@@ -3690,6 +3694,98 @@
       "readOnly": "You have read-only access. An owner or admin manages the EasyOrders connection.",
       "disconnectHelp": "Disconnecting stops Akeed for this store and keeps your history.",
       "disconnectedTitle": "EasyOrders is disconnected"
+    }
+  },
+  "wooCommerceConnect": {
+    "eyebrow": "WooCommerce",
+    "loading": "Loading your WooCommerce connection…",
+    "readOnly": "You have read-only access. Ask an owner or admin to connect WooCommerce.",
+    "storeLabel": "Store",
+    "cleanup": "If you approved in your store, WooCommerce may have created an API key for Akeed that is not used. You can delete it in WordPress under WooCommerce > Settings > Advanced > REST API.",
+    "loadError": {
+      "title": "We couldn’t load your WooCommerce connection",
+      "body": "Check your internet connection and try again.",
+      "retry": "Try again"
+    },
+    "unavailable": {
+      "title": "WooCommerce isn’t available yet",
+      "body": "Connecting a WooCommerce store is not open yet. We will let you know as soon as it is."
+    },
+    "pilotRequired": {
+      "title": "Your account is waiting for approval",
+      "body": "Connecting WooCommerce is open to approved accounts only for now. We’ll let you know when yours is ready.",
+      "refresh": "Check again"
+    },
+    "sourceExists": {
+      "title": "This account already has an order source",
+      "body": "An Akeed account takes its orders from one source, so WooCommerce can’t be added to this one."
+    },
+    "enterUrl": {
+      "title": "Connect your WooCommerce store",
+      "body": "Akeed will confirm your cash-on-delivery orders from WooCommerce over WhatsApp. You approve the connection once, in your store.",
+      "label": "Your store’s address",
+      "hint": "The address your customers visit, starting with https://",
+      "placeholder": "https://example.com",
+      "required": "Enter your store’s address.",
+      "usesTitle": "Your store will ask you to give Akeed read and write access. Akeed uses it only to:",
+      "uses": {
+        "orders": "Receive your new orders",
+        "notifications": "Set up the order notifications it needs in your store",
+        "outcomes": "Record your customer’s answer on the order"
+      },
+      "sender": "Confirmation messages reach your customers from Akeed’s WhatsApp number.",
+      "cta": "Continue to my store",
+      "checking": "Checking your store…",
+      "note": "Your store opens in this tab. Sign in as an administrator or shop manager, then choose Approve."
+    },
+    "waiting": {
+      "title": "Finishing the connection",
+      "body": "Your store is sending Akeed its access. This page updates by itself.",
+      "expires": "This request expires at {time}.",
+      "restart": "Start again"
+    },
+    "denied": {
+      "title": "The connection wasn’t approved",
+      "body": "The request wasn’t approved in your store, so nothing was connected to your Akeed account.",
+      "retry": "Try again"
+    },
+    "unsupported": {
+      "title": "This store can’t be connected yet",
+      "nothing": "Nothing was connected to your Akeed account.",
+      "retry": "Try again"
+    },
+    "error": {
+      "title": "We couldn’t connect WooCommerce",
+      "expired": "The connection request expired before your store finished. Nothing was connected.",
+      "retry": "Try again"
+    },
+    "connected": {
+      "badge": "Connected",
+      "title": "Your WooCommerce store is connected",
+      "body": "Akeed set up its order notifications in your store. You don’t need to copy any key or secret.",
+      "next": "We’ll let you know when Akeed starts confirming this store’s cash-on-delivery orders."
+    },
+    "codes": {
+      "WOOCOMMERCE_STORE_URL_INVALID": "Enter your store’s address, for example https://example.com.",
+      "WOOCOMMERCE_STORE_HTTPS_REQUIRED": "Your store’s address must start with https://. Akeed does not connect to stores without HTTPS.",
+      "WOOCOMMERCE_STORE_ADDRESS_NOT_PUBLIC": "Akeed could not reach this address on the public internet. Check the address and try again.",
+      "WOOCOMMERCE_STORE_REDIRECTS": "This address redirects to another one. Enter your store’s final address, with or without www, exactly as it appears in the browser.",
+      "WOOCOMMERCE_STORE_TLS_FAILED": "Your store’s security certificate is not valid. Ask your hosting provider to fix it, then try again.",
+      "WOOCOMMERCE_REST_NOT_FOUND": "Akeed could not find the WooCommerce REST API at this address. In WordPress, open Settings > Permalinks, choose any option other than Plain, and make sure WooCommerce is up to date.",
+      "WOOCOMMERCE_REST_UNREACHABLE": "Your store did not answer. It may be down, in maintenance mode or blocking outside requests. Try again later or ask your hosting provider.",
+      "WOOCOMMERCE_CREDENTIALS_REJECTED": "Your store did not accept the new API key. Some hosting setups remove the Authorization header before it reaches WordPress; ask your hosting provider to allow it. Then delete the unused key under WooCommerce > Settings > Advanced > REST API and connect again.",
+      "WOOCOMMERCE_PERMISSION_DENIED": "The WordPress user who approved the connection cannot manage WooCommerce. Sign in to your store as an administrator or shop manager and connect again.",
+      "WOOCOMMERCE_STORE_URL_MISMATCH": "Your store reports a different address from the one you entered. Enter the address exactly as it is set in WordPress, then connect again.",
+      "WOOCOMMERCE_WEBHOOK_SETUP_FAILED": "Akeed could not finish setting up order notifications in your store. Nothing was connected. Try again.",
+      "WOOCOMMERCE_STORE_UNAVAILABLE": "This store is already connected to another Akeed account.",
+      "WOOCOMMERCE_PROVIDER_UNAVAILABLE": "Your store took too long to answer. Nothing was connected. Try again.",
+      "WOOCOMMERCE_SOURCE_EXISTS": "This Akeed account already has an order source, so WooCommerce can’t be added.",
+      "WOOCOMMERCE_PILOT_REQUIRED": "Your account isn’t approved for WooCommerce yet.",
+      "WOOCOMMERCE_CONNECT_UNAVAILABLE": "Connecting WooCommerce isn’t available right now.",
+      "WOOCOMMERCE_ROLE_REQUIRED": "Only an owner or admin can connect WooCommerce.",
+      "WOOCOMMERCE_CALLBACK_INVALID": "Your store sent an incomplete answer. Nothing was connected.",
+      "WOOCOMMERCE_INSTALL_VALIDATION_FAILED": "We couldn’t read that request. Check the address and try again.",
+      "default": "Something went wrong. Nothing was connected."
     }
   }
 }

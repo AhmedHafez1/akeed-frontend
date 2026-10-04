@@ -28,6 +28,11 @@ const CONNECTABLE_SOURCES: ReadonlyArray<SignupSource & { enabled: boolean }> =
       organizationSourceMode: 'connect',
       enabled: process.env.NEXT_PUBLIC_EASYORDERS_CONNECT_ENABLED === 'true',
     },
+    {
+      id: 'woocommerce',
+      organizationSourceMode: 'connect',
+      enabled: process.env.NEXT_PUBLIC_WOOCOMMERCE_CONNECT_ENABLED === 'true',
+    },
   ]
 
 /** The sources offered at signup. One entry means there is nothing to pick. */

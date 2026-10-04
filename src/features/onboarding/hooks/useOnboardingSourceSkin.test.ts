@@ -7,7 +7,7 @@ describe('resolveOnboardingSourceSkin', () => {
     [null, 'standalone'],
     [{ platformType: 'standalone' }, 'standalone'],
     [{ platformType: 'shopify' }, 'standalone'],
-    [{ platformType: 'woocommerce' }, 'standalone'],
+    [{ platformType: 'woocommerce' }, 'woocommerce'],
     // Chose a store platform at signup and has not connected it yet.
     ['missing', 'easyorders'],
     // Connected: the same skin shows the connection and its next step.
@@ -29,6 +29,12 @@ describe('resolveOnboardingSourceSkin', () => {
       expect(resolveOnboardingSourceSkin('missing', signupSource)).toBe(skin)
     }
   )
+
+  it('gives a source-less organization that chose WooCommerce its connect skin', () => {
+    expect(resolveOnboardingSourceSkin('missing', 'woocommerce')).toBe(
+      'woocommerce'
+    )
+  })
 
   it('decides by the platform once a source exists, whatever signup chose', () => {
     expect(
