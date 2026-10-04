@@ -3691,7 +3691,6 @@
     "eyebrow": "WooCommerce",
     "loading": "جارٍ تحميل اتصال WooCommerce…",
     "readOnly": "لديك صلاحية عرض فقط. اطلب من المالك أو المسؤول ربط WooCommerce.",
-    "storeLabel": "المتجر",
     "cleanup": "إذا وافقت في متجرك، فقد يكون WooCommerce أنشأ مفتاح API لأكيد لن يُستخدم. يمكنك حذفه في ووردبريس من WooCommerce > الإعدادات > متقدم > REST API.",
     "loadError": {
       "title": "تعذّر تحميل اتصال WooCommerce",
@@ -3777,6 +3776,17 @@
       "WOOCOMMERCE_CALLBACK_INVALID": "أرسل متجرك ردًا غير مكتمل. لم يتم ربط أي شيء.",
       "WOOCOMMERCE_INSTALL_VALIDATION_FAILED": "تعذّرت قراءة هذا الطلب. تحقق من العنوان وحاول مرة أخرى.",
       "default": "حدث خطأ ما. لم يتم ربط أي شيء."
+    }
+  },
+  "connectionLine": {
+    "akeed": "أكيد",
+    "yourStore": "متجرك",
+    "label": {
+      "idle": "أكيد و{store} غير متصلين بعد.",
+      "waiting": "أكيد يتصل الآن بـ{store}.",
+      "connected": "أكيد متصل بـ{store}.",
+      "refused": "تعذّر على أكيد الاتصال بـ{store}.",
+      "disconnected": "أكيد مفصول عن {store}."
     }
   }
 }

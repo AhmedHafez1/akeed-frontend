@@ -4,9 +4,11 @@ import en from '../../../../../public/messages/en.json'
 import {
   WOOCOMMERCE_ERROR_CODES,
   WOOCOMMERCE_UNSUPPORTED_STORE_CODES,
+  displayStoreAddress,
   isUnsupportedStoreCode,
   parseWooCommerceReturnHint,
   resolveWooCommerceConnectView,
+  toStoreAddress,
   toWooCommerceErrorKey,
   type WooCommerceConnectionStatus,
 } from './wooCommerce.types'
@@ -178,5 +180,34 @@ describe('resolveWooCommerceConnectView', () => {
         returnHint: 'denied',
       })
     ).toBe('connected')
+  })
+})
+
+describe('toStoreAddress', () => {
+  it.each([
+    ['shop.example.com', 'https://shop.example.com'],
+    ['  shop.example.com/eg  ', 'https://shop.example.com/eg'],
+    ['https://shop.example.com', 'https://shop.example.com'],
+    // Sent as typed, so the API answers it with the HTTPS message.
+    ['http://shop.example.com', 'http://shop.example.com'],
+    ['HTTPS://Shop.example.com', 'HTTPS://Shop.example.com'],
+  ])('reads %j as %s', (typed, address) => {
+    expect(toStoreAddress(typed)).toBe(address)
+  })
+})
+
+describe('displayStoreAddress', () => {
+  it.each([
+    ['https://shop.example.com', 'shop.example.com'],
+    ['https://shop.example.com/eg/', 'shop.example.com/eg'],
+    ['Shop.Example.com', 'shop.example.com'],
+    ['shop', null],
+    ['https://', null],
+    ['', null],
+    ['   ', null],
+    [null, null],
+    [undefined, null],
+  ])('names %j as %s', (address, shown) => {
+    expect(displayStoreAddress(address)).toBe(shown)
   })
 })

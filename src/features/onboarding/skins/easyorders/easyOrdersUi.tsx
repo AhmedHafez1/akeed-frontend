@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { cn } from '@/shared/lib/utils'
 import { akCard } from '@/shared/ui'
 
-/** The narrow column every EasyOrders connection screen sits in. */
+/** The narrow column every store connection screen sits in. */
 export function Frame({ children }: { children: ReactNode }) {
   return (
     <div className="mx-auto w-full max-w-2xl space-y-4 px-4 py-6 sm:px-6 sm:py-12">
@@ -19,25 +19,34 @@ const ICON_TONES: Record<Tone, string> = {
   destructive: 'bg-destructive-subtle text-destructive-subtle-foreground',
 }
 
+/**
+ * One state of a connection screen. A state about the link to the store leads
+ * with `lead` (the connection line); a state about the account itself, such
+ * as "not available yet", leads with an icon instead.
+ */
 export function Panel({
   icon,
+  lead,
   tone,
   children,
 }: {
-  icon: ReactNode
+  icon?: ReactNode
+  lead?: ReactNode
   tone: Tone
   children: ReactNode
 }) {
   return (
     <section className={cn(akCard, 'space-y-4 p-6 text-start sm:p-8')}>
-      <span
-        className={cn(
-          'flex size-12 items-center justify-center rounded-full [&_svg]:size-6',
-          ICON_TONES[tone]
-        )}
-      >
-        {icon}
-      </span>
+      {lead ?? (
+        <span
+          className={cn(
+            'flex size-12 items-center justify-center rounded-full [&_svg]:size-6',
+            ICON_TONES[tone]
+          )}
+        >
+          {icon}
+        </span>
+      )}
       {children}
     </section>
   )

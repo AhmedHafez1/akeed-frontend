@@ -46,6 +46,35 @@ export function parseWooCommerceReturnHint(
   return null
 }
 
+const SCHEME = /^[a-z][a-z0-9+.-]*:\/\//i
+
+/**
+ * What the merchant typed, as an address the API can check. A bare domain is
+ * taken to mean https; anything with a scheme is sent as typed, so the API
+ * still answers plain HTTP with its own message.
+ */
+export function toStoreAddress(typed: string): string {
+  const value = typed.trim()
+  return SCHEME.test(value) ? value : `https://${value}`
+}
+
+/**
+ * The store as the connection line names it: host and path, no scheme. Null
+ * while what was typed is not yet an address.
+ */
+export function displayStoreAddress(
+  address: string | null | undefined
+): string | null {
+  if (!address?.trim()) return null
+  try {
+    const url = new URL(toStoreAddress(address))
+    if (!url.hostname.includes('.')) return null
+    return `${url.hostname}${url.pathname.replace(/\/+$/, '')}`
+  } catch {
+    return null
+  }
+}
+
 /** What the connect screen shows; one of these at a time. */
 export type WooCommerceConnectView =
   | 'loading'

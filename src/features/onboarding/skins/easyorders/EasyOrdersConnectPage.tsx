@@ -8,12 +8,9 @@ import {
   Check,
   Clock,
   Eye,
-  KeyRound,
   Link2,
-  Loader2,
   ShieldCheck,
   Unplug,
-  XCircle,
 } from 'lucide-react'
 import { TestStep } from '@/features/onboarding/ui/standalone/steps/TestStep'
 import { cn } from '@/shared/lib/utils'
@@ -24,6 +21,10 @@ import {
   StatusBadge,
   akCard,
 } from '@/shared/ui'
+import {
+  ConnectionLine,
+  type ConnectionLineState,
+} from '../connect/ConnectionLine'
 import { DisconnectEasyOrdersDialog } from './DisconnectEasyOrdersDialog'
 import {
   isEasyOrdersReconnect,
@@ -89,6 +90,9 @@ export function EasyOrdersConnectPage() {
   }
 
   const store = status?.organizationName?.trim() || null
+  const line = (state: ConnectionLineState) => (
+    <ConnectionLine state={state} store={store} />
+  )
   const heading = (text: ReactNode) => (
     <h1
       ref={headingRef}
@@ -224,7 +228,7 @@ export function EasyOrdersConnectPage() {
       )}
 
       {view === 'connect' && (
-        <Panel icon={<Link2 aria-hidden="true" />} tone="brand">
+        <Panel lead={line('idle')} tone="brand">
           {heading(
             store ? t('connect.title', { store }) : t('connect.titleNoStore')
           )}
@@ -257,12 +261,7 @@ export function EasyOrdersConnectPage() {
       )}
 
       {view === 'waiting' && (
-        <Panel
-          icon={
-            <Loader2 aria-hidden="true" className="motion-safe:animate-spin" />
-          }
-          tone="brand"
-        >
+        <Panel lead={line('waiting')} tone="brand">
           {heading(t('waiting.title'))}
           <p role="status" className="text-ink-muted text-sm">
             {t('waiting.body')}
@@ -293,7 +292,7 @@ export function EasyOrdersConnectPage() {
       )}
 
       {view === 'denied' && (
-        <Panel icon={<XCircle aria-hidden="true" />} tone="muted">
+        <Panel lead={line('refused')} tone="muted">
           {heading(t('denied.title'))}
           <p className="text-ink-muted text-sm">{t('denied.body')}</p>
           {reconnectNote}
@@ -305,7 +304,7 @@ export function EasyOrdersConnectPage() {
       )}
 
       {view === 'error' && (
-        <Panel icon={<AlertCircle aria-hidden="true" />} tone="destructive">
+        <Panel lead={line('refused')} tone="destructive">
           {heading(t('error.title'))}
           <p role="alert" className="text-ink text-sm">
             {t(`error.codes.${toEasyOrdersErrorKey(status?.lastErrorCode)}`)}
@@ -320,10 +319,7 @@ export function EasyOrdersConnectPage() {
 
       {view === 'success' && status?.connection && (
         <>
-          <Panel
-            icon={<Check aria-hidden="true" strokeWidth={3} />}
-            tone="brand"
-          >
+          <Panel lead={line('connected')} tone="brand">
             <StatusBadge kind="confirmed">{t('success.badge')}</StatusBadge>
             {heading(
               store ? t('success.title', { store }) : t('success.titleNoStore')
@@ -403,7 +399,7 @@ export function EasyOrdersConnectPage() {
       )}
 
       {view === 'revoked' && (
-        <Panel icon={<KeyRound aria-hidden="true" />} tone="destructive">
+        <Panel lead={line('refused')} tone="destructive">
           {heading(t('revoked.title'))}
           <p role="alert" className="text-ink text-sm">
             {t('revoked.body')}
@@ -426,7 +422,7 @@ export function EasyOrdersConnectPage() {
 
       {view === 'disconnected' && (
         <>
-          <Panel icon={<Unplug aria-hidden="true" />} tone="muted">
+          <Panel lead={line('disconnected')} tone="muted">
             {heading(
               store
                 ? t('disconnected.title', { store })

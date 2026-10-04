@@ -23,6 +23,8 @@ const startInstall = vi.mocked(startWooCommerceInstall)
 const assign = vi.mocked(openStoreAuthorization)
 
 const STORE = 'https://shop.example.com/eg'
+/** How the connection line names it: no scheme. */
+const STORE_SHOWN = 'shop.example.com/eg'
 const CALLBACK_TOKEN = 'CALLBACK-TOKEN-VALUE-NEVER-SHOWN'
 const AUTHORIZE_URL = `${STORE}/wc-auth/v1/authorize?app_name=Akeed&scope=read_write&user_id=482910573629104&callback_url=https%3A%2F%2Fapi.akeed.test%2Fapi%2Fwoocommerce%2Finstall%2Fcallback%2F${CALLBACK_TOKEN}`
 
@@ -113,6 +115,38 @@ describe('WooCommerceConnectPage', () => {
     expect(container.innerHTML).not.toContain('wc-auth')
   })
 
+  it('names the store on the connection line as the merchant types it', async () => {
+    await renderPage(status(), 'en')
+    expect(
+      screen.getByText('Akeed and Your store are not connected yet.')
+    ).toBeTruthy()
+
+    fireEvent.change(screen.getByLabelText('Your store’s address'), {
+      target: { value: 'shop.example.com/eg/' },
+    })
+
+    expect(
+      screen.getByText(STORE_SHOWN).closest('bdi')?.getAttribute('dir')
+    ).toBe('ltr')
+    expect(
+      screen.getByText('Akeed and shop.example.com/eg are not connected yet.')
+    ).toBeTruthy()
+  })
+
+  it('takes a bare domain to mean https', async () => {
+    startInstall.mockRejectedValue(new ApiError('refused', 422, 'X'))
+    await renderPage(status(), 'en')
+
+    fireEvent.change(screen.getByLabelText('Your store’s address'), {
+      target: { value: 'shop.example.com/eg' },
+    })
+    fireEvent.click(
+      screen.getByRole('button', { name: /Continue to my store/ })
+    )
+
+    await waitFor(() => expect(startInstall).toHaveBeenCalledWith(STORE, 'en'))
+  })
+
   it('asks for an address before calling anything', async () => {
     await renderPage(status(), 'en')
 
@@ -179,9 +213,9 @@ describe('WooCommerceConnectPage', () => {
       expect(
         await screen.findByRole('heading', { name: 'Finishing the connection' })
       ).toBeTruthy()
-      expect(screen.getByText(STORE).closest('bdi')?.getAttribute('dir')).toBe(
-        'ltr'
-      )
+      expect(
+        screen.getByText(STORE_SHOWN).closest('bdi')?.getAttribute('dir')
+      ).toBe('ltr')
       // The hint is read once and taken out of the address.
       expect(window.location.search).toBe('')
 
@@ -233,7 +267,7 @@ describe('WooCommerceConnectPage', () => {
           ? 'لم يقبل متجرك مفتاح الـ API الجديد.'
           : 'Your store did not accept the new API key.'
       )
-      expect(screen.getByText(STORE)).toBeTruthy()
+      expect(screen.getByText(STORE_SHOWN)).toBeTruthy()
     }
   )
 
@@ -255,7 +289,7 @@ describe('WooCommerceConnectPage', () => {
     async (locale) => {
       const { container } = await renderPage(connected, locale)
 
-      expect(screen.getByText(STORE)).toBeTruthy()
+      expect(screen.getByText(STORE_SHOWN)).toBeTruthy()
       expect(container.innerHTML).not.toMatch(
         /ck_|cs_|wc-auth|\/webhooks\/|callback/i
       )

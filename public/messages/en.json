@@ -3700,7 +3700,6 @@
     "eyebrow": "WooCommerce",
     "loading": "Loading your WooCommerce connection…",
     "readOnly": "You have read-only access. Ask an owner or admin to connect WooCommerce.",
-    "storeLabel": "Store",
     "cleanup": "If you approved in your store, WooCommerce may have created an API key for Akeed that is not used. You can delete it in WordPress under WooCommerce > Settings > Advanced > REST API.",
     "loadError": {
       "title": "We couldn’t load your WooCommerce connection",
@@ -3786,6 +3785,17 @@
       "WOOCOMMERCE_CALLBACK_INVALID": "Your store sent an incomplete answer. Nothing was connected.",
       "WOOCOMMERCE_INSTALL_VALIDATION_FAILED": "We couldn’t read that request. Check the address and try again.",
       "default": "Something went wrong. Nothing was connected."
+    }
+  },
+  "connectionLine": {
+    "akeed": "Akeed",
+    "yourStore": "Your store",
+    "label": {
+      "idle": "Akeed and {store} are not connected yet.",
+      "waiting": "Akeed is connecting to {store}.",
+      "connected": "Akeed is connected to {store}.",
+      "refused": "Akeed could not connect to {store}.",
+      "disconnected": "Akeed is disconnected from {store}."
     }
   }
 }

@@ -14,10 +14,7 @@ import {
   Clock,
   Eye,
   Link2,
-  Loader2,
   ShieldCheck,
-  Store,
-  XCircle,
 } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
 import {
@@ -29,8 +26,14 @@ import {
   StatusBadge,
   akCard,
 } from '@/shared/ui'
+import {
+  ConnectionLine,
+  type ConnectionLineState,
+} from '../connect/ConnectionLine'
 import { Frame, Notice, Panel } from '../easyorders/easyOrdersUi'
 import {
+  displayStoreAddress,
+  toStoreAddress,
   toWooCommerceErrorKey,
   type WooCommerceConnectView,
 } from './wooCommerce.types'
@@ -38,15 +41,6 @@ import { useWooCommerceConnection } from './useWooCommerceConnection'
 
 const STORE_URL_FIELD = 'woocommerce-store-url'
 const USES = ['orders', 'notifications', 'outcomes'] as const
-
-/** The store's canonical address, always left to right. */
-function StoreAddress({ url }: { url: string }) {
-  return (
-    <bdi dir="ltr" className="text-ink font-mono font-semibold break-all">
-      {url}
-    </bdi>
-  )
-}
 
 /**
  * Connecting a WooCommerce store: enter its address, approve in the store,
@@ -96,13 +90,14 @@ export function WooCommerceConnectPage() {
       {text}
     </h1>
   )
-  const storeLine = shownStore && (
-    <dl className="text-sm">
-      <dt className="text-ink-muted">{t('storeLabel')}</dt>
-      <dd>
-        <StoreAddress url={shownStore} />
-      </dd>
-    </dl>
+  // The store stays named in every state: what was typed, then the address
+  // Akeed holds for the install or the connection.
+  const line = (state: ConnectionLineState, address = shownStore) => (
+    <ConnectionLine
+      state={state}
+      store={displayStoreAddress(address)}
+      storeIsAddress
+    />
   )
   const readOnly = !canManage && status && (
     <Notice tone="warning" icon={<Eye aria-hidden="true" />} role="status">
@@ -128,7 +123,7 @@ export function WooCommerceConnectPage() {
     event.preventDefault()
     const typed = storeUrl.trim()
     setMissingUrl(!typed)
-    if (typed) void connection.connect(typed)
+    if (typed) void connection.connect(toStoreAddress(typed))
   }
   const startErrorCode = connection.startErrorCode
   const fieldError = missingUrl
@@ -184,7 +179,7 @@ export function WooCommerceConnectPage() {
       )}
 
       {view === 'enterUrl' && (
-        <Panel icon={<Store aria-hidden="true" />} tone="brand">
+        <Panel lead={line('idle', storeUrl)} tone="brand">
           {heading(t('enterUrl.title'))}
           <p className="text-ink-muted text-sm">{t('enterUrl.body')}</p>
           <form
@@ -217,7 +212,7 @@ export function WooCommerceConnectPage() {
                 }}
                 aria-describedby={`${STORE_URL_FIELD}-hint${fieldError ? ` ${STORE_URL_FIELD}-error` : ''}`}
                 aria-invalid={Boolean(fieldError)}
-                className="rounded-control bg-card h-12 text-start"
+                className="rounded-control bg-card h-14 px-4 text-start text-lg font-semibold"
               />
               <p
                 id={`${STORE_URL_FIELD}-hint`}
@@ -274,17 +269,11 @@ export function WooCommerceConnectPage() {
       )}
 
       {view === 'waiting' && (
-        <Panel
-          icon={
-            <Loader2 aria-hidden="true" className="motion-safe:animate-spin" />
-          }
-          tone="brand"
-        >
+        <Panel lead={line('waiting')} tone="brand">
           {heading(t('waiting.title'))}
           <p role="status" className="text-ink-muted text-sm">
             {t('waiting.body')}
           </p>
-          {storeLine}
           {status?.expiresAt && (
             <p className="text-ink-muted text-sm">
               {t('waiting.expires', {
@@ -311,10 +300,9 @@ export function WooCommerceConnectPage() {
       )}
 
       {view === 'denied' && (
-        <Panel icon={<XCircle aria-hidden="true" />} tone="muted">
+        <Panel lead={line('refused')} tone="muted">
           {heading(t('denied.title'))}
           <p className="text-ink-muted text-sm">{t('denied.body')}</p>
-          {storeLine}
           {cleanup}
           {readOnly}
           {tryAgain(t('denied.retry'))}
@@ -322,12 +310,11 @@ export function WooCommerceConnectPage() {
       )}
 
       {view === 'unsupported' && (
-        <Panel icon={<AlertCircle aria-hidden="true" />} tone="destructive">
+        <Panel lead={line('refused')} tone="destructive">
           {heading(t('unsupported.title'))}
           <p role="alert" className="text-ink text-sm">
             {t(`codes.${toWooCommerceErrorKey(status?.lastErrorCode)}`)}
           </p>
-          {storeLine}
           <p className="text-ink-muted text-sm">{t('unsupported.nothing')}</p>
           {cleanup}
           {readOnly}
@@ -336,14 +323,13 @@ export function WooCommerceConnectPage() {
       )}
 
       {view === 'error' && (
-        <Panel icon={<AlertCircle aria-hidden="true" />} tone="destructive">
+        <Panel lead={line('refused')} tone="destructive">
           {heading(t('error.title'))}
           <p role="alert" className="text-ink text-sm">
             {status?.state === 'expired'
               ? t('error.expired')
               : t(`codes.${toWooCommerceErrorKey(status?.lastErrorCode)}`)}
           </p>
-          {storeLine}
           {cleanup}
           {readOnly}
           {tryAgain(t('error.retry'))}
@@ -351,10 +337,9 @@ export function WooCommerceConnectPage() {
       )}
 
       {view === 'connected' && status?.connection && (
-        <Panel icon={<Check aria-hidden="true" strokeWidth={3} />} tone="brand">
+        <Panel lead={line('connected')} tone="brand">
           <StatusBadge kind="confirmed">{t('connected.badge')}</StatusBadge>
           {heading(t('connected.title'))}
-          {storeLine}
           <p className="text-ink-muted text-sm">{t('connected.body')}</p>
           <p className="text-ink-muted text-sm">{t('connected.next')}</p>
         </Panel>
