@@ -33,6 +33,9 @@ const FAILURE_GUIDANCE: Record<string, string> = {
   connection_missing: 'guidance.reconnect',
   integration_inactive: 'guidance.reconnect',
   source_store_inactive: 'guidance.storeInactive',
+  source_permission_denied: 'guidance.permissionDenied',
+  store_unreachable: 'guidance.storeUnreachable',
+  store_write_method_refused: 'guidance.hostingBlocksUpdates',
 }
 
 export function remoteSyncView(

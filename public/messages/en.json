@@ -1514,6 +1514,9 @@
           "orderNotFound": "We could not find this order in your store. It may have been deleted there.",
           "reconnect": "Your store did not accept Akeed's access. Check the store connection, then try again.",
           "storeInactive": "Your store is not active right now, so it cannot be updated. Reactivate it, then try again.",
+          "permissionDenied": "The account that connected your store does not have permission to change orders. Reconnect your store with an account that manages orders, then try again.",
+          "storeUnreachable": "Akeed could not reach your store safely at its saved address. The address may have changed, it may now redirect to another one, or its security certificate may not be valid. Check your store's address and certificate, and reconnect if the address changed.",
+          "hostingBlocksUpdates": "Your store's hosting blocks the request Akeed uses to update an order (PUT). Ask your hosting provider to allow PUT requests to your store, then try again. Until then, change the order's status in your store yourself.",
           "noReplyLocalOnly": "The customer did not reply. That is recorded in Akeed only: the order in your store is unchanged and was not canceled.",
           "notSwitchedOn": "Updating orders in your store is not switched on yet. Change the order's status in your store yourself."
         },

@@ -81,6 +81,12 @@ describe('remoteSyncView', () => {
     ['order_not_found', false, 'guidance.orderNotFound'],
     ['source_credentials_rejected', true, 'guidance.reconnect'],
     ['source_store_inactive', false, 'guidance.storeInactive'],
+    // Each needs the merchant, and "reconnect" alone would not say what to do.
+    ['source_permission_denied', true, 'guidance.permissionDenied'],
+    ['store_unreachable', true, 'guidance.storeUnreachable'],
+    ['store_write_method_refused', true, 'guidance.hostingBlocksUpdates'],
+    ['store_unverified', false, 'guidance.failed'],
+    ['remote_rejected', false, 'guidance.failed'],
     ['source_unavailable', false, 'guidance.failed'],
     ['some_future_code', false, 'guidance.failed'],
     ['some_future_code', true, 'guidance.reconnect'],
