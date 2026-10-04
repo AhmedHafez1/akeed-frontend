@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, type ComponentType } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { BlockStack, Layout, Page } from '@shopify/polaris'
@@ -21,6 +21,7 @@ import {
   buildTestTimeline,
   useEmbeddedOnboarding,
   useOnboardingSourceSkin,
+  type OnboardingSourceSkin,
   type OnboardingTestError,
 } from '@/features/onboarding'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
@@ -46,15 +47,17 @@ export default function OnboardingPage() {
   return isEmbedded ? <EmbeddedOnboarding /> : <SourceOnboarding />
 }
 
+/** The setup page of each source skin. */
+const SOURCE_SETUP_PAGES: Record<OnboardingSourceSkin, ComponentType> = {
+  standalone: StandaloneOnboardingPage,
+  easyorders: EasyOrdersConnectPage,
+}
+
 /** Non-embedded setup, in the skin of the organization's order source. */
 function SourceOnboarding() {
-  const skin = useOnboardingSourceSkin()
+  const SetupPage = SOURCE_SETUP_PAGES[useOnboardingSourceSkin()]
 
-  return skin === 'easyorders' ? (
-    <EasyOrdersConnectPage />
-  ) : (
-    <StandaloneOnboardingPage />
-  )
+  return <SetupPage />
 }
 
 function EmbeddedOnboarding() {

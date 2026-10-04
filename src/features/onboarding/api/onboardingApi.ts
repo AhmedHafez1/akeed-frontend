@@ -63,14 +63,29 @@ async function getOnboardingApiError(response: Response) {
 export type KnownOnboardingSource = { platformType: string } | 'missing' | null
 
 let knownOnboardingSource: KnownOnboardingSource = null
+let knownSignupSource: string | null = null
 
 /** Lets setup pick its skin without a second read after the route guard's. */
 export function getKnownOnboardingSource(): KnownOnboardingSource {
   return knownOnboardingSource
 }
 
+/**
+ * The store platform chosen at signup, as the route guard read it from the
+ * session. Setup uses it to pick the connect skin of a source-less
+ * organization; the guard has already decided the choice is connectable.
+ */
+export function rememberSignupSource(signupSourceId: unknown): void {
+  knownSignupSource = typeof signupSourceId === 'string' ? signupSourceId : null
+}
+
+export function getKnownSignupSource(): string | null {
+  return knownSignupSource
+}
+
 export function clearKnownOnboardingSource(): void {
   knownOnboardingSource = null
+  knownSignupSource = null
 }
 
 export async function fetchOnboardingState(): Promise<OnboardingStateResponse> {

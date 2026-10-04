@@ -35,8 +35,10 @@ export {
 export {
   OnboardingApiError,
   clearKnownOnboardingSource,
+  rememberSignupSource,
 } from './api/onboardingApi'
 export { useOnboardingSourceSkin } from './hooks/useOnboardingSourceSkin'
+export type { OnboardingSourceSkin } from './hooks/useOnboardingSourceSkin'
 export { EasyOrdersConnectPage } from './skins/easyorders/EasyOrdersConnectPage'
 export { EasyOrdersSourcePanel } from './skins/easyorders/EasyOrdersSourcePanel'
 export { ONBOARDING_STORE_STEP_TITLE } from './model/onboardingProgress'

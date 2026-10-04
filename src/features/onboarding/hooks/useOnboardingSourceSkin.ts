@@ -3,28 +3,38 @@
 import { useState } from 'react'
 import {
   getKnownOnboardingSource,
+  getKnownSignupSource,
   type KnownOnboardingSource,
 } from '@/features/onboarding/api/onboardingApi'
 
 export type OnboardingSourceSkin = 'standalone' | 'easyorders'
 
 /** Sources with their own setup skin; every other source uses Standalone's. */
-const SKIN_BY_PLATFORM: Record<string, OnboardingSourceSkin> = {
-  easyorders: 'easyorders',
-}
+const SKIN_BY_PLATFORM = new Map<string, OnboardingSourceSkin>([
+  ['easyorders', 'easyorders'],
+])
 
 /**
- * The skin for an organization with no source yet: signup chose a store
- * platform to connect. EasyOrders is the only one today.
+ * The skin for an organization with no source yet, by the store platform
+ * chosen at signup. EasyOrders was the first such platform and stays the
+ * answer when the choice is not known.
  */
-const CONNECT_SKIN: OnboardingSourceSkin = 'easyorders'
+const CONNECT_SKIN_BY_SIGNUP_SOURCE = new Map<string, OnboardingSourceSkin>([
+  ['easyorders', 'easyorders'],
+])
+const DEFAULT_CONNECT_SKIN: OnboardingSourceSkin = 'easyorders'
 
 export function resolveOnboardingSourceSkin(
-  source: KnownOnboardingSource
+  source: KnownOnboardingSource,
+  signupSourceId: string | null = null
 ): OnboardingSourceSkin {
-  if (source === 'missing') return CONNECT_SKIN
+  if (source === 'missing')
+    return (
+      (signupSourceId && CONNECT_SKIN_BY_SIGNUP_SOURCE.get(signupSourceId)) ||
+      DEFAULT_CONNECT_SKIN
+    )
   if (source === null) return 'standalone'
-  return SKIN_BY_PLATFORM[source.platformType] ?? 'standalone'
+  return SKIN_BY_PLATFORM.get(source.platformType) ?? 'standalone'
 }
 
 /**
@@ -35,7 +45,10 @@ export function resolveOnboardingSourceSkin(
  */
 export function useOnboardingSourceSkin(): OnboardingSourceSkin {
   const [skin] = useState(() =>
-    resolveOnboardingSourceSkin(getKnownOnboardingSource())
+    resolveOnboardingSourceSkin(
+      getKnownOnboardingSource(),
+      getKnownSignupSource()
+    )
   )
   return skin
 }

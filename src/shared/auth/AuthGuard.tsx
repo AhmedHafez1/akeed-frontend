@@ -22,6 +22,7 @@ import {
   clearKnownOnboardingSource,
   fetchOnboardingState,
   OnboardingApiError,
+  rememberSignupSource,
 } from '@/features/onboarding'
 
 const logger = createLogger('AuthGuard')
@@ -103,6 +104,8 @@ export function AuthGuard({
                   session.user.user_metadata?.signup_source
                 ) === 'connect'
               ) {
+                // Setup mounts the skin of the platform chosen at signup.
+                rememberSignupSource(session.user.user_metadata?.signup_source)
                 return null
               }
               throw error

@@ -1,6 +1,9 @@
 import { screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { fetchOnboardingState } from '@/features/onboarding'
+import {
+  fetchOnboardingState,
+  rememberSignupSource,
+} from '@/features/onboarding'
 import { resolveOrganizationSourceMode } from '@/shared/config/commerceSources'
 import {
   ensureStandaloneOrganization,
@@ -46,6 +49,7 @@ vi.mock('@/features/onboarding', () => {
     OnboardingApiError,
     clearKnownOnboardingSource: vi.fn(),
     fetchOnboardingState: vi.fn(),
+    rememberSignupSource: vi.fn(),
   }
 })
 
@@ -110,6 +114,17 @@ describe('AuthGuard with a source-less organization', () => {
 
     await screen.findByTestId('protected')
     expect(router.replace).not.toHaveBeenCalled()
+  })
+
+  it('tells setup which platform the account chose, so it mounts that connect skin', async () => {
+    pathname = '/ar/onboarding'
+    mockedMode.mockReturnValue('connect')
+    mockedState.mockRejectedValue(await sourceMissing())
+
+    renderGuard()
+
+    await screen.findByTestId('protected')
+    expect(vi.mocked(rememberSignupSource)).toHaveBeenCalledWith('easyorders')
   })
 
   it('still reports a missing source as a failed setup for a Standalone account', async () => {
