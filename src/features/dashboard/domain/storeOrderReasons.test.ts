@@ -20,6 +20,8 @@ const STORE_ORDER_REASONS = [
   'missing_payment_signal',
   'missing_currency',
   'missing_phone_country',
+  'order_currency_unsupported',
+  'order_phone_country_missing',
   'invalid_phone',
   'invalid_amount',
   'incomplete_payload',
@@ -45,6 +47,32 @@ describe('reasons a store order was not confirmed', () => {
       }
     }
   )
+
+  it('sends the merchant to Akeed settings only for what is chosen in Akeed', () => {
+    // A source with a currency and a phone-country setting.
+    expect(en.dashboard.reasons.missing_currency).toContain(
+      'store connection settings'
+    )
+    expect(en.dashboard.reasons.missing_phone_country).toContain(
+      'store connection settings'
+    )
+    // A source whose orders carry both: the fix, if any, is on the order.
+    for (const locale of ['ar', 'en'] as const) {
+      const reasons = messages[locale].dashboard.reasons
+      const setting = locale === 'en' ? 'settings' : 'إعدادات'
+      expect(reasons.order_currency_unsupported).not.toContain(setting)
+      expect(reasons.order_phone_country_missing).not.toContain(setting)
+    }
+    expect(en.dashboard.reasons.order_phone_country_missing).toContain(
+      'to the order in your store'
+    )
+    expect(ar.dashboard.reasons.order_currency_unsupported).not.toBe(
+      en.dashboard.reasons.order_currency_unsupported
+    )
+    expect(ar.dashboard.reasons.order_phone_country_missing).not.toBe(
+      en.dashboard.reasons.order_phone_country_missing
+    )
+  })
 
   it('says why an older or unplaced order was left alone, in each language', () => {
     expect(en.dashboard.reasons.order_predates_connection).toBe(

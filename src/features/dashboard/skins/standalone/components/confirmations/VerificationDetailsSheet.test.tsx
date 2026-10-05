@@ -77,6 +77,16 @@ describe('VerificationDetailsSheet', () => {
     ],
     [
       'en',
+      'order_phone_country_missing',
+      "The customer's phone number has no country code and the order has no billing country, so the number could not be read and no message was sent. Add the country or the full number to the order in your store, and Akeed will check the order again.",
+    ],
+    [
+      'ar',
+      'order_currency_unsupported',
+      'عملة هذا الطلب غير محدّدة أو لا يدعمها أكيد، لذلك لم تُرسل رسالة.',
+    ],
+    [
+      'en',
       'store_mismatch',
       'Verification could not continue. Review setup or contact support.',
     ],

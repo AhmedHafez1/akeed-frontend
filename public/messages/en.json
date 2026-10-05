@@ -1635,6 +1635,8 @@
       "provider_delivery_failed": "WhatsApp could not deliver the message to this customer.",
       "missing_currency": "The store currency has not been chosen yet, so this order was not confirmed. Choose it in the store connection settings.",
       "missing_phone_country": "The country for customer phone numbers has not been chosen yet, so this order was not confirmed. Choose it in the store connection settings.",
+      "order_currency_unsupported": "This order's currency is missing or is not one Akeed supports, so no message was sent.",
+      "order_phone_country_missing": "The customer's phone number has no country code and the order has no billing country, so the number could not be read and no message was sent. Add the country or the full number to the order in your store, and Akeed will check the order again.",
       "invalid_phone": "The customer's phone number is not a valid mobile number, so no message was sent.",
       "invalid_amount": "The order total could not be read, so no message was sent.",
       "incomplete_payload": "The order arrived without the details needed to confirm it, so no message was sent.",

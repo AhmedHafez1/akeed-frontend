@@ -147,6 +147,10 @@ export const EXPLAINED_LIFECYCLE_REASONS = new Set([
   // Why an order from a connected store was not taken in.
   'missing_currency',
   'missing_phone_country',
+  // The same two for a source whose orders carry their own currency and
+  // country: nothing to choose in Akeed.
+  'order_currency_unsupported',
+  'order_phone_country_missing',
   'invalid_phone',
   'invalid_amount',
   'incomplete_payload',
