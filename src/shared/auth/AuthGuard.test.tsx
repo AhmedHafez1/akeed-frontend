@@ -80,6 +80,7 @@ describe('AuthGuard with a source-less organization', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     pathname = '/ar/dashboard'
+    window.history.replaceState(null, '', '/')
     vi.spyOn(console, 'error').mockImplementation(() => undefined)
     vi.mocked(getSupabaseClient).mockReturnValue({
       auth: {
@@ -171,6 +172,30 @@ describe('AuthGuard with a source-less organization', () => {
       )
     }
   )
+
+  it('carries what the source added to the address to the store tab, so a refused reconnect is shown as refused', async () => {
+    pathname = '/ar/onboarding'
+    window.history.replaceState(
+      null,
+      '',
+      '/ar/onboarding?success=0&user_id=123456789012345'
+    )
+    mockedMode.mockReturnValue('connect')
+    mockedState.mockResolvedValue({
+      state: {
+        onboardingStatus: 'completed',
+        sourceSetup: { blockedReasons: ['source_disconnected'] },
+      },
+    } as never)
+
+    renderGuard()
+
+    await waitFor(() =>
+      expect(router.replace).toHaveBeenCalledWith(
+        '/ar/settings?success=0&user_id=123456789012345&tab=store'
+      )
+    )
+  })
 
   it('leaves a finished account with a source to fix on the page it asked for', async () => {
     pathname = '/ar/dashboard'
