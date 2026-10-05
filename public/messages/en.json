@@ -1627,6 +1627,7 @@
       "auto_verify_disabled": "Automatic verification is paused. Enable it before retrying.",
       "onboarding_incomplete": "Complete Standalone setup before retrying verification.",
       "provider_outcome_unknown": "Message acceptance could not be confirmed. Contact support before retrying.",
+      "template_unavailable": "The WhatsApp message for this order is unavailable right now, so nothing was sent and no credit was used. Akeed support has been alerted. Retry later.",
       "CREDIT_ACCOUNT_NOT_PROVISIONED": "This account's credits are not set up yet, so no message was sent. Contact Akeed support if this continues.",
       "CREDIT_ACCOUNT_SUSPENDED": "New message sends are paused for this account. Contact support.",
       "CREDIT_DEBT_OUTSTANDING": "An outstanding credit balance must be settled before new messages are sent.",
