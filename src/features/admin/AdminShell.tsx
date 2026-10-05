@@ -2,7 +2,13 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { BarChart3, LogOut, Store, Users } from 'lucide-react'
+import {
+  BarChart3,
+  LogOut,
+  MessageSquareText,
+  Store,
+  Users,
+} from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { auth } from '@/shared/lib/auth'
@@ -25,6 +31,11 @@ export function AdminShell({ children }: AdminShellProps) {
       href: `/${locale}/admin/standalone-billing`,
       label: t('billing'),
       icon: Users,
+    },
+    {
+      href: `/${locale}/admin/templates`,
+      label: t('templates'),
+      icon: MessageSquareText,
     },
   ]
 

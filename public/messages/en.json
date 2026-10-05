@@ -5,6 +5,7 @@
     "stores": "Stores",
     "funnel": "Funnel",
     "billing": "Standalone billing",
+    "templates": "Templates",
     "navigation": "Admin navigation",
     "signOut": "Sign out",
     "retry": "Retry",
@@ -13,6 +14,280 @@
     "accessRequiredBody": "Your account is signed in but is not authorized for the Akeed control tower.",
     "accessErrorBody": "Try again. If the problem continues, share the request ID with the team.",
     "requestId": "Request ID: {id}"
+  },
+  "adminTemplates": {
+    "eyebrow": "WhatsApp templates",
+    "title": "Templates",
+    "description": "Every message template Akeed can send: what Meta says about it, who sends it and how it performs.",
+    "refresh": "Refresh",
+    "loading": "Loading templates…",
+    "none": "—",
+    "never": "Never",
+    "pendingCategory": "Meta will move it to {category}",
+    "status": {
+      "not_synced": "Not synced yet",
+      "approved": "Approved",
+      "pending": "In review",
+      "rejected": "Rejected",
+      "paused": "Paused",
+      "disabled": "Disabled",
+      "in_appeal": "Appeal requested",
+      "limit_exceeded": "Limit exceeded",
+      "pending_deletion": "Being deleted",
+      "deleted": "Deleted",
+      "archived": "Archived",
+      "flagged": "Flagged",
+      "locked": "Locked",
+      "reinstated": "Reinstated",
+      "unarchived": "Unarchived",
+      "missing": "Missing at Meta",
+      "unknown": "Unknown"
+    },
+    "quality": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low",
+      "pending": "Not rated yet",
+      "unknown": "Unknown"
+    },
+    "category": {
+      "utility": "Utility",
+      "marketing": "Marketing",
+      "authentication": "Authentication",
+      "unknown": "Unknown"
+    },
+    "purpose": {
+      "cod_confirmation": "COD confirmation"
+    },
+    "sendPurpose": {
+      "initial": "First message",
+      "reminder": "Reminder",
+      "test": "Merchant test"
+    },
+    "language": {
+      "ar": "Arabic",
+      "en": "English"
+    },
+    "parameterFormat": {
+      "named": "Named",
+      "positional": "Positional"
+    },
+    "flags": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "default": "Language default",
+      "notSendable": "Cannot be sent"
+    },
+    "range": {
+      "label": "Date range for metrics",
+      "from": "From",
+      "to": "To",
+      "hint": "Sends accepted in this range, in UTC. Up to 92 days.",
+      "invalid": "Choose a start date that is not after the end date."
+    },
+    "filters": {
+      "label": "Template filters",
+      "purpose": "Purpose",
+      "language": "Language",
+      "status": "Meta status",
+      "active": "In Akeed",
+      "all": "All",
+      "reset": "Reset filters"
+    },
+    "table": {
+      "caption": "WhatsApp templates",
+      "template": "Template",
+      "purpose": "Purpose and language",
+      "status": "Meta status",
+      "category": "Category",
+      "quality": "Quality",
+      "stores": "Active stores",
+      "sends": "Sends",
+      "replyRate": "Reply rate",
+      "confirmationRate": "Confirmation rate",
+      "lastSync": "Last sync",
+      "drift": "Text check"
+    },
+    "empty": {
+      "title": "No templates yet",
+      "description": "The template registry is empty in this environment.",
+      "filtered": "No template matches these filters."
+    },
+    "sync": {
+      "run": "Sync now",
+      "running": "Syncing…",
+      "done": "Sync finished.",
+      "failed": "Sync failed: {reason}",
+      "updated": "Updated",
+      "unchanged": "Unchanged",
+      "missing": "Missing at Meta",
+      "unknownAtMeta": "At Meta, not in Akeed",
+      "disabled": "Template sync is off in this environment, so Meta status is not being read.",
+      "last": "Last sync {time} · {status}",
+      "never": "This environment has not synced with Meta yet.",
+      "status": {
+        "running": "Running",
+        "succeeded": "Succeeded",
+        "failed": "Failed"
+      },
+      "trigger": {
+        "scheduled": "Scheduled sync",
+        "manual": "Manual sync",
+        "webhook": "Sync after a Meta update"
+      },
+      "errorCodes": {
+        "not_configured": "the WhatsApp account ID or token is not set",
+        "auth_failed": "Meta refused the access token",
+        "permission_denied": "the token cannot manage templates",
+        "rate_limited": "Meta asked us to slow down",
+        "provider_error": "Meta returned an error",
+        "network": "Meta could not be reached",
+        "too_many_pages": "Meta returned more templates than expected",
+        "persistence_failed": "the result could not be saved",
+        "abandoned": "the sync did not finish",
+        "unknown": "unknown reason"
+      }
+    },
+    "drift": {
+      "state": {
+        "not_synced": "Not checked",
+        "missing": "Missing at Meta",
+        "unreadable": "Could not read",
+        "drift": "Differs from Meta",
+        "in_sync": "Matches Meta"
+      },
+      "kind": {
+        "parameter_format": "Parameter format",
+        "variables": "Variables",
+        "buttons": "Buttons",
+        "button_labels": "Button labels",
+        "body": "Message text"
+      },
+      "registered": "In Akeed",
+      "provider": "At Meta"
+    },
+    "warnings": {
+      "missingTitle": "Meta has no template with this name and language",
+      "missingBody": "A send of this template is refused by Meta. With the send guardrail on, stores that chose it get the language default instead.",
+      "inactiveTitle": "This template is inactive in Akeed",
+      "inactiveBody": "It is not offered to merchants and is not sent.",
+      "notSendableTitle": "This template cannot be sent now",
+      "notSendableBody": "Meta status: {status}. Only an approved template is sent.",
+      "categoryTitle": "Meta is changing this template's category",
+      "categoryBody": "It will become {category}. It keeps sending, but its messages may cost more and some may not be delivered.",
+      "notSyncedTitle": "Not synced with Meta yet",
+      "notSyncedBody": "This environment has never read its templates from Meta, so there is no Meta text to compare. The preview below is Akeed's own copy.",
+      "unreadableTitle": "Meta's text could not be read",
+      "unreadableBody": "The last sync returned this template in a form Akeed does not read, so nothing was compared.",
+      "driftSendTitle": "What Akeed sends does not match this template at Meta",
+      "driftSendBody": "Meta may refuse the message or fill it wrongly. Fix this before stores keep sending it.",
+      "driftPreviewTitle": "The preview merchants see differs from Meta's text",
+      "driftPreviewBody": "Customers receive Meta's text. The message is still delivered."
+    },
+    "preview": {
+      "title": "Message",
+      "fromMeta": "Meta's text with sample values, as a customer receives it.",
+      "fromRegistry": "Akeed's own preview with sample values. Meta's text is not available.",
+      "sender": "Akeed",
+      "senderStatus": "Business account",
+      "avatarAlt": "Akeed",
+      "day": "Today",
+      "time": "10:30"
+    },
+    "facts": {
+      "title": "Template",
+      "purpose": "Purpose",
+      "language": "Language",
+      "format": "Parameter format",
+      "category": "Category",
+      "quality": "Quality",
+      "lastSync": "Last sync",
+      "textChanged": "Meta text last changed",
+      "metaId": "Meta template ID"
+    },
+    "variables": {
+      "title": "Variables",
+      "description": "What Akeed fills in, and what Meta calls it.",
+      "variable": "Akeed value",
+      "parameter": "Meta parameter",
+      "sample": "Sample",
+      "names": {
+        "customer": "Customer name",
+        "store": "Store name",
+        "order": "Order number",
+        "total": "Order total"
+      }
+    },
+    "metrics": {
+      "title": "Performance",
+      "hint": "Rates are shares of accepted sends. A reply after a reminder counts for the reminder.",
+      "empty": "No sends in this range.",
+      "purpose": "Sent as",
+      "sends": "Sends",
+      "replies": "Replies",
+      "confirmed": "Confirmed",
+      "canceled": "Canceled",
+      "noReply": "No reply",
+      "confirmationRate": "Confirmation rate"
+    },
+    "stores": {
+      "title": "Active stores sending it ({count})",
+      "truncated": "Showing the first {shown}.",
+      "empty": "No active store sends this template.",
+      "unnamed": "Unnamed store"
+    },
+    "history": {
+      "title": "Status history",
+      "description": "Updates Meta sent about this template, and recent syncs.",
+      "events": "Meta updates",
+      "noEvents": "Meta has sent no update about this template.",
+      "syncs": "Syncs",
+      "noSyncs": "No sync has run yet.",
+      "runMissing": "Missing at Meta",
+      "field": {
+        "status": "Status",
+        "quality": "Quality",
+        "category": "Category"
+      },
+      "outcome": {
+        "applied": "applied",
+        "stale": "ignored, older than the current state",
+        "conflict": "left to the next sync",
+        "unregistered": "no matching template"
+      }
+    },
+    "test": {
+      "title": "Send a test",
+      "description": "Sends this template with sample values to a staff phone on the test list. It is free and changes no order.",
+      "phone": "Staff phone number",
+      "send": "Send test",
+      "sending": "Sending…",
+      "sent": "Test sent. Check WhatsApp.",
+      "notSendable": "A test needs a template that is active and approved at Meta."
+    },
+    "detail": {
+      "back": "All templates",
+      "notFoundTitle": "No template has this key",
+      "notFoundBody": "It may have been renamed. Go back to the list."
+    },
+    "errors": {
+      "accessDenied": "You are not allowed to do this.",
+      "requestFailed": "The request failed. Try again.",
+      "requestIdLabel": "Request ID:",
+      "ADMIN_TEMPLATE_METRICS_RANGE_INVALID": "Choose a date range of at most 92 days.",
+      "WHATSAPP_TEMPLATE_OPERATIONS_DISABLED": "Template operations are off in this environment.",
+      "WHATSAPP_TEMPLATE_OPERATOR_REQUIRED": "Only a named template operator can do this.",
+      "WHATSAPP_TEMPLATE_SYNC_DISABLED": "Template sync is off in this environment.",
+      "WHATSAPP_TEMPLATE_SYNC_IN_PROGRESS": "A sync is already running. Try again in a moment.",
+      "WHATSAPP_TEMPLATE_SYNC_COOLDOWN": "A sync finished moments ago. Wait a few minutes before the next one.",
+      "WHATSAPP_TEMPLATE_NOT_FOUND": "No template has this key.",
+      "WHATSAPP_TEMPLATE_NOT_SENDABLE": "This template cannot be sent now.",
+      "WHATSAPP_TEMPLATE_TEST_SEND_DISABLED": "Test sends are not set up in this environment.",
+      "WHATSAPP_TEMPLATE_TEST_PHONE_NOT_ALLOWED": "This number is not on the staff test list.",
+      "WHATSAPP_TEMPLATE_TEST_COOLDOWN": "Wait a few seconds before sending another test.",
+      "WHATSAPP_TEMPLATE_TEST_DAILY_LIMIT": "You reached today's limit for test messages.",
+      "WHATSAPP_TEMPLATE_TEST_SEND_FAILED": "WhatsApp did not accept the test message."
+    }
   },
   "adminBillingObservability": {
     "title": "Billing health and reconciliation",
