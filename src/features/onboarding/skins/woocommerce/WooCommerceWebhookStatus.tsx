@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from 'next-intl'
 import { AlertCircle, Check, RefreshCw } from 'lucide-react'
 import { LoadingButton } from '@/shared/ui'
-import { Notice } from '../easyorders/easyOrdersUi'
+import { Notice } from '../connect/connectUi'
 import {
   hasWebhookIn,
   isUnnamedWooCommerceError,

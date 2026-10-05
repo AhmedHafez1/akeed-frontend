@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import { AlertCircle } from 'lucide-react'
-import { Notice } from '../easyorders/easyOrdersUi'
+import { Notice } from '../connect/connectUi'
 import type { WooCommerceWebhookCleanup } from './wooCommerce.types'
 
 const KEY_STEPS = ['openSettings', 'revokeKey'] as const

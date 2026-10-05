@@ -32,7 +32,7 @@ import {
   type EasyOrdersConnectView,
 } from './easyOrders.types'
 import { EasyOrdersSetupChecklist } from './EasyOrdersSetupChecklist'
-import { Frame, Notice, Panel } from './easyOrdersUi'
+import { Frame, Notice, Panel } from '../connect/connectUi'
 import { OrderSettingsForm } from './OrderSettingsForm'
 import { ProviderRemovalSteps } from './ProviderRemovalSteps'
 import { useEasyOrdersConnection } from './useEasyOrdersConnection'

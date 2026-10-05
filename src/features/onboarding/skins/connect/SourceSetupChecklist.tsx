@@ -14,7 +14,7 @@ import {
   akCard,
   type E164Value,
 } from '@/shared/ui'
-import { Notice } from '../easyorders/easyOrdersUi'
+import { Notice } from './connectUi'
 import type { SourceSetupFlow } from './useSourceSetupFlow'
 
 interface SourceSetupChecklistProps {

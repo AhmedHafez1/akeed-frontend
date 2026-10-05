@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { AlertCircle, Eye, Link2, Unplug } from 'lucide-react'
 import { Button, LoadingButton, Skeleton } from '@/shared/ui'
 import { useSourceHealthReadAt } from '../connect/useSourceHealthReadAt'
-import { Notice } from '../easyorders/easyOrdersUi'
+import { Notice } from '../connect/connectUi'
 import { DisconnectWooCommerceDialog } from './DisconnectWooCommerceDialog'
 import {
   displayStoreAddress,

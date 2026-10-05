@@ -34,7 +34,7 @@ import {
   type ConnectionLineState,
 } from '../connect/ConnectionLine'
 import { SourceSetupChecklist } from '../connect/SourceSetupChecklist'
-import { Frame, Notice, Panel } from '../easyorders/easyOrdersUi'
+import { Frame, Notice, Panel } from '../connect/connectUi'
 import { DisconnectWooCommerceDialog } from './DisconnectWooCommerceDialog'
 import {
   displayStoreAddress,
