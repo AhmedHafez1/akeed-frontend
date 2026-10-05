@@ -12,15 +12,23 @@ function leafKeys(value: unknown, path = ''): string[] {
 }
 
 describe('resolveSettingsSourceSkin', () => {
-  it('gives a connected source its panel and its health', () => {
-    const skin = resolveSettingsSourceSkin('easyorders')
+  it.each([
+    ['easyorders', 'sourceEasyOrders', 'sourceHelpEasyOrders'],
+    ['woocommerce', 'sourceWooCommerce', 'sourceHelpWooCommerce'],
+  ])(
+    'gives the connected source %s its panel and its health',
+    (platformType, nameKey, helpKey) => {
+      const skin = resolveSettingsSourceSkin(platformType)
 
-    expect(skin).toMatchObject({
-      nameKey: 'sourceEasyOrders',
-      helpKey: 'sourceHelpEasyOrders',
-      showsHealth: true,
-    })
-    expect(skin?.Panel).toBeTypeOf('function')
+      expect(skin).toMatchObject({ nameKey, helpKey, showsHealth: true })
+      expect(skin?.Panel).toBeTypeOf('function')
+    }
+  )
+
+  it('gives each connected source a panel of its own', () => {
+    expect(resolveSettingsSourceSkin('woocommerce')?.Panel).not.toBe(
+      resolveSettingsSourceSkin('easyorders')?.Panel
+    )
   })
 
   it('leaves the Standalone source without a panel or health', () => {
@@ -31,7 +39,7 @@ describe('resolveSettingsSourceSkin', () => {
     })
   })
 
-  it.each(['shopify', 'woocommerce', '', 'constructor'])(
+  it.each(['shopify', 'salla', '', 'constructor'])(
     'has no skin for %j',
     (platformType) => {
       expect(resolveSettingsSourceSkin(platformType)).toBeNull()
@@ -44,7 +52,7 @@ describe('resolveSettingsSourceSkin', () => {
   ] as const)(
     'has a name and help text for every skin in %s',
     (_, messages) => {
-      for (const platformType of ['standalone', 'easyorders']) {
+      for (const platformType of ['standalone', 'easyorders', 'woocommerce']) {
         const skin = resolveSettingsSourceSkin(platformType)!
         expect(messages.settings[skin.nameKey]).toBeTruthy()
         expect(
@@ -58,6 +66,7 @@ describe('resolveSettingsSourceSkin', () => {
 describe('source setup messages', () => {
   it.each([
     ['the EasyOrders screens', ar.easyOrdersConnect, en.easyOrdersConnect],
+    ['the WooCommerce screens', ar.wooCommerceConnect, en.wooCommerceConnect],
     [
       'the connection health',
       ar.settings.standalone.page.store,
@@ -102,6 +111,36 @@ describe('source setup messages', () => {
 
       expect(text).not.toMatch(/instant|immediately restored|تلقائيًا تعود/i)
       expect(text).not.toMatch(/eo_[A-Za-z0-9_-]{8,}|v1:/)
+    }
+  )
+
+  it.each([
+    ['ar', ar.wooCommerceConnect],
+    ['en', en.wooCommerceConnect],
+  ] as const)(
+    'promises no recovery of missed orders and shows no credential for WooCommerce, in %s',
+    (_, messages) => {
+      const text = JSON.stringify([
+        messages.credentialsRejected,
+        messages.disconnected,
+        messages.disconnect,
+        messages.removal,
+        messages.webhooks,
+        messages.check,
+      ])
+
+      expect(text).not.toMatch(
+        /instant|immediately restored|will be imported|will be recovered|تلقائيًا تعود|سيتم استيراد/i
+      )
+      expect(text).not.toMatch(/ck_[a-z0-9]{6,}|cs_[a-z0-9]{6,}|v1:|wc-auth/)
+      // Wherever a disabled notification or a disconnect is described, the
+      // screen says that orders placed meanwhile are not imported.
+      for (const sentence of [
+        messages.webhooks.disabled.missedOrders,
+        messages.webhooks.enabled,
+        messages.disconnect.effects.reconnect,
+      ])
+        expect(sentence).toMatch(/not imported|لا تُستورد/)
     }
   )
 })

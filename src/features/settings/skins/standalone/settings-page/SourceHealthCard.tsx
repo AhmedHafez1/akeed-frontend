@@ -49,9 +49,10 @@ function HealthRow({
 
 /**
  * The source's health as separate signals: credentials, the last event
- * accepted, processing failures, what is waiting, and updates the store did
- * not take. Each has its own cause, so there is no single "healthy" verdict,
- * and a store that has sent nothing lately is described, not flagged.
+ * accepted, each webhook's state where the store lets it be read, processing
+ * failures, what is waiting, and updates the store did not take. Each has its
+ * own cause, so there is no single "healthy" verdict, and a store that has
+ * sent nothing lately is described, not flagged.
  */
 export function SourceHealthCard() {
   const t = useTranslations('settings.standalone.page.store.health')
@@ -94,7 +95,7 @@ export function SourceHealthCard() {
       numberingSystem: 'latn',
     }).format(new Date(iso))
   const days = health.windowDays
-  const { events, processing, backlog, remoteSync, delivery } = health
+  const { events, processing, backlog, remoteSync, delivery, webhooks } = health
   const supported = health.capabilities.filter((item) => item.supported)
   const unsupported = health.capabilities.filter((item) => !item.supported)
 
@@ -147,6 +148,18 @@ export function SourceHealthCard() {
           attention={delivery.secretsMissing || delivery.rejectedCount > 0}
         />
       )}
+
+      {webhooks?.items.map((webhook) => (
+        <HealthRow
+          key={webhook.kind}
+          title={t(`webhooks.kinds.${webhook.kind}`)}
+          value={t(`webhooks.states.${webhook.state}`)}
+          note={t(`webhooks.notes.${webhook.state}`)}
+          attention={
+            webhook.state === 'disabled' || webhook.state === 'missing'
+          }
+        />
+      ))}
 
       <HealthRow
         title={t('processing.title')}

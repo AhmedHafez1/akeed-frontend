@@ -7,6 +7,40 @@ export type WooCommerceConnectionState =
   | 'failed'
   | 'expired'
   | 'connected'
+  /** Disconnected by an owner or admin; only the same store can reconnect. */
+  | 'disconnected'
+
+export type WooCommerceWebhookKind = 'order_created' | 'order_updated'
+
+/**
+ * What the store last answered for a webhook. `missing`: the store no longer
+ * has it. `unknown`: the store could not be asked.
+ */
+export type WooCommerceWebhookState =
+  | 'active'
+  | 'paused'
+  | 'disabled'
+  | 'missing'
+  | 'unknown'
+
+export interface WooCommerceWebhook {
+  kind: WooCommerceWebhookKind
+  state: WooCommerceWebhookState
+}
+
+export interface WooCommerceConnectionDetails {
+  storeUrl: string
+  health: 'ok' | 'credentials_rejected' | 'permission_denied'
+  connectedAt: string
+  /** Deliveries the store sent that failed the signature or source check. */
+  rejectedDeliveries: number
+  /** The last states read from the store; empty once disconnected. */
+  webhooks: WooCommerceWebhook[]
+  /** When the store was last asked. Nothing asks it in the background. */
+  webhooksCheckedAt: string | null
+  /** Set while disconnected, including while a reconnect is under way. */
+  disconnectedAt: string | null
+}
 
 /** Never carries a key, a secret, a token or the authorize link. */
 export interface WooCommerceConnectionStatus {
@@ -17,11 +51,25 @@ export interface WooCommerceConnectionStatus {
   storeUrl: string | null
   expiresAt: string | null
   lastErrorCode: string | null
-  connection: {
-    storeUrl: string
-    health: 'ok' | 'credentials_rejected' | 'permission_denied'
-    connectedAt: string
-  } | null
+  connection: WooCommerceConnectionDetails | null
+}
+
+/**
+ * Whether Akeed's webhooks were deleted in the store at disconnect. `failed`:
+ * they are still there until the merchant deletes them.
+ */
+export type WooCommerceWebhookCleanup = 'removed' | 'failed' | 'not_attempted'
+
+export interface WooCommerceDisconnected extends WooCommerceConnectionStatus {
+  webhookCleanup: WooCommerceWebhookCleanup
+}
+
+/** What a connection check found. Empty `problems` means nothing is wrong. */
+export interface WooCommerceConnectionCheck {
+  checkedAt: string
+  problems: string[]
+  webhooks: WooCommerceWebhook[]
+  status: WooCommerceConnectionStatus
 }
 
 export interface WooCommerceInstallStarted {
@@ -88,6 +136,9 @@ export type WooCommerceConnectView =
   | 'unsupported'
   | 'error'
   | 'connected'
+  /** Connected, but the store no longer accepts or allows Akeed's key. */
+  | 'credentialsRejected'
+  | 'disconnected'
 
 /**
  * The store cannot be connected as it is (the contract record's support
@@ -117,6 +168,11 @@ const WOOCOMMERCE_OTHER_ERROR_CODES = [
   'WOOCOMMERCE_ROLE_REQUIRED',
   'WOOCOMMERCE_CALLBACK_INVALID',
   'WOOCOMMERCE_INSTALL_VALIDATION_FAILED',
+  'WOOCOMMERCE_RECONNECT_STORE_MISMATCH',
+  'WOOCOMMERCE_NOT_CONNECTED',
+  'WOOCOMMERCE_WEBHOOK_MISSING',
+  'WOOCOMMERCE_WEBHOOK_ENABLE_UNAVAILABLE',
+  'WOOCOMMERCE_WEBHOOK_ENABLE_FAILED',
 ] as const
 
 /** Codes with their own message under `wooCommerceConnect.codes`. */
@@ -133,6 +189,13 @@ export function toWooCommerceErrorKey(
   return WOOCOMMERCE_ERROR_CODES.find((known) => known === code) ?? 'default'
 }
 
+/** True for a code with no message of its own, such as a network failure. */
+export function isUnnamedWooCommerceError(
+  code: string | null | undefined
+): boolean {
+  return toWooCommerceErrorKey(code) === 'default'
+}
+
 export function isUnsupportedStoreCode(
   code: string | null | undefined
 ): boolean {
@@ -140,8 +203,86 @@ export function isUnsupportedStoreCode(
 }
 
 /**
+ * What a connection check can find, each with its own guidance under
+ * `wooCommerceConnect.check.problems`. The wording there is about a store
+ * that is already connected, so it is kept apart from the connect codes.
+ */
+export const WOOCOMMERCE_CHECK_PROBLEMS = [
+  'WOOCOMMERCE_STORE_ADDRESS_NOT_PUBLIC',
+  'WOOCOMMERCE_STORE_REDIRECTS',
+  'WOOCOMMERCE_STORE_TLS_FAILED',
+  'WOOCOMMERCE_REST_NOT_FOUND',
+  'WOOCOMMERCE_REST_UNREACHABLE',
+  'WOOCOMMERCE_PROVIDER_UNAVAILABLE',
+  'WOOCOMMERCE_CREDENTIALS_REJECTED',
+  'WOOCOMMERCE_PERMISSION_DENIED',
+  'WOOCOMMERCE_STORE_URL_MISMATCH',
+  'WOOCOMMERCE_WEBHOOK_MISSING',
+  'WOOCOMMERCE_WEBHOOK_DISABLED',
+  'WOOCOMMERCE_WEBHOOK_PAUSED',
+] as const
+
+export type WooCommerceCheckProblem =
+  (typeof WOOCOMMERCE_CHECK_PROBLEMS)[number]
+
+export function toWooCommerceCheckKey(
+  code: string | null | undefined
+): WooCommerceCheckProblem | 'default' {
+  return WOOCOMMERCE_CHECK_PROBLEMS.find((known) => known === code) ?? 'default'
+}
+
+/** True while a reconnect of a disconnected source is waiting or was refused. */
+export function isWooCommerceReconnect(
+  status: WooCommerceConnectionStatus | null
+): boolean {
+  return Boolean(status?.connection?.disconnectedAt)
+}
+
+/** True when the store last had at least one of Akeed's webhooks in `state`. */
+export function hasWebhookIn(
+  connection: Pick<WooCommerceConnectionDetails, 'webhooks'> | null | undefined,
+  state: WooCommerceWebhookState
+): boolean {
+  return Boolean(
+    connection?.webhooks.some((webhook) => webhook.state === state)
+  )
+}
+
+export const WOOCOMMERCE_CHECKLIST_ITEMS = [
+  'store',
+  'notifications',
+  'sender',
+] as const
+
+export type WooCommerceChecklistItemId =
+  (typeof WOOCOMMERCE_CHECKLIST_ITEMS)[number]
+
+export interface WooCommerceChecklistItem {
+  id: WooCommerceChecklistItemId
+  done: boolean
+}
+
+/**
+ * What must be in place before the test message, each on its own row. There
+ * is no currency or phone country to choose: every order carries its own. A
+ * notification the store disabled holds setup back; the sender is Akeed's, so
+ * only a deployment that reports it is not configured does.
+ */
+export function buildWooCommerceChecklist(
+  connection: Pick<WooCommerceConnectionDetails, 'webhooks'>,
+  senderStatus: 'configured' | 'not_configured' | 'unknown'
+): WooCommerceChecklistItem[] {
+  return [
+    { id: 'store', done: true },
+    { id: 'notifications', done: !hasWebhookIn(connection, 'disabled') },
+    { id: 'sender', done: senderStatus !== 'not_configured' },
+  ]
+}
+
+/**
  * `restarting` is the merchant choosing to enter an address again; it never
- * hides a connection that exists.
+ * hides a connection that exists. A reconnect has no address to enter: its
+ * store is fixed, so starting again goes back to the disconnected screen.
  */
 export function resolveWooCommerceConnectView(
   status: WooCommerceConnectionStatus | null,
@@ -158,7 +299,11 @@ export function resolveWooCommerceConnectView(
   }
   switch (status.state) {
     case 'connected':
-      return 'connected'
+      return status.connection && status.connection.health !== 'ok'
+        ? 'credentialsRejected'
+        : 'connected'
+    case 'disconnected':
+      return 'disconnected'
     case 'unavailable':
       return 'unavailable'
     case 'pilot_required':
@@ -168,7 +313,8 @@ export function resolveWooCommerceConnectView(
     default:
       break
   }
-  if (options.restarting) return 'enterUrl'
+  if (options.restarting)
+    return isWooCommerceReconnect(status) ? 'disconnected' : 'enterUrl'
   switch (status.state) {
     case 'failed':
       return isUnsupportedStoreCode(status.lastErrorCode)

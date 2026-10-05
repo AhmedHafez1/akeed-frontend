@@ -207,13 +207,13 @@ describe('standalone Store tab', () => {
   it('falls back to the platform id for a source with no skin of its own', async () => {
     api.fetchSettings.mockResolvedValue(
       settingsResponseFixture({
-        state: { source: { platformType: 'woocommerce', identity: 'shop-9' } },
+        state: { source: { platformType: 'salla', identity: 'shop-9' } },
       })
     )
     await renderStore()
 
     expect(
-      screen.getByRole('heading', { level: 3, name: 'woocommerce' })
+      screen.getByRole('heading', { level: 3, name: 'salla' })
     ).toBeTruthy()
     expect(
       screen.queryByRole('heading', { name: store.health.heading })

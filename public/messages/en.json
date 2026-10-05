@@ -1988,6 +1988,7 @@
           "codHelp": "Turn on only if your order source usually leaves the payment method out of COD orders.",
           "codRisk": "Prepaid orders with missing payment info will also get a confirmation message and use credits.",
           "sourceHelpEasyOrders": "Orders arrive from your EasyOrders store by themselves.",
+          "sourceHelpWooCommerce": "Orders arrive from your WooCommerce store by themselves.",
           "disconnected": "Disconnected",
           "connectionHeading": "Connection",
           "connectionDesc": "The link between Akeed and your store.",
@@ -2053,6 +2054,26 @@
                 "merchant_no_reply_cancellation": "cancellations you make after no reply",
                 "merchant_cancellation_tagging": "cancellation tags",
                 "automatic_no_reply_tagging": "automatic no-reply marks"
+              }
+            },
+            "webhooks": {
+              "kinds": {
+                "order_created": "Notification for new orders",
+                "order_updated": "Notification for order changes"
+              },
+              "states": {
+                "active": "Active",
+                "paused": "Paused in your store",
+                "disabled": "Disabled by your store",
+                "missing": "Deleted from your store",
+                "unknown": "Couldn’t be read from your store"
+              },
+              "notes": {
+                "active": "Read from your store just now.",
+                "paused": "Akeed doesn’t change this. Activate it in your store’s webhook settings.",
+                "disabled": "Re-enable it under Connection above. Orders placed while it was disabled are not imported.",
+                "missing": "Disconnect, then connect the same store again to restore it.",
+                "unknown": "Your store didn’t answer, or didn’t accept Akeed’s access. That is not by itself a fault of the notification."
               }
             }
           }
@@ -2404,7 +2425,8 @@
         }
       }
     },
-    "sourceEasyOrders": "EasyOrders"
+    "sourceEasyOrders": "EasyOrders",
+    "sourceWooCommerce": "WooCommerce"
   },
   "embeddedOnboarding": {
     "prefillWarning": "We could not prefill Shopify store details. Please enter the store name manually.",
@@ -2671,7 +2693,8 @@
       "order_defaults_missing": "Choose your store’s country and currency.",
       "webhook_secrets_missing": "Add both webhook secrets.",
       "credentials_rejected": "The store no longer accepts Akeed’s access. Disconnect it, then connect it again.",
-      "source_disconnected": "The store is disconnected. Reconnect it to continue."
+      "source_disconnected": "The store is disconnected. Reconnect it to continue.",
+      "webhook_disabled": "Your store disabled an order notification. Re-enable it to continue."
     },
     "shell": {
       "help": "Help",
@@ -3769,6 +3792,156 @@
       "body": "Akeed set up its order notifications in your store. You don’t need to copy any key or secret.",
       "next": "We’ll let you know when Akeed starts confirming this store’s cash-on-delivery orders."
     },
+    "storeLabel": "Store address",
+    "checklist": {
+      "title": "Finish setting up",
+      "body": "Akeed starts confirming your WooCommerce orders once everything below is ready and you have tried the message yourself.",
+      "loading": "Loading your setup…",
+      "loadError": "We couldn’t load your setup. Check your internet connection and try again.",
+      "retry": "Try again",
+      "done": "done",
+      "todo": "still needed",
+      "notReady": "Complete the items above to send the test message.",
+      "items": {
+        "store": {
+          "title": "Store connected",
+          "done": "Your WooCommerce store is connected to Akeed.",
+          "todo": "Connect your WooCommerce store."
+        },
+        "notifications": {
+          "title": "Order notifications",
+          "done": "Akeed set them up in your store. Each order’s currency and phone country come from the order itself, so there is nothing to choose.",
+          "todo": "Your store disabled an order notification. Re-enable it above."
+        },
+        "sender": {
+          "title": "Akeed WhatsApp sender"
+        }
+      },
+      "sender": {
+        "configured": "Messages go out from Akeed’s WhatsApp number. You don’t need a number of your own.",
+        "not_configured": "Akeed’s WhatsApp sender isn’t ready on our side. Contact Akeed support; there is nothing to change in your store.",
+        "unknown": "Messages go out from Akeed’s WhatsApp number. We couldn’t check it just now; the test message will show whether it works."
+      },
+      "automation": {
+        "title": "How confirmations will run",
+        "autoConfirmOn": "A confirmation message is sent for every new cash-on-delivery order.",
+        "autoConfirmOff": "Automatic confirmation is off. No message is sent until you turn it on in Settings.",
+        "reminderOn": "A reminder after {minutes} minutes without a reply.",
+        "reminderOff": "No reminder.",
+        "noReplyOn": "Marked as no reply after {minutes} minutes. Akeed never cancels the order in WooCommerce by itself.",
+        "noReplyOff": "Orders are not marked as no reply automatically.",
+        "quietHoursOn": "No messages between {start} and {end}.",
+        "quietHoursOff": "No quiet hours.",
+        "changeLater": "You can change these in Settings after setup."
+      }
+    },
+    "done": {
+      "badge": "Setup complete",
+      "title": "Your store is set up",
+      "body": "Akeed is ready to confirm your WooCommerce cash-on-delivery orders over WhatsApp.",
+      "dashboard": "Go to the dashboard"
+    },
+    "webhooks": {
+      "title": "Order notifications in your store",
+      "kinds": {
+        "order_created": "New orders:",
+        "order_updated": "Order changes:"
+      },
+      "states": {
+        "active": "Active",
+        "paused": "Paused in your store",
+        "disabled": "Disabled by your store",
+        "missing": "Deleted from your store",
+        "unknown": "Not known yet"
+      },
+      "checkedAt": "Last read from your store: {when}.",
+      "neverChecked": "Akeed hasn’t read these from your store yet.",
+      "disabled": {
+        "title": "Your store disabled an order notification",
+        "body": "WooCommerce does this after several deliveries in a row fail. While it is disabled, new orders don’t reach Akeed.",
+        "missedOrders": "Orders placed while it was disabled were not sent to Akeed and are not imported.",
+        "enable": "Re-enable order notifications",
+        "enabling": "Re-enabling…",
+        "failed": "We couldn’t re-enable the order notification. Nothing was changed. Try again."
+      },
+      "enabled": "Order notifications are active again. Orders placed while they were disabled are not imported.",
+      "paused": "An order notification is paused in your store, so orders don’t reach Akeed. Akeed doesn’t change that: activate it in WordPress under WooCommerce > Settings > Advanced > Webhooks.",
+      "missing": "An order notification was deleted in your store, so orders don’t reach Akeed. To fix it, disconnect WooCommerce here, then connect the same store again.",
+      "rejectedDeliveries": "{count, plural, one {# order notification was refused because its signature or store address didn’t match.} other {# order notifications were refused because their signature or store address didn’t match.}} If the webhook was edited in WooCommerce, disconnect and connect the same store again."
+    },
+    "check": {
+      "help": "Ask your store whether the connection still works.",
+      "button": "Check connection",
+      "checking": "Checking your store…",
+      "ok": "Your store answered, accepted Akeed’s access, and both order notifications are active.",
+      "found": "Here is what needs attention:",
+      "failed": "We couldn’t run the check. Try again.",
+      "checkedAt": "Checked: {when}.",
+      "support": "If your hosting, a security plugin or a custom setup is involved, contact Akeed support. Akeed can’t promise it works with every hosting setup or plugin.",
+      "problems": {
+        "WOOCOMMERCE_STORE_ADDRESS_NOT_PUBLIC": "Akeed can no longer reach your store’s address on the public internet. Check your domain and its DNS.",
+        "WOOCOMMERCE_STORE_REDIRECTS": "Your store’s address now redirects to another one. If the address changed, contact Akeed support: a different address can’t be connected to this account.",
+        "WOOCOMMERCE_STORE_TLS_FAILED": "Your store’s security certificate is not valid. Ask your hosting provider to fix it.",
+        "WOOCOMMERCE_REST_NOT_FOUND": "The WooCommerce REST API is no longer at your store’s address. In WordPress, open Settings > Permalinks and choose any option other than Plain, and make sure WooCommerce is active.",
+        "WOOCOMMERCE_REST_UNREACHABLE": "Your store did not answer. It may be down, in maintenance mode or blocking outside requests. Try again later or ask your hosting provider.",
+        "WOOCOMMERCE_PROVIDER_UNAVAILABLE": "Your store took too long to answer. Try again.",
+        "WOOCOMMERCE_CREDENTIALS_REJECTED": "Your store no longer accepts Akeed’s API key. It may have been revoked, or your hosting may be removing the Authorization header. Disconnect WooCommerce here, then connect the same store again.",
+        "WOOCOMMERCE_PERMISSION_DENIED": "The WordPress user behind Akeed’s API key can no longer manage WooCommerce. Restore that user’s role, or disconnect and connect again as an administrator or shop manager.",
+        "WOOCOMMERCE_STORE_URL_MISMATCH": "Your store now reports a different address from the one that was connected, so its order notifications are refused. If the address changed, contact Akeed support.",
+        "WOOCOMMERCE_WEBHOOK_MISSING": "An order notification was deleted in your store. Disconnect WooCommerce here, then connect the same store again.",
+        "WOOCOMMERCE_WEBHOOK_DISABLED": "Your store disabled an order notification. Re-enable it above. Orders placed while it was disabled are not imported.",
+        "WOOCOMMERCE_WEBHOOK_PAUSED": "An order notification is paused in your store. Activate it in WordPress under WooCommerce > Settings > Advanced > Webhooks.",
+        "default": "The check found a problem Akeed can’t name. Contact Akeed support."
+      }
+    },
+    "credentialsRejected": {
+      "title": "Your store no longer accepts Akeed’s access",
+      "bodyRejected": "The last time Akeed used its API key, your store rejected it. Order updates can’t be written to your store, and its order notifications can’t be read.",
+      "bodyDenied": "The last time Akeed used its API key, your store answered that its WordPress user may not manage WooCommerce. Order updates can’t be written to your store.",
+      "recovery": "To fix it, disconnect WooCommerce here, then connect the same store again. Reconnecting creates a new key and replaces Akeed’s order notifications; there is nothing to copy.",
+      "lastSeen": "This is the last answer your store gave. If you didn’t revoke the key or change the user yourself, contact Akeed support before you disconnect."
+    },
+    "disconnected": {
+      "title": "Your WooCommerce store is disconnected",
+      "body": "Akeed has stopped receiving orders from this store, sending messages for them, and updating them in your store.",
+      "historyKept": "Your earlier orders and their confirmation results are kept and still appear in your reports.",
+      "reconnectBody": "You can connect the same store again. A different store, or this store at a different address, can’t be connected to this account; contact Akeed support if you need that.",
+      "reconnect": "Reconnect WooCommerce",
+      "sameStore": "You are reconnecting a store. Approve again in the same WooCommerce store as before; a different store is refused."
+    },
+    "disconnect": {
+      "button": "Disconnect WooCommerce",
+      "title": "Disconnect WooCommerce?",
+      "description": "Akeed stops working with this store on its side right away.",
+      "keep": "Keep connected",
+      "confirm": "Disconnect",
+      "failed": "We couldn’t disconnect WooCommerce. Nothing was changed. Try again.",
+      "effects": {
+        "stops": "New orders from WooCommerce are no longer received, and messages or order updates that were waiting are not sent.",
+        "history": "Your orders, confirmation results and usage history are kept.",
+        "webhooks": "Akeed asks your store to delete its two order notifications. If your store doesn’t answer, we tell you and you delete them yourself.",
+        "key": "The API key WooCommerce created for Akeed stays in your store until you revoke it there. Akeed deletes its own copy.",
+        "reconnect": "Reconnecting later means approving again in the same store. Orders placed while disconnected are not imported."
+      }
+    },
+    "removal": {
+      "title": "Remove Akeed’s API key from WooCommerce",
+      "intro": "Akeed can’t revoke its own API key in your store. Do it yourself so the key can no longer be used:",
+      "steps": {
+        "openSettings": "In WordPress, open WooCommerce > Settings > Advanced > REST API.",
+        "revokeKey": "Find the key named Akeed and choose Revoke.",
+        "deleteWebhooks": "Under WooCommerce > Settings > Advanced > Webhooks, delete any webhook whose name starts with Akeed."
+      },
+      "webhooksRemoved": "Akeed deleted its two order notifications from your store.",
+      "webhooksLeft": "Your store didn’t confirm that Akeed’s order notifications were deleted. Delete them yourself (step 3). Until then your store keeps calling an address Akeed no longer accepts; nothing is stored from those calls, and WooCommerce disables them after a few failures.",
+      "webhooksUnknown": "Akeed asks your store to delete its order notifications when you disconnect. If any are still listed, delete them (step 3).",
+      "support": "For anything on the Akeed side, contact Akeed support. Problems with your hosting or with WordPress plugins are for your hosting provider."
+    },
+    "panel": {
+      "readOnly": "You have read-only access. An owner or admin manages the WooCommerce connection.",
+      "disconnectHelp": "Disconnecting stops Akeed for this store and keeps your history.",
+      "disconnectedTitle": "WooCommerce is disconnected"
+    },
     "codes": {
       "WOOCOMMERCE_STORE_URL_INVALID": "Enter your store’s address, for example https://example.com.",
       "WOOCOMMERCE_STORE_HTTPS_REQUIRED": "Your store’s address must start with https://. Akeed does not connect to stores without HTTPS.",
@@ -3789,6 +3962,11 @@
       "WOOCOMMERCE_ROLE_REQUIRED": "Only an owner or admin can connect WooCommerce.",
       "WOOCOMMERCE_CALLBACK_INVALID": "Your store sent an incomplete answer. Nothing was connected.",
       "WOOCOMMERCE_INSTALL_VALIDATION_FAILED": "We couldn’t read that request. Check the address and try again.",
+      "WOOCOMMERCE_RECONNECT_STORE_MISMATCH": "Only the store that was connected before can be reconnected. Nothing was changed.",
+      "WOOCOMMERCE_NOT_CONNECTED": "WooCommerce isn’t connected to this account.",
+      "WOOCOMMERCE_WEBHOOK_MISSING": "An order notification was deleted in your store, so it can’t be re-enabled. Disconnect WooCommerce here, then connect the same store again.",
+      "WOOCOMMERCE_WEBHOOK_ENABLE_UNAVAILABLE": "Order notifications can’t be re-enabled right now. Contact Akeed support.",
+      "WOOCOMMERCE_WEBHOOK_ENABLE_FAILED": "Your store didn’t re-enable the order notification. Try again, or contact Akeed support if it keeps happening.",
       "default": "Something went wrong. Nothing was connected."
     }
   },

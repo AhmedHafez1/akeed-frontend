@@ -21,6 +21,22 @@ export const SOURCE_OUTCOME_ACTIONS = [
 export type SourceOutcomeAction = (typeof SOURCE_OUTCOME_ACTIONS)[number]
 
 /**
+ * What the store says of a webhook Akeed created there. `missing`: the store
+ * no longer has it. `unknown`: the store could not be asked.
+ */
+export type SourceWebhookState =
+  | 'active'
+  | 'paused'
+  | 'disabled'
+  | 'missing'
+  | 'unknown'
+
+export interface SourceWebhook {
+  kind: 'order_created' | 'order_updated'
+  state: SourceWebhookState
+}
+
+/**
  * A source's health as separate facts. There is no overall status: each
  * signal has its own cause, and a store with no events is not a broken one.
  */
@@ -49,6 +65,11 @@ export interface SourceHealth {
     lastRejectedAt: string | null
   } | null
   capabilities: { action: SourceOutcomeAction; supported: boolean }[]
+  /**
+   * Each webhook as the store answered when this was read. Present only for
+   * a source whose store lets them be read, and only while it is connected.
+   */
+  webhooks?: { checkedAt: string; items: SourceWebhook[] }
 }
 
 export function sourceHealthOptions() {

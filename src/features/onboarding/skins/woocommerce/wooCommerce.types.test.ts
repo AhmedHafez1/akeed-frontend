@@ -2,15 +2,22 @@ import { describe, expect, it } from 'vitest'
 import ar from '../../../../../public/messages/ar.json'
 import en from '../../../../../public/messages/en.json'
 import {
+  WOOCOMMERCE_CHECK_PROBLEMS,
+  WOOCOMMERCE_CHECKLIST_ITEMS,
   WOOCOMMERCE_ERROR_CODES,
   WOOCOMMERCE_UNSUPPORTED_STORE_CODES,
+  buildWooCommerceChecklist,
   displayStoreAddress,
+  isUnnamedWooCommerceError,
   isUnsupportedStoreCode,
   parseWooCommerceReturnHint,
   resolveWooCommerceConnectView,
   toStoreAddress,
+  toWooCommerceCheckKey,
   toWooCommerceErrorKey,
+  type WooCommerceConnectionDetails,
   type WooCommerceConnectionStatus,
+  type WooCommerceWebhookState,
 } from './wooCommerce.types'
 
 function leafKeys(value: unknown, path = ''): string[] {
@@ -209,5 +216,249 @@ describe('displayStoreAddress', () => {
     [undefined, null],
   ])('names %j as %s', (address, shown) => {
     expect(displayStoreAddress(address)).toBe(shown)
+  })
+})
+
+function details(
+  overrides: Partial<WooCommerceConnectionDetails> = {}
+): WooCommerceConnectionDetails {
+  return {
+    storeUrl: 'https://shop.example.com',
+    health: 'ok',
+    connectedAt: '2026-10-04T10:00:00.000Z',
+    rejectedDeliveries: 0,
+    webhooks: [
+      { kind: 'order_created', state: 'active' },
+      { kind: 'order_updated', state: 'active' },
+    ],
+    webhooksCheckedAt: '2026-10-04T10:00:00.000Z',
+    disconnectedAt: null,
+    ...overrides,
+  }
+}
+
+describe('WooCommerce messages (US-07-05)', () => {
+  it.each(Object.entries({ ar, en }))(
+    '%s has guidance for every problem a connection check can find, and a default',
+    (_locale, messages) => {
+      const problems: Record<string, string> =
+        messages.wooCommerceConnect.check.problems
+
+      expect(Object.keys(problems).sort()).toEqual(
+        [...WOOCOMMERCE_CHECK_PROBLEMS, 'default'].sort()
+      )
+      for (const text of Object.values(problems))
+        expect(text.trim()).toBeTruthy()
+    }
+  )
+
+  it('gives each problem its own guidance: no two read the same', () => {
+    for (const messages of [ar, en]) {
+      const texts = Object.values(
+        messages.wooCommerceConnect.check.problems as Record<string, string>
+      )
+      expect(new Set(texts).size).toBe(texts.length)
+    }
+  })
+
+  it('never leaves Arabic check guidance in English', () => {
+    const arabic = ar.wooCommerceConnect.check.problems as Record<
+      string,
+      string
+    >
+    const english = en.wooCommerceConnect.check.problems as Record<
+      string,
+      string
+    >
+
+    for (const code of [...WOOCOMMERCE_CHECK_PROBLEMS, 'default'])
+      expect(arabic[code], code).not.toBe(english[code])
+  })
+
+  it.each(Object.entries({ ar, en }))(
+    '%s names every checklist row, webhook state and webhook kind',
+    (_locale, messages) => {
+      const woo = messages.wooCommerceConnect
+      const items: Record<string, { title: string }> = woo.checklist.items
+      const states: Record<string, string> = woo.webhooks.states
+      const health = messages.settings.standalone.page.store.health.webhooks
+
+      expect(Object.keys(items).sort()).toEqual(
+        [...WOOCOMMERCE_CHECKLIST_ITEMS].sort()
+      )
+      for (const state of [
+        'active',
+        'paused',
+        'disabled',
+        'missing',
+        'unknown',
+      ]) {
+        expect(states[state]).toBeTruthy()
+        expect((health.states as Record<string, string>)[state]).toBeTruthy()
+        expect((health.notes as Record<string, string>)[state]).toBeTruthy()
+      }
+      for (const kind of ['order_created', 'order_updated']) {
+        expect(
+          (woo.webhooks.kinds as Record<string, string>)[kind]
+        ).toBeTruthy()
+        expect((health.kinds as Record<string, string>)[kind]).toBeTruthy()
+      }
+      expect(
+        messages.standaloneOnboarding.blockers.webhook_disabled
+      ).toBeTruthy()
+    }
+  )
+
+  it('keeps check guidance apart from the connect codes', () => {
+    expect(toWooCommerceCheckKey('WOOCOMMERCE_WEBHOOK_PAUSED')).toBe(
+      'WOOCOMMERCE_WEBHOOK_PAUSED'
+    )
+    for (const code of ['WOOCOMMERCE_SOURCE_EXISTS', 'SOMETHING_NEW', null])
+      expect(toWooCommerceCheckKey(code)).toBe('default')
+  })
+
+  it('tells a code with its own message from one without', () => {
+    expect(isUnnamedWooCommerceError('WOOCOMMERCE_NOT_CONNECTED')).toBe(false)
+    for (const code of ['UNAVAILABLE', 'WOOCOMMERCE_WEBHOOK_PAUSED', null])
+      expect(isUnnamedWooCommerceError(code)).toBe(true)
+  })
+})
+
+describe('resolveWooCommerceConnectView (US-07-05)', () => {
+  const disconnectedAt = '2026-10-05T09:00:00.000Z'
+
+  it.each([
+    [
+      'a connected store',
+      status({ state: 'connected', connection: details() }),
+      {},
+      'connected',
+    ],
+    [
+      'keys the store rejected',
+      status({
+        state: 'connected',
+        connection: details({ health: 'credentials_rejected' }),
+      }),
+      {},
+      'credentialsRejected',
+    ],
+    [
+      'a permission the store denied',
+      status({
+        state: 'connected',
+        connection: details({ health: 'permission_denied' }),
+      }),
+      {},
+      'credentialsRejected',
+    ],
+    [
+      'a disconnected source',
+      status({
+        state: 'disconnected',
+        connection: details({ webhooks: [], disconnectedAt }),
+      }),
+      {},
+      'disconnected',
+    ],
+    [
+      'a reconnect waiting for the store',
+      status({
+        state: 'pending',
+        connection: details({ webhooks: [], disconnectedAt }),
+      }),
+      {},
+      'waiting',
+    ],
+    [
+      'a refused reconnect',
+      status({
+        state: 'failed',
+        lastErrorCode: 'WOOCOMMERCE_STORE_UNAVAILABLE',
+        connection: details({ webhooks: [], disconnectedAt }),
+      }),
+      {},
+      'unsupported',
+    ],
+    [
+      'starting a reconnect again: there is no address to enter',
+      status({
+        state: 'failed',
+        lastErrorCode: 'WOOCOMMERCE_STORE_UNAVAILABLE',
+        connection: details({ webhooks: [], disconnectedAt }),
+      }),
+      { restarting: true },
+      'disconnected',
+    ],
+    [
+      'an expired reconnect, started again',
+      status({
+        state: 'expired',
+        connection: details({ webhooks: [], disconnectedAt }),
+      }),
+      { restarting: true },
+      'disconnected',
+    ],
+  ] as const)('shows %s as %s', (_label, current, options, view) => {
+    expect(
+      resolveWooCommerceConnectView(current, { ...idle, ...options })
+    ).toBe(view)
+  })
+})
+
+describe('buildWooCommerceChecklist', () => {
+  const webhooks = (
+    created: WooCommerceWebhookState,
+    updated: WooCommerceWebhookState
+  ) =>
+    details({
+      webhooks: [
+        { kind: 'order_created', state: created },
+        { kind: 'order_updated', state: updated },
+      ],
+    })
+  const doneOf = (
+    connection: WooCommerceConnectionDetails,
+    sender: 'configured' | 'not_configured' | 'unknown' = 'configured'
+  ) =>
+    Object.fromEntries(
+      buildWooCommerceChecklist(connection, sender).map((item) => [
+        item.id,
+        item.done,
+      ])
+    )
+
+  it('asks for the store, its notifications and the sender: no currency and no country', () => {
+    expect(
+      buildWooCommerceChecklist(details(), 'configured').map((item) => item.id)
+    ).toEqual(['store', 'notifications', 'sender'])
+    expect(doneOf(details())).toEqual({
+      store: true,
+      notifications: true,
+      sender: true,
+    })
+  })
+
+  it.each([
+    ['disabled', 'active', false],
+    ['active', 'disabled', false],
+    // Shown and explained on the screen, but the backend does not block
+    // setup on them, so neither does the checklist.
+    ['paused', 'active', true],
+    ['missing', 'active', true],
+    ['unknown', 'unknown', true],
+  ] as const)(
+    'with notifications %s and %s, the row is done: %s',
+    (created, updated, done) => {
+      expect(doneOf(webhooks(created, updated)).notifications).toBe(done)
+    }
+  )
+
+  it.each([
+    ['configured', true],
+    ['unknown', true],
+    ['not_configured', false],
+  ] as const)('holds setup for a sender that is %s: %s', (sender, done) => {
+    expect(doneOf(details(), sender).sender).toBe(done)
   })
 })

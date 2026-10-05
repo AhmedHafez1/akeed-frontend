@@ -4,6 +4,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { ApiError } from '@/shared/lib/http'
 import { createLogger } from '@/shared/lib/logger'
 import {
+  checkWooCommerceConnection,
+  disconnectWooCommerce,
+  enableWooCommerceWebhooks,
   fetchWooCommerceConnection,
   startWooCommerceInstall,
 } from './wooCommerceApi'
@@ -14,6 +17,7 @@ import {
   type WooCommerceConnectionStatus,
   type WooCommerceConnectView,
   type WooCommerceReturnHint,
+  type WooCommerceWebhookCleanup,
 } from './wooCommerce.types'
 
 const logger = createLogger('Onboarding')
@@ -28,6 +32,12 @@ function errorCode(error: unknown): string {
   return error instanceof ApiError && error.code ? error.code : 'UNAVAILABLE'
 }
 
+/** What the last connection check found. */
+export interface WooCommerceCheckResult {
+  checkedAt: string
+  problems: string[]
+}
+
 export interface WooCommerceConnectionController {
   view: WooCommerceConnectView
   status: WooCommerceConnectionStatus | null
@@ -37,9 +47,31 @@ export interface WooCommerceConnectionController {
   startErrorCode: string | null
   /** Sends the merchant to the store's approval page, in this tab. */
   connect: (storeUrl: string) => Promise<void>
+  /**
+   * The same, for a disconnected source: the store is the one that was
+   * connected, so there is no address to enter.
+   */
+  reconnect: () => Promise<void>
   /** Back to entering an address, keeping the one shown. */
   restart: () => void
   reload: () => Promise<void>
+  isDisconnecting: boolean
+  disconnectErrorCode: string | null
+  /** Resolves true once the source is disconnected. */
+  disconnect: () => Promise<boolean>
+  clearDisconnectError: () => void
+  /** Whether the store deleted Akeed's notifications at the last disconnect. */
+  webhookCleanup: WooCommerceWebhookCleanup | null
+  isChecking: boolean
+  checkResult: WooCommerceCheckResult | null
+  /** Why the check itself could not run. */
+  checkErrorCode: string | null
+  check: () => Promise<void>
+  isEnabling: boolean
+  enableErrorCode: string | null
+  /** True right after a re-enable the store confirmed. */
+  webhooksEnabled: boolean
+  enableWebhooks: () => Promise<boolean>
 }
 
 /**
@@ -60,6 +92,20 @@ export function useWooCommerceConnection(
   const [restarting, setRestarting] = useState(false)
   const [isStarting, setIsStarting] = useState(false)
   const [startErrorCode, setStartErrorCode] = useState<string | null>(null)
+  const [isDisconnecting, setIsDisconnecting] = useState(false)
+  const [disconnectErrorCode, setDisconnectErrorCode] = useState<string | null>(
+    null
+  )
+  const [webhookCleanup, setWebhookCleanup] =
+    useState<WooCommerceWebhookCleanup | null>(null)
+  const [isChecking, setIsChecking] = useState(false)
+  const [checkResult, setCheckResult] = useState<WooCommerceCheckResult | null>(
+    null
+  )
+  const [checkErrorCode, setCheckErrorCode] = useState<string | null>(null)
+  const [isEnabling, setIsEnabling] = useState(false)
+  const [enableErrorCode, setEnableErrorCode] = useState<string | null>(null)
+  const [webhooksEnabled, setWebhooksEnabled] = useState(false)
   const activeRef = useRef(true)
 
   const reload = useCallback(async () => {
@@ -132,10 +178,94 @@ export function useWooCommerceConnection(
     [locale]
   )
 
+  const reconnectStoreUrl = status?.connection?.storeUrl ?? null
+  const reconnect = useCallback(async () => {
+    if (reconnectStoreUrl) await connect(reconnectStoreUrl)
+  }, [connect, reconnectStoreUrl])
+
   const restart = useCallback(() => {
     setRestarting(true)
     setReturnHint(null)
     setStartErrorCode(null)
+  }, [])
+
+  const disconnect = useCallback(async () => {
+    setIsDisconnecting(true)
+    setDisconnectErrorCode(null)
+    try {
+      const { webhookCleanup: cleanup, ...next } = await disconnectWooCommerce()
+      if (!activeRef.current) return true
+      setStatus(next)
+      setWebhookCleanup(cleanup)
+      setCheckResult(null)
+      setCheckErrorCode(null)
+      setEnableErrorCode(null)
+      setWebhooksEnabled(false)
+      setRestarting(false)
+      setReturnHint(null)
+      return true
+    } catch (error) {
+      logger.error('Failed to disconnect WooCommerce', errorCode(error))
+      if (activeRef.current) setDisconnectErrorCode(errorCode(error))
+      return false
+    } finally {
+      if (activeRef.current) setIsDisconnecting(false)
+    }
+  }, [])
+
+  const clearDisconnectError = useCallback(
+    () => setDisconnectErrorCode(null),
+    []
+  )
+
+  const check = useCallback(async () => {
+    setIsChecking(true)
+    setCheckErrorCode(null)
+    setWebhooksEnabled(false)
+    try {
+      const result = await checkWooCommerceConnection()
+      if (!activeRef.current) return
+      setStatus(result.status)
+      setCheckResult({
+        checkedAt: result.checkedAt,
+        problems: result.problems,
+      })
+    } catch (error) {
+      logger.error(
+        'Failed to check the WooCommerce connection',
+        errorCode(error)
+      )
+      if (activeRef.current) {
+        setCheckResult(null)
+        setCheckErrorCode(errorCode(error))
+      }
+    } finally {
+      if (activeRef.current) setIsChecking(false)
+    }
+  }, [])
+
+  const enableWebhooks = useCallback(async () => {
+    setIsEnabling(true)
+    setEnableErrorCode(null)
+    setWebhooksEnabled(false)
+    try {
+      const next = await enableWooCommerceWebhooks()
+      if (!activeRef.current) return true
+      setStatus(next)
+      // What the last check found no longer describes the store.
+      setCheckResult(null)
+      setWebhooksEnabled(true)
+      return true
+    } catch (error) {
+      logger.error(
+        'Failed to re-enable the WooCommerce notifications',
+        errorCode(error)
+      )
+      if (activeRef.current) setEnableErrorCode(errorCode(error))
+      return false
+    } finally {
+      if (activeRef.current) setIsEnabling(false)
+    }
   }, [])
 
   return {
@@ -150,7 +280,21 @@ export function useWooCommerceConnection(
     isStarting,
     startErrorCode,
     connect,
+    reconnect,
     restart,
     reload,
+    isDisconnecting,
+    disconnectErrorCode,
+    disconnect,
+    clearDisconnectError,
+    webhookCleanup,
+    isChecking,
+    checkResult,
+    checkErrorCode,
+    check,
+    isEnabling,
+    enableErrorCode,
+    webhooksEnabled,
+    enableWebhooks,
   }
 }

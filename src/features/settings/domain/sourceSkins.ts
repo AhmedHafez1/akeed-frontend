@@ -1,14 +1,17 @@
 import type { ComponentType } from 'react'
-import { EasyOrdersSourcePanel } from '@/features/onboarding'
+import {
+  EasyOrdersSourcePanel,
+  WooCommerceSourcePanel,
+} from '@/features/onboarding'
 
 /** A source's own connection controls, mounted on the order-source tab. */
 export type SettingsSourcePanel = ComponentType<{ onChanged?: () => void }>
 
 export interface SettingsSourceSkin {
   /** Under `settings`. */
-  nameKey: 'sourceStandalone' | 'sourceEasyOrders'
+  nameKey: 'sourceStandalone' | 'sourceEasyOrders' | 'sourceWooCommerce'
   /** Under `settings.standalone.page.store`. */
-  helpKey: 'sourceHelp' | 'sourceHelpEasyOrders'
+  helpKey: 'sourceHelp' | 'sourceHelpEasyOrders' | 'sourceHelpWooCommerce'
   /** Present for a source the merchant connects, disconnects or reconnects. */
   Panel?: SettingsSourcePanel
   /** The source receives orders by itself, so its health is worth showing. */
@@ -29,6 +32,12 @@ const SETTINGS_SOURCE_SKINS: Partial<Record<string, SettingsSourceSkin>> = {
     nameKey: 'sourceEasyOrders',
     helpKey: 'sourceHelpEasyOrders',
     Panel: EasyOrdersSourcePanel,
+    showsHealth: true,
+  },
+  woocommerce: {
+    nameKey: 'sourceWooCommerce',
+    helpKey: 'sourceHelpWooCommerce',
+    Panel: WooCommerceSourcePanel,
     showsHealth: true,
   },
 }
