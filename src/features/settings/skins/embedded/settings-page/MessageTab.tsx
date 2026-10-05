@@ -12,11 +12,7 @@ import {
   TextField,
 } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
-import type {
-  ArabicCodTemplateVariantId,
-  EnglishCodTemplateVariantId,
-  IntegrationOnboardingLanguage,
-} from '@/features/onboarding'
+import type { IntegrationOnboardingLanguage } from '@/features/onboarding'
 import type { SettingsResponse } from '@/features/settings/api/settingsApi'
 import {
   PREVIEW_CUSTOMER_NAMES,
@@ -28,6 +24,7 @@ import {
   SETTINGS_FIELD_ID,
   STORE_NAME_MAX_LENGTH,
 } from '@/features/settings/domain/settingsForm'
+import { templateStyleLabel } from '@/features/settings/domain/templateStyleLabel'
 import type { EmbeddedSettingsModel } from '@/features/settings/domain/useEmbeddedSettings'
 import { useTestPhonePrompt } from '@/features/settings/domain/useTestPhonePrompt'
 import { formatPlanPrice } from '@/shared/lib/money'
@@ -90,16 +87,10 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
 
   const handleVariantChange = (variant: string) => {
     model.update({
-      codTemplateVariants:
-        previewLanguage === 'ar'
-          ? {
-              ...values.codTemplateVariants,
-              ar: variant as ArabicCodTemplateVariantId,
-            }
-          : {
-              ...values.codTemplateVariants,
-              en: variant as EnglishCodTemplateVariantId,
-            },
+      codTemplateVariants: {
+        ...values.codTemplateVariants,
+        [previewLanguage]: variant,
+      },
     })
   }
 
@@ -182,7 +173,7 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
                 onChange={([variant]) => handleVariantChange(variant)}
                 choices={variants.map((variant) => ({
                   value: variant.variant,
-                  label: t(`variantLabels.${variant.variant}`),
+                  label: templateStyleLabel(t, variant.variant),
                   helpText: (
                     <span dir={previewLanguage === 'ar' ? 'rtl' : 'ltr'}>
                       {templateOpeningLine(variant.preview, sample)}

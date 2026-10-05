@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { settingsResponseFixture } from '../testing/settingsFixture'
+import {
+  SEEDED_STYLES,
+  settingsResponseFixture,
+} from '../testing/settingsFixture'
 import {
   dirtyTabs,
   fieldErrorFromApiCode,
@@ -53,6 +56,25 @@ describe('formFromSettings / toSettingsPayload', () => {
   it('keeps the visible alert gap when the reminder is switched off', () => {
     const form = { ...formFor(), followUpEnabled: false }
     expect(toSettingsPayload(form).escalationDelayMinutes).toBe(720)
+  })
+
+  it.each([
+    ...SEEDED_STYLES.ar.map((style) => ['ar', style] as const),
+    ...SEEDED_STYLES.en.map((style) => ['en', style] as const),
+    ['ar', 'a_style_added_later'] as const,
+  ])('round-trips the %s style %s', (language, style) => {
+    const response = settingsResponseFixture()
+    const form = formFromSettings(response.state, {
+      ...response.template,
+      selected: { ...response.template.selected, [language]: style },
+    })
+
+    expect(form.codTemplateVariants[language]).toBe(style)
+    expect(toSettingsPayload(form)).toMatchObject(
+      language === 'ar'
+        ? { codTemplateArVariant: style, codTemplateEnVariant: 'friendly' }
+        : { codTemplateArVariant: 'standard', codTemplateEnVariant: style }
+    )
   })
 
   it('trims the store name', () => {

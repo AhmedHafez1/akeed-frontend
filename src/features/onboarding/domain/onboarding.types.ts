@@ -5,17 +5,13 @@ export interface BillingManagement {
 
 export type IntegrationOnboardingLanguage = 'auto' | 'en' | 'ar'
 
-export type ArabicCodTemplateVariantId =
-  | 'standard'
-  | 'egyptian'
-  | 'gulf'
-  | 'short'
+/**
+ * The id of a message style. The styles a store may choose come from the
+ * settings response (`template.variants`), never from a list in this app.
+ */
+export type ArabicCodTemplateVariantId = string
 
-export type EnglishCodTemplateVariantId =
-  | 'friendly'
-  | 'professional'
-  | 'direct'
-  | 'short'
+export type EnglishCodTemplateVariantId = string
 
 export type IntegrationOnboardingStatus = 'pending' | 'completed'
 

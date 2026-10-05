@@ -9,6 +9,49 @@ const preview = (greeting: string, body: string, confirm: string) => ({
   cancelButton: 'Cancel',
 })
 
+const style = (
+  language: 'ar' | 'en',
+  variant: string,
+  greeting: string
+): SettingsResponse['template']['variants']['ar'][number] => ({
+  language,
+  variant,
+  metaTemplateName: `template_${variant}`,
+  metaLanguageCode: language,
+  bodyParameterOrder: ['customer', 'store', 'order', 'total'],
+  preview: preview(greeting, `${variant} #{{order}}`, 'OK'),
+})
+
+/** The style ids the registry is seeded with, per language. */
+export const SEEDED_STYLES = {
+  ar: ['standard', 'egyptian', 'gulf', 'short'],
+  en: ['friendly', 'professional', 'direct', 'short'],
+} as const
+
+/**
+ * A response that offers every seeded style plus `levantine`, an Arabic
+ * style this app has no label for: what staff adding a template looks like.
+ */
+export function allStylesSettingsFixture(
+  overrides: Parameters<typeof settingsResponseFixture>[0] = {}
+): SettingsResponse {
+  const response = settingsResponseFixture(overrides)
+  return {
+    ...response,
+    template: {
+      ...response.template,
+      variants: {
+        ar: [...SEEDED_STYLES.ar, 'levantine'].map((variant) =>
+          style('ar', variant, `مرحبا ${variant}`)
+        ),
+        en: SEEDED_STYLES.en.map((variant) =>
+          style('en', variant, `Hello ${variant}`)
+        ),
+      },
+    },
+  }
+}
+
 /** A GET /api/settings response for tests; override what a case needs. */
 export function settingsResponseFixture(
   overrides: {

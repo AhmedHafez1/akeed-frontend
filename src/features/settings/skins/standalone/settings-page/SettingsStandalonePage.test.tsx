@@ -10,7 +10,10 @@ import {
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { NextIntlClientProvider } from 'next-intl'
 import ar from '../../../../../../public/messages/ar.json'
-import { settingsResponseFixture } from '../../../testing/settingsFixture'
+import {
+  allStylesSettingsFixture,
+  settingsResponseFixture,
+} from '../../../testing/settingsFixture'
 import { SettingsStandalonePage } from './SettingsStandalonePage'
 
 const nav = vi.hoisted(() => ({
@@ -564,5 +567,67 @@ describe('SettingsStandalonePage message tab', () => {
 
     expect(egyptian.getAttribute('aria-checked')).toBe('true')
     expect(preview().textContent).toContain('مستني تأكيدك')
+  })
+
+  describe('message styles come from the settings response', () => {
+    beforeEach(() => {
+      api.fetchSettings.mockResolvedValue(
+        allStylesSettingsFixture({ state: { source: standaloneSource } })
+      )
+    })
+
+    it('lists every style the API returns under its label', async () => {
+      renderPage()
+      await storeNameInput()
+      const labels = ar.settings.embedded.message.variantLabels
+
+      for (const name of [
+        labels.standard,
+        labels.egyptian,
+        labels.gulf,
+        labels.short,
+      ]) {
+        expect(
+          screen.getByRole('radio', { name: new RegExp(name) })
+        ).toBeTruthy()
+      }
+      // A style with no translation yet shows under its own id.
+      expect(screen.getByRole('radio', { name: /levantine/ })).toBeTruthy()
+
+      fireEvent.click(screen.getByRole('button', { name: 'الإنجليزية' }))
+
+      for (const name of [
+        labels.friendly,
+        labels.professional,
+        labels.direct,
+        labels.short,
+      ]) {
+        expect(
+          screen.getByRole('radio', { name: new RegExp(name) })
+        ).toBeTruthy()
+      }
+      expect(screen.queryByRole('radio', { name: /levantine/ })).toBeNull()
+    })
+
+    it('saves a style this app has no list entry for', async () => {
+      renderPage()
+      await storeNameInput()
+
+      const levantine = screen.getByRole('radio', { name: /levantine/ })
+      fireEvent.click(levantine)
+      expect(levantine.getAttribute('aria-checked')).toBe('true')
+      expect(preview().textContent).toContain('مرحبا levantine')
+
+      fireEvent.click(screen.getByRole('button', { name: 'حفظ' }))
+
+      await waitFor(() =>
+        expect(api.saveSettings).toHaveBeenCalledWith(
+          expect.objectContaining({
+            codTemplateArVariant: 'levantine',
+            codTemplateEnVariant: 'friendly',
+          })
+        )
+      )
+    })
   })
 })

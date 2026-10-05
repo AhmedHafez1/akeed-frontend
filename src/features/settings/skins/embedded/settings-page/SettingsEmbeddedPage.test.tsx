@@ -6,7 +6,10 @@ import enTranslations from '@shopify/polaris/locales/en.json'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { NextIntlClientProvider } from 'next-intl'
 import ar from '../../../../../../public/messages/ar.json'
-import { settingsResponseFixture } from '../../../testing/settingsFixture'
+import {
+  allStylesSettingsFixture,
+  settingsResponseFixture,
+} from '../../../testing/settingsFixture'
 import { SettingsEmbeddedPage } from './SettingsEmbeddedPage'
 
 const nav = vi.hoisted(() => ({
@@ -331,5 +334,44 @@ describe('SettingsEmbeddedPage', () => {
     renderPage('timing')
     await screen.findByText('ماذا يحدث مع كل طلب دفع عند الاستلام')
     expect(nav.replace).not.toHaveBeenCalled()
+  })
+
+  describe('message styles come from the settings response', () => {
+    beforeEach(() => {
+      api.fetchSettings.mockResolvedValue(allStylesSettingsFixture())
+    })
+
+    it('lists every Arabic style the API returns under its label', async () => {
+      renderPage()
+      await storeNameInput()
+      const labels = messageCopy.variantLabels
+
+      for (const name of [
+        labels.standard,
+        labels.egyptian,
+        labels.gulf,
+        labels.short,
+      ]) {
+        expect(screen.getByRole('radio', { name })).toBeTruthy()
+      }
+      // A style with no translation yet shows under its own id.
+      expect(screen.getByRole('radio', { name: 'levantine' })).toBeTruthy()
+    })
+
+    it('saves a style this app has no list entry for', async () => {
+      renderPage()
+      await storeNameInput()
+
+      fireEvent.click(screen.getByRole('radio', { name: 'levantine' }))
+      await act(async () => {
+        fireEvent.click(screen.getByText('حفظ'))
+      })
+
+      expect(api.saveSettings).toHaveBeenCalledTimes(1)
+      expect(api.saveSettings.mock.calls[0][0]).toMatchObject({
+        codTemplateArVariant: 'levantine',
+        codTemplateEnVariant: 'friendly',
+      })
+    })
   })
 })
