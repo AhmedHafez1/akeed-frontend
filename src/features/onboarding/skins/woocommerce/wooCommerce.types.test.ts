@@ -104,6 +104,110 @@ describe('WooCommerce messages (US-07-02)', () => {
   })
 })
 
+/**
+ * Every code `woocommerce.errors.ts` in the backend can answer with, as of
+ * the US-07-06 release gate. A code added there needs a row here, and with it
+ * a decision: its own message, or the default.
+ */
+const BACKEND_ERROR_CODES = [
+  'WOOCOMMERCE_CONNECT_UNAVAILABLE',
+  'WOOCOMMERCE_PILOT_REQUIRED',
+  'WOOCOMMERCE_SESSION_REQUIRED',
+  'WOOCOMMERCE_ROLE_REQUIRED',
+  'WOOCOMMERCE_SOURCE_EXISTS',
+  'WOOCOMMERCE_INSTALL_VALIDATION_FAILED',
+  'WOOCOMMERCE_INSTALL_CONTEXT_INVALID',
+  'WOOCOMMERCE_CALLBACK_INVALID',
+  'WOOCOMMERCE_PROVIDER_UNAVAILABLE',
+  'WOOCOMMERCE_STORE_URL_INVALID',
+  'WOOCOMMERCE_STORE_HTTPS_REQUIRED',
+  'WOOCOMMERCE_STORE_ADDRESS_NOT_PUBLIC',
+  'WOOCOMMERCE_STORE_REDIRECTS',
+  'WOOCOMMERCE_STORE_TLS_FAILED',
+  'WOOCOMMERCE_REST_NOT_FOUND',
+  'WOOCOMMERCE_REST_UNREACHABLE',
+  'WOOCOMMERCE_CREDENTIALS_REJECTED',
+  'WOOCOMMERCE_PERMISSION_DENIED',
+  'WOOCOMMERCE_STORE_URL_MISMATCH',
+  'WOOCOMMERCE_WEBHOOK_SETUP_FAILED',
+  'WOOCOMMERCE_STORE_UNAVAILABLE',
+  'WOOCOMMERCE_INGESTION_UNAVAILABLE',
+  'WOOCOMMERCE_WEBHOOK_UNAUTHORIZED',
+  'WOOCOMMERCE_NOT_CONNECTED',
+  'WOOCOMMERCE_RECONNECT_STORE_MISMATCH',
+  'WOOCOMMERCE_WEBHOOK_MISSING',
+  'WOOCOMMERCE_WEBHOOK_DISABLED',
+  'WOOCOMMERCE_WEBHOOK_PAUSED',
+  'WOOCOMMERCE_WEBHOOK_ENABLE_UNAVAILABLE',
+  'WOOCOMMERCE_WEBHOOK_ENABLE_FAILED',
+] as const
+
+/**
+ * Codes no merchant screen is ever told: the delivery address answers a
+ * store with them, the install callback answers the store, and a Shopify
+ * session has no WooCommerce screen. They show the localized default.
+ */
+const CODES_NO_SCREEN_RECEIVES = [
+  'WOOCOMMERCE_INGESTION_UNAVAILABLE',
+  'WOOCOMMERCE_INSTALL_CONTEXT_INVALID',
+  'WOOCOMMERCE_SESSION_REQUIRED',
+  'WOOCOMMERCE_WEBHOOK_UNAUTHORIZED',
+]
+
+describe('every WooCommerce error code, in both languages (US-07-06)', () => {
+  type Messages = typeof en.wooCommerceConnect
+
+  /** The message a merchant reads for a code, wherever the code can show. */
+  function messagesFor(code: string, messages: Messages): string[] {
+    const codes: Record<string, string> = messages.codes
+    const problems: Record<string, string> = messages.check.problems
+    const own = [
+      toWooCommerceErrorKey(code) === 'default' ? null : codes[code],
+      toWooCommerceCheckKey(code) === 'default' ? null : problems[code],
+    ].filter((text): text is string => typeof text === 'string')
+    return own.length > 0 ? own : [codes.default]
+  }
+
+  it('has a message of its own for every code a merchant can be shown', () => {
+    const withoutOne = BACKEND_ERROR_CODES.filter(
+      (code) =>
+        toWooCommerceErrorKey(code) === 'default' &&
+        toWooCommerceCheckKey(code) === 'default'
+    )
+
+    expect([...withoutOne].sort()).toEqual([...CODES_NO_SCREEN_RECEIVES].sort())
+  })
+
+  it.each(BACKEND_ERROR_CODES)(
+    '%s reads as a sentence in Arabic and in English, and not the same one',
+    (code) => {
+      const arabic = messagesFor(code, ar.wooCommerceConnect)
+      const english = messagesFor(code, en.wooCommerceConnect)
+
+      expect(arabic).toHaveLength(english.length)
+      for (const [index, text] of arabic.entries()) {
+        expect(text.trim()).not.toBe('')
+        expect(english[index].trim()).not.toBe('')
+        expect(text).not.toBe(english[index])
+        // A message is words, never the code itself.
+        expect(text).not.toContain('WOOCOMMERCE_')
+        expect(english[index]).not.toContain('WOOCOMMERCE_')
+        expect(text).toMatch(/[\u0600-\u06FF]/)
+      }
+    }
+  )
+
+  it('names no code the backend does not have', () => {
+    const backend: readonly string[] = BACKEND_ERROR_CODES
+
+    for (const code of [
+      ...WOOCOMMERCE_ERROR_CODES,
+      ...WOOCOMMERCE_CHECK_PROBLEMS,
+    ])
+      expect(backend, code).toContain(code)
+  })
+})
+
 describe('parseWooCommerceReturnHint', () => {
   it.each([
     ['?success=1&user_id=482910573629104', 'approved'],
