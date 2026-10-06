@@ -7,7 +7,10 @@ import { BlockStack, Layout, Page } from '@shopify/polaris'
 import { OnboardingPageSkeleton } from '@/shared/layout/skeletons'
 import { useAppBridgeLoading } from '@/shared/hooks/useAppBridgeLoading'
 import { useCooldown } from '@/shared/hooks/useCooldown'
-import { fillTemplatePreview } from '@/shared/lib/templatePreview'
+import {
+  fillTemplateLines,
+  templateReplyTone,
+} from '@/shared/lib/templateMessage'
 import {
   EasyOrdersConnectPage,
   LANGUAGE_OPTION_DEFINITIONS,
@@ -147,18 +150,18 @@ function EmbeddedOnboarding() {
       { style: 'currency', currency: sample.currency, maximumFractionDigits: 0 }
     ).format(Number(sample.total))
     return {
-      paragraphs: fillTemplatePreview(testState.preview, {
+      paragraphs: fillTemplateLines(testState.message, {
         customer: sample.customerName,
         store: sample.storeName || settings.storeName,
         order: sample.orderNumber,
         total,
       }),
-      buttons: [
-        { label: testState.preview.confirmButton, tone: 'confirm' as const },
-        { label: testState.preview.cancelButton, tone: 'cancel' as const },
-      ],
+      buttons: testState.message.buttons.map((label, index) => ({
+        label,
+        tone: templateReplyTone(index),
+      })),
       total,
-      dir: testState.language === 'ar' ? ('rtl' as const) : ('ltr' as const),
+      dir: testState.message.direction,
       timeLabel: formatTime(testState.test?.sentAt ?? new Date().toISOString()),
     }
   }, [formatTime, settings.storeName, testState])

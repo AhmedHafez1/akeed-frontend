@@ -13,7 +13,6 @@ import {
   Text,
 } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
-import type { MessageTemplatePreview } from '@/features/settings/api/settingsApi'
 import type { TestPhonePrompt } from '@/features/settings/domain/useTestPhonePrompt'
 import {
   buildPreviewLines,
@@ -24,6 +23,7 @@ import {
 } from '@/features/settings/domain/messagePreview'
 import { formatTemplatePreviewTimestamp } from '@/features/settings/skins/shared/templatePreview'
 import { formatPlanPrice } from '@/shared/lib/money'
+import type { TemplateMessage } from '@/shared/lib/templateMessage'
 import {
   InternationalPhoneInput,
   type E164Value,
@@ -33,7 +33,9 @@ import { SegmentedButtons } from './SegmentedButtons'
 interface MessagePreviewCardProps {
   language: 'ar' | 'en'
   onLanguageChange: (language: 'ar' | 'en') => void
-  template: MessageTemplatePreview
+  message: TemplateMessage
+  /** A note under the preview, for example how `auto` picks a style. */
+  note?: string
   storeName: string
   currency: string
   testSendPhone: string | null
@@ -48,7 +50,8 @@ interface MessagePreviewCardProps {
 export function MessagePreviewCard({
   language,
   onLanguageChange,
-  template,
+  message,
+  note,
   storeName,
   currency,
   testSendPhone,
@@ -64,7 +67,7 @@ export function MessagePreviewCard({
   const noteId = useId()
   // The test sends the saved settings, so the prompt waits for a clean form.
   const isPromptOpen = phonePrompt.isOpen && !isDirty
-  const lines = buildPreviewLines(template, {
+  const lines = buildPreviewLines(message, {
     customer: PREVIEW_CUSTOMER_NAMES[language],
     store: storeName.trim() || 'Akeed Store',
     order: PREVIEW_ORDER_NUMBER,
@@ -95,7 +98,7 @@ export function MessagePreviewCard({
           <div
             role="img"
             aria-label={t('previewAria', { language: languageName })}
-            dir={language === 'ar' ? 'rtl' : 'ltr'}
+            dir={message.direction}
             lang={language}
           >
             <Box
@@ -107,6 +110,11 @@ export function MessagePreviewCard({
             >
               <Box padding="400">
                 <BlockStack gap="150">
+                  {lines.length === 0 && (
+                    <Text as="p" tone="subdued">
+                      {t('previewEmpty')}
+                    </Text>
+                  )}
                   {lines.map((segments, index) => (
                     <Text as="p" key={index}>
                       {segments.map((segment, segmentIndex) =>
@@ -135,8 +143,8 @@ export function MessagePreviewCard({
                   </InlineStack>
                 </BlockStack>
               </Box>
-              {[template.confirmButton, template.cancelButton].map((label) => (
-                <Fragment key={label}>
+              {message.buttons.map((label, index) => (
+                <Fragment key={`${index}-${label}`}>
                   <Divider />
                   <Box padding="300">
                     <Text
@@ -153,6 +161,11 @@ export function MessagePreviewCard({
             </Box>
           </div>
         </Box>
+        {note && (
+          <Text as="p" variant="bodySm" tone="subdued">
+            {note}
+          </Text>
+        )}
 
         {canSendTest && (
           <BlockStack gap="100">

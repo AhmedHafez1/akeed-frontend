@@ -2,11 +2,11 @@
 
 import { fetchWithAuth } from '@/shared/lib/auth'
 import { getErrorMessage, parseJsonResponse } from '@/shared/lib/http'
+import type { TemplateMessage } from '@/shared/lib/templateMessage'
 import type {
   CompleteOnboardingSetupPayload,
   OnboardingClientEvent,
   OnboardingTestState,
-  OnboardingTestTemplatePreview,
   OnboardingBillingPlanConfig,
   OnboardingBillingPlanId,
   OnboardingBillingPlansResponse,
@@ -178,8 +178,8 @@ export async function skipOnboardingTest(): Promise<OnboardingTestState> {
 }
 
 export interface OnboardingTemplatePreviews {
-  ar: OnboardingTestTemplatePreview
-  en: OnboardingTestTemplatePreview
+  ar: TemplateMessage
+  en: TemplateMessage
 }
 
 /**
@@ -199,9 +199,9 @@ export async function fetchTemplatePreviews(): Promise<OnboardingTemplatePreview
   }
 
   const body = await parseJsonResponse<{
-    template: { previews: OnboardingTemplatePreviews }
+    template: { messages: OnboardingTemplatePreviews }
   }>(response)
-  return body.template.previews
+  return body.template.messages
 }
 
 /**

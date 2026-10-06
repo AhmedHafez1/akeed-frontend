@@ -77,6 +77,7 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
   const identityId = useId()
   const languageId = useId()
   const styleId = useId()
+  const reminderId = useId()
   const storeNameNoteId = useId()
   const [previewLanguage, setPreviewLanguage] = useState<'ar' | 'en'>(() =>
     initialPreviewLanguage(data)
@@ -106,8 +107,14 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
   const selectedDefinition =
     variants.find((variant) => variant.variant === selectedVariant) ??
     variants[0]
-  const template =
-    selectedDefinition?.preview ?? data.template.previews[previewLanguage]
+  const message =
+    selectedDefinition?.message ?? data.template.messages[previewLanguage]
+  // Arabic `auto` and the reminder are offered only while the backend says so.
+  const offersAuto =
+    previewLanguage === 'ar' && values.codTemplateArAuto !== undefined
+  const isAuto = offersAuto && values.codTemplateArAuto === true
+  const reminderVariants = data.template.reminder?.variants[previewLanguage]
+  const selectedReminder = values.codReminderVariants?.[previewLanguage] ?? null
 
   const storeNameError =
     model.errors.storeName === 'required'
@@ -141,6 +148,17 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
     model.update({
       codTemplateVariants: {
         ...values.codTemplateVariants,
+        [previewLanguage]: variant,
+      },
+      ...(offersAuto ? { codTemplateArAuto: false } : {}),
+    })
+  }
+
+  const handleReminderChange = (variant: string | null) => {
+    if (!values.codReminderVariants) return
+    model.update({
+      codReminderVariants: {
+        ...values.codReminderVariants,
         [previewLanguage]: variant,
       },
     })
@@ -235,10 +253,19 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
           })}
         >
           <AkChoiceGroup columns={2} aria-labelledby={styleId}>
+            {offersAuto && (
+              <AkChoiceCard
+                checked={isAuto}
+                onSelect={() => model.update({ codTemplateArAuto: true })}
+                disabled={readOnly}
+                title={templateStyleLabel(tShared, 'auto')}
+                description={tShared('autoStyleHelp')}
+              />
+            )}
             {variants.map((variant) => (
               <AkChoiceCard
                 key={variant.variant}
-                checked={variant.variant === selectedVariant}
+                checked={!isAuto && variant.variant === selectedVariant}
                 onSelect={() => handleVariantChange(variant.variant)}
                 disabled={readOnly}
                 title={templateStyleLabel(tShared, variant.variant)}
@@ -250,20 +277,53 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
                     </span>
                   )
                 }
-                description={templateOpeningLine(variant.preview, sample)}
-                descriptionDir={previewLanguage === 'ar' ? 'rtl' : 'ltr'}
+                description={templateOpeningLine(variant.message, sample)}
+                descriptionDir={variant.message.direction}
                 descriptionLang={previewLanguage}
               />
             ))}
           </AkChoiceGroup>
         </SettingsCard>
+
+        {reminderVariants && (
+          <SettingsCard
+            headingId={reminderId}
+            heading={tShared('reminderHeading')}
+            description={tShared('reminderHint', {
+              language: tShared(`languageNames.${previewLanguage}`),
+            })}
+          >
+            <AkChoiceGroup columns={2} aria-labelledby={reminderId}>
+              <AkChoiceCard
+                checked={selectedReminder === null}
+                onSelect={() => handleReminderChange(null)}
+                disabled={readOnly}
+                title={tShared('reminderSame')}
+                description={tShared('reminderSameHelp')}
+              />
+              {reminderVariants.map((variant) => (
+                <AkChoiceCard
+                  key={variant.variant}
+                  checked={variant.variant === selectedReminder}
+                  onSelect={() => handleReminderChange(variant.variant)}
+                  disabled={readOnly}
+                  title={templateStyleLabel(tShared, variant.variant)}
+                  description={templateOpeningLine(variant.message, sample)}
+                  descriptionDir={variant.message.direction}
+                  descriptionLang={previewLanguage}
+                />
+              ))}
+            </AkChoiceGroup>
+          </SettingsCard>
+        )}
       </div>
 
       <MessagePreviewPanel
         language={previewLanguage}
         onLanguageChange={setPreviewLanguage}
-        template={template}
+        message={message}
         sample={sample}
+        note={isAuto ? tShared('autoStylePreviewNote') : undefined}
         testSendPhone={data.state.merchantWhatsappPhone ?? null}
         testSendLanguage={data.state.testSendLanguage ?? previewLanguage}
         canSendTest={!readOnly}

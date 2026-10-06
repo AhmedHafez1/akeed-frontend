@@ -13,7 +13,8 @@
     "accessError": "Unable to verify access",
     "accessRequiredBody": "Your account is signed in but is not authorized for the Akeed control tower.",
     "accessErrorBody": "Try again. If the problem continues, share the request ID with the team.",
-    "requestId": "Request ID: {id}"
+    "requestId": "Request ID: {id}",
+    "messageTexts": "Message texts"
   },
   "adminTemplates": {
     "eyebrow": "WhatsApp templates",
@@ -57,7 +58,8 @@
       "unknown": "Unknown"
     },
     "purpose": {
-      "cod_confirmation": "COD confirmation"
+      "cod_confirmation": "COD confirmation",
+      "cod_reminder": "COD reminder"
     },
     "sendPurpose": {
       "initial": "First message",
@@ -303,7 +305,9 @@
       "WHATSAPP_TEMPLATE_NOT_APPROVED": "Only a template Meta has approved can be activated or made the default.",
       "WHATSAPP_TEMPLATE_NOT_ACTIVE": "Only an active template can be the default.",
       "WHATSAPP_TEMPLATE_REPLACEMENT_REQUIRED": "Stores send this template, or it is a language default. Choose a replacement.",
-      "WHATSAPP_TEMPLATE_REPLACEMENT_INVALID": "The replacement must be an approved, active template of the same purpose and language."
+      "WHATSAPP_TEMPLATE_REPLACEMENT_INVALID": "The replacement must be an approved, active template of the same purpose and language.",
+      "WHATSAPP_MESSAGE_TEXT_CONFLICT": "Another operator saved this text at the same time. Reload and try again.",
+      "WHATSAPP_MESSAGE_TEXT_INVALID": "This text does not meet the rules for its purpose."
     },
     "environment": {
       "production": "Production",
@@ -1757,7 +1761,8 @@
         "senderName": "Akeed",
         "senderStatus": "Business account",
         "avatarAlt": "Akeed",
-        "today": "Today"
+        "today": "Today",
+        "previewError": "We couldn't load the message preview. Your settings still save."
       }
     },
     "success": {
@@ -2826,7 +2831,8 @@
           "friendly": "Friendly",
           "professional": "Professional",
           "direct": "Direct",
-          "short": "Short"
+          "short": "Short",
+          "auto": "Automatic by country"
         },
         "previewHeading": "Preview",
         "previewLanguageGroup": "Preview language",
@@ -2848,7 +2854,14 @@
           "cancel": "Cancel",
           "close": "Close"
         },
-        "templatesNote": "Templates are approved by WhatsApp, so only the style and language change."
+        "templatesNote": "Templates are approved by WhatsApp, so only the style and language change.",
+        "autoStyleHelp": "Egyptian for numbers starting +20, Gulf for Saudi Arabia, the UAE, Bahrain, Qatar, Kuwait and Oman, and Modern Standard for other Arabic numbers.",
+        "autoStylePreviewNote": "The preview shows your saved style. With Automatic, each customer gets the style of their country.",
+        "reminderHeading": "Reminder message",
+        "reminderHint": "Sent to customers who haven't replied yet. These are the {language} reminders; switch the preview language to edit the other.",
+        "reminderSame": "Same as the first message",
+        "reminderSameHelp": "The reminder repeats your first message.",
+        "previewEmpty": "This message has no text to preview yet."
       },
       "timing": {
         "timelineHeading": "What happens with each COD order",
@@ -4504,6 +4517,69 @@
       "connected": "Akeed is connected to {store}.",
       "refused": "Akeed could not connect to {store}.",
       "disconnected": "Akeed is disconnected from {store}."
+    }
+  },
+  "adminMessageTexts": {
+    "eyebrow": "WhatsApp",
+    "title": "Message texts",
+    "description": "Free-form replies Akeed sends inside the customer service window, and the words used for a missing name. They need no WhatsApp review and change as soon as you save.",
+    "loading": "Loading message texts…",
+    "save": "Save",
+    "saving": "Saving…",
+    "refused": "This text was not saved",
+    "existingLabel": "{language} · {style}",
+    "addTitle": "Add a text",
+    "switchOn": "Switch on",
+    "switchOff": "Switch off",
+    "change": {
+      "create": "Saved.",
+      "update": "Saved.",
+      "unchanged": "Nothing changed."
+    },
+    "fields": {
+      "purpose": "What it is for",
+      "language": "Language",
+      "style": "Style",
+      "body": "Text",
+      "active": "Active"
+    },
+    "languages": {
+      "ar": "Arabic",
+      "en": "English"
+    },
+    "empty": {
+      "title": "No texts yet",
+      "description": "Add a text for each purpose and language before turning its switch on."
+    },
+    "purposes": {
+      "ack_confirmed": {
+        "title": "After a customer confirms",
+        "help": "Sent once after the customer confirms. Placeholders: '{{order}}', '{{store}}'."
+      },
+      "ack_canceled": {
+        "title": "After a customer cancels",
+        "help": "Sent once after the customer cancels. Placeholders: '{{order}}', '{{store}}'."
+      },
+      "unresolved_reply_nudge": {
+        "title": "Nudge after an unreadable reply",
+        "help": "Sent once when a typed reply could not be read as an answer. Placeholders: '{{order}}', '{{store}}'."
+      },
+      "fallback_customer_name": {
+        "title": "Word for a missing customer name",
+        "help": "Used in place of the customer's name. One short line, no placeholders, style default only."
+      },
+      "fallback_store_name": {
+        "title": "Word for a missing store name",
+        "help": "Used in place of the store's name. Never Akeed's own name. One short line, no placeholders, style default only."
+      }
+    },
+    "rules": {
+      "body_empty": "Write the text first.",
+      "variable_not_allowed": "This text uses a placeholder its purpose does not allow.",
+      "variable_malformed": "A placeholder is not closed. Write it as '{{order}}' or '{{store}}'.",
+      "fallback_too_long": "A name word can be at most 60 characters.",
+      "fallback_default_style_only": "A name word uses the default style only.",
+      "fallback_single_line": "A name word must be one line."
     }
   }
 }

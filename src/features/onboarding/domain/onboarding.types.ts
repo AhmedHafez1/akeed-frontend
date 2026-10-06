@@ -1,3 +1,5 @@
+import type { TemplateMessage } from '@/shared/lib/templateMessage'
+
 export interface BillingManagement {
   mode: 'shopify' | 'manual'
   canManageBilling: boolean
@@ -174,20 +176,12 @@ export interface OnboardingTestAttempt {
   canceledAt: string | null
 }
 
-export interface OnboardingTestTemplatePreview {
-  greeting: string
-  body: string
-  totalLabel: string
-  ending: string
-  confirmButton: string
-  cancelButton: string
-}
-
 /** GET/POST /api/onboarding/test: everything the test step renders. */
 export interface OnboardingTestState {
   phone: string | null
   language: 'ar' | 'en'
-  preview: OnboardingTestTemplatePreview
+  /** The test's message: what the merchant's phone receives. */
+  message: TemplateMessage
   sample: {
     customerName: string
     orderNumber: string
@@ -220,6 +214,11 @@ export interface OnboardingSettingsPayload {
   sendDelayMinutes?: number
   codTemplateArVariant?: ArabicCodTemplateVariantId
   codTemplateEnVariant?: EnglishCodTemplateVariantId
+  /** A reminder style, or null for "same as the first message". */
+  codReminderArVariant?: string | null
+  codReminderEnVariant?: string | null
+  /** The Arabic style follows the customer's country. */
+  codTemplateArAuto?: boolean
   merchantWhatsappPhone?: string
 }
 

@@ -6,6 +6,7 @@ import {
   BarChart3,
   LogOut,
   MessageSquareText,
+  MessagesSquare,
   Store,
   Users,
 } from 'lucide-react'
@@ -36,6 +37,11 @@ export function AdminShell({ children }: AdminShellProps) {
       href: `/${locale}/admin/templates`,
       label: t('templates'),
       icon: MessageSquareText,
+    },
+    {
+      href: `/${locale}/admin/message-texts`,
+      label: t('messageTexts'),
+      icon: MessagesSquare,
     },
   ]
 

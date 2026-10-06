@@ -1,13 +1,17 @@
+import { templateMessageFixture } from '@/shared/lib/templateMessageFixture'
 import type { SettingsResponse } from '../api/settingsApi'
 
-const preview = (greeting: string, body: string, confirm: string) => ({
-  greeting,
-  body,
-  totalLabel: 'Total: {{total}}',
-  ending: '',
-  confirmButton: confirm,
-  cancelButton: 'Cancel',
-})
+const message = (
+  greeting: string,
+  body: string,
+  confirm: string,
+  direction: 'rtl' | 'ltr' = 'ltr'
+) =>
+  templateMessageFixture(
+    [greeting, body, 'Total: {{total}}'],
+    [confirm, 'Cancel'],
+    { direction }
+  )
 
 const style = (
   language: 'ar' | 'en',
@@ -19,7 +23,12 @@ const style = (
   metaTemplateName: `template_${variant}`,
   metaLanguageCode: language,
   bodyParameterOrder: ['customer', 'store', 'order', 'total'],
-  preview: preview(greeting, `${variant} #{{order}}`, 'OK'),
+  message: message(
+    greeting,
+    `${variant} #{{order}}`,
+    'OK',
+    language === 'ar' ? 'rtl' : 'ltr'
+  ),
 })
 
 /** The style ids the registry is seeded with, per language. */
@@ -147,10 +156,11 @@ export function settingsResponseFixture(
             metaTemplateName: 'akeed_cod_verification_friendly',
             metaLanguageCode: 'ar',
             bodyParameterOrder: ['customer', 'store', 'order', 'total'],
-            preview: preview(
+            message: message(
               'أهلًا بك {{customer}} 👋',
               'شكرًا لتسوّقك من {{store}}. طلبك رقم #{{order}} جاهز.',
-              'تأكيد الطلب'
+              'تأكيد الطلب',
+              'rtl'
             ),
           },
           {
@@ -159,10 +169,11 @@ export function settingsResponseFixture(
             metaTemplateName: 'akeed_cod_verification_direct_eg',
             metaLanguageCode: 'ar_EG',
             bodyParameterOrder: ['customer', 'order', 'store', 'total'],
-            preview: preview(
+            message: message(
               'أهلًا {{customer}}،',
               'طلبك رقم #{{order}} من {{store}} مستني تأكيدك.',
-              'تأكيد وشحن'
+              'تأكيد وشحن',
+              'rtl'
             ),
           },
         ],
@@ -173,7 +184,7 @@ export function settingsResponseFixture(
             metaTemplateName: 'akeed_cod_verification_friendly',
             metaLanguageCode: 'en',
             bodyParameterOrder: ['customer', 'store', 'order', 'total'],
-            preview: preview(
+            message: message(
               'Hi {{customer}}! 👋',
               'Thank you for shopping with {{store}}.',
               'Confirm Order'
@@ -181,9 +192,9 @@ export function settingsResponseFixture(
           },
         ],
       },
-      previews: {
-        ar: preview('أهلًا بك {{customer}}', 'شكرًا', 'تأكيد الطلب'),
-        en: preview('Hi {{customer}}!', 'Thanks', 'Confirm Order'),
+      messages: {
+        ar: message('أهلًا بك {{customer}}', 'شكرًا', 'تأكيد الطلب', 'rtl'),
+        en: message('Hi {{customer}}!', 'Thanks', 'Confirm Order'),
       },
     },
   }

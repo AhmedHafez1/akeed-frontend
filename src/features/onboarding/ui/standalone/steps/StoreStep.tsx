@@ -296,14 +296,13 @@ export function StoreStep({
         <p className="text-ink-muted mb-4 text-center text-sm font-medium">
           {t('preview.label')}
         </p>
-        {!previews.isError && (
-          <MessagePhonePreview
-            template={previews.data?.[previewLanguage] ?? null}
-            language={previewLanguage}
-            storeName={form.storeName}
-            currency={form.currency}
-          />
-        )}
+        <MessagePhonePreview
+          message={previews.data?.[previewLanguage] ?? null}
+          isError={previews.isError}
+          language={previewLanguage}
+          storeName={form.storeName}
+          currency={form.currency}
+        />
       </aside>
     </div>
   )

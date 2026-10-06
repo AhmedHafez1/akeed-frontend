@@ -14,6 +14,7 @@ import {
   allStylesSettingsFixture,
   settingsResponseFixture,
 } from '../../../testing/settingsFixture'
+import { templateMessageFixture } from '@/shared/lib/templateMessageFixture'
 import { SettingsStandalonePage } from './SettingsStandalonePage'
 
 const nav = vi.hoisted(() => ({
@@ -629,5 +630,162 @@ describe('SettingsStandalonePage message tab', () => {
         )
       )
     })
+  })
+})
+
+describe('SettingsStandalonePage message improvements (US-08-07)', () => {
+  const messageCopy = ar.settings.embedded.message
+  const reminder = (variant: string, line: string) => ({
+    language: 'ar' as const,
+    variant,
+    metaTemplateName: `akeed_cod_reminder_${variant}`,
+    metaLanguageCode: 'ar',
+    bodyParameterOrder: ['customer', 'order', 'store', 'total'] as Array<
+      'customer' | 'store' | 'order' | 'total'
+    >,
+    message: templateMessageFixture([line], ['تأكيد', 'إلغاء'], {
+      direction: 'rtl',
+    }),
+  })
+
+  function offered() {
+    const response = settingsResponseFixture({
+      state: { source: standaloneSource },
+    })
+    return {
+      ...response,
+      template: {
+        ...response.template,
+        reminder: {
+          selected: { ar: null, en: null },
+          variants: {
+            ar: [reminder('gulf_v1', 'تذكير {{customer}} بطلب #{{order}}')],
+            en: [],
+          },
+        },
+        arabicAuto: { selected: false },
+      },
+    }
+  }
+
+  it('offers neither choice unless the response does, and saves neither', async () => {
+    renderPage()
+    fireEvent.change(await storeNameInput(), { target: { value: 'متجر نور' } })
+
+    expect(
+      screen.queryByRole('radio', {
+        name: new RegExp(messageCopy.reminderSame),
+      })
+    ).toBeNull()
+    expect(
+      screen.queryByRole('radio', {
+        name: new RegExp(messageCopy.variantLabels.auto),
+      })
+    ).toBeNull()
+
+    fireEvent.click(screen.getByRole('button', { name: 'حفظ' }))
+    await waitFor(() => expect(api.saveSettings).toHaveBeenCalled())
+    const [payload] = api.saveSettings.mock.calls[0] as [
+      Record<string, unknown>,
+    ]
+    expect(payload).not.toHaveProperty('codReminderArVariant')
+    expect(payload).not.toHaveProperty('codTemplateArAuto')
+  })
+
+  it('picks the automatic Arabic style and saves it, keeping the saved style', async () => {
+    api.fetchSettings.mockResolvedValue(offered())
+    renderPage()
+    await storeNameInput()
+
+    const auto = screen.getByRole('radio', {
+      name: new RegExp(messageCopy.variantLabels.auto),
+    })
+    fireEvent.click(auto)
+    expect(auto.getAttribute('aria-checked')).toBe('true')
+    expect(
+      screen.getByRole('radio', { name: /^فصحى/ }).getAttribute('aria-checked')
+    ).toBe('false')
+    expect(screen.getByText(messageCopy.autoStylePreviewNote)).toBeTruthy()
+
+    fireEvent.click(screen.getByRole('button', { name: 'حفظ' }))
+    await waitFor(() =>
+      expect(api.saveSettings).toHaveBeenCalledWith(
+        expect.objectContaining({
+          codTemplateArAuto: true,
+          codTemplateArVariant: 'standard',
+          codReminderArVariant: null,
+          codReminderEnVariant: null,
+        })
+      )
+    )
+  })
+
+  it('offers no automatic style for English', async () => {
+    api.fetchSettings.mockResolvedValue(offered())
+    renderPage()
+    await storeNameInput()
+    fireEvent.click(screen.getByRole('button', { name: 'الإنجليزية' }))
+    expect(
+      screen.queryByRole('radio', {
+        name: new RegExp(messageCopy.variantLabels.auto),
+      })
+    ).toBeNull()
+  })
+
+  it('picks a reminder style, then same as the first message again', async () => {
+    api.fetchSettings.mockResolvedValue(offered())
+    renderPage()
+    await storeNameInput()
+
+    const same = screen.getByRole('radio', {
+      name: new RegExp(messageCopy.reminderSame),
+    })
+    expect(same.getAttribute('aria-checked')).toBe('true')
+    const gulf = screen.getByRole('radio', { name: /خليجي 1/ })
+    expect(within(gulf).getByText(/تذكير أحمد بطلب #1009/)).toBeTruthy()
+    fireEvent.click(gulf)
+    expect(gulf.getAttribute('aria-checked')).toBe('true')
+
+    fireEvent.click(screen.getByRole('button', { name: 'حفظ' }))
+    await waitFor(() =>
+      expect(api.saveSettings).toHaveBeenCalledWith(
+        expect.objectContaining({ codReminderArVariant: 'gulf_v1' })
+      )
+    )
+  })
+
+  it('renders a message read from Meta like any other, with its own replies', async () => {
+    const response = settingsResponseFixture({
+      state: { source: standaloneSource },
+    })
+    response.template.variants.ar[0].message = templateMessageFixture(
+      ['هلا {{customer}}، طلبك #{{order}} من {{store}}'],
+      ['نعم', 'لا'],
+      { direction: 'rtl', source: 'provider' }
+    )
+    api.fetchSettings.mockResolvedValue(response)
+    renderPage()
+    await storeNameInput()
+
+    expect(preview().textContent).toContain('هلا أحمد، طلبك')
+    expect(within(preview()).getByText('#1009').getAttribute('dir')).toBe('ltr')
+    expect(within(preview()).getByText('نعم')).toBeTruthy()
+    expect(within(preview()).getByText('لا')).toBeTruthy()
+  })
+
+  it('says so when a message has no text', async () => {
+    const response = settingsResponseFixture({
+      state: { source: standaloneSource },
+    })
+    response.template.variants.ar[0].message = templateMessageFixture(
+      [],
+      ['تأكيد', 'إلغاء'],
+      { direction: 'rtl' }
+    )
+    api.fetchSettings.mockResolvedValue(response)
+    renderPage()
+    await storeNameInput()
+
+    expect(within(preview()).getByText(messageCopy.previewEmpty)).toBeTruthy()
   })
 })

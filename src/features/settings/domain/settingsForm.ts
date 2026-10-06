@@ -38,6 +38,13 @@ export interface SettingsFormValues {
     ar: ArabicCodTemplateVariantId
     en: EnglishCodTemplateVariantId
   }
+  /**
+   * The reminder style per language, null for "same as the first message".
+   * Absent while the backend does not offer reminders, so it is never sent.
+   */
+  codReminderVariants?: { ar: string | null; en: string | null }
+  /** Arabic style by country. Absent while the backend does not offer it. */
+  codTemplateArAuto?: boolean
   isAutoVerifyEnabled: boolean
   sendDelayChoice: SendDelayChoice
   sendDelayCustom: string
@@ -61,6 +68,12 @@ export function formFromSettings(
     storeName: state.storeName ?? '',
     defaultLanguage: state.defaultLanguage,
     codTemplateVariants: { ...template.selected },
+    ...(template.reminder
+      ? { codReminderVariants: { ...template.reminder.selected } }
+      : {}),
+    ...(template.arabicAuto
+      ? { codTemplateArAuto: template.arabicAuto.selected }
+      : {}),
     isAutoVerifyEnabled: state.isAutoVerifyEnabled,
     sendDelayChoice: sendDelayChoiceFor(state.sendDelayMinutes),
     sendDelayCustom: String(state.sendDelayMinutes),
@@ -135,6 +148,15 @@ export function toSettingsPayload(
     assumeCodWhenPaymentMissing: values.assumeCodWhenPaymentMissing,
     codTemplateArVariant: values.codTemplateVariants.ar,
     codTemplateEnVariant: values.codTemplateVariants.en,
+    ...(values.codReminderVariants
+      ? {
+          codReminderArVariant: values.codReminderVariants.ar,
+          codReminderEnVariant: values.codReminderVariants.en,
+        }
+      : {}),
+    ...(values.codTemplateArAuto === undefined
+      ? {}
+      : { codTemplateArAuto: values.codTemplateArAuto }),
     sendDelayMinutes: resolvedSendDelayMinutes(values) ?? undefined,
     followUpEnabled: values.followUpEnabled,
     followUpDelayMinutes: values.followUpDelayMinutes,
@@ -156,6 +178,9 @@ const MESSAGE_TAB_FIELDS = [
   'defaultLanguage',
   'codTemplateArVariant',
   'codTemplateEnVariant',
+  'codReminderArVariant',
+  'codReminderEnVariant',
+  'codTemplateArAuto',
 ] as const satisfies ReadonlyArray<keyof OnboardingSettingsPayload>
 
 /** The standalone Store tab; the embedded app has no control for it. */

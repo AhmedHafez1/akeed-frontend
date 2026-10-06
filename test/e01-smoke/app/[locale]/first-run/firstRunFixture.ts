@@ -3,6 +3,7 @@ import type {
   OnboardingTestAttempt,
   OnboardingTestState,
 } from '@/features/onboarding/domain/onboarding.types'
+import { templateMessageFixture } from '@/shared/lib/templateMessageFixture'
 
 /*
  * In-memory backend for the standalone dashboard first-run fixture
@@ -45,14 +46,16 @@ function testState(): OnboardingTestState {
   return {
     phone: PHONE,
     language: 'ar',
-    preview: {
-      greeting: 'أهلًا بك {{customer}}',
-      body: 'شكرًا لتسوّقك من {{store}}. طلبك رقم {{order}} بقيمة {{total}} جاهز تقريبًا للشحن.',
-      totalLabel: 'إجمالي الطلب: {{total}}',
-      ending: 'يرجى تأكيد الطلب لنتمكن من إرساله إليك بأسرع وقت.',
-      confirmButton: 'تأكيد الطلب',
-      cancelButton: 'إلغاء الطلب',
-    },
+    message: templateMessageFixture(
+      [
+        'أهلًا بك {{customer}}',
+        'شكرًا لتسوّقك من {{store}}. طلبك رقم {{order}} بقيمة {{total}} جاهز تقريبًا للشحن.',
+        'إجمالي الطلب: {{total}}',
+        'يرجى تأكيد الطلب لنتمكن من إرساله إليك بأسرع وقت.',
+      ],
+      ['تأكيد الطلب', 'إلغاء الطلب'],
+      { direction: 'rtl' }
+    ),
     sample: {
       customerName: 'أحمد',
       orderNumber: 'TEST-1',

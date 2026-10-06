@@ -251,7 +251,7 @@ export function TestStep({
 
         <MessagePhonePreview
           className="hidden lg:block"
-          template={null}
+          message={null}
           language="ar"
           storeName={storeName}
           currency="EGP"
@@ -369,7 +369,7 @@ export function TestStep({
 
       <MessagePhonePreview
         className="hidden lg:block"
-        template={testState?.preview ?? null}
+        message={testState?.message ?? null}
         language={testState?.language ?? 'ar'}
         storeName={testState?.sample.storeName || storeName}
         currency={testState?.sample.currency ?? 'EGP'}

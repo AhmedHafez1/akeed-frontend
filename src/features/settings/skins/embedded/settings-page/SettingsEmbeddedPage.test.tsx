@@ -1,6 +1,13 @@
 import type { ReactNode } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react'
 import { AppProvider } from '@shopify/polaris'
 import enTranslations from '@shopify/polaris/locales/en.json'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -10,6 +17,7 @@ import {
   allStylesSettingsFixture,
   settingsResponseFixture,
 } from '../../../testing/settingsFixture'
+import { templateMessageFixture } from '@/shared/lib/templateMessageFixture'
 import { SettingsEmbeddedPage } from './SettingsEmbeddedPage'
 
 const nav = vi.hoisted(() => ({
@@ -373,5 +381,112 @@ describe('SettingsEmbeddedPage', () => {
         codTemplateEnVariant: 'friendly',
       })
     })
+  })
+})
+
+describe('SettingsEmbeddedPage message improvements (US-08-07)', () => {
+  function offered() {
+    const response = settingsResponseFixture()
+    return {
+      ...response,
+      template: {
+        ...response.template,
+        reminder: {
+          selected: { ar: 'gulf_v1', en: null },
+          variants: {
+            ar: [
+              {
+                language: 'ar' as const,
+                variant: 'gulf_v1',
+                metaTemplateName: 'akeed_cod_reminder_gulf_v1',
+                metaLanguageCode: 'ar',
+                bodyParameterOrder: ['order'] as Array<
+                  'customer' | 'store' | 'order' | 'total'
+                >,
+                message: templateMessageFixture(
+                  ['تذكير بطلب #{{order}}'],
+                  ['تأكيد', 'إلغاء'],
+                  { direction: 'rtl' }
+                ),
+              },
+            ],
+            en: [],
+          },
+        },
+        arabicAuto: { selected: true },
+      },
+    }
+  }
+
+  it('offers neither choice unless the response does', async () => {
+    renderPage()
+    await storeNameInput()
+    expect(
+      screen.queryByRole('radio', { name: messageCopy.variantLabels.auto })
+    ).toBeNull()
+    expect(
+      screen.queryByRole('radio', { name: messageCopy.reminderSame })
+    ).toBeNull()
+  })
+
+  it('reads the saved choices, and saves a change back', async () => {
+    api.fetchSettings.mockResolvedValue(offered())
+    renderPage()
+    await storeNameInput()
+
+    const auto = screen.getByRole('radio', {
+      name: messageCopy.variantLabels.auto,
+    }) as HTMLInputElement
+    expect(auto.checked).toBe(true)
+    expect(screen.getByText(messageCopy.autoStylePreviewNote)).toBeTruthy()
+    const reminder = screen.getByRole('radio', {
+      name: 'خليجي 1',
+    }) as HTMLInputElement
+    expect(reminder.checked).toBe(true)
+
+    fireEvent.click(
+      screen.getByRole('radio', { name: messageCopy.reminderSame })
+    )
+    fireEvent.click(
+      screen.getByRole('radio', { name: messageCopy.variantLabels.egyptian })
+    )
+    await act(async () => {
+      fireEvent.click(screen.getByText('حفظ'))
+    })
+
+    expect(api.saveSettings.mock.calls[0][0]).toMatchObject({
+      codTemplateArVariant: 'egyptian',
+      codTemplateArAuto: false,
+      codReminderArVariant: null,
+      codReminderEnVariant: null,
+    })
+  })
+
+  it('renders the message lines and their own replies, or says it is empty', async () => {
+    const response = settingsResponseFixture()
+    response.template.variants.ar[0].message = templateMessageFixture(
+      ['هلا {{customer}}، طلبك #{{order}}'],
+      ['نعم', 'لا'],
+      { direction: 'rtl', source: 'provider' }
+    )
+    api.fetchSettings.mockResolvedValue(response)
+    const view = renderPage()
+    await storeNameInput()
+    const bubble = screen.getByRole('img')
+    expect(bubble.textContent).toContain('هلا أحمد، طلبك')
+    expect(within(bubble).getByText('نعم')).toBeTruthy()
+    view.unmount()
+
+    response.template.variants.ar[0].message = templateMessageFixture(
+      [],
+      ['نعم', 'لا'],
+      { direction: 'rtl' }
+    )
+    api.fetchSettings.mockResolvedValue(response)
+    renderPage()
+    await storeNameInput()
+    expect(
+      within(screen.getByRole('img')).getByText(messageCopy.previewEmpty)
+    ).toBeTruthy()
   })
 })
