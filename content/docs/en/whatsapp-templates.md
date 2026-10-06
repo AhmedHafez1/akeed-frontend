@@ -30,14 +30,14 @@ Akeed supports Arabic and English templates with multiple styles.
 
 | Language | Available styles |
 | --- | --- |
-| Arabic | Standard, Egyptian, Gulf, Short |
+| Arabic | Modern Standard, Egyptian, Gulf, Short |
 | English | Friendly, Professional, Direct, Short |
 
 ## How To Choose the Right Style
 
 ### Arabic stores (general)
 
-Start with **Standard**.
+Start with **Modern Standard**.
 
 ### Egyptian-heavy customer base
 
@@ -51,6 +51,10 @@ Try **Gulf**.
 
 Try **Short** for quicker scanning and faster replies.
 
+### Arabic customers from several countries
+
+If your settings offer **Automatic by country**, choose it to let the customer's phone number decide: Egyptian for numbers starting +20, Gulf for Saudi Arabia, the UAE, Bahrain, Qatar, Kuwait and Oman, and Modern Standard for other Arabic numbers.
+
 ### English audiences
 
 - **Friendly**: conversational tone.
@@ -58,7 +62,11 @@ Try **Short** for quicker scanning and faster replies.
 - **Direct**: concise and action-first.
 
 > [!INFO]
-> If you are unsure, start with Standard (Arabic) and Friendly (English), then optimize based on response metrics.
+> If you are unsure, start with Modern Standard (Arabic) and Friendly (English), then optimize based on response metrics.
+
+## Reminder Message
+
+Customers who have not replied get a reminder. Where your settings show a **Reminder message** section, you can pick a separate reminder style for each language. **Same as the first message** repeats your first message, which is also what happens when you choose nothing.
 
 ## Best Practices for Better Replies
 
@@ -125,6 +133,6 @@ Only when data suggests improvement potential. Frequent random changes make perf
 
 ### Where can I preview template output?
 
-Use the message preview section in settings.
+In Settings, on the message tab. The preview shows the approved WhatsApp text for the style you choose, filled with sample values. With **Automatic by country**, it shows your saved style; each customer gets the style of their country. If a style has no text to show yet, the preview says so.
 
 See also: [Automation Rules](/docs/automation-rules)
