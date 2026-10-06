@@ -1,11 +1,13 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { AdminApiError } from './adminApi'
+import { getTemplateImpact } from './adminTemplateDraftsApi'
 import { getAdminTemplate, sendAdminTemplateTest } from './adminTemplatesApi'
 import {
   renderAdmin,
   templateContext,
   templateDetail,
+  templateImpact,
   templateSummary,
 } from './adminTemplatesTestUtils'
 import { TemplateDetailAdminPage } from './TemplateDetailAdminPage'
@@ -16,6 +18,20 @@ vi.mock('./adminTemplatesApi', () => ({
   getAdminTemplate: vi.fn(),
   runAdminTemplateSync: vi.fn(),
   sendAdminTemplateTest: vi.fn(),
+}))
+
+vi.mock('./adminTemplateDraftsApi', () => ({
+  getTemplateDrafts: vi.fn(),
+  getTemplateDraft: vi.fn(),
+  checkTemplateDraft: vi.fn(),
+  createTemplateDraft: vi.fn(),
+  updateTemplateDraft: vi.fn(),
+  discardTemplateDraft: vi.fn(),
+  submitTemplateDraft: vi.fn(),
+  reconcileTemplateDraft: vi.fn(),
+  getTemplateImpact: vi.fn(),
+  editTemplateText: vi.fn(),
+  runTemplateAction: vi.fn(),
 }))
 
 const AR_KEY = 'cod_confirm.ar.standard'
@@ -79,6 +95,10 @@ function bubble(text: string): HTMLElement {
 beforeEach(() => {
   vi.clearAllMocks()
   vi.spyOn(console, 'error').mockImplementation(() => undefined)
+  // The actions panel has its own spec; here it stays unloaded.
+  vi.mocked(getTemplateImpact).mockImplementation(
+    () => new Promise<never>(() => undefined)
+  )
 })
 
 describe('TemplateDetailAdminPage', () => {
@@ -588,15 +608,42 @@ describe('TemplateDetailAdminPage', () => {
     expect(await screen.findByText('Please confirm your order.')).toBeTruthy()
   })
 
-  it('has no control that edits the template', async () => {
-    show(positionalDetail(), 'en')
+  it('has no control that changes the template for staff who are not operators', async () => {
+    vi.mocked(getTemplateImpact).mockResolvedValue(
+      templateImpact({ key: EN_SHORT })
+    )
+    show(
+      positionalDetail({
+        ...templateContext({
+          operations: {
+            enabled: true,
+            operator: false,
+            test_send_available: false,
+          },
+        }),
+      }),
+      'en'
+    )
     await screen.findByText('Please confirm your order.')
+    await screen.findByText('12 stores select this template (11 active).')
+
+    expect(
+      screen.getAllByRole('button').map((button) => button.textContent)
+    ).toEqual(['Refresh'])
+  })
+
+  it('offers an operator the actions the template state allows', async () => {
+    vi.mocked(getTemplateImpact).mockResolvedValue(
+      templateImpact({ key: EN_SHORT })
+    )
+    show(positionalDetail(), 'en')
+    await screen.findByRole('button', { name: 'Retire' })
 
     expect(
       screen
         .getAllByRole('button')
         .map((button) => button.textContent)
         .sort()
-    ).toEqual(['Refresh', 'Send test'])
+    ).toEqual(['Deactivate', 'Make default', 'Refresh', 'Retire', 'Send test'])
   })
 })

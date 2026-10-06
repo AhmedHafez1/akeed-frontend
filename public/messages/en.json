@@ -286,7 +286,254 @@
       "WHATSAPP_TEMPLATE_TEST_PHONE_NOT_ALLOWED": "This number is not on the staff test list.",
       "WHATSAPP_TEMPLATE_TEST_COOLDOWN": "Wait a few seconds before sending another test.",
       "WHATSAPP_TEMPLATE_TEST_DAILY_LIMIT": "You reached today's limit for test messages.",
-      "WHATSAPP_TEMPLATE_TEST_SEND_FAILED": "WhatsApp did not accept the test message."
+      "WHATSAPP_TEMPLATE_TEST_SEND_FAILED": "WhatsApp did not accept the test message.",
+      "WHATSAPP_TEMPLATE_DRAFT_NOT_FOUND": "No draft has this ID.",
+      "WHATSAPP_TEMPLATE_DRAFT_NOT_EDITABLE": "This draft was submitted and can no longer be changed here.",
+      "WHATSAPP_TEMPLATE_DRAFT_NAME_TAKEN": "Another template already has this name and language. Reload and try again.",
+      "WHATSAPP_TEMPLATE_DRAFT_INVALID": "The text does not pass validation. Fix the fields marked below.",
+      "WHATSAPP_TEMPLATE_SUBMIT_IN_PROGRESS": "This draft is being submitted right now.",
+      "WHATSAPP_TEMPLATE_SUBMIT_UNRESOLVED": "Meta did not answer the last submit. Check at Meta before submitting again.",
+      "WHATSAPP_TEMPLATE_SUBMIT_REJECTED": "Meta did not accept the template.",
+      "WHATSAPP_TEMPLATE_PROVIDER_UNAVAILABLE": "Meta could not be reached. Nothing was submitted.",
+      "WHATSAPP_TEMPLATE_RECONCILE_NOT_NEEDED": "This draft has no unanswered submit to check.",
+      "WHATSAPP_TEMPLATE_EDIT_REFUSED": "This template cannot be edited now.",
+      "WHATSAPP_TEMPLATE_EDIT_REJECTED": "Meta did not accept the edit.",
+      "WHATSAPP_TEMPLATE_EDIT_UNRESOLVED": "Meta did not answer. The template is treated as in review until the next sync.",
+      "WHATSAPP_TEMPLATE_RETIRED": "This template is retired.",
+      "WHATSAPP_TEMPLATE_NOT_APPROVED": "Only a template Meta has approved can be activated or made the default.",
+      "WHATSAPP_TEMPLATE_NOT_ACTIVE": "Only an active template can be the default.",
+      "WHATSAPP_TEMPLATE_REPLACEMENT_REQUIRED": "Stores send this template, or it is a language default. Choose a replacement.",
+      "WHATSAPP_TEMPLATE_REPLACEMENT_INVALID": "The replacement must be an approved, active template of the same purpose and language."
+    },
+    "environment": {
+      "production": "Production",
+      "nonProduction": "Not production",
+      "account": "Meta account ending in <code>{suffix}</code>",
+      "accountMissing": "No Meta account is configured in this environment."
+    },
+    "access": {
+      "disabled": "Template writes are off in this environment. You can read, not change.",
+      "notOperator": "Only a named template operator can change templates. You can read them."
+    },
+    "dialog": {
+      "close": "Close",
+      "done": "Done",
+      "cancel": "Cancel",
+      "working": "Working…"
+    },
+    "draftState": {
+      "draft": "Draft",
+      "submitting": "Submitting",
+      "submit_unknown": "Needs a check at Meta",
+      "submitted": "Submitted"
+    },
+    "drafts": {
+      "title": "Drafts",
+      "description": "Templates staff are writing. A draft exists only in Akeed until it is submitted to Meta.",
+      "new": "New draft",
+      "empty": "No drafts yet.",
+      "invalid": "Does not pass validation yet",
+      "columns": {
+        "name": "Template name",
+        "language": "Language",
+        "state": "State",
+        "updated": "Last change"
+      }
+    },
+    "editor": {
+      "newTitle": "New template draft",
+      "title": "Template draft",
+      "notFound": "No draft has this ID.",
+      "identity": "Template",
+      "purpose": "Purpose",
+      "language": "Language",
+      "style": "Style",
+      "styleHint": "Lowercase letters, digits and underscores, up to {max} characters. Fixed once the draft is saved.",
+      "languageCode": "Meta language code",
+      "parameterFormat": "Parameter format",
+      "category": "Category",
+      "generatedName": "Template name at Meta",
+      "generatedNamePending": "Generated when the style is filled in",
+      "generatedNameHint": "Akeed generates the name. It cannot be changed after submission.",
+      "text": "Message text",
+      "body": "Body",
+      "bodyHint": "{count} of {max} characters",
+      "variablePicker": "Insert a value",
+      "confirmLabel": "Confirm button",
+      "cancelLabel": "Cancel button",
+      "labelHint": "Up to {max} characters.",
+      "buttonsHint": "Every confirmation carries exactly these two quick replies, Confirm first.",
+      "samples": "Sample values",
+      "samplesHint": "Meta reviews the template with these values. Use realistic, single-line samples.",
+      "samplesEmpty": "The body uses no values yet.",
+      "preview": "Preview",
+      "previewHint": "The message with the sample values, as a customer sees it.",
+      "previewEmpty": "Write the body to see the message.",
+      "save": "Save draft",
+      "saving": "Saving…",
+      "saved": "Saved.",
+      "unsaved": "You have unsaved changes.",
+      "fixFirst": "Fix the marked fields before submitting.",
+      "submitting": "This draft is being submitted.",
+      "lastError": "The last submit was not accepted",
+      "unknown": {
+        "title": "Meta did not answer the last submit",
+        "body": "The template may or may not exist at Meta. Nothing is sent again until Akeed has checked.",
+        "check": "Check at Meta",
+        "checking": "Checking…"
+      },
+      "outcome": {
+        "created": "Submitted to Meta for review.",
+        "adopted": "Meta already holds this template. Akeed linked it; nothing was created twice.",
+        "already_submitted": "This draft was already submitted.",
+        "not_at_provider": "Meta does not hold this template. You can submit the draft again."
+      },
+      "review": {
+        "title": "Review at Meta",
+        "pending": "In review. A decision can take up to {hours} hours and arrives by webhook or the next sync.",
+        "approved": "Approved. Activate it from the template page before any store can choose it.",
+        "rejected": "Meta rejected this template"
+      },
+      "edit": {
+        "start": "Edit text",
+        "rule": "(contract record {rule})",
+        "send": "Review and send edit",
+        "cancel": "Cancel edit",
+        "title": "Send this edit to Meta?",
+        "description": "The whole text is replaced at Meta and reviewed again.",
+        "confirm": "Send edit",
+        "warning": "This template cannot be sent until Meta approves it again",
+        "reReview": "Plan for up to {hours} hours. If Meta rejects the edit, the old text may be gone too.",
+        "limits": "An approved template can be edited {perDay} time in 24 hours and {perMonth} times in 30 days. Used in the last 30 days: {used}.",
+        "sent": "Edit sent. The template is in review."
+      },
+      "discard": {
+        "button": "Discard draft",
+        "title": "Discard this draft?",
+        "description": "The draft is removed from Akeed. Nothing is deleted at Meta.",
+        "confirm": "Discard"
+      }
+    },
+    "validation": {
+      "finding": "(contract record {finding})",
+      "rules": {
+        "style_format": "Use lowercase letters, digits and underscores, starting with a letter, without a version suffix.",
+        "name_format": "A template name is lowercase letters, digits and underscores, up to 512 characters.",
+        "name_convention": "The name must follow the pattern akeed_PURPOSE_STYLE_vN.",
+        "name_taken": "Another template already has this name and language.",
+        "language_code_unsupported": "Choose a language code from the list.",
+        "category_not_allowed": "This purpose is registered as a utility template.",
+        "body_required": "Write the message body.",
+        "body_too_long": "The body is longer than 1024 characters.",
+        "variable_unknown": "Only customer, store, order and total can be used as values.",
+        "braces_mismatched": "A curly brace is not part of a complete value placeholder.",
+        "parameter_at_edge": "The body may not start or end with a value.",
+        "parameter_ratio": "Many values for so few words. Meta may reject this; add text or remove a value.",
+        "mapping_incomplete": "Every value in the body needs exactly one parameter.",
+        "parameter_name_format": "A named parameter is unique lowercase letters and underscores.",
+        "parameter_numbering": "Positional parameters count from 1 without a gap.",
+        "sample_missing": "Give a sample for every value in the body.",
+        "sample_multiline": "A sample must be a single line.",
+        "filled_body_too_long": "With these samples the body reaches 1024 characters. Shorten the text or a sample.",
+        "button_label_required": "Write the button label.",
+        "button_label_too_long": "A button label is at most 25 characters.",
+        "button_labels_identical": "The two buttons need different labels.",
+        "button_count": "A confirmation has exactly two quick replies.",
+        "button_order": "The Confirm button must come first."
+      }
+    },
+    "submit": {
+      "button": "Submit to Meta",
+      "title": "Submit this template to Meta?",
+      "description": "This creates the template in the Meta account below and starts its review. It cannot be undone from Akeed.",
+      "confirm": "Submit for review",
+      "reviewTime": "Review can take up to {hours} hours.",
+      "categoryRisk": "Akeed asks for the utility category. Meta may assign another one now, or move the template to marketing later; marketing messages cost more and some are not delivered.",
+      "notSendable": "No store sends it until Meta approves it and an operator activates it.",
+      "nameFixed": "The name and the language cannot be changed afterwards."
+    },
+    "submitReasons": {
+      "not_configured": "The Meta account or token is not configured.",
+      "auth_failed": "Meta refused the access token.",
+      "permission_denied": "The access token is not allowed to manage templates.",
+      "rate_limited": "Meta asked Akeed to slow down. Try again later.",
+      "invalid_parameter": "Meta found an invalid value in the template.",
+      "character_limit": "Meta says the text is too long.",
+      "format_rejected": "Meta did not accept the format of the text.",
+      "parameter_ratio": "Meta says there are too many values for the amount of text.",
+      "parameter_at_edge": "Meta says the body starts or ends with a value.",
+      "integrity_blocked": "Meta's integrity checks blocked the template.",
+      "status_locked": "The template's status at Meta does not allow this change.",
+      "provider_error": "Meta refused the request for a reason Akeed does not know.",
+      "unresolved": "Meta did not answer.",
+      "provider_read_failed": "Meta could not be read.",
+      "not_at_provider": "Meta did not hold the template when Akeed checked.",
+      "invalid": "The text did not pass validation."
+    },
+    "rejection": {
+      "abusive_content": "Abusive content.",
+      "incorrect_category": "The category does not match the content.",
+      "invalid_format": "Invalid format.",
+      "promotional": "The content is promotional.",
+      "scam": "The content looks like a scam.",
+      "tag_content_mismatch": "The language or tag does not match the content.",
+      "none": "Meta gave no reason.",
+      "unknown": "A reason Akeed does not know."
+    },
+    "editRefusals": {
+      "retired": "A retired template cannot be edited.",
+      "not_authored_here": "This template was not written in Akeed, so there is no text to edit here.",
+      "status_not_editable": "Meta accepts edits only for approved, rejected or paused templates.",
+      "in_use": "Stores can send this template. Write new text as a new template and activate it once approved.",
+      "daily_limit": "An approved template can be edited once in 24 hours.",
+      "monthly_limit": "An approved template can be edited 10 times in 30 days."
+    },
+    "actions": {
+      "title": "Actions",
+      "description": "Each action is confirmed first and recorded in the staff audit log.",
+      "retired": "This template is retired and can no longer be used.",
+      "rejectedTitle": "Meta rejected this template",
+      "storesAffected": "{total, plural, =0 {No store selects this template.} one {# store selects this template ({active} active).} other {# stores select this template ({active} active).}}",
+      "openText": "Open text",
+      "defaultMoves": "It is the {language} default. The replacement becomes the default.",
+      "noReplacement": "No approved, active template of this purpose and language can replace it. Activate one first.",
+      "replacement": "Replacement",
+      "chooseReplacement": "Choose a replacement",
+      "storesMove": "{count, plural, =0 {No store moves; {replacement} takes over.} one {# store moves to {replacement}.} other {# stores move to {replacement}.}}",
+      "storesMoved": "{count, plural, =0 {No store had to move; {replacement} took over.} one {# store moved to {replacement}.} other {# stores moved to {replacement}.}}",
+      "unchanged": "Nothing had to change.",
+      "audited": "Your user and the time are recorded with this action.",
+      "activate": {
+        "button": "Activate",
+        "title": "Activate this template?",
+        "description": "Merchants will be able to choose it in Settings.",
+        "confirm": "Activate",
+        "effect": "No store changes now. Stores send it only after a merchant selects it or it becomes the default.",
+        "done": "Activated."
+      },
+      "setDefault": {
+        "button": "Make default",
+        "title": "Make this the language default?",
+        "description": "The default is what a store sends when its own choice cannot be used.",
+        "confirm": "Make default",
+        "effect": "It replaces the current {language} default in one step. Stores that fall back to the default send this template from now on.",
+        "done": "This is now the default."
+      },
+      "deactivate": {
+        "button": "Deactivate",
+        "title": "Deactivate this template?",
+        "description": "Stores stop sending it and merchants can no longer choose it. It can be activated again.",
+        "confirm": "Deactivate",
+        "done": "Deactivated."
+      },
+      "retire": {
+        "button": "Retire",
+        "title": "Retire this template?",
+        "description": "Stores stop sending it for good. Nothing is deleted at Meta.",
+        "confirm": "Retire",
+        "permanent": "A retired template cannot be activated again",
+        "done": "Retired."
+      }
     }
   },
   "adminBillingObservability": {

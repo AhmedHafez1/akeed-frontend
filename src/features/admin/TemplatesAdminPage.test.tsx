@@ -1,9 +1,11 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { AdminApiError } from './adminApi'
+import { getTemplateDrafts } from './adminTemplateDraftsApi'
 import { getAdminTemplates, runAdminTemplateSync } from './adminTemplatesApi'
 import {
   renderAdmin,
+  templateDraftList,
   templateList,
   templateSummary,
 } from './adminTemplatesTestUtils'
@@ -14,6 +16,20 @@ vi.mock('./adminTemplatesApi', () => ({
   getAdminTemplate: vi.fn(),
   runAdminTemplateSync: vi.fn(),
   sendAdminTemplateTest: vi.fn(),
+}))
+
+vi.mock('./adminTemplateDraftsApi', () => ({
+  getTemplateDrafts: vi.fn(),
+  getTemplateDraft: vi.fn(),
+  checkTemplateDraft: vi.fn(),
+  createTemplateDraft: vi.fn(),
+  updateTemplateDraft: vi.fn(),
+  discardTemplateDraft: vi.fn(),
+  submitTemplateDraft: vi.fn(),
+  reconcileTemplateDraft: vi.fn(),
+  getTemplateImpact: vi.fn(),
+  editTemplateText: vi.fn(),
+  runTemplateAction: vi.fn(),
 }))
 
 const direct = templateSummary({
@@ -47,6 +63,7 @@ const never = () => new Promise<never>(() => undefined)
 beforeEach(() => {
   vi.clearAllMocks()
   vi.spyOn(console, 'error').mockImplementation(() => undefined)
+  vi.mocked(getTemplateDrafts).mockResolvedValue(templateDraftList())
   vi.mocked(getAdminTemplates).mockResolvedValue(
     templateList([templateSummary(), direct])
   )
@@ -335,9 +352,15 @@ describe('TemplatesAdminPage', () => {
     ).toBeTruthy()
   })
 
-  it('has no control that creates or edits a template', async () => {
+  it('writes templates only through the drafts panel', async () => {
     renderAdmin(<TemplatesAdminPage />, 'en')
     await screen.findByRole('link', { name: 'cod_confirm.ar.standard' })
+
+    expect(
+      (await screen.findByRole('link', { name: 'New draft' })).getAttribute(
+        'href'
+      )
+    ).toBe('/en/admin/templates/drafts/new')
 
     expect(
       screen

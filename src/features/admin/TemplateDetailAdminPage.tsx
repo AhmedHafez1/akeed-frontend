@@ -9,6 +9,7 @@ import { cn } from '@/shared/lib/utils'
 import { Button, Input, Label } from '@/shared/ui'
 import { WhatsAppPhonePreview } from '@/shared/ui/whatsapp'
 import { platformLabel } from './AdminStoreUi'
+import { TemplateActionsPanel } from './TemplateActionsPanel'
 import {
   TemplateCategoryLabel,
   TemplateDriftBadge,
@@ -331,6 +332,12 @@ export function TemplateDetailAdminPage({
       {detail && (
         <>
           <TemplateWarnings detail={detail} />
+          <TemplateActionsPanel
+            templateKey={templateKey}
+            language={detail.template.language}
+            operator={detail.operations.enabled && detail.operations.operator}
+            onChanged={state.refresh}
+          />
 
           <div className="grid gap-6 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]">
             <Panel

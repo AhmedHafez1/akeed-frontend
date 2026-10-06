@@ -34,6 +34,19 @@ describe('templateStyleLabel', () => {
     )
   })
 
+  it('names a staff-written version after its style, with its version', () => {
+    expect(templateStyleLabel(translators.en, 'egyptian_v2')).toBe(
+      `${en.settings.embedded.message.variantLabels.egyptian} 2`
+    )
+    expect(templateStyleLabel(translators.ar, 'egyptian_v2')).toBe(
+      `${ar.settings.embedded.message.variantLabels.egyptian} 2`
+    )
+    // A new style has no name yet, with or without a version.
+    expect(templateStyleLabel(translators.en, 'levantine_v1')).toBe(
+      'levantine_v1'
+    )
+  })
+
   it('shows a style without a translation under its own id', () => {
     expect(templateStyleLabel(translators.ar, 'levantine')).toBe('levantine')
     expect(templateStyleLabel(translators.en, 'levantine')).toBe('levantine')

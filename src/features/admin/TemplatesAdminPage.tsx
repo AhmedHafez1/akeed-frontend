@@ -22,6 +22,7 @@ import {
   type TemplateFilters,
   type TemplateSyncRun,
 } from './admin-templates.model'
+import { TemplateDraftsPanel } from './TemplateDraftsPanel'
 import { useAdminTemplates } from './useAdminTemplates'
 
 function SyncResult({ run }: { run: TemplateSyncRun }) {
@@ -152,6 +153,8 @@ export function TemplatesAdminPage() {
           onRetry={state.page ? undefined : state.refresh}
         />
       )}
+
+      <TemplateDraftsPanel />
 
       <div className="border-border bg-card rounded-2xl border shadow-sm">
         <div className="border-border space-y-4 border-b p-4">
