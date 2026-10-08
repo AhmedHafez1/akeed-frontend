@@ -600,6 +600,40 @@ describe('EasyOrdersConnectPage', () => {
         expect(country().value).toBe('EG')
       })
 
+      it.each([
+        [
+          'an answer without a code',
+          new ApiError('Internal server error', 500),
+          'UNAVAILABLE (HTTP 500)',
+        ],
+        [
+          'no answer at all',
+          new TypeError('Failed to fetch'),
+          'UNAVAILABLE (TypeError: Failed to fetch)',
+        ],
+      ])('logs why a save failed: %s', async (_case, failure, logged) => {
+        const consoleError = vi
+          .spyOn(console, 'error')
+          .mockImplementation(() => undefined)
+        try {
+          await renderPage(connected(), 'en')
+          saveSettings.mockRejectedValue(failure)
+
+          fireEvent.change(country(), { target: { value: 'EG' } })
+          saveAndContinue('en')
+
+          expect(
+            await screen.findByText('We couldn’t save your choices. Try again.')
+          ).toBeTruthy()
+          expect(consoleError).toHaveBeenCalledWith(
+            `[Onboarding] Failed to save the EasyOrders order settings: ${logged}`,
+            expect.anything()
+          )
+        } finally {
+          consoleError.mockRestore()
+        }
+      })
+
       it('is read-only for a viewer', async () => {
         await renderPage({ ...connected(), canManage: false }, 'en')
 

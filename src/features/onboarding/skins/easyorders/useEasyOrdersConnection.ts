@@ -28,6 +28,17 @@ function errorCode(error: unknown): string {
   return error instanceof ApiError && error.code ? error.code : 'UNAVAILABLE'
 }
 
+/**
+ * What to log for a failed call: the code plus the HTTP status, or the kind
+ * of failure when no answer came. Never the server's message or the request.
+ */
+function failureSummary(error: unknown): string {
+  const code = errorCode(error)
+  if (error instanceof ApiError) return `${code} (HTTP ${error.status})`
+  if (error instanceof Error) return `${code} (${error.name}: ${error.message})`
+  return code
+}
+
 export interface EasyOrdersConnectionController {
   view: EasyOrdersConnectView
   status: EasyOrdersConnectionStatus | null
@@ -171,7 +182,7 @@ export function useEasyOrdersConnection(
       // The error is logged by code only: the request carried the secrets.
       logger.error(
         'Failed to save the EasyOrders webhook secrets',
-        errorCode(error)
+        failureSummary(error)
       )
       if (activeRef.current) setSecretsErrorCode(errorCode(error))
       return false
@@ -191,7 +202,7 @@ export function useEasyOrdersConnection(
     } catch (error) {
       logger.error(
         'Failed to reset the EasyOrders webhook secrets',
-        errorCode(error)
+        failureSummary(error)
       )
       if (activeRef.current) setResetSecretsErrorCode(errorCode(error))
       return false
@@ -214,7 +225,7 @@ export function useEasyOrdersConnection(
       } catch (error) {
         logger.error(
           'Failed to save the EasyOrders order settings',
-          errorCode(error)
+          failureSummary(error)
         )
         if (activeRef.current) setSettingsErrorCode(errorCode(error))
         return false
@@ -237,7 +248,7 @@ export function useEasyOrdersConnection(
       setSettingsSaved(false)
       return true
     } catch (error) {
-      logger.error('Failed to disconnect EasyOrders', errorCode(error))
+      logger.error('Failed to disconnect EasyOrders', failureSummary(error))
       if (activeRef.current) setDisconnectErrorCode(errorCode(error))
       return false
     } finally {
