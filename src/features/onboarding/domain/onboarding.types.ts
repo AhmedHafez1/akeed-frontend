@@ -268,6 +268,18 @@ export const STANDALONE_STEPS = ['store', 'test', 'done'] as const
 
 export type StandaloneStep = (typeof STANDALONE_STEPS)[number]
 
+/**
+ * A connected store's setup puts up to two steps before the common ones:
+ * connecting the store, and the details only its platform needs.
+ */
+export const SOURCE_SETUP_STEPS = [
+  'connect',
+  'details',
+  ...STANDALONE_STEPS,
+] as const
+
+export type SourceSetupStep = (typeof SOURCE_SETUP_STEPS)[number]
+
 export type StandaloneStoreFieldKey = 'storeName' | 'merchantWhatsappPhone'
 
 export type StandaloneStoreFieldErrors = Partial<

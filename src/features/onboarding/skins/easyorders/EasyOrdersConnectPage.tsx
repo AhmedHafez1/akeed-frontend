@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import Link from 'next/link'
 import { useLocale, useTranslations } from 'next-intl'
 import {
   AlertCircle,
@@ -14,38 +13,33 @@ import {
 } from 'lucide-react'
 import { TestStep } from '@/features/onboarding/ui/standalone/steps/TestStep'
 import { cn } from '@/shared/lib/utils'
-import {
-  Button,
-  LoadingButton,
-  Skeleton,
-  StatusBadge,
-  akCard,
-} from '@/shared/ui'
+import { Button, LoadingButton, Skeleton, akCard } from '@/shared/ui'
 import {
   ConnectionLine,
   type ConnectionLineState,
 } from '../connect/ConnectionLine'
+import { Frame, Notice, Panel, WideFrame } from '../connect/connectUi'
+import { SourceDoneStep } from '../connect/SourceDoneStep'
+import { SourceNumberStep } from '../connect/SourceNumberStep'
 import { DisconnectEasyOrdersDialog } from './DisconnectEasyOrdersDialog'
 import {
   isEasyOrdersReconnect,
   toEasyOrdersErrorKey,
   type EasyOrdersConnectView,
 } from './easyOrders.types'
-import { EasyOrdersSetupChecklist } from './EasyOrdersSetupChecklist'
-import { Frame, Notice, Panel } from '../connect/connectUi'
-import { OrderSettingsForm } from './OrderSettingsForm'
+import { EasyOrdersDetailsStep } from './EasyOrdersDetailsStep'
 import { ProviderRemovalSteps } from './ProviderRemovalSteps'
 import { useEasyOrdersConnection } from './useEasyOrdersConnection'
 import { useEasyOrdersSetupFlow } from './useEasyOrdersSetupFlow'
-import { WebhookSecretsForm } from './WebhookSecretsForm'
 
 const PERMISSIONS = ['read', 'update'] as const
 
 /**
- * Connecting an EasyOrders store and finishing its setup: connect, waiting,
- * not completed, error, connected (with the setup checklist, then the free
- * test), revoked and disconnected, one at a time. The install link, the API
- * key and the webhook secrets never appear on this screen.
+ * Connecting an EasyOrders store and finishing its setup, one step at a
+ * time: connect (with waiting, not completed, error, revoked and
+ * disconnected), the store's details, the number for the free test, the test
+ * and the finish. The install link, the API key and the webhook secrets
+ * never appear on this screen.
  */
 export function EasyOrdersConnectPage() {
   const t = useTranslations('easyOrdersConnect')
@@ -54,7 +48,8 @@ export function EasyOrdersConnectPage() {
   const { view, status, canManage } = connection
   const setup = useEasyOrdersSetupFlow(
     status?.connection ?? null,
-    view === 'success'
+    view === 'success',
+    view !== 'loading' && view !== 'success'
   )
   const [confirmingDisconnect, setConfirmingDisconnect] = useState(false)
   const headingRef = useRef<HTMLHeadingElement>(null)
@@ -149,9 +144,11 @@ export function EasyOrdersConnectPage() {
     />
   )
 
-  if (view === 'success' && setup.step === 'test' && setup.state) {
+  const connected = view === 'success' ? (status?.connection ?? null) : null
+
+  if (connected && setup.step === 'test' && setup.state) {
     return (
-      <div className="mx-auto w-full max-w-[1120px] px-4 py-6 sm:px-6 sm:py-12">
+      <WideFrame>
         <TestStep
           test={setup.test}
           completion={setup.completion}
@@ -161,23 +158,115 @@ export function EasyOrdersConnectPage() {
           canManage={setup.canManage}
           headingRef={headingRef}
         />
-      </div>
+      </WideFrame>
     )
   }
 
-  if (view === 'success' && setup.step === 'done') {
+  if (connected && setup.step === 'done') {
     return (
-      <Frame>
-        <Panel icon={<Check aria-hidden="true" strokeWidth={3} />} tone="brand">
-          <StatusBadge kind="confirmed">{t('done.badge')}</StatusBadge>
-          {heading(t('done.title'))}
-          <p className="text-ink-muted text-sm">{t('done.body')}</p>
-          <p className="text-ink-muted text-sm">{t('success.next')}</p>
-          <Button asChild size="lg" className="font-semibold">
-            <Link href={setup.dashboardPath}>{t('done.dashboard')}</Link>
-          </Button>
-        </Panel>
-      </Frame>
+      <WideFrame>
+        <SourceDoneStep
+          badge={t('done.badge')}
+          title={t('done.title')}
+          body={t('done.body')}
+          next={t('success.next')}
+          dashboardLabel={t('done.dashboard')}
+          dashboardPath={setup.dashboardPath}
+          headingRef={headingRef}
+        />
+      </WideFrame>
+    )
+  }
+
+  if (connected) {
+    const storeNotices = (
+      <>
+        {readOnly}
+        {connected.health === 'store_inactive' && (
+          <Notice
+            tone="warning"
+            icon={<AlertCircle aria-hidden="true" />}
+            role="status"
+          >
+            <span className="font-semibold">{t('success.inactive.title')}</span>{' '}
+            {t('success.inactive.body')}
+          </Notice>
+        )}
+      </>
+    )
+
+    if (setup.step === 'details') {
+      return (
+        <Frame>
+          <EasyOrdersDetailsStep
+            connection={connected}
+            canManage={canManage}
+            isSaving={connection.isSavingSettings || connection.isSavingSecrets}
+            settingsFailed={connection.settingsErrorCode !== null}
+            secretsFailed={connection.secretsErrorCode !== null}
+            onSaveSettings={connection.saveSettings}
+            onSaveSecrets={connection.saveSecrets}
+            onContinue={setup.continueToNumber}
+            lead={
+              <div className="space-y-2">
+                {line('connected')}
+                <p className="text-ink-muted text-sm">
+                  {t('success.storeIdLabel')}{' '}
+                  <bdi dir="ltr" className="text-ink font-mono font-semibold">
+                    {connected.storeId}
+                  </bdi>
+                  {!connected.storeVerified && (
+                    <span className="block">
+                      {t('success.storeUnverified')}
+                    </span>
+                  )}
+                </p>
+              </div>
+            }
+            attention={
+              <>
+                {storeNotices}
+                {connected.rejectedDeliveries > 0 && (
+                  <Notice
+                    tone="warning"
+                    icon={<AlertCircle aria-hidden="true" />}
+                    role="status"
+                  >
+                    {t('success.rejectedDeliveries', {
+                      count: connected.rejectedDeliveries,
+                    })}
+                  </Notice>
+                )}
+              </>
+            }
+            headingRef={headingRef}
+          />
+        </Frame>
+      )
+    }
+
+    return (
+      <WideFrame>
+        <SourceNumberStep
+          setup={setup}
+          namespace="easyOrdersConnect.checklist"
+          idPrefix="easyorders"
+          lead={line('connected')}
+          attention={storeNotices}
+          secondaryAction={
+            <Button
+              type="button"
+              variant="link"
+              className="h-auto min-h-11 p-0 text-start whitespace-normal sm:min-h-0"
+              onClick={setup.editDetails}
+            >
+              {t('details.edit')}
+            </Button>
+          }
+          previewCurrency={connected.currency}
+          headingRef={headingRef}
+        />
+      </WideFrame>
     )
   }
 
@@ -315,87 +404,6 @@ export function EasyOrdersConnectPage() {
           {startError}
           {connectButton(t('error.retry'))}
         </Panel>
-      )}
-
-      {view === 'success' && status?.connection && (
-        <>
-          <Panel lead={line('connected')} tone="brand">
-            <StatusBadge kind="confirmed">{t('success.badge')}</StatusBadge>
-            {heading(
-              store ? t('success.title', { store }) : t('success.titleNoStore')
-            )}
-            <dl className="text-sm">
-              <dt className="text-ink-muted">{t('success.storeIdLabel')}</dt>
-              <dd>
-                <bdi dir="ltr" className="text-ink font-mono font-semibold">
-                  {status.connection.storeId}
-                </bdi>
-              </dd>
-            </dl>
-            {!status.connection.storeVerified && (
-              <p className="text-ink-muted text-sm">
-                {t('success.storeUnverified')}
-              </p>
-            )}
-            {status.connection.health === 'store_inactive' && (
-              <Notice
-                tone="warning"
-                icon={<AlertCircle aria-hidden="true" />}
-                role="status"
-              >
-                <span className="font-semibold">
-                  {t('success.inactive.title')}
-                </span>{' '}
-                {t('success.inactive.body')}
-              </Notice>
-            )}
-            {status.connection.rejectedDeliveries > 0 && (
-              <Notice
-                tone="warning"
-                icon={<AlertCircle aria-hidden="true" />}
-                role="status"
-              >
-                {t('success.rejectedDeliveries', {
-                  count: status.connection.rejectedDeliveries,
-                })}
-              </Notice>
-            )}
-          </Panel>
-
-          <div className={cn(akCard, 'space-y-4 p-6 sm:p-8')}>
-            {readOnly}
-            <OrderSettingsForm
-              currency={status.connection.currency}
-              phoneCountry={status.connection.phoneCountry}
-              canManage={canManage}
-              isSaving={connection.isSavingSettings}
-              saved={connection.settingsSaved}
-              failed={connection.settingsErrorCode !== null}
-              onSave={connection.saveSettings}
-            />
-          </div>
-
-          <div className={cn(akCard, 'space-y-4 p-6 sm:p-8')}>
-            {readOnly}
-            <WebhookSecretsForm
-              webhookUrlHint={status.connection.webhookUrlHint ?? ''}
-              alreadySet={
-                status.connection.ordersSecretSet &&
-                status.connection.statusSecretSet
-              }
-              canManage={canManage}
-              isSaving={connection.isSavingSecrets}
-              saved={connection.secretsSaved}
-              failed={connection.secretsErrorCode !== null}
-              onSave={connection.saveSecrets}
-            />
-            <p className="text-ink-muted text-sm">
-              {t('success.secrets.duplicates')}
-            </p>
-          </div>
-
-          <EasyOrdersSetupChecklist setup={setup} />
-        </>
       )}
 
       {view === 'revoked' && (

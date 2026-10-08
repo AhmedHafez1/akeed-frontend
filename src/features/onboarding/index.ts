@@ -43,7 +43,10 @@ export { EasyOrdersConnectPage } from './skins/easyorders/EasyOrdersConnectPage'
 export { EasyOrdersSourcePanel } from './skins/easyorders/EasyOrdersSourcePanel'
 export { WooCommerceConnectPage } from './skins/woocommerce/WooCommerceConnectPage'
 export { WooCommerceSourcePanel } from './skins/woocommerce/WooCommerceSourcePanel'
-export { ONBOARDING_STORE_STEP_TITLE } from './model/onboardingProgress'
+export {
+  ONBOARDING_PROGRESS_STEPS,
+  resolveOnboardingProgress,
+} from './model/onboardingProgress'
 export { StandaloneOnboardingPage } from './ui/standalone/StandaloneOnboardingPage'
 export { SendTestToPhoneAction } from './ui/standalone/components/SendTestToPhoneAction'
 

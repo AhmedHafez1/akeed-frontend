@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import ar from '../../../../public/messages/ar.json'
 import en from '../../../../public/messages/en.json'
-import { ONBOARDING_STORE_STEP_TITLE } from '@/features/onboarding'
+import { ONBOARDING_PROGRESS_STEPS } from '@/features/onboarding'
 import { resolveSettingsSourceSkin } from './sourceSkins'
 
 function leafKeys(value: unknown, path = ''): string[] {
@@ -89,10 +89,12 @@ describe('source setup messages', () => {
     }
   )
 
-  it('names the middle step of setup for every source skin', () => {
-    for (const key of Object.values(ONBOARDING_STORE_STEP_TITLE)) {
-      expect(ar.standaloneOnboarding.flow[key]).toBeTruthy()
-      expect(en.standaloneOnboarding.flow[key]).toBeTruthy()
+  it('names every setup step of every source skin', () => {
+    for (const steps of Object.values(ONBOARDING_PROGRESS_STEPS)) {
+      for (const { titleKey } of steps) {
+        expect(ar.standaloneOnboarding.flow[titleKey]).toBeTruthy()
+        expect(en.standaloneOnboarding.flow[titleKey]).toBeTruthy()
+      }
     }
   })
 

@@ -147,6 +147,21 @@ export function isValidWebhookSecret(value: string): boolean {
   return WEBHOOK_SECRET_PATTERN.test(value.trim())
 }
 
+/** The country, the currency and both webhook secrets are stored. */
+export function hasEasyOrdersDetails(
+  connection: Pick<
+    EasyOrdersConnectionDetails,
+    'currency' | 'phoneCountry' | 'ordersSecretSet' | 'statusSecretSet'
+  >
+): boolean {
+  return Boolean(
+    connection.currency &&
+    connection.phoneCountry &&
+    connection.ordersSecretSet &&
+    connection.statusSecretSet
+  )
+}
+
 export const EASYORDERS_CHECKLIST_ITEMS = [
   'store',
   'orderDefaults',

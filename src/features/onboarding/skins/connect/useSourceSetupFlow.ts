@@ -14,17 +14,17 @@ import type {
   IntegrationOnboardingState,
   MessagingSenderStatus,
   SetupBlockedReason,
-  StandaloneStep,
+  SourceSetupStep,
 } from '@/features/onboarding/domain/onboarding.types'
 import {
   isTestProviderUnavailable,
   toTestError,
 } from '@/features/onboarding/hooks/useOnboardingTest'
 import { useOnboardingTestCompletion } from '@/features/onboarding/hooks/useOnboardingTestCompletion'
+import { parseSourceSetupStep } from '@/features/onboarding/model/onboardingProgress'
 import {
   countryFromLanguages,
   countryFromPhone,
-  parseStandaloneStep,
   validateStoreForm,
 } from '@/features/onboarding/model/standaloneStore'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
@@ -34,7 +34,10 @@ import type { PhoneCountry } from '@/shared/ui/international-phone-input'
 
 const logger = createLogger('Onboarding')
 
-/** One row of a source's setup checklist. */
+/**
+ * One thing a source needs in place before the test. The rows are not drawn;
+ * together they decide whether the test can be sent.
+ */
 export interface SourceChecklistItem<Id extends string = string> {
   id: Id
   done: boolean
@@ -54,9 +57,22 @@ export interface SourceSetupFlowOptions<Id extends string> {
   ) => SourceChecklistItem<Id>[]
   /** Names the source in log lines only. */
   sourceName: string
+  /**
+   * The store is not connected and the screen says so, so the URL names the
+   * connect step. False while the connection is still being read.
+   */
+  isConnecting?: boolean
+  /**
+   * Whether the details only this platform needs are in place. Null for a
+   * platform with none, which then has no details step.
+   */
+  detailsComplete?: boolean | null
 }
 
-function urlWithStep(step: StandaloneStep) {
+/** The steps a connected store goes through; connecting comes before them. */
+export type ConnectedSetupStep = Exclude<SourceSetupStep, 'connect'>
+
+function urlWithStep(step: SourceSetupStep) {
   const url = new URL(window.location.href)
   url.searchParams.set('step', step)
   return `${url.pathname}${url.search}${url.hash}`
@@ -69,24 +85,32 @@ function browserCountry(): PhoneCountry {
   )
 }
 
-/** The test step needs a saved number and nothing blocking the finish. */
+/**
+ * Missing details hold the merchant on their step; once they are in place
+ * the URL may go back to it. The test step needs a saved number and nothing
+ * blocking the finish.
+ */
 function resolveStep(
-  state: IntegrationOnboardingState,
+  state: IntegrationOnboardingState | null,
   blockedReasons: readonly SetupBlockedReason[],
-  requested: StandaloneStep | null
-): StandaloneStep {
+  requested: SourceSetupStep | null,
+  detailsComplete: boolean | null
+): ConnectedSetupStep {
+  if (detailsComplete === false) return 'details'
+  if (detailsComplete && requested === 'details') return 'details'
   return requested === 'test' &&
-    state.merchantWhatsappPhone &&
+    state?.merchantWhatsappPhone &&
     blockedReasons.length === 0
     ? 'test'
     : 'store'
 }
 
 /**
- * Finishing setup for a connected store, whatever its platform: a checklist
- * of what the connection still needs, then the same free test and `/complete`
- * every other source uses. Steps live in `?step=` under the common names, so
- * the shell's stepper follows without knowing the source.
+ * Finishing setup for a connected store, whatever its platform: the details
+ * its platform needs (if any), the number for the free test, then the same
+ * test and `/complete` every other source uses. Steps live in `?step=` under
+ * the common names, so the shell's stepper follows without knowing the
+ * source.
  *
  * Each source skin supplies its own checklist rows; this hook names none.
  */
@@ -95,6 +119,8 @@ export function useSourceSetupFlow<Id extends string>({
   connectionKey,
   buildChecklist,
   sourceName,
+  isConnecting = false,
+  detailsComplete = null,
 }: SourceSetupFlowOptions<Id>) {
   const t = useTranslations('standaloneOnboarding')
   const pathname = usePathname()
@@ -139,13 +165,14 @@ export function useSourceSetupFlow<Id extends string>({
 
   const blockedReasons: readonly SetupBlockedReason[] =
     completeBlockers ?? state?.sourceSetup?.blockedReasons ?? []
-  const requestedStep = parseStandaloneStep(searchParams?.get('step'))
+  const requestedStep = parseSourceSetupStep(searchParams?.get('step'))
   const dashboardPath = `/${locale}/dashboard`
 
-  const goToStep = useCallback((next: StandaloneStep) => {
+  const goToStep = useCallback((next: SourceSetupStep) => {
     window.history.pushState(null, '', urlWithStep(next))
   }, [])
   const backToChecklist = useCallback(() => goToStep('store'), [goToStep])
+  const editDetails = useCallback(() => goToStep('details'), [goToStep])
   const doneUrl = useCallback(() => urlWithStep('done'), [])
   const showBlockedReasons = useCallback(
     (reasons: SetupBlockedReason[]) => {
@@ -161,7 +188,8 @@ export function useSourceSetupFlow<Id extends string>({
     isTestStep:
       enabled &&
       !!state &&
-      resolveStep(state, blockedReasons, requestedStep) === 'test',
+      resolveStep(state, blockedReasons, requestedStep, detailsComplete) ===
+        'test',
     dashboardPath,
     doneUrl,
     messages: {
@@ -174,17 +202,23 @@ export function useSourceSetupFlow<Id extends string>({
   })
   const { setSubmitTestError } = completion
 
-  const step: StandaloneStep = completion.isDone
+  const step: ConnectedSetupStep = completion.isDone
     ? 'done'
-    : state
-      ? resolveStep(state, blockedReasons, requestedStep)
-      : 'store'
+    : resolveStep(state, blockedReasons, requestedStep, detailsComplete)
 
   // Keep the URL naming the step actually shown.
   useEffect(() => {
     if (!enabled || !state || requestedStep === step) return
     window.history.replaceState(null, '', urlWithStep(step))
   }, [enabled, requestedStep, state, step])
+
+  // A store that is not connected is on the connect step. A URL without a
+  // step already means that; one naming a later step (a link that was lost
+  // since) is corrected, so the shell's stepper does not run ahead.
+  useEffect(() => {
+    if (!isConnecting || !requestedStep || requestedStep === 'connect') return
+    window.history.replaceState(null, '', urlWithStep('connect'))
+  }, [isConnecting, requestedStep])
 
   const setPhone = useCallback((value: string) => {
     setPhoneValue(value)
@@ -300,6 +334,10 @@ export function useSourceSetupFlow<Id extends string>({
     saveError,
     isSubmitting,
     startTest,
+    /** Leaves the details step once what it asks for is saved. */
+    continueToNumber: backToChecklist,
+    /** Back to the details step; only a platform with details offers it. */
+    editDetails,
     test: completion.test,
     completion: completion.completion,
   }

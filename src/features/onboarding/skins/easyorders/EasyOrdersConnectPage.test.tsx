@@ -27,7 +27,7 @@ vi.mock('./easyOrdersApi', () => ({
   startEasyOrdersInstall: vi.fn(),
 }))
 
-// The connected screen reads the onboarding state for its setup checklist.
+// The connected store's steps read the onboarding state and the message.
 vi.mock('@/features/onboarding/api/onboardingApi', async (importOriginal) => {
   const original =
     await importOriginal<
@@ -36,6 +36,7 @@ vi.mock('@/features/onboarding/api/onboardingApi', async (importOriginal) => {
   return {
     ...original,
     fetchOnboardingState: vi.fn(),
+    fetchTemplatePreviews: vi.fn(),
     updateOnboardingSettings: vi.fn(),
     sendOnboardingTest: vi.fn(),
     fetchOnboardingTest: vi.fn(),
@@ -308,9 +309,10 @@ describe('EasyOrdersConnectPage', () => {
         await vi.advanceTimersByTimeAsync(4000)
       })
 
+      // Connected: straight on to the store's details.
       await screen.findByRole('heading', {
         level: 1,
-        name: 'تم ربط متجر نور مع EasyOrders',
+        name: 'بيانات قليلة عن طلبات متجرك على EasyOrders',
       })
       expect(fetchStatus).toHaveBeenCalledTimes(2)
     })
@@ -418,19 +420,39 @@ describe('EasyOrdersConnectPage', () => {
     })
   })
 
-  describe('success', () => {
+  describe('store details', () => {
+    const fillSecrets = (orders: string, statusValue: string) => {
+      fireEvent.change(document.getElementById('easyorders-orders-secret')!, {
+        target: { value: orders },
+      })
+      fireEvent.change(document.getElementById('easyorders-status-secret')!, {
+        target: { value: statusValue },
+      })
+    }
+    const saveAndContinue = (locale: 'ar' | 'en' = 'ar') =>
+      fireEvent.click(
+        screen.getByRole('button', {
+          name: locale === 'ar' ? 'حفظ ومتابعة' : 'Save and continue',
+        })
+      )
+
     it.each([
-      ['ar', 'تم ربط متجر نور مع EasyOrders', 'تم الربط'],
-      ['en', 'متجر نور is connected to EasyOrders', 'Connected'],
+      ['ar', 'بيانات قليلة عن طلبات متجرك على EasyOrders'],
+      ['en', 'A few details about your EasyOrders orders'],
     ] as const)(
-      'names the connected store and its EasyOrders id in %s',
-      async (locale, title, badge) => {
+      'asks for the details on a step of their own, naming the store and its EasyOrders id, in %s',
+      async (locale, title) => {
         await renderPage(connected(), locale)
 
         expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(
           title
         )
-        expect(screen.getByText(badge)).toBeTruthy()
+        // One form, one button; the number comes on the next step.
+        expect(document.querySelectorAll('form')).toHaveLength(1)
+        expect(
+          screen.queryByRole('button', { name: /send a test message|رسالة/i })
+        ).toBeNull()
+        expect(screen.getByText('متجر نور')).toBeTruthy()
         expect(screen.getByText('store-7f3a')).toBeTruthy()
         expect(document.body.textContent).toContain('…aB3_xZ')
       }
@@ -500,15 +522,18 @@ describe('EasyOrdersConnectPage', () => {
         expect(currency().value).toBe('')
       })
 
-      it('suggests the country’s own currency and saves both', async () => {
+      it('suggests the country’s own currency, saves everything with one button and moves on to the number', async () => {
+        onboarding.fetchOnboardingState.mockResolvedValue({
+          state: readySetup(),
+        })
         await renderPage(connected(), 'en')
-        saveSettings.mockResolvedValue(
-          connected({ currency: 'EGP', phoneCountry: 'EG' })
-        )
+        saveSettings.mockResolvedValue(connected(ready))
+        saveSecrets.mockResolvedValue(connected({ ...ready, ...withSecrets }))
 
         fireEvent.change(country(), { target: { value: 'EG' } })
         expect(currency().value).toBe('EGP')
-        fireEvent.submit(form())
+        fillSecrets('ORDERS-secret-01', 'STATUS-secret-02')
+        saveAndContinue('en')
 
         await waitFor(() =>
           expect(saveSettings).toHaveBeenCalledWith({
@@ -516,12 +541,14 @@ describe('EasyOrdersConnectPage', () => {
             phoneCountry: 'EG',
           })
         )
+        await waitFor(() => expect(saveSecrets).toHaveBeenCalledTimes(1))
         expect(
-          await screen.findByText('Saved. New orders use these settings.')
+          await screen.findByRole('heading', {
+            level: 1,
+            name: 'Get your confirmation message ready',
+          })
         ).toBeTruthy()
-        expect(form().textContent).not.toContain(
-          'Orders are not confirmed until you choose both.'
-        )
+        expect(document.getElementById('easyorders-phone-country')).toBeNull()
       })
 
       it('keeps a currency the merchant already chose when the country changes', async () => {
@@ -556,20 +583,22 @@ describe('EasyOrdersConnectPage', () => {
         expect(document.activeElement).toBe(country())
       })
 
-      it('reports a failed save', async () => {
-        await renderPage(
-          connected({ currency: 'EGP', phoneCountry: 'EG' }),
-          'en'
-        )
+      it('reports a failed save and sends no secrets after it', async () => {
+        await renderPage(connected(), 'en')
         saveSettings.mockRejectedValue(
           new ApiError('invalid', 400, 'EASYORDERS_ORDER_SETTINGS_INVALID')
         )
 
-        fireEvent.submit(form())
+        fireEvent.change(country(), { target: { value: 'EG' } })
+        fillSecrets('ORDERS-secret-01', 'STATUS-secret-02')
+        saveAndContinue('en')
 
         expect(
           await screen.findByText('We couldn’t save your choices. Try again.')
         ).toBeTruthy()
+        expect(saveSecrets).not.toHaveBeenCalled()
+        // Still on the step, with what was chosen.
+        expect(country().value).toBe('EG')
       })
 
       it('is read-only for a viewer', async () => {
@@ -580,11 +609,10 @@ describe('EasyOrdersConnectPage', () => {
       })
     })
 
-    it('saves both secrets, then empties the masked fields and never shows them', async () => {
-      const view = await renderPage(connected())
-      saveSecrets.mockResolvedValue(
-        connected({ ordersSecretSet: true, statusSecretSet: true })
-      )
+    it('saves both secrets without sending the country and currency again, and never shows them', async () => {
+      onboarding.fetchOnboardingState.mockResolvedValue({ state: readySetup() })
+      const view = await renderPage(connected(ready))
+      saveSecrets.mockResolvedValue(connected({ ...ready, ...withSecrets }))
       const orders = document.getElementById(
         'easyorders-orders-secret'
       ) as HTMLInputElement
@@ -595,9 +623,8 @@ describe('EasyOrdersConnectPage', () => {
       expect(statusField.type).toBe('password')
       expect(orders.autocomplete).toBe('off')
 
-      fireEvent.change(orders, { target: { value: ' ORDERS-secret-01 ' } })
-      fireEvent.change(statusField, { target: { value: 'STATUS-secret-02' } })
-      fireEvent.click(screen.getByRole('button', { name: 'حفظ المفتاحين' }))
+      fillSecrets(' ORDERS-secret-01 ', 'STATUS-secret-02')
+      saveAndContinue()
 
       await waitFor(() =>
         expect(saveSecrets).toHaveBeenCalledWith({
@@ -605,16 +632,14 @@ describe('EasyOrdersConnectPage', () => {
           statusSecret: 'STATUS-secret-02',
         })
       )
-      await screen.findByText(
-        'تم حفظ المفتاحين. يُخزَّنان مشفّرين ولا يُعرضان مرة أخرى.'
-      )
-      expect(orders.value).toBe('')
-      expect(statusField.value).toBe('')
+      expect(saveSettings).not.toHaveBeenCalled()
+      // On to the number, with the secrets gone from the page.
+      await screen.findByRole('heading', {
+        level: 1,
+        name: 'جهّز رسالة التأكيد لمتجرك',
+      })
       expect(view.container.innerHTML).not.toContain('ORDERS-secret-01')
       expect(view.container.innerHTML).not.toContain('STATUS-secret-02')
-      expect(
-        screen.getByRole('button', { name: 'استبدال المفتاحين' })
-      ).toBeTruthy()
     })
 
     it.each([
@@ -627,34 +652,27 @@ describe('EasyOrdersConnectPage', () => {
     ])(
       'does not send "%s" / "%s"',
       async (ordersValue, statusValue, message) => {
-        await renderPage(connected())
+        await renderPage(connected(ready))
 
-        fireEvent.change(document.getElementById('easyorders-orders-secret')!, {
-          target: { value: ordersValue },
-        })
-        fireEvent.change(document.getElementById('easyorders-status-secret')!, {
-          target: { value: statusValue },
-        })
-        fireEvent.click(screen.getByRole('button', { name: 'حفظ المفتاحين' }))
+        fillSecrets(ordersValue, statusValue)
+        saveAndContinue()
 
         expect((await screen.findByRole('alert')).textContent).toBe(message)
         expect(saveSecrets).not.toHaveBeenCalled()
+        expect(document.activeElement).toBe(
+          document.getElementById('easyorders-orders-secret')
+        )
       }
     )
 
     it('reports a failed save without logging the secrets', async () => {
-      await renderPage(connected())
+      await renderPage(connected(ready))
       saveSecrets.mockRejectedValue(
         new ApiError('Bad Request', 400, 'EASYORDERS_SECRETS_INVALID')
       )
 
-      fireEvent.change(document.getElementById('easyorders-orders-secret')!, {
-        target: { value: 'ORDERS-secret-01' },
-      })
-      fireEvent.change(document.getElementById('easyorders-status-secret')!, {
-        target: { value: 'STATUS-secret-02' },
-      })
-      fireEvent.click(screen.getByRole('button', { name: 'حفظ المفتاحين' }))
+      fillSecrets('ORDERS-secret-01', 'STATUS-secret-02')
+      saveAndContinue()
 
       expect((await screen.findByRole('alert')).textContent).toBe(
         'تعذّر حفظ المفتاحين. حاول مرة أخرى.'
@@ -691,33 +709,65 @@ describe('EasyOrdersConnectPage setup, revoked and disconnected', () => {
     vi.restoreAllMocks()
   })
 
+  /** The "Your number" step, once the setup it reads has loaded. */
   const checklist = async () =>
     (
       await screen.findByRole('heading', {
         level: 2,
-        name: /Finish setting up|أكمل الإعداد/,
+        name: /How confirmations will run|كيف ستعمل رسائل التأكيد/,
       })
-    ).closest('section') as HTMLElement
+    ).closest('form') as HTMLElement
   const sendTest = (section: HTMLElement) =>
     within(section).getByRole('button', {
       name: /send a test message|أرسل رسالة تجريبية|رسالة/i,
     }) as HTMLButtonElement
 
-  describe('setup checklist', () => {
-    it('lists what is still needed and holds the test until it is done', async () => {
-      await renderPage(connected(), 'en')
+  describe('your number', () => {
+    it.each([
+      ['nothing', {}],
+      ['only the country and currency', ready],
+      ['only the secrets', withSecrets],
+    ] as const)(
+      'is not reached while %s of the details is saved',
+      async (_, saved) => {
+        await renderPage(connected(saved), 'en')
+
+        expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(
+          'A few details about your EasyOrders orders'
+        )
+        expect(screen.queryByLabelText('Your WhatsApp number')).toBeNull()
+      }
+    )
+
+    it('asks only for the number once the details are saved, and offers the way back to them', async () => {
+      onboarding.fetchOnboardingState.mockResolvedValue({
+        state: readySetup(),
+      })
+      const { container } = await renderPage(
+        connected({ ...ready, ...withSecrets }),
+        'en'
+      )
       const section = await checklist()
 
+      expect(
+        within(section).getByRole('heading', {
+          level: 1,
+          name: 'Get your confirmation message ready',
+        })
+      ).toBeTruthy()
+      expect(
+        within(section).getByLabelText('Your WhatsApp number')
+      ).toBeTruthy()
       expect(section.textContent).toContain(
-        'Choose your store’s country and currency above.'
+        'The test is free and goes to your number only.'
       )
-      expect(section.textContent).toContain(
-        'Paste both webhook secrets above. Until then, orders from EasyOrders are refused.'
-      )
-      expect(section.textContent).toContain(
-        'Complete the items above to send the test message.'
-      )
-      expect(sendTest(section).disabled).toBe(true)
+      expect(
+        within(section).getByRole('button', {
+          name: 'Change the country, currency or webhook secrets',
+        })
+      ).toBeTruthy()
+      expect(container.querySelector('input[type="password"]')).toBeNull()
+      expect(document.getElementById('easyorders-phone-country')).toBeNull()
     })
 
     it('shows the automation that will run and the Akeed sender, in Arabic', async () => {
@@ -735,7 +785,7 @@ describe('EasyOrdersConnectPage setup, revoked and disconnected', () => {
       expect(section.textContent).toContain(
         'تُرسل الرسائل من رقم واتساب الخاص بأكيد. لا تحتاج إلى رقم خاص بك.'
       )
-      expect(section.textContent).not.toContain('أكمل البنود أعلاه')
+      expect(section.textContent).not.toContain('عالج ما هو مذكور أعلاه')
       expect(sendTest(section).disabled).toBe(false)
     })
 
@@ -761,10 +811,11 @@ describe('EasyOrdersConnectPage setup, revoked and disconnected', () => {
     )
 
     it('re-reads what blocks the finish after a setup input is saved', async () => {
-      await renderPage(connected(), 'en')
-      await checklist()
-      expect(onboarding.fetchOnboardingState).toHaveBeenCalledTimes(1)
-      saveSettings.mockResolvedValue(connected(ready))
+      await renderPage(connected(withSecrets), 'en')
+      await waitFor(() =>
+        expect(onboarding.fetchOnboardingState).toHaveBeenCalledTimes(1)
+      )
+      saveSettings.mockResolvedValue(connected({ ...ready, ...withSecrets }))
 
       const country = screen.getByLabelText(
         'Customer phone country'
@@ -775,6 +826,8 @@ describe('EasyOrdersConnectPage setup, revoked and disconnected', () => {
       await waitFor(() =>
         expect(onboarding.fetchOnboardingState).toHaveBeenCalledTimes(2)
       )
+      // Stored secrets are kept when their fields are left empty.
+      expect(saveSecrets).not.toHaveBeenCalled()
     })
 
     it('asks for a valid number before saving or sending anything', async () => {
@@ -793,7 +846,7 @@ describe('EasyOrdersConnectPage setup, revoked and disconnected', () => {
       expect(onboarding.sendOnboardingTest).not.toHaveBeenCalled()
     })
 
-    it('keeps the checklist read-only for a viewer', async () => {
+    it('keeps the step read-only for a viewer', async () => {
       onboarding.fetchOnboardingState.mockResolvedValue({
         state: {
           ...readySetup(),
@@ -812,10 +865,10 @@ describe('EasyOrdersConnectPage setup, revoked and disconnected', () => {
     })
 
     it('offers a retry when the setup cannot be loaded', async () => {
-      onboarding.fetchOnboardingState.mockRejectedValueOnce(
-        new Error('offline')
-      )
-      await renderPage(connected(), 'en')
+      onboarding.fetchOnboardingState
+        .mockRejectedValueOnce(new Error('offline'))
+        .mockResolvedValue({ state: readySetup() })
+      await renderPage(connected({ ...ready, ...withSecrets }), 'en')
 
       fireEvent.click(await screen.findByRole('button', { name: 'Try again' }))
 

@@ -3294,6 +3294,8 @@
       "test": "Try the message",
       "compact": "{current} of {total} · {title}",
       "menu": "Menu",
+      "details": "Store details",
+      "number": "Your number",
       "connectStore": "Connect your store"
     },
     "store": {
@@ -4102,9 +4104,6 @@
       }
     },
     "success": {
-      "badge": "Connected",
-      "title": "{store} is connected to EasyOrders",
-      "titleNoStore": "Your store is connected to EasyOrders",
       "storeIdLabel": "EasyOrders store ID",
       "storeUnverified": "We’ll confirm this is your store when its first order arrives.",
       "inactive": {
@@ -4131,9 +4130,6 @@
           "placeholder": "Choose a currency",
           "hint": "Shown to the customer next to the order total."
         },
-        "save": "Save",
-        "saving": "Saving…",
-        "saved": "Saved. New orders use these settings.",
         "errors": {
           "required": "Choose a country and a currency.",
           "failed": "We couldn’t save your choices. Try again."
@@ -4164,35 +4160,21 @@
         "duplicates": "Keep exactly one orders webhook and one order-status webhook for Akeed in EasyOrders. If an address appears twice, delete the extra one: its orders arrive with a secret Akeed doesn’t have and are refused."
       }
     },
+    "details": {
+      "title": "A few details about your EasyOrders orders",
+      "body": "Akeed needs these once, to read your orders correctly and to trust the ones it receives.",
+      "secretsKept": "Your webhook secrets are saved. Leave these two fields empty to keep them.",
+      "footerCaption": "Secrets are stored encrypted and are not shown again.",
+      "submit": "Save and continue",
+      "saving": "Saving…",
+      "edit": "Change the country, currency or webhook secrets"
+    },
     "checklist": {
-      "title": "Finish setting up",
-      "body": "Akeed starts confirming your EasyOrders orders once everything below is ready and you have tried the message yourself.",
       "loading": "Loading your setup…",
       "loadError": "We couldn’t load your setup. Check your internet connection and try again.",
       "retry": "Try again",
-      "done": "done",
-      "todo": "still needed",
-      "notReady": "Complete the items above to send the test message.",
-      "items": {
-        "store": {
-          "title": "Store connected",
-          "done": "Your EasyOrders store is connected to Akeed.",
-          "todo": "Connect your EasyOrders store."
-        },
-        "orderDefaults": {
-          "title": "Country and currency",
-          "done": "Chosen above. Every order uses them.",
-          "todo": "Choose your store’s country and currency above."
-        },
-        "secrets": {
-          "title": "Webhook secrets",
-          "done": "Saved. Akeed can trust the orders it receives.",
-          "todo": "Paste both webhook secrets above. Until then, orders from EasyOrders are refused."
-        },
-        "sender": {
-          "title": "Akeed WhatsApp sender"
-        }
-      },
+      "footerCaption": "The test is free and goes to your number only.",
+      "notReady": "Fix what’s flagged above to send the test message.",
       "sender": {
         "configured": "Messages go out from Akeed’s WhatsApp number. You don’t need a number of your own.",
         "not_configured": "Akeed’s WhatsApp sender isn’t ready on our side. Contact Akeed support; there is nothing to change in your store.",
@@ -4325,36 +4307,15 @@
       "retry": "Try again"
     },
     "connected": {
-      "badge": "Connected",
-      "title": "Your WooCommerce store is connected",
-      "body": "Akeed set up its order notifications in your store. You don’t need to copy any key or secret.",
       "next": "We’ll let you know when Akeed starts confirming this store’s cash-on-delivery orders."
     },
     "storeLabel": "Store address",
     "checklist": {
-      "title": "Finish setting up",
-      "body": "Akeed starts confirming your WooCommerce orders once everything below is ready and you have tried the message yourself.",
       "loading": "Loading your setup…",
       "loadError": "We couldn’t load your setup. Check your internet connection and try again.",
       "retry": "Try again",
-      "done": "done",
-      "todo": "still needed",
-      "notReady": "Complete the items above to send the test message.",
-      "items": {
-        "store": {
-          "title": "Store connected",
-          "done": "Your WooCommerce store is connected to Akeed.",
-          "todo": "Connect your WooCommerce store."
-        },
-        "notifications": {
-          "title": "Order notifications",
-          "done": "Akeed set them up in your store. Each order’s currency and phone country come from the order itself, so there is nothing to choose.",
-          "todo": "Your store disabled an order notification. Re-enable it above."
-        },
-        "sender": {
-          "title": "Akeed WhatsApp sender"
-        }
-      },
+      "footerCaption": "The test is free and goes to your number only.",
+      "notReady": "Fix what’s flagged above to send the test message.",
       "sender": {
         "configured": "Messages go out from Akeed’s WhatsApp number. You don’t need a number of your own.",
         "not_configured": "Akeed’s WhatsApp sender isn’t ready on our side. Contact Akeed support; there is nothing to change in your store.",

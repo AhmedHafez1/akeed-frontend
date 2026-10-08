@@ -16,6 +16,12 @@ interface StepperProps {
   label: string
   /** Screen-reader text after a completed step's title. */
   completedLabel: string
+  /**
+   * `current` names only the step on screen and leaves the others as discs,
+   * for a flow with too many steps to name side by side. Every title is
+   * still read out.
+   */
+  titles?: 'all' | 'current'
   className?: string
 }
 
@@ -29,6 +35,7 @@ export function Stepper({
   steps,
   label,
   completedLabel,
+  titles = 'all',
   className,
 }: StepperProps) {
   return (
@@ -62,6 +69,9 @@ export function Stepper({
                 <span
                   className={cn(
                     'text-sm whitespace-nowrap',
+                    titles === 'current' &&
+                      step.state !== 'current' &&
+                      'sr-only',
                     step.state === 'current'
                       ? 'text-brand-ink font-semibold'
                       : step.state === 'done'

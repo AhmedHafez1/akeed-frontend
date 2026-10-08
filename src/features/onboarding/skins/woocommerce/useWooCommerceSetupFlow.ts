@@ -8,14 +8,15 @@ import {
 } from './wooCommerce.types'
 
 /**
- * Finishing setup for a connected WooCommerce store: the shared checklist,
+ * Finishing setup for a connected WooCommerce store: the shared number step,
  * free test and `/complete`, with the WooCommerce rows. There is no currency
  * or phone country to choose here, so what can change the finish is the
  * store's answer about the key and the state of the order notifications.
  */
 export function useWooCommerceSetupFlow(
   connection: WooCommerceConnectionDetails | null,
-  enabled: boolean
+  enabled: boolean,
+  isConnecting = false
 ) {
   const connectionKey = connection
     ? [
@@ -30,6 +31,7 @@ export function useWooCommerceSetupFlow(
     buildChecklist: (senderStatus) =>
       connection ? buildWooCommerceChecklist(connection, senderStatus) : [],
     sourceName: 'WooCommerce',
+    isConnecting,
   })
 }
 

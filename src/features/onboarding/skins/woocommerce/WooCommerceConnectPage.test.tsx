@@ -6,7 +6,6 @@ import type { IntegrationOnboardingState } from '@/features/onboarding/domain/on
 import { renderOnboardingStandalone } from '@/features/onboarding/ui/standalone/components/onboardingTestUtils'
 import { ApiError } from '@/shared/lib/http'
 import {
-  checkWooCommerceConnection,
   disconnectWooCommerce,
   enableWooCommerceWebhooks,
   fetchWooCommerceConnection,
@@ -26,7 +25,7 @@ vi.mock('./wooCommerceApi', () => ({
   fetchWooCommerceConnection: vi.fn(),
   startWooCommerceInstall: vi.fn(),
 }))
-// The connected screen reads the onboarding state for its setup checklist.
+// The connected store's steps read the onboarding state and the message.
 vi.mock('@/features/onboarding/api/onboardingApi', async (importOriginal) => {
   const original =
     await importOriginal<
@@ -35,6 +34,7 @@ vi.mock('@/features/onboarding/api/onboardingApi', async (importOriginal) => {
   return {
     ...original,
     fetchOnboardingState: vi.fn(),
+    fetchTemplatePreviews: vi.fn(),
     updateOnboardingSettings: vi.fn(),
     sendOnboardingTest: vi.fn(),
     fetchOnboardingTest: vi.fn(),
@@ -47,7 +47,6 @@ vi.mock('./wooCommerceNavigation', () => ({
 }))
 
 const onboarding = vi.mocked(onboardingApi)
-const check = vi.mocked(checkWooCommerceConnection)
 const disconnect = vi.mocked(disconnectWooCommerce)
 const enable = vi.mocked(enableWooCommerceWebhooks)
 const fetchStatus = vi.mocked(fetchWooCommerceConnection)
@@ -336,11 +335,13 @@ describe('WooCommerceConnectPage', () => {
       await act(async () => {
         await vi.advanceTimersByTimeAsync(4000)
       })
+      // Connected: straight on to the number for the test message.
       expect(
         await screen.findByRole('heading', {
-          name: 'Your WooCommerce store is connected',
+          name: 'Get your confirmation message ready',
         })
       ).toBeTruthy()
+      expect(await screen.findByLabelText('Your WhatsApp number')).toBeTruthy()
     } finally {
       vi.useRealTimers()
     }
@@ -450,28 +451,33 @@ describe('WooCommerceConnectPage setup and recovery (US-07-05)', () => {
 
   afterEach(() => vi.restoreAllMocks())
 
+  /** The "Your number" step, once the setup it reads has loaded. */
   const checklist = async () =>
     (
       await screen.findByRole('heading', {
         level: 2,
-        name: /Finish setting up|أكمل الإعداد/,
+        name: /How confirmations will run|كيف ستعمل رسائل التأكيد/,
       })
-    ).closest('section') as HTMLElement
+    ).closest('form') as HTMLElement
   const sendTest = (section: HTMLElement) =>
     within(section).getByRole('button', {
       name: /send a test message|أرسل رسالة تجريبية|رسالة/i,
     }) as HTMLButtonElement
 
-  describe('setup checklist', () => {
-    it('finishes with the store, its order notifications and the sender, and no currency or country to choose', async () => {
+  describe('your number', () => {
+    it('asks only for the number, names the store and says how confirmations will run', async () => {
       const { container } = await renderPage(connected, 'en')
       const section = await checklist()
 
+      expect(
+        within(section).getByRole('heading', {
+          level: 1,
+          name: 'Get your confirmation message ready',
+        })
+      ).toBeTruthy()
+      expect(within(section).getByText(STORE_SHOWN)).toBeTruthy()
       expect(section.textContent).toContain(
-        'Your WooCommerce store is connected to Akeed.'
-      )
-      expect(section.textContent).toContain(
-        'Each order’s currency and phone country come from the order itself, so there is nothing to choose.'
+        'The test is free and goes to your number only.'
       )
       expect(section.textContent).toContain(
         'Messages go out from Akeed’s WhatsApp number.'
@@ -479,7 +485,7 @@ describe('WooCommerceConnectPage setup and recovery (US-07-05)', () => {
       expect(section.textContent).toContain(
         'Akeed never cancels the order in WooCommerce by itself.'
       )
-      expect(section.textContent).not.toContain('Complete the items above')
+      expect(section.textContent).not.toContain('Fix what’s flagged above')
       expect(sendTest(section).disabled).toBe(false)
       // Nothing to pick or paste for the store: the only field is the
       // number for the test message.
@@ -489,16 +495,31 @@ describe('WooCommerceConnectPage setup and recovery (US-07-05)', () => {
       expect(container.querySelector('input[type="password"]')).toBeNull()
     })
 
+    it('stays quiet about order notifications while they work, and leaves the connection check to Settings', async () => {
+      await renderPage(connected, 'en')
+      await checklist()
+
+      expect(document.body.textContent).not.toContain(
+        'Order notifications in your store'
+      )
+      expect(
+        screen.queryByRole('button', { name: 'Check connection' })
+      ).toBeNull()
+    })
+
     it('shows the same in Arabic, right to left', async () => {
       await renderPage(connected)
       const section = await checklist()
 
       expect(document.documentElement.dir).toBe('rtl')
+      expect(
+        within(section).getByRole('heading', {
+          level: 1,
+          name: 'جهّز رسالة التأكيد لمتجرك',
+        })
+      ).toBeTruthy()
       expect(section.textContent).toContain(
-        'متجرك على WooCommerce مربوط بأكيد.'
-      )
-      expect(section.textContent).toContain(
-        'عملة كل طلب ودولة رقم الهاتف تأتيان من الطلب نفسه، فلا يوجد ما تختاره.'
+        'رسالة التجربة مجانية وتصل إلى رقمك فقط.'
       )
       expect(section.textContent).toContain('تذكير بعد 120 دقيقة من دون رد.')
       expect(sendTest(section).disabled).toBe(false)
@@ -519,7 +540,7 @@ describe('WooCommerceConnectPage setup and recovery (US-07-05)', () => {
 
       expect(sendTest(section).disabled).toBe(true)
       expect(section.textContent).toContain(
-        'Complete the items above to send the test message.'
+        'Fix what’s flagged above to send the test message.'
       )
     })
 
@@ -687,33 +708,6 @@ describe('WooCommerceConnectPage setup and recovery (US-07-05)', () => {
       ).toBeNull()
     }
   )
-
-  it('finds a notification the store disabled when the merchant checks the connection, and offers the re-enable', async () => {
-    await renderPage(connected, 'en')
-    const disabled = connectedWith({
-      webhooks: [
-        { kind: 'order_created', state: 'disabled' },
-        { kind: 'order_updated', state: 'active' },
-      ],
-    })
-    check.mockResolvedValue({
-      checkedAt: '2026-10-05T09:30:00.000Z',
-      problems: ['WOOCOMMERCE_WEBHOOK_DISABLED'],
-      webhooks: disabled.connection!.webhooks,
-      status: disabled,
-    })
-
-    fireEvent.click(button('Check connection'))
-
-    expect((await screen.findByRole('alert')).textContent).toContain(
-      'Your store disabled an order notification. Re-enable it above. Orders placed while it was disabled are not imported.'
-    )
-    expect(button('Re-enable order notifications').disabled).toBe(false)
-    // What blocks the finish is read again.
-    await waitFor(() =>
-      expect(onboarding.fetchOnboardingState).toHaveBeenCalledTimes(2)
-    )
-  })
 
   it('says how many deliveries were refused', async () => {
     await renderPage(connectedWith({ rejectedDeliveries: 3 }), 'en')

@@ -83,3 +83,15 @@ export function Notice({
     </div>
   )
 }
+
+/**
+ * The wide column of the steps every source shares (the number and the
+ * test), the same one Standalone's steps sit in.
+ */
+export function WideFrame({ children }: { children: ReactNode }) {
+  return (
+    <div className="mx-auto w-full max-w-[1120px] px-4 py-6 sm:px-6 sm:py-12">
+      {children}
+    </div>
+  )
+}

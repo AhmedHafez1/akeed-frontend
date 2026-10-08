@@ -6,9 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { CircleHelp, Languages, LogOut, Menu } from 'lucide-react'
 import {
-  ONBOARDING_STORE_STEP_TITLE,
-  parseStandaloneStep,
-  STANDALONE_STEP_NUMBER,
+  resolveOnboardingProgress,
   STANDALONE_TOTAL_STEPS,
   useOnboardingSourceSkin,
 } from '@/features/onboarding'
@@ -49,9 +47,9 @@ interface StandaloneOnboardingShellProps {
  * While onboarding is incomplete every protected destination redirects back
  * here, so the full sidebar shell is replaced by a slim bar: the Akeed mark
  * at the start, the setup stepper in the centre, and language, Help and sign
- * out at the end. Below 640px the stepper becomes one line of text over a
- * thin progress bar, and the three actions move into a menu. The logo is
- * deliberately not a link.
+ * out at the end. Where the stepper would not fit it becomes one line of
+ * text over a thin progress bar, and below 640px the three actions move into
+ * a menu. The logo is deliberately not a link.
  */
 export function StandaloneOnboardingShell({
   children,
@@ -223,33 +221,28 @@ function AccountPendingProgress() {
   )
 }
 
+/** The widest setup the bar can name in full from 640px up. */
+const FULL_STEPPER_MAX_STEPS = 3
+
 /**
- * Account · Your store · Try the message, driven by the page's `?step`. The
- * account step is always done: nobody reaches this shell without one. The
- * middle step is named by the source being set up.
+ * The setup steps of the source being set up, driven by the page's `?step`.
+ * Three steps fit the bar by name. A longer setup names only the step on
+ * screen until the bar is wide enough for all of them, and uses the one-line
+ * form a little longer on small screens.
  */
 function OnboardingProgress() {
   const t = useTranslations('standaloneOnboarding.flow')
   const searchParams = useSearchParams()
-  const step = parseStandaloneStep(searchParams?.get('step')) ?? 'store'
-  const storeTitle = t(ONBOARDING_STORE_STEP_TITLE[useOnboardingSourceSkin()])
-
-  const steps: StepperStep[] = [
-    { id: 'account', title: t('account'), state: 'done' },
-    {
-      id: 'store',
-      title: storeTitle,
-      state: step === 'store' ? 'current' : 'done',
-    },
-    {
-      id: 'test',
-      title: t('test'),
-      state:
-        step === 'test' ? 'current' : step === 'done' ? 'done' : 'upcoming',
-    },
-  ]
-  const current = STANDALONE_STEP_NUMBER[step]
-  const title = step === 'store' ? storeTitle : t('test')
+  const progress = resolveOnboardingProgress(
+    useOnboardingSourceSkin(),
+    searchParams?.get('step')
+  )
+  const steps: StepperStep[] = progress.steps.map((step) => ({
+    id: step.id,
+    title: t(step.titleKey),
+    state: step.state,
+  }))
+  const isLong = steps.length > FULL_STEPPER_MAX_STEPS
 
   return (
     <>
@@ -257,15 +250,24 @@ function OnboardingProgress() {
         steps={steps}
         label={t('label')}
         completedLabel={t('completed')}
-        className="hidden sm:block"
+        className={isLong ? 'hidden 2xl:block' : 'hidden sm:block'}
       />
+      {isLong && (
+        <Stepper
+          steps={steps}
+          label={t('label')}
+          completedLabel={t('completed')}
+          titles="current"
+          className="hidden md:block 2xl:hidden"
+        />
+      )}
       <StepperCompact
-        className="sm:hidden"
-        progress={step === 'done' ? 1 : current / STANDALONE_TOTAL_STEPS}
+        className={isLong ? 'md:hidden' : 'sm:hidden'}
+        progress={progress.fraction}
         progressLabel={t('compact', {
-          current,
-          total: STANDALONE_TOTAL_STEPS,
-          title,
+          current: progress.current,
+          total: progress.total,
+          title: t(progress.titleKey),
         })}
       />
     </>

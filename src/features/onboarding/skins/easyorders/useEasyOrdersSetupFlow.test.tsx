@@ -231,8 +231,67 @@ describe('useEasyOrdersSetupFlow', () => {
     const view = renderFlow(null)
 
     expect(mocked.fetchOnboardingState).not.toHaveBeenCalled()
-    expect(view.result.current.step).toBe('store')
     expect(view.result.current.isReady).toBe(false)
+  })
+
+  it.each([
+    ['the currency', { ...READY, currency: null }],
+    ['the phone country', { ...READY, phoneCountry: null }],
+    ['a webhook secret', { ...READY, statusSecretSet: false }],
+  ])(
+    'holds the merchant on the details step while %s is missing, whatever the URL asks',
+    async (_, connection) => {
+      window.history.replaceState(null, '', '/ar/onboarding?step=test')
+      mocked.fetchOnboardingState.mockResolvedValue({
+        state: makeState({ merchantWhatsappPhone: PHONE }),
+      })
+      const view = await renderLoaded(connection)
+
+      expect(view.result.current.step).toBe('details')
+      await waitFor(() => expect(stepInUrl()).toBe('details'))
+      expect(mocked.fetchOnboardingTest).not.toHaveBeenCalled()
+    }
+  )
+
+  it('goes on to the number once the details are saved, and back to them when asked', async () => {
+    const view = await renderLoaded()
+    expect(view.result.current.step).toBe('store')
+
+    act(() => view.result.current.editDetails())
+    expect(view.result.current.step).toBe('details')
+    expect(stepInUrl()).toBe('details')
+
+    act(() => view.result.current.continueToNumber())
+    expect(view.result.current.step).toBe('store')
+    expect(stepInUrl()).toBe('store')
+  })
+
+  it('names the connect step in a URL that had run ahead of a store that is not connected', () => {
+    window.history.replaceState(null, '', '/ar/onboarding?step=test&a=1')
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <QueryClientProvider client={new QueryClient()}>
+        <NextIntlClientProvider locale="ar" messages={ar} timeZone="UTC">
+          {children}
+        </NextIntlClientProvider>
+      </QueryClientProvider>
+    )
+    renderHook(() => useEasyOrdersSetupFlow(null, false, true), { wrapper })
+
+    expect(window.location.search).toBe('?step=connect&a=1')
+    expect(mocked.fetchOnboardingState).not.toHaveBeenCalled()
+  })
+
+  it('leaves a URL without a step alone while the store is not connected', () => {
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <QueryClientProvider client={new QueryClient()}>
+        <NextIntlClientProvider locale="ar" messages={ar} timeZone="UTC">
+          {children}
+        </NextIntlClientProvider>
+      </QueryClientProvider>
+    )
+    renderHook(() => useEasyOrdersSetupFlow(null, false, true), { wrapper })
+
+    expect(window.location.search).toBe('')
   })
 
   it('starts on the checklist, under the common step name', async () => {

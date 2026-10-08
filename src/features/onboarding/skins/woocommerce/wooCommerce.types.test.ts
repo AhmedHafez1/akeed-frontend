@@ -3,7 +3,6 @@ import ar from '../../../../../public/messages/ar.json'
 import en from '../../../../../public/messages/en.json'
 import {
   WOOCOMMERCE_CHECK_PROBLEMS,
-  WOOCOMMERCE_CHECKLIST_ITEMS,
   WOOCOMMERCE_ERROR_CODES,
   WOOCOMMERCE_UNSUPPORTED_STORE_CODES,
   buildWooCommerceChecklist,
@@ -380,16 +379,12 @@ describe('WooCommerce messages (US-07-05)', () => {
   })
 
   it.each(Object.entries({ ar, en }))(
-    '%s names every checklist row, webhook state and webhook kind',
+    '%s names every webhook state and webhook kind',
     (_locale, messages) => {
       const woo = messages.wooCommerceConnect
-      const items: Record<string, { title: string }> = woo.checklist.items
       const states: Record<string, string> = woo.webhooks.states
       const health = messages.settings.standalone.page.store.health.webhooks
 
-      expect(Object.keys(items).sort()).toEqual(
-        [...WOOCOMMERCE_CHECKLIST_ITEMS].sort()
-      )
       for (const state of [
         'active',
         'paused',

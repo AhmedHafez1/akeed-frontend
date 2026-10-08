@@ -7,7 +7,6 @@ import {
   type FormEvent,
   type ReactNode,
 } from 'react'
-import Link from 'next/link'
 import { useLocale, useTranslations } from 'next-intl'
 import {
   AlertCircle,
@@ -26,18 +25,19 @@ import {
   Label,
   LoadingButton,
   Skeleton,
-  StatusBadge,
   akCard,
 } from '@/shared/ui'
 import {
   ConnectionLine,
   type ConnectionLineState,
 } from '../connect/ConnectionLine'
-import { SourceSetupChecklist } from '../connect/SourceSetupChecklist'
-import { Frame, Notice, Panel } from '../connect/connectUi'
+import { Frame, Notice, Panel, WideFrame } from '../connect/connectUi'
+import { SourceDoneStep } from '../connect/SourceDoneStep'
+import { SourceNumberStep } from '../connect/SourceNumberStep'
 import { DisconnectWooCommerceDialog } from './DisconnectWooCommerceDialog'
 import {
   displayStoreAddress,
+  hasWebhookIn,
   isUnnamedWooCommerceError,
   isWooCommerceReconnect,
   toStoreAddress,
@@ -46,19 +46,23 @@ import {
 } from './wooCommerce.types'
 import { useWooCommerceConnection } from './useWooCommerceConnection'
 import { useWooCommerceSetupFlow } from './useWooCommerceSetupFlow'
-import { WooCommerceConnectionCheck } from './WooCommerceConnectionCheck'
 import { WooCommerceKeyRemovalSteps } from './WooCommerceKeyRemovalSteps'
 import { WooCommerceWebhookStatus } from './WooCommerceWebhookStatus'
 
 const STORE_URL_FIELD = 'woocommerce-store-url'
 const USES = ['orders', 'notifications', 'outcomes'] as const
 
+/** Webhook states the merchant has to act on before setup can finish. */
+const WEBHOOK_PROBLEMS = ['disabled', 'paused', 'missing'] as const
+
 /**
- * Connecting a WooCommerce store and finishing its setup: enter its address,
- * approve in the store, wait while the store sends Akeed its access, then
- * connected (with the setup checklist, then the free test); or denied,
- * unsupported store, error, rejected access or disconnected, one at a time.
- * The authorize link, the keys, the webhook secret and the delivery address
+ * Connecting a WooCommerce store and finishing its setup, one step at a
+ * time: connect (enter the address, approve in the store, wait while the
+ * store sends Akeed its access; or denied, unsupported store, error,
+ * rejected access or disconnected), the number for the free test, the test
+ * and the finish. The state of the order notifications is shown only when
+ * one needs attention; Settings has the full picture afterwards. The
+ * authorize link, the keys, the webhook secret and the delivery address
  * never appear on this screen.
  */
 export function WooCommerceConnectPage() {
@@ -68,7 +72,8 @@ export function WooCommerceConnectPage() {
   const { view, status, canManage } = connection
   const setup = useWooCommerceSetupFlow(
     status?.connection ?? null,
-    view === 'connected'
+    view === 'connected',
+    view !== 'loading' && view !== 'connected'
   )
   const [storeUrl, setStoreUrl] = useState('')
   const [missingUrl, setMissingUrl] = useState(false)
@@ -188,7 +193,7 @@ export function WooCommerceConnectPage() {
 
   if (view === 'connected' && setup.step === 'test' && setup.state) {
     return (
-      <div className="mx-auto w-full max-w-[1120px] px-4 py-6 sm:px-6 sm:py-12">
+      <WideFrame>
         <TestStep
           test={setup.test}
           completion={setup.completion}
@@ -200,23 +205,58 @@ export function WooCommerceConnectPage() {
           canManage={setup.canManage}
           headingRef={headingRef}
         />
-      </div>
+      </WideFrame>
     )
   }
 
   if (view === 'connected' && setup.step === 'done') {
     return (
-      <Frame>
-        <Panel icon={<Check aria-hidden="true" strokeWidth={3} />} tone="brand">
-          <StatusBadge kind="confirmed">{t('done.badge')}</StatusBadge>
-          {heading(t('done.title'))}
-          <p className="text-ink-muted text-sm">{t('done.body')}</p>
-          <p className="text-ink-muted text-sm">{t('connected.next')}</p>
-          <Button asChild size="lg" className="font-semibold">
-            <Link href={setup.dashboardPath}>{t('done.dashboard')}</Link>
-          </Button>
-        </Panel>
-      </Frame>
+      <WideFrame>
+        <SourceDoneStep
+          badge={t('done.badge')}
+          title={t('done.title')}
+          body={t('done.body')}
+          next={t('connected.next')}
+          dashboardLabel={t('done.dashboard')}
+          dashboardPath={setup.dashboardPath}
+          headingRef={headingRef}
+        />
+      </WideFrame>
+    )
+  }
+
+  if (view === 'connected' && details) {
+    // Quiet while the notifications work; the whole picture once one needs
+    // the merchant, or once they have just re-enabled one.
+    const webhooksNeedAttention =
+      WEBHOOK_PROBLEMS.some((state) => hasWebhookIn(details, state)) ||
+      details.rejectedDeliveries > 0 ||
+      connection.webhooksEnabled ||
+      connection.enableErrorCode !== null
+
+    return (
+      <WideFrame>
+        <SourceNumberStep
+          setup={setup}
+          namespace="wooCommerceConnect.checklist"
+          idPrefix="woocommerce"
+          lead={line('connected')}
+          attention={
+            <>
+              {readOnly}
+              {webhooksNeedAttention && (
+                <div className="border-line rounded-panel border p-4">
+                  <WooCommerceWebhookStatus
+                    details={details}
+                    connection={connection}
+                  />
+                </div>
+              )}
+            </>
+          }
+          headingRef={headingRef}
+        />
+      </WideFrame>
     )
   }
 
@@ -426,33 +466,6 @@ export function WooCommerceConnectPage() {
           {readOnly}
           {tryAgain(t('error.retry'))}
         </Panel>
-      )}
-
-      {view === 'connected' && details && (
-        <>
-          <Panel lead={line('connected')} tone="brand">
-            <StatusBadge kind="confirmed">{t('connected.badge')}</StatusBadge>
-            {heading(t('connected.title'))}
-            <p className="text-ink-muted text-sm">{t('connected.body')}</p>
-          </Panel>
-
-          <div className={cn(akCard, 'space-y-4 p-6 sm:p-8')}>
-            {readOnly}
-            <WooCommerceWebhookStatus
-              details={details}
-              connection={connection}
-            />
-            <div className="border-line border-t pt-4">
-              <WooCommerceConnectionCheck connection={connection} />
-            </div>
-          </div>
-
-          <SourceSetupChecklist
-            setup={setup}
-            namespace="wooCommerceConnect.checklist"
-            idPrefix="woocommerce"
-          />
-        </>
       )}
 
       {view === 'credentialsRejected' && details && (
