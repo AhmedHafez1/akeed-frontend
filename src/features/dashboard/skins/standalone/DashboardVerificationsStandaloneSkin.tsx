@@ -8,6 +8,7 @@ import { cn } from '@/shared/lib/utils'
 import { akButton, akCard, notify } from '@/shared/ui'
 import { useConfirmationsList } from '../../domain/useConfirmationsList'
 import { useManualConfirmation } from '../../domain/useManualConfirmation'
+import { useOutcomeSyncRetry } from '../../domain/useOutcomeSyncRetry'
 import type { DateRangeFilterOption } from '../../domain/dashboard.types'
 import { formatCount } from '../../lib/orderDisplay'
 import type {
@@ -66,6 +67,7 @@ export function DashboardVerificationsStandaloneSkin({
     showPendingOrders: true,
   })
   const confirmation = useManualConfirmation()
+  const storeSync = useOutcomeSyncRetry()
   const [cancelTarget, setCancelTarget] = useState<{
     row: VerificationItem
     orderLabel: string
@@ -107,6 +109,14 @@ export function DashboardVerificationsStandaloneSkin({
       message: creditKey ? tCredits(creditKey) : t('table.actions.retryError'),
       id: 'confirmations-row-action',
     })
+  }
+
+  const handleRetryStoreSync = async (row: VerificationItem) => {
+    const result = await storeSync.retry(row.id)
+    const message = t(`table.storeSync.retryResult.${result}`)
+    const options = { message, id: 'confirmations-store-sync' }
+    if (result === 'updated' || result === 'pending') notify.success(options)
+    else notify.error(options)
   }
 
   const handleCancel = async () => {
@@ -287,6 +297,9 @@ export function DashboardVerificationsStandaloneSkin({
         verification={detailsRow}
         timeZone={list.reportingTimezone}
         onClose={() => setDetailsId(null)}
+        canRetrySync={list.canWrite}
+        retryingSyncId={storeSync.retryingId}
+        onRetrySync={(row) => void handleRetryStoreSync(row)}
       />
       <ManualConfirmDialog
         target={confirmation.target}

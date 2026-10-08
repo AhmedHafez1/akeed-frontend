@@ -7,6 +7,7 @@ import type {
 import type { StandaloneOnboardingFlow } from '@/features/onboarding/hooks/useStandaloneOnboardingFlow'
 import { TestStep } from './TestStep'
 import { renderStep } from './stepTestUtils'
+import { templateMessageFixture } from '@/shared/lib/templateMessageFixture'
 
 function makeTestState(
   status: OnboardingTestStatus | null,
@@ -16,14 +17,16 @@ function makeTestState(
   return {
     phone: '+20 101 234 5670',
     language: 'ar',
-    preview: {
-      greeting: 'أهلًا بك {{customer}}',
-      body: 'طلبك من {{store}}',
-      totalLabel: 'إجمالي الطلب: {{total}}',
-      ending: 'يرجى تأكيد الطلب.',
-      confirmButton: 'تأكيد الطلب',
-      cancelButton: 'إلغاء الطلب',
-    },
+    message: templateMessageFixture(
+      [
+        'أهلًا بك {{customer}}',
+        'طلبك من {{store}}',
+        'إجمالي الطلب: {{total}}',
+        'يرجى تأكيد الطلب.',
+      ],
+      ['تأكيد الطلب', 'إلغاء الطلب'],
+      { direction: 'rtl' }
+    ),
     sample: {
       customerName: 'أحمد',
       orderNumber: 'TEST-1',

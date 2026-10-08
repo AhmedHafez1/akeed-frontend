@@ -3,7 +3,10 @@
 import { useMutation } from '@tanstack/react-query'
 import { api } from '@/shared/lib/auth'
 import { useEmitDomainEvent } from '@/shared/query/domainEvents'
-import type { CancelOrderResponse } from '@/shared/types/commerce-outcome.model'
+import type {
+  CancelOrderResponse,
+  OutcomeSyncRetryResponse,
+} from '@/shared/types/commerce-outcome.model'
 import { retryManualOrderVerification } from '@/features/orders/api/manualOrderApi'
 
 export interface SendTestVerificationResponse {
@@ -40,6 +43,23 @@ export function useRetryVerificationMutation() {
     mutationFn: (orderId: string) => retryManualOrderVerification(orderId),
     onSuccess: () => {
       void emitDomainEvent('verification.retried')
+    },
+  })
+}
+
+/**
+ * Asks the server to tell the store again about a result it failed to take.
+ * The list is refreshed whatever the answer: a refused retry still says why.
+ */
+export function useRetryOutcomeSyncMutation() {
+  const emitDomainEvent = useEmitDomainEvent()
+  return useMutation({
+    mutationFn: (verificationId: string) =>
+      api.post<OutcomeSyncRetryResponse>(
+        `/api/verifications/${encodeURIComponent(verificationId)}/outcome-sync/retry`
+      ),
+    onSettled: () => {
+      void emitDomainEvent('verification.storeSyncRetried')
     },
   })
 }

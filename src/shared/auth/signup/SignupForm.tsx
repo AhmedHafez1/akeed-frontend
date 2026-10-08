@@ -4,10 +4,21 @@ import { useEffect, type FormEvent } from 'react'
 import Link from 'next/link'
 import { AlertCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import {
+  DEFAULT_SIGNUP_SOURCE_ID,
+  getSignupSources,
+  type SignupSource,
+} from '@/shared/config/commerceSources'
 import { auth } from '@/shared/lib/auth'
 import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
-import { Input, LoadingButton, Separator } from '@/shared/ui'
+import {
+  AkChoiceCard,
+  AkChoiceGroup,
+  Input,
+  LoadingButton,
+  Separator,
+} from '@/shared/ui'
 import { PasswordInput } from '../PasswordInput'
 import { ShopifyContinueLink } from '../ShopifyContinueLink'
 import { AUTH_WARNING_FIELD, AuthField } from './AuthField'
@@ -23,6 +34,8 @@ interface SignupFormProps {
   locale: string
   /** Field to focus on mount, e.g. email after "Change email". */
   initialFocus?: SignupField | null
+  /** Order sources to choose from; the picker shows only with two or more. */
+  sources?: readonly SignupSource[]
 }
 
 const LINK_CLASS =
@@ -41,6 +54,7 @@ export function SignupForm({
   signup,
   locale,
   initialFocus = null,
+  sources = getSignupSources(),
 }: SignupFormProps) {
   const t = useTranslations('auth.signup')
 
@@ -138,6 +152,34 @@ export function SignupForm({
             />
           )}
         </AuthField>
+
+        {sources.length > 1 && (
+          <div className="space-y-2">
+            <p
+              id={`${SIGNUP_FIELD_IDS.source}-label`}
+              className="text-ink text-sm font-semibold"
+            >
+              {t('source.label')}
+            </p>
+            <AkChoiceGroup
+              id={SIGNUP_FIELD_IDS.source}
+              aria-labelledby={`${SIGNUP_FIELD_IDS.source}-label`}
+              columns={2}
+            >
+              {sources.map((source) => (
+                <AkChoiceCard
+                  key={source.id}
+                  checked={
+                    (values.source ?? DEFAULT_SIGNUP_SOURCE_ID) === source.id
+                  }
+                  onSelect={() => setValue('source', source.id)}
+                  title={t(`source.options.${source.id}.title`)}
+                  description={t(`source.options.${source.id}.description`)}
+                />
+              ))}
+            </AkChoiceGroup>
+          </div>
+        )}
 
         <AuthField
           htmlFor={SIGNUP_FIELD_IDS.email}

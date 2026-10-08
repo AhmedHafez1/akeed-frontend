@@ -27,7 +27,7 @@ vi.mock('@/features/onboarding/api/onboardingApi', async (importOriginal) => {
 const idle: OnboardingTestState = {
   phone: '+201012345670',
   language: 'ar',
-  preview: null as never,
+  message: null as never,
   sample: {
     customerName: 'أحمد',
     orderNumber: 'TEST-1',

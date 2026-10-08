@@ -2,18 +2,18 @@
 
 import { fetchWithAuth } from '@/shared/lib/auth'
 import { getErrorMessage, parseJsonResponse } from '@/shared/lib/http'
+import type { TemplateMessage } from '@/shared/lib/templateMessage'
 import type {
   CompleteOnboardingSetupPayload,
   OnboardingClientEvent,
   OnboardingTestState,
-  OnboardingTestTemplatePreview,
   OnboardingBillingPlanConfig,
   OnboardingBillingPlanId,
   OnboardingBillingPlansResponse,
   OnboardingBillingResponse,
   OnboardingSettingsPayload,
   OnboardingStateResponse,
-  StandaloneSetupBlockedReason,
+  SetupBlockedReason,
 } from '@/features/onboarding/domain/onboarding.types'
 
 export class OnboardingApiError extends Error {
@@ -21,7 +21,7 @@ export class OnboardingApiError extends Error {
     message: string,
     readonly status: number,
     readonly code: string | null,
-    readonly blockedReasons: StandaloneSetupBlockedReason[] = []
+    readonly blockedReasons: SetupBlockedReason[] = []
   ) {
     super(message)
   }
@@ -38,12 +38,12 @@ export function isFreePlanAlreadyClaimedError(error: unknown): boolean {
 async function getOnboardingApiError(response: Response) {
   let message = `Request failed with status ${response.status}`
   let code: string | null = null
-  let blockedReasons: StandaloneSetupBlockedReason[] = []
+  let blockedReasons: SetupBlockedReason[] = []
   try {
     const body = await parseJsonResponse<{
       message?: string | string[]
       code?: string
-      blockedReasons?: StandaloneSetupBlockedReason[]
+      blockedReasons?: SetupBlockedReason[]
     }>(response)
     message = Array.isArray(body.message)
       ? body.message.join(', ')
@@ -56,6 +56,38 @@ async function getOnboardingApiError(response: Response) {
   return new OnboardingApiError(message, response.status, code, blockedReasons)
 }
 
+/**
+ * The organization's source as the last state read saw it: its platform,
+ * `missing` when it has none yet, or `null` before any read.
+ */
+export type KnownOnboardingSource = { platformType: string } | 'missing' | null
+
+let knownOnboardingSource: KnownOnboardingSource = null
+let knownSignupSource: string | null = null
+
+/** Lets setup pick its skin without a second read after the route guard's. */
+export function getKnownOnboardingSource(): KnownOnboardingSource {
+  return knownOnboardingSource
+}
+
+/**
+ * The store platform chosen at signup, as the route guard read it from the
+ * session. Setup uses it to pick the connect skin of a source-less
+ * organization; the guard has already decided the choice is connectable.
+ */
+export function rememberSignupSource(signupSourceId: unknown): void {
+  knownSignupSource = typeof signupSourceId === 'string' ? signupSourceId : null
+}
+
+export function getKnownSignupSource(): string | null {
+  return knownSignupSource
+}
+
+export function clearKnownOnboardingSource(): void {
+  knownOnboardingSource = null
+  knownSignupSource = null
+}
+
 export async function fetchOnboardingState(): Promise<OnboardingStateResponse> {
   const response = await fetchWithAuth('/api/onboarding/state', {
     method: 'GET',
@@ -63,10 +95,16 @@ export async function fetchOnboardingState(): Promise<OnboardingStateResponse> {
   })
 
   if (!response.ok) {
-    throw await getOnboardingApiError(response)
+    const error = await getOnboardingApiError(response)
+    if (error.code === 'ONBOARDING_SOURCE_MISSING') {
+      knownOnboardingSource = 'missing'
+    }
+    throw error
   }
 
-  return parseJsonResponse<OnboardingStateResponse>(response)
+  const result = await parseJsonResponse<OnboardingStateResponse>(response)
+  knownOnboardingSource = { platformType: result.state.source.platformType }
+  return result
 }
 
 export async function updateOnboardingSettings(
@@ -140,8 +178,8 @@ export async function skipOnboardingTest(): Promise<OnboardingTestState> {
 }
 
 export interface OnboardingTemplatePreviews {
-  ar: OnboardingTestTemplatePreview
-  en: OnboardingTestTemplatePreview
+  ar: TemplateMessage
+  en: TemplateMessage
 }
 
 /**
@@ -161,9 +199,9 @@ export async function fetchTemplatePreviews(): Promise<OnboardingTemplatePreview
   }
 
   const body = await parseJsonResponse<{
-    template: { previews: OnboardingTemplatePreviews }
+    template: { messages: OnboardingTemplatePreviews }
   }>(response)
-  return body.template.previews
+  return body.template.messages
 }
 
 /**

@@ -5,6 +5,7 @@
     "stores": "Stores",
     "funnel": "Funnel",
     "billing": "Standalone billing",
+    "templates": "Templates",
     "navigation": "Admin navigation",
     "signOut": "Sign out",
     "retry": "Retry",
@@ -12,7 +13,532 @@
     "accessError": "Unable to verify access",
     "accessRequiredBody": "Your account is signed in but is not authorized for the Akeed control tower.",
     "accessErrorBody": "Try again. If the problem continues, share the request ID with the team.",
-    "requestId": "Request ID: {id}"
+    "requestId": "Request ID: {id}",
+    "messageTexts": "Message texts"
+  },
+  "adminTemplates": {
+    "eyebrow": "WhatsApp templates",
+    "title": "Templates",
+    "description": "Every message template Akeed can send: what Meta says about it, who sends it and how it performs.",
+    "refresh": "Refresh",
+    "loading": "Loading templates…",
+    "none": "—",
+    "never": "Never",
+    "pendingCategory": "Meta will move it to {category}",
+    "status": {
+      "not_synced": "Not synced yet",
+      "approved": "Approved",
+      "pending": "In review",
+      "rejected": "Rejected",
+      "paused": "Paused",
+      "disabled": "Disabled",
+      "in_appeal": "Appeal requested",
+      "limit_exceeded": "Limit exceeded",
+      "pending_deletion": "Being deleted",
+      "deleted": "Deleted",
+      "archived": "Archived",
+      "flagged": "Flagged",
+      "locked": "Locked",
+      "reinstated": "Reinstated",
+      "unarchived": "Unarchived",
+      "missing": "Missing at Meta",
+      "unknown": "Unknown"
+    },
+    "quality": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low",
+      "pending": "Not rated yet",
+      "unknown": "Unknown"
+    },
+    "category": {
+      "utility": "Utility",
+      "marketing": "Marketing",
+      "authentication": "Authentication",
+      "unknown": "Unknown"
+    },
+    "purpose": {
+      "cod_confirmation": "COD confirmation",
+      "cod_reminder": "COD reminder"
+    },
+    "sendPurpose": {
+      "initial": "First message",
+      "reminder": "Reminder",
+      "test": "Merchant test"
+    },
+    "language": {
+      "ar": "Arabic",
+      "en": "English"
+    },
+    "parameterFormat": {
+      "named": "Named",
+      "positional": "Positional"
+    },
+    "flags": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "default": "Language default",
+      "notSendable": "Cannot be sent"
+    },
+    "range": {
+      "label": "Date range for metrics",
+      "from": "From",
+      "to": "To",
+      "hint": "Sends accepted in this range, in UTC. Up to 92 days.",
+      "invalid": "Choose a start date that is not after the end date."
+    },
+    "filters": {
+      "label": "Template filters",
+      "purpose": "Purpose",
+      "language": "Language",
+      "status": "Meta status",
+      "active": "In Akeed",
+      "all": "All",
+      "reset": "Reset filters"
+    },
+    "table": {
+      "caption": "WhatsApp templates",
+      "template": "Template",
+      "purpose": "Purpose and language",
+      "status": "Meta status",
+      "category": "Category",
+      "quality": "Quality",
+      "stores": "Active stores",
+      "sends": "Sends",
+      "replyRate": "Reply rate",
+      "confirmationRate": "Confirmation rate",
+      "lastSync": "Last sync",
+      "drift": "Text check"
+    },
+    "empty": {
+      "title": "No templates yet",
+      "description": "The template registry is empty in this environment.",
+      "filtered": "No template matches these filters."
+    },
+    "sync": {
+      "run": "Sync now",
+      "running": "Syncing…",
+      "done": "Sync finished.",
+      "failed": "Sync failed: {reason}",
+      "updated": "Updated",
+      "unchanged": "Unchanged",
+      "missing": "Missing at Meta",
+      "unknownAtMeta": "At Meta, not in Akeed",
+      "disabled": "Template sync is off in this environment, so Meta status is not being read.",
+      "last": "Last sync {time} · {status}",
+      "never": "This environment has not synced with Meta yet.",
+      "status": {
+        "running": "Running",
+        "succeeded": "Succeeded",
+        "failed": "Failed"
+      },
+      "trigger": {
+        "scheduled": "Scheduled sync",
+        "manual": "Manual sync",
+        "webhook": "Sync after a Meta update"
+      },
+      "errorCodes": {
+        "not_configured": "the WhatsApp account ID or token is not set",
+        "auth_failed": "Meta refused the access token",
+        "permission_denied": "the token cannot manage templates",
+        "rate_limited": "Meta asked us to slow down",
+        "provider_error": "Meta returned an error",
+        "network": "Meta could not be reached",
+        "too_many_pages": "Meta returned more templates than expected",
+        "persistence_failed": "the result could not be saved",
+        "abandoned": "the sync did not finish",
+        "unknown": "unknown reason"
+      }
+    },
+    "drift": {
+      "state": {
+        "not_synced": "Not checked",
+        "missing": "Missing at Meta",
+        "unreadable": "Could not read",
+        "drift": "Differs from Meta",
+        "in_sync": "Matches Meta"
+      },
+      "kind": {
+        "parameter_format": "Parameter format",
+        "variables": "Variables",
+        "buttons": "Buttons",
+        "button_labels": "Button labels",
+        "body": "Message text"
+      },
+      "registered": "In Akeed",
+      "provider": "At Meta"
+    },
+    "warnings": {
+      "missingTitle": "Meta has no template with this name and language",
+      "missingBody": "A send of this template is refused by Meta. With the send guardrail on, stores that chose it get the language default instead.",
+      "inactiveTitle": "This template is inactive in Akeed",
+      "inactiveBody": "It is not offered to merchants and is not sent.",
+      "notSendableTitle": "This template cannot be sent now",
+      "notSendableBody": "Meta status: {status}. Only an approved template is sent.",
+      "categoryTitle": "Meta is changing this template's category",
+      "categoryBody": "It will become {category}. It keeps sending, but its messages may cost more and some may not be delivered.",
+      "notSyncedTitle": "Not synced with Meta yet",
+      "notSyncedBody": "This environment has never read its templates from Meta, so there is no Meta text to compare. The preview below is Akeed's own copy.",
+      "unreadableTitle": "Meta's text could not be read",
+      "unreadableBody": "The last sync returned this template in a form Akeed does not read, so nothing was compared.",
+      "driftSendTitle": "What Akeed sends does not match this template at Meta",
+      "driftSendBody": "Meta may refuse the message or fill it wrongly. Fix this before stores keep sending it.",
+      "driftPreviewTitle": "The preview merchants see differs from Meta's text",
+      "driftPreviewBody": "Customers receive Meta's text. The message is still delivered."
+    },
+    "preview": {
+      "title": "Message",
+      "fromMeta": "Meta's text with sample values, as a customer receives it.",
+      "fromRegistry": "Akeed's own preview with sample values. Meta's text is not available.",
+      "sender": "Akeed",
+      "senderStatus": "Business account",
+      "avatarAlt": "Akeed",
+      "day": "Today",
+      "time": "10:30"
+    },
+    "facts": {
+      "title": "Template",
+      "purpose": "Purpose",
+      "language": "Language",
+      "format": "Parameter format",
+      "category": "Category",
+      "quality": "Quality",
+      "lastSync": "Last sync",
+      "textChanged": "Meta text last changed",
+      "metaId": "Meta template ID"
+    },
+    "variables": {
+      "title": "Variables",
+      "description": "What Akeed fills in, and what Meta calls it.",
+      "variable": "Akeed value",
+      "parameter": "Meta parameter",
+      "sample": "Sample",
+      "names": {
+        "customer": "Customer name",
+        "store": "Store name",
+        "order": "Order number",
+        "total": "Order total"
+      }
+    },
+    "metrics": {
+      "title": "Performance",
+      "hint": "Rates are shares of accepted sends. A reply after a reminder counts for the reminder.",
+      "empty": "No sends in this range.",
+      "purpose": "Sent as",
+      "sends": "Sends",
+      "replies": "Replies",
+      "confirmed": "Confirmed",
+      "canceled": "Canceled",
+      "noReply": "No reply",
+      "confirmationRate": "Confirmation rate"
+    },
+    "stores": {
+      "title": "Active stores sending it ({count})",
+      "truncated": "Showing the first {shown}.",
+      "empty": "No active store sends this template.",
+      "unnamed": "Unnamed store"
+    },
+    "history": {
+      "title": "Status history",
+      "description": "Updates Meta sent about this template, and recent syncs.",
+      "events": "Meta updates",
+      "noEvents": "Meta has sent no update about this template.",
+      "syncs": "Syncs",
+      "noSyncs": "No sync has run yet.",
+      "runMissing": "Missing at Meta",
+      "field": {
+        "status": "Status",
+        "quality": "Quality",
+        "category": "Category"
+      },
+      "outcome": {
+        "applied": "applied",
+        "stale": "ignored, older than the current state",
+        "conflict": "left to the next sync",
+        "unregistered": "no matching template"
+      }
+    },
+    "test": {
+      "title": "Send a test",
+      "description": "Sends this template with sample values to a staff phone on the test list. It is free and changes no order.",
+      "phone": "Staff phone number",
+      "send": "Send test",
+      "sending": "Sending…",
+      "sent": "Test sent. Check WhatsApp.",
+      "notSendable": "A test needs a template that is active and approved at Meta."
+    },
+    "detail": {
+      "back": "All templates",
+      "notFoundTitle": "No template has this key",
+      "notFoundBody": "It may have been renamed. Go back to the list."
+    },
+    "errors": {
+      "accessDenied": "You are not allowed to do this.",
+      "requestFailed": "The request failed. Try again.",
+      "requestIdLabel": "Request ID:",
+      "ADMIN_TEMPLATE_METRICS_RANGE_INVALID": "Choose a date range of at most 92 days.",
+      "WHATSAPP_TEMPLATE_OPERATIONS_DISABLED": "Template operations are off in this environment.",
+      "WHATSAPP_TEMPLATE_OPERATOR_REQUIRED": "Only a named template operator can do this.",
+      "WHATSAPP_TEMPLATE_SYNC_DISABLED": "Template sync is off in this environment.",
+      "WHATSAPP_TEMPLATE_SYNC_IN_PROGRESS": "A sync is already running. Try again in a moment.",
+      "WHATSAPP_TEMPLATE_SYNC_COOLDOWN": "A sync finished moments ago. Wait a few minutes before the next one.",
+      "WHATSAPP_TEMPLATE_NOT_FOUND": "No template has this key.",
+      "WHATSAPP_TEMPLATE_NOT_SENDABLE": "This template cannot be sent now.",
+      "WHATSAPP_TEMPLATE_TEST_SEND_DISABLED": "Test sends are not set up in this environment.",
+      "WHATSAPP_TEMPLATE_TEST_PHONE_NOT_ALLOWED": "This number is not on the staff test list.",
+      "WHATSAPP_TEMPLATE_TEST_COOLDOWN": "Wait a few seconds before sending another test.",
+      "WHATSAPP_TEMPLATE_TEST_DAILY_LIMIT": "You reached today's limit for test messages.",
+      "WHATSAPP_TEMPLATE_TEST_SEND_FAILED": "WhatsApp did not accept the test message.",
+      "WHATSAPP_TEMPLATE_DRAFT_NOT_FOUND": "No draft has this ID.",
+      "WHATSAPP_TEMPLATE_DRAFT_NOT_EDITABLE": "This draft was submitted and can no longer be changed here.",
+      "WHATSAPP_TEMPLATE_DRAFT_NAME_TAKEN": "Another template already has this name and language. Reload and try again.",
+      "WHATSAPP_TEMPLATE_DRAFT_INVALID": "The text does not pass validation. Fix the fields marked below.",
+      "WHATSAPP_TEMPLATE_SUBMIT_IN_PROGRESS": "This draft is being submitted right now.",
+      "WHATSAPP_TEMPLATE_SUBMIT_UNRESOLVED": "Meta did not answer the last submit. Check at Meta before submitting again.",
+      "WHATSAPP_TEMPLATE_SUBMIT_REJECTED": "Meta did not accept the template.",
+      "WHATSAPP_TEMPLATE_PROVIDER_UNAVAILABLE": "Meta could not be reached. Nothing was submitted.",
+      "WHATSAPP_TEMPLATE_RECONCILE_NOT_NEEDED": "This draft has no unanswered submit to check.",
+      "WHATSAPP_TEMPLATE_EDIT_REFUSED": "This template cannot be edited now.",
+      "WHATSAPP_TEMPLATE_EDIT_REJECTED": "Meta did not accept the edit.",
+      "WHATSAPP_TEMPLATE_EDIT_UNRESOLVED": "Meta did not answer. The template is treated as in review until the next sync.",
+      "WHATSAPP_TEMPLATE_RETIRED": "This template is retired.",
+      "WHATSAPP_TEMPLATE_NOT_APPROVED": "Only a template Meta has approved can be activated or made the default.",
+      "WHATSAPP_TEMPLATE_NOT_ACTIVE": "Only an active template can be the default.",
+      "WHATSAPP_TEMPLATE_REPLACEMENT_REQUIRED": "Stores send this template, or it is a language default. Choose a replacement.",
+      "WHATSAPP_TEMPLATE_REPLACEMENT_INVALID": "The replacement must be an approved, active template of the same purpose and language.",
+      "WHATSAPP_MESSAGE_TEXT_CONFLICT": "Another operator saved this text at the same time. Reload and try again.",
+      "WHATSAPP_MESSAGE_TEXT_INVALID": "This text does not meet the rules for its purpose."
+    },
+    "environment": {
+      "production": "Production",
+      "nonProduction": "Not production",
+      "account": "Meta account ending in <code>{suffix}</code>",
+      "accountMissing": "No Meta account is configured in this environment."
+    },
+    "access": {
+      "disabled": "Template writes are off in this environment. You can read, not change.",
+      "notOperator": "Only a named template operator can change templates. You can read them."
+    },
+    "dialog": {
+      "close": "Close",
+      "done": "Done",
+      "cancel": "Cancel",
+      "working": "Working…"
+    },
+    "draftState": {
+      "draft": "Draft",
+      "submitting": "Submitting",
+      "submit_unknown": "Needs a check at Meta",
+      "submitted": "Submitted"
+    },
+    "drafts": {
+      "title": "Drafts",
+      "description": "Templates staff are writing. A draft exists only in Akeed until it is submitted to Meta.",
+      "new": "New draft",
+      "empty": "No drafts yet.",
+      "invalid": "Does not pass validation yet",
+      "columns": {
+        "name": "Template name",
+        "language": "Language",
+        "state": "State",
+        "updated": "Last change"
+      }
+    },
+    "editor": {
+      "newTitle": "New template draft",
+      "title": "Template draft",
+      "notFound": "No draft has this ID.",
+      "identity": "Template",
+      "purpose": "Purpose",
+      "language": "Language",
+      "style": "Style",
+      "styleHint": "Lowercase letters, digits and underscores, up to {max} characters. Fixed once the draft is saved.",
+      "languageCode": "Meta language code",
+      "parameterFormat": "Parameter format",
+      "category": "Category",
+      "generatedName": "Template name at Meta",
+      "generatedNamePending": "Generated when the style is filled in",
+      "generatedNameHint": "Akeed generates the name. It cannot be changed after submission.",
+      "text": "Message text",
+      "body": "Body",
+      "bodyHint": "{count} of {max} characters",
+      "variablePicker": "Insert a value",
+      "confirmLabel": "Confirm button",
+      "cancelLabel": "Cancel button",
+      "labelHint": "Up to {max} characters.",
+      "buttonsHint": "Every confirmation carries exactly these two quick replies, Confirm first.",
+      "samples": "Sample values",
+      "samplesHint": "Meta reviews the template with these values. Use realistic, single-line samples.",
+      "samplesEmpty": "The body uses no values yet.",
+      "preview": "Preview",
+      "previewHint": "The message with the sample values, as a customer sees it.",
+      "previewEmpty": "Write the body to see the message.",
+      "save": "Save draft",
+      "saving": "Saving…",
+      "saved": "Saved.",
+      "unsaved": "You have unsaved changes.",
+      "fixFirst": "Fix the marked fields before submitting.",
+      "submitting": "This draft is being submitted.",
+      "lastError": "The last submit was not accepted",
+      "unknown": {
+        "title": "Meta did not answer the last submit",
+        "body": "The template may or may not exist at Meta. Nothing is sent again until Akeed has checked.",
+        "check": "Check at Meta",
+        "checking": "Checking…"
+      },
+      "outcome": {
+        "created": "Submitted to Meta for review.",
+        "adopted": "Meta already holds this template. Akeed linked it; nothing was created twice.",
+        "already_submitted": "This draft was already submitted.",
+        "not_at_provider": "Meta does not hold this template. You can submit the draft again."
+      },
+      "review": {
+        "title": "Review at Meta",
+        "pending": "In review. A decision can take up to {hours} hours and arrives by webhook or the next sync.",
+        "approved": "Approved. Activate it from the template page before any store can choose it.",
+        "rejected": "Meta rejected this template"
+      },
+      "edit": {
+        "start": "Edit text",
+        "rule": "(contract record {rule})",
+        "send": "Review and send edit",
+        "cancel": "Cancel edit",
+        "title": "Send this edit to Meta?",
+        "description": "The whole text is replaced at Meta and reviewed again.",
+        "confirm": "Send edit",
+        "warning": "This template cannot be sent until Meta approves it again",
+        "reReview": "Plan for up to {hours} hours. If Meta rejects the edit, the old text may be gone too.",
+        "limits": "An approved template can be edited {perDay} time in 24 hours and {perMonth} times in 30 days. Used in the last 30 days: {used}.",
+        "sent": "Edit sent. The template is in review."
+      },
+      "discard": {
+        "button": "Discard draft",
+        "title": "Discard this draft?",
+        "description": "The draft is removed from Akeed. Nothing is deleted at Meta.",
+        "confirm": "Discard"
+      }
+    },
+    "validation": {
+      "finding": "(contract record {finding})",
+      "rules": {
+        "style_format": "Use lowercase letters, digits and underscores, starting with a letter, without a version suffix.",
+        "name_format": "A template name is lowercase letters, digits and underscores, up to 512 characters.",
+        "name_convention": "The name must follow the pattern akeed_PURPOSE_STYLE_vN.",
+        "name_taken": "Another template already has this name and language.",
+        "language_code_unsupported": "Choose a language code from the list.",
+        "category_not_allowed": "This purpose is registered as a utility template.",
+        "body_required": "Write the message body.",
+        "body_too_long": "The body is longer than 1024 characters.",
+        "variable_unknown": "Only customer, store, order and total can be used as values.",
+        "braces_mismatched": "A curly brace is not part of a complete value placeholder.",
+        "parameter_at_edge": "The body may not start or end with a value.",
+        "parameter_ratio": "Many values for so few words. Meta may reject this; add text or remove a value.",
+        "mapping_incomplete": "Every value in the body needs exactly one parameter.",
+        "parameter_name_format": "A named parameter is unique lowercase letters and underscores.",
+        "parameter_numbering": "Positional parameters count from 1 without a gap.",
+        "sample_missing": "Give a sample for every value in the body.",
+        "sample_multiline": "A sample must be a single line.",
+        "filled_body_too_long": "With these samples the body reaches 1024 characters. Shorten the text or a sample.",
+        "button_label_required": "Write the button label.",
+        "button_label_too_long": "A button label is at most 25 characters.",
+        "button_labels_identical": "The two buttons need different labels.",
+        "button_count": "A confirmation has exactly two quick replies.",
+        "button_order": "The Confirm button must come first."
+      }
+    },
+    "submit": {
+      "button": "Submit to Meta",
+      "title": "Submit this template to Meta?",
+      "description": "This creates the template in the Meta account below and starts its review. It cannot be undone from Akeed.",
+      "confirm": "Submit for review",
+      "reviewTime": "Review can take up to {hours} hours.",
+      "categoryRisk": "Akeed asks for the utility category. Meta may assign another one now, or move the template to marketing later; marketing messages cost more and some are not delivered.",
+      "notSendable": "No store sends it until Meta approves it and an operator activates it.",
+      "nameFixed": "The name and the language cannot be changed afterwards."
+    },
+    "submitReasons": {
+      "not_configured": "The Meta account or token is not configured.",
+      "auth_failed": "Meta refused the access token.",
+      "permission_denied": "The access token is not allowed to manage templates.",
+      "rate_limited": "Meta asked Akeed to slow down. Try again later.",
+      "invalid_parameter": "Meta found an invalid value in the template.",
+      "character_limit": "Meta says the text is too long.",
+      "format_rejected": "Meta did not accept the format of the text.",
+      "parameter_ratio": "Meta says there are too many values for the amount of text.",
+      "parameter_at_edge": "Meta says the body starts or ends with a value.",
+      "integrity_blocked": "Meta's integrity checks blocked the template.",
+      "status_locked": "The template's status at Meta does not allow this change.",
+      "provider_error": "Meta refused the request for a reason Akeed does not know.",
+      "unresolved": "Meta did not answer.",
+      "provider_read_failed": "Meta could not be read.",
+      "not_at_provider": "Meta did not hold the template when Akeed checked.",
+      "invalid": "The text did not pass validation."
+    },
+    "rejection": {
+      "abusive_content": "Abusive content.",
+      "incorrect_category": "The category does not match the content.",
+      "invalid_format": "Invalid format.",
+      "promotional": "The content is promotional.",
+      "scam": "The content looks like a scam.",
+      "tag_content_mismatch": "The language or tag does not match the content.",
+      "none": "Meta gave no reason.",
+      "unknown": "A reason Akeed does not know."
+    },
+    "editRefusals": {
+      "retired": "A retired template cannot be edited.",
+      "not_authored_here": "This template was not written in Akeed, so there is no text to edit here.",
+      "status_not_editable": "Meta accepts edits only for approved, rejected or paused templates.",
+      "in_use": "Stores can send this template. Write new text as a new template and activate it once approved.",
+      "daily_limit": "An approved template can be edited once in 24 hours.",
+      "monthly_limit": "An approved template can be edited 10 times in 30 days."
+    },
+    "actions": {
+      "title": "Actions",
+      "description": "Each action is confirmed first and recorded in the staff audit log.",
+      "retired": "This template is retired and can no longer be used.",
+      "rejectedTitle": "Meta rejected this template",
+      "storesAffected": "{total, plural, =0 {No store selects this template.} one {# store selects this template ({active} active).} other {# stores select this template ({active} active).}}",
+      "openText": "Open text",
+      "defaultMoves": "It is the {language} default. The replacement becomes the default.",
+      "noReplacement": "No approved, active template of this purpose and language can replace it. Activate one first.",
+      "replacement": "Replacement",
+      "chooseReplacement": "Choose a replacement",
+      "storesMove": "{count, plural, =0 {No store moves; {replacement} takes over.} one {# store moves to {replacement}.} other {# stores move to {replacement}.}}",
+      "storesMoved": "{count, plural, =0 {No store had to move; {replacement} took over.} one {# store moved to {replacement}.} other {# stores moved to {replacement}.}}",
+      "unchanged": "Nothing had to change.",
+      "audited": "Your user and the time are recorded with this action.",
+      "activate": {
+        "button": "Activate",
+        "title": "Activate this template?",
+        "description": "Merchants will be able to choose it in Settings.",
+        "confirm": "Activate",
+        "effect": "No store changes now. Stores send it only after a merchant selects it or it becomes the default.",
+        "done": "Activated."
+      },
+      "setDefault": {
+        "button": "Make default",
+        "title": "Make this the language default?",
+        "description": "The default is what a store sends when its own choice cannot be used.",
+        "confirm": "Make default",
+        "effect": "It replaces the current {language} default in one step. Stores that fall back to the default send this template from now on.",
+        "done": "This is now the default."
+      },
+      "deactivate": {
+        "button": "Deactivate",
+        "title": "Deactivate this template?",
+        "description": "Stores stop sending it and merchants can no longer choose it. It can be activated again.",
+        "confirm": "Deactivate",
+        "done": "Deactivated."
+      },
+      "retire": {
+        "button": "Retire",
+        "title": "Retire this template?",
+        "description": "Stores stop sending it for good. Nothing is deleted at Meta.",
+        "confirm": "Retire",
+        "permanent": "A retired template cannot be activated again",
+        "done": "Retired."
+      }
+    }
   },
   "adminBillingObservability": {
     "title": "Billing health and reconciliation",
@@ -911,6 +1437,23 @@
           "title": "Pay only for what's sent",
           "body": "{price} per confirmation after the free credits. No monthly subscription."
         }
+      },
+      "source": {
+        "label": "Where do your orders come from?",
+        "options": {
+          "standalone": {
+            "title": "My own website or orders I add myself",
+            "description": "Add orders by hand, from a file, or through the API."
+          },
+          "easyorders": {
+            "title": "EasyOrders",
+            "description": "Connect your EasyOrders store after you sign up."
+          },
+          "woocommerce": {
+            "title": "WooCommerce",
+            "description": "Connect your WooCommerce store after you sign up."
+          }
+        }
       }
     },
     "verifyEmail": {
@@ -1218,7 +1761,8 @@
         "senderName": "Akeed",
         "senderStatus": "Business account",
         "avatarAlt": "Akeed",
-        "today": "Today"
+        "today": "Today",
+        "previewError": "We couldn't load the message preview. Your settings still save."
       }
     },
     "success": {
@@ -1475,6 +2019,43 @@
       },
       "orderFallbackPrefix": "Order",
       "technicalId": "Technical order ID",
+      "source": "Order source",
+      "storeSync": {
+        "title": "Store update",
+        "separate": "This is about your store only. The order's result above is saved in Akeed either way.",
+        "updatedAt": "Last checked {time}",
+        "state": {
+          "succeeded": "Updated in your store",
+          "pending": "Updating your store",
+          "failed": "Not updated in your store",
+          "unsupported": "Not sent to your store"
+        },
+        "row": {
+          "pending": "Updating your store",
+          "failed": "Store not updated"
+        },
+        "guidance": {
+          "pending": "We are still trying to update this order in your store. There is nothing you need to do yet.",
+          "failed": "We could not update this order in your store. Try again, or change the order's status in your store yourself.",
+          "stateConflict": "This order had already moved to another status in your store, so we left it as it is. Change it in your store if you need to.",
+          "orderNotFound": "We could not find this order in your store. It may have been deleted there.",
+          "reconnect": "Your store did not accept Akeed's access. Check the store connection, then try again.",
+          "storeInactive": "Your store is not active right now, so it cannot be updated. Reactivate it, then try again.",
+          "permissionDenied": "The account that connected your store does not have permission to change orders. Reconnect your store with an account that manages orders, then try again.",
+          "storeUnreachable": "Akeed could not reach your store safely at its saved address. The address may have changed, it may now redirect to another one, or its security certificate may not be valid. Check your store's address and certificate, and reconnect if the address changed.",
+          "hostingBlocksUpdates": "Your store's hosting blocks the request Akeed uses to update an order (PUT). Ask your hosting provider to allow PUT requests to your store, then try again. Until then, change the order's status in your store yourself.",
+          "noReplyLocalOnly": "The customer did not reply. That is recorded in Akeed only: the order in your store is unchanged and was not canceled.",
+          "notSwitchedOn": "Updating orders in your store is not switched on yet. Change the order's status in your store yourself."
+        },
+        "retry": "Try the store update again",
+        "retrying": "Updating your store...",
+        "retryResult": {
+          "updated": "Your store has been updated.",
+          "pending": "We are trying again. This page will show the result.",
+          "failed": "Your store still could not be updated. Open the order to see why.",
+          "error": "We could not start the update. Try again in a moment."
+        }
+      },
       "testBadge": "Test",
       "optimistic": {
         "submitting": "Sending...",
@@ -1554,6 +2135,15 @@
       "queued": "Sending has started and this order is in line. Its message goes out within minutes.",
       "sending": "The confirmation request is being sent to the customer now."
     },
+    "sources": {
+      "shopify": "Shopify",
+      "standalone": "Added in Akeed",
+      "easyorders": "EasyOrders",
+      "woocommerce": "WooCommerce",
+      "salla": "Salla",
+      "zid": "Zid",
+      "other": "Another source"
+    },
     "reasons": {
       "non_cod_payment_method": "This order is not marked as cash on delivery, so no verification was sent.",
       "missing_payment_signal": "A payment method could not be confirmed, so no verification was sent.",
@@ -1564,6 +2154,22 @@
       "auto_verify_disabled": "Automatic verification is paused. Enable it before retrying.",
       "onboarding_incomplete": "Complete Standalone setup before retrying verification.",
       "provider_outcome_unknown": "Message acceptance could not be confirmed. Contact support before retrying.",
+      "template_unavailable": "The WhatsApp message for this order is unavailable right now, so nothing was sent and no credit was used. Akeed support has been alerted. Retry later.",
+      "CREDIT_ACCOUNT_NOT_PROVISIONED": "This account's credits are not set up yet, so no message was sent. Contact Akeed support if this continues.",
+      "CREDIT_ACCOUNT_SUSPENDED": "New message sends are paused for this account. Contact support.",
+      "CREDIT_DEBT_OUTSTANDING": "An outstanding credit balance must be settled before new messages are sent.",
+      "INSUFFICIENT_CREDITS": "No message credits were available, so no message was sent. Add credits, then retry.",
+      "PAYMENT_PENDING_RECONCILIATION": "Message sending is paused while billing is reviewed. Contact support.",
+      "provider_delivery_failed": "WhatsApp could not deliver the message to this customer.",
+      "missing_currency": "The store currency has not been chosen yet, so this order was not confirmed. Choose it in the store connection settings.",
+      "missing_phone_country": "The country for customer phone numbers has not been chosen yet, so this order was not confirmed. Choose it in the store connection settings.",
+      "order_currency_unsupported": "This order's currency is missing or is not one Akeed supports, so no message was sent.",
+      "order_phone_country_missing": "The customer's phone number has no country code and the order has no billing country, so the number could not be read and no message was sent. Add the country or the full number to the order in your store, and Akeed will check the order again.",
+      "invalid_phone": "The customer's phone number is not a valid mobile number, so no message was sent.",
+      "invalid_amount": "The order total could not be read, so no message was sent.",
+      "incomplete_payload": "The order arrived without the details needed to confirm it, so no message was sent.",
+      "order_predates_connection": "This order was placed before the store was connected to Akeed, so no confirmation was sent.",
+      "order_not_placed": "This order has not been placed yet, or its status is one Akeed does not confirm, so no message was sent.",
       "generic": "Verification could not continue. Review setup or contact support."
     },
     "verifications": {
@@ -1910,7 +2516,97 @@
           "codDesc": "How we treat orders that don’t say how they were paid.",
           "codLabel": "Treat them as cash on delivery",
           "codHelp": "Turn on only if your order source usually leaves the payment method out of COD orders.",
-          "codRisk": "Prepaid orders with missing payment info will also get a confirmation message and use credits."
+          "codRisk": "Prepaid orders with missing payment info will also get a confirmation message and use credits.",
+          "sourceHelpEasyOrders": "Orders arrive from your EasyOrders store by themselves.",
+          "sourceHelpWooCommerce": "Orders arrive from your WooCommerce store by themselves.",
+          "disconnected": "Disconnected",
+          "connectionHeading": "Connection",
+          "connectionDesc": "The link between Akeed and your store.",
+          "health": {
+            "heading": "Connection health",
+            "desc": "What Akeed last saw from your store, one signal at a time.",
+            "loading": "Loading connection health…",
+            "loadError": "We couldn’t load the connection health.",
+            "retry": "Try again",
+            "credentials": {
+              "title": "Access to your store",
+              "ok": "Accepted",
+              "store_inactive": "Accepted, but the platform reports the store as inactive or overdue",
+              "rejected": "Rejected by the store",
+              "removed": "Removed when the store was disconnected",
+              "note": "This is the answer the store gave the last time Akeed used its key, not a live check."
+            },
+            "lastEvent": {
+              "title": "Last order event received",
+              "none": "No events yet",
+              "noneNote": "Nothing is wrong with that by itself: an event arrives when your store gets an order.",
+              "recent": "{count, plural, one {# event} other {# events}} in the last {days} days."
+            },
+            "delivery": {
+              "title": "Events refused before processing",
+              "secretsMissing": "Waiting for the first order to secure the webhooks",
+              "rejected": "{count, plural, one {# event was refused for a wrong webhook secret} other {# events were refused for a wrong webhook secret}}",
+              "none": "None",
+              "lastRejected": "Last refused: {when}."
+            },
+            "processing": {
+              "title": "Processing failures",
+              "failed": "{count, plural, one {# event failed} other {# events failed}} in the last {days} days",
+              "none": "None in the last {days} days",
+              "lastFailed": "Last failure: {when}."
+            },
+            "backlog": {
+              "title": "Waiting to be processed",
+              "waiting": "{count, plural, one {# event waiting} other {# events waiting}}",
+              "none": "Nothing waiting",
+              "oldest": "Oldest received: {when}."
+            },
+            "remoteSync": {
+              "title": "Order status updates in your store",
+              "failed": "{count, plural, one {# update was not applied} other {# updates were not applied}} in the last {days} days",
+              "none": "No failed updates in the last {days} days",
+              "pending": "{count, plural, one {# update is still being tried.} other {# updates are still being tried.}}",
+              "assistance": "At least one needs you: the store rejected Akeed’s access. The confirmation result is kept in Akeed either way.",
+              "note": "The confirmation result is kept in Akeed even when the store doesn’t take the update."
+            },
+            "capabilities": {
+              "title": "What Akeed updates in your store",
+              "some": "Order status updates are on",
+              "none": "Order status updates are not switched on for this store yet",
+              "disconnected": "Nothing while the store is disconnected",
+              "supported": "Updated in your store: {list}.",
+              "unsupported": "Kept in Akeed only: {list}.",
+              "separator": ", ",
+              "note": "Results are always recorded in Akeed.",
+              "actions": {
+                "customer_confirmation": "customer confirmations",
+                "customer_cancellation": "customer cancellations",
+                "merchant_no_reply_cancellation": "cancellations you make after no reply",
+                "merchant_cancellation_tagging": "cancellation tags",
+                "automatic_no_reply_tagging": "automatic no-reply marks"
+              }
+            },
+            "webhooks": {
+              "kinds": {
+                "order_created": "Notification for new orders",
+                "order_updated": "Notification for order changes"
+              },
+              "states": {
+                "active": "Active",
+                "paused": "Paused in your store",
+                "disabled": "Disabled by your store",
+                "missing": "Deleted from your store",
+                "unknown": "Couldn’t be read from your store"
+              },
+              "notes": {
+                "active": "Read from your store just now.",
+                "paused": "Akeed doesn’t change this. Activate it in your store’s webhook settings.",
+                "disabled": "Re-enable it under Connection above. Orders placed while it was disabled are not imported.",
+                "missing": "Disconnect, then connect the same store again to restore it.",
+                "unknown": "Your store didn’t answer, or didn’t accept Akeed’s access. That is not by itself a fault of the notification."
+              }
+            }
+          }
         },
         "apiKeys": {
           "heading": "API keys",
@@ -1988,7 +2684,8 @@
         "testSendSuccess": "Test message sent to your WhatsApp",
         "testSendCooldown": "Wait a few seconds before sending another test.",
         "testSendDailyLimit": "You've reached today's limit of test messages.",
-        "testSendError": "The test message couldn't be sent. Try again."
+        "testSendError": "The test message couldn't be sent. Try again.",
+        "sourceDisconnected": "Your order source is disconnected, so settings can’t be changed. You can reconnect it on the order source tab."
       }
     },
     "storeConfigurationHeading": "Store configuration",
@@ -2134,7 +2831,8 @@
           "friendly": "Friendly",
           "professional": "Professional",
           "direct": "Direct",
-          "short": "Short"
+          "short": "Short",
+          "auto": "Automatic by country"
         },
         "previewHeading": "Preview",
         "previewLanguageGroup": "Preview language",
@@ -2156,7 +2854,14 @@
           "cancel": "Cancel",
           "close": "Close"
         },
-        "templatesNote": "Templates are approved by WhatsApp, so only the style and language change."
+        "templatesNote": "Templates are approved by WhatsApp, so only the style and language change.",
+        "autoStyleHelp": "Egyptian for numbers starting +20, Gulf for Saudi Arabia, the UAE, Bahrain, Qatar, Kuwait and Oman, and Modern Standard for other Arabic numbers.",
+        "autoStylePreviewNote": "The preview shows your saved style. With Automatic, each customer gets the style of their country.",
+        "reminderHeading": "Reminder message",
+        "reminderHint": "Sent to customers who haven't replied yet. These are the {language} reminders; switch the preview language to edit the other.",
+        "reminderSame": "Same as the first message",
+        "reminderSameHelp": "The reminder repeats your first message.",
+        "previewEmpty": "This message has no text to preview yet."
       },
       "timing": {
         "timelineHeading": "What happens with each COD order",
@@ -2257,7 +2962,9 @@
           ]
         }
       }
-    }
+    },
+    "sourceEasyOrders": "EasyOrders",
+    "sourceWooCommerce": "WooCommerce"
   },
   "embeddedOnboarding": {
     "prefillWarning": "We could not prefill Shopify store details. Please enter the store name manually.",
@@ -2520,7 +3227,12 @@
       "language_invalid": "Choose a supported message language.",
       "cod_default_invalid": "Choose how missing payment information should be handled.",
       "automation_invalid": "Review the automation timing settings.",
-      "timezone_invalid": "Choose a supported timezone."
+      "timezone_invalid": "Choose a supported timezone.",
+      "order_defaults_missing": "Choose your store’s country and currency.",
+      "webhook_secrets_missing": "Add both webhook secrets.",
+      "credentials_rejected": "The store no longer accepts Akeed’s access. Disconnect it, then connect it again.",
+      "source_disconnected": "The store is disconnected. Reconnect it to continue.",
+      "webhook_disabled": "Your store disabled an order notification. Re-enable it to continue."
     },
     "shell": {
       "help": "Help",
@@ -2581,7 +3293,10 @@
       "store": "Your store",
       "test": "Try the message",
       "compact": "{current} of {total} · {title}",
-      "menu": "Menu"
+      "menu": "Menu",
+      "details": "Store details",
+      "number": "Your number",
+      "connectStore": "Connect your store"
     },
     "store": {
       "heading": "Get your confirmation message ready",
@@ -3320,6 +4035,528 @@
         "save": "Save",
         "failed": "The number couldn't be saved. Try again."
       }
+    }
+  },
+  "easyOrdersConnect": {
+    "eyebrow": "EasyOrders",
+    "loading": "Loading your EasyOrders connection…",
+    "readOnly": "You have read-only access. Ask an owner or admin to connect EasyOrders.",
+    "cleanup": "If you chose Accept in EasyOrders, it may have created an API key and webhooks named Akeed. Delete them in EasyOrders under Settings → Public API before you try again.",
+    "loadError": {
+      "title": "We couldn't load your EasyOrders connection",
+      "body": "Check your internet connection and try again.",
+      "retry": "Try again"
+    },
+    "unavailable": {
+      "title": "EasyOrders isn't available yet",
+      "body": "Connecting an EasyOrders store is not open yet. We will let you know as soon as it is."
+    },
+    "pilotRequired": {
+      "title": "Your EasyOrders access is being prepared",
+      "body": "EasyOrders is open to a small group of stores for now. The Akeed team will approve your account and tell you when you can connect.",
+      "refresh": "Check again"
+    },
+    "sourceExists": {
+      "title": "This account already has an order source",
+      "body": "An account has one order source, and this one is already set up. Contact Akeed support if you need EasyOrders instead."
+    },
+    "connect": {
+      "title": "Connect {store} to EasyOrders",
+      "titleNoStore": "Connect your store to EasyOrders",
+      "body": "Akeed will confirm your cash-on-delivery orders from EasyOrders over WhatsApp. You approve the connection once, in EasyOrders.",
+      "permissionsTitle": "Akeed asks EasyOrders for two permissions only:",
+      "permissions": {
+        "read": "Read your new orders",
+        "update": "Update an order’s status when your customer confirms or cancels"
+      },
+      "sender": "Confirmation messages reach your customers from Akeed’s WhatsApp number.",
+      "cta": "Connect EasyOrders",
+      "starting": "Opening EasyOrders…",
+      "note": "EasyOrders opens in a new tab. Sign in to the store you want to connect, then choose Accept."
+    },
+    "waiting": {
+      "title": "Finish in EasyOrders",
+      "body": "Choose Accept in the EasyOrders tab. This page updates by itself.",
+      "expires": "This request expires at {time}.",
+      "restart": "Open EasyOrders again",
+      "cancelled": "I didn’t accept"
+    },
+    "denied": {
+      "title": "EasyOrders wasn’t connected",
+      "body": "The request wasn’t accepted, or it expired. Nothing was connected to your Akeed account.",
+      "retry": "Try again"
+    },
+    "error": {
+      "title": "We couldn’t connect EasyOrders",
+      "retry": "Try again",
+      "codes": {
+        "EASYORDERS_KEY_REJECTED": "EasyOrders did not accept the API key it created for Akeed. Nothing was connected.",
+        "EASYORDERS_PROVIDER_UNAVAILABLE": "We couldn’t reach EasyOrders to check the connection. Nothing was connected. Try again in a few minutes.",
+        "EASYORDERS_STORE_UNAVAILABLE": "This EasyOrders store is already connected to another Akeed account.",
+        "EASYORDERS_SOURCE_EXISTS": "This Akeed account already has an order source, so EasyOrders can’t be added.",
+        "EASYORDERS_CALLBACK_INVALID": "EasyOrders sent an incomplete response. Nothing was connected.",
+        "EASYORDERS_PILOT_REQUIRED": "Your account isn’t approved for EasyOrders yet.",
+        "EASYORDERS_CONNECT_UNAVAILABLE": "Connecting EasyOrders isn’t available right now.",
+        "EASYORDERS_ROLE_REQUIRED": "Only an owner or admin can connect EasyOrders.",
+        "default": "Something went wrong. Nothing was connected.",
+        "EASYORDERS_RECONNECT_STORE_MISMATCH": "That is a different EasyOrders store. Only the store that was connected before can be reconnected. Nothing was changed.",
+        "EASYORDERS_NOT_CONNECTED": "EasyOrders isn’t connected to this account."
+      }
+    },
+    "success": {
+      "storeIdLabel": "EasyOrders store ID",
+      "storeUnverified": "We’ll confirm this is your store when its first order arrives.",
+      "inactive": {
+        "title": "Your EasyOrders store isn’t active.",
+        "body": "EasyOrders reports it as inactive or overdue. Orders won’t reach Akeed until it is active again."
+      },
+      "keyRejected": {
+        "title": "EasyOrders no longer accepts Akeed’s access.",
+        "body": "Orders can’t be checked until the store is connected again. Contact Akeed support."
+      },
+      "rejectedDeliveries": "{count, plural, one {# order from EasyOrders was refused because its webhook secret didn’t match.} other {# orders from EasyOrders were refused because their webhook secret didn’t match.}} Fix it in Settings, under your EasyOrders connection.",
+      "next": "Order import from EasyOrders is being switched on store by store. We’ll tell you when your orders start arriving in Akeed.",
+      "orderSettings": {
+        "title": "Tell us your store’s country and currency",
+        "body": "EasyOrders sends order totals without a currency and phone numbers without a country code, so Akeed needs both to message your customers correctly.",
+        "warning": "Orders are not confirmed until you choose both.",
+        "phoneCountry": {
+          "label": "Customer phone country",
+          "placeholder": "Choose a country",
+          "hint": "Numbers written without a country code are read as numbers in this country."
+        },
+        "currency": {
+          "label": "Store currency",
+          "placeholder": "Choose a currency",
+          "hint": "Shown to the customer next to the order total."
+        },
+        "errors": {
+          "required": "Choose a country and a currency.",
+          "failed": "We couldn’t save your choices. Try again."
+        }
+      },
+      "secrets": {
+        "title": "Enter the webhook secrets yourself",
+        "replaceTitle": "Webhook secrets",
+        "body": "Akeed normally learns each secret by itself. To enter them by hand, open Settings → Public API → Webhooks in EasyOrders and find the two Akeed webhooks whose address ends in <hint></hint>.",
+        "warning": "Orders placed before you add the secrets are not imported later.",
+        "ordersSecret": {
+          "label": "Orders webhook secret",
+          "hint": "The webhook whose address contains <path></path>."
+        },
+        "statusSecret": {
+          "label": "Order status webhook secret",
+          "hint": "The webhook whose address contains <path></path>."
+        },
+        "save": "Save secrets",
+        "replace": "Replace secrets",
+        "saving": "Saving…",
+        "saved": "Webhook secrets saved. They are stored encrypted and are not shown again.",
+        "errors": {
+          "required": "Paste both secrets.",
+          "invalid": "A secret is at least 8 characters with no spaces. Copy it again from EasyOrders.",
+          "failed": "We couldn’t save the secrets. Try again."
+        },
+        "duplicates": "Keep exactly one orders webhook and one order-status webhook for Akeed in EasyOrders. If an address appears twice, delete the extra one: its orders arrive with a secret Akeed doesn’t have and are refused.",
+        "automaticTitle": "Nothing to copy from EasyOrders",
+        "automatic": "Akeed secures your webhooks by itself. It checks your first order with EasyOrders, then keeps the secret EasyOrders sends with it. Orders are accepted from the start."
+      }
+    },
+    "details": {
+      "title": "A few details about your EasyOrders orders",
+      "body": "Akeed needs these once, to read your orders correctly.",
+      "secretsKept": "Your webhook secrets are saved. Leave these two fields empty to keep them.",
+      "footerCaption": "You can change these later.",
+      "submit": "Save and continue",
+      "saving": "Saving…",
+      "edit": "Change the country or currency"
+    },
+    "checklist": {
+      "loading": "Loading your setup…",
+      "loadError": "We couldn’t load your setup. Check your internet connection and try again.",
+      "retry": "Try again",
+      "footerCaption": "The test is free and goes to your number only.",
+      "notReady": "Fix what’s flagged above to send the test message.",
+      "sender": {
+        "configured": "Messages go out from Akeed’s WhatsApp number. You don’t need a number of your own.",
+        "not_configured": "Akeed’s WhatsApp sender isn’t ready on our side. Contact Akeed support; there is nothing to change in your store.",
+        "unknown": "Messages go out from Akeed’s WhatsApp number. We couldn’t check it just now; the test message will show whether it works."
+      },
+      "automation": {
+        "title": "How confirmations will run",
+        "autoConfirmOn": "A confirmation message is sent for every new cash-on-delivery order.",
+        "autoConfirmOff": "Automatic confirmation is off. No message is sent until you turn it on in Settings.",
+        "reminderOn": "A reminder after {minutes} minutes without a reply.",
+        "reminderOff": "No reminder.",
+        "noReplyOn": "Marked as no reply after {minutes} minutes. Akeed never cancels the order in EasyOrders by itself.",
+        "noReplyOff": "Orders are not marked as no reply automatically.",
+        "quietHoursOn": "No messages between {start} and {end}.",
+        "quietHoursOff": "No quiet hours.",
+        "changeLater": "You can change these in Settings after setup."
+      }
+    },
+    "revoked": {
+      "title": "EasyOrders no longer accepts Akeed’s access",
+      "body": "The last time Akeed used its API key, EasyOrders rejected it. New orders can’t be checked and order statuses can’t be updated in your store.",
+      "recovery": "To fix it, disconnect EasyOrders here, then connect the same store again. Reconnecting creates a new key and new webhooks.",
+      "lastSeen": "This is the last answer EasyOrders gave, not a live check. If you didn’t remove the key yourself, contact Akeed support before you disconnect."
+    },
+    "disconnected": {
+      "title": "{store} is disconnected from EasyOrders",
+      "titleNoStore": "Your store is disconnected from EasyOrders",
+      "body": "Akeed has stopped receiving orders from EasyOrders, sending messages for them, and updating their status in your store.",
+      "historyKept": "Your earlier orders and their confirmation results are kept and still appear in your reports.",
+      "reconnectBody": "You can connect the same EasyOrders store again. A different store can’t be connected to this account; contact Akeed support if you need that.",
+      "reconnect": "Reconnect EasyOrders",
+      "sameStore": "You are reconnecting a store. Sign in to the same EasyOrders store as before; a different store is refused."
+    },
+    "disconnect": {
+      "button": "Disconnect EasyOrders",
+      "title": "Disconnect EasyOrders?",
+      "description": "Akeed stops working with this store on its side right away.",
+      "keep": "Keep connected",
+      "confirm": "Disconnect",
+      "effects": {
+        "stops": "New orders from EasyOrders are no longer received, and messages or status updates that were waiting are not sent.",
+        "history": "Your orders, confirmation results and usage history are kept.",
+        "provider": "Akeed asks EasyOrders to delete the webhooks it created. The API key named Akeed stays in EasyOrders until you delete it there.",
+        "reconnect": "To reconnect later you approve again in EasyOrders. Orders placed while disconnected are not imported."
+      }
+    },
+    "removal": {
+      "title": "Remove Akeed from EasyOrders",
+      "intro": "Disconnecting here doesn’t delete anything in EasyOrders. Do it yourself so EasyOrders stops calling Akeed:",
+      "steps": {
+        "openSettings": "In EasyOrders, open Settings → Public API.",
+        "deleteKey": "Delete the API key named Akeed.",
+        "deleteWebhooks": "Under Webhooks, delete every webhook named Akeed."
+      },
+      "oldWebhooks": "Until you delete them, EasyOrders keeps sending orders to an address Akeed no longer accepts. Nothing is stored from those calls.",
+      "support": "If something in EasyOrders can’t be deleted, contact EasyOrders support at info@easy-orders.net. For anything on the Akeed side, contact Akeed support.",
+      "removed": {
+        "intro": "Akeed deleted its webhooks in EasyOrders, so EasyOrders no longer calls Akeed. One thing is left for you:",
+        "note": "Akeed has already erased its copy of the key. EasyOrders has no way for Akeed to delete the key there, so that step is yours."
+      }
+    },
+    "done": {
+      "badge": "Setup complete",
+      "title": "Your store is set up",
+      "body": "Akeed is ready to confirm your EasyOrders cash-on-delivery orders over WhatsApp.",
+      "dashboard": "Go to the dashboard"
+    },
+    "panel": {
+      "readOnly": "You have read-only access. An owner or admin manages the EasyOrders connection.",
+      "disconnectHelp": "Disconnecting stops Akeed for this store and keeps your history.",
+      "disconnectedTitle": "EasyOrders is disconnected",
+      "secrets": {
+        "title": "Webhook security",
+        "learned": "Secured. Akeed learned both webhook secrets from EasyOrders and checks every delivery against them.",
+        "waiting": "Akeed will learn the webhook secrets from the first order and the first status change EasyOrders sends. Orders are accepted in the meantime; each one is checked with EasyOrders.",
+        "troubleshoot": "Orders being refused? Fix the webhook secrets",
+        "resetBody": "If you deleted and recreated the Akeed webhooks in EasyOrders, their secrets changed. Reset them here and Akeed learns the new ones from the next order.",
+        "reset": "Reset and learn again",
+        "resetting": "Resetting…",
+        "resetFailed": "We couldn’t reset the secrets. Try again."
+      }
+    }
+  },
+  "wooCommerceConnect": {
+    "eyebrow": "WooCommerce",
+    "loading": "Loading your WooCommerce connection…",
+    "readOnly": "You have read-only access. Ask an owner or admin to connect WooCommerce.",
+    "cleanup": "If you approved in your store, WooCommerce may have created an API key for Akeed that is not used. You can delete it in WordPress under WooCommerce > Settings > Advanced > REST API.",
+    "loadError": {
+      "title": "We couldn’t load your WooCommerce connection",
+      "body": "Check your internet connection and try again.",
+      "retry": "Try again"
+    },
+    "unavailable": {
+      "title": "WooCommerce isn’t available yet",
+      "body": "Connecting a WooCommerce store is not open yet. We will let you know as soon as it is."
+    },
+    "pilotRequired": {
+      "title": "Your account is waiting for approval",
+      "body": "Connecting WooCommerce is open to approved accounts only for now. We’ll let you know when yours is ready.",
+      "refresh": "Check again"
+    },
+    "sourceExists": {
+      "title": "This account already has an order source",
+      "body": "An Akeed account takes its orders from one source, so WooCommerce can’t be added to this one."
+    },
+    "enterUrl": {
+      "title": "Connect your WooCommerce store",
+      "body": "Akeed will confirm your cash-on-delivery orders from WooCommerce over WhatsApp. You approve the connection once, in your store.",
+      "label": "Your store’s address",
+      "hint": "The address your customers visit, starting with https://",
+      "placeholder": "https://example.com",
+      "required": "Enter your store’s address.",
+      "usesTitle": "Your store will ask you to give Akeed read and write access. Akeed uses it only to:",
+      "uses": {
+        "orders": "Receive your new orders",
+        "notifications": "Set up the order notifications it needs in your store",
+        "outcomes": "Record your customer’s answer on the order"
+      },
+      "sender": "Confirmation messages reach your customers from Akeed’s WhatsApp number.",
+      "cta": "Continue to my store",
+      "checking": "Checking your store…",
+      "note": "Your store opens in this tab. Sign in as an administrator or shop manager, then choose Approve."
+    },
+    "waiting": {
+      "title": "Finishing the connection",
+      "body": "Your store is sending Akeed its access. This page updates by itself.",
+      "expires": "This request expires at {time}.",
+      "restart": "Start again"
+    },
+    "denied": {
+      "title": "The connection wasn’t approved",
+      "body": "The request wasn’t approved in your store, so nothing was connected to your Akeed account.",
+      "retry": "Try again"
+    },
+    "unsupported": {
+      "title": "This store can’t be connected yet",
+      "nothing": "Nothing was connected to your Akeed account.",
+      "retry": "Try again"
+    },
+    "error": {
+      "title": "We couldn’t connect WooCommerce",
+      "expired": "The connection request expired before your store finished. Nothing was connected.",
+      "retry": "Try again"
+    },
+    "connected": {
+      "next": "We’ll let you know when Akeed starts confirming this store’s cash-on-delivery orders."
+    },
+    "storeLabel": "Store address",
+    "checklist": {
+      "loading": "Loading your setup…",
+      "loadError": "We couldn’t load your setup. Check your internet connection and try again.",
+      "retry": "Try again",
+      "footerCaption": "The test is free and goes to your number only.",
+      "notReady": "Fix what’s flagged above to send the test message.",
+      "sender": {
+        "configured": "Messages go out from Akeed’s WhatsApp number. You don’t need a number of your own.",
+        "not_configured": "Akeed’s WhatsApp sender isn’t ready on our side. Contact Akeed support; there is nothing to change in your store.",
+        "unknown": "Messages go out from Akeed’s WhatsApp number. We couldn’t check it just now; the test message will show whether it works."
+      },
+      "automation": {
+        "title": "How confirmations will run",
+        "autoConfirmOn": "A confirmation message is sent for every new cash-on-delivery order.",
+        "autoConfirmOff": "Automatic confirmation is off. No message is sent until you turn it on in Settings.",
+        "reminderOn": "A reminder after {minutes} minutes without a reply.",
+        "reminderOff": "No reminder.",
+        "noReplyOn": "Marked as no reply after {minutes} minutes. Akeed never cancels the order in WooCommerce by itself.",
+        "noReplyOff": "Orders are not marked as no reply automatically.",
+        "quietHoursOn": "No messages between {start} and {end}.",
+        "quietHoursOff": "No quiet hours.",
+        "changeLater": "You can change these in Settings after setup."
+      }
+    },
+    "done": {
+      "badge": "Setup complete",
+      "title": "Your store is set up",
+      "body": "Akeed is ready to confirm your WooCommerce cash-on-delivery orders over WhatsApp.",
+      "dashboard": "Go to the dashboard"
+    },
+    "webhooks": {
+      "title": "Order notifications in your store",
+      "kinds": {
+        "order_created": "New orders:",
+        "order_updated": "Order changes:"
+      },
+      "states": {
+        "active": "Active",
+        "paused": "Paused in your store",
+        "disabled": "Disabled by your store",
+        "missing": "Deleted from your store",
+        "unknown": "Not known yet"
+      },
+      "checkedAt": "Last read from your store: {when}.",
+      "neverChecked": "Akeed hasn’t read these from your store yet.",
+      "disabled": {
+        "title": "Your store disabled an order notification",
+        "body": "WooCommerce does this after several deliveries in a row fail. While it is disabled, new orders don’t reach Akeed.",
+        "missedOrders": "Orders placed while it was disabled were not sent to Akeed and are not imported.",
+        "enable": "Re-enable order notifications",
+        "enabling": "Re-enabling…",
+        "failed": "We couldn’t re-enable the order notification. Nothing was changed. Try again."
+      },
+      "enabled": "Order notifications are active again. Orders placed while they were disabled are not imported.",
+      "paused": "An order notification is paused in your store, so orders don’t reach Akeed. Akeed doesn’t change that: activate it in WordPress under WooCommerce > Settings > Advanced > Webhooks.",
+      "missing": "An order notification was deleted in your store, so orders don’t reach Akeed. To fix it, disconnect WooCommerce here, then connect the same store again.",
+      "rejectedDeliveries": "{count, plural, one {# order notification was refused because its signature or store address didn’t match.} other {# order notifications were refused because their signature or store address didn’t match.}} If the webhook was edited in WooCommerce, disconnect and connect the same store again."
+    },
+    "check": {
+      "help": "Ask your store whether the connection still works.",
+      "button": "Check connection",
+      "checking": "Checking your store…",
+      "ok": "Your store answered, accepted Akeed’s access, and both order notifications are active.",
+      "found": "Here is what needs attention:",
+      "failed": "We couldn’t run the check. Try again.",
+      "checkedAt": "Checked: {when}.",
+      "support": "If your hosting, a security plugin or a custom setup is involved, contact Akeed support. Akeed can’t promise it works with every hosting setup or plugin.",
+      "problems": {
+        "WOOCOMMERCE_STORE_ADDRESS_NOT_PUBLIC": "Akeed can no longer reach your store’s address on the public internet. Check your domain and its DNS.",
+        "WOOCOMMERCE_STORE_REDIRECTS": "Your store’s address now redirects to another one. If the address changed, contact Akeed support: a different address can’t be connected to this account.",
+        "WOOCOMMERCE_STORE_TLS_FAILED": "Your store’s security certificate is not valid. Ask your hosting provider to fix it.",
+        "WOOCOMMERCE_REST_NOT_FOUND": "The WooCommerce REST API is no longer at your store’s address. In WordPress, open Settings > Permalinks and choose any option other than Plain, and make sure WooCommerce is active.",
+        "WOOCOMMERCE_REST_UNREACHABLE": "Your store did not answer. It may be down, in maintenance mode or blocking outside requests. Try again later or ask your hosting provider.",
+        "WOOCOMMERCE_PROVIDER_UNAVAILABLE": "Your store took too long to answer. Try again.",
+        "WOOCOMMERCE_CREDENTIALS_REJECTED": "Your store no longer accepts Akeed’s API key. It may have been revoked, or your hosting may be removing the Authorization header. Disconnect WooCommerce here, then connect the same store again.",
+        "WOOCOMMERCE_PERMISSION_DENIED": "The WordPress user behind Akeed’s API key can no longer manage WooCommerce. Restore that user’s role, or disconnect and connect again as an administrator or shop manager.",
+        "WOOCOMMERCE_STORE_URL_MISMATCH": "Your store now reports a different address from the one that was connected, so its order notifications are refused. If the address changed, contact Akeed support.",
+        "WOOCOMMERCE_WEBHOOK_MISSING": "An order notification was deleted in your store. Disconnect WooCommerce here, then connect the same store again.",
+        "WOOCOMMERCE_WEBHOOK_DISABLED": "Your store disabled an order notification. Re-enable it above. Orders placed while it was disabled are not imported.",
+        "WOOCOMMERCE_WEBHOOK_PAUSED": "An order notification is paused in your store. Activate it in WordPress under WooCommerce > Settings > Advanced > Webhooks.",
+        "default": "The check found a problem Akeed can’t name. Contact Akeed support."
+      }
+    },
+    "credentialsRejected": {
+      "title": "Your store no longer accepts Akeed’s access",
+      "bodyRejected": "The last time Akeed used its API key, your store rejected it. Order updates can’t be written to your store, and its order notifications can’t be read.",
+      "bodyDenied": "The last time Akeed used its API key, your store answered that its WordPress user may not manage WooCommerce. Order updates can’t be written to your store.",
+      "recovery": "To fix it, disconnect WooCommerce here, then connect the same store again. Reconnecting creates a new key and replaces Akeed’s order notifications; there is nothing to copy.",
+      "lastSeen": "This is the last answer your store gave. If you didn’t revoke the key or change the user yourself, contact Akeed support before you disconnect."
+    },
+    "disconnected": {
+      "title": "Your WooCommerce store is disconnected",
+      "body": "Akeed has stopped receiving orders from this store, sending messages for them, and updating them in your store.",
+      "historyKept": "Your earlier orders and their confirmation results are kept and still appear in your reports.",
+      "reconnectBody": "You can connect the same store again. A different store, or this store at a different address, can’t be connected to this account; contact Akeed support if you need that.",
+      "reconnect": "Reconnect WooCommerce",
+      "sameStore": "You are reconnecting a store. Approve again in the same WooCommerce store as before; a different store is refused."
+    },
+    "disconnect": {
+      "button": "Disconnect WooCommerce",
+      "title": "Disconnect WooCommerce?",
+      "description": "Akeed stops working with this store on its side right away.",
+      "keep": "Keep connected",
+      "confirm": "Disconnect",
+      "failed": "We couldn’t disconnect WooCommerce. Nothing was changed. Try again.",
+      "effects": {
+        "stops": "New orders from WooCommerce are no longer received, and messages or order updates that were waiting are not sent.",
+        "history": "Your orders, confirmation results and usage history are kept.",
+        "webhooks": "Akeed asks your store to delete its two order notifications. If your store doesn’t answer, we tell you and you delete them yourself.",
+        "key": "The API key WooCommerce created for Akeed stays in your store until you revoke it there. Akeed deletes its own copy.",
+        "reconnect": "Reconnecting later means approving again in the same store. Orders placed while disconnected are not imported."
+      }
+    },
+    "removal": {
+      "title": "Remove Akeed’s API key from WooCommerce",
+      "intro": "Akeed can’t revoke its own API key in your store. Do it yourself so the key can no longer be used:",
+      "steps": {
+        "openSettings": "In WordPress, open WooCommerce > Settings > Advanced > REST API.",
+        "revokeKey": "Find the key named Akeed and choose Revoke.",
+        "deleteWebhooks": "Under WooCommerce > Settings > Advanced > Webhooks, delete any webhook whose name starts with Akeed."
+      },
+      "webhooksRemoved": "Akeed deleted its two order notifications from your store.",
+      "webhooksLeft": "Your store didn’t confirm that Akeed’s order notifications were deleted. Delete them yourself (step 3). Until then your store keeps calling an address Akeed no longer accepts; nothing is stored from those calls, and WooCommerce disables them after a few failures.",
+      "webhooksUnknown": "Akeed asks your store to delete its order notifications when you disconnect. If any are still listed, delete them (step 3).",
+      "support": "For anything on the Akeed side, contact Akeed support. Problems with your hosting or with WordPress plugins are for your hosting provider."
+    },
+    "panel": {
+      "readOnly": "You have read-only access. An owner or admin manages the WooCommerce connection.",
+      "disconnectHelp": "Disconnecting stops Akeed for this store and keeps your history.",
+      "disconnectedTitle": "WooCommerce is disconnected"
+    },
+    "codes": {
+      "WOOCOMMERCE_STORE_URL_INVALID": "Enter your store’s address, for example https://example.com.",
+      "WOOCOMMERCE_STORE_HTTPS_REQUIRED": "Your store’s address must start with https://. Akeed does not connect to stores without HTTPS.",
+      "WOOCOMMERCE_STORE_ADDRESS_NOT_PUBLIC": "Akeed could not reach this address on the public internet. Check the address and try again.",
+      "WOOCOMMERCE_STORE_REDIRECTS": "This address redirects to another one. Enter your store’s final address, with or without www, exactly as it appears in the browser.",
+      "WOOCOMMERCE_STORE_TLS_FAILED": "Your store’s security certificate is not valid. Ask your hosting provider to fix it, then try again.",
+      "WOOCOMMERCE_REST_NOT_FOUND": "Akeed could not find the WooCommerce REST API at this address. In WordPress, open Settings > Permalinks, choose any option other than Plain, and make sure WooCommerce is up to date.",
+      "WOOCOMMERCE_REST_UNREACHABLE": "Your store did not answer. It may be down, in maintenance mode or blocking outside requests. Try again later or ask your hosting provider.",
+      "WOOCOMMERCE_CREDENTIALS_REJECTED": "Your store did not accept the new API key. Some hosting setups remove the Authorization header before it reaches WordPress; ask your hosting provider to allow it. Then delete the unused key under WooCommerce > Settings > Advanced > REST API and connect again.",
+      "WOOCOMMERCE_PERMISSION_DENIED": "The WordPress user who approved the connection cannot manage WooCommerce. Sign in to your store as an administrator or shop manager and connect again.",
+      "WOOCOMMERCE_STORE_URL_MISMATCH": "Your store reports a different address from the one you entered. Enter the address exactly as it is set in WordPress, then connect again.",
+      "WOOCOMMERCE_WEBHOOK_SETUP_FAILED": "Akeed could not finish setting up order notifications in your store. Nothing was connected. Try again.",
+      "WOOCOMMERCE_STORE_UNAVAILABLE": "This store is already connected to another Akeed account.",
+      "WOOCOMMERCE_PROVIDER_UNAVAILABLE": "Your store took too long to answer. Nothing was connected. Try again.",
+      "WOOCOMMERCE_SOURCE_EXISTS": "This Akeed account already has an order source, so WooCommerce can’t be added.",
+      "WOOCOMMERCE_PILOT_REQUIRED": "Your account isn’t approved for WooCommerce yet.",
+      "WOOCOMMERCE_CONNECT_UNAVAILABLE": "Connecting WooCommerce isn’t available right now.",
+      "WOOCOMMERCE_ROLE_REQUIRED": "Only an owner or admin can connect WooCommerce.",
+      "WOOCOMMERCE_CALLBACK_INVALID": "Your store sent an incomplete answer. Nothing was connected.",
+      "WOOCOMMERCE_INSTALL_VALIDATION_FAILED": "We couldn’t read that request. Check the address and try again.",
+      "WOOCOMMERCE_RECONNECT_STORE_MISMATCH": "Only the store that was connected before can be reconnected. Nothing was changed.",
+      "WOOCOMMERCE_NOT_CONNECTED": "WooCommerce isn’t connected to this account.",
+      "WOOCOMMERCE_WEBHOOK_MISSING": "An order notification was deleted in your store, so it can’t be re-enabled. Disconnect WooCommerce here, then connect the same store again.",
+      "WOOCOMMERCE_WEBHOOK_ENABLE_UNAVAILABLE": "Order notifications can’t be re-enabled right now. Contact Akeed support.",
+      "WOOCOMMERCE_WEBHOOK_ENABLE_FAILED": "Your store didn’t re-enable the order notification. Try again, or contact Akeed support if it keeps happening.",
+      "default": "Something went wrong. Nothing was connected."
+    }
+  },
+  "connectionLine": {
+    "akeed": "Akeed",
+    "yourStore": "Your store",
+    "label": {
+      "idle": "Akeed and {store} are not connected yet.",
+      "waiting": "Akeed is connecting to {store}.",
+      "connected": "Akeed is connected to {store}.",
+      "refused": "Akeed could not connect to {store}.",
+      "disconnected": "Akeed is disconnected from {store}."
+    }
+  },
+  "adminMessageTexts": {
+    "eyebrow": "WhatsApp",
+    "title": "Message texts",
+    "description": "Free-form replies Akeed sends inside the customer service window, and the words used for a missing name. They need no WhatsApp review and change as soon as you save.",
+    "loading": "Loading message texts…",
+    "save": "Save",
+    "saving": "Saving…",
+    "refused": "This text was not saved",
+    "existingLabel": "{language} · {style}",
+    "addTitle": "Add a text",
+    "switchOn": "Switch on",
+    "switchOff": "Switch off",
+    "change": {
+      "create": "Saved.",
+      "update": "Saved.",
+      "unchanged": "Nothing changed."
+    },
+    "fields": {
+      "purpose": "What it is for",
+      "language": "Language",
+      "style": "Style",
+      "body": "Text",
+      "active": "Active"
+    },
+    "languages": {
+      "ar": "Arabic",
+      "en": "English"
+    },
+    "empty": {
+      "title": "No texts yet",
+      "description": "Add a text for each purpose and language before turning its switch on."
+    },
+    "purposes": {
+      "ack_confirmed": {
+        "title": "After a customer confirms",
+        "help": "Sent once after the customer confirms. Placeholders: '{{order}}', '{{store}}'."
+      },
+      "ack_canceled": {
+        "title": "After a customer cancels",
+        "help": "Sent once after the customer cancels. Placeholders: '{{order}}', '{{store}}'."
+      },
+      "unresolved_reply_nudge": {
+        "title": "Nudge after an unreadable reply",
+        "help": "Sent once when a typed reply could not be read as an answer. Placeholders: '{{order}}', '{{store}}'."
+      },
+      "fallback_customer_name": {
+        "title": "Word for a missing customer name",
+        "help": "Used in place of the customer's name. One short line, no placeholders, style default only."
+      },
+      "fallback_store_name": {
+        "title": "Word for a missing store name",
+        "help": "Used in place of the store's name. Never Akeed's own name. One short line, no placeholders, style default only."
+      }
+    },
+    "rules": {
+      "body_empty": "Write the text first.",
+      "variable_not_allowed": "This text uses a placeholder its purpose does not allow.",
+      "variable_malformed": "A placeholder is not closed. Write it as '{{order}}' or '{{store}}'.",
+      "fallback_too_long": "A name word can be at most 60 characters.",
+      "fallback_default_style_only": "A name word uses the default style only.",
+      "fallback_single_line": "A name word must be one line."
     }
   }
 }

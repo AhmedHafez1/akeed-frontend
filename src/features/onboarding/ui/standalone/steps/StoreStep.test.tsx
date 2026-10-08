@@ -6,19 +6,33 @@ import { StoreStep } from './StoreStep'
 import { renderStep } from './stepTestUtils'
 
 vi.mock('@/features/billing', () => ({ useBillingSummary: vi.fn() }))
-vi.mock('@/features/onboarding/api/onboardingApi', () => ({
-  fetchTemplatePreviews: vi.fn(async () => {
-    const preview = {
-      greeting: 'أهلًا بك {{customer}}',
-      body: 'شكرًا لتسوّقك من {{store}}. طلبك رقم {{order}} بقيمة {{total}}.',
-      totalLabel: 'إجمالي الطلب: {{total}}',
-      ending: 'يرجى تأكيد الطلب.',
-      confirmButton: 'تأكيد الطلب',
-      cancelButton: 'إلغاء الطلب',
-    }
-    return { ar: preview, en: { ...preview, greeting: 'Hi {{customer}}' } }
-  }),
-}))
+const templatePreviews = vi.hoisted(() => ({ fail: false }))
+
+vi.mock('@/features/onboarding/api/onboardingApi', async () => {
+  const { templateMessageFixture } =
+    await import('@/shared/lib/templateMessageFixture')
+  const body = [
+    'شكرًا لتسوّقك من {{store}}. طلبك رقم #{{order}} بقيمة {{total}}.',
+    'إجمالي الطلب: {{total}}',
+    'يرجى تأكيد الطلب.',
+  ]
+  return {
+    fetchTemplatePreviews: vi.fn(async () => {
+      if (templatePreviews.fail) throw new Error('settings unavailable')
+      return {
+        ar: templateMessageFixture(
+          ['أهلًا بك {{customer}}', ...body],
+          ['تأكيد الطلب', 'إلغاء الطلب'],
+          { direction: 'rtl', source: 'provider' }
+        ),
+        en: templateMessageFixture(
+          ['Hi {{customer}}', ...body],
+          ['Confirm order', 'Cancel order']
+        ),
+      }
+    }),
+  }
+})
 
 const summary = {
   availableCredits: 30,
@@ -179,6 +193,20 @@ describe('StoreStep', () => {
     )
     expect(screen.getByText(/#TEST\u20111/)).toBeTruthy()
     expect(screen.getByText('أهلًا بك أحمد')).toBeTruthy()
+  })
+
+  it('says so when the preview cannot be loaded', async () => {
+    templatePreviews.fail = true
+    try {
+      renderStore()
+      expect(
+        await screen.findByText(
+          'تعذّر تحميل معاينة الرسالة. إعداداتك تُحفظ كالمعتاد.'
+        )
+      ).toBeTruthy()
+    } finally {
+      templatePreviews.fail = false
+    }
   })
 
   it('renders the English copy', () => {

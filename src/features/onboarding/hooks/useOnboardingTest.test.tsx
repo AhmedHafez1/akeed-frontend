@@ -9,6 +9,7 @@ import type {
 } from '@/features/onboarding/domain/onboarding.types'
 import { queryKeys } from '@/shared/query/keys'
 import { useOnboardingTest } from './useOnboardingTest'
+import { templateMessageFixture } from '@/shared/lib/templateMessageFixture'
 
 vi.mock('@/features/onboarding/api/onboardingApi', async (importOriginal) => {
   const original =
@@ -33,14 +34,16 @@ function makeTestState(
   return {
     phone: '+201012345670',
     language: 'ar',
-    preview: {
-      greeting: 'أهلًا {{customer}}',
-      body: 'طلبك {{order}}',
-      totalLabel: 'الإجمالي {{total}}',
-      ending: 'أكّد الطلب',
-      confirmButton: 'تأكيد الطلب',
-      cancelButton: 'إلغاء الطلب',
-    },
+    message: templateMessageFixture(
+      [
+        'أهلًا {{customer}}',
+        'طلبك {{order}}',
+        'الإجمالي {{total}}',
+        'أكّد الطلب',
+      ],
+      ['تأكيد الطلب', 'إلغاء الطلب'],
+      { direction: 'rtl' }
+    ),
     sample: {
       customerName: 'أحمد',
       orderNumber: 'TEST-1',

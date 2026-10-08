@@ -1,8 +1,9 @@
 import type {
   CodTemplateDefinition,
-  MessageTemplatePreview,
   SettingsResponse,
 } from '@/features/settings/api/settingsApi'
+import type { TemplateMessage } from '@/shared/lib/templateMessage'
+import { templateMessageFixture } from '@/shared/lib/templateMessageFixture'
 import type {
   CreditSummary,
   LedgerEntry,
@@ -134,26 +135,23 @@ const template = (
   ending: string,
   confirmButton: string,
   cancelButton: string
-): MessageTemplatePreview => ({
-  greeting,
-  body,
-  totalLabel,
-  ending,
-  confirmButton,
-  cancelButton,
-})
+): TemplateMessage =>
+  templateMessageFixture(
+    [greeting, body, totalLabel, ending],
+    [confirmButton, cancelButton]
+  )
 
 const variant = (
   language: 'ar' | 'en',
   id: CodTemplateDefinition['variant'],
-  preview: MessageTemplatePreview
+  message: TemplateMessage
 ): CodTemplateDefinition => ({
   language,
   variant: id,
   metaTemplateName: `fixture_${language}_${id}`,
   metaLanguageCode: language,
   bodyParameterOrder: ['customer', 'store', 'order', 'total'],
-  preview,
+  message: { ...message, direction: language === 'ar' ? 'rtl' : 'ltr' },
 })
 
 const AR_VARIANTS = [
@@ -320,9 +318,9 @@ function settings(): SettingsResponse {
       defaults: { ar: 'standard', en: 'friendly' },
       selected,
       variants: { ar: AR_VARIANTS, en: EN_VARIANTS },
-      previews: {
-        ar: AR_VARIANTS[0].preview,
-        en: EN_VARIANTS[0].preview,
+      messages: {
+        ar: AR_VARIANTS[0].message,
+        en: EN_VARIANTS[0].message,
       },
     },
   }

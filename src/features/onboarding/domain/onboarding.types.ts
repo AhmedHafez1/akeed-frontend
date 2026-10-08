@@ -1,3 +1,5 @@
+import type { TemplateMessage } from '@/shared/lib/templateMessage'
+
 export interface BillingManagement {
   mode: 'shopify' | 'manual'
   canManageBilling: boolean
@@ -5,17 +7,13 @@ export interface BillingManagement {
 
 export type IntegrationOnboardingLanguage = 'auto' | 'en' | 'ar'
 
-export type ArabicCodTemplateVariantId =
-  | 'standard'
-  | 'egyptian'
-  | 'gulf'
-  | 'short'
+/**
+ * The id of a message style. The styles a store may choose come from the
+ * settings response (`template.variants`), never from a list in this app.
+ */
+export type ArabicCodTemplateVariantId = string
 
-export type EnglishCodTemplateVariantId =
-  | 'friendly'
-  | 'professional'
-  | 'direct'
-  | 'short'
+export type EnglishCodTemplateVariantId = string
 
 export type IntegrationOnboardingStatus = 'pending' | 'completed'
 
@@ -30,6 +28,38 @@ export type StandaloneSetupBlockedReason =
   | 'cod_default_invalid'
   | 'automation_invalid'
   | 'timezone_invalid'
+
+/** Setup blockers only a connected source can have (US-06-05, US-07-05). */
+export type SourceSetupBlockedReason =
+  | 'order_defaults_missing'
+  | 'webhook_secrets_missing'
+  | 'credentials_rejected'
+  | 'source_disconnected'
+  | 'webhook_disabled'
+
+export type SetupBlockedReason =
+  | StandaloneSetupBlockedReason
+  | SourceSetupBlockedReason
+
+/**
+ * Whether this deployment holds the shared Akeed sender's credentials. It
+ * says nothing about delivery, template approval or number quality.
+ */
+export interface MessagingSenderStatus {
+  sender: 'akeed_shared'
+  status: 'configured' | 'not_configured' | 'unknown'
+}
+
+/** The connection of a source whose platform describes one. */
+export interface SourceSetup {
+  connectionState: 'connected' | 'disconnected'
+  disconnectedAt: string | null
+  store: { reference: string | null; verified: boolean }
+  orderDefaults: { currency: string | null; phoneCountry: string | null }
+  sender: MessagingSenderStatus
+  canComplete: boolean
+  blockedReasons: SetupBlockedReason[]
+}
 
 export const AUTOMATION_TIMEZONES = [
   'Asia/Riyadh',
@@ -92,6 +122,8 @@ export interface IntegrationOnboardingState {
     blockedReasons: StandaloneSetupBlockedReason[]
     accountStatus: CreditAccountStatus | null
   } | null
+  /** Absent for a source with no connection of its own to describe. */
+  sourceSetup?: SourceSetup
 }
 
 export interface OnboardingActivation {
@@ -144,20 +176,12 @@ export interface OnboardingTestAttempt {
   canceledAt: string | null
 }
 
-export interface OnboardingTestTemplatePreview {
-  greeting: string
-  body: string
-  totalLabel: string
-  ending: string
-  confirmButton: string
-  cancelButton: string
-}
-
 /** GET/POST /api/onboarding/test: everything the test step renders. */
 export interface OnboardingTestState {
   phone: string | null
   language: 'ar' | 'en'
-  preview: OnboardingTestTemplatePreview
+  /** The test's message: what the merchant's phone receives. */
+  message: TemplateMessage
   sample: {
     customerName: string
     orderNumber: string
@@ -190,6 +214,11 @@ export interface OnboardingSettingsPayload {
   sendDelayMinutes?: number
   codTemplateArVariant?: ArabicCodTemplateVariantId
   codTemplateEnVariant?: EnglishCodTemplateVariantId
+  /** A reminder style, or null for "same as the first message". */
+  codReminderArVariant?: string | null
+  codReminderEnVariant?: string | null
+  /** The Arabic style follows the customer's country. */
+  codTemplateArAuto?: boolean
   merchantWhatsappPhone?: string
 }
 
@@ -238,6 +267,18 @@ export interface OnboardingBillingPlansResponse {
 export const STANDALONE_STEPS = ['store', 'test', 'done'] as const
 
 export type StandaloneStep = (typeof STANDALONE_STEPS)[number]
+
+/**
+ * A connected store's setup puts up to two steps before the common ones:
+ * connecting the store, and the details only its platform needs.
+ */
+export const SOURCE_SETUP_STEPS = [
+  'connect',
+  'details',
+  ...STANDALONE_STEPS,
+] as const
+
+export type SourceSetupStep = (typeof SOURCE_SETUP_STEPS)[number]
 
 export type StandaloneStoreFieldKey = 'storeName' | 'merchantWhatsappPhone'
 

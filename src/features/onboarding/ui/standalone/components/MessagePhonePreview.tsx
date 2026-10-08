@@ -2,10 +2,13 @@
 
 import { useMemo } from 'react'
 import { useTranslations } from 'next-intl'
-import type { OnboardingTestTemplatePreview } from '@/features/onboarding/domain/onboarding.types'
 import { cn } from '@/shared/lib/utils'
 import { formatMoneyParts } from '@/shared/lib/money'
-import { fillTemplatePreview } from '@/shared/lib/templatePreview'
+import {
+  fillTemplateSegments,
+  templateReplyTone,
+  type TemplateMessage,
+} from '@/shared/lib/templateMessage'
 import { Skeleton } from '@/shared/ui'
 import {
   WhatsAppChatHeader,
@@ -19,8 +22,10 @@ export const SAMPLE_ORDER_NUMBER = 'TEST-1'
 export const SAMPLE_TOTAL_MINOR = 25000
 
 interface MessagePhonePreviewProps {
-  /** The template text; null while it loads. */
-  template: OnboardingTestTemplatePreview | null
+  /** The message; null while it loads. */
+  message: TemplateMessage | null
+  /** The message could not be loaded. */
+  isError?: boolean
   language: 'ar' | 'en'
   storeName: string
   currency: string
@@ -41,7 +46,8 @@ interface MessagePhonePreviewProps {
  * setup form's live preview and the test step's "what arrived" phone.
  */
 export function MessagePhonePreview({
-  template,
+  message,
+  isError = false,
   language,
   storeName,
   currency,
@@ -67,31 +73,43 @@ export function MessagePhonePreview({
   )
 
   const paragraphs = useMemo(() => {
-    if (!template) return []
+    if (!message) return []
     const { amount, currency: symbol } = formatMoneyParts(
       totalMinor,
       currency,
       language
     )
-    return fillTemplatePreview(template, {
+    return fillTemplateSegments(message, {
       customer: customerName,
       store: storeName.trim() || '…',
-      // Isolated so "#TEST-1" and "250.00 ج.م" keep their order inside
-      // the other script, and the order number never wraps at its hyphen.
-      order: `\u2068#${orderNumber.replace(/-/g, '\u2011')}\u2069`,
-      total: `\u2068${amount} ${symbol.replace(/\.$/, '')}\u2069`,
+      // The order number never wraps at its hyphen.
+      order: orderNumber.replace(/-/g, '\u2011'),
+      total: `${amount} ${symbol.replace(/\.$/, '')}`,
     })
+      .map((segments) =>
+        segments
+          .map((segment) =>
+            // Isolated so "#TEST-1" and "250.00 ج.م" keep their order inside
+            // the other script.
+            segment.kind === 'variable' &&
+            (segment.variable === 'order' || segment.variable === 'total')
+              ? `\u2068${segment.text}\u2069`
+              : segment.text
+          )
+          .join('')
+      )
+      .filter((line) => line.trim().length > 0)
   }, [
     currency,
     customerName,
     language,
+    message,
     orderNumber,
     storeName,
-    template,
     totalMinor,
   ])
 
-  if (isEmpty) {
+  if (isEmpty || isError || (message && paragraphs.length === 0)) {
     return (
       <div className={cn('opacity-60 grayscale', className)}>
         <WhatsAppPhoneFrame>
@@ -101,8 +119,11 @@ export function MessagePhonePreview({
             avatarAlt={t('avatarAlt')}
           />
           <div className="flex min-h-96 items-center justify-center px-6">
-            <p className="text-ink-muted text-sm">
-              {tUnavailable('previewEmpty')}
+            <p
+              className="text-ink-muted text-sm"
+              role={isError ? 'alert' : undefined}
+            >
+              {isError ? t('previewError') : tUnavailable('previewEmpty')}
             </p>
           </div>
         </WhatsAppPhoneFrame>
@@ -110,7 +131,7 @@ export function MessagePhonePreview({
     )
   }
 
-  if (!template) {
+  if (!message) {
     return (
       <div className={className} aria-hidden="true">
         <WhatsAppPhoneFrame>
@@ -129,12 +150,12 @@ export function MessagePhonePreview({
         dayLabel={t('today')}
         paragraphs={paragraphs}
         timeLabel={timeLabel}
-        buttons={[
-          { label: template.confirmButton, tone: 'confirm' },
-          { label: template.cancelButton, tone: 'cancel' },
-        ]}
+        buttons={message.buttons.map((label, index) => ({
+          label,
+          tone: templateReplyTone(index),
+        }))}
         emphasizedTone={emphasizeConfirm ? 'confirm' : undefined}
-        messageDir={language === 'ar' ? 'rtl' : 'ltr'}
+        messageDir={message.direction}
       />
     </div>
   )

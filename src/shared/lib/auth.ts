@@ -2,7 +2,8 @@
 import { createClient } from '@supabase/supabase-js'
 import type { User } from '@supabase/supabase-js'
 import { resolveEmbeddedContextFromWindow } from '@/shared/lib/embedded-context'
-import { createApiError, parseJsonResponse } from '@/shared/lib/http'
+import { resolveOrganizationSourceMode } from '@/shared/config/commerceSources'
+import { ApiError, createApiError, parseJsonResponse } from '@/shared/lib/http'
 import { createLogger } from '@/shared/lib/logger'
 import { withLocale } from '@/shared/lib/locale'
 
@@ -482,6 +483,45 @@ export function getStandaloneOrganizationName(user: User): string {
   return (companyName ?? fullName ?? emailName ?? 'Workspace').slice(0, 120)
 }
 
+/**
+ * Creates the organization the way signup chose: with its Standalone source,
+ * or alone when the merchant picked a store platform to connect. If that
+ * platform was switched off in the meantime, nothing was created yet, so the
+ * account gets the Standalone default instead of a dead end.
+ */
+async function provisionOrganization(
+  user: User
+): Promise<StandaloneOrganizationProvisioningResponse> {
+  const name = getStandaloneOrganizationName(user)
+  const sourceMode = resolveOrganizationSourceMode(
+    user.user_metadata?.signup_source
+  )
+  if (sourceMode === 'standalone') {
+    return api.post<StandaloneOrganizationProvisioningResponse>(
+      '/api/organizations',
+      { name }
+    )
+  }
+
+  try {
+    return await api.post<StandaloneOrganizationProvisioningResponse>(
+      '/api/organizations',
+      { name, sourceMode }
+    )
+  } catch (error) {
+    if (
+      error instanceof ApiError &&
+      error.code === 'SOURCE_CONNECT_UNAVAILABLE'
+    ) {
+      return api.post<StandaloneOrganizationProvisioningResponse>(
+        '/api/organizations',
+        { name }
+      )
+    }
+    throw error
+  }
+}
+
 export function clearStandaloneOrganizationBootstrap(): void {
   standaloneBootstrapCache = null
 }
@@ -493,10 +533,7 @@ export async function ensureStandaloneOrganization(
     return standaloneBootstrapCache.promise
   }
 
-  const promise = api.post<StandaloneOrganizationProvisioningResponse>(
-    '/api/organizations',
-    { name: getStandaloneOrganizationName(user) }
-  )
+  const promise = provisionOrganization(user)
   standaloneBootstrapCache = { userId: user.id, promise }
 
   try {

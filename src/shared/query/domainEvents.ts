@@ -24,6 +24,8 @@ export type DomainEvent =
   /** The merchant confirmed an order by hand from the dashboard. */
   | 'verification.confirmed'
   | 'verification.retried'
+  /** The merchant asked for a failed store update to be tried again. */
+  | 'verification.storeSyncRetried'
   | 'verification.testSent'
   | 'credits.purchased'
   /** A file import was uploaded, re-mapped, changed or discarded. Nothing was sent. */
@@ -70,6 +72,7 @@ const AFFECTED_QUERIES: Record<DomainEvent, ReadonlyArray<QueryKey>> = {
   ],
   'verification.canceled': [queryKeys.verifications.all],
   'verification.confirmed': [queryKeys.verifications.all],
+  'verification.storeSyncRetried': [queryKeys.verifications.all],
   'verification.retried': [
     queryKeys.verifications.all,
     queryKeys.billing.summary(),

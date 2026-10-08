@@ -1,3 +1,4 @@
+import { DEFAULT_SIGNUP_SOURCE_ID } from '@/shared/config/commerceSources'
 import { getAuthErrorCode, isAlreadyRegistered } from '@/shared/lib/authErrors'
 
 export interface SignupValues {
@@ -6,6 +7,8 @@ export interface SignupValues {
   email: string
   password: string
   terms: boolean
+  /** Where orders come from; a `SignupSource` id. Standalone when absent. */
+  source?: string
 }
 
 export type SignupField = keyof SignupValues
@@ -25,6 +28,7 @@ export const SIGNUP_FIELD_IDS: Record<SignupField, string> = {
   email: 'signup-email',
   password: 'signup-password',
   terms: 'signup-terms',
+  source: 'signup-source',
 }
 
 export const SIGNUP_PASSWORD_MIN_LENGTH = 8
@@ -49,6 +53,7 @@ export const EMPTY_SIGNUP_VALUES: SignupValues = {
   email: '',
   password: '',
   terms: false,
+  source: DEFAULT_SIGNUP_SOURCE_ID,
 }
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -108,10 +113,14 @@ export function mapSignUpError(error: unknown): SignupOutcome {
 }
 
 export function toSignupMetadata(values: SignupValues) {
+  const source = values.source ?? DEFAULT_SIGNUP_SOURCE_ID
   return {
     full_name: values.fullName.trim(),
     // `company_name` is what org provisioning and the store-name prefill read.
     company_name: values.storeName.trim(),
+    // Read by org provisioning on first sign-in, so the source is chosen
+    // before any is created. Standalone, the default, is left unsaid.
+    ...(source === DEFAULT_SIGNUP_SOURCE_ID ? {} : { signup_source: source }),
   }
 }
 

@@ -12,11 +12,7 @@ import {
   TextField,
 } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
-import type {
-  ArabicCodTemplateVariantId,
-  EnglishCodTemplateVariantId,
-  IntegrationOnboardingLanguage,
-} from '@/features/onboarding'
+import type { IntegrationOnboardingLanguage } from '@/features/onboarding'
 import type { SettingsResponse } from '@/features/settings/api/settingsApi'
 import {
   PREVIEW_CUSTOMER_NAMES,
@@ -28,10 +24,15 @@ import {
   SETTINGS_FIELD_ID,
   STORE_NAME_MAX_LENGTH,
 } from '@/features/settings/domain/settingsForm'
+import { templateStyleLabel } from '@/features/settings/domain/templateStyleLabel'
 import type { EmbeddedSettingsModel } from '@/features/settings/domain/useEmbeddedSettings'
 import { useTestPhonePrompt } from '@/features/settings/domain/useTestPhonePrompt'
 import { formatPlanPrice } from '@/shared/lib/money'
 import { MessagePreviewCard } from './MessagePreviewCard'
+
+/** Choice values that are not a template style. */
+const AUTO_STYLE = 'auto'
+const SAME_AS_FIRST = '__same_as_first__'
 
 interface MessageTabProps {
   model: EmbeddedSettingsModel
@@ -73,8 +74,14 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
   const selectedDefinition =
     variants.find((variant) => variant.variant === selectedVariant) ??
     variants[0]
-  const template =
-    selectedDefinition?.preview ?? data.template.previews[previewLanguage]
+  const message =
+    selectedDefinition?.message ?? data.template.messages[previewLanguage]
+  // Arabic `auto` and the reminder are offered only while the backend says so.
+  const offersAuto =
+    previewLanguage === 'ar' && values.codTemplateArAuto !== undefined
+  const isAuto = offersAuto && values.codTemplateArAuto === true
+  const reminderVariants = data.template.reminder?.variants[previewLanguage]
+  const selectedReminder = values.codReminderVariants?.[previewLanguage] ?? null
 
   const storeNameError =
     model.errors.storeName === 'required'
@@ -89,17 +96,26 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
   }
 
   const handleVariantChange = (variant: string) => {
+    if (variant === AUTO_STYLE) {
+      model.update({ codTemplateArAuto: true })
+      return
+    }
     model.update({
-      codTemplateVariants:
-        previewLanguage === 'ar'
-          ? {
-              ...values.codTemplateVariants,
-              ar: variant as ArabicCodTemplateVariantId,
-            }
-          : {
-              ...values.codTemplateVariants,
-              en: variant as EnglishCodTemplateVariantId,
-            },
+      codTemplateVariants: {
+        ...values.codTemplateVariants,
+        [previewLanguage]: variant,
+      },
+      ...(offersAuto ? { codTemplateArAuto: false } : {}),
+    })
+  }
+
+  const handleReminderChange = (variant: string) => {
+    if (!values.codReminderVariants) return
+    model.update({
+      codReminderVariants: {
+        ...values.codReminderVariants,
+        [previewLanguage]: variant === SAME_AS_FIRST ? null : variant,
+      },
     })
   }
 
@@ -178,20 +194,71 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
                 title={t('styleHeading')}
                 titleHidden
                 disabled={readOnly}
-                selected={[selectedVariant]}
+                selected={[isAuto ? AUTO_STYLE : selectedVariant]}
                 onChange={([variant]) => handleVariantChange(variant)}
-                choices={variants.map((variant) => ({
-                  value: variant.variant,
-                  label: t(`variantLabels.${variant.variant}`),
-                  helpText: (
-                    <span dir={previewLanguage === 'ar' ? 'rtl' : 'ltr'}>
-                      {templateOpeningLine(variant.preview, sample)}
-                    </span>
-                  ),
-                }))}
+                choices={[
+                  ...(offersAuto
+                    ? [
+                        {
+                          value: AUTO_STYLE,
+                          label: templateStyleLabel(t, AUTO_STYLE),
+                          helpText: t('autoStyleHelp'),
+                        },
+                      ]
+                    : []),
+                  ...variants.map((variant) => ({
+                    value: variant.variant,
+                    label: templateStyleLabel(t, variant.variant),
+                    helpText: (
+                      <span dir={variant.message.direction}>
+                        {templateOpeningLine(variant.message, sample)}
+                      </span>
+                    ),
+                  })),
+                ]}
               />
             </BlockStack>
           </Card>
+
+          {reminderVariants && (
+            <Card>
+              <BlockStack gap="400">
+                <BlockStack gap="100">
+                  <Text as="h2" variant="headingMd">
+                    {t('reminderHeading')}
+                  </Text>
+                  <Text as="p" variant="bodySm" tone="subdued">
+                    {t('reminderHint', {
+                      language: t(`languageNames.${previewLanguage}`),
+                    })}
+                  </Text>
+                </BlockStack>
+                <ChoiceList
+                  title={t('reminderHeading')}
+                  titleHidden
+                  disabled={readOnly}
+                  selected={[selectedReminder ?? SAME_AS_FIRST]}
+                  onChange={([variant]) => handleReminderChange(variant)}
+                  choices={[
+                    {
+                      value: SAME_AS_FIRST,
+                      label: t('reminderSame'),
+                      helpText: t('reminderSameHelp'),
+                    },
+                    ...reminderVariants.map((variant) => ({
+                      value: variant.variant,
+                      label: templateStyleLabel(t, variant.variant),
+                      helpText: (
+                        <span dir={variant.message.direction}>
+                          {templateOpeningLine(variant.message, sample)}
+                        </span>
+                      ),
+                    })),
+                  ]}
+                />
+              </BlockStack>
+            </Card>
+          )}
         </BlockStack>
       </Layout.Section>
 
@@ -199,7 +266,8 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
         <MessagePreviewCard
           language={previewLanguage}
           onLanguageChange={setPreviewLanguage}
-          template={template}
+          message={message}
+          note={isAuto ? t('autoStylePreviewNote') : undefined}
           storeName={values.storeName}
           currency={data.state.shippingCurrency}
           testSendPhone={data.state.merchantWhatsappPhone ?? null}

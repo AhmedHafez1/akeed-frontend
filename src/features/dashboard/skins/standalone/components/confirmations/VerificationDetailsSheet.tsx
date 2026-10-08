@@ -19,22 +19,33 @@ import {
   formatTooltipDateTime,
   resolveRowDescriptionKey,
 } from '@/features/dashboard/domain/verificationRow'
+import { orderSourceLabelKey } from '@/features/dashboard/lib/orderDisplay'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
+import { StoreSyncSection } from './StoreSyncSection'
+
+/** The one action the sheet carries: asking the store again. */
+export interface StoreSyncRetryProps {
+  canRetrySync?: boolean
+  retryingSyncId?: string | null
+  onRetrySync?: (verification: VerificationItem) => void
+}
 
 /**
  * Everything recorded about one order, opened from the row's menu: who, how
- * much, each step of the conversation with its time, and why cancelling is
- * not offered when it is not. Read-only — the actions live on the row.
+ * much, each step of the conversation with its time, whether the store has
+ * the result, and why cancelling is not offered when it is not. The row's own
+ * actions live on the row; the sheet only offers retrying a store update.
  */
 export function VerificationDetailsSheet({
   verification,
   timeZone,
   onClose,
+  ...storeSync
 }: {
   verification: VerificationItem | null
   timeZone: string
   onClose: () => void
-}) {
+} & StoreSyncRetryProps) {
   const t = useTranslations('dashboard')
 
   return (
@@ -47,7 +58,11 @@ export function VerificationDetailsSheet({
           closeLabel={t('table.actions.dismiss')}
           className="!inset-y-0 [inset-inline-end:0] !top-0 !left-auto !h-dvh !w-[calc(100vw-1.5rem)] !max-w-none !translate-x-0 !translate-y-0 !overflow-y-auto !rounded-none !border-y-0 !p-0 sm:!w-[min(100vw,520px)]"
         >
-          <DetailsBody verification={verification} timeZone={timeZone} />
+          <DetailsBody
+            verification={verification}
+            timeZone={timeZone}
+            {...storeSync}
+          />
         </DialogContent>
       )}
     </Dialog>
@@ -57,13 +72,17 @@ export function VerificationDetailsSheet({
 function DetailsBody({
   verification,
   timeZone,
+  canRetrySync = false,
+  retryingSyncId = null,
+  onRetrySync,
 }: {
   verification: VerificationItem
   timeZone: string
-}) {
+} & StoreSyncRetryProps) {
   const t = useTranslations('dashboard')
   const { locale } = useLocaleInfo()
   const unavailableKey = cancellationMessageKey(verification)
+  const sourceKey = orderSourceLabelKey(verification.platform)
 
   return (
     <>
@@ -150,7 +169,23 @@ function DetailsBody({
           </ol>
         </section>
 
+        <StoreSyncSection
+          verification={verification}
+          timeZone={timeZone}
+          canRetry={canRetrySync}
+          isRetrying={retryingSyncId === verification.id}
+          onRetry={onRetrySync}
+        />
+
         <dl className="divide-border border-border divide-y rounded-xl border px-4 text-sm">
+          {sourceKey && (
+            <div className="flex justify-between gap-4 py-3">
+              <dt className="text-muted-foreground">{t('table.source')}</dt>
+              <dd className="text-foreground text-end font-medium">
+                {t(sourceKey)}
+              </dd>
+            </div>
+          )}
           <div className="flex justify-between gap-4 py-3">
             <dt className="text-muted-foreground">
               {t('table.headings.followUp')}

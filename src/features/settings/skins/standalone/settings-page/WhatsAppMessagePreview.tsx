@@ -1,20 +1,22 @@
 import { Fragment } from 'react'
 import { Check } from 'lucide-react'
-import type { MessageTemplatePreview } from '@/features/settings/api/settingsApi'
 import {
   buildPreviewLines,
   isLtrVariable,
   type PreviewSample,
 } from '@/features/settings/domain/messagePreview'
 import { formatTemplatePreviewTimestamp } from '@/features/settings/skins/shared/templatePreview'
+import type { TemplateMessage } from '@/shared/lib/templateMessage'
 
 interface WhatsAppMessagePreviewProps {
   language: 'ar' | 'en'
-  template: MessageTemplatePreview
+  message: TemplateMessage
   sample: PreviewSample
   /** What the picture shows, for assistive tech. */
   label: string
   businessAccountLabel: string
+  /** Shown in the bubble when the message has no text. */
+  emptyLabel: string
 }
 
 /**
@@ -25,12 +27,13 @@ interface WhatsAppMessagePreviewProps {
  */
 export function WhatsAppMessagePreview({
   language,
-  template,
+  message,
   sample,
   label,
   businessAccountLabel,
+  emptyLabel,
 }: WhatsAppMessagePreviewProps) {
-  const lines = buildPreviewLines(template, sample)
+  const lines = buildPreviewLines(message, sample)
 
   return (
     <div
@@ -50,12 +53,15 @@ export function WhatsAppMessagePreview({
         </span>
       </div>
       <div
-        dir={language === 'ar' ? 'rtl' : 'ltr'}
+        dir={message.direction}
         lang={language}
         className="bg-surface-sunken bg-[radial-gradient(var(--line)_1px,transparent_1px)] bg-size-[14px_14px] px-3.5 pt-4.5 pb-5"
       >
         <div className="bg-surface-raised shadow-ak-segment max-w-75 overflow-hidden rounded-xl rounded-ss-sm">
           <div className="text-ak-body text-ink flex flex-col gap-1.5 px-3 pt-2.5 pb-1.5">
+            {lines.length === 0 && (
+              <p className="text-ink-muted">{emptyLabel}</p>
+            )}
             {lines.map((segments, index) => (
               <p key={index}>
                 {segments.map((segment, segmentIndex) =>
@@ -79,9 +85,9 @@ export function WhatsAppMessagePreview({
               {formatTemplatePreviewTimestamp(language)}
             </bdi>
           </div>
-          {[template.confirmButton, template.cancelButton].map((reply) => (
+          {message.buttons.map((reply, index) => (
             <div
-              key={reply}
+              key={`${index}-${reply}`}
               className="border-line text-wa-action text-ak-body flex h-10 items-center justify-center border-t font-semibold"
             >
               {reply}

@@ -6,6 +6,7 @@ import type {
   OnboardingTestAttempt,
   OnboardingTestState,
 } from '@/features/onboarding/domain/onboarding.types'
+import { templateMessageFixture } from '@/shared/lib/templateMessageFixture'
 
 /*
  * In-memory backend for the standalone onboarding v2 fixture
@@ -118,24 +119,26 @@ function initialize() {
   }
 }
 
-const TEMPLATE_PREVIEWS = {
-  ar: {
-    greeting: 'أهلًا بك {{customer}}',
-    body: 'شكرًا لتسوّقك من {{store}}. طلبك رقم {{order}} بقيمة {{total}} جاهز تقريبًا للشحن.',
-    totalLabel: 'إجمالي الطلب: {{total}}',
-    ending: 'يرجى تأكيد الطلب لنتمكن من إرساله إليك بأسرع وقت.',
-    confirmButton: 'تأكيد الطلب',
-    cancelButton: 'إلغاء الطلب',
-  },
-  en: {
-    greeting: 'Hi {{customer}}',
-    body: 'Thanks for shopping at {{store}}. Your order {{order}} of {{total}} is almost ready to ship.',
-    totalLabel: 'Order total: {{total}}',
-    ending:
+const TEMPLATE_MESSAGES = {
+  ar: templateMessageFixture(
+    [
+      'أهلًا بك {{customer}}',
+      'شكرًا لتسوّقك من {{store}}. طلبك رقم {{order}} بقيمة {{total}} جاهز تقريبًا للشحن.',
+      'إجمالي الطلب: {{total}}',
+      'يرجى تأكيد الطلب لنتمكن من إرساله إليك بأسرع وقت.',
+    ],
+    ['تأكيد الطلب', 'إلغاء الطلب'],
+    { direction: 'rtl' }
+  ),
+  en: templateMessageFixture(
+    [
+      'Hi {{customer}}',
+      'Thanks for shopping at {{store}}. Your order {{order}} of {{total}} is almost ready to ship.',
+      'Order total: {{total}}',
       'Please confirm the order so we can send it to you as soon as possible.',
-    confirmButton: 'Confirm order',
-    cancelButton: 'Cancel order',
-  },
+    ],
+    ['Confirm order', 'Cancel order']
+  ),
 }
 
 function testLanguage(): 'ar' | 'en' {
@@ -167,7 +170,7 @@ function testState(): OnboardingTestState {
   return {
     phone: state.merchantWhatsappPhone ?? null,
     language,
-    preview: TEMPLATE_PREVIEWS[language],
+    message: TEMPLATE_MESSAGES[language],
     sample: {
       customerName: language === 'ar' ? 'أحمد' : 'Ahmed',
       orderNumber: 'TEST-1',
@@ -249,7 +252,7 @@ export async function onboardingFixtureRequest(
   }
 
   if (url === '/api/settings' && method === 'GET') {
-    return Response.json({ state, template: { previews: TEMPLATE_PREVIEWS } })
+    return Response.json({ state, template: { messages: TEMPLATE_MESSAGES } })
   }
 
   if (url === '/api/billing/credits' && method === 'GET') {

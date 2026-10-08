@@ -11,6 +11,7 @@ import type {
   OnboardingTestStatus,
 } from '@/features/onboarding/domain/onboarding.types'
 import { useStandaloneOnboardingFlow } from './useStandaloneOnboardingFlow'
+import { templateMessageFixture } from '@/shared/lib/templateMessageFixture'
 
 const nav = vi.hoisted(() => ({ replace: vi.fn(), push: vi.fn() }))
 
@@ -98,14 +99,16 @@ function makeTest(status: OnboardingTestStatus | null): OnboardingTestState {
   return {
     phone: '+201012345670',
     language: 'ar',
-    preview: {
-      greeting: 'أهلًا {{customer}}',
-      body: 'طلبك من {{store}}',
-      totalLabel: 'الإجمالي: {{total}}',
-      ending: 'أكّد طلبك',
-      confirmButton: 'تأكيد الطلب',
-      cancelButton: 'إلغاء الطلب',
-    },
+    message: templateMessageFixture(
+      [
+        'أهلًا {{customer}}',
+        'طلبك من {{store}}',
+        'الإجمالي: {{total}}',
+        'أكّد طلبك',
+      ],
+      ['تأكيد الطلب', 'إلغاء الطلب'],
+      { direction: 'rtl' }
+    ),
     sample: {
       customerName: 'أحمد',
       orderNumber: 'TEST-1',

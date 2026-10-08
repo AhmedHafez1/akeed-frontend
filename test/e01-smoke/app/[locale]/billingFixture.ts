@@ -6,6 +6,7 @@ import type {
   PurchaseDetail,
   PurchaseSummary,
 } from '@/features/billing'
+import { templateMessageFixture } from '@/shared/lib/templateMessageFixture'
 
 let billingPosts = 0
 let settingsReads = 0
@@ -172,14 +173,10 @@ function settings(): SettingsResponse {
   const mode =
     new URLSearchParams(window.location.search).get('entitlement') ?? 'manual'
   const shopify = mode === 'shopify'
-  const preview = {
-    greeting: 'Hello',
-    body: 'Synthetic order',
-    totalLabel: 'Total',
-    ending: 'Please confirm',
-    confirmButton: 'Confirm',
-    cancelButton: 'Cancel',
-  }
+  const message = templateMessageFixture(
+    ['Hello', 'Synthetic order', 'Total', 'Please confirm'],
+    ['Confirm', 'Cancel']
+  )
   return {
     state: {
       integrationId: 'e02-fixture-source',
@@ -269,7 +266,7 @@ function settings(): SettingsResponse {
       defaults: { ar: 'standard', en: 'friendly' },
       selected: { ar: 'standard', en: 'friendly' },
       variants: { ar: [], en: [] },
-      previews: { ar: preview, en: preview },
+      messages: { ar: message, en: message },
     },
   }
 }

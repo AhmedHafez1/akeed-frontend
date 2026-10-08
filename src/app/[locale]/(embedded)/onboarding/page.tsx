@@ -1,14 +1,18 @@
 'use client'
 
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, type ComponentType } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { BlockStack, Layout, Page } from '@shopify/polaris'
 import { OnboardingPageSkeleton } from '@/shared/layout/skeletons'
 import { useAppBridgeLoading } from '@/shared/hooks/useAppBridgeLoading'
 import { useCooldown } from '@/shared/hooks/useCooldown'
-import { fillTemplatePreview } from '@/shared/lib/templatePreview'
 import {
+  fillTemplateLines,
+  templateReplyTone,
+} from '@/shared/lib/templateMessage'
+import {
+  EasyOrdersConnectPage,
   LANGUAGE_OPTION_DEFINITIONS,
   ONBOARDING_FLOW_STEPS,
   OnboardingAlerts,
@@ -17,8 +21,11 @@ import {
   SetupSuccessStep,
   StandaloneOnboardingPage,
   TestMessageStep,
+  WooCommerceConnectPage,
   buildTestTimeline,
   useEmbeddedOnboarding,
+  useOnboardingSourceSkin,
+  type OnboardingSourceSkin,
   type OnboardingTestError,
 } from '@/features/onboarding'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
@@ -41,7 +48,21 @@ export default function OnboardingPage() {
   const { isEmbedded, isLoading: isModeLoading } = useAkeedMode()
 
   if (isModeLoading) return <OnboardingPageSkeleton variant="setup" />
-  return isEmbedded ? <EmbeddedOnboarding /> : <StandaloneOnboardingPage />
+  return isEmbedded ? <EmbeddedOnboarding /> : <SourceOnboarding />
+}
+
+/** The setup page of each source skin. */
+const SOURCE_SETUP_PAGES: Record<OnboardingSourceSkin, ComponentType> = {
+  standalone: StandaloneOnboardingPage,
+  easyorders: EasyOrdersConnectPage,
+  woocommerce: WooCommerceConnectPage,
+}
+
+/** Non-embedded setup, in the skin of the organization's order source. */
+function SourceOnboarding() {
+  const SetupPage = SOURCE_SETUP_PAGES[useOnboardingSourceSkin()]
+
+  return <SetupPage />
 }
 
 function EmbeddedOnboarding() {
@@ -129,18 +150,18 @@ function EmbeddedOnboarding() {
       { style: 'currency', currency: sample.currency, maximumFractionDigits: 0 }
     ).format(Number(sample.total))
     return {
-      paragraphs: fillTemplatePreview(testState.preview, {
+      paragraphs: fillTemplateLines(testState.message, {
         customer: sample.customerName,
         store: sample.storeName || settings.storeName,
         order: sample.orderNumber,
         total,
       }),
-      buttons: [
-        { label: testState.preview.confirmButton, tone: 'confirm' as const },
-        { label: testState.preview.cancelButton, tone: 'cancel' as const },
-      ],
+      buttons: testState.message.buttons.map((label, index) => ({
+        label,
+        tone: templateReplyTone(index),
+      })),
       total,
-      dir: testState.language === 'ar' ? ('rtl' as const) : ('ltr' as const),
+      dir: testState.message.direction,
       timeLabel: formatTime(testState.test?.sentAt ?? new Date().toISOString()),
     }
   }, [formatTime, settings.storeName, testState])

@@ -34,6 +34,9 @@ const countryCurrencies: Readonly<Record<string, OrderCurrency>> = {
   MA: 'MAD',
 }
 
+/** The markets Akeed serves, by ISO country code. */
+export const orderCountries: readonly string[] = Object.keys(countryCurrencies)
+
 export function currencyForCountry(country: string): OrderCurrency | undefined {
   return countryCurrencies[country.toUpperCase()]
 }

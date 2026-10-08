@@ -2,10 +2,10 @@
 
 import { AlertTriangle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import type { StandaloneSetupBlockedReason } from '@/features/onboarding/domain/onboarding.types'
+import type { SetupBlockedReason } from '@/features/onboarding/domain/onboarding.types'
 
 interface BlockedReasonsPanelProps {
-  reasons: readonly StandaloneSetupBlockedReason[]
+  reasons: readonly SetupBlockedReason[]
 }
 
 /**

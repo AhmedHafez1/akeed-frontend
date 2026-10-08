@@ -222,7 +222,7 @@ export function SendTestToPhoneAction({
 
             <MessagePhonePreview
               className="mx-auto w-full max-w-[240px]"
-              template={testState?.preview ?? null}
+              message={testState?.message ?? null}
               language={testState?.language ?? 'ar'}
               storeName={testState?.sample.storeName ?? ''}
               currency={testState?.sample.currency ?? 'EGP'}

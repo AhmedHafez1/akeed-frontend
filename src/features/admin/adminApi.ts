@@ -12,7 +12,9 @@ export class AdminApiError extends Error {
     readonly status: number,
     readonly requestId: string | null,
     /** The backend's machine-readable refusal code, when it sent one. */
-    readonly code: string | null = null
+    readonly code: string | null = null,
+    /** The rest of the refusal body: a reason, validation findings. */
+    readonly details: Record<string, unknown> | null = null
   ) {
     super(message)
   }
@@ -33,11 +35,13 @@ export async function adminRequest<T>(
   if (!response.ok) {
     let message = 'The admin service is unavailable.'
     let code: string | null = null
+    let details: Record<string, unknown> | null = null
     try {
       const body = (await response.json()) as {
         message?: string | string[]
         code?: unknown
-      }
+      } & Record<string, unknown>
+      details = body
       message = Array.isArray(body.message)
         ? body.message.join(', ')
         : body.message || message
@@ -49,16 +53,20 @@ export async function adminRequest<T>(
       message,
       response.status,
       response.headers.get('x-request-id'),
-      code
+      code,
+      details
     )
   }
   return response.json() as Promise<T>
 }
 
 export function getAdminSession() {
-  return adminRequest<{ authenticated: true; role: 'admin' }>(
-    '/api/admin/session'
-  )
+  return adminRequest<{
+    authenticated: true
+    role: 'admin'
+    /** Whether this staff member may write templates (US-08-06). */
+    template_operations?: { enabled: boolean; operator: boolean }
+  }>('/api/admin/session')
 }
 
 export function getAdminStores(query: string) {

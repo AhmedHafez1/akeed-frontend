@@ -32,7 +32,21 @@ export {
   sendOnboardingTest,
   updateOnboardingSettings,
 } from './api/onboardingApi'
-export { OnboardingApiError } from './api/onboardingApi'
+export {
+  OnboardingApiError,
+  clearKnownOnboardingSource,
+  rememberSignupSource,
+} from './api/onboardingApi'
+export { useOnboardingSourceSkin } from './hooks/useOnboardingSourceSkin'
+export type { OnboardingSourceSkin } from './hooks/useOnboardingSourceSkin'
+export { EasyOrdersConnectPage } from './skins/easyorders/EasyOrdersConnectPage'
+export { EasyOrdersSourcePanel } from './skins/easyorders/EasyOrdersSourcePanel'
+export { WooCommerceConnectPage } from './skins/woocommerce/WooCommerceConnectPage'
+export { WooCommerceSourcePanel } from './skins/woocommerce/WooCommerceSourcePanel'
+export {
+  ONBOARDING_PROGRESS_STEPS,
+  resolveOnboardingProgress,
+} from './model/onboardingProgress'
 export { StandaloneOnboardingPage } from './ui/standalone/StandaloneOnboardingPage'
 export { SendTestToPhoneAction } from './ui/standalone/components/SendTestToPhoneAction'
 

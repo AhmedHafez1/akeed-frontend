@@ -3,9 +3,9 @@
 import { useId } from 'react'
 import { Loader2, Send, ShieldCheck } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import type { MessageTemplatePreview } from '@/features/settings/api/settingsApi'
 import type { PreviewSample } from '@/features/settings/domain/messagePreview'
 import { formatPhoneInternational } from '@/shared/lib/phone'
+import type { TemplateMessage } from '@/shared/lib/templateMessage'
 import { cn } from '@/shared/lib/utils'
 import { AkSegmented, akButton, akCard, akLink } from '@/shared/ui'
 import { WhatsAppMessagePreview } from './WhatsAppMessagePreview'
@@ -13,8 +13,10 @@ import { WhatsAppMessagePreview } from './WhatsAppMessagePreview'
 interface MessagePreviewPanelProps {
   language: 'ar' | 'en'
   onLanguageChange: (language: 'ar' | 'en') => void
-  template: MessageTemplatePreview
+  message: TemplateMessage
   sample: PreviewSample
+  /** A note under the preview, for example how `auto` picks a style. */
+  note?: string
   testSendPhone: string | null
   testSendLanguage: 'ar' | 'en'
   canSendTest: boolean
@@ -33,8 +35,9 @@ interface MessagePreviewPanelProps {
 export function MessagePreviewPanel({
   language,
   onLanguageChange,
-  template,
+  message,
   sample,
+  note,
   testSendPhone,
   testSendLanguage,
   canSendTest,
@@ -75,11 +78,13 @@ export function MessagePreviewPanel({
       <div className="px-4 pb-4">
         <WhatsAppMessagePreview
           language={language}
-          template={template}
+          message={message}
           sample={sample}
           label={tShared('previewAria', { language: languageName })}
           businessAccountLabel={t('businessAccount')}
+          emptyLabel={tShared('previewEmpty')}
         />
+        {note && <p className="text-ak-caption text-ink-muted mt-2">{note}</p>}
       </div>
 
       {canSendTest && (

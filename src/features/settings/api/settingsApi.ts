@@ -2,6 +2,7 @@
 
 import { api, fetchWithAuth } from '@/shared/lib/auth'
 import { getErrorMessage, parseJsonResponse } from '@/shared/lib/http'
+import type { TemplateMessage } from '@/shared/lib/templateMessage'
 import type {
   ArabicCodTemplateVariantId,
   EnglishCodTemplateVariantId,
@@ -10,22 +11,14 @@ import type {
   OnboardingSettingsPayload,
 } from '@/features/onboarding'
 
-export interface MessageTemplatePreview {
-  greeting: string
-  body: string
-  totalLabel: string
-  ending: string
-  confirmButton: string
-  cancelButton: string
-}
-
+/** One style a merchant may choose, with the message it sends. */
 export interface CodTemplateDefinition {
   language: 'ar' | 'en'
   variant: ArabicCodTemplateVariantId | EnglishCodTemplateVariantId
   metaTemplateName: string
   metaLanguageCode: string
   bodyParameterOrder: Array<'customer' | 'store' | 'order' | 'total'>
-  preview: MessageTemplatePreview
+  message: TemplateMessage
 }
 
 export interface SettingsResponse {
@@ -57,10 +50,21 @@ export interface SettingsResponse {
       ar: CodTemplateDefinition[]
       en: CodTemplateDefinition[]
     }
-    previews: {
-      ar: MessageTemplatePreview
-      en: MessageTemplatePreview
+    /** The selected message per language. */
+    messages: {
+      ar: TemplateMessage
+      en: TemplateMessage
     }
+    /**
+     * The reminder styles, present only while the backend offers them.
+     * `selected` is null for "same as the first message".
+     */
+    reminder?: {
+      selected: { ar: string | null; en: string | null }
+      variants: { ar: CodTemplateDefinition[]; en: CodTemplateDefinition[] }
+    }
+    /** Arabic style by the customer's country, present only when offered. */
+    arabicAuto?: { selected: boolean }
   }
 }
 
