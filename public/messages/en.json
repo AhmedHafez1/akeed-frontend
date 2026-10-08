@@ -2544,7 +2544,7 @@
             },
             "delivery": {
               "title": "Events refused before processing",
-              "secretsMissing": "Every event is refused until the webhook secrets are added",
+              "secretsMissing": "Waiting for the first order to secure the webhooks",
               "rejected": "{count, plural, one {# event was refused for a wrong webhook secret} other {# events were refused for a wrong webhook secret}}",
               "none": "None",
               "lastRejected": "Last refused: {when}."
@@ -4114,7 +4114,7 @@
         "title": "EasyOrders no longer accepts Akeed’s access.",
         "body": "Orders can’t be checked until the store is connected again. Contact Akeed support."
       },
-      "rejectedDeliveries": "{count, plural, one {# order from EasyOrders was refused because its webhook secret didn’t match.} other {# orders from EasyOrders were refused because their webhook secret didn’t match.}} Check the secrets below.",
+      "rejectedDeliveries": "{count, plural, one {# order from EasyOrders was refused because its webhook secret didn’t match.} other {# orders from EasyOrders were refused because their webhook secret didn’t match.}} Fix it in Settings, under your EasyOrders connection.",
       "next": "Order import from EasyOrders is being switched on store by store. We’ll tell you when your orders start arriving in Akeed.",
       "orderSettings": {
         "title": "Tell us your store’s country and currency",
@@ -4136,9 +4136,9 @@
         }
       },
       "secrets": {
-        "title": "One more step: add your webhook secrets",
+        "title": "Enter the webhook secrets yourself",
         "replaceTitle": "Webhook secrets",
-        "body": "EasyOrders shows a secret next to each webhook, and Akeed needs both to trust the orders it receives. In EasyOrders, open Settings → Public API → Webhooks and find the two Akeed webhooks whose address ends in <hint></hint>.",
+        "body": "Akeed normally learns each secret by itself. To enter them by hand, open Settings → Public API → Webhooks in EasyOrders and find the two Akeed webhooks whose address ends in <hint></hint>.",
         "warning": "Orders placed before you add the secrets are not imported later.",
         "ordersSecret": {
           "label": "Orders webhook secret",
@@ -4157,17 +4157,19 @@
           "invalid": "A secret is at least 8 characters with no spaces. Copy it again from EasyOrders.",
           "failed": "We couldn’t save the secrets. Try again."
         },
-        "duplicates": "Keep exactly one orders webhook and one order-status webhook for Akeed in EasyOrders. If an address appears twice, delete the extra one: its orders arrive with a secret Akeed doesn’t have and are refused."
+        "duplicates": "Keep exactly one orders webhook and one order-status webhook for Akeed in EasyOrders. If an address appears twice, delete the extra one: its orders arrive with a secret Akeed doesn’t have and are refused.",
+        "automaticTitle": "Nothing to copy from EasyOrders",
+        "automatic": "Akeed secures your webhooks by itself. It checks your first order with EasyOrders, then keeps the secret EasyOrders sends with it. Orders are accepted from the start."
       }
     },
     "details": {
       "title": "A few details about your EasyOrders orders",
-      "body": "Akeed needs these once, to read your orders correctly and to trust the ones it receives.",
+      "body": "Akeed needs these once, to read your orders correctly.",
       "secretsKept": "Your webhook secrets are saved. Leave these two fields empty to keep them.",
-      "footerCaption": "Secrets are stored encrypted and are not shown again.",
+      "footerCaption": "You can change these later.",
       "submit": "Save and continue",
       "saving": "Saving…",
-      "edit": "Change the country, currency or webhook secrets"
+      "edit": "Change the country or currency"
     },
     "checklist": {
       "loading": "Loading your setup…",
@@ -4196,7 +4198,7 @@
     "revoked": {
       "title": "EasyOrders no longer accepts Akeed’s access",
       "body": "The last time Akeed used its API key, EasyOrders rejected it. New orders can’t be checked and order statuses can’t be updated in your store.",
-      "recovery": "To fix it, disconnect EasyOrders here, then connect the same store again. Reconnecting creates a new key and new webhooks, and you paste the two webhook secrets again.",
+      "recovery": "To fix it, disconnect EasyOrders here, then connect the same store again. Reconnecting creates a new key and new webhooks.",
       "lastSeen": "This is the last answer EasyOrders gave, not a live check. If you didn’t remove the key yourself, contact Akeed support before you disconnect."
     },
     "disconnected": {
@@ -4217,8 +4219,8 @@
       "effects": {
         "stops": "New orders from EasyOrders are no longer received, and messages or status updates that were waiting are not sent.",
         "history": "Your orders, confirmation results and usage history are kept.",
-        "provider": "EasyOrders keeps the API key and webhooks it created for Akeed until you delete them there.",
-        "reconnect": "Reconnecting later takes a few steps: you approve again in EasyOrders and paste the webhook secrets again. Orders placed while disconnected are not imported."
+        "provider": "Akeed asks EasyOrders to delete the webhooks it created. The API key named Akeed stays in EasyOrders until you delete it there.",
+        "reconnect": "To reconnect later you approve again in EasyOrders. Orders placed while disconnected are not imported."
       }
     },
     "removal": {
@@ -4230,7 +4232,11 @@
         "deleteWebhooks": "Under Webhooks, delete every webhook named Akeed."
       },
       "oldWebhooks": "Until you delete them, EasyOrders keeps sending orders to an address Akeed no longer accepts. Nothing is stored from those calls.",
-      "support": "If something in EasyOrders can’t be deleted, contact EasyOrders support at info@easy-orders.net. For anything on the Akeed side, contact Akeed support."
+      "support": "If something in EasyOrders can’t be deleted, contact EasyOrders support at info@easy-orders.net. For anything on the Akeed side, contact Akeed support.",
+      "removed": {
+        "intro": "Akeed deleted its webhooks in EasyOrders, so EasyOrders no longer calls Akeed. One thing is left for you:",
+        "note": "Akeed has already erased its copy of the key. EasyOrders has no way for Akeed to delete the key there, so that step is yours."
+      }
     },
     "done": {
       "badge": "Setup complete",
@@ -4241,7 +4247,17 @@
     "panel": {
       "readOnly": "You have read-only access. An owner or admin manages the EasyOrders connection.",
       "disconnectHelp": "Disconnecting stops Akeed for this store and keeps your history.",
-      "disconnectedTitle": "EasyOrders is disconnected"
+      "disconnectedTitle": "EasyOrders is disconnected",
+      "secrets": {
+        "title": "Webhook security",
+        "learned": "Secured. Akeed learned both webhook secrets from EasyOrders and checks every delivery against them.",
+        "waiting": "Akeed will learn the webhook secrets from the first order and the first status change EasyOrders sends. Orders are accepted in the meantime; each one is checked with EasyOrders.",
+        "troubleshoot": "Orders being refused? Fix the webhook secrets",
+        "resetBody": "If you deleted and recreated the Akeed webhooks in EasyOrders, their secrets changed. Reset them here and Akeed learns the new ones from the next order.",
+        "reset": "Reset and learn again",
+        "resetting": "Resetting…",
+        "resetFailed": "We couldn’t reset the secrets. Try again."
+      }
     }
   },
   "wooCommerceConnect": {

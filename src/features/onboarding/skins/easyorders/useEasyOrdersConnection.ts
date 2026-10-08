@@ -6,6 +6,7 @@ import { createLogger } from '@/shared/lib/logger'
 import {
   disconnectEasyOrders,
   fetchEasyOrdersConnection,
+  resetEasyOrdersWebhookSecrets,
   saveEasyOrdersOrderSettings,
   saveEasyOrdersWebhookSecrets,
   startEasyOrdersInstall,
@@ -43,6 +44,10 @@ export interface EasyOrdersConnectionController {
   markCancelled: () => void
   reload: () => Promise<void>
   saveSecrets: (secrets: EasyOrdersWebhookSecrets) => Promise<boolean>
+  isResettingSecrets: boolean
+  resetSecretsErrorCode: string | null
+  /** Forgets the stored secrets so Akeed learns them again. */
+  resetSecrets: () => Promise<boolean>
   isSavingSettings: boolean
   settingsErrorCode: string | null
   /** True right after a successful save, until the next one starts. */
@@ -74,6 +79,10 @@ export function useEasyOrdersConnection(
   const [isSavingSecrets, setIsSavingSecrets] = useState(false)
   const [secretsErrorCode, setSecretsErrorCode] = useState<string | null>(null)
   const [secretsSaved, setSecretsSaved] = useState(false)
+  const [isResettingSecrets, setIsResettingSecrets] = useState(false)
+  const [resetSecretsErrorCode, setResetSecretsErrorCode] = useState<
+    string | null
+  >(null)
   const [isSavingSettings, setIsSavingSettings] = useState(false)
   const [settingsErrorCode, setSettingsErrorCode] = useState<string | null>(
     null
@@ -171,6 +180,26 @@ export function useEasyOrdersConnection(
     }
   }, [])
 
+  const resetSecrets = useCallback(async () => {
+    setIsResettingSecrets(true)
+    setResetSecretsErrorCode(null)
+    setSecretsSaved(false)
+    try {
+      const next = await resetEasyOrdersWebhookSecrets()
+      if (activeRef.current) setStatus(next)
+      return true
+    } catch (error) {
+      logger.error(
+        'Failed to reset the EasyOrders webhook secrets',
+        errorCode(error)
+      )
+      if (activeRef.current) setResetSecretsErrorCode(errorCode(error))
+      return false
+    } finally {
+      if (activeRef.current) setIsResettingSecrets(false)
+    }
+  }, [])
+
   const saveSettings = useCallback(
     async (settings: EasyOrdersOrderSettings) => {
       setIsSavingSettings(true)
@@ -238,6 +267,9 @@ export function useEasyOrdersConnection(
     markCancelled,
     reload,
     saveSecrets,
+    isResettingSecrets,
+    resetSecretsErrorCode,
+    resetSecrets,
     isSavingSettings,
     settingsErrorCode,
     settingsSaved,

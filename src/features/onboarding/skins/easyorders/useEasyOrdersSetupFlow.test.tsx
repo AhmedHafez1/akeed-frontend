@@ -153,6 +153,7 @@ const READY: EasyOrdersConnectionDetails = {
   rejectedDeliveries: 0,
   connectedAt: '2026-10-03T10:00:00.000Z',
   disconnectedAt: null,
+  providerCleanup: null,
 }
 
 function renderFlow(connection: EasyOrdersConnectionDetails | null = READY) {
@@ -237,7 +238,6 @@ describe('useEasyOrdersSetupFlow', () => {
   it.each([
     ['the currency', { ...READY, currency: null }],
     ['the phone country', { ...READY, phoneCountry: null }],
-    ['a webhook secret', { ...READY, statusSecretSet: false }],
   ])(
     'holds the merchant on the details step while %s is missing, whatever the URL asks',
     async (_, connection) => {
@@ -252,6 +252,21 @@ describe('useEasyOrdersSetupFlow', () => {
       expect(mocked.fetchOnboardingTest).not.toHaveBeenCalled()
     }
   )
+
+  it('does not wait for the webhook secrets: Akeed learns them by itself', async () => {
+    window.history.replaceState(null, '', '/ar/onboarding?step=test')
+    mocked.fetchOnboardingState.mockResolvedValue({
+      state: makeState({ merchantWhatsappPhone: PHONE }),
+    })
+    const view = await renderLoaded({
+      ...READY,
+      ordersSecretSet: false,
+      statusSecretSet: false,
+    })
+
+    expect(view.result.current.step).toBe('test')
+    expect(view.result.current.checklist.every((item) => item.done)).toBe(true)
+  })
 
   it('goes on to the number once the details are saved, and back to them when asked', async () => {
     const view = await renderLoaded()
@@ -305,7 +320,7 @@ describe('useEasyOrdersSetupFlow', () => {
 
   it.each([
     [{ ...READY, currency: null }, [] as SetupBlockedReason[]],
-    [{ ...READY, ordersSecretSet: false }, [] as SetupBlockedReason[]],
+    [{ ...READY, phoneCountry: null }, [] as SetupBlockedReason[]],
     [READY, ['merchant_name_missing'] as SetupBlockedReason[]],
   ])(
     'holds the test while something is missing: %#',
@@ -451,11 +466,11 @@ describe('useEasyOrdersSetupFlow', () => {
 
   it('re-reads what blocks the finish when a setup input changes', async () => {
     mocked.fetchOnboardingState.mockResolvedValue({
-      state: makeState({}, ['webhook_secrets_missing']),
+      state: makeState({}, ['order_defaults_missing']),
     })
-    const view = await renderLoaded({ ...READY, statusSecretSet: false })
+    const view = await renderLoaded({ ...READY, currency: null })
     expect(view.result.current.blockedReasons).toEqual([
-      'webhook_secrets_missing',
+      'order_defaults_missing',
     ])
 
     mocked.fetchOnboardingState.mockResolvedValue({ state: makeState() })

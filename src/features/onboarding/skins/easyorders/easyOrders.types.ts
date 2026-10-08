@@ -20,6 +20,10 @@ export interface EasyOrdersConnectionDetails {
    * Null once disconnected: the address is retired.
    */
   webhookUrlHint: string | null
+  /**
+   * False until Akeed has kept the webhook's secret, which it learns from the
+   * first order EasyOrders sends. Orders are accepted before that too.
+   */
   ordersSecretSet: boolean
   statusSecretSet: boolean
   /** Currency of every order from the store; null until chosen. */
@@ -31,6 +35,11 @@ export interface EasyOrdersConnectionDetails {
   connectedAt: string
   /** Set while disconnected, including while a reconnect is under way. */
   disconnectedAt: string | null
+  /**
+   * After a disconnect: `removed` when Akeed deleted its webhooks at
+   * EasyOrders, `manual` when the merchant still has to. Null while connected.
+   */
+  providerCleanup: 'removed' | 'manual' | null
 }
 
 /** Never carries a key, a token or a webhook secret. */
@@ -147,25 +156,19 @@ export function isValidWebhookSecret(value: string): boolean {
   return WEBHOOK_SECRET_PATTERN.test(value.trim())
 }
 
-/** The country, the currency and both webhook secrets are stored. */
+/**
+ * The country and the currency are stored. The webhook secrets are not part
+ * of setup: Akeed learns them by itself.
+ */
 export function hasEasyOrdersDetails(
-  connection: Pick<
-    EasyOrdersConnectionDetails,
-    'currency' | 'phoneCountry' | 'ordersSecretSet' | 'statusSecretSet'
-  >
+  connection: Pick<EasyOrdersConnectionDetails, 'currency' | 'phoneCountry'>
 ): boolean {
-  return Boolean(
-    connection.currency &&
-    connection.phoneCountry &&
-    connection.ordersSecretSet &&
-    connection.statusSecretSet
-  )
+  return Boolean(connection.currency && connection.phoneCountry)
 }
 
 export const EASYORDERS_CHECKLIST_ITEMS = [
   'store',
   'orderDefaults',
-  'secrets',
   'sender',
 ] as const
 
@@ -183,10 +186,7 @@ export interface EasyOrdersChecklistItem {
  * only a deployment that reports it is not configured does.
  */
 export function buildEasyOrdersChecklist(
-  connection: Pick<
-    EasyOrdersConnectionDetails,
-    'currency' | 'phoneCountry' | 'ordersSecretSet' | 'statusSecretSet'
-  >,
+  connection: Pick<EasyOrdersConnectionDetails, 'currency' | 'phoneCountry'>,
   senderStatus: 'configured' | 'not_configured' | 'unknown'
 ): EasyOrdersChecklistItem[] {
   return [
@@ -194,10 +194,6 @@ export function buildEasyOrdersChecklist(
     {
       id: 'orderDefaults',
       done: Boolean(connection.currency && connection.phoneCountry),
-    },
-    {
-      id: 'secrets',
-      done: connection.ordersSecretSet && connection.statusSecretSet,
     },
     { id: 'sender', done: senderStatus !== 'not_configured' },
   ]

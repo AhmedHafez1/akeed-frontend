@@ -30,8 +30,9 @@ interface WebhookSecretsFormProps {
 }
 
 /**
- * The merchant copies each webhook's secret from EasyOrders. The fields are
- * masked and emptied after a save: a stored secret is never shown again.
+ * The fallback for the secrets Akeed learns by itself: the merchant copies
+ * each webhook's secret from EasyOrders. The fields are masked and emptied
+ * after a save: a stored secret is never shown again.
  */
 export function WebhookSecretsForm({
   webhookUrlHint,
@@ -120,9 +121,9 @@ export function WebhookSecretsForm({
       aria-busy={isSaving}
     >
       <div className="space-y-2">
-        <h2 className="text-ink text-lg font-bold">
+        <h3 className="text-ink text-sm font-semibold">
           {alreadySet ? t('replaceTitle') : t('title')}
-        </h2>
+        </h3>
         <p className="text-ink-muted text-sm">
           {t.rich('body', {
             hint: () => (
@@ -135,11 +136,6 @@ export function WebhookSecretsForm({
             ),
           })}
         </p>
-        {!alreadySet && (
-          <p className="border-warning-border bg-warning-subtle text-warning-subtle-foreground rounded-panel border p-3 text-sm">
-            {t('warning')}
-          </p>
-        )}
       </div>
 
       {field('ordersSecret', '/orders/')}

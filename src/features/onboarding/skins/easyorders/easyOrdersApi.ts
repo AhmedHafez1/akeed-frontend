@@ -27,8 +27,9 @@ export function startEasyOrdersInstall(
 }
 
 /**
- * Stops the source on Akeed's side and wipes the stored credentials. Nothing
- * is removed at EasyOrders: the merchant deletes the key and webhooks there.
+ * Stops the source on Akeed's side, wipes the stored credentials and asks
+ * EasyOrders to delete Akeed's webhooks. The answer's `providerCleanup` says
+ * whether that worked; the API key is always the merchant's to delete.
  */
 export function disconnectEasyOrders(): Promise<EasyOrdersConnectionStatus> {
   return api.delete<EasyOrdersConnectionStatus>('/api/easyorders/connection')
@@ -44,7 +45,20 @@ export function saveEasyOrdersOrderSettings(
   )
 }
 
-/** Write-only: the response says the secrets are set, never what they are. */
+/**
+ * Forgets both webhook secrets, so Akeed learns them again from the next
+ * order. For a merchant who recreated the webhooks in EasyOrders.
+ */
+export function resetEasyOrdersWebhookSecrets(): Promise<EasyOrdersConnectionStatus> {
+  return api.delete<EasyOrdersConnectionStatus>(
+    '/api/easyorders/connection/webhook-secrets'
+  )
+}
+
+/**
+ * The fallback for the learned secrets. Write-only: the response says the
+ * secrets are set, never what they are.
+ */
 export function saveEasyOrdersWebhookSecrets(
   secrets: EasyOrdersWebhookSecrets
 ): Promise<EasyOrdersConnectionStatus> {

@@ -2,7 +2,14 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { AlertCircle, Eye, Link2, Unplug } from 'lucide-react'
+import {
+  AlertCircle,
+  Eye,
+  Link2,
+  RotateCcw,
+  ShieldCheck,
+  Unplug,
+} from 'lucide-react'
 import { Button, LoadingButton, Skeleton } from '@/shared/ui'
 import { DisconnectEasyOrdersDialog } from './DisconnectEasyOrdersDialog'
 import { toEasyOrdersErrorKey } from './easyOrders.types'
@@ -17,8 +24,10 @@ interface EasyOrdersSourcePanelProps {
 }
 
 /**
- * The EasyOrders connection inside Settings, after setup: its state, the
- * webhook secrets, disconnect, and the way back for a disconnected store.
+ * The EasyOrders connection inside Settings, after setup: its state, whether
+ * Akeed has learned the webhook secrets (with a reset and a manual fallback
+ * for when deliveries are refused), disconnect, and the way back for a
+ * disconnected store.
  * Owners and admins manage it; everyone else reads it. No key, token or
  * secret is ever shown.
  */
@@ -146,20 +155,82 @@ export function EasyOrdersSourcePanel({
           )}
           {readOnly}
           {view === 'success' && (
-            <>
-              <WebhookSecretsForm
-                webhookUrlHint={details.webhookUrlHint ?? ''}
-                alreadySet={details.ordersSecretSet && details.statusSecretSet}
-                canManage={canManage}
-                isSaving={connection.isSavingSecrets}
-                saved={connection.secretsSaved}
-                failed={connection.secretsErrorCode !== null}
-                onSave={connection.saveSecrets}
-              />
-              <p className="text-ink-muted text-sm">
-                {t('success.secrets.duplicates')}
+            <section
+              aria-labelledby="easyorders-panel-secrets"
+              className="border-line space-y-3 border-t pt-4"
+            >
+              <h2
+                id="easyorders-panel-secrets"
+                className="text-ink flex items-center gap-2 text-sm font-semibold"
+              >
+                <ShieldCheck aria-hidden="true" className="size-4 shrink-0" />
+                {t('panel.secrets.title')}
+              </h2>
+              <p role="status" className="text-ink-muted text-sm">
+                {details.ordersSecretSet && details.statusSecretSet
+                  ? t('panel.secrets.learned')
+                  : t('panel.secrets.waiting')}
               </p>
-            </>
+              {details.rejectedDeliveries > 0 && (
+                <Notice
+                  tone="warning"
+                  icon={<AlertCircle aria-hidden="true" />}
+                  role="status"
+                >
+                  {t('success.rejectedDeliveries', {
+                    count: details.rejectedDeliveries,
+                  })}
+                </Notice>
+              )}
+              <details
+                className="group"
+                open={details.rejectedDeliveries > 0 || undefined}
+              >
+                <summary className="text-ink focus-visible:ring-ring rounded-control cursor-pointer text-sm font-semibold underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:outline-none">
+                  {t('panel.secrets.troubleshoot')}
+                </summary>
+                <div className="space-y-5 pt-3">
+                  <div className="space-y-2">
+                    <p className="text-ink-muted text-sm">
+                      {t('panel.secrets.resetBody')}
+                    </p>
+                    {connection.resetSecretsErrorCode && (
+                      <Notice
+                        tone="destructive"
+                        icon={<AlertCircle aria-hidden="true" />}
+                      >
+                        {t('panel.secrets.resetFailed')}
+                      </Notice>
+                    )}
+                    <LoadingButton
+                      variant="outline"
+                      className="w-full gap-2 font-semibold sm:w-auto"
+                      disabled={!canManage}
+                      loading={connection.isResettingSecrets}
+                      loadingText={t('panel.secrets.resetting')}
+                      onClick={() => void connection.resetSecrets()}
+                    >
+                      <RotateCcw aria-hidden="true" />
+                      {t('panel.secrets.reset')}
+                    </LoadingButton>
+                  </div>
+                  <WebhookSecretsForm
+                    webhookUrlHint={details.webhookUrlHint ?? ''}
+                    alreadySet={
+                      details.ordersSecretSet && details.statusSecretSet
+                    }
+                    canManage={canManage}
+                    isSaving={connection.isSavingSecrets}
+                    saved={connection.secretsSaved}
+                    failed={connection.secretsErrorCode !== null}
+                    onSave={connection.saveSecrets}
+                  />
+                  <p className="text-ink-muted text-sm">
+                    {t('success.secrets.duplicates')}
+                  </p>
+                </div>
+              </details>
+            </section>
           )}
           {disconnectButton && (
             <div className="border-line space-y-2 border-t pt-4">
@@ -181,7 +252,9 @@ export function EasyOrdersSourcePanel({
           <p className="text-ink-muted text-sm">
             {t('disconnected.historyKept')}
           </p>
-          <ProviderRemovalSteps />
+          <ProviderRemovalSteps
+            webhooksRemoved={details?.providerCleanup === 'removed'}
+          />
           <p className="text-ink-muted text-sm">
             {t('disconnected.reconnectBody')}
           </p>

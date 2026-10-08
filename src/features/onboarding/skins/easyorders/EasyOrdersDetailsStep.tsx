@@ -8,27 +8,23 @@ import {
   type Ref,
 } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { AlertCircle } from 'lucide-react'
+import { AlertCircle, ShieldCheck } from 'lucide-react'
 import {
   currencyForCountry,
   orderCountries,
   orderCurrencies,
 } from '@/shared/commerce/orderCommerce'
 import { cn } from '@/shared/lib/utils'
-import { AkSelect, Input, Label, LoadingButton, akCard } from '@/shared/ui'
+import { AkSelect, Label, LoadingButton, akCard } from '@/shared/ui'
 import { Notice } from '../connect/connectUi'
-import {
-  isValidWebhookSecret,
-  type EasyOrdersConnectionDetails,
-  type EasyOrdersOrderSettings,
-  type EasyOrdersWebhookSecrets,
+import type {
+  EasyOrdersConnectionDetails,
+  EasyOrdersOrderSettings,
 } from './easyOrders.types'
 
 const FIELD_IDS = {
   phoneCountry: 'easyorders-phone-country',
   currency: 'easyorders-currency',
-  ordersSecret: 'easyorders-orders-secret',
-  statusSecret: 'easyorders-status-secret',
 } as const
 
 const SECTION_IDS = {
@@ -36,30 +32,17 @@ const SECTION_IDS = {
   secrets: 'easyorders-secrets-heading',
 } as const
 
-type Field = keyof typeof FIELD_IDS
-type SettingsField = 'phoneCountry' | 'currency'
-type SecretField = 'ordersSecret' | 'statusSecret'
+type SettingsField = keyof typeof FIELD_IDS
 
 const SETTINGS_FIELDS: readonly SettingsField[] = ['phoneCountry', 'currency']
-const SECRET_FIELDS: readonly SecretField[] = ['ordersSecret', 'statusSecret']
-const SECRET_PATHS: Record<SecretField, string> = {
-  ordersSecret: '/orders/',
-  statusSecret: '/status/',
-}
-
-type FormError =
-  | { section: 'orderSettings'; kind: 'required' }
-  | { section: 'secrets'; kind: 'required' | 'invalid' }
 
 interface EasyOrdersDetailsStepProps {
   connection: EasyOrdersConnectionDetails
   canManage: boolean
   isSaving: boolean
-  /** The last save of each part failed on the server. */
+  /** The last save failed on the server. */
   settingsFailed: boolean
-  secretsFailed: boolean
   onSaveSettings: (settings: EasyOrdersOrderSettings) => Promise<boolean>
-  onSaveSecrets: (secrets: EasyOrdersWebhookSecrets) => Promise<boolean>
   /** Everything is stored; go on to the number. */
   onContinue: () => void
   /** The connection line: the store these details belong to. */
@@ -78,21 +61,17 @@ function displayNames(locale: string, type: 'region' | 'currency') {
 }
 
 /**
- * Step "Store details" of an EasyOrders setup: the three things only this
- * platform needs, on one form with one button. EasyOrders sends amounts
- * without a currency and phone numbers without a country code, and signs
- * what it sends with a secret per webhook. The secret fields are masked and
- * emptied after a save: a stored secret is never shown again, and leaving
- * them empty keeps the ones already stored.
+ * Step "Store details" of an EasyOrders setup: the two things only this
+ * platform needs. EasyOrders sends amounts without a currency and phone
+ * numbers without a country code. The secret each webhook carries is not
+ * asked for: Akeed learns it from the first order, and the step says so.
  */
 export function EasyOrdersDetailsStep({
   connection,
   canManage,
   isSaving,
   settingsFailed,
-  secretsFailed,
   onSaveSettings,
-  onSaveSecrets,
   onContinue,
   lead,
   attention,
@@ -106,12 +85,7 @@ export function EasyOrdersDetailsStep({
     currency: connection.currency ?? '',
     phoneCountry: connection.phoneCountry ?? '',
   })
-  const [secrets, setSecrets] = useState<EasyOrdersWebhookSecrets>({
-    ordersSecret: '',
-    statusSecret: '',
-  })
-  const [error, setError] = useState<FormError | null>(null)
-  const secretsStored = connection.ordersSecretSet && connection.statusSecretSet
+  const [missing, setMissing] = useState(false)
   const disabled = !canManage || isSaving
 
   const options = useMemo(() => {
@@ -138,17 +112,7 @@ export function EasyOrdersDetailsStep({
         ? { currency: currencyForCountry(value) ?? '' }
         : {}),
     }))
-    setError(null)
-  }
-
-  const setSecret = (field: SecretField, value: string) => {
-    setSecrets((previous) => ({ ...previous, [field]: value }))
-    setError(null)
-  }
-
-  const fail = (next: FormError, field: Field) => {
-    setError(next)
-    document.getElementById(FIELD_IDS[field])?.focus()
+    setMissing(false)
   }
 
   const handleSubmit = async (event: FormEvent) => {
@@ -157,69 +121,24 @@ export function EasyOrdersDetailsStep({
 
     const emptySetting = SETTINGS_FIELDS.find((field) => !settings[field])
     if (emptySetting) {
-      fail({ section: 'orderSettings', kind: 'required' }, emptySetting)
+      setMissing(true)
+      document.getElementById(FIELD_IDS[emptySetting])?.focus()
       return
     }
-
-    const typed = {
-      ordersSecret: secrets.ordersSecret.trim(),
-      statusSecret: secrets.statusSecret.trim(),
-    }
-    // Stored secrets stay unless the merchant starts typing new ones.
-    const replacing =
-      !secretsStored || SECRET_FIELDS.some((field) => typed[field])
-    if (replacing) {
-      const emptySecret = SECRET_FIELDS.find((field) => !typed[field])
-      const invalidSecret = SECRET_FIELDS.find(
-        (field) => !isValidWebhookSecret(typed[field])
-      )
-      const wrong = emptySecret ?? invalidSecret
-      if (wrong) {
-        fail(
-          { section: 'secrets', kind: emptySecret ? 'required' : 'invalid' },
-          wrong
-        )
-        return
-      }
-    }
-    setError(null)
+    setMissing(false)
 
     const settingsChanged =
       settings.currency !== connection.currency ||
       settings.phoneCountry !== connection.phoneCountry
     if (settingsChanged && !(await onSaveSettings(settings))) return
-    if (replacing) {
-      if (!(await onSaveSecrets(typed))) return
-      setSecrets({ ordersSecret: '', statusSecret: '' })
-    }
     onContinue()
   }
 
-  const sectionError = (section: FormError['section'], failed: boolean) => {
-    const kind = error?.section === section ? error.kind : null
-    const message =
-      section === 'orderSettings'
-        ? kind
-          ? tSettings(`errors.${kind}`)
-          : failed
-            ? tSettings('errors.failed')
-            : null
-        : kind
-          ? tSecrets(`errors.${kind}`)
-          : failed
-            ? tSecrets('errors.failed')
-            : null
-    return (
-      message && (
-        <Notice tone="destructive" icon={<AlertCircle aria-hidden="true" />}>
-          {message}
-        </Notice>
-      )
-    )
-  }
-
-  const settingsInvalid = error?.section === 'orderSettings'
-  const secretsInvalid = error?.section === 'secrets'
+  const errorMessage = missing
+    ? tSettings('errors.required')
+    : settingsFailed
+      ? tSettings('errors.failed')
+      : null
 
   return (
     <form
@@ -276,9 +195,7 @@ export function EasyOrdersDetailsStep({
                   disabled={disabled}
                   onChange={(event) => setSetting(name, event.target.value)}
                   aria-describedby={`${FIELD_IDS[name]}-hint`}
-                  aria-invalid={
-                    settingsInvalid && !settings[name] ? true : undefined
-                  }
+                  aria-invalid={missing && !settings[name] ? true : undefined}
                   options={[
                     { value: '', label: tSettings(`${name}.placeholder`) },
                     ...options[name],
@@ -293,69 +210,31 @@ export function EasyOrdersDetailsStep({
               </div>
             ))}
           </div>
-          {sectionError('orderSettings', settingsFailed)}
+          {errorMessage && (
+            <Notice
+              tone="destructive"
+              icon={<AlertCircle aria-hidden="true" />}
+            >
+              {errorMessage}
+            </Notice>
+          )}
         </section>
 
         <section
           aria-labelledby={SECTION_IDS.secrets}
-          className="border-line space-y-4 border-t pt-6"
+          className="border-line space-y-2 border-t pt-6"
         >
-          <h2 id={SECTION_IDS.secrets} className="text-ink text-lg font-bold">
-            {secretsStored ? tSecrets('replaceTitle') : tSecrets('title')}
+          <h2
+            id={SECTION_IDS.secrets}
+            className="text-ink flex items-center gap-2 text-lg font-bold"
+          >
+            <ShieldCheck
+              aria-hidden="true"
+              className="text-success-subtle-foreground size-5 shrink-0"
+            />
+            {tSecrets('automaticTitle')}
           </h2>
-          <p className="text-ink-muted text-sm">
-            {tSecrets.rich('body', {
-              hint: () => (
-                <bdi
-                  dir="ltr"
-                  className="text-ink font-mono text-xs font-semibold"
-                >
-                  …{connection.webhookUrlHint ?? ''}
-                </bdi>
-              ),
-            })}
-          </p>
-          <p className="text-ink-muted text-sm">
-            {secretsStored ? t('secretsKept') : tSecrets('warning')}
-          </p>
-          {SECRET_FIELDS.map((name) => (
-            <div key={name} className="space-y-2">
-              <Label
-                htmlFor={FIELD_IDS[name]}
-                className="text-ink text-sm font-semibold"
-              >
-                {tSecrets(`${name}.label`)}
-              </Label>
-              <Input
-                id={FIELD_IDS[name]}
-                name={name}
-                type="password"
-                dir="ltr"
-                autoComplete="off"
-                spellCheck={false}
-                value={secrets[name]}
-                disabled={disabled}
-                onChange={(event) => setSecret(name, event.target.value)}
-                aria-describedby={`${FIELD_IDS[name]}-hint`}
-                aria-invalid={secretsInvalid}
-                className="rounded-control bg-card h-12 text-start"
-              />
-              <p
-                id={`${FIELD_IDS[name]}-hint`}
-                className="text-ink-muted text-sm"
-              >
-                {tSecrets.rich(`${name}.hint`, {
-                  path: () => (
-                    <bdi dir="ltr" className="font-mono text-xs">
-                      {SECRET_PATHS[name]}
-                    </bdi>
-                  ),
-                })}
-              </p>
-            </div>
-          ))}
-          {sectionError('secrets', secretsFailed)}
-          <p className="text-ink-muted text-sm">{tSecrets('duplicates')}</p>
+          <p className="text-ink-muted text-sm">{tSecrets('automatic')}</p>
         </section>
       </div>
 

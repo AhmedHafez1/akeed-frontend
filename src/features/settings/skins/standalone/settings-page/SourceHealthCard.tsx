@@ -145,7 +145,8 @@ export function SourceHealthCard() {
                 })
               : undefined
           }
-          attention={delivery.secretsMissing || delivery.rejectedCount > 0}
+          // A secret not learned yet is normal before the first order.
+          attention={delivery.rejectedCount > 0}
         />
       )}
 

@@ -165,30 +165,43 @@ describe('SourceHealthCard', () => {
     )
   })
 
-  it.each([
-    [
-      { secretsMissing: true, rejectedCount: 0, lastRejectedAt: null },
-      'Every event is refused until the webhook secrets are added',
-    ],
-    [
-      {
-        secretsMissing: false,
-        rejectedCount: 4,
-        lastRejectedAt: '2026-10-03T09:00:00.000Z',
-      },
-      '4 events were refused for a wrong webhook secret',
-    ],
-  ] as const)(
-    'makes refused deliveries visible: %#',
-    async (delivery, text) => {
-      await renderCard(health({ delivery }))
+  it('makes refused deliveries visible', async () => {
+    await renderCard(
+      health({
+        delivery: {
+          secretsMissing: false,
+          rejectedCount: 4,
+          lastRejectedAt: '2026-10-03T09:00:00.000Z',
+        },
+      })
+    )
 
-      expect(valueOf('Events refused before processing').textContent).toBe(text)
-      expect(valueOf('Events refused before processing').className).toContain(
-        'text-ak-warning'
-      )
-    }
-  )
+    expect(valueOf('Events refused before processing').textContent).toBe(
+      '4 events were refused for a wrong webhook secret'
+    )
+    expect(valueOf('Events refused before processing').className).toContain(
+      'text-ak-warning'
+    )
+  })
+
+  it('says a secret not learned yet is waiting for the first order, without flagging it', async () => {
+    await renderCard(
+      health({
+        delivery: {
+          secretsMissing: true,
+          rejectedCount: 0,
+          lastRejectedAt: null,
+        },
+      })
+    )
+
+    expect(valueOf('Events refused before processing').textContent).toBe(
+      'Waiting for the first order to secure the webhooks'
+    )
+    expect(valueOf('Events refused before processing').className).not.toContain(
+      'text-ak-warning'
+    )
+  })
 
   it('says which outcomes reach the store and which stay in Akeed', async () => {
     await renderCard(

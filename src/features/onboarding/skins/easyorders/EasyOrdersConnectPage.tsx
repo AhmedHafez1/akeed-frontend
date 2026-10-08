@@ -201,11 +201,9 @@ export function EasyOrdersConnectPage() {
           <EasyOrdersDetailsStep
             connection={connected}
             canManage={canManage}
-            isSaving={connection.isSavingSettings || connection.isSavingSecrets}
+            isSaving={connection.isSavingSettings}
             settingsFailed={connection.settingsErrorCode !== null}
-            secretsFailed={connection.secretsErrorCode !== null}
             onSaveSettings={connection.saveSettings}
-            onSaveSecrets={connection.saveSecrets}
             onContinue={setup.continueToNumber}
             lead={
               <div className="space-y-2">
@@ -458,7 +456,11 @@ export function EasyOrdersConnectPage() {
             {connectButton(t('disconnected.reconnect'))}
           </Panel>
           <div className={cn(akCard, 'p-6 sm:p-8')}>
-            <ProviderRemovalSteps />
+            <ProviderRemovalSteps
+              webhooksRemoved={
+                status?.connection?.providerCleanup === 'removed'
+              }
+            />
           </div>
         </>
       )}

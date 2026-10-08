@@ -23,6 +23,7 @@ vi.mock('./easyOrdersApi', () => ({
   disconnectEasyOrders: vi.fn(),
   fetchEasyOrdersConnection: vi.fn(),
   saveEasyOrdersOrderSettings: vi.fn(),
+  resetEasyOrdersWebhookSecrets: vi.fn(),
   saveEasyOrdersWebhookSecrets: vi.fn(),
   startEasyOrdersInstall: vi.fn(),
 }))
@@ -88,6 +89,7 @@ const connected = (
       rejectedDeliveries: 0,
       connectedAt: '2026-10-03T10:00:00.000Z',
       disconnectedAt: null,
+      providerCleanup: null,
       ...connection,
     },
   })
@@ -421,14 +423,6 @@ describe('EasyOrdersConnectPage', () => {
   })
 
   describe('store details', () => {
-    const fillSecrets = (orders: string, statusValue: string) => {
-      fireEvent.change(document.getElementById('easyorders-orders-secret')!, {
-        target: { value: orders },
-      })
-      fireEvent.change(document.getElementById('easyorders-status-secret')!, {
-        target: { value: statusValue },
-      })
-    }
     const saveAndContinue = (locale: 'ar' | 'en' = 'ar') =>
       fireEvent.click(
         screen.getByRole('button', {
@@ -454,7 +448,9 @@ describe('EasyOrdersConnectPage', () => {
         ).toBeNull()
         expect(screen.getByText('متجر نور')).toBeTruthy()
         expect(screen.getByText('store-7f3a')).toBeTruthy()
-        expect(document.body.textContent).toContain('…aB3_xZ')
+        // No webhook address to look up and no secret to paste.
+        expect(document.body.textContent).not.toContain('aB3_xZ')
+        expect(document.querySelector('input[type="password"]')).toBeNull()
       }
     )
 
@@ -466,13 +462,22 @@ describe('EasyOrdersConnectPage', () => {
       )
     })
 
-    it('tells the seller to keep one webhook of each kind', async () => {
-      await renderPage(connected(), 'en')
+    it.each([
+      [
+        'en',
+        'Nothing to copy from EasyOrders',
+        'Akeed secures your webhooks by itself.',
+      ],
+      ['ar', 'لا شيء تنسخه من EasyOrders', 'يؤمّن أكيد الويب هوك تلقائيًا.'],
+    ] as const)(
+      'says Akeed secures the webhooks itself, in %s',
+      async (locale, title, sentence) => {
+        await renderPage(connected(), locale)
 
-      expect(document.body.textContent).toContain(
-        'Keep exactly one orders webhook and one order-status webhook for Akeed in EasyOrders.'
-      )
-    })
+        expect(screen.getByRole('heading', { name: title })).toBeTruthy()
+        expect(document.body.textContent).toContain(sentence)
+      }
+    )
 
     it.each([
       [
@@ -522,17 +527,15 @@ describe('EasyOrdersConnectPage', () => {
         expect(currency().value).toBe('')
       })
 
-      it('suggests the country’s own currency, saves everything with one button and moves on to the number', async () => {
+      it('suggests the country’s own currency, saves with one button and moves on to the number', async () => {
         onboarding.fetchOnboardingState.mockResolvedValue({
           state: readySetup(),
         })
         await renderPage(connected(), 'en')
         saveSettings.mockResolvedValue(connected(ready))
-        saveSecrets.mockResolvedValue(connected({ ...ready, ...withSecrets }))
 
         fireEvent.change(country(), { target: { value: 'EG' } })
         expect(currency().value).toBe('EGP')
-        fillSecrets('ORDERS-secret-01', 'STATUS-secret-02')
         saveAndContinue('en')
 
         await waitFor(() =>
@@ -541,7 +544,6 @@ describe('EasyOrdersConnectPage', () => {
             phoneCountry: 'EG',
           })
         )
-        await waitFor(() => expect(saveSecrets).toHaveBeenCalledTimes(1))
         expect(
           await screen.findByRole('heading', {
             level: 1,
@@ -549,6 +551,8 @@ describe('EasyOrdersConnectPage', () => {
           })
         ).toBeTruthy()
         expect(document.getElementById('easyorders-phone-country')).toBeNull()
+        // The secrets are never sent from this screen.
+        expect(saveSecrets).not.toHaveBeenCalled()
       })
 
       it('keeps a currency the merchant already chose when the country changes', async () => {
@@ -561,14 +565,11 @@ describe('EasyOrdersConnectPage', () => {
       })
 
       it('shows what is stored, in Arabic', async () => {
-        await renderPage(connected({ currency: 'SAR', phoneCountry: 'SA' }))
+        await renderPage(connected({ currency: 'SAR' }))
 
-        expect(country().value).toBe('SA')
+        expect(country().value).toBe('')
         expect(currency().value).toBe('SAR')
         expect(form().textContent).toContain('حدّد دولة متجرك وعملته')
-        expect(form().textContent).not.toContain(
-          'لا تُؤكَّد الطلبات حتى تختار الاثنين.'
-        )
       })
 
       it('asks for both before sending anything', async () => {
@@ -583,20 +584,18 @@ describe('EasyOrdersConnectPage', () => {
         expect(document.activeElement).toBe(country())
       })
 
-      it('reports a failed save and sends no secrets after it', async () => {
+      it('reports a failed save and stays on the step', async () => {
         await renderPage(connected(), 'en')
         saveSettings.mockRejectedValue(
           new ApiError('invalid', 400, 'EASYORDERS_ORDER_SETTINGS_INVALID')
         )
 
         fireEvent.change(country(), { target: { value: 'EG' } })
-        fillSecrets('ORDERS-secret-01', 'STATUS-secret-02')
         saveAndContinue('en')
 
         expect(
           await screen.findByText('We couldn’t save your choices. Try again.')
         ).toBeTruthy()
-        expect(saveSecrets).not.toHaveBeenCalled()
         // Still on the step, with what was chosen.
         expect(country().value).toBe('EG')
       })
@@ -607,79 +606,6 @@ describe('EasyOrdersConnectPage', () => {
         expect(country().disabled).toBe(true)
         expect(currency().disabled).toBe(true)
       })
-    })
-
-    it('saves both secrets without sending the country and currency again, and never shows them', async () => {
-      onboarding.fetchOnboardingState.mockResolvedValue({ state: readySetup() })
-      const view = await renderPage(connected(ready))
-      saveSecrets.mockResolvedValue(connected({ ...ready, ...withSecrets }))
-      const orders = document.getElementById(
-        'easyorders-orders-secret'
-      ) as HTMLInputElement
-      const statusField = document.getElementById(
-        'easyorders-status-secret'
-      ) as HTMLInputElement
-      expect(orders.type).toBe('password')
-      expect(statusField.type).toBe('password')
-      expect(orders.autocomplete).toBe('off')
-
-      fillSecrets(' ORDERS-secret-01 ', 'STATUS-secret-02')
-      saveAndContinue()
-
-      await waitFor(() =>
-        expect(saveSecrets).toHaveBeenCalledWith({
-          ordersSecret: 'ORDERS-secret-01',
-          statusSecret: 'STATUS-secret-02',
-        })
-      )
-      expect(saveSettings).not.toHaveBeenCalled()
-      // On to the number, with the secrets gone from the page.
-      await screen.findByRole('heading', {
-        level: 1,
-        name: 'جهّز رسالة التأكيد لمتجرك',
-      })
-      expect(view.container.innerHTML).not.toContain('ORDERS-secret-01')
-      expect(view.container.innerHTML).not.toContain('STATUS-secret-02')
-    })
-
-    it.each([
-      ['', 'STATUS-secret-02', 'الصق المفتاحين.'],
-      [
-        'has space',
-        'STATUS-secret-02',
-        'المفتاح 8 أحرف على الأقل وبدون مسافات. انسخه مرة أخرى من EasyOrders.',
-      ],
-    ])(
-      'does not send "%s" / "%s"',
-      async (ordersValue, statusValue, message) => {
-        await renderPage(connected(ready))
-
-        fillSecrets(ordersValue, statusValue)
-        saveAndContinue()
-
-        expect((await screen.findByRole('alert')).textContent).toBe(message)
-        expect(saveSecrets).not.toHaveBeenCalled()
-        expect(document.activeElement).toBe(
-          document.getElementById('easyorders-orders-secret')
-        )
-      }
-    )
-
-    it('reports a failed save without logging the secrets', async () => {
-      await renderPage(connected(ready))
-      saveSecrets.mockRejectedValue(
-        new ApiError('Bad Request', 400, 'EASYORDERS_SECRETS_INVALID')
-      )
-
-      fillSecrets('ORDERS-secret-01', 'STATUS-secret-02')
-      saveAndContinue()
-
-      expect((await screen.findByRole('alert')).textContent).toBe(
-        'تعذّر حفظ المفتاحين. حاول مرة أخرى.'
-      )
-      expect(JSON.stringify(vi.mocked(console.error).mock.calls)).not.toContain(
-        'secret-0'
-      )
     })
   })
 })
@@ -725,7 +651,9 @@ describe('EasyOrdersConnectPage setup, revoked and disconnected', () => {
   describe('your number', () => {
     it.each([
       ['nothing', {}],
-      ['only the country and currency', ready],
+      ['only the currency', { currency: 'EGP' }],
+      ['only the country', { phoneCountry: 'EG' }],
+      // Learned secrets do not stand in for the country and currency.
       ['only the secrets', withSecrets],
     ] as const)(
       'is not reached while %s of the details is saved',
@@ -763,7 +691,7 @@ describe('EasyOrdersConnectPage setup, revoked and disconnected', () => {
       )
       expect(
         within(section).getByRole('button', {
-          name: 'Change the country, currency or webhook secrets',
+          name: 'Change the country or currency',
         })
       ).toBeTruthy()
       expect(container.querySelector('input[type="password"]')).toBeNull()
@@ -826,8 +754,6 @@ describe('EasyOrdersConnectPage setup, revoked and disconnected', () => {
       await waitFor(() =>
         expect(onboarding.fetchOnboardingState).toHaveBeenCalledTimes(2)
       )
-      // Stored secrets are kept when their fields are left empty.
-      expect(saveSecrets).not.toHaveBeenCalled()
     })
 
     it('asks for a valid number before saving or sending anything', async () => {
@@ -929,7 +855,7 @@ describe('EasyOrdersConnectPage setup, revoked and disconnected', () => {
         'Your orders, confirmation results and usage history are kept.'
       )
       expect(dialog.textContent).toContain(
-        'EasyOrders keeps the API key and webhooks it created for Akeed until you delete them there.'
+        'Akeed asks EasyOrders to delete the webhooks it created. The API key named Akeed stays in EasyOrders until you delete it there.'
       )
       expect(disconnect).not.toHaveBeenCalled()
 
@@ -1136,8 +1062,9 @@ describe('buildEasyOrdersChecklist', () => {
     [base, 'configured', []],
     [{ ...base, currency: null }, 'configured', ['orderDefaults']],
     [{ ...base, phoneCountry: null }, 'configured', ['orderDefaults']],
-    [{ ...base, statusSecretSet: false }, 'configured', ['secrets']],
-    [{ ...base, ordersSecretSet: false }, 'unknown', ['secrets']],
+    // A secret Akeed has not learned yet holds nothing back.
+    [{ ...base, statusSecretSet: false }, 'configured', []],
+    [{ ...base, ordersSecretSet: false }, 'unknown', []],
     [base, 'not_configured', ['sender']],
     // An unknown sender status does not hold the merchant back.
     [base, 'unknown', []],

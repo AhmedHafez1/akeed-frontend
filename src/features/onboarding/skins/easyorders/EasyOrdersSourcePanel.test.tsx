@@ -5,6 +5,7 @@ import { ApiError } from '@/shared/lib/http'
 import {
   disconnectEasyOrders,
   fetchEasyOrdersConnection,
+  resetEasyOrdersWebhookSecrets,
   saveEasyOrdersWebhookSecrets,
   startEasyOrdersInstall,
 } from './easyOrdersApi'
@@ -14,6 +15,7 @@ import type { EasyOrdersConnectionStatus } from './easyOrders.types'
 vi.mock('./easyOrdersApi', () => ({
   disconnectEasyOrders: vi.fn(),
   fetchEasyOrdersConnection: vi.fn(),
+  resetEasyOrdersWebhookSecrets: vi.fn(),
   saveEasyOrdersOrderSettings: vi.fn(),
   saveEasyOrdersWebhookSecrets: vi.fn(),
   startEasyOrdersInstall: vi.fn(),
@@ -22,6 +24,7 @@ vi.mock('./easyOrdersApi', () => ({
 const disconnect = vi.mocked(disconnectEasyOrders)
 const fetchStatus = vi.mocked(fetchEasyOrdersConnection)
 const saveSecrets = vi.mocked(saveEasyOrdersWebhookSecrets)
+const resetSecrets = vi.mocked(resetEasyOrdersWebhookSecrets)
 const startInstall = vi.mocked(startEasyOrdersInstall)
 
 const INSTALL_URL =
@@ -51,6 +54,7 @@ function connected(
       rejectedDeliveries: 0,
       connectedAt: '2026-10-01T10:00:00.000Z',
       disconnectedAt: null,
+      providerCleanup: null,
       ...connection,
     },
     ...overrides,
@@ -119,6 +123,99 @@ describe('EasyOrdersSourcePanel', () => {
       expect(button('Disconnect EasyOrders')).toBeTruthy()
       for (const input of document.querySelectorAll('input'))
         expect((input as HTMLInputElement).value).toBe('')
+    })
+
+    it.each([
+      [
+        'learned',
+        {},
+        'Secured. Akeed learned both webhook secrets from EasyOrders and checks every delivery against them.',
+      ],
+      [
+        'not learned yet',
+        { ordersSecretSet: false, statusSecretSet: false },
+        'Akeed will learn the webhook secrets from the first order and the first status change EasyOrders sends.',
+      ],
+    ])(
+      'says the webhook secrets are %s, with the fix folded away',
+      async (_label, connection, sentence) => {
+        await renderPanel(connected(connection))
+
+        expect(document.body.textContent).toContain(sentence)
+        expect(document.querySelector('details')?.open).toBe(false)
+        expect(document.body.textContent).not.toContain('refused because')
+      }
+    )
+
+    it('opens the fix when deliveries were refused, and resets the secrets on request', async () => {
+      const onChanged = await renderPanel(connected({ rejectedDeliveries: 3 }))
+      resetSecrets.mockResolvedValue(
+        connected({
+          ordersSecretSet: false,
+          statusSecretSet: false,
+          rejectedDeliveries: 0,
+        })
+      )
+
+      expect(document.querySelector('details')?.open).toBe(true)
+      expect(document.body.textContent).toContain(
+        '3 orders from EasyOrders were refused because their webhook secret didn’t match.'
+      )
+      fireEvent.click(button('Reset and learn again'))
+
+      await waitFor(() => expect(resetSecrets).toHaveBeenCalledTimes(1))
+      await waitFor(() =>
+        expect(document.body.textContent).not.toContain('refused because')
+      )
+      expect(document.body.textContent).toContain(
+        'Akeed will learn the webhook secrets from the first order'
+      )
+      expect(onChanged).toHaveBeenCalledTimes(1)
+    })
+
+    it('reports a failed reset', async () => {
+      await renderPanel(connected({ rejectedDeliveries: 1 }))
+      resetSecrets.mockRejectedValue(
+        new ApiError('forbidden', 403, 'EASYORDERS_ROLE_REQUIRED')
+      )
+
+      fireEvent.click(button('Reset and learn again'))
+
+      expect(
+        await screen.findByText('We couldn’t reset the secrets. Try again.')
+      ).toBeTruthy()
+    })
+
+    it('leaves only the API key to delete when Akeed removed its webhooks', async () => {
+      await renderPanel(connected())
+      disconnect.mockResolvedValue(
+        disconnected({
+          connection: {
+            ...disconnected().connection!,
+            providerCleanup: 'removed',
+          },
+        })
+      )
+
+      fireEvent.click(button('Disconnect EasyOrders'))
+      const dialog = await screen.findByRole('dialog')
+      expect(dialog.textContent).toContain(
+        'Akeed asks EasyOrders to delete the webhooks it created.'
+      )
+      fireEvent.click(
+        within(dialog).getByRole('button', { name: 'Disconnect' })
+      )
+
+      expect(await screen.findByText('EasyOrders is disconnected')).toBeTruthy()
+      expect(document.body.textContent).toContain(
+        'Akeed deleted its webhooks in EasyOrders, so EasyOrders no longer calls Akeed.'
+      )
+      expect(document.body.textContent).toContain(
+        'Delete the API key named Akeed.'
+      )
+      expect(document.body.textContent).not.toContain(
+        'delete every webhook named Akeed'
+      )
     })
 
     it('disconnects after a confirmation, then shows the way back and what to remove', async () => {

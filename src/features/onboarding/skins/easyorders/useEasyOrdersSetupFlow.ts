@@ -9,8 +9,8 @@ import {
 } from './easyOrders.types'
 
 /**
- * Finishing setup for a connected EasyOrders store: its country, currency
- * and webhook secrets on a step of their own, then the same number, free
+ * Finishing setup for a connected EasyOrders store: its country and
+ * currency on a step of their own, then the same number, free
  * test and `/complete` every other source uses. The flow itself is the
  * shared one; EasyOrders supplies its rows and says which of its inputs
  * change what blocks the finish.
@@ -23,13 +23,9 @@ export function useEasyOrdersSetupFlow(
   // The setup inputs live on the connection; when one changes, what blocks
   // the finish changes with it.
   const connectionKey = connection
-    ? [
-        connection.currency,
-        connection.phoneCountry,
-        connection.ordersSecretSet,
-        connection.statusSecretSet,
-        connection.health,
-      ].join('|')
+    ? [connection.currency, connection.phoneCountry, connection.health].join(
+        '|'
+      )
     : null
 
   return useSourceSetupFlow<EasyOrdersChecklistItemId>({
