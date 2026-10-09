@@ -166,6 +166,9 @@ export type OnboardingTestStatus =
   | 'failed'
   | 'no_reply'
 
+/** The merchant's answer to the test. Either one finishes it. */
+export type OnboardingTestReply = 'confirmed' | 'canceled'
+
 export interface OnboardingTestAttempt {
   verificationId: string
   status: OnboardingTestStatus
@@ -190,7 +193,10 @@ export interface OnboardingTestState {
     storeName: string
   }
   test: OnboardingTestAttempt | null
+  /** When resend unlocks, on this browser's clock (see `onboardingApi`). */
   resendAvailableAt: string | null
+  /** The cooldown as the server reported it: seconds from its response. */
+  resendAvailableInSeconds?: number
   sendsRemainingToday: number
   testConfirmedAt: string | null
   testSkippedAt: string | null

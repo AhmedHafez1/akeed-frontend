@@ -60,7 +60,7 @@ export function SendTestToPhoneAction({
   const [isOpen, setIsOpen] = useState(false)
   const freshSendRequestedRef = useRef(false)
 
-  const onConfirmed = useCallback(() => {
+  const onAnswered = useCallback(() => {
     // The reminder and the first-run card read the onboarding state.
     void queryClient.invalidateQueries({
       queryKey: queryKeys.onboarding.state(),
@@ -71,7 +71,7 @@ export function SendTestToPhoneAction({
   const test = useOnboardingTest({
     isActive: isOpen,
     freshSendRequestedRef,
-    onConfirmed,
+    onAnswered,
     onSkipped: noop,
     autoSend: false,
   })
@@ -111,7 +111,7 @@ export function SendTestToPhoneAction({
           delivered: tTest('timeline.delivered'),
           tapConfirm: tStep('tapConfirmOnPhone'),
           confirmed: tTest('timeline.confirmed'),
-          canceledNote: tStep('timeline.canceledNote'),
+          canceled: tTest('timeline.canceled'),
           autoDetect: tStep('autoDetectNext'),
         },
         formatTime
@@ -221,7 +221,7 @@ export function SendTestToPhoneAction({
             </div>
 
             <MessagePhonePreview
-              className="mx-auto w-full max-w-[240px]"
+              className="mx-auto w-full max-w-60"
               message={testState?.message ?? null}
               language={testState?.language ?? 'ar'}
               storeName={testState?.sample.storeName ?? ''}

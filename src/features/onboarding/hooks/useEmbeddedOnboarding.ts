@@ -81,12 +81,12 @@ export function useEmbeddedOnboarding({
     router.push(`/${locale}/dashboard${window.location.search}`)
   }, [locale, router])
 
-  const handleTestConfirmed = useCallback(() => setStep('success'), [])
+  const handleTestAnswered = useCallback(() => setStep('success'), [])
 
   const test = useOnboardingTest({
     isActive: !init.isInitialLoading && step !== 'setup',
     freshSendRequestedRef,
-    onConfirmed: handleTestConfirmed,
+    onAnswered: handleTestAnswered,
     onSkipped: goToDashboard,
   })
 

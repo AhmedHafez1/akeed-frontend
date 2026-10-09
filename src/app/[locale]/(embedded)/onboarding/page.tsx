@@ -134,7 +134,7 @@ function EmbeddedOnboarding() {
           delivered: t('test.timeline.delivered'),
           tapConfirm: t('test.timeline.tapConfirm'),
           confirmed: t('test.timeline.confirmed'),
-          canceledNote: t('test.timeline.canceledNote'),
+          canceled: t('test.timeline.canceled'),
           autoDetect: t('test.timeline.autoDetect'),
         },
         formatTime
@@ -180,6 +180,9 @@ function EmbeddedOnboarding() {
   }
 
   const status = testState?.test?.status
+  const canResend = (testState?.sendsRemainingToday ?? 1) > 0
+  // Out of sends, the disabled resend needs its reason even before a click.
+  const testError = test.error ?? (canResend ? null : 'daily_limit')
   const flowIndex = ONBOARDING_FLOW_STEPS.indexOf(
     step as (typeof ONBOARDING_FLOW_STEPS)[number]
   )
@@ -207,7 +210,6 @@ function EmbeddedOnboarding() {
                   heading: t('setup.heading'),
                   subheading: t('setup.subheading'),
                   freePlanTitle: t('setup.freePlanTitle'),
-                  freePlanDescription: t('setup.freePlanDescription'),
                   freePlanUsedTitle: t('setup.freePlanUsedTitle'),
                   freePlanUsedDescription: t('setup.freePlanUsedDescription'),
                   storeNameLabel: t('setup.storeNameLabel'),
@@ -248,8 +250,8 @@ function EmbeddedOnboarding() {
                   resend: t('test.resend'),
                   resendIn: (seconds) => t('test.resendIn', { seconds }),
                   skip: t('test.skip'),
-                  errorMessage: test.error
-                    ? t(TEST_ERROR_KEYS[test.error])
+                  errorMessage: testError
+                    ? t(TEST_ERROR_KEYS[testError])
                     : null,
                   phoneSenderName: t('test.phone.senderName'),
                   phoneSenderStatus: t('test.phone.senderStatus'),
@@ -270,7 +272,7 @@ function EmbeddedOnboarding() {
                 isFailed={status === 'failed' || status === 'expired'}
                 failedMessage={t('test.failed')}
                 cooldownSeconds={cooldownSeconds}
-                canResend={(testState?.sendsRemainingToday ?? 1) > 0}
+                canResend={canResend}
                 isSending={test.isSending}
                 isSkipping={test.isSkipping}
                 onResend={test.resend}
@@ -283,7 +285,11 @@ function EmbeddedOnboarding() {
               <SetupSuccessStep
                 messages={{
                   eyebrow: t('success.eyebrow'),
-                  heading: t('success.heading'),
+                  heading: t(
+                    status === 'canceled'
+                      ? 'success.headingCanceled'
+                      : 'success.heading'
+                  ),
                   subheading: t('success.subheading'),
                   pipeline: [
                     {

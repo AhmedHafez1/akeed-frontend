@@ -23,7 +23,6 @@ export interface QuickSetupStepMessages {
   heading: string
   subheading: string
   freePlanTitle: string
-  freePlanDescription: string
   freePlanUsedTitle: string
   freePlanUsedDescription: string
   storeNameLabel: string
@@ -91,9 +90,7 @@ export function QuickSetupStep({
       </BlockStack>
 
       {isFreePlanAvailable ? (
-        <Banner tone="success" title={messages.freePlanTitle}>
-          <p>{messages.freePlanDescription}</p>
-        </Banner>
+        undefined
       ) : (
         <Banner tone="info" title={messages.freePlanUsedTitle}>
           <p>{messages.freePlanUsedDescription}</p>
@@ -153,11 +150,10 @@ export function QuickSetupStep({
               label={messages.autoVerifyLabel}
               checked={isAutoVerifyEnabled}
               onChange={onAutoVerifyChange}
-              
               helpText={
                 <BlockStack gap="100">
                   {isAutoVerifyEnabled && (
-                    <span className="px-2 py-1 text-success">
+                    <span className="text-success px-2 py-1">
                       {messages.autoVerifyConsent}
                     </span>
                   )}

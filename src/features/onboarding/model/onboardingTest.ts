@@ -20,13 +20,14 @@ export interface TestTimelineLabels {
   delivered: string
   tapConfirm: string
   confirmed: string
-  canceledNote: string
+  canceled: string
   autoDetect: string
 }
 
 /**
  * Maps the latest test attempt onto the four cues of the test step:
- * sent, arrived on the phone, tap Confirm (the one action), and detection.
+ * sent, arrived on the phone, the merchant's reply (the one action), and
+ * detection. Confirm and Cancel both complete it.
  */
 export function buildTestTimeline(
   test: OnboardingTestAttempt | null,
@@ -37,7 +38,9 @@ export function buildTestTimeline(
   const arrivedAt = test?.deliveredAt ?? test?.readAt ?? null
   const isConfirmed = test?.status === 'confirmed'
   const isCanceled = test?.status === 'canceled'
-  const hasArrived = !!arrivedAt || isConfirmed || isCanceled
+  const isAnswered = isConfirmed || isCanceled
+  const hasArrived = !!arrivedAt || isAnswered
+  const answeredAt = isCanceled ? test?.canceledAt : test?.confirmedAt
 
   return [
     {
@@ -54,16 +57,19 @@ export function buildTestTimeline(
     },
     {
       id: 'tap',
-      label: isConfirmed ? labels.confirmed : labels.tapConfirm,
-      state: isConfirmed ? 'done' : hasArrived ? 'current' : 'upcoming',
-      timeLabel: test?.confirmedAt ? formatTime(test.confirmedAt) : undefined,
+      label: isCanceled
+        ? labels.canceled
+        : isConfirmed
+          ? labels.confirmed
+          : labels.tapConfirm,
+      state: isAnswered ? 'done' : hasArrived ? 'current' : 'upcoming',
+      timeLabel: answeredAt ? formatTime(answeredAt) : undefined,
       isAction: true,
-      note: isCanceled ? labels.canceledNote : undefined,
     },
     {
       id: 'detect',
       label: labels.autoDetect,
-      state: isConfirmed ? 'done' : 'upcoming',
+      state: isAnswered ? 'done' : 'upcoming',
     },
   ]
 }

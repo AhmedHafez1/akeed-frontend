@@ -38,7 +38,7 @@ interface OnboardingTestCompletionOptions {
  * The second half of every non-embedded setup flow, whatever the source: the
  * free test on the merchant's phone, then `/complete`.
  *
- * `/complete` is only ever called after the test is confirmed, skipped, or
+ * `/complete` is only ever called after the test is answered, skipped, or
  * Akeed's WhatsApp is unavailable. The finished screen replaces the history
  * entry and never navigates, so the route guard does not bounce a
  * just-completed account off the setup route.
@@ -101,7 +101,7 @@ export function useOnboardingTestCompletion({
     window.history.replaceState(null, '', doneUrl())
   }, [complete, doneUrl])
 
-  const handleTestConfirmed = useCallback(() => {
+  const handleTestAnswered = useCallback(() => {
     if (!isActiveRef.current) return
     void finishConfirmed()
   }, [finishConfirmed])
@@ -124,7 +124,7 @@ export function useOnboardingTestCompletion({
   const test = useOnboardingTest({
     isActive,
     freshSendRequestedRef: neverFreshSendRef,
-    onConfirmed: handleTestConfirmed,
+    onAnswered: handleTestAnswered,
     onSkipped: handleSkipped,
     autoSend: false,
   })

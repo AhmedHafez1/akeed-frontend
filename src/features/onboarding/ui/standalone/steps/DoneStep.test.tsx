@@ -39,6 +39,15 @@ describe('DoneStep', () => {
     expect(pipeline.textContent).toContain('ترى الرد في التأكيدات')
   })
 
+  it('names a cancellation when the merchant answered with Cancel', () => {
+    renderStep(<DoneStep headingRef={{ current: null }} reply="canceled" />)
+    expect(
+      screen.getByRole('heading', {
+        name: 'وصل إلغاؤك. هكذا يعمل أكيد مع كل طلب',
+      })
+    ).toBeTruthy()
+  })
+
   it('puts the money in numbers', () => {
     renderStep(<DoneStep headingRef={{ current: null }} />)
     expect(screen.getByText('30 رسالة')).toBeTruthy()

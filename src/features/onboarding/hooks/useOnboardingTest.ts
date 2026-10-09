@@ -12,6 +12,7 @@ import {
 import { queryKeys } from '@/shared/query/keys'
 import { createLogger } from '@/shared/lib/logger'
 import type {
+  OnboardingTestReply,
   OnboardingTestState,
   OnboardingTestStatus,
 } from '@/features/onboarding/domain/onboarding.types'
@@ -22,9 +23,25 @@ const logger = createLogger('Onboarding')
 /** Statuses after which nothing more will arrive for this test. */
 const SETTLED_STATUSES: ReadonlySet<OnboardingTestStatus> = new Set([
   'confirmed',
+  'canceled',
   'failed',
   'expired',
 ])
+
+/**
+ * The merchant's answer, if the test has one. A reply is final, so Cancel
+ * finishes the test as surely as Confirm.
+ */
+export function resolveTestReply(
+  state: OnboardingTestState | null | undefined
+): OnboardingTestReply | null {
+  const status = state?.test?.status
+  if (status === 'confirmed' || status === 'canceled') return status
+  // Set by the Shopify install lifecycle (always null for standalone): it
+  // also counts a tap on an earlier message, which the displayed test never
+  // reflects.
+  return state?.testConfirmedAt ? 'confirmed' : null
+}
 
 /** A still-open test younger than this is resumed instead of sent again. */
 const RESUME_WINDOW_MS = 10 * 60 * 1000
@@ -60,7 +77,7 @@ interface UseOnboardingTestParams {
    * fresh test goes out even if an earlier one is still open.
    */
   freshSendRequestedRef: RefObject<boolean>
-  onConfirmed: () => void
+  onAnswered: (reply: OnboardingTestReply) => void
   onSkipped: () => void
   /**
    * Send a test on arrival when none is open. Standalone sends from its setup
@@ -71,13 +88,13 @@ interface UseOnboardingTestParams {
 
 /**
  * The test-message step: sends the free test once on arrival (unless one is
- * already on its way), polls its delivery status until the merchant taps
- * Confirm, and exposes resend (server-enforced cooldown) and skip.
+ * already on its way), polls its delivery status until the merchant answers
+ * (Confirm or Cancel), and exposes resend (server-enforced cooldown) and skip.
  */
 export function useOnboardingTest({
   isActive,
   freshSendRequestedRef,
-  onConfirmed,
+  onAnswered,
   onSkipped,
   autoSend = true,
 }: UseOnboardingTestParams) {
@@ -85,7 +102,7 @@ export function useOnboardingTest({
   const [error, setError] = useState<OnboardingTestError | null>(null)
   const [isUnavailable, setIsUnavailable] = useState(false)
   const hasAutoSentRef = useRef(false)
-  const hasReportedConfirmRef = useRef(false)
+  const hasReportedAnswerRef = useRef(false)
 
   const testQuery = useQuery({
     queryKey: queryKeys.onboarding.test(),
@@ -107,9 +124,16 @@ export function useOnboardingTest({
 
   const sendMutation = useMutation({
     mutationFn: (resend: boolean) => sendOnboardingTest({ resend }),
-    onMutate: () => {
+    onMutate: async () => {
       setError(null)
       setIsUnavailable(false)
+      // The new message gets its own answer.
+      hasReportedAnswerRef.current = false
+      // A poll already in flight describes the previous message; landing
+      // after this send it would put that one back on screen.
+      await queryClient.cancelQueries({
+        queryKey: queryKeys.onboarding.test(),
+      })
     },
     onSuccess: storeResult,
     onError: (sendError: unknown) => {
@@ -147,9 +171,7 @@ export function useOnboardingTest({
     }
     if (hasAutoSentRef.current || !autoSend) return
     hasAutoSentRef.current = true
-    // testConfirmedAt comes from the Shopify install lifecycle and is always
-    // null for standalone, so a confirmed latest test counts too.
-    if (data.testConfirmedAt || data.test?.status === 'confirmed') return
+    if (resolveTestReply(data)) return
     const sentAt = data.test?.sentAt ? new Date(data.test.sentAt).getTime() : 0
     const isRecentAndOpen =
       !!data.test &&
@@ -160,15 +182,14 @@ export function useOnboardingTest({
 
   useEffect(() => {
     // The query cache is shared: an inactive observer must not react to a
-    // confirmation another flow is polling for.
-    if (!isActive || !data || hasReportedConfirmRef.current) return
-    // testConfirmedAt also counts a tap on an earlier message of this install,
-    // which the displayed (latest) test never reflects.
-    if (data.test?.status === 'confirmed' || data.testConfirmedAt) {
-      hasReportedConfirmRef.current = true
-      onConfirmed()
+    // reply another flow is polling for.
+    if (!isActive || !data || hasReportedAnswerRef.current) return
+    const reply = resolveTestReply(data)
+    if (reply) {
+      hasReportedAnswerRef.current = true
+      onAnswered(reply)
     }
-  }, [data, isActive, onConfirmed])
+  }, [data, isActive, onAnswered])
 
   const resend = useCallback(() => send(true), [send])
   const skip = useCallback(() => skipMutation.mutate(), [skipMutation])

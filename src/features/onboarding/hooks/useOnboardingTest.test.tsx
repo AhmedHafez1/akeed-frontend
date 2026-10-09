@@ -59,7 +59,7 @@ function makeTestState(
           deliveredAt: null,
           readAt: null,
           confirmedAt: status === 'confirmed' ? now : null,
-          canceledAt: null,
+          canceledAt: status === 'canceled' ? now : null,
         }
       : null,
     resendAvailableAt: null,
@@ -90,7 +90,7 @@ describe('useOnboardingTest', () => {
   it('stays idle while inactive, even when another flow caches a confirmed test', async () => {
     const { queryClient, wrapper } = setup()
     mocked.fetchOnboardingTest.mockResolvedValue(makeTestState('confirmed'))
-    const onConfirmed = vi.fn()
+    const onAnswered = vi.fn()
 
     // Mirrors the embedded flow: its own confirmation would activate it,
     // and an active auto-send hook sends when nothing is open.
@@ -101,8 +101,8 @@ describe('useOnboardingTest', () => {
         return useOnboardingTest({
           isActive,
           freshSendRequestedRef,
-          onConfirmed: () => {
-            onConfirmed()
+          onAnswered: () => {
+            onAnswered()
             setIsActive(true)
           },
           onSkipped: vi.fn(),
@@ -122,28 +122,123 @@ describe('useOnboardingTest', () => {
       await new Promise((resolve) => setTimeout(resolve, 50))
     })
 
-    expect(onConfirmed).not.toHaveBeenCalled()
+    expect(onAnswered).not.toHaveBeenCalled()
     expect(mocked.sendOnboardingTest).not.toHaveBeenCalled()
   })
 
   it('does not auto-send when the latest test is already confirmed', async () => {
     const { wrapper } = setup()
     mocked.fetchOnboardingTest.mockResolvedValue(makeTestState('confirmed'))
-    const onConfirmed = vi.fn()
+    const onAnswered = vi.fn()
 
     renderHook(
       () =>
         useOnboardingTest({
           isActive: true,
           freshSendRequestedRef: { current: false },
-          onConfirmed,
+          onAnswered,
           onSkipped: vi.fn(),
         }),
       { wrapper }
     )
 
-    await waitFor(() => expect(onConfirmed).toHaveBeenCalledTimes(1))
+    await waitFor(() => expect(onAnswered).toHaveBeenCalledTimes(1))
+    expect(onAnswered).toHaveBeenCalledWith('confirmed')
     expect(mocked.sendOnboardingTest).not.toHaveBeenCalled()
+  })
+
+  it('treats Cancel as an answer: reports it once and sends nothing', async () => {
+    const { wrapper } = setup()
+    mocked.fetchOnboardingTest.mockResolvedValue(makeTestState('canceled'))
+    const onAnswered = vi.fn()
+
+    renderHook(
+      () =>
+        useOnboardingTest({
+          isActive: true,
+          freshSendRequestedRef: { current: false },
+          onAnswered,
+          onSkipped: vi.fn(),
+        }),
+      { wrapper }
+    )
+
+    await waitFor(() => expect(onAnswered).toHaveBeenCalledWith('canceled'))
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 50))
+    })
+    expect(onAnswered).toHaveBeenCalledTimes(1)
+    expect(mocked.sendOnboardingTest).not.toHaveBeenCalled()
+  })
+
+  it('reports the answer to a resent message after an earlier answer', async () => {
+    const { wrapper } = setup()
+    mocked.fetchOnboardingTest.mockResolvedValue(makeTestState('confirmed'))
+    mocked.sendOnboardingTest.mockResolvedValue(makeTestState('canceled'))
+    const onAnswered = vi.fn()
+
+    const { result } = renderHook(
+      () =>
+        useOnboardingTest({
+          isActive: true,
+          freshSendRequestedRef: { current: false },
+          onAnswered,
+          onSkipped: vi.fn(),
+          autoSend: false,
+        }),
+      { wrapper }
+    )
+    await waitFor(() => expect(onAnswered).toHaveBeenCalledTimes(1))
+
+    act(() => result.current.resend())
+
+    await waitFor(() => expect(onAnswered).toHaveBeenCalledTimes(2))
+    expect(onAnswered).toHaveBeenLastCalledWith('canceled')
+  })
+
+  it('drops a status poll that was in flight when a resend went out', async () => {
+    const { queryClient, wrapper } = setup()
+    mocked.fetchOnboardingTest.mockResolvedValueOnce(makeTestState('failed'))
+    const onAnswered = vi.fn()
+
+    const { result } = renderHook(
+      () =>
+        useOnboardingTest({
+          isActive: true,
+          freshSendRequestedRef: { current: false },
+          onAnswered,
+          onSkipped: vi.fn(),
+          autoSend: false,
+        }),
+      { wrapper }
+    )
+    await waitFor(() =>
+      expect(result.current.testState?.test?.status).toBe('failed')
+    )
+
+    // A poll about the previous message is still on the wire.
+    let landStalePoll: (state: OnboardingTestState) => void = () => undefined
+    mocked.fetchOnboardingTest.mockReturnValueOnce(
+      new Promise<OnboardingTestState>((resolve) => {
+        landStalePoll = resolve
+      })
+    )
+    void queryClient.refetchQueries({ queryKey: queryKeys.onboarding.test() })
+    await waitFor(() =>
+      expect(mocked.fetchOnboardingTest).toHaveBeenCalledTimes(2)
+    )
+
+    act(() => result.current.resend())
+    await waitFor(() =>
+      expect(result.current.testState?.test?.status).toBe('sent')
+    )
+    await act(async () => {
+      landStalePoll(makeTestState('canceled'))
+      await new Promise((resolve) => setTimeout(resolve, 50))
+    })
+
+    expect(result.current.testState?.test?.status).toBe('sent')
+    expect(onAnswered).not.toHaveBeenCalled()
   })
 
   it('auto-sends once when no test is open', async () => {
@@ -155,7 +250,7 @@ describe('useOnboardingTest', () => {
         useOnboardingTest({
           isActive: true,
           freshSendRequestedRef: { current: false },
-          onConfirmed: vi.fn(),
+          onAnswered: vi.fn(),
           onSkipped: vi.fn(),
         }),
       { wrapper }
@@ -178,7 +273,7 @@ describe('useOnboardingTest', () => {
         useOnboardingTest({
           isActive: true,
           freshSendRequestedRef: { current: false },
-          onConfirmed: vi.fn(),
+          onAnswered: vi.fn(),
           onSkipped: vi.fn(),
           autoSend: false,
         }),
@@ -199,7 +294,7 @@ describe('useOnboardingTest', () => {
         useOnboardingTest({
           isActive: true,
           freshSendRequestedRef,
-          onConfirmed: vi.fn(),
+          onAnswered: vi.fn(),
           onSkipped: vi.fn(),
         }),
       { wrapper }
