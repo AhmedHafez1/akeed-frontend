@@ -284,16 +284,80 @@ describe('ConfirmationsList', () => {
     const tableRows = within(table).getAllByRole('row')
     const namedCells = within(tableRows[1]).getAllByRole('cell')
     const namelessCells = within(tableRows[2]).getAllByRole('cell')
-    expect(namedCells[1].textContent).toBe('Ahmed Zaid')
-    expect(namedCells[2].textContent).toBe('+20 114 867 5077')
-    expect(namelessCells[1].textContent).toBe('No name')
-    expect(namelessCells[2].textContent).toBe('+20 114 867 5077')
-    expect(namedCells[1].querySelectorAll('p')).toHaveLength(0)
+    expect(namedCells[2].textContent).toBe('Ahmed Zaid')
+    expect(namedCells[3].textContent).toBe('+20 114 867 5077')
+    expect(namelessCells[2].textContent).toBe('No name')
+    expect(namelessCells[3].textContent).toBe('+20 114 867 5077')
+    expect(namedCells[2].querySelectorAll('p')).toHaveLength(0)
+  })
 
-    expect(
-      screen.queryByRole('columnheader', { name: 'Last update' })
-    ).toBeNull()
-    expect(screen.queryByText(/Sep 16/)).toBeNull()
+  it('shows when the order came in and when it last changed', () => {
+    const row = {
+      id: 'v-1',
+      status: 'confirmed',
+      reason: null,
+      order_id: 'o-1',
+      order_number: '1137',
+      is_test: false,
+      customer_name: 'Ahmed Zaid',
+      customer_phone: '+201148675077',
+      total_price: '49.95',
+      currency: 'USD',
+      last_sent_at: '2026-09-16T06:49:00Z',
+      confirmed_at: '2026-09-16T07:00:00Z',
+      follow_up_attempts: 0,
+      created_at: '2026-09-16T06:49:00Z',
+      // Older than the confirmation: the column follows the newest event.
+      updated_at: '2026-09-16T06:49:00Z',
+    } as VerificationItem
+    renderStandalone(
+      <ConfirmationsList
+        hasMore={false}
+        isLoadingMore={false}
+        onLoadMore={vi.fn()}
+        loadedLabel=""
+        rows={[row]}
+        timeZone="UTC"
+        canWrite
+        canRetry
+        actingId={null}
+        handlers={{
+          onOpenDetails: vi.fn(),
+          onRequestConfirm: vi.fn(),
+          onRequestCancel: vi.fn(),
+          onRetry: vi.fn(),
+        }}
+      />,
+      'en'
+    )
+
+    const table = screen.getByRole('table')
+    const headings = within(table)
+      .getAllByRole('columnheader')
+      .map((heading) => heading.textContent)
+    expect(headings).toEqual([
+      'Order',
+      'Order time',
+      'Customer',
+      'Phone',
+      'Status',
+      'Reminder',
+      'Last update',
+      'Total',
+      'Action',
+    ])
+    const cells = within(within(table).getAllByRole('row')[1]).getAllByRole(
+      'cell'
+    )
+    expect(cells[1].textContent).toBe('Sep 16 · 6:49 AM')
+    expect(cells[1].querySelector('[title]')?.getAttribute('title')).toBe(
+      'Sep 16, 2026, 6:49 AM'
+    )
+    expect(cells[6].textContent).toBe('Sep 16 · 7:00 AM')
+
+    const card = screen.getByRole('listitem')
+    expect(within(card).getByText('Ordered Sep 16 · 6:49 AM')).toBeTruthy()
+    expect(within(card).getByText('Updated Sep 16 · 7:00 AM')).toBeTruthy()
   })
 
   it('tints the rows waiting on the merchant, in the table and on the card', () => {
@@ -362,6 +426,8 @@ describe('NeedsActionCard', () => {
         customer_phone: '+201148675077',
         total_price: '751',
         currency: 'EGP',
+        created_at: '2026-09-27T09:58:00Z',
+        updated_at: '2026-09-28T10:00:00Z',
         reason: {
           type: 'no_reply_after_follow_up',
           since: '2026-09-27T10:00:00Z',
@@ -390,6 +456,20 @@ describe('NeedsActionCard', () => {
     expect(screen.getByText('طلبان')).toBeTruthy()
     const table = within(screen.getByRole('table'))
     expect(table.getByRole('columnheader', { name: 'الحالة' })).toBeTruthy()
+    expect(
+      table.getAllByRole('columnheader').map((heading) => heading.textContent)
+    ).toEqual([
+      'الطلب',
+      'وقت الطلب',
+      'العميل',
+      'الهاتف',
+      'الحالة',
+      'آخر تحديث',
+      'الإجمالي',
+      'إجراء',
+    ])
+    expect(table.getByText(/^27 سبتمبر · 9:58/)).toBeTruthy()
+    expect(table.getByText(/^28 سبتمبر · 10:00/)).toBeTruthy()
     // The table's word on the badge, the reason on hover.
     expect(
       table.getByText('لم يرد').closest('[title]')?.getAttribute('title')

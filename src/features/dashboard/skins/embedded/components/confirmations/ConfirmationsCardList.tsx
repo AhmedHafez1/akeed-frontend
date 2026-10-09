@@ -6,6 +6,7 @@ import { OrderNumberLink } from '../shared/OrderNumberLink'
 import { ConfirmationRowActions } from './ConfirmationRowActions'
 import {
   AmountText,
+  CardTimes,
   CustomerCell,
   FollowUpCell,
   StatusCell,
@@ -26,7 +27,7 @@ function ConfirmationCard({
   handlers,
 }: CardProps) {
   const t = useTranslations('dashboard')
-  const view = useConfirmationRowView(row)
+  const view = useConfirmationRowView(row, timeZone)
 
   return (
     <Box
@@ -57,6 +58,13 @@ function ConfirmationCard({
             <FollowUpCell row={row} timeZone={timeZone} showTime />
           </BlockStack>
         </InlineStack>
+
+        <CardTimes
+          orderTime={view.orderTime}
+          orderTimeTitle={view.orderTimeTitle}
+          lastUpdate={view.lastUpdate}
+          lastUpdateTitle={view.lastUpdateTitle}
+        />
 
         <ConfirmationRowActions
           row={row}

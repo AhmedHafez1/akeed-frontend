@@ -246,6 +246,10 @@ export type NeedsActionItem = {
   customer_phone: string | null
   total_price: string | null
   currency: string | null
+  /** When the order reached Akeed. Absent on older payloads. */
+  created_at?: string | null
+  /** The newest thing recorded on the row. Absent on older payloads. */
+  updated_at?: string | null
   reason: {
     type: NeedsActionReason
     since: string | null

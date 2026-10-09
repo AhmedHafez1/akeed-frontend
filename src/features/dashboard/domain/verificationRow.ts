@@ -6,8 +6,8 @@ import { EXPLAINED_LIFECYCLE_REASONS } from './verificationLifecycle'
 /**
  * Every value a verification row displays, derived once.
  *
- * Both tables render the same seven columns from these helpers, so a row shows
- * the same order title, the same total, the same date and the same explanation
+ * Both tables render the same nine columns from these helpers, so a row shows
+ * the same order title, the same total, the same dates and the same explanation
  * whichever runtime mode a merchant is looking at. Formatting is pinned to the
  * organization's reporting timezone rather than the browser's, which is what
  * previously let one mode date a row a day apart from the other.
@@ -132,6 +132,37 @@ export function getStatusTimestamp(
     default:
       return null
   }
+}
+
+/**
+ * When anything last happened on the row: the newest of the server's
+ * `updated_at` and every lifecycle timestamp, or the order time when nothing
+ * has happened yet. Taking the newest keeps the column right for a step that
+ * was recorded without touching `updated_at`.
+ */
+export function getLastUpdateAt(verification: VerificationItem): string | null {
+  const candidates = [
+    verification.created_at,
+    verification.updated_at,
+    verification.last_sent_at,
+    verification.delivered_at,
+    verification.read_at,
+    verification.confirmed_at,
+    verification.canceled_at,
+    verification.expired_at,
+    verification.no_reply_at,
+    verification.follow_up_sent_at,
+  ]
+  let latest: string | null = null
+  let latestTime = Number.NEGATIVE_INFINITY
+  for (const value of candidates) {
+    if (!value) continue
+    const time = new Date(value).getTime()
+    if (Number.isNaN(time) || time <= latestTime) continue
+    latest = value
+    latestTime = time
+  }
+  return latest
 }
 
 /**

@@ -22,8 +22,10 @@ import {
 } from './tableStyles'
 import {
   AmountText,
+  CardTimes,
   CustomerCell,
   CustomerNameCell,
+  DateTimeCell,
   FollowUpCell,
   OrderCell,
   PhoneCell,
@@ -45,7 +47,7 @@ function isControlClick(event: MouseEvent) {
 }
 
 function TableRow({ row, timeZone, actingId, ...rest }: RowProps) {
-  const view = useConfirmationRowView(row)
+  const view = useConfirmationRowView(row, timeZone)
   // The Order cell's button is the keyboard route to the same details.
   const openDetails = row.optimistic
     ? undefined
@@ -77,6 +79,9 @@ function TableRow({ row, timeZone, actingId, ...rest }: RowProps) {
         />
       </td>
       <td className={TABLE_CELL}>
+        <DateTimeCell text={view.orderTime} title={view.orderTimeTitle} />
+      </td>
+      <td className={TABLE_CELL}>
         <CustomerNameCell name={view.name} />
       </td>
       <td className={TABLE_CELL}>
@@ -87,6 +92,9 @@ function TableRow({ row, timeZone, actingId, ...rest }: RowProps) {
       </td>
       <td className={TABLE_CELL}>
         <FollowUpCell row={row} timeZone={timeZone} />
+      </td>
+      <td className={TABLE_CELL}>
+        <DateTimeCell text={view.lastUpdate} title={view.lastUpdateTitle} />
       </td>
       <td className={TABLE_AMOUNT_CELL}>
         <AmountText amount={view.amount} isCanceled={view.isCanceled} />
@@ -106,12 +114,12 @@ function TableRow({ row, timeZone, actingId, ...rest }: RowProps) {
 
 /**
  * One order on a phone: order and amount, then who, then what happened (the
- * badge and a plain-words note under it), then the actions. Orders waiting on
- * the merchant carry an amber background. A tap outside a control opens the
+ * badge and a plain-words note under it), then when, then the actions. Orders
+ * waiting on the merchant carry an amber background. A tap outside a control opens the
  * details; the order number stays the keyboard route.
  */
 function CardRow({ row, timeZone, actingId, ...rest }: RowProps) {
-  const view = useConfirmationRowView(row)
+  const view = useConfirmationRowView(row, timeZone)
   const openDetails = row.optimistic
     ? undefined
     : () => rest.handlers.onOpenDetails(row)
@@ -144,6 +152,12 @@ function CardRow({ row, timeZone, actingId, ...rest }: RowProps) {
           <StatusNote row={row} timeZone={timeZone} />
         </div>
       </div>
+      <CardTimes
+        orderTime={view.orderTime}
+        orderTimeTitle={view.orderTimeTitle}
+        lastUpdate={view.lastUpdate}
+        lastUpdateTitle={view.lastUpdateTitle}
+      />
       <ConfirmationRowActions
         row={row}
         orderLabel={view.orderLabel}
@@ -162,12 +176,14 @@ function CardRow({ row, timeZone, actingId, ...rest }: RowProps) {
  * phone or the action buttons onto a second line.
  */
 const HEADINGS = [
-  ['order', 'w-[12%]'],
-  ['customer', 'w-[20%]'],
-  ['phone', 'w-[18%]'],
-  ['status', 'w-[18%]'],
-  ['followUp', 'w-[12%]'],
-  ['total', 'w-[12%] text-end'],
+  ['order', 'w-[9%]'],
+  ['orderTime', 'w-[12%]'],
+  ['customer', 'w-[15%]'],
+  ['phone', 'w-[13%]'],
+  ['status', 'w-[13%]'],
+  ['followUp', 'w-[8%]'],
+  ['updated', 'w-[12%]'],
+  ['total', 'w-[10%] text-end'],
   ['action', 'w-[8%] text-end'],
 ] as const
 
@@ -196,7 +212,7 @@ interface ConfirmationsScrollProps {
 }
 
 /**
- * The confirmations list: a seven-column table from `md`, one card per order
+ * The confirmations list: a nine-column table from `md`, one card per order
  * below it — the same values and actions either way. Switched in CSS rather
  * than by a width hook, so server and first client render always match.
  *
@@ -230,7 +246,7 @@ export function ConfirmationsList({
       className={cn(SCROLL_AREA, 'ak-focus')}
     >
       <div className="hidden md:block">
-        <table className={cn(TABLE, 'min-w-270')}>
+        <table className={cn(TABLE, 'min-w-300')}>
           <caption className="sr-only">{t('title')}</caption>
           <thead>
             <tr className={TABLE_HEAD_ROW}>

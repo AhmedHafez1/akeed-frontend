@@ -17,6 +17,7 @@ import {
   formatOrderTitle,
   formatOrderTotal,
   formatTooltipDateTime,
+  getLastUpdateAt,
   resolveRowDescriptionKey,
 } from '@/features/dashboard/domain/verificationRow'
 import { orderSourceLabelKey } from '@/features/dashboard/lib/orderDisplay'
@@ -202,10 +203,22 @@ function DetailsBody({
           </div>
           <div className="flex justify-between gap-4 py-3">
             <dt className="text-muted-foreground">
-              {t('table.headings.created')}
+              {t('confirmations.headings.orderTime')}
             </dt>
             <dd className="text-foreground text-end font-medium">
               {formatTooltipDateTime(verification.created_at, locale, timeZone)}
+            </dd>
+          </div>
+          <div className="flex justify-between gap-4 py-3">
+            <dt className="text-muted-foreground">
+              {t('confirmations.headings.updated')}
+            </dt>
+            <dd className="text-foreground text-end font-medium">
+              {formatTooltipDateTime(
+                getLastUpdateAt(verification),
+                locale,
+                timeZone
+              )}
             </dd>
           </div>
           <div className="py-3">
