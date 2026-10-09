@@ -36,9 +36,6 @@ import { formatQuietTime } from '@/features/settings/skins/shared/settingsFormat
 import { AutomationTimelineCard } from './AutomationTimelineCard'
 import { SegmentedButtons } from './SegmentedButtons'
 
-/** The Shopify tag the no-reply alert adds (`shopify-outcome.adapter.ts`). */
-const NO_REPLY_TAG = 'Akeed: No Reply'
-
 interface TimingTabProps {
   model: EmbeddedSettingsModel
   data: SettingsResponse
@@ -157,9 +154,6 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
                       />
                     </Box>
                   )}
-                  <Text as="p" variant="bodySm" tone="subdued">
-                    {t('sendTimeHelp')}
-                  </Text>
                 </BlockStack>
               </Box>
             )}
@@ -177,7 +171,6 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
             <BlockStack gap="300">
               <Checkbox
                 label={t('reminderLabel')}
-                helpText={t('reminderHelp')}
                 checked={values.followUpEnabled}
                 disabled={readOnly}
                 onChange={(checked) =>
@@ -213,13 +206,6 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
             <BlockStack gap="300">
               <Checkbox
                 label={t('alertLabel')}
-                helpText={t.rich('alertHelp', {
-                  tag: () => (
-                    <Text as="span" variant="bodySm" tone="subdued">
-                      <code dir="ltr">{NO_REPLY_TAG}</code>
-                    </Text>
-                  ),
-                })}
                 checked={values.escalationEnabled}
                 disabled={readOnly}
                 onChange={(checked) =>

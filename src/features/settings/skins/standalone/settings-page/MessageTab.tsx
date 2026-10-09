@@ -46,7 +46,7 @@ function SettingsCard({
 }: {
   headingId: string
   heading: string
-  description: string
+  description?: string
   children: ReactNode
 }) {
   return (
@@ -58,7 +58,9 @@ function SettingsCard({
         <h2 id={headingId} className="text-ak-section text-ink">
           {heading}
         </h2>
-        <p className="text-ak-caption text-ink-muted mt-0.5">{description}</p>
+        {description && (
+          <p className="text-ak-caption text-ink-muted mt-0.5">{description}</p>
+        )}
       </div>
       {children}
     </section>
@@ -245,13 +247,7 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
           </AkChoiceGroup>
         </SettingsCard>
 
-        <SettingsCard
-          headingId={styleId}
-          heading={tShared('styleHeading')}
-          description={t('styleHint', {
-            language: tShared(`languageNames.${previewLanguage}`),
-          })}
-        >
+        <SettingsCard headingId={styleId} heading={tShared('styleHeading')}>
           <AkChoiceGroup columns={2} aria-labelledby={styleId}>
             {offersAuto && (
               <AkChoiceCard
@@ -259,7 +255,6 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
                 onSelect={() => model.update({ codTemplateArAuto: true })}
                 disabled={readOnly}
                 title={templateStyleLabel(tShared, 'auto')}
-                description={tShared('autoStyleHelp')}
               />
             )}
             {variants.map((variant) => (
@@ -277,9 +272,6 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
                     </span>
                   )
                 }
-                description={templateOpeningLine(variant.message, sample)}
-                descriptionDir={variant.message.direction}
-                descriptionLang={previewLanguage}
               />
             ))}
           </AkChoiceGroup>
@@ -299,7 +291,6 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
                 onSelect={() => handleReminderChange(null)}
                 disabled={readOnly}
                 title={tShared('reminderSame')}
-                description={tShared('reminderSameHelp')}
               />
               {reminderVariants.map((variant) => (
                 <AkChoiceCard

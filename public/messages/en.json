@@ -2489,7 +2489,6 @@
           "languageDesc": "Which language each customer gets the confirmation in.",
           "languageArabic": "Always Arabic",
           "languageEnglish": "Always English",
-          "styleHint": "Each language keeps its own style. These are the {language} styles; switch the preview language to edit the other.",
           "defaultBadge": "Default",
           "businessAccount": "Verified business account",
           "testSend": "Send a test message",
@@ -2499,8 +2498,6 @@
           "flowDesc": "This updates as you edit, before you save.",
           "autoHelp": "When off, no messages are sent.",
           "customDelayLabel": "Delay",
-          "reminderHelp": "We send the same message again if the customer hasn’t replied.",
-          "alertHelp": "The order moves to “Needs your action” so you can follow up. We never cancel orders automatically.",
           "quietDesc": "No messages at night.",
           "quietHelp": "Anything due during quiet hours is sent when they end."
         },
@@ -2819,7 +2816,6 @@
         "languageArabic": "Always Arabic",
         "languageEnglish": "Always English",
         "styleHeading": "Message style",
-        "styleLanguageHint": "Arabic and English each keep their own style. These are the {language} styles; switch the preview language to edit the other.",
         "languageNames": {
           "ar": "Arabic",
           "en": "English"
@@ -2854,13 +2850,10 @@
           "cancel": "Cancel",
           "close": "Close"
         },
-        "templatesNote": "Templates are approved by WhatsApp, so only the style and language change.",
-        "autoStyleHelp": "Egyptian for numbers starting +20, Gulf for Saudi Arabia, the UAE, Bahrain, Qatar, Kuwait and Oman, and Modern Standard for other Arabic numbers.",
         "autoStylePreviewNote": "The preview shows your saved style. With Automatic, each customer gets the style of their country.",
         "reminderHeading": "Reminder message",
         "reminderHint": "Sent to customers who haven't replied yet. These are the {language} reminders; switch the preview language to edit the other.",
         "reminderSame": "Same as the first message",
-        "reminderSameHelp": "The reminder repeats your first message.",
         "previewEmpty": "This message has no text to preview yet."
       },
       "timing": {
@@ -2889,14 +2882,12 @@
           "after1h": "After 1 hour",
           "custom": "Custom"
         },
-        "sendTimeHelp": "Pick a delay if you review orders manually before they are confirmed.",
         "customDelayLabel": "Delay in minutes",
         "customDelaySuffix": "min",
         "customDelayError": "Enter whole minutes from 0 to 1,440.",
         "followHeading": "Follow-up",
         "followDescription": "What we do when a customer doesn't reply.",
         "reminderLabel": "Send one reminder",
-        "reminderHelp": "If the customer doesn't reply to the first message.",
         "after": "After",
         "hoursShort": "{count} h",
         "fromFirstMessage": "after the first message",
@@ -2904,7 +2895,6 @@
         "reminderGroup": "Reminder delay",
         "alertGroup": "No-reply alert delay",
         "alertLabel": "Alert me about orders with no reply",
-        "alertHelp": "The order moves to “Needs your action” and gets the <tag></tag> tag in Shopify. We never cancel orders automatically.",
         "quietHeading": "Quiet hours",
         "quietDescription": "No messages at night. Anything due during quiet hours is sent when they end.",
         "quietLabel": "Pause sending during quiet hours",

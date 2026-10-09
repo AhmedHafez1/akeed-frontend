@@ -119,7 +119,6 @@ describe('standalone Timing tab', () => {
     expect(pressedIn(timing.alertGroup)).toEqual(['12 س'])
     expect(screen.getByText(timing.fromReminder)).toBeTruthy()
     // Standalone has no Shopify tag to mention.
-    expect(screen.getByText(page.timing.alertHelp)).toBeTruthy()
     expect(screen.queryByText(/شوبيفاي/)).toBeNull()
     expect(
       (screen.getByLabelText(timing.quietFrom) as HTMLSelectElement).value

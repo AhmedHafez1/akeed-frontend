@@ -259,10 +259,6 @@ export function MessagePreviewCard({
             </Collapsible>
           </BlockStack>
         )}
-
-        <Text as="p" variant="bodySm" tone="subdued">
-          {t('templatesNote')}
-        </Text>
       </BlockStack>
     </Card>
   )
