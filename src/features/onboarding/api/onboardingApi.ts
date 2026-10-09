@@ -137,6 +137,32 @@ export async function completeOnboardingSetup(
   return parseJsonResponse<OnboardingStateResponse>(response)
 }
 
+/**
+ * Restates the resend cooldown on this browser's clock. The server's absolute
+ * time is only right when both clocks agree; its seconds-from-now is right
+ * whatever this clock says.
+ */
+export function withLocalResendDeadline(
+  state: OnboardingTestState,
+  nowMs = Date.now()
+): OnboardingTestState {
+  const seconds = state.resendAvailableInSeconds
+  if (typeof seconds !== 'number') return state
+  return {
+    ...state,
+    resendAvailableAt:
+      seconds > 0 ? new Date(nowMs + seconds * 1000).toISOString() : null,
+  }
+}
+
+async function parseOnboardingTest(
+  response: Response
+): Promise<OnboardingTestState> {
+  return withLocalResendDeadline(
+    await parseJsonResponse<OnboardingTestState>(response)
+  )
+}
+
 export async function fetchOnboardingTest(): Promise<OnboardingTestState> {
   const response = await fetchWithAuth('/api/onboarding/test', {
     method: 'GET',
@@ -147,7 +173,7 @@ export async function fetchOnboardingTest(): Promise<OnboardingTestState> {
     throw await getOnboardingApiError(response)
   }
 
-  return parseJsonResponse<OnboardingTestState>(response)
+  return parseOnboardingTest(response)
 }
 
 export async function sendOnboardingTest(options: {
@@ -162,7 +188,7 @@ export async function sendOnboardingTest(options: {
     throw await getOnboardingApiError(response)
   }
 
-  return parseJsonResponse<OnboardingTestState>(response)
+  return parseOnboardingTest(response)
 }
 
 export async function skipOnboardingTest(): Promise<OnboardingTestState> {
@@ -174,7 +200,7 @@ export async function skipOnboardingTest(): Promise<OnboardingTestState> {
     throw await getOnboardingApiError(response)
   }
 
-  return parseJsonResponse<OnboardingTestState>(response)
+  return parseOnboardingTest(response)
 }
 
 export interface OnboardingTemplatePreviews {

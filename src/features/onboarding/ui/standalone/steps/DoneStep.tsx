@@ -4,6 +4,7 @@ import { Fragment, type Ref } from 'react'
 import Link from 'next/link'
 import { useLocale, useTranslations } from 'next-intl'
 import { ArrowLeft, Check, Package, Upload } from 'lucide-react'
+import type { OnboardingTestReply } from '@/features/onboarding/domain/onboarding.types'
 import { useCreditOffer } from '@/features/onboarding/hooks/useCreditOffer'
 import { importModalPath } from '@/features/order-imports/domain/importRoutes'
 import { withLocale } from '@/shared/lib/locale'
@@ -17,13 +18,15 @@ const PIPELINE = ['add', 'send', 'reply'] as const
 
 interface DoneStepProps {
   headingRef: Ref<HTMLHeadingElement>
+  /** How the merchant answered the test; the heading names what arrived. */
+  reply?: OnboardingTestReply
 }
 
 /**
  * Step "You're live": what happens with every order from now on, the money
  * in plain numbers, and one next step, adding the first real order.
  */
-export function DoneStep({ headingRef }: DoneStepProps) {
+export function DoneStep({ headingRef, reply }: DoneStepProps) {
   const t = useTranslations('standaloneOnboarding.done')
   const locale = useLocale()
   const { offer } = useCreditOffer()
@@ -43,7 +46,7 @@ export function DoneStep({ headingRef }: DoneStepProps) {
           tabIndex={-1}
           className="text-ink text-h2 font-bold focus-visible:outline-none"
         >
-          {t('heading')}
+          {t(reply === 'canceled' ? 'headingCanceled' : 'heading')}
         </h1>
       </div>
 

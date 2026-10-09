@@ -1713,7 +1713,6 @@
       "heading": "Welcome to Akeed",
       "subheading": "One minute, and you start confirming cash-on-delivery orders on WhatsApp.",
       "freePlanTitle": "Your free plan is active: 30 confirmation messages",
-      "freePlanDescription": "No card needed. Choose a plan later, only when you need more messages.",
       "freePlanUsedTitle": "The test message is always free",
       "freePlanUsedDescription": "This store already used its free plan. Finish setup and try the message; you can choose a plan from the dashboard to confirm real orders.",
       "storeNameLabel": "Store name as it appears in the message",
@@ -1747,7 +1746,7 @@
         "delivered": "Arrived on your phone",
         "tapConfirm": "Tap \"Confirm order\"",
         "confirmed": "You confirmed the order",
-        "canceledNote": "You tapped \"Cancel order\", which is what a customer cancellation looks like. Tap \"Confirm order\" to finish, or resend.",
+        "canceled": "You canceled the order",
         "autoDetect": "We'll detect your reply automatically"
       },
       "errors": {
@@ -1768,6 +1767,7 @@
     "success": {
       "eyebrow": "Setup complete ✓",
       "heading": "Your confirmation arrived. This is how Akeed works",
+      "headingCanceled": "Your cancellation arrived. This is how Akeed works",
       "subheading": "Akeed is now live on your store. Here's what happens with every cash-on-delivery order:",
       "pipeline": {
         "order": {
@@ -3246,7 +3246,6 @@
         "delivered": "Arrived on your phone",
         "tapConfirm": "Tap \"Confirm order\"",
         "confirmed": "You confirmed the order",
-        "canceledNote": "You tapped \"Cancel order\", which is what a customer cancellation looks like. Tap \"Confirm order\" to finish, or resend.",
         "autoDetect": "We'll detect your reply automatically"
       },
       "tapConfirmOnPhone": "Tap \"Confirm order\" on your phone",
@@ -3354,6 +3353,7 @@
     "done": {
       "badge": "Akeed is live",
       "heading": "Your confirmation arrived. This is how Akeed works with every order",
+      "headingCanceled": "Your cancellation arrived. This is how Akeed works with every order",
       "pipelineLabel": "How Akeed works with every order",
       "pipeline": {
         "add": {

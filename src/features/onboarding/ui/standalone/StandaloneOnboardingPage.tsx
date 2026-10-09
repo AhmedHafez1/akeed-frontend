@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import { Eye, ShieldCheck } from 'lucide-react'
 import type { StandaloneStep } from '@/features/onboarding/domain/onboarding.types'
+import { resolveTestReply } from '@/features/onboarding/hooks/useOnboardingTest'
 import { useStandaloneOnboardingFlow } from '@/features/onboarding/hooks/useStandaloneOnboardingFlow'
 import {
   STANDALONE_FIELD_IDS,
@@ -176,14 +177,19 @@ export function StandaloneOnboardingPage() {
           headingRef={headingRef}
         />
       )}
-      {step === 'done' && <DoneStep headingRef={headingRef} />}
+      {step === 'done' && (
+        <DoneStep
+          headingRef={headingRef}
+          reply={resolveTestReply(flow.test.testState) ?? undefined}
+        />
+      )}
     </PageFrame>
   )
 }
 
 function PageFrame({ children }: { children: ReactNode }) {
   return (
-    <div className="mx-auto w-full max-w-[1120px] px-4 py-6 sm:px-6 sm:py-12">
+    <div className="mx-auto w-full max-w-280 px-4 py-6 sm:px-6 sm:py-12">
       {children}
     </div>
   )

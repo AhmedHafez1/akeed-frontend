@@ -83,6 +83,8 @@ export function TestStep({
     status === 'sent' || status === 'delivered' || status === 'read'
   const isFailed = status === 'failed' || status === 'expired'
   const isBusy = test.isSending || test.isSkipping || completion.isCompleting
+  // Out of sends, the disabled resend needs its reason even before a click.
+  const testError = test.error ?? (canResend ? null : 'daily_limit')
   const whatsAppHref = akeedWhatsAppHref()
   const shownPhone = formatPhoneForDisplay(testState?.phone ?? phone)
 
@@ -106,7 +108,7 @@ export function TestStep({
         delivered: tTest('timeline.delivered'),
         tapConfirm: isPhone ? t('mobile.tapConfirm') : t('tapConfirmOnPhone'),
         confirmed: tTest('timeline.confirmed'),
-        canceledNote: t('timeline.canceledNote'),
+        canceled: tTest('timeline.canceled'),
         autoDetect: isPhone ? t('mobile.autoDetect') : t('autoDetectNext'),
       },
       formatTime
@@ -266,7 +268,7 @@ export function TestStep({
       <div className="space-y-6">
         {heading}
 
-        {test.error && (
+        {testError && (
           <div
             role="alert"
             className="border-ak-warning-line bg-ak-warning-soft text-ink rounded-panel flex items-start gap-2 border p-4 text-start text-sm"
@@ -275,7 +277,7 @@ export function TestStep({
               aria-hidden="true"
               className="text-ak-warning mt-0.5 size-4 shrink-0"
             />
-            {tTest(TEST_ERROR_KEYS[test.error])}
+            {tTest(TEST_ERROR_KEYS[testError])}
           </div>
         )}
         {isFailed && (

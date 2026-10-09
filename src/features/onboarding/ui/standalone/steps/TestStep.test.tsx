@@ -42,7 +42,7 @@ function makeTestState(
           deliveredAt: status === 'delivered' ? now : null,
           readAt: null,
           confirmedAt: null,
-          canceledAt: null,
+          canceledAt: status === 'canceled' ? now : null,
         }
       : null,
     resendAvailableAt: null,
@@ -154,6 +154,25 @@ describe('TestStep', () => {
     expect(
       screen.getByRole('button', { name: 'تخطَّ الآن، وجرّبها لاحقًا' })
     ).toBeTruthy()
+  })
+
+  it('explains the daily limit before the merchant tries to resend', () => {
+    renderTest({
+      test: makeTest({
+        testState: makeTestState('sent', { sendsRemainingToday: 0 }),
+      }),
+    })
+    expect(screen.getByText(/وصلت إلى الحد اليومي/)).toBeTruthy()
+  })
+
+  it('shows a Cancel reply as the finished answer, not a dead end', () => {
+    renderTest({
+      test: makeTest({ testState: makeTestState('canceled') }),
+    })
+    const answer = screen.getByText('ألغيت الطلب').closest('li')
+    expect(answer?.getAttribute('aria-current')).toBeNull()
+    expect(screen.queryByText('اضغط «تأكيد الطلب» على هاتفك')).toBeNull()
+    expect(screen.queryByText('هذا بالضبط ما سيفعله عميلك.')).toBeNull()
   })
 
   it('makes Change number the primary when delivery failed', () => {
