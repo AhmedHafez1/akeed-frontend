@@ -1,15 +1,21 @@
 'use client'
 
-import type { KeyboardEvent } from 'react'
-import { BlockStack, InlineGrid, Modal, Spinner, Text } from '@shopify/polaris'
-import { useTranslations } from 'next-intl'
-import { useShopifyPlanUpgrade } from '@/features/billing/domain/useShopifyPlanUpgrade'
+import { useId } from 'react'
 import {
-  RECOMMENDED_SHOPIFY_PLAN_ID,
-  type ShopifyPlanId,
-} from '@/features/billing/domain/shopifyPlans'
+  BlockStack,
+  Box,
+  InlineGrid,
+  Modal,
+  Spinner,
+  Text,
+} from '@shopify/polaris'
+import { useTranslations } from 'next-intl'
+import { isolateLtr } from '@/features/billing/domain/planPresentation'
+import { useShopifyPlanUpgrade } from '@/features/billing/domain/useShopifyPlanUpgrade'
+import { formatPlanPrice } from '@/shared/lib/money'
 import { BillingErrorBanner } from './BillingErrorBanner'
-import { PlanCard } from './PlanCard'
+import { PlanCard, RADIO_SURFACE_CLASS, radioSurface } from './PlanCard'
+import { SharedFeaturesList } from './SharedFeaturesList'
 
 interface UpgradePlansModalProps {
   open: boolean
@@ -21,7 +27,9 @@ interface UpgradePlansModalProps {
 
 /**
  * The plan picker, offered after the merchant has seen Akeed work: at 80% of
- * the free messages, or when a reinstalled store has no free plan left.
+ * the free messages, or when a reinstalled store has no free plan left. Plans
+ * differ only in their monthly allowance, so it is a radio group of three
+ * allowances; Starter is a row under them while the store can still claim it.
  */
 export function UpgradePlansModal({
   open,
@@ -31,20 +39,14 @@ export function UpgradePlansModal({
   onClose,
 }: UpgradePlansModalProps) {
   const t = useTranslations('embeddedOnboarding')
-  const tOnboarding = useTranslations('onboarding')
+  const tPlans = useTranslations('billing.embeddedPlans')
+  const groupName = useId()
   const upgrade = useShopifyPlanUpgrade({ enabled: open, hostParam })
+  const starter = upgrade.isFreePlanClaimed ? null : upgrade.starterPlan
   const selectedPlan = upgrade.plans.find(
     (plan) => plan.id === upgrade.selectedPlanId
   )
-
-  const handleKeyboardSelect = (
-    event: KeyboardEvent<HTMLDivElement>,
-    planId: ShopifyPlanId
-  ) => {
-    if (event.key !== 'Enter' && event.key !== ' ') return
-    event.preventDefault()
-    upgrade.setSelectedPlanId(planId)
-  }
+  const canSubscribe = upgrade.canManageBilling && Boolean(selectedPlan)
 
   return (
     <Modal
@@ -55,11 +57,30 @@ export function UpgradePlansModal({
       primaryAction={
         upgrade.canManageBilling && selectedPlan
           ? {
-              content: selectedPlan.ctaLabel,
+              content:
+                selectedPlan.amount === 0
+                  ? tPlans('starterCta')
+                  : tPlans('subscribeCta', {
+                      plan: selectedPlan.name,
+                      price: isolateLtr(
+                        formatPlanPrice(
+                          selectedPlan.amount,
+                          selectedPlan.currencyCode
+                        )
+                      ),
+                    }),
               loading: upgrade.isActivating,
               onAction: () => void upgrade.activate(),
             }
           : undefined
+      }
+      secondaryActions={[{ content: tPlans('cancel'), onAction: onClose }]}
+      footer={
+        canSubscribe ? (
+          <Text as="p" tone="subdued">
+            {tPlans('redirectNote')}
+          </Text>
+        ) : undefined
       }
     >
       <Modal.Section>
@@ -83,34 +104,61 @@ export function UpgradePlansModal({
           ) : !upgrade.canManageBilling ? (
             <Text as="p">{t('billingManagementUnavailable')}</Text>
           ) : (
-            <InlineGrid columns={{ xs: 1, sm: 2, lg: 4 }} gap="400">
-              {upgrade.plans.map((plan) => {
-                const isDisabled =
-                  plan.id === 'starter' && upgrade.isFreePlanClaimed
-                return (
-                  <PlanCard
-                    key={plan.id}
-                    plan={plan}
-                    isDisabled={isDisabled}
-                    isSelected={
-                      upgrade.selectedPlanId === plan.id && !isDisabled
-                    }
-                    isRecommended={
-                      plan.id === RECOMMENDED_SHOPIFY_PLAN_ID && !isDisabled
-                    }
-                    disabledReason={
-                      isDisabled
-                        ? t('freePlanAlreadyClaimedTooltip')
-                        : undefined
-                    }
-                    recommendedBadgeLabel={tOnboarding('recommendedBadge')}
-                    freePlanUsedLabel={t('freePlanUsedBadge')}
-                    onSelect={upgrade.setSelectedPlanId}
-                    onKeyboardSelect={handleKeyboardSelect}
-                  />
-                )
-              })}
-            </InlineGrid>
+            <>
+              <BlockStack gap="100">
+                <Text as="h3" variant="headingLg">
+                  {tPlans('heading')}
+                </Text>
+                <Text as="p" tone="subdued">
+                  {tPlans('sameFeatures')}
+                </Text>
+              </BlockStack>
+              <div role="radiogroup" aria-label={tPlans('plansLabel')}>
+                <BlockStack gap="300">
+                  <InlineGrid columns={{ xs: 1, md: 3 }} gap="300">
+                    {upgrade.paidPlans.map((plan) => (
+                      <PlanCard
+                        key={plan.id}
+                        plan={plan}
+                        groupName={groupName}
+                        isSelected={upgrade.selectedPlanId === plan.id}
+                        onSelect={upgrade.setSelectedPlanId}
+                      />
+                    ))}
+                  </InlineGrid>
+                  {starter && (
+                    <label
+                      className={`flex items-center gap-3 px-4 py-3 ${RADIO_SURFACE_CLASS}`}
+                      style={radioSurface(
+                        upgrade.selectedPlanId === starter.id
+                      )}
+                    >
+                      <input
+                        type="radio"
+                        name={groupName}
+                        value={starter.id}
+                        checked={upgrade.selectedPlanId === starter.id}
+                        onChange={() => upgrade.setSelectedPlanId(starter.id)}
+                        className="m-0 h-[18px] w-[18px] shrink-0 cursor-pointer"
+                        style={{ accentColor: 'var(--p-color-bg-fill-brand)' }}
+                      />
+                      <Text as="span">{tPlans('starterRow')}</Text>
+                    </label>
+                  )}
+                </BlockStack>
+              </div>
+              <Box
+                background="bg-surface-secondary"
+                borderRadius="300"
+                padding="400"
+              >
+                <SharedFeaturesList compact />
+              </Box>
+              <Text as="p" tone="subdued">
+                {tPlans('modalRules')}
+                {upgrade.isFreePlanClaimed && ` ${tPlans('freeUsed')}`}
+              </Text>
+            </>
           )}
         </BlockStack>
       </Modal.Section>

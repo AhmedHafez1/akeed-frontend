@@ -242,8 +242,8 @@ describe('SettingsEmbeddedPage', () => {
     expect(await screen.findByText('متبقي 3 رسائل مجانية')).toBeTruthy()
     expect(screen.getByText('US$ 9.99')).toBeTruthy()
     expect(screen.getByText('US$ 49.99')).toBeTruthy()
-    expect(screen.getAllByText('مقترحة لك')).toHaveLength(1)
-    expect(screen.getByText(/أرسلت 28 رسالة في آخر 30 يوماً/)).toBeTruthy()
+    expect(screen.getAllByText('الأنسب لاستخدامك')).toHaveLength(1)
+    expect(screen.getByText('أرسلت 28 رسالة في آخر 30 يوماً.')).toBeTruthy()
     expect(shopify.saveBar.show).not.toHaveBeenCalled()
   })
 

@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { queryKeys } from '@/shared/query/keys'
 import { ApiError } from '@/shared/lib/http'
 import { createLogger } from '@/shared/lib/logger'
@@ -10,12 +10,8 @@ import {
   createShopifySubscription,
   fetchShopifyPlans,
 } from '../api/shopifyPlansApi'
-import {
-  RECOMMENDED_SHOPIFY_PLAN_ID,
-  SHOPIFY_PLAN_DEFINITIONS,
-  type ShopifyPlanCard,
-  type ShopifyPlanId,
-} from './shopifyPlans'
+import { PLAN_NAME_KEYS } from './planPresentation'
+import type { ShopifyPlanCard, ShopifyPlanId } from './shopifyPlans'
 
 const logger = createLogger('Billing')
 
@@ -29,19 +25,17 @@ function openConfirmation(confirmationUrl: string) {
 }
 
 /**
- * Plan choice for an embedded store after onboarding: the translated plan
- * cards, the store's free-plan eligibility, and activation through Shopify's
- * approval page.
+ * Plan choice for an embedded store after onboarding: the plans with their
+ * translated names, the store's free-plan eligibility, and activation through
+ * Shopify's approval page. The smallest paid plan is selected until the
+ * merchant picks another.
  */
 export function useShopifyPlanUpgrade(options: {
   enabled: boolean
   hostParam: string | null
 }) {
   const t = useTranslations('embeddedOnboarding')
-  const locale = useLocale()
-  const [selectedPlanId, setSelectedPlanId] = useState<ShopifyPlanId>(
-    RECOMMENDED_SHOPIFY_PLAN_ID
-  )
+  const [chosenPlanId, setSelectedPlanId] = useState<ShopifyPlanId | null>(null)
   const [isActivating, setIsActivating] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -57,41 +51,26 @@ export function useShopifyPlanUpgrade(options: {
     response?.billingManagement?.mode === 'shopify' &&
     response.billingManagement.canManageBilling === true
 
-  const plans = useMemo<ShopifyPlanCard[]>(() => {
-    const numberLocale = locale === 'ar' ? 'ar' : 'en-US'
-    const configById = new Map(
-      (response?.plans ?? []).map((plan) => [plan.id, plan])
-    )
-    return SHOPIFY_PLAN_DEFINITIONS.map((definition) => {
-      const config = configById.get(definition.id)
-      const price = config
-        ? config.amount === 0
-          ? t('planPriceFree')
-          : t('planPricePerMonth', {
-              price: new Intl.NumberFormat(numberLocale, {
-                style: 'currency',
-                currency: config.currencyCode,
-                minimumFractionDigits: Number.isInteger(config.amount) ? 0 : 2,
-                maximumFractionDigits: 2,
-              }).format(config.amount),
-            })
-        : t(definition.priceKey)
-      return {
-        id: definition.id,
-        name: t(definition.nameKey),
-        monthlyPriceLabel: price,
-        monthlyVolumeLabel:
-          config && definition.id !== 'starter'
-            ? t('planVolumePerMonth', { count: config.includedVerifications })
-            : t(definition.volumeKey),
-        subtitle: t(definition.subtitleKey),
-        features: definition.featureKeys.map((key) => t(key)),
-        ctaLabel: t(definition.ctaKey),
-      }
-    })
-  }, [locale, response?.plans, t])
+  const plans = useMemo<ShopifyPlanCard[]>(
+    () =>
+      (response?.plans ?? []).map((plan) => ({
+        ...plan,
+        name: t(PLAN_NAME_KEYS[plan.id]),
+      })),
+    [response?.plans, t]
+  )
+  const paidPlans = useMemo(
+    () =>
+      plans
+        .filter((plan) => plan.amount > 0)
+        .sort((a, b) => a.includedVerifications - b.includedVerifications),
+    [plans]
+  )
+  const starterPlan = plans.find((plan) => plan.amount === 0) ?? null
+  const selectedPlanId = chosenPlanId ?? paidPlans[0]?.id ?? null
 
   const activate = useCallback(async () => {
+    if (!selectedPlanId) return
     setError(null)
     setIsActivating(true)
     try {
@@ -114,6 +93,8 @@ export function useShopifyPlanUpgrade(options: {
 
   return {
     plans,
+    paidPlans,
+    starterPlan,
     isLoading: plansQuery.isLoading,
     isFreePlanClaimed,
     canManageBilling,

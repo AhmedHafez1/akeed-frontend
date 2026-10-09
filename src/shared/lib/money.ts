@@ -67,15 +67,19 @@ export function formatMoneyParts(
  * the leading RLM and the trailing neutral `$` reorder in an RTL paragraph
  * and read as `$US 9.99`. Render the result inside `<bdi dir="ltr">`.
  */
-export function formatPlanPrice(amount: number, currency: string) {
+export function formatPlanPrice(
+  amount: number,
+  currency: string,
+  fractionDigits?: number
+) {
   const symbol =
     new Intl.NumberFormat('ar-u-nu-latn', { style: 'currency', currency })
       .formatToParts(amount)
       .find((part) => part.type === 'currency')
       ?.value.replace(/[\s\u200E\u200F\u061C]+/g, '') ?? currency
   const value = new Intl.NumberFormat('en-US', {
-    minimumFractionDigits: Number.isInteger(amount) ? 0 : 2,
-    maximumFractionDigits: 2,
+    minimumFractionDigits: fractionDigits ?? (Number.isInteger(amount) ? 0 : 2),
+    maximumFractionDigits: fractionDigits ?? 2,
   }).format(amount)
   return `${symbol} ${value}`
 }
