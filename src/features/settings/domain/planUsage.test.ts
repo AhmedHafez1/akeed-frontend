@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { recommendPlan, resolveUsageBanner, usagePercent } from './planUsage'
+import {
+  recommendPlan,
+  resolvePrimaryPlanId,
+  resolveUsageBanner,
+  usagePercent,
+} from './planUsage'
 
 const PLANS = [
   { id: 'starter', amount: 0, includedVerifications: 30 },
@@ -50,15 +55,17 @@ describe('usagePercent', () => {
 })
 
 describe('recommendPlan', () => {
-  it('falls back to Basic with no history', () => {
-    expect(recommendPlan(PLANS, 0)).toBe('basic')
+  it('recommends nothing without history', () => {
+    expect(recommendPlan(PLANS, 0)).toBeNull()
+    expect(recommendPlan(PLANS, -1)).toBeNull()
   })
 
-  it('picks the smallest plan covering 3× the last 30 days', () => {
-    expect(recommendPlan(PLANS, 28)).toBe('basic') // needs 84
-    expect(recommendPlan(PLANS, 100)).toBe('basic') // needs 300
-    expect(recommendPlan(PLANS, 101)).toBe('pro') // needs 303
-    expect(recommendPlan(PLANS, 334)).toBe('business') // needs 1002
+  it('picks the smallest plan covering 1.5× the last 30 days', () => {
+    expect(recommendPlan(PLANS, 120)).toBe('basic') // needs 180
+    expect(recommendPlan(PLANS, 200)).toBe('basic') // needs 300
+    expect(recommendPlan(PLANS, 201)).toBe('pro') // needs 301.5
+    expect(recommendPlan(PLANS, 264)).toBe('pro') // needs 396
+    expect(recommendPlan(PLANS, 900)).toBe('business') // needs 1350
   })
 
   it('picks the largest plan when volume exceeds every plan', () => {
@@ -69,16 +76,35 @@ describe('recommendPlan', () => {
     expect(recommendPlan([...PLANS].reverse(), 5)).toBe('basic')
   })
 
-  it('uses the smallest paid plan when Basic is missing', () => {
-    expect(
-      recommendPlan(
-        PLANS.filter((plan) => plan.id !== 'basic'),
-        0
-      )
-    ).toBe('pro')
-  })
-
   it('returns null without paid plans', () => {
     expect(recommendPlan([PLANS[0]], 10)).toBeNull()
+  })
+})
+
+describe('resolvePrimaryPlanId', () => {
+  it('is the recommended plan when the store is not on it', () => {
+    expect(resolvePrimaryPlanId(PLANS, 'starter', 'basic')).toBe('basic')
+    expect(resolvePrimaryPlanId(PLANS, 'basic', 'pro')).toBe('pro')
+    expect(resolvePrimaryPlanId(PLANS, 'business', 'basic')).toBe('basic')
+  })
+
+  it('is the next plan up when the store is on the recommended plan', () => {
+    expect(resolvePrimaryPlanId(PLANS, 'basic', 'basic')).toBe('pro')
+    expect(resolvePrimaryPlanId(PLANS, 'pro', 'pro')).toBe('business')
+  })
+
+  it('is the smallest other plan on the largest plan', () => {
+    expect(resolvePrimaryPlanId(PLANS, 'business', 'business')).toBe('basic')
+  })
+
+  it('is the smallest plan the store is not on without a recommendation', () => {
+    expect(resolvePrimaryPlanId(PLANS, 'starter', null)).toBe('basic')
+    expect(resolvePrimaryPlanId(PLANS, null, null)).toBe('basic')
+    expect(resolvePrimaryPlanId(PLANS, 'basic', null)).toBe('pro')
+  })
+
+  it('is null when there is no other paid plan', () => {
+    expect(resolvePrimaryPlanId([PLANS[0]], 'starter', null)).toBeNull()
+    expect(resolvePrimaryPlanId(PLANS.slice(0, 2), 'basic', 'basic')).toBeNull()
   })
 })

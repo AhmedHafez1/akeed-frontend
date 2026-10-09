@@ -1683,7 +1683,6 @@
     "billingHeading": "Billing activation",
     "billingBody": "To start verifying orders, please activate your plan.",
     "activatePlan": "Activate Plan",
-    "recommendedBadge": "Popular",
     "planPriceFree": "Free",
     "planPricePerMonth": "{price}/month",
     "planVolumePerMonth": "Up to {count} WhatsApp confirmations/month",
@@ -1995,7 +1994,7 @@
         "warningAtLimit": "You've used your included messages. Upgrade or wait for renewal to keep sending confirmations.",
         "manageCta": "Review in Settings",
         "outcomeTitle": "Akeed confirmed {count} orders for you 🎉",
-        "outcomeNearLimit": "Your free messages are running out. Choose a plan to keep confirming without a break.",
+        "outcomeNearLimit": "Your messages are running out. Choose a plan to keep confirming without a break.",
         "outcomeAtLimit": "Your messages are almost used up. Choose a plan so new orders keep getting confirmed.",
         "choosePlanCta": "Choose your plan",
         "plansModalTitle": "Choose your plan"
@@ -2915,42 +2914,19 @@
         "warningTitle": "{remaining, plural, one {# message left} other {# messages left}}",
         "warningTitleFree": "{remaining, plural, one {# free message left} other {# free messages left}}",
         "warningBody": "When they run out, confirmation messages stop for new orders. Your orders and data stay as they are.",
+        "warningBodyRenews": "When they run out, confirmation messages stop for new orders until your allowance resets on {date}, or until you move to a larger plan. Your orders and data stay as they are.",
         "criticalTitle": "You've used all your messages",
         "criticalBody": "Confirmation messages are paused for new orders. Your orders and data are kept. Choose a plan to resume.",
         "currentPlan": "Your current plan: {plan}",
         "noPlan": "No active plan",
         "badgeFree": "Free",
         "badgeMonthly": "Monthly",
-        "used": "Used {used} of {limit} messages",
-        "oneTime": "One-time credit, doesn't renew",
-        "renews": "Renews on {date}",
         "usageAria": "Messages used",
-        "perMonth": "/ month",
-        "allowance": "{count} messages / month",
-        "recommended": "Recommended for you",
-        "recommendationReason": "You sent {count} messages in the last 30 days, so this plan covers your growth for months.",
         "subscribe": "Subscribe to {plan}",
         "currentPlanButton": "Your current plan",
-        "footer": "Billed through your Shopify invoice. Change or cancel any time.",
         "billingManaged": "Your plan is managed by the Akeed team. Contact support to change it.",
         "subscribeError": "We couldn't open Shopify's approval page. Try again.",
-        "freePlanClaimedError": "This store already used the free plan. Choose a paid plan.",
-        "features": {
-          "basic": [
-            "Automatic follow-up reminder",
-            "Order updates in Shopify",
-            "Official WhatsApp number, no setup"
-          ],
-          "pro": [
-            "Everything in Basic",
-            "Scheduling in your store's time zone"
-          ],
-          "business": [
-            "Everything in Pro",
-            "Priority support",
-            "Setup call to tune your confirmation flow"
-          ]
-        }
+        "freePlanClaimedError": "This store already used the free plan. Choose a paid plan."
       }
     },
     "sourceEasyOrders": "EasyOrders",
@@ -2984,43 +2960,9 @@
     "freePlanAlreadyClaimedError": "This store already used the free plan. Please choose a paid plan.",
     "freePlanUsedBadge": "Used",
     "planStarterName": "Starter",
-    "planStarterPrice": "Free",
-    "planStarterVolume": "30 WhatsApp confirmations (one-time)",
-    "planStarterFeature1": "30 WhatsApp confirmations",
-    "planStarterFeature2": "Automatic COD confirmation on WhatsApp",
-    "planStarterFeature3": "Automatically update orders in Shopify",
-    "planStarterFeature4": "Dashboard with confirmation insights",
-    "planStarterSubtitle": "Try Akeed for free.",
-    "planStarterCta": "Start free",
     "planBasicName": "Basic",
-    "planBasicPrice": "$9.99 / month",
-    "planBasicVolume": "300 WhatsApp confirmations",
-    "planBasicFeature1": "300 WhatsApp confirmations",
-    "planBasicFeature2": "Automated follow-up reminders",
-    "planBasicFeature3": "Rule-based order confirmation",
-    "planBasicFeature4": "via Our official WhatsApp numbers (zero setup)",
-    "planBasicFeature5": "No extra costs",
-    "planBasicSubtitle": "For growing stores confirming COD orders regularly.",
-    "planBasicCta": "Choose Basic",
     "planProName": "Pro",
-    "planProPrice": "$22.99 / month",
-    "planProVolume": "1,000 WhatsApp confirmations",
-    "planProFeature1": "Everything in Basic, plus:",
-    "planProFeature2": "1,000 WhatsApp confirmations",
-    "planProFeature3": "Quiet hours configuration to avoid messaging customers at night",
-    "planProFeature4": "Message scheduling based on your store timezone",
-    "planProSubtitle": "For stores with many COD orders every day.",
-    "planProCta": "Choose Pro",
-    "planBusinessName": "Scale",
-    "planBusinessPrice": "$49.99 / month",
-    "planBusinessVolume": "2,500 WhatsApp confirmations",
-    "planBusinessFeature1": "Everything in Pro, plus:",
-    "planBusinessFeature2": "2,500 WhatsApp confirmations",
-    "planBusinessFeature3": "Priority support",
-    "planBusinessFeature4": "One setup call to configure your confirmation workflow",
-    "planBusinessFeature5": "Built for higher-volume COD stores",
-    "planBusinessSubtitle": "For higher-volume COD operations.",
-    "planBusinessCta": "Choose Scale"
+    "planBusinessName": "Scale"
   },
   "messageTemplate": {
     "pageTitle": "Message template",
@@ -3404,6 +3346,61 @@
     "billingLink": "Open billing & credits"
   },
   "billing": {
+    "embeddedPlans": {
+      "heading": "Choose your monthly message allowance",
+      "sameFeatures": "Every plan includes the same features. The only difference is the number of messages.",
+      "plansLabel": "Plans",
+      "allowance": "messages / month",
+      "perDay": "about {formatted} a day",
+      "perMonth": "/ month",
+      "perMessage": "about {price} per message",
+      "usedOf": "of {limit} messages used",
+      "remaining": "{count, plural, one {{formatted} message left} other {{formatted} messages left}}",
+      "oneTime": "A one-time trial allowance that doesn't renew. When it runs out, confirmation messages stop for new orders until you subscribe to a plan.",
+      "renews": "Your allowance resets to {limit} messages on {date}, then every 30 days. Unused messages don't carry over.",
+      "fitsUsage": "Fits your usage",
+      "fitsUsageReason": "You sent {count} messages in the last 30 days.",
+      "featuresTitle": "Every plan includes",
+      "features": {
+        "codConfirmation": "Automatic COD order confirmation on WhatsApp",
+        "followUp": "Automatic follow-up when the customer doesn't reply",
+        "orderUpdates": "Automatic order updates in Shopify",
+        "quietHours": "Quiet hours and scheduling in your store's time zone",
+        "officialNumber": "Akeed's official WhatsApp number, no setup",
+        "dashboard": "Dashboard with confirmation metrics"
+      },
+      "rulesTitle": "How messages are counted",
+      "rules": {
+        "counted": {
+          "label": "What counts",
+          "body": "Each confirmation or follow-up reminder we send to your customer counts as one message."
+        },
+        "notCounted": {
+          "label": "What doesn't count",
+          "body": "Test messages, and messages that failed to send."
+        },
+        "renewal": {
+          "label": "Renewal",
+          "body": "Paid allowances reset every 30 days from the day you subscribe. Unused messages don't carry over."
+        },
+        "atLimit": {
+          "label": "When you run out",
+          "body": "Confirmation messages stop for new orders until renewal or an upgrade. There are no extra charges, and your orders and data stay as they are."
+        },
+        "planChange": {
+          "label": "Changing plans",
+          "body": "When you approve a new plan in Shopify, a new period starts right away with the new plan's full allowance."
+        }
+      },
+      "footer": "Billed through your Shopify invoice. You can change your plan at any time.",
+      "modalRules": "Confirmations and follow-up reminders count. The allowance resets every 30 days, with no extra charges when it runs out.",
+      "freeUsed": "This store has already used the free plan (30 messages, one-time).",
+      "starterRow": "Starter: 30 free messages, one-time",
+      "starterCta": "Start free",
+      "subscribeCta": "Subscribe to {plan} · {price} / month",
+      "redirectNote": "You'll go to Shopify to approve the charge.",
+      "cancel": "Cancel"
+    },
     "title": "Billing & credits",
     "subtitle": "You only pay for the confirmation messages we send. No monthly plan.",
     "description": "See the credits available for WhatsApp order confirmations, buy more securely, and review every account movement.",
