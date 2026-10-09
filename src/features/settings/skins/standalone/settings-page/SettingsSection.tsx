@@ -64,7 +64,7 @@ export function SwitchSetting({
   children,
 }: {
   title: string
-  help: string
+  help?: string
   checked: boolean
   disabled: boolean
   onCheckedChange: (checked: boolean) => void
@@ -84,16 +84,18 @@ export function SwitchSetting({
           <h3 id={titleId} className={settingsRowTitle}>
             {title}
           </h3>
-          <p id={helpId} className="text-ak-caption text-ink-muted mt-0.5">
-            {help}
-          </p>
+          {help && (
+            <p id={helpId} className="text-ak-caption text-ink-muted mt-0.5">
+              {help}
+            </p>
+          )}
         </div>
         <AkSwitch
           checked={checked}
           onCheckedChange={onCheckedChange}
           disabled={disabled}
           aria-labelledby={titleId}
-          aria-describedby={helpId}
+          aria-describedby={help ? helpId : undefined}
         />
       </div>
       {children}

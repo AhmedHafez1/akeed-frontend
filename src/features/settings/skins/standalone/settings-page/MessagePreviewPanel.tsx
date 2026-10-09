@@ -1,7 +1,7 @@
 'use client'
 
 import { useId } from 'react'
-import { Loader2, Send, ShieldCheck } from 'lucide-react'
+import { Loader2, Send } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import type { PreviewSample } from '@/features/settings/domain/messagePreview'
 import { formatPhoneInternational } from '@/shared/lib/phone'
@@ -28,9 +28,8 @@ interface MessagePreviewPanelProps {
 
 /**
  * The preview beside the Message settings: the message in either language,
- * a free test send to the merchant's own WhatsApp, and why only the style
- * and language can change. A test sends the saved settings, so it waits for
- * unsaved changes to be saved first.
+ * and a free test send to the merchant's own WhatsApp. A test sends the
+ * saved settings, so it waits for unsaved changes to be saved first.
  */
 export function MessagePreviewPanel({
   language,
@@ -140,11 +139,6 @@ export function MessagePreviewPanel({
           </div>
         </div>
       )}
-
-      <p className="border-line bg-surface-sunken text-ak-caption text-ink-muted rounded-b-ak-card flex items-start gap-2 border-t px-4 py-3 sm:px-6">
-        <ShieldCheck aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
-        <span>{tShared('templatesNote')}</span>
-      </p>
     </aside>
   )
 }

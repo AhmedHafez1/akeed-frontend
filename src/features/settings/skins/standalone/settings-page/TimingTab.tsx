@@ -100,7 +100,6 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
   const t = useTranslations('settings.embedded.timing')
   const tPage = useTranslations('settings.standalone.page.timing')
   const tSettings = useTranslations('settings')
-  const customDelayNoteId = useId()
   const quietEndId = useId()
   const quietErrorId = useId()
   const timezoneErrorId = useId()
@@ -210,7 +209,6 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
                         }
                         disabled={readOnly}
                         aria-invalid={customDelayError ? true : undefined}
-                        aria-describedby={customDelayNoteId}
                         className={cn(
                           'ak-focus bg-surface-raised text-ink text-ak-body rounded-ak-control h-10 w-full border ps-3 pe-16 tabular-nums disabled:cursor-not-allowed disabled:opacity-60',
                           customDelayError
@@ -232,12 +230,6 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
                     )}
                   </div>
                 )}
-                <p
-                  id={customDelayNoteId}
-                  className="text-ak-caption text-ink-muted"
-                >
-                  {t('sendTimeHelp')}
-                </p>
               </div>
             )}
           </SwitchSetting>
@@ -249,7 +241,6 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
         >
           <SwitchSetting
             title={t('reminderLabel')}
-            help={tPage('reminderHelp')}
             checked={values.followUpEnabled}
             disabled={readOnly}
             onCheckedChange={(followUpEnabled) =>
@@ -275,7 +266,6 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
           </SwitchSetting>
           <SwitchSetting
             title={t('alertLabel')}
-            help={tPage('alertHelp')}
             checked={values.escalationEnabled}
             disabled={readOnly}
             onCheckedChange={(escalationEnabled) =>

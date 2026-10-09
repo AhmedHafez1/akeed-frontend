@@ -180,16 +180,9 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
 
           <Card>
             <BlockStack gap="400">
-              <BlockStack gap="100">
-                <Text as="h2" variant="headingMd">
-                  {t('styleHeading')}
-                </Text>
-                <Text as="p" variant="bodySm" tone="subdued">
-                  {t('styleLanguageHint', {
-                    language: t(`languageNames.${previewLanguage}`),
-                  })}
-                </Text>
-              </BlockStack>
+              <Text as="h2" variant="headingMd">
+                {t('styleHeading')}
+              </Text>
               <ChoiceList
                 title={t('styleHeading')}
                 titleHidden
@@ -202,18 +195,12 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
                         {
                           value: AUTO_STYLE,
                           label: templateStyleLabel(t, AUTO_STYLE),
-                          helpText: t('autoStyleHelp'),
                         },
                       ]
                     : []),
                   ...variants.map((variant) => ({
                     value: variant.variant,
                     label: templateStyleLabel(t, variant.variant),
-                    helpText: (
-                      <span dir={variant.message.direction}>
-                        {templateOpeningLine(variant.message, sample)}
-                      </span>
-                    ),
                   })),
                 ]}
               />
@@ -243,7 +230,6 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
                     {
                       value: SAME_AS_FIRST,
                       label: t('reminderSame'),
-                      helpText: t('reminderSameHelp'),
                     },
                     ...reminderVariants.map((variant) => ({
                       value: variant.variant,
