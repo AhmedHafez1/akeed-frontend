@@ -146,9 +146,12 @@ export function DashboardVerificationsStandaloneSkin({
    * the viewport less the top bar (3.5rem) and the shell's padding around
    * `main` (3rem, 4rem from `lg`). The floor lets a very short window scroll
    * the page instead of squeezing the table away.
+   *
+   * Wider than the other standalone pages (1440px against 1180px): nine
+   * columns need the room a big screen has to give.
    */
   return (
-    <div className="mx-auto w-full max-w-295 min-w-0 space-y-6 pt-2 pb-8 md:flex md:h-[calc(100dvh-6.5rem)] md:min-h-128 md:flex-col md:pb-0 lg:h-[calc(100dvh-7.5rem)]">
+    <div className="mx-auto w-full max-w-360 min-w-0 space-y-6 pt-2 pb-8 md:flex md:h-[calc(100dvh-6.5rem)] md:min-h-128 md:flex-col md:pb-0 lg:h-[calc(100dvh-7.5rem)]">
       <PageHeader
         title={t('confirmations.title')}
         subtitle={t('confirmations.subtitle')}

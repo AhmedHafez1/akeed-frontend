@@ -75,10 +75,16 @@ export function MainEmbeddedSkin() {
     ) : undefined
 
   return (
-    // Polaris caps a page at 998px, which crowds the seven-column table; a
-    // little more room (1200px) spreads it without sprawling on wide screens.
+    // Polaris caps a page at 998px, which crowds the tables. The dashboard
+    // gets 1200px; the nine-column confirmations table gets 1440px.
     <Page fullWidth>
-      <div className="mx-auto w-full max-w-300">
+      <div
+        className={
+          activeTab === 'metrics'
+            ? 'mx-auto w-full max-w-300'
+            : 'mx-auto w-full max-w-360'
+        }
+      >
         <BlockStack gap="500">
           {showActivation && (
             <DashboardActivationSection activation={activation} />

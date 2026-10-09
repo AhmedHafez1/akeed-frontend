@@ -8,6 +8,7 @@ import { ConfirmationRowActions } from './ConfirmationRowActions'
 import {
   AmountText,
   CustomerNameCell,
+  DateTimeCell,
   FollowUpCell,
   PhoneCell,
   StatusCell,
@@ -32,7 +33,7 @@ function ConfirmationsTableRow({
   handlers,
 }: RowProps) {
   const t = useTranslations('dashboard')
-  const view = useConfirmationRowView(row)
+  const view = useConfirmationRowView(row, timeZone)
 
   return (
     <IndexTable.Row
@@ -51,6 +52,12 @@ function ConfirmationsTableRow({
             />
             {row.is_test && <Badge tone="info">{t('table.testBadge')}</Badge>}
           </div>
+        </div>
+      </IndexTable.Cell>
+
+      <IndexTable.Cell>
+        <div className={cellClassName}>
+          <DateTimeCell text={view.orderTime} title={view.orderTimeTitle} />
         </div>
       </IndexTable.Cell>
 
@@ -80,6 +87,12 @@ function ConfirmationsTableRow({
 
       <IndexTable.Cell>
         <div className={cellClassName}>
+          <DateTimeCell text={view.lastUpdate} title={view.lastUpdateTitle} />
+        </div>
+      </IndexTable.Cell>
+
+      <IndexTable.Cell>
+        <div className={cellClassName}>
           <AmountText amount={view.amount} isCanceled={view.isCanceled} />
         </div>
       </IndexTable.Cell>
@@ -101,7 +114,7 @@ function ConfirmationsTableRow({
 }
 
 /**
- * The confirmations table: seven one-line columns, needs-action rows tinted
+ * The confirmations table: nine one-line columns, needs-action rows tinted
  * amber, and more rows loaded as the page scrolls. Narrow screens get cards.
  */
 export function ConfirmationsTable({
@@ -115,10 +128,12 @@ export function ConfirmationsTable({
 
   const headings = [
     { title: t('confirmations.headings.order'), alignment },
+    { title: t('confirmations.headings.orderTime'), alignment },
     { title: t('confirmations.headings.customer'), alignment },
     { title: t('confirmations.headings.phone'), alignment },
     { title: t('confirmations.headings.status'), alignment },
     { title: t('table.headings.followUp'), alignment },
+    { title: t('confirmations.headings.updated'), alignment },
     { title: t('confirmations.headings.total'), alignment },
     { title: t('confirmations.headings.action'), alignment },
   ] as const

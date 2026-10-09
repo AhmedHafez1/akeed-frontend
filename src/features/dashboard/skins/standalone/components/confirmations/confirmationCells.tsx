@@ -6,7 +6,10 @@ import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
 import { resolveRowStatus } from '@/features/dashboard/domain/confirmationRowStatus'
 import { remoteSyncView } from '@/features/dashboard/domain/remoteSync'
-import { formatTooltipDateTime } from '@/features/dashboard/domain/verificationRow'
+import {
+  formatTooltipDateTime,
+  getLastUpdateAt,
+} from '@/features/dashboard/domain/verificationRow'
 import { useStatusTooltip } from '@/features/dashboard/domain/useStatusTooltip'
 import type { ConfirmationRowActionHandlers } from '@/features/dashboard/domain/confirmationRowActions'
 import {
@@ -32,9 +35,13 @@ export interface ConfirmationsListProps {
 }
 
 /** The row's display values, derived once for the table and the cards. */
-export function useConfirmationRowView(row: VerificationItem) {
+export function useConfirmationRowView(
+  row: VerificationItem,
+  timeZone: string
+) {
   const t = useTranslations('dashboard')
   const { locale } = useLocaleInfo()
+  const lastUpdateAt = getLastUpdateAt(row)
   return {
     name: customerDisplayName(row.customer_name),
     phone: formatPhoneInternational(row.customer_phone),
@@ -45,7 +52,48 @@ export function useConfirmationRowView(row: VerificationItem) {
       currencyAfter: true,
     }),
     isCanceled: row.status === 'canceled',
+    orderTime: formatDayAndClock(row.created_at, locale, timeZone),
+    orderTimeTitle: formatTooltipDateTime(row.created_at, locale, timeZone),
+    lastUpdate: formatDayAndClock(lastUpdateAt, locale, timeZone),
+    lastUpdateTitle: formatTooltipDateTime(lastUpdateAt, locale, timeZone),
   }
+}
+
+/** A day and clock time on one line, with the full date on hover. */
+export function DateTimeCell({ text, title }: { text: string; title: string }) {
+  return (
+    <span
+      title={title || undefined}
+      className="text-ak-caption text-ink-muted block whitespace-nowrap tabular-nums"
+    >
+      <bdi>{text}</bdi>
+    </span>
+  )
+}
+
+/** The card's line of times: when the order came in, and its last change. */
+export function CardTimes({
+  orderTime,
+  orderTimeTitle,
+  lastUpdate,
+  lastUpdateTitle,
+}: {
+  orderTime: string
+  orderTimeTitle: string
+  lastUpdate: string
+  lastUpdateTitle: string
+}) {
+  const t = useTranslations('dashboard.confirmations.card')
+  return (
+    <div className="text-ak-caption text-ink-muted flex flex-wrap items-center justify-between gap-x-3 gap-y-1 tabular-nums">
+      <span title={orderTimeTitle || undefined}>
+        {t('ordered', { time: orderTime })}
+      </span>
+      <span title={lastUpdateTitle || undefined}>
+        {t('updated', { time: lastUpdate })}
+      </span>
+    </div>
+  )
 }
 
 /** The order number, as the link that opens the row's details. */

@@ -10,8 +10,10 @@ import { StatusBadge } from '@/shared/ui/status-badge'
 import type { ManualConfirmationTarget } from '@/features/dashboard/domain/useManualConfirmation'
 import { NEEDS_ACTION_CARD_LIMIT } from '@/features/dashboard/domain/needsActionRow'
 import { useNeedsActionRow } from '@/features/dashboard/domain/useNeedsActionRow'
+import { formatTooltipDateTime } from '@/features/dashboard/domain/verificationRow'
 import {
   customerDisplayName,
+  formatDayAndClock,
   formatOrderAmount,
   formatPhoneInternational,
 } from '@/features/dashboard/lib/orderDisplay'
@@ -21,8 +23,10 @@ import type {
 } from '@/features/dashboard/model/dashboard.model'
 import {
   AmountText,
+  CardTimes,
   CustomerCell,
   CustomerNameCell,
+  DateTimeCell,
   OrderCell,
   PhoneCell,
 } from '../confirmations/confirmationCells'
@@ -61,6 +65,20 @@ function useRowView({ item, timeZone, canAct }: RowProps) {
     amount: formatOrderAmount(item.total_price, item.currency, locale, {
       currencyAfter: true,
     }),
+    times: {
+      orderTime: formatDayAndClock(item.created_at, locale, timeZone),
+      orderTimeTitle: formatTooltipDateTime(
+        item.created_at ?? null,
+        locale,
+        timeZone
+      ),
+      lastUpdate: formatDayAndClock(item.updated_at, locale, timeZone),
+      lastUpdateTitle: formatTooltipDateTime(
+        item.updated_at ?? null,
+        locale,
+        timeZone
+      ),
+    },
     target: {
       verificationId: item.verification_id,
       orderLabel: row.orderLabel,
@@ -82,11 +100,14 @@ function NeedsActionStatus({
 }
 
 function TableRow(props: RowProps) {
-  const { row, name, phone, amount, target } = useRowView(props)
+  const { row, name, phone, amount, times, target } = useRowView(props)
   return (
     <tr className={cn(TABLE_ROW, NEEDS_ACTION_ROW)}>
       <td className={TABLE_CELL}>
         <OrderCell orderLabel={row.orderLabel} isTest={false} />
+      </td>
+      <td className={TABLE_CELL}>
+        <DateTimeCell text={times.orderTime} title={times.orderTimeTitle} />
       </td>
       <td className={TABLE_CELL}>
         <CustomerNameCell name={name} />
@@ -96,6 +117,9 @@ function TableRow(props: RowProps) {
       </td>
       <td className={TABLE_CELL}>
         <NeedsActionStatus row={row} />
+      </td>
+      <td className={TABLE_CELL}>
+        <DateTimeCell text={times.lastUpdate} title={times.lastUpdateTitle} />
       </td>
       <td className={TABLE_AMOUNT_CELL}>
         <AmountText amount={amount} isCanceled={false} />
@@ -116,7 +140,7 @@ function TableRow(props: RowProps) {
 
 /** The Confirmations page's phone card, with the reason written out. */
 function CardRow(props: RowProps) {
-  const { row, name, phone, amount, target } = useRowView(props)
+  const { row, name, phone, amount, times, target } = useRowView(props)
   return (
     <li
       className={cn(
@@ -136,6 +160,7 @@ function CardRow(props: RowProps) {
           {row.reasonText}
         </p>
       </div>
+      <CardTimes {...times} />
       <NeedsActionRowActions
         row={row}
         target={target}
@@ -151,11 +176,13 @@ function CardRow(props: RowProps) {
 
 /* The confirmations table's columns, less Follow-up: every row here waits. */
 const HEADINGS = [
-  ['order', 'w-[12%]'],
-  ['customer', 'w-[24%]'],
-  ['phone', 'w-[18%]'],
-  ['status', 'w-[22%]'],
-  ['total', 'w-[16%] text-end'],
+  ['order', 'w-[10%]'],
+  ['orderTime', 'w-[13%]'],
+  ['customer', 'w-[17%]'],
+  ['phone', 'w-[15%]'],
+  ['status', 'w-[14%]'],
+  ['updated', 'w-[13%]'],
+  ['total', 'w-[10%] text-end'],
   ['action', 'w-[8%] text-end'],
 ] as const
 
@@ -229,7 +256,7 @@ export function NeedsActionCard({
       ) : (
         <>
           <div className="hidden overflow-x-auto md:block">
-            <table className={cn(TABLE, 'min-w-200')}>
+            <table className={cn(TABLE, 'min-w-270')}>
               <caption className="sr-only">{t('title')}</caption>
               <thead>
                 <tr className={TABLE_HEAD_ROW}>

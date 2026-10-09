@@ -2328,8 +2328,13 @@
         "status": "Status",
         "followUp": "Reminder",
         "total": "Total",
+        "orderTime": "Order time",
         "updated": "Last update",
         "action": "Action"
+      },
+      "card": {
+        "ordered": "Ordered {time}",
+        "updated": "Updated {time}"
       },
       "resource": {
         "singular": "confirmation",

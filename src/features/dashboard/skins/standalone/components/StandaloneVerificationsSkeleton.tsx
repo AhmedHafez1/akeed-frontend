@@ -9,9 +9,9 @@ export function StandaloneVerificationsSkeleton() {
       <span className="sr-only">{t('loading')}</span>
       <div
         aria-hidden="true"
-        className="border-line bg-surface-sunken hidden grid-cols-[24fr_24fr_8fr_15fr_12fr_17fr] gap-5 border-b px-5 py-4 md:grid"
+        className="border-line bg-surface-sunken hidden grid-cols-[9fr_12fr_15fr_13fr_13fr_8fr_12fr_10fr_8fr] gap-5 border-b px-5 py-4 md:grid"
       >
-        {Array.from({ length: 6 }, (_, index) => (
+        {Array.from({ length: 9 }, (_, index) => (
           <div
             key={index}
             className="bg-neutral-soft h-4 w-3/4 animate-pulse rounded"
@@ -22,9 +22,9 @@ export function StandaloneVerificationsSkeleton() {
         {Array.from({ length: 5 }, (_, index) => (
           <div
             key={index}
-            className="border-line md:border-line grid grid-cols-2 gap-5 rounded-xl border p-5 md:grid-cols-[24fr_24fr_8fr_15fr_12fr_17fr] md:rounded-none md:border-0 md:border-b"
+            className="border-line md:border-line grid grid-cols-2 gap-5 rounded-xl border p-5 md:grid-cols-[9fr_12fr_15fr_13fr_13fr_8fr_12fr_10fr_8fr] md:rounded-none md:border-0 md:border-b"
           >
-            {Array.from({ length: 6 }, (_, column) => (
+            {Array.from({ length: 9 }, (_, column) => (
               <div
                 key={column}
                 className={`space-y-3 ${column < 2 ? 'col-span-2 md:col-span-1' : ''}`}

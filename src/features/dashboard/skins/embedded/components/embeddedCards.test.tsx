@@ -29,6 +29,8 @@ function item(overrides: Partial<NeedsActionItem> = {}): NeedsActionItem {
     customer_phone: '+201007611456',
     total_price: '2629.95',
     currency: 'USD',
+    created_at: '2026-09-22T09:58:00Z',
+    updated_at: '2026-09-23T10:00:00Z',
     reason: {
       type: 'no_reply_after_follow_up',
       since: '2026-09-22T10:00:00Z',
@@ -75,6 +77,8 @@ describe('NeedsActionCard', () => {
       within(row).getByText('لم يرد منذ 22 سبتمبر · أُرسل التذكير')
     ).toBeTruthy()
     expect(within(row).getByText('US$ 2,629.95')).toBeTruthy()
+    expect(within(row).getByText(/^طُلب 22 سبتمبر · 9:58/)).toBeTruthy()
+    expect(within(row).getByText(/^آخر تحديث 23 سبتمبر · 10:00/)).toBeTruthy()
 
     const chat = within(row).getByRole('link', { name: /واتساب/ })
     expect(chat.getAttribute('href')).toBe('https://wa.me/201007611456')
@@ -388,7 +392,7 @@ describe('ConfirmationsTable', () => {
     },
   }
 
-  it('shows the status timestamp on the badge and omits the updated column', () => {
+  it('shows the status timestamp on the badge, and the order and update times', () => {
     renderEmbedded(
       <ConfirmationsTable
         rows={[listRow({ follow_up_sent_at: '2026-09-16T07:00:00Z' })]}
@@ -403,9 +407,22 @@ describe('ConfirmationsTable', () => {
     expect(
       screen.getByText('Sent').closest('[title]')?.getAttribute('title')
     ).toBe('Sep 16, 2026, 7:00 AM')
+    const table = screen.getByRole('table')
     expect(
-      screen.queryByRole('columnheader', { name: 'Last update' })
-    ).toBeNull()
+      within(table).getByRole('columnheader', { name: 'Order time' })
+    ).toBeTruthy()
+    expect(
+      within(table).getByRole('columnheader', { name: 'Last update' })
+    ).toBeTruthy()
+    const cells = within(within(table).getAllByRole('row')[1]).getAllByRole(
+      'cell'
+    )
+    expect(cells[1].textContent).toBe('Sep 16 · 6:49 AM')
+    // Newer than `updated_at`: the column follows the newest event.
+    expect(cells[6].textContent).toBe('Sep 16 · 7:00 AM')
+    expect(cells[6].querySelector('[title]')?.getAttribute('title')).toBe(
+      'Sep 16, 2026, 7:00 AM'
+    )
   })
 
   it('does not show a status tooltip when no lifecycle timestamp exists', () => {
@@ -428,9 +445,9 @@ describe('ConfirmationsTable', () => {
     ).toBeTruthy()
     const row = within(table).getAllByRole('row')[1]
     const cells = within(row).getAllByRole('cell')
-    expect(cells[1].textContent).toBe('بدون اسم')
-    expect(cells[2].textContent).toBe('+20 114 867 5077')
-    expect(cells[1].querySelectorAll('p')).toHaveLength(0)
+    expect(cells[2].textContent).toBe('بدون اسم')
+    expect(cells[3].textContent).toBe('+20 114 867 5077')
+    expect(cells[2].querySelectorAll('p')).toHaveLength(0)
     expect(screen.queryByText('Guest')).toBeNull()
     expect(screen.getByText('مؤكد')).toBeTruthy()
     const link = screen.getByRole('link', { name: /#1137/ })
@@ -636,7 +653,7 @@ describe('ConfirmationsTable', () => {
 })
 
 describe('ConfirmationsCardList', () => {
-  it('omits the updated date from cards', () => {
+  it('shows the order and update times on a card', () => {
     renderEmbedded(
       <ConfirmationsCardList
         rows={[listRow()]}
@@ -653,7 +670,9 @@ describe('ConfirmationsCardList', () => {
       'en'
     )
 
-    expect(screen.getByRole('listitem').textContent).not.toContain('6:49 AM')
+    const card = within(screen.getByRole('listitem'))
+    expect(card.getByText('Ordered Sep 16 · 6:49 AM')).toBeTruthy()
+    expect(card.getByText('Updated Sep 16 · 7:00 AM')).toBeTruthy()
   })
 
   it('shows each order as a card with its status, total and actions', () => {

@@ -17,9 +17,11 @@ import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import type { ManualConfirmationTarget } from '../../../../domain/useManualConfirmation'
 import { NEEDS_ACTION_CARD_LIMIT } from '../../../../domain/needsActionRow'
 import { useNeedsActionRow } from '../../../../domain/useNeedsActionRow'
+import { formatTooltipDateTime } from '../../../../domain/verificationRow'
 import {
   customerDisplayName,
   formatCount,
+  formatDayAndClock,
   formatOrderAmount,
   formatPhoneInternational,
 } from '../../../../lib/orderDisplay'
@@ -30,8 +32,10 @@ import type {
 import {
   AmountText,
   BADGE_TONES,
+  CardTimes,
   CustomerCell,
   CustomerNameCell,
+  DateTimeCell,
   PhoneCell,
 } from '../confirmations/confirmationRowView'
 import { OrderNumberLink } from '../shared/OrderNumberLink'
@@ -56,6 +60,20 @@ function useRowView({ item, timeZone, canConfirm }: RowProps) {
     name,
     phone,
     amount: formatOrderAmount(item.total_price, item.currency, locale),
+    times: {
+      orderTime: formatDayAndClock(item.created_at, locale, timeZone),
+      orderTimeTitle: formatTooltipDateTime(
+        item.created_at ?? null,
+        locale,
+        timeZone
+      ),
+      lastUpdate: formatDayAndClock(item.updated_at, locale, timeZone),
+      lastUpdateTitle: formatTooltipDateTime(
+        item.updated_at ?? null,
+        locale,
+        timeZone
+      ),
+    },
     target: {
       verificationId: item.verification_id,
       orderLabel: row.orderLabel,
@@ -98,12 +116,22 @@ function TableRow({
   cellClassName,
   ...props
 }: RowProps & { index: number; cellClassName: string }) {
-  const { row, name, phone, amount, target } = useRowView(props)
+  const { row, name, phone, amount, times, target } = useRowView(props)
   const cells = [
     <OrderLabel key="order" item={props.item} fallback={row.orderLabel} />,
+    <DateTimeCell
+      key="orderTime"
+      text={times.orderTime}
+      title={times.orderTimeTitle}
+    />,
     <CustomerNameCell key="customer" name={name} />,
     <PhoneCell key="phone" phone={phone} />,
     <NeedsActionStatus key="status" row={row} />,
+    <DateTimeCell
+      key="updated"
+      text={times.lastUpdate}
+      title={times.lastUpdateTitle}
+    />,
     <AmountText key="total" amount={amount} isCanceled={false} />,
     <NeedsActionRowActions
       key="action"
@@ -131,7 +159,7 @@ function TableRow({
 
 /** The Confirmations page's narrow-screen card, with the reason written out. */
 function CardRow(props: RowProps) {
-  const { row, name, phone, amount, target } = useRowView(props)
+  const { row, name, phone, amount, times, target } = useRowView(props)
   return (
     <Box
       as="li"
@@ -152,6 +180,7 @@ function CardRow(props: RowProps) {
             {row.reasonText}
           </Text>
         </BlockStack>
+        <CardTimes {...times} />
         <NeedsActionRowActions
           row={row}
           target={target}
@@ -167,9 +196,11 @@ function CardRow(props: RowProps) {
 
 const HEADINGS = [
   'order',
+  'orderTime',
   'customer',
   'phone',
   'status',
+  'updated',
   'total',
   'action',
 ] as const
@@ -230,7 +261,7 @@ export function NeedsActionCard({
 }) {
   const t = useTranslations('dashboard.overview.needsAction')
   const { locale } = useLocaleInfo()
-  // Six columns do not fit a phone; below md each order becomes a card.
+  // Eight columns do not fit a phone; below md each order becomes a card.
   const { mdUp } = useBreakpoints({ defaults: { mdUp: true } })
   const rowProps = { timeZone, canConfirm, onRequestConfirm, onViewAll }
   const items = needsAction.items.slice(0, NEEDS_ACTION_CARD_LIMIT)

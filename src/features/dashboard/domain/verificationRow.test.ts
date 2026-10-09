@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
 import { EXPLAINED_LIFECYCLE_REASONS } from './verificationLifecycle'
-import { resolveRowDescriptionKey } from './verificationRow'
+import { getLastUpdateAt, resolveRowDescriptionKey } from './verificationRow'
 import ar from '../../../../public/messages/ar.json'
 import en from '../../../../public/messages/en.json'
 
@@ -28,6 +28,45 @@ describe('resolveRowDescriptionKey', () => {
     expect(resolveRowDescriptionKey(row({ status: 'confirmed' }))).toBe(
       'descriptions.confirmed'
     )
+  })
+})
+
+describe('getLastUpdateAt', () => {
+  it('takes the newest of the update and lifecycle timestamps', () => {
+    expect(
+      getLastUpdateAt(
+        row({
+          created_at: '2026-09-16T06:49:00Z',
+          updated_at: '2026-09-16T06:50:00Z',
+          last_sent_at: '2026-09-16T06:50:00Z',
+          confirmed_at: '2026-09-16T07:00:00Z',
+        })
+      )
+    ).toBe('2026-09-16T07:00:00Z')
+    expect(
+      getLastUpdateAt(
+        row({
+          created_at: '2026-09-16T06:49:00Z',
+          updated_at: '2026-09-17T09:00:00Z',
+          confirmed_at: '2026-09-16T07:00:00Z',
+        })
+      )
+    ).toBe('2026-09-17T09:00:00Z')
+  })
+
+  it('is the order time when nothing has happened yet', () => {
+    expect(getLastUpdateAt(row({ created_at: '2026-09-16T06:49:00Z' }))).toBe(
+      '2026-09-16T06:49:00Z'
+    )
+  })
+
+  it('skips values that are not dates, and is null with none', () => {
+    expect(
+      getLastUpdateAt(
+        row({ created_at: '2026-09-16T06:49:00Z', updated_at: 'soon' })
+      )
+    ).toBe('2026-09-16T06:49:00Z')
+    expect(getLastUpdateAt(row({}))).toBeNull()
   })
 })
 

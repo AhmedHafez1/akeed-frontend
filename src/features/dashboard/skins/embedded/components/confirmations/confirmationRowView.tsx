@@ -6,7 +6,10 @@ import {
   resolveRowStatus,
   type RowStatusKind,
 } from '../../../../domain/confirmationRowStatus'
-import { formatTooltipDateTime } from '../../../../domain/verificationRow'
+import {
+  formatTooltipDateTime,
+  getLastUpdateAt,
+} from '../../../../domain/verificationRow'
 import { useStatusTooltip } from '../../../../domain/useStatusTooltip'
 import {
   customerDisplayName,
@@ -45,9 +48,13 @@ export const BADGE_TONES: Record<
 }
 
 /** The row's display values, derived once for the table and the cards. */
-export function useConfirmationRowView(row: VerificationItem) {
+export function useConfirmationRowView(
+  row: VerificationItem,
+  timeZone: string
+) {
   const t = useTranslations('dashboard')
   const { locale } = useLocaleInfo()
+  const lastUpdateAt = getLastUpdateAt(row)
   return {
     name: customerDisplayName(row.customer_name),
     phone: formatPhoneInternational(row.customer_phone),
@@ -58,7 +65,51 @@ export function useConfirmationRowView(row: VerificationItem) {
       currencyAfter: true,
     }),
     isCanceled: row.status === 'canceled',
+    orderTime: formatDayAndClock(row.created_at, locale, timeZone),
+    orderTimeTitle: formatTooltipDateTime(row.created_at, locale, timeZone),
+    lastUpdate: formatDayAndClock(lastUpdateAt, locale, timeZone),
+    lastUpdateTitle: formatTooltipDateTime(lastUpdateAt, locale, timeZone),
   }
+}
+
+/** A day and clock time on one line, with the full date on hover. */
+export function DateTimeCell({ text, title }: { text: string; title: string }) {
+  return (
+    <span title={title || undefined}>
+      <Text as="span" variant="bodySm" tone="subdued">
+        <bdi>{text}</bdi>
+      </Text>
+    </span>
+  )
+}
+
+/** The card's line of times: when the order came in, and its last change. */
+export function CardTimes({
+  orderTime,
+  orderTimeTitle,
+  lastUpdate,
+  lastUpdateTitle,
+}: {
+  orderTime: string
+  orderTimeTitle: string
+  lastUpdate: string
+  lastUpdateTitle: string
+}) {
+  const t = useTranslations('dashboard.confirmations.card')
+  return (
+    <InlineStack align="space-between" blockAlign="center" gap="200">
+      <span title={orderTimeTitle || undefined}>
+        <Text as="span" variant="bodySm" tone="subdued">
+          {t('ordered', { time: orderTime })}
+        </Text>
+      </span>
+      <span title={lastUpdateTitle || undefined}>
+        <Text as="span" variant="bodySm" tone="subdued">
+          {t('updated', { time: lastUpdate })}
+        </Text>
+      </span>
+    </InlineStack>
+  )
 }
 
 export function StatusCell({
