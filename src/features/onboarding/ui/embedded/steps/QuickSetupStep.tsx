@@ -90,7 +90,7 @@ export function QuickSetupStep({
       </BlockStack>
 
       {isFreePlanAvailable ? (
-        undefined
+        <Banner tone="success" title={messages.freePlanTitle}></Banner>
       ) : (
         <Banner tone="info" title={messages.freePlanUsedTitle}>
           <p>{messages.freePlanUsedDescription}</p>
