@@ -210,14 +210,18 @@ Optional:
   onboarding's test step deep-links to `https://wa.me/<number>` from its
   phone-only "Open WhatsApp" button; when unset, the button is hidden.
 
-- `NEXT_PUBLIC_EASYORDERS_CONNECT_ENABLED` — `true` shows the order-source
-  picker on signup with EasyOrders as a choice (US-06-02). Unset or anything
-  else leaves signup as it was. Turn the backend `EASYORDERS_CONNECT_ENABLED`
-  on first.
+- `NEXT_PUBLIC_EASYORDERS_CONNECT_ENABLED` — `true` offers EasyOrders as a
+  start route: a card on the homepage, a row in the first signup step and an
+  item in the hero logo strip (US-06-02). Unset or anything else leaves it
+  out of all three. Turn the backend `EASYORDERS_CONNECT_ENABLED` on first.
 
-- `NEXT_PUBLIC_WOOCOMMERCE_CONNECT_ENABLED` — `true` adds WooCommerce to the
-  order-source picker on signup (US-07-02). Unset or anything else leaves it
-  out. Turn the backend `WOOCOMMERCE_CONNECT_ENABLED` on first.
+- `NEXT_PUBLIC_WOOCOMMERCE_CONNECT_ENABLED` — the same for WooCommerce
+  (US-07-02). Turn the backend `WOOCOMMERCE_CONNECT_ENABLED` on first.
+
+Signup is two steps on one route: `/signup` asks where the orders come from
+(`getStartRoutes()` in `src/shared/config/commerceSources.ts`), and
+`/signup?source=<id>` is the account form for that source. Shopify is an
+external link to the App Store listing and never reaches the form.
 
 Never commit `.env.local` or files containing secrets.
 

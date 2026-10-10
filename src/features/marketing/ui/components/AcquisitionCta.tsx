@@ -81,6 +81,7 @@ export function AcquisitionCta({
       <Link
         href={target.href}
         className={classes}
+        data-variant={variant}
         aria-label={ariaLabel}
         onClick={onNavigate}
       >
@@ -90,6 +91,7 @@ export function AcquisitionCta({
       <a
         href={target.href}
         className={classes}
+        data-variant={variant}
         aria-label={ariaLabel}
         onClick={onNavigate}
         suppressHydrationWarning

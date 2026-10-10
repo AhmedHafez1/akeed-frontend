@@ -17,7 +17,7 @@ interface LandingSectionHeadingProps {
  *
  * The page previously carried two incompatible header patterns: a centred
  * `.landing-section-header` stack (Problem, HowItWorks, FAQ) and a
- * start-aligned one written inline (Trust, WhoItsFor, Pricing). Reading down
+ * start-aligned one written inline (Trust, Pricing). Reading down
  * the page, the title alignment flipped four times. Pricing had also drifted
  * off the type scale entirely — a literal `text-3xl sm:text-4xl` where every
  * other section used `text-h1`.

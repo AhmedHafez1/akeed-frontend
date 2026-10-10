@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import {
   buildSentSearch,
+  buildSourceSearch,
   firstInvalidField,
   mapSignUpError,
   readSentEmail,
+  readSignupSource,
   toSignupMetadata,
   validateSignup,
   type SignupValues,
@@ -114,6 +116,27 @@ describe('sent state in the URL', () => {
     expect(readSentEmail(new URLSearchParams(search))).toBe(
       'ahmed@noorstore.com'
     )
+  })
+
+  it('carries the order source beside the email, and still no password', () => {
+    const search = buildSentSearch('ahmed@noorstore.com', 'standalone')
+    expect(search).toBe('?sent=1&email=ahmed%40noorstore.com&source=standalone')
+    expect(search).not.toContain('password')
+
+    const params = new URLSearchParams(search)
+    expect(readSentEmail(params)).toBe('ahmed@noorstore.com')
+    expect(readSignupSource(params)).toBe('standalone')
+  })
+
+  it('leaves the source out when there is none', () => {
+    expect(buildSentSearch('a@b.co', null)).toBe('?sent=1&email=a%40b.co')
+  })
+
+  it('builds the form address of a source and reads only offered sources', () => {
+    expect(buildSourceSearch('standalone')).toBe('?source=standalone')
+    expect(readSignupSource(new URLSearchParams('?source=shopify'))).toBeNull()
+    expect(readSignupSource(new URLSearchParams('?source=nope'))).toBeNull()
+    expect(readSignupSource(new URLSearchParams(''))).toBeNull()
   })
 
   it('ignores a missing flag or an invalid email', () => {

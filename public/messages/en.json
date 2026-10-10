@@ -1081,13 +1081,13 @@
   },
   "metadata": {
     "title": "Akeed | COD Order Confirmation on WhatsApp",
-    "description": "Automatically confirm cash-on-delivery orders on official WhatsApp before you ship. Works with Shopify stores and independent stores, priced by usage."
+    "description": "Akeed messages your customers on WhatsApp to confirm cash-on-delivery orders before you ship. It works with Shopify, WooCommerce and EasyOrders, and with orders you add by hand, from a file, or through the API. Shopify stores pay inside Shopify; every other account pays per WhatsApp message."
   },
   "header": {
     "features": "Features",
     "pricing": "Pricing",
     "how_it_works": "How it works",
-    "audience": "Who it's for",
+    "sources": "Ways to connect",
     "docs": "Docs",
     "faq": "FAQ",
     "resources": "Resources",
@@ -1098,15 +1098,12 @@
   "hero": {
     "title": "Confirm COD orders",
     "highlight": "before you ship.",
+    "subtitle": "Akeed messages the customer on WhatsApp for every order and records the reply, whether your orders come from {platforms}, or you add them by hand, from a file, or through the API.",
     "cta_primary": "Get started free",
-    "cta_secondary": "See how it works",
-    "microcopy_credits": "30 free messages",
+    "cta_shopify": "Install on Shopify",
+    "microcopy_credits": "{count} free WhatsApp messages",
     "microcopy_no_card": "No credit card required",
-    "integrations_title": "Works with your store.",
-    "integrations_note": "Connect your business in minutes.",
-    "integration_shopify": "Shopify",
-    "integration_independent": "Independent stores",
-    "integration_more": "+ more integrations",
+    "microcopy_official": "Official WhatsApp Business Platform",
     "flow": {
       "order_title": "New COD Order",
       "order_meta": "#10482 · EGP 1,250",
@@ -1115,22 +1112,43 @@
       "confirm_title": "Customer confirms",
       "confirm_meta": "In seconds",
       "updated_title": "Order updated",
-      "updated_meta": "In your store"
-    },
-    "values": {
-      "returns_title": "Reduce returns",
-      "returns_body": "Confirm before you ship.",
-      "shipping_title": "Save on shipping costs",
-      "shipping_body": "Avoid wasted shipments.",
-      "api_title": "Official WhatsApp API",
-      "api_body": "Reliable, secure and no risk of bans.",
-      "merchants_title": "Built for every merchant",
-      "merchants_body": "Whatever your store, Akeed for you."
+      "updated_meta": "In your store or your Akeed dashboard"
     }
   },
   "ecosystem": {
     "eyebrow": "Built for how you sell",
     "independent": "Independent"
+  },
+  "sources": {
+    "title": "Where do your orders come from?",
+    "subtitle": "Pick your route and we take you straight to the right step.",
+    "payAsYouGo": "Akeed account · pay as you go",
+    "shopify": {
+      "title": "Shopify",
+      "description": "Install the app from the Shopify App Store. Orders arrive automatically, and you don't need an Akeed account.",
+      "billing": "Plan and billing inside Shopify",
+      "cta": "Install on Shopify"
+    },
+    "woocommerce": {
+      "title": "WooCommerce",
+      "description": "Create an Akeed account, then approve the connection in your store admin. No keys to copy.",
+      "cta": "Start with WooCommerce"
+    },
+    "easyorders": {
+      "title": "EasyOrders",
+      "description": "Create an Akeed account, then connect your EasyOrders store from the setup page.",
+      "cta": "Start with EasyOrders"
+    },
+    "standalone": {
+      "title": "No connected store",
+      "description": "For Facebook, Instagram and WhatsApp orders, and for custom sites and systems.",
+      "chips": {
+        "manual": "Manual entry",
+        "file": "CSV or Excel file",
+        "api": "Orders API"
+      },
+      "cta": "Create a free account"
+    }
   },
   "demo": {
     "badge": "Live Demo",
@@ -1177,71 +1195,25 @@
   },
   "how_it_works": {
     "section_title": "How Akeed Works",
-    "main_title": "Pick how your store runs — the rest is automatic.",
-    "tabs_label": "Choose how your store runs",
-    "tabs": {
-      "shopify": "Shopify store",
-      "standalone": "Own store"
-    },
-    "shopify": {
-      "footnote": "Installation and billing happen inside Shopify, and no WhatsApp setup is needed on your side.",
-      "steps": {
-        "connect": {
-          "title": "Install Akeed on Shopify in minutes",
-          "description": "Install Akeed on your Shopify store with a few clicks. No custom WhatsApp setup is required."
-        },
-        "automation": {
-          "title": "Akeed sends the confirmation automatically",
-          "description": "As soon as a COD order is created, Akeed sends a branded WhatsApp confirmation through official Meta APIs and captures a clear customer response."
-        },
-        "ship": {
-          "title": "Ship only verified COD orders",
-          "description": "Confirmed and unconfirmed orders are synced back to your dashboard, so your team ships with more confidence and avoids wasted shipping costs."
-        }
-      }
-    },
-    "standalone": {
-      "footnote": "Your account is active as soon as your email is verified, with launch credits ready to use.",
-      "steps": {
-        "request": {
-          "title": "Create your account",
-          "description": "Sign up with your store details and verify your email. Your account is activated right away with free launch credits, and no credit card is required."
-        },
-        "create": {
-          "title": "Add your orders",
-          "description": "Create orders inside Akeed or import them — no particular store platform required."
-        },
-        "send": {
-          "title": "Send and track replies",
-          "description": "Akeed sends the confirmation on WhatsApp, and you track every order — confirmed, canceled, or awaiting a reply — from one dashboard."
-        }
+    "main_title": "The same steps, wherever your orders come from.",
+    "steps": {
+      "order": {
+        "title": "The order reaches Akeed",
+        "description": "From your connected store, or added by hand, from a file, or through the API."
+      },
+      "message": {
+        "title": "A WhatsApp message to the customer",
+        "description": "Sent automatically in your store's name through the official WhatsApp Business Platform."
+      },
+      "reply": {
+        "title": "The customer confirms or cancels",
+        "description": "With one tap in the chat. Anyone who doesn't reply gets a reminder."
+      },
+      "update": {
+        "title": "The order status is updated",
+        "description": "In your connected store or your Akeed dashboard, so you ship confirmed orders only."
       }
     }
-  },
-  "who_its_for": {
-    "section_title": "Akeed is for you if…",
-    "section_description": "Whether your store runs on Shopify or you handle orders yourself, the goal is the same: never ship an order before you know the customer is ready to receive it.",
-    "shopify": {
-      "title": "You run a Shopify store",
-      "description": "Connect your store and let Akeed handle COD confirmation automatically.",
-      "cta": "Install from Shopify"
-    },
-    "own_store": {
-      "title": "You have your own store or site",
-      "description": "Add your orders to Akeed and manage confirmation on WhatsApp without Shopify.",
-      "cta": "Create your account"
-    },
-    "manual": {
-      "title": "You take orders manually",
-      "description": "Orders from Instagram, WhatsApp, or phone calls? Collect them in Akeed and confirm from one place.",
-      "cta": "Create your account"
-    },
-    "high_cod": {
-      "title": "Cash on delivery is most of your volume",
-      "description": "Every unconfirmed order is wasted shipping and wasted time. Confirming first cuts returns.",
-      "cta": "Create your account"
-    },
-    "not_for": "Akeed for independent stores is self-serve: create an account, verify your email and start sending. If your store is on Shopify, install it from the App Store instead."
   },
   "trust": {
     "section_title": "Built on channels you can trust",
@@ -1255,8 +1227,8 @@
       "description": "Installation and subscription happen within Shopify's ecosystem and policies."
     },
     "independent_stores": {
-      "title": "Built for independent stores",
-      "description": "Create orders directly in Akeed and send WhatsApp confirmations without depending on a specific store platform."
+      "title": "Works without a connected store too",
+      "description": "Connect a WooCommerce or EasyOrders store, or add orders by hand, from a file, or through the Orders API. The customer gets the same WhatsApp message either way."
     },
     "automated_confirmation": {
       "title": "Automated order confirmation",
@@ -1277,7 +1249,7 @@
     "title": "Frequently Asked Questions",
     "supported_platforms": {
       "question": "Which platforms does Akeed support?",
-      "answer": "Akeed supports Shopify directly through an app you install from the App Store. Independent stores can also use Akeed without any particular platform, by creating orders inside Akeed and sending confirmations on WhatsApp."
+      "answer": "Akeed works with Shopify, WooCommerce and EasyOrders stores, and without a connected store. Shopify stores install the app from the Shopify App Store. WooCommerce and EasyOrders stores create an Akeed account and connect the store from the setup page. With no connected store, you add orders by hand, from a CSV or Excel file, or through the Orders API."
     },
     "setup_time": {
       "question": "How long does setup take?",
@@ -1300,12 +1272,12 @@
       "answer": "The order stays unconfirmed so your team can hold it, follow up, or skip shipping based on your process."
     },
     "standalone_start": {
-      "question": "Can I start right away if my store is independent?",
-      "answer": "Yes. Create an account and verify your email, and it is activated immediately with your launch credits, so you can create orders and send confirmations straight away. Shopify stores can start as soon as they install."
+      "question": "Can I start right away without a connected store?",
+      "answer": "Yes. Create an Akeed account and verify your email. Your account is active right away with its free WhatsApp messages, so you can add orders by hand, from a file, or through the API. WooCommerce and EasyOrders stores use the same kind of account and connect the store during setup. Shopify stores start as soon as they install the app."
     },
     "credit_usage": {
       "question": "How exactly are credits counted?",
-      "answer": "One credit is used per WhatsApp message sent to a customer, not per order. If you send a follow-up to a customer who hasn't replied, that uses a second credit. Messages the provider cannot deliver are refunded automatically."
+      "answer": "On an Akeed account (WooCommerce, EasyOrders, or no connected store), one credit is used for each WhatsApp message sent to a customer, not for each order. A reminder to a customer who has not replied uses another credit, and a message that fails to send is refunded automatically. Shopify stores do not use credits: they subscribe to a monthly plan and pay on their Shopify invoice."
     }
   },
   "whatsapp_button": {
@@ -1314,8 +1286,10 @@
   },
   "pricing_credits": {
     "eyebrow": "Pricing",
-    "title": "Pay for what you use. <highlight>No monthly subscription.</highlight>",
-    "subtitle": "For independent stores: buy credits and use them whenever you need. Shopify stores subscribe and are billed inside Shopify.",
+    "title": "Clear pricing <highlight>for your route.</highlight>",
+    "subtitle": "WooCommerce, EasyOrders and no-store orders: pay for the messages you send. Shopify stores subscribe and pay inside Shopify.",
+    "account_title": "Akeed account · pay as you go",
+    "account_audience": "For WooCommerce and EasyOrders stores, and for manual, file and API orders.",
     "unit_text": "WhatsApp message",
     "unit_price_note": "One credit is one WhatsApp message sent to your customer.",
     "per_message": "per WhatsApp message",
@@ -1333,16 +1307,14 @@
     "rejected_body": "If a send fails, the credit returns to your account automatically.",
     "cta": "Create your free account",
     "cta_note": "No credit card needed",
-    "shopify_title": "Store on Shopify?",
-    "shopify_cta": "See plans",
+    "shopify_title": "Shopify stores · monthly plan",
+    "shopify_body": "Choose a plan by monthly message volume and pay on your Shopify invoice. Every plan has the same features, and your first 30 messages are free.",
+    "shopify_cta": "See plans on Shopify",
     "authoritative_note": "Prices are shown in Egyptian pounds and may change. The authoritative price is the one shown on your billing page."
   },
   "mobile_cta": {
-    "eyebrow": "Get started with Akeed",
-    "primary_shopify": "Shopify store",
-    "primary_standalone": "Own store",
-    "aria_shopify": "Install Akeed on Shopify",
-    "aria_standalone": "Create a standalone account"
+    "start": "Get started free",
+    "shopify": "Install on Shopify"
   },
   "auth": {
     "signInToAccount": "Sign in to your account",
@@ -1389,6 +1361,7 @@
     "resettingPassword": "Resetting...",
     "signup": {
       "heading": "Create your account",
+      "step": "Step {current} of {total}",
       "subheading": "Two minutes and you're confirming cash-on-delivery orders on WhatsApp.",
       "fullName": {
         "label": "Your name"
@@ -1409,8 +1382,6 @@
       "submitting": "Creating account…",
       "haveAccount": "Have an account?",
       "signIn": "Sign in",
-      "shopifyDivider": "Selling on Shopify?",
-      "shopifyCta": "Install Akeed from the Shopify App Store",
       "errors": {
         "fullNameRequired": "Enter your name.",
         "storeNameRequired": "Enter your store name as your customers know it.",
@@ -1424,34 +1395,86 @@
         "failed": "We couldn't create your account. Please try again."
       },
       "benefits": {
-        "heading": "What you get",
         "credits": {
-          "title": "{count, plural, one {1 free confirmation message} other {{formatted} free confirmation messages}}",
-          "body": "Added to your balance as soon as you verify your email. No card needed."
-        },
-        "test": {
-          "title": "Try the message on your phone first",
-          "body": "See exactly what your customer will get before any real order."
+          "title": "{count, plural, one {1 free WhatsApp message} other {{formatted} free WhatsApp messages}}"
         },
         "price": {
-          "title": "Pay only for what's sent",
-          "body": "{price} per confirmation after the free credits. No monthly subscription."
+          "body": "Then {price} per WhatsApp message. No monthly subscription, and no card to start."
         }
       },
       "source": {
-        "label": "Where do your orders come from?",
+        "heading": "Where do your orders come from?",
+        "subtitle": "Pick your route and we take you to the right step.",
+        "shopifyTitle": "Shopify",
+        "shopifyRow": "Install Akeed from the Shopify App Store. You don't need an account here.",
+        "summaryLabel": "Order source",
+        "change": "Change",
+        "changeLabel": "Change order source",
         "options": {
           "standalone": {
-            "title": "My own website or orders I add myself",
-            "description": "Add orders by hand, from a file, or through the API."
+            "title": "No connected store",
+            "description": "Add orders by hand, from a CSV or Excel file, or through the API."
           },
           "easyorders": {
             "title": "EasyOrders",
-            "description": "Connect your EasyOrders store after you sign up."
+            "description": "Create an account, then connect your EasyOrders store."
           },
           "woocommerce": {
             "title": "WooCommerce",
-            "description": "Connect your WooCommerce store after you sign up."
+            "description": "Create an account, then approve the connection in your store admin."
+          }
+        }
+      },
+      "next": {
+        "heading": "What happens next",
+        "mobileOffer": "You start with {count, plural, one {1 free WhatsApp message} other {{formatted} free WhatsApp messages}}, then {price} per message.",
+        "mobile": {
+          "standalone": "After you verify your email, you try the message on your phone and add your orders.",
+          "woocommerce": "After you verify your email, you connect your store by approving it in your WooCommerce admin.",
+          "easyorders": "After you verify your email, you connect your EasyOrders store from the setup page."
+        },
+        "steps": {
+          "standalone": {
+            "first": {
+              "title": "Verify your email",
+              "body": "We send you an activation link, and it brings you straight back to setup."
+            },
+            "second": {
+              "title": "Try the message on your phone",
+              "body": "You see exactly what your customer will get before any real order."
+            },
+            "third": {
+              "title": "Add your first order",
+              "body": "By hand, from a CSV or Excel file, or through the API."
+            }
+          },
+          "woocommerce": {
+            "first": {
+              "title": "Verify your email",
+              "body": "We send you an activation link, and your WooCommerce choice stays saved."
+            },
+            "second": {
+              "title": "Connect your store",
+              "body": "You enter your store URL and approve the connection in your WooCommerce admin. No keys to copy."
+            },
+            "third": {
+              "title": "Try the message on your phone",
+              "body": "You see exactly what your customer will get before any real order."
+            }
+          },
+          "easyorders": {
+            "first": {
+              "title": "Verify your email",
+              "body": "We send you an activation link, and your EasyOrders choice stays saved."
+            },
+            "second": {
+              "title": "Connect your store",
+              "body": "You connect your EasyOrders store from the setup page."
+            },
+            "third": {
+              "title": "Try the message on your phone",
+              "body": "You see exactly what your customer will get before any real order."
+            }
           }
         }
       }
@@ -3311,13 +3334,14 @@
         "balanceValue": "{count} messages",
         "balanceCaption": "Free, no payment card",
         "priceLabel": "After the free credits",
-        "priceCaption": "per confirmation message sent",
+        "priceCaption": "per WhatsApp message sent",
         "testLabel": "The test message",
         "testValue": "Free",
         "testCaption": "Not deducted from your balance"
       },
       "addOrder": "Add your first order",
       "importFile": "Import from a file",
+      "useApi": "Use the API",
       "dashboard": "Go to the dashboard",
       "caption": "We send the confirmation to your customer as soon as you add the order."
     },

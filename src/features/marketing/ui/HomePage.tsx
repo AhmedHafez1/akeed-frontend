@@ -1,9 +1,5 @@
 'use client'
 
-import {
-  DEFAULT_ACQUISITION_PATH,
-  type AcquisitionPath,
-} from '@/features/marketing/domain/acquisitionPaths'
 import { StickyMobileCta } from '@/features/marketing/ui/components/StickyMobileCta'
 import {
   landingSectionBackgroundClass,
@@ -14,18 +10,11 @@ import { Reveal } from '@/features/marketing/ui/components/Reveal'
 import Hero from '@/features/marketing/ui/sections/Hero'
 import HowItWorks from '@/features/marketing/ui/sections/HowItWorks'
 import Pricing from '@/features/marketing/ui/sections/Pricing'
-import WhoItsFor from '@/features/marketing/ui/sections/WhoItsFor'
+import Sources from '@/features/marketing/ui/sections/Sources'
 import Trust from '@/features/marketing/ui/sections/Trust'
 import FAQ from '@/features/marketing/ui/sections/FAQ'
 
-interface HomePageProps {
-  /** Resolved from `?path=` on the server so campaign links land on the right flow. */
-  initialPath?: AcquisitionPath
-}
-
-export function HomePage({
-  initialPath = DEFAULT_ACQUISITION_PATH,
-}: HomePageProps) {
+export function HomePage() {
   return (
     <main className="flex min-h-screen flex-col gap-0">
       <section className={`w-full ${landingSectionBackgroundClass}`}>
@@ -33,22 +22,22 @@ export function HomePage({
       </section>
       <section className={`w-full ${landingSectionChromeAltClass}`}>
         <Reveal>
-          <Trust />
+          <Sources />
         </Reveal>
       </section>
       <section className={`w-full ${landingSectionChromeClass}`}>
         <Reveal>
-          <HowItWorks initialPath={initialPath} />
+          <Trust />
         </Reveal>
       </section>
       <section className={`w-full ${landingSectionChromeAltClass}`}>
         <Reveal>
-          <Pricing />
+          <HowItWorks />
         </Reveal>
       </section>
       <section className={`w-full ${landingSectionChromeClass}`}>
         <Reveal>
-          <WhoItsFor />
+          <Pricing />
         </Reveal>
       </section>
       <section className={`w-full ${landingSectionChromeAltClass}`}>

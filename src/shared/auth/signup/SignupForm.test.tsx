@@ -23,7 +23,7 @@ function Harness({
   onEmailSent: (email: string) => void
 }) {
   const signup = useSignup({ locale, onEmailSent, onSignedIn: vi.fn() })
-  return <SignupForm signup={signup} locale={locale} />
+  return <SignupForm signup={signup} locale={locale} sourceId="standalone" />
 }
 
 function renderForm(locale: 'ar' | 'en' = 'ar') {
@@ -78,9 +78,34 @@ describe('SignupForm', () => {
     expect(
       screen.getByText('يظهر في رسائل التأكيد التي تصل لعملائك.')
     ).toBeTruthy()
-    expect(
-      screen.getByRole('link', { name: /ثبّت أكيد من متجر تطبيقات Shopify/ })
-    ).toBeTruthy()
+  })
+
+  it('has no order-source picker and no Shopify link of its own', () => {
+    renderForm()
+    expect(screen.queryByRole('radiogroup')).toBeNull()
+    expect(screen.queryByRole('link', { name: /Shopify/ })).toBeNull()
+  })
+
+  it.each([
+    ['ar', 'مصدر الطلبات', 'بدون متجر مربوط', 'تغيير مصدر الطلبات'],
+    ['en', 'Order source', 'No connected store', 'Change order source'],
+  ] as const)(
+    'names the chosen source in %s and links back to the source step',
+    (locale, label, sourceName, change) => {
+      renderForm(locale)
+      expect(screen.getByText(label)).toBeTruthy()
+      expect(screen.getByText(sourceName)).toBeTruthy()
+      expect(
+        screen.getByRole('link', { name: change }).getAttribute('href')
+      ).toBe(`/${locale}/signup`)
+    }
+  )
+
+  it('states the next step, the free allowance and the price under the source', () => {
+    renderForm('en')
+    const summary = screen.getByText(/After you verify your email/)
+    expect(summary.textContent).toContain('30 free WhatsApp messages')
+    expect(summary.textContent).toContain('2.00 EGP per message')
   })
 
   it('shows inline errors and focuses the first invalid field', async () => {

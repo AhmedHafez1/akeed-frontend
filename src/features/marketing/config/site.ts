@@ -1,20 +1,15 @@
 import {
   BadgeCheck,
   Building2,
-  ClipboardList,
+  CheckCircle2,
   Languages,
   Lock,
   MessageCircle,
-  PhoneCall,
-  Send,
   ShieldCheck,
-  ShoppingBag,
-  Store,
-  Truck,
-  UserPlus,
+  ShoppingCart,
+  UserRound,
   type LucideIcon,
 } from 'lucide-react'
-import type { AcquisitionPath } from '@/features/marketing/domain/acquisitionPaths'
 
 export interface HowItWorksStep {
   key: string
@@ -22,34 +17,14 @@ export interface HowItWorksStep {
 }
 
 /*
- * Both flows are three steps. Standalone accounts are active with their launch
- * credits as soon as the email address is verified, so there is no waiting
- * step to show.
+ * The same four steps for every order source; message keys live under
+ * `how_it_works.steps.<key>`.
  */
-export const howItWorksByPath: Record<AcquisitionPath, HowItWorksStep[]> = {
-  shopify: [
-    { key: 'connect', icon: ShoppingBag },
-    { key: 'automation', icon: MessageCircle },
-    { key: 'ship', icon: Truck },
-  ],
-  standalone: [
-    { key: 'request', icon: UserPlus },
-    { key: 'create', icon: ClipboardList },
-    { key: 'send', icon: Send },
-  ],
-}
-
-export interface Audience {
-  key: string
-  icon: LucideIcon
-  path: AcquisitionPath
-}
-
-export const audiences: Audience[] = [
-  { key: 'shopify', icon: Store, path: 'shopify' },
-  { key: 'own_store', icon: Building2, path: 'standalone' },
-  { key: 'manual', icon: PhoneCall, path: 'standalone' },
-  { key: 'high_cod', icon: Truck, path: 'standalone' },
+export const howItWorksSteps: HowItWorksStep[] = [
+  { key: 'order', icon: ShoppingCart },
+  { key: 'message', icon: MessageCircle },
+  { key: 'reply', icon: UserRound },
+  { key: 'update', icon: CheckCircle2 },
 ]
 
 export interface TrustPoint {

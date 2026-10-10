@@ -36,7 +36,12 @@ export function CreditPriceCard() {
         className="pointer-events-none absolute -end-24 -top-24 -z-10 h-72 w-72 rounded-full bg-emerald-500/25 blur-3xl"
       />
 
-      <span className="inline-flex items-center gap-2 rounded-full bg-emerald-400/10 px-4 py-1.5 text-sm font-semibold text-white ring-1 ring-emerald-400/50">
+      <h3 className="text-xl font-bold text-white">{t('account_title')}</h3>
+      <p className="mt-2 text-sm leading-6 text-slate-400">
+        {t('account_audience')}
+      </p>
+
+      <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-emerald-400/10 px-4 py-1.5 text-sm font-semibold text-white ring-1 ring-emerald-400/50">
         <Gift className="h-4 w-4 text-emerald-400" />
         {t('grant_pill', { count: formatCredits(CREDIT_FREE_GRANT, locale) })}
       </span>

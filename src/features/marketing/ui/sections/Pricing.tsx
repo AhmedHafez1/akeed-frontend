@@ -7,6 +7,7 @@ import { Container } from '@/shared/ui/container'
 import { Section } from '@/shared/ui/section'
 import { CreditPriceCard } from './pricing/CreditPriceCard'
 import { PricingFactsPanel } from './pricing/PricingFactsPanel'
+import { ShopifyPlanPanel } from './pricing/ShopifyPlanPanel'
 
 export default function Pricing() {
   const t = useTranslations('pricing_credits')
@@ -22,21 +23,25 @@ export default function Pricing() {
           title={t.rich('title', {
             // Was a literal `#119764`, which ignored the theme entirely. The
             // token is the same emerald and follows the palette.
-            highlight: (chunks) => <span className="text-primary">{chunks}</span>,
+            highlight: (chunks) => (
+              <span className="text-primary">{chunks}</span>
+            ),
           })}
           description={t('subtitle')}
           isRTL={isRTL}
         />
 
         {/*
-         * One card, split. The ink half carries the price and the slider; the
-         * light half explains billing. Two panels of one object read calmer
-         * than the five separate blocks this section used to stack.
+         * The Akeed-account path: one card, split. The ink half carries the
+         * price and the slider; the light half explains billing. The Shopify
+         * path is its own block below, because it is billed somewhere else.
          */}
         <div className="ring-border shadow-overlay grid overflow-hidden rounded-3xl ring-1 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">
           <CreditPriceCard />
           <PricingFactsPanel />
         </div>
+
+        <ShopifyPlanPanel />
 
         <p className="text-muted-foreground mt-6 text-center text-xs leading-5">
           {t('authoritative_note')}

@@ -1,18 +1,15 @@
+import type { StartRoute } from '@/shared/config/commerceSources'
 import { withLocale } from '@/shared/lib/locale'
 import { SHOPIFY_APP_STORE_LISTING_URL } from '@/shared/lib/shopify-auth'
 
 /**
- * The two ways a visitor can start using Akeed.
+ * The two destinations a visitor can start from.
  *
  * `shopify` installs the embedded app from the App Store, where Shopify also
- * presents its own subscription pricing. `standalone` creates a portal account
- * that is active with its launch credits once the email address is verified.
+ * presents its own subscription pricing. `standalone` opens signup, whose
+ * first step asks where the orders come from.
  */
 export type AcquisitionPath = 'shopify' | 'standalone'
-
-export const ACQUISITION_PATHS = ['shopify', 'standalone'] as const
-
-export const DEFAULT_ACQUISITION_PATH: AcquisitionPath = 'shopify'
 
 export interface AcquisitionTarget {
   path: AcquisitionPath
@@ -43,6 +40,20 @@ export function getAcquisitionTargets(locale: string): AcquisitionTargets {
   }
 }
 
-export function isAcquisitionPath(value: unknown): value is AcquisitionPath {
-  return value === 'shopify' || value === 'standalone'
+/**
+ * Where a start-route card leads: Shopify to the App Store, every other route
+ * to the account form with that order source already chosen.
+ */
+export function getStartRouteTarget(
+  route: StartRoute,
+  locale: string
+): AcquisitionTarget {
+  if (route.kind === 'external') return getAcquisitionTargets(locale).shopify
+
+  const search = new URLSearchParams({ source: route.id })
+  return {
+    path: 'standalone',
+    kind: 'internal',
+    href: `${withLocale('/signup', locale)}?${search.toString()}`,
+  }
 }

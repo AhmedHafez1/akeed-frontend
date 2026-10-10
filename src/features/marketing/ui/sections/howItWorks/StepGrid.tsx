@@ -20,9 +20,6 @@ export function StepGrid({ steps, isRTL, t }: StepGridProps) {
     /*
      * `whileInView`, not `animate`: the section sits well below the fold, so an
      * on-mount animation had always finished before the visitor scrolled to it.
-     * The grid is remounted on every tab change (keyed by path in the parent),
-     * and the replacement is on screen at that point, so switching tabs still
-     * plays the stagger.
      */
     <motion.div
       variants={landingCardGridVariants}

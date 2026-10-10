@@ -4,6 +4,7 @@ import { Store } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import type { ReactNode } from 'react'
+import { getStartRoutes } from '@/shared/config/commerceSources'
 import { cn } from '@/shared/lib/utils'
 
 interface Channel {
@@ -62,7 +63,10 @@ function ChannelItem({ label, mark, markClassName }: Omit<Channel, 'id'>) {
 function Ecosystem() {
   const t = useTranslations('ecosystem')
 
-  const channels: Channel[] = [
+  // A store appears only while its start route is switched on.
+  const startRouteIds = new Set(getStartRoutes().map((route) => route.id))
+
+  const allChannels: Array<Channel & { requiresStartRoute?: boolean }> = [
     {
       id: 'shopify',
       label: 'Shopify',
@@ -90,6 +94,7 @@ function Ecosystem() {
     },
     {
       id: 'woocommerce',
+      requiresStartRoute: true,
       label: 'WooCommerce',
       markClassName: 'w-9',
       mark: (
@@ -98,6 +103,7 @@ function Ecosystem() {
     },
     {
       id: 'easyorders',
+      requiresStartRoute: true,
       label: 'EasyOrders',
       // The source file is the full wordmark; show only its icon.
       mark: (
@@ -115,6 +121,17 @@ function Ecosystem() {
       ),
     },
   ]
+
+  const channels: Channel[] = allChannels
+    .filter(
+      (channel) => !channel.requiresStartRoute || startRouteIds.has(channel.id)
+    )
+    .map(({ id, label, mark, markClassName }) => ({
+      id,
+      label,
+      mark,
+      markClassName,
+    }))
 
   /*
    * Each group repeats the list twice so one group is always wider than the

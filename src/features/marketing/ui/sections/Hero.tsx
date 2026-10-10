@@ -1,15 +1,25 @@
 'use client'
 
 import { motion, useReducedMotion } from 'framer-motion'
-import { ArrowRight, CheckCircle2, CirclePlay, CreditCard } from 'lucide-react'
+import {
+  ArrowRight,
+  CheckCircle2,
+  CreditCard,
+  ExternalLink,
+  ShieldCheck,
+} from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import dynamic from 'next/dynamic'
-import type { MouseEvent } from 'react'
+import Image from 'next/image'
 import { useAcquisition } from '@/features/marketing/domain/useAcquisition'
 import { AcquisitionCta } from '@/features/marketing/ui/components/AcquisitionCta'
 import { HeroFlowSteps } from '@/features/marketing/ui/components/hero/HeroFlowSteps'
-import { HeroValueProps } from '@/features/marketing/ui/components/hero/HeroValueProps'
-import { scrollToElement } from '@/shared/lib/scroll'
+import {
+  DEFAULT_SIGNUP_SOURCE_ID,
+  getStartRoutes,
+} from '@/shared/config/commerceSources'
+import { CREDIT_FREE_GRANT } from '@/shared/config/pricing'
+import { formatCredits } from '@/shared/lib/money'
 import Ecosystem from './Ecosystem'
 
 const ChatInterface = dynamic(
@@ -20,16 +30,35 @@ const ChatInterface = dynamic(
   { ssr: false }
 )
 
-const HOW_IT_WORKS_ID = 'how-it-works'
+/* en-GB joins the last item with "or" and no comma before it. */
+const LIST_LOCALES = { ar: 'ar', en: 'en-GB' } as const
 
 function Hero() {
   const t = useTranslations('hero')
-  const { targets } = useAcquisition()
+  const tSources = useTranslations('sources')
+  const { locale, targets } = useAcquisition()
   const shouldReduceMotion = useReducedMotion()
 
+  // Named from the routes that are switched on, so a store Akeed cannot
+  // connect yet is never promised here.
+  const platforms = new Intl.ListFormat(LIST_LOCALES[locale], {
+    style: 'long',
+    type: 'disjunction',
+  }).format(
+    getStartRoutes()
+      .filter((route) => route.id !== DEFAULT_SIGNUP_SOURCE_ID)
+      .map((route) => tSources(`${route.id}.title`))
+  )
+
   const microcopyItems = [
-    { label: t('microcopy_credits'), icon: CheckCircle2 },
+    {
+      label: t('microcopy_credits', {
+        count: formatCredits(CREDIT_FREE_GRANT, locale),
+      }),
+      icon: CheckCircle2,
+    },
     { label: t('microcopy_no_card'), icon: CreditCard },
+    { label: t('microcopy_official'), icon: ShieldCheck },
   ] as const
 
   const fadeUp = (delay: number) => ({
@@ -41,21 +70,15 @@ function Hero() {
     },
   })
 
-  const handleSeeHowItWorks = (event: MouseEvent<HTMLAnchorElement>) => {
-    if (scrollToElement(HOW_IT_WORKS_ID)) {
-      event.preventDefault()
-    }
-  }
-
   return (
-    <section className="relative overflow-hidden px-4 pt-28 sm:px-6 sm:pt-32 lg:px-10 lg:pt-36 pb-54 rtl:pb-50">
+    <section className="relative overflow-hidden px-4 pt-28 pb-54 sm:px-6 sm:pt-32 lg:px-10 lg:pt-36 rtl:pb-50">
       <div className="mx-auto w-full max-w-7xl">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-8">
           <div className="flex w-full flex-col items-center text-center lg:items-start lg:text-start">
             {/* Headline */}
             <motion.h1
               {...fadeUp(0.08)}
-              className="text-display text-foreground mb-13 text-balance lg:text-[3.5rem] lg:leading-[1.04] xl:text-[4.25rem] rtl:lg:text-[3.25rem] rtl:lg:leading-tight rtl:xl:text-[3.75rem]"
+              className="text-display text-foreground mb-6 text-balance lg:text-[3.5rem] lg:leading-[1.04] xl:text-[4.25rem] rtl:lg:text-[3.25rem] rtl:lg:leading-tight rtl:xl:text-[3.75rem]"
             >
               {/* Arabic runs longer, so only the LTR line is held to one row. */}
               <span className="block ltr:lg:whitespace-nowrap">
@@ -64,19 +87,18 @@ function Hero() {
               <span className="text-primary block">{t('highlight')}</span>
             </motion.h1>
 
-            {/* CTA row */}
+            <motion.p
+              {...fadeUp(0.16)}
+              className="text-lead text-muted-foreground mb-8 max-w-2xl text-pretty"
+            >
+              {t('subtitle', { platforms })}
+            </motion.p>
+
+            {/* CTA row: one primary action, and the direct exit for Shopify. */}
             <motion.div
               {...fadeUp(0.24)}
-              className="mb-4 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center lg:justify-start"
+              className="mb-5 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center lg:justify-start"
             >
-              <a
-                href={`#${HOW_IT_WORKS_ID}`}
-                onClick={handleSeeHowItWorks}
-                className="group rounded-control bg-card/90 text-foreground shadow-card ring-border hover:ring-primary-border hover:text-primary focus-visible:ring-ring inline-flex h-14 items-center justify-center gap-2.5 px-7 text-base font-semibold ring-1 transition-[box-shadow,color,transform] duration-200 hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:outline-none"
-              >
-                <CirclePlay className="text-primary h-5 w-5" />
-                {t('cta_secondary')}
-              </a>
               <AcquisitionCta
                 target={targets.standalone}
                 label={t('cta_primary')}
@@ -86,25 +108,42 @@ function Hero() {
                   <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
                 }
               />
+              <AcquisitionCta
+                target={targets.shopify}
+                label={t('cta_shopify')}
+                variant="secondary"
+                className="h-14 gap-2.5 px-6 text-base font-semibold"
+                leading={
+                  <Image
+                    src="/images/landing/logos/shopify_icon_1.png"
+                    alt=""
+                    width={24}
+                    height={24}
+                    unoptimized
+                    className="h-6 w-6 object-contain"
+                  />
+                }
+                trailing={
+                  <ExternalLink
+                    aria-hidden="true"
+                    className="text-muted-foreground h-4 w-4"
+                  />
+                }
+              />
             </motion.div>
 
             {/* Microcopy */}
             <motion.ul
               {...fadeUp(0.32)}
-              className="text-muted-foreground mb-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm font-light lg:justify-start"
+              className="text-muted-foreground flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm lg:justify-start"
             >
               {microcopyItems.map(({ label, icon: Icon }) => (
                 <li key={label} className="inline-flex items-center gap-2">
-                  <Icon className="h-4 w-4" />
+                  <Icon aria-hidden="true" className="h-4 w-4" />
                   {label}
                 </li>
               ))}
             </motion.ul>
-
-            {/* Value props */}
-            <motion.div {...fadeUp(0.4)} className="w-full">
-              <HeroValueProps />
-            </motion.div>
           </div>
 
           {/* Product visual: flow steps beside the WhatsApp phone */}
@@ -126,7 +165,7 @@ function Hero() {
         </div>
       </div>
 
-      <div className='absolute bottom-0 w-full'>
+      <div className="absolute bottom-0 w-full">
         <Ecosystem />
       </div>
     </section>
