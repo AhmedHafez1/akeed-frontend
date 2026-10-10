@@ -46,6 +46,51 @@ export function getSignupSources(): SignupSource[] {
 }
 
 /**
+ * A way to start with Akeed, as the homepage and the first signup step list
+ * them. `external` leaves for the Shopify App Store; `signup` creates an
+ * Akeed account with that source.
+ */
+export interface StartRoute {
+  id: string
+  kind: 'external' | 'signup'
+}
+
+export const SHOPIFY_START_ROUTE_ID = 'shopify'
+
+/** Display order of the connectable sources; any other id follows them. */
+const START_ROUTE_ORDER = ['woocommerce', 'easyorders']
+
+function startRouteRank(id: string): number {
+  const rank = START_ROUTE_ORDER.indexOf(id)
+  return rank < 0 ? START_ROUTE_ORDER.length : rank
+}
+
+/**
+ * Every start route in display order: Shopify, the connectable sources that
+ * are switched on, then no connected store. A switched-off source is absent.
+ */
+export function getStartRoutes(): StartRoute[] {
+  const connectable = getSignupSources()
+    .filter((source) => source.organizationSourceMode === 'connect')
+    .sort((a, b) => startRouteRank(a.id) - startRouteRank(b.id))
+
+  return [
+    { id: SHOPIFY_START_ROUTE_ID, kind: 'external' },
+    ...connectable.map(({ id }) => ({ id, kind: 'signup' as const })),
+    { id: DEFAULT_SIGNUP_SOURCE_ID, kind: 'signup' },
+  ]
+}
+
+/**
+ * The source named by `?source=` on signup, or null when it is not one of the
+ * sources offered now (Shopify and switched-off sources included).
+ */
+export function parseSignupSourceParam(value: unknown): string | null {
+  if (typeof value !== 'string') return null
+  return getSignupSources().some((source) => source.id === value) ? value : null
+}
+
+/**
  * How the organization is provisioned for a source id saved at signup. An
  * unknown or switched-off id is Standalone, the default.
  */

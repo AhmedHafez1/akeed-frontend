@@ -18,8 +18,7 @@ interface UseAcquisitionResult {
  * Resolves both acquisition destinations for the current locale.
  *
  * Intentionally stateless — the visitor's Shopify-vs-standalone choice is not
- * page-wide state; both paths are always shown. Only `HowItWorks` keeps a local
- * tab selection.
+ * page-wide state; both paths are always shown.
  */
 export function useAcquisition(): UseAcquisitionResult {
   const { locale, isRTL } = useLocaleInfo()

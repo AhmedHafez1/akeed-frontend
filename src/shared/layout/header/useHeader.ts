@@ -14,10 +14,10 @@ const MOBILE_SCROLL_DELAY = 100
 // Every in-page nav anchor must be listed here, or the link falls through to a
 // full navigation instead of smooth-scrolling.
 const SCROLLABLE_SECTIONS = new Set([
+  'sources',
   'trust',
   'how-it-works',
   'pricing',
-  'who-its-for',
   'faq',
 ])
 
@@ -69,6 +69,11 @@ export function useHeader() {
   const navigation = useMemo<HeaderNavItem[]>(
     () => [
       {
+        href: withLocale('/#sources', locale),
+        label: t('sources'),
+        id: 'sources',
+      },
+      {
         href: withLocale('/#trust', locale),
         label: t('features'),
         id: 'trust',
@@ -88,11 +93,6 @@ export function useHeader() {
         label: t('resources'),
         id: 'resources',
         children: [
-          {
-            href: withLocale('/#who-its-for', locale),
-            label: t('audience'),
-            id: 'who-its-for',
-          },
           { href: withLocale('/docs', locale), label: t('docs'), id: 'docs' },
           { href: withLocale('/#faq', locale), label: t('faq'), id: 'faq' },
         ],

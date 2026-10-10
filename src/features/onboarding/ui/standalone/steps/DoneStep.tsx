@@ -14,6 +14,9 @@ import { Button, Skeleton, StatGroup, StatusBadge, akCard } from '@/shared/ui'
 /** Where "Add your first order" lands: the dashboard with the dialog open. */
 export const FIRST_ORDER_PATH = '/dashboard?new-order=1'
 
+/** Where "Use the API" lands: Settings, on the API keys tab. */
+export const API_KEYS_PATH = '/settings?tab=api-keys'
+
 const PIPELINE = ['add', 'send', 'reply'] as const
 
 interface DoneStepProps {
@@ -124,6 +127,9 @@ export function DoneStep({ headingRef, reply }: DoneStepProps) {
               <Upload aria-hidden="true" />
               {t('importFile')}
             </Link>
+          </Button>
+          <Button asChild variant="link" className="font-semibold">
+            <Link href={withLocale(API_KEYS_PATH, locale)}>{t('useApi')}</Link>
           </Button>
           <Button asChild variant="link" className="font-semibold">
             <Link href={withLocale('/dashboard', locale)}>

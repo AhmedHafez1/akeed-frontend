@@ -1,9 +1,12 @@
+import { useEffect } from 'react'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { SignupSource } from '@/shared/config/commerceSources'
+import type { StartRoute } from '@/shared/config/commerceSources'
 import { auth } from '@/shared/lib/auth'
+import { SHOPIFY_APP_STORE_LISTING_URL } from '@/shared/lib/shopify-auth'
 import { renderAuth } from '../authTestUtils'
 import { SignupForm } from './SignupForm'
+import { SignupSourceStep } from './SignupSourceStep'
 import { toSignupMetadata, type SignupValues } from './signup.model'
 import { useSignup } from './useSignup'
 
@@ -17,28 +20,22 @@ vi.mock('@/shared/lib/auth', async (importOriginal) => {
 
 const signUp = vi.mocked(auth.signUp)
 
-const STANDALONE: SignupSource = {
-  id: 'standalone',
-  organizationSourceMode: 'standalone',
-}
-const EASYORDERS: SignupSource = {
-  id: 'easyorders',
-  organizationSourceMode: 'connect',
-}
+const SHOPIFY: StartRoute = { id: 'shopify', kind: 'external' }
+const WOOCOMMERCE: StartRoute = { id: 'woocommerce', kind: 'signup' }
+const EASYORDERS: StartRoute = { id: 'easyorders', kind: 'signup' }
+const STANDALONE: StartRoute = { id: 'standalone', kind: 'signup' }
+const ALL_ROUTES = [SHOPIFY, WOOCOMMERCE, EASYORDERS, STANDALONE]
 
-function Harness({
-  locale,
-  sources,
-}: {
-  locale: 'ar' | 'en'
-  sources: readonly SignupSource[]
-}) {
+/** The form as the page mounts it: the source comes from the URL. */
+function Harness({ sourceId }: { sourceId: string }) {
   const signup = useSignup({
-    locale,
+    locale: 'ar',
     onEmailSent: vi.fn(),
     onSignedIn: vi.fn(),
   })
-  return <SignupForm signup={signup} locale={locale} sources={sources} />
+  const { setValue } = signup
+  useEffect(() => setValue('source', sourceId), [setValue, sourceId])
+  return <SignupForm signup={signup} locale="ar" sourceId={sourceId} />
 }
 
 function fillValid() {
@@ -61,68 +58,96 @@ const values: SignupValues = {
   terms: true,
 }
 
+const hrefs = () =>
+  Array.from(screen.getByRole('navigation').querySelectorAll('a')).map((link) =>
+    link.getAttribute('href')
+  )
+
+describe('signup source step', () => {
+  it.each([
+    ['ar', 'من أين تأتي طلباتك؟', 'بدون متجر مربوط'],
+    ['en', 'Where do your orders come from?', 'No connected store'],
+  ] as const)(
+    'lists every start route in %s, one link each',
+    (locale, heading, standaloneTitle) => {
+      renderAuth(
+        <SignupSourceStep locale={locale} routes={ALL_ROUTES} />,
+        locale
+      )
+
+      expect(screen.getByRole('heading', { name: heading })).toBeTruthy()
+      const rows = Array.from(
+        screen.getByRole('navigation').querySelectorAll('a')
+      )
+      expect(rows.map((row) => row.textContent)).toEqual([
+        expect.stringContaining('Shopify'),
+        expect.stringContaining('WooCommerce'),
+        expect.stringContaining('EasyOrders'),
+        expect.stringContaining(standaloneTitle),
+      ])
+      expect(hrefs()).toEqual([
+        SHOPIFY_APP_STORE_LISTING_URL,
+        '?source=woocommerce',
+        '?source=easyorders',
+        '?source=standalone',
+      ])
+    }
+  )
+
+  it('still offers Shopify and no connected store when no store is switched on', () => {
+    renderAuth(<SignupSourceStep locale="ar" routes={[SHOPIFY, STANDALONE]} />)
+
+    expect(hrefs()).toEqual([
+      SHOPIFY_APP_STORE_LISTING_URL,
+      '?source=standalone',
+    ])
+    expect(screen.queryByText('WooCommerce')).toBeNull()
+    expect(screen.queryByText('EasyOrders')).toBeNull()
+  })
+
+  it('points an existing merchant to sign-in', () => {
+    renderAuth(<SignupSourceStep locale="en" routes={ALL_ROUTES} />, 'en')
+
+    expect(
+      screen.getByRole('link', { name: 'Sign in' }).getAttribute('href')
+    ).toBe('/en/login')
+  })
+})
+
 describe('signup order source', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     signUp.mockResolvedValue({ session: null, user: null } as never)
   })
 
-  it('shows no picker while Standalone is the only source', () => {
-    renderAuth(<Harness locale="ar" sources={[STANDALONE]} />)
+  it.each(['easyorders', 'woocommerce'])(
+    'saves %s in the signup metadata, before any organization exists',
+    async (sourceId) => {
+      renderAuth(<Harness sourceId={sourceId} />)
+      fillValid()
+      fireEvent.click(screen.getByRole('button', { name: 'إنشاء الحساب' }))
 
-    expect(screen.queryByRole('radiogroup')).toBeNull()
-  })
-
-  it.each([
-    ['ar', 'من أين تأتي طلباتك؟', 'موقعي الخاص أو طلبات أضيفها بنفسي'],
-    [
-      'en',
-      'Where do your orders come from?',
-      'My own website or orders I add myself',
-    ],
-  ] as const)(
-    'offers the sources in %s with Standalone selected',
-    (locale, label, standaloneTitle) => {
-      renderAuth(
-        <Harness locale={locale} sources={[STANDALONE, EASYORDERS]} />,
-        locale
-      )
-
-      const group = screen.getByRole('radiogroup', { name: label })
-      const radios = Array.from(group.querySelectorAll('[role="radio"]'))
-      expect(radios).toHaveLength(2)
-      expect(radios[0].textContent).toContain(standaloneTitle)
-      expect(radios[0].getAttribute('aria-checked')).toBe('true')
-      expect(radios[1].textContent).toContain('EasyOrders')
-      expect(radios[1].getAttribute('aria-checked')).toBe('false')
+      await waitFor(() => expect(signUp).toHaveBeenCalledTimes(1))
+      expect(signUp.mock.calls[0][2]).toMatchObject({
+        metadata: {
+          full_name: 'أحمد حافظ',
+          company_name: 'متجر نور',
+          signup_source: sourceId,
+        },
+      })
     }
   )
 
-  it('saves the chosen source in the signup metadata, before any organization exists', async () => {
-    renderAuth(<Harness locale="ar" sources={[STANDALONE, EASYORDERS]} />)
+  it('leaves no connected store unsaid in the metadata', async () => {
+    renderAuth(<Harness sourceId="standalone" />)
     fillValid()
-    fireEvent.click(screen.getByRole('radio', { name: /EasyOrders/ }))
     fireEvent.click(screen.getByRole('button', { name: 'إنشاء الحساب' }))
 
     await waitFor(() => expect(signUp).toHaveBeenCalledTimes(1))
-    expect(signUp.mock.calls[0][2]).toMatchObject({
-      metadata: {
-        full_name: 'أحمد حافظ',
-        company_name: 'متجر نور',
-        signup_source: 'easyorders',
-      },
+    expect(signUp.mock.calls[0][2]?.metadata).toEqual({
+      full_name: 'أحمد حافظ',
+      company_name: 'متجر نور',
     })
-  })
-
-  it('moves the selection with the arrow keys, following the writing direction', () => {
-    renderAuth(<Harness locale="ar" sources={[STANDALONE, EASYORDERS]} />)
-    const [first, second] = screen.getAllByRole('radio')
-
-    first.focus()
-    fireEvent.keyDown(first, { key: 'ArrowDown' })
-
-    expect(second.getAttribute('aria-checked')).toBe('true')
-    expect(document.activeElement).toBe(second)
   })
 
   it('leaves Standalone unsaid, so existing signups are unchanged', () => {

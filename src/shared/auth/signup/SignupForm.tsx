@@ -4,24 +4,13 @@ import { useEffect, type FormEvent } from 'react'
 import Link from 'next/link'
 import { AlertCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import {
-  DEFAULT_SIGNUP_SOURCE_ID,
-  getSignupSources,
-  type SignupSource,
-} from '@/shared/config/commerceSources'
 import { auth } from '@/shared/lib/auth'
-import { withLocale } from '@/shared/lib/locale'
+import { withLocale, type SupportedLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
-import {
-  AkChoiceCard,
-  AkChoiceGroup,
-  Input,
-  LoadingButton,
-  Separator,
-} from '@/shared/ui'
+import { Input, LoadingButton, SourceMark } from '@/shared/ui'
 import { PasswordInput } from '../PasswordInput'
-import { ShopifyContinueLink } from '../ShopifyContinueLink'
 import { AUTH_WARNING_FIELD, AuthField } from './AuthField'
+import { getSignupOffer } from './signupOffer'
 import {
   SIGNUP_FIELD_IDS,
   SIGNUP_STORE_NAME_MAX_LENGTH,
@@ -31,11 +20,11 @@ import type { SignupController } from './useSignup'
 
 interface SignupFormProps {
   signup: SignupController
-  locale: string
+  locale: SupportedLocale
+  /** The order source chosen in step 1, shown above the fields. */
+  sourceId: string
   /** Field to focus on mount, e.g. email after "Change email". */
   initialFocus?: SignupField | null
-  /** Order sources to choose from; the picker shows only with two or more. */
-  sources?: readonly SignupSource[]
 }
 
 const LINK_CLASS =
@@ -46,23 +35,26 @@ function focusField(field: SignupField) {
 }
 
 /**
- * Four fields and the terms: name, store name, email, password. The store
- * name is the one reused later, in the confirmation message and the setup
- * step, so its hint says where customers will see it.
+ * Step 2 of signup: the chosen order source, then four fields and the terms
+ * (name, store name, email, password). The store name is the one reused
+ * later, in the confirmation message and the setup step, so its hint says
+ * where customers will see it.
  */
 export function SignupForm({
   signup,
   locale,
+  sourceId,
   initialFocus = null,
-  sources = getSignupSources(),
 }: SignupFormProps) {
   const t = useTranslations('auth.signup')
+  const offer = getSignupOffer(locale)
 
   useEffect(() => {
     if (initialFocus) focusField(initialFocus)
   }, [initialFocus])
   const { values, fieldErrors, formError, isSubmitting, setValue } = signup
   const loginPath = auth.getLoginPath(locale)
+  const sourceStepPath = withLocale('/signup', locale)
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
@@ -93,6 +85,36 @@ export function SignupForm({
       <header className="space-y-2 text-start">
         <h1 className="text-ink text-h2 font-bold">{t('heading')}</h1>
       </header>
+
+      <div className="border-line bg-surface-sunken rounded-ak-card border px-4 py-3">
+        <div className="flex items-center gap-3">
+          <SourceMark sourceId={sourceId} size="sm" className="bg-card" />
+          <p className="min-w-0 flex-1 text-start">
+            <span className="text-ink-muted block text-xs">
+              {t('source.summaryLabel')}
+            </span>
+            <span className="text-ink block text-sm font-semibold">
+              {t(`source.options.${sourceId}.title`)}
+            </span>
+          </p>
+          <Link
+            href={sourceStepPath}
+            aria-label={t('source.changeLabel')}
+            className={cn(LINK_CLASS, 'inline-flex min-h-11 items-center px-2')}
+          >
+            {t('source.change')}
+          </Link>
+        </div>
+        {/* The aside is desktop only; below it this line stands in. */}
+        <p className="border-line text-ink-muted mt-3 border-t pt-3 text-start text-sm lg:hidden">
+          {t(`next.mobile.${sourceId}`)}{' '}
+          {t('next.mobileOffer', {
+            count: offer.count,
+            formatted: offer.formattedCount,
+            price: offer.price,
+          })}
+        </p>
+      </div>
 
       <form
         className="space-y-5"
@@ -152,34 +174,6 @@ export function SignupForm({
             />
           )}
         </AuthField>
-
-        {sources.length > 1 && (
-          <div className="space-y-2">
-            <p
-              id={`${SIGNUP_FIELD_IDS.source}-label`}
-              className="text-ink text-sm font-semibold"
-            >
-              {t('source.label')}
-            </p>
-            <AkChoiceGroup
-              id={SIGNUP_FIELD_IDS.source}
-              aria-labelledby={`${SIGNUP_FIELD_IDS.source}-label`}
-              columns={2}
-            >
-              {sources.map((source) => (
-                <AkChoiceCard
-                  key={source.id}
-                  checked={
-                    (values.source ?? DEFAULT_SIGNUP_SOURCE_ID) === source.id
-                  }
-                  onSelect={() => setValue('source', source.id)}
-                  title={t(`source.options.${source.id}.title`)}
-                  description={t(`source.options.${source.id}.description`)}
-                />
-              ))}
-            </AkChoiceGroup>
-          </div>
-        )}
 
         <AuthField
           htmlFor={SIGNUP_FIELD_IDS.email}
@@ -295,15 +289,6 @@ export function SignupForm({
           </Link>
         </p>
       </form>
-
-      <div className="space-y-4">
-        <div className="flex items-center gap-3">
-          <Separator className="flex-1" />
-          <span className="text-ink-muted text-sm">{t('shopifyDivider')}</span>
-          <Separator className="flex-1" />
-        </div>
-        <ShopifyContinueLink>{t('shopifyCta')}</ShopifyContinueLink>
-      </div>
     </div>
   )
 }

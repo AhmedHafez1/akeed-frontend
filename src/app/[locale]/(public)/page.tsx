@@ -8,10 +8,6 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { HomePage } from '@/features/marketing'
-import {
-  DEFAULT_ACQUISITION_PATH,
-  isAcquisitionPath,
-} from '@/features/marketing/domain/acquisitionPaths'
 import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import { faqs } from '@/features/marketing/config/site'
 import type { Locale } from '@/i18n'
@@ -35,11 +31,17 @@ export async function generateMetadata({
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'metadata' })
 
-  return createPublicPageMetadata({
-    locale: locale as Locale,
-    title: t('title'),
-    description: t('description'),
-  })
+  const title = t('title')
+
+  return {
+    ...createPublicPageMetadata({
+      locale: locale as Locale,
+      title,
+      description: t('description'),
+    }),
+    // Already carries the brand, so it skips the layout's `%s | Akeed`.
+    title: { absolute: title },
+  }
 }
 
 async function getHomeStructuredData(locale: Locale) {
@@ -98,23 +100,11 @@ async function getHomeStructuredData(locale: Locale) {
 
 export default async function Home({
   params,
-  searchParams,
 }: {
   params: Promise<{ locale: string }>
-  searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
   const { locale } = await params
   const structuredData = await getHomeStructuredData(locale as Locale)
-
-  /*
-   * `?path=` lets a campaign link open the page on the matching flow. Resolved
-   * on the server so the right tab is in the initial HTML — this route is
-   * already server-rendered on demand, so reading searchParams costs nothing.
-   */
-  const requestedPath = (await searchParams).path
-  const initialPath = isAcquisitionPath(requestedPath)
-    ? requestedPath
-    : DEFAULT_ACQUISITION_PATH
 
   return (
     <>
@@ -122,7 +112,7 @@ export default async function Home({
         <JsonLd key={data['@type'] as string} data={data} />
       ))}
       <EmbeddedAuthGate onboardingGate="landing">
-        <HomePage initialPath={initialPath} />
+        <HomePage />
       </EmbeddedAuthGate>
     </>
   )

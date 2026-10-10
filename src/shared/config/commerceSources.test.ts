@@ -71,6 +71,70 @@ describe('signup sources', () => {
     expect(resolveOrganizationSourceMode('woocommerce')).toBe('standalone')
   })
 
+  it('lists Shopify and no connected store as start routes with every switch off', async () => {
+    const { getStartRoutes } = await loadSources(undefined)
+
+    expect(getStartRoutes()).toEqual([
+      { id: 'shopify', kind: 'external' },
+      { id: 'standalone', kind: 'signup' },
+    ])
+  })
+
+  it('puts the switched-on stores between Shopify and no connected store', async () => {
+    vi.stubEnv('NEXT_PUBLIC_WOOCOMMERCE_CONNECT_ENABLED', 'true')
+    const { getStartRoutes } = await loadSources('true')
+
+    expect(getStartRoutes()).toEqual([
+      { id: 'shopify', kind: 'external' },
+      { id: 'woocommerce', kind: 'signup' },
+      { id: 'easyorders', kind: 'signup' },
+      { id: 'standalone', kind: 'signup' },
+    ])
+  })
+
+  it('leaves a switched-off store out of the start routes', async () => {
+    vi.stubEnv('NEXT_PUBLIC_WOOCOMMERCE_CONNECT_ENABLED', 'false')
+    const { getStartRoutes } = await loadSources('true')
+
+    expect(getStartRoutes().map((route) => route.id)).toEqual([
+      'shopify',
+      'easyorders',
+      'standalone',
+    ])
+  })
+
+  it('reads ?source= only for a source offered now', async () => {
+    vi.stubEnv('NEXT_PUBLIC_WOOCOMMERCE_CONNECT_ENABLED', 'true')
+    const { parseSignupSourceParam } = await loadSources('true')
+
+    expect(parseSignupSourceParam('standalone')).toBe('standalone')
+    expect(parseSignupSourceParam('easyorders')).toBe('easyorders')
+    expect(parseSignupSourceParam('woocommerce')).toBe('woocommerce')
+  })
+
+  it.each([
+    undefined,
+    null,
+    '',
+    'shopify',
+    'Standalone',
+    'x',
+    42,
+    ['easyorders'],
+  ])('ignores the ?source= value %p', async (value) => {
+    const { parseSignupSourceParam } = await loadSources('true')
+
+    expect(parseSignupSourceParam(value)).toBeNull()
+  })
+
+  it('ignores ?source= for a switched-off store', async () => {
+    const { parseSignupSourceParam } = await loadSources(undefined)
+
+    expect(parseSignupSourceParam('easyorders')).toBeNull()
+    expect(parseSignupSourceParam('woocommerce')).toBeNull()
+    expect(parseSignupSourceParam('standalone')).toBe('standalone')
+  })
+
   it.each([undefined, null, '', 'standalone', 'shopify', 42, { id: 'x' }])(
     'provisions Standalone for the saved choice %p',
     async (saved) => {

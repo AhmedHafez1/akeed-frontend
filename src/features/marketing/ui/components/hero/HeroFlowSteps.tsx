@@ -93,7 +93,8 @@ export function HeroFlowSteps() {
                 <p className="text-foreground truncate text-sm font-semibold">
                   {step.title}
                 </p>
-                <p className="text-muted-foreground truncate text-xs">
+                {/* Wraps: the last step names two places. */}
+                <p className="text-muted-foreground text-xs text-pretty">
                   {step.meta}
                 </p>
               </div>

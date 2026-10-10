@@ -54,6 +54,7 @@ describe('DoneStep', () => {
     expect(screen.getByText('2.00 ج.م')).toBeTruthy()
     expect(screen.getByText('مجانية')).toBeTruthy()
     expect(screen.getByText('لا تُخصم من رصيدك')).toBeTruthy()
+    expect(screen.getByText('لكل رسالة واتساب مُرسلة')).toBeTruthy()
   })
 
   it('shows skeletons, not zeros, while credits load', () => {
@@ -72,10 +73,21 @@ describe('DoneStep', () => {
       screen.getByRole('link', { name: 'استيراد من ملف' }).getAttribute('href')
     ).toBe('/ar/verifications?import=new')
     expect(
+      screen.getByRole('link', { name: 'استخدم الـ API' }).getAttribute('href')
+    ).toBe('/ar/settings?tab=api-keys')
+    expect(
       screen
         .getByRole('link', { name: 'الذهاب إلى لوحة التحكم' })
         .getAttribute('href')
     ).toBe('/ar/dashboard')
+    expect(screen.getAllByRole('link').map((link) => link.textContent)).toEqual(
+      [
+        'أضف أول طلب',
+        'استيراد من ملف',
+        'استخدم الـ API',
+        'الذهاب إلى لوحة التحكم',
+      ]
+    )
     expect(
       screen.getByText('نرسل التأكيد لعميلك فور إضافة الطلب.')
     ).toBeTruthy()

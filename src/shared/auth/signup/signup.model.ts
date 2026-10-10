@@ -1,4 +1,7 @@
-import { DEFAULT_SIGNUP_SOURCE_ID } from '@/shared/config/commerceSources'
+import {
+  DEFAULT_SIGNUP_SOURCE_ID,
+  parseSignupSourceParam,
+} from '@/shared/config/commerceSources'
 import { getAuthErrorCode, isAlreadyRegistered } from '@/shared/lib/authErrors'
 
 export interface SignupValues {
@@ -124,10 +127,26 @@ export function toSignupMetadata(values: SignupValues) {
   }
 }
 
-/** `?sent=1&email=…`: the verify-email screen survives a refresh. */
-export function buildSentSearch(email: string): string {
+/**
+ * `?sent=1&email=…&source=…`: the verify-email screen survives a refresh, and
+ * "Change email" can return to the form of the same order source.
+ */
+export function buildSentSearch(email: string, source?: string | null): string {
   const params = new URLSearchParams({ sent: '1', email: email.trim() })
+  if (source) params.set('source', source)
   return `?${params.toString()}`
+}
+
+/** `?source=<id>`: the account form for that order source. */
+export function buildSourceSearch(source: string): string {
+  return `?${new URLSearchParams({ source }).toString()}`
+}
+
+/** The order source in the URL, when it is one signup offers now. */
+export function readSignupSource(params: {
+  get(name: string): string | null
+}): string | null {
+  return parseSignupSourceParam(params.get('source'))
 }
 
 export function readSentEmail(params: {
