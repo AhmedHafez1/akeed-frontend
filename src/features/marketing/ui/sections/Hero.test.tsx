@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { renderMarketing } from '@/features/marketing/ui/marketingTestUtils'
-import { SHOPIFY_APP_STORE_LISTING_URL } from '@/shared/lib/shopify-auth'
+import { getShopifyAppStoreListingUrl } from '@/shared/lib/shopify-auth'
 import Hero from './Hero'
 
 // The phone demo is a client-only animation; the hero's copy does not need it.
@@ -28,7 +28,9 @@ describe('Hero', () => {
 
       const shopify = screen.getByRole('link', { name: shopifyLabel })
       expect(shopify.dataset.variant).toBe('secondary')
-      expect(shopify.getAttribute('href')).toBe(SHOPIFY_APP_STORE_LISTING_URL)
+      expect(shopify.getAttribute('href')).toBe(
+        getShopifyAppStoreListingUrl(locale)
+      )
       expect(heroLinks()).toHaveLength(2)
     }
   )

@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { renderMarketing } from '@/features/marketing/ui/marketingTestUtils'
 import type { StartRoute } from '@/shared/config/commerceSources'
-import { SHOPIFY_APP_STORE_LISTING_URL } from '@/shared/lib/shopify-auth'
+import { getShopifyAppStoreListingUrl } from '@/shared/lib/shopify-auth'
 import Sources from './Sources'
 
 const SHOPIFY: StartRoute = { id: 'shopify', kind: 'external' }
@@ -32,7 +32,7 @@ describe('Sources', () => {
           .map((title) => title.textContent)
       ).toEqual(['Shopify', 'WooCommerce', 'EasyOrders', standaloneTitle])
       expect(cards().map((card) => card.getAttribute('href'))).toEqual([
-        SHOPIFY_APP_STORE_LISTING_URL,
+        getShopifyAppStoreListingUrl(locale),
         `/${locale}/signup?source=woocommerce`,
         `/${locale}/signup?source=easyorders`,
         `/${locale}/signup?source=standalone`,

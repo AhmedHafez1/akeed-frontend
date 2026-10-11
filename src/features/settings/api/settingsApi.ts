@@ -2,7 +2,10 @@
 
 import { api, fetchWithAuth } from '@/shared/lib/auth'
 import { getErrorMessage, parseJsonResponse } from '@/shared/lib/http'
-import type { TemplateMessage } from '@/shared/lib/templateMessage'
+import type {
+  TemplateMessage,
+  TemplateMessageVariable,
+} from '@/shared/lib/templateMessage'
 import type {
   ArabicCodTemplateVariantId,
   EnglishCodTemplateVariantId,
@@ -17,7 +20,7 @@ export interface CodTemplateDefinition {
   variant: ArabicCodTemplateVariantId | EnglishCodTemplateVariantId
   metaTemplateName: string
   metaLanguageCode: string
-  bodyParameterOrder: Array<'customer' | 'store' | 'order' | 'total'>
+  bodyParameterOrder: TemplateMessageVariable[]
   message: TemplateMessage
 }
 

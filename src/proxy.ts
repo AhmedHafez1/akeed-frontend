@@ -7,6 +7,9 @@ const intlMiddleware = createMiddleware({
   locales,
   defaultLocale,
   localePrefix: 'always',
+  // Locale-less links always resolve to the default (Arabic); never follow
+  // Accept-Language or the NEXT_LOCALE cookie.
+  localeDetection: false,
 })
 
 export default function proxy(request: NextRequest) {

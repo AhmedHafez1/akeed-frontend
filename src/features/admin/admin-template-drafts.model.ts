@@ -4,7 +4,14 @@ import type {
   TemplateTone,
 } from './admin-templates.model'
 
-export type TemplateVariableName = 'customer' | 'store' | 'order' | 'total'
+export type TemplateVariableName =
+  | 'customer'
+  | 'store'
+  | 'order'
+  | 'total'
+  | 'items'
+  | 'region'
+  | 'address'
 
 export type TemplateDraftState =
   | 'draft'

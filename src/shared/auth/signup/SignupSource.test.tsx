@@ -3,7 +3,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { StartRoute } from '@/shared/config/commerceSources'
 import { auth } from '@/shared/lib/auth'
-import { SHOPIFY_APP_STORE_LISTING_URL } from '@/shared/lib/shopify-auth'
+import { getShopifyAppStoreListingUrl } from '@/shared/lib/shopify-auth'
 import { renderAuth } from '../authTestUtils'
 import { SignupForm } from './SignupForm'
 import { SignupSourceStep } from './SignupSourceStep'
@@ -86,7 +86,7 @@ describe('signup source step', () => {
         expect.stringContaining(standaloneTitle),
       ])
       expect(hrefs()).toEqual([
-        SHOPIFY_APP_STORE_LISTING_URL,
+        getShopifyAppStoreListingUrl(locale),
         '?source=woocommerce',
         '?source=easyorders',
         '?source=standalone',
@@ -98,7 +98,7 @@ describe('signup source step', () => {
     renderAuth(<SignupSourceStep locale="ar" routes={[SHOPIFY, STANDALONE]} />)
 
     expect(hrefs()).toEqual([
-      SHOPIFY_APP_STORE_LISTING_URL,
+      getShopifyAppStoreListingUrl('ar'),
       '?source=standalone',
     ])
     expect(screen.queryByText('WooCommerce')).toBeNull()

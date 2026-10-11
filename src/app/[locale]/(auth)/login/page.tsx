@@ -201,7 +201,7 @@ function LoginForm() {
           <Separator className="flex-1" />
         </div>
 
-        <ShopifyContinueLink>
+        <ShopifyContinueLink locale={locale}>
           {t('auth.continueWithShopify')}
         </ShopifyContinueLink>
       </div>

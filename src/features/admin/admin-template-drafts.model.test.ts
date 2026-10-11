@@ -17,6 +17,9 @@ const VARIABLES: TemplateVariableName[] = [
   'store',
   'order',
   'total',
+  'items',
+  'region',
+  'address',
 ]
 
 function form(overrides: Partial<TemplateDraftForm> = {}): TemplateDraftForm {
@@ -39,6 +42,9 @@ describe('template draft model', () => {
         store: 'Akeed Store',
         order: 'TEST-1',
         total: '250.00 USD',
+        items: '1. Cotton shirt (1x 150) = 150 • 2. Sport socks (2x 50) = 100',
+        region: 'Cairo',
+        address: '12 Nile Street, Maadi',
       },
     })
     expect(emptyDraftForm(authoringContext()).language).toBe('ar')
@@ -47,10 +53,16 @@ describe('template draft model', () => {
   it('reads the supported values of a body in first-use order, once each', () => {
     expect(
       draftVariables(
-        'Order {{order}} for {{ customer }}, total {{total}}, again {{order}} {{items}}',
+        'Order {{order}} for {{ customer }}, total {{total}}, again {{order}} {{tracking}}',
         VARIABLES
       )
     ).toEqual(['order', 'customer', 'total'])
+    expect(
+      draftVariables(
+        'Items: {{items}}. To {{region}}, {{address}}. Total {{total}}.',
+        VARIABLES
+      )
+    ).toEqual(['items', 'region', 'address', 'total'])
   })
 
   it('fills the preview with samples, one paragraph per non-empty line', () => {
