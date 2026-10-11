@@ -197,7 +197,15 @@ describe('TemplateDraftNewPage', () => {
       within(picker)
         .getAllByRole('button')
         .map((button) => button.textContent)
-    ).toEqual(['Customer name', 'Store name', 'Order number', 'Order total'])
+    ).toEqual([
+      'Customer name',
+      'Store name',
+      'Order number',
+      'Order total',
+      'Order items',
+      'Governorate or city',
+      'Delivery address',
+    ])
 
     fireEvent.change(body, { target: { value: 'Hello , welcome' } })
     body.setSelectionRange(6, 6)

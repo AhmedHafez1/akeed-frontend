@@ -6,7 +6,15 @@
  * only fills the values, so a preview shows the merchant's own store name.
  * Shared by the settings editor and the onboarding phones.
  */
-export type TemplateMessageVariable = 'customer' | 'store' | 'order' | 'total'
+export type TemplateMessageVariable =
+  | 'customer'
+  | 'store'
+  | 'order'
+  | 'total'
+  | TemplateDetailVariable
+
+/** What a detailed template shows of the order: its items and where it ships. */
+export type TemplateDetailVariable = 'items' | 'region' | 'address'
 
 export type TemplateMessageSegment =
   | { text: string }
@@ -19,7 +27,37 @@ export interface TemplateMessage {
   source: 'provider' | 'registered'
 }
 
-export type TemplateMessageValues = Record<TemplateMessageVariable, string>
+/**
+ * The values a preview fills in. The order details are optional: a preview
+ * that gives none shows the sample order below.
+ */
+export type TemplateMessageValues = Record<
+  Exclude<TemplateMessageVariable, TemplateDetailVariable>,
+  string
+> &
+  Partial<Record<TemplateDetailVariable, string>>
+
+/**
+ * The sample order a preview shows in a detailed template, written as a send
+ * writes it: the items on one line, then the governorate and the street.
+ */
+export const TEMPLATE_DETAIL_SAMPLES: Record<
+  TemplateMessage['direction'],
+  Record<TemplateDetailVariable, string>
+> = {
+  rtl: {
+    items:
+      '1. قميص قطن (1x 399) = 399، اللون: أزرق • 2. جورب رياضي (2x 100) = 200',
+    region: 'القاهرة',
+    address: '12 شارع النيل، المعادي',
+  },
+  ltr: {
+    items:
+      '1. Cotton shirt (1x 399) = 399, Color: Blue • 2. Sport socks (2x 100) = 200',
+    region: 'Cairo',
+    address: '12 Nile Street, Maadi',
+  },
+}
 
 export type FilledTemplateSegment =
   | { kind: 'text'; text: string }
@@ -40,7 +78,11 @@ export function fillTemplateSegments(
         if (segment.text) segments.push({ kind: 'text', text: segment.text })
         continue
       }
-      let text = values[segment.variable]
+      let text =
+        values[segment.variable] ??
+        TEMPLATE_DETAIL_SAMPLES[message.direction][
+          segment.variable as TemplateDetailVariable
+        ]
       const previous = segments[segments.length - 1]
       if (
         segment.variable === 'order' &&

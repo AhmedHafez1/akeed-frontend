@@ -217,7 +217,10 @@
         "customer": "Customer name",
         "store": "Store name",
         "order": "Order number",
-        "total": "Order total"
+        "total": "Order total",
+        "items": "Order items",
+        "region": "Governorate or city",
+        "address": "Delivery address"
       }
     },
     "metrics": {
@@ -306,6 +309,7 @@
       "WHATSAPP_TEMPLATE_NOT_ACTIVE": "Only an active template can be the default.",
       "WHATSAPP_TEMPLATE_REPLACEMENT_REQUIRED": "Stores send this template, or it is a language default. Choose a replacement.",
       "WHATSAPP_TEMPLATE_REPLACEMENT_INVALID": "The replacement must be an approved, active template of the same purpose and language.",
+      "WHATSAPP_TEMPLATE_DEFAULT_SHOWS_ORDER_DETAILS": "A template that shows order items or an address cannot be a language default, because not every order has them.",
       "WHATSAPP_MESSAGE_TEXT_CONFLICT": "Another operator saved this text at the same time. Reload and try again.",
       "WHATSAPP_MESSAGE_TEXT_INVALID": "This text does not meet the rules for its purpose."
     },
@@ -429,7 +433,7 @@
         "category_not_allowed": "This purpose is registered as a utility template.",
         "body_required": "Write the message body.",
         "body_too_long": "The body is longer than 1024 characters.",
-        "variable_unknown": "Only customer, store, order and total can be used as values.",
+        "variable_unknown": "Only customer, store, order, total, items, region and address can be used as values.",
         "braces_mismatched": "A curly brace is not part of a complete value placeholder.",
         "parameter_at_edge": "The body may not start or end with a value.",
         "parameter_ratio": "Many values for so few words. Meta may reject this; add text or remove a value.",
@@ -2855,6 +2859,7 @@
           "professional": "Professional",
           "direct": "Direct",
           "short": "Short",
+          "detailed": "Detailed",
           "auto": "Automatic by country"
         },
         "previewHeading": "Preview",

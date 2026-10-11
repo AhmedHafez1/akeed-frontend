@@ -41,6 +41,10 @@ describe('templateStyleLabel', () => {
     expect(templateStyleLabel(translators.ar, 'egyptian_v2')).toBe(
       `${ar.settings.embedded.message.variantLabels.egyptian} 2`
     )
+    expect(templateStyleLabel(translators.en, 'detailed_v1')).toBe('Detailed 1')
+    expect(templateStyleLabel(translators.ar, 'detailed_v1')).toBe(
+      `${ar.settings.embedded.message.variantLabels.detailed} 1`
+    )
     // A new style has no name yet, with or without a version.
     expect(templateStyleLabel(translators.en, 'levantine_v1')).toBe(
       'levantine_v1'

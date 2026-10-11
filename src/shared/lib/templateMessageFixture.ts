@@ -4,7 +4,7 @@ import type {
   TemplateMessageVariable,
 } from './templateMessage'
 
-const TOKEN = /{{\s*(customer|store|order|total)\s*}}/g
+const TOKEN = /{{\s*(customer|store|order|total|items|region|address)\s*}}/g
 
 /**
  * A template message for tests and fixtures, written as plain lines with
