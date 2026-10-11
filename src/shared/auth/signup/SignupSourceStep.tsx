@@ -9,7 +9,7 @@ import {
   type StartRoute,
 } from '@/shared/config/commerceSources'
 import { auth } from '@/shared/lib/auth'
-import { SHOPIFY_APP_STORE_LISTING_URL } from '@/shared/lib/shopify-auth'
+import { getShopifyAppStoreListingUrl } from '@/shared/lib/shopify-auth'
 import { SourceMark } from '@/shared/ui'
 import { buildSourceSearch } from './signup.model'
 
@@ -63,7 +63,10 @@ export function SignupSourceStep({
           {routes.map((route) => (
             <li key={route.id}>
               {route.kind === 'external' ? (
-                <a href={SHOPIFY_APP_STORE_LISTING_URL} className={ROW_CLASS}>
+                <a
+                  href={getShopifyAppStoreListingUrl(locale)}
+                  className={ROW_CLASS}
+                >
                   <SourceMark sourceId={route.id} />
                   {rowBody(
                     t('source.shopifyTitle'),

@@ -1,22 +1,24 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
-import { SHOPIFY_APP_STORE_LISTING_URL } from '@/shared/lib/shopify-auth'
+import { getShopifyAppStoreListingUrl } from '@/shared/lib/shopify-auth'
 import { cn } from '@/shared/lib/utils'
 
 interface ShopifyContinueLinkProps {
+  locale: string
   children: ReactNode
   className?: string
 }
 
 export function ShopifyContinueLink({
+  locale,
   children,
   className,
 }: ShopifyContinueLinkProps) {
   return (
     <Link
-      href={SHOPIFY_APP_STORE_LISTING_URL}
+      href={getShopifyAppStoreListingUrl(locale)}
       className={cn(
-        'border-primary-border bg-card text-foreground hover:bg-primary-subtle/40 hover:-translate-y-0.5 focus-visible:ring-primary rounded-control flex min-h-12 w-full items-center justify-center gap-2 border px-4 py-3 text-sm font-bold focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
+        'border-primary-border bg-card text-foreground hover:bg-primary-subtle/40 focus-visible:ring-primary rounded-control flex min-h-12 w-full items-center justify-center gap-2 border px-4 py-3 text-sm font-bold hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
         className
       )}
     >

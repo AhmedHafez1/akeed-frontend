@@ -1,6 +1,6 @@
 import type { StartRoute } from '@/shared/config/commerceSources'
 import { withLocale } from '@/shared/lib/locale'
-import { SHOPIFY_APP_STORE_LISTING_URL } from '@/shared/lib/shopify-auth'
+import { getShopifyAppStoreListingUrl } from '@/shared/lib/shopify-auth'
 
 /**
  * The two destinations a visitor can start from.
@@ -30,7 +30,7 @@ export function getAcquisitionTargets(locale: string): AcquisitionTargets {
     shopify: {
       path: 'shopify',
       kind: 'external',
-      href: SHOPIFY_APP_STORE_LISTING_URL,
+      href: getShopifyAppStoreListingUrl(locale),
     },
     standalone: {
       path: 'standalone',
