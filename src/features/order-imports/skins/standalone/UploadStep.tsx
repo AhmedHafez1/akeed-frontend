@@ -126,7 +126,12 @@ export function UploadStep({ canEdit, onUploaded }: UploadStepProps) {
 
   const downloadTemplate = async (format: OrderImportFormat) => {
     try {
-      const template = await downloadOrderImportTemplate(format, locale)
+      // The sample exists in Arabic and English; other languages get the
+      // English one, whose headers are the field names themselves.
+      const template = await downloadOrderImportTemplate(
+        format,
+        locale === 'ar' ? 'ar' : 'en'
+      )
       downloadBlob(template.blob, template.fileName)
     } catch {
       notify.error({ message: t('upload.templateFailed') })

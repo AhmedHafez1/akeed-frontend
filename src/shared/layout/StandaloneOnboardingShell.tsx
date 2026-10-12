@@ -2,7 +2,7 @@
 
 import { Suspense, useState, type ReactNode } from 'react'
 import Link from 'next/link'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { CircleHelp, Languages, LogOut, Menu } from 'lucide-react'
 import {
@@ -12,12 +12,12 @@ import {
 } from '@/features/onboarding'
 import { auth } from '@/shared/lib/auth'
 import { createLogger } from '@/shared/lib/logger'
+import { useLocaleSwitch } from '@/shared/hooks/useLocaleSwitch'
 import {
-  getLocaleFromPathname,
-  persistLocalePreference,
+  getLocaleNativeName,
+  SUPPORTED_LOCALES,
   withLocale,
 } from '@/shared/lib/locale'
-import type { SupportedLocale } from '@/shared/lib/locale'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,6 +29,7 @@ import {
   type StepperStep,
 } from '@/shared/ui'
 import { AkeedLogo } from './AkeedLogo'
+import { LocaleToggle } from './LocaleToggle'
 
 const logger = createLogger('Auth')
 
@@ -57,9 +58,10 @@ export function StandaloneOnboardingShell({
 }: StandaloneOnboardingShellProps) {
   const t = useTranslations('standaloneOnboarding')
   const tHeader = useTranslations('appHeader')
-  const pathname = usePathname() ?? ''
   const router = useRouter()
-  const locale = getLocaleFromPathname(pathname)
+  // The switch keeps ?step (and signup's ?sent&email), so the same screen
+  // reopens.
+  const { locale, switchLocale } = useLocaleSwitch()
   const [isSigningOut, setIsSigningOut] = useState(false)
 
   const handleSignOut = async () => {
@@ -73,18 +75,6 @@ export function StandaloneOnboardingShell({
     }
   }
 
-  const handleLocaleChange = () => {
-    const nextLocale: SupportedLocale = locale === 'ar' ? 'en' : 'ar'
-    persistLocalePreference(nextLocale)
-    const segments = pathname.split('/')
-    if (segments.length > 1) {
-      segments[1] = nextLocale
-      // Keep ?step (and signup's ?sent&email) so the same screen reopens.
-      router.push(`${segments.join('/') || '/'}${window.location.search}`)
-    }
-  }
-
-  const localeLabel = locale === 'ar' ? 'English' : 'العربية'
   const signOutLabel = isSigningOut ? tHeader('signingOut') : tHeader('signOut')
 
   return (
@@ -110,14 +100,7 @@ export function StandaloneOnboardingShell({
         </div>
 
         <div className="hidden shrink-0 items-center gap-1.5 sm:flex sm:gap-2">
-          <button
-            type="button"
-            onClick={handleLocaleChange}
-            className="hover:bg-muted text-foreground/80 focus-visible:ring-ring inline-flex h-9 items-center rounded-lg px-3 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
-            suppressHydrationWarning
-          >
-            {localeLabel}
-          </button>
+          <LocaleToggle triggerClassName="hover:bg-muted text-foreground/80 focus-visible:ring-ring inline-flex h-9 items-center gap-1.5 rounded-lg px-3 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none" />
           <Link
             href={withLocale('/support', locale)}
             target="_blank"
@@ -151,10 +134,18 @@ export function StandaloneOnboardingShell({
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-48">
-            <DropdownMenuItem onSelect={handleLocaleChange}>
-              <Languages aria-hidden="true" />
-              {localeLabel}
-            </DropdownMenuItem>
+            {SUPPORTED_LOCALES.filter((option) => option !== locale).map(
+              (option) => (
+                <DropdownMenuItem
+                  key={option}
+                  lang={option}
+                  onSelect={() => switchLocale(option)}
+                >
+                  <Languages aria-hidden="true" />
+                  {getLocaleNativeName(option)}
+                </DropdownMenuItem>
+              )
+            )}
             <DropdownMenuItem asChild>
               <Link
                 href={withLocale('/support', locale)}

@@ -4,13 +4,14 @@ import Link from 'next/link'
 import type { MouseEvent } from 'react'
 import type { AcquisitionTargets } from '@/features/marketing/domain/acquisitionPaths'
 import { AcquisitionCta } from '@/features/marketing/ui/components/AcquisitionCta'
+import { useLocaleSwitch } from '@/shared/hooks/useLocaleSwitch'
+import { getLocaleNativeName, SUPPORTED_LOCALES } from '@/shared/lib/locale'
 import { headerOutlineControlClass } from './HeaderActions'
 import type { HeaderNavItem } from './header.model'
 
 interface HeaderMobileMenuProps {
   isOpen: boolean
   items: HeaderNavItem[]
-  locale: string
   targets: AcquisitionTargets
   ctaLabel: string
   loginLabel: string
@@ -19,7 +20,6 @@ interface HeaderMobileMenuProps {
   dashboardHref: string
   isAuthenticated: boolean
   onNavigate: (id: string, event: MouseEvent<HTMLAnchorElement>) => void
-  onLocaleChange: () => void
   onClose: () => void
 }
 
@@ -29,7 +29,6 @@ const mobileLinkClass =
 export function HeaderMobileMenu({
   isOpen,
   items,
-  locale,
   targets,
   ctaLabel,
   loginLabel,
@@ -38,9 +37,10 @@ export function HeaderMobileMenu({
   dashboardHref,
   isAuthenticated,
   onNavigate,
-  onLocaleChange,
   onClose,
 }: HeaderMobileMenuProps) {
+  const { locale, switchLocale } = useLocaleSwitch()
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -88,14 +88,22 @@ export function HeaderMobileMenu({
                 </motion.div>
               ))}
               <div className="mt-4 space-y-3 border-t border-white/10 pt-4">
-                <button
-                  type="button"
-                  onClick={onLocaleChange}
-                  className={`${headerOutlineControlClass} w-full px-4 py-3 text-base`}
-                >
-                  <Globe className="h-5 w-5" />
-                  {locale === 'ar' ? 'English' : 'عربي'}
-                </button>
+                <div className="flex gap-3">
+                  {SUPPORTED_LOCALES.filter((option) => option !== locale).map(
+                    (option) => (
+                      <button
+                        key={option}
+                        type="button"
+                        lang={option}
+                        onClick={() => switchLocale(option)}
+                        className={`${headerOutlineControlClass} flex-1 px-4 py-3 text-base`}
+                      >
+                        <Globe aria-hidden="true" className="h-5 w-5" />
+                        {getLocaleNativeName(option)}
+                      </button>
+                    )
+                  )}
+                </div>
                 <Link
                   href={isAuthenticated ? dashboardHref : loginHref}
                   onClick={onClose}

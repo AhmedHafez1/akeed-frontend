@@ -6,6 +6,7 @@ import { LoadingButton } from '@/shared/ui'
 import { Notice } from '../connect/connectUi'
 import { toWooCommerceCheckKey } from './wooCommerce.types'
 import type { WooCommerceConnectionController } from './useWooCommerceConnection'
+import { getIntlLocale } from '@/shared/lib/locale'
 
 interface WooCommerceConnectionCheckProps {
   connection: Pick<
@@ -26,7 +27,7 @@ export function WooCommerceConnectionCheck({
   const locale = useLocale()
   const { checkResult } = connection
   const formatWhen = (iso: string) =>
-    new Intl.DateTimeFormat(locale === 'ar' ? 'ar-EG' : 'en-US', {
+    new Intl.DateTimeFormat(getIntlLocale(locale), {
       dateStyle: 'medium',
       timeStyle: 'short',
       numberingSystem: 'latn',

@@ -1,10 +1,10 @@
-import { ArrowRight, Globe } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import type { AcquisitionTargets } from '@/features/marketing/domain/acquisitionPaths'
 import { AcquisitionCta } from '@/features/marketing/ui/components/AcquisitionCta'
+import { LocaleToggle } from '@/shared/layout/LocaleToggle'
 
 interface HeaderActionsProps {
-  locale: string
   targets: AcquisitionTargets
   ctaLabel: string
   loginLabel: string
@@ -12,14 +12,12 @@ interface HeaderActionsProps {
   dashboardLabel: string
   dashboardHref: string
   isAuthenticated: boolean
-  onLocaleChange: () => void
 }
 
 export const headerOutlineControlClass =
   'rounded-control focus-visible:ring-primary-border inline-flex items-center justify-center gap-2 text-sm font-semibold text-slate-100 ring-1 ring-white/20 transition-colors hover:bg-white/8 hover:text-white hover:ring-white/35 focus-visible:ring-2 focus-visible:outline-none'
 
 export function HeaderActions({
-  locale,
   targets,
   ctaLabel,
   loginLabel,
@@ -27,19 +25,12 @@ export function HeaderActions({
   dashboardLabel,
   dashboardHref,
   isAuthenticated,
-  onLocaleChange,
 }: HeaderActionsProps) {
   return (
     <div className="hidden items-center gap-3 lg:flex">
-      <button
-        type="button"
-        onClick={onLocaleChange}
-        className={`${headerOutlineControlClass} h-10 px-3.5`}
-        suppressHydrationWarning
-      >
-        <Globe className="h-4 w-4" />
-        <span>{locale === 'ar' ? 'EN' : 'عربي'}</span>
-      </button>
+      <LocaleToggle
+        triggerClassName={`${headerOutlineControlClass} h-10 px-3.5`}
+      />
       <Link
         href={isAuthenticated ? dashboardHref : loginHref}
         className={`${headerOutlineControlClass} h-10 px-5`}

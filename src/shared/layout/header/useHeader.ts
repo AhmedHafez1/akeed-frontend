@@ -1,5 +1,5 @@
 import { type MouseEvent, useEffect, useMemo, useState } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 // Deep import on purpose: `@/features/marketing` re-exports HomePage, so the
 // barrel would pull the entire landing tree into every public-chrome route.
@@ -28,7 +28,6 @@ function getPathWithoutLocale(pathname: string): string {
 export function useHeader() {
   const t = useTranslations('header')
   const pathname = usePathname() ?? ''
-  const router = useRouter()
   const locale = getLocaleFromPathname(pathname)
   const homeHref = withLocale('/', locale)
   const isHomePage = getPathWithoutLocale(pathname) === '/'
@@ -151,17 +150,6 @@ export function useHeader() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const handleLocaleChange = () => {
-    const newLocale = locale === 'ar' ? 'en' : 'ar'
-    const segments = pathname.split('/')
-
-    if (segments.length > 1) {
-      segments[1] = newLocale
-      const newPath = segments.join('/') || '/'
-      router.push(newPath)
-    }
-  }
-
   return {
     t,
     locale,
@@ -176,6 +164,5 @@ export function useHeader() {
     setIsMobileMenuOpen,
     scrollToSection,
     handleHomeClick,
-    handleLocaleChange,
   }
 }

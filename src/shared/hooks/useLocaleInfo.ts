@@ -1,10 +1,10 @@
 import { usePathname } from 'next/navigation'
-import { getLocaleFromPathname } from '@/shared/lib/locale'
+import { getLocaleFromPathname, isRtlLocale } from '@/shared/lib/locale'
 
 export function useLocaleInfo() {
   const pathname = usePathname() ?? ''
   const locale = getLocaleFromPathname(pathname)
-  const isRTL = locale === 'ar'
+  const isRTL = isRtlLocale(locale)
 
   return { locale, isRTL }
 }

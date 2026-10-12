@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { AdminAccessGate } from '@/features/admin/AdminAccessGate'
 import { AdminShell } from '@/features/admin/AdminShell'
+import { getLocaleDirection } from '@/shared/lib/locale'
 
 export const metadata: Metadata = {
   title: 'Admin Control Tower',
@@ -16,7 +17,7 @@ export default async function AdminLayout({
 }) {
   const { locale } = await params
   return (
-    <div dir={locale === 'ar' ? 'rtl' : 'ltr'} lang={locale}>
+    <div dir={getLocaleDirection(locale)} lang={locale}>
       <AdminAccessGate>
         <AdminShell>{children}</AdminShell>
       </AdminAccessGate>

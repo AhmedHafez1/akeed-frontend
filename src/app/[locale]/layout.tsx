@@ -20,6 +20,7 @@ import {
 import { ThemeProvider, themeInitScript } from '@/shared/theme'
 import { fontVariables } from '@/shared/theme/fonts'
 import '../globals.css'
+import { getLocaleDirection } from '@/shared/lib/locale'
 
 export async function generateMetadata({
   params,
@@ -94,7 +95,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      dir={locale === 'ar' ? 'rtl' : 'ltr'}
+      dir={getLocaleDirection(locale)}
       suppressHydrationWarning
     >
       <head>

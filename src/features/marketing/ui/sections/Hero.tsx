@@ -31,7 +31,7 @@ const ChatInterface = dynamic(
 )
 
 /* en-GB joins the last item with "or" and no comma before it. */
-const LIST_LOCALES = { ar: 'ar', en: 'en-GB' } as const
+const LIST_LOCALES = { ar: 'ar', en: 'en-GB', ur: 'ur' } as const
 
 function Hero() {
   const t = useTranslations('hero')

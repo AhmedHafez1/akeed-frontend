@@ -8,34 +8,18 @@ import {
   getLocaleFromPathname,
   isSupportedLocale,
   persistLocalePreference,
+  replacePathnameLocale,
+  SUPPORTED_LOCALES,
   type SupportedLocale,
 } from '@/shared/lib/locale'
 import { resolveEmbeddedContextFromSearch } from '@/shared/lib/embedded-context'
 import { createAkeedEmbeddedSupportWhatsAppUrl } from '@/shared/lib/whatsapp'
 
-function buildLocalizedPathname(
-  pathname: string,
-  targetLocale: SupportedLocale
-): string {
-  const normalizedPathname =
-    pathname.length > 0
-      ? pathname.startsWith('/')
-        ? pathname
-        : `/${pathname}`
-      : '/'
-
-  const segments = normalizedPathname.split('/')
-
-  if (segments.length <= 1) {
-    return `/${targetLocale}`
-  }
-
-  if (isSupportedLocale(segments[1])) {
-    segments[1] = targetLocale
-    return segments.join('/') || `/${targetLocale}`
-  }
-
-  return `/${targetLocale}${normalizedPathname}`
+/** The title-bar label that switches to each language. */
+const SWITCH_LABEL_KEYS: Record<SupportedLocale, string> = {
+  ar: 'switchToArabic',
+  en: 'switchToEnglish',
+  ur: 'switchToUrdu',
 }
 
 export function EmbeddedLanguageSelector() {
@@ -66,7 +50,7 @@ export function EmbeddedLanguageSelector() {
 
       persistLocalePreference(nextLocale)
 
-      const localizedPathname = buildLocalizedPathname(pathname, nextLocale)
+      const localizedPathname = replacePathnameLocale(pathname, nextLocale)
       const destination = `${localizedPathname}${search}`
 
       startTransition(() => {
@@ -95,22 +79,18 @@ export function EmbeddedLanguageSelector() {
     handleLocaleChange(persistedLocale)
   }, [handleLocaleChange, locale])
 
-  const nextLocale: SupportedLocale = locale === 'ar' ? 'en' : 'ar'
-  const switchActionLabel = isPending
-    ? t('languageSwitching')
-    : nextLocale === 'en'
-      ? t('switchToEnglish')
-      : t('switchToArabic')
-
   return (
     <ui-title-bar title="Akeed">
-      <button
-        type="button"
-        onClick={() => handleLocaleChange(nextLocale)}
-        disabled={isPending}
-      >
-        {switchActionLabel}
-      </button>
+      {SUPPORTED_LOCALES.filter((option) => option !== locale).map((option) => (
+        <button
+          key={option}
+          type="button"
+          onClick={() => handleLocaleChange(option)}
+          disabled={isPending}
+        >
+          {isPending ? t('languageSwitching') : t(SWITCH_LABEL_KEYS[option])}
+        </button>
+      ))}
       <button
         type="button"
         onClick={() => {

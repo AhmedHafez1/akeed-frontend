@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ApiError } from '@/shared/lib/http'
+import type { SupportedLocale } from '@/shared/lib/locale'
 import { createLogger } from '@/shared/lib/logger'
 import {
   disconnectEasyOrders,
@@ -79,7 +80,7 @@ export interface EasyOrdersConnectionController {
  * polls the status while a request is open and when the tab regains focus.
  */
 export function useEasyOrdersConnection(
-  locale: 'ar' | 'en'
+  locale: SupportedLocale
 ): EasyOrdersConnectionController {
   const [status, setStatus] = useState<EasyOrdersConnectionStatus | null>(null)
   const [isLoading, setIsLoading] = useState(true)

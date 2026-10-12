@@ -2,9 +2,89 @@
  * Locale utilities for consistent locale handling across the application
  */
 
-export const SUPPORTED_LOCALES = ['ar', 'en'] as const
+export const SUPPORTED_LOCALES = ['ar', 'en', 'ur'] as const
 export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number]
 export const DEFAULT_LOCALE: SupportedLocale = 'ar'
+
+export type LocaleDirection = 'rtl' | 'ltr'
+
+interface LocaleDefinition {
+  direction: LocaleDirection
+  /** The regional tag `Intl` formats dates and numbers with. */
+  intlTag: string
+  /** The language's own name, shown in every language switcher as is. */
+  nativeName: string
+  openGraphLocale: string
+}
+
+/**
+ * Everything the app knows about an interface language. Adding a language is
+ * an entry here plus its `public/messages/<locale>.json`; nothing else should
+ * compare a locale to a literal. The interface language is separate from the
+ * language of the customer's WhatsApp message.
+ */
+const LOCALE_DEFINITIONS: Record<SupportedLocale, LocaleDefinition> = {
+  ar: {
+    direction: 'rtl',
+    intlTag: 'ar-EG',
+    nativeName: 'العربية',
+    openGraphLocale: 'ar_AR',
+  },
+  en: {
+    direction: 'ltr',
+    intlTag: 'en-US',
+    nativeName: 'English',
+    openGraphLocale: 'en_US',
+  },
+  ur: {
+    direction: 'rtl',
+    intlTag: 'ur-PK',
+    nativeName: 'اردو',
+    openGraphLocale: 'ur_PK',
+  },
+}
+
+/** A locale the app serves; anything else reads as the default. */
+export function resolveSupportedLocale(locale: string): SupportedLocale {
+  return isSupportedLocale(locale) ? locale : DEFAULT_LOCALE
+}
+
+export function getLocaleDirection(locale: string): LocaleDirection {
+  return LOCALE_DEFINITIONS[resolveSupportedLocale(locale)].direction
+}
+
+export function isRtlLocale(locale: string): boolean {
+  return getLocaleDirection(locale) === 'rtl'
+}
+
+/** `ar-EG`, `en-US` or `ur-PK`, for `Intl` date and number formatters. */
+export function getIntlLocale(locale: string): string {
+  return LOCALE_DEFINITIONS[resolveSupportedLocale(locale)].intlTag
+}
+
+export function getLocaleNativeName(locale: SupportedLocale): string {
+  return LOCALE_DEFINITIONS[locale].nativeName
+}
+
+export function getOpenGraphLocaleTag(locale: SupportedLocale): string {
+  return LOCALE_DEFINITIONS[locale].openGraphLocale
+}
+
+/** The same path in another language: `/ar/billing` to `/ur/billing`. */
+export function replacePathnameLocale(
+  pathname: string,
+  targetLocale: SupportedLocale
+): string {
+  const normalized = pathname.startsWith('/') ? pathname : `/${pathname}`
+  const segments = normalized.split('/')
+  if (isSupportedLocale(segments[1] ?? '')) {
+    segments[1] = targetLocale
+    return segments.join('/')
+  }
+  return normalized === '/'
+    ? `/${targetLocale}`
+    : `/${targetLocale}${normalized}`
+}
 export const LOCALE_PREFERENCE_STORAGE_KEY = 'akeed:preferred-locale'
 const LOCALE_COOKIE_NAME = 'NEXT_LOCALE'
 const LOCALE_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365

@@ -13,9 +13,10 @@ const intlMiddleware = createMiddleware({
 })
 
 export default function proxy(request: NextRequest) {
-  if (/^\/ar\/admin(?:\/|$)/.test(request.nextUrl.pathname)) {
+  // The admin screens exist in English only.
+  if (/^\/(?:ar|ur)\/admin(?:\/|$)/.test(request.nextUrl.pathname)) {
     const target = request.nextUrl.clone()
-    target.pathname = request.nextUrl.pathname.replace(/^\/ar\//, '/en/')
+    target.pathname = request.nextUrl.pathname.replace(/^\/(?:ar|ur)\//, '/en/')
     return NextResponse.redirect(target)
   }
 
@@ -25,7 +26,7 @@ export default function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     '/',
-    '/(ar|en)/:path*',
+    '/(ar|en|ur)/:path*',
     '/((?!api|webhooks|auth/shopify|_next|_vercel|images|fonts|.*\\..*).*)',
   ],
 }

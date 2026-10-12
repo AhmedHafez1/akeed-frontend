@@ -11,6 +11,7 @@ import {
   type WooCommerceConnectionDetails,
 } from './wooCommerce.types'
 import type { WooCommerceConnectionController } from './useWooCommerceConnection'
+import { getIntlLocale } from '@/shared/lib/locale'
 
 interface WooCommerceWebhookStatusProps {
   details: WooCommerceConnectionDetails
@@ -38,7 +39,7 @@ export function WooCommerceWebhookStatus({
   const tCodes = useTranslations('wooCommerceConnect.codes')
   const locale = useLocale()
   const formatWhen = (iso: string) =>
-    new Intl.DateTimeFormat(locale === 'ar' ? 'ar-EG' : 'en-US', {
+    new Intl.DateTimeFormat(getIntlLocale(locale), {
       dateStyle: 'medium',
       timeStyle: 'short',
       numberingSystem: 'latn',

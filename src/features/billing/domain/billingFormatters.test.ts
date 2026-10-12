@@ -22,8 +22,8 @@ describe('formatMoney', () => {
     expect(formatMoney(200, 'EGP', 'en')).toBe('EGP 2.00')
   })
 
-  it('uses Western digits and no bidi marks in either locale', () => {
-    for (const locale of ['ar', 'en'] as const) {
+  it('uses Western digits and no bidi marks in every locale', () => {
+    for (const locale of ['ar', 'en', 'ur'] as const) {
       const text = formatMoney(1_234_550, 'EGP', locale)
       expect(text).toContain('12,345.50')
       expect(text).not.toMatch(BIDI_MARK)

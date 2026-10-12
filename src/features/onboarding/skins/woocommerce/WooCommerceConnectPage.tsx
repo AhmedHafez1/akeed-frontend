@@ -48,6 +48,7 @@ import { useWooCommerceConnection } from './useWooCommerceConnection'
 import { useWooCommerceSetupFlow } from './useWooCommerceSetupFlow'
 import { WooCommerceKeyRemovalSteps } from './WooCommerceKeyRemovalSteps'
 import { WooCommerceWebhookStatus } from './WooCommerceWebhookStatus'
+import { getIntlLocale, resolveSupportedLocale } from '@/shared/lib/locale'
 
 const STORE_URL_FIELD = 'woocommerce-store-url'
 const USES = ['orders', 'notifications', 'outcomes'] as const
@@ -67,7 +68,7 @@ const WEBHOOK_PROBLEMS = ['disabled', 'paused', 'missing'] as const
  */
 export function WooCommerceConnectPage() {
   const t = useTranslations('wooCommerceConnect')
-  const locale = useLocale() === 'en' ? 'en' : 'ar'
+  const locale = resolveSupportedLocale(useLocale())
   const connection = useWooCommerceConnection(locale)
   const { view, status, canManage } = connection
   const setup = useWooCommerceSetupFlow(
@@ -406,10 +407,10 @@ export function WooCommerceConnectPage() {
           {status?.expiresAt && (
             <p className="text-ink-muted text-sm">
               {t('waiting.expires', {
-                time: new Intl.DateTimeFormat(
-                  locale === 'ar' ? 'ar-EG' : 'en-US',
-                  { hour: 'numeric', minute: '2-digit' }
-                ).format(new Date(status.expiresAt)),
+                time: new Intl.DateTimeFormat(getIntlLocale(locale), {
+                  hour: 'numeric',
+                  minute: '2-digit',
+                }).format(new Date(status.expiresAt)),
               })}
             </p>
           )}

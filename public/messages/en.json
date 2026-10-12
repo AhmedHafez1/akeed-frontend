@@ -2725,6 +2725,7 @@
     "languageArabic": "Arabic",
     "switchToEnglish": "English",
     "switchToArabic": "Arabic",
+    "switchToUrdu": "Urdu",
     "languageSwitching": "Switching language...",
     "autoVerifyLabel": "Enable auto-verification?",
     "autoVerifyDescription": "When enabled, Akeed automatically sends WhatsApp verification for new COD orders.",

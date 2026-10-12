@@ -27,10 +27,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         | 'monthly',
       priority: route === '/' ? 1 : 0.7,
       alternates: {
-        languages: {
-          ar: getAbsoluteUrl(getLocalizedPath('ar', route)),
-          en: getAbsoluteUrl(getLocalizedPath('en', route)),
-        },
+        languages: Object.fromEntries(
+          locales.map((altLocale) => [
+            altLocale,
+            getAbsoluteUrl(getLocalizedPath(altLocale, route)),
+          ])
+        ),
       },
     }))
   )
