@@ -514,7 +514,7 @@
     "registeredAddress": "Guiza, Egipto"
   },
   "support": {
-    "eyebrow": "Soporte público",
+    "eyebrow": "Soporte",
     "title": "¿En qué podemos ayudarte?",
     "intro": "Contacta al soporte de Akeed si tienes preguntas sobre tu cuenta, la configuración de la tienda, la importación de pedidos, la facturación o la verificación de pedidos.",
     "emailTitle": "Soporte por correo electrónico",
@@ -557,7 +557,7 @@
     "primaryNavigation": "Navegación principal",
     "workspace": "Espacio de trabajo",
     "workspaceFallback": "Mi espacio de trabajo",
-    "userFallback": "Sesión iniciada",
+    "userFallback": "Usuario",
     "identityLoading": "Cargando la identidad del espacio de trabajo",
     "helpSupport": "Ayuda y soporte",
     "docs": "Documentación",
@@ -772,7 +772,7 @@
         "canceledDetail": "Envío ahorrado",
         "rate": "Tasa de confirmación",
         "rateDetail": "{confirmed}/{sent}",
-        "rateDetailLabel": "{confirmed} de {sent} pedidos con mensaje confirmados"
+        "rateDetailLabel": "{confirmed} de {sent} pedidos contactados se confirmaron"
       },
       "needsAction": {
         "countPill": "{count, plural, one {# pedido} other {# pedidos}}",
@@ -1200,7 +1200,7 @@
         },
         "canceled": {
           "title": "Cancelados antes del envío",
-          "body": "{count, plural, =0 {Ningún envío desperdiciado en este periodo} one {# envío y devolución que no pagaste} other {# envíos y devoluciones que no pagaste}}"
+          "body": "{count, plural, =0 {Ningún envío perdido en este periodo} one {# envío y devolución que no pagaste} other {# envíos y devoluciones que no pagaste}}"
         },
         "rate": {
           "title": "Tasa de confirmación",
@@ -1222,7 +1222,7 @@
           "send_failed": "Mensaje no enviado"
         },
         "actions": {
-          "whatsapp": "Escribir por WhatsApp",
+          "whatsapp": "Ir a WhatsApp",
           "whatsappLabel": "Escribir a {customer} por WhatsApp (se abre en una pestaña nueva)",
           "manualConfirm": "Confirmar manualmente",
           "manualConfirmLabel": "Confirmar manualmente el pedido {order}"
@@ -1451,7 +1451,7 @@
           "autoHelp": "Si está desactivada, no se envían mensajes.",
           "customDelayLabel": "Retraso",
           "quietDesc": "Sin mensajes por la noche.",
-          "quietHelp": "Lo que toque enviar durante el horario de silencio se envía cuando termina."
+          "quietHelp": "Los mensajes programados durante el horario de silencio se envían cuando este termina."
         },
         "store": {
           "sourceDesc": "De dónde recibe Akeed tus pedidos.",
@@ -1496,19 +1496,19 @@
               "secretsMissing": "Esperando el primer pedido para proteger los webhooks",
               "rejected": "{count, plural, one {Se rechazó # evento por un secreto de webhook incorrecto} other {Se rechazaron # eventos por un secreto de webhook incorrecto}}",
               "none": "Ninguno",
-              "lastRejected": "Último rechazo: {when}."
+              "lastRejected": "Último rechazo ({when})."
             },
             "processing": {
               "title": "Fallos de procesamiento",
               "failed": "{count, plural, one {# evento falló} other {# eventos fallaron}} en los últimos {days} días",
               "none": "Ninguno en los últimos {days} días",
-              "lastFailed": "Último fallo: {when}."
+              "lastFailed": "Último fallo ({when})."
             },
             "backlog": {
               "title": "En espera de procesarse",
               "waiting": "{count, plural, one {# evento en espera} other {# eventos en espera}}",
               "none": "Nada en espera",
-              "oldest": "El más antiguo se recibió: {when}."
+              "oldest": "El más antiguo en espera se recibió ({when})."
             },
             "remoteSync": {
               "title": "Actualizaciones del estado de los pedidos en tu tienda",
@@ -1644,10 +1644,6 @@
     "languageAuto": "Automático, según el país del teléfono del cliente",
     "languageEnglish": "Inglés",
     "languageArabic": "Árabe",
-    "switchToEnglish": "English",
-    "switchToArabic": "العربية",
-    "switchToUrdu": "اردو",
-    "switchToSpanish": "Español",
     "languageSwitching": "Cambiando de idioma...",
     "autoVerifyLabel": "¿Activar la verificación automática?",
     "autoVerifyDescription": "Si está activada, Akeed envía automáticamente la verificación por WhatsApp para los nuevos pedidos contra entrega.",
@@ -1787,9 +1783,9 @@
         },
         "previewHeading": "Vista previa",
         "previewLanguageGroup": "Idioma de la vista previa",
-        "previewAria": "Vista previa del mensaje de WhatsApp en {language}",
+        "previewAria": "Vista previa del mensaje de WhatsApp. Idioma: {language}",
         "testSend": "Enviar un mensaje de prueba a WhatsApp",
-        "testSendHelp": "Se envía a <phone></phone> en {language}. Los mensajes de prueba son gratis.",
+        "testSendHelp": "Se envía a <phone></phone>. Idioma del mensaje: {language}. Los mensajes de prueba son gratis.",
         "testSendHelpNoPhone": "Te pediremos tu número de WhatsApp al enviar. Los mensajes de prueba son gratis.",
         "testSendSaveFirst": "Guarda tus cambios primero para probarlos.",
         "testPhone": {
@@ -1807,7 +1803,7 @@
         },
         "autoStylePreviewNote": "La vista previa muestra tu estilo guardado. Con Automático, cada cliente recibe el estilo de su país.",
         "reminderHeading": "Mensaje de recordatorio",
-        "reminderHint": "Se envía a los clientes que aún no responden. Estos son los recordatorios en {language}; cambia el idioma de la vista previa para editar los del otro idioma.",
+        "reminderHint": "Se envía a los clientes que aún no responden. Idioma de estos recordatorios: {language}. Cambia el idioma de la vista previa para editar los del otro idioma.",
         "reminderSame": "Igual que el primer mensaje",
         "previewEmpty": "Este mensaje aún no tiene texto para mostrar."
       },
@@ -1825,7 +1821,7 @@
         "stepOff": "Desactivado",
         "hours": "{count, plural, one {# hora} other {# horas}}",
         "minutes": "{count, plural, one {# minuto} other {# minutos}}",
-        "quietLine": "Los mensajes que toque enviar entre las {start} y las {end} se envían a las {end}.",
+        "quietLine": "Entre las {start} y las {end} no se envían mensajes; los pendientes salen a las {end}, al terminar el horario de silencio.",
         "autoHeading": "Confirmación automática",
         "autoDescription": "Cuándo enviamos el mensaje de confirmación de los pedidos contra entrega.",
         "autoLabel": "Enviar un mensaje de confirmación por cada pedido nuevo",
@@ -1851,7 +1847,7 @@
         "alertGroup": "Retraso del aviso por falta de respuesta",
         "alertLabel": "Avisarme de los pedidos sin respuesta",
         "quietHeading": "Horario de silencio",
-        "quietDescription": "Sin mensajes por la noche. Lo que toque enviar durante el horario de silencio se envía cuando termina.",
+        "quietDescription": "Sin mensajes por la noche. Los mensajes programados durante el horario de silencio se envían cuando este termina.",
         "quietLabel": "Pausar los envíos durante el horario de silencio",
         "quietFrom": "Desde",
         "quietTo": "Hasta",
@@ -1945,7 +1941,7 @@
     "setupTitle": "Configuración de la plantilla",
     "setupDescription": "Elige el idioma y el tono que reciben los clientes al confirmar pedidos contra entrega por WhatsApp.",
     "storeLanguageAutoHint": "El idioma de la tienda es Automático. Los clientes reciben el mensaje en árabe o en inglés según el país de su teléfono, así que configura ambas plantillas.",
-    "storeLanguageFixedHint": "El idioma de envío de la tienda es {language}. Aun así puedes editar las plantillas de ambos idiomas.",
+    "storeLanguageFixedHint": "Idioma de envío de la tienda: {language}. Aun así puedes editar las plantillas de ambos idiomas.",
     "perLanguageStyleHint": "Consejo: el árabe y el inglés pueden usar tonos distintos.",
     "previewDescription": "Vista previa en vivo de la plantilla de WhatsApp seleccionada.",
     "variantSelectorTitle": "Estilo de la plantilla",
@@ -2068,7 +2064,7 @@
       "timeout": "No pudimos confirmar el resultado en 30 segundos. Tus datos y el token de reintento están bloqueados para que puedas reintentar de forma segura.",
       "offline": "Parece que no tienes conexión. Tus datos y el token de reintento están bloqueados; vuelve a conectarte y reintenta de forma segura.",
       "network": "No pudimos confirmar si el pedido fue aceptado. No cambies estos datos y reintenta con el mismo token.",
-      "acceptanceFailed": "El servidor no pudo registrar este pedido de forma duradera. No cambies estos datos y reintenta de forma segura.",
+      "acceptanceFailed": "El servidor no pudo guardar este pedido. No cambies estos datos y reintenta de forma segura.",
       "conflict": "Este token de reintento ya pertenece a otros datos de pedido. No lo reintentes; empieza de nuevo solo después de comprobar que no se creó ningún pedido.",
       "idempotency": "No se pudo crear un token de reintento seguro. Empieza de nuevo e inténtalo otra vez.",
       "role": "Solo los propietarios y administradores pueden verificar pedidos.",
@@ -2283,9 +2279,9 @@
   "about": {
     "eyebrow": "Quiénes somos",
     "title": "Acerca de Akeed",
-    "intro": "Conoce Akeed Digital Solutions, nuestra misión y cómo ayudamos a los comerciantes de comercio electrónico a reducir los costos de envío desperdiciados.",
+    "intro": "Conoce Akeed Digital Solutions, nuestra misión y cómo ayudamos a los comerciantes de comercio electrónico a reducir el costo de los envíos fallidos.",
     "missionTitle": "Nuestra misión",
-    "missionBody": "Akeed Digital Solutions crea herramientas que ayudan a los comerciantes de comercio electrónico de la región MENA a reducir los costos de envío desperdiciados en pedidos con pago contra entrega. Nuestro producto principal automatiza la confirmación de pedidos mediante las API oficiales de WhatsApp Cloud de Meta, para que los comerciantes verifiquen los pedidos antes de prepararlos y eviten intentos de entrega fallidos.",
+    "missionBody": "Akeed Digital Solutions crea herramientas que ayudan a los comerciantes de comercio electrónico de Medio Oriente y el Norte de África a reducir el costo de los envíos fallidos en pedidos con pago contra entrega. Nuestro producto principal automatiza la confirmación de pedidos mediante las API oficiales de WhatsApp Cloud de Meta, para que los comerciantes verifiquen los pedidos antes de prepararlos y eviten intentos de entrega fallidos.",
     "phoneTitle": "Teléfono de contacto",
     "phoneDescription": "Llámanos directamente en horario de atención.",
     "emailTitle": "Correo electrónico",
@@ -2465,7 +2461,7 @@
     },
     "purchaseStatus": {
       "pending": "Pendiente",
-      "successful": "Exitosa",
+      "successful": "Completada",
       "failed": "Fallida",
       "canceled": "Cancelada",
       "expired": "Vencida",
@@ -3021,7 +3017,7 @@
     "waiting": {
       "title": "Termina en EasyOrders",
       "body": "Elige «Accept» en la pestaña de EasyOrders. Esta página se actualiza sola.",
-      "expires": "Esta solicitud vence a las {time}.",
+      "expires": "Tienes hasta las {time} para completar esta solicitud.",
       "restart": "Abrir EasyOrders de nuevo",
       "cancelled": "No acepté"
     },
@@ -3134,7 +3130,7 @@
         "reminderOff": "Sin recordatorio.",
         "noReplyOn": "Se marca como sin respuesta después de {minutes} minutos. Akeed nunca cancela por sí solo el pedido en EasyOrders.",
         "noReplyOff": "Los pedidos no se marcan como sin respuesta automáticamente.",
-        "quietHoursOn": "Sin mensajes entre las {start} y las {end}.",
+        "quietHoursOn": "Entre las {start} y las {end} no se envían mensajes.",
         "quietHoursOff": "Sin horario de silencio.",
         "changeLater": "Puedes cambiar esto en Configuración después de la configuración inicial."
       }
@@ -3248,7 +3244,7 @@
     "waiting": {
       "title": "Terminando la conexión",
       "body": "Tu tienda le está enviando su acceso a Akeed. Esta página se actualiza sola.",
-      "expires": "Esta solicitud vence a las {time}.",
+      "expires": "Tienes hasta las {time} para completar esta solicitud.",
       "restart": "Empezar de nuevo"
     },
     "denied": {
@@ -3289,7 +3285,7 @@
         "reminderOff": "Sin recordatorio.",
         "noReplyOn": "Se marca como sin respuesta después de {minutes} minutos. Akeed nunca cancela por sí solo el pedido en WooCommerce.",
         "noReplyOff": "Los pedidos no se marcan como sin respuesta automáticamente.",
-        "quietHoursOn": "Sin mensajes entre las {start} y las {end}.",
+        "quietHoursOn": "Entre las {start} y las {end} no se envían mensajes.",
         "quietHoursOff": "Sin horario de silencio.",
         "changeLater": "Puedes cambiar esto en Configuración después de la configuración inicial."
       }
@@ -3313,7 +3309,7 @@
         "missing": "Eliminada de tu tienda",
         "unknown": "Aún no se conoce"
       },
-      "checkedAt": "Última lectura de tu tienda: {when}.",
+      "checkedAt": "Última lectura de tu tienda ({when}).",
       "neverChecked": "Akeed aún no las ha leído de tu tienda.",
       "disabled": {
         "title": "Tu tienda desactivó una notificación de pedidos",
@@ -3335,10 +3331,10 @@
       "ok": "Tu tienda respondió, aceptó el acceso de Akeed y las dos notificaciones de pedidos están activas.",
       "found": "Esto es lo que requiere atención:",
       "failed": "No pudimos hacer la comprobación. Inténtalo de nuevo.",
-      "checkedAt": "Comprobado: {when}.",
+      "checkedAt": "Comprobado ({when}).",
       "support": "Si intervienen tu hosting, un plugin de seguridad o una configuración personalizada, contacta al soporte de Akeed. Akeed no puede garantizar que funcione con todas las configuraciones de hosting ni con todos los plugins.",
       "problems": {
-        "WOOCOMMERCE_STORE_ADDRESS_NOT_PUBLIC": "Akeed ya no puede acceder a la dirección de tu tienda en la internet pública. Revisa tu dominio y su DNS.",
+        "WOOCOMMERCE_STORE_ADDRESS_NOT_PUBLIC": "Akeed ya no puede acceder desde internet a la dirección de tu tienda. Revisa tu dominio y su DNS.",
         "WOOCOMMERCE_STORE_REDIRECTS": "La dirección de tu tienda ahora redirige a otra. Si la dirección cambió, contacta al soporte de Akeed: no se puede conectar una dirección distinta a esta cuenta.",
         "WOOCOMMERCE_STORE_TLS_FAILED": "El certificado de seguridad de tu tienda no es válido. Pide a tu proveedor de hosting que lo corrija.",
         "WOOCOMMERCE_REST_NOT_FOUND": "La API REST de WooCommerce ya no está en la dirección de tu tienda. En WordPress, abre Settings > Permalinks y elige cualquier opción que no sea Plain, y comprueba que WooCommerce esté activo.",
@@ -3404,7 +3400,7 @@
     "codes": {
       "WOOCOMMERCE_STORE_URL_INVALID": "Ingresa la dirección de tu tienda, por ejemplo https://example.com.",
       "WOOCOMMERCE_STORE_HTTPS_REQUIRED": "La dirección de tu tienda debe empezar con https://. Akeed no se conecta a tiendas sin HTTPS.",
-      "WOOCOMMERCE_STORE_ADDRESS_NOT_PUBLIC": "Akeed no pudo acceder a esta dirección en la internet pública. Revisa la dirección e inténtalo de nuevo.",
+      "WOOCOMMERCE_STORE_ADDRESS_NOT_PUBLIC": "Akeed no pudo acceder a esta dirección desde internet. Revisa la dirección e inténtalo de nuevo.",
       "WOOCOMMERCE_STORE_REDIRECTS": "Esta dirección redirige a otra. Ingresa la dirección final de tu tienda, con o sin www, exactamente como aparece en el navegador.",
       "WOOCOMMERCE_STORE_TLS_FAILED": "El certificado de seguridad de tu tienda no es válido. Pide a tu proveedor de hosting que lo corrija e inténtalo de nuevo.",
       "WOOCOMMERCE_REST_NOT_FOUND": "Akeed no pudo encontrar la API REST de WooCommerce en esta dirección. En WordPress, abre Settings > Permalinks, elige cualquier opción que no sea Plain y comprueba que WooCommerce esté actualizado.",

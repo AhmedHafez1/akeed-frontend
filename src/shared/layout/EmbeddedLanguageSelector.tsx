@@ -6,22 +6,14 @@ import { useTranslations } from 'next-intl'
 import {
   getPersistedLocalePreference,
   getLocaleFromPathname,
+  getLocaleNativeName,
   isSupportedLocale,
   persistLocalePreference,
   replacePathnameLocale,
   SUPPORTED_LOCALES,
-  type SupportedLocale,
 } from '@/shared/lib/locale'
 import { resolveEmbeddedContextFromSearch } from '@/shared/lib/embedded-context'
 import { createAkeedEmbeddedSupportWhatsAppUrl } from '@/shared/lib/whatsapp'
-
-/** The title-bar label that switches to each language. */
-const SWITCH_LABEL_KEYS: Record<SupportedLocale, string> = {
-  ar: 'switchToArabic',
-  en: 'switchToEnglish',
-  ur: 'switchToUrdu',
-  es: 'switchToSpanish',
-}
 
 export function EmbeddedLanguageSelector() {
   const t = useTranslations('settings')
@@ -82,16 +74,33 @@ export function EmbeddedLanguageSelector() {
 
   return (
     <ui-title-bar title="Akeed">
-      {SUPPORTED_LOCALES.filter((option) => option !== locale).map((option) => (
-        <button
-          key={option}
-          type="button"
-          onClick={() => handleLocaleChange(option)}
-          disabled={isPending}
-        >
-          {isPending ? t('languageSwitching') : t(SWITCH_LABEL_KEYS[option])}
-        </button>
-      ))}
+      {/*
+       * One menu, named after the language in use; Shopify draws a `section`
+       * as a dropdown. Each language is listed under its own name, so a
+       * merchant can find theirs whatever language the app opened in.
+       */}
+      <section
+        label={
+          isPending
+            ? t('languageSwitching')
+            : `${support('localeLabel')}: ${getLocaleNativeName(locale)}`
+        }
+      >
+        {SUPPORTED_LOCALES.filter((option) => option !== locale).map(
+          (option) => (
+            // Shopify accepts no attributes on a button inside a section, so
+            // a switch in progress is ignored here instead of disabling it.
+            <button
+              key={option}
+              onClick={() => {
+                if (!isPending) handleLocaleChange(option)
+              }}
+            >
+              {getLocaleNativeName(option)}
+            </button>
+          )
+        )}
+      </section>
       <button
         type="button"
         onClick={() => {

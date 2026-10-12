@@ -30,19 +30,22 @@ beforeEach(() => {
 })
 
 describe('EmbeddedLanguageSelector', () => {
-  it('offers every other language in the title bar', () => {
-    render(<EmbeddedLanguageSelector />)
+  it('groups the other languages in one menu named after the current one', () => {
+    const { container } = render(<EmbeddedLanguageSelector />)
 
-    expect(screen.getByText('switchToEnglish')).toBeTruthy()
-    expect(screen.getByText('switchToUrdu')).toBeTruthy()
-    expect(screen.getByText('switchToSpanish')).toBeTruthy()
-    expect(screen.queryByText('switchToArabic')).toBeNull()
+    const menu = container.querySelector('ui-title-bar > section')
+    expect(menu?.getAttribute('label')).toBe('localeLabel: العربية')
+    expect(
+      [...(menu?.querySelectorAll('button') ?? [])].map(
+        (button) => button.textContent
+      )
+    ).toEqual(['English', 'اردو', 'Español'])
   })
 
   it('remembers Urdu and reopens the page in it, keeping the shop', async () => {
     render(<EmbeddedLanguageSelector />)
 
-    fireEvent.click(screen.getByText('switchToUrdu'))
+    fireEvent.click(screen.getByText('اردو'))
 
     await waitFor(() =>
       expect(route.replace).toHaveBeenCalledWith(
@@ -55,7 +58,7 @@ describe('EmbeddedLanguageSelector', () => {
   it('remembers Spanish and reopens the page in it, keeping the shop', async () => {
     render(<EmbeddedLanguageSelector />)
 
-    fireEvent.click(screen.getByText('switchToSpanish'))
+    fireEvent.click(screen.getByText('Español'))
 
     await waitFor(() =>
       expect(route.replace).toHaveBeenCalledWith(

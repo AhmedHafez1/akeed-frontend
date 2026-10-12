@@ -25,6 +25,11 @@ type UiSaveBarProps = DetailedHTMLProps<
 >
 
 declare module 'react' {
+  interface HTMLAttributes<T> {
+    /** Names a `<section>` of `ui-title-bar` actions; Shopify shows it as a menu. */
+    label?: T extends HTMLElement ? string : never
+  }
+
   namespace JSX {
     interface IntrinsicElements {
       's-app-nav': SAppNavProps

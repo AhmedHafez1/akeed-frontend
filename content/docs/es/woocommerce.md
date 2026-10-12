@@ -18,7 +18,7 @@ No instalas un plugin de WordPress ni copias ninguna clave. Apruebas la conexió
 
 Tu tienda necesita todo lo siguiente:
 
-- Una dirección que empiece con `https://` y se abra en la internet pública.
+- Una dirección que empiece con `https://` y sea accesible desde internet.
 - Los enlaces permanentes configurados en cualquier opción que no sea **Plain** (WordPress > Settings > Permalinks).
 - El método de pago estándar **Cash on delivery** de WooCommerce.
 - Un usuario de WordPress que sea administrador o gestor de la tienda, para aprobar la conexión.

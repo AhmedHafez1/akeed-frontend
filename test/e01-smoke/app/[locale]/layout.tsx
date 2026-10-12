@@ -3,6 +3,7 @@ import path from 'node:path'
 import type { ReactNode } from 'react'
 import { notFound } from 'next/navigation'
 import { NextIntlClientProvider, type AbstractIntlMessages } from 'next-intl'
+import { getLocaleDirection, isSupportedLocale } from '@/shared/lib/locale'
 // The production font stack, so fixture screenshots match the app.
 import { fontVariables } from '@/shared/theme/fonts'
 import { FixtureQueryProvider } from './FixtureQueryProvider'
@@ -16,7 +17,7 @@ export default async function SmokeLayout({
   params: Promise<{ locale: string }>
 }) {
   const { locale } = await params
-  if (locale !== 'en' && locale !== 'ar') notFound()
+  if (!isSupportedLocale(locale)) notFound()
   const messages = JSON.parse(
     await readFile(
       path.resolve(process.cwd(), '../../public/messages', `${locale}.json`),
@@ -24,7 +25,7 @@ export default async function SmokeLayout({
     )
   ) as AbstractIntlMessages
   return (
-    <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+    <html lang={locale} dir={getLocaleDirection(locale)}>
       <body className={`${fontVariables} font-sans`}>
         <script
           dangerouslySetInnerHTML={{

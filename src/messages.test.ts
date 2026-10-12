@@ -118,7 +118,6 @@ describe('Urdu messages', () => {
       'orderImport.upload.templateExcel',
       'settings.sourceEasyOrders',
       'settings.sourceWooCommerce',
-      'settings.switchToEnglish',
       'sources.easyorders.title',
       'sources.shopify.title',
       'sources.woocommerce.title',
@@ -132,8 +131,6 @@ describe('Urdu messages', () => {
     const wrongScript = Object.keys(urdu).filter(
       (key) =>
         urdu[key] !== english[key] &&
-        // The Arabic language is named in Arabic in every language menu.
-        key !== 'settings.switchToArabic' &&
         (!URDU_SCRIPT.test(urdu[key]) || ARABIC_ONLY_LETTERS.test(urdu[key]))
     )
     expect(wrongScript).toEqual([])
@@ -215,7 +212,6 @@ describe('Spanish messages', () => {
       'settings.embedded.timing.customDelaySuffix',
       'settings.sourceEasyOrders',
       'settings.sourceWooCommerce',
-      'settings.switchToEnglish',
       'sources.easyorders.title',
       'sources.shopify.title',
       'sources.woocommerce.title',
@@ -228,12 +224,9 @@ describe('Spanish messages', () => {
     ])
   })
 
-  it("writes Latin letters, except the other languages' own names", () => {
-    const wrongScript = Object.keys(spanish).filter(
-      (key) =>
-        key !== 'settings.switchToArabic' &&
-        key !== 'settings.switchToUrdu' &&
-        ARABIC_SCRIPT.test(spanish[key])
+  it('writes Latin letters', () => {
+    const wrongScript = Object.keys(spanish).filter((key) =>
+      ARABIC_SCRIPT.test(spanish[key])
     )
     expect(wrongScript).toEqual([])
   })
@@ -249,13 +242,10 @@ describe('Spanish messages', () => {
 })
 
 describe('Arabic and English messages', () => {
-  it('name every interface language in the embedded title bar', () => {
-    for (const messages of [ar, en, ur, es])
-      expect(messages.settings).toMatchObject({
-        switchToArabic: expect.any(String),
-        switchToEnglish: expect.any(String),
-        switchToUrdu: expect.any(String),
-        switchToSpanish: expect.any(String),
-      })
+  it('label the embedded language menu in every language', () => {
+    for (const messages of [ar, en, ur, es]) {
+      expect(messages.embeddedSupport.localeLabel).toEqual(expect.any(String))
+      expect(messages.settings.languageSwitching).toEqual(expect.any(String))
+    }
   })
 })
