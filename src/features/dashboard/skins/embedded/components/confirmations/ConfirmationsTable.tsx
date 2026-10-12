@@ -63,7 +63,7 @@ function ConfirmationsTableRow({
 
       <IndexTable.Cell>
         <div className={cellClassName}>
-          <CustomerNameCell name={view.name} />
+          <CustomerNameCell name={view.name} history={row.customer_history} />
         </div>
       </IndexTable.Cell>
 

@@ -11,6 +11,7 @@ import {
   getLastUpdateAt,
 } from '../../../../domain/verificationRow'
 import { useStatusTooltip } from '../../../../domain/useStatusTooltip'
+import { useCustomerRecordView } from '../../../../domain/useCustomerRecordView'
 import {
   customerDisplayName,
   formatDayAndClock,
@@ -28,7 +29,9 @@ export interface ConfirmationsListProps {
   canWrite: boolean
   canRetry: boolean
   actingId: string | null
-  handlers: ConfirmationRowActionHandlers
+  handlers: ConfirmationRowActionHandlers & {
+    onOpenDetails: (row: VerificationItem) => void
+  }
 }
 
 /**
@@ -131,6 +134,41 @@ export function StatusCell({
   )
 }
 
+/**
+ * The customer's track record as one small badge: a repeat buyer, or one who
+ * has left orders unconfirmed before (amber). A first-time buyer gets none.
+ */
+export function CustomerRecordBadge({
+  history,
+  compact = false,
+}: {
+  history: VerificationItem['customer_history']
+  /**
+   * The table's form: only a customer who left orders unconfirmed is marked,
+   * as a count with the words in the tooltip.
+   */
+  compact?: boolean
+}) {
+  const view = useCustomerRecordView(history)
+  if (!view?.showInList) return null
+  const tone = view.kind === 'risk' ? 'warning' : undefined
+  if (!compact) {
+    return (
+      <span title={view.summary}>
+        <Badge tone={tone}>{view.label}</Badge>
+      </span>
+    )
+  }
+  if (!view.compact) return null
+  return (
+    <span title={`${view.label} — ${view.summary}`}>
+      <Badge tone={tone} toneAndProgressLabelOverride={view.label}>
+        {view.compact}
+      </Badge>
+    </span>
+  )
+}
+
 export function FollowUpCell({
   row,
   timeZone,
@@ -176,9 +214,11 @@ export function FollowUpCell({
 export function CustomerCell({
   name,
   phone,
+  history,
 }: {
   name: string | null
   phone: string
+  history?: VerificationItem['customer_history']
 }) {
   const t = useTranslations('dashboard')
   const phoneText = <bdi dir="ltr">{phone || t('table.noPhone')}</bdi>
@@ -190,16 +230,26 @@ export function CustomerCell({
       <Text as="span" variant="bodySm" tone="subdued">
         {name ? phoneText : t('confirmations.noName')}
       </Text>
+      <CustomerRecordBadge history={history} />
     </BlockStack>
   )
 }
 
-export function CustomerNameCell({ name }: { name: string | null }) {
+export function CustomerNameCell({
+  name,
+  history,
+}: {
+  name: string | null
+  history?: VerificationItem['customer_history']
+}) {
   const t = useTranslations('dashboard')
   return (
-    <Text as="span" variant="bodyMd" tone="subdued">
-      {name ? <bdi>{name}</bdi> : t('confirmations.noName')}
-    </Text>
+    <InlineStack gap="200" blockAlign="center" wrap={false}>
+      <Text as="span" variant="bodyMd" tone="subdued">
+        {name ? <bdi>{name}</bdi> : t('confirmations.noName')}
+      </Text>
+      <CustomerRecordBadge history={history} compact />
+    </InlineStack>
   )
 }
 

@@ -1,10 +1,11 @@
 'use client'
 
 import { useEffect, useId, useRef, type KeyboardEvent } from 'react'
-import { Search, X } from 'lucide-react'
+import { Download, Loader2, Search, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
+import { akButton } from '@/shared/ui'
 import { CONFIRMATIONS_TABS } from '@/features/dashboard/domain/confirmationsUrlState'
 import { formatCount } from '@/features/dashboard/lib/orderDisplay'
 import type { ConfirmationsTab } from '@/features/dashboard/model/dashboard.model'
@@ -21,6 +22,10 @@ interface ConfirmationsToolbarProps {
   isSearchValid: boolean
   onSearchChange: (value: string) => void
   onSearchClear: () => void
+  /** Downloads the list on screen as a file; hidden when not given. */
+  onExport?: () => void
+  isExporting?: boolean
+  canExport?: boolean
 }
 
 /**
@@ -139,6 +144,9 @@ export function ConfirmationsToolbar({
   isSearchValid,
   onSearchChange,
   onSearchClear,
+  onExport,
+  isExporting = false,
+  canExport = false,
 }: ConfirmationsToolbarProps) {
   const t = useTranslations('dashboard.confirmations')
   const tTable = useTranslations('dashboard.standalone.table')
@@ -170,60 +178,83 @@ export function ConfirmationsToolbar({
         />
       </div>
 
-      <div className="w-full lg:w-80 lg:shrink-0">
-        <div className="relative">
-          <Search
-            aria-hidden="true"
-            className="text-ink-muted pointer-events-none absolute start-3 top-1/2 size-4.5 -translate-y-1/2"
-          />
-          <input
-            ref={inputRef}
-            type="search"
-            inputMode="tel"
-            autoComplete="off"
-            maxLength={32}
-            aria-label={t('search.label')}
-            aria-invalid={!isSearchValid || undefined}
-            aria-describedby={isSearchValid ? hintId : `${hintId} ${errorId}`}
-            aria-keyshortcuts="/"
-            placeholder={tTable('searchPlaceholder')}
-            value={searchInput}
-            onChange={(event) => onSearchChange(event.target.value)}
+      <div className="flex w-full items-start gap-2 lg:w-auto lg:shrink-0">
+        {onExport && (
+          <button
+            type="button"
+            onClick={onExport}
+            disabled={!canExport || isExporting}
+            aria-busy={isExporting || undefined}
+            title={t('export.hint')}
             className={cn(
-              'ak-focus bg-surface-raised text-ink text-ak-body placeholder:text-ink-muted rounded-ak-control h-11 w-full border ps-10 pe-11 [&::-webkit-search-cancel-button]:hidden',
-              isSearchValid ? 'border-control-border' : 'border-ak-danger'
+              akButton({ variant: 'secondary', size: 'md' }),
+              'order-last shrink-0'
             )}
-          />
-          <span id={hintId} className="sr-only">
-            {tTable('searchShortcut')}
-          </span>
-          {searchInput ? (
-            <button
-              type="button"
-              onClick={onSearchClear}
-              aria-label={t('search.clear')}
-              className="ak-focus text-ink-muted hover:text-ink absolute end-2.5 top-1/2 flex size-7 -translate-y-1/2 items-center justify-center rounded-md"
-            >
-              <X aria-hidden="true" className="size-4" />
-            </button>
-          ) : (
-            <kbd
+          >
+            {isExporting ? (
+              <Loader2 aria-hidden="true" className="animate-spin" />
+            ) : (
+              <Download aria-hidden="true" />
+            )}
+            <span className="hidden sm:inline">{t('export.button')}</span>
+            <span className="sr-only sm:hidden">{t('export.button')}</span>
+          </button>
+        )}
+        <div className="min-w-0 flex-1 lg:w-80 lg:flex-none">
+          <div className="relative">
+            <Search
               aria-hidden="true"
-              className="border-line-strong bg-surface-sunken text-ink-muted text-ak-label pointer-events-none absolute end-3 top-1/2 hidden h-6 min-w-6 -translate-y-1/2 items-center justify-center rounded-md border px-1.5 font-sans sm:inline-flex"
+              className="text-ink-muted pointer-events-none absolute start-3 top-1/2 size-4.5 -translate-y-1/2"
+            />
+            <input
+              ref={inputRef}
+              type="search"
+              inputMode="tel"
+              autoComplete="off"
+              maxLength={32}
+              aria-label={t('search.label')}
+              aria-invalid={!isSearchValid || undefined}
+              aria-describedby={isSearchValid ? hintId : `${hintId} ${errorId}`}
+              aria-keyshortcuts="/"
+              placeholder={tTable('searchPlaceholder')}
+              value={searchInput}
+              onChange={(event) => onSearchChange(event.target.value)}
+              className={cn(
+                'ak-focus bg-surface-raised text-ink text-ak-body placeholder:text-ink-muted rounded-ak-control h-11 w-full border ps-10 pe-11 [&::-webkit-search-cancel-button]:hidden',
+                isSearchValid ? 'border-control-border' : 'border-ak-danger'
+              )}
+            />
+            <span id={hintId} className="sr-only">
+              {tTable('searchShortcut')}
+            </span>
+            {searchInput ? (
+              <button
+                type="button"
+                onClick={onSearchClear}
+                aria-label={t('search.clear')}
+                className="ak-focus text-ink-muted hover:text-ink absolute end-2.5 top-1/2 flex size-7 -translate-y-1/2 items-center justify-center rounded-md"
+              >
+                <X aria-hidden="true" className="size-4" />
+              </button>
+            ) : (
+              <kbd
+                aria-hidden="true"
+                className="border-line-strong bg-surface-sunken text-ink-muted text-ak-label pointer-events-none absolute end-3 top-1/2 hidden h-6 min-w-6 -translate-y-1/2 items-center justify-center rounded-md border px-1.5 font-sans sm:inline-flex"
+              >
+                /
+              </kbd>
+            )}
+          </div>
+          {!isSearchValid && (
+            <p
+              id={errorId}
+              role="alert"
+              className="text-ak-caption text-ak-danger mt-1.5"
             >
-              /
-            </kbd>
+              {t('search.invalid')}
+            </p>
           )}
         </div>
-        {!isSearchValid && (
-          <p
-            id={errorId}
-            role="alert"
-            className="text-ak-caption text-ak-danger mt-1.5"
-          >
-            {t('search.invalid')}
-          </p>
-        )}
       </div>
     </div>
   )

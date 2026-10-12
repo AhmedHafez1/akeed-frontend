@@ -1933,6 +1933,7 @@
       }
     },
     "tabs": {
+      "label": "Main views",
       "metrics": "Dashboard",
       "confirmations": "Confirmations"
     },
@@ -2325,6 +2326,8 @@
         "legendConfirmed": "Confirmed {count}",
         "legendCanceled": "Canceled {count}",
         "legendNoReply": "No reply yet {count}",
+        "replyTime": "Typical reply time",
+        "replyTimeLine": "Customers typically reply in {time}.",
         "empty": "No messages sent in this period yet."
       },
       "error": {
@@ -2336,6 +2339,20 @@
     "confirmations": {
       "title": "Confirmations",
       "subtitle": "Every cash-on-delivery order we messaged, and what happened next.",
+      "customer": {
+        "heading": "Customer history",
+        "new": "New customer",
+        "repeat": "Repeat customer · {confirmed} confirmed",
+        "risk": "{unconfirmed} of {orders} other orders not confirmed",
+        "returning": "Repeat customer",
+        "summary": "Other orders: {orders} · Confirmed: {confirmed} · Canceled: {canceled} · No reply: {noReply}"
+      },
+      "export": {
+        "button": "Export",
+        "hint": "Download this list as a spreadsheet file, for example to hand confirmed orders to your courier",
+        "failed": "We could not export the list. Please try again.",
+        "tooLarge": "Too many orders to export at once. Choose a shorter period or one tab."
+      },
       "tabs": {
         "all": "All",
         "needs_action": "Needs action",

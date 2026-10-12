@@ -1,11 +1,13 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import Link from 'next/link'
 import { Activity, CheckCheck, Package, type LucideIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
 import { akCard } from '@/shared/ui'
+import { useKpiDetails } from '@/features/dashboard/domain/useKpiDetails'
 import {
   formatCount,
   formatPercent,
@@ -20,11 +22,13 @@ function KpiCard({
   icon: Icon,
   label,
   value,
+  detail,
   href,
 }: {
   icon: LucideIcon
   label: string
   value: string
+  detail?: ReactNode
   href?: string
 }) {
   const body = (
@@ -38,6 +42,9 @@ function KpiCard({
           <bdi>{value}</bdi>
         </p>
       </div>
+      {detail && (
+        <p className="text-ak-caption text-ink-muted mt-2">{detail}</p>
+      )}
     </>
   )
   const frame = cn(akCard, 'block px-6 py-5')
@@ -69,6 +76,7 @@ export function KpiCards({
 }) {
   const t = useTranslations('dashboard.standalone.kpis')
   const { locale } = useLocaleInfo()
+  const details = useKpiDetails(kpis)
 
   return (
     <div className="grid gap-4 md:grid-cols-3">
@@ -76,6 +84,7 @@ export function KpiCards({
         icon={CheckCheck}
         label={t('confirmed')}
         value={formatCount(kpis.confirmed.count, locale)}
+        detail={details.confirmed}
         href={confirmedHref}
       />
       <KpiCard
@@ -88,6 +97,7 @@ export function KpiCards({
         icon={Activity}
         label={t('rate')}
         value={formatPercent(kpis.confirmation_rate.rate, locale)}
+        detail={details.rate}
       />
     </div>
   )

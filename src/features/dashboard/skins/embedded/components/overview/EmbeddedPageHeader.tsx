@@ -4,7 +4,8 @@ import type { DateRangeFilterOption } from '../../../../domain/dashboard.types'
 import type { DashboardStatsDateRange } from '../../../../model/dashboard.model'
 
 interface EmbeddedPageHeaderProps {
-  title: string
+  /** The page name, or the main tabs standing in for it. */
+  title: ReactNode
   titleMetadata?: ReactNode
   /** A line of text, or richer content such as the settings status line. */
   subtitle?: ReactNode
@@ -29,11 +30,15 @@ export function EmbeddedPageHeader({
 }: EmbeddedPageHeaderProps) {
   return (
     <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-      <BlockStack gap="150">
-        <div className="flex flex-wrap items-center gap-2">
-          <Text as="h1" variant="headingXl">
-            {title}
-          </Text>
+      <BlockStack gap="200">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+          {typeof title === 'string' ? (
+            <Text as="h1" variant="headingXl">
+              {title}
+            </Text>
+          ) : (
+            title
+          )}
           {titleMetadata}
         </div>
         {typeof subtitle === 'string' ? (

@@ -1,10 +1,10 @@
 'use client'
 
 import { useCallback, useMemo } from 'react'
-import { Badge, BlockStack, Page, Tabs } from '@shopify/polaris'
+import { Badge, BlockStack, Page } from '@shopify/polaris'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { MAIN_TABS, resolveMainTab } from '../../domain/mainTabs'
+import { resolveMainTab } from '../../domain/mainTabs'
 import {
   rangeParam,
   resolveConfirmationsTab,
@@ -14,6 +14,7 @@ import { DASHBOARD_DATE_RANGE_IDS } from '../../domain/verificationFilters'
 import type { DashboardStatsDateRange } from '../../model/dashboard.model'
 import type { DateRangeFilterOption } from '../../domain/dashboard.types'
 import { DashboardActivationSection } from './components/DashboardActivationSection'
+import { MainTabsTitle } from './components/MainTabsTitle'
 import { MetricsPlaceholder } from './components/MetricsPlaceholder'
 import { useDashboardActivation } from '../../domain/useDashboardActivation'
 import { OverviewEmbedded } from './OverviewEmbedded'
@@ -21,7 +22,7 @@ import { ConfirmationsEmbedded } from './ConfirmationsEmbedded'
 
 /**
  * The embedded app's main page: the dashboard and the confirmations list as
- * two tabs sharing one period. Tab, period and the confirmations filter live
+ * two views sharing one period, switched from the page title. Tab, period and the confirmations filter live
  * in the URL, so "كل الطلبات" can link straight to the needs-action list and a
  * reload lands where the merchant was.
  */
@@ -61,10 +62,13 @@ export function MainEmbeddedSkin() {
   const onPeriodChange = (next: DashboardStatsDateRange) =>
     updateParams({ range: rangeParam(next) })
 
-  const tabs = [
-    { id: 'metrics', content: t('tabs.metrics') },
-    { id: 'confirmations', content: t('tabs.confirmations') },
-  ]
+  const renderTitle = (needsActionCount: number | null) => (
+    <MainTabsTitle
+      active={activeTab}
+      onSelect={(tab) => updateParams({ tab })}
+      needsActionCount={needsActionCount}
+    />
+  )
   const freeMessagesBadge =
     activation.freeMessagesLeft !== null ? (
       <Badge tone="success">
@@ -75,36 +79,29 @@ export function MainEmbeddedSkin() {
     ) : undefined
 
   return (
-    // Polaris caps a page at 998px, which crowds the tables. The dashboard
-    // gets 1200px; the nine-column confirmations table gets 1440px.
+    // Polaris caps a page at 998px, which crowds the nine-column table. Both
+    // views share one 1320px width, so switching never moves the page edges.
     <Page fullWidth>
-      <div
-        className={
-          activeTab === 'metrics'
-            ? 'mx-auto w-full max-w-300'
-            : 'mx-auto w-full max-w-360'
-        }
-      >
+      <div className="mx-auto w-full max-w-330">
         <BlockStack gap="500">
           {showActivation && (
             <DashboardActivationSection activation={activation} />
           )}
-          <Tabs
-            tabs={tabs}
-            selected={MAIN_TABS.indexOf(activeTab)}
-            onSelect={(index) => updateParams({ tab: MAIN_TABS[index] })}
-          />
           {activeTab === 'metrics' ? (
             showActivation ? (
-              <MetricsPlaceholder
-                title={t('activation.metricsPlaceholder.title')}
-                body={t('activation.metricsPlaceholder.body')}
-              />
+              <>
+                {renderTitle(null)}
+                <MetricsPlaceholder
+                  title={t('activation.metricsPlaceholder.title')}
+                  body={t('activation.metricsPlaceholder.body')}
+                />
+              </>
             ) : (
               <OverviewEmbedded
                 period={period}
                 periodOptions={periodOptions}
                 onPeriodChange={onPeriodChange}
+                renderTitle={renderTitle}
                 titleMetadata={freeMessagesBadge}
                 onEditSettings={activation.openQuietHours}
                 onViewNeedsAction={() =>
@@ -117,7 +114,9 @@ export function MainEmbeddedSkin() {
               period={period}
               periodOptions={periodOptions}
               onPeriodChange={onPeriodChange}
+              title={renderTitle(null)}
               tab={confirmationsTab}
+              onEditSettings={activation.openQuietHours}
               onTabChange={(next) =>
                 updateParams({ filter: next === 'all' ? null : next })
               }

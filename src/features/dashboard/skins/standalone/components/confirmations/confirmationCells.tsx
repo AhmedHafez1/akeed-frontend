@@ -1,6 +1,6 @@
 'use client'
 
-import { Bell, BellRing, Store } from 'lucide-react'
+import { Bell, BellRing, Store, TriangleAlert } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
@@ -11,6 +11,7 @@ import {
   getLastUpdateAt,
 } from '@/features/dashboard/domain/verificationRow'
 import { useStatusTooltip } from '@/features/dashboard/domain/useStatusTooltip'
+import { useCustomerRecordView } from '@/features/dashboard/domain/useCustomerRecordView'
 import type { ConfirmationRowActionHandlers } from '@/features/dashboard/domain/confirmationRowActions'
 import {
   customerDisplayName,
@@ -253,6 +254,23 @@ export function StatusNote({
     )
   }
 
+  return <StatusSubLine row={row} timeZone={timeZone} />
+}
+
+/**
+ * How the status came about, in a few words under the badge: "Confirmed
+ * manually", "After reminder", "By the customer". Nothing when the badge
+ * already says it all.
+ */
+export function StatusSubLine({
+  row,
+  timeZone,
+}: {
+  row: VerificationItem
+  timeZone: string
+}) {
+  const t = useTranslations('dashboard.confirmations.status')
+  const { locale } = useLocaleInfo()
   const view = resolveRowStatus(row)
   if (!view.sub) return null
   const time = view.subTime
@@ -260,8 +278,53 @@ export function StatusNote({
     : ''
   return (
     <p className="text-ak-caption text-ink-muted truncate">
-      {tStatus(view.sub, { time })}
+      {t(view.sub, { time })}
     </p>
+  )
+}
+
+/**
+ * The customer's track record with this merchant as one small chip: a repeat
+ * buyer, or one who has left orders unconfirmed before (amber). A first-time
+ * buyer gets no chip, so the list stays quiet.
+ *
+ * `compact` is the table's form: only a customer who left orders
+ * unconfirmed is marked, as a count beside the name on the row's one line,
+ * with the words in the tooltip.
+ */
+export function CustomerRecordChip({
+  history,
+  compact = false,
+}: {
+  history: VerificationItem['customer_history']
+  compact?: boolean
+}) {
+  const view = useCustomerRecordView(history)
+  if (!view?.showInList) return null
+  if (compact && !view.compact) return null
+  return (
+    <span
+      title={compact ? `${view.label} — ${view.summary}` : view.summary}
+      className={cn(
+        'text-ak-label inline-flex h-5 max-w-full items-center gap-1 rounded-full px-2',
+        compact && 'shrink-0',
+        view.kind === 'risk'
+          ? 'bg-ak-warning-soft text-ak-warning'
+          : 'bg-neutral-soft text-ink-muted'
+      )}
+    >
+      {compact ? (
+        <>
+          <TriangleAlert aria-hidden="true" className="size-3" />
+          <bdi dir="ltr" aria-hidden="true" className="tabular-nums">
+            {view.compact}
+          </bdi>
+          <span className="sr-only">{view.label}</span>
+        </>
+      ) : (
+        <span className="truncate">{view.label}</span>
+      )}
+    </span>
   )
 }
 
@@ -272,9 +335,11 @@ export function StatusNote({
 export function CustomerCell({
   name,
   phone,
+  history,
 }: {
   name: string | null
   phone: string
+  history?: VerificationItem['customer_history']
 }) {
   const t = useTranslations('dashboard')
   const phoneText = (
@@ -291,19 +356,29 @@ export function CustomerCell({
         <p className="text-ak-caption text-ink-muted whitespace-nowrap">
           {name ? phoneText : t('confirmations.noName')}
         </p>
+        <div className="mt-1 empty:hidden">
+          <CustomerRecordChip history={history} />
+        </div>
       </div>
     </div>
   )
 }
 
-export function CustomerNameCell({ name }: { name: string | null }) {
+export function CustomerNameCell({
+  name,
+  history,
+}: {
+  name: string | null
+  history?: VerificationItem['customer_history']
+}) {
   const t = useTranslations('dashboard')
   return (
-    <span
-      className={cn('text-ak-body text-ink-muted block max-w-full truncate')}
-    >
-      {name ? <bdi>{name}</bdi> : t('confirmations.noName')}
-    </span>
+    <div className="flex min-w-0 items-center gap-2">
+      <span className="text-ak-body text-ink-muted block min-w-0 truncate">
+        {name ? <bdi>{name}</bdi> : t('confirmations.noName')}
+      </span>
+      <CustomerRecordChip history={history} compact />
+    </div>
   )
 }
 

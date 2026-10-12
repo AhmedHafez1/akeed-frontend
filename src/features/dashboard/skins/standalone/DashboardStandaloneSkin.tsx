@@ -208,6 +208,7 @@ export function DashboardStandaloneSkin({
           <MessageFlowCard
             funnel={overview.funnel}
             manualConfirmed={manualConfirmationsAfterSend(overview)}
+            replySeconds={overview.reply_time?.median_seconds ?? null}
           />
         </>
       )}

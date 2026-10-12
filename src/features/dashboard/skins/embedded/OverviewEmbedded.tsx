@@ -55,6 +55,8 @@ interface OverviewEmbeddedProps {
   period: DashboardStatsDateRange
   periodOptions: ReadonlyArray<DateRangeFilterOption>
   onPeriodChange: (period: DashboardStatsDateRange) => void
+  /** The main tabs, given the number of orders waiting on the merchant. */
+  renderTitle: (needsActionCount: number | null) => ReactNode
   titleMetadata?: ReactNode
   onEditSettings: () => void
   onViewNeedsAction: () => void
@@ -65,6 +67,7 @@ export function OverviewEmbedded({
   period,
   periodOptions,
   onPeriodChange,
+  renderTitle,
   titleMetadata,
   onEditSettings,
   onViewNeedsAction,
@@ -79,7 +82,7 @@ export function OverviewEmbedded({
   return (
     <BlockStack gap="500">
       <EmbeddedPageHeader
-        title={t('title')}
+        title={renderTitle(overview?.needs_action.count ?? null)}
         titleMetadata={titleMetadata}
         subtitle={
           overview ? (
@@ -135,7 +138,10 @@ export function OverviewEmbedded({
             onRequestConfirm={confirmation.request}
             onViewAll={onViewNeedsAction}
           />
-          <MessageFlowCard funnel={overview.funnel} />
+          <MessageFlowCard
+            funnel={overview.funnel}
+            replySeconds={overview.reply_time?.median_seconds ?? null}
+          />
         </BlockStack>
       )}
 

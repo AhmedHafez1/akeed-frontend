@@ -52,7 +52,11 @@ function ConfirmationCard({
         </InlineStack>
 
         <InlineStack align="space-between" blockAlign="start" wrap={false}>
-          <CustomerCell name={view.name} phone={view.phone} />
+          <CustomerCell
+            name={view.name}
+            phone={view.phone}
+            history={row.customer_history}
+          />
           <BlockStack gap="150" inlineAlign="end">
             <StatusCell row={row} timeZone={timeZone} />
             <FollowUpCell row={row} timeZone={timeZone} showTime />

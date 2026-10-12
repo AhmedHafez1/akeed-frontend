@@ -263,3 +263,40 @@ export function customerInitials(name: string | null | undefined): string {
   const last = words.length > 1 ? (Array.from(words.at(-1)!)[0] ?? '') : ''
   return `${first}${last}`.toLocaleUpperCase('en')
 }
+
+const DURATION_STEPS = [
+  { unit: 'second', size: 1, upTo: 90 },
+  { unit: 'minute', size: 60, upTo: 90 * 60 },
+  { unit: 'hour', size: 3600, upTo: 48 * 3600 },
+  { unit: 'day', size: 86400, upTo: Infinity },
+] as const
+
+/**
+ * A length of time in the one unit a person would say it in: "45 seconds",
+ * "6 minutes", "3 hours", "2 days". Worded by `Intl`, so every interface
+ * language gets its own unit names with Latin digits.
+ */
+export function formatDuration(
+  seconds: number | null | undefined,
+  locale: string
+): string {
+  if (seconds === null || seconds === undefined || !Number.isFinite(seconds))
+    return '—'
+  const safe = Math.max(seconds, 0)
+  const step =
+    DURATION_STEPS.find((candidate) => safe < candidate.upTo) ??
+    DURATION_STEPS[DURATION_STEPS.length - 1]
+  const value = Math.max(Math.round(safe / step.size), step.size === 1 ? 0 : 1)
+  try {
+    return new Intl.NumberFormat(latinLocale(locale), {
+      style: 'unit',
+      unit: step.unit,
+      unitDisplay: 'long',
+      maximumFractionDigits: 0,
+    })
+      .format(value)
+      .replace(BIDI_MARKS, '')
+  } catch {
+    return `${value} ${step.unit}`
+  }
+}
