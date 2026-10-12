@@ -64,7 +64,7 @@ export function getAdminSession() {
   return adminRequest<{
     authenticated: true
     role: 'admin'
-    /** Whether this staff member may write templates (US-08-06). */
+    /** Whether this staff member may write templates. */
     template_operations?: { enabled: boolean; operator: boolean }
   }>('/api/admin/session')
 }

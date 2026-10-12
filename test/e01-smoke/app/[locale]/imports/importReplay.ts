@@ -1,5 +1,5 @@
 /*
- * US-04.6-10 release-gate replay. While `sessionStorage['akeed:e2e-replay']`
+ * Release-gate replay. While `sessionStorage['akeed:e2e-replay']`
  * names a recording, every order-import request and the Verifications list
  * for its batch are answered with what the real backend returned in the
  * PostgreSQL end-to-end test (akeed-backend test/order-import-release-gate.

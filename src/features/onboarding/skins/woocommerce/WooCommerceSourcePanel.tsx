@@ -16,6 +16,7 @@ import { useWooCommerceConnection } from './useWooCommerceConnection'
 import { WooCommerceConnectionCheck } from './WooCommerceConnectionCheck'
 import { WooCommerceKeyRemovalSteps } from './WooCommerceKeyRemovalSteps'
 import { WooCommerceWebhookStatus } from './WooCommerceWebhookStatus'
+import { resolveSupportedLocale } from '@/shared/lib/locale'
 
 interface WooCommerceSourcePanelProps {
   /** The connection changed in a way the rest of Settings should re-read. */
@@ -32,7 +33,7 @@ export function WooCommerceSourcePanel({
   onChanged,
 }: WooCommerceSourcePanelProps) {
   const t = useTranslations('wooCommerceConnect')
-  const locale = useLocale() === 'en' ? 'en' : 'ar'
+  const locale = resolveSupportedLocale(useLocale())
   const connection = useWooCommerceConnection(locale)
   const { view, status, canManage, reload } = connection
   const [confirmingDisconnect, setConfirmingDisconnect] = useState(false)

@@ -1,4 +1,4 @@
-// US-04.6-10 AC3, frontend rows of the E04.6 Reuse map: the manual order form
+// Frontend rows of the bulk-import reuse map: the manual order form
 // and the file import share one currency list, one COD constant and one
 // download helper. Run with `npm run check:reuse-map`; exits 1 on a second copy.
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'

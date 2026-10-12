@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
+import { locales } from '@/i18n'
 import type { Locale } from '@/i18n'
 import { buildMultiLocaleDocsSearchIndex } from '@/features/docs/lib/docs-search.server'
 import {
@@ -27,8 +28,6 @@ import { JsonLd } from '@/shared/ui/JsonLd'
 export async function generateStaticParams(): Promise<
   Array<{ locale: string; slug: string }>
 > {
-  const locales = ['en', 'ar'] as const
-
   const params = await Promise.all(
     locales.map(async (locale) => {
       const slugs = await getAllDocSlugs(locale)

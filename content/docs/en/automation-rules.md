@@ -1,7 +1,7 @@
 ---
 title: Automation Rules
 description: Configure send timing, follow-ups, escalation, and quiet hours to match your COD operations.
-order: 5
+order: 8
 slug: automation-rules
 ---
 

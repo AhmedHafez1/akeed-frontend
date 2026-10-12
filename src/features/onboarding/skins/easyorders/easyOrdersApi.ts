@@ -1,6 +1,7 @@
 'use client'
 
 import { api } from '@/shared/lib/auth'
+import type { SupportedLocale } from '@/shared/lib/locale'
 import type {
   EasyOrdersConnectionStatus,
   EasyOrdersInstallStarted,
@@ -19,7 +20,7 @@ export function fetchEasyOrdersConnection(): Promise<EasyOrdersConnectionStatus>
  * returned link is a credential: it is navigated to, never shown or stored.
  */
 export function startEasyOrdersInstall(
-  locale: 'ar' | 'en'
+  locale: SupportedLocale
 ): Promise<EasyOrdersInstallStarted> {
   return api.post<EasyOrdersInstallStarted>('/api/easyorders/install', {
     locale,

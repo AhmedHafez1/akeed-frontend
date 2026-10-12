@@ -152,7 +152,7 @@ async function renderStore() {
   return view
 }
 
-/** The order-source tab for a WooCommerce source (US-07-05). */
+/** The order-source tab for a WooCommerce source. */
 describe('standalone Store tab with a WooCommerce source', () => {
   beforeEach(() => {
     vi.clearAllMocks()

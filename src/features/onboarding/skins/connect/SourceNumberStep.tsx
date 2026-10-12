@@ -23,6 +23,7 @@ import {
 } from '@/shared/ui'
 import { Notice } from './connectUi'
 import type { SourceSetupFlow } from './useSourceSetupFlow'
+import { getIntlLocale } from '@/shared/lib/locale'
 
 interface SourceNumberStepProps {
   setup: SourceSetupFlow
@@ -89,7 +90,7 @@ export function SourceNumberStep({
 
   const sender = state?.sourceSetup?.sender.status ?? 'unknown'
   const minutes = (value: number) =>
-    new Intl.NumberFormat(locale === 'ar' ? 'ar-EG' : 'en-US', {
+    new Intl.NumberFormat(getIntlLocale(locale), {
       numberingSystem: 'latn',
     }).format(value)
   const automation = state

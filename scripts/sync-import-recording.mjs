@@ -1,4 +1,4 @@
-// Copies the US-04.6-10 release-gate recording and its fixture manifest from
+// Copies the import release-gate recording and its fixture manifest from
 // akeed-backend into the e01-smoke fixture app, where the Playwright flow
 // replays them. Record first in akeed-backend with RECORD_E2E=1 (see
 // test/order-import-release-gate.contract-spec.ts). Run with

@@ -7,6 +7,7 @@
  * `$US 2,629.95` in the Arabic table.
  */
 
+import { isRtlLocale } from '@/shared/lib/locale'
 import { symbolThenAmount } from '@/shared/lib/money'
 
 const BIDI_MARKS = new RegExp(
@@ -181,7 +182,7 @@ export function formatUpdatedAt(
       month: locale === 'ar' ? 'long' : 'short',
       timeZone,
     }).format(date)
-    return `${day}${locale === 'ar' ? '، ' : ', '}${formatClockTime(date, locale, timeZone)}`
+    return `${day}${isRtlLocale(locale) ? '، ' : ', '}${formatClockTime(date, locale, timeZone)}`
   } catch {
     return date.toISOString()
   }

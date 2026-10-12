@@ -1,5 +1,5 @@
 /*
- * US-04.6-05 order-import fixture. Answers every order-import request in
+ * Order-import fixture. Answers every order-import request in
  * memory with the backend's response shapes (akeed-backend
  * src/modules/order-imports/dto). No authentication, database, upload or
  * message send happens.
@@ -11,7 +11,7 @@
  * - theme=dark: dark tokens (applied by the fixture pages).
  * Batch ids: b-map (unconfirmed, ambiguous dates, an unknown payment value,
  * uploaded twice), b-review (confirmed), b-empty (nothing ready), b-expired;
- * committed batches for US-04.6-08: b-imported (awaiting_start), b-releasing,
+ * committed batches: b-imported (awaiting_start), b-releasing,
  * b-paused (out of credits), b-stopped, b-completed, and b-none (completed,
  * but no order of it is visible in Verifications); any other id answers 404.
  */

@@ -77,7 +77,7 @@ const valueOf = (title: string) =>
 const noteOf = (title: string) =>
   valueOf(title).nextElementSibling as HTMLElement
 
-/** Each webhook's state, as the store answered (US-07-05). */
+/** Each webhook's state, as the store answered. */
 describe('SourceHealthCard webhook state', () => {
   beforeEach(() => vi.clearAllMocks())
 

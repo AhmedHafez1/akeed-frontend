@@ -29,7 +29,7 @@ import {
   type OnboardingTestError,
 } from '@/features/onboarding'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
-import { getLocaleFromPathname } from '@/shared/lib/locale'
+import { getLocaleFromPathname, getIntlLocale } from '@/shared/lib/locale'
 
 const TEST_ERROR_KEYS: Record<OnboardingTestError, string> = {
   cooldown: 'test.errors.cooldown',
@@ -116,7 +116,7 @@ function EmbeddedOnboarding() {
 
   const formatTime = useCallback(
     (iso: string) =>
-      new Intl.DateTimeFormat(locale === 'ar' ? 'ar-EG' : 'en-US', {
+      new Intl.DateTimeFormat(getIntlLocale(locale), {
         hour: 'numeric',
         minute: '2-digit',
       }).format(new Date(iso)),

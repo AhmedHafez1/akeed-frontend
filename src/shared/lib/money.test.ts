@@ -21,6 +21,13 @@ describe('formatAmount', () => {
     expect(formatAmount(500, 'EGP', 'en')).toBe('EGP 500.00')
   })
 
+  it('writes Urdu amounts like English ones: Latin symbol first, no marks', () => {
+    expect(formatAmount(1250.5, 'PKR', 'ur')).toBe('Rs 1,250.50')
+    expect(formatAmount(500, 'EGP', 'ur')).toBe('EGP 500.00')
+    expect(formatAmount(500, 'USD', 'ur')).toBe('$500.00')
+    expect(formatAmount(99.5, 'PKR', 'ur')).not.toMatch(bidiMarks)
+  })
+
   it('carries no bidi marks except the anchor after an Arabic symbol', () => {
     for (const currency of ['EGP', 'SAR', 'AED', 'USD'])
       expect(formatAmount(99.5, currency, 'en')).not.toMatch(bidiMarks)

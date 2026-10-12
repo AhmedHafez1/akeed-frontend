@@ -15,7 +15,7 @@ function leafKeys(value: unknown, path = ''): string[] {
 
 const locales = { ar, en }
 
-describe('EasyOrders messages (US-06-06)', () => {
+describe('EasyOrders messages', () => {
   it.each(Object.entries(locales))(
     '%s has a message for every error code the screen names, and a default',
     (_locale, messages) => {

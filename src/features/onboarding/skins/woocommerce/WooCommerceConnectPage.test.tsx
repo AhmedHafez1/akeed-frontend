@@ -439,7 +439,7 @@ describe('WooCommerceConnectPage', () => {
   })
 })
 
-describe('WooCommerceConnectPage setup and recovery (US-07-05)', () => {
+describe('WooCommerceConnectPage setup and recovery', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     vi.spyOn(console, 'error').mockImplementation(() => undefined)

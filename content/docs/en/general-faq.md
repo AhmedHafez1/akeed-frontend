@@ -1,7 +1,7 @@
 ---
 title: General FAQ
 description: Quick answers to common merchant questions about setup, importing orders, messaging, plans, credits, and support.
-order: 9
+order: 12
 slug: general-faq
 ---
 
@@ -15,7 +15,7 @@ If you are just starting, read [Getting Started](/en/docs/getting-started) first
 
 ### Which platforms does Akeed support?
 
-Akeed works with Shopify stores, which install it from Shopify and receive orders automatically. It also works for merchants without Shopify: you add orders manually or import them from a CSV or Excel file. See [Using Akeed Without Shopify](/docs/standalone-platform).
+Akeed works with Shopify stores, which install it from Shopify and receive orders automatically. WooCommerce and EasyOrders stores connect in a few steps and also receive orders automatically: see [Connect WooCommerce](/docs/woocommerce) and [Connect EasyOrders](/docs/easyorders). Everyone else adds orders manually, imports them from a CSV or Excel file, or sends them from their own server. See [Using Akeed Without Shopify](/docs/standalone-platform).
 
 ### How long does setup usually take?
 

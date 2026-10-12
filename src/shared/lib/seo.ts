@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import type { Locale } from '@/i18n'
 import { defaultLocale, locales } from '@/i18n'
+import { getOpenGraphLocaleTag } from '@/shared/lib/locale'
 
 // Business identity below must stay byte-identical to the Meta Business
 // Portfolio record (portfolio ID 859731917035191) so business verification
@@ -87,8 +88,9 @@ export function getLanguageAlternates(path = '/') {
   return {
     canonical: getLocalizedPath(defaultLocale, path),
     languages: {
-      ar: getLocalizedPath('ar', path),
-      en: getLocalizedPath('en', path),
+      ...Object.fromEntries(
+        locales.map((locale) => [locale, getLocalizedPath(locale, path)])
+      ),
       'x-default': getLocalizedPath(defaultLocale, path),
     },
   }
@@ -102,11 +104,11 @@ export function getLocalizedLanguageAlternates(path = '/', locale: Locale) {
 }
 
 export function getOpenGraphLocale(locale: Locale): string {
-  return locale === 'ar' ? 'ar_AR' : 'en_US'
+  return getOpenGraphLocaleTag(locale)
 }
 
 export function getOpenGraphAlternateLocale(locale: Locale): string[] {
-  return locale === 'ar' ? ['en_US'] : ['ar_AR']
+  return locales.filter((other) => other !== locale).map(getOpenGraphLocaleTag)
 }
 
 interface PageMetadataInput {

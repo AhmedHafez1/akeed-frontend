@@ -31,6 +31,7 @@ import { EasyOrdersDetailsStep } from './EasyOrdersDetailsStep'
 import { ProviderRemovalSteps } from './ProviderRemovalSteps'
 import { useEasyOrdersConnection } from './useEasyOrdersConnection'
 import { useEasyOrdersSetupFlow } from './useEasyOrdersSetupFlow'
+import { getIntlLocale, resolveSupportedLocale } from '@/shared/lib/locale'
 
 const PERMISSIONS = ['read', 'update'] as const
 
@@ -43,7 +44,7 @@ const PERMISSIONS = ['read', 'update'] as const
  */
 export function EasyOrdersConnectPage() {
   const t = useTranslations('easyOrdersConnect')
-  const locale = useLocale() === 'en' ? 'en' : 'ar'
+  const locale = resolveSupportedLocale(useLocale())
   const connection = useEasyOrdersConnection(locale)
   const { view, status, canManage } = connection
   const setup = useEasyOrdersSetupFlow(
@@ -357,10 +358,10 @@ export function EasyOrdersConnectPage() {
           {status?.expiresAt && (
             <p className="text-ink-muted text-sm">
               {t('waiting.expires', {
-                time: new Intl.DateTimeFormat(
-                  locale === 'ar' ? 'ar-EG' : 'en-US',
-                  { hour: 'numeric', minute: '2-digit' }
-                ).format(new Date(status.expiresAt)),
+                time: new Intl.DateTimeFormat(getIntlLocale(locale), {
+                  hour: 'numeric',
+                  minute: '2-digit',
+                }).format(new Date(status.expiresAt)),
               })}
             </p>
           )}

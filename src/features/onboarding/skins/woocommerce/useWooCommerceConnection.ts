@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ApiError } from '@/shared/lib/http'
+import type { SupportedLocale } from '@/shared/lib/locale'
 import { createLogger } from '@/shared/lib/logger'
 import {
   checkWooCommerceConnection,
@@ -83,7 +84,7 @@ export interface WooCommerceConnectionController {
  * `success=0` shows the denied state. Neither changes anything.
  */
 export function useWooCommerceConnection(
-  locale: 'ar' | 'en'
+  locale: SupportedLocale
 ): WooCommerceConnectionController {
   const [status, setStatus] = useState<WooCommerceConnectionStatus | null>(null)
   const [isLoading, setIsLoading] = useState(true)

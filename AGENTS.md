@@ -36,7 +36,7 @@ Also validate changes with `npm run build && npm run lint`.
 - Framework: Next.js 16 (App Router) with React 19
 - Language: TypeScript (strict mode)
 - Styling: Tailwind CSS 4 + shadcn/ui primitives (CVA + Radix)
-- i18n: next-intl (locales: `ar` default, `en`). Messages in `public/messages/{locale}.json`
+- i18n: next-intl (locales: `ar` default, `en`, `ur`; listed in `src/shared/lib/locale.ts`). Messages in `public/messages/{locale}.json`
 - Auth: Dual-mode — Supabase (standalone) / Shopify App Bridge (embedded)
 - State: React hooks only (no external state library)
 - API client: `fetchWithAuth` / `api.*` in `src/shared/lib/auth.ts`
@@ -182,7 +182,7 @@ Rules:
 ## i18n — Locale Requirements
 
 - All user-facing text must come from `next-intl` translation keys
-- When adding text, update both `public/messages/ar.json` and `public/messages/en.json`
+- When adding text, update `public/messages/ar.json`, `en.json` and `ur.json` (Urdu has no `admin*` namespaces)
 - Use `useTranslations('namespace')` in client components
 - Locale routing is enforced by middleware; all routes are under `/{locale}/`
 - RTL support: Arabic (`ar`) renders RTL; use `useLocaleInfo()` for `isRTL` checks
@@ -212,11 +212,10 @@ Optional:
 
 - `NEXT_PUBLIC_EASYORDERS_CONNECT_ENABLED` — `true` offers EasyOrders as a
   start route: a card on the homepage, a row in the first signup step and an
-  item in the hero logo strip (US-06-02). Unset or anything else leaves it
+  item in the hero logo strip. Unset or anything else leaves it
   out of all three. Turn the backend `EASYORDERS_CONNECT_ENABLED` on first.
 
-- `NEXT_PUBLIC_WOOCOMMERCE_CONNECT_ENABLED` — the same for WooCommerce
-  (US-07-02). Turn the backend `WOOCOMMERCE_CONNECT_ENABLED` on first.
+- `NEXT_PUBLIC_WOOCOMMERCE_CONNECT_ENABLED` — the same for WooCommerce. Turn the backend `WOOCOMMERCE_CONNECT_ENABLED` on first.
 
 Signup is two steps on one route: `/signup` asks where the orders come from
 (`getStartRoutes()` in `src/shared/config/commerceSources.ts`), and

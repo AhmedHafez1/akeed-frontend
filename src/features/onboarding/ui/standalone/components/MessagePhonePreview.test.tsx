@@ -19,7 +19,7 @@ const english = templateMessageFixture(
   ['Confirm Order', 'Cancel Order']
 )
 
-describe('MessagePhonePreview (US-08-07g)', () => {
+describe('MessagePhonePreview', () => {
   it('fills an Arabic message, keeping the order number in one piece', () => {
     renderOnboardingStandalone(
       <MessagePhonePreview

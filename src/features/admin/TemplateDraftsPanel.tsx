@@ -10,7 +10,7 @@ import { draftStateTone } from './admin-template-drafts.model'
 import { useTemplateDrafts } from './useAdminTemplateDrafts'
 
 /**
- * The drafts staff are writing, on the templates list (US-08-06). Any staff
+ * The drafts staff are writing, on the templates list. Any staff
  * member can read them; only a template operator is offered "New draft".
  */
 export function TemplateDraftsPanel() {

@@ -1,7 +1,7 @@
 ---
 title: Analytics
 description: Understand your key COD confirmation metrics and use them to improve shipping quality and reduce losses.
-order: 7
+order: 10
 slug: analytics
 ---
 

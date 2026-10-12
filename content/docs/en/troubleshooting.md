@@ -1,7 +1,7 @@
 ---
 title: Troubleshooting
 description: Fix common COD confirmation issues quickly with clear checks and next actions.
-order: 8
+order: 11
 slug: troubleshooting
 ---
 
@@ -118,6 +118,20 @@ These five checks solve most issues.
 1. Confirm timezone is correct for your operating market.
 2. Narrow quiet-hours window if needed.
 3. Re-test with a live order and watch status timing.
+
+## Issue: Orders from WooCommerce or EasyOrders stopped arriving
+
+### What to check
+
+- Open **Settings**, then your order source, and read the connection status.
+- On WooCommerce, check whether an order notification is disabled, paused or deleted.
+- On EasyOrders, check that the store is active and that orders are not being refused.
+
+### What to do
+
+1. Follow the step the status shows: re-enable the notification, reset the webhook secrets, or disconnect and connect the same store again.
+2. Confirm by hand the orders placed while the connection was down. They are not imported later.
+3. See [Connect WooCommerce](/docs/woocommerce) or [Connect EasyOrders](/docs/easyorders) for each case.
 
 ## Issue: Imported orders are not confirmed
 

@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server'
 import type { Locale } from '@/i18n'
 import { createPublicPageMetadata } from '@/shared/lib/seo'
 import { LegalDocumentPage } from '@/shared/layout/LegalDocumentPage'
+import { isRtlLocale } from '@/shared/lib/locale'
 
 const sections = [1, 2, 3, 4, 5] as const
 
@@ -50,7 +51,7 @@ export default async function TermsPage({
       primaryLinkLabel={t('homeLink')}
       secondaryLinkHref="/privacy"
       secondaryLinkLabel={t('privacyLink')}
-      isRTL={safeLocale === 'ar'}
+      isRTL={isRtlLocale(safeLocale)}
     />
   )
 }

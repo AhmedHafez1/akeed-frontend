@@ -17,6 +17,7 @@ import { Notice } from '../connect/connectUi'
 import { ProviderRemovalSteps } from './ProviderRemovalSteps'
 import { useEasyOrdersConnection } from './useEasyOrdersConnection'
 import { WebhookSecretsForm } from './WebhookSecretsForm'
+import { resolveSupportedLocale } from '@/shared/lib/locale'
 
 interface EasyOrdersSourcePanelProps {
   /** The connection changed in a way the rest of Settings should re-read. */
@@ -35,7 +36,7 @@ export function EasyOrdersSourcePanel({
   onChanged,
 }: EasyOrdersSourcePanelProps) {
   const t = useTranslations('easyOrdersConnect')
-  const locale = useLocale() === 'en' ? 'en' : 'ar'
+  const locale = resolveSupportedLocale(useLocale())
   const connection = useEasyOrdersConnection(locale)
   const { view, status, canManage } = connection
   const [confirmingDisconnect, setConfirmingDisconnect] = useState(false)

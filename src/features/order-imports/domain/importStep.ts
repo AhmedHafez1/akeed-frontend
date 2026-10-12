@@ -18,7 +18,7 @@ export type BatchView =
  * The step comes from the server's status, never from client memory, so a
  * refresh or a shared link lands on the same screen. A draft is mapped until
  * the merchant confirms the mapping, then reviewed; once committed it shows
- * progress, then the imported summary, then the paced release (US-04.6-07).
+ * progress, then the imported summary, then the paced release.
  */
 export function viewForBatch(
   detail: Pick<OrderImportBatchDetail, 'status' | 'mappingConfirmed'>

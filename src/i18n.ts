@@ -1,10 +1,16 @@
 import { getRequestConfig } from 'next-intl/server'
 import { notFound } from 'next/navigation'
+import {
+  DEFAULT_LOCALE,
+  SUPPORTED_LOCALES,
+  type SupportedLocale,
+} from './shared/lib/locale'
 
-export const locales = ['en', 'ar'] as const
-export type Locale = (typeof locales)[number]
+// The list of interface languages lives in `shared/lib/locale`.
+export const locales = SUPPORTED_LOCALES
+export type Locale = SupportedLocale
 
-export const defaultLocale: Locale = 'ar'
+export const defaultLocale: Locale = DEFAULT_LOCALE
 
 export default getRequestConfig(async ({ requestLocale }) => {
   const locale = await requestLocale

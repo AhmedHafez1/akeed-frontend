@@ -1,6 +1,7 @@
 'use client'
 
 import { api } from '@/shared/lib/auth'
+import type { SupportedLocale } from '@/shared/lib/locale'
 import type {
   WooCommerceConnectionCheck,
   WooCommerceConnectionStatus,
@@ -21,7 +22,7 @@ export function fetchWooCommerceConnection(): Promise<WooCommerceConnectionStatu
  */
 export function startWooCommerceInstall(
   storeUrl: string,
-  locale: 'ar' | 'en'
+  locale: SupportedLocale
 ): Promise<WooCommerceInstallStarted> {
   return api.post<WooCommerceInstallStarted>('/api/woocommerce/install', {
     storeUrl,

@@ -10,7 +10,6 @@ import { HeaderNav } from './header/HeaderNav'
 export function Header() {
   const {
     t,
-    locale,
     homeHref,
     loginHref,
     dashboardHref,
@@ -22,7 +21,6 @@ export function Header() {
     setIsMobileMenuOpen,
     scrollToSection,
     handleHomeClick,
-    handleLocaleChange,
   } = useHeader()
 
   return (
@@ -44,7 +42,6 @@ export function Header() {
 
             {/* Language + Login + CTA */}
             <HeaderActions
-              locale={locale}
               targets={acquisitionTargets}
               ctaLabel={t('cta_primary')}
               loginLabel={t('login')}
@@ -52,7 +49,6 @@ export function Header() {
               dashboardLabel={t('dashboard')}
               dashboardHref={dashboardHref}
               isAuthenticated={isAuthenticated}
-              onLocaleChange={handleLocaleChange}
             />
 
             {/* Mobile Menu Button */}
@@ -67,7 +63,6 @@ export function Header() {
         <HeaderMobileMenu
           isOpen={isMobileMenuOpen}
           items={navigation}
-          locale={locale}
           targets={acquisitionTargets}
           ctaLabel={t('cta_primary')}
           loginLabel={t('login')}
@@ -76,7 +71,6 @@ export function Header() {
           dashboardHref={dashboardHref}
           isAuthenticated={isAuthenticated}
           onNavigate={scrollToSection}
-          onLocaleChange={handleLocaleChange}
           onClose={() => setIsMobileMenuOpen(false)}
         />
       </header>

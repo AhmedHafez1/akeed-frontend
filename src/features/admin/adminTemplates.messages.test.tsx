@@ -12,7 +12,7 @@ function keysOf(value: unknown, prefix = ''): string[] {
   )
 }
 
-/** Every refusal code the template routes answer with (backend E08). */
+/** Every refusal code the template routes answer with. */
 const BACKEND_CODES = [
   'ADMIN_TEMPLATE_METRICS_RANGE_INVALID',
   'WHATSAPP_TEMPLATE_OPERATIONS_DISABLED',
@@ -68,7 +68,7 @@ const REVIEW_STATUSES = [
   'not_synced',
 ] as const
 
-/** Every rule `template-draft.validation.ts` can report (backend US-08-06). */
+/** Every rule `template-draft.validation.ts` can report. */
 const VALIDATION_RULES = [
   'style_format',
   'name_format',

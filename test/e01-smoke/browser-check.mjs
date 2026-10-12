@@ -399,7 +399,7 @@ const importLinkLabelsByLocale = {
 }
 
 /**
- * US-04.6-08: every batch state links to its orders in the existing
+ * Every batch state links to its orders in the existing
  * Verifications list. For each state: one link with the filtered href, the
  * chip on arrival, and rows from the same table. b-none lands on the existing
  * empty state. Clearing the chip keeps any other filter.

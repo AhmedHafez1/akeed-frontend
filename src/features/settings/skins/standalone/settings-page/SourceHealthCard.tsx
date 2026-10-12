@@ -10,6 +10,7 @@ import {
 import { cn } from '@/shared/lib/utils'
 import { Skeleton, akButton } from '@/shared/ui'
 import { settingsRowPadding, settingsRowTitle } from './SettingsSection'
+import { getIntlLocale } from '@/shared/lib/locale'
 
 /** One signal: its name, what Akeed last saw, and a note when one helps. */
 function HealthRow({
@@ -89,7 +90,7 @@ export function SourceHealthCard() {
 
   const health: SourceHealth = query.data
   const formatWhen = (iso: string) =>
-    new Intl.DateTimeFormat(locale === 'ar' ? 'ar-EG' : 'en-US', {
+    new Intl.DateTimeFormat(getIntlLocale(locale), {
       dateStyle: 'medium',
       timeStyle: 'short',
       numberingSystem: 'latn',

@@ -27,6 +27,7 @@ import {
   MessagePhonePreview,
   TestTimeline,
 } from '../components'
+import { getIntlLocale } from '@/shared/lib/locale'
 
 const TEST_ERROR_KEYS: Record<OnboardingTestError, string> = {
   cooldown: 'errors.cooldown',
@@ -90,7 +91,7 @@ export function TestStep({
 
   const formatTime = useCallback(
     (iso: string) =>
-      new Intl.DateTimeFormat(locale === 'ar' ? 'ar-EG' : 'en-US', {
+      new Intl.DateTimeFormat(getIntlLocale(locale), {
         hour: 'numeric',
         minute: '2-digit',
         numberingSystem: 'latn',
