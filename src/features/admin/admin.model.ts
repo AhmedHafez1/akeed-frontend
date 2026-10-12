@@ -71,6 +71,7 @@ export interface AdminStoreMilestone {
 
 export interface AdminStoreDetail extends AdminStore {
   owner_email: string | null
+  merchant_whatsapp_phone: string | null
   created_at: string | null
   last_synced_at: string | null
   billing_activated_at: string | null
@@ -104,6 +105,8 @@ export interface AdminStoreVerification {
   id: string
   status: string
   reason: string | null
+  failure_code: string | null
+  failure_title: string | null
   order_number: string | null
   external_order_id: string
   is_test: boolean
