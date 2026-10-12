@@ -35,6 +35,7 @@ describe('EmbeddedLanguageSelector', () => {
 
     expect(screen.getByText('switchToEnglish')).toBeTruthy()
     expect(screen.getByText('switchToUrdu')).toBeTruthy()
+    expect(screen.getByText('switchToSpanish')).toBeTruthy()
     expect(screen.queryByText('switchToArabic')).toBeNull()
   })
 
@@ -49,6 +50,19 @@ describe('EmbeddedLanguageSelector', () => {
       )
     )
     expect(localStorage.getItem(LOCALE_PREFERENCE_STORAGE_KEY)).toBe('ur')
+  })
+
+  it('remembers Spanish and reopens the page in it, keeping the shop', async () => {
+    render(<EmbeddedLanguageSelector />)
+
+    fireEvent.click(screen.getByText('switchToSpanish'))
+
+    await waitFor(() =>
+      expect(route.replace).toHaveBeenCalledWith(
+        '/es/settings?shop=demo.myshopify.com'
+      )
+    )
+    expect(localStorage.getItem(LOCALE_PREFERENCE_STORAGE_KEY)).toBe('es')
   })
 
   it('restores a remembered Urdu choice when the app opens in Arabic', async () => {

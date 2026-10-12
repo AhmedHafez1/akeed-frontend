@@ -1,16 +1,16 @@
 import { formatAmount } from '@/shared/lib/money'
-import type { SupportedLocale } from '@/shared/lib/locale'
+import { getFormatLocale, type SupportedLocale } from '@/shared/lib/locale'
 
 /** "412 KB", "1.2 MB", in the page locale. */
 export function formatFileSize(bytes: number, locale: string): string {
   const megabytes = bytes / (1024 * 1024)
   if (megabytes >= 1)
-    return new Intl.NumberFormat(locale, {
+    return new Intl.NumberFormat(getFormatLocale(locale), {
       style: 'unit',
       unit: 'megabyte',
       maximumFractionDigits: 1,
     }).format(megabytes)
-  return new Intl.NumberFormat(locale, {
+  return new Intl.NumberFormat(getFormatLocale(locale), {
     style: 'unit',
     unit: 'kilobyte',
     maximumFractionDigits: 0,
@@ -44,7 +44,7 @@ export function formatImportDate(
 ): string {
   const [year, month, day] = isoDate.slice(0, 10).split('-').map(Number)
   if (!year || !month || !day) return isoDate
-  return new Intl.DateTimeFormat(locale, {
+  return new Intl.DateTimeFormat(getFormatLocale(locale), {
     day: 'numeric',
     month: 'short',
     ...(withYear ? { year: 'numeric' } : {}),

@@ -23,7 +23,7 @@ describe('formatMoney', () => {
   })
 
   it('uses Western digits and no bidi marks in every locale', () => {
-    for (const locale of ['ar', 'en', 'ur'] as const) {
+    for (const locale of ['ar', 'en', 'ur', 'es'] as const) {
       const text = formatMoney(1_234_550, 'EGP', locale)
       expect(text).toContain('12,345.50')
       expect(text).not.toMatch(BIDI_MARK)
@@ -39,6 +39,7 @@ describe('formatShortDate', () => {
   it('is the day and month within the current year', () => {
     expect(formatShortDate(september, 'ar', now)).toBe('12 سبتمبر')
     expect(formatShortDate(september, 'en', now)).toBe('Sep 12')
+    expect(formatShortDate(september, 'es', now)).toBe('12 sept')
   })
 
   it('adds the year when it is not this one', () => {
@@ -55,6 +56,9 @@ describe('formatBillingDate', () => {
   it('writes the day, then the time, in each locale', () => {
     expect(formatBillingDate(updated, 'ar')).toBe('1 أكتوبر 2026 · 8:52 ص')
     expect(formatBillingDate(updated, 'en')).toBe('Oct 1, 2026 · 8:52 AM')
+    expect(formatBillingDate(updated, 'es').replace(/\s/g, ' ')).toBe(
+      '1 oct 2026 · 8:52 a.m.'
+    )
   })
 
   it('uses Western digits in Arabic', () => {

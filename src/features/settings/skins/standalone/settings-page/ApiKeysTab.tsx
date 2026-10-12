@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { AlertTriangle, KeyRound, Plus } from 'lucide-react'
-import { useFormatter, useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { getFormatLocale } from '@/shared/lib/locale'
 import {
   integrationKeysOptions,
   useRevokeIntegrationKeyMutation,
@@ -34,7 +35,7 @@ interface ApiKeysTabProps {
  */
 export function ApiKeysTab({ readOnly }: ApiKeysTabProps) {
   const t = useTranslations('settings.standalone.page.apiKeys')
-  const format = useFormatter()
+  const formatLocale = getFormatLocale(useLocale())
   const { isStandalone, isLoading: isModeLoading } = useAkeedMode()
   const keys = useQuery(integrationKeysOptions(isStandalone && !isModeLoading))
   const revoke = useRevokeIntegrationKeyMutation()
@@ -64,13 +65,15 @@ export function ApiKeysTab({ readOnly }: ApiKeysTabProps) {
   }
 
   const formatDate = (value: string) =>
-    format.dateTime(new Date(value), { dateStyle: 'medium' })
+    new Intl.DateTimeFormat(formatLocale, { dateStyle: 'medium' }).format(
+      new Date(value)
+    )
 
   const formatDateTime = (value: string) =>
-    format.dateTime(new Date(value), {
+    new Intl.DateTimeFormat(formatLocale, {
       dateStyle: 'medium',
       timeStyle: 'short',
-    })
+    }).format(new Date(value))
 
   return (
     <>

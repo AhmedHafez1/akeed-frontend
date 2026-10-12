@@ -7,7 +7,7 @@
  * `$US 2,629.95` in the Arabic table.
  */
 
-import { isRtlLocale } from '@/shared/lib/locale'
+import { getFormatLocale, isRtlLocale } from '@/shared/lib/locale'
 import { symbolThenAmount } from '@/shared/lib/money'
 
 const BIDI_MARKS = new RegExp(
@@ -16,7 +16,7 @@ const BIDI_MARKS = new RegExp(
 )
 
 function latinLocale(locale: string): string {
-  return `${locale}-u-nu-latn`
+  return `${getFormatLocale(locale)}-u-nu-latn`
 }
 
 /**

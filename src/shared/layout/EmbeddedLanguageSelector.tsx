@@ -20,6 +20,7 @@ const SWITCH_LABEL_KEYS: Record<SupportedLocale, string> = {
   ar: 'switchToArabic',
   en: 'switchToEnglish',
   ur: 'switchToUrdu',
+  es: 'switchToSpanish',
 }
 
 export function EmbeddedLanguageSelector() {

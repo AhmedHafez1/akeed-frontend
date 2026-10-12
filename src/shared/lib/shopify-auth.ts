@@ -4,6 +4,7 @@ export const SHOPIFY_APP_STORE_LISTING_URL = 'https://apps.shopify.com/akeed'
 const SHOPIFY_APP_STORE_LISTING_LOCALES: ReadonlySet<string> = new Set([
   'ar',
   'ur',
+  'es',
 ])
 
 /** The App Store listing in the visitor's language, or the default one. */

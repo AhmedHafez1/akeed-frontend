@@ -2,7 +2,7 @@
  * Locale utilities for consistent locale handling across the application
  */
 
-export const SUPPORTED_LOCALES = ['ar', 'en', 'ur'] as const
+export const SUPPORTED_LOCALES = ['ar', 'en', 'ur', 'es'] as const
 export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number]
 export const DEFAULT_LOCALE: SupportedLocale = 'ar'
 
@@ -12,6 +12,12 @@ interface LocaleDefinition {
   direction: LocaleDirection
   /** The regional tag `Intl` formats dates and numbers with. */
   intlTag: string
+  /**
+   * The tag the money, count and date helpers format with. It is the bare
+   * language code, except where the bare code carries another region's
+   * conventions: plain `es` writes `1250,50 EGP` and `14:58` as Spain does.
+   */
+  formatLocale: string
   /** The language's own name, shown in every language switcher as is. */
   nativeName: string
   openGraphLocale: string
@@ -27,20 +33,30 @@ const LOCALE_DEFINITIONS: Record<SupportedLocale, LocaleDefinition> = {
   ar: {
     direction: 'rtl',
     intlTag: 'ar-EG',
+    formatLocale: 'ar',
     nativeName: 'العربية',
     openGraphLocale: 'ar_AR',
   },
   en: {
     direction: 'ltr',
     intlTag: 'en-US',
+    formatLocale: 'en',
     nativeName: 'English',
     openGraphLocale: 'en_US',
   },
   ur: {
     direction: 'rtl',
     intlTag: 'ur-PK',
+    formatLocale: 'ur',
     nativeName: 'اردو',
     openGraphLocale: 'ur_PK',
+  },
+  es: {
+    direction: 'ltr',
+    intlTag: 'es-419',
+    formatLocale: 'es-419',
+    nativeName: 'Español',
+    openGraphLocale: 'es_LA',
   },
 }
 
@@ -57,9 +73,17 @@ export function isRtlLocale(locale: string): boolean {
   return getLocaleDirection(locale) === 'rtl'
 }
 
-/** `ar-EG`, `en-US` or `ur-PK`, for `Intl` date and number formatters. */
+/** `ar-EG`, `en-US`, `ur-PK` or `es-419`, for `Intl` formatters. */
 export function getIntlLocale(locale: string): string {
   return LOCALE_DEFINITIONS[resolveSupportedLocale(locale)].intlTag
+}
+
+/**
+ * The tag for helpers that build their own format, often with `-u-nu-latn`
+ * appended: `ar`, `en`, `ur` or `es-419`.
+ */
+export function getFormatLocale(locale: string): string {
+  return LOCALE_DEFINITIONS[resolveSupportedLocale(locale)].formatLocale
 }
 
 export function getLocaleNativeName(locale: SupportedLocale): string {

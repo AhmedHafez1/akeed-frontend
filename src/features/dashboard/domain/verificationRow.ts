@@ -1,6 +1,6 @@
 import type { VerificationItem } from '../model/dashboard.model'
 import { formatAmount } from '@/shared/lib/money'
-import type { SupportedLocale } from '@/shared/lib/locale'
+import { getFormatLocale, type SupportedLocale } from '@/shared/lib/locale'
 import { EXPLAINED_LIFECYCLE_REASONS } from './verificationLifecycle'
 
 /**
@@ -31,7 +31,7 @@ export function formatCurrencyTotal(
 
   const currency = verification.currency ?? 'SAR'
   try {
-    return new Intl.NumberFormat(locale, {
+    return new Intl.NumberFormat(getFormatLocale(locale), {
       style: 'currency',
       currency,
       minimumFractionDigits: 2,
@@ -71,7 +71,7 @@ export function formatCreatedDate(
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return '-'
 
-  return new Intl.DateTimeFormat(locale, {
+  return new Intl.DateTimeFormat(getFormatLocale(locale), {
     month: 'short',
     day: 'numeric',
     timeZone,
@@ -87,7 +87,7 @@ export function formatCreatedTime(
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return ''
 
-  return new Intl.DateTimeFormat(locale, {
+  return new Intl.DateTimeFormat(getFormatLocale(locale), {
     hour: '2-digit',
     minute: '2-digit',
     timeZone,
@@ -103,7 +103,7 @@ export function formatTooltipDateTime(
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return ''
 
-  return new Intl.DateTimeFormat(locale, {
+  return new Intl.DateTimeFormat(getFormatLocale(locale), {
     dateStyle: 'medium',
     timeStyle: 'short',
     timeZone,

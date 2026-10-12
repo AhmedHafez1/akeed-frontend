@@ -5,11 +5,15 @@ const HTTP_LINK_REGEX = /^https?:\/\//i
 const SCHEME_LINK_REGEX = /^[a-z][a-z\d+.-]*:/i
 const DOC_EXTENSION_REGEX = /\.(md|markdown)$/i
 
+/**
+ * A heading's id: lower-case Latin letters (accented ones included, so
+ * "Configuración" keeps its "ó"), digits and Arabic-script letters.
+ */
 export function slugifyHeading(value: string): string {
   return value
     .trim()
     .toLowerCase()
-    .replace(/[^a-z0-9\u0600-\u06ff\s-]/g, '')
+    .replace(/[^a-z0-9\u00df-\u00f6\u00f8-\u024f\u0600-\u06ff\s-]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '')

@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import ar from '../public/messages/ar.json'
 import en from '../public/messages/en.json'
+import es from '../public/messages/es.json'
 import ur from '../public/messages/ur.json'
 
 type Messages = { [key: string]: string | Messages }
 
-/** The admin screens exist in English only, so Urdu has no `admin*` strings. */
+/** The admin screens exist in English only: Urdu and Spanish have no `admin*` strings. */
 const isAdminNamespace = (key: string) => key.startsWith('admin')
 
 function flatten(
@@ -65,6 +66,12 @@ const ARABIC_ONLY_LETTERS = new RegExp(
 
 const english = merchantStrings(en)
 const urdu = merchantStrings(ur as Messages)
+const spanish = merchantStrings(es as Messages)
+
+const ARABIC_SCRIPT = URDU_SCRIPT
+/** Spanish opens a question or an exclamation with the inverted mark. */
+const count = (text: string, mark: number) =>
+  text.split(letter(mark)).length - 1
 
 describe('Urdu messages', () => {
   it('has exactly the merchant-facing keys of the English file', () => {
@@ -133,13 +140,122 @@ describe('Urdu messages', () => {
   })
 })
 
+describe('Spanish messages', () => {
+  it('has exactly the merchant-facing keys of the English file', () => {
+    expect(Object.keys(spanish).sort()).toEqual(Object.keys(english).sort())
+  })
+
+  it('leaves the admin screens to English', () => {
+    expect(Object.keys(es).filter(isAdminNamespace)).toEqual([])
+  })
+
+  it('keeps every placeholder and tag of the English message', () => {
+    const different = Object.keys(english).filter(
+      (key) =>
+        placeholders(spanish[key] ?? '').join(' ') !==
+        placeholders(english[key]).join(' ')
+    )
+    expect(different).toEqual([])
+  })
+
+  it('translates every message that has words to translate', () => {
+    // Left as written: names, codes, plan names, unit abbreviations and words
+    // Spanish spells the same way ("Total", "Legal", "Plan").
+    const untranslated = Object.keys(english).filter(
+      (key) =>
+        spanish[key] === english[key] &&
+        /[a-z]{2}/.test(english[key].replace(/\{[^}]*\}/g, ''))
+    )
+    expect(untranslated.sort()).toEqual([
+      'auth.shopifyStorePlaceholder',
+      'auth.shopifyStoreSuffix',
+      'auth.signup.source.options.easyorders.title',
+      'auth.signup.source.options.woocommerce.title',
+      'auth.signup.source.shopifyTitle',
+      'billing.purchase.total',
+      'connectionLine.akeed',
+      'dashboard.confirmations.headings.total',
+      'dashboard.metrics.cards.total',
+      'dashboard.sources.easyorders',
+      'dashboard.sources.salla',
+      'dashboard.sources.shopify',
+      'dashboard.sources.woocommerce',
+      'dashboard.sources.zid',
+      'dashboard.standalone.settings.minutes',
+      'dashboard.table.headings.total',
+      'demo.bot_name_short',
+      'easyOrdersConnect.eyebrow',
+      'embeddedOnboarding.planBasicName',
+      'embeddedOnboarding.planBusinessName',
+      'embeddedOnboarding.planProName',
+      'embeddedOnboarding.planStarterName',
+      'footer.facebook',
+      'footer.instagram',
+      'footer.legalTitle',
+      'footer.logoAlt',
+      'footer.youtube',
+      'legal.refundEyebrow',
+      'legal.termsEyebrow',
+      'messageTemplate.phoneTotalLabel',
+      'messageTemplate.whatsappLabel',
+      'onboarding.flow.plan',
+      'onboarding.planBasicName',
+      'onboarding.planBusinessName',
+      'onboarding.planProName',
+      'onboarding.planStarterName',
+      'onboarding.test.phone.avatarAlt',
+      'onboarding.test.phone.senderName',
+      'onboarding.whatsapp',
+      'orderImport.start.durationHours',
+      'orderImport.start.durationMinutes',
+      'orderImport.upload.templateExcel',
+      'pricing_credits.total_label',
+      'settings.automation.timezones.Asia_Kuwait',
+      'settings.embedded.tabs.plan',
+      'settings.embedded.timing.customDelaySuffix',
+      'settings.sourceEasyOrders',
+      'settings.sourceWooCommerce',
+      'settings.switchToEnglish',
+      'sources.easyorders.title',
+      'sources.shopify.title',
+      'sources.woocommerce.title',
+      'standaloneOnboarding.store.timezones.Africa_Casablanca',
+      'standaloneOnboarding.store.timezones.Asia_Bahrain',
+      'standaloneOnboarding.store.timezones.Asia_Qatar',
+      'support.email',
+      'wooCommerceConnect.enterUrl.placeholder',
+      'wooCommerceConnect.eyebrow',
+    ])
+  })
+
+  it("writes Latin letters, except the other languages' own names", () => {
+    const wrongScript = Object.keys(spanish).filter(
+      (key) =>
+        key !== 'settings.switchToArabic' &&
+        key !== 'settings.switchToUrdu' &&
+        ARABIC_SCRIPT.test(spanish[key])
+    )
+    expect(wrongScript).toEqual([])
+  })
+
+  it('opens every question and exclamation with its inverted mark', () => {
+    const unbalanced = Object.keys(spanish).filter(
+      (key) =>
+        count(spanish[key], 0x3f) !== count(spanish[key], 0xbf) ||
+        count(spanish[key], 0x21) !== count(spanish[key], 0xa1)
+    )
+    expect(unbalanced).toEqual([])
+  })
+})
+
 describe('Arabic and English messages', () => {
   it('name every interface language in the embedded title bar', () => {
-    for (const messages of [ar, en, ur])
+    for (const messages of [ar, en, ur, es])
       expect(messages.settings).toMatchObject({
         switchToArabic: expect.any(String),
         switchToEnglish: expect.any(String),
         switchToUrdu: expect.any(String),
+        switchToSpanish: expect.any(String),
       })
   })
 })

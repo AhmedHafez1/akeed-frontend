@@ -26,6 +26,7 @@ import type {
   OnboardingBillingPlanId,
 } from '@/features/onboarding'
 import type { SettingsResponse } from '@/features/settings/api/settingsApi'
+import { getFormatLocale } from '@/shared/lib/locale'
 import {
   recommendPlan,
   resolvePrimaryPlanId,
@@ -56,7 +57,7 @@ export function PlanTab({ model, data }: PlanTabProps) {
   const remaining = Math.max(0, limit - used)
   // `periodEnd` is a calendar date, so it is read in UTC, not the browser zone.
   const renewalDate = periodEnd
-    ? new Intl.DateTimeFormat(`${locale}-u-nu-latn`, {
+    ? new Intl.DateTimeFormat(`${getFormatLocale(locale)}-u-nu-latn`, {
         dateStyle: 'long',
         timeZone: 'UTC',
       }).format(new Date(periodEnd))

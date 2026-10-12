@@ -14,6 +14,7 @@ import {
   orderCountries,
   orderCurrencies,
 } from '@/shared/commerce/orderCommerce'
+import { getFormatLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
 import { AkSelect, Label, LoadingButton, akCard } from '@/shared/ui'
 import { Notice } from '../connect/connectUi'
@@ -54,7 +55,7 @@ interface EasyOrdersDetailsStepProps {
 
 function displayNames(locale: string, type: 'region' | 'currency') {
   try {
-    return new Intl.DisplayNames([locale], { type })
+    return new Intl.DisplayNames([getFormatLocale(locale)], { type })
   } catch {
     return null
   }
