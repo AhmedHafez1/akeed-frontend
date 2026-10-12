@@ -46,6 +46,8 @@ describe('NeedsActionCard', () => {
   const props = {
     timeZone: 'UTC',
     canConfirm: true,
+    onOpenDetails: vi.fn(),
+
     onRequestConfirm: vi.fn(),
     onViewAll: vi.fn(),
   }
@@ -386,6 +388,8 @@ describe('ConfirmationsTable', () => {
     canRetry: true,
     actingId: null,
     handlers: {
+      onOpenDetails: vi.fn(),
+
       onRequestConfirm: vi.fn(),
       onRequestCancel: vi.fn(),
       onRetry: vi.fn(),
@@ -482,11 +486,12 @@ describe('ConfirmationsTable', () => {
     expect(followUpBadge.closest('[title]')?.getAttribute('title')).toMatch(
       /2026.*6:49/
     )
-    // No action sits outside the "more" sheet, and only 1138 has one.
+    // No action sits outside the "more" sheet; every row has one for its
+    // details, and only 1138's offers the chat.
     expect(screen.queryAllByRole('link', { name: /واتساب/ })).toHaveLength(0)
     const more = screen.getAllByRole('button', { name: /مزيد من الإجراءات/ })
-    expect(more).toHaveLength(1)
-    fireEvent.click(more[0])
+    expect(more).toHaveLength(2)
+    fireEvent.click(more[1])
     expect(
       within(screen.getByRole('dialog')).getAllByRole('link', {
         name: /واتساب/,
@@ -530,8 +535,9 @@ describe('ConfirmationsTable', () => {
         {...tableProps}
       />
     )
+    // The test order's sheet holds its details only, never the shipping link.
     const more = screen.getAllByRole('button', { name: /مزيد من الإجراءات/ })
-    expect(more).toHaveLength(1)
+    expect(more).toHaveLength(2)
     fireEvent.click(more[0])
     const links = within(screen.getByRole('dialog')).getAllByRole('link', {
       name: /بيانات الشحن/,
@@ -543,6 +549,53 @@ describe('ConfirmationsTable', () => {
     expect(text).toContain('Ahmed')
     expect(text).toContain('#1137')
     expect(text).toContain('رقم التتبع')
+  })
+
+  it('offers every row its details and marks a customer who left orders unconfirmed', () => {
+    const onOpenDetails = vi.fn()
+    renderEmbedded(
+      <ConfirmationsTable
+        rows={[
+          listRow({
+            customer_history: {
+              other_orders: 3,
+              confirmed: 1,
+              canceled: 2,
+              no_reply: 0,
+            },
+          }),
+          listRow({
+            id: 'v-new',
+            order_number: '1140',
+            customer_history: {
+              other_orders: 0,
+              confirmed: 0,
+              canceled: 0,
+              no_reply: 0,
+            },
+          }),
+        ]}
+        {...tableProps}
+        handlers={{ ...tableProps.handlers, onOpenDetails }}
+      />
+    )
+    // One line per row: the table shows a count, the words are its tooltip.
+    expect(
+      screen.getByText('2/3').closest('[title]')?.getAttribute('title')
+    ).toContain('2 من 3 طلبات أخرى لم تُؤكَّد')
+    expect(screen.queryByText('عميل جديد')).toBeNull()
+
+    fireEvent.click(
+      screen.getByRole('button', { name: 'مزيد من الإجراءات للطلب #1140' })
+    )
+    fireEvent.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: 'عرض التفاصيل',
+      })
+    )
+    expect(onOpenDetails).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 'v-new' })
+    )
   })
 
   it('opens the more actions in a sheet and runs the chosen one', () => {
@@ -662,6 +715,8 @@ describe('ConfirmationsCardList', () => {
         canRetry
         actingId={null}
         handlers={{
+          onOpenDetails: vi.fn(),
+
           onRequestConfirm: vi.fn(),
           onRequestCancel: vi.fn(),
           onRetry: vi.fn(),
@@ -694,6 +749,8 @@ describe('ConfirmationsCardList', () => {
         canRetry
         actingId={null}
         handlers={{
+          onOpenDetails: vi.fn(),
+
           onRequestConfirm: vi.fn(),
           onRequestCancel: vi.fn(),
           onRetry: vi.fn(),

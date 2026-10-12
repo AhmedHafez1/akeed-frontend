@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import {
   Banner,
   BlockStack,
@@ -14,10 +14,14 @@ import {
   TextField,
   useBreakpoints,
 } from '@shopify/polaris'
-import { SearchIcon } from '@shopify/polaris-icons'
+import { ExportIcon, SearchIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { CONFIRMATIONS_TABS } from '../../domain/confirmationsUrlState'
+import {
+  exportErrorKey,
+  useConfirmationsExport,
+} from '../../domain/useConfirmationsExport'
 import { useConfirmationsList } from '../../domain/useConfirmationsList'
 import { useManualConfirmation } from '../../domain/useManualConfirmation'
 import { formatCount } from '../../lib/orderDisplay'
@@ -27,10 +31,12 @@ import type {
   DashboardStatsDateRange,
   VerificationItem,
 } from '../../model/dashboard.model'
+import { ConfirmationDetailsModal } from './components/confirmations/ConfirmationDetailsModal'
 import { ConfirmationsCardList } from './components/confirmations/ConfirmationsCardList'
 import { LoadMoreFooter } from './components/confirmations/LoadMoreFooter'
 import { ConfirmationsTable } from './components/confirmations/ConfirmationsTable'
 import { EmbeddedPageHeader } from './components/overview/EmbeddedPageHeader'
+import { SettingsStatusLine } from './components/overview/SettingsStatusLine'
 import { ManualConfirmModal } from './components/shared/ManualConfirmModal'
 import { VerificationsTableSkeleton } from './components/VerificationsTableSkeleton'
 
@@ -40,8 +46,11 @@ interface ConfirmationsEmbeddedProps {
   period: DashboardStatsDateRange
   periodOptions: ReadonlyArray<DateRangeFilterOption>
   onPeriodChange: (period: DashboardStatsDateRange) => void
+  /** The main tabs, standing in for the page title. */
+  title: ReactNode
   tab: ConfirmationsTab
   onTabChange: (tab: ConfirmationsTab) => void
+  onEditSettings: () => void
 }
 
 /** Every COD order we messaged, by outcome, searchable and paged. */
@@ -49,8 +58,10 @@ export function ConfirmationsEmbedded({
   period,
   periodOptions,
   onPeriodChange,
+  title,
   tab,
   onTabChange,
+  onEditSettings,
 }: ConfirmationsEmbeddedProps) {
   const t = useTranslations('dashboard')
   const { locale } = useLocaleInfo()
@@ -64,6 +75,24 @@ export function ConfirmationsEmbedded({
     orderLabel: string
   } | null>(null)
   const [feedback, setFeedback] = useState<Feedback | null>(null)
+  const [detailsId, setDetailsId] = useState<string | null>(null)
+  // Looked up on every render so the details follow the row as it updates.
+  const detailsRow = list.rows.find((row) => row.id === detailsId) ?? null
+  const exporter = useConfirmationsExport({
+    tab,
+    dateRange: period,
+    search: list.search,
+  })
+
+  const handleExport = async () => {
+    setFeedback(null)
+    const result = await exporter.exportList()
+    if (result === 'done') return
+    setFeedback({
+      tone: 'critical',
+      message: t(`confirmations.export.${exportErrorKey(result)}`),
+    })
+  }
 
   const tabs = CONFIRMATIONS_TABS.map((id) => {
     const count = list.tabCounts?.[id]
@@ -122,8 +151,17 @@ export function ConfirmationsEmbedded({
   return (
     <BlockStack gap="500">
       <EmbeddedPageHeader
-        title={t('confirmations.title')}
-        subtitle={t('confirmations.subtitle')}
+        title={title}
+        subtitle={
+          list.settings ? (
+            <SettingsStatusLine
+              settings={list.settings}
+              onEdit={onEditSettings}
+            />
+          ) : (
+            t('confirmations.subtitle')
+          )
+        }
         periodLabel={t('overview.periodLabel')}
         period={period}
         periodOptions={periodOptions}
@@ -151,26 +189,36 @@ export function ConfirmationsEmbedded({
               onSelect={(index) => onTabChange(CONFIRMATIONS_TABS[index])}
             />
           </div>
-          <div className="w-full lg:w-80">
-            <TextField
-              label={t('confirmations.search.label')}
-              labelHidden
-              type="search"
-              inputMode="tel"
-              autoComplete="off"
-              placeholder={t('confirmations.search.placeholder')}
-              prefix={<Icon source={SearchIcon} tone="subdued" />}
-              value={list.searchInput}
-              onChange={list.onSearchChange}
-              clearButton
-              onClearButtonClick={list.onSearchClear}
-              maxLength={32}
-              error={
-                list.isSearchValid
-                  ? undefined
-                  : t('confirmations.search.invalid')
-              }
-            />
+          <div className="flex w-full items-start gap-2 lg:w-auto">
+            <div className="min-w-0 flex-1 lg:w-80 lg:flex-none">
+              <TextField
+                label={t('confirmations.search.label')}
+                labelHidden
+                type="search"
+                inputMode="tel"
+                autoComplete="off"
+                placeholder={t('confirmations.search.placeholder')}
+                prefix={<Icon source={SearchIcon} tone="subdued" />}
+                value={list.searchInput}
+                onChange={list.onSearchChange}
+                clearButton
+                onClearButtonClick={list.onSearchClear}
+                maxLength={32}
+                error={
+                  list.isSearchValid
+                    ? undefined
+                    : t('confirmations.search.invalid')
+                }
+              />
+            </div>
+            <Button
+              icon={ExportIcon}
+              loading={exporter.isExporting}
+              disabled={!list.rows.some((row) => !row.is_test)}
+              onClick={() => void handleExport()}
+            >
+              {t('confirmations.export.button')}
+            </Button>
           </div>
         </div>
 
@@ -209,6 +257,7 @@ export function ConfirmationsEmbedded({
                 canRetry={list.canRetry}
                 actingId={list.actingId}
                 handlers={{
+                  onOpenDetails: (row) => setDetailsId(row.id),
                   onRequestConfirm: (row, orderLabel) =>
                     confirmation.request({
                       verificationId: row.id,
@@ -224,6 +273,11 @@ export function ConfirmationsEmbedded({
         </div>
       </Card>
 
+      <ConfirmationDetailsModal
+        verification={detailsRow}
+        timeZone={list.reportingTimezone}
+        onClose={() => setDetailsId(null)}
+      />
       <ManualConfirmModal
         target={confirmation.target}
         isConfirming={confirmation.isConfirming}

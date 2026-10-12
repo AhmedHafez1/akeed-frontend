@@ -7,6 +7,7 @@ import { cn } from '@/shared/lib/utils'
 import { akCard } from '@/shared/ui'
 import {
   formatCount,
+  formatDuration,
   formatPercent,
 } from '@/features/dashboard/lib/orderDisplay'
 import type { DashboardOverview } from '@/features/dashboard/model/dashboard.model'
@@ -97,10 +98,13 @@ function MiniStat({ label, value }: { label: string; value: string }) {
 export function MessageFlowCard({
   funnel,
   manualConfirmed,
+  replySeconds = null,
 }: {
   funnel: Funnel
   /** Confirmed by the merchant after a send; outside the reply bar. */
   manualConfirmed: number
+  /** The typical time a customer takes to answer; null when unknown. */
+  replySeconds?: number | null
 }) {
   const t = useTranslations('dashboard.overview.flow')
   const tFlow = useTranslations('dashboard.standalone.flow')
@@ -133,6 +137,14 @@ export function MessageFlowCard({
                 value={formatPercent(funnel.replied.percent_of_sent, locale)}
               />
             </div>
+            {replySeconds !== null && (
+              <div className="border-line ms-6 border-s ps-6">
+                <MiniStat
+                  label={t('replyTime')}
+                  value={formatDuration(replySeconds, locale)}
+                />
+              </div>
+            )}
           </dl>
         )}
       </div>

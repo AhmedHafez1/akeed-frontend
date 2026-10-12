@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from '@/shared/ui'
 import { cancellationMessageKey } from '@/features/dashboard/domain/cancellation'
+import { useCustomerRecordView } from '@/features/dashboard/domain/useCustomerRecordView'
 import { getVerificationLifecycleSteps } from '@/features/dashboard/domain/verificationLifecycle'
 import {
   formatOrderTitle,
@@ -84,6 +85,7 @@ function DetailsBody({
   const { locale } = useLocaleInfo()
   const unavailableKey = cancellationMessageKey(verification)
   const sourceKey = orderSourceLabelKey(verification.platform)
+  const customerRecord = useCustomerRecordView(verification.customer_history)
 
   return (
     <>
@@ -122,6 +124,27 @@ function DetailsBody({
             </p>
           </div>
         </div>
+
+        {customerRecord && (
+          <div
+            className={cn(
+              'rounded-xl border px-4 py-3 text-sm',
+              customerRecord.kind === 'risk'
+                ? 'border-warning-border bg-warning-subtle text-warning-subtle-foreground'
+                : 'border-border text-foreground'
+            )}
+          >
+            <p className="text-xs opacity-80">
+              {t('confirmations.customer.heading')}
+            </p>
+            <p className="mt-1 font-semibold">{customerRecord.label}</p>
+            {customerRecord.kind !== 'new' && (
+              <p className="mt-0.5 text-xs opacity-80">
+                {customerRecord.summary}
+              </p>
+            )}
+          </div>
+        )}
 
         <section aria-labelledby="verification-history-title">
           <h3

@@ -14,6 +14,11 @@ import type { VerificationItem } from '../../../../model/dashboard.model'
 
 export type { ConfirmationRowActionHandlers }
 
+/** The shared row actions, plus opening the row's details. */
+export type EmbeddedRowActionHandlers = ConfirmationRowActionHandlers & {
+  onOpenDetails: (row: VerificationItem) => void
+}
+
 interface RowActionItem {
   id: string
   content: string
@@ -36,13 +41,19 @@ function useConfirmationRowActions({
   orderLabel: string
   canWrite: boolean
   canRetry: boolean
-  handlers: ConfirmationRowActionHandlers
+  handlers: EmbeddedRowActionHandlers
 }): { link: ConfirmationRowLink | null; items: RowActionItem[] } {
   const t = useTranslations('dashboard')
   const plan = planConfirmationRowActions(row, { canWrite, canRetry })
   const link = useConfirmationRowLink(row, orderLabel, plan.primary)
 
-  const items: RowActionItem[] = []
+  const items: RowActionItem[] = [
+    {
+      id: 'details',
+      content: t('table.actions.details'),
+      onAction: () => handlers.onOpenDetails(row),
+    },
+  ]
   if (plan.canConfirm) {
     items.push({
       id: 'confirm',
@@ -70,10 +81,10 @@ function useConfirmationRowActions({
 }
 
 /**
- * Nothing for rows that need nothing. In the table every action, the WhatsApp
- * link included, sits in a small sheet behind one labelled "more" button, so
- * rows stay quiet. On a card only the link sits up front; the sheet keeps the
- * rest, Confirm included.
+ * In the table every action, the WhatsApp link included, sits in a small
+ * sheet behind one labelled "more" button, so rows stay quiet. On a card only
+ * the link sits up front; the sheet keeps the rest, Confirm included. Every
+ * row has at least its details.
  *
  * The sheet is a Modal, not a Popover: Polaris' popover keeps the window in
  * its props, and React's dev profiler walks it into the cross-origin Shopify
@@ -93,7 +104,7 @@ export function ConfirmationRowActions({
   canWrite: boolean
   canRetry: boolean
   isActing: boolean
-  handlers: ConfirmationRowActionHandlers
+  handlers: EmbeddedRowActionHandlers
   /** `stacked` stretches the main link across a card. */
   layout?: 'inline' | 'stacked'
 }) {
@@ -107,7 +118,6 @@ export function ConfirmationRowActions({
     handlers,
   })
 
-  if (!link && items.length === 0) return null
   const isStacked = layout === 'stacked'
   const showSheet = items.length > 0 || (!isStacked && link !== null)
 

@@ -129,6 +129,8 @@ export type VerificationItem = {
   /** Akeed also canceled the order in the store. */
   canceled_in_store?: boolean
   updated_at?: string | null
+  /** How this customer's other orders ended. Null on test rows. */
+  customer_history?: CustomerHistory | null
   /**
    * Client-only: set on a row the UI is showing ahead of the server — an order
    * the merchant just created whose verification a worker has not written yet.
@@ -160,6 +162,8 @@ export type DashboardPageContext = {
     follow_up_enabled: boolean
     quiet_hours_enabled: boolean
   }
+  /** The summary the settings line shows. Absent on older payloads. */
+  settings?: DashboardOverview['settings']
   permissions?: DashboardPermissions
   usage?: DashboardPageUsage
   /** Rows per confirmations tab for the period, search ignored. */
@@ -219,6 +223,14 @@ export type DashboardStatsResponse = {
   stats: DashboardStats
 }
 
+/** A customer's other real orders with this merchant, by how they ended. */
+export type CustomerHistory = {
+  other_orders: number
+  confirmed: number
+  canceled: number
+  no_reply: number
+}
+
 /** Why the server says a row needs the merchant. */
 export type NeedsActionReason =
   | 'delivery_failed'
@@ -257,6 +269,7 @@ export type NeedsActionItem = {
     failure_code: string | null
   }
   capabilities: VerificationRowCapability[]
+  customer_history?: CustomerHistory | null
 }
 
 export type UsageState = 'ok' | 'warning' | 'exhausted'
@@ -303,6 +316,8 @@ export type DashboardOverview = {
     customer_canceled: number
     no_reply_yet: number
   }
+  /** How quickly customers answered; null seconds until there are enough replies. */
+  reply_time?: { median_seconds: number | null; replies: number }
   needs_action: {
     count: number
     items: NeedsActionItem[]

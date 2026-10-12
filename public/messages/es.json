@@ -854,6 +854,7 @@
       }
     },
     "tabs": {
+      "label": "Vistas principales",
       "metrics": "Panel",
       "confirmations": "Confirmaciones"
     },
@@ -1246,6 +1247,8 @@
         "legendConfirmed": "Confirmados {count}",
         "legendCanceled": "Cancelados {count}",
         "legendNoReply": "Aún sin respuesta {count}",
+        "replyTime": "Tiempo de respuesta habitual",
+        "replyTimeLine": "Los clientes suelen responder en {time}.",
         "empty": "Aún no se enviaron mensajes en este periodo."
       },
       "error": {
@@ -1257,6 +1260,20 @@
     "confirmations": {
       "title": "Confirmaciones",
       "subtitle": "Cada pedido contra entrega al que escribimos y lo que pasó después.",
+      "customer": {
+        "heading": "Historial del cliente",
+        "new": "Cliente nuevo",
+        "repeat": "Cliente recurrente · {confirmed} confirmados",
+        "risk": "{unconfirmed} de {orders} otros pedidos sin confirmar",
+        "returning": "Cliente recurrente",
+        "summary": "Otros pedidos: {orders} · Confirmados: {confirmed} · Cancelados: {canceled} · Sin respuesta: {noReply}"
+      },
+      "export": {
+        "button": "Exportar",
+        "hint": "Descarga esta lista como hoja de cálculo, por ejemplo para entregar los pedidos confirmados a tu mensajería",
+        "failed": "No pudimos exportar la lista. Inténtalo de nuevo.",
+        "tooLarge": "Demasiados pedidos para exportar de una vez. Elige un periodo más corto o una sola pestaña."
+      },
       "tabs": {
         "all": "Todos",
         "needs_action": "Requieren acción",

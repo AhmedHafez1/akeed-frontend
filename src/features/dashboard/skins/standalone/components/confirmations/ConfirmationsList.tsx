@@ -82,7 +82,7 @@ function TableRow({ row, timeZone, actingId, ...rest }: RowProps) {
         <DateTimeCell text={view.orderTime} title={view.orderTimeTitle} />
       </td>
       <td className={TABLE_CELL}>
-        <CustomerNameCell name={view.name} />
+        <CustomerNameCell name={view.name} history={row.customer_history} />
       </td>
       <td className={TABLE_CELL}>
         <PhoneCell phone={view.phone} />
@@ -146,7 +146,11 @@ function CardRow({ row, timeZone, actingId, ...rest }: RowProps) {
         <AmountText amount={view.amount} isCanceled={view.isCanceled} />
       </div>
       <div className="flex items-start justify-between gap-3">
-        <CustomerCell name={view.name} phone={view.phone} />
+        <CustomerCell
+          name={view.name}
+          phone={view.phone}
+          history={row.customer_history}
+        />
         <div className="flex min-w-0 shrink-0 flex-col items-end gap-1.5 text-end">
           <StatusCell row={row} timeZone={timeZone} />
           <StatusNote row={row} timeZone={timeZone} />

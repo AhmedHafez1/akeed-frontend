@@ -1,7 +1,11 @@
 import { BlockStack, Card, Divider, Text } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import { formatCount, formatPercent } from '../../../../lib/orderDisplay'
+import {
+  formatCount,
+  formatDuration,
+  formatPercent,
+} from '../../../../lib/orderDisplay'
 import type { DashboardOverview } from '../../../../model/dashboard.model'
 
 type Funnel = DashboardOverview['funnel']
@@ -89,7 +93,14 @@ function LegendItem({ color, label }: { color: string; label: string }) {
  * last bar splits into confirmed and canceled so the outcome is visible at a
  * glance.
  */
-export function MessageFlowCard({ funnel }: { funnel: Funnel }) {
+export function MessageFlowCard({
+  funnel,
+  replySeconds = null,
+}: {
+  funnel: Funnel
+  /** The typical time a customer takes to answer; null when unknown. */
+  replySeconds?: number | null
+}) {
   const t = useTranslations('dashboard.overview.flow')
   const { locale } = useLocaleInfo()
   const sent = funnel.sent.count
@@ -104,6 +115,13 @@ export function MessageFlowCard({ funnel }: { funnel: Funnel }) {
           <Text as="p" variant="bodyMd" tone="subdued">
             {t('subtitle')}
           </Text>
+          {sent > 0 && replySeconds !== null && (
+            <Text as="p" variant="bodyMd">
+              {t('replyTimeLine', {
+                time: formatDuration(replySeconds, locale),
+              })}
+            </Text>
+          )}
         </BlockStack>
         {sent === 0 ? (
           <Text as="p" variant="bodyMd" tone="subdued">

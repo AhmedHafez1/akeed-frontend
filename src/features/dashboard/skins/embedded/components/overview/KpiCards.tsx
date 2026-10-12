@@ -2,19 +2,18 @@ import type { ReactNode } from 'react'
 import { BlockStack, Card, InlineGrid, Text } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import {
-  formatCount,
-  formatOrderAmount,
-  formatPercent,
-} from '../../../../lib/orderDisplay'
+import { useKpiDetails } from '../../../../domain/useKpiDetails'
+import { formatCount, formatPercent } from '../../../../lib/orderDisplay'
 import type { DashboardOverview } from '../../../../model/dashboard.model'
 
 function KpiCard({
   title,
   value,
+  detail,
 }: {
   title: string
   value: string
+  detail?: ReactNode
 }) {
   return (
     <Card>
@@ -25,6 +24,11 @@ function KpiCard({
         <Text as="p" variant="heading2xl">
           <bdi dir="ltr">{value}</bdi>
         </Text>
+        {detail && (
+          <Text as="p" variant="bodySm" tone="subdued">
+            {detail}
+          </Text>
+        )}
       </BlockStack>
     </Card>
   )
@@ -34,14 +38,14 @@ function KpiCard({
 export function KpiCards({ kpis }: { kpis: DashboardOverview['kpis'] }) {
   const t = useTranslations('dashboard.overview.kpis')
   const { locale } = useLocaleInfo()
-  const [topValue] = kpis.confirmed.value
-  const rate = kpis.confirmation_rate
+  const details = useKpiDetails(kpis)
 
   return (
     <InlineGrid columns={{ xs: 1, md: 3 }} gap="400">
       <KpiCard
         title={t('confirmed.title')}
         value={formatCount(kpis.confirmed.count, locale)}
+        detail={details.confirmed}
       />
       <KpiCard
         title={t('canceled.title')}
@@ -49,7 +53,8 @@ export function KpiCards({ kpis }: { kpis: DashboardOverview['kpis'] }) {
       />
       <KpiCard
         title={t('rate.title')}
-        value={formatPercent(rate.rate, locale)}
+        value={formatPercent(kpis.confirmation_rate.rate, locale)}
+        detail={details.rate}
       />
     </InlineGrid>
   )

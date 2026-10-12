@@ -7,6 +7,10 @@ import { creditFeedbackKey } from '@/shared/lib/creditFeedback'
 import { cn } from '@/shared/lib/utils'
 import { akButton, akCard, notify } from '@/shared/ui'
 import { useConfirmationsList } from '../../domain/useConfirmationsList'
+import {
+  exportErrorKey,
+  useConfirmationsExport,
+} from '@/features/dashboard/domain/useConfirmationsExport'
 import { useManualConfirmation } from '../../domain/useManualConfirmation'
 import { useOutcomeSyncRetry } from '../../domain/useOutcomeSyncRetry'
 import type { DateRangeFilterOption } from '../../domain/dashboard.types'
@@ -23,6 +27,7 @@ import { CancelOrderDialog } from './components/confirmations/CancelOrderDialog'
 import { ConfirmationsList } from './components/confirmations/ConfirmationsList'
 import { ConfirmationsToolbar } from './components/confirmations/ConfirmationsToolbar'
 import { VerificationDetailsSheet } from './components/confirmations/VerificationDetailsSheet'
+import { SettingsStatusLine } from './components/overview/SettingsStatusLine'
 import { PageHeader } from './components/shared/PageHeader'
 
 export interface DashboardVerificationsStandaloneSkinProps {
@@ -68,6 +73,12 @@ export function DashboardVerificationsStandaloneSkin({
   })
   const confirmation = useManualConfirmation()
   const storeSync = useOutcomeSyncRetry()
+  const exporter = useConfirmationsExport({
+    tab,
+    dateRange: period,
+    search: list.search,
+    importBatchId,
+  })
   const [cancelTarget, setCancelTarget] = useState<{
     row: VerificationItem
     orderLabel: string
@@ -119,6 +130,15 @@ export function DashboardVerificationsStandaloneSkin({
     else notify.error(options)
   }
 
+  const handleExport = async () => {
+    const result = await exporter.exportList()
+    if (result === 'done') return
+    notify.error({
+      message: t(`confirmations.export.${exportErrorKey(result)}`),
+      id: 'confirmations-export',
+    })
+  }
+
   const handleCancel = async () => {
     if (!cancelTarget) return
     const result = await list.onCancel(cancelTarget.row.id)
@@ -154,7 +174,13 @@ export function DashboardVerificationsStandaloneSkin({
     <div className="mx-auto w-full max-w-360 min-w-0 space-y-6 pt-2 pb-8 md:flex md:h-[calc(100dvh-6.5rem)] md:min-h-128 md:flex-col md:pb-0 lg:h-[calc(100dvh-7.5rem)]">
       <PageHeader
         title={t('confirmations.title')}
-        subtitle={t('confirmations.subtitle')}
+        subtitle={
+          list.settings ? (
+            <SettingsStatusLine settings={list.settings} />
+          ) : (
+            t('confirmations.subtitle')
+          )
+        }
         periodLabel={t('overview.periodLabel')}
         period={period}
         periodOptions={periodOptions}
@@ -205,6 +231,9 @@ export function DashboardVerificationsStandaloneSkin({
           isSearchValid={list.isSearchValid}
           onSearchChange={list.onSearchChange}
           onSearchClear={list.onSearchClear}
+          onExport={() => void handleExport()}
+          isExporting={exporter.isExporting}
+          canExport={list.rows.some((row) => !row.optimistic && !row.is_test)}
         />
 
         <div
