@@ -2,10 +2,10 @@
 
 import Link from 'next/link'
 import { Moon } from 'lucide-react'
-import { useFormatter, useLocale, useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { billingPurchaseHref } from '@/features/billing'
 import { creditFeedbackKey } from '@/shared/lib/creditFeedback'
-import { withLocale } from '@/shared/lib/locale'
+import { getFormatLocale, withLocale } from '@/shared/lib/locale'
 import { Button, LoadingButton, Progress } from '@/shared/ui'
 import { useResumeOrderImport } from '../../../api/orderImportMutations'
 import {
@@ -43,7 +43,6 @@ export function SendProgressView({
   const t = useTranslations('orderImport.release')
   const tImport = useTranslations('orderImport')
   const locale = useLocale()
-  const format = useFormatter()
   const progress = releaseProgress(detail)
   const { hours, minutes } = splitDuration(minutesLeft(detail))
   const timeLeft =
@@ -81,10 +80,10 @@ export function SendProgressView({
             <>
               {' · '}
               {t('startedAt', {
-                time: format.dateTime(new Date(detail.startedAt), {
+                time: new Intl.DateTimeFormat(getFormatLocale(locale), {
                   dateStyle: 'medium',
                   timeStyle: 'short',
-                }),
+                }).format(new Date(detail.startedAt)),
               })}
             </>
           )}
@@ -127,7 +126,6 @@ function StatusBanner({
   const tStart = useTranslations('orderImport.start')
   const tCredits = useTranslations('creditErrors')
   const locale = useLocale()
-  const format = useFormatter()
   const blockerText = useBlockerText()
   const resume = useResumeOrderImport(detail.batchId)
   const release = detail.release
@@ -172,10 +170,10 @@ function StatusBanner({
           <Moon aria-hidden="true" className="mt-1 size-4 shrink-0" />
           <span>
             {t('quietHours', {
-              time: format.dateTime(new Date(detail.quietHoursUntil!), {
+              time: new Intl.DateTimeFormat(getFormatLocale(locale), {
                 timeStyle: 'short',
                 timeZone: detail.storeTimezone ?? undefined,
-              }),
+              }).format(new Date(detail.quietHoursUntil!)),
               timezone: detail.storeTimezone ?? '',
             })}
           </span>

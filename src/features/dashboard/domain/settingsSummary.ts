@@ -1,3 +1,5 @@
+import { getFormatLocale } from '@/shared/lib/locale'
+
 /**
  * The follow-up delay as the dashboard says it: whole hours when it divides
  * evenly ("تذكير بعد 6 ساعات"), minutes otherwise.
@@ -24,11 +26,14 @@ export function formatQuietHour(value: string | null, locale: string) {
   const date = new Date(
     Date.UTC(2000, 0, 1, Number(match[1]), Number(match[2]))
   )
-  const formatted = new Intl.DateTimeFormat(`${locale}-u-nu-latn`, {
-    hour: 'numeric',
-    ...(match[2] === '00' ? {} : { minute: '2-digit' }),
-    timeZone: 'UTC',
-  }).format(date)
+  const formatted = new Intl.DateTimeFormat(
+    `${getFormatLocale(locale)}-u-nu-latn`,
+    {
+      hour: 'numeric',
+      ...(match[2] === '00' ? {} : { minute: '2-digit' }),
+      timeZone: 'UTC',
+    }
+  ).format(date)
   return locale === 'ar' ? formatted.replace(/\s+/g, '') : formatted
 }
 

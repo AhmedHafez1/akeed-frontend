@@ -1,4 +1,4 @@
-import type { SupportedLocale } from '@/shared/lib/locale'
+import { getFormatLocale, type SupportedLocale } from '@/shared/lib/locale'
 
 /**
  * Money and credit formatting shared by the billing screen and the public
@@ -11,7 +11,7 @@ import type { SupportedLocale } from '@/shared/lib/locale'
  * in-app balance disagree about what the same price looks like.
  */
 export function formatCredits(value: number, locale: SupportedLocale) {
-  return new Intl.NumberFormat(locale).format(value)
+  return new Intl.NumberFormat(getFormatLocale(locale)).format(value)
 }
 
 export function formatMoney(
@@ -19,7 +19,7 @@ export function formatMoney(
   currency: string,
   locale: SupportedLocale
 ) {
-  return new Intl.NumberFormat(locale, {
+  return new Intl.NumberFormat(getFormatLocale(locale), {
     style: 'currency',
     currency,
     maximumFractionDigits: 2,
@@ -36,7 +36,7 @@ export function formatMoneyParts(
   currency: string,
   locale: SupportedLocale
 ) {
-  const parts = new Intl.NumberFormat(locale, {
+  const parts = new Intl.NumberFormat(getFormatLocale(locale), {
     style: 'currency',
     currency,
     maximumFractionDigits: 2,
@@ -122,12 +122,15 @@ export function formatAmount(
   currency: string,
   locale: SupportedLocale
 ): string {
-  const formatter = new Intl.NumberFormat(`${locale}-u-nu-latn`, {
-    style: 'currency',
-    currency,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })
+  const formatter = new Intl.NumberFormat(
+    `${getFormatLocale(locale)}-u-nu-latn`,
+    {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }
+  )
   if (locale !== 'ar')
     return formatter.format(value).replace(BIDI_MARKS, '').replace(/\s+/g, ' ')
   const parts = formatter.formatToParts(value)

@@ -17,6 +17,12 @@ describe('getShopifyAppStoreListingUrl', () => {
     )
   })
 
+  it('opens the Spanish listing for the Spanish site', () => {
+    expect(getShopifyAppStoreListingUrl('es')).toBe(
+      'https://apps.shopify.com/akeed?locale=es'
+    )
+  })
+
   it.each(['en', 'fr', ''])('keeps the default listing for "%s"', (locale) => {
     expect(getShopifyAppStoreListingUrl(locale)).toBe(
       SHOPIFY_APP_STORE_LISTING_URL

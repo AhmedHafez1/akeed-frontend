@@ -36,7 +36,7 @@ Also validate changes with `npm run build && npm run lint`.
 - Framework: Next.js 16 (App Router) with React 19
 - Language: TypeScript (strict mode)
 - Styling: Tailwind CSS 4 + shadcn/ui primitives (CVA + Radix)
-- i18n: next-intl (locales: `ar` default, `en`, `ur`; listed in `src/shared/lib/locale.ts`). Messages in `public/messages/{locale}.json`
+- i18n: next-intl (locales: `ar` default, `en`, `ur`, `es`; listed in `src/shared/lib/locale.ts`). Messages in `public/messages/{locale}.json`
 - Auth: Dual-mode — Supabase (standalone) / Shopify App Bridge (embedded)
 - State: React hooks only (no external state library)
 - API client: `fetchWithAuth` / `api.*` in `src/shared/lib/auth.ts`
@@ -182,7 +182,7 @@ Rules:
 ## i18n — Locale Requirements
 
 - All user-facing text must come from `next-intl` translation keys
-- When adding text, update `public/messages/ar.json`, `en.json` and `ur.json` (Urdu has no `admin*` namespaces)
+- When adding text, update `public/messages/ar.json`, `en.json`, `ur.json` and `es.json` (Urdu and Spanish have no `admin*` namespaces)
 - Use `useTranslations('namespace')` in client components
 - Locale routing is enforced by middleware; all routes are under `/{locale}/`
 - RTL support: Arabic (`ar`) renders RTL; use `useLocaleInfo()` for `isRTL` checks

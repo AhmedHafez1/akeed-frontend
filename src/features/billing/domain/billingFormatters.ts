@@ -1,4 +1,4 @@
-import type { SupportedLocale } from '@/shared/lib/locale'
+import { getFormatLocale, type SupportedLocale } from '@/shared/lib/locale'
 
 /*
  * Credit counts are shared with the public pricing section, so they live in
@@ -47,7 +47,7 @@ export function formatShortDate(
   now: Date = new Date()
 ) {
   const date = new Date(value)
-  return new Intl.DateTimeFormat(`${locale}-u-nu-latn`, {
+  return new Intl.DateTimeFormat(`${getFormatLocale(locale)}-u-nu-latn`, {
     day: 'numeric',
     month: 'short',
     ...(date.getFullYear() !== now.getFullYear() && { year: 'numeric' }),
@@ -61,7 +61,7 @@ export function formatShortDate(
  */
 export function formatBillingDate(value: string, locale: SupportedLocale) {
   const date = new Date(value)
-  const tag = `${locale}-u-nu-latn`
+  const tag = `${getFormatLocale(locale)}-u-nu-latn`
   const day = new Intl.DateTimeFormat(tag, {
     day: 'numeric',
     month: 'short',

@@ -3,6 +3,7 @@ import {
   DEFAULT_LOCALE,
   LOCALE_PREFERENCE_STORAGE_KEY,
   SUPPORTED_LOCALES,
+  getFormatLocale,
   getIntlLocale,
   getLocaleDirection,
   getLocaleFromPathname,
@@ -21,8 +22,8 @@ function clearLocaleCookie() {
 }
 
 describe('interface languages', () => {
-  it('serves Arabic, English and Urdu, with Arabic as the default', () => {
-    expect(SUPPORTED_LOCALES).toEqual(['ar', 'en', 'ur'])
+  it('serves Arabic, English, Urdu and Spanish, with Arabic as the default', () => {
+    expect(SUPPORTED_LOCALES).toEqual(['ar', 'en', 'ur', 'es'])
     expect(DEFAULT_LOCALE).toBe('ar')
   })
 
@@ -30,6 +31,7 @@ describe('interface languages', () => {
     ['ar', 'rtl', 'ar-EG', 'العربية'],
     ['en', 'ltr', 'en-US', 'English'],
     ['ur', 'rtl', 'ur-PK', 'اردو'],
+    ['es', 'ltr', 'es-419', 'Español'],
   ] as const)(
     'describes %s as %s, formatted as %s',
     (locale, direction, tag, name) => {
@@ -39,6 +41,27 @@ describe('interface languages', () => {
       expect(getLocaleNativeName(locale)).toBe(name)
     }
   )
+
+  it.each([
+    ['ar', 'ar'],
+    ['en', 'en'],
+    ['ur', 'ur'],
+    ['es', 'es-419'],
+  ] as const)('formats %s amounts and dates as %s', (locale, tag) => {
+    expect(getFormatLocale(locale)).toBe(tag)
+  })
+
+  it('formats Spanish like Latin America, not like Spain', () => {
+    const tag = getFormatLocale('es')
+    expect(new Intl.NumberFormat(tag).format(12500.5)).toBe('12,500.5')
+    expect(
+      new Intl.DateTimeFormat(tag, {
+        day: 'numeric',
+        month: 'long',
+        timeZone: 'UTC',
+      }).format(new Date(Date.UTC(2026, 8, 22)))
+    ).toBe('22 de septiembre')
+  })
 
   it('reads an unknown language as the default', () => {
     expect(isSupportedLocale('fr')).toBe(false)
@@ -50,6 +73,8 @@ describe('interface languages', () => {
   it('reads the language from the path', () => {
     expect(getLocaleFromPathname('/ur/dashboard')).toBe('ur')
     expect(withLocale('/billing', 'ur')).toBe('/ur/billing')
+    expect(getLocaleFromPathname('/es/dashboard')).toBe('es')
+    expect(withLocale('/billing', 'es')).toBe('/es/billing')
   })
 })
 
@@ -60,6 +85,8 @@ describe('replacePathnameLocale', () => {
     ['/en', 'ur', '/ur'],
     ['/', 'ur', '/ur'],
     ['/billing', 'ur', '/ur/billing'],
+    ['/ar/billing', 'es', '/es/billing'],
+    ['/es/settings/api', 'ar', '/ar/settings/api'],
   ] as const)('turns %s into %s: %s', (pathname, locale, expected) => {
     expect(replacePathnameLocale(pathname, locale)).toBe(expected)
   })

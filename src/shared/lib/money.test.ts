@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatAmount } from './money'
+import { formatAmount, formatCredits } from './money'
 
 const LRM = String.fromCharCode(0x200e)
 const bidiMarks = new RegExp(`[${String.fromCharCode(0x200e, 0x200f, 0x061c)}]`)
@@ -26,6 +26,14 @@ describe('formatAmount', () => {
     expect(formatAmount(500, 'EGP', 'ur')).toBe('EGP 500.00')
     expect(formatAmount(500, 'USD', 'ur')).toBe('$500.00')
     expect(formatAmount(99.5, 'PKR', 'ur')).not.toMatch(bidiMarks)
+  })
+
+  it("writes Spanish amounts like English ones, not with Spain's decimal comma", () => {
+    expect(formatAmount(1250.5, 'EGP', 'es')).toBe('EGP 1,250.50')
+    expect(formatAmount(1250.5, 'MXN', 'es')).toBe('MXN 1,250.50')
+    expect(formatAmount(500, 'USD', 'es')).toBe('USD 500.00')
+    expect(formatAmount(99.5, 'EUR', 'es')).not.toMatch(bidiMarks)
+    expect(formatCredits(12500, 'es')).toBe('12,500')
   })
 
   it('carries no bidi marks except the anchor after an Arabic symbol', () => {
