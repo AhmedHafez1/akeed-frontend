@@ -25,7 +25,7 @@ describe('the Server API guide', () => {
   it('is one page in both locales, next to Bulk Order Import', () => {
     for (const guide of [english, arabic]) {
       expect(guide.data.slug).toBe('server-api')
-      expect(guide.data.order).toBe(3)
+      expect(guide.data.order).toBe(6)
       expect(String(guide.data.title).trim()).not.toBe('')
       expect(String(guide.data.description).trim()).not.toBe('')
     }

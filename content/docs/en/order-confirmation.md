@@ -1,7 +1,7 @@
 ---
 title: Order Confirmation
 description: Learn how Akeed confirms COD orders on WhatsApp and how to act on each status in your daily shipping workflow.
-order: 4
+order: 7
 slug: order-confirmation
 ---
 
@@ -31,6 +31,7 @@ Order confirmation helps reduce both.
 3. The customer confirms, cancels, or does not reply.
 4. Akeed updates status and reflects it in dashboard views.
 5. Follow-up and escalation rules apply based on your settings.
+6. On a connected store, Akeed records the answer on the order: a tag on Shopify, a status on EasyOrders, a note or a cancelled status on WooCommerce.
 
 > [!INFO]
 > Akeed’s main confirmation workflow is for COD orders.

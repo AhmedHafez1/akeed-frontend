@@ -29,7 +29,7 @@ export type StandaloneSetupBlockedReason =
   | 'automation_invalid'
   | 'timezone_invalid'
 
-/** Setup blockers only a connected source can have (US-06-05, US-07-05). */
+/** Setup blockers only a connected source can have. */
 export type SourceSetupBlockedReason =
   | 'order_defaults_missing'
   | 'webhook_secrets_missing'

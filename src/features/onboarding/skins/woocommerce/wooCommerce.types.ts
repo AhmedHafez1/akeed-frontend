@@ -141,7 +141,7 @@ export type WooCommerceConnectView =
   | 'disconnected'
 
 /**
- * The store cannot be connected as it is (the contract record's support
+ * The store cannot be connected as it is (outside the support
  * boundary). Each has its own message telling the merchant what to change.
  */
 export const WOOCOMMERCE_UNSUPPORTED_STORE_CODES = [

@@ -1,4 +1,4 @@
-# E01 isolated cancellation feedback fixture
+# Isolated cancellation feedback fixture
 
 ## Order sync fixture
 
@@ -62,7 +62,7 @@ Run `npm run smoke:e01` from the frontend repository with its existing dependenc
 
 This separate Next.js test application imports the real embedded `useMainConfirmationsTab`, order-centric standalone `useDashboard`, data hooks and both table components. Its Webpack configuration replaces only the authentication/API module with a strict in-memory fixture. The Standalone fixture includes an order without a verification, a retryable synthetic order, reconciled order totals and billing-period usage. No production route, authentication code or service response is changed. It does not load the application's `.env.local`, uses no provider credentials and binds only to loopback. Its CSP blocks external connections, forms and frames. Unexpected API operations throw, including the send-test endpoint; there is no network fallback.
 
-The fixture is **not authentication evidence**. Check the real Shopify session, real standalone session and organization bootstrap, onboarding, full layouts, settings, navigation and billing visibility separately in the authenticated development apps. The single backend evidence record is `akeed-backend/docs/E01-BASELINE-EVIDENCE.md` in the workspace.
+The fixture is **not authentication evidence**. Check the real Shopify session, real standalone session and organization bootstrap, onboarding, full layouts, settings, navigation and billing visibility separately in the authenticated development apps.
 
 For each locale and both **Fixture skin** choices:
 
@@ -83,9 +83,9 @@ For the E02 release gate, `npm run smoke:e02:typecheck` compiles the same fixtur
 
 Validation: run frontend TypeScript/build/non-fixing lint and the documented backend gate. Use a separate `NEXT_DIST_DIR` for a production validation build while the owner's two development servers run, to avoid deleting their generated chunks. Do not count missing infrastructure, fixture setup errors, or failed smoke actions as passes.
 
-US-02-03 extends the fixture with per-order capabilities and a neutral pending-operation result. After the order row loads, choose **Unsupported** in **Fixture capability**: both skins must show the translated unavailable message with no cancellation button. Choose **Legacy response**: the cancellation controls remain compatible with the old response. In both languages, successful cancellation must show the translated pending-provider message after refresh. Enter activates the native confirmation/dismiss controls. The fixture still does not prove authenticated full-layout styling or remote completion.
+The fixture also carries per-order capabilities and a neutral pending-operation result. After the order row loads, choose **Unsupported** in **Fixture capability**: both skins must show the translated unavailable message with no cancellation button. Choose **Legacy response**: the cancellation controls remain compatible with the old response. In both languages, successful cancellation must show the translated pending-provider message after refresh. Enter activates the native confirmation/dismiss controls. The fixture still does not prove authenticated full-layout styling or remote completion.
 
-## US-02-04 billing fixture
+## Billing fixture
 
 Open `http://127.0.0.1:3098/en/billing?entitlement=manual&skin=standalone`. Use `/ar/billing` for Arabic. This route renders the real Settings pages, `SettingsStandalonePage` and `SettingsEmbeddedPage`, each loading through its own hook; the state line above them reads the same cached settings response. The layout supplies a synthetic no-op App Bridge `loading` method; there are no session tokens or real authentication. All API operations remain intercepted, with unexpected requests rejected.
 
@@ -99,9 +99,9 @@ For each locale and shell:
 4. With `entitlement=shopify` in the embedded skin, verify four existing plans and `canManageBilling:true`, and use the translated subscribe button on the Pro card. The real hook redirects to the same loopback page with `approved=1`; this is a synthetic confirmation destination, not a subscription purchase. The old `tab=billing` is replaced with `tab=plan`, and each paid plan card has its own subscribe button. Do not test these actions against a live merchant.
 5. Confirm Enter activates the subscribe button and Arabic `lang=ar`/`dir=rtl`. **Inspect billing calls** refreshes counters without changing application state.
 
-The fixture does not simulate onboarding activation or staff provisioning. Its template previews are synthetic. Authenticated layout, live Shopify approval, and staff/audit validation remain separate release gates. See `akeed-backend/docs/US-02-04-PROVIDER-NEUTRAL-ENTITLEMENTS-EVIDENCE.md` for dated results and the unrun PostgreSQL gate.
+The fixture does not simulate onboarding activation or staff provisioning. Its template previews are synthetic. Authenticated layout, live Shopify approval, and staff/audit validation remain separate release gates.
 
-## US-03-02 Standalone pilot fixture
+## Standalone pilot fixture
 
 Open `http://127.0.0.1:3098/en/pilots` and `/ar/pilots`. This route imports the real Standalone pilot page and intercepts every admin API request. Select the first two eligible accounts, preview them, enter a non-secret synthetic reason, and apply. The first result deliberately activates one row and fails one; retry must report the first row as previously completed and activate the second. Verify translated labels, native keyboard controls, disabled in-flight actions, report downloads, and Arabic `lang=ar`, `dir=rtl`. No authentication, database write, merchant activation, or provider call occurs.
 
@@ -115,13 +115,13 @@ Scenarios, as query parameters: `backend=unavailable` (Akeed's WhatsApp is down:
 
 `onboarding-v2-check.mjs` drives all of this in Chromium for both locales at 1280 and 390 px and writes screenshots to `test/screenshots/standalone-onboarding-v2/`: start the fixture, then run `node test/e01-smoke/onboarding-v2-check.mjs` from the frontend root. The fixture performs no authentication, database write, provider call or message send.
 
-## US-03-05 role and stale-page fixture
+## Role and stale-page fixture
 
 Open the root fixture in both locales and select each embedded/Standalone skin. Owner and admin must retain cancellation and test-send actions. Viewer must see the localized read-only notice with neither action, while the verification values remain readable. Missing permission data is covered by the production hook's strict `=== true` check and therefore fails closed.
 
 To simulate a membership change after page load, keep the fixture role as owner or admin, choose **Role denied (stale 403)**, request cancellation, and resolve the pending request. The row must remain unchanged and display the localized cancellation error in a `role="alert"` container. This fixture uses a synthetic `403 VERIFICATION_ROLE_REQUIRED`; it does not prove live authentication or membership refresh.
 
-## US-04-02 manual-order entry fixture
+## Manual-order entry fixture
 
 Open `http://127.0.0.1:3098/en/manual-order` and `/ar/manual-order`. This route imports the real Standalone manual-order hook, modal, validation, translations, authenticated API adapter, and shared form primitives. Every order request is intercepted in memory; no authentication, database write, provider call, or message send occurs.
 
@@ -129,7 +129,7 @@ Use the fixture controls to exercise owner/admin, viewer, connected/disconnected
 
 `browser-check.mjs` exports `checkManualOrder(tab, locale)` for the primary keyboard, validation, pending, success, reset, and same-token retry sequence. Run it once per locale after loading a fresh fixture page. Check the viewer/disconnected controls, long text limits, timeout, server error choices, modal focus trap, and `lang`/`dir` manually or with equivalent browser automation. The timeout intentionally waits 30 seconds and remains separate from the shorter primary helper.
 
-## US-04.5-06 staff billing operations fixture
+## Staff billing operations fixture
 
 Open `http://127.0.0.1:3098/en/standalone-billing` and `/ar/standalone-billing`. The account list uses the real staff page with synthetic rows: filter by approval, account status, balance and reconciliation, and follow **Open** on *Refunded merchant in debt* to `/{locale}/admin/standalone-billing/10000000-0000-4000-8000-000000000005`. That route renders the real account detail and operation components; every admin request is answered in memory with the backend's response shapes, and nothing is authenticated, written to a database or sent to Paymob or Meta.
 
@@ -145,7 +145,7 @@ Operation requests are recorded in `window.__akeedAdminBillingCalls`. Check that
 
 The fixture proves component behavior only. Authorization, idempotency, locking and ledger effects are proven by the backend PostgreSQL contract suite (`npm run test:contract:billing-operations`).
 
-## US-04.6-05 order-import wizard fixture
+## Order-import wizard fixture
 
 Open `http://127.0.0.1:3098/en/imports/new` or `/ar/imports/new`, and the batch pages `/{locale}/imports/b-map` (unconfirmed mapping: ambiguous dates, one unknown payment value, uploaded twice), `/b-review` (confirmed: 970 ready, 12 to fix, 6 duplicates, 14 excluded), `/b-empty` (nothing ready, no date column) and `/b-expired`. Any other id answers 404. These routes render the real `OrderImportNewStandalone` / `OrderImportBatchStandalone` with every order-import request answered in memory in the backend's shapes (`app/[locale]/imports/orderImportFixture.ts`); nothing is authenticated, uploaded, stored or sent.
 
@@ -153,7 +153,7 @@ Query parameters: `theme=dark`; `role=viewer` (read-only permissions); `scenario
 
 Check at 1440 and 390 px in both locales and themes: the map step blocks Continue until the date format and the unknown payment value are chosen, then moves to review with focus on the step heading; Include anyway moves one row from Excluded to Ready at once and back on failure; Discard asks first and returns to `/imports/new`; the viewer sees no upload, continue, include, discard or import controls. The fixture does not prove authentication, the backend contract or the real shell.
 
-## US-04.6-08 imported orders in Verifications
+## Imported orders in Verifications
 
 Committed batches: `/{locale}/imports/b-imported` (awaiting start), `/b-releasing`, `/b-paused` (out of credits), `/b-stopped`, `/b-completed` and `/b-none` (completed, no order visible). Each renders its real batch view with a **Review orders** link to `/{locale}/verifications?importBatchId=<id>`. The `/verifications` fixture mounts the real page's header action (the "From import: {file}" chip and **Import from file**), answers `?importBatchId=` with a mix of awaiting-start, confirmed, no-reply and canceled rows, returns no rows for `b-none` or an unknown id (the existing empty state), and honours `?theme=dark`.
 

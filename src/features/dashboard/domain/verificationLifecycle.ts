@@ -144,7 +144,7 @@ export const EXPLAINED_LIFECYCLE_REASONS = new Set([
   'auto_verify_disabled',
   'onboarding_incomplete',
   'provider_outcome_unknown',
-  // No WhatsApp template could be sent for the customer's language (US-08-04).
+  // No WhatsApp template could be sent for the customer's language.
   'template_unavailable',
   // Why an order from a connected store was not taken in.
   'missing_currency',

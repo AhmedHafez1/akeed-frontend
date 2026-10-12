@@ -384,7 +384,7 @@ describe('SettingsEmbeddedPage', () => {
   })
 })
 
-describe('SettingsEmbeddedPage message improvements (US-08-07)', () => {
+describe('SettingsEmbeddedPage message improvements', () => {
   function offered() {
     const response = settingsResponseFixture()
     return {

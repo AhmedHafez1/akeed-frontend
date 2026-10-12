@@ -1,7 +1,7 @@
 ---
 title: Bulk Order Import
 description: Import COD orders from a CSV or Excel file, check them, and start WhatsApp confirmation for all of them at once.
-order: 3
+order: 5
 slug: bulk-order-import
 ---
 

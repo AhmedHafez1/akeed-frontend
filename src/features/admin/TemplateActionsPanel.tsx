@@ -161,7 +161,7 @@ function ActionDialog({
 }
 
 /**
- * The staff actions on one registry template (US-08-06 criteria 5 to 7).
+ * The staff actions on one registry template.
  * Each opens a confirmation that states its effect, with the stores it moves.
  * Operators see the controls; everyone else sees only the template's state,
  * and the backend refuses the writes whatever the page shows.

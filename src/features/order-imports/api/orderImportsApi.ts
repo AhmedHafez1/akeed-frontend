@@ -5,7 +5,7 @@ import type { OrderCurrency } from '@/shared/commerce/orderCommerce'
 export type OrderImportFormat = 'csv' | 'xlsx'
 export type OrderImportTemplateLocale = 'ar' | 'en'
 
-/** The canonical fields a column can feed (US-04.6-03), required first. */
+/** The canonical fields a column can feed, required first. */
 export const orderImportFields = [
   'phone',
   'customerName',
@@ -99,7 +99,7 @@ export type OrderImportMappingState = {
   dateFormat: OrderImportDateCheck | null
 }
 
-/** `POST /api/order-imports` (US-04.6-02 AC8, US-04.6-03). */
+/** `POST /api/order-imports`. */
 export type OrderImportUploadResponse = OrderImportMappingState & {
   batchId: string
   status: 'draft'
@@ -165,7 +165,7 @@ export type OrderImportBatchDetail = OrderImportMappingState & {
   committedAt?: string | null
   /** Confirmation must be started before this, or the orders lapse. */
   startDeadlineAt?: string | null
-  /** Release progress, present once the batch is committed (US-04.6-07). */
+  /** Release progress, present once the batch is committed. */
   startedAt?: string | null
   /** A blocker code, or `staff_paused`, while the batch is paused. */
   pausedReason?: string | null

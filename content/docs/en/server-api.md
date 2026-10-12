@@ -1,7 +1,7 @@
 ---
 title: Server API
 description: Send cash-on-delivery orders from your own website or back end to Akeed with one HTTPS request, and retry safely.
-order: 3
+order: 6
 slug: server-api
 ---
 

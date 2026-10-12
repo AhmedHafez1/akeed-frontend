@@ -212,11 +212,10 @@ Optional:
 
 - `NEXT_PUBLIC_EASYORDERS_CONNECT_ENABLED` — `true` offers EasyOrders as a
   start route: a card on the homepage, a row in the first signup step and an
-  item in the hero logo strip (US-06-02). Unset or anything else leaves it
+  item in the hero logo strip. Unset or anything else leaves it
   out of all three. Turn the backend `EASYORDERS_CONNECT_ENABLED` on first.
 
-- `NEXT_PUBLIC_WOOCOMMERCE_CONNECT_ENABLED` — the same for WooCommerce
-  (US-07-02). Turn the backend `WOOCOMMERCE_CONNECT_ENABLED` on first.
+- `NEXT_PUBLIC_WOOCOMMERCE_CONNECT_ENABLED` — the same for WooCommerce. Turn the backend `WOOCOMMERCE_CONNECT_ENABLED` on first.
 
 Signup is two steps on one route: `/signup` asks where the orders come from
 (`getStartRoutes()` in `src/shared/config/commerceSources.ts`), and

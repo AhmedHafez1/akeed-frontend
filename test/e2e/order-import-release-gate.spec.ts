@@ -3,7 +3,7 @@ import { mkdirSync, readFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 
 /*
- * US-04.6-10 AC2, the browser half: arabic-excel.xlsx through the real
+ * The browser half of the import gate: arabic-excel.xlsx through the real
  * import modal (الملف → الفحص → الإرسال), the top bar's progress, and into
  * the Verifications list for the batch, in Arabic and English, light and
  * dark, at 1440 and 390 px. The fixture app answers with what the real

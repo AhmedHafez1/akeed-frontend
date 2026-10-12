@@ -48,7 +48,7 @@ const idle = {
   restarting: false,
 } as const
 
-describe('WooCommerce messages (US-07-02)', () => {
+describe('WooCommerce messages', () => {
   it.each(Object.entries({ ar, en }))(
     '%s has a message for every code the screen names, and a default',
     (_locale, messages) => {
@@ -104,8 +104,8 @@ describe('WooCommerce messages (US-07-02)', () => {
 })
 
 /**
- * Every code `woocommerce.errors.ts` in the backend can answer with, as of
- * the US-07-06 release gate. A code added there needs a row here, and with it
+ * Every code `woocommerce.errors.ts` in the backend can answer with.
+ * A code added there needs a row here, and with it
  * a decision: its own message, or the default.
  */
 const BACKEND_ERROR_CODES = [
@@ -153,7 +153,7 @@ const CODES_NO_SCREEN_RECEIVES = [
   'WOOCOMMERCE_WEBHOOK_UNAUTHORIZED',
 ]
 
-describe('every WooCommerce error code, in both languages (US-07-06)', () => {
+describe('every WooCommerce error code, in both languages', () => {
   type Messages = typeof en.wooCommerceConnect
 
   /** The message a merchant reads for a code, wherever the code can show. */
@@ -340,7 +340,7 @@ function details(
   }
 }
 
-describe('WooCommerce messages (US-07-05)', () => {
+describe('WooCommerce messages', () => {
   it.each(Object.entries({ ar, en }))(
     '%s has guidance for every problem a connection check can find, and a default',
     (_locale, messages) => {
@@ -423,7 +423,7 @@ describe('WooCommerce messages (US-07-05)', () => {
   })
 })
 
-describe('resolveWooCommerceConnectView (US-07-05)', () => {
+describe('resolveWooCommerceConnectView', () => {
   const disconnectedAt = '2026-10-05T09:00:00.000Z'
 
   it.each([

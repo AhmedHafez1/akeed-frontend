@@ -238,7 +238,7 @@ function TextEditor({
 }
 
 /**
- * Staff manage the free-form texts of US-08-07 here: what a customer reads
+ * Staff manage the free-form texts here: what a customer reads
  * after confirming or cancelling, the nudge after a reply Akeed could not
  * read, and the words for a missing name. A named template operator saves;
  * every change is audited.

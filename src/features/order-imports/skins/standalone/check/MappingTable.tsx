@@ -414,7 +414,7 @@ function OptionalFields({
   )
 }
 
-/** A full name may come from a first and a last name column (US-04.6-03). */
+/** A full name may come from a first and a last name column. */
 function SecondNameColumn({
   columns,
   headers,

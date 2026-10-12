@@ -77,7 +77,7 @@ rows = rows.concat(
 )
 
 /*
- * US-04.6-08: the orders of an import, as `?importBatchId=` filters them.
+ * The orders of an import, as `?importBatchId=` filters them.
  * The M9 mix of held and confirmed outcomes, rendered by the same table as
  * every other order. `b-none`, and any id the import fixture does not know,
  * has no visible order, which is the existing empty state.
@@ -154,7 +154,7 @@ export async function verificationFixtureRequest<T>(
     quiet_hours_enabled: false,
   }
   const importBatchId = query.searchParams.get('importBatchId')
-  // US-04.6-10: the batch the release-gate replay imported, as the backend
+  // The batch the release-gate replay imported, as the backend
   // listed it.
   const replayed = isImportReplay()
     ? (replayVerifications(url) as { data: VerificationItem[] } | undefined)

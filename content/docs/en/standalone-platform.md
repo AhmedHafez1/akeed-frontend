@@ -1,6 +1,6 @@
 ---
 title: Using Akeed Without Shopify
-description: Confirm cash-on-delivery orders on WhatsApp from any store. Add orders manually or import a file, and pay for usage with credits.
+description: Confirm cash-on-delivery orders on WhatsApp from any store. Connect WooCommerce or EasyOrders, add orders manually or import a file, and pay for usage with credits.
 order: 2
 slug: standalone-platform
 ---
@@ -32,6 +32,12 @@ This is called the **standalone** way of using Akeed. The confirmation flow is t
 Both ways send the same WhatsApp confirmation and use the same follow-up and no-reply rules. Imported orders appear in your **Confirmations** list together with every other order.
 
 If you have your own website or order system, it can also send orders to Akeed automatically. See [Server API](/docs/server-api).
+
+## Connect a Store Instead
+
+If your store runs on WooCommerce or EasyOrders, you do not add orders yourself. Choose the platform when you sign up, approve the connection once, and every new COD order reaches Akeed by itself. Akeed also records the customer's answer on the order in your store. See [Connect WooCommerce](/docs/woocommerce) and [Connect EasyOrders](/docs/easyorders).
+
+An account takes its orders from one source. An account connected to a store does not use **Verify order**, file import or the Server API.
 
 > [!INFO]
 > Only owners and admins can add or import orders. Viewers can see orders and results but cannot change anything.
@@ -70,13 +76,13 @@ Akeed never asks for or stores your card or wallet details. Credits are added to
 
 ## What Is Different from Shopify
 
-| | Shopify | Standalone |
-| --- | --- | --- |
-| How orders arrive | Automatically from your store. | You add them, one by one or from a file. |
-| Where results appear | Your Akeed dashboard and your Shopify order. | Your Akeed dashboard. |
-| How you pay | A monthly plan billed by Shopify. | Credits bought through Paymob. |
+| | Shopify | WooCommerce or EasyOrders | Standalone |
+| --- | --- | --- | --- |
+| How orders arrive | Automatically from your store. | Automatically from your store. | You add them, one by one, from a file or from your server. |
+| Where results appear | Your Akeed dashboard and your Shopify order. | Your Akeed dashboard and the order in your store. | Your Akeed dashboard. |
+| How you pay | A monthly plan billed by Shopify. | Credits bought through Paymob. | Credits bought through Paymob. |
 
-Akeed does not change anything in another system for standalone orders. Use the status in your dashboard to decide what to ship.
+For orders you add yourself, Akeed does not change anything in another system. Use the status in your dashboard to decide what to ship.
 
 ## Common Mistakes
 
@@ -95,7 +101,7 @@ No. Standalone accounts do not need Shopify or any other platform.
 
 ### Is Akeed different for Shopify stores?
 
-Shopify stores install Akeed from Shopify, receive orders automatically and use a monthly plan billed by Shopify. Other merchants create a standalone account, add their own orders and use credits.
+Shopify stores install Akeed from Shopify, receive orders automatically and use a monthly plan billed by Shopify. Other merchants create an account, connect a WooCommerce or EasyOrders store or add their own orders, and use credits.
 
 ### Do I need my own WhatsApp Business account?
 
@@ -107,6 +113,8 @@ Yes. Owners and admins can add and import orders. Viewers have read-only access.
 
 ## Related Guides
 
+- [Connect WooCommerce](/docs/woocommerce)
+- [Connect EasyOrders](/docs/easyorders)
 - [Bulk Order Import](/docs/bulk-order-import)
 - [Server API](/docs/server-api)
 - [Getting Started](/docs/getting-started)

@@ -73,7 +73,7 @@ beforeEach(() => {
   vi.mocked(saveMessageText).mockReset()
 })
 
-describe('MessageTextsAdminPage (US-08-07)', () => {
+describe('MessageTextsAdminPage', () => {
   it('lists each purpose with its switch, the default style first', async () => {
     vi.mocked(getMessageTexts).mockResolvedValue(response())
     renderAdmin(<MessageTextsAdminPage />)

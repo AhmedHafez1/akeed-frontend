@@ -1,5 +1,5 @@
 /**
- * The free-form texts staff manage (US-08-07): the acknowledgment after a
+ * The free-form texts staff manage: the acknowledgment after a
  * customer confirms or cancels, the nudge after an unreadable reply, and the
  * words used for a missing customer or store name. Not WhatsApp templates:
  * they need no review and are saved directly.

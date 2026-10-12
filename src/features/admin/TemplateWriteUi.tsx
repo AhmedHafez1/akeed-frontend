@@ -56,7 +56,7 @@ export function TemplateNotice({
   )
 }
 
-/** Which Meta account this environment writes to (US-08-06 criterion 10). */
+/** Which Meta account this environment writes to. */
 export function TemplateEnvironment({
   environment,
 }: {

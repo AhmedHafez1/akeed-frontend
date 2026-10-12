@@ -1,7 +1,7 @@
 ---
 title: ربط الخادم بأكيد (Server API)
 description: أرسل طلبات الدفع عند الاستلام من موقعك أو نظامك إلى أكيد تلقائياً بطلب HTTPS واحد.
-order: 3
+order: 6
 slug: server-api
 ---
 

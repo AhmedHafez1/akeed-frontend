@@ -1,7 +1,7 @@
 ---
 title: WhatsApp Templates
 description: Choose the right confirmation message style and language so customers reply faster and with less confusion.
-order: 6
+order: 9
 slug: whatsapp-templates
 ---
 
@@ -67,6 +67,10 @@ If your settings offer **Automatic by country**, choose it to let the customer's
 ## Reminder Message
 
 Customers who have not replied get a reminder. Where your settings show a **Reminder message** section, you can pick a separate reminder style for each language. **Same as the first message** repeats your first message, which is also what happens when you choose nothing.
+
+## Order Details in the Message
+
+Some styles also show what the customer ordered and where it will be delivered: the items, the region and the address. Such a style is sent only when the order carries those details. When it does not, the customer gets the default style of the same language, so the message never arrives with empty lines.
 
 ## Best Practices for Better Replies
 

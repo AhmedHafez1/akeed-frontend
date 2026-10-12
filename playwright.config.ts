@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test'
 
 /*
- * US-04.6-10 release-gate browser flows. They drive the real import and
+ * Release-gate browser flows. They drive the real import and
  * Verifications UI inside the e01-smoke fixture app (port 3098), which
  * replays API answers recorded from the real backend. No sign-in, database or
  * message send is involved. Run with `npm run e2e:order-imports`.

@@ -1,6 +1,6 @@
 ---
 title: Getting Started
-description: Set up Akeed on Shopify or with your own store, and send your first COD confirmation message.
+description: Set up Akeed on Shopify, with a connected WooCommerce or EasyOrders store, or on its own, and send your first COD confirmation message.
 order: 1
 slug: getting-started
 ---
@@ -9,12 +9,13 @@ slug: getting-started
 
 **Akeed — COD confirmation infrastructure for merchants.** Akeed helps you confirm cash-on-delivery orders on WhatsApp before shipping. For every eligible COD order, Akeed sends a confirmation message and updates your dashboard when the customer responds.
 
-Akeed works in two ways. Use this guide when you are setting it up for the first time.
+Akeed works in three ways. Use this guide when you are setting it up for the first time.
 
 | If you… | Use | How orders arrive | How you pay |
 | --- | --- | --- | --- |
 | Have a Shopify store | [Path A: Shopify](#path-a-shopify) | Automatically from your store. | A monthly plan billed by Shopify. |
-| Sell anywhere else, or work from a spreadsheet | [Path B: Your own store](#path-b-your-own-store-no-shopify) | You add them one by one, or import a file. | Credits, bought through Paymob. |
+| Have a WooCommerce or EasyOrders store | [Connect WooCommerce](/docs/woocommerce) or [Connect EasyOrders](/docs/easyorders) | Automatically from your store. | Credits, bought through Paymob. |
+| Sell anywhere else, or work from a spreadsheet | [Path B: Your own store](#path-b-your-own-store-no-shopify) | You add them one by one, import a file, or send them from your own server. | Credits, bought through Paymob. |
 
 > [!INFO]
 > Akeed is designed for COD order confirmation. It does not send confirmation messages for online-paid orders.
@@ -91,7 +92,7 @@ Check the dashboard regularly so your fulfillment team knows which COD orders ar
 
 ## Path B: Your Own Store (No Shopify)
 
-Use this path if you do not use Shopify. See [Using Akeed Without Shopify](/docs/standalone-platform) for the full picture.
+Use this path if you do not use Shopify. See [Using Akeed Without Shopify](/docs/standalone-platform) for the full picture. If your store runs on WooCommerce or EasyOrders, choose it when you sign up and follow [Connect WooCommerce](/docs/woocommerce) or [Connect EasyOrders](/docs/easyorders) instead: your orders then arrive by themselves.
 
 ### Step 1: Create Your Account
 
@@ -148,7 +149,7 @@ No. Akeed is focused on cash-on-delivery orders. Online-paid orders are not auto
 
 ### Do I need Shopify to use Akeed?
 
-No. Shopify stores install Akeed from Shopify. Everyone else can use a standalone account. See [Using Akeed Without Shopify](/docs/standalone-platform).
+No. Shopify stores install Akeed from Shopify. WooCommerce and EasyOrders stores connect in a few steps. Everyone else can use a standalone account. See [Using Akeed Without Shopify](/docs/standalone-platform).
 
 ### Do I need my own WhatsApp Business account?
 

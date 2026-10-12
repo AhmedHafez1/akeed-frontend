@@ -148,7 +148,7 @@ describe('SettingsStandalonePage tabs', () => {
 
     fireEvent.keyDown(screen.getByRole('tablist'), { key: 'End' })
 
-    // API keys is the last tab (US-05-01).
+    // API keys is the last tab.
     expect(nav.push).toHaveBeenCalledWith('/ar/settings?tab=api-keys', {
       scroll: false,
     })
@@ -633,7 +633,7 @@ describe('SettingsStandalonePage message tab', () => {
   })
 })
 
-describe('SettingsStandalonePage message improvements (US-08-07)', () => {
+describe('SettingsStandalonePage message improvements', () => {
   const messageCopy = ar.settings.embedded.message
   const reminder = (variant: string, line: string) => ({
     language: 'ar' as const,

@@ -34,7 +34,7 @@ export type LedgerReasonCode =
 
 export interface CreditSummary {
   billingEnabled: boolean
-  /** Standalone bulk order import is switched on (E04.6). Absent means off. */
+  /** Standalone bulk order import is switched on. Absent means off. */
   bulkImportEnabled?: boolean
   status: CreditAccountStatus
   postedBalance: number
