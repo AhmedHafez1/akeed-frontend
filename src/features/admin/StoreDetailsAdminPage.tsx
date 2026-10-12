@@ -46,6 +46,7 @@ import {
   useAdminStoreVerifications,
   type AdminStoreVerificationFilters,
 } from './useAdminStore'
+import { describeVerificationFailure } from './verificationFailure'
 
 const verificationStatusOptions = [
   { value: '', label: 'All statuses' },
@@ -405,6 +406,16 @@ function ProfileCard({ store }: { store: AdminStoreDetail }) {
         items={[
           ['Organization', store.organization_name],
           ['Owner', store.owner_email ?? 'Unknown'],
+          [
+            'WhatsApp number',
+            store.merchant_whatsapp_phone ? (
+              <span className="font-mono" dir="ltr">
+                {store.merchant_whatsapp_phone}
+              </span>
+            ) : (
+              'Not provided'
+            ),
+          ],
           ['Platform', platformLabel(store.platform)],
           ['Country', store.country_code ?? 'Unknown'],
           ['Timezone', store.timezone ?? 'Unknown'],
@@ -868,6 +879,7 @@ function VerificationsSection({
                 {response.data.map((verification) => {
                   const isExpanded = expanded.has(verification.id)
                   const detailId = `verification-${verification.id}`
+                  const failure = describeVerificationFailure(verification)
                   return (
                     <Fragment key={verification.id}>
                       <tr
@@ -899,10 +911,20 @@ function VerificationsSection({
                         <td className="text-foreground px-4 py-3 text-end font-medium whitespace-nowrap tabular-nums">
                           {formatAmount(verification)}
                         </td>
-                        <td className="px-4 py-3">
-                          <VerificationStatusBadge
-                            status={verification.status}
-                          />
+                        <td className="max-w-80 px-4 py-3">
+                          <div className="flex items-center gap-2">
+                            <VerificationStatusBadge
+                              status={verification.status}
+                            />
+                            {failure && (
+                              <span
+                                className="text-destructive-subtle-foreground min-w-0 truncate text-xs"
+                                title={failure.detail}
+                              >
+                                {failure.label}
+                              </span>
+                            )}
+                          </div>
                         </td>
                         <td className="text-foreground/80 px-4 py-3 text-end tabular-nums">
                           {verification.attempts}
@@ -950,6 +972,7 @@ function VerificationsSection({
             {response.data.map((verification) => {
               const isExpanded = expanded.has(verification.id)
               const detailId = `mobile-verification-${verification.id}`
+              const failure = describeVerificationFailure(verification)
               return (
                 <li key={verification.id} className="p-4">
                   <div className="flex items-start justify-between gap-3">
@@ -970,6 +993,11 @@ function VerificationsSection({
                     </div>
                     <VerificationStatusBadge status={verification.status} />
                   </div>
+                  {failure && (
+                    <p className="text-destructive-subtle-foreground mt-2 text-xs">
+                      {failure.label}
+                    </p>
+                  )}
                   <div className="text-foreground/70 mt-3 flex items-center justify-between text-xs">
                     <span className="text-foreground font-medium tabular-nums">
                       {formatAmount(verification)}
@@ -1076,7 +1104,8 @@ function VerificationDetails({
   ]
   if (verification.cancellation_source)
     facts.push(['Canceled by', titleCase(verification.cancellation_source)])
-  if (verification.reason)
+  const failure = describeVerificationFailure(verification)
+  if (verification.reason && !failure)
     facts.push(['Reason', titleCase(verification.reason)])
 
   return (
@@ -1117,6 +1146,19 @@ function VerificationDetails({
           ))}
         </dl>
       </div>
+      {failure && (
+        <div className="md:col-span-2">
+          <h3 className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+            Why it failed
+          </h3>
+          <p className="text-foreground mt-2 text-sm font-medium">
+            {failure.label}
+          </p>
+          <p className="text-foreground/70 mt-1 text-sm break-words">
+            {failure.detail}
+          </p>
+        </div>
+      )}
     </div>
   )
 }

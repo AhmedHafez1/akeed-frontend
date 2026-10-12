@@ -64,6 +64,8 @@ const platformOptions = [
   { value: '', label: 'All platforms' },
   { value: 'shopify', label: 'Shopify' },
   { value: 'standalone', label: 'Standalone' },
+  { value: 'easyorders', label: 'EasyOrders' },
+  { value: 'woocommerce', label: 'WooCommerce' },
 ]
 
 const planOptions = [
