@@ -183,7 +183,12 @@ export function SettingsEmbeddedPage() {
               <MessageTab model={model} data={data} readOnly={readOnly} />
             )}
             {activeTab === 'timing' && (
-              <TimingTab model={model} data={data} readOnly={readOnly} />
+              <TimingTab
+                model={model}
+                data={data}
+                readOnly={readOnly}
+                onPreviewMessage={() => goToTab('message')}
+              />
             )}
             {activeTab === 'plan' && <PlanTab model={model} data={data} />}
           </BlockStack>

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   TEMPLATE_DETAIL_SAMPLES,
   fillTemplateLines,
+  fillTemplateSegments,
   templateReplyTone,
   type TemplateMessage,
 } from './templateMessage'
@@ -44,6 +45,64 @@ describe('fillTemplateLines', () => {
         total: '250',
       })[1]
     ).toBe('Order #TEST-1 for 250')
+  })
+})
+
+describe('WhatsApp bold markers', () => {
+  const values = {
+    customer: 'Camille',
+    store: 'AAHI',
+    order: '1009',
+    total: '599.00 USD',
+  }
+  const fill = (line: string) =>
+    fillTemplateSegments(templateMessageFixture([line], []), values)[0]
+
+  it('bolds a value between two markers and removes them', () => {
+    expect(
+      fill('sur *{{store}}*. Le total est de *{{total}}*, à payer.')
+    ).toEqual([
+      { kind: 'text', text: 'sur ' },
+      { kind: 'variable', variable: 'store', text: 'AAHI', bold: true },
+      { kind: 'text', text: '. Le total est de ' },
+      { kind: 'variable', variable: 'total', text: '599.00 USD', bold: true },
+      { kind: 'text', text: ', à payer.' },
+    ])
+  })
+
+  it('bolds text and the values inside it together', () => {
+    expect(fill('*Order #{{order}}* is ready')).toEqual([
+      { kind: 'text', text: 'Order ', bold: true },
+      { kind: 'variable', variable: 'order', text: '#1009', bold: true },
+      { kind: 'text', text: ' is ready' },
+    ])
+  })
+
+  it('leaves a value the message does not mark as it is', () => {
+    expect(fill('Hi {{customer}}')[1]).toEqual({
+      kind: 'variable',
+      variable: 'customer',
+      text: 'Camille',
+    })
+  })
+
+  it.each([
+    ['2 * 3 = 6'],
+    ['a lone * star'],
+    ['* spaced out *'],
+    ['size 2*3*4 cm'],
+    ['empty ** pair'],
+  ])('shows an asterisk that is not a marker: %s', (line) => {
+    expect(fill(line)).toEqual([{ kind: 'text', text: line }])
+  })
+
+  it('keeps the markers out of the plain text', () => {
+    expect(
+      fillTemplateLines(
+        templateMessageFixture(['Merci *{{customer}}* !'], []),
+        values
+      )
+    ).toEqual(['Merci Camille !'])
   })
 })
 

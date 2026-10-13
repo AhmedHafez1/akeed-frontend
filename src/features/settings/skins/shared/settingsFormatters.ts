@@ -18,6 +18,28 @@ export function formatQuietTime(t: Translator, value: string): string {
 }
 
 /**
+ * The wait written on the line into a step of the embedded flow: "Immediately",
+ * "After 2 hours", or "Off". Null for the first step, which has no line.
+ */
+export function formatConnectorDelay(
+  t: Translator,
+  step: TimelineStep
+): string | null {
+  if (step.delay.kind === 'none') return null
+  if (!step.isOn) return t('stepOff')
+  return step.delay.kind === 'immediate'
+    ? t('delayImmediate')
+    : t('delayAfter', { duration: formatDuration(t, step.delay.minutes) })
+}
+
+/** "15 min" / "2 h" for a segment; whole hours read as hours. */
+export function formatShortDuration(t: Translator, minutes: number): string {
+  return minutes > 0 && minutes % 60 === 0
+    ? t('hoursShort', { count: minutes / 60 })
+    : t('minutesShort', { count: minutes })
+}
+
+/**
  * When a timeline step happens: "Immediately", "After 2 hours", "6 hours
  * later", or "Off". Null for the first step, which has no wait before it.
  */

@@ -37,6 +37,7 @@ const messages: SettingsModelMessages = {
   testSendSuccess: 'testSendSuccess',
   testSendCooldown: 'testSendCooldown',
   testSendDailyLimit: 'testSendDailyLimit',
+  testSendLanguageUnavailable: 'testSendLanguageUnavailable',
   testSendError: 'testSendError',
 }
 
@@ -315,6 +316,38 @@ describe('useSettingsModel', () => {
   })
 
   describe('test send', () => {
+    it('sends the language it is given, and explains one that cannot be sent', async () => {
+      sendOnboardingTest.mockResolvedValueOnce(
+        {} as Awaited<ReturnType<typeof onboardingApi.sendOnboardingTest>>
+      )
+      const { result } = await setupLoaded()
+
+      await act(async () => {
+        await result.current.sendTest('en')
+      })
+      expect(sendOnboardingTest).toHaveBeenCalledWith({
+        resend: true,
+        language: 'en',
+      })
+
+      sendOnboardingTest.mockRejectedValueOnce(
+        new onboardingApi.OnboardingApiError(
+          'unavailable',
+          400,
+          'ONBOARDING_TEST_LANGUAGE_UNAVAILABLE'
+        )
+      )
+      let outcome: unknown
+      await act(async () => {
+        outcome = await result.current.sendTest('ur')
+      })
+      expect(outcome).toBe('failed')
+      expect(adapter.notifyError).toHaveBeenCalledWith(
+        'testSendLanguageUnavailable',
+        'testSend'
+      )
+    })
+
     it('notifies when the test message is sent', async () => {
       sendOnboardingTest.mockResolvedValue(
         {} as Awaited<ReturnType<typeof onboardingApi.sendOnboardingTest>>

@@ -4,24 +4,34 @@ import { useId } from 'react'
 import { Loader2, Send } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import type { PreviewSample } from '@/features/settings/domain/messagePreview'
+import { SettingsPhonePreview } from '@/features/settings/skins/shared/SettingsPhonePreview'
 import type { MessageLanguage } from '@/shared/lib/messageLanguage'
 import { formatPhoneInternational } from '@/shared/lib/phone'
 import type { TemplateMessage } from '@/shared/lib/templateMessage'
 import { cn } from '@/shared/lib/utils'
 import { AkSelect, akButton, akCard, akLink } from '@/shared/ui'
-import { WhatsAppMessagePreview } from './WhatsAppMessagePreview'
 
 interface MessagePreviewPanelProps {
   language: MessageLanguage
-  /** The languages the preview can show, live or not. */
-  languages: readonly MessageLanguage[]
-  onLanguageChange: (language: MessageLanguage) => void
+  /**
+   * Given while the preview can show any language (the store's language is
+   * automatic): the languages, live or not, and what picking one does.
+   */
+  languageChoice?: {
+    languages: readonly MessageLanguage[]
+    onChange: (language: MessageLanguage) => void
+  }
   message: TemplateMessage
   sample: PreviewSample
+  /** Which language and style the phone shows. */
+  previewingLabel: string
   /** A note under the preview, for example how `auto` picks a style. */
   note?: string
   testSendPhone: string | null
+  /** The language the test goes out in: the one being previewed. */
   testSendLanguage: MessageLanguage
+  /** False while that language has no approved message to send. */
+  isPreviewLive: boolean
   canSendTest: boolean
   isDirty: boolean
   isSendingTest: boolean
@@ -31,18 +41,21 @@ interface MessagePreviewPanelProps {
 
 /**
  * The preview beside the Message settings: the message in any language,
- * and a free test send to the merchant's own WhatsApp. A test sends the
- * saved settings, so it waits for unsaved changes to be saved first.
+ * and a free test send to the merchant's own WhatsApp. The test is the
+ * message on the phone: the previewed language, with its saved style, so it
+ * waits for unsaved changes to be saved first and for a language that has an
+ * approved message.
  */
 export function MessagePreviewPanel({
   language,
-  languages,
-  onLanguageChange,
+  languageChoice,
   message,
   sample,
+  previewingLabel,
   note,
   testSendPhone,
   testSendLanguage,
+  isPreviewLive,
   canSendTest,
   isDirty,
   isSendingTest,
@@ -53,6 +66,7 @@ export function MessagePreviewPanel({
   const tShared = useTranslations('settings.embedded.message')
   const headingId = useId()
   const captionId = useId()
+  const languageId = useId()
   const languageName = tShared(`languageNames.${language}`)
   const testLanguageName = tShared(`languageNames.${testSendLanguage}`)
   const phone = formatPhoneInternational(testSendPhone)
@@ -62,34 +76,48 @@ export function MessagePreviewPanel({
       aria-labelledby={headingId}
       className={cn(akCard, 'min-[1100px]:sticky min-[1100px]:top-20')}
     >
-      <div className="flex items-center justify-between gap-4 px-4 py-4 sm:px-6">
-        <h2 id={headingId} className="text-ak-section text-ink">
-          {tShared('previewHeading')}
-        </h2>
-        <AkSelect
-          className="w-36 shrink-0"
-          aria-label={tShared('previewLanguageGroup')}
-          value={language}
-          onChange={(event) =>
-            onLanguageChange(event.target.value as MessageLanguage)
-          }
-          options={languages.map((option) => ({
-            value: option,
-            label: tShared(`languageNames.${option}`),
-          }))}
-        />
+      <div className="space-y-3 px-4 pt-4 pb-3 sm:px-6">
+        <div>
+          <h2 id={headingId} className="text-ak-section text-ink">
+            {tShared('previewHeading')}
+          </h2>
+          <p className="text-ak-caption text-ink-muted mt-0.5">
+            {previewingLabel}
+          </p>
+        </div>
+        {languageChoice && (
+          <div className="flex items-center gap-3">
+            <label
+              htmlFor={languageId}
+              className="text-ak-caption text-ink shrink-0 font-semibold"
+            >
+              {tShared('previewLanguageGroup')}
+            </label>
+            <AkSelect
+              id={languageId}
+              className="min-w-0 flex-1"
+              value={language}
+              onChange={(event) =>
+                languageChoice.onChange(event.target.value as MessageLanguage)
+              }
+              options={languageChoice.languages.map((option) => ({
+                value: option,
+                label: tShared(`languageNames.${option}`),
+              }))}
+            />
+          </div>
+        )}
       </div>
 
       <div className="px-4 pb-4">
-        <WhatsAppMessagePreview
+        <SettingsPhonePreview
           language={language}
           message={message}
           sample={sample}
           label={tShared('previewAria', { language: languageName })}
-          businessAccountLabel={t('businessAccount')}
           emptyLabel={tShared('previewEmpty')}
         />
-        {note && <p className="text-ak-caption text-ink-muted mt-2">{note}</p>}
+        {note && <p className="text-ak-caption text-ink-muted mt-3">{note}</p>}
       </div>
 
       {canSendTest && (
@@ -97,10 +125,10 @@ export function MessagePreviewPanel({
           <button
             type="button"
             onClick={onSendTest}
-            disabled={isDirty || isSendingTest}
+            disabled={isDirty || !isPreviewLive || isSendingTest}
             aria-busy={isSendingTest}
             aria-describedby={captionId}
-            className={cn(akButton({ variant: 'secondary' }), 'w-full')}
+            className={cn(akButton({ variant: 'primary' }), 'w-full')}
           >
             {isSendingTest ? (
               <Loader2
@@ -116,23 +144,27 @@ export function MessagePreviewPanel({
             <p id={captionId} className="text-ak-caption text-ink-muted">
               {isDirty
                 ? t('testSendSaveFirst')
-                : phone
-                  ? tShared.rich('testSendHelp', {
-                      phone: () => (
-                        <bdi
-                          dir="ltr"
-                          className="text-ink font-semibold tabular-nums"
-                        >
-                          {phone}
-                        </bdi>
-                      ),
+                : !isPreviewLive
+                  ? tShared('testSendLanguageLocked', {
                       language: testLanguageName,
                     })
-                  : tShared('testSendHelpNoPhone', {
-                      language: testLanguageName,
-                    })}
+                  : phone
+                    ? tShared.rich('testSendHelp', {
+                        phone: () => (
+                          <bdi
+                            dir="ltr"
+                            className="text-ink font-semibold tabular-nums"
+                          >
+                            {phone}
+                          </bdi>
+                        ),
+                        language: testLanguageName,
+                      })
+                    : tShared('testSendHelpNoPhone', {
+                        language: testLanguageName,
+                      })}
             </p>
-            {!isDirty && phone && (
+            {!isDirty && isPreviewLive && phone && (
               <button
                 type="button"
                 onClick={onChangePhone}

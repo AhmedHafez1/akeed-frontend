@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import {
   BlockStack,
   Box,
+  Button,
   Card,
   Checkbox,
   Divider,
@@ -12,7 +13,6 @@ import {
   Layout,
   Select,
   Text,
-  TextField,
 } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
 import type { SettingsResponse } from '@/features/settings/api/settingsApi'
@@ -21,18 +21,21 @@ import {
   ESCALATION_PRESET_HOURS,
   hourPresetOptions,
   REMINDER_PRESET_HOURS,
-  SEND_DELAY_PRESETS,
-  type SendDelayChoice,
+  sendDelayFieldsFor,
+  sendDelayOptions,
 } from '@/features/settings/domain/delayPresets'
 import { quietTimeValues } from '@/features/settings/domain/quietHours'
 import {
-  sendDelayChoicePatch,
+  resolvedSendDelayMinutes,
   SETTINGS_FIELD_ID,
   timelineInputFromForm,
 } from '@/features/settings/domain/settingsForm'
 import { buildTimezoneOptions } from '@/features/settings/domain/timezoneOptions'
 import type { EmbeddedSettingsModel } from '@/features/settings/domain/useEmbeddedSettings'
-import { formatQuietTime } from '@/features/settings/skins/shared/settingsFormatters'
+import {
+  formatQuietTime,
+  formatShortDuration,
+} from '@/features/settings/skins/shared/settingsFormatters'
 import { AutomationTimelineCard } from './AutomationTimelineCard'
 import { SegmentedButtons } from './SegmentedButtons'
 
@@ -40,9 +43,16 @@ interface TimingTabProps {
   model: EmbeddedSettingsModel
   data: SettingsResponse
   readOnly: boolean
+  /** Opens the Message tab, where the message is previewed. */
+  onPreviewMessage: () => void
 }
 
-export function TimingTab({ model, data, readOnly }: TimingTabProps) {
+export function TimingTab({
+  model,
+  data,
+  readOnly,
+  onPreviewMessage,
+}: TimingTabProps) {
   const t = useTranslations('settings.embedded.timing')
   const tSettings = useTranslations('settings')
   const values = model.values
@@ -64,17 +74,14 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
 
   const timeline = buildAutomationTimeline(timelineInputFromForm(values))
 
-  const sendChoices: ReadonlyArray<{ value: SendDelayChoice; label: string }> =
-    [
-      ...SEND_DELAY_PRESETS.map((preset) => ({
-        value: preset.id,
-        label: t(`sendPresets.${preset.id}`),
-      })),
-      { value: 'custom', label: t('sendPresets.custom') },
-    ]
-
-  const handleSendChoice = (choice: SendDelayChoice) =>
-    model.update(sendDelayChoicePatch(values, choice))
+  const sendDelayMinutes = resolvedSendDelayMinutes(values)
+  const sendChoices = sendDelayOptions(sendDelayMinutes).map((option) => ({
+    value: option.minutes,
+    label:
+      option.minutes === 0
+        ? t('sendPresets.now')
+        : formatShortDuration(t, option.minutes),
+  }))
 
   const hourOptions = (presets: readonly number[], currentMinutes: number) =>
     hourPresetOptions(presets, currentMinutes).map((option) => ({
@@ -119,41 +126,28 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
             {values.isAutoVerifyEnabled && (
               <Box paddingInlineStart="800">
                 <BlockStack gap="200">
-                  <Text as="p" fontWeight="medium">
-                    {t('sendTimeLabel')}
-                  </Text>
-                  <SegmentedButtons
-                    label={t('sendTimeLabel')}
-                    options={sendChoices}
-                    value={values.sendDelayChoice}
-                    disabled={readOnly}
-                    onChange={handleSendChoice}
-                  />
-                  {values.sendDelayChoice === 'custom' && (
-                    <Box maxWidth="240px">
-                      <TextField
-                        id={SETTINGS_FIELD_ID.sendDelayCustom}
-                        label={t('customDelayLabel')}
-                        type="number"
-                        inputMode="numeric"
-                        min={0}
-                        max={1440}
-                        step={1}
-                        autoComplete="off"
-                        suffix={t('customDelaySuffix')}
-                        value={values.sendDelayCustom}
-                        disabled={readOnly}
-                        error={
-                          model.errors.sendDelayCustom
-                            ? t('customDelayError')
-                            : undefined
-                        }
-                        onChange={(value) =>
-                          model.update({ sendDelayCustom: value })
-                        }
-                      />
-                    </Box>
-                  )}
+                  <InlineStack align="space-between" blockAlign="center">
+                    <Text as="p" fontWeight="medium">
+                      {t('sendTimeLabel')}
+                    </Text>
+                    <Button variant="plain" onClick={onPreviewMessage}>
+                      {t('previewMessage')}
+                    </Button>
+                  </InlineStack>
+                  <InlineStack gap="200" blockAlign="center">
+                    <SegmentedButtons
+                      label={t('sendTimeLabel')}
+                      options={sendChoices}
+                      value={sendDelayMinutes}
+                      disabled={readOnly}
+                      onChange={(minutes) =>
+                        model.update(sendDelayFieldsFor(minutes))
+                      }
+                    />
+                    <Text as="span" tone="subdued">
+                      {t('fromOrder')}
+                    </Text>
+                  </InlineStack>
                 </BlockStack>
               </Box>
             )}
@@ -179,24 +173,29 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
               />
               {values.followUpEnabled && (
                 <Box paddingInlineStart="800">
-                  <InlineStack gap="200" blockAlign="center">
-                    <Text as="span">{t('after')}</Text>
-                    <SegmentedButtons
-                      label={t('reminderGroup')}
-                      options={hourOptions(
-                        REMINDER_PRESET_HOURS,
-                        values.followUpDelayMinutes
-                      )}
-                      value={values.followUpDelayMinutes}
-                      disabled={readOnly}
-                      onChange={(minutes) =>
-                        model.update({ followUpDelayMinutes: minutes })
-                      }
-                    />
-                    <Text as="span" tone="subdued">
-                      {t('fromFirstMessage')}
+                  <BlockStack gap="200">
+                    <InlineStack gap="200" blockAlign="center">
+                      <Text as="span">{t('after')}</Text>
+                      <SegmentedButtons
+                        label={t('reminderGroup')}
+                        options={hourOptions(
+                          REMINDER_PRESET_HOURS,
+                          values.followUpDelayMinutes
+                        )}
+                        value={values.followUpDelayMinutes}
+                        disabled={readOnly}
+                        onChange={(minutes) =>
+                          model.update({ followUpDelayMinutes: minutes })
+                        }
+                      />
+                      <Text as="span" tone="subdued">
+                        {t('fromFirstMessage')}
+                      </Text>
+                    </InlineStack>
+                    <Text as="p" tone="subdued">
+                      {t('reminderCounts')}
                     </Text>
-                  </InlineStack>
+                  </BlockStack>
                 </Box>
               )}
             </BlockStack>
@@ -206,6 +205,7 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
             <BlockStack gap="300">
               <Checkbox
                 label={t('alertLabel')}
+                helpText={t('alertHelp')}
                 checked={values.escalationEnabled}
                 disabled={readOnly}
                 onChange={(checked) =>
@@ -250,6 +250,7 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
           <BlockStack gap="400">
             <Checkbox
               label={t('quietLabel')}
+              helpText={values.quietHoursEnabled ? undefined : t('quietOff')}
               checked={values.quietHoursEnabled}
               disabled={readOnly}
               onChange={model.setQuietHoursEnabled}

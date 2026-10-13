@@ -16,19 +16,6 @@ import type { SettingsFormValues } from './settingsForm'
 
 type TemplateSettings = SettingsResponse['template']
 
-/**
- * The translation key of "Always <language>" for each message language. The
- * same key names exist under `settings.embedded.message` and
- * `settings.standalone.page.message`.
- */
-export const ALWAYS_LANGUAGE_KEYS = {
-  ar: 'languageArabic',
-  en: 'languageEnglish',
-  ur: 'languageUrdu',
-  es: 'languageSpanish',
-  fr: 'languageFrench',
-} as const satisfies Record<MessageLanguage, string>
-
 /** The translation key of the pill on a style that cannot be chosen yet. */
 export const STYLE_LOCK_KEYS = {
   in_review: 'awaitingApproval',
@@ -72,6 +59,11 @@ export interface MessageLanguageChoice {
 
 export interface MessageStyles {
   previewLanguage: MessageLanguage
+  /**
+   * True while the store's language is `auto`: the preview can then show
+   * any language. A store set to one language previews that language.
+   */
+  canChoosePreviewLanguage: boolean
   setPreviewLanguage: (language: MessageLanguage) => void
   languages: MessageLanguageChoice[]
   /** Whether the preview language can be used by the store. */
@@ -89,6 +81,11 @@ export interface MessageStyles {
   reminderVariants: CodTemplateDefinition[] | undefined
   selectedReminder: string | null
   chooseLanguage: (language: IntegrationOnboardingLanguage) => void
+  /**
+   * Leaves `auto` for one language: the previewed one when the store can use
+   * it, else the first it can.
+   */
+  chooseFixedLanguage: () => void
   chooseVariant: (variant: string) => void
   chooseAuto: () => void
   chooseReminder: (variant: string | null) => void
@@ -103,17 +100,25 @@ interface UseMessageStylesParams {
 /**
  * What the Message tab shows for the language being previewed, and what its
  * controls change. Each language keeps its own style, so everything follows
- * the preview language. Both skins render from this.
+ * the preview language. A store set to one language previews that language;
+ * on `auto` the merchant picks which one to look at. Both skins render from
+ * this.
  */
 export function useMessageStyles({
   data,
   values,
   update,
 }: UseMessageStylesParams): MessageStyles | null {
-  const [previewLanguage, setPreviewLanguage] = useState<MessageLanguage>(() =>
-    initialPreviewLanguage(data)
+  const [chosenPreviewLanguage, setPreviewLanguage] = useState<MessageLanguage>(
+    () => initialPreviewLanguage(data)
   )
   if (!values) return null
+
+  // Read from the form, so a discarded language change leaves the preview
+  // with the form and not on a language nothing on screen can change.
+  const previewLanguage = isMessageLanguage(values.defaultLanguage)
+    ? values.defaultLanguage
+    : chosenPreviewLanguage
 
   const { template } = data
   const isLive = isLiveMessageLanguage(template, previewLanguage)
@@ -132,14 +137,16 @@ export function useMessageStyles({
   const offersAuto =
     previewLanguage === 'ar' && values.codTemplateArAuto !== undefined
   const reminders = values.codReminderVariants
+  const languages = messageLanguagesOf(template).map((language) => ({
+    language,
+    isLive: isLiveMessageLanguage(template, language),
+  }))
 
   return {
     previewLanguage,
+    canChoosePreviewLanguage: values.defaultLanguage === 'auto',
     setPreviewLanguage,
-    languages: messageLanguagesOf(template).map((language) => ({
-      language,
-      isLive: isLiveMessageLanguage(template, language),
-    })),
+    languages,
     isLive,
     variants,
     selectedVariant,
@@ -154,6 +161,14 @@ export function useMessageStyles({
     chooseLanguage: (language) => {
       update({ defaultLanguage: language })
       if (language !== 'auto') setPreviewLanguage(language)
+    },
+    chooseFixedLanguage: () => {
+      const language = isLive
+        ? previewLanguage
+        : languages.find((choice) => choice.isLive)?.language
+      if (!language) return
+      update({ defaultLanguage: language })
+      setPreviewLanguage(language)
     },
     chooseVariant: (variant) =>
       update({

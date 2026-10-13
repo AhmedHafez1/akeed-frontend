@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { WhatsAppChatHeader } from './chat-header'
 import { WhatsAppMessageBubble } from './message-bubble'
 import { WhatsAppPhoneFrame } from './phone-frame'
@@ -12,12 +13,14 @@ interface WhatsAppPhonePreviewProps {
   senderStatus: string
   avatarAlt: string
   dayLabel: string
-  paragraphs: ReadonlyArray<string>
+  /** One entry per line; a node when a line carries bold or isolated text. */
+  paragraphs: ReadonlyArray<ReactNode>
   timeLabel: string
   buttons: ReadonlyArray<WhatsAppTemplateButton>
   emphasizedTone?: WhatsAppReplyTone
   /** The message follows its template language, not the app locale. */
   messageDir?: 'rtl' | 'ltr'
+  messageLang?: string
 }
 
 /**
@@ -34,6 +37,7 @@ export function WhatsAppPhonePreview({
   buttons,
   emphasizedTone,
   messageDir,
+  messageLang,
 }: WhatsAppPhonePreviewProps) {
   return (
     <WhatsAppPhoneFrame>
@@ -50,6 +54,7 @@ export function WhatsAppPhonePreview({
         </div>
         <div
           dir={messageDir}
+          lang={messageLang}
           className="mx-auto my-8 w-[92%] overflow-hidden rounded-xl rounded-ss-sm bg-white shadow-sm dark:bg-[#202c33]"
         >
           <WhatsAppMessageBubble
@@ -58,7 +63,7 @@ export function WhatsAppPhonePreview({
             className="shadow-none"
           >
             {paragraphs.map((paragraph, index) => (
-              <p key={`${index}-${paragraph}`}>{paragraph}</p>
+              <p key={index}>{paragraph}</p>
             ))}
           </WhatsAppMessageBubble>
           <WhatsAppTemplateButtons

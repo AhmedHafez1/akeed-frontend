@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { formatPlanPrice } from '@/shared/lib/money'
 import type { TemplateMessage } from '@/shared/lib/templateMessage'
-import { buildPreviewLines, templateOpeningLine } from './messagePreview'
+import {
+  buildPreviewLines,
+  isLtrVariable,
+  previewTotal,
+  templateOpeningLine,
+} from './messagePreview'
 
 const message: TemplateMessage = {
   lines: [
@@ -81,8 +86,33 @@ describe('templateOpeningLine', () => {
     expect(line.length).toBeLessThanOrEqual(49)
   })
 
+  it('leaves out the bold markers', () => {
+    expect(
+      templateOpeningLine(
+        {
+          ...message,
+          lines: [[{ text: 'من *' }, { variable: 'store' }, { text: '*' }]],
+        },
+        sample
+      )
+    ).toBe('من Togo_Test_A…')
+  })
+
   it('is empty for a message without text', () => {
     expect(templateOpeningLine({ ...message, lines: [] }, sample)).toBe('')
+  })
+})
+
+describe('previewTotal', () => {
+  it('writes the sample total as a message in that language sends it', () => {
+    expect(previewTotal('USD', 'fr')).toBe('599.00 USD')
+    expect(previewTotal('USD', 'en')).toBe('USD 599.00')
+    expect(previewTotal('USD', 'ar')).toBe('599.00 $')
+  })
+
+  it('is not an island: it flows with the message text', () => {
+    expect(isLtrVariable('total')).toBe(false)
+    expect(isLtrVariable('order')).toBe(true)
   })
 })
 
