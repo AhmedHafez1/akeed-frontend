@@ -14,7 +14,8 @@ const BIDI_MARKS = new RegExp(
 
 /**
  * A billing amount with Western digits and two decimals: `1,000.00 ج.م` in
- * Arabic (the amount, then the currency) and `EGP 1,000.00` in English.
+ * Arabic (the amount, then the currency), `EGP 1,000.00` in English and
+ * `1 000,00 EGP` in French, as the language's own format writes a currency code.
  *
  * `Intl` under `ar` wraps the amount in bidi marks and ends the symbol with a
  * dot (`ج.م.`) that reads as a full stop, so the string is built here instead.
@@ -29,7 +30,22 @@ export function formatMoney(
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(valueMinor / 100)
-  if (locale !== 'ar') return `${currency} ${amount}`
+  if (locale !== 'ar') {
+    try {
+      return new Intl.NumberFormat(`${getFormatLocale(locale)}-u-nu-latn`, {
+        style: 'currency',
+        currency,
+        currencyDisplay: 'code',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
+        .format(valueMinor / 100)
+        .replace(BIDI_MARKS, '')
+        .replace(/\s+/g, ' ')
+    } catch {
+      return `${currency} ${amount}`
+    }
+  }
 
   const symbol =
     new Intl.NumberFormat('ar', { style: 'currency', currency })

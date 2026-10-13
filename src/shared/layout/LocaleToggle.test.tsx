@@ -35,7 +35,7 @@ beforeEach(() => {
 })
 
 describe('LocaleToggle', () => {
-  it('names the current language and offers all four', () => {
+  it('names the current language and offers every language', () => {
     render(<LocaleToggle />)
 
     const trigger = screen.getByRole('button', { name: 'changeLocale' })
@@ -45,7 +45,7 @@ describe('LocaleToggle', () => {
 
     expect(
       screen.getAllByRole('menuitem').map((item) => item.textContent)
-    ).toEqual(['العربية', 'English', 'اردو', 'Español'])
+    ).toEqual(['العربية', 'English', 'اردو', 'Español', 'Français'])
     expect(
       screen
         .getByRole('menuitem', { name: 'العربية' })
@@ -73,6 +73,17 @@ describe('LocaleToggle', () => {
     expect(route.push).toHaveBeenCalledWith('/es/billing?tab=usage')
     expect(localStorage.getItem(LOCALE_PREFERENCE_STORAGE_KEY)).toBe('es')
     expect(getPersistedLocalePreference()).toBe('es')
+  })
+
+  it('remembers French and reopens the same page and query in it', () => {
+    render(<LocaleToggle />)
+
+    openMenu()
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Français' }))
+
+    expect(route.push).toHaveBeenCalledWith('/fr/billing?tab=usage')
+    expect(localStorage.getItem(LOCALE_PREFERENCE_STORAGE_KEY)).toBe('fr')
+    expect(getPersistedLocalePreference()).toBe('fr')
   })
 
   it('does nothing when the current language is chosen again', () => {

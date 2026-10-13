@@ -22,6 +22,23 @@ describe('formatMoney', () => {
     expect(formatMoney(200, 'EGP', 'en')).toBe('EGP 2.00')
   })
 
+  it('keeps the same form in Urdu and Spanish', () => {
+    for (const locale of ['ur', 'es'] as const) {
+      expect(formatMoney(100_000, 'EGP', locale)).toBe('EGP 1,000.00')
+      expect(formatMoney(200, 'USD', locale)).toBe('USD 2.00')
+    }
+  })
+
+  it('writes French amounts the French way, then the currency code', () => {
+    expect(formatMoney(100_000, 'EGP', 'fr')).toBe('1 000,00 EGP')
+    expect(formatMoney(1_234_550, 'EUR', 'fr')).toBe('12 345,50 EUR')
+    expect(formatMoney(200, 'USD', 'fr')).not.toMatch(BIDI_MARK)
+  })
+
+  it('falls back to the code and amount for a currency Intl rejects', () => {
+    expect(formatMoney(200, 'CREDITS', 'en')).toBe('CREDITS 2.00')
+  })
+
   it('uses Western digits and no bidi marks in every locale', () => {
     for (const locale of ['ar', 'en', 'ur', 'es'] as const) {
       const text = formatMoney(1_234_550, 'EGP', locale)
@@ -40,6 +57,7 @@ describe('formatShortDate', () => {
     expect(formatShortDate(september, 'ar', now)).toBe('12 سبتمبر')
     expect(formatShortDate(september, 'en', now)).toBe('Sep 12')
     expect(formatShortDate(september, 'es', now)).toBe('12 sept')
+    expect(formatShortDate(september, 'fr', now)).toBe('12 sept.')
   })
 
   it('adds the year when it is not this one', () => {
@@ -59,6 +77,10 @@ describe('formatBillingDate', () => {
     expect(formatBillingDate(updated, 'es').replace(/\s/g, ' ')).toBe(
       '1 oct 2026 · 8:52 a.m.'
     )
+  })
+
+  it('writes French dates with a 24-hour clock', () => {
+    expect(formatBillingDate(updated, 'fr')).toBe('1 oct. 2026 · 8:52')
   })
 
   it('uses Western digits in Arabic', () => {
