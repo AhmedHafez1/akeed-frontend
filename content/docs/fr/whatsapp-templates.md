@@ -26,12 +26,21 @@ Un bon modèle est :
 
 ## Langues et variantes
 
-Akeed propose des modèles en arabe et en anglais, dans plusieurs styles.
+Akeed propose des modèles en arabe, anglais, ourdou, espagnol et français, dans plusieurs styles.
 
 | Langue | Styles disponibles |
 | --- | --- |
 | Arabe | Arabe standard moderne, Égyptien, Golfe, Court |
 | Anglais | Chaleureux, Professionnel, Direct, Court |
+| Ourdou | Standard, Court |
+| Espagnol | Standard, Court |
+| Français | Standard, Court |
+
+### Langue automatique
+
+Avec **Automatique, selon le numéro du client**, le numéro de téléphone du client détermine la langue : l’arabe pour les pays arabes, l’ourdou pour le Pakistan, l’espagnol pour l’Espagne et l’Amérique latine hispanophone, le français pour la France, et l’anglais pour tous les autres.
+
+Si une langue apparaît avec la mention **Pas encore disponible** dans vos réglages, son message WhatsApp est suspendu ou encore en cours d’examen. Les clients qui l’auraient reçu reçoivent l’anglais jusqu’à son retour.
 
 ## Comment choisir le bon style
 

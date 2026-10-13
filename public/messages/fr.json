@@ -161,7 +161,7 @@
     },
     "arabic_first": {
       "title": "L’arabe d’abord",
-      "description": "Interface et messages en arabe, avec une prise en charge complète de l’écriture de droite à gauche ; l’anglais est aussi disponible."
+      "description": "Interface et messages en arabe, avec une prise en charge complète de l’écriture de droite à gauche, et aussi en anglais, ourdou, espagnol et français."
     },
     "data_protection": {
       "title": "Les données de votre boutique sont protégées",
@@ -1458,6 +1458,9 @@
           "languageDesc": "La langue dans laquelle chaque client reçoit la confirmation.",
           "languageArabic": "Toujours en arabe",
           "languageEnglish": "Toujours en anglais",
+          "languageUrdu": "Toujours en ourdou",
+          "languageSpanish": "Toujours en espagnol",
+          "languageFrench": "Toujours en français",
           "defaultBadge": "Par défaut",
           "businessAccount": "Compte professionnel vérifié",
           "testSend": "Envoyer un message de test",
@@ -1778,17 +1781,29 @@
         "storeNameTooLong": "Utilisez {max} caractères au maximum.",
         "languageHeading": "Langue des messages",
         "languageAuto": "Automatique, selon le numéro du client",
-        "languageAutoHelp": "L’arabe pour les numéros des pays arabes, l’anglais partout ailleurs.",
+        "languageAutoHelp": "L’arabe pour les numéros des pays arabes, l’ourdou pour le Pakistan, l’espagnol pour l’Espagne et l’Amérique latine, le français pour la France, et l’anglais partout ailleurs.",
         "recommended": "Recommandé",
         "languageArabic": "Toujours en arabe",
         "languageEnglish": "Toujours en anglais",
+        "languageUrdu": "Toujours en ourdou",
+        "languageSpanish": "Toujours en espagnol",
+        "languageFrench": "Toujours en français",
+        "styleHint": "Langue de ces styles : {language} ; changez la langue de l’aperçu pour voir ceux d’une autre langue.",
+        "awaitingApproval": "En attente de l’approbation de WhatsApp",
+        "notEnabledYet": "Pas encore disponible",
+        "languageLockedNote": "Langue : {language}. Ses messages attendent l’approbation de WhatsApp. Vous pourrez choisir cette langue pour votre boutique dès qu’un message sera approuvé.",
+        "stylesEmpty": "Aucun message dans cette langue ({language}) pour l’instant.",
         "styleHeading": "Style du message",
         "languageNames": {
           "ar": "Arabe",
-          "en": "Anglais"
+          "en": "Anglais",
+          "ur": "Ourdou",
+          "es": "Espagnol",
+          "fr": "Français"
         },
         "variantLabels": {
           "standard": "Arabe standard moderne",
+          "standardPlain": "Standard",
           "egyptian": "Égyptien",
           "gulf": "Golfe",
           "friendly": "Chaleureux",
@@ -1820,7 +1835,7 @@
         },
         "autoStylePreviewNote": "L’aperçu montre le style que vous avez enregistré. Avec Automatique, chaque client reçoit le style de son pays.",
         "reminderHeading": "Message de rappel",
-        "reminderHint": "Envoyé aux clients qui n’ont pas encore répondu. Langue de ces rappels : {language} ; changez la langue de l’aperçu pour modifier ceux de l’autre langue.",
+        "reminderHint": "Envoyé aux clients qui n’ont pas encore répondu. Langue de ces rappels : {language} ; changez la langue de l’aperçu pour modifier ceux d’une autre langue.",
         "reminderSame": "Identique au premier message",
         "previewEmpty": "Ce message n’a pas encore de texte à prévisualiser."
       },
@@ -1957,9 +1972,9 @@
     "styleLabel": "Ton et style",
     "setupTitle": "Configuration du modèle",
     "setupDescription": "Choisissez la langue et le ton des messages que reçoivent les clients pour confirmer leurs commandes COD sur WhatsApp.",
-    "storeLanguageAutoHint": "La langue de la boutique est réglée sur Automatique. Les clients reçoivent l’arabe ou l’anglais selon le pays de leur numéro : configurez les deux modèles.",
+    "storeLanguageAutoHint": "La langue de la boutique est réglée sur Automatique. Les clients reçoivent l’arabe, l’anglais, l’ourdou, l’espagnol ou le français selon le pays de leur numéro : configurez le style de chaque langue dans laquelle vous vendez.",
     "storeLanguageFixedHint": "Langue d’envoi de la boutique : {language}. Vous pouvez tout de même modifier les modèles des deux langues.",
-    "perLanguageStyleHint": "Astuce : l’arabe et l’anglais peuvent avoir des tons différents.",
+    "perLanguageStyleHint": "Astuce : chaque langue peut avoir un ton différent.",
     "previewDescription": "Aperçu en direct du modèle WhatsApp sélectionné.",
     "variantSelectorTitle": "Style du modèle",
     "variantSelectorDescription": "Choisissez le ton de votre confirmation pour chaque langue.",

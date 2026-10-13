@@ -18,6 +18,10 @@ import {
 import { TemplateErrorNotice } from './TemplateAdminUi'
 import { TemplateNotice, templateFieldClass } from './TemplateWriteUi'
 import { toTemplateError } from './useAdminTemplateDrafts'
+import {
+  getMessageLanguageDirection,
+  type MessageLanguage,
+} from '@/shared/lib/messageLanguage'
 
 type Loaded =
   | { state: 'loading' }
@@ -155,7 +159,7 @@ function TextEditor({
               value={form.language}
               disabled={!canWrite}
               onChange={(event) =>
-                set('language', event.target.value as 'ar' | 'en')
+                set('language', event.target.value as MessageLanguage)
               }
             >
               {options.languages.map((language) => (
@@ -193,7 +197,7 @@ function TextEditor({
           className={templateFieldClass}
           rows={isFallback ? 1 : 3}
           maxLength={limit}
-          dir={form.language === 'ar' ? 'rtl' : 'ltr'}
+          dir={getMessageLanguageDirection(form.language)}
           lang={form.language}
           value={form.body}
           disabled={!canWrite}

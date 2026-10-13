@@ -5,11 +5,14 @@ import {
   isLtrVariable,
   type PreviewSample,
 } from '@/features/settings/domain/messagePreview'
-import { formatTemplatePreviewTimestamp } from '@/features/settings/skins/shared/templatePreview'
+import {
+  getMessagePreviewTimestamp,
+  type MessageLanguage,
+} from '@/shared/lib/messageLanguage'
 import type { TemplateMessage } from '@/shared/lib/templateMessage'
 
 interface WhatsAppMessagePreviewProps {
-  language: 'ar' | 'en'
+  language: MessageLanguage
   message: TemplateMessage
   sample: PreviewSample
   /** What the picture shows, for assistive tech. */
@@ -82,7 +85,7 @@ export function WhatsAppMessagePreview({
               </p>
             ))}
             <bdi className="text-ink-muted self-end text-[11px] tabular-nums">
-              {formatTemplatePreviewTimestamp(language)}
+              {getMessagePreviewTimestamp(language)}
             </bdi>
           </div>
           {message.buttons.map((reply, index) => (

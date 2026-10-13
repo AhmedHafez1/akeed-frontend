@@ -1,3 +1,5 @@
+import type { MessageLanguage } from '@/shared/lib/messageLanguage'
+
 /**
  * The free-form texts staff manage: the acknowledgment after a
  * customer confirms or cancels, the nudge after an unreadable reply, and the
@@ -14,7 +16,7 @@ export type MessageTextPurpose =
 export interface MessageText {
   id: string
   purpose: MessageTextPurpose
-  language: 'ar' | 'en'
+  language: MessageLanguage
   /** `default`, or a dialect such as `egyptian` that overrides it. */
   style: string
   body: string
@@ -31,7 +33,7 @@ export interface MessageTextsResponse {
   }
   options: {
     purposes: MessageTextPurpose[]
-    languages: Array<'ar' | 'en'>
+    languages: MessageLanguage[]
     default_style: string
     /** The placeholders each purpose may use. */
     variables: Record<MessageTextPurpose, string[]>
@@ -42,7 +44,7 @@ export interface MessageTextsResponse {
 
 export interface MessageTextForm {
   purpose: MessageTextPurpose
-  language: 'ar' | 'en'
+  language: MessageLanguage
   style: string
   body: string
   is_active: boolean

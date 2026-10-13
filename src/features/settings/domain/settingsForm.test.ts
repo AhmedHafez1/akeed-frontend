@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  liveUrduSettingsFixture,
   SEEDED_STYLES,
   settingsResponseFixture,
 } from '../testing/settingsFixture'
@@ -279,5 +280,41 @@ describe('timelineInputFromForm', () => {
       sendDelayCustom: '9999',
     })
     expect(input.sendDelayMinutes).toBeNull()
+  })
+})
+
+describe('message languages in the payload', () => {
+  it('sends no style for a language that is not live', () => {
+    const payload = toSettingsPayload(formFor())
+
+    expect(payload).toMatchObject({
+      codTemplateArVariant: 'standard',
+      codTemplateEnVariant: 'friendly',
+    })
+    for (const field of [
+      'codTemplateUrVariant',
+      'codTemplateEsVariant',
+      'codTemplateFrVariant',
+      'codReminderUrVariant',
+    ]) {
+      expect(payload).not.toHaveProperty(field)
+    }
+  })
+
+  it('sends the style of a live language, and counts a change to it', () => {
+    const response = liveUrduSettingsFixture()
+    const saved = formFromSettings(response.state, response.template)
+    const changed = {
+      ...saved,
+      defaultLanguage: 'ur' as const,
+      codTemplateVariants: { ...saved.codTemplateVariants, ur: 'short_v1' },
+    }
+
+    expect(toSettingsPayload(saved).codTemplateUrVariant).toBe('standard_v1')
+    expect(toSettingsPayload(changed)).toMatchObject({
+      defaultLanguage: 'ur',
+      codTemplateUrVariant: 'short_v1',
+    })
+    expect(dirtyTabs(changed, saved)).toEqual(new Set(['message']))
   })
 })

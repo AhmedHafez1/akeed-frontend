@@ -1,3 +1,4 @@
+import type { MessageLanguage } from '@/shared/lib/messageLanguage'
 import type { TemplateMessage } from '@/shared/lib/templateMessage'
 
 export interface BillingManagement {
@@ -5,7 +6,8 @@ export interface BillingManagement {
   canManageBilling: boolean
 }
 
-export type IntegrationOnboardingLanguage = 'auto' | 'en' | 'ar'
+/** The store's message language: one language, or `auto` by number. */
+export type IntegrationOnboardingLanguage = 'auto' | MessageLanguage
 
 /**
  * The id of a message style. The styles a store may choose come from the
@@ -110,7 +112,7 @@ export interface IntegrationOnboardingState {
   /** The Shopify store's phone, offered as a prefill for that number. */
   shopPhone?: string | null
   /** Template language the merchant's own test message is sent in. */
-  testSendLanguage?: 'ar' | 'en'
+  testSendLanguage?: MessageLanguage
   activation?: OnboardingActivation
   usage?: OnboardingUsage | null
   permissions: {
@@ -182,7 +184,7 @@ export interface OnboardingTestAttempt {
 /** GET/POST /api/onboarding/test: everything the test step renders. */
 export interface OnboardingTestState {
   phone: string | null
-  language: 'ar' | 'en'
+  language: MessageLanguage
   /** The test's message: what the merchant's phone receives. */
   message: TemplateMessage
   sample: {
@@ -220,9 +222,15 @@ export interface OnboardingSettingsPayload {
   sendDelayMinutes?: number
   codTemplateArVariant?: ArabicCodTemplateVariantId
   codTemplateEnVariant?: EnglishCodTemplateVariantId
+  codTemplateUrVariant?: string
+  codTemplateEsVariant?: string
+  codTemplateFrVariant?: string
   /** A reminder style, or null for "same as the first message". */
   codReminderArVariant?: string | null
   codReminderEnVariant?: string | null
+  codReminderUrVariant?: string | null
+  codReminderEsVariant?: string | null
+  codReminderFrVariant?: string | null
   /** The Arabic style follows the customer's country. */
   codTemplateArAuto?: boolean
   merchantWhatsappPhone?: string

@@ -68,7 +68,10 @@
     },
     "language": {
       "ar": "Arabic",
-      "en": "English"
+      "en": "English",
+      "ur": "Urdu",
+      "es": "Spanish",
+      "fr": "French"
     },
     "parameterFormat": {
       "named": "Named",
@@ -1240,7 +1243,7 @@
     },
     "arabic_first": {
       "title": "Arabic first",
-      "description": "Interface and messages in Arabic with full right-to-left support, and English available."
+      "description": "Interface and messages in Arabic with full right-to-left support, plus English, Urdu, Spanish and French."
     },
     "data_protection": {
       "title": "Your store data is protected",
@@ -2537,6 +2540,9 @@
           "languageDesc": "Which language each customer gets the confirmation in.",
           "languageArabic": "Always Arabic",
           "languageEnglish": "Always English",
+          "languageUrdu": "Always Urdu",
+          "languageSpanish": "Always Spanish",
+          "languageFrench": "Always French",
           "defaultBadge": "Default",
           "businessAccount": "Verified business account",
           "testSend": "Send a test message",
@@ -2857,17 +2863,29 @@
         "storeNameTooLong": "Use {max} characters or fewer.",
         "languageHeading": "Message language",
         "languageAuto": "Automatic, by customer number",
-        "languageAutoHelp": "Arabic for numbers in Arab countries, English everywhere else.",
+        "languageAutoHelp": "Arabic for numbers in Arab countries, Urdu for Pakistan, Spanish for Spain and Latin America, French for France, and English everywhere else.",
         "recommended": "Recommended",
         "languageArabic": "Always Arabic",
         "languageEnglish": "Always English",
+        "languageUrdu": "Always Urdu",
+        "languageSpanish": "Always Spanish",
+        "languageFrench": "Always French",
+        "styleHint": "These are the {language} styles; switch the preview language to see another language.",
+        "awaitingApproval": "Awaiting WhatsApp approval",
+        "notEnabledYet": "Not available yet",
+        "languageLockedNote": "{language} messages are waiting for WhatsApp to approve them. You can choose {language} for your store once one is approved.",
+        "stylesEmpty": "There are no {language} messages yet.",
         "styleHeading": "Message style",
         "languageNames": {
           "ar": "Arabic",
-          "en": "English"
+          "en": "English",
+          "ur": "Urdu",
+          "es": "Spanish",
+          "fr": "French"
         },
         "variantLabels": {
           "standard": "Modern Standard",
+          "standardPlain": "Standard",
           "egyptian": "Egyptian",
           "gulf": "Gulf",
           "friendly": "Friendly",
@@ -2899,7 +2917,7 @@
         },
         "autoStylePreviewNote": "The preview shows your saved style. With Automatic, each customer gets the style of their country.",
         "reminderHeading": "Reminder message",
-        "reminderHint": "Sent to customers who haven't replied yet. These are the {language} reminders; switch the preview language to edit the other.",
+        "reminderHint": "Sent to customers who haven't replied yet. These are the {language} reminders; switch the preview language to edit another language.",
         "reminderSame": "Same as the first message",
         "previewEmpty": "This message has no text to preview yet."
       },
@@ -3036,9 +3054,9 @@
     "styleLabel": "Tone and style",
     "setupTitle": "Template setup",
     "setupDescription": "Choose the language and tone customers receive when confirming COD orders on WhatsApp.",
-    "storeLanguageAutoHint": "Store language is Auto. Customers receive Arabic or English based on phone country, so configure both templates.",
+    "storeLanguageAutoHint": "Store language is Auto. Customers receive Arabic, English, Urdu, Spanish or French based on phone country, so set a style for each language you sell in.",
     "storeLanguageFixedHint": "Store sending language is {language}. You can still edit both language templates.",
-    "perLanguageStyleHint": "Tip: Arabic and English can use different tones.",
+    "perLanguageStyleHint": "Tip: each language can use a different tone.",
     "previewDescription": "Live preview of the selected WhatsApp template.",
     "variantSelectorTitle": "Template style",
     "variantSelectorDescription": "Choose how your confirmation sounds for each language.",
@@ -4558,7 +4576,10 @@
     },
     "languages": {
       "ar": "Arabic",
-      "en": "English"
+      "en": "English",
+      "ur": "Urdu",
+      "es": "Spanish",
+      "fr": "French"
     },
     "empty": {
       "title": "No texts yet",

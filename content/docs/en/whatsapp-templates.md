@@ -26,12 +26,21 @@ Good templates are:
 
 ## Languages and Variants
 
-Akeed supports Arabic and English templates with multiple styles.
+Akeed supports Arabic, English, Urdu, Spanish and French templates with multiple styles.
 
 | Language | Available styles |
 | --- | --- |
 | Arabic | Modern Standard, Egyptian, Gulf, Short |
 | English | Friendly, Professional, Direct, Short |
+| Urdu | Standard, Short |
+| Spanish | Standard, Short |
+| French | Standard, Short |
+
+### Automatic language
+
+With **Automatic, by customer number**, the customer's phone number decides the language: Arabic for Arab countries, Urdu for Pakistan, Spanish for Spain and Spanish-speaking Latin America, French for France, and English for everyone else.
+
+If a language shows **Not available yet** in your settings, its WhatsApp message is paused or still in review. Customers who would get it receive English until it is back.
 
 ## How To Choose the Right Style
 

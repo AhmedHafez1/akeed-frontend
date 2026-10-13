@@ -51,8 +51,30 @@ describe('templateStyleLabel', () => {
     )
   })
 
+  it('names the standard style after Arabic only for an Arabic message', () => {
+    const labels = en.settings.embedded.message.variantLabels
+    expect(templateStyleLabel(translators.en, 'standard_v1', 'ar')).toBe(
+      `${labels.standard} 1`
+    )
+    for (const language of ['en', 'ur', 'es', 'fr'] as const) {
+      expect(templateStyleLabel(translators.en, 'standard_v1', language)).toBe(
+        `${labels.standardPlain} 1`
+      )
+      expect(templateStyleLabel(translators.en, 'standard', language)).toBe(
+        labels.standardPlain
+      )
+    }
+    // Every other style keeps one name in every language.
+    expect(templateStyleLabel(translators.en, 'short_v1', 'ur')).toBe(
+      `${labels.short} 1`
+    )
+  })
+
   it('shows a style without a translation under its own id', () => {
     expect(templateStyleLabel(translators.ar, 'levantine')).toBe('levantine')
+    expect(templateStyleLabel(translators.en, 'levantine_v1', 'fr')).toBe(
+      'levantine_v1'
+    )
     expect(templateStyleLabel(translators.en, 'levantine')).toBe('levantine')
   })
 })

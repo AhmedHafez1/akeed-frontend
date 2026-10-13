@@ -4,21 +4,24 @@ import { useId } from 'react'
 import { Loader2, Send } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import type { PreviewSample } from '@/features/settings/domain/messagePreview'
+import type { MessageLanguage } from '@/shared/lib/messageLanguage'
 import { formatPhoneInternational } from '@/shared/lib/phone'
 import type { TemplateMessage } from '@/shared/lib/templateMessage'
 import { cn } from '@/shared/lib/utils'
-import { AkSegmented, akButton, akCard, akLink } from '@/shared/ui'
+import { AkSelect, akButton, akCard, akLink } from '@/shared/ui'
 import { WhatsAppMessagePreview } from './WhatsAppMessagePreview'
 
 interface MessagePreviewPanelProps {
-  language: 'ar' | 'en'
-  onLanguageChange: (language: 'ar' | 'en') => void
+  language: MessageLanguage
+  /** The languages the preview can show, live or not. */
+  languages: readonly MessageLanguage[]
+  onLanguageChange: (language: MessageLanguage) => void
   message: TemplateMessage
   sample: PreviewSample
   /** A note under the preview, for example how `auto` picks a style. */
   note?: string
   testSendPhone: string | null
-  testSendLanguage: 'ar' | 'en'
+  testSendLanguage: MessageLanguage
   canSendTest: boolean
   isDirty: boolean
   isSendingTest: boolean
@@ -27,12 +30,13 @@ interface MessagePreviewPanelProps {
 }
 
 /**
- * The preview beside the Message settings: the message in either language,
+ * The preview beside the Message settings: the message in any language,
  * and a free test send to the merchant's own WhatsApp. A test sends the
  * saved settings, so it waits for unsaved changes to be saved first.
  */
 export function MessagePreviewPanel({
   language,
+  languages,
   onLanguageChange,
   message,
   sample,
@@ -62,15 +66,17 @@ export function MessagePreviewPanel({
         <h2 id={headingId} className="text-ak-section text-ink">
           {tShared('previewHeading')}
         </h2>
-        <AkSegmented
-          size="sm"
+        <AkSelect
+          className="w-36 shrink-0"
           aria-label={tShared('previewLanguageGroup')}
           value={language}
-          onValueChange={onLanguageChange}
-          options={[
-            { value: 'ar', label: tShared('languageNames.ar') },
-            { value: 'en', label: tShared('languageNames.en') },
-          ]}
+          onChange={(event) =>
+            onLanguageChange(event.target.value as MessageLanguage)
+          }
+          options={languages.map((option) => ({
+            value: option,
+            label: tShared(`languageNames.${option}`),
+          }))}
         />
       </div>
 

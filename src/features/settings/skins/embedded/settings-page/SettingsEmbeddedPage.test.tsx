@@ -15,6 +15,8 @@ import { NextIntlClientProvider } from 'next-intl'
 import ar from '../../../../../../public/messages/ar.json'
 import {
   allStylesSettingsFixture,
+  awaitingUrduSettingsFixture,
+  liveUrduSettingsFixture,
   settingsResponseFixture,
 } from '../../../testing/settingsFixture'
 import { templateMessageFixture } from '@/shared/lib/templateMessageFixture'
@@ -488,5 +490,96 @@ describe('SettingsEmbeddedPage message improvements', () => {
     expect(
       within(screen.getByRole('img')).getByText(messageCopy.previewEmpty)
     ).toBeTruthy()
+  })
+})
+
+describe('SettingsEmbeddedPage message languages', () => {
+  const previewLanguage = () =>
+    screen.getByLabelText(messageCopy.previewLanguageGroup) as HTMLSelectElement
+  const previewIn = (language: string) =>
+    fireEvent.change(previewLanguage(), { target: { value: language } })
+  const radio = (name: string) =>
+    screen.getByRole('radio', { name: new RegExp(name) }) as HTMLInputElement
+  // Staff-written styles: a version of "standard" and one of "short".
+  const standardStyle = `${messageCopy.variantLabels.standardPlain} 1`
+  const shortStyle = `${messageCopy.variantLabels.short} 1`
+
+  it('shows a language with no approved message, but does not let it be chosen', async () => {
+    renderPage()
+    await storeNameInput()
+
+    expect(
+      Array.from(previewLanguage().options).map((option) => option.value)
+    ).toEqual(['ar', 'en', 'ur', 'es', 'fr'])
+    for (const name of [
+      messageCopy.languageUrdu,
+      messageCopy.languageSpanish,
+      messageCopy.languageFrench,
+    ]) {
+      expect(radio(name).disabled).toBe(true)
+    }
+    expect(radio(messageCopy.languageArabic).disabled).toBe(false)
+    expect(radio(messageCopy.languageEnglish).disabled).toBe(false)
+    expect(screen.getAllByText(messageCopy.notEnabledYet)).toHaveLength(3)
+  })
+
+  it('says so when a language has no messages at all', async () => {
+    renderPage()
+    await storeNameInput()
+    previewIn('fr')
+
+    expect(
+      screen.getByText(
+        messageCopy.stylesEmpty.replace(
+          '{language}',
+          messageCopy.languageNames.fr
+        )
+      )
+    ).toBeTruthy()
+  })
+
+  it('lists messages that are not approved yet as locked', async () => {
+    api.fetchSettings.mockResolvedValue(awaitingUrduSettingsFixture())
+    renderPage()
+    await storeNameInput()
+    previewIn('ur')
+
+    expect(radio(standardStyle).disabled).toBe(true)
+    expect(radio(shortStyle).disabled).toBe(true)
+    expect(radio(standardStyle).checked).toBe(false)
+    expect(screen.getByText(messageCopy.awaitingApproval)).toBeTruthy()
+    expect(
+      screen.getByText(
+        messageCopy.languageLockedNote.replaceAll(
+          '{language}',
+          messageCopy.languageNames.ur
+        )
+      )
+    ).toBeTruthy()
+    expect(lastSaveBarCall()).toBe('hidden')
+  })
+
+  it('lets a store choose a live language and one of its styles, and saves both', async () => {
+    api.fetchSettings.mockResolvedValue(liveUrduSettingsFixture())
+    renderPage()
+    await storeNameInput()
+
+    fireEvent.click(radio(messageCopy.languageUrdu))
+    expect(previewLanguage().value).toBe('ur')
+    fireEvent.click(radio(shortStyle))
+    await act(async () => {
+      fireEvent.click(screen.getByText('حفظ'))
+    })
+
+    expect(api.saveSettings).toHaveBeenCalledTimes(1)
+    const [payload] = api.saveSettings.mock.calls[0] as [
+      Record<string, unknown>,
+    ]
+    expect(payload).toMatchObject({
+      defaultLanguage: 'ur',
+      codTemplateUrVariant: 'short_v1',
+      codTemplateArVariant: 'standard',
+    })
+    expect(payload).not.toHaveProperty('codTemplateEsVariant')
   })
 })

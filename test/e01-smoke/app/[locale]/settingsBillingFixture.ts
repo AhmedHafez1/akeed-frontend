@@ -313,14 +313,24 @@ function settings(): SettingsResponse {
       },
     },
     template: {
-      languages: ['ar', 'en'],
+      languages: ['ar', 'en', 'ur', 'es', 'fr'],
+      liveLanguages: ['ar', 'en'],
       defaultPreviewLanguage: 'ar',
-      defaults: { ar: 'standard', en: 'friendly' },
-      selected,
-      variants: { ar: AR_VARIANTS, en: EN_VARIANTS },
+      defaults: {
+        ar: 'standard',
+        en: 'friendly',
+        ur: null,
+        es: null,
+        fr: null,
+      },
+      selected: { ur: null, es: null, fr: null, ...selected },
+      variants: { ar: AR_VARIANTS, en: EN_VARIANTS, ur: [], es: [], fr: [] },
       messages: {
         ar: AR_VARIANTS[0].message,
         en: EN_VARIANTS[0].message,
+        ur: null,
+        es: null,
+        fr: null,
       },
     },
   }

@@ -95,6 +95,17 @@ describe('template draft model', () => {
     ])
   })
 
+  it('previews Urdu right to left, and Spanish and French left to right', () => {
+    expect(
+      previewDraft(form({ language: 'ur', body: 'السلام علیکم' })).direction
+    ).toBe('rtl')
+    for (const language of ['es', 'fr'] as const) {
+      expect(previewDraft(form({ language, body: 'Hola' })).direction).toBe(
+        'ltr'
+      )
+    }
+  })
+
   it('inserts a value at the caret, or over the selection', () => {
     expect(insertVariable('Hello , hi', 'customer', 6, 6)).toEqual({
       body: 'Hello {{customer}}, hi',
