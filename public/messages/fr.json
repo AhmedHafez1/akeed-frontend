@@ -161,7 +161,7 @@
     },
     "arabic_first": {
       "title": "L’arabe d’abord",
-      "description": "Interface et messages en arabe, avec une prise en charge complète de l’écriture de droite à gauche ; l’anglais est aussi disponible."
+      "description": "Interface et messages en arabe, avec une prise en charge complète de l’écriture de droite à gauche, et aussi en anglais, ourdou, espagnol et français."
     },
     "data_protection": {
       "title": "Les données de votre boutique sont protégées",
@@ -1781,7 +1781,7 @@
         "storeNameTooLong": "Utilisez {max} caractères au maximum.",
         "languageHeading": "Langue des messages",
         "languageAuto": "Automatique, selon le numéro du client",
-        "languageAutoHelp": "L’arabe pour les numéros des pays arabes, l’anglais partout ailleurs. L’ourdou, l’espagnol et le français suivent le pays du client dès qu’ils sont disponibles.",
+        "languageAutoHelp": "L’arabe pour les numéros des pays arabes, l’ourdou pour le Pakistan, l’espagnol pour l’Espagne et l’Amérique latine, le français pour la France, et l’anglais partout ailleurs.",
         "recommended": "Recommandé",
         "languageArabic": "Toujours en arabe",
         "languageEnglish": "Toujours en anglais",
@@ -1972,9 +1972,9 @@
     "styleLabel": "Ton et style",
     "setupTitle": "Configuration du modèle",
     "setupDescription": "Choisissez la langue et le ton des messages que reçoivent les clients pour confirmer leurs commandes COD sur WhatsApp.",
-    "storeLanguageAutoHint": "La langue de la boutique est réglée sur Automatique. Les clients reçoivent l’arabe ou l’anglais selon le pays de leur numéro : configurez les deux modèles.",
+    "storeLanguageAutoHint": "La langue de la boutique est réglée sur Automatique. Les clients reçoivent l’arabe, l’anglais, l’ourdou, l’espagnol ou le français selon le pays de leur numéro : configurez le style de chaque langue dans laquelle vous vendez.",
     "storeLanguageFixedHint": "Langue d’envoi de la boutique : {language}. Vous pouvez tout de même modifier les modèles des deux langues.",
-    "perLanguageStyleHint": "Astuce : l’arabe et l’anglais peuvent avoir des tons différents.",
+    "perLanguageStyleHint": "Astuce : chaque langue peut avoir un ton différent.",
     "previewDescription": "Aperçu en direct du modèle WhatsApp sélectionné.",
     "variantSelectorTitle": "Style du modèle",
     "variantSelectorDescription": "Choisissez le ton de votre confirmation pour chaque langue.",

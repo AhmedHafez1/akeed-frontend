@@ -26,18 +26,21 @@ Las buenas plantillas son:
 
 ## Idiomas y variantes
 
-Akeed ofrece plantillas en árabe y en inglés con varios estilos.
+Akeed ofrece plantillas en árabe, inglés, urdu, español y francés con varios estilos.
 
 | Idioma | Estilos disponibles |
 | --- | --- |
 | Árabe | Estándar moderno, Egipcio, Del Golfo, Breve |
 | Inglés | Amigable, Profesional, Directo, Breve |
+| Urdu | Estándar, Breve |
+| Español | Estándar, Breve |
+| Francés | Estándar, Breve |
 
-### Urdu, español y francés
+### Idioma automático
 
-Los mensajes en urdu, español y francés están disponibles cuando WhatsApp los aprueba. Hasta entonces, tus ajustes muestran cada uno de estos idiomas como **Aún no disponible** y listan sus mensajes bloqueados para que puedas leerlos.
+Con **Automático, según el número del cliente**, el número de teléfono del cliente decide el idioma: árabe para los países árabes, urdu para Pakistán, español para España y la Latinoamérica hispanohablante, francés para Francia e inglés para todos los demás.
 
-Cuando un idioma está disponible, puedes elegirlo para tu tienda y escoger uno de sus estilos. Con **Automático, según el número del cliente**, un cliente con número de Pakistán recibe el mensaje en urdu, un cliente de España o de la Latinoamérica hispanohablante lo recibe en español, y un cliente de Francia lo recibe en francés. Los demás clientes reciben árabe o inglés, como hasta ahora.
+Si un idioma aparece como **Aún no disponible** en tus ajustes, su mensaje de WhatsApp está en pausa o todavía en revisión. Los clientes que lo recibirían reciben el mensaje en inglés hasta que vuelva a estar disponible.
 
 ## Cómo elegir el estilo adecuado
 

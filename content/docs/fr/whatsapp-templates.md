@@ -26,18 +26,21 @@ Un bon modèle est :
 
 ## Langues et variantes
 
-Akeed propose des modèles en arabe et en anglais, dans plusieurs styles.
+Akeed propose des modèles en arabe, anglais, ourdou, espagnol et français, dans plusieurs styles.
 
 | Langue | Styles disponibles |
 | --- | --- |
 | Arabe | Arabe standard moderne, Égyptien, Golfe, Court |
 | Anglais | Chaleureux, Professionnel, Direct, Court |
+| Ourdou | Standard, Court |
+| Espagnol | Standard, Court |
+| Français | Standard, Court |
 
-### Ourdou, espagnol et français
+### Langue automatique
 
-Les messages en ourdou, en espagnol et en français deviennent disponibles une fois approuvés par WhatsApp. D’ici là, vos réglages affichent chacune de ces langues avec la mention **Pas encore disponible** et listent ses messages verrouillés, pour que vous puissiez les lire.
+Avec **Automatique, selon le numéro du client**, le numéro de téléphone du client détermine la langue : l’arabe pour les pays arabes, l’ourdou pour le Pakistan, l’espagnol pour l’Espagne et l’Amérique latine hispanophone, le français pour la France, et l’anglais pour tous les autres.
 
-Dès qu’une langue est disponible, vous pouvez la choisir pour votre boutique et sélectionner l’un de ses styles. Avec **Automatique, selon le numéro du client**, un client dont le numéro est pakistanais reçoit le message en ourdou, un client en Espagne ou en Amérique latine hispanophone le reçoit en espagnol, et un client en France le reçoit en français. Tous les autres clients reçoivent l’arabe ou l’anglais, comme auparavant.
+Si une langue apparaît avec la mention **Pas encore disponible** dans vos réglages, son message WhatsApp est suspendu ou encore en cours d’examen. Les clients qui l’auraient reçu reçoivent l’anglais jusqu’à son retour.
 
 ## Comment choisir le bon style
 

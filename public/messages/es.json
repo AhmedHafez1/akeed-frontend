@@ -161,7 +161,7 @@
     },
     "arabic_first": {
       "title": "El árabe primero",
-      "description": "Interfaz y mensajes en árabe con soporte completo de derecha a izquierda, e inglés disponible."
+      "description": "Interfaz y mensajes en árabe con soporte completo de derecha a izquierda, y también en inglés, urdu, español y francés."
     },
     "data_protection": {
       "title": "Los datos de tu tienda están protegidos",
@@ -1781,7 +1781,7 @@
         "storeNameTooLong": "Usa {max} caracteres o menos.",
         "languageHeading": "Idioma del mensaje",
         "languageAuto": "Automático, según el número del cliente",
-        "languageAutoHelp": "Árabe para los números de países árabes e inglés para todos los demás. El urdu, el español y el francés se envían según el país del cliente cuando estén disponibles.",
+        "languageAutoHelp": "Árabe para los números de países árabes, urdu para Pakistán, español para España y Latinoamérica, francés para Francia e inglés para todos los demás.",
         "recommended": "Recomendado",
         "languageArabic": "Siempre en árabe",
         "languageEnglish": "Siempre en inglés",
@@ -1972,9 +1972,9 @@
     "styleLabel": "Tono y estilo",
     "setupTitle": "Configuración de la plantilla",
     "setupDescription": "Elige el idioma y el tono que reciben los clientes al confirmar pedidos contra entrega por WhatsApp.",
-    "storeLanguageAutoHint": "El idioma de la tienda es Automático. Los clientes reciben el mensaje en árabe o en inglés según el país de su teléfono, así que configura ambas plantillas.",
+    "storeLanguageAutoHint": "El idioma de la tienda es Automático. Los clientes reciben el mensaje en árabe, inglés, urdu, español o francés según el país de su teléfono, así que configura el estilo de cada idioma en el que vendes.",
     "storeLanguageFixedHint": "Idioma de envío de la tienda: {language}. Aun así puedes editar las plantillas de ambos idiomas.",
-    "perLanguageStyleHint": "Consejo: el árabe y el inglés pueden usar tonos distintos.",
+    "perLanguageStyleHint": "Consejo: cada idioma puede usar un tono distinto.",
     "previewDescription": "Vista previa en vivo de la plantilla de WhatsApp seleccionada.",
     "variantSelectorTitle": "Estilo de la plantilla",
     "variantSelectorDescription": "Elige cómo suena tu confirmación en cada idioma.",

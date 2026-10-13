@@ -1243,7 +1243,7 @@
     },
     "arabic_first": {
       "title": "Arabic first",
-      "description": "Interface and messages in Arabic with full right-to-left support, and English available."
+      "description": "Interface and messages in Arabic with full right-to-left support, plus English, Urdu, Spanish and French."
     },
     "data_protection": {
       "title": "Your store data is protected",
@@ -2863,7 +2863,7 @@
         "storeNameTooLong": "Use {max} characters or fewer.",
         "languageHeading": "Message language",
         "languageAuto": "Automatic, by customer number",
-        "languageAutoHelp": "Arabic for numbers in Arab countries, English everywhere else. Urdu, Spanish and French follow the customer's country once each is available.",
+        "languageAutoHelp": "Arabic for numbers in Arab countries, Urdu for Pakistan, Spanish for Spain and Latin America, French for France, and English everywhere else.",
         "recommended": "Recommended",
         "languageArabic": "Always Arabic",
         "languageEnglish": "Always English",
@@ -3054,9 +3054,9 @@
     "styleLabel": "Tone and style",
     "setupTitle": "Template setup",
     "setupDescription": "Choose the language and tone customers receive when confirming COD orders on WhatsApp.",
-    "storeLanguageAutoHint": "Store language is Auto. Customers receive Arabic or English based on phone country, so configure both templates.",
+    "storeLanguageAutoHint": "Store language is Auto. Customers receive Arabic, English, Urdu, Spanish or French based on phone country, so set a style for each language you sell in.",
     "storeLanguageFixedHint": "Store sending language is {language}. You can still edit both language templates.",
-    "perLanguageStyleHint": "Tip: Arabic and English can use different tones.",
+    "perLanguageStyleHint": "Tip: each language can use a different tone.",
     "previewDescription": "Live preview of the selected WhatsApp template.",
     "variantSelectorTitle": "Template style",
     "variantSelectorDescription": "Choose how your confirmation sounds for each language.",
