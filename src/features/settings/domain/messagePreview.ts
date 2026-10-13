@@ -1,3 +1,4 @@
+import { MESSAGE_SAMPLE_CUSTOMER_NAMES } from '@/shared/lib/messageLanguage'
 import {
   fillTemplateLines,
   fillTemplateSegments,
@@ -21,7 +22,7 @@ export type PreviewSample = TemplateMessageValues
 
 export const PREVIEW_ORDER_NUMBER = '1009'
 export const PREVIEW_TOTAL_AMOUNT = 599
-export const PREVIEW_CUSTOMER_NAMES = { ar: 'أحمد', en: 'Ahmed' } as const
+export const PREVIEW_CUSTOMER_NAMES = MESSAGE_SAMPLE_CUSTOMER_NAMES
 
 const LTR_VARIABLES: ReadonlySet<PreviewVariable> = new Set(['order', 'total'])
 

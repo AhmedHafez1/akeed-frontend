@@ -1,6 +1,8 @@
+import {
+  MESSAGE_LANGUAGES,
+  type MessageLanguage,
+} from '@/shared/lib/messageLanguage'
 import type {
-  ArabicCodTemplateVariantId,
-  EnglishCodTemplateVariantId,
   IntegrationOnboardingLanguage,
   IntegrationOnboardingState,
   OnboardingSettingsPayload,
@@ -34,15 +36,13 @@ const DEFAULT_TIMEZONE = 'Asia/Riyadh'
 export interface SettingsFormValues {
   storeName: string
   defaultLanguage: IntegrationOnboardingLanguage
-  codTemplateVariants: {
-    ar: ArabicCodTemplateVariantId
-    en: EnglishCodTemplateVariantId
-  }
+  /** The style per language; null while a language has none to choose. */
+  codTemplateVariants: Record<MessageLanguage, string | null>
   /**
    * The reminder style per language, null for "same as the first message".
    * Absent while the backend does not offer reminders, so it is never sent.
    */
-  codReminderVariants?: { ar: string | null; en: string | null }
+  codReminderVariants?: Record<MessageLanguage, string | null>
   /** Arabic style by country. Absent while the backend does not offer it. */
   codTemplateArAuto?: boolean
   isAutoVerifyEnabled: boolean
@@ -91,6 +91,45 @@ export function formFromSettings(
     timezone: state.timezone,
     assumeCodWhenPaymentMissing: state.assumeCodWhenPaymentMissing,
   }
+}
+
+/**
+ * The payload fields that carry each language's style and reminder. A new
+ * message language is added here and to `OnboardingSettingsPayload`.
+ */
+const TEMPLATE_PAYLOAD_FIELDS = {
+  ar: { style: 'codTemplateArVariant', reminder: 'codReminderArVariant' },
+  en: { style: 'codTemplateEnVariant', reminder: 'codReminderEnVariant' },
+  ur: { style: 'codTemplateUrVariant', reminder: 'codReminderUrVariant' },
+  es: { style: 'codTemplateEsVariant', reminder: 'codReminderEsVariant' },
+  fr: { style: 'codTemplateFrVariant', reminder: 'codReminderFrVariant' },
+} as const satisfies Record<
+  MessageLanguage,
+  {
+    style: keyof OnboardingSettingsPayload
+    reminder: keyof OnboardingSettingsPayload
+  }
+>
+
+/**
+ * The style and reminder of every language. A language with no style (it is
+ * not live yet) sends neither field, so the backend is never asked to save a
+ * choice it would refuse.
+ */
+function templateChoicesPayload(
+  values: SettingsFormValues
+): Partial<OnboardingSettingsPayload> {
+  const payload: Partial<Record<string, string | null>> = {}
+  for (const language of MESSAGE_LANGUAGES) {
+    const style = values.codTemplateVariants[language]
+    if (style === null || style === undefined) continue
+    const fields = TEMPLATE_PAYLOAD_FIELDS[language]
+    payload[fields.style] = style
+    if (values.codReminderVariants) {
+      payload[fields.reminder] = values.codReminderVariants[language] ?? null
+    }
+  }
+  return payload
 }
 
 /** The first-send delay the form currently means; null while invalid. */
@@ -146,14 +185,7 @@ export function toSettingsPayload(
     defaultLanguage: values.defaultLanguage,
     isAutoVerifyEnabled: values.isAutoVerifyEnabled,
     assumeCodWhenPaymentMissing: values.assumeCodWhenPaymentMissing,
-    codTemplateArVariant: values.codTemplateVariants.ar,
-    codTemplateEnVariant: values.codTemplateVariants.en,
-    ...(values.codReminderVariants
-      ? {
-          codReminderArVariant: values.codReminderVariants.ar,
-          codReminderEnVariant: values.codReminderVariants.en,
-        }
-      : {}),
+    ...templateChoicesPayload(values),
     ...(values.codTemplateArAuto === undefined
       ? {}
       : { codTemplateArAuto: values.codTemplateArAuto }),
@@ -173,15 +205,15 @@ export function toSettingsPayload(
   }
 }
 
-const MESSAGE_TAB_FIELDS = [
+const MESSAGE_TAB_FIELDS: ReadonlyArray<keyof OnboardingSettingsPayload> = [
   'storeName',
   'defaultLanguage',
-  'codTemplateArVariant',
-  'codTemplateEnVariant',
-  'codReminderArVariant',
-  'codReminderEnVariant',
+  ...MESSAGE_LANGUAGES.flatMap((language) => [
+    TEMPLATE_PAYLOAD_FIELDS[language].style,
+    TEMPLATE_PAYLOAD_FIELDS[language].reminder,
+  ]),
   'codTemplateArAuto',
-] as const satisfies ReadonlyArray<keyof OnboardingSettingsPayload>
+]
 
 /** The standalone Store tab; the embedded app has no control for it. */
 const STORE_TAB_FIELDS = [

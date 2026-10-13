@@ -33,6 +33,12 @@ Akeed supports Arabic and English templates with multiple styles.
 | Arabic | Modern Standard, Egyptian, Gulf, Short |
 | English | Friendly, Professional, Direct, Short |
 
+### Urdu, Spanish and French
+
+Urdu, Spanish and French messages become available once WhatsApp approves them. Until then, your settings show each of these languages as **Not available yet**, and list its messages as locked so you can read them.
+
+Once a language is available, you can choose it for your store and pick one of its styles. With **Automatic, by customer number**, a customer with a Pakistani number gets Urdu, a customer in Spain or Spanish-speaking Latin America gets Spanish, and a customer in France gets French. Every other customer gets Arabic or English, as before.
+
 ## How To Choose the Right Style
 
 ### Arabic stores (general)

@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, useState, type ReactNode } from 'react'
+import { useId, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import type { IntegrationOnboardingLanguage } from '@/features/onboarding'
 import type { SettingsResponse } from '@/features/settings/api/settingsApi'
@@ -16,6 +16,11 @@ import {
   STORE_NAME_MAX_LENGTH,
 } from '@/features/settings/domain/settingsForm'
 import { templateStyleLabel } from '@/features/settings/domain/templateStyleLabel'
+import {
+  ALWAYS_LANGUAGE_KEYS,
+  STYLE_LOCK_KEYS,
+  useMessageStyles,
+} from '@/features/settings/domain/useMessageStyles'
 import type { StandaloneSettingsModel } from '@/features/settings/domain/useStandaloneSettings'
 import { useTestPhonePrompt } from '@/features/settings/domain/useTestPhonePrompt'
 import { formatAmount } from '@/shared/lib/money'
@@ -28,14 +33,6 @@ interface MessageTabProps {
   model: StandaloneSettingsModel
   data: SettingsResponse
   readOnly: boolean
-}
-
-function initialPreviewLanguage(data: SettingsResponse): 'ar' | 'en' {
-  const language = data.state.defaultLanguage
-  if (language === 'ar' || language === 'en') return language
-  // "auto" follows the customer's number; the merchant's own number is the
-  // best guess for where their customers are.
-  return data.state.testSendLanguage ?? 'ar'
 }
 
 function SettingsCard({
@@ -71,7 +68,8 @@ function SettingsCard({
  * What the confirmation message says: the store name on it, the language it
  * goes out in, and the wording style per language, beside a live preview.
  * Each language keeps its own style, so the style card follows the preview
- * language.
+ * language. A language WhatsApp has not approved a message for yet is shown
+ * with its messages locked, and cannot be chosen.
  */
 export function MessageTab({ model, data, readOnly }: MessageTabProps) {
   const t = useTranslations('settings.standalone.page.message')
@@ -81,9 +79,11 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
   const styleId = useId()
   const reminderId = useId()
   const storeNameNoteId = useId()
-  const [previewLanguage, setPreviewLanguage] = useState<'ar' | 'en'>(() =>
-    initialPreviewLanguage(data)
-  )
+  const styles = useMessageStyles({
+    data,
+    values: model.values,
+    update: model.update,
+  })
   const phonePrompt = useTestPhonePrompt({
     savedPhone: data.state.merchantWhatsappPhone ?? null,
     shopPhone: data.state.shopPhone ?? null,
@@ -91,7 +91,18 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
     saveTestPhone: model.saveTestPhone,
   })
   const values = model.values
-  if (!values) return null
+  if (!values || !styles) return null
+  const {
+    previewLanguage,
+    variants,
+    selectedVariant,
+    message,
+    offersAuto,
+    isAuto,
+    reminderVariants,
+    selectedReminder,
+  } = styles
+  const previewLanguageName = tShared(`languageNames.${previewLanguage}`)
 
   const storeName = values.storeName.trim() || 'Akeed Store'
   const sample: PreviewSample = {
@@ -104,19 +115,6 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
       previewLanguage
     ),
   }
-  const variants = data.template.variants[previewLanguage]
-  const selectedVariant = values.codTemplateVariants[previewLanguage]
-  const selectedDefinition =
-    variants.find((variant) => variant.variant === selectedVariant) ??
-    variants[0]
-  const message =
-    selectedDefinition?.message ?? data.template.messages[previewLanguage]
-  // Arabic `auto` and the reminder are offered only while the backend says so.
-  const offersAuto =
-    previewLanguage === 'ar' && values.codTemplateArAuto !== undefined
-  const isAuto = offersAuto && values.codTemplateArAuto === true
-  const reminderVariants = data.template.reminder?.variants[previewLanguage]
-  const selectedReminder = values.codReminderVariants?.[previewLanguage] ?? null
 
   const storeNameError =
     model.errors.storeName === 'required'
@@ -130,6 +128,8 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
     label: string
     help?: string
     recommended?: boolean
+    /** No approved message yet: shown, but it cannot be chosen. */
+    locked?: boolean
   }> = [
     {
       value: 'auto',
@@ -137,34 +137,13 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
       help: tShared('languageAutoHelp'),
       recommended: true,
     },
-    { value: 'ar', label: t('languageArabic') },
-    { value: 'en', label: t('languageEnglish') },
+    ...styles.languages.map(({ language, isLive }) => ({
+      value: language,
+      label: t(ALWAYS_LANGUAGE_KEYS[language]),
+      // A store already on the language keeps its choice selectable.
+      locked: !isLive && values.defaultLanguage !== language,
+    })),
   ]
-
-  const handleLanguageChange = (language: IntegrationOnboardingLanguage) => {
-    model.update({ defaultLanguage: language })
-    if (language !== 'auto') setPreviewLanguage(language)
-  }
-
-  const handleVariantChange = (variant: string) => {
-    model.update({
-      codTemplateVariants: {
-        ...values.codTemplateVariants,
-        [previewLanguage]: variant,
-      },
-      ...(offersAuto ? { codTemplateArAuto: false } : {}),
-    })
-  }
-
-  const handleReminderChange = (variant: string | null) => {
-    if (!values.codReminderVariants) return
-    model.update({
-      codReminderVariants: {
-        ...values.codReminderVariants,
-        [previewLanguage]: variant,
-      },
-    })
-  }
 
   return (
     <div className="grid items-start gap-6 min-[1100px]:grid-cols-[minmax(0,1fr)_360px]">
@@ -226,19 +205,28 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
           heading={tShared('languageHeading')}
           description={t('languageDesc')}
         >
-          <AkChoiceGroup aria-labelledby={languageId}>
+          <AkChoiceGroup columns={2} aria-labelledby={languageId}>
             {languageChoices.map((choice) => (
               <AkChoiceCard
                 key={choice.value}
+                className={
+                  choice.value === 'auto' ? 'sm:col-span-2' : undefined
+                }
                 checked={values.defaultLanguage === choice.value}
-                onSelect={() => handleLanguageChange(choice.value)}
-                disabled={readOnly}
+                onSelect={() => styles.chooseLanguage(choice.value)}
+                disabled={readOnly || choice.locked}
                 title={choice.label}
                 badge={
-                  choice.recommended && (
+                  choice.recommended ? (
                     <span className={akPill({ tone: 'brand' })}>
                       {tShared('recommended')}
                     </span>
+                  ) : (
+                    choice.locked && (
+                      <span className={akPill({ tone: 'neutral' })}>
+                        {tShared('notEnabledYet')}
+                      </span>
+                    )
                   )
                 }
                 description={choice.help}
@@ -247,34 +235,71 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
           </AkChoiceGroup>
         </SettingsCard>
 
-        <SettingsCard headingId={styleId} heading={tShared('styleHeading')}>
-          <AkChoiceGroup columns={2} aria-labelledby={styleId}>
-            {offersAuto && (
-              <AkChoiceCard
-                checked={isAuto}
-                onSelect={() => model.update({ codTemplateArAuto: true })}
-                disabled={readOnly}
-                title={templateStyleLabel(tShared, 'auto')}
-              />
-            )}
-            {variants.map((variant) => (
-              <AkChoiceCard
-                key={variant.variant}
-                checked={!isAuto && variant.variant === selectedVariant}
-                onSelect={() => handleVariantChange(variant.variant)}
-                disabled={readOnly}
-                title={templateStyleLabel(tShared, variant.variant)}
-                badge={
-                  data.template.defaults[previewLanguage] ===
-                    variant.variant && (
-                    <span className={akPill({ tone: 'neutral' })}>
-                      {t('defaultBadge')}
-                    </span>
-                  )
-                }
-              />
-            ))}
-          </AkChoiceGroup>
+        <SettingsCard
+          headingId={styleId}
+          heading={tShared('styleHeading')}
+          description={tShared('styleHint', { language: previewLanguageName })}
+        >
+          {!styles.isLive && (
+            <p className="text-ak-caption text-ink-muted">
+              {tShared(
+                variants.length > 0 ? 'languageLockedNote' : 'stylesEmpty',
+                { language: previewLanguageName }
+              )}
+            </p>
+          )}
+          {(variants.length > 0 || offersAuto) && (
+            <AkChoiceGroup columns={2} aria-labelledby={styleId}>
+              {offersAuto && (
+                <AkChoiceCard
+                  checked={isAuto}
+                  onSelect={styles.chooseAuto}
+                  disabled={readOnly}
+                  title={templateStyleLabel(tShared, 'auto')}
+                />
+              )}
+              {variants.map((variant) => {
+                const lock = variant.availability
+                return (
+                  <AkChoiceCard
+                    key={variant.variant}
+                    checked={
+                      !lock && !isAuto && variant.variant === selectedVariant
+                    }
+                    onSelect={() => styles.chooseVariant(variant.variant)}
+                    disabled={readOnly || Boolean(lock)}
+                    title={templateStyleLabel(
+                      tShared,
+                      variant.variant,
+                      previewLanguage
+                    )}
+                    badge={
+                      lock ? (
+                        <span className={akPill({ tone: 'neutral' })}>
+                          {tShared(STYLE_LOCK_KEYS[lock])}
+                        </span>
+                      ) : (
+                        styles.defaultVariant === variant.variant && (
+                          <span className={akPill({ tone: 'neutral' })}>
+                            {t('defaultBadge')}
+                          </span>
+                        )
+                      )
+                    }
+                    // A locked style cannot be picked to preview it, so its
+                    // opening line is shown on the card.
+                    description={
+                      lock
+                        ? templateOpeningLine(variant.message, sample)
+                        : undefined
+                    }
+                    descriptionDir={variant.message.direction}
+                    descriptionLang={previewLanguage}
+                  />
+                )
+              })}
+            </AkChoiceGroup>
+          )}
         </SettingsCard>
 
         {reminderVariants && (
@@ -282,13 +307,13 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
             headingId={reminderId}
             heading={tShared('reminderHeading')}
             description={tShared('reminderHint', {
-              language: tShared(`languageNames.${previewLanguage}`),
+              language: previewLanguageName,
             })}
           >
             <AkChoiceGroup columns={2} aria-labelledby={reminderId}>
               <AkChoiceCard
                 checked={selectedReminder === null}
-                onSelect={() => handleReminderChange(null)}
+                onSelect={() => styles.chooseReminder(null)}
                 disabled={readOnly}
                 title={tShared('reminderSame')}
               />
@@ -296,9 +321,13 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
                 <AkChoiceCard
                   key={variant.variant}
                   checked={variant.variant === selectedReminder}
-                  onSelect={() => handleReminderChange(variant.variant)}
+                  onSelect={() => styles.chooseReminder(variant.variant)}
                   disabled={readOnly}
-                  title={templateStyleLabel(tShared, variant.variant)}
+                  title={templateStyleLabel(
+                    tShared,
+                    variant.variant,
+                    previewLanguage
+                  )}
                   description={templateOpeningLine(variant.message, sample)}
                   descriptionDir={variant.message.direction}
                   descriptionLang={previewLanguage}
@@ -311,7 +340,8 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
 
       <MessagePreviewPanel
         language={previewLanguage}
-        onLanguageChange={setPreviewLanguage}
+        languages={styles.languages.map(({ language }) => language)}
+        onLanguageChange={styles.setPreviewLanguage}
         message={message}
         sample={sample}
         note={isAuto ? tShared('autoStylePreviewNote') : undefined}

@@ -12,6 +12,8 @@ import { NextIntlClientProvider } from 'next-intl'
 import ar from '../../../../../../public/messages/ar.json'
 import {
   allStylesSettingsFixture,
+  awaitingUrduSettingsFixture,
+  liveUrduSettingsFixture,
   settingsResponseFixture,
 } from '../../../testing/settingsFixture'
 import { templateMessageFixture } from '@/shared/lib/templateMessageFixture'
@@ -98,6 +100,12 @@ const tab = (name: string | RegExp) => screen.getByRole('tab', { name })
 const saveBar = () =>
   screen.queryByRole('region', { name: copy.page.saveBar.label })
 const preview = () => screen.getByRole('img')
+const previewLanguage = () =>
+  screen.getByRole('combobox', {
+    name: ar.settings.embedded.message.previewLanguageGroup,
+  }) as HTMLSelectElement
+const previewIn = (language: string) =>
+  fireEvent.change(previewLanguage(), { target: { value: language } })
 
 beforeEach(() => {
   vi.clearAllMocks()
@@ -522,10 +530,9 @@ describe('SettingsStandalonePage message tab', () => {
     // The order number stays left to right inside the Arabic line.
     expect(within(preview()).getByText('#1009').getAttribute('dir')).toBe('ltr')
 
-    const english = screen.getByRole('button', { name: 'الإنجليزية' })
-    fireEvent.click(english)
+    previewIn('en')
 
-    expect(english.getAttribute('aria-pressed')).toBe('true')
+    expect(previewLanguage().value).toBe('en')
     expect(preview().getAttribute('aria-label')).toContain('الإنجليزية')
     expect(preview().textContent).toContain(
       'Thank you for shopping with Togo_Test_A'
@@ -595,7 +602,7 @@ describe('SettingsStandalonePage message tab', () => {
       // A style with no translation yet shows under its own id.
       expect(screen.getByRole('radio', { name: /levantine/ })).toBeTruthy()
 
-      fireEvent.click(screen.getByRole('button', { name: 'الإنجليزية' }))
+      previewIn('en')
 
       for (const name of [
         labels.friendly,
@@ -724,7 +731,7 @@ describe('SettingsStandalonePage message improvements', () => {
     api.fetchSettings.mockResolvedValue(offered())
     renderPage()
     await storeNameInput()
-    fireEvent.click(screen.getByRole('button', { name: 'الإنجليزية' }))
+    previewIn('en')
     expect(
       screen.queryByRole('radio', {
         name: new RegExp(messageCopy.variantLabels.auto),
@@ -787,5 +794,120 @@ describe('SettingsStandalonePage message improvements', () => {
     await storeNameInput()
 
     expect(within(preview()).getByText(messageCopy.previewEmpty)).toBeTruthy()
+  })
+})
+
+describe('SettingsStandalonePage message languages', () => {
+  const messageCopy = ar.settings.embedded.message
+  const pageCopy = copy.page.message
+  const source = { state: { source: standaloneSource } }
+  const always = (name: string) =>
+    screen.getByRole('radio', { name: new RegExp(name) })
+  // Staff-written styles: a version of "standard" and one of "short".
+  const standardStyle = `${messageCopy.variantLabels.standardPlain} 1`
+  const shortStyle = `${messageCopy.variantLabels.short} 1`
+
+  it('previews in any of the five languages', async () => {
+    renderPage()
+    await storeNameInput()
+
+    expect(
+      Array.from(previewLanguage().options).map((option) => option.value)
+    ).toEqual(['ar', 'en', 'ur', 'es', 'fr'])
+  })
+
+  it('shows a language with no approved message, but does not let it be chosen', async () => {
+    renderPage()
+    await storeNameInput()
+
+    for (const name of [
+      pageCopy.languageUrdu,
+      pageCopy.languageSpanish,
+      pageCopy.languageFrench,
+    ]) {
+      const choice = always(name)
+      expect(choice.hasAttribute('disabled')).toBe(true)
+      expect(within(choice).getByText(messageCopy.notEnabledYet)).toBeTruthy()
+      fireEvent.click(choice)
+      expect(choice.getAttribute('aria-checked')).toBe('false')
+    }
+    expect(always(pageCopy.languageArabic).hasAttribute('disabled')).toBe(false)
+    expect(always(pageCopy.languageEnglish).hasAttribute('disabled')).toBe(
+      false
+    )
+    expect(saveBar()).toBeNull()
+  })
+
+  it('says so when a language has no messages at all', async () => {
+    renderPage()
+    await storeNameInput()
+    previewIn('es')
+
+    expect(
+      screen.getByText(
+        messageCopy.stylesEmpty.replace(
+          '{language}',
+          messageCopy.languageNames.es
+        )
+      )
+    ).toBeTruthy()
+    expect(screen.queryByRole('radio', { name: /standard/ })).toBeNull()
+  })
+
+  it('lists messages that are not approved yet as locked, with their text', async () => {
+    api.fetchSettings.mockResolvedValue(awaitingUrduSettingsFixture(source))
+    renderPage()
+    await storeNameInput()
+    previewIn('ur')
+
+    const inReview = always(standardStyle)
+    const notEnabled = always(shortStyle)
+    expect(
+      within(inReview).getByText(messageCopy.awaitingApproval)
+    ).toBeTruthy()
+    expect(within(notEnabled).getByText(messageCopy.notEnabledYet)).toBeTruthy()
+    expect(inReview.textContent).toContain('السلام علیکم')
+
+    for (const card of [inReview, notEnabled]) {
+      expect(card.hasAttribute('disabled')).toBe(true)
+      fireEvent.click(card)
+      expect(card.getAttribute('aria-checked')).toBe('false')
+    }
+    expect(always(pageCopy.languageUrdu).hasAttribute('disabled')).toBe(true)
+    expect(preview().querySelector('[lang]')?.getAttribute('dir')).toBe('rtl')
+    expect(saveBar()).toBeNull()
+  })
+
+  it('lets a store choose a live language and one of its styles, and saves both', async () => {
+    api.fetchSettings.mockResolvedValue(liveUrduSettingsFixture(source))
+    renderPage()
+    await storeNameInput()
+
+    const urdu = always(pageCopy.languageUrdu)
+    expect(urdu.hasAttribute('disabled')).toBe(false)
+    fireEvent.click(urdu)
+    expect(urdu.getAttribute('aria-checked')).toBe('true')
+    // The preview and the style card follow the chosen language.
+    expect(previewLanguage().value).toBe('ur')
+
+    const short = always(shortStyle)
+    expect(short.hasAttribute('disabled')).toBe(false)
+    fireEvent.click(short)
+    expect(short.getAttribute('aria-checked')).toBe('true')
+
+    fireEvent.click(screen.getByRole('button', { name: 'حفظ' }))
+    await waitFor(() => expect(api.saveSettings).toHaveBeenCalled())
+    const [payload] = api.saveSettings.mock.calls[0] as [
+      Record<string, unknown>,
+    ]
+    expect(payload).toMatchObject({
+      defaultLanguage: 'ur',
+      codTemplateUrVariant: 'short_v1',
+      codTemplateArVariant: 'standard',
+      codTemplateEnVariant: 'friendly',
+    })
+    // A language that is not live sends no choice.
+    expect(payload).not.toHaveProperty('codTemplateEsVariant')
+    expect(payload).not.toHaveProperty('codTemplateFrVariant')
   })
 })

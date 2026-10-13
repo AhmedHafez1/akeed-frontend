@@ -1,5 +1,13 @@
+import {
+  getMessageLanguageDirection,
+  type MessageLanguage,
+} from '@/shared/lib/messageLanguage'
 import { templateMessageFixture } from '@/shared/lib/templateMessageFixture'
-import type { SettingsResponse } from '../api/settingsApi'
+import type { SettingsResponse, TemplateStyleLock } from '../api/settingsApi'
+
+/** What the response holds for the languages that are not live. */
+const NOT_LIVE = { ur: null, es: null, fr: null } as const
+const NO_STYLES = { ur: [], es: [], fr: [] }
 
 const message = (
   greeting: string,
@@ -14,12 +22,14 @@ const message = (
   )
 
 const style = (
-  language: 'ar' | 'en',
+  language: MessageLanguage,
   variant: string,
-  greeting: string
+  greeting: string,
+  availability?: TemplateStyleLock
 ): SettingsResponse['template']['variants']['ar'][number] => ({
   language,
   variant,
+  ...(availability ? { availability } : {}),
   metaTemplateName: `template_${variant}`,
   metaLanguageCode: language,
   bodyParameterOrder: ['customer', 'store', 'order', 'total'],
@@ -27,9 +37,54 @@ const style = (
     greeting,
     `${variant} #{{order}}`,
     'OK',
-    language === 'ar' ? 'rtl' : 'ltr'
+    getMessageLanguageDirection(language)
   ),
 })
+
+/**
+ * Urdu before it is live: one message WhatsApp is still reviewing and one it
+ * approved that is not switched on. Neither can be chosen.
+ */
+export function awaitingUrduSettingsFixture(
+  overrides: Parameters<typeof settingsResponseFixture>[0] = {}
+): SettingsResponse {
+  const response = settingsResponseFixture(overrides)
+  return {
+    ...response,
+    template: {
+      ...response.template,
+      variants: {
+        ...response.template.variants,
+        ur: [
+          style('ur', 'standard_v1', 'السلام علیکم', 'in_review'),
+          style('ur', 'short_v1', 'آپ کا آرڈر', 'not_enabled'),
+        ],
+      },
+    },
+  }
+}
+
+/** Urdu once staff made an approved message its default. */
+export function liveUrduSettingsFixture(
+  overrides: Parameters<typeof settingsResponseFixture>[0] = {}
+): SettingsResponse {
+  const response = settingsResponseFixture(overrides)
+  const styles = [
+    style('ur', 'standard_v1', 'السلام علیکم'),
+    style('ur', 'short_v1', 'آپ کا آرڈر'),
+  ]
+  return {
+    ...response,
+    template: {
+      ...response.template,
+      liveLanguages: ['ar', 'en', 'ur'],
+      defaults: { ...response.template.defaults, ur: 'standard_v1' },
+      selected: { ...response.template.selected, ur: 'standard_v1' },
+      variants: { ...response.template.variants, ur: styles },
+      messages: { ...response.template.messages, ur: styles[0].message },
+    },
+  }
+}
 
 /** The style ids the registry is seeded with, per language. */
 export const SEEDED_STYLES = {
@@ -50,6 +105,7 @@ export function allStylesSettingsFixture(
     template: {
       ...response.template,
       variants: {
+        ...NO_STYLES,
         ar: [...SEEDED_STYLES.ar, 'levantine'].map((variant) =>
           style('ar', variant, `مرحبا ${variant}`)
         ),
@@ -144,11 +200,13 @@ export function settingsResponseFixture(
       ...overrides.billing,
     },
     template: {
-      languages: ['ar', 'en'],
+      languages: ['ar', 'en', 'ur', 'es', 'fr'],
+      liveLanguages: ['ar', 'en'],
       defaultPreviewLanguage: 'en',
-      defaults: { ar: 'standard', en: 'friendly' },
-      selected: { ar: 'standard', en: 'friendly' },
+      defaults: { ar: 'standard', en: 'friendly', ...NOT_LIVE },
+      selected: { ar: 'standard', en: 'friendly', ...NOT_LIVE },
       variants: {
+        ...NO_STYLES,
         ar: [
           {
             language: 'ar',
@@ -195,6 +253,7 @@ export function settingsResponseFixture(
       messages: {
         ar: message('أهلًا بك {{customer}}', 'شكرًا', 'تأكيد الطلب', 'rtl'),
         en: message('Hi {{customer}}!', 'Thanks', 'Confirm Order'),
+        ...NOT_LIVE,
       },
     },
   }

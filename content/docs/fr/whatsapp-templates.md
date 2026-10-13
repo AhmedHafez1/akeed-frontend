@@ -33,6 +33,12 @@ Akeed propose des modèles en arabe et en anglais, dans plusieurs styles.
 | Arabe | Arabe standard moderne, Égyptien, Golfe, Court |
 | Anglais | Chaleureux, Professionnel, Direct, Court |
 
+### Ourdou, espagnol et français
+
+Les messages en ourdou, en espagnol et en français deviennent disponibles une fois approuvés par WhatsApp. D’ici là, vos réglages affichent chacune de ces langues avec la mention **Pas encore disponible** et listent ses messages verrouillés, pour que vous puissiez les lire.
+
+Dès qu’une langue est disponible, vous pouvez la choisir pour votre boutique et sélectionner l’un de ses styles. Avec **Automatique, selon le numéro du client**, un client dont le numéro est pakistanais reçoit le message en ourdou, un client en Espagne ou en Amérique latine hispanophone le reçoit en espagnol, et un client en France le reçoit en français. Tous les autres clients reçoivent l’arabe ou l’anglais, comme auparavant.
+
 ## Comment choisir le bon style
 
 ### Boutiques arabophones (cas général)

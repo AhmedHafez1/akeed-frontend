@@ -10,6 +10,7 @@ import {
   Divider,
   InlineError,
   InlineStack,
+  Select,
   Text,
 } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
@@ -21,25 +22,29 @@ import {
   PREVIEW_ORDER_NUMBER,
   PREVIEW_TOTAL_AMOUNT,
 } from '@/features/settings/domain/messagePreview'
-import { formatTemplatePreviewTimestamp } from '@/features/settings/skins/shared/templatePreview'
+import {
+  getMessagePreviewTimestamp,
+  type MessageLanguage,
+} from '@/shared/lib/messageLanguage'
 import { formatPlanPrice } from '@/shared/lib/money'
 import type { TemplateMessage } from '@/shared/lib/templateMessage'
 import {
   InternationalPhoneInput,
   type E164Value,
 } from '@/shared/ui/international-phone-input'
-import { SegmentedButtons } from './SegmentedButtons'
 
 interface MessagePreviewCardProps {
-  language: 'ar' | 'en'
-  onLanguageChange: (language: 'ar' | 'en') => void
+  language: MessageLanguage
+  /** The languages the preview can show, live or not. */
+  languages: readonly MessageLanguage[]
+  onLanguageChange: (language: MessageLanguage) => void
   message: TemplateMessage
   /** A note under the preview, for example how `auto` picks a style. */
   note?: string
   storeName: string
   currency: string
   testSendPhone: string | null
-  testSendLanguage: 'ar' | 'en'
+  testSendLanguage: MessageLanguage
   canSendTest: boolean
   isDirty: boolean
   isSendingTest: boolean
@@ -49,6 +54,7 @@ interface MessagePreviewCardProps {
 
 export function MessagePreviewCard({
   language,
+  languages,
   onLanguageChange,
   message,
   note,
@@ -83,14 +89,15 @@ export function MessagePreviewCard({
           <Text as="h2" variant="headingMd">
             {t('previewHeading')}
           </Text>
-          <SegmentedButtons
+          <Select
             label={t('previewLanguageGroup')}
+            labelHidden
             value={language}
-            onChange={onLanguageChange}
-            options={[
-              { value: 'ar', label: t('languageNames.ar') },
-              { value: 'en', label: t('languageNames.en') },
-            ]}
+            onChange={(value) => onLanguageChange(value as MessageLanguage)}
+            options={languages.map((option) => ({
+              value: option,
+              label: t(`languageNames.${option}`),
+            }))}
           />
         </InlineStack>
 
@@ -138,7 +145,7 @@ export function MessagePreviewCard({
                   ))}
                   <InlineStack align="end">
                     <Text as="span" variant="bodySm" tone="subdued">
-                      {formatTemplatePreviewTimestamp(language)}
+                      {getMessagePreviewTimestamp(language)}
                     </Text>
                   </InlineStack>
                 </BlockStack>

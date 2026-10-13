@@ -261,12 +261,25 @@ function settings(): SettingsResponse {
       },
     },
     template: {
-      languages: ['ar', 'en'],
+      languages: ['ar', 'en', 'ur', 'es', 'fr'],
+      liveLanguages: ['ar', 'en'],
       defaultPreviewLanguage: 'en',
-      defaults: { ar: 'standard', en: 'friendly' },
-      selected: { ar: 'standard', en: 'friendly' },
-      variants: { ar: [], en: [] },
-      messages: { ar: message, en: message },
+      defaults: {
+        ar: 'standard',
+        en: 'friendly',
+        ur: null,
+        es: null,
+        fr: null,
+      },
+      selected: {
+        ar: 'standard',
+        en: 'friendly',
+        ur: null,
+        es: null,
+        fr: null,
+      },
+      variants: { ar: [], en: [], ur: [], es: [], fr: [] },
+      messages: { ar: message, en: message, ur: null, es: null, fr: null },
     },
   }
 }

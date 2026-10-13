@@ -30,6 +30,7 @@ import {
 } from '@/features/onboarding'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { getLocaleFromPathname, getIntlLocale } from '@/shared/lib/locale'
+import { getMessageLanguageIntlTag } from '@/shared/lib/messageLanguage'
 
 const TEST_ERROR_KEYS: Record<OnboardingTestError, string> = {
   cooldown: 'test.errors.cooldown',
@@ -146,7 +147,7 @@ function EmbeddedOnboarding() {
     if (!testState) return null
     const { sample } = testState
     const total = new Intl.NumberFormat(
-      testState.language === 'ar' ? 'ar-EG' : 'en-US',
+      getMessageLanguageIntlTag(testState.language),
       { style: 'currency', currency: sample.currency, maximumFractionDigits: 0 }
     ).format(Number(sample.total))
     return {

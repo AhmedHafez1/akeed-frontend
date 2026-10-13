@@ -9,6 +9,11 @@ import {
   templateReplyTone,
   type TemplateMessage,
 } from '@/shared/lib/templateMessage'
+import {
+  MESSAGE_SAMPLE_CUSTOMER_NAMES,
+  getMessageLanguageIntlTag,
+  type MessageLanguage,
+} from '@/shared/lib/messageLanguage'
 import { Skeleton } from '@/shared/ui'
 import {
   WhatsAppChatHeader,
@@ -17,7 +22,7 @@ import {
 } from '@/shared/ui/whatsapp'
 
 /** Sample customer of the onboarding test, in the message's own language. */
-export const SAMPLE_CUSTOMER_NAMES = { ar: 'أحمد', en: 'Ahmed' } as const
+export const SAMPLE_CUSTOMER_NAMES = MESSAGE_SAMPLE_CUSTOMER_NAMES
 export const SAMPLE_ORDER_NUMBER = 'TEST-1'
 export const SAMPLE_TOTAL_MINOR = 25000
 
@@ -26,7 +31,7 @@ interface MessagePhonePreviewProps {
   message: TemplateMessage | null
   /** The message could not be loaded. */
   isError?: boolean
-  language: 'ar' | 'en'
+  language: MessageLanguage
   storeName: string
   currency: string
   customerName?: string
@@ -64,7 +69,7 @@ export function MessagePhonePreview({
 
   const timeLabel = useMemo(
     () =>
-      new Intl.DateTimeFormat(language === 'ar' ? 'ar-EG' : 'en-US', {
+      new Intl.DateTimeFormat(getMessageLanguageIntlTag(language), {
         hour: 'numeric',
         minute: '2-digit',
         numberingSystem: 'latn',

@@ -18,6 +18,7 @@ import {
   type TemplateVariableName,
 } from './admin-template-drafts.model'
 import type { TemplateLanguage } from './admin-templates.model'
+import { getMessageLanguageDirection } from '@/shared/lib/messageLanguage'
 
 /**
  * What the operator may change:
@@ -291,7 +292,7 @@ export function TemplateDraftForm({
               id="draft-body"
               ref={bodyRef}
               rows={9}
-              dir={form.language === 'ar' ? 'rtl' : 'ltr'}
+              dir={getMessageLanguageDirection(form.language)}
               className={templateFieldClass}
               value={form.body}
               disabled={textLocked}
@@ -309,7 +310,7 @@ export function TemplateDraftForm({
             >
               <input
                 id="draft-confirm"
-                dir={form.language === 'ar' ? 'rtl' : 'ltr'}
+                dir={getMessageLanguageDirection(form.language)}
                 className={templateFieldClass}
                 value={form.confirm_label}
                 disabled={textLocked}
@@ -326,7 +327,7 @@ export function TemplateDraftForm({
             >
               <input
                 id="draft-cancel"
-                dir={form.language === 'ar' ? 'rtl' : 'ltr'}
+                dir={getMessageLanguageDirection(form.language)}
                 className={templateFieldClass}
                 value={form.cancel_label}
                 disabled={textLocked}

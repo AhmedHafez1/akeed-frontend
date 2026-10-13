@@ -25,6 +25,7 @@ import type {
   TemplateDetailResponse,
 } from './admin-templates.model'
 import { useAdminTemplate } from './useAdminTemplates'
+import { getMessageLanguageDirection } from '@/shared/lib/messageLanguage'
 
 type Translate = ReturnType<typeof useTranslations>
 
@@ -88,7 +89,7 @@ function TemplateWarnings({ detail }: { detail: TemplateDetailResponse }) {
   const t = useTranslations('adminTemplates')
   const { label } = useTemplateFormat()
   const { template, drift } = detail
-  const direction = template.language === 'ar' ? 'rtl' : 'ltr'
+  const direction = getMessageLanguageDirection(template.language)
 
   return (
     <div className="space-y-3">
@@ -451,9 +452,9 @@ export function TemplateDetailAdminPage({
                           </td>
                           <td
                             className={cell}
-                            dir={
-                              detail.template.language === 'ar' ? 'rtl' : 'ltr'
-                            }
+                            dir={getMessageLanguageDirection(
+                              detail.template.language
+                            )}
                           >
                             {row.sample}
                           </td>

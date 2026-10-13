@@ -1,3 +1,5 @@
+import type { MessageLanguage } from '@/shared/lib/messageLanguage'
+
 export type TemplateReviewStatus =
   | 'approved'
   | 'pending'
@@ -24,7 +26,8 @@ export type TemplateCategory =
 
 export type TemplateQuality = 'high' | 'medium' | 'low' | 'pending' | 'unknown'
 
-export type TemplateLanguage = 'ar' | 'en'
+/** The language a template is written in; the list is the app's one. */
+export type TemplateLanguage = MessageLanguage
 
 export type TemplateDriftState =
   | 'not_synced'

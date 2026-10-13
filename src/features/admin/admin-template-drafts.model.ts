@@ -3,6 +3,7 @@ import type {
   TemplateLanguage,
   TemplateTone,
 } from './admin-templates.model'
+import { getMessageLanguageDirection } from '@/shared/lib/messageLanguage'
 
 export type TemplateVariableName =
   | 'customer'
@@ -224,7 +225,7 @@ export function previewDraft(form: TemplateDraftForm): RenderedTemplateMessage {
       { label: form.confirm_label, kind: 'quick_reply' },
       { label: form.cancel_label, kind: 'quick_reply' },
     ].filter((button) => button.label.trim().length > 0),
-    direction: form.language === 'ar' ? 'rtl' : 'ltr',
+    direction: getMessageLanguageDirection(form.language),
   }
 }
 
