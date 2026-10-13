@@ -36,6 +36,14 @@ describe('formatAmount', () => {
     expect(formatCredits(12500, 'es')).toBe('12,500')
   })
 
+  it('writes French amounts as France does: amount, decimal comma, then the currency', () => {
+    expect(formatAmount(1250.5, 'EGP', 'fr')).toBe('1 250,50 EGP')
+    expect(formatAmount(1250.5, 'EUR', 'fr')).toBe('1 250,50 €')
+    expect(formatAmount(500, 'MAD', 'fr')).toBe('500,00 MAD')
+    expect(formatAmount(99.5, 'USD', 'fr')).not.toMatch(bidiMarks)
+    expect(formatCredits(12500, 'fr').replace(/\s/g, ' ')).toBe('12 500')
+  })
+
   it('carries no bidi marks except the anchor after an Arabic symbol', () => {
     for (const currency of ['EGP', 'SAR', 'AED', 'USD'])
       expect(formatAmount(99.5, currency, 'en')).not.toMatch(bidiMarks)

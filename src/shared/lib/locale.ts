@@ -2,7 +2,7 @@
  * Locale utilities for consistent locale handling across the application
  */
 
-export const SUPPORTED_LOCALES = ['ar', 'en', 'ur', 'es'] as const
+export const SUPPORTED_LOCALES = ['ar', 'en', 'ur', 'es', 'fr'] as const
 export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number]
 export const DEFAULT_LOCALE: SupportedLocale = 'ar'
 
@@ -58,6 +58,13 @@ const LOCALE_DEFINITIONS: Record<SupportedLocale, LocaleDefinition> = {
     nativeName: 'Español',
     openGraphLocale: 'es_LA',
   },
+  fr: {
+    direction: 'ltr',
+    intlTag: 'fr-FR',
+    formatLocale: 'fr',
+    nativeName: 'Français',
+    openGraphLocale: 'fr_FR',
+  },
 }
 
 /** A locale the app serves; anything else reads as the default. */
@@ -73,14 +80,14 @@ export function isRtlLocale(locale: string): boolean {
   return getLocaleDirection(locale) === 'rtl'
 }
 
-/** `ar-EG`, `en-US`, `ur-PK` or `es-419`, for `Intl` formatters. */
+/** `ar-EG`, `en-US`, `ur-PK`, `es-419` or `fr-FR`, for `Intl` formatters. */
 export function getIntlLocale(locale: string): string {
   return LOCALE_DEFINITIONS[resolveSupportedLocale(locale)].intlTag
 }
 
 /**
  * The tag for helpers that build their own format, often with `-u-nu-latn`
- * appended: `ar`, `en`, `ur` or `es-419`.
+ * appended: `ar`, `en`, `ur`, `es-419` or `fr`.
  */
 export function getFormatLocale(locale: string): string {
   return LOCALE_DEFINITIONS[resolveSupportedLocale(locale)].formatLocale

@@ -182,7 +182,7 @@ Rules:
 ## i18n — Locale Requirements
 
 - All user-facing text must come from `next-intl` translation keys
-- When adding text, update `public/messages/ar.json`, `en.json`, `ur.json` and `es.json` (Urdu and Spanish have no `admin*` namespaces)
+- When adding text, update `public/messages/ar.json`, `en.json`, `ur.json`, `es.json` and `fr.json` (Urdu, Spanish and French have no `admin*` namespaces)
 - Use `useTranslations('namespace')` in client components
 - Locale routing is enforced by middleware; all routes are under `/{locale}/`
 - RTL support: Arabic (`ar`) renders RTL; use `useLocaleInfo()` for `isRTL` checks

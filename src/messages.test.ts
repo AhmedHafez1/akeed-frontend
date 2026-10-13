@@ -2,11 +2,12 @@ import { describe, expect, it } from 'vitest'
 import ar from '../public/messages/ar.json'
 import en from '../public/messages/en.json'
 import es from '../public/messages/es.json'
+import fr from '../public/messages/fr.json'
 import ur from '../public/messages/ur.json'
 
 type Messages = { [key: string]: string | Messages }
 
-/** The admin screens exist in English only: Urdu and Spanish have no `admin*` strings. */
+/** The admin screens exist in English only: Urdu, Spanish and French have no `admin*` strings. */
 const isAdminNamespace = (key: string) => key.startsWith('admin')
 
 function flatten(
@@ -67,6 +68,7 @@ const ARABIC_ONLY_LETTERS = new RegExp(
 const english = merchantStrings(en)
 const urdu = merchantStrings(ur as Messages)
 const spanish = merchantStrings(es as Messages)
+const french = merchantStrings(fr as Messages)
 
 const ARABIC_SCRIPT = URDU_SCRIPT
 /** Spanish opens a question or an exclamation with the inverted mark. */
@@ -241,9 +243,166 @@ describe('Spanish messages', () => {
   })
 })
 
+describe('French messages', () => {
+  const NO_BREAK = letter(0x00a0)
+  const NARROW_NO_BREAK = letter(0x202f)
+  /** What is left once addresses, arguments, clock times and codes are set aside. */
+  const prose = (text: string) =>
+    text
+      .replace(/https?:\/\/\S*/g, '')
+      .replace(/\{[^{}]*\}/g, 'X')
+      .replace(/\d:\d|HH:mm|Akeed: [A-Za-z]+/g, '')
+
+  it('has exactly the merchant-facing keys of the English file', () => {
+    expect(Object.keys(french).sort()).toEqual(Object.keys(english).sort())
+  })
+
+  it('leaves the admin screens to English', () => {
+    expect(Object.keys(fr).filter(isAdminNamespace)).toEqual([])
+  })
+
+  it('keeps every placeholder and tag of the English message', () => {
+    const different = Object.keys(english).filter(
+      (key) =>
+        placeholders(french[key] ?? '').join(' ') !==
+        placeholders(english[key]).join(' ')
+    )
+    expect(different).toEqual([])
+  })
+
+  it('translates every message that has words to translate', () => {
+    // Left as written: names, codes, plan names, unit abbreviations and words
+    // French spells the same way ("Total", "Message", "Confirmations").
+    const untranslated = Object.keys(english).filter(
+      (key) =>
+        french[key] === english[key] &&
+        /[a-z]{2}/.test(english[key].replace(/\{[^}]*\}/g, ''))
+    )
+    expect(untranslated.sort()).toEqual([
+      'appHeader.notifications',
+      'appHeader.verifications',
+      'auth.shopifyStorePlaceholder',
+      'auth.shopifyStoreSuffix',
+      'auth.signup.source.options.easyorders.title',
+      'auth.signup.source.options.woocommerce.title',
+      'auth.signup.source.shopifyTitle',
+      'billing.balance.unit',
+      'billing.purchase.messages',
+      'billing.purchase.total',
+      'billing.purchase.unit',
+      'billing.return.credits',
+      'connectionLine.akeed',
+      'dashboard.confirmations.headings.action',
+      'dashboard.confirmations.headings.total',
+      'dashboard.confirmations.resource.plural',
+      'dashboard.confirmations.resource.singular',
+      'dashboard.confirmations.title',
+      'dashboard.firstRun.confirmations.title',
+      'dashboard.metrics.cards.total',
+      'dashboard.sources.easyorders',
+      'dashboard.sources.salla',
+      'dashboard.sources.shopify',
+      'dashboard.sources.woocommerce',
+      'dashboard.sources.zid',
+      'dashboard.standalone.settings.minutes',
+      'dashboard.table.headings.actions',
+      'dashboard.table.headings.total',
+      'dashboard.table.testBadge',
+      'dashboard.tabs.confirmations',
+      'demo.bot_name_short',
+      'docs.eyebrow',
+      'easyOrdersConnect.eyebrow',
+      'embeddedOnboarding.planBasicName',
+      'embeddedOnboarding.planBusinessName',
+      'embeddedOnboarding.planProName',
+      'embeddedOnboarding.planStarterName',
+      'footer.facebook',
+      'footer.instagram',
+      'footer.logoAlt',
+      'footer.navigationTitle',
+      'footer.youtube',
+      'legal.privacySection5Title',
+      'messageTemplate.variantLabels.direct',
+      'messageTemplate.whatsappLabel',
+      'onboarding.planBasicName',
+      'onboarding.planBusinessName',
+      'onboarding.planProName',
+      'onboarding.planStarterName',
+      'onboarding.test.phone.avatarAlt',
+      'onboarding.test.phone.senderName',
+      'onboarding.whatsapp',
+      'orderImport.map.fields.notes',
+      'orderImport.start.durationHours',
+      'orderImport.start.durationMinutes',
+      'orderImport.upload.templateExcel',
+      'pricing_credits.total_label',
+      'settings.automation.timezones.Asia_Muscat',
+      'settings.automation.timezones.Asia_Qatar',
+      'settings.automation.units.minute',
+      'settings.automation.units.minutes',
+      'settings.embedded.message.variantLabels.direct',
+      'settings.embedded.tabs.message',
+      'settings.embedded.timing.customDelaySuffix',
+      'settings.embedded.timing.minutes',
+      'settings.sourceEasyOrders',
+      'settings.sourceWooCommerce',
+      'settings.standalone.page.apiKeys.status.active',
+      'settings.standalone.page.store.health.webhooks.states.active',
+      'settings.standalone.page.tabs.message',
+      'sources.easyorders.title',
+      'sources.shopify.title',
+      'sources.woocommerce.title',
+      'standaloneOnboarding.done.stats.balanceValue',
+      'standaloneOnboarding.flow.menu',
+      'standaloneOnboarding.store.timezones.Africa_Casablanca',
+      'standaloneOnboarding.store.timezones.Asia_Amman',
+      'standaloneOnboarding.store.timezones.Asia_Bahrain',
+      'standaloneOnboarding.store.timezones.Asia_Qatar',
+      'support.email',
+      'wooCommerceConnect.enterUrl.placeholder',
+      'wooCommerceConnect.eyebrow',
+      'wooCommerceConnect.webhooks.states.active',
+    ])
+  })
+
+  it('writes Latin letters', () => {
+    const wrongScript = Object.keys(french).filter((key) =>
+      ARABIC_SCRIPT.test(french[key])
+    )
+    expect(wrongScript).toEqual([])
+  })
+
+  it('writes the typographic apostrophe, which ICU does not read as a quote', () => {
+    // A straight apostrophe before a brace would quote the argument away.
+    const straight = Object.keys(french).filter((key) =>
+      /(?<!\})'(?!\{)/.test(french[key])
+    )
+    expect(straight).toEqual([])
+  })
+
+  it('puts a no-break space before high punctuation', () => {
+    const narrow = new RegExp(`[^${NARROW_NO_BREAK}][;!?]`)
+    const colon = new RegExp(`[^${NO_BREAK}]:`)
+    const percent = new RegExp(`[^${NO_BREAK}]%`)
+    const loose = Object.keys(french).filter((key) => {
+      const text = prose(french[key])
+      return narrow.test(text) || colon.test(text) || percent.test(text)
+    })
+    expect(loose).toEqual([])
+  })
+
+  it('quotes with spaced guillemets, not straight or curly quotes', () => {
+    const quotes = new RegExp(
+      `"|[${letter(0x201c, 0x201d)}]|${letter(0x00ab)}[^${NO_BREAK}]|[^${NO_BREAK}]${letter(0x00bb)}`
+    )
+    const wrong = Object.keys(french).filter((key) => quotes.test(french[key]))
+    expect(wrong).toEqual([])
+  })
+})
+
 describe('Arabic and English messages', () => {
   it('label the embedded language menu in every language', () => {
-    for (const messages of [ar, en, ur, es]) {
+    for (const messages of [ar, en, ur, es, fr]) {
       expect(messages.embeddedSupport.localeLabel).toEqual(expect.any(String))
       expect(messages.settings.languageSwitching).toEqual(expect.any(String))
     }
