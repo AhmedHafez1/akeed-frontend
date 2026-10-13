@@ -41,6 +41,7 @@ export function useStandaloneSettings() {
       testSendSuccess: t('testSendSuccess'),
       testSendCooldown: t('testSendCooldown'),
       testSendDailyLimit: t('testSendDailyLimit'),
+      testSendLanguageUnavailable: t('testSendLanguageUnavailable'),
       testSendError: t('testSendError'),
     }),
     [t]

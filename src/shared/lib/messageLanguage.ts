@@ -51,3 +51,69 @@ const MESSAGE_PREVIEW_TIMESTAMPS: Record<MessageLanguage, string> = {
 export function getMessagePreviewTimestamp(language: MessageLanguage): string {
   return MESSAGE_PREVIEW_TIMESTAMPS[language]
 }
+
+/**
+ * The currency word Arabic readers expect after an amount. A currency not
+ * listed here is written with its ISO code.
+ */
+const ARABIC_CURRENCY_SYMBOLS: Readonly<Record<string, string>> = {
+  EGP: 'ج.م',
+  SAR: 'ر.س',
+  AED: 'د.إ',
+  KWD: 'د.ك',
+  QAR: 'ر.ق',
+  BHD: 'د.ب',
+  OMR: 'ر.ع',
+  USD: '$',
+}
+
+const PLAIN_DECIMAL = /^(\d+)(?:\.(\d+))?$/
+const ISO_CURRENCY = /^[A-Z]{3}$/
+
+function currencyMinorUnits(currency: string): number {
+  try {
+    return (
+      new Intl.NumberFormat('en', {
+        style: 'currency',
+        currency,
+      }).resolvedOptions().maximumFractionDigits ?? 2
+    )
+  } catch {
+    return 2
+  }
+}
+
+/**
+ * An order total as a sent message writes it, so a preview shows what the
+ * customer gets: `1,250.00 ج.م` in Arabic, `EGP 1,250.00` in English and
+ * `1,250.00 EUR` in the other languages, Western digits, the currency's minor
+ * units always shown. It follows the backend's `formatOrderTotal`; change
+ * the two together.
+ */
+export function formatMessageTotal(
+  amount: string | number,
+  currency: string | null | undefined,
+  language: MessageLanguage
+): string {
+  const match = PLAIN_DECIMAL.exec(String(amount).trim())
+  const code = (currency ?? '').trim().toUpperCase()
+  if (!match || (code && !ISO_CURRENCY.test(code))) {
+    return `${amount} ${currency ?? ''}`.trim()
+  }
+  const [, whole, fraction = ''] = match
+  const minorUnits = code ? currencyMinorUnits(code) : 2
+  let digits = fraction
+  while (digits.length > minorUnits && digits.endsWith('0')) {
+    digits = digits.slice(0, -1)
+  }
+  const decimals = digits.padEnd(minorUnits, '0')
+  const grouped = whole
+    .replace(/^0+(?=\d)/, '')
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  const number = decimals ? `${grouped}.${decimals}` : grouped
+  if (!code) return number
+  if (language === 'ar') {
+    return `${number} ${ARABIC_CURRENCY_SYMBOLS[code] ?? code}`
+  }
+  return language === 'en' ? `${code} ${number}` : `${number} ${code}`
+}

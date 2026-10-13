@@ -1,13 +1,12 @@
 'use client'
 
-import { Fragment, useId } from 'react'
+import { useId } from 'react'
 import {
   BlockStack,
   Box,
   Button,
   Card,
   Collapsible,
-  Divider,
   InlineError,
   InlineStack,
   Select,
@@ -15,18 +14,9 @@ import {
 } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
 import type { TestPhonePrompt } from '@/features/settings/domain/useTestPhonePrompt'
-import {
-  buildPreviewLines,
-  isLtrVariable,
-  PREVIEW_CUSTOMER_NAMES,
-  PREVIEW_ORDER_NUMBER,
-  PREVIEW_TOTAL_AMOUNT,
-} from '@/features/settings/domain/messagePreview'
-import {
-  getMessagePreviewTimestamp,
-  type MessageLanguage,
-} from '@/shared/lib/messageLanguage'
-import { formatPlanPrice } from '@/shared/lib/money'
+import type { PreviewSample } from '@/features/settings/domain/messagePreview'
+import { SettingsPhonePreview } from '@/features/settings/skins/shared/SettingsPhonePreview'
+import type { MessageLanguage } from '@/shared/lib/messageLanguage'
 import type { TemplateMessage } from '@/shared/lib/templateMessage'
 import {
   InternationalPhoneInput,
@@ -35,16 +25,25 @@ import {
 
 interface MessagePreviewCardProps {
   language: MessageLanguage
-  /** The languages the preview can show, live or not. */
-  languages: readonly MessageLanguage[]
-  onLanguageChange: (language: MessageLanguage) => void
+  /**
+   * Given while the preview can show any language (the store's language is
+   * automatic): the languages, live or not, and what picking one does.
+   */
+  languageChoice?: {
+    languages: readonly MessageLanguage[]
+    onChange: (language: MessageLanguage) => void
+  }
   message: TemplateMessage
+  sample: PreviewSample
+  /** Which language and style the phone shows. */
+  previewingLabel: string
   /** A note under the preview, for example how `auto` picks a style. */
   note?: string
-  storeName: string
-  currency: string
   testSendPhone: string | null
+  /** The language the test goes out in: the one being previewed. */
   testSendLanguage: MessageLanguage
+  /** False while that language has no approved message to send. */
+  isPreviewLive: boolean
   canSendTest: boolean
   isDirty: boolean
   isSendingTest: boolean
@@ -54,14 +53,14 @@ interface MessagePreviewCardProps {
 
 export function MessagePreviewCard({
   language,
-  languages,
-  onLanguageChange,
+  languageChoice,
   message,
+  sample,
+  previewingLabel,
   note,
-  storeName,
-  currency,
   testSendPhone,
   testSendLanguage,
+  isPreviewLive,
   canSendTest,
   isDirty,
   isSendingTest,
@@ -73,101 +72,42 @@ export function MessagePreviewCard({
   const noteId = useId()
   // The test sends the saved settings, so the prompt waits for a clean form.
   const isPromptOpen = phonePrompt.isOpen && !isDirty
-  const lines = buildPreviewLines(message, {
-    customer: PREVIEW_CUSTOMER_NAMES[language],
-    store: storeName.trim() || 'Akeed Store',
-    order: PREVIEW_ORDER_NUMBER,
-    total: formatPlanPrice(PREVIEW_TOTAL_AMOUNT, currency),
-  })
   const languageName = t(`languageNames.${language}`)
   const testLanguageName = t(`languageNames.${testSendLanguage}`)
 
   return (
     <Card>
-      <BlockStack gap="400">
-        <InlineStack align="space-between" blockAlign="center" gap="200">
+      <BlockStack gap="300">
+        <BlockStack gap="050">
           <Text as="h2" variant="headingMd">
             {t('previewHeading')}
           </Text>
+          <Text as="p" variant="bodySm" tone="subdued">
+            {previewingLabel}
+          </Text>
+        </BlockStack>
+        {languageChoice && (
           <Select
             label={t('previewLanguageGroup')}
-            labelHidden
+            labelInline
             value={language}
-            onChange={(value) => onLanguageChange(value as MessageLanguage)}
-            options={languages.map((option) => ({
+            onChange={(value) =>
+              languageChoice.onChange(value as MessageLanguage)
+            }
+            options={languageChoice.languages.map((option) => ({
               value: option,
               label: t(`languageNames.${option}`),
             }))}
           />
-        </InlineStack>
+        )}
 
-        <Box background="bg-surface-secondary" borderRadius="300" padding="400">
-          <div
-            role="img"
-            aria-label={t('previewAria', { language: languageName })}
-            dir={message.direction}
-            lang={language}
-          >
-            <Box
-              background="bg-surface"
-              borderRadius="300"
-              shadow="100"
-              overflowX="hidden"
-              overflowY="hidden"
-            >
-              <Box padding="400">
-                <BlockStack gap="150">
-                  {lines.length === 0 && (
-                    <Text as="p" tone="subdued">
-                      {t('previewEmpty')}
-                    </Text>
-                  )}
-                  {lines.map((segments, index) => (
-                    <Text as="p" key={index}>
-                      {segments.map((segment, segmentIndex) =>
-                        segment.kind === 'text' ? (
-                          <Fragment key={segmentIndex}>{segment.text}</Fragment>
-                        ) : (
-                          <Text
-                            as="span"
-                            fontWeight="semibold"
-                            key={segmentIndex}
-                          >
-                            {isLtrVariable(segment.variable) ? (
-                              <bdi dir="ltr">{segment.text}</bdi>
-                            ) : (
-                              segment.text
-                            )}
-                          </Text>
-                        )
-                      )}
-                    </Text>
-                  ))}
-                  <InlineStack align="end">
-                    <Text as="span" variant="bodySm" tone="subdued">
-                      {getMessagePreviewTimestamp(language)}
-                    </Text>
-                  </InlineStack>
-                </BlockStack>
-              </Box>
-              {message.buttons.map((label, index) => (
-                <Fragment key={`${index}-${label}`}>
-                  <Divider />
-                  <Box padding="300">
-                    <Text
-                      as="p"
-                      alignment="center"
-                      fontWeight="medium"
-                      tone="success"
-                    >
-                      {label}
-                    </Text>
-                  </Box>
-                </Fragment>
-              ))}
-            </Box>
-          </div>
-        </Box>
+        <SettingsPhonePreview
+          language={language}
+          message={message}
+          sample={sample}
+          label={t('previewAria', { language: languageName })}
+          emptyLabel={t('previewEmpty')}
+        />
         {note && (
           <Text as="p" variant="bodySm" tone="subdued">
             {note}
@@ -178,8 +118,9 @@ export function MessagePreviewCard({
           <BlockStack gap="100">
             <Button
               fullWidth
+              variant="primary"
               loading={isSendingTest}
-              disabled={isDirty}
+              disabled={isDirty || !isPreviewLive}
               onClick={() => void phonePrompt.requestSend()}
             >
               {t('testSend')}
@@ -188,14 +129,20 @@ export function MessagePreviewCard({
               <Text as="p" variant="bodySm" tone="subdued">
                 {isDirty
                   ? t('testSendSaveFirst')
-                  : testSendPhone
-                    ? t.rich('testSendHelp', {
-                        phone: () => <bdi dir="ltr">{testSendPhone}</bdi>,
+                  : !isPreviewLive
+                    ? t('testSendLanguageLocked', {
                         language: testLanguageName,
                       })
-                    : t('testSendHelpNoPhone', { language: testLanguageName })}
+                    : testSendPhone
+                      ? t.rich('testSendHelp', {
+                          phone: () => <bdi dir="ltr">{testSendPhone}</bdi>,
+                          language: testLanguageName,
+                        })
+                      : t('testSendHelpNoPhone', {
+                          language: testLanguageName,
+                        })}
               </Text>
-              {!isDirty && testSendPhone && !isPromptOpen && (
+              {!isDirty && isPreviewLive && testSendPhone && !isPromptOpen && (
                 <Button
                   variant="plain"
                   disabled={isSendingTest}

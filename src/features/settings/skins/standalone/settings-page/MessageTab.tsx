@@ -7,7 +7,7 @@ import type { SettingsResponse } from '@/features/settings/api/settingsApi'
 import {
   PREVIEW_CUSTOMER_NAMES,
   PREVIEW_ORDER_NUMBER,
-  PREVIEW_TOTAL_AMOUNT,
+  previewTotal,
   templateOpeningLine,
   type PreviewSample,
 } from '@/features/settings/domain/messagePreview'
@@ -17,15 +17,19 @@ import {
 } from '@/features/settings/domain/settingsForm'
 import { templateStyleLabel } from '@/features/settings/domain/templateStyleLabel'
 import {
-  ALWAYS_LANGUAGE_KEYS,
   STYLE_LOCK_KEYS,
   useMessageStyles,
 } from '@/features/settings/domain/useMessageStyles'
 import type { StandaloneSettingsModel } from '@/features/settings/domain/useStandaloneSettings'
 import { useTestPhonePrompt } from '@/features/settings/domain/useTestPhonePrompt'
-import { formatAmount } from '@/shared/lib/money'
 import { cn } from '@/shared/lib/utils'
-import { AkChoiceCard, AkChoiceGroup, akCard, akPill } from '@/shared/ui'
+import {
+  AkChoiceCard,
+  AkChoiceGroup,
+  AkSelect,
+  akCard,
+  akPill,
+} from '@/shared/ui'
 import { MessagePreviewPanel } from './MessagePreviewPanel'
 import { TestPhoneDialog } from './TestPhoneDialog'
 
@@ -49,7 +53,7 @@ function SettingsCard({
   return (
     <section
       aria-labelledby={headingId}
-      className={cn(akCard, 'space-y-4 px-4 py-4 sm:px-6 sm:py-5')}
+      className={cn(akCard, 'space-y-3 px-4 py-4 sm:px-6')}
     >
       <div>
         <h2 id={headingId} className="text-ak-section text-ink">
@@ -65,8 +69,9 @@ function SettingsCard({
 }
 
 /**
- * What the confirmation message says: the store name on it, the language it
- * goes out in, and the wording style per language, beside a live preview.
+ * What the confirmation message says: the store name on it and the language
+ * it goes out in (one card), and the wording style per language, beside a
+ * live preview.
  * Each language keeps its own style, so the style card follows the preview
  * language. A language WhatsApp has not approved a message for yet is shown
  * with its messages locked, and cannot be chosen.
@@ -76,6 +81,7 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
   const tShared = useTranslations('settings.embedded.message')
   const identityId = useId()
   const languageId = useId()
+  const fixedLanguageId = useId()
   const styleId = useId()
   const reminderId = useId()
   const storeNameNoteId = useId()
@@ -87,7 +93,8 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
   const phonePrompt = useTestPhonePrompt({
     savedPhone: data.state.merchantWhatsappPhone ?? null,
     shopPhone: data.state.shopPhone ?? null,
-    sendTest: model.sendTest,
+    // The test is the message on the phone: it goes out in that language.
+    sendTest: () => model.sendTest(styles?.previewLanguage),
     saveTestPhone: model.saveTestPhone,
   })
   const values = model.values
@@ -109,12 +116,27 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
     customer: PREVIEW_CUSTOMER_NAMES[previewLanguage],
     store: storeName,
     order: PREVIEW_ORDER_NUMBER,
-    total: formatAmount(
-      PREVIEW_TOTAL_AMOUNT,
-      data.state.shippingCurrency,
-      previewLanguage
-    ),
+    total: previewTotal(data.state.shippingCurrency, previewLanguage),
   }
+  const styleIds = variants.map((variant) => variant.variant)
+  const shownStyle = isAuto ? 'auto' : (selectedVariant ?? styleIds[0])
+  const previewingLabel = shownStyle
+    ? tShared('previewingLabel', {
+        language: previewLanguageName,
+        style: templateStyleLabel(
+          tShared,
+          shownStyle,
+          previewLanguage,
+          styleIds
+        ),
+      })
+    : tShared('previewingLanguage', { language: previewLanguageName })
+  const reminderIds = reminderVariants?.map((variant) => variant.variant)
+  const isAutoLanguage = values.defaultLanguage === 'auto'
+  // On automatic, the style cards edit the language being previewed.
+  const languageHint = styles.canChoosePreviewLanguage
+    ? tShared('styleForLanguage', { language: previewLanguageName })
+    : undefined
 
   const storeNameError =
     model.errors.storeName === 'required'
@@ -122,28 +144,6 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
       : model.errors.storeName === 'tooLong'
         ? tShared('storeNameTooLong', { max: STORE_NAME_MAX_LENGTH })
         : null
-
-  const languageChoices: Array<{
-    value: IntegrationOnboardingLanguage
-    label: string
-    help?: string
-    recommended?: boolean
-    /** No approved message yet: shown, but it cannot be chosen. */
-    locked?: boolean
-  }> = [
-    {
-      value: 'auto',
-      label: tShared('languageAuto'),
-      help: tShared('languageAutoHelp'),
-      recommended: true,
-    },
-    ...styles.languages.map(({ language, isLive }) => ({
-      value: language,
-      label: t(ALWAYS_LANGUAGE_KEYS[language]),
-      // A store already on the language keeps its choice selectable.
-      locked: !isLive && values.defaultLanguage !== language,
-    })),
-  ]
 
   return (
     <div className="grid items-start gap-6 min-[1100px]:grid-cols-[minmax(0,1fr)_360px]">
@@ -198,47 +198,84 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
               </p>
             )}
           </div>
-        </SettingsCard>
 
-        <SettingsCard
-          headingId={languageId}
-          heading={tShared('languageHeading')}
-          description={t('languageDesc')}
-        >
-          <AkChoiceGroup columns={2} aria-labelledby={languageId}>
-            {languageChoices.map((choice) => (
+          <div className="border-line space-y-2 border-t pt-3">
+            <div>
+              <h3
+                id={languageId}
+                className="text-ak-caption text-ink font-semibold"
+              >
+                {tShared('languageHeading')}
+              </h3>
+              <p className="text-ak-caption text-ink-muted">
+                {t('languageDesc')}
+              </p>
+            </div>
+            <AkChoiceGroup columns={2} aria-labelledby={languageId}>
               <AkChoiceCard
-                key={choice.value}
-                className={
-                  choice.value === 'auto' ? 'sm:col-span-2' : undefined
-                }
-                checked={values.defaultLanguage === choice.value}
-                onSelect={() => styles.chooseLanguage(choice.value)}
-                disabled={readOnly || choice.locked}
-                title={choice.label}
+                checked={isAutoLanguage}
+                onSelect={() => styles.chooseLanguage('auto')}
+                disabled={readOnly}
+                title={tShared('languageAuto')}
                 badge={
-                  choice.recommended ? (
-                    <span className={akPill({ tone: 'brand' })}>
-                      {tShared('recommended')}
-                    </span>
-                  ) : (
-                    choice.locked && (
-                      <span className={akPill({ tone: 'neutral' })}>
-                        {tShared('notEnabledYet')}
-                      </span>
-                    )
-                  )
+                  <span className={akPill({ tone: 'brand' })}>
+                    {tShared('recommended')}
+                  </span>
                 }
-                description={choice.help}
+                description={tShared('languageAutoHelp')}
               />
-            ))}
-          </AkChoiceGroup>
+              <AkChoiceCard
+                checked={!isAutoLanguage}
+                onSelect={styles.chooseFixedLanguage}
+                disabled={readOnly}
+                title={tShared('languageFixed')}
+                description={tShared('languageFixedHelp')}
+              />
+            </AkChoiceGroup>
+            {!isAutoLanguage && (
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                <label
+                  htmlFor={fixedLanguageId}
+                  className="text-ak-caption text-ink font-semibold"
+                >
+                  {tShared('languageFixedLabel')}
+                </label>
+                <AkSelect
+                  id={fixedLanguageId}
+                  className="w-full sm:w-64"
+                  value={values.defaultLanguage}
+                  disabled={readOnly}
+                  onChange={(event) =>
+                    styles.chooseLanguage(
+                      event.target.value as IntegrationOnboardingLanguage
+                    )
+                  }
+                  options={styles.languages.map(({ language, isLive }) => {
+                    // A store already on the language keeps its choice.
+                    const locked =
+                      !isLive && values.defaultLanguage !== language
+                    const name = tShared(`languageNames.${language}`)
+                    return {
+                      value: language,
+                      disabled: locked,
+                      label: locked
+                        ? tShared('languageOptionLocked', {
+                            language: name,
+                            status: tShared('notEnabledYet'),
+                          })
+                        : name,
+                    }
+                  })}
+                />
+              </div>
+            )}
+          </div>
         </SettingsCard>
 
         <SettingsCard
           headingId={styleId}
           heading={tShared('styleHeading')}
-          description={tShared('styleHint', { language: previewLanguageName })}
+          description={languageHint}
         >
           {!styles.isLive && (
             <p className="text-ak-caption text-ink-muted">
@@ -271,7 +308,8 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
                     title={templateStyleLabel(
                       tShared,
                       variant.variant,
-                      previewLanguage
+                      previewLanguage,
+                      styleIds
                     )}
                     badge={
                       lock ? (
@@ -306,9 +344,11 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
           <SettingsCard
             headingId={reminderId}
             heading={tShared('reminderHeading')}
-            description={tShared('reminderHint', {
-              language: previewLanguageName,
-            })}
+            description={
+              languageHint
+                ? `${tShared('reminderHint')} ${languageHint}`
+                : tShared('reminderHint')
+            }
           >
             <AkChoiceGroup columns={2} aria-labelledby={reminderId}>
               <AkChoiceCard
@@ -326,7 +366,8 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
                   title={templateStyleLabel(
                     tShared,
                     variant.variant,
-                    previewLanguage
+                    previewLanguage,
+                    reminderIds
                   )}
                   description={templateOpeningLine(variant.message, sample)}
                   descriptionDir={variant.message.direction}
@@ -340,13 +381,21 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
 
       <MessagePreviewPanel
         language={previewLanguage}
-        languages={styles.languages.map(({ language }) => language)}
-        onLanguageChange={styles.setPreviewLanguage}
+        languageChoice={
+          styles.canChoosePreviewLanguage
+            ? {
+                languages: styles.languages.map(({ language }) => language),
+                onChange: styles.setPreviewLanguage,
+              }
+            : undefined
+        }
         message={message}
         sample={sample}
+        previewingLabel={previewingLabel}
         note={isAuto ? tShared('autoStylePreviewNote') : undefined}
         testSendPhone={data.state.merchantWhatsappPhone ?? null}
-        testSendLanguage={data.state.testSendLanguage ?? previewLanguage}
+        testSendLanguage={previewLanguage}
+        isPreviewLive={styles.isLive}
         canSendTest={!readOnly}
         isDirty={model.isDirty}
         isSendingTest={model.isSendingTest}

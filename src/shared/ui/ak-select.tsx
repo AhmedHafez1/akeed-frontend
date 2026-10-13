@@ -8,6 +8,7 @@ import { cn } from '@/shared/lib/utils'
 export interface AkSelectOption {
   value: string
   label: string
+  disabled?: boolean
 }
 
 export interface AkSelectProps extends Omit<
@@ -35,7 +36,11 @@ export const AkSelect = React.forwardRef<HTMLSelectElement, AkSelectProps>(
         {...props}
       >
         {options.map((option) => (
-          <option key={option.value} value={option.value}>
+          <option
+            key={option.value}
+            value={option.value}
+            disabled={option.disabled}
+          >
             {option.label}
           </option>
         ))}

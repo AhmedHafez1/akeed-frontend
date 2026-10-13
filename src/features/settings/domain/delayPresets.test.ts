@@ -7,6 +7,8 @@ import {
   parseCustomDelayMinutes,
   REMINDER_PRESET_HOURS,
   sendDelayChoiceFor,
+  sendDelayFieldsFor,
+  sendDelayOptions,
   sendDelayPresetMinutes,
 } from './delayPresets'
 
@@ -132,5 +134,39 @@ describe('no-reply delay conversion', () => {
         followUpDelayMinutes: 120,
       })
     ).toBe(1440)
+  })
+})
+
+describe('embedded send times', () => {
+  it('offers the five fixed choices', () => {
+    expect(sendDelayOptions(0).map((option) => option.minutes)).toEqual([
+      0, 15, 60, 120, 240,
+    ])
+  })
+
+  it('adds a saved delay that is not a choice, in order', () => {
+    expect(sendDelayOptions(10)).toEqual([
+      { minutes: 0, isExtra: false },
+      { minutes: 10, isExtra: true },
+      { minutes: 15, isExtra: false },
+      { minutes: 60, isExtra: false },
+      { minutes: 120, isExtra: false },
+      { minutes: 240, isExtra: false },
+    ])
+  })
+
+  it('adds nothing while the form holds no valid delay', () => {
+    expect(sendDelayOptions(null)).toHaveLength(5)
+  })
+
+  it('writes a choice through the fields the form already has', () => {
+    expect(sendDelayFieldsFor(15)).toEqual({
+      sendDelayChoice: 'after15m',
+      sendDelayCustom: '15',
+    })
+    expect(sendDelayFieldsFor(120)).toEqual({
+      sendDelayChoice: 'custom',
+      sendDelayCustom: '120',
+    })
   })
 })

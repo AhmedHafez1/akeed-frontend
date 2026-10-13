@@ -70,6 +70,34 @@ describe('templateStyleLabel', () => {
     )
   })
 
+  it('drops the version while it is the only one of its style listed', () => {
+    const labels = en.settings.embedded.message.variantLabels
+    const french = ['standard_v1', 'short_v1']
+    expect(
+      templateStyleLabel(translators.en, 'standard_v1', 'fr', french)
+    ).toBe(labels.standardPlain)
+    expect(templateStyleLabel(translators.en, 'short_v1', 'fr', french)).toBe(
+      labels.short
+    )
+    // Two versions of one style, or a version beside its style: told apart.
+    expect(
+      templateStyleLabel(translators.en, 'egyptian_v2', 'ar', [
+        'egyptian_v1',
+        'egyptian_v2',
+      ])
+    ).toBe(`${labels.egyptian} 2`)
+    expect(
+      templateStyleLabel(translators.en, 'egyptian_v2', 'ar', [
+        'egyptian',
+        'egyptian_v2',
+      ])
+    ).toBe(`${labels.egyptian} 2`)
+    // A style with no name still shows under its own id.
+    expect(
+      templateStyleLabel(translators.en, 'levantine_v1', 'ar', ['levantine_v1'])
+    ).toBe('levantine_v1')
+  })
+
   it('shows a style without a translation under its own id', () => {
     expect(templateStyleLabel(translators.ar, 'levantine')).toBe('levantine')
     expect(templateStyleLabel(translators.en, 'levantine_v1', 'fr')).toBe(

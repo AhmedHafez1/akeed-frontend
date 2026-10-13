@@ -468,6 +468,7 @@ describe('SettingsStandalonePage message tab', () => {
     )
     expect(onboarding.sendOnboardingTest).toHaveBeenCalledWith({
       resend: true,
+      language: 'ar',
     })
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
     // The panel now names the saved number.
@@ -551,13 +552,20 @@ describe('SettingsStandalonePage message tab', () => {
     expect(auto.getAttribute('aria-checked')).toBe('true')
     expect(within(auto).getByText('موصى به')).toBeTruthy()
 
-    fireEvent.click(screen.getByRole('radio', { name: 'الإنجليزية دائمًا' }))
+    const messageCopy = ar.settings.embedded.message
+    const fixed = screen.getByRole('radio', {
+      name: new RegExp(messageCopy.languageFixed),
+    })
+    fireEvent.click(fixed)
+    const language = screen.getByLabelText(
+      messageCopy.languageFixedLabel
+    ) as HTMLSelectElement
+    // It starts on the language being previewed.
+    expect(language.value).toBe('ar')
+    fireEvent.change(language, { target: { value: 'en' } })
 
-    expect(
-      screen
-        .getByRole('radio', { name: 'الإنجليزية دائمًا' })
-        .getAttribute('aria-checked')
-    ).toBe('true')
+    expect(fixed.getAttribute('aria-checked')).toBe('true')
+    expect(auto.getAttribute('aria-checked')).toBe('false')
     expect(preview().getAttribute('aria-label')).toContain('الإنجليزية')
     expect(
       within(tab(/الرسالة/)).getByText(copy.page.unsavedShort)
@@ -748,7 +756,9 @@ describe('SettingsStandalonePage message improvements', () => {
       name: new RegExp(messageCopy.reminderSame),
     })
     expect(same.getAttribute('aria-checked')).toBe('true')
-    const gulf = screen.getByRole('radio', { name: /خليجي 1/ })
+    // The only version of its style on screen: named without its number.
+    const gulf = screen.getByRole('radio', { name: /خليجي/ })
+    expect(gulf.textContent).not.toContain('خليجي 1')
     expect(within(gulf).getByText(/تذكير أحمد بطلب #1009/)).toBeTruthy()
     fireEvent.click(gulf)
     expect(gulf.getAttribute('aria-checked')).toBe('true')
@@ -780,6 +790,34 @@ describe('SettingsStandalonePage message improvements', () => {
     expect(within(preview()).getByText('لا')).toBeTruthy()
   })
 
+  it('shows bold as WhatsApp does, and the total as it is sent', async () => {
+    const response = settingsResponseFixture({
+      state: { source: standaloneSource },
+    })
+    response.template.variants.ar[0].message = templateMessageFixture(
+      ['طلبك من *{{store}}* بإجمالي *{{total}}* يا {{customer}}'],
+      ['نعم', 'لا'],
+      { direction: 'rtl', source: 'provider' }
+    )
+    api.fetchSettings.mockResolvedValue(response)
+    renderPage()
+    await storeNameInput()
+
+    const picture = preview()
+    expect(picture.textContent).not.toContain('*')
+    expect(within(picture).getByText('Togo_Test_A').tagName).toBe('B')
+    expect(within(picture).getByText('599.00 $').tagName).toBe('B')
+    // A value the message does not mark is not bold.
+    expect(within(picture).queryByText('أحمد', { selector: 'b' })).toBeNull()
+    expect(
+      screen.getByText(
+        messageCopy.previewingLabel
+          .replace('{language}', messageCopy.languageNames.ar)
+          .replace('{style}', messageCopy.variantLabels.standard)
+      )
+    ).toBeTruthy()
+  })
+
   it('says so when a message has no text', async () => {
     const response = settingsResponseFixture({
       state: { source: standaloneSource },
@@ -799,13 +837,21 @@ describe('SettingsStandalonePage message improvements', () => {
 
 describe('SettingsStandalonePage message languages', () => {
   const messageCopy = ar.settings.embedded.message
-  const pageCopy = copy.page.message
   const source = { state: { source: standaloneSource } }
   const always = (name: string) =>
     screen.getByRole('radio', { name: new RegExp(name) })
-  // Staff-written styles: a version of "standard" and one of "short".
-  const standardStyle = `${messageCopy.variantLabels.standardPlain} 1`
-  const shortStyle = `${messageCopy.variantLabels.short} 1`
+  const chooseOneLanguage = () =>
+    fireEvent.click(always(messageCopy.languageFixed))
+  const oneLanguage = () =>
+    screen.getByLabelText(messageCopy.languageFixedLabel) as HTMLSelectElement
+  const languageOption = (language: string) =>
+    Array.from(oneLanguage().options).find(
+      (option) => option.value === language
+    ) as HTMLOptionElement
+  // Staff-written styles: a version of "standard" and one of "short", each
+  // the only version of its style, so neither shows its number.
+  const standardStyle = messageCopy.variantLabels.standardPlain
+  const shortStyle = messageCopy.variantLabels.short
 
   it('previews in any of the five languages', async () => {
     renderPage()
@@ -820,22 +866,166 @@ describe('SettingsStandalonePage message languages', () => {
     renderPage()
     await storeNameInput()
 
-    for (const name of [
-      pageCopy.languageUrdu,
-      pageCopy.languageSpanish,
-      pageCopy.languageFrench,
-    ]) {
-      const choice = always(name)
-      expect(choice.hasAttribute('disabled')).toBe(true)
-      expect(within(choice).getByText(messageCopy.notEnabledYet)).toBeTruthy()
-      fireEvent.click(choice)
-      expect(choice.getAttribute('aria-checked')).toBe('false')
+    // Automatic shows no list; one language for everyone does.
+    expect(screen.queryByLabelText(messageCopy.languageFixedLabel)).toBeNull()
+    chooseOneLanguage()
+
+    expect(
+      Array.from(oneLanguage().options).map((option) => option.value)
+    ).toEqual(['ar', 'en', 'ur', 'es', 'fr'])
+    for (const language of ['ur', 'es', 'fr']) {
+      expect(languageOption(language).disabled).toBe(true)
+      expect(languageOption(language).textContent).toContain(
+        messageCopy.notEnabledYet
+      )
     }
-    expect(always(pageCopy.languageArabic).hasAttribute('disabled')).toBe(false)
-    expect(always(pageCopy.languageEnglish).hasAttribute('disabled')).toBe(
-      false
+    expect(languageOption('ar').disabled).toBe(false)
+    expect(languageOption('en').disabled).toBe(false)
+    expect(languageOption('en').textContent).toBe(messageCopy.languageNames.en)
+  })
+
+  it('sends the test in the language being previewed', async () => {
+    onboarding.sendOnboardingTest.mockResolvedValue({})
+    renderPage()
+    await storeNameInput()
+    previewIn('en')
+
+    // The helper names the language of the message on the phone.
+    expect(
+      screen.getByText(
+        (_, element) =>
+          element?.tagName === 'P' &&
+          element.textContent.includes('+20') &&
+          element.textContent.includes(messageCopy.languageNames.en)
+      )
+    ).toBeTruthy()
+    fireEvent.click(
+      screen.getByRole('button', { name: copy.page.message.testSend })
     )
-    expect(saveBar()).toBeNull()
+
+    await waitFor(() =>
+      expect(onboarding.sendOnboardingTest).toHaveBeenCalledWith({
+        resend: true,
+        language: 'en',
+      })
+    )
+  })
+
+  it('has nothing to test while the previewed language has no approved message', async () => {
+    renderPage()
+    await storeNameInput()
+    previewIn('fr')
+
+    const send = screen.getByRole('button', {
+      name: copy.page.message.testSend,
+    }) as HTMLButtonElement
+    expect(send.disabled).toBe(true)
+    expect(
+      screen.getByText(
+        messageCopy.testSendLanguageLocked.replace(
+          '{language}',
+          messageCopy.languageNames.fr
+        )
+      )
+    ).toBeTruthy()
+    fireEvent.click(send)
+    expect(onboarding.sendOnboardingTest).not.toHaveBeenCalled()
+
+    // Back on a language the store can use, the test is offered again.
+    previewIn('ar')
+    expect(send.disabled).toBe(false)
+  })
+
+  it('previews the one language a store sends, with no second language list', async () => {
+    onboarding.sendOnboardingTest.mockResolvedValue({})
+    api.saveSettings.mockImplementation(async (payload) =>
+      settingsResponseFixture({
+        state: {
+          source: standaloneSource,
+          defaultLanguage: payload.defaultLanguage,
+        },
+      })
+    )
+    const styleHint = (language: 'ar' | 'en') =>
+      messageCopy.styleForLanguage.replace(
+        '{language}',
+        messageCopy.languageNames[language]
+      )
+    renderPage()
+    await storeNameInput()
+
+    // Automatic: the preview picks a language, and the style card names it.
+    expect(
+      screen.queryByRole('combobox', {
+        name: messageCopy.previewLanguageGroup,
+      })
+    ).toBeTruthy()
+    expect(screen.getByText(styleHint('ar'))).toBeTruthy()
+
+    chooseOneLanguage()
+    fireEvent.change(oneLanguage(), { target: { value: 'en' } })
+
+    expect(
+      screen.queryByRole('combobox', {
+        name: messageCopy.previewLanguageGroup,
+      })
+    ).toBeNull()
+    expect(screen.queryByText(styleHint('en'))).toBeNull()
+    expect(preview().getAttribute('aria-label')).toContain(
+      messageCopy.languageNames.en
+    )
+
+    // Unsaved: the test would send the saved settings, so it waits.
+    const send = () =>
+      screen.getByRole('button', {
+        name: copy.page.message.testSend,
+      }) as HTMLButtonElement
+    expect(send().disabled).toBe(true)
+    expect(screen.getByText(copy.page.message.testSendSaveFirst)).toBeTruthy()
+    fireEvent.click(send())
+    expect(onboarding.sendOnboardingTest).not.toHaveBeenCalled()
+
+    fireEvent.click(screen.getByRole('button', { name: 'حفظ' }))
+    await waitFor(() => expect(send().disabled).toBe(false))
+    fireEvent.click(send())
+
+    await waitFor(() =>
+      expect(onboarding.sendOnboardingTest).toHaveBeenCalledWith({
+        resend: true,
+        language: 'en',
+      })
+    )
+  })
+
+  it('returns the preview to the saved language when a change is discarded', async () => {
+    api.fetchSettings.mockResolvedValue(
+      settingsResponseFixture({
+        state: { source: standaloneSource, defaultLanguage: 'ar' },
+      })
+    )
+    renderPage()
+    await storeNameInput()
+    expect(
+      screen.queryByRole('combobox', {
+        name: messageCopy.previewLanguageGroup,
+      })
+    ).toBeNull()
+    expect(preview().getAttribute('aria-label')).toContain(
+      messageCopy.languageNames.ar
+    )
+
+    fireEvent.change(oneLanguage(), { target: { value: 'en' } })
+    expect(preview().getAttribute('aria-label')).toContain(
+      messageCopy.languageNames.en
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'تجاهل' }))
+
+    await waitFor(() =>
+      expect(preview().getAttribute('aria-label')).toContain(
+        messageCopy.languageNames.ar
+      )
+    )
   })
 
   it('says so when a language has no messages at all', async () => {
@@ -873,7 +1063,6 @@ describe('SettingsStandalonePage message languages', () => {
       fireEvent.click(card)
       expect(card.getAttribute('aria-checked')).toBe('false')
     }
-    expect(always(pageCopy.languageUrdu).hasAttribute('disabled')).toBe(true)
     expect(preview().querySelector('[lang]')?.getAttribute('dir')).toBe('rtl')
     expect(saveBar()).toBeNull()
   })
@@ -883,12 +1072,20 @@ describe('SettingsStandalonePage message languages', () => {
     renderPage()
     await storeNameInput()
 
-    const urdu = always(pageCopy.languageUrdu)
-    expect(urdu.hasAttribute('disabled')).toBe(false)
-    fireEvent.click(urdu)
-    expect(urdu.getAttribute('aria-checked')).toBe('true')
+    chooseOneLanguage()
+    expect(languageOption('ur').disabled).toBe(false)
+    fireEvent.change(oneLanguage(), { target: { value: 'ur' } })
+    expect(oneLanguage().value).toBe('ur')
     // The preview and the style card follow the chosen language.
-    expect(previewLanguage().value).toBe('ur')
+    // One language: the preview follows it, with no list of its own.
+    expect(
+      screen.queryByRole('combobox', {
+        name: messageCopy.previewLanguageGroup,
+      })
+    ).toBeNull()
+    expect(preview().getAttribute('aria-label')).toContain(
+      messageCopy.languageNames.ur
+    )
 
     const short = always(shortStyle)
     expect(short.hasAttribute('disabled')).toBe(false)

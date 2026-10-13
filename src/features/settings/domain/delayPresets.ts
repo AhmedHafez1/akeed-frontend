@@ -43,6 +43,49 @@ export function parseCustomDelayMinutes(input: string): number | null {
   return minutes <= SEND_DELAY_MAX_MINUTES ? minutes : null
 }
 
+/** The send times the embedded Timing tab offers, with no custom field. */
+export const EMBEDDED_SEND_DELAY_MINUTES = [0, 15, 60, 120, 240] as const
+
+export interface SendDelayOption {
+  minutes: number
+  /** A saved value that matches no choice, shown so it is not lost. */
+  isExtra: boolean
+}
+
+/**
+ * The segments of the embedded send-time group. A stored delay that is not
+ * one of the choices gets its own segment instead of being silently rounded.
+ */
+export function sendDelayOptions(
+  currentMinutes: number | null
+): SendDelayOption[] {
+  const options: SendDelayOption[] = EMBEDDED_SEND_DELAY_MINUTES.map(
+    (minutes) => ({ minutes, isExtra: false })
+  )
+  if (
+    currentMinutes !== null &&
+    !options.some((option) => option.minutes === currentMinutes)
+  ) {
+    options.push({ minutes: currentMinutes, isExtra: true })
+    options.sort((a, b) => a.minutes - b.minutes)
+  }
+  return options
+}
+
+/**
+ * The form fields a send time of `minutes` means: its preset when it has one,
+ * otherwise the custom choice holding the minutes.
+ */
+export function sendDelayFieldsFor(minutes: number): {
+  sendDelayChoice: SendDelayChoice
+  sendDelayCustom: string
+} {
+  return {
+    sendDelayChoice: sendDelayChoiceFor(minutes),
+    sendDelayCustom: String(minutes),
+  }
+}
+
 export interface HourPresetOption {
   minutes: number
   hours: number

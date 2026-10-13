@@ -19,7 +19,8 @@ interface SegmentedButtonsProps<TValue extends string | number> {
 /**
  * Polaris segmented `ButtonGroup` with `pressed` state. Each button reports
  * its pressed state to assistive tech through `aria-pressed`, and the group
- * is named with `role="group"`.
+ * is named with `role="group"`. The pressed segment is a primary button, so
+ * the choice reads as a filled segment and not as a faint grey one.
  */
 export function SegmentedButtons<TValue extends string | number>({
   label,
@@ -34,6 +35,7 @@ export function SegmentedButtons<TValue extends string | number>({
         {options.map((option) => (
           <Button
             key={String(option.value)}
+            variant={option.value === value ? 'primary' : undefined}
             pressed={option.value === value}
             disabled={disabled}
             onClick={() => onChange(option.value)}

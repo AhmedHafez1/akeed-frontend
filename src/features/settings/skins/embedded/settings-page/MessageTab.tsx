@@ -5,8 +5,10 @@ import {
   BlockStack,
   Card,
   ChoiceList,
+  Divider,
+  InlineGrid,
   InlineStack,
-  Layout,
+  Select,
   Text,
   TextField,
 } from '@shopify/polaris'
@@ -16,7 +18,7 @@ import type { SettingsResponse } from '@/features/settings/api/settingsApi'
 import {
   PREVIEW_CUSTOMER_NAMES,
   PREVIEW_ORDER_NUMBER,
-  PREVIEW_TOTAL_AMOUNT,
+  previewTotal,
   templateOpeningLine,
 } from '@/features/settings/domain/messagePreview'
 import {
@@ -25,18 +27,19 @@ import {
 } from '@/features/settings/domain/settingsForm'
 import { templateStyleLabel } from '@/features/settings/domain/templateStyleLabel'
 import {
-  ALWAYS_LANGUAGE_KEYS,
   STYLE_LOCK_KEYS,
   useMessageStyles,
 } from '@/features/settings/domain/useMessageStyles'
 import type { EmbeddedSettingsModel } from '@/features/settings/domain/useEmbeddedSettings'
 import { useTestPhonePrompt } from '@/features/settings/domain/useTestPhonePrompt'
-import { formatPlanPrice } from '@/shared/lib/money'
 import { MessagePreviewCard } from './MessagePreviewCard'
 
 /** Choice values that are not a template style. */
 const AUTO_STYLE = 'auto'
 const SAME_AS_FIRST = '__same_as_first__'
+/** The language choices: by the customer's number, or one for everyone. */
+const AUTO_LANGUAGE = 'auto'
+const FIXED_LANGUAGE = '__fixed_language__'
 
 interface MessageTabProps {
   model: EmbeddedSettingsModel
@@ -51,7 +54,8 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
   const phonePrompt = useTestPhonePrompt({
     savedPhone: data.state.merchantWhatsappPhone ?? null,
     shopPhone: data.state.shopPhone ?? null,
-    sendTest: model.sendTest,
+    // The test is the message on the phone: it goes out in that language.
+    sendTest: () => model.sendTest(styles?.previewLanguage),
     saveTestPhone: model.saveTestPhone,
   })
   if (!values || !styles) return null
@@ -72,8 +76,22 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
     customer: PREVIEW_CUSTOMER_NAMES[previewLanguage],
     store: storeName,
     order: PREVIEW_ORDER_NUMBER,
-    total: formatPlanPrice(PREVIEW_TOTAL_AMOUNT, data.state.shippingCurrency),
+    total: previewTotal(data.state.shippingCurrency, previewLanguage),
   }
+  const styleIds = variants.map((variant) => variant.variant)
+  const shownStyle = isAuto ? AUTO_STYLE : (selectedVariant ?? styleIds[0])
+  const previewingLabel = shownStyle
+    ? t('previewingLabel', {
+        language: previewLanguageName,
+        style: templateStyleLabel(t, shownStyle, previewLanguage, styleIds),
+      })
+    : t('previewingLanguage', { language: previewLanguageName })
+  const reminderIds = reminderVariants?.map((variant) => variant.variant)
+  const isAutoLanguage = values.defaultLanguage === AUTO_LANGUAGE
+  // On automatic, the style cards edit the language being previewed.
+  const languageHint = styles.canChoosePreviewLanguage
+    ? t('styleForLanguage', { language: previewLanguageName })
+    : undefined
 
   const storeNameError =
     model.errors.storeName === 'required'
@@ -90,217 +108,241 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
   const handleReminderChange = (variant: string) =>
     styles.chooseReminder(variant === SAME_AS_FIRST ? null : variant)
 
-  return (
-    <Layout>
-      <Layout.Section>
-        <BlockStack gap="400">
-          <Card>
-            <BlockStack gap="400">
-              <Text as="h2" variant="headingMd">
-                {t('identityHeading')}
-              </Text>
-              <TextField
-                id={SETTINGS_FIELD_ID.storeName}
-                label={t('storeNameLabel')}
-                value={values.storeName}
-                onChange={(storeNameValue) =>
-                  model.update({ storeName: storeNameValue })
-                }
-                autoComplete="organization"
-                maxLength={STORE_NAME_MAX_LENGTH}
-                requiredIndicator
-                disabled={readOnly}
-                error={storeNameError}
-                helpText={t('storeNameHelp', { name: storeName })}
-              />
-            </BlockStack>
-          </Card>
+  const handleLanguageModeChange = (mode: string) => {
+    if (mode === AUTO_LANGUAGE) styles.chooseLanguage(AUTO_LANGUAGE)
+    else if (isAutoLanguage) styles.chooseFixedLanguage()
+  }
 
-          <Card>
-            <BlockStack gap="400">
+  return (
+    <InlineGrid columns={{ xs: 1, md: ['twoThirds', 'oneThird'] }} gap="400">
+      <BlockStack gap="400">
+        <Card>
+          <BlockStack gap="300">
+            <Text as="h2" variant="headingMd">
+              {t('identityHeading')}
+            </Text>
+            <TextField
+              id={SETTINGS_FIELD_ID.storeName}
+              label={t('storeNameLabel')}
+              value={values.storeName}
+              onChange={(storeNameValue) =>
+                model.update({ storeName: storeNameValue })
+              }
+              autoComplete="organization"
+              maxLength={STORE_NAME_MAX_LENGTH}
+              requiredIndicator
+              disabled={readOnly}
+              error={storeNameError}
+              helpText={t('storeNameHelp', { name: storeName })}
+            />
+            <Divider />
+            <ChoiceList
+              title={t('languageHeading')}
+              disabled={readOnly}
+              selected={[isAutoLanguage ? AUTO_LANGUAGE : FIXED_LANGUAGE]}
+              onChange={([mode]) => handleLanguageModeChange(mode)}
+              choices={[
+                {
+                  value: AUTO_LANGUAGE,
+                  label: (
+                    <InlineStack gap="200" blockAlign="center">
+                      <Text as="span">{t('languageAuto')}</Text>
+                      <Badge tone="success">{t('recommended')}</Badge>
+                    </InlineStack>
+                  ),
+                  helpText: t('languageAutoHelp'),
+                },
+                {
+                  value: FIXED_LANGUAGE,
+                  label: t('languageFixed'),
+                  helpText: t('languageFixedHelp'),
+                  renderChildren: (isSelected) =>
+                    isSelected && (
+                      <Select
+                        label={t('languageFixedLabel')}
+                        labelHidden
+                        disabled={readOnly}
+                        value={values.defaultLanguage}
+                        onChange={(language) =>
+                          styles.chooseLanguage(
+                            language as IntegrationOnboardingLanguage
+                          )
+                        }
+                        options={styles.languages.map(
+                          ({ language, isLive }) => {
+                            // A store already on the language keeps its choice.
+                            const locked =
+                              !isLive && values.defaultLanguage !== language
+                            const name = t(`languageNames.${language}`)
+                            return {
+                              value: language,
+                              disabled: locked,
+                              label: locked
+                                ? t('languageOptionLocked', {
+                                    language: name,
+                                    status: t('notEnabledYet'),
+                                  })
+                                : name,
+                            }
+                          }
+                        )}
+                      />
+                    ),
+                },
+              ]}
+            />
+          </BlockStack>
+        </Card>
+
+        <Card>
+          <BlockStack gap="300">
+            <BlockStack gap="100">
               <Text as="h2" variant="headingMd">
-                {t('languageHeading')}
+                {t('styleHeading')}
               </Text>
+              {languageHint && (
+                <Text as="p" variant="bodySm" tone="subdued">
+                  {languageHint}
+                </Text>
+              )}
+            </BlockStack>
+            {!styles.isLive && (
+              <Text as="p" tone="subdued">
+                {t(variants.length > 0 ? 'languageLockedNote' : 'stylesEmpty', {
+                  language: previewLanguageName,
+                })}
+              </Text>
+            )}
+            {(variants.length > 0 || offersAuto) && (
               <ChoiceList
-                title={t('languageHeading')}
+                title={t('styleHeading')}
                 titleHidden
                 disabled={readOnly}
-                selected={[values.defaultLanguage]}
-                onChange={([language]) =>
-                  styles.chooseLanguage(
-                    language as IntegrationOnboardingLanguage
-                  )
+                selected={
+                  isAuto
+                    ? [AUTO_STYLE]
+                    : selectedVariant
+                      ? [selectedVariant]
+                      : []
                 }
+                onChange={([variant]) => handleVariantChange(variant)}
                 choices={[
-                  {
-                    value: 'auto',
-                    label: (
-                      <InlineStack gap="200" blockAlign="center">
-                        <Text as="span">{t('languageAuto')}</Text>
-                        <Badge tone="success">{t('recommended')}</Badge>
-                      </InlineStack>
-                    ),
-                    helpText: t('languageAutoHelp'),
-                  },
-                  ...styles.languages.map(({ language, isLive }) => {
-                    // A store already on the language keeps its choice.
-                    const locked =
-                      !isLive && values.defaultLanguage !== language
+                  ...(offersAuto
+                    ? [
+                        {
+                          value: AUTO_STYLE,
+                          label: templateStyleLabel(t, AUTO_STYLE),
+                        },
+                      ]
+                    : []),
+                  ...variants.map((variant) => {
+                    const lock = variant.availability
+                    const label = templateStyleLabel(
+                      t,
+                      variant.variant,
+                      previewLanguage,
+                      styleIds
+                    )
+                    if (!lock) return { value: variant.variant, label }
                     return {
-                      value: language,
-                      disabled: locked,
-                      label: locked ? (
+                      value: variant.variant,
+                      disabled: true,
+                      label: (
                         <InlineStack gap="200" blockAlign="center">
-                          <Text as="span">
-                            {t(ALWAYS_LANGUAGE_KEYS[language])}
-                          </Text>
-                          <Badge>{t('notEnabledYet')}</Badge>
+                          <Text as="span">{label}</Text>
+                          <Badge>{t(STYLE_LOCK_KEYS[lock])}</Badge>
                         </InlineStack>
-                      ) : (
-                        t(ALWAYS_LANGUAGE_KEYS[language])
+                      ),
+                      // A locked style cannot be picked to preview it, so
+                      // its opening line is shown under it.
+                      helpText: (
+                        <span
+                          dir={variant.message.direction}
+                          lang={previewLanguage}
+                        >
+                          {templateOpeningLine(variant.message, sample)}
+                        </span>
                       ),
                     }
                   }),
                 ]}
               />
-            </BlockStack>
-          </Card>
+            )}
+          </BlockStack>
+        </Card>
 
+        {reminderVariants && (
           <Card>
-            <BlockStack gap="400">
+            <BlockStack gap="300">
               <BlockStack gap="100">
                 <Text as="h2" variant="headingMd">
-                  {t('styleHeading')}
+                  {t('reminderHeading')}
                 </Text>
                 <Text as="p" variant="bodySm" tone="subdued">
-                  {t('styleHint', { language: previewLanguageName })}
+                  {languageHint
+                    ? `${t('reminderHint')} ${languageHint}`
+                    : t('reminderHint')}
                 </Text>
               </BlockStack>
-              {!styles.isLive && (
-                <Text as="p" tone="subdued">
-                  {t(
-                    variants.length > 0 ? 'languageLockedNote' : 'stylesEmpty',
-                    { language: previewLanguageName }
-                  )}
-                </Text>
-              )}
-              {(variants.length > 0 || offersAuto) && (
-                <ChoiceList
-                  title={t('styleHeading')}
-                  titleHidden
-                  disabled={readOnly}
-                  selected={
-                    isAuto
-                      ? [AUTO_STYLE]
-                      : selectedVariant
-                        ? [selectedVariant]
-                        : []
-                  }
-                  onChange={([variant]) => handleVariantChange(variant)}
-                  choices={[
-                    ...(offersAuto
-                      ? [
-                          {
-                            value: AUTO_STYLE,
-                            label: templateStyleLabel(t, AUTO_STYLE),
-                          },
-                        ]
-                      : []),
-                    ...variants.map((variant) => {
-                      const lock = variant.availability
-                      const label = templateStyleLabel(
-                        t,
-                        variant.variant,
-                        previewLanguage
-                      )
-                      if (!lock) return { value: variant.variant, label }
-                      return {
-                        value: variant.variant,
-                        disabled: true,
-                        label: (
-                          <InlineStack gap="200" blockAlign="center">
-                            <Text as="span">{label}</Text>
-                            <Badge>{t(STYLE_LOCK_KEYS[lock])}</Badge>
-                          </InlineStack>
-                        ),
-                        // A locked style cannot be picked to preview it, so
-                        // its opening line is shown under it.
-                        helpText: (
-                          <span
-                            dir={variant.message.direction}
-                            lang={previewLanguage}
-                          >
-                            {templateOpeningLine(variant.message, sample)}
-                          </span>
-                        ),
-                      }
-                    }),
-                  ]}
-                />
-              )}
+              <ChoiceList
+                title={t('reminderHeading')}
+                titleHidden
+                disabled={readOnly}
+                selected={[selectedReminder ?? SAME_AS_FIRST]}
+                onChange={([variant]) => handleReminderChange(variant)}
+                choices={[
+                  {
+                    value: SAME_AS_FIRST,
+                    label: t('reminderSame'),
+                  },
+                  ...reminderVariants.map((variant) => ({
+                    value: variant.variant,
+                    label: templateStyleLabel(
+                      t,
+                      variant.variant,
+                      previewLanguage,
+                      reminderIds
+                    ),
+                    helpText: (
+                      <span dir={variant.message.direction}>
+                        {templateOpeningLine(variant.message, sample)}
+                      </span>
+                    ),
+                  })),
+                ]}
+              />
             </BlockStack>
           </Card>
+        )}
+      </BlockStack>
 
-          {reminderVariants && (
-            <Card>
-              <BlockStack gap="400">
-                <BlockStack gap="100">
-                  <Text as="h2" variant="headingMd">
-                    {t('reminderHeading')}
-                  </Text>
-                  <Text as="p" variant="bodySm" tone="subdued">
-                    {t('reminderHint', { language: previewLanguageName })}
-                  </Text>
-                </BlockStack>
-                <ChoiceList
-                  title={t('reminderHeading')}
-                  titleHidden
-                  disabled={readOnly}
-                  selected={[selectedReminder ?? SAME_AS_FIRST]}
-                  onChange={([variant]) => handleReminderChange(variant)}
-                  choices={[
-                    {
-                      value: SAME_AS_FIRST,
-                      label: t('reminderSame'),
-                    },
-                    ...reminderVariants.map((variant) => ({
-                      value: variant.variant,
-                      label: templateStyleLabel(
-                        t,
-                        variant.variant,
-                        previewLanguage
-                      ),
-                      helpText: (
-                        <span dir={variant.message.direction}>
-                          {templateOpeningLine(variant.message, sample)}
-                        </span>
-                      ),
-                    })),
-                  ]}
-                />
-              </BlockStack>
-            </Card>
-          )}
-        </BlockStack>
-      </Layout.Section>
-
-      <Layout.Section variant="oneThird">
-        <MessagePreviewCard
-          language={previewLanguage}
-          languages={styles.languages.map(({ language }) => language)}
-          onLanguageChange={styles.setPreviewLanguage}
-          message={message}
-          note={isAuto ? t('autoStylePreviewNote') : undefined}
-          storeName={values.storeName}
-          currency={data.state.shippingCurrency}
-          testSendPhone={data.state.merchantWhatsappPhone ?? null}
-          testSendLanguage={data.state.testSendLanguage ?? previewLanguage}
-          canSendTest={!readOnly}
-          isDirty={model.isDirty}
-          isSendingTest={model.isSendingTest}
-          phonePrompt={phonePrompt}
-        />
-      </Layout.Section>
-    </Layout>
+      {/* Stays in view while the settings beside it scroll. */}
+      <div>
+        <div className="md:sticky md:top-4">
+          <MessagePreviewCard
+            language={previewLanguage}
+            languageChoice={
+              styles.canChoosePreviewLanguage
+                ? {
+                    languages: styles.languages.map(({ language }) => language),
+                    onChange: styles.setPreviewLanguage,
+                  }
+                : undefined
+            }
+            message={message}
+            sample={sample}
+            previewingLabel={previewingLabel}
+            note={isAuto ? t('autoStylePreviewNote') : undefined}
+            testSendPhone={data.state.merchantWhatsappPhone ?? null}
+            testSendLanguage={previewLanguage}
+            isPreviewLive={styles.isLive}
+            canSendTest={!readOnly}
+            isDirty={model.isDirty}
+            isSendingTest={model.isSendingTest}
+            phonePrompt={phonePrompt}
+          />
+        </div>
+      </div>
+    </InlineGrid>
   )
 }

@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { OnboardingApiError, sendOnboardingTest } from '@/features/onboarding'
 import { ApiError } from '@/shared/lib/http'
 import { createLogger } from '@/shared/lib/logger'
+import type { MessageLanguage } from '@/shared/lib/messageLanguage'
 import { queryKeys } from '@/shared/query/keys'
 import {
   fetchSettings,
@@ -30,11 +31,13 @@ const logger = createLogger('Settings')
 type TestSendErrorKey =
   | 'testSendCooldown'
   | 'testSendDailyLimit'
+  | 'testSendLanguageUnavailable'
   | 'testSendError'
 
 const TEST_SEND_ERROR_KEYS: Partial<Record<string, TestSendErrorKey>> = {
   ONBOARDING_TEST_COOLDOWN: 'testSendCooldown',
   ONBOARDING_TEST_DAILY_LIMIT: 'testSendDailyLimit',
+  ONBOARDING_TEST_LANGUAGE_UNAVAILABLE: 'testSendLanguageUnavailable',
 }
 
 export type SaveOutcome =
@@ -216,24 +219,31 @@ export function useSettingsModel({
     setSaveError(null)
   }, [isSaving, saved])
 
-  const sendTest = useCallback(async (): Promise<TestSendOutcome> => {
-    setIsSendingTest(true)
-    try {
-      await sendOnboardingTest({ resend: true })
-      adapter.notifySuccess(messages.testSendSuccess)
-      return 'sent'
-    } catch (error) {
-      const code = error instanceof OnboardingApiError ? error.code : null
-      if (code === 'ONBOARDING_TEST_PHONE_MISSING') return 'phoneMissing'
-      logger.error('Failed to send test message', error)
-      const key =
-        (code ? TEST_SEND_ERROR_KEYS[code] : undefined) ?? 'testSendError'
-      adapter.notifyError(messages[key], 'testSend')
-      return 'failed'
-    } finally {
-      setIsSendingTest(false)
-    }
-  }, [adapter, messages])
+  /**
+   * Sends the free test. Given a language, the test goes out in it: the
+   * Message tab passes the one its preview shows.
+   */
+  const sendTest = useCallback(
+    async (language?: MessageLanguage): Promise<TestSendOutcome> => {
+      setIsSendingTest(true)
+      try {
+        await sendOnboardingTest({ resend: true, language })
+        adapter.notifySuccess(messages.testSendSuccess)
+        return 'sent'
+      } catch (error) {
+        const code = error instanceof OnboardingApiError ? error.code : null
+        if (code === 'ONBOARDING_TEST_PHONE_MISSING') return 'phoneMissing'
+        logger.error('Failed to send test message', error)
+        const key =
+          (code ? TEST_SEND_ERROR_KEYS[code] : undefined) ?? 'testSendError'
+        adapter.notifyError(messages[key], 'testSend')
+        return 'failed'
+      } finally {
+        setIsSendingTest(false)
+      }
+    },
+    [adapter, messages]
+  )
 
   /**
    * Saves the number the free test goes to. It is sent with the saved

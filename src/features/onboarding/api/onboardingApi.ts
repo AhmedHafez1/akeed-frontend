@@ -2,6 +2,7 @@
 
 import { fetchWithAuth } from '@/shared/lib/auth'
 import { getErrorMessage, parseJsonResponse } from '@/shared/lib/http'
+import type { MessageLanguage } from '@/shared/lib/messageLanguage'
 import type { TemplateMessage } from '@/shared/lib/templateMessage'
 import type {
   CompleteOnboardingSetupPayload,
@@ -178,10 +179,15 @@ export async function fetchOnboardingTest(): Promise<OnboardingTestState> {
 
 export async function sendOnboardingTest(options: {
   resend: boolean
+  /** The language to test; without it, the one the number resolves to. */
+  language?: MessageLanguage
 }): Promise<OnboardingTestState> {
   const response = await fetchWithAuth('/api/onboarding/test', {
     method: 'POST',
-    body: JSON.stringify({ resend: options.resend }),
+    body: JSON.stringify({
+      resend: options.resend,
+      ...(options.language ? { language: options.language } : {}),
+    }),
   })
 
   if (!response.ok) {
