@@ -15,6 +15,7 @@ export type RowStatusKind =
   | 'canceled'
   | 'failed'
   | 'scheduled'
+  | 'noWhatsApp'
 
 /**
  * What the status column shows for a row: one badge and an optional sub-line.
@@ -65,7 +66,9 @@ export function resolveRowStatus(
             ? 'sub.canceledInStore'
             : row.cancellation_source === 'merchant_no_reply'
               ? 'sub.canceledNoReply'
-              : 'sub.canceledByCustomer',
+              : row.cancellation_source === 'merchant_no_whatsapp'
+                ? 'sub.canceledNoWhatsApp'
+                : 'sub.canceledByCustomer',
       }
     case 'failed':
       return {
@@ -76,6 +79,14 @@ export function resolveRowStatus(
           row.reason === 'provider_delivery_failed'
             ? `failure.${deliveryFailureKey(row.failure_code)}`
             : 'failure.notSent',
+      }
+    case 'no_whatsapp':
+      // The customer number cannot receive WhatsApp: the merchant calls.
+      return {
+        badge: 'noWhatsApp',
+        tone: 'warning',
+        kind: 'noWhatsApp',
+        sub: 'sub.callCustomer',
       }
     case 'queued':
     case 'sending':

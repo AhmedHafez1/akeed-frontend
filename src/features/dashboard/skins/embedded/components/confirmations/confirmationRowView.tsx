@@ -40,7 +40,7 @@ export interface ConfirmationsListProps {
  */
 export const BADGE_TONES: Record<
   RowStatusKind,
-  'info' | 'warning' | 'success' | 'critical' | undefined
+  'info' | 'warning' | 'attention' | 'success' | 'critical' | undefined
 > = {
   pending: 'info',
   needsAction: 'warning',
@@ -48,6 +48,7 @@ export const BADGE_TONES: Record<
   canceled: 'critical',
   failed: 'critical',
   scheduled: undefined,
+  noWhatsApp: 'attention',
 }
 
 /** The row's display values, derived once for the table and the cards. */

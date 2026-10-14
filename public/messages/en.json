@@ -1925,7 +1925,8 @@
         "confirmed": "Confirmed",
         "canceled": "Canceled",
         "failed": "Failed",
-        "no_reply": "No reply"
+        "no_reply": "No reply",
+        "no_whatsapp": "No WhatsApp"
       },
       "dateRange": {
         "label": "Date range",
@@ -2075,6 +2076,7 @@
           "storeUnreachable": "Akeed could not reach your store safely at its saved address. The address may have changed, it may now redirect to another one, or its security certificate may not be valid. Check your store's address and certificate, and reconnect if the address changed.",
           "hostingBlocksUpdates": "Your store's hosting blocks the request Akeed uses to update an order (PUT). Ask your hosting provider to allow PUT requests to your store, then try again. Until then, change the order's status in your store yourself.",
           "noReplyLocalOnly": "The customer did not reply. That is recorded in Akeed only: the order in your store is unchanged and was not canceled.",
+          "noWhatsAppLocalOnly": "The customer’s number isn’t on WhatsApp. That is recorded in Akeed only. The order in your store is unchanged.",
           "notSwitchedOn": "Updating orders in your store is not switched on yet. Change the order's status in your store yourself."
         },
         "retry": "Try the store update again",
@@ -2145,6 +2147,7 @@
       "expired": "Expired",
       "failed": "Failed",
       "no_reply": "No reply",
+      "no_whatsapp": "No WhatsApp",
       "awaiting_start": "Awaiting start",
       "not_started": "Not started",
       "queued": "Queued",
@@ -2160,6 +2163,7 @@
       "expired": "The verification window ended without a final response.",
       "failed": "Verification could not be completed.",
       "no_reply": "The customer did not reply within the configured time.",
+      "no_whatsapp": "This number isn’t on WhatsApp, so the confirmation can’t reach the customer. Call them to confirm the order.",
       "awaiting_start": "Imported and held. No message is sent until you start confirmation.",
       "not_started": "The import was not started, so no message was sent.",
       "queued": "Sending has started and this order is in line. Its message goes out within minutes.",
@@ -2302,7 +2306,8 @@
           "no_reply": "No reply since {date}",
           "read_no_reply": "Read, no reply · {hours, plural, one {# hour} other {# hours}} ago",
           "delivery_failed": "Not delivered: {reason}",
-          "send_failed": "Message not sent"
+          "send_failed": "Message not sent",
+          "no_whatsapp": "Not on WhatsApp · Call the customer"
         },
         "actions": {
           "whatsapp": "WhatsApp them",
@@ -2359,6 +2364,7 @@
       "tabs": {
         "all": "All",
         "needs_action": "Needs action",
+        "no_whatsapp": "No WhatsApp",
         "confirmed": "Confirmed",
         "canceled": "Canceled"
       },
@@ -2398,6 +2404,7 @@
         "sending": "Sending",
         "awaitingReply": "Awaiting reply",
         "noReply": "No reply",
+        "noWhatsApp": "No WhatsApp",
         "awaitingStart": "Awaiting start",
         "notStarted": "Not started",
         "sub": {
@@ -2406,12 +2413,16 @@
           "canceledInStore": "Canceled in Shopify",
           "canceledByCustomer": "By the customer",
           "canceledNoReply": "No reply from the customer",
+          "canceledNoWhatsApp": "Number not on WhatsApp",
           "followUpSent": "Reminder sent",
-          "sendsAt": "Sends {time}"
+          "sendsAt": "Sends {time}",
+          "callCustomer": "Call the customer"
         },
         "tooltip": {
           "scheduledFor": "Scheduled for {time}",
-          "reminderAt": "Reminder scheduled for {time}"
+          "reminderAt": "Reminder scheduled for {time}",
+          "callCustomer": "Number isn’t on WhatsApp. Call the customer to confirm.",
+          "callCustomerSince": "Not on WhatsApp since {time}. Call the customer to confirm."
         },
         "failure": {
           "notOnWhatsApp": "number isn’t on WhatsApp",
@@ -2427,6 +2438,7 @@
       "empty": {
         "all": "No confirmations in this period yet.",
         "needs_action": "Nothing needs your action. Nice work!",
+        "no_whatsapp": "Every customer in this period can receive WhatsApp messages.",
         "confirmed": "No confirmed orders in this period.",
         "canceled": "No customer canceled in this period.",
         "search": "No results for “{query}”."
@@ -2628,7 +2640,8 @@
                 "customer_cancellation": "customer cancellations",
                 "merchant_no_reply_cancellation": "cancellations you make after no reply",
                 "merchant_cancellation_tagging": "cancellation tags",
-                "automatic_no_reply_tagging": "automatic no-reply marks"
+                "automatic_no_reply_tagging": "automatic no-reply marks",
+                "automatic_no_whatsapp_tagging": "automatic no-WhatsApp marks"
               }
             },
             "webhooks": {

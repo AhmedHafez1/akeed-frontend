@@ -48,6 +48,7 @@ La confirmación de pedidos ayuda a reducir ambos.
 | Confirmado | El cliente confirmó el pedido. | Dale prioridad en la preparación. |
 | Cancelado | El cliente canceló (o el comerciante canceló por falta de respuesta). | No lo envíes. |
 | Sin respuesta | No hubo respuesta dentro del plazo de aviso que configuraste. | Revísalo pronto y aplica tu política de cancelación. |
+| Sin WhatsApp | El número del cliente no está en WhatsApp, así que el mensaje no le llega. Akeed no envía recordatorio y no cuenta el mensaje en tu uso. | Llama al cliente y después confirma o cancela el pedido manualmente. |
 | Fallido | El envío falló o fue bloqueado. | Revisa la calidad del teléfono, el uso del plan o el saldo de créditos, y la configuración. |
 
 ## Flujo de trabajo práctico para el comerciante
@@ -106,6 +107,10 @@ Pueden responder más tarde, según el momento y según si el comerciante ya cer
 ### ¿Basta con «entregado» para enviar el pedido?
 
 No. Entregado solo significa que el mensaje llegó al cliente. Usa **Confirmado** para enviar con seguridad.
+
+### ¿Qué pasa si el número del cliente no está en WhatsApp?
+
+WhatsApp avisa a Akeed de que el mensaje no se puede entregar, y el pedido pasa a **Sin WhatsApp**. Lo encontrarás en la pestaña **Sin WhatsApp** y en **Requieren acción**. Akeed cancela el recordatorio, no cuenta el mensaje en tu uso y, en Shopify, etiqueta el pedido con `Akeed: No WhatsApp`. Llama al cliente y después confirma o cancela el pedido manualmente.
 
 ### ¿Dónde se ajustan los tiempos y el recordatorio?
 

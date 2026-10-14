@@ -21,6 +21,7 @@ import { renderStandalone } from './shared/standaloneTestUtils'
 const counts: Record<ConfirmationsTab, number> = {
   all: 38,
   needs_action: 2,
+  no_whatsapp: 1,
   confirmed: 18,
   canceled: 4,
 }
@@ -48,13 +49,18 @@ describe('ConfirmationsToolbar', () => {
     renderToolbar()
     const tabs = screen.getAllByRole('tab')
     expect(screen.getByRole('tablist')).toBeTruthy()
-    expect(tabs).toHaveLength(4)
+    expect(tabs).toHaveLength(5)
     expect(tabs[0].getAttribute('aria-selected')).toBe('true')
     expect(tabs[0].getAttribute('aria-controls')).toBe('panel')
     expect(tabs[1].getAttribute('aria-selected')).toBe('false')
     expect(tabs[1].textContent).toBe('Needs action2')
     // Failed rows live under "Needs action"; there is no Failed tab.
     expect(tabs.map((tab) => tab.textContent)).not.toContain('Failed')
+    // No WhatsApp has its own tab, its count marked like Needs action.
+    expect(tabs[2].textContent).toBe('No WhatsApp1')
+    expect(tabs[2].querySelector('span')?.className).toContain(
+      'bg-ak-warning-soft'
+    )
   })
 
   it('moves with the arrow keys and focuses search on "/"', () => {

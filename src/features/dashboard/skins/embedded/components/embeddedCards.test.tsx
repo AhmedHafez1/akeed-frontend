@@ -429,6 +429,35 @@ describe('ConfirmationsTable', () => {
     )
   })
 
+  it('marks a number that is not on WhatsApp on one line, with the call hint in the tooltip', () => {
+    renderEmbedded(
+      <ConfirmationsTable
+        rows={[
+          listRow({
+            status: 'no_whatsapp',
+            confirmed_at: null,
+            action_reason: 'no_whatsapp',
+            failure_code: '131026',
+            no_whatsapp_at: '2026-09-16T07:05:00Z',
+          }),
+        ]}
+        {...tableProps}
+      />,
+      'en'
+    )
+
+    const badge = screen.getByText('No WhatsApp')
+    expect(badge.closest('[title]')?.getAttribute('title')).toBe(
+      'Not on WhatsApp since Sep 16, 2026, 7:05 AM. Call the customer to confirm.'
+    )
+    const cells = within(
+      within(screen.getByRole('table')).getAllByRole('row')[1]
+    ).getAllByRole('cell')
+    // The status cell holds the badge only: no sub-line in a table row.
+    expect(cells[4].querySelectorAll('p')).toHaveLength(0)
+    expect(screen.queryByText('Call the customer')).toBeNull()
+  })
+
   it('does not show a status tooltip when no lifecycle timestamp exists', () => {
     renderEmbedded(
       <ConfirmationsTable

@@ -129,6 +129,8 @@ export function getStatusTimestamp(
       return verification.expired_at
     case 'no_reply':
       return verification.no_reply_at
+    case 'no_whatsapp':
+      return verification.no_whatsapp_at ?? null
     default:
       return null
   }
@@ -176,6 +178,8 @@ export function getLastUpdateAt(verification: VerificationItem): string | null {
 export function resolveRowDescriptionKey(
   verification: VerificationItem
 ): string {
+  // Says what to do next: call the customer.
+  if (verification.status === 'no_whatsapp') return 'descriptions.no_whatsapp'
   const reason = verification.reason
   if (reason) {
     return EXPLAINED_LIFECYCLE_REASONS.has(reason)

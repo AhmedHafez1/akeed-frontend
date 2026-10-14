@@ -20,6 +20,7 @@ const ACTIONS = [
   'merchant_no_reply_cancellation',
   'merchant_cancellation_tagging',
   'automatic_no_reply_tagging',
+  'automatic_no_whatsapp_tagging',
 ] as const
 
 function health(overrides: Partial<SourceHealth> = {}): SourceHealth {
@@ -217,7 +218,7 @@ describe('SourceHealthCard', () => {
       'Updated in your store: customer confirmations, customer cancellations, cancellations you make after no reply.'
     )
     expect(document.body.textContent).toContain(
-      'Kept in Akeed only: cancellation tags, automatic no-reply marks.'
+      'Kept in Akeed only: cancellation tags, automatic no-reply marks, automatic no-WhatsApp marks.'
     )
   })
 

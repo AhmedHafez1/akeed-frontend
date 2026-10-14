@@ -103,7 +103,7 @@ function ConfirmationTabs({
               <span
                 className={cn(
                   'text-ak-label inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 tabular-nums',
-                  id === 'needs_action'
+                  id === 'needs_action' || id === 'no_whatsapp'
                     ? 'bg-ak-warning-soft text-ak-warning'
                     : selected
                       ? 'bg-inverse-foreground/15 text-inverse-foreground'

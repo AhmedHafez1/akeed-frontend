@@ -68,7 +68,9 @@ export function remoteSyncView(
         guidanceKey:
           sync.action === 'automatic_no_reply_tagging'
             ? 'guidance.noReplyLocalOnly'
-            : 'guidance.notSwitchedOn',
+            : sync.action === 'automatic_no_whatsapp_tagging'
+              ? 'guidance.noWhatsAppLocalOnly'
+              : 'guidance.notSwitchedOn',
       }
     case 'failed':
       return {

@@ -21,6 +21,7 @@ export const VERIFICATION_STATUS_FILTER_IDS = [
   'canceled',
   'failed',
   'no_reply',
+  'no_whatsapp',
 ] as const satisfies ReadonlyArray<VerificationStatusFilter>
 
 export const DASHBOARD_DATE_RANGE_IDS = [
@@ -51,7 +52,7 @@ export const OUTCOME_STAGES: Readonly<
   confirmed: [],
   canceled: [],
   in_progress: ['pending', 'sent', 'delivered', 'read'],
-  needs_attention: ['failed', 'expired', 'no_reply'],
+  needs_attention: ['failed', 'expired', 'no_reply', 'no_whatsapp'],
 }
 
 /**

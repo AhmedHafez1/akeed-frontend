@@ -64,6 +64,22 @@ describe('remoteSyncView', () => {
     })
   })
 
+  it('explains that a number not on WhatsApp stays local', () => {
+    expect(
+      remoteSyncView({
+        remote_sync: sync({
+          state: 'unsupported',
+          action: 'automatic_no_whatsapp_tagging',
+          error_code: 'capability_not_supported',
+        }),
+      })
+    ).toMatchObject({
+      labelKey: 'state.unsupported',
+      guidanceKey: 'guidance.noWhatsAppLocalOnly',
+      canRetry: false,
+    })
+  })
+
   it('explains an update that is not switched on', () => {
     const view = remoteSyncView({
       remote_sync: sync({

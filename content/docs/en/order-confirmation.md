@@ -48,6 +48,7 @@ Order confirmation helps reduce both.
 | Confirmed | Customer confirmed the order. | Prioritize for fulfillment. |
 | Canceled | Customer canceled (or merchant canceled after no reply). | Do not ship. |
 | No reply | No response within your configured escalation window. | Review quickly and follow your cancellation policy. |
+| No WhatsApp | The customer’s number isn’t on WhatsApp, so the message can’t reach them. Akeed sends no reminder and counts no usage for it. | Call the customer, then confirm or cancel the order by hand. |
 | Failed | Send failed or was blocked. | Check phone quality, plan usage or credit balance, and settings. |
 
 ## Practical Merchant Workflow
@@ -106,6 +107,10 @@ They may reply later, depending on timing and whether the order has already been
 ### Is “delivered” enough to ship?
 
 No. Delivered only means the message reached the customer. Use **Confirmed** for shipping confidence.
+
+### What if the customer’s number isn’t on WhatsApp?
+
+WhatsApp tells Akeed the message can’t be delivered, and the order moves to **No WhatsApp**. You find it under the **No WhatsApp** tab and in **Needs action**. Akeed cancels the reminder, does not count the message in your usage, and on Shopify tags the order `Akeed: No WhatsApp`. Call the customer, then confirm or cancel the order by hand.
 
 ### Where do I tune timing and follow-up?
 

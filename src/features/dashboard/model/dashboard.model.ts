@@ -20,6 +20,7 @@ export type VerificationStatus =
   | 'expired'
   | 'failed'
   | 'no_reply'
+  | 'no_whatsapp'
 
 /**
  * An imported order that has no verification yet: `awaiting_start` until
@@ -111,6 +112,8 @@ export type VerificationItem = {
   canceled_at: string | null
   expired_at: string | null
   no_reply_at: string | null
+  /** When WhatsApp reported the customer number undeliverable. */
+  no_whatsapp_at?: string | null
   follow_up_attempts: number
   follow_up_sent_at: string | null
   /** Set while a pending row waits for quiet hours or a send delay. */
@@ -233,6 +236,7 @@ export type CustomerHistory = {
 
 /** Why the server says a row needs the merchant. */
 export type NeedsActionReason =
+  | 'no_whatsapp'
   | 'delivery_failed'
   | 'send_failed'
   | 'no_reply_after_follow_up'
@@ -240,7 +244,12 @@ export type NeedsActionReason =
   | 'no_reply'
 
 /** Tabs of the embedded confirmations list, each a server-side filter. */
-export type ConfirmationsTab = 'all' | 'needs_action' | 'confirmed' | 'canceled'
+export type ConfirmationsTab =
+  | 'all'
+  | 'needs_action'
+  | 'no_whatsapp'
+  | 'confirmed'
+  | 'canceled'
 
 export type FunnelStep = {
   count: number

@@ -16,6 +16,7 @@ export const SOURCE_OUTCOME_ACTIONS = [
   'merchant_no_reply_cancellation',
   'merchant_cancellation_tagging',
   'automatic_no_reply_tagging',
+  'automatic_no_whatsapp_tagging',
 ] as const
 
 export type SourceOutcomeAction = (typeof SOURCE_OUTCOME_ACTIONS)[number]
