@@ -2413,6 +2413,7 @@
           "canceledInStore": "Canceled in Shopify",
           "canceledByCustomer": "By the customer",
           "canceledNoReply": "No reply from the customer",
+          "canceledNoWhatsApp": "Number not on WhatsApp",
           "followUpSent": "Reminder sent",
           "sendsAt": "Sends {time}",
           "callCustomer": "Call the customer"

@@ -2407,6 +2407,7 @@
           "canceledInStore": "أُلغي في شوبيفاي",
           "canceledByCustomer": "ألغاه العميل",
           "canceledNoReply": "لم يرد العميل",
+          "canceledNoWhatsApp": "الرقم غير مسجل على واتساب",
           "followUpSent": "أُرسل التذكير",
           "sendsAt": "يُرسل {time}",
           "callCustomer": "اتصل بالعميل"

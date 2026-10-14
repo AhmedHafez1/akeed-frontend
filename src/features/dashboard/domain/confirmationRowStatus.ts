@@ -66,7 +66,9 @@ export function resolveRowStatus(
             ? 'sub.canceledInStore'
             : row.cancellation_source === 'merchant_no_reply'
               ? 'sub.canceledNoReply'
-              : 'sub.canceledByCustomer',
+              : row.cancellation_source === 'merchant_no_whatsapp'
+                ? 'sub.canceledNoWhatsApp'
+                : 'sub.canceledByCustomer',
       }
     case 'failed':
       return {

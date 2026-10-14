@@ -1331,6 +1331,7 @@
           "canceledInStore": "Shopify میں منسوخ ہوا",
           "canceledByCustomer": "کسٹمر کی طرف سے",
           "canceledNoReply": "کسٹمر کا جواب نہیں آیا",
+          "canceledNoWhatsApp": "نمبر واٹس ایپ پر موجود نہیں",
           "followUpSent": "یاد دہانی بھیج دی گئی",
           "sendsAt": "{time} بھیجا جائے گا",
           "callCustomer": "کسٹمر کو کال کریں"

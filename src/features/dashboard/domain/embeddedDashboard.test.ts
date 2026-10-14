@@ -81,6 +81,15 @@ describe('resolveRowStatus', () => {
         })
       ).sub
     ).toBe('sub.canceledNoReply')
+    // Canceled after a call: the number was not on WhatsApp.
+    expect(
+      resolveRowStatus(
+        row({
+          status: 'canceled',
+          cancellation_source: 'merchant_no_whatsapp',
+        })
+      ).sub
+    ).toBe('sub.canceledNoWhatsApp')
     expect(
       resolveRowStatus(
         row({

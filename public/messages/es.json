@@ -1331,6 +1331,7 @@
           "canceledInStore": "Cancelado en Shopify",
           "canceledByCustomer": "Por el cliente",
           "canceledNoReply": "Sin respuesta del cliente",
+          "canceledNoWhatsApp": "Número sin WhatsApp",
           "followUpSent": "Recordatorio enviado",
           "sendsAt": "Se envía {time}",
           "callCustomer": "Llama al cliente"
