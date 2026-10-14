@@ -32,8 +32,13 @@ describe('resolveConfirmationsTab', () => {
     expect(CONFIRMATIONS_TABS).toEqual([
       'all',
       'needs_action',
+      'no_whatsapp',
       'confirmed',
       'canceled',
     ])
+  })
+
+  it('keeps a No WhatsApp link on its own tab', () => {
+    expect(resolveConfirmationsTab('no_whatsapp')).toBe('no_whatsapp')
   })
 })

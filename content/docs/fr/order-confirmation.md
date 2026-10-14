@@ -48,6 +48,7 @@ La confirmation des commandes aide à réduire les deux.
 | Confirmée | Le client a confirmé la commande. | Traitez-la en priorité. |
 | Annulée | Le client a annulé (ou le marchand a annulé faute de réponse). | N’expédiez pas. |
 | Sans réponse | Pas de réponse dans le délai d’escalade configuré. | Examinez-la rapidement et appliquez votre politique d’annulation. |
+| Sans WhatsApp | Le numéro du client n’est pas sur WhatsApp, le message ne peut donc pas lui parvenir. Akeed n’envoie pas de rappel et ne compte pas ce message dans votre consommation. | Appelez le client, puis confirmez ou annulez la commande manuellement. |
 | Échec | L’envoi a échoué ou a été bloqué. | Vérifiez la qualité du numéro, l’utilisation du forfait ou le solde de crédits, et les paramètres. |
 
 ## Routine pratique pour le marchand
@@ -106,6 +107,10 @@ Ils peuvent répondre plus tard, selon le moment et selon que la commande a déj
 ### Le statut « Remis » suffit-il pour expédier ?
 
 Non. « Remis » signifie seulement que le message est parvenu au client. Fiez-vous à **Confirmée** pour expédier en confiance.
+
+### Que se passe-t-il si le numéro du client n’est pas sur WhatsApp ?
+
+WhatsApp indique à Akeed que le message ne peut pas être remis, et la commande passe au statut **Sans WhatsApp**. Vous la retrouvez dans l’onglet **Sans WhatsApp** et dans **À traiter**. Akeed annule le rappel, ne compte pas ce message dans votre consommation et, sur Shopify, ajoute l’étiquette `Akeed: No WhatsApp` à la commande. Appelez le client, puis confirmez ou annulez la commande manuellement.
 
 ### Où régler les délais et la relance ?
 

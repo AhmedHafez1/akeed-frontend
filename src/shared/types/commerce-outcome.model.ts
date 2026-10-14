@@ -4,6 +4,7 @@ export type CommerceOutcomeAction =
   | 'merchant_no_reply_cancellation'
   | 'merchant_cancellation_tagging'
   | 'automatic_no_reply_tagging'
+  | 'automatic_no_whatsapp_tagging'
 
 export type CommerceOutcomeCapability = {
   action: CommerceOutcomeAction

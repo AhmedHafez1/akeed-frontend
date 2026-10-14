@@ -13,6 +13,7 @@ import type {
 export const CONFIRMATIONS_TABS: ConfirmationsTab[] = [
   'all',
   'needs_action',
+  'no_whatsapp',
   'confirmed',
   'canceled',
 ]

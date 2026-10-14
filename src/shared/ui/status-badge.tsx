@@ -4,6 +4,7 @@ import {
   AlertTriangle,
   Check,
   Clock,
+  PhoneOff,
   Send,
   X,
   type LucideIcon,
@@ -18,6 +19,7 @@ export type StatusBadgeKind =
   | 'canceled'
   | 'failed'
   | 'scheduled'
+  | 'noWhatsApp'
 
 const STYLES: Record<StatusBadgeKind, { className: string; Icon: LucideIcon }> =
   {
@@ -33,6 +35,11 @@ const STYLES: Record<StatusBadgeKind, { className: string; Icon: LucideIcon }> =
       Icon: AlertTriangle,
     },
     scheduled: { className: 'bg-neutral-soft text-ink-muted', Icon: Clock },
+    // Amber like "needs action", with its own icon: the merchant calls.
+    noWhatsApp: {
+      className: 'bg-ak-warning-soft text-ak-warning',
+      Icon: PhoneOff,
+    },
   }
 
 /**

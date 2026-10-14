@@ -22,6 +22,11 @@ export function useStatusTooltip(
     formatTooltipDateTime(value ?? null, locale, timeZone)
 
   const { badge, kind } = resolveRowStatus(row)
+  // The table row has room for the badge only, so the advice rides here.
+  if (kind === 'noWhatsApp') {
+    const since = format(getStatusTimestamp(row))
+    return since ? t('callCustomerSince', { time: since }) : t('callCustomer')
+  }
   if (kind === 'scheduled' && row.scheduled_for) {
     return t('scheduledFor', { time: format(row.scheduled_for) })
   }

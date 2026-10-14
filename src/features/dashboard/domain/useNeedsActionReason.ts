@@ -18,6 +18,9 @@ export function useNeedsActionReason(
   const tFailure = useTranslations('dashboard.confirmations.status.failure')
   const { locale } = useLocaleInfo()
 
+  if (reason.type === 'no_whatsapp') {
+    return { text: t('no_whatsapp'), isCritical: true }
+  }
   if (reason.type === 'delivery_failed') {
     return {
       text: t('delivery_failed', {

@@ -32,8 +32,12 @@ export function planConfirmationRowActions(
     }
   }
 
+  // No chat where the message never arrived: a failed delivery, or a
+  // number that is not on WhatsApp at all.
   const primary =
-    row.action_reason && row.action_reason !== 'delivery_failed'
+    row.action_reason &&
+    row.action_reason !== 'delivery_failed' &&
+    row.action_reason !== 'no_whatsapp'
       ? 'chat'
       : canSendShippingInfo(row)
         ? 'shipping'

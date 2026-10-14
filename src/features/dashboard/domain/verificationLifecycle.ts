@@ -42,6 +42,8 @@ const LIFECYCLE_TONES: Record<LifecycleStatus, LifecycleTone> = {
   failed: 'critical',
   expired: 'warning',
   no_reply: 'attention',
+  // Not on WhatsApp: the merchant has to call the customer.
+  no_whatsapp: 'attention',
 }
 
 export function lifecycleTone(status: LifecycleStatus): LifecycleTone {
