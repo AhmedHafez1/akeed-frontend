@@ -1038,6 +1038,7 @@
         "retrySuccess": "Nouvelle tentative de vérification acceptée. Le cycle de vie de la commande a été actualisé.",
         "retryError": "La vérification n’a pas pu être relancée. Vérifiez l’état de la commande et réessayez.",
         "cancelOrderSuccess": "Commande marquée comme annulée dans Akeed. Aucun système de commandes externe n’a été modifié.",
+        "cancelOrderSuccessShopify": "Commande {order} annulée. Akeed l’annule aussi dans Shopify et remet ses articles en stock.",
         "dismiss": "Fermer"
       },
       "lifecycle": {

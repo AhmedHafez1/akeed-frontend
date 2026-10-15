@@ -1038,6 +1038,7 @@
         "retrySuccess": "Reintento de verificación aceptado. El ciclo del pedido se actualizó.",
         "retryError": "No se pudo reintentar la verificación. Revisa el estado del pedido e inténtalo de nuevo.",
         "cancelOrderSuccess": "Pedido marcado como cancelado en Akeed. No se modificó ningún sistema de pedidos externo.",
+        "cancelOrderSuccessShopify": "Pedido {order} cancelado. Akeed también lo está cancelando en Shopify y devolviendo sus artículos al inventario.",
         "dismiss": "Descartar"
       },
       "lifecycle": {
