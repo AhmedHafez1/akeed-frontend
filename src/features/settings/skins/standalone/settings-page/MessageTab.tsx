@@ -20,6 +20,7 @@ import {
   STYLE_LOCK_KEYS,
   useMessageStyles,
 } from '@/features/settings/domain/useMessageStyles'
+import { useMerchantLogo } from '@/features/settings/domain/useMerchantLogo'
 import type { StandaloneSettingsModel } from '@/features/settings/domain/useStandaloneSettings'
 import { useTestPhonePrompt } from '@/features/settings/domain/useTestPhonePrompt'
 import { cn } from '@/shared/lib/utils'
@@ -30,6 +31,7 @@ import {
   akCard,
   akPill,
 } from '@/shared/ui'
+import { LogoCard } from './LogoCard'
 import { MessagePreviewPanel } from './MessagePreviewPanel'
 import { TestPhoneDialog } from './TestPhoneDialog'
 
@@ -79,6 +81,8 @@ function SettingsCard({
 export function MessageTab({ model, data, readOnly }: MessageTabProps) {
   const t = useTranslations('settings.standalone.page.message')
   const tShared = useTranslations('settings.embedded.message')
+  const tLogo = useTranslations('settings.logo')
+  const logo = useMerchantLogo(data.branding)
   const identityId = useId()
   const languageId = useId()
   const fixedLanguageId = useId()
@@ -272,6 +276,8 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
           </div>
         </SettingsCard>
 
+        {logo.isAvailable && <LogoCard logo={logo} readOnly={readOnly} />}
+
         <SettingsCard
           headingId={styleId}
           heading={tShared('styleHeading')}
@@ -401,6 +407,11 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
         isSendingTest={model.isSendingTest}
         onSendTest={() => void phonePrompt.requestSend()}
         onChangePhone={phonePrompt.openToChange}
+        headerImage={
+          logo.isAvailable && logo.branding.bannerUrl
+            ? { src: logo.branding.bannerUrl, alt: tLogo('bannerAlt') }
+            : undefined
+        }
       />
       <TestPhoneDialog prompt={phonePrompt} />
     </div>

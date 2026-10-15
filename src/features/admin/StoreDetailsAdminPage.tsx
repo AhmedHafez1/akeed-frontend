@@ -28,6 +28,7 @@ import type {
   AdminStoreVerification,
 } from './admin.model'
 import { AdminErrorPanel } from './AdminErrorPanel'
+import { StoreLogoHeaderCard } from './StoreLogoHeaderCard'
 import {
   CreditBalanceBadge,
   formatDate,
@@ -170,6 +171,14 @@ export function StoreDetailsAdminPage({
             </div>
             <LifecycleCard milestones={store.milestones} />
           </div>
+          {response.logo_header && (
+            <StoreLogoHeaderCard
+              // A refresh brings a new switch state; start from it.
+              key={response.evaluated_at}
+              integrationId={integrationId}
+              initial={response.logo_header}
+            />
+          )}
           <VerificationsSection
             integrationId={integrationId}
             store={store}

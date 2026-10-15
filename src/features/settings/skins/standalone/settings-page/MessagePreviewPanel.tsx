@@ -37,6 +37,8 @@ interface MessagePreviewPanelProps {
   isSendingTest: boolean
   onSendTest: () => void
   onChangePhone: () => void
+  /** The store's banner, when its messages carry it. */
+  headerImage?: { src: string; alt: string }
 }
 
 /**
@@ -61,6 +63,7 @@ export function MessagePreviewPanel({
   isSendingTest,
   onSendTest,
   onChangePhone,
+  headerImage,
 }: MessagePreviewPanelProps) {
   const t = useTranslations('settings.standalone.page.message')
   const tShared = useTranslations('settings.embedded.message')
@@ -116,6 +119,7 @@ export function MessagePreviewPanel({
           sample={sample}
           label={tShared('previewAria', { language: languageName })}
           emptyLabel={tShared('previewEmpty')}
+          headerImage={headerImage}
         />
         {note && <p className="text-ak-caption text-ink-muted mt-3">{note}</p>}
       </div>

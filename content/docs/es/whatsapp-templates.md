@@ -81,6 +81,12 @@ Los clientes que no han respondido reciben un recordatorio. Si tu configuración
 
 Algunos estilos también muestran qué pidió el cliente y dónde se entregará: los artículos, la región y la dirección. Ese estilo se envía solo cuando el pedido incluye esos datos. Cuando no los incluye, el cliente recibe el estilo predeterminado del mismo idioma, así que el mensaje nunca llega con líneas vacías.
 
+## El logo de tu tienda en los mensajes
+
+Cuando la opción de logo está activada para tu tienda, **Configuración › Mensaje** muestra la tarjeta **Logo de la tienda**. Sube un logo PNG o JPEG (hasta 5 MB y al menos 64 píxeles en el lado más corto). Akeed lo centra sobre un banner blanco, y el banner aparece arriba de tus mensajes de confirmación y recordatorio. La vista previa junto a la configuración también muestra el banner.
+
+Usa **Cambiar logo** para reemplazarlo; el nuevo banner se usa en los siguientes mensajes. **Quitar** elimina el logo y tus mensajes vuelven a ser solo texto. El texto y los botones no cambian, y si WhatsApp no puede mostrar la imagen, el mensaje se envía como texto.
+
 ## Buenas prácticas para obtener más respuestas
 
 1. Centra el mensaje en una sola decisión: confirmar o cancelar.

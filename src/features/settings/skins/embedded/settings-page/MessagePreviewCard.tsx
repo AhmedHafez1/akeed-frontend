@@ -49,6 +49,8 @@ interface MessagePreviewCardProps {
   isSendingTest: boolean
   /** Sends the test, asking for the merchant's number first when needed. */
   phonePrompt: TestPhonePrompt
+  /** The store's banner, when its messages carry it. */
+  headerImage?: { src: string; alt: string }
 }
 
 export function MessagePreviewCard({
@@ -65,6 +67,7 @@ export function MessagePreviewCard({
   isDirty,
   isSendingTest,
   phonePrompt,
+  headerImage,
 }: MessagePreviewCardProps) {
   const t = useTranslations('settings.embedded.message')
   const promptId = useId()
@@ -107,6 +110,7 @@ export function MessagePreviewCard({
           sample={sample}
           label={t('previewAria', { language: languageName })}
           emptyLabel={t('previewEmpty')}
+          headerImage={headerImage}
         />
         {note && (
           <Text as="p" variant="bodySm" tone="subdued">

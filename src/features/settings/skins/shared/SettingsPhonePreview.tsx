@@ -25,6 +25,8 @@ interface SettingsPhonePreviewProps {
   label: string
   /** Shown in the bubble when the message has no text. */
   emptyLabel: string
+  /** The store's banner, shown as the message's image header. */
+  headerImage?: { src: string; alt: string }
 }
 
 function PreviewSegmentText({ segment }: { segment: PreviewSegment }) {
@@ -48,6 +50,7 @@ export function SettingsPhonePreview({
   sample,
   label,
   emptyLabel,
+  headerImage,
 }: SettingsPhonePreviewProps) {
   const t = useTranslations('onboarding.test.phone')
   const lines = buildPreviewLines(message, sample)
@@ -81,6 +84,7 @@ export function SettingsPhonePreview({
         }))}
         messageDir={message.direction}
         messageLang={language}
+        headerImage={headerImage}
       />
     </div>
   )

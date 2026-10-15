@@ -2,6 +2,7 @@ import { fetchWithAuth } from '@/shared/lib/auth'
 import type {
   AdminFunnelResponse,
   AdminStoreDetailResponse,
+  AdminStoreLogoHeader,
   AdminStoresResponse,
   AdminStoreVerificationsResponse,
 } from './admin.model'
@@ -76,6 +77,21 @@ export function getAdminStores(query: string) {
 export function getAdminStore(integrationId: string) {
   return adminRequest<AdminStoreDetailResponse>(
     `/api/admin/stores/${encodeURIComponent(integrationId)}`
+  )
+}
+
+/** Switches the store's logo header; audited by the backend. */
+export function setAdminStoreLogoHeader(
+  integrationId: string,
+  enabled: boolean
+) {
+  return adminRequest<{ logo_header: AdminStoreLogoHeader }>(
+    `/api/admin/stores/${encodeURIComponent(integrationId)}/logo-header`,
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ enabled }),
+    }
   )
 }
 

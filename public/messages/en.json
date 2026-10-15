@@ -2512,6 +2512,28 @@
     }
   },
   "settings": {
+    "logo": {
+      "heading": "Store logo",
+      "description": "Your logo goes on top of the confirmation and reminder messages, centred on a white banner.",
+      "requirements": "PNG or JPEG, up to 5 MB, at least 64 pixels on the shorter side.",
+      "upload": "Upload logo",
+      "replace": "Replace logo",
+      "remove": "Remove",
+      "uploading": "Uploading your logo…",
+      "logoAlt": "Your store logo",
+      "bannerAlt": "Your logo on the message banner",
+      "bannerCaption": "This banner appears at the top of each message.",
+      "errors": {
+        "tooLarge": "The logo must be 5 MB or smaller.",
+        "unsupportedType": "Choose a PNG or JPEG image.",
+        "unreadable": "This image could not be read. Try saving it again as PNG or JPEG.",
+        "tooSmall": "The logo is too small. Use one at least 64 pixels on the shorter side.",
+        "storageUnavailable": "The logo could not be saved right now. Try again in a moment.",
+        "forbidden": "Only an owner or admin can change the logo.",
+        "rateLimited": "Too many uploads. Wait a minute, then try again.",
+        "generic": "Something went wrong. Try again."
+      }
+    },
     "title": "Settings",
     "subtitle": "Manage your storefront and billing preferences.",
     "sourceHeading": "Order source",
