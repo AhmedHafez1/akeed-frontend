@@ -90,6 +90,7 @@ export interface AdminStoreDetail extends AdminStore {
   verification_totals: {
     total: number
     test: number
+    sent: number
     by_status: Record<string, number>
     failed_24h: number
     total_24h: number
