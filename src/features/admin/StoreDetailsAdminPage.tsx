@@ -285,9 +285,12 @@ function StoreKpis({ store }: { store: AdminStoreDetail }) {
   const totals = store.verification_totals
   const confirmed = totals.by_status.confirmed ?? 0
   const canceled = totals.by_status.canceled ?? 0
-  const resolved = confirmed + canceled
+  // Same definition as the merchant dashboard: confirmed out of sent, capped
+  // at 100% because a reply on a row without a recorded send is a data defect.
   const confirmationRate =
-    resolved > 0 ? `${Math.round((confirmed / resolved) * 100)}%` : '—'
+    totals.sent > 0
+      ? `${Math.round(Math.min(confirmed / totals.sent, 1) * 100)}%`
+      : '—'
   const failedRate =
     totals.total_24h > 0
       ? Math.round((totals.failed_24h / totals.total_24h) * 100)
@@ -308,7 +311,7 @@ function StoreKpis({ store }: { store: AdminStoreDetail }) {
       <AdminMetricCard
         label="Confirmation rate"
         value={confirmationRate}
-        detail={`${numberFormat.format(confirmed)} confirmed · ${numberFormat.format(canceled)} canceled`}
+        detail={`${numberFormat.format(confirmed)} confirmed of ${numberFormat.format(totals.sent)} sent · ${numberFormat.format(canceled)} canceled`}
         icon={CheckCircle2}
         tone="emerald"
       />
