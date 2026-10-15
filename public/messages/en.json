@@ -2120,6 +2120,7 @@
         "retrySuccess": "Verification retry accepted. The order lifecycle has been refreshed.",
         "retryError": "Verification could not be retried. Review the order state and try again.",
         "cancelOrderSuccess": "Order marked canceled in Akeed. No external order system was changed.",
+        "cancelOrderSuccessShopify": "Order {order} canceled. Akeed is also canceling it in Shopify and returning its items to stock.",
         "dismiss": "Dismiss"
       },
       "lifecycle": {

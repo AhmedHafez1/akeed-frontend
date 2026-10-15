@@ -122,9 +122,16 @@ export function ConfirmationsEmbedded({
     if (!cancelTarget) return
     const result = await list.onCancel(cancelTarget.row.id)
     setCancelTarget(null)
+    // Embedded stores are Shopify stores, and a merchant cancel there also
+    // cancels the Shopify order (restocked, customer not notified).
     setFeedback(
       result.status === 'success'
-        ? { tone: 'success', message: t('table.actions.cancelOrderSuccess') }
+        ? {
+            tone: 'success',
+            message: t('table.actions.cancelOrderSuccessShopify', {
+              order: cancelTarget.orderLabel,
+            }),
+          }
         : { tone: 'critical', message: t('table.actions.cancelOrderError') }
     )
   }
