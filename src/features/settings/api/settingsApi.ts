@@ -12,6 +12,7 @@ import type {
   OnboardingBillingPlanConfig,
   OnboardingSettingsPayload,
 } from '@/features/onboarding'
+import type { MerchantBranding } from './brandingApi'
 
 /** One style a merchant may choose, with the message it sends. */
 export interface CodTemplateDefinition {
@@ -35,6 +36,8 @@ type ByMessageLanguage<T> = Record<MessageLanguage, T>
 
 export interface SettingsResponse {
   state: IntegrationOnboardingState
+  /** The store's logo and banner. Absent from an older backend. */
+  branding?: MerchantBranding
   billing: {
     plans: OnboardingBillingPlanConfig[]
     isFreePlanClaimed: boolean

@@ -32,6 +32,8 @@ import {
 } from '@/features/settings/domain/useMessageStyles'
 import type { EmbeddedSettingsModel } from '@/features/settings/domain/useEmbeddedSettings'
 import { useTestPhonePrompt } from '@/features/settings/domain/useTestPhonePrompt'
+import { useMerchantLogo } from '@/features/settings/domain/useMerchantLogo'
+import { LogoCard } from './LogoCard'
 import { MessagePreviewCard } from './MessagePreviewCard'
 
 /** Choice values that are not a template style. */
@@ -49,6 +51,8 @@ interface MessageTabProps {
 
 export function MessageTab({ model, data, readOnly }: MessageTabProps) {
   const t = useTranslations('settings.embedded.message')
+  const tLogo = useTranslations('settings.logo')
+  const logo = useMerchantLogo(data.branding)
   const values = model.values
   const styles = useMessageStyles({ data, values, update: model.update })
   const phonePrompt = useTestPhonePrompt({
@@ -193,6 +197,8 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
             />
           </BlockStack>
         </Card>
+
+        {logo.isAvailable && <LogoCard logo={logo} readOnly={readOnly} />}
 
         <Card>
           <BlockStack gap="300">
@@ -340,6 +346,11 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
             isDirty={model.isDirty}
             isSendingTest={model.isSendingTest}
             phonePrompt={phonePrompt}
+            headerImage={
+              logo.isAvailable && logo.branding.bannerUrl
+                ? { src: logo.branding.bannerUrl, alt: tLogo('bannerAlt') }
+                : undefined
+            }
           />
         </div>
       </div>

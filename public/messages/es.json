@@ -1430,6 +1430,28 @@
     }
   },
   "settings": {
+    "logo": {
+      "heading": "Logo de la tienda",
+      "description": "Tu logo aparece arriba de los mensajes de confirmación y recordatorio, centrado sobre un banner blanco.",
+      "requirements": "PNG o JPEG, hasta 5 MB y al menos 64 píxeles en el lado más corto.",
+      "upload": "Subir logo",
+      "replace": "Cambiar logo",
+      "remove": "Quitar",
+      "uploading": "Subiendo tu logo…",
+      "logoAlt": "El logo de tu tienda",
+      "bannerAlt": "Tu logo en el banner del mensaje",
+      "bannerCaption": "Este banner aparece arriba de cada mensaje.",
+      "errors": {
+        "tooLarge": "El logo debe pesar 5 MB o menos.",
+        "unsupportedType": "Elige una imagen PNG o JPEG.",
+        "unreadable": "No se pudo leer esta imagen. Guárdala de nuevo como PNG o JPEG e inténtalo otra vez.",
+        "tooSmall": "El logo es demasiado pequeño. Usa uno de al menos 64 píxeles en el lado más corto.",
+        "storageUnavailable": "No se pudo guardar el logo ahora. Inténtalo de nuevo en un momento.",
+        "forbidden": "Solo un propietario o administrador puede cambiar el logo.",
+        "rateLimited": "Demasiadas subidas. Espera un minuto e inténtalo de nuevo.",
+        "generic": "Algo salió mal. Inténtalo de nuevo."
+      }
+    },
     "title": "Configuración",
     "subtitle": "Administra las preferencias de tu tienda y de facturación.",
     "sourceHeading": "Origen de pedidos",

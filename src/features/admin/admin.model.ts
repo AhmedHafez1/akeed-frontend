@@ -97,8 +97,29 @@ export interface AdminStoreDetail extends AdminStore {
   }
 }
 
+/** One image-header twin staff registered for a text template. */
+export interface AdminImageTwin {
+  twin_of_key: string
+  twin_of_template_name: string
+  template_name: string
+  language_code: string
+  is_active: boolean
+  review_status: string | null
+}
+
+/** The store's logo, banner and logo-header switch. */
+export interface AdminStoreLogoHeader {
+  enabled: boolean
+  logo_url: string | null
+  banner_url: string | null
+  updated_at: string | null
+  image_twins: AdminImageTwin[]
+}
+
 export interface AdminStoreDetailResponse {
   store: AdminStoreDetail
+  /** Absent from an older backend. */
+  logo_header?: AdminStoreLogoHeader
   evaluated_at: string
 }
 

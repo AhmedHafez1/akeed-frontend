@@ -1,0 +1,70 @@
+'use client'
+
+import { useCallback, useState } from 'react'
+import {
+  useMerchantLogoMutations,
+  type MerchantBranding,
+} from '@/features/settings/api/brandingApi'
+import {
+  logoErrorKey,
+  logoFileProblem,
+  type LogoErrorKey,
+} from './merchantLogo'
+
+export interface MerchantLogoModel {
+  branding: MerchantBranding
+  /** Shown only while staff have switched the logo header on. */
+  isAvailable: boolean
+  isUploading: boolean
+  isRemoving: boolean
+  error: LogoErrorKey | null
+  /** Checks the file, then uploads it; a new logo replaces the old one. */
+  choose: (file: File | undefined) => void
+  remove: () => void
+}
+
+const NO_BRANDING: MerchantBranding = {
+  logoUrl: null,
+  bannerUrl: null,
+  updatedAt: null,
+  logoHeaderAvailable: false,
+}
+
+/** The logo card's state for both skins. */
+export function useMerchantLogo(
+  branding: MerchantBranding | undefined
+): MerchantLogoModel {
+  const { upload, remove } = useMerchantLogoMutations()
+  const [error, setError] = useState<LogoErrorKey | null>(null)
+  const current = branding ?? NO_BRANDING
+
+  const choose = useCallback(
+    (file: File | undefined) => {
+      if (!file) return
+      const problem = logoFileProblem(file)
+      setError(problem)
+      if (problem) return
+      upload.mutate(file, {
+        onError: (failure) => setError(logoErrorKey(failure)),
+      })
+    },
+    [upload]
+  )
+
+  const removeLogo = useCallback(() => {
+    setError(null)
+    remove.mutate(undefined, {
+      onError: (failure) => setError(logoErrorKey(failure)),
+    })
+  }, [remove])
+
+  return {
+    branding: current,
+    isAvailable: current.logoHeaderAvailable,
+    isUploading: upload.isPending,
+    isRemoving: remove.isPending,
+    error,
+    choose,
+    remove: removeLogo,
+  }
+}

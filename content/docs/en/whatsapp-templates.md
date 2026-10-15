@@ -81,6 +81,12 @@ Customers who have not replied get a reminder. Where your settings show a **Remi
 
 Some styles also show what the customer ordered and where it will be delivered: the items, the region and the address. Such a style is sent only when the order carries those details. When it does not, the customer gets the default style of the same language, so the message never arrives with empty lines.
 
+## Store Logo on Your Messages
+
+When the logo option is turned on for your store, **Settings › Message** shows a **Store logo** card. Upload a PNG or JPEG logo (up to 5 MB, at least 64 pixels on the shorter side). Akeed centres it on a white banner, and the banner appears at the top of your confirmation and reminder messages. The preview beside your settings shows the banner too.
+
+Use **Replace logo** to change it; the new banner is used for the next messages. **Remove** takes the logo off, and your messages go back to text only. The wording and the buttons do not change, and if WhatsApp cannot show the image, the message is sent as text.
+
 ## Best Practices for Better Replies
 
 1. Keep the message focused on one decision: confirm or cancel.

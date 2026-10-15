@@ -1430,6 +1430,28 @@
     }
   },
   "settings": {
+    "logo": {
+      "heading": "Logo de la boutique",
+      "description": "Votre logo apparaît en haut des messages de confirmation et de rappel, centré sur une bannière blanche.",
+      "requirements": "PNG ou JPEG, 5 Mo maximum, au moins 64 pixels sur le côté le plus court.",
+      "upload": "Importer le logo",
+      "replace": "Remplacer le logo",
+      "remove": "Retirer",
+      "uploading": "Importation de votre logo…",
+      "logoAlt": "Le logo de votre boutique",
+      "bannerAlt": "Votre logo sur la bannière du message",
+      "bannerCaption": "Cette bannière apparaît en haut de chaque message.",
+      "errors": {
+        "tooLarge": "Le logo doit faire 5 Mo ou moins.",
+        "unsupportedType": "Choisissez une image PNG ou JPEG.",
+        "unreadable": "Impossible de lire cette image. Enregistrez-la à nouveau en PNG ou JPEG, puis réessayez.",
+        "tooSmall": "Le logo est trop petit. Utilisez-en un d’au moins 64 pixels sur le côté le plus court.",
+        "storageUnavailable": "Le logo n’a pas pu être enregistré pour le moment. Réessayez dans un instant.",
+        "forbidden": "Seul un propriétaire ou un administrateur peut modifier le logo.",
+        "rateLimited": "Trop d’importations. Patientez une minute, puis réessayez.",
+        "generic": "Une erreur s’est produite. Réessayez."
+      }
+    },
     "title": "Paramètres",
     "subtitle": "Gérez les préférences de votre boutique et de votre facturation.",
     "sourceHeading": "Source des commandes",

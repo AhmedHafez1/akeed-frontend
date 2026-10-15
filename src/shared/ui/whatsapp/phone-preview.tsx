@@ -21,6 +21,8 @@ interface WhatsAppPhonePreviewProps {
   /** The message follows its template language, not the app locale. */
   messageDir?: 'rtl' | 'ltr'
   messageLang?: string
+  /** An image header above the text, as a template with one shows it. */
+  headerImage?: { src: string; alt: string }
 }
 
 /**
@@ -38,6 +40,7 @@ export function WhatsAppPhonePreview({
   emphasizedTone,
   messageDir,
   messageLang,
+  headerImage,
 }: WhatsAppPhonePreviewProps) {
   return (
     <WhatsAppPhoneFrame>
@@ -57,6 +60,16 @@ export function WhatsAppPhonePreview({
           lang={messageLang}
           className="mx-auto my-8 w-[92%] overflow-hidden rounded-xl rounded-ss-sm bg-white shadow-sm dark:bg-[#202c33]"
         >
+          {headerImage && (
+            // A merchant's own upload from storage or a local file: not a
+            // build-time asset next/image could optimise.
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={headerImage.src}
+              alt={headerImage.alt}
+              className="block aspect-[1200/628] w-full rounded-lg object-cover p-1"
+            />
+          )}
           <WhatsAppMessageBubble
             direction="incoming"
             timeLabel={timeLabel}

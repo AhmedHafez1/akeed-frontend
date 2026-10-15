@@ -81,6 +81,12 @@ Les clients qui n’ont pas répondu reçoivent un rappel. Lorsque vos paramètr
 
 Certains styles indiquent aussi ce que le client a commandé et le lieu de livraison : les articles, la région et l’adresse. Un tel style n’est envoyé que si la commande contient ces informations. Dans le cas contraire, le client reçoit le style par défaut de la même langue : le message n’arrive donc jamais avec des lignes vides.
 
+## Le logo de votre boutique sur vos messages
+
+Lorsque l’option logo est activée pour votre boutique, **Paramètres › Message** affiche la carte **Logo de la boutique**. Importez un logo PNG ou JPEG (5 Mo maximum, au moins 64 pixels sur le côté le plus court). Akeed le centre sur une bannière blanche, et la bannière apparaît en haut de vos messages de confirmation et de rappel. L’aperçu à côté des paramètres montre aussi la bannière.
+
+Utilisez **Remplacer le logo** pour le changer ; la nouvelle bannière est utilisée pour les messages suivants. **Retirer** supprime le logo, et vos messages redeviennent du texte seul. Le texte et les boutons ne changent pas, et si WhatsApp ne peut pas afficher l’image, le message est envoyé en texte.
+
 ## Bonnes pratiques pour de meilleures réponses
 
 1. Centrez le message sur une seule décision : confirmer ou annuler.
