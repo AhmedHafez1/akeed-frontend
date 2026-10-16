@@ -225,12 +225,14 @@ export interface OnboardingSettingsPayload {
   codTemplateUrVariant?: string
   codTemplateEsVariant?: string
   codTemplateFrVariant?: string
+  codTemplateTrVariant?: string
   /** A reminder style, or null for "same as the first message". */
   codReminderArVariant?: string | null
   codReminderEnVariant?: string | null
   codReminderUrVariant?: string | null
   codReminderEsVariant?: string | null
   codReminderFrVariant?: string | null
+  codReminderTrVariant?: string | null
   /** The Arabic style follows the customer's country. */
   codTemplateArAuto?: boolean
   merchantWhatsappPhone?: string

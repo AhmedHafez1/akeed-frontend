@@ -152,6 +152,7 @@ export function authoringContext(
         ur: ['ur'],
         es: ['es', 'es_ES', 'es_MX', 'es_AR'],
         fr: ['fr'],
+        tr: ['tr'],
       },
       variables: [
         'customer',
@@ -208,6 +209,15 @@ export function authoringContext(
           items: '1. Chemise en coton (1x 150) = 150',
           region: 'Paris',
           address: '12 rue de Rivoli, 75004',
+        },
+        tr: {
+          customer: 'Ayşe',
+          store: 'Akeed Mağazası',
+          order: 'TEST-1',
+          total: '250.00 USD',
+          items: '1. Pamuklu gömlek (1x 150) = 150',
+          region: 'İstanbul',
+          address: 'İstiklal Caddesi No: 12, Beyoğlu',
         },
       },
       category: { cod_confirmation: 'utility' },

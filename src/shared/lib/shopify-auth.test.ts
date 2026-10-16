@@ -29,9 +29,12 @@ describe('getShopifyAppStoreListingUrl', () => {
     )
   })
 
-  it.each(['en', 'de', ''])('keeps the default listing for "%s"', (locale) => {
-    expect(getShopifyAppStoreListingUrl(locale)).toBe(
-      SHOPIFY_APP_STORE_LISTING_URL
-    )
-  })
+  it.each(['en', 'tr', 'de', ''])(
+    'keeps the default listing for "%s"',
+    (locale) => {
+      expect(getShopifyAppStoreListingUrl(locale)).toBe(
+        SHOPIFY_APP_STORE_LISTING_URL
+      )
+    }
+  )
 })

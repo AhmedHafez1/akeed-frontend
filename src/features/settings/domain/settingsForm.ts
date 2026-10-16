@@ -103,6 +103,7 @@ const TEMPLATE_PAYLOAD_FIELDS = {
   ur: { style: 'codTemplateUrVariant', reminder: 'codReminderUrVariant' },
   es: { style: 'codTemplateEsVariant', reminder: 'codReminderEsVariant' },
   fr: { style: 'codTemplateFrVariant', reminder: 'codReminderFrVariant' },
+  tr: { style: 'codTemplateTrVariant', reminder: 'codReminderTrVariant' },
 } as const satisfies Record<
   MessageLanguage,
   {

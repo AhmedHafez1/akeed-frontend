@@ -15,7 +15,9 @@ import { NextIntlClientProvider } from 'next-intl'
 import ar from '../../../../../../public/messages/ar.json'
 import {
   allStylesSettingsFixture,
+  awaitingTurkishSettingsFixture,
   awaitingUrduSettingsFixture,
+  liveTurkishSettingsFixture,
   liveUrduSettingsFixture,
   settingsResponseFixture,
 } from '../../../testing/settingsFixture'
@@ -548,13 +550,13 @@ describe('SettingsEmbeddedPage message languages', () => {
 
     expect(
       Array.from(previewLanguage().options).map((option) => option.value)
-    ).toEqual(['ar', 'en', 'ur', 'es', 'fr'])
+    ).toEqual(['ar', 'en', 'ur', 'es', 'fr', 'tr'])
     // Automatic shows no list; one language for everyone does.
     expect(screen.queryByLabelText(messageCopy.languageFixedLabel)).toBeNull()
     chooseOneLanguage()
 
     expect(oneLanguage().value).toBe('ar')
-    for (const language of ['ur', 'es', 'fr']) {
+    for (const language of ['ur', 'es', 'fr', 'tr']) {
       expect(languageOption(language).disabled).toBe(true)
       expect(languageOption(language).textContent).toContain(
         messageCopy.notEnabledYet
@@ -760,5 +762,40 @@ describe('SettingsEmbeddedPage message languages', () => {
       codTemplateArVariant: 'standard',
     })
     expect(payload).not.toHaveProperty('codTemplateEsVariant')
+  })
+
+  it('keeps Turkish locked while its messages are not approved and switched on', async () => {
+    api.fetchSettings.mockResolvedValue(awaitingTurkishSettingsFixture())
+    renderPage()
+    await storeNameInput()
+    previewIn('tr')
+
+    expect(radio(standardStyle).disabled).toBe(true)
+    expect(radio(shortStyle).disabled).toBe(true)
+    expect(screen.getByText(messageCopy.awaitingApproval)).toBeTruthy()
+    expect(lastSaveBarCall()).toBe('hidden')
+  })
+
+  it('offers both approved Turkish confirmations once Turkish is live', async () => {
+    api.fetchSettings.mockResolvedValue(liveTurkishSettingsFixture())
+    renderPage()
+    await storeNameInput()
+
+    chooseOneLanguage()
+    fireEvent.change(oneLanguage(), { target: { value: 'tr' } })
+    expect(radio(standardStyle).disabled).toBe(false)
+    expect(radio(shortStyle).disabled).toBe(false)
+    fireEvent.click(radio(shortStyle))
+    await act(async () => {
+      fireEvent.click(screen.getByText('حفظ'))
+    })
+
+    const [payload] = api.saveSettings.mock.calls[0] as [
+      Record<string, unknown>,
+    ]
+    expect(payload).toMatchObject({
+      defaultLanguage: 'tr',
+      codTemplateTrVariant: 'short_v1',
+    })
   })
 })

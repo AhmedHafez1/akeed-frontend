@@ -95,11 +95,11 @@ describe('template draft model', () => {
     ])
   })
 
-  it('previews Urdu right to left, and Spanish and French left to right', () => {
+  it('previews Urdu right to left, and Spanish, French and Turkish left to right', () => {
     expect(
       previewDraft(form({ language: 'ur', body: 'السلام علیکم' })).direction
     ).toBe('rtl')
-    for (const language of ['es', 'fr'] as const) {
+    for (const language of ['es', 'fr', 'tr'] as const) {
       expect(previewDraft(form({ language, body: 'Hola' })).direction).toBe(
         'ltr'
       )

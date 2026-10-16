@@ -10,7 +10,7 @@ import {
 
 describe('message languages', () => {
   it('lists Arabic and English first, then the newer languages', () => {
-    expect(MESSAGE_LANGUAGES).toEqual(['ar', 'en', 'ur', 'es', 'fr'])
+    expect(MESSAGE_LANGUAGES).toEqual(['ar', 'en', 'ur', 'es', 'fr', 'tr'])
   })
 
   it('writes Arabic and Urdu right to left, the others left to right', () => {
@@ -18,6 +18,7 @@ describe('message languages', () => {
       'rtl',
       'ltr',
       'rtl',
+      'ltr',
       'ltr',
       'ltr',
     ])
@@ -43,7 +44,7 @@ describe('formatMessageTotal', () => {
   it('writes the total as each language sends it', () => {
     expect(formatMessageTotal('1250.00', 'EGP', 'ar')).toBe('1,250.00 ج.م')
     expect(formatMessageTotal('1250.00', 'EGP', 'en')).toBe('EGP 1,250.00')
-    for (const language of ['ur', 'es', 'fr'] as const) {
+    for (const language of ['ur', 'es', 'fr', 'tr'] as const) {
       expect(formatMessageTotal('1250.00', 'EUR', language)).toBe(
         '1,250.00 EUR'
       )

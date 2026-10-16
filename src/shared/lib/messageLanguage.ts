@@ -10,7 +10,7 @@ import {
  * customers in Arabic. The backend decides which of these a store may use
  * (`template.liveLanguages`); this list only says how to show each one.
  */
-export const MESSAGE_LANGUAGES = ['ar', 'en', 'ur', 'es', 'fr'] as const
+export const MESSAGE_LANGUAGES = ['ar', 'en', 'ur', 'es', 'fr', 'tr'] as const
 
 export type MessageLanguage = (typeof MESSAGE_LANGUAGES)[number]
 
@@ -37,6 +37,7 @@ export const MESSAGE_SAMPLE_CUSTOMER_NAMES: Record<MessageLanguage, string> = {
   ur: 'احمد',
   es: 'Carlos',
   fr: 'Camille',
+  tr: 'Ayşe',
 }
 
 /** The time under a preview bubble, as a phone in that language shows it. */
@@ -46,6 +47,7 @@ const MESSAGE_PREVIEW_TIMESTAMPS: Record<MessageLanguage, string> = {
   ur: '8:08 AM',
   es: '8:08 a. m.',
   fr: '08:08',
+  tr: '08:08',
 }
 
 export function getMessagePreviewTimestamp(language: MessageLanguage): string {

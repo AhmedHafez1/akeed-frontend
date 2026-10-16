@@ -39,7 +39,7 @@ describe('EmbeddedLanguageSelector', () => {
       [...(menu?.querySelectorAll('button') ?? [])].map(
         (button) => button.textContent
       )
-    ).toEqual(['English', 'اردو', 'Español', 'Français'])
+    ).toEqual(['English', 'اردو', 'Español', 'Français', 'Türkçe'])
   })
 
   it('remembers Urdu and reopens the page in it, keeping the shop', async () => {
@@ -79,6 +79,19 @@ describe('EmbeddedLanguageSelector', () => {
       )
     )
     expect(localStorage.getItem(LOCALE_PREFERENCE_STORAGE_KEY)).toBe('fr')
+  })
+
+  it('remembers Turkish and reopens the page in it, keeping the shop', async () => {
+    render(<EmbeddedLanguageSelector />)
+
+    fireEvent.click(screen.getByText('Türkçe'))
+
+    await waitFor(() =>
+      expect(route.replace).toHaveBeenCalledWith(
+        '/tr/settings?shop=demo.myshopify.com'
+      )
+    )
+    expect(localStorage.getItem(LOCALE_PREFERENCE_STORAGE_KEY)).toBe('tr')
   })
 
   it('restores a remembered French choice when the app opens in Arabic', async () => {

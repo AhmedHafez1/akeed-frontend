@@ -21,7 +21,7 @@ import { IBM_Plex_Sans, IBM_Plex_Sans_Arabic } from 'next/font/google'
  * generated face when `fallback` is given, so both are set.
  */
 const latin = IBM_Plex_Sans({
-  subsets: ['latin'],
+  subsets: ['latin', 'latin-ext'],
   display: 'swap',
   adjustFontFallback: false,
   fallback: [],

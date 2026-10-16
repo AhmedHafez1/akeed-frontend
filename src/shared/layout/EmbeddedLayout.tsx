@@ -5,6 +5,7 @@ import { AppProvider, Frame } from '@shopify/polaris'
 import enTranslations from '@shopify/polaris/locales/en.json'
 import esTranslations from '@shopify/polaris/locales/es.json'
 import frTranslations from '@shopify/polaris/locales/fr.json'
+import trTranslations from '@shopify/polaris/locales/tr.json'
 import '@shopify/polaris/build/esm/styles.css'
 import { usePathname } from 'next/navigation'
 import {
@@ -38,6 +39,7 @@ const POLARIS_TRANSLATIONS: Partial<
 > = {
   es: esTranslations,
   fr: frTranslations,
+  tr: trTranslations,
 }
 
 interface EmbeddedLayoutProps {
