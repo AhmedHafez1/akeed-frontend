@@ -37,6 +37,7 @@ const LIST_LOCALES = {
   ur: 'ur',
   es: 'es',
   fr: 'fr',
+  tr: 'tr',
 } as const
 
 function Hero() {

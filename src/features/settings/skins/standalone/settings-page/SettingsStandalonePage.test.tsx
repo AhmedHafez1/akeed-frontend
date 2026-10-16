@@ -12,7 +12,9 @@ import { NextIntlClientProvider } from 'next-intl'
 import ar from '../../../../../../public/messages/ar.json'
 import {
   allStylesSettingsFixture,
+  awaitingTurkishSettingsFixture,
   awaitingUrduSettingsFixture,
+  liveTurkishSettingsFixture,
   liveUrduSettingsFixture,
   settingsResponseFixture,
 } from '../../../testing/settingsFixture'
@@ -853,13 +855,13 @@ describe('SettingsStandalonePage message languages', () => {
   const standardStyle = messageCopy.variantLabels.standardPlain
   const shortStyle = messageCopy.variantLabels.short
 
-  it('previews in any of the five languages', async () => {
+  it('previews in any of the six languages', async () => {
     renderPage()
     await storeNameInput()
 
     expect(
       Array.from(previewLanguage().options).map((option) => option.value)
-    ).toEqual(['ar', 'en', 'ur', 'es', 'fr'])
+    ).toEqual(['ar', 'en', 'ur', 'es', 'fr', 'tr'])
   })
 
   it('shows a language with no approved message, but does not let it be chosen', async () => {
@@ -872,8 +874,8 @@ describe('SettingsStandalonePage message languages', () => {
 
     expect(
       Array.from(oneLanguage().options).map((option) => option.value)
-    ).toEqual(['ar', 'en', 'ur', 'es', 'fr'])
-    for (const language of ['ur', 'es', 'fr']) {
+    ).toEqual(['ar', 'en', 'ur', 'es', 'fr', 'tr'])
+    for (const language of ['ur', 'es', 'fr', 'tr']) {
       expect(languageOption(language).disabled).toBe(true)
       expect(languageOption(language).textContent).toContain(
         messageCopy.notEnabledYet
@@ -1106,5 +1108,61 @@ describe('SettingsStandalonePage message languages', () => {
     // A language that is not live sends no choice.
     expect(payload).not.toHaveProperty('codTemplateEsVariant')
     expect(payload).not.toHaveProperty('codTemplateFrVariant')
+  })
+
+  it('keeps Turkish locked while its messages are only in review or not switched on', async () => {
+    api.fetchSettings.mockResolvedValue(awaitingTurkishSettingsFixture(source))
+    renderPage()
+    await storeNameInput()
+
+    previewIn('tr')
+
+    const inReview = always(standardStyle)
+    const notEnabled = always(shortStyle)
+    expect(
+      within(inReview).getByText(messageCopy.awaitingApproval)
+    ).toBeTruthy()
+    expect(within(notEnabled).getByText(messageCopy.notEnabledYet)).toBeTruthy()
+    for (const card of [inReview, notEnabled]) {
+      expect(card.hasAttribute('disabled')).toBe(true)
+      fireEvent.click(card)
+      expect(card.getAttribute('aria-checked')).toBe('false')
+    }
+    expect(preview().querySelector('[lang]')?.getAttribute('dir')).toBe('ltr')
+
+    chooseOneLanguage()
+    expect(languageOption('tr').disabled).toBe(true)
+  })
+
+  it('offers both approved Turkish confirmations once Turkish is live, and saves the choice', async () => {
+    api.fetchSettings.mockResolvedValue(liveTurkishSettingsFixture(source))
+    renderPage()
+    await storeNameInput()
+
+    chooseOneLanguage()
+    expect(languageOption('tr').disabled).toBe(false)
+    fireEvent.change(oneLanguage(), { target: { value: 'tr' } })
+    expect(preview().getAttribute('aria-label')).toContain(
+      messageCopy.languageNames.tr
+    )
+
+    const standard = always(standardStyle)
+    const short = always(shortStyle)
+    expect(standard.hasAttribute('disabled')).toBe(false)
+    expect(short.hasAttribute('disabled')).toBe(false)
+    expect(standard.getAttribute('aria-checked')).toBe('true')
+    fireEvent.click(short)
+    expect(short.getAttribute('aria-checked')).toBe('true')
+
+    fireEvent.click(screen.getByRole('button', { name: 'حفظ' }))
+    await waitFor(() => expect(api.saveSettings).toHaveBeenCalled())
+    const [payload] = api.saveSettings.mock.calls[0] as [
+      Record<string, unknown>,
+    ]
+    expect(payload).toMatchObject({
+      defaultLanguage: 'tr',
+      codTemplateTrVariant: 'short_v1',
+    })
+    expect(payload).not.toHaveProperty('codTemplateUrVariant')
   })
 })

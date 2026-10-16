@@ -71,7 +71,8 @@
       "en": "English",
       "ur": "Urdu",
       "es": "Spanish",
-      "fr": "French"
+      "fr": "French",
+      "tr": "Turkish"
     },
     "parameterFormat": {
       "named": "Named",
@@ -2912,7 +2913,8 @@
           "en": "English",
           "ur": "Urdu",
           "es": "Spanish",
-          "fr": "French"
+          "fr": "French",
+          "tr": "Turkish"
         },
         "variantLabels": {
           "standard": "Modern Standard",
@@ -4619,7 +4621,8 @@
       "en": "English",
       "ur": "Urdu",
       "es": "Spanish",
-      "fr": "French"
+      "fr": "French",
+      "tr": "Turkish"
     },
     "empty": {
       "title": "No texts yet",

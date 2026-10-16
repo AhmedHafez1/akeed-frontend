@@ -22,8 +22,8 @@ function clearLocaleCookie() {
 }
 
 describe('interface languages', () => {
-  it('serves five languages, with Arabic as the default', () => {
-    expect(SUPPORTED_LOCALES).toEqual(['ar', 'en', 'ur', 'es', 'fr'])
+  it('serves six languages, with Arabic as the default', () => {
+    expect(SUPPORTED_LOCALES).toEqual(['ar', 'en', 'ur', 'es', 'fr', 'tr'])
     expect(DEFAULT_LOCALE).toBe('ar')
   })
 
@@ -33,6 +33,7 @@ describe('interface languages', () => {
     ['ur', 'rtl', 'ur-PK', 'اردو'],
     ['es', 'ltr', 'es-419', 'Español'],
     ['fr', 'ltr', 'fr-FR', 'Français'],
+    ['tr', 'ltr', 'tr-TR', 'Türkçe'],
   ] as const)(
     'describes %s as %s, formatted as %s',
     (locale, direction, tag, name) => {
@@ -49,6 +50,7 @@ describe('interface languages', () => {
     ['ur', 'ur'],
     ['es', 'es-419'],
     ['fr', 'fr'],
+    ['tr', 'tr'],
   ] as const)('formats %s amounts and dates as %s', (locale, tag) => {
     expect(getFormatLocale(locale)).toBe(tag)
   })
@@ -87,6 +89,25 @@ describe('interface languages', () => {
     ).toBe('14:58')
   })
 
+  it('formats Turkish as Türkiye does: dotted thousands, decimal comma, 24-hour clock', () => {
+    const tag = getFormatLocale('tr')
+    expect(new Intl.NumberFormat(tag).format(12500.5)).toBe('12.500,5')
+    expect(
+      new Intl.DateTimeFormat(tag, {
+        day: 'numeric',
+        month: 'long',
+        timeZone: 'UTC',
+      }).format(new Date(Date.UTC(2026, 8, 22)))
+    ).toBe('22 Eylül')
+    expect(
+      new Intl.DateTimeFormat(tag, {
+        hour: 'numeric',
+        minute: '2-digit',
+        timeZone: 'UTC',
+      }).format(new Date(Date.UTC(2026, 8, 22, 14, 58)))
+    ).toBe('14:58')
+  })
+
   it('reads an unknown language as the default', () => {
     expect(isSupportedLocale('de')).toBe(false)
     expect(resolveSupportedLocale('de')).toBe('ar')
@@ -101,6 +122,8 @@ describe('interface languages', () => {
     expect(withLocale('/billing', 'es')).toBe('/es/billing')
     expect(getLocaleFromPathname('/fr/dashboard')).toBe('fr')
     expect(withLocale('/billing', 'fr')).toBe('/fr/billing')
+    expect(getLocaleFromPathname('/tr/dashboard')).toBe('tr')
+    expect(withLocale('/billing', 'tr')).toBe('/tr/billing')
   })
 })
 
@@ -115,6 +138,8 @@ describe('replacePathnameLocale', () => {
     ['/es/settings/api', 'ar', '/ar/settings/api'],
     ['/ar/billing', 'fr', '/fr/billing'],
     ['/fr/settings/api', 'ar', '/ar/settings/api'],
+    ['/ar/billing', 'tr', '/tr/billing'],
+    ['/tr/settings/api', 'ar', '/ar/settings/api'],
   ] as const)('turns %s into %s: %s', (pathname, locale, expected) => {
     expect(replacePathnameLocale(pathname, locale)).toBe(expected)
   })

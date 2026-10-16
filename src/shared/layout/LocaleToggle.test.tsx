@@ -45,7 +45,7 @@ describe('LocaleToggle', () => {
 
     expect(
       screen.getAllByRole('menuitem').map((item) => item.textContent)
-    ).toEqual(['العربية', 'English', 'اردو', 'Español', 'Français'])
+    ).toEqual(['العربية', 'English', 'اردو', 'Español', 'Français', 'Türkçe'])
     expect(
       screen
         .getByRole('menuitem', { name: 'العربية' })
@@ -84,6 +84,17 @@ describe('LocaleToggle', () => {
     expect(route.push).toHaveBeenCalledWith('/fr/billing?tab=usage')
     expect(localStorage.getItem(LOCALE_PREFERENCE_STORAGE_KEY)).toBe('fr')
     expect(getPersistedLocalePreference()).toBe('fr')
+  })
+
+  it('remembers Turkish and reopens the same page and query in it', () => {
+    render(<LocaleToggle />)
+
+    openMenu()
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Türkçe' }))
+
+    expect(route.push).toHaveBeenCalledWith('/tr/billing?tab=usage')
+    expect(localStorage.getItem(LOCALE_PREFERENCE_STORAGE_KEY)).toBe('tr')
+    expect(getPersistedLocalePreference()).toBe('tr')
   })
 
   it('does nothing when the current language is chosen again', () => {

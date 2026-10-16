@@ -3,11 +3,15 @@ import ar from '../public/messages/ar.json'
 import en from '../public/messages/en.json'
 import es from '../public/messages/es.json'
 import fr from '../public/messages/fr.json'
+import tr from '../public/messages/tr.json'
 import ur from '../public/messages/ur.json'
 
 type Messages = { [key: string]: string | Messages }
 
-/** The admin screens exist in English only: Urdu, Spanish and French have no `admin*` strings. */
+/**
+ * The admin screens exist in English only: Urdu, Spanish, French and Turkish
+ * have no `admin*` strings.
+ */
 const isAdminNamespace = (key: string) => key.startsWith('admin')
 
 function flatten(
@@ -69,6 +73,7 @@ const english = merchantStrings(en)
 const urdu = merchantStrings(ur as Messages)
 const spanish = merchantStrings(es as Messages)
 const french = merchantStrings(fr as Messages)
+const turkish = merchantStrings(tr as Messages)
 
 const ARABIC_SCRIPT = URDU_SCRIPT
 /** Spanish opens a question or an exclamation with the inverted mark. */
@@ -404,9 +409,113 @@ describe('French messages', () => {
   })
 })
 
+describe('Turkish messages', () => {
+  it('has exactly the merchant-facing keys of the English file', () => {
+    expect(Object.keys(turkish).sort()).toEqual(Object.keys(english).sort())
+  })
+
+  it('leaves the admin screens to English', () => {
+    expect(Object.keys(tr).filter(isAdminNamespace)).toEqual([])
+  })
+
+  it('keeps every placeholder and tag of the English message', () => {
+    const different = Object.keys(english).filter(
+      (key) =>
+        placeholders(turkish[key] ?? '').join(' ') !==
+        placeholders(english[key]).join(' ')
+    )
+    expect(different).toEqual([])
+  })
+
+  it('translates every message that has words to translate', () => {
+    // Left as written: names, codes, plan names and words Turkish spells the
+    // same way ("Plan", "Platform", "Test").
+    const untranslated = Object.keys(english).filter(
+      (key) =>
+        turkish[key] === english[key] &&
+        /[a-z]{2}/.test(english[key].replace(/\{[^}]*\}/g, ''))
+    )
+    expect(untranslated.sort()).toEqual([
+      'auth.shopifyStorePlaceholder',
+      'auth.shopifyStoreSuffix',
+      'auth.signup.source.options.easyorders.title',
+      'auth.signup.source.options.woocommerce.title',
+      'auth.signup.source.shopifyTitle',
+      'connectionLine.akeed',
+      'dashboard.sources.easyorders',
+      'dashboard.sources.salla',
+      'dashboard.sources.shopify',
+      'dashboard.sources.woocommerce',
+      'dashboard.sources.zid',
+      'dashboard.table.testBadge',
+      'demo.bot_name_short',
+      'easyOrdersConnect.eyebrow',
+      'embeddedOnboarding.planBasicName',
+      'embeddedOnboarding.planBusinessName',
+      'embeddedOnboarding.planProName',
+      'embeddedOnboarding.planStarterName',
+      'footer.facebook',
+      'footer.instagram',
+      'footer.logoAlt',
+      'footer.youtube',
+      'messageTemplate.whatsappLabel',
+      'onboarding.flow.plan',
+      'onboarding.planBasicName',
+      'onboarding.planBusinessName',
+      'onboarding.planProName',
+      'onboarding.planStarterName',
+      'onboarding.platform',
+      'onboarding.test.phone.avatarAlt',
+      'onboarding.test.phone.senderName',
+      'onboarding.whatsapp',
+      'orderImport.upload.templateExcel',
+      'settings.embedded.tabs.plan',
+      'settings.sourceEasyOrders',
+      'settings.sourceWooCommerce',
+      'sources.easyorders.title',
+      'sources.shopify.title',
+      'sources.woocommerce.title',
+      'standaloneOnboarding.store.timezones.Asia_Amman',
+      'standaloneOnboarding.store.timezones.Asia_Bahrain',
+      'standaloneOnboarding.store.timezones.Asia_Dubai',
+      'standaloneOnboarding.store.timezones.Asia_Qatar',
+      'support.email',
+      'wooCommerceConnect.eyebrow',
+    ])
+  })
+
+  it('writes Latin letters, with the Turkish ones', () => {
+    const wrongScript = Object.keys(turkish).filter((key) =>
+      ARABIC_SCRIPT.test(turkish[key])
+    )
+    expect(wrongScript).toEqual([])
+    const all = Object.values(turkish).join(' ')
+    // ğ, ı, İ and ş: the letters a text typed without Turkish support loses.
+    for (const code of [0x011f, 0x0131, 0x0130, 0x015f]) {
+      expect(all).toContain(letter(code))
+    }
+  })
+
+  it('writes every apostrophe as the typographic one', () => {
+    // A suffix on a name ("Shopify’da") takes an apostrophe; a straight one
+    // before a brace would open an ICU quote and drop the value.
+    const straight = Object.keys(turkish).filter((key) =>
+      turkish[key].includes("'")
+    )
+    expect(straight).toEqual([])
+  })
+
+  it('puts no suffix on a placeholder, whose vowels it cannot know', () => {
+    const suffixed = Object.keys(turkish).filter((key) =>
+      /\}\s?['’]/.test(turkish[key])
+    )
+    expect(suffixed).toEqual([])
+  })
+})
+
 describe('Arabic and English messages', () => {
   it('label the embedded language menu in every language', () => {
-    for (const messages of [ar, en, ur, es, fr]) {
+    for (const messages of [ar, en, ur, es, fr, tr]) {
       expect(messages.embeddedSupport.localeLabel).toEqual(expect.any(String))
       expect(messages.settings.languageSwitching).toEqual(expect.any(String))
     }

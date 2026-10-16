@@ -261,7 +261,7 @@ function settings(): SettingsResponse {
       },
     },
     template: {
-      languages: ['ar', 'en', 'ur', 'es', 'fr'],
+      languages: ['ar', 'en', 'ur', 'es', 'fr', 'tr'],
       liveLanguages: ['ar', 'en'],
       defaultPreviewLanguage: 'en',
       defaults: {
@@ -270,6 +270,7 @@ function settings(): SettingsResponse {
         ur: null,
         es: null,
         fr: null,
+        tr: null,
       },
       selected: {
         ar: 'standard',
@@ -277,9 +278,17 @@ function settings(): SettingsResponse {
         ur: null,
         es: null,
         fr: null,
+        tr: null,
       },
-      variants: { ar: [], en: [], ur: [], es: [], fr: [] },
-      messages: { ar: message, en: message, ur: null, es: null, fr: null },
+      variants: { ar: [], en: [], ur: [], es: [], fr: [], tr: [] },
+      messages: {
+        ar: message,
+        en: message,
+        ur: null,
+        es: null,
+        fr: null,
+        tr: null,
+      },
     },
   }
 }

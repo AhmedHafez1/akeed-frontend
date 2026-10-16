@@ -1,0 +1,3512 @@
+{
+  "error": {
+    "title": "Bir sorun oluştu",
+    "description": "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.",
+    "tryAgain": "Tekrar dene"
+  },
+  "metadata": {
+    "title": "Akeed | WhatsApp ile kapıda ödemeli sipariş onayı",
+    "description": "Akeed, kapıda ödemeli siparişleri kargolamadan önce onaylamak için müşterilerinize WhatsApp’tan mesaj gönderir. Shopify, WooCommerce ve EasyOrders ile; elle, dosyadan veya API ile eklediğiniz siparişlerle de çalışır. Shopify mağazaları ödemeyi Shopify içinden yapar; diğer tüm hesaplar gönderilen her WhatsApp mesajı için ödeme yapar."
+  },
+  "header": {
+    "features": "Özellikler",
+    "pricing": "Fiyatlandırma",
+    "how_it_works": "Nasıl çalışır",
+    "sources": "Bağlantı yolları",
+    "docs": "Belgeler",
+    "faq": "SSS",
+    "resources": "Kaynaklar",
+    "login": "Giriş yap",
+    "dashboard": "Panel",
+    "cta_primary": "Ücretsiz başlayın"
+  },
+  "hero": {
+    "title": "Kapıda ödemeli siparişleri",
+    "highlight": "kargolamadan önce onaylayın.",
+    "subtitle": "Akeed her sipariş için müşteriye WhatsApp’tan yazar ve yanıtı kaydeder. Siparişleriniz {platforms} üzerinden gelebilir ya da onları elle, dosyadan veya API ile ekleyebilirsiniz.",
+    "cta_primary": "Ücretsiz başlayın",
+    "cta_shopify": "Shopify’a yükleyin",
+    "microcopy_credits": "{count} ücretsiz WhatsApp mesajı",
+    "microcopy_no_card": "Kredi kartı gerekmez",
+    "microcopy_official": "Resmî WhatsApp Business Platformu",
+    "flow": {
+      "order_title": "Yeni kapıda ödemeli sipariş",
+      "order_meta": "#10482 · EGP 1.250",
+      "message_title": "WhatsApp mesajı",
+      "message_meta": "Otomatik gönderildi",
+      "confirm_title": "Müşteri onaylar",
+      "confirm_meta": "Saniyeler içinde",
+      "updated_title": "Sipariş güncellendi",
+      "updated_meta": "Mağazanızda veya Akeed panelinizde"
+    }
+  },
+  "ecosystem": {
+    "eyebrow": "Satış şeklinize göre tasarlandı",
+    "independent": "Bağımsız"
+  },
+  "sources": {
+    "title": "Siparişleriniz nereden geliyor?",
+    "subtitle": "Yolunuzu seçin, sizi doğrudan doğru adıma götürelim.",
+    "payAsYouGo": "Akeed hesabı · kullandıkça öde",
+    "shopify": {
+      "title": "Shopify",
+      "description": "Uygulamayı Shopify App Store’dan yükleyin. Siparişler otomatik olarak gelir ve Akeed hesabına ihtiyacınız olmaz.",
+      "billing": "Plan ve faturalandırma Shopify içinde",
+      "cta": "Shopify’a yükleyin"
+    },
+    "woocommerce": {
+      "title": "WooCommerce",
+      "description": "Bir Akeed hesabı oluşturun, ardından bağlantıyı mağazanızın yönetim panelinde onaylayın. Anahtar kopyalamanız gerekmez.",
+      "cta": "WooCommerce ile başlayın"
+    },
+    "easyorders": {
+      "title": "EasyOrders",
+      "description": "Bir Akeed hesabı oluşturun, ardından EasyOrders mağazanızı kurulum sayfasından bağlayın.",
+      "cta": "EasyOrders ile başlayın"
+    },
+    "standalone": {
+      "title": "Bağlı mağaza yok",
+      "description": "Facebook, Instagram ve WhatsApp siparişleri ile özel siteler ve sistemler için.",
+      "chips": {
+        "manual": "Elle giriş",
+        "file": "CSV veya Excel dosyası",
+        "api": "Sipariş API’si"
+      },
+      "cta": "Ücretsiz hesap oluşturun"
+    }
+  },
+  "demo": {
+    "badge": "Canlı demo",
+    "title": "Onay akışını",
+    "title_highlight": "gerçek zamanlı izleyin",
+    "subtitle": "Akeed’in markanıza özel, kurallara dayalı bir WhatsApp onay akışıyla sipariş bilgilerini nasıl doğruladığını ve sonucu otomatik olarak nasıl güncellediğini izleyin.",
+    "phone_status": "Çevrimiçi",
+    "chat": {
+      "bot_1": "Merhaba Ahmed 👋\nKapıda ödemeli #10482 numaralı siparişiniz hazır.\nToplam: EGP 1.250\n\nKargoya verebilmemiz için lütfen siparişinizi onaylayın.",
+      "user_1": "Onaylandı ✅",
+      "bot_3": "📍 Teslimat adresi:\n12 King Fahd Road\nRiyad, Suudi Arabistan\n\nBu teslimat adresi doğru mu?",
+      "user_2": "Evet, adres doğru",
+      "bot_5": "Harika ✅ Siparişiniz onaylandı ve kargoya hazır olarak işaretlendi.",
+      "bot_6": "Mağazanız otomatik olarak güncellenecek. Bizi tercih ettiğiniz için teşekkür ederiz.",
+      "buttons": {
+        "confirm": "Siparişi onayla",
+        "cancel": "Siparişi iptal et",
+        "will_confirm_later": "Sonra onaylayacağım",
+        "correct_address": "Evet, adres doğru"
+      }
+    },
+    "bot_name": "Akeed Onay",
+    "bot_name_short": "Akeed",
+    "typing_placeholder": "Bir mesaj yazın...",
+    "stats_title": "Gerçek zamanlı performans",
+    "stat_1_label": "Onaylanan sipariş",
+    "stat_1_value": "12.847",
+    "stat_2_label": "Ortalama yanıt süresi",
+    "stat_2_value": "< 3 sn",
+    "stat_3_label": "Tasarruf edilen kargo maliyeti",
+    "stat_3_value": "34 bin $",
+    "stat_4_label": "Onay oranı",
+    "stat_4_value": "%85",
+    "stat_5_label": "Günlük sipariş",
+    "stat_5_value": "+10 bin",
+    "stat_6_label": "Kurulum süresi",
+    "stat_6_value": "5 dk",
+    "features_title": "Ekipler neden güveniyor",
+    "feature_1": "Resmî Meta WhatsApp Cloud API ile teslimat",
+    "feature_2": "Yapılandırılmış onay ve adres kontrolleri",
+    "feature_3": "Ekibinizin yönetebileceği kurallara dayalı akışlar",
+    "feature_4": "Gerçek zamanlı sipariş durumu güncellemeleri",
+    "feature_5": "Daha hızlı kurulum için paylaşımlı WhatsApp altyapısı"
+  },
+  "how_it_works": {
+    "section_title": "Akeed nasıl çalışır",
+    "main_title": "Siparişleriniz nereden gelirse gelsin, adımlar aynı.",
+    "steps": {
+      "order": {
+        "title": "Sipariş Akeed’e ulaşır",
+        "description": "Bağlı mağazanızdan gelir ya da elle, dosyadan veya API ile eklenir."
+      },
+      "message": {
+        "title": "Müşteriye bir WhatsApp mesajı",
+        "description": "Resmî WhatsApp Business Platformu üzerinden, mağazanız adına otomatik olarak gönderilir."
+      },
+      "reply": {
+        "title": "Müşteri onaylar veya iptal eder",
+        "description": "Sohbette tek dokunuşla. Yanıt vermeyenlere bir hatırlatma gider."
+      },
+      "update": {
+        "title": "Sipariş durumu güncellenir",
+        "description": "Bağlı mağazanızda veya Akeed panelinizde. Böylece yalnızca onaylanan siparişleri kargolarsınız."
+      }
+    }
+  },
+  "trust": {
+    "section_title": "Güvenebileceğiniz kanallar üzerine kurulu",
+    "section_description": "Akeed resmî platformlarda çalışır ve bölgedeki e-ticaret için tasarlanmıştır. Resmî olmayan numaralar yok, geçici çözümler yok.",
+    "official_whatsapp": {
+      "title": "Meta’nın resmî WhatsApp’ı",
+      "description": "Mesajlar onaysız numaralar veya araçlarla değil, resmî WhatsApp Business Platformu üzerinden gönderilir."
+    },
+    "shopify_approved": {
+      "title": "Shopify App Store’da listelenir",
+      "description": "Kurulum ve abonelik, Shopify ekosistemi ve politikaları içinde gerçekleşir."
+    },
+    "independent_stores": {
+      "title": "Bağlı mağaza olmadan da çalışır",
+      "description": "Bir WooCommerce veya EasyOrders mağazası bağlayın ya da siparişleri elle, dosyadan veya Sipariş API’si ile ekleyin. Müşteri her durumda aynı WhatsApp mesajını alır."
+    },
+    "automated_confirmation": {
+      "title": "Otomatik sipariş onayı",
+      "description": "Onay mesajlarını otomatik gönderin ve her müşteri yanıtını tek, anlaşılır bir iş akışında toplayın."
+    },
+    "arabic_first": {
+      "title": "Önce Arapça",
+      "description": "Tam sağdan sola desteğiyle Arapça arayüz ve mesajlar; ayrıca İngilizce, Urduca, İspanyolca ve Fransızca."
+    },
+    "data_protection": {
+      "title": "Mağaza verileriniz koruma altında",
+      "description": "Entegrasyon kimlik bilgileri şifrelenir ve müşteri verileri yalnızca onayı tamamlamak için kullanılır."
+    }
+  },
+  "faq": {
+    "section_title": "Sıkça sorulan sorular",
+    "section_description": "Kurulum, WhatsApp ve planlarla ilgili sık sorulan sorulara kısa yanıtlar. Tam liste için Belgeler’deki Genel SSS sayfasına bakın.",
+    "title": "Sıkça sorulan sorular",
+    "supported_platforms": {
+      "question": "Akeed hangi platformları destekliyor?",
+      "answer": "Akeed; Shopify, WooCommerce ve EasyOrders mağazalarıyla ve bağlı mağaza olmadan da çalışır. Shopify mağazaları uygulamayı Shopify App Store’dan yükler. WooCommerce ve EasyOrders mağazaları bir Akeed hesabı oluşturur ve mağazayı kurulum sayfasından bağlar. Bağlı mağaza yoksa siparişleri elle, CSV veya Excel dosyasından ya da Sipariş API’si ile eklersiniz."
+    },
+    "setup_time": {
+      "question": "Kurulum ne kadar sürer?",
+      "answer": "Satıcıların çoğu kurulumu birkaç dakikada tamamlar ve hemen bir test onayı gönderebilir."
+    },
+    "own_whatsapp_number": {
+      "question": "Başlamak için kendi WhatsApp numaram gerekir mi?",
+      "answer": "Hayır. Satıcıların çoğu Akeed’in paylaşımlı resmî altyapısıyla başlar, gerekirse daha sonra kendi numarasına geçer."
+    },
+    "official_apis": {
+      "question": "Mesajlar resmî WhatsApp API’leri üzerinden mi gönderiliyor?",
+      "answer": "Evet. Akeed, güvenilir mesaj teslimi için Meta’nın resmî WhatsApp API’lerini kullanır."
+    },
+    "customize_messages": {
+      "question": "Akeed mesajlarını ve dilini özelleştirebilir miyim?",
+      "answer": "Evet. Onay metnini özelleştirebilir, markanıza ve müşteri kitlenize en uygun dil üslubunu seçebilirsiniz."
+    },
+    "customer_no_reply": {
+      "question": "Müşteri yanıt vermezse ne olur?",
+      "answer": "Sipariş onaylanmamış olarak kalır. Ekibiniz kendi sürecine göre siparişi bekletebilir, müşteriyle iletişime geçebilir veya kargolamayabilir."
+    },
+    "standalone_start": {
+      "question": "Bağlı mağaza olmadan hemen başlayabilir miyim?",
+      "answer": "Evet. Bir Akeed hesabı oluşturun ve e-posta adresinizi doğrulayın. Hesabınız ücretsiz WhatsApp mesajlarıyla birlikte hemen etkinleşir; siparişleri elle, dosyadan veya API ile ekleyebilirsiniz. WooCommerce ve EasyOrders mağazaları aynı tür hesabı kullanır ve mağazayı kurulum sırasında bağlar. Shopify mağazaları uygulamayı yükler yüklemez başlar."
+    },
+    "credit_usage": {
+      "question": "Krediler tam olarak nasıl sayılır?",
+      "answer": "Bir Akeed hesabında (WooCommerce, EasyOrders veya bağlı mağaza yok), sipariş başına değil, müşteriye gönderilen her WhatsApp mesajı için bir kredi kullanılır. Yanıt vermeyen müşteriye gönderilen hatırlatma bir kredi daha kullanır; gönderilemeyen mesajın kredisi otomatik olarak iade edilir. Shopify mağazaları kredi kullanmaz: aylık bir plana abone olur ve Shopify faturası üzerinden öder."
+    }
+  },
+  "whatsapp_button": {
+    "text": "Önce telefonunuzda deneyin",
+    "message": "Merhaba, Akeed’i denemek istiyorum"
+  },
+  "pricing_credits": {
+    "eyebrow": "Fiyatlandırma",
+    "title": "Yolunuza göre <highlight>net fiyatlandırma.</highlight>",
+    "subtitle": "WooCommerce, EasyOrders ve mağazasız siparişler: gönderdiğiniz mesajlar kadar ödeyin. Shopify mağazaları abone olur ve Shopify içinden öder.",
+    "account_title": "Akeed hesabı · kullandıkça öde",
+    "account_audience": "WooCommerce ve EasyOrders mağazaları ile elle, dosyadan ve API ile eklenen siparişler için.",
+    "unit_text": "WhatsApp mesajı",
+    "unit_price_note": "Bir kredi, müşterinize gönderilen bir WhatsApp mesajıdır.",
+    "per_message": "WhatsApp mesajı başına",
+    "grant_pill": "Kayıtta {count} ücretsiz mesaj",
+    "slider_label": "Kaç mesaja ihtiyacınız var?",
+    "slider_value": "{count} kredi",
+    "total_label": "Toplam",
+    "calculator_orders": "{low}–{high} siparişi karşılar",
+    "how_title": "Krediler nasıl kullanılır",
+    "credit_is_message_title": "Bir kredi bir mesajdır",
+    "credit_is_message_body": "Her WhatsApp mesajı tam olarak bir kredi kullanır.",
+    "followup_title": "Takip mesajları da sayılır",
+    "followup_body": "Müşteri yanıt vermezse hatırlatma bir kredi daha kullanır.",
+    "rejected_title": "Başarısız gönderimler iade edilir",
+    "rejected_body": "Bir gönderim başarısız olursa kredi otomatik olarak hesabınıza geri döner.",
+    "cta": "Ücretsiz hesabınızı oluşturun",
+    "cta_note": "Kredi kartı gerekmez",
+    "shopify_title": "Shopify mağazaları · aylık plan",
+    "shopify_body": "Aylık mesaj hacmine göre bir plan seçin ve Shopify faturanız üzerinden ödeyin. Tüm planlar aynı özelliklere sahiptir ve ilk 30 mesajınız ücretsizdir.",
+    "shopify_cta": "Shopify’daki planları görün",
+    "authoritative_note": "Fiyatlar Mısır lirası olarak gösterilir ve değişebilir. Geçerli fiyat, faturalandırma sayfanızda gösterilen fiyattır."
+  },
+  "mobile_cta": {
+    "start": "Ücretsiz başlayın",
+    "shopify": "Shopify’a yükleyin"
+  },
+  "auth": {
+    "signInToAccount": "Hesabınıza giriş yapın",
+    "dontHaveAccount": "Hesabınız yok mu?",
+    "signUp": "Kaydolun",
+    "email": "E-posta",
+    "password": "Şifre",
+    "showPassword": "Şifreyi göster",
+    "hidePassword": "Şifreyi gizle",
+    "rememberMe": "Beni hatırla",
+    "forgotPassword": "Şifrenizi mi unuttunuz?",
+    "signingIn": "Giriş yapılıyor...",
+    "signIn": "Giriş yap",
+    "orContinueWith": "Veya şununla devam edin",
+    "continueWithShopify": "Shopify ile devam et",
+    "shopifyStoreDomain": "Shopify mağazanız",
+    "shopifyStorePlaceholder": "mystore",
+    "shopifyStoreSuffix": ".myshopify.com",
+    "shopifyStoreRequired": "Lütfen mağaza adınızı girin",
+    "connectShopify": "Shopify mağazasını bağla",
+    "passwordRequirement": "En az 8 karakter",
+    "confirmPassword": "Şifreyi onaylayın",
+    "signInFailed": "Giriş yapılamadı. Lütfen bilgilerinizi kontrol edin.",
+    "emailNotConfirmed": "E-posta adresiniz henüz onaylanmadı. Giriş yapmadan önce gelen kutunuzu kontrol edip e-postanızı onaylayın.",
+    "organizationSetupFailedTitle": "Kuruluşunuzu ve sipariş kaynağınızı hazırlayamadık",
+    "organizationSetupFailedMessage": "Hesabınıza giriş yapıldı ancak kuruluş ve sipariş kaynağı kurulumu tamamlanmadı. Lütfen tekrar deneyin.",
+    "retryOrganizationSetup": "Tekrar dene",
+    "signOut": "Çıkış yap",
+    "passwordsDoNotMatch": "Şifreler eşleşmiyor",
+    "forgotPasswordTitle": "Şifrenizi sıfırlayın",
+    "forgotPasswordSubtitle": "E-posta adresinizi girin, şifrenizi sıfırlamanız için size bir bağlantı gönderelim.",
+    "sendResetLink": "Sıfırlama bağlantısı gönder",
+    "sendingResetLink": "Gönderiliyor...",
+    "resetLinkSent": "Bu e-posta adresiyle bir hesap varsa sıfırlama bağlantısı gönderildi.",
+    "resetLinkFailed": "Sıfırlama bağlantısı gönderilemedi. Lütfen tekrar deneyin.",
+    "backToSignIn": "Girişe dön",
+    "resetPasswordTitle": "Yeni şifre belirleyin",
+    "resetPasswordSubtitle": "Yeni şifrenizi aşağıya girin.",
+    "resetPasswordProcessing": "Sıfırlama bağlantınız doğrulanıyor...",
+    "resetPasswordSuccess": "Şifreniz güncellendi. Artık yeni şifrenizle giriş yapabilirsiniz.",
+    "resetPasswordFailed": "Şifre güncellenemedi. Lütfen tekrar deneyin veya yeni bir sıfırlama bağlantısı isteyin.",
+    "newPassword": "Yeni şifre",
+    "resetPassword": "Şifreyi sıfırla",
+    "resettingPassword": "Sıfırlanıyor...",
+    "signup": {
+      "heading": "Hesabınızı oluşturun",
+      "step": "Adım {current} / {total}",
+      "subheading": "İki dakika sonra kapıda ödemeli siparişleri WhatsApp’tan onaylamaya başlarsınız.",
+      "fullName": {
+        "label": "Adınız"
+      },
+      "storeName": {
+        "label": "Mağaza adı",
+        "hint": "Müşterilerinize giden onay mesajlarında gösterilir."
+      },
+      "email": {
+        "label": "E-posta"
+      },
+      "password": {
+        "label": "Şifre",
+        "hint": "En az 8 karakter."
+      },
+      "terms": "<terms>Kullanım Koşulları</terms> ve <privacy>Gizlilik Politikası</privacy> metinlerini kabul ediyorum",
+      "submit": "Hesap oluştur",
+      "submitting": "Hesap oluşturuluyor…",
+      "haveAccount": "Hesabınız var mı?",
+      "signIn": "Giriş yap",
+      "errors": {
+        "fullNameRequired": "Adınızı girin.",
+        "storeNameRequired": "Mağaza adınızı, müşterilerinizin bildiği şekilde girin.",
+        "emailRequired": "E-posta adresinizi girin.",
+        "emailInvalid": "Geçerli bir e-posta adresi girin, örneğin ad@magaza.com",
+        "emailRegistered": "Bu e-posta adresi zaten kayıtlı. <link>Bunun yerine giriş yapın</link>",
+        "passwordTooShort": "Şifre çok kısa. En az 8 karakter kullanın.",
+        "passwordWeak": "Bu şifre kolay tahmin edilir. Rakam veya simge ekleyin.",
+        "termsRequired": "Hesabınızı oluşturmak için koşulları kabul edin.",
+        "rateLimited": "Kısa sürede çok fazla deneme yapıldı. Bir dakika bekleyip tekrar deneyin.",
+        "failed": "Hesabınızı oluşturamadık. Lütfen tekrar deneyin."
+      },
+      "benefits": {
+        "credits": {
+          "title": "{count, plural, one {1 ücretsiz WhatsApp mesajı} other {{formatted} ücretsiz WhatsApp mesajı}}"
+        },
+        "price": {
+          "body": "Sonrasında WhatsApp mesajı başına {price}. Aylık abonelik yok, başlamak için kart gerekmez."
+        }
+      },
+      "source": {
+        "heading": "Siparişleriniz nereden geliyor?",
+        "subtitle": "Yolunuzu seçin, sizi doğru adıma götürelim.",
+        "shopifyTitle": "Shopify",
+        "shopifyRow": "Akeed’i Shopify App Store’dan yükleyin. Burada hesap açmanız gerekmez.",
+        "summaryLabel": "Sipariş kaynağı",
+        "change": "Değiştir",
+        "changeLabel": "Sipariş kaynağını değiştir",
+        "options": {
+          "standalone": {
+            "title": "Bağlı mağaza yok",
+            "description": "Siparişleri elle, CSV veya Excel dosyasından ya da API ile ekleyin."
+          },
+          "easyorders": {
+            "title": "EasyOrders",
+            "description": "Bir hesap oluşturun, ardından EasyOrders mağazanızı bağlayın."
+          },
+          "woocommerce": {
+            "title": "WooCommerce",
+            "description": "Bir hesap oluşturun, ardından bağlantıyı mağazanızın yönetim panelinde onaylayın."
+          }
+        }
+      },
+      "next": {
+        "heading": "Sırada ne var",
+        "mobileOffer": "{count, plural, one {1 ücretsiz WhatsApp mesajıyla} other {{formatted} ücretsiz WhatsApp mesajıyla}} başlarsınız; sonrasında mesaj başına {price}.",
+        "mobile": {
+          "standalone": "E-postanızı doğruladıktan sonra mesajı telefonunuzda dener ve siparişlerinizi eklersiniz.",
+          "woocommerce": "E-postanızı doğruladıktan sonra mağazanızı WooCommerce yönetim panelinizde onaylayarak bağlarsınız.",
+          "easyorders": "E-postanızı doğruladıktan sonra EasyOrders mağazanızı kurulum sayfasından bağlarsınız."
+        },
+        "steps": {
+          "standalone": {
+            "first": {
+              "title": "E-postanızı doğrulayın",
+              "body": "Size bir etkinleştirme bağlantısı göndeririz; bağlantı sizi doğrudan kuruluma geri getirir."
+            },
+            "second": {
+              "title": "Mesajı telefonunuzda deneyin",
+              "body": "Gerçek bir siparişten önce müşterinizin tam olarak ne alacağını görürsünüz."
+            },
+            "third": {
+              "title": "İlk siparişinizi ekleyin",
+              "body": "Elle, CSV veya Excel dosyasından ya da API ile."
+            }
+          },
+          "woocommerce": {
+            "first": {
+              "title": "E-postanızı doğrulayın",
+              "body": "Size bir etkinleştirme bağlantısı göndeririz; WooCommerce seçiminiz kayıtlı kalır."
+            },
+            "second": {
+              "title": "Mağazanızı bağlayın",
+              "body": "Mağaza adresinizi girer ve bağlantıyı WooCommerce yönetim panelinizde onaylarsınız. Anahtar kopyalamanız gerekmez."
+            },
+            "third": {
+              "title": "Mesajı telefonunuzda deneyin",
+              "body": "Gerçek bir siparişten önce müşterinizin tam olarak ne alacağını görürsünüz."
+            }
+          },
+          "easyorders": {
+            "first": {
+              "title": "E-postanızı doğrulayın",
+              "body": "Size bir etkinleştirme bağlantısı göndeririz; EasyOrders seçiminiz kayıtlı kalır."
+            },
+            "second": {
+              "title": "Mağazanızı bağlayın",
+              "body": "EasyOrders mağazanızı kurulum sayfasından bağlarsınız."
+            },
+            "third": {
+              "title": "Mesajı telefonunuzda deneyin",
+              "body": "Gerçek bir siparişten önce müşterinizin tam olarak ne alacağını görürsünüz."
+            }
+          }
+        }
+      }
+    },
+    "verifyEmail": {
+      "heading": "Hesabınızı etkinleştirmek için gelen kutunuzu açın",
+      "body": "Etkinleştirme bağlantısını şu adrese gönderdik: <email></email>. Bağlantıyı açtığınızda kurulumu tamamlamak için doğrudan buraya dönersiniz.",
+      "steps": {
+        "verify": "E-postanızı bağlantıdan doğrulayın",
+        "whatsapp": "WhatsApp numaranızı ekleyin",
+        "test": "Onay mesajını telefonunuzda deneyin"
+      },
+      "caption": "İlk mesajınıza yaklaşık iki dakika var. Ücretsiz kredileriniz doğrulama yapar yapmaz hazır olur.",
+      "changeEmail": "E-postayı değiştir",
+      "spamHint": "Gelmedi mi? İstenmeyen e-posta klasörünüzü kontrol edin.",
+      "resend": "Yeniden gönder",
+      "resending": "Gönderiliyor…",
+      "resendIn": "{seconds} sn sonra yeniden gönder",
+      "resent": "Yeni bir bağlantı gönderdik. Gelen kutunuzdaki en son e-postayı kullanın.",
+      "resendFailed": "Bağlantıyı şu anda gönderemedik. Biraz sonra tekrar deneyin."
+    },
+    "linkError": {
+      "link_expired": "Bu etkinleştirme bağlantısının süresi dolmuş veya bağlantı zaten kullanılmış. E-postanıza yeni bir bağlantı gönderin.",
+      "unknown": "Bu bağlantıyı doğrulayamadık. E-postanıza yeni bir bağlantı gönderin.",
+      "resend": "Yeni bağlantı gönder",
+      "resending": "Gönderiliyor…",
+      "resendIn": "{seconds} sn sonra yeniden gönder",
+      "sent": "Yeni bir bağlantı gönderdik. Gelen kutunuzdaki en son e-postayı açın.",
+      "failed": "Bağlantıyı şu anda gönderemedik. Biraz sonra tekrar deneyin.",
+      "emailMissing": "Bağlantıyı gönderebilmemiz için e-posta adresinizi girin."
+    }
+  },
+  "legal": {
+    "termsEyebrow": "Yasal",
+    "termsTitle": "Hizmet Koşulları",
+    "termsLastUpdated": "Son güncelleme: Mart 2026",
+    "termsIntro": "Akeed’i kullanarak aşağıdaki hüküm ve koşulları kabul etmiş olursunuz.",
+    "termsSection1Title": "1. Hizmetin Tanımı",
+    "termsSection1Body": "Akeed, kapıda ödeme modeliyle çalışan e-ticaret mağazalarına WhatsApp tabanlı otomatik sipariş doğrulama hizmeti sunar.",
+    "termsSection2Title": "2. Kullanıcı Yükümlülükleri",
+    "termsSection2Body": "Hesap bilgilerinizin güvenliğini sağlamaktan ve hesabınız altında gerçekleşen tüm işlemlerden siz sorumlusunuz.",
+    "termsSection3Title": "3. Verilerin Kullanımı",
+    "termsSection3Body": "Sipariş ve müşteri verilerini yalnızca doğrulama hizmetlerini sunmak amacıyla işleriz. Ayrıntılar için Gizlilik Politikamıza bakın.",
+    "termsSection4Title": "4. Sorumluluğun Sınırlandırılması",
+    "termsSection4Body": "Akeed \"olduğu gibi\" esasıyla sunulur. Hizmetin kesintisiz olacağını garanti etmeyiz ve hizmetin kullanımından doğan dolaylı zararlardan sorumlu değiliz.",
+    "termsSection5Title": "5. Koşullarda Değişiklik",
+    "termsSection5Body": "Bu koşulları dilediğimiz zaman değiştirme hakkımız saklıdır. Hizmeti kullanmaya devam etmeniz, güncellenmiş koşulları kabul ettiğiniz anlamına gelir.",
+    "privacyEyebrow": "Gizlilik",
+    "privacyTitle": "Gizlilik Politikası",
+    "privacyLastUpdated": "Son güncelleme: Mart 2026",
+    "privacyIntro": "Bu politika, Akeed’in verilerinizi nasıl topladığını, kullandığını ve koruduğunu açıklar.",
+    "privacySection1Title": "1. Topladığımız Bilgiler",
+    "privacySection1Body": "Hesap bilgilerini (e-posta, ad, şirket), mağaza verilerini (siparişler, doğrulama için müşteri bilgileri) ve kullanım verilerini (erişim kayıtları, özellik kullanımı) toplarız.",
+    "privacySection2Title": "2. Verilerinizi Nasıl Kullanırız",
+    "privacySection2Body": "Verileriniz sipariş doğrulama hizmetlerini sunmak, platformumuzu geliştirmek ve hizmet güncellemelerini bildirmek için kullanılır. Verilerinizi üçüncü taraflara satmayız.",
+    "privacySection3Title": "3. Verilerin Saklanması",
+    "privacySection3Body": "Verilerinizi hesabınız etkin olduğu sürece saklarız. Destek ekibiyle iletişime geçerek verilerinizin silinmesini dilediğiniz zaman talep edebilirsiniz.",
+    "privacySection4Title": "4. Güvenlik",
+    "privacySection4Body": "Verilerinizi korumak için sektör standardında şifreleme ve güvenlik uygulamaları kullanırız. Ancak internet üzerinden yapılan hiçbir iletim yöntemi %100 güvenli değildir.",
+    "privacySection5Title": "5. İletişim",
+    "privacySection5Body": "Gizlilikle ilgili sorularınız için support@getakeed.com adresinden bize ulaşın.",
+    "refundEyebrow": "Yasal",
+    "refundTitle": "İade ve İptal Politikası",
+    "refundLastUpdated": "Son güncelleme: Ekim 2026",
+    "refundIntro": "Bu politika, Akeed’de iadelerin, mesaj kredilerinin ve abonelik iptallerinin nasıl işlediğini açıklar.",
+    "refundSection1Title": "1. Dijital Hizmetlerin Niteliği",
+    "refundSection1Body": "Akeed, Paymob üzerinden ödenen ön ödemeli WhatsApp sipariş doğrulama mesaj kredileri satar ve Shopify kullanan satıcılara aylık Shopify uygulama aboneliği sunar. Her doğrulama mesajı gönderildiğinde kredi kullanılır. WhatsApp bir mesajı kabul etmezse o mesajın kredisi otomatik olarak bakiyenize iade edilir.",
+    "refundSection2Title": "2. Mesaj Kredisi İadeleri",
+    "refundSection2Body": "Tamamlanan tüm mesaj kredisi satın alımları, bakiyenin tamamı kullanılsın veya kullanılmasın kesindir ve iade edilmez. Satın alınan kredilerin süresi dolmaz. Ödemeler Paymob tarafından işlenir; Akeed kart veya cüzdan bilgilerinizi saklamaz.",
+    "refundSection3Title": "3. Aboneliğin İptali",
+    "refundSection3Body": "Akeed Shopify uygulama aboneliği, Shopify yönetim panelinizdeki faturalandırma sayfasından dilediğiniz zaman iptal edilebilir. İptal, Shopify’ın kendi faturalandırma dönemi kurallarına tabidir ve içinde bulunulan faturalandırma dönemi için iade yapılmaz. Bağımsız hesapların aboneliği yoktur: yalnızca kredi satın aldığınızda ödeme yaparsınız, dolayısıyla iptal edilecek bir şey yoktur.",
+    "refundSection4Title": "4. İptal Süreci",
+    "refundSection4Body": "Shopify satıcıları: iptal etmek için Akeed uygulamasını Shopify yönetim panelinizden kaldırın veya aboneliği Shopify faturalandırma ayarlarınızdan iptal edin. Kalan mesaj kredisi bakiyesi hesabınızda tutulur ve uygulamayı yeniden yüklerseniz kullanılabilir. Bağımsız hesaplar: Akeed’i kullanmayı ve kredi satın almayı dilediğiniz zaman bırakabilirsiniz. Hesabınızı kapatmak için 5. bölümdeki bilgilerden bize ulaşın.",
+    "refundSection5Title": "5. İade Talepleri için İletişim",
+    "refundSection5Body": "Faturalandırma anlaşmazlıkları, hatalı tahsil edilen ödemeler veya istisnai iade talepleri için support@getakeed.com ya da +201148675077 üzerinden bize ulaşın.",
+    "homeLink": "Ana sayfaya dön",
+    "termsLink": "Hizmet Koşullarını görüntüle",
+    "privacyLink": "Gizlilik Politikasını görüntüle",
+    "refundLink": "İade ve İptal Politikasını görüntüle"
+  },
+  "footer": {
+    "logoAlt": "Akeed",
+    "navigationLabel": "Alt bilgi gezinmesi",
+    "navigationTitle": "Gezinme",
+    "supportTitle": "Destek",
+    "legalTitle": "Yasal",
+    "home": "Ana sayfa",
+    "about": "Hakkımızda",
+    "features": "Özellikler",
+    "pricing": "Fiyatlandırma",
+    "docs": "Belgeler",
+    "integrations": "Entegrasyonlar",
+    "changelog": "Sürüm notları",
+    "helpCenter": "Yardım merkezi",
+    "contactUs": "Bize ulaşın",
+    "status": "Durum",
+    "resources": "Kaynaklar",
+    "community": "Topluluk",
+    "privacyPolicy": "Gizlilik Politikası",
+    "termsOfService": "Hizmet Koşulları",
+    "refundPolicy": "İade ve İptal Politikası",
+    "security": "Güvenlik",
+    "dataProcessing": "Veri işleme",
+    "cookiePolicy": "Çerez Politikası",
+    "facebook": "Facebook",
+    "youtube": "YouTube",
+    "instagram": "Instagram",
+    "ctaTitle": "Akeed ile başlayın",
+    "ctaDescription": "Zaman kazanan ve işlerini ileri taşıyan ekiplere katılın.",
+    "ctaLabel": "Hesap oluştur",
+    "copyright": "© {year} Akeed. Tüm hakları saklıdır.",
+    "registeredAddress": "Giza, Mısır"
+  },
+  "support": {
+    "eyebrow": "Genel destek",
+    "title": "Size nasıl yardımcı olabiliriz?",
+    "intro": "Hesabınız, mağaza kurulumu, sipariş içe aktarma, faturalandırma veya sipariş doğrulama ile ilgili sorularınız için Akeed destek ekibine ulaşın.",
+    "emailTitle": "E-posta desteği",
+    "emailDescription": "Talebinizi destek ekibimize gönderin, en kısa sürede yanıt verelim.",
+    "email": "support@getakeed.com",
+    "phoneTitle": "Telefon desteği",
+    "phoneDescription": "Hesabınız veya kurulumunuzla ilgili hızlı yardım için bizi doğrudan arayın.",
+    "phoneNumber": "+201148675077",
+    "addressTitle": "Kayıtlı adres",
+    "registeredAddress": "Giza, Mısır",
+    "addressDescription": "Mısır’daki resmî kayıtlı şirket adresimiz.",
+    "whatsappTitle": "WhatsApp desteği",
+    "whatsappDescription": "Hızlıca yazışmayı mı tercih edersiniz? Bize WhatsApp’tan yazın, oradan size yol gösterelim.",
+    "whatsappCta": "WhatsApp’ı aç",
+    "whatsappMessage": "Merhaba, Akeed ile ilgili yardıma ihtiyacım var.",
+    "detailsTitle": "Neleri eklemelisiniz",
+    "detailStore": "Mağaza adınız (Shopify kullanıyorsanız Shopify alan adınız da).",
+    "detailContact": "Akeed hesabınıza bağlı e-posta adresi.",
+    "detailIssue": "Soru, kurulum adımı veya sipariş doğrulama sorununun kısa bir açıklaması.",
+    "responseTitle": "Yanıt beklentileri",
+    "responseBody": "Size hızlıca yardımcı olabilmemiz için lütfen mağaza adınızı, iletişim e-postanızı ve sorunun kısa bir açıklamasını ekleyin.",
+    "backHome": "Ana sayfaya dön"
+  },
+  "embeddedSupport": {
+    "titleBarAction": "Destek",
+    "sidebarLabel": "Destek",
+    "defaultMessage": "Merhaba, Akeed ile ilgili yardıma ihtiyacım var.",
+    "shopLabel": "Mağaza",
+    "pageLabel": "Geçerli sayfa",
+    "localeLabel": "Dil",
+    "issuePrompt": "Sorun"
+  },
+  "appHeader": {
+    "dashboard": "Panel",
+    "verifications": "Onaylar",
+    "billing": "Faturalandırma ve krediler",
+    "paymentStatus": "Ödeme durumu",
+    "settings": "Ayarlar",
+    "navigationMenu": "Gezinme menüsünü aç",
+    "primaryNavigation": "Ana gezinme",
+    "workspace": "Çalışma alanı",
+    "workspaceFallback": "Çalışma alanım",
+    "userFallback": "Giriş yapmış kullanıcı",
+    "identityLoading": "Çalışma alanı bilgileri yükleniyor",
+    "helpSupport": "Yardım ve destek",
+    "docs": "Belgeler",
+    "admin": "Yönetici",
+    "search": "Sipariş ara",
+    "searchOrders": "Sipariş aramasını aç",
+    "notifications": "Bildirimler",
+    "breadcrumbs": "İçerik yolu",
+    "closeNavigation": "Gezinme menüsünü kapat",
+    "navigationDescription": "Akeed’in korumalı sayfaları arasında gezinin.",
+    "changeLocale": "Dili değiştir",
+    "signOut": "Çıkış yap",
+    "signingOut": "Çıkış yapılıyor..."
+  },
+  "common": {
+    "loading": "Akeed yükleniyor..."
+  },
+  "theme": {
+    "label": "Tema",
+    "light": "Açık",
+    "dark": "Koyu",
+    "system": "Sistem"
+  },
+  "onboarding": {
+    "organization": "Kuruluş",
+    "platform": "Platform",
+    "whatsapp": "WhatsApp",
+    "welcomeToAkeed": "Akeed’e hoş geldiniz!",
+    "letsSetupAccount": "Hesabınızı kuralım",
+    "createOrganization": "Kuruluş oluştur",
+    "organizationDescription": "Başlamak için lütfen kuruluş bilgilerinizi girin.",
+    "organizationName": "Kuruluş adı",
+    "organizationNamePlaceholder": "Kuruluşunuzun adını girin",
+    "organizationSlug": "Kuruluş kısa adı",
+    "continue": "Devam et",
+    "processing": "İşleniyor...",
+    "gotoDashboard": "Panele git",
+    "skipForNow": "Şimdilik atla",
+    "readyToStart": "Akeed’i kullanmaya hazırsınız!",
+    "selectPlatforms": "Platformlarınızı seçin",
+    "platformsDescription": "Akeed’e bağlamak istediğiniz platformları seçin.",
+    "configureWhatsApp": "WhatsApp’ı yapılandırın",
+    "whatsappDescription": "Sipariş onaylarını etkinleştirmek için WhatsApp Business bilgilerinizi girin.",
+    "phoneNumberId": "Telefon numarası kimliği",
+    "businessAccountId": "İşletme hesabı kimliği",
+    "accessToken": "Erişim belirteci",
+    "whatsappHelp": "Bu bilgileri WhatsApp Business panelinizde bulabilirsiniz.",
+    "allSet": "Her şey hazır!",
+    "title": "Kapıda ödemeli siparişleri hazırlamadan önce onaylayın",
+    "stepCounter": "Adım {current} / {total}",
+    "flow": {
+      "storeSetup": "Mağaza kurulumu",
+      "messageTemplate": "Mesaj şablonu",
+      "plan": "Plan",
+      "dashboard": "Panel",
+      "quickSetup": "Hızlı kurulum",
+      "tryMessage": "Mesajı deneyin"
+    },
+    "welcomeHeading": "Kapıda ödemeli siparişleri hazırlamadan önce WhatsApp’tan onaylayın",
+    "welcomeBody": "Akeed’i WhatsApp onay talepleri gönderecek, müşteri yanıtlarını kaydedecek ve Shopify sipariş durumunu güncelleyecek şekilde kurun.",
+    "startSetup": "Kuruluma başla",
+    "storeNameLabel": "Mağaza adı",
+    "storeNameRequired": "Mağaza adı zorunludur.",
+    "defaultLanguageLabel": "Varsayılan mesaj dili",
+    "languageAuto": "Otomatik, müşteri telefonunun ülkesine göre",
+    "languageEnglish": "İngilizce",
+    "languageArabic": "Arapça",
+    "autoVerifyLabel": "Otomatik doğrulama açılsın mı?",
+    "autoVerifyDescription": "Açık olduğunda Akeed, yeni kapıda ödemeli siparişler için WhatsApp onay mesajlarını otomatik olarak gönderir.",
+    "billingManagementUnavailable": "Faturalandırma yönetimi kullanılamıyor. Erişiminizin incelenmesi için destek ekibine ulaşın.",
+    "billingHeading": "Faturalandırmayı etkinleştirme",
+    "billingBody": "Siparişleri doğrulamaya başlamak için lütfen planınızı etkinleştirin.",
+    "activatePlan": "Planı etkinleştir",
+    "planPriceFree": "Ücretsiz",
+    "planPricePerMonth": "{price}/ay",
+    "planVolumePerMonth": "Ayda en fazla {count} WhatsApp onayı",
+    "planStarterName": "Starter",
+    "planStarterPrice": "Ücretsiz",
+    "planStarterVolume": "30 WhatsApp onayı (tek seferlik)",
+    "planBasicName": "Basic",
+    "planBasicPrice": "9,99 $/ay",
+    "planBasicVolume": "Ayda 300 WhatsApp onayı",
+    "planProName": "Pro",
+    "planProPrice": "22,99 $/ay",
+    "planProVolume": "Ayda 1.000 WhatsApp onayı",
+    "planBusinessName": "Scale",
+    "planBusinessPrice": "49,99 $/ay",
+    "planBusinessVolume": "Ayda 2.500 WhatsApp onayı",
+    "prefillWarning": "Shopify mağaza bilgilerini önceden dolduramadık. Lütfen mağaza adını elle girin.",
+    "settingsSaveError": "Kurulum ayarlarınızı kaydedemedik. Lütfen tekrar deneyin.",
+    "billingActivationError": "Faturalandırma etkinleştirmesini başlatamadık. Lütfen tekrar deneyin.",
+    "billingStatusPending": "Faturalandırma onayınız hâlâ bekliyor. Lütfen onayı Shopify’da tamamlayıp tekrar deneyin.",
+    "billingStatusDeclined": "Faturalandırma onayınız reddedildi. Devam etmek için lütfen bir plan seçip faturalandırmayı onaylayın.",
+    "billingStatusFrozen": "Aboneliğiniz donduruldu. Lütfen faturalandırma sorununu Shopify’da çözüp planınızı yeniden etkinleştirin.",
+    "billingStatusExpired": "Aboneliğinizin süresi doldu. Siparişleri doğrulamaya devam etmek için lütfen bir planı yeniden etkinleştirin.",
+    "billingStatusCanceled": "Aboneliğiniz iptal edildi. Devam etmek için lütfen bir plan seçip faturalandırmayı etkinleştirin.",
+    "billingStatusError": "Faturalandırma durumunuzu doğrulayamadık. Lütfen planınızı tekrar etkinleştirmeyi deneyin.",
+    "billingStatusNeedsAttention": "Faturalandırma durumunuzun kontrol edilmesi gerekiyor. Devam etmek için lütfen planınızı etkinleştirin veya güncelleyin.",
+    "setup": {
+      "heading": "Akeed’e hoş geldiniz",
+      "subheading": "Bir dakika sonra kapıda ödemeli siparişleri WhatsApp’tan onaylamaya başlarsınız.",
+      "freePlanTitle": "Ücretsiz planınız etkin: 30 onay mesajı",
+      "freePlanUsedTitle": "Test mesajı her zaman ücretsizdir",
+      "freePlanUsedDescription": "Bu mağaza ücretsiz planını daha önce kullandı. Kurulumu tamamlayıp mesajı deneyin; gerçek siparişleri onaylamak için panelden bir plan seçebilirsiniz.",
+      "storeNameLabel": "Mesajda görünecek mağaza adı",
+      "languageLabel": "Müşteri mesajlarının dili",
+      "phoneLabel": "Size test mesajı göndereceğimiz WhatsApp numaranız",
+      "phoneHelp": "Mağaza bilgilerinizden alındı. Müşterilerinizin ne gördüğünü görmeniz için bir sonraki adımda bu numaraya test mesajı göndereceğiz.",
+      "autoVerifyLabel": "Her yeni kapıda ödemeli siparişi otomatik olarak onaylat",
+      "autoVerifyDescription": "Müşterinin yanıtı siparişi Shopify’da otomatik olarak günceller.",
+      "autoVerifyConsent": "Kurulumdan sonra Akeed yeni kapıda ödemeli siparişleri otomatik olarak onaylatmaya başlar. Bunu ayarlardan dilediğiniz zaman kapatabilirsiniz.",
+      "submit": "Sonraki: test mesajı gönder",
+      "durationHint": "Yaklaşık 60 saniye",
+      "storeNameRequired": "Mağaza adınızı girin.",
+      "phoneInvalid": "Ülke kodu dahil geçerli bir WhatsApp numarası girin.",
+      "saveError": "Kurulumunuzu kaydedemedik. Tekrar deneyin.",
+      "prefillWarning": "Mağaza bilgilerinizi yükleyemedik. Alanları doldurup devam edin."
+    },
+    "test": {
+      "heading": "Müşterinizin ne göreceğini görün",
+      "subheading": "WhatsApp’ınıza bir test onayı gönderdik. Telefonunuzda açıp onay düğmesine dokunun.",
+      "sentTo": "Gönderildiği numara",
+      "changeNumber": "Numarayı değiştir",
+      "freeNote": "Test mesajı ücretsizdir, bakiyenizden düşülmez ve sessiz saatlerde bile hemen gönderilir.",
+      "resend": "Gelmedi mi? Yeniden gönder",
+      "resendIn": "{seconds} saniye sonra yeniden gönder",
+      "skip": "Testi atla. Daha sonra panelden deneyebilirsiniz",
+      "failed": "WhatsApp test mesajını iletemedi. Numarayı kontrol edip yeniden gönderin veya numarayı değiştirin.",
+      "timeline": {
+        "sending": "Mesaj gönderiliyor…",
+        "sent": "Mesaj gönderildi",
+        "awaitingDelivery": "Telefonunuzda WhatsApp’ı açın",
+        "delivered": "Telefonunuza ulaştı",
+        "tapConfirm": "Onay düğmesine dokunun",
+        "confirmed": "Siparişi onayladınız",
+        "canceled": "Siparişi iptal ettiniz",
+        "autoDetect": "Yanıtınızı otomatik olarak algılayacağız"
+      },
+      "errors": {
+        "cooldown": "Yeniden göndermeden önce birkaç saniye bekleyin.",
+        "dailyLimit": "Bugünkü test mesajı sınırına ulaştınız. Yarın tekrar deneyin veya şimdilik atlayın.",
+        "phoneMissing": "Önce WhatsApp numaranızı ekleyin.",
+        "sendFailed": "Test mesajını gönderemedik. Tekrar deneyin.",
+        "skipFailed": "Testi atlayamadık. Tekrar deneyin."
+      },
+      "phone": {
+        "senderName": "Akeed",
+        "senderStatus": "İşletme hesabı",
+        "avatarAlt": "Akeed",
+        "today": "Bugün",
+        "previewError": "Mesaj önizlemesini yükleyemedik. Ayarlarınız yine de kaydedilir."
+      }
+    },
+    "success": {
+      "eyebrow": "Kurulum tamamlandı ✓",
+      "heading": "Onayınız ulaştı. Akeed böyle çalışır",
+      "headingCanceled": "İptaliniz ulaştı. Akeed böyle çalışır",
+      "subheading": "Akeed artık mağazanızda yayında. Her kapıda ödemeli siparişte şunlar olur:",
+      "pipeline": {
+        "order": {
+          "title": "Yeni bir sipariş gelir",
+          "description": "Mağazanızdaki herhangi bir kapıda ödemeli sipariş."
+        },
+        "message": {
+          "title": "Müşteriniz bir mesaj alır",
+          "description": "Az önce gördüğünüz mesajın aynısı; yanıt vermezse bir de hatırlatma."
+        },
+        "update": {
+          "title": "Sipariş kendiliğinden güncellenir",
+          "description": "Shopify’da onaylandı veya iptal edildi etiketi eklenir; sizin bir şey yapmanız gerekmez."
+        }
+      },
+      "exampleTitle": "Örnek: siparişin Shopify’daki görünümü",
+      "exampleOrderDetails": "{customer} · {total} · Kapıda ödeme",
+      "dashboardCta": "Panele git",
+      "editMessageCta": "Mesaj metnini düzenle"
+    }
+  },
+  "dashboard": {
+    "mainTitle": "Panel",
+    "mainSubtitle": "Kapıda ödeme onaylarını ve müşteri yanıtlarını takip edin.",
+    "title": "Panel",
+    "subtitle": "Kanallarınızdaki doğrulama durumunu ve son siparişleri izleyin.",
+    "valueProposition": "Akeed, kapıda ödemeli siparişleri hazırlamadan önce WhatsApp üzerinden onaylar.",
+    "standalone": {
+      "manualConfirmBody": "Akeed siparişi, müşteri onaylamış gibi onaylandı olarak kaydeder. Başka mesaj gönderilmez.",
+      "credits": {
+        "warning": "{limit} kredinin {used} tanesini kullandınız. Krediler bittiğinde onaylar durur.",
+        "exhausted": "Tüm kredilerinizi kullandınız. Kredi yükleyene kadar onaylar durduruldu.",
+        "cta": "Kredi satın al"
+      },
+      "header": {
+        "credits": "{count, plural, one {mesaj kredisi} other {mesaj kredisi}}",
+        "creditsLabel": "{count, plural, one {# mesaj kredisi kaldı} other {# mesaj kredisi kaldı}}",
+        "topUp": "Kredi yükle",
+        "topUpLabel": "Mesaj kredisi yükle"
+      },
+      "settings": {
+        "autoConfirm": "Otomatik onay",
+        "reminder": "Hatırlatma süresi",
+        "reminderOff": "Hatırlatma",
+        "quietHours": "Sessiz saatler",
+        "on": "Açık",
+        "off": "Kapalı",
+        "minutes": "{count, plural, one {# dk} other {# dk}}",
+        "hours": "{count, plural, one {# saat} other {# saat}}",
+        "edit": "Ayarları düzenle"
+      },
+      "kpis": {
+        "confirmed": "Onaylanan",
+        "canceled": "Kargolamadan önce iptal edilen",
+        "canceledDetail": "Kargo masrafından tasarruf edildi",
+        "rate": "Onay oranı",
+        "rateDetail": "{confirmed}/{sent}",
+        "rateDetailLabel": "Mesaj gönderilen {sent} siparişten {confirmed} tanesi onaylandı"
+      },
+      "needsAction": {
+        "countPill": "{count, plural, one {# sipariş} other {# sipariş}}",
+        "confirm": "Elle onayla",
+        "more": "{order} numaralı sipariş için diğer işlemler",
+        "viewInList": "Onaylarda görüntüle",
+        "cancel": "Siparişi iptal et"
+      },
+      "flow": {
+        "replied": "Yanıt verenler",
+        "deliveryRate": "Teslim oranı",
+        "replyRate": "Yanıt oranı",
+        "legendLabel": "Sonuca göre yanıtlar",
+        "confirmed": "Onaylandı",
+        "canceled": "İptal edildi",
+        "noReply": "Henüz yanıt yok",
+        "moreManual": "{count, plural, one {# sipariş daha elle onaylandı} other {# sipariş daha elle onaylandı}}",
+        "barLabel": "{label}: gönderilen {sent} mesajdan {count}"
+      },
+      "table": {
+        "searchPlaceholder": "Sipariş numarası veya telefon ara",
+        "searchShortcut": "Aramak için / tuşuna basın",
+        "sortedBy": "Son güncellemeye göre, en yeni önce",
+        "confirm": "Onayla",
+        "message": "Mesaj",
+        "showing": "<b>{total}</b> {total, plural, one {siparişten} other {siparişten}} <b>{from}–{to}</b> arası gösteriliyor",
+        "previous": "Önceki",
+        "next": "Sonraki",
+        "openDetails": "{order} numaralı siparişin ayrıntılarını aç"
+      }
+    },
+    "sourceDisconnectedTitle": "Sipariş kaynağının bağlantısı kesildi",
+    "sourceDisconnectedDescription": "Yeni siparişler ve sıradaki işlemler duraklatıldı. Sipariş ve doğrulama geçmişiniz panelde erişilebilir durumda kalır.",
+    "statusCard": {
+      "activeLabel": "Otomatik onay açık",
+      "inactiveLabel": "Otomatik onay kapalı",
+      "followUpActiveLabel": "Takip hatırlatması açık",
+      "followUpInactiveLabel": "Takip hatırlatması kapalı",
+      "quietHoursActiveLabel": "Sessiz saatler ayarlandı",
+      "quietHoursInactiveLabel": "Sessiz saatler kapalı",
+      "title": "Doğrulama etkin",
+      "description": "Akeed yeni kapıda ödemeli siparişleri izliyor ve WhatsApp onay taleplerini otomatik olarak gönderiyor.",
+      "inactiveTitle": "Doğrulama duraklatıldı",
+      "inactiveDescription": "Akeed yeni otomatik doğrulama talepleri göndermiyor. Geçmiş sonuçlar erişilebilir durumda kalır.",
+      "workflowTitle": "Kapıda ödemeli bir sipariş verildikten sonra",
+      "workflowDescription": "Akeed bir WhatsApp onay talebi gönderir, müşterinin yanıtını kaydeder ve Shopify’daki sipariş durumunu günceller.",
+      "standaloneWorkflowDescription": "Akeed bir WhatsApp onay talebi gönderir ve müşterinin yanıtını Akeed’e kaydeder. Harici bir sipariş sistemi güncellenmez.",
+      "reviewTitle": "Şüpheli veya onaylanmamış siparişler",
+      "reviewDescription": "Müşteri yanıt vermezse sipariş yanıt bekliyor / yanıt yok durumunda kalır ve hazırlanmadan önce incelenebilir."
+    },
+    "tooltips": {
+      "confirmedOrders": "Müşterilerin onayladığı siparişler.",
+      "customerCanceled": "Müşterilerin iptal ettiği veya reddettiği siparişler.",
+      "awaitingReply": "Mesajlar başarıyla gönderildi ancak müşteri henüz onaylamadı veya iptal etmedi.",
+      "pending": "İlk doğrulama mesajının gönderilmesini bekleyen kapıda ödemeli siparişler.",
+      "responseRate": "Gönderilen doğrulama mesajları içinde net bir kararla yanıt veren müşteriler.",
+      "confirmationRate": "Gönderilen doğrulama mesajları içinde onaylanan siparişler.",
+      "failed": "Gönderilemeyen veya başarısız olarak bildirilen doğrulama mesajları.",
+      "followUps": "Müşteri yanıt vermediğinde gönderilen takip hatırlatma mesajları.",
+      "noReply": "Ayarlanan takip ve yükseltme süresinden sonra müşterinin yanıt vermediği siparişler."
+    },
+    "filters": {
+      "status": {
+        "label": "Durum",
+        "all": "Tümü",
+        "pending": "Beklemede",
+        "awaiting_response": "Yanıt bekleniyor",
+        "confirmed": "Onaylandı",
+        "canceled": "İptal edildi",
+        "failed": "Başarısız",
+        "no_reply": "Yanıt yok",
+        "no_whatsapp": "WhatsApp yok"
+      },
+      "dateRange": {
+        "label": "Tarih aralığı",
+        "today": "Bugün",
+        "last_7_days": "Son 7 gün",
+        "last_30_days": "Son 30 gün",
+        "last_3_months": "Son 3 ay"
+      }
+    },
+    "tabs": {
+      "label": "Ana görünümler",
+      "metrics": "Panel",
+      "confirmations": "Onaylar"
+    },
+    "emptyState": {
+      "all": "Henüz doğrulama yok. Bir sipariş geldiğinde doğrulama talepleri burada görünecek.",
+      "filtered": "Seçilen durumla eşleşen doğrulama yok.",
+      "onboarding": {
+        "heading": "İlk siparişiniz bekleniyor...",
+        "activeDescription": "Akeed hazır. Kapıda ödemeli bir sipariş Akeed’e ulaşır ulaşmaz müşteriniz otomatik olarak bir WhatsApp onay mesajı alır.",
+        "step1": "Kapıda ödemeli bir sipariş Akeed’e ulaşır.",
+        "step2": "Akeed müşteriye bir WhatsApp doğrulama mesajı gönderir.",
+        "step3": "Müşteri onaylar veya iptal eder; sonuçlar burada anında görünür.",
+        "testSectionHeading": "Test doğrulaması gönderin",
+        "testSectionDescription": "Test doğrulamasını başlatmak için bir ülke seçin ve gerçek bir WhatsApp numarası girin.",
+        "testPhoneLabel": "Müşteri telefonu",
+        "testPhonePlaceholder": "532 123 45 67",
+        "testSendLabel": "Test doğrulaması gönder",
+        "testSendingLabel": "Gönderiliyor...",
+        "testPhoneRequired": "Lütfen bir müşteri telefon numarası girin.",
+        "testPhoneInvalid": "Ülke kodu dahil geçerli bir WhatsApp telefon numarası girin.",
+        "testSent": "Örnek test mesajı gönderildi. Gerçek bir sipariş oluşturulmadı veya güncellenmedi.",
+        "testFailed": "Test doğrulaması gönderilemedi. Lütfen tekrar deneyin.",
+        "testSkipped": "Test doğrulaması atlandı.",
+        "testQuotaReached": "Mevcut doğrulama sınırınıza ulaşıldı. Tekrar denemeden önce kullanımınızı gözden geçirin.",
+        "testSourceUnavailable": "Mevcut sipariş kaynağı test mesajı için hazır değil. Kurulumu gözden geçirin veya destek ekibine ulaşın.",
+        "testEntitlementRequired": "Bu kaynak için test mesajı etkin değil. Pilot erişiminin incelenmesi için Akeed destek ekibine başvurun.",
+        "testSetupIncomplete": "Test mesajı göndermeden önce kaynak kurulumunu tamamlayın.",
+        "testRoleRequired": "Test mesajını yalnızca bir sahip veya yönetici gönderebilir.",
+        "testProviderFailed": "WhatsApp test mesajını kabul etmedi. Numarayı kontrol edip tekrar deneyin.",
+        "testRateLimited": "Çok fazla test denemesi yapıldı. Bir dakika bekleyip tekrar deneyin.",
+        "nextStepHint": "Kendi WhatsApp numaranıza hemen bir örnek mesaj gönderin. Bu işlem gerçek bir sipariş oluşturmaz veya güncellemez."
+      }
+    },
+    "verificationSection": {
+      "title": "Sipariş doğrulamaları",
+      "subtitle": "Mağazanızdaki en son kapıda ödeme doğrulamaları.",
+      "loading": "Doğrulamalar yükleniyor...",
+      "emptyHeading": "Doğrulama yok"
+    },
+    "metrics": {
+      "title": "Genel bakış",
+      "subtitle": "Canlı doğrulama performansına genel bakış.",
+      "loading": "Metrikler yükleniyor...",
+      "summaryTitle": "Doğrulama özeti",
+      "replyRate": "Müşterilerin %{value} kadarı yanıt verdi",
+      "replyRateHelp": "Gönderilen doğrulamalardan müşteri yanıtı alanların yüzdesi.",
+      "sections": {
+        "orderOutcomes": "Sipariş sonuçları",
+        "needsAttention": "Dikkat gerektirenler",
+        "verificationSummary": "Doğrulama özeti"
+      },
+      "cards": {
+        "pending": "Beklemede",
+        "confirmedOrders": "Onaylanan siparişler",
+        "customerCanceled": "Müşteri iptalleri",
+        "confirmed": "Onaylandı",
+        "canceled": "İptal edildi",
+        "awaitingResponse": "Yanıt bekleniyor",
+        "responseRate": "Yanıt oranı",
+        "confirmationRate": "Onay oranı",
+        "failed": "Başarısız",
+        "followUps": "Takip mesajları",
+        "sent": "Gönderildi",
+        "delivered": "Teslim edildi",
+        "read": "Okundu",
+        "confirmedCanceled": "Onaylandı / İptal edildi",
+        "responded": "Yanıt verdi",
+        "total": "Toplam"
+      },
+      "funnelTitle": "Doğrulama hunisi",
+      "funnelSubtitle": "Mesajın gönderilmesinden müşterinin yanıtına kadar.",
+      "conversionFromPrevious": "%{value} dönüşüm",
+      "dropOff": "{value} kayıp",
+      "moneySaved": {
+        "title": "Tasarruf edilen tutar",
+        "description": "İptal edilen kapıda ödemeli siparişleri yakalayarak kurtarılan kargo maliyeti",
+        "breakdownTitle": "Nasıl hesaplanır",
+        "breakdownLine": "{count} iptal x {cost} ort. kargo"
+      },
+      "usage": {
+        "title": "Plan kullanımı",
+        "period": "Faturalandırma dönemi: {start} – {end}",
+        "monthlyLimit": "Aylık sınır",
+        "used": "%{value} kullanıldı",
+        "warningNearLimit": "Planınıza dahil mesaj sınırına yaklaşıyorsunuz. Onayların gönderilmeye devam etmesi için mesajlarınız bitmeden planınızı yükseltin.",
+        "warningAtLimit": "Planınıza dahil mesajları kullandınız. Onay göndermeye devam etmek için planınızı yükseltin veya yenilemeyi bekleyin.",
+        "manageCta": "Ayarlarda incele",
+        "outcomeTitle": "Akeed sizin için {count} siparişi onayladı 🎉",
+        "outcomeNearLimit": "Mesajlarınız azalıyor. Onaylara ara vermeden devam etmek için bir plan seçin.",
+        "outcomeAtLimit": "Mesajlarınız neredeyse bitti. Yeni siparişlerin onaylanmaya devam etmesi için bir plan seçin.",
+        "choosePlanCta": "Planınızı seçin",
+        "plansModalTitle": "Planınızı seçin"
+      },
+      "unavailable": "Metrikler şu anda kullanılamıyor."
+    },
+    "table": {
+      "resource": {
+        "singular": "doğrulama",
+        "plural": "doğrulama"
+      },
+      "headings": {
+        "order": "Sipariş",
+        "customer": "Müşteri",
+        "status": "Durum",
+        "followUp": "Hatırlatma",
+        "total": "Toplam",
+        "created": "Oluşturulma",
+        "actions": "İşlemler",
+        "orderCustomer": "Sipariş ve müşteri"
+      },
+      "orderFallbackPrefix": "Sipariş",
+      "technicalId": "Teknik sipariş kimliği",
+      "source": "Sipariş kaynağı",
+      "storeSync": {
+        "title": "Mağaza güncellemesi",
+        "separate": "Bu yalnızca mağazanızla ilgilidir. Siparişin yukarıdaki sonucu her durumda Akeed’e kaydedilir.",
+        "updatedAt": "Son kontrol: {time}",
+        "state": {
+          "succeeded": "Mağazanızda güncellendi",
+          "pending": "Mağazanız güncelleniyor",
+          "failed": "Mağazanızda güncellenmedi",
+          "unsupported": "Mağazanıza gönderilmedi"
+        },
+        "row": {
+          "pending": "Mağazanız güncelleniyor",
+          "failed": "Mağaza güncellenmedi"
+        },
+        "guidance": {
+          "pending": "Bu siparişi mağazanızda güncellemeye çalışmaya devam ediyoruz. Şimdilik yapmanız gereken bir şey yok.",
+          "failed": "Bu siparişi mağazanızda güncelleyemedik. Tekrar deneyin veya siparişin durumunu mağazanızda kendiniz değiştirin.",
+          "stateConflict": "Bu sipariş mağazanızda zaten başka bir duruma geçmişti, bu yüzden olduğu gibi bıraktık. Gerekirse mağazanızda değiştirin.",
+          "orderNotFound": "Bu siparişi mağazanızda bulamadık. Orada silinmiş olabilir.",
+          "reconnect": "Mağazanız Akeed’in erişimini kabul etmedi. Mağaza bağlantısını kontrol edip tekrar deneyin.",
+          "storeInactive": "Mağazanız şu anda etkin değil, bu yüzden güncellenemiyor. Mağazayı yeniden etkinleştirip tekrar deneyin.",
+          "permissionDenied": "Mağazanızı bağlayan hesabın siparişleri değiştirme izni yok. Mağazanızı siparişleri yöneten bir hesapla yeniden bağlayıp tekrar deneyin.",
+          "storeUnreachable": "Akeed mağazanıza kayıtlı adresinden güvenli şekilde ulaşamadı. Adres değişmiş, artık başka bir adrese yönlendiriyor veya güvenlik sertifikası geçersiz olabilir. Mağazanızın adresini ve sertifikasını kontrol edin; adres değiştiyse yeniden bağlayın.",
+          "hostingBlocksUpdates": "Mağazanızın barındırma hizmeti, Akeed’in siparişi güncellemek için kullandığı isteği (PUT) engelliyor. Barındırma sağlayıcınızdan mağazanıza PUT isteklerine izin vermesini isteyip tekrar deneyin. O zamana kadar siparişin durumunu mağazanızda kendiniz değiştirin.",
+          "noReplyLocalOnly": "Müşteri yanıt vermedi. Bu yalnızca Akeed’e kaydedildi: mağazanızdaki sipariş değişmedi ve iptal edilmedi.",
+          "noWhatsAppLocalOnly": "Müşterinin numarası WhatsApp’ta kayıtlı değil. Bu yalnızca Akeed’e kaydedildi. Mağazanızdaki sipariş değişmedi.",
+          "notSwitchedOn": "Siparişlerin mağazanızda güncellenmesi henüz açılmadı. Siparişin durumunu mağazanızda kendiniz değiştirin."
+        },
+        "retry": "Mağaza güncellemesini tekrar dene",
+        "retrying": "Mağazanız güncelleniyor...",
+        "retryResult": {
+          "updated": "Mağazanız güncellendi.",
+          "pending": "Tekrar deniyoruz. Sonuç bu sayfada görünecek.",
+          "failed": "Mağazanız yine güncellenemedi. Nedenini görmek için siparişi açın.",
+          "error": "Güncellemeyi başlatamadık. Biraz sonra tekrar deneyin."
+        }
+      },
+      "testBadge": "Test",
+      "optimistic": {
+        "submitting": "Gönderiliyor...",
+        "queued": "Hazırlanıyor...",
+        "hint": "Bu sipariş hâlâ hazırlanıyor ve otomatik olarak güncellenecek."
+      },
+      "unknownCustomer": "Bilinmeyen müşteri",
+      "noPhone": "Telefon yok",
+      "loadingMore": "Daha fazlası yükleniyor...",
+      "followUp": {
+        "sent": "Gönderildi",
+        "notSent": "—",
+        "sentAt": "Hatırlatma gönderildi: {time}"
+      },
+      "actions": {
+        "details": "Ayrıntıları görüntüle",
+        "viewDetails": "{order} numaralı siparişin ayrıntılarını görüntüle",
+        "openMenu": "{order} numaralı sipariş için işlemleri aç",
+        "cancelOrder": "Siparişi iptal et",
+        "confirmCancelOrder": "Evet, iptal et",
+        "keepOrder": "Siparişi koru",
+        "cancelingOrder": "İptal ediliyor...",
+        "cancelOrderError": "Bu siparişi iptal edemedik. Lütfen tekrar deneyin.",
+        "cancelOrderConfirmDescription": "Bu işlem sipariş kaynağınızdan iptal talep eder ve Akeed’e satıcı iptali olarak kaydeder. Talep kabul edildikten sonra işlem devam edebilir.",
+        "cancelOrderPending": "İptal kabul edildi; sipariş kaynağında tamamlanması bekleniyor.",
+        "cancelOrderUnsupported": "Bu sipariş kaynağı için iptal kullanılamıyor.",
+        "cancelOrderUntracked": "İptal talebi bir takip referansı olmadan kabul edildi. Tamamlanıp tamamlanmadığını sipariş kaynağından kontrol edin.",
+        "retry": "Doğrulamayı yeniden dene",
+        "retrying": "Yeniden deneniyor...",
+        "retrySuccess": "Doğrulama yeniden denemesi kabul edildi. Siparişin süreci yenilendi.",
+        "retryError": "Doğrulama yeniden denenemedi. Siparişin durumunu inceleyip tekrar deneyin.",
+        "cancelOrderSuccess": "Sipariş Akeed’de iptal edildi olarak işaretlendi. Harici bir sipariş sisteminde değişiklik yapılmadı.",
+        "cancelOrderSuccessShopify": "{order} numaralı sipariş iptal edildi. Akeed siparişi Shopify’da da iptal ediyor ve ürünlerini stoğa geri ekliyor.",
+        "dismiss": "Kapat"
+      },
+      "lifecycle": {
+        "label": "Doğrulama süreci",
+        "sent": "Gönderildi",
+        "delivered": "Teslim edildi",
+        "read": "Okundu",
+        "outcome": "Nihai sonuç",
+        "recorded": "Kaydedildi",
+        "completedBy": {
+          "confirmed": "Müşteri onayıyla tamamlandı",
+          "canceled": "Akeed’e kaydedilen iptalle tamamlandı"
+        },
+        "unrecorded": "Henüz kaydedilmedi"
+      },
+      "scheduledBadge": "Planlandı · gönderim: {time}"
+    },
+    "verificationStatus": {
+      "pending": "Beklemede",
+      "sent": "Gönderildi",
+      "delivered": "Teslim edildi",
+      "read": "Okundu",
+      "confirmed": "Onaylandı",
+      "canceled": "İptal edildi",
+      "expired": "Süresi doldu",
+      "failed": "Başarısız",
+      "no_reply": "Yanıt yok",
+      "no_whatsapp": "WhatsApp yok",
+      "awaiting_start": "Başlatılmayı bekliyor",
+      "not_started": "Başlatılmadı",
+      "queued": "Sırada",
+      "sending": "Gönderiliyor…"
+    },
+    "descriptions": {
+      "pending": "Doğrulama sırada ve gönderilmeyi bekliyor.",
+      "sent": "Doğrulama talebi gönderildi; teslim edilmesi veya yanıt bekleniyor.",
+      "delivered": "Doğrulama talebi teslim edildi ve yanıt bekleniyor.",
+      "read": "Müşteri doğrulama talebini açtı ancak henüz yanıt vermedi.",
+      "confirmed": "Müşteri siparişi onayladı.",
+      "canceled": "Sipariş Akeed’de iptal edildi olarak kayıtlı.",
+      "expired": "Doğrulama süresi kesin bir yanıt alınmadan sona erdi.",
+      "failed": "Doğrulama tamamlanamadı.",
+      "no_reply": "Müşteri ayarlanan süre içinde yanıt vermedi.",
+      "no_whatsapp": "Bu numara WhatsApp’ta kayıtlı değil, bu yüzden onay mesajı müşteriye ulaşamıyor. Siparişi onaylamak için müşteriyi arayın.",
+      "awaiting_start": "İçe aktarıldı ve bekletiliyor. Onayı başlatana kadar mesaj gönderilmez.",
+      "not_started": "İçe aktarma başlatılmadı, bu yüzden mesaj gönderilmedi.",
+      "queued": "Gönderim başladı ve bu sipariş sırada. Mesajı birkaç dakika içinde gider.",
+      "sending": "Onay talebi şu anda müşteriye gönderiliyor."
+    },
+    "sources": {
+      "shopify": "Shopify",
+      "standalone": "Akeed’de eklendi",
+      "easyorders": "EasyOrders",
+      "woocommerce": "WooCommerce",
+      "salla": "Salla",
+      "zid": "Zid",
+      "other": "Başka bir kaynak"
+    },
+    "reasons": {
+      "non_cod_payment_method": "Bu sipariş kapıda ödeme olarak işaretlenmemiş, bu yüzden doğrulama gönderilmedi.",
+      "missing_payment_signal": "Ödeme yöntemi doğrulanamadı, bu yüzden doğrulama gönderilmedi.",
+      "plan_limit_reached": "Mevcut doğrulama sınırına ulaşıldı. Kapasite açıldığında yeniden deneyin.",
+      "integration_inactive": "Sipariş kaynağı etkin değil. Doğrulamayı yeniden denemeden önce kaynağı geri yükleyin.",
+      "billing_not_active": "Doğrulama erişimi etkin değil. İncelemesi için bir hesap sahibine veya Akeed destek ekibine başvurun.",
+      "provider_not_accepted": "Mesaj kabul edilmedi. Yeniden denemeden önce hazırlığı kontrol edin.",
+      "auto_verify_disabled": "Otomatik doğrulama duraklatıldı. Yeniden denemeden önce açın.",
+      "onboarding_incomplete": "Doğrulamayı yeniden denemeden önce bağımsız hesap kurulumunu tamamlayın.",
+      "provider_outcome_unknown": "Mesajın kabul edildiği doğrulanamadı. Yeniden denemeden önce destek ekibine ulaşın.",
+      "template_unavailable": "Bu siparişin WhatsApp mesajı şu anda kullanılamıyor, bu yüzden hiçbir şey gönderilmedi ve kredi kullanılmadı. Akeed destek ekibi uyarıldı. Daha sonra yeniden deneyin.",
+      "CREDIT_ACCOUNT_NOT_PROVISIONED": "Bu hesabın kredileri henüz ayarlanmadı, bu yüzden mesaj gönderilmedi. Sorun devam ederse Akeed destek ekibine ulaşın.",
+      "CREDIT_ACCOUNT_SUSPENDED": "Bu hesap için yeni mesaj gönderimleri duraklatıldı. Destek ekibine ulaşın.",
+      "CREDIT_DEBT_OUTSTANDING": "Yeni mesaj gönderilmeden önce ödenmemiş kredi bakiyesinin kapatılması gerekir.",
+      "INSUFFICIENT_CREDITS": "Kullanılabilir mesaj kredisi yoktu, bu yüzden mesaj gönderilmedi. Kredi ekleyip yeniden deneyin.",
+      "PAYMENT_PENDING_RECONCILIATION": "Faturalandırma incelenirken mesaj gönderimi duraklatıldı. Destek ekibine ulaşın.",
+      "provider_delivery_failed": "WhatsApp mesajı bu müşteriye iletemedi.",
+      "missing_currency": "Mağaza para birimi henüz seçilmedi, bu yüzden bu sipariş onaylanmadı. Para birimini mağaza bağlantısı ayarlarından seçin.",
+      "missing_phone_country": "Müşteri telefon numaraları için ülke henüz seçilmedi, bu yüzden bu sipariş onaylanmadı. Ülkeyi mağaza bağlantısı ayarlarından seçin.",
+      "order_currency_unsupported": "Bu siparişin para birimi eksik veya Akeed’in desteklediği bir para birimi değil, bu yüzden mesaj gönderilmedi.",
+      "order_phone_country_missing": "Müşterinin telefon numarasında ülke kodu yok ve siparişte fatura ülkesi bulunmuyor; bu yüzden numara okunamadı ve mesaj gönderilmedi. Mağazanızdaki siparişe ülkeyi veya tam numarayı ekleyin, Akeed siparişi yeniden kontrol eder.",
+      "invalid_phone": "Müşterinin telefon numarası geçerli bir cep telefonu numarası değil, bu yüzden mesaj gönderilmedi.",
+      "invalid_amount": "Sipariş toplamı okunamadı, bu yüzden mesaj gönderilmedi.",
+      "incomplete_payload": "Sipariş, onaylanması için gereken bilgiler olmadan geldi, bu yüzden mesaj gönderilmedi.",
+      "order_predates_connection": "Bu sipariş mağaza Akeed’e bağlanmadan önce verildi, bu yüzden onay gönderilmedi.",
+      "order_not_placed": "Bu sipariş henüz verilmedi veya durumu Akeed’in onaylamadığı bir durum, bu yüzden mesaj gönderilmedi.",
+      "generic": "Doğrulama devam edemedi. Kurulumu gözden geçirin veya destek ekibine ulaşın."
+    },
+    "verifications": {
+      "loading": "Doğrulamalar yükleniyor...",
+      "loadMoreRetry": "Tekrar dene",
+      "readOnlyNotice": "Salt okunur erişiminiz var. Doğrulamayı yeniden deneme veya desteklenen siparişleri iptal edildi olarak işaretleme işlemlerini bir hesap sahibi ya da yönetici yapabilir.",
+      "empty": {
+        "title": "Henüz onay yok",
+        "description": "Her siparişin durumu, siparişi eklediğiniz anda burada görünür.",
+        "testHeading": "Mesajı telefonunuzda deneyin",
+        "testHint": "Hesabınızda kayıtlı WhatsApp numarasına ücretsiz bir test mesajı göndeririz. Bakiyenizden düşülmez."
+      },
+      "showing": "{total} kayıttan {loaded} tanesi gösteriliyor"
+    },
+    "activation": {
+      "liveBanner": "Akeed yayında. Bir sonraki kapıda ödemeli siparişiniz otomatik olarak onaylatılacak.",
+      "pausedBanner": "Otomatik onay kapalı. Akeed’in yeni siparişlerinizi onaylatması için ayarlardan açın.",
+      "needsPlanTitle": "Akeed’in gerçek siparişlerinizi onaylatması için bir plan seçin",
+      "needsPlanBody": "Bu mağaza ücretsiz planını daha önce kullandı. Test mesajları ücretsiz olmaya devam eder.",
+      "choosePlan": "Planınızı seçin",
+      "settings": "Ayarlar",
+      "plansModalTitle": "Planınızı seçin",
+      "freeMessagesLeft": "{count} ücretsiz mesaj kaldı",
+      "checklist": {
+        "title": "Güvenle başlayın",
+        "progress": "{done} / {total}",
+        "setup": "Mağaza kurulumu",
+        "test": "Mesajı telefonunuzda deneyin",
+        "testHint": "Müşterilerinizin tam olarak ne aldığını görün. Ücretsizdir.",
+        "tryTest": "Şimdi deneyin",
+        "firstOrder": "İlk gerçek siparişiniz bekleniyor",
+        "firstOrderHint": "İlk kapıda ödemeli siparişiniz geldiğinde Akeed onu otomatik olarak onaylatır."
+      },
+      "quietHours": {
+        "onTitle": "Sessiz saatler açık ({start} – {end})",
+        "onBody": "Gece gelen siparişlerin mesajları saat {end} olduğunda gönderilir ve burada \"Planlandı\" olarak görünür.",
+        "offTitle": "Sessiz saatler kapalı",
+        "offBody": "Mesajlar, sipariş gelir gelmez günün her saatinde gönderilir.",
+        "change": "Zamanlamayı değiştir",
+        "enable": "Sessiz saatleri aç"
+      },
+      "help": {
+        "title": "Kurulumda yardıma mı ihtiyacınız var?",
+        "body": "Akeed ekibiyle WhatsApp’tan konuşun. Genellikle bir saat içinde yanıt veririz.",
+        "action": "Bize ulaşın"
+      },
+      "metricsPlaceholder": {
+        "title": "Metrikleriniz ilk siparişten sonra burada görünür",
+        "body": "Onay oranı, yanıt oranı ve takip gerektiren siparişler."
+      }
+    },
+    "overview": {
+      "title": "Panel",
+      "periodLabel": "Dönem",
+      "settings": {
+        "label": "Onay ayarları",
+        "on": "Açık",
+        "off": "Kapalı",
+        "autoConfirm": "Otomatik onay",
+        "autoConfirmOff": "Otomatik onay kapalı",
+        "followUpHours": "Hatırlatma: {count, plural, one {# saat} other {# saat}} sonra",
+        "followUpMinutes": "Hatırlatma: {count, plural, one {# dakika} other {# dakika}} sonra",
+        "followUpOff": "Hatırlatma kapalı",
+        "quietHours": "Sessiz saatler: {window}",
+        "quietHoursOff": "Sessiz saat yok",
+        "edit": "Düzenle",
+        "editLabel": "Onay ayarlarını düzenle"
+      },
+      "credits": {
+        "warning": "{limit} mesajın {used} tanesini kullandınız. Mesajlar bittiğinde onaylar durur.",
+        "exhausted": "{limit} mesajın tamamını kullandınız. Bir plan seçene kadar onaylar durduruldu.",
+        "progressLabel": "Mesaj kullanımı",
+        "cta": "Plan seçin",
+        "plansModalTitle": "Planınızı seçin"
+      },
+      "kpis": {
+        "confirmed": {
+          "title": "Onaylanan siparişler",
+          "value": "<amount></amount> değerinde, kargoya hazır",
+          "none": "Bu dönemde onaylanan sipariş yok"
+        },
+        "canceled": {
+          "title": "Kargolamadan önce iptal edilen",
+          "body": "{count, plural, =0 {Bu dönemde boşa giden gönderi yok} one {Ödemek zorunda kalmadığınız # gönderi ve iade} other {Ödemek zorunda kalmadığınız # gönderi ve iade}}"
+        },
+        "rate": {
+          "title": "Onay oranı",
+          "body": "Mesaj gönderdiğimiz {sent} siparişten {confirmed} tanesi",
+          "none": "Bu dönemde henüz mesaj gönderilmedi"
+        }
+      },
+      "needsAction": {
+        "title": "İşlem bekleyenler",
+        "countLabel": "{count, plural, one {# sipariş işlem bekliyor} other {# sipariş işlem bekliyor}}",
+        "allOrders": "Tüm siparişler",
+        "empty": "İşlem bekleyen bir şey yok",
+        "emptyBody": "Bu dönemdeki her sipariş ya onaylandı ya da müşteriyi bekliyor.",
+        "reason": {
+          "no_reply_after_follow_up": "{date} tarihinden beri yanıt yok · Hatırlatma gönderildi",
+          "no_reply": "{date} tarihinden beri yanıt yok",
+          "read_no_reply": "Okundu, yanıt yok · {hours, plural, one {# saat} other {# saat}} önce",
+          "delivery_failed": "Teslim edilmedi: {reason}",
+          "send_failed": "Mesaj gönderilmedi",
+          "no_whatsapp": "WhatsApp’ta yok · Müşteriyi arayın"
+        },
+        "actions": {
+          "whatsapp": "WhatsApp’tan yazın",
+          "whatsappLabel": "WhatsApp’tan mesaj gönder: {customer} (yeni sekmede açılır)",
+          "manualConfirm": "Elle onayla",
+          "manualConfirmLabel": "{order} numaralı siparişi elle onayla"
+        },
+        "confirmDialog": {
+          "title": "{order} numaralı sipariş elle onaylansın mı?",
+          "body": "Akeed siparişi, müşteri onaylamış gibi onaylandı olarak kaydeder ve Shopify’da “Akeed: Verified” etiketiyle işaretler. Başka mesaj gönderilmez.",
+          "confirm": "Evet, siparişi onayla",
+          "cancel": "Geri dön",
+          "success": "{order} numaralı sipariş onaylandı.",
+          "error": "Sipariş onaylanamadı. Lütfen tekrar deneyin."
+        }
+      },
+      "flow": {
+        "title": "Mesaj akışı",
+        "subtitle": "Mesajın gönderilmesinden müşterinin yanıtına kadar",
+        "sent": "Gönderildi",
+        "delivered": "Teslim edildi",
+        "read": "Okundu",
+        "replied": "Müşteri yanıtladı",
+        "legendConfirmed": "Onaylanan {count}",
+        "legendCanceled": "İptal edilen {count}",
+        "legendNoReply": "Henüz yanıt yok {count}",
+        "replyTime": "Olağan yanıt süresi",
+        "replyTimeLine": "Müşteriler genellikle şu sürede yanıt veriyor: {time}.",
+        "empty": "Bu dönemde henüz mesaj gönderilmedi."
+      },
+      "error": {
+        "title": "Panel yüklenemedi",
+        "retry": "Tekrar dene"
+      },
+      "unavailable": "Panel şu anda kullanılamıyor."
+    },
+    "confirmations": {
+      "title": "Onaylar",
+      "subtitle": "Mesaj gönderdiğimiz her kapıda ödemeli sipariş ve sonrasında olanlar.",
+      "customer": {
+        "heading": "Müşteri geçmişi",
+        "new": "Yeni müşteri",
+        "repeat": "Tekrar gelen müşteri · {confirmed} onaylı",
+        "risk": "Diğer {orders} siparişten {unconfirmed} tanesi onaylanmadı",
+        "returning": "Tekrar gelen müşteri",
+        "summary": "Diğer siparişler: {orders} · Onaylanan: {confirmed} · İptal edilen: {canceled} · Yanıt yok: {noReply}"
+      },
+      "export": {
+        "button": "Dışa aktar",
+        "hint": "Bu listeyi tablo dosyası olarak indirin; örneğin onaylanan siparişleri kargo firmanıza iletmek için",
+        "failed": "Listeyi dışa aktaramadık. Lütfen tekrar deneyin.",
+        "tooLarge": "Tek seferde dışa aktarılamayacak kadar çok sipariş var. Daha kısa bir dönem veya tek bir sekme seçin."
+      },
+      "tabs": {
+        "all": "Tümü",
+        "needs_action": "İşlem bekleyen",
+        "no_whatsapp": "WhatsApp yok",
+        "confirmed": "Onaylanan",
+        "canceled": "İptal edilen"
+      },
+      "search": {
+        "label": "Sipariş numarası veya telefona göre ara",
+        "placeholder": "Sipariş numarası veya telefon",
+        "invalid": "Yalnızca sipariş veya telefon rakamlarını kullanın.",
+        "clear": "Aramayı temizle"
+      },
+      "headings": {
+        "order": "Sipariş",
+        "customer": "Müşteri",
+        "phone": "Telefon",
+        "status": "Durum",
+        "followUp": "Hatırlatma",
+        "total": "Toplam",
+        "orderTime": "Sipariş zamanı",
+        "updated": "Son güncelleme",
+        "action": "İşlem"
+      },
+      "card": {
+        "ordered": "Sipariş: {time}",
+        "updated": "Güncelleme: {time}"
+      },
+      "resource": {
+        "singular": "onay",
+        "plural": "onay"
+      },
+      "noName": "İsim yok",
+      "openOrderLabel": "{order} numaralı siparişi Shopify’da aç",
+      "status": {
+        "confirmed": "Onaylandı",
+        "canceled": "İptal edildi",
+        "failed": "Gönderilemedi",
+        "scheduled": "Planlandı",
+        "pending": "Beklemede",
+        "sending": "Gönderiliyor",
+        "awaitingReply": "Yanıt bekleniyor",
+        "noReply": "Yanıt yok",
+        "noWhatsApp": "WhatsApp yok",
+        "awaitingStart": "Başlatılmayı bekliyor",
+        "notStarted": "Başlatılmadı",
+        "sub": {
+          "afterFollowUp": "Hatırlatmadan sonra",
+          "manual": "Elle onaylandı",
+          "canceledInStore": "Shopify’da iptal edildi",
+          "canceledByCustomer": "Müşteri tarafından",
+          "canceledNoReply": "Müşteriden yanıt yok",
+          "canceledNoWhatsApp": "Numara WhatsApp’ta yok",
+          "followUpSent": "Hatırlatma gönderildi",
+          "sendsAt": "Gönderim: {time}",
+          "callCustomer": "Müşteriyi arayın"
+        },
+        "tooltip": {
+          "scheduledFor": "Planlanan zaman: {time}",
+          "reminderAt": "Hatırlatma zamanı: {time}",
+          "callCustomer": "Numara WhatsApp’ta yok. Onay için müşteriyi arayın.",
+          "callCustomerSince": "{time} tarihinden beri WhatsApp’ta yok. Onay için müşteriyi arayın."
+        },
+        "failure": {
+          "notOnWhatsApp": "numara WhatsApp’ta yok",
+          "invalidNumber": "geçersiz telefon numarası",
+          "reengagement": "konuşma süresi doldu",
+          "notDelivered": "WhatsApp iletemedi",
+          "generic": "mesaj teslim edilmedi",
+          "notSent": "mesaj gönderilmedi"
+        }
+      },
+      "loadingMore": "Daha fazla sipariş yükleniyor…",
+      "loaded": "{total} siparişten {loaded} tanesi gösteriliyor",
+      "empty": {
+        "all": "Bu dönemde henüz onay yok.",
+        "needs_action": "İşlem bekleyen bir şey yok. Harika iş!",
+        "no_whatsapp": "Bu dönemdeki tüm müşteriler WhatsApp mesajı alabiliyor.",
+        "confirmed": "Bu dönemde onaylanan sipariş yok.",
+        "canceled": "Bu dönemde iptal eden müşteri yok.",
+        "search": "“{query}” için sonuç yok."
+      },
+      "error": {
+        "title": "Onaylar yüklenemedi",
+        "retry": "Tekrar dene"
+      },
+      "actions": {
+        "more": "{order} numaralı sipariş için diğer işlemler",
+        "cancelTitle": "{order} numaralı sipariş iptal edilsin mi?",
+        "menuTitle": "{order} numaralı sipariş için işlemler",
+        "close": "Kapat",
+        "sendShipping": "Kargo bilgisi gönder",
+        "sendShippingLabel": "Kargo bilgisini WhatsApp’tan gönder: {customer} (yeni pencerede açılır)"
+      },
+      "shipping": {
+        "message": "Merhaba {customer}, {order} numaralı siparişiniz ({total}) onaylandı ve kargoya hazırlanıyor.\nKargo firması: \nTakip numarası: ",
+        "customerFallback": "değerli müşterimiz"
+      },
+      "tabsLabel": "Onayları sonuca göre filtrele"
+    },
+    "failedRow": {
+      "reason": {
+        "noCredits": "Yeterli kredi yok",
+        "autoVerifyOff": "Otomatik onay kapalı",
+        "rejected": "WhatsApp mesajı reddetti"
+      },
+      "action": {
+        "buyCredits": "Kredi satın al",
+        "openSettings": "Ayarları aç",
+        "details": "Ayrıntılar"
+      }
+    },
+    "firstRun": {
+      "greeting": "Hoş geldiniz, {name}",
+      "greetingNoName": "Hoş geldiniz",
+      "firstOrder": {
+        "title": "İlk onay mesajınızı gerçek bir müşteriye gönderin",
+        "subtitle": "Siparişlerinizin Akeed’e nasıl ulaşacağını seçin. Bir sipariş eklediğiniz anda onay mesajını göndeririz; bu, bakiyenizden bir mesaj kullanır.",
+        "manual": {
+          "title": "Tek sipariş",
+          "body": "WhatsApp, Instagram ve telefon siparişleri için. Yalnızca müşteri numarası, sipariş numarası ve tutar."
+        },
+        "file": {
+          "title": "Excel veya CSV dosyası",
+          "body": "Aynı anda çok sayıda sipariş için. Sütunları sizin için eşleştiririz, siz de herhangi bir şey gönderilmeden önce kontrol edersiniz."
+        },
+        "storeLinkSoon": "Her siparişin otomatik gelmesi için çevrimiçi mağazanızı bağlama: yakında.",
+        "zeroBalance": {
+          "title": "Bakiyeniz {count} mesaj",
+          "body": "Her onay bakiyenizden bir mesaj kullanır. İlk onayınızı göndermek için bakiye yükleyin.",
+          "action": "Bakiye yükle"
+        }
+      },
+      "skippedTest": {
+        "title": "Mesajı henüz denemediniz",
+        "body": "İlk müşterinizden önce siz telefonunuzda görün. Bir dakika sürer ve ücretsizdir."
+      },
+      "confirmations": {
+        "title": "Onaylar",
+        "empty": "Henüz sipariş yok. Her siparişin durumu gerçekleştikçe burada görünecek.",
+        "examplesLabel": "Örnek sipariş durumları:",
+        "examples": {
+          "sent": "Gönderildi · yanıt bekleniyor",
+          "confirmed": "Onaylandı",
+          "canceled": "İptal edildi"
+        }
+      }
+    }
+  },
+  "settings": {
+    "logo": {
+      "heading": "Mağaza logosu",
+      "description": "Logonuz, onay ve hatırlatma mesajlarının üstünde, beyaz bir bannerın ortasında yer alır.",
+      "requirements": "PNG veya JPEG, en fazla 5 MB, kısa kenarı en az 64 piksel.",
+      "upload": "Logo yükle",
+      "replace": "Logoyu değiştir",
+      "remove": "Kaldır",
+      "uploading": "Logonuz yükleniyor…",
+      "logoAlt": "Mağaza logonuz",
+      "bannerAlt": "Mesaj bannerındaki logonuz",
+      "bannerCaption": "Bu banner her mesajın üstünde görünür.",
+      "errors": {
+        "tooLarge": "Logo en fazla 5 MB olmalıdır.",
+        "unsupportedType": "PNG veya JPEG bir görsel seçin.",
+        "unreadable": "Bu görsel okunamadı. PNG veya JPEG olarak yeniden kaydetmeyi deneyin.",
+        "tooSmall": "Logo çok küçük. Kısa kenarı en az 64 piksel olan bir logo kullanın.",
+        "storageUnavailable": "Logo şu anda kaydedilemedi. Biraz sonra tekrar deneyin.",
+        "forbidden": "Logoyu yalnızca bir hesap sahibi veya yönetici değiştirebilir.",
+        "rateLimited": "Çok fazla yükleme yapıldı. Bir dakika bekleyip tekrar deneyin.",
+        "generic": "Bir sorun oluştu. Tekrar deneyin."
+      }
+    },
+    "title": "Ayarlar",
+    "subtitle": "Mağaza ve faturalandırma tercihlerinizi yönetin.",
+    "sourceHeading": "Sipariş kaynağı",
+    "sourceStandalone": "Bağımsız / Elle eklenen kaynak",
+    "codDefaultLabel": "Ödeme bilgisi eksik siparişleri kapıda ödeme say",
+    "codDefaultHelp": "Yalnızca sipariş kaynağınız kapıda ödemeli siparişlerde ödeme bilgisini genellikle göndermiyorsa açın.",
+    "pilotAccessHeading": "Pilot erişim ve kullanım",
+    "readOnly": "Salt okunur erişiminiz var. Yapılandırma değişikliklerini bir hesap sahibi veya yönetici yapmalıdır.",
+    "retryButton": "Yeniden dene",
+    "standalone": {
+      "page": {
+        "title": "Ayarlar",
+        "subtitle": "Onay mesajınızı, zamanlamasını ve siparişlerinizin nereden geldiğini yönetin.",
+        "tabs": {
+          "message": "Mesaj",
+          "timing": "Zamanlama ve takip",
+          "store": "Mağaza",
+          "apiKeys": "API anahtarları"
+        },
+        "unsavedShort": "Kaydedilmemiş değişiklikler",
+        "dismiss": "Kapat",
+        "loadError": {
+          "title": "Ayarlarınızı yükleyemedik",
+          "body": "Bağlantınızı kontrol edip tekrar deneyin.",
+          "retry": "Tekrar dene"
+        },
+        "saveBar": {
+          "label": "Kaydedilmemiş değişiklikler",
+          "unsaved": "Kaydedilmemiş değişiklikleriniz var",
+          "unsavedIn": "Kaydedilmemiş değişiklikler: {tabs}",
+          "separator": ", ",
+          "discard": "Vazgeç",
+          "save": "Kaydet",
+          "saving": "Kaydediliyor…"
+        },
+        "message": {
+          "identityDesc": "Müşterilerinizin her mesajda gördüğü ad.",
+          "storeNameHelp": "Her mesajda görünür: “{name} mağazasından verdiğiniz sipariş için teşekkür ederiz.”",
+          "languageDesc": "Her müşterinin onay mesajını hangi dilde alacağı.",
+          "defaultBadge": "Varsayılan",
+          "testSend": "Test mesajı gönder",
+          "testSendSaveFirst": "Test etmek için önce değişikliklerinizi kaydedin."
+        },
+        "timing": {
+          "flowDesc": "Bu, siz düzenledikçe kaydetmeden önce güncellenir.",
+          "autoHelp": "Kapalıyken hiçbir mesaj gönderilmez.",
+          "customDelayLabel": "Gecikme",
+          "quietDesc": "Gece mesaj gönderilmez.",
+          "quietHelp": "Sessiz saatlere denk gelen mesajlar, sessiz saatler bitince gönderilir."
+        },
+        "store": {
+          "sourceDesc": "Akeed’in siparişlerinizi nereden aldığı.",
+          "sourceHelp": "Dosyadan içe aktardığınız veya elle eklediğiniz siparişler.",
+          "connected": "Bağlı",
+          "connectionId": "Bağlantı kimliği",
+          "copy": "Kopyala",
+          "copied": "Kopyalandı",
+          "copyError": "Bağlantı kimliği kopyalanamadı. Elle kopyalayın.",
+          "codHeading": "Eksik ödeme bilgisi",
+          "codDesc": "Nasıl ödendiği belirtilmeyen siparişleri nasıl ele aldığımız.",
+          "codLabel": "Bunları kapıda ödeme olarak kabul et",
+          "codHelp": "Yalnızca sipariş kaynağınız kapıda ödemeli siparişlerde ödeme yöntemini genellikle belirtmiyorsa açın.",
+          "codRisk": "Ödeme bilgisi eksik olan ön ödemeli siparişler de onay mesajı alır ve kredi kullanır.",
+          "sourceHelpEasyOrders": "Siparişler EasyOrders mağazanızdan kendiliğinden gelir.",
+          "sourceHelpWooCommerce": "Siparişler WooCommerce mağazanızdan kendiliğinden gelir.",
+          "disconnected": "Bağlantı kesildi",
+          "connectionHeading": "Bağlantı",
+          "connectionDesc": "Akeed ile mağazanız arasındaki bağlantı.",
+          "health": {
+            "heading": "Bağlantı sağlığı",
+            "desc": "Akeed’in mağazanızdan en son ne gördüğü, sinyal sinyal.",
+            "loading": "Bağlantı sağlığı yükleniyor…",
+            "loadError": "Bağlantı sağlığını yükleyemedik.",
+            "retry": "Tekrar dene",
+            "credentials": {
+              "title": "Mağazanıza erişim",
+              "ok": "Kabul edildi",
+              "store_inactive": "Kabul edildi, ancak platform mağazayı etkin değil veya ödemesi gecikmiş olarak bildiriyor",
+              "rejected": "Mağaza tarafından reddedildi",
+              "removed": "Mağazanın bağlantısı kesildiğinde kaldırıldı",
+              "note": "Bu, Akeed anahtarını en son kullandığında mağazanın verdiği yanıttır; canlı bir kontrol değildir."
+            },
+            "lastEvent": {
+              "title": "Alınan son sipariş olayı",
+              "none": "Henüz olay yok",
+              "noneNote": "Bu tek başına bir sorun değildir: mağazanıza sipariş geldiğinde bir olay gelir.",
+              "recent": "Son {days} günde {count, plural, one {# olay} other {# olay}}."
+            },
+            "delivery": {
+              "title": "İşlenmeden önce reddedilen olaylar",
+              "secretsMissing": "Webhook’ları güvenceye almak için ilk sipariş bekleniyor",
+              "rejected": "{count, plural, one {# olay hatalı webhook gizli anahtarı nedeniyle reddedildi} other {# olay hatalı webhook gizli anahtarı nedeniyle reddedildi}}",
+              "none": "Yok",
+              "lastRejected": "Son reddedilme: {when}."
+            },
+            "processing": {
+              "title": "İşleme hataları",
+              "failed": "Son {days} günde {count, plural, one {# olay başarısız oldu} other {# olay başarısız oldu}}",
+              "none": "Son {days} günde yok",
+              "lastFailed": "Son hata: {when}."
+            },
+            "backlog": {
+              "title": "İşlenmeyi bekleyen",
+              "waiting": "{count, plural, one {# olay bekliyor} other {# olay bekliyor}}",
+              "none": "Bekleyen bir şey yok",
+              "oldest": "En eski alınan: {when}."
+            },
+            "remoteSync": {
+              "title": "Mağazanızdaki sipariş durumu güncellemeleri",
+              "failed": "Son {days} günde {count, plural, one {# güncelleme uygulanmadı} other {# güncelleme uygulanmadı}}",
+              "none": "Son {days} günde başarısız güncelleme yok",
+              "pending": "{count, plural, one {# güncelleme hâlâ deneniyor.} other {# güncelleme hâlâ deneniyor.}}",
+              "assistance": "En az biri sizi bekliyor: mağaza Akeed’in erişimini reddetti. Onay sonucu her durumda Akeed’de saklanır.",
+              "note": "Mağaza güncellemeyi almasa bile onay sonucu Akeed’de saklanır."
+            },
+            "capabilities": {
+              "title": "Akeed’in mağazanızda güncellediği bilgiler",
+              "some": "Sipariş durumu güncellemeleri açık",
+              "none": "Bu mağaza için sipariş durumu güncellemeleri henüz açılmadı",
+              "disconnected": "Mağazanın bağlantısı kesikken hiçbir şey",
+              "supported": "Mağazanızda güncellenen: {list}.",
+              "unsupported": "Yalnızca Akeed’de tutulan: {list}.",
+              "separator": ", ",
+              "note": "Sonuçlar her zaman Akeed’e kaydedilir.",
+              "actions": {
+                "customer_confirmation": "müşteri onayları",
+                "customer_cancellation": "müşteri iptalleri",
+                "merchant_no_reply_cancellation": "yanıt gelmeyince yaptığınız iptaller",
+                "merchant_cancellation_tagging": "iptal etiketleri",
+                "automatic_no_reply_tagging": "otomatik yanıt yok işaretleri",
+                "automatic_no_whatsapp_tagging": "otomatik WhatsApp yok işaretleri"
+              }
+            },
+            "webhooks": {
+              "kinds": {
+                "order_created": "Yeni sipariş bildirimi",
+                "order_updated": "Sipariş değişikliği bildirimi"
+              },
+              "states": {
+                "active": "Etkin",
+                "paused": "Mağazanızda duraklatıldı",
+                "disabled": "Mağazanız tarafından devre dışı bırakıldı",
+                "missing": "Mağazanızdan silindi",
+                "unknown": "Mağazanızdan okunamadı"
+              },
+              "notes": {
+                "active": "Az önce mağazanızdan okundu.",
+                "paused": "Akeed bunu değiştirmez. Mağazanızın webhook ayarlarından etkinleştirin.",
+                "disabled": "Yukarıdaki Bağlantı bölümünden yeniden etkinleştirin. Devre dışıyken verilen siparişler içe aktarılmaz.",
+                "missing": "Geri yüklemek için bağlantıyı kesin, ardından aynı mağazayı yeniden bağlayın.",
+                "unknown": "Mağazanız yanıt vermedi veya Akeed’in erişimini kabul etmedi. Bu tek başına bildirimin bir hatası değildir."
+              }
+            }
+          }
+        },
+        "apiKeys": {
+          "heading": "API anahtarları",
+          "description": "Kendi web sitenizin veya arka uç sisteminizin Akeed’e sipariş göndermesini sağlayın.",
+          "serverOnlyTitle": "Yalnızca sunucunuz için",
+          "serverOnly": "Anahtarları sunucunuzda tutun. Bir anahtarı asla web sayfasına, mobil uygulamaya veya müşterinin görebileceği herhangi bir yere koymayın: anahtara sahip olan herkes mağazanıza sipariş gönderebilir.",
+          "createButton": "Anahtar oluştur",
+          "limitReached": "En fazla {max} etkin anahtarınız olabilir. Yenisini oluşturmak için birini iptal edin.",
+          "empty": "Henüz API anahtarı yok.",
+          "listLabel": "API anahtarları",
+          "retry": "Tekrar dene",
+          "createdAt": "Oluşturulma: {date}",
+          "revokedAt": "İptal: {date}",
+          "lastUsedAt": "Son kullanım: {date}",
+          "neverUsed": "Hiç kullanılmadı",
+          "revokeButton": "İptal et",
+          "revokeLabel": "İptal et: {name}",
+          "status": {
+            "active": "Etkin",
+            "revoked": "İptal edildi"
+          },
+          "create": {
+            "title": "API anahtarı oluşturun",
+            "description": "Daha sonra hangisini iptal edeceğinizi bilmek için anahtara onu kullanacak sunucunun adını verin.",
+            "nameLabel": "Anahtar adı",
+            "namePlaceholder": "örn. Mağaza web sitesi",
+            "nameHelp": "En fazla 60 karakter. Yalnızca ekibiniz görür.",
+            "nameRequired": "Anahtar için bir ad girin.",
+            "cancel": "Vazgeç",
+            "submit": "Anahtar oluştur"
+          },
+          "reveal": {
+            "title": "API anahtarınızı kopyalayın",
+            "description": "Bu anahtarı sunucunuzun ayarlarına ekleyin.",
+            "once": "Bu anahtarı yalnızca bu kez göreceksiniz. Şimdi kopyalayın. Kaybederseniz iptal edip yenisini oluşturun.",
+            "keyLabel": "API anahtarı",
+            "copy": "Kopyala",
+            "copied": "Kopyalandı",
+            "copyError": "Anahtar kopyalanamadı. Seçip elle kopyalayın.",
+            "done": "Kaydettim"
+          },
+          "revoke": {
+            "title": "“{name}” iptal edilsin mi?",
+            "description": "Bu anahtarı kullanan istekler hemen reddedilir. Anahtarın daha önce gönderdiği siparişler korunur. Bu işlem geri alınamaz.",
+            "keep": "Anahtarı koru",
+            "confirm": "Anahtarı iptal et"
+          },
+          "connect": {
+            "endpointLabel": "Siparişlerin gönderileceği adres",
+            "copy": "Kopyala",
+            "copied": "Kopyalandı",
+            "copyError": "Adres kopyalanamadı. Seçip elle kopyalayın.",
+            "guideLink": "Sunucu API’si kılavuzunu okuyun",
+            "newTab": "yeni sekmede açılır"
+          },
+          "errors": {
+            "API_KEY_ROLE_REQUIRED": "API anahtarlarını yalnızca bir hesap sahibi veya yönetici yönetebilir.",
+            "API_KEY_SOURCE_UNAVAILABLE": "API anahtarı oluşturmadan önce mağazanızı bağlayın.",
+            "API_KEY_SOURCE_AMBIGUOUS": "Hesabınızda birden fazla etkin mağaza var. API anahtarı oluşturmak için destek ekibine ulaşın.",
+            "API_KEY_SOURCE_UNSUPPORTED": "API anahtarları yalnızca bağımsız mağazalar için kullanılabilir.",
+            "API_KEY_SETUP_INCOMPLETE": "API anahtarı oluşturmadan önce mağazanızın kurulumunu tamamlayın.",
+            "API_KEY_LIMIT_REACHED": "Etkin anahtar sınırına ulaştınız. Önce birini iptal edin.",
+            "API_KEY_NOT_FOUND": "Bu anahtar artık mevcut değil. Sayfayı yenileyin.",
+            "API_KEY_VALIDATION_FAILED": "Anahtar adını kontrol edip tekrar deneyin.",
+            "RATE_LIMITED": "Çok fazla istek gönderildi. Bir dakika bekleyip tekrar deneyin.",
+            "generic": "Bir sorun oluştu. Tekrar deneyin."
+          }
+        }
+      },
+      "messages": {
+        "saveSuccess": "Ayarlar kaydedildi",
+        "saveInvalid": "Kaydetmeden önce bazı alanların düzeltilmesi gerekiyor.",
+        "saveError": "Ayarlarınızı kaydedemedik. İşaretli alanları kontrol edip tekrar deneyin.",
+        "readOnly": "Salt okunur erişiminiz var. Yapılandırma değişikliklerini bir hesap sahibi veya yönetici yapmalıdır.",
+        "testSendSuccess": "Test mesajı WhatsApp’ınıza gönderildi",
+        "testSendCooldown": "Başka bir test göndermeden önce birkaç saniye bekleyin.",
+        "testSendDailyLimit": "Bugünkü test mesajı sınırına ulaştınız.",
+        "testSendError": "Test mesajı gönderilemedi. Tekrar deneyin.",
+        "testSendLanguageUnavailable": "Bu dildeki mesajlar şu anda kullanılamıyor. Başka bir dilin önizlemesini açıp tekrar deneyin.",
+        "sourceDisconnected": "Sipariş kaynağınızın bağlantısı kesik, bu yüzden ayarlar değiştirilemiyor. Sipariş kaynağı sekmesinden yeniden bağlayabilirsiniz."
+      }
+    },
+    "storeConfigurationHeading": "Mağaza yapılandırması",
+    "storeNameLabel": "Mağaza adı",
+    "storeNameRequired": "Mağaza adı zorunludur.",
+    "defaultLanguageLabel": "Varsayılan dil",
+    "languageAuto": "Otomatik, müşteri telefonunun ülkesine göre",
+    "languageEnglish": "İngilizce",
+    "languageArabic": "Arapça",
+    "languageSwitching": "Dil değiştiriliyor...",
+    "autoVerifyLabel": "Otomatik doğrulama açılsın mı?",
+    "autoVerifyDescription": "Açık olduğunda Akeed, yeni kapıda ödemeli siparişler için WhatsApp doğrulamasını otomatik olarak gönderir.",
+    "automation": {
+      "title": "Otomasyon ayarları",
+      "subtitle": "Akeed’in WhatsApp onaylarını, takip mesajlarını ve inceleme işaretlerini ne zaman göndereceğini belirleyin.",
+      "heading": "Otomasyon",
+      "description": "Akeed’in doğrulamayı, tek takip mesajını ve yanıt yok yükseltmesini ne zaman yapacağını belirleyin.",
+      "trustSignal": "Meta’nın resmî WhatsApp Cloud API’leri üzerinden, Akeed’in doğrulanmış işletme numarasından gönderilir.",
+      "sendDelayMinutesLabel": "İlk gönderim gecikmesi (saat)",
+      "sendDelayMinutesHelp": "Yeni bir kapıda ödemeli sipariş alındıktan hemen sonra göndermek için 0 girin.",
+      "followUpEnabledLabel": "Bir takip mesajı gönder",
+      "followUpEnabledHelp": "Müşteri yanıt vermezse Akeed aynı WhatsApp şablonunu bir kez daha gönderir.",
+      "followUpDelayMinutesLabel": "Takip gecikmesi (saat)",
+      "escalationEnabledLabel": "Yanıt yok yükseltmesini aç",
+      "escalationEnabledHelp": "Müşteri hiç yanıt vermezse, ayarlanan süreden sonra siparişi elle inceleme için işaretle.",
+      "escalationDelayMinutesLabel": "Yanıt yok yükseltme gecikmesi (saat)",
+      "escalationDelayMinutesHelp": "İlk WhatsApp mesajının başarıyla gönderildiği andan itibaren ölçülür.",
+      "escalationReviewDescription": "{value} {unit} içinde yanıt vermeyen siparişler elle inceleme için işaretlenir.",
+      "units": {
+        "hour": "saat",
+        "hours": "saat",
+        "minute": "dakika",
+        "minutes": "dakika"
+      },
+      "quietHoursEnabledLabel": "Sessiz saatlerde gönderimi duraklat",
+      "quietHoursEnabledHelp": "Akeed planlanan gönderimleri izin verilen bir sonraki yerel saate kaydırır.",
+      "quietHoursStartLabel": "Sessiz saatlerin başlangıcı",
+      "quietHoursEndLabel": "Sessiz saatlerin bitişi",
+      "timezoneLabel": "Saat dilimi",
+      "validation": {
+        "sendDelayMinutes": "İlk gönderim gecikmesi 0 ile 24 saat arasında olmalıdır.",
+        "followUpDelayMinutes": "Takip gecikmesi 0 ile 168 saat arasında olmalıdır.",
+        "escalationDelayMinutes": "Yanıt yok yükseltme gecikmesi 0 ile 168 saat arasında olmalıdır.",
+        "followUpBeforeEscalation": "Yanıt yok yükseltme gecikmesi, takip gecikmesinden uzun olmalıdır.",
+        "quietHoursRequired": "Sessiz saatlerin başlangıç ve bitiş zamanlarını SS:dd biçiminde girin.",
+        "quietHoursDifferent": "Sessiz saatlerin başlangıç ve bitiş zamanları farklı olmalıdır. Gece yarısını aşan aralıklara izin verilir."
+      },
+      "timezones": {
+        "Asia_Riyadh": "Suudi Arabistan (Asia/Riyadh)",
+        "Asia_Dubai": "BAE (Asia/Dubai)",
+        "Asia_Qatar": "Katar (Asia/Qatar)",
+        "Asia_Kuwait": "Kuveyt (Asia/Kuwait)",
+        "Asia_Bahrain": "Bahreyn (Asia/Bahrain)",
+        "Asia_Muscat": "Umman (Asia/Muscat)",
+        "Asia_Amman": "Ürdün (Asia/Amman)",
+        "Africa_Cairo": "Mısır (Africa/Cairo)",
+        "Africa_Casablanca": "Fas (Africa/Casablanca)",
+        "UTC": "UTC"
+      }
+    },
+    "saveButton": "Değişiklikleri kaydet",
+    "savingButton": "Kaydediliyor...",
+    "saveSuccess": "Ayarlar başarıyla güncellendi.",
+    "saveError": "Ayarlarınızı kaydedemedik. Lütfen tekrar deneyin.",
+    "loadError": "Ayarlarınızı yükleyemedik. Lütfen sayfayı yenileyip tekrar deneyin.",
+    "subscriptionHeading": "Abonelik",
+    "subscriptionCurrentPlan": "Mevcut planınız: {plan}.",
+    "subscriptionNoPlan": "Henüz etkin bir plan seçilmedi.",
+    "subscriptionStatusLabel": "Abonelik durumu: {status}",
+    "billingStatusActive": "Etkin",
+    "billingStatusPending": "Onay bekliyor",
+    "billingStatusDeclined": "Reddedildi",
+    "billingStatusFrozen": "Donduruldu",
+    "billingStatusExpired": "Süresi doldu",
+    "billingStatusCanceled": "İptal edildi",
+    "billingStatusError": "Kontrol gerekiyor",
+    "billingStatusManualPilot": "Elle yönetilen pilot — abonelik gerekmez",
+    "billingStatusNotRequired": "Abonelik gerekmez",
+    "usageManualLimitReached": "Pilot doğrulama sınırınıza ulaşıldı. Erişiminizin incelenmesi için destek ekibine ulaşın.",
+    "billingStatusUnknown": "Bilinmiyor",
+    "usageTitle": "Onay mesajları",
+    "usageUsedPercent": "%{value} kullanıldı",
+    "usageMonthlyLimit": "Aylık sınır",
+    "usageOneTimeLimit": "Tek seferlik ücretsiz hak",
+    "usageOneTimeLimitReachedPrompt": "Ücretsiz Starter hakkınızı kullandınız. Bu hak yenilenmez; onaylara devam etmek için planınızı yükseltin.",
+    "usageUpgradePrompt": "Planınıza dahil aylık WhatsApp onay sınırına yaklaşıyorsunuz. Onayların gönderilmeye devam etmesi için bitmeden planınızı yükseltin.",
+    "usageLimitReachedPrompt": "Aylık WhatsApp onay sınırınıza ulaştınız. Onaylara hemen devam etmek için planınızı yükseltin veya bir sonraki faturalandırma dönemini bekleyin.",
+    "currentPlanBadge": "Mevcut",
+    "changePlanButton": "Seçilen plana geç",
+    "changingPlanButton": "Plan değiştiriliyor...",
+    "changePlanError": "Plan değişikliğini başlatamadık. Lütfen tekrar deneyin.",
+    "planFree": "Ücretsiz",
+    "planPricePerMonth": "{price} / ay",
+    "planVolumePerMonth": "Ayda en fazla {count} WhatsApp onayı",
+    "planVolumeOneTime": "{count} WhatsApp onayı (tek seferlik)",
+    "freePlanAlreadyClaimedTooltip": "Ücretsiz planı daha önce kullandınız. Ücretsiz plan yalnızca bir kez seçilebilir.",
+    "freePlanAlreadyClaimedError": "Bu mağaza ücretsiz planı daha önce kullandı. Lütfen ücretli bir plan seçin.",
+    "embedded": {
+      "title": "Ayarlar",
+      "tabs": {
+        "message": "Mesaj",
+        "timing": "Zamanlama ve takip",
+        "plan": "Plan"
+      },
+      "save": "Kaydet",
+      "discard": "Vazgeç",
+      "saveSuccess": "Ayarlar kaydedildi",
+      "saveError": "Ayarlarınızı kaydedemedik. İşaretli alanları kontrol edip tekrar deneyin.",
+      "saveInvalid": "Kaydetmeden önce bazı alanların düzeltilmesi gerekiyor.",
+      "readOnly": "Salt okunur erişiminiz var. Yapılandırma değişikliklerini bir hesap sahibi veya yönetici yapmalıdır.",
+      "loadError": "Ayarlarınızı yükleyemedik.",
+      "retry": "Tekrar dene",
+      "unsavedElsewhere": "Başka bir sekmede kaydedilmemiş değişiklikleriniz var. Kaydetmek veya vazgeçmek için o sekmeye dönün.",
+      "reviewChanges": "Değişiklikleri gözden geçir",
+      "testSendSuccess": "Test mesajı WhatsApp’ınıza gönderildi",
+      "testSendCooldown": "Başka bir test göndermeden önce birkaç saniye bekleyin.",
+      "testSendDailyLimit": "Bugünkü test mesajı sınırına ulaştınız.",
+      "testSendError": "Test mesajı gönderilemedi. Tekrar deneyin.",
+      "testSendLanguageUnavailable": "Bu dildeki mesajlar şu anda kullanılamıyor. Başka bir dilin önizlemesini açıp tekrar deneyin.",
+      "message": {
+        "identityHeading": "Mesaj kimliği",
+        "storeNameLabel": "Mağaza adı",
+        "storeNameHelp": "Her mesajda görünür: “{name} mağazasından verdiğiniz sipariş için teşekkür ederiz.”",
+        "storeNameRequired": "Mağaza adınızı girin.",
+        "storeNameTooLong": "En fazla {max} karakter kullanın.",
+        "languageHeading": "Mesaj dili",
+        "languageAuto": "Otomatik, müşteri numarasına göre",
+        "languageAutoHelp": "Arap ülkelerindeki numaralara Arapça, Pakistan’a Urduca, İspanya ve Latin Amerika’ya İspanyolca, Fransa’ya Fransızca, diğer her yere İngilizce.",
+        "recommended": "Önerilen",
+        "languageFixed": "Tüm müşteriler için tek dil",
+        "languageFixedHelp": "Her müşteri mesajı sizin seçtiğiniz dilde alır.",
+        "languageFixedLabel": "Dil",
+        "languageOptionLocked": "{language} ({status})",
+        "awaitingApproval": "WhatsApp onayı bekleniyor",
+        "notEnabledYet": "Henüz kullanılamıyor",
+        "languageLockedNote": "{language} mesajlar WhatsApp’ın onayını bekliyor. Biri onaylandığında mağazanız için {language} dilini seçebilirsiniz.",
+        "stylesEmpty": "Henüz {language} mesaj yok.",
+        "styleHeading": "Mesaj üslubu",
+        "styleForLanguage": "{language} mesajlar için. Başka bir dili ayarlamak için önizleme dilini değiştirin.",
+        "languageNames": {
+          "ar": "Arapça",
+          "en": "İngilizce",
+          "ur": "Urduca",
+          "es": "İspanyolca",
+          "fr": "Fransızca",
+          "tr": "Türkçe"
+        },
+        "variantLabels": {
+          "standard": "Modern Standart",
+          "standardPlain": "Standart",
+          "egyptian": "Mısır lehçesi",
+          "gulf": "Körfez lehçesi",
+          "friendly": "Samimi",
+          "professional": "Profesyonel",
+          "direct": "Doğrudan",
+          "short": "Kısa",
+          "detailed": "Ayrıntılı",
+          "auto": "Ülkeye göre otomatik"
+        },
+        "previewHeading": "Önizleme",
+        "previewingLabel": "Önizleme: {language} · {style}",
+        "previewingLanguage": "Önizleme: {language}",
+        "previewLanguageGroup": "Önizleme dili",
+        "previewAria": "{language} WhatsApp mesajı önizlemesi",
+        "testSend": "WhatsApp’a test mesajı gönder",
+        "testSendHelp": "Yukarıda gösterildiği gibi <phone></phone> numarasına {language} olarak gönderilir. Test mesajları ücretsizdir.",
+        "testSendLanguageLocked": "{language} mesajlar henüz kullanılamıyor, bu yüzden test edilecek bir şey yok.",
+        "testSendHelpNoPhone": "Gönderirken WhatsApp numaranızı soracağız. Test mesajları ücretsizdir.",
+        "testSendSaveFirst": "Test etmek için önce değişikliklerinizi kaydedin.",
+        "testPhone": {
+          "change": "Değiştir",
+          "title": "WhatsApp numaranız",
+          "description": "Test mesajı bu numaraya gönderilir. Sonraki testleriniz için kaydedilir.",
+          "label": "WhatsApp numarası",
+          "suggested": "Bu, mağazanızın telefon numarası. WhatsApp’ta kayıtlı olduğundan emin olun.",
+          "invalid": "Ülke kodu dahil geçerli bir WhatsApp numarası girin.",
+          "readOnly": "Hesabınız bu numarayı değiştiremez.",
+          "saveFailed": "Numara kaydedilemedi. Tekrar deneyin.",
+          "submit": "Kaydet ve gönder",
+          "cancel": "Vazgeç",
+          "close": "Kapat"
+        },
+        "autoStylePreviewNote": "Önizleme, kayıtlı üslubunuzu gösterir. Otomatik seçeneğinde her müşteri kendi ülkesinin üslubunu alır.",
+        "reminderHeading": "Hatırlatma mesajı",
+        "reminderHint": "Henüz yanıt vermeyen müşterilere gönderilir.",
+        "reminderSame": "İlk mesajla aynı",
+        "previewEmpty": "Bu mesajda henüz önizlenecek metin yok."
+      },
+      "timing": {
+        "timelineHeading": "Her kapıda ödemeli siparişte ne olur",
+        "steps": {
+          "newOrder": "Yeni sipariş",
+          "confirmation": "Onay mesajı",
+          "reminder": "Yanıt yoksa hatırlatma",
+          "needsAction": "“İşlem bekleyenler”"
+        },
+        "delayImmediate": "Hemen",
+        "delayAfter": "{duration} sonra",
+        "delayAfterMore": "{duration} daha sonra",
+        "stepOff": "Kapalı",
+        "hours": "{count, plural, one {# saat} other {# saat}}",
+        "minutes": "{count, plural, one {# dakika} other {# dakika}}",
+        "quietLine": "{start} ile {end} arasında gönderilecek mesajlar {end} olduğunda gönderilir.",
+        "autoHeading": "Otomatik onay",
+        "autoDescription": "Kapıda ödemeli siparişler için onay mesajını ne zaman gönderdiğimiz.",
+        "autoLabel": "Her yeni sipariş için onay mesajı gönder",
+        "autoHelp": "Kapalıyken hiçbir mesaj gönderilmez.",
+        "sendTimeLabel": "Gönderim zamanı",
+        "previewMessage": "Mesajı önizle",
+        "sendPresets": {
+          "now": "Hemen",
+          "after15m": "15 dakika sonra",
+          "after1h": "1 saat sonra",
+          "custom": "Özel"
+        },
+        "customDelayLabel": "Dakika cinsinden gecikme",
+        "customDelaySuffix": "dk",
+        "customDelayError": "0 ile 1.440 arasında tam dakika girin.",
+        "followHeading": "Takip",
+        "followDescription": "Müşteri yanıt vermediğinde ne yaptığımız.",
+        "reminderLabel": "Bir hatırlatma gönder",
+        "reminderCounts": "Hatırlatmalar aylık mesajlarınızdan düşülür.",
+        "after": "Süre",
+        "hoursShort": "{count} sa",
+        "minutesShort": "{count} dk",
+        "fromOrder": "(sipariş geldikten sonra)",
+        "fromFirstMessage": "(ilk mesajdan sonra)",
+        "fromReminder": "(hatırlatmadan sonra)",
+        "reminderGroup": "Hatırlatma gecikmesi",
+        "alertGroup": "Yanıt yok uyarısı gecikmesi",
+        "alertLabel": "Yanıt gelmeyen siparişler için beni uyar",
+        "alertHelp": "Sipariş, kendiniz takip edebilmeniz için Akeed’de “İşlem bekleyenler” bölümüne taşınır.",
+        "quietHeading": "Sessiz saatler",
+        "quietDescription": "Gece mesaj gönderilmez. Sessiz saatlere denk gelen mesajlar, sessiz saatler bitince gönderilir.",
+        "quietLabel": "Sessiz saatlerde gönderimi duraklat",
+        "quietOff": "Kapalı. Müşterilere gece mesaj göndermemek için açın.",
+        "quietFrom": "Başlangıç",
+        "quietTo": "Bitiş",
+        "timezoneLabel": "Saat dilimi",
+        "storeTime": "{zone} (mağaza saati)",
+        "timeValue": "{time} {period}",
+        "am": "ÖÖ",
+        "pm": "ÖS",
+        "quietErrors": {
+          "sameStartEnd": "Başlangıç ve bitiş aynı saat olamaz.",
+          "invalidTime": "Bir başlangıç ve bitiş saati seçin.",
+          "unsupportedTimezone": "Listeden bir saat dilimi seçin."
+        }
+      },
+      "plan": {
+        "warningTitle": "{remaining, plural, one {# mesaj kaldı} other {# mesaj kaldı}}",
+        "warningTitleFree": "{remaining, plural, one {# ücretsiz mesaj kaldı} other {# ücretsiz mesaj kaldı}}",
+        "warningBody": "Mesajlar bittiğinde yeni siparişler için onay mesajları durur. Siparişleriniz ve verileriniz olduğu gibi kalır.",
+        "warningBodyRenews": "Mesajlar bittiğinde, hakkınız {date} tarihinde yenilenene veya daha büyük bir plana geçene kadar yeni siparişler için onay mesajları durur. Siparişleriniz ve verileriniz olduğu gibi kalır.",
+        "criticalTitle": "Tüm mesajlarınızı kullandınız",
+        "criticalBody": "Yeni siparişler için onay mesajları duraklatıldı. Siparişleriniz ve verileriniz korunur. Devam etmek için bir plan seçin.",
+        "currentPlan": "Mevcut planınız: {plan}",
+        "noPlan": "Etkin plan yok",
+        "badgeFree": "Ücretsiz",
+        "badgeMonthly": "Aylık",
+        "usageAria": "Kullanılan mesajlar",
+        "subscribe": "Abone ol: {plan}",
+        "currentPlanButton": "Mevcut planınız",
+        "billingManaged": "Planınız Akeed ekibi tarafından yönetiliyor. Değiştirmek için destek ekibine ulaşın.",
+        "subscribeError": "Shopify’ın onay sayfasını açamadık. Tekrar deneyin.",
+        "freePlanClaimedError": "Bu mağaza ücretsiz planı daha önce kullandı. Ücretli bir plan seçin."
+      }
+    },
+    "sourceEasyOrders": "EasyOrders",
+    "sourceWooCommerce": "WooCommerce"
+  },
+  "embeddedOnboarding": {
+    "prefillWarning": "Shopify mağaza bilgilerini önceden dolduramadık. Lütfen mağaza adını elle girin.",
+    "billingManagementUnavailable": "Faturalandırma yönetimi kullanılamıyor. Erişiminizin incelenmesi için destek ekibine ulaşın.",
+    "storeNameRequired": "Mağaza adı zorunludur.",
+    "settingsSaveError": "Kurulum ayarlarınızı kaydedemedik. Lütfen tekrar deneyin.",
+    "billingActivationError": "Faturalandırma etkinleştirmesini başlatamadık. Lütfen tekrar deneyin.",
+    "billingStatusPending": "Faturalandırma onayınız hâlâ bekliyor. Lütfen onayı Shopify’da tamamlayıp tekrar deneyin.",
+    "billingStatusDeclined": "Faturalandırma onayınız reddedildi. Devam etmek için lütfen bir plan seçip faturalandırmayı onaylayın.",
+    "billingStatusFrozen": "Aboneliğiniz donduruldu. Lütfen faturalandırma sorununu Shopify’da çözüp planınızı yeniden etkinleştirin.",
+    "billingStatusExpired": "Aboneliğinizin süresi doldu. Siparişleri doğrulamaya devam etmek için lütfen bir planı yeniden etkinleştirin.",
+    "billingStatusCanceled": "Aboneliğiniz iptal edildi. Devam etmek için lütfen bir plan seçip faturalandırmayı etkinleştirin.",
+    "billingStatusError": "Faturalandırma durumunuzu doğrulayamadık. Lütfen planınızı tekrar etkinleştirmeyi deneyin.",
+    "billingStatusNeedsAttention": "Faturalandırma durumunuzun kontrol edilmesi gerekiyor. Devam etmek için lütfen planınızı etkinleştirin veya güncelleyin.",
+    "billingHeading": "Planınızı seçin",
+    "billingBody": "Müşterilerin alacağı WhatsApp mesajının tam önizlemesini görün, ardından aylık onay hacminizi seçin.",
+    "changePlanLaterNote": "Planınızı daha sonra ayarlardan değiştirebilirsiniz.",
+    "readyToVerify": "Akeed yeni kapıda ödemeli siparişleri doğrulamaya hazır.",
+    "activatePlan": "Seçilen planı etkinleştir",
+    "billingRedirecting": "Faturalandırma onayı için Shopify’a yönlendiriliyorsunuz…",
+    "billingTryAgain": "Tekrar dene",
+    "billingBack": "Geri",
+    "planPriceFree": "Ücretsiz",
+    "planPricePerMonth": "{price} / ay",
+    "planVolumePerMonth": "Ayda en fazla {count} WhatsApp onayı",
+    "freePlanAlreadyClaimedTooltip": "Ücretsiz planı daha önce kullandınız. Ücretsiz plan yalnızca bir kez seçilebilir.",
+    "freePlanAlreadyClaimedError": "Bu mağaza ücretsiz planı daha önce kullandı. Lütfen ücretli bir plan seçin.",
+    "freePlanUsedBadge": "Kullanıldı",
+    "planStarterName": "Starter",
+    "planBasicName": "Basic",
+    "planProName": "Pro",
+    "planBusinessName": "Scale"
+  },
+  "messageTemplate": {
+    "pageTitle": "Mesaj şablonu",
+    "pageSubtitle": "Müşterilerin kapıda ödeme onayı için aldığı WhatsApp mesajını birebir inceleyin.",
+    "title": "Müşteriye giden WhatsApp mesajının birebir hâli",
+    "subtitle": "Kapıda ödemeli bir sipariş verildiğinde müşterilerin aldığı WhatsApp mesajı tam olarak budur.",
+    "imageAlt": "Akeed WhatsApp onay mesajı şablonu",
+    "aboutTitle": "Bu şablon hakkında",
+    "aboutDescription": "Bu WhatsApp mesajı, müşteriler kapıda ödemeli bir sipariş verdikten sonra gönderilir.",
+    "purposeLabel": "Amaç",
+    "purposeValue": "Sipariş onayı",
+    "channelLabel": "Kanal",
+    "variablesTitle": "Şablon değişkenleri",
+    "previewHeading": "Mesaj şablonu",
+    "trustTitle": "Resmî ve güvenli",
+    "whatsappLabel": "WhatsApp",
+    "sampleBadge": "Müşteri önizlemesi",
+    "trustNote": "Meta’nın resmî WhatsApp Cloud API’leri üzerinden, Akeed’in doğrulanmış işletme numarasından gönderilir.",
+    "languageArabic": "Arapça",
+    "languageEnglish": "İngilizce",
+    "languageAuto": "Otomatik",
+    "languageLabel": "Müşteri dili",
+    "styleLabel": "Ton ve üslup",
+    "setupTitle": "Şablon kurulumu",
+    "setupDescription": "Müşterilerin kapıda ödemeli siparişleri WhatsApp’tan onaylarken alacağı dili ve tonu seçin.",
+    "storeLanguageAutoHint": "Mağaza dili Otomatik. Müşteriler telefon ülkesine göre Arapça, İngilizce, Urduca, İspanyolca veya Fransızca mesaj alır; bu yüzden satış yaptığınız her dil için bir üslup belirleyin.",
+    "storeLanguageFixedHint": "Mağazanın gönderim dili: {language}. Her iki dilin şablonunu da yine düzenleyebilirsiniz.",
+    "perLanguageStyleHint": "İpucu: her dil farklı bir ton kullanabilir.",
+    "previewDescription": "Seçilen WhatsApp şablonunun canlı önizlemesi.",
+    "variantSelectorTitle": "Şablon üslubu",
+    "variantSelectorDescription": "Onay mesajınızın her dilde nasıl görüneceğini seçin.",
+    "variantLabel": "Şablon çeşidi",
+    "defaultVariantLabel": "Varsayılan: {variant}",
+    "badgeDefault": "Varsayılan",
+    "badgeCustom": "Özel",
+    "variantLabels": {
+      "standard": "Standart (varsayılan)",
+      "egyptian": "Mısır Arapçası",
+      "gulf": "Körfez Arapçası",
+      "friendly": "Samimi",
+      "professional": "Profesyonel",
+      "direct": "Doğrudan",
+      "short": "Kısa ve öz"
+    },
+    "phoneStoreName": "Akeed Mağazası",
+    "phoneOnlineStatus": "Şu anda çevrimiçi",
+    "phoneGreeting": "Merhaba",
+    "phoneOrderLine": "Siparişiniz alındı",
+    "phoneTotalLabel": "Toplam:",
+    "phonePrompt": "Lütfen siparişinizi onaylayın.",
+    "confirmButton": "Onayla",
+    "cancelButton": "İptal et",
+    "variables": {
+      "orderNumber": "Sipariş numarası",
+      "paymentMethod": "Ödeme yöntemi",
+      "totalPrice": "Toplam tutar",
+      "businessName": "İşletme adı"
+    },
+    "values": {
+      "orderNumber": "11996743237999",
+      "paymentMethod": "Kapıda ödeme",
+      "totalPrice": "600,00 $",
+      "businessName": "Akeed Mağazası"
+    },
+    "confirmationRate": "Onay oranı",
+    "confirmationRateHelp": "Gönderilen doğrulamalardan müşterinin onayladıklarının yüzdesi."
+  },
+  "docs": {
+    "eyebrow": "Belgeler",
+    "title": "Akeed Belgeleri",
+    "description": "Akeed için kılavuzlar, kurulum adımları ve işletim belgeleri.",
+    "empty": "Belge sayfaları yakında burada görünecek.",
+    "backToDocs": "Belgelere dön",
+    "sidebarTitle": "İçindekiler",
+    "openContents": "İçindekileri aç",
+    "closeContents": "İçindekileri kapat",
+    "breadcrumbsLabel": "İçerik yolu",
+    "docsCrumb": "Belgeler",
+    "previous": "Önceki",
+    "next": "Sonraki",
+    "searchLabel": "Belgelerde ara",
+    "searchPlaceholder": "Belgelerde ara",
+    "searchResultsLabel": "Arama sonuçları",
+    "searchNoResults": "Aramanızla eşleşen belge sayfası yok.",
+    "searchHint": "İpucu: Aramaya geçmek için / tuşuna basın",
+    "clearSearch": "Aramayı temizle"
+  },
+  "docsHelp": {
+    "viewDocumentation": "Belgeleri görüntüle",
+    "learnMore": "Daha fazla bilgi",
+    "needHelp": "Yardıma mı ihtiyacınız var?"
+  },
+  "manualOrder": {
+    "title": "Bir siparişi doğrulayın",
+    "description": "Akeed müşteriye kapıda ödeme onay mesajı gönderir.",
+    "open": "Siparişi doğrula",
+    "close": "Kapat",
+    "cancel": "Vazgeç",
+    "submit": "Siparişi doğrula",
+    "submitting": "Doğrulamaya gönderiliyor...",
+    "required": "Zorunlu",
+    "readOnly": "Siparişleri yalnızca hesap sahipleri ve yöneticiler doğrulayabilir.",
+    "sourceDisconnected": "Kaynağın bağlantısı kesikken sipariş doğrulama kullanılamaz.",
+    "availabilityLoading": "Sipariş doğrulamanın kullanılabilir olup olmadığı kontrol ediliyor.",
+    "availabilityUnavailable": "Sipariş doğrulama geçici olarak kullanılamıyor.",
+    "planLimitReasonLabel": "Bu döneme dahil tüm doğrulamaları kullandınız.",
+    "fields": {
+      "customerPhone": {
+        "label": "Müşteri telefonu",
+        "placeholder": "+90 532 123 45 67"
+      },
+      "customerName": {
+        "label": "Müşteri adı"
+      },
+      "orderNumber": {
+        "label": "Sipariş referansı"
+      },
+      "totalPrice": {
+        "label": "Sipariş tutarı",
+        "placeholder": "125.50"
+      },
+      "currency": {
+        "label": "Para birimi",
+        "placeholder": "Para birimi seçin"
+      }
+    },
+    "validation": {
+      "customerNameRequired": "Müşterinin adını girin.",
+      "orderNumberRequired": "Sipariş referansını girin.",
+      "customerPhoneRequired": "Müşterinin telefon numarasını girin.",
+      "customerPhoneInvalid": "Ülke koduyla birlikte geçerli bir telefon numarası girin.",
+      "customerPhoneServer": "Telefon numarasını kontrol edip tekrar deneyin.",
+      "customerNameTooLong": "Müşteri adı en fazla 255 karakter olmalıdır.",
+      "customerNameServer": "Müşteri adını kontrol edip tekrar deneyin.",
+      "orderNumberTooLong": "Sipariş referansı en fazla 100 karakter olmalıdır.",
+      "orderNumberServer": "Sipariş referansını kontrol edip tekrar deneyin.",
+      "totalPriceRequired": "Sipariş tutarını girin.",
+      "totalPriceInvalid": "Sıfırdan büyük ve en fazla iki ondalık basamaklı bir tutar girin.",
+      "totalPriceServer": "Sipariş tutarını kontrol edip tekrar deneyin.",
+      "currencyRequired": "Desteklenen bir para birimi seçin.",
+      "currencyServer": "Desteklenen bir para birimi seçip tekrar deneyin."
+    },
+    "errors": {
+      "planLimitReached": "Bu döneme dahil tüm doğrulamaları kullandınız.",
+      "autoVerifyDisabled": "Bir siparişi doğrulamadan önce otomatik doğrulamayı açın.",
+      "validation": "Bazı sipariş bilgilerinin düzeltilmesi gerekiyor.",
+      "timeout": "Sonucu 30 saniye içinde doğrulayamadık. Güvenle yeniden deneyebilmeniz için bilgileriniz ve yeniden deneme belirteciniz kilitlendi.",
+      "offline": "Çevrimdışı görünüyorsunuz. Bilgileriniz ve yeniden deneme belirteciniz kilitlendi; yeniden bağlanıp güvenle tekrar deneyin.",
+      "network": "Siparişin kabul edilip edilmediğini doğrulayamadık. Bu bilgileri değiştirmeden aynı belirteçle yeniden deneyin.",
+      "acceptanceFailed": "Sunucu bu siparişi kalıcı olarak kabul edemedi. Bu bilgileri değiştirmeden güvenle yeniden deneyin.",
+      "conflict": "Bu yeniden deneme belirteci farklı sipariş bilgilerine ait. Yeniden denemeyin; yalnızca sipariş oluşturulmadığını kontrol ettikten sonra baştan başlayın.",
+      "idempotency": "Güvenli bir yeniden deneme belirteci oluşturulamadı. Baştan başlayıp tekrar deneyin.",
+      "role": "Siparişleri yalnızca hesap sahipleri ve yöneticiler doğrulayabilir.",
+      "sourceUnavailable": "Etkin bir bağımsız kaynak yok. Yeniden denemeden önce kurulumunuzu kontrol edin.",
+      "sourceAmbiguous": "Birden fazla etkin kaynak bulundu. Sipariş oluşturmadan önce destek ekibine ulaşın.",
+      "sourceUnsupported": "Sipariş doğrulama yalnızca bağımsız kaynaklar için kullanılabilir.",
+      "setupIncomplete": "Bir siparişi doğrulamadan önce bağımsız hesap kurulumunu tamamlayın.",
+      "entitlement": "Bu çalışma alanı için sipariş doğrulama etkin değil. Destek ekibine ulaşın.",
+      "notProvisioned": "Bu hesabın kredileri henüz ayarlanmadı. Sayfayı yenileyin; sorun devam ederse Akeed destek ekibine ulaşın.",
+      "unexpected": "Siparişi doğrulamaya gönderemedik. Bilgileri kontrol edip tekrar deneyin."
+    },
+    "retry": {
+      "locked": "Önceki sonuç belirsiz olduğu için bu değerler kilitlendi. Yeniden deneme, ilk belirteci kullanır ve aynı siparişten ikincisini oluşturamaz.",
+      "retry": "Güvenle yeniden dene",
+      "retrying": "Yeniden deneniyor...",
+      "startOver": "Bunun yerine baştan başla",
+      "startOverWarning": "Önceki istek zaten kabul edilmiş olabilir. Baştan başlamak yeni bir belirteç kullanır ve mükerrer sipariş oluşturabilir.",
+      "confirmStartOver": "Yine de baştan başla",
+      "keepRetry": "Güvenli yeniden denemede kal"
+    },
+    "success": {
+      "title": "Sipariş doğrulama için kabul edildi",
+      "description": "Sipariş kaydedildi ve doğrulama için sıraya alındı. Bu, henüz bir WhatsApp mesajının gönderildiği veya teslim edildiği anlamına gelmez.",
+      "duplicateTitle": "Sipariş zaten kabul edilmiş",
+      "duplicateDescription": "Akeed, güvenli yeniden denemenizden asıl siparişi buldu; mükerrer sipariş oluşturulmadı.",
+      "createAnother": "Başka bir siparişi doğrula"
+    }
+  },
+  "standaloneOnboarding": {
+    "blockedHeading": "Kurulumda hâlâ tamamlanması gereken adımlar var",
+    "readOnly": "Salt okunur erişiminiz var. Kurulumu güncellemesi veya tamamlaması için bir hesap sahibine ya da yöneticiye başvurun.",
+    "completeError": "Kurulumu tamamlayamadık. Lütfen tekrar deneyin.",
+    "loadErrorTitle": "Kurulum kullanılamıyor",
+    "loadError": "Kurulumu yükleyemedik. Sunucuyu kontrol edip tekrar deneyin.",
+    "sourceMissing": "Etkin bir sipariş kaynağı bulunamadı. Hesap kurulumunu yeniden deneyin veya destek ekibine ulaşın.",
+    "sourceInactive": "Sipariş kaynağınız etkin değil. Devam etmeden önce destek ekibine ulaşın.",
+    "sourceAmbiguous": "Birden fazla etkin sipariş kaynağının ekip tarafından incelenmesi gerekiyor.",
+    "retry": "Yeniden dene",
+    "blockers": {
+      "source_invalid": "Geçerli ve etkin bir bağımsız kaynak gerekiyor.",
+      "account_suspended": "Bu hesap askıya alındı. Akeed destek ekibine ulaşın.",
+      "pilot_entitlement_missing": "Pilot erişimin Akeed ekibi tarafından etkinleştirilmesi gerekiyor.",
+      "merchant_name_missing": "Bir mağaza adı girin.",
+      "language_invalid": "Desteklenen bir mesaj dili seçin.",
+      "cod_default_invalid": "Eksik ödeme bilgisinin nasıl ele alınacağını seçin.",
+      "automation_invalid": "Otomasyon zamanlama ayarlarını gözden geçirin.",
+      "timezone_invalid": "Desteklenen bir saat dilimi seçin.",
+      "order_defaults_missing": "Mağazanızın ülkesini ve para birimini seçin.",
+      "webhook_secrets_missing": "Her iki webhook gizli anahtarını da ekleyin.",
+      "credentials_rejected": "Mağaza artık Akeed’in erişimini kabul etmiyor. Bağlantıyı kesip yeniden bağlayın.",
+      "source_disconnected": "Mağazanın bağlantısı kesik. Devam etmek için yeniden bağlayın.",
+      "webhook_disabled": "Mağazanız bir sipariş bildirimini devre dışı bıraktı. Devam etmek için yeniden etkinleştirin."
+    },
+    "shell": {
+      "help": "Yardım",
+      "skipToContent": "Kuruluma geç"
+    },
+    "test": {
+      "timeline": {
+        "sending": "Mesaj gönderiliyor…",
+        "sent": "Mesaj gönderildi",
+        "awaitingDelivery": "Telefonunuzda WhatsApp’ı açın",
+        "delivered": "Telefonunuza ulaştı",
+        "tapConfirm": "Onay düğmesine dokunun",
+        "confirmed": "Siparişi onayladınız",
+        "autoDetect": "Yanıtınızı otomatik olarak algılayacağız"
+      },
+      "tapConfirmOnPhone": "Telefonunuzda onay düğmesine dokunun",
+      "tapNote": "Müşterinizin yapacağı şey tam olarak budur.",
+      "autoDetectNext": "Yanıtınızı algılayıp otomatik olarak devam edeceğiz",
+      "mobile": {
+        "subheading": "Bu telefondaki WhatsApp’a bir test mesajı gönderdik. Açıp onay düğmesine dokunun.",
+        "tapConfirm": "WhatsApp’ta onay düğmesine dokunun",
+        "autoDetect": "Buraya dönün; yanıtınızı almış olacağız"
+      },
+      "freeNote": "Test mesajı ücretsizdir ve bakiyenizden düşülmez.",
+      "resendIn": "Gelmedi mi? {seconds} sn sonra yeniden gönderin",
+      "send": "Test mesajını gönder",
+      "skip": "Şimdilik atla, sonra dene",
+      "openWhatsApp": "WhatsApp’ı aç",
+      "completing": "Kurulum tamamlanıyor…",
+      "unavailable": {
+        "title": "Şu anda WhatsApp’a ulaşamıyoruz",
+        "body": "Sorun sizin numaranızda değil, bizim tarafımızda. Kurulumunuz kaydedildi ve bakiyenizden hiçbir şey düşülmedi.",
+        "subheading": "Müşterilerinizin ne aldığını görmeniz için WhatsApp’ınıza bir test mesajı göndeririz.",
+        "numberLabel": "Numara",
+        "badge": "Gönderilmedi",
+        "previewEmpty": "Henüz mesaj yok",
+        "continue": "Panele devam et",
+        "retry": "Tekrar dene"
+      }
+    },
+    "defaultsWell": {
+      "change": "Değiştir"
+    },
+    "status": {
+      "stepAnnouncement": "Adım {current} / {total}: {title}"
+    },
+    "suspended": {
+      "title": "Bu hesap beklemede",
+      "body": "Kuruluma devam etmeden önce bu hesabın incelenmesi için Akeed destek ekibine ulaşın.",
+      "note": "Hesap beklemedeyken hiçbir şey kaybolmaz. Kayıtlı ayarlarınız, siparişleriniz ve geçmişiniz olduğu gibi kalır.",
+      "refresh": "Tekrar kontrol et"
+    },
+    "flow": {
+      "label": "Kurulum ilerlemesi",
+      "completed": "tamamlandı",
+      "account": "Hesap",
+      "store": "Mağazanız",
+      "test": "Mesajı deneyin",
+      "compact": "{current} / {total} · {title}",
+      "menu": "Menü",
+      "details": "Mağaza bilgileri",
+      "number": "Numaranız",
+      "connectStore": "Mağazanızı bağlayın"
+    },
+    "store": {
+      "heading": "Onay mesajınızı hazırlayın",
+      "subheading": "Size test göndermek için tek bir WhatsApp numarasına ihtiyacımız var. Gerisini sizin için seçtik.",
+      "credits": {
+        "title": "{count} ücretsiz onay mesajınız var",
+        "body": "Ödeme kartı gerekmez. Sonrasında gönderilen mesaj başına yalnızca {price}."
+      },
+      "storeName": {
+        "label": "Mesajda görünecek mağaza adı",
+        "hint": "Kayıt bilgilerinizden aldık.",
+        "placeholder": "örn. Nur Butik"
+      },
+      "phone": {
+        "label": "WhatsApp numaranız",
+        "hint": "Bu numaraya şimdi ücretsiz bir test mesajı göndereceğiz. Müşterileriniz bu numarayı asla görmez."
+      },
+      "defaults": {
+        "heading": "Sizin için seçildi",
+        "language": "Mesaj dili",
+        "currency": "Para birimi",
+        "timezone": "Saat dilimi",
+        "caption": "Telefon numaranıza ve tarayıcı dilinize göre seçildi. Bunları daha sonra Ayarlar’dan da değiştirebilirsiniz."
+      },
+      "languageOptions": {
+        "auto": "Otomatik, müşteri numarasına göre",
+        "ar": "Arapça",
+        "en": "İngilizce"
+      },
+      "timezones": {
+        "Asia_Riyadh": "Riyad",
+        "Asia_Dubai": "Dubai",
+        "Asia_Qatar": "Doha",
+        "Asia_Kuwait": "Kuveyt",
+        "Asia_Bahrain": "Manama",
+        "Asia_Muscat": "Maskat",
+        "Asia_Amman": "Amman",
+        "Africa_Cairo": "Kahire",
+        "Africa_Casablanca": "Kazablanka",
+        "UTC": "UTC"
+      },
+      "footerCaption": "Siz bir sipariş ekleyene kadar müşterilerinize hiçbir şey göndermeyiz.",
+      "submit": "Sonraki: test mesajı gönder",
+      "submitting": "Kaydediliyor ve gönderiliyor…",
+      "loading": "Mağazanız hazırlanıyor…",
+      "saveError": "Mağaza bilgilerinizi kaydedemedik. Yazdığınız her şey hâlâ burada; tekrar deneyin.",
+      "validation": {
+        "storeName": "Mağaza adınızı müşterilerinizin bildiği şekilde girin.",
+        "phone": "Numara eksik. {code} sonrasına {digits} haneli numarayı girin, örn. {example}"
+      },
+      "preview": {
+        "label": "Müşterinizin alacağı mesaj"
+      }
+    },
+    "done": {
+      "badge": "Akeed yayında",
+      "heading": "Onayınız ulaştı. Akeed her siparişte böyle çalışır",
+      "headingCanceled": "İptaliniz ulaştı. Akeed her siparişte böyle çalışır",
+      "pipelineLabel": "Akeed her siparişte nasıl çalışır",
+      "pipeline": {
+        "add": {
+          "title": "Siparişi siz eklersiniz",
+          "description": "WhatsApp’tan, Instagram’dan veya telefonla gelen tek bir siparişi ya da bir Excel dosyasından aynı anda çok sayıda siparişi."
+        },
+        "send": {
+          "title": "Müşterinize mesaj göndeririz",
+          "description": "Az önce denediğiniz mesajın aynısı, mağazanız adına."
+        },
+        "reply": {
+          "title": "Yanıtı Onaylar bölümünde görürsünüz",
+          "description": "Onaylandı veya iptal edildi; yanıt vermeyenleri de takip edebilmeniz için bir araya getiririz."
+        }
+      },
+      "stats": {
+        "balanceLabel": "Şu anki bakiyeniz",
+        "balanceValue": "{count} mesaj",
+        "balanceCaption": "Ücretsiz, ödeme kartı gerekmez",
+        "priceLabel": "Ücretsiz kredilerden sonra",
+        "priceCaption": "gönderilen WhatsApp mesajı başına",
+        "testLabel": "Test mesajı",
+        "testValue": "Ücretsiz",
+        "testCaption": "Bakiyenizden düşülmez"
+      },
+      "addOrder": "İlk siparişinizi ekleyin",
+      "importFile": "Dosyadan içe aktarın",
+      "useApi": "API’yi kullanın",
+      "dashboard": "Panele git",
+      "caption": "Siparişi eklediğiniz anda onay mesajını müşterinize göndeririz."
+    },
+    "phoneTest": {
+      "action": "Telefonuma gönder",
+      "title": "Telefonunuza bir test mesajı",
+      "description": "Müşterilerinizin aldığı mesajın aynısını size göndeririz. WhatsApp’ta açıp onay düğmesine dokunun.",
+      "close": "Kapat"
+    }
+  },
+  "about": {
+    "eyebrow": "Hakkımızda",
+    "title": "Akeed hakkında",
+    "intro": "Akeed Digital Solutions’ı, misyonumuzu ve e-ticaret satıcılarının boşa giden kargo maliyetlerini azaltmalarına nasıl yardımcı olduğumuzu öğrenin.",
+    "missionTitle": "Misyonumuz",
+    "missionBody": "Akeed Digital Solutions, MENA bölgesindeki e-ticaret satıcılarının kapıda ödemeli siparişlerde boşa giden kargo maliyetlerini azaltmalarına yardımcı olan araçlar geliştirir. Amiral ürünümüz, sipariş onayını Meta’nın resmî WhatsApp Cloud API’leri üzerinden otomatikleştirir; böylece satıcılar siparişleri hazırlamadan önce doğrular ve başarısız teslimat denemelerinin önüne geçer.",
+    "phoneTitle": "İletişim telefonu",
+    "phoneDescription": "Mesai saatlerinde bize doğrudan telefonla ulaşın.",
+    "emailTitle": "E-posta",
+    "emailDescription": "Bize e-posta gönderin, en kısa sürede yanıt verelim.",
+    "socialTitle": "Bizi takip edin",
+    "socialDescription": "Güncellemeler ve haberler için bizi sosyal medyada takip edin.",
+    "backHome": "Ana sayfaya dön"
+  },
+  "creditErrors": {
+    "notProvisioned": "Bu hesabın kredileri henüz ayarlanmadı. Sayfayı yenileyin; sorun devam ederse Akeed destek ekibine ulaşın. Mevcut siparişler ve geçmiş erişilebilir durumda kalır.",
+    "suspended": "Bu hesap için yeni mesaj gönderimleri duraklatıldı. Destek ekibine ulaşın. Mevcut siparişler ve geçmiş erişilebilir durumda kalır.",
+    "debt": "Yeni mesaj göndermeden önce ödenmemiş kredi bakiyesinin kapatılması gerekir. Mevcut siparişler ve geçmiş erişilebilir durumda kalır.",
+    "insufficient": "Kullanılabilir mesaj kredisi yok. Kredi eklendiğinde yeni gönderimler devam edebilir. Mevcut siparişler ve geçmiş erişilebilir durumda kalır.",
+    "reconciliation": "Faturalandırma incelenirken mesaj gönderimi duraklatıldı. Destek ekibine ulaşın. Mevcut siparişler ve geçmiş erişilebilir durumda kalır.",
+    "billingLink": "Faturalandırma ve kredileri aç"
+  },
+  "billing": {
+    "embeddedPlans": {
+      "heading": "Aylık mesaj hakkınızı seçin",
+      "sameFeatures": "Her plan aynı özellikleri içerir. Tek fark mesaj sayısıdır.",
+      "plansLabel": "Planlar",
+      "allowance": "mesaj / ay",
+      "perDay": "günde yaklaşık {formatted}",
+      "perMonth": "/ ay",
+      "perMessage": "mesaj başına yaklaşık {price}",
+      "usedOf": "/ {limit} mesaj kullanıldı",
+      "remaining": "{count, plural, one {{formatted} mesaj kaldı} other {{formatted} mesaj kaldı}}",
+      "oneTime": "Yenilenmeyen, tek seferlik bir deneme hakkı. Bittiğinde, bir plana abone olana kadar yeni siparişler için onay mesajları durur.",
+      "renews": "Hakkınız {date} tarihinde {limit} mesaja sıfırlanır, ardından her 30 günde bir yenilenir. Kullanılmayan mesajlar devretmez.",
+      "fitsUsage": "Kullanımınıza uygun",
+      "fitsUsageReason": "Son 30 günde {count} mesaj gönderdiniz.",
+      "featuresTitle": "Her planda bulunanlar",
+      "features": {
+        "codConfirmation": "WhatsApp’ta otomatik kapıda ödeme sipariş onayı",
+        "followUp": "Müşteri yanıt vermediğinde otomatik takip",
+        "orderUpdates": "Shopify’da otomatik sipariş güncellemeleri",
+        "quietHours": "Mağazanızın saat diliminde sessiz saatler ve zamanlama",
+        "officialNumber": "Akeed’in resmî WhatsApp numarası, kurulum gerektirmez",
+        "dashboard": "Onay metriklerini gösteren panel"
+      },
+      "rulesTitle": "Mesajlar nasıl sayılır",
+      "rules": {
+        "counted": {
+          "label": "Sayılanlar",
+          "body": "Müşterinize gönderdiğimiz her onay veya takip hatırlatması bir mesaj sayılır."
+        },
+        "notCounted": {
+          "label": "Sayılmayanlar",
+          "body": "Test mesajları ve gönderilemeyen mesajlar."
+        },
+        "renewal": {
+          "label": "Yenileme",
+          "body": "Ücretli haklar, abone olduğunuz günden itibaren her 30 günde bir sıfırlanır. Kullanılmayan mesajlar devretmez."
+        },
+        "atLimit": {
+          "label": "Mesajlarınız bittiğinde",
+          "body": "Yenilemeye veya plan yükseltmeye kadar yeni siparişler için onay mesajları durur. Ek ücret alınmaz; siparişleriniz ve verileriniz olduğu gibi kalır."
+        },
+        "planChange": {
+          "label": "Plan değiştirme",
+          "body": "Shopify’da yeni bir planı onayladığınızda, yeni planın hakkının tamamıyla hemen yeni bir dönem başlar."
+        }
+      },
+      "footer": "Shopify faturanız üzerinden faturalandırılır. Planınızı dilediğiniz zaman değiştirebilirsiniz.",
+      "modalRules": "Onaylar ve takip hatırlatmaları sayılır. Hak her 30 günde bir sıfırlanır; bittiğinde ek ücret alınmaz.",
+      "freeUsed": "Bu mağaza ücretsiz planı daha önce kullandı (30 mesaj, tek seferlik).",
+      "starterRow": "Starter: 30 ücretsiz mesaj, tek seferlik",
+      "starterCta": "Ücretsiz başla",
+      "subscribeCta": "Abone ol: {plan} · {price} / ay",
+      "redirectNote": "Ücreti onaylamak için Shopify’a yönlendirileceksiniz.",
+      "cancel": "Vazgeç"
+    },
+    "title": "Faturalandırma ve krediler",
+    "subtitle": "Yalnızca gönderdiğimiz onay mesajları için ödeme yaparsınız. Aylık plan yok.",
+    "description": "WhatsApp sipariş onayları için kullanılabilir kredilerinizi görün, güvenle daha fazlasını satın alın ve hesabınızdaki her hareketi inceleyin.",
+    "threshold": "Düşük bakiye uyarısı: {count} kredi",
+    "retry": "Tekrar dene",
+    "balance": {
+      "available": "Kullanılabilir bakiye",
+      "unit": "mesaj",
+      "state": {
+        "healthy": "Bakiye yeterli",
+        "low": "Azalıyor",
+        "zero": "Kredi kalmadı",
+        "debt": "Kredi kalmadı",
+        "suspended": "Faturalandırma askıya alındı",
+        "notProvisioned": "Ayarlanmadı"
+      },
+      "runway": "{count, plural, =0 {Bu ayki hızla bir günden az yeter.} one {Bu ayki hızla yaklaşık 1 gün yeter.} other {Bu ayki hızla yaklaşık {days} gün yeter.}}",
+      "runwayPaused": "Kredi yükleyene kadar yeni siparişler onaylanmıyor.",
+      "chartLabel": "Son 14 gün",
+      "chartFrom": "14 gün önce",
+      "chartToday": "Bugün",
+      "usedThisMonth": "Bu ay kullanılan",
+      "lastPurchase": "Son satın alma",
+      "noPurchase": "Henüz satın alma yok",
+      "unitPrice": "Mesaj başına fiyat"
+    },
+    "status": {
+      "active": "Etkin",
+      "suspended": "Askıya alındı",
+      "not_provisioned": "Ayarlanmadı"
+    },
+    "metrics": {
+      "available": "Kullanılabilir krediler",
+      "availableHelp": "Yeni mesajlar için hazır",
+      "posted": "Kayıtlı bakiye",
+      "postedHelp": "Tüm kesinleşmiş krediler",
+      "held": "Bekletilen krediler",
+      "heldHelp": "Gönderimi süren mesajlar için ayrıldı",
+      "debt": "Borç",
+      "debtHelp": "Kapatılması gereken krediler",
+      "messages": "Bu ayki mesajlar",
+      "messagesHelp": "Başlangıç: {date}",
+      "messagesCapped": "Yüklenen son {count} işlem içinde",
+      "postedShort": "Tüm kesinleşmiş krediler",
+      "heldShort": "Gönderimi süren mesajlar için bekletiliyor",
+      "debtShort": "Ödenmemiş tutar yok",
+      "debtOutstanding": "Kapatılacak bakiye"
+    },
+    "alerts": {
+      "lowTitle": "{count, plural, one {Yalnızca 1 mesaj kaldı} other {Yalnızca {formatted} mesaj kaldı}}",
+      "lowDescription": "Yeni siparişlerin onaylanmaya devam etmesi için krediniz bitmeden yükleme yapın.",
+      "zeroTitle": "Mesaj krediniz kalmadı",
+      "zeroDescription": "Şu anda yeni siparişleri onaylatmıyoruz. Siparişleriniz ve verileriniz güvende; kredi yüklediğiniz anda mesajlar yeniden başlar.",
+      "debtTitle": "{count, plural, one {1 mesaj borcunuz var} other {{formatted} mesaj borcunuz var}}",
+      "debtDescription": "Bu borç kapatılana kadar yeni siparişleri onaylatmıyoruz. Borcu kapatmak ve mesajları yeniden başlatmak için kredi yükleyin.",
+      "suspendedTitle": "Faturalandırma askıya alındı",
+      "suspendedDescription": "Satın alma ve mesaj gönderimi kullanılamıyor. Akeed destek ekibine ulaşın.",
+      "notProvisionedTitle": "Kredi faturalandırması henüz ayarlanmadı",
+      "notProvisionedDescription": "Hesap kurulumunuzu tamamlıyoruz. O zamana kadar satın alma ve mesaj gönderimi kullanılamaz."
+    },
+    "grant": {
+      "title": "Başlangıç kredisi hediyesi",
+      "granted": "Tek seferlik {count} kredilik hediyeniz hesabınıza eklendi.",
+      "pending": "Tek seferlik {count} kredilik hediyeniz, hesabınız oluşturulduğunda eklenir."
+    },
+    "purchase": {
+      "title": "Kredi satın al",
+      "description": "Kaç mesaj istediğinizi seçin. Mesaj başına tek sabit fiyat; kredilerin süresi dolmaz.",
+      "quantity": "Kredi miktarı",
+      "decrease": "Miktarı azalt",
+      "increase": "Miktarı artır",
+      "rules": "{step} mesajlık adımlarla {min} ile {max} mesaj arası.",
+      "credits": "Krediler",
+      "unitPrice": "Mesaj başına fiyat",
+      "total": "Toplam",
+      "submit": "Güvenli ödeme oluştur",
+      "creating": "Ödeme oluşturuluyor…",
+      "continuePaymob": "Paymob ile devam et",
+      "startNew": "Yeni satın alma başlat",
+      "pendingTitle": "Bir satın alma hâlâ kontrol ediliyor",
+      "pendingDescription": "İki kez ödeme yapmamak için yenisini başlatmadan önce durumunu kontrol edin.",
+      "viewStatus": "Satın alma durumunu görüntüle",
+      "errors": {
+        "whole": "Tam sayı olarak bir mesaj adedi girin.",
+        "range": "{min} ile {max} arasında seçin.",
+        "step": "{step} sayısının katı olan bir değer seçin.",
+        "network": "Ödeme isteği tamamlanamadı. Aynı satın alma denemesiyle güvenle yeniden deneyin.",
+        "api": "Ödeme oluşturulamadı. Miktarı kontrol edin veya tekrar deneyin."
+      },
+      "chooseAmount": "Bir miktar seçin",
+      "customLabel": "Veya başka bir miktar girin",
+      "unit": "mesaj",
+      "summaryTitle": "Sipariş özeti",
+      "messages": "Mesajlar",
+      "balanceAfter": "Satın alma sonrası bakiye: <b>{count}</b> mesaj",
+      "pay": "Öde: <amount>{value}</amount>",
+      "payEmpty": "Öde",
+      "paymobNote": "Ödemeyi Paymob’un güvenli sayfasında kartla veya Vodafone Cash ile tamamlarsınız. Akeed ödeme bilgilerinizi asla görmez ve saklamaz.",
+      "blocked": {
+        "disabled": "Kredi satın alımları şu anda kapalı.",
+        "suspended": "Faturalandırma askıdayken satın alma yapılamaz.",
+        "notProvisioned": "Hesabınızın kurulumunu tamamlayana kadar satın alma yapılamaz.",
+        "readOnly": "Yalnızca görüntüleme erişiminiz var. Kredi satın alma işlemini bir hesap sahibi veya yönetici yapabilir."
+      }
+    },
+    "purchaseStatus": {
+      "pending": "Beklemede",
+      "successful": "Başarılı",
+      "failed": "Başarısız",
+      "canceled": "İptal edildi",
+      "expired": "Süresi doldu",
+      "refunded": "İade edildi"
+    },
+    "disputeStatus": {
+      "none": "İtiraz yok",
+      "open": "İtiraz açık",
+      "won": "İtiraz kazanıldı",
+      "lost": "İtiraz kaybedildi"
+    },
+    "error": {
+      "title": "Faturalandırma yüklenemedi",
+      "description": "Doğrulanmış kredi bakiyesini alamadık. Faturalandırmayla ilgili bir işlem yapmadan önce tekrar deneyin."
+    },
+    "return": {
+      "credits": "Mesajlar",
+      "amount": "Tutar",
+      "status": "Durum",
+      "updated": "Son güncelleme",
+      "reference": "Satın alma referansı",
+      "backToBilling": "Faturalandırmaya dön",
+      "backToImport": "İçe aktarmaya devam et",
+      "newPurchase": "Yeni satın alma başlat",
+      "refresh": "Durumu yenile",
+      "refreshing": "Yenileniyor…",
+      "successTitle": "{count, plural, one {Bakiyenize <n>{value}</n> mesaj ekledik} other {Bakiyenize <n>{value}</n> mesaj ekledik}}",
+      "successBody": "{count, plural, one {Bakiyeniz artık <n>{value}</n> mesaj; yeni siparişler her zamanki gibi onaylanmaya devam ediyor.} other {Bakiyeniz artık <n>{value}</n> mesaj; yeni siparişler her zamanki gibi onaylanmaya devam ediyor.}}",
+      "successBodyNoBalance": "Mesajlar artık bakiyenizde.",
+      "title": {
+        "pending": "Ödemeniz kontrol ediliyor",
+        "stale": "Ödemenin onaylanması hâlâ bekleniyor",
+        "failed": "Ödeme gerçekleşmedi",
+        "canceled": "Ödeme iptal edildi",
+        "expired": "Bu ödeme bağlantısının süresi doldu",
+        "refunded": "Bu ödeme iade edildi",
+        "reconciliation": "Bu ödemeyi inceliyoruz",
+        "invalid": "Bu ödeme bağlantısı geçerli değil",
+        "error": "Ödeme durumunu yükleyemedik"
+      },
+      "body": {
+        "pending": "Paymob’un onayını bekliyoruz. Bu sayfayı açık tutun veya daha sonra geri gelin; yeni bir ödeme başlatmayacağız.",
+        "stale": "Otomatik kontrolleri duraklattık. Dilediğiniz zaman yenileyin; yeni bir ödeme başlatmayacağız.",
+        "failed": "Hesabınıza kredi eklenmedi. Hazır olduğunuzda yeni bir satın alma başlatabilirsiniz.",
+        "canceled": "Hesabınıza kredi eklenmedi. Hazır olduğunuzda yeni bir satın alma başlatabilirsiniz.",
+        "expired": "Kredi eklenmedi. Faturalandırma sayfasından yeni bir satın alma başlatın.",
+        "refunded": "Tutar iade edildi ve bakiyenize yansıdı.",
+        "reconciliation": "Bu ödemeyi Paymob kayıtlarıyla eşleştiriyoruz. Destek ekibi sizinle iletişime geçmedikçe bir şey yapmanız gerekmez.",
+        "invalid": "Bu bağlantıda geçerli bir satın alma referansı yok. Faturalandırmaya dönün.",
+        "error": "Yeni bir ödeme başlatmadık. Durumu yenileyin veya faturalandırmaya dönün."
+      }
+    },
+    "badge": {
+      "label": "mesaj kredisi"
+    },
+    "balanceChip": {
+      "label": "Bakiye: {count} mesaj",
+      "value": "Bakiye <strong>{count}</strong> mesaj"
+    }
+  },
+  "orderImport": {
+    "entry": {
+      "newImport": "Dosyadan içe aktar"
+    },
+    "viewer": "Siparişleri yalnızca hesap sahipleri ve yöneticiler içe aktarabilir. Bu içe aktarmayı görüntüleyebilirsiniz ancak değiştiremezsiniz.",
+    "upload": {
+      "heading": "Sipariş dosyanızı seçin",
+      "dropTitle": "Sipariş dosyanızı buraya sürükleyip bırakın",
+      "dropActive": "Yüklemek için dosyayı bırakın",
+      "helper": "CSV veya Excel · en fazla {rows, plural, one {# sipariş} other {# sipariş}} · en fazla 5 MB",
+      "choose": "Cihazınızdan bir dosya seçin",
+      "cancel": "Vazgeç",
+      "progressLabel": "Yükleme ilerlemesi",
+      "uploading": "Yükleniyor… %{percent}",
+      "reading": "Siparişleriniz okunuyor…",
+      "templatePrompt": "Hazır dosyanız yok mu? Şablonu indirin:",
+      "templateCsv": "CSV",
+      "templateExcel": "Excel",
+      "templateFailed": "Şablon indirilemedi. Tekrar deneyin.",
+      "autoAdvance": "Bir dosya seçtiğiniz anda kontrol adımına geçeriz."
+    },
+    "fileErrors": {
+      "actions": {
+        "chooseAnother": "Başka bir dosya seç",
+        "retry": "Tekrar dene",
+        "openSettings": "Kurulumu tamamla",
+        "contactSupport": "Destek ekibine ulaş",
+        "backToOrders": "Onaylara dön"
+      },
+      "IMPORT_FILE_REQUIRED": {
+        "title": "Dosya alınmadı",
+        "body": "Bir CSV veya Excel dosyası seçip yeniden yükleyin."
+      },
+      "IMPORT_FILE_TOO_LARGE": {
+        "title": "Bu dosya 5 MB’tan büyük",
+        "body": "Fazla sütunları kaldırın veya dosyayı daha küçük parçalara bölüp yeniden yükleyin."
+      },
+      "IMPORT_FILE_TYPE_UNSUPPORTED": {
+        "title": "Bu dosya türü desteklenmiyor",
+        "body": "Dosyayı Excel Çalışma Kitabı (.xlsx) veya CSV UTF-8 olarak kaydedip yeniden yükleyin. Eski .xls dosyaları ve makro içeren dosyalar okunamaz."
+      },
+      "IMPORT_FILE_PROTECTED": {
+        "title": "Bu dosya parola korumalı",
+        "body": "Parolayı Excel’de kaldırın (Dosya → Bilgi → Çalışma kitabını koru) ve yeniden yükleyin."
+      },
+      "IMPORT_FILE_UNREADABLE": {
+        "title": "Bu dosya okunamadı",
+        "body": "Dosya bozuk olabilir veya aslında bir tablo dosyası olmayabilir. Açıp .xlsx veya CSV UTF-8 olarak yeniden kaydedin ve tekrar yükleyin."
+      },
+      "IMPORT_FILE_EMPTY": {
+        "title": "Bu dosyada sipariş yok",
+        "body": "Siparişlerinizi başlık satırının altına ekleyip yeniden yükleyin."
+      },
+      "IMPORT_ROW_LIMIT_EXCEEDED": {
+        "title": "Bu dosyada çok fazla sipariş var",
+        "body": "Dosyayı en fazla 100 siparişlik parçalara bölün ve her parçayı ayrı yükleyin."
+      },
+      "IMPORT_COLUMN_LIMIT_EXCEEDED": {
+        "title": "Bu dosyada çok fazla sütun var",
+        "body": "En fazla 100 sütun bırakın. İhtiyacınız olmayan sütunları silip yeniden yükleyin."
+      },
+      "IMPORT_TOO_MANY_DRAFTS": {
+        "title": "Devam eden çok fazla içe aktarma var",
+        "body": "Ekibinizin devam eden birkaç içe aktarması var. Birinin bitmesini bekleyip tekrar deneyin."
+      },
+      "IMPORT_RATE_LIMITED": {
+        "title": "Kısa sürede çok fazla yükleme",
+        "body": "Bir dakika bekleyip tekrar deneyin."
+      },
+      "IMPORT_DISABLED": {
+        "title": "Sipariş içe aktarma kullanılamıyor",
+        "body": "Dosyadan sipariş içe aktarma hesabınız için henüz açılmadı."
+      },
+      "IMPORT_ROLE_REQUIRED": {
+        "title": "Siparişleri yalnızca hesap sahipleri ve yöneticiler içe aktarabilir",
+        "body": "Bu dosyayı içe aktarması için hesabınızın sahibine veya bir yöneticiye başvurun."
+      },
+      "IMPORT_SOURCE_UNSUPPORTED": {
+        "title": "Bu mağaza için içe aktarma kullanılamıyor",
+        "body": "Dosyadan içe aktarma yalnızca Shopify’a bağlı olmayan Akeed mağazalarında çalışır. Bunun bir hata olduğunu düşünüyorsanız destek ekibine ulaşın."
+      },
+      "IMPORT_SETUP_INCOMPLETE": {
+        "title": "Önce mağaza kurulumunuzu tamamlayın",
+        "body": "Mağaza kurulumunuzu tamamlayın, ardından siparişleri içe aktarmak için geri gelin."
+      },
+      "generic": {
+        "title": "Dosya yüklenemedi",
+        "body": "Bir sorun oluştu. Tekrar deneyin veya bu referansı belirterek destek ekibine ulaşın.",
+        "reference": "Referans:",
+        "copy": "Referansı kopyala",
+        "copied": "Referans kopyalandı."
+      }
+    },
+    "duplicate": {
+      "banner": "Aynı dosyayı daha önce yüklediniz: {time}.",
+      "view": "Önceki içe aktarmayı görüntüle",
+      "continue": "Yine de devam et"
+    },
+    "map": {
+      "heading": "Sütunlarınızı eşleştirin",
+      "description": "Her bilginin <file></file> dosyasının hangi sütununda olduğunu Akeed’e söyleyin.",
+      "fieldHeader": "Akeed alanı",
+      "columnHeader": "Dosyanızdaki sütun",
+      "statusHeader": "Durum",
+      "required": "zorunlu",
+      "notProvided": "— Belirtilmedi",
+      "addSecondName": "Ad iki sütuna mı bölünmüş? Soyadı sütununu ekleyin",
+      "secondName": "Soyadı sütunu",
+      "samples": "Örnekler:",
+      "sampleSeparator": ", ",
+      "noSamples": "İlk satırlarda değer yok.",
+      "fields": {
+        "phone": "Müşteri telefonu",
+        "customerName": "Müşteri adı",
+        "amount": "Tutar",
+        "orderReference": "Sipariş referansı",
+        "currency": "Para birimi",
+        "paymentMethod": "Ödeme yöntemi",
+        "orderDate": "Sipariş tarihi",
+        "city": "Şehir",
+        "address": "Adres",
+        "notes": "Notlar"
+      },
+      "errors": {
+        "duplicateColumn": "Bu sütun zaten başka bir bilgi için kullanılıyor."
+      },
+      "fixBeforeContinue": "Devam etmek için işaretli öğeleri düzeltin.",
+      "ignored": "{count, plural, one {# sütun içe aktarılmayacak} other {# sütun içe aktarılmayacak}}",
+      "back": "Geri",
+      "continue": "İncelemeye geç",
+      "saving": "Siparişleriniz kontrol ediliyor…",
+      "saveFailed": "Eşleştirme kaydedilemedi. Tekrar deneyin."
+    },
+    "settings": {
+      "title": "İçe aktarma ayarları",
+      "country": "Telefon ülkesi",
+      "countryHelp": "Ülke kodu olmadan yazılmış numaralar için kullanılır.",
+      "currency": "Varsayılan para birimi",
+      "currencyHelp": "Para birimi olmayan satırlarda kullanılır.",
+      "dateFormat": "Tarih biçimi",
+      "dateFormatHelp": "05/06/2026 gibi tarihler iki şekilde de okunabilir.",
+      "DMY": "Gün/Ay/Yıl",
+      "MDY": "Ay/Gün/Yıl"
+    },
+    "payment": {
+      "title": "Ödeme değerleri",
+      "description": "Yalnızca kapıda ödemeli siparişler onaylanır. Diğerleri hariç tutulur.",
+      "cod": "Kapıda ödeme",
+      "notCod": "Kapıda ödeme değil",
+      "choose": "“{value}” kapıda ödeme mi?",
+      "toggle": "“{value}” kapıda ödemedir",
+      "recheck": "Devam ettiğinizde Akeed bu sütunun değerlerini okur.",
+      "blank": "{count, plural, one {# satırda} other {# satırda}} ödeme değeri yok.",
+      "truncated": "Yalnızca en sık görülen 50 değer listelenir. Diğerleri otomatik olarak sınıflandırılır."
+    },
+    "review": {
+      "table": {
+        "customer": "Müşteri",
+        "phone": "Telefon",
+        "amount": "Tutar",
+        "reference": "Sipariş",
+        "rowNumber": "Satır {number}"
+      },
+      "includeAnyway": "Yine de dahil et",
+      "includeFailed": "Değişiklik kaydedilemedi. Tekrar deneyin."
+    },
+    "states": {
+      "notFound": {
+        "title": "İçe aktarma bulunamadı",
+        "body": "Bu içe aktarma mevcut değil veya başka bir hesaba ait.",
+        "action": "Yeni içe aktarma başlat"
+      },
+      "expired": {
+        "title": "Bu içe aktarmanın süresi doldu",
+        "body": "Bu içe aktarmanın süresi 24 saat sonra doldu. Dosyayı yeniden yükleyin.",
+        "action": "Yeniden yükle"
+      },
+      "unavailable": {
+        "title": "Bu içe aktarma burada değiştirilemez",
+        "body": "Durumu: {status}.",
+        "action": "Yeni içe aktarma başlat"
+      },
+      "disabled": {
+        "title": "Sipariş içe aktarma kullanılamıyor",
+        "body": "Dosyadan sipariş içe aktarma hesabınız için henüz açılmadı.",
+        "action": "Onaylara dön"
+      },
+      "loadFailed": {
+        "title": "Bu içe aktarma yüklenemedi",
+        "body": "Bağlantınızı kontrol edip tekrar deneyin.",
+        "action": "Tekrar dene"
+      }
+    },
+    "batchStatus": {
+      "draft": "Taslak",
+      "committing": "İçe aktarılıyor",
+      "awaiting_start": "Başlatılmayı bekliyor",
+      "releasing": "Onaylar gönderiliyor",
+      "paused": "Duraklatıldı",
+      "completed": "Tamamlandı",
+      "stopped": "Durduruldu",
+      "not_started": "Başlatılmadı",
+      "expired": "Süresi doldu",
+      "failed": "Başarısız"
+    },
+    "issues": {
+      "PHONE_MISSING": "Telefon numarası eksik.",
+      "PHONE_INVALID": "Bu geçerli bir telefon numarası değil.",
+      "PHONE_NOT_MOBILE": "Bu bir sabit hat. WhatsApp için cep telefonu numarası gerekir.",
+      "PHONE_MULTIPLE": "Hücrede birden fazla telefon numarası var. Birini bırakın.",
+      "PHONE_SCIENTIFIC_NOTATION": "Excel bu telefonu 2.01E+11 gibi bir sayıya çevirmiş ve rakamlar kaybolmuş. Sütunu metin olarak biçimlendirip yeniden dışa aktarın.",
+      "NAME_MISSING": "Müşteri adı eksik.",
+      "NAME_TOO_LONG": "Müşteri adı 255 karakterden uzun.",
+      "NAME_NOT_TEXT": "Müşteri adında harf yok.",
+      "AMOUNT_MISSING": "Sipariş tutarı eksik.",
+      "AMOUNT_INVALID": "Sipariş tutarı bir sayı değil.",
+      "AMOUNT_NOT_POSITIVE": "Sipariş tutarı sıfırdan büyük olmalıdır.",
+      "AMOUNT_TOO_LARGE": "Sipariş tutarı çok büyük.",
+      "AMOUNT_AMBIGUOUS": "Virgülün ondalık mı yoksa binlik ayırıcı mı olduğunu anlayamıyoruz.",
+      "AMOUNT_TOO_PRECISE": "Sipariş tutarında 2’den fazla ondalık basamak var.",
+      "CURRENCY_UNSUPPORTED": "Bu para birimi desteklenmiyor.",
+      "PAYMENT_NOT_COD": "Kapıda ödeme değil, bu yüzden onaylanmayacak.",
+      "PAYMENT_UNKNOWN_EXCLUDED": "Ödeme yöntemi yok ve mağazanız eksik ödeme yöntemini kapıda ödeme olarak kabul etmiyor.",
+      "ORDER_REF_TOO_LONG": "Sipariş numarası 100 karakterden uzun.",
+      "ORDER_REF_CONFLICT_IN_FILE": "Başka bir satırda bu sipariş numarası farklı bir telefon veya tutarla yer alıyor.",
+      "DUPLICATE_IN_FILE": "Satır {rowNumber} ile aynı sipariş.",
+      "ALREADY_IMPORTED": "Bu sipariş zaten içe aktarıldı.",
+      "POSSIBLE_DUPLICATE": "{match, select, order_number {{date} tarihli {orderNumber} numaralı sipariş aynı sipariş numarasına sahip.} other {{date} tarihli {orderNumber} numaralı sipariş aynı telefon ve tutara sahip.}}",
+      "ORDER_DATE_INVALID": "Bu sipariş tarihini okuyamıyoruz.",
+      "ORDER_DATE_FUTURE": "Sipariş tarihi gelecekte.",
+      "ORDER_TOO_OLD": "Sipariş {maxAgeDays, plural, one {# günden} other {# günden}} eski; onaylamak için çok geç.",
+      "FIELD_TOO_LONG": "Bir hücre 1.000 karakterden uzundu ve kısaltıldı.",
+      "CSV_MALFORMED_QUOTE": "Bu satırda bozuk bir tırnak işareti var, bu yüzden hücreleri kaymış olabilir.",
+      "unknown": "Bu satırda Akeed’in henüz açıklayamadığı bir sorun var."
+    },
+    "imported": {
+      "nothingSent": "Müşterilere henüz hiçbir şey gönderilmedi.",
+      "reviewOrders": "Siparişleri incele"
+    },
+    "partial": {
+      "heading": "Bu içe aktarma tamamlanmadı",
+      "title": "Bazı siparişler içe aktarılamadı",
+      "body": "{attempted} siparişten {imported} tanesi içe aktarıldı. {missing} tanesi içe aktarılamadı.",
+      "reupload": "Kalanları yükle"
+    },
+    "start": {
+      "title": "WhatsApp onayını başlatın",
+      "description": "Herhangi bir şey gönderilmeden önce kime mesaj gideceğini ve maliyetini kontrol edin.",
+      "loading": "Özet hazırlanıyor…",
+      "loadFailed": "Özeti hazırlayamadık.",
+      "retry": "Tekrar dene",
+      "customers": "Mesaj gönderilecek müşteriler",
+      "pace": "Gönderim hızı",
+      "paceValue": "Dakikada yaklaşık {rate, number} · tahmini {duration}",
+      "quietNote": "(sessiz saatlerde duraklar: {window})",
+      "credits": "Krediler",
+      "creditsValue": "Şimdi {min, number} · takip mesajlarıyla en fazla {max, number}",
+      "creditsValueNoFollowUp": "Şimdi {min, number}",
+      "planUsage": "Plan onayları",
+      "planUsageValue": "Şimdi {min, number} · bu dönem {slots, number} kaldı",
+      "balance": "Bakiyeniz",
+      "balanceValue": "{available, number} → ilk mesajlardan sonra {after, number}",
+      "balanceShort": "{available, number} kredi · {shortfall, number} eksik",
+      "attestationLabel": "Müşteri onayı (izin)",
+      "cancel": "Vazgeç",
+      "confirm": "{count, plural, one {# müşteriye} other {# müşteriye}} göndermeye başla",
+      "buy": "{credits, number} kredi satın al",
+      "shortfallTitle": "Başlamak için kredi satın alın.",
+      "shortfallBody": "Bakiyeniz {count, number} siparişin tamamını karşılayana kadar hiçbir şey gönderilmez.",
+      "autoVerifyTitle": "Otomatik onay kapalı",
+      "openSettings": "Ayarları aç",
+      "blocked": {
+        "IMPORT_SETUP_INCOMPLETE": "Onay başlamadan önce mağaza kurulumunuzda düzeltilmesi gereken bir şey var.",
+        "IMPORT_PLAN_LIMIT_REACHED": "Planınızda bu dönem {slots, number} onay kaldı; bu, bu siparişlerden az.",
+        "IMPORT_START_WINDOW_EXPIRED": "Bu içe aktarmayı başlatma süresi geçti. Onaylamak için siparişleri yeniden yükleyin."
+      },
+      "stale": "Sipariş sayısı veya bakiyeniz değişti. Güncel özeti inceleyip tekrar onaylayın.",
+      "failed": "Onay başlatılamadı. Tekrar deneyin.",
+      "durationMinutes": "{minutes, plural, one {# dk} other {# dk}}",
+      "durationHours": "{hours, number} sa {minutes, number} dk"
+    },
+    "release": {
+      "startedAt": "Başlangıç: {time}",
+      "progress": "{total, number} siparişten {settled, number} tanesi işlendi",
+      "timeLeft": "yaklaşık {duration} kaldı",
+      "quietHours": "Sessiz saatler — gönderim {time} saatinde yeniden başlar ({timezone}).",
+      "pausedTitle": "Duraklatıldı — {reason}",
+      "waiting": "{count, plural, one {# müşteri bekliyor} other {# müşteri bekliyor}}.",
+      "pausedReason": {
+        "IMPORT_AUTO_VERIFY_DISABLED": "otomatik onay kapatıldı.",
+        "IMPORT_SETUP_INCOMPLETE": "mağaza kurulumunuzda düzeltilmesi gereken bir şey var.",
+        "IMPORT_PLAN_LIMIT_REACHED": "planınızda bu dönem onay hakkı kalmadı.",
+        "other": "gönderim beklemede."
+      },
+      "staffPaused": "Akeed destek ekibi tarafından duraklatıldı. Göndermeye devam etmek için destek ekibine ulaşın.",
+      "resume": "Devam et",
+      "resumeFailed": "Gönderime devam edilemedi.",
+      "buyCredits": "Kredi satın al",
+      "stopped": "Durduruldu. Mesajlar {sent, plural, one {# müşteriye} other {# müşteriye}} ulaştı; {withdrawn, plural, one {# müşteriyle} other {# müşteriyle}} iletişime geçilmeyecek. Gönderilmiş siparişler normal şekilde devam eder.",
+      "completed": "Mesajlar {count, plural, one {# müşteriye} other {# müşteriye}} ulaştı. Yanıtlar onaylar listenize gelmeye devam ediyor.",
+      "notStartedTitle": "Bu içe aktarma hiç başlatılmadı",
+      "notStartedBody": "Başlatma süresi geçtiği için bu siparişler gönderilmedi. Onaylamak için yeniden yükleyin.",
+      "settling": "Şimdi gönderiliyor. {count, plural, one {# sipariş sırada} other {# sipariş sırada}}.",
+      "failedSome": "{count, plural, one {# müşteriye} other {# müşteriye}} gönderilemedi. Nedeni, onaylar listenizde her siparişin yanında yazıyor."
+    },
+    "modal": {
+      "title": "Siparişleri dosyadan içe aktarın",
+      "description": "Sipariş dosyanızı yükleyin, kontrol edin, ardından onayları WhatsApp üzerinden gönderin.",
+      "close": "Kapat",
+      "stepsLabel": "İçe aktarma adımları",
+      "completed": "tamamlandı",
+      "steps": {
+        "file": "Dosya",
+        "check": "Kontrol",
+        "send": "Gönder"
+      },
+      "stepOf": "{current, number} / {total, number} · {label}",
+      "cancel": "Vazgeç"
+    },
+    "check": {
+      "heading": "Dosyanızı kontrol edin",
+      "rows": "{count, plural, one {# satır} other {# satır}}",
+      "changeFile": "Dosyayı değiştir",
+      "country": "Telefon numarası ülkesi",
+      "currency": "Para birimi",
+      "matched": {
+        "title": "Dosyanızın sütunlarını eşleştirdik",
+        "edit": "Eşleştirmeyi düzenle",
+        "chip": "{field}: {column} sütunu",
+        "missing": "Dosyanızda yok (isteğe bağlı): {fields}.",
+        "noDate": "Sipariş tarihi olmadan her sipariş yeni sayılır."
+      },
+      "attention": {
+        "one": "Bir sütun için yardımınıza ihtiyacımız var: {detail}",
+        "many": "Devam etmeden önce {count, plural, one {# sütun} other {# sütun}} için yardımınıza ihtiyacımız var.",
+        "why": {
+          "phone": "telefon numaralarının hangi sütunda olduğundan emin değiliz.",
+          "customerName": "müşteri adlarının hangi sütunda olduğundan emin değiliz.",
+          "amount": "tutarların hangi sütunda olduğundan emin değiliz."
+        }
+      },
+      "table": {
+        "field": "Akeed’deki alan",
+        "column": "Dosyanızdaki sütun",
+        "status": "Durum"
+      },
+      "choose": "Bir sütun seçin…",
+      "notInFile": "Dosyada yok",
+      "status": {
+        "matched": "Eşleşti",
+        "required": "Zorunlu",
+        "check": "Bunu kontrol edin"
+      },
+      "samples": "örn. {values}",
+      "suggestion": {
+        "question": "“{column}” mu?",
+        "use": "Bunu kullan",
+        "useLabel": "{field} için {column} sütununu kullan"
+      },
+      "confirm": {
+        "question": "“{column}” doğru sütun mu?",
+        "yes": "Evet, doğru",
+        "yesLabel": "{field} için {column} sütununu onayla"
+      },
+      "optional": {
+        "title": "İsteğe bağlı alanlar",
+        "mapped": "{field}: eşleşti",
+        "missing": "{field}: dosyada yok"
+      },
+      "payment": {
+        "question": "Hangi siparişleri onaylayalım?",
+        "intro": "Yalnızca kapıda ödemeli siparişleri onaylatırız. Bir değeri diğer gruba taşımak için üzerine dokunun.",
+        "confirm": "Onayla · kapıda ödeme",
+        "ignore": "Atla · önceden ödenmiş",
+        "orders": "{count, plural, one {# sipariş} other {# sipariş}}",
+        "blank": "Ödeme yöntemi yok",
+        "blankHint": "Ödeme yöntemi olmayan siparişleri bu içe aktarma için doğru gruba taşıyın. Değiştirmezseniz mağaza ayarınıza göre işlenirler.",
+        "confirmValue": "“{value}” siparişlerini onayla",
+        "empty": "Burada değer yok",
+        "remember": "Sonraki dosyalarınız için bunu hatırlayacağız.",
+        "summary": "{confirm} → onayla · {ignore} → atla",
+        "summaryConfirmOnly": "{confirm} → onayla",
+        "edit": "Düzenle",
+        "noColumnAssume": "Ödeme sütunu yok, bu yüzden mağaza ayarınıza göre her sipariş kapıda ödeme sayılır.",
+        "noColumnSkip": "Ödeme sütunu yok ve mağaza ayarınız ödeme yöntemi olmayan siparişleri onaylatmıyor. Hangi siparişlerin kapıda ödemeli olduğunu bilmemiz için ödeme sütununu seçin.",
+        "recount": "Devam ettiğinizde bu sütunun değerlerini sayarız."
+      },
+      "footer": {
+        "ready": "{count, plural, one {# hazır} other {# hazır}}",
+        "excluded": "{count, plural, one {# hariç} other {# hariç}}",
+        "continue": "Göndermeye geç",
+        "blockedOne": "Devam etmek için {field} sütununu seçin",
+        "confirmOne": "Devam etmek için {field} sütununu onaylayın",
+        "blockedMany": "Devam etmek için zorunlu sütunları seçin",
+        "fixErrors": "Devam etmek için işaretli alanları düzeltin"
+      }
+    },
+    "send": {
+      "heading": "{count, plural, one {sipariş WhatsApp’ta onaylanmaya hazır} other {sipariş WhatsApp’ta onaylanmaya hazır}}",
+      "from": "Kaynak dosya: {file}",
+      "clean": "Mükerrer kayıt yok, hata yok",
+      "nothingReady": "Bu dosyada onaylatabileceğimiz sipariş yok. Aşağıdaki nedenlere bakın veya dosyayı değiştirin.",
+      "showAll": "Tüm siparişleri göster ({count, number})",
+      "showFewer": "Daha az göster",
+      "previewLabel": "Hazır siparişler",
+      "skipped": {
+        "notCod": "{count, plural, one {# sipariş peşin ödendiği için hariç tutuldu} other {# sipariş peşin ödendiği için hariç tutuldu}}",
+        "noPayment": "{count, plural, one {# sipariş ödeme yöntemi olmadığı için hariç tutuldu} other {# sipariş ödeme yöntemi olmadığı için hariç tutuldu}}",
+        "tooOld": "{count, plural, one {# sipariş onaylamak için çok eski} other {# sipariş onaylamak için çok eski}}",
+        "possibleDuplicate": "{count, plural, one {# sipariş daha önceki bir siparişin tekrarı olabilir} other {# sipariş daha önceki siparişlerin tekrarı olabilir}}",
+        "duplicate": "{count, plural, one {# mükerrer kayıt, içe aktarılmayacak} other {# mükerrer kayıt, içe aktarılmayacak}}",
+        "invalid": "{count, plural, one {# kaydın düzeltilmesi gerekiyor, içe aktarılmayacak} other {# kaydın düzeltilmesi gerekiyor, içe aktarılmayacak}}",
+        "excluded": "{count, plural, one {# hariç tutuldu} other {# hariç tutuldu}}",
+        "change": "Değiştir",
+        "show": "Göster",
+        "hide": "Gizle"
+      },
+      "cost": {
+        "label": "Maliyet ve süre",
+        "messages": "Şimdi gidecek mesajlar",
+        "upTo": "Takip mesajlarıyla en fazla {max, number}",
+        "noFollowUp": "Takip mesajı yok",
+        "balance": "Gönderim sonrası bakiyeniz",
+        "of": "/ {available, number}",
+        "short": "{shortfall, number} eksik",
+        "plan": "Planınızda kalan",
+        "planOf": "/ {slots, number} (bu dönem)",
+        "duration": "Tahmini süre",
+        "minutes": "{minutes, plural, =0 {Bir dakikadan az} one {Yaklaşık bir dakika} other {Yaklaşık # dakika}}",
+        "hours": "{hours, plural, =0 {Bir saatten az} one {Yaklaşık bir saat} other {Yaklaşık # saat}}",
+        "rate": "Dakikada yaklaşık {rate, number} mesaj",
+        "quiet": "Sessiz saatlerde duraklar: {window}",
+        "loading": "Maliyet hesaplanıyor…"
+      },
+      "sendNow": "{count, plural, one {# müşteriye} other {# müşteriye}} gönder",
+      "importing": "Siparişleriniz içe aktarılıyor…",
+      "importProgress": "{total, number} siparişten {imported, number} tanesi içe aktarıldı",
+      "starting": "Gönderim başlıyor…",
+      "importedNotice": "Siparişler içe aktarıldı. Henüz hiçbir şey gönderilmedi.",
+      "notice": {
+        "stale": "Sipariş sayısı veya bakiyeniz değişti. Güncel rakamları kontrol edip tekrar onaylayın.",
+        "startFailed": "Gönderim başlatılamadı. Siparişleriniz içe aktarıldı; tekrar göndermeyi deneyin.",
+        "importFailed": "Siparişler içe aktarılamadı. Hiçbir şey gönderilmedi; tekrar deneyin."
+      },
+      "done": {
+        "sent": "{count, plural, one {# sipariş} other {# sipariş}} içe aktarıldı; onay mesajlarını şimdi gönderiyoruz. Her siparişin durumunu buradan takip edin."
+      },
+      "phoneFix": {
+        "label": "Satır {number} için yeni telefon numarası",
+        "placeholder": "Cep telefonu numarası",
+        "save": "Kaydet",
+        "failed": "Numara kaydedilemedi. Tekrar deneyin."
+      }
+    }
+  },
+  "easyOrdersConnect": {
+    "eyebrow": "EasyOrders",
+    "loading": "EasyOrders bağlantınız yükleniyor…",
+    "readOnly": "Salt okunur erişiminiz var. EasyOrders’ı bağlaması için bir hesap sahibine veya yöneticiye başvurun.",
+    "cleanup": "EasyOrders’da Accept seçeneğini seçtiyseniz, Akeed adında bir API anahtarı ve webhook’lar oluşturulmuş olabilir. Tekrar denemeden önce bunları EasyOrders’da Settings → Public API altında silin.",
+    "loadError": {
+      "title": "EasyOrders bağlantınızı yükleyemedik",
+      "body": "İnternet bağlantınızı kontrol edip tekrar deneyin.",
+      "retry": "Tekrar dene"
+    },
+    "unavailable": {
+      "title": "EasyOrders henüz kullanılamıyor",
+      "body": "EasyOrders mağazası bağlama henüz açılmadı. Açılır açılmaz size haber vereceğiz."
+    },
+    "pilotRequired": {
+      "title": "EasyOrders erişiminiz hazırlanıyor",
+      "body": "EasyOrders şimdilik küçük bir mağaza grubuna açık. Akeed ekibi hesabınızı onaylayacak ve ne zaman bağlanabileceğinizi size bildirecek.",
+      "refresh": "Tekrar kontrol et"
+    },
+    "sourceExists": {
+      "title": "Bu hesabın zaten bir sipariş kaynağı var",
+      "body": "Bir hesabın tek bir sipariş kaynağı olur ve bu hesabınki zaten kurulu. Bunun yerine EasyOrders’a ihtiyacınız varsa Akeed destek ekibine ulaşın."
+    },
+    "connect": {
+      "title": "{store} mağazasını EasyOrders’a bağlayın",
+      "titleNoStore": "Mağazanızı EasyOrders’a bağlayın",
+      "body": "Akeed, EasyOrders’dan gelen kapıda ödemeli siparişlerinizi WhatsApp üzerinden onaylatır. Bağlantıyı EasyOrders’da bir kez onaylarsınız.",
+      "permissionsTitle": "Akeed, EasyOrders’dan yalnızca iki izin ister:",
+      "permissions": {
+        "read": "Yeni siparişlerinizi okuma",
+        "update": "Müşteriniz onayladığında veya iptal ettiğinde siparişin durumunu güncelleme"
+      },
+      "sender": "Onay mesajları müşterilerinize Akeed’in WhatsApp numarasından ulaşır.",
+      "cta": "EasyOrders’ı bağla",
+      "starting": "EasyOrders açılıyor…",
+      "note": "EasyOrders yeni bir sekmede açılır. Bağlamak istediğiniz mağazaya giriş yapın, ardından Accept seçeneğini seçin."
+    },
+    "waiting": {
+      "title": "EasyOrders’da tamamlayın",
+      "body": "EasyOrders sekmesinde Accept seçeneğini seçin. Bu sayfa kendiliğinden güncellenir.",
+      "expires": "Bu isteğin süresi şu saatte doluyor: {time}.",
+      "restart": "EasyOrders’ı yeniden aç",
+      "cancelled": "Kabul etmedim"
+    },
+    "denied": {
+      "title": "EasyOrders bağlanmadı",
+      "body": "İstek kabul edilmedi veya süresi doldu. Akeed hesabınıza hiçbir şey bağlanmadı.",
+      "retry": "Tekrar dene"
+    },
+    "error": {
+      "title": "EasyOrders’ı bağlayamadık",
+      "retry": "Tekrar dene",
+      "codes": {
+        "EASYORDERS_KEY_REJECTED": "EasyOrders, Akeed için oluşturduğu API anahtarını kabul etmedi. Hiçbir şey bağlanmadı.",
+        "EASYORDERS_PROVIDER_UNAVAILABLE": "Bağlantıyı kontrol etmek için EasyOrders’a ulaşamadık. Hiçbir şey bağlanmadı. Birkaç dakika sonra tekrar deneyin.",
+        "EASYORDERS_STORE_UNAVAILABLE": "Bu EasyOrders mağazası zaten başka bir Akeed hesabına bağlı.",
+        "EASYORDERS_SOURCE_EXISTS": "Bu Akeed hesabının zaten bir sipariş kaynağı var, bu yüzden EasyOrders eklenemez.",
+        "EASYORDERS_CALLBACK_INVALID": "EasyOrders eksik bir yanıt gönderdi. Hiçbir şey bağlanmadı.",
+        "EASYORDERS_PILOT_REQUIRED": "Hesabınız henüz EasyOrders için onaylanmadı.",
+        "EASYORDERS_CONNECT_UNAVAILABLE": "EasyOrders bağlama şu anda kullanılamıyor.",
+        "EASYORDERS_ROLE_REQUIRED": "EasyOrders’ı yalnızca bir hesap sahibi veya yönetici bağlayabilir.",
+        "default": "Bir sorun oluştu. Hiçbir şey bağlanmadı.",
+        "EASYORDERS_RECONNECT_STORE_MISMATCH": "Bu farklı bir EasyOrders mağazası. Yalnızca daha önce bağlanmış mağaza yeniden bağlanabilir. Hiçbir şey değiştirilmedi.",
+        "EASYORDERS_NOT_CONNECTED": "EasyOrders bu hesaba bağlı değil."
+      }
+    },
+    "success": {
+      "storeIdLabel": "EasyOrders mağaza kimliği",
+      "storeUnverified": "İlk siparişi geldiğinde bunun sizin mağazanız olduğunu doğrulayacağız.",
+      "inactive": {
+        "title": "EasyOrders mağazanız etkin değil.",
+        "body": "EasyOrders mağazayı etkin değil veya ödemesi gecikmiş olarak bildiriyor. Mağaza yeniden etkin olana kadar siparişler Akeed’e ulaşmaz."
+      },
+      "keyRejected": {
+        "title": "EasyOrders artık Akeed’in erişimini kabul etmiyor.",
+        "body": "Mağaza yeniden bağlanana kadar siparişler kontrol edilemez. Akeed destek ekibine ulaşın."
+      },
+      "rejectedDeliveries": "{count, plural, one {EasyOrders’dan gelen # sipariş, webhook gizli anahtarı eşleşmediği için reddedildi.} other {EasyOrders’dan gelen # sipariş, webhook gizli anahtarları eşleşmediği için reddedildi.}} Bunu Ayarlar’da, EasyOrders bağlantınızın altında düzeltin.",
+      "next": "EasyOrders’dan sipariş aktarımı mağaza mağaza açılıyor. Siparişleriniz Akeed’e gelmeye başladığında size haber vereceğiz.",
+      "orderSettings": {
+        "title": "Mağazanızın ülkesini ve para birimini bize bildirin",
+        "body": "EasyOrders sipariş toplamlarını para birimi olmadan, telefon numaralarını da ülke kodu olmadan gönderir; bu yüzden Akeed’in müşterilerinize doğru mesaj gönderebilmesi için ikisine de ihtiyacı var.",
+        "warning": "İkisini de seçene kadar siparişler onaylanmaz.",
+        "phoneCountry": {
+          "label": "Müşteri telefonu ülkesi",
+          "placeholder": "Bir ülke seçin",
+          "hint": "Ülke kodu olmadan yazılmış numaralar bu ülkenin numaraları olarak okunur."
+        },
+        "currency": {
+          "label": "Mağaza para birimi",
+          "placeholder": "Bir para birimi seçin",
+          "hint": "Müşteriye sipariş toplamının yanında gösterilir."
+        },
+        "errors": {
+          "required": "Bir ülke ve bir para birimi seçin.",
+          "failed": "Seçimlerinizi kaydedemedik. Tekrar deneyin."
+        }
+      },
+      "secrets": {
+        "title": "Webhook gizli anahtarlarını kendiniz girin",
+        "replaceTitle": "Webhook gizli anahtarları",
+        "body": "Akeed normalde her gizli anahtarı kendisi öğrenir. Elle girmek için EasyOrders’da Settings → Public API → Webhooks bölümünü açın ve adresi <hint></hint> ile biten iki Akeed webhook’unu bulun.",
+        "warning": "Gizli anahtarları eklemeden önce verilen siparişler daha sonra içe aktarılmaz.",
+        "ordersSecret": {
+          "label": "Sipariş webhook’u gizli anahtarı",
+          "hint": "Adresinde <path></path> bulunan webhook."
+        },
+        "statusSecret": {
+          "label": "Sipariş durumu webhook’u gizli anahtarı",
+          "hint": "Adresinde <path></path> bulunan webhook."
+        },
+        "save": "Gizli anahtarları kaydet",
+        "replace": "Gizli anahtarları değiştir",
+        "saving": "Kaydediliyor…",
+        "saved": "Webhook gizli anahtarları kaydedildi. Şifreli olarak saklanır ve tekrar gösterilmez.",
+        "errors": {
+          "required": "İki gizli anahtarı da yapıştırın.",
+          "invalid": "Gizli anahtar boşluk içermeyen en az 8 karakterden oluşur. EasyOrders’dan yeniden kopyalayın.",
+          "failed": "Gizli anahtarları kaydedemedik. Tekrar deneyin."
+        },
+        "duplicates": "EasyOrders’da Akeed için tam olarak bir sipariş webhook’u ve bir sipariş durumu webhook’u bırakın. Bir adres iki kez görünüyorsa fazlasını silin: onun siparişleri Akeed’in sahip olmadığı bir gizli anahtarla gelir ve reddedilir.",
+        "automaticTitle": "EasyOrders’dan kopyalanacak bir şey yok",
+        "automatic": "Akeed webhook’larınızı kendisi güvenceye alır. İlk siparişinizi EasyOrders ile doğrular, ardından EasyOrders’ın onunla gönderdiği gizli anahtarı saklar. Siparişler en baştan kabul edilir."
+      }
+    },
+    "details": {
+      "title": "EasyOrders siparişleriniz hakkında birkaç bilgi",
+      "body": "Akeed’in siparişlerinizi doğru okuyabilmesi için bunlara bir kez ihtiyacı var.",
+      "secretsKept": "Webhook gizli anahtarlarınız kaydedildi. Korumak için bu iki alanı boş bırakın.",
+      "footerCaption": "Bunları daha sonra değiştirebilirsiniz.",
+      "submit": "Kaydet ve devam et",
+      "saving": "Kaydediliyor…",
+      "edit": "Ülkeyi veya para birimini değiştir"
+    },
+    "checklist": {
+      "loading": "Kurulumunuz yükleniyor…",
+      "loadError": "Kurulumunuzu yükleyemedik. İnternet bağlantınızı kontrol edip tekrar deneyin.",
+      "retry": "Tekrar dene",
+      "footerCaption": "Test ücretsizdir ve yalnızca sizin numaranıza gider.",
+      "notReady": "Test mesajını göndermek için yukarıda işaretlenenleri düzeltin.",
+      "sender": {
+        "configured": "Mesajlar Akeed’in WhatsApp numarasından gider. Kendinize ait bir numaraya ihtiyacınız yok.",
+        "not_configured": "Akeed’in WhatsApp göndericisi bizim tarafımızda hazır değil. Akeed destek ekibine ulaşın; mağazanızda değiştirmeniz gereken bir şey yok.",
+        "unknown": "Mesajlar Akeed’in WhatsApp numarasından gider. Bunu şu anda kontrol edemedik; test mesajı çalışıp çalışmadığını gösterecek."
+      },
+      "automation": {
+        "title": "Onaylar nasıl işleyecek",
+        "autoConfirmOn": "Her yeni kapıda ödemeli sipariş için bir onay mesajı gönderilir.",
+        "autoConfirmOff": "Otomatik onay kapalı. Ayarlar’dan açana kadar mesaj gönderilmez.",
+        "reminderOn": "{minutes} dakika yanıt gelmezse bir hatırlatma.",
+        "reminderOff": "Hatırlatma yok.",
+        "noReplyOn": "{minutes} dakika sonra yanıt yok olarak işaretlenir. Akeed siparişi EasyOrders’da asla kendiliğinden iptal etmez.",
+        "noReplyOff": "Siparişler otomatik olarak yanıt yok diye işaretlenmez.",
+        "quietHoursOn": "{start} ile {end} arasında mesaj gönderilmez.",
+        "quietHoursOff": "Sessiz saat yok.",
+        "changeLater": "Bunları kurulumdan sonra Ayarlar’dan değiştirebilirsiniz."
+      }
+    },
+    "revoked": {
+      "title": "EasyOrders artık Akeed’in erişimini kabul etmiyor",
+      "body": "Akeed API anahtarını en son kullandığında EasyOrders anahtarı reddetti. Yeni siparişler kontrol edilemiyor ve mağazanızdaki sipariş durumları güncellenemiyor.",
+      "recovery": "Düzeltmek için EasyOrders bağlantısını burada kesin, ardından aynı mağazayı yeniden bağlayın. Yeniden bağlamak yeni bir anahtar ve yeni webhook’lar oluşturur.",
+      "lastSeen": "Bu, EasyOrders’ın verdiği son yanıttır; canlı bir kontrol değildir. Anahtarı kendiniz kaldırmadıysanız bağlantıyı kesmeden önce Akeed destek ekibine ulaşın."
+    },
+    "disconnected": {
+      "title": "{store} mağazasının EasyOrders bağlantısı kesildi",
+      "titleNoStore": "Mağazanızın EasyOrders bağlantısı kesildi",
+      "body": "Akeed, EasyOrders’dan sipariş almayı, bu siparişler için mesaj göndermeyi ve mağazanızdaki durumlarını güncellemeyi durdurdu.",
+      "historyKept": "Önceki siparişleriniz ve onay sonuçları saklanır ve raporlarınızda görünmeye devam eder.",
+      "reconnectBody": "Aynı EasyOrders mağazasını yeniden bağlayabilirsiniz. Bu hesaba farklı bir mağaza bağlanamaz; buna ihtiyacınız varsa Akeed destek ekibine ulaşın.",
+      "reconnect": "EasyOrders’ı yeniden bağla",
+      "sameStore": "Bir mağazayı yeniden bağlıyorsunuz. Önceki EasyOrders mağazasıyla giriş yapın; farklı bir mağaza reddedilir."
+    },
+    "disconnect": {
+      "button": "EasyOrders bağlantısını kes",
+      "title": "EasyOrders bağlantısı kesilsin mi?",
+      "description": "Akeed kendi tarafında bu mağazayla çalışmayı hemen durdurur.",
+      "keep": "Bağlı kalsın",
+      "confirm": "Bağlantıyı kes",
+      "effects": {
+        "stops": "EasyOrders’dan yeni siparişler artık alınmaz; bekleyen mesajlar veya durum güncellemeleri gönderilmez.",
+        "history": "Siparişleriniz, onay sonuçlarınız ve kullanım geçmişiniz saklanır.",
+        "provider": "Akeed, oluşturduğu webhook’ları silmesini EasyOrders’dan ister. Akeed adlı API anahtarı, siz silene kadar EasyOrders’da kalır.",
+        "reconnect": "Daha sonra yeniden bağlanmak için EasyOrders’da tekrar onay verirsiniz. Bağlantı kesikken verilen siparişler içe aktarılmaz."
+      }
+    },
+    "removal": {
+      "title": "Akeed’i EasyOrders’dan kaldırın",
+      "intro": "Buradan bağlantıyı kesmek EasyOrders’da hiçbir şeyi silmez. EasyOrders’ın Akeed’e çağrı göndermeyi bırakması için bunu kendiniz yapın:",
+      "steps": {
+        "openSettings": "EasyOrders’da Settings → Public API bölümünü açın.",
+        "deleteKey": "Akeed adlı API anahtarını silin.",
+        "deleteWebhooks": "Webhooks altında Akeed adlı tüm webhook’ları silin."
+      },
+      "oldWebhooks": "Siz silene kadar EasyOrders siparişleri Akeed’in artık kabul etmediği bir adrese göndermeye devam eder. Bu çağrılardan hiçbir şey saklanmaz.",
+      "support": "EasyOrders’daki bir şey silinemiyorsa info@easy-orders.net adresinden EasyOrders destek ekibine ulaşın. Akeed tarafındaki her konu için Akeed destek ekibine ulaşın.",
+      "removed": {
+        "intro": "Akeed, EasyOrders’daki webhook’larını sildi; EasyOrders artık Akeed’e çağrı göndermiyor. Size kalan tek bir adım var:",
+        "note": "Akeed anahtarın kendi kopyasını zaten sildi. EasyOrders, Akeed’in oradaki anahtarı silmesine olanak tanımıyor; bu adım size ait."
+      }
+    },
+    "done": {
+      "badge": "Kurulum tamamlandı",
+      "title": "Mağazanız kuruldu",
+      "body": "Akeed, EasyOrders’daki kapıda ödemeli siparişlerinizi WhatsApp üzerinden onaylatmaya hazır.",
+      "dashboard": "Panele git"
+    },
+    "panel": {
+      "readOnly": "Salt okunur erişiminiz var. EasyOrders bağlantısını bir hesap sahibi veya yönetici yönetir.",
+      "disconnectHelp": "Bağlantıyı kesmek bu mağaza için Akeed’i durdurur ve geçmişinizi korur.",
+      "disconnectedTitle": "EasyOrders bağlantısı kesik",
+      "secrets": {
+        "title": "Webhook güvenliği",
+        "learned": "Güvende. Akeed iki webhook gizli anahtarını da EasyOrders’dan öğrendi ve her teslimatı bunlarla kontrol ediyor.",
+        "waiting": "Akeed, webhook gizli anahtarlarını EasyOrders’ın göndereceği ilk siparişten ve ilk durum değişikliğinden öğrenecek. Bu arada siparişler kabul edilir; her biri EasyOrders ile kontrol edilir.",
+        "troubleshoot": "Siparişler reddediliyor mu? Webhook gizli anahtarlarını düzeltin",
+        "resetBody": "Akeed webhook’larını EasyOrders’da silip yeniden oluşturduysanız gizli anahtarları değişti. Buradan sıfırlayın; Akeed yenilerini bir sonraki siparişten öğrenir.",
+        "reset": "Sıfırla ve yeniden öğren",
+        "resetting": "Sıfırlanıyor…",
+        "resetFailed": "Gizli anahtarları sıfırlayamadık. Tekrar deneyin."
+      }
+    }
+  },
+  "wooCommerceConnect": {
+    "eyebrow": "WooCommerce",
+    "loading": "WooCommerce bağlantınız yükleniyor…",
+    "readOnly": "Salt okunur erişiminiz var. WooCommerce’i bağlaması için bir hesap sahibine veya yöneticiye başvurun.",
+    "cleanup": "Mağazanızda onay verdiyseniz WooCommerce, Akeed için kullanılmayan bir API anahtarı oluşturmuş olabilir. Bunu WordPress’te WooCommerce > Settings > Advanced > REST API altında silebilirsiniz.",
+    "loadError": {
+      "title": "WooCommerce bağlantınızı yükleyemedik",
+      "body": "İnternet bağlantınızı kontrol edip tekrar deneyin.",
+      "retry": "Tekrar dene"
+    },
+    "unavailable": {
+      "title": "WooCommerce henüz kullanılamıyor",
+      "body": "WooCommerce mağazası bağlama henüz açılmadı. Açılır açılmaz size haber vereceğiz."
+    },
+    "pilotRequired": {
+      "title": "Hesabınız onay bekliyor",
+      "body": "WooCommerce bağlama şimdilik yalnızca onaylı hesaplara açık. Hesabınız hazır olduğunda size haber vereceğiz.",
+      "refresh": "Tekrar kontrol et"
+    },
+    "sourceExists": {
+      "title": "Bu hesabın zaten bir sipariş kaynağı var",
+      "body": "Bir Akeed hesabı siparişlerini tek bir kaynaktan alır, bu yüzden bu hesaba WooCommerce eklenemez."
+    },
+    "enterUrl": {
+      "title": "WooCommerce mağazanızı bağlayın",
+      "body": "Akeed, WooCommerce’den gelen kapıda ödemeli siparişlerinizi WhatsApp üzerinden onaylatır. Bağlantıyı mağazanızda bir kez onaylarsınız.",
+      "label": "Mağazanızın adresi",
+      "hint": "Müşterilerinizin ziyaret ettiği, https:// ile başlayan adres",
+      "placeholder": "https://ornek.com",
+      "required": "Mağazanızın adresini girin.",
+      "usesTitle": "Mağazanız sizden Akeed’e okuma ve yazma erişimi vermenizi isteyecek. Akeed bunu yalnızca şu amaçlarla kullanır:",
+      "uses": {
+        "orders": "Yeni siparişlerinizi almak",
+        "notifications": "Mağazanızda ihtiyaç duyduğu sipariş bildirimlerini kurmak",
+        "outcomes": "Müşterinizin yanıtını siparişe kaydetmek"
+      },
+      "sender": "Onay mesajları müşterilerinize Akeed’in WhatsApp numarasından ulaşır.",
+      "cta": "Mağazama devam et",
+      "checking": "Mağazanız kontrol ediliyor…",
+      "note": "Mağazanız bu sekmede açılır. Yönetici veya mağaza yöneticisi olarak giriş yapın, ardından Approve seçeneğini seçin."
+    },
+    "waiting": {
+      "title": "Bağlantı tamamlanıyor",
+      "body": "Mağazanız Akeed’e erişim bilgilerini gönderiyor. Bu sayfa kendiliğinden güncellenir.",
+      "expires": "Bu isteğin süresi şu saatte doluyor: {time}.",
+      "restart": "Baştan başla"
+    },
+    "denied": {
+      "title": "Bağlantı onaylanmadı",
+      "body": "İstek mağazanızda onaylanmadı, bu yüzden Akeed hesabınıza hiçbir şey bağlanmadı.",
+      "retry": "Tekrar dene"
+    },
+    "unsupported": {
+      "title": "Bu mağaza henüz bağlanamıyor",
+      "nothing": "Akeed hesabınıza hiçbir şey bağlanmadı.",
+      "retry": "Tekrar dene"
+    },
+    "error": {
+      "title": "WooCommerce’i bağlayamadık",
+      "expired": "Bağlantı isteğinin süresi mağazanız işlemi bitirmeden doldu. Hiçbir şey bağlanmadı.",
+      "retry": "Tekrar dene"
+    },
+    "connected": {
+      "next": "Akeed bu mağazanın kapıda ödemeli siparişlerini onaylatmaya başladığında size haber vereceğiz."
+    },
+    "storeLabel": "Mağaza adresi",
+    "checklist": {
+      "loading": "Kurulumunuz yükleniyor…",
+      "loadError": "Kurulumunuzu yükleyemedik. İnternet bağlantınızı kontrol edip tekrar deneyin.",
+      "retry": "Tekrar dene",
+      "footerCaption": "Test ücretsizdir ve yalnızca sizin numaranıza gider.",
+      "notReady": "Test mesajını göndermek için yukarıda işaretlenenleri düzeltin.",
+      "sender": {
+        "configured": "Mesajlar Akeed’in WhatsApp numarasından gider. Kendinize ait bir numaraya ihtiyacınız yok.",
+        "not_configured": "Akeed’in WhatsApp göndericisi bizim tarafımızda hazır değil. Akeed destek ekibine ulaşın; mağazanızda değiştirmeniz gereken bir şey yok.",
+        "unknown": "Mesajlar Akeed’in WhatsApp numarasından gider. Bunu şu anda kontrol edemedik; test mesajı çalışıp çalışmadığını gösterecek."
+      },
+      "automation": {
+        "title": "Onaylar nasıl işleyecek",
+        "autoConfirmOn": "Her yeni kapıda ödemeli sipariş için bir onay mesajı gönderilir.",
+        "autoConfirmOff": "Otomatik onay kapalı. Ayarlar’dan açana kadar mesaj gönderilmez.",
+        "reminderOn": "{minutes} dakika yanıt gelmezse bir hatırlatma.",
+        "reminderOff": "Hatırlatma yok.",
+        "noReplyOn": "{minutes} dakika sonra yanıt yok olarak işaretlenir. Akeed siparişi WooCommerce’de asla kendiliğinden iptal etmez.",
+        "noReplyOff": "Siparişler otomatik olarak yanıt yok diye işaretlenmez.",
+        "quietHoursOn": "{start} ile {end} arasında mesaj gönderilmez.",
+        "quietHoursOff": "Sessiz saat yok.",
+        "changeLater": "Bunları kurulumdan sonra Ayarlar’dan değiştirebilirsiniz."
+      }
+    },
+    "done": {
+      "badge": "Kurulum tamamlandı",
+      "title": "Mağazanız kuruldu",
+      "body": "Akeed, WooCommerce’deki kapıda ödemeli siparişlerinizi WhatsApp üzerinden onaylatmaya hazır.",
+      "dashboard": "Panele git"
+    },
+    "webhooks": {
+      "title": "Mağazanızdaki sipariş bildirimleri",
+      "kinds": {
+        "order_created": "Yeni siparişler:",
+        "order_updated": "Sipariş değişiklikleri:"
+      },
+      "states": {
+        "active": "Etkin",
+        "paused": "Mağazanızda duraklatıldı",
+        "disabled": "Mağazanız tarafından devre dışı bırakıldı",
+        "missing": "Mağazanızdan silindi",
+        "unknown": "Henüz bilinmiyor"
+      },
+      "checkedAt": "Mağazanızdan son okuma: {when}.",
+      "neverChecked": "Akeed bunları henüz mağazanızdan okumadı.",
+      "disabled": {
+        "title": "Mağazanız bir sipariş bildirimini devre dışı bıraktı",
+        "body": "WooCommerce bunu, art arda birkaç teslimat başarısız olduğunda yapar. Devre dışıyken yeni siparişler Akeed’e ulaşmaz.",
+        "missedOrders": "Devre dışıyken verilen siparişler Akeed’e gönderilmedi ve içe aktarılmaz.",
+        "enable": "Sipariş bildirimlerini yeniden etkinleştir",
+        "enabling": "Yeniden etkinleştiriliyor…",
+        "failed": "Sipariş bildirimini yeniden etkinleştiremedik. Hiçbir şey değiştirilmedi. Tekrar deneyin."
+      },
+      "enabled": "Sipariş bildirimleri yeniden etkin. Devre dışıyken verilen siparişler içe aktarılmaz.",
+      "paused": "Mağazanızda bir sipariş bildirimi duraklatılmış, bu yüzden siparişler Akeed’e ulaşmıyor. Akeed bunu değiştirmez: WordPress’te WooCommerce > Settings > Advanced > Webhooks altından etkinleştirin.",
+      "missing": "Mağazanızda bir sipariş bildirimi silinmiş, bu yüzden siparişler Akeed’e ulaşmıyor. Düzeltmek için WooCommerce bağlantısını burada kesin, ardından aynı mağazayı yeniden bağlayın.",
+      "rejectedDeliveries": "{count, plural, one {# sipariş bildirimi, imzası veya mağaza adresi eşleşmediği için reddedildi.} other {# sipariş bildirimi, imzaları veya mağaza adresleri eşleşmediği için reddedildi.}} Webhook WooCommerce’de düzenlendiyse bağlantıyı kesip aynı mağazayı yeniden bağlayın."
+    },
+    "check": {
+      "help": "Bağlantının hâlâ çalışıp çalışmadığını mağazanıza sorun.",
+      "button": "Bağlantıyı kontrol et",
+      "checking": "Mağazanız kontrol ediliyor…",
+      "ok": "Mağazanız yanıt verdi, Akeed’in erişimini kabul etti ve iki sipariş bildirimi de etkin.",
+      "found": "Düzeltilmesi gerekenler:",
+      "failed": "Kontrolü çalıştıramadık. Tekrar deneyin.",
+      "checkedAt": "Kontrol zamanı: {when}.",
+      "support": "Barındırma hizmetiniz, bir güvenlik eklentisi veya özel bir kurulum söz konusuysa Akeed destek ekibine ulaşın. Akeed her barındırma kurulumu veya eklentiyle çalışacağını garanti edemez.",
+      "problems": {
+        "WOOCOMMERCE_STORE_ADDRESS_NOT_PUBLIC": "Akeed artık mağazanızın adresine genel internet üzerinden ulaşamıyor. Alan adınızı ve DNS ayarlarını kontrol edin.",
+        "WOOCOMMERCE_STORE_REDIRECTS": "Mağazanızın adresi artık başka bir adrese yönlendiriyor. Adres değiştiyse Akeed destek ekibine ulaşın: bu hesaba farklı bir adres bağlanamaz.",
+        "WOOCOMMERCE_STORE_TLS_FAILED": "Mağazanızın güvenlik sertifikası geçerli değil. Barındırma sağlayıcınızdan düzeltmesini isteyin.",
+        "WOOCOMMERCE_REST_NOT_FOUND": "WooCommerce REST API’si artık mağazanızın adresinde değil. WordPress’te Settings > Permalinks bölümünü açıp Plain dışında herhangi bir seçeneği seçin ve WooCommerce’in etkin olduğundan emin olun.",
+        "WOOCOMMERCE_REST_UNREACHABLE": "Mağazanız yanıt vermedi. Kapalı, bakım modunda olabilir veya dışarıdan gelen istekleri engelliyor olabilir. Daha sonra tekrar deneyin veya barındırma sağlayıcınıza danışın.",
+        "WOOCOMMERCE_PROVIDER_UNAVAILABLE": "Mağazanızın yanıt vermesi çok uzun sürdü. Tekrar deneyin.",
+        "WOOCOMMERCE_CREDENTIALS_REJECTED": "Mağazanız artık Akeed’in API anahtarını kabul etmiyor. Anahtar iptal edilmiş olabilir veya barındırma hizmetiniz Authorization başlığını kaldırıyor olabilir. WooCommerce bağlantısını burada kesin, ardından aynı mağazayı yeniden bağlayın.",
+        "WOOCOMMERCE_PERMISSION_DENIED": "Akeed’in API anahtarının bağlı olduğu WordPress kullanıcısı artık WooCommerce’i yönetemiyor. Bu kullanıcının rolünü geri yükleyin veya bağlantıyı kesip yönetici ya da mağaza yöneticisi olarak yeniden bağlanın.",
+        "WOOCOMMERCE_STORE_URL_MISMATCH": "Mağazanız artık bağlanan adresten farklı bir adres bildiriyor, bu yüzden sipariş bildirimleri reddediliyor. Adres değiştiyse Akeed destek ekibine ulaşın.",
+        "WOOCOMMERCE_WEBHOOK_MISSING": "Mağazanızda bir sipariş bildirimi silinmiş. WooCommerce bağlantısını burada kesin, ardından aynı mağazayı yeniden bağlayın.",
+        "WOOCOMMERCE_WEBHOOK_DISABLED": "Mağazanız bir sipariş bildirimini devre dışı bıraktı. Yukarıdan yeniden etkinleştirin. Devre dışıyken verilen siparişler içe aktarılmaz.",
+        "WOOCOMMERCE_WEBHOOK_PAUSED": "Mağazanızda bir sipariş bildirimi duraklatılmış. WordPress’te WooCommerce > Settings > Advanced > Webhooks altından etkinleştirin.",
+        "default": "Kontrol, Akeed’in adlandıramadığı bir sorun buldu. Akeed destek ekibine ulaşın."
+      }
+    },
+    "credentialsRejected": {
+      "title": "Mağazanız artık Akeed’in erişimini kabul etmiyor",
+      "bodyRejected": "Akeed API anahtarını en son kullandığında mağazanız anahtarı reddetti. Sipariş güncellemeleri mağazanıza yazılamıyor ve sipariş bildirimleri okunamıyor.",
+      "bodyDenied": "Akeed API anahtarını en son kullandığında mağazanız, ilgili WordPress kullanıcısının WooCommerce’i yönetemeyeceğini bildirdi. Sipariş güncellemeleri mağazanıza yazılamıyor.",
+      "recovery": "Düzeltmek için WooCommerce bağlantısını burada kesin, ardından aynı mağazayı yeniden bağlayın. Yeniden bağlamak yeni bir anahtar oluşturur ve Akeed’in sipariş bildirimlerini yeniler; kopyalanacak bir şey yoktur.",
+      "lastSeen": "Bu, mağazanızın verdiği son yanıttır. Anahtarı kendiniz iptal etmediyseniz veya kullanıcıyı değiştirmediyseniz bağlantıyı kesmeden önce Akeed destek ekibine ulaşın."
+    },
+    "disconnected": {
+      "title": "WooCommerce mağazanızın bağlantısı kesildi",
+      "body": "Akeed bu mağazadan sipariş almayı, bu siparişler için mesaj göndermeyi ve mağazanızda güncellemeyi durdurdu.",
+      "historyKept": "Önceki siparişleriniz ve onay sonuçları saklanır ve raporlarınızda görünmeye devam eder.",
+      "reconnectBody": "Aynı mağazayı yeniden bağlayabilirsiniz. Bu hesaba farklı bir mağaza veya bu mağaza farklı bir adresle bağlanamaz; buna ihtiyacınız varsa Akeed destek ekibine ulaşın.",
+      "reconnect": "WooCommerce’i yeniden bağla",
+      "sameStore": "Bir mağazayı yeniden bağlıyorsunuz. Önceki WooCommerce mağazasında yeniden onay verin; farklı bir mağaza reddedilir."
+    },
+    "disconnect": {
+      "button": "WooCommerce bağlantısını kes",
+      "title": "WooCommerce bağlantısı kesilsin mi?",
+      "description": "Akeed kendi tarafında bu mağazayla çalışmayı hemen durdurur.",
+      "keep": "Bağlı kalsın",
+      "confirm": "Bağlantıyı kes",
+      "failed": "WooCommerce bağlantısını kesemedik. Hiçbir şey değiştirilmedi. Tekrar deneyin.",
+      "effects": {
+        "stops": "WooCommerce’den yeni siparişler artık alınmaz; bekleyen mesajlar veya sipariş güncellemeleri gönderilmez.",
+        "history": "Siparişleriniz, onay sonuçlarınız ve kullanım geçmişiniz saklanır.",
+        "webhooks": "Akeed, iki sipariş bildirimini silmesini mağazanızdan ister. Mağazanız yanıt vermezse size bildiririz ve bunları kendiniz silersiniz.",
+        "key": "WooCommerce’in Akeed için oluşturduğu API anahtarı, siz orada iptal edene kadar mağazanızda kalır. Akeed kendi kopyasını siler.",
+        "reconnect": "Daha sonra yeniden bağlanmak için aynı mağazada tekrar onay vermeniz gerekir. Bağlantı kesikken verilen siparişler içe aktarılmaz."
+      }
+    },
+    "removal": {
+      "title": "Akeed’in API anahtarını WooCommerce’den kaldırın",
+      "intro": "Akeed, mağazanızdaki kendi API anahtarını iptal edemez. Anahtarın artık kullanılamaması için bunu kendiniz yapın:",
+      "steps": {
+        "openSettings": "WordPress’te WooCommerce > Settings > Advanced > REST API bölümünü açın.",
+        "revokeKey": "Akeed adlı anahtarı bulun ve Revoke seçeneğini seçin.",
+        "deleteWebhooks": "WooCommerce > Settings > Advanced > Webhooks altında adı Akeed ile başlayan tüm webhook’ları silin."
+      },
+      "webhooksRemoved": "Akeed iki sipariş bildirimini mağazanızdan sildi.",
+      "webhooksLeft": "Mağazanız, Akeed’in sipariş bildirimlerinin silindiğini doğrulamadı. Bunları kendiniz silin (3. adım). O zamana kadar mağazanız, Akeed’in artık kabul etmediği bir adrese çağrı göndermeye devam eder; bu çağrılardan hiçbir şey saklanmaz ve WooCommerce birkaç başarısız denemeden sonra bunları devre dışı bırakır.",
+      "webhooksUnknown": "Bağlantıyı kestiğinizde Akeed, sipariş bildirimlerini silmesini mağazanızdan ister. Hâlâ listelenen varsa silin (3. adım).",
+      "support": "Akeed tarafındaki her konu için Akeed destek ekibine ulaşın. Barındırma hizmetinizle veya WordPress eklentileriyle ilgili sorunlar için barındırma sağlayıcınıza başvurun."
+    },
+    "panel": {
+      "readOnly": "Salt okunur erişiminiz var. WooCommerce bağlantısını bir hesap sahibi veya yönetici yönetir.",
+      "disconnectHelp": "Bağlantıyı kesmek bu mağaza için Akeed’i durdurur ve geçmişinizi korur.",
+      "disconnectedTitle": "WooCommerce bağlantısı kesik"
+    },
+    "codes": {
+      "WOOCOMMERCE_STORE_URL_INVALID": "Mağazanızın adresini girin, örneğin https://ornek.com.",
+      "WOOCOMMERCE_STORE_HTTPS_REQUIRED": "Mağazanızın adresi https:// ile başlamalıdır. Akeed HTTPS kullanmayan mağazalara bağlanmaz.",
+      "WOOCOMMERCE_STORE_ADDRESS_NOT_PUBLIC": "Akeed bu adrese genel internet üzerinden ulaşamadı. Adresi kontrol edip tekrar deneyin.",
+      "WOOCOMMERCE_STORE_REDIRECTS": "Bu adres başka bir adrese yönlendiriyor. Mağazanızın son adresini, www ile veya www olmadan, tarayıcıda göründüğü şekliyle tam olarak girin.",
+      "WOOCOMMERCE_STORE_TLS_FAILED": "Mağazanızın güvenlik sertifikası geçerli değil. Barındırma sağlayıcınızdan düzeltmesini isteyip tekrar deneyin.",
+      "WOOCOMMERCE_REST_NOT_FOUND": "Akeed bu adreste WooCommerce REST API’sini bulamadı. WordPress’te Settings > Permalinks bölümünü açıp Plain dışında herhangi bir seçeneği seçin ve WooCommerce’in güncel olduğundan emin olun.",
+      "WOOCOMMERCE_REST_UNREACHABLE": "Mağazanız yanıt vermedi. Kapalı, bakım modunda olabilir veya dışarıdan gelen istekleri engelliyor olabilir. Daha sonra tekrar deneyin veya barındırma sağlayıcınıza danışın.",
+      "WOOCOMMERCE_CREDENTIALS_REJECTED": "Mağazanız yeni API anahtarını kabul etmedi. Bazı barındırma kurulumları Authorization başlığını WordPress’e ulaşmadan önce kaldırır; barındırma sağlayıcınızdan buna izin vermesini isteyin. Ardından kullanılmayan anahtarı WooCommerce > Settings > Advanced > REST API altında silip yeniden bağlanın.",
+      "WOOCOMMERCE_PERMISSION_DENIED": "Bağlantıyı onaylayan WordPress kullanıcısı WooCommerce’i yönetemiyor. Mağazanıza yönetici veya mağaza yöneticisi olarak giriş yapıp yeniden bağlanın.",
+      "WOOCOMMERCE_STORE_URL_MISMATCH": "Mağazanız, girdiğiniz adresten farklı bir adres bildiriyor. Adresi WordPress’te ayarlandığı şekliyle tam olarak girip yeniden bağlanın.",
+      "WOOCOMMERCE_WEBHOOK_SETUP_FAILED": "Akeed mağazanızda sipariş bildirimlerinin kurulumunu tamamlayamadı. Hiçbir şey bağlanmadı. Tekrar deneyin.",
+      "WOOCOMMERCE_STORE_UNAVAILABLE": "Bu mağaza zaten başka bir Akeed hesabına bağlı.",
+      "WOOCOMMERCE_PROVIDER_UNAVAILABLE": "Mağazanızın yanıt vermesi çok uzun sürdü. Hiçbir şey bağlanmadı. Tekrar deneyin.",
+      "WOOCOMMERCE_SOURCE_EXISTS": "Bu Akeed hesabının zaten bir sipariş kaynağı var, bu yüzden WooCommerce eklenemez.",
+      "WOOCOMMERCE_PILOT_REQUIRED": "Hesabınız henüz WooCommerce için onaylanmadı.",
+      "WOOCOMMERCE_CONNECT_UNAVAILABLE": "WooCommerce bağlama şu anda kullanılamıyor.",
+      "WOOCOMMERCE_ROLE_REQUIRED": "WooCommerce’i yalnızca bir hesap sahibi veya yönetici bağlayabilir.",
+      "WOOCOMMERCE_CALLBACK_INVALID": "Mağazanız eksik bir yanıt gönderdi. Hiçbir şey bağlanmadı.",
+      "WOOCOMMERCE_INSTALL_VALIDATION_FAILED": "Bu isteği okuyamadık. Adresi kontrol edip tekrar deneyin.",
+      "WOOCOMMERCE_RECONNECT_STORE_MISMATCH": "Yalnızca daha önce bağlanmış mağaza yeniden bağlanabilir. Hiçbir şey değiştirilmedi.",
+      "WOOCOMMERCE_NOT_CONNECTED": "WooCommerce bu hesaba bağlı değil.",
+      "WOOCOMMERCE_WEBHOOK_MISSING": "Mağazanızda bir sipariş bildirimi silinmiş, bu yüzden yeniden etkinleştirilemez. WooCommerce bağlantısını burada kesin, ardından aynı mağazayı yeniden bağlayın.",
+      "WOOCOMMERCE_WEBHOOK_ENABLE_UNAVAILABLE": "Sipariş bildirimleri şu anda yeniden etkinleştirilemiyor. Akeed destek ekibine ulaşın.",
+      "WOOCOMMERCE_WEBHOOK_ENABLE_FAILED": "Mağazanız sipariş bildirimini yeniden etkinleştirmedi. Tekrar deneyin; sorun devam ederse Akeed destek ekibine ulaşın.",
+      "default": "Bir sorun oluştu. Hiçbir şey bağlanmadı."
+    }
+  },
+  "connectionLine": {
+    "akeed": "Akeed",
+    "yourStore": "Mağazanız",
+    "label": {
+      "idle": "Akeed ile {store} henüz bağlı değil.",
+      "waiting": "Akeed ile {store} arasında bağlantı kuruluyor.",
+      "connected": "Akeed ile {store} bağlı.",
+      "refused": "Akeed ile {store} arasında bağlantı kurulamadı.",
+      "disconnected": "Akeed ile {store} arasındaki bağlantı kesildi."
+    }
+  }
+}

@@ -6,8 +6,8 @@ import { templateMessageFixture } from '@/shared/lib/templateMessageFixture'
 import type { SettingsResponse, TemplateStyleLock } from '../api/settingsApi'
 
 /** What the response holds for the languages that are not live. */
-const NOT_LIVE = { ur: null, es: null, fr: null } as const
-const NO_STYLES = { ur: [], es: [], fr: [] }
+const NOT_LIVE = { ur: null, es: null, fr: null, tr: null } as const
+const NO_STYLES = { ur: [], es: [], fr: [], tr: [] }
 
 const message = (
   greeting: string,
@@ -82,6 +82,52 @@ export function liveUrduSettingsFixture(
       selected: { ...response.template.selected, ur: 'standard_v1' },
       variants: { ...response.template.variants, ur: styles },
       messages: { ...response.template.messages, ur: styles[0].message },
+    },
+  }
+}
+
+/**
+ * Turkish before it is live. Staff have submitted the standard confirmation
+ * and WhatsApp is reviewing it; the short one is approved but not switched
+ * on. A draft that was never submitted has no row here at all.
+ */
+export function awaitingTurkishSettingsFixture(
+  overrides: Parameters<typeof settingsResponseFixture>[0] = {}
+): SettingsResponse {
+  const response = settingsResponseFixture(overrides)
+  return {
+    ...response,
+    template: {
+      ...response.template,
+      variants: {
+        ...response.template.variants,
+        tr: [
+          style('tr', 'standard_v1', 'Merhaba', 'in_review'),
+          style('tr', 'short_v1', 'Siparişiniz alındı', 'not_enabled'),
+        ],
+      },
+    },
+  }
+}
+
+/** Turkish once WhatsApp approved both confirmations and staff set a default. */
+export function liveTurkishSettingsFixture(
+  overrides: Parameters<typeof settingsResponseFixture>[0] = {}
+): SettingsResponse {
+  const response = settingsResponseFixture(overrides)
+  const styles = [
+    style('tr', 'standard_v1', 'Merhaba'),
+    style('tr', 'short_v1', 'Siparişiniz alındı'),
+  ]
+  return {
+    ...response,
+    template: {
+      ...response.template,
+      liveLanguages: ['ar', 'en', 'tr'],
+      defaults: { ...response.template.defaults, tr: 'standard_v1' },
+      selected: { ...response.template.selected, tr: 'standard_v1' },
+      variants: { ...response.template.variants, tr: styles },
+      messages: { ...response.template.messages, tr: styles[0].message },
     },
   }
 }
@@ -200,7 +246,7 @@ export function settingsResponseFixture(
       ...overrides.billing,
     },
     template: {
-      languages: ['ar', 'en', 'ur', 'es', 'fr'],
+      languages: ['ar', 'en', 'ur', 'es', 'fr', 'tr'],
       liveLanguages: ['ar', 'en'],
       defaultPreviewLanguage: 'en',
       defaults: { ar: 'standard', en: 'friendly', ...NOT_LIVE },

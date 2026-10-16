@@ -106,6 +106,7 @@ describe('templateOpeningLine', () => {
 describe('previewTotal', () => {
   it('writes the sample total as a message in that language sends it', () => {
     expect(previewTotal('USD', 'fr')).toBe('599.00 USD')
+    expect(previewTotal('USD', 'tr')).toBe('599.00 USD')
     expect(previewTotal('USD', 'en')).toBe('USD 599.00')
     expect(previewTotal('USD', 'ar')).toBe('599.00 $')
   })
