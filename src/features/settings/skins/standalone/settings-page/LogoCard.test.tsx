@@ -77,7 +77,7 @@ describe('LogoCard (standalone)', () => {
         .getByRole('img', { name: 'Your logo on the message banner' })
         .getAttribute('src')
     ).toBe(BANNER)
-    expect(screen.getByRole('button', { name: 'Replace logo' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Change logo' })).toBeTruthy()
     fireEvent.click(screen.getByRole('button', { name: 'Remove' }))
     expect(logo.remove).toHaveBeenCalledOnce()
   })
@@ -95,7 +95,7 @@ describe('LogoCard (standalone)', () => {
   it('shows the translated error for a backend code (ar)', () => {
     renderCard(model({ error: 'tooSmall' }), { locale: 'ar' })
     expect(screen.getByRole('alert').textContent).toBe(
-      'الشعار صغير جدًا. استخدم شعارًا لا يقل ضلعه الأقصر عن 64 بكسل.'
+      'الصورة صغيرة. يجب ألا يقل أقصر ضلع فيها عن 64 بكسل.'
     )
   })
 

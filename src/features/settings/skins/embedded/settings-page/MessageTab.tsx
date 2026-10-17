@@ -33,8 +33,9 @@ import {
 import type { EmbeddedSettingsModel } from '@/features/settings/domain/useEmbeddedSettings'
 import { useTestPhonePrompt } from '@/features/settings/domain/useTestPhonePrompt'
 import { useMerchantLogo } from '@/features/settings/domain/useMerchantLogo'
-import { LogoCard } from './LogoCard'
+import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { MessagePreviewCard } from './MessagePreviewCard'
+import { StoreLogoField } from './StoreLogoField'
 
 /** Choice values that are not a template style. */
 const AUTO_STYLE = 'auto'
@@ -52,7 +53,11 @@ interface MessageTabProps {
 export function MessageTab({ model, data, readOnly }: MessageTabProps) {
   const t = useTranslations('settings.embedded.message')
   const tLogo = useTranslations('settings.logo')
-  const logo = useMerchantLogo(data.branding)
+  const { shopify } = useAkeedMode()
+  const logo = useMerchantLogo(data.branding, {
+    onUploaded: () => shopify?.toast.show(tLogo('saved')),
+    onRemoved: () => shopify?.toast.show(tLogo('removed')),
+  })
   const values = model.values
   const styles = useMessageStyles({ data, values, update: model.update })
   const phonePrompt = useTestPhonePrompt({
@@ -198,7 +203,7 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
           </BlockStack>
         </Card>
 
-        {logo.isAvailable && <LogoCard logo={logo} readOnly={readOnly} />}
+        {logo.isAvailable && <StoreLogoField logo={logo} readOnly={readOnly} />}
 
         <Card>
           <BlockStack gap="300">

@@ -104,4 +104,42 @@ describe('useMerchantLogo', () => {
       expect(auth.api.delete).toHaveBeenCalledWith('/api/settings/logo')
     )
   })
+
+  it('reports a finished upload and removal to the caller', async () => {
+    auth.uploadWithAuth.mockResolvedValue(json(200, SAVED))
+    auth.api.delete.mockResolvedValue({ ...SAVED, logoUrl: null })
+    const onUploaded = vi.fn()
+    const onRemoved = vi.fn()
+    const client = new QueryClient({
+      defaultOptions: { mutations: { retry: false } },
+    })
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <QueryClientProvider client={client}>{children}</QueryClientProvider>
+    )
+    const { result } = renderHook(
+      () => useMerchantLogo(SAVED, { onUploaded, onRemoved }),
+      { wrapper }
+    )
+
+    act(() => result.current.choose(png()))
+    await waitFor(() => expect(onUploaded).toHaveBeenCalledOnce())
+    act(() => result.current.remove())
+    await waitFor(() => expect(onRemoved).toHaveBeenCalledOnce())
+  })
+
+  it('does not report a refused file as uploaded', () => {
+    const onUploaded = vi.fn()
+    const client = new QueryClient()
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <QueryClientProvider client={client}>{children}</QueryClientProvider>
+    )
+    const { result } = renderHook(
+      () => useMerchantLogo(SAVED, { onUploaded }),
+      { wrapper }
+    )
+    act(() =>
+      result.current.choose(new File(['x'], 'a.gif', { type: 'image/gif' }))
+    )
+    expect(onUploaded).not.toHaveBeenCalled()
+  })
 })

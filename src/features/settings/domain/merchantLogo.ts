@@ -1,4 +1,5 @@
 import { ApiError } from '@/shared/lib/http'
+import { getFormatLocale } from '@/shared/lib/locale'
 
 /** What the backend accepts; it checks again after decoding the file. */
 export const LOGO_ACCEPTED_TYPES = ['image/png', 'image/jpeg'] as const
@@ -37,6 +38,13 @@ export function logoFileProblem(file: {
   }
   if (file.size > LOGO_MAX_BYTES) return 'tooLarge'
   return null
+}
+
+/** When the logo last changed, as a date in the interface language. */
+export function formatLogoUpdatedAt(iso: string, locale: string): string {
+  return new Intl.DateTimeFormat(`${getFormatLocale(locale)}-u-nu-latn`, {
+    dateStyle: 'medium',
+  }).format(new Date(iso))
 }
 
 /** The message key for a failed upload or removal. */
