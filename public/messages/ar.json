@@ -18,6 +18,15 @@
   },
   "adminTemplates": {
     "imageTwins": {
+      "upload": {
+        "reason": "السبب: {reason}",
+        "hints": {
+          "token": "رفضت ميتا الرمز. تأكّد أن WA_ACCESS_TOKEN صادر للتطبيق نفسه في META_APP_ID ويملك صلاحية whatsapp_business_management.",
+          "appId": "رفضت ميتا الطلب. تأكّد أن META_APP_ID هو المعرّف الرقمي لتطبيق ميتا نفسه.",
+          "session": "أجابت ميتا بصيغة لم يستطع أكيد قراءتها. حاول مرة أخرى؛ وإن تكرّر ذلك فشارك معرّف الطلب مع المطوّر.",
+          "other": "حاول مرة أخرى بعد دقائق. وإن تكرّر ذلك فشارك معرّف الطلب مع المطوّر."
+        }
+      },
       "title": "نسخ الصورة لشعار المتجر",
       "description": "لكل قالب نصي نسخة بنفس النص مع ترويسة صورة. المتاجر التي فُعّل لها الشعار ترسل النسخة مع شريطها.",
       "create": "إنشاء النسخ الناقصة",
@@ -349,6 +358,8 @@
       "WHATSAPP_TEMPLATE_REPLACEMENT_REQUIRED": "ترسل متاجر هذا القالب أو هو الافتراضي للغة. اختر بديلًا.",
       "WHATSAPP_TEMPLATE_REPLACEMENT_INVALID": "يجب أن يكون البديل قالبًا معتمدًا ومفعّلًا بنفس الغرض واللغة.",
       "WHATSAPP_TEMPLATE_DEFAULT_SHOWS_ORDER_DETAILS": "القالب الذي يعرض منتجات الطلب أو العنوان لا يصلح قالبًا افتراضيًا للغة، لأن بعض الطلبات لا تحتوي عليها.",
+      "WHATSAPP_TEMPLATE_IMAGE_TWIN_NOT_CONFIGURED": "اضبط META_APP_ID لإنشاء نسخ الصورة. لم يُرسَل شيء.",
+      "WHATSAPP_TEMPLATE_IMAGE_TWIN_UPLOAD_FAILED": "تعذّر رفع صورة العينة إلى ميتا. لم يُرسَل شيء.",
       "WHATSAPP_MESSAGE_TEXT_CONFLICT": "حفظ مشغّل آخر هذا النص في الوقت نفسه. أعد التحميل وحاول مجددًا.",
       "WHATSAPP_MESSAGE_TEXT_INVALID": "لا يطابق هذا النص قواعد غرضه."
     },

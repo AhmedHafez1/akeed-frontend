@@ -161,6 +161,51 @@ describe('ImageTwinsPanel', () => {
     ).toBeTruthy()
   })
 
+  it.each([
+    [
+      'en',
+      'permission_denied',
+      200,
+      'Reason: permission_denied #200',
+      /Check that WA_ACCESS_TOKEN was issued/,
+    ],
+    [
+      'en',
+      'upload_session_unreadable',
+      null,
+      'Reason: upload_session_unreadable',
+      /Meta answered in a form Akeed could not read/,
+    ],
+    [
+      'ar',
+      'invalid_parameter',
+      100,
+      'السبب: invalid_parameter #100',
+      /META_APP_ID هو المعرّف الرقمي/,
+    ],
+  ] as const)(
+    'explains a failed sample upload (%s, %s)',
+    async (lang, reason, providerCode, reasonText, hint) => {
+      vi.mocked(createMissingImageTwins).mockRejectedValue(
+        new AdminApiError(
+          'upload failed',
+          502,
+          'req-7',
+          'WHATSAPP_TEMPLATE_IMAGE_TWIN_UPLOAD_FAILED',
+          { reason, provider_code: providerCode }
+        )
+      )
+      renderAdmin(<ImageTwinsPanel operator />, lang)
+      const create =
+        lang === 'ar' ? 'إنشاء النسخ الناقصة' : 'Create missing twins'
+      fireEvent.click(await screen.findByRole('button', { name: create }))
+      const dialog = await screen.findByRole('dialog')
+      fireEvent.click(within(dialog).getByRole('button', { name: create }))
+      expect(await within(dialog).findByText(reasonText)).toBeTruthy()
+      expect(within(dialog).getByText(hint)).toBeTruthy()
+    }
+  )
+
   it('shows a failed load with a retry', async () => {
     vi.mocked(getImageTwins).mockRejectedValue(
       new AdminApiError('down', 503, 'req-1')
