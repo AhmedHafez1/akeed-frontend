@@ -23,6 +23,12 @@ export interface MerchantLogoModel {
   remove: () => void
 }
 
+/** Run after the server accepted the change, for example to show a toast. */
+export interface MerchantLogoCallbacks {
+  onUploaded?: () => void
+  onRemoved?: () => void
+}
+
 const NO_BRANDING: MerchantBranding = {
   logoUrl: null,
   bannerUrl: null,
@@ -32,7 +38,8 @@ const NO_BRANDING: MerchantBranding = {
 
 /** The logo card's state for both skins. */
 export function useMerchantLogo(
-  branding: MerchantBranding | undefined
+  branding: MerchantBranding | undefined,
+  { onUploaded, onRemoved }: MerchantLogoCallbacks = {}
 ): MerchantLogoModel {
   const { upload, remove } = useMerchantLogoMutations()
   const [error, setError] = useState<LogoErrorKey | null>(null)
@@ -45,18 +52,20 @@ export function useMerchantLogo(
       setError(problem)
       if (problem) return
       upload.mutate(file, {
+        onSuccess: () => onUploaded?.(),
         onError: (failure) => setError(logoErrorKey(failure)),
       })
     },
-    [upload]
+    [upload, onUploaded]
   )
 
   const removeLogo = useCallback(() => {
     setError(null)
     remove.mutate(undefined, {
+      onSuccess: () => onRemoved?.(),
       onError: (failure) => setError(logoErrorKey(failure)),
     })
-  }, [remove])
+  }, [remove, onRemoved])
 
   return {
     branding: current,

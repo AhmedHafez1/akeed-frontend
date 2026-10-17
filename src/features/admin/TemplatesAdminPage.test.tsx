@@ -18,6 +18,13 @@ vi.mock('./adminTemplatesApi', () => ({
   sendAdminTemplateTest: vi.fn(),
 }))
 
+// The image twins panel reads its own list; it is tested on its own.
+vi.mock('./adminImageTwinsApi', () => ({
+  getImageTwins: vi.fn(() => new Promise(() => {})),
+  createMissingImageTwins: vi.fn(),
+  activateApprovedImageTwins: vi.fn(),
+}))
+
 vi.mock('./adminTemplateDraftsApi', () => ({
   getTemplateDrafts: vi.fn(),
   getTemplateDraft: vi.fn(),

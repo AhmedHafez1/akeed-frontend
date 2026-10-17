@@ -30,7 +30,7 @@ interface Loaded<T> {
 }
 
 /** Loads one resource; the last good answer stays while the next loads. */
-function useResource<T>(
+export function useResource<T>(
   context: string,
   resourceKey: string | null,
   load: () => Promise<T>

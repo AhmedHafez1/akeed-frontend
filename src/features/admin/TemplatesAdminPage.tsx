@@ -23,6 +23,7 @@ import {
   type TemplateSyncRun,
 } from './admin-templates.model'
 import { TemplateDraftsPanel } from './TemplateDraftsPanel'
+import { ImageTwinsPanel } from './ImageTwinsPanel'
 import { useAdminTemplates } from './useAdminTemplates'
 
 function SyncResult({ run }: { run: TemplateSyncRun }) {
@@ -155,6 +156,12 @@ export function TemplatesAdminPage() {
       )}
 
       <TemplateDraftsPanel />
+
+      <ImageTwinsPanel
+        operator={
+          !!state.page?.operations.enabled && !!state.page.operations.operator
+        }
+      />
 
       <div className="border-border bg-card rounded-2xl border shadow-sm">
         <div className="border-border space-y-4 border-b p-4">

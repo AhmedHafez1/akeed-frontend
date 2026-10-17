@@ -1432,7 +1432,7 @@
   "settings": {
     "logo": {
       "heading": "Mağaza logosu",
-      "description": "Logonuz, onay ve hatırlatma mesajlarının üstünde, beyaz bir bannerın ortasında yer alır.",
+      "description": "Onay ve hatırlatma mesajlarının üstünde, beyaz bir arka plan üzerinde görünür.",
       "requirements": "PNG veya JPEG, en fazla 5 MB, kısa kenarı en az 64 piksel.",
       "upload": "Logo yükle",
       "replace": "Logoyu değiştir",
@@ -1441,12 +1441,19 @@
       "logoAlt": "Mağaza logonuz",
       "bannerAlt": "Mesaj bannerındaki logonuz",
       "bannerCaption": "Bu banner her mesajın üstünde görünür.",
+      "emptyTitle": "Logonuzu yükleyin",
+      "emptyHint": "veya görseli buraya sürükleyin",
+      "currentLabel": "Geçerli logo",
+      "updatedOn": "Son güncelleme: {date}",
+      "removeAria": "Mağaza logosunu kaldır",
+      "removed": "Logo kaldırıldı",
+      "saved": "Logo güncellendi",
       "errors": {
-        "tooLarge": "Logo en fazla 5 MB olmalıdır.",
-        "unsupportedType": "PNG veya JPEG bir görsel seçin.",
+        "tooLarge": "Dosya 5 MB sınırını aşıyor. Daha küçük bir görsel seçin.",
+        "unsupportedType": "Bu dosya türü desteklenmiyor. PNG veya JPEG bir görsel seçin.",
         "unreadable": "Bu görsel okunamadı. PNG veya JPEG olarak yeniden kaydetmeyi deneyin.",
-        "tooSmall": "Logo çok küçük. Kısa kenarı en az 64 piksel olan bir logo kullanın.",
-        "storageUnavailable": "Logo şu anda kaydedilemedi. Biraz sonra tekrar deneyin.",
+        "tooSmall": "Görsel çok küçük. Kısa kenarı en az 64 piksel olmalıdır.",
+        "storageUnavailable": "Logonuz yüklenemedi. Tekrar deneyin.",
         "forbidden": "Logoyu yalnızca bir hesap sahibi veya yönetici değiştirebilir.",
         "rateLimited": "Çok fazla yükleme yapıldı. Bir dakika bekleyip tekrar deneyin.",
         "generic": "Bir sorun oluştu. Tekrar deneyin."
