@@ -17,6 +17,41 @@
     "messageTexts": "Message texts"
   },
   "adminTemplates": {
+    "imageTwins": {
+      "title": "Image twins for the logo header",
+      "description": "Each text template gets a twin with the same text and an image header. Stores with the logo header on send the twin with their banner.",
+      "create": "Create missing twins",
+      "creating": "Submitting to Meta…",
+      "activate": "Activate approved twins",
+      "activating": "Activating…",
+      "counts": {
+        "parents": "Templates",
+        "twins": "Twins",
+        "approved": "Approved",
+        "active": "Active",
+        "missing": "Missing"
+      },
+      "notConfigured": "Set META_APP_ID to create twins: Meta needs it to upload the sample image.",
+      "reviewNote": "Meta reviews new twins within 24 hours. Then press Sync now, and activate the approved twins.",
+      "confirmTitle": "Submit image twins to Meta?",
+      "confirmDescription": "This submits {count, plural, one {# template} other {# templates}} to Meta for review, one at a time, with a neutral sample banner. Twins are registered inactive. Nothing is sent twice.",
+      "activated": "Activated {activated, plural, one {# twin} other {# twins}}. {waiting, plural, =0 {None waiting} one {# still waiting} other {# still waiting}} for approval.",
+      "resultsCaption": "Result for each template",
+      "columns": {
+        "template": "Template",
+        "language": "Language",
+        "outcome": "Outcome",
+        "detail": "Detail"
+      },
+      "outcomes": {
+        "created": "Submitted",
+        "adopted": "Found at Meta",
+        "skipped": "Skipped",
+        "failed": "Refused",
+        "unresolved": "Unknown",
+        "not_attempted": "Not tried"
+      }
+    },
     "eyebrow": "WhatsApp templates",
     "title": "Templates",
     "description": "Every message template Akeed can send: what Meta says about it, who sends it and how it performs.",
