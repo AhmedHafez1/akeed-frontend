@@ -18,6 +18,15 @@
   },
   "adminTemplates": {
     "imageTwins": {
+      "upload": {
+        "reason": "Reason: {reason}",
+        "hints": {
+          "token": "Meta refused the token. Check that WA_ACCESS_TOKEN was issued for the app in META_APP_ID and has whatsapp_business_management.",
+          "appId": "Meta refused the request. Check that META_APP_ID is the numeric ID of the same Meta app.",
+          "session": "Meta answered in a form Akeed could not read. Try again; if it repeats, share the request ID with a developer.",
+          "other": "Try again in a few minutes. If it repeats, share the request ID with a developer."
+        }
+      },
       "title": "Image twins for the logo header",
       "description": "Each text template gets a twin with the same text and an image header. Stores with the logo header on send the twin with their banner.",
       "create": "Create missing twins",
@@ -349,6 +358,8 @@
       "WHATSAPP_TEMPLATE_REPLACEMENT_REQUIRED": "Stores send this template, or it is a language default. Choose a replacement.",
       "WHATSAPP_TEMPLATE_REPLACEMENT_INVALID": "The replacement must be an approved, active template of the same purpose and language.",
       "WHATSAPP_TEMPLATE_DEFAULT_SHOWS_ORDER_DETAILS": "A template that shows order items or an address cannot be a language default, because not every order has them.",
+      "WHATSAPP_TEMPLATE_IMAGE_TWIN_NOT_CONFIGURED": "Set META_APP_ID to create image twins. Nothing was submitted.",
+      "WHATSAPP_TEMPLATE_IMAGE_TWIN_UPLOAD_FAILED": "The sample image could not be uploaded to Meta. Nothing was submitted.",
       "WHATSAPP_MESSAGE_TEXT_CONFLICT": "Another operator saved this text at the same time. Reload and try again.",
       "WHATSAPP_MESSAGE_TEXT_INVALID": "This text does not meet the rules for its purpose."
     },

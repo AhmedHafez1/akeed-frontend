@@ -10,6 +10,47 @@ import {
   imageTwinOutcomeTone,
 } from './admin-image-twins.model'
 import { useAdminImageTwins } from './useAdminImageTwins'
+import type { AdminApiError } from './adminApi'
+
+const UPLOAD_FAILED = 'WHATSAPP_TEMPLATE_IMAGE_TWIN_UPLOAD_FAILED'
+
+/** Which hint fits the reason the backend gave for a failed upload. */
+function uploadHint(reason: string | null) {
+  if (reason === 'auth_failed' || reason === 'permission_denied') return 'token'
+  if (reason === 'invalid_parameter' || reason === 'provider_error')
+    return 'appId'
+  if (
+    reason === 'upload_session_unreadable' ||
+    reason === 'upload_handle_missing'
+  )
+    return 'session'
+  return 'other'
+}
+
+/** Why the sample image upload failed, and what to check. */
+function UploadFailureDetail({ error }: { error: AdminApiError }) {
+  const t = useTranslations('adminTemplates.imageTwins.upload')
+  if (error.code !== UPLOAD_FAILED) return null
+  const reason =
+    typeof error.details?.reason === 'string' ? error.details.reason : null
+  const providerCode =
+    typeof error.details?.provider_code === 'number'
+      ? error.details.provider_code
+      : null
+  return (
+    <div className="text-muted-foreground space-y-1 text-xs">
+      {reason && (
+        <p>
+          {t('reason', {
+            reason:
+              providerCode !== null ? `${reason} #${providerCode}` : reason,
+          })}
+        </p>
+      )}
+      <p>{t(`hints.${uploadHint(reason)}`)}</p>
+    </div>
+  )
+}
 
 /**
  * The image-header twins the logo header sends. Any staff member sees the
@@ -116,7 +157,10 @@ export function ImageTwinsPanel({ operator }: { operator: boolean }) {
         onConfirm={() => void state.createMissing()}
       >
         {state.create.error && (
-          <TemplateErrorNotice error={state.create.error} />
+          <>
+            <TemplateErrorNotice error={state.create.error} />
+            <UploadFailureDetail error={state.create.error} />
+          </>
         )}
         {results && <ImageTwinResults results={results} />}
       </TemplateConfirmDialog>
