@@ -13,7 +13,7 @@ import {
 
 export interface MerchantLogoModel {
   branding: MerchantBranding
-  /** Shown only while staff have switched the logo header on. */
+  /** Shown unless staff switched the store's logo header off. */
   isAvailable: boolean
   isUploading: boolean
   isRemoving: boolean

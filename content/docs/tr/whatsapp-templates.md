@@ -83,7 +83,7 @@ Bazı üsluplar müşterinin ne sipariş ettiğini ve nereye teslim edileceğini
 
 ## Mesajlarınızda Mağaza Logosu
 
-Mağazanız için logo seçeneği açıldığında **Ayarlar › Mesaj** bölümünde bir **Mağaza logosu** kartı görünür. PNG veya JPEG biçiminde bir logo yükleyin (en fazla 5 MB, kısa kenarı en az 64 piksel). Akeed logoyu beyaz bir banner’ın ortasına yerleştirir ve banner onay ve hatırlatma mesajlarınızın en üstünde görünür. Ayarlarınızın yanındaki önizleme de banner’ı gösterir.
+**Ayarlar › Mesaj** bölümünde bir **Mağaza logosu** kartı bulunur. PNG veya JPEG biçiminde bir logo yükleyin (en fazla 5 MB, kısa kenarı en az 64 piksel). Akeed logoyu beyaz bir banner’ın ortasına yerleştirir ve banner onay ve hatırlatma mesajlarınızın en üstünde görünür. Ayarlarınızın yanındaki önizleme de banner’ı gösterir.
 
 Değiştirmek için **Logoyu değiştir** seçeneğini kullanın; yeni banner sonraki mesajlarda kullanılır. **Kaldır** logoyu kaldırır ve mesajlarınız yalnızca metne geri döner. Metin ve düğmeler değişmez; WhatsApp görseli gösteremezse mesaj metin olarak gönderilir.
 

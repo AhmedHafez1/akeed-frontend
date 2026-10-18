@@ -11,7 +11,7 @@ export interface MerchantBranding {
   logoUrl: string | null
   bannerUrl: string | null
   updatedAt: string | null
-  /** Staff switched the logo header on, so the banner goes on messages. */
+  /** The logo header is on (unless staff switched it off), so the banner goes on messages. */
   logoHeaderAvailable: boolean
 }
 
