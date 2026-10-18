@@ -11,8 +11,10 @@ export interface MerchantBranding {
   logoUrl: string | null
   bannerUrl: string | null
   updatedAt: string | null
-  /** Staff switched the logo header on, so the banner goes on messages. */
+  /** The logo header is on (unless staff switched it off), so the banner goes on messages. */
   logoHeaderAvailable: boolean
+  /** The store's plan includes the logo header; below it the card is locked. */
+  logoHeaderIncluded: boolean
 }
 
 const PATH = '/api/settings/logo'

@@ -11,6 +11,7 @@ export { SharedFeaturesList } from './ui/embedded/SharedFeaturesList'
 export { UsageRulesCard } from './ui/embedded/UsageRulesCard'
 export {
   PLAN_NAME_KEYS,
+  planIncludesLogo,
   SHARED_FEATURE_KEYS,
   USAGE_RULE_KEYS,
   formatMessageCount,

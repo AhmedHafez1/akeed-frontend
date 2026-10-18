@@ -11,8 +11,8 @@ import { formatDateTime } from './AdminStoreUi'
 import { toAdminApiError } from './useStandaloneBillingAccount'
 
 /**
- * The store's logo, its banner and the staff switch that sends the banner as
- * the image header. Lists every image twin staff registered: a template
+ * The store's logo, its banner and the staff switch (on by default) that
+ * sends the banner as the image header. Lists every image twin staff registered: a template
  * without an active, approved twin keeps going out as text.
  */
 export function StoreLogoHeaderCard({
@@ -48,11 +48,16 @@ export function StoreLogoHeaderCard({
     <section className="border-border bg-card rounded-2xl border p-5 shadow-xs">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-foreground text-sm font-semibold">Logo header</h2>
+          <h2 className="text-foreground flex items-center gap-2 text-sm font-semibold">
+            Logo header
+            {!state.plan_included && (
+              <Badge variant="warning">Needs Pro plan</Badge>
+            )}
+          </h2>
           <p id={descriptionId} className="text-muted-foreground mt-1 text-xs">
-            While on, messages whose template has an active, approved image twin
-            carry the store&apos;s banner. The merchant uploads the logo in
-            Settings once this is on.
+            On for every store by default. While on, messages whose template has
+            an active, approved image twin carry the store&apos;s banner. Switch
+            it off to send text only and hide the logo card in Settings.
           </p>
         </div>
         <Switch

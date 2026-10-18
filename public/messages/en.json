@@ -2577,6 +2577,10 @@
       "removeAria": "Remove store logo",
       "removed": "Logo removed",
       "saved": "Logo updated",
+      "planPill": "Pro plan",
+      "planLocked": "Your logo on messages is included on the Pro plan and up.",
+      "planLockedSaved": "Your saved logo is not sent on your current plan. Upgrade to Pro to send it again.",
+      "seePlans": "See plans",
       "errors": {
         "tooLarge": "This file is larger than 5 MB. Choose a smaller image.",
         "unsupportedType": "This file type isn't supported. Choose a PNG or JPEG image.",
@@ -2585,6 +2589,7 @@
         "storageUnavailable": "We couldn't upload your logo. Try again.",
         "forbidden": "Only an owner or admin can change the logo.",
         "rateLimited": "Too many uploads. Wait a minute, then try again.",
+        "planRequired": "Your logo on messages is included on the Pro plan and up.",
         "generic": "Something went wrong. Try again."
       }
     },
@@ -3510,7 +3515,8 @@
   "billing": {
     "embeddedPlans": {
       "heading": "Choose your monthly message allowance",
-      "sameFeatures": "Every plan includes the same features. The only difference is the number of messages.",
+      "sameFeatures": "Plans differ in the number of messages. Pro and up also put your store logo on messages.",
+      "logoIncluded": "Store logo on messages",
       "plansLabel": "Plans",
       "allowance": "messages / month",
       "perDay": "about {formatted} a day",

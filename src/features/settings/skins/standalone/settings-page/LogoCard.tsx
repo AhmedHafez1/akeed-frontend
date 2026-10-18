@@ -56,7 +56,13 @@ export function LogoCard({ logo, readOnly }: LogoCardProps) {
           )}
         </div>
         <div className="min-w-0 flex-1 space-y-2">
-          <p className="text-ak-caption text-ink-muted">{t('requirements')}</p>
+          <p className="text-ak-caption text-ink-muted">
+            {logo.isLocked
+              ? hasLogo
+                ? t('planLockedSaved')
+                : t('planLocked')
+              : t('requirements')}
+          </p>
           {!readOnly && (
             <div className="flex flex-wrap gap-2">
               <input
@@ -72,23 +78,25 @@ export function LogoCard({ logo, readOnly }: LogoCardProps) {
                   event.target.value = ''
                 }}
               />
-              <button
-                type="button"
-                onClick={() => input.current?.click()}
-                disabled={busy}
-                aria-describedby={error ? errorId : undefined}
-                className={akButton({ variant: 'secondary', size: 'row' })}
-              >
-                {isUploading ? (
-                  <Loader2
-                    aria-hidden="true"
-                    className="motion-safe:animate-spin"
-                  />
-                ) : (
-                  <ImageUp aria-hidden="true" />
-                )}
-                {hasLogo ? t('replace') : t('upload')}
-              </button>
+              {!logo.isLocked && (
+                <button
+                  type="button"
+                  onClick={() => input.current?.click()}
+                  disabled={busy}
+                  aria-describedby={error ? errorId : undefined}
+                  className={akButton({ variant: 'secondary', size: 'row' })}
+                >
+                  {isUploading ? (
+                    <Loader2
+                      aria-hidden="true"
+                      className="motion-safe:animate-spin"
+                    />
+                  ) : (
+                    <ImageUp aria-hidden="true" />
+                  )}
+                  {hasLogo ? t('replace') : t('upload')}
+                </button>
+              )}
               {hasLogo && (
                 <button
                   type="button"
@@ -122,7 +130,7 @@ export function LogoCard({ logo, readOnly }: LogoCardProps) {
         </p>
       )}
 
-      {branding.bannerUrl && (
+      {branding.bannerUrl && !logo.isLocked && (
         <figure className="border-line space-y-1.5 border-t pt-3">
           <img
             src={branding.bannerUrl}

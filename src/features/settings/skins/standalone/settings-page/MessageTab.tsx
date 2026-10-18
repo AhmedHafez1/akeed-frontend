@@ -408,7 +408,7 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
         onSendTest={() => void phonePrompt.requestSend()}
         onChangePhone={phonePrompt.openToChange}
         headerImage={
-          logo.isAvailable && logo.branding.bannerUrl
+          logo.isAvailable && !logo.isLocked && logo.branding.bannerUrl
             ? { src: logo.branding.bannerUrl, alt: tLogo('bannerAlt') }
             : undefined
         }

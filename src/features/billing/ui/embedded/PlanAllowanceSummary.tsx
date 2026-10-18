@@ -1,7 +1,8 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { BlockStack, Divider, InlineStack, Text } from '@shopify/polaris'
+import { BlockStack, Divider, Icon, InlineStack, Text } from '@shopify/polaris'
+import { CheckIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import {
   PER_MESSAGE_PRICE_DIGITS,
@@ -21,11 +22,13 @@ interface PlanAllowanceSummaryProps {
   id?: string
   /** Sits at the end of the name row: a badge, or the card's radio. */
   trailing?: ReactNode
+  /** The plan puts the store logo on messages (Pro and up). */
+  includesLogo?: boolean
 }
 
 /**
- * What a plan is, in the only terms plans differ by: how many messages a
- * month, and what that costs. Prices and counts come from the API plan.
+ * What a plan is, in the terms plans differ by: how many messages a month,
+ * what that costs, and whether the store logo goes on messages. Prices and counts come from the API plan.
  */
 export function PlanAllowanceSummary({
   name,
@@ -34,6 +37,7 @@ export function PlanAllowanceSummary({
   includedVerifications,
   id,
   trailing,
+  includesLogo = false,
 }: PlanAllowanceSummaryProps) {
   const t = useTranslations('billing.embeddedPlans')
   const perDay = messagesPerDay(includedVerifications)
@@ -83,6 +87,16 @@ export function PlanAllowanceSummary({
               })}
             </Text>
           </BlockStack>
+          {includesLogo && (
+            <InlineStack gap="100" blockAlign="center" wrap={false}>
+              <span className="shrink-0">
+                <Icon source={CheckIcon} tone="success" />
+              </span>
+              <Text as="p" variant="bodySm">
+                {t('logoIncluded')}
+              </Text>
+            </InlineStack>
+          )}
         </BlockStack>
       </div>
     </BlockStack>
