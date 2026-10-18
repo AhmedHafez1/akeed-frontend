@@ -15,6 +15,7 @@ export type LogoErrorKey =
   | 'storageUnavailable'
   | 'forbidden'
   | 'rateLimited'
+  | 'planRequired'
   | 'generic'
 
 const ERROR_KEY_BY_CODE: Record<string, LogoErrorKey> = {
@@ -26,6 +27,7 @@ const ERROR_KEY_BY_CODE: Record<string, LogoErrorKey> = {
   LOGO_STORAGE_UNAVAILABLE: 'storageUnavailable',
   LOGO_WRITE_FORBIDDEN: 'forbidden',
   LOGO_RATE_LIMITED: 'rateLimited',
+  LOGO_PLAN_REQUIRED: 'planRequired',
 }
 
 /** A problem the browser can see before uploading, or null. */

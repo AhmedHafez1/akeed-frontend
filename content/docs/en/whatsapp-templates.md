@@ -85,6 +85,8 @@ Some styles also show what the customer ordered and where it will be delivered: 
 
 **Settings › Message** has a **Store logo** card. Upload a PNG or JPEG logo (up to 5 MB, at least 64 pixels on the shorter side). Akeed centres it on a white banner, and the banner appears at the top of your confirmation and reminder messages. The preview beside your settings shows the banner too.
 
+The logo is included on the Pro and Scale plans of a Shopify store and on every Akeed account outside Shopify. On a lower plan the card shows **Pro plan** and a **See plans** button, and a logo you saved earlier stays but is not sent until you upgrade.
+
 Use **Replace logo** to change it; the new banner is used for the next messages. **Remove** takes the logo off, and your messages go back to text only. The wording and the buttons do not change, and if WhatsApp cannot show the image, the message is sent as text.
 
 ## Best Practices for Better Replies

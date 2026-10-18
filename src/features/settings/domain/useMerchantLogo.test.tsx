@@ -24,6 +24,7 @@ const SAVED = {
   bannerUrl: 'https://cdn.test/b.jpg',
   updatedAt: '2026-10-15T10:00:00.000Z',
   logoHeaderAvailable: true,
+  logoHeaderIncluded: true,
 }
 
 function setup() {
@@ -141,5 +142,20 @@ describe('useMerchantLogo', () => {
       result.current.choose(new File(['x'], 'a.gif', { type: 'image/gif' }))
     )
     expect(onUploaded).not.toHaveBeenCalled()
+  })
+
+  it('locks the card below the plan and uploads nothing', () => {
+    const client = new QueryClient()
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <QueryClientProvider client={client}>{children}</QueryClientProvider>
+    )
+    const { result } = renderHook(
+      () => useMerchantLogo({ ...SAVED, logoHeaderIncluded: false }),
+      { wrapper }
+    )
+    expect(result.current.isAvailable).toBe(true)
+    expect(result.current.isLocked).toBe(true)
+    act(() => result.current.choose(png()))
+    expect(auth.uploadWithAuth).not.toHaveBeenCalled()
   })
 })

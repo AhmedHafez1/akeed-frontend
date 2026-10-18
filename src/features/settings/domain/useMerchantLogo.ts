@@ -15,6 +15,8 @@ export interface MerchantLogoModel {
   branding: MerchantBranding
   /** Shown unless staff switched the store's logo header off. */
   isAvailable: boolean
+  /** Shown but locked: the store's plan does not include the logo. */
+  isLocked: boolean
   isUploading: boolean
   isRemoving: boolean
   error: LogoErrorKey | null
@@ -34,6 +36,7 @@ const NO_BRANDING: MerchantBranding = {
   bannerUrl: null,
   updatedAt: null,
   logoHeaderAvailable: false,
+  logoHeaderIncluded: false,
 }
 
 /** The logo card's state for both skins. */
@@ -44,10 +47,11 @@ export function useMerchantLogo(
   const { upload, remove } = useMerchantLogoMutations()
   const [error, setError] = useState<LogoErrorKey | null>(null)
   const current = branding ?? NO_BRANDING
+  const isLocked = current.logoHeaderAvailable && !current.logoHeaderIncluded
 
   const choose = useCallback(
     (file: File | undefined) => {
-      if (!file) return
+      if (!file || isLocked) return
       const problem = logoFileProblem(file)
       setError(problem)
       if (problem) return
@@ -56,7 +60,7 @@ export function useMerchantLogo(
         onError: (failure) => setError(logoErrorKey(failure)),
       })
     },
-    [upload, onUploaded]
+    [upload, onUploaded, isLocked]
   )
 
   const removeLogo = useCallback(() => {
@@ -70,6 +74,7 @@ export function useMerchantLogo(
   return {
     branding: current,
     isAvailable: current.logoHeaderAvailable,
+    isLocked,
     isUploading: upload.isPending,
     isRemoving: remove.isPending,
     error,

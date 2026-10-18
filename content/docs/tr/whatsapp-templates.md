@@ -85,6 +85,8 @@ Bazı üsluplar müşterinin ne sipariş ettiğini ve nereye teslim edileceğini
 
 **Ayarlar › Mesaj** bölümünde bir **Mağaza logosu** kartı bulunur. PNG veya JPEG biçiminde bir logo yükleyin (en fazla 5 MB, kısa kenarı en az 64 piksel). Akeed logoyu beyaz bir banner’ın ortasına yerleştirir ve banner onay ve hatırlatma mesajlarınızın en üstünde görünür. Ayarlarınızın yanındaki önizleme de banner’ı gösterir.
 
+Logo, Shopify mağazalarında Pro ve Scale planlarına, Shopify dışındaki her Akeed hesabına dahildir. Daha düşük bir planda kartta **Pro planı** etiketi ve **Planları gör** düğmesi görünür; daha önce kaydettiğiniz logo korunur ancak planınızı yükseltene kadar gönderilmez.
+
 Değiştirmek için **Logoyu değiştir** seçeneğini kullanın; yeni banner sonraki mesajlarda kullanılır. **Kaldır** logoyu kaldırır ve mesajlarınız yalnızca metne geri döner. Metin ve düğmeler değişmez; WhatsApp görseli gösteremezse mesaj metin olarak gönderilir.
 
 ## Daha Fazla Yanıt İçin En İyi Uygulamalar

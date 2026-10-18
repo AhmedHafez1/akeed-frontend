@@ -1448,6 +1448,10 @@
       "removeAria": "Quitar el logo de la tienda",
       "removed": "Logo quitado",
       "saved": "Logo actualizado",
+      "planPill": "Plan Pro",
+      "planLocked": "Tu logo en los mensajes está incluido en el plan Pro y superiores.",
+      "planLockedSaved": "Tu logo guardado no se envía con tu plan actual. Cambia al plan Pro para volver a enviarlo.",
+      "seePlans": "Ver planes",
       "errors": {
         "tooLarge": "El archivo pesa más de 5 MB. Elige una imagen más pequeña.",
         "unsupportedType": "Este tipo de archivo no es compatible. Elige una imagen PNG o JPEG.",
@@ -1456,6 +1460,7 @@
         "storageUnavailable": "No pudimos subir tu logo. Inténtalo de nuevo.",
         "forbidden": "Solo un propietario o administrador puede cambiar el logo.",
         "rateLimited": "Demasiadas subidas. Espera un minuto e inténtalo de nuevo.",
+        "planRequired": "Tu logo en los mensajes está incluido en el plan Pro y superiores.",
         "generic": "Algo salió mal. Inténtalo de nuevo."
       }
     },
@@ -2381,7 +2386,8 @@
   "billing": {
     "embeddedPlans": {
       "heading": "Elige tu asignación mensual de mensajes",
-      "sameFeatures": "Todos los planes incluyen las mismas funciones. La única diferencia es la cantidad de mensajes.",
+      "sameFeatures": "Los planes se diferencian en la cantidad de mensajes. Pro y superiores también añaden el logo de tu tienda a los mensajes.",
+      "logoIncluded": "Logo de la tienda en los mensajes",
       "plansLabel": "Planes",
       "allowance": "mensajes / mes",
       "perDay": "unos {formatted} al día",

@@ -48,7 +48,12 @@ export function StoreLogoHeaderCard({
     <section className="border-border bg-card rounded-2xl border p-5 shadow-xs">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-foreground text-sm font-semibold">Logo header</h2>
+          <h2 className="text-foreground flex items-center gap-2 text-sm font-semibold">
+            Logo header
+            {!state.plan_included && (
+              <Badge variant="warning">Needs Pro plan</Badge>
+            )}
+          </h2>
           <p id={descriptionId} className="text-muted-foreground mt-1 text-xs">
             On for every store by default. While on, messages whose template has
             an active, approved image twin carry the store&apos;s banner. Switch
