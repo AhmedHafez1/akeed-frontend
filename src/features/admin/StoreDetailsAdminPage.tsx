@@ -29,6 +29,7 @@ import type {
 } from './admin.model'
 import { AdminErrorPanel } from './AdminErrorPanel'
 import { StoreLogoHeaderCard } from './StoreLogoHeaderCard'
+import { StoreReviewPromptCard } from './StoreReviewPromptCard'
 import {
   CreditBalanceBadge,
   formatDate,
@@ -177,6 +178,13 @@ export function StoreDetailsAdminPage({
               key={response.evaluated_at}
               integrationId={integrationId}
               initial={response.logo_header}
+            />
+          )}
+          {response.review_prompt && (
+            <StoreReviewPromptCard
+              key={`review-prompt-${response.evaluated_at}`}
+              integrationId={integrationId}
+              initial={response.review_prompt}
             />
           )}
           <VerificationsSection

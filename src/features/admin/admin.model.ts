@@ -118,10 +118,49 @@ export interface AdminStoreLogoHeader {
   image_twins: AdminImageTwin[]
 }
 
+export type AdminReviewPromptEventName =
+  | 'enabled'
+  | 'shown'
+  | 'review_clicked'
+  | 'snoozed'
+  | 'dismissed'
+  | 'dont_ask_again'
+  | 'admin_disabled'
+
+/** One step in a store's App Store review requests. */
+export interface AdminReviewPromptEvent {
+  id: string
+  request_id: string
+  event: AdminReviewPromptEventName
+  actor_type: 'admin' | 'merchant'
+  actor_id: string | null
+  at: string
+}
+
+/** The staff switch that asks a Shopify merchant, once, for a review. */
+export interface AdminStoreReviewPrompt {
+  /** A request is open and waiting for the merchant's answer. */
+  enabled: boolean
+  request_id: string | null
+  enabled_at: string | null
+  enabled_by: string | null
+  /** The merchant chose "Don't ask again"; final. */
+  opted_out: boolean
+  opted_out_at: string | null
+  last_event: {
+    event: string
+    actor_type: 'admin' | 'merchant'
+    at: string
+  } | null
+  events: AdminReviewPromptEvent[]
+}
+
 export interface AdminStoreDetailResponse {
   store: AdminStoreDetail
   /** Absent from an older backend. */
   logo_header?: AdminStoreLogoHeader
+  /** Shopify stores only; absent from an older backend. */
+  review_prompt?: AdminStoreReviewPrompt
   evaluated_at: string
 }
 

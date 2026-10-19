@@ -1137,6 +1137,14 @@
       },
       "showing": "{total} kayıttan {loaded} tanesi gösteriliyor"
     },
+    "reviewPrompt": {
+      "title": "Akeed mağazanız için nasıl çalışıyor?",
+      "message": "Dürüst görüşünüzü almaktan memnuniyet duyarız. Diğer satıcıların bilinçli karar vermesine yardımcı olmak için deneyiminizi Shopify App Store’da paylaşın.",
+      "writeReview": "Değerlendirme yaz",
+      "notNow": "Şimdi değil",
+      "dontAskAgain": "Bir daha sorma",
+      "saveFailed": "Yanıtınız kaydedilemedi. Lütfen tekrar deneyin."
+    },
     "activation": {
       "liveBanner": "Akeed yayında. Bir sonraki kapıda ödemeli siparişiniz otomatik olarak onaylatılacak.",
       "pausedBanner": "Otomatik onay kapalı. Akeed’in yeni siparişlerinizi onaylatması için ayarlardan açın.",

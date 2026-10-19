@@ -3,6 +3,7 @@ import type {
   AdminFunnelResponse,
   AdminStoreDetailResponse,
   AdminStoreLogoHeader,
+  AdminStoreReviewPrompt,
   AdminStoresResponse,
   AdminStoreVerificationsResponse,
 } from './admin.model'
@@ -87,6 +88,24 @@ export function setAdminStoreLogoHeader(
 ) {
   return adminRequest<{ logo_header: AdminStoreLogoHeader }>(
     `/api/admin/stores/${encodeURIComponent(integrationId)}/logo-header`,
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ enabled }),
+    }
+  )
+}
+
+/**
+ * Opens or withdraws the store's App Store review request; audited by the
+ * backend, and refused once the merchant has opted out.
+ */
+export function setAdminStoreReviewPrompt(
+  integrationId: string,
+  enabled: boolean
+) {
+  return adminRequest<{ review_prompt: AdminStoreReviewPrompt }>(
+    `/api/admin/stores/${encodeURIComponent(integrationId)}/review-prompt`,
     {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },

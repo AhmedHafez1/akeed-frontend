@@ -2266,6 +2266,14 @@
       },
       "showing": "Showing {loaded} of {total}"
     },
+    "reviewPrompt": {
+      "title": "How's Akeed working for your store?",
+      "message": "We'd appreciate your honest feedback. Share your experience on the Shopify App Store to help other merchants make informed decisions.",
+      "writeReview": "Write a review",
+      "notNow": "Not now",
+      "dontAskAgain": "Don't ask again",
+      "saveFailed": "We couldn't save your answer. Please try again."
+    },
     "activation": {
       "liveBanner": "Akeed is live. Your next cash-on-delivery order will be confirmed automatically.",
       "pausedBanner": "Auto-confirm is off. Turn it on in settings so Akeed confirms your new orders.",
