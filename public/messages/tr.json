@@ -1148,7 +1148,9 @@
       "fallbackAsk": "Shopify’da kısa bir değerlendirme diğer satıcıların seçim yapmasına yardımcı olur. 30 saniye sürer.",
       "cta": "Akeed’i Shopify’da değerlendirin",
       "later": "Şimdi değil",
-      "thanks": "Teşekkürler. Değerlendirmeniz diğer satıcıların seçim yapmasına yardımcı olur."
+      "thanks": "Teşekkürler. Değerlendirmeniz diğer satıcıların seçim yapmasına yardımcı olur.",
+      "alreadyReviewed": "Akeed’i bu mağazadan zaten değerlendirdiniz. Teşekkürler.",
+      "seeReview": "Değerlendirmenizi Shopify’da görün"
     },
     "activation": {
       "liveBanner": "Akeed yayında. Bir sonraki kapıda ödemeli siparişiniz otomatik olarak onaylatılacak.",

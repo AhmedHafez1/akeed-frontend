@@ -2277,7 +2277,9 @@
       "fallbackAsk": "A short review on Shopify helps other merchants choose. It takes 30 seconds.",
       "cta": "Rate Akeed on Shopify",
       "later": "Not now",
-      "thanks": "Thank you. Your review helps other merchants choose."
+      "thanks": "Thank you. Your review helps other merchants choose.",
+      "alreadyReviewed": "You've already reviewed Akeed from this store. Thank you.",
+      "seeReview": "See your review on Shopify"
     },
     "activation": {
       "liveBanner": "Akeed is live. Your next cash-on-delivery order will be confirmed automatically.",

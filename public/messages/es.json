@@ -1148,7 +1148,9 @@
       "fallbackAsk": "Una reseña breve en Shopify ayuda a otros comerciantes a elegir. Solo toma 30 segundos.",
       "cta": "Califica Akeed en Shopify",
       "later": "Ahora no",
-      "thanks": "Gracias. Tu reseña ayuda a otros comerciantes a elegir."
+      "thanks": "Gracias. Tu reseña ayuda a otros comerciantes a elegir.",
+      "alreadyReviewed": "Ya calificaste Akeed desde esta tienda. Gracias.",
+      "seeReview": "Ver tu reseña en Shopify"
     },
     "activation": {
       "liveBanner": "Akeed está activo. Tu próximo pedido contra entrega se confirmará automáticamente.",
