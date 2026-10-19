@@ -58,6 +58,8 @@ interface OverviewEmbeddedProps {
   /** The main tabs, given the number of orders waiting on the merchant. */
   renderTitle: (needsActionCount: number | null) => ReactNode
   titleMetadata?: ReactNode
+  /** Shown under the page header, above everything else. */
+  afterHeader?: ReactNode
   onEditSettings: () => void
   onViewNeedsAction: () => void
 }
@@ -69,6 +71,7 @@ export function OverviewEmbedded({
   onPeriodChange,
   renderTitle,
   titleMetadata,
+  afterHeader,
   onEditSettings,
   onViewNeedsAction,
 }: OverviewEmbeddedProps) {
@@ -97,6 +100,8 @@ export function OverviewEmbedded({
         periodOptions={periodOptions}
         onPeriodChange={onPeriodChange}
       />
+
+      {afterHeader}
 
       {confirmation.feedback && (
         <Banner

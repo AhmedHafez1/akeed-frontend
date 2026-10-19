@@ -16,8 +16,9 @@ import type { DateRangeFilterOption } from '../../domain/dashboard.types'
 import { DashboardActivationSection } from './components/DashboardActivationSection'
 import { MainTabsTitle } from './components/MainTabsTitle'
 import { MetricsPlaceholder } from './components/MetricsPlaceholder'
-import { ReviewPromptBanner } from './components/ReviewPromptBanner'
+import { ReviewPromptCard } from './components/ReviewPromptCard'
 import { useDashboardActivation } from '../../domain/useDashboardActivation'
+import { useReviewPrompt } from '../../domain/useReviewPrompt'
 import { OverviewEmbedded } from './OverviewEmbedded'
 import { ConfirmationsEmbedded } from './ConfirmationsEmbedded'
 
@@ -41,6 +42,18 @@ export function MainEmbeddedSkin() {
   // Asked only once the store is past setup, never beside the first-run panel
   // and never in the moment before that state is known.
   const showReviewPrompt = activation.isLoaded && !activation.isFirstRun
+  // One prompt for both tabs, so it is recorded as shown once per page and
+  // its thank-you state survives a tab switch.
+  const reviewPrompt = useReviewPrompt(showReviewPrompt)
+  const reviewPromptCard = (
+    <ReviewPromptCard
+      status={reviewPrompt.status}
+      results={reviewPrompt.results}
+      requesting={reviewPrompt.requesting}
+      onRate={reviewPrompt.rate}
+      onNotNow={reviewPrompt.notNow}
+    />
+  )
 
   const updateParams = useCallback(
     (changes: Record<string, string | null>) => {
@@ -88,7 +101,6 @@ export function MainEmbeddedSkin() {
     <Page fullWidth>
       <div className="mx-auto w-full max-w-330">
         <BlockStack gap="500">
-          {showReviewPrompt && <ReviewPromptBanner />}
           {showActivation && (
             <DashboardActivationSection activation={activation} />
           )}
@@ -108,6 +120,7 @@ export function MainEmbeddedSkin() {
                 onPeriodChange={onPeriodChange}
                 renderTitle={renderTitle}
                 titleMetadata={freeMessagesBadge}
+                afterHeader={reviewPromptCard}
                 onEditSettings={activation.openQuietHours}
                 onViewNeedsAction={() =>
                   updateParams({ tab: 'confirmations', filter: 'needs_action' })
@@ -120,6 +133,7 @@ export function MainEmbeddedSkin() {
               periodOptions={periodOptions}
               onPeriodChange={onPeriodChange}
               title={renderTitle(null)}
+              afterHeader={reviewPromptCard}
               tab={confirmationsTab}
               onEditSettings={activation.openQuietHours}
               onTabChange={(next) =>

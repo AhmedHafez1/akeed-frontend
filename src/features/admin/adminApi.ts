@@ -114,6 +114,17 @@ export function setAdminStoreReviewPrompt(
   )
 }
 
+/**
+ * Puts the store back to eligible, so the merchant is asked again while the
+ * switch is on. Audited by the backend.
+ */
+export function resetAdminStoreReviewPrompt(integrationId: string) {
+  return adminRequest<{ review_prompt: AdminStoreReviewPrompt }>(
+    `/api/admin/stores/${encodeURIComponent(integrationId)}/review-prompt/reset`,
+    { method: 'POST' }
+  )
+}
+
 export function getAdminStoreVerifications(
   integrationId: string,
   query: string

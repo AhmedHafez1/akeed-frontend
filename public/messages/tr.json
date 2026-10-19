@@ -1138,12 +1138,17 @@
       "showing": "{total} kayıttan {loaded} tanesi gösteriliyor"
     },
     "reviewPrompt": {
-      "title": "Akeed mağazanız için nasıl çalışıyor?",
-      "message": "Dürüst görüşünüzü almaktan memnuniyet duyarız. Diğer satıcıların bilinçli karar vermesine yardımcı olmak için deneyiminizi Shopify App Store’da paylaşın.",
-      "writeReview": "Değerlendirme yaz",
-      "notNow": "Şimdi değil",
-      "dontAskAgain": "Bir daha sorma",
-      "saveFailed": "Yanıtınız kaydedilemedi. Lütfen tekrar deneyin."
+      "title": "Akeed’in mağazanızdaki sonuçları",
+      "since": "{date} tarihinden beri",
+      "confirmed": "{count, plural, one {onaylanan sipariş} other {onaylanan sipariş}}",
+      "canceled": "{count, plural, one {kargodan önce iptal edildi} other {kargodan önce iptal edildi}}",
+      "ask": "Akeed işinize yaradıysa Shopify’da kısa bir değerlendirme diğer satıcıların karar vermesine yardımcı olur. 30 saniye sürer.",
+      "askMobile": "Akeed işinize yaradıysa Shopify’da kısa bir değerlendirme diğer satıcıların karar vermesine yardımcı olur. 30 saniye sürer.",
+      "fallbackTitle": "Akeed sizin için nasıl çalışıyor?",
+      "fallbackAsk": "Shopify’da kısa bir değerlendirme diğer satıcıların seçim yapmasına yardımcı olur. 30 saniye sürer.",
+      "cta": "Akeed’i Shopify’da değerlendirin",
+      "later": "Şimdi değil",
+      "thanks": "Teşekkürler. Değerlendirmeniz diğer satıcıların seçim yapmasına yardımcı olur."
     },
     "activation": {
       "liveBanner": "Akeed yayında. Bir sonraki kapıda ödemeli siparişiniz otomatik olarak onaylatılacak.",

@@ -1138,12 +1138,17 @@
       "showing": "Mostrando {loaded} de {total}"
     },
     "reviewPrompt": {
-      "title": "¿Cómo está funcionando Akeed en tu tienda?",
-      "message": "Agradeceríamos tu opinión sincera. Comparte tu experiencia en la Shopify App Store para ayudar a otros comerciantes a tomar decisiones informadas.",
-      "writeReview": "Escribir una reseña",
-      "notNow": "Ahora no",
-      "dontAskAgain": "No volver a preguntar",
-      "saveFailed": "No pudimos guardar tu respuesta. Inténtalo de nuevo."
+      "title": "Resultados de Akeed en tu tienda",
+      "since": "desde el {date}",
+      "confirmed": "{count, plural, one {pedido confirmado} other {pedidos confirmados}}",
+      "canceled": "{count, plural, one {cancelado antes del envío} other {cancelados antes del envío}}",
+      "ask": "Si Akeed te ha ayudado, una reseña breve en Shopify ayuda a otros comerciantes a decidir. Solo toma 30 segundos.",
+      "askMobile": "Si Akeed te ha ayudado, una reseña breve en Shopify ayuda a otros comerciantes a decidir. Solo toma 30 segundos.",
+      "fallbackTitle": "¿Cómo te está funcionando Akeed?",
+      "fallbackAsk": "Una reseña breve en Shopify ayuda a otros comerciantes a elegir. Solo toma 30 segundos.",
+      "cta": "Califica Akeed en Shopify",
+      "later": "Ahora no",
+      "thanks": "Gracias. Tu reseña ayuda a otros comerciantes a elegir."
     },
     "activation": {
       "liveBanner": "Akeed está activo. Tu próximo pedido contra entrega se confirmará automáticamente.",
