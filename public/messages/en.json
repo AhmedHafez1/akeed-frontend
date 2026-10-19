@@ -2267,12 +2267,17 @@
       "showing": "Showing {loaded} of {total}"
     },
     "reviewPrompt": {
-      "title": "How's Akeed working for your store?",
-      "message": "We'd appreciate your honest feedback. Share your experience on the Shopify App Store to help other merchants make informed decisions.",
-      "writeReview": "Write a review",
-      "notNow": "Not now",
-      "dontAskAgain": "Don't ask again",
-      "saveFailed": "We couldn't save your answer. Please try again."
+      "title": "Akeed's results for your store",
+      "since": "since {date}",
+      "confirmed": "{count, plural, one {order confirmed} other {orders confirmed}}",
+      "canceled": "{count, plural, one {canceled before shipping} other {canceled before shipping}}",
+      "ask": "If Akeed has helped, a short review on Shopify helps other merchants decide. It takes 30 seconds.",
+      "askMobile": "If Akeed has helped, a short review on Shopify helps other merchants decide. It takes 30 seconds.",
+      "fallbackTitle": "How is Akeed working for you?",
+      "fallbackAsk": "A short review on Shopify helps other merchants choose. It takes 30 seconds.",
+      "cta": "Rate Akeed on Shopify",
+      "later": "Not now",
+      "thanks": "Thank you. Your review helps other merchants choose."
     },
     "activation": {
       "liveBanner": "Akeed is live. Your next cash-on-delivery order will be confirmed automatically.",

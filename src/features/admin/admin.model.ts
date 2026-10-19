@@ -126,18 +126,45 @@ export type AdminReviewPromptEventName =
   | 'dismissed'
   | 'dont_ask_again'
   | 'admin_disabled'
+  | 'clicked'
+  | 'result'
+  | 'declined'
+  | 'reset'
 
 /** One step in a store's App Store review requests. */
 export interface AdminReviewPromptEvent {
   id: string
   request_id: string
   event: AdminReviewPromptEventName
+  /** The Reviews API answer, on a `result` event. */
+  result_code?: string | null
   actor_type: 'admin' | 'merchant'
   actor_id: string | null
   at: string
 }
 
-/** The staff switch that asks a Shopify merchant, once, for a review. */
+/**
+ * Where the merchant stands with the review card. An expired snooze is
+ * reported as eligible.
+ */
+export type AdminReviewPromptState =
+  | 'eligible'
+  | 'snoozed'
+  | 'declined'
+  | 'clicked'
+  | 'reviewed_prompted'
+  | 'reviewed'
+  | 'ineligible'
+
+/** What the merchant's card would show right now. */
+export interface AdminReviewPromptPreview {
+  variant: 'results' | 'fallback'
+  confirmed: number | null
+  canceled: number | null
+  since: string | null
+}
+
+/** The staff switch that asks a Shopify merchant for a review. */
 export interface AdminStoreReviewPrompt {
   /** A request is open and waiting for the merchant's answer. */
   enabled: boolean
@@ -153,6 +180,14 @@ export interface AdminStoreReviewPrompt {
     at: string
   } | null
   events: AdminReviewPromptEvent[]
+  /** The fields below are absent from an older backend. */
+  state?: AdminReviewPromptState
+  snoozed_until?: string | null
+  snooze_count?: number
+  shown_count?: number
+  last_shown_at?: string | null
+  last_result_code?: string | null
+  preview?: AdminReviewPromptPreview
 }
 
 export interface AdminStoreDetailResponse {

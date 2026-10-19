@@ -56,7 +56,34 @@ interface ShopifyGlobal {
     /** Resolves when navigation may continue; shakes the bar otherwise. */
     leaveConfirmation(): Promise<void>
   }
+
+  /**
+   * Shopify's native App Store review modal. Absent from older App Bridge
+   * builds, so callers must check for it.
+   *
+   * @see https://shopify.dev/docs/api/app-home/apis/user-interface-and-interactions/reviews-api
+   */
+  reviews?: {
+    request(): Promise<{
+      success: boolean
+      code?: ShopifyReviewRequestCode
+      message?: string
+    }>
+  }
 }
+
+/** The codes `shopify.reviews.request()` answers with. */
+type ShopifyReviewRequestCode =
+  | 'success'
+  | 'already-reviewed'
+  | 'annual-limit-reached'
+  | 'cooldown-period'
+  | 'merchant-ineligible'
+  | 'mobile-app'
+  | 'recently-installed'
+  | 'cancelled'
+  | 'already-open'
+  | 'open-in-progress'
 
 declare global {
   interface Window {
@@ -64,4 +91,4 @@ declare global {
   }
 }
 
-export type { ShopifyGlobal }
+export type { ShopifyGlobal, ShopifyReviewRequestCode }

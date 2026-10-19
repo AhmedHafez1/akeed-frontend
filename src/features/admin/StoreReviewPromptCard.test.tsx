@@ -70,7 +70,7 @@ describe('StoreReviewPromptCard', () => {
     expect(url).toBe('/api/admin/stores/int%201/review-prompt')
     expect(init.method).toBe('PATCH')
     expect(JSON.parse(init.body)).toEqual({ enabled: true })
-    expect(screen.getByText('Pending')).toBeTruthy()
+    expect(screen.getByText('On')).toBeTruthy()
     expect(screen.getByText(/Turned on by admin/)).toBeTruthy()
   })
 
@@ -86,7 +86,7 @@ describe('StoreReviewPromptCard', () => {
     )
     expect(reviewSwitch().hasAttribute('disabled')).toBe(true)
     expect(screen.getByText('Opted out')).toBeTruthy()
-    expect(screen.getByText(/That choice is final/)).toBeTruthy()
+    expect(screen.getByText(/so the switch stays off/)).toBeTruthy()
     fireEvent.click(reviewSwitch())
     expect(auth.fetchWithAuth).not.toHaveBeenCalled()
   })
@@ -101,5 +101,94 @@ describe('StoreReviewPromptCard', () => {
       expect(reviewSwitch().hasAttribute('disabled')).toBe(true)
     )
     expect(screen.getByText('Opted out')).toBeTruthy()
+  })
+
+  it('shows where the merchant stands and what they would see', () => {
+    render(
+      <StoreReviewPromptCard
+        integrationId="int-1"
+        initial={prompt({
+          enabled: true,
+          state: 'snoozed',
+          snoozed_until: '2026-11-02T09:00:00Z',
+          snooze_count: 1,
+          shown_count: 4,
+          last_shown_at: '2026-10-19T09:00:00Z',
+          last_result_code: 'cancelled',
+          preview: {
+            variant: 'results',
+            confirmed: 42,
+            canceled: 3,
+            since: '2026-03-15T09:00:00Z',
+          },
+        })}
+      />
+    )
+    expect(screen.getByText(/^Snoozed until/)).toBeTruthy()
+    expect(
+      screen.getByText(/^Results: 42 confirmed, 3 canceled since/)
+    ).toBeTruthy()
+    expect(screen.getByText(/^4 · last/)).toBeTruthy()
+    expect(screen.getByText('cancelled')).toBeTruthy()
+  })
+
+  it('describes the plain request when there are too few results', () => {
+    render(
+      <StoreReviewPromptCard
+        integrationId="int-1"
+        initial={prompt({
+          state: 'eligible',
+          preview: {
+            variant: 'fallback',
+            confirmed: 4,
+            canceled: 0,
+            since: null,
+          },
+        })}
+      />
+    )
+    expect(screen.getByText(/^Plain request/)).toBeTruthy()
+    // An eligible store has nothing to reset.
+    expect(screen.queryByRole('button', { name: 'Reset prompt' })).toBeNull()
+  })
+
+  it('resets a declined store through the reset endpoint', async () => {
+    const reset = prompt({ state: 'eligible', snooze_count: 0 })
+    auth.fetchWithAuth.mockResolvedValue(json(200, { review_prompt: reset }))
+    render(
+      <StoreReviewPromptCard
+        integrationId="int 1"
+        initial={prompt({
+          state: 'declined',
+          opted_out: true,
+          snooze_count: 2,
+        })}
+      />
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'Reset prompt' }))
+
+    await waitFor(() =>
+      expect(screen.queryByRole('button', { name: 'Reset prompt' })).toBeNull()
+    )
+    const [url, init] = auth.fetchWithAuth.mock.calls[0]
+    expect(url).toBe('/api/admin/stores/int%201/review-prompt/reset')
+    expect(init.method).toBe('POST')
+    expect(screen.getByText('Eligible')).toBeTruthy()
+    expect(reviewSwitch().hasAttribute('disabled')).toBe(false)
+  })
+
+  it('keeps the card and offers a retry when the reset fails', async () => {
+    auth.fetchWithAuth.mockResolvedValue(
+      json(503, { message: 'Admin service unavailable' })
+    )
+    render(
+      <StoreReviewPromptCard
+        integrationId="int-1"
+        initial={prompt({ state: 'clicked' })}
+      />
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'Reset prompt' }))
+    expect(await screen.findByText('Admin service unavailable')).toBeTruthy()
+    expect(screen.getByText('Clicked')).toBeTruthy()
   })
 })

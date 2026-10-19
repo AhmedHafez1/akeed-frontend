@@ -48,6 +48,8 @@ interface ConfirmationsEmbeddedProps {
   onPeriodChange: (period: DashboardStatsDateRange) => void
   /** The main tabs, standing in for the page title. */
   title: ReactNode
+  /** Shown under the page header, above the filters. */
+  afterHeader?: ReactNode
   tab: ConfirmationsTab
   onTabChange: (tab: ConfirmationsTab) => void
   onEditSettings: () => void
@@ -59,6 +61,7 @@ export function ConfirmationsEmbedded({
   periodOptions,
   onPeriodChange,
   title,
+  afterHeader,
   tab,
   onTabChange,
   onEditSettings,
@@ -174,6 +177,8 @@ export function ConfirmationsEmbedded({
         periodOptions={periodOptions}
         onPeriodChange={onPeriodChange}
       />
+
+      {afterHeader}
 
       {shownFeedback && (
         <Banner
