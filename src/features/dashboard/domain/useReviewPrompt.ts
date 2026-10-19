@@ -3,7 +3,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { requestShopifyReview } from '@/shared/lib/shopifyReviews'
-import { SHOPIFY_APP_STORE_REVIEW_URL } from '@/shared/lib/shopify-auth'
+import {
+  SHOPIFY_APP_STORE_REVIEWS_URL,
+  SHOPIFY_APP_STORE_REVIEW_URL,
+} from '@/shared/lib/shopify-auth'
 import { reviewPromptOptions } from '../api/reviewPromptQueries'
 import { useRecordReviewPromptAction } from '../api/reviewPromptMutations'
 import {
@@ -12,7 +15,7 @@ import {
   type ReviewPromptView,
 } from '../model/reviewPrompt.model'
 
-export type ReviewPromptStatus = 'hidden' | 'card' | 'thanks'
+export type ReviewPromptStatus = 'hidden' | 'card' | 'thanks' | 'reviewed'
 
 /** The store's results the card leads with, or null for the plain request. */
 export interface ReviewPromptResults {
@@ -28,6 +31,8 @@ export interface ReviewPromptState {
   requesting: boolean
   rate: () => void
   notNow: () => void
+  /** Opens the listing's reviews in a new tab. */
+  seeReview: () => void
 }
 
 function resultsOf(view: ReviewPromptView): ReviewPromptResults | null {
@@ -55,7 +60,9 @@ export function useReviewPrompt(enabled: boolean): ReviewPromptState {
   const { data: view } = useQuery({ ...reviewPromptOptions(), enabled })
   const { mutate: record, mutateAsync: recordAsync } =
     useRecordReviewPromptAction()
-  const [answer, setAnswer] = useState<'thanks' | 'hidden' | null>(null)
+  const [answer, setAnswer] = useState<'thanks' | 'reviewed' | 'hidden' | null>(
+    null
+  )
   const [requesting, setRequesting] = useState(false)
   const shownRecorded = useRef(false)
 
@@ -83,6 +90,7 @@ export function useReviewPrompt(enabled: boolean): ReviewPromptState {
       window.open(SHOPIFY_APP_STORE_REVIEW_URL, '_blank', 'noopener,noreferrer')
     }
     if (outcome.ui === 'thanks') setAnswer('thanks')
+    if (outcome.ui === 'reviewed') setAnswer('reviewed')
     if (outcome.ui === 'hide') setAnswer('hidden')
     setRequesting(false)
   }, [record, recordAsync, requesting])
@@ -92,11 +100,16 @@ export function useReviewPrompt(enabled: boolean): ReviewPromptState {
     record({ action: 'not_now' })
   }, [record])
 
+  const seeReview = useCallback(() => {
+    window.open(SHOPIFY_APP_STORE_REVIEWS_URL, '_blank', 'noopener,noreferrer')
+  }, [])
+
   return {
     status,
     results: view ? resultsOf(view) : null,
     requesting,
     rate: () => void rate(),
     notNow,
+    seeReview,
   }
 }

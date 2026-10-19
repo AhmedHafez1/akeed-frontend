@@ -52,6 +52,7 @@ export function MainEmbeddedSkin() {
       requesting={reviewPrompt.requesting}
       onRate={reviewPrompt.rate}
       onNotNow={reviewPrompt.notNow}
+      onSeeReview={reviewPrompt.seeReview}
     />
   )
 

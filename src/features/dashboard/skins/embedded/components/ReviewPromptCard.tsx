@@ -28,6 +28,8 @@ interface ReviewPromptCardProps {
   requesting: boolean
   onRate: () => void
   onNotNow: () => void
+  /** Opens the listing's reviews, for a store that already reviewed Akeed. */
+  onSeeReview: () => void
 }
 
 /** Western digits in every locale, so counts read the same everywhere. */
@@ -48,6 +50,25 @@ function formatSince(iso: string, locale: string): string {
   }).format(date)
 }
 
+/**
+ * A Polaris Icon is a block with `margin: auto`, so as a bare flex item it
+ * takes the row's free space and pushes its siblings away. This box shrinks to
+ * the icon, which keeps it beside its text.
+ */
+function InlineIcon({
+  source,
+  tone,
+}: {
+  source: typeof CheckCircleIcon
+  tone: 'success' | 'subdued'
+}) {
+  return (
+    <Box as="span">
+      <Icon source={source} tone={tone} />
+    </Box>
+  )
+}
+
 function StarBadge() {
   return (
     <Box
@@ -59,6 +80,12 @@ function StarBadge() {
     </Box>
   )
 }
+
+/*
+ * Every InlineStack here passes `align` explicitly. Polaris sets it as an
+ * inherited CSS variable only when the prop is given, so a nested stack
+ * without it takes the outer row's `space-between` and spreads its children.
+ */
 
 interface StatProps {
   icon: typeof CheckCircleIcon
@@ -87,18 +114,19 @@ function Stat({ icon, tone, value, label, stacked }: StatProps) {
   )
   return (
     <InlineStack
+      align="start"
       gap="200"
       blockAlign={stacked ? 'start' : 'center'}
       wrap={false}
     >
-      <Icon source={icon} tone={tone} />
+      <InlineIcon source={icon} tone={tone} />
       {stacked ? (
         <BlockStack gap="100">
           {number}
           {caption}
         </BlockStack>
       ) : (
-        <InlineStack gap="200" blockAlign="center">
+        <InlineStack align="start" gap="200" blockAlign="center">
           {number}
           {caption}
         </InlineStack>
@@ -118,6 +146,7 @@ export function ReviewPromptCard({
   requesting,
   onRate,
   onNotNow,
+  onSeeReview,
 }: ReviewPromptCardProps) {
   const t = useTranslations('dashboard.reviewPrompt')
   const { locale } = useLocaleInfo()
@@ -129,10 +158,41 @@ export function ReviewPromptCard({
     return (
       <Card>
         <div role="status">
-          <InlineStack gap="200" blockAlign="center" wrap={false}>
-            <Icon source={CheckCircleIcon} tone="success" />
+          <InlineStack align="start" gap="200" blockAlign="center" wrap={false}>
+            <InlineIcon source={CheckCircleIcon} tone="success" />
             <Text as="p">{t('thanks')}</Text>
           </InlineStack>
+        </div>
+      </Card>
+    )
+  }
+
+  if (status === 'reviewed') {
+    const message = (
+      <InlineStack align="start" gap="200" blockAlign="center" wrap={false}>
+        <InlineIcon source={CheckCircleIcon} tone="success" />
+        <Text as="p">{t('alreadyReviewed')}</Text>
+      </InlineStack>
+    )
+    const seeReview = (
+      <Button variant="tertiary" onClick={onSeeReview} fullWidth={xsOnly}>
+        {t('seeReview')}
+      </Button>
+    )
+    return (
+      <Card>
+        <div role="status">
+          {xsOnly ? (
+            <BlockStack gap="300">
+              {message}
+              {seeReview}
+            </BlockStack>
+          ) : (
+            <InlineStack align="space-between" blockAlign="center" gap="400">
+              {message}
+              {seeReview}
+            </InlineStack>
+          )}
         </div>
       </Card>
     )
@@ -204,7 +264,12 @@ export function ReviewPromptCard({
       <Card>
         <BlockStack gap="400">
           <BlockStack gap="200">
-            <InlineStack gap="200" blockAlign="center" wrap={false}>
+            <InlineStack
+              align="start"
+              gap="200"
+              blockAlign="center"
+              wrap={false}
+            >
               <StarBadge />
               {title}
             </InlineStack>
@@ -229,13 +294,13 @@ export function ReviewPromptCard({
     <Card>
       <InlineStack align="space-between" blockAlign="center" gap="600">
         <BlockStack gap="300">
-          <InlineStack gap="200" blockAlign="center">
+          <InlineStack align="start" gap="200" blockAlign="center">
             <StarBadge />
             {title}
             {since}
           </InlineStack>
           {stats.length > 0 && (
-            <InlineStack gap="500" blockAlign="center">
+            <InlineStack align="start" gap="500" blockAlign="center">
               {stats.map((stat, index) =>
                 index === 0 ? (
                   stat
@@ -254,7 +319,7 @@ export function ReviewPromptCard({
           )}
           {ask}
         </BlockStack>
-        <InlineStack gap="200" blockAlign="center">
+        <InlineStack align="end" gap="200" blockAlign="center">
           {later}
           {cta}
         </InlineStack>

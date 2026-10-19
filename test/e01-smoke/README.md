@@ -170,3 +170,11 @@ the row in memory.
 
 Use `?scenario=empty`, `error`, `limit` (plan used up), `quiet` (usage under
 80%) or `viewer` (no manual confirmation).
+
+## Review card fixture
+
+Open `/en/review-card` or `/ar/review-card` to see every state of the embedded
+App Store review card at the dashboard's width: results, results with nothing
+canceled, the plain request, the thank-you state and the already-reviewed
+state. Check them at 1280 and 390 px. Icons must sit beside their text, and the
+badge, title and date must start together, never spread across the row.

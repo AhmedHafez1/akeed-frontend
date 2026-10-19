@@ -38,8 +38,11 @@ export const REVIEW_RESULTS_THRESHOLD = 10
 
 /** What the card does after Shopify answers a review request. */
 export interface ReviewOutcome {
-  /** Thank the merchant, keep the card, hide it, or change nothing. */
-  ui: 'thanks' | 'keep' | 'hide' | 'ignore'
+  /**
+   * Thank the merchant, tell them they already reviewed, keep the card, hide
+   * it, or change nothing.
+   */
+  ui: 'thanks' | 'reviewed' | 'keep' | 'hide' | 'ignore'
   /** Open the listing's review page in a new tab. */
   openFallback: boolean
 }
@@ -52,8 +55,9 @@ export interface ReviewOutcome {
 export function reviewOutcomeFor(code: ReviewRequestCode): ReviewOutcome {
   switch (code) {
     case 'success':
-    case 'already-reviewed':
       return { ui: 'thanks', openFallback: false }
+    case 'already-reviewed':
+      return { ui: 'reviewed', openFallback: false }
     case 'cooldown-period':
     case 'annual-limit-reached':
     case 'mobile-app':

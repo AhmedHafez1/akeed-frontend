@@ -1,7 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { SHOPIFY_APP_STORE_REVIEW_URL } from '@/shared/lib/shopify-auth'
+import {
+  SHOPIFY_APP_STORE_REVIEWS_URL,
+  SHOPIFY_APP_STORE_REVIEW_URL,
+} from '@/shared/lib/shopify-auth'
 import type { ShopifyGlobal } from '@/shared/types/window.model'
 import { useReviewPrompt } from '../../../domain/useReviewPrompt'
 import type {
@@ -24,6 +27,8 @@ const FALLBACK_TITLE = 'ما رأيك في أكيد حتى الآن؟'
 const CTA = 'قيّم أكيد على Shopify'
 const LATER = 'ليس الآن'
 const THANKS = 'شكرًا لك. تقييمك يساعد التجار الآخرين على الاختيار.'
+const ALREADY_REVIEWED = 'سبق أن قيّمت أكيد من هذا المتجر. شكرًا لك.'
+const SEE_REVIEW = 'عرض تقييمك على Shopify'
 
 const RESULTS: ReviewPromptView = {
   visible: true,
@@ -43,12 +48,14 @@ function Harness() {
       requesting={prompt.requesting}
       onRate={prompt.rate}
       onNotNow={prompt.notNow}
+      onSeeReview={prompt.seeReview}
     />
   )
 }
 
 function setup(view: ReviewPromptView = RESULTS) {
   auth.api.get.mockResolvedValue(view)
+  // A new client per render, as a page load starts with an empty cache.
   const client = new QueryClient({
     defaultOptions: { mutations: { retry: false } },
   })
@@ -168,9 +175,41 @@ describe('ReviewPromptCard', () => {
     ).toBeTruthy()
   })
 
-  it.each<[ReviewRequestCode, 'thanks' | 'keep' | 'hide' | 'ignore', boolean]>([
+  /**
+   * A Polaris Icon is a block with `margin: auto`: as a direct flex item it
+   * takes the row's free space. Every icon must sit in its own wrapper.
+   */
+  function expectIconsWrapped(container: HTMLElement) {
+    const icons = [...container.querySelectorAll('.Polaris-Icon')]
+    expect(icons.length).toBeGreaterThan(0)
+    for (const icon of icons) {
+      expect(
+        icon.parentElement?.classList.contains('Polaris-InlineStack')
+      ).toBe(false)
+    }
+  }
+
+  /**
+   * Polaris passes `align` as an inherited CSS variable, so a nested stack
+   * without its own takes the outer row's `space-between`.
+   */
+  function expectStacksAligned(container: HTMLElement) {
+    const stacks = [...container.querySelectorAll('.Polaris-InlineStack')]
+    expect(stacks.length).toBeGreaterThan(0)
+    for (const stack of stacks) {
+      expect(stack.getAttribute('style')).toMatch(/--pc-inline-stack-align:/)
+    }
+  }
+
+  it.each<
+    [
+      ReviewRequestCode,
+      'thanks' | 'reviewed' | 'keep' | 'hide' | 'ignore',
+      boolean,
+    ]
+  >([
     ['success', 'thanks', false],
-    ['already-reviewed', 'thanks', false],
+    ['already-reviewed', 'reviewed', false],
     ['cooldown-period', 'thanks', true],
     ['annual-limit-reached', 'thanks', true],
     ['mobile-app', 'thanks', true],
@@ -207,6 +246,10 @@ describe('ReviewPromptCard', () => {
       expect(await screen.findByText(THANKS)).toBeTruthy()
       expect(screen.queryByText(TITLE)).toBeNull()
       expect(screen.queryByRole('button')).toBeNull()
+    } else if (ui === 'reviewed') {
+      expect(await screen.findByText(ALREADY_REVIEWED)).toBeTruthy()
+      expect(screen.queryByText(THANKS)).toBeNull()
+      expect(screen.getByRole('button', { name: SEE_REVIEW })).toBeTruthy()
     } else if (ui === 'hide') {
       await waitFor(() => expect(screen.queryByText(TITLE)).toBeNull())
       expect(screen.queryByText(THANKS)).toBeNull()
@@ -220,6 +263,66 @@ describe('ReviewPromptCard', () => {
         ).not.toBe('true')
       )
     }
+  })
+
+  it('already reviewed: links to the review, records it, and is gone after a reload', async () => {
+    const open = vi.spyOn(window, 'open').mockReturnValue(null)
+    stubReviews('already-reviewed')
+    const first = setup()
+    fireEvent.click(await screen.findByRole('button', { name: CTA }))
+
+    expect(await screen.findByText(ALREADY_REVIEWED)).toBeTruthy()
+    expect(screen.getAllByRole('button')).toHaveLength(1)
+    await waitFor(() =>
+      expect(posted()).toContainEqual({
+        action: 'result',
+        code: 'already-reviewed',
+      })
+    )
+    expect(open).not.toHaveBeenCalled()
+
+    fireEvent.click(screen.getByRole('button', { name: SEE_REVIEW }))
+    expect(open).toHaveBeenCalledWith(
+      SHOPIFY_APP_STORE_REVIEWS_URL,
+      '_blank',
+      'noopener,noreferrer'
+    )
+    expectIconsWrapped(first.container)
+    expectStacksAligned(first.container)
+
+    // The backend now holds the store as reviewed and answers not visible.
+    first.unmount()
+    auth.api.post.mockClear()
+    setup({ ...RESULTS, visible: false })
+    await waitFor(() => expect(auth.api.get).toHaveBeenCalledTimes(2))
+    expect(screen.queryByText(TITLE)).toBeNull()
+    expect(screen.queryByText(ALREADY_REVIEWED)).toBeNull()
+    expect(auth.api.post).not.toHaveBeenCalled()
+  })
+
+  it.each([
+    ['results', RESULTS],
+    [
+      'plain',
+      { ...RESULTS, variant: 'fallback', confirmed: null, canceled: null },
+    ],
+  ] as const)(
+    'keeps every %s icon beside its text and every row aligned',
+    async (_, view) => {
+      const { container } = setup(view)
+      await screen.findByRole('button', { name: CTA })
+      expectIconsWrapped(container)
+      expectStacksAligned(container)
+    }
+  )
+
+  it('keeps the thank-you icon beside its text', async () => {
+    stubReviews('success')
+    const { container } = setup()
+    fireEvent.click(await screen.findByRole('button', { name: CTA }))
+    expect(await screen.findByText(THANKS)).toBeTruthy()
+    expectIconsWrapped(container)
+    expectStacksAligned(container)
   })
 
   it('"Not now" records the answer and hides the card', async () => {
@@ -248,5 +351,15 @@ describe('ReviewPromptCard', () => {
     for (const button of buttons) {
       expect(button.className).toMatch(/fullWidth/)
     }
+  })
+
+  it('stacks the already-reviewed state on a phone', async () => {
+    emulatePhone()
+    stubReviews('already-reviewed')
+    const { container } = setup()
+    fireEvent.click(await screen.findByRole('button', { name: CTA }))
+    const button = await screen.findByRole('button', { name: SEE_REVIEW })
+    expect(button.className).toMatch(/fullWidth/)
+    expectIconsWrapped(container)
   })
 })
