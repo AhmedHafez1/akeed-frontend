@@ -16,6 +16,7 @@ import type { DateRangeFilterOption } from '../../domain/dashboard.types'
 import { DashboardActivationSection } from './components/DashboardActivationSection'
 import { MainTabsTitle } from './components/MainTabsTitle'
 import { MetricsPlaceholder } from './components/MetricsPlaceholder'
+import { ReviewPromptBanner } from './components/ReviewPromptBanner'
 import { useDashboardActivation } from '../../domain/useDashboardActivation'
 import { OverviewEmbedded } from './OverviewEmbedded'
 import { ConfirmationsEmbedded } from './ConfirmationsEmbedded'
@@ -37,6 +38,9 @@ export function MainEmbeddedSkin() {
 
   const activation = useDashboardActivation()
   const showActivation = activation.isLoaded && activation.isFirstRun
+  // Asked only once the store is past setup, never beside the first-run panel
+  // and never in the moment before that state is known.
+  const showReviewPrompt = activation.isLoaded && !activation.isFirstRun
 
   const updateParams = useCallback(
     (changes: Record<string, string | null>) => {
@@ -84,6 +88,7 @@ export function MainEmbeddedSkin() {
     <Page fullWidth>
       <div className="mx-auto w-full max-w-330">
         <BlockStack gap="500">
+          {showReviewPrompt && <ReviewPromptBanner />}
           {showActivation && (
             <DashboardActivationSection activation={activation} />
           )}

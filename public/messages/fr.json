@@ -1137,6 +1137,14 @@
       },
       "showing": "Affichage de {loaded} sur {total}"
     },
+    "reviewPrompt": {
+      "title": "Comment Akeed fonctionne-t-il pour votre boutique ?",
+      "message": "Votre avis sincère nous serait précieux. Partagez votre expérience sur le Shopify App Store pour aider d’autres marchands à faire un choix éclairé.",
+      "writeReview": "Écrire un avis",
+      "notNow": "Pas maintenant",
+      "dontAskAgain": "Ne plus demander",
+      "saveFailed": "Impossible d’enregistrer votre réponse. Réessayez."
+    },
     "activation": {
       "liveBanner": "Akeed est actif. Votre prochaine commande en paiement à la livraison sera confirmée automatiquement.",
       "pausedBanner": "La confirmation automatique est désactivée. Activez-la dans les paramètres pour qu’Akeed confirme vos nouvelles commandes.",

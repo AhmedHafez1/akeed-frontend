@@ -56,6 +56,11 @@ export const queryKeys = {
     templatePreviews: () =>
       [...queryKeys.onboarding.all, 'template-previews'] as const,
   },
+  reviewPrompt: {
+    all: ['review-prompt'] as const,
+    /** The App Store review request waiting for the merchant, or none. */
+    state: () => [...queryKeys.reviewPrompt.all, 'state'] as const,
+  },
   orders: {
     /**
      * What has been observed on the server for each just-created order.
