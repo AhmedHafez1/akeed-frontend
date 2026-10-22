@@ -25,6 +25,13 @@ export type AdminStoreBilling =
       balance_state: AdminCreditBalanceState
     }
 
+export interface AdminCustomerCountries {
+  top: string | null
+  /** Share (0-100) of the orders whose country is known. */
+  share: number | null
+  count: number
+}
+
 export interface AdminStore {
   integration_id: string
   org_id: string
@@ -34,6 +41,8 @@ export interface AdminStore {
   shop_domain: string | null
   source_identity: string
   country_code: string | null
+  /** Where the store's customers' phones are from, over its real orders. */
+  customer_countries: AdminCustomerCountries
   timezone: string | null
   installed_at: string
   lifecycle_status: string
@@ -210,6 +219,7 @@ export interface AdminStoreVerification {
   is_test: boolean
   customer_name: string | null
   customer_phone_masked: string
+  customer_country: string | null
   total_price: string | null
   currency: string | null
   attempts: number

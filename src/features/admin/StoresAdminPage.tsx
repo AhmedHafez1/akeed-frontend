@@ -35,6 +35,8 @@ import {
   PlatformBadge,
   platformLabel,
   storeSubtitle,
+  CustomerCountryMarker,
+  customerCountriesLabel,
   titleCase,
 } from './AdminStoreUi'
 import {
@@ -93,6 +95,7 @@ const filterLabels: Record<string, string> = {
   plan: 'Plan',
   onboarding_status: 'Onboarding',
   country: 'Country',
+  customer_country: 'Customer country',
   installed_from: 'Installed from',
   installed_to: 'Installed to',
   last_activity_from: 'Active from',
@@ -103,6 +106,7 @@ const filterKeys = Object.keys(filterLabels)
 const advancedKeys = [
   'onboarding_status',
   'country',
+  'customer_country',
   'installed_from',
   'installed_to',
   'last_activity_from',
@@ -116,6 +120,7 @@ function advancedFromParams(params: URLSearchParams): AdvancedFilters {
   return {
     onboarding_status: params.get('onboarding_status') ?? '',
     country: params.get('country') ?? '',
+    customer_country: params.get('customer_country') ?? '',
     installed_from: params.get('installed_from') ?? '',
     installed_to: params.get('installed_to') ?? '',
     last_activity_from: params.get('last_activity_from') ?? '',
@@ -518,6 +523,21 @@ export function StoresAdminPage() {
                       }
                     />
                   </label>
+                  <label className="text-foreground/70 block text-xs font-medium">
+                    Customer country
+                    <Input
+                      className="focus:bg-card mt-1.5 h-10 rounded-lg border text-sm uppercase"
+                      placeholder="e.g. GT"
+                      maxLength={2}
+                      value={advanced.customer_country}
+                      onChange={(event) =>
+                        setAdvanced((current) => ({
+                          ...current,
+                          customer_country: event.target.value.toUpperCase(),
+                        }))
+                      }
+                    />
+                  </label>
                   <AdvancedDate
                     label="Installed from"
                     value={advanced.installed_from}
@@ -800,9 +820,12 @@ function StoresResults({
                           </Link>
                           <PlatformBadge platform={store.platform} />
                         </div>
-                        <p className="text-muted-foreground mt-1 truncate text-xs">
-                          {storeSubtitle(store)}
-                        </p>
+                        <div className="mt-1 flex min-w-0 items-center gap-2">
+                          <p className="text-muted-foreground truncate text-xs">
+                            {storeSubtitle(store)}
+                          </p>
+                          <CustomerCountryMarker store={store} />
+                        </div>
                       </td>
                       <td className="px-4 py-4">
                         <LifecycleBadge status={store.lifecycle_status} />
@@ -885,6 +908,7 @@ function StoresResults({
                     <p className="text-muted-foreground truncate text-xs">
                       {storeSubtitle(store)}
                     </p>
+                    <CustomerCountryMarker store={store} />
                   </div>
                 </div>
                 <HealthBadge status={store.health.status} />
@@ -1000,6 +1024,7 @@ function StoreDetails({ store, href }: { store: AdminStore; href: string }) {
   const details = [
     ['Platform', platformLabel(store.platform)],
     ['Country', store.country_code ?? 'Unknown'],
+    ['Customer countries', customerCountriesLabel(store) ?? 'Unknown'],
     ['Timezone', store.timezone ?? 'Unknown'],
     ['Onboarding', titleCase(store.onboarding_status)],
     store.billing.model === 'credits'
