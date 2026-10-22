@@ -21,6 +21,7 @@ import {
 } from 'lucide-react'
 import { Badge, Button, Skeleton } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
+import { countryName } from '@/shared/lib/country'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import type {
   AdminStoreDetail,
@@ -32,6 +33,8 @@ import { StoreLogoHeaderCard } from './StoreLogoHeaderCard'
 import { StoreReviewPromptCard } from './StoreReviewPromptCard'
 import {
   CreditBalanceBadge,
+  CustomerCountryCode,
+  customerCountriesLabel,
   formatDate,
   formatDateTime,
   HealthBadge,
@@ -439,6 +442,7 @@ function ProfileCard({ store }: { store: AdminStoreDetail }) {
           ],
           ['Platform', platformLabel(store.platform)],
           ['Country', store.country_code ?? 'Unknown'],
+          ['Customer countries', customerCountriesLabel(store) ?? 'Unknown'],
           ['Timezone', store.timezone ?? 'Unknown'],
           [
             isInstalledPlatform(store.platform) ? 'Installed' : 'Created',
@@ -926,6 +930,9 @@ function VerificationsSection({
                             className="text-muted-foreground mt-0.5 font-mono text-xs"
                             dir="ltr"
                           >
+                            <CustomerCountryCode
+                              code={verification.customer_country}
+                            />
                             {verification.customer_phone_masked || '—'}
                           </p>
                         </td>
@@ -1008,6 +1015,9 @@ function VerificationsSection({
                       <p className="text-muted-foreground mt-0.5 truncate text-xs">
                         {verification.customer_name ?? 'Unknown'} ·{' '}
                         <span className="font-mono" dir="ltr">
+                          <CustomerCountryCode
+                            code={verification.customer_country}
+                          />
                           {verification.customer_phone_masked || '—'}
                         </span>
                       </p>
@@ -1116,6 +1126,10 @@ function VerificationDetails({
   const reached = timeline.filter(([, value]) => value)
   const facts: Array<[string, string]> = [
     ['External order ID', verification.external_order_id],
+    [
+      'Customer country',
+      countryName(verification.customer_country) ?? 'Unknown',
+    ],
     ['Template', verification.template_name ?? 'Unknown'],
     ['Language', verification.language_code?.toUpperCase() ?? 'Unknown'],
     [

@@ -1,5 +1,6 @@
 import { Badge } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
+import { countryName } from '@/shared/lib/country'
 import type {
   AdminCreditBalanceState,
   AdminHealthStatus,
@@ -46,6 +47,44 @@ export const isInstalledPlatform = (platform: string) =>
 
 export function storeSubtitle(store: AdminStore) {
   return store.shop_domain ?? store.organization_name
+}
+
+/** `Guatemala 82% · 3 countries`, or null before any order has a country. */
+export function customerCountriesLabel(store: AdminStore) {
+  const { top, share, count } = store.customer_countries
+  if (!top) return null
+  const name = countryName(top) ?? top
+  const lead = share === null ? name : `${name} ${share}%`
+  return count > 1 ? `${lead} · ${count} countries` : lead
+}
+
+/** One-line marker for a store row: `GT 82% +2`. */
+export function CustomerCountryMarker({ store }: { store: AdminStore }) {
+  const { top, share, count } = store.customer_countries
+  if (!top) return null
+  return (
+    <span
+      className="text-muted-foreground shrink-0 text-xs whitespace-nowrap tabular-nums"
+      title={`Customers: ${customerCountriesLabel(store)}`}
+    >
+      <span className="text-foreground/80 font-medium">{top}</span>
+      {share !== null && ` ${share}%`}
+      {count > 1 && ` +${count - 1}`}
+    </span>
+  )
+}
+
+/** The country code shown before a masked phone, named in its tooltip. */
+export function CustomerCountryCode({ code }: { code: string | null }) {
+  if (!code) return null
+  return (
+    <abbr
+      className="text-foreground/80 me-1 font-sans font-medium no-underline"
+      title={countryName(code) ?? code}
+    >
+      {code}
+    </abbr>
+  )
 }
 
 export function HealthBadge({ status }: { status: AdminHealthStatus }) {
