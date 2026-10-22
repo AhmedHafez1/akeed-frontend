@@ -49,9 +49,16 @@ export function storeSubtitle(store: AdminStore) {
   return store.shop_domain ?? store.organization_name
 }
 
+/** Stands in when the API predates customer countries, so the page still renders. */
+const noCountries: AdminStore['customer_countries'] = {
+  top: null,
+  share: null,
+  count: 0,
+}
+
 /** `Guatemala 82% · 3 countries`, or null before any order has a country. */
 export function customerCountriesLabel(store: AdminStore) {
-  const { top, share, count } = store.customer_countries
+  const { top, share, count } = store.customer_countries ?? noCountries
   if (!top) return null
   const name = countryName(top) ?? top
   const lead = share === null ? name : `${name} ${share}%`
@@ -60,7 +67,7 @@ export function customerCountriesLabel(store: AdminStore) {
 
 /** One-line marker for a store row: `GT 82% +2`. */
 export function CustomerCountryMarker({ store }: { store: AdminStore }) {
-  const { top, share, count } = store.customer_countries
+  const { top, share, count } = store.customer_countries ?? noCountries
   if (!top) return null
   return (
     <span
