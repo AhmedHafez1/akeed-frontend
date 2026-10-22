@@ -2,6 +2,12 @@
 
 Guidelines for AI coding agents operating in this repository.
 
+## Shared workspace skills
+
+Read the parent [AGENTS.md](../AGENTS.md) and [CLAUDE.md](../CLAUDE.md) for shared product context and constraints. Before frontend edits, load [frontend-dev](../.agents/skills/frontend-dev/SKILL.md); its maintained implementation is shared with Claude. Load the database, localization, or design skills from that parent guide when relevant. If this repository is checked out alone, report missing shared resources rather than inventing their contents.
+
+Preserve CRLF and existing user edits. Format only touched files, with `--end-of-line crlf`; do not reformat hand-written Markdown docs. Inspect the current branch; commit only when requested and never on `main`.
+
 ## Build / Lint / Typecheck / Dev
 
 ```bash
@@ -9,8 +15,8 @@ npm run dev            # Start dev server on port 3001
 npm run build          # Production build (Next.js)
 npm run start          # Run production server on port 3001
 npm run lint           # ESLint (flat config)
-npx prettier --check "src/**/*.{ts,tsx}"  # Check formatting
-npx prettier --write "src/**/*.{ts,tsx}"  # Auto-format
+npx prettier --check --end-of-line crlf <files> # Check touched code
+npx prettier --write --end-of-line crlf <files> # Format touched code only
 npx tsc --noEmit       # Type-check without emitting
 npm run shopify:dev    # Shopify embedded app dev
 ```
@@ -29,16 +35,16 @@ npx vitest run -t "test name"                             # One test by name
 Embedded components render inside Polaris `AppProvider` and `NextIntlClientProvider`
 with the real message files (see `renderEmbedded` in
 `src/features/dashboard/skins/embedded/components/embeddedTestUtils.tsx`).
-Also validate changes with `npm run build && npm run lint`.
+Validate code changes with `npx tsc --noEmit`, `npm run lint`, and relevant Vitest tests. Run a production build when the change needs build or route verification; it is unnecessary for skill-only documentation edits. See the shared localization skill for isolated build output and preserving existing `tsconfig.json` edits.
 
 ## Project Overview
 
 - Framework: Next.js 16 (App Router) with React 19
 - Language: TypeScript (strict mode)
 - Styling: Tailwind CSS 4 + shadcn/ui primitives (CVA + Radix)
-- i18n: next-intl (locales: `ar` default, `en`, `ur`, `es`; listed in `src/shared/lib/locale.ts`). Messages in `public/messages/{locale}.json`
+- i18n: next-intl (locales: `ar` default, `en`, `ur`, `es`, `fr`, `tr`; listed in `src/shared/lib/locale.ts`). Messages in `public/messages/{locale}.json`
 - Auth: Dual-mode — Supabase (standalone) / Shopify App Bridge (embedded)
-- State: React hooks only (no external state library)
+- State: React hooks for local state; TanStack React Query for server state (`src/shared/query`)
 - API client: `fetchWithAuth` / `api.*` in `src/shared/lib/auth.ts`
 
 ## Source Layout
