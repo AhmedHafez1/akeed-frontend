@@ -844,7 +844,8 @@
         "canceled": "Cancelado",
         "failed": "Fallido",
         "no_reply": "Sin respuesta",
-        "no_whatsapp": "Sin WhatsApp"
+        "no_whatsapp": "Sin WhatsApp",
+        "blocked": "En espera de envío"
       },
       "dateRange": {
         "label": "Rango de fechas",
@@ -1070,7 +1071,8 @@
       "awaiting_start": "Esperando inicio",
       "not_started": "No iniciado",
       "queued": "En cola",
-      "sending": "Enviando…"
+      "sending": "Enviando…",
+      "blocked": "En espera de envío"
     },
     "descriptions": {
       "pending": "La verificación está en cola, a la espera de enviarse.",
@@ -1086,7 +1088,8 @@
       "awaiting_start": "Importado y en espera. No se envía ningún mensaje hasta que inicies la confirmación.",
       "not_started": "La importación no se inició, así que no se envió ningún mensaje.",
       "queued": "El envío comenzó y este pedido está en la fila. Su mensaje sale en unos minutos.",
-      "sending": "La solicitud de confirmación se está enviando al cliente en este momento."
+      "sending": "La solicitud de confirmación se está enviando al cliente en este momento.",
+      "blocked": "Aún no se envió: se agotaron las confirmaciones de tu plan o tus créditos. Akeed lo enviará automáticamente en cuanto puedas volver a enviar, y no se cobra nada hasta entonces."
     },
     "sources": {
       "shopify": "Shopify",
@@ -1123,7 +1126,8 @@
       "incomplete_payload": "El pedido llegó sin los datos necesarios para confirmarlo, así que no se envió ningún mensaje.",
       "order_predates_connection": "Este pedido se hizo antes de que la tienda se conectara a Akeed, así que no se envió ninguna confirmación.",
       "order_not_placed": "Este pedido aún no se ha realizado, o su estado es uno que Akeed no confirma, así que no se envió ningún mensaje.",
-      "generic": "La verificación no pudo continuar. Revisa la configuración o contacta al soporte."
+      "generic": "La verificación no pudo continuar. Revisa la configuración o contacta al soporte.",
+      "capacity_block_stale": "Este pedido esperó demasiado a tener confirmaciones o créditos, así que Akeed no lo envió. Confírmalo o cancélalo tú, o reinténtalo para enviarlo ahora."
     },
     "verifications": {
       "loading": "Cargando verificaciones...",
@@ -1350,7 +1354,8 @@
           "canceledNoWhatsApp": "Número sin WhatsApp",
           "followUpSent": "Recordatorio enviado",
           "sendsAt": "Se envía {time}",
-          "callCustomer": "Llama al cliente"
+          "callCustomer": "Llama al cliente",
+          "waitingForCapacity": "Plan o créditos agotados"
         },
         "tooltip": {
           "scheduledFor": "Programado para {time}",
@@ -1365,7 +1370,8 @@
           "notDelivered": "WhatsApp no pudo entregarlo",
           "generic": "mensaje no entregado",
           "notSent": "mensaje no enviado"
-        }
+        },
+        "blocked": "En espera de envío"
       },
       "loadingMore": "Cargando más pedidos…",
       "loaded": "Mostrando {loaded} de {total} pedidos",
@@ -1441,6 +1447,25 @@
           "confirmed": "Confirmado",
           "canceled": "Cancelado"
         }
+      }
+    },
+    "blockedOrders": {
+      "title": "Pedidos en espera de envío: {count}",
+      "remaining": {
+        "plan": "Confirmaciones restantes en este periodo: {remaining}",
+        "credits": "Créditos restantes: {remaining}"
+      },
+      "body": {
+        "upgrade": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Mejora tu plan para enviarlos ahora, o saldrán automáticamente cuando tu cupo se renueve el {date}.",
+        "upgradeNoDate": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Mejora tu plan y Akeed los enviará automáticamente.",
+        "recharge": "Se agotaron tus créditos, así que estos pedidos no se enviaron. Compra créditos y Akeed los enviará automáticamente.",
+        "waitReset": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Saldrán automáticamente cuando tu cupo se renueve el {date}.",
+        "waitResetNoDate": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Saldrán automáticamente cuando tu cupo se renueve."
+      },
+      "note": "No se cobra nada hasta que se envía un pedido. Un pedido que espera demasiado pasa a Requieren acción.",
+      "cta": {
+        "upgrade": "Mejorar plan",
+        "recharge": "Comprar créditos"
       }
     }
   },

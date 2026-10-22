@@ -44,6 +44,8 @@ const LIFECYCLE_TONES: Record<LifecycleStatus, LifecycleTone> = {
   no_reply: 'attention',
   // Not on WhatsApp: the merchant has to call the customer.
   no_whatsapp: 'attention',
+  // Waiting for plan allowance or credits; sends itself once they return.
+  blocked: 'warning',
 }
 
 export function lifecycleTone(status: LifecycleStatus): LifecycleTone {
@@ -148,6 +150,8 @@ export const EXPLAINED_LIFECYCLE_REASONS = new Set([
   'provider_outcome_unknown',
   // No WhatsApp template could be sent for the customer's language.
   'template_unavailable',
+  // A blocked order waited too long for capacity and was not sent.
+  'capacity_block_stale',
   // Why an order from a connected store was not taken in.
   'missing_currency',
   'missing_phone_country',

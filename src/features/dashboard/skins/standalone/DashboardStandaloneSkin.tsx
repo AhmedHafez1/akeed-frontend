@@ -22,6 +22,7 @@ import { MessageFlowCard } from './components/overview/MessageFlowCard'
 import { NeedsActionCard } from './components/overview/NeedsActionCard'
 import { SettingsStatusLine } from './components/overview/SettingsStatusLine'
 import { UsageBar } from './components/overview/UsageBar'
+import { BlockedOrdersBanner } from './components/overview/BlockedOrdersBanner'
 import { CancelOrderDialog } from './components/confirmations/CancelOrderDialog'
 import { PageHeader } from './components/shared/PageHeader'
 
@@ -191,6 +192,10 @@ export function DashboardStandaloneSkin({
         </div>
       ) : (
         <>
+          <BlockedOrdersBanner
+            capacity={overview.capacity}
+            timeZone={overview.reporting_timezone}
+          />
           {overview.usage && <UsageBar usage={overview.usage} />}
           <KpiCards
             kpis={overview.kpis}

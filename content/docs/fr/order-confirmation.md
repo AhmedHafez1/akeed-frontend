@@ -49,6 +49,7 @@ La confirmation des commandes aide à réduire les deux.
 | Annulée | Le client a annulé (ou le marchand a annulé faute de réponse). | N’expédiez pas. |
 | Sans réponse | Pas de réponse dans le délai d’escalade configuré. | Examinez-la rapidement et appliquez votre politique d’annulation. |
 | Sans WhatsApp | Le numéro du client n’est pas sur WhatsApp, le message ne peut donc pas lui parvenir. Akeed n’envoie pas de rappel et ne compte pas ce message dans votre consommation. | Appelez le client, puis confirmez ou annulez la commande manuellement. |
+| En attente d’envoi | Les confirmations de votre forfait ou vos crédits sont épuisés, le message n’a donc pas été envoyé. Rien n’est facturé. | Changez de forfait ou achetez des crédits : Akeed l’enverra alors automatiquement. |
 | Échec | L’envoi a échoué ou a été bloqué. | Vérifiez la qualité du numéro, l’utilisation du forfait ou le solde de crédits, et les paramètres. |
 
 ## Routine pratique pour le marchand
@@ -111,6 +112,10 @@ Non. « Remis » signifie seulement que le message est parvenu au client. Fiez
 ### Que se passe-t-il si le numéro du client n’est pas sur WhatsApp ?
 
 WhatsApp indique à Akeed que le message ne peut pas être remis, et la commande passe au statut **Sans WhatsApp**. Vous la retrouvez dans l’onglet **Sans WhatsApp** et dans **À traiter**. Akeed annule le rappel, ne compte pas ce message dans votre consommation et, sur Shopify, ajoute l’étiquette `Akeed: No WhatsApp` à la commande. Appelez le client, puis confirmez ou annulez la commande manuellement.
+
+### Que se passe-t-il quand les confirmations de mon forfait ou mes crédits sont épuisés ?
+
+Les nouvelles commandes sont toujours reçues, mais leurs messages attendent avec le statut **En attente d’envoi**, et un bandeau rouge sur le tableau de bord indique combien attendent et ce que vous pouvez faire. Rien n’est facturé pour elles. Dès que vous changez de forfait, achetez des crédits ou que votre quota est renouvelé, Akeed les envoie automatiquement, de la plus ancienne à la plus récente, en respectant le délai d’envoi et les heures de silence. Une commande qui attend plus de 24 heures n’est pas envoyée d’elle-même : elle passe dans **À traiter**, où vous pouvez la confirmer, l’annuler ou la relancer.
 
 ### Où régler les délais et la relance ?
 

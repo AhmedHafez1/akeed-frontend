@@ -49,6 +49,7 @@ Order confirmation helps reduce both.
 | Canceled | Customer canceled (or merchant canceled after no reply). | Do not ship. |
 | No reply | No response within your configured escalation window. | Review quickly and follow your cancellation policy. |
 | No WhatsApp | The customer’s number isn’t on WhatsApp, so the message can’t reach them. Akeed sends no reminder and counts no usage for it. | Call the customer, then confirm or cancel the order by hand. |
+| Waiting to send | Your plan’s confirmations or your credits ran out, so the message wasn’t sent. Nothing is charged for it. | Upgrade or buy credits. Akeed then sends it automatically. |
 | Failed | Send failed or was blocked. | Check phone quality, plan usage or credit balance, and settings. |
 
 ## Practical Merchant Workflow
@@ -111,6 +112,10 @@ No. Delivered only means the message reached the customer. Use **Confirmed** for
 ### What if the customer’s number isn’t on WhatsApp?
 
 WhatsApp tells Akeed the message can’t be delivered, and the order moves to **No WhatsApp**. You find it under the **No WhatsApp** tab and in **Needs action**. Akeed cancels the reminder, does not count the message in your usage, and on Shopify tags the order `Akeed: No WhatsApp`. Call the customer, then confirm or cancel the order by hand.
+
+### What happens when my plan or credits run out?
+
+New orders are still taken in, but their messages wait with the status **Waiting to send**, and a red banner on the dashboard shows how many are waiting and what you can do. Nothing is charged for them. Once you upgrade, buy credits, or your plan’s allowance renews, Akeed sends them automatically, oldest first, keeping your send delay and quiet hours. An order that waits more than 24 hours is not sent on its own: it moves to **Needs action**, where you can confirm, cancel or retry it.
 
 ### Where do I tune timing and follow-up?
 
