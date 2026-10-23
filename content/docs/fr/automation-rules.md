@@ -70,6 +70,24 @@ Servez-vous du statut « Sans réponse » comme d’une file d’examen pour v
 > [!WARNING]
 > Si l’escalade est trop agressive, vous risquez de bloquer des commandes valides dont le client aurait répondu plus tard.
 
+### Annuler automatiquement les commandes sans réponse
+
+Vous pouvez laisser Akeed annuler une commande dans votre boutique quand elle passe **Sans réponse**. L’option reste désactivée tant que vous ne l’activez pas dans **Délais et relance**, dans les réglages, et elle demande l’alerte des commandes sans réponse. À l’activation, Akeed propose un délai de 48 heures après le premier message.
+
+Akeed n’annule une commande que si tout ceci est vrai :
+
+- La confirmation, et le rappel s’il était prévu, ont été distribués.
+- Au moins 12 heures se sont écoulées depuis le dernier message distribué, hors heures de silence.
+- Le client n’a jamais écrit, sous aucune forme.
+- Vous n’avez pas exclu la commande avec **Ne pas annuler automatiquement**.
+- La boutique indique toujours la commande comme non payée et non expédiée.
+
+Si Akeed n’a pas pu envoyer ou distribuer un message, par exemple parce que votre forfait ou vos crédits sont épuisés, l’annulation est suspendue. Akeed n’annule jamais une commande à cause de ses propres limites d’envoi.
+
+Sur Shopify, vous choisissez si les articles sont remis en stock et si Shopify prévient le client. WooCommerce et EasyOrders suivent les réglages de votre boutique. Une commande annulée affiche **Aucune réponse après les tentatives de confirmation**. Si le client écrit ensuite, la commande passe dans **À traiter par vous** pour que vous lisiez son message.
+
+Désactiver l’option arrête toutes les annulations qui n’ont pas encore atteint votre boutique.
+
 ## Règle 4 : heures de silence
 
 Les heures de silence empêchent les envois à certaines heures locales (la nuit, par exemple).

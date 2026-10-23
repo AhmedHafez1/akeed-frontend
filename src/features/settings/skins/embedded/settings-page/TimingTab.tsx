@@ -26,6 +26,9 @@ import {
 } from '@/features/settings/domain/delayPresets'
 import { quietTimeValues } from '@/features/settings/domain/quietHours'
 import {
+  autoCancelTogglePatch,
+  escalationMinutesFromForm,
+  escalationTogglePatch,
   resolvedSendDelayMinutes,
   SETTINGS_FIELD_ID,
   timelineInputFromForm,
@@ -209,7 +212,7 @@ export function TimingTab({
                 checked={values.escalationEnabled}
                 disabled={readOnly}
                 onChange={(checked) =>
-                  model.update({ escalationEnabled: checked })
+                  model.update(escalationTogglePatch(checked))
                 }
               />
               {values.escalationEnabled && (
@@ -238,6 +241,60 @@ export function TimingTab({
               )}
             </BlockStack>
           </Box>
+        </Card>
+      </Layout.AnnotatedSection>
+
+      <Layout.AnnotatedSection
+        id="settings-auto-cancel"
+        title={t('autoCancel.heading')}
+        description={t('autoCancel.description')}
+      >
+        <Card>
+          <BlockStack gap="300">
+            <Checkbox
+              id={SETTINGS_FIELD_ID.autoCancel}
+              label={t('autoCancel.label')}
+              helpText={t('autoCancel.help')}
+              checked={values.autoCancelEnabled}
+              disabled={readOnly}
+              error={
+                model.errors.autoCancel
+                  ? t('autoCancel.requiresEscalation')
+                  : undefined
+              }
+              onChange={(checked) =>
+                model.update(autoCancelTogglePatch(values, checked))
+              }
+            />
+            {values.autoCancelEnabled && (
+              <Box paddingInlineStart="800">
+                <BlockStack gap="200">
+                  <Text as="p">
+                    {t('autoCancel.deadline', {
+                      count: Math.round(escalationMinutesFromForm(values) / 60),
+                    })}
+                  </Text>
+                  <Checkbox
+                    label={t('autoCancel.restockLabel')}
+                    checked={values.autoCancelRestock}
+                    disabled={readOnly}
+                    onChange={(checked) =>
+                      model.update({ autoCancelRestock: checked })
+                    }
+                  />
+                  <Checkbox
+                    label={t('autoCancel.notifyLabel')}
+                    helpText={t('autoCancel.storeNote')}
+                    checked={values.autoCancelNotifyCustomer}
+                    disabled={readOnly}
+                    onChange={(checked) =>
+                      model.update({ autoCancelNotifyCustomer: checked })
+                    }
+                  />
+                </BlockStack>
+              </Box>
+            )}
+          </BlockStack>
         </Card>
       </Layout.AnnotatedSection>
 

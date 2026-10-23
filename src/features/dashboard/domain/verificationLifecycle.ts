@@ -111,11 +111,17 @@ export function canMarkOrderCanceled(
   actionReason: NeedsActionReason | null | undefined,
   capabilities: VerificationRowCapability[] | undefined
 ): boolean {
+  // A settled order has nothing left to cancel, even when it still needs a
+  // look (a reply after Akeed canceled it). A customer who wrote is
+  // cancellable only once the order reached no reply.
+  if (status === 'confirmed' || status === 'canceled') return false
   const unanswered =
     status === 'no_reply' ||
     (Boolean(actionReason) &&
       actionReason !== 'delivery_failed' &&
-      actionReason !== 'send_failed')
+      actionReason !== 'send_failed' &&
+      actionReason !== 'customer_replied' &&
+      actionReason !== 'late_reply_after_auto_cancel')
   if (!unanswered) return false
   // A row loaded before capabilities existed is assumed cancellable; the
   // server rejects it if not, and hiding the only recovery action would be

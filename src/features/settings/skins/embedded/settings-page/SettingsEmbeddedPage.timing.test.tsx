@@ -160,9 +160,24 @@ describe.each(['ar', 'en'] as const)('embedded Timing tab (%s)', (locale) => {
     expect(view.steps.map((step) => step.textContent).join(' ')).not.toMatch(
       /(^|\s)[123](\s|$)/
     )
-    for (const step of Object.values(timing.steps)) {
+    // The automatic-cancellation name replaces the last one only while it is on.
+    const { autoCancel, ...stepNames } = timing.steps
+    for (const step of Object.values(stepNames)) {
       expect(within(view.steps[0].parentElement!).getByText(step)).toBeTruthy()
     }
+    expect(screen.queryByText(autoCancel)).toBeNull()
+  })
+
+  it('names the last step after the automatic cancellation while it is on', async () => {
+    const view = await renderTiming(locale, { autoCancelEnabled: true })
+
+    expect(view.steps).toHaveLength(4)
+    expect(
+      within(view.steps[3]).getByText(timing.steps.autoCancel)
+    ).toBeTruthy()
+    expect(
+      within(view.steps[3]).queryByText(timing.steps.needsAction)
+    ).toBeNull()
   })
 
   it('keeps a switched-off reminder in place, dashed and marked off', async () => {

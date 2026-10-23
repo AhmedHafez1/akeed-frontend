@@ -99,7 +99,7 @@ Un envío fallido es una señal operativa, no solo un número del panel.
 
 ### ¿Akeed cancela automáticamente todos los pedidos sin confirmar?
 
-No. Tu configuración y tu proceso determinan cómo se tratan los pedidos sin respuesta.
+Solo si activas **Cancelar automáticamente los pedidos sin respuesta** en Configuración, y aun así solo los pedidos que quedaron sin respuesta después de entregarse todos los mensajes y sin que el cliente escribiera. Si no, los pedidos sin respuesta te esperan. Consulta [Reglas de automatización](/docs/automation-rules).
 
 ### ¿Los clientes pueden responder después del estado sin respuesta?
 

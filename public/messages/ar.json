@@ -2368,7 +2368,10 @@
           "read_no_reply": "قرأ الرسالة ولم يرد · منذ {hours, plural, one {ساعة} two {ساعتين} few {# ساعات} many {# ساعة} other {# ساعة}}",
           "delivery_failed": "لم تصل الرسالة: {reason}",
           "send_failed": "لم تُرسل الرسالة",
-          "no_whatsapp": "غير مسجل على واتساب · اتصل بالعميل"
+          "no_whatsapp": "غير مسجل على واتساب · اتصل بالعميل",
+          "customer_replied": "رد العميل · اقرأ رسالته",
+          "auto_cancel_failed": "فشل الإلغاء التلقائي",
+          "late_reply_after_auto_cancel": "كتب بعد الإلغاء"
         },
         "actions": {
           "whatsapp": "راسله واتساب",
@@ -2465,6 +2468,7 @@
         "sending": "قيد الإرسال",
         "awaitingReply": "بانتظار الرد",
         "noReply": "لم يرد",
+        "customerReplied": "رد العميل",
         "noWhatsApp": "بدون واتساب",
         "awaitingStart": "بانتظار البدء",
         "notStarted": "لم يبدأ",
@@ -2475,6 +2479,8 @@
           "canceledByCustomer": "ألغاه العميل",
           "canceledNoReply": "لم يرد العميل",
           "canceledNoWhatsApp": "الرقم غير مسجل على واتساب",
+          "canceledAutomatically": "لا رد بعد محاولات التأكيد",
+          "lateReplyAfterAutoCancel": "كتب العميل بعد الإلغاء",
           "followUpSent": "أُرسل التذكير",
           "sendsAt": "يُرسل {time}",
           "callCustomer": "اتصل بالعميل",
@@ -2497,6 +2503,53 @@
         "blocked": "بانتظار الإرسال"
       },
       "loadingMore": "جارٍ تحميل المزيد من الطلبات…",
+      "autoCancel": {
+        "marker": {
+          "scheduled": "يُلغى تلقائيًا في {time} إن لم يرد العميل",
+          "paused": "الإلغاء التلقائي متوقف لأن {reason}",
+          "pausedReasons": {
+            "initial_not_delivered": "رسالة التأكيد لم تصل",
+            "reminder_blocked": "التذكير لم يُرسل",
+            "reminder_not_delivered": "التذكير لم يصل",
+            "unknown": "إحدى الرسائل لم تصل"
+          },
+          "excluded": "مستثنى من الإلغاء التلقائي",
+          "inProgress": "جارٍ إلغاؤه في متجرك",
+          "failed": "فشل الإلغاء التلقائي. ألغِه بنفسك أو احتفظ به."
+        },
+        "actions": {
+          "exclude": "لا تلغِه تلقائيًا",
+          "include": "اسمح بالإلغاء التلقائي",
+          "excludeSuccess": "لن يُلغى هذا الطلب تلقائيًا.",
+          "includeSuccess": "عاد الإلغاء التلقائي لهذا الطلب.",
+          "error": "تعذر تغيير الإلغاء التلقائي لهذا الطلب. حاول مرة أخرى.",
+          "inProgressError": "المتجر يلغي هذا الطلب بالفعل."
+        },
+        "detail": {
+          "label": "الإلغاء التلقائي",
+          "canceled": "أُلغي. لا رد بعد محاولات التأكيد.",
+          "canceledLateReply": "أُلغي لعدم الرد. كتب العميل بعد ذلك، فاقرأ رسالته على واتساب.",
+          "skipped": "لم يُلغَ لأن {reason}",
+          "skipReasons": {
+            "paid": "الطلب مدفوع",
+            "fulfilled": "الطلب شُحن",
+            "fulfillment_in_progress": "الطلب قيد التجهيز",
+            "status_not_writable": "المتجر نقل الطلب إلى مرحلة أخرى",
+            "order_not_found": "الطلب غير موجود في المتجر",
+            "source_unsupported": "متجرك لا يسمح بذلك",
+            "other": "إحدى قواعد الأمان لم تتحقق"
+          },
+          "stopped": "توقف لأن {reason}",
+          "stopReasons": {
+            "customer_reply": "العميل رد",
+            "excluded": "أنت استثنيت الطلب",
+            "feature_disabled": "الإلغاء التلقائي أُوقف",
+            "status_changed": "حالة الطلب تغيرت",
+            "other": "إحدى قواعد الأمان لم تتحقق"
+          },
+          "waiting": "في انتظار العميل"
+        }
+      },
       "loaded": "عرض {loaded} من {total} طلب",
       "empty": {
         "all": "لا توجد تأكيدات في هذه الفترة بعد.",
@@ -3055,7 +3108,8 @@
           "newOrder": "طلب جديد",
           "confirmation": "رسالة التأكيد",
           "reminder": "تذكير إن لم يرد",
-          "needsAction": "«تحتاج إجراءك»"
+          "needsAction": "«تحتاج إجراءك»",
+          "autoCancel": "إلغاء تلقائي"
         },
         "delayImmediate": "فورًا",
         "delayAfter": "بعد {duration}",
@@ -3093,6 +3147,17 @@
         "alertGroup": "مدة انتظار التنبيه",
         "alertLabel": "تنبيهي بالطلبات بدون رد",
         "alertHelp": "ينتقل الطلب إلى «تحتاج إجراءك» في أكيد لتتابعه بنفسك.",
+        "autoCancel": {
+          "heading": "الطلبات بدون رد",
+          "description": "ماذا يحدث للطلبات التي لا يرد عليها العميل.",
+          "label": "ألغِ الطلبات بدون رد تلقائيًا",
+          "help": "عندما يصل الطلب إلى «لم يرد» يلغيه أكيد في متجرك. فقط إذا وصلت كل الرسائل ولم يكتب العميل أي رد. الطلبات المدفوعة أو المشحونة أو المستثناة تبقى كما هي.",
+          "deadline": "تُلغى الطلبات بدون رد بعد {count, plural, one {ساعة} two {ساعتين} few {# ساعات} many {# ساعة} other {# ساعة}} من الرسالة الأولى، ولا يحدث ذلك قبل مرور 12 ساعة على آخر رسالة وصلت.",
+          "restockLabel": "أعِد المنتجات إلى المخزون",
+          "notifyLabel": "اسمح للمتجر بإبلاغ العميل",
+          "storeNote": "إعادة المخزون وإبلاغ العميل يطبَّقان على متاجر Shopify. أما WooCommerce وEasyOrders فيتبعان إعدادات متجرك.",
+          "requiresEscalation": "فعّل تنبيه الطلبات بدون رد أولًا. الإلغاء التلقائي يحدث عندما يصل الطلب إلى «لم يرد»."
+        },
         "quietHeading": "ساعات الهدوء",
         "quietDescription": "لا نرسل رسائل ليلاً. ما يحين موعده خلالها يُرسل عند انتهائها.",
         "quietLabel": "إيقاف الإرسال أثناء ساعات الهدوء",

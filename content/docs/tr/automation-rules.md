@@ -70,6 +70,24 @@ Yanıt yok listesini operasyon ekibi için bir inceleme kuyruğu olarak kullanı
 > [!WARNING]
 > İşaretleme süresi çok kısa tutulursa, daha sonra yanıt verecek geçerli siparişleri engelleyebilirsiniz.
 
+### Yanıtsız siparişleri otomatik iptal etme
+
+Bir sipariş **Yanıt yok** durumuna geldiğinde Akeed’in onu mağazanızda iptal etmesine izin verebilirsiniz. Ayarlarda **Zamanlama ve takip** bölümünden açana kadar kapalıdır ve yanıtsız sipariş uyarısını gerektirir. Açtığınızda Akeed, ilk mesajdan 48 saat sonrasını süre olarak önerir.
+
+Akeed bir siparişi yalnızca bunların hepsi sağlandığında iptal eder:
+
+- Onay mesajı ve gerekiyorsa hatırlatma teslim edildi.
+- Son teslim edilen mesajdan bu yana, sessiz saatlerin dışında, en az 12 saat geçti.
+- Müşteri hiçbir şekilde yazmadı.
+- Siparişi **Otomatik iptal etme** ile hariç tutmadınız.
+- Mağaza siparişi hâlâ ödenmemiş ve gönderilmemiş gösteriyor.
+
+Akeed bir mesajı gönderemez veya teslim edemezse, örneğin planınız ya da kredileriniz bittiği için, iptal duraklatılır. Akeed kendi gönderim sınırları yüzünden hiçbir siparişi iptal etmez.
+
+Shopify’da ürünlerin stoğa geri eklenip eklenmeyeceğini ve Shopify’ın müşteriyi bilgilendirip bilgilendirmeyeceğini siz seçersiniz. WooCommerce ve EasyOrders mağazanızın kendi ayarlarını izler. İptal edilen siparişte **Onay denemelerinden sonra yanıt yok** yazar. Müşteri bundan sonra yazarsa, mesajı okuyabilmeniz için sipariş **İşlem bekleyenler** bölümüne taşınır.
+
+Ayarı kapatmak, mağazanıza henüz ulaşmamış tüm iptalleri durdurur.
+
 ## Kural 4: Sessiz Saatler
 
 Sessiz saatler, belirli yerel saatlerde (örneğin gece boyunca) gönderim yapılmasını önler.

@@ -1245,7 +1245,10 @@
           "read_no_reply": "Leído, sin respuesta · hace {hours, plural, one {# hora} other {# horas}}",
           "delivery_failed": "No entregado: {reason}",
           "send_failed": "Mensaje no enviado",
-          "no_whatsapp": "No está en WhatsApp · Llama al cliente"
+          "no_whatsapp": "No está en WhatsApp · Llama al cliente",
+          "customer_replied": "El cliente respondió · Lee su mensaje",
+          "auto_cancel_failed": "La cancelación automática falló",
+          "late_reply_after_auto_cancel": "Escribió tras la cancelación"
         },
         "actions": {
           "whatsapp": "Ir a WhatsApp",
@@ -1342,6 +1345,7 @@
         "sending": "Enviando",
         "awaitingReply": "Esperando respuesta",
         "noReply": "Sin respuesta",
+        "customerReplied": "El cliente respondió",
         "noWhatsApp": "Sin WhatsApp",
         "awaitingStart": "Esperando inicio",
         "notStarted": "No iniciado",
@@ -1352,6 +1356,8 @@
           "canceledByCustomer": "Por el cliente",
           "canceledNoReply": "Sin respuesta del cliente",
           "canceledNoWhatsApp": "Número sin WhatsApp",
+          "canceledAutomatically": "Sin respuesta tras los intentos de confirmación",
+          "lateReplyAfterAutoCancel": "El cliente escribió tras la cancelación",
           "followUpSent": "Recordatorio enviado",
           "sendsAt": "Se envía {time}",
           "callCustomer": "Llama al cliente",
@@ -1374,6 +1380,53 @@
         "blocked": "En espera de envío"
       },
       "loadingMore": "Cargando más pedidos…",
+      "autoCancel": {
+        "marker": {
+          "scheduled": "Se cancela automáticamente {time} si el cliente no responde",
+          "paused": "Cancelación automática en pausa porque {reason}",
+          "pausedReasons": {
+            "initial_not_delivered": "la confirmación no se entregó",
+            "reminder_blocked": "el recordatorio no se envió",
+            "reminder_not_delivered": "el recordatorio no se entregó",
+            "unknown": "un mensaje no se entregó"
+          },
+          "excluded": "Excluido de la cancelación automática",
+          "inProgress": "Cancelándose en tu tienda",
+          "failed": "La cancelación automática falló. Cancélalo tú o consérvalo."
+        },
+        "actions": {
+          "exclude": "No cancelar automáticamente",
+          "include": "Permitir la cancelación automática",
+          "excludeSuccess": "Este pedido no se cancelará automáticamente.",
+          "includeSuccess": "La cancelación automática vuelve a aplicarse a este pedido.",
+          "error": "No pudimos cambiar la cancelación automática de este pedido. Inténtalo de nuevo.",
+          "inProgressError": "La tienda ya está cancelando este pedido."
+        },
+        "detail": {
+          "label": "Cancelación automática",
+          "canceled": "Cancelado. Sin respuesta tras los intentos de confirmación.",
+          "canceledLateReply": "Cancelado por falta de respuesta. El cliente escribió después, así que lee su mensaje en WhatsApp.",
+          "skipped": "No se canceló porque {reason}",
+          "skipReasons": {
+            "paid": "el pedido está pagado",
+            "fulfilled": "el pedido se envió",
+            "fulfillment_in_progress": "el pedido se está preparando",
+            "status_not_writable": "la tienda avanzó el pedido",
+            "order_not_found": "la tienda no tiene el pedido",
+            "source_unsupported": "tu tienda no lo permite",
+            "other": "no se cumplió una regla de seguridad"
+          },
+          "stopped": "Se detuvo porque {reason}",
+          "stopReasons": {
+            "customer_reply": "el cliente respondió",
+            "excluded": "conservaste el pedido",
+            "feature_disabled": "se desactivó la cancelación automática",
+            "status_changed": "el pedido cambió",
+            "other": "no se cumplió una regla de seguridad"
+          },
+          "waiting": "Esperando al cliente"
+        }
+      },
       "loaded": "Mostrando {loaded} de {total} pedidos",
       "empty": {
         "all": "Aún no hay confirmaciones en este periodo.",
@@ -1932,7 +1985,8 @@
           "newOrder": "Pedido nuevo",
           "confirmation": "Mensaje de confirmación",
           "reminder": "Recordatorio si no hay respuesta",
-          "needsAction": "«Requieren tu acción»"
+          "needsAction": "«Requieren tu acción»",
+          "autoCancel": "Se cancela automáticamente"
         },
         "delayImmediate": "De inmediato",
         "delayAfter": "Tras {duration}",
@@ -1970,6 +2024,17 @@
         "alertGroup": "Retraso del aviso por falta de respuesta",
         "alertLabel": "Avisarme de los pedidos sin respuesta",
         "alertHelp": "El pedido pasa a «Requieren tu acción» en Akeed para que le des seguimiento tú mismo.",
+        "autoCancel": {
+          "heading": "Pedidos sin respuesta",
+          "description": "Qué pasa con los pedidos que el cliente nunca responde.",
+          "label": "Cancelar automáticamente los pedidos sin respuesta",
+          "help": "Cuando un pedido queda sin respuesta, Akeed lo cancela en tu tienda. Solo si todos los mensajes se entregaron y el cliente nunca escribió. Los pedidos pagados, enviados o excluidos se quedan como están.",
+          "deadline": "Los pedidos sin respuesta se cancelan {count, plural, one {# hora} other {# horas}} después del primer mensaje, y nunca antes de 12 horas tras el último mensaje entregado.",
+          "restockLabel": "Reponer el inventario",
+          "notifyLabel": "Dejar que la tienda avise al cliente",
+          "storeNote": "La reposición y el aviso al cliente se aplican a las tiendas Shopify. WooCommerce y EasyOrders siguen la configuración de tu tienda.",
+          "requiresEscalation": "Primero activa el aviso de pedidos sin respuesta. La cancelación automática ocurre cuando un pedido queda sin respuesta."
+        },
         "quietHeading": "Horario de silencio",
         "quietDescription": "Sin mensajes por la noche. Los mensajes programados durante el horario de silencio se envían cuando este termina.",
         "quietLabel": "Pausar los envíos durante el horario de silencio",

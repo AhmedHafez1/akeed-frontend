@@ -1,5 +1,6 @@
 import type { VerificationItem } from '../model/dashboard.model'
 import { canCancelOrder } from './cancellation'
+import { autoCancelToggleAction } from './autoCancel'
 import { canSendShippingInfo } from './confirmationRowStatus'
 import { canRetryVerification, hasCapability } from './verificationLifecycle'
 
@@ -16,6 +17,8 @@ export interface ConfirmationRowActionPlan {
   canConfirm: boolean
   canRetry: boolean
   canCancel: boolean
+  /** Keep the order out of the automatic cancellation, or let it back in. */
+  autoCancelToggle: 'exclude' | 'include' | null
 }
 
 export function planConfirmationRowActions(
@@ -29,6 +32,7 @@ export function planConfirmationRowActions(
       canConfirm: false,
       canRetry: false,
       canCancel: false,
+      autoCancelToggle: null,
     }
   }
 
@@ -51,6 +55,7 @@ export function planConfirmationRowActions(
       hasCapability(row.capabilities, 'merchant_manual_confirmation'),
     canRetry: permissions.canRetry && canRetryVerification(row.capabilities),
     canCancel: permissions.canWrite && canCancelOrder(row),
+    autoCancelToggle: permissions.canWrite ? autoCancelToggleAction(row) : null,
   }
 }
 
@@ -59,4 +64,8 @@ export interface ConfirmationRowActionHandlers {
   onRequestConfirm: (row: VerificationItem, orderLabel: string) => void
   onRequestCancel: (row: VerificationItem, orderLabel: string) => void
   onRetry: (row: VerificationItem) => void
+  onToggleAutoCancel: (
+    row: VerificationItem,
+    action: 'exclude' | 'include'
+  ) => void
 }

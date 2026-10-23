@@ -62,13 +62,17 @@ export function resolveRowStatus(
         tone: 'critical',
         kind: 'canceled',
         sub:
-          options.showStoreCancellation && row.canceled_in_store
-            ? 'sub.canceledInStore'
-            : row.cancellation_source === 'merchant_no_reply'
-              ? 'sub.canceledNoReply'
-              : row.cancellation_source === 'merchant_no_whatsapp'
-                ? 'sub.canceledNoWhatsApp'
-                : 'sub.canceledByCustomer',
+          row.action_reason === 'late_reply_after_auto_cancel'
+            ? 'sub.lateReplyAfterAutoCancel'
+            : row.cancellation_source === 'automatic_no_reply'
+              ? 'sub.canceledAutomatically'
+              : options.showStoreCancellation && row.canceled_in_store
+                ? 'sub.canceledInStore'
+                : row.cancellation_source === 'merchant_no_reply'
+                  ? 'sub.canceledNoReply'
+                  : row.cancellation_source === 'merchant_no_whatsapp'
+                    ? 'sub.canceledNoWhatsApp'
+                    : 'sub.canceledByCustomer',
       }
     case 'failed':
       return {
@@ -116,6 +120,9 @@ export function resolveRowStatus(
       break
   }
 
+  if (row.action_reason === 'customer_replied') {
+    return { badge: 'customerReplied', tone: 'warning', kind: 'needsAction' }
+  }
   if (row.action_reason || row.status === 'no_reply') {
     return {
       badge: 'noReply',

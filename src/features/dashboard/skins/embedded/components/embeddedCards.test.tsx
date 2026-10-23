@@ -393,6 +393,8 @@ describe('ConfirmationsTable', () => {
       onRequestConfirm: vi.fn(),
       onRequestCancel: vi.fn(),
       onRetry: vi.fn(),
+
+      onToggleAutoCancel: vi.fn(),
     },
   }
 
@@ -749,6 +751,8 @@ describe('ConfirmationsCardList', () => {
           onRequestConfirm: vi.fn(),
           onRequestCancel: vi.fn(),
           onRetry: vi.fn(),
+
+          onToggleAutoCancel: vi.fn(),
         }}
       />,
       'en'
@@ -783,6 +787,8 @@ describe('ConfirmationsCardList', () => {
           onRequestConfirm: vi.fn(),
           onRequestCancel: vi.fn(),
           onRetry: vi.fn(),
+
+          onToggleAutoCancel: vi.fn(),
         }}
       />
     )

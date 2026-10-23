@@ -13,6 +13,7 @@ import {
 } from '@/shared/ui'
 import { cancellationMessageKey } from '@/features/dashboard/domain/cancellation'
 import { useCustomerRecordView } from '@/features/dashboard/domain/useCustomerRecordView'
+import { useAutoCancelDetail } from '@/features/dashboard/domain/useAutoCancelMarker'
 import { getVerificationLifecycleSteps } from '@/features/dashboard/domain/verificationLifecycle'
 import {
   formatOrderTitle,
@@ -86,6 +87,7 @@ function DetailsBody({
   const unavailableKey = cancellationMessageKey(verification)
   const sourceKey = orderSourceLabelKey(verification.platform)
   const customerRecord = useCustomerRecordView(verification.customer_history)
+  const autoCancel = useAutoCancelDetail(verification, timeZone)
 
   return (
     <>
@@ -224,6 +226,16 @@ function DetailsBody({
                 : t('table.followUp.notSent')}
             </dd>
           </div>
+          {autoCancel && (
+            <div className="flex justify-between gap-4 py-3">
+              <dt className="text-muted-foreground">
+                {t('confirmations.autoCancel.detail.label')}
+              </dt>
+              <dd className="text-foreground text-end font-medium">
+                {autoCancel}
+              </dd>
+            </div>
+          )}
           <div className="flex justify-between gap-4 py-3">
             <dt className="text-muted-foreground">
               {t('confirmations.headings.orderTime')}

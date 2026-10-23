@@ -99,7 +99,7 @@ A failed send is an operational signal, not just a dashboard number.
 
 ### Does Akeed auto-cancel all unconfirmed orders?
 
-No. Your settings and process determine how no-reply orders are handled.
+Only if you turn on **Cancel unanswered orders automatically** in Settings, and then only orders that reached No Reply after every message was delivered and the customer never wrote back. Otherwise no-reply orders wait for you. See [Automation Rules](/docs/automation-rules).
 
 ### Can customers still reply after no-reply status?
 

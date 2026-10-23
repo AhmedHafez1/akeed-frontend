@@ -59,6 +59,7 @@ describe('a No WhatsApp row', () => {
       canConfirm: true,
       canRetry: false,
       canCancel: true,
+      autoCancelToggle: null,
     })
     expect(
       canMarkOrderCanceled('no_whatsapp', 'no_whatsapp', row().capabilities)

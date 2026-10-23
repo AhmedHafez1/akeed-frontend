@@ -99,7 +99,7 @@ Başarısız bir gönderim yalnızca paneldeki bir sayı değil, operasyonel bir
 
 ### Akeed onaylanmayan tüm siparişleri otomatik olarak iptal eder mi?
 
-Hayır. Yanıt yok siparişlerinin nasıl ele alınacağını ayarlarınız ve süreciniz belirler.
+Yalnızca ayarlarda **Yanıtsız siparişleri otomatik iptal et** seçeneğini açarsanız ve yalnızca her mesaj teslim edildikten sonra yanıtsız kalan, müşterinin hiç yazmadığı siparişler için. Aksi hâlde yanıtsız siparişler sizi bekler. Bkz. [Otomasyon Kuralları](/docs/automation-rules).
 
 ### Müşteriler yanıt yok durumundan sonra da yanıt verebilir mi?
 

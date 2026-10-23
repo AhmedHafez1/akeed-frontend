@@ -13,6 +13,9 @@ import {
 } from '@/features/settings/domain/delayPresets'
 import { quietTimeValues } from '@/features/settings/domain/quietHours'
 import {
+  autoCancelTogglePatch,
+  escalationMinutesFromForm,
+  escalationTogglePatch,
   sendDelayChoicePatch,
   SETTINGS_FIELD_ID,
   timelineInputFromForm,
@@ -151,6 +154,9 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
   const timezoneError = model.errors.timezone
     ? t('quietErrors.unsupportedTimezone')
     : null
+  const autoCancelError = model.errors.autoCancel
+    ? t('autoCancel.requiresEscalation')
+    : null
 
   return (
     <div className="space-y-6">
@@ -269,7 +275,7 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
             checked={values.escalationEnabled}
             disabled={readOnly}
             onCheckedChange={(escalationEnabled) =>
-              model.update({ escalationEnabled })
+              model.update(escalationTogglePatch(escalationEnabled))
             }
           >
             {values.escalationEnabled && (
@@ -293,6 +299,59 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
               />
             )}
           </SwitchSetting>
+        </AnnotatedSection>
+
+        <AnnotatedSection
+          title={t('autoCancel.heading')}
+          description={t('autoCancel.description')}
+        >
+          <div id={SETTINGS_FIELD_ID.autoCancel}>
+            <SwitchSetting
+              title={t('autoCancel.label')}
+              help={t('autoCancel.help')}
+              checked={values.autoCancelEnabled}
+              disabled={readOnly}
+              onCheckedChange={(enabled) =>
+                model.update(autoCancelTogglePatch(values, enabled))
+              }
+            >
+              {values.autoCancelEnabled && (
+                <div className="space-y-1 px-4 pb-4 sm:px-6 sm:pb-5">
+                  <p className="text-ak-body text-ink">
+                    {t('autoCancel.deadline', {
+                      count: Math.round(escalationMinutesFromForm(values) / 60),
+                    })}
+                  </p>
+                  {autoCancelError && (
+                    <p role="alert" className={fieldErrorClass}>
+                      {autoCancelError}
+                    </p>
+                  )}
+                </div>
+              )}
+            </SwitchSetting>
+            {values.autoCancelEnabled && (
+              <>
+                <SwitchSetting
+                  title={t('autoCancel.restockLabel')}
+                  checked={values.autoCancelRestock}
+                  disabled={readOnly}
+                  onCheckedChange={(autoCancelRestock) =>
+                    model.update({ autoCancelRestock })
+                  }
+                />
+                <SwitchSetting
+                  title={t('autoCancel.notifyLabel')}
+                  help={t('autoCancel.storeNote')}
+                  checked={values.autoCancelNotifyCustomer}
+                  disabled={readOnly}
+                  onCheckedChange={(autoCancelNotifyCustomer) =>
+                    model.update({ autoCancelNotifyCustomer })
+                  }
+                />
+              </>
+            )}
+          </div>
         </AnnotatedSection>
 
         <AnnotatedSection

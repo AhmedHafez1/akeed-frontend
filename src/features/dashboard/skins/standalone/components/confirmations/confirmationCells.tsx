@@ -1,6 +1,12 @@
 'use client'
 
-import { Bell, BellRing, Store, TriangleAlert } from 'lucide-react'
+import {
+  Bell,
+  BellRing,
+  CalendarClock,
+  Store,
+  TriangleAlert,
+} from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
@@ -11,6 +17,7 @@ import {
   getLastUpdateAt,
 } from '@/features/dashboard/domain/verificationRow'
 import { useStatusTooltip } from '@/features/dashboard/domain/useStatusTooltip'
+import { useAutoCancelMarker } from '@/features/dashboard/domain/useAutoCancelMarker'
 import { useCustomerRecordView } from '@/features/dashboard/domain/useCustomerRecordView'
 import type { ConfirmationRowActionHandlers } from '@/features/dashboard/domain/confirmationRowActions'
 import {
@@ -154,11 +161,29 @@ export function StatusCell({
   // The badge stays the local result; a store that does not have it yet is a
   // second line, never a different badge.
   const syncNote = remoteSyncView(row)?.rowNoteKey
+  const autoCancel = useAutoCancelMarker(row, timeZone)
   return (
     <div className="flex min-w-0 flex-col items-start gap-1">
-      <StatusBadge kind={view.kind} icon={false} title={statusTitle}>
-        {t(view.badge)}
-      </StatusBadge>
+      <div className="flex min-w-0 items-center gap-1.5">
+        <StatusBadge kind={view.kind} icon={false} title={statusTitle}>
+          {t(view.badge)}
+        </StatusBadge>
+        {autoCancel && (
+          <span
+            role="img"
+            aria-label={autoCancel.text}
+            title={autoCancel.text}
+            className={cn(
+              'inline-flex shrink-0',
+              autoCancel.marker.key === 'failed'
+                ? 'text-ak-warning'
+                : 'text-ink-muted'
+            )}
+          >
+            <CalendarClock aria-hidden="true" className="size-3.5" />
+          </span>
+        )}
+      </div>
       {syncNote && (
         <p className="text-ak-caption text-ink-muted flex min-w-0 items-center gap-1.5">
           <Store aria-hidden="true" className="size-3.5 shrink-0" />

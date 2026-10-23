@@ -2374,7 +2374,10 @@
           "read_no_reply": "Read, no reply · {hours, plural, one {# hour} other {# hours}} ago",
           "delivery_failed": "Not delivered: {reason}",
           "send_failed": "Message not sent",
-          "no_whatsapp": "Not on WhatsApp · Call the customer"
+          "no_whatsapp": "Not on WhatsApp · Call the customer",
+          "customer_replied": "Customer replied · Read their message",
+          "auto_cancel_failed": "Automatic cancellation failed",
+          "late_reply_after_auto_cancel": "Wrote after it was canceled"
         },
         "actions": {
           "whatsapp": "WhatsApp them",
@@ -2471,6 +2474,7 @@
         "sending": "Sending",
         "awaitingReply": "Awaiting reply",
         "noReply": "No reply",
+        "customerReplied": "Customer replied",
         "noWhatsApp": "No WhatsApp",
         "awaitingStart": "Awaiting start",
         "notStarted": "Not started",
@@ -2481,6 +2485,8 @@
           "canceledByCustomer": "By the customer",
           "canceledNoReply": "No reply from the customer",
           "canceledNoWhatsApp": "Number not on WhatsApp",
+          "canceledAutomatically": "No response after confirmation attempts",
+          "lateReplyAfterAutoCancel": "Customer wrote after it was canceled",
           "followUpSent": "Reminder sent",
           "sendsAt": "Sends {time}",
           "callCustomer": "Call the customer",
@@ -2503,6 +2509,53 @@
         "blocked": "Waiting to send"
       },
       "loadingMore": "Loading more orders…",
+      "autoCancel": {
+        "marker": {
+          "scheduled": "Cancels automatically {time} if the customer doesn’t reply",
+          "paused": "Automatic cancellation paused because {reason}",
+          "pausedReasons": {
+            "initial_not_delivered": "the confirmation wasn’t delivered",
+            "reminder_blocked": "the reminder wasn’t sent",
+            "reminder_not_delivered": "the reminder wasn’t delivered",
+            "unknown": "a message wasn’t delivered"
+          },
+          "excluded": "Kept out of automatic cancellation",
+          "inProgress": "Being canceled in your store",
+          "failed": "Automatic cancellation failed. Cancel it yourself or keep it."
+        },
+        "actions": {
+          "exclude": "Don’t auto-cancel",
+          "include": "Allow auto-cancel",
+          "excludeSuccess": "This order won’t be canceled automatically.",
+          "includeSuccess": "Automatic cancellation is back on for this order.",
+          "error": "We couldn’t change automatic cancellation for this order. Please try again.",
+          "inProgressError": "The store is already canceling this order."
+        },
+        "detail": {
+          "label": "Automatic cancellation",
+          "canceled": "Canceled. No response after confirmation attempts.",
+          "canceledLateReply": "Canceled for no response. The customer wrote afterwards, so read their message on WhatsApp.",
+          "skipped": "Not canceled because {reason}",
+          "skipReasons": {
+            "paid": "the order is paid",
+            "fulfilled": "the order was shipped",
+            "fulfillment_in_progress": "the order is being fulfilled",
+            "status_not_writable": "the store moved the order on",
+            "order_not_found": "the store doesn’t have the order",
+            "source_unsupported": "your store doesn’t allow it",
+            "other": "a safety rule didn’t hold"
+          },
+          "stopped": "Stopped because {reason}",
+          "stopReasons": {
+            "customer_reply": "the customer wrote back",
+            "excluded": "you kept the order",
+            "feature_disabled": "automatic cancellation was turned off",
+            "status_changed": "the order changed",
+            "other": "a safety rule didn’t hold"
+          },
+          "waiting": "Waiting for the customer"
+        }
+      },
       "loaded": "Showing {loaded} of {total} orders",
       "empty": {
         "all": "No confirmations in this period yet.",
@@ -3061,7 +3114,8 @@
           "newOrder": "New order",
           "confirmation": "Confirmation message",
           "reminder": "Reminder if no reply",
-          "needsAction": "“Needs your action”"
+          "needsAction": "“Needs your action”",
+          "autoCancel": "Canceled automatically"
         },
         "delayImmediate": "Immediately",
         "delayAfter": "After {duration}",
@@ -3099,6 +3153,17 @@
         "alertGroup": "No-reply alert delay",
         "alertLabel": "Alert me about orders with no reply",
         "alertHelp": "The order moves to “Needs your action” in Akeed so you can follow up yourself.",
+        "autoCancel": {
+          "heading": "Unanswered orders",
+          "description": "What happens to orders the customer never answers.",
+          "label": "Cancel unanswered orders automatically",
+          "help": "When an order reaches no reply, Akeed cancels it in your store. Only if every message was delivered and the customer never wrote back. Paid, shipped and excluded orders are left as they are.",
+          "deadline": "Unanswered orders are canceled {count, plural, one {# hour} other {# hours}} after the first message, and never sooner than 12 hours after the last delivered message.",
+          "restockLabel": "Restock the items",
+          "notifyLabel": "Let the store notify the customer",
+          "storeNote": "Restocking and the customer notice apply to Shopify stores. WooCommerce and EasyOrders follow your store’s own settings.",
+          "requiresEscalation": "Turn on the no-reply alert first. Automatic cancellation runs when an order reaches no reply."
+        },
         "quietHeading": "Quiet hours",
         "quietDescription": "No messages at night. Anything due during quiet hours is sent when they end.",
         "quietLabel": "Pause sending during quiet hours",

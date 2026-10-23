@@ -70,6 +70,8 @@ function listState(capacity: CapacitySummary | null) {
     onSearchClear: vi.fn(),
     actingId: null,
     onRetry: vi.fn(),
+
+    onToggleAutoCancel: vi.fn(),
     onCancel: vi.fn(),
   } as unknown as ReturnType<typeof useConfirmationsList>
 }

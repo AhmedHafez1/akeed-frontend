@@ -5,7 +5,11 @@ import {
   settingsResponseFixture,
 } from '../testing/settingsFixture'
 import {
+  AUTO_CANCEL_SUGGESTED_MINUTES,
+  autoCancelTogglePatch,
   dirtyTabs,
+  escalationMinutesFromForm,
+  escalationTogglePatch,
   fieldErrorFromApiCode,
   firstInvalidField,
   formFromSettings,
@@ -316,5 +320,63 @@ describe('message languages in the payload', () => {
       codTemplateUrVariant: 'short_v1',
     })
     expect(dirtyTabs(changed, saved)).toEqual(new Set(['message']))
+  })
+})
+
+describe('automatic cancellation settings', () => {
+  it('is off by default and sends all three fields', () => {
+    const form = formFor()
+    expect(form).toMatchObject({
+      autoCancelEnabled: false,
+      autoCancelRestock: true,
+      autoCancelNotifyCustomer: false,
+    })
+    expect(toSettingsPayload(form)).toMatchObject({
+      autoCancelEnabled: false,
+      autoCancelRestock: true,
+      autoCancelNotifyCustomer: false,
+    })
+  })
+
+  it('offers the 48-hour deadline and turns the escalation on when switched on', () => {
+    const form = { ...formFor(), escalationEnabled: false }
+    const next = { ...form, ...autoCancelTogglePatch(form, true) }
+    expect(next.autoCancelEnabled).toBe(true)
+    expect(next.escalationEnabled).toBe(true)
+    expect(escalationMinutesFromForm(next)).toBe(AUTO_CANCEL_SUGGESTED_MINUTES)
+  })
+
+  it('keeps a later deadline the merchant already chose', () => {
+    const form = formFor()
+    const later = {
+      ...form,
+      escalationGapMinutes: 72 * 60 - form.followUpDelayMinutes,
+    }
+    expect(autoCancelTogglePatch(later, true)).not.toHaveProperty(
+      'escalationGapMinutes'
+    )
+  })
+
+  it('switches off with the no-reply alert it runs on', () => {
+    expect(escalationTogglePatch(false)).toEqual({
+      escalationEnabled: false,
+      autoCancelEnabled: false,
+    })
+    const invalid = {
+      ...formFor(),
+      autoCancelEnabled: true,
+      escalationEnabled: false,
+    }
+    expect(validateSettingsForm(invalid).autoCancel).toBe('requiresEscalation')
+    expect(
+      fieldErrorFromApiCode('SETTINGS_AUTO_CANCEL_REQUIRES_ESCALATION')
+    ).toEqual({ autoCancel: 'requiresEscalation' })
+  })
+
+  it('counts a change as a Timing tab change', () => {
+    const saved = formFor()
+    expect([
+      ...dirtyTabs({ ...saved, autoCancelNotifyCustomer: true }, saved),
+    ]).toEqual(['timing'])
   })
 })

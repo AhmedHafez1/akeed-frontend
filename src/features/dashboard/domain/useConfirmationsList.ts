@@ -7,6 +7,7 @@ import { createLogger } from '@/shared/lib/logger'
 import { usePendingManualOrders } from '@/features/orders'
 import { confirmationsListOptions } from '../api/verificationQueries'
 import {
+  useAutoCancelExclusionMutation,
   useCancelVerificationMutation,
   useRetryVerificationMutation,
 } from '../api/verificationMutations'
@@ -120,6 +121,7 @@ export function useConfirmationsList({
 
   const { mutateAsync: retryVerification } = useRetryVerificationMutation()
   const { mutateAsync: cancelVerification } = useCancelVerificationMutation()
+  const { mutateAsync: changeAutoCancel } = useAutoCancelExclusionMutation()
   const [actingId, setActingId] = useState<string | null>(null)
 
   const runRowAction = useCallback(
@@ -159,6 +161,14 @@ export function useConfirmationsList({
     [cancelVerification, runRowAction]
   )
 
+  const onToggleAutoCancel = useCallback(
+    (verificationId: string, action: 'exclude' | 'include') =>
+      runRowAction(verificationId, () =>
+        changeAutoCancel({ verificationId, action })
+      ),
+    [changeAutoCancel, runRowAction]
+  )
+
   return {
     rows,
     total,
@@ -190,5 +200,6 @@ export function useConfirmationsList({
     actingId,
     onRetry,
     onCancel,
+    onToggleAutoCancel,
   }
 }

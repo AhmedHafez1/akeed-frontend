@@ -1,6 +1,8 @@
 'use client'
 
 import {
+  CalendarCheck,
+  CalendarX,
   CheckCircle2,
   Ellipsis,
   Eye,
@@ -58,6 +60,7 @@ export function ConfirmationRowActions({
   // A row shown ahead of the server has no details or actions yet.
   if (row.optimistic) return null
   const LinkIcon = plan.primary === 'shipping' ? Truck : MessageCircle
+  const autoCancelToggle = plan.autoCancelToggle
 
   const inline = layout === 'inline'
 
@@ -133,6 +136,21 @@ export function ConfirmationRowActions({
               {isActing
                 ? t('table.actions.retrying')
                 : t('table.actions.retry')}
+            </DropdownMenuItem>
+          )}
+          {autoCancelToggle && (
+            <DropdownMenuItem
+              disabled={isAnyActing}
+              onSelect={() =>
+                handlers.onToggleAutoCancel(row, autoCancelToggle)
+              }
+            >
+              {autoCancelToggle === 'exclude' ? (
+                <CalendarX aria-hidden="true" className="size-4" />
+              ) : (
+                <CalendarCheck aria-hidden="true" className="size-4" />
+              )}
+              {t(`confirmations.autoCancel.actions.${autoCancelToggle}`)}
             </DropdownMenuItem>
           )}
           {plan.canCancel && (

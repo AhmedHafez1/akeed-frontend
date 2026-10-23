@@ -1245,7 +1245,10 @@
           "read_no_reply": "Lu, sans réponse · il y a {hours, plural, one {# heure} other {# heures}}",
           "delivery_failed": "Non remis : {reason}",
           "send_failed": "Message non envoyé",
-          "no_whatsapp": "Pas sur WhatsApp · Appelez le client"
+          "no_whatsapp": "Pas sur WhatsApp · Appelez le client",
+          "customer_replied": "Le client a répondu · Lisez son message",
+          "auto_cancel_failed": "L’annulation automatique a échoué",
+          "late_reply_after_auto_cancel": "A écrit après l’annulation"
         },
         "actions": {
           "whatsapp": "Écrire sur WhatsApp",
@@ -1342,6 +1345,7 @@
         "sending": "Envoi en cours",
         "awaitingReply": "En attente de réponse",
         "noReply": "Sans réponse",
+        "customerReplied": "Le client a répondu",
         "noWhatsApp": "Sans WhatsApp",
         "awaitingStart": "En attente de démarrage",
         "notStarted": "Non démarrée",
@@ -1352,6 +1356,8 @@
           "canceledByCustomer": "Par le client",
           "canceledNoReply": "Sans réponse du client",
           "canceledNoWhatsApp": "Numéro sans WhatsApp",
+          "canceledAutomatically": "Aucune réponse après les tentatives de confirmation",
+          "lateReplyAfterAutoCancel": "Le client a écrit après l’annulation",
           "followUpSent": "Rappel envoyé",
           "sendsAt": "Envoi : {time}",
           "callCustomer": "Appelez le client",
@@ -1374,6 +1380,53 @@
         "blocked": "En attente d’envoi"
       },
       "loadingMore": "Chargement d’autres commandes…",
+      "autoCancel": {
+        "marker": {
+          "scheduled": "Annulée automatiquement {time} si le client ne répond pas",
+          "paused": "Annulation automatique suspendue, car {reason}",
+          "pausedReasons": {
+            "initial_not_delivered": "la confirmation n’a pas été distribuée",
+            "reminder_blocked": "le rappel n’a pas été envoyé",
+            "reminder_not_delivered": "le rappel n’a pas été distribué",
+            "unknown": "un message n’a pas été distribué"
+          },
+          "excluded": "Exclue de l’annulation automatique",
+          "inProgress": "Annulation en cours dans votre boutique",
+          "failed": "L’annulation automatique a échoué. Annulez-la vous-même ou gardez-la."
+        },
+        "actions": {
+          "exclude": "Ne pas annuler automatiquement",
+          "include": "Autoriser l’annulation automatique",
+          "excludeSuccess": "Cette commande ne sera pas annulée automatiquement.",
+          "includeSuccess": "L’annulation automatique s’applique de nouveau à cette commande.",
+          "error": "Impossible de modifier l’annulation automatique de cette commande. Réessayez.",
+          "inProgressError": "La boutique annule déjà cette commande."
+        },
+        "detail": {
+          "label": "Annulation automatique",
+          "canceled": "Annulée. Aucune réponse après les tentatives de confirmation.",
+          "canceledLateReply": "Annulée faute de réponse. Le client a écrit ensuite, lisez son message sur WhatsApp.",
+          "skipped": "Non annulée, car {reason}",
+          "skipReasons": {
+            "paid": "la commande est payée",
+            "fulfilled": "la commande a été expédiée",
+            "fulfillment_in_progress": "la commande est en préparation",
+            "status_not_writable": "la boutique a fait avancer la commande",
+            "order_not_found": "la boutique n’a pas cette commande",
+            "source_unsupported": "votre boutique ne le permet pas",
+            "other": "une règle de sécurité n’était pas remplie"
+          },
+          "stopped": "Arrêtée, car {reason}",
+          "stopReasons": {
+            "customer_reply": "le client a répondu",
+            "excluded": "vous avez gardé la commande",
+            "feature_disabled": "l’annulation automatique a été désactivée",
+            "status_changed": "la commande a changé",
+            "other": "une règle de sécurité n’était pas remplie"
+          },
+          "waiting": "En attente du client"
+        }
+      },
       "loaded": "Affichage de {loaded} commandes sur {total}",
       "empty": {
         "all": "Aucune confirmation sur cette période pour l’instant.",
@@ -1932,7 +1985,8 @@
           "newOrder": "Nouvelle commande",
           "confirmation": "Message de confirmation",
           "reminder": "Rappel faute de réponse",
-          "needsAction": "« À traiter par vous »"
+          "needsAction": "« À traiter par vous »",
+          "autoCancel": "Annulée automatiquement"
         },
         "delayImmediate": "Immédiatement",
         "delayAfter": "Après {duration}",
@@ -1970,6 +2024,17 @@
         "alertGroup": "Délai de l’alerte « sans réponse »",
         "alertLabel": "M’alerter sur les commandes sans réponse",
         "alertHelp": "La commande passe dans « À traiter par vous » dans Akeed pour que vous puissiez la suivre vous-même.",
+        "autoCancel": {
+          "heading": "Commandes sans réponse",
+          "description": "Ce qui arrive aux commandes auxquelles le client ne répond jamais.",
+          "label": "Annuler automatiquement les commandes sans réponse",
+          "help": "Quand une commande reste sans réponse, Akeed l’annule dans votre boutique. Seulement si chaque message a été distribué et que le client n’a jamais écrit. Les commandes payées, expédiées ou exclues restent telles quelles.",
+          "deadline": "Les commandes sans réponse sont annulées {count, plural, one {# heure} other {# heures}} après le premier message, et jamais moins de 12 heures après le dernier message distribué.",
+          "restockLabel": "Remettre les articles en stock",
+          "notifyLabel": "Laisser la boutique prévenir le client",
+          "storeNote": "La remise en stock et l’avis au client s’appliquent aux boutiques Shopify. WooCommerce et EasyOrders suivent les réglages de votre boutique.",
+          "requiresEscalation": "Activez d’abord l’alerte des commandes sans réponse. L’annulation automatique a lieu quand une commande reste sans réponse."
+        },
         "quietHeading": "Heures de silence",
         "quietDescription": "Pas de messages la nuit. Tout envoi prévu pendant les heures de silence part à la fin de celles-ci.",
         "quietLabel": "Suspendre les envois pendant les heures de silence",

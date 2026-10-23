@@ -68,6 +68,14 @@ function useConfirmationRowActions({
       onAction: () => handlers.onRetry(row),
     })
   }
+  const toggle = plan.autoCancelToggle
+  if (toggle) {
+    items.push({
+      id: 'auto-cancel',
+      content: t(`confirmations.autoCancel.actions.${toggle}`),
+      onAction: () => handlers.onToggleAutoCancel(row, toggle),
+    })
+  }
   if (plan.canCancel) {
     items.push({
       id: 'cancel',

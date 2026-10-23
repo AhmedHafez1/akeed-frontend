@@ -24,6 +24,8 @@ export type DomainEvent =
   /** The merchant confirmed an order by hand from the dashboard. */
   | 'verification.confirmed'
   | 'verification.retried'
+  /** The merchant kept an order out of the automatic cancellation, or let it back in. */
+  | 'verification.autoCancelChanged'
   /** The merchant asked for a failed store update to be tried again. */
   | 'verification.storeSyncRetried'
   | 'verification.testSent'
@@ -73,6 +75,7 @@ const AFFECTED_QUERIES: Record<DomainEvent, ReadonlyArray<QueryKey>> = {
   'verification.canceled': [queryKeys.verifications.all],
   'verification.confirmed': [queryKeys.verifications.all],
   'verification.storeSyncRetried': [queryKeys.verifications.all],
+  'verification.autoCancelChanged': [queryKeys.verifications.all],
   'verification.retried': [
     queryKeys.verifications.all,
     queryKeys.billing.summary(),

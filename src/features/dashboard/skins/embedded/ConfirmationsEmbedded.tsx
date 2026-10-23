@@ -128,6 +128,29 @@ export function ConfirmationsEmbedded({
     )
   }
 
+  const handleToggleAutoCancel = async (
+    row: VerificationItem,
+    action: 'exclude' | 'include'
+  ) => {
+    setFeedback(null)
+    const result = await list.onToggleAutoCancel(row.id, action)
+    setFeedback(
+      result.status === 'success'
+        ? {
+            tone: 'success',
+            message: t(`confirmations.autoCancel.actions.${action}Success`),
+          }
+        : {
+            tone: 'critical',
+            message: t(
+              result.code === 'AUTO_CANCEL_ALREADY_IN_PROGRESS'
+                ? 'confirmations.autoCancel.actions.inProgressError'
+                : 'confirmations.autoCancel.actions.error'
+            ),
+          }
+    )
+  }
+
   const handleCancel = async () => {
     if (!cancelTarget) return
     const result = await list.onCancel(cancelTarget.row.id)
@@ -291,6 +314,8 @@ export function ConfirmationsEmbedded({
                   onRequestCancel: (row, orderLabel) =>
                     setCancelTarget({ row, orderLabel }),
                   onRetry: (row) => void handleRetry(row),
+                  onToggleAutoCancel: (row, action) =>
+                    void handleToggleAutoCancel(row, action),
                 }}
               />
             </LoadMoreFooter>

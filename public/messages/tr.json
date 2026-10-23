@@ -1245,7 +1245,10 @@
           "read_no_reply": "Okundu, yanıt yok · {hours, plural, one {# saat} other {# saat}} önce",
           "delivery_failed": "Teslim edilmedi: {reason}",
           "send_failed": "Mesaj gönderilmedi",
-          "no_whatsapp": "WhatsApp’ta yok · Müşteriyi arayın"
+          "no_whatsapp": "WhatsApp’ta yok · Müşteriyi arayın",
+          "customer_replied": "Müşteri yanıt verdi · Mesajını okuyun",
+          "auto_cancel_failed": "Otomatik iptal başarısız oldu",
+          "late_reply_after_auto_cancel": "İptalden sonra yazdı"
         },
         "actions": {
           "whatsapp": "WhatsApp’tan yazın",
@@ -1342,6 +1345,7 @@
         "sending": "Gönderiliyor",
         "awaitingReply": "Yanıt bekleniyor",
         "noReply": "Yanıt yok",
+        "customerReplied": "Müşteri yanıt verdi",
         "noWhatsApp": "WhatsApp yok",
         "awaitingStart": "Başlatılmayı bekliyor",
         "notStarted": "Başlatılmadı",
@@ -1352,6 +1356,8 @@
           "canceledByCustomer": "Müşteri tarafından",
           "canceledNoReply": "Müşteriden yanıt yok",
           "canceledNoWhatsApp": "Numara WhatsApp’ta yok",
+          "canceledAutomatically": "Onay denemelerinden sonra yanıt yok",
+          "lateReplyAfterAutoCancel": "Müşteri iptalden sonra yazdı",
           "followUpSent": "Hatırlatma gönderildi",
           "sendsAt": "Gönderim: {time}",
           "callCustomer": "Müşteriyi arayın",
@@ -1374,6 +1380,53 @@
         "blocked": "Gönderim bekliyor"
       },
       "loadingMore": "Daha fazla sipariş yükleniyor…",
+      "autoCancel": {
+        "marker": {
+          "scheduled": "Müşteri yanıt vermezse {time} otomatik iptal edilir",
+          "paused": "Otomatik iptal duraklatıldı, çünkü {reason}",
+          "pausedReasons": {
+            "initial_not_delivered": "onay mesajı teslim edilmedi",
+            "reminder_blocked": "hatırlatma gönderilmedi",
+            "reminder_not_delivered": "hatırlatma teslim edilmedi",
+            "unknown": "bir mesaj teslim edilmedi"
+          },
+          "excluded": "Otomatik iptal dışında tutuldu",
+          "inProgress": "Mağazanızda iptal ediliyor",
+          "failed": "Otomatik iptal başarısız oldu. Kendiniz iptal edin ya da tutun."
+        },
+        "actions": {
+          "exclude": "Otomatik iptal etme",
+          "include": "Otomatik iptale izin ver",
+          "excludeSuccess": "Bu sipariş otomatik iptal edilmeyecek.",
+          "includeSuccess": "Bu sipariş için otomatik iptal yeniden açık.",
+          "error": "Bu siparişin otomatik iptali değiştirilemedi. Tekrar deneyin.",
+          "inProgressError": "Mağaza bu siparişi zaten iptal ediyor."
+        },
+        "detail": {
+          "label": "Otomatik iptal",
+          "canceled": "İptal edildi. Onay denemelerinden sonra yanıt yok.",
+          "canceledLateReply": "Yanıt olmadığı için iptal edildi. Müşteri sonradan yazdı, mesajını WhatsApp’ta okuyun.",
+          "skipped": "İptal edilmedi, çünkü {reason}",
+          "skipReasons": {
+            "paid": "sipariş ödenmiş",
+            "fulfilled": "sipariş kargolanmış",
+            "fulfillment_in_progress": "sipariş hazırlanıyor",
+            "status_not_writable": "mağaza siparişi ilerletti",
+            "order_not_found": "sipariş mağazada yok",
+            "source_unsupported": "mağazanız buna izin vermiyor",
+            "other": "bir güvenlik kuralı sağlanmadı"
+          },
+          "stopped": "Durduruldu, çünkü {reason}",
+          "stopReasons": {
+            "customer_reply": "müşteri yanıt verdi",
+            "excluded": "siparişi tuttunuz",
+            "feature_disabled": "otomatik iptal kapatıldı",
+            "status_changed": "sipariş değişti",
+            "other": "bir güvenlik kuralı sağlanmadı"
+          },
+          "waiting": "Müşteri bekleniyor"
+        }
+      },
       "loaded": "{total} siparişten {loaded} tanesi gösteriliyor",
       "empty": {
         "all": "Bu dönemde henüz onay yok.",
@@ -1932,7 +1985,8 @@
           "newOrder": "Yeni sipariş",
           "confirmation": "Onay mesajı",
           "reminder": "Yanıt yoksa hatırlatma",
-          "needsAction": "“İşlem bekleyenler”"
+          "needsAction": "“İşlem bekleyenler”",
+          "autoCancel": "Otomatik iptal edilir"
         },
         "delayImmediate": "Hemen",
         "delayAfter": "{duration} sonra",
@@ -1970,6 +2024,17 @@
         "alertGroup": "Yanıt yok uyarısı gecikmesi",
         "alertLabel": "Yanıt gelmeyen siparişler için beni uyar",
         "alertHelp": "Sipariş, kendiniz takip edebilmeniz için Akeed’de “İşlem bekleyenler” bölümüne taşınır.",
+        "autoCancel": {
+          "heading": "Yanıtsız siparişler",
+          "description": "Müşterinin hiç yanıtlamadığı siparişlere ne olacağı.",
+          "label": "Yanıtsız siparişleri otomatik iptal et",
+          "help": "Bir sipariş yanıtsız kaldığında Akeed onu mağazanızda iptal eder. Yalnızca her mesaj teslim edildiyse ve müşteri hiç yazmadıysa. Ödenmiş, kargolanmış ve hariç tutulan siparişler olduğu gibi kalır.",
+          "deadline": "Yanıtsız siparişler ilk mesajdan {count, plural, one {# saat} other {# saat}} sonra iptal edilir ve son teslim edilen mesajdan 12 saat geçmeden asla iptal edilmez.",
+          "restockLabel": "Ürünleri stoğa geri ekle",
+          "notifyLabel": "Mağazanın müşteriyi bilgilendirmesine izin ver",
+          "storeNote": "Stoğa geri ekleme ve müşteri bildirimi Shopify mağazaları için geçerlidir. WooCommerce ve EasyOrders mağazanızın kendi ayarlarını izler.",
+          "requiresEscalation": "Önce yanıtsız sipariş uyarısını açın. Otomatik iptal, sipariş yanıtsız kaldığında çalışır."
+        },
         "quietHeading": "Sessiz saatler",
         "quietDescription": "Gece mesaj gönderilmez. Sessiz saatlere denk gelen mesajlar, sessiz saatler bitince gönderilir.",
         "quietLabel": "Sessiz saatlerde gönderimi duraklat",

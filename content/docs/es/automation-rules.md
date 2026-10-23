@@ -70,6 +70,24 @@ Usa Sin respuesta como una cola de revisión para tu operación.
 > [!WARNING]
 > Si el aviso llega demasiado pronto, puedes bloquear pedidos válidos que habrían respondido más tarde.
 
+### Cancelar automáticamente los pedidos sin respuesta
+
+Puedes dejar que Akeed cancele un pedido en tu tienda cuando queda **Sin respuesta**. Está desactivado hasta que lo activas en **Tiempos y recordatorio** dentro de Configuración, y necesita el aviso de pedidos sin respuesta. Al activarlo, Akeed propone 48 horas después del primer mensaje como plazo.
+
+Akeed cancela un pedido solo cuando se cumple todo esto:
+
+- Se entregó la confirmación y, si tocaba, el recordatorio.
+- Pasaron al menos 12 horas desde el último mensaje entregado, fuera del horario de silencio.
+- El cliente nunca escribió, de ninguna forma.
+- No excluiste el pedido con **No cancelar automáticamente**.
+- La tienda todavía muestra el pedido sin pagar y sin enviar.
+
+Si Akeed no pudo enviar o entregar un mensaje, por ejemplo porque se agotó tu plan o tus créditos, la cancelación se pone en pausa. Akeed nunca cancela un pedido por sus propios límites de envío.
+
+En Shopify eliges si se repone el inventario y si Shopify avisa al cliente. WooCommerce y EasyOrders siguen la configuración de tu tienda. Un pedido cancelado muestra **Sin respuesta tras los intentos de confirmación**. Si el cliente escribe después, el pedido pasa a **Requieren tu acción** para que leas el mensaje.
+
+Desactivar la opción detiene todas las cancelaciones que aún no llegaron a tu tienda.
+
 ## Regla 4: Horario de silencio
 
 El horario de silencio evita los envíos durante ciertas horas locales (por ejemplo, de madrugada).

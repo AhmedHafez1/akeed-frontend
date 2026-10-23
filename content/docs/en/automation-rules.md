@@ -70,6 +70,24 @@ Use No Reply as a review queue for operations.
 > [!WARNING]
 > If escalation is too aggressive, you may block valid orders that would have replied later.
 
+### Cancel unanswered orders automatically
+
+You can let Akeed cancel an order in your store when it reaches **No Reply**. It is off until you turn it on under **Timing & follow-up** in Settings, and it needs the no-reply alert. When you turn it on, Akeed suggests 48 hours after the first message as the deadline.
+
+Akeed cancels an order only when all of these hold:
+
+- The confirmation, and the reminder if one was due, were delivered.
+- At least 12 hours passed since the last delivered message, outside quiet hours.
+- The customer never wrote back, in any form.
+- You did not keep the order out with **Don’t auto-cancel**.
+- The store still shows the order unpaid and unfulfilled.
+
+A message Akeed could not send or deliver, for example because your plan or credits ran out, pauses the cancellation instead. Akeed never cancels an order because of its own sending limits.
+
+On Shopify you choose whether the items are restocked and whether Shopify tells the customer. WooCommerce and EasyOrders follow your store’s own settings. A canceled order shows **No response after confirmation attempts**. If the customer writes after that, the order moves to **Needs action** so you can read the message.
+
+Turning the setting off stops every cancellation that has not reached your store yet.
+
 ## Rule 4: Quiet Hours
 
 Quiet Hours prevent sends during specific local times (for example overnight).
