@@ -23,7 +23,7 @@ import type { SettingsTabId } from './settingsTabs'
 /** Mirrors the backend limit: a template variable on every message. */
 export const STORE_NAME_MAX_LENGTH = 60
 
-const DEFAULT_QUIET_START = '21:00'
+const DEFAULT_QUIET_START = '22:00'
 const DEFAULT_QUIET_END = '09:00'
 /** The column default; a store still on it never chose a zone. */
 const DEFAULT_TIMEZONE = 'Asia/Riyadh'

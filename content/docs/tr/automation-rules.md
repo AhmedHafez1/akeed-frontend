@@ -44,7 +44,7 @@ Açıksa Akeed, yanıt vermeyen müşterilere bir hatırlatma gönderir.
 ### Önerilen varsayılan
 
 - Hatırlatmayı **açık** tutun.
-- İlk gönderimden **1 ile 2 saat** sonrasıyla başlayın.
+- İlk gönderimden **6 saat** sonrasıyla başlayın. Varsayılan değer budur.
 
 ### Neden işe yarar
 
@@ -57,7 +57,7 @@ Bu kural, müşteri ayarladığınız süreden sonra hâlâ yanıt vermemişse s
 
 ### Önerilen varsayılan
 
-- **4 ile 6 saat** ile başlayın.
+- Hatırlatmadan **24 saat** sonrasıyla başlayın. Varsayılan değer budur.
 - İşaretleme süresini hatırlatma süresinden uzun tutun.
 
 ### Operasyonda kullanımı
@@ -76,7 +76,7 @@ Sessiz saatler, belirli yerel saatlerde (örneğin gece boyunca) gönderim yapı
 
 ### Önerilen kullanım
 
-- Müşterileriniz geç saatte gelen mesajlardan rahatsız oluyorsa açın.
+- Sessiz saatler varsayılan olarak saat diliminizde 22:00 ile 09:00 arasında açıktır. Yalnızca müşterileriniz gece mesaj bekliyorsa kapatın.
 - Başlangıç ve bitiş saatlerini pazarınızdaki alışkanlıklara göre belirleyin.
 
 ### Önemli
@@ -96,8 +96,7 @@ Saat dilimini ana operasyon ekibinizin ve müşterilerinizin kullandığı saat 
 | Mağaza Tipi | İlk Gecikme | Hatırlatma | Yanıt Yok İşaretleme | Sessiz Saatler |
 | --- | ---: | ---: | ---: | --- |
 | Hızlı sevkiyat yapan mağaza | 0–10 dk | 60 dk | 240 dk | İsteğe bağlı |
-| Dengeli varsayılan kurulum | 10–15 dk | 120 dk | 360 dk | İsteğe bağlı |
-| Gece geç saatlere duyarlı müşteri kitlesi | 10–20 dk | 120 dk | 360–480 dk | Açık |
+| Dengeli varsayılan kurulum | 0 dk | 360 dk | Hatırlatmadan sonra 1440 dk | 22:00–09:00 |
 
 Bunları başlangıç noktası olarak kullanın, ardından yanıt ve onay oranlarınıza göre her hafta ince ayar yapın.
 
@@ -141,7 +140,7 @@ Hayır. Kuralları kendi sipariş davranışınıza, müşteri kitlenizin alış
 
 ### En iyi yanıt yok işaretleme süresi nedir?
 
-Herkese uyan bir değer yoktur. 4–6 saatle başlayın, ardından gerçek yanıt örüntülerine göre ayarlayın.
+Herkese uyan bir değer yoktur. Hatırlatmadan 24 saat sonrasıyla başlayın, ardından gerçek yanıt örüntülerine göre ayarlayın.
 
 ### Kurallarımın işe yarayıp yaramadığını nereden kontrol edebilirim?
 

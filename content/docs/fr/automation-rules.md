@@ -44,7 +44,7 @@ Si cette option est activée, Akeed envoie un rappel de relance aux clients qui 
 ### Valeur recommandée
 
 - Laissez la relance **activée**.
-- Commencez par **1 à 2 heures** après le premier envoi.
+- Commencez par **6 heures** après le premier envoi. C’est la valeur par défaut.
 
 ### Pourquoi c’est utile
 
@@ -57,7 +57,7 @@ L’escalade marque la commande comme **Sans réponse** lorsque le client n’a 
 
 ### Valeur recommandée
 
-- Commencez par **4 à 6 heures**.
+- Commencez par **24 heures** après la relance. C’est la valeur par défaut.
 - Placez l’escalade après la relance.
 
 ### Usage opérationnel
@@ -76,7 +76,7 @@ Les heures de silence empêchent les envois à certaines heures locales (la nuit
 
 ### Usage recommandé
 
-- Activez-les si votre clientèle est sensible aux messages tardifs.
+- Elles sont activées par défaut, de 22:00 à 09:00 dans votre fuseau horaire. Désactivez-les seulement si vos clients attendent des messages la nuit.
 - Fixez le début et la fin selon les habitudes de votre marché.
 
 ### Important
@@ -96,8 +96,7 @@ Choisissez le fuseau horaire de votre équipe opérationnelle principale et de v
 | Profil de boutique | Délai initial | Relance | Escalade | Heures de silence |
 | --- | ---: | ---: | ---: | --- |
 | Boutique à traitement rapide | 0–10 min | 60 min | 240 min | Facultatives |
-| Configuration équilibrée par défaut | 10–15 min | 120 min | 360 min | Facultatives |
-| Clientèle sensible aux messages nocturnes | 10–20 min | 120 min | 360–480 min | Activées |
+| Configuration équilibrée par défaut | 0 min | 360 min | 1440 min après la relance | 22:00–09:00 |
 
 Prenez-les comme points de départ, puis ajustez chaque semaine d’après vos taux de réponse et de confirmation.
 
@@ -141,7 +140,7 @@ Pour la plupart des boutiques, oui. Une relance capte généralement l’essenti
 
 ### Quel est le meilleur délai d’escalade ?
 
-Il n’existe pas de valeur universelle. Commencez par 4 à 6 heures, puis ajustez selon les réponses réellement observées.
+Il n’existe pas de valeur universelle. Commencez par 24 heures après la relance, puis ajustez selon les réponses réellement observées.
 
 ### Où vérifier que les règles fonctionnent ?
 

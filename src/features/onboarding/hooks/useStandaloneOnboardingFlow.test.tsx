@@ -298,9 +298,11 @@ describe('useStandaloneOnboardingFlow: Your store', () => {
         shippingCurrency: 'EGP',
         isAutoVerifyEnabled: true,
         followUpEnabled: true,
-        followUpDelayMinutes: 120,
-        escalationDelayMinutes: 360,
-        quietHoursEnabled: false,
+        followUpDelayMinutes: 360,
+        escalationDelayMinutes: 1800,
+        quietHoursEnabled: true,
+        quietHoursStart: '22:00',
+        quietHoursEnd: '09:00',
         assumeCodWhenPaymentMissing: false,
       })
     )
