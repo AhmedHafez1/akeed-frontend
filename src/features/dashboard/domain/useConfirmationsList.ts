@@ -166,6 +166,7 @@ export function useConfirmationsList({
     reportingTimezone: pageContext?.reporting_timezone ?? 'UTC',
     sourceStatus: pageContext?.source?.status ?? null,
     settings: pageContext?.settings ?? null,
+    capacity: pageContext?.capacity ?? null,
     creditDenialCode,
     canWrite: permissions?.can_cancel_orders === true,
     canRetry: permissions?.can_retry_verifications === true && !creditBlocked,

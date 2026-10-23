@@ -21,6 +21,8 @@ export type VerificationStatus =
   | 'failed'
   | 'no_reply'
   | 'no_whatsapp'
+  /** Out of plan allowance or credits; sent automatically once capacity returns. */
+  | 'blocked'
 
 /**
  * An imported order that has no verification yet: `awaiting_start` until
@@ -169,6 +171,8 @@ export type DashboardPageContext = {
   settings?: DashboardOverview['settings']
   permissions?: DashboardPermissions
   usage?: DashboardPageUsage
+  /** Orders waiting for capacity. Absent on older payloads. */
+  capacity?: CapacitySummary | null
   /** Rows per confirmations tab for the period, search ignored. */
   tab_counts?: Record<ConfirmationsTab, number>
 }
@@ -283,6 +287,20 @@ export type NeedsActionItem = {
 
 export type UsageState = 'ok' | 'warning' | 'exhausted'
 
+/** What unblocks sending: a bigger plan, more credits, or the next period. */
+export type CapacityAction = 'upgrade' | 'recharge' | 'wait_reset'
+
+/** Orders waiting for sending capacity, and what the merchant can do. */
+export type CapacitySummary = {
+  blocked_count: number
+  mode: 'plan' | 'credits'
+  /** Confirmations or credits left. */
+  remaining: number
+  action: CapacityAction
+  /** When the plan allowance renews; null for credits. */
+  reset_at: string | null
+}
+
 /** GET /api/verifications/overview: everything the embedded dashboard shows. */
 export type DashboardOverview = {
   date_range: DashboardStatsDateRange
@@ -302,6 +320,8 @@ export type DashboardOverview = {
     percent: number
     state: UsageState
   } | null
+  /** Absent on older payloads. */
+  capacity?: CapacitySummary | null
   kpis: {
     confirmed: {
       count: number

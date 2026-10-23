@@ -49,6 +49,7 @@ Sipariş onayı her ikisini de azaltmaya yardımcı olur.
 | İptal edildi | Müşteri iptal etti (ya da yanıt gelmediği için satıcı iptal etti). | Kargoya vermeyin. |
 | Yanıt yok | Ayarladığınız yanıt yok işaretleme süresi içinde yanıt gelmedi. | Hızla gözden geçirin ve iptal politikanızı uygulayın. |
 | WhatsApp yok | Müşterinin numarası WhatsApp’ta değil, bu yüzden mesaj ulaşamıyor. Akeed hatırlatma göndermez ve bu mesajı kullanımınıza saymaz. | Müşteriyi arayın, ardından siparişi elle onaylayın ya da iptal edin. |
+| Gönderim bekliyor | Planınızın onayları veya krediniz bittiği için mesaj gönderilmedi. Ücret alınmaz. | Planınızı yükseltin ya da kredi satın alın; Akeed mesajı otomatik olarak gönderir. |
 | Başarısız | Gönderim başarısız oldu ya da engellendi. | Telefon numarasının doğruluğunu, plan kullanımını veya kredi bakiyesini ve ayarları kontrol edin. |
 
 ## Satıcılar İçin Pratik Akış
@@ -111,6 +112,10 @@ Hayır. Teslim edildi yalnızca mesajın müşteriye ulaştığı anlamına geli
 ### Müşterinin numarası WhatsApp’ta değilse ne olur?
 
 WhatsApp, Akeed’e mesajın teslim edilemeyeceğini bildirir ve sipariş **WhatsApp yok** durumuna geçer. Siparişi **WhatsApp yok** sekmesinde ve **İşlem gerekiyor** bölümünde bulursunuz. Akeed hatırlatmayı iptal eder, mesajı kullanımınıza saymaz ve Shopify’da siparişe `Akeed: No WhatsApp` etiketini ekler. Müşteriyi arayın, ardından siparişi elle onaylayın ya da iptal edin.
+
+### Planımın onayları veya kredim bittiğinde ne olur?
+
+Yeni siparişler yine alınır, ancak mesajları **Gönderim bekliyor** durumunda bekler ve panodaki kırmızı bir uyarı kaç siparişin beklediğini ve ne yapabileceğinizi gösterir. Bunlar için ücret alınmaz. Planınızı yükselttiğinizde, kredi satın aldığınızda ya da plan kotanız yenilendiğinde Akeed bunları en eskisinden başlayarak, gönderim gecikmesine ve sessiz saatlere uyarak otomatik olarak gönderir. 24 saatten uzun bekleyen bir sipariş kendiliğinden gönderilmez: onaylayabileceğiniz, iptal edebileceğiniz ya da yeniden deneyebileceğiniz **İşlem bekleyen** bölümüne taşınır.
 
 ### Zamanlamayı ve hatırlatmaları nereden ayarlarım?
 

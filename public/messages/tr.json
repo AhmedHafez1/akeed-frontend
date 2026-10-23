@@ -844,7 +844,8 @@
         "canceled": "İptal edildi",
         "failed": "Başarısız",
         "no_reply": "Yanıt yok",
-        "no_whatsapp": "WhatsApp yok"
+        "no_whatsapp": "WhatsApp yok",
+        "blocked": "Gönderim bekliyor"
       },
       "dateRange": {
         "label": "Tarih aralığı",
@@ -1070,7 +1071,8 @@
       "awaiting_start": "Başlatılmayı bekliyor",
       "not_started": "Başlatılmadı",
       "queued": "Sırada",
-      "sending": "Gönderiliyor…"
+      "sending": "Gönderiliyor…",
+      "blocked": "Gönderim bekliyor"
     },
     "descriptions": {
       "pending": "Doğrulama sırada ve gönderilmeyi bekliyor.",
@@ -1086,7 +1088,8 @@
       "awaiting_start": "İçe aktarıldı ve bekletiliyor. Onayı başlatana kadar mesaj gönderilmez.",
       "not_started": "İçe aktarma başlatılmadı, bu yüzden mesaj gönderilmedi.",
       "queued": "Gönderim başladı ve bu sipariş sırada. Mesajı birkaç dakika içinde gider.",
-      "sending": "Onay talebi şu anda müşteriye gönderiliyor."
+      "sending": "Onay talebi şu anda müşteriye gönderiliyor.",
+      "blocked": "Henüz gönderilmedi: planınızın onayları veya krediniz bitti. Gönderim yeniden mümkün olduğunda Akeed bunu otomatik olarak gönderir ve o zamana kadar ücret alınmaz."
     },
     "sources": {
       "shopify": "Shopify",
@@ -1123,7 +1126,8 @@
       "incomplete_payload": "Sipariş, onaylanması için gereken bilgiler olmadan geldi, bu yüzden mesaj gönderilmedi.",
       "order_predates_connection": "Bu sipariş mağaza Akeed’e bağlanmadan önce verildi, bu yüzden onay gönderilmedi.",
       "order_not_placed": "Bu sipariş henüz verilmedi veya durumu Akeed’in onaylamadığı bir durum, bu yüzden mesaj gönderilmedi.",
-      "generic": "Doğrulama devam edemedi. Kurulumu gözden geçirin veya destek ekibine ulaşın."
+      "generic": "Doğrulama devam edemedi. Kurulumu gözden geçirin veya destek ekibine ulaşın.",
+      "capacity_block_stale": "Bu sipariş onay veya kredi için çok uzun bekledi, bu yüzden Akeed göndermedi. Kendiniz onaylayın veya iptal edin ya da şimdi göndermek için yeniden deneyin."
     },
     "verifications": {
       "loading": "Doğrulamalar yükleniyor...",
@@ -1350,7 +1354,8 @@
           "canceledNoWhatsApp": "Numara WhatsApp’ta yok",
           "followUpSent": "Hatırlatma gönderildi",
           "sendsAt": "Gönderim: {time}",
-          "callCustomer": "Müşteriyi arayın"
+          "callCustomer": "Müşteriyi arayın",
+          "waitingForCapacity": "Plan veya kredi bitti"
         },
         "tooltip": {
           "scheduledFor": "Planlanan zaman: {time}",
@@ -1365,7 +1370,8 @@
           "notDelivered": "WhatsApp iletemedi",
           "generic": "mesaj teslim edilmedi",
           "notSent": "mesaj gönderilmedi"
-        }
+        },
+        "blocked": "Gönderim bekliyor"
       },
       "loadingMore": "Daha fazla sipariş yükleniyor…",
       "loaded": "{total} siparişten {loaded} tanesi gösteriliyor",
@@ -1441,6 +1447,25 @@
           "confirmed": "Onaylandı",
           "canceled": "İptal edildi"
         }
+      }
+    },
+    "blockedOrders": {
+      "title": "Gönderim bekleyen siparişler: {count}",
+      "remaining": {
+        "plan": "Bu dönem kalan onay: {remaining}",
+        "credits": "Kalan kredi: {remaining}"
+      },
+      "body": {
+        "upgrade": "Planınızın onayları bitti, bu yüzden bu siparişler gönderilmedi. Şimdi göndermek için planınızı yükseltin; aksi halde kotanız {date} tarihinde yenilendiğinde otomatik olarak gönderilir.",
+        "upgradeNoDate": "Planınızın onayları bitti, bu yüzden bu siparişler gönderilmedi. Planınızı yükseltin, Akeed bunları otomatik olarak göndersin.",
+        "recharge": "Krediniz bitti, bu yüzden bu siparişler gönderilmedi. Kredi satın alın, Akeed bunları otomatik olarak göndersin.",
+        "waitReset": "Planınızın onayları bitti, bu yüzden bu siparişler gönderilmedi. Kotanız {date} tarihinde yenilendiğinde otomatik olarak gönderilir.",
+        "waitResetNoDate": "Planınızın onayları bitti, bu yüzden bu siparişler gönderilmedi. Kotanız yenilendiğinde otomatik olarak gönderilir."
+      },
+      "note": "Bir sipariş gönderilene kadar ücret alınmaz. Çok uzun bekleyen sipariş İşlem bekleyen bölümüne taşınır.",
+      "cta": {
+        "upgrade": "Planı yükselt",
+        "recharge": "Kredi satın al"
       }
     }
   },

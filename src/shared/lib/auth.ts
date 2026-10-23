@@ -1,7 +1,10 @@
 'use client'
 import { createClient } from '@supabase/supabase-js'
 import type { User } from '@supabase/supabase-js'
-import { resolveEmbeddedContextFromWindow } from '@/shared/lib/embedded-context'
+import {
+  resolveEmbeddedContextFromWindow,
+  type EmbeddedContext,
+} from '@/shared/lib/embedded-context'
 import { resolveOrganizationSourceMode } from '@/shared/config/commerceSources'
 import { ApiError, createApiError, parseJsonResponse } from '@/shared/lib/http'
 import { createLogger } from '@/shared/lib/logger'
@@ -68,18 +71,18 @@ export function getSupabaseClient() {
 /**
  * Get authentication token based on current mode
  */
-async function getAuthToken(): Promise<string | null> {
+async function getAuthToken(context: EmbeddedContext): Promise<string | null> {
   // Check if we're in a browser environment
   if (typeof window === 'undefined') {
     return null
   }
 
   // Detect mode from URL parameters
-  const { isEmbedded } = resolveEmbeddedContextFromWindow()
+  const { isEmbedded } = context
 
   if (isEmbedded) {
     // EMBEDDED MODE: Get Shopify Session Token
-    return await getShopifySessionToken()
+    return await getShopifySessionToken(context)
   } else {
     // STANDALONE MODE: Get Supabase JWT
     return await getSupabaseToken()
@@ -104,6 +107,23 @@ interface SessionTokenCache {
 }
 
 let sessionTokenCache: SessionTokenCache | null = null
+let sessionTokenContext: string | null = null
+let sessionTokenGeneration = 0
+let sessionTokenRequest: Promise<string | null> | null = null
+
+function syncSessionTokenContext(
+  embeddedContext = resolveEmbeddedContextFromWindow()
+): string | null {
+  const { isEmbedded, shopDomain, hostParam } = embeddedContext
+  const context = isEmbedded ? JSON.stringify([shopDomain, hostParam]) : null
+  if (context !== sessionTokenContext) {
+    sessionTokenContext = context
+    sessionTokenCache = null
+    sessionTokenRequest = null
+    sessionTokenGeneration += 1
+  }
+  return context
+}
 
 interface StandaloneOrganization {
   id: string
@@ -156,6 +176,13 @@ function getJwtExpiry(token: string): number | null {
  * authenticated API request.
  */
 export function primeShopifySessionToken(token: string): void {
+  syncSessionTokenContext()
+  cacheShopifySessionToken(token)
+}
+
+function cacheShopifySessionToken(token: string): void {
+  sessionTokenGeneration += 1
+  sessionTokenRequest = null
   const expSec = getJwtExpiry(token)
   sessionTokenCache = {
     token,
@@ -166,15 +193,28 @@ export function primeShopifySessionToken(token: string): void {
 }
 
 /** Clear the cached session token so the next call fetches a fresh one. */
-function clearSessionTokenCache(): void {
-  sessionTokenCache = null
+function clearSessionTokenCache(
+  rejectedToken: string | null,
+  generation: number
+): void {
+  if (
+    sessionTokenCache?.token === rejectedToken &&
+    sessionTokenGeneration === generation
+  ) {
+    sessionTokenCache = null
+  }
 }
 
-async function getShopifySessionToken(): Promise<string | null> {
+async function getShopifySessionToken(
+  embeddedContext: EmbeddedContext
+): Promise<string | null> {
   try {
+    const context = syncSessionTokenContext(embeddedContext)
+    if (context === null) return null
     if (sessionTokenCache && Date.now() < sessionTokenCache.expiresAt) {
       return sessionTokenCache.token
     }
+    if (sessionTokenRequest) return await sessionTokenRequest
 
     const shopify = window.shopify
 
@@ -185,13 +225,22 @@ async function getShopifySessionToken(): Promise<string | null> {
       return null
     }
 
-    const token = await shopify.idToken()
-
-    if (token) {
-      primeShopifySessionToken(token)
+    const generation = sessionTokenGeneration
+    const request = Promise.resolve().then(async () => {
+      const token = await shopify.idToken()
+      if (syncSessionTokenContext() !== context) return null
+      if (sessionTokenGeneration !== generation) {
+        return sessionTokenCache?.token ?? null
+      }
+      if (token) cacheShopifySessionToken(token)
+      return token
+    })
+    sessionTokenRequest = request
+    try {
+      return await request
+    } finally {
+      if (sessionTokenRequest === request) sessionTokenRequest = null
     }
-
-    return token
   } catch (error) {
     logger.error('Failed to get Shopify session token', error)
     return null
@@ -274,8 +323,14 @@ async function sendWithAuth(
   options: RequestInit,
   transport: Transport
 ): Promise<Response> {
+  const embeddedContext = resolveEmbeddedContextFromWindow()
+  const requestContext = syncSessionTokenContext(embeddedContext)
   // Get authentication token
-  const token = await getAuthToken()
+  const token = await getAuthToken(embeddedContext)
+  const tokenGeneration = sessionTokenGeneration
+  if (requestContext !== syncSessionTokenContext()) {
+    throw new DOMException('Authentication context changed.', 'AbortError')
+  }
 
   const headers = buildRequestHeaders(options, token)
   if (!token) {
@@ -283,7 +338,7 @@ async function sendWithAuth(
   }
 
   // Make request
-  const { isEmbedded } = resolveEmbeddedContextFromWindow()
+  const { isEmbedded } = embeddedContext
   const fullUrl = resolveRequestUrl(url, isEmbedded)
 
   const response = await transport(fullUrl, headers)
@@ -291,12 +346,13 @@ async function sendWithAuth(
   // Handle 401 Unauthorized
   if (response.status === 401) {
     if (isEmbedded) {
+      if (requestContext !== syncSessionTokenContext()) return response
       // In embedded mode, a 401 likely means the cached session token
       // expired. Clear the cache, fetch a fresh token, and retry once.
-      clearSessionTokenCache()
-      const freshToken = await getShopifySessionToken()
+      clearSessionTokenCache(token, tokenGeneration)
+      const freshToken = await getShopifySessionToken(embeddedContext)
 
-      if (freshToken) {
+      if (freshToken && requestContext === syncSessionTokenContext()) {
         const retryHeaders = buildRequestHeaders(options, freshToken)
 
         // If the retry also fails with 401, fall through to return it

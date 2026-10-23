@@ -49,6 +49,7 @@ La confirmación de pedidos ayuda a reducir ambos.
 | Cancelado | El cliente canceló (o el comerciante canceló por falta de respuesta). | No lo envíes. |
 | Sin respuesta | No hubo respuesta dentro del plazo de aviso que configuraste. | Revísalo pronto y aplica tu política de cancelación. |
 | Sin WhatsApp | El número del cliente no está en WhatsApp, así que el mensaje no le llega. Akeed no envía recordatorio y no cuenta el mensaje en tu uso. | Llama al cliente y después confirma o cancela el pedido manualmente. |
+| En espera de envío | Se agotaron las confirmaciones de tu plan o tus créditos, así que el mensaje no se envió. No se cobra nada. | Mejora tu plan o compra créditos. Akeed lo enviará automáticamente. |
 | Fallido | El envío falló o fue bloqueado. | Revisa la calidad del teléfono, el uso del plan o el saldo de créditos, y la configuración. |
 
 ## Flujo de trabajo práctico para el comerciante
@@ -111,6 +112,10 @@ No. Entregado solo significa que el mensaje llegó al cliente. Usa **Confirmado*
 ### ¿Qué pasa si el número del cliente no está en WhatsApp?
 
 WhatsApp avisa a Akeed de que el mensaje no se puede entregar, y el pedido pasa a **Sin WhatsApp**. Lo encontrarás en la pestaña **Sin WhatsApp** y en **Requieren acción**. Akeed cancela el recordatorio, no cuenta el mensaje en tu uso y, en Shopify, etiqueta el pedido con `Akeed: No WhatsApp`. Llama al cliente y después confirma o cancela el pedido manualmente.
+
+### ¿Qué pasa cuando se agotan las confirmaciones de mi plan o mis créditos?
+
+Los pedidos nuevos se siguen recibiendo, pero sus mensajes quedan con el estado **En espera de envío**, y un aviso rojo en el panel muestra cuántos esperan y qué puedes hacer. No se cobra nada por ellos. En cuanto mejoras tu plan, compras créditos o tu cupo se renueva, Akeed los envía automáticamente, empezando por el más antiguo y respetando el retraso de envío y las horas de silencio. Un pedido que espera más de 24 horas no se envía solo: pasa a **Requieren acción**, donde puedes confirmarlo, cancelarlo o reintentarlo.
 
 ### ¿Dónde se ajustan los tiempos y el recordatorio?
 

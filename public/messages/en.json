@@ -1973,7 +1973,8 @@
         "canceled": "Canceled",
         "failed": "Failed",
         "no_reply": "No reply",
-        "no_whatsapp": "No WhatsApp"
+        "no_whatsapp": "No WhatsApp",
+        "blocked": "Waiting to send"
       },
       "dateRange": {
         "label": "Date range",
@@ -2199,7 +2200,8 @@
       "awaiting_start": "Awaiting start",
       "not_started": "Not started",
       "queued": "Queued",
-      "sending": "Sending…"
+      "sending": "Sending…",
+      "blocked": "Waiting to send"
     },
     "descriptions": {
       "pending": "Verification is queued and waiting to be sent.",
@@ -2215,7 +2217,8 @@
       "awaiting_start": "Imported and held. No message is sent until you start confirmation.",
       "not_started": "The import was not started, so no message was sent.",
       "queued": "Sending has started and this order is in line. Its message goes out within minutes.",
-      "sending": "The confirmation request is being sent to the customer now."
+      "sending": "The confirmation request is being sent to the customer now.",
+      "blocked": "Not sent yet: your plan’s confirmations or your credits ran out. Akeed sends it automatically once you can send again, and nothing is charged until then."
     },
     "sources": {
       "shopify": "Shopify",
@@ -2252,7 +2255,8 @@
       "incomplete_payload": "The order arrived without the details needed to confirm it, so no message was sent.",
       "order_predates_connection": "This order was placed before the store was connected to Akeed, so no confirmation was sent.",
       "order_not_placed": "This order has not been placed yet, or its status is one Akeed does not confirm, so no message was sent.",
-      "generic": "Verification could not continue. Review setup or contact support."
+      "generic": "Verification could not continue. Review setup or contact support.",
+      "capacity_block_stale": "This order waited too long for confirmations or credits, so Akeed didn’t send it. Confirm or cancel it yourself, or retry to send it now."
     },
     "verifications": {
       "loading": "Loading verifications...",
@@ -2479,7 +2483,8 @@
           "canceledNoWhatsApp": "Number not on WhatsApp",
           "followUpSent": "Reminder sent",
           "sendsAt": "Sends {time}",
-          "callCustomer": "Call the customer"
+          "callCustomer": "Call the customer",
+          "waitingForCapacity": "Plan or credits used up"
         },
         "tooltip": {
           "scheduledFor": "Scheduled for {time}",
@@ -2494,7 +2499,8 @@
           "notDelivered": "WhatsApp couldn’t deliver it",
           "generic": "message not delivered",
           "notSent": "message not sent"
-        }
+        },
+        "blocked": "Waiting to send"
       },
       "loadingMore": "Loading more orders…",
       "loaded": "Showing {loaded} of {total} orders",
@@ -2570,6 +2576,25 @@
           "confirmed": "Confirmed",
           "canceled": "Canceled"
         }
+      }
+    },
+    "blockedOrders": {
+      "title": "Orders waiting to be sent: {count}",
+      "remaining": {
+        "plan": "Confirmations left this period: {remaining}",
+        "credits": "Credits left: {remaining}"
+      },
+      "body": {
+        "upgrade": "Your plan’s confirmations ran out, so these orders weren’t sent. Upgrade to send them now, or they go out automatically when your allowance renews on {date}.",
+        "upgradeNoDate": "Your plan’s confirmations ran out, so these orders weren’t sent. Upgrade and Akeed sends them automatically.",
+        "recharge": "Your credits ran out, so these orders weren’t sent. Buy credits and Akeed sends them automatically.",
+        "waitReset": "Your plan’s confirmations ran out, so these orders weren’t sent. They go out automatically when your allowance renews on {date}.",
+        "waitResetNoDate": "Your plan’s confirmations ran out, so these orders weren’t sent. They go out automatically when your allowance renews."
+      },
+      "note": "Nothing is charged until an order is sent. An order that waits too long moves to Needs action.",
+      "cta": {
+        "upgrade": "Upgrade plan",
+        "recharge": "Buy credits"
       }
     }
   },

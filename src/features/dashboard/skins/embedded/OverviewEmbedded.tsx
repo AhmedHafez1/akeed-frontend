@@ -19,6 +19,7 @@ import { useDashboardOverview } from '../../domain/useDashboardOverview'
 import { useManualConfirmation } from '../../domain/useManualConfirmation'
 import type { DateRangeFilterOption } from '../../domain/dashboard.types'
 import type { DashboardStatsDateRange } from '../../model/dashboard.model'
+import { BlockedOrdersBanner } from './components/overview/BlockedOrdersBanner'
 import { CreditsBar } from './components/overview/CreditsBar'
 import { EmbeddedPageHeader } from './components/overview/EmbeddedPageHeader'
 import { KpiCards } from './components/overview/KpiCards'
@@ -129,6 +130,11 @@ export function OverviewEmbedded({
         </Banner>
       ) : (
         <BlockStack gap="400">
+          <BlockedOrdersBanner
+            capacity={overview.capacity}
+            timeZone={overview.reporting_timezone}
+            onChoosePlan={() => setIsPlansOpen(true)}
+          />
           {overview.usage && (
             <CreditsBar
               usage={overview.usage}

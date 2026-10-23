@@ -180,6 +180,8 @@ export function resolveRowDescriptionKey(
 ): string {
   // Says what to do next: call the customer.
   if (verification.status === 'no_whatsapp') return 'descriptions.no_whatsapp'
+  // Says it will send itself; the stored reason would say to retry.
+  if (verification.status === 'blocked') return 'descriptions.blocked'
   const reason = verification.reason
   if (reason) {
     return EXPLAINED_LIFECYCLE_REASONS.has(reason)

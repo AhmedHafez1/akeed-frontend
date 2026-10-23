@@ -88,6 +88,14 @@ export function resolveRowStatus(
         kind: 'noWhatsApp',
         sub: 'sub.callCustomer',
       }
+    case 'blocked':
+      // Out of allowance or credits; Akeed sends it once capacity returns.
+      return {
+        badge: 'blocked',
+        tone: 'warning',
+        kind: 'needsAction',
+        sub: 'sub.waitingForCapacity',
+      }
     case 'queued':
     case 'sending':
     case 'pending':

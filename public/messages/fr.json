@@ -844,7 +844,8 @@
         "canceled": "Annulée",
         "failed": "Échec",
         "no_reply": "Sans réponse",
-        "no_whatsapp": "Sans WhatsApp"
+        "no_whatsapp": "Sans WhatsApp",
+        "blocked": "En attente d’envoi"
       },
       "dateRange": {
         "label": "Période",
@@ -1070,7 +1071,8 @@
       "awaiting_start": "En attente de démarrage",
       "not_started": "Non démarrée",
       "queued": "En file d’attente",
-      "sending": "Envoi…"
+      "sending": "Envoi…",
+      "blocked": "En attente d’envoi"
     },
     "descriptions": {
       "pending": "La vérification est en file d’attente et attend d’être envoyée.",
@@ -1086,7 +1088,8 @@
       "awaiting_start": "Importée et mise en attente. Aucun message n’est envoyé tant que vous ne lancez pas la confirmation.",
       "not_started": "L’import n’a pas été lancé : aucun message n’a été envoyé.",
       "queued": "L’envoi a commencé et cette commande est dans la file. Son message part dans quelques minutes.",
-      "sending": "La demande de confirmation est en cours d’envoi au client."
+      "sending": "La demande de confirmation est en cours d’envoi au client.",
+      "blocked": "Pas encore envoyée : les confirmations de votre forfait ou vos crédits sont épuisés. Akeed l’enverra automatiquement dès que l’envoi sera de nouveau possible, et rien n’est facturé d’ici là."
     },
     "sources": {
       "shopify": "Shopify",
@@ -1123,7 +1126,8 @@
       "incomplete_payload": "La commande est arrivée sans les informations nécessaires à sa confirmation : aucun message n’a été envoyé.",
       "order_predates_connection": "Cette commande a été passée avant la connexion de la boutique à Akeed : aucune confirmation n’a été envoyée.",
       "order_not_placed": "Cette commande n’a pas encore été passée, ou son statut n’est pas de ceux qu’Akeed confirme : aucun message n’a été envoyé.",
-      "generic": "La vérification n’a pas pu se poursuivre. Vérifiez la configuration ou contactez l’assistance."
+      "generic": "La vérification n’a pas pu se poursuivre. Vérifiez la configuration ou contactez l’assistance.",
+      "capacity_block_stale": "Cette commande a attendu trop longtemps des confirmations ou des crédits, Akeed ne l’a donc pas envoyée. Confirmez-la ou annulez-la vous-même, ou relancez-la pour l’envoyer maintenant."
     },
     "verifications": {
       "loading": "Chargement des vérifications...",
@@ -1350,7 +1354,8 @@
           "canceledNoWhatsApp": "Numéro sans WhatsApp",
           "followUpSent": "Rappel envoyé",
           "sendsAt": "Envoi : {time}",
-          "callCustomer": "Appelez le client"
+          "callCustomer": "Appelez le client",
+          "waitingForCapacity": "Forfait ou crédits épuisés"
         },
         "tooltip": {
           "scheduledFor": "Planifié pour : {time}",
@@ -1365,7 +1370,8 @@
           "notDelivered": "WhatsApp n’a pas pu le remettre",
           "generic": "message non remis",
           "notSent": "message non envoyé"
-        }
+        },
+        "blocked": "En attente d’envoi"
       },
       "loadingMore": "Chargement d’autres commandes…",
       "loaded": "Affichage de {loaded} commandes sur {total}",
@@ -1441,6 +1447,25 @@
           "confirmed": "Confirmée",
           "canceled": "Annulée"
         }
+      }
+    },
+    "blockedOrders": {
+      "title": "Commandes en attente d’envoi : {count}",
+      "remaining": {
+        "plan": "Confirmations restantes sur cette période : {remaining}",
+        "credits": "Crédits restants : {remaining}"
+      },
+      "body": {
+        "upgrade": "Les confirmations de votre forfait sont épuisées, ces commandes n’ont donc pas été envoyées. Passez à un forfait supérieur pour les envoyer maintenant, sinon elles partiront automatiquement au renouvellement de votre quota le {date}.",
+        "upgradeNoDate": "Les confirmations de votre forfait sont épuisées, ces commandes n’ont donc pas été envoyées. Passez à un forfait supérieur et Akeed les enverra automatiquement.",
+        "recharge": "Vos crédits sont épuisés, ces commandes n’ont donc pas été envoyées. Achetez des crédits et Akeed les enverra automatiquement.",
+        "waitReset": "Les confirmations de votre forfait sont épuisées, ces commandes n’ont donc pas été envoyées. Elles partiront automatiquement au renouvellement de votre quota le {date}.",
+        "waitResetNoDate": "Les confirmations de votre forfait sont épuisées, ces commandes n’ont donc pas été envoyées. Elles partiront automatiquement au renouvellement de votre quota."
+      },
+      "note": "Rien n’est facturé avant l’envoi d’une commande. Une commande qui attend trop longtemps passe dans À traiter.",
+      "cta": {
+        "upgrade": "Changer de forfait",
+        "recharge": "Acheter des crédits"
       }
     }
   },
