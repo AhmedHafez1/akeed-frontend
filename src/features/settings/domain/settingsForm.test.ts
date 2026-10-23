@@ -5,8 +5,6 @@ import {
   settingsResponseFixture,
 } from '../testing/settingsFixture'
 import {
-  AUTO_CANCEL_SUGGESTED_MINUTES,
-  autoCancelTogglePatch,
   dirtyTabs,
   escalationMinutesFromForm,
   escalationTogglePatch,
@@ -338,23 +336,16 @@ describe('automatic cancellation settings', () => {
     })
   })
 
-  it('offers the 48-hour deadline and turns the escalation on when switched on', () => {
-    const form = { ...formFor(), escalationEnabled: false }
-    const next = { ...form, ...autoCancelTogglePatch(form, true) }
-    expect(next.autoCancelEnabled).toBe(true)
-    expect(next.escalationEnabled).toBe(true)
-    expect(escalationMinutesFromForm(next)).toBe(AUTO_CANCEL_SUGGESTED_MINUTES)
-  })
-
-  it('keeps a later deadline the merchant already chose', () => {
+  it('uses the no-reply delay as the deadline and changes nothing else', () => {
     const form = formFor()
-    const later = {
-      ...form,
-      escalationGapMinutes: 72 * 60 - form.followUpDelayMinutes,
-    }
-    expect(autoCancelTogglePatch(later, true)).not.toHaveProperty(
-      'escalationGapMinutes'
+    const next = { ...form, autoCancelEnabled: true }
+    expect(escalationMinutesFromForm(next)).toBe(
+      escalationMinutesFromForm(form)
     )
+    expect(toSettingsPayload(next)).toEqual({
+      ...toSettingsPayload(form),
+      autoCancelEnabled: true,
+    })
   })
 
   it('switches off with the no-reply alert it runs on', () => {

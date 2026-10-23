@@ -72,12 +72,11 @@ Use No Reply as a review queue for operations.
 
 ### Cancel unanswered orders automatically
 
-You can let Akeed cancel an order in your store when it reaches **No Reply**. It is off until you turn it on under **Timing & follow-up** in Settings, and it needs the no-reply alert. When you turn it on, Akeed suggests 48 hours after the first message as the deadline.
+You can let Akeed cancel an order in your store when it reaches **No Reply**. It is off until you turn it on under **Timing & follow-up** in Settings, and it needs the no-reply alert. It cancels at the moment the order reaches No Reply, so your no-reply delay is the deadline.
 
 Akeed cancels an order only when all of these hold:
 
 - The confirmation, and the reminder if one was due, were delivered.
-- At least 12 hours passed since the last delivered message, outside quiet hours.
 - The customer never wrote back, in any form.
 - You did not keep the order out with **Don’t auto-cancel**.
 - The store still shows the order unpaid and unfulfilled.

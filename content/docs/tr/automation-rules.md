@@ -72,12 +72,11 @@ Yanıt yok listesini operasyon ekibi için bir inceleme kuyruğu olarak kullanı
 
 ### Yanıtsız siparişleri otomatik iptal etme
 
-Bir sipariş **Yanıt yok** durumuna geldiğinde Akeed’in onu mağazanızda iptal etmesine izin verebilirsiniz. Ayarlarda **Zamanlama ve takip** bölümünden açana kadar kapalıdır ve yanıtsız sipariş uyarısını gerektirir. Açtığınızda Akeed, ilk mesajdan 48 saat sonrasını süre olarak önerir.
+Bir sipariş **Yanıt yok** durumuna geldiğinde Akeed’in onu mağazanızda iptal etmesine izin verebilirsiniz. Ayarlarda **Zamanlama ve takip** bölümünden açana kadar kapalıdır ve yanıtsız sipariş uyarısını gerektirir. İptal, sipariş **Yanıt yok** durumuna geldiği anda yapılır, yani yanıt yok süreniz aynı zamanda iptal sürenizdir.
 
 Akeed bir siparişi yalnızca bunların hepsi sağlandığında iptal eder:
 
 - Onay mesajı ve gerekiyorsa hatırlatma teslim edildi.
-- Son teslim edilen mesajdan bu yana, sessiz saatlerin dışında, en az 12 saat geçti.
 - Müşteri hiçbir şekilde yazmadı.
 - Siparişi **Otomatik iptal etme** ile hariç tutmadınız.
 - Mağaza siparişi hâlâ ödenmemiş ve gönderilmemiş gösteriyor.

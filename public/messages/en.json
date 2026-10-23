@@ -3158,7 +3158,7 @@
           "description": "What happens to orders the customer never answers.",
           "label": "Cancel unanswered orders automatically",
           "help": "When an order reaches no reply, Akeed cancels it in your store. Only if every message was delivered and the customer never wrote back. Paid, shipped and excluded orders are left as they are.",
-          "deadline": "Unanswered orders are canceled {count, plural, one {# hour} other {# hours}} after the first message, and never sooner than 12 hours after the last delivered message.",
+          "deadline": "Unanswered orders are canceled when they reach no reply, {count, plural, one {# hour} other {# hours}} after the first message.",
           "restockLabel": "Restock the items",
           "notifyLabel": "Let the store notify the customer",
           "storeNote": "Restocking and the customer notice apply to Shopify stores. WooCommerce and EasyOrders follow your store’s own settings.",

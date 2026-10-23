@@ -72,12 +72,11 @@ Usa Sin respuesta como una cola de revisión para tu operación.
 
 ### Cancelar automáticamente los pedidos sin respuesta
 
-Puedes dejar que Akeed cancele un pedido en tu tienda cuando queda **Sin respuesta**. Está desactivado hasta que lo activas en **Tiempos y recordatorio** dentro de Configuración, y necesita el aviso de pedidos sin respuesta. Al activarlo, Akeed propone 48 horas después del primer mensaje como plazo.
+Puedes dejar que Akeed cancele un pedido en tu tienda cuando queda **Sin respuesta**. Está desactivado hasta que lo activas en **Tiempos y recordatorio** dentro de Configuración, y necesita el aviso de pedidos sin respuesta. La cancelación ocurre en el momento en que el pedido queda **Sin respuesta**, así que tu plazo del aviso por falta de respuesta es también el plazo de cancelación.
 
 Akeed cancela un pedido solo cuando se cumple todo esto:
 
 - Se entregó la confirmación y, si tocaba, el recordatorio.
-- Pasaron al menos 12 horas desde el último mensaje entregado, fuera del horario de silencio.
 - El cliente nunca escribió, de ninguna forma.
 - No excluiste el pedido con **No cancelar automáticamente**.
 - La tienda todavía muestra el pedido sin pagar y sin enviar.

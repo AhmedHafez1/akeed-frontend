@@ -228,44 +228,16 @@ export function escalationTogglePatch(
     : { escalationEnabled: false, autoCancelEnabled: false }
 }
 
-/** The deadline offered when automatic cancellation is switched on. */
-export const AUTO_CANCEL_SUGGESTED_MINUTES = 48 * 60
-
-/** When an unanswered order reaches no reply, from the first message. */
+/**
+ * When an unanswered order reaches no reply, from the first message. An
+ * order is canceled automatically at that moment, so it is also the deadline.
+ */
 export function escalationMinutesFromForm(values: SettingsFormValues): number {
   return escalationStoredFromGap({
     gapMinutes: values.escalationGapMinutes,
     followUpEnabled: values.followUpEnabled,
     followUpDelayMinutes: values.followUpDelayMinutes,
   })
-}
-
-/**
- * What switching automatic cancellation changes. It runs when an order
- * reaches no reply, so turning it on also turns the escalation on and, when
- * the escalation comes sooner, offers the 48-hour deadline. The merchant sees
- * both before saving. Turning it off changes nothing else.
- */
-export function autoCancelTogglePatch(
-  values: SettingsFormValues,
-  enabled: boolean
-): Partial<SettingsFormValues> {
-  if (!enabled) return { autoCancelEnabled: false }
-  const patch: Partial<SettingsFormValues> = {
-    autoCancelEnabled: true,
-    escalationEnabled: true,
-  }
-  if (
-    !values.escalationEnabled ||
-    escalationMinutesFromForm(values) < AUTO_CANCEL_SUGGESTED_MINUTES
-  ) {
-    patch.escalationGapMinutes = escalationGapFromStored({
-      escalationDelayMinutes: AUTO_CANCEL_SUGGESTED_MINUTES,
-      followUpEnabled: values.followUpEnabled,
-      followUpDelayMinutes: values.followUpDelayMinutes,
-    })
-  }
-  return patch
 }
 
 const MESSAGE_TAB_FIELDS: ReadonlyArray<keyof OnboardingSettingsPayload> = [

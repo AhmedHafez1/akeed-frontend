@@ -2029,7 +2029,7 @@
           "description": "Ce qui arrive aux commandes auxquelles le client ne répond jamais.",
           "label": "Annuler automatiquement les commandes sans réponse",
           "help": "Quand une commande reste sans réponse, Akeed l’annule dans votre boutique. Seulement si chaque message a été distribué et que le client n’a jamais écrit. Les commandes payées, expédiées ou exclues restent telles quelles.",
-          "deadline": "Les commandes sans réponse sont annulées {count, plural, one {# heure} other {# heures}} après le premier message, et jamais moins de 12 heures après le dernier message distribué.",
+          "deadline": "Les commandes sans réponse sont annulées dès qu’elles restent sans réponse, {count, plural, one {# heure} other {# heures}} après le premier message.",
           "restockLabel": "Remettre les articles en stock",
           "notifyLabel": "Laisser la boutique prévenir le client",
           "storeNote": "La remise en stock et l’avis au client s’appliquent aux boutiques Shopify. WooCommerce et EasyOrders suivent les réglages de votre boutique.",

@@ -13,7 +13,6 @@ import {
 } from '@/features/settings/domain/delayPresets'
 import { quietTimeValues } from '@/features/settings/domain/quietHours'
 import {
-  autoCancelTogglePatch,
   escalationMinutesFromForm,
   escalationTogglePatch,
   sendDelayChoicePatch,
@@ -308,11 +307,15 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
           <div id={SETTINGS_FIELD_ID.autoCancel}>
             <SwitchSetting
               title={t('autoCancel.label')}
-              help={t('autoCancel.help')}
+              help={
+                values.escalationEnabled
+                  ? t('autoCancel.help')
+                  : t('autoCancel.requiresEscalation')
+              }
               checked={values.autoCancelEnabled}
-              disabled={readOnly}
-              onCheckedChange={(enabled) =>
-                model.update(autoCancelTogglePatch(values, enabled))
+              disabled={readOnly || !values.escalationEnabled}
+              onCheckedChange={(autoCancelEnabled) =>
+                model.update({ autoCancelEnabled })
               }
             >
               {values.autoCancelEnabled && (

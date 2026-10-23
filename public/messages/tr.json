@@ -2029,7 +2029,7 @@
           "description": "Müşterinin hiç yanıtlamadığı siparişlere ne olacağı.",
           "label": "Yanıtsız siparişleri otomatik iptal et",
           "help": "Bir sipariş yanıtsız kaldığında Akeed onu mağazanızda iptal eder. Yalnızca her mesaj teslim edildiyse ve müşteri hiç yazmadıysa. Ödenmiş, kargolanmış ve hariç tutulan siparişler olduğu gibi kalır.",
-          "deadline": "Yanıtsız siparişler ilk mesajdan {count, plural, one {# saat} other {# saat}} sonra iptal edilir ve son teslim edilen mesajdan 12 saat geçmeden asla iptal edilmez.",
+          "deadline": "Yanıtsız siparişler yanıt yok durumuna geldiklerinde, yani ilk mesajdan {count, plural, one {# saat} other {# saat}} sonra iptal edilir.",
           "restockLabel": "Ürünleri stoğa geri ekle",
           "notifyLabel": "Mağazanın müşteriyi bilgilendirmesine izin ver",
           "storeNote": "Stoğa geri ekleme ve müşteri bildirimi Shopify mağazaları için geçerlidir. WooCommerce ve EasyOrders mağazanızın kendi ayarlarını izler.",

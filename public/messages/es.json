@@ -2029,7 +2029,7 @@
           "description": "Qué pasa con los pedidos que el cliente nunca responde.",
           "label": "Cancelar automáticamente los pedidos sin respuesta",
           "help": "Cuando un pedido queda sin respuesta, Akeed lo cancela en tu tienda. Solo si todos los mensajes se entregaron y el cliente nunca escribió. Los pedidos pagados, enviados o excluidos se quedan como están.",
-          "deadline": "Los pedidos sin respuesta se cancelan {count, plural, one {# hora} other {# horas}} después del primer mensaje, y nunca antes de 12 horas tras el último mensaje entregado.",
+          "deadline": "Los pedidos sin respuesta se cancelan al quedar sin respuesta, {count, plural, one {# hora} other {# horas}} después del primer mensaje.",
           "restockLabel": "Reponer el inventario",
           "notifyLabel": "Dejar que la tienda avise al cliente",
           "storeNote": "La reposición y el aviso al cliente se aplican a las tiendas Shopify. WooCommerce y EasyOrders siguen la configuración de tu tienda.",

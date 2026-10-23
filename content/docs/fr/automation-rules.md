@@ -72,12 +72,11 @@ Servez-vous du statut « Sans réponse » comme d’une file d’examen pour v
 
 ### Annuler automatiquement les commandes sans réponse
 
-Vous pouvez laisser Akeed annuler une commande dans votre boutique quand elle passe **Sans réponse**. L’option reste désactivée tant que vous ne l’activez pas dans **Délais et relance**, dans les réglages, et elle demande l’alerte des commandes sans réponse. À l’activation, Akeed propose un délai de 48 heures après le premier message.
+Vous pouvez laisser Akeed annuler une commande dans votre boutique quand elle passe **Sans réponse**. L’option reste désactivée tant que vous ne l’activez pas dans **Délais et relance**, dans les réglages, et elle demande l’alerte des commandes sans réponse. L’annulation a lieu dès que la commande passe **Sans réponse**, votre délai d’escalade sert donc aussi de délai d’annulation.
 
 Akeed n’annule une commande que si tout ceci est vrai :
 
 - La confirmation, et le rappel s’il était prévu, ont été distribués.
-- Au moins 12 heures se sont écoulées depuis le dernier message distribué, hors heures de silence.
 - Le client n’a jamais écrit, sous aucune forme.
 - Vous n’avez pas exclu la commande avec **Ne pas annuler automatiquement**.
 - La boutique indique toujours la commande comme non payée et non expédiée.
