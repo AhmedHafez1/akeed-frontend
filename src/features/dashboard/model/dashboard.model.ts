@@ -171,6 +171,8 @@ export type DashboardPageContext = {
   settings?: DashboardOverview['settings']
   permissions?: DashboardPermissions
   usage?: DashboardPageUsage
+  /** Orders waiting for capacity. Absent on older payloads. */
+  capacity?: CapacitySummary | null
   /** Rows per confirmations tab for the period, search ignored. */
   tab_counts?: Record<ConfirmationsTab, number>
 }

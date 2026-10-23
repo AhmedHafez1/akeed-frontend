@@ -15,8 +15,11 @@ import {
   useBreakpoints,
 } from '@shopify/polaris'
 import { ExportIcon, SearchIcon } from '@shopify/polaris-icons'
+import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import { UpgradePlansModal } from '@/features/billing'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { resolveEmbeddedContextFromSearch } from '@/shared/lib/embedded-context'
 import { CONFIRMATIONS_TABS } from '../../domain/confirmationsUrlState'
 import {
   exportErrorKey,
@@ -35,6 +38,7 @@ import { ConfirmationDetailsModal } from './components/confirmations/Confirmatio
 import { ConfirmationsCardList } from './components/confirmations/ConfirmationsCardList'
 import { LoadMoreFooter } from './components/confirmations/LoadMoreFooter'
 import { ConfirmationsTable } from './components/confirmations/ConfirmationsTable'
+import { BlockedOrdersBanner } from './components/overview/BlockedOrdersBanner'
 import { EmbeddedPageHeader } from './components/overview/EmbeddedPageHeader'
 import { SettingsStatusLine } from './components/overview/SettingsStatusLine'
 import { ManualConfirmModal } from './components/shared/ManualConfirmModal'
@@ -70,6 +74,9 @@ export function ConfirmationsEmbedded({
   const { locale } = useLocaleInfo()
   const list = useConfirmationsList({ dateRange: period, tab })
   const confirmation = useManualConfirmation()
+  const searchParams = useSearchParams()
+  const embeddedContext = resolveEmbeddedContextFromSearch(searchParams)
+  const [isPlansOpen, setIsPlansOpen] = useState(false)
   // Six columns do not fit a phone; below md each order becomes a card.
   const { mdUp } = useBreakpoints({ defaults: { mdUp: true } })
   const ConfirmationsList = mdUp ? ConfirmationsTable : ConfirmationsCardList
@@ -179,6 +186,12 @@ export function ConfirmationsEmbedded({
       />
 
       {afterHeader}
+
+      <BlockedOrdersBanner
+        capacity={list.capacity}
+        timeZone={list.reportingTimezone}
+        onChoosePlan={() => setIsPlansOpen(true)}
+      />
 
       {shownFeedback && (
         <Banner
@@ -295,6 +308,12 @@ export function ConfirmationsEmbedded({
         isConfirming={confirmation.isConfirming}
         onConfirm={() => void confirmation.confirm()}
         onDismiss={confirmation.dismiss}
+      />
+      <UpgradePlansModal
+        open={isPlansOpen}
+        title={t('overview.credits.plansModalTitle')}
+        hostParam={embeddedContext.hostParam}
+        onClose={() => setIsPlansOpen(false)}
       />
       <Modal
         open={cancelTarget !== null}

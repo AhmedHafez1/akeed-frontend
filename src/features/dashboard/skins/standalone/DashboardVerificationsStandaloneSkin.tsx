@@ -29,6 +29,7 @@ import { ConfirmationsToolbar } from './components/confirmations/ConfirmationsTo
 import { VerificationDetailsSheet } from './components/confirmations/VerificationDetailsSheet'
 import { SettingsStatusLine } from './components/overview/SettingsStatusLine'
 import { PageHeader } from './components/shared/PageHeader'
+import { BlockedOrdersBanner } from './components/overview/BlockedOrdersBanner'
 
 export interface DashboardVerificationsStandaloneSkinProps {
   period: DashboardStatsDateRange
@@ -185,6 +186,11 @@ export function DashboardVerificationsStandaloneSkin({
         period={period}
         periodOptions={periodOptions}
         onPeriodChange={onPeriodChange}
+      />
+
+      <BlockedOrdersBanner
+        capacity={list.capacity}
+        timeZone={list.reportingTimezone}
       />
 
       <StandaloneFeedbackBanners
