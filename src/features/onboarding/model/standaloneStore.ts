@@ -53,10 +53,12 @@ export const STANDALONE_SETTINGS_DEFAULTS = {
   assumeCodWhenPaymentMissing: false,
   sendDelayMinutes: 0,
   followUpEnabled: true,
-  followUpDelayMinutes: 120,
+  followUpDelayMinutes: 360,
   escalationEnabled: true,
-  escalationDelayMinutes: 360,
-  quietHoursEnabled: false,
+  escalationDelayMinutes: 1800,
+  quietHoursEnabled: true,
+  quietHoursStart: '22:00',
+  quietHoursEnd: '09:00',
 } as const satisfies Partial<OnboardingSettingsPayload>
 
 export interface StandaloneStoreForm {

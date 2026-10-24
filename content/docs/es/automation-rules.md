@@ -44,7 +44,7 @@ Si está activado, Akeed envía un recordatorio a los clientes que no respondier
 ### Valor recomendado
 
 - Deja el recordatorio **activado**.
-- Empieza con **1 a 2 horas** después del primer envío.
+- Empieza con **6 horas** después del primer envío. Es el valor predeterminado.
 
 ### Por qué ayuda
 
@@ -57,7 +57,7 @@ El aviso marca el pedido como **Sin respuesta** cuando el cliente sigue sin resp
 
 ### Valor recomendado
 
-- Empieza con **4 a 6 horas**.
+- Empieza con **24 horas** después del recordatorio. Es el valor predeterminado.
 - Deja el aviso para después del recordatorio.
 
 ### Uso operativo
@@ -70,13 +70,30 @@ Usa Sin respuesta como una cola de revisión para tu operación.
 > [!WARNING]
 > Si el aviso llega demasiado pronto, puedes bloquear pedidos válidos que habrían respondido más tarde.
 
+### Cancelar automáticamente los pedidos sin respuesta
+
+Puedes dejar que Akeed cancele un pedido en tu tienda cuando queda **Sin respuesta**. Está desactivado hasta que lo activas en **Tiempos y recordatorio** dentro de Configuración, y necesita el aviso de pedidos sin respuesta. La cancelación ocurre en el momento en que el pedido queda **Sin respuesta**, así que tu plazo del aviso por falta de respuesta es también el plazo de cancelación.
+
+Akeed cancela un pedido solo cuando se cumple todo esto:
+
+- Se entregó la confirmación y, si tocaba, el recordatorio.
+- El cliente no confirmó ni canceló. Akeed ignora los mensajes que no puede leer como una confirmación o una cancelación.
+- No excluiste el pedido con **No cancelar automáticamente**.
+- La tienda todavía muestra el pedido sin pagar y sin enviar.
+
+Si Akeed no pudo enviar o entregar un mensaje, por ejemplo porque se agotó tu plan o tus créditos, la cancelación se pone en pausa. Akeed nunca cancela un pedido por sus propios límites de envío.
+
+En Shopify eliges si se repone el inventario y si Shopify avisa al cliente. WooCommerce y EasyOrders siguen la configuración de tu tienda. Un pedido cancelado muestra **Sin respuesta tras los intentos de confirmación**. Si el cliente confirma después, el pedido muestra **Confirmó tras cancelar** y pasa a **Requieren tu acción** para que lo contactes. El pedido sigue cancelado. Cualquier otro mensaje después de la cancelación se ignora.
+
+Desactivar la opción detiene todas las cancelaciones que aún no llegaron a tu tienda.
+
 ## Regla 4: Horario de silencio
 
 El horario de silencio evita los envíos durante ciertas horas locales (por ejemplo, de madrugada).
 
 ### Uso recomendado
 
-- Actívalo si a tu público le molestan los mensajes a deshoras.
+- Viene activado de forma predeterminada, de 22:00 a 09:00 en tu zona horaria. Desactívalo solo si tus clientes esperan mensajes de noche.
 - Define el inicio y el fin según el comportamiento de tu mercado.
 
 ### Importante
@@ -96,8 +113,7 @@ Usa la misma zona horaria de tu equipo principal de operaciones y de tus cliente
 | Tipo de tienda | Retraso inicial | Recordatorio | Aviso | Horario de silencio |
 | --- | ---: | ---: | ---: | --- |
 | Tienda con preparación rápida | 0–10 min | 60 min | 240 min | Opcional |
-| Configuración equilibrada | 10–15 min | 120 min | 360 min | Opcional |
-| Público sensible a los mensajes nocturnos | 10–20 min | 120 min | 360–480 min | Activado |
+| Configuración equilibrada | 0 min | 360 min | 1440 min tras el recordatorio | 22:00–09:00 |
 
 Úsalas como punto de partida y luego ajústalas cada semana con tus tasas de respuesta y de confirmación.
 
@@ -141,7 +157,7 @@ En la mayoría de las tiendas, sí. Un recordatorio suele recuperar casi todas l
 
 ### ¿Cuál es el mejor plazo para el aviso?
 
-No hay un valor universal. Empieza con 4–6 horas y ajusta según los patrones reales de respuesta.
+No hay un valor universal. Empieza con 24 horas después del recordatorio y ajusta según los patrones reales de respuesta.
 
 ### ¿Dónde se comprueba si las reglas funcionan?
 

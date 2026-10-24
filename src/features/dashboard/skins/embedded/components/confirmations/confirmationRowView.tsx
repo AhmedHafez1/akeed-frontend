@@ -1,5 +1,9 @@
 import { Badge, BlockStack, InlineStack, Icon, Text } from '@shopify/polaris'
-import { NotificationIcon } from '@shopify/polaris-icons'
+import {
+  CalendarTimeIcon,
+  NotificationIcon,
+  ShieldCheckMarkIcon,
+} from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import {
@@ -11,6 +15,7 @@ import {
   getLastUpdateAt,
 } from '../../../../domain/verificationRow'
 import { useStatusTooltip } from '../../../../domain/useStatusTooltip'
+import { useAutoCancelMarker } from '../../../../domain/useAutoCancelMarker'
 import { useCustomerRecordView } from '../../../../domain/useCustomerRecordView'
 import {
   customerDisplayName,
@@ -126,12 +131,25 @@ export function StatusCell({
   const t = useTranslations('dashboard.confirmations.status')
   const view = resolveRowStatus(row, { showStoreCancellation: true })
   const statusTitle = useStatusTooltip(row, timeZone)
+  const autoCancel = useAutoCancelMarker(row, timeZone)
   return (
-    <BlockStack gap="100" inlineAlign="start">
+    <InlineStack gap="100" blockAlign="center" wrap={false}>
       <span title={statusTitle}>
         <Badge tone={BADGE_TONES[view.kind]}>{t(view.badge)}</Badge>
       </span>
-    </BlockStack>
+      {autoCancel && (
+        <span role="img" aria-label={autoCancel.text} title={autoCancel.text}>
+          <Icon
+            source={
+              autoCancel.marker.key === 'excluded'
+                ? ShieldCheckMarkIcon
+                : CalendarTimeIcon
+            }
+            tone={autoCancel.marker.key === 'failed' ? 'caution' : 'subdued'}
+          />
+        </span>
+      )}
+    </InlineStack>
   )
 }
 

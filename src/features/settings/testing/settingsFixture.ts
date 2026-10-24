@@ -236,6 +236,7 @@ export function settingsResponseFixture(
         },
       ],
       isFreePlanClaimed: true,
+      currentPlanId: overrides.state?.billingPlanId ?? 'starter',
       usage: {
         used: 27,
         limit: 30,

@@ -99,11 +99,11 @@ A failed send is an operational signal, not just a dashboard number.
 
 ### Does Akeed auto-cancel all unconfirmed orders?
 
-No. Your settings and process determine how no-reply orders are handled.
+Only if you turn on **Cancel unanswered orders automatically** in Settings, and then only orders that reached No Reply after every message was delivered and the customer neither confirmed nor canceled. Otherwise no-reply orders wait for you. See [Automation Rules](/docs/automation-rules).
 
 ### Can customers still reply after no-reply status?
 
-They may reply later, depending on timing and whether the order has already been finalized by merchant action.
+Yes, at any time. Akeed ignores a message it can’t read as a confirm or a cancel. If Akeed already canceled the order and the customer then confirms, the order shows **Confirmed after cancel** and moves to **Needs action**. Contact the customer with **WhatsApp them** or by phone. The order stays canceled until you change it in your store.
 
 ### Is “delivered” enough to ship?
 
@@ -116,6 +116,8 @@ WhatsApp tells Akeed the message can’t be delivered, and the order moves to **
 ### What happens when my plan or credits run out?
 
 New orders are still taken in, but their messages wait with the status **Waiting to send**, and a red banner on the dashboard shows how many are waiting and what you can do. Nothing is charged for them. Once you upgrade, buy credits, or your plan’s allowance renews, Akeed sends them automatically, oldest first, keeping your send delay and quiet hours. An order that waits more than 24 hours is not sent on its own: it moves to **Needs action**, where you can confirm, cancel or retry it.
+
+On a paid Shopify plan, the banner also offers **Renew {plan} now**, named after your plan (for example **Renew Basic now**). You approve your current plan again in Shopify, and a new 30-day period starts right away with the full allowance, so the waiting orders go out. Messages left in the old period don’t carry over. The same button is on your current plan in **Settings → Plan**.
 
 ### Where do I tune timing and follow-up?
 

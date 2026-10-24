@@ -23,7 +23,7 @@ import type { SettingsTabId } from './settingsTabs'
 /** Mirrors the backend limit: a template variable on every message. */
 export const STORE_NAME_MAX_LENGTH = 60
 
-const DEFAULT_QUIET_START = '21:00'
+const DEFAULT_QUIET_START = '22:00'
 const DEFAULT_QUIET_END = '09:00'
 /** The column default; a store still on it never chose a zone. */
 const DEFAULT_TIMEZONE = 'Asia/Riyadh'
@@ -52,6 +52,9 @@ export interface SettingsFormValues {
   followUpDelayMinutes: number
   escalationEnabled: boolean
   escalationGapMinutes: number
+  autoCancelEnabled: boolean
+  autoCancelRestock: boolean
+  autoCancelNotifyCustomer: boolean
   quietHoursEnabled: boolean
   quietHoursStart: string
   quietHoursEnd: string
@@ -85,6 +88,9 @@ export function formFromSettings(
       followUpEnabled: state.followUpEnabled,
       followUpDelayMinutes: state.followUpDelayMinutes,
     }),
+    autoCancelEnabled: state.autoCancelEnabled === true,
+    autoCancelRestock: state.autoCancelRestock !== false,
+    autoCancelNotifyCustomer: state.autoCancelNotifyCustomer === true,
     quietHoursEnabled: state.quietHoursEnabled,
     quietHoursStart: state.quietHoursStart ?? DEFAULT_QUIET_START,
     quietHoursEnd: state.quietHoursEnd ?? DEFAULT_QUIET_END,
@@ -171,6 +177,7 @@ export function timelineInputFromForm(
     quietHoursEnabled: values.quietHoursEnabled,
     quietHoursStart: values.quietHoursStart,
     quietHoursEnd: values.quietHoursEnd,
+    autoCancelEnabled: values.autoCancelEnabled,
   }
 }
 
@@ -199,11 +206,38 @@ export function toSettingsPayload(
       followUpEnabled: values.followUpEnabled,
       followUpDelayMinutes: values.followUpDelayMinutes,
     }),
+    autoCancelEnabled: values.autoCancelEnabled,
+    autoCancelRestock: values.autoCancelRestock,
+    autoCancelNotifyCustomer: values.autoCancelNotifyCustomer,
     quietHoursEnabled: values.quietHoursEnabled,
     quietHoursStart: values.quietHoursStart,
     quietHoursEnd: values.quietHoursEnd,
     timezone: values.timezone,
   }
+}
+
+/**
+ * What switching the no-reply alert changes. Automatic cancellation runs on
+ * it, so switching the alert off switches the cancellation off too.
+ */
+export function escalationTogglePatch(
+  enabled: boolean
+): Partial<SettingsFormValues> {
+  return enabled
+    ? { escalationEnabled: true }
+    : { escalationEnabled: false, autoCancelEnabled: false }
+}
+
+/**
+ * When an unanswered order reaches no reply, from the first message. An
+ * order is canceled automatically at that moment, so it is also the deadline.
+ */
+export function escalationMinutesFromForm(values: SettingsFormValues): number {
+  return escalationStoredFromGap({
+    gapMinutes: values.escalationGapMinutes,
+    followUpEnabled: values.followUpEnabled,
+    followUpDelayMinutes: values.followUpDelayMinutes,
+  })
 }
 
 const MESSAGE_TAB_FIELDS: ReadonlyArray<keyof OnboardingSettingsPayload> = [
@@ -259,6 +293,7 @@ export type SettingsFieldKey =
   | 'sendDelayCustom'
   | 'quietHours'
   | 'timezone'
+  | 'autoCancel'
 
 export type SettingsFieldErrorCode =
   | 'required'
@@ -266,6 +301,7 @@ export type SettingsFieldErrorCode =
   | 'invalidDelay'
   | QuietHoursError
   | 'unsupportedTimezone'
+  | 'requiresEscalation'
 
 export type SettingsFormErrors = Partial<
   Record<SettingsFieldKey, SettingsFieldErrorCode>
@@ -277,6 +313,7 @@ export const SETTINGS_FIELD_ORDER: readonly SettingsFieldKey[] = [
   'sendDelayCustom',
   'quietHours',
   'timezone',
+  'autoCancel',
 ]
 
 export const SETTINGS_FIELD_TAB: Record<
@@ -287,6 +324,7 @@ export const SETTINGS_FIELD_TAB: Record<
   sendDelayCustom: 'timing',
   quietHours: 'timing',
   timezone: 'timing',
+  autoCancel: 'timing',
 }
 
 /** DOM ids of the inputs, so a failed save can move focus to the field. */
@@ -295,6 +333,7 @@ export const SETTINGS_FIELD_ID: Record<SettingsFieldKey, string> = {
   sendDelayCustom: 'settings-send-delay-custom',
   quietHours: 'settings-quiet-hours-start',
   timezone: 'settings-quiet-hours-timezone',
+  autoCancel: 'settings-auto-cancel',
 }
 
 export function validateSettingsForm(
@@ -316,6 +355,8 @@ export function validateSettingsForm(
     end: values.quietHoursEnd,
   })
   if (quietHoursError) errors.quietHours = quietHoursError
+  if (values.autoCancelEnabled && !values.escalationEnabled)
+    errors.autoCancel = 'requiresEscalation'
   return errors
 }
 
@@ -334,6 +375,8 @@ export function fieldErrorFromApiCode(
       return { timezone: 'unsupportedTimezone' }
     case 'SETTINGS_QUIET_HOURS_EMPTY_WINDOW':
       return { quietHours: 'sameStartEnd' }
+    case 'SETTINGS_AUTO_CANCEL_REQUIRES_ESCALATION':
+      return { autoCancel: 'requiresEscalation' }
     default:
       return null
   }

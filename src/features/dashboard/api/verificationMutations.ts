@@ -35,6 +35,29 @@ export function useCancelVerificationMutation() {
   })
 }
 
+/**
+ * Keeps one order out of the automatic cancellation (`exclude`), or lets it
+ * back in (`include`). The list is refreshed whatever the answer.
+ */
+export function useAutoCancelExclusionMutation() {
+  const emitDomainEvent = useEmitDomainEvent()
+  return useMutation({
+    mutationFn: ({
+      verificationId,
+      action,
+    }: {
+      verificationId: string
+      action: 'exclude' | 'include'
+    }) =>
+      api.post<{ verificationId: string; excluded: boolean }>(
+        `/api/verifications/${encodeURIComponent(verificationId)}/auto-cancel/${action}`
+      ),
+    onSettled: () => {
+      void emitDomainEvent('verification.autoCancelChanged')
+    },
+  })
+}
+
 export function useRetryVerificationMutation() {
   const emitDomainEvent = useEmitDomainEvent()
   return useMutation({

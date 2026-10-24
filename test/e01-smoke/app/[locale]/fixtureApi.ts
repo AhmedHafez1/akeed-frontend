@@ -360,7 +360,7 @@ export const api = {
     options: RequestInit = {}
   ): Promise<T> {
     if (isEmbeddedDashboardFixture())
-      return embeddedDashboardRequest<T>('POST', url)
+      return embeddedDashboardRequest<T>('POST', url, data)
     if (isOrderSyncFixture()) return orderSyncRequest<T>('POST', url, data)
     if (isVerificationFixture())
       return verificationFixtureRequest<T>('POST', url)

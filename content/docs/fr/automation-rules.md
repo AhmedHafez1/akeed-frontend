@@ -44,7 +44,7 @@ Si cette option est activée, Akeed envoie un rappel de relance aux clients qui 
 ### Valeur recommandée
 
 - Laissez la relance **activée**.
-- Commencez par **1 à 2 heures** après le premier envoi.
+- Commencez par **6 heures** après le premier envoi. C’est la valeur par défaut.
 
 ### Pourquoi c’est utile
 
@@ -57,7 +57,7 @@ L’escalade marque la commande comme **Sans réponse** lorsque le client n’a 
 
 ### Valeur recommandée
 
-- Commencez par **4 à 6 heures**.
+- Commencez par **24 heures** après la relance. C’est la valeur par défaut.
 - Placez l’escalade après la relance.
 
 ### Usage opérationnel
@@ -70,13 +70,30 @@ Servez-vous du statut « Sans réponse » comme d’une file d’examen pour v
 > [!WARNING]
 > Si l’escalade est trop agressive, vous risquez de bloquer des commandes valides dont le client aurait répondu plus tard.
 
+### Annuler automatiquement les commandes sans réponse
+
+Vous pouvez laisser Akeed annuler une commande dans votre boutique quand elle passe **Sans réponse**. L’option reste désactivée tant que vous ne l’activez pas dans **Délais et relance**, dans les réglages, et elle demande l’alerte des commandes sans réponse. L’annulation a lieu dès que la commande passe **Sans réponse**, votre délai d’escalade sert donc aussi de délai d’annulation.
+
+Akeed n’annule une commande que si tout ceci est vrai :
+
+- La confirmation, et le rappel s’il était prévu, ont été distribués.
+- Le client n’a ni confirmé ni annulé. Akeed ignore un message qu’il ne peut lire ni comme une confirmation ni comme une annulation.
+- Vous n’avez pas exclu la commande avec **Ne pas annuler automatiquement**.
+- La boutique indique toujours la commande comme non payée et non expédiée.
+
+Si Akeed n’a pas pu envoyer ou distribuer un message, par exemple parce que votre forfait ou vos crédits sont épuisés, l’annulation est suspendue. Akeed n’annule jamais une commande à cause de ses propres limites d’envoi.
+
+Sur Shopify, vous choisissez si les articles sont remis en stock et si Shopify prévient le client. WooCommerce et EasyOrders suivent les réglages de votre boutique. Une commande annulée affiche **Aucune réponse après les tentatives de confirmation**. Si le client confirme ensuite, la commande affiche **Confirmée après annulation** et passe dans **À traiter par vous** pour que vous le contactiez. La commande reste annulée. Tout autre message après l’annulation est ignoré.
+
+Désactiver l’option arrête toutes les annulations qui n’ont pas encore atteint votre boutique.
+
 ## Règle 4 : heures de silence
 
 Les heures de silence empêchent les envois à certaines heures locales (la nuit, par exemple).
 
 ### Usage recommandé
 
-- Activez-les si votre clientèle est sensible aux messages tardifs.
+- Elles sont activées par défaut, de 22:00 à 09:00 dans votre fuseau horaire. Désactivez-les seulement si vos clients attendent des messages la nuit.
 - Fixez le début et la fin selon les habitudes de votre marché.
 
 ### Important
@@ -96,8 +113,7 @@ Choisissez le fuseau horaire de votre équipe opérationnelle principale et de v
 | Profil de boutique | Délai initial | Relance | Escalade | Heures de silence |
 | --- | ---: | ---: | ---: | --- |
 | Boutique à traitement rapide | 0–10 min | 60 min | 240 min | Facultatives |
-| Configuration équilibrée par défaut | 10–15 min | 120 min | 360 min | Facultatives |
-| Clientèle sensible aux messages nocturnes | 10–20 min | 120 min | 360–480 min | Activées |
+| Configuration équilibrée par défaut | 0 min | 360 min | 1440 min après la relance | 22:00–09:00 |
 
 Prenez-les comme points de départ, puis ajustez chaque semaine d’après vos taux de réponse et de confirmation.
 
@@ -141,7 +157,7 @@ Pour la plupart des boutiques, oui. Une relance capte généralement l’essenti
 
 ### Quel est le meilleur délai d’escalade ?
 
-Il n’existe pas de valeur universelle. Commencez par 4 à 6 heures, puis ajustez selon les réponses réellement observées.
+Il n’existe pas de valeur universelle. Commencez par 24 heures après la relance, puis ajustez selon les réponses réellement observées.
 
 ### Où vérifier que les règles fonctionnent ?
 

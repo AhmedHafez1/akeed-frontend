@@ -99,6 +99,12 @@ export interface IntegrationOnboardingState {
   followUpDelayMinutes: number
   escalationEnabled: boolean
   escalationDelayMinutes: number
+  /** Cancel an order in its store once it reaches no reply. Off by default. */
+  autoCancelEnabled?: boolean
+  /** Restock the items of an automatically canceled order (Shopify). */
+  autoCancelRestock?: boolean
+  /** Let the store tell the customer about the cancellation (Shopify). */
+  autoCancelNotifyCustomer?: boolean
   quietHoursEnabled: boolean
   quietHoursStart: string | null
   quietHoursEnd: string | null
@@ -215,6 +221,9 @@ export interface OnboardingSettingsPayload {
   followUpDelayMinutes?: number
   escalationEnabled?: boolean
   escalationDelayMinutes?: number
+  autoCancelEnabled?: boolean
+  autoCancelRestock?: boolean
+  autoCancelNotifyCustomer?: boolean
   quietHoursEnabled?: boolean
   quietHoursStart?: string
   quietHoursEnd?: string

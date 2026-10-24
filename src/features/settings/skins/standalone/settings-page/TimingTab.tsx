@@ -13,13 +13,19 @@ import {
 } from '@/features/settings/domain/delayPresets'
 import { quietTimeValues } from '@/features/settings/domain/quietHours'
 import {
+  escalationMinutesFromForm,
+  escalationTogglePatch,
   sendDelayChoicePatch,
   SETTINGS_FIELD_ID,
   timelineInputFromForm,
 } from '@/features/settings/domain/settingsForm'
 import { buildTimezoneOptions } from '@/features/settings/domain/timezoneOptions'
 import type { StandaloneSettingsModel } from '@/features/settings/domain/useStandaloneSettings'
-import { formatQuietTime } from '@/features/settings/skins/shared/settingsFormatters'
+import {
+  formatDuration,
+  formatQuietTime,
+  formatShortDuration,
+} from '@/features/settings/skins/shared/settingsFormatters'
 import { cn } from '@/shared/lib/utils'
 import { AkSegmented, AkSelect } from '@/shared/ui'
 import { AutomationFlowCard } from './AutomationFlowCard'
@@ -134,7 +140,7 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
   const hourOptions = (presets: readonly number[], currentMinutes: number) =>
     hourPresetOptions(presets, currentMinutes).map((option) => ({
       value: String(option.minutes),
-      label: t('hoursShort', { count: option.hours }),
+      label: formatShortDuration(t, option.minutes),
     }))
 
   const timeOptions = quietTimeValues(
@@ -150,6 +156,9 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
     : null
   const timezoneError = model.errors.timezone
     ? t('quietErrors.unsupportedTimezone')
+    : null
+  const autoCancelError = model.errors.autoCancel
+    ? t('autoCancel.requiresEscalation')
     : null
 
   return (
@@ -269,7 +278,7 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
             checked={values.escalationEnabled}
             disabled={readOnly}
             onCheckedChange={(escalationEnabled) =>
-              model.update({ escalationEnabled })
+              model.update(escalationTogglePatch(escalationEnabled))
             }
           >
             {values.escalationEnabled && (
@@ -293,6 +302,45 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
               />
             )}
           </SwitchSetting>
+        </AnnotatedSection>
+
+        <AnnotatedSection
+          title={t('autoCancel.heading')}
+          description={t('autoCancel.description')}
+        >
+          <div id={SETTINGS_FIELD_ID.autoCancel}>
+            <SwitchSetting
+              title={t('autoCancel.label')}
+              help={
+                values.escalationEnabled
+                  ? undefined
+                  : t('autoCancel.requiresEscalation')
+              }
+              checked={values.autoCancelEnabled}
+              disabled={readOnly || !values.escalationEnabled}
+              onCheckedChange={(autoCancelEnabled) =>
+                model.update({ autoCancelEnabled })
+              }
+            >
+              {values.autoCancelEnabled && (
+                <div className="space-y-1 px-4 pb-4 sm:px-6 sm:pb-5">
+                  <p className="text-ak-body text-ink">
+                    {t('autoCancel.deadline', {
+                      duration: formatDuration(
+                        t,
+                        escalationMinutesFromForm(values)
+                      ),
+                    })}
+                  </p>
+                  {autoCancelError && (
+                    <p role="alert" className={fieldErrorClass}>
+                      {autoCancelError}
+                    </p>
+                  )}
+                </div>
+              )}
+            </SwitchSetting>
+          </div>
         </AnnotatedSection>
 
         <AnnotatedSection

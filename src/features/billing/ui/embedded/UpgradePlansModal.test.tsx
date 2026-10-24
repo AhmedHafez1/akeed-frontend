@@ -12,7 +12,10 @@ const api = vi.hoisted(() => ({
 
 vi.mock('../../api/shopifyPlansApi', () => api)
 
-function plansResponse(isFreePlanClaimed: boolean): ShopifyPlansResponse {
+function plansResponse(
+  isFreePlanClaimed: boolean,
+  currentPlanId: ShopifyPlansResponse['currentPlanId'] = null
+): ShopifyPlansResponse {
   return {
     billingManagement: { mode: 'shopify', canManageBilling: true },
     plans: [
@@ -46,11 +49,17 @@ function plansResponse(isFreePlanClaimed: boolean): ShopifyPlansResponse {
       },
     ],
     isFreePlanClaimed,
+    currentPlanId,
   }
 }
 
-async function renderModal(isFreePlanClaimed = true) {
-  api.fetchShopifyPlans.mockResolvedValue(plansResponse(isFreePlanClaimed))
+async function renderModal(
+  isFreePlanClaimed = true,
+  currentPlanId: ShopifyPlansResponse['currentPlanId'] = null
+) {
+  api.fetchShopifyPlans.mockResolvedValue(
+    plansResponse(isFreePlanClaimed, currentPlanId)
+  )
   const onClose = vi.fn()
   const client = new QueryClient({
     defaultOptions: { queries: { retry: false } },
@@ -134,7 +143,8 @@ describe('UpgradePlansModal', () => {
     expect(api.createShopifySubscription).toHaveBeenCalledTimes(1)
     expect(api.createShopifySubscription).toHaveBeenCalledWith(
       'business',
-      'host-1'
+      'host-1',
+      { renew: false }
     )
   })
 
@@ -152,8 +162,46 @@ describe('UpgradePlansModal', () => {
 
     expect(api.createShopifySubscription).toHaveBeenCalledWith(
       'starter',
-      'host-1'
+      'host-1',
+      { renew: false }
     )
+  })
+
+  it('marks the current plan and selects the next one up', async () => {
+    await renderModal(true, 'basic')
+
+    expect(screen.getAllByText('باقتك الحالية')).toHaveLength(1)
+    expect(radio('الاحترافية').checked).toBe(true)
+    expect(screen.queryByText(/يبدأ التجديد/)).toBeNull()
+  })
+
+  it('renews the current plan when it is chosen', async () => {
+    await renderModal(true, 'basic')
+    fireEvent.click(radio('الأساسية'))
+
+    expect(screen.getByText(/^يبدأ التجديد فترة جديدة/)).toBeTruthy()
+    await act(async () => {
+      fireEvent.click(
+        screen.getByRole('button', {
+          name: /^جدِّد باقة الأساسية الآن · .US\$ 9\.99. شهرياً$/,
+        })
+      )
+    })
+
+    expect(api.createShopifySubscription).toHaveBeenCalledWith(
+      'basic',
+      'host-1',
+      { renew: true }
+    )
+  })
+
+  it('selects the top plan itself, as a renewal, on the top plan', async () => {
+    await renderModal(true, 'business')
+
+    expect(radio('المتقدمة').checked).toBe(true)
+    expect(
+      screen.getByRole('button', { name: /^جدِّد باقة المتقدمة الآن/ })
+    ).toBeTruthy()
   })
 
   it('cancels through the secondary action', async () => {

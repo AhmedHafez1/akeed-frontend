@@ -100,6 +100,107 @@ beforeEach(() => {
 })
 
 describe('standalone Timing tab', () => {
+  it.each([
+    [true, 2, 4, '4 دقائق'],
+    [false, 2, 2, 'دقيقتين'],
+    [true, 30, 90, '90 دقيقة'],
+    [true, 360, 1080, '18 ساعة'],
+  ] as const)(
+    'shows the exact cancellation duration (reminder=%s, reminder minutes=%s, total=%s)',
+    async (
+      followUpEnabled,
+      followUpDelayMinutes,
+      escalationDelayMinutes,
+      duration
+    ) => {
+      await renderTiming({
+        autoCancelEnabled: true,
+        followUpEnabled,
+        followUpDelayMinutes,
+        escalationDelayMinutes,
+      })
+      expect(
+        screen.getByText(
+          'سيُلغى الطلب تلقائيًا بعد ' + duration + ' من الرسالة الأولى.'
+        )
+      ).toBeTruthy()
+    }
+  )
+
+  it('updates minute delays before saving and preserves exact payload minutes', async () => {
+    await renderTiming({
+      autoCancelEnabled: false,
+      followUpDelayMinutes: 2,
+      escalationDelayMinutes: 4,
+    })
+    expect(pressedIn(timing.reminderGroup)).toEqual(['2 د'])
+    expect(pressedIn(timing.alertGroup)).toEqual(['2 د'])
+    fireEvent.click(toggle(timing.autoCancel.label))
+    fireEvent.click(toggle(timing.reminderLabel))
+    expect(
+      screen.getByText('سيُلغى الطلب تلقائيًا بعد دقيقتين من الرسالة الأولى.')
+    ).toBeTruthy()
+    fireEvent.click(toggle(timing.reminderLabel))
+    expect(
+      screen.getByText('سيُلغى الطلب تلقائيًا بعد 4 دقائق من الرسالة الأولى.')
+    ).toBeTruthy()
+    expect(api.saveSettings).not.toHaveBeenCalled()
+    fireEvent.click(saveButton())
+    await waitFor(() =>
+      expect(api.saveSettings).toHaveBeenCalledWith(
+        expect.objectContaining({
+          autoCancelEnabled: true,
+          followUpDelayMinutes: 2,
+          escalationDelayMinutes: 4,
+        })
+      )
+    )
+  })
+
+  it.each([
+    [false, true],
+    [true, false],
+  ])(
+    'hides Shopify options and preserves restock=%s, notify=%s on save',
+    async (autoCancelRestock, autoCancelNotifyCustomer) => {
+      await renderTiming({
+        autoCancelEnabled: false,
+        autoCancelRestock,
+        autoCancelNotifyCustomer,
+      })
+      expect(
+        screen.queryByRole('switch', { name: timing.autoCancel.restockLabel })
+      ).toBeNull()
+      expect(
+        screen.queryByRole('switch', { name: timing.autoCancel.notifyLabel })
+      ).toBeNull()
+      fireEvent.click(toggle(timing.autoCancel.label))
+      expect(
+        screen.queryByRole('switch', { name: timing.autoCancel.restockLabel })
+      ).toBeNull()
+      expect(
+        screen.queryByRole('switch', { name: timing.autoCancel.notifyLabel })
+      ).toBeNull()
+      expect(screen.queryByText(/WooCommerce/)).toBeNull()
+      fireEvent.click(saveButton())
+      await waitFor(() =>
+        expect(api.saveSettings).toHaveBeenCalledWith(
+          expect.objectContaining({
+            autoCancelEnabled: true,
+            autoCancelRestock,
+            autoCancelNotifyCustomer,
+          })
+        )
+      )
+    }
+  )
+
+  it('keeps disabled-state guidance when escalation is off', async () => {
+    await renderTiming({ escalationEnabled: false, autoCancelEnabled: false })
+    expect(toggle(timing.autoCancel.label)).toHaveProperty('disabled', true)
+    expect(screen.getByText(timing.autoCancel.requiresEscalation)).toBeTruthy()
+  })
+
   it('shows the three sections with the saved choices pressed', async () => {
     await renderTiming()
 

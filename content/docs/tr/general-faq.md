@@ -69,7 +69,7 @@ Bir kredi, müşteriye gönderilen bir WhatsApp mesajıdır. Yanıt vermeyen bir
 
 ### Aylık onay sınırıma ulaştığımda ya da kredim bittiğinde ne olur?
 
-Yeni onaylar, döneminiz yenilenene, planınızı yükseltene ya da kredi satın alana kadar duraklar.
+Yeni onaylar, döneminiz yenilenene, planınızı yükseltene ya da kredi satın alana kadar duraklar. Ücretli bir Shopify planında planınızı şimdi yenileyebilirsiniz de; bu, tam hakla 30 günlük yeni bir dönem başlatır.
 
 ### Sınırdan sonra otomatik ek ücret alınıyor mu?
 

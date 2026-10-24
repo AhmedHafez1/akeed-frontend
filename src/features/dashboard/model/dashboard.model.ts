@@ -49,6 +49,7 @@ export type VerificationRowAction =
   | 'merchant_no_reply_cancellation'
   | 'retry_verification'
   | 'merchant_manual_confirmation'
+  | 'auto_cancel_exclusion'
 
 export type VerificationRowCapability = {
   action: VerificationRowAction
@@ -136,6 +137,11 @@ export type VerificationItem = {
   updated_at?: string | null
   /** How this customer's other orders ended. Null on test rows. */
   customer_history?: CustomerHistory | null
+  /**
+   * The order's automatic cancellation. Null when the store does not cancel
+   * unanswered orders automatically and nothing was decided for it.
+   */
+  auto_cancel?: AutoCancelView | null
   /**
    * Client-only: set on a row the UI is showing ahead of the server — an order
    * the merchant just created whose verification a worker has not written yet.
@@ -238,11 +244,35 @@ export type CustomerHistory = {
   no_reply: number
 }
 
+/** Where a row's automatic cancellation stands. */
+export type AutoCancelState =
+  | 'projected'
+  | 'scheduled'
+  | 'paused'
+  | 'in_progress'
+  | 'awaiting_platform'
+  | 'succeeded'
+  | 'failed'
+  | 'skipped'
+  | 'stopped'
+
+export type AutoCancelView = {
+  /** `projected` while the customer can still answer. */
+  state: AutoCancelState
+  /** When it runs on its own; null when it will not. */
+  scheduled_for: string | null
+  reason: string | null
+  excluded: boolean
+  late_reply: boolean
+}
+
 /** Why the server says a row needs the merchant. */
 export type NeedsActionReason =
+  | 'late_reply_after_auto_cancel'
   | 'no_whatsapp'
   | 'delivery_failed'
   | 'send_failed'
+  | 'auto_cancel_failed'
   | 'no_reply_after_follow_up'
   | 'read_no_reply'
   | 'no_reply'
@@ -297,6 +327,8 @@ export type CapacitySummary = {
   /** Confirmations or credits left. */
   remaining: number
   action: CapacityAction
+  /** The recurring paid plan that can be bought again to start a fresh period now. */
+  renew_plan_id?: 'basic' | 'pro' | 'business' | null
   /** When the plan allowance renews; null for credits. */
   reset_at: string | null
 }

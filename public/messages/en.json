@@ -1362,7 +1362,7 @@
     "cta": "Create your free account",
     "cta_note": "No credit card needed",
     "shopify_title": "Shopify stores · monthly plan",
-    "shopify_body": "Choose a plan by monthly message volume and pay on your Shopify invoice. Every plan has the same features, and your first 30 messages are free.",
+    "shopify_body": "Choose a plan by monthly message volume and pay on your Shopify invoice. Your first 30 messages are free.",
     "shopify_cta": "See plans on Shopify",
     "authoritative_note": "Prices are shown in Egyptian pounds and may change. The authoritative price is the one shown on your billing page."
   },
@@ -2374,7 +2374,9 @@
           "read_no_reply": "Read, no reply · {hours, plural, one {# hour} other {# hours}} ago",
           "delivery_failed": "Not delivered: {reason}",
           "send_failed": "Message not sent",
-          "no_whatsapp": "Not on WhatsApp · Call the customer"
+          "no_whatsapp": "Not on WhatsApp · Call the customer",
+          "auto_cancel_failed": "Automatic cancellation failed",
+          "late_reply_after_auto_cancel": "Confirmed after it was canceled"
         },
         "actions": {
           "whatsapp": "WhatsApp them",
@@ -2471,6 +2473,7 @@
         "sending": "Sending",
         "awaitingReply": "Awaiting reply",
         "noReply": "No reply",
+        "confirmedAfterCancel": "Confirmed after cancel",
         "noWhatsApp": "No WhatsApp",
         "awaitingStart": "Awaiting start",
         "notStarted": "Not started",
@@ -2481,6 +2484,8 @@
           "canceledByCustomer": "By the customer",
           "canceledNoReply": "No reply from the customer",
           "canceledNoWhatsApp": "Number not on WhatsApp",
+          "canceledAutomatically": "No response after confirmation attempts",
+          "lateReplyAfterAutoCancel": "Customer confirmed after it was canceled",
           "followUpSent": "Reminder sent",
           "sendsAt": "Sends {time}",
           "callCustomer": "Call the customer",
@@ -2490,7 +2495,8 @@
           "scheduledFor": "Scheduled for {time}",
           "reminderAt": "Reminder scheduled for {time}",
           "callCustomer": "Number isn’t on WhatsApp. Call the customer to confirm.",
-          "callCustomerSince": "Not on WhatsApp since {time}. Call the customer to confirm."
+          "callCustomerSince": "Not on WhatsApp since {time}. Call the customer to confirm.",
+          "confirmedAfterCancel": "Canceled automatically on {time}. The customer confirmed afterwards — contact them."
         },
         "failure": {
           "notOnWhatsApp": "number isn’t on WhatsApp",
@@ -2503,6 +2509,53 @@
         "blocked": "Waiting to send"
       },
       "loadingMore": "Loading more orders…",
+      "autoCancel": {
+        "marker": {
+          "scheduled": "Cancels automatically {time} if the customer doesn’t reply",
+          "paused": "Automatic cancellation paused because {reason}",
+          "pausedReasons": {
+            "initial_not_delivered": "the confirmation wasn’t delivered",
+            "reminder_blocked": "the reminder wasn’t sent",
+            "reminder_not_delivered": "the reminder wasn’t delivered",
+            "unknown": "a message wasn’t delivered"
+          },
+          "excluded": "Kept out of automatic cancellation",
+          "inProgress": "Being canceled in your store",
+          "failed": "Automatic cancellation failed. Cancel it yourself or keep it."
+        },
+        "actions": {
+          "exclude": "Don’t auto-cancel",
+          "include": "Allow auto-cancel",
+          "excludeSuccess": "This order won’t be canceled automatically.",
+          "includeSuccess": "Automatic cancellation is back on for this order.",
+          "error": "We couldn’t change automatic cancellation for this order. Please try again.",
+          "inProgressError": "The store is already canceling this order."
+        },
+        "detail": {
+          "label": "Automatic cancellation",
+          "canceled": "Canceled. No response after confirmation attempts.",
+          "canceledLateReply": "Canceled for no response. The customer confirmed afterwards. Contact them to check whether they still want the order.",
+          "skipped": "Not canceled because {reason}",
+          "skipReasons": {
+            "paid": "the order is paid",
+            "fulfilled": "the order was shipped",
+            "fulfillment_in_progress": "the order is being fulfilled",
+            "status_not_writable": "the store moved the order on",
+            "order_not_found": "the store doesn’t have the order",
+            "source_unsupported": "your store doesn’t allow it",
+            "other": "a safety rule didn’t hold"
+          },
+          "stopped": "Stopped because {reason}",
+          "stopReasons": {
+            "customer_reply": "the customer wrote back",
+            "excluded": "you kept the order",
+            "feature_disabled": "automatic cancellation was turned off",
+            "status_changed": "the order changed",
+            "other": "a safety rule didn’t hold"
+          },
+          "waiting": "Waiting for the customer"
+        }
+      },
       "loaded": "Showing {loaded} of {total} orders",
       "empty": {
         "all": "No confirmations in this period yet.",
@@ -2589,12 +2642,17 @@
         "upgradeNoDate": "Your plan’s confirmations ran out, so these orders weren’t sent. Upgrade and Akeed sends them automatically.",
         "recharge": "Your credits ran out, so these orders weren’t sent. Buy credits and Akeed sends them automatically.",
         "waitReset": "Your plan’s confirmations ran out, so these orders weren’t sent. They go out automatically when your allowance renews on {date}.",
-        "waitResetNoDate": "Your plan’s confirmations ran out, so these orders weren’t sent. They go out automatically when your allowance renews."
+        "waitResetNoDate": "Your plan’s confirmations ran out, so these orders weren’t sent. They go out automatically when your allowance renews.",
+        "upgradeOrRenew": "Your plan’s confirmations ran out, so these orders weren’t sent. Upgrade or renew your plan to send them now, or they go out automatically when your allowance renews on {date}.",
+        "upgradeOrRenewNoDate": "Your plan’s confirmations ran out, so these orders weren’t sent. Upgrade or renew your plan and Akeed sends them automatically.",
+        "renewOrWait": "Your plan’s confirmations ran out, so these orders weren’t sent. Renew your plan to send them now, or they go out automatically when your allowance renews on {date}.",
+        "renewOrWaitNoDate": "Your plan’s confirmations ran out, so these orders weren’t sent. Renew your plan to send them now, or they go out automatically when your allowance renews."
       },
       "note": "Nothing is charged until an order is sent. An order that waits too long moves to Needs action.",
       "cta": {
         "upgrade": "Upgrade plan",
-        "recharge": "Buy credits"
+        "recharge": "Buy credits",
+        "renew": "Renew {plan} now"
       }
     }
   },
@@ -2994,7 +3052,7 @@
         "storeNameTooLong": "Use {max} characters or fewer.",
         "languageHeading": "Message language",
         "languageAuto": "Automatic, by customer number",
-        "languageAutoHelp": "Arabic for numbers in Arab countries, Urdu for Pakistan, Spanish for Spain and Latin America, French for France, and English everywhere else.",
+        "languageAutoHelp": "Arabic for numbers in Arab countries, Urdu for Pakistan, Spanish for Spain and Latin America, French for France, Turkish for Türkiye, and English everywhere else.",
         "recommended": "Recommended",
         "languageFixed": "One language for all customers",
         "languageFixedHelp": "Every customer gets the message in the language you choose.",
@@ -3061,7 +3119,8 @@
           "newOrder": "New order",
           "confirmation": "Confirmation message",
           "reminder": "Reminder if no reply",
-          "needsAction": "“Needs your action”"
+          "needsAction": "“Needs your action”",
+          "autoCancel": "Canceled automatically"
         },
         "delayImmediate": "Immediately",
         "delayAfter": "After {duration}",
@@ -3071,8 +3130,8 @@
         "minutes": "{count, plural, one {# minute} other {# minutes}}",
         "quietLine": "Messages due between {start} and {end} are sent at {end}.",
         "autoHeading": "Auto-confirmation",
-        "autoDescription": "When we send the confirmation message for COD orders.",
-        "autoLabel": "Send a confirmation message for every new order",
+        "autoDescription": "Confirmation timing.",
+        "autoLabel": "Send confirmations automatically",
         "autoHelp": "When off, no messages are sent.",
         "sendTimeLabel": "Send time",
         "previewMessage": "Preview message",
@@ -3086,7 +3145,7 @@
         "customDelaySuffix": "min",
         "customDelayError": "Enter whole minutes from 0 to 1,440.",
         "followHeading": "Follow-up",
-        "followDescription": "What we do when a customer doesn't reply.",
+        "followDescription": "When customers don’t reply.",
         "reminderLabel": "Send one reminder",
         "reminderCounts": "Reminders count toward your monthly messages.",
         "after": "After",
@@ -3097,8 +3156,17 @@
         "fromReminder": "after the reminder",
         "reminderGroup": "Reminder delay",
         "alertGroup": "No-reply alert delay",
-        "alertLabel": "Alert me about orders with no reply",
-        "alertHelp": "The order moves to “Needs your action” in Akeed so you can follow up yourself.",
+        "alertLabel": "Flag unanswered orders",
+        "alertHelp": "Moves orders to “Needs your action”.",
+        "autoCancel": {
+          "heading": "Unanswered orders",
+          "description": "Automatic cancellation settings.",
+          "label": "Auto-cancel unanswered orders",
+          "deadline": "Order will be automatically cancelled after {duration} from the first message.",
+          "restockLabel": "Restock items",
+          "notifyLabel": "Send store notification",
+          "requiresEscalation": "Turn on “Flag unanswered orders” first. Cancellation uses the same delay."
+        },
         "quietHeading": "Quiet hours",
         "quietDescription": "No messages at night. Anything due during quiet hours is sent when they end.",
         "quietLabel": "Pause sending during quiet hours",
@@ -3130,6 +3198,7 @@
         "usageAria": "Messages used",
         "subscribe": "Subscribe to {plan}",
         "currentPlanButton": "Your current plan",
+        "renew": "Renew {plan} now",
         "billingManaged": "Your plan is managed by the Akeed team. Contact support to change it.",
         "subscribeError": "We couldn't open Shopify's approval page. Try again.",
         "freePlanClaimedError": "This store already used the free plan. Choose a paid plan."
@@ -3606,6 +3675,9 @@
       "starterRow": "Starter: 30 free messages, one-time",
       "starterCta": "Start free",
       "subscribeCta": "Subscribe to {plan} · {price} / month",
+      "renewCta": "Renew {plan} now · {price} / month",
+      "renewNote": "Renewing starts a new 30-day period today with the full allowance. Messages left in the current period don’t carry over.",
+      "currentPlan": "Current plan",
       "redirectNote": "You'll go to Shopify to approve the charge.",
       "cancel": "Cancel"
     },

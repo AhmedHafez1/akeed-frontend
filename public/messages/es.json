@@ -233,7 +233,7 @@
     "cta": "Crea tu cuenta gratis",
     "cta_note": "Sin tarjeta de crédito",
     "shopify_title": "Tiendas Shopify · plan mensual",
-    "shopify_body": "Elige un plan según tu volumen mensual de mensajes y paga en tu factura de Shopify. Todos los planes tienen las mismas funciones y tus primeros 30 mensajes son gratis.",
+    "shopify_body": "Elige un plan según tu volumen mensual de mensajes y paga en tu factura de Shopify. Tus primeros 30 mensajes son gratis.",
     "shopify_cta": "Ver planes en Shopify",
     "authoritative_note": "Los precios se muestran en libras egipcias y pueden cambiar. El precio válido es el que aparece en tu página de facturación."
   },
@@ -1245,7 +1245,9 @@
           "read_no_reply": "Leído, sin respuesta · hace {hours, plural, one {# hora} other {# horas}}",
           "delivery_failed": "No entregado: {reason}",
           "send_failed": "Mensaje no enviado",
-          "no_whatsapp": "No está en WhatsApp · Llama al cliente"
+          "no_whatsapp": "No está en WhatsApp · Llama al cliente",
+          "auto_cancel_failed": "La cancelación automática falló",
+          "late_reply_after_auto_cancel": "Confirmó tras la cancelación"
         },
         "actions": {
           "whatsapp": "Ir a WhatsApp",
@@ -1342,6 +1344,7 @@
         "sending": "Enviando",
         "awaitingReply": "Esperando respuesta",
         "noReply": "Sin respuesta",
+        "confirmedAfterCancel": "Confirmó tras cancelar",
         "noWhatsApp": "Sin WhatsApp",
         "awaitingStart": "Esperando inicio",
         "notStarted": "No iniciado",
@@ -1352,6 +1355,8 @@
           "canceledByCustomer": "Por el cliente",
           "canceledNoReply": "Sin respuesta del cliente",
           "canceledNoWhatsApp": "Número sin WhatsApp",
+          "canceledAutomatically": "Sin respuesta tras los intentos de confirmación",
+          "lateReplyAfterAutoCancel": "El cliente confirmó tras la cancelación",
           "followUpSent": "Recordatorio enviado",
           "sendsAt": "Se envía {time}",
           "callCustomer": "Llama al cliente",
@@ -1361,7 +1366,8 @@
           "scheduledFor": "Programado para {time}",
           "reminderAt": "Recordatorio programado para {time}",
           "callCustomer": "El número no está en WhatsApp. Llama al cliente para confirmar.",
-          "callCustomerSince": "Sin WhatsApp desde {time}. Llama al cliente para confirmar."
+          "callCustomerSince": "Sin WhatsApp desde {time}. Llama al cliente para confirmar.",
+          "confirmedAfterCancel": "Cancelado automáticamente el {time}. El cliente confirmó después — contáctalo."
         },
         "failure": {
           "notOnWhatsApp": "el número no está en WhatsApp",
@@ -1374,6 +1380,53 @@
         "blocked": "En espera de envío"
       },
       "loadingMore": "Cargando más pedidos…",
+      "autoCancel": {
+        "marker": {
+          "scheduled": "Se cancela automáticamente {time} si el cliente no responde",
+          "paused": "Cancelación automática en pausa porque {reason}",
+          "pausedReasons": {
+            "initial_not_delivered": "la confirmación no se entregó",
+            "reminder_blocked": "el recordatorio no se envió",
+            "reminder_not_delivered": "el recordatorio no se entregó",
+            "unknown": "un mensaje no se entregó"
+          },
+          "excluded": "Excluido de la cancelación automática",
+          "inProgress": "Cancelándose en tu tienda",
+          "failed": "La cancelación automática falló. Cancélalo tú o consérvalo."
+        },
+        "actions": {
+          "exclude": "No cancelar automáticamente",
+          "include": "Permitir la cancelación automática",
+          "excludeSuccess": "Este pedido no se cancelará automáticamente.",
+          "includeSuccess": "La cancelación automática vuelve a aplicarse a este pedido.",
+          "error": "No pudimos cambiar la cancelación automática de este pedido. Inténtalo de nuevo.",
+          "inProgressError": "La tienda ya está cancelando este pedido."
+        },
+        "detail": {
+          "label": "Cancelación automática",
+          "canceled": "Cancelado. Sin respuesta tras los intentos de confirmación.",
+          "canceledLateReply": "Cancelado por falta de respuesta. El cliente confirmó después. Contáctalo para comprobar si todavía quiere el pedido.",
+          "skipped": "No se canceló porque {reason}",
+          "skipReasons": {
+            "paid": "el pedido está pagado",
+            "fulfilled": "el pedido se envió",
+            "fulfillment_in_progress": "el pedido se está preparando",
+            "status_not_writable": "la tienda avanzó el pedido",
+            "order_not_found": "la tienda no tiene el pedido",
+            "source_unsupported": "tu tienda no lo permite",
+            "other": "no se cumplió una regla de seguridad"
+          },
+          "stopped": "Se detuvo porque {reason}",
+          "stopReasons": {
+            "customer_reply": "el cliente respondió",
+            "excluded": "conservaste el pedido",
+            "feature_disabled": "se desactivó la cancelación automática",
+            "status_changed": "el pedido cambió",
+            "other": "no se cumplió una regla de seguridad"
+          },
+          "waiting": "Esperando al cliente"
+        }
+      },
       "loaded": "Mostrando {loaded} de {total} pedidos",
       "empty": {
         "all": "Aún no hay confirmaciones en este periodo.",
@@ -1460,12 +1513,17 @@
         "upgradeNoDate": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Mejora tu plan y Akeed los enviará automáticamente.",
         "recharge": "Se agotaron tus créditos, así que estos pedidos no se enviaron. Compra créditos y Akeed los enviará automáticamente.",
         "waitReset": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Saldrán automáticamente cuando tu cupo se renueve el {date}.",
-        "waitResetNoDate": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Saldrán automáticamente cuando tu cupo se renueve."
+        "waitResetNoDate": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Saldrán automáticamente cuando tu cupo se renueve.",
+        "upgradeOrRenew": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Mejora o renueva tu plan para enviarlos ahora, o saldrán automáticamente cuando tu cupo se renueve el {date}.",
+        "upgradeOrRenewNoDate": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Mejora o renueva tu plan y Akeed los enviará automáticamente.",
+        "renewOrWait": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Renueva tu plan para enviarlos ahora, o saldrán automáticamente cuando tu cupo se renueve el {date}.",
+        "renewOrWaitNoDate": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Renueva tu plan para enviarlos ahora, o saldrán automáticamente cuando tu cupo se renueve."
       },
       "note": "No se cobra nada hasta que se envía un pedido. Un pedido que espera demasiado pasa a Requieren acción.",
       "cta": {
         "upgrade": "Mejorar plan",
-        "recharge": "Comprar créditos"
+        "recharge": "Comprar créditos",
+        "renew": "Renovar {plan} ahora"
       }
     }
   },
@@ -1865,7 +1923,7 @@
         "storeNameTooLong": "Usa {max} caracteres o menos.",
         "languageHeading": "Idioma del mensaje",
         "languageAuto": "Automático, según el número del cliente",
-        "languageAutoHelp": "Árabe para los números de países árabes, urdu para Pakistán, español para España y Latinoamérica, francés para Francia e inglés para todos los demás.",
+        "languageAutoHelp": "Árabe para los números de países árabes, urdu para Pakistán, español para España y Latinoamérica, francés para Francia, turco para Turquía e inglés para todos los demás.",
         "recommended": "Recomendado",
         "languageFixed": "Un solo idioma para todos los clientes",
         "languageFixedHelp": "Todos los clientes reciben el mensaje en el idioma que elijas.",
@@ -1932,7 +1990,8 @@
           "newOrder": "Pedido nuevo",
           "confirmation": "Mensaje de confirmación",
           "reminder": "Recordatorio si no hay respuesta",
-          "needsAction": "«Requieren tu acción»"
+          "needsAction": "«Requieren tu acción»",
+          "autoCancel": "Se cancela automáticamente"
         },
         "delayImmediate": "De inmediato",
         "delayAfter": "Tras {duration}",
@@ -1942,8 +2001,8 @@
         "minutes": "{count, plural, one {# minuto} other {# minutos}}",
         "quietLine": "Entre las {start} y las {end} no se envían mensajes; los pendientes salen a las {end}, al terminar el horario de silencio.",
         "autoHeading": "Confirmación automática",
-        "autoDescription": "Cuándo enviamos el mensaje de confirmación de los pedidos contra entrega.",
-        "autoLabel": "Enviar un mensaje de confirmación por cada pedido nuevo",
+        "autoDescription": "Cuándo enviar la confirmación.",
+        "autoLabel": "Enviar confirmaciones automáticamente",
         "autoHelp": "Si está desactivada, no se envían mensajes.",
         "sendTimeLabel": "Momento del envío",
         "previewMessage": "Vista previa del mensaje",
@@ -1957,7 +2016,7 @@
         "customDelaySuffix": "min",
         "customDelayError": "Ingresa minutos enteros de 0 a 1,440.",
         "followHeading": "Seguimiento",
-        "followDescription": "Qué hacemos cuando un cliente no responde.",
+        "followDescription": "Cuando el cliente no responde.",
         "reminderLabel": "Enviar un recordatorio",
         "reminderCounts": "Los recordatorios cuentan para tus mensajes mensuales.",
         "after": "Esperar",
@@ -1968,8 +2027,17 @@
         "fromReminder": "desde el recordatorio",
         "reminderGroup": "Retraso del recordatorio",
         "alertGroup": "Retraso del aviso por falta de respuesta",
-        "alertLabel": "Avisarme de los pedidos sin respuesta",
-        "alertHelp": "El pedido pasa a «Requieren tu acción» en Akeed para que le des seguimiento tú mismo.",
+        "alertLabel": "Marcar pedidos sin respuesta",
+        "alertHelp": "Mueve los pedidos a «Requieren tu acción».",
+        "autoCancel": {
+          "heading": "Pedidos sin respuesta",
+          "description": "Ajustes de cancelación automática.",
+          "label": "Cancelar pedidos sin respuesta automáticamente",
+          "deadline": "El pedido se cancelará automáticamente {duration} después del primer mensaje.",
+          "restockLabel": "Reponer inventario",
+          "notifyLabel": "Enviar aviso desde la tienda",
+          "requiresEscalation": "Activa primero «Marcar pedidos sin respuesta». La cancelación usa el mismo plazo."
+        },
         "quietHeading": "Horario de silencio",
         "quietDescription": "Sin mensajes por la noche. Los mensajes programados durante el horario de silencio se envían cuando este termina.",
         "quietLabel": "Pausar los envíos durante el horario de silencio",
@@ -2001,6 +2069,7 @@
         "usageAria": "Mensajes usados",
         "subscribe": "Suscribirme a {plan}",
         "currentPlanButton": "Tu plan actual",
+        "renew": "Renovar {plan} ahora",
         "billingManaged": "El equipo de Akeed administra tu plan. Contacta al soporte para cambiarlo.",
         "subscribeError": "No pudimos abrir la página de aprobación de Shopify. Inténtalo de nuevo.",
         "freePlanClaimedError": "Esta tienda ya usó el plan gratuito. Elige un plan de pago."
@@ -2477,6 +2546,9 @@
       "starterRow": "Starter: 30 mensajes gratis, una sola vez",
       "starterCta": "Empezar gratis",
       "subscribeCta": "Suscribirme a {plan} · {price} / mes",
+      "renewCta": "Renovar {plan} ahora · {price} / mes",
+      "renewNote": "Renovar empieza hoy un nuevo periodo de 30 días con la asignación completa. Los mensajes que quedan del periodo actual no se acumulan.",
+      "currentPlan": "Plan actual",
       "redirectNote": "Irás a Shopify para aprobar el cargo.",
       "cancel": "Cancelar"
     },

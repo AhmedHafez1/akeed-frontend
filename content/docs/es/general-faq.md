@@ -69,7 +69,7 @@ Un crédito es un mensaje de WhatsApp enviado a un cliente. Un recordatorio a un
 
 ### ¿Qué pasa al llegar al límite mensual de confirmaciones o al quedarse sin créditos?
 
-Las confirmaciones nuevas se pausan hasta que tu ciclo se renueve, mejores el plan o compres más créditos.
+Las confirmaciones nuevas se pausan hasta que tu ciclo se renueve, mejores el plan o compres más créditos. En un plan de pago de Shopify también puedes renovarlo ahora, lo que inicia un nuevo periodo de 30 días con la asignación completa.
 
 ### ¿Hay cargos adicionales automáticos después del límite?
 

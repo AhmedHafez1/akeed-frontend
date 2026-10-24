@@ -1,4 +1,5 @@
 import type {
+  CapacitySummary,
   DashboardOverview,
   VerificationItem,
 } from '@/features/dashboard/model/dashboard.model'
@@ -9,7 +10,9 @@ import type {
  * by the customer and 3 waiting on the merchant. No network, no provider.
  *
  * Scenarios (`?scenario=`): `empty` (a new shop), `error` (every read fails),
- * `limit` (plan used up), `quiet` (usage under 80%), `viewer` (read-only role).
+ * `limit` (plan used up), `quiet` (usage under 80%), `viewer` (read-only role),
+ * `blocked-basic` and `blocked-scale` (an order waits on a used-up paid plan,
+ * which the banner and plan picker offer to renew).
  */
 
 /** The standalone pages read the same synthetic backend as the embedded one. */
@@ -155,6 +158,48 @@ function ensureScenario() {
   rows = loadedScenario === 'empty' ? [] : buildRows()
 }
 
+/** The paid plan a blocked scenario runs out on. */
+function blockedPlan(): 'basic' | 'business' | null {
+  if (scenario() === 'blocked-basic') return 'basic'
+  if (scenario() === 'blocked-scale') return 'business'
+  return null
+}
+
+function capacity(): CapacitySummary | null {
+  const plan = blockedPlan()
+  if (!plan) return null
+  return {
+    blocked_count: 1,
+    mode: 'plan',
+    remaining: 0,
+    action: plan === 'business' ? 'wait_reset' : 'upgrade',
+    renew_plan_id: plan,
+    reset_at: '2026-10-21T00:00:00Z',
+  }
+}
+
+const PLANS = [
+  ['starter', 'Akeed Starter', 0, 30],
+  ['basic', 'Akeed Basic', 9.99, 300],
+  ['pro', 'Akeed Pro', 22.99, 1000],
+  ['business', 'Akeed Scale', 49.99, 2500],
+] as const
+
+function shopifyPlans() {
+  return {
+    billingManagement: { mode: 'shopify', canManageBilling: true },
+    plans: PLANS.map(([id, name, amount, includedVerifications]) => ({
+      id,
+      name,
+      amount,
+      currencyCode: 'USD',
+      includedVerifications,
+    })),
+    isFreePlanClaimed: true,
+    currentPlanId: blockedPlan() ?? 'starter',
+  }
+}
+
 function countOf(filter: (row: VerificationItem) => boolean) {
   return rows.filter(filter).length
 }
@@ -237,6 +282,7 @@ function overview(): DashboardOverview {
       })),
     },
     permissions: { can_confirm_orders: scenario() !== 'viewer' },
+    capacity: capacity(),
   }
 }
 
@@ -296,6 +342,7 @@ function list(url: URL) {
         canceled: countOf((row) => row.status === 'canceled'),
         failed: countOf((row) => row.status === 'failed'),
       },
+      capacity: capacity(),
     },
   }
 }
@@ -322,10 +369,13 @@ const onboardingState = {
 
 export async function embeddedDashboardRequest<T>(
   method: 'GET' | 'POST',
-  path: string
+  path: string,
+  body?: unknown
 ): Promise<T> {
   ensureScenario()
-  requests.push(`${method} ${path}`)
+  requests.push(
+    `${method} ${path}${body === undefined ? '' : ` ${JSON.stringify(body)}`}`
+  )
   await new Promise((resolve) => setTimeout(resolve, 250))
   const url = new URL(path, 'http://fixture.local')
   if (scenario() === 'error' && url.pathname !== '/api/onboarding/state')
@@ -336,6 +386,11 @@ export async function embeddedDashboardRequest<T>(
     return { overview: overview() } as T
   if (method === 'GET' && url.pathname === '/api/verifications')
     return list(url) as T
+  if (method === 'GET' && url.pathname === '/api/onboarding/billing/plans')
+    return shopifyPlans() as T
+  // Stays on the page; the request log shows the plan and `renew` flag.
+  if (method === 'POST' && url.pathname === '/api/onboarding/billing')
+    return { confirmationUrl: '#shopify-approval' } as T
   const confirmMatch = /^\/api\/verifications\/([^/]+)\/confirm$/.exec(
     url.pathname
   )

@@ -154,7 +154,7 @@ export function AutomationFlowCard({
               {delay && <Connector isOn={step.isOn} label={delay} />}
               <StepNode
                 step={step}
-                title={t(`steps.${step.id}`)}
+                title={t(`steps.${step.title ?? step.id}`)}
                 delay={delay}
                 offLabel={t('stepOff')}
               />

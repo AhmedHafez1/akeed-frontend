@@ -153,10 +153,12 @@ describe('buildStoreSettingsPayload', () => {
       isAutoVerifyEnabled: true,
       sendDelayMinutes: 0,
       followUpEnabled: true,
-      followUpDelayMinutes: 120,
+      followUpDelayMinutes: 360,
       escalationEnabled: true,
-      escalationDelayMinutes: 360,
-      quietHoursEnabled: false,
+      escalationDelayMinutes: 1800,
+      quietHoursEnabled: true,
+      quietHoursStart: '22:00',
+      quietHoursEnd: '09:00',
       assumeCodWhenPaymentMissing: false,
     })
   })

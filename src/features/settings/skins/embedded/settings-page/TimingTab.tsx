@@ -26,6 +26,8 @@ import {
 } from '@/features/settings/domain/delayPresets'
 import { quietTimeValues } from '@/features/settings/domain/quietHours'
 import {
+  escalationMinutesFromForm,
+  escalationTogglePatch,
   resolvedSendDelayMinutes,
   SETTINGS_FIELD_ID,
   timelineInputFromForm,
@@ -33,6 +35,7 @@ import {
 import { buildTimezoneOptions } from '@/features/settings/domain/timezoneOptions'
 import type { EmbeddedSettingsModel } from '@/features/settings/domain/useEmbeddedSettings'
 import {
+  formatDuration,
   formatQuietTime,
   formatShortDuration,
 } from '@/features/settings/skins/shared/settingsFormatters'
@@ -86,7 +89,7 @@ export function TimingTab({
   const hourOptions = (presets: readonly number[], currentMinutes: number) =>
     hourPresetOptions(presets, currentMinutes).map((option) => ({
       value: option.minutes,
-      label: t('hoursShort', { count: option.hours }),
+      label: formatShortDuration(t, option.minutes),
     }))
 
   const timeOptions = quietTimeValues(
@@ -209,7 +212,7 @@ export function TimingTab({
                 checked={values.escalationEnabled}
                 disabled={readOnly}
                 onChange={(checked) =>
-                  model.update({ escalationEnabled: checked })
+                  model.update(escalationTogglePatch(checked))
                 }
               />
               {values.escalationEnabled && (
@@ -238,6 +241,66 @@ export function TimingTab({
               )}
             </BlockStack>
           </Box>
+        </Card>
+      </Layout.AnnotatedSection>
+
+      <Layout.AnnotatedSection
+        id="settings-auto-cancel-section"
+        title={t('autoCancel.heading')}
+        description={t('autoCancel.description')}
+      >
+        <Card>
+          <BlockStack gap="300">
+            <Checkbox
+              id={SETTINGS_FIELD_ID.autoCancel}
+              label={t('autoCancel.label')}
+              helpText={
+                values.escalationEnabled
+                  ? undefined
+                  : t('autoCancel.requiresEscalation')
+              }
+              checked={values.autoCancelEnabled}
+              disabled={readOnly || !values.escalationEnabled}
+              error={
+                model.errors.autoCancel
+                  ? t('autoCancel.requiresEscalation')
+                  : undefined
+              }
+              onChange={(checked) =>
+                model.update({ autoCancelEnabled: checked })
+              }
+            />
+            {values.autoCancelEnabled && (
+              <Box paddingInlineStart="800">
+                <BlockStack gap="200">
+                  <Text as="p">
+                    {t('autoCancel.deadline', {
+                      duration: formatDuration(
+                        t,
+                        escalationMinutesFromForm(values)
+                      ),
+                    })}
+                  </Text>
+                  <Checkbox
+                    label={t('autoCancel.restockLabel')}
+                    checked={values.autoCancelRestock}
+                    disabled={readOnly}
+                    onChange={(checked) =>
+                      model.update({ autoCancelRestock: checked })
+                    }
+                  />
+                  <Checkbox
+                    label={t('autoCancel.notifyLabel')}
+                    checked={values.autoCancelNotifyCustomer}
+                    disabled={readOnly}
+                    onChange={(checked) =>
+                      model.update({ autoCancelNotifyCustomer: checked })
+                    }
+                  />
+                </BlockStack>
+              </Box>
+            )}
+          </BlockStack>
         </Card>
       </Layout.AnnotatedSection>
 

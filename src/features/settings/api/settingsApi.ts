@@ -41,6 +41,8 @@ export interface SettingsResponse {
   billing: {
     plans: OnboardingBillingPlanConfig[]
     isFreePlanClaimed: boolean
+    /** The plan the store pays for now; null while none is live. Absent from an older backend. */
+    currentPlanId?: OnboardingBillingPlanConfig['id'] | null
     usage: {
       used: number
       limit: number

@@ -31,7 +31,8 @@ vi.mock('../domain/useManualConfirmation', () => ({
 vi.mock('../domain/useOutcomeSyncRetry', () => ({
   useOutcomeSyncRetry: () => ({ retryingId: null, retry: vi.fn() }),
 }))
-vi.mock('@/features/billing', () => ({
+vi.mock('@/features/billing', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/features/billing')>()),
   UpgradePlansModal: () => null,
 }))
 
@@ -70,6 +71,8 @@ function listState(capacity: CapacitySummary | null) {
     onSearchClear: vi.fn(),
     actingId: null,
     onRetry: vi.fn(),
+
+    onToggleAutoCancel: vi.fn(),
     onCancel: vi.fn(),
   } as unknown as ReturnType<typeof useConfirmationsList>
 }

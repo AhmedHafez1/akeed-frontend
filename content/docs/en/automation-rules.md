@@ -44,7 +44,7 @@ If enabled, Akeed sends one follow-up reminder to customers who did not reply.
 ### Recommended default
 
 - Keep follow-up **enabled**.
-- Start with **1 to 2 hours** after initial send.
+- Start with **6 hours** after the first message. This is the default.
 
 ### Why it helps
 
@@ -57,7 +57,7 @@ Escalation marks the order as **No Reply** when the customer still has not respo
 
 ### Recommended default
 
-- Start with **4 to 6 hours**.
+- Start with **24 hours** after the reminder. This is the default.
 - Keep escalation later than follow-up.
 
 ### Operational use
@@ -70,13 +70,30 @@ Use No Reply as a review queue for operations.
 > [!WARNING]
 > If escalation is too aggressive, you may block valid orders that would have replied later.
 
+### Cancel unanswered orders automatically
+
+You can let Akeed cancel an order in your store when it reaches **No Reply**. It is off until you turn it on under **Timing & follow-up** in Settings, and it needs the no-reply alert. It cancels at the moment the order reaches No Reply, so your no-reply delay is the deadline.
+
+Akeed cancels an order only when all of these hold:
+
+- The confirmation, and the reminder if one was due, were delivered.
+- The customer did not confirm or cancel. Akeed ignores a message it can’t read as either.
+- You did not keep the order out with **Don’t auto-cancel**.
+- The store still shows the order unpaid and unfulfilled.
+
+A message Akeed could not send or deliver, for example because your plan or credits ran out, pauses the cancellation instead. Akeed never cancels an order because of its own sending limits.
+
+On Shopify you choose whether the items are restocked and whether Shopify tells the customer. WooCommerce and EasyOrders follow your store’s own settings. A canceled order shows **No response after confirmation attempts**. If the customer confirms after that, the order shows **Confirmed after cancel** and moves to **Needs action** so you can contact them. The order stays canceled. Any other message after the cancellation is ignored.
+
+Turning the setting off stops every cancellation that has not reached your store yet.
+
 ## Rule 4: Quiet Hours
 
 Quiet Hours prevent sends during specific local times (for example overnight).
 
 ### Recommended use
 
-- Enable if your audience is sensitive to late messages.
+- Quiet hours are on by default, from 22:00 to 09:00 in your timezone. Turn them off only if your customers expect messages at night.
 - Set start/end based on your market behavior.
 
 ### Important
@@ -96,8 +113,7 @@ Set timezone to the same timezone used by your core operations team and customer
 | Store Pattern | Initial Delay | Follow-Up | Escalation | Quiet Hours |
 | --- | ---: | ---: | ---: | --- |
 | Fast fulfillment store | 0–10 min | 60 min | 240 min | Optional |
-| Balanced default setup | 10–15 min | 120 min | 360 min | Optional |
-| Sensitive late-night audience | 10–20 min | 120 min | 360–480 min | Enabled |
+| Balanced default setup | 0 min | 360 min | 1440 min after the reminder | 22:00–09:00 |
 
 Use these as starting points, then tune weekly using your reply and confirmation rates.
 
@@ -141,7 +157,7 @@ For most stores, yes. One follow-up usually captures most recoverable responses 
 
 ### What is the best escalation time?
 
-There is no universal value. Start with 4–6 hours, then adjust based on actual response patterns.
+There is no universal value. Start with 24 hours after the reminder, then adjust based on actual response patterns.
 
 ### Where can I check if my rules are working?
 

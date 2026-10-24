@@ -123,6 +123,28 @@ export function DashboardVerificationsStandaloneSkin({
     })
   }
 
+  const handleToggleAutoCancel = async (
+    row: VerificationItem,
+    action: 'exclude' | 'include'
+  ) => {
+    const result = await list.onToggleAutoCancel(row.id, action)
+    if (result.status === 'success') {
+      notify.success({
+        message: t(`confirmations.autoCancel.actions.${action}Success`),
+        id: 'confirmations-row-action',
+      })
+      return
+    }
+    notify.error({
+      message: t(
+        result.code === 'AUTO_CANCEL_ALREADY_IN_PROGRESS'
+          ? 'confirmations.autoCancel.actions.inProgressError'
+          : 'confirmations.autoCancel.actions.error'
+      ),
+      id: 'confirmations-row-action',
+    })
+  }
+
   const handleRetryStoreSync = async (row: VerificationItem) => {
     const result = await storeSync.retry(row.id)
     const message = t(`table.storeSync.retryResult.${result}`)
@@ -324,6 +346,8 @@ export function DashboardVerificationsStandaloneSkin({
                   onRequestCancel: (row, orderLabel) =>
                     setCancelTarget({ row, orderLabel }),
                   onRetry: (row) => void handleRetry(row),
+                  onToggleAutoCancel: (row, action) =>
+                    void handleToggleAutoCancel(row, action),
                 }}
               />
             </>

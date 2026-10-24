@@ -24,6 +24,11 @@ export interface TimelineStep {
   id: TimelineStepId
   isOn: boolean
   delay: TimelineDelay
+  /**
+   * The name shown instead of the step's own: the no-reply step reads
+   * "Canceled automatically" while automatic cancellation is on.
+   */
+  title?: 'autoCancel'
 }
 
 export interface AutomationTimeline {
@@ -43,6 +48,7 @@ export interface TimelineInput {
   quietHoursEnabled: boolean
   quietHoursStart: string
   quietHoursEnd: string
+  autoCancelEnabled?: boolean
 }
 
 export function buildAutomationTimeline(
@@ -81,6 +87,7 @@ export function buildAutomationTimeline(
           minutes: input.escalationGapMinutes,
           relativeTo: input.followUpEnabled ? 'reminder' : 'firstMessage',
         },
+        ...(input.autoCancelEnabled ? { title: 'autoCancel' as const } : {}),
       },
     ],
     quietHours:

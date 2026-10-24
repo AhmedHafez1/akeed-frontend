@@ -10,13 +10,18 @@ export function fetchShopifyPlans(signal?: AbortSignal) {
   })
 }
 
-/** Returns Shopify's confirmation URL; the merchant approves the charge there. */
+/**
+ * Returns Shopify's confirmation URL; the merchant approves the charge there.
+ * `renew` buys the active paid plan again, starting a fresh period now.
+ */
 export function createShopifySubscription(
   planId: ShopifyPlanId,
-  host?: string
+  host?: string,
+  options: { renew?: boolean } = {}
 ) {
   return api.post<{ confirmationUrl: string }>('/api/onboarding/billing', {
     planId,
     host,
+    ...(options.renew ? { renew: true } : {}),
   })
 }

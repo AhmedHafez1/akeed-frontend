@@ -99,11 +99,11 @@ Un envío fallido es una señal operativa, no solo un número del panel.
 
 ### ¿Akeed cancela automáticamente todos los pedidos sin confirmar?
 
-No. Tu configuración y tu proceso determinan cómo se tratan los pedidos sin respuesta.
+Solo si activas **Cancelar automáticamente los pedidos sin respuesta** en Configuración, y aun así solo los pedidos que quedaron sin respuesta después de entregarse todos los mensajes y sin que el cliente confirmara ni cancelara. Si no, los pedidos sin respuesta te esperan. Consulta [Reglas de automatización](/docs/automation-rules).
 
 ### ¿Los clientes pueden responder después del estado sin respuesta?
 
-Pueden responder más tarde, según el momento y según si el comerciante ya cerró el pedido con alguna acción.
+Sí, en cualquier momento. Akeed ignora los mensajes que no puede leer como una confirmación o una cancelación. Si Akeed ya canceló el pedido y luego el cliente confirma, el pedido muestra **Confirmó tras cancelar** y pasa a **Requieren tu acción**. Contacta al cliente con **Ir a WhatsApp** o por teléfono. El pedido sigue cancelado hasta que lo cambies en tu tienda.
 
 ### ¿Basta con «entregado» para enviar el pedido?
 
@@ -116,6 +116,8 @@ WhatsApp avisa a Akeed de que el mensaje no se puede entregar, y el pedido pasa 
 ### ¿Qué pasa cuando se agotan las confirmaciones de mi plan o mis créditos?
 
 Los pedidos nuevos se siguen recibiendo, pero sus mensajes quedan con el estado **En espera de envío**, y un aviso rojo en el panel muestra cuántos esperan y qué puedes hacer. No se cobra nada por ellos. En cuanto mejoras tu plan, compras créditos o tu cupo se renueva, Akeed los envía automáticamente, empezando por el más antiguo y respetando el retraso de envío y las horas de silencio. Un pedido que espera más de 24 horas no se envía solo: pasa a **Requieren acción**, donde puedes confirmarlo, cancelarlo o reintentarlo.
+
+En un plan de pago de Shopify, el aviso también ofrece un botón de renovación con el nombre de tu plan, por ejemplo **Renovar Basic ahora**. Apruebas de nuevo tu plan actual en Shopify y empieza en el acto un nuevo periodo de 30 días con la asignación completa, así que los pedidos en espera se envían. Los mensajes que quedan del periodo anterior no se acumulan. El mismo botón está en tu plan actual en **Configuración → Plan**.
 
 ### ¿Dónde se ajustan los tiempos y el recordatorio?
 

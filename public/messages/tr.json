@@ -233,7 +233,7 @@
     "cta": "Ücretsiz hesabınızı oluşturun",
     "cta_note": "Kredi kartı gerekmez",
     "shopify_title": "Shopify mağazaları · aylık plan",
-    "shopify_body": "Aylık mesaj hacmine göre bir plan seçin ve Shopify faturanız üzerinden ödeyin. Tüm planlar aynı özelliklere sahiptir ve ilk 30 mesajınız ücretsizdir.",
+    "shopify_body": "Aylık mesaj hacmine göre bir plan seçin ve Shopify faturanız üzerinden ödeyin. İlk 30 mesajınız ücretsizdir.",
     "shopify_cta": "Shopify’daki planları görün",
     "authoritative_note": "Fiyatlar Mısır lirası olarak gösterilir ve değişebilir. Geçerli fiyat, faturalandırma sayfanızda gösterilen fiyattır."
   },
@@ -1245,7 +1245,9 @@
           "read_no_reply": "Okundu, yanıt yok · {hours, plural, one {# saat} other {# saat}} önce",
           "delivery_failed": "Teslim edilmedi: {reason}",
           "send_failed": "Mesaj gönderilmedi",
-          "no_whatsapp": "WhatsApp’ta yok · Müşteriyi arayın"
+          "no_whatsapp": "WhatsApp’ta yok · Müşteriyi arayın",
+          "auto_cancel_failed": "Otomatik iptal başarısız oldu",
+          "late_reply_after_auto_cancel": "İptalden sonra onayladı"
         },
         "actions": {
           "whatsapp": "WhatsApp’tan yazın",
@@ -1342,6 +1344,7 @@
         "sending": "Gönderiliyor",
         "awaitingReply": "Yanıt bekleniyor",
         "noReply": "Yanıt yok",
+        "confirmedAfterCancel": "İptalden sonra onayladı",
         "noWhatsApp": "WhatsApp yok",
         "awaitingStart": "Başlatılmayı bekliyor",
         "notStarted": "Başlatılmadı",
@@ -1352,6 +1355,8 @@
           "canceledByCustomer": "Müşteri tarafından",
           "canceledNoReply": "Müşteriden yanıt yok",
           "canceledNoWhatsApp": "Numara WhatsApp’ta yok",
+          "canceledAutomatically": "Onay denemelerinden sonra yanıt yok",
+          "lateReplyAfterAutoCancel": "Müşteri iptalden sonra onayladı",
           "followUpSent": "Hatırlatma gönderildi",
           "sendsAt": "Gönderim: {time}",
           "callCustomer": "Müşteriyi arayın",
@@ -1361,7 +1366,8 @@
           "scheduledFor": "Planlanan zaman: {time}",
           "reminderAt": "Hatırlatma zamanı: {time}",
           "callCustomer": "Numara WhatsApp’ta yok. Onay için müşteriyi arayın.",
-          "callCustomerSince": "{time} tarihinden beri WhatsApp’ta yok. Onay için müşteriyi arayın."
+          "callCustomerSince": "{time} tarihinden beri WhatsApp’ta yok. Onay için müşteriyi arayın.",
+          "confirmedAfterCancel": "{time} tarihinde otomatik olarak iptal edildi. Müşteri sonradan onayladı — onunla iletişime geçin."
         },
         "failure": {
           "notOnWhatsApp": "numara WhatsApp’ta yok",
@@ -1374,6 +1380,53 @@
         "blocked": "Gönderim bekliyor"
       },
       "loadingMore": "Daha fazla sipariş yükleniyor…",
+      "autoCancel": {
+        "marker": {
+          "scheduled": "Müşteri yanıt vermezse {time} otomatik iptal edilir",
+          "paused": "Otomatik iptal duraklatıldı, çünkü {reason}",
+          "pausedReasons": {
+            "initial_not_delivered": "onay mesajı teslim edilmedi",
+            "reminder_blocked": "hatırlatma gönderilmedi",
+            "reminder_not_delivered": "hatırlatma teslim edilmedi",
+            "unknown": "bir mesaj teslim edilmedi"
+          },
+          "excluded": "Otomatik iptal dışında tutuldu",
+          "inProgress": "Mağazanızda iptal ediliyor",
+          "failed": "Otomatik iptal başarısız oldu. Kendiniz iptal edin ya da tutun."
+        },
+        "actions": {
+          "exclude": "Otomatik iptal etme",
+          "include": "Otomatik iptale izin ver",
+          "excludeSuccess": "Bu sipariş otomatik iptal edilmeyecek.",
+          "includeSuccess": "Bu sipariş için otomatik iptal yeniden açık.",
+          "error": "Bu siparişin otomatik iptali değiştirilemedi. Tekrar deneyin.",
+          "inProgressError": "Mağaza bu siparişi zaten iptal ediyor."
+        },
+        "detail": {
+          "label": "Otomatik iptal",
+          "canceled": "İptal edildi. Onay denemelerinden sonra yanıt yok.",
+          "canceledLateReply": "Yanıt olmadığı için iptal edildi. Müşteri sonradan onayladı. Siparişi hâlâ isteyip istemediğini öğrenmek için onunla iletişime geçin.",
+          "skipped": "İptal edilmedi, çünkü {reason}",
+          "skipReasons": {
+            "paid": "sipariş ödenmiş",
+            "fulfilled": "sipariş kargolanmış",
+            "fulfillment_in_progress": "sipariş hazırlanıyor",
+            "status_not_writable": "mağaza siparişi ilerletti",
+            "order_not_found": "sipariş mağazada yok",
+            "source_unsupported": "mağazanız buna izin vermiyor",
+            "other": "bir güvenlik kuralı sağlanmadı"
+          },
+          "stopped": "Durduruldu, çünkü {reason}",
+          "stopReasons": {
+            "customer_reply": "müşteri yanıt verdi",
+            "excluded": "siparişi tuttunuz",
+            "feature_disabled": "otomatik iptal kapatıldı",
+            "status_changed": "sipariş değişti",
+            "other": "bir güvenlik kuralı sağlanmadı"
+          },
+          "waiting": "Müşteri bekleniyor"
+        }
+      },
       "loaded": "{total} siparişten {loaded} tanesi gösteriliyor",
       "empty": {
         "all": "Bu dönemde henüz onay yok.",
@@ -1460,12 +1513,17 @@
         "upgradeNoDate": "Planınızın onayları bitti, bu yüzden bu siparişler gönderilmedi. Planınızı yükseltin, Akeed bunları otomatik olarak göndersin.",
         "recharge": "Krediniz bitti, bu yüzden bu siparişler gönderilmedi. Kredi satın alın, Akeed bunları otomatik olarak göndersin.",
         "waitReset": "Planınızın onayları bitti, bu yüzden bu siparişler gönderilmedi. Kotanız {date} tarihinde yenilendiğinde otomatik olarak gönderilir.",
-        "waitResetNoDate": "Planınızın onayları bitti, bu yüzden bu siparişler gönderilmedi. Kotanız yenilendiğinde otomatik olarak gönderilir."
+        "waitResetNoDate": "Planınızın onayları bitti, bu yüzden bu siparişler gönderilmedi. Kotanız yenilendiğinde otomatik olarak gönderilir.",
+        "upgradeOrRenew": "Planınızın onayları bitti, bu yüzden bu siparişler gönderilmedi. Şimdi göndermek için planınızı yükseltin veya yenileyin; aksi halde kotanız {date} tarihinde yenilendiğinde otomatik olarak gönderilir.",
+        "upgradeOrRenewNoDate": "Planınızın onayları bitti, bu yüzden bu siparişler gönderilmedi. Planınızı yükseltin veya yenileyin, Akeed bunları otomatik olarak göndersin.",
+        "renewOrWait": "Planınızın onayları bitti, bu yüzden bu siparişler gönderilmedi. Şimdi göndermek için planınızı yenileyin; aksi halde kotanız {date} tarihinde yenilendiğinde otomatik olarak gönderilir.",
+        "renewOrWaitNoDate": "Planınızın onayları bitti, bu yüzden bu siparişler gönderilmedi. Şimdi göndermek için planınızı yenileyin; aksi halde kotanız yenilendiğinde otomatik olarak gönderilir."
       },
       "note": "Bir sipariş gönderilene kadar ücret alınmaz. Çok uzun bekleyen sipariş İşlem bekleyen bölümüne taşınır.",
       "cta": {
         "upgrade": "Planı yükselt",
-        "recharge": "Kredi satın al"
+        "recharge": "Kredi satın al",
+        "renew": "{plan} planını şimdi yenile"
       }
     }
   },
@@ -1865,7 +1923,7 @@
         "storeNameTooLong": "En fazla {max} karakter kullanın.",
         "languageHeading": "Mesaj dili",
         "languageAuto": "Otomatik, müşteri numarasına göre",
-        "languageAutoHelp": "Arap ülkelerindeki numaralara Arapça, Pakistan’a Urduca, İspanya ve Latin Amerika’ya İspanyolca, Fransa’ya Fransızca, diğer her yere İngilizce.",
+        "languageAutoHelp": "Arap ülkelerindeki numaralara Arapça, Pakistan’a Urduca, İspanya ve Latin Amerika’ya İspanyolca, Fransa’ya Fransızca, Türkiye’ye Türkçe, diğer her yere İngilizce.",
         "recommended": "Önerilen",
         "languageFixed": "Tüm müşteriler için tek dil",
         "languageFixedHelp": "Her müşteri mesajı sizin seçtiğiniz dilde alır.",
@@ -1932,7 +1990,8 @@
           "newOrder": "Yeni sipariş",
           "confirmation": "Onay mesajı",
           "reminder": "Yanıt yoksa hatırlatma",
-          "needsAction": "“İşlem bekleyenler”"
+          "needsAction": "“İşlem bekleyenler”",
+          "autoCancel": "Otomatik iptal edilir"
         },
         "delayImmediate": "Hemen",
         "delayAfter": "{duration} sonra",
@@ -1942,8 +2001,8 @@
         "minutes": "{count, plural, one {# dakika} other {# dakika}}",
         "quietLine": "{start} ile {end} arasında gönderilecek mesajlar {end} olduğunda gönderilir.",
         "autoHeading": "Otomatik onay",
-        "autoDescription": "Kapıda ödemeli siparişler için onay mesajını ne zaman gönderdiğimiz.",
-        "autoLabel": "Her yeni sipariş için onay mesajı gönder",
+        "autoDescription": "Onay gönderim zamanı.",
+        "autoLabel": "Onayları otomatik gönder",
         "autoHelp": "Kapalıyken hiçbir mesaj gönderilmez.",
         "sendTimeLabel": "Gönderim zamanı",
         "previewMessage": "Mesajı önizle",
@@ -1957,7 +2016,7 @@
         "customDelaySuffix": "dk",
         "customDelayError": "0 ile 1.440 arasında tam dakika girin.",
         "followHeading": "Takip",
-        "followDescription": "Müşteri yanıt vermediğinde ne yaptığımız.",
+        "followDescription": "Müşteri yanıt vermediğinde.",
         "reminderLabel": "Bir hatırlatma gönder",
         "reminderCounts": "Hatırlatmalar aylık mesajlarınızdan düşülür.",
         "after": "Süre",
@@ -1968,8 +2027,17 @@
         "fromReminder": "(hatırlatmadan sonra)",
         "reminderGroup": "Hatırlatma gecikmesi",
         "alertGroup": "Yanıt yok uyarısı gecikmesi",
-        "alertLabel": "Yanıt gelmeyen siparişler için beni uyar",
-        "alertHelp": "Sipariş, kendiniz takip edebilmeniz için Akeed’de “İşlem bekleyenler” bölümüne taşınır.",
+        "alertLabel": "Yanıtsız siparişleri işaretle",
+        "alertHelp": "Siparişleri “İşlem bekleyenler” bölümüne taşır.",
+        "autoCancel": {
+          "heading": "Yanıtsız siparişler",
+          "description": "Otomatik iptal ayarları.",
+          "label": "Yanıtsız siparişleri otomatik iptal et",
+          "deadline": "Sipariş ilk mesajdan {duration} sonra otomatik olarak iptal edilecektir.",
+          "restockLabel": "Ürünleri stoğa ekle",
+          "notifyLabel": "Mağazadan bildirim gönder",
+          "requiresEscalation": "Önce “Yanıtsız siparişleri işaretle” seçeneğini açın. İptal de aynı süreyi kullanır."
+        },
         "quietHeading": "Sessiz saatler",
         "quietDescription": "Gece mesaj gönderilmez. Sessiz saatlere denk gelen mesajlar, sessiz saatler bitince gönderilir.",
         "quietLabel": "Sessiz saatlerde gönderimi duraklat",
@@ -2001,6 +2069,7 @@
         "usageAria": "Kullanılan mesajlar",
         "subscribe": "Abone ol: {plan}",
         "currentPlanButton": "Mevcut planınız",
+        "renew": "{plan} planını şimdi yenile",
         "billingManaged": "Planınız Akeed ekibi tarafından yönetiliyor. Değiştirmek için destek ekibine ulaşın.",
         "subscribeError": "Shopify’ın onay sayfasını açamadık. Tekrar deneyin.",
         "freePlanClaimedError": "Bu mağaza ücretsiz planı daha önce kullandı. Ücretli bir plan seçin."
@@ -2477,6 +2546,9 @@
       "starterRow": "Starter: 30 ücretsiz mesaj, tek seferlik",
       "starterCta": "Ücretsiz başla",
       "subscribeCta": "Abone ol: {plan} · {price} / ay",
+      "renewCta": "{plan} planını şimdi yenile · {price} / ay",
+      "renewNote": "Yenileme, bugünden itibaren tam hakla 30 günlük yeni bir dönem başlatır. Mevcut dönemden kalan mesajlar devretmez.",
+      "currentPlan": "Mevcut plan",
       "redirectNote": "Ücreti onaylamak için Shopify’a yönlendirileceksiniz.",
       "cancel": "Vazgeç"
     },

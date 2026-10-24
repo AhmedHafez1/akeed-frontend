@@ -99,11 +99,11 @@ Başarısız bir gönderim yalnızca paneldeki bir sayı değil, operasyonel bir
 
 ### Akeed onaylanmayan tüm siparişleri otomatik olarak iptal eder mi?
 
-Hayır. Yanıt yok siparişlerinin nasıl ele alınacağını ayarlarınız ve süreciniz belirler.
+Yalnızca ayarlarda **Yanıtsız siparişleri otomatik iptal et** seçeneğini açarsanız ve yalnızca her mesaj teslim edildikten sonra yanıtsız kalan, müşterinin onaylamadığı ya da iptal etmediği siparişler için. Aksi hâlde yanıtsız siparişler sizi bekler. Bkz. [Otomasyon Kuralları](/docs/automation-rules).
 
 ### Müşteriler yanıt yok durumundan sonra da yanıt verebilir mi?
 
-Zamanlamaya ve siparişin satıcı tarafından zaten sonuçlandırılıp sonuçlandırılmadığına bağlı olarak daha sonra yanıt verebilirler.
+Evet, istedikleri zaman. Akeed, onay ya da iptal olarak okuyamadığı mesajları yok sayar. Akeed siparişi zaten iptal ettiyse ve müşteri sonra onaylarsa sipariş **İptalden sonra onayladı** olarak görünür ve **İşlem bekleyenler** bölümüne taşınır. Müşteriyle **WhatsApp’tan yazın** ile ya da telefonla iletişime geçin. Sipariş, siz mağazanızda değiştirene kadar iptal edilmiş olarak kalır.
 
 ### “Teslim edildi” kargoya vermek için yeterli mi?
 
@@ -116,6 +116,8 @@ WhatsApp, Akeed’e mesajın teslim edilemeyeceğini bildirir ve sipariş **What
 ### Planımın onayları veya kredim bittiğinde ne olur?
 
 Yeni siparişler yine alınır, ancak mesajları **Gönderim bekliyor** durumunda bekler ve panodaki kırmızı bir uyarı kaç siparişin beklediğini ve ne yapabileceğinizi gösterir. Bunlar için ücret alınmaz. Planınızı yükselttiğinizde, kredi satın aldığınızda ya da plan kotanız yenilendiğinde Akeed bunları en eskisinden başlayarak, gönderim gecikmesine ve sessiz saatlere uyarak otomatik olarak gönderir. 24 saatten uzun bekleyen bir sipariş kendiliğinden gönderilmez: onaylayabileceğiniz, iptal edebileceğiniz ya da yeniden deneyebileceğiniz **İşlem bekleyen** bölümüne taşınır.
+
+Ücretli bir Shopify planında uyarı ayrıca planınızın adını taşıyan bir yenileme düğmesi sunar, örneğin **Basic planını şimdi yenile**. Mevcut planınızı Shopify’da yeniden onaylarsınız ve tam hakla 30 günlük yeni bir dönem hemen başlar; bekleyen siparişler gönderilir. Eski dönemden kalan mesajlar devretmez. Aynı düğme **Ayarlar → Plan** bölümünde mevcut planınızda da bulunur.
 
 ### Zamanlamayı ve hatırlatmaları nereden ayarlarım?
 

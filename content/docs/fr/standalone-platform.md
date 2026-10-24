@@ -50,7 +50,7 @@ Un compte reçoit ses commandes d’une seule source. Un compte connecté à une
 
 Vous êtes alors en service. Ajoutez votre première commande ou importez un fichier.
 
-Les nouveaux comptes autonomes démarrent avec ces réglages par défaut : le premier message part immédiatement, une relance part au bout de 2 heures, et une commande sans réponse est marquée **Sans réponse** au bout de 6 heures. Vous pouvez les modifier dans les paramètres. Consultez [Règles d’automatisation](/docs/automation-rules).
+Les nouveaux comptes autonomes démarrent avec ces réglages par défaut : le premier message part immédiatement, une relance part au bout de 6 heures, et une commande sans réponse est marquée **Sans réponse** 24 heures après la relance. Les heures de silence sont activées de 22:00 à 09:00, donc rien n’est envoyé la nuit. Vous pouvez les modifier dans les paramètres. Consultez [Règles d’automatisation](/docs/automation-rules).
 
 ## Fonctionnement des crédits
 

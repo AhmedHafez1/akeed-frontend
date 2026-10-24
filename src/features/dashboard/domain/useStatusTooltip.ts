@@ -27,6 +27,12 @@ export function useStatusTooltip(
     const since = format(getStatusTimestamp(row))
     return since ? t('callCustomerSince', { time: since }) : t('callCustomer')
   }
+  if (badge === 'confirmedAfterCancel') {
+    const canceledAt = format(getStatusTimestamp(row))
+    return canceledAt
+      ? t('confirmedAfterCancel', { time: canceledAt })
+      : undefined
+  }
   if (kind === 'scheduled' && row.scheduled_for) {
     return t('scheduledFor', { time: format(row.scheduled_for) })
   }

@@ -126,7 +126,7 @@ const EXPECTED = {
     off: 'متوقف',
     quietOff: 'متوقفة. فعّلها لتجنّب مراسلة العملاء ليلًا.',
     reminderCounts: 'تُحتسب التذكيرات ضمن رسائلك الشهرية.',
-    alertHelp: 'ينتقل الطلب إلى «تحتاج إجراءك» في أكيد لتتابعه بنفسك.',
+    alertHelp: 'ينقل الطلبات إلى «تحتاج إجراءك».',
     preview: 'معاينة الرسالة',
     sendSegments: ['فورًا', '15 د', '1 س', '2 س', '4 س'],
     tenMinutes: '10 د',
@@ -137,8 +137,7 @@ const EXPECTED = {
     off: 'Off',
     quietOff: 'Off. Turn on to avoid messaging customers at night.',
     reminderCounts: 'Reminders count toward your monthly messages.',
-    alertHelp:
-      'The order moves to “Needs your action” in Akeed so you can follow up yourself.',
+    alertHelp: 'Moves orders to “Needs your action”.',
     preview: 'Preview message',
     sendSegments: ['Immediately', '15 min', '1 h', '2 h', '4 h'],
     tenMinutes: '10 min',
@@ -160,9 +159,24 @@ describe.each(['ar', 'en'] as const)('embedded Timing tab (%s)', (locale) => {
     expect(view.steps.map((step) => step.textContent).join(' ')).not.toMatch(
       /(^|\s)[123](\s|$)/
     )
-    for (const step of Object.values(timing.steps)) {
+    // The automatic-cancellation name replaces the last one only while it is on.
+    const { autoCancel, ...stepNames } = timing.steps
+    for (const step of Object.values(stepNames)) {
       expect(within(view.steps[0].parentElement!).getByText(step)).toBeTruthy()
     }
+    expect(screen.queryByText(autoCancel)).toBeNull()
+  })
+
+  it('names the last step after the automatic cancellation while it is on', async () => {
+    const view = await renderTiming(locale, { autoCancelEnabled: true })
+
+    expect(view.steps).toHaveLength(4)
+    expect(
+      within(view.steps[3]).getByText(timing.steps.autoCancel)
+    ).toBeTruthy()
+    expect(
+      within(view.steps[3]).queryByText(timing.steps.needsAction)
+    ).toBeNull()
   })
 
   it('keeps a switched-off reminder in place, dashed and marked off', async () => {
@@ -199,6 +213,99 @@ describe.each(['ar', 'en'] as const)('embedded Timing tab (%s)', (locale) => {
     expect(screen.queryByText(expected.quietOff)).toBeNull()
     expect(screen.getByLabelText(timing.quietFrom)).toBeTruthy()
     view.unmount()
+  })
+
+  it.each([
+    [true, 2, 4, { ar: '4 دقائق', en: '4 minutes' }],
+    [false, 2, 2, { ar: 'دقيقتين', en: '2 minutes' }],
+    [true, 30, 90, { ar: '90 دقيقة', en: '90 minutes' }],
+    [true, 360, 1080, { ar: '18 ساعة', en: '18 hours' }],
+  ] as const)(
+    'shows the exact cancellation duration (reminder=%s, reminder minutes=%s, total=%s)',
+    async (
+      followUpEnabled,
+      followUpDelayMinutes,
+      escalationDelayMinutes,
+      duration
+    ) => {
+      await renderTiming(locale, {
+        autoCancelEnabled: true,
+        followUpEnabled,
+        followUpDelayMinutes,
+        escalationDelayMinutes,
+      })
+      const deadline =
+        locale === 'en'
+          ? 'Order will be automatically cancelled after ' +
+            duration.en +
+            ' from the first message.'
+          : 'سيُلغى الطلب تلقائيًا بعد ' + duration.ar + ' من الرسالة الأولى.'
+      expect(screen.getByText(deadline)).toBeTruthy()
+    }
+  )
+
+  it('updates minute delays before saving and preserves exact payload minutes', async () => {
+    const view = await renderTiming(locale, {
+      autoCancelEnabled: false,
+      followUpDelayMinutes: 2,
+      escalationDelayMinutes: 4,
+    })
+    const minuteLabel = locale === 'en' ? '2 min' : '2 د'
+    expect(view.pressedIn(timing.reminderGroup)).toEqual([minuteLabel])
+    expect(view.pressedIn(timing.alertGroup)).toEqual([minuteLabel])
+    fireEvent.click(screen.getByLabelText(timing.autoCancel.label))
+    fireEvent.click(screen.getByLabelText(timing.reminderLabel))
+    expect(
+      screen.getByText(
+        locale === 'en'
+          ? 'Order will be automatically cancelled after 2 minutes from the first message.'
+          : 'سيُلغى الطلب تلقائيًا بعد دقيقتين من الرسالة الأولى.'
+      )
+    ).toBeTruthy()
+    fireEvent.click(screen.getByLabelText(timing.reminderLabel))
+    expect(
+      screen.getByText(
+        locale === 'en'
+          ? 'Order will be automatically cancelled after 4 minutes from the first message.'
+          : 'سيُلغى الطلب تلقائيًا بعد 4 دقائق من الرسالة الأولى.'
+      )
+    ).toBeTruthy()
+    expect(api.saveSettings).not.toHaveBeenCalled()
+    await act(async () => {
+      fireEvent.click(screen.getByText(locale === 'en' ? 'Save' : 'حفظ'))
+    })
+    expect(api.saveSettings).toHaveBeenCalledWith(
+      expect.objectContaining({
+        autoCancelEnabled: true,
+        followUpDelayMinutes: 2,
+        escalationDelayMinutes: 4,
+      })
+    )
+  })
+
+  it('shows Shopify options only while automatic cancellation is enabled', async () => {
+    await renderTiming(locale, { autoCancelEnabled: false })
+    expect(screen.queryByLabelText(timing.autoCancel.restockLabel)).toBeNull()
+    expect(screen.queryByLabelText(timing.autoCancel.notifyLabel)).toBeNull()
+    fireEvent.click(screen.getByLabelText(timing.autoCancel.label))
+    expect(screen.getByLabelText(timing.autoCancel.restockLabel)).toBeTruthy()
+    expect(screen.getByLabelText(timing.autoCancel.notifyLabel)).toBeTruthy()
+    expect(screen.queryByText(/WooCommerce/)).toBeNull()
+    fireEvent.click(screen.getByLabelText(timing.autoCancel.label))
+    expect(screen.queryByLabelText(timing.autoCancel.restockLabel)).toBeNull()
+    expect(screen.queryByLabelText(timing.autoCancel.notifyLabel)).toBeNull()
+  })
+
+  it('keeps disabled-state guidance when escalation is off', async () => {
+    await renderTiming(locale, {
+      escalationEnabled: false,
+      autoCancelEnabled: false,
+    })
+    expect(screen.getByLabelText(timing.autoCancel.label)).toHaveProperty(
+      'disabled',
+      true
+    )
+    expect(screen.getByText(timing.autoCancel.requiresEscalation)).toBeTruthy()
   })
 
   it('says what the reminder and the alert do', async () => {

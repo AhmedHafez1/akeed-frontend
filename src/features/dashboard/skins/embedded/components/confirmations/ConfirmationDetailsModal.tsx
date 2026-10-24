@@ -10,6 +10,7 @@ import {
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { useCustomerRecordView } from '../../../../domain/useCustomerRecordView'
+import { useAutoCancelDetail } from '../../../../domain/useAutoCancelMarker'
 import { getVerificationLifecycleSteps } from '../../../../domain/verificationLifecycle'
 import {
   formatOrderTitle,
@@ -43,6 +44,7 @@ function DetailsBody({
   const t = useTranslations('dashboard')
   const { locale } = useLocaleInfo()
   const customerRecord = useCustomerRecordView(verification.customer_history)
+  const autoCancel = useAutoCancelDetail(verification, timeZone)
   const time = (iso: string | null | undefined) =>
     formatTooltipDateTime(iso ?? null, locale, timeZone)
 
@@ -135,6 +137,12 @@ function DetailsBody({
           {time(getLastUpdateAt(verification))}
         </Fact>
       </InlineGrid>
+
+      {autoCancel && (
+        <Fact label={t('confirmations.autoCancel.detail.label')}>
+          {autoCancel}
+        </Fact>
+      )}
     </BlockStack>
   )
 }

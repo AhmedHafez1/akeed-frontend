@@ -1,4 +1,6 @@
 import { useId } from 'react'
+import { Badge, InlineStack } from '@shopify/polaris'
+import { useTranslations } from 'next-intl'
 import type {
   ShopifyPlanCard,
   ShopifyPlanId,
@@ -28,16 +30,23 @@ interface PlanCardProps {
   /** The radio group's shared `name`. */
   groupName: string
   isSelected: boolean
+  /** The plan the store pays for now. */
+  isCurrent?: boolean
   onSelect: (planId: ShopifyPlanId) => void
 }
 
-/** One paid plan in the picker: a radio whose label is the whole card. */
+/**
+ * One paid plan in the picker: a radio whose label is the whole card, with a
+ * badge on the plan the store pays for now.
+ */
 export function PlanCard({
   plan,
   groupName,
   isSelected,
+  isCurrent = false,
   onSelect,
 }: PlanCardProps) {
+  const t = useTranslations('billing.embeddedPlans')
   const id = useId()
 
   return (
@@ -54,17 +63,20 @@ export function PlanCard({
         currencyCode={plan.currencyCode}
         includedVerifications={plan.includedVerifications}
         trailing={
-          <input
-            type="radio"
-            name={groupName}
-            value={plan.id}
-            checked={isSelected}
-            onChange={() => onSelect(plan.id)}
-            aria-labelledby={`${id}-name`}
-            aria-describedby={`${id}-details`}
-            className="m-0 h-[18px] w-[18px] shrink-0 cursor-pointer"
-            style={{ accentColor: 'var(--p-color-bg-fill-brand)' }}
-          />
+          <InlineStack gap="200" blockAlign="center" wrap={false}>
+            {isCurrent && <Badge tone="info">{t('currentPlan')}</Badge>}
+            <input
+              type="radio"
+              name={groupName}
+              value={plan.id}
+              checked={isSelected}
+              onChange={() => onSelect(plan.id)}
+              aria-labelledby={`${id}-name`}
+              aria-describedby={`${id}-details`}
+              className="m-0 h-[18px] w-[18px] shrink-0 cursor-pointer"
+              style={{ accentColor: 'var(--p-color-bg-fill-brand)' }}
+            />
+          </InlineStack>
         }
       />
     </div>

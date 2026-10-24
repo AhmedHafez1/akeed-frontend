@@ -69,7 +69,7 @@ One credit is one WhatsApp message sent to a customer. A follow-up to a customer
 
 ### What happens when I reach my monthly confirmation limit or run out of credits?
 
-New confirmations pause until your cycle renews, you upgrade the plan, or you buy more credits.
+New confirmations pause until your cycle renews, you upgrade the plan, or you buy more credits. On a paid Shopify plan you can also renew it now, which starts a new 30-day period with the full allowance.
 
 ### Are there automatic extra charges after the limit?
 

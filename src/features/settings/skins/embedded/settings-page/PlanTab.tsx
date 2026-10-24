@@ -71,6 +71,8 @@ export function PlanTab({ model, data }: PlanTabProps) {
   const sentLast30Days = billing.messagesSentLast30Days ?? 0
   const paidPlans = billing.plans.filter((plan) => plan.amount > 0)
   const recommendedId = recommendPlan(billing.plans, sentLast30Days)
+  // Only a live paid plan renews; Starter and a lapsed plan do not.
+  const renewablePlanId = billing.currentPlanId ?? null
   const primaryId = resolvePrimaryPlanId(
     billing.plans,
     currentPlanId ?? null,
@@ -179,12 +181,14 @@ export function PlanTab({ model, data }: PlanTabProps) {
                 plan={plan}
                 name={planName(plan.id)}
                 isCurrent={plan.id === currentPlanId}
+                canRenew={plan.id === renewablePlanId}
                 isRecommended={plan.id === recommendedId}
                 isPrimary={plan.id === primaryId}
                 sentLast30Days={sentLast30Days}
                 isSubscribing={model.subscribingPlanId === plan.id}
                 isBusy={!canSubscribe || model.subscribingPlanId !== null}
                 onSubscribe={() => void model.subscribe(plan.id)}
+                onRenew={() => void model.subscribe(plan.id, { renew: true })}
               />
             ))}
           </InlineGrid>
@@ -209,24 +213,29 @@ interface PlanCardProps {
   plan: OnboardingBillingPlanConfig
   name: string
   isCurrent: boolean
+  /** The current plan is live and paid, so it can be bought again now. */
+  canRenew: boolean
   isRecommended: boolean
   isPrimary: boolean
   sentLast30Days: number
   isSubscribing: boolean
   isBusy: boolean
   onSubscribe: () => void
+  onRenew: () => void
 }
 
 function PlanCard({
   plan,
   name,
   isCurrent,
+  canRenew,
   isRecommended,
   isPrimary,
   sentLast30Days,
   isSubscribing,
   isBusy,
   onSubscribe,
+  onRenew,
 }: PlanCardProps) {
   const t = useTranslations('settings.embedded.plan')
   const tPlans = useTranslations('billing.embeddedPlans')
@@ -261,7 +270,21 @@ function PlanCard({
         </Text>
       )}
       <div className="mt-auto">
-        {isCurrent ? (
+        {isCurrent && canRenew ? (
+          <BlockStack gap="200">
+            <Button
+              fullWidth
+              loading={isSubscribing}
+              disabled={isBusy && !isSubscribing}
+              onClick={onRenew}
+            >
+              {t('renew', { plan: name })}
+            </Button>
+            <Text as="p" variant="bodySm" tone="subdued">
+              {tPlans('renewNote')}
+            </Text>
+          </BlockStack>
+        ) : isCurrent ? (
           <Button fullWidth disabled>
             {t('currentPlanButton')}
           </Button>

@@ -24,11 +24,9 @@ export { TestMessageStep } from './ui/embedded/steps/TestMessageStep'
 export { SetupSuccessStep } from './ui/embedded/steps/SetupSuccessStep'
 
 export {
-  createOnboardingBilling,
   completeStandaloneOnboarding,
   fetchOnboardingBillingPlans,
   fetchOnboardingState,
-  isFreePlanAlreadyClaimedError,
   sendOnboardingTest,
   updateOnboardingSettings,
 } from './api/onboardingApi'

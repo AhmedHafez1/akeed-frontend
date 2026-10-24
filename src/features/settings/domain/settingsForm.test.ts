@@ -6,6 +6,8 @@ import {
 } from '../testing/settingsFixture'
 import {
   dirtyTabs,
+  escalationMinutesFromForm,
+  escalationTogglePatch,
   fieldErrorFromApiCode,
   firstInvalidField,
   formFromSettings,
@@ -316,5 +318,56 @@ describe('message languages in the payload', () => {
       codTemplateUrVariant: 'short_v1',
     })
     expect(dirtyTabs(changed, saved)).toEqual(new Set(['message']))
+  })
+})
+
+describe('automatic cancellation settings', () => {
+  it('is off by default and sends all three fields', () => {
+    const form = formFor()
+    expect(form).toMatchObject({
+      autoCancelEnabled: false,
+      autoCancelRestock: true,
+      autoCancelNotifyCustomer: false,
+    })
+    expect(toSettingsPayload(form)).toMatchObject({
+      autoCancelEnabled: false,
+      autoCancelRestock: true,
+      autoCancelNotifyCustomer: false,
+    })
+  })
+
+  it('uses the no-reply delay as the deadline and changes nothing else', () => {
+    const form = formFor()
+    const next = { ...form, autoCancelEnabled: true }
+    expect(escalationMinutesFromForm(next)).toBe(
+      escalationMinutesFromForm(form)
+    )
+    expect(toSettingsPayload(next)).toEqual({
+      ...toSettingsPayload(form),
+      autoCancelEnabled: true,
+    })
+  })
+
+  it('switches off with the no-reply alert it runs on', () => {
+    expect(escalationTogglePatch(false)).toEqual({
+      escalationEnabled: false,
+      autoCancelEnabled: false,
+    })
+    const invalid = {
+      ...formFor(),
+      autoCancelEnabled: true,
+      escalationEnabled: false,
+    }
+    expect(validateSettingsForm(invalid).autoCancel).toBe('requiresEscalation')
+    expect(
+      fieldErrorFromApiCode('SETTINGS_AUTO_CANCEL_REQUIRES_ESCALATION')
+    ).toEqual({ autoCancel: 'requiresEscalation' })
+  })
+
+  it('counts a change as a Timing tab change', () => {
+    const saved = formFor()
+    expect([
+      ...dirtyTabs({ ...saved, autoCancelNotifyCustomer: true }, saved),
+    ]).toEqual(['timing'])
   })
 })

@@ -41,6 +41,7 @@ describe('planConfirmationRowActions', () => {
       canConfirm: true,
       canRetry: false,
       canCancel: true,
+      autoCancelToggle: null,
     })
   })
 
@@ -88,6 +89,7 @@ describe('planConfirmationRowActions', () => {
       canConfirm: false,
       canRetry: false,
       canCancel: false,
+      autoCancelToggle: null,
     })
   })
 
@@ -101,6 +103,7 @@ describe('planConfirmationRowActions', () => {
       canConfirm: false,
       canRetry: false,
       canCancel: false,
+      autoCancelToggle: null,
     })
   })
 })

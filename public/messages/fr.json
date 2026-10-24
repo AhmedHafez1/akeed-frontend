@@ -233,7 +233,7 @@
     "cta": "Créez votre compte gratuit",
     "cta_note": "Sans carte bancaire",
     "shopify_title": "Boutiques Shopify · forfait mensuel",
-    "shopify_body": "Choisissez un forfait selon votre volume mensuel de messages et payez sur votre facture Shopify. Tous les forfaits offrent les mêmes fonctionnalités, et vos 30 premiers messages sont gratuits.",
+    "shopify_body": "Choisissez un forfait selon votre volume mensuel de messages et payez sur votre facture Shopify. Vos 30 premiers messages sont gratuits.",
     "shopify_cta": "Voir les forfaits sur Shopify",
     "authoritative_note": "Les prix sont indiqués en livres égyptiennes et peuvent changer. Le prix qui fait foi est celui affiché sur votre page de facturation."
   },
@@ -1245,7 +1245,9 @@
           "read_no_reply": "Lu, sans réponse · il y a {hours, plural, one {# heure} other {# heures}}",
           "delivery_failed": "Non remis : {reason}",
           "send_failed": "Message non envoyé",
-          "no_whatsapp": "Pas sur WhatsApp · Appelez le client"
+          "no_whatsapp": "Pas sur WhatsApp · Appelez le client",
+          "auto_cancel_failed": "L’annulation automatique a échoué",
+          "late_reply_after_auto_cancel": "A confirmé après l’annulation"
         },
         "actions": {
           "whatsapp": "Écrire sur WhatsApp",
@@ -1342,6 +1344,7 @@
         "sending": "Envoi en cours",
         "awaitingReply": "En attente de réponse",
         "noReply": "Sans réponse",
+        "confirmedAfterCancel": "Confirmée après annulation",
         "noWhatsApp": "Sans WhatsApp",
         "awaitingStart": "En attente de démarrage",
         "notStarted": "Non démarrée",
@@ -1352,6 +1355,8 @@
           "canceledByCustomer": "Par le client",
           "canceledNoReply": "Sans réponse du client",
           "canceledNoWhatsApp": "Numéro sans WhatsApp",
+          "canceledAutomatically": "Aucune réponse après les tentatives de confirmation",
+          "lateReplyAfterAutoCancel": "Le client a confirmé après l’annulation",
           "followUpSent": "Rappel envoyé",
           "sendsAt": "Envoi : {time}",
           "callCustomer": "Appelez le client",
@@ -1361,7 +1366,8 @@
           "scheduledFor": "Planifié pour : {time}",
           "reminderAt": "Rappel planifié pour : {time}",
           "callCustomer": "Le numéro n’est pas sur WhatsApp. Appelez le client pour confirmer.",
-          "callCustomerSince": "Pas sur WhatsApp depuis le {time}. Appelez le client pour confirmer."
+          "callCustomerSince": "Pas sur WhatsApp depuis le {time}. Appelez le client pour confirmer.",
+          "confirmedAfterCancel": "Annulée automatiquement le {time}. Le client a confirmé ensuite — contactez-le."
         },
         "failure": {
           "notOnWhatsApp": "le numéro n’est pas sur WhatsApp",
@@ -1374,6 +1380,53 @@
         "blocked": "En attente d’envoi"
       },
       "loadingMore": "Chargement d’autres commandes…",
+      "autoCancel": {
+        "marker": {
+          "scheduled": "Annulée automatiquement {time} si le client ne répond pas",
+          "paused": "Annulation automatique suspendue, car {reason}",
+          "pausedReasons": {
+            "initial_not_delivered": "la confirmation n’a pas été distribuée",
+            "reminder_blocked": "le rappel n’a pas été envoyé",
+            "reminder_not_delivered": "le rappel n’a pas été distribué",
+            "unknown": "un message n’a pas été distribué"
+          },
+          "excluded": "Exclue de l’annulation automatique",
+          "inProgress": "Annulation en cours dans votre boutique",
+          "failed": "L’annulation automatique a échoué. Annulez-la vous-même ou gardez-la."
+        },
+        "actions": {
+          "exclude": "Ne pas annuler automatiquement",
+          "include": "Autoriser l’annulation automatique",
+          "excludeSuccess": "Cette commande ne sera pas annulée automatiquement.",
+          "includeSuccess": "L’annulation automatique s’applique de nouveau à cette commande.",
+          "error": "Impossible de modifier l’annulation automatique de cette commande. Réessayez.",
+          "inProgressError": "La boutique annule déjà cette commande."
+        },
+        "detail": {
+          "label": "Annulation automatique",
+          "canceled": "Annulée. Aucune réponse après les tentatives de confirmation.",
+          "canceledLateReply": "Annulée faute de réponse. Le client a confirmé ensuite. Contactez-le pour savoir s’il veut toujours la commande.",
+          "skipped": "Non annulée, car {reason}",
+          "skipReasons": {
+            "paid": "la commande est payée",
+            "fulfilled": "la commande a été expédiée",
+            "fulfillment_in_progress": "la commande est en préparation",
+            "status_not_writable": "la boutique a fait avancer la commande",
+            "order_not_found": "la boutique n’a pas cette commande",
+            "source_unsupported": "votre boutique ne le permet pas",
+            "other": "une règle de sécurité n’était pas remplie"
+          },
+          "stopped": "Arrêtée, car {reason}",
+          "stopReasons": {
+            "customer_reply": "le client a répondu",
+            "excluded": "vous avez gardé la commande",
+            "feature_disabled": "l’annulation automatique a été désactivée",
+            "status_changed": "la commande a changé",
+            "other": "une règle de sécurité n’était pas remplie"
+          },
+          "waiting": "En attente du client"
+        }
+      },
       "loaded": "Affichage de {loaded} commandes sur {total}",
       "empty": {
         "all": "Aucune confirmation sur cette période pour l’instant.",
@@ -1460,12 +1513,17 @@
         "upgradeNoDate": "Les confirmations de votre forfait sont épuisées, ces commandes n’ont donc pas été envoyées. Passez à un forfait supérieur et Akeed les enverra automatiquement.",
         "recharge": "Vos crédits sont épuisés, ces commandes n’ont donc pas été envoyées. Achetez des crédits et Akeed les enverra automatiquement.",
         "waitReset": "Les confirmations de votre forfait sont épuisées, ces commandes n’ont donc pas été envoyées. Elles partiront automatiquement au renouvellement de votre quota le {date}.",
-        "waitResetNoDate": "Les confirmations de votre forfait sont épuisées, ces commandes n’ont donc pas été envoyées. Elles partiront automatiquement au renouvellement de votre quota."
+        "waitResetNoDate": "Les confirmations de votre forfait sont épuisées, ces commandes n’ont donc pas été envoyées. Elles partiront automatiquement au renouvellement de votre quota.",
+        "upgradeOrRenew": "Les confirmations de votre forfait sont épuisées, ces commandes n’ont donc pas été envoyées. Changez ou renouvelez votre forfait pour les envoyer maintenant, sinon elles partiront automatiquement au renouvellement de votre quota le {date}.",
+        "upgradeOrRenewNoDate": "Les confirmations de votre forfait sont épuisées, ces commandes n’ont donc pas été envoyées. Changez ou renouvelez votre forfait et Akeed les enverra automatiquement.",
+        "renewOrWait": "Les confirmations de votre forfait sont épuisées, ces commandes n’ont donc pas été envoyées. Renouvelez votre forfait pour les envoyer maintenant, sinon elles partiront automatiquement au renouvellement de votre quota le {date}.",
+        "renewOrWaitNoDate": "Les confirmations de votre forfait sont épuisées, ces commandes n’ont donc pas été envoyées. Renouvelez votre forfait pour les envoyer maintenant, sinon elles partiront automatiquement au renouvellement de votre quota."
       },
       "note": "Rien n’est facturé avant l’envoi d’une commande. Une commande qui attend trop longtemps passe dans À traiter.",
       "cta": {
         "upgrade": "Changer de forfait",
-        "recharge": "Acheter des crédits"
+        "recharge": "Acheter des crédits",
+        "renew": "Renouveler {plan} maintenant"
       }
     }
   },
@@ -1865,7 +1923,7 @@
         "storeNameTooLong": "Utilisez {max} caractères au maximum.",
         "languageHeading": "Langue des messages",
         "languageAuto": "Automatique, selon le numéro du client",
-        "languageAutoHelp": "L’arabe pour les numéros des pays arabes, l’ourdou pour le Pakistan, l’espagnol pour l’Espagne et l’Amérique latine, le français pour la France, et l’anglais partout ailleurs.",
+        "languageAutoHelp": "L’arabe pour les numéros des pays arabes, l’ourdou pour le Pakistan, l’espagnol pour l’Espagne et l’Amérique latine, le français pour la France, le turc pour la Turquie, et l’anglais partout ailleurs.",
         "recommended": "Recommandé",
         "languageFixed": "Une seule langue pour tous les clients",
         "languageFixedHelp": "Chaque client reçoit le message dans la langue que vous choisissez.",
@@ -1932,7 +1990,8 @@
           "newOrder": "Nouvelle commande",
           "confirmation": "Message de confirmation",
           "reminder": "Rappel faute de réponse",
-          "needsAction": "« À traiter par vous »"
+          "needsAction": "« À traiter par vous »",
+          "autoCancel": "Annulée automatiquement"
         },
         "delayImmediate": "Immédiatement",
         "delayAfter": "Après {duration}",
@@ -1942,8 +2001,8 @@
         "minutes": "{count, plural, one {# minute} other {# minutes}}",
         "quietLine": "Les messages prévus entre {start} et {end} partent à {end}.",
         "autoHeading": "Confirmation automatique",
-        "autoDescription": "Le moment où nous envoyons le message de confirmation des commandes COD.",
-        "autoLabel": "Envoyer un message de confirmation pour chaque nouvelle commande",
+        "autoDescription": "Délai d’envoi de la confirmation.",
+        "autoLabel": "Envoyer les confirmations automatiquement",
         "autoHelp": "Si l’option est désactivée, aucun message n’est envoyé.",
         "sendTimeLabel": "Moment de l’envoi",
         "previewMessage": "Aperçu du message",
@@ -1957,7 +2016,7 @@
         "customDelaySuffix": "min",
         "customDelayError": "Saisissez un nombre entier de minutes entre 0 et 1 440.",
         "followHeading": "Relance",
-        "followDescription": "Ce que nous faisons quand un client ne répond pas.",
+        "followDescription": "Quand le client ne répond pas.",
         "reminderLabel": "Envoyer un rappel",
         "reminderCounts": "Les rappels comptent dans vos messages mensuels.",
         "after": "Délai",
@@ -1968,8 +2027,17 @@
         "fromReminder": "après le rappel",
         "reminderGroup": "Délai du rappel",
         "alertGroup": "Délai de l’alerte « sans réponse »",
-        "alertLabel": "M’alerter sur les commandes sans réponse",
-        "alertHelp": "La commande passe dans « À traiter par vous » dans Akeed pour que vous puissiez la suivre vous-même.",
+        "alertLabel": "Signaler les commandes sans réponse",
+        "alertHelp": "Déplace les commandes vers « À traiter par vous ».",
+        "autoCancel": {
+          "heading": "Commandes sans réponse",
+          "description": "Réglages d’annulation automatique.",
+          "label": "Annuler les commandes sans réponse automatiquement",
+          "deadline": "La commande sera automatiquement annulée {duration} après le premier message.",
+          "restockLabel": "Remettre en stock",
+          "notifyLabel": "Envoyer un avis de la boutique",
+          "requiresEscalation": "Activez d’abord « Signaler les commandes sans réponse ». L’annulation utilise le même délai."
+        },
         "quietHeading": "Heures de silence",
         "quietDescription": "Pas de messages la nuit. Tout envoi prévu pendant les heures de silence part à la fin de celles-ci.",
         "quietLabel": "Suspendre les envois pendant les heures de silence",
@@ -2001,6 +2069,7 @@
         "usageAria": "Messages utilisés",
         "subscribe": "S’abonner à {plan}",
         "currentPlanButton": "Votre forfait actuel",
+        "renew": "Renouveler {plan} maintenant",
         "billingManaged": "Votre forfait est géré par l’équipe Akeed. Contactez l’assistance pour le modifier.",
         "subscribeError": "Nous n’avons pas pu ouvrir la page d’approbation de Shopify. Réessayez.",
         "freePlanClaimedError": "Cette boutique a déjà utilisé le forfait gratuit. Choisissez un forfait payant."
@@ -2477,6 +2546,9 @@
       "starterRow": "Starter : 30 messages gratuits, une seule fois",
       "starterCta": "Commencer gratuitement",
       "subscribeCta": "S’abonner à {plan} · {price} / mois",
+      "renewCta": "Renouveler {plan} maintenant · {price} / mois",
+      "renewNote": "Le renouvellement démarre aujourd’hui une nouvelle période de 30 jours avec le quota complet. Les messages restants de la période en cours ne sont pas reportés.",
+      "currentPlan": "Forfait actuel",
       "redirectNote": "Vous serez redirigé vers Shopify pour approuver le prélèvement.",
       "cancel": "Annuler"
     },

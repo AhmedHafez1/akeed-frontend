@@ -99,11 +99,11 @@ Un envoi échoué est un signal opérationnel, pas un simple chiffre du tableau 
 
 ### Akeed annule-t-il automatiquement toutes les commandes non confirmées ?
 
-Non. Ce sont vos paramètres et vos procédures qui déterminent le traitement des commandes sans réponse.
+Seulement si vous activez **Annuler automatiquement les commandes sans réponse** dans les réglages, et uniquement pour les commandes restées sans réponse alors que chaque message a été distribué et que le client n’a ni confirmé ni annulé. Sinon, les commandes sans réponse vous attendent. Voir [Règles d’automatisation](/docs/automation-rules).
 
 ### Les clients peuvent-ils encore répondre après le statut « Sans réponse » ?
 
-Ils peuvent répondre plus tard, selon le moment et selon que la commande a déjà été clôturée ou non par une action du marchand.
+Oui, à tout moment. Akeed ignore un message qu’il ne peut lire ni comme une confirmation ni comme une annulation. Si Akeed a déjà annulé la commande et que le client confirme ensuite, la commande affiche **Confirmée après annulation** et passe dans **À traiter par vous**. Contactez le client avec **Écrire sur WhatsApp** ou par téléphone. La commande reste annulée tant que vous ne la modifiez pas dans votre boutique.
 
 ### Le statut « Remis » suffit-il pour expédier ?
 
@@ -116,6 +116,8 @@ WhatsApp indique à Akeed que le message ne peut pas être remis, et la commande
 ### Que se passe-t-il quand les confirmations de mon forfait ou mes crédits sont épuisés ?
 
 Les nouvelles commandes sont toujours reçues, mais leurs messages attendent avec le statut **En attente d’envoi**, et un bandeau rouge sur le tableau de bord indique combien attendent et ce que vous pouvez faire. Rien n’est facturé pour elles. Dès que vous changez de forfait, achetez des crédits ou que votre quota est renouvelé, Akeed les envoie automatiquement, de la plus ancienne à la plus récente, en respectant le délai d’envoi et les heures de silence. Une commande qui attend plus de 24 heures n’est pas envoyée d’elle-même : elle passe dans **À traiter**, où vous pouvez la confirmer, l’annuler ou la relancer.
+
+Sur un forfait Shopify payant, le bandeau propose aussi un bouton de renouvellement au nom de votre forfait, par exemple **Renouveler Basic maintenant**. Vous approuvez à nouveau votre forfait actuel dans Shopify, et une nouvelle période de 30 jours démarre aussitôt avec le quota complet : les commandes en attente partent. Les messages restants de l’ancienne période ne sont pas reportés. Le même bouton figure sur votre forfait actuel dans **Paramètres → Forfait**.
 
 ### Où régler les délais et la relance ?
 
