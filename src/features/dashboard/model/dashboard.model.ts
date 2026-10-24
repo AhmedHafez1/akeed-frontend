@@ -272,7 +272,6 @@ export type NeedsActionReason =
   | 'no_whatsapp'
   | 'delivery_failed'
   | 'send_failed'
-  | 'customer_replied'
   | 'auto_cancel_failed'
   | 'no_reply_after_follow_up'
   | 'read_no_reply'

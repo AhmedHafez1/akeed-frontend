@@ -2375,9 +2375,8 @@
           "delivery_failed": "Not delivered: {reason}",
           "send_failed": "Message not sent",
           "no_whatsapp": "Not on WhatsApp · Call the customer",
-          "customer_replied": "Customer wrote back · Contact them",
           "auto_cancel_failed": "Automatic cancellation failed",
-          "late_reply_after_auto_cancel": "Wrote after it was canceled"
+          "late_reply_after_auto_cancel": "Confirmed after it was canceled"
         },
         "actions": {
           "whatsapp": "WhatsApp them",
@@ -2474,7 +2473,7 @@
         "sending": "Sending",
         "awaitingReply": "Awaiting reply",
         "noReply": "No reply",
-        "customerReplied": "Customer replied",
+        "confirmedAfterCancel": "Confirmed after cancel",
         "noWhatsApp": "No WhatsApp",
         "awaitingStart": "Awaiting start",
         "notStarted": "Not started",
@@ -2486,7 +2485,7 @@
           "canceledNoReply": "No reply from the customer",
           "canceledNoWhatsApp": "Number not on WhatsApp",
           "canceledAutomatically": "No response after confirmation attempts",
-          "lateReplyAfterAutoCancel": "Customer wrote after it was canceled",
+          "lateReplyAfterAutoCancel": "Customer confirmed after it was canceled",
           "followUpSent": "Reminder sent",
           "sendsAt": "Sends {time}",
           "callCustomer": "Call the customer",
@@ -2496,7 +2495,8 @@
           "scheduledFor": "Scheduled for {time}",
           "reminderAt": "Reminder scheduled for {time}",
           "callCustomer": "Number isn’t on WhatsApp. Call the customer to confirm.",
-          "callCustomerSince": "Not on WhatsApp since {time}. Call the customer to confirm."
+          "callCustomerSince": "Not on WhatsApp since {time}. Call the customer to confirm.",
+          "confirmedAfterCancel": "Canceled automatically on {time}. The customer confirmed afterwards — contact them."
         },
         "failure": {
           "notOnWhatsApp": "number isn’t on WhatsApp",
@@ -2534,7 +2534,7 @@
         "detail": {
           "label": "Automatic cancellation",
           "canceled": "Canceled. No response after confirmation attempts.",
-          "canceledLateReply": "Canceled for no response. The customer wrote afterwards. Contact them to check whether they still want the order.",
+          "canceledLateReply": "Canceled for no response. The customer confirmed afterwards. Contact them to check whether they still want the order.",
           "skipped": "Not canceled because {reason}",
           "skipReasons": {
             "paid": "the order is paid",

@@ -185,6 +185,39 @@ describe('StatusCell scheduling', () => {
   })
 })
 
+describe('a confirm after Akeed canceled the order', () => {
+  const late = {
+    status: 'canceled',
+    cancellation_source: 'automatic_no_reply',
+    action_reason: 'late_reply_after_auto_cancel',
+    canceled_at: '2026-10-21T09:00:00Z',
+    follow_up_sent_at: '2026-10-20T10:00:00Z',
+  } as VerificationItem
+
+  it('wears the amber badge with the explanation in its tooltip', () => {
+    renderStandalone(<StatusCell row={late} timeZone="UTC" />, 'en')
+
+    expect(screen.queryByText('Canceled')).toBeNull()
+    expect(
+      screen
+        .getByText('Confirmed after cancel')
+        .closest('[title]')
+        ?.getAttribute('title')
+    ).toBe(
+      'Canceled automatically on Oct 21, 2026, 9:00 AM. The customer confirmed afterwards — contact them.'
+    )
+  })
+
+  it('explains itself on the card ahead of the reminder', () => {
+    renderStandalone(<StatusNote row={late} timeZone="UTC" />, 'en')
+
+    expect(
+      screen.getByText('Customer confirmed after it was canceled')
+    ).toBeTruthy()
+    expect(screen.queryByText(/Reminder sent/)).toBeNull()
+  })
+})
+
 describe('StatusNote', () => {
   it('says when the reminder is due while it waits', () => {
     const row = {

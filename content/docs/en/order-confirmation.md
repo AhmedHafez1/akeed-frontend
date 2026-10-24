@@ -99,11 +99,11 @@ A failed send is an operational signal, not just a dashboard number.
 
 ### Does Akeed auto-cancel all unconfirmed orders?
 
-Only if you turn on **Cancel unanswered orders automatically** in Settings, and then only orders that reached No Reply after every message was delivered and the customer never wrote back. Otherwise no-reply orders wait for you. See [Automation Rules](/docs/automation-rules).
+Only if you turn on **Cancel unanswered orders automatically** in Settings, and then only orders that reached No Reply after every message was delivered and the customer neither confirmed nor canceled. Otherwise no-reply orders wait for you. See [Automation Rules](/docs/automation-rules).
 
 ### Can customers still reply after no-reply status?
 
-Yes, at any time. Akeed can’t show what they wrote, because messages go out from Akeed’s number, so the order moves to **Needs action**. Contact the customer with **WhatsApp them** or by phone. If Akeed already canceled the order, it stays canceled until you change it in your store.
+Yes, at any time. Akeed ignores a message it can’t read as a confirm or a cancel. If Akeed already canceled the order and the customer then confirms, the order shows **Confirmed after cancel** and moves to **Needs action**. Contact the customer with **WhatsApp them** or by phone. The order stays canceled until you change it in your store.
 
 ### Is “delivered” enough to ship?
 

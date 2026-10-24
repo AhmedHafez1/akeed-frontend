@@ -228,7 +228,9 @@ export function FollowUpCell({
 /**
  * The card's explanation under the status badge: when the reminder went out,
  * or else the status's own sub-line ("Confirmed manually", "Sends 6:40 AM",
- * why a message failed). Nothing when there is nothing to add.
+ * why a message failed). A confirm after Akeed canceled the order outranks
+ * the reminder, since it is why the order needs the merchant. Nothing when
+ * there is nothing to add.
  */
 export function StatusNote({
   row,
@@ -240,6 +242,10 @@ export function StatusNote({
   const tStatus = useTranslations('dashboard.confirmations.status')
   const tFollowUp = useTranslations('dashboard.table.followUp')
   const { locale } = useLocaleInfo()
+
+  if (row.action_reason === 'late_reply_after_auto_cancel') {
+    return <StatusSubLine row={row} timeZone={timeZone} />
+  }
 
   if (row.follow_up_sent_at) {
     const sentAt = formatDayAndClock(row.follow_up_sent_at, locale, timeZone)

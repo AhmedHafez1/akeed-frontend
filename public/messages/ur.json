@@ -1246,9 +1246,8 @@
           "delivery_failed": "پہنچا نہیں: {reason}",
           "send_failed": "پیغام نہیں بھیجا گیا",
           "no_whatsapp": "واٹس ایپ پر موجود نہیں · کسٹمر کو کال کریں",
-          "customer_replied": "کسٹمر نے جواب دیا · اُن سے رابطہ کریں",
           "auto_cancel_failed": "خودکار منسوخی ناکام رہی",
-          "late_reply_after_auto_cancel": "منسوخی کے بعد لکھا"
+          "late_reply_after_auto_cancel": "منسوخی کے بعد تصدیق کی"
         },
         "actions": {
           "whatsapp": "واٹس ایپ پر رابطہ کریں",
@@ -1345,7 +1344,7 @@
         "sending": "بھیجا جا رہا ہے",
         "awaitingReply": "جواب کا انتظار",
         "noReply": "جواب نہیں ملا",
-        "customerReplied": "کسٹمر نے جواب دیا",
+        "confirmedAfterCancel": "منسوخی کے بعد تصدیق",
         "noWhatsApp": "واٹس ایپ نہیں",
         "awaitingStart": "شروع ہونے کا انتظار",
         "notStarted": "شروع نہیں ہوا",
@@ -1357,7 +1356,7 @@
           "canceledNoReply": "کسٹمر کا جواب نہیں آیا",
           "canceledNoWhatsApp": "نمبر واٹس ایپ پر موجود نہیں",
           "canceledAutomatically": "تصدیق کی کوششوں کے بعد کوئی جواب نہیں",
-          "lateReplyAfterAutoCancel": "منسوخی کے بعد کسٹمر نے لکھا",
+          "lateReplyAfterAutoCancel": "منسوخی کے بعد کسٹمر نے تصدیق کی",
           "followUpSent": "یاد دہانی بھیج دی گئی",
           "sendsAt": "{time} بھیجا جائے گا",
           "callCustomer": "کسٹمر کو کال کریں",
@@ -1367,7 +1366,8 @@
           "scheduledFor": "{time} کے لیے شیڈول شدہ",
           "reminderAt": "یاد دہانی {time} کے لیے شیڈول شدہ",
           "callCustomer": "نمبر واٹس ایپ پر موجود نہیں۔ تصدیق کے لیے کسٹمر کو کال کریں۔",
-          "callCustomerSince": "{time} سے واٹس ایپ پر موجود نہیں۔ تصدیق کے لیے کسٹمر کو کال کریں۔"
+          "callCustomerSince": "{time} سے واٹس ایپ پر موجود نہیں۔ تصدیق کے لیے کسٹمر کو کال کریں۔",
+          "confirmedAfterCancel": "{time} کو خودکار طور پر منسوخ ہوا۔ کسٹمر نے بعد میں تصدیق کی — اُن سے رابطہ کریں۔"
         },
         "failure": {
           "notOnWhatsApp": "نمبر واٹس ایپ پر موجود نہیں",
@@ -1405,7 +1405,7 @@
         "detail": {
           "label": "خودکار منسوخی",
           "canceled": "منسوخ ہوا۔ تصدیق کی کوششوں کے بعد کوئی جواب نہیں۔",
-          "canceledLateReply": "جواب نہ آنے پر منسوخ ہوا۔ کسٹمر نے بعد میں لکھا۔ اُن سے رابطہ کر کے پوچھیں کہ کیا وہ اب بھی آرڈر چاہتے ہیں۔",
+          "canceledLateReply": "جواب نہ آنے پر منسوخ ہوا۔ کسٹمر نے بعد میں تصدیق کی۔ اُن سے رابطہ کر کے پوچھیں کہ کیا وہ اب بھی آرڈر چاہتے ہیں۔",
           "skipped": "منسوخ نہیں ہوا کیونکہ {reason}",
           "skipReasons": {
             "paid": "آرڈر کی ادائیگی ہو چکی ہے",

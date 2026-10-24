@@ -77,13 +77,13 @@ You can let Akeed cancel an order in your store when it reaches **No Reply**. It
 Akeed cancels an order only when all of these hold:
 
 - The confirmation, and the reminder if one was due, were delivered.
-- The customer never wrote back, in any form.
+- The customer did not confirm or cancel. Akeed ignores a message it can’t read as either.
 - You did not keep the order out with **Don’t auto-cancel**.
 - The store still shows the order unpaid and unfulfilled.
 
 A message Akeed could not send or deliver, for example because your plan or credits ran out, pauses the cancellation instead. Akeed never cancels an order because of its own sending limits.
 
-On Shopify you choose whether the items are restocked and whether Shopify tells the customer. WooCommerce and EasyOrders follow your store’s own settings. A canceled order shows **No response after confirmation attempts**. If the customer writes after that, the order moves to **Needs action** so you can contact them. Akeed can’t show what they wrote, and the order stays canceled.
+On Shopify you choose whether the items are restocked and whether Shopify tells the customer. WooCommerce and EasyOrders follow your store’s own settings. A canceled order shows **No response after confirmation attempts**. If the customer confirms after that, the order shows **Confirmed after cancel** and moves to **Needs action** so you can contact them. The order stays canceled. Any other message after the cancellation is ignored.
 
 Turning the setting off stops every cancellation that has not reached your store yet.
 

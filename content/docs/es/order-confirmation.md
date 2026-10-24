@@ -99,11 +99,11 @@ Un envío fallido es una señal operativa, no solo un número del panel.
 
 ### ¿Akeed cancela automáticamente todos los pedidos sin confirmar?
 
-Solo si activas **Cancelar automáticamente los pedidos sin respuesta** en Configuración, y aun así solo los pedidos que quedaron sin respuesta después de entregarse todos los mensajes y sin que el cliente escribiera. Si no, los pedidos sin respuesta te esperan. Consulta [Reglas de automatización](/docs/automation-rules).
+Solo si activas **Cancelar automáticamente los pedidos sin respuesta** en Configuración, y aun así solo los pedidos que quedaron sin respuesta después de entregarse todos los mensajes y sin que el cliente confirmara ni cancelara. Si no, los pedidos sin respuesta te esperan. Consulta [Reglas de automatización](/docs/automation-rules).
 
 ### ¿Los clientes pueden responder después del estado sin respuesta?
 
-Sí, en cualquier momento. Akeed no puede mostrar lo que escribieron, porque los mensajes salen desde el número de Akeed, así que el pedido pasa a **Requieren tu acción**. Contacta al cliente con **Ir a WhatsApp** o por teléfono. Si Akeed ya canceló el pedido, sigue cancelado hasta que lo cambies en tu tienda.
+Sí, en cualquier momento. Akeed ignora los mensajes que no puede leer como una confirmación o una cancelación. Si Akeed ya canceló el pedido y luego el cliente confirma, el pedido muestra **Confirmó tras cancelar** y pasa a **Requieren tu acción**. Contacta al cliente con **Ir a WhatsApp** o por teléfono. El pedido sigue cancelado hasta que lo cambies en tu tienda.
 
 ### ¿Basta con «entregado» para enviar el pedido?
 

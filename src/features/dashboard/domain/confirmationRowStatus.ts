@@ -56,23 +56,31 @@ export function resolveRowStatus(
               : undefined,
       }
     case 'canceled':
+      // A confirm after Akeed canceled it on its own needs the merchant, so
+      // it wears amber instead of the red "Canceled".
+      if (row.action_reason === 'late_reply_after_auto_cancel') {
+        return {
+          badge: 'confirmedAfterCancel',
+          tone: 'warning',
+          kind: 'needsAction',
+          sub: 'sub.lateReplyAfterAutoCancel',
+        }
+      }
       // The badge is just "Canceled"; who canceled it is the sub-line.
       return {
         badge: 'canceled',
         tone: 'critical',
         kind: 'canceled',
         sub:
-          row.action_reason === 'late_reply_after_auto_cancel'
-            ? 'sub.lateReplyAfterAutoCancel'
-            : row.cancellation_source === 'automatic_no_reply'
-              ? 'sub.canceledAutomatically'
-              : options.showStoreCancellation && row.canceled_in_store
-                ? 'sub.canceledInStore'
-                : row.cancellation_source === 'merchant_no_reply'
-                  ? 'sub.canceledNoReply'
-                  : row.cancellation_source === 'merchant_no_whatsapp'
-                    ? 'sub.canceledNoWhatsApp'
-                    : 'sub.canceledByCustomer',
+          row.cancellation_source === 'automatic_no_reply'
+            ? 'sub.canceledAutomatically'
+            : options.showStoreCancellation && row.canceled_in_store
+              ? 'sub.canceledInStore'
+              : row.cancellation_source === 'merchant_no_reply'
+                ? 'sub.canceledNoReply'
+                : row.cancellation_source === 'merchant_no_whatsapp'
+                  ? 'sub.canceledNoWhatsApp'
+                  : 'sub.canceledByCustomer',
       }
     case 'failed':
       return {
@@ -120,9 +128,6 @@ export function resolveRowStatus(
       break
   }
 
-  if (row.action_reason === 'customer_replied') {
-    return { badge: 'customerReplied', tone: 'warning', kind: 'needsAction' }
-  }
   if (row.action_reason || row.status === 'no_reply') {
     return {
       badge: 'noReply',

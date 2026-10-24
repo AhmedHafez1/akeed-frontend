@@ -126,31 +126,37 @@ describe('auto-cancel statuses', () => {
     ).toBe('sub.canceledAutomatically')
   })
 
-  it('flags a reply that came after the cancellation, and offers no second cancel', () => {
+  it('flags a confirm that came after the cancellation in amber, and offers no second cancel', () => {
     const late = row({
       status: 'canceled',
       cancellation_source: 'automatic_no_reply',
       action_reason: 'late_reply_after_auto_cancel',
     })
-    expect(resolveRowStatus(late).sub).toBe('sub.lateReplyAfterAutoCancel')
+    expect(resolveRowStatus(late)).toEqual({
+      badge: 'confirmedAfterCancel',
+      tone: 'warning',
+      kind: 'needsAction',
+      sub: 'sub.lateReplyAfterAutoCancel',
+    })
     expect(canCancelOrder(late)).toBe(false)
   })
 
-  it('shows a customer who wrote without answering as replied', () => {
-    const replied = row({
-      status: 'delivered',
-      action_reason: 'customer_replied',
-    })
-    expect(resolveRowStatus(replied)).toMatchObject({
-      badge: 'customerReplied',
-      kind: 'needsAction',
-    })
-    // Not at no reply yet, so the server would refuse a cancel.
-    expect(canCancelOrder(replied)).toBe(false)
+  it('keeps an automatic cancellation nobody answered red', () => {
     expect(
-      canCancelOrder(
-        row({ status: 'no_reply', action_reason: 'customer_replied' })
+      resolveRowStatus(
+        row({
+          status: 'canceled',
+          cancellation_source: 'automatic_no_reply',
+          action_reason: null,
+        })
       )
-    ).toBe(true)
+    ).toMatchObject({ badge: 'canceled', tone: 'critical', kind: 'canceled' })
+  })
+
+  it('offers the merchant cancel on any no-reply order', () => {
+    expect(canCancelOrder(row({}))).toBe(true)
+    expect(
+      canCancelOrder(row({ status: 'delivered', action_reason: null }))
+    ).toBe(false)
   })
 })

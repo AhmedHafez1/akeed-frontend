@@ -1246,9 +1246,8 @@
           "delivery_failed": "Teslim edilmedi: {reason}",
           "send_failed": "Mesaj gönderilmedi",
           "no_whatsapp": "WhatsApp’ta yok · Müşteriyi arayın",
-          "customer_replied": "Müşteri yanıt verdi · İletişime geçin",
           "auto_cancel_failed": "Otomatik iptal başarısız oldu",
-          "late_reply_after_auto_cancel": "İptalden sonra yazdı"
+          "late_reply_after_auto_cancel": "İptalden sonra onayladı"
         },
         "actions": {
           "whatsapp": "WhatsApp’tan yazın",
@@ -1345,7 +1344,7 @@
         "sending": "Gönderiliyor",
         "awaitingReply": "Yanıt bekleniyor",
         "noReply": "Yanıt yok",
-        "customerReplied": "Müşteri yanıt verdi",
+        "confirmedAfterCancel": "İptalden sonra onayladı",
         "noWhatsApp": "WhatsApp yok",
         "awaitingStart": "Başlatılmayı bekliyor",
         "notStarted": "Başlatılmadı",
@@ -1357,7 +1356,7 @@
           "canceledNoReply": "Müşteriden yanıt yok",
           "canceledNoWhatsApp": "Numara WhatsApp’ta yok",
           "canceledAutomatically": "Onay denemelerinden sonra yanıt yok",
-          "lateReplyAfterAutoCancel": "Müşteri iptalden sonra yazdı",
+          "lateReplyAfterAutoCancel": "Müşteri iptalden sonra onayladı",
           "followUpSent": "Hatırlatma gönderildi",
           "sendsAt": "Gönderim: {time}",
           "callCustomer": "Müşteriyi arayın",
@@ -1367,7 +1366,8 @@
           "scheduledFor": "Planlanan zaman: {time}",
           "reminderAt": "Hatırlatma zamanı: {time}",
           "callCustomer": "Numara WhatsApp’ta yok. Onay için müşteriyi arayın.",
-          "callCustomerSince": "{time} tarihinden beri WhatsApp’ta yok. Onay için müşteriyi arayın."
+          "callCustomerSince": "{time} tarihinden beri WhatsApp’ta yok. Onay için müşteriyi arayın.",
+          "confirmedAfterCancel": "{time} tarihinde otomatik olarak iptal edildi. Müşteri sonradan onayladı — onunla iletişime geçin."
         },
         "failure": {
           "notOnWhatsApp": "numara WhatsApp’ta yok",
@@ -1405,7 +1405,7 @@
         "detail": {
           "label": "Otomatik iptal",
           "canceled": "İptal edildi. Onay denemelerinden sonra yanıt yok.",
-          "canceledLateReply": "Yanıt olmadığı için iptal edildi. Müşteri sonradan yazdı. Siparişi hâlâ isteyip istemediğini öğrenmek için onunla iletişime geçin.",
+          "canceledLateReply": "Yanıt olmadığı için iptal edildi. Müşteri sonradan onayladı. Siparişi hâlâ isteyip istemediğini öğrenmek için onunla iletişime geçin.",
           "skipped": "İptal edilmedi, çünkü {reason}",
           "skipReasons": {
             "paid": "sipariş ödenmiş",

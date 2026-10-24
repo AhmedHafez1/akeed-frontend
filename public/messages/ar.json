@@ -2369,9 +2369,8 @@
           "delivery_failed": "لم تصل الرسالة: {reason}",
           "send_failed": "لم تُرسل الرسالة",
           "no_whatsapp": "غير مسجل على واتساب · اتصل بالعميل",
-          "customer_replied": "رد العميل · تواصل معه",
           "auto_cancel_failed": "فشل الإلغاء التلقائي",
-          "late_reply_after_auto_cancel": "كتب بعد الإلغاء"
+          "late_reply_after_auto_cancel": "أكد بعد الإلغاء"
         },
         "actions": {
           "whatsapp": "راسله واتساب",
@@ -2468,7 +2467,7 @@
         "sending": "قيد الإرسال",
         "awaitingReply": "بانتظار الرد",
         "noReply": "لم يرد",
-        "customerReplied": "رد العميل",
+        "confirmedAfterCancel": "أكد بعد الإلغاء",
         "noWhatsApp": "بدون واتساب",
         "awaitingStart": "بانتظار البدء",
         "notStarted": "لم يبدأ",
@@ -2480,7 +2479,7 @@
           "canceledNoReply": "لم يرد العميل",
           "canceledNoWhatsApp": "الرقم غير مسجل على واتساب",
           "canceledAutomatically": "لا رد بعد محاولات التأكيد",
-          "lateReplyAfterAutoCancel": "كتب العميل بعد الإلغاء",
+          "lateReplyAfterAutoCancel": "أكد العميل بعد الإلغاء",
           "followUpSent": "أُرسل التذكير",
           "sendsAt": "يُرسل {time}",
           "callCustomer": "اتصل بالعميل",
@@ -2490,7 +2489,8 @@
           "scheduledFor": "مجدول في {time}",
           "reminderAt": "التذكير مجدول في {time}",
           "callCustomer": "الرقم غير مسجل على واتساب. اتصل بالعميل لتأكيد الطلب.",
-          "callCustomerSince": "غير مسجل على واتساب منذ {time}. اتصل بالعميل لتأكيد الطلب."
+          "callCustomerSince": "غير مسجل على واتساب منذ {time}. اتصل بالعميل لتأكيد الطلب.",
+          "confirmedAfterCancel": "أُلغي تلقائيًا في {time}. أكد العميل بعد ذلك — تواصل معه."
         },
         "failure": {
           "notOnWhatsApp": "الرقم غير مسجل على واتساب",
@@ -2528,7 +2528,7 @@
         "detail": {
           "label": "الإلغاء التلقائي",
           "canceled": "أُلغي. لا رد بعد محاولات التأكيد.",
-          "canceledLateReply": "أُلغي لعدم الرد. كتب العميل بعد ذلك. تواصل معه لتتأكد إن كان لا يزال يريد الطلب.",
+          "canceledLateReply": "أُلغي لعدم الرد. أكد العميل بعد ذلك. تواصل معه لتتأكد إن كان لا يزال يريد الطلب.",
           "skipped": "لم يُلغَ لأن {reason}",
           "skipReasons": {
             "paid": "الطلب مدفوع",

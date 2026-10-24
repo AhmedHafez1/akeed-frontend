@@ -99,11 +99,11 @@ Un envoi échoué est un signal opérationnel, pas un simple chiffre du tableau 
 
 ### Akeed annule-t-il automatiquement toutes les commandes non confirmées ?
 
-Seulement si vous activez **Annuler automatiquement les commandes sans réponse** dans les réglages, et uniquement pour les commandes restées sans réponse alors que chaque message a été distribué et que le client n’a jamais écrit. Sinon, les commandes sans réponse vous attendent. Voir [Règles d’automatisation](/docs/automation-rules).
+Seulement si vous activez **Annuler automatiquement les commandes sans réponse** dans les réglages, et uniquement pour les commandes restées sans réponse alors que chaque message a été distribué et que le client n’a ni confirmé ni annulé. Sinon, les commandes sans réponse vous attendent. Voir [Règles d’automatisation](/docs/automation-rules).
 
 ### Les clients peuvent-ils encore répondre après le statut « Sans réponse » ?
 
-Oui, à tout moment. Akeed ne peut pas afficher ce qu’ils ont écrit, car les messages partent du numéro d’Akeed. La commande passe donc dans **À traiter par vous**. Contactez le client avec **Écrire sur WhatsApp** ou par téléphone. Si Akeed a déjà annulé la commande, elle reste annulée tant que vous ne la modifiez pas dans votre boutique.
+Oui, à tout moment. Akeed ignore un message qu’il ne peut lire ni comme une confirmation ni comme une annulation. Si Akeed a déjà annulé la commande et que le client confirme ensuite, la commande affiche **Confirmée après annulation** et passe dans **À traiter par vous**. Contactez le client avec **Écrire sur WhatsApp** ou par téléphone. La commande reste annulée tant que vous ne la modifiez pas dans votre boutique.
 
 ### Le statut « Remis » suffit-il pour expédier ?
 

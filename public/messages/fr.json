@@ -1246,9 +1246,8 @@
           "delivery_failed": "Non remis : {reason}",
           "send_failed": "Message non envoyé",
           "no_whatsapp": "Pas sur WhatsApp · Appelez le client",
-          "customer_replied": "Le client a répondu · Contactez-le",
           "auto_cancel_failed": "L’annulation automatique a échoué",
-          "late_reply_after_auto_cancel": "A écrit après l’annulation"
+          "late_reply_after_auto_cancel": "A confirmé après l’annulation"
         },
         "actions": {
           "whatsapp": "Écrire sur WhatsApp",
@@ -1345,7 +1344,7 @@
         "sending": "Envoi en cours",
         "awaitingReply": "En attente de réponse",
         "noReply": "Sans réponse",
-        "customerReplied": "Le client a répondu",
+        "confirmedAfterCancel": "Confirmée après annulation",
         "noWhatsApp": "Sans WhatsApp",
         "awaitingStart": "En attente de démarrage",
         "notStarted": "Non démarrée",
@@ -1357,7 +1356,7 @@
           "canceledNoReply": "Sans réponse du client",
           "canceledNoWhatsApp": "Numéro sans WhatsApp",
           "canceledAutomatically": "Aucune réponse après les tentatives de confirmation",
-          "lateReplyAfterAutoCancel": "Le client a écrit après l’annulation",
+          "lateReplyAfterAutoCancel": "Le client a confirmé après l’annulation",
           "followUpSent": "Rappel envoyé",
           "sendsAt": "Envoi : {time}",
           "callCustomer": "Appelez le client",
@@ -1367,7 +1366,8 @@
           "scheduledFor": "Planifié pour : {time}",
           "reminderAt": "Rappel planifié pour : {time}",
           "callCustomer": "Le numéro n’est pas sur WhatsApp. Appelez le client pour confirmer.",
-          "callCustomerSince": "Pas sur WhatsApp depuis le {time}. Appelez le client pour confirmer."
+          "callCustomerSince": "Pas sur WhatsApp depuis le {time}. Appelez le client pour confirmer.",
+          "confirmedAfterCancel": "Annulée automatiquement le {time}. Le client a confirmé ensuite — contactez-le."
         },
         "failure": {
           "notOnWhatsApp": "le numéro n’est pas sur WhatsApp",
@@ -1405,7 +1405,7 @@
         "detail": {
           "label": "Annulation automatique",
           "canceled": "Annulée. Aucune réponse après les tentatives de confirmation.",
-          "canceledLateReply": "Annulée faute de réponse. Le client a écrit ensuite. Contactez-le pour savoir s’il veut toujours la commande.",
+          "canceledLateReply": "Annulée faute de réponse. Le client a confirmé ensuite. Contactez-le pour savoir s’il veut toujours la commande.",
           "skipped": "Non annulée, car {reason}",
           "skipReasons": {
             "paid": "la commande est payée",

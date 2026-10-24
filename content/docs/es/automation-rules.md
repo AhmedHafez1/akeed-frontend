@@ -77,13 +77,13 @@ Puedes dejar que Akeed cancele un pedido en tu tienda cuando queda **Sin respues
 Akeed cancela un pedido solo cuando se cumple todo esto:
 
 - Se entregó la confirmación y, si tocaba, el recordatorio.
-- El cliente nunca escribió, de ninguna forma.
+- El cliente no confirmó ni canceló. Akeed ignora los mensajes que no puede leer como una confirmación o una cancelación.
 - No excluiste el pedido con **No cancelar automáticamente**.
 - La tienda todavía muestra el pedido sin pagar y sin enviar.
 
 Si Akeed no pudo enviar o entregar un mensaje, por ejemplo porque se agotó tu plan o tus créditos, la cancelación se pone en pausa. Akeed nunca cancela un pedido por sus propios límites de envío.
 
-En Shopify eliges si se repone el inventario y si Shopify avisa al cliente. WooCommerce y EasyOrders siguen la configuración de tu tienda. Un pedido cancelado muestra **Sin respuesta tras los intentos de confirmación**. Si el cliente escribe después, el pedido pasa a **Requieren tu acción** para que lo contactes. Akeed no puede mostrar lo que escribió, y el pedido sigue cancelado.
+En Shopify eliges si se repone el inventario y si Shopify avisa al cliente. WooCommerce y EasyOrders siguen la configuración de tu tienda. Un pedido cancelado muestra **Sin respuesta tras los intentos de confirmación**. Si el cliente confirma después, el pedido muestra **Confirmó tras cancelar** y pasa a **Requieren tu acción** para que lo contactes. El pedido sigue cancelado. Cualquier otro mensaje después de la cancelación se ignora.
 
 Desactivar la opción detiene todas las cancelaciones que aún no llegaron a tu tienda.
 

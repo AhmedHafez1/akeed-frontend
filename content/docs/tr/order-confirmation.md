@@ -99,11 +99,11 @@ Başarısız bir gönderim yalnızca paneldeki bir sayı değil, operasyonel bir
 
 ### Akeed onaylanmayan tüm siparişleri otomatik olarak iptal eder mi?
 
-Yalnızca ayarlarda **Yanıtsız siparişleri otomatik iptal et** seçeneğini açarsanız ve yalnızca her mesaj teslim edildikten sonra yanıtsız kalan, müşterinin hiç yazmadığı siparişler için. Aksi hâlde yanıtsız siparişler sizi bekler. Bkz. [Otomasyon Kuralları](/docs/automation-rules).
+Yalnızca ayarlarda **Yanıtsız siparişleri otomatik iptal et** seçeneğini açarsanız ve yalnızca her mesaj teslim edildikten sonra yanıtsız kalan, müşterinin onaylamadığı ya da iptal etmediği siparişler için. Aksi hâlde yanıtsız siparişler sizi bekler. Bkz. [Otomasyon Kuralları](/docs/automation-rules).
 
 ### Müşteriler yanıt yok durumundan sonra da yanıt verebilir mi?
 
-Evet, istedikleri zaman. Mesajlar Akeed’in numarasından gittiği için Akeed müşterinin ne yazdığını gösteremez, bu yüzden sipariş **İşlem bekleyenler** bölümüne taşınır. Müşteriyle **WhatsApp’tan yazın** ile ya da telefonla iletişime geçin. Akeed siparişi zaten iptal ettiyse, siz mağazanızda değiştirene kadar iptal edilmiş olarak kalır.
+Evet, istedikleri zaman. Akeed, onay ya da iptal olarak okuyamadığı mesajları yok sayar. Akeed siparişi zaten iptal ettiyse ve müşteri sonra onaylarsa sipariş **İptalden sonra onayladı** olarak görünür ve **İşlem bekleyenler** bölümüne taşınır. Müşteriyle **WhatsApp’tan yazın** ile ya da telefonla iletişime geçin. Sipariş, siz mağazanızda değiştirene kadar iptal edilmiş olarak kalır.
 
 ### “Teslim edildi” kargoya vermek için yeterli mi?
 

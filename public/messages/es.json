@@ -1246,9 +1246,8 @@
           "delivery_failed": "No entregado: {reason}",
           "send_failed": "Mensaje no enviado",
           "no_whatsapp": "No está en WhatsApp · Llama al cliente",
-          "customer_replied": "El cliente respondió · Contáctalo",
           "auto_cancel_failed": "La cancelación automática falló",
-          "late_reply_after_auto_cancel": "Escribió tras la cancelación"
+          "late_reply_after_auto_cancel": "Confirmó tras la cancelación"
         },
         "actions": {
           "whatsapp": "Ir a WhatsApp",
@@ -1345,7 +1344,7 @@
         "sending": "Enviando",
         "awaitingReply": "Esperando respuesta",
         "noReply": "Sin respuesta",
-        "customerReplied": "El cliente respondió",
+        "confirmedAfterCancel": "Confirmó tras cancelar",
         "noWhatsApp": "Sin WhatsApp",
         "awaitingStart": "Esperando inicio",
         "notStarted": "No iniciado",
@@ -1357,7 +1356,7 @@
           "canceledNoReply": "Sin respuesta del cliente",
           "canceledNoWhatsApp": "Número sin WhatsApp",
           "canceledAutomatically": "Sin respuesta tras los intentos de confirmación",
-          "lateReplyAfterAutoCancel": "El cliente escribió tras la cancelación",
+          "lateReplyAfterAutoCancel": "El cliente confirmó tras la cancelación",
           "followUpSent": "Recordatorio enviado",
           "sendsAt": "Se envía {time}",
           "callCustomer": "Llama al cliente",
@@ -1367,7 +1366,8 @@
           "scheduledFor": "Programado para {time}",
           "reminderAt": "Recordatorio programado para {time}",
           "callCustomer": "El número no está en WhatsApp. Llama al cliente para confirmar.",
-          "callCustomerSince": "Sin WhatsApp desde {time}. Llama al cliente para confirmar."
+          "callCustomerSince": "Sin WhatsApp desde {time}. Llama al cliente para confirmar.",
+          "confirmedAfterCancel": "Cancelado automáticamente el {time}. El cliente confirmó después — contáctalo."
         },
         "failure": {
           "notOnWhatsApp": "el número no está en WhatsApp",
@@ -1405,7 +1405,7 @@
         "detail": {
           "label": "Cancelación automática",
           "canceled": "Cancelado. Sin respuesta tras los intentos de confirmación.",
-          "canceledLateReply": "Cancelado por falta de respuesta. El cliente escribió después. Contáctalo para confirmar si todavía quiere el pedido.",
+          "canceledLateReply": "Cancelado por falta de respuesta. El cliente confirmó después. Contáctalo para comprobar si todavía quiere el pedido.",
           "skipped": "No se canceló porque {reason}",
           "skipReasons": {
             "paid": "el pedido está pagado",
