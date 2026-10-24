@@ -35,6 +35,7 @@ import {
 import { buildTimezoneOptions } from '@/features/settings/domain/timezoneOptions'
 import type { EmbeddedSettingsModel } from '@/features/settings/domain/useEmbeddedSettings'
 import {
+  formatDuration,
   formatQuietTime,
   formatShortDuration,
 } from '@/features/settings/skins/shared/settingsFormatters'
@@ -88,7 +89,7 @@ export function TimingTab({
   const hourOptions = (presets: readonly number[], currentMinutes: number) =>
     hourPresetOptions(presets, currentMinutes).map((option) => ({
       value: option.minutes,
-      label: t('hoursShort', { count: option.hours }),
+      label: formatShortDuration(t, option.minutes),
     }))
 
   const timeOptions = quietTimeValues(
@@ -244,7 +245,7 @@ export function TimingTab({
       </Layout.AnnotatedSection>
 
       <Layout.AnnotatedSection
-        id="settings-auto-cancel"
+        id="settings-auto-cancel-section"
         title={t('autoCancel.heading')}
         description={t('autoCancel.description')}
       >
@@ -274,7 +275,10 @@ export function TimingTab({
                 <BlockStack gap="200">
                   <Text as="p">
                     {t('autoCancel.deadline', {
-                      count: Math.round(escalationMinutesFromForm(values) / 60),
+                      duration: formatDuration(
+                        t,
+                        escalationMinutesFromForm(values)
+                      ),
                     })}
                   </Text>
                   <Checkbox

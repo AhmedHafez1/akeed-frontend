@@ -21,7 +21,11 @@ import {
 } from '@/features/settings/domain/settingsForm'
 import { buildTimezoneOptions } from '@/features/settings/domain/timezoneOptions'
 import type { StandaloneSettingsModel } from '@/features/settings/domain/useStandaloneSettings'
-import { formatQuietTime } from '@/features/settings/skins/shared/settingsFormatters'
+import {
+  formatDuration,
+  formatQuietTime,
+  formatShortDuration,
+} from '@/features/settings/skins/shared/settingsFormatters'
 import { cn } from '@/shared/lib/utils'
 import { AkSegmented, AkSelect } from '@/shared/ui'
 import { AutomationFlowCard } from './AutomationFlowCard'
@@ -136,7 +140,7 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
   const hourOptions = (presets: readonly number[], currentMinutes: number) =>
     hourPresetOptions(presets, currentMinutes).map((option) => ({
       value: String(option.minutes),
-      label: t('hoursShort', { count: option.hours }),
+      label: formatShortDuration(t, option.minutes),
     }))
 
   const timeOptions = quietTimeValues(
@@ -322,7 +326,10 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
                 <div className="space-y-1 px-4 pb-4 sm:px-6 sm:pb-5">
                   <p className="text-ak-body text-ink">
                     {t('autoCancel.deadline', {
-                      count: Math.round(escalationMinutesFromForm(values) / 60),
+                      duration: formatDuration(
+                        t,
+                        escalationMinutesFromForm(values)
+                      ),
                     })}
                   </p>
                   {autoCancelError && (

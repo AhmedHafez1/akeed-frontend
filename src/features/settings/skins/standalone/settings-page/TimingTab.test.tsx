@@ -100,6 +100,67 @@ beforeEach(() => {
 })
 
 describe('standalone Timing tab', () => {
+  it.each([
+    [true, 2, 4, '4 دقائق'],
+    [false, 2, 2, 'دقيقتين'],
+    [true, 30, 90, '90 دقيقة'],
+    [true, 360, 1080, '18 ساعة'],
+  ] as const)(
+    'shows the exact cancellation duration (reminder=%s, reminder minutes=%s, total=%s)',
+    async (
+      followUpEnabled,
+      followUpDelayMinutes,
+      escalationDelayMinutes,
+      duration
+    ) => {
+      await renderTiming({
+        autoCancelEnabled: true,
+        followUpEnabled,
+        followUpDelayMinutes,
+        escalationDelayMinutes,
+      })
+      expect(
+        screen.getByText(
+          'يصبح الطلب مؤهلًا للإلغاء بعد ' + duration + ' من الرسالة الأولى.'
+        )
+      ).toBeTruthy()
+    }
+  )
+
+  it('updates minute delays before saving and preserves exact payload minutes', async () => {
+    await renderTiming({
+      autoCancelEnabled: false,
+      followUpDelayMinutes: 2,
+      escalationDelayMinutes: 4,
+    })
+    expect(pressedIn(timing.reminderGroup)).toEqual(['2 د'])
+    expect(pressedIn(timing.alertGroup)).toEqual(['2 د'])
+    fireEvent.click(toggle(timing.autoCancel.label))
+    fireEvent.click(toggle(timing.reminderLabel))
+    expect(
+      screen.getByText(
+        'يصبح الطلب مؤهلًا للإلغاء بعد دقيقتين من الرسالة الأولى.'
+      )
+    ).toBeTruthy()
+    fireEvent.click(toggle(timing.reminderLabel))
+    expect(
+      screen.getByText(
+        'يصبح الطلب مؤهلًا للإلغاء بعد 4 دقائق من الرسالة الأولى.'
+      )
+    ).toBeTruthy()
+    expect(api.saveSettings).not.toHaveBeenCalled()
+    fireEvent.click(saveButton())
+    await waitFor(() =>
+      expect(api.saveSettings).toHaveBeenCalledWith(
+        expect.objectContaining({
+          autoCancelEnabled: true,
+          followUpDelayMinutes: 2,
+          escalationDelayMinutes: 4,
+        })
+      )
+    )
+  })
+
   it('shows the three sections with the saved choices pressed', async () => {
     await renderTiming()
 
