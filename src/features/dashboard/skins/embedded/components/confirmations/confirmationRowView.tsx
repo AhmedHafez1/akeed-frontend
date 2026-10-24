@@ -1,5 +1,9 @@
 import { Badge, BlockStack, InlineStack, Icon, Text } from '@shopify/polaris'
-import { CalendarTimeIcon, NotificationIcon } from '@shopify/polaris-icons'
+import {
+  CalendarTimeIcon,
+  NotificationIcon,
+  ShieldCheckMarkIcon,
+} from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import {
@@ -136,7 +140,11 @@ export function StatusCell({
       {autoCancel && (
         <span role="img" aria-label={autoCancel.text} title={autoCancel.text}>
           <Icon
-            source={CalendarTimeIcon}
+            source={
+              autoCancel.marker.key === 'excluded'
+                ? ShieldCheckMarkIcon
+                : CalendarTimeIcon
+            }
             tone={autoCancel.marker.key === 'failed' ? 'caution' : 'subdued'}
           />
         </span>

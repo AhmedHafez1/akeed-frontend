@@ -4,6 +4,7 @@ import {
   Bell,
   BellRing,
   CalendarClock,
+  ShieldCheck,
   Store,
   TriangleAlert,
 } from 'lucide-react'
@@ -180,7 +181,11 @@ export function StatusCell({
                 : 'text-ink-muted'
             )}
           >
-            <CalendarClock aria-hidden="true" className="size-3.5" />
+            {autoCancel.marker.key === 'excluded' ? (
+              <ShieldCheck aria-hidden="true" className="size-3.5" />
+            ) : (
+              <CalendarClock aria-hidden="true" className="size-3.5" />
+            )}
           </span>
         )}
       </div>
