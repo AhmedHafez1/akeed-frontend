@@ -103,7 +103,7 @@ Solo si activas **Cancelar automáticamente los pedidos sin respuesta** en Confi
 
 ### ¿Los clientes pueden responder después del estado sin respuesta?
 
-Pueden responder más tarde, según el momento y según si el comerciante ya cerró el pedido con alguna acción.
+Sí, en cualquier momento. Akeed no puede mostrar lo que escribieron, porque los mensajes salen desde el número de Akeed, así que el pedido pasa a **Requieren tu acción**. Contacta al cliente con **Ir a WhatsApp** o por teléfono. Si Akeed ya canceló el pedido, sigue cancelado hasta que lo cambies en tu tienda.
 
 ### ¿Basta con «entregado» para enviar el pedido?
 

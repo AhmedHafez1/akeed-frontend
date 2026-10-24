@@ -1246,7 +1246,7 @@
           "delivery_failed": "Non remis : {reason}",
           "send_failed": "Message non envoyé",
           "no_whatsapp": "Pas sur WhatsApp · Appelez le client",
-          "customer_replied": "Le client a répondu · Lisez son message",
+          "customer_replied": "Le client a répondu · Contactez-le",
           "auto_cancel_failed": "L’annulation automatique a échoué",
           "late_reply_after_auto_cancel": "A écrit après l’annulation"
         },
@@ -1405,7 +1405,7 @@
         "detail": {
           "label": "Annulation automatique",
           "canceled": "Annulée. Aucune réponse après les tentatives de confirmation.",
-          "canceledLateReply": "Annulée faute de réponse. Le client a écrit ensuite, lisez son message sur WhatsApp.",
+          "canceledLateReply": "Annulée faute de réponse. Le client a écrit ensuite. Contactez-le pour savoir s’il veut toujours la commande.",
           "skipped": "Non annulée, car {reason}",
           "skipReasons": {
             "paid": "la commande est payée",

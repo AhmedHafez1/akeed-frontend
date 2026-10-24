@@ -103,7 +103,7 @@ Only if you turn on **Cancel unanswered orders automatically** in Settings, and 
 
 ### Can customers still reply after no-reply status?
 
-They may reply later, depending on timing and whether the order has already been finalized by merchant action.
+Yes, at any time. Akeed can’t show what they wrote, because messages go out from Akeed’s number, so the order moves to **Needs action**. Contact the customer with **WhatsApp them** or by phone. If Akeed already canceled the order, it stays canceled until you change it in your store.
 
 ### Is “delivered” enough to ship?
 

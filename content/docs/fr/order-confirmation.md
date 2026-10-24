@@ -103,7 +103,7 @@ Seulement si vous activez **Annuler automatiquement les commandes sans réponse*
 
 ### Les clients peuvent-ils encore répondre après le statut « Sans réponse » ?
 
-Ils peuvent répondre plus tard, selon le moment et selon que la commande a déjà été clôturée ou non par une action du marchand.
+Oui, à tout moment. Akeed ne peut pas afficher ce qu’ils ont écrit, car les messages partent du numéro d’Akeed. La commande passe donc dans **À traiter par vous**. Contactez le client avec **Écrire sur WhatsApp** ou par téléphone. Si Akeed a déjà annulé la commande, elle reste annulée tant que vous ne la modifiez pas dans votre boutique.
 
 ### Le statut « Remis » suffit-il pour expédier ?
 

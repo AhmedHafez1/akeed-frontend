@@ -103,7 +103,7 @@ Yalnızca ayarlarda **Yanıtsız siparişleri otomatik iptal et** seçeneğini a
 
 ### Müşteriler yanıt yok durumundan sonra da yanıt verebilir mi?
 
-Zamanlamaya ve siparişin satıcı tarafından zaten sonuçlandırılıp sonuçlandırılmadığına bağlı olarak daha sonra yanıt verebilirler.
+Evet, istedikleri zaman. Mesajlar Akeed’in numarasından gittiği için Akeed müşterinin ne yazdığını gösteremez, bu yüzden sipariş **İşlem bekleyenler** bölümüne taşınır. Müşteriyle **WhatsApp’tan yazın** ile ya da telefonla iletişime geçin. Akeed siparişi zaten iptal ettiyse, siz mağazanızda değiştirene kadar iptal edilmiş olarak kalır.
 
 ### “Teslim edildi” kargoya vermek için yeterli mi?
 

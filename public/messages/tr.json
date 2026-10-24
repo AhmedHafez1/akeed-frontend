@@ -1246,7 +1246,7 @@
           "delivery_failed": "Teslim edilmedi: {reason}",
           "send_failed": "Mesaj gönderilmedi",
           "no_whatsapp": "WhatsApp’ta yok · Müşteriyi arayın",
-          "customer_replied": "Müşteri yanıt verdi · Mesajını okuyun",
+          "customer_replied": "Müşteri yanıt verdi · İletişime geçin",
           "auto_cancel_failed": "Otomatik iptal başarısız oldu",
           "late_reply_after_auto_cancel": "İptalden sonra yazdı"
         },
@@ -1405,7 +1405,7 @@
         "detail": {
           "label": "Otomatik iptal",
           "canceled": "İptal edildi. Onay denemelerinden sonra yanıt yok.",
-          "canceledLateReply": "Yanıt olmadığı için iptal edildi. Müşteri sonradan yazdı, mesajını WhatsApp’ta okuyun.",
+          "canceledLateReply": "Yanıt olmadığı için iptal edildi. Müşteri sonradan yazdı. Siparişi hâlâ isteyip istemediğini öğrenmek için onunla iletişime geçin.",
           "skipped": "İptal edilmedi, çünkü {reason}",
           "skipReasons": {
             "paid": "sipariş ödenmiş",

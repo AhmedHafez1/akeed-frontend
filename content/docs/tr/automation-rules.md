@@ -83,7 +83,7 @@ Akeed bir siparişi yalnızca bunların hepsi sağlandığında iptal eder:
 
 Akeed bir mesajı gönderemez veya teslim edemezse, örneğin planınız ya da kredileriniz bittiği için, iptal duraklatılır. Akeed kendi gönderim sınırları yüzünden hiçbir siparişi iptal etmez.
 
-Shopify’da ürünlerin stoğa geri eklenip eklenmeyeceğini ve Shopify’ın müşteriyi bilgilendirip bilgilendirmeyeceğini siz seçersiniz. WooCommerce ve EasyOrders mağazanızın kendi ayarlarını izler. İptal edilen siparişte **Onay denemelerinden sonra yanıt yok** yazar. Müşteri bundan sonra yazarsa, mesajı okuyabilmeniz için sipariş **İşlem bekleyenler** bölümüne taşınır.
+Shopify’da ürünlerin stoğa geri eklenip eklenmeyeceğini ve Shopify’ın müşteriyi bilgilendirip bilgilendirmeyeceğini siz seçersiniz. WooCommerce ve EasyOrders mağazanızın kendi ayarlarını izler. İptal edilen siparişte **Onay denemelerinden sonra yanıt yok** yazar. Müşteri bundan sonra yazarsa, onunla iletişime geçebilmeniz için sipariş **İşlem bekleyenler** bölümüne taşınır. Akeed müşterinin ne yazdığını gösteremez ve sipariş iptal edilmiş olarak kalır.
 
 Ayarı kapatmak, mağazanıza henüz ulaşmamış tüm iptalleri durdurur.
 

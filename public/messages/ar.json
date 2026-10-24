@@ -2369,7 +2369,7 @@
           "delivery_failed": "لم تصل الرسالة: {reason}",
           "send_failed": "لم تُرسل الرسالة",
           "no_whatsapp": "غير مسجل على واتساب · اتصل بالعميل",
-          "customer_replied": "رد العميل · اقرأ رسالته",
+          "customer_replied": "رد العميل · تواصل معه",
           "auto_cancel_failed": "فشل الإلغاء التلقائي",
           "late_reply_after_auto_cancel": "كتب بعد الإلغاء"
         },
@@ -2528,7 +2528,7 @@
         "detail": {
           "label": "الإلغاء التلقائي",
           "canceled": "أُلغي. لا رد بعد محاولات التأكيد.",
-          "canceledLateReply": "أُلغي لعدم الرد. كتب العميل بعد ذلك، فاقرأ رسالته على واتساب.",
+          "canceledLateReply": "أُلغي لعدم الرد. كتب العميل بعد ذلك. تواصل معه لتتأكد إن كان لا يزال يريد الطلب.",
           "skipped": "لم يُلغَ لأن {reason}",
           "skipReasons": {
             "paid": "الطلب مدفوع",

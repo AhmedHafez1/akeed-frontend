@@ -2375,7 +2375,7 @@
           "delivery_failed": "Not delivered: {reason}",
           "send_failed": "Message not sent",
           "no_whatsapp": "Not on WhatsApp · Call the customer",
-          "customer_replied": "Customer replied · Read their message",
+          "customer_replied": "Customer wrote back · Contact them",
           "auto_cancel_failed": "Automatic cancellation failed",
           "late_reply_after_auto_cancel": "Wrote after it was canceled"
         },
@@ -2534,7 +2534,7 @@
         "detail": {
           "label": "Automatic cancellation",
           "canceled": "Canceled. No response after confirmation attempts.",
-          "canceledLateReply": "Canceled for no response. The customer wrote afterwards, so read their message on WhatsApp.",
+          "canceledLateReply": "Canceled for no response. The customer wrote afterwards. Contact them to check whether they still want the order.",
           "skipped": "Not canceled because {reason}",
           "skipReasons": {
             "paid": "the order is paid",
