@@ -2642,12 +2642,17 @@
         "upgradeNoDate": "Your plan’s confirmations ran out, so these orders weren’t sent. Upgrade and Akeed sends them automatically.",
         "recharge": "Your credits ran out, so these orders weren’t sent. Buy credits and Akeed sends them automatically.",
         "waitReset": "Your plan’s confirmations ran out, so these orders weren’t sent. They go out automatically when your allowance renews on {date}.",
-        "waitResetNoDate": "Your plan’s confirmations ran out, so these orders weren’t sent. They go out automatically when your allowance renews."
+        "waitResetNoDate": "Your plan’s confirmations ran out, so these orders weren’t sent. They go out automatically when your allowance renews.",
+        "upgradeOrRenew": "Your plan’s confirmations ran out, so these orders weren’t sent. Upgrade or renew your plan to send them now, or they go out automatically when your allowance renews on {date}.",
+        "upgradeOrRenewNoDate": "Your plan’s confirmations ran out, so these orders weren’t sent. Upgrade or renew your plan and Akeed sends them automatically.",
+        "renewOrWait": "Your plan’s confirmations ran out, so these orders weren’t sent. Renew your plan to send them now, or they go out automatically when your allowance renews on {date}.",
+        "renewOrWaitNoDate": "Your plan’s confirmations ran out, so these orders weren’t sent. Renew your plan to send them now, or they go out automatically when your allowance renews."
       },
       "note": "Nothing is charged until an order is sent. An order that waits too long moves to Needs action.",
       "cta": {
         "upgrade": "Upgrade plan",
-        "recharge": "Buy credits"
+        "recharge": "Buy credits",
+        "renew": "Renew {plan} now"
       }
     }
   },
@@ -3669,6 +3674,9 @@
       "starterRow": "Starter: 30 free messages, one-time",
       "starterCta": "Start free",
       "subscribeCta": "Subscribe to {plan} · {price} / month",
+      "renewCta": "Renew {plan} now · {price} / month",
+      "renewNote": "Renewing starts a new 30-day period today with the full allowance. Messages left in the current period don’t carry over.",
+      "currentPlan": "Current plan",
       "redirectNote": "You'll go to Shopify to approve the charge.",
       "cancel": "Cancel"
     },

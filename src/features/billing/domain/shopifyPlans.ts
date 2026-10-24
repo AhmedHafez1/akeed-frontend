@@ -20,6 +20,8 @@ export interface ShopifyPlansResponse {
   billingManagement?: { mode: 'shopify' | 'manual'; canManageBilling: boolean }
   plans: ShopifyPlanConfig[]
   isFreePlanClaimed: boolean
+  /** The plan the store pays for now; null while no plan is active. */
+  currentPlanId?: ShopifyPlanId | null
 }
 
 /**

@@ -30,6 +30,7 @@ interface UpgradePlansModalProps {
  * the free messages, or when a reinstalled store has no free plan left. Plans
  * differ in their monthly allowance (Pro and up add the store logo), so it is
  * a radio group of three allowances; Starter is a row under them while the store can still claim it.
+ * The current paid plan is marked, and choosing it renews it now.
  */
 export function UpgradePlansModal({
   open,
@@ -60,7 +61,7 @@ export function UpgradePlansModal({
               content:
                 selectedPlan.amount === 0
                   ? tPlans('starterCta')
-                  : tPlans('subscribeCta', {
+                  : tPlans(upgrade.isRenewal ? 'renewCta' : 'subscribeCta', {
                       plan: selectedPlan.name,
                       price: isolateLtr(
                         formatPlanPrice(
@@ -122,6 +123,7 @@ export function UpgradePlansModal({
                         plan={plan}
                         groupName={groupName}
                         isSelected={upgrade.selectedPlanId === plan.id}
+                        isCurrent={upgrade.currentPlanId === plan.id}
                         onSelect={upgrade.setSelectedPlanId}
                       />
                     ))}
@@ -154,6 +156,7 @@ export function UpgradePlansModal({
               >
                 <SharedFeaturesList compact />
               </Box>
+              {upgrade.isRenewal && <Text as="p">{tPlans('renewNote')}</Text>}
               <Text as="p" tone="subdued">
                 {tPlans('modalRules')}
                 {upgrade.isFreePlanClaimed && ` ${tPlans('freeUsed')}`}

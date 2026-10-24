@@ -1513,12 +1513,17 @@
         "upgradeNoDate": "Planınızın onayları bitti, bu yüzden bu siparişler gönderilmedi. Planınızı yükseltin, Akeed bunları otomatik olarak göndersin.",
         "recharge": "Krediniz bitti, bu yüzden bu siparişler gönderilmedi. Kredi satın alın, Akeed bunları otomatik olarak göndersin.",
         "waitReset": "Planınızın onayları bitti, bu yüzden bu siparişler gönderilmedi. Kotanız {date} tarihinde yenilendiğinde otomatik olarak gönderilir.",
-        "waitResetNoDate": "Planınızın onayları bitti, bu yüzden bu siparişler gönderilmedi. Kotanız yenilendiğinde otomatik olarak gönderilir."
+        "waitResetNoDate": "Planınızın onayları bitti, bu yüzden bu siparişler gönderilmedi. Kotanız yenilendiğinde otomatik olarak gönderilir.",
+        "upgradeOrRenew": "Planınızın onayları bitti, bu yüzden bu siparişler gönderilmedi. Şimdi göndermek için planınızı yükseltin veya yenileyin; aksi halde kotanız {date} tarihinde yenilendiğinde otomatik olarak gönderilir.",
+        "upgradeOrRenewNoDate": "Planınızın onayları bitti, bu yüzden bu siparişler gönderilmedi. Planınızı yükseltin veya yenileyin, Akeed bunları otomatik olarak göndersin.",
+        "renewOrWait": "Planınızın onayları bitti, bu yüzden bu siparişler gönderilmedi. Şimdi göndermek için planınızı yenileyin; aksi halde kotanız {date} tarihinde yenilendiğinde otomatik olarak gönderilir.",
+        "renewOrWaitNoDate": "Planınızın onayları bitti, bu yüzden bu siparişler gönderilmedi. Şimdi göndermek için planınızı yenileyin; aksi halde kotanız yenilendiğinde otomatik olarak gönderilir."
       },
       "note": "Bir sipariş gönderilene kadar ücret alınmaz. Çok uzun bekleyen sipariş İşlem bekleyen bölümüne taşınır.",
       "cta": {
         "upgrade": "Planı yükselt",
-        "recharge": "Kredi satın al"
+        "recharge": "Kredi satın al",
+        "renew": "{plan} planını şimdi yenile"
       }
     }
   },
@@ -2540,6 +2545,9 @@
       "starterRow": "Starter: 30 ücretsiz mesaj, tek seferlik",
       "starterCta": "Ücretsiz başla",
       "subscribeCta": "Abone ol: {plan} · {price} / ay",
+      "renewCta": "{plan} planını şimdi yenile · {price} / ay",
+      "renewNote": "Yenileme, bugünden itibaren tam hakla 30 günlük yeni bir dönem başlatır. Mevcut dönemden kalan mesajlar devretmez.",
+      "currentPlan": "Mevcut plan",
       "redirectNote": "Ücreti onaylamak için Shopify’a yönlendirileceksiniz.",
       "cancel": "Vazgeç"
     },

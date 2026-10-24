@@ -69,7 +69,7 @@ Un crédit correspond à un message WhatsApp envoyé à un client. Une relance �
 
 ### Que se passe-t-il quand la limite mensuelle de confirmations est atteinte ou que les crédits sont épuisés ?
 
-Les nouvelles confirmations sont suspendues jusqu’au renouvellement de votre cycle, à un changement de forfait ou à un achat de crédits.
+Les nouvelles confirmations sont suspendues jusqu’au renouvellement de votre cycle, à un changement de forfait ou à un achat de crédits. Sur un forfait Shopify payant, vous pouvez aussi le renouveler maintenant, ce qui démarre une nouvelle période de 30 jours avec le quota complet.
 
 ### Y a-t-il des frais supplémentaires automatiques au-delà de la limite ?
 

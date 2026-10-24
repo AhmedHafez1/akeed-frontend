@@ -213,6 +213,7 @@ export function ConfirmationsEmbedded({
       <BlockedOrdersBanner
         capacity={list.capacity}
         timeZone={list.reportingTimezone}
+        hostParam={embeddedContext.hostParam}
         onChoosePlan={() => setIsPlansOpen(true)}
       />
 

@@ -328,6 +328,8 @@ export type CapacitySummary = {
   /** Confirmations or credits left. */
   remaining: number
   action: CapacityAction
+  /** The recurring paid plan that can be bought again to start a fresh period now. */
+  renew_plan_id?: 'basic' | 'pro' | 'business' | null
   /** When the plan allowance renews; null for credits. */
   reset_at: string | null
 }

@@ -117,6 +117,8 @@ WhatsApp avisa a Akeed de que el mensaje no se puede entregar, y el pedido pasa 
 
 Los pedidos nuevos se siguen recibiendo, pero sus mensajes quedan con el estado **En espera de envío**, y un aviso rojo en el panel muestra cuántos esperan y qué puedes hacer. No se cobra nada por ellos. En cuanto mejoras tu plan, compras créditos o tu cupo se renueva, Akeed los envía automáticamente, empezando por el más antiguo y respetando el retraso de envío y las horas de silencio. Un pedido que espera más de 24 horas no se envía solo: pasa a **Requieren acción**, donde puedes confirmarlo, cancelarlo o reintentarlo.
 
+En un plan de pago de Shopify, el aviso también ofrece **Renovar ahora**. Apruebas de nuevo tu plan actual en Shopify y empieza en el acto un nuevo periodo de 30 días con la asignación completa, así que los pedidos en espera se envían. Los mensajes que quedan del periodo anterior no se acumulan.
+
 ### ¿Dónde se ajustan los tiempos y el recordatorio?
 
 En la sección de automatización de tu configuración.

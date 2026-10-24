@@ -1,5 +1,5 @@
-import { describe, expect, it, vi } from 'vitest'
-import { fireEvent, screen } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { act, fireEvent, screen } from '@testing-library/react'
 import type { CapacitySummary } from '@/features/dashboard/model/dashboard.model'
 import { renderStandalone } from '../shared/standaloneTestUtils'
 import { renderEmbedded } from '../../../embedded/components/embeddedTestUtils'
@@ -8,6 +8,20 @@ import { BlockedOrdersBanner as EmbeddedBlockedOrdersBanner } from '../../../emb
 import { resolveRowStatus } from '@/features/dashboard/domain/confirmationRowStatus'
 import { resolveRowDescriptionKey } from '@/features/dashboard/domain/verificationRow'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
+
+const billingApi = vi.hoisted(() => ({
+  fetchShopifyPlans: vi.fn(),
+  createShopifySubscription: vi.fn(),
+}))
+
+vi.mock('@/features/billing/api/shopifyPlansApi', () => billingApi)
+
+beforeEach(() => {
+  vi.clearAllMocks()
+  billingApi.createShopifySubscription.mockResolvedValue({
+    confirmationUrl: '#approved',
+  })
+})
 
 const credits: CapacitySummary = {
   blocked_count: 3,
@@ -72,6 +86,7 @@ describe('BlockedOrdersBanner (embedded)', () => {
       <EmbeddedBlockedOrdersBanner
         capacity={plan}
         timeZone="UTC"
+        hostParam="host-1"
         onChoosePlan={onChoosePlan}
       />,
       'en'
@@ -89,6 +104,7 @@ describe('BlockedOrdersBanner (embedded)', () => {
       <EmbeddedBlockedOrdersBanner
         capacity={{ ...plan, action: 'wait_reset' }}
         timeZone="UTC"
+        hostParam="host-1"
         onChoosePlan={vi.fn()}
       />,
       'en'
@@ -98,6 +114,77 @@ describe('BlockedOrdersBanner (embedded)', () => {
       screen.getByText(/go out automatically when your allowance renews on/)
     ).toBeTruthy()
     expect(screen.queryByRole('button', { name: 'Upgrade plan' })).toBeNull()
+  })
+
+  it('offers renewing the current paid plan beside the upgrade', async () => {
+    const onChoosePlan = vi.fn()
+    renderEmbedded(
+      <EmbeddedBlockedOrdersBanner
+        capacity={{ ...plan, renew_plan_id: 'basic' }}
+        timeZone="UTC"
+        hostParam="host-1"
+        onChoosePlan={onChoosePlan}
+      />,
+      'en'
+    )
+
+    expect(screen.getByText(/Upgrade or renew your plan/)).toBeTruthy()
+    fireEvent.click(screen.getByRole('button', { name: 'Upgrade plan' }))
+    expect(onChoosePlan).toHaveBeenCalledTimes(1)
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Renew Basic now' }))
+    })
+    expect(billingApi.createShopifySubscription).toHaveBeenCalledWith(
+      'basic',
+      'host-1',
+      { renew: true }
+    )
+  })
+
+  it('offers only renewing on the top plan', () => {
+    renderEmbedded(
+      <EmbeddedBlockedOrdersBanner
+        capacity={{ ...plan, action: 'wait_reset', renew_plan_id: 'business' }}
+        timeZone="UTC"
+        hostParam="host-1"
+        onChoosePlan={vi.fn()}
+      />,
+      'en'
+    )
+
+    expect(screen.getByText(/Renew your plan to send them now/)).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Renew Scale now' })).toBeTruthy()
+    expect(screen.queryByRole('button', { name: 'Upgrade plan' })).toBeNull()
+  })
+
+  it('says why a renewal could not start', async () => {
+    billingApi.createShopifySubscription.mockRejectedValueOnce(
+      new Error('down')
+    )
+    renderEmbedded(
+      <EmbeddedBlockedOrdersBanner
+        capacity={{ ...plan, renew_plan_id: 'pro' }}
+        timeZone="UTC"
+        hostParam={null}
+        onChoosePlan={vi.fn()}
+      />,
+      'en'
+    )
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Renew Pro now' }))
+    })
+    expect(billingApi.createShopifySubscription).toHaveBeenCalledWith(
+      'pro',
+      undefined,
+      { renew: true }
+    )
+    expect(
+      screen.getByText(
+        'We could not start billing activation. Please try again.'
+      )
+    ).toBeTruthy()
   })
 })
 

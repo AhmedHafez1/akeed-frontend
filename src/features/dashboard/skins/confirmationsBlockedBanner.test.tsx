@@ -31,7 +31,8 @@ vi.mock('../domain/useManualConfirmation', () => ({
 vi.mock('../domain/useOutcomeSyncRetry', () => ({
   useOutcomeSyncRetry: () => ({ retryingId: null, retry: vi.fn() }),
 }))
-vi.mock('@/features/billing', () => ({
+vi.mock('@/features/billing', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/features/billing')>()),
   UpgradePlansModal: () => null,
 }))
 

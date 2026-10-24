@@ -1513,12 +1513,17 @@
         "upgradeNoDate": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Mejora tu plan y Akeed los enviará automáticamente.",
         "recharge": "Se agotaron tus créditos, así que estos pedidos no se enviaron. Compra créditos y Akeed los enviará automáticamente.",
         "waitReset": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Saldrán automáticamente cuando tu cupo se renueve el {date}.",
-        "waitResetNoDate": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Saldrán automáticamente cuando tu cupo se renueve."
+        "waitResetNoDate": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Saldrán automáticamente cuando tu cupo se renueve.",
+        "upgradeOrRenew": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Mejora o renueva tu plan para enviarlos ahora, o saldrán automáticamente cuando tu cupo se renueve el {date}.",
+        "upgradeOrRenewNoDate": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Mejora o renueva tu plan y Akeed los enviará automáticamente.",
+        "renewOrWait": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Renueva tu plan para enviarlos ahora, o saldrán automáticamente cuando tu cupo se renueve el {date}.",
+        "renewOrWaitNoDate": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Renueva tu plan para enviarlos ahora, o saldrán automáticamente cuando tu cupo se renueve."
       },
       "note": "No se cobra nada hasta que se envía un pedido. Un pedido que espera demasiado pasa a Requieren acción.",
       "cta": {
         "upgrade": "Mejorar plan",
-        "recharge": "Comprar créditos"
+        "recharge": "Comprar créditos",
+        "renew": "Renovar {plan} ahora"
       }
     }
   },
@@ -2540,6 +2545,9 @@
       "starterRow": "Starter: 30 mensajes gratis, una sola vez",
       "starterCta": "Empezar gratis",
       "subscribeCta": "Suscribirme a {plan} · {price} / mes",
+      "renewCta": "Renovar {plan} ahora · {price} / mes",
+      "renewNote": "Renovar empieza hoy un nuevo periodo de 30 días con la asignación completa. Los mensajes que quedan del periodo actual no se acumulan.",
+      "currentPlan": "Plan actual",
       "redirectNote": "Irás a Shopify para aprobar el cargo.",
       "cancel": "Cancelar"
     },

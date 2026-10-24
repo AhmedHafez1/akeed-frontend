@@ -1513,12 +1513,17 @@
         "upgradeNoDate": "Les confirmations de votre forfait sont épuisées, ces commandes n’ont donc pas été envoyées. Passez à un forfait supérieur et Akeed les enverra automatiquement.",
         "recharge": "Vos crédits sont épuisés, ces commandes n’ont donc pas été envoyées. Achetez des crédits et Akeed les enverra automatiquement.",
         "waitReset": "Les confirmations de votre forfait sont épuisées, ces commandes n’ont donc pas été envoyées. Elles partiront automatiquement au renouvellement de votre quota le {date}.",
-        "waitResetNoDate": "Les confirmations de votre forfait sont épuisées, ces commandes n’ont donc pas été envoyées. Elles partiront automatiquement au renouvellement de votre quota."
+        "waitResetNoDate": "Les confirmations de votre forfait sont épuisées, ces commandes n’ont donc pas été envoyées. Elles partiront automatiquement au renouvellement de votre quota.",
+        "upgradeOrRenew": "Les confirmations de votre forfait sont épuisées, ces commandes n’ont donc pas été envoyées. Changez ou renouvelez votre forfait pour les envoyer maintenant, sinon elles partiront automatiquement au renouvellement de votre quota le {date}.",
+        "upgradeOrRenewNoDate": "Les confirmations de votre forfait sont épuisées, ces commandes n’ont donc pas été envoyées. Changez ou renouvelez votre forfait et Akeed les enverra automatiquement.",
+        "renewOrWait": "Les confirmations de votre forfait sont épuisées, ces commandes n’ont donc pas été envoyées. Renouvelez votre forfait pour les envoyer maintenant, sinon elles partiront automatiquement au renouvellement de votre quota le {date}.",
+        "renewOrWaitNoDate": "Les confirmations de votre forfait sont épuisées, ces commandes n’ont donc pas été envoyées. Renouvelez votre forfait pour les envoyer maintenant, sinon elles partiront automatiquement au renouvellement de votre quota."
       },
       "note": "Rien n’est facturé avant l’envoi d’une commande. Une commande qui attend trop longtemps passe dans À traiter.",
       "cta": {
         "upgrade": "Changer de forfait",
-        "recharge": "Acheter des crédits"
+        "recharge": "Acheter des crédits",
+        "renew": "Renouveler {plan} maintenant"
       }
     }
   },
@@ -2540,6 +2545,9 @@
       "starterRow": "Starter : 30 messages gratuits, une seule fois",
       "starterCta": "Commencer gratuitement",
       "subscribeCta": "S’abonner à {plan} · {price} / mois",
+      "renewCta": "Renouveler {plan} maintenant · {price} / mois",
+      "renewNote": "Le renouvellement démarre aujourd’hui une nouvelle période de 30 jours avec le quota complet. Les messages restants de la période en cours ne sont pas reportés.",
+      "currentPlan": "Forfait actuel",
       "redirectNote": "Vous serez redirigé vers Shopify pour approuver le prélèvement.",
       "cancel": "Annuler"
     },

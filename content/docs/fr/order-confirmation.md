@@ -117,6 +117,8 @@ WhatsApp indique à Akeed que le message ne peut pas être remis, et la commande
 
 Les nouvelles commandes sont toujours reçues, mais leurs messages attendent avec le statut **En attente d’envoi**, et un bandeau rouge sur le tableau de bord indique combien attendent et ce que vous pouvez faire. Rien n’est facturé pour elles. Dès que vous changez de forfait, achetez des crédits ou que votre quota est renouvelé, Akeed les envoie automatiquement, de la plus ancienne à la plus récente, en respectant le délai d’envoi et les heures de silence. Une commande qui attend plus de 24 heures n’est pas envoyée d’elle-même : elle passe dans **À traiter**, où vous pouvez la confirmer, l’annuler ou la relancer.
 
+Sur un forfait Shopify payant, le bandeau propose aussi **Renouveler maintenant**. Vous approuvez à nouveau votre forfait actuel dans Shopify, et une nouvelle période de 30 jours démarre aussitôt avec le quota complet : les commandes en attente partent. Les messages restants de l’ancienne période ne sont pas reportés.
+
 ### Où régler les délais et la relance ?
 
 Dans la section d’automatisation de vos paramètres.

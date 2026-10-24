@@ -133,6 +133,7 @@ export function OverviewEmbedded({
           <BlockedOrdersBanner
             capacity={overview.capacity}
             timeZone={overview.reporting_timezone}
+            hostParam={embeddedContext.hostParam}
             onChoosePlan={() => setIsPlansOpen(true)}
           />
           {overview.usage && (
