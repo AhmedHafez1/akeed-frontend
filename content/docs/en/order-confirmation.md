@@ -117,7 +117,7 @@ WhatsApp tells Akeed the message can’t be delivered, and the order moves to **
 
 New orders are still taken in, but their messages wait with the status **Waiting to send**, and a red banner on the dashboard shows how many are waiting and what you can do. Nothing is charged for them. Once you upgrade, buy credits, or your plan’s allowance renews, Akeed sends them automatically, oldest first, keeping your send delay and quiet hours. An order that waits more than 24 hours is not sent on its own: it moves to **Needs action**, where you can confirm, cancel or retry it.
 
-On a paid Shopify plan, the banner also offers **Renew now**. You approve your current plan again in Shopify, and a new 30-day period starts right away with the full allowance, so the waiting orders go out. Messages left in the old period don’t carry over.
+On a paid Shopify plan, the banner also offers **Renew {plan} now**, named after your plan (for example **Renew Basic now**). You approve your current plan again in Shopify, and a new 30-day period starts right away with the full allowance, so the waiting orders go out. Messages left in the old period don’t carry over. The same button is on your current plan in **Settings → Plan**.
 
 ### Where do I tune timing and follow-up?
 

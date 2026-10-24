@@ -11,7 +11,6 @@ import type {
   OnboardingBillingPlanConfig,
   OnboardingBillingPlanId,
   OnboardingBillingPlansResponse,
-  OnboardingBillingResponse,
   OnboardingSettingsPayload,
   OnboardingStateResponse,
   SetupBlockedReason,
@@ -26,14 +25,6 @@ export class OnboardingApiError extends Error {
   ) {
     super(message)
   }
-}
-
-/** The store already used the one-time free (starter) plan. */
-export function isFreePlanAlreadyClaimedError(error: unknown): boolean {
-  return (
-    error instanceof OnboardingApiError &&
-    error.code === 'BILLING_FREE_PLAN_ALREADY_CLAIMED'
-  )
 }
 
 async function getOnboardingApiError(response: Response) {
@@ -265,22 +256,6 @@ export async function completeStandaloneOnboarding(): Promise<OnboardingStateRes
   }
 
   return parseJsonResponse<OnboardingStateResponse>(response)
-}
-
-export async function createOnboardingBilling(
-  planId: OnboardingBillingPlanId,
-  host?: string
-): Promise<OnboardingBillingResponse> {
-  const response = await fetchWithAuth('/api/onboarding/billing', {
-    method: 'POST',
-    body: JSON.stringify({ planId, host }),
-  })
-
-  if (!response.ok) {
-    throw await getOnboardingApiError(response)
-  }
-
-  return parseJsonResponse<OnboardingBillingResponse>(response)
 }
 
 export async function fetchOnboardingBillingPlans(): Promise<OnboardingBillingPlansResponse> {

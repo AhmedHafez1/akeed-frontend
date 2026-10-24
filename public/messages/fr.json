@@ -2069,6 +2069,7 @@
         "usageAria": "Messages utilisés",
         "subscribe": "S’abonner à {plan}",
         "currentPlanButton": "Votre forfait actuel",
+        "renew": "Renouveler {plan} maintenant",
         "billingManaged": "Votre forfait est géré par l’équipe Akeed. Contactez l’assistance pour le modifier.",
         "subscribeError": "Nous n’avons pas pu ouvrir la page d’approbation de Shopify. Réessayez.",
         "freePlanClaimedError": "Cette boutique a déjà utilisé le forfait gratuit. Choisissez un forfait payant."

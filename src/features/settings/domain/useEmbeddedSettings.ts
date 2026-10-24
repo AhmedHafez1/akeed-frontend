@@ -3,15 +3,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import {
-  createOnboardingBilling,
-  isFreePlanAlreadyClaimedError,
-  type OnboardingBillingPlanId,
-} from '@/features/onboarding'
+import { useShopifySubscribe } from '@/features/billing'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { useAppBridgeLoading } from '@/shared/hooks/useAppBridgeLoading'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
-import { createLogger } from '@/shared/lib/logger'
 import {
   useSettingsModel,
   type SettingsModelAdapter,
@@ -19,8 +14,6 @@ import {
 } from './useSettingsModel'
 
 export type { SaveOutcome } from './useSettingsModel'
-
-const logger = createLogger('Settings')
 
 /**
  * State and actions for the embedded Settings page: the shared form model
@@ -72,9 +65,18 @@ export function useEmbeddedSettings() {
   })
   const { data, dirtyTabs: modelDirtyTabs } = model
 
-  const [subscribingPlanId, setSubscribingPlanId] =
-    useState<OnboardingBillingPlanId | null>(null)
-  const [planError, setPlanError] = useState<string | null>(null)
+  const planErrorMessage = useCallback(
+    (failure: 'freePlanClaimed' | 'failed') =>
+      t(
+        failure === 'freePlanClaimed'
+          ? 'plan.freePlanClaimedError'
+          : 'plan.subscribeError'
+      ),
+    [t]
+  )
+  const plan = useShopifySubscribe(hostParam, {
+    errorMessage: planErrorMessage,
+  })
 
   useEffect(() => {
     if (data?.state.onboardingStatus !== 'pending') return
@@ -89,43 +91,14 @@ export function useEmbeddedSettings() {
     return tabs
   }, [modelDirtyTabs])
 
-  const subscribe = useCallback(
-    async (planId: OnboardingBillingPlanId) => {
-      setPlanError(null)
-      setSubscribingPlanId(planId)
-      try {
-        const { confirmationUrl } = await createOnboardingBilling(
-          planId,
-          hostParam ?? undefined
-        )
-        if (window.top && window.top !== window.self) {
-          window.open(confirmationUrl, '_top')
-        } else {
-          window.location.href = confirmationUrl
-        }
-      } catch (error) {
-        logger.error('Failed to start subscription', error)
-        setPlanError(
-          t(
-            isFreePlanAlreadyClaimedError(error)
-              ? 'plan.freePlanClaimedError'
-              : 'plan.subscribeError'
-          )
-        )
-        setSubscribingPlanId(null)
-      }
-    },
-    [hostParam, t]
-  )
-
   return {
     ...model,
     dirtyTabs: dirty,
     isDirty: dirty.size > 0,
-    subscribingPlanId,
-    planError,
-    dismissPlanError: () => setPlanError(null),
-    subscribe,
+    subscribingPlanId: plan.subscribingPlanId,
+    planError: plan.error,
+    dismissPlanError: plan.clearError,
+    subscribe: plan.subscribe,
   }
 }
 

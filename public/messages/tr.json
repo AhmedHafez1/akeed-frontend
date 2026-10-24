@@ -2069,6 +2069,7 @@
         "usageAria": "Kullanılan mesajlar",
         "subscribe": "Abone ol: {plan}",
         "currentPlanButton": "Mevcut planınız",
+        "renew": "{plan} planını şimdi yenile",
         "billingManaged": "Planınız Akeed ekibi tarafından yönetiliyor. Değiştirmek için destek ekibine ulaşın.",
         "subscribeError": "Shopify’ın onay sayfasını açamadık. Tekrar deneyin.",
         "freePlanClaimedError": "Bu mağaza ücretsiz planı daha önce kullandı. Ücretli bir plan seçin."

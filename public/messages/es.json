@@ -2069,6 +2069,7 @@
         "usageAria": "Mensajes usados",
         "subscribe": "Suscribirme a {plan}",
         "currentPlanButton": "Tu plan actual",
+        "renew": "Renovar {plan} ahora",
         "billingManaged": "El equipo de Akeed administra tu plan. Contacta al soporte para cambiarlo.",
         "subscribeError": "No pudimos abrir la página de aprobación de Shopify. Inténtalo de nuevo.",
         "freePlanClaimedError": "Esta tienda ya usó el plan gratuito. Elige un plan de pago."

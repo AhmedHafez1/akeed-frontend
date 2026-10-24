@@ -118,9 +118,27 @@ describe('PlanTab', () => {
     expect(primaryButtons()).toEqual([button('اشترك في الاحترافية')])
   })
 
-  it('disables the current plan and subscribes to another', () => {
+  it('renews the live paid plan and subscribes to another', () => {
     const { subscribe } = renderTab(PAID_NEAR_LIMIT)
 
+    expect(screen.queryByRole('button', { name: 'باقتك الحالية' })).toBeNull()
+    expect(screen.getByText(/^يبدأ التجديد فترة جديدة/)).toBeTruthy()
+    fireEvent.click(button('جدِّد باقة الأساسية الآن'))
+    expect(subscribe).toHaveBeenCalledWith('basic', { renew: true })
+
+    fireEvent.click(button('اشترك في الاحترافية'))
+    expect(subscribe).toHaveBeenCalledWith('pro')
+  })
+
+  it('disables a current plan that has lapsed, and subscribes to another', () => {
+    const { subscribe } = renderTab({
+      ...PAID_NEAR_LIMIT,
+      billing: { ...PAID_NEAR_LIMIT.billing, currentPlanId: null },
+    })
+
+    expect(
+      screen.queryByRole('button', { name: 'جدِّد باقة الأساسية الآن' })
+    ).toBeNull()
     const current = button('باقتك الحالية')
     expect(
       current.disabled || current.getAttribute('aria-disabled')

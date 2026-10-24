@@ -117,7 +117,7 @@ WhatsApp, Akeed’e mesajın teslim edilemeyeceğini bildirir ve sipariş **What
 
 Yeni siparişler yine alınır, ancak mesajları **Gönderim bekliyor** durumunda bekler ve panodaki kırmızı bir uyarı kaç siparişin beklediğini ve ne yapabileceğinizi gösterir. Bunlar için ücret alınmaz. Planınızı yükselttiğinizde, kredi satın aldığınızda ya da plan kotanız yenilendiğinde Akeed bunları en eskisinden başlayarak, gönderim gecikmesine ve sessiz saatlere uyarak otomatik olarak gönderir. 24 saatten uzun bekleyen bir sipariş kendiliğinden gönderilmez: onaylayabileceğiniz, iptal edebileceğiniz ya da yeniden deneyebileceğiniz **İşlem bekleyen** bölümüne taşınır.
 
-Ücretli bir Shopify planında uyarı ayrıca **Şimdi yenile** seçeneği sunar. Mevcut planınızı Shopify’da yeniden onaylarsınız ve tam hakla 30 günlük yeni bir dönem hemen başlar; bekleyen siparişler gönderilir. Eski dönemden kalan mesajlar devretmez.
+Ücretli bir Shopify planında uyarı ayrıca planınızın adını taşıyan bir yenileme düğmesi sunar, örneğin **Basic planını şimdi yenile**. Mevcut planınızı Shopify’da yeniden onaylarsınız ve tam hakla 30 günlük yeni bir dönem hemen başlar; bekleyen siparişler gönderilir. Eski dönemden kalan mesajlar devretmez. Aynı düğme **Ayarlar → Plan** bölümünde mevcut planınızda da bulunur.
 
 ### Zamanlamayı ve hatırlatmaları nereden ayarlarım?
 

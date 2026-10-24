@@ -142,6 +142,33 @@ describe('BlockedOrdersBanner (embedded)', () => {
     )
   })
 
+  it('sends one renewal however often the button is clicked', async () => {
+    billingApi.createShopifySubscription.mockReturnValueOnce(
+      new Promise(() => {})
+    )
+    renderEmbedded(
+      <EmbeddedBlockedOrdersBanner
+        capacity={{ ...plan, renew_plan_id: 'basic' }}
+        timeZone="UTC"
+        hostParam="host-1"
+        onChoosePlan={vi.fn()}
+      />,
+      'en'
+    )
+
+    const renew = screen.getByRole('button', { name: 'Renew Basic now' })
+    await act(async () => {
+      fireEvent.click(renew)
+      fireEvent.click(renew)
+      fireEvent.click(renew)
+    })
+
+    expect(billingApi.createShopifySubscription).toHaveBeenCalledTimes(1)
+    expect(
+      screen.getByText("You'll go to Shopify to approve the charge.")
+    ).toBeTruthy()
+  })
+
   it('offers only renewing on the top plan', () => {
     renderEmbedded(
       <EmbeddedBlockedOrdersBanner

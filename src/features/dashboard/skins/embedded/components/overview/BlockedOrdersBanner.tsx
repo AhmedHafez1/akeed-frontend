@@ -1,4 +1,5 @@
 import { Banner, BlockStack, Text } from '@shopify/polaris'
+import { useTranslations } from 'next-intl'
 import { useShopifySubscribe } from '@/features/billing'
 import { useBlockedOrdersBanner } from '../../../../domain/useBlockedOrdersBanner'
 import type { CapacitySummary } from '../../../../model/dashboard.model'
@@ -20,6 +21,7 @@ export function BlockedOrdersBanner({
   hostParam: string | null
   onChoosePlan: () => void
 }) {
+  const tPlans = useTranslations('billing.embeddedPlans')
   const view = useBlockedOrdersBanner(capacity, timeZone)
   const { subscribe, isSubscribing, error } = useShopifySubscribe(hostParam)
   if (!view) return null
@@ -28,6 +30,8 @@ export function BlockedOrdersBanner({
     ? { content: view.cta.label, onAction: onChoosePlan }
     : undefined
   const renew = view.renew
+  // Polaris shows no loading state on a secondary action, so the pending
+  // request is spelled out below and the hook ignores repeat clicks.
   const renewAction = renew
     ? {
         content: renew.label,
@@ -48,6 +52,11 @@ export function BlockedOrdersBanner({
         <Text as="p" tone="subdued">
           {view.remaining} · {view.note}
         </Text>
+        {isSubscribing && (
+          <Text as="p" tone="subdued">
+            {tPlans('redirectNote')}
+          </Text>
+        )}
         {error && (
           <Text as="p" tone="critical">
             {error}
