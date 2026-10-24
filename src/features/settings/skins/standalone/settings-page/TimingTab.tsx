@@ -313,7 +313,7 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
               title={t('autoCancel.label')}
               help={
                 values.escalationEnabled
-                  ? t('autoCancel.help')
+                  ? undefined
                   : t('autoCancel.requiresEscalation')
               }
               checked={values.autoCancelEnabled}
@@ -340,27 +340,6 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
                 </div>
               )}
             </SwitchSetting>
-            {values.autoCancelEnabled && (
-              <>
-                <SwitchSetting
-                  title={t('autoCancel.restockLabel')}
-                  checked={values.autoCancelRestock}
-                  disabled={readOnly}
-                  onCheckedChange={(autoCancelRestock) =>
-                    model.update({ autoCancelRestock })
-                  }
-                />
-                <SwitchSetting
-                  title={t('autoCancel.notifyLabel')}
-                  help={t('autoCancel.storeNote')}
-                  checked={values.autoCancelNotifyCustomer}
-                  disabled={readOnly}
-                  onCheckedChange={(autoCancelNotifyCustomer) =>
-                    model.update({ autoCancelNotifyCustomer })
-                  }
-                />
-              </>
-            )}
           </div>
         </AnnotatedSection>
 

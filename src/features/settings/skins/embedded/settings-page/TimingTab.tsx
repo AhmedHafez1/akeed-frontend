@@ -256,7 +256,7 @@ export function TimingTab({
               label={t('autoCancel.label')}
               helpText={
                 values.escalationEnabled
-                  ? t('autoCancel.help')
+                  ? undefined
                   : t('autoCancel.requiresEscalation')
               }
               checked={values.autoCancelEnabled}
@@ -291,7 +291,6 @@ export function TimingTab({
                   />
                   <Checkbox
                     label={t('autoCancel.notifyLabel')}
-                    helpText={t('autoCancel.storeNote')}
                     checked={values.autoCancelNotifyCustomer}
                     disabled={readOnly}
                     onChange={(checked) =>

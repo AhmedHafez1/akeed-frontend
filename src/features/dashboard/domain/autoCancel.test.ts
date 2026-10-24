@@ -77,23 +77,42 @@ describe('autoCancelMarker', () => {
 
 describe('auto-cancel row action', () => {
   it('offers to keep the order out, then to let it back in', () => {
-    expect(autoCancelToggleAction(row({}))).toBe('exclude')
+    expect(autoCancelToggleAction(row({ status: 'delivered' }))).toBe('exclude')
     expect(
-      autoCancelToggleAction(row({ auto_cancel: view({ excluded: true }) }))
+      autoCancelToggleAction(
+        row({ status: 'delivered', auto_cancel: view({ excluded: true }) })
+      )
     ).toBe('include')
   })
+
+  it.each([false, true])(
+    'hides both toggles at no reply even with stale capabilities (excluded=%s)',
+    (excluded) => {
+      const verification = row({ auto_cancel: view({ excluded }) })
+      expect(autoCancelToggleAction(verification)).toBeNull()
+      expect(
+        planConfirmationRowActions(verification, {
+          canWrite: true,
+          canRetry: true,
+        }).autoCancelToggle
+      ).toBeNull()
+    }
+  )
 
   it('is offered only where the server allows it, and never to a viewer', () => {
     expect(
       autoCancelToggleAction(
         row({
+          status: 'delivered',
           capabilities: [{ action: 'auto_cancel_exclusion', supported: false }],
         })
       )
     ).toBeNull()
     expect(
-      planConfirmationRowActions(row({}), { canWrite: false, canRetry: false })
-        .autoCancelToggle
+      planConfirmationRowActions(row({ status: 'delivered' }), {
+        canWrite: false,
+        canRetry: false,
+      }).autoCancelToggle
     ).toBeNull()
   })
 })

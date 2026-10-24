@@ -49,6 +49,7 @@ export function autoCancelMarker(
 
 /** Whether the merchant may keep the order out, or let it back in. */
 export function canToggleAutoCancel(row: VerificationItem): boolean {
+  if (row.status === 'no_reply') return false
   return (
     row.capabilities?.some(
       (capability) =>

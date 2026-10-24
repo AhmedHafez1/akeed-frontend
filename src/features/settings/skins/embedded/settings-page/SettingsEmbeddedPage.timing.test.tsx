@@ -236,12 +236,10 @@ describe.each(['ar', 'en'] as const)('embedded Timing tab (%s)', (locale) => {
       })
       const deadline =
         locale === 'en'
-          ? 'Eligible for cancellation ' +
+          ? 'Order will be automatically cancelled after ' +
             duration.en +
-            ' after the first message.'
-          : 'يصبح الطلب مؤهلًا للإلغاء بعد ' +
-            duration.ar +
-            ' من الرسالة الأولى.'
+            ' from the first message.'
+          : 'سيُلغى الطلب تلقائيًا بعد ' + duration.ar + ' من الرسالة الأولى.'
       expect(screen.getByText(deadline)).toBeTruthy()
     }
   )
@@ -260,16 +258,16 @@ describe.each(['ar', 'en'] as const)('embedded Timing tab (%s)', (locale) => {
     expect(
       screen.getByText(
         locale === 'en'
-          ? 'Eligible for cancellation 2 minutes after the first message.'
-          : 'يصبح الطلب مؤهلًا للإلغاء بعد دقيقتين من الرسالة الأولى.'
+          ? 'Order will be automatically cancelled after 2 minutes from the first message.'
+          : 'سيُلغى الطلب تلقائيًا بعد دقيقتين من الرسالة الأولى.'
       )
     ).toBeTruthy()
     fireEvent.click(screen.getByLabelText(timing.reminderLabel))
     expect(
       screen.getByText(
         locale === 'en'
-          ? 'Eligible for cancellation 4 minutes after the first message.'
-          : 'يصبح الطلب مؤهلًا للإلغاء بعد 4 دقائق من الرسالة الأولى.'
+          ? 'Order will be automatically cancelled after 4 minutes from the first message.'
+          : 'سيُلغى الطلب تلقائيًا بعد 4 دقائق من الرسالة الأولى.'
       )
     ).toBeTruthy()
     expect(api.saveSettings).not.toHaveBeenCalled()
@@ -283,6 +281,31 @@ describe.each(['ar', 'en'] as const)('embedded Timing tab (%s)', (locale) => {
         escalationDelayMinutes: 4,
       })
     )
+  })
+
+  it('shows Shopify options only while automatic cancellation is enabled', async () => {
+    await renderTiming(locale, { autoCancelEnabled: false })
+    expect(screen.queryByLabelText(timing.autoCancel.restockLabel)).toBeNull()
+    expect(screen.queryByLabelText(timing.autoCancel.notifyLabel)).toBeNull()
+    fireEvent.click(screen.getByLabelText(timing.autoCancel.label))
+    expect(screen.getByLabelText(timing.autoCancel.restockLabel)).toBeTruthy()
+    expect(screen.getByLabelText(timing.autoCancel.notifyLabel)).toBeTruthy()
+    expect(screen.queryByText(/WooCommerce/)).toBeNull()
+    fireEvent.click(screen.getByLabelText(timing.autoCancel.label))
+    expect(screen.queryByLabelText(timing.autoCancel.restockLabel)).toBeNull()
+    expect(screen.queryByLabelText(timing.autoCancel.notifyLabel)).toBeNull()
+  })
+
+  it('keeps disabled-state guidance when escalation is off', async () => {
+    await renderTiming(locale, {
+      escalationEnabled: false,
+      autoCancelEnabled: false,
+    })
+    expect(screen.getByLabelText(timing.autoCancel.label)).toHaveProperty(
+      'disabled',
+      true
+    )
+    expect(screen.getByText(timing.autoCancel.requiresEscalation)).toBeTruthy()
   })
 
   it('says what the reminder and the alert do', async () => {
