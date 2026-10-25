@@ -93,7 +93,7 @@ Les heures de silence empêchent les envois à certaines heures locales (la nuit
 
 ### Usage recommandé
 
-- Elles sont activées par défaut, de 22:00 à 09:00 dans votre fuseau horaire. Désactivez-les seulement si vos clients attendent des messages la nuit.
+- Elles sont désactivées par défaut. Une fois activées, la plage va de 22:00 à 09:00 dans votre fuseau horaire, tant que vous ne la changez pas. Activez-les si vos clients n’attendent pas de messages la nuit.
 - Fixez le début et la fin selon les habitudes de votre marché.
 
 ### Important
@@ -113,7 +113,7 @@ Choisissez le fuseau horaire de votre équipe opérationnelle principale et de v
 | Profil de boutique | Délai initial | Relance | Escalade | Heures de silence |
 | --- | ---: | ---: | ---: | --- |
 | Boutique à traitement rapide | 0–10 min | 60 min | 240 min | Facultatives |
-| Configuration équilibrée par défaut | 0 min | 360 min | 1440 min après la relance | 22:00–09:00 |
+| Configuration équilibrée par défaut | 0 min | 360 min | 1440 min après la relance | Désactivées, ou 22:00–09:00 |
 
 Prenez-les comme points de départ, puis ajustez chaque semaine d’après vos taux de réponse et de confirmation.
 

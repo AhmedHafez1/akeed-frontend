@@ -93,7 +93,7 @@ Sessiz saatler, belirli yerel saatlerde (örneğin gece boyunca) gönderim yapı
 
 ### Önerilen kullanım
 
-- Sessiz saatler varsayılan olarak saat diliminizde 22:00 ile 09:00 arasında açıktır. Yalnızca müşterileriniz gece mesaj bekliyorsa kapatın.
+- Sessiz saatler varsayılan olarak kapalıdır. Açtığınızda, siz değiştirene kadar saat diliminizde 22:00 ile 09:00 arasını kapsar. Müşterileriniz gece mesaj beklemiyorsa açın.
 - Başlangıç ve bitiş saatlerini pazarınızdaki alışkanlıklara göre belirleyin.
 
 ### Önemli
@@ -113,7 +113,7 @@ Saat dilimini ana operasyon ekibinizin ve müşterilerinizin kullandığı saat 
 | Mağaza Tipi | İlk Gecikme | Hatırlatma | Yanıt Yok İşaretleme | Sessiz Saatler |
 | --- | ---: | ---: | ---: | --- |
 | Hızlı sevkiyat yapan mağaza | 0–10 dk | 60 dk | 240 dk | İsteğe bağlı |
-| Dengeli varsayılan kurulum | 0 dk | 360 dk | Hatırlatmadan sonra 1440 dk | 22:00–09:00 |
+| Dengeli varsayılan kurulum | 0 dk | 360 dk | Hatırlatmadan sonra 1440 dk | Kapalı veya 22:00–09:00 |
 
 Bunları başlangıç noktası olarak kullanın, ardından yanıt ve onay oranlarınıza göre her hafta ince ayar yapın.
 

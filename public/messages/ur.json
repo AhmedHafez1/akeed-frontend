@@ -3633,5 +3633,15 @@
       "refused": "Akeed، {store} سے نہیں جُڑ سکا۔",
       "disconnected": "Akeed کا {store} سے رابطہ ختم ہو گیا ہے۔"
     }
+  },
+  "tips": {
+    "badge": {
+      "tip": "مشورہ",
+      "update": "نیا فیچر"
+    },
+    "dismiss": "«{title}» کو مستقل طور پر ہٹائیں",
+    "dismissError": "یہ کارڈ ہٹایا نہیں جا سکا۔ دوبارہ کوشش کریں۔",
+    "sectionLabel": "مشورے اور اپ ڈیٹس",
+    "opensInNewTab": "نئے ٹیب میں کھلتا ہے"
   }
 }

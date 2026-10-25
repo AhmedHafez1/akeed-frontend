@@ -56,6 +56,12 @@ export const queryKeys = {
     templatePreviews: () =>
       [...queryKeys.onboarding.all, 'template-previews'] as const,
   },
+  tips: {
+    all: ['tips'] as const,
+    /** The tips and updates this account should see, in one UI language. */
+    cards: (locale: string) =>
+      [...queryKeys.tips.all, 'cards', locale] as const,
+  },
   reviewPrompt: {
     all: ['review-prompt'] as const,
     /** The App Store review request waiting for the merchant, or none. */

@@ -14,7 +14,8 @@
     "accessRequiredBody": "Your account is signed in but is not authorized for the Akeed control tower.",
     "accessErrorBody": "Try again. If the problem continues, share the request ID with the team.",
     "requestId": "Request ID: {id}",
-    "messageTexts": "Message texts"
+    "messageTexts": "Message texts",
+    "tips": "Tips & updates"
   },
   "adminTemplates": {
     "imageTwins": {
@@ -4828,6 +4829,270 @@
       "fallback_too_long": "A name word can be at most 60 characters.",
       "fallback_default_style_only": "A name word uses the default style only.",
       "fallback_single_line": "A name word must be one line."
+    }
+  },
+  "tips": {
+    "badge": {
+      "tip": "Tip",
+      "update": "New feature"
+    },
+    "dismiss": "Dismiss “{title}” for good",
+    "dismissError": "This card couldn’t be dismissed. Try again.",
+    "sectionLabel": "Tips and updates",
+    "opensInNewTab": "opens in a new tab"
+  },
+  "adminTips": {
+    "eyebrow": "Merchant dashboard",
+    "title": "Tips & updates",
+    "description": "Publish tips and feature announcements to chosen merchants. They appear as dismissible cards on the dashboard only.",
+    "none": "—",
+    "noExpiry": "No expiry",
+    "status": {
+      "draft": "Draft",
+      "published": "Published",
+      "paused": "Paused",
+      "expired": "Expired",
+      "archived": "Archived"
+    },
+    "type": {
+      "tip": "Tip",
+      "update": "Feature update"
+    },
+    "list": {
+      "create": "New campaign",
+      "search": "Search",
+      "searchPlaceholder": "Campaign name",
+      "status": "Status",
+      "allStatuses": "All statuses",
+      "emptyTitle": "No campaigns yet",
+      "emptyBody": "Create a campaign to show a tip or an update on chosen merchants' dashboards.",
+      "caption": "Tips and updates campaigns",
+      "columns": {
+        "name": "Campaign",
+        "status": "Status",
+        "published": "Published",
+        "expires": "Expires"
+      },
+      "firstPage": "First page",
+      "nextPage": "Next page"
+    },
+    "analytics": {
+      "title": "Reach",
+      "recipients": "Recipients",
+      "viewed": "Viewed",
+      "clicked": "Clicked",
+      "dismissed": "Dismissed",
+      "noButton": "No button",
+      "noButtonNote": "This campaign has no button, so it has no clicks."
+    },
+    "errors": {
+      "requestIdLabel": "Request ID:",
+      "accessDenied": "Your account is not allowed to manage campaigns.",
+      "requestFailed": "The request failed. Try again.",
+      "TIPS_CAMPAIGN_NOT_FOUND": "This campaign no longer exists.",
+      "TIPS_CAMPAIGN_INVALID": "Some fields need attention.",
+      "TIPS_CAMPAIGN_REVISION_CONFLICT": "Someone else changed this campaign. Reload it and try again.",
+      "TIPS_CAMPAIGN_NOT_EDITABLE": "An archived campaign is read-only.",
+      "TIPS_CAMPAIGN_AUDIENCE_LOCKED": "The audience of a published campaign cannot change. Create a new campaign to reach other merchants.",
+      "TIPS_CAMPAIGN_EXPIRY_LOCKED": "The expiry of a published campaign cannot change.",
+      "TIPS_CAMPAIGN_INVALID_TRANSITION": "The campaign cannot make that change in its current state.",
+      "TIPS_CAMPAIGN_EXPIRED": "This campaign has expired. Archive it and publish a new one.",
+      "TIPS_CAMPAIGN_NO_RECIPIENTS": "No merchant matches this audience.",
+      "TIPS_CAMPAIGN_AUDIENCE_TOO_LARGE": "This audience has {count, number} merchants, more than one campaign may reach.",
+      "TIPS_CAMPAIGN_REVIEW_REQUIRED": "Review the audience again before publishing.",
+      "TIPS_CAMPAIGN_AUDIENCE_CHANGED": "The audience changed since your review; it now has {count, number} merchants. Review it again before publishing."
+    },
+    "issues": {
+      "required": "Required.",
+      "too_long": "Too long.",
+      "too_many_lines": "Too many line breaks.",
+      "control_character": "Remove invisible control characters.",
+      "english_required": "English content is required.",
+      "unsupported_locale": "That language is not supported.",
+      "duplicate_locale": "That language is listed twice.",
+      "invalid_url": "Enter a full link to a public website.",
+      "url_not_https": "Use a link that starts with https://.",
+      "url_too_long": "This link is too long.",
+      "invalid_route": "Choose a page.",
+      "expiry_in_past": "The expiry must be in the future.",
+      "invalid_value": "This value is not valid.",
+      "invalid_date": "Enter a valid date.",
+      "date_order": "The end date is before the start date.",
+      "too_many": "Too many merchants in this list."
+    },
+    "editor": {
+      "back": "All campaigns",
+      "newTitle": "New campaign",
+      "loading": "Loading campaign…",
+      "archivedNote": "Archived campaigns are read-only. Merchants no longer see them.",
+      "publishedNote": "Published: you can still edit the text and the button. The audience and expiry stay as published.",
+      "contentTitle": "Card",
+      "contentDescription": "What merchants read. Plain text; line breaks are kept.",
+      "name": "Internal name",
+      "nameHint": "Only admins see this name.",
+      "type": "Type",
+      "typeTip": "Tip",
+      "typeUpdate": "Feature update",
+      "languages": "Card languages",
+      "required": "required",
+      "hasErrors": "has errors",
+      "addLanguage": "Add a language",
+      "languagesHint": "Merchants read their dashboard language when it is complete here, otherwise English.",
+      "title": "Title",
+      "descriptionField": "Description",
+      "plainTextHint": "Plain text. Up to 8 line breaks.",
+      "buttonLabel": "Button label",
+      "removeLanguage": "Remove {language}",
+      "button": "Button",
+      "buttonNone": "No button",
+      "buttonInternal": "Open an Akeed page",
+      "buttonExternal": "Open a website",
+      "buttonPage": "Page",
+      "buttonPagePlaceholder": "Choose a page",
+      "modeOnly": {
+        "embedded": "Shopify app only",
+        "standalone": "standalone only (no button in Shopify)"
+      },
+      "buttonUrl": "Link",
+      "buttonUrlHint": "Opens in a new tab. https:// links only.",
+      "expiry": "Expiry (optional)",
+      "expiryHint": "Times are in your time zone ({zone}) and stored as an exact instant.",
+      "expiryHintSet": "Your time zone is {zone}. Stored as {utc} (UTC).",
+      "expiryLocked": "Set before publishing; it cannot change now.",
+      "fixErrors": "Fix the highlighted fields.",
+      "unsaved": "Unsaved changes",
+      "saved": "All changes saved",
+      "saving": "Saving…",
+      "save": "Save",
+      "createDraft": "Create draft",
+      "publishedAt": "Published",
+      "expiresAt": "Expires"
+    },
+    "routes": {
+      "settings_message": "Settings: message",
+      "settings_timing": "Settings: timing",
+      "plan": "Plan and billing",
+      "verifications": "Confirmations",
+      "settings_store": "Settings: store",
+      "settings_api_keys": "Settings: API keys",
+      "imports_new": "Import orders"
+    },
+    "audience": {
+      "title": "Audience",
+      "description": "Merchants with an active store. The list is frozen when you publish.",
+      "lockedDescription": "Frozen at publication: merchants who join or change settings later are not added or removed.",
+      "mode": "How to choose merchants",
+      "modes": {
+        "direct": "Pick merchants",
+        "directHint": "Search and add individual merchants.",
+        "filters": "Use filters",
+        "filtersHint": "Match by country, platform, signup date, message language, plan or features."
+      },
+      "selected": "{count, plural, =0 {No merchants selected} one {# merchant selected} other {# merchants selected}}",
+      "remove": "Remove {name}",
+      "search": "Search merchants",
+      "searchPlaceholder": "Store or organization name, or shop domain",
+      "noResults": "No merchants found.",
+      "add": "Add",
+      "removeShort": "Remove",
+      "loadMore": "Load more",
+      "logic": "Different filters must all match. Values inside one filter match any. An unused filter matches everyone; missing data never matches.",
+      "countries": "Store country",
+      "countriesHint": "The country is known for Shopify stores only. It is not the merchant's or customers' language.",
+      "platforms": "Platform",
+      "plans": "Current plan",
+      "plansHint": "Shopify plans count only while the subscription is current. Prepaid credits covers standalone, EasyOrders and WooCommerce.",
+      "messageLanguages": "WhatsApp message language",
+      "messageLanguagesHint": "The store's message language setting, not its dashboard language.",
+      "signup": "Signup date (UTC)",
+      "signup_from": "From (inclusive)",
+      "signup_to": "To (inclusive)",
+      "signupHint": "Whole days in UTC, both ends included.",
+      "features": "Features",
+      "featureAny": "Any",
+      "featureOn": "On",
+      "featureOff": "Off",
+      "matching": "Matching merchants",
+      "matchingSaveFirst": "Create the draft to see who matches.",
+      "matchingHint": "Shows the saved filters. Exclude a merchant here, then save.",
+      "include": "Include",
+      "exclude": "Exclude",
+      "noMatches": "No merchant matches the saved filters.",
+      "excludedCount": "{count, plural, =0 {No exclusions} one {# merchant excluded} other {# merchants excluded}}"
+    },
+    "platformNames": {
+      "shopify": "Shopify",
+      "standalone": "Standalone",
+      "easyorders": "EasyOrders",
+      "woocommerce": "WooCommerce"
+    },
+    "planNames": {
+      "starter": "Starter",
+      "basic": "Basic",
+      "pro": "Pro",
+      "business": "Scale",
+      "prepaid": "Prepaid credits"
+    },
+    "messageLanguageNames": {
+      "ar": "Arabic",
+      "en": "English",
+      "ur": "Urdu",
+      "es": "Spanish",
+      "fr": "French",
+      "tr": "Turkish",
+      "auto": "Auto (customer's language)"
+    },
+    "featureNames": {
+      "auto_cancel": "Auto-cancel unanswered",
+      "quiet_hours": "Quiet hours",
+      "follow_up": "Follow-up",
+      "escalation": "Escalation (no reply)",
+      "auto_verify": "Auto-confirmation",
+      "logo_header": "Logo header switch"
+    },
+    "review": {
+      "title": "Review and publish",
+      "description": "Check the card and the exact recipients. Publishing freezes this list.",
+      "review": "Review audience",
+      "reviewAgain": "Review again",
+      "reviewing": "Counting…",
+      "saveFirst": "Save your changes before reviewing.",
+      "recipients": "Recipients",
+      "criteria": "Criteria",
+      "criteriaDirect": "{count, plural, one {# merchant picked} other {# merchants picked}}",
+      "criteriaFilters": "{count, plural, =0 {No filters: every merchant} one {# filter} other {# filters}}",
+      "exclusions": "Exclusions",
+      "expiry": "Expiry",
+      "noExpiry": "No expiry",
+      "previewLanguage": "Preview language",
+      "previewFallback": "No complete {language} content: merchants see English.",
+      "publish": "Publish",
+      "confirmTitle": "Publish this campaign?",
+      "confirmBody": "{count, plural, one {# merchant} other {# merchants}} will see this card on their dashboard. The recipient list cannot change after this.",
+      "confirmPublish": "Publish now"
+    },
+    "recipients": {
+      "title": "Recipients",
+      "search": "Search recipients",
+      "caption": "Campaign recipients",
+      "merchant": "Merchant",
+      "platform": "Platform · country",
+      "viewed": "First viewed",
+      "clicked": "First clicked",
+      "dismissed": "Dismissed",
+      "state": "In audience",
+      "excluded": "Excluded",
+      "included": "Included",
+      "empty": "No merchants.",
+      "loadMore": "Load more"
+    },
+    "actions": {
+      "pause": "Pause",
+      "resume": "Resume",
+      "archive": "Archive"
+    },
+    "archiveDraft": {
+      "title": "Discard this draft"
     }
   }
 }

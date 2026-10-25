@@ -3633,5 +3633,15 @@
       "refused": "Akeed no pudo conectarse a {store}.",
       "disconnected": "Akeed está desconectado de {store}."
     }
+  },
+  "tips": {
+    "badge": {
+      "tip": "Consejo",
+      "update": "Novedad"
+    },
+    "dismiss": "Descartar «{title}» para siempre",
+    "dismissError": "No se pudo descartar esta tarjeta. Inténtalo de nuevo.",
+    "sectionLabel": "Consejos y novedades",
+    "opensInNewTab": "se abre en una pestaña nueva"
   }
 }

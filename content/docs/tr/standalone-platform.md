@@ -50,7 +50,7 @@ Bir hesap siparişlerini tek bir kaynaktan alır. Bir mağazaya bağlı hesap **
 
 Bundan sonra kullanıma hazırsınız. İlk siparişinizi ekleyin ya da bir dosya içe aktarın.
 
-Yeni bağımsız hesaplar şu varsayılanlarla başlar: ilk mesaj hemen gönderilir, 6 saat sonra bir hatırlatma gider ve yanıt gelmeyen bir sipariş hatırlatmadan 24 saat sonra **Yanıt yok** olarak işaretlenir. Sessiz saatler 22:00 ile 09:00 arasında açıktır, bu yüzden gece hiçbir şey gönderilmez. Bunları Ayarlar’dan değiştirebilirsiniz. [Otomasyon Kuralları](/docs/automation-rules) kılavuzuna bakın.
+Yeni bağımsız hesaplar şu varsayılanlarla başlar: ilk mesaj hemen gönderilir, 6 saat sonra bir hatırlatma gider ve yanıt gelmeyen bir sipariş hatırlatmadan 24 saat sonra **Yanıt yok** olarak işaretlenir. Sessiz saatler kapalıdır, bu yüzden mesajlar her saatte gönderilir. Mesajları 22:00 ile 09:00 arasında bekletmek için açın. Bunları Ayarlar’dan değiştirebilirsiniz. [Otomasyon Kuralları](/docs/automation-rules) kılavuzuna bakın.
 
 ## Krediler Nasıl Çalışır
 

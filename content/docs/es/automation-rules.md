@@ -93,7 +93,7 @@ El horario de silencio evita los envíos durante ciertas horas locales (por ejem
 
 ### Uso recomendado
 
-- Viene activado de forma predeterminada, de 22:00 a 09:00 en tu zona horaria. Desactívalo solo si tus clientes esperan mensajes de noche.
+- Viene desactivado de forma predeterminada. Al activarlo, el horario es de 22:00 a 09:00 en tu zona horaria hasta que lo cambies. Actívalo si tus clientes no esperan mensajes de noche.
 - Define el inicio y el fin según el comportamiento de tu mercado.
 
 ### Importante
@@ -113,7 +113,7 @@ Usa la misma zona horaria de tu equipo principal de operaciones y de tus cliente
 | Tipo de tienda | Retraso inicial | Recordatorio | Aviso | Horario de silencio |
 | --- | ---: | ---: | ---: | --- |
 | Tienda con preparación rápida | 0–10 min | 60 min | 240 min | Opcional |
-| Configuración equilibrada | 0 min | 360 min | 1440 min tras el recordatorio | 22:00–09:00 |
+| Configuración equilibrada | 0 min | 360 min | 1440 min tras el recordatorio | Desactivado, o 22:00–09:00 |
 
 Úsalas como punto de partida y luego ajústalas cada semana con tus tasas de respuesta y de confirmación.
 

@@ -15,6 +15,8 @@ interface FirstRunOverviewProps {
   showSkippedTestReminder: boolean
   /** "Send it to my phone"; omitted for viewers, who cannot send. */
   phoneTestAction?: ReactNode
+  /** Shown right under the greeting (admin-published tips). */
+  afterHeader?: ReactNode
 }
 
 /**
@@ -27,6 +29,7 @@ export function FirstRunOverview({
   settings,
   showSkippedTestReminder,
   phoneTestAction,
+  afterHeader,
 }: FirstRunOverviewProps) {
   const t = useTranslations('dashboard.firstRun')
 
@@ -38,6 +41,8 @@ export function FirstRunOverview({
         </h1>
         {settings && <SettingsStatusLine settings={settings} />}
       </header>
+
+      {afterHeader}
 
       <FirstOrderCard
         banner={

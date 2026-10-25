@@ -14,7 +14,8 @@
     "accessRequiredBody": "أنت مسجل الدخول، لكن حسابك غير مصرح له بالوصول إلى مركز متابعة أكيد.",
     "accessErrorBody": "حاول مرة أخرى. إذا استمرت المشكلة، شارك معرف الطلب مع الفريق.",
     "requestId": "معرف الطلب: {id}",
-    "messageTexts": "نصوص الرسائل"
+    "messageTexts": "نصوص الرسائل",
+    "tips": "النصائح والتحديثات"
   },
   "adminTemplates": {
     "imageTwins": {
@@ -4822,6 +4823,270 @@
       "fallback_too_long": "كلمة الاسم لا تتجاوز 60 حرفًا.",
       "fallback_default_style_only": "كلمة الاسم بالأسلوب الافتراضي فقط.",
       "fallback_single_line": "كلمة الاسم سطر واحد."
+    }
+  },
+  "tips": {
+    "badge": {
+      "tip": "نصيحة",
+      "update": "ميزة جديدة"
+    },
+    "dismiss": "إخفاء «{title}» نهائيًا",
+    "dismissError": "تعذّر إخفاء هذه البطاقة. حاول مرة أخرى.",
+    "sectionLabel": "نصائح وتحديثات",
+    "opensInNewTab": "يفتح في علامة تبويب جديدة"
+  },
+  "adminTips": {
+    "eyebrow": "لوحة التاجر",
+    "title": "النصائح والتحديثات",
+    "description": "انشر نصائح وإعلانات عن الميزات لتجار تختارهم. تظهر كبطاقات قابلة للإخفاء في لوحة التحكم فقط.",
+    "none": "—",
+    "noExpiry": "بلا انتهاء",
+    "status": {
+      "draft": "مسودة",
+      "published": "منشورة",
+      "paused": "موقوفة مؤقتًا",
+      "expired": "منتهية",
+      "archived": "مؤرشفة"
+    },
+    "type": {
+      "tip": "نصيحة",
+      "update": "تحديث ميزة"
+    },
+    "list": {
+      "create": "حملة جديدة",
+      "search": "بحث",
+      "searchPlaceholder": "اسم الحملة",
+      "status": "الحالة",
+      "allStatuses": "كل الحالات",
+      "emptyTitle": "لا توجد حملات بعد",
+      "emptyBody": "أنشئ حملة لعرض نصيحة أو تحديث في لوحات تجار تختارهم.",
+      "caption": "حملات النصائح والتحديثات",
+      "columns": {
+        "name": "الحملة",
+        "status": "الحالة",
+        "published": "تاريخ النشر",
+        "expires": "تاريخ الانتهاء"
+      },
+      "firstPage": "الصفحة الأولى",
+      "nextPage": "الصفحة التالية"
+    },
+    "analytics": {
+      "title": "الوصول",
+      "recipients": "المستلمون",
+      "viewed": "شاهدوها",
+      "clicked": "نقروا",
+      "dismissed": "أخفوها",
+      "noButton": "بلا زر",
+      "noButtonNote": "هذه الحملة بلا زر، فلا نقرات لها."
+    },
+    "errors": {
+      "requestIdLabel": "معرف الطلب:",
+      "accessDenied": "حسابك غير مسموح له بإدارة الحملات.",
+      "requestFailed": "فشل الطلب. حاول مرة أخرى.",
+      "TIPS_CAMPAIGN_NOT_FOUND": "هذه الحملة لم تعد موجودة.",
+      "TIPS_CAMPAIGN_INVALID": "بعض الحقول تحتاج إلى مراجعة.",
+      "TIPS_CAMPAIGN_REVISION_CONFLICT": "غيّر شخص آخر هذه الحملة. أعد تحميلها وحاول مرة أخرى.",
+      "TIPS_CAMPAIGN_NOT_EDITABLE": "الحملة المؤرشفة للقراءة فقط.",
+      "TIPS_CAMPAIGN_AUDIENCE_LOCKED": "لا يمكن تغيير جمهور حملة منشورة. أنشئ حملة جديدة للوصول إلى تجار آخرين.",
+      "TIPS_CAMPAIGN_EXPIRY_LOCKED": "لا يمكن تغيير تاريخ انتهاء حملة منشورة.",
+      "TIPS_CAMPAIGN_INVALID_TRANSITION": "لا يمكن إجراء هذا التغيير على الحملة في حالتها الحالية.",
+      "TIPS_CAMPAIGN_EXPIRED": "انتهت هذه الحملة. أرشفها وانشر حملة جديدة.",
+      "TIPS_CAMPAIGN_NO_RECIPIENTS": "لا يطابق أي تاجر هذا الجمهور.",
+      "TIPS_CAMPAIGN_AUDIENCE_TOO_LARGE": "يضم هذا الجمهور {count, number} تاجرًا، وهذا أكثر مما تصل إليه حملة واحدة.",
+      "TIPS_CAMPAIGN_REVIEW_REQUIRED": "راجع الجمهور مرة أخرى قبل النشر.",
+      "TIPS_CAMPAIGN_AUDIENCE_CHANGED": "تغيّر الجمهور منذ مراجعتك وأصبح يضم {count, number} تاجرًا. راجعه مرة أخرى قبل النشر."
+    },
+    "issues": {
+      "required": "مطلوب.",
+      "too_long": "طويل جدًا.",
+      "too_many_lines": "أسطر كثيرة جدًا.",
+      "control_character": "احذف رموز التحكم غير المرئية.",
+      "english_required": "المحتوى الإنجليزي مطلوب.",
+      "unsupported_locale": "هذه اللغة غير مدعومة.",
+      "duplicate_locale": "هذه اللغة مكررة.",
+      "invalid_url": "أدخل رابطًا كاملًا لموقع عام.",
+      "url_not_https": "استخدم رابطًا يبدأ بـ https://.",
+      "url_too_long": "هذا الرابط طويل جدًا.",
+      "invalid_route": "اختر صفحة.",
+      "expiry_in_past": "يجب أن يكون تاريخ الانتهاء في المستقبل.",
+      "invalid_value": "هذه القيمة غير صالحة.",
+      "invalid_date": "أدخل تاريخًا صالحًا.",
+      "date_order": "تاريخ النهاية قبل تاريخ البداية.",
+      "too_many": "عدد التجار في هذه القائمة كبير جدًا."
+    },
+    "editor": {
+      "back": "كل الحملات",
+      "newTitle": "حملة جديدة",
+      "loading": "جارٍ تحميل الحملة…",
+      "archivedNote": "الحملات المؤرشفة للقراءة فقط، ولم يعد التجار يرونها.",
+      "publishedNote": "منشورة: ما زال بإمكانك تعديل النص والزر. يبقى الجمهور وتاريخ الانتهاء كما نُشرا.",
+      "contentTitle": "البطاقة",
+      "contentDescription": "ما يقرؤه التجار. نص عادي مع الحفاظ على فواصل الأسطر.",
+      "name": "الاسم الداخلي",
+      "nameHint": "لا يرى هذا الاسم إلا المشرفون.",
+      "type": "النوع",
+      "typeTip": "نصيحة",
+      "typeUpdate": "تحديث ميزة",
+      "languages": "لغات البطاقة",
+      "required": "مطلوبة",
+      "hasErrors": "بها أخطاء",
+      "addLanguage": "أضف لغة",
+      "languagesHint": "يقرأ التاجر لغة لوحته إذا كانت مكتملة هنا، وإلا يقرأ الإنجليزية.",
+      "title": "العنوان",
+      "descriptionField": "الوصف",
+      "plainTextHint": "نص عادي. حتى 8 فواصل أسطر.",
+      "buttonLabel": "نص الزر",
+      "removeLanguage": "احذف {language}",
+      "button": "الزر",
+      "buttonNone": "بلا زر",
+      "buttonInternal": "فتح صفحة في أكيد",
+      "buttonExternal": "فتح موقع",
+      "buttonPage": "الصفحة",
+      "buttonPagePlaceholder": "اختر صفحة",
+      "modeOnly": {
+        "embedded": "تطبيق Shopify فقط",
+        "standalone": "الحساب المستقل فقط (بلا زر في Shopify)"
+      },
+      "buttonUrl": "الرابط",
+      "buttonUrlHint": "يُفتح في علامة تبويب جديدة. روابط https:// فقط.",
+      "expiry": "تاريخ الانتهاء (اختياري)",
+      "expiryHint": "الأوقات بمنطقتك الزمنية ({zone}) وتُحفظ كلحظة دقيقة.",
+      "expiryHintSet": "منطقتك الزمنية {zone}. يُحفظ كـ {utc} (UTC).",
+      "expiryLocked": "يُحدَّد قبل النشر ولا يمكن تغييره الآن.",
+      "fixErrors": "صحّح الحقول المحددة.",
+      "unsaved": "تغييرات غير محفوظة",
+      "saved": "حُفظت كل التغييرات",
+      "saving": "جارٍ الحفظ…",
+      "save": "حفظ",
+      "createDraft": "إنشاء مسودة",
+      "publishedAt": "تاريخ النشر",
+      "expiresAt": "تاريخ الانتهاء"
+    },
+    "routes": {
+      "settings_message": "الإعدادات: الرسالة",
+      "settings_timing": "الإعدادات: التوقيت",
+      "plan": "الخطة والفوترة",
+      "verifications": "التأكيدات",
+      "settings_store": "الإعدادات: المتجر",
+      "settings_api_keys": "الإعدادات: مفاتيح API",
+      "imports_new": "استيراد الطلبات"
+    },
+    "audience": {
+      "title": "الجمهور",
+      "description": "تجار لديهم متجر نشط. تُجمَّد القائمة عند النشر.",
+      "lockedDescription": "جُمِّدت عند النشر: لا يُضاف ولا يُحذف التجار الذين ينضمون أو يغيّرون إعداداتهم لاحقًا.",
+      "mode": "طريقة اختيار التجار",
+      "modes": {
+        "direct": "اختيار التجار",
+        "directHint": "ابحث وأضف تجارًا بعينهم.",
+        "filters": "استخدام عوامل التصفية",
+        "filtersHint": "طابق حسب الدولة أو المنصة أو تاريخ التسجيل أو لغة الرسائل أو الخطة أو الميزات."
+      },
+      "selected": "{count, plural, =0 {لم يُختر أي تاجر} one {اختير تاجر واحد} two {اختير تاجران} few {اختير # تجار} many {اختير # تاجرًا} other {اختير # تاجر}}",
+      "remove": "احذف {name}",
+      "search": "ابحث عن التجار",
+      "searchPlaceholder": "اسم المتجر أو المؤسسة أو نطاق المتجر",
+      "noResults": "لم يُعثر على تجار.",
+      "add": "إضافة",
+      "removeShort": "حذف",
+      "loadMore": "تحميل المزيد",
+      "logic": "يجب أن تتطابق عوامل التصفية المختلفة كلها، وتكفي أي قيمة داخل العامل الواحد. العامل غير المستخدم يطابق الجميع، والبيانات الناقصة لا تطابق أبدًا.",
+      "countries": "دولة المتجر",
+      "countriesHint": "الدولة معروفة لمتاجر Shopify فقط، وهي ليست لغة التاجر أو عملائه.",
+      "platforms": "المنصة",
+      "plans": "الخطة الحالية",
+      "plansHint": "تُحتسب خطط Shopify ما دام الاشتراك ساريًا. الرصيد المدفوع مسبقًا يشمل الحسابات المستقلة وEasyOrders وWooCommerce.",
+      "messageLanguages": "لغة رسائل واتساب",
+      "messageLanguagesHint": "إعداد لغة الرسائل في المتجر، وليس لغة لوحة التحكم.",
+      "signup": "تاريخ التسجيل (UTC)",
+      "signup_from": "من (شاملًا)",
+      "signup_to": "إلى (شاملًا)",
+      "signupHint": "أيام كاملة بتوقيت UTC، والطرفان مشمولان.",
+      "features": "الميزات",
+      "featureAny": "أي حالة",
+      "featureOn": "مفعّلة",
+      "featureOff": "متوقفة",
+      "matching": "التجار المطابقون",
+      "matchingSaveFirst": "أنشئ المسودة لترى من يطابق.",
+      "matchingHint": "تعرض عوامل التصفية المحفوظة. استبعد تاجرًا من هنا ثم احفظ.",
+      "include": "تضمين",
+      "exclude": "استبعاد",
+      "noMatches": "لا يطابق أي تاجر عوامل التصفية المحفوظة.",
+      "excludedCount": "{count, plural, =0 {لا استبعادات} one {استُبعد تاجر واحد} two {استُبعد تاجران} few {استُبعد # تجار} many {استُبعد # تاجرًا} other {استُبعد # تاجر}}"
+    },
+    "platformNames": {
+      "shopify": "Shopify",
+      "standalone": "حساب مستقل",
+      "easyorders": "EasyOrders",
+      "woocommerce": "WooCommerce"
+    },
+    "planNames": {
+      "starter": "Starter",
+      "basic": "Basic",
+      "pro": "Pro",
+      "business": "Scale",
+      "prepaid": "رصيد مدفوع مسبقًا"
+    },
+    "messageLanguageNames": {
+      "ar": "العربية",
+      "en": "الإنجليزية",
+      "ur": "الأردية",
+      "es": "الإسبانية",
+      "fr": "الفرنسية",
+      "tr": "التركية",
+      "auto": "تلقائي (لغة العميل)"
+    },
+    "featureNames": {
+      "auto_cancel": "الإلغاء التلقائي لغير المجاب",
+      "quiet_hours": "ساعات الهدوء",
+      "follow_up": "رسالة المتابعة",
+      "escalation": "التصعيد (لم يتم الرد)",
+      "auto_verify": "التأكيد التلقائي",
+      "logo_header": "مفتاح ترويسة الشعار"
+    },
+    "review": {
+      "title": "المراجعة والنشر",
+      "description": "تحقق من البطاقة ومن المستلمين بدقة. النشر يجمّد هذه القائمة.",
+      "review": "مراجعة الجمهور",
+      "reviewAgain": "مراجعة مرة أخرى",
+      "reviewing": "جارٍ العد…",
+      "saveFirst": "احفظ تغييراتك قبل المراجعة.",
+      "recipients": "المستلمون",
+      "criteria": "المعايير",
+      "criteriaDirect": "{count, plural, one {تاجر واحد مختار} two {تاجران مختاران} few {# تجار مختارون} many {# تاجرًا مختارًا} other {# تاجر مختار}}",
+      "criteriaFilters": "{count, plural, =0 {بلا عوامل تصفية: كل التجار} one {عامل تصفية واحد} two {عاملا تصفية} few {# عوامل تصفية} many {# عاملًا} other {# عامل}}",
+      "exclusions": "الاستبعادات",
+      "expiry": "الانتهاء",
+      "noExpiry": "بلا انتهاء",
+      "previewLanguage": "لغة المعاينة",
+      "previewFallback": "لا يوجد محتوى {language} مكتمل، فيرى التجار الإنجليزية.",
+      "publish": "نشر",
+      "confirmTitle": "هل تنشر هذه الحملة؟",
+      "confirmBody": "{count, plural, one {سيرى تاجر واحد} two {سيرى تاجران} few {سيرى # تجار} many {سيرى # تاجرًا} other {سيرى # تاجر}} هذه البطاقة في لوحة التحكم. لا يمكن تغيير قائمة المستلمين بعد ذلك.",
+      "confirmPublish": "انشر الآن"
+    },
+    "recipients": {
+      "title": "المستلمون",
+      "search": "ابحث في المستلمين",
+      "caption": "مستلمو الحملة",
+      "merchant": "التاجر",
+      "platform": "المنصة · الدولة",
+      "viewed": "أول مشاهدة",
+      "clicked": "أول نقرة",
+      "dismissed": "تاريخ الإخفاء",
+      "state": "في الجمهور",
+      "excluded": "مستبعد",
+      "included": "مشمول",
+      "empty": "لا تجار.",
+      "loadMore": "تحميل المزيد"
+    },
+    "actions": {
+      "pause": "إيقاف مؤقت",
+      "resume": "استئناف",
+      "archive": "أرشفة"
+    },
+    "archiveDraft": {
+      "title": "التخلص من هذه المسودة"
     }
   }
 }
