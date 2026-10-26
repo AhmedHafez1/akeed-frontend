@@ -134,6 +134,26 @@ describe('HeaderTools', () => {
     expect(screen.queryByRole('dialog')).toBeNull()
   })
 
+  it('shows only the counts below the warning threshold', () => {
+    renderEmbedded(
+      <Harness
+        view={{ ...warning, used: 8, remaining: 22, fill: 26, state: 'ok' }}
+      />,
+      'en'
+    )
+    fireEvent.click(usageTrigger())
+
+    const dialog = screen.getByRole('dialog', { name: 'Message usage' })
+    expect(within(dialog).getByText('8 / 30 used')).toBeTruthy()
+    expect(within(dialog).getByText('22 messages remaining')).toBeTruthy()
+    expect(
+      within(dialog).queryByText('Confirmations stop when these run out.')
+    ).toBeNull()
+    expect(
+      within(dialog).queryByRole('button', { name: 'Choose a plan' })
+    ).toBeNull()
+  })
+
   it('keeps one panel open at a time and toggles on its trigger', () => {
     renderEmbedded(<Harness />, 'en')
     fireEvent.click(usageTrigger())

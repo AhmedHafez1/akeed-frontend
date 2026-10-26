@@ -74,6 +74,9 @@ export function UsagePanel({
   })
   const exhausted = view.state === 'exhausted'
   const hasLimit = view.limit > 0
+  // Below the warning threshold the counts are all a merchant needs; the
+  // consequence and the plan action appear from 80%.
+  const needsPlan = view.state !== 'ok'
 
   return (
     <BlockStack gap="300">
@@ -125,9 +128,11 @@ export function UsagePanel({
           })}
         </Text>
       )}
-      <Text as="p" tone="subdued">
-        {t(exhausted ? 'consequenceExhausted' : 'consequence')}
-      </Text>
+      {needsPlan && (
+        <Text as="p" tone="subdued">
+          {t(exhausted ? 'consequenceExhausted' : 'consequence')}
+        </Text>
+      )}
       {view.stale && (
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
           <Text as="p" tone="caution">
@@ -136,7 +141,7 @@ export function UsagePanel({
           {retry}
         </div>
       )}
-      {choosePlan}
+      {needsPlan && choosePlan}
     </BlockStack>
   )
 }
