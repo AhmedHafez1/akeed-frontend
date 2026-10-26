@@ -100,6 +100,26 @@ beforeEach(() => {
 })
 
 describe('standalone Timing tab', () => {
+  it('saves the 12-hour no-reply gap as 18 hours from the first message', async () => {
+    await renderTiming({
+      followUpDelayMinutes: 360,
+      escalationDelayMinutes: 1080,
+    })
+    expect(pressedIn(timing.reminderGroup)).toEqual(['6 س'])
+    expect(pressedIn(timing.alertGroup)).toEqual(['12 س'])
+    fireEvent.click(toggle(timing.autoCancel.label))
+    fireEvent.click(saveButton())
+
+    await waitFor(() => {
+      expect(api.saveSettings).toHaveBeenCalledWith(
+        expect.objectContaining({
+          followUpDelayMinutes: 360,
+          escalationDelayMinutes: 1080,
+        })
+      )
+    })
+  })
+
   it.each([
     [true, 2, 4, '4 دقائق'],
     [false, 2, 2, 'دقيقتين'],

@@ -50,7 +50,7 @@ An account takes its orders from one source. An account connected to a store doe
 
 After that you are live. Add your first order or import a file.
 
-New standalone accounts start with these defaults: the first message is sent right away, one follow-up goes out after 6 hours, and an order with no reply is marked **No reply** 24 hours after that follow-up. Quiet hours are off, so messages go out at any hour. Turn them on to hold messages from 22:00 to 09:00. You can change them in Settings. See [Automation Rules](/docs/automation-rules).
+New standalone accounts start with these defaults: the first message is sent right away, one follow-up goes out after 6 hours, and an order with no reply is marked **No reply** 12 hours after that follow-up. Quiet hours are off, so messages go out at any hour. Turn them on to hold messages from 22:00 to 09:00. You can change them in Settings. See [Automation Rules](/docs/automation-rules).
 
 ## How Credits Work
 

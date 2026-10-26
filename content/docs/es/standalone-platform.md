@@ -50,7 +50,7 @@ Una cuenta recibe sus pedidos de un solo origen. Una cuenta conectada a una tien
 
 Después de eso ya estás en marcha. Agrega tu primer pedido o importa un archivo.
 
-Las cuentas independientes nuevas empiezan con estos valores predeterminados: el primer mensaje se envía de inmediato, un recordatorio sale después de 6 horas y un pedido sin respuesta se marca como **Sin respuesta** 24 horas después del recordatorio. El horario de silencio está desactivado, así que los mensajes salen a cualquier hora. Actívalo para retenerlos de 22:00 a 09:00. Puedes cambiarlos en Configuración. Consulta [Reglas de automatización](/docs/automation-rules).
+Las cuentas independientes nuevas empiezan con estos valores predeterminados: el primer mensaje se envía de inmediato, un recordatorio sale después de 6 horas y un pedido sin respuesta se marca como **Sin respuesta** 12 horas después del recordatorio. El horario de silencio está desactivado, así que los mensajes salen a cualquier hora. Actívalo para retenerlos de 22:00 a 09:00. Puedes cambiarlos en Configuración. Consulta [Reglas de automatización](/docs/automation-rules).
 
 ## Cómo funcionan los créditos
 
