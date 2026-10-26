@@ -9,6 +9,7 @@ import {
   InlineGrid,
   InlineStack,
   Select,
+  RadioButton,
   Text,
   TextField,
 } from '@shopify/polaris'
@@ -36,6 +37,7 @@ import { useMerchantLogo } from '@/features/settings/domain/useMerchantLogo'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { MessagePreviewCard } from './MessagePreviewCard'
 import { StoreLogoField } from './StoreLogoField'
+import { SettingsHelp } from './SettingsHelp'
 
 /** Choice values that are not a template style. */
 const AUTO_STYLE = 'auto'
@@ -137,76 +139,95 @@ export function MessageTab({
             <Text as="h2" variant="headingMd">
               {t('identityHeading')}
             </Text>
-            <TextField
-              id={SETTINGS_FIELD_ID.storeName}
-              label={t('storeNameLabel')}
-              value={values.storeName}
-              onChange={(storeNameValue) =>
-                model.update({ storeName: storeNameValue })
-              }
-              autoComplete="organization"
-              maxLength={STORE_NAME_MAX_LENGTH}
-              requiredIndicator
-              disabled={readOnly}
-              error={storeNameError}
-              helpText={t('storeNameHelp', { name: storeName })}
-            />
+            <BlockStack gap="100">
+              <InlineStack gap="100" blockAlign="center">
+                <label htmlFor={SETTINGS_FIELD_ID.storeName}>
+                  {t('storeNameLabel')} <span aria-hidden="true">*</span>
+                </label>
+                <SettingsHelp
+                  label={t('storeNameLabel')}
+                  content={t('storeNameHelp', { name: storeName })}
+                />
+              </InlineStack>
+              <TextField
+                id={SETTINGS_FIELD_ID.storeName}
+                label={t('storeNameLabel')}
+                labelHidden
+                value={values.storeName}
+                onChange={(storeNameValue) =>
+                  model.update({ storeName: storeNameValue })
+                }
+                autoComplete="organization"
+                maxLength={STORE_NAME_MAX_LENGTH}
+                requiredIndicator
+                disabled={readOnly}
+                error={storeNameError}
+              />
+            </BlockStack>
             <Divider />
-            <ChoiceList
-              title={t('languageHeading')}
-              disabled={readOnly}
-              selected={[isAutoLanguage ? AUTO_LANGUAGE : FIXED_LANGUAGE]}
-              onChange={([mode]) => handleLanguageModeChange(mode)}
-              choices={[
-                {
-                  value: AUTO_LANGUAGE,
-                  label: (
-                    <InlineStack gap="200" blockAlign="center">
-                      <Text as="span">{t('languageAuto')}</Text>
-                      <Badge tone="success">{t('recommended')}</Badge>
-                    </InlineStack>
-                  ),
-                  helpText: t('languageAutoHelp'),
-                },
-                {
-                  value: FIXED_LANGUAGE,
-                  label: t('languageFixed'),
-                  helpText: t('languageFixedHelp'),
-                  renderChildren: (isSelected) =>
-                    isSelected && (
-                      <Select
-                        label={t('languageFixedLabel')}
-                        labelHidden
-                        disabled={readOnly}
-                        value={values.defaultLanguage}
-                        onChange={(language) =>
-                          styles.chooseLanguage(
-                            language as IntegrationOnboardingLanguage
-                          )
-                        }
-                        options={styles.languages.map(
-                          ({ language, isLive }) => {
-                            // A store already on the language keeps its choice.
-                            const locked =
-                              !isLive && values.defaultLanguage !== language
-                            const name = t(`languageNames.${language}`)
-                            return {
-                              value: language,
-                              disabled: locked,
-                              label: locked
-                                ? t('languageOptionLocked', {
-                                    language: name,
-                                    status: t('notEnabledYet'),
-                                  })
-                                : name,
-                            }
-                          }
-                        )}
-                      />
-                    ),
-                },
-              ]}
-            />
+            <fieldset style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
+              <legend>{t('languageHeading')}</legend>
+              <BlockStack gap="100">
+                <InlineStack gap="100" blockAlign="center">
+                  <RadioButton
+                    id="message-language-auto"
+                    name="message-language"
+                    label={t('languageAuto')}
+                    checked={isAutoLanguage}
+                    disabled={readOnly}
+                    onChange={() => handleLanguageModeChange(AUTO_LANGUAGE)}
+                  />
+                  <Badge tone="success">{t('recommended')}</Badge>
+                  <SettingsHelp
+                    label={t('languageAuto')}
+                    content={t('languageAutoHelp')}
+                  />
+                </InlineStack>
+                <InlineStack gap="100" blockAlign="center">
+                  <RadioButton
+                    id="message-language-fixed"
+                    name="message-language"
+                    label={t('languageFixed')}
+                    checked={!isAutoLanguage}
+                    disabled={readOnly}
+                    onChange={() => handleLanguageModeChange(FIXED_LANGUAGE)}
+                  />
+                  <SettingsHelp
+                    label={t('languageFixed')}
+                    content={t('languageFixedHelp')}
+                  />
+                </InlineStack>
+                {!isAutoLanguage && (
+                  <Select
+                    label={t('languageFixedLabel')}
+                    labelHidden
+                    disabled={readOnly}
+                    value={values.defaultLanguage}
+                    onChange={(language) =>
+                      styles.chooseLanguage(
+                        language as IntegrationOnboardingLanguage
+                      )
+                    }
+                    options={styles.languages.map(({ language, isLive }) => {
+                      // A store already on the language keeps its choice.
+                      const locked =
+                        !isLive && values.defaultLanguage !== language
+                      const name = t(`languageNames.${language}`)
+                      return {
+                        value: language,
+                        disabled: locked,
+                        label: locked
+                          ? t('languageOptionLocked', {
+                              language: name,
+                              status: t('notEnabledYet'),
+                            })
+                          : name,
+                      }
+                    })}
+                  />
+                )}
+              </BlockStack>
+            </fieldset>
           </BlockStack>
         </Card>
 
@@ -220,16 +241,17 @@ export function MessageTab({
 
         <Card>
           <BlockStack gap="300">
-            <BlockStack gap="100">
+            <InlineStack gap="100" blockAlign="center">
               <Text as="h2" variant="headingMd">
                 {t('styleHeading')}
               </Text>
               {languageHint && (
-                <Text as="p" variant="bodySm" tone="subdued">
-                  {languageHint}
-                </Text>
+                <SettingsHelp
+                  label={t('styleHeading')}
+                  content={languageHint}
+                />
               )}
-            </BlockStack>
+            </InlineStack>
             {!styles.isLive && (
               <Text as="p" tone="subdued">
                 {t(variants.length > 0 ? 'languageLockedNote' : 'stylesEmpty', {
@@ -298,16 +320,19 @@ export function MessageTab({
         {reminderVariants && (
           <Card>
             <BlockStack gap="300">
-              <BlockStack gap="100">
+              <InlineStack gap="100" blockAlign="center">
                 <Text as="h2" variant="headingMd">
                   {t('reminderHeading')}
                 </Text>
-                <Text as="p" variant="bodySm" tone="subdued">
-                  {languageHint
-                    ? `${t('reminderHint')} ${languageHint}`
-                    : t('reminderHint')}
-                </Text>
-              </BlockStack>
+                <SettingsHelp
+                  label={t('reminderHeading')}
+                  content={
+                    languageHint
+                      ? `${t('reminderHint')} ${languageHint}`
+                      : t('reminderHint')
+                  }
+                />
+              </InlineStack>
               <ChoiceList
                 title={t('reminderHeading')}
                 titleHidden

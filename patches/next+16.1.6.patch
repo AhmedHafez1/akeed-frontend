@@ -1,0 +1,72 @@
+diff --git a/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js b/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js
+index cafcb37..1c502aa 100644
+--- a/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js
++++ b/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js
+@@ -3962,7 +3962,16 @@
+           break;
+         }
+     }
+-    function addValueToProperties(
++    // Cross-origin objects (an iframe parent Window) throw on any property
++    // read; log them as … instead of crashing the commit.
++    function addValueToProperties(propertyName, value, properties, indent, prefix) {
++      try {
++        addValueToPropertiesUnguarded(propertyName, value, properties, indent, prefix);
++      } catch (x) {
++        properties.push([prefix + "\u00a0\u00a0".repeat(indent) + propertyName, "\u2026"]);
++      }
++    }
++    function addValueToPropertiesUnguarded(
+       propertyName,
+       value,
+       properties,
+@@ -4151,6 +4160,13 @@
+       ]);
+     }
+     function addObjectDiffToProperties(prev, next, properties, indent) {
++      try {
++        return addObjectDiffToPropertiesUnguarded(prev, next, properties, indent);
++      } catch (x) {
++        return !1;
++      }
++    }
++    function addObjectDiffToPropertiesUnguarded(prev, next, properties, indent) {
+       var isDeeplyEqual = !0,
+         prevPropertiesChecked = 0;
+       for (key in prev) {
+diff --git a/node_modules/next/dist/compiled/react-dom/cjs/react-dom-profiling.development.js b/node_modules/next/dist/compiled/react-dom/cjs/react-dom-profiling.development.js
+index 763580b..b51e041 100644
+--- a/node_modules/next/dist/compiled/react-dom/cjs/react-dom-profiling.development.js
++++ b/node_modules/next/dist/compiled/react-dom/cjs/react-dom-profiling.development.js
+@@ -3970,7 +3970,16 @@
+           break;
+         }
+     }
+-    function addValueToProperties(
++    // Cross-origin objects (an iframe parent Window) throw on any property
++    // read; log them as … instead of crashing the commit.
++    function addValueToProperties(propertyName, value, properties, indent, prefix) {
++      try {
++        addValueToPropertiesUnguarded(propertyName, value, properties, indent, prefix);
++      } catch (x) {
++        properties.push([prefix + "\u00a0\u00a0".repeat(indent) + propertyName, "\u2026"]);
++      }
++    }
++    function addValueToPropertiesUnguarded(
+       propertyName,
+       value,
+       properties,
+@@ -4159,6 +4168,13 @@
+       ]);
+     }
+     function addObjectDiffToProperties(prev, next, properties, indent) {
++      try {
++        return addObjectDiffToPropertiesUnguarded(prev, next, properties, indent);
++      } catch (x) {
++        return !1;
++      }
++    }
++    function addObjectDiffToPropertiesUnguarded(prev, next, properties, indent) {
+       var isDeeplyEqual = !0,
+         prevPropertiesChecked = 0;
+       for (key in prev) {

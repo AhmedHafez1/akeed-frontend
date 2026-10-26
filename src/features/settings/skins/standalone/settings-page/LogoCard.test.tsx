@@ -66,7 +66,7 @@ describe('LogoCard (standalone)', () => {
     expect(screen.getByRole('heading', { name: 'Store logo' })).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Upload logo' })).toBeTruthy()
     expect(screen.queryByRole('button', { name: 'Remove' })).toBeNull()
-    expect(screen.queryByRole('img')).toBeNull()
+    expect(screen.queryByRole('img', { name: 'Your store logo' })).toBeNull()
   })
 
   it('shows the logo and the banner, with replace and remove', () => {
@@ -105,6 +105,7 @@ describe('LogoCard (standalone)', () => {
   it('shows no actions to a read-only member', () => {
     renderCard(withLogo(), { readOnly: true })
     expect(screen.queryByRole('button')).toBeNull()
+    expect(screen.getByRole('img', { name: 'Store logo' })).toBeTruthy()
     expect(screen.getByRole('img', { name: 'Your store logo' })).toBeTruthy()
   })
 })
