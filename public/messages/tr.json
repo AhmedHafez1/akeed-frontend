@@ -3633,5 +3633,15 @@
       "refused": "Akeed ile {store} arasında bağlantı kurulamadı.",
       "disconnected": "Akeed ile {store} arasındaki bağlantı kesildi."
     }
+  },
+  "tips": {
+    "badge": {
+      "tip": "İpucu",
+      "update": "Yeni özellik"
+    },
+    "dismiss": "“{title}” kartını kalıcı olarak kapat",
+    "dismissError": "Bu kart kapatılamadı. Tekrar deneyin.",
+    "sectionLabel": "İpuçları ve güncellemeler",
+    "opensInNewTab": "yeni sekmede açılır"
   }
 }

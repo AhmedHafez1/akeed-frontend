@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   act,
   fireEvent,
@@ -105,7 +105,9 @@ function renderPage(tab: string | null = 'message') {
 }
 
 async function storeNameInput() {
-  return (await screen.findByLabelText(/اسم المتجر/)) as HTMLInputElement
+  return (await screen.findByRole('textbox', {
+    name: /اسم المتجر/,
+  })) as HTMLInputElement
 }
 
 function lastSaveBarCall() {
@@ -114,7 +116,12 @@ function lastSaveBarCall() {
   return shows > hides ? 'shown' : 'hidden'
 }
 
+afterEach(() => vi.restoreAllMocks())
+
 beforeEach(() => {
+  vi.spyOn(HTMLElement.prototype, 'offsetParent', 'get').mockReturnValue(
+    document.body
+  )
   vi.clearAllMocks()
   api.fetchSettings.mockResolvedValue(settingsResponseFixture())
   api.saveSettings.mockImplementation(async (payload) =>
@@ -479,7 +486,11 @@ describe('SettingsEmbeddedPage message improvements', () => {
     api.fetchSettings.mockResolvedValue(response)
     const view = renderPage()
     await storeNameInput()
-    const bubble = screen.getByRole('img')
+    const bubble = screen.getByRole('img', {
+      name: new RegExp(
+        ar.settings.embedded.message.previewAria.replace('{language}', '.*')
+      ),
+    })
     expect(bubble.textContent).toContain('هلا أحمد، طلبك')
     expect(within(bubble).getByText('نعم')).toBeTruthy()
     view.unmount()
@@ -493,7 +504,13 @@ describe('SettingsEmbeddedPage message improvements', () => {
     renderPage()
     await storeNameInput()
     expect(
-      within(screen.getByRole('img')).getByText(messageCopy.previewEmpty)
+      within(
+        screen.getByRole('img', {
+          name: new RegExp(
+            ar.settings.embedded.message.previewAria.replace('{language}', '.*')
+          ),
+        })
+      ).getByText(messageCopy.previewEmpty)
     ).toBeTruthy()
   })
 
@@ -508,7 +525,11 @@ describe('SettingsEmbeddedPage message improvements', () => {
     renderPage()
     await storeNameInput()
 
-    const picture = screen.getByRole('img')
+    const picture = screen.getByRole('img', {
+      name: new RegExp(
+        ar.settings.embedded.message.previewAria.replace('{language}', '.*')
+      ),
+    })
     expect(picture.textContent).not.toContain('*')
     expect(within(picture).getByText('Togo_Test_A').tagName).toBe('B')
     expect(within(picture).getByText('599.00 $').tagName).toBe('B')
@@ -635,16 +656,31 @@ describe('SettingsEmbeddedPage message languages', () => {
     expect(
       screen.queryByLabelText(messageCopy.previewLanguageGroup)
     ).toBeTruthy()
-    expect(screen.getByText(styleHint('ar'))).toBeTruthy()
+    fireEvent.mouseEnter(
+      screen.getByRole('img', {
+        name: messageCopy.styleHeading,
+      })
+    )
+    expect((await screen.findByRole('tooltip')).textContent).toBe(
+      styleHint('ar')
+    )
+    fireEvent.keyDown(document, { key: 'Escape' })
+    await waitFor(() => expect(screen.queryByRole('tooltip')).toBeNull())
 
     chooseOneLanguage()
     fireEvent.change(oneLanguage(), { target: { value: 'en' } })
 
     expect(screen.queryByLabelText(messageCopy.previewLanguageGroup)).toBeNull()
     expect(screen.queryByText(styleHint('en'))).toBeNull()
-    expect(screen.getByRole('img').getAttribute('aria-label')).toContain(
-      messageCopy.languageNames.en
-    )
+    expect(
+      screen
+        .getByRole('img', {
+          name: new RegExp(
+            ar.settings.embedded.message.previewAria.replace('{language}', '.*')
+          ),
+        })
+        .getAttribute('aria-label')
+    ).toContain(messageCopy.languageNames.en)
 
     // Unsaved: the test would send the saved settings, so it waits.
     const send = () =>
@@ -681,21 +717,42 @@ describe('SettingsEmbeddedPage message languages', () => {
     renderPage()
     await storeNameInput()
     expect(screen.queryByLabelText(messageCopy.previewLanguageGroup)).toBeNull()
-    expect(screen.getByRole('img').getAttribute('aria-label')).toContain(
-      messageCopy.languageNames.ar
-    )
+    expect(
+      screen
+        .getByRole('img', {
+          name: new RegExp(
+            ar.settings.embedded.message.previewAria.replace('{language}', '.*')
+          ),
+        })
+        .getAttribute('aria-label')
+    ).toContain(messageCopy.languageNames.ar)
 
     fireEvent.change(oneLanguage(), { target: { value: 'en' } })
-    expect(screen.getByRole('img').getAttribute('aria-label')).toContain(
-      messageCopy.languageNames.en
-    )
+    expect(
+      screen
+        .getByRole('img', {
+          name: new RegExp(
+            ar.settings.embedded.message.previewAria.replace('{language}', '.*')
+          ),
+        })
+        .getAttribute('aria-label')
+    ).toContain(messageCopy.languageNames.en)
 
     fireEvent.click(screen.getByText('تجاهل'))
 
     await waitFor(() =>
-      expect(screen.getByRole('img').getAttribute('aria-label')).toContain(
-        messageCopy.languageNames.ar
-      )
+      expect(
+        screen
+          .getByRole('img', {
+            name: new RegExp(
+              ar.settings.embedded.message.previewAria.replace(
+                '{language}',
+                '.*'
+              )
+            ),
+          })
+          .getAttribute('aria-label')
+      ).toContain(messageCopy.languageNames.ar)
     )
   })
 
@@ -744,9 +801,15 @@ describe('SettingsEmbeddedPage message languages', () => {
     fireEvent.change(oneLanguage(), { target: { value: 'ur' } })
     // One language: the preview follows it, with no list of its own.
     expect(screen.queryByLabelText(messageCopy.previewLanguageGroup)).toBeNull()
-    expect(screen.getByRole('img').getAttribute('aria-label')).toContain(
-      messageCopy.languageNames.ur
-    )
+    expect(
+      screen
+        .getByRole('img', {
+          name: new RegExp(
+            ar.settings.embedded.message.previewAria.replace('{language}', '.*')
+          ),
+        })
+        .getAttribute('aria-label')
+    ).toContain(messageCopy.languageNames.ur)
     fireEvent.click(radio(shortStyle))
     await act(async () => {
       fireEvent.click(screen.getByText('حفظ'))
@@ -798,4 +861,122 @@ describe('SettingsEmbeddedPage message languages', () => {
       codTemplateTrVariant: 'short_v1',
     })
   })
+})
+
+describe('message settings contextual help', () => {
+  const messageCopy = ar.settings.embedded.message
+
+  it('reveals help without selecting a language or saving', async () => {
+    renderPage()
+    await storeNameInput()
+    const auto = screen.getByRole('radio', {
+      name: new RegExp(messageCopy.languageAuto),
+    })
+    const initialChecked =
+      auto.getAttribute('aria-checked') ?? (auto as HTMLInputElement).checked
+    expect(screen.queryByRole('tooltip')).toBeNull()
+    const help = screen.getByRole('img', {
+      name: messageCopy.languageFixed,
+    })
+    expect(help.closest('label')).toBeNull()
+    expect(help.parentElement?.closest('[role="radio"]')).toBeNull()
+
+    fireEvent.mouseEnter(help)
+    expect((await screen.findByRole('tooltip')).textContent).toBe(
+      messageCopy.languageFixedHelp
+    )
+    fireEvent.keyDown(document, { key: 'Escape' })
+    await waitFor(() => expect(screen.queryByRole('tooltip')).toBeNull())
+
+    fireEvent.click(help)
+    expect(screen.queryByRole('tooltip')).toBeNull()
+    expect(help.closest('button')).toBeNull()
+    fireEvent.focus(help)
+    expect(await screen.findByRole('tooltip')).toBeTruthy()
+    fireEvent.blur(help)
+    await waitFor(() => expect(screen.queryByRole('tooltip')).toBeNull())
+    fireEvent.mouseEnter(help)
+    expect(await screen.findByRole('tooltip')).toBeTruthy()
+    fireEvent.mouseLeave(help)
+    await waitFor(() => expect(screen.queryByRole('tooltip')).toBeNull())
+
+    expect(
+      auto.getAttribute('aria-checked') ?? (auto as HTMLInputElement).checked
+    ).toBe(initialChecked)
+    expect(screen.queryByLabelText(messageCopy.languageFixedLabel)).toBeNull()
+    expect(api.saveSettings).not.toHaveBeenCalled()
+    expect(shopify.saveBar.show).not.toHaveBeenCalled()
+  })
+
+  it('keeps the store-name example current', async () => {
+    renderPage()
+    const input = await storeNameInput()
+    fireEvent.change(input, { target: { value: 'Sample Store' } })
+    fireEvent.mouseEnter(
+      screen.getByRole('img', {
+        name: messageCopy.storeNameLabel,
+      })
+    )
+    expect((await screen.findByRole('tooltip')).textContent).toContain(
+      'Sample Store'
+    )
+  })
+})
+
+it.each([
+  [ar.settings.logo.heading, ar.settings.logo.description],
+  [
+    ar.settings.embedded.message.reminderHeading,
+    ar.settings.embedded.message.reminderHint,
+  ],
+])(
+  'shows %s details only through its help control',
+  async (label, description) => {
+    const response = settingsResponseFixture({})
+    response.branding = {
+      logoUrl: null,
+      bannerUrl: null,
+      updatedAt: null,
+      logoHeaderAvailable: true,
+      logoHeaderIncluded: true,
+    }
+    response.template.reminder = {
+      selected: response.template.selected,
+      variants: response.template.variants,
+    }
+    api.fetchSettings.mockResolvedValue(response)
+
+    renderPage()
+    await storeNameInput()
+    expect(screen.queryByRole('tooltip')).toBeNull()
+    expect(screen.queryByText(description)).toBeNull()
+    fireEvent.mouseEnter(screen.getByRole('img', { name: label }))
+    expect((await screen.findByRole('tooltip')).textContent).toContain(
+      description
+    )
+  }
+)
+
+it('keeps contextual help available for read-only stores', async () => {
+  api.fetchSettings.mockResolvedValue(
+    settingsResponseFixture({
+      state: {
+        permissions: {
+          canUpdateConfiguration: false,
+          canCompleteOnboarding: false,
+        },
+      },
+    })
+  )
+  renderPage()
+  expect((await storeNameInput()).disabled).toBe(true)
+  const help = screen.getByRole('img', {
+    name: ar.settings.embedded.message.languageAuto,
+  })
+  expect(help.getAttribute('tabindex')).toBe('0')
+  fireEvent.mouseEnter(help)
+  expect((await screen.findByRole('tooltip')).textContent).toBe(
+    ar.settings.embedded.message.languageAutoHelp
+  )
+  expect(api.saveSettings).not.toHaveBeenCalled()
 })

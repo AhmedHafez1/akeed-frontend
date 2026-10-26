@@ -4,6 +4,7 @@ import { useCallback, useMemo } from 'react'
 import { Badge, BlockStack, Page } from '@shopify/polaris'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import { TipsSectionEmbedded } from '@/features/tips'
 import { resolveMainTab } from '../../domain/mainTabs'
 import {
   rangeParam,
@@ -56,6 +57,10 @@ export function MainEmbeddedSkin() {
     />
   )
 
+  // Admin-published tips sit above the tabs, so both tabs show them, from
+  // the first run on.
+  const tipsSection = <TipsSectionEmbedded enabled={activation.isLoaded} />
+
   const updateParams = useCallback(
     (changes: Record<string, string | null>) => {
       const next = new URLSearchParams(searchParams.toString())
@@ -105,6 +110,7 @@ export function MainEmbeddedSkin() {
           {showActivation && (
             <DashboardActivationSection activation={activation} />
           )}
+          {tipsSection}
           {activeTab === 'metrics' ? (
             showActivation ? (
               <>

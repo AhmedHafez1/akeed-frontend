@@ -34,6 +34,7 @@ import {
 import { LogoCard } from './LogoCard'
 import { MessagePreviewPanel } from './MessagePreviewPanel'
 import { TestPhoneDialog } from './TestPhoneDialog'
+import { SettingsHelp } from './SettingsHelp'
 
 interface MessageTabProps {
   model: StandaloneSettingsModel
@@ -57,13 +58,11 @@ function SettingsCard({
       aria-labelledby={headingId}
       className={cn(akCard, 'space-y-3 px-4 py-4 sm:px-6')}
     >
-      <div>
+      <div className="flex items-center gap-1">
         <h2 id={headingId} className="text-ak-section text-ink">
           {heading}
         </h2>
-        {description && (
-          <p className="text-ak-caption text-ink-muted mt-0.5">{description}</p>
-        )}
+        {description && <SettingsHelp label={heading} content={description} />}
       </div>
       {children}
     </section>
@@ -158,15 +157,21 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
           description={t('identityDesc')}
         >
           <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor={SETTINGS_FIELD_ID.storeName}
-              className="text-ak-caption text-ink font-semibold"
-            >
-              {tShared('storeNameLabel')}{' '}
-              <span aria-hidden="true" className="text-ak-danger">
-                *
-              </span>
-            </label>
+            <div className="flex items-center gap-1">
+              <label
+                htmlFor={SETTINGS_FIELD_ID.storeName}
+                className="text-ak-caption text-ink font-semibold"
+              >
+                {tShared('storeNameLabel')}{' '}
+                <span aria-hidden="true" className="text-ak-danger">
+                  *
+                </span>
+              </label>
+              <SettingsHelp
+                label={tShared('storeNameLabel')}
+                content={t('storeNameHelp', { name: storeName })}
+              />
+            </div>
             <input
               id={SETTINGS_FIELD_ID.storeName}
               type="text"
@@ -179,13 +184,13 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
               required
               disabled={readOnly}
               aria-invalid={storeNameError ? true : undefined}
-              aria-describedby={storeNameNoteId}
+              aria-describedby={storeNameError ? storeNameNoteId : undefined}
               className={cn(
                 'ak-focus bg-surface-raised text-ink text-ak-body rounded-ak-control h-10 w-full border px-3 disabled:cursor-not-allowed disabled:opacity-60',
                 storeNameError ? 'border-ak-warning' : 'border-control-border'
               )}
             />
-            {storeNameError ? (
+            {storeNameError && (
               <p
                 id={storeNameNoteId}
                 role="alert"
@@ -193,48 +198,58 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
               >
                 {storeNameError}
               </p>
-            ) : (
-              <p
-                id={storeNameNoteId}
-                className="text-ak-caption text-ink-muted"
-              >
-                {t('storeNameHelp', { name: storeName })}
-              </p>
             )}
           </div>
 
           <div className="border-line space-y-2 border-t pt-3">
-            <div>
+            <div className="flex items-center gap-1">
               <h3
                 id={languageId}
                 className="text-ak-caption text-ink font-semibold"
               >
                 {tShared('languageHeading')}
               </h3>
-              <p className="text-ak-caption text-ink-muted">
-                {t('languageDesc')}
-              </p>
+              <SettingsHelp
+                label={tShared('languageHeading')}
+                content={t('languageDesc')}
+              />
             </div>
             <AkChoiceGroup columns={2} aria-labelledby={languageId}>
-              <AkChoiceCard
-                checked={isAutoLanguage}
-                onSelect={() => styles.chooseLanguage('auto')}
-                disabled={readOnly}
-                title={tShared('languageAuto')}
-                badge={
-                  <span className={akPill({ tone: 'brand' })}>
-                    {tShared('recommended')}
-                  </span>
-                }
-                description={tShared('languageAutoHelp')}
-              />
-              <AkChoiceCard
-                checked={!isAutoLanguage}
-                onSelect={styles.chooseFixedLanguage}
-                disabled={readOnly}
-                title={tShared('languageFixed')}
-                description={tShared('languageFixedHelp')}
-              />
+              <div className="relative flex">
+                <AkChoiceCard
+                  className="pe-12"
+                  checked={isAutoLanguage}
+                  onSelect={() => styles.chooseLanguage('auto')}
+                  disabled={readOnly}
+                  title={tShared('languageAuto')}
+                  badge={
+                    <span className={akPill({ tone: 'brand' })}>
+                      {tShared('recommended')}
+                    </span>
+                  }
+                />
+                <div className="absolute end-2 top-3.5">
+                  <SettingsHelp
+                    label={tShared('languageAuto')}
+                    content={tShared('languageAutoHelp')}
+                  />
+                </div>
+              </div>
+              <div className="relative flex">
+                <AkChoiceCard
+                  className="pe-12"
+                  checked={!isAutoLanguage}
+                  onSelect={styles.chooseFixedLanguage}
+                  disabled={readOnly}
+                  title={tShared('languageFixed')}
+                />
+                <div className="absolute end-2 top-3.5">
+                  <SettingsHelp
+                    label={tShared('languageFixed')}
+                    content={tShared('languageFixedHelp')}
+                  />
+                </div>
+              </div>
             </AkChoiceGroup>
             {!isAutoLanguage && (
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">

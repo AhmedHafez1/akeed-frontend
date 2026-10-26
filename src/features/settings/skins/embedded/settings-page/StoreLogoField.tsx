@@ -22,6 +22,7 @@ import {
   formatLogoUpdatedAt,
 } from '@/features/settings/domain/merchantLogo'
 import type { MerchantLogoModel } from '@/features/settings/domain/useMerchantLogo'
+import { SettingsHelp } from './SettingsHelp'
 
 interface StoreLogoFieldProps {
   logo: MerchantLogoModel
@@ -66,10 +67,8 @@ export function StoreLogoField({
               {t('heading')}
             </Text>
             {logo.isLocked && <Badge>{t('planPill')}</Badge>}
+            <SettingsHelp label={t('heading')} content={t('description')} />
           </InlineStack>
-          <Text as="p" variant="bodySm" tone="subdued">
-            {t('description')}
-          </Text>
         </BlockStack>
 
         {logo.isLocked && (

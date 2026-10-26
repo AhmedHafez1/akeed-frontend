@@ -57,7 +57,7 @@ Escalation marks the order as **No Reply** when the customer still has not respo
 
 ### Recommended default
 
-- Start with **24 hours** after the reminder. This is the default.
+- Start with **12 hours** after the reminder. This is the default.
 - Keep escalation later than follow-up.
 
 ### Operational use
@@ -93,7 +93,7 @@ Quiet Hours prevent sends during specific local times (for example overnight).
 
 ### Recommended use
 
-- Quiet hours are on by default, from 22:00 to 09:00 in your timezone. Turn them off only if your customers expect messages at night.
+- Quiet hours are off by default. When you turn them on, the window is 22:00 to 09:00 in your timezone until you change it. Turn them on if your customers do not expect messages at night.
 - Set start/end based on your market behavior.
 
 ### Important
@@ -113,7 +113,7 @@ Set timezone to the same timezone used by your core operations team and customer
 | Store Pattern | Initial Delay | Follow-Up | Escalation | Quiet Hours |
 | --- | ---: | ---: | ---: | --- |
 | Fast fulfillment store | 0–10 min | 60 min | 240 min | Optional |
-| Balanced default setup | 0 min | 360 min | 1440 min after the reminder | 22:00–09:00 |
+| Balanced default setup | 0 min | 360 min | 720 min after the reminder | Off, or 22:00–09:00 |
 
 Use these as starting points, then tune weekly using your reply and confirmation rates.
 
@@ -157,7 +157,7 @@ For most stores, yes. One follow-up usually captures most recoverable responses 
 
 ### What is the best escalation time?
 
-There is no universal value. Start with 24 hours after the reminder, then adjust based on actual response patterns.
+There is no universal value. Start with 12 hours after the reminder, then adjust based on actual response patterns.
 
 ### Where can I check if my rules are working?
 

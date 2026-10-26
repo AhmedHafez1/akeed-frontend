@@ -148,6 +148,24 @@ describe.each(['ar', 'en'] as const)('embedded Timing tab (%s)', (locale) => {
   const expected = EXPECTED[locale]
   const timing = copy(locale)
 
+  it('saves the 12-hour no-reply gap as 18 hours from the first message', async () => {
+    const view = await renderTiming(locale, {
+      followUpDelayMinutes: 360,
+      escalationDelayMinutes: 1080,
+    })
+    expect(view.pills()).toEqual(expected.allOn)
+    fireEvent.click(screen.getByLabelText(timing.autoCancel.label))
+    await act(async () => {
+      fireEvent.click(screen.getByText(locale === 'en' ? 'Save' : 'حفظ'))
+    })
+    expect(api.saveSettings).toHaveBeenCalledWith(
+      expect.objectContaining({
+        followUpDelayMinutes: 360,
+        escalationDelayMinutes: 1080,
+      })
+    )
+  })
+
   it('draws all four steps with the wait on each connector', async () => {
     const view = await renderTiming(locale)
 

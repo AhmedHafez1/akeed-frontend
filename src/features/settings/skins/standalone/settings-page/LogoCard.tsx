@@ -9,6 +9,7 @@ import { LOGO_ACCEPT_ATTRIBUTE } from '@/features/settings/domain/merchantLogo'
 import type { MerchantLogoModel } from '@/features/settings/domain/useMerchantLogo'
 import { cn } from '@/shared/lib/utils'
 import { akButton, akCard } from '@/shared/ui'
+import { SettingsHelp } from './SettingsHelp'
 
 interface LogoCardProps {
   logo: MerchantLogoModel
@@ -34,15 +35,12 @@ export function LogoCard({ logo, readOnly }: LogoCardProps) {
       aria-busy={busy}
       className={cn(akCard, 'space-y-3 px-4 py-4 sm:px-6')}
     >
-      <div>
+      <div className="flex items-center gap-1">
         <h2 id={headingId} className="text-ak-section text-ink">
           {t('heading')}
         </h2>
-        <p className="text-ak-caption text-ink-muted mt-0.5">
-          {t('description')}
-        </p>
+        <SettingsHelp label={t('heading')} content={t('description')} />
       </div>
-
       <div className="flex flex-wrap items-center gap-4">
         <div className="border-line bg-surface-sunken rounded-ak-control flex size-20 shrink-0 items-center justify-center overflow-hidden border">
           {branding.logoUrl ? (

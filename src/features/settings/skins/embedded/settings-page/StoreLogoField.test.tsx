@@ -57,7 +57,7 @@ describe('StoreLogoField (embedded, ar)', () => {
         'PNG أو JPEG، حتى 5 ميجابايت، وأقصر ضلع فيها 64 بكسل على الأقل.'
       )
     ).toBeTruthy()
-    expect(screen.queryByRole('img')).toBeNull()
+    expect(screen.queryByRole('img', { name: 'شعار متجرك' })).toBeNull()
     expect(
       screen.queryByRole('button', { name: 'إزالة شعار المتجر' })
     ).toBeNull()

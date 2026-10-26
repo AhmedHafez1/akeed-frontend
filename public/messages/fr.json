@@ -3633,5 +3633,15 @@
       "refused": "Akeed n’a pas pu se connecter à {store}.",
       "disconnected": "Akeed est déconnecté de {store}."
     }
+  },
+  "tips": {
+    "badge": {
+      "tip": "Conseil",
+      "update": "Nouveauté"
+    },
+    "dismiss": "Masquer définitivement {title}",
+    "dismissError": "Impossible de masquer cette carte. Réessayez.",
+    "sectionLabel": "Conseils et nouveautés",
+    "opensInNewTab": "s’ouvre dans un nouvel onglet"
   }
 }

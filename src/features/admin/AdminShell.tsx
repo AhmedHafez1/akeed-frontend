@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   BarChart3,
+  Lightbulb,
   LogOut,
   MessageSquareText,
   MessagesSquare,
@@ -43,6 +44,7 @@ export function AdminShell({ children }: AdminShellProps) {
       label: t('messageTexts'),
       icon: MessagesSquare,
     },
+    { href: `/${locale}/admin/tips`, label: t('tips'), icon: Lightbulb },
   ]
 
   const signOut = async () => {
