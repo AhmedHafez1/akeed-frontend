@@ -223,6 +223,14 @@ Optional:
 
 - `NEXT_PUBLIC_WOOCOMMERCE_CONNECT_ENABLED` — the same for WooCommerce. Turn the backend `WOOCOMMERCE_CONNECT_ENABLED` on first.
 
+- `NEXT_PUBLIC_META_PIXEL_ID` — the Meta Pixel the standalone site reports
+  to (`src/shared/config/metaPixel.ts`). Set the production Pixel on Vercel
+  Production and the dev Pixel on Preview and locally. Unset, only a Vercel
+  production build (`NEXT_PUBLIC_VERCEL_ENV=production`) uses the production
+  Pixel; everything else uses the dev one. The backend's `META_PIXEL_ID` must
+  name the same Pixel, or the browser and server `CompleteRegistration`
+  events are not deduplicated.
+
 Signup is two steps on one route: `/signup` asks where the orders come from
 (`getStartRoutes()` in `src/shared/config/commerceSources.ts`), and
 `/signup?source=<id>` is the account form for that source. Shopify is an
