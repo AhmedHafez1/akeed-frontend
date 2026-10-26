@@ -1193,6 +1193,33 @@
         "body": "Tasa de confirmación, tasa de respuesta y pedidos que requieren seguimiento."
       }
     },
+    "headerTools": {
+      "close": "Cerrar",
+      "tips": {
+        "trigger": "Consejos y novedades",
+        "heading": "Consejos y novedades",
+        "empty": "No hay consejos ni novedades por ahora"
+      },
+      "usage": {
+        "trigger": "{count, plural, one {Queda {formatted} mensaje} other {Quedan {formatted} mensajes}}",
+        "triggerUnknown": "Uso de mensajes",
+        "heading": "Uso de mensajes",
+        "allowance": {
+          "free": "Mensajes gratis",
+          "monthly": "Mensajes mensuales",
+          "generic": "Mensajes"
+        },
+        "usedOf": "{used} / {limit} usados",
+        "remaining": "{count, plural, one {Queda {formatted} mensaje} other {Quedan {formatted} mensajes}}",
+        "consequence": "Las confirmaciones se detienen cuando se agotan.",
+        "consequenceExhausted": "Las confirmaciones se detuvieron. Elige un plan para reanudarlas.",
+        "unavailable": "El uso de mensajes no está disponible ahora.",
+        "stale": "No se pudo actualizar el uso",
+        "retry": "Reintentar",
+        "retryLabel": "Reintentar la carga del uso de mensajes",
+        "cta": "Elegir un plan"
+      }
+    },
     "overview": {
       "title": "Panel",
       "periodLabel": "Periodo",
@@ -1211,10 +1238,6 @@
         "editLabel": "Editar la configuración de confirmación"
       },
       "credits": {
-        "warning": "Usaste {used} de {limit} mensajes. Las confirmaciones se detienen cuando se agotan.",
-        "exhausted": "Usaste los {limit} mensajes. Las confirmaciones están detenidas hasta que elijas un plan.",
-        "progressLabel": "Uso de mensajes",
-        "cta": "Elegir un plan",
         "plansModalTitle": "Elige tu plan"
       },
       "kpis": {

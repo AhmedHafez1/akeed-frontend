@@ -305,6 +305,7 @@ describe('French messages', () => {
       'dashboard.confirmations.resource.singular',
       'dashboard.confirmations.title',
       'dashboard.firstRun.confirmations.title',
+      'dashboard.headerTools.usage.allowance.generic',
       'dashboard.metrics.cards.total',
       'dashboard.sources.easyorders',
       'dashboard.sources.salla',

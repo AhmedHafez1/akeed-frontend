@@ -6,7 +6,7 @@ import { NextIntlClientProvider } from 'next-intl'
 import { testLocale } from '../../../../../test/vitest/setup'
 import ar from '../../../../../public/messages/ar.json'
 import type { TipCardView } from '../../domain/useTipCards'
-import { TipCardEmbedded } from './TipCardEmbedded'
+import { TipEntryEmbedded } from './TipEntryEmbedded'
 
 const router = vi.hoisted(() => ({ push: vi.fn() }))
 vi.mock('next/navigation', async (importOriginal) => ({
@@ -22,7 +22,7 @@ function renderCard(view: TipCardView, canDismiss = true) {
   render(
     <NextIntlClientProvider locale="ar" messages={ar} timeZone="UTC">
       <AppProvider i18n={enTranslations}>
-        <TipCardEmbedded view={view} canDismiss={canDismiss} {...handlers} />
+        <TipEntryEmbedded view={view} canDismiss={canDismiss} {...handlers} />
       </AppProvider>
     </NextIntlClientProvider>
   )
@@ -39,7 +39,7 @@ const base = {
   published_at: '2026-10-25T10:00:00.000Z',
 }
 
-describe('TipCardEmbedded', () => {
+describe('TipEntryEmbedded', () => {
   afterEach(() => vi.clearAllMocks())
 
   it('navigates in the app for an internal button and records the click', () => {

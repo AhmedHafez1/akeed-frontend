@@ -765,6 +765,19 @@
   z-index: 30;
 }
 
+/*
+ * The embedded period select keeps its resting look after a mouse or touch
+ * press: the open list already shows where the merchant is. Keyboard focus
+ * (`EmbeddedPageHeader` clears the marker on any key) keeps Polaris's ring.
+ */
+.akeed-period-select[data-pointer-focus]
+  .Polaris-Select__Input:focus-visible
+  ~ .Polaris-Select__Backdrop {
+  border-color: var(--p-color-input-border);
+  background-color: var(--p-color-input-bg-surface);
+  outline: none;
+}
+
 @media (max-width: 48rem) {
   .akeed-embedded-content {
     padding-inline: 0.75rem;

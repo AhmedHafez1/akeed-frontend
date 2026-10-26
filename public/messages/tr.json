@@ -1193,6 +1193,33 @@
         "body": "Onay oranı, yanıt oranı ve takip gerektiren siparişler."
       }
     },
+    "headerTools": {
+      "close": "Kapat",
+      "tips": {
+        "trigger": "İpuçları ve güncellemeler",
+        "heading": "İpuçları ve güncellemeler",
+        "empty": "Şu anda ipucu veya güncelleme yok"
+      },
+      "usage": {
+        "trigger": "{count, plural, one {{formatted} mesaj kaldı} other {{formatted} mesaj kaldı}}",
+        "triggerUnknown": "Mesaj kullanımı",
+        "heading": "Mesaj kullanımı",
+        "allowance": {
+          "free": "Ücretsiz mesajlar",
+          "monthly": "Aylık mesajlar",
+          "generic": "Mesajlar"
+        },
+        "usedOf": "{used} / {limit} kullanıldı",
+        "remaining": "{count, plural, one {{formatted} mesaj kaldı} other {{formatted} mesaj kaldı}}",
+        "consequence": "Mesajlar bittiğinde onaylar durur.",
+        "consequenceExhausted": "Onaylar durdu. Yeniden başlatmak için bir plan seçin.",
+        "unavailable": "Mesaj kullanımı şu anda görüntülenemiyor.",
+        "stale": "Kullanım yenilenemedi",
+        "retry": "Yeniden dene",
+        "retryLabel": "Mesaj kullanımını yeniden yükle",
+        "cta": "Plan seçin"
+      }
+    },
     "overview": {
       "title": "Panel",
       "periodLabel": "Dönem",
@@ -1211,10 +1238,6 @@
         "editLabel": "Onay ayarlarını düzenle"
       },
       "credits": {
-        "warning": "{limit} mesajın {used} tanesini kullandınız. Mesajlar bittiğinde onaylar durur.",
-        "exhausted": "{limit} mesajın tamamını kullandınız. Bir plan seçene kadar onaylar durduruldu.",
-        "progressLabel": "Mesaj kullanımı",
-        "cta": "Plan seçin",
         "plansModalTitle": "Planınızı seçin"
       },
       "kpis": {
