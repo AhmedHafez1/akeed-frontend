@@ -2323,6 +2323,33 @@
         "body": "Confirmation rate, reply rate, and orders that need follow-up."
       }
     },
+    "headerTools": {
+      "close": "Close",
+      "tips": {
+        "trigger": "Tips & updates",
+        "heading": "Tips & updates",
+        "empty": "No tips or updates right now"
+      },
+      "usage": {
+        "trigger": "{count, plural, one {{formatted} message left} other {{formatted} messages left}}",
+        "triggerUnknown": "Message usage",
+        "heading": "Message usage",
+        "allowance": {
+          "free": "Free messages",
+          "monthly": "Monthly messages",
+          "generic": "Messages"
+        },
+        "usedOf": "{used} / {limit} used",
+        "remaining": "{count, plural, one {{formatted} message remaining} other {{formatted} messages remaining}}",
+        "consequence": "Confirmations stop when these run out.",
+        "consequenceExhausted": "Confirmations have stopped. Choose a plan to start them again.",
+        "unavailable": "Message usage isn’t available right now.",
+        "stale": "Unable to refresh usage",
+        "retry": "Retry",
+        "retryLabel": "Retry loading message usage",
+        "cta": "Choose a plan"
+      }
+    },
     "overview": {
       "title": "Dashboard",
       "periodLabel": "Period",
@@ -2341,10 +2368,6 @@
         "editLabel": "Edit confirmation settings"
       },
       "credits": {
-        "warning": "You've used {used} of {limit} messages. Confirmations stop when they run out.",
-        "exhausted": "You've used all {limit} messages. Confirmations have stopped until you choose a plan.",
-        "progressLabel": "Message usage",
-        "cta": "Choose a plan",
         "plansModalTitle": "Choose your plan"
       },
       "kpis": {

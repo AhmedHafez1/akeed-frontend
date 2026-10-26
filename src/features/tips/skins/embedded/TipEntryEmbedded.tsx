@@ -1,12 +1,11 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, type Ref } from 'react'
 import {
   Badge,
   BlockStack,
   Box,
   Button,
-  Card,
   InlineStack,
   Text,
 } from '@shopify/polaris'
@@ -17,7 +16,8 @@ import { useSeenOnce } from '@/shared/hooks/useSeenOnce'
 import { getLocaleDirection } from '@/shared/lib/locale'
 import type { TipCardView } from '../../domain/useTipCards'
 
-export interface TipCardEmbeddedProps {
+export interface TipEntryEmbeddedProps {
+  ref?: Ref<HTMLDivElement>
   view: TipCardView
   canDismiss: boolean
   onSeen: (id: string) => void
@@ -25,24 +25,29 @@ export interface TipCardEmbeddedProps {
   onDismiss: (id: string) => void
 }
 
-/** One tip or feature update on the embedded Shopify dashboard. */
-export function TipCardEmbedded({
+/**
+ * One tip or feature update in the embedded Tips & updates panel. It mounts
+ * only while the panel is open, so a view is recorded once at least half of
+ * it is actually on screen, never because the header button exists.
+ */
+export function TipEntryEmbedded({
+  ref,
   view,
   canDismiss,
   onSeen,
   onAction,
   onDismiss,
-}: TipCardEmbeddedProps) {
+}: TipEntryEmbeddedProps) {
   const t = useTranslations('tips')
   const router = useRouter()
-  const ref = useRef<HTMLDivElement>(null)
+  const seenRef = useRef<HTMLDivElement>(null)
   const { card, link } = view
-  useSeenOnce(ref, () => onSeen(card.id))
+  useSeenOnce(seenRef, () => onSeen(card.id))
 
   return (
-    <div ref={ref}>
-      <Card>
-        <BlockStack gap="300">
+    <div ref={ref} tabIndex={-1} className="outline-none">
+      <div ref={seenRef}>
+        <BlockStack gap="200">
           <InlineStack
             align="space-between"
             blockAlign="start"
@@ -96,7 +101,7 @@ export function TipCardEmbedded({
             </BlockStack>
           </div>
         </BlockStack>
-      </Card>
+      </div>
     </div>
   )
 }

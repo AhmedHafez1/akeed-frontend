@@ -77,6 +77,12 @@ function listState(capacity: CapacitySummary | null) {
   } as unknown as ReturnType<typeof useConfirmationsList>
 }
 
+const embeddedOnly = {
+  title: 'Confirmations',
+  onEditSettings: vi.fn(),
+  onChoosePlan: vi.fn(),
+}
+
 const shared = {
   period: 'last_30_days' as const,
   periodOptions: [],
@@ -100,7 +106,10 @@ describe('blocked-orders warning on the confirmations list', () => {
   it('shows on the embedded list while orders wait', () => {
     vi.mocked(useConfirmationsList).mockReturnValue(listState(blocked))
 
-    renderEmbedded(<ConfirmationsEmbedded {...shared} />, 'en')
+    renderEmbedded(
+      <ConfirmationsEmbedded {...shared} {...embeddedOnly} />,
+      'en'
+    )
 
     expect(screen.getByText('Orders waiting to be sent: 4')).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Upgrade plan' })).toBeTruthy()
@@ -112,7 +121,10 @@ describe('blocked-orders warning on the confirmations list', () => {
     )
 
     renderStandalone(<DashboardVerificationsStandaloneSkin {...shared} />, 'en')
-    renderEmbedded(<ConfirmationsEmbedded {...shared} />, 'en')
+    renderEmbedded(
+      <ConfirmationsEmbedded {...shared} {...embeddedOnly} />,
+      'en'
+    )
 
     expect(screen.queryByText(/Orders waiting to be sent/)).toBeNull()
   })

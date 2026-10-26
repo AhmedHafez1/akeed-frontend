@@ -5,7 +5,6 @@ import type {
   NeedsActionItem,
   VerificationItem,
 } from '../../../model/dashboard.model'
-import { CreditsBar } from './overview/CreditsBar'
 import { KpiCards } from './overview/KpiCards'
 import { MessageFlowCard } from './overview/MessageFlowCard'
 import { NeedsActionCard } from './overview/NeedsActionCard'
@@ -216,49 +215,6 @@ describe('MessageFlowCard', () => {
     expect(
       screen.getByText('No messages sent in this period yet.')
     ).toBeTruthy()
-  })
-})
-
-describe('CreditsBar', () => {
-  it('stays hidden below 80%', () => {
-    const { container } = renderEmbedded(
-      <CreditsBar
-        usage={{ used: 20, limit: 30, percent: 66, state: 'ok' }}
-        onChoosePlan={vi.fn()}
-      />
-    )
-    expect(container.textContent).toBe('')
-  })
-
-  it('warns from 80% and critically at the limit', () => {
-    const onChoosePlan = vi.fn()
-    renderEmbedded(
-      <CreditsBar
-        usage={{ used: 27, limit: 30, percent: 90, state: 'warning' }}
-        onChoosePlan={onChoosePlan}
-      />
-    )
-    expect(screen.getByRole('status').textContent).toContain(
-      'استخدمت 27 من 30 رسالة'
-    )
-    expect(screen.getByRole('progressbar').getAttribute('aria-valuenow')).toBe(
-      '27'
-    )
-    fireEvent.click(screen.getByRole('button', { name: 'اختر باقة' }))
-    expect(onChoosePlan).toHaveBeenCalled()
-  })
-
-  it('announces that confirmations stopped at 100%', () => {
-    renderEmbedded(
-      <CreditsBar
-        usage={{ used: 30, limit: 30, percent: 100, state: 'exhausted' }}
-        onChoosePlan={vi.fn()}
-      />,
-      'en'
-    )
-    expect(screen.getByRole('alert').textContent).toContain(
-      'Confirmations have stopped'
-    )
   })
 })
 

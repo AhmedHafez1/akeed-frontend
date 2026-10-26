@@ -17,7 +17,6 @@ import {
 import { ExportIcon, SearchIcon } from '@shopify/polaris-icons'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { UpgradePlansModal } from '@/features/billing'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { resolveEmbeddedContextFromSearch } from '@/shared/lib/embedded-context'
 import { CONFIRMATIONS_TABS } from '../../domain/confirmationsUrlState'
@@ -52,8 +51,11 @@ interface ConfirmationsEmbeddedProps {
   onPeriodChange: (period: DashboardStatsDateRange) => void
   /** The main tabs, standing in for the page title. */
   title: ReactNode
+  /** Tips and usage, before the period select. */
+  headerActions?: ReactNode
   /** Shown under the page header, above the filters. */
   afterHeader?: ReactNode
+  onChoosePlan: () => void
   tab: ConfirmationsTab
   onTabChange: (tab: ConfirmationsTab) => void
   onEditSettings: () => void
@@ -65,7 +67,9 @@ export function ConfirmationsEmbedded({
   periodOptions,
   onPeriodChange,
   title,
+  headerActions,
   afterHeader,
+  onChoosePlan,
   tab,
   onTabChange,
   onEditSettings,
@@ -76,7 +80,6 @@ export function ConfirmationsEmbedded({
   const confirmation = useManualConfirmation()
   const searchParams = useSearchParams()
   const embeddedContext = resolveEmbeddedContextFromSearch(searchParams)
-  const [isPlansOpen, setIsPlansOpen] = useState(false)
   // Six columns do not fit a phone; below md each order becomes a card.
   const { mdUp } = useBreakpoints({ defaults: { mdUp: true } })
   const ConfirmationsList = mdUp ? ConfirmationsTable : ConfirmationsCardList
@@ -202,10 +205,13 @@ export function ConfirmationsEmbedded({
             t('confirmations.subtitle')
           )
         }
-        periodLabel={t('overview.periodLabel')}
-        period={period}
-        periodOptions={periodOptions}
-        onPeriodChange={onPeriodChange}
+        actions={headerActions}
+        periodControl={{
+          label: t('overview.periodLabel'),
+          value: period,
+          options: periodOptions,
+          onChange: onPeriodChange,
+        }}
       />
 
       {afterHeader}
@@ -214,7 +220,7 @@ export function ConfirmationsEmbedded({
         capacity={list.capacity}
         timeZone={list.reportingTimezone}
         hostParam={embeddedContext.hostParam}
-        onChoosePlan={() => setIsPlansOpen(true)}
+        onChoosePlan={onChoosePlan}
       />
 
       {shownFeedback && (
@@ -334,12 +340,6 @@ export function ConfirmationsEmbedded({
         isConfirming={confirmation.isConfirming}
         onConfirm={() => void confirmation.confirm()}
         onDismiss={confirmation.dismiss}
-      />
-      <UpgradePlansModal
-        open={isPlansOpen}
-        title={t('overview.credits.plansModalTitle')}
-        hostParam={embeddedContext.hostParam}
-        onClose={() => setIsPlansOpen(false)}
       />
       <Modal
         open={cancelTarget !== null}

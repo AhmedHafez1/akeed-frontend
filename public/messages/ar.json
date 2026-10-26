@@ -2317,6 +2317,33 @@
         "body": "معدل التأكيد، معدل الرد، والطلبات التي تحتاج متابعة."
       }
     },
+    "headerTools": {
+      "close": "إغلاق",
+      "tips": {
+        "trigger": "نصائح وتحديثات",
+        "heading": "نصائح وتحديثات",
+        "empty": "لا توجد نصائح أو تحديثات الآن"
+      },
+      "usage": {
+        "trigger": "{count, plural, zero {لم تتبقَّ رسائل} one {رسالة واحدة متبقية} two {رسالتان متبقيتان} few {{formatted} رسائل متبقية} many {{formatted} رسالة متبقية} other {{formatted} رسالة متبقية}}",
+        "triggerUnknown": "استخدام الرسائل",
+        "heading": "استخدام الرسائل",
+        "allowance": {
+          "free": "الرسائل المجانية",
+          "monthly": "الرسائل الشهرية",
+          "generic": "الرسائل"
+        },
+        "usedOf": "تم استخدام {used} من {limit}",
+        "remaining": "{count, plural, zero {لم تتبقَّ رسائل} one {رسالة واحدة متبقية} two {رسالتان متبقيتان} few {{formatted} رسائل متبقية} many {{formatted} رسالة متبقية} other {{formatted} رسالة متبقية}}",
+        "consequence": "تتوقف التأكيدات عند نفاد الرسائل.",
+        "consequenceExhausted": "توقفت التأكيدات. اختر باقة لاستئنافها.",
+        "unavailable": "استخدام الرسائل غير متاح الآن.",
+        "stale": "تعذّر تحديث الاستخدام",
+        "retry": "إعادة المحاولة",
+        "retryLabel": "إعادة تحميل استخدام الرسائل",
+        "cta": "اختر باقة"
+      }
+    },
     "overview": {
       "title": "لوحة التحكم",
       "periodLabel": "الفترة",
@@ -2335,10 +2362,6 @@
         "editLabel": "تعديل إعدادات التأكيد"
       },
       "credits": {
-        "warning": "استخدمت {used} من {limit} رسالة. بعد نفادها تتوقف التأكيدات.",
-        "exhausted": "استخدمت كل رسائلك ({limit} من {limit}). توقفت التأكيدات حتى تختار باقة.",
-        "progressLabel": "استهلاك الرسائل",
-        "cta": "اختر باقة",
         "plansModalTitle": "اختر باقتك"
       },
       "kpis": {

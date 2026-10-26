@@ -1193,6 +1193,33 @@
         "body": "Taux de confirmation, taux de réponse et commandes à relancer."
       }
     },
+    "headerTools": {
+      "close": "Fermer",
+      "tips": {
+        "trigger": "Conseils et nouveautés",
+        "heading": "Conseils et nouveautés",
+        "empty": "Aucun conseil ni nouveauté pour l’instant"
+      },
+      "usage": {
+        "trigger": "{count, plural, one {{formatted} message restant} other {{formatted} messages restants}}",
+        "triggerUnknown": "Utilisation des messages",
+        "heading": "Utilisation des messages",
+        "allowance": {
+          "free": "Messages gratuits",
+          "monthly": "Messages mensuels",
+          "generic": "Messages"
+        },
+        "usedOf": "{used} / {limit} utilisés",
+        "remaining": "{count, plural, one {{formatted} message restant} other {{formatted} messages restants}}",
+        "consequence": "Les confirmations s’arrêtent quand ils sont épuisés.",
+        "consequenceExhausted": "Les confirmations sont arrêtées. Choisissez un forfait pour les relancer.",
+        "unavailable": "L’utilisation des messages n’est pas disponible pour le moment.",
+        "stale": "Impossible d’actualiser l’utilisation",
+        "retry": "Réessayer",
+        "retryLabel": "Recharger l’utilisation des messages",
+        "cta": "Choisir un forfait"
+      }
+    },
     "overview": {
       "title": "Tableau de bord",
       "periodLabel": "Période",
@@ -1211,10 +1238,6 @@
         "editLabel": "Modifier les paramètres de confirmation"
       },
       "credits": {
-        "warning": "Vous avez utilisé {used} messages sur {limit}. Les confirmations s’arrêtent quand ils sont épuisés.",
-        "exhausted": "Vous avez utilisé vos {limit} messages. Les confirmations sont arrêtées jusqu’à ce que vous choisissiez un forfait.",
-        "progressLabel": "Utilisation des messages",
-        "cta": "Choisir un forfait",
         "plansModalTitle": "Choisissez votre forfait"
       },
       "kpis": {

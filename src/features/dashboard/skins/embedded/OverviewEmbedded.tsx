@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import {
   Banner,
   BlockStack,
@@ -13,14 +13,12 @@ import {
 } from '@shopify/polaris'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { UpgradePlansModal } from '@/features/billing'
 import { resolveEmbeddedContextFromSearch } from '@/shared/lib/embedded-context'
 import { useDashboardOverview } from '../../domain/useDashboardOverview'
 import { useManualConfirmation } from '../../domain/useManualConfirmation'
 import type { DateRangeFilterOption } from '../../domain/dashboard.types'
 import type { DashboardStatsDateRange } from '../../model/dashboard.model'
 import { BlockedOrdersBanner } from './components/overview/BlockedOrdersBanner'
-import { CreditsBar } from './components/overview/CreditsBar'
 import { EmbeddedPageHeader } from './components/overview/EmbeddedPageHeader'
 import { KpiCards } from './components/overview/KpiCards'
 import { MessageFlowCard } from './components/overview/MessageFlowCard'
@@ -58,21 +56,24 @@ interface OverviewEmbeddedProps {
   onPeriodChange: (period: DashboardStatsDateRange) => void
   /** The main tabs, given the number of orders waiting on the merchant. */
   renderTitle: (needsActionCount: number | null) => ReactNode
-  titleMetadata?: ReactNode
+  /** Tips and usage, before the period select. */
+  headerActions?: ReactNode
   /** Shown under the page header, above everything else. */
   afterHeader?: ReactNode
+  onChoosePlan: () => void
   onEditSettings: () => void
   onViewNeedsAction: () => void
 }
 
-/** The embedded dashboard: settings, usage, three KPIs, actions, the funnel. */
+/** The embedded dashboard: settings, warnings, three KPIs, actions, the funnel. */
 export function OverviewEmbedded({
   period,
   periodOptions,
   onPeriodChange,
   renderTitle,
-  titleMetadata,
+  headerActions,
   afterHeader,
+  onChoosePlan,
   onEditSettings,
   onViewNeedsAction,
 }: OverviewEmbeddedProps) {
@@ -80,14 +81,12 @@ export function OverviewEmbedded({
   const searchParams = useSearchParams()
   const { overview, isLoading, isError, retry } = useDashboardOverview(period)
   const confirmation = useManualConfirmation()
-  const [isPlansOpen, setIsPlansOpen] = useState(false)
   const embeddedContext = resolveEmbeddedContextFromSearch(searchParams)
 
   return (
     <BlockStack gap="500">
       <EmbeddedPageHeader
         title={renderTitle(overview?.needs_action.count ?? null)}
-        titleMetadata={titleMetadata}
         subtitle={
           overview ? (
             <SettingsStatusLine
@@ -96,10 +95,13 @@ export function OverviewEmbedded({
             />
           ) : undefined
         }
-        periodLabel={t('periodLabel')}
-        period={period}
-        periodOptions={periodOptions}
-        onPeriodChange={onPeriodChange}
+        actions={headerActions}
+        periodControl={{
+          label: t('periodLabel'),
+          value: period,
+          options: periodOptions,
+          onChange: onPeriodChange,
+        }}
       />
 
       {afterHeader}
@@ -134,14 +136,8 @@ export function OverviewEmbedded({
             capacity={overview.capacity}
             timeZone={overview.reporting_timezone}
             hostParam={embeddedContext.hostParam}
-            onChoosePlan={() => setIsPlansOpen(true)}
+            onChoosePlan={onChoosePlan}
           />
-          {overview.usage && (
-            <CreditsBar
-              usage={overview.usage}
-              onChoosePlan={() => setIsPlansOpen(true)}
-            />
-          )}
           <KpiCards kpis={overview.kpis} />
           <NeedsActionCard
             needsAction={overview.needs_action}
@@ -162,12 +158,6 @@ export function OverviewEmbedded({
         isConfirming={confirmation.isConfirming}
         onConfirm={() => void confirmation.confirm()}
         onDismiss={confirmation.dismiss}
-      />
-      <UpgradePlansModal
-        open={isPlansOpen}
-        title={t('credits.plansModalTitle')}
-        hostParam={embeddedContext.hostParam}
-        onClose={() => setIsPlansOpen(false)}
       />
     </BlockStack>
   )

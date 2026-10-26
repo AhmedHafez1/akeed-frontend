@@ -1,10 +1,13 @@
 'use client'
 
-import { useCallback, useMemo } from 'react'
-import { Badge, BlockStack, Page } from '@shopify/polaris'
+import { useCallback, useMemo, useState } from 'react'
+import { BlockStack, Page } from '@shopify/polaris'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { TipsSectionEmbedded } from '@/features/tips'
+import { UpgradePlansModal } from '@/features/billing'
+import { useTipCards } from '@/features/tips'
+import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
+import { resolveEmbeddedContextFromSearch } from '@/shared/lib/embedded-context'
 import { resolveMainTab } from '../../domain/mainTabs'
 import {
   rangeParam,
@@ -15,10 +18,14 @@ import { DASHBOARD_DATE_RANGE_IDS } from '../../domain/verificationFilters'
 import type { DashboardStatsDateRange } from '../../model/dashboard.model'
 import type { DateRangeFilterOption } from '../../domain/dashboard.types'
 import { DashboardActivationSection } from './components/DashboardActivationSection'
+import { HeaderTools } from './components/header/HeaderTools'
+import { EmbeddedPageHeader } from './components/overview/EmbeddedPageHeader'
 import { MainTabsTitle } from './components/MainTabsTitle'
 import { MetricsPlaceholder } from './components/MetricsPlaceholder'
 import { ReviewPromptCard } from './components/ReviewPromptCard'
 import { useDashboardActivation } from '../../domain/useDashboardActivation'
+import { useHeaderPanels } from '../../domain/useHeaderPanels'
+import { useMessageUsage } from '../../domain/useMessageUsage'
 import { useReviewPrompt } from '../../domain/useReviewPrompt'
 import { OverviewEmbedded } from './OverviewEmbedded'
 import { ConfirmationsEmbedded } from './ConfirmationsEmbedded'
@@ -31,6 +38,8 @@ import { ConfirmationsEmbedded } from './ConfirmationsEmbedded'
  */
 export function MainEmbeddedSkin() {
   const t = useTranslations('dashboard')
+  const tTips = useTranslations('tips')
+  const { shopify } = useAkeedMode()
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -57,9 +66,52 @@ export function MainEmbeddedSkin() {
     />
   )
 
-  // Admin-published tips sit above the tabs, so both tabs show them, from
-  // the first run on.
-  const tipsSection = <TipsSectionEmbedded enabled={activation.isLoaded} />
+  // Tips, usage and the plan picker belong to the page, not to a tab: both
+  // tabs show the same count and open the same picker, and a tip counts as
+  // viewed once per page however often its panel reopens.
+  const panels = useHeaderPanels(activeTab)
+  const tips = useTipCards({
+    mode: 'embedded',
+    enabled: activation.isLoaded,
+    onDismissError: () =>
+      shopify?.toast.show(tTips('dismissError'), { isError: true }),
+  })
+  const usage = useMessageUsage(period, activation.state?.billingPlanId)
+  const hostParam = resolveEmbeddedContextFromSearch(searchParams).hostParam
+  const [plansReturnFocus, setPlansReturnFocus] = useState<{
+    target: HTMLElement | null
+  } | null>(null)
+  const openPlans = (target?: HTMLElement | null) =>
+    setPlansReturnFocus({
+      target:
+        target ??
+        (document.activeElement instanceof HTMLElement
+          ? document.activeElement
+          : null),
+    })
+  const closePlans = () => {
+    const target = plansReturnFocus?.target
+    setPlansReturnFocus(null)
+    // The panel's button is gone by now; the usage trigger is stable.
+    requestAnimationFrame(() =>
+      (target?.isConnected ? target : panels.usageTriggerRef.current)?.focus()
+    )
+  }
+
+  const headerActions = (
+    <HeaderTools
+      panels={panels}
+      usage={usage}
+      tips={{
+        cards: tips.cards,
+        canDismiss: tips.canDismiss,
+        onSeen: tips.onSeen,
+        onAction: tips.onAction,
+        onDismiss: tips.onDismiss,
+      }}
+      onChoosePlan={() => openPlans(panels.usageTriggerRef.current)}
+    />
+  )
 
   const updateParams = useCallback(
     (changes: Record<string, string | null>) => {
@@ -92,15 +144,6 @@ export function MainEmbeddedSkin() {
       needsActionCount={needsActionCount}
     />
   )
-  const freeMessagesBadge =
-    activation.freeMessagesLeft !== null ? (
-      <Badge tone="success">
-        {t('activation.freeMessagesLeft', {
-          count: activation.freeMessagesLeft,
-        })}
-      </Badge>
-    ) : undefined
-
   return (
     // Polaris caps a page at 998px, which crowds the nine-column table. Both
     // views share one 1320px width, so switching never moves the page edges.
@@ -110,11 +153,13 @@ export function MainEmbeddedSkin() {
           {showActivation && (
             <DashboardActivationSection activation={activation} />
           )}
-          {tipsSection}
           {activeTab === 'metrics' ? (
             showActivation ? (
               <>
-                {renderTitle(null)}
+                <EmbeddedPageHeader
+                  title={renderTitle(null)}
+                  actions={headerActions}
+                />
                 <MetricsPlaceholder
                   title={t('activation.metricsPlaceholder.title')}
                   body={t('activation.metricsPlaceholder.body')}
@@ -126,8 +171,9 @@ export function MainEmbeddedSkin() {
                 periodOptions={periodOptions}
                 onPeriodChange={onPeriodChange}
                 renderTitle={renderTitle}
-                titleMetadata={freeMessagesBadge}
+                headerActions={headerActions}
                 afterHeader={reviewPromptCard}
+                onChoosePlan={() => openPlans()}
                 onEditSettings={activation.openQuietHours}
                 onViewNeedsAction={() =>
                   updateParams({ tab: 'confirmations', filter: 'needs_action' })
@@ -140,7 +186,9 @@ export function MainEmbeddedSkin() {
               periodOptions={periodOptions}
               onPeriodChange={onPeriodChange}
               title={renderTitle(null)}
+              headerActions={headerActions}
               afterHeader={reviewPromptCard}
+              onChoosePlan={() => openPlans()}
               tab={confirmationsTab}
               onEditSettings={activation.openQuietHours}
               onTabChange={(next) =>
@@ -150,6 +198,12 @@ export function MainEmbeddedSkin() {
           )}
         </BlockStack>
       </div>
+      <UpgradePlansModal
+        open={plansReturnFocus !== null}
+        title={t('overview.credits.plansModalTitle')}
+        hostParam={hostParam}
+        onClose={closePlans}
+      />
     </Page>
   )
 }
