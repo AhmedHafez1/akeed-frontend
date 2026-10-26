@@ -85,10 +85,14 @@ type ShopifyReviewRequestCode =
   | 'already-open'
   | 'open-in-progress'
 
+/** Meta Pixel's global, loaded by `MarketingScripts` in standalone mode only. */
+type MetaPixelFbq = (...args: unknown[]) => void
+
 declare global {
   interface Window {
     shopify?: ShopifyGlobal
+    fbq?: MetaPixelFbq
   }
 }
 
-export type { ShopifyGlobal, ShopifyReviewRequestCode }
+export type { MetaPixelFbq, ShopifyGlobal, ShopifyReviewRequestCode }

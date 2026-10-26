@@ -3,6 +3,7 @@
 import { useCallback, useState } from 'react'
 import { auth, getEmailRedirectUrl } from '@/shared/lib/auth'
 import { isAlreadyRegistered } from '@/shared/lib/authErrors'
+import { reportCompleteRegistration } from './reportCompleteRegistration'
 import {
   EMPTY_SIGNUP_VALUES,
   firstInvalidField,
@@ -83,6 +84,9 @@ export function useSignup({
         setFieldErrors({ email: 'emailRegistered' })
         return 'email'
       }
+
+      // Only a created account counts as a registration for the ads.
+      if (data.user?.id) reportCompleteRegistration(data.user.id)
 
       if (data.session) onSignedIn()
       else onEmailSent(email)

@@ -8,16 +8,27 @@
  *  - They track Akeed marketing visitors, not Shopify merchants
  *  - They add unnecessary network overhead in embedded mode
  *  - They may interfere with Shopify's Content Security Policy
+ *
+ * This is the one place the Pixel is initialised and PageView is sent; other
+ * events go through `@/shared/lib/metaPixel`.
  */
 
 import Script from 'next/script'
+import { META_PIXEL_ID } from '@/shared/config/metaPixel'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
+import { useInstallClickTracking } from './useInstallClickTracking'
 
 export function MarketingScripts() {
   const { isStandalone } = useAkeedMode()
 
   // Don't load marketing scripts in Shopify embedded mode
   if (!isStandalone) return null
+
+  return <StandaloneMarketingScripts />
+}
+
+function StandaloneMarketingScripts() {
+  useInstallClickTracking()
 
   return (
     <>
@@ -32,7 +43,7 @@ export function MarketingScripts() {
           t.src=v;s=b.getElementsByTagName(e)[0];
           s.parentNode.insertBefore(t,s)}(window, document,'script',
           'https://connect.facebook.net/en_US/fbevents.js');
-          fbq('init', '2079384036148209');
+          fbq('init', ${JSON.stringify(META_PIXEL_ID)});
           fbq('track', 'PageView');
         `}
       </Script>
