@@ -11,8 +11,8 @@ import {
 } from '@shopify/polaris'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { useSeenOnce } from '@/shared/hooks/useSeenOnce'
 import { getLocaleDirection } from '@/shared/lib/locale'
+import { useTipReadVisibility } from '../../domain/useTipReadVisibility'
 import type { TipCardView } from '../../domain/useTipCards'
 
 export interface TipEntryEmbeddedProps {
@@ -26,8 +26,8 @@ export interface TipEntryEmbeddedProps {
 
 /**
  * One tip or feature update in the embedded Tips & updates panel. It mounts
- * only while the panel is open, so a view is recorded once at least half of
- * it is actually on screen, never because the header button exists.
+ * only while the panel is open. A view requires two continuous seconds with
+ * at least half the entry visible in an active browser tab.
  */
 export function TipEntryEmbedded({
   ref,
@@ -41,7 +41,8 @@ export function TipEntryEmbedded({
   const router = useRouter()
   const seenRef = useRef<HTMLDivElement>(null)
   const { card, link } = view
-  useSeenOnce(seenRef, () => onSeen(card.id))
+  const unread = card.first_viewed_at === null
+  useTipReadVisibility(seenRef, () => onSeen(card.id), !card.first_viewed_at)
 
   return (
     <div ref={ref} tabIndex={-1} className="outline-none">
@@ -54,9 +55,22 @@ export function TipEntryEmbedded({
           </InlineStack>
           <div lang={card.locale} dir={getLocaleDirection(card.locale)}>
             <BlockStack gap="200" inlineAlign="start">
-              <Text as="h3" variant="headingSm" breakWord>
-                <span className="whitespace-pre-line">{card.title}</span>
-              </Text>
+              <div className="flex items-center gap-2">
+                <span
+                  aria-hidden="true"
+                  className="shrink-0 rounded-full"
+                  style={{
+                    width: 6,
+                    height: 6,
+                    background: 'var(--p-color-icon-info)',
+                    visibility: unread ? 'visible' : 'hidden',
+                  }}
+                />
+                <Text as="h3" variant="headingSm" breakWord>
+                  {unread && <span className="sr-only">{t('unread')}: </span>}
+                  <span className="whitespace-pre-line">{card.title}</span>
+                </Text>
+              </div>
               <Text as="p" tone="subdued" breakWord>
                 <span className="whitespace-pre-line">{card.description}</span>
               </Text>

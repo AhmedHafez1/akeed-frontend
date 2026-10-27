@@ -1196,6 +1196,7 @@
     "headerTools": {
       "close": "Kapat",
       "tips": {
+        "unreadTrigger": "İpuçları ve güncellemeler — okunmamış öğeler",
         "trigger": "İpuçları ve güncellemeler",
         "heading": "İpuçları ve güncellemeler",
         "empty": "Şu anda ipucu veya güncelleme yok"
@@ -3653,6 +3654,7 @@
     }
   },
   "tips": {
+    "unread": "Okunmadı",
     "badge": {
       "tip": "İpucu",
       "update": "Yeni özellik"

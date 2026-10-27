@@ -34,12 +34,15 @@ interface HeaderTriggerProps {
   controls: string
   tone?: HeaderTriggerTone
   loading?: boolean
+  iconTone?: 'info'
+  accessibilityLabel?: string
   onClick: () => void
 }
 
 /**
  * A labelled header button that opens a panel. The label carries the state
- * (the count), so the tone is never the only signal. No unread dot or badge.
+ * (the count), so the tone is never the only signal. The icon can also signal
+ * unread tips.
  */
 export function HeaderTrigger({
   ref,
@@ -49,6 +52,8 @@ export function HeaderTrigger({
   controls,
   tone = 'neutral',
   loading,
+  iconTone,
+  accessibilityLabel,
   onClick,
 }: HeaderTriggerProps) {
   return (
@@ -56,6 +61,7 @@ export function HeaderTrigger({
       ref={ref}
       type="button"
       {...{ [HEADER_TRIGGER_ATTRIBUTE]: '' }}
+      aria-label={accessibilityLabel}
       aria-haspopup="dialog"
       aria-expanded={expanded}
       aria-controls={expanded ? controls : undefined}
@@ -73,7 +79,15 @@ export function HeaderTrigger({
         outlineColor: 'var(--p-color-border-focus)',
       }}
     >
-      <span className="shrink-0" aria-hidden="true">
+      <span
+        className="shrink-0"
+        aria-hidden="true"
+        style={
+          iconTone === 'info'
+            ? { color: 'var(--p-color-icon-info)' }
+            : undefined
+        }
+      >
         {loading ? (
           <Spinner size="small" />
         ) : (

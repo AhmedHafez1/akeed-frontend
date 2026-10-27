@@ -1196,6 +1196,7 @@
     "headerTools": {
       "close": "Fermer",
       "tips": {
+        "unreadTrigger": "Conseils et nouveautés — éléments non lus",
         "trigger": "Conseils et nouveautés",
         "heading": "Conseils et nouveautés",
         "empty": "Aucun conseil ni nouveauté pour l’instant"
@@ -3653,6 +3654,7 @@
     }
   },
   "tips": {
+    "unread": "Non lu",
     "badge": {
       "tip": "Conseil",
       "update": "Nouveauté"

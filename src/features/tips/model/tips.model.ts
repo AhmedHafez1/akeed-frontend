@@ -18,6 +18,8 @@ export type TipCardAction =
   | { kind: 'external'; url: string; label: string }
 
 export interface TipCard {
+  /** Missing on older APIs; only explicit null means unread. */
+  first_viewed_at?: string | null
   id: string
   type: TipType
   /** The language the card is written in; may be the English fallback. */

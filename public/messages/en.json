@@ -2326,6 +2326,7 @@
     "headerTools": {
       "close": "Close",
       "tips": {
+        "unreadTrigger": "Tips & updates — unread items",
         "trigger": "Tips & updates",
         "heading": "Tips & updates",
         "empty": "No tips or updates right now"
@@ -4850,6 +4851,7 @@
     }
   },
   "tips": {
+    "unread": "Unread",
     "badge": {
       "tip": "Tip",
       "update": "New feature"
