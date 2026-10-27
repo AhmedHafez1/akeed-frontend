@@ -119,8 +119,6 @@ export interface AdminImageTwin {
 /** The store's logo, banner and logo-header switch. */
 export interface AdminStoreLogoHeader {
   enabled: boolean
-  /** The store's plan includes the logo header (Pro and up, or prepaid credits). */
-  plan_included: boolean
   logo_url: string | null
   banner_url: string | null
   updated_at: string | null

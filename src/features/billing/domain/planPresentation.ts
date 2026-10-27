@@ -1,9 +1,9 @@
 /**
- * How the embedded app presents a Shopify plan. Plans differ in their monthly
- * message allowance, and Pro and up add the store logo on messages, so the
- * Plan tab and the plan picker read one model: two derived figures, one shared
- * feature list, the logo plans and one list of usage rules. Message keys live in
- * `billing.embeddedPlans`, except plan names (`embeddedOnboarding`).
+ * How the embedded app presents a Shopify plan. Plans differ only in their
+ * monthly message allowance, so the Plan tab and the plan picker read one
+ * model: two derived figures, one shared feature list and one list of usage
+ * rules. Message keys live in `billing.embeddedPlans`, except plan names
+ * (`embeddedOnboarding`).
  */
 import type { ShopifyPlanId } from './shopifyPlans'
 
@@ -16,13 +16,6 @@ export const PLAN_NAME_KEYS: Record<ShopifyPlanId, string> = {
   basic: 'planBasicName',
   pro: 'planProName',
   business: 'planBusinessName',
-}
-
-/** The plans that put the store logo on messages; matches the backend. */
-const LOGO_PLAN_IDS: readonly ShopifyPlanId[] = ['pro', 'business']
-
-export function planIncludesLogo(planId: ShopifyPlanId): boolean {
-  return LOGO_PLAN_IDS.includes(planId)
 }
 
 /** What one message costs on a plan, to three decimals (9.99 / 300 = 0.033). */
@@ -47,6 +40,7 @@ export const SHARED_FEATURE_KEYS = [
   'orderUpdates',
   'quietHours',
   'officialNumber',
+  'storeLogo',
   'dashboard',
 ] as const
 

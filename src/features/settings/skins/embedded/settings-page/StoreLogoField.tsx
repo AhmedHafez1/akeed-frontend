@@ -4,7 +4,6 @@
 
 import { useEffect, useRef, type ChangeEvent } from 'react'
 import {
-  Badge,
   BlockStack,
   Button,
   Card,
@@ -27,8 +26,6 @@ import { SettingsHelp } from './SettingsHelp'
 interface StoreLogoFieldProps {
   logo: MerchantLogoModel
   readOnly: boolean
-  /** Opens the plans, for a store whose plan does not include the logo. */
-  onSeePlans?: () => void
 }
 
 const ERROR_ID = 'store-logo-error'
@@ -36,13 +33,8 @@ const ERROR_ID = 'store-logo-error'
 /**
  * The store's logo in Shopify admin: one row to change or remove it, or one
  * drop area to upload it. The phone preview beside it shows the result.
- * Below the Pro plan it is locked: a saved logo can only be removed.
  */
-export function StoreLogoField({
-  logo,
-  readOnly,
-  onSeePlans,
-}: StoreLogoFieldProps) {
+export function StoreLogoField({ logo, readOnly }: StoreLogoFieldProps) {
   const t = useTranslations('settings.logo')
   const { branding, isUploading, isRemoving, error } = logo
   const busy = isUploading || isRemoving
@@ -66,21 +58,9 @@ export function StoreLogoField({
             <Text as="h2" variant="headingMd">
               {t('heading')}
             </Text>
-            {logo.isLocked && <Badge>{t('planPill')}</Badge>}
             <SettingsHelp label={t('heading')} content={t('description')} />
           </InlineStack>
         </BlockStack>
-
-        {logo.isLocked && (
-          <InlineStack gap="300" align="space-between" blockAlign="center">
-            <Text as="p" variant="bodyMd">
-              {branding.logoUrl ? t('planLockedSaved') : t('planLocked')}
-            </Text>
-            {onSeePlans && (
-              <Button onClick={onSeePlans}>{t('seePlans')}</Button>
-            )}
-          </InlineStack>
-        )}
 
         {branding.logoUrl ? (
           <LogoRow
@@ -90,7 +70,7 @@ export function StoreLogoField({
             readOnly={readOnly}
             hasError={Boolean(error)}
           />
-        ) : logo.isLocked ? null : (
+        ) : (
           <div ref={emptyRef} aria-busy={busy}>
             <DropZone
               label={t('emptyTitle')}
@@ -130,11 +110,9 @@ export function StoreLogoField({
         {error && (
           <InlineError message={t(`errors.${error}`)} fieldID={ERROR_ID} />
         )}
-        {!logo.isLocked && (
-          <Text as="p" variant="bodySm" tone="subdued">
-            {t('requirements')}
-          </Text>
-        )}
+        <Text as="p" variant="bodySm" tone="subdued">
+          {t('requirements')}
+        </Text>
       </BlockStack>
     </Card>
   )
@@ -220,15 +198,13 @@ function LogoRow({
               aria-hidden
               onChange={handleFile}
             />
-            {!logo.isLocked && (
-              <Button
-                icon={UploadIcon}
-                disabled={busy}
-                onClick={() => inputRef.current?.click()}
-              >
-                {t('replace')}
-              </Button>
-            )}
+            <Button
+              icon={UploadIcon}
+              disabled={busy}
+              onClick={() => inputRef.current?.click()}
+            >
+              {t('replace')}
+            </Button>
             {/* Quiet until the pointer or keyboard reaches it. */}
             <span className="contents [&_button:is(:hover,:focus-visible)]:text-(--p-color-text-critical)">
               <Button

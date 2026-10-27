@@ -88,7 +88,8 @@ describe('PlanTab', () => {
     expect(primaryButtons()).toEqual([button('اشترك في الأساسية')])
 
     expect(screen.getByText('كل الباقات تشمل')).toBeTruthy()
-    expect(screen.getAllByRole('listitem')).toHaveLength(6)
+    expect(screen.getAllByRole('listitem')).toHaveLength(7)
+    expect(screen.getByText('شعار المتجر على الرسائل')).toBeTruthy()
     expect(screen.getByText('كيف نحتسب الرسائل')).toBeTruthy()
     expect(screen.getByText('عند نفاد الرصيد')).toBeTruthy()
     expect(

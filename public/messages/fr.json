@@ -1569,10 +1569,6 @@
       "removeAria": "Retirer le logo de la boutique",
       "removed": "Logo retiré",
       "saved": "Logo mis à jour",
-      "planPill": "Forfait Pro",
-      "planLocked": "Votre logo sur les messages est inclus à partir du forfait Pro.",
-      "planLockedSaved": "Votre logo enregistré n’est pas envoyé avec votre forfait actuel. Passez au forfait Pro pour l’envoyer de nouveau.",
-      "seePlans": "Voir les forfaits",
       "errors": {
         "tooLarge": "Ce fichier dépasse 5 Mo. Choisissez une image plus légère.",
         "unsupportedType": "Ce type de fichier n’est pas pris en charge. Choisissez une image PNG ou JPEG.",
@@ -1581,7 +1577,6 @@
         "storageUnavailable": "Nous n’avons pas pu importer votre logo. Réessayez.",
         "forbidden": "Seul un propriétaire ou un administrateur peut modifier le logo.",
         "rateLimited": "Trop d’importations. Patientez une minute, puis réessayez.",
-        "planRequired": "Votre logo sur les messages est inclus à partir du forfait Pro.",
         "generic": "Une erreur s’est produite. Réessayez."
       }
     },
@@ -2518,8 +2513,7 @@
   "billing": {
     "embeddedPlans": {
       "heading": "Choisissez votre quota mensuel de messages",
-      "sameFeatures": "Les forfaits se distinguent par le nombre de messages. À partir de Pro, le logo de votre boutique figure aussi sur les messages.",
-      "logoIncluded": "Logo de la boutique sur les messages",
+      "sameFeatures": "Tous les forfaits incluent les mêmes fonctionnalités. Seul le nombre de messages change.",
       "plansLabel": "Forfaits",
       "allowance": "messages / mois",
       "perDay": "environ {formatted} par jour",
@@ -2538,6 +2532,7 @@
         "orderUpdates": "Mise à jour automatique des commandes dans Shopify",
         "quietHours": "Heures de silence et planification dans le fuseau horaire de votre boutique",
         "officialNumber": "Numéro WhatsApp officiel d’Akeed, sans configuration",
+        "storeLogo": "Logo de la boutique sur les messages",
         "dashboard": "Tableau de bord avec les indicateurs de confirmation"
       },
       "rulesTitle": "Comment les messages sont décomptés",

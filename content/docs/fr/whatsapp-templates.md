@@ -85,7 +85,7 @@ Certains styles indiquent aussi ce que le client a commandé et le lieu de livra
 
 **Paramètres › Message** affiche la carte **Logo de la boutique**. Importez un logo PNG ou JPEG (5 Mo maximum, au moins 64 pixels sur le côté le plus court). Akeed le centre sur une bannière blanche, et la bannière apparaît en haut de vos messages de confirmation et de rappel. L’aperçu à côté des paramètres montre aussi la bannière.
 
-Le logo est inclus dans les forfaits Pro et Scale d’une boutique Shopify et dans tout compte Akeed hors Shopify. Avec un forfait inférieur, la carte affiche **Forfait Pro** et un bouton **Voir les forfaits**, et le logo enregistré auparavant est conservé, mais il n’est pas envoyé tant que vous ne changez pas de forfait.
+Le logo est inclus dans tous les forfaits d’une boutique Shopify et dans tout compte Akeed hors Shopify.
 
 Utilisez **Remplacer le logo** pour le changer ; la nouvelle bannière est utilisée pour les messages suivants. **Retirer** supprime le logo, et vos messages redeviennent du texte seul. Le texte et les boutons ne changent pas, et si WhatsApp ne peut pas afficher l’image, le message est envoyé en texte.
 
