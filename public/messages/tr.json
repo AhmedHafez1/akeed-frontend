@@ -3658,6 +3658,7 @@
       "update": "Yeni özellik"
     },
     "dismiss": "“{title}” kartını kalıcı olarak kapat",
+    "dismissLabel": "Kapat",
     "dismissError": "Bu kart kapatılamadı. Tekrar deneyin.",
     "sectionLabel": "İpuçları ve güncellemeler",
     "opensInNewTab": "yeni sekmede açılır"

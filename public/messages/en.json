@@ -4855,6 +4855,7 @@
       "update": "New feature"
     },
     "dismiss": "Dismiss “{title}” for good",
+    "dismissLabel": "Dismiss",
     "dismissError": "This card couldn’t be dismissed. Try again.",
     "sectionLabel": "Tips and updates",
     "opensInNewTab": "opens in a new tab"

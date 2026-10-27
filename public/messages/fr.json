@@ -3658,6 +3658,7 @@
       "update": "Nouveauté"
     },
     "dismiss": "Masquer définitivement {title}",
+    "dismissLabel": "Masquer",
     "dismissError": "Impossible de masquer cette carte. Réessayez.",
     "sectionLabel": "Conseils et nouveautés",
     "opensInNewTab": "s’ouvre dans un nouvel onglet"

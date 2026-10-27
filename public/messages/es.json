@@ -3658,6 +3658,7 @@
       "update": "Novedad"
     },
     "dismiss": "Descartar «{title}» para siempre",
+    "dismissLabel": "Descartar",
     "dismissError": "No se pudo descartar esta tarjeta. Inténtalo de nuevo.",
     "sectionLabel": "Consejos y novedades",
     "opensInNewTab": "se abre en una pestaña nueva"

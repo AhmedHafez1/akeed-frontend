@@ -4849,6 +4849,7 @@
       "update": "ميزة جديدة"
     },
     "dismiss": "إخفاء «{title}» نهائيًا",
+    "dismissLabel": "إخفاء",
     "dismissError": "تعذّر إخفاء هذه البطاقة. حاول مرة أخرى.",
     "sectionLabel": "نصائح وتحديثات",
     "opensInNewTab": "يفتح في علامة تبويب جديدة"

@@ -173,6 +173,22 @@ describe('HeaderTools', () => {
     await waitFor(() => expect(document.activeElement).toBe(usageTrigger()))
   })
 
+  it('closes tips from the header without dismissing any entry', () => {
+    const onDismiss = vi.fn()
+    renderEmbedded(<Harness onDismiss={onDismiss} />, 'en')
+    fireEvent.click(tipsTrigger())
+    const dialog = screen.getByRole('dialog', { name: 'Tips & updates' })
+    expect(
+      within(dialog).getAllByRole('button', { name: 'Close' })
+    ).toHaveLength(1)
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Close' }))
+    expect(screen.queryByRole('dialog')).toBeNull()
+    expect(onDismiss).not.toHaveBeenCalled()
+    fireEvent.click(tipsTrigger())
+    expect(screen.getByText('Title a')).toBeTruthy()
+    expect(screen.getByText('Title b')).toBeTruthy()
+  })
+
   it('closes on an outside press without dismissing anything', () => {
     const onDismiss = vi.fn()
     renderEmbedded(<Harness onDismiss={onDismiss} />, 'en')

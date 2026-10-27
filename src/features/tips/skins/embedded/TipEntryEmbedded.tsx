@@ -9,7 +9,6 @@ import {
   InlineStack,
   Text,
 } from '@shopify/polaris'
-import { XIcon } from '@shopify/polaris-icons'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useSeenOnce } from '@/shared/hooks/useSeenOnce'
@@ -48,23 +47,10 @@ export function TipEntryEmbedded({
     <div ref={ref} tabIndex={-1} className="outline-none">
       <div ref={seenRef}>
         <BlockStack gap="200">
-          <InlineStack
-            align="space-between"
-            blockAlign="start"
-            gap="200"
-            wrap={false}
-          >
+          <InlineStack align="start">
             <Badge tone={card.type === 'update' ? 'info' : 'success'}>
               {t(`badge.${card.type}`)}
             </Badge>
-            {canDismiss && (
-              <Button
-                variant="tertiary"
-                icon={XIcon}
-                accessibilityLabel={t('dismiss', { title: card.title })}
-                onClick={() => onDismiss(card.id)}
-              />
-            )}
           </InlineStack>
           <div lang={card.locale} dir={getLocaleDirection(card.locale)}>
             <BlockStack gap="200" inlineAlign="start">
@@ -74,9 +60,25 @@ export function TipEntryEmbedded({
               <Text as="p" tone="subdued" breakWord>
                 <span className="whitespace-pre-line">{card.description}</span>
               </Text>
+            </BlockStack>
+          </div>
+        </BlockStack>
+        {(canDismiss || link) && (
+          <Box paddingBlockStart="400">
+            <InlineStack align="end" blockAlign="center" gap="200" wrap>
+              {canDismiss && (
+                <Button
+                  variant="secondary"
+                  accessibilityLabel={t('dismiss', { title: card.title })}
+                  onClick={() => onDismiss(card.id)}
+                >
+                  {t('dismissLabel')}
+                </Button>
+              )}
               {link?.kind === 'internal' && (
-                <Box paddingBlockStart="100">
+                <div lang={card.locale} dir={getLocaleDirection(card.locale)}>
                   <Button
+                    variant="primary"
                     onClick={() => {
                       onAction(card.id)
                       router.push(link.href)
@@ -84,11 +86,12 @@ export function TipEntryEmbedded({
                   >
                     {link.label}
                   </Button>
-                </Box>
+                </div>
               )}
               {link?.kind === 'external' && (
-                <Box paddingBlockStart="100">
+                <div lang={card.locale} dir={getLocaleDirection(card.locale)}>
                   <Button
+                    variant="primary"
                     url={link.href}
                     target="_blank"
                     onClick={() => onAction(card.id)}
@@ -96,11 +99,11 @@ export function TipEntryEmbedded({
                   >
                     {link.label}
                   </Button>
-                </Box>
+                </div>
               )}
-            </BlockStack>
-          </div>
-        </BlockStack>
+            </InlineStack>
+          </Box>
+        )}
       </div>
     </div>
   )
