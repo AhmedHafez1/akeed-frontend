@@ -14,10 +14,8 @@ function model(overrides: Partial<MerchantLogoModel> = {}): MerchantLogoModel {
       bannerUrl: 'https://cdn.test/b.jpg',
       updatedAt: '2026-10-15T12:00:00.000Z',
       logoHeaderAvailable: true,
-      logoHeaderIncluded: true,
     },
     isAvailable: true,
-    isLocked: false,
     isUploading: false,
     isRemoving: false,
     error: null,
@@ -34,7 +32,6 @@ const empty = (overrides: Partial<MerchantLogoModel> = {}) =>
       bannerUrl: null,
       updatedAt: null,
       logoHeaderAvailable: true,
-      logoHeaderIncluded: true,
     },
     ...overrides,
   })
@@ -168,34 +165,5 @@ describe('StoreLogoField (embedded, ar)', () => {
       screen.queryByRole('button', { name: 'إزالة شعار المتجر' })
     ).toBeNull()
     expect(screen.getByRole('img', { name: 'شعار متجرك' })).toBeTruthy()
-  })
-
-  it('locks an empty card below the plan and opens the plans', () => {
-    const onSeePlans = vi.fn()
-    renderEmbedded(
-      <StoreLogoField
-        logo={empty({ isLocked: true })}
-        readOnly={false}
-        onSeePlans={onSeePlans}
-      />
-    )
-    expect(screen.getByText('الباقة الاحترافية')).toBeTruthy()
-    expect(
-      screen.getByText('شعارك على الرسائل متاح في الباقة الاحترافية وما فوقها.')
-    ).toBeTruthy()
-    expect(screen.queryByLabelText('ارفع شعارك')).toBeNull()
-    fireEvent.click(screen.getByRole('button', { name: 'عرض الباقات' }))
-    expect(onSeePlans).toHaveBeenCalledOnce()
-  })
-
-  it('keeps a saved logo removable but not replaceable below the plan', () => {
-    const logo = model({ isLocked: true })
-    renderField(logo)
-    expect(
-      screen.getByText(/^شعارك المحفوظ لا يُرسل مع باقتك الحالية/)
-    ).toBeTruthy()
-    expect(screen.queryByRole('button', { name: 'تغيير الشعار' })).toBeNull()
-    fireEvent.click(screen.getByRole('button', { name: 'إزالة شعار المتجر' }))
-    expect(logo.remove).toHaveBeenCalledOnce()
   })
 })

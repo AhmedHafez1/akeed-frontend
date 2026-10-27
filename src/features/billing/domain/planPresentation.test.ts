@@ -59,8 +59,8 @@ describe('formatting', () => {
 })
 
 describe('shared copy keys', () => {
-  it('lists six features, four of them in the compact list', () => {
-    expect(SHARED_FEATURE_KEYS).toHaveLength(6)
+  it('lists seven features, four of them in the compact list', () => {
+    expect(SHARED_FEATURE_KEYS).toHaveLength(7)
     expect(COMPACT_FEATURE_KEYS).toHaveLength(4)
     for (const key of COMPACT_FEATURE_KEYS) {
       expect(SHARED_FEATURE_KEYS).toContain(key)

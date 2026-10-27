@@ -1260,7 +1260,6 @@ it.each([
       bannerUrl: null,
       updatedAt: null,
       logoHeaderAvailable: true,
-      logoHeaderIncluded: true,
     }
     response.template.reminder = {
       selected: response.template.selected,

@@ -17,7 +17,6 @@ import { useLocale, useTranslations } from 'next-intl'
 import {
   PLAN_NAME_KEYS,
   PlanAllowanceSummary,
-  planIncludesLogo,
   SharedFeaturesList,
   UsageRulesCard,
   formatMessageCount,
@@ -253,7 +252,6 @@ function PlanCard({
       }}
     >
       <PlanAllowanceSummary
-        includesLogo={planIncludesLogo(plan.id)}
         name={name}
         amount={plan.amount}
         currencyCode={plan.currencyCode}

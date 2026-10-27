@@ -28,7 +28,7 @@ interface UpgradePlansModalProps {
 /**
  * The plan picker, offered after the merchant has seen Akeed work: at 80% of
  * the free messages, or when a reinstalled store has no free plan left. Plans
- * differ in their monthly allowance (Pro and up add the store logo), so it is
+ * differ only in their monthly allowance, so it is
  * a radio group of three allowances; Starter is a row under them while the store can still claim it.
  * The current paid plan is marked, and choosing it renews it now.
  */

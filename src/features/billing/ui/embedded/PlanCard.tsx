@@ -5,7 +5,6 @@ import type {
   ShopifyPlanCard,
   ShopifyPlanId,
 } from '@/features/billing/domain/shopifyPlans'
-import { planIncludesLogo } from '@/features/billing/domain/planPresentation'
 import { PlanAllowanceSummary } from './PlanAllowanceSummary'
 
 /** Selected and resting surfaces of a radio card, from Polaris tokens. */
@@ -56,7 +55,6 @@ export function PlanCard({
       onClick={() => onSelect(plan.id)}
     >
       <PlanAllowanceSummary
-        includesLogo={planIncludesLogo(plan.id)}
         id={id}
         name={plan.name}
         amount={plan.amount}

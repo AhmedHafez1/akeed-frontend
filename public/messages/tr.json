@@ -1569,10 +1569,6 @@
       "removeAria": "Mağaza logosunu kaldır",
       "removed": "Logo kaldırıldı",
       "saved": "Logo güncellendi",
-      "planPill": "Pro planı",
-      "planLocked": "Mesajlarda logonuz Pro plan ve üzeri planlara dahildir.",
-      "planLockedSaved": "Kayıtlı logonuz mevcut planınızda gönderilmez. Yeniden göndermek için Pro plana geçin.",
-      "seePlans": "Planları gör",
       "errors": {
         "tooLarge": "Dosya 5 MB sınırını aşıyor. Daha küçük bir görsel seçin.",
         "unsupportedType": "Bu dosya türü desteklenmiyor. PNG veya JPEG bir görsel seçin.",
@@ -1581,7 +1577,6 @@
         "storageUnavailable": "Logonuz yüklenemedi. Tekrar deneyin.",
         "forbidden": "Logoyu yalnızca bir hesap sahibi veya yönetici değiştirebilir.",
         "rateLimited": "Çok fazla yükleme yapıldı. Bir dakika bekleyip tekrar deneyin.",
-        "planRequired": "Mesajlarda logonuz Pro plan ve üzeri planlara dahildir.",
         "generic": "Bir sorun oluştu. Tekrar deneyin."
       }
     },
@@ -2518,8 +2513,7 @@
   "billing": {
     "embeddedPlans": {
       "heading": "Aylık mesaj hakkınızı seçin",
-      "sameFeatures": "Planlar mesaj sayısında farklılık gösterir. Pro ve üzeri planlar mesajlara mağaza logonuzu da ekler.",
-      "logoIncluded": "Mesajlarda mağaza logosu",
+      "sameFeatures": "Her plan aynı özellikleri içerir. Tek fark mesaj sayısıdır.",
       "plansLabel": "Planlar",
       "allowance": "mesaj / ay",
       "perDay": "günde yaklaşık {formatted}",
@@ -2538,6 +2532,7 @@
         "orderUpdates": "Shopify’da otomatik sipariş güncellemeleri",
         "quietHours": "Mağazanızın saat diliminde sessiz saatler ve zamanlama",
         "officialNumber": "Akeed’in resmî WhatsApp numarası, kurulum gerektirmez",
+        "storeLogo": "Mesajlarda mağaza logosu",
         "dashboard": "Onay metriklerini gösteren panel"
       },
       "rulesTitle": "Mesajlar nasıl sayılır",

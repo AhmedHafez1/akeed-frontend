@@ -50,16 +50,9 @@ interface MessageTabProps {
   model: EmbeddedSettingsModel
   data: SettingsResponse
   readOnly: boolean
-  /** Opens the Plan tab, from the locked logo card. */
-  onSeePlans?: () => void
 }
 
-export function MessageTab({
-  model,
-  data,
-  readOnly,
-  onSeePlans,
-}: MessageTabProps) {
+export function MessageTab({ model, data, readOnly }: MessageTabProps) {
   const t = useTranslations('settings.embedded.message')
   const tLogo = useTranslations('settings.logo')
   const { shopify } = useAkeedMode()
@@ -231,13 +224,7 @@ export function MessageTab({
           </BlockStack>
         </Card>
 
-        {logo.isAvailable && (
-          <StoreLogoField
-            logo={logo}
-            readOnly={readOnly}
-            onSeePlans={onSeePlans}
-          />
-        )}
+        {logo.isAvailable && <StoreLogoField logo={logo} readOnly={readOnly} />}
 
         <Card>
           <BlockStack gap="300">
@@ -390,7 +377,7 @@ export function MessageTab({
             isSendingTest={model.isSendingTest}
             phonePrompt={phonePrompt}
             headerImage={
-              logo.isAvailable && !logo.isLocked && logo.branding.bannerUrl
+              logo.isAvailable && logo.branding.bannerUrl
                 ? { src: logo.branding.bannerUrl, alt: tLogo('bannerAlt') }
                 : undefined
             }

@@ -180,12 +180,7 @@ export function SettingsEmbeddedPage() {
             )}
 
             {activeTab === 'message' && (
-              <MessageTab
-                model={model}
-                data={data}
-                readOnly={readOnly}
-                onSeePlans={() => goToTab('plan')}
-              />
+              <MessageTab model={model} data={data} readOnly={readOnly} />
             )}
             {activeTab === 'timing' && (
               <TimingTab

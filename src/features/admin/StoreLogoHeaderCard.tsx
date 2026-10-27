@@ -50,9 +50,6 @@ export function StoreLogoHeaderCard({
         <div>
           <h2 className="text-foreground flex items-center gap-2 text-sm font-semibold">
             Logo header
-            {!state.plan_included && (
-              <Badge variant="warning">Needs Pro plan</Badge>
-            )}
           </h2>
           <p id={descriptionId} className="text-muted-foreground mt-1 text-xs">
             On for every store by default. While on, messages whose template has
