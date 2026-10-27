@@ -384,7 +384,9 @@ export function fieldErrorFromApiCode(
 
 /**
  * When a store that never chose a zone turns quiet hours on, start from the
- * Shopify store's own zone rather than the Riyadh column default. The change
+ * Shopify store's own zone rather than the Riyadh column default. The backend
+ * already saves the store zone at install; this covers a store still on the
+ * default, for example one whose shop profile synced only later. The change
  * is part of the form, so the merchant sees it before saving.
  */
 export function suggestedTimezoneOnEnable(params: {
