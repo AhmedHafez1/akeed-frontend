@@ -5,6 +5,7 @@ import enTranslations from '@shopify/polaris/locales/en.json'
 import { NextIntlClientProvider } from 'next-intl'
 import { testLocale } from '../../../../../test/vitest/setup'
 import ar from '../../../../../public/messages/ar.json'
+import en from '../../../../../public/messages/en.json'
 import type { TipCardView } from '../../domain/useTipCards'
 import { TipEntryEmbedded } from './TipEntryEmbedded'
 
@@ -16,13 +17,23 @@ vi.mock('next/navigation', async (importOriginal) => ({
   useSearchParams: () => new URLSearchParams(),
 }))
 
-function renderCard(view: TipCardView, canDismiss = true) {
-  testLocale.current = 'ar'
+function renderCard(
+  view: TipCardView,
+  canDismiss = true,
+  locale: 'ar' | 'en' = 'ar'
+) {
+  testLocale.current = locale
   const handlers = { onSeen: vi.fn(), onAction: vi.fn(), onDismiss: vi.fn() }
   render(
-    <NextIntlClientProvider locale="ar" messages={ar} timeZone="UTC">
+    <NextIntlClientProvider
+      locale={locale}
+      messages={locale === 'ar' ? ar : en}
+      timeZone="UTC"
+    >
       <AppProvider i18n={enTranslations}>
-        <TipEntryEmbedded view={view} canDismiss={canDismiss} {...handlers} />
+        <div dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+          <TipEntryEmbedded view={view} canDismiss={canDismiss} {...handlers} />
+        </div>
       </AppProvider>
     </NextIntlClientProvider>
   )
@@ -57,7 +68,7 @@ describe('TipEntryEmbedded', () => {
   })
 
   it('opens an external button in a new tab without opener access', () => {
-    renderCard({
+    const handlers = renderCard({
       card: base,
       link: {
         kind: 'external',
@@ -69,6 +80,10 @@ describe('TipEntryEmbedded', () => {
     expect(link.getAttribute('href')).toBe('https://akeed.app/docs')
     expect(link.getAttribute('target')).toBe('_blank')
     expect(link.getAttribute('rel')).toContain('noopener')
+    expect(link.className).toContain('Polaris-Button--variantPrimary')
+    fireEvent.click(link)
+    expect(handlers.onAction).toHaveBeenCalledWith('c1')
+    expect(router.push).not.toHaveBeenCalled()
   })
 
   it('dismisses with an explaining label, and hides it from viewers', () => {
@@ -79,6 +94,60 @@ describe('TipEntryEmbedded', () => {
       })
     )
     expect(handlers.onDismiss).toHaveBeenCalledWith('c1')
+    expect(screen.getByText(ar.tips.dismissLabel)).toBeTruthy()
+    expect(handlers.onAction).not.toHaveBeenCalled()
+    expect(router.push).not.toHaveBeenCalled()
+  })
+
+  it.each(['en', 'ar'] as const)(
+    'puts text dismissal before the primary action in the %s interface',
+    (locale) => {
+      const messages = locale === 'ar' ? ar : en
+      // Campaign content can have a different direction from the interface.
+      renderCard(
+        {
+          card: { ...base, locale: 'en', title: 'Your logo' },
+          link: {
+            kind: 'internal',
+            href: '/en/settings',
+            label: 'Add your logo',
+          },
+        },
+        true,
+        locale
+      )
+      const controls = screen.getAllByRole('button')
+      expect(controls).toHaveLength(2)
+      expect(controls[0].textContent).toBe(messages.tips.dismissLabel)
+      expect(controls[0].getAttribute('aria-label')).toBe(
+        messages.tips.dismiss.replace('{title}', 'Your logo')
+      )
+      expect(controls[0].className).toContain(
+        'Polaris-Button--variantSecondary'
+      )
+      expect(controls[1].textContent).toBe('Add your logo')
+      expect(controls[1].className).toContain('Polaris-Button--variantPrimary')
+      expect(controls[0].closest('[dir]')?.getAttribute('dir')).toBe(
+        locale === 'ar' ? 'rtl' : 'ltr'
+      )
+    }
+  )
+
+  it('keeps the primary action available to viewers', () => {
+    renderCard(
+      {
+        card: base,
+        link: {
+          kind: 'internal',
+          href: '/ar/settings',
+          label: 'افتح الإعدادات',
+        },
+      },
+      false
+    )
+    expect(screen.getAllByRole('button')).toHaveLength(1)
+    expect(screen.getByRole('button', { name: 'افتح الإعدادات' })).toBeTruthy()
+    expect(screen.queryByText(ar.tips.dismissLabel)).toBeNull()
   })
 
   it('shows no dismiss control to viewers', () => {

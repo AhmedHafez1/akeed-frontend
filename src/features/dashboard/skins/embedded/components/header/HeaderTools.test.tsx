@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useState } from 'react'
-import { fireEvent, screen, waitFor, within } from '@testing-library/react'
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import type { TipCardView } from '@/features/tips'
 import { useHeaderPanels } from '../../../../domain/useHeaderPanels'
 import type { MessageUsageView } from '../../../../model/messageUsage.model'
@@ -63,7 +63,22 @@ function Harness({
         tips={{
           cards,
           canDismiss,
-          onSeen,
+          onSeen: (id) => {
+            onSeen(id)
+            setCards((current) =>
+              current.map((view) =>
+                view.card.id === id
+                  ? {
+                      ...view,
+                      card: {
+                        ...view.card,
+                        first_viewed_at: new Date().toISOString(),
+                      },
+                    }
+                  : view
+              )
+            )
+          },
           onAction: vi.fn(),
           onDismiss: (id) => {
             onDismiss(id)
@@ -84,6 +99,7 @@ const tipsTrigger = () => screen.getByRole('button', { name: 'Tips & updates' })
 describe('HeaderTools', () => {
   let observed: Element[] = []
   beforeEach(() => {
+    vi.spyOn(document, 'visibilityState', 'get').mockReturnValue('visible')
     observed = []
     // Every observed entry counts as fully on screen.
     vi.stubGlobal(
@@ -96,13 +112,19 @@ describe('HeaderTools', () => {
         ) {}
         observe(element: Element) {
           observed.push(element)
-          this.callback([{ isIntersecting: true, intersectionRatio: 1 }])
+          this.callback([
+            { isIntersecting: true, intersectionRatio: 1, target: element },
+          ])
         }
         disconnect() {}
       }
     )
   })
-  afterEach(() => vi.unstubAllGlobals())
+  afterEach(() => {
+    vi.unstubAllGlobals()
+    vi.restoreAllMocks()
+    vi.useRealTimers()
+  })
 
   it('shows what is left, with a dialog trigger and no badge', () => {
     renderEmbedded(<Harness />, 'en')
@@ -173,6 +195,22 @@ describe('HeaderTools', () => {
     await waitFor(() => expect(document.activeElement).toBe(usageTrigger()))
   })
 
+  it('closes tips from the header without dismissing any entry', () => {
+    const onDismiss = vi.fn()
+    renderEmbedded(<Harness onDismiss={onDismiss} />, 'en')
+    fireEvent.click(tipsTrigger())
+    const dialog = screen.getByRole('dialog', { name: 'Tips & updates' })
+    expect(
+      within(dialog).getAllByRole('button', { name: 'Close' })
+    ).toHaveLength(1)
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Close' }))
+    expect(screen.queryByRole('dialog')).toBeNull()
+    expect(onDismiss).not.toHaveBeenCalled()
+    fireEvent.click(tipsTrigger())
+    expect(screen.getByText('Title a')).toBeTruthy()
+    expect(screen.getByText('Title b')).toBeTruthy()
+  })
+
   it('closes on an outside press without dismissing anything', () => {
     const onDismiss = vi.fn()
     renderEmbedded(<Harness onDismiss={onDismiss} />, 'en')
@@ -190,16 +228,54 @@ describe('HeaderTools', () => {
     expect(screen.queryByRole('dialog')).toBeNull()
   })
 
-  it('records tip views only once the panel shows them, in their order', () => {
+  it('records tip views after two seconds in their order', () => {
+    vi.useFakeTimers()
     const onSeen = vi.fn()
     renderEmbedded(<Harness onSeen={onSeen} />, 'en')
     expect(onSeen).not.toHaveBeenCalled()
 
     fireEvent.click(tipsTrigger())
     const dialog = screen.getByRole('dialog', { name: 'Tips & updates' })
+    expect(onSeen).not.toHaveBeenCalled()
+    act(() => vi.advanceTimersByTime(2000))
     expect(onSeen.mock.calls.map(([id]) => id)).toEqual(['a', 'b'])
     const titles = within(dialog).getAllByRole('heading', { level: 3 })
     expect(titles.map((h) => h.textContent)).toEqual(['Title a', 'Title b'])
+  })
+
+  it('colors only the bulb while tips are unread, then keeps the read cards', () => {
+    vi.useFakeTimers()
+    const unread = tip('new', 'Open settings')
+    unread.card.first_viewed_at = null
+    const read = tip('old', null)
+    read.card.first_viewed_at = '2026-10-26T10:00:00.000Z'
+    renderEmbedded(<Harness initialCards={[unread, read]} />, 'en')
+    const trigger = screen.getByRole('button', {
+      name: /Tips & updates.*unread/,
+    })
+    expect(
+      trigger.querySelector('[aria-hidden="true"]')?.getAttribute('style')
+    ).toContain('--p-color-icon-info')
+    fireEvent.click(trigger)
+    const dot = screen
+      .getByRole('heading', { name: /Title new/ })
+      .parentElement?.querySelector<HTMLElement>('[aria-hidden="true"]')
+    expect(dot?.style.visibility).toBe('visible')
+    expect(
+      screen.getByRole('heading', { name: /Unread.*Title new/ })
+    ).toBeTruthy()
+    act(() => vi.advanceTimersByTime(1999))
+    expect(
+      screen.getByRole('heading', { name: /Unread.*Title new/ })
+    ).toBeTruthy()
+    act(() => vi.advanceTimersByTime(1))
+    expect(dot?.style.visibility).toBe('hidden')
+    expect(screen.getByRole('heading', { name: 'Title new' })).toBeTruthy()
+    expect(screen.getByRole('heading', { name: 'Title old' })).toBeTruthy()
+    expect(tipsTrigger().getAttribute('aria-label')).toBeNull()
+    expect(
+      tipsTrigger().querySelector('[aria-hidden="true"]')?.getAttribute('style')
+    ).not.toContain('--p-color-icon-info')
   })
 
   it('moves focus to the next entry after a dismissal, then to the empty state', async () => {

@@ -9,11 +9,10 @@ import {
   InlineStack,
   Text,
 } from '@shopify/polaris'
-import { XIcon } from '@shopify/polaris-icons'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { useSeenOnce } from '@/shared/hooks/useSeenOnce'
 import { getLocaleDirection } from '@/shared/lib/locale'
+import { useTipReadVisibility } from '../../domain/useTipReadVisibility'
 import type { TipCardView } from '../../domain/useTipCards'
 
 export interface TipEntryEmbeddedProps {
@@ -27,8 +26,8 @@ export interface TipEntryEmbeddedProps {
 
 /**
  * One tip or feature update in the embedded Tips & updates panel. It mounts
- * only while the panel is open, so a view is recorded once at least half of
- * it is actually on screen, never because the header button exists.
+ * only while the panel is open. A view requires two continuous seconds with
+ * at least half the entry visible in an active browser tab.
  */
 export function TipEntryEmbedded({
   ref,
@@ -42,41 +41,58 @@ export function TipEntryEmbedded({
   const router = useRouter()
   const seenRef = useRef<HTMLDivElement>(null)
   const { card, link } = view
-  useSeenOnce(seenRef, () => onSeen(card.id))
+  const unread = card.first_viewed_at === null
+  useTipReadVisibility(seenRef, () => onSeen(card.id), !card.first_viewed_at)
 
   return (
     <div ref={ref} tabIndex={-1} className="outline-none">
       <div ref={seenRef}>
         <BlockStack gap="200">
-          <InlineStack
-            align="space-between"
-            blockAlign="start"
-            gap="200"
-            wrap={false}
-          >
+          <InlineStack align="start">
             <Badge tone={card.type === 'update' ? 'info' : 'success'}>
               {t(`badge.${card.type}`)}
             </Badge>
-            {canDismiss && (
-              <Button
-                variant="tertiary"
-                icon={XIcon}
-                accessibilityLabel={t('dismiss', { title: card.title })}
-                onClick={() => onDismiss(card.id)}
-              />
-            )}
           </InlineStack>
           <div lang={card.locale} dir={getLocaleDirection(card.locale)}>
             <BlockStack gap="200" inlineAlign="start">
-              <Text as="h3" variant="headingSm" breakWord>
-                <span className="whitespace-pre-line">{card.title}</span>
-              </Text>
+              <div className="flex items-center gap-2">
+                <span
+                  aria-hidden="true"
+                  className="shrink-0 rounded-full"
+                  style={{
+                    width: 6,
+                    height: 6,
+                    background: 'var(--p-color-icon-info)',
+                    visibility: unread ? 'visible' : 'hidden',
+                  }}
+                />
+                <Text as="h3" variant="headingSm" breakWord>
+                  {unread && <span className="sr-only">{t('unread')}: </span>}
+                  <span className="whitespace-pre-line">{card.title}</span>
+                </Text>
+              </div>
               <Text as="p" tone="subdued" breakWord>
                 <span className="whitespace-pre-line">{card.description}</span>
               </Text>
+            </BlockStack>
+          </div>
+        </BlockStack>
+        {(canDismiss || link) && (
+          <Box paddingBlockStart="400">
+            <InlineStack align="end" blockAlign="center" gap="200" wrap>
+              {canDismiss && (
+                <Button
+                  variant="secondary"
+                  accessibilityLabel={t('dismiss', { title: card.title })}
+                  onClick={() => onDismiss(card.id)}
+                >
+                  {t('dismissLabel')}
+                </Button>
+              )}
               {link?.kind === 'internal' && (
-                <Box paddingBlockStart="100">
+                <div lang={card.locale} dir={getLocaleDirection(card.locale)}>
                   <Button
+                    variant="primary"
                     onClick={() => {
                       onAction(card.id)
                       router.push(link.href)
@@ -84,11 +100,12 @@ export function TipEntryEmbedded({
                   >
                     {link.label}
                   </Button>
-                </Box>
+                </div>
               )}
               {link?.kind === 'external' && (
-                <Box paddingBlockStart="100">
+                <div lang={card.locale} dir={getLocaleDirection(card.locale)}>
                   <Button
+                    variant="primary"
                     url={link.href}
                     target="_blank"
                     onClick={() => onAction(card.id)}
@@ -96,11 +113,11 @@ export function TipEntryEmbedded({
                   >
                     {link.label}
                   </Button>
-                </Box>
+                </div>
               )}
-            </BlockStack>
-          </div>
-        </BlockStack>
+            </InlineStack>
+          </Box>
+        )}
       </div>
     </div>
   )

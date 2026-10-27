@@ -12,13 +12,15 @@ import type { TipCardsResponse, TipEvent } from '../model/tips.model'
 export function recordTipEvent(
   id: string,
   event: Exclude<TipEvent, 'dismiss'>
-): void {
-  api
+): Promise<boolean> {
+  return api
     .post(`/api/tips/${encodeURIComponent(id)}/${event}`, undefined, {
       keepalive: true,
     })
+    .then(() => true)
     .catch((error: unknown) => {
       console.warn('[Tips] Event not recorded', { event, error })
+      return false
     })
 }
 

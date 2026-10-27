@@ -1196,6 +1196,7 @@
     "headerTools": {
       "close": "Cerrar",
       "tips": {
+        "unreadTrigger": "Consejos y novedades — elementos sin leer",
         "trigger": "Consejos y novedades",
         "heading": "Consejos y novedades",
         "empty": "No hay consejos ni novedades por ahora"
@@ -3653,11 +3654,13 @@
     }
   },
   "tips": {
+    "unread": "Sin leer",
     "badge": {
       "tip": "Consejo",
       "update": "Novedad"
     },
     "dismiss": "Descartar «{title}» para siempre",
+    "dismissLabel": "Descartar",
     "dismissError": "No se pudo descartar esta tarjeta. Inténtalo de nuevo.",
     "sectionLabel": "Consejos y novedades",
     "opensInNewTab": "se abre en una pestaña nueva"

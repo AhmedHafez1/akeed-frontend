@@ -1,9 +1,10 @@
 'use client'
 
 import { useCallback, useRef } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSearchParams } from 'next/navigation'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { queryKeys } from '@/shared/query/keys'
 import { recordTipEvent, useDismissTip } from '../api/tipsMutations'
 import { tipCardsOptions } from '../api/tipsQueries'
 import {
@@ -11,6 +12,7 @@ import {
   resolveTipHref,
   type TipActionMode,
   type TipCard,
+  type TipCardsResponse,
 } from '../model/tips.model'
 
 /** A card's button, resolved for this mode, or none. */
@@ -34,6 +36,7 @@ export function useTipCards(options: {
   onDismissError: () => void
 }) {
   const { locale } = useLocaleInfo()
+  const queryClient = useQueryClient()
   const searchParams = useSearchParams()
   const query = useQuery({
     ...tipCardsOptions(locale),
@@ -48,13 +51,47 @@ export function useTipCards(options: {
     link: resolveLink(card, options.mode, locale, search),
   }))
 
-  const onSeen = useCallback((id: string) => {
-    if (viewed.current.has(id)) return
-    viewed.current.add(id)
-    recordTipEvent(id, 'view')
-  }, [])
+  const onSeen = useCallback(
+    (id: string) => {
+      if (viewed.current.has(id)) return
+      viewed.current.add(id)
+      void recordTipEvent(id, 'view').then(async (recorded) => {
+        if (!recorded) {
+          viewed.current.delete(id)
+          return
+        }
+        // An older in-flight GET must not replace the confirmed read state.
+        await queryClient.cancelQueries({ queryKey: queryKeys.tips.all })
+        const readAt = new Date().toISOString()
+        queryClient.setQueriesData<TipCardsResponse>(
+          { queryKey: queryKeys.tips.all },
+          (previous) =>
+            previous
+              ? {
+                  ...previous,
+                  cards: previous.cards.map((card) =>
+                    card.id === id
+                      ? {
+                          ...card,
+                          first_viewed_at: card.first_viewed_at ?? readAt,
+                        }
+                      : card
+                  ),
+                }
+              : previous
+        )
+      })
+    },
+    [queryClient]
+  )
 
-  const onAction = useCallback((id: string) => recordTipEvent(id, 'click'), [])
+  const onAction = useCallback(
+    (id: string) => {
+      if (options.mode === 'embedded') onSeen(id)
+      void recordTipEvent(id, 'click')
+    },
+    [onSeen, options.mode]
+  )
 
   return {
     cards,
