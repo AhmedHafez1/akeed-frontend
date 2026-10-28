@@ -995,7 +995,7 @@
           "storeUnreachable": "Akeed mağazanıza kayıtlı adresinden güvenli şekilde ulaşamadı. Adres değişmiş, artık başka bir adrese yönlendiriyor veya güvenlik sertifikası geçersiz olabilir. Mağazanızın adresini ve sertifikasını kontrol edin; adres değiştiyse yeniden bağlayın.",
           "hostingBlocksUpdates": "Mağazanızın barındırma hizmeti, Akeed’in siparişi güncellemek için kullandığı isteği (PUT) engelliyor. Barındırma sağlayıcınızdan mağazanıza PUT isteklerine izin vermesini isteyip tekrar deneyin. O zamana kadar siparişin durumunu mağazanızda kendiniz değiştirin.",
           "noReplyLocalOnly": "Müşteri yanıt vermedi. Bu yalnızca Akeed’e kaydedildi: mağazanızdaki sipariş değişmedi ve iptal edilmedi.",
-          "noWhatsAppLocalOnly": "Müşterinin numarası WhatsApp’ta kayıtlı değil. Bu yalnızca Akeed’e kaydedildi. Mağazanızdaki sipariş değişmedi.",
+          "noWhatsAppLocalOnly": "WhatsApp mesajı müşterinin numarasına iletemedi. Bu yalnızca Akeed’e kaydedildi. Mağazanızdaki sipariş değişmedi.",
           "notSwitchedOn": "Siparişlerin mağazanızda güncellenmesi henüz açılmadı. Siparişin durumunu mağazanızda kendiniz değiştirin."
         },
         "retry": "Mağaza güncellemesini tekrar dene",
@@ -1084,7 +1084,7 @@
       "expired": "Doğrulama süresi kesin bir yanıt alınmadan sona erdi.",
       "failed": "Doğrulama tamamlanamadı.",
       "no_reply": "Müşteri ayarlanan süre içinde yanıt vermedi.",
-      "no_whatsapp": "Bu numara WhatsApp’ta kayıtlı değil, bu yüzden onay mesajı müşteriye ulaşamıyor. Siparişi onaylamak için müşteriyi arayın.",
+      "no_whatsapp": "WhatsApp onay mesajını bu numaraya iletemedi. Numara WhatsApp’ta kayıtlı olmayabilir ya da müşterinin WhatsApp’ı güncellemesi veya en son koşulları kabul etmesi gerekebilir. Siparişi onaylamak için müşteriyi arayın.",
       "awaiting_start": "İçe aktarıldı ve bekletiliyor. Onayı başlatana kadar mesaj gönderilmez.",
       "not_started": "İçe aktarma başlatılmadı, bu yüzden mesaj gönderilmedi.",
       "queued": "Gönderim başladı ve bu sipariş sırada. Mesajı birkaç dakika içinde gider.",
@@ -1269,7 +1269,7 @@
           "read_no_reply": "Okundu, yanıt yok · {hours, plural, one {# saat} other {# saat}} önce",
           "delivery_failed": "Teslim edilmedi: {reason}",
           "send_failed": "Mesaj gönderilmedi",
-          "no_whatsapp": "WhatsApp’ta yok · Müşteriyi arayın",
+          "no_whatsapp": "WhatsApp iletemedi · Müşteriyi arayın",
           "auto_cancel_failed": "Otomatik iptal başarısız oldu",
           "late_reply_after_auto_cancel": "İptalden sonra onayladı"
         },
@@ -1378,7 +1378,7 @@
           "canceledInStore": "Shopify’da iptal edildi",
           "canceledByCustomer": "Müşteri tarafından",
           "canceledNoReply": "Müşteriden yanıt yok",
-          "canceledNoWhatsApp": "Numara WhatsApp’ta yok",
+          "canceledNoWhatsApp": "WhatsApp iletemedi",
           "canceledAutomatically": "Onay denemelerinden sonra yanıt yok",
           "lateReplyAfterAutoCancel": "Müşteri iptalden sonra onayladı",
           "followUpSent": "Hatırlatma gönderildi",
@@ -1389,12 +1389,12 @@
         "tooltip": {
           "scheduledFor": "Planlanan zaman: {time}",
           "reminderAt": "Hatırlatma zamanı: {time}",
-          "callCustomer": "Numara WhatsApp’ta yok. Onay için müşteriyi arayın.",
-          "callCustomerSince": "{time} tarihinden beri WhatsApp’ta yok. Onay için müşteriyi arayın.",
+          "callCustomer": "WhatsApp bu numaraya iletemedi. Onay için müşteriyi arayın.",
+          "callCustomerSince": "{time} tarihinden beri WhatsApp iletemiyor. Onay için müşteriyi arayın.",
           "confirmedAfterCancel": "{time} tarihinde otomatik olarak iptal edildi. Müşteri sonradan onayladı — onunla iletişime geçin."
         },
         "failure": {
-          "notOnWhatsApp": "numara WhatsApp’ta yok",
+          "notOnWhatsApp": "WhatsApp bu numaraya ulaşamıyor",
           "invalidNumber": "geçersiz telefon numarası",
           "reengagement": "konuşma süresi doldu",
           "notDelivered": "WhatsApp iletemedi",

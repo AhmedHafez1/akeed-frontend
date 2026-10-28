@@ -48,7 +48,7 @@ La confirmación de pedidos ayuda a reducir ambos.
 | Confirmado | El cliente confirmó el pedido. | Dale prioridad en la preparación. |
 | Cancelado | El cliente canceló (o el comerciante canceló por falta de respuesta). | No lo envíes. |
 | Sin respuesta | No hubo respuesta dentro del plazo de aviso que configuraste. | Revísalo pronto y aplica tu política de cancelación. |
-| Sin WhatsApp | El número del cliente no está en WhatsApp, así que el mensaje no le llega. Akeed no envía recordatorio y no cuenta el mensaje en tu uso. | Llama al cliente y después confirma o cancela el pedido manualmente. |
+| Sin WhatsApp | WhatsApp no pudo entregar el mensaje al número del cliente. Akeed no envía recordatorio y no cuenta el mensaje en tu uso. | Llama al cliente y después confirma o cancela el pedido manualmente. |
 | En espera de envío | Se agotaron las confirmaciones de tu plan o tus créditos, así que el mensaje no se envió. No se cobra nada. | Mejora tu plan o compra créditos. Akeed lo enviará automáticamente. |
 | Fallido | El envío falló o fue bloqueado. | Revisa la calidad del teléfono, el uso del plan o el saldo de créditos, y la configuración. |
 
@@ -109,9 +109,11 @@ Sí, en cualquier momento. Akeed ignora los mensajes que no puede leer como una 
 
 No. Entregado solo significa que el mensaje llegó al cliente. Usa **Confirmado** para enviar con seguridad.
 
-### ¿Qué pasa si el número del cliente no está en WhatsApp?
+### ¿Qué pasa si WhatsApp no puede entregar al número del cliente?
 
 WhatsApp avisa a Akeed de que el mensaje no se puede entregar, y el pedido pasa a **Sin WhatsApp**. Lo encontrarás en la pestaña **Sin WhatsApp** y en **Requieren acción**. Akeed cancela el recordatorio, no cuenta el mensaje en tu uso y, en Shopify, etiqueta el pedido con `Akeed: No WhatsApp`. Llama al cliente y después confirma o cancela el pedido manualmente.
+
+WhatsApp da la misma respuesta por tres motivos y no dice cuál es: el número no está en WhatsApp, el cliente no aceptó los términos más recientes de WhatsApp o su app de WhatsApp está desactualizada. Por eso puede aparecer aquí un cliente al que tú sí puedes escribir por WhatsApp. Pídele que actualice WhatsApp y acepte sus términos (WhatsApp se lo pide en Ajustes, luego Ayuda). Después, los mensajes de sus próximos pedidos podrán llegarle.
 
 ### ¿Qué pasa cuando se agotan las confirmaciones de mi plan o mis créditos?
 

@@ -995,7 +995,7 @@
           "storeUnreachable": "Akeed n’a pas pu joindre votre boutique de façon sûre à l’adresse enregistrée. L’adresse a peut-être changé, elle redirige peut-être vers une autre, ou son certificat de sécurité n’est peut-être pas valide. Vérifiez l’adresse et le certificat de votre boutique, et reconnectez-la si l’adresse a changé.",
           "hostingBlocksUpdates": "L’hébergement de votre boutique bloque la requête qu’Akeed utilise pour mettre à jour une commande (PUT). Demandez à votre hébergeur d’autoriser les requêtes PUT vers votre boutique, puis réessayez. D’ici là, modifiez vous-même le statut de la commande dans votre boutique.",
           "noReplyLocalOnly": "Le client n’a pas répondu. Cette information n’est enregistrée que dans Akeed : la commande dans votre boutique est inchangée et n’a pas été annulée.",
-          "noWhatsAppLocalOnly": "Le numéro du client n’est pas sur WhatsApp. Cette information n’est enregistrée que dans Akeed. La commande dans votre boutique est inchangée.",
+          "noWhatsAppLocalOnly": "WhatsApp n’a pas pu remettre le message au numéro du client. Cette information n’est enregistrée que dans Akeed. La commande dans votre boutique est inchangée.",
           "notSwitchedOn": "La mise à jour des commandes dans votre boutique n’est pas encore activée. Modifiez vous-même le statut de la commande dans votre boutique."
         },
         "retry": "Relancer la mise à jour de la boutique",
@@ -1084,7 +1084,7 @@
       "expired": "Le délai de vérification s’est écoulé sans réponse définitive.",
       "failed": "La vérification n’a pas pu aboutir.",
       "no_reply": "Le client n’a pas répondu dans le délai configuré.",
-      "no_whatsapp": "Ce numéro n’est pas sur WhatsApp, la confirmation ne peut donc pas parvenir au client. Appelez-le pour confirmer la commande.",
+      "no_whatsapp": "WhatsApp n’a pas pu remettre la confirmation à ce numéro. Le numéro n’est peut-être pas sur WhatsApp, ou le client doit mettre à jour WhatsApp ou accepter ses dernières conditions. Appelez-le pour confirmer la commande.",
       "awaiting_start": "Importée et mise en attente. Aucun message n’est envoyé tant que vous ne lancez pas la confirmation.",
       "not_started": "L’import n’a pas été lancé : aucun message n’a été envoyé.",
       "queued": "L’envoi a commencé et cette commande est dans la file. Son message part dans quelques minutes.",
@@ -1269,7 +1269,7 @@
           "read_no_reply": "Lu, sans réponse · il y a {hours, plural, one {# heure} other {# heures}}",
           "delivery_failed": "Non remis : {reason}",
           "send_failed": "Message non envoyé",
-          "no_whatsapp": "Pas sur WhatsApp · Appelez le client",
+          "no_whatsapp": "Non remis par WhatsApp · Appelez le client",
           "auto_cancel_failed": "L’annulation automatique a échoué",
           "late_reply_after_auto_cancel": "A confirmé après l’annulation"
         },
@@ -1378,7 +1378,7 @@
           "canceledInStore": "Annulée dans Shopify",
           "canceledByCustomer": "Par le client",
           "canceledNoReply": "Sans réponse du client",
-          "canceledNoWhatsApp": "Numéro sans WhatsApp",
+          "canceledNoWhatsApp": "Non remis par WhatsApp",
           "canceledAutomatically": "Aucune réponse après les tentatives de confirmation",
           "lateReplyAfterAutoCancel": "Le client a confirmé après l’annulation",
           "followUpSent": "Rappel envoyé",
@@ -1389,12 +1389,12 @@
         "tooltip": {
           "scheduledFor": "Planifié pour : {time}",
           "reminderAt": "Rappel planifié pour : {time}",
-          "callCustomer": "Le numéro n’est pas sur WhatsApp. Appelez le client pour confirmer.",
-          "callCustomerSince": "Pas sur WhatsApp depuis le {time}. Appelez le client pour confirmer.",
+          "callCustomer": "WhatsApp n’a pas pu joindre ce numéro. Appelez le client pour confirmer.",
+          "callCustomerSince": "Non remis par WhatsApp depuis le {time}. Appelez le client pour confirmer.",
           "confirmedAfterCancel": "Annulée automatiquement le {time}. Le client a confirmé ensuite — contactez-le."
         },
         "failure": {
-          "notOnWhatsApp": "le numéro n’est pas sur WhatsApp",
+          "notOnWhatsApp": "WhatsApp ne peut pas joindre ce numéro",
           "invalidNumber": "numéro de téléphone invalide",
           "reengagement": "la fenêtre de conversation a expiré",
           "notDelivered": "WhatsApp n’a pas pu le remettre",
