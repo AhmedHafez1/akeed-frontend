@@ -1,6 +1,7 @@
 import { withLocale } from '@/shared/lib/locale'
 
-export type TipType = 'tip' | 'update'
+/** `update` is a new feature; `change` says Akeed changed how something works. */
+export type TipType = 'tip' | 'update' | 'change' | 'note'
 export type TipActionMode = 'embedded' | 'standalone'
 
 /** The pages a tip's button may open; mirrors the backend catalog. */

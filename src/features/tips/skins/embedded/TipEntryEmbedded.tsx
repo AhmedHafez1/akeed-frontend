@@ -8,12 +8,21 @@ import {
   Button,
   InlineStack,
   Text,
+  type BadgeProps,
 } from '@shopify/polaris'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { getLocaleDirection } from '@/shared/lib/locale'
 import { useTipReadVisibility } from '../../domain/useTipReadVisibility'
 import type { TipCardView } from '../../domain/useTipCards'
+
+/** A change asks for attention; a note keeps Polaris's neutral badge. */
+const TYPE_TONES: Record<TipCardView['card']['type'], BadgeProps['tone']> = {
+  tip: 'success',
+  update: 'info',
+  change: 'attention',
+  note: undefined,
+}
 
 export interface TipEntryEmbeddedProps {
   ref?: Ref<HTMLDivElement>
@@ -49,7 +58,7 @@ export function TipEntryEmbedded({
       <div ref={seenRef}>
         <BlockStack gap="200">
           <InlineStack align="start">
-            <Badge tone={card.type === 'update' ? 'info' : 'success'}>
+            <Badge tone={TYPE_TONES[card.type]}>
               {t(`badge.${card.type}`)}
             </Badge>
           </InlineStack>

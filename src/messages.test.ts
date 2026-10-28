@@ -369,6 +369,7 @@ describe('French messages', () => {
       'standaloneOnboarding.store.timezones.Asia_Bahrain',
       'standaloneOnboarding.store.timezones.Asia_Qatar',
       'support.email',
+      'tips.badge.note',
       'wooCommerceConnect.enterUrl.placeholder',
       'wooCommerceConnect.eyebrow',
       'wooCommerceConnect.webhooks.states.active',

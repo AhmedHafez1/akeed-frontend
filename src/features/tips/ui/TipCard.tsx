@@ -2,7 +2,15 @@
 
 import { useId, type Ref } from 'react'
 import Link from 'next/link'
-import { ExternalLink, Lightbulb, Sparkles, X } from 'lucide-react'
+import {
+  ExternalLink,
+  Info,
+  Lightbulb,
+  RefreshCw,
+  Sparkles,
+  X,
+  type LucideIcon,
+} from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { getLocaleDirection } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
@@ -17,6 +25,17 @@ export interface TipCardProps {
   onDismiss?: () => void
   onAction?: () => void
   ref?: Ref<HTMLElement>
+}
+
+/** A change asks for attention; a note is only for reading. */
+const TYPE_BADGES: Record<
+  TipCardModel['type'],
+  { icon: LucideIcon; tone: 'brand' | 'info' | 'warning' | 'neutral' }
+> = {
+  tip: { icon: Lightbulb, tone: 'brand' },
+  update: { icon: Sparkles, tone: 'info' },
+  change: { icon: RefreshCw, tone: 'warning' },
+  note: { icon: Info, tone: 'neutral' },
 }
 
 /**
@@ -35,7 +54,7 @@ export function TipCard({
 }: TipCardProps) {
   const t = useTranslations('tips')
   const titleId = useId()
-  const BadgeIcon = card.type === 'update' ? Sparkles : Lightbulb
+  const { icon: BadgeIcon, tone } = TYPE_BADGES[card.type]
 
   return (
     <article
@@ -44,11 +63,7 @@ export function TipCard({
       className={cn(akCard, 'flex min-w-0 flex-col gap-3 p-5')}
     >
       <div className="flex items-start gap-3">
-        <span
-          className={akPill({
-            tone: card.type === 'update' ? 'info' : 'brand',
-          })}
-        >
+        <span className={akPill({ tone })}>
           <BadgeIcon aria-hidden="true" className="size-3.5" />
           {t(`badge.${card.type}`)}
         </span>

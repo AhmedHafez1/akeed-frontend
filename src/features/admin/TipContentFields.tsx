@@ -130,6 +130,8 @@ export function TipContentFields({
           options={[
             { value: 'tip', label: t('typeTip') },
             { value: 'update', label: t('typeUpdate') },
+            { value: 'change', label: t('typeChange') },
+            { value: 'note', label: t('typeNote') },
           ]}
         />
       </div>

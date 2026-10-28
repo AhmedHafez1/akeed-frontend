@@ -4854,7 +4854,9 @@
     "unread": "Unread",
     "badge": {
       "tip": "Tip",
-      "update": "New feature"
+      "update": "New feature",
+      "change": "Update",
+      "note": "Note"
     },
     "dismiss": "Dismiss “{title}” for good",
     "dismissLabel": "Dismiss",
@@ -4877,7 +4879,9 @@
     },
     "type": {
       "tip": "Tip",
-      "update": "Feature update"
+      "update": "Feature update",
+      "change": "Update",
+      "note": "Note"
     },
     "list": {
       "create": "New campaign",
@@ -4954,6 +4958,8 @@
       "type": "Type",
       "typeTip": "Tip",
       "typeUpdate": "Feature update",
+      "typeChange": "Update",
+      "typeNote": "Note",
       "languages": "Card languages",
       "required": "required",
       "hasErrors": "has errors",
