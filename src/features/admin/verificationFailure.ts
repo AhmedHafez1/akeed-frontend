@@ -22,8 +22,8 @@ type FailureText = readonly [label: string, detail: string]
  */
 const DELIVERY_FAILURES: Record<string, FailureText> = {
   '131026': [
-    'No WhatsApp on customer number',
-    'The customer number has no WhatsApp account, or cannot receive this message.',
+    'WhatsApp could not deliver to the customer number',
+    'The number may not be on WhatsApp, or the customer has not accepted the latest terms or runs an outdated app.',
   ],
   '131021': [
     'Invalid customer number',

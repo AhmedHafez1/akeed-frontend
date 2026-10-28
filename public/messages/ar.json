@@ -1968,7 +1968,7 @@
         "canceled": "تم الإلغاء",
         "failed": "فشل",
         "no_reply": "لم يتم الرد",
-        "no_whatsapp": "بدون واتساب",
+        "no_whatsapp": "تعذّر التسليم على واتساب",
         "blocked": "بانتظار الإرسال"
       },
       "dateRange": {
@@ -2191,7 +2191,7 @@
       "expired": "انتهت المهلة",
       "failed": "فشل الإرسال",
       "no_reply": "لم يتم الرد",
-      "no_whatsapp": "بدون واتساب",
+      "no_whatsapp": "تعذّر التسليم على واتساب",
       "awaiting_start": "بانتظار البدء",
       "not_started": "لم يبدأ",
       "queued": "في الدور",
@@ -2393,7 +2393,7 @@
           "read_no_reply": "قرأ الرسالة ولم يرد · منذ {hours, plural, one {ساعة} two {ساعتين} few {# ساعات} many {# ساعة} other {# ساعة}}",
           "delivery_failed": "لم تصل الرسالة: {reason}",
           "send_failed": "لم تُرسل الرسالة",
-          "no_whatsapp": "تعذّر التوصيل على واتساب · اتصل بالعميل",
+          "no_whatsapp": "تعذّر التسليم على واتساب · اتصل بالعميل",
           "auto_cancel_failed": "فشل الإلغاء التلقائي",
           "late_reply_after_auto_cancel": "أكد بعد الإلغاء"
         },
@@ -2452,7 +2452,7 @@
       "tabs": {
         "all": "الكل",
         "needs_action": "تحتاج إجراء",
-        "no_whatsapp": "بدون واتساب",
+        "no_whatsapp": "تعذّر التسليم على واتساب",
         "confirmed": "مؤكد",
         "canceled": "ملغي"
       },
@@ -2493,7 +2493,7 @@
         "awaitingReply": "بانتظار الرد",
         "noReply": "لم يرد",
         "confirmedAfterCancel": "أكد بعد الإلغاء",
-        "noWhatsApp": "بدون واتساب",
+        "noWhatsApp": "تعذّر التسليم على واتساب",
         "awaitingStart": "بانتظار البدء",
         "notStarted": "لم يبدأ",
         "sub": {
@@ -2502,7 +2502,7 @@
           "canceledInStore": "أُلغي في شوبيفاي",
           "canceledByCustomer": "ألغاه العميل",
           "canceledNoReply": "لم يرد العميل",
-          "canceledNoWhatsApp": "تعذّر التوصيل على واتساب",
+          "canceledNoWhatsApp": "تعذّر التسليم على واتساب",
           "canceledAutomatically": "لا رد بعد محاولات التأكيد",
           "lateReplyAfterAutoCancel": "أكد العميل بعد الإلغاء",
           "followUpSent": "أُرسل التذكير",
@@ -2513,8 +2513,8 @@
         "tooltip": {
           "scheduledFor": "مجدول في {time}",
           "reminderAt": "التذكير مجدول في {time}",
-          "callCustomer": "تعذّر على واتساب التوصيل إلى هذا الرقم. اتصل بالعميل لتأكيد الطلب.",
-          "callCustomerSince": "تعذّر التوصيل على واتساب منذ {time}. اتصل بالعميل لتأكيد الطلب.",
+          "callCustomer": "تعذّر على واتساب التوصيل إلى هذا الرقم. قد لا يكون الرقم مسجلًا على واتساب، أو يحتاج العميل إلى تحديث واتساب أو قبول أحدث شروطه. اتصل بالعميل لتأكيد الطلب.",
+          "callCustomerSince": "منذ {time}، تعذّر على واتساب التوصيل إلى هذا الرقم. قد لا يكون الرقم مسجلًا على واتساب، أو يحتاج العميل إلى تحديث واتساب أو قبول أحدث شروطه. اتصل بالعميل لتأكيد الطلب.",
           "confirmedAfterCancel": "أُلغي تلقائيًا في {time}. أكد العميل بعد ذلك — تواصل معه."
         },
         "failure": {
@@ -2835,7 +2835,7 @@
                 "merchant_no_reply_cancellation": "إلغاءاتك بعد عدم الرد",
                 "merchant_cancellation_tagging": "وسوم الإلغاء",
                 "automatic_no_reply_tagging": "علامات «بلا رد» التلقائية",
-                "automatic_no_whatsapp_tagging": "علامات «بدون واتساب» التلقائية"
+                "automatic_no_whatsapp_tagging": "علامات «تعذّر التسليم على واتساب» التلقائية"
               }
             },
             "webhooks": {

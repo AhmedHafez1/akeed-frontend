@@ -218,7 +218,7 @@ describe('SourceHealthCard', () => {
       'Updated in your store: customer confirmations, customer cancellations, cancellations you make after no reply.'
     )
     expect(document.body.textContent).toContain(
-      'Kept in Akeed only: cancellation tags, automatic no-reply marks, automatic no-WhatsApp marks.'
+      'Kept in Akeed only: cancellation tags, automatic no-reply marks, automatic WhatsApp-undeliverable marks.'
     )
   })
 

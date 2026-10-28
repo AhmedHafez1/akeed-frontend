@@ -404,9 +404,9 @@ describe('ConfirmationsTable', () => {
       'en'
     )
 
-    const badge = screen.getByText('No WhatsApp')
+    const badge = screen.getByText('WhatsApp undeliverable')
     expect(badge.closest('[title]')?.getAttribute('title')).toBe(
-      'Undeliverable on WhatsApp since Sep 16, 2026, 7:05 AM. Call the customer to confirm.'
+      'Since Sep 16, 2026, 7:05 AM, WhatsApp couldn’t deliver to this number. It may not be on WhatsApp, or the customer needs to update WhatsApp or accept its latest terms. Call the customer to confirm.'
     )
     const cells = within(
       within(screen.getByRole('table')).getAllByRole('row')[1]

@@ -62,7 +62,7 @@ const verificationStatusOptions = [
   { value: 'confirmed', label: 'Confirmed' },
   { value: 'canceled', label: 'Canceled' },
   { value: 'no_reply', label: 'No reply' },
-  { value: 'no_whatsapp', label: 'No WhatsApp' },
+  { value: 'no_whatsapp', label: 'WhatsApp undeliverable' },
   { value: 'blocked', label: 'Blocked' },
   { value: 'expired', label: 'Expired' },
   { value: 'failed', label: 'Failed' },
