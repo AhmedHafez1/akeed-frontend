@@ -3657,7 +3657,9 @@
     "unread": "Okunmadı",
     "badge": {
       "tip": "İpucu",
-      "update": "Yeni özellik"
+      "update": "Yeni özellik",
+      "change": "Güncelleme",
+      "note": "Not"
     },
     "dismiss": "“{title}” kartını kalıcı olarak kapat",
     "dismissLabel": "Kapat",

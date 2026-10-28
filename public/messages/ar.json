@@ -4848,7 +4848,9 @@
     "unread": "غير مقروء",
     "badge": {
       "tip": "نصيحة",
-      "update": "ميزة جديدة"
+      "update": "ميزة جديدة",
+      "change": "تحديث",
+      "note": "ملاحظة"
     },
     "dismiss": "إخفاء «{title}» نهائيًا",
     "dismissLabel": "إخفاء",
@@ -4871,7 +4873,9 @@
     },
     "type": {
       "tip": "نصيحة",
-      "update": "تحديث ميزة"
+      "update": "تحديث ميزة",
+      "change": "تحديث",
+      "note": "ملاحظة"
     },
     "list": {
       "create": "حملة جديدة",
@@ -4948,6 +4952,8 @@
       "type": "النوع",
       "typeTip": "نصيحة",
       "typeUpdate": "تحديث ميزة",
+      "typeChange": "تحديث",
+      "typeNote": "ملاحظة",
       "languages": "لغات البطاقة",
       "required": "مطلوبة",
       "hasErrors": "بها أخطاء",

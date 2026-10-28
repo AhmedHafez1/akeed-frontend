@@ -102,14 +102,20 @@ describe('TipsSection', () => {
       cards: [
         card({ id: 'new', title: 'الأحدث' }),
         card({ id: 'old', title: 'الأقدم', type: 'update' }),
+        card({ id: 'change', title: 'تغيير', type: 'change' }),
+        card({ id: 'note', title: 'معلومة', type: 'note' }),
       ],
     })
     const headings = await screen.findAllByRole('heading', { level: 3 })
     expect(headings.map((node) => node.textContent)).toEqual([
       'الأحدث',
       'الأقدم',
+      'تغيير',
+      'معلومة',
     ])
     expect(screen.getByText(ar.tips.badge.update)).toBeTruthy()
+    expect(screen.getByText(ar.tips.badge.change)).toBeTruthy()
+    expect(screen.getByText(ar.tips.badge.note)).toBeTruthy()
     expect(auth.api.get).toHaveBeenCalledWith(
       '/api/tips?locale=ar',
       expect.anything()

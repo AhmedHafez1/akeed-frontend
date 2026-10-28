@@ -3657,7 +3657,9 @@
     "unread": "Sin leer",
     "badge": {
       "tip": "Consejo",
-      "update": "Novedad"
+      "update": "Novedad",
+      "change": "Actualización",
+      "note": "Nota"
     },
     "dismiss": "Descartar «{title}» para siempre",
     "dismissLabel": "Descartar",

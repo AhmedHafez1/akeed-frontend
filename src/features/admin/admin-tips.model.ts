@@ -1,6 +1,7 @@
 import { SUPPORTED_LOCALES } from '@/shared/lib/locale'
 
-export type TipType = 'tip' | 'update'
+/** `update` is a new feature; `change` says Akeed changed how something works. */
+export type TipType = 'tip' | 'update' | 'change' | 'note'
 export type TipStatus = 'draft' | 'published' | 'paused' | 'archived'
 export type TipEffectiveStatus = TipStatus | 'expired'
 export type TipTargetingMode = 'direct' | 'filters'
