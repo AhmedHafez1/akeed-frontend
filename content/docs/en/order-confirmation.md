@@ -48,7 +48,7 @@ Order confirmation helps reduce both.
 | Confirmed | Customer confirmed the order. | Prioritize for fulfillment. |
 | Canceled | Customer canceled (or merchant canceled after no reply). | Do not ship. |
 | No reply | No response within your configured escalation window. | Review quickly and follow your cancellation policy. |
-| No WhatsApp | The customer’s number isn’t on WhatsApp, so the message can’t reach them. Akeed sends no reminder and counts no usage for it. | Call the customer, then confirm or cancel the order by hand. |
+| No WhatsApp | WhatsApp couldn’t deliver the message to the customer’s number. Akeed sends no reminder and counts no usage for it. | Call the customer, then confirm or cancel the order by hand. |
 | Waiting to send | Your plan’s confirmations or your credits ran out, so the message wasn’t sent. Nothing is charged for it. | Upgrade or buy credits. Akeed then sends it automatically. |
 | Failed | Send failed or was blocked. | Check phone quality, plan usage or credit balance, and settings. |
 
@@ -109,9 +109,11 @@ Yes, at any time. Akeed ignores a message it can’t read as a confirm or a canc
 
 No. Delivered only means the message reached the customer. Use **Confirmed** for shipping confidence.
 
-### What if the customer’s number isn’t on WhatsApp?
+### What if WhatsApp can’t deliver to the customer’s number?
 
 WhatsApp tells Akeed the message can’t be delivered, and the order moves to **No WhatsApp**. You find it under the **No WhatsApp** tab and in **Needs action**. Akeed cancels the reminder, does not count the message in your usage, and on Shopify tags the order `Akeed: No WhatsApp`. Call the customer, then confirm or cancel the order by hand.
+
+WhatsApp gives the same answer for three reasons and doesn’t say which one applies: the number isn’t on WhatsApp, the customer hasn’t accepted WhatsApp’s latest terms, or their WhatsApp app is out of date. So a customer you can reach on WhatsApp yourself can still end up here. Ask them to update WhatsApp and accept its terms (WhatsApp shows the prompt under Settings, then Help). Messages for their next orders can then reach them.
 
 ### What happens when my plan or credits run out?
 

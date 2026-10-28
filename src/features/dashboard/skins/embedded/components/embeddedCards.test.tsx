@@ -114,7 +114,7 @@ describe('NeedsActionCard', () => {
     )
     expect(screen.getByText('فشل الإرسال')).toBeTruthy()
     expect(
-      screen.getByText('لم تصل الرسالة: الرقم غير مسجل على واتساب')
+      screen.getByText('لم تصل الرسالة: تعذّر على واتساب الوصول إلى الرقم')
     ).toBeTruthy()
     expect(screen.getByText('+20 100 761 1456')).toBeTruthy()
     expect(screen.queryByRole('link', { name: /واتساب/ })).toBeNull()
@@ -387,7 +387,7 @@ describe('ConfirmationsTable', () => {
     )
   })
 
-  it('marks a number that is not on WhatsApp on one line, with the call hint in the tooltip', () => {
+  it('marks a number WhatsApp could not deliver to on one line, with the call hint in the tooltip', () => {
     renderEmbedded(
       <ConfirmationsTable
         rows={[
@@ -406,7 +406,7 @@ describe('ConfirmationsTable', () => {
 
     const badge = screen.getByText('No WhatsApp')
     expect(badge.closest('[title]')?.getAttribute('title')).toBe(
-      'Not on WhatsApp since Sep 16, 2026, 7:05 AM. Call the customer to confirm.'
+      'Undeliverable on WhatsApp since Sep 16, 2026, 7:05 AM. Call the customer to confirm.'
     )
     const cells = within(
       within(screen.getByRole('table')).getAllByRole('row')[1]

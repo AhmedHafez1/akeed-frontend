@@ -2125,7 +2125,7 @@
           "storeUnreachable": "Akeed could not reach your store safely at its saved address. The address may have changed, it may now redirect to another one, or its security certificate may not be valid. Check your store's address and certificate, and reconnect if the address changed.",
           "hostingBlocksUpdates": "Your store's hosting blocks the request Akeed uses to update an order (PUT). Ask your hosting provider to allow PUT requests to your store, then try again. Until then, change the order's status in your store yourself.",
           "noReplyLocalOnly": "The customer did not reply. That is recorded in Akeed only: the order in your store is unchanged and was not canceled.",
-          "noWhatsAppLocalOnly": "The customer’s number isn’t on WhatsApp. That is recorded in Akeed only. The order in your store is unchanged.",
+          "noWhatsAppLocalOnly": "WhatsApp couldn’t deliver the message to the customer’s number. That is recorded in Akeed only. The order in your store is unchanged.",
           "notSwitchedOn": "Updating orders in your store is not switched on yet. Change the order's status in your store yourself."
         },
         "retry": "Try the store update again",
@@ -2214,7 +2214,7 @@
       "expired": "The verification window ended without a final response.",
       "failed": "Verification could not be completed.",
       "no_reply": "The customer did not reply within the configured time.",
-      "no_whatsapp": "This number isn’t on WhatsApp, so the confirmation can’t reach the customer. Call them to confirm the order.",
+      "no_whatsapp": "WhatsApp couldn’t deliver the confirmation to this number. The number may not be on WhatsApp, or the customer may need to update WhatsApp or accept its latest terms. Call them to confirm the order.",
       "awaiting_start": "Imported and held. No message is sent until you start confirmation.",
       "not_started": "The import was not started, so no message was sent.",
       "queued": "Sending has started and this order is in line. Its message goes out within minutes.",
@@ -2399,7 +2399,7 @@
           "read_no_reply": "Read, no reply · {hours, plural, one {# hour} other {# hours}} ago",
           "delivery_failed": "Not delivered: {reason}",
           "send_failed": "Message not sent",
-          "no_whatsapp": "Not on WhatsApp · Call the customer",
+          "no_whatsapp": "WhatsApp couldn’t deliver · Call the customer",
           "auto_cancel_failed": "Automatic cancellation failed",
           "late_reply_after_auto_cancel": "Confirmed after it was canceled"
         },
@@ -2508,7 +2508,7 @@
           "canceledInStore": "Canceled in Shopify",
           "canceledByCustomer": "By the customer",
           "canceledNoReply": "No reply from the customer",
-          "canceledNoWhatsApp": "Number not on WhatsApp",
+          "canceledNoWhatsApp": "Undeliverable on WhatsApp",
           "canceledAutomatically": "No response after confirmation attempts",
           "lateReplyAfterAutoCancel": "Customer confirmed after it was canceled",
           "followUpSent": "Reminder sent",
@@ -2519,12 +2519,12 @@
         "tooltip": {
           "scheduledFor": "Scheduled for {time}",
           "reminderAt": "Reminder scheduled for {time}",
-          "callCustomer": "Number isn’t on WhatsApp. Call the customer to confirm.",
-          "callCustomerSince": "Not on WhatsApp since {time}. Call the customer to confirm.",
+          "callCustomer": "WhatsApp couldn’t deliver to this number. Call the customer to confirm.",
+          "callCustomerSince": "Undeliverable on WhatsApp since {time}. Call the customer to confirm.",
           "confirmedAfterCancel": "Canceled automatically on {time}. The customer confirmed afterwards — contact them."
         },
         "failure": {
-          "notOnWhatsApp": "number isn’t on WhatsApp",
+          "notOnWhatsApp": "WhatsApp can’t reach this number",
           "invalidNumber": "invalid phone number",
           "reengagement": "conversation window expired",
           "notDelivered": "WhatsApp couldn’t deliver it",

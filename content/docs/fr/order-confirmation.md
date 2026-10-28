@@ -48,7 +48,7 @@ La confirmation des commandes aide à réduire les deux.
 | Confirmée | Le client a confirmé la commande. | Traitez-la en priorité. |
 | Annulée | Le client a annulé (ou le marchand a annulé faute de réponse). | N’expédiez pas. |
 | Sans réponse | Pas de réponse dans le délai d’escalade configuré. | Examinez-la rapidement et appliquez votre politique d’annulation. |
-| Sans WhatsApp | Le numéro du client n’est pas sur WhatsApp, le message ne peut donc pas lui parvenir. Akeed n’envoie pas de rappel et ne compte pas ce message dans votre consommation. | Appelez le client, puis confirmez ou annulez la commande manuellement. |
+| Sans WhatsApp | WhatsApp n’a pas pu remettre le message au numéro du client. Akeed n’envoie pas de rappel et ne compte pas ce message dans votre consommation. | Appelez le client, puis confirmez ou annulez la commande manuellement. |
 | En attente d’envoi | Les confirmations de votre forfait ou vos crédits sont épuisés, le message n’a donc pas été envoyé. Rien n’est facturé. | Changez de forfait ou achetez des crédits : Akeed l’enverra alors automatiquement. |
 | Échec | L’envoi a échoué ou a été bloqué. | Vérifiez la qualité du numéro, l’utilisation du forfait ou le solde de crédits, et les paramètres. |
 
@@ -109,9 +109,11 @@ Oui, à tout moment. Akeed ignore un message qu’il ne peut lire ni comme une c
 
 Non. « Remis » signifie seulement que le message est parvenu au client. Fiez-vous à **Confirmée** pour expédier en confiance.
 
-### Que se passe-t-il si le numéro du client n’est pas sur WhatsApp ?
+### Que se passe-t-il si WhatsApp ne peut pas joindre le numéro du client ?
 
 WhatsApp indique à Akeed que le message ne peut pas être remis, et la commande passe au statut **Sans WhatsApp**. Vous la retrouvez dans l’onglet **Sans WhatsApp** et dans **À traiter**. Akeed annule le rappel, ne compte pas ce message dans votre consommation et, sur Shopify, ajoute l’étiquette `Akeed: No WhatsApp` à la commande. Appelez le client, puis confirmez ou annulez la commande manuellement.
+
+WhatsApp donne la même réponse pour trois raisons et ne précise pas laquelle : le numéro n’est pas sur WhatsApp, le client n’a pas accepté les dernières conditions de WhatsApp, ou son application WhatsApp n’est pas à jour. Un client que vous joignez vous-même sur WhatsApp peut donc se retrouver ici. Demandez-lui de mettre à jour WhatsApp et d’accepter ses conditions (WhatsApp le lui propose dans Paramètres, puis Aide). Les messages de ses prochaines commandes pourront ensuite lui parvenir.
 
 ### Que se passe-t-il quand les confirmations de mon forfait ou mes crédits sont épuisés ?
 

@@ -995,7 +995,7 @@
           "storeUnreachable": "Akeed no pudo conectarse de forma segura a tu tienda en la dirección guardada. Es posible que la dirección haya cambiado, que ahora redirija a otra o que su certificado de seguridad no sea válido. Revisa la dirección y el certificado de tu tienda, y vuelve a conectarla si la dirección cambió.",
           "hostingBlocksUpdates": "El hosting de tu tienda bloquea la solicitud que Akeed usa para actualizar un pedido (PUT). Pide a tu proveedor de hosting que permita las solicitudes PUT a tu tienda e inténtalo de nuevo. Mientras tanto, cambia tú el estado del pedido en tu tienda.",
           "noReplyLocalOnly": "El cliente no respondió. Eso queda registrado solo en Akeed: el pedido en tu tienda no cambió y no se canceló.",
-          "noWhatsAppLocalOnly": "El número del cliente no está en WhatsApp. Eso queda registrado solo en Akeed. El pedido en tu tienda no cambió.",
+          "noWhatsAppLocalOnly": "WhatsApp no pudo entregar el mensaje al número del cliente. Eso queda registrado solo en Akeed. El pedido en tu tienda no cambió.",
           "notSwitchedOn": "La actualización de pedidos en tu tienda aún no está activada. Cambia tú el estado del pedido en tu tienda."
         },
         "retry": "Reintentar la actualización de la tienda",
@@ -1084,7 +1084,7 @@
       "expired": "El plazo de verificación terminó sin una respuesta final.",
       "failed": "No se pudo completar la verificación.",
       "no_reply": "El cliente no respondió dentro del tiempo configurado.",
-      "no_whatsapp": "Este número no está en WhatsApp, así que la confirmación no llega al cliente. Llámalo para confirmar el pedido.",
+      "no_whatsapp": "WhatsApp no pudo entregar la confirmación a este número. Puede que el número no esté en WhatsApp o que el cliente deba actualizar WhatsApp o aceptar sus términos más recientes. Llámalo para confirmar el pedido.",
       "awaiting_start": "Importado y en espera. No se envía ningún mensaje hasta que inicies la confirmación.",
       "not_started": "La importación no se inició, así que no se envió ningún mensaje.",
       "queued": "El envío comenzó y este pedido está en la fila. Su mensaje sale en unos minutos.",
@@ -1269,7 +1269,7 @@
           "read_no_reply": "Leído, sin respuesta · hace {hours, plural, one {# hora} other {# horas}}",
           "delivery_failed": "No entregado: {reason}",
           "send_failed": "Mensaje no enviado",
-          "no_whatsapp": "No está en WhatsApp · Llama al cliente",
+          "no_whatsapp": "WhatsApp no pudo entregarlo · Llama al cliente",
           "auto_cancel_failed": "La cancelación automática falló",
           "late_reply_after_auto_cancel": "Confirmó tras la cancelación"
         },
@@ -1378,7 +1378,7 @@
           "canceledInStore": "Cancelado en Shopify",
           "canceledByCustomer": "Por el cliente",
           "canceledNoReply": "Sin respuesta del cliente",
-          "canceledNoWhatsApp": "Número sin WhatsApp",
+          "canceledNoWhatsApp": "WhatsApp no pudo entregarlo",
           "canceledAutomatically": "Sin respuesta tras los intentos de confirmación",
           "lateReplyAfterAutoCancel": "El cliente confirmó tras la cancelación",
           "followUpSent": "Recordatorio enviado",
@@ -1389,12 +1389,12 @@
         "tooltip": {
           "scheduledFor": "Programado para {time}",
           "reminderAt": "Recordatorio programado para {time}",
-          "callCustomer": "El número no está en WhatsApp. Llama al cliente para confirmar.",
-          "callCustomerSince": "Sin WhatsApp desde {time}. Llama al cliente para confirmar.",
+          "callCustomer": "WhatsApp no pudo entregar a este número. Llama al cliente para confirmar.",
+          "callCustomerSince": "No entregado por WhatsApp desde {time}. Llama al cliente para confirmar.",
           "confirmedAfterCancel": "Cancelado automáticamente el {time}. El cliente confirmó después — contáctalo."
         },
         "failure": {
-          "notOnWhatsApp": "el número no está en WhatsApp",
+          "notOnWhatsApp": "WhatsApp no llega a este número",
           "invalidNumber": "número de teléfono no válido",
           "reengagement": "la ventana de conversación venció",
           "notDelivered": "WhatsApp no pudo entregarlo",
