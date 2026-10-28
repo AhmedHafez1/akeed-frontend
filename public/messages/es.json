@@ -844,7 +844,7 @@
         "canceled": "Cancelado",
         "failed": "Fallido",
         "no_reply": "Sin respuesta",
-        "no_whatsapp": "Sin WhatsApp",
+        "no_whatsapp": "No entregado en WhatsApp",
         "blocked": "En espera de envío"
       },
       "dateRange": {
@@ -1067,7 +1067,7 @@
       "expired": "Vencido",
       "failed": "Fallido",
       "no_reply": "Sin respuesta",
-      "no_whatsapp": "Sin WhatsApp",
+      "no_whatsapp": "No entregado en WhatsApp",
       "awaiting_start": "Esperando inicio",
       "not_started": "No iniciado",
       "queued": "En cola",
@@ -1269,7 +1269,7 @@
           "read_no_reply": "Leído, sin respuesta · hace {hours, plural, one {# hora} other {# horas}}",
           "delivery_failed": "No entregado: {reason}",
           "send_failed": "Mensaje no enviado",
-          "no_whatsapp": "WhatsApp no pudo entregarlo · Llama al cliente",
+          "no_whatsapp": "No entregado en WhatsApp · Llama al cliente",
           "auto_cancel_failed": "La cancelación automática falló",
           "late_reply_after_auto_cancel": "Confirmó tras la cancelación"
         },
@@ -1328,7 +1328,7 @@
       "tabs": {
         "all": "Todos",
         "needs_action": "Requieren acción",
-        "no_whatsapp": "Sin WhatsApp",
+        "no_whatsapp": "No entregado en WhatsApp",
         "confirmed": "Confirmados",
         "canceled": "Cancelados"
       },
@@ -1369,7 +1369,7 @@
         "awaitingReply": "Esperando respuesta",
         "noReply": "Sin respuesta",
         "confirmedAfterCancel": "Confirmó tras cancelar",
-        "noWhatsApp": "Sin WhatsApp",
+        "noWhatsApp": "No entregado en WhatsApp",
         "awaitingStart": "Esperando inicio",
         "notStarted": "No iniciado",
         "sub": {
@@ -1378,7 +1378,7 @@
           "canceledInStore": "Cancelado en Shopify",
           "canceledByCustomer": "Por el cliente",
           "canceledNoReply": "Sin respuesta del cliente",
-          "canceledNoWhatsApp": "WhatsApp no pudo entregarlo",
+          "canceledNoWhatsApp": "No entregado en WhatsApp",
           "canceledAutomatically": "Sin respuesta tras los intentos de confirmación",
           "lateReplyAfterAutoCancel": "El cliente confirmó tras la cancelación",
           "followUpSent": "Recordatorio enviado",
@@ -1389,8 +1389,8 @@
         "tooltip": {
           "scheduledFor": "Programado para {time}",
           "reminderAt": "Recordatorio programado para {time}",
-          "callCustomer": "WhatsApp no pudo entregar a este número. Llama al cliente para confirmar.",
-          "callCustomerSince": "No entregado por WhatsApp desde {time}. Llama al cliente para confirmar.",
+          "callCustomer": "WhatsApp no pudo entregar a este número. Puede que no esté en WhatsApp o que el cliente deba actualizar WhatsApp o aceptar sus términos más recientes. Llama al cliente para confirmar.",
+          "callCustomerSince": "Desde {time}, WhatsApp no puede entregar a este número. Puede que no esté en WhatsApp o que el cliente deba actualizar WhatsApp o aceptar sus términos más recientes. Llama al cliente para confirmar.",
           "confirmedAfterCancel": "Cancelado automáticamente el {time}. El cliente confirmó después — contáctalo."
         },
         "failure": {
@@ -1711,7 +1711,7 @@
                 "merchant_no_reply_cancellation": "cancelaciones que haces tras no recibir respuesta",
                 "merchant_cancellation_tagging": "etiquetas de cancelación",
                 "automatic_no_reply_tagging": "marcas automáticas de sin respuesta",
-                "automatic_no_whatsapp_tagging": "marcas automáticas de sin WhatsApp"
+                "automatic_no_whatsapp_tagging": "marcas automáticas de no entregado en WhatsApp"
               }
             },
             "webhooks": {

@@ -844,7 +844,7 @@
         "canceled": "İptal edildi",
         "failed": "Başarısız",
         "no_reply": "Yanıt yok",
-        "no_whatsapp": "WhatsApp yok",
+        "no_whatsapp": "WhatsApp iletilemedi",
         "blocked": "Gönderim bekliyor"
       },
       "dateRange": {
@@ -1067,7 +1067,7 @@
       "expired": "Süresi doldu",
       "failed": "Başarısız",
       "no_reply": "Yanıt yok",
-      "no_whatsapp": "WhatsApp yok",
+      "no_whatsapp": "WhatsApp iletilemedi",
       "awaiting_start": "Başlatılmayı bekliyor",
       "not_started": "Başlatılmadı",
       "queued": "Sırada",
@@ -1269,7 +1269,7 @@
           "read_no_reply": "Okundu, yanıt yok · {hours, plural, one {# saat} other {# saat}} önce",
           "delivery_failed": "Teslim edilmedi: {reason}",
           "send_failed": "Mesaj gönderilmedi",
-          "no_whatsapp": "WhatsApp iletemedi · Müşteriyi arayın",
+          "no_whatsapp": "WhatsApp iletilemedi · Müşteriyi arayın",
           "auto_cancel_failed": "Otomatik iptal başarısız oldu",
           "late_reply_after_auto_cancel": "İptalden sonra onayladı"
         },
@@ -1328,7 +1328,7 @@
       "tabs": {
         "all": "Tümü",
         "needs_action": "İşlem bekleyen",
-        "no_whatsapp": "WhatsApp yok",
+        "no_whatsapp": "WhatsApp iletilemedi",
         "confirmed": "Onaylanan",
         "canceled": "İptal edilen"
       },
@@ -1369,7 +1369,7 @@
         "awaitingReply": "Yanıt bekleniyor",
         "noReply": "Yanıt yok",
         "confirmedAfterCancel": "İptalden sonra onayladı",
-        "noWhatsApp": "WhatsApp yok",
+        "noWhatsApp": "WhatsApp iletilemedi",
         "awaitingStart": "Başlatılmayı bekliyor",
         "notStarted": "Başlatılmadı",
         "sub": {
@@ -1378,7 +1378,7 @@
           "canceledInStore": "Shopify’da iptal edildi",
           "canceledByCustomer": "Müşteri tarafından",
           "canceledNoReply": "Müşteriden yanıt yok",
-          "canceledNoWhatsApp": "WhatsApp iletemedi",
+          "canceledNoWhatsApp": "WhatsApp iletilemedi",
           "canceledAutomatically": "Onay denemelerinden sonra yanıt yok",
           "lateReplyAfterAutoCancel": "Müşteri iptalden sonra onayladı",
           "followUpSent": "Hatırlatma gönderildi",
@@ -1389,8 +1389,8 @@
         "tooltip": {
           "scheduledFor": "Planlanan zaman: {time}",
           "reminderAt": "Hatırlatma zamanı: {time}",
-          "callCustomer": "WhatsApp bu numaraya iletemedi. Onay için müşteriyi arayın.",
-          "callCustomerSince": "{time} tarihinden beri WhatsApp iletemiyor. Onay için müşteriyi arayın.",
+          "callCustomer": "WhatsApp bu numaraya iletemedi. Numara WhatsApp’ta kayıtlı olmayabilir ya da müşterinin WhatsApp’ı güncellemesi veya en son koşulları kabul etmesi gerekebilir. Onay için müşteriyi arayın.",
+          "callCustomerSince": "{time} tarihinden beri WhatsApp bu numaraya iletemiyor. Numara WhatsApp’ta kayıtlı olmayabilir ya da müşterinin WhatsApp’ı güncellemesi veya en son koşulları kabul etmesi gerekebilir. Onay için müşteriyi arayın.",
           "confirmedAfterCancel": "{time} tarihinde otomatik olarak iptal edildi. Müşteri sonradan onayladı — onunla iletişime geçin."
         },
         "failure": {
@@ -1711,7 +1711,7 @@
                 "merchant_no_reply_cancellation": "yanıt gelmeyince yaptığınız iptaller",
                 "merchant_cancellation_tagging": "iptal etiketleri",
                 "automatic_no_reply_tagging": "otomatik yanıt yok işaretleri",
-                "automatic_no_whatsapp_tagging": "otomatik WhatsApp yok işaretleri"
+                "automatic_no_whatsapp_tagging": "otomatik WhatsApp iletilemedi işaretleri"
               }
             },
             "webhooks": {

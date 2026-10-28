@@ -56,8 +56,8 @@ describe('ConfirmationsToolbar', () => {
     expect(tabs[1].textContent).toBe('Needs action2')
     // Failed rows live under "Needs action"; there is no Failed tab.
     expect(tabs.map((tab) => tab.textContent)).not.toContain('Failed')
-    // No WhatsApp has its own tab, its count marked like Needs action.
-    expect(tabs[2].textContent).toBe('No WhatsApp1')
+    // WhatsApp undeliverable has its own tab, its count marked like Needs action.
+    expect(tabs[2].textContent).toBe('WhatsApp undeliverable1')
     expect(tabs[2].querySelector('span')?.className).toContain(
       'bg-ak-warning-soft'
     )

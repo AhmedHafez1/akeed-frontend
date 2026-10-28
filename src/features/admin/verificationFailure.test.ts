@@ -14,15 +14,15 @@ describe('describeVerificationFailure', () => {
     ).toBeNull()
   })
 
-  it('names a number without WhatsApp and quotes the provider error', () => {
+  it('names a number WhatsApp could not deliver to and quotes the provider error', () => {
     expect(
       describeVerificationFailure(
         failed('provider_delivery_failed', '131026', 'Message undeliverable')
       )
     ).toEqual({
-      label: 'No WhatsApp on customer number',
+      label: 'WhatsApp could not deliver to the customer number',
       detail:
-        'The customer number has no WhatsApp account, or cannot receive this message. WhatsApp error 131026: Message undeliverable.',
+        'The number may not be on WhatsApp, or the customer has not accepted the latest terms or runs an outdated app. WhatsApp error 131026: Message undeliverable.',
     })
   })
 
