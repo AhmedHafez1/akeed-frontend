@@ -45,6 +45,7 @@ import {
   AdminPageHeader,
   AdminSelect,
 } from './AdminUi'
+import { UnconnectedStoresPanel } from './UnconnectedStoresPanel'
 
 const lifecycleOptions = [
   { value: '', label: 'All lifecycle stages' },
@@ -401,6 +402,8 @@ export function StoresAdminPage() {
               />
             </div>
           </section>
+
+          <UnconnectedStoresPanel />
 
           <section className="border-border bg-card rounded-2xl border shadow-xs">
             <div className="grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-[minmax(240px,1.6fr)_repeat(4,minmax(130px,1fr))_minmax(150px,1fr)_auto_auto]">

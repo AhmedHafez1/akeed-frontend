@@ -72,6 +72,24 @@ export interface AdminStoresResponse {
   evaluated_at: string
 }
 
+/**
+ * A store the platform still sends orders for while Akeed has no integration
+ * for it, so every order is skipped.
+ */
+export interface AdminUnconnectedStore {
+  platform: string
+  shop_domain: string
+  skipped_events: number
+  unique_orders: number
+  unique_orders_7d: number
+  first_received_at: string
+  last_received_at: string
+}
+
+export interface AdminUnconnectedStoresResponse {
+  data: AdminUnconnectedStore[]
+}
+
 export interface AdminStoreMilestone {
   key: string
   at: string | null
