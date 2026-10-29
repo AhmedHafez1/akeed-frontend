@@ -6,7 +6,6 @@ import type {
   AdminStoreReviewPrompt,
   AdminStoresResponse,
   AdminStoreVerificationsResponse,
-  AdminUnconnectedStoresResponse,
 } from './admin.model'
 
 export class AdminApiError extends Error {
@@ -74,12 +73,6 @@ export function getAdminSession() {
 
 export function getAdminStores(query: string) {
   return adminRequest<AdminStoresResponse>(`/api/admin/stores?${query}`)
-}
-
-export function getAdminUnconnectedStores() {
-  return adminRequest<AdminUnconnectedStoresResponse>(
-    '/api/admin/stores/unconnected'
-  )
 }
 
 export function getAdminStore(integrationId: string) {
