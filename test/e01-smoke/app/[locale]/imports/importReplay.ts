@@ -74,6 +74,16 @@ function record(method: string, url: string, requestBody?: unknown) {
   state().calls.push({ method, url, body: requestBody, at: Date.now() })
 }
 
+/** A recording older than the message estimates counts them as credits. */
+function displayedQuote(value: unknown): Json {
+  const quote = value as Json
+  return {
+    estimatedMessagesMin: quote.estimatedCreditsMin,
+    estimatedMessagesMax: quote.estimatedCreditsMax,
+    ...quote,
+  }
+}
+
 function json(value: unknown, status = 200): Response {
   return Response.json(value, { status })
 }
@@ -161,7 +171,7 @@ export async function replayRequest(
     return json(body('commit'), 202)
   }
   if (method === 'GET' && rest === '/start-quote')
-    return json(body('start-quote'))
+    return json(displayedQuote(body('start-quote')))
   if (method === 'POST' && rest === '/start') {
     setStage('releasing')
     state().detailReads = 0

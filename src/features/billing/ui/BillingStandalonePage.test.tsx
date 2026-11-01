@@ -12,6 +12,9 @@ import { BillingStandalonePage } from './BillingStandalonePage'
 
 vi.mock('../domain/useBillingPage', () => ({ useBillingPage: vi.fn() }))
 vi.mock('../domain/useBillingUsage', () => ({ useBillingUsage: vi.fn() }))
+vi.mock('./components/CreditModelNoticeBanner', () => ({
+  CreditModelNoticeBanner: () => null,
+}))
 
 type PageState = ReturnType<typeof useBillingPage>
 
@@ -24,7 +27,12 @@ const summary: CreditSummary = {
   debtCredits: 0,
   lowBalanceThreshold: 50,
   freeGrant: { granted: true, quantity: 30, grantedAt: null },
-  price: { unitPriceMinor: 200, currency: 'EGP' },
+  price: {
+    unitPriceMinor: 100,
+    messagePriceMinor: 200,
+    creditsPerMessage: 2,
+    currency: 'EGP',
+  },
   range: { min: 100, max: 5000, step: 50 },
   canPurchase: true,
   purchaseDenialReason: null,
@@ -132,19 +140,19 @@ describe('BillingStandalonePage (ar)', () => {
 
     expect(screen.getByText('212')).toBeTruthy()
     expect(screen.getByText('· 12 سبتمبر')).toBeTruthy()
-    expect(screen.getAllByText('2.00 ج.م').length).toBe(2)
+    expect(screen.getAllByText('1.00 ج.م').length).toBe(2)
 
     const selected = screen.getByRole('radio', { checked: true })
     expect(selected.textContent).toContain('500')
-    expect(selected.textContent).toContain('1,000.00 ج.م')
-    expect(screen.getByText('من 100 إلى 5,000 رسالة، بخطوات قدرها 50.'))
+    expect(selected.textContent).toContain('500.00 ج.م')
+    expect(screen.getByText('من 100 إلى 5,000 رصيد، بخطوات قدرها 50.'))
 
     const pay = screen.getByRole('button', { name: 'ادفع 1,000.00 ج.م' })
     expect(pay).toHaveProperty('disabled', false)
     expect(container.querySelectorAll('button.bg-brand').length).toBe(1)
     expect(
       screen.getByText('رصيدك بعد الشراء', { exact: false }).textContent
-    ).toBe('رصيدك بعد الشراء 888 رسالة')
+    ).toBe('رصيدك بعد الشراء 888 رصيد')
   })
 
   it('warns once, under the card, when the balance is low', () => {
@@ -154,7 +162,7 @@ describe('BillingStandalonePage (ar)', () => {
     expect(screen.getByText('42').className).toContain('text-ak-warning')
     expect(screen.getByText('الرصيد منخفض')).toBeTruthy()
     const banner = screen.getByRole('status')
-    expect(banner.textContent).toContain('بقيت 42 رسالة فقط')
+    expect(banner.textContent).toContain('بقي 42 رصيد فقط')
     expect(banner.className).toContain('bg-ak-warning-soft')
     expect(screen.queryByRole('alert')).toBeNull()
   })

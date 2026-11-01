@@ -90,6 +90,7 @@ const purchases: PurchaseRow[] = [
     status: 'pending',
     disputeStatus: 'none',
     quantity: 100,
+    displayedQuantity: 200,
     unitPriceMinor: 200,
     totalMinor: 20000,
     currency: 'EGP',
@@ -111,6 +112,7 @@ const purchases: PurchaseRow[] = [
     status: 'refunded',
     disputeStatus: 'none',
     quantity: 100,
+    displayedQuantity: 200,
     unitPriceMinor: 200,
     totalMinor: 20000,
     currency: 'EGP',
@@ -141,6 +143,8 @@ const ledger: LedgerRow[] = [
     sourceReference: 'rf-7001',
     postedBalanceBefore: 88,
     postedBalanceAfter: -12,
+    displayedQuantity: -200,
+    displayedPostedBalanceAfter: -24,
     createdAt: '2026-09-01T09:00:00Z',
   },
   {
@@ -156,6 +160,8 @@ const ledger: LedgerRow[] = [
     sourceReference: null,
     postedBalanceBefore: 130,
     postedBalanceAfter: 88,
+    displayedQuantity: -84,
+    displayedPostedBalanceAfter: 176,
     createdAt: '2026-08-20T12:00:00Z',
   },
   {
@@ -171,6 +177,8 @@ const ledger: LedgerRow[] = [
     sourceReference: null,
     postedBalanceBefore: 30,
     postedBalanceAfter: 130,
+    displayedQuantity: 200,
+    displayedPostedBalanceAfter: 260,
     createdAt: '2026-08-10T10:05:00Z',
   },
   {
@@ -186,6 +194,8 @@ const ledger: LedgerRow[] = [
     sourceReference: null,
     postedBalanceBefore: 0,
     postedBalanceAfter: 30,
+    displayedQuantity: 60,
+    displayedPostedBalanceAfter: 60,
     createdAt: '2026-08-02T09:00:00Z',
   },
 ]
@@ -419,6 +429,7 @@ export function accountDetailFixture(
     account: {
       status: 'active',
       ...projection(postedBalance, heldCredits),
+      displayed: projection(postedBalance * 2, heldCredits * 2),
       balanceState,
       version: 9,
       activatedAt: '2026-08-02T09:00:00Z',

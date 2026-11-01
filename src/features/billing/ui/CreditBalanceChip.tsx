@@ -9,7 +9,7 @@ import { Skeleton } from '@/shared/ui'
 import { useBillingSummary } from '../domain/useBillingSummary'
 
 /**
- * "الرصيد 30 رسالة" in the standalone top bar, linking to billing. A skeleton
+ * "الرصيد 60 رصيد" in the standalone top bar, linking to billing. A skeleton
  * while the balance loads (never a placeholder "0"); nothing if it failed.
  * Below 640px only the number shows, with the full phrase as its label.
  */
@@ -38,7 +38,7 @@ export function CreditBalanceChip() {
         {t.rich('value', {
           count,
           strong: (chunks) => (
-            <strong className="font-semibold text-lg">{chunks}</strong>
+            <strong className="text-lg font-semibold">{chunks}</strong>
           ),
         })}
       </span>

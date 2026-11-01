@@ -18,7 +18,7 @@ import {
   DEFAULT_SIGNUP_SOURCE_ID,
   getStartRoutes,
 } from '@/shared/config/commerceSources'
-import { CREDIT_FREE_GRANT } from '@/shared/config/pricing'
+import { CREDIT_FREE_MESSAGES } from '@/shared/config/pricing'
 import { formatCredits } from '@/shared/lib/money'
 import Ecosystem from './Ecosystem'
 
@@ -60,7 +60,7 @@ function Hero() {
   const microcopyItems = [
     {
       label: t('microcopy_credits', {
-        count: formatCredits(CREDIT_FREE_GRANT, locale),
+        count: formatCredits(CREDIT_FREE_MESSAGES, locale),
       }),
       icon: CheckCircle2,
     },

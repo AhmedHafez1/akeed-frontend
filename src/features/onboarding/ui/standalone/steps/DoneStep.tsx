@@ -94,7 +94,7 @@ export function DoneStep({ headingRef, reply }: DoneStepProps) {
             label: t('stats.balanceLabel'),
             value: valueOrSkeleton(
               offer
-                ? t('stats.balanceValue', { count: offer.count })
+                ? t('stats.balanceValue', { count: offer.credits })
                 : undefined
             ),
             caption: t('stats.balanceCaption'),

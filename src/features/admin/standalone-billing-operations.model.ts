@@ -69,6 +69,9 @@ export interface LedgerRow {
   sourceReference: string | null
   postedBalanceBefore: number
   postedBalanceAfter: number
+  /** What the merchant sees; the other figures here are stored credits. */
+  displayedQuantity: number
+  displayedPostedBalanceAfter: number
   createdAt: string
 }
 
@@ -104,6 +107,8 @@ export interface PurchaseRow {
   status: PurchaseStatus
   disputeStatus: DisputeStatus
   quantity: number
+  /** What the merchant sees; `quantity` is stored credits. */
+  displayedQuantity: number
   unitPriceMinor: number
   totalMinor: number
   currency: string
@@ -145,6 +150,8 @@ export interface AccountDetail {
   account:
     | (BalanceProjection & {
         status: CreditAccountStatus
+        /** What the merchant sees; the projection itself is stored credits. */
+        displayed: BalanceProjection
         balanceState: BalanceState
         version: number
         activatedAt: string | null

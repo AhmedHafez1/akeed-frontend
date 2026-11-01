@@ -46,14 +46,19 @@ function merchantCreditSummary(): CreditSummary {
     heldCredits: held,
     availableCredits: Math.max(posted - held, 0),
     debtCredits: Math.max(-posted, 0),
-    lowBalanceThreshold: 10,
+    lowBalanceThreshold: 20,
     freeGrant: {
       granted: status === 'active',
-      quantity: 30,
+      quantity: 60,
       grantedAt: status === 'active' ? '2026-09-01T10:00:00.000Z' : null,
     },
-    price: { unitPriceMinor: 200, currency: 'EGP' },
-    range: { min: 100, max: 5000, step: 50 },
+    price: {
+      unitPriceMinor: 100,
+      messagePriceMinor: 200,
+      creditsPerMessage: 2,
+      currency: 'EGP',
+    },
+    range: { min: 200, max: 10000, step: 100 },
     canPurchase: account !== 'disabled' && status === 'active' && !viewer,
     purchaseDenialReason: viewer
       ? 'BILLING_PURCHASE_ROLE_REQUIRED'
@@ -293,10 +298,22 @@ function settings(): SettingsResponse {
   }
 }
 
+let creditNoticeDismissed = false
+
 export async function billingFixtureRequest(
   url: string,
   options: RequestInit = {}
 ): Promise<Response> {
+  if (url === '/api/billing/credit-model-notice')
+    return Response.json({
+      visible: !creditNoticeDismissed,
+      canDismiss:
+        new URLSearchParams(window.location.search).get('role') !== 'viewer',
+    })
+  if (url === '/api/billing/credit-model-notice/dismiss') {
+    creditNoticeDismissed = true
+    return new Response(null, { status: 204 })
+  }
   if (url === '/api/billing/credits') {
     if (new URLSearchParams(window.location.search).get('account') === 'error')
       return Response.json(

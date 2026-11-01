@@ -61,10 +61,10 @@ export function CostStrip({
     >
       <Stat
         label={t('messages')}
-        value={quote.estimatedCreditsMin}
+        value={quote.estimatedMessagesMin}
         note={
-          quote.estimatedCreditsMax > quote.estimatedCreditsMin
-            ? t('upTo', { max: quote.estimatedCreditsMax })
+          quote.estimatedMessagesMax > quote.estimatedMessagesMin
+            ? t('upTo', { max: quote.estimatedMessagesMax })
             : t('noFollowUp')
         }
       />
@@ -83,7 +83,7 @@ export function CostStrip({
         <Stat
           label={t('plan')}
           value={Math.max(
-            (quote.slotsRemaining ?? 0) - quote.estimatedCreditsMin,
+            (quote.slotsRemaining ?? 0) - quote.estimatedMessagesMin,
             0
           )}
           note={t('planOf', { slots: quote.slotsRemaining ?? 0 })}

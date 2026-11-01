@@ -14,6 +14,7 @@ import {
   CREDIT_PURCHASE_MIN,
   CREDIT_PURCHASE_STEP,
   CREDIT_UNIT_PRICE_MINOR,
+  CREDITS_PER_MESSAGE,
 } from '@/shared/config/pricing'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { formatCredits, formatMoneyParts } from '@/shared/lib/money'
@@ -40,8 +41,8 @@ function defaultCredits() {
  * costs and roughly how many orders it covers.
  *
  * The orders figure is a range on purpose. Billing meters messages, not orders:
- * an order the customer confirms first time costs one credit, one that needs a
- * follow-up costs two. Quoting a single "orders" number would overstate it.
+ * an order the customer confirms first time sends one message, one that needs a
+ * follow-up sends two. Quoting a single "orders" number would overstate it.
  */
 export function CreditSlider() {
   const t = useTranslations('pricing_credits')
@@ -73,9 +74,10 @@ export function CreditSlider() {
   const creditsLabel = t('slider_value', {
     count: formatCredits(credits, locale),
   })
+  const messages = Math.floor(credits / CREDITS_PER_MESSAGE)
   const ordersLabel = t('calculator_orders', {
-    low: formatCredits(Math.ceil(credits / 2), locale),
-    high: formatCredits(credits, locale),
+    low: formatCredits(Math.ceil(messages / 2), locale),
+    high: formatCredits(messages, locale),
   })
 
   return (

@@ -6,10 +6,16 @@ import { useAcquisition } from '@/features/marketing/domain/useAcquisition'
 import { AcquisitionCta } from '@/features/marketing/ui/components/AcquisitionCta'
 import {
   CREDIT_CURRENCY,
-  CREDIT_FREE_GRANT,
+  CREDIT_FREE_MESSAGES,
+  CREDIT_MESSAGE_PRICE_MINOR,
   CREDIT_UNIT_PRICE_MINOR,
+  CREDITS_PER_MESSAGE,
 } from '@/shared/config/pricing'
-import { formatCredits, formatMoneyParts } from '@/shared/lib/money'
+import {
+  formatCredits,
+  formatMoney,
+  formatMoneyParts,
+} from '@/shared/lib/money'
 import { CreditSlider } from './CreditSlider'
 
 /**
@@ -43,7 +49,9 @@ export function CreditPriceCard() {
 
       <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-emerald-400/10 px-4 py-1.5 text-sm font-semibold text-white ring-1 ring-emerald-400/50">
         <Gift className="h-4 w-4 text-emerald-400" />
-        {t('grant_pill', { count: formatCredits(CREDIT_FREE_GRANT, locale) })}
+        {t('grant_pill', {
+          count: formatCredits(CREDIT_FREE_MESSAGES, locale),
+        })}
       </span>
 
       {/*
@@ -62,7 +70,17 @@ export function CreditPriceCard() {
           {price.currency}
         </span>
       </p>
-      <p className="mt-3 text-base text-slate-400">{t('per_message')}</p>
+      <p className="mt-3 text-base text-slate-400">{t('per_credit')}</p>
+      <p className="mt-1 text-base text-slate-400">
+        {t('message_cost', {
+          credits: formatCredits(CREDITS_PER_MESSAGE, locale),
+          price: formatMoney(
+            CREDIT_MESSAGE_PRICE_MINOR,
+            CREDIT_CURRENCY,
+            locale
+          ),
+        })}
+      </p>
 
       <div className="mt-8 border-t border-white/10 pt-8">
         <CreditSlider />

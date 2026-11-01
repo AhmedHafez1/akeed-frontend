@@ -58,16 +58,16 @@ Las cuentas independientes no usan un plan mensual. Pagas por lo que usas con **
 
 | Regla | Detalles |
 | --- | --- |
-| Un crédito | Un mensaje de WhatsApp enviado a un cliente. |
-| Recordatorios | Un recordatorio a un cliente que no ha respondido usa un crédito más. |
-| Envíos fallidos | Si WhatsApp no acepta un mensaje, el crédito vuelve a tu cuenta automáticamente. |
-| Créditos de bienvenida | Las cuentas nuevas reciben **30 créditos gratis** una sola vez, sin tarjeta de crédito. Tu saldo se muestra en la app. |
-| Precio | **EGP 2.00** por crédito al momento de escribir esta guía. Un mensaje y su recordatorio cuestan EGP 4.00 en total. |
+| Un mensaje | Cada mensaje de WhatsApp enviado a un cliente usa 2 créditos, así que cuesta EGP 2. |
+| Recordatorios | Un recordatorio a un cliente que no ha respondido usa 2 créditos más. |
+| Envíos fallidos | Si WhatsApp no acepta un mensaje, sus créditos vuelven a tu cuenta automáticamente. |
+| Créditos de bienvenida | Las cuentas nuevas reciben **60 créditos gratis** una sola vez, suficientes para 30 mensajes, sin tarjeta de crédito. Tu saldo se muestra en la app. |
+| Precio | **EGP 1.00** por crédito al momento de escribir esta guía. Un mensaje y su recordatorio cuestan EGP 4.00 en total. |
 | Sin suscripción | Solo pagas cuando compras créditos. No hay cargo mensual. |
 
 ### Comprar créditos
 
-Abre **Facturación y créditos**, elige cuántos créditos necesitas y continúa al pago. Puedes comprar de 100 a 5,000 créditos por vez, en incrementos de 50. Por ejemplo, 500 créditos cuestan EGP 1,000. El pago lo gestiona **Paymob**, el proveedor de pagos egipcio, y puedes pagar con tarjeta o con Vodafone Cash. Los precios están en libras egipcias y pueden cambiar, así que el precio que aparece en la página de facturación es siempre el que se aplica.
+Abre **Facturación y créditos**, elige cuántos créditos necesitas y continúa al pago. Puedes comprar de 200 a 10,000 créditos por vez, en incrementos de 100. Por ejemplo, 1,000 créditos cuestan EGP 1,000. El pago lo gestiona **Paymob**, el proveedor de pagos egipcio, y puedes pagar con tarjeta o con Vodafone Cash. Los precios están en libras egipcias y pueden cambiar, así que el precio que aparece en la página de facturación es siempre el que se aplica.
 
 Akeed nunca pide ni almacena los datos de tu tarjeta o de tu billetera. Los créditos se agregan a tu saldo después de que Paymob confirma el pago.
 
@@ -90,7 +90,7 @@ En los pedidos que agregas tú, Akeed no cambia nada en otro sistema. Usa el est
 | --- | --- |
 | Iniciar una importación grande con poco saldo | Revisa primero tu saldo. Akeed no empieza a menos que tus créditos cubran todos los pedidos de la importación. |
 | Enviar el pedido antes de que el cliente confirme | Envía primero los pedidos con estado **Confirmado**. |
-| Olvidar que los recordatorios usan créditos | Calcula hasta dos créditos por pedido. |
+| Olvidar que los recordatorios usan créditos | Calcula hasta 4 créditos por pedido. |
 | Esperar que se confirmen los pedidos pagados en línea | Solo se confirman los pedidos contra entrega. |
 
 ## Preguntas frecuentes

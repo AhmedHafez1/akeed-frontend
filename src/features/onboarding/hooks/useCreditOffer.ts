@@ -8,6 +8,8 @@ import type { SupportedLocale } from '@/shared/lib/locale'
 export interface CreditOffer {
   /** Free confirmations available now, already localized. */
   count: string
+  /** The balance those confirmations come from, in credits, localized. */
+  credits: string
   /** Price of one confirmation after them, e.g. "2.00 ج.م" / "2.00 EGP". */
   price: string
 }
@@ -24,12 +26,16 @@ export function useCreditOffer() {
   if (!summary) return { offer: null, isLoading }
 
   const { amount, currency } = formatMoneyParts(
-    summary.price.unitPriceMinor,
+    summary.price.messagePriceMinor,
     summary.price.currency,
     locale
   )
   const offer: CreditOffer = {
-    count: formatCredits(summary.availableCredits, locale),
+    count: formatCredits(
+      Math.floor(summary.availableCredits / summary.price.creditsPerMessage),
+      locale
+    ),
+    credits: formatCredits(summary.availableCredits, locale),
     // Intl ends the Arabic pound with a period ("ج.م."); drop it mid-sentence.
     price: `${amount} ${currency.replace(/\.$/, '')}`,
   }

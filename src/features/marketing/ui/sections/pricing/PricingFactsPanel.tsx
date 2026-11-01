@@ -5,9 +5,9 @@ import { useTranslations } from 'next-intl'
 
 /*
  * What a credit actually buys. This is the correction that matters most on the
- * page: billing meters one outbound WhatsApp message the provider accepted —
- * not one order — and a follow-up consumes a second credit. Saying "orders"
- * here would under-quote real cost by roughly half.
+ * page: billing meters each outbound WhatsApp message the provider accepted —
+ * not each order — and a follow-up is another message. Saying "orders" here
+ * would under-quote real cost by roughly half.
  */
 const FACT_KEYS = ['credit_is_message', 'followup', 'rejected'] as const
 

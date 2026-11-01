@@ -9,7 +9,10 @@ import { useDashboardOverview } from '@/features/dashboard/domain/useDashboardOv
 import { useStandaloneFirstRun } from '@/features/dashboard/domain/useStandaloneFirstRun'
 import { DashboardStandaloneSkin } from '@/features/dashboard/skins/standalone/DashboardStandaloneSkin'
 
-vi.mock('@/features/billing', () => ({ useBillingSummary: vi.fn() }))
+vi.mock('@/features/billing', () => ({
+  CreditModelNoticeBanner: () => null,
+  useBillingSummary: vi.fn(),
+}))
 vi.mock('@/features/orders', () => ({
   ManualOrderAction: () => <button type="button">تأكيد طلب</button>,
 }))
@@ -138,7 +141,7 @@ describe('Standalone dashboard first run', () => {
     mockCredits(0)
     renderSkin(skin)
 
-    expect(screen.getByText('رصيدك 0 رسالة')).toBeTruthy()
+    expect(screen.getByText('رصيدك 0 رصيد')).toBeTruthy()
     expect(
       screen.getByRole('link', { name: 'شحن الرصيد' }).getAttribute('href')
     ).toBe('/ar/billing')

@@ -43,7 +43,7 @@ Si no cuentas con un desarrollador, usa la [Importación masiva de pedidos](/doc
 | ¿Qué pasa si el sistema envía el mismo pedido dos veces? | No se crea un segundo pedido, no se envía un segundo mensaje y no se descuenta el crédito dos veces. |
 | ¿Se puede modificar o cancelar un pedido desde la API? | No. La API solo crea pedidos. |
 | ¿Dónde se ve la respuesta del cliente? | En la lista de **Confirmaciones** del panel. Akeed no envía notificaciones a tu servidor. |
-| ¿Hay un modo de prueba? | No. Cada pedido con pago contra entrega envía un mensaje real y usa un crédito. Prueba primero con tu propio número de teléfono. |
+| ¿Hay un modo de prueba? | No. Cada pedido con pago contra entrega envía un mensaje real y usa créditos. Prueba primero con tu propio número de teléfono. |
 | ¿Qué detiene la recepción de pedidos? | Que se agote el saldo, que se desactive la confirmación automática en la configuración o que se revoque la clave. |
 
 ## Si hay un problema

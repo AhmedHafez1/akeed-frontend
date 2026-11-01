@@ -113,7 +113,7 @@ Akeed envoie une confirmation de test gratuite à votre propre numéro. Vérifie
 
 ### Étape 5 : garder des crédits disponibles
 
-Vous commencez avec 30 crédits gratuits. Un crédit correspond à un message WhatsApp, et une relance en coûte un de plus. Ouvrez **Facturation et crédits** pour en acheter via Paymob, par carte ou avec Vodafone Cash.
+Vous commencez avec 60 crédits gratuits, soit 30 messages WhatsApp. 1 crédit vaut 1 EGP, chaque message WhatsApp utilise 2 crédits et une relance en utilise 2 de plus. Ouvrez **Facturation et crédits** pour en acheter via Paymob, par carte ou avec Vodafone Cash.
 
 > [!WARNING]
 > Quand vos crédits sont épuisés, les nouvelles confirmations s’arrêtent jusqu’à ce que vous en achetiez.

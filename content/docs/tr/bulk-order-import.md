@@ -176,7 +176,7 @@ Diğer tüm siparişlerdeki gibi: bir hatırlatma, ardından **Yanıt yok**. [Ot
 
 ### Bir içe aktarma ne kadar kredi kullanır?
 
-Mesaj başına bir kredi. 80 hazır sipariş içeren bir dosya 80 kredi kullanır (kredi başına EGP 2,00 ile EGP 160); hatırlatmalar açıksa ve müşteriler yanıt vermezse bu 160 krediye kadar çıkabilir.
+Mesaj başına iki kredi. 80 hazır sipariş içeren bir dosya 160 kredi kullanır (1 kredi EGP 1 olduğu için EGP 160); hatırlatmalar açıksa ve müşteriler yanıt vermezse bu 320 krediye kadar çıkabilir.
 
 ### Atlanan satırların raporunu indirebilir miyim?
 

@@ -113,7 +113,7 @@ Akeed envía una confirmación de prueba gratis a tu propio número. Comprueba q
 
 ### Paso 5: Mantén créditos disponibles
 
-Empiezas con 30 créditos gratis. Un crédito es un mensaje de WhatsApp, y un recordatorio cuesta uno más. Abre **Facturación y créditos** para comprar más mediante Paymob, con tarjeta o Vodafone Cash.
+Empiezas con 60 créditos gratis, suficientes para 30 mensajes de WhatsApp. 1 crédito equivale a EGP 1, cada mensaje de WhatsApp usa 2 créditos y un recordatorio usa 2 más. Abre **Facturación y créditos** para comprar más mediante Paymob, con tarjeta o Vodafone Cash.
 
 > [!WARNING]
 > Cuando se agotan tus créditos, las confirmaciones nuevas se detienen hasta que compres más.

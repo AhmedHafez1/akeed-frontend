@@ -261,7 +261,12 @@ function started(
     status,
     startedAt: iso(-45 * 60_000),
     ratePerMinute: 20,
-    release: { total: 970, withdrawn: 0, ...release },
+    release: {
+      total: 970,
+      withdrawn: 0,
+      heldCredits: (release.held ?? 0) * 2,
+      ...release,
+    },
     lifecycle: {
       queued: 0,
       sent: 0,

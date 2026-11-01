@@ -346,8 +346,8 @@ function StoreKpis({ store }: { store: AdminStoreDetail }) {
       {store.billing.model === 'credits' ? (
         <AdminMetricCard
           label="Credits available"
-          value={numberFormat.format(store.billing.available)}
-          detail={`${numberFormat.format(store.billing.held)} held`}
+          value={numberFormat.format(store.billing.displayed_available)}
+          detail={`${numberFormat.format(store.billing.available)} stored, ${numberFormat.format(store.billing.held)} stored held`}
           icon={Coins}
           tone={
             store.billing.balance_state === 'ok'
@@ -465,18 +465,20 @@ function BillingCard({ store }: { store: AdminStoreDetail }) {
         <div className="mb-4 flex items-end justify-between gap-3">
           <div>
             <p className="text-foreground text-2xl font-semibold tabular-nums">
-              {numberFormat.format(billing.available)}
+              {numberFormat.format(billing.displayed_available)}
             </p>
-            <p className="text-muted-foreground text-xs">credits available</p>
+            <p className="text-muted-foreground text-xs">
+              credits available, {numberFormat.format(billing.available)} stored
+            </p>
           </div>
           <CreditBalanceBadge state={billing.balance_state} />
         </div>
         <DetailList
           items={[
             ['Account status', titleCase(billing.account_status)],
-            ['Held for sends', numberFormat.format(billing.held)],
+            ['Held for sends (stored)', numberFormat.format(billing.held)],
             [
-              'Debt',
+              'Debt (stored)',
               billing.debt > 0 ? (
                 <span className="text-destructive-subtle-foreground">
                   {numberFormat.format(billing.debt)}

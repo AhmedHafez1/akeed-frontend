@@ -35,8 +35,13 @@ vi.mock('@/features/onboarding/api/onboardingApi', async () => {
 })
 
 const summary = {
-  availableCredits: 30,
-  price: { unitPriceMinor: 200, currency: 'EGP' },
+  availableCredits: 60,
+  price: {
+    unitPriceMinor: 100,
+    messagePriceMinor: 200,
+    creditsPerMessage: 2,
+    currency: 'EGP',
+  },
 }
 
 function makeStore(

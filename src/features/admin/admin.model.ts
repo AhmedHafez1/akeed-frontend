@@ -22,6 +22,8 @@ export type AdminStoreBilling =
       available: number
       held: number
       debt: number
+      /** What the merchant sees; the fields above are stored credits. */
+      displayed_available: number
       balance_state: AdminCreditBalanceState
     }
 

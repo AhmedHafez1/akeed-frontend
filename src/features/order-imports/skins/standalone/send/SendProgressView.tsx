@@ -216,7 +216,7 @@ function StatusBanner({
                   <Link
                     href={withLocale(
                       billingPurchaseHref({
-                        credits: release?.held ?? 0,
+                        credits: release?.heldCredits ?? 0,
                         returnTo: importReturnPath(detail.batchId, false),
                       }),
                       locale

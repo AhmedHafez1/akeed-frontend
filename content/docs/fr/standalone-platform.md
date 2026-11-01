@@ -58,16 +58,16 @@ Les comptes autonomes n’ont pas de forfait mensuel. Vous payez ce que vous con
 
 | Règle | Détails |
 | --- | --- |
-| Un crédit | Un message WhatsApp envoyé à un client. |
-| Relances | Un rappel à un client qui n’a pas répondu utilise un crédit de plus. |
-| Envois échoués | Si WhatsApp n’accepte pas un message, le crédit revient automatiquement sur votre compte. |
-| Crédits de bienvenue | Les nouveaux comptes reçoivent **30 crédits gratuits** une seule fois, sans carte bancaire. Votre solde est affiché dans l’application. |
-| Prix | **2,00 EGP** par crédit au moment de la rédaction. Un message et sa relance coûtent 4,00 EGP au total. |
+| Un message | Chaque message WhatsApp envoyé à un client utilise 2 crédits, soit 2 EGP. |
+| Relances | Un rappel à un client qui n’a pas répondu utilise 2 crédits de plus. |
+| Envois échoués | Si WhatsApp n’accepte pas un message, ses crédits reviennent automatiquement sur votre compte. |
+| Crédits de bienvenue | Les nouveaux comptes reçoivent **60 crédits gratuits** une seule fois, soit 30 messages, sans carte bancaire. Votre solde est affiché dans l’application. |
+| Prix | **1,00 EGP** par crédit au moment de la rédaction. Un message et sa relance coûtent 4,00 EGP au total. |
 | Pas d’abonnement | Vous ne payez que lorsque vous achetez des crédits. Il n’y a aucun prélèvement mensuel. |
 
 ### Acheter des crédits
 
-Ouvrez **Facturation et crédits**, choisissez le nombre de crédits dont vous avez besoin, puis passez au paiement. Vous pouvez acheter de 100 à 5 000 crédits à la fois, par paliers de 50. Par exemple, 500 crédits coûtent 1 000 EGP. Le paiement est assuré par **Paymob**, prestataire de paiement égyptien, et vous pouvez payer par carte ou avec Vodafone Cash. Les prix sont en livres égyptiennes et peuvent changer : le prix affiché sur la page de facturation est toujours celui qui s’applique.
+Ouvrez **Facturation et crédits**, choisissez le nombre de crédits dont vous avez besoin, puis passez au paiement. Vous pouvez acheter de 200 à 10 000 crédits à la fois, par paliers de 100. Par exemple, 1 000 crédits coûtent 1 000 EGP. Le paiement est assuré par **Paymob**, prestataire de paiement égyptien, et vous pouvez payer par carte ou avec Vodafone Cash. Les prix sont en livres égyptiennes et peuvent changer : le prix affiché sur la page de facturation est toujours celui qui s’applique.
 
 Akeed ne demande ni ne conserve jamais les données de votre carte ou de votre portefeuille électronique. Les crédits sont ajoutés à votre solde dès que Paymob confirme le paiement.
 
@@ -90,7 +90,7 @@ Pour les commandes que vous ajoutez vous-même, Akeed ne modifie rien dans un au
 | --- | --- |
 | Lancer un gros import avec un solde bas | Vérifiez d’abord votre solde. Akeed ne démarre pas si vos crédits ne couvrent pas toutes les commandes de l’import. |
 | Expédier avant la confirmation du client | Expédiez d’abord les commandes au statut **Confirmée**. |
-| Oublier que les relances utilisent des crédits | Prévoyez jusqu’à deux crédits par commande. |
+| Oublier que les relances utilisent des crédits | Prévoyez jusqu’à 4 crédits par commande. |
 | S’attendre à ce que les commandes payées en ligne soient confirmées | Seules les commandes COD sont confirmées. |
 
 ## FAQ

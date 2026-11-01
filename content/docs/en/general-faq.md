@@ -65,7 +65,7 @@ Shopify stores subscribe to a monthly plan billed through Shopify. Standalone ac
 
 ### How are credits counted?
 
-One credit is one WhatsApp message sent to a customer. A follow-up to a customer who has not replied uses a second credit. If WhatsApp does not accept a message, the credit is returned automatically.
+1 credit is EGP 1, and each WhatsApp message sent to a customer uses 2 credits. A follow-up to a customer who has not replied uses 2 more credits. If WhatsApp does not accept a message, its credits are returned automatically.
 
 ### What happens when I reach my monthly confirmation limit or run out of credits?
 

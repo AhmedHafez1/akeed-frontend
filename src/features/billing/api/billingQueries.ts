@@ -1,6 +1,11 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query'
 import { queryKeys } from '@/shared/query/keys'
-import { fetchCreditSummary, fetchLedger, fetchPurchases } from './billingApi'
+import {
+  fetchCreditModelNotice,
+  fetchCreditSummary,
+  fetchLedger,
+  fetchPurchases,
+} from './billingApi'
 
 /** The server caps `limit` at 100; the usage figures drain at that size. */
 export const DRAIN_PAGE_SIZE = 100
@@ -9,6 +14,14 @@ export function creditSummaryOptions() {
   return queryOptions({
     queryKey: queryKeys.billing.summary(),
     queryFn: ({ signal }) => fetchCreditSummary(signal),
+  })
+}
+
+export function creditModelNoticeOptions() {
+  return queryOptions({
+    queryKey: queryKeys.billing.creditModelNotice(),
+    queryFn: () => fetchCreditModelNotice(),
+    retry: false,
   })
 }
 

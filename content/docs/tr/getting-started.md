@@ -113,7 +113,7 @@ Akeed kendi numaranıza ücretsiz bir test onayı gönderir. Mesajın geldiğini
 
 ### Adım 5: Kredinizi Hazır Tutun
 
-30 ücretsiz krediyle başlarsınız. Bir kredi bir WhatsApp mesajıdır; bir hatırlatma bir kredi daha harcar. Daha fazla kredi almak için **Faturalandırma ve krediler** bölümünü açın ve Paymob üzerinden kartla veya Vodafone Cash ile ödeyin.
+30 WhatsApp mesajına yetecek 60 ücretsiz krediyle başlarsınız. 1 kredi EGP 1’e eşittir, her WhatsApp mesajı 2 kredi kullanır; bir hatırlatma da 2 kredi daha kullanır. Daha fazla kredi almak için **Faturalandırma ve krediler** bölümünü açın ve Paymob üzerinden kartla veya Vodafone Cash ile ödeyin.
 
 > [!WARNING]
 > Krediniz bittiğinde, yeni kredi alana kadar yeni onaylar durur.

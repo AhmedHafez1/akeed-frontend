@@ -63,8 +63,8 @@ async function getHomeStructuredData(locale: Locale) {
     url: getCanonicalUrl(locale),
     description: metadata('description'),
     /*
-     * Metered, not a subscription: the product is priced per WhatsApp message,
-     * so a flat Offer would misdescribe it. Standalone accounts are
+     * Metered, not a subscription: the product is priced per credit, so a flat
+     * Offer would misdescribe it. Standalone accounts are
      * self-serve, so it is available now.
      */
     offers: {

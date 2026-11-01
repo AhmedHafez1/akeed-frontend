@@ -202,7 +202,7 @@
     },
     "credit_usage": {
       "question": "Krediler tam olarak nasıl sayılır?",
-      "answer": "Bir Akeed hesabında (WooCommerce, EasyOrders veya bağlı mağaza yok), sipariş başına değil, müşteriye gönderilen her WhatsApp mesajı için bir kredi kullanılır. Yanıt vermeyen müşteriye gönderilen hatırlatma bir kredi daha kullanır; gönderilemeyen mesajın kredisi otomatik olarak iade edilir. Shopify mağazaları kredi kullanmaz: aylık bir plana abone olur ve Shopify faturası üzerinden öder."
+      "answer": "Bir Akeed hesabında (WooCommerce, EasyOrders veya bağlı mağaza yok), 1 kredi 1 EGP’ye eşittir ve sipariş başına değil, müşteriye gönderilen her WhatsApp mesajı için 2 kredi kullanılır. Yanıt vermeyen müşteriye gönderilen hatırlatma 2 kredi daha kullanır; gönderilemeyen mesajın kredisi otomatik olarak iade edilir. Shopify mağazaları kredi kullanmaz: aylık bir plana abone olur ve Shopify faturası üzerinden öder."
     }
   },
   "whatsapp_button": {
@@ -215,21 +215,22 @@
     "subtitle": "WooCommerce, EasyOrders ve mağazasız siparişler: gönderdiğiniz mesajlar kadar ödeyin. Shopify mağazaları abone olur ve Shopify içinden öder.",
     "account_title": "Akeed hesabı · kullandıkça öde",
     "account_audience": "WooCommerce ve EasyOrders mağazaları ile elle, dosyadan ve API ile eklenen siparişler için.",
-    "unit_text": "WhatsApp mesajı",
-    "unit_price_note": "Bir kredi, müşterinize gönderilen bir WhatsApp mesajıdır.",
-    "per_message": "WhatsApp mesajı başına",
+    "unit_text": "Kredi",
+    "unit_price_note": "1 kredi 1 EGP’ye eşittir. Akeed’den gönderilen bir WhatsApp mesajı 2 kredi kullanır.",
+    "per_credit": "kredi başına",
+    "message_cost": "Akeed’den gönderilen bir WhatsApp mesajı {credits} kredi kullanır ({price})",
     "grant_pill": "Kayıtta {count} ücretsiz mesaj",
-    "slider_label": "Kaç mesaja ihtiyacınız var?",
+    "slider_label": "Kaç krediye ihtiyacınız var?",
     "slider_value": "{count} kredi",
     "total_label": "Toplam",
     "calculator_orders": "{low}–{high} siparişi karşılar",
     "how_title": "Krediler nasıl kullanılır",
-    "credit_is_message_title": "Bir kredi bir mesajdır",
-    "credit_is_message_body": "Her WhatsApp mesajı tam olarak bir kredi kullanır.",
+    "credit_is_message_title": "1 kredi 1 EGP’dir",
+    "credit_is_message_body": "Akeed’den gönderilen her WhatsApp mesajı 2 kredi kullanır, yani bir mesajın maliyeti 2 EGP’dir.",
     "followup_title": "Takip mesajları da sayılır",
-    "followup_body": "Müşteri yanıt vermezse hatırlatma bir kredi daha kullanır.",
+    "followup_body": "Müşteri yanıt vermezse hatırlatma 2 kredi daha kullanır.",
     "rejected_title": "Başarısız gönderimler iade edilir",
-    "rejected_body": "Bir gönderim başarısız olursa kredi otomatik olarak hesabınıza geri döner.",
+    "rejected_body": "Bir gönderim başarısız olursa kredileri otomatik olarak hesabınıza geri döner.",
     "cta": "Ücretsiz hesabınızı oluşturun",
     "cta_note": "Kredi kartı gerekmez",
     "shopify_title": "Shopify mağazaları · aylık plan",
@@ -1495,7 +1496,7 @@
       "greetingNoName": "Hoş geldiniz",
       "firstOrder": {
         "title": "İlk onay mesajınızı gerçek bir müşteriye gönderin",
-        "subtitle": "Siparişlerinizin Akeed’e nasıl ulaşacağını seçin. Bir sipariş eklediğiniz anda onay mesajını göndeririz; bu, bakiyenizden bir mesaj kullanır.",
+        "subtitle": "Siparişlerinizin Akeed’e nasıl ulaşacağını seçin. Bir sipariş eklediğiniz anda onay mesajını göndeririz; bu, bakiyenizden 2 kredi kullanır.",
         "manual": {
           "title": "Tek sipariş",
           "body": "WhatsApp, Instagram ve telefon siparişleri için. Yalnızca müşteri numarası, sipariş numarası ve tutar."
@@ -1506,8 +1507,8 @@
         },
         "storeLinkSoon": "Her siparişin otomatik gelmesi için çevrimiçi mağazanızı bağlama: yakında.",
         "zeroBalance": {
-          "title": "Bakiyeniz {count} mesaj",
-          "body": "Her onay bakiyenizden bir mesaj kullanır. İlk onayınızı göndermek için bakiye yükleyin.",
+          "title": "Bakiyeniz {count} kredi",
+          "body": "Her onay bakiyenizden 2 kredi kullanır. İlk onayınızı göndermek için bakiye yükleyin.",
           "action": "Bakiye yükle"
         }
       },
@@ -2468,7 +2469,7 @@
       },
       "stats": {
         "balanceLabel": "Şu anki bakiyeniz",
-        "balanceValue": "{count} mesaj",
+        "balanceValue": "{count} kredi",
         "balanceCaption": "Ücretsiz, ödeme kartı gerekmez",
         "priceLabel": "Ücretsiz kredilerden sonra",
         "priceCaption": "gönderilen WhatsApp mesajı başına",
@@ -2573,12 +2574,19 @@
     },
     "title": "Faturalandırma ve krediler",
     "subtitle": "Yalnızca gönderdiğimiz onay mesajları için ödeme yaparsınız. Aylık plan yok.",
+    "creditModelNotice": {
+      "title": "Bakiyenizdeki sayı iki katına çıktı. Değeri değişmedi.",
+      "body": "Artık 1 kredi 1 EGP’ye eşit ve Akeed’den gönderilen her WhatsApp mesajı 2 kredi kullanıyor. Bir mesajın maliyeti yine 2 EGP ve hiçbir para hareketi olmadı.",
+      "example": "Örneğin 100 kredi artık 200 kredi oldu ve yine 100 mesaj gönderiyor.",
+      "dismissFailed": "Kaydedilemedi. Tekrar deneyin.",
+      "dismiss": "Anladım"
+    },
     "description": "WhatsApp sipariş onayları için kullanılabilir kredilerinizi görün, güvenle daha fazlasını satın alın ve hesabınızdaki her hareketi inceleyin.",
     "threshold": "Düşük bakiye uyarısı: {count} kredi",
     "retry": "Tekrar dene",
     "balance": {
       "available": "Kullanılabilir bakiye",
-      "unit": "mesaj",
+      "unit": "kredi",
       "state": {
         "healthy": "Bakiye yeterli",
         "low": "Azalıyor",
@@ -2595,7 +2603,7 @@
       "usedThisMonth": "Bu ay kullanılan",
       "lastPurchase": "Son satın alma",
       "noPurchase": "Henüz satın alma yok",
-      "unitPrice": "Mesaj başına fiyat"
+      "unitPrice": "Kredi başına fiyat"
     },
     "status": {
       "active": "Etkin",
@@ -2620,11 +2628,11 @@
       "debtOutstanding": "Kapatılacak bakiye"
     },
     "alerts": {
-      "lowTitle": "{count, plural, one {Yalnızca 1 mesaj kaldı} other {Yalnızca {formatted} mesaj kaldı}}",
+      "lowTitle": "{count, plural, one {Yalnızca 1 kredi kaldı} other {Yalnızca {formatted} kredi kaldı}}",
       "lowDescription": "Yeni siparişlerin onaylanmaya devam etmesi için krediniz bitmeden yükleme yapın.",
       "zeroTitle": "Mesaj krediniz kalmadı",
       "zeroDescription": "Şu anda yeni siparişleri onaylatmıyoruz. Siparişleriniz ve verileriniz güvende; kredi yüklediğiniz anda mesajlar yeniden başlar.",
-      "debtTitle": "{count, plural, one {1 mesaj borcunuz var} other {{formatted} mesaj borcunuz var}}",
+      "debtTitle": "{count, plural, one {1 kredi borcunuz var} other {{formatted} kredi borcunuz var}}",
       "debtDescription": "Bu borç kapatılana kadar yeni siparişleri onaylatmıyoruz. Borcu kapatmak ve mesajları yeniden başlatmak için kredi yükleyin.",
       "suspendedTitle": "Faturalandırma askıya alındı",
       "suspendedDescription": "Satın alma ve mesaj gönderimi kullanılamıyor. Akeed destek ekibine ulaşın.",
@@ -2638,13 +2646,13 @@
     },
     "purchase": {
       "title": "Kredi satın al",
-      "description": "Kaç mesaj istediğinizi seçin. Mesaj başına tek sabit fiyat; kredilerin süresi dolmaz.",
+      "description": "Kaç kredi istediğinizi seçin. 1 kredi 1 EGP’ye eşittir, bir WhatsApp mesajı 2 kredi kullanır; kredilerin süresi dolmaz.",
       "quantity": "Kredi miktarı",
       "decrease": "Miktarı azalt",
       "increase": "Miktarı artır",
-      "rules": "{step} mesajlık adımlarla {min} ile {max} mesaj arası.",
+      "rules": "{step} kredilik adımlarla {min} ile {max} kredi arası.",
       "credits": "Krediler",
-      "unitPrice": "Mesaj başına fiyat",
+      "unitPrice": "Kredi başına fiyat",
       "total": "Toplam",
       "submit": "Güvenli ödeme oluştur",
       "creating": "Ödeme oluşturuluyor…",
@@ -2654,7 +2662,8 @@
       "pendingDescription": "İki kez ödeme yapmamak için yenisini başlatmadan önce durumunu kontrol edin.",
       "viewStatus": "Satın alma durumunu görüntüle",
       "errors": {
-        "whole": "Tam sayı olarak bir mesaj adedi girin.",
+        "whole": "Tam sayı olarak bir kredi adedi girin.",
+        "refresh": "Bu sayfa açıldığından beri fiyatlar değişti. Sayfayı yenileyip tekrar deneyin.",
         "range": "{min} ile {max} arasında seçin.",
         "step": "{step} sayısının katı olan bir değer seçin.",
         "network": "Ödeme isteği tamamlanamadı. Aynı satın alma denemesiyle güvenle yeniden deneyin.",
@@ -2662,10 +2671,10 @@
       },
       "chooseAmount": "Bir miktar seçin",
       "customLabel": "Veya başka bir miktar girin",
-      "unit": "mesaj",
+      "unit": "kredi",
       "summaryTitle": "Sipariş özeti",
-      "messages": "Mesajlar",
-      "balanceAfter": "Satın alma sonrası bakiye: <b>{count}</b> mesaj",
+      "messages": "Krediler",
+      "balanceAfter": "Satın alma sonrası bakiye: <b>{count}</b> kredi",
       "pay": "Öde: <amount>{value}</amount>",
       "payEmpty": "Öde",
       "paymobNote": "Ödemeyi Paymob’un güvenli sayfasında kartla veya Vodafone Cash ile tamamlarsınız. Akeed ödeme bilgilerinizi asla görmez ve saklamaz.",
@@ -2695,7 +2704,7 @@
       "description": "Doğrulanmış kredi bakiyesini alamadık. Faturalandırmayla ilgili bir işlem yapmadan önce tekrar deneyin."
     },
     "return": {
-      "credits": "Mesajlar",
+      "credits": "Krediler",
       "amount": "Tutar",
       "status": "Durum",
       "updated": "Son güncelleme",
@@ -2705,9 +2714,9 @@
       "newPurchase": "Yeni satın alma başlat",
       "refresh": "Durumu yenile",
       "refreshing": "Yenileniyor…",
-      "successTitle": "{count, plural, one {Bakiyenize <n>{value}</n> mesaj ekledik} other {Bakiyenize <n>{value}</n> mesaj ekledik}}",
-      "successBody": "{count, plural, one {Bakiyeniz artık <n>{value}</n> mesaj; yeni siparişler her zamanki gibi onaylanmaya devam ediyor.} other {Bakiyeniz artık <n>{value}</n> mesaj; yeni siparişler her zamanki gibi onaylanmaya devam ediyor.}}",
-      "successBodyNoBalance": "Mesajlar artık bakiyenizde.",
+      "successTitle": "{count, plural, one {Bakiyenize <n>{value}</n> kredi ekledik} other {Bakiyenize <n>{value}</n> kredi ekledik}}",
+      "successBody": "{count, plural, one {Bakiyeniz artık <n>{value}</n> kredi; yeni siparişler her zamanki gibi onaylanmaya devam ediyor.} other {Bakiyeniz artık <n>{value}</n> kredi; yeni siparişler her zamanki gibi onaylanmaya devam ediyor.}}",
+      "successBodyNoBalance": "Krediler artık bakiyenizde.",
       "title": {
         "pending": "Ödemeniz kontrol ediliyor",
         "stale": "Ödemenin onaylanması hâlâ bekleniyor",
@@ -2735,8 +2744,8 @@
       "label": "mesaj kredisi"
     },
     "balanceChip": {
-      "label": "Bakiye: {count} mesaj",
-      "value": "Bakiye <strong>{count}</strong> mesaj"
+      "label": "Bakiye: {count} kredi",
+      "value": "Bakiye <strong>{count}</strong> kredi"
     }
   },
   "orderImport": {
@@ -3162,8 +3171,8 @@
         "upTo": "Takip mesajlarıyla en fazla {max, number}",
         "noFollowUp": "Takip mesajı yok",
         "balance": "Gönderim sonrası bakiyeniz",
-        "of": "/ {available, number}",
-        "short": "{shortfall, number} eksik",
+        "of": "/ {available, number} kredi",
+        "short": "{shortfall, number} kredi eksik",
         "plan": "Planınızda kalan",
         "planOf": "/ {slots, number} (bu dönem)",
         "duration": "Tahmini süre",

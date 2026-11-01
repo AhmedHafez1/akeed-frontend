@@ -47,7 +47,15 @@ export interface CreditSummary {
     quantity: number
     grantedAt: string | null
   }
-  price: { unitPriceMinor: number; currency: string }
+  price: {
+    /** One displayed credit. */
+    unitPriceMinor: number
+    /** One message from the Akeed number. */
+    messagePriceMinor: number
+    /** Credits one message from the Akeed number uses. */
+    creditsPerMessage: number
+    currency: string
+  }
   range: { min: number; max: number; step: number }
   canPurchase: boolean
   purchaseDenialReason: string | null

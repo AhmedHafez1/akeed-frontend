@@ -176,7 +176,7 @@ Lo mismo que con cualquier otro pedido: un recordatorio y luego **Sin respuesta*
 
 ### ¿Cuántos créditos usa una importación?
 
-Un crédito por mensaje. Un archivo con 80 pedidos listos usa 80 créditos (EGP 160 a EGP 2.00 por crédito), o hasta 160 créditos si los recordatorios están activados y los clientes no responden.
+Dos créditos por mensaje. Un archivo con 80 pedidos listos usa 160 créditos (EGP 160, porque 1 crédito equivale a EGP 1), o hasta 320 créditos si los recordatorios están activados y los clientes no responden.
 
 ### ¿Se puede descargar un informe de las filas omitidas?
 

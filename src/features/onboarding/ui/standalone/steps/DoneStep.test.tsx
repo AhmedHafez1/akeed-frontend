@@ -10,8 +10,13 @@ function mockSummary(loaded: boolean) {
   vi.mocked(useBillingSummary).mockReturnValue({
     summary: loaded
       ? {
-          availableCredits: 30,
-          price: { unitPriceMinor: 200, currency: 'EGP' },
+          availableCredits: 60,
+          price: {
+            unitPriceMinor: 100,
+            messagePriceMinor: 200,
+            creditsPerMessage: 2,
+            currency: 'EGP',
+          },
         }
       : null,
     isLoading: !loaded,
@@ -50,7 +55,7 @@ describe('DoneStep', () => {
 
   it('puts the money in numbers', () => {
     renderStep(<DoneStep headingRef={{ current: null }} />)
-    expect(screen.getByText('30 رسالة')).toBeTruthy()
+    expect(screen.getByText('60 رصيد')).toBeTruthy()
     expect(screen.getByText('2.00 ج.م')).toBeTruthy()
     expect(screen.getByText('مجانية')).toBeTruthy()
     expect(screen.getByText('لا تُخصم من رصيدك')).toBeTruthy()
@@ -60,7 +65,7 @@ describe('DoneStep', () => {
   it('shows skeletons, not zeros, while credits load', () => {
     mockSummary(false)
     renderStep(<DoneStep headingRef={{ current: null }} />)
-    expect(screen.queryByText(/^0 رسالة/)).toBeNull()
+    expect(screen.queryByText(/^0 رصيد/)).toBeNull()
     expect(screen.getByText('رصيدك الآن')).toBeTruthy()
   })
 

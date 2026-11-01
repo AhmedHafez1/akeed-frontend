@@ -632,7 +632,7 @@
       "netRevenue": "Net revenue",
       "gross": "Gross {amount}",
       "liability": "Unspent paid-credit liability",
-      "liabilityCredits": "{count} paid credits remain",
+      "liabilityCredits": "{count} paid stored credits remain",
       "arppu": "ARPPU",
       "revenuePerMessage": "Revenue per accepted message",
       "freeUtilization": "Free-credit utilization",
@@ -743,7 +743,7 @@
     "next": "Next",
     "noSource": "No source yet",
     "noAccount": "No credit account",
-    "balance": "{available} available of {posted} posted",
+    "balance": "{displayed} shown to merchant, stored {available} available of {posted} posted",
     "grantPosted": "Launch grant already posted",
     "accountStatus": {
       "active": "Active",
@@ -752,7 +752,7 @@
     "creditHealth": "Credit health",
     "details": "Open",
     "openAccount": "Open billing account for {name}",
-    "debt": "{count} credits of debt",
+    "debt": "{count} stored credits of debt",
     "projectionMismatch": "Balance does not match its ledger",
     "reconciliationSummary": "Needs reconciliation: {purchases} flagged purchases, {holds} unresolved sends",
     "balanceStates": {
@@ -786,6 +786,8 @@
     }
   },
   "adminBillingOps": {
+    "storedValue": "{value} stored",
+    "storedDetail": "{stored} stored · {detail}",
     "back": "All billing accounts",
     "eyebrow": "Standalone billing account",
     "unknownOrganization": "Organization",
@@ -806,8 +808,8 @@
     },
     "balanceStates": {
       "none": "No credit account",
-      "ok": "Above the low-balance threshold of {threshold}",
-      "low": "At or below the low-balance threshold of {threshold}",
+      "ok": "Above the stored low-balance threshold of {threshold}",
+      "low": "At or below the stored low-balance threshold of {threshold}",
       "zero": "No spendable credits",
       "debt": "In debt; new sends are blocked"
     },
@@ -1029,16 +1031,16 @@
       "done": "Done",
       "alreadyDone": "It had already been recorded; nothing changed twice.",
       "adjustment": {
-        "title": "Credit adjustment",
-        "description": "Add or remove credits with a staff ledger entry. Preview first: the adjustment applies only to the balance you reviewed, and is recorded with your identity and reason.",
-        "quantity": "Credits to add or remove",
+        "title": "Stored credit adjustment",
+        "description": "Add or remove stored credits with a staff ledger entry. 1 stored credit shows the merchant 2 credits. Preview first: the adjustment applies only to the balance you reviewed, and is recorded with your identity and reason.",
+        "quantity": "Stored credits to add or remove",
         "quantityHelp": "A whole number between -{max} and {max}, not zero. Use a minus sign to remove credits.",
-        "review": "Review: {quantity} credits",
+        "review": "Review: {quantity} stored credits",
         "createsDebt": "This leaves the account in debt, which blocks new sends until it is cleared.",
-        "apply": "Apply {quantity} credits",
+        "apply": "Apply {quantity} stored credits",
         "outcomes": {
-          "applied": "Posted {quantity} credits. The posted balance is now {posted}.",
-          "duplicate": "This adjustment was already posted ({quantity} credits); nothing was posted twice. The posted balance was {posted}."
+          "applied": "Posted {quantity} stored credits. The posted balance is now {posted} stored.",
+          "duplicate": "This adjustment was already posted ({quantity} stored credits); nothing was posted twice. The posted balance was {posted} stored."
         }
       },
       "repair": {
@@ -1332,7 +1334,7 @@
     },
     "credit_usage": {
       "question": "How exactly are credits counted?",
-      "answer": "On an Akeed account (WooCommerce, EasyOrders, or no connected store), one credit is used for each WhatsApp message sent to a customer, not for each order. A reminder to a customer who has not replied uses another credit, and a message that fails to send is refunded automatically. Shopify stores do not use credits: they subscribe to a monthly plan and pay on their Shopify invoice."
+      "answer": "On an Akeed account (WooCommerce, EasyOrders, or no connected store), 1 credit is EGP 1, and each WhatsApp message sent to a customer uses 2 credits, whatever the number of orders. A reminder to a customer who has not replied uses 2 more credits, and a message that fails to send is refunded automatically. Shopify stores do not use credits: they subscribe to a monthly plan and pay on their Shopify invoice."
     }
   },
   "whatsapp_button": {
@@ -1345,21 +1347,22 @@
     "subtitle": "WooCommerce, EasyOrders and no-store orders: pay for the messages you send. Shopify stores subscribe and pay inside Shopify.",
     "account_title": "Akeed account · pay as you go",
     "account_audience": "For WooCommerce and EasyOrders stores, and for manual, file and API orders.",
-    "unit_text": "WhatsApp message",
-    "unit_price_note": "One credit is one WhatsApp message sent to your customer.",
-    "per_message": "per WhatsApp message",
+    "unit_text": "credit",
+    "unit_price_note": "1 credit is EGP 1. A WhatsApp message from Akeed uses 2 credits.",
+    "per_credit": "per credit",
+    "message_cost": "A WhatsApp message from Akeed uses {credits} credits ({price})",
     "grant_pill": "{count} free messages on sign-up",
-    "slider_label": "How many messages do you need?",
+    "slider_label": "How many credits do you need?",
     "slider_value": "{count} credits",
     "total_label": "Total",
     "calculator_orders": "Covers {low}–{high} orders",
     "how_title": "How credits are used",
-    "credit_is_message_title": "A credit is one message",
-    "credit_is_message_body": "Every WhatsApp message uses exactly one credit.",
+    "credit_is_message_title": "1 credit is EGP 1",
+    "credit_is_message_body": "Every WhatsApp message from Akeed uses 2 credits, so a message costs EGP 2.",
     "followup_title": "Follow-ups count too",
-    "followup_body": "If a customer does not reply, the reminder uses another credit.",
+    "followup_body": "If a customer does not reply, the reminder uses 2 more credits.",
     "rejected_title": "Failed sends are refunded",
-    "rejected_body": "If a send fails, the credit returns to your account automatically.",
+    "rejected_body": "If a send fails, its credits return to your account automatically.",
     "cta": "Create your free account",
     "cta_note": "No credit card needed",
     "shopify_title": "Shopify stores · monthly plan",
@@ -2625,7 +2628,7 @@
       "greetingNoName": "Welcome",
       "firstOrder": {
         "title": "Send your first confirmation to a real customer",
-        "subtitle": "Choose how your orders reach Akeed. We send the confirmation as soon as you add an order, and it uses one message from your balance.",
+        "subtitle": "Choose how your orders reach Akeed. We send the confirmation as soon as you add an order, and it uses 2 credits from your balance.",
         "manual": {
           "title": "One order",
           "body": "For WhatsApp, Instagram and phone orders. Just the customer number, order number and amount."
@@ -2636,8 +2639,8 @@
         },
         "storeLinkSoon": "Connecting your online store so every order arrives automatically: coming soon.",
         "zeroBalance": {
-          "title": "Your balance is {count} messages",
-          "body": "Each confirmation uses one message from your balance. Top up to send your first one.",
+          "title": "Your balance is {count} credits",
+          "body": "Each confirmation uses 2 credits from your balance. Top up to send your first one.",
           "action": "Top up balance"
         }
       },
@@ -3598,7 +3601,7 @@
       },
       "stats": {
         "balanceLabel": "Your balance now",
-        "balanceValue": "{count} messages",
+        "balanceValue": "{count} credits",
         "balanceCaption": "Free, no payment card",
         "priceLabel": "After the free credits",
         "priceCaption": "per WhatsApp message sent",
@@ -3703,12 +3706,19 @@
     },
     "title": "Billing & credits",
     "subtitle": "You only pay for the confirmation messages we send. No monthly plan.",
+    "creditModelNotice": {
+      "title": "Your balance number doubled. Its value did not change.",
+      "body": "1 credit now equals EGP 1, and each WhatsApp message from Akeed uses 2 credits. A message still costs EGP 2, and no money has moved.",
+      "example": "For example, 100 credits are now 200 credits and still send 100 messages.",
+      "dismissFailed": "Couldn't save that. Try again.",
+      "dismiss": "Got it"
+    },
     "description": "See the credits available for WhatsApp order confirmations, buy more securely, and review every account movement.",
     "threshold": "Low-balance alert at {count} credits",
     "retry": "Try again",
     "balance": {
       "available": "Available balance",
-      "unit": "messages",
+      "unit": "credits",
       "state": {
         "healthy": "Healthy balance",
         "low": "Running low",
@@ -3725,7 +3735,7 @@
       "usedThisMonth": "Used this month",
       "lastPurchase": "Last purchase",
       "noPurchase": "No purchases yet",
-      "unitPrice": "Price per message"
+      "unitPrice": "Price per credit"
     },
     "status": {
       "active": "Active",
@@ -3750,11 +3760,11 @@
       "debtOutstanding": "Balance to settle"
     },
     "alerts": {
-      "lowTitle": "{count, plural, one {Only 1 message left} other {Only {formatted} messages left}}",
+      "lowTitle": "{count, plural, one {Only 1 credit left} other {Only {formatted} credits left}}",
       "lowDescription": "Top up before you run out so new orders keep getting confirmed.",
       "zeroTitle": "You’re out of message credits",
       "zeroDescription": "We aren’t confirming new orders right now. Your orders and data are safe, and messages resume as soon as you top up.",
-      "debtTitle": "{count, plural, one {You owe 1 message} other {You owe {formatted} messages}}",
+      "debtTitle": "{count, plural, one {You owe 1 credit} other {You owe {formatted} credits}}",
       "debtDescription": "We aren’t confirming new orders until this is settled. Top up to clear it and resume messages.",
       "suspendedTitle": "Billing is suspended",
       "suspendedDescription": "Purchases and message sends are unavailable. Contact Akeed support.",
@@ -3768,13 +3778,13 @@
     },
     "purchase": {
       "title": "Buy credits",
-      "description": "Choose how many messages. One flat price per message, and credits never expire.",
+      "description": "Choose how many credits. 1 credit is EGP 1, a WhatsApp message uses 2, and credits never expire.",
       "quantity": "Credit quantity",
       "decrease": "Decrease amount",
       "increase": "Increase amount",
-      "rules": "{min} to {max} messages, in steps of {step}.",
+      "rules": "{min} to {max} credits, in steps of {step}.",
       "credits": "Credits",
-      "unitPrice": "Price per message",
+      "unitPrice": "Price per credit",
       "total": "Total",
       "submit": "Create secure checkout",
       "creating": "Creating checkout…",
@@ -3784,7 +3794,8 @@
       "pendingDescription": "Check its status before starting a new one so you don’t pay twice.",
       "viewStatus": "View purchase status",
       "errors": {
-        "whole": "Enter a whole number of messages.",
+        "whole": "Enter a whole number of credits.",
+        "refresh": "Prices have changed since this page opened. Refresh the page and try again.",
         "range": "Choose between {min} and {max}.",
         "step": "Choose a multiple of {step}.",
         "network": "The checkout request could not be completed. Retry safely with the same purchase attempt.",
@@ -3792,10 +3803,10 @@
       },
       "chooseAmount": "Choose an amount",
       "customLabel": "Or enter another amount",
-      "unit": "messages",
+      "unit": "credits",
       "summaryTitle": "Order summary",
-      "messages": "Messages",
-      "balanceAfter": "Balance after purchase: <b>{count}</b> messages",
+      "messages": "Credits",
+      "balanceAfter": "Balance after purchase: <b>{count}</b> credits",
       "pay": "Pay <amount>{value}</amount>",
       "payEmpty": "Pay",
       "paymobNote": "You finish paying on Paymob’s secure page by card or Vodafone Cash. Akeed never sees or stores your payment details.",
@@ -3825,7 +3836,7 @@
       "description": "We could not retrieve the trusted credit balance. Try again before taking billing action."
     },
     "return": {
-      "credits": "Messages",
+      "credits": "Credits",
       "amount": "Amount",
       "status": "Status",
       "updated": "Last updated",
@@ -3835,9 +3846,9 @@
       "newPurchase": "Start a new purchase",
       "refresh": "Refresh status",
       "refreshing": "Refreshing…",
-      "successTitle": "{count, plural, one {We added <n>{value}</n> message to your balance} other {We added <n>{value}</n> messages to your balance}}",
-      "successBody": "{count, plural, one {Your balance is now <n>{value}</n> message, and new orders keep getting confirmed as usual.} other {Your balance is now <n>{value}</n> messages, and new orders keep getting confirmed as usual.}}",
-      "successBodyNoBalance": "The messages are in your balance now.",
+      "successTitle": "{count, plural, one {We added <n>{value}</n> credit to your balance} other {We added <n>{value}</n> credits to your balance}}",
+      "successBody": "{count, plural, one {Your balance is now <n>{value}</n> credit, and new orders keep getting confirmed as usual.} other {Your balance is now <n>{value}</n> credits, and new orders keep getting confirmed as usual.}}",
+      "successBodyNoBalance": "The credits are in your balance now.",
       "title": {
         "pending": "Checking your payment",
         "stale": "Still waiting for the payment to confirm",
@@ -3865,8 +3876,8 @@
       "label": "message credits"
     },
     "balanceChip": {
-      "label": "Balance: {count} messages",
-      "value": "Balance <strong>{count}</strong> messages"
+      "label": "Balance: {count} credits",
+      "value": "Balance <strong>{count}</strong> credits"
     }
   },
   "orderImport": {
@@ -4292,8 +4303,8 @@
         "upTo": "Up to {max, number} with follow-ups",
         "noFollowUp": "No follow-up messages",
         "balance": "Your balance after sending",
-        "of": "of {available, number}",
-        "short": "{shortfall, number} short",
+        "of": "of {available, number} credits",
+        "short": "{shortfall, number} credits short",
         "plan": "Left in your plan",
         "planOf": "of {slots, number} this period",
         "duration": "Expected time",

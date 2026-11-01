@@ -65,7 +65,7 @@ Les boutiques Shopify souscrivent un forfait mensuel facturé par Shopify. Les c
 
 ### Comment les crédits sont-ils décomptés ?
 
-Un crédit correspond à un message WhatsApp envoyé à un client. Une relance à un client qui n’a pas répondu utilise un deuxième crédit. Si WhatsApp n’accepte pas un message, le crédit est restitué automatiquement.
+1 crédit vaut 1 EGP, et chaque message WhatsApp envoyé à un client utilise 2 crédits. Une relance à un client qui n’a pas répondu utilise 2 crédits de plus. Si WhatsApp n’accepte pas un message, ses crédits sont restitués automatiquement.
 
 ### Que se passe-t-il quand la limite mensuelle de confirmations est atteinte ou que les crédits sont épuisés ?
 

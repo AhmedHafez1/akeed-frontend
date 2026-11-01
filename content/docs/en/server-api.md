@@ -87,7 +87,7 @@ X-Correlation-Id: <CORRELATION_ID>
 Open **Confirmations** in Akeed. The order is there, and the customer receives the WhatsApp confirmation message.
 
 > [!WARNING]
-> There is no test mode. An accepted cash-on-delivery order sends a real WhatsApp message and uses a credit. While you build, send orders with your own phone number.
+> There is no test mode. An accepted cash-on-delivery order sends a real WhatsApp message and uses credits. While you build, send orders with your own phone number.
 
 ## Order Fields
 

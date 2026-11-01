@@ -58,14 +58,19 @@ function creditSummary(): CreditSummary {
     heldCredits: 0,
     availableCredits: available,
     debtCredits: 0,
-    lowBalanceThreshold: 50,
+    lowBalanceThreshold: 100,
     freeGrant: {
       granted: true,
-      quantity: 30,
+      quantity: 60,
       grantedAt: '2026-08-01T10:00:00.000Z',
     },
-    price: { unitPriceMinor: 200, currency: 'EGP' },
-    range: { min: 100, max: 5000, step: 50 },
+    price: {
+      unitPriceMinor: 100,
+      messagePriceMinor: 200,
+      creditsPerMessage: 2,
+      currency: 'EGP',
+    },
+    range: { min: 200, max: 10000, step: 100 },
     canPurchase: !suspended,
     purchaseDenialReason: suspended ? 'CREDIT_ACCOUNT_SUSPENDED' : null,
   }

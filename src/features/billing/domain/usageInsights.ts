@@ -39,7 +39,7 @@ export function runwayDays(
 }
 
 /**
- * Messages used per local day, oldest first and today last. Days without
+ * Credits used per local day, oldest first and today last. Days without
  * usage are 0. Only consumption rows count, as in the month total.
  */
 export function dailyUsage(
