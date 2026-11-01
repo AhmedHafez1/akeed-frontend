@@ -2320,7 +2320,7 @@
     "headerTools": {
       "close": "إغلاق",
       "tips": {
-        "unreadTrigger": "نصائح وتحديثات — عناصر غير مقروءة",
+        "unreadTrigger": "نصائح وتحديثات — {count, plural, zero {لا توجد عناصر غير مقروءة} one {عنصر واحد غير مقروء} two {عنصران غير مقروءين} few {{formatted} عناصر غير مقروءة} many {{formatted} عنصرًا غير مقروء} other {{formatted} عنصر غير مقروء}}",
         "trigger": "نصائح وتحديثات",
         "heading": "نصائح وتحديثات",
         "empty": "لا توجد نصائح أو تحديثات الآن"

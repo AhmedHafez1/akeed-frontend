@@ -243,7 +243,7 @@ describe('HeaderTools', () => {
     expect(titles.map((h) => h.textContent)).toEqual(['Title a', 'Title b'])
   })
 
-  it('colors only the bulb while tips are unread, then keeps the read cards', () => {
+  it('highlights the trigger with a count while tips are unread, then keeps the read cards', () => {
     vi.useFakeTimers()
     const unread = tip('new', 'Open settings')
     unread.card.first_viewed_at = null
@@ -251,11 +251,18 @@ describe('HeaderTools', () => {
     read.card.first_viewed_at = '2026-10-26T10:00:00.000Z'
     renderEmbedded(<Harness initialCards={[unread, read]} />, 'en')
     const trigger = screen.getByRole('button', {
-      name: /Tips & updates.*unread/,
+      name: 'Tips & updates — 1 unread item',
     })
+    expect(trigger.getAttribute('style')).toContain(
+      '--p-color-bg-surface-magic'
+    )
     expect(
       trigger.querySelector('[aria-hidden="true"]')?.getAttribute('style')
-    ).toContain('--p-color-icon-info')
+    ).toContain('--p-color-icon-magic')
+    expect(within(trigger).getByText('1')).toBeTruthy()
+    expect(usageTrigger().getAttribute('style')).toContain(
+      '--p-color-bg-surface-warning'
+    )
     fireEvent.click(trigger)
     const dot = screen
       .getByRole('heading', { name: /Title new/ })
@@ -273,9 +280,27 @@ describe('HeaderTools', () => {
     expect(screen.getByRole('heading', { name: 'Title new' })).toBeTruthy()
     expect(screen.getByRole('heading', { name: 'Title old' })).toBeTruthy()
     expect(tipsTrigger().getAttribute('aria-label')).toBeNull()
+    expect(tipsTrigger().getAttribute('style')).not.toContain(
+      '--p-color-bg-surface-magic'
+    )
     expect(
       tipsTrigger().querySelector('[aria-hidden="true"]')?.getAttribute('style')
-    ).not.toContain('--p-color-icon-info')
+    ).not.toContain('--p-color-icon-magic')
+    expect(within(tipsTrigger()).queryByText('1')).toBeNull()
+  })
+
+  it('counts only the unread tips on the trigger', () => {
+    const first = tip('one', null)
+    first.card.first_viewed_at = null
+    const second = tip('two', null)
+    second.card.first_viewed_at = null
+    const read = tip('three', null)
+    read.card.first_viewed_at = '2026-10-26T10:00:00.000Z'
+    renderEmbedded(<Harness initialCards={[first, second, read]} />, 'en')
+    const trigger = screen.getByRole('button', {
+      name: 'Tips & updates — 2 unread items',
+    })
+    expect(within(trigger).getByText('2')).toBeTruthy()
   })
 
   it('moves focus to the next entry after a dismissal, then to the empty state', async () => {

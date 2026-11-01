@@ -6,7 +6,7 @@ import type { IconSource } from '@shopify/polaris'
 import { ChevronDownIcon } from '@shopify/polaris-icons'
 import { HEADER_TRIGGER_ATTRIBUTE } from './HeaderPanel'
 
-export type HeaderTriggerTone = 'neutral' | 'warning' | 'critical'
+export type HeaderTriggerTone = 'neutral' | 'warning' | 'critical' | 'magic'
 
 const TONES: Record<HeaderTriggerTone, CSSProperties> = {
   neutral: {
@@ -24,6 +24,11 @@ const TONES: Record<HeaderTriggerTone, CSSProperties> = {
     borderColor: 'var(--p-color-border-critical)',
     color: 'var(--p-color-text-critical)',
   },
+  magic: {
+    background: 'var(--p-color-bg-surface-magic)',
+    borderColor: 'var(--p-color-border-magic)',
+    color: 'var(--p-color-text-magic)',
+  },
 }
 
 interface HeaderTriggerProps {
@@ -34,15 +39,16 @@ interface HeaderTriggerProps {
   controls: string
   tone?: HeaderTriggerTone
   loading?: boolean
-  iconTone?: 'info'
+  /** A short count beside the label; `accessibilityLabel` must say it too. */
+  badge?: string
   accessibilityLabel?: string
   onClick: () => void
 }
 
 /**
  * A labelled header button that opens a panel. The label carries the state
- * (the count), so the tone is never the only signal. The icon can also signal
- * unread tips.
+ * (the count), so the tone is never the only signal. The badge pulses a few
+ * times when it appears, then stays still.
  */
 export function HeaderTrigger({
   ref,
@@ -52,7 +58,7 @@ export function HeaderTrigger({
   controls,
   tone = 'neutral',
   loading,
-  iconTone,
+  badge,
   accessibilityLabel,
   onClick,
 }: HeaderTriggerProps) {
@@ -83,9 +89,7 @@ export function HeaderTrigger({
         className="shrink-0"
         aria-hidden="true"
         style={
-          iconTone === 'info'
-            ? { color: 'var(--p-color-icon-info)' }
-            : undefined
+          tone === 'magic' ? { color: 'var(--p-color-icon-magic)' } : undefined
         }
       >
         {loading ? (
@@ -95,6 +99,21 @@ export function HeaderTrigger({
         )}
       </span>
       <span className="min-w-0">{label}</span>
+      {badge && (
+        <span
+          aria-hidden="true"
+          className="shrink-0 motion-safe:animate-pulse motion-safe:[animation-iteration-count:3]"
+          style={{
+            background: 'var(--p-color-bg-fill-magic)',
+            color: 'var(--p-color-text-magic-on-bg-fill)',
+            borderRadius: 'var(--p-border-radius-full)',
+            padding: '0 var(--p-space-150)',
+            fontWeight: 'var(--p-font-weight-semibold)',
+          }}
+        >
+          {badge}
+        </span>
+      )}
       <span
         className={`shrink-0 transition-transform duration-[120ms] motion-reduce:transition-none ${expanded ? 'rotate-180' : ''}`}
         aria-hidden="true"

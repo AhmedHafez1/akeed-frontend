@@ -1196,7 +1196,7 @@
     "headerTools": {
       "close": "Kapat",
       "tips": {
-        "unreadTrigger": "İpuçları ve güncellemeler — okunmamış öğeler",
+        "unreadTrigger": "İpuçları ve güncellemeler — {count, plural, one {{formatted} okunmamış öğe} other {{formatted} okunmamış öğe}}",
         "trigger": "İpuçları ve güncellemeler",
         "heading": "İpuçları ve güncellemeler",
         "empty": "Şu anda ipucu veya güncelleme yok"
