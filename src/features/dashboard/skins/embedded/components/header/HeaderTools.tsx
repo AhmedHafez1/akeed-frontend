@@ -59,9 +59,10 @@ export function HeaderTools({
   const { view } = usage
   // No entries and nothing open: the trigger stays away, as the old section
   // did. An open panel keeps it while its last entry is dismissed.
-  const hasUnreadTips = tips.cards.some(
+  const unreadTips = tips.cards.filter(
     ({ card }) => card.first_viewed_at === null
-  )
+  ).length
+  const unreadTipsLabel = formatCount(unreadTips, locale)
   const showTips = tips.cards.length > 0 || openPanel === 'tips'
 
   const usageLabel =
@@ -80,9 +81,15 @@ export function HeaderTools({
             ref={tipsTriggerRef}
             icon={LightbulbIcon}
             label={t('tips.trigger')}
-            iconTone={hasUnreadTips ? 'info' : undefined}
+            tone={unreadTips > 0 ? 'magic' : 'neutral'}
+            badge={unreadTips > 0 ? unreadTipsLabel : undefined}
             accessibilityLabel={
-              hasUnreadTips ? t('tips.unreadTrigger') : undefined
+              unreadTips > 0
+                ? t('tips.unreadTrigger', {
+                    count: unreadTips,
+                    formatted: unreadTipsLabel,
+                  })
+                : undefined
             }
             expanded={openPanel === 'tips'}
             controls={tipsPanelId}

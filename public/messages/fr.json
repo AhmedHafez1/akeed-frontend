@@ -1196,7 +1196,7 @@
     "headerTools": {
       "close": "Fermer",
       "tips": {
-        "unreadTrigger": "Conseils et nouveautés — éléments non lus",
+        "unreadTrigger": "Conseils et nouveautés — {count, plural, one {{formatted} élément non lu} other {{formatted} éléments non lus}}",
         "trigger": "Conseils et nouveautés",
         "heading": "Conseils et nouveautés",
         "empty": "Aucun conseil ni nouveauté pour l’instant"

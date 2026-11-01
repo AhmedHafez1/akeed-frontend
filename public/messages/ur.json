@@ -1196,7 +1196,7 @@
     "headerTools": {
       "close": "بند کریں",
       "tips": {
-        "unreadTrigger": "مشورے اور اپ ڈیٹس — غیر پڑھی ہوئی چیزیں",
+        "unreadTrigger": "مشورے اور اپ ڈیٹس — {count, plural, one {{formatted} غیر پڑھی ہوئی چیز} other {{formatted} غیر پڑھی ہوئی چیزیں}}",
         "trigger": "مشورے اور اپ ڈیٹس",
         "heading": "مشورے اور اپ ڈیٹس",
         "empty": "ابھی کوئی مشورہ یا اپ ڈیٹ نہیں"

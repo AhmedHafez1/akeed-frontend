@@ -2326,7 +2326,7 @@
     "headerTools": {
       "close": "Close",
       "tips": {
-        "unreadTrigger": "Tips & updates — unread items",
+        "unreadTrigger": "Tips & updates — {count, plural, one {{formatted} unread item} other {{formatted} unread items}}",
         "trigger": "Tips & updates",
         "heading": "Tips & updates",
         "empty": "No tips or updates right now"
