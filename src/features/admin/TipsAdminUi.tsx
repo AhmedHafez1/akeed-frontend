@@ -31,12 +31,14 @@ export function TipStatusBadge({ status }: { status: TipEffectiveStatus }) {
 /** The message for a failed request: by code, then by status. */
 export function useTipsErrorMessage() {
   const t = useTranslations('adminTips.errors')
-  return (error: AdminApiError): string => {
+  return (error: AdminApiError, fallbackMessage?: string): string => {
     if (error.code && t.has(error.code)) {
       const count = error.details?.recipient_count
       return t(error.code, { count: typeof count === 'number' ? count : 0 })
     }
-    return error.status === 403 ? t('accessDenied') : t('requestFailed')
+    return error.status === 403
+      ? t('accessDenied')
+      : (fallbackMessage ?? t('requestFailed'))
   }
 }
 
@@ -44,10 +46,12 @@ export function TipsErrorNotice({
   error,
   onRetry,
   className,
+  fallbackMessage,
 }: {
   error: AdminApiError
   onRetry?: () => void
   className?: string
+  fallbackMessage?: string
 }) {
   const t = useTranslations('adminTips.errors')
   const tc = useTranslations('adminCommon')
@@ -60,7 +64,7 @@ export function TipsErrorNotice({
         className
       )}
     >
-      <p>{message(error)}</p>
+      <p>{message(error, fallbackMessage)}</p>
       {error.requestId && (
         <p className="mt-2 text-xs">
           <span>{t('requestIdLabel')} </span>

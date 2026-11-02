@@ -3678,6 +3678,7 @@
     }
   },
   "tips": {
+    "bannerLabel": "Bannière de conseils et nouveautés",
     "unread": "Non lu",
     "badge": {
       "tip": "Conseil",

@@ -28,7 +28,7 @@ export interface TipCardProps {
 }
 
 /** A change asks for attention; a note is only for reading. */
-const TYPE_BADGES: Record<
+export const TIP_TYPE_BADGES: Record<
   TipCardModel['type'],
   { icon: LucideIcon; tone: 'brand' | 'info' | 'warning' | 'neutral' }
 > = {
@@ -54,7 +54,7 @@ export function TipCard({
 }: TipCardProps) {
   const t = useTranslations('tips')
   const titleId = useId()
-  const { icon: BadgeIcon, tone } = TYPE_BADGES[card.type]
+  const { icon: BadgeIcon, tone } = TIP_TYPE_BADGES[card.type]
 
   return (
     <article

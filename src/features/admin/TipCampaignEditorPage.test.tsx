@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { fireEvent, screen, waitFor, within } from '@testing-library/react'
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import en from '../../../public/messages/en.json'
 import { AdminApiError } from './adminApi'
 import type {
@@ -24,6 +24,7 @@ const api = vi.hoisted(() => ({
   reviewTipCampaign: vi.fn(),
   publishTipCampaign: vi.fn(),
   changeTipLifecycle: vi.fn(),
+  setTipBanner: vi.fn(),
 }))
 vi.mock('./adminTipsApi', () => api)
 
@@ -64,6 +65,7 @@ function campaign(overrides: Partial<AdminTipCampaign> = {}): AdminTipCampaign {
     type: 'tip',
     status: 'draft',
     effective_status: 'draft',
+    show_as_banner: false,
     action: null,
     expires_at: null,
     audience: {
@@ -132,6 +134,7 @@ describe('Tips campaign editor', () => {
       screen.getAllByText(en.adminTips.issues.required).length
     ).toBeGreaterThanOrEqual(3)
     expect(api.createTipCampaign).not.toHaveBeenCalled()
+    expect(screen.queryByRole('switch')).toBeNull()
   })
 
   it('reviews the audience, previews the card and publishes with the token', async () => {
@@ -236,5 +239,131 @@ describe('Tips campaign editor', () => {
     expect(
       screen.queryByRole('button', { name: en.adminTips.review.review })
     ).toBeNull()
+  })
+
+  it('saves the banner immediately, waits for refresh, and preserves unsaved content', async () => {
+    const draft = campaign()
+    let finishWrite!: (value: AdminTipCampaign) => void
+    let finishRefresh!: (value: AdminTipCampaign) => void
+    api.getTipCampaign.mockResolvedValueOnce(draft).mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          finishRefresh = resolve
+        })
+    )
+    api.setTipBanner.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          finishWrite = resolve
+        })
+    )
+    renderAdmin(<TipCampaignEditorPage id="c1" />, 'en')
+    const toggle = await screen.findByRole('switch')
+    const name = screen.getByLabelText(
+      en.adminTips.editor.name
+    ) as HTMLInputElement
+    fireEvent.change(name, { target: { value: 'Unsaved name' } })
+    fireEvent.click(toggle)
+    expect(api.setTipBanner).toHaveBeenCalledWith('c1', true)
+    expect((toggle as HTMLButtonElement).disabled).toBe(true)
+    expect(toggle.getAttribute('aria-checked')).toBe('false')
+    await act(async () => finishWrite(campaign({ show_as_banner: true })))
+    await waitFor(() => expect(api.getTipCampaign).toHaveBeenCalledTimes(2))
+    expect((toggle as HTMLButtonElement).disabled).toBe(true)
+    await act(async () => finishRefresh(campaign({ show_as_banner: true })))
+    await waitFor(() =>
+      expect(toggle.getAttribute('aria-checked')).toBe('true')
+    )
+    expect(name.value).toBe('Unsaved name')
+    expect(screen.getByText(en.adminTips.editor.unsaved)).toBeTruthy()
+    expect(api.updateTipCampaign).not.toHaveBeenCalled()
+    expect(api.reviewTipCampaign).not.toHaveBeenCalled()
+    expect(toggle.getAttribute('aria-describedby')).toBeTruthy()
+  })
+
+  it('keeps the existing review and publish token after toggling', async () => {
+    const draft = campaign()
+    const token = `2.${'b'.repeat(64)}`
+    api.getTipCampaign
+      .mockResolvedValueOnce(draft)
+      .mockResolvedValue(campaign({ show_as_banner: true }))
+    api.reviewTipCampaign.mockResolvedValue({
+      review_token: token,
+      recipient_count: 1,
+      campaign: draft,
+    })
+    api.setTipBanner.mockResolvedValue(campaign({ show_as_banner: true }))
+    api.publishTipCampaign.mockResolvedValue(
+      campaign({
+        status: 'published',
+        effective_status: 'published',
+        show_as_banner: true,
+      })
+    )
+    renderAdmin(<TipCampaignEditorPage id="c1" />, 'en')
+    fireEvent.click(
+      await screen.findByRole('button', { name: en.adminTips.review.review })
+    )
+    await screen.findByTestId('tip-preview')
+    fireEvent.click(screen.getByRole('switch'))
+    await waitFor(() =>
+      expect(screen.getByRole('switch').getAttribute('aria-checked')).toBe(
+        'true'
+      )
+    )
+    expect(screen.getByTestId('tip-preview')).toBeTruthy()
+    fireEvent.click(
+      screen.getByRole('button', { name: en.adminTips.review.publish })
+    )
+    fireEvent.click(
+      await screen.findByRole('button', {
+        name: en.adminTips.review.confirmPublish,
+      })
+    )
+    await waitFor(() =>
+      expect(api.publishTipCampaign).toHaveBeenCalledWith('c1', token)
+    )
+    expect(api.reviewTipCampaign).toHaveBeenCalledTimes(1)
+  })
+
+  it.each(['published', 'paused', 'archived'] as const)(
+    'only locks the banner on an archived %s campaign',
+    async (status) => {
+      api.getTipCampaign.mockResolvedValue(
+        campaign({ status, effective_status: status, show_as_banner: true })
+      )
+      renderAdmin(<TipCampaignEditorPage id="c1" />, 'en')
+      const toggle = await screen.findByRole('switch')
+      expect(toggle.getAttribute('aria-checked')).toBe('true')
+      expect((toggle as HTMLButtonElement).disabled).toBe(status === 'archived')
+    }
+  )
+
+  it('retains the previous setting and allows retry after a failed write', async () => {
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {})
+    api.getTipCampaign.mockResolvedValue(campaign())
+    api.setTipBanner.mockRejectedValueOnce(
+      new AdminApiError('offline', 0, null)
+    )
+    renderAdmin(<TipCampaignEditorPage id="c1" />, 'en')
+    fireEvent.click(await screen.findByRole('switch'))
+    expect(await screen.findByText(en.adminTips.banner.error)).toBeTruthy()
+    expect(screen.getByRole('switch').getAttribute('aria-checked')).toBe(
+      'false'
+    )
+    expect((screen.getByRole('switch') as HTMLButtonElement).disabled).toBe(
+      false
+    )
+    expect(api.getTipCampaign).toHaveBeenCalledTimes(1)
+    api.setTipBanner.mockResolvedValueOnce(campaign({ show_as_banner: true }))
+    api.getTipCampaign.mockResolvedValue(campaign({ show_as_banner: true }))
+    fireEvent.click(screen.getByRole('switch'))
+    await waitFor(() =>
+      expect(screen.getByRole('switch').getAttribute('aria-checked')).toBe(
+        'true'
+      )
+    )
+    expect(screen.queryByRole('alert')).toBeNull()
+    log.mockRestore()
   })
 })

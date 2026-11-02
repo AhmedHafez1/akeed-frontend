@@ -8,6 +8,7 @@ import ar from '../../../../public/messages/ar.json'
 import en from '../../../../public/messages/en.json'
 import type { TipCard, TipCardsResponse } from '../model/tips.model'
 import { TipsSection } from './TipsSection'
+import { TipBannerSlot } from './TipBanner'
 
 const auth = vi.hoisted(() => ({
   api: { get: vi.fn(), post: vi.fn() },
@@ -63,7 +64,11 @@ function card(overrides: Partial<TipCard> = {}): TipCard {
   }
 }
 
-function setup(response: TipCardsResponse | Error, lang: 'ar' | 'en' = 'ar') {
+function setup(
+  response: TipCardsResponse | Error,
+  lang: 'ar' | 'en' = 'ar',
+  withBanner = false
+) {
   testLocale.current = lang
   if (response instanceof Error) auth.api.get.mockRejectedValue(response)
   else auth.api.get.mockResolvedValue(response)
@@ -77,6 +82,7 @@ function setup(response: TipCardsResponse | Error, lang: 'ar' | 'en' = 'ar') {
         messages={lang === 'ar' ? ar : en}
         timeZone="UTC"
       >
+        {withBanner && <TipBannerSlot />}
         <TipsSection />
       </NextIntlClientProvider>
     </QueryClientProvider>
@@ -131,6 +137,40 @@ describe('TipsSection', () => {
     const failed = setup(new Error('down'))
     await waitFor(() => expect(auth.api.get).toHaveBeenCalledTimes(2))
     expect(failed.container.innerHTML).toBe('')
+  })
+
+  it('keeps flagged cards listed, synchronizes dismissal and tracks each replacement banner', async () => {
+    setup(
+      {
+        can_dismiss: true,
+        cards: [
+          card({ id: 'new', title: 'Newest', show_as_banner: true }),
+          card({ id: 'old', title: 'Older', show_as_banner: true }),
+        ],
+      },
+      'en',
+      true
+    )
+    const banner = await screen.findByRole('complementary', {
+      name: en.tips.bannerLabel,
+    })
+    expect(screen.getAllByText('Newest')).toHaveLength(2)
+    const observer = () =>
+      FakeObserver.instances.find(
+        (item) => item.element === screen.getByRole('complementary')
+      )!
+    act(() => observer().fire(1))
+    await waitFor(() => expect(posts()).toContain('/api/tips/new/view'))
+    // Keep the synthetic read consistent with the successful dismissal refetch.
+    auth.api.get.mockResolvedValue({
+      can_dismiss: true,
+      cards: [card({ id: 'old', title: 'Older', show_as_banner: true })],
+    })
+    fireEvent.click(banner.querySelector('button')!)
+    await waitFor(() => expect(screen.queryByText('Newest')).toBeNull())
+    expect(screen.getAllByText('Older')).toHaveLength(2)
+    act(() => observer().fire(1))
+    await waitFor(() => expect(posts()).toContain('/api/tips/old/view'))
   })
 
   it('counts a view only once the card is on screen, and only once', async () => {

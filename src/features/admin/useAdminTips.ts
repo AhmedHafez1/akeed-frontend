@@ -1,14 +1,47 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { AdminApiError } from './adminApi'
-import { getTipCampaign, getTipCampaigns, getTipOptions } from './adminTipsApi'
+import {
+  getTipCampaign,
+  getTipCampaigns,
+  getTipOptions,
+  setTipBanner,
+} from './adminTipsApi'
 import type {
+  AdminTipCampaign,
   AdminTipOrganization,
   AdminTipOrganizationsResponse,
   TipStatus,
 } from './admin-tips.model'
-import { toTemplateError, useResource } from './useAdminTemplateDrafts'
+import {
+  toTemplateError,
+  useResource,
+  useTemplateAction,
+} from './useAdminTemplateDrafts'
+
+/** A display-only write: refreshing must not reset the content editor. */
+export function useTipBanner(onChanged: () => void) {
+  const action = useTemplateAction<AdminTipCampaign>(
+    'Tips banner change failed'
+  )
+  const writing = useRef(false)
+  const run = action.run
+  const setBanner = useCallback(
+    async (id: string, value: boolean) => {
+      if (writing.current) return
+      writing.current = true
+      try {
+        const changed = await run(() => setTipBanner(id, value))
+        if (changed) onChanged()
+      } finally {
+        writing.current = false
+      }
+    },
+    [run, onChanged]
+  )
+  return { pending: action.pending, error: action.error, setBanner }
+}
 
 export function useTipCampaigns(params: {
   status?: TipStatus

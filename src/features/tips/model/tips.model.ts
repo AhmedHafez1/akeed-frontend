@@ -29,6 +29,8 @@ export interface TipCard {
   description: string
   action: TipCardAction | null
   published_at: string
+  /** Also shown as a one-line banner; missing on older APIs means off. */
+  show_as_banner?: boolean
 }
 
 export interface TipCardsResponse {

@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useState, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
+import { TipBannerSlot } from '@/features/tips'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { creditFeedbackKey } from '@/shared/lib/creditFeedback'
 import { cn } from '@/shared/lib/utils'
@@ -209,6 +210,8 @@ export function DashboardVerificationsStandaloneSkin({
         periodOptions={periodOptions}
         onPeriodChange={onPeriodChange}
       />
+
+      <TipBannerSlot />
 
       <BlockedOrdersBanner
         capacity={list.capacity}

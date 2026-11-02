@@ -3,7 +3,7 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import { CreditModelNoticeBanner } from '@/features/billing'
-import { TipsSection } from '@/features/tips'
+import { TipBannerSlot, TipsSection } from '@/features/tips'
 import { cn } from '@/shared/lib/utils'
 import { Skeleton, akButton, akCard, notify } from '@/shared/ui'
 import { useCancelVerificationMutation } from '../../api/verificationMutations'
@@ -151,6 +151,7 @@ export function DashboardStandaloneSkin({
           }
           afterHeader={
             <>
+              <TipBannerSlot />
               <CreditModelNoticeBanner />
               <TipsSection />
             </>
@@ -175,6 +176,7 @@ export function DashboardStandaloneSkin({
         onPeriodChange={onPeriodChange}
       />
 
+      <TipBannerSlot />
       <CreditModelNoticeBanner />
       <TipsSection />
 

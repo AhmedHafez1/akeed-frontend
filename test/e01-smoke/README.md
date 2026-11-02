@@ -171,6 +171,16 @@ the row in memory.
 Use `?scenario=empty`, `error`, `limit` (plan used up), `quiet` (usage under
 80%) or `viewer` (no manual confirmation).
 
+## Tips banner fixture
+
+Add `?tips=banner` to `/en/standalone-dashboard`,
+`/en/standalone-confirmations`, or `/en/embedded-dashboard` to show two
+flagged campaigns plus a card-only campaign. Arabic routes use Arabic content.
+Use `tips=long` for title and action overflow, `tips=fallback` for English
+content inside an Arabic interface, and `scenario=viewer` to hide dismissal.
+Embedded confirmations use `?tips=banner&tab=confirmations`. Dismissal and
+view state are kept in memory; the default fixture has no tips.
+
 ## Review card fixture
 
 Open `/en/review-card` or `/ar/review-card` to see every state of the embedded

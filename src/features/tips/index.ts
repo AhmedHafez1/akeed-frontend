@@ -7,7 +7,10 @@
 export { TipsSection } from './ui/TipsSection'
 export { TipCard } from './ui/TipCard'
 export type { TipCardProps } from './ui/TipCard'
+export { TipBanner, TipBannerSlot } from './ui/TipBanner'
+export type { TipBannerProps } from './ui/TipBanner'
 export { TipEntryEmbedded } from './skins/embedded/TipEntryEmbedded'
+export { TipBannerEmbedded } from './skins/embedded/TipBannerEmbedded'
 export { useTipCards } from './domain/useTipCards'
 export { TIP_ACTION_TARGETS, resolveTipHref } from './model/tips.model'
 export type {

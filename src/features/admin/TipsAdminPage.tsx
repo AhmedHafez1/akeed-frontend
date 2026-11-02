@@ -5,11 +5,11 @@ import Link from 'next/link'
 import { Lightbulb, Plus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import { Button, Input } from '@/shared/ui'
+import { Button, Input, Switch } from '@/shared/ui'
 import { AdminEmptyState, AdminPageHeader, AdminSelect } from './AdminUi'
 import type { TipStatus } from './admin-tips.model'
 import { TipStatusBadge, TipsErrorNotice, useTipsFormat } from './TipsAdminUi'
-import { useTipCampaigns } from './useAdminTips'
+import { useTipBanner, useTipCampaigns } from './useAdminTips'
 
 const STATUSES: TipStatus[] = ['draft', 'published', 'paused', 'archived']
 
@@ -38,6 +38,7 @@ export function TipsAdminPage() {
     cursor,
   })
   const items = list.data?.items ?? []
+  const banner = useTipBanner(list.refresh)
 
   return (
     <div className="space-y-6">
@@ -88,6 +89,12 @@ export function TipsAdminPage() {
       {list.error && (
         <TipsErrorNotice error={list.error} onRetry={list.refresh} />
       )}
+      {banner.error && (
+        <TipsErrorNotice
+          error={banner.error}
+          fallbackMessage={t('banner.error')}
+        />
+      )}
 
       {!list.error && !list.loading && items.length === 0 ? (
         <AdminEmptyState
@@ -106,6 +113,9 @@ export function TipsAdminPage() {
                 </th>
                 <th scope="col" className="px-4 py-3 text-start font-medium">
                   {t('list.columns.status')}
+                </th>
+                <th scope="col" className="px-4 py-3 text-start font-medium">
+                  {t('banner.column')}
                 </th>
                 <th scope="col" className="px-4 py-3 text-start font-medium">
                   {t('list.columns.published')}
@@ -143,6 +153,20 @@ export function TipsAdminPage() {
                   </td>
                   <td className="px-4 py-3">
                     <TipStatusBadge status={item.effective_status} />
+                  </td>
+                  <td className="px-4 py-3">
+                    <Switch
+                      checked={item.show_as_banner}
+                      label={t('banner.label', { name: item.name })}
+                      disabled={
+                        item.status === 'archived' ||
+                        banner.pending ||
+                        list.loading
+                      }
+                      onChange={(value) =>
+                        void banner.setBanner(item.id, value)
+                      }
+                    />
                   </td>
                   <td className="text-foreground/80 px-4 py-3">
                     {format.dateTime(item.published_at)}

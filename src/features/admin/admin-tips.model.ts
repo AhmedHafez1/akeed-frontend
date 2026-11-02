@@ -41,6 +41,7 @@ export interface AdminTipCampaign {
   type: TipType
   status: TipStatus
   effective_status: TipEffectiveStatus
+  show_as_banner: boolean
   action: TipAction | null
   expires_at: string | null
   audience: {
@@ -72,6 +73,7 @@ export interface AdminTipListItem {
   type: TipType
   status: TipStatus
   effective_status: TipEffectiveStatus
+  show_as_banner: boolean
   has_action: boolean
   published_at: string | null
   expires_at: string | null

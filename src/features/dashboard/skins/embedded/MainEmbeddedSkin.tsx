@@ -5,7 +5,7 @@ import { BlockStack, Page } from '@shopify/polaris'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { UpgradePlansModal } from '@/features/billing'
-import { useTipCards } from '@/features/tips'
+import { TipBannerEmbedded, useTipCards } from '@/features/tips'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { resolveEmbeddedContextFromSearch } from '@/shared/lib/embedded-context'
 import { resolveMainTab } from '../../domain/mainTabs'
@@ -150,6 +150,13 @@ export function MainEmbeddedSkin() {
     <Page fullWidth>
       <div className="mx-auto w-full max-w-330">
         <BlockStack gap="500">
+          <TipBannerEmbedded
+            view={tips.banner}
+            canDismiss={tips.canDismiss}
+            onSeen={tips.onSeen}
+            onAction={tips.onAction}
+            onDismiss={tips.onDismiss}
+          />
           {showActivation && (
             <DashboardActivationSection activation={activation} />
           )}
