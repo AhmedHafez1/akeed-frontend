@@ -4761,6 +4761,7 @@
       "WOOCOMMERCE_STORE_ADDRESS_NOT_PUBLIC": "Akeed could not reach this address on the public internet. Check the address and try again.",
       "WOOCOMMERCE_STORE_REDIRECTS": "This address redirects to another one. Enter your store’s final address, with or without www, exactly as it appears in the browser.",
       "WOOCOMMERCE_STORE_TLS_FAILED": "Your store’s security certificate is not valid. Ask your hosting provider to fix it, then try again.",
+      "WOOCOMMERCE_PLAIN_PERMALINKS": "Your store address is correct, but WordPress is set to Plain permalinks, which blocks the connection. Open Settings > Permalinks, choose Post name and save. If your site uses a cache, clear it, then connect again with the same address.",
       "WOOCOMMERCE_REST_NOT_FOUND": "Akeed could not find the WooCommerce REST API at this address. In WordPress, open Settings > Permalinks, choose any option other than Plain, and make sure WooCommerce is up to date.",
       "WOOCOMMERCE_REST_UNREACHABLE": "Your store did not answer. It may be down, in maintenance mode or blocking outside requests. Try again later or ask your hosting provider.",
       "WOOCOMMERCE_CREDENTIALS_REJECTED": "Your store did not accept the new API key. Some hosting setups remove the Authorization header before it reaches WordPress; ask your hosting provider to allow it. Then delete the unused key under WooCommerce > Settings > Advanced > REST API and connect again.",

@@ -99,6 +99,10 @@ Akeed آپ کے اسٹور سے کہتا ہے کہ اپنی آرڈرز کی دو
 
 ## مسائل کا حل
 
+### WordPress میں Permalinks کی ترتیب Plain ہے
+
+جب تک Permalinks کی ترتیب **Plain** ہے، Akeed کنکٹ نہیں ہو سکتا، چاہے آپ کا ایڈریس درست ہو۔ WordPress میں Settings > Permalinks کھولیں، **Post name** چُنیں اور محفوظ کریں۔ اگر آپ کی سائٹ کیش استعمال کرتی ہے تو اسے صاف کریں، پھر اسی ایڈریس سے دوبارہ جوڑیں۔
+
 ### Akeed کو WooCommerce REST API نہیں ملا
 
 WordPress میں Settings > Permalinks کھولیں، **Plain** کے علاوہ کوئی بھی آپشن چُنیں، اور یقینی بنائیں کہ WooCommerce فعال اور اپ ٹو ڈیٹ ہے۔

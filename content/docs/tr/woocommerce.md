@@ -99,6 +99,10 @@ Yeniden onay vererek aynı mağazayı istediğiniz zaman yeniden bağlayabilirsi
 
 ## Sorun Giderme
 
+### WordPress kalıcı bağlantıları Plain olarak ayarlı
+
+Kalıcı bağlantılar **Plain** olarak ayarlıyken Akeed bağlanamaz, adresiniz doğru olsa bile. WordPress’te Settings > Permalinks bölümünü açın, **Post name** seçeneğini seçin ve kaydedin. Sitenizde önbellek varsa temizleyin, ardından aynı adresle yeniden bağlanın.
+
 ### Akeed WooCommerce REST API’sini bulamadı
 
 WordPress’te Settings > Permalinks bölümünü açın, **Plain** dışında herhangi bir seçeneği seçin ve WooCommerce’in etkin ve güncel olduğundan emin olun.

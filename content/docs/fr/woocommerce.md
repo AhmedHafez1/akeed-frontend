@@ -99,6 +99,10 @@ Vous pouvez reconnecter la même boutique à tout moment en approuvant de nouvea
 
 ## Dépannage
 
+### Les permaliens WordPress sont réglés sur Plain
+
+Akeed ne peut pas se connecter tant que les permaliens sont réglés sur **Plain**, même si votre adresse est correcte. Dans WordPress, ouvrez Settings > Permalinks, choisissez **Post name** et enregistrez. Si votre site utilise un cache, videz-le, puis reconnectez-vous avec la même adresse.
+
 ### Akeed n’a pas trouvé l’API REST de WooCommerce
 
 Dans WordPress, ouvrez Settings > Permalinks, choisissez n’importe quelle option autre que **Plain**, puis vérifiez que WooCommerce est actif et à jour.

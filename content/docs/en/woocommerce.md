@@ -99,6 +99,10 @@ You can reconnect the same store at any time by approving again. A different sto
 
 ## Troubleshooting
 
+### WordPress permalinks are set to Plain
+
+Akeed cannot connect while permalinks are **Plain**, even when your address is correct. In WordPress, open Settings > Permalinks, choose **Post name** and save. If your site uses a cache, clear it, then connect again with the same address.
+
 ### Akeed could not find the WooCommerce REST API
 
 In WordPress, open Settings > Permalinks, choose any option other than **Plain**, and make sure WooCommerce is active and up to date.

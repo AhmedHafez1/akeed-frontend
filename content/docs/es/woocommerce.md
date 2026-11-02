@@ -99,6 +99,10 @@ Puedes reconectar la misma tienda en cualquier momento aprobando de nuevo. No se
 
 ## Solución de problemas
 
+### Los enlaces permanentes de WordPress están en Plain
+
+Akeed no puede conectarse mientras los enlaces permanentes estén en **Plain**, aunque tu dirección sea correcta. En WordPress, abre Settings > Permalinks, elige **Post name** y guarda. Si tu sitio usa caché, bórrala y vuelve a conectar con la misma dirección.
+
 ### Akeed no pudo encontrar la API REST de WooCommerce
 
 En WordPress, abre Settings > Permalinks, elige cualquier opción que no sea **Plain** y comprueba que WooCommerce esté activo y actualizado.

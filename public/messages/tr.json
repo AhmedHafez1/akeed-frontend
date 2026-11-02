@@ -3629,6 +3629,7 @@
       "WOOCOMMERCE_STORE_ADDRESS_NOT_PUBLIC": "Akeed bu adrese genel internet üzerinden ulaşamadı. Adresi kontrol edip tekrar deneyin.",
       "WOOCOMMERCE_STORE_REDIRECTS": "Bu adres başka bir adrese yönlendiriyor. Mağazanızın son adresini, www ile veya www olmadan, tarayıcıda göründüğü şekliyle tam olarak girin.",
       "WOOCOMMERCE_STORE_TLS_FAILED": "Mağazanızın güvenlik sertifikası geçerli değil. Barındırma sağlayıcınızdan düzeltmesini isteyip tekrar deneyin.",
+      "WOOCOMMERCE_PLAIN_PERMALINKS": "Mağaza adresiniz doğru, ancak WordPress’te kalıcı bağlantılar Plain olarak ayarlı ve bu durum bağlantıyı engelliyor. Settings > Permalinks bölümünü açın, Post name seçeneğini seçin ve kaydedin. Sitenizde önbellek varsa temizleyin, ardından aynı adresle yeniden bağlanın.",
       "WOOCOMMERCE_REST_NOT_FOUND": "Akeed bu adreste WooCommerce REST API’sini bulamadı. WordPress’te Settings > Permalinks bölümünü açıp Plain dışında herhangi bir seçeneği seçin ve WooCommerce’in güncel olduğundan emin olun.",
       "WOOCOMMERCE_REST_UNREACHABLE": "Mağazanız yanıt vermedi. Kapalı, bakım modunda olabilir veya dışarıdan gelen istekleri engelliyor olabilir. Daha sonra tekrar deneyin veya barındırma sağlayıcınıza danışın.",
       "WOOCOMMERCE_CREDENTIALS_REJECTED": "Mağazanız yeni API anahtarını kabul etmedi. Bazı barındırma kurulumları Authorization başlığını WordPress’e ulaşmadan önce kaldırır; barındırma sağlayıcınızdan buna izin vermesini isteyin. Ardından kullanılmayan anahtarı WooCommerce > Settings > Advanced > REST API altında silip yeniden bağlanın.",
