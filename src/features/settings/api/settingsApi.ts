@@ -36,6 +36,13 @@ type ByMessageLanguage<T> = Record<MessageLanguage, T>
 
 export interface SettingsResponse {
   state: IntegrationOnboardingState
+  acknowledgment?: {
+    available: boolean
+    creditsPerMessage: number
+    previews: ByMessageLanguage<
+      Record<string, { confirmed: string | null; canceled: string | null }>
+    >
+  }
   /** The store's logo and banner. Absent from an older backend. */
   branding?: MerchantBranding
   billing: {

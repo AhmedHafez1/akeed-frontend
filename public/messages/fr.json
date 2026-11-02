@@ -1553,6 +1553,20 @@
     }
   },
   "settings": {
+    "thankYou": {
+      "heading": "Messages de remerciement",
+      "label": "Envoyer un remerciement après confirmation ou annulation",
+      "description": "Envoyez un message après que le client confirme ou annule sa commande. Désactivé par défaut.",
+      "creditCost": "Chaque remerciement utilise {count} crédits.",
+      "planCost": "Chaque remerciement compte pour 1 message dans votre forfait.",
+      "confirmed": "Après confirmation",
+      "canceled": "Après annulation",
+      "unavailable": "Les messages de remerciement sont temporairement indisponibles. Vous pouvez toujours les désactiver.",
+      "textUnavailable": "Aucun texte de remerciement n’est disponible dans cette langue.",
+      "previewNote": "Le texte reprend la langue et le style du dernier message envoyé au client. Les rappels peuvent utiliser un autre style.",
+      "autoNote": "Cet exemple utilise le style par défaut. Le texte arabe réel suit le dialecte du client.",
+      "saveUnavailable": "Les messages de remerciement sont indisponibles. Désactivez-les pour enregistrer vos modifications."
+    },
     "logo": {
       "heading": "Logo de la boutique",
       "description": "Affiché en haut des messages de confirmation et de rappel, sur un fond blanc.",

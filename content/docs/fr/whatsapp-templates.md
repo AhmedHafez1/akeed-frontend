@@ -157,3 +157,11 @@ Seulement quand les données laissent entrevoir une amélioration possible. Des 
 Dans les paramètres, dans l’onglet du message. L’aperçu montre le texte WhatsApp approuvé du style que vous choisissez, rempli avec des valeurs d’exemple. Avec **Automatique selon le pays**, il montre le style que vous avez enregistré ; chaque client reçoit le style de son pays. Si un style n’a pas encore de texte à afficher, l’aperçu l’indique.
 
 Voir aussi : [Règles d’automatisation](/docs/automation-rules)
+
+## Messages de remerciement
+
+Dans **Paramètres › Message**, activez **Envoyer un remerciement après confirmation ou annulation**, puis enregistrez. Un seul interrupteur contrôle les deux résultats et reste désactivé par défaut pour chaque boutique. Consultez les deux exemples avant de l’activer. Akeed gère le texte, qui reprend la langue et le style du dernier message envoyé au client.
+
+Chaque remerciement coûte le tarif normal d’un message : **2 crédits** hors Shopify ou **1 message de votre forfait** dans Shopify. Le coût figure à côté de l’interrupteur. Si les crédits ou les messages du forfait sont épuisés, Akeed ignore le remerciement et conserve la confirmation ou l’annulation du client. Un échec de livraison restitue le coût du message.
+
+La désactivation arrête les remerciements dont l’envoi n’a pas commencé. Une réactivation n’envoie aucun message pour les réponses passées. Ces messages suivent uniquement une réponse du client, jamais une commande de test, une annulation par le personnel ou une annulation automatique.

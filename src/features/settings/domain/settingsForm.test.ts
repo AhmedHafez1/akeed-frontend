@@ -371,3 +371,13 @@ describe('automatic cancellation settings', () => {
     ]).toEqual(['timing'])
   })
 })
+
+describe('thank-you message form', () => {
+  it('defaults off and associates opt-in with the Message tab', () => {
+    const saved = formFor()
+    expect(saved.acknowledgmentEnabled).toBe(false)
+    const changed = { ...saved, acknowledgmentEnabled: true }
+    expect(toSettingsPayload(changed).acknowledgmentEnabled).toBe(true)
+    expect([...dirtyTabs(changed, saved)]).toEqual(['message'])
+  })
+})

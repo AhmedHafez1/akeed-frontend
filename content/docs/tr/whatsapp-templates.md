@@ -157,3 +157,11 @@ Yalnızca veriler bir iyileştirme fırsatına işaret ettiğinde. Sık ve rastg
 Ayarlar’da, mesaj sekmesinde. Önizleme, seçtiğiniz üslubun onaylanmış WhatsApp metnini örnek değerlerle doldurulmuş olarak gösterir. **Ülkeye göre otomatik** seçeneğinde kaydettiğiniz üslubu gösterir; her müşteri kendi ülkesinin üslubunu alır. Bir üslubun henüz gösterilecek metni yoksa önizleme bunu belirtir.
 
 Ayrıca bakın: [Otomasyon Kuralları](/docs/automation-rules)
+
+## Teşekkür mesajları
+
+**Ayarlar › Mesaj** bölümünde **Onay veya iptal sonrasında teşekkür mesajı gönder** seçeneğini açıp kaydedin. Tek anahtar her iki sonucu kontrol eder ve her mağaza için varsayılan olarak kapalıdır. Açmadan önce iki örneği inceleyin. Metni Akeed yönetir; metin müşteriye gönderilen son mesajın dilini ve stilini kullanır.
+
+Her teşekkür mesajı normal mesaj ücretiyle hesaplanır: Shopify dışında **2 kredi**, Shopify içinde **planınızdan 1 mesaj**. Ücret anahtarın yanında gösterilir. Kredi veya plan hakkı kalmadığında Akeed teşekkür mesajını atlar; müşterinin onayı veya iptali korunur. Teslimat başarısız olursa mesaj ücreti iade edilir.
+
+Kapatmak, gönderimi henüz başlamamış teşekkür mesajlarını durdurur. Yeniden açmak geçmiş yanıtlar için mesaj göndermez. Bu mesajlar yalnızca müşteri yanıtlarında gönderilir; test siparişleri, personel iptalleri veya otomatik iptaller için gönderilmez.

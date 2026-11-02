@@ -21,6 +21,7 @@ export type { SaveOutcome } from './useSettingsModel'
  * toast and loading bar and the Plan tab's subscription.
  */
 export function useEmbeddedSettings() {
+  const tThankYou = useTranslations('settings.thankYou')
   const t = useTranslations('settings.embedded')
   const { isLoading: isModeLoading, hostParam, shopify } = useAkeedMode()
   const router = useRouter()
@@ -35,6 +36,7 @@ export function useEmbeddedSettings() {
       saveSuccess: t('saveSuccess'),
       saveInvalid: t('saveInvalid'),
       saveError: t('saveError'),
+      acknowledgmentUnavailable: tThankYou('saveUnavailable'),
       readOnly: t('readOnly'),
       testSendSuccess: t('testSendSuccess'),
       testSendCooldown: t('testSendCooldown'),
@@ -42,7 +44,7 @@ export function useEmbeddedSettings() {
       testSendLanguageUnavailable: t('testSendLanguageUnavailable'),
       testSendError: t('testSendError'),
     }),
-    [t]
+    [t, tThankYou]
   )
   const adapter = useMemo<SettingsModelAdapter>(
     () => ({
