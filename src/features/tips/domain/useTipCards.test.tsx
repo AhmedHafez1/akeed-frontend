@@ -12,7 +12,10 @@ vi.mock('@/shared/hooks/useLocaleInfo', () => ({
   useLocaleInfo: () => ({ locale: 'en' }),
 }))
 
-function setup(mode: 'embedded' | 'standalone' = 'embedded') {
+function setup(
+  mode: 'embedded' | 'standalone' = 'embedded',
+  overrides: Partial<TipCardsResponse> = {}
+) {
   const client = new QueryClient({
     defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
   })
@@ -30,19 +33,21 @@ function setup(mode: 'embedded' | 'standalone' = 'embedded') {
         first_viewed_at: null,
       },
     ],
+    ...overrides,
   }
   for (const locale of ['en', 'ar'])
     client.setQueryData(queryKeys.tips.cards(locale), data)
   const wrapper = ({ children }: { children: ReactNode }) => (
     <QueryClientProvider client={client}>{children}</QueryClientProvider>
   )
+  const onDismissError = vi.fn()
   return {
     client,
     data,
-    ...renderHook(
-      () => useTipCards({ mode, enabled: false, onDismissError: vi.fn() }),
-      { wrapper }
-    ),
+    onDismissError,
+    ...renderHook(() => useTipCards({ mode, enabled: false, onDismissError }), {
+      wrapper,
+    }),
   }
 }
 
@@ -112,6 +117,71 @@ describe('useTipCards read status', () => {
     expect(auth.api.post.mock.calls.map(([url]) => url)).toEqual([
       '/api/tips/one/click',
     ])
+  })
+
+  const card = (id: string, show_as_banner?: boolean) => ({
+    id,
+    type: 'tip' as const,
+    locale: 'en',
+    title: id,
+    description: 'Body',
+    action: null,
+    published_at: '2026-10-25T10:00:00.000Z',
+    show_as_banner,
+  })
+
+  it('selects the first flagged card in publication order and keeps it in the cards', () => {
+    const { result } = setup('standalone', {
+      cards: [card('unflagged'), card('newest', true), card('older', true)],
+    })
+    expect(result.current.banner?.card.id).toBe('newest')
+    expect(result.current.cards.map((view) => view.card.id)).toEqual([
+      'unflagged',
+      'newest',
+      'older',
+    ])
+  })
+
+  it('has no banner when flags are false, missing, or cards are empty', () => {
+    const unflagged = setup('standalone', {
+      cards: [card('old-api'), card('off', false)],
+    })
+    expect(unflagged.result.current.banner).toBeNull()
+    const empty = setup('standalone', { cards: [] })
+    expect(empty.result.current.banner).toBeNull()
+  })
+
+  it('dismisses the banner and card together, advancing to the next flagged card', async () => {
+    const { result } = setup('standalone', {
+      cards: [card('new', true), card('old', true)],
+    })
+    act(() => result.current.onDismiss('new'))
+    await waitFor(() => expect(result.current.banner?.card.id).toBe('old'))
+    expect(result.current.cards.map((view) => view.card.id)).toEqual(['old'])
+    expect(auth.api.post).toHaveBeenCalledWith('/api/tips/new/dismiss')
+  })
+
+  it('restores the banner and card when permanent dismissal fails', async () => {
+    const warning = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    let rejectDismiss!: (error: Error) => void
+    auth.api.post.mockReturnValueOnce(
+      new Promise((_resolve, reject) => {
+        rejectDismiss = reject
+      })
+    )
+    const { result, onDismissError } = setup('standalone', {
+      cards: [card('new', true), card('old', true)],
+    })
+    act(() => result.current.onDismiss('new'))
+    await waitFor(() => expect(result.current.banner?.card.id).toBe('old'))
+    act(() => rejectDismiss(new Error('offline')))
+    await waitFor(() => expect(onDismissError).toHaveBeenCalledOnce())
+    expect(result.current.banner?.card.id).toBe('new')
+    expect(result.current.cards.map((view) => view.card.id)).toEqual([
+      'new',
+      'old',
+    ])
+    warning.mockRestore()
   })
 
   it('does not resurrect a card dismissed while its view was being recorded', async () => {

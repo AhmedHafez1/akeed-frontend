@@ -6,6 +6,12 @@ import type {
 } from '@/features/dashboard/model/dashboard.model'
 import type { CancelOrderResponse } from '@/shared/types/commerce-outcome.model'
 import { ApiError } from '@/shared/lib/http'
+import { tipsFixtureRequest } from './tipsFixture'
+
+/** Keep URL-building helpers on this local, synthetic server too. */
+export function getApiBaseUrl(): string {
+  return 'http://127.0.0.1:3098'
+}
 import { billingFixtureRequest } from './billingFixture'
 import { adminBillingFixtureRequest } from './adminBillingFixture'
 import {
@@ -302,6 +308,7 @@ export const api = {
     throw new Error(`Blocked fixture PATCH: ${url}`)
   },
   async get<T>(url: string): Promise<T> {
+    if (url.startsWith('/api/tips')) return tipsFixtureRequest<T>('GET', url)
     if (isFirstRunFixture()) return firstRunApiGet<T>(url)
     if (isSettingsBillingFixture()) return settingsBillingApi<T>('GET', url)
     if (isEmbeddedDashboardFixture())
@@ -359,6 +366,7 @@ export const api = {
     data?: unknown,
     options: RequestInit = {}
   ): Promise<T> {
+    if (url.startsWith('/api/tips')) return tipsFixtureRequest<T>('POST', url)
     if (isEmbeddedDashboardFixture())
       return embeddedDashboardRequest<T>('POST', url, data)
     if (isOrderSyncFixture()) return orderSyncRequest<T>('POST', url, data)

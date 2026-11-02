@@ -97,3 +97,11 @@ export function changeTipLifecycle(
     'POST'
   )
 }
+
+export function setTipBanner(id: string, value: boolean) {
+  return send<AdminTipCampaign>(
+    `${BASE}/${encodeURIComponent(id)}/banner`,
+    'POST',
+    { show_as_banner: value }
+  )
+}

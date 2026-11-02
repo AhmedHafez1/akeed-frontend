@@ -17,7 +17,10 @@ import { useTipReadVisibility } from '../../domain/useTipReadVisibility'
 import type { TipCardView } from '../../domain/useTipCards'
 
 /** A change asks for attention; a note keeps Polaris's neutral badge. */
-const TYPE_TONES: Record<TipCardView['card']['type'], BadgeProps['tone']> = {
+export const TYPE_TONES: Record<
+  TipCardView['card']['type'],
+  BadgeProps['tone']
+> = {
   tip: 'success',
   update: 'info',
   change: 'attention',

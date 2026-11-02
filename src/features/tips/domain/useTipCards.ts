@@ -27,7 +27,9 @@ export interface TipCardView {
 
 /**
  * The dashboard's tip cards: what to show, and what happens on view, click
- * and dismiss. `enabled` waits for the dashboard to know its state, so cards
+ * and dismiss. `banner` is the newest card also flagged as a banner; it
+ * shares the same handlers, so a dismissal removes it from both places.
+ * `enabled` waits for the dashboard to know its state, so cards
  * do not flash in before it settles.
  */
 export function useTipCards(options: {
@@ -50,6 +52,8 @@ export function useTipCards(options: {
     card,
     link: resolveLink(card, options.mode, locale, search),
   }))
+  // Cards arrive newest first, so a dismissed banner gives way to the next.
+  const banner = cards.find((view) => view.card.show_as_banner === true) ?? null
 
   const onSeen = useCallback(
     (id: string) => {
@@ -95,6 +99,7 @@ export function useTipCards(options: {
 
   return {
     cards,
+    banner,
     canDismiss: query.data?.can_dismiss === true,
     onSeen,
     onAction,

@@ -3678,6 +3678,7 @@
     }
   },
   "tips": {
+    "bannerLabel": "İpuçları ve güncellemeler şeridi",
     "unread": "Okunmadı",
     "badge": {
       "tip": "İpucu",

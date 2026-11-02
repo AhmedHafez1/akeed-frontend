@@ -4878,6 +4878,7 @@
     }
   },
   "tips": {
+    "bannerLabel": "Tips and updates banner",
     "unread": "Unread",
     "badge": {
       "tip": "Tip",
@@ -4892,9 +4893,15 @@
     "opensInNewTab": "opens in a new tab"
   },
   "adminTips": {
+    "banner": {
+      "column": "Banner",
+      "label": "Show “{name}” as a banner",
+      "help": "Also show this campaign as a banner on the dashboard and confirmations. Changes save immediately without a new review. It stays in Tips & updates; only the newest eligible banner appears.",
+      "error": "The banner setting couldn’t be saved. Try again."
+    },
     "eyebrow": "Merchant dashboard",
     "title": "Tips & updates",
-    "description": "Publish tips and feature announcements to chosen merchants. They appear as dismissible cards on the dashboard only.",
+    "description": "Publish tips and feature announcements to chosen merchants. They appear in Tips & updates and can also appear as a banner on the dashboard and confirmations.",
     "none": "—",
     "noExpiry": "No expiry",
     "status": {

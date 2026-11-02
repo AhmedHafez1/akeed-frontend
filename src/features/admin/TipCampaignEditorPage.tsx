@@ -1,12 +1,12 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useId, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import { Button } from '@/shared/ui'
+import { Button, Switch } from '@/shared/ui'
 import {
   changeTipLifecycle,
   createTipCampaign,
@@ -31,7 +31,7 @@ import { TipContentFields } from './TipContentFields'
 import { TipRecipientsList, TipReviewPanel } from './TipReviewPanel'
 import { TipStatusBadge, TipsErrorNotice, useTipsFormat } from './TipsAdminUi'
 import { useTemplateAction } from './useAdminTemplateDrafts'
-import { useTipCampaign, useTipOptions } from './useAdminTips'
+import { useTipBanner, useTipCampaign, useTipOptions } from './useAdminTips'
 
 function Section({
   title,
@@ -58,14 +58,21 @@ function Section({
 interface TipCampaignEditorProps {
   campaign: AdminTipCampaign | null
   onChanged: () => void
+  refreshing?: boolean
 }
 
-function TipCampaignEditor({ campaign, onChanged }: TipCampaignEditorProps) {
+function TipCampaignEditor({
+  campaign,
+  onChanged,
+  refreshing = false,
+}: TipCampaignEditorProps) {
   const t = useTranslations('adminTips')
   const router = useRouter()
   const { locale } = useLocaleInfo()
   const format = useTipsFormat()
   const options = useTipOptions()
+  const banner = useTipBanner(onChanged)
+  const bannerHelpId = useId()
   const initial = useMemo(
     () => (campaign ? tipFormFromCampaign(campaign) : emptyTipForm()),
     [campaign]
@@ -165,6 +172,33 @@ function TipCampaignEditor({ campaign, onChanged }: TipCampaignEditorProps) {
         </h1>
         {campaign && <TipStatusBadge status={effective} />}
       </header>
+      {campaign && (
+        <div className="border-border bg-card space-y-3 rounded-xl border p-5">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="text-foreground font-medium">
+                {t('banner.label', { name: campaign.name })}
+              </p>
+              <p id={bannerHelpId} className="text-muted-foreground text-sm">
+                {t('banner.help')}
+              </p>
+            </div>
+            <Switch
+              checked={campaign.show_as_banner}
+              label={t('banner.label', { name: campaign.name })}
+              describedBy={bannerHelpId}
+              disabled={readOnly || banner.pending || refreshing}
+              onChange={(value) => void banner.setBanner(campaign.id, value)}
+            />
+          </div>
+          {banner.error && (
+            <TipsErrorNotice
+              error={banner.error}
+              fallbackMessage={t('banner.error')}
+            />
+          )}
+        </div>
+      )}
       {campaign && !isDraft && (
         <p className="text-muted-foreground text-sm">
           {readOnly ? t('editor.archivedNote') : t('editor.publishedNote')}
@@ -366,6 +400,7 @@ export function TipCampaignEditorPage({ id }: { id: string }) {
       key={`${resource.data.revision}:${resource.data.status}`}
       campaign={resource.data}
       onChanged={resource.refresh}
+      refreshing={resource.loading}
     />
   )
 }

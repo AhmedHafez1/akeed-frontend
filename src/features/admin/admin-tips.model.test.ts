@@ -5,6 +5,9 @@ import {
   externalUrlIssue,
   removeTipLocale,
   tipDraftPayload,
+  tipContentPayload,
+  tipFormFromCampaign,
+  type AdminTipCampaign,
   tipIssuesFromApi,
   validateTipForm,
   type TipForm,
@@ -93,6 +96,25 @@ describe('externalUrlIssue', () => {
 })
 
 describe('form helpers', () => {
+  it('keeps the banner setting outside content forms and both save payloads', () => {
+    const content = filled()
+    const campaign = {
+      ...tipDraftPayload(content),
+      translations: [
+        {
+          locale: 'en',
+          title: 'Quiet hours',
+          description: 'Hold sends.',
+          action_label: null,
+        },
+      ],
+      show_as_banner: true,
+    } as AdminTipCampaign
+    const form = tipFormFromCampaign(campaign)
+    expect(form).not.toHaveProperty('show_as_banner')
+    expect(tipContentPayload(form)).not.toHaveProperty('show_as_banner')
+    expect(tipDraftPayload(form)).not.toHaveProperty('show_as_banner')
+  })
   it('keeps English and orders languages', () => {
     const form = addTipLocale(addTipLocale(filled(), 'tr'), 'ar')
     expect(form.locales).toEqual(['en', 'ar', 'tr'])
