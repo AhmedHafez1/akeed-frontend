@@ -59,6 +59,7 @@ export interface SettingsModelMessages extends Record<
   saveSuccess: string
   saveInvalid: string
   saveError: string
+  acknowledgmentUnavailable?: string
   readOnly: string
   testSendSuccess: string
 }
@@ -198,9 +199,12 @@ export function useSettingsModel({
         error instanceof ApiError ? fieldErrorFromApiCode(error.code) : null
       if (serverErrors) setErrors(serverErrors)
       const message =
-        error instanceof ApiError && error.status === 403
-          ? messages.readOnly
-          : messages.saveError
+        error instanceof ApiError &&
+        error.code === 'SETTINGS_ACKNOWLEDGMENT_UNAVAILABLE'
+          ? (messages.acknowledgmentUnavailable ?? messages.saveError)
+          : error instanceof ApiError && error.status === 403
+            ? messages.readOnly
+            : messages.saveError
       setSaveError(message)
       adapter.notifyError(message, 'save')
       return {

@@ -45,6 +45,7 @@ export interface SettingsFormValues {
   codReminderVariants?: Record<MessageLanguage, string | null>
   /** Arabic style by country. Absent while the backend does not offer it. */
   codTemplateArAuto?: boolean
+  acknowledgmentEnabled: boolean
   isAutoVerifyEnabled: boolean
   sendDelayChoice: SendDelayChoice
   sendDelayCustom: string
@@ -77,6 +78,7 @@ export function formFromSettings(
     ...(template.arabicAuto
       ? { codTemplateArAuto: template.arabicAuto.selected }
       : {}),
+    acknowledgmentEnabled: state.acknowledgmentEnabled === true,
     isAutoVerifyEnabled: state.isAutoVerifyEnabled,
     sendDelayChoice: sendDelayChoiceFor(state.sendDelayMinutes),
     sendDelayCustom: String(state.sendDelayMinutes),
@@ -191,6 +193,7 @@ export function toSettingsPayload(
   return {
     storeName: values.storeName.trim(),
     defaultLanguage: values.defaultLanguage,
+    acknowledgmentEnabled: values.acknowledgmentEnabled,
     isAutoVerifyEnabled: values.isAutoVerifyEnabled,
     assumeCodWhenPaymentMissing: values.assumeCodWhenPaymentMissing,
     ...templateChoicesPayload(values),
@@ -248,6 +251,7 @@ const MESSAGE_TAB_FIELDS: ReadonlyArray<keyof OnboardingSettingsPayload> = [
     TEMPLATE_PAYLOAD_FIELDS[language].reminder,
   ]),
   'codTemplateArAuto',
+  'acknowledgmentEnabled',
 ]
 
 /** The standalone Store tab; the embedded app has no control for it. */

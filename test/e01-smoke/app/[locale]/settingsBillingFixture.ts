@@ -317,6 +317,33 @@ function settings(): SettingsResponse {
         periodEnd: null,
       },
     },
+    acknowledgment: {
+      creditsPerMessage: creditSummary().price.creditsPerMessage,
+      available:
+        new URLSearchParams(window.location.search).get('thankYou') !==
+        'unavailable',
+      previews: {
+        ar: {
+          default: {
+            confirmed: 'تم تأكيد طلبك رقم #{{order}} من {{store}}. شكرًا لك!',
+            canceled:
+              'تم إلغاء طلبك رقم #{{order}} من {{store}}. شكرًا لإبلاغنا.',
+          },
+        },
+        en: {
+          default: {
+            confirmed:
+              'Your order #{{order}} from {{store}} is confirmed. Thank you!',
+            canceled:
+              'Your order #{{order}} from {{store}} is canceled. Thank you for letting us know.',
+          },
+        },
+        ur: {},
+        es: {},
+        fr: {},
+        tr: {},
+      },
+    },
     template: {
       languages: ['ar', 'en', 'ur', 'es', 'fr', 'tr'],
       liveLanguages: ['ar', 'en'],

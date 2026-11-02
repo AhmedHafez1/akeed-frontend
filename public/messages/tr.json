@@ -1553,6 +1553,20 @@
     }
   },
   "settings": {
+    "thankYou": {
+      "heading": "Teşekkür mesajları",
+      "label": "Onay veya iptal sonrasında teşekkür mesajı gönder",
+      "description": "Müşteri siparişini onayladıktan veya iptal ettikten sonra bir mesaj gönderin. Varsayılan olarak kapalıdır.",
+      "creditCost": "Her teşekkür mesajı {count} kredi kullanır.",
+      "planCost": "Her teşekkür mesajı planınızdan 1 mesaj olarak sayılır.",
+      "confirmed": "Onay sonrasında",
+      "canceled": "İptal sonrasında",
+      "unavailable": "Teşekkür mesajları geçici olarak kullanılamıyor. Yine de kapatabilirsiniz.",
+      "textUnavailable": "Bu dilde teşekkür metni bulunmuyor.",
+      "previewNote": "Metin, müşteriye gönderilen son mesajın dilini ve stilini kullanır. Hatırlatmalar farklı bir stil kullanabilir.",
+      "autoNote": "Bu örnek varsayılan stili kullanır. Gerçek Arapça metin müşterinin lehçesine göre değişir.",
+      "saveUnavailable": "Teşekkür mesajları şu anda kullanılamıyor. Değişiklikleri kaydetmek için kapatın."
+    },
     "logo": {
       "heading": "Mağaza logosu",
       "description": "Onay ve hatırlatma mesajlarının üstünde, beyaz bir arka plan üzerinde görünür.",

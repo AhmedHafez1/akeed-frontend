@@ -89,6 +89,7 @@ export interface IntegrationOnboardingState {
   storeName: string | null
   defaultLanguage: IntegrationOnboardingLanguage
   isAutoVerifyEnabled: boolean
+  acknowledgmentEnabled?: boolean
   assumeCodWhenPaymentMissing: boolean
   shippingCurrency: string
   avgShippingCost: number
@@ -214,6 +215,7 @@ export interface OnboardingSettingsPayload {
   storeName: string
   defaultLanguage: IntegrationOnboardingLanguage
   isAutoVerifyEnabled: boolean
+  acknowledgmentEnabled?: boolean
   assumeCodWhenPaymentMissing?: boolean
   shippingCurrency?: string
   avgShippingCost?: number

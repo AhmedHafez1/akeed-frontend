@@ -35,6 +35,7 @@ import { LogoCard } from './LogoCard'
 import { MessagePreviewPanel } from './MessagePreviewPanel'
 import { TestPhoneDialog } from './TestPhoneDialog'
 import { SettingsHelp } from './SettingsHelp'
+import { ThankYouMessagesCard } from './ThankYouMessagesCard'
 
 interface MessageTabProps {
   model: StandaloneSettingsModel
@@ -398,6 +399,18 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
             </AkChoiceGroup>
           </SettingsCard>
         )}
+        <ThankYouMessagesCard
+          acknowledgment={data.acknowledgment}
+          checked={values.acknowledgmentEnabled}
+          onChange={(acknowledgmentEnabled) =>
+            model.update({ acknowledgmentEnabled })
+          }
+          readOnly={readOnly}
+          language={previewLanguage}
+          style={isAuto ? null : selectedVariant}
+          sample={sample}
+          automaticStyle={isAuto}
+        />
       </div>
 
       <MessagePreviewPanel

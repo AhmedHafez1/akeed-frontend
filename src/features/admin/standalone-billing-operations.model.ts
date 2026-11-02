@@ -79,7 +79,7 @@ export interface HoldRow {
   reservationId: string
   dispatchId: string
   verificationId: string
-  kind: 'initial' | 'follow_up'
+  kind: 'initial' | 'follow_up' | 'acknowledgment'
   generation: number
   quantity: number
   createdAt: string

@@ -210,6 +210,7 @@ export function StandaloneBillingObservability({
               detail={t('metrics.consumption', {
                 initial: health.product.initialConsumption,
                 followup: health.product.followUpConsumption,
+                acknowledgment: health.product.acknowledgmentConsumption ?? 0,
                 reversed: health.product.failureReversals,
               })}
             />

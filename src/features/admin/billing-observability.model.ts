@@ -50,6 +50,7 @@ export interface BillingHealth {
     paidConversionPercent: number
     initialConsumption: number
     followUpConsumption: number
+    acknowledgmentConsumption: number
     failureReversals: number
   }
   finance: {

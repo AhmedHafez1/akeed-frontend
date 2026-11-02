@@ -38,6 +38,7 @@ import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { MessagePreviewCard } from './MessagePreviewCard'
 import { StoreLogoField } from './StoreLogoField'
 import { SettingsHelp } from './SettingsHelp'
+import { ThankYouMessagesCard } from './ThankYouMessagesCard'
 
 /** Choice values that are not a template style. */
 const AUTO_STYLE = 'auto'
@@ -350,6 +351,18 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
             </BlockStack>
           </Card>
         )}
+        <ThankYouMessagesCard
+          acknowledgment={data.acknowledgment}
+          checked={values.acknowledgmentEnabled}
+          onChange={(acknowledgmentEnabled) =>
+            model.update({ acknowledgmentEnabled })
+          }
+          readOnly={readOnly}
+          language={previewLanguage}
+          style={isAuto ? null : selectedVariant}
+          sample={sample}
+          automaticStyle={isAuto}
+        />
       </BlockStack>
 
       {/* Stays in view while the settings beside it scroll. */}

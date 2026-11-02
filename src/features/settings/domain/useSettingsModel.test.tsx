@@ -33,6 +33,7 @@ const messages: SettingsModelMessages = {
   saveSuccess: 'saveSuccess',
   saveInvalid: 'saveInvalid',
   saveError: 'saveError',
+  acknowledgmentUnavailable: 'acknowledgmentUnavailable',
   readOnly: 'readOnly',
   testSendSuccess: 'testSendSuccess',
   testSendCooldown: 'testSendCooldown',
@@ -457,5 +458,42 @@ describe('useSettingsModel', () => {
       expect(outcome).toEqual({ ok: false, reason })
       expect(adapter.notifyError).not.toHaveBeenCalled()
     })
+  })
+})
+
+describe('thank-you settings save flow', () => {
+  it('keeps the saved choice on discard and persists an explicit opt-in', async () => {
+    api.saveSettings.mockImplementation(async (payload) =>
+      settingsResponseFixture({
+        state: { acknowledgmentEnabled: payload.acknowledgmentEnabled },
+      })
+    )
+    const { result } = await setupLoaded()
+    expect(result.current.values?.acknowledgmentEnabled).toBe(false)
+    act(() => result.current.update({ acknowledgmentEnabled: true }))
+    expect([...result.current.dirtyTabs]).toEqual(['message'])
+    act(() => result.current.discard())
+    expect(result.current.values?.acknowledgmentEnabled).toBe(false)
+    act(() => result.current.update({ acknowledgmentEnabled: true }))
+    await act(async () => {
+      await result.current.save()
+    })
+    expect(api.saveSettings).toHaveBeenCalledWith(
+      expect.objectContaining({ acknowledgmentEnabled: true })
+    )
+    expect(result.current.values?.acknowledgmentEnabled).toBe(true)
+    expect(result.current.isDirty).toBe(false)
+  })
+  it('explains when availability changed while the merchant was editing', async () => {
+    api.saveSettings.mockRejectedValue(
+      new ApiError('Unavailable', 400, 'SETTINGS_ACKNOWLEDGMENT_UNAVAILABLE')
+    )
+    const { result } = await setupLoaded()
+    act(() => result.current.update({ acknowledgmentEnabled: true }))
+    await act(async () => {
+      await result.current.save()
+    })
+    expect(result.current.saveError).toBe('acknowledgmentUnavailable')
+    expect(result.current.isDirty).toBe(true)
   })
 })

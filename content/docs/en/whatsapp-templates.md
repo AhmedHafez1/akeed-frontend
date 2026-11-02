@@ -157,3 +157,11 @@ Only when data suggests improvement potential. Frequent random changes make perf
 In Settings, on the message tab. The preview shows the approved WhatsApp text for the style you choose, filled with sample values. With **Automatic by country**, it shows your saved style; each customer gets the style of their country. If a style has no text to show yet, the preview says so.
 
 See also: [Automation Rules](/docs/automation-rules)
+
+## Thank-you messages
+
+In **Settings › Message**, turn on **Send a thank-you after confirmation or cancellation**, then save. One switch covers both outcomes. It starts off for every store. Read the two examples before enabling it; Akeed manages the wording, which follows the language and style of the latest message sent to the customer.
+
+Each thank-you uses the normal message rate: **2 credits** outside Shopify, or **1 message from your plan** in Shopify. The charge appears beside the switch. If there is no credit or plan allowance left, Akeed skips the thank-you and keeps the customer’s confirmation or cancellation. Failed delivery restores the message charge.
+
+Turning it off stops thank-you messages that have not started sending. It does not send messages for past replies when you turn it back on. Thank-you messages are sent only for customer replies, never for test orders, staff cancellations or automatic cancellations.

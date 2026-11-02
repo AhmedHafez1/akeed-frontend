@@ -320,6 +320,7 @@ export async function adminBillingFixtureRequest(
         averagePurchaseCredits: 180,
         paidConversionPercent: 62.5,
         initialConsumption: 40,
+        acknowledgmentConsumption: 0,
         followUpConsumption: 12,
         failureReversals: 3,
       },
