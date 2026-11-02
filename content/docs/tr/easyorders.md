@@ -45,9 +45,9 @@ Mesajlar müşterilerinize Akeed’in WhatsApp numarasından ulaşır. Kendinize
 | Müşteri onaylar | Sipariş durumu **confirmed** olarak değişir. |
 | Müşteri iptal eder | Sipariş durumu **canceled** olarak değişir. |
 | Yanıt yok durumundaki bir siparişi Akeed’den iptal edersiniz | Sipariş durumu **canceled** olarak değişir. |
-| Müşteri yanıt vermez | Hiçbir şey. Sipariş yalnızca Akeed’de **Yanıt yok** olarak işaretlenir. |
+| Müşteri yanıt vermez | Otomatik iptali açmadıysanız hiçbir şey. Sipariş Akeed’de **Yanıt yok** olarak işaretlenir. |
 
-Akeed, EasyOrders’daki bir siparişi hiçbir zaman kendi kendine iptal etmez. Ayrıca yalnızca hâlâ beklemede olan bir siparişi günceller: siparişin durumunu zaten değiştirdiyseniz Akeed ona dokunmaz.
+Akeed, EasyOrders’daki bir siparişi yalnızca otomatik iptali açarsanız kendi kendine iptal eder; siz açana kadar bu özellik kapalıdır. [Otomasyon Kuralları](/docs/automation-rules) sayfasına bakın. Ayrıca yalnızca hâlâ beklemede olan bir siparişi günceller: siparişin durumunu zaten değiştirdiyseniz Akeed ona dokunmaz.
 
 ## Bağlantıyı Sağlıklı Tutun
 

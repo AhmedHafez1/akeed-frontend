@@ -45,9 +45,9 @@ Messages reach your customers from Akeed's WhatsApp number. You do not need a Wh
 | The customer confirms | The order status changes to **confirmed**. |
 | The customer cancels | The order status changes to **canceled**. |
 | You cancel a no-reply order from Akeed | The order status changes to **canceled**. |
-| The customer does not reply | Nothing. The order is marked **No reply** in Akeed only. |
+| The customer does not reply | Nothing, unless you turned on automatic cancellation. The order is marked **No reply** in Akeed. |
 
-Akeed never cancels an order in EasyOrders by itself. It also updates only an order that is still pending: if you already changed the order's status, Akeed leaves it alone.
+Akeed cancels an order in EasyOrders by itself only if you turn on automatic cancellation, which stays off until you do. See [Automation Rules](/docs/automation-rules). It also updates only an order that is still pending: if you already changed the order's status, Akeed leaves it alone.
 
 ## Keep the Connection Healthy
 

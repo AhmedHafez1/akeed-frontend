@@ -51,9 +51,9 @@ Los mensajes llegan a tus clientes desde el número de WhatsApp de Akeed. No nec
 | El cliente confirma | Akeed agrega una nota privada al pedido. El estado del pedido no cambia. |
 | El cliente cancela | El estado del pedido cambia a **Cancelled**. |
 | Cancelas desde Akeed un pedido sin respuesta | El estado del pedido cambia a **Cancelled**. |
-| El cliente no responde | Nada. El pedido se marca como **Sin respuesta** solo en Akeed. |
+| El cliente no responde | Nada, salvo que hayas activado la cancelación automática. El pedido se marca como **Sin respuesta** en Akeed. |
 
-Akeed nunca cancela por sí solo un pedido en WooCommerce. Cuando un cliente no responde, tú decides qué hacer.
+Akeed solo cancela por sí solo un pedido en WooCommerce si activas la cancelación automática, que sigue desactivada hasta que lo hagas. Consulta [Reglas de automatización](/docs/automation-rules). En los demás casos, cuando un cliente no responde, tú decides qué hacer.
 
 Cuando un pedido se cancela, WooCommerce hace lo que siempre hace con un pedido cancelado, como devolver el inventario y enviar su correo de cancelación.
 

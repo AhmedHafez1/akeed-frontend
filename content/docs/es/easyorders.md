@@ -45,9 +45,9 @@ Los mensajes llegan a tus clientes desde el número de WhatsApp de Akeed. No nec
 | El cliente confirma | El estado del pedido cambia a **confirmed**. |
 | El cliente cancela | El estado del pedido cambia a **canceled**. |
 | Cancelas desde Akeed un pedido sin respuesta | El estado del pedido cambia a **canceled**. |
-| El cliente no responde | Nada. El pedido se marca como **Sin respuesta** solo en Akeed. |
+| El cliente no responde | Nada, salvo que hayas activado la cancelación automática. El pedido se marca como **Sin respuesta** en Akeed. |
 
-Akeed nunca cancela por sí solo un pedido en EasyOrders. Además, solo actualiza un pedido que sigue pendiente: si ya cambiaste el estado del pedido, Akeed no lo toca.
+Akeed solo cancela por sí solo un pedido en EasyOrders si activas la cancelación automática, que sigue desactivada hasta que lo hagas. Consulta [Reglas de automatización](/docs/automation-rules). Además, solo actualiza un pedido que sigue pendiente: si ya cambiaste el estado del pedido, Akeed no lo toca.
 
 ## Mantén la conexión en buen estado
 

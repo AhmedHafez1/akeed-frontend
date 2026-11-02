@@ -51,9 +51,9 @@ Messages reach your customers from Akeed's WhatsApp number. You do not need a Wh
 | The customer confirms | Akeed adds a private order note. The order status does not change. |
 | The customer cancels | The order status changes to **Cancelled**. |
 | You cancel a no-reply order from Akeed | The order status changes to **Cancelled**. |
-| The customer does not reply | Nothing. The order is marked **No reply** in Akeed only. |
+| The customer does not reply | Nothing, unless you turned on automatic cancellation. The order is marked **No reply** in Akeed. |
 
-Akeed never cancels an order in WooCommerce by itself. When a customer does not reply, you decide what to do.
+Akeed cancels an order in WooCommerce by itself only if you turn on automatic cancellation, which stays off until you do. See [Automation Rules](/docs/automation-rules). Otherwise, when a customer does not reply, you decide what to do.
 
 When an order is cancelled, WooCommerce does what it always does for a cancelled order, such as returning the stock and sending its cancellation email.
 
