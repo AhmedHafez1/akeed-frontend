@@ -155,6 +155,7 @@ function accountSnapshot(
     postedBalance,
     heldCredits,
     availableCredits: Math.max(postedBalance - heldCredits, 0),
+    displayedAvailableCredits: Math.max(postedBalance - heldCredits, 0) * 2,
     version,
   }
 }

@@ -43,7 +43,7 @@ Geliştiriciniz yoksa [Toplu Sipariş İçe Aktarma](/docs/bulk-order-import) ö
 | Sistem aynı siparişi iki kez gönderirse ne olur? | İkinci bir sipariş oluşturulmaz, ikinci bir mesaj gönderilmez ve kredi iki kez düşülmez. |
 | Bir sipariş API’den değiştirilebilir veya iptal edilebilir mi? | Hayır. API yalnızca sipariş oluşturur. |
 | Müşterinin yanıtı nerede görülür? | Paneldeki **Onaylar** listesinde. Akeed sunucunuza bildirim göndermez. |
-| Bir test modu var mı? | Hayır. Her kapıda ödeme siparişi gerçek bir mesaj gönderir ve bir kredi kullanır. Önce kendi telefon numaranızla deneyin. |
+| Bir test modu var mı? | Hayır. Her kapıda ödeme siparişi gerçek bir mesaj gönderir ve kredi kullanır. Önce kendi telefon numaranızla deneyin. |
 | Siparişlerin alınmasını ne durdurur? | Bakiyenin bitmesi, ayarlarda otomatik onayın kapatılması ya da anahtarın iptal edilmesi. |
 
 ## Sorun Olursa

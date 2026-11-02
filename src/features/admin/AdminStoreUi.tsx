@@ -227,7 +227,10 @@ export function BillingCell({ store }: { store: AdminStore }) {
     return (
       <div>
         <p className="text-foreground text-xs font-medium tabular-nums">
-          {store.billing.available.toLocaleString('en')} credits
+          {store.billing.displayed_available.toLocaleString('en')} credits
+        </p>
+        <p className="text-muted-foreground text-xs tabular-nums">
+          {store.billing.available.toLocaleString('en')} stored
         </p>
         <div className="mt-1.5">
           <CreditBalanceBadge state={store.billing.balance_state} />

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
+import { CreditModelNoticeBanner } from '@/features/billing'
 import { TipsSection } from '@/features/tips'
 import { cn } from '@/shared/lib/utils'
 import { Skeleton, akButton, akCard, notify } from '@/shared/ui'
@@ -148,7 +149,12 @@ export function DashboardStandaloneSkin({
               ? undefined
               : phoneTestAction
           }
-          afterHeader={<TipsSection />}
+          afterHeader={
+            <>
+              <CreditModelNoticeBanner />
+              <TipsSection />
+            </>
+          }
         />
       </div>
     )
@@ -169,6 +175,7 @@ export function DashboardStandaloneSkin({
         onPeriodChange={onPeriodChange}
       />
 
+      <CreditModelNoticeBanner />
       <TipsSection />
 
       {isLoading || firstRun.status === 'loading' ? (

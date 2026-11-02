@@ -43,7 +43,7 @@ Si vous n’avez pas de développeur, utilisez l’[Import de commandes en masse
 | Que se passe-t-il si le système envoie deux fois la même commande ? | Aucune seconde commande n’est créée, aucun second message n’est envoyé et le crédit n’est pas décompté deux fois. |
 | Peut-on modifier ou annuler une commande depuis l’API ? | Non. L’API ne fait que créer des commandes. |
 | Où voit-on la réponse du client ? | Dans la liste **Confirmations** du tableau de bord. Akeed n’envoie pas de notifications à votre serveur. |
-| Existe-t-il un mode test ? | Non. Chaque commande en paiement à la livraison envoie un vrai message et utilise un crédit. Essayez d’abord avec votre propre numéro de téléphone. |
+| Existe-t-il un mode test ? | Non. Chaque commande en paiement à la livraison envoie un vrai message et utilise des crédits. Essayez d’abord avec votre propre numéro de téléphone. |
 | Qu’est-ce qui interrompt la réception des commandes ? | Un solde épuisé, la désactivation de la confirmation automatique dans les paramètres ou la révocation de la clé. |
 
 ## En cas de problème

@@ -37,7 +37,12 @@ const summary: CreditSummary = {
   debtCredits: 0,
   lowBalanceThreshold: 50,
   freeGrant: { granted: true, quantity: 30, grantedAt: null },
-  price: { unitPriceMinor: 200, currency: 'EGP' },
+  price: {
+    unitPriceMinor: 100,
+    messagePriceMinor: 200,
+    creditsPerMessage: 2,
+    currency: 'EGP',
+  },
   range: { min: 100, max: 5000, step: 50 },
   canPurchase: true,
   purchaseDenialReason: null,
@@ -119,9 +124,9 @@ describe('BillingReturnPage (ar)', () => {
   it('names the outcome of a successful payment and the new balance', async () => {
     const { container } = renderPage()
 
-    await heading('أضفنا 500 رسالة إلى رصيدك')
+    await heading('أضفنا 500 رصيد إلى حسابك')
     expect(screen.getByText('رصيدك الآن', { exact: false }).textContent).toBe(
-      'رصيدك الآن 888 رسالة، ونرسل التأكيدات للطلبات الجديدة كالمعتاد.'
+      'رصيدك الآن 888 رصيد، ونرسل التأكيدات للطلبات الجديدة كالمعتاد.'
     )
 
     const card = container.querySelector('section')
@@ -131,7 +136,7 @@ describe('BillingReturnPage (ar)', () => {
       'bg-brand-soft text-brand'
     )
 
-    expect(detail('الرسائل')).toBe('500')
+    expect(detail('الرصيد')).toBe('500')
     expect(detail('المبلغ')).toBe('1,000.00 ج.م')
     expect(detail('آخر تحديث')).toBe('1 أكتوبر 2026 · 8:52 ص')
     const pill = screen.getByText('ناجحة')
@@ -155,8 +160,8 @@ describe('BillingReturnPage (ar)', () => {
     mockSummary('stale')
     renderPage()
 
-    await heading('أضفنا 500 رسالة إلى رصيدك')
-    expect(screen.getByText('الرسائل متاحة في رصيدك الآن.')).toBeTruthy()
+    await heading('أضفنا 500 رصيد إلى حسابك')
+    expect(screen.getByText('الرصيد متاح في حسابك الآن.')).toBeTruthy()
     expect(screen.queryByText('ونرسل التأكيدات', { exact: false })).toBeNull()
   })
 
@@ -164,16 +169,16 @@ describe('BillingReturnPage (ar)', () => {
     mockSummary('fresh', {}, true)
     renderPage()
 
-    await heading('أضفنا 500 رسالة إلى رصيدك')
-    expect(screen.getByText('الرسائل متاحة في رصيدك الآن.')).toBeTruthy()
+    await heading('أضفنا 500 رصيد إلى حسابك')
+    expect(screen.getByText('الرصيد متاح في حسابك الآن.')).toBeTruthy()
   })
 
   it('does not promise confirmations when the account cannot send', async () => {
     mockSummary('fresh', { status: 'suspended' })
     renderPage()
 
-    await heading('أضفنا 500 رسالة إلى رصيدك')
-    expect(screen.getByText('الرسائل متاحة في رصيدك الآن.')).toBeTruthy()
+    await heading('أضفنا 500 رصيد إلى حسابك')
+    expect(screen.getByText('الرصيد متاح في حسابك الآن.')).toBeTruthy()
   })
 
   it('offers to continue the import that sent the merchant here', async () => {
@@ -230,7 +235,7 @@ describe('BillingReturnPage (ar)', () => {
     )
 
     await act(async () => settle(purchase()))
-    await heading('أضفنا 500 رسالة إلى رصيدك')
+    await heading('أضفنا 500 رصيد إلى حسابك')
   })
 
   it('stops polling after five tries and says the payment is still waiting', async () => {
@@ -321,7 +326,7 @@ describe('BillingReturnPage (ar)', () => {
     expect(container.querySelector('dl')).toBeNull()
 
     fireEvent.click(screen.getByRole('button', { name: 'تحديث الحالة' }))
-    await heading('أضفنا 500 رسالة إلى رصيدك')
+    await heading('أضفنا 500 رصيد إلى حسابك')
     expect(fetchPurchase).toHaveBeenCalledTimes(2)
   })
 
@@ -340,13 +345,13 @@ describe('BillingReturnPage (en)', () => {
   it('names the outcome of a successful payment and the new balance', async () => {
     renderPage('en')
 
-    await heading('We added 500 messages to your balance')
+    await heading('We added 500 credits to your balance')
     expect(
       screen.getByText('Your balance is now', { exact: false }).textContent
     ).toBe(
-      'Your balance is now 888 messages, and new orders keep getting confirmed as usual.'
+      'Your balance is now 888 credits, and new orders keep getting confirmed as usual.'
     )
-    expect(detail('Messages')).toBe('500')
+    expect(detail('Credits')).toBe('500')
     expect(detail('Amount')).toBe('EGP 1,000.00')
     expect(detail('Last updated')).toBe('Oct 1, 2026 · 8:52 AM')
     expect(screen.getByText('Successful')).toBeTruthy()

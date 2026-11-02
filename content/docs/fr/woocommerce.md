@@ -51,9 +51,9 @@ Les messages parviennent à vos clients depuis le numéro WhatsApp d’Akeed. Vo
 | Le client confirme | Akeed ajoute une note de commande privée. Le statut de la commande ne change pas. |
 | Le client annule | Le statut de la commande passe à **Cancelled**. |
 | Vous annulez depuis Akeed une commande sans réponse | Le statut de la commande passe à **Cancelled**. |
-| Le client ne répond pas | Rien. La commande est marquée **Sans réponse** dans Akeed uniquement. |
+| Le client ne répond pas | Rien, sauf si vous avez activé l’annulation automatique. La commande est marquée **Sans réponse** dans Akeed. |
 
-Akeed n’annule jamais de lui-même une commande dans WooCommerce. Quand un client ne répond pas, c’est vous qui décidez de la suite.
+Akeed n’annule de lui-même une commande dans WooCommerce que si vous activez l’annulation automatique, qui reste désactivée jusque-là. Consultez [Règles d’automatisation](/docs/automation-rules). Sinon, quand un client ne répond pas, c’est vous qui décidez de la suite.
 
 Quand une commande est annulée, WooCommerce fait ce qu’il fait toujours pour une commande annulée, par exemple remettre le stock à disposition et envoyer son e-mail d’annulation.
 
@@ -98,6 +98,10 @@ Vous pouvez reconnecter la même boutique à tout moment en approuvant de nouvea
 | S’attendre à ce que les commandes manquées arrivent après une correction | Elles ne sont pas importées. Confirmez-les à la main. |
 
 ## Dépannage
+
+### Les permaliens WordPress sont réglés sur Plain
+
+Akeed ne peut pas se connecter tant que les permaliens sont réglés sur **Plain**, même si votre adresse est correcte. Dans WordPress, ouvrez Settings > Permalinks, choisissez **Post name** et enregistrez. Si votre site utilise un cache, videz-le, puis reconnectez-vous avec la même adresse.
 
 ### Akeed n’a pas trouvé l’API REST de WooCommerce
 

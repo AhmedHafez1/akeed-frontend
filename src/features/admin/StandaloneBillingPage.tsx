@@ -45,6 +45,7 @@ export function StandaloneBillingPage() {
         </div>
         <div className="text-muted-foreground mt-1 text-xs">
           {t('balance', {
+            displayed: row.account.displayedAvailableCredits,
             available: row.account.availableCredits,
             posted: row.account.postedBalance,
           })}

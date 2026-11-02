@@ -65,7 +65,7 @@ Shopify mağazaları Shopify üzerinden faturalanan aylık bir plana abone olur.
 
 ### Krediler nasıl sayılır?
 
-Bir kredi, müşteriye gönderilen bir WhatsApp mesajıdır. Yanıt vermeyen bir müşteriye gönderilen hatırlatma ikinci bir kredi harcar. WhatsApp bir mesajı kabul etmezse kredi otomatik olarak iade edilir.
+1 kredi EGP 1’e eşittir ve müşteriye gönderilen her WhatsApp mesajı 2 kredi kullanır. Yanıt vermeyen bir müşteriye gönderilen hatırlatma 2 kredi daha kullanır. WhatsApp bir mesajı kabul etmezse kredileri otomatik olarak iade edilir.
 
 ### Aylık onay sınırıma ulaştığımda ya da kredim bittiğinde ne olur?
 

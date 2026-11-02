@@ -51,9 +51,9 @@ Mesajlar müşterilerinize Akeed’in WhatsApp numarasından ulaşır. Kendinize
 | Müşteri onaylar | Akeed özel bir sipariş notu ekler. Sipariş durumu değişmez. |
 | Müşteri iptal eder | Sipariş durumu **Cancelled** olarak değişir. |
 | Yanıt yok durumundaki bir siparişi Akeed’den iptal edersiniz | Sipariş durumu **Cancelled** olarak değişir. |
-| Müşteri yanıt vermez | Hiçbir şey. Sipariş yalnızca Akeed’de **Yanıt yok** olarak işaretlenir. |
+| Müşteri yanıt vermez | Otomatik iptali açmadıysanız hiçbir şey. Sipariş Akeed’de **Yanıt yok** olarak işaretlenir. |
 
-Akeed, WooCommerce’deki bir siparişi hiçbir zaman kendi kendine iptal etmez. Müşteri yanıt vermediğinde ne yapılacağına siz karar verirsiniz.
+Akeed, WooCommerce’deki bir siparişi yalnızca otomatik iptali açarsanız kendi kendine iptal eder; siz açana kadar bu özellik kapalıdır. [Otomasyon Kuralları](/docs/automation-rules) sayfasına bakın. Aksi hâlde müşteri yanıt vermediğinde ne yapılacağına siz karar verirsiniz.
 
 Bir sipariş iptal edildiğinde WooCommerce, iptal edilen her siparişte yaptığını yapar; örneğin stoğu geri ekler ve iptal e-postasını gönderir.
 
@@ -98,6 +98,10 @@ Yeniden onay vererek aynı mağazayı istediğiniz zaman yeniden bağlayabilirsi
 | Kaçırılan siparişlerin sorun giderildikten sonra gelmesini beklemek | Bu siparişler içe aktarılmaz. Onları elle onaylayın. |
 
 ## Sorun Giderme
+
+### WordPress kalıcı bağlantıları Plain olarak ayarlı
+
+Kalıcı bağlantılar **Plain** olarak ayarlıyken Akeed bağlanamaz, adresiniz doğru olsa bile. WordPress’te Settings > Permalinks bölümünü açın, **Post name** seçeneğini seçin ve kaydedin. Sitenizde önbellek varsa temizleyin, ardından aynı adresle yeniden bağlanın.
 
 ### Akeed WooCommerce REST API’sini bulamadı
 

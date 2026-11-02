@@ -58,16 +58,16 @@ Bağımsız hesaplar aylık plan kullanmaz. Kullandığınız kadarını **kredi
 
 | Kural | Ayrıntılar |
 | --- | --- |
-| Bir kredi | Müşteriye gönderilen bir WhatsApp mesajı. |
-| Hatırlatmalar | Yanıt vermeyen bir müşteriye gönderilen hatırlatma bir kredi daha kullanır. |
-| Başarısız gönderimler | WhatsApp bir mesajı kabul etmezse kredi hesabınıza otomatik olarak iade edilir. |
-| Başlangıç kredileri | Yeni hesaplar kredi kartı gerekmeden bir kereye mahsus **30 ücretsiz kredi** alır. Bakiyeniz uygulamada gösterilir. |
-| Fiyat | Bu kılavuzun yazıldığı tarihte kredi başına **EGP 2,00**. Bir mesaj ve hatırlatması birlikte EGP 4,00 tutar. |
+| Bir mesaj | Müşteriye gönderilen her WhatsApp mesajı 2 kredi kullanır, yani EGP 2 tutar. |
+| Hatırlatmalar | Yanıt vermeyen bir müşteriye gönderilen hatırlatma 2 kredi daha kullanır. |
+| Başarısız gönderimler | WhatsApp bir mesajı kabul etmezse kredileri hesabınıza otomatik olarak iade edilir. |
+| Başlangıç kredileri | Yeni hesaplar kredi kartı gerekmeden bir kereye mahsus 30 mesaja yetecek **60 ücretsiz kredi** alır. Bakiyeniz uygulamada gösterilir. |
+| Fiyat | Bu kılavuzun yazıldığı tarihte kredi başına **EGP 1,00**. Bir mesaj ve hatırlatması birlikte EGP 4,00 tutar. |
 | Abonelik yok | Yalnızca kredi satın aldığınızda ödersiniz. Aylık ücret yoktur. |
 
 ### Kredi satın alma
 
-**Faturalandırma ve krediler** bölümünü açın, kaç krediye ihtiyacınız olduğunu seçin ve ödeme adımına geçin. Tek seferde 50’şer artışlarla 100 ile 5.000 arasında kredi satın alabilirsiniz. Örneğin 500 kredi EGP 1.000 tutar. Ödeme, Mısırlı ödeme sağlayıcısı **Paymob** tarafından işlenir ve kartla veya Vodafone Cash ile ödeyebilirsiniz. Fiyatlar Mısır lirası cinsindendir ve değişebilir; geçerli olan her zaman faturalandırma sayfasında gösterilen fiyattır.
+**Faturalandırma ve krediler** bölümünü açın, kaç krediye ihtiyacınız olduğunu seçin ve ödeme adımına geçin. Tek seferde 100’er artışlarla 200 ile 10.000 arasında kredi satın alabilirsiniz. Örneğin 1.000 kredi EGP 1.000 tutar. Ödeme, Mısırlı ödeme sağlayıcısı **Paymob** tarafından işlenir ve kartla veya Vodafone Cash ile ödeyebilirsiniz. Fiyatlar Mısır lirası cinsindendir ve değişebilir; geçerli olan her zaman faturalandırma sayfasında gösterilen fiyattır.
 
 Akeed kart veya cüzdan bilgilerinizi hiçbir zaman istemez ve saklamaz. Krediler, Paymob ödemeyi onayladıktan sonra bakiyenize eklenir.
 
@@ -90,7 +90,7 @@ Kendiniz eklediğiniz siparişlerde Akeed başka bir sistemde hiçbir şeyi değ
 | --- | --- |
 | Düşük bakiyeyle büyük bir içe aktarma başlatmak | Önce bakiyenizi kontrol edin. Krediniz içe aktarmadaki tüm siparişleri karşılamıyorsa Akeed başlatmaz. |
 | Müşteri onaylamadan kargoya vermek | Önce **Onaylandı** durumundaki siparişleri gönderin. |
-| Hatırlatmaların kredi kullandığını unutmak | Sipariş başına en fazla iki kredi hesaplayın. |
+| Hatırlatmaların kredi kullandığını unutmak | Sipariş başına en fazla 4 kredi hesaplayın. |
 | Online ödemesi yapılmış siparişlerin onaylanmasını beklemek | Yalnızca kapıda ödeme siparişleri onaylanır. |
 
 ## SSS

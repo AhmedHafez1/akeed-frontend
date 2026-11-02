@@ -65,7 +65,7 @@ Las tiendas Shopify se suscriben a un plan mensual que se cobra mediante Shopify
 
 ### ¿Cómo se cuentan los créditos?
 
-Un crédito es un mensaje de WhatsApp enviado a un cliente. Un recordatorio a un cliente que no ha respondido usa un segundo crédito. Si WhatsApp no acepta un mensaje, el crédito se devuelve automáticamente.
+1 crédito equivale a EGP 1, y cada mensaje de WhatsApp enviado a un cliente usa 2 créditos. Un recordatorio a un cliente que no ha respondido usa 2 créditos más. Si WhatsApp no acepta un mensaje, sus créditos se devuelven automáticamente.
 
 ### ¿Qué pasa al llegar al límite mensual de confirmaciones o al quedarse sin créditos?
 

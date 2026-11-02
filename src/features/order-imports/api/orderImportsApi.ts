@@ -186,6 +186,8 @@ export type OrderImportReleaseCounts = {
   held: number
   released: number
   withdrawn: number
+  /** Displayed credits one message for each held order would use. */
+  heldCredits: number
 }
 
 /** The verification lifecycle of the batch's orders, as the M8 pills group it. */
@@ -230,6 +232,8 @@ export type OrderImportStartQuote = {
   slotsRemaining: number | null
   estimatedCreditsMin: number
   estimatedCreditsMax: number
+  estimatedMessagesMin: number
+  estimatedMessagesMax: number
   ratePerMinute: number
   estimatedDurationMinutes: number
   quietHours: {

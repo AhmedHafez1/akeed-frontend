@@ -176,7 +176,7 @@ The same as for any other order: a follow-up, then **No reply**. See [Automation
 
 ### How many credits will an import use?
 
-One credit per message. A file of 80 ready orders uses 80 credits (EGP 160 at EGP 2.00 per credit), or up to 160 credits if follow-ups are on and customers do not reply.
+Two credits per message. A file of 80 ready orders uses 160 credits (EGP 160, since 1 credit is EGP 1), or up to 320 credits if follow-ups are on and customers do not reply.
 
 ### Can I download a report of rows that were skipped?
 

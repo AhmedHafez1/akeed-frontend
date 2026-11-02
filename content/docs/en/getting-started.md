@@ -113,7 +113,7 @@ Akeed sends a free test confirmation to your own number. Check that it arrives a
 
 ### Step 5: Keep Credits Available
 
-You start with 30 free credits. One credit is one WhatsApp message, and a follow-up costs one more. Open **Billing & credits** to buy more through Paymob with a card or Vodafone Cash.
+You start with 60 free credits, enough for 30 WhatsApp messages. 1 credit is EGP 1, each WhatsApp message uses 2 credits, and a follow-up uses 2 more. Open **Billing & credits** to buy more through Paymob with a card or Vodafone Cash.
 
 > [!WARNING]
 > When your credits run out, new confirmations stop until you buy more.

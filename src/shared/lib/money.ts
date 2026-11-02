@@ -144,12 +144,3 @@ export function formatAmount(
     .join('')
   return symbolThenAmount(symbol, number)
 }
-
-export function formatMoneyFromCredits(
-  credits: number,
-  unitPriceMinor: number,
-  currency: string,
-  locale: SupportedLocale
-) {
-  return formatMoney(credits * unitPriceMinor, currency, locale)
-}

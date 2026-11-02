@@ -30,9 +30,9 @@ function renderChip() {
 beforeEach(() => mockSummary({ availableCredits: 30 }))
 
 describe('CreditBalanceChip', () => {
-  it('shows the balance in messages and links to billing', () => {
+  it('shows the balance in credits and links to billing', () => {
     renderChip()
-    const link = screen.getByRole('link', { name: 'الرصيد 30 رسالة' })
+    const link = screen.getByRole('link', { name: 'الرصيد 30' })
     expect(link.getAttribute('href')).toBe('/ar/billing')
   })
 

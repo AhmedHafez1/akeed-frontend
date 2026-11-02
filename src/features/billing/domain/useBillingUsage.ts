@@ -12,7 +12,7 @@ export type BillingUsage =
   | {
       status: 'ready'
       usedThisMonth: number
-      /** Messages per local day over the last 14 days, today last. */
+      /** Credits per local day over the last 14 days, today last. */
       daily: number[]
       lastPurchase: PurchaseSummary | null
     }

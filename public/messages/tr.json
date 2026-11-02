@@ -202,7 +202,7 @@
     },
     "credit_usage": {
       "question": "Krediler tam olarak nasıl sayılır?",
-      "answer": "Bir Akeed hesabında (WooCommerce, EasyOrders veya bağlı mağaza yok), sipariş başına değil, müşteriye gönderilen her WhatsApp mesajı için bir kredi kullanılır. Yanıt vermeyen müşteriye gönderilen hatırlatma bir kredi daha kullanır; gönderilemeyen mesajın kredisi otomatik olarak iade edilir. Shopify mağazaları kredi kullanmaz: aylık bir plana abone olur ve Shopify faturası üzerinden öder."
+      "answer": "Bir Akeed hesabında (WooCommerce, EasyOrders veya bağlı mağaza yok), 1 kredi 1 EGP’ye eşittir ve sipariş başına değil, müşteriye gönderilen her WhatsApp mesajı için 2 kredi kullanılır. Yanıt vermeyen müşteriye gönderilen hatırlatma 2 kredi daha kullanır; gönderilemeyen mesajın kredisi otomatik olarak iade edilir. Shopify mağazaları kredi kullanmaz: aylık bir plana abone olur ve Shopify faturası üzerinden öder."
     }
   },
   "whatsapp_button": {
@@ -215,21 +215,22 @@
     "subtitle": "WooCommerce, EasyOrders ve mağazasız siparişler: gönderdiğiniz mesajlar kadar ödeyin. Shopify mağazaları abone olur ve Shopify içinden öder.",
     "account_title": "Akeed hesabı · kullandıkça öde",
     "account_audience": "WooCommerce ve EasyOrders mağazaları ile elle, dosyadan ve API ile eklenen siparişler için.",
-    "unit_text": "WhatsApp mesajı",
-    "unit_price_note": "Bir kredi, müşterinize gönderilen bir WhatsApp mesajıdır.",
-    "per_message": "WhatsApp mesajı başına",
+    "unit_text": "Kredi",
+    "unit_price_note": "1 kredi 1 EGP’ye eşittir. Akeed’den gönderilen bir WhatsApp mesajı 2 kredi kullanır.",
+    "per_credit": "kredi başına",
+    "message_cost": "Akeed’den gönderilen bir WhatsApp mesajı {credits} kredi kullanır ({price})",
     "grant_pill": "Kayıtta {count} ücretsiz mesaj",
-    "slider_label": "Kaç mesaja ihtiyacınız var?",
+    "slider_label": "Kaç krediye ihtiyacınız var?",
     "slider_value": "{count} kredi",
     "total_label": "Toplam",
     "calculator_orders": "{low}–{high} siparişi karşılar",
     "how_title": "Krediler nasıl kullanılır",
-    "credit_is_message_title": "Bir kredi bir mesajdır",
-    "credit_is_message_body": "Her WhatsApp mesajı tam olarak bir kredi kullanır.",
+    "credit_is_message_title": "1 kredi 1 EGP’dir",
+    "credit_is_message_body": "Akeed’den gönderilen her WhatsApp mesajı 2 kredi kullanır, yani bir mesajın maliyeti 2 EGP’dir.",
     "followup_title": "Takip mesajları da sayılır",
-    "followup_body": "Müşteri yanıt vermezse hatırlatma bir kredi daha kullanır.",
+    "followup_body": "Müşteri yanıt vermezse hatırlatma 2 kredi daha kullanır.",
     "rejected_title": "Başarısız gönderimler iade edilir",
-    "rejected_body": "Bir gönderim başarısız olursa kredi otomatik olarak hesabınıza geri döner.",
+    "rejected_body": "Bir gönderim başarısız olursa kredileri otomatik olarak hesabınıza geri döner.",
     "cta": "Ücretsiz hesabınızı oluşturun",
     "cta_note": "Kredi kartı gerekmez",
     "shopify_title": "Shopify mağazaları · aylık plan",
@@ -463,16 +464,16 @@
     "privacySection5Body": "Gizlilikle ilgili sorularınız için support@getakeed.com adresinden bize ulaşın.",
     "refundEyebrow": "Yasal",
     "refundTitle": "İade ve İptal Politikası",
-    "refundLastUpdated": "Son güncelleme: Ekim 2026",
-    "refundIntro": "Bu politika, Akeed’de iadelerin, mesaj kredilerinin ve abonelik iptallerinin nasıl işlediğini açıklar.",
+    "refundLastUpdated": "Son güncelleme: Kasım 2026",
+    "refundIntro": "Bu politika, Akeed’de iadelerin, kredilerin ve abonelik iptallerinin nasıl işlediğini açıklar.",
     "refundSection1Title": "1. Dijital Hizmetlerin Niteliği",
-    "refundSection1Body": "Akeed, Paymob üzerinden ödenen ön ödemeli WhatsApp sipariş doğrulama mesaj kredileri satar ve Shopify kullanan satıcılara aylık Shopify uygulama aboneliği sunar. Her doğrulama mesajı gönderildiğinde kredi kullanılır. WhatsApp bir mesajı kabul etmezse o mesajın kredisi otomatik olarak bakiyenize iade edilir.",
-    "refundSection2Title": "2. Mesaj Kredisi İadeleri",
-    "refundSection2Body": "Tamamlanan tüm mesaj kredisi satın alımları, bakiyenin tamamı kullanılsın veya kullanılmasın kesindir ve iade edilmez. Satın alınan kredilerin süresi dolmaz. Ödemeler Paymob tarafından işlenir; Akeed kart veya cüzdan bilgilerinizi saklamaz.",
+    "refundSection1Body": "Akeed, WhatsApp sipariş doğrulaması için Paymob üzerinden ödenen ön ödemeli krediler satar ve Shopify kullanan satıcılara aylık Shopify uygulama aboneliği sunar. 1 kredi EGP 1’e eşittir ve Akeed’in numarasından gönderilen her doğrulama mesajı 2 kredi kullanır. WhatsApp bir mesajı kabul etmezse o mesajın kredileri otomatik olarak bakiyenize iade edilir.",
+    "refundSection2Title": "2. Kredi İadeleri",
+    "refundSection2Body": "Tamamlanan tüm kredi satın alımları, bakiyenin tamamı kullanılsın veya kullanılmasın kesindir ve iade edilmez. Satın alınan kredilerin süresi dolmaz. Ödemeler Paymob tarafından işlenir; Akeed kart veya cüzdan bilgilerinizi saklamaz.",
     "refundSection3Title": "3. Aboneliğin İptali",
     "refundSection3Body": "Akeed Shopify uygulama aboneliği, Shopify yönetim panelinizdeki faturalandırma sayfasından dilediğiniz zaman iptal edilebilir. İptal, Shopify’ın kendi faturalandırma dönemi kurallarına tabidir ve içinde bulunulan faturalandırma dönemi için iade yapılmaz. Bağımsız hesapların aboneliği yoktur: yalnızca kredi satın aldığınızda ödeme yaparsınız, dolayısıyla iptal edilecek bir şey yoktur.",
     "refundSection4Title": "4. İptal Süreci",
-    "refundSection4Body": "Shopify satıcıları: iptal etmek için Akeed uygulamasını Shopify yönetim panelinizden kaldırın veya aboneliği Shopify faturalandırma ayarlarınızdan iptal edin. Kalan mesaj kredisi bakiyesi hesabınızda tutulur ve uygulamayı yeniden yüklerseniz kullanılabilir. Bağımsız hesaplar: Akeed’i kullanmayı ve kredi satın almayı dilediğiniz zaman bırakabilirsiniz. Hesabınızı kapatmak için 5. bölümdeki bilgilerden bize ulaşın.",
+    "refundSection4Body": "Shopify satıcıları: iptal etmek için Akeed uygulamasını Shopify yönetim panelinizden kaldırın veya aboneliği Shopify faturalandırma ayarlarınızdan iptal edin. Kalan kredi bakiyesi hesabınızda tutulur ve uygulamayı yeniden yüklerseniz kullanılabilir. Bağımsız hesaplar: Akeed’i kullanmayı ve kredi satın almayı dilediğiniz zaman bırakabilirsiniz. Hesabınızı kapatmak için 5. bölümdeki bilgilerden bize ulaşın.",
     "refundSection5Title": "5. İade Talepleri için İletişim",
     "refundSection5Body": "Faturalandırma anlaşmazlıkları, hatalı tahsil edilen ödemeler veya istisnai iade talepleri için support@getakeed.com ya da +201148675077 üzerinden bize ulaşın.",
     "homeLink": "Ana sayfaya dön",
@@ -1495,7 +1496,7 @@
       "greetingNoName": "Hoş geldiniz",
       "firstOrder": {
         "title": "İlk onay mesajınızı gerçek bir müşteriye gönderin",
-        "subtitle": "Siparişlerinizin Akeed’e nasıl ulaşacağını seçin. Bir sipariş eklediğiniz anda onay mesajını göndeririz; bu, bakiyenizden bir mesaj kullanır.",
+        "subtitle": "Siparişlerinizin Akeed’e nasıl ulaşacağını seçin. Bir sipariş eklediğiniz anda onay mesajını göndeririz; bu, bakiyenizden 2 kredi kullanır.",
         "manual": {
           "title": "Tek sipariş",
           "body": "WhatsApp, Instagram ve telefon siparişleri için. Yalnızca müşteri numarası, sipariş numarası ve tutar."
@@ -1506,8 +1507,8 @@
         },
         "storeLinkSoon": "Her siparişin otomatik gelmesi için çevrimiçi mağazanızı bağlama: yakında.",
         "zeroBalance": {
-          "title": "Bakiyeniz {count} mesaj",
-          "body": "Her onay bakiyenizden bir mesaj kullanır. İlk onayınızı göndermek için bakiye yükleyin.",
+          "title": "Bakiyeniz {count} kredi",
+          "body": "Her onay bakiyenizden 2 kredi kullanır. İlk onayınızı göndermek için bakiye yükleyin.",
           "action": "Bakiye yükle"
         }
       },
@@ -2468,7 +2469,7 @@
       },
       "stats": {
         "balanceLabel": "Şu anki bakiyeniz",
-        "balanceValue": "{count} mesaj",
+        "balanceValue": "{count} kredi",
         "balanceCaption": "Ücretsiz, ödeme kartı gerekmez",
         "priceLabel": "Ücretsiz kredilerden sonra",
         "priceCaption": "gönderilen WhatsApp mesajı başına",
@@ -2573,12 +2574,19 @@
     },
     "title": "Faturalandırma ve krediler",
     "subtitle": "Yalnızca gönderdiğimiz onay mesajları için ödeme yaparsınız. Aylık plan yok.",
+    "creditModelNotice": {
+      "title": "Bakiyenizdeki sayı iki katına çıktı. Değeri değişmedi.",
+      "body": "Artık 1 kredi 1 EGP’ye eşit ve Akeed’den gönderilen her WhatsApp mesajı 2 kredi kullanıyor. Bir mesajın maliyeti yine 2 EGP ve hiçbir para hareketi olmadı.",
+      "example": "Örneğin 100 kredi artık 200 kredi oldu ve yine 100 mesaj gönderiyor.",
+      "dismissFailed": "Kaydedilemedi. Tekrar deneyin.",
+      "dismiss": "Anladım"
+    },
     "description": "WhatsApp sipariş onayları için kullanılabilir kredilerinizi görün, güvenle daha fazlasını satın alın ve hesabınızdaki her hareketi inceleyin.",
     "threshold": "Düşük bakiye uyarısı: {count} kredi",
     "retry": "Tekrar dene",
     "balance": {
       "available": "Kullanılabilir bakiye",
-      "unit": "mesaj",
+      "unit": "kredi",
       "state": {
         "healthy": "Bakiye yeterli",
         "low": "Azalıyor",
@@ -2595,7 +2603,7 @@
       "usedThisMonth": "Bu ay kullanılan",
       "lastPurchase": "Son satın alma",
       "noPurchase": "Henüz satın alma yok",
-      "unitPrice": "Mesaj başına fiyat"
+      "unitPrice": "Kredi başına fiyat"
     },
     "status": {
       "active": "Etkin",
@@ -2620,11 +2628,11 @@
       "debtOutstanding": "Kapatılacak bakiye"
     },
     "alerts": {
-      "lowTitle": "{count, plural, one {Yalnızca 1 mesaj kaldı} other {Yalnızca {formatted} mesaj kaldı}}",
+      "lowTitle": "{count, plural, one {Yalnızca 1 kredi kaldı} other {Yalnızca {formatted} kredi kaldı}}",
       "lowDescription": "Yeni siparişlerin onaylanmaya devam etmesi için krediniz bitmeden yükleme yapın.",
       "zeroTitle": "Mesaj krediniz kalmadı",
       "zeroDescription": "Şu anda yeni siparişleri onaylatmıyoruz. Siparişleriniz ve verileriniz güvende; kredi yüklediğiniz anda mesajlar yeniden başlar.",
-      "debtTitle": "{count, plural, one {1 mesaj borcunuz var} other {{formatted} mesaj borcunuz var}}",
+      "debtTitle": "{count, plural, one {1 kredi borcunuz var} other {{formatted} kredi borcunuz var}}",
       "debtDescription": "Bu borç kapatılana kadar yeni siparişleri onaylatmıyoruz. Borcu kapatmak ve mesajları yeniden başlatmak için kredi yükleyin.",
       "suspendedTitle": "Faturalandırma askıya alındı",
       "suspendedDescription": "Satın alma ve mesaj gönderimi kullanılamıyor. Akeed destek ekibine ulaşın.",
@@ -2638,13 +2646,13 @@
     },
     "purchase": {
       "title": "Kredi satın al",
-      "description": "Kaç mesaj istediğinizi seçin. Mesaj başına tek sabit fiyat; kredilerin süresi dolmaz.",
+      "description": "Kaç kredi istediğinizi seçin. 1 kredi 1 EGP’ye eşittir, bir WhatsApp mesajı 2 kredi kullanır; kredilerin süresi dolmaz.",
       "quantity": "Kredi miktarı",
       "decrease": "Miktarı azalt",
       "increase": "Miktarı artır",
-      "rules": "{step} mesajlık adımlarla {min} ile {max} mesaj arası.",
+      "rules": "{step} kredilik adımlarla {min} ile {max} kredi arası.",
       "credits": "Krediler",
-      "unitPrice": "Mesaj başına fiyat",
+      "unitPrice": "Kredi başına fiyat",
       "total": "Toplam",
       "submit": "Güvenli ödeme oluştur",
       "creating": "Ödeme oluşturuluyor…",
@@ -2654,7 +2662,8 @@
       "pendingDescription": "İki kez ödeme yapmamak için yenisini başlatmadan önce durumunu kontrol edin.",
       "viewStatus": "Satın alma durumunu görüntüle",
       "errors": {
-        "whole": "Tam sayı olarak bir mesaj adedi girin.",
+        "whole": "Tam sayı olarak bir kredi adedi girin.",
+        "refresh": "Bu sayfa açıldığından beri fiyatlar değişti. Sayfayı yenileyip tekrar deneyin.",
         "range": "{min} ile {max} arasında seçin.",
         "step": "{step} sayısının katı olan bir değer seçin.",
         "network": "Ödeme isteği tamamlanamadı. Aynı satın alma denemesiyle güvenle yeniden deneyin.",
@@ -2662,10 +2671,10 @@
       },
       "chooseAmount": "Bir miktar seçin",
       "customLabel": "Veya başka bir miktar girin",
-      "unit": "mesaj",
+      "unit": "kredi",
       "summaryTitle": "Sipariş özeti",
-      "messages": "Mesajlar",
-      "balanceAfter": "Satın alma sonrası bakiye: <b>{count}</b> mesaj",
+      "messages": "Krediler",
+      "balanceAfter": "Satın alma sonrası bakiye: <b>{count}</b> kredi",
       "pay": "Öde: <amount>{value}</amount>",
       "payEmpty": "Öde",
       "paymobNote": "Ödemeyi Paymob’un güvenli sayfasında kartla veya Vodafone Cash ile tamamlarsınız. Akeed ödeme bilgilerinizi asla görmez ve saklamaz.",
@@ -2695,7 +2704,7 @@
       "description": "Doğrulanmış kredi bakiyesini alamadık. Faturalandırmayla ilgili bir işlem yapmadan önce tekrar deneyin."
     },
     "return": {
-      "credits": "Mesajlar",
+      "credits": "Krediler",
       "amount": "Tutar",
       "status": "Durum",
       "updated": "Son güncelleme",
@@ -2705,9 +2714,9 @@
       "newPurchase": "Yeni satın alma başlat",
       "refresh": "Durumu yenile",
       "refreshing": "Yenileniyor…",
-      "successTitle": "{count, plural, one {Bakiyenize <n>{value}</n> mesaj ekledik} other {Bakiyenize <n>{value}</n> mesaj ekledik}}",
-      "successBody": "{count, plural, one {Bakiyeniz artık <n>{value}</n> mesaj; yeni siparişler her zamanki gibi onaylanmaya devam ediyor.} other {Bakiyeniz artık <n>{value}</n> mesaj; yeni siparişler her zamanki gibi onaylanmaya devam ediyor.}}",
-      "successBodyNoBalance": "Mesajlar artık bakiyenizde.",
+      "successTitle": "{count, plural, one {Bakiyenize <n>{value}</n> kredi ekledik} other {Bakiyenize <n>{value}</n> kredi ekledik}}",
+      "successBody": "{count, plural, one {Bakiyeniz artık <n>{value}</n> kredi; yeni siparişler her zamanki gibi onaylanmaya devam ediyor.} other {Bakiyeniz artık <n>{value}</n> kredi; yeni siparişler her zamanki gibi onaylanmaya devam ediyor.}}",
+      "successBodyNoBalance": "Krediler artık bakiyenizde.",
       "title": {
         "pending": "Ödemeniz kontrol ediliyor",
         "stale": "Ödemenin onaylanması hâlâ bekleniyor",
@@ -2735,8 +2744,8 @@
       "label": "mesaj kredisi"
     },
     "balanceChip": {
-      "label": "Bakiye: {count} mesaj",
-      "value": "Bakiye <strong>{count}</strong> mesaj"
+      "label": "Bakiye: {count} kredi",
+      "value": "Bakiye <strong>{count}</strong> kredi"
     }
   },
   "orderImport": {
@@ -3162,8 +3171,8 @@
         "upTo": "Takip mesajlarıyla en fazla {max, number}",
         "noFollowUp": "Takip mesajı yok",
         "balance": "Gönderim sonrası bakiyeniz",
-        "of": "/ {available, number}",
-        "short": "{shortfall, number} eksik",
+        "of": "/ {available, number} kredi",
+        "short": "{shortfall, number} kredi eksik",
         "plan": "Planınızda kalan",
         "planOf": "/ {slots, number} (bu dönem)",
         "duration": "Tahmini süre",
@@ -3345,7 +3354,7 @@
         "autoConfirmOff": "Otomatik onay kapalı. Ayarlar’dan açana kadar mesaj gönderilmez.",
         "reminderOn": "{minutes} dakika yanıt gelmezse bir hatırlatma.",
         "reminderOff": "Hatırlatma yok.",
-        "noReplyOn": "{minutes} dakika sonra yanıt yok olarak işaretlenir. Akeed siparişi EasyOrders’da asla kendiliğinden iptal etmez.",
+        "noReplyOn": "{minutes} dakika sonra yanıt yok olarak işaretlenir. Akeed siparişi EasyOrders’da yalnızca otomatik iptali açarsanız kendiliğinden iptal eder.",
         "noReplyOff": "Siparişler otomatik olarak yanıt yok diye işaretlenmez.",
         "quietHoursOn": "{start} ile {end} arasında mesaj gönderilmez.",
         "quietHoursOff": "Sessiz saat yok.",
@@ -3500,7 +3509,7 @@
         "autoConfirmOff": "Otomatik onay kapalı. Ayarlar’dan açana kadar mesaj gönderilmez.",
         "reminderOn": "{minutes} dakika yanıt gelmezse bir hatırlatma.",
         "reminderOff": "Hatırlatma yok.",
-        "noReplyOn": "{minutes} dakika sonra yanıt yok olarak işaretlenir. Akeed siparişi WooCommerce’de asla kendiliğinden iptal etmez.",
+        "noReplyOn": "{minutes} dakika sonra yanıt yok olarak işaretlenir. Akeed siparişi WooCommerce’de yalnızca otomatik iptali açarsanız kendiliğinden iptal eder.",
         "noReplyOff": "Siparişler otomatik olarak yanıt yok diye işaretlenmez.",
         "quietHoursOn": "{start} ile {end} arasında mesaj gönderilmez.",
         "quietHoursOff": "Sessiz saat yok.",
@@ -3620,6 +3629,7 @@
       "WOOCOMMERCE_STORE_ADDRESS_NOT_PUBLIC": "Akeed bu adrese genel internet üzerinden ulaşamadı. Adresi kontrol edip tekrar deneyin.",
       "WOOCOMMERCE_STORE_REDIRECTS": "Bu adres başka bir adrese yönlendiriyor. Mağazanızın son adresini, www ile veya www olmadan, tarayıcıda göründüğü şekliyle tam olarak girin.",
       "WOOCOMMERCE_STORE_TLS_FAILED": "Mağazanızın güvenlik sertifikası geçerli değil. Barındırma sağlayıcınızdan düzeltmesini isteyip tekrar deneyin.",
+      "WOOCOMMERCE_PLAIN_PERMALINKS": "Mağaza adresiniz doğru, ancak WordPress’te kalıcı bağlantılar Plain olarak ayarlı ve bu durum bağlantıyı engelliyor. Settings > Permalinks bölümünü açın, Post name seçeneğini seçin ve kaydedin. Sitenizde önbellek varsa temizleyin, ardından aynı adresle yeniden bağlanın.",
       "WOOCOMMERCE_REST_NOT_FOUND": "Akeed bu adreste WooCommerce REST API’sini bulamadı. WordPress’te Settings > Permalinks bölümünü açıp Plain dışında herhangi bir seçeneği seçin ve WooCommerce’in güncel olduğundan emin olun.",
       "WOOCOMMERCE_REST_UNREACHABLE": "Mağazanız yanıt vermedi. Kapalı, bakım modunda olabilir veya dışarıdan gelen istekleri engelliyor olabilir. Daha sonra tekrar deneyin veya barındırma sağlayıcınıza danışın.",
       "WOOCOMMERCE_CREDENTIALS_REJECTED": "Mağazanız yeni API anahtarını kabul etmedi. Bazı barındırma kurulumları Authorization başlığını WordPress’e ulaşmadan önce kaldırır; barındırma sağlayıcınızdan buna izin vermesini isteyin. Ardından kullanılmayan anahtarı WooCommerce > Settings > Advanced > REST API altında silip yeniden bağlanın.",

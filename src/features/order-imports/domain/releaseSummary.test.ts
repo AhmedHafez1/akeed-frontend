@@ -25,7 +25,13 @@ function lifecycle(
   }
 }
 
-const allReleased = { total: 5, held: 0, released: 5, withdrawn: 0 }
+const allReleased = {
+  total: 5,
+  held: 0,
+  released: 5,
+  withdrawn: 0,
+  heldCredits: 0,
+}
 
 describe('releaseProgress', () => {
   it('does not count orders handed to the queue as sent (bug 3.1)', () => {
@@ -57,7 +63,7 @@ describe('releaseProgress', () => {
 
   it('treats every outcome after sending as delivered', () => {
     const progress = releaseProgress({
-      release: { total: 6, held: 1, released: 5, withdrawn: 0 },
+      release: { total: 6, held: 1, released: 5, withdrawn: 0, heldCredits: 2 },
       lifecycle: lifecycle({
         queued: 1,
         sent: 1,

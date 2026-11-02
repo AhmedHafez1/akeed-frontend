@@ -9,6 +9,7 @@ import { useBillingPage } from '../domain/useBillingPage'
 import { useBillingUsage } from '../domain/useBillingUsage'
 import { BalanceCard } from './components/BalanceCard'
 import { BillingAlert } from './components/BillingAlert'
+import { CreditModelNoticeBanner } from './components/CreditModelNoticeBanner'
 import { CheckoutSummaryCard } from './components/CheckoutSummaryCard'
 import { RechargePanel } from './components/RechargePanel'
 
@@ -93,6 +94,7 @@ export function BillingStandalonePage() {
 
   return (
     <PageShell>
+      <CreditModelNoticeBanner />
       <BalanceCard summary={state.summary} usage={usage} />
       <BillingAlert summary={state.summary} />
       <div className={buyGrid}>

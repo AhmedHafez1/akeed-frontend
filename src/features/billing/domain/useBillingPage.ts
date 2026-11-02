@@ -113,6 +113,11 @@ export function useBillingPage() {
     } catch (cause) {
       if (cause instanceof BillingApiError && cause.reference) {
         setPendingReference(cause.reference)
+      } else if (
+        cause instanceof BillingApiError &&
+        cause.code === 'BILLING_CLIENT_REFRESH_REQUIRED'
+      ) {
+        setCheckoutError('refresh')
       } else {
         setCheckoutError(cause instanceof BillingApiError ? 'api' : 'network')
       }

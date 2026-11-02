@@ -7,43 +7,44 @@ function envInt(value: string | undefined, fallback: number): number {
  * Standalone credit pricing, mirroring the backend's
  * `src/shared/config/standalone-credit-billing.config.ts`.
  *
- * The authenticated app never reads these — it reads the `/api/billing`
- * summary, which is authoritative. They exist only because the public marketing
- * page is unauthenticated and `/api/billing` sits behind `DualAuthGuard`, so
- * there is no endpoint for it to ask. Reading them through `NEXT_PUBLIC_*`
- * means a price change is a redeploy env var in both repos rather than a code
- * change in one.
+ * Quantities here are displayed credits: 1 credit = EGP 1, half the stored
+ * credit the backend counts. Signed-in amounts come from the `/api/billing`
+ * summary, which is authoritative; these exist because the public marketing
+ * and signup pages are unauthenticated and `/api/billing` sits behind
+ * `DualAuthGuard`. The in-app recharge tiles also share `CREDIT_PRESETS`.
+ * Reading them through `NEXT_PUBLIC_*` means a price change is a redeploy env
+ * var in both repos rather than a code change in one.
  */
 export const CREDIT_CURRENCY = 'EGP'
 
 export const CREDIT_UNIT_PRICE_MINOR = envInt(
   process.env.NEXT_PUBLIC_CREDIT_UNIT_PRICE_MINOR,
-  200
+  100
 )
 
 export const CREDIT_FREE_GRANT = envInt(
   process.env.NEXT_PUBLIC_CREDIT_FREE_GRANT,
-  30
+  60
 )
 
 export const CREDIT_PURCHASE_MIN = envInt(
   process.env.NEXT_PUBLIC_CREDIT_PURCHASE_MIN,
-  100
+  200
 )
 
 export const CREDIT_PURCHASE_MAX = envInt(
   process.env.NEXT_PUBLIC_CREDIT_PURCHASE_MAX,
-  5000
+  10000
 )
 
 export const CREDIT_PURCHASE_STEP = envInt(
   process.env.NEXT_PUBLIC_CREDIT_PURCHASE_STEP,
-  50
+  100
 )
 
 export const CREDIT_LOW_BALANCE_THRESHOLD = envInt(
   process.env.NEXT_PUBLIC_CREDIT_LOW_BALANCE_THRESHOLD,
-  10
+  20
 )
 
 /**
@@ -51,7 +52,19 @@ export const CREDIT_LOW_BALANCE_THRESHOLD = envInt(
  * `{min, max, step}` range, not packages. Shared with the in-app recharge tiles
  * so the two surfaces cannot drift.
  */
-export const CREDIT_PRESETS = [100, 250, 500, 1000] as const
+export const CREDIT_PRESETS = [200, 500, 1000, 2000] as const
+
+/** Credits one WhatsApp message from the Akeed number uses. */
+export const CREDITS_PER_MESSAGE = 2
+
+/** What the free grant buys, for copy that counts messages. */
+export const CREDIT_FREE_MESSAGES = Math.floor(
+  CREDIT_FREE_GRANT / CREDITS_PER_MESSAGE
+)
+
+/** One message from the Akeed number. */
+export const CREDIT_MESSAGE_PRICE_MINOR =
+  CREDIT_UNIT_PRICE_MINOR * CREDITS_PER_MESSAGE
 
 /*
  * The Shopify plan mirror that used to live here is gone. Shopify's monthly

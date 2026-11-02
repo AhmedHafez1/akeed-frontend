@@ -40,6 +40,7 @@ async function billingRequest<T>(
     cache: 'no-store',
     headers,
   })
+  if (response.status === 204) return undefined as T
   if (response.ok) return parseJsonResponse<T>(response)
 
   let body: BillingErrorBody = {}
@@ -98,16 +99,34 @@ export function fetchPurchases(
   )
 }
 
+export interface CreditModelNotice {
+  visible: boolean
+  canDismiss: boolean
+}
+
+export function fetchCreditModelNotice() {
+  return billingRequest<CreditModelNotice>('/api/billing/credit-model-notice')
+}
+
+export function dismissCreditModelNotice() {
+  return billingRequest<void>('/api/billing/credit-model-notice/dismiss', {
+    method: 'POST',
+  })
+}
+
 export function fetchPurchase(reference: string) {
   return billingRequest<PurchaseDetail>(
     `/api/billing/purchases/${encodeURIComponent(reference)}`
   )
 }
 
-export function createPurchase(quantity: number, idempotencyKey: string) {
+export function createPurchase(
+  displayQuantity: number,
+  idempotencyKey: string
+) {
   return billingRequest<CreatePurchaseResponse>('/api/billing/purchases', {
     method: 'POST',
     headers: { 'Idempotency-Key': idempotencyKey },
-    body: JSON.stringify({ quantity }),
+    body: JSON.stringify({ displayQuantity }),
   })
 }

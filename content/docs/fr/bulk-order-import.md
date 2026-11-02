@@ -176,7 +176,7 @@ La même chose que pour toute autre commande : une relance, puis **Sans répons
 
 ### Combien de crédits un import utilise-t-il ?
 
-Un crédit par message. Un fichier de 80 commandes prêtes utilise 80 crédits (160 EGP à 2,00 EGP le crédit), ou jusqu’à 160 crédits si les relances sont activées et que les clients ne répondent pas.
+Deux crédits par message. Un fichier de 80 commandes prêtes utilise 160 crédits (160 EGP, car 1 crédit vaut 1 EGP), ou jusqu’à 320 crédits si les relances sont activées et que les clients ne répondent pas.
 
 ### Peut-on télécharger un rapport des lignes ignorées ?
 

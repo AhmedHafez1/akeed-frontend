@@ -45,9 +45,9 @@ Les messages parviennent à vos clients depuis le numéro WhatsApp d’Akeed. Vo
 | Le client confirme | Le statut de la commande passe à **confirmed**. |
 | Le client annule | Le statut de la commande passe à **canceled**. |
 | Vous annulez depuis Akeed une commande sans réponse | Le statut de la commande passe à **canceled**. |
-| Le client ne répond pas | Rien. La commande est marquée **Sans réponse** dans Akeed uniquement. |
+| Le client ne répond pas | Rien, sauf si vous avez activé l’annulation automatique. La commande est marquée **Sans réponse** dans Akeed. |
 
-Akeed n’annule jamais de lui-même une commande dans EasyOrders. Il ne met aussi à jour qu’une commande encore en attente : si vous avez déjà modifié le statut de la commande, Akeed n’y touche pas.
+Akeed n’annule de lui-même une commande dans EasyOrders que si vous activez l’annulation automatique, qui reste désactivée jusque-là. Consultez [Règles d’automatisation](/docs/automation-rules). Il ne met aussi à jour qu’une commande encore en attente : si vous avez déjà modifié le statut de la commande, Akeed n’y touche pas.
 
 ## Garder la connexion en bon état
 

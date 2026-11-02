@@ -58,16 +58,16 @@ Standalone accounts do not use a monthly plan. You pay for what you use with **c
 
 | Rule | Details |
 | --- | --- |
-| One credit | One WhatsApp message sent to a customer. |
-| Follow-ups | A reminder to a customer who has not replied uses one more credit. |
-| Failed sends | If WhatsApp does not accept a message, the credit returns to your account automatically. |
-| Launch credits | New accounts receive **30 free credits** once, with no credit card. Your balance is shown in the app. |
-| Price | **EGP 2.00** per credit at the time of writing. A message and its follow-up cost EGP 4.00 together. |
+| One message | Each WhatsApp message sent to a customer uses 2 credits, so it costs EGP 2. |
+| Follow-ups | A reminder to a customer who has not replied uses 2 more credits. |
+| Failed sends | If WhatsApp does not accept a message, its credits return to your account automatically. |
+| Launch credits | New accounts receive **60 free credits** once, enough for 30 messages, with no credit card. Your balance is shown in the app. |
+| Price | **EGP 1.00** per credit at the time of writing. A message and its follow-up cost EGP 4.00 together. |
 | No subscription | You pay only when you buy credits. There is no monthly charge. |
 
 ### Buying credits
 
-Open **Billing & credits**, choose how many credits you need, and continue to checkout. You can buy from 100 to 5,000 credits at a time, in steps of 50. For example, 500 credits cost EGP 1,000. Payment is handled by **Paymob**, the Egyptian payment provider, and you can pay by card or with Vodafone Cash. Prices are in Egyptian pounds and may change, so the price shown on the billing page is always the one that applies.
+Open **Billing & credits**, choose how many credits you need, and continue to checkout. You can buy from 200 to 10,000 credits at a time, in steps of 100. For example, 1,000 credits cost EGP 1,000. Payment is handled by **Paymob**, the Egyptian payment provider, and you can pay by card or with Vodafone Cash. Prices are in Egyptian pounds and may change, so the price shown on the billing page is always the one that applies.
 
 Akeed never asks for or stores your card or wallet details. Credits are added to your balance after Paymob confirms the payment.
 
@@ -90,7 +90,7 @@ For orders you add yourself, Akeed does not change anything in another system. U
 | --- | --- |
 | Starting a large import with a low balance | Check your balance first. Akeed will not start unless your credits cover every order in the import. |
 | Shipping before the customer confirms | Ship **Confirmed** orders first. |
-| Forgetting that follow-ups use credits | Plan for up to two credits per order. |
+| Forgetting that follow-ups use credits | Plan for up to 4 credits per order. |
 | Expecting online-paid orders to be confirmed | Only COD orders are confirmed. |
 
 ## FAQ
