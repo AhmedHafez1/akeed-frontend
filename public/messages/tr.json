@@ -3690,5 +3690,91 @@
     "dismissError": "Bu kart kapatılamadı. Tekrar deneyin.",
     "sectionLabel": "İpuçları ve güncellemeler",
     "opensInNewTab": "yeni sekmede açılır"
+  },
+  "whatsappConnect": {
+    "title": "WhatsApp numaranızı bağlayın",
+    "intro": "Sipariş onaylarını Akeed’in numarası yerine kendi WhatsApp Business numaranızdan gönderin.",
+    "claiming": "Bağlantınız kontrol ediliyor...",
+    "missingHeading": "Akeed ayarlarından başlayın",
+    "missing": "Bu sayfa Akeed’deki bir bağlantıdan açılır. Akeed’de Ayarlar’a gidin ve WhatsApp’ı bağla’yı seçin.",
+    "before": {
+      "heading": "Bağlamadan önce",
+      "sending": "Kurulum tamamlandığında onaylar sizin numaranızdan gider ve müşteriler size oradan yanıt verir. O zamana kadar Akeed kendi numarasından göndermeye devam eder.",
+      "billing": "Numaranızdan gönderilen WhatsApp mesajları için Meta sizi doğrudan faturalandırır. Bu, Akeed’e ödediğinizden ayrıdır.",
+      "app": "Bu numara WhatsApp Business uygulamasını kullanıyorsa, uygulamayı bazı değişikliklerle kullanmaya devam edersiniz: toplu mesaj listeleri salt okunur olur, bire bir sohbetlerde süreli mesajlar, tek görüntülemelik mesajlar ve canlı konum kapanır, bağlı cihazlardan da siz yeniden bağlayana kadar çıkış yapılır.",
+      "activity": "Telefonunuzda WhatsApp Business uygulamasını açmaya devam edin. Uygulama yaklaşık iki hafta kullanılmazsa Meta numaranın Akeed ile bağlantısını kesebilir.",
+      "meta": "İşletmenizi ve numaranızı seçmek için bir Facebook penceresinde devam edeceksiniz."
+    },
+    "launch": "Facebook ile devam et",
+    "tryAgain": "Facebook’u yeniden aç",
+    "sdkLoading": "Facebook yükleniyor...",
+    "sdkFailed": "Facebook yüklenemedi. Bağlantınızı kontrol edin veya içerik engelleyicinizde facebook.com’a izin verin, ardından yeniden deneyin.",
+    "retrySdk": "Yeniden dene",
+    "inMeta": "Facebook penceresindeki adımları tamamlayın. Bu sayfayı açık tutun.",
+    "submitting": "Meta ile bağlantınız kontrol ediliyor...",
+    "connected": {
+      "heading": "Numaranız bağlandı",
+      "pending": "Kurulum henüz tamamlanmadı. Akeed mesaj şablonlarınızı hazırlıyor ve numaranız hazır olana kadar onaylar Akeed’in numarasından gitmeye devam ediyor.",
+      "close": "Bu sayfayı kapatıp Akeed’e dönebilirsiniz."
+    },
+    "cancelled": "Facebook penceresini bitirmeden kapattınız. Hiçbir şey bağlanmadı.",
+    "noCode": "Facebook son adımı onaylamadı. Pencereyi yeniden açın ve kapatmak yerine son ekranda Bitir’e tıklayın.",
+    "metaErrorHeading": "Facebook bağlantıyı tamamlayamadı",
+    "metaErrorCode": "Meta hata kodu: {code}",
+    "failedHeading": "Numaranız bağlanmadı",
+    "expired": "Bu sayfanın süresi doldu. Akeed’de Ayarlar’a gidin ve WhatsApp’ı bağla’yı yeniden seçin.",
+    "startAgain": "Yeniden başlamak için Akeed’de Ayarlar’a gidin ve WhatsApp’ı bağla’yı seçin.",
+    "errors": {
+      "ticketInvalid": "Bu bağlantının süresi doldu veya daha önce kullanıldı.",
+      "unavailable": "Kendi numaranızı bağlama özelliği hesabınızda kullanılamıyor.",
+      "ownerRequired": "Yalnızca hesap sahibi bir WhatsApp numarası bağlayabilir.",
+      "connectionExists": "Hesabınızda zaten bağlı veya kurulmakta olan bir WhatsApp numarası var.",
+      "numberAlreadyConnected": "Bu numara başka bir Akeed hesabına bağlı. Önce oradan bağlantısını kesin veya başka bir numara seçin.",
+      "codeRejected": "Meta oturum açmayı kabul etmedi. Çok uzun sürmüş olabilir.",
+      "providerUnavailable": "Meta zamanında yanıt vermedi.",
+      "tokenUnverified": "Akeed ihtiyaç duyduğu WhatsApp izinlerini almadı. Bağlanırken Facebook’un istediği tüm izinleri verin.",
+      "assetUnverified": "Akeed seçtiğiniz WhatsApp hesabına ve numaraya erişimi doğrulayamadı.",
+      "assetAmbiguous": "Birden fazla WhatsApp hesabı veya numarası paylaşıldı. Bağlanırken yalnızca birini seçin.",
+      "network": "Akeed’e ulaşılamadı. Bağlantınızı kontrol edip yeniden deneyin.",
+      "default": "Bağlanırken bir sorun oluştu."
+    },
+    "metaErrors": {
+      "sharedWithPartner": "Bu WhatsApp Business hesabı zaten başka bir sağlayıcıya bağlı. WhatsApp Business uygulamasında o sağlayıcının bağlantısını kesin, ardından yeniden deneyin.",
+      "notEligible": "Bu numara henüz bağlanamıyor. Meta önce WhatsApp Business uygulamasında bu numarada daha fazla etkinlik görmek istiyor.",
+      "updateApp": "Telefonunuzdaki WhatsApp Business uygulamasını en son sürüme güncelleyin, ardından yeniden deneyin.",
+      "registeredElsewhere": "Bu numara zaten bir işletme platformuna bağlı. WhatsApp Business uygulamasında bağlantısını kesin, 15 dakika bekleyin, ardından yeniden deneyin.",
+      "regionUnavailable": "Meta bunu henüz bu ülkedeki numaralar için sunmuyor. Başka bir numara deneyin.",
+      "tooManyAttempts": "Çok fazla deneme yapıldı. Birkaç dakika bekleyin, ardından yeniden deneyin.",
+      "twoFactorRequired": "Meta, Facebook hesabınızda iki adımlı doğrulama istiyor. Etkinleştirin, ardından yeniden deneyin.",
+      "default": "Facebook bir sorun bildirdi. Yeniden deneyin, sorun sürerse Akeed destek ekibiyle iletişime geçin."
+    },
+    "steps": {
+      "label": "İlerleme",
+      "review": "İnceleme",
+      "connect": "Facebook ile bağlan",
+      "setup": "Kurulum",
+      "done": "tamamlandı"
+    },
+    "yourNumber": "Numaranız",
+    "waiting": "Facebook bekleniyor",
+    "setupPending": "Kurulum bekliyor",
+    "timeline": {
+      "label": "Sırada ne var",
+      "verified": "Numara doğrulandı",
+      "templates": "Mesaj şablonları Meta tarafından onaylandı",
+      "sending": "Onaylar numaranızdan gönderilir",
+      "done": "Tamam",
+      "next": "Sıradaki",
+      "afterApproval": "Onaydan sonra"
+    },
+    "card": {
+      "heading": "Kendi WhatsApp numaranız",
+      "description": "Onayları kendi WhatsApp Business numaranızdan gönderin. Bağlama, Facebook ile devam edeceğiniz yeni bir sayfa açar.",
+      "action": "WhatsApp’ı bağla",
+      "opening": "Açılıyor...",
+      "opened": "Bağlantı sayfası yeni bir sekmede açıldı.",
+      "blocked": "Tarayıcınız yeni sekmeyi engelledi.",
+      "openLink": "Bağlantı sayfasını aç"
+    }
   }
 }

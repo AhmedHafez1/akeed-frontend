@@ -295,6 +295,18 @@ export function uploadWithAuth(
   return orderImportFixtureUpload(options)
 }
 
+/** Same origin: the connect page's ticket requests reach this app's route handlers. */
+export function getApiBaseUrl(): string {
+  return ''
+}
+
+const WHATSAPP_SENDER_FIXTURE = {
+  available: true,
+  appId: '999653349077771',
+  configId: '2344392272632365',
+  canConnect: true,
+}
+
 export const api = {
   async patch<T>(url: string, data?: unknown): Promise<T> {
     if (isSettingsBillingFixture())
@@ -302,6 +314,7 @@ export const api = {
     throw new Error(`Blocked fixture PATCH: ${url}`)
   },
   async get<T>(url: string): Promise<T> {
+    if (url === '/api/whatsapp-sender') return WHATSAPP_SENDER_FIXTURE as T
     if (isFirstRunFixture()) return firstRunApiGet<T>(url)
     if (isSettingsBillingFixture()) return settingsBillingApi<T>('GET', url)
     if (isEmbeddedDashboardFixture())
@@ -359,6 +372,13 @@ export const api = {
     data?: unknown,
     options: RequestInit = {}
   ): Promise<T> {
+    if (url === '/api/whatsapp-sender/connect-ticket') {
+      const locale = (data as { locale?: string } | undefined)?.locale ?? 'en'
+      return {
+        connectUrl: `${window.location.origin}/${locale}/whatsapp-connect?ticket=${'T'.repeat(43)}`,
+        expiresAt: new Date(Date.now() + 600_000).toISOString(),
+      } as T
+    }
     if (isEmbeddedDashboardFixture())
       return embeddedDashboardRequest<T>('POST', url, data)
     if (isOrderSyncFixture()) return orderSyncRequest<T>('POST', url, data)

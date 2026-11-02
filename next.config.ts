@@ -37,6 +37,20 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        // The connect page arrives with a one-time ticket in its address.
+        source: '/:locale/whatsapp/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'private, no-store',
+          },
+          {
+            key: 'X-Robots-Tag',
+            value: 'noindex, nofollow',
+          },
+        ],
+      },
+      {
         source: '/:path*',
         headers: [
           {

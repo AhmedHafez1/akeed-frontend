@@ -3690,5 +3690,91 @@
     "dismissError": "No se pudo descartar esta tarjeta. Inténtalo de nuevo.",
     "sectionLabel": "Consejos y novedades",
     "opensInNewTab": "se abre en una pestaña nueva"
+  },
+  "whatsappConnect": {
+    "title": "Conecta tu número de WhatsApp",
+    "intro": "Envía las confirmaciones de pedidos desde tu propio número de WhatsApp Business en lugar del de Akeed.",
+    "claiming": "Comprobando tu enlace...",
+    "missingHeading": "Empieza desde la configuración de Akeed",
+    "missing": "Esta página se abre desde un enlace de Akeed. En Akeed, ve a Configuración y elige Conectar WhatsApp.",
+    "before": {
+      "heading": "Antes de conectar",
+      "sending": "Cuando termine la configuración, las confirmaciones saldrán desde tu número y los clientes te responderán allí. Hasta entonces, Akeed sigue enviando desde su propio número.",
+      "billing": "Meta te cobra directamente los mensajes de WhatsApp enviados desde tu número. Es aparte de lo que pagas a Akeed.",
+      "app": "Si este número usa la app WhatsApp Business, podrás seguir usándola con algunos cambios: las listas de difusión pasan a ser de solo lectura, los mensajes temporales, los de visualización única y la ubicación en tiempo real se desactivan en los chats individuales, y los dispositivos vinculados se desconectan hasta que los vuelvas a vincular.",
+      "activity": "Sigue abriendo la app WhatsApp Business en tu teléfono. Si pasa unas dos semanas sin usarse, Meta puede desconectar el número de Akeed.",
+      "meta": "Continuarás en una ventana de Facebook para elegir tu negocio y tu número."
+    },
+    "launch": "Continuar con Facebook",
+    "tryAgain": "Abrir Facebook de nuevo",
+    "sdkLoading": "Cargando Facebook...",
+    "sdkFailed": "No se pudo cargar Facebook. Revisa tu conexión o permite facebook.com en tu bloqueador de contenido y vuelve a intentarlo.",
+    "retrySdk": "Reintentar",
+    "inMeta": "Completa los pasos en la ventana de Facebook. Mantén esta página abierta.",
+    "submitting": "Comprobando tu conexión con Meta...",
+    "connected": {
+      "heading": "Tu número está conectado",
+      "pending": "La configuración aún no ha terminado. Akeed está preparando tus plantillas de mensajes y las confirmaciones seguirán saliendo desde el número de Akeed hasta que tu número esté listo.",
+      "close": "Puedes cerrar esta página y volver a Akeed."
+    },
+    "cancelled": "Cerraste la ventana de Facebook antes de terminar. No se conectó nada.",
+    "noCode": "Facebook no confirmó el último paso. Ábrelo de nuevo y haz clic en Finalizar en la última pantalla en lugar de cerrar la ventana.",
+    "metaErrorHeading": "Facebook no pudo completar la conexión",
+    "metaErrorCode": "Código de error de Meta: {code}",
+    "failedHeading": "Tu número no se conectó",
+    "expired": "Esta página ha caducado. En Akeed, ve a Configuración y elige Conectar WhatsApp otra vez.",
+    "startAgain": "En Akeed, ve a Configuración y elige Conectar WhatsApp para empezar de nuevo.",
+    "errors": {
+      "ticketInvalid": "Este enlace ha caducado o ya se usó.",
+      "unavailable": "Conectar tu propio número no está disponible para tu cuenta.",
+      "ownerRequired": "Solo el propietario de la cuenta puede conectar un número de WhatsApp.",
+      "connectionExists": "Tu cuenta ya tiene un número de WhatsApp conectado o en configuración.",
+      "numberAlreadyConnected": "Este número ya está conectado a otra cuenta de Akeed. Desconéctalo allí primero o elige otro número.",
+      "codeRejected": "Meta no aceptó el inicio de sesión. Puede que haya tardado demasiado.",
+      "providerUnavailable": "Meta no respondió a tiempo.",
+      "tokenUnverified": "Akeed no recibió los permisos de WhatsApp que necesita. Acepta todos los permisos que pide Facebook al conectar.",
+      "assetUnverified": "Akeed no pudo confirmar el acceso a la cuenta de WhatsApp y al número que elegiste.",
+      "assetAmbiguous": "Se compartió más de una cuenta o número de WhatsApp. Elige solo uno al conectar.",
+      "network": "No se pudo contactar con Akeed. Revisa tu conexión y vuelve a intentarlo.",
+      "default": "Algo salió mal al conectar."
+    },
+    "metaErrors": {
+      "sharedWithPartner": "Esta cuenta de WhatsApp Business ya está conectada a otro proveedor. Desconecta ese proveedor en la app WhatsApp Business y vuelve a intentarlo.",
+      "notEligible": "Este número todavía no puede conectarse. Meta necesita ver más actividad en él en la app WhatsApp Business.",
+      "updateApp": "Actualiza la app WhatsApp Business de tu teléfono a la última versión y vuelve a intentarlo.",
+      "registeredElsewhere": "Este número ya está conectado a una plataforma empresarial. Desconéctalo en la app WhatsApp Business, espera 15 minutos y vuelve a intentarlo.",
+      "regionUnavailable": "Meta aún no ofrece esto para números de este país. Prueba con otro número.",
+      "tooManyAttempts": "Demasiados intentos. Espera unos minutos y vuelve a intentarlo.",
+      "twoFactorRequired": "Meta exige la autenticación en dos pasos en tu cuenta de Facebook. Actívala y vuelve a intentarlo.",
+      "default": "Facebook informó un problema. Vuelve a intentarlo y, si continúa, contacta con el soporte de Akeed."
+    },
+    "steps": {
+      "label": "Progreso",
+      "review": "Revisar",
+      "connect": "Conectar con Facebook",
+      "setup": "Configuración",
+      "done": "completado"
+    },
+    "yourNumber": "Tu número",
+    "waiting": "Esperando a Facebook",
+    "setupPending": "Configuración pendiente",
+    "timeline": {
+      "label": "Qué pasa después",
+      "verified": "Número verificado",
+      "templates": "Plantillas de mensajes aprobadas por Meta",
+      "sending": "Confirmaciones enviadas desde tu número",
+      "done": "Hecho",
+      "next": "Siguiente",
+      "afterApproval": "Tras la aprobación"
+    },
+    "card": {
+      "heading": "Tu propio número de WhatsApp",
+      "description": "Envía las confirmaciones desde tu propio número de WhatsApp Business. Al conectar se abre una página nueva donde continúas con Facebook.",
+      "action": "Conectar WhatsApp",
+      "opening": "Abriendo...",
+      "opened": "La página de conexión se abrió en una pestaña nueva.",
+      "blocked": "Tu navegador bloqueó la pestaña nueva.",
+      "openLink": "Abrir la página de conexión"
+    }
   }
 }

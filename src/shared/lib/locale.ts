@@ -279,6 +279,24 @@ export const PUBLIC_ROUTES = [
 ] as const
 
 /**
+ * The page that connects a merchant's own WhatsApp number. It opens in its
+ * own tab with a one-time ticket instead of a session, so it gets a bare frame
+ * with no login guard, no app shell and no analytics.
+ */
+export const WHATSAPP_CONNECT_ROUTE = '/whatsapp/connect'
+
+export function isWhatsappConnectRoute(
+  pathname: string | null | undefined
+): boolean {
+  if (!pathname) return false
+  const withoutLocale = '/' + pathname.split('/').slice(2).join('/')
+  return (
+    withoutLocale === WHATSAPP_CONNECT_ROUTE ||
+    withoutLocale === `${WHATSAPP_CONNECT_ROUTE}/`
+  )
+}
+
+/**
  * Check if a pathname (with locale) matches a public marketing route
  */
 export function isPublicRoute(pathname: string | null | undefined): boolean {

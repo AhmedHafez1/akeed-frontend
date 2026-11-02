@@ -2,6 +2,8 @@
 
 import { type ReactNode, Suspense } from 'react'
 import dynamic from 'next/dynamic'
+import { usePathname } from 'next/navigation'
+import { isWhatsappConnectRoute } from '@/shared/lib/locale'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { QueryProvider } from '@/shared/query/QueryProvider'
 import { StandaloneLayout } from './StandaloneLayout'
@@ -36,8 +38,11 @@ interface AppLayoutProps {
 
 function AppLayoutInner({ children }: AppLayoutProps) {
   const { isEmbedded } = useAkeedMode()
+  const pathname = usePathname()
 
-  if (isEmbedded) {
+  // Opened top-level from Shopify too, where Polaris and App Bridge do not
+  // apply: it always takes the standalone frame.
+  if (isEmbedded && !isWhatsappConnectRoute(pathname)) {
     return <EmbeddedLayout>{children}</EmbeddedLayout>
   }
 
