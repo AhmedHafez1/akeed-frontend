@@ -483,7 +483,7 @@ describe('WooCommerceConnectPage setup and recovery', () => {
         'Messages go out from Akeed’s WhatsApp number.'
       )
       expect(section.textContent).toContain(
-        'Akeed never cancels the order in WooCommerce by itself.'
+        'Akeed cancels the order in WooCommerce by itself only if you turn on automatic cancellation.'
       )
       expect(section.textContent).not.toContain('Fix what’s flagged above')
       expect(sendTest(section).disabled).toBe(false)
