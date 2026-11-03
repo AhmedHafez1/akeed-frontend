@@ -17,21 +17,21 @@ function TrackedTipCard({
 }: {
   view: TipCardView
   canDismiss: boolean
-  onSeen: (id: string) => void
-  onAction: (id: string) => void
-  onDismiss: (id: string) => void
+  onSeen: (id: string, generation?: number) => void
+  onAction: (id: string, generation?: number) => void
+  onDismiss: (id: string, generation?: number) => void
 }) {
   const ref = useRef<HTMLElement>(null)
   const id = view.card.id
-  useSeenOnce(ref, () => onSeen(id))
+  useSeenOnce(ref, () => onSeen(id, view.card.delivery_generation ?? 1))
   return (
     <TipCard
       ref={ref}
       card={view.card}
       link={view.link}
       canDismiss={canDismiss}
-      onAction={() => onAction(id)}
-      onDismiss={() => onDismiss(id)}
+      onAction={() => onAction(id, view.card.delivery_generation ?? 1)}
+      onDismiss={() => onDismiss(id, view.card.delivery_generation ?? 1)}
     />
   )
 }
@@ -62,7 +62,7 @@ export function TipsSection({
     >
       {tips.cards.map((view) => (
         <TrackedTipCard
-          key={view.card.id}
+          key={view.card.id + ':' + (view.card.delivery_generation ?? 1)}
           view={view}
           canDismiss={tips.canDismiss}
           onSeen={tips.onSeen}

@@ -52,6 +52,86 @@ function setup(
 }
 
 describe('useTipCards read status', () => {
+  it('records a new view for a reissued generation without accepting an old view response', async () => {
+    let finishOld!: (value: { recorded: boolean }) => void
+    auth.api.post.mockReturnValueOnce(
+      new Promise((resolve) => {
+        finishOld = resolve
+      })
+    )
+    const { result, client, data } = setup()
+    act(() => result.current.onSeen('one', 1))
+    const next = {
+      ...data,
+      cards: data.cards.map((card) => ({
+        ...card,
+        delivery_generation: 2,
+        first_viewed_at: null,
+      })),
+    }
+    act(() => client.setQueryData(queryKeys.tips.cards('en'), next))
+    await waitFor(() =>
+      expect(result.current.cards[0].card.delivery_generation).toBe(2)
+    )
+    await act(async () => {
+      finishOld({ recorded: true })
+      await Promise.resolve()
+    })
+    expect(result.current.cards[0].card.first_viewed_at).toBeNull()
+    act(() => result.current.onSeen('one', 2))
+    await waitFor(() =>
+      expect(result.current.cards[0].card.first_viewed_at).toEqual(
+        expect.any(String)
+      )
+    )
+    expect(auth.api.post).toHaveBeenCalledWith(
+      '/api/tips/one/view',
+      { delivery_generation: 2 },
+      { keepalive: true }
+    )
+  })
+
+  it('keeps a server-ignored view unread', async () => {
+    auth.api.post.mockResolvedValue({ recorded: false })
+    const { result } = setup()
+    act(() => result.current.onSeen('one', 1))
+    await act(async () => {
+      await Promise.resolve()
+    })
+    expect(result.current.cards[0].card.first_viewed_at).toBeNull()
+  })
+
+  it('does not roll a newer delivery back after an old dismissal fails', async () => {
+    const warning = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    let failOld!: (reason: unknown) => void
+    auth.api.post.mockReturnValueOnce(
+      new Promise((_resolve, reject) => {
+        failOld = reject
+      })
+    )
+    const { result, client, data } = setup()
+    act(() => result.current.onDismiss('one', 1))
+    await waitFor(() => expect(result.current.cards).toHaveLength(0))
+    act(() =>
+      client.setQueryData(queryKeys.tips.cards('en'), {
+        ...data,
+        cards: data.cards.map((card) => ({
+          ...card,
+          delivery_generation: 2,
+          first_viewed_at: null,
+        })),
+      })
+    )
+    await act(async () => {
+      failOld(new Error('Offline'))
+      await Promise.resolve()
+    })
+    await waitFor(() =>
+      expect(result.current.cards[0].card.delivery_generation).toBe(2)
+    )
+    expect(result.current.cards[0].card.first_viewed_at).toBeNull()
+    warning.mockRestore()
+  })
   beforeEach(() => {
     auth.api.post.mockResolvedValue({ recorded: true })
   })
@@ -158,7 +238,9 @@ describe('useTipCards read status', () => {
     act(() => result.current.onDismiss('new'))
     await waitFor(() => expect(result.current.banner?.card.id).toBe('old'))
     expect(result.current.cards.map((view) => view.card.id)).toEqual(['old'])
-    expect(auth.api.post).toHaveBeenCalledWith('/api/tips/new/dismiss')
+    expect(auth.api.post).toHaveBeenCalledWith('/api/tips/new/dismiss', {
+      delivery_generation: 1,
+    })
   })
 
   it('restores the banner and card when permanent dismissal fails', async () => {

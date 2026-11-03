@@ -13,9 +13,9 @@ import { TYPE_TONES } from './TipEntryEmbedded'
 export interface TipBannerEmbeddedProps {
   view: TipCardView | null
   canDismiss: boolean
-  onSeen: (id: string) => void
-  onAction: (id: string) => void
-  onDismiss: (id: string) => void
+  onSeen: (id: string, generation?: number) => void
+  onAction: (id: string, generation?: number) => void
+  onDismiss: (id: string, generation?: number) => void
 }
 
 /**
@@ -26,7 +26,13 @@ export interface TipBannerEmbeddedProps {
 export function TipBannerEmbedded({ view, ...props }: TipBannerEmbeddedProps) {
   if (!view) return null
   // A new banner is a new element, so its view is counted on its own.
-  return <BannerLine key={view.card.id} view={view} {...props} />
+  return (
+    <BannerLine
+      key={view.card.id + ':' + (view.card.delivery_generation ?? 1)}
+      view={view}
+      {...props}
+    />
+  )
 }
 
 function BannerLine({
@@ -40,7 +46,11 @@ function BannerLine({
   const router = useRouter()
   const seenRef = useRef<HTMLElement>(null)
   const { card, link } = view
-  useTipReadVisibility(seenRef, () => onSeen(card.id), !card.first_viewed_at)
+  useTipReadVisibility(
+    seenRef,
+    () => onSeen(card.id, card.delivery_generation ?? 1),
+    !card.first_viewed_at
+  )
 
   return (
     <aside ref={seenRef} aria-label={t('bannerLabel')}>
@@ -70,7 +80,7 @@ function BannerLine({
                 <Button
                   variant="plain"
                   onClick={() => {
-                    onAction(card.id)
+                    onAction(card.id, card.delivery_generation ?? 1)
                     router.push(link.href)
                   }}
                 >
@@ -84,7 +94,9 @@ function BannerLine({
                   variant="plain"
                   url={link.href}
                   target="_blank"
-                  onClick={() => onAction(card.id)}
+                  onClick={() =>
+                    onAction(card.id, card.delivery_generation ?? 1)
+                  }
                   accessibilityLabel={`${link.label} (${t('opensInNewTab')})`}
                 >
                   {link.label}
@@ -97,7 +109,7 @@ function BannerLine({
               variant="tertiary"
               icon={XIcon}
               accessibilityLabel={t('dismiss', { title: card.title })}
-              onClick={() => onDismiss(card.id)}
+              onClick={() => onDismiss(card.id, card.delivery_generation ?? 1)}
             />
           )}
         </InlineStack>

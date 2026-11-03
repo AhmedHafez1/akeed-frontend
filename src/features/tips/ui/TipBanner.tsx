@@ -14,9 +14,9 @@ import { TIP_TYPE_BADGES } from './TipCard'
 export interface TipBannerProps {
   view: TipCardView
   canDismiss: boolean
-  onSeen: (id: string) => void
-  onAction: (id: string) => void
-  onDismiss: (id: string) => void
+  onSeen: (id: string, generation?: number) => void
+  onAction: (id: string, generation?: number) => void
+  onDismiss: (id: string, generation?: number) => void
   className?: string
 }
 
@@ -37,7 +37,7 @@ export function TipBanner({
   const ref = useRef<HTMLElement>(null)
   const { card, link } = view
   const { icon: BadgeIcon, tone } = TIP_TYPE_BADGES[card.type]
-  useSeenOnce(ref, () => onSeen(card.id))
+  useSeenOnce(ref, () => onSeen(card.id, card.delivery_generation ?? 1))
 
   return (
     <aside
@@ -66,7 +66,7 @@ export function TipBanner({
         {link?.kind === 'internal' && (
           <Link
             href={link.href}
-            onClick={() => onAction(card.id)}
+            onClick={() => onAction(card.id, card.delivery_generation ?? 1)}
             className={cn(
               akLink,
               'text-ak-caption max-w-[45%] min-w-0 shrink-0'
@@ -81,7 +81,7 @@ export function TipBanner({
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`${link.label} (${t('opensInNewTab')})`}
-            onClick={() => onAction(card.id)}
+            onClick={() => onAction(card.id, card.delivery_generation ?? 1)}
             className={cn(
               akLink,
               'text-ak-caption max-w-[45%] min-w-0 shrink-0'
@@ -98,7 +98,7 @@ export function TipBanner({
       {canDismiss && (
         <button
           type="button"
-          onClick={() => onDismiss(card.id)}
+          onClick={() => onDismiss(card.id, card.delivery_generation ?? 1)}
           aria-label={t('dismiss', { title: card.title })}
           title={t('dismiss', { title: card.title })}
           className={cn(
@@ -128,7 +128,9 @@ export function TipBannerSlot({ className }: { className?: string }) {
   return (
     <TipBanner
       // A new banner is a new element, so its view is counted on its own.
-      key={tips.banner.card.id}
+      key={
+        tips.banner.card.id + ':' + (tips.banner.card.delivery_generation ?? 1)
+      }
       view={tips.banner}
       canDismiss={tips.canDismiss}
       onSeen={tips.onSeen}

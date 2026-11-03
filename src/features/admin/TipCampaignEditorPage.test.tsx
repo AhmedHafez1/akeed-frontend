@@ -25,6 +25,9 @@ const api = vi.hoisted(() => ({
   publishTipCampaign: vi.fn(),
   changeTipLifecycle: vi.fn(),
   setTipBanner: vi.fn(),
+  getTipRecipientOptions: vi.fn(),
+  getTipDeliveryHistory: vi.fn(),
+  changeTipRecipients: vi.fn(),
 }))
 vi.mock('./adminTipsApi', () => api)
 
@@ -99,6 +102,9 @@ const recipients = {
   items: [
     {
       org_id: 'o1',
+      delivery_generation: 1,
+      eligible: true,
+      removed_at: null,
       organization_name: 'Lahore Org',
       store_name: 'Lahore Store',
       shop_domain: 'lahore.myshopify.com',
@@ -115,6 +121,14 @@ const recipients = {
 
 describe('Tips campaign editor', () => {
   beforeEach(() => {
+    api.getTipRecipientOptions.mockResolvedValue({
+      items: [],
+      next_cursor: null,
+    })
+    api.getTipDeliveryHistory.mockResolvedValue({
+      items: [],
+      next_before: null,
+    })
     api.getTipOptions.mockResolvedValue(OPTIONS)
     api.getTipRecipients.mockResolvedValue(recipients)
     api.searchTipOrganizations.mockResolvedValue({
@@ -279,6 +293,143 @@ describe('Tips campaign editor', () => {
     expect(api.updateTipCampaign).not.toHaveBeenCalled()
     expect(api.reviewTipCampaign).not.toHaveBeenCalled()
     expect(toggle.getAttribute('aria-describedby')).toBeTruthy()
+  })
+
+  it('preserves unsaved text across recipient revision changes and saves with the new revision', async () => {
+    const published = campaign({
+      status: 'published',
+      effective_status: 'published',
+      published_at: '2026-11-01T10:00:00Z',
+    })
+    const changed = { ...published, revision: 3 }
+    api.getTipCampaign
+      .mockResolvedValueOnce(published)
+      .mockResolvedValue(changed)
+    api.getTipRecipients.mockResolvedValue({
+      ...recipients,
+      items: recipients.items.map((row) => ({
+        ...row,
+        dismissed_at: '2026-11-01T11:00:00Z',
+      })),
+    })
+    api.changeTipRecipients.mockResolvedValue({
+      campaign: changed,
+      changed: 1,
+      unchanged: 0,
+    })
+    api.updateTipCampaign.mockResolvedValue({
+      ...changed,
+      name: 'Unsaved name',
+      revision: 4,
+    })
+    renderAdmin(<TipCampaignEditorPage id="c1" />, 'en')
+    const name = (await screen.findByLabelText(
+      en.adminTips.editor.name
+    )) as HTMLInputElement
+    fireEvent.change(name, { target: { value: 'Unsaved name' } })
+    fireEvent.click(
+      await screen.findByRole('checkbox', { name: 'Select Lahore Store' })
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'Show again (1)' }))
+    fireEvent.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: 'Show again (1)',
+      })
+    )
+    await waitFor(() => expect(api.getTipCampaign).toHaveBeenCalledTimes(2))
+    expect(name.value).toBe('Unsaved name')
+    fireEvent.click(
+      screen.getByRole('button', { name: en.adminTips.editor.save })
+    )
+    await waitFor(() =>
+      expect(api.updateTipCampaign).toHaveBeenCalledWith(
+        'c1',
+        expect.objectContaining({ revision: 3, name: 'Unsaved name' })
+      )
+    )
+  })
+
+  it('keeps unsaved content when a campaign refresh fails', async () => {
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const draft = campaign()
+    api.getTipCampaign
+      .mockResolvedValueOnce(draft)
+      .mockRejectedValueOnce(new Error('Offline'))
+    api.setTipBanner.mockResolvedValue({ ...draft, show_as_banner: true })
+    renderAdmin(<TipCampaignEditorPage id="c1" />, 'en')
+    const name = (await screen.findByLabelText(
+      en.adminTips.editor.name
+    )) as HTMLInputElement
+    fireEvent.change(name, { target: { value: 'Keep these edits' } })
+    fireEvent.click(screen.getByRole('switch'))
+    expect(await screen.findByRole('alert')).toBeTruthy()
+    expect(name.value).toBe('Keep these edits')
+    expect(screen.getByLabelText(en.adminTips.editor.name)).toBe(name)
+    error.mockRestore()
+  })
+
+  it('retains the content revision if a recipient response includes another admin’s content edits', async () => {
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const published = campaign({
+      status: 'published',
+      effective_status: 'published',
+      published_at: '2026-11-01T10:00:00Z',
+    })
+    const concurrent = {
+      ...published,
+      name: 'Another admin’s name',
+      revision: 4,
+    }
+    api.getTipCampaign
+      .mockResolvedValueOnce(published)
+      .mockResolvedValue(concurrent)
+    api.getTipRecipients.mockResolvedValue({
+      ...recipients,
+      items: recipients.items.map((row) => ({
+        ...row,
+        dismissed_at: '2026-11-01T11:00:00Z',
+      })),
+    })
+    api.changeTipRecipients.mockResolvedValue({
+      campaign: concurrent,
+      changed: 1,
+      unchanged: 0,
+    })
+    api.updateTipCampaign.mockRejectedValue(
+      new AdminApiError(
+        'Conflict',
+        409,
+        null,
+        'TIPS_CAMPAIGN_REVISION_CONFLICT'
+      )
+    )
+    renderAdmin(<TipCampaignEditorPage id="c1" />, 'en')
+    const name = (await screen.findByLabelText(
+      en.adminTips.editor.name
+    )) as HTMLInputElement
+    fireEvent.change(name, { target: { value: 'Keep my draft' } })
+    fireEvent.click(
+      await screen.findByRole('checkbox', { name: 'Select Lahore Store' })
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'Show again (1)' }))
+    fireEvent.click(
+      within(screen.getByRole('dialog')).getByRole('button', {
+        name: 'Show again (1)',
+      })
+    )
+    await waitFor(() => expect(api.getTipCampaign).toHaveBeenCalledTimes(2))
+    fireEvent.click(
+      screen.getByRole('button', { name: en.adminTips.editor.save })
+    )
+    await waitFor(() =>
+      expect(api.updateTipCampaign).toHaveBeenCalledWith(
+        'c1',
+        expect.objectContaining({ revision: 2, name: 'Keep my draft' })
+      )
+    )
+    expect(await screen.findByRole('alert')).toBeTruthy()
+    expect(name.value).toBe('Keep my draft')
+    error.mockRestore()
   })
 
   it('keeps the existing review and publish token after toggling', async () => {

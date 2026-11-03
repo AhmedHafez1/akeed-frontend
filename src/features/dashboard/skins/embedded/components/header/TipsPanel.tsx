@@ -8,9 +8,9 @@ import { TipEntryEmbedded, type TipCardView } from '@/features/tips'
 export interface TipsPanelProps {
   cards: TipCardView[]
   canDismiss: boolean
-  onSeen: (id: string) => void
-  onAction: (id: string) => void
-  onDismiss: (id: string) => void
+  onSeen: (id: string, generation?: number) => void
+  onAction: (id: string, generation?: number) => void
+  onDismiss: (id: string, generation?: number) => void
 }
 
 const FOCUSABLE = 'a[href], button:not([disabled])'
@@ -50,11 +50,11 @@ export function TipsPanel({
     ;(controls[controls.length - 1] ?? entry).focus()
   }, [cards])
 
-  const dismiss = (id: string) => {
+  const dismiss = (id: string, generation?: number) => {
     const index = cards.findIndex((view) => view.card.id === id)
     const neighbour = cards[index + 1] ?? cards[index - 1] ?? null
     pendingFocus.current = { id: neighbour?.card.id ?? null }
-    onDismiss(id)
+    onDismiss(id, generation)
   }
 
   if (!cards.length) {
@@ -70,7 +70,9 @@ export function TipsPanel({
   return (
     <div className="flex flex-col gap-4">
       {cards.map((view, index) => (
-        <Fragment key={view.card.id}>
+        <Fragment
+          key={view.card.id + ':' + (view.card.delivery_generation ?? 1)}
+        >
           {index > 0 && <Divider />}
           <TipEntryEmbedded
             ref={(node) => {

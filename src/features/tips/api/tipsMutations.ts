@@ -11,13 +11,18 @@ import type { TipCardsResponse, TipEvent } from '../model/tips.model'
  */
 export function recordTipEvent(
   id: string,
-  event: Exclude<TipEvent, 'dismiss'>
+  event: Exclude<TipEvent, 'dismiss'>,
+  generation = 1
 ): Promise<boolean> {
   return api
-    .post(`/api/tips/${encodeURIComponent(id)}/${event}`, undefined, {
-      keepalive: true,
-    })
-    .then(() => true)
+    .post<{ recorded: boolean }>(
+      `/api/tips/${encodeURIComponent(id)}/${event}`,
+      { delivery_generation: generation },
+      {
+        keepalive: true,
+      }
+    )
+    .then((result) => result.recorded)
     .catch((error: unknown) => {
       console.warn('[Tips] Event not recorded', { event, error })
       return false
@@ -32,21 +37,40 @@ export function useDismissTip(locale: string, onError: () => void) {
   const queryClient = useQueryClient()
   const key = queryKeys.tips.cards(locale)
   return useMutation({
-    mutationFn: (id: string) =>
-      api.post(`/api/tips/${encodeURIComponent(id)}/dismiss`),
-    onMutate: async (id) => {
+    mutationFn: ({ id, generation }: { id: string; generation: number }) =>
+      api.post(`/api/tips/${encodeURIComponent(id)}/dismiss`, {
+        delivery_generation: generation,
+      }),
+    onMutate: async ({ id, generation }) => {
       await queryClient.cancelQueries({ queryKey: key })
       const previous = queryClient.getQueryData<TipCardsResponse>(key)
       if (previous) {
         queryClient.setQueryData<TipCardsResponse>(key, {
           ...previous,
-          cards: previous.cards.filter((card) => card.id !== id),
+          cards: previous.cards.filter(
+            (card) =>
+              card.id !== id || (card.delivery_generation ?? 1) !== generation
+          ),
         })
       }
       return { previous }
     },
-    onError: (error, _id, context) => {
-      if (context?.previous) queryClient.setQueryData(key, context.previous)
+    onError: (error, { id, generation }, context) => {
+      const previous = context?.previous
+      const removed = previous?.cards.find(
+        (card) =>
+          card.id === id && (card.delivery_generation ?? 1) === generation
+      )
+      if (removed && previous)
+        queryClient.setQueryData<TipCardsResponse>(key, (current) => {
+          if (!current) return previous
+          // A newer delivery fetched while the request failed must survive rollback.
+          if (current.cards.some((card) => card.id === id)) return current
+          const cards = [...current.cards]
+          const position = previous.cards.findIndex((card) => card.id === id)
+          cards.splice(Math.min(position, cards.length), 0, removed)
+          return { ...current, cards }
+        })
       console.warn('[Tips] Dismissal not saved', { error })
       onError()
     },

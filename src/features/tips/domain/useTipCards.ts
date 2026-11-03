@@ -56,12 +56,17 @@ export function useTipCards(options: {
   const banner = cards.find((view) => view.card.show_as_banner === true) ?? null
 
   const onSeen = useCallback(
-    (id: string) => {
-      if (viewed.current.has(id)) return
-      viewed.current.add(id)
-      void recordTipEvent(id, 'view').then(async (recorded) => {
+    (
+      id: string,
+      generation = query.data?.cards.find((card) => card.id === id)
+        ?.delivery_generation ?? 1
+    ) => {
+      const deliveryKey = `${id}:${generation}`
+      if (viewed.current.has(deliveryKey)) return
+      viewed.current.add(deliveryKey)
+      void recordTipEvent(id, 'view', generation).then(async (recorded) => {
         if (!recorded) {
-          viewed.current.delete(id)
+          viewed.current.delete(deliveryKey)
           return
         }
         // An older in-flight GET must not replace the confirmed read state.
@@ -74,7 +79,8 @@ export function useTipCards(options: {
               ? {
                   ...previous,
                   cards: previous.cards.map((card) =>
-                    card.id === id
+                    card.id === id &&
+                    (card.delivery_generation ?? 1) === generation
                       ? {
                           ...card,
                           first_viewed_at: card.first_viewed_at ?? readAt,
@@ -86,15 +92,19 @@ export function useTipCards(options: {
         )
       })
     },
-    [queryClient]
+    [queryClient, query.data]
   )
 
   const onAction = useCallback(
-    (id: string) => {
-      if (options.mode === 'embedded') onSeen(id)
-      void recordTipEvent(id, 'click')
+    (
+      id: string,
+      generation = query.data?.cards.find((card) => card.id === id)
+        ?.delivery_generation ?? 1
+    ) => {
+      if (options.mode === 'embedded') onSeen(id, generation)
+      void recordTipEvent(id, 'click', generation)
     },
-    [onSeen, options.mode]
+    [onSeen, options.mode, query.data]
   )
 
   return {
@@ -103,7 +113,11 @@ export function useTipCards(options: {
     canDismiss: query.data?.can_dismiss === true,
     onSeen,
     onAction,
-    onDismiss: (id: string) => dismiss.mutate(id),
+    onDismiss: (
+      id: string,
+      generation = query.data?.cards.find((card) => card.id === id)
+        ?.delivery_generation ?? 1
+    ) => dismiss.mutate({ id, generation }),
   }
 }
 

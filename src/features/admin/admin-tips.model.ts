@@ -119,6 +119,46 @@ export interface AdminTipOrganization {
   first_viewed_at: string | null
   first_clicked_at: string | null
   dismissed_at: string | null
+  removed_at?: string | null
+  delivery_generation?: number | null
+  delivery_started_at?: string | null
+  eligible?: boolean
+}
+
+export type TipRecipientOperation = 'add' | 'remove' | 'reissue'
+export interface TipDeliveryHistory {
+  delivery_generation: number
+  delivery_started_at: string
+  first_viewed_at: string | null
+  first_clicked_at: string | null
+  dismissed_at: string | null
+  removed_at: string | null
+  archived_at: string
+}
+
+export function recipientState(
+  row: AdminTipOrganization
+): 'new' | 'active' | 'dismissed' | 'removed' {
+  if (!row.delivery_generation) return 'new'
+  if (row.removed_at) return 'removed'
+  return row.dismissed_at ? 'dismissed' : 'active'
+}
+
+export function recipientOperationIds(
+  rows: AdminTipOrganization[],
+  operation: TipRecipientOperation
+): string[] {
+  return rows
+    .filter((row) => {
+      const state = recipientState(row)
+      if (operation === 'remove')
+        return state === 'active' || state === 'dismissed'
+      if (!row.eligible) return false
+      return operation === 'add'
+        ? state === 'new'
+        : state === 'removed' || state === 'dismissed'
+    })
+    .map((row) => row.org_id)
 }
 
 export interface AdminTipOrganizationsResponse {
