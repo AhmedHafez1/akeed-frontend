@@ -33,7 +33,8 @@ interface Loaded<T> {
 export function useResource<T>(
   context: string,
   resourceKey: string | null,
-  load: () => Promise<T>
+  load: () => Promise<T>,
+  keepPreviousOnError = false
 ) {
   const [revision, setRevision] = useState(0)
   const [result, setResult] = useState<Loaded<T> | null>(null)
@@ -47,17 +48,22 @@ export function useResource<T>(
         if (current) setResult({ key: requestKey, data, error: null })
       })
       .catch((cause: unknown) => {
-        if (current)
-          setResult({
+        if (current) {
+          const error = toTemplateError(context, cause)
+          setResult((previous) => ({
             key: requestKey,
-            data: null,
-            error: toTemplateError(context, cause),
-          })
+            data:
+              keepPreviousOnError && previous?.key.startsWith(`${resourceKey}#`)
+                ? previous.data
+                : null,
+            error,
+          }))
+        }
       })
     return () => {
       current = false
     }
-  }, [requestKey, load, context])
+  }, [requestKey, load, context, keepPreviousOnError, resourceKey])
 
   const loading = requestKey !== null && result?.key !== requestKey
   const refresh = useCallback(() => setRevision((value) => value + 1), [])

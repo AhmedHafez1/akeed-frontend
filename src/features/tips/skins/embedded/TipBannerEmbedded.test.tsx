@@ -111,13 +111,13 @@ describe('TipBannerEmbedded', () => {
     expect(action.className).toContain('Polaris-Button--variantPlain')
     fireEvent.click(action)
     expect(router.push).toHaveBeenCalledWith('/en/settings?host=h&tab=timing')
-    expect(handlers.onAction).toHaveBeenCalledWith('c1')
+    expect(handlers.onAction).toHaveBeenCalledWith('c1', 1)
     fireEvent.click(
       screen.getByRole('button', {
         name: en.tips.dismiss.replace('{title}', base.card.title),
       })
     )
-    expect(handlers.onDismiss).toHaveBeenCalledWith('c1')
+    expect(handlers.onDismiss).toHaveBeenCalledWith('c1', 1)
   })
 
   it('keeps a safe external plain action for viewers without dismissal', () => {
@@ -139,7 +139,7 @@ describe('TipBannerEmbedded', () => {
     expect(link.getAttribute('target')).toBe('_blank')
     expect(link.getAttribute('rel')).toContain('noopener')
     fireEvent.click(link)
-    expect(onAction).toHaveBeenCalledWith('c1')
+    expect(onAction).toHaveBeenCalledWith('c1', 1)
     expect(screen.queryByRole('button')).toBeNull()
     expect(router.push).not.toHaveBeenCalled()
   })
@@ -177,13 +177,13 @@ describe('TipBannerEmbedded', () => {
     })
     expect(handlers.onSeen).not.toHaveBeenCalled()
     act(() => vi.advanceTimersByTime(1))
-    expect(handlers.onSeen).toHaveBeenCalledExactlyOnceWith('c1')
+    expect(handlers.onSeen).toHaveBeenCalledExactlyOnceWith('c1', 1)
     handlers.replace({ ...base, card: { ...base.card, id: 'c2' } })
     act(() => {
       report(1)
       vi.advanceTimersByTime(2000)
     })
-    expect(handlers.onSeen).toHaveBeenLastCalledWith('c2')
+    expect(handlers.onSeen).toHaveBeenLastCalledWith('c2', 1)
     expect(handlers.onSeen).toHaveBeenCalledTimes(2)
     handlers.replace({
       ...base,

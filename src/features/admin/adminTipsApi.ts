@@ -6,6 +6,8 @@ import type {
   AdminTipOrganizationsResponse,
   AdminTipReview,
   TipStatus,
+  TipRecipientOperation,
+  TipDeliveryHistory,
 } from './admin-tips.model'
 
 const BASE = '/api/admin/tips-campaigns'
@@ -58,6 +60,43 @@ export function getTipRecipients(
 ) {
   return adminRequest<AdminTipOrganizationsResponse>(
     `${BASE}/${encodeURIComponent(id)}/recipients${query(params)}`
+  )
+}
+
+export function getTipRecipientOptions(
+  id: string,
+  params: { search?: string; cursor?: string }
+) {
+  return adminRequest<AdminTipOrganizationsResponse>(
+    `${BASE}/${encodeURIComponent(id)}/recipient-options${query(params)}`
+  )
+}
+
+export function changeTipRecipients(
+  id: string,
+  body: {
+    revision: number
+    operation: TipRecipientOperation
+    org_ids: string[]
+  }
+) {
+  return send<{
+    campaign: AdminTipCampaign
+    changed: number
+    unchanged: number
+  }>(`${BASE}/${encodeURIComponent(id)}/recipients`, 'POST', body)
+}
+
+export function getTipDeliveryHistory(
+  id: string,
+  orgId: string,
+  before?: number
+) {
+  return adminRequest<{
+    items: TipDeliveryHistory[]
+    next_before: number | null
+  }>(
+    `${BASE}/${encodeURIComponent(id)}/recipients/${encodeURIComponent(orgId)}/history${before ? '?before=' + before : ''}`
   )
 }
 
