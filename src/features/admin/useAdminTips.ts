@@ -59,7 +59,7 @@ export function useTipCampaigns(params: {
 
 export function useTipCampaign(id: string) {
   const load = useCallback(() => getTipCampaign(id), [id])
-  return useResource('Tips campaign request failed', id, load)
+  return useResource('Tips campaign request failed', id, load, true)
 }
 
 export function useTipOptions() {

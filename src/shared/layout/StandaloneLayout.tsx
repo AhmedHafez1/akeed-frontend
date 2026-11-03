@@ -4,7 +4,11 @@ import { useState } from 'react'
 import type { ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { isAuthRoute, isPublicRoute } from '@/shared/lib/locale'
+import {
+  isAuthRoute,
+  isPublicRoute,
+  isWhatsappConnectRoute,
+} from '@/shared/lib/locale'
 import { WhatsAppButton } from '@/shared/ui/WhatsAppButton'
 import { ManualOrderReconciler } from '@/features/orders'
 import {
@@ -53,6 +57,17 @@ export function StandaloneLayout({ children }: StandaloneLayoutProps) {
     publicPath === '/admin' || publicPath.startsWith('/admin/')
   const isOnboardingRoute =
     publicPath === '/onboarding' || publicPath.startsWith('/onboarding/')
+
+  // The WhatsApp connect page: authenticated by its one-time ticket, not by
+  // a session, so it must not meet the login guard.
+  if (isWhatsappConnectRoute(pathname)) {
+    return (
+      <>
+        {children}
+        <StandaloneToaster />
+      </>
+    )
+  }
 
   // 1. Auth routes — minimal auth page shell
   if (isAuthRoute(pathname)) {

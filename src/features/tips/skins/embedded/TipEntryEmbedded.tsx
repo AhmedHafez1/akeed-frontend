@@ -31,9 +31,9 @@ export interface TipEntryEmbeddedProps {
   ref?: Ref<HTMLDivElement>
   view: TipCardView
   canDismiss: boolean
-  onSeen: (id: string) => void
-  onAction: (id: string) => void
-  onDismiss: (id: string) => void
+  onSeen: (id: string, generation?: number) => void
+  onAction: (id: string, generation?: number) => void
+  onDismiss: (id: string, generation?: number) => void
 }
 
 /**
@@ -54,7 +54,11 @@ export function TipEntryEmbedded({
   const seenRef = useRef<HTMLDivElement>(null)
   const { card, link } = view
   const unread = card.first_viewed_at === null
-  useTipReadVisibility(seenRef, () => onSeen(card.id), !card.first_viewed_at)
+  useTipReadVisibility(
+    seenRef,
+    () => onSeen(card.id, card.delivery_generation ?? 1),
+    !card.first_viewed_at
+  )
 
   return (
     <div ref={ref} tabIndex={-1} className="outline-none">
@@ -96,7 +100,9 @@ export function TipEntryEmbedded({
                 <Button
                   variant="secondary"
                   accessibilityLabel={t('dismiss', { title: card.title })}
-                  onClick={() => onDismiss(card.id)}
+                  onClick={() =>
+                    onDismiss(card.id, card.delivery_generation ?? 1)
+                  }
                 >
                   {t('dismissLabel')}
                 </Button>
@@ -106,7 +112,7 @@ export function TipEntryEmbedded({
                   <Button
                     variant="primary"
                     onClick={() => {
-                      onAction(card.id)
+                      onAction(card.id, card.delivery_generation ?? 1)
                       router.push(link.href)
                     }}
                   >
@@ -120,7 +126,9 @@ export function TipEntryEmbedded({
                     variant="primary"
                     url={link.href}
                     target="_blank"
-                    onClick={() => onAction(card.id)}
+                    onClick={() =>
+                      onAction(card.id, card.delivery_generation ?? 1)
+                    }
                     accessibilityLabel={`${link.label} (${t('opensInNewTab')})`}
                   >
                     {link.label}

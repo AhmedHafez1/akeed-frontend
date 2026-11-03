@@ -28,7 +28,8 @@ import {
 } from './admin-tips.model'
 import { TipAudienceFields } from './TipAudienceFields'
 import { TipContentFields } from './TipContentFields'
-import { TipRecipientsList, TipReviewPanel } from './TipReviewPanel'
+import { TipReviewPanel } from './TipReviewPanel'
+import { TipRecipientManager } from './TipRecipientManager'
 import { TipStatusBadge, TipsErrorNotice, useTipsFormat } from './TipsAdminUi'
 import { useTemplateAction } from './useAdminTemplateDrafts'
 import { useTipBanner, useTipCampaign, useTipOptions } from './useAdminTips'
@@ -78,6 +79,9 @@ function TipCampaignEditor({
     [campaign]
   )
   const [form, setForm] = useState<TipForm>(initial)
+  const [baseline, setBaseline] = useState<TipForm>(initial)
+  // Membership refreshes may advance the revision while content is unsaved.
+  const [editRevision, setEditRevision] = useState(campaign?.revision ?? 0)
   // Field findings appear after the first save attempt, then follow every edit.
   const [attempted, setAttempted] = useState(false)
   const [review, setReview] = useState<AdminTipReview | null>(null)
@@ -95,7 +99,7 @@ function TipCampaignEditor({
   const status = campaign?.status ?? 'draft'
   const isDraft = status === 'draft'
   const readOnly = status === 'archived'
-  const dirty = JSON.stringify(form) !== JSON.stringify(initial)
+  const dirty = JSON.stringify(form) !== JSON.stringify(baseline)
 
   const onSave = async () => {
     setAttempted(true)
@@ -104,12 +108,15 @@ function TipCampaignEditor({
     const saved = await save.run(() =>
       campaign
         ? updateTipCampaign(campaign.id, {
-            revision: campaign.revision,
+            revision: editRevision,
             ...(isDraft ? tipDraftPayload(form) : tipContentPayload(form)),
           })
         : createTipCampaign(tipDraftPayload(form))
     )
     if (!saved) return
+    setForm(tipFormFromCampaign(saved))
+    setBaseline(tipFormFromCampaign(saved))
+    setEditRevision(saved.revision)
     setReview(null)
     if (!campaign) router.replace(`/${locale}/admin/tips/${saved.id}`)
     else onChanged()
@@ -288,6 +295,9 @@ function TipCampaignEditor({
               campaign.action ? undefined : t('analytics.noButtonNote')
             }
           >
+            <p className="text-muted-foreground text-sm">
+              {t('analytics.currentNote')}
+            </p>
             <dl className="grid gap-4 sm:grid-cols-4">
               {(['recipients', 'viewed', 'clicked', 'dismissed'] as const).map(
                 (key) => (
@@ -355,10 +365,21 @@ function TipCampaignEditor({
             {lifecycle.error && <TipsErrorNotice error={lifecycle.error} />}
           </Section>
           <Section title={t('recipients.title')}>
-            <TipRecipientsList
-              campaignId={campaign.id}
-              reloadKey={campaign.revision}
-              frozen
+            <TipRecipientManager
+              campaign={campaign}
+              refreshing={refreshing}
+              onApplied={(updated) => {
+                // A response can also include another admin's concurrent content edit.
+                if (
+                  JSON.stringify(
+                    tipContentPayload(tipFormFromCampaign(updated))
+                  ) === JSON.stringify(tipContentPayload(baseline))
+                ) {
+                  setEditRevision(updated.revision)
+                }
+                onChanged()
+              }}
+              onRefresh={onChanged}
             />
           </Section>
         </>
@@ -386,7 +407,7 @@ export function TipCampaignNewPage() {
 export function TipCampaignEditorPage({ id }: { id: string }) {
   const t = useTranslations('adminTips')
   const resource = useTipCampaign(id)
-  if (resource.error) {
+  if (resource.error && !resource.data) {
     return <TipsErrorNotice error={resource.error} onRetry={resource.refresh} />
   }
   if (!resource.data) {
@@ -394,13 +415,18 @@ export function TipCampaignEditorPage({ id }: { id: string }) {
       <p className="text-muted-foreground text-sm">{t('editor.loading')}</p>
     )
   }
-  // Keyed by revision and status, so a save or a lifecycle change reloads the form.
+  // Recipient changes preserve unsaved content; lifecycle changes reload it.
   return (
-    <TipCampaignEditor
-      key={`${resource.data.revision}:${resource.data.status}`}
-      campaign={resource.data}
-      onChanged={resource.refresh}
-      refreshing={resource.loading}
-    />
+    <>
+      {resource.error && (
+        <TipsErrorNotice error={resource.error} onRetry={resource.refresh} />
+      )}
+      <TipCampaignEditor
+        key={`${resource.data.id}:${resource.data.status}`}
+        campaign={resource.data}
+        onChanged={resource.refresh}
+        refreshing={resource.loading}
+      />
+    </>
   )
 }

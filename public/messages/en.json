@@ -4893,6 +4893,52 @@
     "opensInNewTab": "opens in a new tab"
   },
   "adminTips": {
+    "membership": {
+      "description": "Add or remove merchant accounts without changing the original audience rules. Show again makes a removed or dismissed update unread for that account and keeps its previous activity.",
+      "readOnly": "Recipient controls are read-only for expired and archived campaigns. Previous deliveries remain available below.",
+      "recipients": "Enrolled accounts",
+      "findAccounts": "Find accounts to add",
+      "search": "Search merchant accounts",
+      "select": "Select",
+      "selectAccount": "Select {name}",
+      "selectPage": "Select visible accounts",
+      "selected": "Selected: {count}",
+      "clear": "Clear selection",
+      "caption": "Merchant accounts and current delivery activity",
+      "merchant": "Merchant account",
+      "state": "Status",
+      "activity": "Current delivery",
+      "history": "Previous deliveries",
+      "inactive": "No active store",
+      "delivery": "Delivery {generation}",
+      "viewed": "Viewed",
+      "clicked": "Clicked",
+      "dismissed": "Dismissed",
+      "removed": "Removed",
+      "noHistory": "No previous deliveries",
+      "loading": "Loading accounts…",
+      "empty": "No accounts found.",
+      "loadMore": "Load more",
+      "saved": "Accounts changed: {count}",
+      "confirmTitle": "Apply recipient changes?",
+      "pausedNote": "This campaign is paused. Accounts will see it only after it resumes.",
+      "states": {
+        "new": "Not enrolled",
+        "active": "Enrolled",
+        "dismissed": "Dismissed",
+        "removed": "Removed"
+      },
+      "actions": {
+        "add": "Add accounts ({count})",
+        "remove": "Remove ({count})",
+        "reissue": "Show again ({count})"
+      },
+      "confirm": {
+        "add": "Add {count} selected accounts? They will see this update as unread.",
+        "remove": "Remove {count} selected accounts? This update will stop appearing for them. Their activity will be retained.",
+        "reissue": "Show this update again to {count} selected accounts? It will be unread again, and their previous activity will be retained."
+      }
+    },
     "banner": {
       "column": "Banner",
       "label": "Show “{name}” as a banner",
@@ -4936,6 +4982,7 @@
       "nextPage": "Next page"
     },
     "analytics": {
+      "currentNote": "Counts show enrolled accounts and activity for their current delivery. Removed accounts are excluded; previous deliveries stay in account history.",
       "title": "Reach",
       "recipients": "Recipients",
       "viewed": "Viewed",
@@ -4948,11 +4995,14 @@
       "requestIdLabel": "Request ID:",
       "accessDenied": "Your account is not allowed to manage campaigns.",
       "requestFailed": "The request failed. Try again.",
+      "TIPS_RECIPIENT_INELIGIBLE": "An account no longer has an active store. Refresh the account list.",
+      "TIPS_RECIPIENT_REISSUE_REQUIRED": "Use Show again for accounts that dismissed the update or were removed.",
+      "TIPS_RECIPIENT_NOT_ENROLLED": "Use Add accounts for an account that has not received this update.",
       "TIPS_CAMPAIGN_NOT_FOUND": "This campaign no longer exists.",
       "TIPS_CAMPAIGN_INVALID": "Some fields need attention.",
       "TIPS_CAMPAIGN_REVISION_CONFLICT": "Someone else changed this campaign. Reload it and try again.",
       "TIPS_CAMPAIGN_NOT_EDITABLE": "An archived campaign is read-only.",
-      "TIPS_CAMPAIGN_AUDIENCE_LOCKED": "The audience of a published campaign cannot change. Create a new campaign to reach other merchants.",
+      "TIPS_CAMPAIGN_AUDIENCE_LOCKED": "The original audience rules cannot change after publication. Manage individual accounts in the recipients section.",
       "TIPS_CAMPAIGN_EXPIRY_LOCKED": "The expiry of a published campaign cannot change.",
       "TIPS_CAMPAIGN_INVALID_TRANSITION": "The campaign cannot make that change in its current state.",
       "TIPS_CAMPAIGN_EXPIRED": "This campaign has expired. Archive it and publish a new one.",
@@ -4984,7 +5034,7 @@
       "newTitle": "New campaign",
       "loading": "Loading campaign…",
       "archivedNote": "Archived campaigns are read-only. Merchants no longer see them.",
-      "publishedNote": "Published: you can still edit the text and the button. The audience and expiry stay as published.",
+      "publishedNote": "Published: you can edit content and manage enrolled accounts below. The original audience rules and expiry stay fixed.",
       "contentTitle": "Card",
       "contentDescription": "What merchants read. Plain text; line breaks are kept.",
       "name": "Internal name",
@@ -5040,8 +5090,8 @@
     },
     "audience": {
       "title": "Audience",
-      "description": "Merchants with an active store. The list is frozen when you publish.",
-      "lockedDescription": "Frozen at publication: merchants who join or change settings later are not added or removed.",
+      "description": "Merchants with an active store. Publishing saves the initial audience; you can manage accounts afterward.",
+      "lockedDescription": "Original publication rules. Accounts are added or removed only through explicit recipient changes below.",
       "mode": "How to choose merchants",
       "modes": {
         "direct": "Pick merchants",
@@ -5113,7 +5163,7 @@
     },
     "review": {
       "title": "Review and publish",
-      "description": "Check the card and the exact recipients. Publishing freezes this list.",
+      "description": "Check the card and the exact recipients. Publishing saves the initial list; you can manage accounts afterward.",
       "review": "Review audience",
       "reviewAgain": "Review again",
       "reviewing": "Counting…",
@@ -5154,6 +5204,92 @@
     },
     "archiveDraft": {
       "title": "Discard this draft"
+    }
+  },
+  "whatsappConnect": {
+    "title": "Connect your WhatsApp number",
+    "intro": "Send order confirmations from your own WhatsApp Business number instead of Akeed's.",
+    "claiming": "Checking your link...",
+    "missingHeading": "Start from Akeed settings",
+    "missing": "This page opens from a link in Akeed. In Akeed, go to Settings and choose Connect WhatsApp.",
+    "before": {
+      "heading": "Before you connect",
+      "sending": "Once setup is finished, confirmations go out from your number and customers reply to you there. Until then, Akeed keeps sending from its own number.",
+      "billing": "Meta bills you directly for WhatsApp messages sent from your number. This is separate from what you pay Akeed.",
+      "app": "If this number uses the WhatsApp Business app, you keep using it, with some changes: broadcast lists become read-only, disappearing messages, view-once messages and live location are turned off in one-to-one chats, and linked devices are signed out until you link them again.",
+      "activity": "Keep opening the WhatsApp Business app on your phone. If it goes unused for about two weeks, Meta can disconnect the number from Akeed.",
+      "meta": "You'll continue in a Facebook window to choose your business and number."
+    },
+    "launch": "Continue with Facebook",
+    "tryAgain": "Open Facebook again",
+    "sdkLoading": "Loading Facebook...",
+    "sdkFailed": "Facebook could not be loaded. Check your connection or allow facebook.com in any content blocker, then try again.",
+    "retrySdk": "Try again",
+    "inMeta": "Finish the steps in the Facebook window. Keep this page open.",
+    "submitting": "Checking your connection with Meta...",
+    "connected": {
+      "heading": "Your number is connected",
+      "pending": "Setup isn't finished yet. Akeed is preparing your message templates, and confirmations keep going out from Akeed's number until your number is ready.",
+      "close": "You can close this page and go back to Akeed."
+    },
+    "cancelled": "You closed the Facebook window before finishing. Nothing was connected.",
+    "noCode": "Facebook didn't confirm the last step. Open it again and click Finish on the last screen instead of closing the window.",
+    "metaErrorHeading": "Facebook couldn't finish the connection",
+    "metaErrorCode": "Meta error code: {code}",
+    "failedHeading": "Your number wasn't connected",
+    "expired": "This page has expired. In Akeed, go to Settings and choose Connect WhatsApp again.",
+    "startAgain": "In Akeed, go to Settings and choose Connect WhatsApp to start again.",
+    "errors": {
+      "ticketInvalid": "This link has expired or was already used.",
+      "unavailable": "Connecting your own number isn't available for your account.",
+      "ownerRequired": "Only the account owner can connect a WhatsApp number.",
+      "connectionExists": "Your account already has a WhatsApp number connected or being set up.",
+      "numberAlreadyConnected": "This number is already connected to another Akeed account. Disconnect it there first, or choose another number.",
+      "codeRejected": "Meta didn't accept the sign-in. It may have taken too long.",
+      "providerUnavailable": "Meta didn't respond in time.",
+      "tokenUnverified": "Akeed didn't receive the WhatsApp permissions it needs. Allow every permission Facebook asks for when you connect.",
+      "assetUnverified": "Akeed couldn't confirm access to the WhatsApp account and number you chose.",
+      "assetAmbiguous": "More than one WhatsApp account or number was shared. Choose only one when you connect.",
+      "network": "Akeed couldn't be reached. Check your connection and try again.",
+      "default": "Something went wrong while connecting."
+    },
+    "metaErrors": {
+      "sharedWithPartner": "This WhatsApp Business account is already connected to another provider. Disconnect that provider in the WhatsApp Business app, then try again.",
+      "notEligible": "This number can't connect yet. Meta needs to see more activity on it in the WhatsApp Business app first.",
+      "updateApp": "Update the WhatsApp Business app on your phone to the latest version, then try again.",
+      "registeredElsewhere": "This number is already connected to a business platform. Disconnect it in the WhatsApp Business app, wait 15 minutes, then try again.",
+      "regionUnavailable": "Meta doesn't offer this for numbers from this country yet. Try another number.",
+      "tooManyAttempts": "Too many attempts. Wait a few minutes, then try again.",
+      "twoFactorRequired": "Meta requires two-factor authentication on your Facebook account. Turn it on, then try again.",
+      "default": "Facebook reported a problem. Try again, and if it continues, contact Akeed support."
+    },
+    "steps": {
+      "label": "Progress",
+      "review": "Review",
+      "connect": "Connect with Facebook",
+      "setup": "Setup",
+      "done": "completed"
+    },
+    "yourNumber": "Your number",
+    "waiting": "Waiting for Facebook",
+    "setupPending": "Setup pending",
+    "timeline": {
+      "label": "What happens next",
+      "verified": "Number verified",
+      "templates": "Message templates approved by Meta",
+      "sending": "Confirmations sent from your number",
+      "done": "Done",
+      "next": "Next",
+      "afterApproval": "After approval"
+    },
+    "card": {
+      "heading": "Your own WhatsApp number",
+      "description": "Send confirmations from your own WhatsApp Business number. Connecting opens a new page where you continue with Facebook.",
+      "action": "Connect WhatsApp",
+      "opening": "Opening...",
+      "opened": "The connection page opened in a new tab.",
+      "blocked": "Your browser blocked the new tab.",
+      "openLink": "Open the connection page"
     }
   }
 }

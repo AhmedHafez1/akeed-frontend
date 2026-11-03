@@ -19,6 +19,8 @@ export type TipCardAction =
   | { kind: 'external'; url: string; label: string }
 
 export interface TipCard {
+  /** Older APIs have only the initial delivery. */
+  delivery_generation?: number
   /** Missing on older APIs; only explicit null means unread. */
   first_viewed_at?: string | null
   id: string

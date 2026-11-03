@@ -23,6 +23,7 @@ import {
 import { useMerchantLogo } from '@/features/settings/domain/useMerchantLogo'
 import type { StandaloneSettingsModel } from '@/features/settings/domain/useStandaloneSettings'
 import { useTestPhonePrompt } from '@/features/settings/domain/useTestPhonePrompt'
+import { WhatsappConnectStandaloneCard } from '@/features/whatsapp-connect'
 import { cn } from '@/shared/lib/utils'
 import {
   AkChoiceCard,
@@ -411,6 +412,7 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
           sample={sample}
           automaticStyle={isAuto}
         />
+        <WhatsappConnectStandaloneCard />
       </div>
 
       <MessagePreviewPanel

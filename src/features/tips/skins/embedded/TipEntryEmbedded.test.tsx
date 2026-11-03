@@ -63,7 +63,7 @@ describe('TipEntryEmbedded', () => {
       },
     })
     fireEvent.click(screen.getByRole('button', { name: 'افتح الإعدادات' }))
-    expect(handlers.onAction).toHaveBeenCalledWith('c1')
+    expect(handlers.onAction).toHaveBeenCalledWith('c1', 1)
     expect(router.push).toHaveBeenCalledWith('/ar/settings?host=h&tab=timing')
   })
 
@@ -82,7 +82,7 @@ describe('TipEntryEmbedded', () => {
     expect(link.getAttribute('rel')).toContain('noopener')
     expect(link.className).toContain('Polaris-Button--variantPrimary')
     fireEvent.click(link)
-    expect(handlers.onAction).toHaveBeenCalledWith('c1')
+    expect(handlers.onAction).toHaveBeenCalledWith('c1', 1)
     expect(router.push).not.toHaveBeenCalled()
   })
 
@@ -93,7 +93,7 @@ describe('TipEntryEmbedded', () => {
         name: ar.tips.dismiss.replace('{title}', base.title),
       })
     )
-    expect(handlers.onDismiss).toHaveBeenCalledWith('c1')
+    expect(handlers.onDismiss).toHaveBeenCalledWith('c1', 1)
     expect(screen.getByText(ar.tips.dismissLabel)).toBeTruthy()
     expect(handlers.onAction).not.toHaveBeenCalled()
     expect(router.push).not.toHaveBeenCalled()

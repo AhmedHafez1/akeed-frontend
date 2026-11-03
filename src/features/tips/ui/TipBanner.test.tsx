@@ -85,7 +85,7 @@ describe('TipBanner', () => {
       report(0.5)
       report(1)
     })
-    expect(onSeen).toHaveBeenCalledExactlyOnceWith('c1')
+    expect(onSeen).toHaveBeenCalledExactlyOnceWith('c1', 1)
   })
 
   it('records internal navigation and permanent dismissal separately', () => {
@@ -100,13 +100,13 @@ describe('TipBanner', () => {
     const link = screen.getByRole('link', { name: 'Open settings' })
     expect(link.getAttribute('href')).toBe('/en/settings?tab=timing')
     fireEvent.click(link)
-    expect(handlers.onAction).toHaveBeenCalledWith('c1')
+    expect(handlers.onAction).toHaveBeenCalledWith('c1', 1)
     fireEvent.click(
       screen.getByRole('button', {
         name: en.tips.dismiss.replace('{title}', base.card.title),
       })
     )
-    expect(handlers.onDismiss).toHaveBeenCalledWith('c1')
+    expect(handlers.onDismiss).toHaveBeenCalledWith('c1', 1)
   })
 
   it('retains a safe external action for viewers without a dismiss button', () => {
@@ -127,7 +127,7 @@ describe('TipBanner', () => {
     expect(link.getAttribute('target')).toBe('_blank')
     expect(link.getAttribute('rel')).toBe('noopener noreferrer')
     fireEvent.click(link)
-    expect(onAction).toHaveBeenCalledWith('c1')
+    expect(onAction).toHaveBeenCalledWith('c1', 1)
     expect(screen.queryByRole('button')).toBeNull()
   })
 
