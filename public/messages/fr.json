@@ -3691,5 +3691,91 @@
     "dismissError": "Impossible de masquer cette carte. Réessayez.",
     "sectionLabel": "Conseils et nouveautés",
     "opensInNewTab": "s’ouvre dans un nouvel onglet"
+  },
+  "whatsappConnect": {
+    "title": "Connectez votre numéro WhatsApp",
+    "intro": "Envoyez les confirmations de commande depuis votre propre numéro WhatsApp Business au lieu de celui d’Akeed.",
+    "claiming": "Vérification de votre lien...",
+    "missingHeading": "Commencez depuis les paramètres d’Akeed",
+    "missing": "Cette page s’ouvre depuis un lien dans Akeed. Dans Akeed, allez dans Paramètres et choisissez Connecter WhatsApp.",
+    "before": {
+      "heading": "Avant de connecter",
+      "sending": "Une fois la configuration terminée, les confirmations partent de votre numéro et les clients vous y répondent. D’ici là, Akeed continue d’envoyer depuis son propre numéro.",
+      "billing": "Meta vous facture directement les messages WhatsApp envoyés depuis votre numéro. C’est indépendant de ce que vous payez à Akeed.",
+      "app": "Si ce numéro utilise l’application WhatsApp Business, vous continuez à l’utiliser avec quelques changements : les listes de diffusion passent en lecture seule, les messages éphémères, les messages à vue unique et la localisation en direct sont désactivés dans les discussions individuelles, et les appareils associés sont déconnectés jusqu’à ce que vous les associiez de nouveau.",
+      "activity": "Continuez d’ouvrir l’application WhatsApp Business sur votre téléphone. Si elle reste inutilisée environ deux semaines, Meta peut déconnecter le numéro d’Akeed.",
+      "meta": "Vous continuerez dans une fenêtre Facebook pour choisir votre entreprise et votre numéro."
+    },
+    "launch": "Continuer avec Facebook",
+    "tryAgain": "Rouvrir Facebook",
+    "sdkLoading": "Chargement de Facebook...",
+    "sdkFailed": "Impossible de charger Facebook. Vérifiez votre connexion ou autorisez facebook.com dans votre bloqueur de contenu, puis réessayez.",
+    "retrySdk": "Réessayer",
+    "inMeta": "Terminez les étapes dans la fenêtre Facebook. Gardez cette page ouverte.",
+    "submitting": "Vérification de votre connexion avec Meta...",
+    "connected": {
+      "heading": "Votre numéro est connecté",
+      "pending": "La configuration n’est pas encore terminée. Akeed prépare vos modèles de messages, et les confirmations continuent de partir du numéro d’Akeed jusqu’à ce que votre numéro soit prêt.",
+      "close": "Vous pouvez fermer cette page et revenir à Akeed."
+    },
+    "cancelled": "Vous avez fermé la fenêtre Facebook avant la fin. Aucun numéro n’a été connecté.",
+    "noCode": "Facebook n’a pas confirmé la dernière étape. Rouvrez-le et cliquez sur Terminer sur le dernier écran au lieu de fermer la fenêtre.",
+    "metaErrorHeading": "Facebook n’a pas pu terminer la connexion",
+    "metaErrorCode": "Code d’erreur Meta : {code}",
+    "failedHeading": "Votre numéro n’a pas été connecté",
+    "expired": "Cette page a expiré. Dans Akeed, allez dans Paramètres et choisissez de nouveau Connecter WhatsApp.",
+    "startAgain": "Dans Akeed, allez dans Paramètres et choisissez Connecter WhatsApp pour recommencer.",
+    "errors": {
+      "ticketInvalid": "Ce lien a expiré ou a déjà été utilisé.",
+      "unavailable": "La connexion de votre propre numéro n’est pas disponible pour votre compte.",
+      "ownerRequired": "Seul le propriétaire du compte peut connecter un numéro WhatsApp.",
+      "connectionExists": "Votre compte a déjà un numéro WhatsApp connecté ou en cours de configuration.",
+      "numberAlreadyConnected": "Ce numéro est déjà connecté à un autre compte Akeed. Déconnectez-le d’abord de ce compte ou choisissez un autre numéro.",
+      "codeRejected": "Meta n’a pas accepté la connexion. Elle a peut-être pris trop de temps.",
+      "providerUnavailable": "Meta n’a pas répondu à temps.",
+      "tokenUnverified": "Akeed n’a pas reçu les autorisations WhatsApp nécessaires. Acceptez toutes les autorisations demandées par Facebook lors de la connexion.",
+      "assetUnverified": "Akeed n’a pas pu confirmer l’accès au compte WhatsApp et au numéro que vous avez choisis.",
+      "assetAmbiguous": "Plus d’un compte ou numéro WhatsApp a été partagé. Choisissez-en un seul lors de la connexion.",
+      "network": "Impossible de joindre Akeed. Vérifiez votre connexion et réessayez.",
+      "default": "Un problème est survenu pendant la connexion."
+    },
+    "metaErrors": {
+      "sharedWithPartner": "Ce compte WhatsApp Business est déjà connecté à un autre fournisseur. Déconnectez ce fournisseur dans l’application WhatsApp Business, puis réessayez.",
+      "notEligible": "Ce numéro ne peut pas encore être connecté. Meta doit d’abord constater plus d’activité dessus dans l’application WhatsApp Business.",
+      "updateApp": "Mettez à jour l’application WhatsApp Business de votre téléphone vers la dernière version, puis réessayez.",
+      "registeredElsewhere": "Ce numéro est déjà connecté à une plateforme professionnelle. Déconnectez-le dans l’application WhatsApp Business, attendez 15 minutes, puis réessayez.",
+      "regionUnavailable": "Meta ne propose pas encore cette fonction pour les numéros de ce pays. Essayez un autre numéro.",
+      "tooManyAttempts": "Trop de tentatives. Attendez quelques minutes, puis réessayez.",
+      "twoFactorRequired": "Meta exige l’authentification à deux facteurs sur votre compte Facebook. Activez-la, puis réessayez.",
+      "default": "Facebook a signalé un problème. Réessayez et, si cela continue, contactez l’assistance Akeed."
+    },
+    "steps": {
+      "label": "Progression",
+      "review": "Vérifier",
+      "connect": "Connecter avec Facebook",
+      "setup": "Configuration",
+      "done": "terminée"
+    },
+    "yourNumber": "Votre numéro",
+    "waiting": "En attente de Facebook",
+    "setupPending": "Configuration en attente",
+    "timeline": {
+      "label": "Étapes suivantes",
+      "verified": "Numéro vérifié",
+      "templates": "Modèles de messages approuvés par Meta",
+      "sending": "Confirmations envoyées depuis votre numéro",
+      "done": "Fait",
+      "next": "Ensuite",
+      "afterApproval": "Après approbation"
+    },
+    "card": {
+      "heading": "Votre propre numéro WhatsApp",
+      "description": "Envoyez les confirmations depuis votre propre numéro WhatsApp Business. La connexion ouvre une nouvelle page où vous continuez avec Facebook.",
+      "action": "Connecter WhatsApp",
+      "opening": "Ouverture...",
+      "opened": "La page de connexion s’est ouverte dans un nouvel onglet.",
+      "blocked": "Votre navigateur a bloqué le nouvel onglet.",
+      "openLink": "Ouvrir la page de connexion"
+    }
   }
 }

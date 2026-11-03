@@ -8,10 +8,6 @@ import type { CancelOrderResponse } from '@/shared/types/commerce-outcome.model'
 import { ApiError } from '@/shared/lib/http'
 import { tipsFixtureRequest } from './tipsFixture'
 
-/** Keep URL-building helpers on this local, synthetic server too. */
-export function getApiBaseUrl(): string {
-  return 'http://127.0.0.1:3098'
-}
 import { billingFixtureRequest } from './billingFixture'
 import { adminBillingFixtureRequest } from './adminBillingFixture'
 import {
@@ -301,6 +297,18 @@ export function uploadWithAuth(
   return orderImportFixtureUpload(options)
 }
 
+/** Same origin: the connect page's ticket requests reach this app's route handlers. */
+export function getApiBaseUrl(): string {
+  return ''
+}
+
+const WHATSAPP_SENDER_FIXTURE = {
+  available: true,
+  appId: '999653349077771',
+  configId: '2344392272632365',
+  canConnect: true,
+}
+
 export const api = {
   async patch<T>(url: string, data?: unknown): Promise<T> {
     if (isSettingsBillingFixture())
@@ -309,6 +317,7 @@ export const api = {
   },
   async get<T>(url: string): Promise<T> {
     if (url.startsWith('/api/tips')) return tipsFixtureRequest<T>('GET', url)
+    if (url === '/api/whatsapp-sender') return WHATSAPP_SENDER_FIXTURE as T
     if (isFirstRunFixture()) return firstRunApiGet<T>(url)
     if (isSettingsBillingFixture()) return settingsBillingApi<T>('GET', url)
     if (isEmbeddedDashboardFixture())
@@ -367,6 +376,13 @@ export const api = {
     options: RequestInit = {}
   ): Promise<T> {
     if (url.startsWith('/api/tips')) return tipsFixtureRequest<T>('POST', url)
+    if (url === '/api/whatsapp-sender/connect-ticket') {
+      const locale = (data as { locale?: string } | undefined)?.locale ?? 'en'
+      return {
+        connectUrl: `${window.location.origin}/${locale}/whatsapp-connect?ticket=${'T'.repeat(43)}`,
+        expiresAt: new Date(Date.now() + 600_000).toISOString(),
+      } as T
+    }
     if (isEmbeddedDashboardFixture())
       return embeddedDashboardRequest<T>('POST', url, data)
     if (isOrderSyncFixture()) return orderSyncRequest<T>('POST', url, data)

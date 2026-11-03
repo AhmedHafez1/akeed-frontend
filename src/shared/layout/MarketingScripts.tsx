@@ -14,15 +14,21 @@
  */
 
 import Script from 'next/script'
+import { usePathname } from 'next/navigation'
+import { isWhatsappConnectRoute } from '@/shared/lib/locale'
 import { META_PIXEL_ID } from '@/shared/config/metaPixel'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { useInstallClickTracking } from './useInstallClickTracking'
 
 export function MarketingScripts() {
   const { isStandalone } = useAkeedMode()
+  const pathname = usePathname()
 
   // Don't load marketing scripts in Shopify embedded mode
   if (!isStandalone) return null
+  // Nor on the WhatsApp connect page, whose address arrives with a one-time
+  // ticket and which runs Meta's own SDK.
+  if (isWhatsappConnectRoute(pathname)) return null
 
   return <StandaloneMarketingScripts />
 }
