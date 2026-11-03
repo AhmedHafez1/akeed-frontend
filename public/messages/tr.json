@@ -3730,6 +3730,7 @@
       "ownerRequired": "Yalnızca hesap sahibi bir WhatsApp numarası bağlayabilir.",
       "connectionExists": "Hesabınızda zaten bağlı veya kurulmakta olan bir WhatsApp numarası var.",
       "numberAlreadyConnected": "Bu numara başka bir Akeed hesabına bağlı. Önce oradan bağlantısını kesin veya başka bir numara seçin.",
+      "accountAlreadyConnected": "Bu WhatsApp Business hesabı zaten başka bir Akeed kuruluşuna bağlı. Önce oradaki bağlantıyı kesin veya başka bir WhatsApp Business hesabı seçin.",
       "codeRejected": "Meta oturum açmayı kabul etmedi. Çok uzun sürmüş olabilir.",
       "providerUnavailable": "Meta zamanında yanıt vermedi.",
       "tokenUnverified": "Akeed ihtiyaç duyduğu WhatsApp izinlerini almadı. Bağlanırken Facebook’un istediği tüm izinleri verin.",
