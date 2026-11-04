@@ -23,6 +23,8 @@ import { ApiError } from '@/shared/lib/http'
  *   pending=1        the billing page opens on a purchase still being checked
  *   role=viewer      settings are read-only
  *   save=fail        PATCH /api/settings answers 500
+ *   usage=unavailable  the per-send usage read fails
+ *   wa=...           the WhatsApp sender (see whatsappSenderFixture.ts)
  *
  * Saving keeps the new values for the page's lifetime. Nothing leaves the
  * browser.
@@ -68,6 +70,7 @@ function creditSummary(): CreditSummary {
       unitPriceMinor: 100,
       messagePriceMinor: 200,
       creditsPerMessage: 2,
+      ownNumberCreditsPerMessage: 1,
       currency: 'EGP',
     },
     range: { min: 200, max: 10000, step: 100 },
@@ -93,6 +96,45 @@ function purchase(
     checkoutExpiresAt: null,
     createdAt,
     updatedAt: createdAt,
+  }
+}
+
+/**
+ * Per-send usage over the same 14 days: on the days the merchant number sent,
+ * its credits (1 each) sit beside Akeed's (2 each).
+ */
+function creditUsage(url: string) {
+  const timeZone =
+    new URL(url, 'http://fixture.local').searchParams.get('timeZone') ?? 'UTC'
+  const now = new Date()
+  const dateIn = (at: Date) => {
+    const parts = new Intl.DateTimeFormat('en', {
+      timeZone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(at)
+    const part = (type: string) =>
+      parts.find((item) => item.type === type)?.value
+    return [part('year'), part('month'), part('day')].join('-')
+  }
+  const today = dateIn(now)
+  const monthStart = today.slice(0, 7) + '-01'
+  const daily = DAILY_USAGE.map((credits, index) => {
+    const date = dateIn(new Date(now.getTime() - (13 - index) * DAY_MS))
+    const own = index >= 8 ? Math.floor(credits / 2) : 0
+    return { date, credits, akeedCredits: credits - own, ownNumberCredits: own }
+  })
+  const inMonth = daily.filter((day) => day.date >= monthStart)
+  const akeed = inMonth.reduce((sum, day) => sum + day.akeedCredits, 0)
+  const ownNumber = inMonth.reduce((sum, day) => sum + day.ownNumberCredits, 0)
+  return {
+    asOf: now.toISOString(),
+    timeZone,
+    monthStart,
+    usedThisMonth: akeed + ownNumber,
+    bySender: { akeed, ownNumber },
+    daily,
   }
 }
 
@@ -387,6 +429,11 @@ export async function settingsBillingFetch(
   if (url === '/api/settings' && method === 'GET')
     return Response.json(settings())
   if (url === '/api/billing/credits') return Response.json(creditSummary())
+  if (url.startsWith('/api/billing/credits/usage')) {
+    if (param('usage') === 'unavailable')
+      return Response.json({ message: 'Synthetic' }, { status: 503 })
+    return Response.json(creditUsage(url))
+  }
   if (url.startsWith('/api/billing/credits/ledger'))
     return Response.json({ items: ledger(), nextCursor: null, limit: 100 })
   if (url.startsWith('/api/billing/purchases?')) {

@@ -23,6 +23,8 @@ export type AdminStoreBilling =
       available: number
       held: number
       debt: number
+      /** The spare displayed credit, 0 or 1. Absent from an older backend. */
+      spare?: number
       /** What the merchant sees; the fields above are stored credits. */
       displayed_available: number
       balance_state: AdminCreditBalanceState
@@ -35,13 +37,40 @@ export interface AdminCustomerCountries {
   count: number
 }
 
-export interface AdminStore {
-  whatsapp?: {
-    state: string | null
-    reason: string | null
-    lastSender: string | null
-    lastSenderReason: string | null
+/**
+ * The store's own-number connection as the list sees it. `lastSender` is
+ * history: which number the last accepted message went from, never whether
+ * the number is ready now.
+ */
+export interface AdminStoreWhatsapp {
+  state: string | null
+  reason: string | null
+  lastSender: string | null
+  lastSenderReason: string | null
+}
+
+/** Staff view of one organization's connection: readiness now, per template. */
+export interface AdminWhatsappConnection {
+  state: string
+  displayPhoneNumber: string | null
+  signupPath: string
+  health: {
+    stateReason: string | null
+    qualityRating: string | null
+    degradedClass: string | null
+    lastCheckedAt: string | null
   }
+  templates: { total: number; ready: number; pending: number; rejected: number }
+  templateDetails: {
+    key: string
+    language: string
+    status: string
+    readiness: { kind: string; reason: string }
+  }[]
+}
+
+export interface AdminStore {
+  whatsapp?: AdminStoreWhatsapp
   integration_id: string
   org_id: string
   platform: string

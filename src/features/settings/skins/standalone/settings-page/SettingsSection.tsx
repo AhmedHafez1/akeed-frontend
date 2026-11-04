@@ -30,7 +30,7 @@ export function AnnotatedSection({
   return (
     <section
       aria-labelledby={headingId}
-      className="grid gap-3 min-[1100px]:grid-cols-[280px_minmax(0,1fr)] min-[1100px]:gap-8"
+      className="grid grid-cols-[minmax(0,1fr)] gap-3 min-[1100px]:grid-cols-[280px_minmax(0,1fr)] min-[1100px]:gap-8"
     >
       <div>
         <h2 id={headingId} className="text-ak-section text-ink">
@@ -38,7 +38,8 @@ export function AnnotatedSection({
         </h2>
         <p className="text-ak-caption text-ink-muted mt-0.5">{description}</p>
       </div>
-      <div className={akCard}>{children}</div>
+      {/* min-w-0: a wide table scrolls inside the card, not the page. */}
+      <div className={cn(akCard, 'min-w-0')}>{children}</div>
     </section>
   )
 }

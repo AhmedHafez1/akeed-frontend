@@ -6,6 +6,7 @@ import type {
   AdminStoreReviewPrompt,
   AdminStoresResponse,
   AdminStoreVerificationsResponse,
+  AdminWhatsappConnection,
 } from './admin.model'
 
 export class AdminApiError extends Error {
@@ -78,6 +79,13 @@ export function getAdminStores(query: string) {
 export function getAdminStore(integrationId: string) {
   return adminRequest<AdminStoreDetailResponse>(
     `/api/admin/stores/${encodeURIComponent(integrationId)}`
+  )
+}
+
+/** One organization's own-number connection, for staff. 404 when none. */
+export function getAdminWhatsappConnection(orgId: string) {
+  return adminRequest<AdminWhatsappConnection>(
+    `/api/admin/whatsapp-connections/${encodeURIComponent(orgId)}`
   )
 }
 

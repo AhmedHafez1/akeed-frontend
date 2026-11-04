@@ -34,19 +34,33 @@ import {
   usagePercent,
 } from '@/features/settings/domain/planUsage'
 import type { EmbeddedSettingsModel } from '@/features/settings/domain/useEmbeddedSettings'
+import type { UsagePools } from '@/shared/types/usagePools'
 
 interface PlanTabProps {
   model: EmbeddedSettingsModel
   data: SettingsResponse
+  /** The merchant's own number is offered or connected. */
+  ownNumberVisible?: boolean
 }
 
-export function PlanTab({ model, data }: PlanTabProps) {
+export function PlanTab({
+  model,
+  data,
+  ownNumberVisible = false,
+}: PlanTabProps) {
   const t = useTranslations('settings.embedded.plan')
   const tPlans = useTranslations('billing.embeddedPlans')
   const tNames = useTranslations('embeddedOnboarding')
   const locale = useLocale()
 
   const { state, billing } = data
+  // Each pool as charged, once the merchant's own number is offered or has
+  // paid for sends; otherwise the single allowance as before.
+  const pools =
+    billing.usage.pools &&
+    (ownNumberVisible || billing.usage.pools.ownNumber.used > 0)
+      ? billing.usage.pools
+      : null
   const planName = (id: OnboardingBillingPlanId) => tNames(PLAN_NAME_KEYS[id])
   const currentPlanId = state.billingPlanId
   const currentPlan = billing.plans.find((plan) => plan.id === currentPlanId)
@@ -69,7 +83,17 @@ export function PlanTab({ model, data }: PlanTabProps) {
   const canSubscribe = state.permissions.canUpdateConfiguration
   const sentLast30Days = billing.messagesSentLast30Days ?? 0
   const paidPlans = billing.plans.filter((plan) => plan.amount > 0)
-  const recommendedId = recommendPlan(billing.plans, sentLast30Days)
+  const usagePools = billing.usage.pools
+  const byPool =
+    billing.messagesSentLast30DaysByPool &&
+    usagePools &&
+    usagePools.akeed.limit > 0
+      ? {
+          ...billing.messagesSentLast30DaysByPool,
+          ownNumberRatio: usagePools.ownNumber.limit / usagePools.akeed.limit,
+        }
+      : null
+  const recommendedId = recommendPlan(billing.plans, sentLast30Days, byPool)
   // Only a live paid plan renews; Starter and a lapsed plan do not.
   const renewablePlanId = billing.currentPlanId ?? null
   const primaryId = resolvePrimaryPlanId(
@@ -113,47 +137,60 @@ export function PlanTab({ model, data }: PlanTabProps) {
               <Badge>{isFree ? t('badgeFree') : t('badgeMonthly')}</Badge>
             )}
           </InlineStack>
-          <InlineStack align="space-between" blockAlign="baseline" gap="300">
-            <div id="settings-usage-label">
-              <InlineStack gap="200" blockAlign="baseline">
-                <Text as="span" variant="heading2xl">
-                  <bdi>{formatMessageCount(used)}</bdi>
-                </Text>
-                <Text as="span" tone="subdued">
-                  {tPlans('usedOf', { limit: formatMessageCount(limit) })}
+          {pools ? (
+            <PoolMeters pools={pools} renewalDate={renewalDate} />
+          ) : (
+            <>
+              <InlineStack
+                align="space-between"
+                blockAlign="baseline"
+                gap="300"
+              >
+                <div id="settings-usage-label">
+                  <InlineStack gap="200" blockAlign="baseline">
+                    <Text as="span" variant="heading2xl">
+                      <bdi>{formatMessageCount(used)}</bdi>
+                    </Text>
+                    <Text as="span" tone="subdued">
+                      {tPlans('usedOf', { limit: formatMessageCount(limit) })}
+                    </Text>
+                  </InlineStack>
+                </div>
+                <Text as="p" fontWeight="semibold">
+                  {tPlans('remaining', {
+                    count: remaining,
+                    formatted: formatMessageCount(remaining),
+                  })}
                 </Text>
               </InlineStack>
-            </div>
-            <Text as="p" fontWeight="semibold">
-              {tPlans('remaining', {
-                count: remaining,
-                formatted: formatMessageCount(remaining),
-              })}
-            </Text>
-          </InlineStack>
-          <ProgressBar
-            progress={percent}
-            tone={percent >= 100 ? 'critical' : 'primary'}
-            size="small"
-            ariaLabelledBy="settings-usage-label"
-            animated={false}
-          />
-          <div className="grid grid-cols-[20px_minmax(0,1fr)] items-start gap-2">
-            <span className="flex h-5 w-5 items-center justify-center">
-              <Icon
-                source={renewalDate ? RefreshIcon : InfoIcon}
-                tone="subdued"
+              <ProgressBar
+                progress={percent}
+                tone={percent >= 100 ? 'critical' : 'primary'}
+                size="small"
+                ariaLabelledBy="settings-usage-label"
+                animated={false}
               />
-            </span>
-            <Text as="p" tone="subdued">
-              {renewalDate
-                ? tPlans('renews', {
-                    limit: formatMessageCount(limit),
-                    date: renewalDate,
-                  })
-                : tPlans('oneTime')}
-            </Text>
-          </div>
+            </>
+          )}
+          {/* The pools say when they renew themselves. */}
+          {!pools && (
+            <div className="grid grid-cols-[20px_minmax(0,1fr)] items-start gap-2">
+              <span className="flex h-5 w-5 items-center justify-center">
+                <Icon
+                  source={renewalDate ? RefreshIcon : InfoIcon}
+                  tone="subdued"
+                />
+              </span>
+              <Text as="p" tone="subdued">
+                {renewalDate
+                  ? tPlans('renews', {
+                      limit: formatMessageCount(limit),
+                      date: renewalDate,
+                    })
+                  : tPlans('oneTime')}
+              </Text>
+            </div>
+          )}
         </BlockStack>
       </Card>
 
@@ -204,6 +241,65 @@ export function PlanTab({ model, data }: PlanTabProps) {
           <p>{t('billingManaged')}</p>
         </Banner>
       )}
+    </BlockStack>
+  )
+}
+
+/** The Akeed and own-number pools, side by side, for one billing period. */
+function PoolMeters({
+  pools,
+  renewalDate,
+}: {
+  pools: UsagePools
+  renewalDate: string | null
+}) {
+  const t = useTranslations('settings.embedded.plan.pools')
+  const tPlans = useTranslations('billing.embeddedPlans')
+  const rows = [
+    { key: 'akeed', pool: pools.akeed },
+    { key: 'ownNumber', pool: pools.ownNumber },
+  ] as const
+  return (
+    <BlockStack gap="300">
+      <Text as="p" fontWeight="semibold">
+        {t('title')}
+      </Text>
+      <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
+        {rows.map(({ key, pool }) => {
+          const labelId = `settings-pool-${key}`
+          return (
+            <BlockStack key={key} gap="200">
+              <Text as="p" tone="subdued" id={labelId}>
+                {t(key)}
+              </Text>
+              <InlineStack gap="200" blockAlign="baseline">
+                <Text as="span" variant="headingXl">
+                  <bdi>{formatMessageCount(pool.used)}</bdi>
+                </Text>
+                <Text as="span" tone="subdued">
+                  {tPlans('usedOf', { limit: formatMessageCount(pool.limit) })}
+                </Text>
+              </InlineStack>
+              <ProgressBar
+                progress={usagePercent(pool.used, pool.limit)}
+                tone={pool.used >= pool.limit ? 'critical' : 'primary'}
+                size="small"
+                ariaLabelledBy={labelId}
+                animated={false}
+              />
+              <Text as="p" tone="subdued">
+                {tPlans('remaining', {
+                  count: pool.remaining,
+                  formatted: formatMessageCount(pool.remaining),
+                })}
+              </Text>
+            </BlockStack>
+          )
+        })}
+      </InlineGrid>
+      <Text as="p" tone="subdued">
+        {renewalDate ? t('noteRenews', { date: renewalDate }) : t('note')}
+      </Text>
     </BlockStack>
   )
 }

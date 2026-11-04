@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  allowanceDemand,
   recommendPlan,
   resolvePrimaryPlanId,
   resolveUsageBanner,
@@ -78,6 +79,34 @@ describe('recommendPlan', () => {
 
   it('returns null without paid plans', () => {
     expect(recommendPlan([PLANS[0]], 10)).toBeNull()
+  })
+
+  it('sizes each pool from what it paid for with mixed senders', () => {
+    // 264 messages in all would need Pro; 64 of them paid from Akeed's pool
+    // and 200 from a pool three times larger only need Basic.
+    expect(
+      recommendPlan(PLANS, 264, {
+        akeed: 64,
+        ownNumber: 200,
+        ownNumberRatio: 3,
+      })
+    ).toBe('basic')
+    // The tighter pool decides: own-number volume can still call for more.
+    expect(
+      recommendPlan(PLANS, 1000, {
+        akeed: 100,
+        ownNumber: 900,
+        ownNumberRatio: 3,
+      })
+    ).toBe('pro')
+  })
+
+  it('counts every message against the allowance without pool figures', () => {
+    expect(allowanceDemand(264)).toBe(264)
+    expect(allowanceDemand(264, null)).toBe(264)
+    expect(
+      allowanceDemand(10, { akeed: 4, ownNumber: 6, ownNumberRatio: 0 })
+    ).toBe(10)
   })
 })
 

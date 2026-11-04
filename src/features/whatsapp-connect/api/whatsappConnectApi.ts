@@ -7,16 +7,29 @@ import type { SignupSessionHints } from '../model/signupMessage'
 import { NETWORK_ERROR_CODE } from '../model/signupErrors'
 import type { SignupCompletion } from '../model/signupMachine'
 
+/** One accepted send, as it happened: history, never current readiness. */
+export interface AcceptedSend {
+  kind: 'akeed_system' | 'merchant_own'
+  reason: string | null
+  acceptedAt: string
+  deliveryStatus: 'accepted' | 'delivered' | 'read' | 'failed'
+}
+
+export type SenderAlert = NonNullable<
+  WhatsappSenderAvailability['alerts']
+>[number]
+
 /** Whether this organization may connect its own number, and who may. */
 export interface WhatsappSenderAvailability {
   sendingEnabled?: boolean
   permissions?: { canDisconnect: boolean; canUpdateThankYou: boolean }
-  lastAcceptedSend?: {
-    kind: 'akeed_system' | 'merchant_own'
-    reason: string | null
-    acceptedAt: string
-    deliveryStatus: 'accepted' | 'delivered' | 'read' | 'failed'
-  } | null
+  /** The later of the two below. */
+  lastAcceptedSend?: AcceptedSend | null
+  /** Absent from an older backend. */
+  lastAccepted?: {
+    confirmation: AcceptedSend | null
+    reminder: AcceptedSend | null
+  }
   alerts?: {
     kind:
       | 'fallback'
@@ -100,12 +113,18 @@ export function updateWhatsappThankYou(thankYouEnabled: boolean) {
   )
 }
 
+export interface WhatsappDisconnectResult {
+  state: 'disconnected'
+  providerCleanup: 'succeeded' | 'manual_required' | 'not_needed'
+  /** Steps left in the WhatsApp Business app; empty for a new number. */
+  businessAppSteps: string[]
+}
+
 export function disconnectWhatsapp() {
-  return api.post<{
-    state: 'disconnected'
-    providerCleanup: 'succeeded' | 'manual_required' | 'not_needed'
-    businessAppSteps: string[]
-  }>('/api/whatsapp-sender/disconnect', {})
+  return api.post<WhatsappDisconnectResult>(
+    '/api/whatsapp-sender/disconnect',
+    {}
+  )
 }
 
 export interface ConnectTicketClaimed {
@@ -118,6 +137,10 @@ export interface ConnectTicketClaimed {
 }
 
 export const whatsappSenderQueryKey = ['whatsapp-sender'] as const
+export const whatsappConnectionQueryKey = [
+  'whatsapp-sender',
+  'connection',
+] as const
 
 export function getWhatsappSender(): Promise<WhatsappSenderAvailability> {
   return api.get<WhatsappSenderAvailability>('/api/whatsapp-sender')

@@ -30,7 +30,7 @@ Make sure you have:
 - Permission to install apps and approve app subscriptions.
 - At least one recent COD order or a phone number you can use for a test confirmation.
 
-You do not need to connect your own WhatsApp number for the standard setup. Akeed sends messages through official WhatsApp infrastructure.
+You do not need your own WhatsApp number to get started. Akeed sends messages from its official WhatsApp number. If you prefer, you can connect your own WhatsApp Business number later.
 
 ### Step 1: Install Akeed
 
@@ -100,7 +100,7 @@ Sign up and confirm your email address.
 
 ### Step 2: Set Up Your Store
 
-Enter your store name and your own WhatsApp number. You do not need to connect a WhatsApp number for customers. Akeed sends messages from its official number.
+Enter your store name and your own WhatsApp number. Akeed sends messages to customers from its official number, so you do not need to connect a number now. You can connect your own WhatsApp Business number later in **Settings**.
 
 ### Step 3: Try the Message
 
@@ -153,7 +153,7 @@ No. Shopify stores install Akeed from Shopify. WooCommerce and EasyOrders stores
 
 ### Do I need my own WhatsApp Business account?
 
-Not for the standard setup. Akeed can send confirmation messages using its official WhatsApp infrastructure.
+No. Akeed sends confirmations from its official WhatsApp number by default. If you want customers to get confirmations from your business number, you can connect your own WhatsApp Business number, and Akeed's number covers any message yours is not ready to send. See [Use Your Own WhatsApp Number](/docs/own-whatsapp-number).
 
 ### Can I change the message language later?
 

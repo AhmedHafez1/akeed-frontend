@@ -35,7 +35,6 @@ import type { EmbeddedSettingsModel } from '@/features/settings/domain/useEmbedd
 import { useTestPhonePrompt } from '@/features/settings/domain/useTestPhonePrompt'
 import { useMerchantLogo } from '@/features/settings/domain/useMerchantLogo'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
-import { WhatsappConnectEmbeddedCard } from '@/features/whatsapp-connect'
 import { MessagePreviewCard } from './MessagePreviewCard'
 import { StoreLogoField } from './StoreLogoField'
 import { SettingsHelp } from './SettingsHelp'
@@ -364,7 +363,6 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
           sample={sample}
           automaticStyle={isAuto}
         />
-        <WhatsappConnectEmbeddedCard />
       </BlockStack>
 
       {/* Stays in view while the settings beside it scroll. */}

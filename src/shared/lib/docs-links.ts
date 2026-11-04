@@ -9,6 +9,7 @@ export const docsArticleSlugs = {
   analytics: 'analytics',
   troubleshooting: 'troubleshooting',
   generalFaq: 'general-faq',
+  ownWhatsappNumber: 'own-whatsapp-number',
 } as const
 
 export type DocsArticleKey = keyof typeof docsArticleSlugs

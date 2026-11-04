@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 import type { PurchaseSummary } from './billing.types'
-import type { Transaction } from './transactions'
 import {
   dailyUsage,
   latestSuccessfulPurchase,
@@ -11,27 +10,6 @@ import {
 /** Local wall-clock dates, so the suite passes in any time zone. */
 function local(month: number, day: number, hour = 12, minute = 0) {
   return new Date(2026, month - 1, day, hour, minute)
-}
-
-let sequence = 0
-function entry(
-  at: Date,
-  quantity: number,
-  ledgerType: Transaction['ledgerType'] = 'consumption'
-): Transaction {
-  sequence += 1
-  return {
-    id: `entry-${sequence}`,
-    kind: ledgerType === 'consumption' ? 'usage' : 'purchase',
-    ledgerType,
-    reasonCode: 'message_accepted',
-    actorType: 'system',
-    quantity,
-    balanceAfter: 0,
-    createdAt: at.toISOString(),
-    reference: null,
-    purchase: null,
-  }
 }
 
 function purchase(
@@ -56,6 +34,11 @@ function purchase(
 }
 
 describe('runwayDays', () => {
+  it('projects mixed senders from displayed credits, whichever number sent', () => {
+    // 124 credits from Akeed and 146 from the merchant's number by the 4th.
+    expect(runwayDays(842, 124 + 146, local(11, 4))).toBe(12)
+  })
+
   it('divides the balance by the daily average so far this month', () => {
     // 212 used over 20 days is 10.6 a day; 388 lasts 36.6 days.
     expect(runwayDays(388, 212, local(10, 20))).toBe(36)
@@ -79,59 +62,28 @@ describe('runwayDays', () => {
 })
 
 describe('dailyUsage', () => {
-  const now = local(10, 20, 15)
-
-  it('returns 14 zero days when nothing was used', () => {
-    expect(dailyUsage([], now)).toEqual(new Array(14).fill(0))
+  const day = (credits: number, akeed: number, own: number) => ({
+    date: '2026-11-04',
+    credits,
+    akeedCredits: akeed,
+    ownNumberCredits: own,
   })
 
-  it('puts today last and 13 days ago first', () => {
-    const buckets = dailyUsage(
-      [entry(local(10, 20, 9), -3), entry(local(10, 7, 9), -2)],
-      now
-    )
-    expect(buckets).toHaveLength(14)
-    expect(buckets[13]).toBe(3)
-    expect(buckets[0]).toBe(2)
+  it('reads mixed senders from the server buckets, each at its own rate', () => {
+    // Two Akeed sends (2 each) and three own-number sends (1 each).
+    const usage = {
+      daily: [...new Array(13).fill(day(0, 0, 0)), day(7, 4, 3)],
+    }
+    expect(dailyUsage(usage)).toEqual({
+      total: [...new Array(13).fill(0), 7],
+      akeed: [...new Array(13).fill(0), 4],
+      ownNumber: [...new Array(13).fill(0), 3],
+    })
   })
 
-  it('splits days at local midnight', () => {
-    const buckets = dailyUsage(
-      [
-        entry(local(10, 19, 23, 59), -1),
-        entry(local(10, 20, 0, 0), -1),
-        entry(local(10, 20, 14), -1),
-      ],
-      now
-    )
-    expect(buckets[12]).toBe(1)
-    expect(buckets[13]).toBe(2)
-  })
-
-  it('leaves out rows older than the window', () => {
-    const buckets = dailyUsage([entry(local(10, 6, 23, 59), -9)], now)
-    expect(buckets.every((value) => value === 0)).toBe(true)
-  })
-
-  it('counts consumption only', () => {
-    const buckets = dailyUsage(
-      [
-        entry(local(10, 20, 9), 500, 'purchase'),
-        entry(local(10, 20, 9), 1, 'failure_reversal'),
-        entry(local(10, 20, 9), -4),
-      ],
-      now
-    )
-    expect(buckets[13]).toBe(4)
-  })
-
-  it('reaches into the previous month early in the month', () => {
-    const buckets = dailyUsage(
-      [entry(local(9, 30, 10), -6), entry(local(10, 1, 10), -2)],
-      local(10, 1, 18)
-    )
-    expect(buckets[12]).toBe(6)
-    expect(buckets[13]).toBe(2)
+  it('keeps a netted refund and a zero-cost fallback as the server counted them', () => {
+    const usage = { daily: [day(0, 0, 0), day(1, 0, 1), day(2, 2, 0)] }
+    expect(dailyUsage(usage).total).toEqual([0, 1, 2])
   })
 })
 

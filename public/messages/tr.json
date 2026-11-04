@@ -1219,7 +1219,12 @@
         "stale": "Kullanım yenilenemedi",
         "retry": "Yeniden dene",
         "retryLabel": "Mesaj kullanımını yeniden yükle",
-        "cta": "Plan seçin"
+        "cta": "Plan seçin",
+        "pools": {
+          "akeed": "Akeed numarası",
+          "ownNumber": "Numaranız",
+          "note": "Her kota yalnızca karşıladığı mesajları sayar."
+        }
       }
     },
     "overview": {
@@ -1613,7 +1618,8 @@
           "message": "Mesaj",
           "timing": "Zamanlama ve takip",
           "store": "Mağaza",
-          "apiKeys": "API anahtarları"
+          "apiKeys": "API anahtarları",
+          "whatsapp": "WhatsApp"
         },
         "unsavedShort": "Kaydedilmemiş değişiklikler",
         "dismiss": "Kapat",
@@ -1932,7 +1938,8 @@
       "tabs": {
         "message": "Mesaj",
         "timing": "Zamanlama ve takip",
-        "plan": "Plan"
+        "plan": "Plan",
+        "whatsapp": "WhatsApp"
       },
       "save": "Kaydet",
       "discard": "Vazgeç",
@@ -2106,7 +2113,14 @@
         "renew": "{plan} planını şimdi yenile",
         "billingManaged": "Planınız Akeed ekibi tarafından yönetiliyor. Değiştirmek için destek ekibine ulaşın.",
         "subscribeError": "Shopify’ın onay sayfasını açamadık. Tekrar deneyin.",
-        "freePlanClaimedError": "Bu mağaza ücretsiz planı daha önce kullandı. Ücretli bir plan seçin."
+        "freePlanClaimedError": "Bu mağaza ücretsiz planı daha önce kullandı. Ücretli bir plan seçin.",
+        "pools": {
+          "title": "İki kota. Tek fatura dönemi.",
+          "akeed": "Akeed numarasından mesajlar",
+          "ownNumber": "Kendi numaranızdan mesajlar",
+          "note": "İki kota birlikte yenilenir. Meta, kendi numaranızdan gönderilen mesajlar için işletmenizi ayrıca faturalandırır.",
+          "noteRenews": "İki kota {date} tarihinde birlikte yenilenir. Meta, kendi numaranızdan gönderilen mesajlar için işletmenizi ayrıca faturalandırır."
+        }
       }
     },
     "sourceEasyOrders": "EasyOrders",
@@ -2621,7 +2635,14 @@
       "usedThisMonth": "Bu ay kullanılan",
       "lastPurchase": "Son satın alma",
       "noPurchase": "Henüz satın alma yok",
-      "unitPrice": "Kredi başına fiyat"
+      "unitPrice": "Kredi başına fiyat",
+      "senders": {
+        "usedHeading": "Bu ay numaraya göre kullanılan kredi",
+        "akeed": "Akeed numarası",
+        "ownNumber": "Numaranız",
+        "usageNote": "Her gönderimin gerçek maliyeti, iade edilen gönderimler düşülerek.",
+        "ratesHeading": "Mesaj başına maliyet"
+      }
     },
     "status": {
       "active": "Etkin",
@@ -2764,7 +2785,34 @@
     "balanceChip": {
       "label": "Bakiye: {count} kredi",
       "value": "Bakiye <strong>{count}</strong> kredi"
-    }
+    },
+    "transactions": {
+      "title": "İşlemler",
+      "columns": {
+        "transaction": "İşlem",
+        "date": "Tarih",
+        "credits": "Kredi",
+        "balance": "Sonraki bakiye"
+      },
+      "types": {
+        "purchase": "Kredi yükleme",
+        "free_grant": "Hoş geldin kredisi",
+        "consumption": "Akeed numarasından mesaj",
+        "own_number_pack": "Kendi numaranızdan mesajlar",
+        "own_number_pack_reversal": "Kendi numaranızın kredisi geri yüklendi",
+        "failure_reversal": "Teslim edilmeyen mesaj için iade edilen kredi",
+        "refund_reversal": "İade",
+        "chargeback_reversal": "İtiraz edilen ödeme",
+        "chargeback_reinstatement": "İtiraz edilen ödeme geri yüklendi",
+        "staff_adjustment": "Akeed düzeltmesi"
+      },
+      "packNote": "Bir paket, kendi numaranızdan iki gönderimi karşılar",
+      "empty": "Henüz işlem yok.",
+      "error": "İşlemler yüklenemedi.",
+      "retry": "Tekrar dene",
+      "note": "Kullanılabilir bakiye ek krediyi de içerir. Kullanım gönderim başına sayılır; paket kayıtları bu geçmişte kalır."
+    },
+    "ownNumberGuide": "Kendi WhatsApp numaranız nasıl faturalandırılır"
   },
   "orderImport": {
     "entry": {
@@ -3741,7 +3789,8 @@
       "assetUnverified": "Akeed seçtiğiniz WhatsApp hesabına ve numaraya erişimi doğrulayamadı.",
       "assetAmbiguous": "Birden fazla WhatsApp hesabı veya numarası paylaşıldı. Bağlanırken yalnızca birini seçin.",
       "network": "Akeed’e ulaşılamadı. Bağlantınızı kontrol edip yeniden deneyin.",
-      "default": "Bağlanırken bir sorun oluştu."
+      "default": "Bağlanırken bir sorun oluştu.",
+      "writeRequired": "Bunu yalnızca mağaza sahibi ve yöneticiler değiştirebilir."
     },
     "metaErrors": {
       "sharedWithPartner": "Bu WhatsApp Business hesabı zaten başka bir sağlayıcıya bağlı. WhatsApp Business uygulamasında o sağlayıcının bağlantısını kesin, ardından yeniden deneyin.",
@@ -3780,6 +3829,238 @@
       "opened": "Bağlantı sayfası yeni bir sekmede açıldı.",
       "blocked": "Tarayıcınız yeni sekmeyi engelledi.",
       "openLink": "Bağlantı sayfasını aç"
+    },
+    "tab": {
+      "number": {
+        "title": "WhatsApp numaranız",
+        "description": "İşletme numaranızı bağlayın; her onay, müşterilerinizin tanıdığı bir numaradan gitsin.",
+        "subtitle": {
+          "coexistence": "WhatsApp Business uygulaması numarası",
+          "new_number": "Yeni WhatsApp Business numarası"
+        },
+        "noNumber": "Numara henüz doğrulanmadı",
+        "yourNumber": "Numaranız"
+      },
+      "line": {
+        "idle": "Akeed henüz WhatsApp numaranıza bağlı değil.",
+        "waiting": "Akeed {number} numarasını hazırlıyor.",
+        "connected": "Akeed {number} numarasına bağlı.",
+        "disconnected": "Akeed artık {number} numarasına bağlı değil."
+      },
+      "connect": {
+        "heading": "Tanıdık bir numara. Mağazanızın sesi.",
+        "body": "Numaranız hazır olana kadar Akeed göndermeye devam eder.",
+        "keepApp": "WhatsApp Business uygulamanızı kullanmaya devam edin",
+        "metaBills": "Meta işletmenizi doğrudan faturalandırır",
+        "action": "Numaranızı bağlayın",
+        "opening": "Açılıyor…",
+        "hint": "Yeni sekmede güvenli bir bağlantı sayfası açar",
+        "opened": "Bağlantı sayfası yeni sekmede açık. Bitirdiğinizde buraya dönün.",
+        "ownerOnly": "Numarayı yalnızca mağaza sahibi bağlayabilir veya bağlantısını kesebilir"
+      },
+      "costs": {
+        "title": "Neler değişir",
+        "description": "Bağlamadan önce maliyeti öğrenin.",
+        "fromAkeed": "Akeed numarasından",
+        "fromYours": "Kendi numaranızdan",
+        "credits": "{count, plural, one {# kredi / mesaj} other {# kredi / mesaj}}",
+        "creditNote": "Meta, kendi numaranızdan gönderilen mesajlar için işletmenizi ayrıca faturalandırır.",
+        "messages": "{count} mesaj",
+        "extraMessages": "+{count} mesaj",
+        "poolNote": "Planınızda her biri için ayrı bir kota vardır ve ikisi her fatura döneminde birlikte yenilenir. Meta, kendi numaranızdan gönderilen mesajlar için işletmenizi ayrıca faturalandırır."
+      },
+      "status": {
+        "connected": "Bağlı",
+        "preparing": "Kuruluyor",
+        "disconnected": "Bağlantı kesildi"
+      },
+      "readiness": {
+        "label": "Numara durumu",
+        "ready": "Göndermeye hazır",
+        "templatesVary": "Hazır — şablona göre değişir",
+        "noTemplatesReady": "Onaylı şablon bekleniyor",
+        "preparing": "Kuruluyor",
+        "degradedPayment": "Ödeme ilgilenmenizi bekliyor",
+        "degradedCredentials": "Bağlantının yenilenmesi gerekiyor",
+        "degradedRestricted": "Meta tarafından kısıtlandı",
+        "degradedOther": "Geçici olarak kullanılamıyor",
+        "sendingOff": "Duraklatıldı — Akeed numarasından gönderiliyor",
+        "disconnected": "Bağlantı kesildi",
+        "offboarded": "Akeed’den kaldırıldı"
+      },
+      "last": {
+        "confirmation": "Son kabul edilen onay",
+        "reminder": "Son kabul edilen hatırlatma",
+        "noConfirmation": "Henüz kabul edilen onay yok",
+        "value": "{sender} · {time}",
+        "historical": "Geçmiş bir gönderim. Numaranızın şu anda hazır olup olmadığını göstermez.",
+        "delivery": {
+          "accepted": "Kabul edildi",
+          "delivered": "Teslim edildi",
+          "read": "Okundu",
+          "failed": "Teslim edilmedi"
+        }
+      },
+      "sender": {
+        "yourNumber": "Numaranız",
+        "akeed": "Akeed"
+      },
+      "templates": {
+        "title": "Mesaj şablonları",
+        "description": "Her dilin durumu ve şu anda kullanacağı gönderen.",
+        "subheading": "Durum her şablon ve her dil için ayrı kontrol edilir.",
+        "approvedCount": "{approved} / {total} onaylı",
+        "tableLabel": "Dile göre mesaj şablonları",
+        "columns": {
+          "language": "Dil",
+          "message": "Mesaj",
+          "status": "Durum",
+          "sender": "Şu anki gönderen"
+        },
+        "message": {
+          "confirmation": "Sipariş onayı",
+          "reminder": "Hatırlatma",
+          "thankYouConfirmed": "Onaydan sonra teşekkür",
+          "thankYouCanceled": "İptalden sonra teşekkür",
+          "other": "Mesaj"
+        },
+        "status": {
+          "approved": "Onaylandı",
+          "pending": "İncelemede",
+          "rejected": "Reddedildi",
+          "paused": "Duraklatıldı",
+          "recategorized": "Pazarlamaya taşındı",
+          "missing": "Henüz oluşturulmadı"
+        },
+        "reason": {
+          "featureOff": "Numaranızdan gönderim duraklatıldı",
+          "notReady": "Numaranız hâlâ kuruluyor",
+          "disconnected": "Numaranızın bağlantısı kesildi",
+          "degraded": "Numaranız ilgilenmenizi bekliyor",
+          "templateMissing": "Şablon henüz oluşturulmadı",
+          "templateRejected": "Şablon reddedildi",
+          "templatePaused": "Şablon duraklatıldı",
+          "templatePending": "Şablon incelemede",
+          "templateRecategorized": "Hizmet şablonu değil",
+          "other": "Kullanılamıyor"
+        },
+        "empty": "Henüz şablon yok. Numaranız kurulduğunda Akeed bunları oluşturur.",
+        "footer": {
+          "ready": "Gönderen her mesajda yeniden kontrol edilir.",
+          "pending": "İncelemedeki şablonlar, Meta inceleyene kadar Akeed numarasından gider. Onaylı şablonlar numaranızı kullanabilir.",
+          "degraded": "Şablonlar onaylı, ancak numaranız geçici olarak kullanılamıyor; bu yüzden şimdilik Akeed gönderiyor.",
+          "akeed": "Şablonu hazır olmayan mesajlar Akeed numarasından gider."
+        }
+      },
+      "thankYou": {
+        "title": "Teşekkür yanıtları",
+        "description": "Müşteri onayladığında veya iptal ettiğinde kısa bir yanıt gönderin.",
+        "heading": "Teşekkür yanıtlarını numaranızdan gönderin",
+        "help": "Akeed kredisi kullanılmaz. Meta fiyatlandırması uygulanabilir. Bu yanıtlar yalnızca sizin numaranızdan gider, asla Akeed numarasından gitmez.",
+        "readOnly": "Bunu mağaza sahibi ve yöneticiler değiştirebilir.",
+        "error": "Bu değişiklik kaydedilmedi. Tekrar deneyin."
+      },
+      "banners": {
+        "sendingOff": {
+          "title": "Akeed numarasından gönderiliyor",
+          "body": "Numaranızdan gönderim geçici olarak kapatıldı. Bağlantınız korunuyor."
+        },
+        "templatesInReview": {
+          "title": "Bağlantınız hazır. Bazı şablonlar hâlâ incelemede.",
+          "body": "Durum dile göre değişebilir. Şablonu hazır olmayan mesajları Akeed gönderir."
+        },
+        "disconnect": {
+          "disconnected": {
+            "title": "Numaranızın bağlantısı kesildi",
+            "body": "Onaylar Akeed numarasından devam ediyor."
+          },
+          "offboarded": {
+            "title": "Numaranız Akeed’den kaldırıldı",
+            "body": "Akeed’in WhatsApp Business hesabınıza artık erişimi yok. Onaylar Akeed numarasından devam ediyor."
+          },
+          "primary_inactivity": {
+            "title": "WhatsApp Business uygulaması bağlantısı sona erdi",
+            "body": "Telefonunuzdaki uygulama bir süredir kullanılmadığı için Meta bağlantıyı sonlandırdı. Onaylar Akeed numarasından devam ediyor."
+          }
+        },
+        "payment": {
+          "payment": {
+            "title": "Meta’daki ödeme yönteminizi güncelleyin",
+            "body": "Onaylar şimdilik Akeed numarasından gidiyor. Ödeme yönteminizi WhatsApp Yöneticisi’nde güncelleyin."
+          }
+        },
+        "quality_drop": {
+          "red": {
+            "title": "Numaranızın kalite puanı düşük",
+            "body": "Meta, numaranızdan gönderilen son mesajlara düşük puan verdi. Numaranızı WhatsApp Yöneticisi’nde inceleyin."
+          }
+        },
+        "template_rejection": {
+          "unavailable": {
+            "title": "Bazı şablonlar kullanılamıyor",
+            "body": "Meta yeniden onaylayana kadar bunlar Akeed numarasından gider: {templates}."
+          },
+          "recategorized": {
+            "title": "Meta bazı şablonları pazarlamaya taşıdı",
+            "body": "Bunlar Akeed numarasından gider: {templates}."
+          }
+        },
+        "fallback": {
+          "credentials": {
+            "title": "Numaranızı yeniden bağlayın",
+            "body": "Akeed artık numaranızdan gönderemiyor. Onaylar Akeed numarasından gidiyor."
+          },
+          "restricted": {
+            "title": "Meta hesabınızı kısıtladı",
+            "body": "Onaylar Akeed numarasından gidiyor. Hesabınızı WhatsApp Yöneticisi’nde kontrol edin."
+          },
+          "sender_unavailable": {
+            "title": "Yakın zamandaki bir onay Akeed numarasından gitti",
+            "body": "Numaranız gönderemediği için Akeed gönderdi."
+          }
+        },
+        "resumes": "Numaranız bir sonraki kontrolden sonra yeniden göndermeye başlar.",
+        "reconnectFirst": "Yeniden bağlamak için önce numaranızın bağlantısını kesin, sonra tekrar bağlayın.",
+        "askOwner": "Numarayı yeniden bağlaması için mağaza sahibinden yardım isteyin.",
+        "templateItem": "{message} ({language})",
+        "templateSeparator": ", "
+      },
+      "reconnect": {
+        "title": "Numaranızı yeniden bağlayın",
+        "body": "WhatsApp Business bağlantınız kaldırıldı. Onaylar Akeed numarasından devam ediyor.",
+        "next": "Sonraki adım",
+        "nextValue": "Yeniden bağlayın, ardından durumu kontrol edin",
+        "action": "Facebook ile yeniden bağlan"
+      },
+      "disconnect": {
+        "action": "Bağlantıyı kes",
+        "title": "Numaranızın bağlantısı kesilsin mi?",
+        "body": "Yeni onaylar Akeed numarasını kullanır.",
+        "coexistence": "Bir WhatsApp Business uygulaması numarasının bağlantısını tamamen kesmek için Akeed’in bağlantısını o uygulamadan da kesin.",
+        "history": "Bağlantınız ve geçmiş gönderim kayıtlarınız destek için erişilebilir kalır.",
+        "keep": "Bağlı kalsın",
+        "confirm": "Akeed’de bağlantıyı kes",
+        "error": "Numaranızın bağlantısı kesilmedi. Tekrar deneyin.",
+        "done": "Numaranızın Akeed’deki bağlantısı kesildi.",
+        "appStepsIntro": "Bitirmek için telefonunuzda WhatsApp Business uygulamasını açın:",
+        "appSteps": {
+          "settings": "Ayarlar’ı açın",
+          "account": "Hesap’ı seçin",
+          "business_platform": "İşletme Platformu’nu seçin",
+          "disconnect": "Hesabın bağlantısını kes’i seçin"
+        },
+        "cleanupManual": "Akeed, Meta’daki erişimini otomatik olarak kaldıramadı. Kaldırmayı tamamlamak için Akeed desteğiyle iletişime geçin."
+      },
+      "permissions": {
+        "title": "Mağaza sahibinin izni gerekli",
+        "body": "Numarayı bağlaması veya bağlantısını kesmesi için mağaza sahibinden yardım isteyin. Yöneticiler teşekkür yanıtlarını değiştirebilir. Görüntüleyiciler yalnızca durumu inceleyebilir."
+      },
+      "load": {
+        "title": "Bağlantınızı yükleyemedik",
+        "body": "Gönderim ayarlarınız değişmedi. En son durumu görmek için tekrar deneyin.",
+        "retry": "Tekrar dene"
+      },
+      "help": "Kendi numaranız nasıl çalışır"
     }
   }
 }

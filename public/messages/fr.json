@@ -1219,7 +1219,12 @@
         "stale": "Impossible d’actualiser l’utilisation",
         "retry": "Réessayer",
         "retryLabel": "Recharger l’utilisation des messages",
-        "cta": "Choisir un forfait"
+        "cta": "Choisir un forfait",
+        "pools": {
+          "akeed": "Numéro Akeed",
+          "ownNumber": "Votre numéro",
+          "note": "Chaque quota ne compte que les messages qu’il a payés."
+        }
       }
     },
     "overview": {
@@ -1613,7 +1618,8 @@
           "message": "Message",
           "timing": "Délais et relance",
           "store": "Boutique",
-          "apiKeys": "Clés API"
+          "apiKeys": "Clés API",
+          "whatsapp": "WhatsApp"
         },
         "unsavedShort": "Modifications non enregistrées",
         "dismiss": "Fermer",
@@ -1932,7 +1938,8 @@
       "tabs": {
         "message": "Message",
         "timing": "Délais et relance",
-        "plan": "Forfait"
+        "plan": "Forfait",
+        "whatsapp": "WhatsApp"
       },
       "save": "Enregistrer",
       "discard": "Ignorer",
@@ -2106,7 +2113,14 @@
         "renew": "Renouveler {plan} maintenant",
         "billingManaged": "Votre forfait est géré par l’équipe Akeed. Contactez l’assistance pour le modifier.",
         "subscribeError": "Nous n’avons pas pu ouvrir la page d’approbation de Shopify. Réessayez.",
-        "freePlanClaimedError": "Cette boutique a déjà utilisé le forfait gratuit. Choisissez un forfait payant."
+        "freePlanClaimedError": "Cette boutique a déjà utilisé le forfait gratuit. Choisissez un forfait payant.",
+        "pools": {
+          "title": "Deux quotas. Une période de facturation.",
+          "akeed": "Messages depuis Akeed",
+          "ownNumber": "Messages depuis votre numéro",
+          "note": "Les deux quotas se renouvellent ensemble. Meta facture séparément à votre entreprise les messages envoyés depuis votre numéro.",
+          "noteRenews": "Les deux quotas se renouvellent ensemble le {date}. Meta facture séparément à votre entreprise les messages envoyés depuis votre numéro."
+        }
       }
     },
     "sourceEasyOrders": "EasyOrders",
@@ -2621,7 +2635,14 @@
       "usedThisMonth": "Utilisés ce mois-ci",
       "lastPurchase": "Dernier achat",
       "noPurchase": "Aucun achat pour l’instant",
-      "unitPrice": "Prix par crédit"
+      "unitPrice": "Prix par crédit",
+      "senders": {
+        "usedHeading": "Crédits utilisés ce mois-ci par numéro",
+        "akeed": "Numéro Akeed",
+        "ownNumber": "Votre numéro",
+        "usageNote": "Coût réel de chaque envoi, déduction faite des envois remboursés.",
+        "ratesHeading": "Coût par message"
+      }
     },
     "status": {
       "active": "Actif",
@@ -2764,7 +2785,34 @@
     "balanceChip": {
       "label": "Solde : {count} crédits",
       "value": "Solde <strong>{count}</strong> crédits"
-    }
+    },
+    "transactions": {
+      "title": "Transactions",
+      "columns": {
+        "transaction": "Transaction",
+        "date": "Date",
+        "credits": "Crédits",
+        "balance": "Solde après"
+      },
+      "types": {
+        "purchase": "Recharge de crédits",
+        "free_grant": "Crédits de bienvenue",
+        "consumption": "Message depuis Akeed",
+        "own_number_pack": "Messages depuis votre numéro",
+        "own_number_pack_reversal": "Crédits de votre numéro rétablis",
+        "failure_reversal": "Crédits rendus pour un message non remis",
+        "refund_reversal": "Remboursement",
+        "chargeback_reversal": "Paiement contesté",
+        "chargeback_reinstatement": "Paiement contesté rétabli",
+        "staff_adjustment": "Ajustement par Akeed"
+      },
+      "packNote": "Un pack couvre deux envois depuis votre numéro",
+      "empty": "Aucune transaction pour l’instant.",
+      "error": "Impossible de charger les transactions.",
+      "retry": "Réessayer",
+      "note": "Le solde disponible inclut tout crédit supplémentaire. L’usage est compté par envoi ; les packs restent dans cet historique."
+    },
+    "ownNumberGuide": "Comment votre propre numéro WhatsApp est facturé"
   },
   "orderImport": {
     "entry": {
@@ -3741,7 +3789,8 @@
       "assetUnverified": "Akeed n’a pas pu confirmer l’accès au compte WhatsApp et au numéro que vous avez choisis.",
       "assetAmbiguous": "Plus d’un compte ou numéro WhatsApp a été partagé. Choisissez-en un seul lors de la connexion.",
       "network": "Impossible de joindre Akeed. Vérifiez votre connexion et réessayez.",
-      "default": "Un problème est survenu pendant la connexion."
+      "default": "Un problème est survenu pendant la connexion.",
+      "writeRequired": "Seuls le propriétaire et les administrateurs de la boutique peuvent modifier ce réglage."
     },
     "metaErrors": {
       "sharedWithPartner": "Ce compte WhatsApp Business est déjà connecté à un autre fournisseur. Déconnectez ce fournisseur dans l’application WhatsApp Business, puis réessayez.",
@@ -3780,6 +3829,238 @@
       "opened": "La page de connexion s’est ouverte dans un nouvel onglet.",
       "blocked": "Votre navigateur a bloqué le nouvel onglet.",
       "openLink": "Ouvrir la page de connexion"
+    },
+    "tab": {
+      "number": {
+        "title": "Votre numéro WhatsApp",
+        "description": "Connectez le numéro de votre entreprise pour que chaque confirmation vienne d’un numéro que vos clients connaissent.",
+        "subtitle": {
+          "coexistence": "Numéro de l’application WhatsApp Business",
+          "new_number": "Nouveau numéro WhatsApp Business"
+        },
+        "noNumber": "Numéro pas encore confirmé",
+        "yourNumber": "Votre numéro"
+      },
+      "line": {
+        "idle": "Akeed n’est pas encore connecté à votre numéro WhatsApp.",
+        "waiting": "Akeed configure {number}.",
+        "connected": "Akeed est connecté à {number}.",
+        "disconnected": "Akeed n’est plus connecté à {number}."
+      },
+      "connect": {
+        "heading": "Un numéro familier. La voix de votre boutique.",
+        "body": "Akeed continue d’envoyer jusqu’à ce que votre numéro soit prêt.",
+        "keepApp": "Continuez à utiliser l’application WhatsApp Business",
+        "metaBills": "Meta facture directement votre entreprise",
+        "action": "Connecter votre numéro",
+        "opening": "Ouverture…",
+        "hint": "Ouvre une page de connexion sécurisée dans un nouvel onglet",
+        "opened": "La page de connexion est ouverte dans un nouvel onglet. Revenez ici une fois terminé.",
+        "ownerOnly": "Seul le propriétaire de la boutique peut connecter ou déconnecter le numéro"
+      },
+      "costs": {
+        "title": "Ce qui change",
+        "description": "Connaissez le coût avant de vous connecter.",
+        "fromAkeed": "Depuis Akeed",
+        "fromYours": "Depuis votre numéro",
+        "credits": "{count, plural, one {# crédit / message} other {# crédits / message}}",
+        "creditNote": "Meta facture séparément à votre entreprise les messages envoyés depuis votre numéro.",
+        "messages": "{count} messages",
+        "extraMessages": "+{count} messages",
+        "poolNote": "Votre offre comprend un quota distinct pour chacun, et les deux se renouvellent ensemble à chaque période de facturation. Meta facture séparément à votre entreprise les messages envoyés depuis votre numéro."
+      },
+      "status": {
+        "connected": "Connecté",
+        "preparing": "Configuration en cours",
+        "disconnected": "Déconnecté"
+      },
+      "readiness": {
+        "label": "État du numéro",
+        "ready": "Prêt à envoyer",
+        "templatesVary": "Prêt — selon le modèle",
+        "noTemplatesReady": "En attente de modèles approuvés",
+        "preparing": "Configuration en cours",
+        "degradedPayment": "Le paiement demande votre attention",
+        "degradedCredentials": "La connexion doit être renouvelée",
+        "degradedRestricted": "Restreint par Meta",
+        "degradedOther": "Indisponible pour le moment",
+        "sendingOff": "En pause — envoi depuis Akeed",
+        "disconnected": "Déconnecté",
+        "offboarded": "Retiré d’Akeed"
+      },
+      "last": {
+        "confirmation": "Dernière confirmation acceptée",
+        "reminder": "Dernier rappel accepté",
+        "noConfirmation": "Aucune confirmation acceptée pour l’instant",
+        "value": "{sender} · {time}",
+        "historical": "Un envoi passé. Il n’indique pas si votre numéro est prêt maintenant.",
+        "delivery": {
+          "accepted": "Accepté",
+          "delivered": "Remis",
+          "read": "Lu",
+          "failed": "Non remis"
+        }
+      },
+      "sender": {
+        "yourNumber": "Votre numéro",
+        "akeed": "Akeed"
+      },
+      "templates": {
+        "title": "Modèles de messages",
+        "description": "L’état de chaque langue et l’expéditeur qu’elle utiliserait maintenant.",
+        "subheading": "L’état est vérifié pour chaque modèle et chaque langue.",
+        "approvedCount": "{approved} / {total} approuvés",
+        "tableLabel": "Modèles de messages par langue",
+        "columns": {
+          "language": "Langue",
+          "message": "Message",
+          "status": "État",
+          "sender": "Expéditeur actuel"
+        },
+        "message": {
+          "confirmation": "Confirmation de commande",
+          "reminder": "Rappel",
+          "thankYouConfirmed": "Remerciement après confirmation",
+          "thankYouCanceled": "Remerciement après annulation",
+          "other": "Message"
+        },
+        "status": {
+          "approved": "Approuvé",
+          "pending": "En cours d’examen",
+          "rejected": "Refusé",
+          "paused": "En pause",
+          "recategorized": "Passé en marketing",
+          "missing": "Pas encore créé"
+        },
+        "reason": {
+          "featureOff": "L’envoi depuis votre numéro est en pause",
+          "notReady": "Votre numéro est encore en configuration",
+          "disconnected": "Votre numéro est déconnecté",
+          "degraded": "Votre numéro demande votre attention",
+          "templateMissing": "Modèle pas encore créé",
+          "templateRejected": "Modèle refusé",
+          "templatePaused": "Modèle en pause",
+          "templatePending": "Modèle en cours d’examen",
+          "templateRecategorized": "Pas un modèle utilitaire",
+          "other": "Indisponible"
+        },
+        "empty": "Aucun modèle pour l’instant. Akeed les crée une fois votre numéro configuré.",
+        "footer": {
+          "ready": "L’expéditeur est vérifié à nouveau pour chaque message.",
+          "pending": "Les modèles en cours d’examen partent depuis Akeed pendant que Meta les examine. Les modèles approuvés peuvent utiliser votre numéro.",
+          "degraded": "Les modèles sont approuvés, mais votre numéro est indisponible pour le moment : Akeed envoie à sa place.",
+          "akeed": "Les messages dont le modèle n’est pas prêt partent depuis Akeed."
+        }
+      },
+      "thankYou": {
+        "title": "Messages de remerciement",
+        "description": "Envoyez une courte réponse quand un client confirme ou annule.",
+        "heading": "Envoyer les remerciements depuis votre numéro",
+        "help": "Aucun crédit Akeed. Les tarifs de Meta peuvent s’appliquer. Ces réponses partent uniquement de votre numéro, jamais de celui d’Akeed.",
+        "readOnly": "Le propriétaire et les administrateurs de la boutique peuvent modifier ce réglage.",
+        "error": "Cette modification n’a pas été enregistrée. Réessayez."
+      },
+      "banners": {
+        "sendingOff": {
+          "title": "Envoi depuis Akeed",
+          "body": "L’envoi depuis votre numéro est temporairement désactivé. Votre connexion est conservée."
+        },
+        "templatesInReview": {
+          "title": "Votre connexion est prête. Certains modèles sont encore en cours d’examen.",
+          "body": "L’état peut varier selon la langue. Akeed couvre les messages dont les modèles ne sont pas prêts."
+        },
+        "disconnect": {
+          "disconnected": {
+            "title": "Votre numéro est déconnecté",
+            "body": "Les confirmations continuent depuis Akeed."
+          },
+          "offboarded": {
+            "title": "Votre numéro a été retiré d’Akeed",
+            "body": "Akeed n’a plus accès à votre compte WhatsApp Business. Les confirmations continuent depuis Akeed."
+          },
+          "primary_inactivity": {
+            "title": "Le lien avec l’application WhatsApp Business a pris fin",
+            "body": "L’application sur votre téléphone n’a pas été utilisée depuis un moment, Meta a donc mis fin au lien. Les confirmations continuent depuis Akeed."
+          }
+        },
+        "payment": {
+          "payment": {
+            "title": "Mettez à jour votre moyen de paiement chez Meta",
+            "body": "Les confirmations partent depuis Akeed pour le moment. Mettez à jour votre moyen de paiement dans le Gestionnaire WhatsApp."
+          }
+        },
+        "quality_drop": {
+          "red": {
+            "title": "La note de qualité de votre numéro est basse",
+            "body": "Meta a mal noté les messages récents de votre numéro. Vérifiez votre numéro dans le Gestionnaire WhatsApp."
+          }
+        },
+        "template_rejection": {
+          "unavailable": {
+            "title": "Certains modèles ne peuvent pas être utilisés",
+            "body": "Ils partent depuis Akeed jusqu’à ce que Meta les approuve de nouveau : {templates}."
+          },
+          "recategorized": {
+            "title": "Meta a classé certains modèles en marketing",
+            "body": "Ils partent depuis Akeed : {templates}."
+          }
+        },
+        "fallback": {
+          "credentials": {
+            "title": "Reconnectez votre numéro",
+            "body": "Akeed ne peut plus envoyer depuis votre numéro. Les confirmations partent depuis Akeed."
+          },
+          "restricted": {
+            "title": "Meta a restreint votre compte",
+            "body": "Les confirmations partent depuis Akeed. Vérifiez votre compte dans le Gestionnaire WhatsApp."
+          },
+          "sender_unavailable": {
+            "title": "Une confirmation récente est partie depuis Akeed",
+            "body": "Votre numéro n’a pas pu l’envoyer, Akeed l’a donc envoyée."
+          }
+        },
+        "resumes": "Votre numéro reprend après sa prochaine vérification.",
+        "reconnectFirst": "Pour vous reconnecter, déconnectez d’abord votre numéro, puis connectez-le à nouveau.",
+        "askOwner": "Demandez au propriétaire de la boutique de reconnecter le numéro.",
+        "templateItem": "{message} ({language})",
+        "templateSeparator": ", "
+      },
+      "reconnect": {
+        "title": "Reconnectez votre numéro",
+        "body": "Votre connexion WhatsApp Business a été retirée. Les confirmations continuent depuis Akeed.",
+        "next": "Étape suivante",
+        "nextValue": "Reconnectez-vous, puis vérifiez l’état",
+        "action": "Se reconnecter avec Facebook"
+      },
+      "disconnect": {
+        "action": "Déconnecter",
+        "title": "Déconnecter votre numéro ?",
+        "body": "Les nouvelles confirmations utiliseront Akeed.",
+        "coexistence": "Pour dissocier complètement un numéro de l’application WhatsApp Business, déconnectez aussi Akeed dans cette application.",
+        "history": "Votre connexion et l’historique des envois restent disponibles pour l’assistance.",
+        "keep": "Rester connecté",
+        "confirm": "Déconnecter dans Akeed",
+        "error": "Votre numéro n’a pas été déconnecté. Réessayez.",
+        "done": "Votre numéro est déconnecté dans Akeed.",
+        "appStepsIntro": "Pour terminer, ouvrez l’application WhatsApp Business sur votre téléphone :",
+        "appSteps": {
+          "settings": "Ouvrez Paramètres",
+          "account": "Choisissez Compte",
+          "business_platform": "Choisissez Plateforme Business",
+          "disconnect": "Choisissez Déconnecter le compte"
+        },
+        "cleanupManual": "Akeed n’a pas pu retirer son accès chez Meta automatiquement. Contactez l’assistance Akeed pour finir de le retirer."
+      },
+      "permissions": {
+        "title": "Autorisation du propriétaire requise",
+        "body": "Demandez au propriétaire de la boutique de connecter ou de déconnecter le numéro. Les administrateurs peuvent modifier les remerciements. Les lecteurs peuvent seulement consulter l’état."
+      },
+      "load": {
+        "title": "Impossible de charger votre connexion",
+        "body": "Vos réglages d’envoi n’ont pas changé. Réessayez pour voir l’état le plus récent.",
+        "retry": "Réessayer"
+      },
+      "help": "Comment fonctionne votre propre numéro"
     }
   }
 }

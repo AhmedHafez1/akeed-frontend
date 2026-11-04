@@ -58,6 +58,8 @@ export interface CreditSummary {
     messagePriceMinor: number
     /** Credits one message from the Akeed number uses. */
     creditsPerMessage: number
+    /** Credits one message from the merchant's own number uses. Absent from an older backend. */
+    ownNumberCreditsPerMessage?: number
     currency: string
   }
   range: { min: number; max: number; step: number }

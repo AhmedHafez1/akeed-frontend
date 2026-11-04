@@ -26,12 +26,19 @@ import {
   type SettingsTabId,
 } from '@/features/settings/domain/settingsTabs'
 import { useEmbeddedSettings } from '@/features/settings/domain/useEmbeddedSettings'
+import { useOwnNumberPresence } from '@/features/whatsapp-connect'
 import { AppBridgeSaveBar } from '@/shared/ui/app-bridge/AppBridgeSaveBar'
 import { MessageTab } from './MessageTab'
 import { PlanTab } from './PlanTab'
 import { TimingTab } from './TimingTab'
+import { WhatsappTab } from './WhatsappTab'
 
 const SAVE_BAR_ID = 'akeed-settings-save-bar'
+
+/** The tabs that hold form fields; the others are never dirty. */
+function isFormTab(tab: SettingsTabId): tab is 'message' | 'timing' {
+  return tab === 'message' || tab === 'timing'
+}
 
 export function SettingsEmbeddedSkeleton({ title }: { title: string }) {
   return (
@@ -61,11 +68,18 @@ export function SettingsEmbeddedPage() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const model = useEmbeddedSettings()
+  const ownNumber = useOwnNumberPresence()
   // The field to focus once its tab has rendered after a failed save.
   const pendingFocus = useRef<SettingsFieldKey | null>(null)
 
   const tabParam = searchParams.get('tab')
   const activeTab = resolveSettingsTab(tabParam)
+  // Offered while connecting is, or while a connection exists to manage.
+  const whatsappHidden =
+    activeTab === 'whatsapp' && !ownNumber.isLoading && !ownNumber.visible
+  const shownTabs = SETTINGS_TABS.filter(
+    (tab) => tab !== 'whatsapp' || ownNumber.visible || activeTab === 'whatsapp'
+  )
 
   const goToTab = useCallback(
     (tab: SettingsTabId, mode: 'push' | 'replace' = 'push') => {
@@ -81,8 +95,9 @@ export function SettingsEmbeddedPage() {
   // Old tab ids (store, confirmation, message-preview, billing, ...) land on
   // the tab that now holds their fields, without adding a history entry.
   useEffect(() => {
-    if (!isCanonicalSettingsTab(tabParam)) goToTab(activeTab, 'replace')
-  }, [activeTab, goToTab, tabParam])
+    if (whatsappHidden) goToTab('message', 'replace')
+    else if (!isCanonicalSettingsTab(tabParam)) goToTab(activeTab, 'replace')
+  }, [activeTab, goToTab, tabParam, whatsappHidden])
 
   // Focus a field on another tab once that tab has rendered.
   useEffect(() => {
@@ -127,23 +142,24 @@ export function SettingsEmbeddedPage() {
   // Polaris renders tab labels as plain text (its `accessibilityLabel` is not
   // forwarded to the button), so the unsaved-changes dot is part of the name;
   // the App Bridge save bar announces the unsaved state itself.
-  const tabs = SETTINGS_TABS.map((tab) => {
-    const hasChanges = tab !== 'plan' && model.dirtyTabs.has(tab)
+  const tabs = shownTabs.map((tab) => {
+    const hasChanges = isFormTab(tab) && model.dirtyTabs.has(tab)
     return {
       id: `settings-tab-${tab}`,
       panelID: `settings-panel-${tab}`,
       content: hasChanges ? `${tabLabel(tab)} •` : tabLabel(tab),
     }
   })
-  const firstDirtyTab = SETTINGS_TABS.find(
-    (tab) => tab !== 'plan' && model.dirtyTabs.has(tab)
+  const firstDirtyTab = SETTINGS_TABS.filter(isFormTab).find((tab) =>
+    model.dirtyTabs.has(tab)
   )
+  const onFormTab = isFormTab(activeTab)
 
   return (
     <Page title={t('title')}>
       <AppBridgeSaveBar
         id={SAVE_BAR_ID}
-        open={model.isDirty && !readOnly && activeTab !== 'plan'}
+        open={model.isDirty && !readOnly && onFormTab}
         isSaving={model.isSaving}
         saveLabel={t('save')}
         discardLabel={t('discard')}
@@ -153,21 +169,21 @@ export function SettingsEmbeddedPage() {
       <BlockStack gap="400">
         <Tabs
           tabs={tabs}
-          selected={SETTINGS_TABS.indexOf(activeTab)}
-          onSelect={(index) => goToTab(SETTINGS_TABS[index])}
+          selected={Math.max(0, shownTabs.indexOf(activeTab))}
+          onSelect={(index) => goToTab(shownTabs[index])}
         >
           <BlockStack gap="400">
-            {readOnly && (
+            {readOnly && activeTab !== 'whatsapp' && (
               <Banner tone="info">
                 <p>{t('readOnly')}</p>
               </Banner>
             )}
-            {model.saveError && activeTab !== 'plan' && (
+            {model.saveError && onFormTab && (
               <Banner tone="critical" onDismiss={model.dismissSaveError}>
                 <p>{model.saveError}</p>
               </Banner>
             )}
-            {activeTab === 'plan' && firstDirtyTab && (
+            {!onFormTab && firstDirtyTab && (
               <Banner
                 tone="warning"
                 action={{
@@ -190,7 +206,16 @@ export function SettingsEmbeddedPage() {
                 onPreviewMessage={() => goToTab('message')}
               />
             )}
-            {activeTab === 'plan' && <PlanTab model={model} data={data} />}
+            {activeTab === 'plan' && (
+              <PlanTab
+                model={model}
+                data={data}
+                ownNumberVisible={ownNumber.visible}
+              />
+            )}
+            {activeTab === 'whatsapp' && !whatsappHidden && (
+              <WhatsappTab pools={data.billing.usage.pools ?? null} />
+            )}
           </BlockStack>
         </Tabs>
       </BlockStack>

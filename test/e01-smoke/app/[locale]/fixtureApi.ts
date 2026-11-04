@@ -42,6 +42,19 @@ import {
   settingsBillingApi,
   settingsBillingFetch,
 } from './settingsBillingFixture'
+import {
+  isWhatsappSenderUrl,
+  whatsappSenderRequest,
+} from './whatsappSenderFixture'
+
+/** Pages that show the WhatsApp tab or its billing facts. */
+function usesWhatsappFixture() {
+  if (typeof window === 'undefined') return false
+  return (
+    isSettingsBillingFixture() ||
+    window.location.pathname.endsWith('/whatsapp-tab')
+  )
+}
 
 export function fetchWithAuth(url: string, options: RequestInit = {}) {
   if (isFirstRunFixture()) return firstRunFetch(url, options)
@@ -309,12 +322,18 @@ const WHATSAPP_SENDER_FIXTURE = {
 
 export const api = {
   async patch<T>(url: string, data?: unknown): Promise<T> {
+    if (isWhatsappSenderUrl(url) && usesWhatsappFixture())
+      return whatsappSenderRequest<T>('PATCH', url, data)
     if (isSettingsBillingFixture())
       return settingsBillingApi<T>('PATCH', url, data)
     throw new Error(`Blocked fixture PATCH: ${url}`)
   },
   async get<T>(url: string): Promise<T> {
+    if (isWhatsappSenderUrl(url) && usesWhatsappFixture())
+      return whatsappSenderRequest<T>('GET', url)
     if (url === '/api/whatsapp-sender') return WHATSAPP_SENDER_FIXTURE as T
+    if (url === '/api/whatsapp-sender/connection')
+      return { connection: null } as T
     if (isFirstRunFixture()) return firstRunApiGet<T>(url)
     if (isSettingsBillingFixture()) return settingsBillingApi<T>('GET', url)
     if (isEmbeddedDashboardFixture())
@@ -372,6 +391,12 @@ export const api = {
     data?: unknown,
     options: RequestInit = {}
   ): Promise<T> {
+    if (
+      isWhatsappSenderUrl(url) &&
+      url !== '/api/whatsapp-sender/connect-ticket' &&
+      usesWhatsappFixture()
+    )
+      return whatsappSenderRequest<T>('POST', url, data)
     if (url === '/api/whatsapp-sender/connect-ticket') {
       const locale = (data as { locale?: string } | undefined)?.locale ?? 'en'
       return {

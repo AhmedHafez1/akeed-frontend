@@ -26,6 +26,7 @@ import { AdminApiError, getAdminStores } from './adminApi'
 import { AdminErrorPanel } from './AdminErrorPanel'
 import {
   BillingCell,
+  WhatsappCell,
   formatDate,
   formatDateTime,
   HealthBadge,
@@ -753,7 +754,7 @@ function StoresResults({
     <section aria-label="Store results">
       <div className="border-border bg-card hidden overflow-hidden rounded-2xl border shadow-xs md:block">
         <div className="overflow-x-auto">
-          <table className="bg-card w-full min-w-[1120px] text-left text-sm">
+          <table className="bg-card w-full min-w-[1280px] text-left text-sm">
             <thead className="border-border bg-muted/40 text-muted-foreground border-b text-xs font-semibold tracking-wide uppercase">
               <tr>
                 <SortableHeader
@@ -779,6 +780,7 @@ function StoresResults({
                   direction={direction}
                   onSort={onSort}
                 />
+                <th className="px-4 py-3">WhatsApp</th>
                 <SortableHeader
                   label="Last activity"
                   sortKey="last_activity"
@@ -839,6 +841,9 @@ function StoresResults({
                       <td className="min-w-40 px-4 py-4">
                         <BillingCell store={store} />
                       </td>
+                      <td className="px-4 py-4">
+                        <WhatsappCell whatsapp={store.whatsapp} />
+                      </td>
                       <td className="text-foreground/70 px-4 py-4 text-xs whitespace-nowrap">
                         {formatDateTime(store.last_activity_at)}
                       </td>
@@ -871,7 +876,7 @@ function StoresResults({
                     </tr>
                     {isExpanded && (
                       <tr id={detailId}>
-                        <td colSpan={8} className="bg-muted/50 px-5 py-5">
+                        <td colSpan={9} className="bg-muted/50 px-5 py-5">
                           <StoreDetails store={store} href={storeHref(store)} />
                         </td>
                       </tr>
@@ -931,6 +936,10 @@ function StoresResults({
                     {store.billing.model === 'credits' ? 'Credits' : 'Usage'}
                   </p>
                   <BillingCell store={store} />
+                </div>
+                <div className="col-span-2">
+                  <p className="text-muted-foreground mb-1.5">WhatsApp</p>
+                  <WhatsappCell whatsapp={store.whatsapp} />
                 </div>
                 <div>
                   <p className="text-muted-foreground">

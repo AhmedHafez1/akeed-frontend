@@ -55,6 +55,11 @@ function Stat({ label, children }: { label: string; children: ReactNode }) {
 interface BalanceCardProps {
   summary: CreditSummary
   usage: BillingUsage
+  /**
+   * Show what each number costs and spent: the merchant can connect their
+   * own number, has one, or has sent from it this month.
+   */
+  showSenders?: boolean
 }
 
 /**
@@ -62,14 +67,22 @@ interface BalanceCardProps {
  * lasts, and the usage behind that. The number takes the state's colour, so
  * a low or empty balance is seen before it is read.
  */
-export function BalanceCard({ summary, usage }: BalanceCardProps) {
+export function BalanceCard({
+  summary,
+  usage,
+  showSenders = false,
+}: BalanceCardProps) {
   const t = useTranslations('billing.balance')
+  const tRates = useTranslations('whatsappConnect.tab.costs')
   const { locale } = useLocaleInfo()
   const headingId = useId()
   const { state, tone } = resolveBalanceState(summary)
   const StateIcon = STATE_ICON[state]
 
   const ready = usage.status === 'ready' ? usage : null
+  const senders =
+    showSenders || (ready !== null && ready.bySender.ownNumber > 0)
+  const ownRate = summary.price.ownNumberCreditsPerMessage
 
   // A runway only means something while messages can still go out.
   const days =
@@ -134,7 +147,12 @@ export function BalanceCard({ summary, usage }: BalanceCardProps) {
         {usage.status === 'loading' && (
           <Skeleton className="rounded-ak-control hidden h-25 w-65 sm:block" />
         )}
-        {ready && <DailyUsageBars daily={ready.daily} />}
+        {ready && (
+          <DailyUsageBars
+            daily={ready.daily}
+            split={senders ? ready.dailyBySender : undefined}
+          />
+        )}
       </div>
 
       <dl className="border-line divide-line grid divide-y border-t sm:auto-cols-fr sm:grid-flow-col sm:divide-x sm:divide-y-0">
@@ -175,6 +193,79 @@ export function BalanceCard({ summary, usage }: BalanceCardProps) {
           </bdi>
         </Stat>
       </dl>
+
+      {senders && (
+        <div className="border-line grid gap-5 border-t px-5 py-4 sm:grid-cols-2 sm:px-6">
+          <div className="space-y-2">
+            <h3 className="text-ak-caption text-ink-muted">
+              {t('senders.usedHeading')}
+            </h3>
+            <dl className="flex flex-wrap gap-x-8 gap-y-2">
+              {(['akeed', 'ownNumber'] as const).map((sender) => (
+                <div key={sender} className="flex flex-col gap-0.5">
+                  <dt className="text-ak-caption text-ink-muted flex items-center gap-1.5">
+                    <span
+                      aria-hidden="true"
+                      className={cn(
+                        'size-2 rounded-full',
+                        sender === 'akeed' ? 'bg-brand' : 'bg-brand-line'
+                      )}
+                    />
+                    {t(`senders.${sender}`)}
+                  </dt>
+                  <dd className="text-ink text-[1.0625rem] font-semibold">
+                    {ready ? (
+                      <>
+                        <span dir="ltr" className="tabular-nums">
+                          {formatCredits(ready.bySender[sender], locale)}
+                        </span>{' '}
+                        <span className="text-ak-caption text-ink-muted font-normal">
+                          {t('unit')}
+                        </span>
+                      </>
+                    ) : (
+                      usagePlaceholder
+                    )}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+            <p className="text-ak-caption text-ink-muted">
+              {t('senders.usageNote')}
+            </p>
+          </div>
+          {ownRate !== undefined && (
+            <div className="space-y-2">
+              <h3 className="text-ak-caption text-ink-muted">
+                {t('senders.ratesHeading')}
+              </h3>
+              <dl className="flex flex-wrap gap-x-8 gap-y-2">
+                <div className="flex flex-col gap-0.5">
+                  <dt className="text-ak-caption text-ink-muted">
+                    {t('senders.ownNumber')}
+                  </dt>
+                  <dd className="text-ink text-[1.0625rem] font-semibold">
+                    {tRates('credits', { count: ownRate })}
+                  </dd>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  <dt className="text-ak-caption text-ink-muted">
+                    {t('senders.akeed')}
+                  </dt>
+                  <dd className="text-ink text-[1.0625rem] font-semibold">
+                    {tRates('credits', {
+                      count: summary.price.creditsPerMessage,
+                    })}
+                  </dd>
+                </div>
+              </dl>
+              <p className="text-ak-caption text-ink-muted">
+                {tRates('creditNote')}
+              </p>
+            </div>
+          )}
+        </div>
+      )}
     </section>
   )
 }

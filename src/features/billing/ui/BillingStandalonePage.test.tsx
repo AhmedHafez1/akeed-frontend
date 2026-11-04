@@ -12,6 +12,23 @@ import { BillingStandalonePage } from './BillingStandalonePage'
 
 vi.mock('../domain/useBillingPage', () => ({ useBillingPage: vi.fn() }))
 vi.mock('../domain/useBillingUsage', () => ({ useBillingUsage: vi.fn() }))
+const presence = vi.hoisted(() => ({ visible: false }))
+vi.mock('@/features/whatsapp-connect', () => ({
+  useOwnNumberPresence: () => ({ visible: presence.visible, isLoading: false }),
+}))
+const history = vi.hoisted(() => ({
+  transactions: [] as unknown[],
+  purchases: [],
+  isComplete: true,
+  isWindowCovered: true,
+  isLoading: false,
+  isDraining: false,
+  error: false,
+  reload: async () => undefined,
+}))
+vi.mock('../domain/useTransactions', () => ({
+  useTransactions: () => history,
+}))
 vi.mock('./components/CreditModelNoticeBanner', () => ({
   CreditModelNoticeBanner: () => null,
 }))
@@ -56,7 +73,12 @@ const lastPurchase: PurchaseSummary = {
 const readyUsage: BillingUsage = {
   status: 'ready',
   usedThisMonth: 212,
+  bySender: { akeed: 212, ownNumber: 0 },
   daily: [9, 14, 11, 17, 8, 12, 21, 15, 13, 18, 10, 16, 22, 14],
+  dailyBySender: {
+    akeed: [9, 14, 11, 17, 8, 12, 21, 15, 13, 18, 10, 16, 22, 14],
+    ownNumber: Array(14).fill(0),
+  },
   lastPurchase,
 }
 
@@ -119,6 +141,8 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.useRealTimers()
+  presence.visible = false
+  history.transactions = []
   testLocale.current = 'ar'
 })
 
@@ -258,5 +282,64 @@ describe('BillingStandalonePage (en)', () => {
     ).toBeTruthy()
     expect(screen.getByText('Lasts about 36 days at this month’s pace.'))
     expect(screen.getByText('· Sep 12')).toBeTruthy()
+  })
+})
+
+describe('BillingStandalonePage with the merchant number', () => {
+  it('splits this month by number and shows both rates from the server', () => {
+    presence.visible = true
+    vi.mocked(useBillingUsage).mockReturnValue({
+      ...readyUsage,
+      usedThisMonth: 270,
+      bySender: { akeed: 124, ownNumber: 146 },
+    })
+    mockPage({
+      price: { ...summary.price, ownNumberCreditsPerMessage: 1 },
+    })
+    renderPage('en')
+    const balance = en.billing.balance
+    expect(screen.getByText(balance.senders.usedHeading)).toBeTruthy()
+    expect(screen.getByText('124')).toBeTruthy()
+    expect(screen.getByText('146')).toBeTruthy()
+    expect(screen.getByText('1 credit / message')).toBeTruthy()
+    expect(screen.getByText('2 credits / message')).toBeTruthy()
+    expect(screen.getByText(balance.senders.usageNote)).toBeTruthy()
+  })
+
+  it('keeps the page as it was while the own number is not offered or used', () => {
+    renderPage('en')
+    expect(
+      screen.queryByText(en.billing.balance.senders.usedHeading)
+    ).toBeNull()
+  })
+
+  it('shows unavailable usage as a dash, never as zero', () => {
+    presence.visible = true
+    vi.mocked(useBillingUsage).mockReturnValue({ status: 'unavailable' })
+    renderPage('en')
+    expect(screen.getAllByText('—').length).toBeGreaterThan(0)
+    expect(screen.queryByText('0')).toBeNull()
+  })
+
+  it('lists the latest transactions with the own-number pack note', () => {
+    history.transactions = [
+      {
+        id: 'tx-1',
+        kind: 'usage',
+        ledgerType: 'own_number_pack',
+        reasonCode: 'own_number_messages',
+        actorType: 'system',
+        quantity: -2,
+        balanceAfter: 842,
+        createdAt: new Date(2026, 9, 20, 10, 42).toISOString(),
+        reference: null,
+        purchase: null,
+      },
+    ]
+    renderPage('en')
+    const tx = en.billing.transactions
+    expect(screen.getByText(tx.types.own_number_pack)).toBeTruthy()
+    expect(screen.getByText(tx.packNote)).toBeTruthy()
+    expect(screen.getByText('842')).toBeTruthy()
   })
 })

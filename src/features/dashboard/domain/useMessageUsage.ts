@@ -4,6 +4,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { verificationOverviewOptions } from '../api/verificationQueries'
 import type { DashboardStatsDateRange } from '../model/dashboard.model'
 import { toMessageUsageView } from '../model/messageUsage.model'
+import { useOwnNumberPresence } from '@/features/whatsapp-connect'
 
 /**
  * The message allowance for the header, on both main tabs. It reads the
@@ -19,6 +20,7 @@ export function useMessageUsage(
     ...verificationOverviewOptions(dateRange),
     placeholderData: keepPreviousData,
   })
+  const ownNumber = useOwnNumberPresence()
 
   return {
     view: toMessageUsageView({
@@ -27,6 +29,7 @@ export function useMessageUsage(
       isPending: query.isPending,
       isError: query.isError,
       billingPlanId,
+      showPools: ownNumber.visible,
     }),
     isRefreshing: query.isFetching,
     retry: () => void query.refetch(),

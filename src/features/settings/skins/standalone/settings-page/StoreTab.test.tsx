@@ -53,6 +53,10 @@ vi.mock('../../../api/settingsApi', () => api)
 
 /** What a connected source's panel and health read, by path. */
 const backend = vi.hoisted(() => ({ get: vi.fn() }))
+const healthReads = () =>
+  backend.get.mock.calls.filter(
+    ([path]) => !String(path).startsWith('/api/whatsapp-sender')
+  )
 vi.mock('@/shared/lib/auth', async (importOriginal) => {
   const original = await importOriginal<typeof import('@/shared/lib/auth')>()
   return { ...original, api: { ...original.api, get: backend.get } }
@@ -218,7 +222,8 @@ describe('standalone Store tab', () => {
     expect(
       screen.queryByRole('heading', { name: store.health.heading })
     ).toBeNull()
-    expect(backend.get).not.toHaveBeenCalled()
+    // The page reads the WhatsApp sender for its own tab; no source health.
+    expect(healthReads()).toEqual([])
   })
 
   it('keeps the Standalone source as it was: no connection panel and no health', async () => {
@@ -230,7 +235,8 @@ describe('standalone Store tab', () => {
     expect(
       screen.queryByRole('heading', { name: store.health.heading })
     ).toBeNull()
-    expect(backend.get).not.toHaveBeenCalled()
+    // The page reads the WhatsApp sender for its own tab; no source health.
+    expect(healthReads()).toEqual([])
   })
 
   it('names an EasyOrders source and shows its connection and its health', async () => {
