@@ -74,7 +74,11 @@ export function BalanceCard({ summary, usage }: BalanceCardProps) {
   // A runway only means something while messages can still go out.
   const days =
     (state === 'healthy' || state === 'low') && ready
-      ? runwayDays(summary.availableCredits, ready.usedThisMonth)
+      ? runwayDays(
+          summary.availableCredits,
+          ready.usedThisMonth,
+          ready.asOf ? new Date(ready.asOf) : new Date()
+        )
       : null
   const caption =
     state === 'zero' || state === 'debt'

@@ -146,6 +146,7 @@ export interface OnboardingActivation {
 }
 
 export interface OnboardingUsage {
+  pools?: import('@/shared/types/usagePools').UsagePools | null
   used: number
   limit: number
   remaining: number

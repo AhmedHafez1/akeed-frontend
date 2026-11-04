@@ -27,6 +27,8 @@ export const queryKeys = {
       [...queryKeys.verifications.all, 'page-context'] as const,
   },
   billing: {
+    usage: (timeZone: string) =>
+      [...queryKeys.billing.all, 'usage', timeZone] as const,
     all: ['billing'] as const,
     summary: () => [...queryKeys.billing.all, 'summary'] as const,
     creditModelNotice: () =>

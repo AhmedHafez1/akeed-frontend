@@ -11,6 +11,8 @@ export type PurchaseStatus =
 export type DisputeStatus = 'lost' | 'none' | 'open' | 'won'
 
 export type LedgerType =
+  | 'own_number_pack'
+  | 'own_number_pack_reversal'
   | 'chargeback_reinstatement'
   | 'chargeback_reversal'
   | 'consumption'
@@ -23,6 +25,8 @@ export type LedgerType =
 export type LedgerActorType = 'akeed_staff' | 'meta' | 'paymob' | 'system'
 
 export type LedgerReasonCode =
+  | 'own_number_messages'
+  | 'own_number_messages_returned'
   | 'chargeback_reinstated'
   | 'chargeback_reversed'
   | 'delivery_failure_restored'

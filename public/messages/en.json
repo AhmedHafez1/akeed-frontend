@@ -3660,6 +3660,10 @@
     "billingLink": "Open billing & credits"
   },
   "billing": {
+    "ledgerReasons": {
+      "own_number_messages": "Messages from your number",
+      "own_number_messages_returned": "Own-number message credits restored"
+    },
     "embeddedPlans": {
       "heading": "Choose your monthly message allowance",
       "sameFeatures": "Every plan includes the same features. The only difference is the number of messages.",

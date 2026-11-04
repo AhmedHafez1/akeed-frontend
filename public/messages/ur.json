@@ -2527,6 +2527,10 @@
     "billingLink": "بلنگ اور کریڈٹس کھولیں"
   },
   "billing": {
+    "ledgerReasons": {
+      "own_number_messages": "آپ کے نمبر سے پیغامات",
+      "own_number_messages_returned": "آپ کے نمبر کے پیغامات کا کریڈٹ واپس کر دیا گیا"
+    },
     "embeddedPlans": {
       "heading": "پیغامات کا اپنا ماہانہ کوٹا چُنیں",
       "sameFeatures": "ہر پلان میں یکساں خصوصیات شامل ہیں۔ فرق صرف پیغامات کی تعداد کا ہے۔",

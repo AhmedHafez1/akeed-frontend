@@ -2527,6 +2527,10 @@
     "billingLink": "Abrir facturación y créditos"
   },
   "billing": {
+    "ledgerReasons": {
+      "own_number_messages": "Mensajes desde tu número",
+      "own_number_messages_returned": "Créditos de mensajes de tu número restituidos"
+    },
     "embeddedPlans": {
       "heading": "Elige tu asignación mensual de mensajes",
       "sameFeatures": "Todos los planes incluyen las mismas funciones. La única diferencia es la cantidad de mensajes.",

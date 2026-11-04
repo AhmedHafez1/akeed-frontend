@@ -2527,6 +2527,10 @@
     "billingLink": "Ouvrir Facturation et crédits"
   },
   "billing": {
+    "ledgerReasons": {
+      "own_number_messages": "Messages depuis votre numéro",
+      "own_number_messages_returned": "Crédits des messages de votre numéro restitués"
+    },
     "embeddedPlans": {
       "heading": "Choisissez votre quota mensuel de messages",
       "sameFeatures": "Tous les forfaits incluent les mêmes fonctionnalités. Seul le nombre de messages change.",

@@ -2527,6 +2527,10 @@
     "billingLink": "Faturalandırma ve kredileri aç"
   },
   "billing": {
+    "ledgerReasons": {
+      "own_number_messages": "Kendi numaranızdan mesajlar",
+      "own_number_messages_returned": "Kendi numaranızın mesaj kredileri iade edildi"
+    },
     "embeddedPlans": {
       "heading": "Aylık mesaj hakkınızı seçin",
       "sameFeatures": "Her plan aynı özellikleri içerir. Tek fark mesaj sayısıdır.",

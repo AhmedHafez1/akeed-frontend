@@ -1,6 +1,7 @@
 'use client'
 
 import { api, fetchWithAuth } from '@/shared/lib/auth'
+import type { UsagePools } from '@/shared/types/usagePools'
 import { getErrorMessage, parseJsonResponse } from '@/shared/lib/http'
 import type {
   TemplateMessage,
@@ -51,6 +52,7 @@ export interface SettingsResponse {
     /** The plan the store pays for now; null while none is live. Absent from an older backend. */
     currentPlanId?: OnboardingBillingPlanConfig['id'] | null
     usage: {
+      pools?: UsagePools | null
       used: number
       limit: number
       periodStart: string

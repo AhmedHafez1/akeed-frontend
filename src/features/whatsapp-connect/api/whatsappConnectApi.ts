@@ -9,6 +9,31 @@ import type { SignupCompletion } from '../model/signupMachine'
 
 /** Whether this organization may connect its own number, and who may. */
 export interface WhatsappSenderAvailability {
+  sendingEnabled?: boolean
+  permissions?: { canDisconnect: boolean; canUpdateThankYou: boolean }
+  lastAcceptedSend?: {
+    kind: 'akeed_system' | 'merchant_own'
+    reason: string | null
+    acceptedAt: string
+    deliveryStatus: 'accepted' | 'delivered' | 'read' | 'failed'
+  } | null
+  alerts?: {
+    kind:
+      | 'fallback'
+      | 'disconnect'
+      | 'template_rejection'
+      | 'quality_drop'
+      | 'payment'
+    reason: string
+    severity: 'warning' | 'critical'
+    action: 'reconnect' | 'whatsapp_manager' | 'review_templates' | 'none'
+    templates: {
+      key: string
+      language: string
+      status: string
+      category: string | null
+    }[]
+  }[]
   available: boolean
   appId: string | null
   configId: string | null
@@ -19,6 +44,68 @@ export interface ConnectTicketIssued {
   /** Carries a one-time ticket: used for navigation only, never stored. */
   connectUrl: string
   expiresAt: string
+}
+
+export interface WhatsappConnectionStatus {
+  thankYouEnabled: boolean
+  state: 'connecting' | 'verifying' | 'active' | 'disconnected' | 'offboarded'
+  signupPath: 'coexistence' | 'new_number'
+  displayPhoneNumber: string | null
+  health: {
+    stateReason: string | null
+    qualityRating: string | null
+    degradedClass: string | null
+    lastCheckedAt: string | null
+  }
+  setup: {
+    status: string
+    step: string
+    errorCode: string | null
+    retryAt: string | null
+    subscribedAt: string | null
+    numberVerifiedAt: string | null
+    registeredAt: string | null
+    completedAt: string | null
+  }
+  templates: {
+    total: number
+    ready: number
+    pending: number
+    rejected: number
+    recategorized: number
+    retrying: number
+    needsStaff: number
+    drift: number
+  }
+  templateDetails: {
+    key: string
+    language: string
+    languageCode: string
+    status: string
+    category: string | null
+    readiness: { kind: 'akeed_system' | 'merchant_own'; reason: string }
+  }[]
+}
+
+export function getWhatsappConnection() {
+  return api.get<{ connection: WhatsappConnectionStatus | null }>(
+    '/api/whatsapp-sender/connection'
+  )
+}
+
+export function updateWhatsappThankYou(thankYouEnabled: boolean) {
+  return api.patch<{ thankYouEnabled: boolean }>(
+    '/api/whatsapp-sender/connection',
+    { thankYouEnabled }
+  )
+}
+
+export function disconnectWhatsapp() {
+  return api.post<{
+    state: 'disconnected'
+    providerCleanup: 'succeeded' | 'manual_required' | 'not_needed'
+    businessAppSteps: string[]
+  }>('/api/whatsapp-sender/disconnect', {})
 }
 
 export interface ConnectTicketClaimed {

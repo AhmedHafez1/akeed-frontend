@@ -3,6 +3,7 @@ export type AdminHealthStatus = 'healthy' | 'attention_required' | 'critical'
 export type AdminCreditBalanceState = 'none' | 'ok' | 'low' | 'zero' | 'debt'
 
 export interface AdminUsage {
+  pools?: import('@/shared/types/usagePools').UsagePools
   used: number
   limit: number
   remaining: number
@@ -35,6 +36,12 @@ export interface AdminCustomerCountries {
 }
 
 export interface AdminStore {
+  whatsapp?: {
+    state: string | null
+    reason: string | null
+    lastSender: string | null
+    lastSenderReason: string | null
+  }
   integration_id: string
   org_id: string
   platform: string
