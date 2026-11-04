@@ -5245,6 +5245,7 @@
       "ownerRequired": "Only the account owner can connect a WhatsApp number.",
       "connectionExists": "Your account already has a WhatsApp number connected or being set up.",
       "numberAlreadyConnected": "This number is already connected to another Akeed account. Disconnect it there first, or choose another number.",
+      "accountAlreadyConnected": "This WhatsApp Business account is already connected to another Akeed organization. Disconnect it there first, or choose another WhatsApp Business account.",
       "codeRejected": "Meta didn't accept the sign-in. It may have taken too long.",
       "providerUnavailable": "Meta didn't respond in time.",
       "tokenUnverified": "Akeed didn't receive the WhatsApp permissions it needs. Allow every permission Facebook asks for when you connect.",
