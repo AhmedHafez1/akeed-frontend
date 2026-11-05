@@ -25,7 +25,8 @@ export type PreviewSegment = FilledTemplateSegment
 
 export type PreviewSample = TemplateMessageValues
 
-export const PREVIEW_ORDER_NUMBER = '1009'
+/** As the order lists write it, so the preview reads "#1009". */
+export const PREVIEW_ORDER_NUMBER = '#1009'
 export const PREVIEW_TOTAL_AMOUNT = 599
 export const PREVIEW_CUSTOMER_NAMES = MESSAGE_SAMPLE_CUSTOMER_NAMES
 

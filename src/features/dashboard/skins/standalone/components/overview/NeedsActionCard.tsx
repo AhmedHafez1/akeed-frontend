@@ -62,9 +62,7 @@ function useRowView({ item, timeZone, canAct }: RowProps) {
     row,
     name,
     phone,
-    amount: formatOrderAmount(item.total_price, item.currency, locale, {
-      currencyAfter: true,
-    }),
+    amount: formatOrderAmount(item.total_price, item.currency, locale),
     times: {
       orderTime: formatDayAndClock(item.created_at, locale, timeZone),
       orderTimeTitle: formatTooltipDateTime(

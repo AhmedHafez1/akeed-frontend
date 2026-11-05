@@ -20,27 +20,26 @@ const BIDI = new RegExp(
 )
 
 describe('formatOrderAmount', () => {
-  it('can put the currency after the number', () => {
-    expect(formatOrderAmount('751', 'EGP', 'ar', { currencyAfter: true })).toBe(
+  it('puts the currency after the number by default', () => {
+    expect(formatOrderAmount('751', 'EGP', 'ar')).toBe(
       `ج.م${String.fromCharCode(0x200e)} 751.00`
     )
-    expect(formatOrderAmount('751', 'EGP', 'en', { currencyAfter: true })).toBe(
-      '751.00 EGP'
-    )
-    expect(formatOrderAmount('500', 'USD', 'en', { currencyAfter: true })).toBe(
-      '500.00 $'
-    )
+    expect(formatOrderAmount('2629.95', 'EGP', 'en')).toBe('2,629.95 EGP')
+    expect(formatOrderAmount('500', 'USD', 'en')).toBe('500.00 $')
   })
 
-  it('puts the symbol first with Latin digits and no bidi marks in Arabic', () => {
+  it('writes a Latin symbol with Latin digits and no bidi marks in Arabic', () => {
     const value = formatOrderAmount('2629.95', 'USD', 'ar')
     expect(value).toBe('US$ 2,629.95')
     expect(value).not.toMatch(BIDI)
   })
 
-  it('uses the English currency format in English', () => {
-    expect(formatOrderAmount('2629.95', 'USD', 'en')).toBe('$2,629.95')
-    expect(formatOrderAmount(49.95, 'EGP', 'en')).toBe('EGP 49.95')
+  it('can put the symbol first', () => {
+    const symbolFirst = { currencyAfter: false }
+    expect(formatOrderAmount('2629.95', 'USD', 'en', symbolFirst)).toBe(
+      '$2,629.95'
+    )
+    expect(formatOrderAmount(49.95, 'EGP', 'en', symbolFirst)).toBe('EGP 49.95')
   })
 
   it('shows a dash for a missing or broken amount', () => {

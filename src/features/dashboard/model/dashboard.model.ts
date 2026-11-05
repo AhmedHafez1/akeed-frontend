@@ -359,7 +359,11 @@ export type DashboardOverview = {
       count: number
       value: Array<{ currency: string; amount: string }>
     }
-    canceled_before_shipping: { count: number }
+    canceled_before_shipping: {
+      count: number
+      /** Absent from an API that predates it. */
+      value?: Array<{ currency: string; amount: string }>
+    }
     confirmation_rate: {
       rate: number | null
       confirmed: number

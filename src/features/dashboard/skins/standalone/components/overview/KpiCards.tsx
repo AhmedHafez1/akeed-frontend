@@ -91,6 +91,7 @@ export function KpiCards({
         icon={Package}
         label={t('canceled')}
         value={formatCount(kpis.canceled_before_shipping.count, locale)}
+        detail={details.canceled}
         href={canceledHref}
       />
       <KpiCard

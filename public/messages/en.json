@@ -2358,6 +2358,7 @@
     "overview": {
       "title": "Dashboard",
       "periodLabel": "Period",
+      "periodInlineLabel": "Period:",
       "settings": {
         "label": "Confirmation settings",
         "on": "On",
@@ -2383,7 +2384,8 @@
         },
         "canceled": {
           "title": "Canceled before shipping",
-          "body": "{count, plural, =0 {No wasted shipments this period} one {# shipment and return you didn’t pay for} other {# shipments and returns you didn’t pay for}}"
+          "body": "{count, plural, =0 {No wasted shipments this period} one {# shipment and return you didn’t pay for} other {# shipments and returns you didn’t pay for}}",
+          "value": "Worth <amount></amount> you didn’t ship"
         },
         "rate": {
           "title": "Confirmation rate",

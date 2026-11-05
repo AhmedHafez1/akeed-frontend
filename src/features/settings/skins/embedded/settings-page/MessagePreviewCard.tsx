@@ -22,6 +22,7 @@ import {
   InternationalPhoneInput,
   type E164Value,
 } from '@/shared/ui/international-phone-input'
+import { formatPhoneInternational } from '@/shared/lib/phone'
 
 interface MessagePreviewCardProps {
   language: MessageLanguage
@@ -139,7 +140,11 @@ export function MessagePreviewCard({
                       })
                     : testSendPhone
                       ? t.rich('testSendHelp', {
-                          phone: () => <bdi dir="ltr">{testSendPhone}</bdi>,
+                          phone: () => (
+                            <bdi dir="ltr">
+                              {formatPhoneInternational(testSendPhone)}
+                            </bdi>
+                          ),
                           language: testLanguageName,
                         })
                       : t('testSendHelpNoPhone', {

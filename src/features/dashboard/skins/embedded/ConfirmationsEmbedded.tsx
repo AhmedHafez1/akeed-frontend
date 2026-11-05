@@ -207,7 +207,7 @@ export function ConfirmationsEmbedded({
         }
         actions={headerActions}
         periodControl={{
-          label: t('overview.periodLabel'),
+          label: t('overview.periodInlineLabel'),
           value: period,
           options: periodOptions,
           onChange: onPeriodChange,

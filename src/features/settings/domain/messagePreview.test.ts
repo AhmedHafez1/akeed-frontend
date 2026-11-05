@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { formatPlanPrice } from '@/shared/lib/money'
 import type { TemplateMessage } from '@/shared/lib/templateMessage'
 import {
+  PREVIEW_ORDER_NUMBER,
   buildPreviewLines,
   isLtrVariable,
   previewTotal,
@@ -49,6 +50,26 @@ describe('buildPreviewLines', () => {
       text: '#1009',
     })
     expect(body[0]).toEqual({ kind: 'text', text: 'طلبك رقم ' })
+  })
+
+  it('writes the sample order as the lists do, with one hash either way', () => {
+    const withSample = { ...sample, order: PREVIEW_ORDER_NUMBER }
+    const [, withHash] = buildPreviewLines(message, withSample)
+    const [withoutHash] = buildPreviewLines(
+      {
+        ...message,
+        lines: [[{ text: 'Your order ' }, { variable: 'order' }]],
+        direction: 'ltr',
+      },
+      withSample
+    )
+    for (const line of [withHash, withoutHash]) {
+      expect(line).toContainEqual({
+        kind: 'variable',
+        variable: 'order',
+        text: '#1009',
+      })
+    }
   })
 
   it('drops empty lines', () => {

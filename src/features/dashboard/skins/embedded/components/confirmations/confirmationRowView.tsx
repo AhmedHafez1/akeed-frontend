@@ -70,9 +70,7 @@ export function useConfirmationRowView(
     orderLabel:
       formatOrderNumber(row.order_number) ??
       `${t('table.orderFallbackPrefix')} ${row.order_id.slice(0, 8)}`,
-    amount: formatOrderAmount(row.total_price, row.currency, locale, {
-      currencyAfter: true,
-    }),
+    amount: formatOrderAmount(row.total_price, row.currency, locale),
     isCanceled: row.status === 'canceled',
     orderTime: formatDayAndClock(row.created_at, locale, timeZone),
     orderTimeTitle: formatTooltipDateTime(row.created_at, locale, timeZone),

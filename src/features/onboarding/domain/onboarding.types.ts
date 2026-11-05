@@ -92,6 +92,8 @@ export interface IntegrationOnboardingState {
   acknowledgmentEnabled?: boolean
   assumeCodWhenPaymentMissing: boolean
   shippingCurrency: string
+  /** The latest real order's currency, which a message preview writes. */
+  messageCurrency?: string
   avgShippingCost: number
   billingPlanId: OnboardingBillingPlanId | null
   billingStatus: string | null

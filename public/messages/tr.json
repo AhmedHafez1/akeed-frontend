@@ -1225,6 +1225,7 @@
     "overview": {
       "title": "Panel",
       "periodLabel": "Dönem",
+      "periodInlineLabel": "Dönem:",
       "settings": {
         "label": "Onay ayarları",
         "on": "Açık",
@@ -1250,7 +1251,8 @@
         },
         "canceled": {
           "title": "Kargolamadan önce iptal edilen",
-          "body": "{count, plural, =0 {Bu dönemde boşa giden gönderi yok} one {Ödemek zorunda kalmadığınız # gönderi ve iade} other {Ödemek zorunda kalmadığınız # gönderi ve iade}}"
+          "body": "{count, plural, =0 {Bu dönemde boşa giden gönderi yok} one {Ödemek zorunda kalmadığınız # gönderi ve iade} other {Ödemek zorunda kalmadığınız # gönderi ve iade}}",
+          "value": "Göndermediğiniz <amount></amount> değerinde"
         },
         "rate": {
           "title": "Onay oranı",
