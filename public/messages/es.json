@@ -236,7 +236,23 @@
     "shopify_title": "Tiendas Shopify · plan mensual",
     "shopify_body": "Elige un plan según tu volumen mensual de mensajes y paga en tu factura de Shopify. Tus primeros 30 mensajes son gratis.",
     "shopify_cta": "Ver planes en Shopify",
-    "authoritative_note": "Los precios se muestran en libras egipcias y pueden cambiar. El precio válido es el que aparece en tu página de facturación."
+    "authoritative_note": "Los precios se muestran en libras egipcias y pueden cambiar. El precio válido es el que aparece en tu página de facturación.",
+    "own_number": {
+      "rates_heading": "Costo por mensaje",
+      "from_akeed": "Desde el número de Akeed",
+      "from_yours": "Desde tu propio número",
+      "rate": "{credits, plural, one {# crédito} other {# créditos}} · {price}",
+      "saving": "Conectar tu propio número de WhatsApp Business reduce a la mitad lo que Akeed cobra por mensaje.",
+      "meta_note": "Meta factura a tu negocio por separado los mensajes enviados desde tu número.",
+      "fact_title": "Tu propio número es opcional",
+      "fact_body": "Conecta tu número de WhatsApp Business y cada mensaje enviado desde él usa 1 crédito. Meta te factura directamente esos mensajes.",
+      "slider_coverage": "<line>Unos <b>{count}</b> mensajes desde el número de Akeed</line><line>o <o>{own}</o> desde tu propio número</line>",
+      "akeed_line": "<b>{count}</b> mensajes desde el número de Akeed",
+      "own_line": "{count} más desde tu propio número",
+      "one_time": "Una sola vez",
+      "monthly": "Cada mes",
+      "shopify_note": "Los mensajes extra son un cupo separado que se habilita al conectar tu número. Meta factura a tu negocio por separado esos mensajes."
+    }
   },
   "mobile_cta": {
     "start": "Empieza gratis",
@@ -2602,7 +2618,13 @@
       "renewNote": "Renovar empieza hoy un nuevo periodo de 30 días con la asignación completa. Los mensajes que quedan del periodo actual no se acumulan.",
       "currentPlan": "Plan actual",
       "redirectNote": "Irás a Shopify para aprobar el cargo.",
-      "cancel": "Cancelar"
+      "cancel": "Cancelar",
+      "ownNumber": {
+        "extra": "{count} desde tu propio número",
+        "opens": "Se habilita al conectar tu número",
+        "connected": "Tu número está conectado",
+        "note": "Los mensajes desde tu propio número son un cupo separado que se renueva con tu plan. Meta factura a tu negocio por separado esos mensajes."
+      }
     },
     "title": "Facturación y créditos",
     "subtitle": "Solo pagas por los mensajes de confirmación que enviamos. Sin plan mensual.",
@@ -2717,6 +2739,15 @@
       "pay": "Pagar <amount>{value}</amount>",
       "payEmpty": "Pagar",
       "paymobNote": "Terminas el pago en la página segura de Paymob, con tarjeta o Vodafone Cash. Akeed nunca ve ni almacena tus datos de pago.",
+      "coverage": {
+        "akeedShort": "Número de Akeed",
+        "ownShort": "Tu número",
+        "approx": "≈ {count}",
+        "tileLabel": "Alcanza para unos {akeed} mensajes desde el número de Akeed, o {own} desde tu número",
+        "akeed": "Mensajes desde el número de Akeed",
+        "own": "O desde tu número",
+        "metaNote": "Meta factura a tu negocio por separado los mensajes enviados desde tu número."
+      },
       "blocked": {
         "disabled": "Las compras de créditos están desactivadas en este momento.",
         "suspended": "Las compras no están disponibles mientras la facturación esté suspendida.",

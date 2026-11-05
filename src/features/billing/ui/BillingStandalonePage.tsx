@@ -107,8 +107,8 @@ export function BillingStandalonePage() {
       />
       <BillingAlert summary={state.summary} />
       <div className={buyGrid}>
-        <RechargePanel state={state} />
-        <CheckoutSummaryCard state={state} />
+        <RechargePanel state={state} showOwnNumber={ownNumber.visible} />
+        <CheckoutSummaryCard state={state} showOwnNumber={ownNumber.visible} />
       </div>
       <TransactionsCard history={history} />
       {ownNumber.visible && (

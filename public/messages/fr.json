@@ -236,7 +236,23 @@
     "shopify_title": "Boutiques Shopify · forfait mensuel",
     "shopify_body": "Choisissez un forfait selon votre volume mensuel de messages et payez sur votre facture Shopify. Vos 30 premiers messages sont gratuits.",
     "shopify_cta": "Voir les forfaits sur Shopify",
-    "authoritative_note": "Les prix sont indiqués en livres égyptiennes et peuvent changer. Le prix qui fait foi est celui affiché sur votre page de facturation."
+    "authoritative_note": "Les prix sont indiqués en livres égyptiennes et peuvent changer. Le prix qui fait foi est celui affiché sur votre page de facturation.",
+    "own_number": {
+      "rates_heading": "Coût par message",
+      "from_akeed": "Depuis le numéro d’Akeed",
+      "from_yours": "Depuis votre propre numéro",
+      "rate": "{credits, plural, one {# crédit} other {# crédits}} · {price}",
+      "saving": "Connecter votre propre numéro WhatsApp Business divise par deux ce qu’Akeed facture par message.",
+      "meta_note": "Meta facture séparément à votre entreprise les messages envoyés depuis votre numéro.",
+      "fact_title": "Votre propre numéro est facultatif",
+      "fact_body": "Connectez votre numéro WhatsApp Business : chaque message envoyé depuis celui-ci utilise 1 crédit. Meta vous facture directement ces messages.",
+      "slider_coverage": "<line>Environ <b>{count}</b> messages depuis le numéro d’Akeed</line><line>ou <o>{own}</o> depuis votre propre numéro</line>",
+      "akeed_line": "<b>{count}</b> messages depuis le numéro d’Akeed",
+      "own_line": "{count} de plus depuis votre propre numéro",
+      "one_time": "Une seule fois",
+      "monthly": "Chaque mois",
+      "shopify_note": "Les messages supplémentaires forment un quota distinct, ouvert dès que vous connectez votre numéro. Meta les facture séparément à votre entreprise."
+    }
   },
   "mobile_cta": {
     "start": "Commencer gratuitement",
@@ -2602,7 +2618,13 @@
       "renewNote": "Le renouvellement démarre aujourd’hui une nouvelle période de 30 jours avec le quota complet. Les messages restants de la période en cours ne sont pas reportés.",
       "currentPlan": "Forfait actuel",
       "redirectNote": "Vous serez redirigé vers Shopify pour approuver le prélèvement.",
-      "cancel": "Annuler"
+      "cancel": "Annuler",
+      "ownNumber": {
+        "extra": "{count} depuis votre propre numéro",
+        "opens": "Ouvert dès que vous connectez votre numéro",
+        "connected": "Votre numéro est connecté",
+        "note": "Les messages depuis votre propre numéro forment un quota distinct, renouvelé avec votre offre. Meta les facture séparément à votre entreprise."
+      }
     },
     "title": "Facturation et crédits",
     "subtitle": "Vous ne payez que les messages de confirmation que nous envoyons. Pas de forfait mensuel.",
@@ -2717,6 +2739,15 @@
       "pay": "Payer <amount>{value}</amount>",
       "payEmpty": "Payer",
       "paymobNote": "Vous terminez le paiement sur la page sécurisée de Paymob, par carte ou avec Vodafone Cash. Akeed ne voit ni ne conserve jamais vos données de paiement.",
+      "coverage": {
+        "akeedShort": "Numéro d’Akeed",
+        "ownShort": "Votre numéro",
+        "approx": "≈ {count}",
+        "tileLabel": "Couvre environ {akeed} messages depuis le numéro d’Akeed, ou {own} depuis votre numéro",
+        "akeed": "Messages depuis le numéro d’Akeed",
+        "own": "Ou depuis votre numéro",
+        "metaNote": "Meta facture séparément à votre entreprise les messages envoyés depuis votre numéro."
+      },
       "blocked": {
         "disabled": "L’achat de crédits est désactivé pour le moment.",
         "suspended": "Les achats sont indisponibles tant que la facturation est suspendue.",

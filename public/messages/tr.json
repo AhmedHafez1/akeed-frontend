@@ -236,7 +236,23 @@
     "shopify_title": "Shopify mağazaları · aylık plan",
     "shopify_body": "Aylık mesaj hacmine göre bir plan seçin ve Shopify faturanız üzerinden ödeyin. İlk 30 mesajınız ücretsizdir.",
     "shopify_cta": "Shopify’daki planları görün",
-    "authoritative_note": "Fiyatlar Mısır lirası olarak gösterilir ve değişebilir. Geçerli fiyat, faturalandırma sayfanızda gösterilen fiyattır."
+    "authoritative_note": "Fiyatlar Mısır lirası olarak gösterilir ve değişebilir. Geçerli fiyat, faturalandırma sayfanızda gösterilen fiyattır.",
+    "own_number": {
+      "rates_heading": "Mesaj başına maliyet",
+      "from_akeed": "Akeed numarasından",
+      "from_yours": "Kendi numaranızdan",
+      "rate": "{credits, plural, one {# kredi} other {# kredi}} · {price}",
+      "saving": "Kendi WhatsApp Business numaranızı bağlamak, Akeed’in mesaj başına ücretini yarıya indirir.",
+      "meta_note": "Meta, kendi numaranızdan gönderilen mesajlar için işletmenizi ayrıca faturalandırır.",
+      "fact_title": "Kendi numaranız isteğe bağlıdır",
+      "fact_body": "WhatsApp Business numaranızı bağlayın; bu numaradan gönderilen her mesaj 1 kredi kullanır. Meta bu mesajları doğrudan size faturalandırır.",
+      "slider_coverage": "<line>Akeed numarasından yaklaşık <b>{count}</b> mesaj</line><line>veya kendi numaranızdan <o>{own}</o> mesaj</line>",
+      "akeed_line": "Akeed numarasından <b>{count}</b> mesaj",
+      "own_line": "Kendi numaranızdan {count} mesaj daha",
+      "one_time": "Tek seferlik",
+      "monthly": "Her ay",
+      "shopify_note": "Ek mesajlar, numaranızı bağladığınızda açılan ayrı bir kotadır. Meta bu mesajlar için işletmenizi ayrıca faturalandırır."
+    }
   },
   "mobile_cta": {
     "start": "Ücretsiz başlayın",
@@ -2602,7 +2618,13 @@
       "renewNote": "Yenileme, bugünden itibaren tam hakla 30 günlük yeni bir dönem başlatır. Mevcut dönemden kalan mesajlar devretmez.",
       "currentPlan": "Mevcut plan",
       "redirectNote": "Ücreti onaylamak için Shopify’a yönlendirileceksiniz.",
-      "cancel": "Vazgeç"
+      "cancel": "Vazgeç",
+      "ownNumber": {
+        "extra": "Kendi numaranızdan {count}",
+        "opens": "Numaranızı bağladığınızda açılır",
+        "connected": "Numaranız bağlı",
+        "note": "Kendi numaranızdan gönderilen mesajlar, planınızla birlikte yenilenen ayrı bir kotadır. Meta bu mesajlar için işletmenizi ayrıca faturalandırır."
+      }
     },
     "title": "Faturalandırma ve krediler",
     "subtitle": "Yalnızca gönderdiğimiz onay mesajları için ödeme yaparsınız. Aylık plan yok.",
@@ -2717,6 +2739,15 @@
       "pay": "Öde: <amount>{value}</amount>",
       "payEmpty": "Öde",
       "paymobNote": "Ödemeyi Paymob’un güvenli sayfasında kartla veya Vodafone Cash ile tamamlarsınız. Akeed ödeme bilgilerinizi asla görmez ve saklamaz.",
+      "coverage": {
+        "akeedShort": "Akeed numarası",
+        "ownShort": "Numaranız",
+        "approx": "≈ {count}",
+        "tileLabel": "Akeed numarasından yaklaşık {akeed} mesaj veya numaranızdan {own} mesaj karşılar",
+        "akeed": "Akeed numarasından mesajlar",
+        "own": "Veya numaranızdan",
+        "metaNote": "Meta, kendi numaranızdan gönderilen mesajlar için işletmenizi ayrıca faturalandırır."
+      },
       "blocked": {
         "disabled": "Kredi satın alımları şu anda kapalı.",
         "suspended": "Faturalandırma askıdayken satın alma yapılamaz.",

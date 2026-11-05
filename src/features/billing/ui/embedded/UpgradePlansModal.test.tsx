@@ -12,11 +12,21 @@ const api = vi.hoisted(() => ({
 
 vi.mock('../../api/shopifyPlansApi', () => api)
 
+const presence = vi.hoisted(() => ({
+  value: { visible: false, connected: false, isLoading: false },
+}))
+vi.mock('@/features/whatsapp-connect', () => ({
+  useOwnNumberPresence: () => presence.value,
+}))
+
+const OWN_POOLS = { starter: 90, basic: 900, pro: 3000, business: 7500 }
+
 function plansResponse(
   isFreePlanClaimed: boolean,
-  currentPlanId: ShopifyPlansResponse['currentPlanId'] = null
+  currentPlanId: ShopifyPlansResponse['currentPlanId'] = null,
+  withOwnPools = true
 ): ShopifyPlansResponse {
-  return {
+  const response: ShopifyPlansResponse = {
     billingManagement: { mode: 'shopify', canManageBilling: true },
     plans: [
       {
@@ -51,14 +61,22 @@ function plansResponse(
     isFreePlanClaimed,
     currentPlanId,
   }
+  if (withOwnPools) {
+    response.plans = response.plans.map((plan) => ({
+      ...plan,
+      ownNumberIncludedVerifications: OWN_POOLS[plan.id],
+    }))
+  }
+  return response
 }
 
 async function renderModal(
   isFreePlanClaimed = true,
-  currentPlanId: ShopifyPlansResponse['currentPlanId'] = null
+  currentPlanId: ShopifyPlansResponse['currentPlanId'] = null,
+  withOwnPools = true
 ) {
   api.fetchShopifyPlans.mockResolvedValue(
-    plansResponse(isFreePlanClaimed, currentPlanId)
+    plansResponse(isFreePlanClaimed, currentPlanId, withOwnPools)
   )
   const onClose = vi.fn()
   const client = new QueryClient({
@@ -86,6 +104,7 @@ const FREE_USED =
 
 beforeEach(() => {
   vi.clearAllMocks()
+  presence.value = { visible: false, connected: false, isLoading: false }
   api.createShopifySubscription.mockResolvedValue({
     confirmationUrl: '#approved',
   })
@@ -211,5 +230,46 @@ describe('UpgradePlansModal', () => {
 
     await waitFor(() => expect(onClose).toHaveBeenCalled())
     expect(api.createShopifySubscription).not.toHaveBeenCalled()
+  })
+})
+
+describe('UpgradePlansModal with the merchant number', () => {
+  const OWN_LINE = /\+900\u2069? من رقمك الخاص/
+  const META = 'وتحاسب Meta نشاطك التجاري بشكل منفصل عليها.'
+  const pageText = () => document.body.textContent ?? ''
+
+  it('keeps one allowance per plan while the own number is not offered', async () => {
+    await renderModal(true)
+
+    expect(pageText()).not.toMatch(OWN_LINE)
+    expect(pageText()).not.toContain(META)
+  })
+
+  it('adds each plan\u2019s own-number pool as a second line', async () => {
+    presence.value = { visible: true, connected: false, isLoading: false }
+    await renderModal(true)
+
+    expect(pageText()).toMatch(OWN_LINE)
+    expect(pageText()).toMatch(/\+3,000\u2069? من رقمك الخاص/)
+    expect(pageText()).toMatch(/\+7,500\u2069? من رقمك الخاص/)
+    expect(screen.getAllByText('تُتاح عند ربط رقمك')).toHaveLength(3)
+    expect(pageText()).toContain(META)
+    // The Akeed allowance stays the headline, unchanged.
+    expect(screen.getByText('300')).toBeTruthy()
+  })
+
+  it('says the pool is open once the number is connected', async () => {
+    presence.value = { visible: true, connected: true, isLoading: false }
+    await renderModal(true)
+
+    expect(screen.getAllByText('رقمك مربوط')).toHaveLength(3)
+  })
+
+  it('shows no second line when an older backend sends no pool', async () => {
+    presence.value = { visible: true, connected: false, isLoading: false }
+    await renderModal(true, null, false)
+
+    expect(pageText()).not.toMatch(OWN_LINE)
+    expect(pageText()).not.toContain(META)
   })
 })

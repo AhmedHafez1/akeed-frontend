@@ -280,6 +280,8 @@ export interface OnboardingBillingPlanConfig {
   amount: number
   currencyCode: string
   includedVerifications: number
+  /** The separate own-number allowance; absent from older API responses. */
+  ownNumberIncludedVerifications?: number
 }
 
 export interface OnboardingBillingPlansResponse {

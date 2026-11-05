@@ -1371,7 +1371,23 @@
     "shopify_title": "Shopify stores · monthly plan",
     "shopify_body": "Choose a plan by monthly message volume and pay on your Shopify invoice. Your first 30 messages are free.",
     "shopify_cta": "See plans on Shopify",
-    "authoritative_note": "Prices are shown in Egyptian pounds and may change. The authoritative price is the one shown on your billing page."
+    "authoritative_note": "Prices are shown in Egyptian pounds and may change. The authoritative price is the one shown on your billing page.",
+    "own_number": {
+      "rates_heading": "Cost per message",
+      "from_akeed": "From Akeed's number",
+      "from_yours": "From your own number",
+      "rate": "{credits, plural, one {# credit} other {# credits}} · {price}",
+      "saving": "Connecting your own WhatsApp Business number halves Akeed's charge per message.",
+      "meta_note": "Meta bills your business separately for messages from your number.",
+      "fact_title": "Your own number is optional",
+      "fact_body": "Connect your WhatsApp Business number and each message from it uses 1 credit. Meta bills you directly for those messages.",
+      "slider_coverage": "<line>About <b>{count}</b> messages from Akeed's number</line><line>or <o>{own}</o> from your own number</line>",
+      "akeed_line": "<b>{count}</b> messages from Akeed's number",
+      "own_line": "{count} more from your own number",
+      "one_time": "One-time",
+      "monthly": "Every month",
+      "shopify_note": "The extra messages are a separate allowance that opens when you connect your number. Meta bills your business separately for them."
+    }
   },
   "mobile_cta": {
     "start": "Get started free",
@@ -3737,7 +3753,13 @@
       "renewNote": "Renewing starts a new 30-day period today with the full allowance. Messages left in the current period don’t carry over.",
       "currentPlan": "Current plan",
       "redirectNote": "You'll go to Shopify to approve the charge.",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "ownNumber": {
+        "extra": "{count} from your own number",
+        "opens": "Opens when you connect your number",
+        "connected": "Your number is connected",
+        "note": "Messages from your own number are a separate allowance that resets with your plan. Meta bills your business separately for them."
+      }
     },
     "title": "Billing & credits",
     "subtitle": "You only pay for the confirmation messages we send. No monthly plan.",
@@ -3852,6 +3874,15 @@
       "pay": "Pay <amount>{value}</amount>",
       "payEmpty": "Pay",
       "paymobNote": "You finish paying on Paymob’s secure page by card or Vodafone Cash. Akeed never sees or stores your payment details.",
+      "coverage": {
+        "akeedShort": "Akeed's number",
+        "ownShort": "Your number",
+        "approx": "≈ {count}",
+        "tileLabel": "Pays for about {akeed} messages from Akeed's number, or {own} from your number",
+        "akeed": "Messages from Akeed's number",
+        "own": "Or from your number",
+        "metaNote": "Meta bills your business separately for messages from your number."
+      },
       "blocked": {
         "disabled": "Credit purchases are switched off right now.",
         "suspended": "Purchases are unavailable while billing is suspended.",

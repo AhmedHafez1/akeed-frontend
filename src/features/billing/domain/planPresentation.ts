@@ -33,6 +33,26 @@ export function messagesPerDay(includedVerifications: number): number {
   return Math.max(0, Math.floor(includedVerifications / PERIOD_DAYS))
 }
 
+/** The own-number allowance a plan card adds, or null to show none. */
+export interface OwnNumberAllowance {
+  messages: number
+  /** The merchant's number is connected, so the allowance is open now. */
+  connected: boolean
+}
+
+/**
+ * The second pool for a plan card: only while the organisation's own number is
+ * offered or connected, and only when the API sent the allowance.
+ */
+export function ownNumberAllowance(
+  plan: { ownNumberIncludedVerifications?: number },
+  presence: { visible: boolean; connected: boolean } | null | undefined
+): OwnNumberAllowance | null {
+  const messages = plan.ownNumberIncludedVerifications
+  if (!presence?.visible || !messages || messages <= 0) return null
+  return { messages, connected: presence.connected }
+}
+
 /** `billing.embeddedPlans.features.*`, in display order. */
 export const SHARED_FEATURE_KEYS = [
   'codConfirmation',

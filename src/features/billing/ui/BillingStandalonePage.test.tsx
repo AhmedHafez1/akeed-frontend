@@ -343,3 +343,44 @@ describe('BillingStandalonePage with the merchant number', () => {
     expect(screen.getByText('842')).toBeTruthy()
   })
 })
+
+describe('Recharge with the merchant number', () => {
+  const coverage = en.billing.purchase.coverage
+  const withOwnRate = {
+    price: { ...summary.price, ownNumberCreditsPerMessage: 1 },
+  }
+
+  it('shows both coverage figures on the tiles and in the summary', () => {
+    presence.visible = true
+    mockPage(withOwnRate)
+    renderPage('en')
+
+    expect(
+      screen.getByText(
+        "Pays for about 250 messages from Akeed's number, or 500 from your number"
+      )
+    ).toBeTruthy()
+    expect(screen.getByText(coverage.akeed)).toBeTruthy()
+    expect(screen.getByText(coverage.own)).toBeTruthy()
+    expect(screen.getAllByText('≈ 250').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('≈ 500').length).toBeGreaterThan(0)
+    // Beside the coverage figures, as well as under the balance card’s rates.
+    expect(screen.getAllByText(coverage.metaNote)).toHaveLength(2)
+  })
+
+  it('keeps recharge as it was while the own number is not offered', () => {
+    mockPage(withOwnRate)
+    renderPage('en')
+
+    expect(screen.queryByText(coverage.akeed)).toBeNull()
+    expect(screen.queryByText(coverage.metaNote)).toBeNull()
+  })
+
+  it('shows no coverage when the server sends no own-number rate', () => {
+    presence.visible = true
+    mockPage()
+    renderPage('en')
+
+    expect(screen.queryByText(coverage.akeed)).toBeNull()
+  })
+})

@@ -2,7 +2,7 @@
 
 import { useId } from 'react'
 import Link from 'next/link'
-import { ArrowRight, ShieldCheck, TrendingUp } from 'lucide-react'
+import { ArrowRight, Info, ShieldCheck, TrendingUp } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
@@ -10,10 +10,13 @@ import { cn } from '@/shared/lib/utils'
 import { akButton, akCard } from '@/shared/ui'
 import { purchaseBlock } from '../../domain/balanceState'
 import { formatCredits, formatMoney } from '../../domain/billingFormatters'
+import { coverageRates, messageCoverage } from '../../domain/messageCoverage'
 import type { useBillingPage } from '../../domain/useBillingPage'
 
 interface CheckoutSummaryCardProps {
   state: ReturnType<typeof useBillingPage>
+  /** The merchant's own number is offered or connected. */
+  showOwnNumber?: boolean
 }
 
 const noteClass =
@@ -24,7 +27,10 @@ const noteClass =
  * leaves, and the page's one primary button. Paying happens on Paymob; this
  * card only creates the checkout and hands over.
  */
-export function CheckoutSummaryCard({ state }: CheckoutSummaryCardProps) {
+export function CheckoutSummaryCard({
+  state,
+  showOwnNumber = false,
+}: CheckoutSummaryCardProps) {
   const t = useTranslations('billing.purchase')
   const { locale } = useLocaleInfo()
   const headingId = useId()
@@ -34,6 +40,9 @@ export function CheckoutSummaryCard({ state }: CheckoutSummaryCardProps) {
   const currency = state.checkout?.currency ?? summary.price.currency
   const totalMinor = state.checkout?.totalMinor ?? state.totalMinor
   const isQuantityValid = !state.quantityError
+  const rates = showOwnNumber ? coverageRates(summary.price) : null
+  const coverage =
+    rates && isQuantityValid ? messageCoverage(state.quantity, rates) : null
   const total = formatMoney(totalMinor, currency, locale)
   const block = purchaseBlock(summary)
   // Credits bought first settle what is owed, then add to the balance.
@@ -72,6 +81,29 @@ export function CheckoutSummaryCard({ state }: CheckoutSummaryCardProps) {
               </bdi>
             </dd>
           </div>
+          {coverage && (
+            <>
+              <div className="flex items-baseline justify-between gap-3 py-2">
+                <dt className="text-ink-muted">{t('coverage.akeed')}</dt>
+                <dd dir="ltr" className="font-semibold tabular-nums">
+                  {t('coverage.approx', {
+                    count: formatCredits(coverage.akeed, locale),
+                  })}
+                </dd>
+              </div>
+              <div className="flex items-baseline justify-between gap-3 py-2">
+                <dt className="text-ink-muted">{t('coverage.own')}</dt>
+                <dd
+                  dir="ltr"
+                  className="text-brand-ink font-semibold tabular-nums"
+                >
+                  {t('coverage.approx', {
+                    count: formatCredits(coverage.ownNumber, locale),
+                  })}
+                </dd>
+              </div>
+            </>
+          )}
           <div className="border-line mt-1.5 flex items-baseline justify-between gap-3 border-t pt-3.5">
             <dt className="font-semibold">{t('total')}</dt>
             <dd className="text-[1.75rem] leading-9 font-semibold">
@@ -100,6 +132,13 @@ export function CheckoutSummaryCard({ state }: CheckoutSummaryCardProps) {
                 ),
               })}
             </span>
+          </p>
+        )}
+
+        {rates && (
+          <p className="text-ak-caption text-ink-muted mt-3 flex items-start gap-2">
+            <Info aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
+            <span>{t('coverage.metaNote')}</span>
           </p>
         )}
 

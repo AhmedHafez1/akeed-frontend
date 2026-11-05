@@ -56,11 +56,14 @@ export function useWhatsappSenderData(enabled = true) {
  */
 export function useOwnNumberPresence(enabled = true): {
   visible: boolean
+  /** A number is connected and active, so its allowance is open. */
+  connected: boolean
   isLoading: boolean
 } {
   const data = useWhatsappSenderData(enabled)
   return {
     visible: Boolean(data.availability?.available || data.connection),
+    connected: data.connection?.state === 'active',
     isLoading: data.isLoading,
   }
 }

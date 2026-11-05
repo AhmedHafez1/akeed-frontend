@@ -211,6 +211,7 @@ export function SettingsEmbeddedPage() {
                 model={model}
                 data={data}
                 ownNumberVisible={ownNumber.visible}
+                ownNumberConnected={ownNumber.connected}
               />
             )}
             {activeTab === 'whatsapp' && !whatsappHidden && (

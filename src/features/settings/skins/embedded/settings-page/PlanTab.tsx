@@ -20,6 +20,8 @@ import {
   SharedFeaturesList,
   UsageRulesCard,
   formatMessageCount,
+  ownNumberAllowance,
+  type OwnNumberAllowance,
 } from '@/features/billing'
 import type {
   OnboardingBillingPlanConfig,
@@ -41,12 +43,15 @@ interface PlanTabProps {
   data: SettingsResponse
   /** The merchant's own number is offered or connected. */
   ownNumberVisible?: boolean
+  /** The merchant's own number is connected and active. */
+  ownNumberConnected?: boolean
 }
 
 export function PlanTab({
   model,
   data,
   ownNumberVisible = false,
+  ownNumberConnected = false,
 }: PlanTabProps) {
   const t = useTranslations('settings.embedded.plan')
   const tPlans = useTranslations('billing.embeddedPlans')
@@ -83,6 +88,13 @@ export function PlanTab({
   const canSubscribe = state.permissions.canUpdateConfiguration
   const sentLast30Days = billing.messagesSentLast30Days ?? 0
   const paidPlans = billing.plans.filter((plan) => plan.amount > 0)
+  const ownNumberPresence = {
+    visible: ownNumberVisible,
+    connected: ownNumberConnected,
+  }
+  const showsOwnNumber = paidPlans.some((plan) =>
+    Boolean(ownNumberAllowance(plan, ownNumberPresence))
+  )
   const usagePools = billing.usage.pools
   const byPool =
     billing.messagesSentLast30DaysByPool &&
@@ -220,6 +232,7 @@ export function PlanTab({
                 canRenew={plan.id === renewablePlanId}
                 isRecommended={plan.id === recommendedId}
                 isPrimary={plan.id === primaryId}
+                ownNumber={ownNumberAllowance(plan, ownNumberPresence)}
                 sentLast30Days={sentLast30Days}
                 isSubscribing={model.subscribingPlanId === plan.id}
                 isBusy={!canSubscribe || model.subscribingPlanId !== null}
@@ -234,6 +247,7 @@ export function PlanTab({
           <UsageRulesCard />
           <Text as="p" tone="subdued">
             {tPlans('footer')}
+            {showsOwnNumber && ` ${tPlans('ownNumber.note')}`}
           </Text>
         </>
       ) : (
@@ -312,6 +326,7 @@ interface PlanCardProps {
   canRenew: boolean
   isRecommended: boolean
   isPrimary: boolean
+  ownNumber: OwnNumberAllowance | null
   sentLast30Days: number
   isSubscribing: boolean
   isBusy: boolean
@@ -326,6 +341,7 @@ function PlanCard({
   canRenew,
   isRecommended,
   isPrimary,
+  ownNumber,
   sentLast30Days,
   isSubscribing,
   isBusy,
@@ -352,6 +368,7 @@ function PlanCard({
         amount={plan.amount}
         currencyCode={plan.currencyCode}
         includedVerifications={plan.includedVerifications}
+        ownNumber={ownNumber}
         trailing={
           isRecommended && <Badge tone="info">{tPlans('fitsUsage')}</Badge>
         }
