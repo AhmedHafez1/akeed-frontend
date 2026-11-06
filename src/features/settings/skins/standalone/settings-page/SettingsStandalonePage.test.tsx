@@ -66,6 +66,19 @@ vi.mock('@/features/onboarding/api/onboardingApi', async (importOriginal) => ({
   sendOnboardingTest: onboarding.sendOnboardingTest,
 }))
 
+const whatsapp = vi.hoisted(() => ({ sender: vi.fn(), connection: vi.fn() }))
+
+vi.mock(
+  '@/features/whatsapp-connect/api/whatsappConnectApi',
+  async (importOriginal) => ({
+    ...(await importOriginal<
+      typeof import('@/features/whatsapp-connect/api/whatsappConnectApi')
+    >()),
+    getWhatsappSender: whatsapp.sender,
+    getWhatsappConnection: whatsapp.connection,
+  })
+)
+
 const copy = ar.settings.standalone
 const promptCopy = ar.settings.embedded.message.testPhone
 const standaloneSource = {
@@ -118,6 +131,13 @@ const previewIn = (language: string) =>
 
 beforeEach(() => {
   vi.clearAllMocks()
+  whatsapp.sender.mockResolvedValue({
+    available: false,
+    appId: null,
+    configId: null,
+    canConnect: false,
+  })
+  whatsapp.connection.mockResolvedValue({ connection: null })
   api.fetchSettings.mockResolvedValue(
     settingsResponseFixture({ state: { source: standaloneSource } })
   )
@@ -1302,4 +1322,45 @@ it('keeps contextual help available for read-only stores', async () => {
     ar.settings.embedded.message.languageAutoHelp
   )
   expect(api.saveSettings).not.toHaveBeenCalled()
+})
+
+describe('standalone settings WhatsApp tab', () => {
+  it('is not offered while connecting is unavailable and nothing is connected', async () => {
+    renderPage({ tab: 'whatsapp' })
+    await waitFor(() =>
+      expect(nav.replace).toHaveBeenCalledWith(
+        expect.stringContaining('tab=message'),
+        { scroll: false }
+      )
+    )
+    // The URL is a stub here, so only the panel shows the tab was dropped.
+    expect(
+      screen.queryByRole('button', {
+        name: ar.whatsappConnect.tab.connect.action,
+      })
+    ).toBeNull()
+  })
+
+  it('is offered while connecting is available, and holds the connect action', async () => {
+    whatsapp.sender.mockResolvedValue({
+      available: true,
+      appId: '1',
+      configId: '2',
+      canConnect: true,
+      sendingEnabled: true,
+      permissions: { canDisconnect: true, canUpdateThankYou: true },
+      alerts: [],
+    })
+    const { goTo } = renderPage()
+    expect(
+      await screen.findByRole('tab', { name: copy.page.tabs.whatsapp })
+    ).toBeTruthy()
+    goTo('whatsapp')
+    expect(
+      await screen.findByRole('button', {
+        name: ar.whatsappConnect.tab.connect.action,
+      })
+    ).toBeTruthy()
+    expect(saveBar()).toBeNull()
+  })
 })

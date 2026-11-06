@@ -33,7 +33,7 @@ Evet, bağımsız hesaplarda. En fazla 100 sipariş içeren bir CSV veya Excel d
 
 ### Kendi WhatsApp numaram gerekli mi?
 
-Hayır. Çoğu satıcı Akeed’in ortak resmi altyapısıyla başlar. Daha büyük ekipler ileride gerekirse kendi numaralarına geçebilir.
+Hayır. Akeed onayları varsayılan olarak kendi resmi WhatsApp numarasından gönderir. Müşterilerin onayları işletmenizin numarasından alması için kendi WhatsApp Business numaranızı da bağlayabilirsiniz; Akeed’in numarası yedek olarak kalır. [Kendi WhatsApp Numaranızı Kullanma](/docs/own-whatsapp-number) kılavuzuna bakın.
 
 ### Mesajlar resmi API’ler üzerinden mi gönderiliyor?
 

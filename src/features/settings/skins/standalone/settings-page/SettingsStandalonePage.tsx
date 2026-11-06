@@ -16,6 +16,7 @@ import {
   type StandaloneSettingsTabId,
 } from '@/features/settings/domain/settingsTabs'
 import { useStandaloneSettings } from '@/features/settings/domain/useStandaloneSettings'
+import { useOwnNumberPresence } from '@/features/whatsapp-connect'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
@@ -31,6 +32,7 @@ import {
   SettingsTabs,
 } from './SettingsTabs'
 import { TimingTab } from './TimingTab'
+import { WhatsappTab } from './WhatsappTab'
 
 function PageShell({
   title,
@@ -73,6 +75,7 @@ export function SettingsStandalonePage() {
   const searchParams = useSearchParams()
   const { locale } = useLocaleInfo()
   const model = useStandaloneSettings()
+  const ownNumber = useOwnNumberPresence()
   // The field to focus once its tab has rendered after a failed save.
   const pendingFocus = useRef<SettingsFieldKey | null>(null)
 
@@ -84,6 +87,13 @@ export function SettingsStandalonePage() {
   const isBilling = destination.kind === 'billing'
   const activeTab = destination.kind === 'tab' ? destination.tab : 'message'
   const isCanonicalUrl = isCanonicalStandaloneSettingsUrl(urlParams)
+  // The WhatsApp tab is offered while connecting is, or while a connection
+  // exists to manage; a link to it otherwise lands on the first tab.
+  const whatsappHidden =
+    activeTab === 'whatsapp' && !ownNumber.isLoading && !ownNumber.visible
+  const shownTabs = STANDALONE_SETTINGS_TABS.filter(
+    (tab) => tab !== 'whatsapp' || ownNumber.visible || activeTab === 'whatsapp'
+  )
 
   const goToTab = useCallback(
     (tab: StandaloneSettingsTabId, mode: 'push' | 'replace' = 'push') => {
@@ -101,8 +111,17 @@ export function SettingsStandalonePage() {
   // land on the tab that now holds their fields, without a history entry.
   useEffect(() => {
     if (isBilling) router.replace(withLocale('/billing', locale))
+    else if (whatsappHidden) goToTab('message', 'replace')
     else if (!isCanonicalUrl) goToTab(activeTab, 'replace')
-  }, [activeTab, goToTab, isBilling, isCanonicalUrl, locale, router])
+  }, [
+    activeTab,
+    goToTab,
+    isBilling,
+    isCanonicalUrl,
+    locale,
+    router,
+    whatsappHidden,
+  ])
 
   // Focus a field on another tab once that tab has rendered.
   useEffect(() => {
@@ -169,6 +188,7 @@ export function SettingsStandalonePage() {
     timing: t('tabs.timing'),
     store: t('tabs.store'),
     'api-keys': t('tabs.apiKeys'),
+    whatsapp: t('tabs.whatsapp'),
   }
   // The API keys tab holds no form fields, so it is never dirty.
   const dirtyTabs: ReadonlySet<StandaloneSettingsTabId> = model.dirtyTabs
@@ -186,6 +206,7 @@ export function SettingsStandalonePage() {
     >
       <SettingsTabs
         label={t('title')}
+        tabs={shownTabs}
         active={activeTab}
         labels={labels}
         dirtyTabs={model.dirtyTabs}
@@ -193,7 +214,7 @@ export function SettingsStandalonePage() {
         onSelect={goToTab}
       />
 
-      {disconnected && (
+      {disconnected && activeTab !== 'whatsapp' && (
         <div
           role="status"
           className="border-ak-info/30 bg-ak-info-soft text-ak-info text-ak-body rounded-ak-card flex items-start gap-3 border px-4 py-3"
@@ -247,6 +268,7 @@ export function SettingsStandalonePage() {
           <StoreTab model={model} data={data} readOnly={readOnly} />
         )}
         {activeTab === 'api-keys' && <ApiKeysTab readOnly={readOnly} />}
+        {activeTab === 'whatsapp' && !whatsappHidden && <WhatsappTab />}
       </div>
 
       {showSaveBar && (

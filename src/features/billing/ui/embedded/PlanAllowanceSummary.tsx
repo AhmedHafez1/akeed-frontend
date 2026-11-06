@@ -9,6 +9,7 @@ import {
   isolateLtr,
   messagesPerDay,
   perMessagePrice,
+  type OwnNumberAllowance,
 } from '@/features/billing/domain/planPresentation'
 import { formatPlanPrice } from '@/shared/lib/money'
 
@@ -21,6 +22,8 @@ interface PlanAllowanceSummaryProps {
   id?: string
   /** Sits at the end of the name row: a badge, or the card's radio. */
   trailing?: ReactNode
+  /** The separate pool from the merchant's own number, when offered. */
+  ownNumber?: OwnNumberAllowance | null
 }
 
 /**
@@ -34,6 +37,7 @@ export function PlanAllowanceSummary({
   includedVerifications,
   id,
   trailing,
+  ownNumber = null,
 }: PlanAllowanceSummaryProps) {
   const t = useTranslations('billing.embeddedPlans')
   const perDay = messagesPerDay(includedVerifications)
@@ -48,18 +52,38 @@ export function PlanAllowanceSummary({
       </InlineStack>
       <div id={id && `${id}-details`}>
         <BlockStack gap="300">
-          <BlockStack gap="050">
-            <Text as="p" variant="heading2xl">
-              <bdi>{formatMessageCount(includedVerifications)}</bdi>
-            </Text>
-            <Text as="p" tone="subdued">
-              {t('allowance')}
-              {' · '}
-              {t('perDay', {
-                count: perDay,
-                formatted: formatMessageCount(perDay),
-              })}
-            </Text>
+          <BlockStack gap="200">
+            <BlockStack gap="050">
+              <Text as="p" variant="heading2xl">
+                <bdi>{formatMessageCount(includedVerifications)}</bdi>
+              </Text>
+              <Text as="p" tone="subdued">
+                {t('allowance')}
+                {' · '}
+                {t('perDay', {
+                  count: perDay,
+                  formatted: formatMessageCount(perDay),
+                })}
+              </Text>
+            </BlockStack>
+            {ownNumber && (
+              <BlockStack gap="025">
+                <Text as="p" fontWeight="semibold" tone="success">
+                  {t('ownNumber.extra', {
+                    count: isolateLtr(
+                      `+${formatMessageCount(ownNumber.messages)}`
+                    ),
+                  })}
+                </Text>
+                <Text as="p" variant="bodySm" tone="subdued">
+                  {t(
+                    ownNumber.connected
+                      ? 'ownNumber.connected'
+                      : 'ownNumber.opens'
+                  )}
+                </Text>
+              </BlockStack>
+            )}
           </BlockStack>
           <Divider />
           <BlockStack gap="050">

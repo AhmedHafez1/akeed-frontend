@@ -15,6 +15,7 @@ import {
   CREDIT_PURCHASE_STEP,
   CREDIT_UNIT_PRICE_MINOR,
   CREDITS_PER_MESSAGE,
+  OWN_NUMBER_CREDITS_PER_MESSAGE,
 } from '@/shared/config/pricing'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { formatCredits, formatMoneyParts } from '@/shared/lib/money'
@@ -44,7 +45,15 @@ function defaultCredits() {
  * an order the customer confirms first time sends one message, one that needs a
  * follow-up sends two. Quoting a single "orders" number would overstate it.
  */
-export function CreditSlider() {
+interface CreditSliderProps {
+  /**
+   * Quote messages from either number instead of the orders range. The two
+   * figures are alternatives for the same credits, never a sum.
+   */
+  showOwnNumber?: boolean
+}
+
+export function CreditSlider({ showOwnNumber = false }: CreditSliderProps) {
   const t = useTranslations('pricing_credits')
   const { locale } = useLocaleInfo()
   const shouldReduceMotion = useReducedMotion()
@@ -75,10 +84,24 @@ export function CreditSlider() {
     count: formatCredits(credits, locale),
   })
   const messages = Math.floor(credits / CREDITS_PER_MESSAGE)
-  const ordersLabel = t('calculator_orders', {
-    low: formatCredits(Math.ceil(messages / 2), locale),
-    high: formatCredits(messages, locale),
-  })
+  const ownMessages = Math.floor(credits / OWN_NUMBER_CREDITS_PER_MESSAGE)
+  const coverageValues = {
+    count: formatCredits(messages, locale),
+    own: formatCredits(ownMessages, locale),
+  }
+  const coverageLabel = showOwnNumber
+    ? t
+        .markup('own_number.slider_coverage', {
+          ...coverageValues,
+          line: (chunks) => `${chunks} `,
+          b: (chunks) => chunks,
+          o: (chunks) => chunks,
+        })
+        .trim()
+    : t('calculator_orders', {
+        low: formatCredits(Math.ceil(messages / 2), locale),
+        high: formatCredits(messages, locale),
+      })
 
   return (
     <div>
@@ -132,11 +155,28 @@ export function CreditSlider() {
           className="hidden h-10 w-px self-center bg-white/10 sm:block"
         />
 
-        <p className="text-sm text-slate-400 sm:text-base">{ordersLabel}</p>
+        <p className="text-sm text-slate-400 sm:max-w-xs sm:text-base">
+          {showOwnNumber
+            ? t.rich('own_number.slider_coverage', {
+                ...coverageValues,
+                line: (chunks) => <span className="block">{chunks}</span>,
+                b: (chunks) => (
+                  <b className="font-semibold text-white tabular-nums">
+                    {chunks}
+                  </b>
+                ),
+                o: (chunks) => (
+                  <b className="font-semibold text-emerald-400 tabular-nums">
+                    {chunks}
+                  </b>
+                ),
+              })
+            : coverageLabel}
+        </p>
 
         {/* One announcement per settled value, not one per animation frame. */}
         <p className="sr-only" aria-live="polite">
-          {`${creditsLabel} = ${total.amount} ${total.currency}. ${ordersLabel}`}
+          {`${creditsLabel} = ${total.amount} ${total.currency}. ${coverageLabel}`}
         </p>
       </div>
     </div>

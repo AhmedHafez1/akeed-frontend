@@ -1,10 +1,8 @@
 import type { PurchaseSummary } from './billing.types'
-import type { Transaction } from './transactions'
+import type { CreditUsage } from './creditUsage'
 
 /** The mini chart on the balance card: today and the 13 days before it. */
 export const USAGE_CHART_DAYS = 14
-
-const DAY_MS = 86_400_000
 
 function startOfLocalDay(date: Date, offsetDays = 0) {
   return new Date(
@@ -39,27 +37,21 @@ export function runwayDays(
 }
 
 /**
- * Credits used per local day, oldest first and today last. Days without
- * usage are 0. Only consumption rows count, as in the month total.
+ * Credits used per day, oldest first and today last, from the server's
+ * per-send totals: whichever number each message went from, refunds already
+ * netted on the day of the send. Never rebuilt from ledger postings, which
+ * record packs rather than sends.
  */
-export function dailyUsage(
-  items: Transaction[],
-  now: Date = new Date(),
-  days: number = USAGE_CHART_DAYS
-): number[] {
-  const buckets = new Array<number>(days).fill(0)
-  const today = startOfLocalDay(now)
-
-  for (const item of items) {
-    if (item.ledgerType !== 'consumption') continue
-    const day = startOfLocalDay(new Date(item.createdAt))
-    // Rounded, because a daylight-saving change makes one day 23 or 25 hours.
-    const daysAgo = Math.round((today - day) / DAY_MS)
-    if (daysAgo < 0 || daysAgo >= days) continue
-    buckets[days - 1 - daysAgo] += Math.abs(item.quantity)
+export function dailyUsage(usage: Pick<CreditUsage, 'daily'>): {
+  total: number[]
+  akeed: number[]
+  ownNumber: number[]
+} {
+  return {
+    total: usage.daily.map((day) => day.credits),
+    akeed: usage.daily.map((day) => day.akeedCredits),
+    ownNumber: usage.daily.map((day) => day.ownNumberCredits),
   }
-
-  return buckets
 }
 
 /** The newest purchase that was paid for and still stands. */

@@ -1,3 +1,4 @@
+import type { UsagePools } from '@/shared/types/usagePools'
 import type { DashboardOverview, UsageState } from './dashboard.model'
 
 /** Which allowance the count belongs to, for the panel's label. */
@@ -19,6 +20,11 @@ export type MessageUsageView =
       allowance: AllowanceKind
       /** The last refresh failed; the numbers are the last ones known. */
       stale: boolean
+      /**
+       * The Akeed and own-number pools, shown apart once the merchant's own
+       * number is offered or has paid for sends; null otherwise.
+       */
+      pools: UsagePools | null
     }
 
 const PAID_PLAN_IDS = new Set(['basic', 'pro', 'business'])
@@ -45,6 +51,8 @@ export function toMessageUsageView(input: {
   isPending: boolean
   isError: boolean
   billingPlanId: string | null | undefined
+  /** The merchant's own number is offered or connected. */
+  showPools?: boolean
 }): MessageUsageView {
   const { usage } = input
   if (usage === undefined) {
@@ -70,5 +78,9 @@ export function toMessageUsageView(input: {
     state: usage.state,
     allowance: resolveAllowanceKind(input.billingPlanId),
     stale: input.isError,
+    pools:
+      usage.pools && (input.showPools || usage.pools.ownNumber.used > 0)
+        ? usage.pools
+        : null,
   }
 }

@@ -30,7 +30,7 @@ Akeed üç şekilde çalışır. İlk kurulumu yaparken bu kılavuzu kullanın.
 - Uygulama yükleme ve uygulama aboneliklerini onaylama yetkisi.
 - En az bir yeni kapıda ödeme siparişi ya da test onayı için kullanabileceğiniz bir telefon numarası.
 
-Standart kurulum için kendi WhatsApp numaranızı bağlamanız gerekmez. Akeed mesajları resmi WhatsApp altyapısı üzerinden gönderir.
+Başlamak için kendi WhatsApp numaranıza ihtiyacınız yok. Akeed mesajları kendi resmi WhatsApp numarasından gönderir. İsterseniz daha sonra kendi WhatsApp Business numaranızı bağlayabilirsiniz.
 
 ### Adım 1: Akeed’i Yükleyin
 
@@ -100,7 +100,7 @@ Kayıt olun ve e-posta adresinizi doğrulayın.
 
 ### Adım 2: Mağazanızı Kurun
 
-Mağaza adınızı ve kendi WhatsApp numaranızı girin. Müşteriler için bir WhatsApp numarası bağlamanız gerekmez. Akeed mesajları kendi resmi numarasından gönderir.
+Mağaza adınızı ve kendi WhatsApp numaranızı girin. Akeed müşterilere mesajları kendi resmi numarasından gönderir, bu yüzden şimdi bir numara bağlamanız gerekmez. Kendi WhatsApp Business numaranızı daha sonra **Ayarlar**’dan bağlayabilirsiniz.
 
 ### Adım 3: Mesajı Deneyin
 
@@ -153,7 +153,7 @@ Hayır. Shopify mağazaları Akeed’i Shopify’dan yükler. WooCommerce ve Eas
 
 ### Kendi WhatsApp Business hesabım gerekli mi?
 
-Standart kurulum için gerekli değil. Akeed onay mesajlarını kendi resmi WhatsApp altyapısıyla gönderebilir.
+Hayır. Akeed onayları varsayılan olarak kendi resmi WhatsApp numarasından gönderir. Müşterilerin onayları işletmenizin numarasından almasını istiyorsanız kendi WhatsApp Business numaranızı bağlayabilirsiniz; numaranızın henüz gönderemediği her mesajı Akeed’in numarası gönderir. [Kendi WhatsApp Numaranızı Kullanma](/docs/own-whatsapp-number) kılavuzuna bakın.
 
 ### Mesaj dilini daha sonra değiştirebilir miyim?
 

@@ -5,19 +5,25 @@ import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { akCard } from '@/shared/ui'
 import { formatCredits } from '../../domain/billingFormatters'
+import { coverageRates } from '../../domain/messageCoverage'
 import type { useBillingPage } from '../../domain/useBillingPage'
 import { CreditPackageTiles } from './CreditPackageTiles'
 import { QuantityStepper } from './QuantityStepper'
 
 interface RechargePanelProps {
   state: ReturnType<typeof useBillingPage>
+  /** The merchant's own number is offered or connected. */
+  showOwnNumber?: boolean
 }
 
 /**
  * Choosing the amount: the preset tiles, or any other amount through the
  * stepper. Both edit the one quantity the summary card prices.
  */
-export function RechargePanel({ state }: RechargePanelProps) {
+export function RechargePanel({
+  state,
+  showOwnNumber = false,
+}: RechargePanelProps) {
   const t = useTranslations('billing.purchase')
   const { locale } = useLocaleInfo()
   const headingId = useId()
@@ -50,6 +56,7 @@ export function RechargePanel({ state }: RechargePanelProps) {
           selected={state.selectedPackage}
           currency={summary.price.currency}
           disabled={controlsDisabled}
+          coverageRates={showOwnNumber ? coverageRates(summary.price) : null}
           onSelect={state.selectPackage}
         />
 

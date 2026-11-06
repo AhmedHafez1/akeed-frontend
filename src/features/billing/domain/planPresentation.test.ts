@@ -20,6 +20,15 @@ describe('perMessagePrice', () => {
     expect(perMessagePrice(49.99, 2500)).toBe(0.02)
   })
 
+  it('prices the Akeed allowance alone, however many messages go from the merchant number', () => {
+    // Basic: 300 Akeed messages plus a separate own-number pool. Own-number
+    // messages carry no Akeed charge, so they never dilute the price shown.
+    expect(perMessagePrice(9.99, 300)).toBe(0.033)
+    expect(perMessagePrice(9.99, 300 + 900)).not.toBe(
+      perMessagePrice(9.99, 300)
+    )
+  })
+
   it('is zero for a free plan or an empty allowance', () => {
     expect(perMessagePrice(0, 30)).toBe(0)
     expect(perMessagePrice(9.99, 0)).toBe(0)

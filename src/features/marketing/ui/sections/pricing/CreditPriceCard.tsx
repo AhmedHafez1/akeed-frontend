@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowRight, Gift } from 'lucide-react'
+import { ArrowRight, Gift, Info } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useAcquisition } from '@/features/marketing/domain/useAcquisition'
 import { AcquisitionCta } from '@/features/marketing/ui/components/AcquisitionCta'
@@ -10,6 +10,8 @@ import {
   CREDIT_MESSAGE_PRICE_MINOR,
   CREDIT_UNIT_PRICE_MINOR,
   CREDITS_PER_MESSAGE,
+  OWN_NUMBER_CREDITS_PER_MESSAGE,
+  OWN_NUMBER_MESSAGE_PRICE_MINOR,
 } from '@/shared/config/pricing'
 import {
   formatCredits,
@@ -25,7 +27,14 @@ import { CreditSlider } from './CreditSlider'
  * price reads as the section's single statement instead of one card among
  * five. Emerald is the only accent, and the only decoration is a corner glow.
  */
-export function CreditPriceCard() {
+interface CreditPriceCardProps {
+  /** Add the own-number rate beside Akeed's, with Meta's separate charge. */
+  showOwnNumber?: boolean
+}
+
+export function CreditPriceCard({
+  showOwnNumber = false,
+}: CreditPriceCardProps) {
   const t = useTranslations('pricing_credits')
   const { locale, targets } = useAcquisition()
 
@@ -82,8 +91,59 @@ export function CreditPriceCard() {
         })}
       </p>
 
+      {showOwnNumber && (
+        <div className="mt-6 border-t border-white/10 pt-5">
+          <p className="text-sm text-slate-400">
+            {t('own_number.rates_heading')}
+          </p>
+          <dl className="mt-2.5 grid grid-cols-2 gap-4">
+            <div className="border-s-2 border-white/20 ps-3">
+              <dt className="text-sm text-slate-400">
+                {t('own_number.from_akeed')}
+              </dt>
+              <dd className="mt-0.5 text-lg font-semibold text-white">
+                <bdi>
+                  {t('own_number.rate', {
+                    credits: CREDITS_PER_MESSAGE,
+                    price: formatMoney(
+                      CREDIT_MESSAGE_PRICE_MINOR,
+                      CREDIT_CURRENCY,
+                      locale
+                    ),
+                  })}
+                </bdi>
+              </dd>
+            </div>
+            <div className="border-s-2 border-emerald-400 ps-3">
+              <dt className="text-sm text-slate-400">
+                {t('own_number.from_yours')}
+              </dt>
+              <dd className="mt-0.5 text-lg font-semibold text-white">
+                <bdi>
+                  {t('own_number.rate', {
+                    credits: OWN_NUMBER_CREDITS_PER_MESSAGE,
+                    price: formatMoney(
+                      OWN_NUMBER_MESSAGE_PRICE_MINOR,
+                      CREDIT_CURRENCY,
+                      locale
+                    ),
+                  })}
+                </bdi>
+              </dd>
+            </div>
+          </dl>
+          <p className="mt-3.5 text-[0.9375rem] leading-6 text-slate-100">
+            {t('own_number.saving')}
+          </p>
+          <p className="mt-2 flex items-start gap-2 text-sm leading-5 text-slate-400">
+            <Info aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
+            <span>{t('own_number.meta_note')}</span>
+          </p>
+        </div>
+      )}
+
       <div className="mt-8 border-t border-white/10 pt-8">
-        <CreditSlider />
+        <CreditSlider showOwnNumber={showOwnNumber} />
       </div>
 
       <div className="mt-10 flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">

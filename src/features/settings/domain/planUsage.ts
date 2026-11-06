@@ -43,6 +43,28 @@ function paidBySize<T extends RecommendablePlan>(plans: readonly T[]): T[] {
     .sort((a, b) => a.includedVerifications - b.includedVerifications)
 }
 
+/** The last 30 days by the plan pool that paid for each message. */
+export interface SentByPool {
+  akeed: number
+  ownNumber: number
+  /** The own-number pool's size per Akeed message, from the current pools. */
+  ownNumberRatio: number
+}
+
+/**
+ * Messages the Akeed allowance has to cover. With the merchant's own number,
+ * each pool is sized from what it actually paid for: own-number messages
+ * count against a pool `ownNumberRatio` times larger, so they need that much
+ * less of the allowance. Whichever pool is tighter decides.
+ */
+export function allowanceDemand(
+  messagesSentLast30Days: number,
+  byPool?: SentByPool | null
+): number {
+  if (!byPool || byPool.ownNumberRatio <= 0) return messagesSentLast30Days
+  return Math.max(byPool.akeed, byPool.ownNumber / byPool.ownNumberRatio)
+}
+
 /**
  * The smallest paid plan whose monthly allowance is at least 1.5 times the
  * messages sent in the last 30 days, which leaves room for follow-ups. Without
@@ -51,12 +73,14 @@ function paidBySize<T extends RecommendablePlan>(plans: readonly T[]): T[] {
  */
 export function recommendPlan(
   plans: readonly RecommendablePlan[],
-  messagesSentLast30Days: number
+  messagesSentLast30Days: number,
+  byPool?: SentByPool | null
 ): string | null {
   const paid = paidBySize(plans)
   if (paid.length === 0 || messagesSentLast30Days <= 0) return null
 
-  const target = messagesSentLast30Days * RECOMMENDATION_HEADROOM
+  const target =
+    allowanceDemand(messagesSentLast30Days, byPool) * RECOMMENDATION_HEADROOM
   return (
     paid.find((plan) => plan.includedVerifications >= target)?.id ??
     paid[paid.length - 1].id

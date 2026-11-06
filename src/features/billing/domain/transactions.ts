@@ -24,6 +24,8 @@ export interface Transaction {
 }
 
 const KIND_BY_LEDGER_TYPE: Record<LedgerType, TransactionKind> = {
+  own_number_pack: 'usage',
+  own_number_pack_reversal: 'adjustment',
   purchase: 'purchase',
   free_grant: 'purchase',
   consumption: 'usage',

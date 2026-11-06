@@ -148,6 +148,7 @@ export interface OnboardingActivation {
 }
 
 export interface OnboardingUsage {
+  pools?: import('@/shared/types/usagePools').UsagePools | null
   used: number
   limit: number
   remaining: number
@@ -281,6 +282,8 @@ export interface OnboardingBillingPlanConfig {
   amount: number
   currencyCode: string
   includedVerifications: number
+  /** The separate own-number allowance; absent from older API responses. */
+  ownNumberIncludedVerifications?: number
 }
 
 export interface OnboardingBillingPlansResponse {

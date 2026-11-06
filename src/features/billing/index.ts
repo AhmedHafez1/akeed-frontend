@@ -17,6 +17,8 @@ export {
   USAGE_RULE_KEYS,
   formatMessageCount,
   messagesPerDay,
+  ownNumberAllowance,
   perMessagePrice,
 } from './domain/planPresentation'
+export type { OwnNumberAllowance } from './domain/planPresentation'
 export type * from './domain/billing.types'

@@ -1,4 +1,5 @@
 import { fetchWithAuth } from '@/shared/lib/auth'
+import type { CreditUsage } from '../domain/creditUsage'
 import { parseJsonResponse } from '@/shared/lib/http'
 import type {
   CreatePurchaseResponse,
@@ -75,6 +76,13 @@ async function billingRequest<T>(
 
 export function fetchCreditSummary(signal?: AbortSignal) {
   return billingRequest<CreditSummary>('/api/billing/credits', { signal })
+}
+
+export function fetchCreditUsage(timeZone: string, signal?: AbortSignal) {
+  const query = new URLSearchParams({ timeZone })
+  return billingRequest<CreditUsage>(`/api/billing/credits/usage?${query}`, {
+    signal,
+  })
 }
 
 export function fetchLedger(cursor?: string, signal?: AbortSignal, limit = 25) {

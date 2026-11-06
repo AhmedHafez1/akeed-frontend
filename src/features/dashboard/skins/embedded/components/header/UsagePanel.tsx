@@ -78,6 +78,77 @@ export function UsagePanel({
   // consequence and the plan action appear from 80%.
   const needsPlan = view.state !== 'ok'
 
+  if (view.pools) {
+    const rows = [
+      { key: 'akeed', pool: view.pools.akeed },
+      { key: 'ownNumber', pool: view.pools.ownNumber },
+    ] as const
+    return (
+      <BlockStack gap="300">
+        <Text as="p" fontWeight="semibold">
+          {allowanceLabel}
+        </Text>
+        {rows.map(({ key, pool }) => {
+          const label = t(`pools.${key}`)
+          const text = t('usedOf', {
+            used: formatCount(pool.used, locale),
+            limit: formatCount(pool.limit, locale),
+          })
+          return (
+            <BlockStack key={key} gap="100">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                <Text as="p">{label}</Text>
+                <Text as="p" tone="subdued">
+                  {text}
+                </Text>
+              </div>
+              {pool.limit > 0 && (
+                <div
+                  role="progressbar"
+                  aria-label={label}
+                  aria-valuemin={0}
+                  aria-valuemax={pool.limit}
+                  aria-valuenow={Math.min(pool.used, pool.limit)}
+                  aria-valuetext={text}
+                  className="h-[5px] w-full overflow-hidden rounded-full"
+                  style={{ background: 'var(--p-color-bg-fill-secondary)' }}
+                >
+                  <div
+                    className="h-full rounded-full"
+                    style={{
+                      width: `${Math.min(100, (pool.used / pool.limit) * 100)}%`,
+                      background:
+                        pool.used >= pool.limit
+                          ? FILL_BY_STATE.exhausted
+                          : FILL_BY_STATE.ok,
+                    }}
+                  />
+                </div>
+              )}
+            </BlockStack>
+          )
+        })}
+        <Text as="p" tone="subdued">
+          {t('pools.note')}
+        </Text>
+        {needsPlan && (
+          <Text as="p" tone="subdued">
+            {t(exhausted ? 'consequenceExhausted' : 'consequence')}
+          </Text>
+        )}
+        {view.stale && (
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <Text as="p" tone="caution">
+              {t('stale')}
+            </Text>
+            {retry}
+          </div>
+        )}
+        {needsPlan && choosePlan}
+      </BlockStack>
+    )
+  }
+
   return (
     <BlockStack gap="300">
       <BlockStack gap="200">

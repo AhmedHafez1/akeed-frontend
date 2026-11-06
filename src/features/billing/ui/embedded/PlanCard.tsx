@@ -1,6 +1,7 @@
 import { useId } from 'react'
 import { Badge, InlineStack } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
+import type { OwnNumberAllowance } from '@/features/billing/domain/planPresentation'
 import type {
   ShopifyPlanCard,
   ShopifyPlanId,
@@ -31,6 +32,8 @@ interface PlanCardProps {
   isSelected: boolean
   /** The plan the store pays for now. */
   isCurrent?: boolean
+  /** The plan's own-number pool, while the store's own number is offered. */
+  ownNumber?: OwnNumberAllowance | null
   onSelect: (planId: ShopifyPlanId) => void
 }
 
@@ -43,6 +46,7 @@ export function PlanCard({
   groupName,
   isSelected,
   isCurrent = false,
+  ownNumber = null,
   onSelect,
 }: PlanCardProps) {
   const t = useTranslations('billing.embeddedPlans')
@@ -60,6 +64,7 @@ export function PlanCard({
         amount={plan.amount}
         currencyCode={plan.currencyCode}
         includedVerifications={plan.includedVerifications}
+        ownNumber={ownNumber}
         trailing={
           <InlineStack gap="200" blockAlign="center" wrap={false}>
             {isCurrent && <Badge tone="info">{t('currentPlan')}</Badge>}
