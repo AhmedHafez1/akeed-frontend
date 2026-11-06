@@ -30,7 +30,7 @@ Assurez-vous d’avoir :
 - L’autorisation d’installer des applications et d’approuver des abonnements.
 - Au moins une commande COD récente, ou un numéro de téléphone utilisable pour une confirmation de test.
 
-Vous n’avez pas besoin de votre propre numéro WhatsApp pour commencer. Akeed envoie les messages depuis son numéro WhatsApp officiel. Si vous préférez, vous pourrez connecter plus tard votre propre numéro WhatsApp Business.
+Vous n’avez pas besoin de connecter votre propre numéro WhatsApp pour la configuration standard. Akeed envoie les messages via l’infrastructure officielle de WhatsApp.
 
 ### Étape 1 : installer Akeed
 
@@ -100,7 +100,7 @@ Inscrivez-vous et validez votre adresse e-mail.
 
 ### Étape 2 : configurer votre boutique
 
-Saisissez le nom de votre boutique et votre propre numéro WhatsApp. Akeed envoie les messages aux clients depuis son numéro officiel : vous n’avez donc pas besoin de connecter un numéro maintenant. Vous pourrez connecter plus tard votre propre numéro WhatsApp Business dans **Paramètres**.
+Saisissez le nom de votre boutique et votre propre numéro WhatsApp. Vous n’avez pas besoin de connecter un numéro WhatsApp pour vos clients. Akeed envoie les messages depuis son numéro officiel.
 
 ### Étape 3 : essayer le message
 
@@ -153,7 +153,7 @@ Non. Les boutiques Shopify installent Akeed depuis Shopify. Les boutiques WooCom
 
 ### Faut-il son propre compte WhatsApp Business ?
 
-Non. Par défaut, Akeed envoie les confirmations depuis son numéro WhatsApp officiel. Si vous voulez que les clients reçoivent les confirmations depuis le numéro de votre entreprise, vous pouvez connecter votre propre numéro WhatsApp Business ; le numéro d’Akeed prend alors le relais pour tout message que le vôtre ne peut pas encore envoyer. Consultez [Utiliser votre propre numéro WhatsApp](/docs/own-whatsapp-number).
+Pas pour la configuration standard. Akeed peut envoyer les messages de confirmation via son infrastructure WhatsApp officielle.
 
 ### Peut-on changer la langue des messages plus tard ?
 

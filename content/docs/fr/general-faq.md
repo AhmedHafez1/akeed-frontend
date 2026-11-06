@@ -33,7 +33,7 @@ Oui, sur les comptes autonomes. Envoyez un fichier CSV ou Excel de 100 commandes
 
 ### Faut-il son propre numéro WhatsApp ?
 
-Non. Par défaut, Akeed envoie les confirmations depuis son numéro WhatsApp officiel. Vous pouvez aussi connecter votre propre numéro WhatsApp Business pour que les clients reçoivent les confirmations depuis le numéro de votre entreprise, le numéro d’Akeed restant disponible en secours. Consultez [Utiliser votre propre numéro WhatsApp](/docs/own-whatsapp-number).
+Non. La plupart des marchands commencent avec l’infrastructure officielle partagée d’Akeed. Par la suite, les équipes plus importantes peuvent passer à leur propre numéro si nécessaire.
 
 ### Les messages passent-ils par les API officielles ?
 

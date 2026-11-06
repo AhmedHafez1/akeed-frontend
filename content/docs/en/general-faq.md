@@ -33,7 +33,7 @@ Yes, on standalone accounts. Upload a CSV or Excel file of up to 100 orders, che
 
 ### Do I need my own WhatsApp number?
 
-No. Akeed sends confirmations from its official WhatsApp number by default. You can also connect your own WhatsApp Business number so customers get confirmations from your business number, with Akeed's number as a backup. See [Use Your Own WhatsApp Number](/docs/own-whatsapp-number).
+No. Most merchants start using Akeed's shared official infrastructure. Later, larger teams can move to their own number if needed.
 
 ### Are messages sent through official APIs?
 

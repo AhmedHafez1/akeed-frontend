@@ -30,7 +30,7 @@ Comprueba que tienes:
 - Permiso para instalar apps y aprobar suscripciones de apps.
 - Al menos un pedido contra entrega reciente o un número de teléfono que puedas usar para una confirmación de prueba.
 
-No necesitas tu propio número de WhatsApp para empezar. Akeed envía los mensajes desde su número oficial de WhatsApp. Si lo prefieres, más adelante puedes conectar tu propio número de WhatsApp Business.
+En la configuración estándar no necesitas conectar tu propio número de WhatsApp. Akeed envía los mensajes mediante la infraestructura oficial de WhatsApp.
 
 ### Paso 1: Instala Akeed
 
@@ -100,7 +100,7 @@ Regístrate y confirma tu correo electrónico.
 
 ### Paso 2: Configura tu tienda
 
-Ingresa el nombre de tu tienda y tu propio número de WhatsApp. Akeed envía los mensajes a los clientes desde su número oficial, así que no necesitas conectar un número ahora. Más adelante puedes conectar tu propio número de WhatsApp Business en **Configuración**.
+Ingresa el nombre de tu tienda y tu propio número de WhatsApp. No necesitas conectar un número de WhatsApp para los clientes. Akeed envía los mensajes desde su número oficial.
 
 ### Paso 3: Prueba el mensaje
 
@@ -153,7 +153,7 @@ No. Las tiendas Shopify instalan Akeed desde Shopify. Las tiendas WooCommerce y 
 
 ### ¿Se necesita una cuenta propia de WhatsApp Business?
 
-No. Por defecto, Akeed envía las confirmaciones desde su número oficial de WhatsApp. Si quieres que los clientes reciban las confirmaciones desde el número de tu negocio, puedes conectar tu propio número de WhatsApp Business, y el número de Akeed cubre cualquier mensaje que el tuyo aún no pueda enviar. Consulta [Usar tu propio número de WhatsApp](/docs/own-whatsapp-number).
+No en la configuración estándar. Akeed puede enviar los mensajes de confirmación con su infraestructura oficial de WhatsApp.
 
 ### ¿Se puede cambiar el idioma de los mensajes más adelante?
 
