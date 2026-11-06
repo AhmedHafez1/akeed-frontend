@@ -92,6 +92,9 @@ export interface AdminStoreDetail extends AdminStore {
     follow_up_enabled: boolean
     follow_up_delay_minutes: number
     escalation_enabled: boolean
+    /** Absent when an older backend does not expose these preferences. */
+    acknowledgment_enabled?: boolean
+    auto_cancel_enabled?: boolean
     quiet_hours_enabled: boolean
     quiet_hours_start: string | null
     quiet_hours_end: string | null

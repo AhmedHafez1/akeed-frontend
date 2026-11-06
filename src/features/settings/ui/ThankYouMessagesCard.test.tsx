@@ -76,11 +76,48 @@ describe.each([
     renderCard(Component)
     const control = screen.getByRole(role, { name: en.settings.thankYou.label })
     expect(checked(control)).toBe(false)
+    expect(screen.getByText(en.settings.thankYou.off)).toBeTruthy()
     expect(screen.getByText(cost)).toBeTruthy()
+    expect(
+      screen.getByRole('heading', {
+        name: en.settings.thankYou.examplesHeading,
+      })
+    ).toBeTruthy()
+    expect(
+      screen.getByText(en.settings.embedded.message.languageNames.en)
+    ).toBeTruthy()
     expect(screen.getByText('Confirmed 123 from Nour')).toBeTruthy()
     expect(screen.getByText('Canceled 123')).toBeTruthy()
     fireEvent.click(control)
     expect(checked(control)).toBe(true)
+    expect(screen.getByText(en.settings.thankYou.on)).toBeTruthy()
+  })
+  it('keeps English samples in LTR within Arabic UI and uses Arabic direction for missing text', () => {
+    renderCard(
+      Component,
+      {
+        acknowledgment: {
+          ...base.acknowledgment!,
+          previews: {
+            ...base.acknowledgment!.previews,
+            en: {
+              default: {
+                confirmed: 'Confirmed {{order}} from {{store}}',
+                canceled: null,
+              },
+            },
+          },
+        },
+      },
+      'ar'
+    )
+    const sample = screen.getByText('Confirmed 123 from Nour')
+    expect(sample.getAttribute('dir')).toBe('ltr')
+    expect(sample.getAttribute('lang')).toBe('en')
+    const missing = screen.getByText(ar.settings.thankYou.textUnavailable)
+    expect(missing.getAttribute('dir')).toBe('rtl')
+    expect(missing.getAttribute('lang')).toBe('ar')
+    expect(screen.queryByText(/Reminders may use|التذكير ممكن/)).toBeNull()
   })
   it('prevents enabling while globally unavailable and permits an existing opt-in to be disabled', () => {
     const acknowledgment = { ...base.acknowledgment!, available: false }

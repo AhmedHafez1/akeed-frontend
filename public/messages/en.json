@@ -2690,15 +2690,17 @@
   "settings": {
     "thankYou": {
       "heading": "Thank-you messages",
-      "label": "Send a thank-you after confirmation or cancellation",
-      "description": "Send one message after your customer confirms or cancels their order. Off by default.",
+      "on": "On",
+      "off": "Off",
+      "examplesHeading": "Message examples",
+      "label": "Send thank-you messages",
+      "description": "Send one message after a customer confirms or cancels an order.",
       "creditCost": "Each thank-you uses {count} credits.",
       "planCost": "Each thank-you counts as 1 message toward your plan.",
       "confirmed": "After confirmation",
       "canceled": "After cancellation",
       "unavailable": "Thank-you messages are temporarily unavailable. You can still turn them off.",
       "textUnavailable": "No thank-you text is available for this language.",
-      "previewNote": "The wording follows the language and style of the latest message sent to the customer. Reminders may use a different style.",
       "autoNote": "This example uses the default style. The actual Arabic wording follows the customer’s dialect.",
       "saveUnavailable": "Thank-you messages are currently unavailable. Turn them off to save your changes."
     },

@@ -1557,15 +1557,17 @@
   "settings": {
     "thankYou": {
       "heading": "Mensajes de agradecimiento",
-      "label": "Enviar un agradecimiento tras la confirmación o cancelación",
-      "description": "Envía un mensaje después de que el cliente confirme o cancele su pedido. Desactivado por defecto.",
+      "on": "Activados",
+      "off": "Desactivados",
+      "examplesHeading": "Ejemplos de mensajes",
+      "label": "Enviar mensajes de agradecimiento",
+      "description": "Envía un mensaje después de que el cliente confirme o cancele su pedido.",
       "creditCost": "Cada agradecimiento usa {count} créditos.",
       "planCost": "Cada agradecimiento cuenta como 1 mensaje de tu plan.",
       "confirmed": "Tras la confirmación",
       "canceled": "Tras la cancelación",
       "unavailable": "Los mensajes de agradecimiento no están disponibles temporalmente. Aún puedes desactivarlos.",
       "textUnavailable": "No hay texto de agradecimiento disponible en este idioma.",
-      "previewNote": "El texto usa el idioma y estilo del último mensaje enviado al cliente. Los recordatorios pueden usar otro estilo.",
       "autoNote": "Este ejemplo usa el estilo predeterminado. El texto árabe real sigue el dialecto del cliente.",
       "saveUnavailable": "Los mensajes de agradecimiento no están disponibles. Desactívalos para guardar los cambios."
     },
