@@ -512,7 +512,7 @@ function BillingCard({ store }: { store: AdminStoreDetail }) {
   )
 }
 
-function OnOff({ enabled, detail }: { enabled: boolean; detail?: string }) {
+function OnOff({ enabled, detail }: { enabled?: boolean; detail?: string }) {
   return (
     <span className="inline-flex items-center gap-1.5">
       <span
@@ -522,7 +522,7 @@ function OnOff({ enabled, detail }: { enabled: boolean; detail?: string }) {
         )}
         aria-hidden="true"
       />
-      {enabled ? 'On' : 'Off'}
+      {enabled === undefined ? 'Unknown' : enabled ? 'On' : 'Off'}
       {enabled && detail && (
         <span className="text-muted-foreground font-normal">· {detail}</span>
       )}
@@ -557,6 +557,14 @@ function AutomationCard({ store }: { store: AdminStoreDetail }) {
           [
             'Escalation',
             <OnOff key="escalation" enabled={settings.escalation_enabled} />,
+          ],
+          [
+            'Auto-cancellation',
+            <OnOff key="cancel" enabled={settings.auto_cancel_enabled} />,
+          ],
+          [
+            'Thank-you messages',
+            <OnOff key="thanks" enabled={settings.acknowledgment_enabled} />,
           ],
           [
             'Quiet hours',
