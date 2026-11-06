@@ -232,6 +232,11 @@ Optional:
   alone. Signed-in screens ignore it and follow the organisation's own-number
   availability from the API.
 
+  **Launch step:** the help-center article `own-whatsapp-number` and the
+  FAQ/getting-started lines that mention connecting a number were held back
+  in commit `10e9f7b`. Run `git revert 10e9f7b` before the backend
+  `WHATSAPP_OWN_NUMBER_CONNECT_ENABLED` goes on in production.
+
 - `NEXT_PUBLIC_WOOCOMMERCE_CONNECT_ENABLED` — the same for WooCommerce. Turn the backend `WOOCOMMERCE_CONNECT_ENABLED` on first.
 
 - `NEXT_PUBLIC_META_PIXEL_ID` — the Meta Pixel the standalone site reports
