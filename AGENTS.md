@@ -11,7 +11,8 @@ Preserve CRLF and existing user edits. Format only touched files, with `--end-of
 ## Build / Lint / Typecheck / Dev
 
 ```bash
-npm run dev            # Start dev server on port 3001
+npm run dev            # Start dev server on port 3001 (scripts/dev.mjs: 4 GB heap, then warms the entry routes)
+npm run dev:clean      # Delete the Next.js dev caches when dev is slow or stuck (stop dev servers first; --all wipes .next)
 npm run build          # Production build (Next.js)
 npm run start          # Run production server on port 3001
 npm run lint           # ESLint (flat config)

@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "postinstall": "patch-package",
-    "dev": "node --max-old-space-size=1536 ./node_modules/next/dist/bin/next dev -p 3001",
+    "dev": "node scripts/dev.mjs -p 3001",
+    "dev:clean": "node scripts/dev-clean.mjs",
     "build": "next build",
     "start": "next start -p 3001",
     "lint": "eslint",

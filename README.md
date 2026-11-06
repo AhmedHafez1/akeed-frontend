@@ -26,8 +26,17 @@ Open the parent `Akeed` folder in VS Code and run the
 - ngrok tunnels `http://localhost:3000` (`ngrok http 3000`).
 - Redis runs in Docker on `localhost:6379` (started by the backend's pre-launch task).
 - NestJS runs on `http://localhost:3000` (debugger on port 9230) and uses the backend `.env`.
-- The frontend runs through the Shopify CLI (`npm run shopify:dev`); Shopify's
-  localhost HTTPS proxy uses `https://localhost:3458`.
+- The frontend runs through the Shopify CLI (`npm run shopify:dev`) as a plain
+  VS Code task without the debugger; Shopify's localhost HTTPS proxy uses
+  `https://localhost:3458`. Stopping the compound stops the task too. To debug
+  the Next.js server, use the opt-in `Frontend: Shopify CLI with debugger`
+  launch instead (it is slower and uses more memory).
+- Both `npm run dev` and the Shopify CLI start Next.js through
+  `scripts/dev.mjs`, which raises the heap to 4 GB (`DEV_HEAP_MB`) and requests
+  the entry routes once so the first Shopify Admin load is not a cold compile
+  (`DEV_WARMUP=0` skips it, `DEV_WARMUP_ROUTES=/a,/b` changes the list).
+- If dev becomes slow, stalls on a white page or runs out of memory, stop the
+  servers and run `npm run dev:clean` (the `Frontend: Clean dev cache` task).
 
 For standalone mode only, run `npm run dev` (port 3001) instead of the Shopify
 CLI launch.
