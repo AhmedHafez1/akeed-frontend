@@ -1,6 +1,6 @@
 'use client'
 
-import { Check } from 'lucide-react'
+import { Check, Smartphone } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 /*
@@ -11,8 +11,15 @@ import { useTranslations } from 'next-intl'
  */
 const FACT_KEYS = ['credit_is_message', 'followup', 'rejected'] as const
 
+interface PricingFactsPanelProps {
+  /** Add the optional own-number fact, with Meta's separate charge. */
+  showOwnNumber?: boolean
+}
+
 /** The light half of the pricing card: how credit billing works. */
-export function PricingFactsPanel() {
+export function PricingFactsPanel({
+  showOwnNumber = false,
+}: PricingFactsPanelProps) {
   const t = useTranslations('pricing_credits')
 
   return (
@@ -35,6 +42,21 @@ export function PricingFactsPanel() {
             </div>
           </li>
         ))}
+        {showOwnNumber && (
+          <li className="border-primary-border flex items-start gap-3 border-t border-dashed pt-6">
+            <span className="bg-primary-subtle ring-primary-border mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full ring-1">
+              <Smartphone aria-hidden="true" className="text-primary h-4 w-4" />
+            </span>
+            <div>
+              <p className="text-foreground font-semibold">
+                {t('own_number.fact_title')}
+              </p>
+              <p className="text-muted-foreground mt-1 text-sm leading-6">
+                {t('own_number.fact_body')}
+              </p>
+            </div>
+          </li>
+        )}
       </ul>
     </div>
   )

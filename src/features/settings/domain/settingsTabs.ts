@@ -1,6 +1,18 @@
-export type SettingsTabId = 'message' | 'timing' | 'plan'
+export type SettingsTabId = 'message' | 'timing' | 'plan' | 'whatsapp'
 
-export const SETTINGS_TABS: SettingsTabId[] = ['message', 'timing', 'plan']
+export const SETTINGS_TABS: SettingsTabId[] = [
+  'message',
+  'timing',
+  'plan',
+  'whatsapp',
+]
+
+/** Tabs that hold no form fields: never dirty, never behind the save bar. */
+export const FORMLESS_SETTINGS_TABS: readonly string[] = [
+  'plan',
+  'api-keys',
+  'whatsapp',
+]
 
 /**
  * Every `?tab=` value that has ever linked into Settings, mapped to the tab
@@ -19,6 +31,9 @@ export const SETTINGS_TAB_ALIASES: Partial<Record<string, SettingsTabId>> = {
   automation: 'timing',
   billing: 'plan',
   subscription: 'plan',
+  'whatsapp-number': 'whatsapp',
+  'own-number': 'whatsapp',
+  sender: 'whatsapp',
 }
 
 export function resolveSettingsTab(
@@ -36,20 +51,23 @@ export function resolveSettingsTab(
 }
 
 /**
- * The standalone app has no plan tab; its third tab holds the order source and
- * its fourth the server API keys. Only the first three hold form fields.
+ * The standalone app has no plan tab; its third tab holds the order source,
+ * its fourth the server API keys and its fifth the merchant's own WhatsApp
+ * number. Only the first three hold form fields.
  */
 export type StandaloneSettingsTabId =
   | 'message'
   | 'timing'
   | 'store'
   | 'api-keys'
+  | 'whatsapp'
 
 export const STANDALONE_SETTINGS_TABS: StandaloneSettingsTabId[] = [
   'message',
   'timing',
   'store',
   'api-keys',
+  'whatsapp',
 ]
 
 /** Where a standalone Settings URL leads: one of its tabs, or `/billing`. */
@@ -69,6 +87,9 @@ const STANDALONE_SETTINGS_TAB_ALIASES: Partial<
   'message-preview': 'message',
   automation: 'timing',
   confirmation: 'timing',
+  'whatsapp-number': 'whatsapp',
+  'own-number': 'whatsapp',
+  sender: 'whatsapp',
 }
 
 /** Standalone billing is credits on a page of its own, not a Settings tab. */

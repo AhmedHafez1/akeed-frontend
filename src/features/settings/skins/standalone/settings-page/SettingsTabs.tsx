@@ -14,6 +14,8 @@ export const settingsPanelDomId = (tab: StandaloneSettingsTabId) =>
 
 interface SettingsTabsProps {
   label: string
+  /** The tabs to offer, in order; a hidden tab is left out. */
+  tabs?: readonly StandaloneSettingsTabId[]
   active: StandaloneSettingsTabId
   labels: Record<StandaloneSettingsTabId, string>
   /** Tabs holding unsaved changes; each gets a dot and a spoken note. */
@@ -29,6 +31,7 @@ interface SettingsTabsProps {
  */
 export function SettingsTabs({
   label,
+  tabs: shownTabs = STANDALONE_SETTINGS_TABS,
   active,
   labels,
   dirtyTabs,
@@ -36,15 +39,14 @@ export function SettingsTabs({
   onSelect,
 }: SettingsTabsProps) {
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    const count = STANDALONE_SETTINGS_TABS.length
+    const count = shownTabs.length
     const tabs = Array.from(
       event.currentTarget.querySelectorAll<HTMLButtonElement>('[role="tab"]')
     )
     // From the focused tab, not the selected one: the selection follows the
     // URL, which can still be catching up with the previous key press.
     const focused = tabs.indexOf(document.activeElement as HTMLButtonElement)
-    const index =
-      focused >= 0 ? focused : STANDALONE_SETTINGS_TABS.indexOf(active)
+    const index = focused >= 0 ? focused : shownTabs.indexOf(active)
     const rtl = getComputedStyle(event.currentTarget).direction === 'rtl'
     const targets: Record<string, number> = {
       [rtl ? 'ArrowLeft' : 'ArrowRight']: (index + 1) % count,
@@ -55,7 +57,7 @@ export function SettingsTabs({
     const next = targets[event.key]
     if (next === undefined) return
     event.preventDefault()
-    onSelect(STANDALONE_SETTINGS_TABS[next])
+    onSelect(shownTabs[next])
     tabs[next]?.focus()
   }
 
@@ -73,7 +75,7 @@ export function SettingsTabs({
         onKeyDown={onKeyDown}
         className="-m-1 flex gap-1 overflow-x-auto p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {STANDALONE_SETTINGS_TABS.map((tab) => {
+        {shownTabs.map((tab) => {
           const selected = tab === active
           return (
             <button

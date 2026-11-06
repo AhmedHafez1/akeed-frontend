@@ -194,6 +194,7 @@ function shopifyPlans() {
       amount,
       currencyCode: 'USD',
       includedVerifications,
+      ownNumberIncludedVerifications: includedVerifications * 3,
     })),
     isFreePlanClaimed: true,
     currentPlanId: blockedPlan() ?? 'starter',

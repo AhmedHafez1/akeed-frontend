@@ -14,6 +14,9 @@ describe('resolveStandaloneSettingsTab', () => {
     [{ tab: 'timing' }, 'timing'],
     [{ tab: 'store' }, 'store'],
     [{ tab: 'api-keys' }, 'api-keys'],
+    [{ tab: 'whatsapp' }, 'whatsapp'],
+    [{ tab: 'own-number' }, 'whatsapp'],
+    [{ section: 'sender' }, 'whatsapp'],
     // The previous layout's `?section=` ids.
     [{ section: 'general' }, 'message'],
     [{ section: 'automation' }, 'timing'],
@@ -67,6 +70,9 @@ describe('resolveSettingsTab', () => {
     ['message', 'message'],
     ['timing', 'timing'],
     ['plan', 'plan'],
+    ['whatsapp', 'whatsapp'],
+    ['whatsapp-number', 'whatsapp'],
+    ['sender', 'whatsapp'],
     // The four-tab layout and older ids keep landing on their fields.
     ['store', 'message'],
     ['settings', 'message'],

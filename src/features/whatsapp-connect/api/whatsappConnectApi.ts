@@ -7,8 +7,46 @@ import type { SignupSessionHints } from '../model/signupMessage'
 import { NETWORK_ERROR_CODE } from '../model/signupErrors'
 import type { SignupCompletion } from '../model/signupMachine'
 
+/** One accepted send, as it happened: history, never current readiness. */
+export interface AcceptedSend {
+  kind: 'akeed_system' | 'merchant_own'
+  reason: string | null
+  acceptedAt: string
+  deliveryStatus: 'accepted' | 'delivered' | 'read' | 'failed'
+}
+
+export type SenderAlert = NonNullable<
+  WhatsappSenderAvailability['alerts']
+>[number]
+
 /** Whether this organization may connect its own number, and who may. */
 export interface WhatsappSenderAvailability {
+  sendingEnabled?: boolean
+  permissions?: { canDisconnect: boolean; canUpdateThankYou: boolean }
+  /** The later of the two below. */
+  lastAcceptedSend?: AcceptedSend | null
+  /** Absent from an older backend. */
+  lastAccepted?: {
+    confirmation: AcceptedSend | null
+    reminder: AcceptedSend | null
+  }
+  alerts?: {
+    kind:
+      | 'fallback'
+      | 'disconnect'
+      | 'template_rejection'
+      | 'quality_drop'
+      | 'payment'
+    reason: string
+    severity: 'warning' | 'critical'
+    action: 'reconnect' | 'whatsapp_manager' | 'review_templates' | 'none'
+    templates: {
+      key: string
+      language: string
+      status: string
+      category: string | null
+    }[]
+  }[]
   available: boolean
   appId: string | null
   configId: string | null
@@ -21,6 +59,74 @@ export interface ConnectTicketIssued {
   expiresAt: string
 }
 
+export interface WhatsappConnectionStatus {
+  thankYouEnabled: boolean
+  state: 'connecting' | 'verifying' | 'active' | 'disconnected' | 'offboarded'
+  signupPath: 'coexistence' | 'new_number'
+  displayPhoneNumber: string | null
+  health: {
+    stateReason: string | null
+    qualityRating: string | null
+    degradedClass: string | null
+    lastCheckedAt: string | null
+  }
+  setup: {
+    status: string
+    step: string
+    errorCode: string | null
+    retryAt: string | null
+    subscribedAt: string | null
+    numberVerifiedAt: string | null
+    registeredAt: string | null
+    completedAt: string | null
+  }
+  templates: {
+    total: number
+    ready: number
+    pending: number
+    rejected: number
+    recategorized: number
+    retrying: number
+    needsStaff: number
+    drift: number
+  }
+  templateDetails: {
+    key: string
+    language: string
+    languageCode: string
+    status: string
+    category: string | null
+    readiness: { kind: 'akeed_system' | 'merchant_own'; reason: string }
+  }[]
+}
+
+export function getWhatsappConnection() {
+  return api.get<{ connection: WhatsappConnectionStatus | null }>(
+    '/api/whatsapp-sender/connection'
+  )
+}
+
+export function updateWhatsappThankYou(thankYouEnabled: boolean) {
+  return api.patch<{ thankYouEnabled: boolean }>(
+    '/api/whatsapp-sender/connection',
+    { thankYouEnabled }
+  )
+}
+
+export interface WhatsappDisconnectResult {
+  state: 'disconnected'
+  providerCleanup: 'succeeded' | 'manual_required' | 'not_needed'
+  /** Steps left in the WhatsApp Business app; empty for a new number. */
+  businessAppSteps: string[]
+}
+
+export function disconnectWhatsapp() {
+  return api.post<WhatsappDisconnectResult>(
+    '/api/whatsapp-sender/disconnect',
+    {}
+  )
+}
+
 export interface ConnectTicketClaimed {
   /** Single use; kept in memory for the one completion request. */
   signupTicket: string
@@ -31,6 +137,10 @@ export interface ConnectTicketClaimed {
 }
 
 export const whatsappSenderQueryKey = ['whatsapp-sender'] as const
+export const whatsappConnectionQueryKey = [
+  'whatsapp-sender',
+  'connection',
+] as const
 
 export function getWhatsappSender(): Promise<WhatsappSenderAvailability> {
   return api.get<WhatsappSenderAvailability>('/api/whatsapp-sender')

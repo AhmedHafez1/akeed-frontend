@@ -22,7 +22,6 @@ import {
   formatOrderTitle,
   formatTooltipDateTime,
   getStatusTimestamp,
-  resolveRowDescriptionKey,
 } from '@/features/dashboard/domain/verificationRow'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'

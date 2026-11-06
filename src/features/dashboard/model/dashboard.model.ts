@@ -1,3 +1,4 @@
+import type { UsagePools } from '@/shared/types/usagePools'
 import type { CreditDenialCode } from '@/shared/lib/creditFeedback'
 import type {
   CommerceOutcomeOperationResult,
@@ -351,6 +352,8 @@ export type DashboardOverview = {
     limit: number
     percent: number
     state: UsageState
+    /** Shopify plans: each pool as charged. Absent on older payloads. */
+    pools?: UsagePools | null
   } | null
   /** Absent on older payloads. */
   capacity?: CapacitySummary | null

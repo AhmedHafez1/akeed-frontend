@@ -5,6 +5,7 @@ import type {
   AdminCreditBalanceState,
   AdminHealthStatus,
   AdminStore,
+  AdminStoreWhatsapp,
   AdminUsage,
 } from './admin.model'
 
@@ -222,6 +223,32 @@ export function UsageMeter({ usage }: { usage: AdminUsage }) {
   )
 }
 
+/** Stored credits, and the spare displayed credit when there is one. */
+export function storedCreditsLabel(billing: {
+  available: number
+  spare?: number
+}): string {
+  const stored = `${billing.available.toLocaleString('en')} stored`
+  return billing.spare === 1 ? `${stored} + 1 spare` : stored
+}
+
+/** Whether the own-number pool is worth showing for this store. */
+export function hasOwnNumber(store: AdminStore): boolean {
+  const usage = store.billing.model === 'plan' ? store.billing.usage : null
+  return Boolean(
+    store.whatsapp?.state || (usage?.pools && usage.pools.ownNumber.used > 0)
+  )
+}
+
+/** Both plan pools on one line: `Akeed 138/300 · Own 360/900`. */
+export function poolsLine(usage: AdminUsage): string | null {
+  if (!usage.pools) return null
+  const { akeed, ownNumber } = usage.pools
+  const pair = (used: number, limit: number) =>
+    `${used.toLocaleString('en')}/${limit.toLocaleString('en')}`
+  return `Akeed ${pair(akeed.used, akeed.limit)} · Own ${pair(ownNumber.used, ownNumber.limit)}`
+}
+
 export function BillingCell({ store }: { store: AdminStore }) {
   if (store.billing.model === 'credits') {
     return (
@@ -230,7 +257,7 @@ export function BillingCell({ store }: { store: AdminStore }) {
           {store.billing.displayed_available.toLocaleString('en')} credits
         </p>
         <p className="text-muted-foreground text-xs tabular-nums">
-          {store.billing.available.toLocaleString('en')} stored
+          {storedCreditsLabel(store.billing)}
         </p>
         <div className="mt-1.5">
           <CreditBalanceBadge state={store.billing.balance_state} />
@@ -238,7 +265,102 @@ export function BillingCell({ store }: { store: AdminStore }) {
       </div>
     )
   }
+  const pools = hasOwnNumber(store) ? poolsLine(store.billing.usage) : null
+  if (pools)
+    return (
+      <p className="text-foreground text-xs font-medium whitespace-nowrap tabular-nums">
+        {pools}
+      </p>
+    )
   return <UsageMeter usage={store.billing.usage} />
+}
+
+const SENDER_REASONS: Record<string, string> = {
+  own_number: 'Ready template',
+  feature_off: 'Sending switched off',
+  no_connection: 'No connection',
+  not_ready: 'Setting up',
+  disconnected: 'Disconnected',
+  offboarded: 'Partner removed',
+  template_missing: 'Template missing',
+  template_rejected: 'Template rejected',
+  template_paused: 'Template paused',
+  template_pending: 'Template pending',
+  template_recategorized: 'Template recategorized',
+  payment: 'Payment needs attention',
+  credentials: 'Credentials expired',
+  restricted: 'Restricted by Meta',
+  merchant_disconnect: 'Disconnected by merchant',
+  PARTNER_REMOVED: 'Partner removed',
+  PRIMARY_INACTIVITY: 'App inactive',
+}
+
+/** A sender or connection reason in words; unknown codes are title-cased. */
+export function whatsappReasonLabel(reason: string | null): string | null {
+  if (!reason) return null
+  const code = reason.startsWith('degraded:') ? reason.slice(9) : reason
+  return SENDER_REASONS[code] ?? titleCase(code)
+}
+
+/** Which number a message went from, as history. */
+export function senderLabel(kind: string | null): string {
+  if (kind === 'merchant_own') return 'Own number'
+  if (kind === 'akeed_system') return 'Akeed'
+  return 'None yet'
+}
+
+const CONNECTION_LABELS: Record<string, string> = {
+  active: 'Connected',
+  connecting: 'Setting up',
+  verifying: 'Setting up',
+  disconnected: 'Disconnected',
+  offboarded: 'Offboarded',
+}
+
+export function WhatsappStateBadge({ state }: { state: string | null }) {
+  const connected = state === 'active'
+  const preparing = state === 'connecting' || state === 'verifying'
+  const lost = state === 'disconnected' || state === 'offboarded'
+  return (
+    <Badge
+      variant="outline"
+      className={cn(
+        'border-border bg-muted/50 text-foreground/70 gap-1.5 whitespace-nowrap',
+        connected && 'border-primary-border bg-primary-subtle text-primary',
+        preparing &&
+          'border-info-border bg-info-subtle text-info-subtle-foreground',
+        lost &&
+          'border-destructive-border bg-destructive-subtle text-destructive-subtle-foreground'
+      )}
+    >
+      {state ? (CONNECTION_LABELS[state] ?? titleCase(state)) : 'Not connected'}
+    </Badge>
+  )
+}
+
+/**
+ * Connection on the first line; the last accepted sender and its reason on
+ * the second. The sender is history, not current readiness.
+ */
+export function WhatsappCell({
+  whatsapp,
+}: {
+  whatsapp: AdminStoreWhatsapp | undefined
+}) {
+  if (!whatsapp || (!whatsapp.state && !whatsapp.lastSender))
+    return <span className="text-muted-foreground text-xs">Akeed only</span>
+  const reason = whatsappReasonLabel(
+    whatsapp.lastSenderReason ?? whatsapp.reason
+  )
+  return (
+    <div className="min-w-0">
+      <WhatsappStateBadge state={whatsapp.state} />
+      <p className="text-muted-foreground mt-1 max-w-48 truncate text-xs">
+        Last: {senderLabel(whatsapp.lastSender)}
+        {reason ? ` · ${reason}` : ''}
+      </p>
+    </div>
+  )
 }
 
 export function PlanCell({ store }: { store: AdminStore }) {

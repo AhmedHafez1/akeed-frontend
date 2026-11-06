@@ -4,14 +4,17 @@ import type { ReactNode } from 'react'
 import { AlertTriangle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/shared/lib/utils'
-import { akButton, akCard, Skeleton } from '@/shared/ui'
+import { useOwnNumberPresence } from '@/features/whatsapp-connect'
+import { akButton, akCard, akLink, DocsLink, Skeleton } from '@/shared/ui'
 import { useBillingPage } from '../domain/useBillingPage'
 import { useBillingUsage } from '../domain/useBillingUsage'
+import { useTransactions } from '../domain/useTransactions'
 import { BalanceCard } from './components/BalanceCard'
 import { BillingAlert } from './components/BillingAlert'
 import { CreditModelNoticeBanner } from './components/CreditModelNoticeBanner'
 import { CheckoutSummaryCard } from './components/CheckoutSummaryCard'
 import { RechargePanel } from './components/RechargePanel'
+import { TransactionsCard } from './components/TransactionsCard'
 
 /** One column below 1100px; the amount beside a 360px summary from there up. */
 const buyGrid =
@@ -48,6 +51,8 @@ export function BillingStandalonePage() {
   const t = useTranslations('billing')
   const state = useBillingPage()
   const usage = useBillingUsage()
+  const history = useTransactions()
+  const ownNumber = useOwnNumberPresence()
 
   if (state.isSummaryLoading) {
     return (
@@ -95,12 +100,24 @@ export function BillingStandalonePage() {
   return (
     <PageShell>
       <CreditModelNoticeBanner />
-      <BalanceCard summary={state.summary} usage={usage} />
+      <BalanceCard
+        summary={state.summary}
+        usage={usage}
+        showSenders={ownNumber.visible}
+      />
       <BillingAlert summary={state.summary} />
       <div className={buyGrid}>
-        <RechargePanel state={state} />
-        <CheckoutSummaryCard state={state} />
+        <RechargePanel state={state} showOwnNumber={ownNumber.visible} />
+        <CheckoutSummaryCard state={state} showOwnNumber={ownNumber.visible} />
       </div>
+      <TransactionsCard history={history} />
+      {ownNumber.visible && (
+        <p className="text-ak-caption text-ink-muted text-center">
+          <DocsLink article="ownWhatsappNumber" className={akLink}>
+            {t('ownNumberGuide')}
+          </DocsLink>
+        </p>
+      )}
     </PageShell>
   )
 }

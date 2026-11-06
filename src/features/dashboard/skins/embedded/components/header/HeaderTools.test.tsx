@@ -16,6 +16,7 @@ const warning: MessageUsageView = {
   state: 'warning',
   allowance: 'free',
   stale: false,
+  pools: null,
 }
 
 function tip(id: string, label: string | null): TipCardView {

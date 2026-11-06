@@ -1,6 +1,7 @@
 'use client'
 
 import { api, fetchWithAuth } from '@/shared/lib/auth'
+import type { UsagePools } from '@/shared/types/usagePools'
 import { getErrorMessage, parseJsonResponse } from '@/shared/lib/http'
 import type {
   TemplateMessage,
@@ -51,6 +52,7 @@ export interface SettingsResponse {
     /** The plan the store pays for now; null while none is live. Absent from an older backend. */
     currentPlanId?: OnboardingBillingPlanConfig['id'] | null
     usage: {
+      pools?: UsagePools | null
       used: number
       limit: number
       periodStart: string
@@ -58,6 +60,8 @@ export interface SettingsResponse {
     }
     /** Accepted customer messages in the last 30 days, tests excluded. */
     messagesSentLast30Days?: number
+    /** The same messages by the plan pool that paid for each. Absent from an older backend. */
+    messagesSentLast30DaysByPool?: { akeed: number; ownNumber: number }
   }
   template: {
     /** Every message language, usable or not, in display order. */

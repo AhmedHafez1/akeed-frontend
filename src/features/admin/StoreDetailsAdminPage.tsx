@@ -29,6 +29,7 @@ import type {
   AdminStoreVerification,
 } from './admin.model'
 import { AdminErrorPanel } from './AdminErrorPanel'
+import { AdminWhatsappSenderCard } from './AdminWhatsappSenderCard'
 import { StoreLogoHeaderCard } from './StoreLogoHeaderCard'
 import { StoreReviewPromptCard } from './StoreReviewPromptCard'
 import {
@@ -44,6 +45,8 @@ import {
   platformLabel,
   titleCase,
   UsageMeter,
+  hasOwnNumber,
+  storedCreditsLabel,
 } from './AdminStoreUi'
 import { AdminEmptyState, AdminMetricCard, AdminSelect } from './AdminUi'
 import {
@@ -173,6 +176,11 @@ export function StoreDetailsAdminPage({
               <BillingCard store={store} />
               <AutomationCard store={store} />
               <HealthCard store={store} />
+              <AdminWhatsappSenderCard
+                orgId={store.org_id}
+                whatsapp={store.whatsapp}
+                revision={revision}
+              />
             </div>
             <LifecycleCard milestones={store.milestones} />
           </div>
@@ -468,7 +476,7 @@ function BillingCard({ store }: { store: AdminStoreDetail }) {
               {numberFormat.format(billing.displayed_available)}
             </p>
             <p className="text-muted-foreground text-xs">
-              credits available, {numberFormat.format(billing.available)} stored
+              credits available, {storedCreditsLabel(billing)}
             </p>
           </div>
           <CreditBalanceBadge state={billing.balance_state} />
@@ -494,13 +502,41 @@ function BillingCard({ store }: { store: AdminStoreDetail }) {
   }
   return (
     <DetailCard title="Billing · Plan">
-      <div className="mb-4">
-        <UsageMeter usage={billing.usage} />
-        <p className="text-muted-foreground mt-1.5 text-xs">
-          {numberFormat.format(billing.usage.remaining)} verifications remaining
-          this period
-        </p>
-      </div>
+      {billing.usage.pools && hasOwnNumber(store) ? (
+        <div className="mb-4 space-y-3">
+          {(
+            [
+              ['Akeed pool', billing.usage.pools.akeed],
+              ['Own-number pool', billing.usage.pools.ownNumber],
+            ] as const
+          ).map(([label, pool]) => (
+            <div key={label}>
+              <p className="text-muted-foreground mb-1 text-xs">{label}</p>
+              <UsageMeter
+                usage={{
+                  ...pool,
+                  percent:
+                    pool.limit > 0
+                      ? Math.round((pool.used / pool.limit) * 100)
+                      : 0,
+                }}
+              />
+            </div>
+          ))}
+          <p className="text-muted-foreground text-xs">
+            Persisted charges by pool for this period; the sender does not
+            decide which pool paid.
+          </p>
+        </div>
+      ) : (
+        <div className="mb-4">
+          <UsageMeter usage={billing.usage} />
+          <p className="text-muted-foreground mt-1.5 text-xs">
+            {numberFormat.format(billing.usage.remaining)} verifications
+            remaining this period
+          </p>
+        </div>
+      )}
       <DetailList
         items={[
           ['Plan', titleCase(billing.plan)],

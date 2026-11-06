@@ -3,13 +3,21 @@
 import { useTranslations } from 'next-intl'
 import { LandingSectionHeading } from '@/features/marketing/ui/components/LandingSectionHeading'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { OWN_NUMBER_PRICING_ENABLED } from '@/shared/config/pricing'
 import { Container } from '@/shared/ui/container'
 import { Section } from '@/shared/ui/section'
 import { CreditPriceCard } from './pricing/CreditPriceCard'
 import { PricingFactsPanel } from './pricing/PricingFactsPanel'
 import { ShopifyPlanPanel } from './pricing/ShopifyPlanPanel'
 
-export default function Pricing() {
+interface PricingProps {
+  /** Promote the merchant's own number. Defaults to the public flag. */
+  showOwnNumber?: boolean
+}
+
+export default function Pricing({
+  showOwnNumber = OWN_NUMBER_PRICING_ENABLED,
+}: PricingProps = {}) {
   const t = useTranslations('pricing_credits')
   const { isRTL } = useLocaleInfo()
 
@@ -37,11 +45,11 @@ export default function Pricing() {
          * path is its own block below, because it is billed somewhere else.
          */}
         <div className="ring-border shadow-overlay grid overflow-hidden rounded-3xl ring-1 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">
-          <CreditPriceCard />
-          <PricingFactsPanel />
+          <CreditPriceCard showOwnNumber={showOwnNumber} />
+          <PricingFactsPanel showOwnNumber={showOwnNumber} />
         </div>
 
-        <ShopifyPlanPanel />
+        <ShopifyPlanPanel showOwnNumber={showOwnNumber} />
 
         <p className="text-muted-foreground mt-6 text-center text-xs leading-5">
           {t('authoritative_note')}

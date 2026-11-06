@@ -10,8 +10,12 @@ import {
   Text,
 } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
-import { isolateLtr } from '@/features/billing/domain/planPresentation'
+import {
+  isolateLtr,
+  ownNumberAllowance,
+} from '@/features/billing/domain/planPresentation'
 import { useShopifyPlanUpgrade } from '@/features/billing/domain/useShopifyPlanUpgrade'
+import { useOwnNumberPresence } from '@/features/whatsapp-connect'
 import { formatPlanPrice } from '@/shared/lib/money'
 import { BillingErrorBanner } from './BillingErrorBanner'
 import { PlanCard, RADIO_SURFACE_CLASS, radioSurface } from './PlanCard'
@@ -43,6 +47,10 @@ export function UpgradePlansModal({
   const tPlans = useTranslations('billing.embeddedPlans')
   const groupName = useId()
   const upgrade = useShopifyPlanUpgrade({ enabled: open, hostParam })
+  const ownNumberPresence = useOwnNumberPresence(open)
+  const showsOwnNumber = upgrade.paidPlans.some((plan) =>
+    Boolean(ownNumberAllowance(plan, ownNumberPresence))
+  )
   const starter = upgrade.isFreePlanClaimed ? null : upgrade.starterPlan
   const selectedPlan = upgrade.plans.find(
     (plan) => plan.id === upgrade.selectedPlanId
@@ -124,6 +132,7 @@ export function UpgradePlansModal({
                         groupName={groupName}
                         isSelected={upgrade.selectedPlanId === plan.id}
                         isCurrent={upgrade.currentPlanId === plan.id}
+                        ownNumber={ownNumberAllowance(plan, ownNumberPresence)}
                         onSelect={upgrade.setSelectedPlanId}
                       />
                     ))}
@@ -159,6 +168,7 @@ export function UpgradePlansModal({
               {upgrade.isRenewal && <Text as="p">{tPlans('renewNote')}</Text>}
               <Text as="p" tone="subdued">
                 {tPlans('modalRules')}
+                {showsOwnNumber && ` ${tPlans('ownNumber.note')}`}
                 {upgrade.isFreePlanClaimed && ` ${tPlans('freeUsed')}`}
               </Text>
             </>
