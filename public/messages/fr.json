@@ -1225,6 +1225,7 @@
     "overview": {
       "title": "Tableau de bord",
       "periodLabel": "Période",
+      "periodInlineLabel": "Période :",
       "settings": {
         "label": "Paramètres de confirmation",
         "on": "Activé",
@@ -1250,7 +1251,8 @@
         },
         "canceled": {
           "title": "Annulées avant envoi",
-          "body": "{count, plural, =0 {Aucune expédition perdue sur cette période} one {# expédition et son retour que vous n’avez pas payés} other {# expéditions et retours que vous n’avez pas payés}}"
+          "body": "{count, plural, =0 {Aucune expédition perdue sur cette période} one {# expédition et son retour que vous n’avez pas payés} other {# expéditions et retours que vous n’avez pas payés}}",
+          "value": "D’une valeur de <amount></amount> que vous n’avez pas expédiées"
         },
         "rate": {
           "title": "Taux de confirmation",
@@ -3731,6 +3733,7 @@
       "ownerRequired": "Seul le propriétaire du compte peut connecter un numéro WhatsApp.",
       "connectionExists": "Votre compte a déjà un numéro WhatsApp connecté ou en cours de configuration.",
       "numberAlreadyConnected": "Ce numéro est déjà connecté à un autre compte Akeed. Déconnectez-le d’abord de ce compte ou choisissez un autre numéro.",
+      "accountAlreadyConnected": "Ce compte WhatsApp Business est déjà connecté à une autre organisation Akeed. Déconnectez-le d’abord de cette organisation ou choisissez un autre compte WhatsApp Business.",
       "codeRejected": "Meta n’a pas accepté la connexion. Elle a peut-être pris trop de temps.",
       "providerUnavailable": "Meta n’a pas répondu à temps.",
       "tokenUnverified": "Akeed n’a pas reçu les autorisations WhatsApp nécessaires. Acceptez toutes les autorisations demandées par Facebook lors de la connexion.",

@@ -1,6 +1,6 @@
 import type { VerificationItem } from '../model/dashboard.model'
-import { formatAmount } from '@/shared/lib/money'
 import { getFormatLocale, type SupportedLocale } from '@/shared/lib/locale'
+import { formatOrderAmount } from '../lib/orderDisplay'
 import { EXPLAINED_LIFECYCLE_REASONS } from './verificationLifecycle'
 
 /**
@@ -43,23 +43,20 @@ export function formatCurrencyTotal(
 }
 
 /**
- * The standalone list's total: Latin digits, and in Arabic the currency after
- * the amount as an Arabic reader meets it (`ج.م 500.00` left to right). Render
- * inside `<bdi dir="ltr">`.
+ * The details view's total, written like the order list's (`749.95 EGP`; in
+ * Arabic `ج.م 749.95` left to right). Render inside `<bdi dir="ltr">`.
  */
 export function formatOrderTotal(
   verification: VerificationItem,
   locale: SupportedLocale
 ): string {
   if (!verification.total_price) return '-'
-  const value = Number(verification.total_price)
-  const currency = verification.currency ?? 'SAR'
-  if (!Number.isFinite(value)) return '-'
-  try {
-    return formatAmount(value, currency, locale)
-  } catch {
-    return `${verification.total_price} ${currency}`
-  }
+  if (!Number.isFinite(Number(verification.total_price))) return '-'
+  return formatOrderAmount(
+    verification.total_price,
+    verification.currency ?? 'SAR',
+    locale
+  )
 }
 
 export function formatCreatedDate(

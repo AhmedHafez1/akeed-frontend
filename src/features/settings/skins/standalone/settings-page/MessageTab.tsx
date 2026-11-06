@@ -121,7 +121,10 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
     customer: PREVIEW_CUSTOMER_NAMES[previewLanguage],
     store: storeName,
     order: PREVIEW_ORDER_NUMBER,
-    total: previewTotal(data.state.shippingCurrency, previewLanguage),
+    total: previewTotal(
+      data.state.messageCurrency ?? data.state.shippingCurrency,
+      previewLanguage
+    ),
   }
   const styleIds = variants.map((variant) => variant.variant)
   const shownStyle = isAuto ? 'auto' : (selectedVariant ?? styleIds[0])

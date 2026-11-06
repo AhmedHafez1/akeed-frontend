@@ -50,6 +50,7 @@ export function KpiCards({ kpis }: { kpis: DashboardOverview['kpis'] }) {
       <KpiCard
         title={t('canceled.title')}
         value={formatCount(kpis.canceled_before_shipping.count, locale)}
+        detail={details.canceled}
       />
       <KpiCard
         title={t('rate.title')}

@@ -20,19 +20,19 @@ function latinLocale(locale: string): string {
 }
 
 /**
- * `US$ 2,629.95` in Arabic, `$2,629.95` in English: Latin digits in both, the
- * currency symbol before the amount.
+ * The app's one way of writing an order amount: Latin digits and the currency
+ * after the number as the reader meets it — `3,051.50 EGP` in English, and in
+ * Arabic `ج.م 751.00` written left to right, so an Arabic reader (right to
+ * left) sees the amount first.
  *
- * `currencyAfter` puts the symbol after the number as the reader meets it —
- * `3,051.50 EGP` in English, and in Arabic `ج.م 751.00` written left to right,
- * so an Arabic reader (right to left) sees the amount first — which the order
- * tables use.
+ * `currencyAfter: false` puts the symbol first (`$2,629.95`) for a caller
+ * that needs it.
  */
 export function formatOrderAmount(
   amount: string | number | null | undefined,
   currency: string | null | undefined,
   locale: string,
-  { currencyAfter = false }: { currencyAfter?: boolean } = {}
+  { currencyAfter = true }: { currencyAfter?: boolean } = {}
 ): string {
   if (amount === null || amount === undefined || amount === '') return '—'
   const value = Number(amount)

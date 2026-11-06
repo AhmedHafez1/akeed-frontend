@@ -97,7 +97,7 @@ export function OverviewEmbedded({
         }
         actions={headerActions}
         periodControl={{
-          label: t('periodLabel'),
+          label: t('periodInlineLabel'),
           value: period,
           options: periodOptions,
           onChange: onPeriodChange,

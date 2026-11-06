@@ -1225,6 +1225,7 @@
     "overview": {
       "title": "Panel",
       "periodLabel": "Periodo",
+      "periodInlineLabel": "Periodo:",
       "settings": {
         "label": "Configuración de confirmación",
         "on": "Sí",
@@ -1250,7 +1251,8 @@
         },
         "canceled": {
           "title": "Cancelados antes del envío",
-          "body": "{count, plural, =0 {Ningún envío perdido en este periodo} one {# envío y devolución que no pagaste} other {# envíos y devoluciones que no pagaste}}"
+          "body": "{count, plural, =0 {Ningún envío perdido en este periodo} one {# envío y devolución que no pagaste} other {# envíos y devoluciones que no pagaste}}",
+          "value": "Por un valor de <amount></amount> que no enviaste"
         },
         "rate": {
           "title": "Tasa de confirmación",
@@ -3731,6 +3733,7 @@
       "ownerRequired": "Solo el propietario de la cuenta puede conectar un número de WhatsApp.",
       "connectionExists": "Tu cuenta ya tiene un número de WhatsApp conectado o en configuración.",
       "numberAlreadyConnected": "Este número ya está conectado a otra cuenta de Akeed. Desconéctalo allí primero o elige otro número.",
+      "accountAlreadyConnected": "Esta cuenta de WhatsApp Business ya está conectada a otra organización de Akeed. Desconéctala primero allí o elige otra cuenta de WhatsApp Business.",
       "codeRejected": "Meta no aceptó el inicio de sesión. Puede que haya tardado demasiado.",
       "providerUnavailable": "Meta no respondió a tiempo.",
       "tokenUnverified": "Akeed no recibió los permisos de WhatsApp que necesita. Acepta todos los permisos que pide Facebook al conectar.",
