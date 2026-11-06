@@ -837,6 +837,26 @@
   margin-inline-start: calc(var(--p-space-025) * -1);
 }
 
+/*
+ * Polaris spaces a Checkbox or RadioButton from its label with a physical
+ * `margin-right`, and indents the help text under it with `padding-left`. In
+ * RTL the control sits on the right, so the gap lands on its outer edge and
+ * the label touches it. Re-apply both on the logical side.
+ */
+[dir='rtl'] .Polaris-Choice__Control {
+  margin-right: 0;
+  margin-inline-end: var(--p-space-200);
+}
+
+[dir='rtl'] .Polaris-Choice--labelHidden .Polaris-Choice__Control {
+  margin-inline-end: 0;
+}
+
+[dir='rtl'] .Polaris-Choice__Descriptions {
+  padding-left: 0;
+  padding-inline-start: calc(var(--p-space-200) + var(--pc-choice-size));
+}
+
 @layer utilities {
   /* Shared layout rhythm for marketing section headers. */
   .landing-section-header {
