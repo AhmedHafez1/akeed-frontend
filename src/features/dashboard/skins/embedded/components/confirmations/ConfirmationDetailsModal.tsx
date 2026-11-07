@@ -20,6 +20,7 @@ import {
   resolveRowDescriptionKey,
 } from '../../../../domain/verificationRow'
 import type { VerificationItem } from '../../../../model/dashboard.model'
+import { ConfirmationOrderDetails } from './ConfirmationOrderDetails'
 
 function Fact({ label, children }: { label: string; children: string }) {
   return (
@@ -69,6 +70,8 @@ function DetailsBody({
           {formatOrderTotal(verification, locale)}
         </Fact>
       </InlineGrid>
+
+      <ConfirmationOrderDetails verification={verification} />
 
       {customerRecord && (
         <Box

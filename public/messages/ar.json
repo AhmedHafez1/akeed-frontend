@@ -2115,6 +2115,10 @@
       },
       "orderFallbackPrefix": "طلب",
       "technicalId": "معرّف الطلب التقني",
+      "orderDetails": {
+        "products": "المنتجات",
+        "deliveryAddress": "عنوان التوصيل"
+      },
       "source": "مصدر الطلب",
       "storeSync": {
         "title": "تحديث المتجر",

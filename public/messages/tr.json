@@ -986,6 +986,10 @@
       },
       "orderFallbackPrefix": "Sipariş",
       "technicalId": "Teknik sipariş kimliği",
+      "orderDetails": {
+        "products": "Ürünler",
+        "deliveryAddress": "Teslimat adresi"
+      },
       "source": "Sipariş kaynağı",
       "storeSync": {
         "title": "Mağaza güncellemesi",

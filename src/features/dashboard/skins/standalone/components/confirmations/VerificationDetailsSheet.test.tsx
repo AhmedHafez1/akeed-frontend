@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { screen } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
 import { renderStandalone } from '../shared/standaloneTestUtils'
 import { VerificationDetailsSheet } from './VerificationDetailsSheet'
@@ -42,6 +42,103 @@ function fact(label: string): string | null {
 }
 
 describe('VerificationDetailsSheet', () => {
+  const products = [
+    {
+      name: 'Cotton shirt',
+      quantity: 2,
+      unit_price: '125.50',
+      options: [{ name: 'Colour', value: 'Red' }, { value: 'XL' }],
+    },
+    { name: 'Gift wrap', quantity: 3, unit_price: null, options: [] },
+    { name: 'Free sample', quantity: 1, unit_price: '0', options: [] },
+  ]
+
+  it.each([
+    ['en', 'Products', 'Delivery address', 'Verification lifecycle'],
+    ['ar', 'المنتجات', 'عنوان التوصيل', 'مراحل التأكيد'],
+  ] as const)(
+    'shows products and a multiline address in %s',
+    (locale, productTitle, addressTitle, lifecycleTitle) => {
+      renderSheet(
+        verification({
+          line_items: products,
+          shipping_region: 'Cairo',
+          shipping_address: '12 Nile Street\nFloor 3',
+        }),
+        locale
+      )
+
+      const items = screen.getByRole('region', { name: productTitle })
+      expect(within(items).getByText('Cotton shirt')).toBeTruthy()
+      expect(within(items).getByText('Red / XL')).toBeTruthy()
+      expect(within(items).getByText('× 2')).toBeTruthy()
+      const pricedLine = within(items).getAllByRole('listitem')[0]
+      expect(pricedLine.textContent).toContain('251.00')
+      expect(pricedLine.textContent).toContain(locale === 'en' ? 'EGP' : 'ج.م')
+      const gift = within(items).getByText('Gift wrap').closest('li')!
+      expect(gift.textContent).toBe('Gift wrap× 3')
+      expect(
+        within(items).getByText('Free sample').closest('li')?.textContent
+      ).toContain('0.00')
+
+      const address = screen.getByRole('region', { name: addressTitle })
+      expect(within(address).getByText('Cairo')).toBeTruthy()
+      expect(
+        within(address).getByText('12 Nile Street Floor 3').textContent
+      ).toBe('12 Nile Street\nFloor 3')
+      const headings = screen.getAllByRole('heading').map((n) => n.textContent)
+      expect(headings.indexOf(productTitle)).toBeLessThan(
+        headings.indexOf(addressTitle)
+      )
+      expect(headings.indexOf(addressTitle)).toBeLessThan(
+        headings.indexOf(lifecycleTitle)
+      )
+      expect(within(items).getByText('× 2').getAttribute('dir')).toBe('ltr')
+    }
+  )
+
+  it.each(['products', 'address'] as const)(
+    'shows only %s when the other field is missing',
+    (field) => {
+      renderSheet(
+        verification(
+          field === 'products'
+            ? { line_items: products }
+            : { shipping_address: '12 Nile Street' }
+        ),
+        'en'
+      )
+      expect(screen.queryByRole('region', { name: 'Products' }) !== null).toBe(
+        field === 'products'
+      )
+      expect(
+        screen.queryByRole('region', { name: 'Delivery address' }) !== null
+      ).toBe(field === 'address')
+    }
+  )
+
+  it.each([
+    {},
+    { line_items: null, shipping_region: null, shipping_address: null },
+    { line_items: [], shipping_region: ' ', shipping_address: '\n' },
+  ])('hides both sections when details are missing: %j', (details) => {
+    renderSheet(verification(details), 'en')
+    expect(screen.queryByRole('region', { name: 'Products' })).toBeNull()
+    expect(
+      screen.queryByRole('region', { name: 'Delivery address' })
+    ).toBeNull()
+    expect(
+      screen.getByRole('heading', { name: 'Verification lifecycle' })
+    ).toBeTruthy()
+  })
+
+  it('shows an available region without inventing a street address', () => {
+    renderSheet(verification({ shipping_region: 'Cairo' }), 'en')
+    const address = screen.getByRole('region', { name: 'Delivery address' })
+    expect(within(address).getByText('Cairo')).toBeTruthy()
+    expect(address.textContent).not.toContain('—')
+  })
+
   it.each([
     ['en', 'easyorders', 'Order source', 'EasyOrders'],
     ['ar', 'easyorders', 'مصدر الطلب', 'EasyOrders'],

@@ -986,6 +986,10 @@
       },
       "orderFallbackPrefix": "آرڈر",
       "technicalId": "آرڈر کی تکنیکی ID",
+      "orderDetails": {
+        "products": "مصنوعات",
+        "deliveryAddress": "ترسیل کا پتہ"
+      },
       "source": "آرڈر کا ذریعہ",
       "storeSync": {
         "title": "اسٹور کی اپ ڈیٹ",
