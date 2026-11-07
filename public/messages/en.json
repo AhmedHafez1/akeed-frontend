@@ -2121,6 +2121,10 @@
       },
       "orderFallbackPrefix": "Order",
       "technicalId": "Technical order ID",
+      "orderDetails": {
+        "products": "Products",
+        "deliveryAddress": "Delivery address"
+      },
       "source": "Order source",
       "storeSync": {
         "title": "Store update",

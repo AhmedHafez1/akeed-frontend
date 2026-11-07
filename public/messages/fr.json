@@ -986,6 +986,10 @@
       },
       "orderFallbackPrefix": "Commande",
       "technicalId": "ID technique de la commande",
+      "orderDetails": {
+        "products": "Produits",
+        "deliveryAddress": "Adresse de livraison"
+      },
       "source": "Source de la commande",
       "storeSync": {
         "title": "Mise à jour de la boutique",

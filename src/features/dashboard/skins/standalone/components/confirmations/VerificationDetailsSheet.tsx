@@ -25,6 +25,7 @@ import {
 import { orderSourceLabelKey } from '@/features/dashboard/lib/orderDisplay'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
 import { StoreSyncSection } from './StoreSyncSection'
+import { VerificationOrderDetails } from './VerificationOrderDetails'
 
 /** The one action the sheet carries: asking the store again. */
 export interface StoreSyncRetryProps {
@@ -126,6 +127,8 @@ function DetailsBody({
             </p>
           </div>
         </div>
+
+        <VerificationOrderDetails verification={verification} />
 
         {customerRecord && (
           <div
