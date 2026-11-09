@@ -263,6 +263,12 @@ export interface AdminStoreVerification {
   currency: string | null
   attempts: number
   follow_up_attempts: number
+  /**
+   * A first confirmation awaiting review that no WhatsApp message id shows
+   * went out; staff may mark it not sent and resend it. Absent from older
+   * backends.
+   */
+  resend_dispatch_id?: string | null
   template_name: string | null
   language_code: string | null
   cancellation_source: string | null
@@ -319,4 +325,10 @@ export interface AdminFunnelResponse {
     notes: string[]
   }
   evaluated_at: string
+}
+
+export interface AdminDispatchResendResponse {
+  dispatchId: string
+  state: 'rejected'
+  retry: { orderId: string; duplicate: boolean }
 }

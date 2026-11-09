@@ -186,4 +186,57 @@ describe('admin store automation visibility', () => {
     await screen.findByRole('heading', { name: 'Store not found' })
     expect(screen.queryByText('Thank-you messages')).toBeNull()
   })
+
+  it('offers the resend inside an expanded order awaiting review', async () => {
+    api.store.mockResolvedValue(response(store()))
+    api.verifications.mockResolvedValue({
+      data: [
+        {
+          id: 'ver-1',
+          status: 'failed',
+          reason: 'provider_outcome_unknown',
+          failure_code: null,
+          failure_title: null,
+          order_number: '3141',
+          external_order_id: '6580956037477',
+          is_test: false,
+          customer_name: 'Customer',
+          customer_phone_masked: '+2011•••••410',
+          customer_country: 'EG',
+          total_price: '2300.00',
+          currency: 'EGP',
+          attempts: 0,
+          follow_up_attempts: 0,
+          resend_dispatch_id: 'dispatch-1',
+          template_name: null,
+          language_code: null,
+          cancellation_source: null,
+          created_at: '2026-11-09T17:29:00Z',
+          updated_at: null,
+          last_sent_at: null,
+          delivered_at: null,
+          read_at: null,
+          confirmed_at: null,
+          canceled_at: null,
+          expired_at: null,
+          no_reply_at: null,
+          follow_up_sent_at: null,
+        },
+      ],
+      next_cursor: null,
+      total_count: 1,
+    })
+    render(<StoreDetailsAdminPage integrationId="store-1" />)
+
+    fireEvent.click(
+      await screen.findByRole('button', {
+        name: 'Show details for order 3141',
+      })
+    )
+
+    // The desktop table and the mobile list both render the details.
+    expect(
+      await screen.findAllByRole('button', { name: 'Mark not sent and resend' })
+    ).not.toHaveLength(0)
+  })
 })
