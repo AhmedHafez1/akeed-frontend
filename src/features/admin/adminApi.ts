@@ -1,5 +1,6 @@
 import { fetchWithAuth } from '@/shared/lib/auth'
 import type {
+  AdminDispatchResendResponse,
   AdminFunnelResponse,
   AdminStoreDetailResponse,
   AdminStoreLogoHeader,
@@ -139,6 +140,21 @@ export function getAdminStoreVerifications(
 ) {
   return adminRequest<AdminStoreVerificationsResponse>(
     `/api/admin/stores/${encodeURIComponent(integrationId)}/verifications?${query}`
+  )
+}
+
+/**
+ * Marks a first confirmation that never reached WhatsApp as not sent, then
+ * sends it again through the merchant's retry. Audited by the backend.
+ */
+export function resendAdminDispatch(dispatchId: string, reason: string) {
+  return adminRequest<AdminDispatchResendResponse>(
+    `/api/admin/message-dispatches/${encodeURIComponent(dispatchId)}/resend`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reason }),
+    }
   )
 }
 
