@@ -18,6 +18,14 @@ export function useNeedsActionReason(
   const tFailure = useTranslations('dashboard.confirmations.status.failure')
   const { locale } = useLocaleInfo()
 
+  if (reason.type === 'change_requested') {
+    return {
+      text: t('change_requested', {
+        date: formatShortDate(reason.since, locale, timeZone),
+      }),
+      isCritical: true,
+    }
+  }
   if (reason.type === 'no_whatsapp') {
     return { text: t('no_whatsapp'), isCritical: true }
   }

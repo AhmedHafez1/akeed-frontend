@@ -754,6 +754,53 @@
     }
   },
   "dashboard": {
+    "changeRequest": {
+      "doNotShipStrip": "N’expédiez pas les commandes avec une demande de modification.",
+      "dontShip": "Ne pas expédier pour l’instant",
+      "ackMissing": "Client non informé",
+      "handle": "Traiter la demande",
+      "openWhatsapp": "Ouvrir WhatsApp",
+      "call": "Appeler",
+      "copy": "Copier le numéro",
+      "copied": "Numéro copié",
+      "copyError": "Impossible de copier le numéro.",
+      "noPhone": "Aucun numéro de téléphone valide",
+      "panelTitle": "N’expédiez pas encore cette commande",
+      "detailsDescription": "Le client a demandé une modification",
+      "ackSent": "Client informé",
+      "ackSkipped": "Client non informé : solde insuffisant",
+      "ackFailed": "Client non informé : message non délivré",
+      "contactHeading": "Contacter le client",
+      "resultHeading": "Enregistrer le résultat",
+      "confirmAfter": "Confirmée après contact avec le client",
+      "cancelAfter": "Annulée après contact avec le client",
+      "resend": "Envoyer une confirmation mise à jour",
+      "resendState": {
+        "queued": "Envoi en cours…",
+        "scheduled": "Prévu pour {time} (heures calmes)",
+        "store": "Non envoyé : commande introuvable dans votre boutique",
+        "balance": "Non envoyé : solde insuffisant",
+        "send": "Non envoyé : échec de l’envoi"
+      },
+      "retry": "Réessayer",
+      "topUp": "Recharger",
+      "result": {
+        "confirm": "Commande confirmée.",
+        "cancel": "Commande annulée.",
+        "resend": "Confirmation mise à jour en file d’attente."
+      },
+      "stale": {
+        "confirmed": "Déjà confirmée par le client.",
+        "canceled": "Déjà annulée par le client.",
+        "resent": "Une confirmation mise à jour a déjà été envoyée.",
+        "unknown": "Cette demande a déjà été traitée."
+      },
+      "error": {
+        "confirm": "Impossible de confirmer la commande. Réessayez.",
+        "cancel": "Impossible d’annuler la commande. Réessayez.",
+        "resend": "Impossible d’envoyer la confirmation mise à jour. Réessayez."
+      }
+    },
     "mainTitle": "Tableau de bord",
     "mainSubtitle": "Suivez les confirmations COD et les réponses des clients.",
     "title": "Tableau de bord",
@@ -1292,6 +1339,7 @@
         "empty": "Rien à traiter",
         "emptyBody": "Toutes les commandes de cette période sont confirmées ou en attente du client.",
         "reason": {
+          "change_requested": "Ne pas expédier pour l’instant · {date}",
           "no_reply_after_follow_up": "Sans réponse depuis le {date} · Rappel envoyé",
           "no_reply": "Sans réponse depuis le {date}",
           "read_no_reply": "Lu, sans réponse · il y a {hours, plural, one {# heure} other {# heures}}",
@@ -1354,6 +1402,7 @@
         "tooLarge": "Trop de commandes à exporter en une fois. Choisissez une période plus courte ou un seul onglet."
       },
       "tabs": {
+        "change_requested": "Demandes de modification",
         "all": "Toutes",
         "needs_action": "À traiter",
         "no_whatsapp": "Non distribué sur WhatsApp",
@@ -1388,6 +1437,7 @@
       "noName": "Sans nom",
       "openOrderLabel": "Ouvrir la commande {order} dans Shopify",
       "status": {
+        "changeRequested": "Modification demandée",
         "confirmed": "Confirmée",
         "canceled": "Annulée",
         "failed": "Échec de l’envoi",
@@ -1481,6 +1531,7 @@
       },
       "loaded": "Affichage de {loaded} commandes sur {total}",
       "empty": {
+        "change_requested": "Aucune demande de modification ouverte.",
         "all": "Aucune confirmation sur cette période pour l’instant.",
         "needs_action": "Rien à traiter. Beau travail !",
         "no_whatsapp": "Tous les clients de cette période peuvent recevoir des messages WhatsApp.",
@@ -1580,6 +1631,19 @@
     }
   },
   "settings": {
+    "changeRequests": {
+      "heading": "Demander une modification",
+      "on": "Activé",
+      "off": "Désactivé",
+      "label": "Permettre aux clients de demander une modification",
+      "description": "Ajoute un troisième bouton aux messages de confirmation.",
+      "notAvailableYet": "Pas encore disponible. Réessayez plus tard.",
+      "noteAck": "Akeed répond une fois pour confirmer la réception (1 message).",
+      "noteAckPlan": "Akeed répond une fois pour confirmer la réception (1 message de votre forfait).",
+      "noteShopify": "Les commandes Shopify reçoivent un tag, pas une suspension du traitement.",
+      "noteOff": "La désactivation ne s’applique qu’aux nouveaux messages.",
+      "saveUnavailable": "Demander une modification n’est pas encore disponible. Réessayez plus tard."
+    },
     "thankYou": {
       "heading": "Messages de remerciement",
       "on": "Activés",

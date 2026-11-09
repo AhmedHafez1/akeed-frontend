@@ -1,5 +1,6 @@
 import {
   Badge,
+  Banner,
   BlockStack,
   Box,
   Card,
@@ -11,7 +12,7 @@ import {
   Text,
   useBreakpoints,
 } from '@shopify/polaris'
-import { CheckCircleIcon } from '@shopify/polaris-icons'
+import { AlertTriangleIcon, CheckCircleIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import type { ManualConfirmationTarget } from '../../../../domain/useManualConfirmation'
@@ -47,6 +48,8 @@ interface RowProps {
   canConfirm: boolean
   onRequestConfirm: (target: ManualConfirmationTarget) => void
   onViewAll: () => void
+  /** Opens this order's change request in its details. */
+  onHandle: (verificationId: string) => void
 }
 
 /** Everything a row and a card show, from one item. */
@@ -89,7 +92,20 @@ function NeedsActionStatus({
 }) {
   return (
     <span title={row.reasonText}>
-      <Badge tone={BADGE_TONES[row.status.kind]}>{row.badgeText}</Badge>
+      <InlineStack gap="100" blockAlign="center" wrap={false}>
+        <Badge tone={BADGE_TONES[row.status.kind]}>{row.badgeText}</Badge>
+        {row.changeRequest?.ackMissing && <ChangeRequestAckIcon />}
+      </InlineStack>
+    </span>
+  )
+}
+
+/** The customer was not told the request arrived. */
+function ChangeRequestAckIcon() {
+  const t = useTranslations('dashboard.changeRequest')
+  return (
+    <span title={t('ackMissing')} aria-label={t('ackMissing')} role="img">
+      <Icon source={AlertTriangleIcon} tone="critical" />
     </span>
   )
 }
@@ -140,6 +156,7 @@ function TableRow({
       customerLabel={name ?? phone}
       onRequestConfirm={props.onRequestConfirm}
       onViewAll={props.onViewAll}
+      onHandle={() => props.onHandle(props.item.verification_id)}
     />,
   ]
   return (
@@ -176,7 +193,12 @@ function CardRow(props: RowProps) {
         <CustomerCell name={name} phone={phone} />
         <BlockStack gap="150" inlineAlign="start">
           <NeedsActionStatus row={row} />
-          <Text as="p" variant="bodySm" tone="subdued">
+          <Text
+            as="p"
+            variant="bodySm"
+            tone={row.changeRequest ? 'critical' : 'subdued'}
+            fontWeight={row.changeRequest ? 'semibold' : undefined}
+          >
             {row.reasonText}
           </Text>
         </BlockStack>
@@ -187,6 +209,7 @@ function CardRow(props: RowProps) {
           customerLabel={name ?? phone}
           onRequestConfirm={props.onRequestConfirm}
           onViewAll={props.onViewAll}
+          onHandle={() => props.onHandle(props.item.verification_id)}
           layout="stacked"
         />
       </BlockStack>
@@ -252,19 +275,31 @@ export function NeedsActionCard({
   canConfirm,
   onRequestConfirm,
   onViewAll,
+  onHandle,
 }: {
   needsAction: DashboardOverview['needs_action']
   timeZone: string
   canConfirm: boolean
   onRequestConfirm: (target: ManualConfirmationTarget) => void
   onViewAll: () => void
+  onHandle: (verificationId: string) => void
 }) {
   const t = useTranslations('dashboard.overview.needsAction')
   const { locale } = useLocaleInfo()
   // Eight columns do not fit a phone; below md each order becomes a card.
   const { mdUp } = useBreakpoints({ defaults: { mdUp: true } })
-  const rowProps = { timeZone, canConfirm, onRequestConfirm, onViewAll }
+  const tChange = useTranslations('dashboard.changeRequest')
+  const rowProps = {
+    timeZone,
+    canConfirm,
+    onRequestConfirm,
+    onViewAll,
+    onHandle,
+  }
   const items = needsAction.items.slice(0, NEEDS_ACTION_CARD_LIMIT)
+  const hasChangeRequest = items.some(
+    (item) => item.reason.type === 'change_requested'
+  )
 
   return (
     <Card padding="0">
@@ -287,6 +322,11 @@ export function NeedsActionCard({
         </InlineStack>
       </Box>
       <Divider />
+      {hasChangeRequest && (
+        <Box padding="400" paddingBlockEnd="0">
+          <Banner tone="critical">{tChange('doNotShipStrip')}</Banner>
+        </Box>
+      )}
       {items.length === 0 ? (
         <Box padding="600">
           <BlockStack gap="200" inlineAlign="center">

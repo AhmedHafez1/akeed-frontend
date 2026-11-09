@@ -37,6 +37,7 @@ describe('needsActionRowModel', () => {
       chatUrl: 'https://wa.me/201007611456',
       confirmable: true,
       cancelable: true,
+      changeRequest: null,
     })
   })
 

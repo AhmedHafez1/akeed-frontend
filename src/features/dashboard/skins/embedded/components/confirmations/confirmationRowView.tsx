@@ -1,5 +1,6 @@
 import { Badge, BlockStack, InlineStack, Icon, Text } from '@shopify/polaris'
 import {
+  AlertTriangleIcon,
   CalendarTimeIcon,
   NotificationIcon,
   ShieldCheckMarkIcon,
@@ -17,6 +18,7 @@ import {
 import { useStatusTooltip } from '../../../../domain/useStatusTooltip'
 import { useAutoCancelMarker } from '../../../../domain/useAutoCancelMarker'
 import { useCustomerRecordView } from '../../../../domain/useCustomerRecordView'
+import { isAckMissing } from '../../../../domain/changeRequestView'
 import {
   customerDisplayName,
   formatDayAndClock,
@@ -130,11 +132,21 @@ export function StatusCell({
   const view = resolveRowStatus(row, { showStoreCancellation: true })
   const statusTitle = useStatusTooltip(row, timeZone)
   const autoCancel = useAutoCancelMarker(row, timeZone)
+  const tChange = useTranslations('dashboard.changeRequest')
   return (
     <InlineStack gap="100" blockAlign="center" wrap={false}>
       <span title={statusTitle}>
         <Badge tone={BADGE_TONES[view.kind]}>{t(view.badge)}</Badge>
       </span>
+      {row.change_request && isAckMissing(row.change_request) && (
+        <span
+          role="img"
+          aria-label={tChange('ackMissing')}
+          title={tChange('ackMissing')}
+        >
+          <Icon source={AlertTriangleIcon} tone="critical" />
+        </span>
+      )}
       {autoCancel && (
         <span role="img" aria-label={autoCancel.text} title={autoCancel.text}>
           <Icon

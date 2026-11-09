@@ -59,6 +59,10 @@ interface ConfirmationsEmbeddedProps {
   tab: ConfirmationsTab
   onTabChange: (tab: ConfirmationsTab) => void
   onEditSettings: () => void
+  /** An order whose details open on arrival ("Handle request"). */
+  openId?: string
+  /** Clears `openId` once its details close. */
+  onCloseDetails?: () => void
 }
 
 /** Every COD order we messaged, by outcome, searchable and paged. */
@@ -73,6 +77,8 @@ export function ConfirmationsEmbedded({
   tab,
   onTabChange,
   onEditSettings,
+  openId,
+  onCloseDetails,
 }: ConfirmationsEmbeddedProps) {
   const t = useTranslations('dashboard')
   const { locale } = useLocaleInfo()
@@ -88,7 +94,7 @@ export function ConfirmationsEmbedded({
     orderLabel: string
   } | null>(null)
   const [feedback, setFeedback] = useState<Feedback | null>(null)
-  const [detailsId, setDetailsId] = useState<string | null>(null)
+  const [detailsId, setDetailsId] = useState<string | null>(openId ?? null)
   // Looked up on every render so the details follow the row as it updates.
   const detailsRow = list.rows.find((row) => row.id === detailsId) ?? null
   const exporter = useConfirmationsExport({
@@ -333,7 +339,11 @@ export function ConfirmationsEmbedded({
       <ConfirmationDetailsModal
         verification={detailsRow}
         timeZone={list.reportingTimezone}
-        onClose={() => setDetailsId(null)}
+        onClose={() => {
+          setDetailsId(null)
+          if (openId) onCloseDetails?.()
+        }}
+        canAct={list.canWrite}
       />
       <ManualConfirmModal
         target={confirmation.target}

@@ -154,6 +154,11 @@ export type VerificationItem = {
    */
   auto_cancel?: AutoCancelView | null
   /**
+   * The customer's open change request: the order must not ship until the
+   * merchant settles it or the customer answers. Null when none is open.
+   */
+  change_request?: ChangeRequestSummary | null
+  /**
    * Client-only: set on a row the UI is showing ahead of the server — an order
    * the merchant just created whose verification a worker has not written yet.
    * The API never sends it, and a row carrying it offers no actions.
@@ -277,8 +282,38 @@ export type AutoCancelView = {
   late_reply: boolean
 }
 
+/** Why the merchant's updated confirmation did not go. Stable server codes. */
+export type ReconfirmationFailureCode =
+  | 'order_source_unavailable'
+  | 'order_not_found'
+  | 'order_not_eligible'
+  | 'no_allowance'
+  | 'template_unavailable'
+  | 'sending_failed'
+  | 'provider_outcome_unknown'
+  | 'sending_unavailable'
+
+/** An open change request, as a list row or a needs-action item carries it. */
+export type ChangeRequestSummary = {
+  id: string
+  opened_at: string
+  confirmation_cycle: number
+  /**
+   * The customer's "request received" reply: `done` sent, `skipped` (no
+   * allowance), `failed`, or still `pending` / `in_progress`. Null when
+   * none was owed.
+   */
+  acknowledgment: { status: string; reason: string | null } | null
+  reconfirmation: {
+    state: 'requested' | 'scheduled' | 'sending' | 'failed' | null
+    scheduled_for: string | null
+    last_error: ReconfirmationFailureCode | string | null
+  }
+}
+
 /** Why the server says a row needs the merchant. */
 export type NeedsActionReason =
+  | 'change_requested'
   | 'late_reply_after_auto_cancel'
   | 'no_whatsapp'
   | 'delivery_failed'
@@ -292,6 +327,7 @@ export type NeedsActionReason =
 export type ConfirmationsTab =
   | 'all'
   | 'needs_action'
+  | 'change_requested'
   | 'no_whatsapp'
   | 'confirmed'
   | 'canceled'
@@ -324,6 +360,8 @@ export type NeedsActionItem = {
   }
   capabilities: VerificationRowCapability[]
   customer_history?: CustomerHistory | null
+  /** Set for `change_requested`. */
+  change_request?: ChangeRequestSummary | null
 }
 
 export type UsageState = 'ok' | 'warning' | 'exhausted'

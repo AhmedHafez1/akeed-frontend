@@ -21,6 +21,8 @@ export default function StandaloneConfirmationsFixturePage() {
         tab={url.tab}
         onTabChange={url.onTabChange}
         importBatchId={url.importBatchId}
+        openId={url.openId}
+        onCloseDetails={url.onCloseDetails}
       />
     </main>
   )

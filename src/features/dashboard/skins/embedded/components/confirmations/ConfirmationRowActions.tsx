@@ -50,7 +50,9 @@ function useConfirmationRowActions({
   const items: RowActionItem[] = [
     {
       id: 'details',
-      content: t('table.actions.details'),
+      content: plan.handle
+        ? t('changeRequest.handle')
+        : t('table.actions.details'),
       onAction: () => handlers.onOpenDetails(row),
     },
   ]

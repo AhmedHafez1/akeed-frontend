@@ -34,6 +34,8 @@ export function useStandaloneDashboardUrlState() {
     ? resolveConfirmationsTab(tabParam)
     : 'all'
   const importBatchId = searchParams.get('importBatchId') ?? undefined
+  /** An order whose details open on arrival ("Handle request"). */
+  const openId = searchParams.get('open') ?? undefined
 
   const updateParams = useCallback(
     (changes: Record<string, string | null>) => {
@@ -57,11 +59,15 @@ export function useStandaloneDashboardUrlState() {
     [t]
   )
 
-  /** The confirmations list for a tab, in the period shown here. */
+  /**
+   * The confirmations list for a tab, in the period shown here; with
+   * `openId`, that order's details open on arrival.
+   */
   const confirmationsHref = useCallback(
-    (target: ConfirmationsTab) => {
+    (target: ConfirmationsTab, openId?: string) => {
       const params = new URLSearchParams()
       if (target !== 'all') params.set('tab', target)
+      if (openId) params.set('open', openId)
       const range = rangeParam(period)
       if (range) params.set('range', range)
       const query = params.toString()
@@ -77,8 +83,14 @@ export function useStandaloneDashboardUrlState() {
       updateParams({ range: rangeParam(next) }),
     tab,
     onTabChange: (next: ConfirmationsTab) =>
-      updateParams({ tab: next === 'all' ? null : next, status: null }),
+      updateParams({
+        tab: next === 'all' ? null : next,
+        status: null,
+        open: null,
+      }),
     importBatchId,
+    openId,
+    onCloseDetails: () => updateParams({ open: null }),
     confirmationsHref,
   }
 }

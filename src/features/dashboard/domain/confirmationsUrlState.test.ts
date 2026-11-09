@@ -32,6 +32,7 @@ describe('resolveConfirmationsTab', () => {
     expect(CONFIRMATIONS_TABS).toEqual([
       'all',
       'needs_action',
+      'change_requested',
       'no_whatsapp',
       'confirmed',
       'canceled',

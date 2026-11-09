@@ -14,6 +14,12 @@ import { canRetryVerification, hasCapability } from './verificationLifecycle'
  */
 export interface ConfirmationRowActionPlan {
   primary: 'chat' | 'shipping' | null
+  /**
+   * The customer asked for a change: the row is handled from its details,
+   * where the change request's own outcomes are, never with the plain
+   * confirm and cancel.
+   */
+  handle: boolean
   canConfirm: boolean
   canRetry: boolean
   canCancel: boolean
@@ -29,6 +35,18 @@ export function planConfirmationRowActions(
   if (row.optimistic) {
     return {
       primary: null,
+      handle: false,
+      canConfirm: false,
+      canRetry: false,
+      canCancel: false,
+      autoCancelToggle: null,
+    }
+  }
+
+  if (row.change_request) {
+    return {
+      primary: 'chat',
+      handle: true,
       canConfirm: false,
       canRetry: false,
       canCancel: false,
@@ -49,6 +67,7 @@ export function planConfirmationRowActions(
 
   return {
     primary,
+    handle: false,
     canConfirm:
       permissions.canWrite &&
       Boolean(row.action_reason) &&

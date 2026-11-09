@@ -754,6 +754,53 @@
     }
   },
   "dashboard": {
+    "changeRequest": {
+      "doNotShipStrip": "Değişiklik isteği olan siparişleri göndermeyin.",
+      "dontShip": "Henüz gönderme",
+      "ackMissing": "Müşteriye bildirilmedi",
+      "handle": "İsteği ele al",
+      "openWhatsapp": "WhatsApp’ı aç",
+      "call": "Ara",
+      "copy": "Numarayı kopyala",
+      "copied": "Numara kopyalandı",
+      "copyError": "Numara kopyalanamadı.",
+      "noPhone": "Geçerli telefon numarası yok",
+      "panelTitle": "Bu siparişi henüz göndermeyin",
+      "detailsDescription": "Müşteri değişiklik istedi",
+      "ackSent": "Müşteriye bildirildi",
+      "ackSkipped": "Müşteriye bildirilmedi: bakiye yok",
+      "ackFailed": "Müşteriye bildirilmedi: iletilmedi",
+      "contactHeading": "Müşteriyle iletişime geçin",
+      "resultHeading": "Sonucu kaydedin",
+      "confirmAfter": "Müşteriyle görüşüldükten sonra onaylandı",
+      "cancelAfter": "Müşteriyle görüşüldükten sonra iptal edildi",
+      "resend": "Güncel onay gönder",
+      "resendState": {
+        "queued": "Gönderiliyor…",
+        "scheduled": "{time} için planlandı (sessiz saatler)",
+        "store": "Gönderilmedi: sipariş mağazanızda bulunamadı",
+        "balance": "Gönderilmedi: bakiye yok",
+        "send": "Gönderilmedi: gönderim başarısız"
+      },
+      "retry": "Tekrar dene",
+      "topUp": "Bakiye yükle",
+      "result": {
+        "confirm": "Sipariş onaylandı.",
+        "cancel": "Sipariş iptal edildi.",
+        "resend": "Güncel onay sıraya alındı."
+      },
+      "stale": {
+        "confirmed": "Müşteri zaten onayladı.",
+        "canceled": "Müşteri zaten iptal etti.",
+        "resent": "Güncel onay zaten gönderildi.",
+        "unknown": "Bu istek zaten ele alındı."
+      },
+      "error": {
+        "confirm": "Sipariş onaylanamadı. Tekrar deneyin.",
+        "cancel": "Sipariş iptal edilemedi. Tekrar deneyin.",
+        "resend": "Güncel onay gönderilemedi. Tekrar deneyin."
+      }
+    },
     "mainTitle": "Panel",
     "mainSubtitle": "Kapıda ödeme onaylarını ve müşteri yanıtlarını takip edin.",
     "title": "Panel",
@@ -1292,6 +1339,7 @@
         "empty": "İşlem bekleyen bir şey yok",
         "emptyBody": "Bu dönemdeki her sipariş ya onaylandı ya da müşteriyi bekliyor.",
         "reason": {
+          "change_requested": "Henüz gönderme · {date}",
           "no_reply_after_follow_up": "{date} tarihinden beri yanıt yok · Hatırlatma gönderildi",
           "no_reply": "{date} tarihinden beri yanıt yok",
           "read_no_reply": "Okundu, yanıt yok · {hours, plural, one {# saat} other {# saat}} önce",
@@ -1354,6 +1402,7 @@
         "tooLarge": "Tek seferde dışa aktarılamayacak kadar çok sipariş var. Daha kısa bir dönem veya tek bir sekme seçin."
       },
       "tabs": {
+        "change_requested": "Değişiklik istekleri",
         "all": "Tümü",
         "needs_action": "İşlem bekleyen",
         "no_whatsapp": "WhatsApp iletilemedi",
@@ -1388,6 +1437,7 @@
       "noName": "İsim yok",
       "openOrderLabel": "{order} numaralı siparişi Shopify’da aç",
       "status": {
+        "changeRequested": "Değişiklik istendi",
         "confirmed": "Onaylandı",
         "canceled": "İptal edildi",
         "failed": "Gönderilemedi",
@@ -1481,6 +1531,7 @@
       },
       "loaded": "{total} siparişten {loaded} tanesi gösteriliyor",
       "empty": {
+        "change_requested": "Açık değişiklik isteği yok.",
         "all": "Bu dönemde henüz onay yok.",
         "needs_action": "İşlem bekleyen bir şey yok. Harika iş!",
         "no_whatsapp": "Bu dönemdeki tüm müşteriler WhatsApp mesajı alabiliyor.",
@@ -1580,6 +1631,19 @@
     }
   },
   "settings": {
+    "changeRequests": {
+      "heading": "Değişiklik iste",
+      "on": "Açık",
+      "off": "Kapalı",
+      "label": "Müşterilerin değişiklik istemesine izin ver",
+      "description": "Onay mesajlarına üçüncü bir düğme ekler.",
+      "notAvailableYet": "Henüz kullanılamıyor. Daha sonra tekrar deneyin.",
+      "noteAck": "Akeed, alındığını onaylamak için bir kez yanıt verir (1 mesaj).",
+      "noteAckPlan": "Akeed, alındığını onaylamak için bir kez yanıt verir (planınızdan 1 mesaj).",
+      "noteShopify": "Shopify siparişlerine etiket eklenir, gönderim bekletilmez.",
+      "noteOff": "Kapatmak yalnızca yeni mesajları etkiler.",
+      "saveUnavailable": "Değişiklik iste henüz kullanılamıyor. Daha sonra tekrar deneyin."
+    },
     "thankYou": {
       "heading": "Teşekkür mesajları",
       "on": "Açık",
