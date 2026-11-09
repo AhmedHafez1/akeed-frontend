@@ -1,0 +1,76 @@
+.layout,
+.plain {
+  display: grid;
+  gap: calc(var(--p-space-400) + var(--p-space-050));
+}
+
+.layout {
+  grid-template-areas: 'invitation' 'results' 'actions';
+}
+
+.plain {
+  grid-template-areas: 'invitation' 'actions';
+}
+
+.invitation {
+  grid-area: invitation;
+  min-width: 0;
+}
+
+.results {
+  grid-area: results;
+  min-width: 0;
+  padding-block-start: var(--p-space-400);
+  border-block-start: var(--p-border-width-025) solid
+    var(--p-color-border-secondary);
+}
+
+.value {
+  font-size: calc(var(--p-font-size-600) + var(--p-space-100));
+  font-weight: var(--p-font-weight-semibold);
+  line-height: var(--p-font-line-height-800);
+}
+
+.actions {
+  grid-area: actions;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--p-space-200);
+}
+
+.actions button {
+  min-height: calc(var(--p-space-1000) + var(--p-space-100));
+}
+
+@media (min-width: 48em) {
+  .layout {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    grid-template-areas: 'invitation results' 'actions results';
+    gap: var(--p-space-400) calc(var(--p-space-600) + var(--p-space-100));
+  }
+
+  .plain {
+    grid-template-areas: 'invitation' 'actions';
+    gap: var(--p-space-400);
+  }
+
+  .results {
+    align-self: center;
+    padding-block-start: 0;
+    padding-inline-start: calc(var(--p-space-600) + var(--p-space-100));
+    border-block-start: 0;
+    border-inline-start: var(--p-border-width-025) solid
+      var(--p-color-border-secondary);
+  }
+
+  .actions {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .actions button {
+    min-height: calc(var(--p-space-800) + var(--p-space-100));
+  }
+}

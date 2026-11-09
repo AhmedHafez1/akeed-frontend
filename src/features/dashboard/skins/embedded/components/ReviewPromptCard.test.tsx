@@ -22,11 +22,14 @@ const auth = vi.hoisted(() => ({
 // The transport under the review calls: no request leaves the test.
 vi.mock('@/shared/lib/auth', () => auth)
 
-const TITLE = 'نتائج أكيد لمتجرك'
+const TITLE = 'ما رأيك في أكيد حتى الآن؟'
+const RESULTS_TITLE = 'متجرك مع أكيد'
+const THANK_YOU = 'شكرًا لاستخدامك أكيد'
+const ASK = 'شارك تجربتك على Shopify لمساعدة التجار الآخرين على الاختيار.'
 const FALLBACK_TITLE = 'ما رأيك في أكيد حتى الآن؟'
 const CTA = 'قيّم أكيد على Shopify'
 const LATER = 'ليس الآن'
-const THANKS = 'شكرًا لك. تقييمك يساعد التجار الآخرين على الاختيار.'
+const THANKS = 'شكرًا لدعمك أكيد.'
 const ALREADY_REVIEWED = 'سبق أن قيّمت أكيد من هذا المتجر. شكرًا لك.'
 const SEE_REVIEW = 'عرض تقييمك على Shopify'
 
@@ -131,7 +134,7 @@ describe('ReviewPromptCard', () => {
     expect(auth.api.post).not.toHaveBeenCalled()
   })
 
-  it('leads with both results, in Western digits, and records one view', async () => {
+  it('invites a review with appreciation and supporting results, recording one view', async () => {
     const { container } = setup()
     await screen.findByText(TITLE)
     const numbers = [...container.querySelectorAll('bdi')].map(
@@ -142,7 +145,9 @@ describe('ReviewPromptCard', () => {
     expect(screen.getByText('طلبًا مؤكدًا')).toBeTruthy()
     expect(screen.getByText('طلبات أُلغيت قبل الشحن')).toBeTruthy()
     expect(screen.getByText(/^منذ 15 مارس/)).toBeTruthy()
-    expect(screen.getByText(/ويمكنك كتابته بالعربية/)).toBeTruthy()
+    expect(screen.getByText(THANK_YOU)).toBeTruthy()
+    expect(screen.getByText(ASK)).toBeTruthy()
+    expect(screen.getByText(RESULTS_TITLE)).toBeTruthy()
     expect(screen.getAllByRole('button')).toHaveLength(2)
     await waitFor(() => expect(posted()).toEqual([{ action: 'shown' }]))
     expect(auth.api.post).toHaveBeenCalledWith('/api/review-prompt/actions', {
@@ -166,13 +171,9 @@ describe('ReviewPromptCard', () => {
   ] as const)('shows the plain request %s', async (_, view) => {
     const { container } = setup(view)
     await screen.findByText(FALLBACK_TITLE)
-    expect(screen.queryByText(TITLE)).toBeNull()
+    expect(screen.queryByText(RESULTS_TITLE)).toBeNull()
     expect(container.querySelectorAll('bdi')).toHaveLength(0)
-    expect(
-      screen.getByText(
-        'تقييم قصير على Shopify يساعد التجار الآخرين على الاختيار. يستغرق 30 ثانية.'
-      )
-    ).toBeTruthy()
+    expect(screen.getByText(ASK)).toBeTruthy()
   })
 
   /**
@@ -334,23 +335,17 @@ describe('ReviewPromptCard', () => {
     )
   })
 
-  it('stacks on a phone, primary first and full width', async () => {
+  it('keeps the same invitation on a phone, with the primary action first', async () => {
     emulatePhone()
     setup()
     await screen.findByText(TITLE)
     await waitFor(() =>
       expect(screen.queryByText(/ويمكنك كتابته بالعربية/)).toBeNull()
     )
-    expect(
-      screen.getByText(
-        'إن كان أكيد مفيدًا لك، ساعد التجار الآخرين بتقييم قصير على Shopify. يستغرق 30 ثانية.'
-      )
-    ).toBeTruthy()
+    expect(screen.getByText(ASK)).toBeTruthy()
+    expect(screen.getByText(THANK_YOU)).toBeTruthy()
     const buttons = screen.getAllByRole('button')
     expect(buttons.map((button) => button.textContent)).toEqual([CTA, LATER])
-    for (const button of buttons) {
-      expect(button.className).toMatch(/fullWidth/)
-    }
   })
 
   it('stacks the already-reviewed state on a phone', async () => {
