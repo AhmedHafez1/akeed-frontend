@@ -55,6 +55,7 @@ import {
   type AdminStoreVerificationFilters,
 } from './useAdminStore'
 import { describeVerificationFailure } from './verificationFailure'
+import { VerificationResendAction } from './VerificationResendAction'
 
 const verificationStatusOptions = [
   { value: '', label: 'All statuses' },
@@ -1032,7 +1033,10 @@ function VerificationsSection({
                       {isExpanded && (
                         <tr id={detailId}>
                           <td colSpan={8} className="bg-muted/50 px-5 py-4">
-                            <VerificationDetails verification={verification} />
+                            <VerificationDetails
+                              verification={verification}
+                              onResent={reload}
+                            />
                           </td>
                         </tr>
                       )}
@@ -1103,7 +1107,10 @@ function VerificationsSection({
                       id={detailId}
                       className="bg-muted/50 mt-2 rounded-lg p-3"
                     >
-                      <VerificationDetails verification={verification} />
+                      <VerificationDetails
+                        verification={verification}
+                        onResent={reload}
+                      />
                     </div>
                   )}
                 </li>
@@ -1156,8 +1163,10 @@ function TestBadge() {
 
 function VerificationDetails({
   verification,
+  onResent,
 }: {
   verification: AdminStoreVerification
+  onResent: () => void
 }) {
   const timeline: Array<[string, string | null]> = [
     ['Created', verification.created_at],
@@ -1239,6 +1248,18 @@ function VerificationDetails({
           <p className="text-foreground/70 mt-1 text-sm break-words">
             {failure.detail}
           </p>
+          <VerificationResendAction
+            verification={verification}
+            onResent={onResent}
+          />
+        </div>
+      )}
+      {!failure && verification.resend_dispatch_id && (
+        <div className="md:col-span-2">
+          <VerificationResendAction
+            verification={verification}
+            onResent={onResent}
+          />
         </div>
       )}
     </div>
