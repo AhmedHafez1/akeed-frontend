@@ -23,28 +23,16 @@ The test-only fixture API module is used instead of production token acquisition
 
 ## Application checks and limitations
 
-- Full Vitest baseline: 193 test files / 2,328 tests passed. Verification changes touch test tooling only; production components and business contracts remain unchanged.
+- Full Vitest baseline and authorized follow-up rerun: 193 test files / 2,328 tests passed. Verification changes touch test tooling only; production components and business contracts remain unchanged.
 - `npm run lint` and `npm run build`: passed.
-- Standard `npx tsc --noEmit`: **failed**, reproduced before edits and again after the production build. Three generated `.next/types/validator.ts` TS2344 errors combine fixture/root route declarations and disagree on `LayoutProps` for `/[locale]/admin`. Do not report this command as passing.
-- A separate TypeScript API check excluding generated Next caches and `next-env.d.ts` checked 978 application/test roots with zero errors. This supplements the passing build; it does not replace or turn the standard typecheck green.
+- Standard `npx tsc --noEmit`: **passes after the authorized follow-up**. The initial failure was caused by importing the independent smoke app's generated route globals into the production compiler. Root configuration now excludes the smoke project while retaining the production generated validators.
+- `npm run typecheck`: **passes for both projects**, running the production compiler followed by `smoke:e02:typecheck`. The smoke project remains fully checked with its own generated routes. This also passes after the production build and another integrated fixture run. The initial 978-file application-only check is historical evidence, not the current verification method.
 - No deployment, production migration, activation, real notifications, live template approval, native proofreading or actual Shopify Admin session was performed. Screenshots confirm fixture rendering, not real store data or live-provider behavior. Settings fixture logs include existing missing logo-image warnings; no new feature-page uncaught runtime error was observed.
 
-Production release readiness remains conditional on resolving/accepting the recorded broader-check limitations through the normal release process and verifying real templates, infrastructure and smoke procedures. Disabling future feature selection must retain handlers and UI for already-sent buttons and open requests.
+The two previously recorded code blockers are resolved. Production activation still requires actual templates, infrastructure and provider smoke procedures. Disabling future feature selection must retain handlers and UI for already-sent buttons and open requests.
 
-## Exact supplemental application typecheck
+## TypeScript project boundary
 
-Run in PowerShell from the frontend root. The failed standard command remains a separate result.
+The fixture is a separate Next.js application. Its generated route declarations describe fixture layouts rather than production layouts, so its `next-env.d.ts` must not enter the root compiler through the broad file glob. Excluding only its cache directory was insufficient because imported files bypass TypeScript's discovery exclusions.
 
-```powershell
-@'
-const ts=require('typescript');
-const cfg=ts.readConfigFile('tsconfig.json',ts.sys.readFile);
-const parsed=ts.parseJsonConfigFileContent(cfg.config,ts.sys,process.cwd());
-const roots=parsed.fileNames.filter(f=>!/[\\/]\.next[^\\/]*[\\/]/.test(f)&&!f.endsWith('next-env.d.ts'));
-const program=ts.createProgram(roots,{...parsed.options,incremental:false});
-const errors=ts.getPreEmitDiagnostics(program);
-console.log(ts.formatDiagnosticsWithColorAndContext(errors,{getCanonicalFileName:f=>f,getCurrentDirectory:()=>process.cwd(),getNewLine:()=> '\n'}));
-console.log(JSON.stringify({rootFiles:roots.length,errors:errors.length}));
-process.exitCode=errors.length?1:0;
-'@ | node
-```
+The production project excludes `test/e01-smoke`; the fixture keeps its own existing `tsconfig.json` with explicit includes/excludes. The combined `npm run typecheck` command checks both independently. Production `.next/types` and `.next/dev/types` validation stays enabled; neither generated files nor compiler strictness were weakened. Compiler file-list inspection verifies that the root graph retains production routes and the fixture graph uses fixture routes.

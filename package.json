@@ -9,6 +9,7 @@
     "build": "next build",
     "start": "next start -p 3001",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit && npm run smoke:e02:typecheck",
     "test": "vitest run",
     "smoke:e01": "npm --prefix test/e01-smoke run dev",
     "smoke:e02": "npm --prefix test/e01-smoke run dev",
