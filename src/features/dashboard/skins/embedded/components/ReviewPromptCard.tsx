@@ -1,6 +1,5 @@
 'use client'
 
-import type { ReactNode } from 'react'
 import {
   BlockStack,
   Box,
@@ -12,7 +11,7 @@ import {
   Text,
   useBreakpoints,
 } from '@shopify/polaris'
-import { CheckCircleIcon, StarIcon, XCircleIcon } from '@shopify/polaris-icons'
+import { CheckCircleIcon, HeartIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { getFormatLocale } from '@/shared/lib/locale'
@@ -20,6 +19,7 @@ import type {
   ReviewPromptResults,
   ReviewPromptStatus,
 } from '../../../domain/useReviewPrompt'
+import styles from './ReviewPromptCard.module.css'
 
 interface ReviewPromptCardProps {
   status: ReviewPromptStatus
@@ -69,14 +69,14 @@ function InlineIcon({
   )
 }
 
-function StarBadge() {
+function HeartBadge() {
   return (
     <Box
       background="bg-fill-success-secondary"
       borderRadius="200"
-      padding="150"
+      padding="200"
     >
-      <Icon source={StarIcon} tone="success" />
+      <Icon source={HeartIcon} tone="success" />
     </Box>
   )
 }
@@ -88,57 +88,35 @@ function StarBadge() {
  */
 
 interface StatProps {
-  icon: typeof CheckCircleIcon
   tone: 'success' | 'subdued'
   value: string
   label: string
-  stacked: boolean
 }
 
-/** One count; the label sits beside the number, or under it on a phone. */
-function Stat({ icon, tone, value, label, stacked }: StatProps) {
-  const number = (
-    <Text
-      as="span"
-      variant="headingXl"
-      numeric
-      tone={tone === 'success' ? 'success' : undefined}
-    >
-      <bdi>{value}</bdi>
-    </Text>
-  )
-  const caption = (
-    <Text as="span" tone="subdued">
-      {label}
-    </Text>
-  )
+/** Store results support the invitation without competing with its heading. */
+function Stat({ tone, value, label }: StatProps) {
   return (
-    <InlineStack
-      align="start"
-      gap="200"
-      blockAlign={stacked ? 'start' : 'center'}
-      wrap={false}
-    >
-      <InlineIcon source={icon} tone={tone} />
-      {stacked ? (
-        <BlockStack gap="100">
-          {number}
-          {caption}
-        </BlockStack>
-      ) : (
-        <InlineStack align="start" gap="200" blockAlign="center">
-          {number}
-          {caption}
-        </InlineStack>
-      )}
-    </InlineStack>
+    <BlockStack gap="150">
+      <span className={styles.value}>
+        <Text
+          as="span"
+          numeric
+          tone={tone === 'success' ? 'success' : undefined}
+        >
+          <bdi>{value}</bdi>
+        </Text>
+      </span>
+      <Text as="span" variant="bodySm" tone="subdued">
+        {label}
+      </Text>
+    </BlockStack>
   )
 }
 
 /**
  * The App Store review request on the embedded dashboard and confirmations
- * pages. It leads with what Akeed did for this store when there is enough to
- * show, offers one way in and one way out, and thanks the merchant in place.
+ * pages. It invites an honest review, supports the request with store results,
+ * and keeps the native review and dismissal behavior in place.
  */
 export function ReviewPromptCard({
   status,
@@ -150,17 +128,22 @@ export function ReviewPromptCard({
 }: ReviewPromptCardProps) {
   const t = useTranslations('dashboard.reviewPrompt')
   const { locale } = useLocaleInfo()
-  const { xsOnly } = useBreakpoints()
+  const { smDown } = useBreakpoints()
 
   if (status === 'hidden') return null
 
   if (status === 'thanks') {
     return (
-      <Card>
+      <Card padding="500" roundedAbove="xs">
         <div role="status">
           <InlineStack align="start" gap="200" blockAlign="center" wrap={false}>
             <InlineIcon source={CheckCircleIcon} tone="success" />
-            <Text as="p">{t('thanks')}</Text>
+            <BlockStack gap="100">
+              <Text as="p">{t('thanks')}</Text>
+              <Text as="p" variant="bodySm" tone="subdued">
+                {t('thanksBody')}
+              </Text>
+            </BlockStack>
           </InlineStack>
         </div>
       </Card>
@@ -175,14 +158,14 @@ export function ReviewPromptCard({
       </InlineStack>
     )
     const seeReview = (
-      <Button variant="tertiary" onClick={onSeeReview} fullWidth={xsOnly}>
+      <Button variant="tertiary" onClick={onSeeReview} fullWidth={smDown}>
         {t('seeReview')}
       </Button>
     )
     return (
-      <Card>
+      <Card padding="500" roundedAbove="xs">
         <div role="status">
-          {xsOnly ? (
+          {smDown ? (
             <BlockStack gap="300">
               {message}
               {seeReview}
@@ -198,132 +181,84 @@ export function ReviewPromptCard({
     )
   }
 
-  const title = (
-    <Text as="h2" variant="headingMd">
-      {results ? t('title') : t('fallbackTitle')}
-    </Text>
-  )
-  const since =
-    results?.since != null ? (
-      <Text as="span" tone="subdued">
-        {t('since', { date: formatSince(results.since, locale) })}
-      </Text>
-    ) : null
-
-  const stats: ReactNode[] = results
-    ? [
-        <Stat
-          key="confirmed"
-          icon={CheckCircleIcon}
-          tone="success"
-          value={formatCount(results.confirmed, locale)}
-          label={t('confirmed', { count: results.confirmed })}
-          stacked={xsOnly}
-        />,
-        results.canceled > 0 ? (
-          <Stat
-            key="canceled"
-            icon={XCircleIcon}
-            tone="subdued"
-            value={formatCount(results.canceled, locale)}
-            label={t('canceled', { count: results.canceled })}
-            stacked={xsOnly}
-          />
-        ) : null,
-      ].filter(Boolean)
-    : []
-
-  const ask = (
-    <Text as="p" tone="subdued">
-      {results ? t(xsOnly ? 'askMobile' : 'ask') : t('fallbackAsk')}
-    </Text>
-  )
-  const cta = (
-    <Button
-      variant="primary"
-      onClick={onRate}
-      loading={requesting}
-      fullWidth={xsOnly}
-    >
-      {t('cta')}
-    </Button>
-  )
-  const later = (
-    <Button
-      variant="tertiary"
-      onClick={onNotNow}
-      disabled={requesting}
-      fullWidth={xsOnly}
-    >
-      {t('later')}
-    </Button>
-  )
-
-  if (xsOnly) {
-    return (
-      <Card>
-        <BlockStack gap="400">
+  return (
+    <Card padding="500" roundedAbove="xs">
+      <div
+        className={results ? styles.layout : styles.plain}
+        aria-busy={requesting}
+      >
+        <div className={styles.invitation}>
           <BlockStack gap="200">
             <InlineStack
               align="start"
-              gap="200"
-              blockAlign="center"
+              gap="300"
+              blockAlign="start"
               wrap={false}
             >
-              <StarBadge />
-              {title}
+              <HeartBadge />
+              <BlockStack gap="100">
+                <Text as="h2" variant="headingMd">
+                  {t('title')}
+                </Text>
+                <Text as="p" fontWeight="medium">
+                  {t('thankYou')}
+                </Text>
+              </BlockStack>
             </InlineStack>
-            {since}
+            <Text as="p" tone="subdued">
+              {t('ask')}
+            </Text>
           </BlockStack>
-          {stats.length > 0 && (
-            <InlineGrid columns={2} gap="400">
-              {stats}
-            </InlineGrid>
-          )}
-          {ask}
-          <BlockStack gap="200">
-            {cta}
-            {later}
-          </BlockStack>
-        </BlockStack>
-      </Card>
-    )
-  }
-
-  return (
-    <Card>
-      <InlineStack align="space-between" blockAlign="center" gap="600">
-        <BlockStack gap="300">
-          <InlineStack align="start" gap="200" blockAlign="center">
-            <StarBadge />
-            {title}
-            {since}
-          </InlineStack>
-          {stats.length > 0 && (
-            <InlineStack align="start" gap="500" blockAlign="center">
-              {stats.map((stat, index) =>
-                index === 0 ? (
-                  stat
-                ) : (
-                  <Box
-                    key="divider"
-                    borderInlineStartWidth="025"
-                    borderColor="border"
-                    paddingInlineStart="500"
-                  >
-                    {stat}
-                  </Box>
-                )
-              )}
-            </InlineStack>
-          )}
-          {ask}
-        </BlockStack>
-        <InlineStack align="end" gap="200" blockAlign="center">
-          {later}
-          {cta}
-        </InlineStack>
-      </InlineStack>
+        </div>
+        {results && (
+          <div className={styles.results}>
+            <BlockStack gap="400">
+              <InlineStack align="space-between" gap="200" blockAlign="start">
+                <Text as="p" variant="bodySm" fontWeight="medium">
+                  {t('resultsTitle')}
+                </Text>
+                {results.since != null && (
+                  <Text as="p" variant="bodySm" tone="subdued">
+                    {t('since', { date: formatSince(results.since, locale) })}
+                  </Text>
+                )}
+              </InlineStack>
+              <InlineGrid columns={results.canceled > 0 ? 2 : 1} gap="400">
+                <Stat
+                  tone="success"
+                  value={formatCount(results.confirmed, locale)}
+                  label={t('confirmed', { count: results.confirmed })}
+                />
+                {results.canceled > 0 && (
+                  <Stat
+                    tone="subdued"
+                    value={formatCount(results.canceled, locale)}
+                    label={t('canceled', { count: results.canceled })}
+                  />
+                )}
+              </InlineGrid>
+            </BlockStack>
+          </div>
+        )}
+        <div className={styles.actions}>
+          <Button
+            variant="primary"
+            size="large"
+            onClick={onRate}
+            loading={requesting}
+          >
+            {t('cta')}
+          </Button>
+          <Button
+            variant="tertiary"
+            size="large"
+            onClick={onNotNow}
+            disabled={requesting}
+          >
+            {t('later')}
+          </Button>
+        </div>
+      </div>
     </Card>
   )
 }

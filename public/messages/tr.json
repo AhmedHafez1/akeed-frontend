@@ -1211,19 +1211,22 @@
       "showing": "{total} kayıttan {loaded} tanesi gösteriliyor"
     },
     "reviewPrompt": {
-      "title": "Akeed’in mağazanızdaki sonuçları",
+      "title": "Akeed sizin için nasıl çalışıyor?",
       "since": "{date} tarihinden beri",
       "confirmed": "{count, plural, one {onaylanan sipariş} other {onaylanan sipariş}}",
       "canceled": "{count, plural, one {kargodan önce iptal edildi} other {kargodan önce iptal edildi}}",
-      "ask": "Akeed işinize yaradıysa Shopify’da kısa bir değerlendirme diğer satıcıların karar vermesine yardımcı olur. 30 saniye sürer.",
-      "askMobile": "Akeed işinize yaradıysa Shopify’da kısa bir değerlendirme diğer satıcıların karar vermesine yardımcı olur. 30 saniye sürer.",
+      "ask": "Diğer satıcıların seçim yapmasına yardımcı olmak için deneyiminizi Shopify’da paylaşın.",
+      "askMobile": "Diğer satıcıların seçim yapmasına yardımcı olmak için deneyiminizi Shopify’da paylaşın.",
       "fallbackTitle": "Akeed sizin için nasıl çalışıyor?",
-      "fallbackAsk": "Shopify’da kısa bir değerlendirme diğer satıcıların seçim yapmasına yardımcı olur. 30 saniye sürer.",
-      "cta": "Akeed’i Shopify’da değerlendirin",
+      "fallbackAsk": "Diğer satıcıların seçim yapmasına yardımcı olmak için deneyiminizi Shopify’da paylaşın.",
+      "cta": "Shopify’da Akeed’i değerlendirin",
       "later": "Şimdi değil",
-      "thanks": "Teşekkürler. Değerlendirmeniz diğer satıcıların seçim yapmasına yardımcı olur.",
+      "thanks": "Akeed’e desteğiniz için teşekkürler.",
       "alreadyReviewed": "Akeed’i bu mağazadan zaten değerlendirdiniz. Teşekkürler.",
-      "seeReview": "Değerlendirmenizi Shopify’da görün"
+      "seeReview": "Değerlendirmenizi Shopify’da görün",
+      "thankYou": "Akeed’i kullandığınız için teşekkürler",
+      "resultsTitle": "Akeed ile mağazanız",
+      "thanksBody": "Görüşünüz diğer satıcıların seçim yapmasına yardımcı olur."
     },
     "activation": {
       "liveBanner": "Akeed yayında. Bir sonraki kapıda ödemeli siparişiniz otomatik olarak onaylatılacak.",
