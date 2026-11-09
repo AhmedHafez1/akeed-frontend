@@ -126,3 +126,9 @@ En un plan de pago de Shopify, el aviso también ofrece un botón de renovación
 En la sección de automatización de tu configuración.
 
 Consulta también: [Reglas de automatización](/docs/automation-rules)
+
+## Correo para solicitudes de cambio
+
+Si las solicitudes de cambio están activadas y un cliente solicita un cambio, la tarea permanece en Necesita tu acción aunque no tengas mensajes de WhatsApp disponibles o falle una notificación. Akeed programa un único correo inicial a la dirección de notificaciones existente o, si no está disponible, al propietario de la cuenta. Incluye tienda, pedido, origen, hora de la solicitud y un enlace al pedido en el panel con autenticación. No consume mensajes de WhatsApp. No se añaden correos de recordatorio ni avisos de WhatsApp al comerciante.
+
+Shopify recibe la etiqueta Akeed: Change Requested mientras la solicitud está abierta. Se elimina al resolverla o enviar correctamente una confirmación actualizada, conservando las demás etiquetas. Es una advertencia, no un bloqueo de preparación. WooCommerce y EasyOrders mantienen sus ajustes de sincronización y resultados admitidos. Los pedidos independientes conservan el mismo flujo en Akeed sin actualizar una tienda externa. Si falla el correo o la actualización de la tienda, revisa la advertencia y continúa gestionando la solicitud en Akeed.

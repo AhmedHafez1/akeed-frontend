@@ -1884,6 +1884,7 @@
   },
   "dashboard": {
     "changeRequest": {
+      "emailUnavailable": "مش قادرين نأكد إرسال الإيميل. طلب التعديل لسه موجود هنا.",
       "doNotShipStrip": "لا تشحن الطلبات التي فيها طلب تعديل.",
       "dontShip": "لا تشحن الآن",
       "ackMissing": "لم يُبلَّغ العميل",

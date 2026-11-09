@@ -126,3 +126,9 @@ On a paid Shopify plan, the banner also offers **Renew {plan} now**, named after
 Go to your settings automation section.
 
 See also: [Automation Rules](/docs/automation-rules)
+
+## Email for change requests
+
+When change requests are enabled and a customer requests a change, the request stays in Needs your action even if your WhatsApp allowance is zero or a notification fails. Akeed schedules one initial email to your existing notification address, falling back to the account owner. The email identifies the store, order, source and request time and links to the order in your authenticated dashboard. It does not use WhatsApp allowance. There are no reminder emails or merchant WhatsApp alerts.
+
+Shopify receives the Akeed: Change Requested tag while the request is open. Resolution or a successful updated confirmation clears that marker; unrelated tags are preserved. The tag is a warning, not a fulfillment hold. WooCommerce and EasyOrders keep their existing synchronization settings and supported outcome mappings; standalone orders have the same Akeed request workflow without an external store update. If an email or store update fails, review the warning and keep handling the request in Akeed.

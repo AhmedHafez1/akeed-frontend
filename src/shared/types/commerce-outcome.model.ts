@@ -1,4 +1,5 @@
 export type CommerceOutcomeAction =
+  | 'change_request_reconciliation'
   | 'customer_confirmation'
   | 'customer_cancellation'
   | 'merchant_no_reply_cancellation'

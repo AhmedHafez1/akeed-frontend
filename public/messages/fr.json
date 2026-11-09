@@ -755,6 +755,7 @@
   },
   "dashboard": {
     "changeRequest": {
+      "emailUnavailable": "L’envoi de la notification par e-mail n’a pas pu être confirmé. La demande reste disponible ici.",
       "doNotShipStrip": "N’expédiez pas les commandes avec une demande de modification.",
       "dontShip": "Ne pas expédier pour l’instant",
       "ackMissing": "Client non informé",

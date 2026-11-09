@@ -108,6 +108,20 @@ export function ChangeRequestPanel({
             {t(panel.ack === 'skipped' ? 'ackSkipped' : 'ackFailed')}
           </p>
         ) : null}
+        {['failed', 'skipped'].includes(
+          summary.merchant_email?.status ?? ''
+        ) && (
+          <p
+            role="status"
+            className="text-ak-caption text-ak-danger flex items-start gap-1.5"
+          >
+            <AlertTriangle
+              aria-hidden="true"
+              className="mt-0.5 size-3.5 shrink-0"
+            />
+            {t('emailUnavailable')}
+          </p>
+        )}
       </div>
 
       <div className="bg-card divide-line divide-y">

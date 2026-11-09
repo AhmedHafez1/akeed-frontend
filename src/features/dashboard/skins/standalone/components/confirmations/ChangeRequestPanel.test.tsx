@@ -53,6 +53,26 @@ function renderPanel(
 }
 
 describe('ChangeRequestPanel', () => {
+  it('retains merchant actions and the shipping warning after email failure', () => {
+    renderPanel({
+      summary: summary({
+        merchant_email: { status: 'failed', reason: 'no_recipient' },
+      }),
+    })
+    expect(
+      screen.getByText(
+        'The email notification could not be confirmed. This request is still available here.'
+      )
+    ).toBeTruthy()
+    expect(screen.getByText('Don’t ship this order yet')).toBeTruthy()
+    expect(
+      (
+        screen.getByRole('button', {
+          name: 'Confirmed after contacting customer',
+        }) as HTMLButtonElement
+      ).disabled
+    ).toBe(false)
+  })
   beforeEach(() => {
     auth.api.get.mockReset()
     auth.api.post.mockReset()

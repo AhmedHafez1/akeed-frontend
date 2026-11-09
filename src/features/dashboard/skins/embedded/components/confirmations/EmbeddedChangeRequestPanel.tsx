@@ -77,6 +77,13 @@ export function EmbeddedChangeRequestPanel({
     <BlockStack gap="400">
       <Banner tone="warning" title={t('panelTitle')}>
         <BlockStack gap="200">
+          {['failed', 'skipped'].includes(
+            summary.merchant_email?.status ?? ''
+          ) && (
+            <Text as="p" variant="bodySm" tone="critical">
+              {t('emailUnavailable')}
+            </Text>
+          )}
           <Text as="p" variant="bodySm" tone="subdued">
             {panel.age}
           </Text>

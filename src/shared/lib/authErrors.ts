@@ -81,13 +81,45 @@ export const AUTH_ERROR_PARAM = 'auth_error'
  */
 export function getLoginRedirectPath(
   locale: string,
-  location: { hash: string; search: string }
+  location: { hash: string; search: string; pathname?: string }
 ): string {
   const loginPath = withLocale('/login', locale)
   const callbackError = readAuthCallbackError(location)
-  if (!callbackError) return loginPath
-  const params = new URLSearchParams({ [AUTH_ERROR_PARAM]: callbackError })
-  return `${loginPath}?${params.toString()}`
+  const params = new URLSearchParams()
+  if (callbackError) params.set(AUTH_ERROR_PARAM, callbackError)
+  const returnTo = safeOrderReturnPath(
+    `${location.pathname ?? ''}${location.search}`
+  )
+  if (returnTo) params.set('returnTo', returnTo)
+  return params.size ? `${loginPath}?${params.toString()}` : loginPath
+}
+
+/** Only the authenticated order deep link may survive sign-in; never an external redirect. */
+export function safeOrderReturnPath(
+  value: string | null | undefined
+): string | null {
+  if (!value || !/^\/(ar|en|ur|es|fr|tr)\/verifications\?/.test(value))
+    return null
+  try {
+    const url = new URL(value, 'https://akeed.invalid')
+    if (
+      url.origin !== 'https://akeed.invalid' ||
+      url.hash ||
+      !/^\/(ar|en|ur|es|fr|tr)\/verifications$/.test(url.pathname)
+    )
+      return null
+    const open = url.searchParams.get('open')
+    if (
+      !open ||
+      !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+        open
+      )
+    )
+      return null
+    return `${url.pathname}?${new URLSearchParams({ open })}`
+  } catch {
+    return null
+  }
 }
 
 export function parseAuthErrorParam(

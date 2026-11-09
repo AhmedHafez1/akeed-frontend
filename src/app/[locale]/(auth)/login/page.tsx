@@ -9,6 +9,7 @@ import {
   AUTH_ERROR_PARAM,
   getAuthErrorCode,
   parseAuthErrorParam,
+  safeOrderReturnPath,
 } from '@/shared/lib/authErrors'
 import { createLogger } from '@/shared/lib/logger'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
@@ -64,7 +65,10 @@ function LoginForm() {
       await auth.signIn(email, password)
 
       // Redirect to dashboard
-      router.push(auth.getDashboardPath(locale))
+      router.push(
+        safeOrderReturnPath(searchParams?.get('returnTo')) ??
+          auth.getDashboardPath(locale)
+      )
     } catch (error) {
       logger.error('Sign in failed', error)
       if (getAuthErrorCode(error) === 'email_not_confirmed') {

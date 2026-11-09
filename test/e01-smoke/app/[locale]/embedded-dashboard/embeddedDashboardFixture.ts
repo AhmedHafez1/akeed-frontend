@@ -152,7 +152,9 @@ function buildRows(): VerificationItem[] {
               confirmed_at: null,
               action_reason: 'change_requested',
               capabilities: confirm,
-              change_request: changeRequest('cr-7'),
+              change_request: changeRequest('cr-7', {
+                merchant_email: { status: 'failed', reason: 'no_recipient' },
+              }),
               shipping_address: '12 Nile Street, Dokki',
               shipping_region: 'Giza',
             })

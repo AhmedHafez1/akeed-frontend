@@ -126,3 +126,9 @@ Yeni siparişler yine alınır, ancak mesajları **Gönderim bekliyor** durumund
 Ayarlar’daki otomasyon bölümüne gidin.
 
 Ayrıca bakın: [Otomasyon Kuralları](/docs/automation-rules)
+
+## Değişiklik talepleri için e-posta
+
+Değişiklik talepleri açıkken müşteri değişiklik istediğinde, WhatsApp mesaj hakkı sıfır olsa veya bildirim başarısız olsa bile talep işlem bekleyenler listesinde kalır. Akeed mevcut bildirim adresine, bu adres kullanılamıyorsa hesap sahibine tek bir ilk e-posta planlar. E-postada mağaza, sipariş, kaynak, talep zamanı ve oturum açıldıktan sonra siparişi gösteren panel bağlantısı bulunur. WhatsApp mesaj hakkı kullanılmaz. Hatırlatma e-postası veya satıcıya WhatsApp uyarısı eklenmez.
+
+Shopify, talep açıkken Akeed: Change Requested etiketini alır. Talep çözüldüğünde veya güncellenmiş onay başarıyla gönderildiğinde bu etiket kaldırılır; diğer etiketler korunur. Bu bir uyarıdır, gönderim engeli değildir. WooCommerce ve EasyOrders mevcut eşitleme ayarlarını ve desteklenen sonuçları kullanır. Bağımsız siparişler harici mağaza güncellemesi olmadan aynı Akeed sürecini izler. E-posta veya mağaza güncellemesi başarısız olursa uyarıyı inceleyin ve talebi Akeed üzerinden işlemeye devam edin.

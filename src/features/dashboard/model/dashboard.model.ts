@@ -295,6 +295,7 @@ export type ReconfirmationFailureCode =
 
 /** An open change request, as a list row or a needs-action item carries it. */
 export type ChangeRequestSummary = {
+  merchant_email?: { status: string; reason: string | null } | null
   id: string
   opened_at: string
   confirmation_cycle: number
