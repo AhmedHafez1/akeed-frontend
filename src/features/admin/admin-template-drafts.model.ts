@@ -55,6 +55,8 @@ export interface TemplateDraft {
   body: string
   confirm_label: string
   cancel_label: string
+  change_label?: string | null
+  change_request_of_key?: string | null
   samples: TemplateDraftSamples
   state: TemplateDraftState
   state_changed_at: string
@@ -102,6 +104,8 @@ export interface TemplateDraftForm {
   body: string
   confirm_label: string
   cancel_label: string
+  change_label?: string | null
+  change_request_of_key?: string | null
   samples: TemplateDraftSamples
 }
 
@@ -188,6 +192,8 @@ export function draftToForm(draft: TemplateDraft): TemplateDraftForm {
     body: draft.body,
     confirm_label: draft.confirm_label,
     cancel_label: draft.cancel_label,
+    change_label: draft.change_label,
+    change_request_of_key: draft.change_request_of_key,
     samples: { ...draft.samples },
   }
 }
@@ -224,6 +230,9 @@ export function previewDraft(form: TemplateDraftForm): RenderedTemplateMessage {
     buttons: [
       { label: form.confirm_label, kind: 'quick_reply' },
       { label: form.cancel_label, kind: 'quick_reply' },
+      ...(form.change_request_of_key && form.change_label
+        ? [{ label: form.change_label, kind: 'quick_reply' as const }]
+        : []),
     ].filter((button) => button.label.trim().length > 0),
     direction: getMessageLanguageDirection(form.language),
   }

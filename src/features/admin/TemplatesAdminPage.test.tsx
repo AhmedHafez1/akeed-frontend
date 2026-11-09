@@ -17,6 +17,13 @@ vi.mock('./adminTemplatesApi', () => ({
   runAdminTemplateSync: vi.fn(),
   sendAdminTemplateTest: vi.fn(),
 }))
+vi.mock('./adminChangePreparationApi', () => ({
+  getChangePreparation: vi
+    .fn()
+    .mockResolvedValue({ variants: [], draft_only_sources: [] }),
+  prepareChangeDrafts: vi.fn(),
+  changePreparationMarkdown: vi.fn(),
+}))
 
 // The image twins panel reads its own list; it is tested on its own.
 vi.mock('./adminImageTwinsApi', () => ({
@@ -374,6 +381,13 @@ describe('TemplatesAdminPage', () => {
         .getAllByRole('button')
         .map((button) => button.textContent)
         .sort()
-    ).toEqual(['Refresh', 'Reset filters', 'Sync now'])
+    ).toEqual([
+      'Export JSON',
+      'Export review',
+      'Prepare missing drafts',
+      'Refresh',
+      'Reset filters',
+      'Sync now',
+    ])
   })
 })

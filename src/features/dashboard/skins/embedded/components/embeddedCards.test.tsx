@@ -49,6 +49,7 @@ describe('NeedsActionCard', () => {
 
     onRequestConfirm: vi.fn(),
     onViewAll: vi.fn(),
+    onHandle: vi.fn(),
   }
 
   it('shows a positive empty state instead of an empty table', () => {

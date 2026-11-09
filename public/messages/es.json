@@ -754,6 +754,54 @@
     }
   },
   "dashboard": {
+    "changeRequest": {
+      "emailUnavailable": "No se pudo confirmar la notificación por correo. La solicitud sigue disponible aquí.",
+      "doNotShipStrip": "No envíes pedidos con una solicitud de cambio.",
+      "dontShip": "No enviar todavía",
+      "ackMissing": "Cliente no notificado",
+      "handle": "Atender solicitud",
+      "openWhatsapp": "Abrir WhatsApp",
+      "call": "Llamar",
+      "copy": "Copiar número",
+      "copied": "Número copiado",
+      "copyError": "No se pudo copiar el número.",
+      "noPhone": "No hay un número de teléfono válido",
+      "panelTitle": "No envíes este pedido todavía",
+      "detailsDescription": "El cliente solicitó un cambio",
+      "ackSent": "Cliente notificado",
+      "ackSkipped": "Cliente no notificado: sin saldo",
+      "ackFailed": "Cliente no notificado: no se entregó",
+      "contactHeading": "Contacta al cliente",
+      "resultHeading": "Registra el resultado",
+      "confirmAfter": "Confirmado tras contactar al cliente",
+      "cancelAfter": "Cancelado tras contactar al cliente",
+      "resend": "Enviar confirmación actualizada",
+      "resendState": {
+        "queued": "Enviando…",
+        "scheduled": "Programado para {time} (horas de silencio)",
+        "store": "No enviado: el pedido no está en tu tienda",
+        "balance": "No enviado: sin saldo",
+        "send": "No enviado: falló el envío"
+      },
+      "retry": "Reintentar",
+      "topUp": "Recargar",
+      "result": {
+        "confirm": "Pedido confirmado.",
+        "cancel": "Pedido cancelado.",
+        "resend": "Confirmación actualizada en cola."
+      },
+      "stale": {
+        "confirmed": "El cliente ya lo confirmó.",
+        "canceled": "El cliente ya lo canceló.",
+        "resent": "Ya se envió una confirmación actualizada.",
+        "unknown": "Esta solicitud ya fue atendida."
+      },
+      "error": {
+        "confirm": "No se pudo confirmar el pedido. Inténtalo de nuevo.",
+        "cancel": "No se pudo cancelar el pedido. Inténtalo de nuevo.",
+        "resend": "No se pudo enviar la confirmación actualizada. Inténtalo de nuevo."
+      }
+    },
     "mainTitle": "Panel",
     "mainSubtitle": "Sigue las confirmaciones de pedidos contra entrega y las respuestas de los clientes.",
     "title": "Panel",
@@ -1292,6 +1340,7 @@
         "empty": "Nada requiere tu acción",
         "emptyBody": "Todos los pedidos de este periodo están confirmados o esperando al cliente.",
         "reason": {
+          "change_requested": "No enviar todavía · {date}",
           "no_reply_after_follow_up": "Sin respuesta desde {date} · Recordatorio enviado",
           "no_reply": "Sin respuesta desde {date}",
           "read_no_reply": "Leído, sin respuesta · hace {hours, plural, one {# hora} other {# horas}}",
@@ -1354,6 +1403,7 @@
         "tooLarge": "Demasiados pedidos para exportar de una vez. Elige un periodo más corto o una sola pestaña."
       },
       "tabs": {
+        "change_requested": "Solicitudes de cambio",
         "all": "Todos",
         "needs_action": "Requieren acción",
         "no_whatsapp": "No entregado en WhatsApp",
@@ -1388,6 +1438,7 @@
       "noName": "Sin nombre",
       "openOrderLabel": "Abrir el pedido {order} en Shopify",
       "status": {
+        "changeRequested": "Cambio solicitado",
         "confirmed": "Confirmado",
         "canceled": "Cancelado",
         "failed": "Envío fallido",
@@ -1481,6 +1532,7 @@
       },
       "loaded": "Mostrando {loaded} de {total} pedidos",
       "empty": {
+        "change_requested": "No hay solicitudes de cambio abiertas.",
         "all": "Aún no hay confirmaciones en este periodo.",
         "needs_action": "Nada requiere tu acción. ¡Buen trabajo!",
         "no_whatsapp": "Todos los clientes de este periodo pueden recibir mensajes de WhatsApp.",
@@ -1580,6 +1632,21 @@
     }
   },
   "settings": {
+    "changeRequests": {
+      "heading": "Solicitar un cambio",
+      "on": "Activado",
+      "off": "Desactivado",
+      "label": "Permitir que los clientes soliciten un cambio",
+      "description": "Agrega un tercer botón a los mensajes de confirmación.",
+      "notAvailableYet": "Aún no está disponible. Inténtalo más tarde.",
+      "noteAck": "Akeed responde una vez para confirmar la recepción (1 mensaje).",
+      "noteAckPlan": "Akeed responde una vez para confirmar la recepción (1 mensaje de tu plan).",
+      "noteShopify": "Los pedidos de Shopify reciben una etiqueta, no una retención de preparación.",
+      "noteOff": "Desactivarlo solo afecta a los mensajes nuevos.",
+      "saveUnavailable": "Solicitar un cambio aún no está disponible. Inténtalo más tarde.",
+      "brandingUnavailable": "Los mensajes de tres botones con logo no están disponibles. Revisa el banner y las plantillas de imagen aprobadas. Se mantiene la confirmación alternativa segura.",
+      "ownNumberText": "Tu número de WhatsApp solo envía texto. Un logo guardado no impide usar Solicitar un cambio."
+    },
     "thankYou": {
       "heading": "Mensajes de agradecimiento",
       "on": "Activados",

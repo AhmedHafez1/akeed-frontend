@@ -38,6 +38,7 @@ describe('planConfirmationRowActions', () => {
     )
     expect(plan).toEqual({
       primary: 'chat',
+      handle: false,
       canConfirm: true,
       canRetry: false,
       canCancel: true,
@@ -86,6 +87,7 @@ describe('planConfirmationRowActions', () => {
     )
     expect(plan).toEqual({
       primary: 'chat',
+      handle: false,
       canConfirm: false,
       canRetry: false,
       canCancel: false,
@@ -100,6 +102,7 @@ describe('planConfirmationRowActions', () => {
     )
     expect(plan).toEqual({
       primary: null,
+      handle: false,
       canConfirm: false,
       canRetry: false,
       canCancel: false,

@@ -27,6 +27,7 @@ const standaloneAdapter: SettingsModelAdapter = {
  */
 export function useStandaloneSettings() {
   const tThankYou = useTranslations('settings.thankYou')
+  const tChangeRequests = useTranslations('settings.changeRequests')
   const t = useTranslations('settings.standalone.messages')
   const { isLoading: isModeLoading } = useAkeedMode()
   const router = useRouter()
@@ -39,6 +40,7 @@ export function useStandaloneSettings() {
       saveInvalid: t('saveInvalid'),
       saveError: t('saveError'),
       acknowledgmentUnavailable: tThankYou('saveUnavailable'),
+      changeRequestsUnavailable: tChangeRequests('saveUnavailable'),
       readOnly: t('readOnly'),
       testSendSuccess: t('testSendSuccess'),
       testSendCooldown: t('testSendCooldown'),
@@ -46,7 +48,7 @@ export function useStandaloneSettings() {
       testSendLanguageUnavailable: t('testSendLanguageUnavailable'),
       testSendError: t('testSendError'),
     }),
-    [t, tThankYou]
+    [t, tThankYou, tChangeRequests]
   )
 
   const model = useSettingsModel({

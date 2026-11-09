@@ -1,8 +1,10 @@
 import type {
   CapacitySummary,
+  ChangeRequestSummary,
   DashboardOverview,
   VerificationItem,
 } from '@/features/dashboard/model/dashboard.model'
+import { ApiError } from '@/shared/lib/http'
 
 /*
  * The embedded dashboard and confirmations list over synthetic data shaped
@@ -12,7 +14,13 @@ import type {
  * Scenarios (`?scenario=`): `empty` (a new shop), `error` (every read fails),
  * `limit` (plan used up), `quiet` (usage under 80%), `viewer` (read-only role),
  * `blocked-basic` and `blocked-scale` (an order waits on a used-up paid plan,
- * which the banner and plan picker offer to renew).
+ * which the banner and plan picker offer to renew), `race` (the customer
+ * settles every change request before the merchant's action lands).
+ *
+ * Three orders carry an open change request: one whose customer was told,
+ * one told nothing (no balance) whose updated confirmation failed for the
+ * same reason, and one without a usable phone whose resend waits for quiet
+ * hours.
  */
 
 /** The standalone pages read the same synthetic backend as the embedded one. */
@@ -76,6 +84,20 @@ function base(
   }
 }
 
+function changeRequest(
+  id: string,
+  overrides: Partial<ChangeRequestSummary> = {}
+): ChangeRequestSummary {
+  return {
+    id,
+    opened_at: at(2),
+    confirmation_cycle: 1,
+    acknowledgment: { status: 'done', reason: null },
+    reconfirmation: { state: null, scheduled_for: null, last_error: null },
+    ...overrides,
+  }
+}
+
 function buildRows(): VerificationItem[] {
   const rows: VerificationItem[] = [
     base(0, {
@@ -122,27 +144,81 @@ function buildRows(): VerificationItem[] {
             action_reason: 'read_no_reply',
             capabilities: confirm,
           })
-        : index === 11
+        : index === 7
           ? base(index, {
-              order_number: '1127',
-              customer_name: 'سارة أحمد',
-              status: 'failed',
+              order_number: '1131',
+              customer_name: 'Mona Adel',
+              status: 'read',
               confirmed_at: null,
-              delivered_at: null,
-              read_at: null,
-              reason: 'provider_delivery_failed',
-              failure_code: '131026',
-              action_reason: 'delivery_failed',
+              action_reason: 'change_requested',
               capabilities: confirm,
+              change_request: changeRequest('cr-7', {
+                merchant_email: { status: 'failed', reason: 'no_recipient' },
+              }),
+              shipping_address: '12 Nile Street, Dokki',
+              shipping_region: 'Giza',
             })
-          : index % 6 === 0
+          : index === 8
             ? base(index, {
-                status: 'canceled',
+                order_number: '1130',
+                customer_name: 'Karim Fathy',
+                status: 'delivered',
                 confirmed_at: null,
-                canceled_at: at(90 + index),
-                cancellation_source: 'customer',
+                read_at: null,
+                action_reason: 'change_requested',
+                capabilities: confirm,
+                change_request: changeRequest('cr-8', {
+                  opened_at: at(5),
+                  acknowledgment: {
+                    status: 'skipped',
+                    reason: 'skipped_no_allowance',
+                  },
+                  reconfirmation: {
+                    state: 'failed',
+                    scheduled_for: null,
+                    last_error: 'no_allowance',
+                  },
+                }),
               })
-            : base(index, {})
+            : index === 10
+              ? base(index, {
+                  order_number: '1128',
+                  customer_name: 'Sara Nabil',
+                  customer_phone: null,
+                  status: 'read',
+                  confirmed_at: null,
+                  action_reason: 'change_requested',
+                  capabilities: confirm,
+                  change_request: changeRequest('cr-10', {
+                    opened_at: at(20),
+                    reconfirmation: {
+                      state: 'scheduled',
+                      scheduled_for: '2026-09-25T07:00:00Z',
+                      last_error: null,
+                    },
+                  }),
+                })
+              : index === 11
+                ? base(index, {
+                    order_number: '1127',
+                    customer_name: 'سارة أحمد',
+                    status: 'failed',
+                    confirmed_at: null,
+                    delivered_at: null,
+                    read_at: null,
+                    reason: 'provider_delivery_failed',
+                    failure_code: '131026',
+                    action_reason: 'delivery_failed',
+                    capabilities: confirm,
+                  })
+                : index % 6 === 0
+                  ? base(index, {
+                      status: 'canceled',
+                      confirmed_at: null,
+                      canceled_at: at(90 + index),
+                      cancellation_source: 'customer',
+                    })
+                  : base(index, {})
     )
   }
   return rows
@@ -275,11 +351,16 @@ function overview(): DashboardOverview {
         reason: {
           type: row.action_reason!,
           since:
-            row.action_reason === 'read_no_reply' ? at(14) : row.last_sent_at,
+            row.action_reason === 'change_requested'
+              ? (row.change_request?.opened_at ?? null)
+              : row.action_reason === 'read_no_reply'
+                ? at(14)
+                : row.last_sent_at,
           hours: row.action_reason === 'read_no_reply' ? 14 : null,
           failure_code: row.failure_code ?? null,
         },
         capabilities: row.capabilities ?? [],
+        change_request: row.change_request ?? null,
       })),
     },
     permissions: { can_confirm_orders: scenario() !== 'viewer' },
@@ -291,6 +372,8 @@ function matchesTab(row: VerificationItem, tab: string | null) {
   switch (tab) {
     case 'needs_action':
       return Boolean(row.action_reason)
+    case 'change_requested':
+      return Boolean(row.change_request)
     case 'confirmed':
     case 'canceled':
     case 'failed':
@@ -339,6 +422,7 @@ function list(url: URL) {
       tab_counts: {
         all: rows.length,
         needs_action: countOf((row) => Boolean(row.action_reason)),
+        change_requested: countOf((row) => Boolean(row.change_request)),
         confirmed: countOf((row) => row.status === 'confirmed'),
         canceled: countOf((row) => row.status === 'canceled'),
         failed: countOf((row) => row.status === 'failed'),
@@ -392,6 +476,11 @@ export async function embeddedDashboardRequest<T>(
   // Stays on the page; the request log shows the plan and `renew` flag.
   if (method === 'POST' && url.pathname === '/api/onboarding/billing')
     return { confirmationUrl: '#shopify-approval' } as T
+  const change =
+    /^\/api\/verifications\/([^/]+)\/change-request(?:\/(confirm|cancel|resend))?$/.exec(
+      url.pathname
+    )
+  if (change) return changeRequestAction(method, change[1], change[2]) as T
   const confirmMatch = /^\/api\/verifications\/([^/]+)\/confirm$/.exec(
     url.pathname
   )
@@ -415,6 +504,93 @@ export async function embeddedDashboardRequest<T>(
     } as T
   }
   throw new Error(`Unexpected embedded fixture ${method}: ${path}`)
+}
+
+/** Outcomes a settled request answers with, for the stale-page read. */
+const resolutions = new Map<string, string>()
+
+function changeRequestAction(
+  method: 'GET' | 'POST',
+  verificationId: string,
+  action: string | undefined
+) {
+  const row = rows.find((candidate) => candidate.id === verificationId)
+  if (method === 'GET') {
+    const id = row?.change_request?.id ?? `cr-${verificationId.split('-')[1]}`
+    return {
+      change_request: {
+        id,
+        status: resolutions.has(verificationId) ? 'resolved' : 'open',
+        resolution: resolutions.get(verificationId) ?? null,
+      },
+    }
+  }
+  if (!row?.change_request || scenario() === 'race') {
+    resolutions.set(verificationId, 'customer_confirmed')
+    rows = rows.map((candidate) =>
+      candidate.id === verificationId
+        ? {
+            ...candidate,
+            status: 'confirmed',
+            confirmation_source: 'customer',
+            action_reason: null,
+            change_request: null,
+          }
+        : candidate
+    )
+    throw new ApiError(
+      'This change request was already resolved.',
+      409,
+      'CHANGE_REQUEST_ALREADY_RESOLVED'
+    )
+  }
+  const stamp = new Date(now).toISOString()
+  if (action === 'resend') {
+    rows = rows.map((candidate) =>
+      candidate.id === verificationId && candidate.change_request
+        ? {
+            ...candidate,
+            change_request: {
+              ...candidate.change_request,
+              reconfirmation: {
+                state: 'requested',
+                scheduled_for: null,
+                last_error: null,
+              },
+            },
+          }
+        : candidate
+    )
+    return { reconfirmation: { state: 'requested' } }
+  }
+  const status = action === 'cancel' ? 'canceled' : 'confirmed'
+  resolutions.set(
+    verificationId,
+    status === 'confirmed' ? 'merchant_confirmed' : 'merchant_canceled'
+  )
+  rows = rows.map((candidate) =>
+    candidate.id === verificationId
+      ? {
+          ...candidate,
+          status,
+          ...(status === 'confirmed'
+            ? { confirmed_at: stamp, confirmation_source: 'merchant_manual' }
+            : {
+                canceled_at: stamp,
+                cancellation_source: 'merchant_change_request',
+              }),
+          updated_at: stamp,
+          action_reason: null,
+          change_request: null,
+        }
+      : candidate
+  )
+  return {
+    success: true,
+    verificationId,
+    status,
+    changeRequestId: row.change_request.id,
+  }
 }
 
 export function embeddedDashboardRequests() {

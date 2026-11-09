@@ -42,6 +42,11 @@ export function resolveRowStatus(
   row: VerificationItem,
   options: { showStoreCancellation?: boolean } = {}
 ): RowStatusView {
+  // An open change request outranks the awaiting status it sits on: the
+  // order must not ship until it is settled.
+  if (row.change_request) {
+    return { badge: 'changeRequested', tone: 'warning', kind: 'needsAction' }
+  }
   switch (row.status) {
     case 'confirmed':
       return {

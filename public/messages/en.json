@@ -60,7 +60,9 @@
         "failed": "Refused",
         "unresolved": "Unknown",
         "not_attempted": "Not tried"
-      }
+      },
+      "liveAction": "Create missing twins uploads a sample and submits live templates to Meta; it is not draft-only preparation.",
+      "drifted": "Image twin content differs or has not been synchronized. It is not ready to send."
     },
     "eyebrow": "WhatsApp templates",
     "title": "Templates",
@@ -362,7 +364,9 @@
       "WHATSAPP_TEMPLATE_IMAGE_TWIN_NOT_CONFIGURED": "Set META_APP_ID to create image twins. Nothing was submitted.",
       "WHATSAPP_TEMPLATE_IMAGE_TWIN_UPLOAD_FAILED": "The sample image could not be uploaded to Meta. Nothing was submitted.",
       "WHATSAPP_MESSAGE_TEXT_CONFLICT": "Another operator saved this text at the same time. Reload and try again.",
-      "WHATSAPP_MESSAGE_TEXT_INVALID": "This text does not meet the rules for its purpose."
+      "WHATSAPP_MESSAGE_TEXT_INVALID": "This text does not meet the rules for its purpose.",
+      "WHATSAPP_TEMPLATE_DRAFT_IDENTITY_FIXED": "The language code and parameter format are fixed to the original template.",
+      "WHATSAPP_TEMPLATE_CHANGE_REQUEST_NOT_SELECTABLE": "A Request a change counterpart cannot be an ordinary default or replacement."
     },
     "environment": {
       "production": "Production",
@@ -471,7 +475,11 @@
         "title": "Discard this draft?",
         "description": "The draft is removed from Akeed. Nothing is deleted at Meta.",
         "confirm": "Discard"
-      }
+      },
+      "changeLabel": "Request a change label",
+      "changeLabelFixed": "Fixed service label; cannot be customized.",
+      "changeParent": "Original template",
+      "changeButtonsHint": "Buttons in order: Confirm, Cancel, Request a change. The third label is fixed."
     },
     "validation": {
       "finding": "(contract record {finding})",
@@ -498,7 +506,9 @@
         "button_label_too_long": "A button label is at most 25 characters.",
         "button_labels_identical": "The two buttons need different labels.",
         "button_count": "A confirmation has exactly two quick replies.",
-        "button_order": "The Confirm button must come first."
+        "button_order": "The Confirm button must come first.",
+        "change_label_fixed": "Use the fixed Request a change label for this language.",
+        "change_link_required": "The third button requires its original-template relationship."
       }
     },
     "submit": {
@@ -593,6 +603,30 @@
         "permanent": "A retired template cannot be activated again",
         "done": "Retired."
       }
+    },
+    "preparation": {
+      "title": "Request a change preparation",
+      "description": "Preparation saves drafts only. Review content, variables and all three buttons before submission.",
+      "prepare": "Prepare missing drafts",
+      "preparing": "Preparing…",
+      "export": "Export review",
+      "exportJson": "Export JSON",
+      "loading": "Loading templates…",
+      "count": "Original templates: {count}",
+      "created": "Draft created",
+      "reused": "Existing record preserved",
+      "blocked": "Blocked",
+      "invalid": "Review validation findings",
+      "active": "Active",
+      "inactive": "Inactive",
+      "logo": "Logo",
+      "planned": "Planned",
+      "registered": "Registered",
+      "labelDifference": "Provider label differs from the old preview. The new draft uses the provider label.",
+      "review": "Review draft",
+      "empty": "No original templates to prepare.",
+      "ownNumber": "Merchant-owned numbers send text only and require independent approval. A configured logo does not block Request a change.",
+      "submissionBoundary": "Creating image twins uploads a sample and submits to Meta. Planned, draft and submission accepted do not mean ready to send."
     }
   },
   "adminBillingObservability": {
@@ -1889,6 +1923,54 @@
     }
   },
   "dashboard": {
+    "changeRequest": {
+      "emailUnavailable": "The email notification could not be confirmed. This request is still available here.",
+      "doNotShipStrip": "Don’t ship orders with a change request.",
+      "dontShip": "Don’t ship yet",
+      "ackMissing": "Customer not notified",
+      "handle": "Handle request",
+      "openWhatsapp": "Open WhatsApp",
+      "call": "Call",
+      "copy": "Copy number",
+      "copied": "Number copied",
+      "copyError": "Couldn’t copy the number.",
+      "noPhone": "No valid phone number",
+      "panelTitle": "Don’t ship this order yet",
+      "detailsDescription": "The customer requested a change",
+      "ackSent": "Customer notified",
+      "ackSkipped": "Customer not notified: no balance",
+      "ackFailed": "Customer not notified: not delivered",
+      "contactHeading": "Contact the customer",
+      "resultHeading": "Record the result",
+      "confirmAfter": "Confirmed after contacting customer",
+      "cancelAfter": "Cancelled after contacting customer",
+      "resend": "Send updated confirmation",
+      "resendState": {
+        "queued": "Sending…",
+        "scheduled": "Scheduled for {time} (quiet hours)",
+        "store": "Not sent: order not found in your store",
+        "balance": "Not sent: no balance",
+        "send": "Not sent: sending failed"
+      },
+      "retry": "Try again",
+      "topUp": "Top up",
+      "result": {
+        "confirm": "Order confirmed.",
+        "cancel": "Order cancelled.",
+        "resend": "Updated confirmation queued."
+      },
+      "stale": {
+        "confirmed": "Already confirmed by the customer.",
+        "canceled": "Already cancelled by the customer.",
+        "resent": "An updated confirmation was already sent.",
+        "unknown": "This request was already handled."
+      },
+      "error": {
+        "confirm": "Couldn’t confirm the order. Try again.",
+        "cancel": "Couldn’t cancel the order. Try again.",
+        "resend": "Couldn’t send the updated confirmation. Try again."
+      }
+    },
     "mainTitle": "Dashboard",
     "mainSubtitle": "Track COD confirmations and customer replies.",
     "title": "Dashboard",
@@ -2427,6 +2509,7 @@
         "empty": "Nothing needs your action",
         "emptyBody": "Every order in this period is confirmed or waiting for the customer.",
         "reason": {
+          "change_requested": "Don’t ship yet · {date}",
           "no_reply_after_follow_up": "No reply since {date} · Reminder sent",
           "no_reply": "No reply since {date}",
           "read_no_reply": "Read, no reply · {hours, plural, one {# hour} other {# hours}} ago",
@@ -2489,6 +2572,7 @@
         "tooLarge": "Too many orders to export at once. Choose a shorter period or one tab."
       },
       "tabs": {
+        "change_requested": "Change requests",
         "all": "All",
         "needs_action": "Needs action",
         "no_whatsapp": "WhatsApp undeliverable",
@@ -2523,6 +2607,7 @@
       "noName": "No name",
       "openOrderLabel": "Open order {order} in Shopify",
       "status": {
+        "changeRequested": "Change requested",
         "confirmed": "Confirmed",
         "canceled": "Canceled",
         "failed": "Failed to send",
@@ -2616,6 +2701,7 @@
       },
       "loaded": "Showing {loaded} of {total} orders",
       "empty": {
+        "change_requested": "No open change requests.",
         "all": "No confirmations in this period yet.",
         "needs_action": "Nothing needs your action. Nice work!",
         "no_whatsapp": "Every customer in this period can receive WhatsApp messages.",
@@ -2715,6 +2801,21 @@
     }
   },
   "settings": {
+    "changeRequests": {
+      "heading": "Request a change",
+      "on": "On",
+      "off": "Off",
+      "label": "Let customers request a change",
+      "description": "Adds a third button to confirmation messages.",
+      "notAvailableYet": "Not available yet. Try again later.",
+      "noteAck": "Akeed replies once to confirm receipt (1 message).",
+      "noteAckPlan": "Akeed replies once to confirm receipt (1 message from your plan).",
+      "noteShopify": "Shopify orders get a tag, not a fulfillment hold.",
+      "noteOff": "Turning off applies to new messages only.",
+      "saveUnavailable": "Request a change isn't available yet. Try again later.",
+      "brandingUnavailable": "Branded three-button messages are unavailable. Check the logo banner and matching approved image twins. Existing safe confirmation fallback remains in use.",
+      "ownNumberText": "Your WhatsApp number sends text only. A saved logo does not prevent using Request a change."
+    },
     "thankYou": {
       "heading": "Thank-you messages",
       "on": "On",

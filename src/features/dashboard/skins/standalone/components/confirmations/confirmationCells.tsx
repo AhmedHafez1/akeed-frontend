@@ -4,6 +4,7 @@ import {
   Bell,
   BellRing,
   CalendarClock,
+  PackageX,
   ShieldCheck,
   Store,
   TriangleAlert,
@@ -12,6 +13,7 @@ import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
 import { resolveRowStatus } from '@/features/dashboard/domain/confirmationRowStatus'
+import { isAckMissing } from '@/features/dashboard/domain/changeRequestView'
 import { remoteSyncView } from '@/features/dashboard/domain/remoteSync'
 import {
   formatTooltipDateTime,
@@ -155,6 +157,7 @@ export function StatusCell({
 }) {
   const t = useTranslations('dashboard.confirmations.status')
   const tSync = useTranslations('dashboard.table.storeSync')
+  const tChange = useTranslations('dashboard.changeRequest')
   const view = resolveRowStatus(row)
   const statusTitle = useStatusTooltip(row, timeZone)
   // The badge stays the local result; a store that does not have it yet is a
@@ -164,9 +167,23 @@ export function StatusCell({
   return (
     <div className="flex min-w-0 flex-col items-start gap-1">
       <div className="flex min-w-0 items-center gap-1.5">
-        <StatusBadge kind={view.kind} icon={false} title={statusTitle}>
+        <StatusBadge
+          kind={view.kind}
+          icon={row.change_request ? PackageX : false}
+          title={statusTitle}
+        >
           {t(view.badge)}
         </StatusBadge>
+        {row.change_request && isAckMissing(row.change_request) && (
+          <span
+            role="img"
+            aria-label={tChange('ackMissing')}
+            title={tChange('ackMissing')}
+            className="text-ak-danger inline-flex shrink-0"
+          >
+            <TriangleAlert aria-hidden="true" className="size-4" />
+          </span>
+        )}
         {autoCancel && (
           <span
             role="img"

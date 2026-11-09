@@ -103,7 +103,9 @@ function ConfirmationTabs({
               <span
                 className={cn(
                   'text-ak-label inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 tabular-nums',
-                  id === 'needs_action' || id === 'no_whatsapp'
+                  id === 'needs_action' ||
+                    id === 'change_requested' ||
+                    id === 'no_whatsapp'
                     ? 'bg-ak-warning-soft text-ak-warning'
                     : selected
                       ? 'bg-inverse-foreground/15 text-inverse-foreground'
@@ -130,7 +132,8 @@ function isTypingTarget(target: EventTarget | null) {
 }
 
 /**
- * Tabs at the start, search by order number or phone at the end. `/`
+ * Tabs on the first row; search by order number or phone, and export, on the
+ * second, at the end (six tabs leave no room beside them). `/`
  * anywhere on the page (outside a field) jumps to the search box. The tabs
  * scroll sideways on a phone rather than wrapping.
  */
@@ -167,8 +170,8 @@ export function ConfirmationsToolbar({
   }, [])
 
   return (
-    <div className="border-line flex flex-col gap-3 border-b px-4 py-4 sm:px-6 lg:flex-row lg:items-start lg:justify-between">
-      <div className="-mx-4 min-w-0 overflow-x-auto px-4 [scrollbar-width:none] sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 [&::-webkit-scrollbar]:hidden">
+    <div className="border-line flex flex-col gap-3 border-b px-4 py-4 sm:px-6">
+      <div className="-mx-4 min-w-0 overflow-x-auto px-4 [scrollbar-width:none] sm:-mx-6 sm:px-6 [&::-webkit-scrollbar]:hidden">
         <ConfirmationTabs
           tab={tab}
           tabCounts={tabCounts}
@@ -178,7 +181,7 @@ export function ConfirmationsToolbar({
         />
       </div>
 
-      <div className="flex w-full items-start gap-2 lg:w-auto lg:shrink-0">
+      <div className="flex w-full items-start gap-2 lg:justify-end">
         {onExport && (
           <button
             type="button"

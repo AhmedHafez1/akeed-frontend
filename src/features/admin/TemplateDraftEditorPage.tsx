@@ -194,6 +194,7 @@ function DraftEditor({
   }
 
   const submitReason = reasonOf(submit.error)
+  const reviewDraft = save.result?.draft ?? draft
   const editReason = reasonOf(edit.error)
 
   return (
@@ -382,7 +383,7 @@ function DraftEditor({
         </div>
       )}
 
-      {dialog === 'submit' && draft && (
+      {dialog === 'submit' && reviewDraft && (
         <TemplateConfirmDialog
           open
           onOpenChange={(open) => {
@@ -399,11 +400,49 @@ function DraftEditor({
           onConfirm={() => void submitDraft()}
         >
           {!submit.result && (
-            <SubmitFacts
-              context={context}
-              templateName={draft.template_name}
-              languageCode={draft.language_code}
-            />
+            <div className="space-y-4">
+              <SubmitFacts
+                context={context}
+                templateName={reviewDraft.template_name}
+                languageCode={reviewDraft.language_code}
+              />
+              {reviewDraft.change_request_of_key && (
+                <p
+                  className="text-muted-foreground text-sm break-all"
+                  dir="ltr"
+                >
+                  {t('changeParent')}: {reviewDraft.change_request_of_key}
+                </p>
+              )}
+              <p className="text-sm" dir="ltr">
+                {format.label('category', reviewDraft.category)} ·{' '}
+                {reviewDraft.parameter_format}
+              </p>
+              <p
+                className="text-sm whitespace-pre-wrap"
+                dir={reviewDraft.preview.direction}
+              >
+                {reviewDraft.body}
+              </p>
+              <ol
+                className="list-decimal space-y-1 ps-5"
+                dir={reviewDraft.preview.direction}
+              >
+                {reviewDraft.preview.buttons.map((button, index) => (
+                  <li key={index}>{button.label}</li>
+                ))}
+              </ol>
+              <dl className="text-xs" dir="ltr">
+                {reviewDraft.variables.map((variable) => (
+                  <div key={variable.variable} className="flex flex-wrap gap-2">
+                    <dt>
+                      {variable.variable} ({variable.parameter})
+                    </dt>
+                    <dd>{variable.sample}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
           )}
           {submit.error && (
             <>

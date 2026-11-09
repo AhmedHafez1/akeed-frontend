@@ -24,11 +24,14 @@ import {
 } from '@/features/dashboard/domain/verificationRow'
 import { orderSourceLabelKey } from '@/features/dashboard/lib/orderDisplay'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
+import { ChangeRequestPanel } from './ChangeRequestPanel'
 import { StoreSyncSection } from './StoreSyncSection'
 import { VerificationOrderDetails } from './VerificationOrderDetails'
 
 /** The one action the sheet carries: asking the store again. */
 export interface StoreSyncRetryProps {
+  /** Owner or admin: may settle an open change request. */
+  canActOnChangeRequest?: boolean
   canRetrySync?: boolean
   retryingSyncId?: string | null
   onRetrySync?: (verification: VerificationItem) => void
@@ -76,6 +79,7 @@ export function VerificationDetailsSheet({
 function DetailsBody({
   verification,
   timeZone,
+  canActOnChangeRequest = false,
   canRetrySync = false,
   retryingSyncId = null,
   onRetrySync,
@@ -89,21 +93,35 @@ function DetailsBody({
   const sourceKey = orderSourceLabelKey(verification.platform)
   const customerRecord = useCustomerRecordView(verification.customer_history)
   const autoCancel = useAutoCancelDetail(verification, timeZone)
+  const orderTitle = formatOrderTitle(
+    verification,
+    t('table.orderFallbackPrefix')
+  )
 
   return (
     <>
       <DialogHeader className="border-border border-b px-5 py-5 pe-14">
         <DialogTitle className="text-xl">
-          <bdi dir="ltr">
-            {formatOrderTitle(verification, t('table.orderFallbackPrefix'))}
-          </bdi>
+          <bdi dir="ltr">{orderTitle}</bdi>
         </DialogTitle>
         <DialogDescription>
-          {t(resolveRowDescriptionKey(verification))}
+          {verification.change_request
+            ? t('changeRequest.detailsDescription')
+            : t(resolveRowDescriptionKey(verification))}
         </DialogDescription>
       </DialogHeader>
 
       <div className="space-y-6 p-5">
+        {verification.change_request && (
+          <ChangeRequestPanel
+            verificationId={verification.id}
+            orderLabel={orderTitle}
+            summary={verification.change_request}
+            phone={verification.customer_phone}
+            timeZone={timeZone}
+            canAct={canActOnChangeRequest}
+          />
+        )}
         <div className="bg-muted grid grid-cols-2 gap-4 rounded-xl p-4 text-sm">
           <div>
             <p className="text-muted-foreground text-xs">

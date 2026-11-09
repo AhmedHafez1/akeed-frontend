@@ -21,6 +21,7 @@ import {
 } from '../../../../domain/verificationRow'
 import type { VerificationItem } from '../../../../model/dashboard.model'
 import { ConfirmationOrderDetails } from './ConfirmationOrderDetails'
+import { EmbeddedChangeRequestPanel } from './EmbeddedChangeRequestPanel'
 
 function Fact({ label, children }: { label: string; children: string }) {
   return (
@@ -38,9 +39,11 @@ function Fact({ label, children }: { label: string; children: string }) {
 function DetailsBody({
   verification,
   timeZone,
+  canAct,
 }: {
   verification: VerificationItem
   timeZone: string
+  canAct: boolean
 }) {
   const t = useTranslations('dashboard')
   const { locale } = useLocaleInfo()
@@ -51,9 +54,23 @@ function DetailsBody({
 
   return (
     <BlockStack gap="400">
-      <Text as="p" variant="bodyMd" tone="subdued">
-        {t(resolveRowDescriptionKey(verification))}
-      </Text>
+      {verification.change_request ? (
+        <EmbeddedChangeRequestPanel
+          verificationId={verification.id}
+          orderLabel={formatOrderTitle(
+            verification,
+            t('table.orderFallbackPrefix')
+          )}
+          summary={verification.change_request}
+          phone={verification.customer_phone}
+          timeZone={timeZone}
+          canAct={canAct}
+        />
+      ) : (
+        <Text as="p" variant="bodyMd" tone="subdued">
+          {t(resolveRowDescriptionKey(verification))}
+        </Text>
+      )}
 
       <InlineGrid columns={2} gap="400">
         <BlockStack gap="050">
@@ -159,10 +176,13 @@ export function ConfirmationDetailsModal({
   verification,
   timeZone,
   onClose,
+  canAct = false,
 }: {
   verification: VerificationItem | null
   timeZone: string
   onClose: () => void
+  /** Owner or admin: may settle an open change request. */
+  canAct?: boolean
 }) {
   const t = useTranslations('dashboard')
   return (
@@ -180,7 +200,11 @@ export function ConfirmationDetailsModal({
     >
       {verification && (
         <Modal.Section>
-          <DetailsBody verification={verification} timeZone={timeZone} />
+          <DetailsBody
+            verification={verification}
+            timeZone={timeZone}
+            canAct={canAct}
+          />
         </Modal.Section>
       )}
     </Modal>

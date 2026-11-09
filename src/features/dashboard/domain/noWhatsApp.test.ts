@@ -56,6 +56,7 @@ describe('a No WhatsApp row', () => {
       planConfirmationRowActions(row(), { canWrite: true, canRetry: true })
     ).toEqual({
       primary: null,
+      handle: false,
       canConfirm: true,
       canRetry: false,
       canCancel: true,
@@ -95,6 +96,7 @@ describe('a No WhatsApp row', () => {
       chatUrl: null,
       confirmable: true,
       cancelable: true,
+      changeRequest: null,
     })
   })
 })

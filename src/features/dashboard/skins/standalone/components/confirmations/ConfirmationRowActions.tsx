@@ -7,6 +7,7 @@ import {
   Ellipsis,
   Eye,
   MessageCircle,
+  PackageX,
   RotateCcw,
   Truck,
   XCircle,
@@ -24,7 +25,9 @@ import {
 import { planConfirmationRowActions } from '@/features/dashboard/domain/confirmationRowActions'
 import { useConfirmationRowLink } from '@/features/dashboard/domain/useConfirmationRowLink'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
+import { customerContact } from '@/features/dashboard/lib/customerContact'
 import type { ConfirmationsListProps } from './confirmationCells'
+import { ContactMenuItems } from './ContactMenuItems'
 
 /**
  * In the table: one labelled "more" menu holds every action — details, the
@@ -63,6 +66,68 @@ export function ConfirmationRowActions({
   const autoCancelToggle = plan.autoCancelToggle
 
   const inline = layout === 'inline'
+
+  if (plan.handle) {
+    const contact = customerContact(row.customer_phone)
+    return (
+      <div
+        className={cn(
+          'flex items-center gap-2',
+          inline ? 'justify-end' : 'pt-1'
+        )}
+      >
+        {!inline && (
+          <button
+            type="button"
+            onClick={() => handlers.onOpenDetails(row)}
+            className={cn(
+              akButton({ variant: 'tinted', size: 'md' }),
+              'min-w-0 flex-1'
+            )}
+          >
+            {t('changeRequest.handle')}
+          </button>
+        )}
+        {!inline && link && (
+          <a
+            href={link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={link.accessibilityLabel}
+            className={akButton({ variant: 'secondary', size: 'iconMd' })}
+          >
+            <MessageCircle aria-hidden="true" />
+          </a>
+        )}
+        <DropdownMenu modal={false}>
+          <DropdownMenuTrigger asChild>
+            <button
+              type="button"
+              aria-label={t('confirmations.actions.more', {
+                order: orderLabel,
+              })}
+              className={akButton({
+                variant: inline ? 'ghost' : 'secondary',
+                size: inline ? 'iconTable' : 'iconMd',
+              })}
+            >
+              <Ellipsis aria-hidden="true" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              className="font-semibold"
+              onSelect={() => handlers.onOpenDetails(row)}
+            >
+              <PackageX aria-hidden="true" className="size-4" />
+              {t('changeRequest.handle')}
+            </DropdownMenuItem>
+            <ContactMenuItems contact={contact} />
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    )
+  }
 
   return (
     <div

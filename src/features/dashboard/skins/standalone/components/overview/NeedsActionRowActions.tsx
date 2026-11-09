@@ -7,6 +7,7 @@ import {
   Ellipsis,
   List,
   MessageCircle,
+  PackageX,
   XCircle,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -21,6 +22,7 @@ import {
 } from '@/shared/ui'
 import type { NeedsActionRowModel } from '@/features/dashboard/domain/needsActionRow'
 import type { ManualConfirmationTarget } from '@/features/dashboard/domain/useManualConfirmation'
+import { ContactMenuItems } from '../confirmations/ContactMenuItems'
 
 /**
  * A needs-action row's actions, laid out like the confirmations table's: in
@@ -32,6 +34,7 @@ export function NeedsActionRowActions({
   target,
   customerLabel,
   listHref,
+  handleHref,
   onRequestConfirm,
   onRequestCancel,
   layout = 'inline',
@@ -40,6 +43,8 @@ export function NeedsActionRowActions({
   target: ManualConfirmationTarget
   customerLabel: string
   listHref: string
+  /** Opens the order's change request; used only for such a row. */
+  handleHref: string
   onRequestConfirm: (target: ManualConfirmationTarget) => void
   onRequestCancel: (target: ManualConfirmationTarget) => void
   layout?: 'inline' | 'stacked'
@@ -53,6 +58,60 @@ export function NeedsActionRowActions({
   const confirmLabel = t('overview.needsAction.actions.manualConfirmLabel', {
     order: target.orderLabel,
   })
+  const tChange = useTranslations('dashboard.changeRequest')
+
+  if (row.changeRequest) {
+    const { contact } = row.changeRequest
+    return (
+      <div className={cn('flex items-center gap-2', inline && 'justify-end')}>
+        {!inline && (
+          <Link
+            href={handleHref}
+            className={cn(
+              akButton({ variant: 'tinted', size: 'md' }),
+              'min-w-0 flex-1'
+            )}
+          >
+            {tChange('handle')}
+          </Link>
+        )}
+        {!inline && contact && (
+          <a
+            href={contact.whatsAppUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={whatsappLabel}
+            className={akButton({ variant: 'secondary', size: 'iconMd' })}
+          >
+            <MessageCircle aria-hidden="true" />
+          </a>
+        )}
+        <DropdownMenu modal={false}>
+          <DropdownMenuTrigger asChild>
+            <button
+              type="button"
+              aria-label={tRow('more', { order: target.orderLabel })}
+              className={akButton({
+                variant: inline ? 'ghost' : 'secondary',
+                size: inline ? 'iconTable' : 'iconMd',
+              })}
+            >
+              <Ellipsis aria-hidden="true" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem asChild>
+              <Link href={handleHref} className="font-semibold">
+                <PackageX aria-hidden="true" className="size-4" />
+                {tChange('handle')}
+              </Link>
+            </DropdownMenuItem>
+            <ContactMenuItems contact={contact} />
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    )
+  }
 
   return (
     <div className={cn('flex items-center gap-2', inline && 'justify-end')}>

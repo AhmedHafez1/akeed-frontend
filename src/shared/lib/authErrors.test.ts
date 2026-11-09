@@ -5,7 +5,34 @@ import {
   isAlreadyRegistered,
   parseAuthErrorParam,
   readAuthCallbackError,
+  safeOrderReturnPath,
 } from './authErrors'
+
+describe('authenticated order return path', () => {
+  const id = '86cf9da1-71a0-4604-aa90-9da9329ed087'
+  it('preserves the protected order through sign-in without a bearer link', () => {
+    const target = `/en/verifications?open=${id}`
+    const login = getLoginRedirectPath('en', {
+      pathname: '/en/verifications',
+      search: `?open=${id}`,
+      hash: '',
+    })
+    expect(
+      new URL(login, 'https://app.example.test').searchParams.get('returnTo')
+    ).toBe(target)
+    expect(safeOrderReturnPath(target)).toBe(target)
+  })
+  it.each([
+    'https://evil.test',
+    '//evil.test/en/verifications',
+    '/en/../login?open=x',
+    '/en/verifications?open=not-an-id',
+    '/en/verifications?open=%0aLocation:evil',
+    '/en/verifications?open=x#public',
+  ])('rejects unsafe return target %s', (value) => {
+    expect(safeOrderReturnPath(value)).toBeNull()
+  })
+})
 
 describe('getAuthErrorCode', () => {
   it('reads a string code and ignores anything else', () => {

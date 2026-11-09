@@ -33,7 +33,7 @@ export interface DashboardStandaloneSkinProps {
   periodOptions: ReadonlyArray<DateRangeFilterOption>
   onPeriodChange: (period: DashboardStatsDateRange) => void
   /** The confirmations list for a tab, in the same period. */
-  confirmationsHref: (tab: ConfirmationsTab) => string
+  confirmationsHref: (tab: ConfirmationsTab, openId?: string) => string
   /** The merchant's first name for the first-run greeting. */
   firstName?: string | null
   /**
@@ -222,6 +222,9 @@ export function DashboardStandaloneSkin({
             onRequestConfirm={confirmation.request}
             onRequestCancel={setCancelTarget}
             viewAllHref={confirmationsHref('needs_action')}
+            handleHref={(verificationId) =>
+              confirmationsHref('change_requested', verificationId)
+            }
           />
           <MessageFlowCard
             funnel={overview.funnel}

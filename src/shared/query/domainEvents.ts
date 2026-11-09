@@ -28,6 +28,11 @@ export type DomainEvent =
   | 'verification.autoCancelChanged'
   /** The merchant asked for a failed store update to be tried again. */
   | 'verification.storeSyncRetried'
+  /**
+   * The merchant settled a change request, or asked for an updated
+   * confirmation; or the server said the customer settled it first.
+   */
+  | 'verification.changeRequestChanged'
   | 'verification.testSent'
   | 'credits.purchased'
   /** A file import was uploaded, re-mapped, changed or discarded. Nothing was sent. */
@@ -75,6 +80,7 @@ const AFFECTED_QUERIES: Record<DomainEvent, ReadonlyArray<QueryKey>> = {
   'verification.canceled': [queryKeys.verifications.all],
   'verification.confirmed': [queryKeys.verifications.all],
   'verification.storeSyncRetried': [queryKeys.verifications.all],
+  'verification.changeRequestChanged': [queryKeys.verifications.all],
   'verification.autoCancelChanged': [queryKeys.verifications.all],
   'verification.retried': [
     queryKeys.verifications.all,

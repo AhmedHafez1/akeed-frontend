@@ -3,6 +3,19 @@ export interface ImageTwinParent {
   key: string
   template_name: string
   language_code: string
+  change_request_of_key?: string | null
+  drifted?: boolean
+  planned?: {
+    kind: string
+    reason?: string
+    submission?: {
+      templateName: string
+      body: ({ text: string } | { parameter: string })[]
+      footer?: ({ text: string } | { parameter: string })[]
+      buttons: { text: string; kind: string }[]
+      samples: { parameter: string; sample: string }[]
+    }
+  }
   twin: {
     template_name: string
     is_active: boolean

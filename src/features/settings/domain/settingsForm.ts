@@ -46,6 +46,8 @@ export interface SettingsFormValues {
   /** Arabic style by country. Absent while the backend does not offer it. */
   codTemplateArAuto?: boolean
   acknowledgmentEnabled: boolean
+  /** Absent while the backend does not offer it, so it is never sent. */
+  changeRequestsEnabled?: boolean
   isAutoVerifyEnabled: boolean
   sendDelayChoice: SendDelayChoice
   sendDelayCustom: string
@@ -79,6 +81,9 @@ export function formFromSettings(
       ? { codTemplateArAuto: template.arabicAuto.selected }
       : {}),
     acknowledgmentEnabled: state.acknowledgmentEnabled === true,
+    ...(state.changeRequestsEnabled === undefined
+      ? {}
+      : { changeRequestsEnabled: state.changeRequestsEnabled }),
     isAutoVerifyEnabled: state.isAutoVerifyEnabled,
     sendDelayChoice: sendDelayChoiceFor(state.sendDelayMinutes),
     sendDelayCustom: String(state.sendDelayMinutes),
@@ -194,6 +199,9 @@ export function toSettingsPayload(
     storeName: values.storeName.trim(),
     defaultLanguage: values.defaultLanguage,
     acknowledgmentEnabled: values.acknowledgmentEnabled,
+    ...(values.changeRequestsEnabled === undefined
+      ? {}
+      : { changeRequestsEnabled: values.changeRequestsEnabled }),
     isAutoVerifyEnabled: values.isAutoVerifyEnabled,
     assumeCodWhenPaymentMissing: values.assumeCodWhenPaymentMissing,
     ...templateChoicesPayload(values),
@@ -252,6 +260,7 @@ const MESSAGE_TAB_FIELDS: ReadonlyArray<keyof OnboardingSettingsPayload> = [
   ]),
   'codTemplateArAuto',
   'acknowledgmentEnabled',
+  'changeRequestsEnabled',
 ]
 
 /** The standalone Store tab; the embedded app has no control for it. */

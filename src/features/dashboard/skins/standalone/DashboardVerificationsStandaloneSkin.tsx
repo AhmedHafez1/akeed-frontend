@@ -45,6 +45,10 @@ export interface DashboardVerificationsStandaloneSkinProps {
    * it belongs to the onboarding feature, which this one does not import.
    */
   phoneTestAction?: ReactNode
+  /** An order whose details open on arrival ("Handle request"). */
+  openId?: string
+  /** Clears `openId` from the URL once its details close. */
+  onCloseDetails?: () => void
 }
 
 /**
@@ -61,6 +65,8 @@ export function DashboardVerificationsStandaloneSkin({
   onTabChange,
   importBatchId,
   phoneTestAction,
+  openId,
+  onCloseDetails,
 }: DashboardVerificationsStandaloneSkinProps) {
   const t = useTranslations('dashboard')
   const tabIdPrefix = useId()
@@ -85,7 +91,7 @@ export function DashboardVerificationsStandaloneSkin({
     row: VerificationItem
     orderLabel: string
   } | null>(null)
-  const [detailsId, setDetailsId] = useState<string | null>(null)
+  const [detailsId, setDetailsId] = useState<string | null>(openId ?? null)
   // Looked up on every render so the sheet follows the row as it updates.
   const detailsRow = list.rows.find((row) => row.id === detailsId) ?? null
 
@@ -361,7 +367,11 @@ export function DashboardVerificationsStandaloneSkin({
       <VerificationDetailsSheet
         verification={detailsRow}
         timeZone={list.reportingTimezone}
-        onClose={() => setDetailsId(null)}
+        onClose={() => {
+          setDetailsId(null)
+          if (openId) onCloseDetails?.()
+        }}
+        canActOnChangeRequest={list.canWrite}
         canRetrySync={list.canWrite}
         retryingSyncId={storeSync.retryingId}
         onRetrySync={(row) => void handleRetryStoreSync(row)}

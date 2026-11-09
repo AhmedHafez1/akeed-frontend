@@ -46,6 +46,8 @@ export function MainEmbeddedSkin() {
   const activeTab = resolveMainTab(searchParams.get('tab'))
   const period = resolveDashboardRange(searchParams.get('range'))
   const confirmationsTab = resolveConfirmationsTab(searchParams.get('filter'))
+  /** An order whose details open on arrival ("Handle request"). */
+  const openId = searchParams.get('open') ?? undefined
 
   const activation = useDashboardActivation()
   const showActivation = activation.isLoaded && activation.isFirstRun
@@ -185,6 +187,13 @@ export function MainEmbeddedSkin() {
                 onViewNeedsAction={() =>
                   updateParams({ tab: 'confirmations', filter: 'needs_action' })
                 }
+                onHandleChangeRequest={(verificationId) =>
+                  updateParams({
+                    tab: 'confirmations',
+                    filter: 'change_requested',
+                    open: verificationId,
+                  })
+                }
               />
             )
           ) : (
@@ -199,8 +208,13 @@ export function MainEmbeddedSkin() {
               tab={confirmationsTab}
               onEditSettings={activation.openQuietHours}
               onTabChange={(next) =>
-                updateParams({ filter: next === 'all' ? null : next })
+                updateParams({
+                  filter: next === 'all' ? null : next,
+                  open: null,
+                })
               }
+              openId={openId}
+              onCloseDetails={() => updateParams({ open: null })}
             />
           )}
         </BlockStack>

@@ -126,3 +126,9 @@ Sur un forfait Shopify payant, le bandeau propose aussi un bouton de renouvellem
 Dans la section d’automatisation de vos paramètres.
 
 Voir aussi : [Règles d’automatisation](/docs/automation-rules)
+
+## E-mail pour les demandes de modification
+
+Lorsqu’un client demande une modification et que cette fonction est activée, la demande reste dans la liste des actions requises, même sans messages WhatsApp disponibles ou si une notification échoue. Akeed programme un seul e-mail initial vers l’adresse de notification existante ou, à défaut, vers le propriétaire du compte. Il indique la boutique, la commande, son origine et la date de la demande, avec un lien vers la commande dans le tableau de bord après connexion. Il ne consomme aucun message WhatsApp. Aucun e-mail de rappel ni alerte WhatsApp au marchand n’est ajouté.
+
+Shopify reçoit le tag Akeed: Change Requested tant que la demande est ouverte. Il est retiré après résolution ou envoi réussi d’une confirmation actualisée, sans supprimer les autres tags. Il s’agit d’un avertissement, pas d’un blocage du traitement. WooCommerce et EasyOrders conservent leurs paramètres de synchronisation et les résultats pris en charge. Les commandes indépendantes suivent le même parcours dans Akeed sans mise à jour d’une boutique externe. En cas d’échec de l’e-mail ou de la mise à jour, consultez l’avertissement et continuez à traiter la demande dans Akeed.

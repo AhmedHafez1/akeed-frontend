@@ -35,6 +35,7 @@ import { LogoCard } from './LogoCard'
 import { MessagePreviewPanel } from './MessagePreviewPanel'
 import { TestPhoneDialog } from './TestPhoneDialog'
 import { SettingsHelp } from './SettingsHelp'
+import { ChangeRequestsCard } from './ChangeRequestsCard'
 import { ThankYouMessagesCard } from './ThankYouMessagesCard'
 
 interface MessageTabProps {
@@ -414,6 +415,17 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
           sample={sample}
           automaticStyle={isAuto}
         />
+        {values.changeRequestsEnabled !== undefined && (
+          <ChangeRequestsCard
+            checked={values.changeRequestsEnabled}
+            ready={data.state.changeRequestReadiness?.ready === true}
+            variants={data.state.changeRequestReadiness?.variants}
+            onChange={(changeRequestsEnabled) =>
+              model.update({ changeRequestsEnabled })
+            }
+            readOnly={readOnly}
+          />
+        )}
       </div>
 
       <MessagePreviewPanel

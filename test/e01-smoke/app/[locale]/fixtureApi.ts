@@ -5,7 +5,7 @@ import type {
   VerificationStatus,
 } from '@/features/dashboard/model/dashboard.model'
 import type { CancelOrderResponse } from '@/shared/types/commerce-outcome.model'
-import { ApiError } from '@/shared/lib/http'
+import { ApiError, createApiError } from '@/shared/lib/http'
 import { tipsFixtureRequest } from './tipsFixture'
 
 import { billingFixtureRequest } from './billingFixture'
@@ -59,6 +59,14 @@ function usesWhatsappFixture() {
 }
 
 export function fetchWithAuth(url: string, options: RequestInit = {}) {
+  if (
+    typeof window !== 'undefined' &&
+    window.location.pathname.includes('/admin-template-preparation')
+  ) {
+    if (!url.startsWith('/api/admin/templates'))
+      throw new Error('Unexpected admin fixture request')
+    return fetch(url, options)
+  }
   if (isFirstRunFixture()) return firstRunFetch(url, options)
   if (isSettingsBillingFixture()) return settingsBillingFetch(url, options)
   if (url.startsWith('/api/onboarding/'))
@@ -331,6 +339,8 @@ export const api = {
     throw new Error(`Blocked fixture PATCH: ${url}`)
   },
   async get<T>(url: string): Promise<T> {
+    if (isIntegratedChangeRequest(url))
+      return integratedChangeRequest<T>('GET', url)
     if (url.startsWith('/api/tips')) return tipsFixtureRequest<T>('GET', url)
     if (isWhatsappSenderUrl(url) && usesWhatsappFixture())
       return whatsappSenderRequest<T>('GET', url)
@@ -408,6 +418,8 @@ export const api = {
         expiresAt: new Date(Date.now() + 600_000).toISOString(),
       } as T
     }
+    if (isIntegratedChangeRequest(url))
+      return integratedChangeRequest<T>('POST', url, data)
     if (isEmbeddedDashboardFixture())
       return embeddedDashboardRequest<T>('POST', url, data)
     if (isOrderSyncFixture()) return orderSyncRequest<T>('POST', url, data)
@@ -487,4 +499,30 @@ export const api = {
     } satisfies CancelOrderResponse
     return response as T
   },
+}
+
+function isIntegratedChangeRequest(url: string) {
+  return (
+    typeof window !== 'undefined' &&
+    new URLSearchParams(window.location.search).get('scenario') ===
+      'integrated' &&
+    /^\/api\/verifications(?:[/?]|$)/.test(url)
+  )
+}
+
+async function integratedChangeRequest<T>(
+  method: 'GET' | 'POST',
+  url: string,
+  data?: unknown
+): Promise<T> {
+  const response = await fetch('/cr05-api' + url, {
+    method,
+    headers: {
+      Authorization: 'Bearer cr05-browser',
+      'Content-Type': 'application/json',
+    },
+    ...(data === undefined ? {} : { body: JSON.stringify(data) }),
+  })
+  if (!response.ok) throw await createApiError(response)
+  return response.json() as Promise<T>
 }

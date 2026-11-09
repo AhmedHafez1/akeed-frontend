@@ -23,6 +23,7 @@ npm run lint           # ESLint (flat config)
 npx prettier --check --end-of-line crlf <files> # Check touched code
 npx prettier --write --end-of-line crlf <files> # Format touched code only
 npx tsc --noEmit       # Type-check without emitting
+npm run typecheck      # Check the production app and the separate smoke app
 npm run shopify:dev    # Shopify embedded app dev
 ```
 
@@ -41,6 +42,8 @@ Embedded components render inside Polaris `AppProvider` and `NextIntlClientProvi
 with the real message files (see `renderEmbedded` in
 `src/features/dashboard/skins/embedded/components/embeddedTestUtils.tsx`).
 Validate code changes with `npx tsc --noEmit`, `npm run lint`, and relevant Vitest tests. Run a production build when the change needs build or route verification; it is unnecessary for skill-only documentation edits. See the shared localization skill for isolated build output and preserving existing `tsconfig.json` edits.
+
+The production TypeScript project excludes `test/e01-smoke`, which is a separate Next.js app with its own generated route globals. Use `npm run typecheck` to check both projects, or `npm run smoke:e02:typecheck` for the fixture alone. Do not import the fixture's `next-env.d.ts` into the root project: its `LayoutProps` and route declarations conflict with the production app's generated types. Keep production `.next/types` and `.next/dev/types` validation enabled.
 
 ## Project Overview
 

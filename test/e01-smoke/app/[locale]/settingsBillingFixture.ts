@@ -25,6 +25,7 @@ import { ApiError } from '@/shared/lib/http'
  *   save=fail        PATCH /api/settings answers 500
  *   usage=unavailable  the per-send usage read fails
  *   wa=...           the WhatsApp sender (see whatsappSenderFixture.ts)
+ *   cr=unready       Request a change has no approved messages yet
  *
  * Saving keeps the new values for the page's lifetime. Nothing leaves the
  * browser.
@@ -320,6 +321,11 @@ function settings(): SettingsResponse {
       storeName: 'Zam',
       defaultLanguage: 'auto',
       isAutoVerifyEnabled: true,
+      changeRequestsEnabled: false,
+      changeRequestReadiness: {
+        ready:
+          new URLSearchParams(window.location.search).get('cr') !== 'unready',
+      },
       assumeCodWhenPaymentMissing: false,
       shippingCurrency: 'EGP',
       avgShippingCost: 60,

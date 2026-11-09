@@ -31,6 +31,8 @@ const BACKEND_CODES = [
   'WHATSAPP_TEMPLATE_DRAFT_NOT_EDITABLE',
   'WHATSAPP_TEMPLATE_DRAFT_NAME_TAKEN',
   'WHATSAPP_TEMPLATE_DRAFT_INVALID',
+  'WHATSAPP_TEMPLATE_DRAFT_IDENTITY_FIXED',
+  'WHATSAPP_TEMPLATE_CHANGE_REQUEST_NOT_SELECTABLE',
   'WHATSAPP_TEMPLATE_SUBMIT_IN_PROGRESS',
   'WHATSAPP_TEMPLATE_SUBMIT_UNRESOLVED',
   'WHATSAPP_TEMPLATE_SUBMIT_REJECTED',
@@ -93,6 +95,8 @@ const VALIDATION_RULES = [
   'button_labels_identical',
   'button_count',
   'button_order',
+  'change_label_fixed',
+  'change_link_required',
 ] as const
 
 /** `TemplateSubmissionErrorCode` in the backend's template catalog port. */

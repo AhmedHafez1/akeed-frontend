@@ -24,6 +24,8 @@ function StandaloneVerificationsPageContent() {
         tab={url.tab}
         onTabChange={url.onTabChange}
         importBatchId={url.importBatchId}
+        openId={url.openId}
+        onCloseDetails={url.onCloseDetails}
         phoneTestAction={<SendTestToPhoneAction variant="outline" />}
       />
       {/* "استيراد من ملف" in the top bar opens it through the URL. */}

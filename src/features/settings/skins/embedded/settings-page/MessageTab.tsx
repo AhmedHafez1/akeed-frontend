@@ -38,6 +38,7 @@ import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { MessagePreviewCard } from './MessagePreviewCard'
 import { StoreLogoField } from './StoreLogoField'
 import { SettingsHelp } from './SettingsHelp'
+import { ChangeRequestsCard } from './ChangeRequestsCard'
 import { ThankYouMessagesCard } from './ThankYouMessagesCard'
 
 /** Choice values that are not a template style. */
@@ -366,6 +367,17 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
           sample={sample}
           automaticStyle={isAuto}
         />
+        {values.changeRequestsEnabled !== undefined && (
+          <ChangeRequestsCard
+            checked={values.changeRequestsEnabled}
+            ready={data.state.changeRequestReadiness?.ready === true}
+            variants={data.state.changeRequestReadiness?.variants}
+            onChange={(changeRequestsEnabled) =>
+              model.update({ changeRequestsEnabled })
+            }
+            readOnly={readOnly}
+          />
+        )}
       </BlockStack>
 
       {/* Stays in view while the settings beside it scroll. */}

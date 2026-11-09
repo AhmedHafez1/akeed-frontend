@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowRight, CheckCircle2 } from 'lucide-react'
+import { AlertTriangle, ArrowRight, CheckCircle2, PackageX } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
@@ -50,6 +50,8 @@ interface RowProps {
   onRequestConfirm: (target: ManualConfirmationTarget) => void
   onRequestCancel: (target: ManualConfirmationTarget) => void
   listHref: string
+  /** Where "Handle request" opens this order's change request. */
+  handleHref: (verificationId: string) => string
 }
 
 /** Everything a row and a card show, from one item. */
@@ -90,10 +92,57 @@ function NeedsActionStatus({
 }: {
   row: ReturnType<typeof useNeedsActionRow>
 }) {
+  const t = useTranslations('dashboard.changeRequest')
+  if (row.changeRequest)
+    return (
+      <span className="inline-flex max-w-full items-center gap-1.5">
+        <StatusBadge kind="needsAction" icon={PackageX} title={t('dontShip')}>
+          {row.badgeText}
+        </StatusBadge>
+        {row.changeRequest.ackMissing && (
+          <span title={t('ackMissing')} className="text-ak-danger inline-flex">
+            <AlertTriangle aria-hidden="true" className="size-4" />
+            <span className="sr-only">{t('ackMissing')}</span>
+          </span>
+        )}
+      </span>
+    )
   return (
     <StatusBadge kind={row.status.kind} icon={false} title={row.reasonText}>
       {row.badgeText}
     </StatusBadge>
+  )
+}
+
+/** The card's line under the status: why the order waits. */
+function NeedsActionReasonLine({
+  row,
+}: {
+  row: ReturnType<typeof useNeedsActionRow>
+}) {
+  const t = useTranslations('dashboard.changeRequest')
+  if (!row.changeRequest)
+    return (
+      <p className="text-ak-caption text-ink-muted max-w-full truncate">
+        {row.reasonText}
+      </p>
+    )
+  return (
+    <>
+      <p className="text-ak-caption text-ak-danger flex items-center gap-1.5 font-semibold">
+        <PackageX aria-hidden="true" className="size-3.5 shrink-0" />
+        {row.reasonText}
+      </p>
+      {row.changeRequest.ackMissing && (
+        <p className="text-ak-caption text-ak-danger flex items-start gap-1.5">
+          <AlertTriangle
+            aria-hidden="true"
+            className="mt-0.5 size-3.5 shrink-0"
+          />
+          {t('ackMissing')}
+        </p>
+      )}
+    </>
   )
 }
 
@@ -128,6 +177,7 @@ function TableRow(props: RowProps) {
           target={target}
           customerLabel={name ?? phone}
           listHref={props.listHref}
+          handleHref={props.handleHref(props.item.verification_id)}
           onRequestConfirm={props.onRequestConfirm}
           onRequestCancel={props.onRequestCancel}
         />
@@ -144,7 +194,8 @@ function CardRow(props: RowProps) {
       className={cn(
         CARD_ROW,
         NEEDS_ACTION_ROW,
-        'border-ak-warning border-s-[3px]'
+        'border-s-[3px]',
+        row.changeRequest ? 'border-ak-danger' : 'border-ak-warning'
       )}
     >
       <div className="flex items-center justify-between gap-3">
@@ -154,9 +205,7 @@ function CardRow(props: RowProps) {
       <CustomerCell name={name} phone={phone} />
       <div className="flex min-w-0 flex-col items-start gap-1.5">
         <NeedsActionStatus row={row} />
-        <p className="text-ak-caption text-ink-muted max-w-full truncate">
-          {row.reasonText}
-        </p>
+        <NeedsActionReasonLine row={row} />
       </div>
       <CardTimes {...times} />
       <NeedsActionRowActions
@@ -164,6 +213,7 @@ function CardRow(props: RowProps) {
         target={target}
         customerLabel={name ?? phone}
         listHref={props.listHref}
+        handleHref={props.handleHref(props.item.verification_id)}
         onRequestConfirm={props.onRequestConfirm}
         onRequestCancel={props.onRequestCancel}
         layout="stacked"
@@ -176,12 +226,12 @@ function CardRow(props: RowProps) {
 const HEADINGS = [
   ['order', 'w-[10%]'],
   ['orderTime', 'w-[13%]'],
-  ['customer', 'w-[17%]'],
+  ['customer', 'w-[15%]'],
   ['phone', 'w-[15%]'],
-  ['status', 'w-[14%]'],
-  ['updated', 'w-[13%]'],
+  ['status', 'w-[18%]'],
+  ['updated', 'w-[12%]'],
   ['total', 'w-[10%] text-end'],
-  ['action', 'w-[8%] text-end'],
+  ['action', 'w-[7%] text-end'],
 ] as const
 
 /**
@@ -196,6 +246,7 @@ export function NeedsActionCard({
   onRequestConfirm,
   onRequestCancel,
   viewAllHref,
+  handleHref,
 }: {
   needsAction: DashboardOverview['needs_action']
   timeZone: string
@@ -203,18 +254,24 @@ export function NeedsActionCard({
   onRequestConfirm: (target: ManualConfirmationTarget) => void
   onRequestCancel: (target: ManualConfirmationTarget) => void
   viewAllHref: string
+  handleHref: (verificationId: string) => string
 }) {
   const t = useTranslations('dashboard.overview.needsAction')
   const tCard = useTranslations('dashboard.standalone.needsAction')
   const tHeadings = useTranslations('dashboard.confirmations.headings')
+  const tChange = useTranslations('dashboard.changeRequest')
   const items = needsAction.items.slice(0, NEEDS_ACTION_CARD_LIMIT)
   const hasItems = items.length > 0
+  const hasChangeRequest = items.some(
+    (item) => item.reason.type === 'change_requested'
+  )
   const rowProps = {
     timeZone,
     canAct: canConfirm,
     onRequestConfirm,
     onRequestCancel,
     listHref: viewAllHref,
+    handleHref,
   }
 
   return (
@@ -253,6 +310,20 @@ export function NeedsActionCard({
         </div>
       ) : (
         <>
+          {hasChangeRequest && (
+            <div
+              role="note"
+              className="bg-ak-danger-soft text-ak-danger border-line flex items-start gap-2.5 border-b px-4 py-3 md:px-6"
+            >
+              <PackageX
+                aria-hidden="true"
+                className="mt-0.5 size-4 shrink-0 md:size-4.5"
+              />
+              <p className="text-ak-caption md:text-ak-body font-semibold">
+                {tChange('doNotShipStrip')}
+              </p>
+            </div>
+          )}
           <div className="hidden overflow-x-auto md:block">
             <table className={cn(TABLE, 'min-w-270')}>
               <caption className="sr-only">{t('title')}</caption>

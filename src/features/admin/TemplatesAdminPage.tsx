@@ -1,6 +1,8 @@
 'use client'
 
 import Link from 'next/link'
+import { useState } from 'react'
+import { ChangePreparationPanel } from './ChangePreparationPanel'
 import { MessageSquareText, RefreshCw } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
@@ -79,6 +81,7 @@ function SyncResult({ run }: { run: TemplateSyncRun }) {
 }
 
 export function TemplatesAdminPage() {
+  const [draftRevision, setDraftRevision] = useState(0)
   const t = useTranslations('adminTemplates')
   const { isRTL, locale } = useLocaleInfo()
   const state = useAdminTemplates()
@@ -155,7 +158,15 @@ export function TemplatesAdminPage() {
         />
       )}
 
-      <TemplateDraftsPanel />
+      {state.page && (
+        <ChangePreparationPanel
+          operator={
+            !!state.page?.operations.enabled && !!state.page.operations.operator
+          }
+          onPrepared={() => setDraftRevision((value) => value + 1)}
+        />
+      )}
+      <TemplateDraftsPanel key={draftRevision} />
 
       <ImageTwinsPanel
         operator={

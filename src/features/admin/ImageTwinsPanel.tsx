@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Badge, Button } from '@/shared/ui'
-import { TemplateErrorNotice } from './TemplateAdminUi'
+import { TemplateErrorNotice, TemplateStatusBadge } from './TemplateAdminUi'
+import type { TemplateReviewStatus } from './admin-templates.model'
 import { TemplateConfirmDialog, TemplateNotice } from './TemplateWriteUi'
 import {
   imageTwinCounts,
@@ -128,6 +129,77 @@ export function ImageTwinsPanel({ operator }: { operator: boolean }) {
             <TemplateNotice tone="warning" title={t('notConfigured')} />
           )}
           <p className="text-muted-foreground text-xs">{t('reviewNote')}</p>
+          <p className="text-warning-subtle-foreground text-xs">
+            {t('liveAction')}
+          </p>
+          {page.parents.map((parent) => (
+            <details key={parent.key} className="border-border border-t pt-3">
+              <summary
+                className="focus-visible:ring-ring rounded-control cursor-pointer font-mono text-xs break-all focus-visible:ring-2"
+                dir="ltr"
+              >
+                {parent.key}
+              </summary>
+              <div className="mt-3 space-y-2 text-sm">
+                <p className="font-mono text-xs break-all" dir="ltr">
+                  {parent.twin?.template_name ??
+                    parent.planned?.submission?.templateName ??
+                    `${parent.template_name}_logo`}{' '}
+                  [{parent.language_code}] · IMAGE
+                </p>
+                {parent.change_request_of_key && (
+                  <p className="font-mono text-xs break-all" dir="ltr">
+                    {parent.change_request_of_key}
+                  </p>
+                )}
+                {parent.twin && (
+                  <TemplateStatusBadge
+                    status={
+                      parent.twin.review_status as TemplateReviewStatus | null
+                    }
+                  />
+                )}
+                {parent.drifted && (
+                  <p role="status" className="text-destructive">
+                    {t('drifted')}
+                  </p>
+                )}
+                {parent.planned?.reason && (
+                  <p className="text-muted-foreground text-xs">
+                    {parent.planned.reason}
+                  </p>
+                )}
+                {parent.planned?.submission && (
+                  <>
+                    <p className="whitespace-pre-wrap">
+                      {parent.planned.submission.body
+                        .map((segment) =>
+                          'text' in segment
+                            ? segment.text
+                            : `{{${segment.parameter}}}`
+                        )
+                        .join('')}
+                    </p>
+                    <ol className="list-decimal ps-5">
+                      {parent.planned.submission.buttons.map(
+                        (button, index) => (
+                          <li key={index}>{button.text}</li>
+                        )
+                      )}
+                    </ol>
+                    <dl dir="ltr" className="text-xs">
+                      {parent.planned.submission.samples.map((sample) => (
+                        <div key={sample.parameter} className="flex gap-2">
+                          <dt>{sample.parameter}</dt>
+                          <dd>{sample.sample}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </>
+                )}
+              </div>
+            </details>
+          ))}
         </>
       )}
 

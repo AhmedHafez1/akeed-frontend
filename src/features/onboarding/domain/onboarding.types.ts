@@ -90,6 +90,21 @@ export interface IntegrationOnboardingState {
   defaultLanguage: IntegrationOnboardingLanguage
   isAutoVerifyEnabled: boolean
   acknowledgmentEnabled?: boolean
+  /** "Request a change" on future messages. Absent from an older backend. */
+  changeRequestsEnabled?: boolean
+  /**
+   * Whether the store's sender has an approved three-button message for the
+   * selected languages and styles. Only `ready` is shown.
+   */
+  changeRequestReadiness?: {
+    ready: boolean
+    variants?: {
+      ready: boolean
+      reason: string | null
+      sender: string
+      branding_supported?: boolean
+    }[]
+  }
   assumeCodWhenPaymentMissing: boolean
   shippingCurrency: string
   /** The latest real order's currency, which a message preview writes. */
@@ -219,6 +234,7 @@ export interface OnboardingSettingsPayload {
   defaultLanguage: IntegrationOnboardingLanguage
   isAutoVerifyEnabled: boolean
   acknowledgmentEnabled?: boolean
+  changeRequestsEnabled?: boolean
   assumeCodWhenPaymentMissing?: boolean
   shippingCurrency?: string
   avgShippingCost?: number

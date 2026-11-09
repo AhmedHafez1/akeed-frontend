@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { BlockStack, Button, InlineStack, Modal } from '@shopify/polaris'
-import { CheckIcon, MenuHorizontalIcon } from '@shopify/polaris-icons'
+import { ChatIcon, CheckIcon, MenuHorizontalIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import type { NeedsActionRowModel } from '../../../../domain/needsActionRow'
 import type { ManualConfirmationTarget } from '../../../../domain/useManualConfirmation'
@@ -21,6 +21,7 @@ export function NeedsActionRowActions({
   customerLabel,
   onRequestConfirm,
   onViewAll,
+  onHandle,
   layout = 'inline',
 }: {
   row: NeedsActionRowModel
@@ -28,6 +29,8 @@ export function NeedsActionRowActions({
   customerLabel: string
   onRequestConfirm: (target: ManualConfirmationTarget) => void
   onViewAll: () => void
+  /** Opens the order's change request; used only for such a row. */
+  onHandle: () => void
   layout?: 'inline' | 'stacked'
 }) {
   const t = useTranslations('dashboard')
@@ -43,6 +46,68 @@ export function NeedsActionRowActions({
   const closeThen = (action: () => void) => () => {
     setIsSheetOpen(false)
     action()
+  }
+  const tChange = useTranslations('dashboard.changeRequest')
+
+  if (row.changeRequest) {
+    const { contact } = row.changeRequest
+    return (
+      <InlineStack gap="200" wrap={false} blockAlign="center">
+        {isStacked && (
+          <div className="min-w-0 flex-1">
+            <Button variant="primary" fullWidth onClick={onHandle}>
+              {tChange('handle')}
+            </Button>
+          </div>
+        )}
+        {isStacked && contact && (
+          <Button
+            icon={ChatIcon}
+            url={contact.whatsAppUrl}
+            target="_blank"
+            accessibilityLabel={whatsappLabel}
+          />
+        )}
+        <Button
+          icon={MenuHorizontalIcon}
+          accessibilityLabel={tRow('more', { order: target.orderLabel })}
+          onClick={() => setIsSheetOpen(true)}
+        />
+        <Modal
+          open={isSheetOpen}
+          onClose={() => setIsSheetOpen(false)}
+          title={t('confirmations.actions.menuTitle', {
+            order: target.orderLabel,
+          })}
+          size="small"
+          secondaryActions={[
+            {
+              content: t('confirmations.actions.close'),
+              onAction: () => setIsSheetOpen(false),
+            },
+          ]}
+        >
+          <Modal.Section>
+            <BlockStack gap="200">
+              <Button variant="primary" fullWidth onClick={closeThen(onHandle)}>
+                {tChange('handle')}
+              </Button>
+              <Button
+                fullWidth
+                disabled={!contact}
+                url={contact?.whatsAppUrl}
+                target="_blank"
+              >
+                {tChange('openWhatsapp')}
+              </Button>
+              <Button fullWidth disabled={!contact} url={contact?.callUrl}>
+                {tChange('call')}
+              </Button>
+            </BlockStack>
+          </Modal.Section>
+        </Modal>
+      </InlineStack>
+    )
   }
 
   return (
