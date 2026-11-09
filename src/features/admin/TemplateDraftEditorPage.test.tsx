@@ -95,6 +95,40 @@ beforeEach(() => {
 })
 
 describe('TemplateDraftsPanel', () => {
+  it.each([
+    ['ar', 'طلب تعديل'],
+    ['en', 'Request a change'],
+    ['ur', 'تبدیلی کی درخواست'],
+    ['es', 'Solicitar un cambio'],
+    ['fr', 'Demander une modification'],
+    ['tr', 'Değişiklik iste'],
+  ] as const)(
+    'preserves the fixed third label and source relationship for %s',
+    async (language, label) => {
+      const draft = templateDraft({
+        language,
+        change_label: label,
+        change_request_of_key: `cod_confirm.${language}.short`,
+        preview: {
+          paragraphs: ['Order TEST-1'],
+          direction: language === 'ar' || language === 'ur' ? 'rtl' : 'ltr',
+          buttons: [
+            { label: 'Confirm', kind: 'quick_reply' },
+            { label: 'Cancel', kind: 'quick_reply' },
+            { label, kind: 'quick_reply' },
+          ],
+        },
+      })
+      showDraft(draft)
+      const third = (await screen.findByLabelText(
+        'Request a change label'
+      )) as HTMLInputElement
+      expect(third.value).toBe(label)
+      expect(third.readOnly).toBe(true)
+      expect(screen.getByText(draft.change_request_of_key!)).toBeTruthy()
+      expect(screen.getAllByText(label).length).toBeGreaterThan(0)
+    }
+  )
   it('lists drafts and offers a new one to an operator, naming the environment', async () => {
     vi.mocked(getTemplateDrafts).mockResolvedValue(
       templateDraftList([

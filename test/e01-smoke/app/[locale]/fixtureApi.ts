@@ -59,6 +59,14 @@ function usesWhatsappFixture() {
 }
 
 export function fetchWithAuth(url: string, options: RequestInit = {}) {
+  if (
+    typeof window !== 'undefined' &&
+    window.location.pathname.includes('/admin-template-preparation')
+  ) {
+    if (!url.startsWith('/api/admin/templates'))
+      throw new Error('Unexpected admin fixture request')
+    return fetch(url, options)
+  }
   if (isFirstRunFixture()) return firstRunFetch(url, options)
   if (isSettingsBillingFixture()) return settingsBillingFetch(url, options)
   if (url.startsWith('/api/onboarding/'))

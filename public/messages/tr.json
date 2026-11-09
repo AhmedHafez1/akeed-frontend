@@ -1643,7 +1643,9 @@
       "noteAckPlan": "Akeed, alındığını onaylamak için bir kez yanıt verir (planınızdan 1 mesaj).",
       "noteShopify": "Shopify siparişlerine etiket eklenir, gönderim bekletilmez.",
       "noteOff": "Kapatmak yalnızca yeni mesajları etkiler.",
-      "saveUnavailable": "Değişiklik iste henüz kullanılamıyor. Daha sonra tekrar deneyin."
+      "saveUnavailable": "Değişiklik iste henüz kullanılamıyor. Daha sonra tekrar deneyin.",
+      "brandingUnavailable": "Logolu üç düğmeli mesajlar kullanılamıyor. Logo görselini ve eşleşen onaylı görsel şablonlarını kontrol edin. Güvenli alternatif onay akışı kullanılmaya devam eder.",
+      "ownNumberText": "Kendi WhatsApp numaranız yalnızca metin gönderir. Kayıtlı bir logo değişiklik isteğini kullanmanızı engellemez."
     },
     "thankYou": {
       "heading": "Teşekkür mesajları",

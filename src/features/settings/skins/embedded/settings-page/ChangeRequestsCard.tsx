@@ -24,11 +24,17 @@ export function ChangeRequestsCard({
   ready,
   onChange,
   readOnly,
+  variants,
 }: {
   checked: boolean
   ready: boolean
   onChange: (checked: boolean) => void
   readOnly: boolean
+  variants?: {
+    ready: boolean
+    reason: string | null
+    branding_supported?: boolean
+  }[]
 }) {
   const t = useTranslations('settings.changeRequests')
   const blocked = !ready && !checked
@@ -51,16 +57,27 @@ export function ChangeRequestsCard({
             onChange={onChange}
             helpText={t('description')}
           />
-          {blocked && (
+          {!ready && (
             <InlineGrid columns="20px 1fr" gap="100" alignItems="center">
               <Icon source={ClockIcon} tone="caution" />
               <Text as="p" variant="bodySm" tone="caution">
-                {t('notAvailableYet')}
+                {variants?.some(
+                  (v) =>
+                    v.reason === 'change_image_twin_unavailable' ||
+                    v.reason === 'logo_banner_unavailable'
+                )
+                  ? t('brandingUnavailable')
+                  : t('notAvailableYet')}
               </Text>
             </InlineGrid>
           )}
         </BlockStack>
         <Divider />
+        {variants?.some((v) => v.branding_supported === false) && (
+          <Text as="p" variant="bodySm" tone="subdued">
+            {t('ownNumberText')}
+          </Text>
+        )}
         <InlineGrid columns="20px 1fr" gap="200" alignItems="start">
           <Icon source={InfoIcon} tone="subdued" />
           <BlockStack gap="150">

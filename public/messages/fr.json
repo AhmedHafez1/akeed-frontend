@@ -1643,7 +1643,9 @@
       "noteAckPlan": "Akeed répond une fois pour confirmer la réception (1 message de votre forfait).",
       "noteShopify": "Les commandes Shopify reçoivent un tag, pas une suspension du traitement.",
       "noteOff": "La désactivation ne s’applique qu’aux nouveaux messages.",
-      "saveUnavailable": "Demander une modification n’est pas encore disponible. Réessayez plus tard."
+      "saveUnavailable": "Demander une modification n’est pas encore disponible. Réessayez plus tard.",
+      "brandingUnavailable": "Les messages à trois boutons avec logo sont indisponibles. Vérifiez la bannière et les modèles avec image approuvés. La confirmation de secours reste utilisée.",
+      "ownNumberText": "Votre numéro WhatsApp envoie uniquement du texte. Un logo enregistré ne bloque pas la demande de modification."
     },
     "thankYou": {
       "heading": "Messages de remerciement",

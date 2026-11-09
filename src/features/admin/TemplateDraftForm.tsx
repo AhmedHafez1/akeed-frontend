@@ -82,7 +82,10 @@ export function TemplateDraftForm({
   const bodyRef = useRef<HTMLTextAreaElement>(null)
   const { options } = context
   const identityLocked = mode !== 'new'
-  const settingsLocked = mode === 'text' || mode === 'readonly'
+  const settingsLocked =
+    mode === 'text' ||
+    mode === 'readonly' ||
+    Boolean(form.change_request_of_key)
   const textLocked = mode === 'readonly'
   const used = draftVariables(form.body, options.variables)
   const preview = previewDraft(form)
@@ -337,7 +340,38 @@ export function TemplateDraftForm({
               />
             </Field>
           </div>
-          <p className="text-muted-foreground text-xs">{t('buttonsHint')}</p>
+          <p className="text-muted-foreground text-xs">
+            {t(
+              form.change_request_of_key ? 'changeButtonsHint' : 'buttonsHint'
+            )}
+          </p>
+          {form.change_request_of_key && (
+            <div className="space-y-2">
+              <Field
+                id="draft-change"
+                label={t('changeLabel')}
+                hint={t('changeLabelFixed')}
+              >
+                <input
+                  id="draft-change"
+                  className={templateFieldClass}
+                  dir={getMessageLanguageDirection(form.language)}
+                  readOnly
+                  value={form.change_label ?? ''}
+                />
+              </Field>
+              <TemplateIssues
+                id="draft-change-issues"
+                issues={issuesFor(validation, ['change_label'])}
+              />
+              <p className="text-muted-foreground text-sm">
+                {t('changeParent')}
+              </p>
+              <p className="font-mono text-xs break-all" dir="ltr">
+                {form.change_request_of_key}
+              </p>
+            </div>
+          )}
         </fieldset>
 
         <fieldset className="border-border bg-card space-y-4 rounded-2xl border p-5 shadow-sm">

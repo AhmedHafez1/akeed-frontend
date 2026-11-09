@@ -16,12 +16,18 @@ export function ChangeRequestsCard({
   ready,
   onChange,
   readOnly,
+  variants,
 }: {
   checked: boolean
   /** The store's sender has its approved three-button messages. */
   ready: boolean
   onChange: (checked: boolean) => void
   readOnly: boolean
+  variants?: {
+    ready: boolean
+    reason: string | null
+    branding_supported?: boolean
+  }[]
 }) {
   const t = useTranslations('settings.changeRequests')
   const id = useId()
@@ -60,17 +66,26 @@ export function ChangeRequestsCard({
         <p id={`${id}-description`} className="text-ak-caption text-ink-muted">
           {t('description')}
         </p>
-        {blocked && (
+        {!ready && (
           <p
             id={`${id}-unavailable`}
             role="status"
             className="text-ak-caption text-ak-warning flex items-center gap-1.5"
           >
             <Clock aria-hidden="true" className="size-3.5 shrink-0" />
-            {t('notAvailableYet')}
+            {variants?.some(
+              (v) =>
+                v.reason === 'change_image_twin_unavailable' ||
+                v.reason === 'logo_banner_unavailable'
+            )
+              ? t('brandingUnavailable')
+              : t('notAvailableYet')}
           </p>
         )}
       </div>
+      {variants?.some((v) => v.branding_supported === false) && (
+        <p className="text-ak-caption text-ink-muted">{t('ownNumberText')}</p>
+      )}
       <div className="border-line flex items-start gap-2 border-t pt-4">
         <Info
           aria-hidden="true"

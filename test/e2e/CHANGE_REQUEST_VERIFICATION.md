@@ -1,5 +1,13 @@
 # Change-request browser verification
 
+## Three-button admin preparation follow-up
+
+`npx playwright test --config playwright.template-preparation.config.ts` runs six real admin-component cases through the isolated smoke app on port 3096. They cover Arabic/English/Urdu/Spanish/French/Turkish message labels, immutable predecessor and third label, edited content saved before submission, actual saved-body/sample/button review, exports, and exactly one synthetic submission. Arabic uses the Arabic UI, RTL, mobile width and dark tokens. Screenshots/results live under `.tmp/template-preparation-browser`.
+
+The APIs and provider response are intercepted fixtures; no real template is submitted. This supplements the existing integrated release/browser bridge. The owner approved the desktop and Arabic mobile review boards under workspace `design/change-requests/template-preparation`; the implementation retains the existing editor/phone preview/dialog and uses expandable inventory entries for the complete source list.
+
+Production database preparation and its 23 verified text drafts/23 image plans are recorded separately in backend `test/release-evidence/change-request-template-preparation.md` and the linked JSON/Markdown exports. Application deployment, production external authentication, independent provider approvals and merchant activation remain separate.
+
 This record accompanies the cross-platform backend verification. The starting frontend snapshot was `2de7592f5db53a63aa163133d4b9b38a46dcead2`; results apply to the verification changes in the commit containing this record. Full operational rollout/rollback and the D01–D24 matrix live in the backend repository's `docs/CHANGE_REQUEST_RELEASE_RUNBOOK.md` and `test/release-evidence/change-requests.md`.
 
 ## Reproduce

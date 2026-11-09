@@ -60,7 +60,9 @@
         "failed": "Refused",
         "unresolved": "Unknown",
         "not_attempted": "Not tried"
-      }
+      },
+      "liveAction": "Create missing twins uploads a sample and submits live templates to Meta; it is not draft-only preparation.",
+      "drifted": "Image twin content differs or has not been synchronized. It is not ready to send."
     },
     "eyebrow": "WhatsApp templates",
     "title": "Templates",
@@ -362,7 +364,9 @@
       "WHATSAPP_TEMPLATE_IMAGE_TWIN_NOT_CONFIGURED": "Set META_APP_ID to create image twins. Nothing was submitted.",
       "WHATSAPP_TEMPLATE_IMAGE_TWIN_UPLOAD_FAILED": "The sample image could not be uploaded to Meta. Nothing was submitted.",
       "WHATSAPP_MESSAGE_TEXT_CONFLICT": "Another operator saved this text at the same time. Reload and try again.",
-      "WHATSAPP_MESSAGE_TEXT_INVALID": "This text does not meet the rules for its purpose."
+      "WHATSAPP_MESSAGE_TEXT_INVALID": "This text does not meet the rules for its purpose.",
+      "WHATSAPP_TEMPLATE_DRAFT_IDENTITY_FIXED": "The language code and parameter format are fixed to the original template.",
+      "WHATSAPP_TEMPLATE_CHANGE_REQUEST_NOT_SELECTABLE": "A Request a change counterpart cannot be an ordinary default or replacement."
     },
     "environment": {
       "production": "Production",
@@ -471,7 +475,11 @@
         "title": "Discard this draft?",
         "description": "The draft is removed from Akeed. Nothing is deleted at Meta.",
         "confirm": "Discard"
-      }
+      },
+      "changeLabel": "Request a change label",
+      "changeLabelFixed": "Fixed service label; cannot be customized.",
+      "changeParent": "Original template",
+      "changeButtonsHint": "Buttons in order: Confirm, Cancel, Request a change. The third label is fixed."
     },
     "validation": {
       "finding": "(contract record {finding})",
@@ -498,7 +506,9 @@
         "button_label_too_long": "A button label is at most 25 characters.",
         "button_labels_identical": "The two buttons need different labels.",
         "button_count": "A confirmation has exactly two quick replies.",
-        "button_order": "The Confirm button must come first."
+        "button_order": "The Confirm button must come first.",
+        "change_label_fixed": "Use the fixed Request a change label for this language.",
+        "change_link_required": "The third button requires its original-template relationship."
       }
     },
     "submit": {
@@ -593,6 +603,30 @@
         "permanent": "A retired template cannot be activated again",
         "done": "Retired."
       }
+    },
+    "preparation": {
+      "title": "Request a change preparation",
+      "description": "Preparation saves drafts only. Review content, variables and all three buttons before submission.",
+      "prepare": "Prepare missing drafts",
+      "preparing": "Preparing…",
+      "export": "Export review",
+      "exportJson": "Export JSON",
+      "loading": "Loading templates…",
+      "count": "Original templates: {count}",
+      "created": "Draft created",
+      "reused": "Existing record preserved",
+      "blocked": "Blocked",
+      "invalid": "Review validation findings",
+      "active": "Active",
+      "inactive": "Inactive",
+      "logo": "Logo",
+      "planned": "Planned",
+      "registered": "Registered",
+      "labelDifference": "Provider label differs from the old preview. The new draft uses the provider label.",
+      "review": "Review draft",
+      "empty": "No original templates to prepare.",
+      "ownNumber": "Merchant-owned numbers send text only and require independent approval. A configured logo does not block Request a change.",
+      "submissionBoundary": "Creating image twins uploads a sample and submits to Meta. Planned, draft and submission accepted do not mean ready to send."
     }
   },
   "adminBillingObservability": {
@@ -2778,7 +2812,9 @@
       "noteAckPlan": "Akeed replies once to confirm receipt (1 message from your plan).",
       "noteShopify": "Shopify orders get a tag, not a fulfillment hold.",
       "noteOff": "Turning off applies to new messages only.",
-      "saveUnavailable": "Request a change isn't available yet. Try again later."
+      "saveUnavailable": "Request a change isn't available yet. Try again later.",
+      "brandingUnavailable": "Branded three-button messages are unavailable. Check the logo banner and matching approved image twins. Existing safe confirmation fallback remains in use.",
+      "ownNumberText": "Your WhatsApp number sends text only. A saved logo does not prevent using Request a change."
     },
     "thankYou": {
       "heading": "Thank-you messages",
