@@ -8,6 +8,47 @@ function copy(locale: string) {
   ).dashboard.changeRequest as Record<string, string>
 }
 
+for (const locale of ['en', 'ar']) {
+  for (const skin of ['standalone', 'embedded']) {
+    for (const width of [390, 1440]) {
+      test(`fixture: ${skin} ${locale} ${width} row opens Handle request directly`, async ({
+        page,
+      }) => {
+        const t = copy(locale)
+        await page.setViewportSize({ width, height: 1000 })
+        const route =
+          skin === 'standalone'
+            ? 'standalone-confirmations?tab=change_requested'
+            : 'embedded-dashboard?tab=confirmations&filter=change_requested'
+        await page.goto(`/${locale}/${route}`)
+
+        const trigger = page.getByRole('button', {
+          name: `${t.handle}: #1131`,
+          exact: true,
+        })
+        await expect(trigger).toBeVisible()
+        await expect(page.locator('a[href*="wa.me"]')).toHaveCount(0)
+        await trigger.focus()
+        await trigger.press('Enter')
+
+        const dialog = page.getByRole('dialog')
+        await expect(dialog).toHaveCount(1)
+        await expect(
+          dialog.getByRole('button', { name: t.confirmAfter, exact: true })
+        ).toBeVisible()
+        await expect(
+          dialog.getByRole('link', { name: t.openWhatsapp, exact: true })
+        ).toHaveAttribute('href', /wa\.me/)
+        await expect(page.getByRole('menu')).toHaveCount(0)
+
+        await page.keyboard.press('Escape')
+        await expect(dialog).toHaveCount(0)
+        await expect(trigger).toBeVisible()
+      })
+    }
+  }
+}
+
 test('integrated: production panel resolves a persisted request through the guarded API', async ({
   page,
   request,
@@ -70,15 +111,21 @@ for (const locale of ['en', 'ar', 'ur', 'es', 'fr', 'tr']) {
       await expect(
         page.getByRole('link', { name: t.openWhatsapp, exact: true })
       ).toHaveAttribute('href', /wa\.me/)
-      await expect(
-        page.getByRole('link', { name: t.call, exact: true })
-      ).toHaveAttribute('href', /^tel:/)
+      const call = page.getByRole('link', { name: t.call, exact: true })
+      await expect(call).toHaveAttribute('href', /^tel:/)
+      if (skin === 'embedded') {
+        await expect(call).toHaveAttribute('target', '_blank')
+        await expect(call).toHaveAttribute('rel', 'noopener noreferrer')
+      }
       await expect(
         page.getByRole('button', { name: t.copy, exact: true })
       ).toBeVisible()
       await expect(
-        page.getByText(t.emailUnavailable, { exact: true })
+        page.getByRole('heading', { name: t.panelTitle, exact: true })
       ).toBeVisible()
+      await expect(
+        page.getByText(t.emailUnavailable, { exact: true })
+      ).toHaveCount(0)
       expect(await page.locator('html').getAttribute('dir')).toBe(
         mobile ? 'rtl' : 'ltr'
       )

@@ -766,7 +766,7 @@
       "copied": "Número copiado",
       "copyError": "No se pudo copiar el número.",
       "noPhone": "No hay un número de teléfono válido",
-      "panelTitle": "No envíes este pedido todavía",
+      "panelTitle": "Cambios solicitados por el cliente",
       "detailsDescription": "El cliente solicitó un cambio",
       "ackSent": "Cliente notificado",
       "ackSkipped": "Cliente no notificado: sin saldo",

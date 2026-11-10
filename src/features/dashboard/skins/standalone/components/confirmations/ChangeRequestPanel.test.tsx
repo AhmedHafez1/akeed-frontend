@@ -53,18 +53,18 @@ function renderPanel(
 }
 
 describe('ChangeRequestPanel', () => {
-  it('retains merchant actions and the shipping warning after email failure', () => {
+  it('keeps the title and merchant actions without the email warning after email failure', () => {
     renderPanel({
       summary: summary({
         merchant_email: { status: 'failed', reason: 'no_recipient' },
       }),
     })
     expect(
-      screen.getByText(
+      screen.queryByText(
         'The email notification could not be confirmed. This request is still available here.'
       )
-    ).toBeTruthy()
-    expect(screen.getByText('Don’t ship this order yet')).toBeTruthy()
+    ).toBeNull()
+    expect(screen.getByText('Changes requested by the customer')).toBeTruthy()
     expect(
       (
         screen.getByRole('button', {
@@ -80,10 +80,17 @@ describe('ChangeRequestPanel', () => {
     toast.error.mockReset()
   })
 
-  it('warns not to ship and offers contact links that open outside Akeed', () => {
+  it('shows only the request title above contact links that open outside Akeed', () => {
     renderPanel()
-    expect(screen.getByText('Don’t ship this order yet')).toBeTruthy()
-    expect(screen.getByText('Customer notified')).toBeTruthy()
+    expect(screen.getByText('Changes requested by the customer')).toBeTruthy()
+    const title = screen.getByRole('heading', {
+      name: 'Changes requested by the customer',
+    })
+    expect(title.parentElement?.textContent).toBe(
+      'Changes requested by the customer'
+    )
+    expect(title.parentElement?.querySelector('svg')).toBeNull()
+    expect(screen.queryByText('Customer notified')).toBeNull()
     expect(
       screen.getByRole('link', { name: 'Open WhatsApp' }).getAttribute('href')
     ).toBe('https://wa.me/201001234567')
@@ -102,14 +109,26 @@ describe('ChangeRequestPanel', () => {
       ).toBe(true)
   })
 
-  it('says when the customer was not told the request arrived', () => {
-    renderPanel({
-      summary: summary({
-        acknowledgment: { status: 'skipped', reason: 'skipped_no_allowance' },
-      }),
-    })
-    expect(screen.getByText('Customer not notified: no balance')).toBeTruthy()
-  })
+  it.each(['skipped', 'failed'] as const)(
+    'hides the %s acknowledgment notice',
+    (status) => {
+      renderPanel({
+        summary: summary({
+          acknowledgment: { status, reason: 'skipped_no_allowance' },
+        }),
+      })
+      expect(screen.queryByText('Customer not notified: no balance')).toBeNull()
+      expect(
+        screen.queryByText('Customer not notified: not delivered')
+      ).toBeNull()
+      const title = screen.getByRole('heading', {
+        name: 'Changes requested by the customer',
+      })
+      expect(title.parentElement?.textContent).toBe(
+        'Changes requested by the customer'
+      )
+    }
+  )
 
   it('confirms in one tap, naming the request the page showed', async () => {
     auth.api.post.mockResolvedValue({ success: true, status: 'confirmed' })
@@ -245,7 +264,7 @@ describe('ChangeRequestPanel', () => {
 
   it('reads right to left in Arabic', () => {
     renderPanel({ lang: 'ar' })
-    expect(screen.getByText('لا تشحن هذا الطلب الآن')).toBeTruthy()
+    expect(screen.getByText('تغييرات طلبها العميل')).toBeTruthy()
     expect(document.documentElement.dir).toBe('rtl')
   })
 })

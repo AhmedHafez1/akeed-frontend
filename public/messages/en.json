@@ -1935,7 +1935,7 @@
       "copied": "Number copied",
       "copyError": "Couldn’t copy the number.",
       "noPhone": "No valid phone number",
-      "panelTitle": "Don’t ship this order yet",
+      "panelTitle": "Changes requested by the customer",
       "detailsDescription": "The customer requested a change",
       "ackSent": "Customer notified",
       "ackSkipped": "Customer not notified: no balance",

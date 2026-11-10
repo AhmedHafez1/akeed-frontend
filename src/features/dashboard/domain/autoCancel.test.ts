@@ -73,6 +73,40 @@ describe('autoCancelMarker', () => {
     expect(autoCancelMarker(row({ status: 'canceled' }))).toBeNull()
     expect(autoCancelMarker(row({ auto_cancel: null }))).toBeNull()
   })
+
+  it.each([
+    view(),
+    view({ state: 'projected' }),
+    view({ state: 'paused', reason: 'reminder_blocked' }),
+    view({ state: 'stopped', excluded: true }),
+    view({ state: 'in_progress' }),
+    view({ state: 'awaiting_platform' }),
+    view({ state: 'failed' }),
+  ])(
+    'hides stale auto-cancel data for an open change request: %j',
+    (autoCancel) => {
+      expect(
+        autoCancelMarker(
+          row({
+            status: 'read',
+            action_reason: 'change_requested',
+            auto_cancel: autoCancel,
+            change_request: {
+              id: 'cr-1',
+              opened_at: AT,
+              confirmation_cycle: 1,
+              acknowledgment: { status: 'done', reason: null },
+              reconfirmation: {
+                state: null,
+                scheduled_for: null,
+                last_error: null,
+              },
+            },
+          })
+        )
+      ).toBeNull()
+    }
+  )
 })
 
 describe('auto-cancel row action', () => {
