@@ -104,6 +104,20 @@ function renderPage(tab: string | null = 'message') {
   return { ...view, goTo }
 }
 
+function styleSelect() {
+  return screen.getByRole('combobox', {
+    name: ar.settings.embedded.message.styleHeading,
+  }) as HTMLSelectElement
+}
+function styleOption(name: string | RegExp) {
+  return within(styleSelect()).getByRole('option', {
+    name: typeof name === 'string' ? new RegExp(name) : name,
+  }) as HTMLOptionElement
+}
+function chooseStyle(option: HTMLOptionElement) {
+  fireEvent.change(styleSelect(), { target: { value: option.value } })
+}
+
 async function storeNameInput() {
   return (await screen.findByRole('textbox', {
     name: /اسم المتجر/,
@@ -373,17 +387,17 @@ describe('SettingsEmbeddedPage', () => {
         labels.gulf,
         labels.short,
       ]) {
-        expect(screen.getByRole('radio', { name })).toBeTruthy()
+        expect(styleOption(name)).toBeTruthy()
       }
       // A style with no translation yet shows under its own id.
-      expect(screen.getByRole('radio', { name: 'levantine' })).toBeTruthy()
+      expect(styleOption('levantine')).toBeTruthy()
     })
 
     it('saves a style this app has no list entry for', async () => {
       renderPage()
       await storeNameInput()
 
-      fireEvent.click(screen.getByRole('radio', { name: 'levantine' }))
+      chooseStyle(styleOption('levantine'))
       await act(async () => {
         fireEvent.click(screen.getByText('حفظ'))
       })
@@ -435,7 +449,7 @@ describe('SettingsEmbeddedPage message improvements', () => {
     renderPage()
     await storeNameInput()
     expect(
-      screen.queryByRole('radio', { name: messageCopy.variantLabels.auto })
+      screen.queryByRole('option', { name: messageCopy.variantLabels.auto })
     ).toBeNull()
     expect(
       screen.queryByRole('radio', { name: messageCopy.reminderSame })
@@ -447,10 +461,8 @@ describe('SettingsEmbeddedPage message improvements', () => {
     renderPage()
     await storeNameInput()
 
-    const auto = screen.getByRole('radio', {
-      name: messageCopy.variantLabels.auto,
-    }) as HTMLInputElement
-    expect(auto.checked).toBe(true)
+    const auto = styleOption(messageCopy.variantLabels.auto)
+    expect(auto.selected).toBe(true)
     expect(screen.getByText(messageCopy.autoStylePreviewNote)).toBeTruthy()
     // The only version of its style on screen: named without its number.
     const reminder = screen.getByRole('radio', {
@@ -461,9 +473,7 @@ describe('SettingsEmbeddedPage message improvements', () => {
     fireEvent.click(
       screen.getByRole('radio', { name: messageCopy.reminderSame })
     )
-    fireEvent.click(
-      screen.getByRole('radio', { name: messageCopy.variantLabels.egyptian })
-    )
+    chooseStyle(styleOption(messageCopy.variantLabels.egyptian))
     await act(async () => {
       fireEvent.click(screen.getByText('حفظ'))
     })
@@ -657,7 +667,7 @@ describe('SettingsEmbeddedPage message languages', () => {
       screen.queryByLabelText(messageCopy.previewLanguageGroup)
     ).toBeTruthy()
     fireEvent.mouseEnter(
-      screen.getByRole('img', {
+      screen.getByRole('button', {
         name: messageCopy.styleHeading,
       })
     )
@@ -777,10 +787,12 @@ describe('SettingsEmbeddedPage message languages', () => {
     await storeNameInput()
     previewIn('ur')
 
-    expect(radio(standardStyle).disabled).toBe(true)
-    expect(radio(shortStyle).disabled).toBe(true)
-    expect(radio(standardStyle).checked).toBe(false)
-    expect(screen.getByText(messageCopy.awaitingApproval)).toBeTruthy()
+    expect(styleOption(standardStyle).disabled).toBe(true)
+    expect(styleOption(shortStyle).disabled).toBe(true)
+    expect(styleOption(standardStyle).selected).toBe(false)
+    expect(styleOption(standardStyle).textContent).toContain(
+      messageCopy.awaitingApproval
+    )
     expect(
       screen.getByText(
         messageCopy.languageLockedNote.replaceAll(
@@ -810,7 +822,7 @@ describe('SettingsEmbeddedPage message languages', () => {
         })
         .getAttribute('aria-label')
     ).toContain(messageCopy.languageNames.ur)
-    fireEvent.click(radio(shortStyle))
+    chooseStyle(styleOption(shortStyle))
     await act(async () => {
       fireEvent.click(screen.getByText('حفظ'))
     })
@@ -833,9 +845,11 @@ describe('SettingsEmbeddedPage message languages', () => {
     await storeNameInput()
     previewIn('tr')
 
-    expect(radio(standardStyle).disabled).toBe(true)
-    expect(radio(shortStyle).disabled).toBe(true)
-    expect(screen.getByText(messageCopy.awaitingApproval)).toBeTruthy()
+    expect(styleOption(standardStyle).disabled).toBe(true)
+    expect(styleOption(shortStyle).disabled).toBe(true)
+    expect(styleOption(standardStyle).textContent).toContain(
+      messageCopy.awaitingApproval
+    )
     expect(lastSaveBarCall()).toBe('hidden')
   })
 
@@ -846,9 +860,9 @@ describe('SettingsEmbeddedPage message languages', () => {
 
     chooseOneLanguage()
     fireEvent.change(oneLanguage(), { target: { value: 'tr' } })
-    expect(radio(standardStyle).disabled).toBe(false)
-    expect(radio(shortStyle).disabled).toBe(false)
-    fireEvent.click(radio(shortStyle))
+    expect(styleOption(standardStyle).disabled).toBe(false)
+    expect(styleOption(shortStyle).disabled).toBe(false)
+    chooseStyle(styleOption(shortStyle))
     await act(async () => {
       fireEvent.click(screen.getByText('حفظ'))
     })
@@ -875,7 +889,7 @@ describe('message settings contextual help', () => {
     const initialChecked =
       auto.getAttribute('aria-checked') ?? (auto as HTMLInputElement).checked
     expect(screen.queryByRole('tooltip')).toBeNull()
-    const help = screen.getByRole('img', {
+    const help = screen.getByRole('button', {
       name: messageCopy.languageFixed,
     })
     expect(help.closest('label')).toBeNull()
@@ -889,8 +903,9 @@ describe('message settings contextual help', () => {
     await waitFor(() => expect(screen.queryByRole('tooltip')).toBeNull())
 
     fireEvent.click(help)
-    expect(screen.queryByRole('tooltip')).toBeNull()
-    expect(help.closest('button')).toBeNull()
+    expect(await screen.findByRole('tooltip')).toBeTruthy()
+    expect(help.tagName).toBe('BUTTON')
+    fireEvent.keyDown(document, { key: 'Escape' })
     fireEvent.focus(help)
     expect(await screen.findByRole('tooltip')).toBeTruthy()
     fireEvent.blur(help)
@@ -913,7 +928,7 @@ describe('message settings contextual help', () => {
     const input = await storeNameInput()
     fireEvent.change(input, { target: { value: 'Sample Store' } })
     fireEvent.mouseEnter(
-      screen.getByRole('img', {
+      screen.getByRole('button', {
         name: messageCopy.storeNameLabel,
       })
     )
@@ -949,7 +964,7 @@ it.each([
     await storeNameInput()
     expect(screen.queryByRole('tooltip')).toBeNull()
     expect(screen.queryByText(description)).toBeNull()
-    fireEvent.mouseEnter(screen.getByRole('img', { name: label }))
+    fireEvent.mouseEnter(screen.getByRole('button', { name: label }))
     expect((await screen.findByRole('tooltip')).textContent).toContain(
       description
     )
@@ -969,13 +984,41 @@ it('keeps contextual help available for read-only stores', async () => {
   )
   renderPage()
   expect((await storeNameInput()).disabled).toBe(true)
-  const help = screen.getByRole('img', {
+  const help = screen.getByRole('button', {
     name: ar.settings.embedded.message.languageAuto,
   })
-  expect(help.getAttribute('tabindex')).toBe('0')
+  expect((help as HTMLButtonElement).disabled).toBe(false)
   fireEvent.mouseEnter(help)
   expect((await screen.findByRole('tooltip')).textContent).toBe(
     ar.settings.embedded.message.languageAutoHelp
   )
+  expect(api.saveSettings).not.toHaveBeenCalled()
+})
+
+it.each([null, 'retired_style'])(
+  'preserves the saved style %s without choosing an option on render',
+  async (selected) => {
+    const response = settingsResponseFixture({
+      state: { defaultLanguage: 'ar' },
+    })
+    response.template.selected.ar = selected
+    api.fetchSettings.mockResolvedValue(response)
+    renderPage()
+    await storeNameInput()
+    expect(styleSelect().value).toBe(selected ?? '')
+    expect(styleSelect().selectedOptions[0].disabled).toBe(true)
+    expect(lastSaveBarCall()).toBe('hidden')
+    expect(api.saveSettings).not.toHaveBeenCalled()
+  }
+)
+
+it('discards a changed style and restores the saved dropdown value', async () => {
+  renderPage()
+  await storeNameInput()
+  const initial = styleSelect().value
+  chooseStyle(styleOption(ar.settings.embedded.message.variantLabels.egyptian))
+  expect(styleSelect().value).toBe('egyptian')
+  fireEvent.click(screen.getByText('تجاهل'))
+  await waitFor(() => expect(styleSelect().value).toBe(initial))
   expect(api.saveSettings).not.toHaveBeenCalled()
 })

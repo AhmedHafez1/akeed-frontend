@@ -1644,8 +1644,6 @@
       "notAvailableYet": "Aún no está disponible. Inténtalo más tarde.",
       "noteAck": "Akeed responde una vez para confirmar la recepción (1 mensaje).",
       "noteAckPlan": "Akeed responde una vez para confirmar la recepción (1 mensaje de tu plan).",
-      "noteShopify": "Los pedidos de Shopify reciben una etiqueta, no una retención de preparación.",
-      "noteOff": "Desactivarlo solo afecta a los mensajes nuevos.",
       "saveUnavailable": "Solicitar un cambio aún no está disponible. Inténtalo más tarde.",
       "brandingUnavailable": "Los mensajes de tres botones con logo no están disponibles. Revisa el banner y las plantillas de imagen aprobadas. Se mantiene la confirmación alternativa segura.",
       "ownNumberText": "Tu número de WhatsApp solo envía texto. Un logo guardado no impide usar Solicitar un cambio."

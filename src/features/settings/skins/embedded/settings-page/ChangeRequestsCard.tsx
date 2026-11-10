@@ -5,14 +5,14 @@ import {
   BlockStack,
   Card,
   Checkbox,
-  Divider,
   Icon,
   InlineGrid,
   InlineStack,
   Text,
 } from '@shopify/polaris'
-import { ClockIcon, InfoIcon } from '@shopify/polaris-icons'
+import { ClockIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
+import { SettingsHelp } from './SettingsHelp'
 
 /**
  * "Request a change" in the embedded settings: a third button on future
@@ -39,12 +39,15 @@ export function ChangeRequestsCard({
   const t = useTranslations('settings.changeRequests')
   const blocked = !ready && !checked
   return (
-    <Card padding="600">
-      <BlockStack gap="400">
+    <Card>
+      <BlockStack gap="300">
         <InlineStack align="space-between" blockAlign="center" gap="300">
-          <Text as="h2" variant="headingMd">
-            {t('heading')}
-          </Text>
+          <InlineStack gap="100" blockAlign="center">
+            <Text as="h2" variant="headingMd">
+              {t('heading')}
+            </Text>
+            <SettingsHelp label={t('heading')} content={t('noteAckPlan')} />
+          </InlineStack>
           <Badge tone={checked ? 'success' : undefined}>
             {t(checked ? 'on' : 'off')}
           </Badge>
@@ -72,26 +75,11 @@ export function ChangeRequestsCard({
             </InlineGrid>
           )}
         </BlockStack>
-        <Divider />
         {variants?.some((v) => v.branding_supported === false) && (
           <Text as="p" variant="bodySm" tone="subdued">
             {t('ownNumberText')}
           </Text>
         )}
-        <InlineGrid columns="20px 1fr" gap="200" alignItems="start">
-          <Icon source={InfoIcon} tone="subdued" />
-          <BlockStack gap="150">
-            <Text as="p" variant="bodySm" tone="subdued">
-              {t('noteAckPlan')}
-            </Text>
-            <Text as="p" variant="bodySm" tone="subdued">
-              {t('noteShopify')}
-            </Text>
-            <Text as="p" variant="bodySm" tone="subdued">
-              {t('noteOff')}
-            </Text>
-          </BlockStack>
-        </InlineGrid>
       </BlockStack>
     </Card>
   )

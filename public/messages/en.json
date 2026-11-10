@@ -2813,8 +2813,6 @@
       "notAvailableYet": "Not available yet. Try again later.",
       "noteAck": "Akeed replies once to confirm receipt (1 message).",
       "noteAckPlan": "Akeed replies once to confirm receipt (1 message from your plan).",
-      "noteShopify": "Shopify orders get a tag, not a fulfillment hold.",
-      "noteOff": "Turning off applies to new messages only.",
       "saveUnavailable": "Request a change isn't available yet. Try again later.",
       "brandingUnavailable": "Branded three-button messages are unavailable. Check the logo banner and matching approved image twins. Existing safe confirmation fallback remains in use.",
       "ownNumberText": "Your WhatsApp number sends text only. A saved logo does not prevent using Request a change."

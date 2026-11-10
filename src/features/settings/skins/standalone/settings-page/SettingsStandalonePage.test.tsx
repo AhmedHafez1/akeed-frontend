@@ -107,6 +107,20 @@ function renderPage(query: Record<string, string> = {}) {
   return { ...view, goTo }
 }
 
+function styleSelect() {
+  return screen.getByRole('combobox', {
+    name: ar.settings.embedded.message.styleHeading,
+  }) as HTMLSelectElement
+}
+function styleOption(name: string | RegExp) {
+  return within(styleSelect()).getByRole('option', {
+    name: typeof name === 'string' ? new RegExp(name) : name,
+  }) as HTMLOptionElement
+}
+function chooseStyle(option: HTMLOptionElement) {
+  fireEvent.change(styleSelect(), { target: { value: option.value } })
+}
+
 async function storeNameInput() {
   return (await screen.findByRole('textbox', {
     name: /اسم المتجر/,
@@ -569,9 +583,9 @@ describe('SettingsStandalonePage message tab', () => {
     )
     expect(preview().querySelector('[lang]')?.getAttribute('dir')).toBe('ltr')
     // The style cards follow: the English styles, with their default marked.
-    const friendly = screen.getByRole('radio', { name: /ودّي/ })
-    expect(friendly.getAttribute('aria-checked')).toBe('true')
-    expect(within(friendly).getByText('الافتراضي')).toBeTruthy()
+    const friendly = styleOption(/ودّي/)
+    expect(friendly.selected).toBe(true)
+    expect(friendly.textContent).toContain('الافتراضي')
   })
 
   it('switches the preview when a fixed message language is chosen', async () => {
@@ -607,10 +621,10 @@ describe('SettingsStandalonePage message tab', () => {
 
     expect(preview().textContent).toContain('شكرًا لتسوّقك من متجر نور')
 
-    const egyptian = screen.getByRole('radio', { name: /مصري/ })
-    fireEvent.click(egyptian)
+    const egyptian = styleOption(/مصري/)
+    chooseStyle(egyptian)
 
-    expect(egyptian.getAttribute('aria-checked')).toBe('true')
+    expect(egyptian.selected).toBe(true)
     expect(preview().textContent).toContain('مستني تأكيدك')
   })
 
@@ -632,12 +646,10 @@ describe('SettingsStandalonePage message tab', () => {
         labels.gulf,
         labels.short,
       ]) {
-        expect(
-          screen.getByRole('radio', { name: new RegExp(name) })
-        ).toBeTruthy()
+        expect(styleOption(name)).toBeTruthy()
       }
       // A style with no translation yet shows under its own id.
-      expect(screen.getByRole('radio', { name: /levantine/ })).toBeTruthy()
+      expect(styleOption(/levantine/)).toBeTruthy()
 
       previewIn('en')
 
@@ -647,20 +659,18 @@ describe('SettingsStandalonePage message tab', () => {
         labels.direct,
         labels.short,
       ]) {
-        expect(
-          screen.getByRole('radio', { name: new RegExp(name) })
-        ).toBeTruthy()
+        expect(styleOption(name)).toBeTruthy()
       }
-      expect(screen.queryByRole('radio', { name: /levantine/ })).toBeNull()
+      expect(screen.queryByRole('option', { name: /levantine/ })).toBeNull()
     })
 
     it('saves a style this app has no list entry for', async () => {
       renderPage()
       await storeNameInput()
 
-      const levantine = screen.getByRole('radio', { name: /levantine/ })
-      fireEvent.click(levantine)
-      expect(levantine.getAttribute('aria-checked')).toBe('true')
+      const levantine = styleOption(/levantine/)
+      chooseStyle(levantine)
+      expect(levantine.selected).toBe(true)
       expect(preview().textContent).toContain('مرحبا levantine')
 
       fireEvent.click(screen.getByRole('button', { name: 'حفظ' }))
@@ -722,7 +732,7 @@ describe('SettingsStandalonePage message improvements', () => {
       })
     ).toBeNull()
     expect(
-      screen.queryByRole('radio', {
+      screen.queryByRole('option', {
         name: new RegExp(messageCopy.variantLabels.auto),
       })
     ).toBeNull()
@@ -741,14 +751,10 @@ describe('SettingsStandalonePage message improvements', () => {
     renderPage()
     await storeNameInput()
 
-    const auto = screen.getByRole('radio', {
-      name: new RegExp(messageCopy.variantLabels.auto),
-    })
-    fireEvent.click(auto)
-    expect(auto.getAttribute('aria-checked')).toBe('true')
-    expect(
-      screen.getByRole('radio', { name: /^فصحى/ }).getAttribute('aria-checked')
-    ).toBe('false')
+    const auto = styleOption(messageCopy.variantLabels.auto)
+    chooseStyle(auto)
+    expect(auto.selected).toBe(true)
+    expect(styleOption(/^فصحى/).selected).toBe(false)
     expect(screen.getByText(messageCopy.autoStylePreviewNote)).toBeTruthy()
 
     fireEvent.click(screen.getByRole('button', { name: 'حفظ' }))
@@ -770,7 +776,7 @@ describe('SettingsStandalonePage message improvements', () => {
     await storeNameInput()
     previewIn('en')
     expect(
-      screen.queryByRole('radio', {
+      screen.queryByRole('option', {
         name: new RegExp(messageCopy.variantLabels.auto),
       })
     ).toBeNull()
@@ -990,7 +996,7 @@ describe('SettingsStandalonePage message languages', () => {
       })
     ).toBeTruthy()
     fireEvent.mouseEnter(
-      screen.getByRole('img', {
+      screen.getByRole('button', {
         name: messageCopy.styleHeading,
       })
     )
@@ -1088,18 +1094,24 @@ describe('SettingsStandalonePage message languages', () => {
     await storeNameInput()
     previewIn('ur')
 
-    const inReview = always(standardStyle)
-    const notEnabled = always(shortStyle)
+    const inReview = styleOption(standardStyle)
+    const notEnabled = styleOption(shortStyle)
     expect(
-      within(inReview).getByText(messageCopy.awaitingApproval)
+      inReview.textContent?.includes(messageCopy.awaitingApproval)
     ).toBeTruthy()
-    expect(within(notEnabled).getByText(messageCopy.notEnabledYet)).toBeTruthy()
-    expect(inReview.textContent).toContain('السلام علیکم')
+    expect(notEnabled.textContent).toContain(messageCopy.notEnabledYet)
+    expect(screen.queryByRole('tooltip')).toBeNull()
+    fireEvent.click(
+      screen.getByRole('button', { name: messageCopy.styleHeading })
+    )
+    expect((await screen.findByRole('tooltip')).textContent).toContain(
+      'السلام علیکم'
+    )
+    fireEvent.keyDown(document, { key: 'Escape' })
 
     for (const card of [inReview, notEnabled]) {
       expect(card.hasAttribute('disabled')).toBe(true)
-      fireEvent.click(card)
-      expect(card.getAttribute('aria-checked')).toBe('false')
+      expect(card.selected).toBe(false)
     }
     expect(preview().querySelector('[lang]')?.getAttribute('dir')).toBe('rtl')
     expect(saveBar()).toBeNull()
@@ -1125,10 +1137,10 @@ describe('SettingsStandalonePage message languages', () => {
       messageCopy.languageNames.ur
     )
 
-    const short = always(shortStyle)
+    const short = styleOption(shortStyle)
     expect(short.hasAttribute('disabled')).toBe(false)
-    fireEvent.click(short)
-    expect(short.getAttribute('aria-checked')).toBe('true')
+    chooseStyle(short)
+    expect(short.selected).toBe(true)
 
     fireEvent.click(screen.getByRole('button', { name: 'حفظ' }))
     await waitFor(() => expect(api.saveSettings).toHaveBeenCalled())
@@ -1153,16 +1165,15 @@ describe('SettingsStandalonePage message languages', () => {
 
     previewIn('tr')
 
-    const inReview = always(standardStyle)
-    const notEnabled = always(shortStyle)
+    const inReview = styleOption(standardStyle)
+    const notEnabled = styleOption(shortStyle)
     expect(
-      within(inReview).getByText(messageCopy.awaitingApproval)
+      inReview.textContent?.includes(messageCopy.awaitingApproval)
     ).toBeTruthy()
-    expect(within(notEnabled).getByText(messageCopy.notEnabledYet)).toBeTruthy()
+    expect(notEnabled.textContent).toContain(messageCopy.notEnabledYet)
     for (const card of [inReview, notEnabled]) {
       expect(card.hasAttribute('disabled')).toBe(true)
-      fireEvent.click(card)
-      expect(card.getAttribute('aria-checked')).toBe('false')
+      expect(card.selected).toBe(false)
     }
     expect(preview().querySelector('[lang]')?.getAttribute('dir')).toBe('ltr')
 
@@ -1182,13 +1193,13 @@ describe('SettingsStandalonePage message languages', () => {
       messageCopy.languageNames.tr
     )
 
-    const standard = always(standardStyle)
-    const short = always(shortStyle)
+    const standard = styleOption(standardStyle)
+    const short = styleOption(shortStyle)
     expect(standard.hasAttribute('disabled')).toBe(false)
     expect(short.hasAttribute('disabled')).toBe(false)
-    expect(standard.getAttribute('aria-checked')).toBe('true')
-    fireEvent.click(short)
-    expect(short.getAttribute('aria-checked')).toBe('true')
+    expect(standard.selected).toBe(true)
+    chooseStyle(short)
+    expect(short.selected).toBe(true)
 
     fireEvent.click(screen.getByRole('button', { name: 'حفظ' }))
     await waitFor(() => expect(api.saveSettings).toHaveBeenCalled())
@@ -1215,7 +1226,7 @@ describe('message settings contextual help', () => {
     const initialChecked =
       auto.getAttribute('aria-checked') ?? (auto as HTMLInputElement).checked
     expect(screen.queryByRole('tooltip')).toBeNull()
-    const help = screen.getByRole('img', {
+    const help = screen.getByRole('button', {
       name: messageCopy.languageFixed,
     })
     expect(help.closest('label')).toBeNull()
@@ -1229,8 +1240,9 @@ describe('message settings contextual help', () => {
     await waitFor(() => expect(screen.queryByRole('tooltip')).toBeNull())
 
     fireEvent.click(help)
-    expect(screen.queryByRole('tooltip')).toBeNull()
-    expect(help.closest('button')).toBeNull()
+    expect(await screen.findByRole('tooltip')).toBeTruthy()
+    expect(help.tagName).toBe('BUTTON')
+    fireEvent.keyDown(document, { key: 'Escape' })
     fireEvent.focus(help)
     expect(await screen.findByRole('tooltip')).toBeTruthy()
     fireEvent.blur(help)
@@ -1253,7 +1265,7 @@ describe('message settings contextual help', () => {
     const input = await storeNameInput()
     fireEvent.change(input, { target: { value: 'Sample Store' } })
     fireEvent.mouseEnter(
-      screen.getByRole('img', {
+      screen.getByRole('button', {
         name: messageCopy.storeNameLabel,
       })
     )
@@ -1291,7 +1303,7 @@ it.each([
     await storeNameInput()
     expect(screen.queryByRole('tooltip')).toBeNull()
     expect(screen.queryByText(description)).toBeNull()
-    fireEvent.mouseEnter(screen.getByRole('img', { name: label }))
+    fireEvent.mouseEnter(screen.getByRole('button', { name: label }))
     expect((await screen.findByRole('tooltip')).textContent).toContain(
       description
     )
@@ -1313,10 +1325,10 @@ it('keeps contextual help available for read-only stores', async () => {
   )
   renderPage()
   expect((await storeNameInput()).disabled).toBe(true)
-  const help = screen.getByRole('img', {
+  const help = screen.getByRole('button', {
     name: ar.settings.embedded.message.languageAuto,
   })
-  expect(help.getAttribute('tabindex')).toBe('0')
+  expect((help as HTMLButtonElement).disabled).toBe(false)
   fireEvent.mouseEnter(help)
   expect((await screen.findByRole('tooltip')).textContent).toBe(
     ar.settings.embedded.message.languageAutoHelp
@@ -1363,4 +1375,32 @@ describe('standalone settings WhatsApp tab', () => {
     ).toBeTruthy()
     expect(saveBar()).toBeNull()
   })
+})
+
+it.each([null, 'retired_style'])(
+  'preserves the saved style %s without choosing an option on render',
+  async (selected) => {
+    const response = settingsResponseFixture({
+      state: { defaultLanguage: 'ar', source: standaloneSource },
+    })
+    response.template.selected.ar = selected
+    api.fetchSettings.mockResolvedValue(response)
+    renderPage()
+    await storeNameInput()
+    expect(styleSelect().value).toBe(selected ?? '')
+    expect(styleSelect().selectedOptions[0].disabled).toBe(true)
+    expect(saveBar()).toBeNull()
+    expect(api.saveSettings).not.toHaveBeenCalled()
+  }
+)
+
+it('discards a changed style and restores the saved dropdown value', async () => {
+  renderPage()
+  await storeNameInput()
+  const initial = styleSelect().value
+  chooseStyle(styleOption(ar.settings.embedded.message.variantLabels.egyptian))
+  expect(styleSelect().value).toBe('egyptian')
+  fireEvent.click(screen.getByRole('button', { name: 'تجاهل' }))
+  await waitFor(() => expect(styleSelect().value).toBe(initial))
+  expect(api.saveSettings).not.toHaveBeenCalled()
 })
