@@ -1,10 +1,11 @@
 'use client'
 
 import { useId } from 'react'
-import { Clock, Info } from 'lucide-react'
+import { Clock } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { AkSwitch, akCard, akPill } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
+import { SettingsHelp } from './SettingsHelp'
 
 /**
  * "Request a change": a third button on future confirmation messages. Off
@@ -34,13 +35,16 @@ export function ChangeRequestsCard({
   const blocked = !ready && !checked
   return (
     <section
-      className={cn(akCard, 'space-y-4 px-4 py-4 sm:px-6')}
+      className={cn(akCard, 'space-y-3 px-4 py-4 sm:px-6')}
       aria-labelledby={`${id}-heading`}
     >
       <div className="flex items-center justify-between gap-4">
-        <h2 id={`${id}-heading`} className="text-ak-section text-ink">
-          {t('heading')}
-        </h2>
+        <div className="flex items-center gap-1">
+          <h2 id={`${id}-heading`} className="text-ak-section text-ink">
+            {t('heading')}
+          </h2>
+          <SettingsHelp label={t('heading')} content={t('noteAck')} />
+        </div>
         <span className={akPill({ tone: checked ? 'brand' : 'neutral' })}>
           {t(checked ? 'on' : 'off')}
         </span>
@@ -86,16 +90,6 @@ export function ChangeRequestsCard({
       {variants?.some((v) => v.branding_supported === false) && (
         <p className="text-ak-caption text-ink-muted">{t('ownNumberText')}</p>
       )}
-      <div className="border-line flex items-start gap-2 border-t pt-4">
-        <Info
-          aria-hidden="true"
-          className="text-ink-muted mt-0.5 size-4 shrink-0"
-        />
-        <ul className="text-ak-caption text-ink-muted space-y-1">
-          <li>{t('noteAck')}</li>
-          <li>{t('noteOff')}</li>
-        </ul>
-      </div>
     </section>
   )
 }

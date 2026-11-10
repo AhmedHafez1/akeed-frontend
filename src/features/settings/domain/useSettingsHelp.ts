@@ -5,8 +5,8 @@ import { useCallback, useEffect, useId, useRef, useState } from 'react'
 /** Shared interaction rules; each skin owns the help's appearance. */
 export function useSettingsHelp() {
   const id = useId()
-  const ref = useRef<HTMLSpanElement>(null)
-  const contentRef = useRef<HTMLSpanElement>(null)
+  const ref = useRef<HTMLButtonElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
   const leaveTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined
   )
@@ -60,7 +60,14 @@ export function useSettingsHelp() {
     hoverHandlers,
     handlers: {
       ...hoverHandlers,
-      onFocus: () => setOpen(true),
+      onFocus: () => {
+        clearTimeout(leaveTimer.current)
+        setOpen(true)
+      },
+      onClick: () => {
+        clearTimeout(leaveTimer.current)
+        setOpen(true)
+      },
       onBlur: close,
     },
   }

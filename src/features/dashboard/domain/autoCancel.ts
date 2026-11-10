@@ -34,6 +34,7 @@ function pauseReasonOf(reason: string | null): AutoCancelPauseReason {
 export function autoCancelMarker(
   row: VerificationItem
 ): AutoCancelMarker | null {
+  if (row.change_request) return null
   const view = row.auto_cancel
   if (!view || row.status === 'confirmed' || row.status === 'canceled')
     return null

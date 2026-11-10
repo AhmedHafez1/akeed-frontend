@@ -5,12 +5,10 @@ import Link from 'next/link'
 import {
   AlertTriangle,
   Check,
-  CheckCircle2,
   Clock,
   Copy,
   Loader2,
   MessageCircle,
-  PackageX,
   Phone,
   RefreshCw,
   XCircle,
@@ -20,7 +18,7 @@ import { useCopyToClipboard } from '@/shared/hooks/useCopyToClipboard'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
-import { akButton, akPill, notify } from '@/shared/ui'
+import { akButton, notify } from '@/shared/ui'
 import {
   useChangeRequestPanel,
   type ChangeRequestFeedback,
@@ -37,8 +35,8 @@ function announce(feedback: ChangeRequestFeedback | null) {
 
 /**
  * The top of an order's details while its customer's change request is open:
- * don't ship, whether the customer was told, how to reach them outside Akeed
- * and the three outcomes. Confirming is one tap; cancelling asks first.
+ * the request heading, contact tools outside Akeed and the three outcomes.
+ * Confirming is one tap; cancelling asks first.
  */
 export function ChangeRequestPanel({
   verificationId,
@@ -77,51 +75,13 @@ export function ChangeRequestPanel({
       aria-labelledby={titleId}
       className="border-ak-warning-line overflow-hidden rounded-xl border"
     >
-      <div className="bg-ak-warning-soft space-y-2 px-4 py-3.5">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <h3
-            id={titleId}
-            className="text-ak-danger flex items-center gap-2 text-[0.9375rem] leading-6 font-semibold"
-          >
-            <PackageX aria-hidden="true" className="size-4.5" />
-            {t('panelTitle')}
-          </h3>
-          <span className={akPill({ tone: 'warning' })}>
-            <Clock aria-hidden="true" className="size-3" />
-            {panel.age}
-          </span>
-        </div>
-        {panel.ack === 'sent' ? (
-          <p className="text-ak-caption text-ink-muted flex items-center gap-1.5">
-            <CheckCircle2
-              aria-hidden="true"
-              className="text-brand-ink size-3.5"
-            />
-            {t('ackSent')}
-          </p>
-        ) : panel.ack === 'skipped' || panel.ack === 'failed' ? (
-          <p className="text-ak-caption text-ak-danger flex items-start gap-1.5">
-            <AlertTriangle
-              aria-hidden="true"
-              className="mt-0.5 size-3.5 shrink-0"
-            />
-            {t(panel.ack === 'skipped' ? 'ackSkipped' : 'ackFailed')}
-          </p>
-        ) : null}
-        {['failed', 'skipped'].includes(
-          summary.merchant_email?.status ?? ''
-        ) && (
-          <p
-            role="status"
-            className="text-ak-caption text-ak-danger flex items-start gap-1.5"
-          >
-            <AlertTriangle
-              aria-hidden="true"
-              className="mt-0.5 size-3.5 shrink-0"
-            />
-            {t('emailUnavailable')}
-          </p>
-        )}
+      <div className="bg-ak-warning-soft px-4 py-3.5">
+        <h3
+          id={titleId}
+          className="text-ak-danger text-[0.9375rem] leading-6 font-semibold"
+        >
+          {t('panelTitle')}
+        </h3>
       </div>
 
       <div className="bg-card divide-line divide-y">

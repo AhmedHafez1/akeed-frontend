@@ -117,6 +117,12 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
         : undefined
 
   const handleVariantChange = (variant: string) => {
+    if (
+      !styleOptions.some(
+        (option) => option.value === variant && !option.disabled
+      )
+    )
+      return
     if (variant === AUTO_STYLE) styles.chooseAuto()
     else styles.chooseVariant(variant)
   }
@@ -128,6 +134,63 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
     if (mode === AUTO_LANGUAGE) styles.chooseLanguage(AUTO_LANGUAGE)
     else if (isAutoLanguage) styles.chooseFixedLanguage()
   }
+
+  const styleValue = isAuto ? AUTO_STYLE : (selectedVariant ?? '')
+  const styleOptions = [
+    ...(offersAuto
+      ? [
+          {
+            value: AUTO_STYLE,
+            label: templateStyleLabel(t, AUTO_STYLE),
+            disabled: false,
+          },
+        ]
+      : []),
+    ...variants.map((variant) => {
+      const label = templateStyleLabel(
+        t,
+        variant.variant,
+        previewLanguage,
+        styleIds
+      )
+      return {
+        value: variant.variant,
+        label: variant.availability
+          ? `${label} (${t(STYLE_LOCK_KEYS[variant.availability])})`
+          : label,
+        disabled: Boolean(variant.availability),
+      }
+    }),
+  ]
+  // Preserve an unset or unavailable saved value without selecting a different style.
+  if (!styleOptions.some((option) => option.value === styleValue)) {
+    styleOptions.unshift({
+      value: styleValue,
+      label: styleValue
+        ? templateStyleLabel(t, styleValue, previewLanguage, styleIds)
+        : t('styleHeading'),
+      disabled: true,
+    })
+  }
+  const lockedStyles = variants.filter((variant) => variant.availability)
+  const styleHelp = lockedStyles.length ? (
+    <BlockStack gap="300">
+      {languageHint && <Text as="p">{languageHint}</Text>}
+      {lockedStyles.map((variant) => (
+        <BlockStack gap="100" key={variant.variant}>
+          <Text as="p" fontWeight="semibold">
+            {templateStyleLabel(t, variant.variant, previewLanguage, styleIds)}{' '}
+            ({t(STYLE_LOCK_KEYS[variant.availability!])})
+          </Text>
+          <p dir={variant.message.direction} lang={previewLanguage}>
+            {templateOpeningLine(variant.message, sample)}
+          </p>
+        </BlockStack>
+      ))}
+    </BlockStack>
+  ) : (
+    languageHint
+  )
 
   return (
     <InlineGrid columns={{ xs: 1, md: ['twoThirds', 'oneThird'] }} gap="400">
@@ -237,11 +300,8 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
               <Text as="h2" variant="headingMd">
                 {t('styleHeading')}
               </Text>
-              {languageHint && (
-                <SettingsHelp
-                  label={t('styleHeading')}
-                  content={languageHint}
-                />
+              {styleHelp && (
+                <SettingsHelp label={t('styleHeading')} content={styleHelp} />
               )}
             </InlineStack>
             {!styles.isLive && (
@@ -252,58 +312,13 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
               </Text>
             )}
             {(variants.length > 0 || offersAuto) && (
-              <ChoiceList
-                title={t('styleHeading')}
-                titleHidden
+              <Select
+                label={t('styleHeading')}
+                labelHidden
                 disabled={readOnly}
-                selected={
-                  isAuto
-                    ? [AUTO_STYLE]
-                    : selectedVariant
-                      ? [selectedVariant]
-                      : []
-                }
-                onChange={([variant]) => handleVariantChange(variant)}
-                choices={[
-                  ...(offersAuto
-                    ? [
-                        {
-                          value: AUTO_STYLE,
-                          label: templateStyleLabel(t, AUTO_STYLE),
-                        },
-                      ]
-                    : []),
-                  ...variants.map((variant) => {
-                    const lock = variant.availability
-                    const label = templateStyleLabel(
-                      t,
-                      variant.variant,
-                      previewLanguage,
-                      styleIds
-                    )
-                    if (!lock) return { value: variant.variant, label }
-                    return {
-                      value: variant.variant,
-                      disabled: true,
-                      label: (
-                        <InlineStack gap="200" blockAlign="center">
-                          <Text as="span">{label}</Text>
-                          <Badge>{t(STYLE_LOCK_KEYS[lock])}</Badge>
-                        </InlineStack>
-                      ),
-                      // A locked style cannot be picked to preview it, so
-                      // its opening line is shown under it.
-                      helpText: (
-                        <span
-                          dir={variant.message.direction}
-                          lang={previewLanguage}
-                        >
-                          {templateOpeningLine(variant.message, sample)}
-                        </span>
-                      ),
-                    }
-                  }),
-                ]}
+                value={styleValue}
+                onChange={handleVariantChange}
+                options={styleOptions}
               />
             )}
           </BlockStack>

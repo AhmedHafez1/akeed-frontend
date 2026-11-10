@@ -101,8 +101,9 @@ describe('LogoCard (standalone)', () => {
 
   it('shows no actions to a read-only member', () => {
     renderCard(withLogo(), { readOnly: true })
-    expect(screen.queryByRole('button')).toBeNull()
-    expect(screen.getByRole('img', { name: 'Store logo' })).toBeTruthy()
+    expect(screen.queryByRole('button', { name: 'Change logo' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Remove' })).toBeNull()
+    expect(screen.getByRole('button', { name: 'Store logo' })).toBeTruthy()
     expect(screen.getByRole('img', { name: 'Your store logo' })).toBeTruthy()
   })
 })

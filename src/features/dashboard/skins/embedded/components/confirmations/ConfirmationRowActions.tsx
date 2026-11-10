@@ -42,7 +42,11 @@ function useConfirmationRowActions({
   canWrite: boolean
   canRetry: boolean
   handlers: EmbeddedRowActionHandlers
-}): { link: ConfirmationRowLink | null; items: RowActionItem[] } {
+}): {
+  handle: boolean
+  link: ConfirmationRowLink | null
+  items: RowActionItem[]
+} {
   const t = useTranslations('dashboard')
   const plan = planConfirmationRowActions(row, { canWrite, canRetry })
   const link = useConfirmationRowLink(row, orderLabel, plan.primary)
@@ -50,9 +54,7 @@ function useConfirmationRowActions({
   const items: RowActionItem[] = [
     {
       id: 'details',
-      content: plan.handle
-        ? t('changeRequest.handle')
-        : t('table.actions.details'),
+      content: t('table.actions.details'),
       onAction: () => handlers.onOpenDetails(row),
     },
   ]
@@ -87,14 +89,15 @@ function useConfirmationRowActions({
     })
   }
 
-  return { link, items }
+  return { handle: plan.handle, link, items }
 }
 
 /**
  * In the table every action, the WhatsApp link included, sits in a small
  * sheet behind one labelled "more" button, so rows stay quiet. On a card only
  * the link sits up front; the sheet keeps the rest, Confirm included. Every
- * row has at least its details.
+ * row has at least its details. Change requests open their details directly;
+ * their contact tools are inside that modal.
  *
  * The sheet is a Modal, not a Popover: Polaris' popover keeps the window in
  * its props, and React's dev profiler walks it into the cross-origin Shopify
@@ -120,7 +123,7 @@ export function ConfirmationRowActions({
 }) {
   const t = useTranslations('dashboard')
   const [isSheetOpen, setIsSheetOpen] = useState(false)
-  const { link, items } = useConfirmationRowActions({
+  const { handle, link, items } = useConfirmationRowActions({
     row,
     orderLabel,
     canWrite,
@@ -130,6 +133,20 @@ export function ConfirmationRowActions({
 
   const isStacked = layout === 'stacked'
   const showSheet = items.length > 0 || (!isStacked && link !== null)
+
+  if (handle) {
+    return (
+      <Box paddingBlockStart={isStacked ? '100' : '0'}>
+        <Button
+          icon={MenuHorizontalIcon}
+          disabled={isActing}
+          loading={isActing}
+          accessibilityLabel={`${t('changeRequest.handle')}: ${orderLabel}`}
+          onClick={() => handlers.onOpenDetails(row)}
+        />
+      </Box>
+    )
+  }
 
   return (
     <Box paddingBlockStart={isStacked ? '100' : '0'}>

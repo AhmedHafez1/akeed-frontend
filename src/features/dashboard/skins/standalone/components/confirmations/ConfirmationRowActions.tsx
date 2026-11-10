@@ -7,7 +7,6 @@ import {
   Ellipsis,
   Eye,
   MessageCircle,
-  PackageX,
   RotateCcw,
   Truck,
   XCircle,
@@ -25,16 +24,15 @@ import {
 import { planConfirmationRowActions } from '@/features/dashboard/domain/confirmationRowActions'
 import { useConfirmationRowLink } from '@/features/dashboard/domain/useConfirmationRowLink'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
-import { customerContact } from '@/features/dashboard/lib/customerContact'
 import type { ConfirmationsListProps } from './confirmationCells'
-import { ContactMenuItems } from './ContactMenuItems'
 
 /**
  * In the table: one labelled "more" menu holds every action — details, the
  * WhatsApp or shipping link, manual confirm, retry, cancel — so rows stay
  * quiet. On a card only the link sits up front as a 40px button, and the
  * menu keeps the rest, Confirm included. The shared plan decides
- * which actions exist, so both modes offer the same ones.
+ * which actions exist, so both modes offer the same ones. Change requests
+ * open their details directly, with contact tools inside that modal.
  */
 export function ConfirmationRowActions({
   row,
@@ -68,7 +66,6 @@ export function ConfirmationRowActions({
   const inline = layout === 'inline'
 
   if (plan.handle) {
-    const contact = customerContact(row.customer_phone)
     return (
       <div
         className={cn(
@@ -79,6 +76,7 @@ export function ConfirmationRowActions({
         {!inline && (
           <button
             type="button"
+            disabled={isActing}
             onClick={() => handlers.onOpenDetails(row)}
             className={cn(
               akButton({ variant: 'tinted', size: 'md' }),
@@ -88,43 +86,22 @@ export function ConfirmationRowActions({
             {t('changeRequest.handle')}
           </button>
         )}
-        {!inline && link && (
-          <a
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={link.accessibilityLabel}
-            className={akButton({ variant: 'secondary', size: 'iconMd' })}
-          >
-            <MessageCircle aria-hidden="true" />
-          </a>
-        )}
-        <DropdownMenu modal={false}>
-          <DropdownMenuTrigger asChild>
-            <button
-              type="button"
-              aria-label={t('confirmations.actions.more', {
-                order: orderLabel,
-              })}
-              className={akButton({
-                variant: inline ? 'ghost' : 'secondary',
-                size: inline ? 'iconTable' : 'iconMd',
-              })}
-            >
-              <Ellipsis aria-hidden="true" />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              className="font-semibold"
-              onSelect={() => handlers.onOpenDetails(row)}
-            >
-              <PackageX aria-hidden="true" className="size-4" />
-              {t('changeRequest.handle')}
-            </DropdownMenuItem>
-            <ContactMenuItems contact={contact} />
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <button
+          type="button"
+          disabled={isActing}
+          aria-busy={isActing || undefined}
+          aria-label={`${t('changeRequest.handle')}: ${orderLabel}`}
+          onClick={() => handlers.onOpenDetails(row)}
+          className={akButton({
+            variant: inline ? 'ghost' : 'secondary',
+            size: inline ? 'iconTable' : 'iconMd',
+          })}
+        >
+          <Ellipsis
+            aria-hidden="true"
+            className={cn(isActing && 'animate-pulse')}
+          />
+        </button>
       </div>
     )
   }

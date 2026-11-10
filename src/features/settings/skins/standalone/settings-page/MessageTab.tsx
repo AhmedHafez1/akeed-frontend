@@ -52,7 +52,7 @@ function SettingsCard({
 }: {
   headingId: string
   heading: string
-  description?: string
+  description?: ReactNode
   children: ReactNode
 }) {
   return (
@@ -152,6 +152,70 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
       : model.errors.storeName === 'tooLong'
         ? tShared('storeNameTooLong', { max: STORE_NAME_MAX_LENGTH })
         : null
+
+  const styleValue = isAuto ? 'auto' : (selectedVariant ?? '')
+  const styleOptions = [
+    ...(offersAuto
+      ? [
+          {
+            value: 'auto',
+            label: templateStyleLabel(tShared, 'auto'),
+            disabled: false,
+          },
+        ]
+      : []),
+    ...variants.map((variant) => {
+      const label = templateStyleLabel(
+        tShared,
+        variant.variant,
+        previewLanguage,
+        styleIds
+      )
+      return {
+        value: variant.variant,
+        label: variant.availability
+          ? `${label} (${tShared(STYLE_LOCK_KEYS[variant.availability])})`
+          : styles.defaultVariant === variant.variant
+            ? `${label} (${t('defaultBadge')})`
+            : label,
+        disabled: Boolean(variant.availability),
+      }
+    }),
+  ]
+  // Preserve an unset or unavailable saved value without selecting a different style.
+  if (!styleOptions.some((option) => option.value === styleValue)) {
+    styleOptions.unshift({
+      value: styleValue,
+      label: styleValue
+        ? templateStyleLabel(tShared, styleValue, previewLanguage, styleIds)
+        : tShared('styleHeading'),
+      disabled: true,
+    })
+  }
+  const lockedStyles = variants.filter((variant) => variant.availability)
+  const styleHelp = lockedStyles.length ? (
+    <div className="space-y-3">
+      {languageHint && <p>{languageHint}</p>}
+      {lockedStyles.map((variant) => (
+        <div className="space-y-1" key={variant.variant}>
+          <p className="font-semibold">
+            {templateStyleLabel(
+              tShared,
+              variant.variant,
+              previewLanguage,
+              styleIds
+            )}{' '}
+            ({tShared(STYLE_LOCK_KEYS[variant.availability!])})
+          </p>
+          <p dir={variant.message.direction} lang={previewLanguage}>
+            {templateOpeningLine(variant.message, sample)}
+          </p>
+        </div>
+      ))}
+    </div>
+  ) : (
+    languageHint
+  )
 
   return (
     <div className="grid items-start gap-6 min-[1100px]:grid-cols-[minmax(0,1fr)_360px]">
@@ -301,7 +365,7 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
         <SettingsCard
           headingId={styleId}
           heading={tShared('styleHeading')}
-          description={languageHint}
+          description={styleHelp}
         >
           {!styles.isLive && (
             <p className="text-ak-caption text-ink-muted">
@@ -312,57 +376,23 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
             </p>
           )}
           {(variants.length > 0 || offersAuto) && (
-            <AkChoiceGroup columns={2} aria-labelledby={styleId}>
-              {offersAuto && (
-                <AkChoiceCard
-                  checked={isAuto}
-                  onSelect={styles.chooseAuto}
-                  disabled={readOnly}
-                  title={templateStyleLabel(tShared, 'auto')}
-                />
-              )}
-              {variants.map((variant) => {
-                const lock = variant.availability
-                return (
-                  <AkChoiceCard
-                    key={variant.variant}
-                    checked={
-                      !lock && !isAuto && variant.variant === selectedVariant
-                    }
-                    onSelect={() => styles.chooseVariant(variant.variant)}
-                    disabled={readOnly || Boolean(lock)}
-                    title={templateStyleLabel(
-                      tShared,
-                      variant.variant,
-                      previewLanguage,
-                      styleIds
-                    )}
-                    badge={
-                      lock ? (
-                        <span className={akPill({ tone: 'neutral' })}>
-                          {tShared(STYLE_LOCK_KEYS[lock])}
-                        </span>
-                      ) : (
-                        styles.defaultVariant === variant.variant && (
-                          <span className={akPill({ tone: 'neutral' })}>
-                            {t('defaultBadge')}
-                          </span>
-                        )
-                      )
-                    }
-                    // A locked style cannot be picked to preview it, so its
-                    // opening line is shown on the card.
-                    description={
-                      lock
-                        ? templateOpeningLine(variant.message, sample)
-                        : undefined
-                    }
-                    descriptionDir={variant.message.direction}
-                    descriptionLang={previewLanguage}
-                  />
+            <AkSelect
+              aria-labelledby={styleId}
+              options={styleOptions}
+              value={styleValue}
+              disabled={readOnly}
+              onChange={(event) => {
+                const variant = event.target.value
+                if (
+                  !styleOptions.some(
+                    (option) => option.value === variant && !option.disabled
+                  )
                 )
-              })}
-            </AkChoiceGroup>
+                  return
+                if (variant === 'auto') styles.chooseAuto()
+                else styles.chooseVariant(variant)
+              }}
+            />
           )}
         </SettingsCard>
 

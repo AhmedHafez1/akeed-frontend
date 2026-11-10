@@ -32,6 +32,10 @@ describe('ChangeRequestsCard', () => {
     expect(toggle.disabled).toBe(false)
     fireEvent.click(toggle)
     expect(onChange).toHaveBeenCalledWith(true)
+    expect(screen.queryByText(en.settings.changeRequests.noteAck)).toBeNull()
+    fireEvent.click(
+      screen.getByRole('button', { name: en.settings.changeRequests.heading })
+    )
     expect(
       screen.getByText('Akeed replies once to confirm receipt (1 message).')
     ).toBeTruthy()

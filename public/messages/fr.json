@@ -766,7 +766,7 @@
       "copied": "Numéro copié",
       "copyError": "Impossible de copier le numéro.",
       "noPhone": "Aucun numéro de téléphone valide",
-      "panelTitle": "N’expédiez pas encore cette commande",
+      "panelTitle": "Modifications demandées par le client",
       "detailsDescription": "Le client a demandé une modification",
       "ackSent": "Client informé",
       "ackSkipped": "Client non informé : solde insuffisant",
@@ -1644,8 +1644,6 @@
       "notAvailableYet": "Pas encore disponible. Réessayez plus tard.",
       "noteAck": "Akeed répond une fois pour confirmer la réception (1 message).",
       "noteAckPlan": "Akeed répond une fois pour confirmer la réception (1 message de votre forfait).",
-      "noteShopify": "Les commandes Shopify reçoivent un tag, pas une suspension du traitement.",
-      "noteOff": "La désactivation ne s’applique qu’aux nouveaux messages.",
       "saveUnavailable": "Demander une modification n’est pas encore disponible. Réessayez plus tard.",
       "brandingUnavailable": "Les messages à trois boutons avec logo sont indisponibles. Vérifiez la bannière et les modèles avec image approuvés. La confirmation de secours reste utilisée.",
       "ownNumberText": "Votre numéro WhatsApp envoie uniquement du texte. Un logo enregistré ne bloque pas la demande de modification."

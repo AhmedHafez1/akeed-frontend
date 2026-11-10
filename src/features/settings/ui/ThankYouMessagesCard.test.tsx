@@ -1,6 +1,6 @@
 import { useState, type ComponentType } from 'react'
 import { fireEvent, render, screen, cleanup } from '@testing-library/react'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { AppProvider } from '@shopify/polaris'
 import polaris from '@shopify/polaris/locales/en.json'
 import { NextIntlClientProvider } from 'next-intl'
@@ -61,7 +61,15 @@ function renderCard(
   )
 }
 
-afterEach(cleanup)
+beforeEach(() => {
+  vi.spyOn(HTMLElement.prototype, 'offsetParent', 'get').mockReturnValue(
+    document.body
+  )
+})
+afterEach(() => {
+  cleanup()
+  vi.restoreAllMocks()
+})
 
 describe.each([
   [
@@ -72,11 +80,18 @@ describe.each([
   ],
   ['embedded', Embedded, 'checkbox', en.settings.thankYou.planCost],
 ] as const)('%s thank-you settings', (_skin, Component, role, cost) => {
-  it('starts off, discloses the price, previews both outcomes, and toggles', () => {
+  it('starts compact, reveals price and examples through help, and toggles', async () => {
     renderCard(Component)
     const control = screen.getByRole(role, { name: en.settings.thankYou.label })
     expect(checked(control)).toBe(false)
     expect(screen.getByText(en.settings.thankYou.off)).toBeTruthy()
+    expect(screen.queryByText(cost)).toBeNull()
+    expect(screen.queryByText('Confirmed 123 from Nour')).toBeNull()
+    expect(screen.getByText(en.settings.thankYou.description)).toBeTruthy()
+    fireEvent.click(
+      screen.getByRole('button', { name: en.settings.thankYou.heading })
+    )
+    expect(await screen.findByRole('tooltip')).toBeTruthy()
     expect(screen.getByText(cost)).toBeTruthy()
     expect(
       screen.getByRole('heading', {
@@ -92,7 +107,7 @@ describe.each([
     expect(checked(control)).toBe(true)
     expect(screen.getByText(en.settings.thankYou.on)).toBeTruthy()
   })
-  it('keeps English samples in LTR within Arabic UI and uses Arabic direction for missing text', () => {
+  it('keeps English samples in LTR within Arabic UI and uses Arabic direction for missing text', async () => {
     renderCard(
       Component,
       {
@@ -111,6 +126,10 @@ describe.each([
       },
       'ar'
     )
+    fireEvent.click(
+      screen.getByRole('button', { name: ar.settings.thankYou.heading })
+    )
+    await screen.findByRole('tooltip')
     const sample = screen.getByText('Confirmed 123 from Nour')
     expect(sample.getAttribute('dir')).toBe('ltr')
     expect(sample.getAttribute('lang')).toBe('en')
@@ -141,6 +160,17 @@ describe.each([
   it('omits the feature when talking to an older backend', () => {
     renderCard(Component, { acknowledgment: undefined })
     expect(screen.queryByRole(role)).not.toBeTruthy()
+  })
+  it('keeps automatic-style details available to read-only users', async () => {
+    renderCard(Component, { readOnly: true, automaticStyle: true })
+    expect(screen.queryByText(en.settings.thankYou.autoNote)).toBeNull()
+    const help = screen.getByRole('button', {
+      name: en.settings.thankYou.heading,
+    })
+    expect((help as HTMLButtonElement).disabled).toBe(false)
+    fireEvent.focus(help)
+    await screen.findByRole('tooltip')
+    expect(screen.getByText(en.settings.thankYou.autoNote)).toBeTruthy()
   })
 })
 

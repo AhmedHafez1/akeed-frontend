@@ -7,8 +7,6 @@ import {
   Box,
   Button,
   Divider,
-  Icon,
-  InlineGrid,
   InlineStack,
   Text,
 } from '@shopify/polaris'
@@ -75,35 +73,7 @@ export function EmbeddedChangeRequestPanel({
 
   return (
     <BlockStack gap="400">
-      <Banner tone="warning" title={t('panelTitle')}>
-        <BlockStack gap="200">
-          {['failed', 'skipped'].includes(
-            summary.merchant_email?.status ?? ''
-          ) && (
-            <Text as="p" variant="bodySm" tone="critical">
-              {t('emailUnavailable')}
-            </Text>
-          )}
-          <Text as="p" variant="bodySm" tone="subdued">
-            {panel.age}
-          </Text>
-          {panel.ack === 'sent' ? (
-            <InlineGrid columns="20px 1fr" gap="100" alignItems="start">
-              <Icon source={CheckIcon} tone="success" />
-              <Text as="p" variant="bodySm" tone="subdued">
-                {t('ackSent')}
-              </Text>
-            </InlineGrid>
-          ) : panel.ack === 'skipped' || panel.ack === 'failed' ? (
-            <InlineGrid columns="20px 1fr" gap="100" alignItems="start">
-              <Icon source={AlertTriangleIcon} tone="critical" />
-              <Text as="p" variant="bodySm" tone="critical">
-                {t(panel.ack === 'skipped' ? 'ackSkipped' : 'ackFailed')}
-              </Text>
-            </InlineGrid>
-          ) : null}
-        </BlockStack>
-      </Banner>
+      <Banner tone="warning" title={t('panelTitle')} hideIcon />
 
       {feedback && (
         <Banner
@@ -133,7 +103,12 @@ export function EmbeddedChangeRequestPanel({
           >
             {t('openWhatsapp')}
           </Button>
-          <Button icon={PhoneIcon} disabled={!contact} url={contact?.callUrl}>
+          <Button
+            icon={PhoneIcon}
+            disabled={!contact}
+            url={contact?.callUrl}
+            target="_blank"
+          >
             {t('call')}
           </Button>
           <Button
