@@ -40,6 +40,19 @@ export function isLiveMessageLanguage(
   return (template.liveLanguages ?? template.languages).includes(language)
 }
 
+/**
+ * The message with "Request a change" as its last reply, as a send adds it
+ * while change requests are on. A message without replies is left as it is.
+ */
+export function withChangeButton(
+  message: TemplateMessage,
+  label: string | undefined
+): TemplateMessage {
+  if (!label || message.buttons.length === 0) return message
+  if (message.buttons.includes(label)) return message
+  return { ...message, buttons: [...message.buttons, label] }
+}
+
 /** The language the preview opens on. */
 export function initialPreviewLanguage(
   data: SettingsResponse
@@ -74,6 +87,8 @@ export interface MessageStyles {
   defaultVariant: string | null
   /** What the preview shows. Empty when the language has no message yet. */
   message: TemplateMessage
+  /** Whether the shown style has a change-request version for this store. */
+  changeRequestAvailable: boolean
   /** Arabic style by the customer's country, while the backend offers it. */
   offersAuto: boolean
   isAuto: boolean
@@ -127,13 +142,21 @@ export function useMessageStyles({
   const shown =
     variants.find((variant) => variant.variant === selectedVariant) ??
     variants[0]
-  const message: TemplateMessage = shown?.message ??
+  const templateMessage: TemplateMessage = shown?.message ??
     template.messages[previewLanguage] ?? {
       lines: [],
       buttons: [],
       direction: getMessageLanguageDirection(previewLanguage),
       source: 'registered',
     }
+  // An older backend does not say; it is then taken as available.
+  const changeRequestAvailable = shown?.changeRequest !== false
+  const message = withChangeButton(
+    templateMessage,
+    values.changeRequestsEnabled === true && changeRequestAvailable
+      ? template.changeButtons?.[previewLanguage]
+      : undefined
+  )
   const offersAuto =
     previewLanguage === 'ar' && values.codTemplateArAuto !== undefined
   const reminders = values.codReminderVariants
@@ -152,6 +175,7 @@ export function useMessageStyles({
     selectedVariant,
     defaultVariant: template.defaults[previewLanguage] ?? null,
     message,
+    changeRequestAvailable,
     offersAuto,
     isAuto: offersAuto && values.codTemplateArAuto === true,
     reminderVariants: isLive

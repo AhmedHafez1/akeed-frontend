@@ -1642,6 +1642,7 @@
       "label": "Permitir que los clientes soliciten un cambio",
       "description": "Agrega un tercer botón a los mensajes de confirmación.",
       "notAvailableYet": "Aún no está disponible. Inténtalo más tarde.",
+      "styleUnavailable": "No hay plantilla de solicitud de cambio para el estilo seleccionado.",
       "noteAck": "Akeed responde una vez para confirmar la recepción (1 mensaje).",
       "noteAckPlan": "Akeed responde una vez para confirmar la recepción (1 mensaje de tu plan).",
       "saveUnavailable": "Solicitar un cambio aún no está disponible. Inténtalo más tarde.",

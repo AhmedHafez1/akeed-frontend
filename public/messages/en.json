@@ -2811,6 +2811,7 @@
       "label": "Let customers request a change",
       "description": "Adds a third button to confirmation messages.",
       "notAvailableYet": "Not available yet. Try again later.",
+      "styleUnavailable": "No change request template available for the selected style.",
       "noteAck": "Akeed replies once to confirm receipt (1 message).",
       "noteAckPlan": "Akeed replies once to confirm receipt (1 message from your plan).",
       "saveUnavailable": "Request a change isn't available yet. Try again later.",

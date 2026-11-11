@@ -4,6 +4,7 @@ import { useId } from 'react'
 import { Clock } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { AkSwitch, akCard, akPill } from '@/shared/ui'
+import { Tooltip } from '@/shared/ui/tooltip'
 import { cn } from '@/shared/lib/utils'
 import { SettingsHelp } from './SettingsHelp'
 
@@ -15,6 +16,7 @@ import { SettingsHelp } from './SettingsHelp'
 export function ChangeRequestsCard({
   checked,
   ready,
+  styleReady = true,
   onChange,
   readOnly,
   variants,
@@ -22,6 +24,8 @@ export function ChangeRequestsCard({
   checked: boolean
   /** The store's sender has its approved three-button messages. */
   ready: boolean
+  /** The selected style has its change-request version. */
+  styleReady?: boolean
   onChange: (checked: boolean) => void
   readOnly: boolean
   variants?: {
@@ -32,7 +36,8 @@ export function ChangeRequestsCard({
 }) {
   const t = useTranslations('settings.changeRequests')
   const id = useId()
-  const blocked = !ready && !checked
+  const blocked = (!ready || !styleReady) && !checked
+  const styleBlocked = ready && !styleReady && !checked
   return (
     <section
       className={cn(akCard, 'space-y-3 px-4 py-4 sm:px-6')}
@@ -58,14 +63,27 @@ export function ChangeRequestsCard({
           >
             {t('label')}
           </label>
-          <AkSwitch
-            id={`${id}-switch`}
-            aria-labelledby={`${id}-label`}
-            aria-describedby={`${id}-description${blocked ? ` ${id}-unavailable` : ''}`}
-            checked={checked}
-            disabled={readOnly || blocked}
-            onCheckedChange={onChange}
-          />
+          {styleBlocked ? (
+            <Tooltip content={t('styleUnavailable')}>
+              <AkSwitch
+                id={`${id}-switch`}
+                aria-labelledby={`${id}-label`}
+                aria-describedby={`${id}-description`}
+                checked={checked}
+                disabled
+                onCheckedChange={onChange}
+              />
+            </Tooltip>
+          ) : (
+            <AkSwitch
+              id={`${id}-switch`}
+              aria-labelledby={`${id}-label`}
+              aria-describedby={`${id}-description${blocked ? ` ${id}-unavailable` : ''}`}
+              checked={checked}
+              disabled={readOnly || blocked}
+              onCheckedChange={onChange}
+            />
+          )}
         </div>
         <p id={`${id}-description`} className="text-ak-caption text-ink-muted">
           {t('description')}

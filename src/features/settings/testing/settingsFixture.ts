@@ -302,6 +302,14 @@ export function settingsResponseFixture(
         en: message('Hi {{customer}}!', 'Thanks', 'Confirm Order'),
         ...NOT_LIVE,
       },
+      changeButtons: {
+        ar: 'طلب تعديل',
+        en: 'Request a change',
+        ur: 'تبدیلی کی درخواست',
+        es: 'Solicitar un cambio',
+        fr: 'Demander une modification',
+        tr: 'Değişiklik iste',
+      },
     },
   }
 }
