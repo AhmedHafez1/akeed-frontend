@@ -486,6 +486,49 @@ describe('SettingsEmbeddedPage message improvements', () => {
     })
   })
 
+  it('adds Request a change to the preview while the box is checked', async () => {
+    api.fetchSettings.mockResolvedValue(
+      settingsResponseFixture({
+        state: {
+          changeRequestsEnabled: false,
+          changeRequestReadiness: { ready: true },
+        },
+      })
+    )
+    renderPage()
+    await storeNameInput()
+    const bubble = () =>
+      screen.getByRole('img', {
+        name: new RegExp(messageCopy.previewAria.replace('{language}', '.*')),
+      })
+    const box = () =>
+      screen.getByRole('checkbox', { name: ar.settings.changeRequests.label })
+    expect(within(bubble()).queryByText('طلب تعديل')).toBeNull()
+
+    fireEvent.click(box())
+    expect(within(bubble()).getByText('طلب تعديل')).toBeTruthy()
+
+    fireEvent.click(box())
+    expect(within(bubble()).queryByText('طلب تعديل')).toBeNull()
+  })
+
+  it('cannot check Request a change for a style without its template', async () => {
+    const response = settingsResponseFixture({
+      state: {
+        changeRequestsEnabled: false,
+        changeRequestReadiness: { ready: true },
+      },
+    })
+    response.template.variants.ar[0].changeRequest = false
+    api.fetchSettings.mockResolvedValue(response)
+    renderPage()
+    await storeNameInput()
+    const box = screen.getByRole('checkbox', {
+      name: ar.settings.changeRequests.label,
+    }) as HTMLInputElement
+    expect(box.disabled).toBe(true)
+  })
+
   it('renders the message lines and their own replies, or says it is empty', async () => {
     const response = settingsResponseFixture()
     response.template.variants.ar[0].message = templateMessageFixture(

@@ -9,6 +9,7 @@ import {
   InlineGrid,
   InlineStack,
   Text,
+  Tooltip,
 } from '@shopify/polaris'
 import { ClockIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
@@ -22,12 +23,15 @@ import { SettingsHelp } from './SettingsHelp'
 export function ChangeRequestsCard({
   checked,
   ready,
+  styleReady = true,
   onChange,
   readOnly,
   variants,
 }: {
   checked: boolean
   ready: boolean
+  /** The selected style has its change-request version. */
+  styleReady?: boolean
   onChange: (checked: boolean) => void
   readOnly: boolean
   variants?: {
@@ -37,7 +41,8 @@ export function ChangeRequestsCard({
   }[]
 }) {
   const t = useTranslations('settings.changeRequests')
-  const blocked = !ready && !checked
+  const blocked = (!ready || !styleReady) && !checked
+  const styleBlocked = ready && !styleReady && !checked
   return (
     <Card>
       <BlockStack gap="300">
@@ -53,13 +58,25 @@ export function ChangeRequestsCard({
           </Badge>
         </InlineStack>
         <BlockStack gap="200">
-          <Checkbox
-            label={t('label')}
-            checked={checked}
-            disabled={readOnly || blocked}
-            onChange={onChange}
-            helpText={t('description')}
-          />
+          {styleBlocked ? (
+            <Tooltip content={t('styleUnavailable')} preferredPosition="above">
+              <Checkbox
+                label={t('label')}
+                checked={checked}
+                disabled
+                onChange={onChange}
+                helpText={t('description')}
+              />
+            </Tooltip>
+          ) : (
+            <Checkbox
+              label={t('label')}
+              checked={checked}
+              disabled={readOnly || blocked}
+              onChange={onChange}
+              helpText={t('description')}
+            />
+          )}
           {!ready && (
             <InlineGrid columns="20px 1fr" gap="100" alignItems="center">
               <Icon source={ClockIcon} tone="caution" />

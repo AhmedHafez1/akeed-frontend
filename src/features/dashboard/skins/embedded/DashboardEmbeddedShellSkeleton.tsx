@@ -1,13 +1,21 @@
-import { BlockStack, InlineStack, Page, SkeletonBodyText } from '@shopify/polaris'
+import {
+  BlockStack,
+  InlineStack,
+  Page,
+  SkeletonBodyText,
+} from '@shopify/polaris'
 import { DashboardPageSkeleton } from '@/shared/layout/skeletons'
+import { ConfirmationsShellSkeleton } from './components/ConfirmationsShellSkeleton'
 
 interface DashboardEmbeddedShellSkeletonProps {
-  variant: 'stats' | 'verifications'
+  variant: 'stats' | 'verifications' | 'confirmations'
 }
 
 export function DashboardEmbeddedShellSkeleton({
   variant,
 }: DashboardEmbeddedShellSkeletonProps) {
+  if (variant === 'confirmations') return <ConfirmationsShellSkeleton />
+
   return (
     <Page title="Dashboard">
       <BlockStack gap="500">

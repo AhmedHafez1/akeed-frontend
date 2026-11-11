@@ -51,7 +51,7 @@ export default function VerificationsPage() {
 
   return (
     <EmbeddedAuthGate
-      fallback={<DashboardEmbeddedShellSkeleton variant="verifications" />}
+      fallback={<DashboardEmbeddedShellSkeleton variant="confirmations" />}
       onboardingGate="dashboard"
     >
       {mode === 'EMBEDDED' ? (

@@ -825,6 +825,50 @@ describe('SettingsStandalonePage message improvements', () => {
     expect(within(preview()).getByText('لا')).toBeTruthy()
   })
 
+  it('adds Request a change to the preview while the switch is on', async () => {
+    api.fetchSettings.mockResolvedValue(
+      settingsResponseFixture({
+        state: {
+          source: standaloneSource,
+          changeRequestsEnabled: false,
+          changeRequestReadiness: { ready: true },
+        },
+      })
+    )
+    renderPage()
+    await storeNameInput()
+    expect(within(preview()).queryByText('طلب تعديل')).toBeNull()
+
+    fireEvent.click(
+      screen.getByRole('switch', { name: ar.settings.changeRequests.label })
+    )
+    expect(within(preview()).getByText('طلب تعديل')).toBeTruthy()
+
+    fireEvent.click(
+      screen.getByRole('switch', { name: ar.settings.changeRequests.label })
+    )
+    expect(within(preview()).queryByText('طلب تعديل')).toBeNull()
+  })
+
+  it('cannot turn on Request a change for a style without its template', async () => {
+    const response = settingsResponseFixture({
+      state: {
+        source: standaloneSource,
+        changeRequestsEnabled: false,
+        changeRequestReadiness: { ready: true },
+      },
+    })
+    response.template.variants.ar[0].changeRequest = false
+    api.fetchSettings.mockResolvedValue(response)
+    renderPage()
+    await storeNameInput()
+    const control = screen.getByRole('switch', {
+      name: ar.settings.changeRequests.label,
+    }) as HTMLButtonElement
+    expect(control.disabled).toBe(true)
+    expect(within(preview()).queryByText('طلب تعديل')).toBeNull()
+  })
+
   it('shows bold as WhatsApp does, and the total as it is sent', async () => {
     const response = settingsResponseFixture({
       state: { source: standaloneSource },

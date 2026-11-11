@@ -386,6 +386,7 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
           <ChangeRequestsCard
             checked={values.changeRequestsEnabled}
             ready={data.state.changeRequestReadiness?.ready === true}
+            styleReady={styles.changeRequestAvailable}
             variants={data.state.changeRequestReadiness?.variants}
             onChange={(changeRequestsEnabled) =>
               model.update({ changeRequestsEnabled })

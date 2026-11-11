@@ -1,6 +1,6 @@
 import { IndexTable, SkeletonBodyText } from '@shopify/polaris'
 
-const SKELETON_ROW_COUNT = 5
+const SKELETON_ROW_COUNT = 10
 /** One per column of the confirmations table, each a single line. */
 const SKELETON_COLUMN_COUNT = 9
 

@@ -1642,6 +1642,7 @@
       "label": "Müşterilerin değişiklik istemesine izin ver",
       "description": "Onay mesajlarına üçüncü bir düğme ekler.",
       "notAvailableYet": "Henüz kullanılamıyor. Daha sonra tekrar deneyin.",
+      "styleUnavailable": "Seçilen stil için değişiklik isteği şablonu yok.",
       "noteAck": "Akeed, alındığını onaylamak için bir kez yanıt verir (1 mesaj).",
       "noteAckPlan": "Akeed, alındığını onaylamak için bir kez yanıt verir (planınızdan 1 mesaj).",
       "saveUnavailable": "Değişiklik iste henüz kullanılamıyor. Daha sonra tekrar deneyin.",

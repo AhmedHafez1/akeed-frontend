@@ -1642,6 +1642,7 @@
       "label": "Permettre aux clients de demander une modification",
       "description": "Ajoute un troisième bouton aux messages de confirmation.",
       "notAvailableYet": "Pas encore disponible. Réessayez plus tard.",
+      "styleUnavailable": "Aucun modèle de demande de modification pour le style sélectionné.",
       "noteAck": "Akeed répond une fois pour confirmer la réception (1 message).",
       "noteAckPlan": "Akeed répond une fois pour confirmer la réception (1 message de votre forfait).",
       "saveUnavailable": "Demander une modification n’est pas encore disponible. Réessayez plus tard.",

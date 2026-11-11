@@ -29,6 +29,11 @@ export interface CodTemplateDefinition {
    * approved and not switched on yet (`not_enabled`).
    */
   availability?: TemplateStyleLock
+  /**
+   * Whether the style has a usable change-request version for this store.
+   * Absent from an older backend.
+   */
+  changeRequest?: boolean
 }
 
 export type TemplateStyleLock = 'in_review' | 'not_enabled'
@@ -78,6 +83,11 @@ export interface SettingsResponse {
     variants: ByMessageLanguage<CodTemplateDefinition[]>
     /** The selected message per language; null when it is not live. */
     messages: ByMessageLanguage<TemplateMessage | null>
+    /**
+     * The "Request a change" label as each language sends it. Absent from an
+     * older backend.
+     */
+    changeButtons?: ByMessageLanguage<string>
     /**
      * The reminder styles, present only while the backend offers them.
      * `selected` is null for "same as the first message".

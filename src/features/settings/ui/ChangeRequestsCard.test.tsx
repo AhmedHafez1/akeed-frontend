@@ -43,6 +43,35 @@ describe.each([
     expect(screen.queryByText(/fulfillment hold/i)).toBeNull()
     expect(onChange).not.toHaveBeenCalled()
   })
+  it('is disabled with a hover hint when the selected style has no change-request template', async () => {
+    const onChange = vi.fn()
+    render(
+      <NextIntlClientProvider locale="en" messages={en} timeZone="UTC">
+        <AppProvider i18n={polaris}>
+          <Component
+            checked={false}
+            ready
+            styleReady={false}
+            onChange={onChange}
+            readOnly={false}
+          />
+        </AppProvider>
+      </NextIntlClientProvider>
+    )
+    const control = screen.getByRole(role) as HTMLInputElement
+    expect(control.disabled).toBe(true)
+    expect(
+      screen.queryByText(en.settings.changeRequests.styleUnavailable)
+    ).toBeNull()
+    fireEvent.mouseOver(control)
+    fireEvent.mouseEnter(control.closest('span[tabindex]') ?? control)
+    fireEvent.focus(control.closest('span[tabindex]') ?? control)
+    expect(
+      await screen.findByText(en.settings.changeRequests.styleUnavailable)
+    ).toBeTruthy()
+    fireEvent.click(control)
+    expect(onChange).not.toHaveBeenCalled()
+  })
   it('keeps readiness and branding notices visible without opening help', () => {
     render(
       <NextIntlClientProvider locale="en" messages={en} timeZone="UTC">
