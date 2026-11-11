@@ -1,5 +1,6 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import { useStandaloneShell } from '@/shared/layout/StandaloneShellContext'
@@ -7,6 +8,7 @@ import {
   DashboardEmbeddedShellSkeleton,
   DashboardStandaloneSkin,
   MainEmbeddedSkin,
+  resolveMainTab,
   useStandaloneDashboardUrlState,
 } from '@/features/dashboard'
 import { SendTestToPhoneAction } from '@/features/onboarding'
@@ -30,10 +32,17 @@ function StandaloneDashboardPageContent() {
 
 export default function DashboardPage() {
   const { mode } = useAkeedMode()
+  // The loading screen matches the view that opens, so it does not change
+  // shape when the session is ready.
+  const tab = resolveMainTab(useSearchParams().get('tab'))
 
   return (
     <EmbeddedAuthGate
-      fallback={<DashboardEmbeddedShellSkeleton variant="stats" />}
+      fallback={
+        <DashboardEmbeddedShellSkeleton
+          variant={tab === 'metrics' ? 'stats' : 'confirmations'}
+        />
+      }
       onboardingGate="dashboard"
     >
       {mode === 'EMBEDDED' ? (
