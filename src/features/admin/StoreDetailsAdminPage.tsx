@@ -15,7 +15,6 @@ import {
   ListChecks,
   Loader2,
   RefreshCw,
-  ShieldCheck,
   Store as StoreIcon,
   Wallet,
 } from 'lucide-react'
@@ -50,6 +49,8 @@ import {
   storedCreditsLabel,
 } from './AdminStoreUi'
 import { AdminEmptyState, AdminMetricCard, AdminSelect } from './AdminUi'
+import { SignalList } from './AdminSignalUi'
+import { skipReasonLabel } from './adminSignals'
 import {
   useAdminStore,
   useAdminStoreVerifications,
@@ -85,21 +86,6 @@ const milestoneLabels: Record<string, string> = {
   first_real_cod_resolved: 'Activated (first order resolved)',
   paid_subscription_activated: 'Paid subscription activated',
   uninstalled: 'Uninstalled',
-}
-
-const signalLabels: Record<string, string> = {
-  store_uninstalled: 'Store uninstalled',
-  onboarding_incomplete: 'Onboarding incomplete',
-  no_eligible_order: 'No eligible COD order yet',
-  usage_critical: 'Plan usage almost exhausted',
-  usage_attention: 'Plan usage above 80%',
-  failed_verification_rate: 'High failed verification rate (24h)',
-  webhook_failures: 'Webhook delivery failures (1h)',
-  auto_confirmation_disabled: 'Auto-confirmation is disabled',
-  subscription_blocked: 'Subscription is blocked',
-  credits_exhausted: 'No credits left',
-  credits_low: 'Credit balance is low',
-  no_recent_activity: 'No recent activity',
 }
 
 const numberFormat = new Intl.NumberFormat('en')
@@ -181,7 +167,7 @@ export function StoreDetailsAdminPage({
                 onChanged={refreshAll}
               />
               <AutomationCard store={store} />
-              <HealthCard store={store} />
+              <OrderIntakeCard store={store} />
               <AdminWhatsappSenderCard
                 orgId={store.org_id}
                 whatsapp={store.whatsapp}
@@ -252,66 +238,77 @@ function StoreHeader({
       : null
 
   return (
-    <header className="border-border bg-card flex flex-col gap-4 rounded-2xl border p-5 shadow-xs sm:p-6 lg:flex-row lg:items-start lg:justify-between">
-      <div className="flex min-w-0 items-start gap-4">
-        <span className="bg-primary-subtle text-primary grid size-12 shrink-0 place-items-center rounded-xl">
-          <StoreIcon className="size-6" aria-hidden="true" />
-        </span>
-        <div className="min-w-0">
-          <p className="text-primary text-xs font-semibold tracking-[0.16em] uppercase">
-            Store details
-          </p>
-          <h1 className="text-foreground mt-1 truncate text-2xl font-semibold">
-            {store.store_name}
-          </h1>
-          <div className="mt-2 flex flex-wrap items-center gap-2">
-            <PlatformBadge platform={store.platform} />
-            <LifecycleBadge status={store.lifecycle_status} />
-            <HealthBadge status={store.health.status} />
+    <header className="border-border bg-card rounded-2xl border p-5 shadow-xs sm:p-6">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+        <div className="flex min-w-0 items-start gap-4">
+          <span className="bg-primary-subtle text-primary grid size-12 shrink-0 place-items-center rounded-xl">
+            <StoreIcon className="size-6" aria-hidden="true" />
+          </span>
+          <div className="min-w-0">
+            <p className="text-primary text-xs font-semibold tracking-[0.16em] uppercase">
+              Store details
+            </p>
+            <h1 className="text-foreground mt-1 truncate text-2xl font-semibold">
+              {store.store_name}
+            </h1>
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <PlatformBadge platform={store.platform} />
+              <LifecycleBadge status={store.lifecycle_status} />
+              <HealthBadge status={store.health.status} />
+            </div>
+            <p className="text-muted-foreground mt-2 flex min-w-0 items-center gap-1.5 text-xs">
+              {shopUrl ? (
+                <a
+                  href={shopUrl}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="hover:text-primary focus-visible:ring-ring inline-flex min-w-0 items-center gap-1 rounded font-mono hover:underline focus-visible:ring-2 focus-visible:outline-none"
+                >
+                  <span className="truncate">{store.shop_domain}</span>
+                  <ExternalLink
+                    className="size-3 shrink-0"
+                    aria-hidden="true"
+                  />
+                </a>
+              ) : (
+                <span className="truncate font-mono">
+                  {store.shop_domain ?? store.source_identity}
+                </span>
+              )}
+            </p>
           </div>
-          <p className="text-muted-foreground mt-2 flex min-w-0 items-center gap-1.5 text-xs">
-            {shopUrl ? (
-              <a
-                href={shopUrl}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="hover:text-primary focus-visible:ring-ring inline-flex min-w-0 items-center gap-1 rounded font-mono hover:underline focus-visible:ring-2 focus-visible:outline-none"
-              >
-                <span className="truncate">{store.shop_domain}</span>
-                <ExternalLink className="size-3 shrink-0" aria-hidden="true" />
-              </a>
-            ) : (
-              <span className="truncate font-mono">
-                {store.shop_domain ?? store.source_identity}
-              </span>
+        </div>
+        <div className="flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center lg:flex-col lg:items-end">
+          <span className="text-muted-foreground text-xs">
+            Last updated {formatDateTime(evaluatedAt)}
+          </span>
+          <div className="flex flex-wrap gap-2">
+            {store.billing.model === 'credits' && (
+              <Button asChild variant="outline">
+                <Link
+                  href={`/${locale}/admin/standalone-billing/${store.org_id}`}
+                >
+                  <Wallet aria-hidden="true" />
+                  Billing account
+                </Link>
+              </Button>
             )}
-          </p>
-        </div>
-      </div>
-      <div className="flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center lg:flex-col lg:items-end">
-        <span className="text-muted-foreground text-xs">
-          Last updated {formatDateTime(evaluatedAt)}
-        </span>
-        <div className="flex flex-wrap gap-2">
-          {store.billing.model === 'credits' && (
-            <Button asChild variant="outline">
-              <Link
-                href={`/${locale}/admin/standalone-billing/${store.org_id}`}
-              >
-                <Wallet aria-hidden="true" />
-                Billing account
-              </Link>
+            <Button variant="outline" onClick={onRefresh} disabled={loading}>
+              <RefreshCw
+                className={cn(loading && 'animate-spin')}
+                aria-hidden="true"
+              />
+              {loading ? 'Refreshing' : 'Refresh'}
             </Button>
-          )}
-          <Button variant="outline" onClick={onRefresh} disabled={loading}>
-            <RefreshCw
-              className={cn(loading && 'animate-spin')}
-              aria-hidden="true"
-            />
-            {loading ? 'Refreshing' : 'Refresh'}
-          </Button>
+          </div>
         </div>
       </div>
+      <SignalList store={store} className="mt-5" />
+      {store.data_quality.length > 0 && (
+        <p className="text-muted-foreground mt-3 text-xs">
+          Some milestones are estimated from retained records.
+        </p>
+      )}
     </header>
   )
 }
@@ -556,6 +553,7 @@ function BillingCard({
           ['Plan', titleCase(billing.plan)],
           ['Subscription', titleCase(billing.subscription_status)],
           ['Billing activated', formatDate(store.billing_activated_at)],
+          ...reinstallRows(store),
         ]}
       />
       <StorePaidThroughControl
@@ -642,45 +640,159 @@ function AutomationCard({ store }: { store: AdminStoreDetail }) {
   )
 }
 
-function HealthCard({ store }: { store: AdminStoreDetail }) {
-  const signals = store.health.signals
-  return (
-    <DetailCard title="Health">
-      <div className="flex items-center justify-between gap-3">
-        <HealthBadge status={store.health.status} />
-        <span className="text-muted-foreground text-xs">
-          {signals.length === 0
-            ? 'No active signals'
-            : `${signals.length} active signal${signals.length === 1 ? '' : 's'}`}
-        </span>
-      </div>
-      {signals.length > 0 ? (
-        <ul className="mt-4 space-y-2">
-          {signals.map((signal) => (
-            <li
-              key={signal}
-              className="bg-muted/50 text-foreground/80 flex items-start gap-2 rounded-lg px-3 py-2 text-sm"
-            >
-              <CircleAlert
-                className="text-warning mt-0.5 size-4 shrink-0"
-                aria-hidden="true"
-              />
-              {signalLabels[signal] ?? titleCase(signal)}
-            </li>
-          ))}
-        </ul>
+/** The plan a reinstalled store lost, and whether it has one again. */
+function reinstallRows(
+  store: AdminStoreDetail
+): Array<[string, React.ReactNode]> {
+  const reinstall = store.reinstall
+  if (!reinstall) return []
+  return [
+    [
+      'Before reinstall',
+      [
+        reinstall.previous_plan
+          ? titleCase(reinstall.previous_plan)
+          : 'No plan',
+        reinstall.lost_at && `lost ${formatDateTime(reinstall.lost_at)}`,
+      ]
+        .filter(Boolean)
+        .join(' · '),
+    ],
+    [
+      'Now',
+      reinstall.has_active_plan ? (
+        'Active plan'
       ) : (
-        <p className="bg-primary-subtle text-primary-subtle-foreground mt-4 flex items-center gap-2 rounded-lg px-3 py-2 text-sm">
-          <ShieldCheck className="size-4" aria-hidden="true" />
-          Everything looks good.
+        <span className="text-destructive">No active plan</span>
+      ),
+    ],
+  ]
+}
+
+const intakeDay = (day: string) =>
+  new Intl.DateTimeFormat('en', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(`${day}T00:00:00Z`))
+
+/** A day where nearly every order was skipped stands out. */
+const mostlySkipped = (day: { received: number; skipped: number }) =>
+  day.received >= 5 && day.skipped / day.received >= 0.9
+
+function OrderIntakeCard({ store }: { store: AdminStoreDetail }) {
+  const intake = store.order_intake
+  const days = intake?.days ?? []
+  const received = days.reduce((sum, day) => sum + day.received, 0)
+  return (
+    <section className="border-border bg-card rounded-2xl border p-5 shadow-xs">
+      <div className="flex items-baseline justify-between gap-3">
+        <h2 className="text-foreground text-sm font-semibold">Order intake</h2>
+        {intake && (
+          <span className="text-muted-foreground text-xs">
+            Last 7 days · {intake.time_zone}
+          </span>
+        )}
+      </div>
+      {!intake ? (
+        <p className="text-muted-foreground mt-4 text-sm">Unknown</p>
+      ) : received === 0 ? (
+        <p className="text-muted-foreground mt-4 text-sm">
+          No orders received in the last 7 days.
         </p>
+      ) : (
+        <>
+          <table className="mt-4 w-full text-sm">
+            <thead className="text-muted-foreground text-xs">
+              <tr>
+                <th scope="col" className="pb-2 text-start font-medium">
+                  Day
+                </th>
+                <th scope="col" className="pb-2 text-end font-medium">
+                  Received
+                </th>
+                <th scope="col" className="pb-2 text-end font-medium">
+                  Eligible
+                </th>
+                <th scope="col" className="pb-2 text-end font-medium">
+                  Skipped
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-border divide-y">
+              {days.map((day) => (
+                <tr key={day.day}>
+                  <th
+                    scope="row"
+                    className="text-foreground/80 py-1.5 pe-3 text-start text-xs font-normal"
+                  >
+                    {intakeDay(day.day)}
+                  </th>
+                  <td className="text-foreground py-1.5 text-end tabular-nums">
+                    {numberFormat.format(day.received)}
+                  </td>
+                  <td className="text-foreground py-1.5 text-end tabular-nums">
+                    {numberFormat.format(day.eligible)}
+                  </td>
+                  <td
+                    className={cn(
+                      'py-1.5 text-end tabular-nums',
+                      mostlySkipped(day)
+                        ? 'text-destructive font-semibold'
+                        : 'text-foreground'
+                    )}
+                  >
+                    {numberFormat.format(day.skipped)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="border-border mt-4 grid gap-4 border-t pt-4 sm:grid-cols-2">
+            <div>
+              <p className="text-muted-foreground text-xs">Skip reasons</p>
+              {intake.skip_reasons.length === 0 ? (
+                <p className="text-foreground mt-2 text-sm">None</p>
+              ) : (
+                <ul className="mt-2 space-y-1">
+                  {intake.skip_reasons.map((entry) => (
+                    <li
+                      key={entry.reason}
+                      className="flex justify-between gap-3 text-sm"
+                    >
+                      <span className="text-foreground first-letter:uppercase">
+                        {skipReasonLabel(entry.reason)}
+                      </span>
+                      <span className="text-foreground tabular-nums">
+                        {numberFormat.format(entry.count)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div>
+              <p className="text-muted-foreground text-xs">Payment methods</p>
+              <ul className="mt-2 flex flex-wrap gap-1.5">
+                {intake.payment_methods.map((entry) => (
+                  <li
+                    key={entry.name}
+                    dir="auto"
+                    className="border-border bg-muted text-foreground inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-xs font-medium"
+                  >
+                    {entry.name}
+                    <span className="text-muted-foreground tabular-nums">
+                      {numberFormat.format(entry.count)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </>
       )}
-      {store.data_quality.length > 0 && (
-        <p className="text-muted-foreground mt-3 text-xs">
-          Some milestones are estimated from retained records.
-        </p>
-      )}
-    </DetailCard>
+    </section>
   )
 }
 
