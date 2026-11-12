@@ -29,6 +29,7 @@ import { useMessageUsage } from '../../domain/useMessageUsage'
 import { useReviewPrompt } from '../../domain/useReviewPrompt'
 import { OverviewEmbedded } from './OverviewEmbedded'
 import { ConfirmationsEmbedded } from './ConfirmationsEmbedded'
+import { BlockedOrdersBanner } from './components/overview/BlockedOrdersBanner'
 
 /**
  * The embedded app's main page: the dashboard and the confirmations list as
@@ -159,12 +160,22 @@ export function MainEmbeddedSkin() {
             onAction={tips.onAction}
             onDismiss={tips.onDismiss}
           />
-          {showActivation && (
+          {showActivation && !activation.needsPlan && (
             <DashboardActivationSection activation={activation} />
           )}
           {activeTab === 'metrics' ? (
             showActivation ? (
               <>
+                <BlockedOrdersBanner
+                  capacity={null}
+                  availability={activation.state?.sendingAvailability}
+                  canSubscribe={
+                    activation.state?.permissions?.canUpdateConfiguration
+                  }
+                  timeZone="UTC"
+                  hostParam={hostParam}
+                  onChoosePlan={() => openPlans()}
+                />
                 <EmbeddedPageHeader
                   title={renderTitle(null)}
                   actions={headerActions}
@@ -176,6 +187,10 @@ export function MainEmbeddedSkin() {
               </>
             ) : (
               <OverviewEmbedded
+                availability={activation.state?.sendingAvailability}
+                canSubscribe={
+                  activation.state?.permissions?.canUpdateConfiguration
+                }
                 period={period}
                 periodOptions={periodOptions}
                 onPeriodChange={onPeriodChange}
@@ -198,6 +213,10 @@ export function MainEmbeddedSkin() {
             )
           ) : (
             <ConfirmationsEmbedded
+              availability={activation.state?.sendingAvailability}
+              canSubscribe={
+                activation.state?.permissions?.canUpdateConfiguration
+              }
               period={period}
               periodOptions={periodOptions}
               onPeriodChange={onPeriodChange}
@@ -220,6 +239,11 @@ export function MainEmbeddedSkin() {
         </BlockStack>
       </div>
       <UpgradePlansModal
+        preferredPlanId={
+          activation.state?.sendingAvailability?.currentPlanId
+            ? null
+            : activation.state?.sendingAvailability?.lastPlanId
+        }
         open={plansReturnFocus !== null}
         title={t('overview.credits.plansModalTitle')}
         hostParam={hostParam}

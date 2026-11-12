@@ -1,4 +1,27 @@
 {
+  "shopifyPlanRequired": {
+    "periodEnded": "Your previously paid period has ended. Choose a plan to resume confirmations.",
+    "heading": "Choose a plan to resume confirmations",
+    "criticalTitle": "No active plan — confirmations are stopped",
+    "noPlan": "No active plan",
+    "body": "Your settings are saved, but your store has no active plan. Confirmations will not send until you choose a plan.",
+    "freeUsed": "Your store has already used its one-time free messages.",
+    "previousEnded": "Your {plan} subscription ended when the app was removed. Choose it again to resume.",
+    "chooseLater": "Choose later",
+    "choosePlan": "Choose a plan",
+    "chooseAnother": "Choose another plan",
+    "subscribe": "Subscribe to {plan}",
+    "missed": "Orders not confirmed because there was no active plan in the last 48 hours: {count}.",
+    "held": "Other orders waiting for plan allowance: {count}. These held orders can resume when capacity returns.",
+    "reviewMissed": "Review missed orders in Shopify; choosing a plan does not automatically resend them.",
+    "ownerRequired": "Ask the store owner or an administrator to choose a plan.",
+    "previousStatus": "Previous plan: {plan} · {status}",
+    "cancelledOn": "Cancelled {date}",
+    "cancelled": "Cancelled",
+    "frozen": "Frozen",
+    "inactive": "Inactive",
+    "usageEnded": "Usage from the ended period is not current. Choose a plan to start sending confirmations."
+  },
   "adminCommon": {
     "title": "Akeed Admin",
     "subtitle": "Control tower",

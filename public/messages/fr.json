@@ -1,4 +1,27 @@
 {
+  "shopifyPlanRequired": {
+    "periodEnded": "Votre période déjà payée est terminée. Choisissez un forfait pour reprendre les confirmations.",
+    "heading": "Choisissez un forfait pour reprendre les confirmations",
+    "criticalTitle": "Aucun forfait actif — les confirmations sont arrêtées",
+    "noPlan": "Aucun forfait actif",
+    "body": "Vos paramètres sont enregistrés, mais votre boutique n’a aucun forfait actif. Les confirmations ne seront pas envoyées avant le choix d’un forfait.",
+    "freeUsed": "Votre boutique a déjà utilisé ses messages gratuits offerts une seule fois.",
+    "previousEnded": "Votre abonnement {plan} a pris fin à la suppression de l’application. Choisissez-le à nouveau pour reprendre.",
+    "chooseLater": "Choisir plus tard",
+    "choosePlan": "Choisir un forfait",
+    "chooseAnother": "Choisir un autre forfait",
+    "subscribe": "S’abonner à {plan}",
+    "missed": "Commandes non confirmées faute de forfait actif au cours des 48 dernières heures : {count}.",
+    "held": "Autres commandes en attente de capacité du forfait : {count}. Ces commandes en attente pourront reprendre lorsque la capacité sera rétablie.",
+    "reviewMissed": "Vérifiez les commandes manquées dans Shopify ; choisir un forfait ne renvoie pas automatiquement leurs confirmations.",
+    "ownerRequired": "Demandez au propriétaire ou à un administrateur de choisir un forfait.",
+    "previousStatus": "Forfait précédent : {plan} · {status}",
+    "cancelledOn": "Annulé le {date}",
+    "cancelled": "Annulé",
+    "frozen": "Gelé",
+    "inactive": "Inactif",
+    "usageEnded": "L’utilisation de la période terminée n’est pas l’utilisation actuelle. Choisissez un forfait pour envoyer des confirmations."
+  },
   "error": {
     "title": "Une erreur s’est produite",
     "description": "Une erreur inattendue s’est produite. Veuillez réessayer.",

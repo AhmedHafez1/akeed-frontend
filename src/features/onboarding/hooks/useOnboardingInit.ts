@@ -36,6 +36,11 @@ export function resolveResumeStep(
   requestedStep: string | null
 ): EmbeddedStep | 'dashboard' {
   if (state.onboardingStatus !== 'completed') return 'setup'
+  if (
+    state.activation?.needsPlan ||
+    state.sendingAvailability?.reason === 'billing_not_active'
+  )
+    return 'plans'
   if (requestedStep === 'test') return 'test'
   const activation = state.activation
   if (activation && !activation.testConfirmedAt && !activation.testSkippedAt) {
@@ -59,6 +64,7 @@ export function useOnboardingInit({
   setStep,
 }: UseOnboardingInitParams) {
   const [isInitialLoading, setIsInitialLoading] = useState(true)
+  const [state, setState] = useState<IntegrationOnboardingState | null>(null)
   const [initialStoreName, setInitialStoreName] = useState('')
   const [initialDefaultLanguage, setInitialDefaultLanguage] =
     useState<IntegrationOnboardingLanguage>('auto')
@@ -93,6 +99,7 @@ export function useOnboardingInit({
           }),
         ])
         if (!active) return
+        setState(state)
 
         const resumeStep = resolveResumeStep(state, requestedStep)
         if (resumeStep === 'dashboard') {
@@ -137,6 +144,7 @@ export function useOnboardingInit({
   ])
 
   return {
+    state,
     isInitialLoading,
     initialStoreName,
     initialDefaultLanguage,

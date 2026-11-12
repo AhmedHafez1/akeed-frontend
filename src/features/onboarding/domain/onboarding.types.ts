@@ -79,6 +79,7 @@ export const AUTOMATION_TIMEZONES = [
 export type AutomationTimezone = (typeof AUTOMATION_TIMEZONES)[number]
 
 export interface IntegrationOnboardingState {
+  sendingAvailability?: import('@/shared/types/sendingAvailability').SendingAvailability
   integrationId: string
   source: {
     platformType: string

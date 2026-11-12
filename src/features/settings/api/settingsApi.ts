@@ -65,7 +65,7 @@ export interface SettingsResponse {
       pools?: UsagePools | null
       used: number
       limit: number
-      periodStart: string
+      periodStart: string | null
       periodEnd: string | null
     }
     /** Accepted customer messages in the last 30 days, tests excluded. */

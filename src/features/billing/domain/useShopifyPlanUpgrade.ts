@@ -22,6 +22,7 @@ import { useShopifySubscribe } from './useShopifySubscribe'
 export function useShopifyPlanUpgrade(options: {
   enabled: boolean
   hostParam: string | null
+  preferredPlanId?: ShopifyPlanId | null
 }) {
   const t = useTranslations('embeddedOnboarding')
   const [chosenPlanId, setSelectedPlanId] = useState<ShopifyPlanId | null>(null)
@@ -66,7 +67,12 @@ export function useShopifyPlanUpgrade(options: {
     currentPaidIndex < 0
       ? paidPlans[0]?.id
       : (paidPlans[currentPaidIndex + 1] ?? paidPlans[currentPaidIndex]).id
-  const selectedPlanId = chosenPlanId ?? defaultPlanId ?? null
+  const preferred =
+    !currentPlanId &&
+    paidPlans.some((plan) => plan.id === options.preferredPlanId)
+      ? options.preferredPlanId
+      : null
+  const selectedPlanId = chosenPlanId ?? preferred ?? defaultPlanId ?? null
   const isRenewal =
     !paidThroughAt && currentPaidIndex >= 0 && selectedPlanId === currentPlanId
   const isKeepingPaidPlan =
@@ -82,6 +88,8 @@ export function useShopifyPlanUpgrade(options: {
     paidPlans,
     starterPlan,
     isLoading: plansQuery.isLoading,
+    loadError: plansQuery.isError,
+    retryPlans: () => void plansQuery.refetch(),
     isFreePlanClaimed,
     canManageBilling,
     currentPlanId,

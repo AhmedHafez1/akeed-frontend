@@ -29,6 +29,8 @@ import {
   type OnboardingTestError,
 } from '@/features/onboarding'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
+import { PlanRequiredStep } from '@/features/billing'
+import { resolveEmbeddedContextFromSearch } from '@/shared/lib/embedded-context'
 import { getLocaleFromPathname, getIntlLocale } from '@/shared/lib/locale'
 import { getMessageLanguageIntlTag } from '@/shared/lib/messageLanguage'
 
@@ -99,6 +101,7 @@ function EmbeddedOnboarding() {
     errorBanner,
     prefillWarning,
     isFreePlanAvailable,
+    state,
     settings,
     test,
     goToDashboard,
@@ -189,11 +192,11 @@ function EmbeddedOnboarding() {
   )
 
   return (
-    <Page narrowWidth={step !== 'test'}>
+    <Page narrowWidth={step !== 'test' && step !== 'plans'}>
       <Layout>
         <Layout.Section>
           <BlockStack gap="600">
-            {step !== 'success' && (
+            {step !== 'success' && step !== 'plans' && (
               <OnboardingStepCounter
                 currentIndex={flowIndex}
                 steps={[t('flow.quickSetup'), t('flow.tryMessage')]}
@@ -237,6 +240,17 @@ function EmbeddedOnboarding() {
                 onMerchantPhoneChange={settings.handleMerchantPhoneChange}
                 onAutoVerifyChange={settings.setIsAutoVerifyEnabled}
                 onSubmit={settings.handleSubmitSetup}
+              />
+            )}
+
+            {step === 'plans' && (
+              <PlanRequiredStep
+                availability={state?.sendingAvailability}
+                canSubscribe={state?.permissions.canUpdateConfiguration}
+                hostParam={
+                  resolveEmbeddedContextFromSearch(searchParams).hostParam
+                }
+                onChooseLater={goToDashboard}
               />
             )}
 

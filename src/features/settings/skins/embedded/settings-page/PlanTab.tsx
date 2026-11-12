@@ -56,6 +56,7 @@ export function PlanTab({
   const t = useTranslations('settings.embedded.plan')
   const tPlans = useTranslations('billing.embeddedPlans')
   const tNames = useTranslations('embeddedOnboarding')
+  const tRequired = useTranslations('shopifyPlanRequired')
   const locale = useLocale()
 
   const { state, billing } = data
@@ -67,12 +68,37 @@ export function PlanTab({
       ? billing.usage.pools
       : null
   const planName = (id: OnboardingBillingPlanId) => tNames(PLAN_NAME_KEYS[id])
-  const currentPlanId = state.billingPlanId
+  const status = state.sendingAvailability
+  const currentPlanId = status
+    ? status.currentPlanId
+    : billing.currentPlanId !== undefined
+      ? billing.currentPlanId
+      : ['active', 'not_required'].includes(state.billingStatus ?? '') ||
+          (state.billingStatus === 'paid_through' && state.paidThroughAt)
+        ? state.billingPlanId
+        : null
+  const lastPlanId = status?.lastPlanId ?? state.billingPlanId
+  const cancellationDate =
+    status?.cancelledAt && Number.isFinite(Date.parse(status.cancelledAt))
+      ? new Intl.DateTimeFormat(getFormatLocale(locale), {
+          dateStyle: 'medium',
+          timeZone: state.timezone,
+        }).format(new Date(status.cancelledAt))
+      : null
+  const endedStatus =
+    status?.planState === 'frozen' || state.billingStatus === 'frozen'
+      ? tRequired('frozen')
+      : status?.planState === 'cancelled' ||
+          ['cancelled', 'canceled'].includes(state.billingStatus ?? '')
+        ? cancellationDate
+          ? tRequired('cancelledOn', { date: cancellationDate })
+          : tRequired('cancelled')
+        : tRequired('inactive')
   const currentPlan = billing.plans.find((plan) => plan.id === currentPlanId)
   const isFree = !currentPlan || currentPlan.amount === 0
   const { used, limit, periodEnd } = billing.usage
   const percent = usagePercent(used, limit)
-  const banner = resolveUsageBanner(used, limit)
+  const banner = currentPlanId ? resolveUsageBanner(used, limit) : null
   const remaining = Math.max(0, limit - used)
   const paidThroughAt = billing.paidThroughAt ?? null
   const paidThroughDate = paidThroughAt
@@ -159,49 +185,65 @@ export function PlanTab({
             <Text as="h2" variant="headingMd">
               {currentPlanId
                 ? t('currentPlan', { plan: planName(currentPlanId) })
-                : t('noPlan')}
+                : tRequired('noPlan')}
             </Text>
             {currentPlanId && (
               <Badge>{isFree ? t('badgeFree') : t('badgeMonthly')}</Badge>
             )}
           </InlineStack>
-          {pools ? (
-            <PoolMeters pools={pools} renewalDate={renewalDate} />
-          ) : (
-            <>
-              <InlineStack
-                align="space-between"
-                blockAlign="baseline"
-                gap="300"
-              >
-                <div id="settings-usage-label">
-                  <InlineStack gap="200" blockAlign="baseline">
-                    <Text as="span" variant="heading2xl">
-                      <bdi>{formatMessageCount(used)}</bdi>
-                    </Text>
-                    <Text as="span" tone="subdued">
-                      {tPlans('usedOf', { limit: formatMessageCount(limit) })}
-                    </Text>
-                  </InlineStack>
-                </div>
-                <Text as="p" fontWeight="semibold">
-                  {tPlans('remaining', {
-                    count: remaining,
-                    formatted: formatMessageCount(remaining),
+          {!currentPlanId && (
+            <BlockStack gap="200">
+              {lastPlanId && (
+                <Text as="p">
+                  {tRequired('previousStatus', {
+                    plan: planName(lastPlanId),
+                    status: endedStatus,
                   })}
                 </Text>
-              </InlineStack>
-              <ProgressBar
-                progress={percent}
-                tone={percent >= 100 ? 'critical' : 'primary'}
-                size="small"
-                ariaLabelledBy="settings-usage-label"
-                animated={false}
-              />
-            </>
+              )}
+              <Text as="p" tone="subdued">
+                {tRequired('usageEnded')}
+              </Text>
+            </BlockStack>
           )}
+          {currentPlanId &&
+            (pools ? (
+              <PoolMeters pools={pools} renewalDate={renewalDate} />
+            ) : (
+              <>
+                <InlineStack
+                  align="space-between"
+                  blockAlign="baseline"
+                  gap="300"
+                >
+                  <div id="settings-usage-label">
+                    <InlineStack gap="200" blockAlign="baseline">
+                      <Text as="span" variant="heading2xl">
+                        <bdi>{formatMessageCount(used)}</bdi>
+                      </Text>
+                      <Text as="span" tone="subdued">
+                        {tPlans('usedOf', { limit: formatMessageCount(limit) })}
+                      </Text>
+                    </InlineStack>
+                  </div>
+                  <Text as="p" fontWeight="semibold">
+                    {tPlans('remaining', {
+                      count: remaining,
+                      formatted: formatMessageCount(remaining),
+                    })}
+                  </Text>
+                </InlineStack>
+                <ProgressBar
+                  progress={percent}
+                  tone={percent >= 100 ? 'critical' : 'primary'}
+                  size="small"
+                  ariaLabelledBy="settings-usage-label"
+                  animated={false}
+                />
+              </>
+            ))}
           {/* The pools say when they renew themselves. */}
-          {!pools && !paidThroughDate && (
+          {currentPlanId && !pools && !paidThroughDate && (
             <div className="grid grid-cols-[20px_minmax(0,1fr)] items-start gap-2">
               <span className="flex h-5 w-5 items-center justify-center">
                 <Icon

@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import * as onboardingApi from '@/features/onboarding/api/onboardingApi'
 import type { IntegrationOnboardingState } from '@/features/onboarding/domain/onboarding.types'
-import { useOnboardingInit } from './useOnboardingInit'
+import { resolveResumeStep, useOnboardingInit } from './useOnboardingInit'
 
 vi.mock('@/features/onboarding/api/onboardingApi', () => ({
   fetchOnboardingState: vi.fn(),
@@ -13,6 +13,21 @@ vi.mock('@/features/onboarding/api/onboardingApi', () => ({
 const api = vi.mocked(onboardingApi)
 const router = { replace: vi.fn() } as unknown as AppRouterInstance
 const setStep = vi.fn()
+
+describe('planless onboarding resume', () => {
+  it('opens plan selection ahead of the test or success flow', () => {
+    const state = {
+      onboardingStatus: 'completed',
+      activation: {
+        needsPlan: true,
+        testConfirmedAt: '2026-11-11',
+        testSkippedAt: null,
+      },
+    } as IntegrationOnboardingState
+    expect(resolveResumeStep(state, null)).toBe('plans')
+    expect(resolveResumeStep(state, 'test')).toBe('plans')
+  })
+})
 
 function pendingState(
   phones: Pick<

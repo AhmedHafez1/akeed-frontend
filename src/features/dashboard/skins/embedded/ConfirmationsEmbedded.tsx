@@ -46,6 +46,8 @@ import { VerificationsTableSkeleton } from './components/VerificationsTableSkele
 type Feedback = { tone: 'success' | 'critical'; message: string }
 
 interface ConfirmationsEmbeddedProps {
+  availability?: import('@/shared/types/sendingAvailability').SendingAvailability
+  canSubscribe?: boolean
   period: DashboardStatsDateRange
   periodOptions: ReadonlyArray<DateRangeFilterOption>
   onPeriodChange: (period: DashboardStatsDateRange) => void
@@ -67,6 +69,8 @@ interface ConfirmationsEmbeddedProps {
 
 /** Every COD order we messaged, by outcome, searchable and paged. */
 export function ConfirmationsEmbedded({
+  availability,
+  canSubscribe,
   period,
   periodOptions,
   onPeriodChange,
@@ -223,6 +227,8 @@ export function ConfirmationsEmbedded({
       {afterHeader}
 
       <BlockedOrdersBanner
+        availability={availability}
+        canSubscribe={canSubscribe}
         capacity={list.capacity}
         timeZone={list.reportingTimezone}
         hostParam={embeddedContext.hostParam}

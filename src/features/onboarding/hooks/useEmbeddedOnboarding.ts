@@ -29,7 +29,7 @@ interface UseEmbeddedOnboardingParams {
  * banner, and wires the focused hooks together:
  *
  *   useOnboardingInit          load state, pick the resume step
- *   useOnboardingSettings      quick setup form and submit (goes live)
+ *   useOnboardingSettings      quick setup and the planless-result branch
  *   useOnboardingTest          free test message: send, poll, resend, skip
  *   useOnboardingFunnelEvents  setup_started / onboarding_exited
  */
@@ -84,7 +84,7 @@ export function useEmbeddedOnboarding({
   const handleTestAnswered = useCallback(() => setStep('success'), [])
 
   const test = useOnboardingTest({
-    isActive: !init.isInitialLoading && step !== 'setup',
+    isActive: !init.isInitialLoading && step === 'test',
     freshSendRequestedRef,
     onAnswered: handleTestAnswered,
     onSkipped: goToDashboard,
@@ -95,6 +95,7 @@ export function useEmbeddedOnboarding({
   const handleChangeNumber = useCallback(() => setStep('setup'), [])
 
   return {
+    state: settings.completedState ?? init.state,
     isInitialLoading: init.isInitialLoading,
     step,
     errorBanner,

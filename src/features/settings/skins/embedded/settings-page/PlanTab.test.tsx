@@ -155,22 +155,21 @@ describe('PlanTab', () => {
     expect(subscribe).toHaveBeenCalledWith('pro')
   })
 
-  it('disables a current plan that has lapsed, and subscribes to another', () => {
+  it('offers the lapsed plan again and hides its old usage', () => {
     const { subscribe } = renderTab({
       ...PAID_NEAR_LIMIT,
+      state: { billingPlanId: 'basic', billingStatus: 'cancelled' },
       billing: { ...PAID_NEAR_LIMIT.billing, currentPlanId: null },
     })
 
     expect(
       screen.queryByRole('button', { name: 'جدِّد باقة الأساسية الآن' })
     ).toBeNull()
-    const current = button('باقتك الحالية')
-    expect(
-      current.disabled || current.getAttribute('aria-disabled')
-    ).toBeTruthy()
-    expect(
-      screen.queryByRole('button', { name: 'اشترك في الأساسية' })
-    ).toBeNull()
+    expect(screen.queryByRole('button', { name: 'باقتك الحالية' })).toBeNull()
+    expect(screen.getByText('مفيش باقة نشطة')).toBeTruthy()
+    expect(screen.queryByRole('progressbar')).toBeNull()
+    fireEvent.click(button('اشترك في الأساسية'))
+    expect(subscribe).toHaveBeenCalledWith('basic')
 
     fireEvent.click(button('اشترك في الاحترافية'))
     expect(subscribe).toHaveBeenCalledWith('pro')
