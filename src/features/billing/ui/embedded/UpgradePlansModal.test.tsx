@@ -194,6 +194,43 @@ describe('UpgradePlansModal', () => {
     expect(screen.queryByText(/يبدأ التجديد/)).toBeNull()
   })
 
+  it('subscribes to keep the plan during a paid-through period, never as a renewal', async () => {
+    api.fetchShopifyPlans.mockResolvedValue({
+      ...plansResponse(true, 'pro'),
+      paidThroughAt: '2026-11-30T08:30:00.000Z',
+    })
+    const client = new QueryClient({
+      defaultOptions: { queries: { retry: false } },
+    })
+    renderEmbedded(
+      <QueryClientProvider client={client}>
+        <UpgradePlansModal
+          open
+          title="اختر باقتك"
+          hostParam="host-1"
+          onClose={vi.fn()}
+        />
+      </QueryClientProvider>
+    )
+    await screen.findByRole('radiogroup', { name: 'الباقات' })
+    fireEvent.click(radio('الاحترافية'))
+
+    expect(screen.getByText(/أيامك المدفوعة من قبل إعادة التثبيت/)).toBeTruthy()
+    expect(screen.queryByText(/يبدأ التجديد/)).toBeNull()
+    const keep = screen.getByRole('button', {
+      name: /^احتفظ بباقة الاحترافية · .US\$ 22\.99. شهرياً ابتداءً من /,
+    })
+    await act(async () => {
+      fireEvent.click(keep)
+    })
+
+    expect(api.createShopifySubscription).toHaveBeenCalledWith(
+      'pro',
+      'host-1',
+      { renew: false }
+    )
+  })
+
   it('renews the current plan when it is chosen', async () => {
     await renderModal(true, 'basic')
     fireEvent.click(radio('الأساسية'))

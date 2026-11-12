@@ -51,6 +51,8 @@ function OverviewSkeleton() {
 }
 
 interface OverviewEmbeddedProps {
+  availability?: import('@/shared/types/sendingAvailability').SendingAvailability
+  canSubscribe?: boolean
   period: DashboardStatsDateRange
   periodOptions: ReadonlyArray<DateRangeFilterOption>
   onPeriodChange: (period: DashboardStatsDateRange) => void
@@ -68,6 +70,8 @@ interface OverviewEmbeddedProps {
 
 /** The embedded dashboard: settings, warnings, three KPIs, actions, the funnel. */
 export function OverviewEmbedded({
+  availability,
+  canSubscribe,
   period,
   periodOptions,
   onPeriodChange,
@@ -107,6 +111,14 @@ export function OverviewEmbedded({
       />
 
       {afterHeader}
+      <BlockedOrdersBanner
+        availability={availability}
+        canSubscribe={canSubscribe}
+        capacity={overview?.capacity}
+        timeZone={overview?.reporting_timezone ?? 'UTC'}
+        hostParam={embeddedContext.hostParam}
+        onChoosePlan={onChoosePlan}
+      />
 
       {confirmation.feedback && (
         <Banner
@@ -134,12 +146,6 @@ export function OverviewEmbedded({
         </Banner>
       ) : (
         <BlockStack gap="400">
-          <BlockedOrdersBanner
-            capacity={overview.capacity}
-            timeZone={overview.reporting_timezone}
-            hostParam={embeddedContext.hostParam}
-            onChoosePlan={onChoosePlan}
-          />
           <KpiCards kpis={overview.kpis} />
           <NeedsActionCard
             needsAction={overview.needs_action}

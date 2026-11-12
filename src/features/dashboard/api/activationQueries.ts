@@ -21,5 +21,14 @@ export function activationStateOptions() {
     // The first real confirmation arrives by webhook, so coming back to the
     // tab re-reads it instead of trusting a fresh-looking cache.
     refetchOnWindowFocus: 'always',
+    refetchInterval: (query) => {
+      const status = query.state.data?.state.sendingAvailability
+      const expires = status?.paidThroughAt
+        ? Date.parse(status.paidThroughAt) - Date.now()
+        : null
+      return expires !== null && expires > 0
+        ? Math.min(expires + 100, 30_000)
+        : 30_000
+    },
   })
 }

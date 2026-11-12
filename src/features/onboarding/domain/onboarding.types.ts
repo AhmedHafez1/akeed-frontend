@@ -79,6 +79,7 @@ export const AUTOMATION_TIMEZONES = [
 export type AutomationTimezone = (typeof AUTOMATION_TIMEZONES)[number]
 
 export interface IntegrationOnboardingState {
+  sendingAvailability?: import('@/shared/types/sendingAvailability').SendingAvailability
   integrationId: string
   source: {
     platformType: string
@@ -112,6 +113,12 @@ export interface IntegrationOnboardingState {
   avgShippingCost: number
   billingPlanId: OnboardingBillingPlanId | null
   billingStatus: string | null
+  /**
+   * While the store uses days it paid for before a reinstall
+   * (`billingStatus` = `paid_through`): when they end. Absent from an older
+   * backend.
+   */
+  paidThroughAt?: string | null
   billingManagement?: BillingManagement
   followUpEnabled: boolean
   followUpDelayMinutes: number

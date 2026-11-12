@@ -31,6 +31,7 @@ import type {
 import { AdminErrorPanel } from './AdminErrorPanel'
 import { AdminWhatsappSenderCard } from './AdminWhatsappSenderCard'
 import { StoreLogoHeaderCard } from './StoreLogoHeaderCard'
+import { StorePaidThroughControl } from './StorePaidThroughControl'
 import { StoreReviewPromptCard } from './StoreReviewPromptCard'
 import {
   CreditBalanceBadge,
@@ -174,7 +175,11 @@ export function StoreDetailsAdminPage({
           <div className="grid gap-4 lg:grid-cols-3">
             <div className="grid gap-4 lg:col-span-2 lg:grid-cols-2">
               <ProfileCard store={store} />
-              <BillingCard store={store} />
+              <BillingCard
+                store={store}
+                integrationId={integrationId}
+                onChanged={refreshAll}
+              />
               <AutomationCard store={store} />
               <HealthCard store={store} />
               <AdminWhatsappSenderCard
@@ -466,7 +471,15 @@ function ProfileCard({ store }: { store: AdminStoreDetail }) {
   )
 }
 
-function BillingCard({ store }: { store: AdminStoreDetail }) {
+function BillingCard({
+  store,
+  integrationId,
+  onChanged,
+}: {
+  store: AdminStoreDetail
+  integrationId: string
+  onChanged: () => void
+}) {
   const billing = store.billing
   if (billing.model === 'credits') {
     return (
@@ -544,6 +557,11 @@ function BillingCard({ store }: { store: AdminStoreDetail }) {
           ['Subscription', titleCase(billing.subscription_status)],
           ['Billing activated', formatDate(store.billing_activated_at)],
         ]}
+      />
+      <StorePaidThroughControl
+        integrationId={integrationId}
+        paidThroughAt={store.paid_through_at}
+        onCleared={onChanged}
       />
     </DetailCard>
   )

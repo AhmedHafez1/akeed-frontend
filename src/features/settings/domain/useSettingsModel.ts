@@ -106,7 +106,14 @@ export function useSettingsModel({
     queryFn: fetchSettings,
     enabled,
     staleTime: Infinity,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: (current) =>
+      current.state.data?.state.billingManagement?.mode === 'shopify'
+        ? 'always'
+        : false,
+    refetchInterval: (current) =>
+      current.state.data?.state.billingManagement?.mode === 'shopify'
+        ? 30_000
+        : false,
   })
   const data = query.data
 

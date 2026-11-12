@@ -1,9 +1,9 @@
 /**
  * Onboarding v2 has two visible steps (quick setup, test message) and a
- * success screen that closes them. There is no plan step: Starter is granted
- * when setup is saved, and plans are offered later from the dashboard.
+ * success screen that closes them. A planless Shopify reinstall instead sees
+ * a plan picker after setup; eligible stores still receive Starter silently.
  */
-export type EmbeddedStep = 'setup' | 'test' | 'success'
+export type EmbeddedStep = 'setup' | 'plans' | 'test' | 'success'
 
 export const ONBOARDING_FLOW_STEPS = ['setup', 'test'] as const
 

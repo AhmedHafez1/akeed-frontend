@@ -134,6 +134,17 @@ export function resetAdminStoreReviewPrompt(integrationId: string) {
   )
 }
 
+/**
+ * Removes the store's paid-through date (e.g. after refunding the charge by
+ * hand). A store using it loses the plan now. Audited by the backend.
+ */
+export function clearAdminStorePaidThrough(integrationId: string) {
+  return adminRequest<unknown>(
+    `/api/admin/stores/${encodeURIComponent(integrationId)}/paid-through/clear`,
+    { method: 'POST' }
+  )
+}
+
 export function getAdminStoreVerifications(
   integrationId: string,
   query: string

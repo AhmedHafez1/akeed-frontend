@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import type { RefObject } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { queryKeys } from '@/shared/query/keys'
 import {
   completeOnboardingSetup,
   OnboardingApiError,
@@ -10,7 +12,10 @@ import {
 import { setCachedOnboardingStatus } from '@/features/onboarding/lib/embeddedAuth'
 import { createLogger } from '@/shared/lib/logger'
 import { isValidPhoneNumber } from '@/shared/ui/international-phone-input'
-import type { IntegrationOnboardingLanguage } from '@/features/onboarding/domain/onboarding.types'
+import type {
+  IntegrationOnboardingLanguage,
+  IntegrationOnboardingState,
+} from '@/features/onboarding/domain/onboarding.types'
 import type { EmbeddedStep } from '../model/onboarding.config'
 
 const logger = createLogger('Onboarding')
@@ -50,6 +55,7 @@ export function useOnboardingSettings({
   initialIsAutoVerifyEnabled,
   initialMerchantPhone,
 }: UseOnboardingSettingsParams) {
+  const queryClient = useQueryClient()
   const [storeName, setStoreName] = useState(initialStoreName)
   const [storeNameError, setStoreNameError] = useState<string | undefined>()
   const [defaultLanguage, setDefaultLanguage] =
@@ -60,6 +66,8 @@ export function useOnboardingSettings({
   const [merchantPhone, setMerchantPhone] = useState(initialMerchantPhone)
   const [phoneError, setPhoneError] = useState<string | undefined>()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [completedState, setCompletedState] =
+    useState<IntegrationOnboardingState | null>(null)
 
   useEffect(() => setStoreName(initialStoreName), [initialStoreName])
   useEffect(
@@ -126,14 +134,28 @@ export function useOnboardingSettings({
 
     setIsSubmitting(true)
     try {
-      await completeOnboardingSetup({
+      const { state } = await completeOnboardingSetup({
         storeName: trimmedStoreName,
         defaultLanguage,
         isAutoVerifyEnabled,
         merchantWhatsappPhone: merchantPhone,
       })
       setCachedOnboardingStatus('completed')
-      setStep('test')
+      setCompletedState(state)
+      queryClient.setQueryData(queryKeys.onboarding.state(), { state })
+      void Promise.all([
+        queryClient.invalidateQueries({ queryKey: queryKeys.billing.all }),
+        queryClient.invalidateQueries({ queryKey: queryKeys.settings.all }),
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.verifications.all,
+        }),
+      ])
+      setStep(
+        state.activation?.needsPlan ||
+          state.sendingAvailability?.reason === 'billing_not_active'
+          ? 'plans'
+          : 'test'
+      )
     } catch (error) {
       logger.error('Failed to complete setup', error)
       if (
@@ -155,9 +177,11 @@ export function useOnboardingSettings({
     setErrorBanner,
     setStep,
     storeName,
+    queryClient,
   ])
 
   return {
+    completedState,
     storeName,
     storeNameError,
     defaultLanguage,

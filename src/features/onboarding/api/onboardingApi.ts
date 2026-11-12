@@ -233,7 +233,7 @@ export async function fetchTemplatePreviews(): Promise<OnboardingTemplatePreview
  */
 export async function postOnboardingEvent(
   name: OnboardingClientEvent,
-  step?: 'setup' | 'test' | 'success'
+  step?: 'setup' | 'plans' | 'test' | 'success'
 ): Promise<void> {
   try {
     await fetchWithAuth('/api/onboarding/events', {

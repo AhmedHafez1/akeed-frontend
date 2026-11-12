@@ -131,22 +131,45 @@ describe('PlanTab', () => {
     expect(subscribe).toHaveBeenCalledWith('pro')
   })
 
-  it('disables a current plan that has lapsed, and subscribes to another', () => {
+  it('offers to keep the plan during a paid-through period, with no renewal', () => {
+    const { subscribe } = renderTab({
+      state: { billingPlanId: 'pro' },
+      billing: {
+        currentPlanId: 'pro',
+        paidThroughAt: '2026-11-30T08:30:00.000Z',
+        usage: {
+          used: 180,
+          limit: 1000,
+          periodStart: '2026-10-31',
+          periodEnd: '2026-11-30',
+        },
+        messagesSentLast30Days: 180,
+      },
+    })
+
+    expect(screen.getByText(/أيامك المدفوعة من قبل إعادة التثبيت/)).toBeTruthy()
+    expect(screen.queryByText(/يتجدد رصيدك إلى/)).toBeNull()
+    expect(screen.queryByRole('button', { name: /جدِّد باقة/ })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'باقتك الحالية' })).toBeNull()
+    fireEvent.click(button('اشترك في الاحترافية'))
+    expect(subscribe).toHaveBeenCalledWith('pro')
+  })
+
+  it('offers the lapsed plan again and hides its old usage', () => {
     const { subscribe } = renderTab({
       ...PAID_NEAR_LIMIT,
+      state: { billingPlanId: 'basic', billingStatus: 'cancelled' },
       billing: { ...PAID_NEAR_LIMIT.billing, currentPlanId: null },
     })
 
     expect(
       screen.queryByRole('button', { name: 'جدِّد باقة الأساسية الآن' })
     ).toBeNull()
-    const current = button('باقتك الحالية')
-    expect(
-      current.disabled || current.getAttribute('aria-disabled')
-    ).toBeTruthy()
-    expect(
-      screen.queryByRole('button', { name: 'اشترك في الأساسية' })
-    ).toBeNull()
+    expect(screen.queryByRole('button', { name: 'باقتك الحالية' })).toBeNull()
+    expect(screen.getByText('مفيش باقة نشطة')).toBeTruthy()
+    expect(screen.queryByRole('progressbar')).toBeNull()
+    fireEvent.click(button('اشترك في الأساسية'))
+    expect(subscribe).toHaveBeenCalledWith('basic')
 
     fireEvent.click(button('اشترك في الاحترافية'))
     expect(subscribe).toHaveBeenCalledWith('pro')
