@@ -10,6 +10,7 @@ import { tipsFixtureRequest } from './tipsFixture'
 
 import { billingFixtureRequest } from './billingFixture'
 import { adminBillingFixtureRequest } from './adminBillingFixture'
+import { adminStoresFixtureRequest } from './adminStoresFixture'
 import {
   isOnboardingFixture,
   onboardingFixtureRequest,
@@ -87,6 +88,8 @@ export function fetchWithAuth(url: string, options: RequestInit = {}) {
       .then((summary) => Response.json(orderImportCreditSummary(summary)))
   if (isOrderSyncFixture() && url === '/api/billing/credits')
     return orderSyncCreditsResponse()
+  const adminStores = adminStoresFixtureRequest(url)
+  if (adminStores) return Promise.resolve(adminStores)
   return url.startsWith('/api/admin/')
     ? adminBillingFixtureRequest(url, options)
     : billingFixtureRequest(url, options)

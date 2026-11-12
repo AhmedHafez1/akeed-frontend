@@ -99,8 +99,77 @@ export interface AdminStore {
     top_signal: string | null
     signal_count: number
     signals: string[]
+    /** Absent from an older backend. */
+    levels?: Record<string, AdminSignalLevel>
+    details?: AdminSignalDetails
   }
   data_quality: string[]
+}
+
+export type AdminSignalLevel = 'critical' | 'attention'
+
+/** Short, non-personal facts behind each active health signal. */
+export interface AdminSignalDetails {
+  orders_not_eligible?: {
+    received: number
+    eligible: number
+    skipped: number
+    top_reason: string | null
+    top_payment_method: string | null
+  }
+  paid_store_uninstalled?: {
+    plan: string | null
+    uninstalled_at: string | null
+    paid_through_at: string | null
+  }
+  store_uninstalled?: { uninstalled_at: string | null }
+  reinstalled_without_plan?: {
+    previous_plan: string | null
+    lost_at: string | null
+    reinstalled_at: string | null
+  }
+  subscription_blocked?: { status: string | null }
+  usage_critical?: AdminSignalUsageDetail
+  usage_attention?: AdminSignalUsageDetail
+  failed_verification_rate?: { failed: number; total: number }
+  webhook_failures?: { count: number }
+  credits_exhausted?: AdminSignalCreditDetail
+  credits_low?: AdminSignalCreditDetail
+  onboarding_incomplete?: { since: string | null }
+  no_eligible_order?: { since: string | null }
+  no_recent_activity?: { since: string | null }
+}
+
+export interface AdminSignalUsageDetail {
+  percent: number
+  used: number
+  limit: number
+}
+
+export interface AdminSignalCreditDetail {
+  available: number
+  debt: number
+}
+
+/** Unique store orders received over the last days, in the store's zone. */
+export interface AdminStoreOrderIntake {
+  time_zone: string
+  days: Array<{
+    day: string
+    received: number
+    eligible: number
+    skipped: number
+  }>
+  skip_reasons: Array<{ reason: string; count: number }>
+  payment_methods: Array<{ name: string; count: number }>
+}
+
+/** The plan a reinstalled store had before, and whether it has one now. */
+export interface AdminStoreReinstall {
+  previous_plan: string | null
+  lost_at: string | null
+  reinstalled_at: string
+  has_active_plan: boolean
 }
 
 export interface AdminStoresResponse {
@@ -142,6 +211,9 @@ export interface AdminStoreDetail extends AdminStore {
     send_delay_minutes: number
   }
   milestones: AdminStoreMilestone[]
+  /** Absent from an older backend. */
+  order_intake?: AdminStoreOrderIntake
+  reinstall?: AdminStoreReinstall | null
   verification_totals: {
     total: number
     test: number

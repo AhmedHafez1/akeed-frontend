@@ -46,6 +46,8 @@ import {
   AdminPageHeader,
   AdminSelect,
 } from './AdminUi'
+import { SignalCallout, SignalSummary } from './AdminSignalUi'
+import { signalLabel, signalOptions } from './adminSignals'
 
 const lifecycleOptions = [
   { value: '', label: 'All lifecycle stages' },
@@ -93,6 +95,7 @@ const filterLabels: Record<string, string> = {
   platform: 'Platform',
   lifecycle_status: 'Lifecycle',
   health_status: 'Health',
+  signal: 'Signal',
   plan: 'Plan',
   onboarding_status: 'Onboarding',
   country: 'Country',
@@ -404,7 +407,7 @@ export function StoresAdminPage() {
           </section>
 
           <section className="border-border bg-card rounded-2xl border shadow-xs">
-            <div className="grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-[minmax(240px,1.6fr)_repeat(4,minmax(130px,1fr))_minmax(150px,1fr)_auto_auto]">
+            <div className="grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-[minmax(240px,1.6fr)_repeat(5,minmax(130px,1fr))_minmax(150px,1fr)_auto_auto]">
               <label className="relative block">
                 <span className="sr-only">Search stores</span>
                 <Search className="text-muted-foreground/70 absolute top-3 left-3 size-4" />
@@ -439,6 +442,13 @@ export function StoresAdminPage() {
                   setFilter('health_status', event.target.value)
                 }
                 options={healthOptions}
+              />
+              <AdminSelect
+                label="Signal"
+                hideLabel
+                value={searchParams.get('signal') ?? ''}
+                onChange={(event) => setFilter('signal', event.target.value)}
+                options={signalOptions}
               />
               <AdminSelect
                 label="Plan"
@@ -605,7 +615,9 @@ export function StoresAdminPage() {
                     <span className="font-medium">{filter.label}:</span>
                     {filter.key === 'platform'
                       ? platformLabel(filter.value)
-                      : titleCase(filter.value)}
+                      : filter.key === 'signal'
+                        ? signalLabel(filter.value)
+                        : titleCase(filter.value)}
                     <X className="size-3" aria-hidden="true" />
                   </button>
                 ))}
@@ -849,11 +861,7 @@ function StoresResults({
                       </td>
                       <td className="px-4 py-4">
                         <HealthBadge status={store.health.status} />
-                        {store.health.top_signal && (
-                          <p className="text-muted-foreground mt-1 max-w-36 truncate text-xs">
-                            {titleCase(store.health.top_signal)}
-                          </p>
-                        )}
+                        <SignalSummary store={store} />
                       </td>
                       <td className="px-3 py-4 text-right">
                         <Button
@@ -918,6 +926,7 @@ function StoresResults({
                 </div>
                 <HealthBadge status={store.health.status} />
               </div>
+              <SignalCallout store={store} />
               <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
                 <div>
                   <p className="text-muted-foreground">Lifecycle</p>
@@ -1046,7 +1055,7 @@ function StoreDetails({ store, href }: { store: AdminStore; href: string }) {
     [
       'Health signals',
       store.health.signal_count > 0
-        ? `${store.health.signal_count} · ${titleCase(store.health.top_signal)}`
+        ? `${store.health.signal_count} · ${signalLabel(store.health.top_signal ?? '')}`
         : 'No active signals',
     ],
     [
