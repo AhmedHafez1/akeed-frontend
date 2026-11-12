@@ -74,13 +74,21 @@ export function PlanTab({
   const percent = usagePercent(used, limit)
   const banner = resolveUsageBanner(used, limit)
   const remaining = Math.max(0, limit - used)
-  // `periodEnd` is a calendar date, so it is read in UTC, not the browser zone.
-  const renewalDate = periodEnd
+  const paidThroughAt = billing.paidThroughAt ?? null
+  const paidThroughDate = paidThroughAt
     ? new Intl.DateTimeFormat(`${getFormatLocale(locale)}-u-nu-latn`, {
         dateStyle: 'long',
-        timeZone: 'UTC',
-      }).format(new Date(periodEnd))
+      }).format(new Date(paidThroughAt))
     : null
+  // `periodEnd` is a calendar date, so it is read in UTC, not the browser zone.
+  // A paid-through period ends at its date instead of renewing.
+  const renewalDate =
+    periodEnd && !paidThroughDate
+      ? new Intl.DateTimeFormat(`${getFormatLocale(locale)}-u-nu-latn`, {
+          dateStyle: 'long',
+          timeZone: 'UTC',
+        }).format(new Date(periodEnd))
+      : null
   // Shopify-billed stores see the plans; only owners and admins can subscribe.
   const isShopifyBilled =
     state.billingManagement?.mode === 'shopify' &&
@@ -106,8 +114,11 @@ export function PlanTab({
         }
       : null
   const recommendedId = recommendPlan(billing.plans, sentLast30Days, byPool)
-  // Only a live paid plan renews; Starter and a lapsed plan do not.
-  const renewablePlanId = billing.currentPlanId ?? null
+  // Only a live paid plan renews; Starter and a lapsed plan do not, nor a
+  // paid-through period (no subscription yet: choosing its plan subscribes).
+  const renewablePlanId = paidThroughDate
+    ? null
+    : (billing.currentPlanId ?? null)
   const primaryId = resolvePrimaryPlanId(
     billing.plans,
     currentPlanId ?? null,
@@ -116,6 +127,11 @@ export function PlanTab({
 
   return (
     <BlockStack gap="400">
+      {paidThroughDate && (
+        <Banner tone="info">
+          <p>{tPlans('paidThroughNote', { date: paidThroughDate })}</p>
+        </Banner>
+      )}
       {banner && (
         <Banner
           tone={banner.tone}
@@ -185,7 +201,7 @@ export function PlanTab({
             </>
           )}
           {/* The pools say when they renew themselves. */}
-          {!pools && (
+          {!pools && !paidThroughDate && (
             <div className="grid grid-cols-[20px_minmax(0,1fr)] items-start gap-2">
               <span className="flex h-5 w-5 items-center justify-center">
                 <Icon
@@ -228,7 +244,9 @@ export function PlanTab({
                 key={plan.id}
                 plan={plan}
                 name={planName(plan.id)}
-                isCurrent={plan.id === currentPlanId}
+                // During a paid-through period the plan can be subscribed to,
+                // so its card offers that rather than a disabled "current".
+                isCurrent={plan.id === currentPlanId && !paidThroughDate}
                 canRenew={plan.id === renewablePlanId}
                 isRecommended={plan.id === recommendedId}
                 isPrimary={plan.id === primaryId}

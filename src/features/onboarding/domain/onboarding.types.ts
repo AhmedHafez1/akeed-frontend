@@ -112,6 +112,12 @@ export interface IntegrationOnboardingState {
   avgShippingCost: number
   billingPlanId: OnboardingBillingPlanId | null
   billingStatus: string | null
+  /**
+   * While the store uses days it paid for before a reinstall
+   * (`billingStatus` = `paid_through`): when they end. Absent from an older
+   * backend.
+   */
+  paidThroughAt?: string | null
   billingManagement?: BillingManagement
   followUpEnabled: boolean
   followUpDelayMinutes: number

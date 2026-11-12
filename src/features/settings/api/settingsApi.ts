@@ -56,6 +56,11 @@ export interface SettingsResponse {
     isFreePlanClaimed: boolean
     /** The plan the store pays for now; null while none is live. Absent from an older backend. */
     currentPlanId?: OnboardingBillingPlanConfig['id'] | null
+    /**
+     * While the store uses days it paid for before a reinstall: when they end.
+     * Subscribing now is charged from then. Absent from an older backend.
+     */
+    paidThroughAt?: string | null
     usage: {
       pools?: UsagePools | null
       used: number

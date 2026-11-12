@@ -3862,6 +3862,8 @@
       "subscribeCta": "Subscribe to {plan} · {price} / month",
       "renewCta": "Renew {plan} now · {price} / month",
       "renewNote": "Renewing starts a new 30-day period today with the full allowance. Messages left in the current period don’t carry over.",
+      "paidThroughNote": "Your paid days from before you reinstalled last until {date}. Subscribe now to keep a plan after that: Shopify charges you only from {date}.",
+      "keepCta": "Keep {plan} · {price} / month from {date}",
       "currentPlan": "Current plan",
       "redirectNote": "You'll go to Shopify to approve the charge.",
       "cancel": "Cancel",

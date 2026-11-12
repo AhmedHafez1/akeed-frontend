@@ -24,6 +24,11 @@ export interface ShopifyPlansResponse {
   isFreePlanClaimed: boolean
   /** The plan the store pays for now; null while no plan is active. */
   currentPlanId?: ShopifyPlanId | null
+  /**
+   * While the store uses days it paid for before a reinstall (no Shopify
+   * subscription yet): when they end. Subscribing now is charged from then.
+   */
+  paidThroughAt?: string | null
 }
 
 /**

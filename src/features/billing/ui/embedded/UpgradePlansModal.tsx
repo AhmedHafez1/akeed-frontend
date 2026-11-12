@@ -9,7 +9,7 @@ import {
   Spinner,
   Text,
 } from '@shopify/polaris'
-import { useTranslations } from 'next-intl'
+import { useFormatter, useTranslations } from 'next-intl'
 import {
   isolateLtr,
   ownNumberAllowance,
@@ -46,7 +46,11 @@ export function UpgradePlansModal({
   const t = useTranslations('embeddedOnboarding')
   const tPlans = useTranslations('billing.embeddedPlans')
   const groupName = useId()
+  const format = useFormatter()
   const upgrade = useShopifyPlanUpgrade({ enabled: open, hostParam })
+  const paidThroughDate = upgrade.paidThroughAt
+    ? format.dateTime(new Date(upgrade.paidThroughAt), { dateStyle: 'long' })
+    : null
   const ownNumberPresence = useOwnNumberPresence(open)
   const showsOwnNumber = upgrade.paidPlans.some((plan) =>
     Boolean(ownNumberAllowance(plan, ownNumberPresence))
@@ -69,15 +73,26 @@ export function UpgradePlansModal({
               content:
                 selectedPlan.amount === 0
                   ? tPlans('starterCta')
-                  : tPlans(upgrade.isRenewal ? 'renewCta' : 'subscribeCta', {
-                      plan: selectedPlan.name,
-                      price: isolateLtr(
-                        formatPlanPrice(
-                          selectedPlan.amount,
-                          selectedPlan.currencyCode
-                        )
-                      ),
-                    }),
+                  : upgrade.isKeepingPaidPlan && paidThroughDate
+                    ? tPlans('keepCta', {
+                        plan: selectedPlan.name,
+                        price: isolateLtr(
+                          formatPlanPrice(
+                            selectedPlan.amount,
+                            selectedPlan.currencyCode
+                          )
+                        ),
+                        date: paidThroughDate,
+                      })
+                    : tPlans(upgrade.isRenewal ? 'renewCta' : 'subscribeCta', {
+                        plan: selectedPlan.name,
+                        price: isolateLtr(
+                          formatPlanPrice(
+                            selectedPlan.amount,
+                            selectedPlan.currencyCode
+                          )
+                        ),
+                      }),
               loading: upgrade.isActivating,
               onAction: () => void upgrade.activate(),
             }
@@ -166,6 +181,11 @@ export function UpgradePlansModal({
                 <SharedFeaturesList compact />
               </Box>
               {upgrade.isRenewal && <Text as="p">{tPlans('renewNote')}</Text>}
+              {paidThroughDate && (
+                <Text as="p">
+                  {tPlans('paidThroughNote', { date: paidThroughDate })}
+                </Text>
+              )}
               <Text as="p" tone="subdued">
                 {tPlans('modalRules')}
                 {showsOwnNumber && ` ${tPlans('ownNumber.note')}`}

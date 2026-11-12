@@ -15,7 +15,9 @@ import { useShopifySubscribe } from './useShopifySubscribe'
  * activation through Shopify's approval page. The next plan up from the
  * current one is selected until the merchant picks another (the cheapest paid
  * plan with none, the current one on the top plan). Choosing the current paid
- * plan renews it.
+ * plan renews it, except during a paid-through period: there is no live
+ * subscription to renew, so choosing it subscribes to keep the plan, charged
+ * from the end of the paid days.
  */
 export function useShopifyPlanUpgrade(options: {
   enabled: boolean
@@ -36,6 +38,7 @@ export function useShopifyPlanUpgrade(options: {
   const response = plansQuery.data
   const isFreePlanClaimed = response?.isFreePlanClaimed ?? true
   const currentPlanId = response?.currentPlanId ?? null
+  const paidThroughAt = response?.paidThroughAt ?? null
   const canManageBilling =
     response?.billingManagement?.mode === 'shopify' &&
     response.billingManagement.canManageBilling === true
@@ -64,7 +67,10 @@ export function useShopifyPlanUpgrade(options: {
       ? paidPlans[0]?.id
       : (paidPlans[currentPaidIndex + 1] ?? paidPlans[currentPaidIndex]).id
   const selectedPlanId = chosenPlanId ?? defaultPlanId ?? null
-  const isRenewal = currentPaidIndex >= 0 && selectedPlanId === currentPlanId
+  const isRenewal =
+    !paidThroughAt && currentPaidIndex >= 0 && selectedPlanId === currentPlanId
+  const isKeepingPaidPlan =
+    Boolean(paidThroughAt) && selectedPlanId === currentPlanId
 
   const activate = useCallback(async () => {
     if (!selectedPlanId) return
@@ -79,6 +85,8 @@ export function useShopifyPlanUpgrade(options: {
     isFreePlanClaimed,
     canManageBilling,
     currentPlanId,
+    paidThroughAt,
+    isKeepingPaidPlan,
     selectedPlanId,
     setSelectedPlanId,
     isRenewal,

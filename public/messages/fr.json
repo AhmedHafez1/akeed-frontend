@@ -2693,6 +2693,8 @@
       "subscribeCta": "S’abonner à {plan} · {price} / mois",
       "renewCta": "Renouveler {plan} maintenant · {price} / mois",
       "renewNote": "Le renouvellement démarre aujourd’hui une nouvelle période de 30 jours avec le quota complet. Les messages restants de la période en cours ne sont pas reportés.",
+      "paidThroughNote": "Vos jours payés avant la réinstallation durent jusqu’au {date}. Abonnez-vous maintenant pour garder un forfait ensuite : Shopify ne vous facture qu’à partir du {date}.",
+      "keepCta": "Garder {plan} · {price} / mois à partir du {date}",
       "currentPlan": "Forfait actuel",
       "redirectNote": "Vous serez redirigé vers Shopify pour approuver le prélèvement.",
       "cancel": "Annuler",

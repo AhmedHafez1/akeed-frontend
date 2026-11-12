@@ -2693,6 +2693,8 @@
       "subscribeCta": "Abone ol: {plan} · {price} / ay",
       "renewCta": "{plan} planını şimdi yenile · {price} / ay",
       "renewNote": "Yenileme, bugünden itibaren tam hakla 30 günlük yeni bir dönem başlatır. Mevcut dönemden kalan mesajlar devretmez.",
+      "paidThroughNote": "Yeniden yüklemeden önce ödediğiniz günler {date} tarihine kadar sürer. Sonrasında bir planda kalmak için şimdi abone olun: Shopify sizden yalnızca {date} tarihinden itibaren ücret alır.",
+      "keepCta": "{plan} planında kal · {date} tarihinden itibaren {price} / ay",
       "currentPlan": "Mevcut plan",
       "redirectNote": "Ücreti onaylamak için Shopify’a yönlendirileceksiniz.",
       "cancel": "Vazgeç",

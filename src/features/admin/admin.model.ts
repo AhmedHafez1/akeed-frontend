@@ -122,6 +122,11 @@ export interface AdminStoreDetail extends AdminStore {
   created_at: string | null
   last_synced_at: string | null
   billing_activated_at: string | null
+  /**
+   * End of the paid period a reinstalled store is using without a Shopify
+   * subscription (`subscription_status` = `paid_through`); null otherwise.
+   */
+  paid_through_at?: string | null
   settings: {
     default_language: string
     shipping_currency: string
