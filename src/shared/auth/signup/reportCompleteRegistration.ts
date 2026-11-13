@@ -19,9 +19,12 @@ export const COMPLETE_REGISTRATION_PATH =
  * page sends only IDs. Nothing here is awaited or allowed to throw: tracking
  * never stands between a merchant and their new account.
  */
-export function reportCompleteRegistration(userId: string): void {
+export function reportCompleteRegistration(
+  userId: string,
+  providedEventId?: string
+): void {
   try {
-    const eventId = newMetaEventId()
+    const eventId = providedEventId ?? newMetaEventId()
     trackMetaEvent(COMPLETE_REGISTRATION_EVENT, eventId)
 
     // The query string can carry the email on later screens; the path is enough.

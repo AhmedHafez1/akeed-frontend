@@ -1451,6 +1451,29 @@
     "shopify": "Install on Shopify"
   },
   "auth": {
+    "google": {
+      "continue": "Continue with Google",
+      "emailAlternative": "Or use email and password",
+      "heading": "Finish creating your account",
+      "description": "Your Google account is connected. Add your store details to continue.",
+      "connected": "Signed in with Google",
+      "complete": "Continue to setup",
+      "anotherAccount": "Use another account",
+      "opening": "Opening Google…",
+      "failed": "Google sign-in did not finish. Try again or use email and password.",
+      "checking": "Preparing your account…",
+      "failedTitle": "Google sign-in did not finish",
+      "retry": "Try again",
+      "saving": "Saving your account…",
+      "completionFailed": "Your account could not be completed. Try again, or use another account.",
+      "firstTitle": "Create your account",
+      "firstBody": "Use Google, or confirm your email with the link we send you. Your platform choice stays saved.",
+      "nextMobile": {
+        "standalone": "After creating your account, try the message on your phone and add your orders.",
+        "woocommerce": "After creating your account, connect your store by approving it in your WooCommerce admin.",
+        "easyorders": "After creating your account, connect your EasyOrders store from the setup page."
+      }
+    },
     "signInToAccount": "Sign in to your account",
     "dontHaveAccount": "Don't have an account?",
     "signUp": "Sign up",

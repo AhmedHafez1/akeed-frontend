@@ -1,9 +1,19 @@
 import { screen, within } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { renderAuth } from '../authTestUtils'
 import { SignupBenefits } from './SignupBenefits'
 
 describe('SignupBenefits', () => {
+  it('describes both methods only while Google is enabled', () => {
+    vi.stubEnv('NEXT_PUBLIC_GOOGLE_AUTH_ENABLED', 'true')
+    try {
+      renderAuth(<SignupBenefits locale="en" sourceId="woocommerce" />, 'en')
+      expect(screen.getByText(/Use Google, or confirm your email/)).toBeTruthy()
+      expect(screen.queryByText('Verify your email')).toBeNull()
+    } finally {
+      vi.unstubAllEnvs()
+    }
+  })
   it.each([
     ['standalone', 'Add your first order'],
     ['woocommerce', 'Connect your store'],

@@ -282,6 +282,29 @@
     "shopify": "Shopify’a yükleyin"
   },
   "auth": {
+    "google": {
+      "continue": "Google ile devam et",
+      "emailAlternative": "Veya e-posta ve şifre kullan",
+      "heading": "Hesabınızı oluşturmayı tamamlayın",
+      "description": "Google hesabınız bağlandı. Devam etmek için mağaza bilgilerinizi ekleyin.",
+      "connected": "Google ile giriş yapıldı",
+      "complete": "Kuruluma devam et",
+      "anotherAccount": "Başka bir hesap kullan",
+      "opening": "Google açılıyor…",
+      "failed": "Google ile giriş tamamlanamadı. Tekrar deneyin veya e-posta ve şifre kullanın.",
+      "checking": "Hesabınız hazırlanıyor…",
+      "failedTitle": "Google ile giriş tamamlanamadı",
+      "retry": "Tekrar dene",
+      "saving": "Hesabınız kaydediliyor…",
+      "completionFailed": "Hesabınız tamamlanamadı. Tekrar deneyin veya başka bir hesap kullanın.",
+      "firstTitle": "Hesabınızı oluşturun",
+      "firstBody": "Google kullanın veya gönderdiğimiz bağlantıyla e-postanızı doğrulayın. Platform seçiminiz kaydedilir.",
+      "nextMobile": {
+        "standalone": "Hesabınızı oluşturduktan sonra mesajı telefonunuzda deneyin ve siparişlerinizi ekleyin.",
+        "woocommerce": "Hesabınızı oluşturduktan sonra WooCommerce yönetiminde onay vererek mağazanızı bağlayın.",
+        "easyorders": "Hesabınızı oluşturduktan sonra kurulum sayfasından EasyOrders mağazanızı bağlayın."
+      }
+    },
     "signInToAccount": "Hesabınıza giriş yapın",
     "dontHaveAccount": "Hesabınız yok mu?",
     "signUp": "Kaydolun",

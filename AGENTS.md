@@ -219,6 +219,10 @@ Required variables (see `.env.local`):
 
 Optional:
 
+- `NEXT_PUBLIC_GOOGLE_AUTH_ENABLED` — `true` offers Google on standalone login
+  and signup. Defaults to disabled. Configure Google Cloud and Supabase first;
+  see `docs/GOOGLE_AUTH.md`. The Google secret stays in Supabase provider settings.
+
 - `NEXT_PUBLIC_AKEED_WHATSAPP_NUMBER` — Akeed's own WhatsApp sender number in
   international format, digits only (e.g. `201001234567`, no `+`). Standalone
   onboarding's test step deep-links to `https://wa.me/<number>` from its

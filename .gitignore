@@ -15,6 +15,7 @@
 
 # next.js
 /.next/
+/.next-*/
 /test/e01-smoke/.next/
 /out/
 
@@ -43,3 +44,4 @@ next-env.d.ts
 
 .vercel
 .env*.local
+!.env.example
