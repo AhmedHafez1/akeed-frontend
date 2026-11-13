@@ -255,6 +255,13 @@ export const AUTH_ROUTES = [
   '/reset-password',
 ] as const
 
+/** OAuth callbacks must not load analytics while the address carries credentials. */
+export function isGoogleAccountRoute(
+  pathname: string | null | undefined
+): boolean {
+  return /^\/(ar|en|ur|es|fr|tr)\/signup\/google\/?$/.test(pathname ?? '')
+}
+
 /**
  * Check if a pathname (with locale) matches an auth route
  */

@@ -17,6 +17,8 @@ interface SignupSourceStepProps {
   locale: string
   /** Start routes to list; Shopify and no connected store are always there. */
   routes?: readonly StartRoute[]
+  onSelectSource?: (source: string) => void
+  hideAccountLink?: boolean
 }
 
 const ROW_CLASS =
@@ -36,6 +38,8 @@ const TRAILING_ICON_CLASS =
 export function SignupSourceStep({
   locale,
   routes = getStartRoutes(),
+  onSelectSource,
+  hideAccountLink = false,
 }: SignupSourceStepProps) {
   const t = useTranslations('auth.signup')
 
@@ -77,6 +81,22 @@ export function SignupSourceStep({
                     />
                   )}
                 </a>
+              ) : onSelectSource ? (
+                <button
+                  type="button"
+                  onClick={() => onSelectSource(route.id)}
+                  className={ROW_CLASS}
+                >
+                  <SourceMark sourceId={route.id} />
+                  {rowBody(
+                    t(`source.options.${route.id}.title`),
+                    t(`source.options.${route.id}.description`),
+                    <ChevronRight
+                      aria-hidden="true"
+                      className={`${TRAILING_ICON_CLASS} rtl:rotate-180`}
+                    />
+                  )}
+                </button>
               ) : (
                 <Link href={buildSourceSearch(route.id)} className={ROW_CLASS}>
                   <SourceMark sourceId={route.id} />
@@ -95,12 +115,14 @@ export function SignupSourceStep({
         </ul>
       </nav>
 
-      <p className="text-ink-muted text-center text-sm">
-        {t('haveAccount')}{' '}
-        <Link href={auth.getLoginPath(locale)} className={LINK_CLASS}>
-          {t('signIn')}
-        </Link>
-      </p>
+      {!hideAccountLink && (
+        <p className="text-ink-muted text-center text-sm">
+          {t('haveAccount')}{' '}
+          <Link href={auth.getLoginPath(locale)} className={LINK_CLASS}>
+            {t('signIn')}
+          </Link>
+        </p>
+      )}
     </div>
   )
 }

@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl'
 import type { SupportedLocale } from '@/shared/lib/locale'
 import { getSignupOffer } from './signupOffer'
+import { isGoogleAuthEnabled } from '@/shared/lib/googleOAuth'
 
 interface SignupBenefitsProps {
   locale: SupportedLocale
@@ -19,6 +20,7 @@ const NEXT_STEPS = ['first', 'second', 'third'] as const
  */
 export function SignupBenefits({ locale, sourceId }: SignupBenefitsProps) {
   const t = useTranslations('auth.signup')
+  const google = useTranslations('auth.google')
   const offer = getSignupOffer(locale)
 
   return (
@@ -37,10 +39,14 @@ export function SignupBenefits({ locale, sourceId }: SignupBenefitsProps) {
             </span>
             <div className="space-y-1">
               <p className="text-ink font-semibold">
-                {t(`next.steps.${sourceId}.${step}.title`)}
+                {step === 'first' && isGoogleAuthEnabled()
+                  ? google('firstTitle')
+                  : t(`next.steps.${sourceId}.${step}.title`)}
               </p>
               <p className="text-ink-muted text-sm">
-                {t(`next.steps.${sourceId}.${step}.body`)}
+                {step === 'first' && isGoogleAuthEnabled()
+                  ? google('firstBody')
+                  : t(`next.steps.${sourceId}.${step}.body`)}
               </p>
             </div>
           </li>

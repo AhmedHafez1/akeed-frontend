@@ -14,6 +14,7 @@ import {
 import { createLogger } from '@/shared/lib/logger'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
 import { AuthPanel } from '@/shared/auth/AuthPanel'
+import { GoogleSignInChoice } from '@/shared/auth/google/GoogleSignInChoice'
 import { PasswordInput } from '@/shared/auth/PasswordInput'
 import { ResendConfirmationNotice } from '@/shared/auth/ResendConfirmationNotice'
 import { ShopifyContinueLink } from '@/shared/auth/ShopifyContinueLink'
@@ -47,6 +48,7 @@ function LoginForm() {
   const [emailNotConfirmed, setEmailNotConfirmed] = useState(false)
   const [emailMissing, setEmailMissing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [googleBusy, setGoogleBusy] = useState(false)
   const hasError = Boolean(error)
   const linkError = parseAuthErrorParam(searchParams?.get(AUTH_ERROR_PARAM))
   const resendMessage = emailNotConfirmed
@@ -57,6 +59,7 @@ function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (googleBusy || isLoading) return
     setError('')
     setEmailNotConfirmed(false)
     setIsLoading(true)
@@ -83,6 +86,13 @@ function LoginForm() {
 
   return (
     <AuthPanel title={t('auth.signInToAccount')}>
+      <GoogleSignInChoice
+        locale={locale}
+        intent="login"
+        returnTo={searchParams?.get('returnTo')}
+        disabled={isLoading}
+        onBusyChange={setGoogleBusy}
+      />
       <form className="space-y-6" onSubmit={handleSubmit} noValidate>
         {resendMessage && (
           <ResendConfirmationNotice
@@ -180,6 +190,7 @@ function LoginForm() {
           size="lg"
           className="auth-gradient-button w-full"
           loading={isLoading}
+          disabled={googleBusy}
           loadingText={t('auth.signingIn')}
         >
           {t('auth.signIn')}

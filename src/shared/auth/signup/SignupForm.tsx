@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import Link from 'next/link'
 import { AlertCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -17,6 +17,8 @@ import {
   type SignupField,
 } from './signup.model'
 import type { SignupController } from './useSignup'
+import { GoogleSignInChoice } from '@/shared/auth/google/GoogleSignInChoice'
+import { isGoogleAuthEnabled } from '@/shared/lib/googleOAuth'
 
 interface SignupFormProps {
   signup: SignupController
@@ -47,6 +49,8 @@ export function SignupForm({
   initialFocus = null,
 }: SignupFormProps) {
   const t = useTranslations('auth.signup')
+  const google = useTranslations('auth.google')
+  const [googleBusy, setGoogleBusy] = useState(false)
   const offer = getSignupOffer(locale)
 
   useEffect(() => {
@@ -58,6 +62,7 @@ export function SignupForm({
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
+    if (googleBusy || isSubmitting) return
     const invalid = await signup.submit()
     if (invalid) focusField(invalid)
   }
@@ -107,7 +112,9 @@ export function SignupForm({
         </div>
         {/* The aside is desktop only; below it this line stands in. */}
         <p className="border-line text-ink-muted mt-3 border-t pt-3 text-start text-sm lg:hidden">
-          {t(`next.mobile.${sourceId}`)}{' '}
+          {isGoogleAuthEnabled()
+            ? google(`nextMobile.${sourceId}`)
+            : t(`next.mobile.${sourceId}`)}{' '}
           {t('next.mobileOffer', {
             count: offer.count,
             formatted: offer.formattedCount,
@@ -115,6 +122,14 @@ export function SignupForm({
           })}
         </p>
       </div>
+
+      <GoogleSignInChoice
+        locale={locale}
+        intent="signup"
+        source={sourceId}
+        disabled={isSubmitting}
+        onBusyChange={setGoogleBusy}
+      />
 
       <form
         className="space-y-5"
@@ -277,6 +292,7 @@ export function SignupForm({
           size="lg"
           className="w-full px-8 font-semibold sm:w-auto"
           loading={isSubmitting}
+          disabled={googleBusy}
           loadingText={t('submitting')}
         >
           {t('submit')}

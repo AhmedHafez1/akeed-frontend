@@ -49,6 +49,24 @@ function getSupabasePublicConfig(): { url: string; anonKey: string } {
   }
 }
 
+/** An isolated PKCE client; email confirmation continues using the normal client. */
+export function createGoogleOAuthClient(
+  storageKey: string,
+  storage: Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>
+) {
+  const { url, anonKey } = getSupabasePublicConfig()
+  return createClient(url, anonKey, {
+    auth: {
+      storageKey,
+      storage,
+      flowType: 'pkce',
+      persistSession: true,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+    },
+  })
+}
+
 export function getSupabaseClient() {
   if (supabaseClient) {
     return supabaseClient

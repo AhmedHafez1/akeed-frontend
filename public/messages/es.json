@@ -282,6 +282,29 @@
     "shopify": "Instalar en Shopify"
   },
   "auth": {
+    "google": {
+      "continue": "Continuar con Google",
+      "emailAlternative": "O usa tu correo y contraseña",
+      "heading": "Termina de crear tu cuenta",
+      "description": "Tu cuenta de Google está conectada. Agrega los datos de tu tienda para continuar.",
+      "connected": "Sesión iniciada con Google",
+      "complete": "Continuar con la configuración",
+      "anotherAccount": "Usar otra cuenta",
+      "opening": "Abriendo Google…",
+      "failed": "No se completó el acceso con Google. Inténtalo de nuevo o usa tu correo y contraseña.",
+      "checking": "Preparando tu cuenta…",
+      "failedTitle": "No se completó el acceso con Google",
+      "retry": "Volver a intentar",
+      "saving": "Guardando tu cuenta…",
+      "completionFailed": "No se pudo completar tu cuenta. Inténtalo de nuevo o usa otra cuenta.",
+      "firstTitle": "Crea tu cuenta",
+      "firstBody": "Usa Google o confirma tu correo con el enlace que te enviamos. Tu plataforma queda guardada.",
+      "nextMobile": {
+        "standalone": "Después de crear tu cuenta, prueba el mensaje en tu teléfono y agrega tus pedidos.",
+        "woocommerce": "Después de crear tu cuenta, conecta tu tienda dando tu aprobación en el administrador de WooCommerce.",
+        "easyorders": "Después de crear tu cuenta, conecta tu tienda EasyOrders desde la página de configuración."
+      }
+    },
     "signInToAccount": "Inicia sesión en tu cuenta",
     "dontHaveAccount": "¿No tienes una cuenta?",
     "signUp": "Regístrate",
