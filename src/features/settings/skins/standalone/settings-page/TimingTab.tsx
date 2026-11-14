@@ -163,10 +163,7 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
       <AutomationFlowCard timeline={timeline} />
 
       <AnnotatedSections>
-        <AnnotatedSection
-          title={t('autoHeading')}
-          description={t('autoDescription')}
-        >
+        <AnnotatedSection title={t('autoHeading')}>
           <SwitchSetting
             title={t('autoLabel')}
             help={tPage('autoHelp')}
@@ -201,10 +198,7 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
           </SwitchSetting>
         </AnnotatedSection>
 
-        <AnnotatedSection
-          title={t('followHeading')}
-          description={t('followDescription')}
-        >
+        <AnnotatedSection title={t('followHeading')}>
           <SwitchSetting
             title={t('reminderLabel')}
             checked={values.followUpEnabled}
@@ -261,10 +255,7 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
           </SwitchSetting>
         </AnnotatedSection>
 
-        <AnnotatedSection
-          title={t('autoCancel.heading')}
-          description={t('autoCancel.description')}
-        >
+        <AnnotatedSection title={t('autoCancel.heading')}>
           <div id={SETTINGS_FIELD_ID.autoCancel}>
             <SwitchSetting
               title={t('autoCancel.label')}
@@ -300,10 +291,7 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
           </div>
         </AnnotatedSection>
 
-        <AnnotatedSection
-          title={t('quietHeading')}
-          description={tPage('quietDesc')}
-        >
+        <AnnotatedSection title={t('quietHeading')}>
           <SwitchSetting
             title={t('quietLabel')}
             help={tPage('quietHelp')}

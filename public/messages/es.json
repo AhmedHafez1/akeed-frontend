@@ -1691,7 +1691,7 @@
       "noteAck": "Akeed responde una vez para confirmar la recepción (1 mensaje).",
       "noteAckPlan": "Akeed responde una vez para confirmar la recepción (1 mensaje de tu plan).",
       "saveUnavailable": "Solicitar un cambio aún no está disponible. Inténtalo más tarde.",
-      "brandingUnavailable": "Los mensajes de tres botones con logo no están disponibles. Revisa el banner y las plantillas de imagen aprobadas. Se mantiene la confirmación alternativa segura.",
+      "brandingUnavailable": "Aún no está disponible con tu logo. Las confirmaciones se siguen enviando.",
       "ownNumberText": "Tu número de WhatsApp solo envía texto. Un logo guardado no impide usar Solicitar un cambio."
     },
     "thankYou": {
@@ -1720,7 +1720,6 @@
       "uploading": "Subiendo tu logo…",
       "logoAlt": "El logo de tu tienda",
       "bannerAlt": "Tu logo en el banner del mensaje",
-      "bannerCaption": "Este banner aparece arriba de cada mensaje.",
       "emptyTitle": "Sube tu logo",
       "emptyHint": "o arrastra la imagen aquí",
       "currentLabel": "Logo actual",
@@ -1751,7 +1750,6 @@
     "standalone": {
       "page": {
         "title": "Configuración",
-        "subtitle": "Controla tu mensaje de confirmación, sus tiempos y de dónde llegan tus pedidos.",
         "tabs": {
           "message": "Mensaje",
           "timing": "Tiempos y recordatorio",
@@ -1768,7 +1766,7 @@
         },
         "saveBar": {
           "label": "Cambios sin guardar",
-          "unsaved": "Tienes cambios sin guardar",
+          "unsaved": "Cambios sin guardar",
           "unsavedIn": "Cambios sin guardar en: {tabs}",
           "separator": ", ",
           "discard": "Descartar",
@@ -1776,7 +1774,6 @@
           "saving": "Guardando…"
         },
         "message": {
-          "identityDesc": "El nombre que tus clientes ven en cada mensaje.",
           "storeNameHelp": "Aparece en cada mensaje: «Gracias por tu pedido en {name}».",
           "languageDesc": "En qué idioma recibe la confirmación cada cliente.",
           "defaultBadge": "Predeterminado",
@@ -1784,13 +1781,10 @@
           "testSendSaveFirst": "Guarda tus cambios primero para probarlos."
         },
         "timing": {
-          "flowDesc": "Se actualiza mientras editas, antes de guardar.",
           "autoHelp": "Si está desactivada, no se envían mensajes.",
-          "quietDesc": "Sin mensajes por la noche.",
           "quietHelp": "Los mensajes programados durante el horario de silencio se envían cuando este termina."
         },
         "store": {
-          "sourceDesc": "De dónde recibe Akeed tus pedidos.",
           "sourceHelp": "Pedidos que importas desde un archivo o agregas manualmente.",
           "connected": "Conectada",
           "connectionId": "ID de conexión",
@@ -1798,7 +1792,6 @@
           "copied": "Copiado",
           "copyError": "No se pudo copiar el ID de conexión. Cópialo manualmente.",
           "codHeading": "Información de pago faltante",
-          "codDesc": "Cómo tratamos los pedidos que no indican cómo se pagaron.",
           "codLabel": "Tratarlos como pago contra entrega",
           "codHelp": "Actívalo solo si tu origen de pedidos suele omitir el método de pago en los pedidos contra entrega.",
           "codRisk": "Los pedidos prepagados sin información de pago también recibirán un mensaje de confirmación y usarán créditos.",
@@ -1806,10 +1799,8 @@
           "sourceHelpWooCommerce": "Los pedidos llegan solos desde tu tienda WooCommerce.",
           "disconnected": "Desconectada",
           "connectionHeading": "Conexión",
-          "connectionDesc": "El vínculo entre Akeed y tu tienda.",
           "health": {
             "heading": "Estado de la conexión",
-            "desc": "Lo último que Akeed vio de tu tienda, señal por señal.",
             "loading": "Cargando el estado de la conexión…",
             "loadError": "No pudimos cargar el estado de la conexión.",
             "retry": "Intentar de nuevo",
@@ -1862,7 +1853,6 @@
               "supported": "Se actualiza en tu tienda: {list}.",
               "unsupported": "Se conserva solo en Akeed: {list}.",
               "separator": ", ",
-              "note": "Los resultados siempre se registran en Akeed.",
               "actions": {
                 "customer_confirmation": "confirmaciones de los clientes",
                 "customer_cancellation": "cancelaciones de los clientes",
@@ -1889,16 +1879,15 @@
                 "paused": "Akeed no cambia esto. Actívala en la configuración de webhooks de tu tienda.",
                 "disabled": "Vuelve a activarla en Conexión, más arriba. Los pedidos realizados mientras estuvo desactivada no se importan.",
                 "missing": "Desconecta la tienda y vuelve a conectarla para restablecerla.",
-                "unknown": "Tu tienda no respondió o no aceptó el acceso de Akeed. Eso por sí solo no es un fallo de la notificación."
+                "unknown": "No se pudo leer desde tu tienda."
               }
             }
           }
         },
         "apiKeys": {
           "heading": "Claves de API",
-          "description": "Permite que tu propio sitio web o backend envíe pedidos a Akeed.",
           "serverOnlyTitle": "Solo para tu servidor",
-          "serverOnly": "Guarda las claves en tu servidor. Nunca pongas una clave en una página web, una app móvil ni en ningún lugar donde un cliente pueda verla: cualquiera que tenga la clave puede enviar pedidos a tu tienda.",
+          "serverOnly": "Usa las claves solo en tu servidor. Cualquiera que tenga una clave puede enviar pedidos a tu tienda.",
           "createButton": "Crear clave",
           "limitReached": "Puedes tener hasta {max} claves activas. Revoca una para crear otra.",
           "empty": "Aún no hay claves de API.",
@@ -1916,10 +1905,9 @@
           },
           "create": {
             "title": "Crear una clave de API",
-            "description": "Ponle a la clave el nombre del servidor que la usará, para saber cuál revocar más adelante.",
+            "description": "Ponle el nombre del servidor que la usará.",
             "nameLabel": "Nombre de la clave",
             "namePlaceholder": "p. ej., Sitio web de la tienda",
-            "nameHelp": "Hasta 60 caracteres. Solo lo ve tu equipo.",
             "nameRequired": "Ingresa un nombre para la clave.",
             "cancel": "Cancelar",
             "submit": "Crear clave"
@@ -1966,13 +1954,13 @@
         "saveSuccess": "Configuración guardada",
         "saveInvalid": "Algunos campos requieren tu atención antes de guardar.",
         "saveError": "No pudimos guardar tu configuración. Revisa los campos resaltados e inténtalo de nuevo.",
-        "readOnly": "Tienes acceso de solo lectura. Un propietario o administrador debe hacer los cambios de configuración.",
+        "readOnly": "Solo lectura. Un propietario o administrador puede hacer cambios.",
         "testSendSuccess": "Mensaje de prueba enviado a tu WhatsApp",
         "testSendCooldown": "Espera unos segundos antes de enviar otra prueba.",
         "testSendDailyLimit": "Alcanzaste el límite de mensajes de prueba de hoy.",
         "testSendError": "No se pudo enviar el mensaje de prueba. Inténtalo de nuevo.",
         "testSendLanguageUnavailable": "Los mensajes en este idioma no están disponibles ahora. Elige otro idioma en la vista previa e inténtalo de nuevo.",
-        "sourceDisconnected": "Tu origen de pedidos está desconectado, así que la configuración no se puede cambiar. Puedes volver a conectarlo en la pestaña del origen de pedidos."
+        "sourceDisconnected": "Origen de pedidos desconectado. Vuelve a conectarlo en la pestaña Tienda para hacer cambios."
       }
     },
     "storeConfigurationHeading": "Configuración de la tienda",
@@ -2111,7 +2099,7 @@
         "languageOptionLocked": "{language} ({status})",
         "awaitingApproval": "En espera de la aprobación de WhatsApp",
         "notEnabledYet": "Aún no disponible",
-        "languageLockedNote": "Idioma: {language}. Sus mensajes esperan la aprobación de WhatsApp. Podrás elegir este idioma para tu tienda cuando se apruebe uno.",
+        "languageLockedNote": "Idioma: {language}. Esperando la aprobación de WhatsApp.",
         "stylesEmpty": "Aún no hay mensajes en este idioma ({language}).",
         "styleHeading": "Estilo del mensaje",
         "styleForLanguage": "Idioma: {language}. Cambia el idioma de la vista previa para ajustar otro.",
@@ -2141,14 +2129,14 @@
         "previewLanguageGroup": "Vista previa en",
         "previewAria": "Vista previa del mensaje de WhatsApp. Idioma: {language}",
         "testSend": "Enviar un mensaje de prueba a WhatsApp",
-        "testSendHelp": "Se envía a <phone></phone>, tal como se ve arriba. Idioma del mensaje: {language}. Los mensajes de prueba son gratis.",
-        "testSendLanguageLocked": "Idioma: {language}. Sus mensajes aún no están disponibles, así que no hay nada que probar.",
-        "testSendHelpNoPhone": "Te pediremos tu número de WhatsApp al enviar. Los mensajes de prueba son gratis.",
+        "testSendHelp": "A <phone></phone> · gratis",
+        "testSendLanguageLocked": "Idioma: {language}. Aún no disponible.",
+        "testSendHelpNoPhone": "Los mensajes de prueba son gratis.",
         "testSendSaveFirst": "Guarda tus cambios primero para probarlos.",
         "testPhone": {
           "change": "Cambiar",
           "title": "Tu número de WhatsApp",
-          "description": "El mensaje de prueba se envía a este número. Queda guardado para tus próximas pruebas.",
+          "description": "Queda guardado para tus próximas pruebas.",
           "label": "Número de WhatsApp",
           "suggested": "Este es el número de teléfono de tu tienda. Comprueba que tenga WhatsApp.",
           "invalid": "Ingresa un número de WhatsApp válido, con el código de país.",
@@ -2207,10 +2195,10 @@
           "heading": "Pedidos sin respuesta",
           "description": "Ajustes de cancelación automática.",
           "label": "Cancelar pedidos sin respuesta automáticamente",
-          "deadline": "El pedido se cancelará automáticamente {duration} después del primer mensaje.",
+          "deadline": "Se cancela {duration} después del primer mensaje.",
           "restockLabel": "Reponer inventario",
           "notifyLabel": "Enviar aviso desde la tienda",
-          "requiresEscalation": "Activa primero «Marcar pedidos sin respuesta». La cancelación usa el mismo plazo."
+          "requiresEscalation": "Activa primero «Marcar pedidos sin respuesta»."
         },
         "quietHeading": "Horario de silencio",
         "quietDescription": "Sin mensajes por la noche. Los mensajes programados durante el horario de silencio se envían cuando este termina.",

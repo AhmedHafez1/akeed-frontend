@@ -1691,7 +1691,7 @@
       "noteAck": "Akeed, alındığını onaylamak için bir kez yanıt verir (1 mesaj).",
       "noteAckPlan": "Akeed, alındığını onaylamak için bir kez yanıt verir (planınızdan 1 mesaj).",
       "saveUnavailable": "Değişiklik iste henüz kullanılamıyor. Daha sonra tekrar deneyin.",
-      "brandingUnavailable": "Logolu üç düğmeli mesajlar kullanılamıyor. Logo görselini ve eşleşen onaylı görsel şablonlarını kontrol edin. Güvenli alternatif onay akışı kullanılmaya devam eder.",
+      "brandingUnavailable": "Logonuzla henüz kullanılamıyor. Onay mesajları gönderilmeye devam eder.",
       "ownNumberText": "Kendi WhatsApp numaranız yalnızca metin gönderir. Kayıtlı bir logo değişiklik isteğini kullanmanızı engellemez."
     },
     "thankYou": {
@@ -1720,7 +1720,6 @@
       "uploading": "Logonuz yükleniyor…",
       "logoAlt": "Mağaza logonuz",
       "bannerAlt": "Mesaj bannerındaki logonuz",
-      "bannerCaption": "Bu banner her mesajın üstünde görünür.",
       "emptyTitle": "Logonuzu yükleyin",
       "emptyHint": "veya görseli buraya sürükleyin",
       "currentLabel": "Geçerli logo",
@@ -1751,7 +1750,6 @@
     "standalone": {
       "page": {
         "title": "Ayarlar",
-        "subtitle": "Onay mesajınızı, zamanlamasını ve siparişlerinizin nereden geldiğini yönetin.",
         "tabs": {
           "message": "Mesaj",
           "timing": "Zamanlama ve takip",
@@ -1768,7 +1766,7 @@
         },
         "saveBar": {
           "label": "Kaydedilmemiş değişiklikler",
-          "unsaved": "Kaydedilmemiş değişiklikleriniz var",
+          "unsaved": "Kaydedilmemiş değişiklikler",
           "unsavedIn": "Kaydedilmemiş değişiklikler: {tabs}",
           "separator": ", ",
           "discard": "Vazgeç",
@@ -1776,7 +1774,6 @@
           "saving": "Kaydediliyor…"
         },
         "message": {
-          "identityDesc": "Müşterilerinizin her mesajda gördüğü ad.",
           "storeNameHelp": "Her mesajda görünür: “{name} mağazasından verdiğiniz sipariş için teşekkür ederiz.”",
           "languageDesc": "Her müşterinin onay mesajını hangi dilde alacağı.",
           "defaultBadge": "Varsayılan",
@@ -1784,13 +1781,10 @@
           "testSendSaveFirst": "Test etmek için önce değişikliklerinizi kaydedin."
         },
         "timing": {
-          "flowDesc": "Bu, siz düzenledikçe kaydetmeden önce güncellenir.",
           "autoHelp": "Kapalıyken hiçbir mesaj gönderilmez.",
-          "quietDesc": "Gece mesaj gönderilmez.",
           "quietHelp": "Sessiz saatlere denk gelen mesajlar, sessiz saatler bitince gönderilir."
         },
         "store": {
-          "sourceDesc": "Akeed’in siparişlerinizi nereden aldığı.",
           "sourceHelp": "Dosyadan içe aktardığınız veya elle eklediğiniz siparişler.",
           "connected": "Bağlı",
           "connectionId": "Bağlantı kimliği",
@@ -1798,7 +1792,6 @@
           "copied": "Kopyalandı",
           "copyError": "Bağlantı kimliği kopyalanamadı. Elle kopyalayın.",
           "codHeading": "Eksik ödeme bilgisi",
-          "codDesc": "Nasıl ödendiği belirtilmeyen siparişleri nasıl ele aldığımız.",
           "codLabel": "Bunları kapıda ödeme olarak kabul et",
           "codHelp": "Yalnızca sipariş kaynağınız kapıda ödemeli siparişlerde ödeme yöntemini genellikle belirtmiyorsa açın.",
           "codRisk": "Ödeme bilgisi eksik olan ön ödemeli siparişler de onay mesajı alır ve kredi kullanır.",
@@ -1806,10 +1799,8 @@
           "sourceHelpWooCommerce": "Siparişler WooCommerce mağazanızdan kendiliğinden gelir.",
           "disconnected": "Bağlantı kesildi",
           "connectionHeading": "Bağlantı",
-          "connectionDesc": "Akeed ile mağazanız arasındaki bağlantı.",
           "health": {
             "heading": "Bağlantı sağlığı",
-            "desc": "Akeed’in mağazanızdan en son ne gördüğü, sinyal sinyal.",
             "loading": "Bağlantı sağlığı yükleniyor…",
             "loadError": "Bağlantı sağlığını yükleyemedik.",
             "retry": "Tekrar dene",
@@ -1862,7 +1853,6 @@
               "supported": "Mağazanızda güncellenen: {list}.",
               "unsupported": "Yalnızca Akeed’de tutulan: {list}.",
               "separator": ", ",
-              "note": "Sonuçlar her zaman Akeed’e kaydedilir.",
               "actions": {
                 "customer_confirmation": "müşteri onayları",
                 "customer_cancellation": "müşteri iptalleri",
@@ -1889,16 +1879,15 @@
                 "paused": "Akeed bunu değiştirmez. Mağazanızın webhook ayarlarından etkinleştirin.",
                 "disabled": "Yukarıdaki Bağlantı bölümünden yeniden etkinleştirin. Devre dışıyken verilen siparişler içe aktarılmaz.",
                 "missing": "Geri yüklemek için bağlantıyı kesin, ardından aynı mağazayı yeniden bağlayın.",
-                "unknown": "Mağazanız yanıt vermedi veya Akeed’in erişimini kabul etmedi. Bu tek başına bildirimin bir hatası değildir."
+                "unknown": "Bu bilgi mağazanızdan okunamadı."
               }
             }
           }
         },
         "apiKeys": {
           "heading": "API anahtarları",
-          "description": "Kendi web sitenizin veya arka uç sisteminizin Akeed’e sipariş göndermesini sağlayın.",
           "serverOnlyTitle": "Yalnızca sunucunuz için",
-          "serverOnly": "Anahtarları sunucunuzda tutun. Bir anahtarı asla web sayfasına, mobil uygulamaya veya müşterinin görebileceği herhangi bir yere koymayın: anahtara sahip olan herkes mağazanıza sipariş gönderebilir.",
+          "serverOnly": "Anahtarları yalnızca sunucunuzda kullanın. Anahtara sahip olan herkes mağazanıza sipariş gönderebilir.",
           "createButton": "Anahtar oluştur",
           "limitReached": "En fazla {max} etkin anahtarınız olabilir. Yenisini oluşturmak için birini iptal edin.",
           "empty": "Henüz API anahtarı yok.",
@@ -1916,10 +1905,9 @@
           },
           "create": {
             "title": "API anahtarı oluşturun",
-            "description": "Daha sonra hangisini iptal edeceğinizi bilmek için anahtara onu kullanacak sunucunun adını verin.",
+            "description": "Onu kullanacak sunucunun adını verin.",
             "nameLabel": "Anahtar adı",
             "namePlaceholder": "örn. Mağaza web sitesi",
-            "nameHelp": "En fazla 60 karakter. Yalnızca ekibiniz görür.",
             "nameRequired": "Anahtar için bir ad girin.",
             "cancel": "Vazgeç",
             "submit": "Anahtar oluştur"
@@ -1966,13 +1954,13 @@
         "saveSuccess": "Ayarlar kaydedildi",
         "saveInvalid": "Kaydetmeden önce bazı alanların düzeltilmesi gerekiyor.",
         "saveError": "Ayarlarınızı kaydedemedik. İşaretli alanları kontrol edip tekrar deneyin.",
-        "readOnly": "Salt okunur erişiminiz var. Yapılandırma değişikliklerini bir hesap sahibi veya yönetici yapmalıdır.",
+        "readOnly": "Yalnızca görüntüleme. Değişiklikleri hesap sahibi veya yönetici yapabilir.",
         "testSendSuccess": "Test mesajı WhatsApp’ınıza gönderildi",
         "testSendCooldown": "Başka bir test göndermeden önce birkaç saniye bekleyin.",
         "testSendDailyLimit": "Bugünkü test mesajı sınırına ulaştınız.",
         "testSendError": "Test mesajı gönderilemedi. Tekrar deneyin.",
         "testSendLanguageUnavailable": "Bu dildeki mesajlar şu anda kullanılamıyor. Başka bir dilin önizlemesini açıp tekrar deneyin.",
-        "sourceDisconnected": "Sipariş kaynağınızın bağlantısı kesik, bu yüzden ayarlar değiştirilemiyor. Sipariş kaynağı sekmesinden yeniden bağlayabilirsiniz."
+        "sourceDisconnected": "Sipariş kaynağının bağlantısı kesik. Değişiklik yapmak için Mağaza sekmesinden yeniden bağlayın."
       }
     },
     "storeConfigurationHeading": "Mağaza yapılandırması",
@@ -2111,7 +2099,7 @@
         "languageOptionLocked": "{language} ({status})",
         "awaitingApproval": "WhatsApp onayı bekleniyor",
         "notEnabledYet": "Henüz kullanılamıyor",
-        "languageLockedNote": "{language} mesajlar WhatsApp’ın onayını bekliyor. Biri onaylandığında mağazanız için {language} dilini seçebilirsiniz.",
+        "languageLockedNote": "{language} mesajlar WhatsApp’ın onayını bekliyor.",
         "stylesEmpty": "Henüz {language} mesaj yok.",
         "styleHeading": "Mesaj üslubu",
         "styleForLanguage": "{language} mesajlar için. Başka bir dili ayarlamak için önizleme dilini değiştirin.",
@@ -2141,14 +2129,14 @@
         "previewLanguageGroup": "Önizleme dili",
         "previewAria": "{language} WhatsApp mesajı önizlemesi",
         "testSend": "WhatsApp’a test mesajı gönder",
-        "testSendHelp": "Yukarıda gösterildiği gibi <phone></phone> numarasına {language} olarak gönderilir. Test mesajları ücretsizdir.",
-        "testSendLanguageLocked": "{language} mesajlar henüz kullanılamıyor, bu yüzden test edilecek bir şey yok.",
-        "testSendHelpNoPhone": "Gönderirken WhatsApp numaranızı soracağız. Test mesajları ücretsizdir.",
+        "testSendHelp": "<phone></phone> numarasına · ücretsiz",
+        "testSendLanguageLocked": "{language} mesajlar henüz kullanılamıyor.",
+        "testSendHelpNoPhone": "Test mesajları ücretsizdir.",
         "testSendSaveFirst": "Test etmek için önce değişikliklerinizi kaydedin.",
         "testPhone": {
           "change": "Değiştir",
           "title": "WhatsApp numaranız",
-          "description": "Test mesajı bu numaraya gönderilir. Sonraki testleriniz için kaydedilir.",
+          "description": "Sonraki testleriniz için kaydedilir.",
           "label": "WhatsApp numarası",
           "suggested": "Bu, mağazanızın telefon numarası. WhatsApp’ta kayıtlı olduğundan emin olun.",
           "invalid": "Ülke kodu dahil geçerli bir WhatsApp numarası girin.",
@@ -2207,10 +2195,10 @@
           "heading": "Yanıtsız siparişler",
           "description": "Otomatik iptal ayarları.",
           "label": "Yanıtsız siparişleri otomatik iptal et",
-          "deadline": "Sipariş ilk mesajdan {duration} sonra otomatik olarak iptal edilecektir.",
+          "deadline": "İlk mesajdan {duration} sonra iptal edilir.",
           "restockLabel": "Ürünleri stoğa ekle",
           "notifyLabel": "Mağazadan bildirim gönder",
-          "requiresEscalation": "Önce “Yanıtsız siparişleri işaretle” seçeneğini açın. İptal de aynı süreyi kullanır."
+          "requiresEscalation": "Önce “Yanıtsız siparişleri işaretle” seçeneğini açın."
         },
         "quietHeading": "Sessiz saatler",
         "quietDescription": "Gece mesaj gönderilmez. Sessiz saatlere denk gelen mesajlar, sessiz saatler bitince gönderilir.",

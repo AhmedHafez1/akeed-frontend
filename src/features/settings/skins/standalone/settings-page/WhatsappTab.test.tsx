@@ -118,7 +118,7 @@ describe('standalone WhatsApp tab before connecting', () => {
     expect(button.hasAttribute('disabled')).toBe(false)
     expect(await screen.findByText('2 credits / message')).toBeTruthy()
     expect(screen.getByText('1 credit / message')).toBeTruthy()
-    expect(screen.getByText(copy.costs.creditNote)).toBeTruthy()
+    expect(screen.queryByText(copy.costs.creditNote)).toBeNull()
   })
 
   it('shows the action to others but leaves it to the owner', async () => {
@@ -230,7 +230,7 @@ describe('standalone WhatsApp tab with a connection', () => {
     ).toBeTruthy()
     expect(within(rows[1]).getByText(copy.sender.akeed)).toBeTruthy()
     expect(screen.getByText(copy.last.confirmation)).toBeTruthy()
-    expect(screen.getByText(copy.last.historical)).toBeTruthy()
+    expect(screen.queryByText(copy.last.historical)).toBeNull()
     const last = screen.getByText(copy.last.confirmation).parentElement
     expect(last?.textContent).toContain(copy.sender.yourNumber)
     expect(last?.textContent).toContain(copy.last.delivery.read)

@@ -140,9 +140,7 @@ describe('standalone Timing tab', () => {
         escalationDelayMinutes,
       })
       expect(
-        screen.getByText(
-          'سيُلغى الطلب تلقائيًا بعد ' + duration + ' من الرسالة الأولى.'
-        )
+        screen.getByText('يُلغى بعد ' + duration + ' من الرسالة الأولى.')
       ).toBeTruthy()
     }
   )
@@ -158,11 +156,11 @@ describe('standalone Timing tab', () => {
     fireEvent.click(toggle(timing.autoCancel.label))
     fireEvent.click(toggle(timing.reminderLabel))
     expect(
-      screen.getByText('سيُلغى الطلب تلقائيًا بعد دقيقتين من الرسالة الأولى.')
+      screen.getByText('يُلغى بعد دقيقتين من الرسالة الأولى.')
     ).toBeTruthy()
     fireEvent.click(toggle(timing.reminderLabel))
     expect(
-      screen.getByText('سيُلغى الطلب تلقائيًا بعد 4 دقائق من الرسالة الأولى.')
+      screen.getByText('يُلغى بعد 4 دقائق من الرسالة الأولى.')
     ).toBeTruthy()
     expect(api.saveSettings).not.toHaveBeenCalled()
     fireEvent.click(saveButton())

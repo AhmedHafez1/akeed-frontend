@@ -38,7 +38,9 @@ describe.each([
     fireEvent.click(
       screen.getByRole('button', { name: en.settings.changeRequests.heading })
     )
-    expect((await screen.findByRole('tooltip')).textContent).toBe(cost)
+    const tooltip = await screen.findByRole('tooltip')
+    if (_skin === 'embedded') expect(tooltip.textContent).toBe(cost)
+    else expect(tooltip.textContent).toContain(cost)
     expect(screen.queryByText(/new messages only/i)).toBeNull()
     expect(screen.queryByText(/fulfillment hold/i)).toBeNull()
     expect(onChange).not.toHaveBeenCalled()
@@ -95,9 +97,10 @@ describe.each([
     expect(
       screen.getByText(en.settings.changeRequests.brandingUnavailable)
     ).toBeTruthy()
+    // Standalone keeps the own-number note behind the help icon.
     expect(
-      screen.getByText(en.settings.changeRequests.ownNumberText)
-    ).toBeTruthy()
+      screen.queryAllByText(en.settings.changeRequests.ownNumberText)
+    ).toHaveLength(_skin === 'embedded' ? 1 : 0)
     expect(screen.queryByRole('tooltip')).toBeNull()
   })
 })

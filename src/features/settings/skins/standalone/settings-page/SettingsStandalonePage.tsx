@@ -36,12 +36,10 @@ import { WhatsappTab } from './WhatsappTab'
 
 function PageShell({
   title,
-  subtitle,
   hasSaveBar = false,
   children,
 }: {
   title: string
-  subtitle: string
   /** Leaves room under the last card for the fixed save bar. */
   hasSaveBar?: boolean
   children: ReactNode
@@ -53,10 +51,7 @@ function PageShell({
         hasSaveBar ? settingsSaveBarClearance : 'pb-8'
       )}
     >
-      <header className="space-y-1">
-        <h1 className="text-ak-title text-ink">{title}</h1>
-        <p className="text-ak-body text-ink-muted">{subtitle}</p>
-      </header>
+      <h1 className="text-ak-title text-ink">{title}</h1>
       {children}
     </div>
   )
@@ -146,7 +141,7 @@ export function SettingsStandalonePage() {
 
   if (model.isLoadError) {
     return (
-      <PageShell title={t('title')} subtitle={t('subtitle')}>
+      <PageShell title={t('title')}>
         <div
           role="alert"
           className={cn(
@@ -199,11 +194,7 @@ export function SettingsStandalonePage() {
   const showSaveBar = model.isDirty && !readOnly
 
   return (
-    <PageShell
-      title={t('title')}
-      subtitle={t('subtitle')}
-      hasSaveBar={showSaveBar}
-    >
+    <PageShell title={t('title')} hasSaveBar={showSaveBar}>
       <SettingsTabs
         label={t('title')}
         tabs={shownTabs}

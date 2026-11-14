@@ -1,6 +1,6 @@
 'use client'
 
-import { HelpCircle, Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/shared/lib/utils'
 import {
@@ -56,10 +56,7 @@ export function WhatsappDisconnectDialog({
             {coexistence && <> {t('coexistence')}</>}
           </DialogDescription>
         </DialogHeader>
-        <p className="border-ak-warning-line bg-ak-warning-soft text-ak-warning text-ak-body rounded-ak-control flex items-start gap-3 border px-4 py-3">
-          <HelpCircle aria-hidden="true" className="mt-0.5 size-4.5 shrink-0" />
-          {t('history')}
-        </p>
+        <p className="text-ak-caption text-ink-muted">{t('history')}</p>
         {error && (
           <p role="alert" className="text-ak-caption text-ak-danger">
             {error === 'ownerRequired' ? tErrors('ownerRequired') : t('error')}

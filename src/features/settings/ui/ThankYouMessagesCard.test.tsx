@@ -84,7 +84,10 @@ describe.each([
     renderCard(Component)
     const control = screen.getByRole(role, { name: en.settings.thankYou.label })
     expect(checked(control)).toBe(false)
-    expect(screen.getByText(en.settings.thankYou.off)).toBeTruthy()
+    // Standalone drops the on/off pill: the switch already shows it.
+    expect(screen.queryAllByText(en.settings.thankYou.off)).toHaveLength(
+      _skin === 'embedded' ? 1 : 0
+    )
     expect(screen.queryByText(cost)).toBeNull()
     expect(screen.queryByText('Confirmed 123 from Nour')).toBeNull()
     expect(screen.getByText(en.settings.thankYou.description)).toBeTruthy()
@@ -105,7 +108,9 @@ describe.each([
     expect(screen.getByText('Canceled 123')).toBeTruthy()
     fireEvent.click(control)
     expect(checked(control)).toBe(true)
-    expect(screen.getByText(en.settings.thankYou.on)).toBeTruthy()
+    expect(screen.queryAllByText(en.settings.thankYou.on)).toHaveLength(
+      _skin === 'embedded' ? 1 : 0
+    )
   })
   it('keeps English samples in LTR within Arabic UI and uses Arabic direction for missing text', async () => {
     renderCard(

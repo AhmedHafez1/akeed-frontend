@@ -3,7 +3,7 @@
 import { useId } from 'react'
 import { Clock } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { AkSwitch, InfoHint, akCard, akPill } from '@/shared/ui'
+import { AkSwitch, InfoHint, akCard } from '@/shared/ui'
 import { Tooltip } from '@/shared/ui/tooltip'
 import { cn } from '@/shared/lib/utils'
 
@@ -37,21 +37,28 @@ export function ChangeRequestsCard({
   const id = useId()
   const blocked = (!ready || !styleReady) && !checked
   const styleBlocked = ready && !styleReady && !checked
+  const ownNumberText = variants?.some((v) => v.branding_supported === false)
   return (
     <section
       className={cn(akCard, 'space-y-3 px-4 py-4 sm:px-6')}
       aria-labelledby={`${id}-heading`}
     >
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-1">
-          <h2 id={`${id}-heading`} className="text-ak-section text-ink">
-            {t('heading')}
-          </h2>
-          <InfoHint label={t('heading')} content={t('noteAck')} />
-        </div>
-        <span className={akPill({ tone: checked ? 'brand' : 'neutral' })}>
-          {t(checked ? 'on' : 'off')}
-        </span>
+      <div className="flex items-center gap-1">
+        <h2 id={`${id}-heading`} className="text-ak-section text-ink">
+          {t('heading')}
+        </h2>
+        <InfoHint
+          label={t('heading')}
+          content={
+            <span className="block space-y-2">
+              <span className="block">{t('description')}</span>
+              <span className="block">{t('noteAck')}</span>
+              {ownNumberText && (
+                <span className="block">{t('ownNumberText')}</span>
+              )}
+            </span>
+          }
+        />
       </div>
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-4">
@@ -84,7 +91,7 @@ export function ChangeRequestsCard({
             />
           )}
         </div>
-        <p id={`${id}-description`} className="text-ak-caption text-ink-muted">
+        <p id={`${id}-description`} className="sr-only">
           {t('description')}
         </p>
         {!ready && (
@@ -104,9 +111,6 @@ export function ChangeRequestsCard({
           </p>
         )}
       </div>
-      {variants?.some((v) => v.branding_supported === false) && (
-        <p className="text-ak-caption text-ink-muted">{t('ownNumberText')}</p>
-      )}
     </section>
   )
 }

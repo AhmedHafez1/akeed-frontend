@@ -9,7 +9,7 @@ import type { MessageLanguage } from '@/shared/lib/messageLanguage'
 import { formatPhoneInternational } from '@/shared/lib/phone'
 import type { TemplateMessage } from '@/shared/lib/templateMessage'
 import { cn } from '@/shared/lib/utils'
-import { AkSelect, akButton, akCard, akLink } from '@/shared/ui'
+import { AkSelect, InfoHint, akButton, akCard, akLink } from '@/shared/ui'
 
 interface MessagePreviewPanelProps {
   language: MessageLanguage
@@ -25,7 +25,7 @@ interface MessagePreviewPanelProps {
   sample: PreviewSample
   /** Which language and style the phone shows. */
   previewingLabel: string
-  /** A note under the preview, for example how `auto` picks a style. */
+  /** Help beside the heading, for example how `auto` picks a style. */
   note?: string
   testSendPhone: string | null
   /** The language the test goes out in: the one being previewed. */
@@ -81,9 +81,14 @@ export function MessagePreviewPanel({
     >
       <div className="space-y-3 px-4 pt-4 pb-3 sm:px-6">
         <div>
-          <h2 id={headingId} className="text-ak-section text-ink">
-            {tShared('previewHeading')}
-          </h2>
+          <div className="flex items-center gap-1">
+            <h2 id={headingId} className="text-ak-section text-ink">
+              {tShared('previewHeading')}
+            </h2>
+            {note && (
+              <InfoHint label={tShared('previewHeading')} content={note} />
+            )}
+          </div>
           <p className="text-ak-caption text-ink-muted mt-0.5">
             {previewingLabel}
           </p>
@@ -121,7 +126,6 @@ export function MessagePreviewPanel({
           emptyLabel={tShared('previewEmpty')}
           headerImage={headerImage}
         />
-        {note && <p className="text-ak-caption text-ink-muted mt-3">{note}</p>}
       </div>
 
       {canSendTest && (

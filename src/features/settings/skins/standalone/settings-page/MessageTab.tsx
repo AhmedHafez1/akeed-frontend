@@ -223,7 +223,6 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
         <SettingsCard
           headingId={identityId}
           heading={tShared('identityHeading')}
-          description={t('identityDesc')}
         >
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center gap-1">

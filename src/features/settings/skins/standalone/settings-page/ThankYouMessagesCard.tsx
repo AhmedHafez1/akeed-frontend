@@ -2,7 +2,7 @@
 
 import { useId } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { AkSwitch, InfoHint, akCard, akPill } from '@/shared/ui'
+import { AkSwitch, InfoHint, akCard } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 import { getLocaleDirection } from '@/shared/lib/locale'
 import {
@@ -20,6 +20,7 @@ export function ThankYouMessagesCard(props: ThankYouMessagesProps) {
   const available = props.acknowledgment.available
   const details = (
     <div className="space-y-3">
+      <p>{t('description')}</p>
       <p>
         {t('creditCost', { count: props.acknowledgment.creditsPerMessage })}
       </p>
@@ -49,16 +50,11 @@ export function ThankYouMessagesCard(props: ThankYouMessagesProps) {
       className={cn(akCard, 'space-y-3 px-4 py-4 sm:px-6')}
       aria-labelledby={`${id}-heading`}
     >
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-1">
-          <h2 id={`${id}-heading`} className="text-ak-section text-ink">
-            {t('heading')}
-          </h2>
-          <InfoHint label={t('heading')} content={details} rich />
-        </div>
-        <span className={akPill({ tone: props.checked ? 'brand' : 'neutral' })}>
-          {t(props.checked ? 'on' : 'off')}
-        </span>
+      <div className="flex items-center gap-1">
+        <h2 id={`${id}-heading`} className="text-ak-section text-ink">
+          {t('heading')}
+        </h2>
+        <InfoHint label={t('heading')} content={details} rich />
       </div>
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-4">
@@ -78,7 +74,7 @@ export function ThankYouMessagesCard(props: ThankYouMessagesProps) {
             onCheckedChange={props.onChange}
           />
         </div>
-        <p id={`${id}-description`} className="text-ak-caption text-ink-muted">
+        <p id={`${id}-description`} className="sr-only">
           {t('description')}
         </p>
       </div>

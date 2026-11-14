@@ -8,20 +8,25 @@ import {
   type SourceHealth,
 } from '@/features/settings/api/sourceHealthApi'
 import { cn } from '@/shared/lib/utils'
-import { Skeleton, akButton } from '@/shared/ui'
+import { InfoHint, Skeleton, akButton } from '@/shared/ui'
 import { settingsRowPadding, settingsRowTitle } from './SettingsSection'
 import { getIntlLocale } from '@/shared/lib/locale'
 
-/** One signal: its name, what Akeed last saw, and a note when one helps. */
+/**
+ * One signal: its name, what Akeed last saw, a note the merchant needs now,
+ * and help behind an ⓘ for the rest.
+ */
 function HealthRow({
   title,
   value,
   note,
+  help,
   attention = false,
 }: {
   title: string
   value: ReactNode
   note?: ReactNode
+  help?: string
   /** The signal needs the merchant; quiet signals stay in plain ink. */
   attention?: boolean
 }) {
@@ -32,7 +37,10 @@ function HealthRow({
         settingsRowPadding
       )}
     >
-      <dt className={settingsRowTitle}>{title}</dt>
+      <dt className={cn(settingsRowTitle, 'flex items-center gap-1')}>
+        {title}
+        {help && <InfoHint label={title} content={help} />}
+      </dt>
       <dd
         className={cn(
           'text-ak-body mt-0.5',
@@ -106,7 +114,7 @@ export function SourceHealthCard() {
         <HealthRow
           title={t('credentials.title')}
           value={t(`credentials.${health.credentials.status}`)}
-          note={
+          help={
             health.credentials.status === 'removed'
               ? undefined
               : t('credentials.note')
@@ -125,8 +133,9 @@ export function SourceHealthCard() {
         note={
           events.lastAcceptedAt
             ? t('lastEvent.recent', { count: events.acceptedCount, days })
-            : t('lastEvent.noneNote')
+            : undefined
         }
+        help={events.lastAcceptedAt ? undefined : t('lastEvent.noneNote')}
       />
 
       {delivery && (
@@ -156,7 +165,11 @@ export function SourceHealthCard() {
           key={webhook.kind}
           title={t(`webhooks.kinds.${webhook.kind}`)}
           value={t(`webhooks.states.${webhook.state}`)}
-          note={t(`webhooks.notes.${webhook.state}`)}
+          note={
+            webhook.state === 'active'
+              ? undefined
+              : t(`webhooks.notes.${webhook.state}`)
+          }
           attention={
             webhook.state === 'disabled' || webhook.state === 'missing'
           }
@@ -202,19 +215,20 @@ export function SourceHealthCard() {
             : t('remoteSync.none', { days })
         }
         note={
-          <>
-            {remoteSync.pendingCount > 0 && (
-              <span className="block">
-                {t('remoteSync.pending', { count: remoteSync.pendingCount })}
-              </span>
-            )}
-            <span className="block">
-              {remoteSync.requiresAssistance
-                ? t('remoteSync.assistance')
-                : t('remoteSync.note')}
-            </span>
-          </>
+          (remoteSync.pendingCount > 0 || remoteSync.requiresAssistance) && (
+            <>
+              {remoteSync.pendingCount > 0 && (
+                <span className="block">
+                  {t('remoteSync.pending', { count: remoteSync.pendingCount })}
+                </span>
+              )}
+              {remoteSync.requiresAssistance && (
+                <span className="block">{t('remoteSync.assistance')}</span>
+              )}
+            </>
+          )
         }
+        help={t('remoteSync.note')}
         attention={remoteSync.failedCount > 0}
       />
 
@@ -228,27 +242,28 @@ export function SourceHealthCard() {
               : t('capabilities.none')
         }
         note={
-          <>
-            {supported.length > 0 && (
-              <span className="block">
-                {t('capabilities.supported', {
-                  list: supported
-                    .map((item) => t(`capabilities.actions.${item.action}`))
-                    .join(t('capabilities.separator')),
-                })}
-              </span>
-            )}
-            {supported.length > 0 && unsupported.length > 0 && (
-              <span className="block">
-                {t('capabilities.unsupported', {
-                  list: unsupported
-                    .map((item) => t(`capabilities.actions.${item.action}`))
-                    .join(t('capabilities.separator')),
-                })}
-              </span>
-            )}
-            <span className="block">{t('capabilities.note')}</span>
-          </>
+          supported.length > 0 && (
+            <>
+              {supported.length > 0 && (
+                <span className="block">
+                  {t('capabilities.supported', {
+                    list: supported
+                      .map((item) => t(`capabilities.actions.${item.action}`))
+                      .join(t('capabilities.separator')),
+                  })}
+                </span>
+              )}
+              {supported.length > 0 && unsupported.length > 0 && (
+                <span className="block">
+                  {t('capabilities.unsupported', {
+                    list: unsupported
+                      .map((item) => t(`capabilities.actions.${item.action}`))
+                      .join(t('capabilities.separator')),
+                  })}
+                </span>
+              )}
+            </>
+          )
         }
       />
     </dl>

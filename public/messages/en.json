@@ -2860,7 +2860,7 @@
       "noteAck": "Akeed replies once to confirm receipt (1 message).",
       "noteAckPlan": "Akeed replies once to confirm receipt (1 message from your plan).",
       "saveUnavailable": "Request a change isn't available yet. Try again later.",
-      "brandingUnavailable": "Branded three-button messages are unavailable. Check the logo banner and matching approved image twins. Existing safe confirmation fallback remains in use.",
+      "brandingUnavailable": "Not available with your logo yet. Confirmations still go out.",
       "ownNumberText": "Your WhatsApp number sends text only. A saved logo does not prevent using Request a change."
     },
     "thankYou": {
@@ -2889,7 +2889,6 @@
       "uploading": "Uploading your logo…",
       "logoAlt": "Your store logo",
       "bannerAlt": "Your logo on the message banner",
-      "bannerCaption": "This banner appears at the top of each message.",
       "emptyTitle": "Upload your logo",
       "emptyHint": "or drag the image here",
       "currentLabel": "Current logo",
@@ -2920,7 +2919,6 @@
     "standalone": {
       "page": {
         "title": "Settings",
-        "subtitle": "Control your confirmation message, its timing, and where your orders come from.",
         "tabs": {
           "message": "Message",
           "timing": "Timing & follow-up",
@@ -2937,7 +2935,7 @@
         },
         "saveBar": {
           "label": "Unsaved changes",
-          "unsaved": "You have unsaved changes",
+          "unsaved": "Unsaved changes",
           "unsavedIn": "Unsaved changes in: {tabs}",
           "separator": ", ",
           "discard": "Discard",
@@ -2945,7 +2943,6 @@
           "saving": "Saving…"
         },
         "message": {
-          "identityDesc": "The name your customers see in every message.",
           "storeNameHelp": "Appears in every message: “Thank you for your order from {name}.”",
           "languageDesc": "Which language each customer gets the confirmation in.",
           "defaultBadge": "Default",
@@ -2953,13 +2950,10 @@
           "testSendSaveFirst": "Save your changes first to test them."
         },
         "timing": {
-          "flowDesc": "This updates as you edit, before you save.",
           "autoHelp": "When off, no messages are sent.",
-          "quietDesc": "No messages at night.",
           "quietHelp": "Anything due during quiet hours is sent when they end."
         },
         "store": {
-          "sourceDesc": "Where Akeed receives your orders from.",
           "sourceHelp": "Orders you import from a file or add by hand.",
           "connected": "Connected",
           "connectionId": "Connection ID",
@@ -2967,7 +2961,6 @@
           "copied": "Copied",
           "copyError": "Couldn’t copy the connection ID. Copy it by hand.",
           "codHeading": "Missing payment info",
-          "codDesc": "How we treat orders that don’t say how they were paid.",
           "codLabel": "Treat them as cash on delivery",
           "codHelp": "Turn on only if your order source usually leaves the payment method out of COD orders.",
           "codRisk": "Prepaid orders with missing payment info will also get a confirmation message and use credits.",
@@ -2975,10 +2968,8 @@
           "sourceHelpWooCommerce": "Orders arrive from your WooCommerce store by themselves.",
           "disconnected": "Disconnected",
           "connectionHeading": "Connection",
-          "connectionDesc": "The link between Akeed and your store.",
           "health": {
             "heading": "Connection health",
-            "desc": "What Akeed last saw from your store, one signal at a time.",
             "loading": "Loading connection health…",
             "loadError": "We couldn’t load the connection health.",
             "retry": "Try again",
@@ -3031,7 +3022,6 @@
               "supported": "Updated in your store: {list}.",
               "unsupported": "Kept in Akeed only: {list}.",
               "separator": ", ",
-              "note": "Results are always recorded in Akeed.",
               "actions": {
                 "customer_confirmation": "customer confirmations",
                 "customer_cancellation": "customer cancellations",
@@ -3058,16 +3048,15 @@
                 "paused": "Akeed doesn’t change this. Activate it in your store’s webhook settings.",
                 "disabled": "Re-enable it under Connection above. Orders placed while it was disabled are not imported.",
                 "missing": "Disconnect, then connect the same store again to restore it.",
-                "unknown": "Your store didn’t answer, or didn’t accept Akeed’s access. That is not by itself a fault of the notification."
+                "unknown": "Couldn’t read this from your store."
               }
             }
           }
         },
         "apiKeys": {
           "heading": "API keys",
-          "description": "Let your own website or back end send orders to Akeed.",
           "serverOnlyTitle": "For your server only",
-          "serverOnly": "Keep keys on your server. Never put a key in a website page, a mobile app or anywhere a customer can see it: anyone with the key can send orders to your store.",
+          "serverOnly": "Use keys on your server only. Anyone with a key can send orders to your store.",
           "createButton": "Create key",
           "limitReached": "You can have up to {max} active keys. Revoke one to create another.",
           "empty": "No API keys yet.",
@@ -3085,10 +3074,9 @@
           },
           "create": {
             "title": "Create an API key",
-            "description": "Name the key after the server that will use it, so you know which one to revoke later.",
+            "description": "Name it after the server that will use it.",
             "nameLabel": "Key name",
             "namePlaceholder": "e.g. Store website",
-            "nameHelp": "Up to 60 characters. Only your team sees it.",
             "nameRequired": "Enter a name for the key.",
             "cancel": "Cancel",
             "submit": "Create key"
@@ -3135,13 +3123,13 @@
         "saveSuccess": "Settings saved",
         "saveInvalid": "Some fields need your attention before saving.",
         "saveError": "We couldn't save your settings. Check the highlighted fields and try again.",
-        "readOnly": "You have read-only access. An owner or admin must make configuration changes.",
+        "readOnly": "View only. An owner or admin can make changes.",
         "testSendSuccess": "Test message sent to your WhatsApp",
         "testSendCooldown": "Wait a few seconds before sending another test.",
         "testSendDailyLimit": "You've reached today's limit of test messages.",
         "testSendError": "The test message couldn't be sent. Try again.",
         "testSendLanguageUnavailable": "Messages in this language aren't available right now. Preview another language and try again.",
-        "sourceDisconnected": "Your order source is disconnected, so settings can’t be changed. You can reconnect it on the order source tab."
+        "sourceDisconnected": "Order source disconnected. Reconnect it on the Store tab to make changes."
       }
     },
     "storeConfigurationHeading": "Store configuration",
@@ -3280,7 +3268,7 @@
         "languageOptionLocked": "{language} ({status})",
         "awaitingApproval": "Awaiting WhatsApp approval",
         "notEnabledYet": "Not available yet",
-        "languageLockedNote": "{language} messages are waiting for WhatsApp to approve them. You can choose {language} for your store once one is approved.",
+        "languageLockedNote": "{language} messages are awaiting WhatsApp approval.",
         "stylesEmpty": "There are no {language} messages yet.",
         "styleHeading": "Message style",
         "styleForLanguage": "For {language} messages. Change the preview language to set another.",
@@ -3310,14 +3298,14 @@
         "previewLanguageGroup": "Preview in",
         "previewAria": "WhatsApp message preview in {language}",
         "testSend": "Send a test message to WhatsApp",
-        "testSendHelp": "Sent to <phone></phone> in {language}, as shown above. Test messages are free.",
-        "testSendLanguageLocked": "{language} messages aren't available yet, so there is nothing to test.",
-        "testSendHelpNoPhone": "We'll ask for your WhatsApp number when you send. Test messages are free.",
+        "testSendHelp": "To <phone></phone> · free",
+        "testSendLanguageLocked": "{language} messages aren’t available yet.",
+        "testSendHelpNoPhone": "Test messages are free.",
         "testSendSaveFirst": "Save your changes first to test them.",
         "testPhone": {
           "change": "Change",
           "title": "Your WhatsApp number",
-          "description": "The test message is sent to this number. It's saved for your next tests.",
+          "description": "It's saved for your next tests.",
           "label": "WhatsApp number",
           "suggested": "This is your store's phone number. Check that it's on WhatsApp.",
           "invalid": "Enter a valid WhatsApp number, including the country code.",
@@ -3376,10 +3364,10 @@
           "heading": "Unanswered orders",
           "description": "Automatic cancellation settings.",
           "label": "Auto-cancel unanswered orders",
-          "deadline": "Order will be automatically cancelled after {duration} from the first message.",
+          "deadline": "Cancels {duration} after the first message.",
           "restockLabel": "Restock items",
           "notifyLabel": "Send store notification",
-          "requiresEscalation": "Turn on “Flag unanswered orders” first. Cancellation uses the same delay."
+          "requiresEscalation": "Turn on “Flag unanswered orders” first."
         },
         "quietHeading": "Quiet hours",
         "quietDescription": "No messages at night. Anything due during quiet hours is sent when they end.",
