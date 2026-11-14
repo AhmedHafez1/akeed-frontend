@@ -2,14 +2,13 @@
 
 import { useId } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { AkSwitch, akCard, akPill } from '@/shared/ui'
+import { AkSwitch, InfoHint, akCard, akPill } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 import { getLocaleDirection } from '@/shared/lib/locale'
 import {
   thankYouPreview,
   type ThankYouMessagesProps,
 } from '@/features/settings/domain/thankYouPreview'
-import { SettingsHelp } from './SettingsHelp'
 
 export function ThankYouMessagesCard(props: ThankYouMessagesProps) {
   const t = useTranslations('settings.thankYou')
@@ -55,7 +54,7 @@ export function ThankYouMessagesCard(props: ThankYouMessagesProps) {
           <h2 id={`${id}-heading`} className="text-ak-section text-ink">
             {t('heading')}
           </h2>
-          <SettingsHelp label={t('heading')} content={details} rich />
+          <InfoHint label={t('heading')} content={details} rich />
         </div>
         <span className={akPill({ tone: props.checked ? 'brand' : 'neutral' })}>
           {t(props.checked ? 'on' : 'off')}

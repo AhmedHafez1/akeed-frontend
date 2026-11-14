@@ -8,7 +8,7 @@ import {
 } from 'react'
 import { Icon, Popover, Text } from '@shopify/polaris'
 import { InfoIcon } from '@shopify/polaris-icons'
-import { useSettingsHelp } from '@/features/settings/domain/useSettingsHelp'
+import { useInfoHint } from '@/shared/hooks/useInfoHint'
 
 export function SettingsHelp({
   label,
@@ -27,7 +27,7 @@ export function SettingsHelp({
     close,
     hoverHandlers,
     handlers,
-  } = useSettingsHelp()
+  } = useInfoHint()
   const maxHeight = useAvailableHeight(open, activatorRef)
   return (
     <span className="inline-flex items-center align-middle [&>span]:inline-flex">

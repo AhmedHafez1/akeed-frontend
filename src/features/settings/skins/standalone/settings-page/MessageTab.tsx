@@ -28,13 +28,13 @@ import {
   AkChoiceCard,
   AkChoiceGroup,
   AkSelect,
+  InfoHint,
   akCard,
   akPill,
 } from '@/shared/ui'
 import { LogoCard } from './LogoCard'
 import { MessagePreviewPanel } from './MessagePreviewPanel'
 import { TestPhoneDialog } from './TestPhoneDialog'
-import { SettingsHelp } from './SettingsHelp'
 import { ChangeRequestsCard } from './ChangeRequestsCard'
 import { ThankYouMessagesCard } from './ThankYouMessagesCard'
 
@@ -64,7 +64,7 @@ function SettingsCard({
         <h2 id={headingId} className="text-ak-section text-ink">
           {heading}
         </h2>
-        {description && <SettingsHelp label={heading} content={description} />}
+        {description && <InfoHint label={heading} content={description} />}
       </div>
       {children}
     </section>
@@ -236,7 +236,7 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
                   *
                 </span>
               </label>
-              <SettingsHelp
+              <InfoHint
                 label={tShared('storeNameLabel')}
                 content={t('storeNameHelp', { name: storeName })}
               />
@@ -278,7 +278,7 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
               >
                 {tShared('languageHeading')}
               </h3>
-              <SettingsHelp
+              <InfoHint
                 label={tShared('languageHeading')}
                 content={t('languageDesc')}
               />
@@ -298,7 +298,7 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
                   }
                 />
                 <div className="absolute end-2 top-3.5">
-                  <SettingsHelp
+                  <InfoHint
                     label={tShared('languageAuto')}
                     content={tShared('languageAutoHelp')}
                   />
@@ -313,7 +313,7 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
                   title={tShared('languageFixed')}
                 />
                 <div className="absolute end-2 top-3.5">
-                  <SettingsHelp
+                  <InfoHint
                     label={tShared('languageFixed')}
                     content={tShared('languageFixedHelp')}
                   />

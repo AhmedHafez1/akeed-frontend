@@ -268,7 +268,7 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
           <div id={SETTINGS_FIELD_ID.autoCancel}>
             <SwitchSetting
               title={t('autoCancel.label')}
-              help={
+              note={
                 values.escalationEnabled
                   ? undefined
                   : t('autoCancel.requiresEscalation')

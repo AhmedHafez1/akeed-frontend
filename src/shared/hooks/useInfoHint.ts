@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 
 /** Shared interaction rules; each skin owns the help's appearance. */
-export function useSettingsHelp() {
+export function useInfoHint() {
   const id = useId()
   const ref = useRef<HTMLButtonElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)

@@ -3,10 +3,9 @@
 import { useId } from 'react'
 import { Clock } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { AkSwitch, akCard, akPill } from '@/shared/ui'
+import { AkSwitch, InfoHint, akCard, akPill } from '@/shared/ui'
 import { Tooltip } from '@/shared/ui/tooltip'
 import { cn } from '@/shared/lib/utils'
-import { SettingsHelp } from './SettingsHelp'
 
 /**
  * "Request a change": a third button on future confirmation messages. Off
@@ -48,7 +47,7 @@ export function ChangeRequestsCard({
           <h2 id={`${id}-heading`} className="text-ak-section text-ink">
             {t('heading')}
           </h2>
-          <SettingsHelp label={t('heading')} content={t('noteAck')} />
+          <InfoHint label={t('heading')} content={t('noteAck')} />
         </div>
         <span className={akPill({ tone: checked ? 'brand' : 'neutral' })}>
           {t(checked ? 'on' : 'off')}

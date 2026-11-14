@@ -327,7 +327,9 @@ describe('standalone Store tab', () => {
   it('warns about prepaid orders only while missing payment counts as COD', async () => {
     await renderStore()
     expect(codSwitch().getAttribute('aria-checked')).toBe('false')
-    expect(screen.getByText(store.codHelp)).toBeTruthy()
+    // The explanation sits behind the help icon, not on the page.
+    expect(screen.queryByText(store.codHelp)).toBeNull()
+    expect(screen.getByRole('button', { name: store.codLabel })).toBeTruthy()
     expect(screen.queryByText(store.codRisk)).toBeNull()
 
     fireEvent.click(codSwitch())

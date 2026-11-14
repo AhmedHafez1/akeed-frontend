@@ -8,8 +8,7 @@ import { useTranslations } from 'next-intl'
 import { LOGO_ACCEPT_ATTRIBUTE } from '@/features/settings/domain/merchantLogo'
 import type { MerchantLogoModel } from '@/features/settings/domain/useMerchantLogo'
 import { cn } from '@/shared/lib/utils'
-import { akButton, akCard } from '@/shared/ui'
-import { SettingsHelp } from './SettingsHelp'
+import { InfoHint, akButton, akCard } from '@/shared/ui'
 
 interface LogoCardProps {
   logo: MerchantLogoModel
@@ -39,7 +38,7 @@ export function LogoCard({ logo, readOnly }: LogoCardProps) {
         <h2 id={headingId} className="text-ak-section text-ink">
           {t('heading')}
         </h2>
-        <SettingsHelp label={t('heading')} content={t('description')} />
+        <InfoHint label={t('heading')} content={t('description')} />
       </div>
       <div className="flex flex-wrap items-center gap-4">
         <div className="border-line bg-surface-sunken rounded-ak-control flex size-20 shrink-0 items-center justify-center overflow-hidden border">
