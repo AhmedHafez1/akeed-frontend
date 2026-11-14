@@ -210,7 +210,6 @@ export function StoreStep({
               <OnboardingField
                 htmlFor={STANDALONE_FIELD_IDS.storeName}
                 label={t('storeName.label')}
-                helpText={t('storeName.hint')}
                 error={fieldErrors.storeName}
               >
                 {({ describedBy }) => (
@@ -276,7 +275,7 @@ export function StoreStep({
 
         <div className="border-line bg-surface-sunken flex flex-col gap-4 border-t p-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <p className="text-ink-muted text-sm" aria-live="polite">
-            {isLoading ? t('loading') : t('footerCaption')}
+            {isLoading ? t('loading') : null}
           </p>
           {canManage && (
             <Button

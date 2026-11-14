@@ -298,7 +298,6 @@
       "saving": "Hesabınız kaydediliyor…",
       "completionFailed": "Hesabınız tamamlanamadı. Tekrar deneyin veya başka bir hesap kullanın.",
       "firstTitle": "Hesabınızı oluşturun",
-      "firstBody": "Google kullanın veya gönderdiğimiz bağlantıyla e-postanızı doğrulayın. Platform seçiminiz kaydedilir.",
       "nextMobile": {
         "standalone": "Hesabınızı oluşturduktan sonra mesajı telefonunuzda deneyin ve siparişlerinizi ekleyin.",
         "woocommerce": "Hesabınızı oluşturduktan sonra WooCommerce yönetiminde onay vererek mağazanızı bağlayın.",
@@ -333,14 +332,12 @@
     "signOut": "Çıkış yap",
     "passwordsDoNotMatch": "Şifreler eşleşmiyor",
     "forgotPasswordTitle": "Şifrenizi sıfırlayın",
-    "forgotPasswordSubtitle": "E-posta adresinizi girin, şifrenizi sıfırlamanız için size bir bağlantı gönderelim.",
     "sendResetLink": "Sıfırlama bağlantısı gönder",
     "sendingResetLink": "Gönderiliyor...",
     "resetLinkSent": "Bu e-posta adresiyle bir hesap varsa sıfırlama bağlantısı gönderildi.",
     "resetLinkFailed": "Sıfırlama bağlantısı gönderilemedi. Lütfen tekrar deneyin.",
     "backToSignIn": "Girişe dön",
     "resetPasswordTitle": "Yeni şifre belirleyin",
-    "resetPasswordSubtitle": "Yeni şifrenizi aşağıya girin.",
     "resetPasswordProcessing": "Sıfırlama bağlantınız doğrulanıyor...",
     "resetPasswordSuccess": "Şifreniz güncellendi. Artık yeni şifrenizle giriş yapabilirsiniz.",
     "resetPasswordFailed": "Şifre güncellenemedi. Lütfen tekrar deneyin veya yeni bir sıfırlama bağlantısı isteyin.",
@@ -392,7 +389,6 @@
       },
       "source": {
         "heading": "Siparişleriniz nereden geliyor?",
-        "subtitle": "Yolunuzu seçin, sizi doğru adıma götürelim.",
         "shopifyTitle": "Shopify",
         "shopifyRow": "Akeed’i Shopify App Store’dan yükleyin. Burada hesap açmanız gerekmez.",
         "summaryLabel": "Sipariş kaynağı",
@@ -424,44 +420,35 @@
         "steps": {
           "standalone": {
             "first": {
-              "title": "E-postanızı doğrulayın",
-              "body": "Size bir etkinleştirme bağlantısı göndeririz; bağlantı sizi doğrudan kuruluma geri getirir."
+              "title": "E-postanızı doğrulayın"
             },
             "second": {
-              "title": "Mesajı telefonunuzda deneyin",
-              "body": "Gerçek bir siparişten önce müşterinizin tam olarak ne alacağını görürsünüz."
+              "title": "Mesajı telefonunuzda deneyin"
             },
             "third": {
-              "title": "İlk siparişinizi ekleyin",
-              "body": "Elle, CSV veya Excel dosyasından ya da API ile."
+              "title": "İlk siparişinizi ekleyin"
             }
           },
           "woocommerce": {
             "first": {
-              "title": "E-postanızı doğrulayın",
-              "body": "Size bir etkinleştirme bağlantısı göndeririz; WooCommerce seçiminiz kayıtlı kalır."
+              "title": "E-postanızı doğrulayın"
             },
             "second": {
-              "title": "Mağazanızı bağlayın",
-              "body": "Mağaza adresinizi girer ve bağlantıyı WooCommerce yönetim panelinizde onaylarsınız. Anahtar kopyalamanız gerekmez."
+              "title": "Mağazanızı bağlayın"
             },
             "third": {
-              "title": "Mesajı telefonunuzda deneyin",
-              "body": "Gerçek bir siparişten önce müşterinizin tam olarak ne alacağını görürsünüz."
+              "title": "Mesajı telefonunuzda deneyin"
             }
           },
           "easyorders": {
             "first": {
-              "title": "E-postanızı doğrulayın",
-              "body": "Size bir etkinleştirme bağlantısı göndeririz; EasyOrders seçiminiz kayıtlı kalır."
+              "title": "E-postanızı doğrulayın"
             },
             "second": {
-              "title": "Mağazanızı bağlayın",
-              "body": "EasyOrders mağazanızı kurulum sayfasından bağlarsınız."
+              "title": "Mağazanızı bağlayın"
             },
             "third": {
-              "title": "Mesajı telefonunuzda deneyin",
-              "body": "Gerçek bir siparişten önce müşterinizin tam olarak ne alacağını görürsünüz."
+              "title": "Mesajı telefonunuzda deneyin"
             }
           }
         }
@@ -475,7 +462,6 @@
         "whatsapp": "WhatsApp numaranızı ekleyin",
         "test": "Onay mesajını telefonunuzda deneyin"
       },
-      "caption": "İlk mesajınıza yaklaşık iki dakika var. Ücretsiz kredileriniz doğrulama yapar yapmaz hazır olur.",
       "changeEmail": "E-postayı değiştir",
       "spamHint": "Gelmedi mi? İstenmeyen e-posta klasörünüzü kontrol edin.",
       "resend": "Yeniden gönder",
@@ -618,7 +604,6 @@
     "settings": "Ayarlar",
     "navigationMenu": "Gezinme menüsünü aç",
     "primaryNavigation": "Ana gezinme",
-    "workspace": "Çalışma alanı",
     "workspaceFallback": "Çalışma alanım",
     "userFallback": "Giriş yapmış kullanıcı",
     "identityLoading": "Çalışma alanı bilgileri yükleniyor",
@@ -2494,7 +2479,6 @@
         "autoDetect": "Yanıtınızı otomatik olarak algılayacağız"
       },
       "tapConfirmOnPhone": "Telefonunuzda onay düğmesine dokunun",
-      "tapNote": "Müşterinizin yapacağı şey tam olarak budur.",
       "autoDetectNext": "Yanıtınızı algılayıp otomatik olarak devam edeceğiz",
       "mobile": {
         "subheading": "Bu telefondaki WhatsApp’a bir test mesajı gönderdik. Açıp onay düğmesine dokunun.",
@@ -2551,7 +2535,6 @@
       },
       "storeName": {
         "label": "Mesajda görünecek mağaza adı",
-        "hint": "Kayıt bilgilerinizden aldık.",
         "placeholder": "örn. Nur Butik"
       },
       "phone": {
@@ -2582,7 +2565,6 @@
         "Africa_Casablanca": "Kazablanka",
         "UTC": "UTC"
       },
-      "footerCaption": "Siz bir sipariş ekleyene kadar müşterilerinize hiçbir şey göndermeyiz.",
       "submit": "Sonraki: test mesajı gönder",
       "submitting": "Kaydediliyor ve gönderiliyor…",
       "loading": "Mağazanız hazırlanıyor…",
@@ -2602,33 +2584,27 @@
       "pipelineLabel": "Akeed her siparişte nasıl çalışır",
       "pipeline": {
         "add": {
-          "title": "Siparişi siz eklersiniz",
-          "description": "WhatsApp’tan, Instagram’dan veya telefonla gelen tek bir siparişi ya da bir Excel dosyasından aynı anda çok sayıda siparişi."
+          "title": "Siparişi siz eklersiniz"
         },
         "send": {
-          "title": "Müşterinize mesaj göndeririz",
-          "description": "Az önce denediğiniz mesajın aynısı, mağazanız adına."
+          "title": "Müşterinize mesaj göndeririz"
         },
         "reply": {
-          "title": "Yanıtı Onaylar bölümünde görürsünüz",
-          "description": "Onaylandı veya iptal edildi; yanıt vermeyenleri de takip edebilmeniz için bir araya getiririz."
+          "title": "Yanıtı Onaylar bölümünde görürsünüz"
         }
       },
       "stats": {
         "balanceLabel": "Şu anki bakiyeniz",
         "balanceValue": "{count} kredi",
-        "balanceCaption": "Ücretsiz, ödeme kartı gerekmez",
         "priceLabel": "Ücretsiz kredilerden sonra",
         "priceCaption": "gönderilen WhatsApp mesajı başına",
         "testLabel": "Test mesajı",
-        "testValue": "Ücretsiz",
-        "testCaption": "Bakiyenizden düşülmez"
+        "testValue": "Ücretsiz"
       },
       "addOrder": "İlk siparişinizi ekleyin",
       "importFile": "Dosyadan içe aktarın",
       "useApi": "API’yi kullanın",
-      "dashboard": "Panele git",
-      "caption": "Siparişi eklediğiniz anda onay mesajını müşterinize göndeririz."
+      "dashboard": "Panele git"
     },
     "phoneTest": {
       "action": "Telefonuma gönder",
@@ -3424,7 +3400,6 @@
     "connect": {
       "title": "{store} mağazasını EasyOrders’a bağlayın",
       "titleNoStore": "Mağazanızı EasyOrders’a bağlayın",
-      "body": "Akeed, EasyOrders’dan gelen kapıda ödemeli siparişlerinizi WhatsApp üzerinden onaylatır. Bağlantıyı EasyOrders’da bir kez onaylarsınız.",
       "permissionsTitle": "Akeed, EasyOrders’dan yalnızca iki izin ister:",
       "permissions": {
         "read": "Yeni siparişlerinizi okuma",
@@ -3525,9 +3500,7 @@
     },
     "details": {
       "title": "EasyOrders siparişleriniz hakkında birkaç bilgi",
-      "body": "Akeed’in siparişlerinizi doğru okuyabilmesi için bunlara bir kez ihtiyacı var.",
       "secretsKept": "Webhook gizli anahtarlarınız kaydedildi. Korumak için bu iki alanı boş bırakın.",
-      "footerCaption": "Bunları daha sonra değiştirebilirsiniz.",
       "submit": "Kaydet ve devam et",
       "saving": "Kaydediliyor…",
       "edit": "Ülkeyi veya para birimini değiştir"
@@ -3536,7 +3509,6 @@
       "loading": "Kurulumunuz yükleniyor…",
       "loadError": "Kurulumunuzu yükleyemedik. İnternet bağlantınızı kontrol edip tekrar deneyin.",
       "retry": "Tekrar dene",
-      "footerCaption": "Test ücretsizdir ve yalnızca sizin numaranıza gider.",
       "notReady": "Test mesajını göndermek için yukarıda işaretlenenleri düzeltin.",
       "sender": {
         "configured": "Mesajlar Akeed’in WhatsApp numarasından gider. Kendinize ait bir numaraya ihtiyacınız yok.",
@@ -3552,8 +3524,7 @@
         "noReplyOn": "{minutes} dakika sonra yanıt yok olarak işaretlenir. Akeed siparişi EasyOrders’da yalnızca otomatik iptali açarsanız kendiliğinden iptal eder.",
         "noReplyOff": "Siparişler otomatik olarak yanıt yok diye işaretlenmez.",
         "quietHoursOn": "{start} ile {end} arasında mesaj gönderilmez.",
-        "quietHoursOff": "Sessiz saat yok.",
-        "changeLater": "Bunları kurulumdan sonra Ayarlar’dan değiştirebilirsiniz."
+        "quietHoursOff": "Sessiz saat yok."
       }
     },
     "revoked": {
@@ -3646,7 +3617,6 @@
     },
     "enterUrl": {
       "title": "WooCommerce mağazanızı bağlayın",
-      "body": "Akeed, WooCommerce’den gelen kapıda ödemeli siparişlerinizi WhatsApp üzerinden onaylatır. Bağlantıyı mağazanızda bir kez onaylarsınız.",
       "label": "Mağazanızın adresi",
       "hint": "Müşterilerinizin ziyaret ettiği, https:// ile başlayan adres",
       "placeholder": "https://ornek.com",
@@ -3691,7 +3661,6 @@
       "loading": "Kurulumunuz yükleniyor…",
       "loadError": "Kurulumunuzu yükleyemedik. İnternet bağlantınızı kontrol edip tekrar deneyin.",
       "retry": "Tekrar dene",
-      "footerCaption": "Test ücretsizdir ve yalnızca sizin numaranıza gider.",
       "notReady": "Test mesajını göndermek için yukarıda işaretlenenleri düzeltin.",
       "sender": {
         "configured": "Mesajlar Akeed’in WhatsApp numarasından gider. Kendinize ait bir numaraya ihtiyacınız yok.",
@@ -3707,8 +3676,7 @@
         "noReplyOn": "{minutes} dakika sonra yanıt yok olarak işaretlenir. Akeed siparişi WooCommerce’de yalnızca otomatik iptali açarsanız kendiliğinden iptal eder.",
         "noReplyOff": "Siparişler otomatik olarak yanıt yok diye işaretlenmez.",
         "quietHoursOn": "{start} ile {end} arasında mesaj gönderilmez.",
-        "quietHoursOff": "Sessiz saat yok.",
-        "changeLater": "Bunları kurulumdan sonra Ayarlar’dan değiştirebilirsiniz."
+        "quietHoursOff": "Sessiz saat yok."
       }
     },
     "done": {
@@ -3746,7 +3714,6 @@
       "rejectedDeliveries": "{count, plural, one {# sipariş bildirimi, imzası veya mağaza adresi eşleşmediği için reddedildi.} other {# sipariş bildirimi, imzaları veya mağaza adresleri eşleşmediği için reddedildi.}} Webhook WooCommerce’de düzenlendiyse bağlantıyı kesip aynı mağazayı yeniden bağlayın."
     },
     "check": {
-      "help": "Bağlantının hâlâ çalışıp çalışmadığını mağazanıza sorun.",
       "button": "Bağlantıyı kontrol et",
       "checking": "Mağazanız kontrol ediliyor…",
       "ok": "Mağazanız yanıt verdi, Akeed’in erişimini kabul etti ve iki sipariş bildirimi de etkin.",

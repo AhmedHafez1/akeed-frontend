@@ -105,15 +105,15 @@ describe('StoreStep', () => {
       screen.getByRole('heading', { name: 'جهّز رسالة التأكيد لمتجرك' })
     ).toBeTruthy()
     expect(screen.getByLabelText('اسم المتجر كما يظهر في الرسالة')).toBeTruthy()
-    expect(screen.getByText('أخذناه من بيانات التسجيل.')).toBeTruthy()
+    expect(screen.queryByText('أخذناه من بيانات التسجيل.')).toBeNull()
     expect(screen.getByText('رقم واتساب الخاص بك')).toBeTruthy()
     expect(screen.getByText('اخترنا لك')).toBeTruthy()
     expect(screen.getByText('تلقائي حسب رقم العميل')).toBeTruthy()
     expect(screen.getByText('جنيه مصري (ج.م)')).toBeTruthy()
     expect(screen.getByText('القاهرة')).toBeTruthy()
     expect(
-      screen.getByText('لن نرسل شيئًا لعملائك قبل أن تضيف طلبًا.')
-    ).toBeTruthy()
+      screen.queryByText('لن نرسل شيئًا لعملائك قبل أن تضيف طلبًا.')
+    ).toBeNull()
   })
 
   it('states the free credits and the price after them', () => {

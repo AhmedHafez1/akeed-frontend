@@ -37,18 +37,11 @@ export function SignupBenefits({ locale, sourceId }: SignupBenefitsProps) {
             >
               {index + 1}
             </span>
-            <div className="space-y-1">
-              <p className="text-ink font-semibold">
-                {step === 'first' && isGoogleAuthEnabled()
-                  ? google('firstTitle')
-                  : t(`next.steps.${sourceId}.${step}.title`)}
-              </p>
-              <p className="text-ink-muted text-sm">
-                {step === 'first' && isGoogleAuthEnabled()
-                  ? google('firstBody')
-                  : t(`next.steps.${sourceId}.${step}.body`)}
-              </p>
-            </div>
+            <p className="text-ink self-center font-semibold">
+              {step === 'first' && isGoogleAuthEnabled()
+                ? google('firstTitle')
+                : t(`next.steps.${sourceId}.${step}.title`)}
+            </p>
           </li>
         ))}
       </ol>

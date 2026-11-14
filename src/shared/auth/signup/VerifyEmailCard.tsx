@@ -111,8 +111,6 @@ export function VerifyEmailCard({
             )
           })}
         </ol>
-
-        <p className="text-ink-muted text-sm">{t('caption')}</p>
       </div>
 
       <footer className="border-line bg-surface-sunken space-y-3 border-t p-5 sm:px-10">

@@ -35,7 +35,6 @@ export function WooCommerceConnectionCheck({
 
   return (
     <div className="space-y-3 text-start">
-      <p className="text-ink-muted text-sm">{t('help')}</p>
       <LoadingButton
         variant="outline"
         className="w-full gap-2 font-semibold sm:w-auto"

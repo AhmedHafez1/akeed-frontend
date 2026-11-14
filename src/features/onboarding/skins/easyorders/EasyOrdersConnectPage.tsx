@@ -320,7 +320,6 @@ export function EasyOrdersConnectPage() {
           {heading(
             store ? t('connect.title', { store }) : t('connect.titleNoStore')
           )}
-          <p className="text-ink-muted text-sm">{t('connect.body')}</p>
           <div className="space-y-2">
             <p className="text-ink text-sm font-semibold">
               {t('connect.permissionsTitle')}

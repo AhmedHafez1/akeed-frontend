@@ -720,7 +720,7 @@ describe('EasyOrdersConnectPage setup, revoked and disconnected', () => {
       expect(
         within(section).getByLabelText('Your WhatsApp number')
       ).toBeTruthy()
-      expect(section.textContent).toContain(
+      expect(section.textContent).not.toContain(
         'The test is free and goes to your number only.'
       )
       expect(

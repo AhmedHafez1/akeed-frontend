@@ -8,7 +8,7 @@ describe('SignupBenefits', () => {
     vi.stubEnv('NEXT_PUBLIC_GOOGLE_AUTH_ENABLED', 'true')
     try {
       renderAuth(<SignupBenefits locale="en" sourceId="woocommerce" />, 'en')
-      expect(screen.getByText(/Use Google, or confirm your email/)).toBeTruthy()
+      expect(screen.getByText('Create your account')).toBeTruthy()
       expect(screen.queryByText('Verify your email')).toBeNull()
     } finally {
       vi.unstubAllEnvs()
@@ -41,21 +41,12 @@ describe('SignupBenefits', () => {
     }
   )
 
-  it('says how each store is connected', () => {
-    const { unmount } = renderAuth(
-      <SignupBenefits locale="en" sourceId="woocommerce" />,
-      'en'
-    )
+  it('keeps each step to its title', () => {
+    renderAuth(<SignupBenefits locale="en" sourceId="woocommerce" />, 'en')
     expect(
-      screen.getByText(/approve the connection in your WooCommerce admin/)
-    ).toBeTruthy()
-    expect(screen.getByText(/No keys to copy/)).toBeTruthy()
-    unmount()
-
-    renderAuth(<SignupBenefits locale="en" sourceId="easyorders" />, 'en')
-    expect(
-      screen.getByText('You connect your EasyOrders store from the setup page.')
-    ).toBeTruthy()
+      screen.queryByText(/approve the connection in your WooCommerce admin/)
+    ).toBeNull()
+    expect(screen.getByText('Connect your store')).toBeTruthy()
   })
 
   it('renders the Arabic copy with Western digits', () => {

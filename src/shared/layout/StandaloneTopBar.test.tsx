@@ -56,7 +56,7 @@ describe('StandaloneTopBar', () => {
     render(<StandaloneTopBar onOpenNavigation={vi.fn()} />)
 
     const breadcrumb = screen.getByRole('navigation', { name: 'breadcrumbs' })
-    expect(breadcrumb.textContent).toBe(`workspace${title}`)
+    expect(breadcrumb.textContent).toBe(title)
   })
 
   it('puts the payment return page under a link back to Billing', () => {
