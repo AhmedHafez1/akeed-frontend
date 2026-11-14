@@ -2107,6 +2107,8 @@
         "recommended": "Önerilen",
         "languageFixed": "Tüm müşteriler için tek dil",
         "languageFixedHelp": "Her müşteri mesajı sizin seçtiğiniz dilde alır.",
+        "languageStorefront": "Müşterinin alışveriş yaptığı dile göre",
+        "languageStorefrontHelp": "Her müşteri mesajı mağazanızda kullandığı dilde alır.",
         "languageFixedLabel": "Dil",
         "languageOptionLocked": "{language} ({status})",
         "awaitingApproval": "WhatsApp onayı bekleniyor",

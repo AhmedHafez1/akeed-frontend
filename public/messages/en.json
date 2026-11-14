@@ -3276,6 +3276,8 @@
         "recommended": "Recommended",
         "languageFixed": "One language for all customers",
         "languageFixedHelp": "Every customer gets the message in the language you choose.",
+        "languageStorefront": "By the language the customer shopped in",
+        "languageStorefrontHelp": "Each customer gets the message in the language they used on your store.",
         "languageFixedLabel": "Language",
         "languageOptionLocked": "{language} ({status})",
         "awaitingApproval": "Awaiting WhatsApp approval",

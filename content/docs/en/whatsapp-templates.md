@@ -42,6 +42,10 @@ With **Automatic, by customer number**, the customer's phone number decides the 
 
 If a language shows **Not available yet** in your settings, its WhatsApp message is paused or still in review. Customers who would get it receive English until it is back.
 
+### Language the customer shopped in
+
+For Shopify stores. With **By the language the customer shopped in**, each customer gets the message in the language they used on your store. A language Akeed does not send in gets English. If the order has no language, the customer number decides, as in Automatic.
+
 ## How To Choose the Right Style
 
 ### Arabic stores (general)

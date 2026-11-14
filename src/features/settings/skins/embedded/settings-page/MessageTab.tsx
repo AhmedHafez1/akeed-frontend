@@ -46,6 +46,7 @@ const AUTO_STYLE = 'auto'
 const SAME_AS_FIRST = '__same_as_first__'
 /** The language choices: by the customer's number, or one for everyone. */
 const AUTO_LANGUAGE = 'auto'
+const STORE_LANGUAGE = 'storefront'
 const FIXED_LANGUAGE = '__fixed_language__'
 
 interface MessageTabProps {
@@ -104,6 +105,8 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
     : t('previewingLanguage', { language: previewLanguageName })
   const reminderIds = reminderVariants?.map((variant) => variant.variant)
   const isAutoLanguage = values.defaultLanguage === AUTO_LANGUAGE
+  const isStoreLanguage = values.defaultLanguage === STORE_LANGUAGE
+  const isFixedLanguage = !isAutoLanguage && !isStoreLanguage
   // On automatic, the style cards edit the language being previewed.
   const languageHint = styles.canChoosePreviewLanguage
     ? t('styleForLanguage', { language: previewLanguageName })
@@ -131,8 +134,9 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
     styles.chooseReminder(variant === SAME_AS_FIRST ? null : variant)
 
   const handleLanguageModeChange = (mode: string) => {
-    if (mode === AUTO_LANGUAGE) styles.chooseLanguage(AUTO_LANGUAGE)
-    else if (isAutoLanguage) styles.chooseFixedLanguage()
+    if (mode === AUTO_LANGUAGE || mode === STORE_LANGUAGE)
+      styles.chooseLanguage(mode)
+    else if (!isFixedLanguage) styles.chooseFixedLanguage()
   }
 
   const styleValue = isAuto ? AUTO_STYLE : (selectedVariant ?? '')
@@ -246,10 +250,24 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
                 </InlineStack>
                 <InlineStack gap="100" blockAlign="center">
                   <RadioButton
+                    id="message-language-storefront"
+                    name="message-language"
+                    label={t('languageStorefront')}
+                    checked={isStoreLanguage}
+                    disabled={readOnly}
+                    onChange={() => handleLanguageModeChange(STORE_LANGUAGE)}
+                  />
+                  <SettingsHelp
+                    label={t('languageStorefront')}
+                    content={t('languageStorefrontHelp')}
+                  />
+                </InlineStack>
+                <InlineStack gap="100" blockAlign="center">
+                  <RadioButton
                     id="message-language-fixed"
                     name="message-language"
                     label={t('languageFixed')}
-                    checked={!isAutoLanguage}
+                    checked={isFixedLanguage}
                     disabled={readOnly}
                     onChange={() => handleLanguageModeChange(FIXED_LANGUAGE)}
                   />
@@ -258,7 +276,7 @@ export function MessageTab({ model, data, readOnly }: MessageTabProps) {
                     content={t('languageFixedHelp')}
                   />
                 </InlineStack>
-                {!isAutoLanguage && (
+                {isFixedLanguage && (
                   <Select
                     label={t('languageFixedLabel')}
                     labelHidden

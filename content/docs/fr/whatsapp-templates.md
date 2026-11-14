@@ -42,6 +42,10 @@ Avec **Automatique, selon le numéro du client**, le numéro de téléphone du c
 
 Si une langue apparaît avec la mention **Pas encore disponible** dans vos réglages, son message WhatsApp est suspendu ou encore en cours d’examen. Les clients qui l’auraient reçu reçoivent l’anglais jusqu’à son retour.
 
+### Langue d’achat du client
+
+Pour les boutiques Shopify. Avec **Selon la langue dans laquelle le client a acheté**, chaque client reçoit le message dans la langue qu’il a utilisée sur votre boutique. Une langue dans laquelle Akeed n’envoie pas de messages reçoit l’anglais. Si la commande n’indique aucune langue, le numéro du client décide, comme en mode Automatique.
+
 ## Comment choisir le bon style
 
 ### Boutiques arabophones (cas général)

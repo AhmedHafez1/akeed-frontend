@@ -42,6 +42,10 @@ Con **Automático, según el número del cliente**, el número de teléfono del 
 
 Si un idioma aparece como **Aún no disponible** en tus ajustes, su mensaje de WhatsApp está en pausa o todavía en revisión. Los clientes que lo recibirían reciben el mensaje en inglés hasta que vuelva a estar disponible.
 
+### Idioma en que compró el cliente
+
+Para tiendas Shopify. Con **Según el idioma en que compró el cliente**, cada cliente recibe el mensaje en el idioma que usó en tu tienda. Un idioma en el que Akeed no envía mensajes recibe inglés. Si el pedido no trae idioma, decide el número del cliente, como en Automático.
+
 ## Cómo elegir el estilo adecuado
 
 ### Tiendas árabes (en general)
