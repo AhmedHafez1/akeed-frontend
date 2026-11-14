@@ -91,7 +91,7 @@ function AkSegmentedInner<T extends string>(
                 ? 'text-ak-label h-7 px-2.5'
                 : 'text-ak-caption h-8.5 px-3.5',
               pressed
-                ? 'bg-surface-raised text-ink shadow-ak-segment'
+                ? 'bg-brand text-brand-foreground shadow-ak-segment'
                 : 'text-ink-muted hover:text-ink'
             )}
           >
