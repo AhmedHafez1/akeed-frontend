@@ -1971,7 +1971,6 @@
   "dashboard": {
     "changeRequest": {
       "emailUnavailable": "The email notification could not be confirmed. This request is still available here.",
-      "doNotShipStrip": "Don’t ship orders with a change request.",
       "dontShip": "Don’t ship yet",
       "ackMissing": "Customer not notified",
       "handle": "Handle request",

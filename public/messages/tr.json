@@ -802,7 +802,6 @@
   "dashboard": {
     "changeRequest": {
       "emailUnavailable": "E-posta bildirimi doğrulanamadı. Bu talebe buradan erişmeye devam edebilirsiniz.",
-      "doNotShipStrip": "Değişiklik isteği olan siparişleri göndermeyin.",
       "dontShip": "Henüz gönderme",
       "ackMissing": "Müşteriye bildirilmedi",
       "handle": "İsteği ele al",

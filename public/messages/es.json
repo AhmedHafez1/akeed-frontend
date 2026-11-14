@@ -802,7 +802,6 @@
   "dashboard": {
     "changeRequest": {
       "emailUnavailable": "No se pudo confirmar la notificación por correo. La solicitud sigue disponible aquí.",
-      "doNotShipStrip": "No envíes pedidos con una solicitud de cambio.",
       "dontShip": "No enviar todavía",
       "ackMissing": "Cliente no notificado",
       "handle": "Atender solicitud",

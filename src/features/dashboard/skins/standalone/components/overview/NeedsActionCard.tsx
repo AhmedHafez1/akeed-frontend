@@ -259,12 +259,8 @@ export function NeedsActionCard({
   const t = useTranslations('dashboard.overview.needsAction')
   const tCard = useTranslations('dashboard.standalone.needsAction')
   const tHeadings = useTranslations('dashboard.confirmations.headings')
-  const tChange = useTranslations('dashboard.changeRequest')
   const items = needsAction.items.slice(0, NEEDS_ACTION_CARD_LIMIT)
   const hasItems = items.length > 0
-  const hasChangeRequest = items.some(
-    (item) => item.reason.type === 'change_requested'
-  )
   const rowProps = {
     timeZone,
     canAct: canConfirm,
@@ -310,20 +306,6 @@ export function NeedsActionCard({
         </div>
       ) : (
         <>
-          {hasChangeRequest && (
-            <div
-              role="note"
-              className="bg-ak-danger-soft text-ak-danger border-line flex items-start gap-2.5 border-b px-4 py-3 md:px-6"
-            >
-              <PackageX
-                aria-hidden="true"
-                className="mt-0.5 size-4 shrink-0 md:size-4.5"
-              />
-              <p className="text-ak-caption md:text-ak-body font-semibold">
-                {tChange('doNotShipStrip')}
-              </p>
-            </div>
-          )}
           <div className="hidden overflow-x-auto md:block">
             <table className={cn(TABLE, 'min-w-270')}>
               <caption className="sr-only">{t('title')}</caption>
