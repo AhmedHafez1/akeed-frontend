@@ -75,10 +75,7 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <AuthPanel
-      title={t('auth.forgotPasswordTitle')}
-      description={t('auth.forgotPasswordSubtitle')}
-    >
+    <AuthPanel title={t('auth.forgotPasswordTitle')}>
       <form className="space-y-6" onSubmit={handleSubmit} noValidate>
         {error && (
           <div

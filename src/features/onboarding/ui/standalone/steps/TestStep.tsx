@@ -113,10 +113,6 @@ export function TestStep({
         autoDetect: isPhone ? t('mobile.autoDetect') : t('autoDetectNext'),
       },
       formatTime
-    ).map((row) =>
-      row.id === 'tap' && row.state === 'current' && !row.note
-        ? { ...row, note: t('tapNote') }
-        : row
     )
     // On a phone the list is short: once it has arrived, "sent" says nothing.
     return isPhone && rows[1]?.state === 'done'

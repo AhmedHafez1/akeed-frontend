@@ -57,8 +57,8 @@ describe('AutomationFlowCard', () => {
       })
     ).toBeTruthy()
     expect(
-      screen.getByText('يتحدث هذا المسار مع كل تعديل قبل الحفظ.')
-    ).toBeTruthy()
+      screen.queryByText('يتحدث هذا المسار مع كل تعديل قبل الحفظ.')
+    ).toBeNull()
     expect(screen.getByRole('list').tagName).toBe('OL')
     expect(steps).toHaveLength(4)
     expect(connectorLabels()).toEqual([

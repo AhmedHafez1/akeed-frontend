@@ -2,7 +2,7 @@
 
 import { useId, type ReactNode } from 'react'
 import { cn } from '@/shared/lib/utils'
-import { AkSwitch, akCard } from '@/shared/ui'
+import { AkSwitch, InfoHint, akCard } from '@/shared/ui'
 
 /** Stacks annotated sections with a hairline between them. */
 export function AnnotatedSections({ children }: { children: ReactNode }) {
@@ -14,8 +14,9 @@ export function AnnotatedSections({ children }: { children: ReactNode }) {
 }
 
 /**
- * A settings group: what it is about in a narrow start column, its card in
- * the end column. One column below 1100px.
+ * A settings group: its title in a narrow start column, its card in the end
+ * column. One column below 1100px. `description` is help behind an ⓘ, not
+ * text on the page.
  */
 export function AnnotatedSection({
   title,
@@ -23,7 +24,7 @@ export function AnnotatedSection({
   children,
 }: {
   title: string
-  description: string
+  description?: string
   children: ReactNode
 }) {
   const headingId = useId()
@@ -33,10 +34,13 @@ export function AnnotatedSection({
       className="grid grid-cols-[minmax(0,1fr)] gap-3 min-[1100px]:grid-cols-[280px_minmax(0,1fr)] min-[1100px]:gap-8"
     >
       <div>
-        <h2 id={headingId} className="text-ak-section text-ink">
+        <h2
+          id={headingId}
+          className="text-ak-section text-ink flex items-center gap-1"
+        >
           {title}
+          {description && <InfoHint label={title} content={description} />}
         </h2>
-        <p className="text-ak-caption text-ink-muted mt-0.5">{description}</p>
       </div>
       {/* min-w-0: a wide table scrolls inside the card, not the page. */}
       <div className={cn(akCard, 'min-w-0')}>{children}</div>
@@ -52,13 +56,16 @@ export const settingsRowTitle =
 export const settingsRowPadding = 'px-4 py-4 sm:px-6 sm:py-5'
 
 /**
- * One on/off setting inside a card: its name and what it does at the start,
- * the switch at the end, and whatever the setting reveals (`children`) under
- * them. Settings in the same card are separated by a hairline.
+ * One on/off setting inside a card: its name at the start, the switch at the
+ * end, and whatever the setting reveals (`children`) under them. `help` sits
+ * behind an ⓘ; `note` stays visible and is only for what the merchant must
+ * see now, such as why the switch is disabled. Settings in the same card are
+ * separated by a hairline.
  */
 export function SwitchSetting({
   title,
   help,
+  note,
   checked,
   disabled,
   onCheckedChange,
@@ -66,6 +73,7 @@ export function SwitchSetting({
 }: {
   title: string
   help?: string
+  note?: string
   checked: boolean
   disabled: boolean
   onCheckedChange: (checked: boolean) => void
@@ -82,12 +90,15 @@ export function SwitchSetting({
         )}
       >
         <div className="min-w-0">
-          <h3 id={titleId} className={settingsRowTitle}>
-            {title}
-          </h3>
-          {help && (
+          <div className="flex items-center gap-1">
+            <h3 id={titleId} className={settingsRowTitle}>
+              {title}
+            </h3>
+            {help && <InfoHint label={title} content={help} />}
+          </div>
+          {note && (
             <p id={helpId} className="text-ak-caption text-ink-muted mt-0.5">
-              {help}
+              {note}
             </p>
           )}
         </div>
@@ -96,7 +107,7 @@ export function SwitchSetting({
           onCheckedChange={onCheckedChange}
           disabled={disabled}
           aria-labelledby={titleId}
-          aria-describedby={help ? helpId : undefined}
+          aria-describedby={note ? helpId : undefined}
         />
       </div>
       {children}

@@ -29,7 +29,14 @@ import {
 } from '@/features/whatsapp-connect'
 import { getFormatLocale, resolveSupportedLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
-import { akButton, akLink, akPill, DocsLink, Skeleton } from '@/shared/ui'
+import {
+  akButton,
+  akLink,
+  akPill,
+  DocsLink,
+  InfoHint,
+  Skeleton,
+} from '@/shared/ui'
 import {
   AnnotatedSection,
   AnnotatedSections,
@@ -87,7 +94,9 @@ export function WhatsappTab() {
       <AnnotatedSections>
         <AnnotatedSection
           title={t('number.title')}
-          description={t('number.description')}
+          description={
+            view.kind === 'unconnected' ? t('connect.body') : undefined
+          }
         >
           {view.kind === 'unconnected' ? (
             <ConnectPanel model={model} canConnect={view.canConnect} />
@@ -98,16 +107,10 @@ export function WhatsappTab() {
         {view.kind === 'unconnected' && <CostsSection />}
         {view.kind === 'connection' && view.state !== 'disconnected' && (
           <>
-            <AnnotatedSection
-              title={t('templates.title')}
-              description={t('templates.description')}
-            >
+            <AnnotatedSection title={t('templates.title')}>
               <TemplatesPanel view={view} />
             </AnnotatedSection>
-            <AnnotatedSection
-              title={t('thankYou.title')}
-              description={t('thankYou.description')}
-            >
+            <AnnotatedSection title={t('thankYou.title')}>
               <SwitchSetting
                 title={t('thankYou.heading')}
                 help={t('thankYou.help')}
@@ -241,10 +244,6 @@ function ConnectPanel({
   return (
     <div className={cn('space-y-5', settingsRowPadding)}>
       <NumberLine state="idle" phone={null} />
-      <div className="space-y-1">
-        <h3 className={settingsRowTitle}>{t('connect.heading')}</h3>
-        <p className="text-ak-body text-ink-muted">{t('connect.body')}</p>
-      </div>
       <ul className="text-ak-caption text-ink-muted flex flex-wrap gap-x-6 gap-y-2">
         {(['keepApp', 'metaBills'] as const).map((key) => (
           <li key={key} className="flex items-center gap-2">
@@ -258,7 +257,7 @@ function ConnectPanel({
           model={model}
           canConnect={canConnect}
           label={t('connect.action')}
-          hint={canConnect ? t('connect.hint') : t('connect.ownerOnly')}
+          hint={canConnect ? undefined : t('connect.ownerOnly')}
         />
         {!canConnect && <PermissionNote />}
       </div>
@@ -275,7 +274,7 @@ function ConnectAction({
   model: WhatsappTabModel
   canConnect: boolean
   label: string
-  hint: string
+  hint?: string
 }) {
   const t = useTranslations('whatsappConnect')
   const hintId = useId()
@@ -288,7 +287,7 @@ function ConnectAction({
           type="button"
           onClick={entry.open}
           disabled={!canConnect || opening}
-          aria-describedby={hintId}
+          aria-describedby={hint ? hintId : undefined}
           className={akButton({ variant: 'primary', size: 'md' })}
         >
           {opening ? (
@@ -298,9 +297,11 @@ function ConnectAction({
           )}
           {opening ? t('tab.connect.opening') : label}
         </button>
-        <p id={hintId} className="text-ak-caption text-ink-muted">
-          {hint}
-        </p>
+        {hint && (
+          <p id={hintId} className="text-ak-caption text-ink-muted">
+            {hint}
+          </p>
+        )}
       </div>
       <div role="status" aria-live="polite" className="text-ak-caption">
         {entry.status === 'opened' && (
@@ -333,8 +334,10 @@ function PermissionNote() {
   const t = useTranslations('whatsappConnect.tab.permissions')
   return (
     <div className="bg-neutral-soft rounded-ak-control mt-4 px-4 py-3">
-      <p className="text-ak-body text-ink font-semibold">{t('title')}</p>
-      <p className="text-ak-caption text-ink-muted mt-0.5">{t('body')}</p>
+      <p className="text-ak-body text-ink flex items-center gap-1 font-semibold">
+        {t('title')}
+        <InfoHint label={t('title')} content={t('body')} />
+      </p>
     </div>
   )
 }
@@ -347,13 +350,12 @@ function CostsSection() {
   // Rates only from the server; without both there is nothing to compare.
   if (akeed === undefined || own === undefined) return null
   return (
-    <AnnotatedSection title={t('title')} description={t('description')}>
-      <div className={cn('space-y-4', settingsRowPadding)}>
+    <AnnotatedSection title={t('title')}>
+      <div className={settingsRowPadding}>
         <dl className="grid gap-4 sm:grid-cols-2">
           <Rate label={t('fromAkeed')} value={t('credits', { count: akeed })} />
           <Rate label={t('fromYours')} value={t('credits', { count: own })} />
         </dl>
-        <p className="text-ak-caption text-ink-muted">{t('creditNote')}</p>
       </div>
     </AnnotatedSection>
   )
@@ -425,7 +427,14 @@ function NumberPanel({
           <Fact label={t('readiness.label')}>
             {t(`readiness.${view.readiness}`)}
           </Fact>
-          <Fact label={t('last.confirmation')}>
+          <Fact
+            label={t('last.confirmation')}
+            help={
+              view.lastConfirmation || view.lastReminder
+                ? t('last.historical')
+                : undefined
+            }
+          >
             {view.lastConfirmation ? (
               <LastSend send={view.lastConfirmation} />
             ) : (
@@ -434,11 +443,6 @@ function NumberPanel({
             {view.lastReminder && (
               <span className="text-ak-caption text-ink-muted mt-1 block font-normal">
                 {t('last.reminder')}: <LastSend send={view.lastReminder} />
-              </span>
-            )}
-            {(view.lastConfirmation || view.lastReminder) && (
-              <span className="text-ak-caption text-ink-muted mt-1 block font-normal">
-                {t('last.historical')}
               </span>
             )}
           </Fact>
@@ -463,9 +467,11 @@ function NumberPanel({
             <Unplug aria-hidden="true" />
             {t('disconnect.action')}
           </button>
-          <p className="text-ak-caption text-ink-muted">
-            {t('connect.ownerOnly')}
-          </p>
+          {!view.canDisconnect && (
+            <p className="text-ak-caption text-ink-muted">
+              {t('connect.ownerOnly')}
+            </p>
+          )}
         </div>
       )}
 
@@ -519,10 +525,21 @@ function NumberPanel({
   }
 }
 
-function Fact({ label, children }: { label: string; children: ReactNode }) {
+function Fact({
+  label,
+  help,
+  children,
+}: {
+  label: string
+  help?: string
+  children: ReactNode
+}) {
   return (
     <div className="min-w-0">
-      <dt className="text-ak-caption text-ink-muted">{label}</dt>
+      <dt className="text-ak-caption text-ink-muted flex items-center gap-1">
+        {label}
+        {help && <InfoHint label={label} content={help} />}
+      </dt>
       <dd className="text-ak-body text-ink mt-1 font-semibold">{children}</dd>
     </div>
   )
@@ -552,22 +569,13 @@ function LastSend({ send }: { send: AcceptedSend }) {
 
 function ReconnectPanel({ model }: { model: WhatsappTabModel }) {
   const t = useTranslations('whatsappConnect.tab.reconnect')
-  const tTab = useTranslations('whatsappConnect.tab')
   return (
     <div className={cn('border-line space-y-4 border-t', settingsRowPadding)}>
       <div className="space-y-1">
         <h3 className={settingsRowTitle}>{t('title')}</h3>
         <p className="text-ak-body text-ink-muted">{t('body')}</p>
       </div>
-      <dl>
-        <Fact label={t('next')}>{t('nextValue')}</Fact>
-      </dl>
-      <ConnectAction
-        model={model}
-        canConnect
-        label={t('action')}
-        hint={tTab('connect.hint')}
-      />
+      <ConnectAction model={model} canConnect label={t('action')} />
     </div>
   )
 }
@@ -604,11 +612,11 @@ function TemplatesPanel({ view }: { view: ConnectionView }) {
           settingsRowPadding
         )}
       >
-        <div className="min-w-0">
+        <div className="flex min-w-0 items-center gap-1">
           <h3 className={settingsRowTitle}>{t('title')}</h3>
-          <p className="text-ak-caption text-ink-muted mt-0.5">
-            {t('subheading')}
-          </p>
+          {footer === 'akeed' && (
+            <InfoHint label={t('title')} content={t('footer.akeed')} />
+          )}
         </div>
         {rows.length > 0 && (
           <span className={akPill({ tone: allApproved ? 'brand' : 'warning' })}>
@@ -652,7 +660,7 @@ function TemplatesPanel({ view }: { view: ConnectionView }) {
           </table>
         </div>
       )}
-      {rows.length > 0 && (
+      {rows.length > 0 && (footer === 'pending' || footer === 'degraded') && (
         <p
           className={cn(
             'text-ak-caption text-ink-muted border-line mt-2 flex items-start gap-2 border-t',

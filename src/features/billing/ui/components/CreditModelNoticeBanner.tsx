@@ -2,7 +2,7 @@
 
 import { Info } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { akButton, notify } from '@/shared/ui'
+import { InfoHint, akButton, notify } from '@/shared/ui'
 import { useCreditModelNotice } from '../../domain/useCreditModelNotice'
 
 /**
@@ -19,15 +19,20 @@ export function CreditModelNoticeBanner() {
   return (
     <div
       role="status"
-      className="rounded-ak-card border-info-border bg-info-subtle text-info-subtle-foreground text-ak-body flex flex-col gap-3 border px-4 py-3 sm:flex-row sm:items-start sm:justify-between"
+      className="rounded-ak-card border-info-border bg-info-subtle text-info-subtle-foreground text-ak-body flex flex-col gap-3 border px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
     >
-      <div className="flex min-w-0 items-start gap-2.5">
-        <Info aria-hidden="true" className="mt-0.5 size-5 shrink-0" />
-        <p className="flex min-w-0 flex-col gap-0.5">
-          <span className="font-bold">{t('title')}</span>
-          <span>{t('body')}</span>
-          <span>{t('example')}</span>
-        </p>
+      <div className="flex min-w-0 items-center gap-2.5">
+        <Info aria-hidden="true" className="size-5 shrink-0" />
+        <p className="min-w-0 font-bold">{t('title')}</p>
+        <InfoHint
+          label={t('title')}
+          content={
+            <span className="block space-y-1">
+              <span className="block">{t('body')}</span>
+              <span className="block">{t('example')}</span>
+            </span>
+          }
+        />
       </div>
       {canDismiss && (
         <button

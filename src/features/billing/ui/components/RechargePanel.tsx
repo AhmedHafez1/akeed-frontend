@@ -3,7 +3,7 @@
 import { useId } from 'react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import { akCard } from '@/shared/ui'
+import { InfoHint, akCard } from '@/shared/ui'
 import { formatCredits } from '../../domain/billingFormatters'
 import { coverageRates } from '../../domain/messageCoverage'
 import type { useBillingPage } from '../../domain/useBillingPage'
@@ -41,13 +41,11 @@ export function RechargePanel({
 
   return (
     <section className={akCard} aria-labelledby={headingId}>
-      <div className="px-4 py-4 sm:px-6 sm:py-5">
+      <div className="flex items-center gap-1 px-4 py-4 sm:px-6 sm:py-5">
         <h2 id={headingId} className="text-ak-section text-ink">
           {t('title')}
         </h2>
-        <p className="text-ak-caption text-ink-muted mt-0.5">
-          {t('description')}
-        </p>
+        <InfoHint label={t('title')} content={t('description')} />
       </div>
 
       <div className="flex flex-col gap-5 px-4 pb-4 sm:px-6 sm:pb-6">

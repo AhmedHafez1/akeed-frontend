@@ -254,10 +254,8 @@ describe.each(['ar', 'en'] as const)('embedded Timing tab (%s)', (locale) => {
       })
       const deadline =
         locale === 'en'
-          ? 'Order will be automatically cancelled after ' +
-            duration.en +
-            ' from the first message.'
-          : 'سيُلغى الطلب تلقائيًا بعد ' + duration.ar + ' من الرسالة الأولى.'
+          ? 'Cancels ' + duration.en + ' after the first message.'
+          : 'يُلغى بعد ' + duration.ar + ' من الرسالة الأولى.'
       expect(screen.getByText(deadline)).toBeTruthy()
     }
   )
@@ -276,16 +274,16 @@ describe.each(['ar', 'en'] as const)('embedded Timing tab (%s)', (locale) => {
     expect(
       screen.getByText(
         locale === 'en'
-          ? 'Order will be automatically cancelled after 2 minutes from the first message.'
-          : 'سيُلغى الطلب تلقائيًا بعد دقيقتين من الرسالة الأولى.'
+          ? 'Cancels 2 minutes after the first message.'
+          : 'يُلغى بعد دقيقتين من الرسالة الأولى.'
       )
     ).toBeTruthy()
     fireEvent.click(screen.getByLabelText(timing.reminderLabel))
     expect(
       screen.getByText(
         locale === 'en'
-          ? 'Order will be automatically cancelled after 4 minutes from the first message.'
-          : 'سيُلغى الطلب تلقائيًا بعد 4 دقائق من الرسالة الأولى.'
+          ? 'Cancels 4 minutes after the first message.'
+          : 'يُلغى بعد 4 دقائق من الرسالة الأولى.'
       )
     ).toBeTruthy()
     expect(api.saveSettings).not.toHaveBeenCalled()
@@ -342,15 +340,13 @@ describe.each(['ar', 'en'] as const)('embedded Timing tab (%s)', (locale) => {
     expect(nav.push).toHaveBeenCalledWith(`/${locale}/settings?tab=message`)
   })
 
-  it('offers five send times and no custom field', async () => {
+  it('offers five send times', async () => {
     const view = await renderTiming(locale)
 
     expect(view.segmentsIn(timing.sendTimeLabel)).toEqual(expected.sendSegments)
     expect(view.pressedIn(timing.sendTimeLabel)).toEqual([
       expected.sendSegments[0],
     ])
-    expect(screen.queryByText(timing.sendPresets.custom)).toBeNull()
-    expect(screen.queryByLabelText(timing.customDelayLabel)).toBeNull()
   })
 
   it('keeps a saved send time that is not one of the choices', async () => {

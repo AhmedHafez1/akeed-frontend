@@ -3,9 +3,13 @@
 import { useLayoutEffect, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { Info } from 'lucide-react'
-import { useSettingsHelp } from '@/features/settings/domain/useSettingsHelp'
+import { useInfoHint } from '@/shared/hooks/useInfoHint'
 
-export function SettingsHelp({
+/**
+ * A small ⓘ button whose explanation opens on hover, tap or focus, the
+ * way Shopify shows help. Use it instead of a visible helper paragraph.
+ */
+export function InfoHint({
   label,
   content,
   rich = false,
@@ -21,7 +25,7 @@ export function SettingsHelp({
     open,
     hoverHandlers,
     handlers,
-  } = useSettingsHelp()
+  } = useInfoHint()
   const [position, setPosition] = useState({
     top: 0,
     left: 0,

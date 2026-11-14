@@ -159,7 +159,6 @@ export function EasyOrdersDetailsStep({
           >
             {t('title')}
           </h1>
-          <p className="text-ink-muted text-body">{t('body')}</p>
         </header>
 
         {attention}
@@ -239,8 +238,7 @@ export function EasyOrdersDetailsStep({
         </section>
       </div>
 
-      <div className="border-line bg-surface-sunken flex flex-col gap-4 border-t p-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-        <p className="text-ink-muted text-sm">{t('footerCaption')}</p>
+      <div className="border-line bg-surface-sunken flex flex-col gap-4 border-t p-5 sm:flex-row sm:items-center sm:justify-end sm:px-8">
         <LoadingButton
           type="submit"
           size="lg"

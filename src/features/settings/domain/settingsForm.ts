@@ -155,21 +155,6 @@ export function resolvedSendDelayMinutes(
     : sendDelayPresetMinutes(values.sendDelayChoice)
 }
 
-/**
- * What picking a send-time segment changes. "Custom" opens on the delay the
- * form currently means, so the field never starts empty.
- */
-export function sendDelayChoicePatch(
-  values: SettingsFormValues,
-  choice: SendDelayChoice
-): Pick<SettingsFormValues, 'sendDelayChoice' | 'sendDelayCustom'> {
-  const minutes =
-    choice === 'custom'
-      ? (resolvedSendDelayMinutes(values) ?? 0)
-      : sendDelayPresetMinutes(choice)
-  return { sendDelayChoice: choice, sendDelayCustom: String(minutes) }
-}
-
 /** The timeline of the form as it stands, saved or not. */
 export function timelineInputFromForm(
   values: SettingsFormValues

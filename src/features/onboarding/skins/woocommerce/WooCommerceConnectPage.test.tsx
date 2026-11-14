@@ -476,7 +476,7 @@ describe('WooCommerceConnectPage setup and recovery', () => {
         })
       ).toBeTruthy()
       expect(within(section).getByText(STORE_SHOWN)).toBeTruthy()
-      expect(section.textContent).toContain(
+      expect(section.textContent).not.toContain(
         'The test is free and goes to your number only.'
       )
       expect(section.textContent).toContain(
@@ -518,7 +518,7 @@ describe('WooCommerceConnectPage setup and recovery', () => {
           name: 'جهّز رسالة التأكيد لمتجرك',
         })
       ).toBeTruthy()
-      expect(section.textContent).toContain(
+      expect(section.textContent).not.toContain(
         'رسالة التجربة مجانية وتصل إلى رقمك فقط.'
       )
       expect(section.textContent).toContain('تذكير بعد 120 دقيقة من دون رد.')

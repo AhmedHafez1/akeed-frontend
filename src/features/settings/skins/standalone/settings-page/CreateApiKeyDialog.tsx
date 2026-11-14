@@ -10,7 +10,6 @@ import {
 } from '@/features/settings/domain/integrationKeyErrors'
 import { useCopyToClipboard } from '@/features/settings/domain/useCopyToClipboard'
 import { createLogger } from '@/shared/lib/logger'
-import { cn } from '@/shared/lib/utils'
 import {
   akButton,
   Dialog,
@@ -44,7 +43,6 @@ export function CreateApiKeyDialog({ open, onClose }: CreateApiKeyDialogProps) {
   const create = useCreateIntegrationKeyMutation()
   const fieldId = useId()
   const errorId = useId()
-  const noteId = useId()
   const [name, setName] = useState('')
   const [secret, setSecret] = useState<string | null>(null)
   const [error, setError] = useState<
@@ -115,7 +113,7 @@ export function CreateApiKeyDialog({ open, onClose }: CreateApiKeyDialogProps) {
               <DialogTitle className="text-ink leading-snug tracking-normal">
                 {t('reveal.title')}
               </DialogTitle>
-              <DialogDescription className="text-ink-muted">
+              <DialogDescription className="sr-only">
                 {t('reveal.description')}
               </DialogDescription>
             </DialogHeader>
@@ -153,9 +151,6 @@ export function CreateApiKeyDialog({ open, onClose }: CreateApiKeyDialogProps) {
                   </span>
                 </button>
               </div>
-              <p className="text-ak-caption text-ink-muted">
-                {t('serverOnly')}
-              </p>
             </div>
             <DialogFooter>
               <button
@@ -198,11 +193,8 @@ export function CreateApiKeyDialog({ open, onClose }: CreateApiKeyDialogProps) {
                   disabled={isCreating}
                   onChange={(event) => setName(event.target.value)}
                   aria-invalid={error === 'nameRequired'}
-                  aria-describedby={cn(noteId, error && errorId)}
+                  aria-describedby={error ? errorId : undefined}
                 />
-                <p id={noteId} className="text-ak-caption text-ink-muted">
-                  {t('create.nameHelp')}
-                </p>
                 {error && (
                   <p
                     id={errorId}

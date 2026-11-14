@@ -1,14 +1,7 @@
 'use client'
 
 import { useId } from 'react'
-import {
-  AlertTriangle,
-  Clock,
-  Moon,
-  Package,
-  Send,
-  type LucideIcon,
-} from 'lucide-react'
+import { Clock, Moon, Package, Send, User, type LucideIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import type {
   AutomationTimeline,
@@ -22,7 +15,7 @@ import {
 import { cn } from '@/shared/lib/utils'
 import { akCard, akPill } from '@/shared/ui'
 
-type StepTone = 'neutral' | 'brand' | 'warning'
+type StepTone = 'neutral' | 'brand'
 
 const STEP_LOOK: Record<
   TimelineStepId,
@@ -35,14 +28,13 @@ const STEP_LOOK: Record<
     iconClassName: 'rtl:-scale-x-100',
   },
   reminder: { icon: Clock, tone: 'brand' },
-  needsAction: { icon: AlertTriangle, tone: 'warning' },
+  needsAction: { icon: User, tone: 'brand' },
 }
 
 const MARKER_TONE: Record<StepTone, string> = {
   neutral: 'bg-neutral-soft text-ink-muted',
   // The halo marks the steps where Akeed acts on the order.
   brand: 'bg-brand text-brand-foreground ring-ak-halo ring-4',
-  warning: 'bg-ak-warning-soft text-ak-warning ring-ak-warning-line ring-4',
 }
 
 /**
@@ -128,7 +120,6 @@ export function AutomationFlowCard({
   timeline: AutomationTimeline
 }) {
   const t = useTranslations('settings.embedded.timing')
-  const tPage = useTranslations('settings.standalone.page.timing')
   const headingId = useId()
 
   return (
@@ -137,15 +128,12 @@ export function AutomationFlowCard({
         <h2 id={headingId} className="text-ak-section text-ink">
           {t('timelineHeading')}
         </h2>
-        <p className="text-ak-caption text-ink-muted mt-0.5">
-          {tPage('flowDesc')}
-        </p>
       </div>
 
       {/* `role` keeps the list semantics that `list-none` and `contents` drop. */}
       <ol
         role="list"
-        className="grid list-none px-4 pt-6 pb-5 sm:px-6 sm:pt-7 sm:pb-6 lg:grid-cols-[auto_1fr_auto_1fr_auto_1fr_auto] lg:items-start"
+        className="grid list-none px-4 pt-5 pb-5 sm:px-6 sm:pt-6 sm:pb-6 lg:grid-cols-[auto_1fr_auto_1fr_auto_1fr_auto] lg:items-start"
       >
         {timeline.steps.map((step) => {
           const delay = formatStepDelay(t, step)

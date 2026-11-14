@@ -10,7 +10,7 @@ import {
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
-import { akCard, akPill, Skeleton } from '@/shared/ui'
+import { InfoHint, akCard, akPill, Skeleton } from '@/shared/ui'
 import {
   resolveBalanceState,
   type BalanceState,
@@ -197,8 +197,12 @@ export function BalanceCard({
       {senders && (
         <div className="border-line grid gap-5 border-t px-5 py-4 sm:grid-cols-2 sm:px-6">
           <div className="space-y-2">
-            <h3 className="text-ak-caption text-ink-muted">
+            <h3 className="text-ak-caption text-ink-muted flex items-center gap-1">
               {t('senders.usedHeading')}
+              <InfoHint
+                label={t('senders.usedHeading')}
+                content={t('senders.usageNote')}
+              />
             </h3>
             <dl className="flex flex-wrap gap-x-8 gap-y-2">
               {(['akeed', 'ownNumber'] as const).map((sender) => (
@@ -230,14 +234,15 @@ export function BalanceCard({
                 </div>
               ))}
             </dl>
-            <p className="text-ak-caption text-ink-muted">
-              {t('senders.usageNote')}
-            </p>
           </div>
           {ownRate !== undefined && (
             <div className="space-y-2">
-              <h3 className="text-ak-caption text-ink-muted">
+              <h3 className="text-ak-caption text-ink-muted flex items-center gap-1">
                 {t('senders.ratesHeading')}
+                <InfoHint
+                  label={t('senders.ratesHeading')}
+                  content={tRates('creditNote')}
+                />
               </h3>
               <dl className="flex flex-wrap gap-x-8 gap-y-2">
                 <div className="flex flex-col gap-0.5">
@@ -259,9 +264,6 @@ export function BalanceCard({
                   </dd>
                 </div>
               </dl>
-              <p className="text-ak-caption text-ink-muted">
-                {tRates('creditNote')}
-              </p>
             </div>
           )}
         </div>

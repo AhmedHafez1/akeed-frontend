@@ -58,7 +58,7 @@ describe('DoneStep', () => {
     expect(screen.getByText('60 رصيد')).toBeTruthy()
     expect(screen.getByText('2.00 ج.م')).toBeTruthy()
     expect(screen.getByText('مجانية')).toBeTruthy()
-    expect(screen.getByText('لا تُخصم من رصيدك')).toBeTruthy()
+    expect(screen.queryByText('لا تُخصم من رصيدك')).toBeNull()
     expect(screen.getByText('لكل رسالة واتساب مُرسلة')).toBeTruthy()
   })
 
@@ -94,8 +94,8 @@ describe('DoneStep', () => {
       ]
     )
     expect(
-      screen.getByText('نرسل التأكيد لعميلك فور إضافة الطلب.')
-    ).toBeTruthy()
+      screen.queryByText('نرسل التأكيد لعميلك فور إضافة الطلب.')
+    ).toBeNull()
   })
 
   it('renders the English copy', () => {

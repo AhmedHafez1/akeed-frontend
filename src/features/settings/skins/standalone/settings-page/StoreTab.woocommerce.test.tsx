@@ -166,7 +166,7 @@ describe('standalone Store tab with a WooCommerce source', () => {
     expect(
       screen.getByRole('heading', { level: 3, name: 'WooCommerce' })
     ).toBeTruthy()
-    expect(screen.getByText(store.sourceHelpWooCommerce)).toBeTruthy()
+    expect(screen.queryByText(store.sourceHelpWooCommerce)).toBeNull()
     expect(screen.getByText('متصل')).toBeTruthy()
     expect(
       screen.getByRole('heading', { level: 2, name: store.connectionHeading })

@@ -4,7 +4,7 @@ import { Clock } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
-import { akCard } from '@/shared/ui'
+import { InfoHint, akCard } from '@/shared/ui'
 import {
   formatCount,
   formatDuration,
@@ -117,11 +117,11 @@ export function MessageFlowCard({
       className={cn(akCard, 'px-6 py-5')}
     >
       <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
-        <div className="min-w-0 space-y-1">
+        <div className="flex min-w-0 items-center gap-1">
           <h2 id="message-flow-title" className="text-ak-section text-ink">
             {t('title')}
           </h2>
-          <p className="text-ak-body text-ink-muted">{t('subtitle')}</p>
+          <InfoHint label={t('title')} content={t('subtitle')} />
         </div>
         {sent > 0 && (
           <dl className="flex">

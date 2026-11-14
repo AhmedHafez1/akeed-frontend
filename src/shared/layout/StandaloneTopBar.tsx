@@ -63,22 +63,20 @@ export function StandaloneTopBar({ onOpenNavigation }: StandaloneTopBarProps) {
           aria-label={t('breadcrumbs')}
           className="flex min-w-0 items-center gap-2 text-sm"
         >
-          {isPaymentReturn ? (
-            <Link
-              href={withLocale('/billing', getLocaleFromPathname(pathname))}
-              className="ak-focus text-muted-foreground hover:text-foreground hidden rounded-sm transition-colors sm:inline"
-            >
-              {breadcrumbLabel}
-            </Link>
-          ) : (
-            <span className="text-muted-foreground hidden sm:inline">
-              {t('workspace')}
-            </span>
+          {isPaymentReturn && (
+            <>
+              <Link
+                href={withLocale('/billing', getLocaleFromPathname(pathname))}
+                className="ak-focus text-muted-foreground hover:text-foreground hidden rounded-sm transition-colors sm:inline"
+              >
+                {breadcrumbLabel}
+              </Link>
+              <ChevronRight
+                aria-hidden="true"
+                className="text-muted-foreground hidden h-4 w-4 sm:block rtl:rotate-180"
+              />
+            </>
           )}
-          <ChevronRight
-            aria-hidden="true"
-            className="text-muted-foreground hidden h-4 w-4 sm:block rtl:rotate-180"
-          />
           <span className="text-foreground truncate font-semibold">
             {isPaymentReturn ? t('paymentStatus') : breadcrumbLabel}
           </span>

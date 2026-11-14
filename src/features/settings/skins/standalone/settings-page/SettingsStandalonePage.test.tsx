@@ -170,7 +170,6 @@ describe('SettingsStandalonePage tabs', () => {
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(
       'الإعدادات'
     )
-    expect(screen.getByText(copy.page.subtitle)).toBeTruthy()
     expect(screen.getByRole('tablist')).toBeTruthy()
     expect(tab('الرسالة').getAttribute('aria-selected')).toBe('true')
     expect(tab('التوقيت والمتابعة').getAttribute('aria-selected')).toBe('false')
@@ -755,7 +754,7 @@ describe('SettingsStandalonePage message improvements', () => {
     chooseStyle(auto)
     expect(auto.selected).toBe(true)
     expect(styleOption(/^فصحى/).selected).toBe(false)
-    expect(screen.getByText(messageCopy.autoStylePreviewNote)).toBeTruthy()
+    expect(screen.queryByText(messageCopy.autoStylePreviewNote)).toBeNull()
 
     fireEvent.click(screen.getByRole('button', { name: 'حفظ' }))
     await waitFor(() =>
@@ -969,13 +968,11 @@ describe('SettingsStandalonePage message languages', () => {
     await storeNameInput()
     previewIn('en')
 
-    // The helper names the language of the message on the phone.
+    // The helper names the number the test goes to.
     expect(
       screen.getByText(
         (_, element) =>
-          element?.tagName === 'P' &&
-          element.textContent.includes('+20') &&
-          element.textContent.includes(messageCopy.languageNames.en)
+          element?.tagName === 'P' && element.textContent.includes('+20')
       )
     ).toBeTruthy()
     fireEvent.click(

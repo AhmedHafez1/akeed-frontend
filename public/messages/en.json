@@ -1467,7 +1467,6 @@
       "saving": "Saving your account…",
       "completionFailed": "Your account could not be completed. Try again, or use another account.",
       "firstTitle": "Create your account",
-      "firstBody": "Use Google, or confirm your email with the link we send you. Your platform choice stays saved.",
       "nextMobile": {
         "standalone": "After creating your account, try the message on your phone and add your orders.",
         "woocommerce": "After creating your account, connect your store by approving it in your WooCommerce admin.",
@@ -1502,14 +1501,12 @@
     "signOut": "Sign out",
     "passwordsDoNotMatch": "Passwords do not match",
     "forgotPasswordTitle": "Reset your password",
-    "forgotPasswordSubtitle": "Enter your email and we will send you a link to reset your password.",
     "sendResetLink": "Send reset link",
     "sendingResetLink": "Sending...",
     "resetLinkSent": "If an account with that email exists, a reset link has been sent.",
     "resetLinkFailed": "Failed to send reset link. Please try again.",
     "backToSignIn": "Back to sign in",
     "resetPasswordTitle": "Set new password",
-    "resetPasswordSubtitle": "Enter your new password below.",
     "resetPasswordProcessing": "Verifying your reset link...",
     "resetPasswordSuccess": "Your password has been updated. You can now sign in with your new password.",
     "resetPasswordFailed": "Failed to update password. Please try again or request a new reset link.",
@@ -1561,7 +1558,6 @@
       },
       "source": {
         "heading": "Where do your orders come from?",
-        "subtitle": "Pick your route and we take you to the right step.",
         "shopifyTitle": "Shopify",
         "shopifyRow": "Install Akeed from the Shopify App Store. You don't need an account here.",
         "summaryLabel": "Order source",
@@ -1593,44 +1589,35 @@
         "steps": {
           "standalone": {
             "first": {
-              "title": "Verify your email",
-              "body": "We send you an activation link, and it brings you straight back to setup."
+              "title": "Verify your email"
             },
             "second": {
-              "title": "Try the message on your phone",
-              "body": "You see exactly what your customer will get before any real order."
+              "title": "Try the message on your phone"
             },
             "third": {
-              "title": "Add your first order",
-              "body": "By hand, from a CSV or Excel file, or through the API."
+              "title": "Add your first order"
             }
           },
           "woocommerce": {
             "first": {
-              "title": "Verify your email",
-              "body": "We send you an activation link, and your WooCommerce choice stays saved."
+              "title": "Verify your email"
             },
             "second": {
-              "title": "Connect your store",
-              "body": "You enter your store URL and approve the connection in your WooCommerce admin. No keys to copy."
+              "title": "Connect your store"
             },
             "third": {
-              "title": "Try the message on your phone",
-              "body": "You see exactly what your customer will get before any real order."
+              "title": "Try the message on your phone"
             }
           },
           "easyorders": {
             "first": {
-              "title": "Verify your email",
-              "body": "We send you an activation link, and your EasyOrders choice stays saved."
+              "title": "Verify your email"
             },
             "second": {
-              "title": "Connect your store",
-              "body": "You connect your EasyOrders store from the setup page."
+              "title": "Connect your store"
             },
             "third": {
-              "title": "Try the message on your phone",
-              "body": "You see exactly what your customer will get before any real order."
+              "title": "Try the message on your phone"
             }
           }
         }
@@ -1644,7 +1631,6 @@
         "whatsapp": "Add your WhatsApp number",
         "test": "Try the confirmation message on your phone"
       },
-      "caption": "About two minutes to your first message. Your free credits are ready as soon as you verify.",
       "changeEmail": "Change email",
       "spamHint": "Didn't get it? Check your spam folder.",
       "resend": "Resend",
@@ -1787,7 +1773,6 @@
     "settings": "Settings",
     "navigationMenu": "Open navigation menu",
     "primaryNavigation": "Primary navigation",
-    "workspace": "Workspace",
     "workspaceFallback": "My workspace",
     "userFallback": "Signed-in user",
     "identityLoading": "Loading workspace identity",
@@ -2022,10 +2007,10 @@
     "subtitle": "Monitor verification status and recent orders across your channels.",
     "valueProposition": "Akeed confirms cash-on-delivery orders through WhatsApp before fulfillment.",
     "standalone": {
-      "manualConfirmBody": "Akeed will record the order as confirmed, just as if the customer had confirmed. No more messages will be sent.",
+      "manualConfirmBody": "No more messages will be sent.",
       "credits": {
-        "warning": "You've used {used} of {limit} credits. Confirmations stop when they run out.",
-        "exhausted": "You've used all your credits. Confirmations have stopped until you top up.",
+        "warning": "{used} of {limit} credits used",
+        "exhausted": "Out of credits. Confirmations are paused.",
         "cta": "Buy credits"
       },
       "header": {
@@ -2418,7 +2403,6 @@
       "readOnlyNotice": "You have read-only access. An owner or admin can retry verification or mark supported orders canceled.",
       "empty": {
         "title": "No confirmations yet",
-        "description": "Each order's status shows here as soon as you add it.",
         "testHeading": "Try the message on your phone",
         "testHint": "We send a free test message to the WhatsApp number saved on your account. It isn't deducted from your balance."
       },
@@ -2801,20 +2785,19 @@
           "title": "Excel or CSV file",
           "body": "For many orders at once. We match the columns for you, and you review before anything is sent."
         },
-        "storeLinkSoon": "Connecting your online store so every order arrives automatically: coming soon.",
         "zeroBalance": {
           "title": "Your balance is {count} credits",
-          "body": "Each confirmation uses 2 credits from your balance. Top up to send your first one.",
+          "body": "Top up to send your first confirmation.",
           "action": "Top up balance"
         }
       },
       "skippedTest": {
         "title": "You haven't tried the message yet",
-        "body": "See it on your phone before your first customer does. One minute, and free."
+        "body": "One minute, and free."
       },
       "confirmations": {
         "title": "Confirmations",
-        "empty": "No orders yet. Each order's status will show here as it happens.",
+        "empty": "No orders yet.",
         "examplesLabel": "Example order statuses:",
         "examples": {
           "sent": "Sent · awaiting reply",
@@ -2860,7 +2843,7 @@
       "noteAck": "Akeed replies once to confirm receipt (1 message).",
       "noteAckPlan": "Akeed replies once to confirm receipt (1 message from your plan).",
       "saveUnavailable": "Request a change isn't available yet. Try again later.",
-      "brandingUnavailable": "Branded three-button messages are unavailable. Check the logo banner and matching approved image twins. Existing safe confirmation fallback remains in use.",
+      "brandingUnavailable": "Not available with your logo yet. Confirmations still go out.",
       "ownNumberText": "Your WhatsApp number sends text only. A saved logo does not prevent using Request a change."
     },
     "thankYou": {
@@ -2889,7 +2872,6 @@
       "uploading": "Uploading your logo…",
       "logoAlt": "Your store logo",
       "bannerAlt": "Your logo on the message banner",
-      "bannerCaption": "This banner appears at the top of each message.",
       "emptyTitle": "Upload your logo",
       "emptyHint": "or drag the image here",
       "currentLabel": "Current logo",
@@ -2920,7 +2902,6 @@
     "standalone": {
       "page": {
         "title": "Settings",
-        "subtitle": "Control your confirmation message, its timing, and where your orders come from.",
         "tabs": {
           "message": "Message",
           "timing": "Timing & follow-up",
@@ -2937,7 +2918,7 @@
         },
         "saveBar": {
           "label": "Unsaved changes",
-          "unsaved": "You have unsaved changes",
+          "unsaved": "Unsaved changes",
           "unsavedIn": "Unsaved changes in: {tabs}",
           "separator": ", ",
           "discard": "Discard",
@@ -2945,7 +2926,6 @@
           "saving": "Saving…"
         },
         "message": {
-          "identityDesc": "The name your customers see in every message.",
           "storeNameHelp": "Appears in every message: “Thank you for your order from {name}.”",
           "languageDesc": "Which language each customer gets the confirmation in.",
           "defaultBadge": "Default",
@@ -2953,14 +2933,10 @@
           "testSendSaveFirst": "Save your changes first to test them."
         },
         "timing": {
-          "flowDesc": "This updates as you edit, before you save.",
           "autoHelp": "When off, no messages are sent.",
-          "customDelayLabel": "Delay",
-          "quietDesc": "No messages at night.",
           "quietHelp": "Anything due during quiet hours is sent when they end."
         },
         "store": {
-          "sourceDesc": "Where Akeed receives your orders from.",
           "sourceHelp": "Orders you import from a file or add by hand.",
           "connected": "Connected",
           "connectionId": "Connection ID",
@@ -2968,7 +2944,6 @@
           "copied": "Copied",
           "copyError": "Couldn’t copy the connection ID. Copy it by hand.",
           "codHeading": "Missing payment info",
-          "codDesc": "How we treat orders that don’t say how they were paid.",
           "codLabel": "Treat them as cash on delivery",
           "codHelp": "Turn on only if your order source usually leaves the payment method out of COD orders.",
           "codRisk": "Prepaid orders with missing payment info will also get a confirmation message and use credits.",
@@ -2976,10 +2951,8 @@
           "sourceHelpWooCommerce": "Orders arrive from your WooCommerce store by themselves.",
           "disconnected": "Disconnected",
           "connectionHeading": "Connection",
-          "connectionDesc": "The link between Akeed and your store.",
           "health": {
             "heading": "Connection health",
-            "desc": "What Akeed last saw from your store, one signal at a time.",
             "loading": "Loading connection health…",
             "loadError": "We couldn’t load the connection health.",
             "retry": "Try again",
@@ -3032,7 +3005,6 @@
               "supported": "Updated in your store: {list}.",
               "unsupported": "Kept in Akeed only: {list}.",
               "separator": ", ",
-              "note": "Results are always recorded in Akeed.",
               "actions": {
                 "customer_confirmation": "customer confirmations",
                 "customer_cancellation": "customer cancellations",
@@ -3059,16 +3031,15 @@
                 "paused": "Akeed doesn’t change this. Activate it in your store’s webhook settings.",
                 "disabled": "Re-enable it under Connection above. Orders placed while it was disabled are not imported.",
                 "missing": "Disconnect, then connect the same store again to restore it.",
-                "unknown": "Your store didn’t answer, or didn’t accept Akeed’s access. That is not by itself a fault of the notification."
+                "unknown": "Couldn’t read this from your store."
               }
             }
           }
         },
         "apiKeys": {
           "heading": "API keys",
-          "description": "Let your own website or back end send orders to Akeed.",
           "serverOnlyTitle": "For your server only",
-          "serverOnly": "Keep keys on your server. Never put a key in a website page, a mobile app or anywhere a customer can see it: anyone with the key can send orders to your store.",
+          "serverOnly": "Use keys on your server only. Anyone with a key can send orders to your store.",
           "createButton": "Create key",
           "limitReached": "You can have up to {max} active keys. Revoke one to create another.",
           "empty": "No API keys yet.",
@@ -3086,10 +3057,9 @@
           },
           "create": {
             "title": "Create an API key",
-            "description": "Name the key after the server that will use it, so you know which one to revoke later.",
+            "description": "Name it after the server that will use it.",
             "nameLabel": "Key name",
             "namePlaceholder": "e.g. Store website",
-            "nameHelp": "Up to 60 characters. Only your team sees it.",
             "nameRequired": "Enter a name for the key.",
             "cancel": "Cancel",
             "submit": "Create key"
@@ -3136,13 +3106,13 @@
         "saveSuccess": "Settings saved",
         "saveInvalid": "Some fields need your attention before saving.",
         "saveError": "We couldn't save your settings. Check the highlighted fields and try again.",
-        "readOnly": "You have read-only access. An owner or admin must make configuration changes.",
+        "readOnly": "View only. An owner or admin can make changes.",
         "testSendSuccess": "Test message sent to your WhatsApp",
         "testSendCooldown": "Wait a few seconds before sending another test.",
         "testSendDailyLimit": "You've reached today's limit of test messages.",
         "testSendError": "The test message couldn't be sent. Try again.",
         "testSendLanguageUnavailable": "Messages in this language aren't available right now. Preview another language and try again.",
-        "sourceDisconnected": "Your order source is disconnected, so settings can’t be changed. You can reconnect it on the order source tab."
+        "sourceDisconnected": "Order source disconnected. Reconnect it on the Store tab to make changes."
       }
     },
     "storeConfigurationHeading": "Store configuration",
@@ -3281,7 +3251,7 @@
         "languageOptionLocked": "{language} ({status})",
         "awaitingApproval": "Awaiting WhatsApp approval",
         "notEnabledYet": "Not available yet",
-        "languageLockedNote": "{language} messages are waiting for WhatsApp to approve them. You can choose {language} for your store once one is approved.",
+        "languageLockedNote": "{language} messages are awaiting WhatsApp approval.",
         "stylesEmpty": "There are no {language} messages yet.",
         "styleHeading": "Message style",
         "styleForLanguage": "For {language} messages. Change the preview language to set another.",
@@ -3311,14 +3281,14 @@
         "previewLanguageGroup": "Preview in",
         "previewAria": "WhatsApp message preview in {language}",
         "testSend": "Send a test message to WhatsApp",
-        "testSendHelp": "Sent to <phone></phone> in {language}, as shown above. Test messages are free.",
-        "testSendLanguageLocked": "{language} messages aren't available yet, so there is nothing to test.",
-        "testSendHelpNoPhone": "We'll ask for your WhatsApp number when you send. Test messages are free.",
+        "testSendHelp": "To <phone></phone> · free",
+        "testSendLanguageLocked": "{language} messages aren’t available yet.",
+        "testSendHelpNoPhone": "Test messages are free.",
         "testSendSaveFirst": "Save your changes first to test them.",
         "testPhone": {
           "change": "Change",
           "title": "Your WhatsApp number",
-          "description": "The test message is sent to this number. It's saved for your next tests.",
+          "description": "It's saved for your next tests.",
           "label": "WhatsApp number",
           "suggested": "This is your store's phone number. Check that it's on WhatsApp.",
           "invalid": "Enter a valid WhatsApp number, including the country code.",
@@ -3357,14 +3327,8 @@
         "sendTimeLabel": "Send time",
         "previewMessage": "Preview message",
         "sendPresets": {
-          "now": "Immediately",
-          "after15m": "After 15 minutes",
-          "after1h": "After 1 hour",
-          "custom": "Custom"
+          "now": "Immediately"
         },
-        "customDelayLabel": "Delay in minutes",
-        "customDelaySuffix": "min",
-        "customDelayError": "Enter whole minutes from 0 to 1,440.",
         "followHeading": "Follow-up",
         "followDescription": "When customers don’t reply.",
         "reminderLabel": "Send one reminder",
@@ -3383,10 +3347,10 @@
           "heading": "Unanswered orders",
           "description": "Automatic cancellation settings.",
           "label": "Auto-cancel unanswered orders",
-          "deadline": "Order will be automatically cancelled after {duration} from the first message.",
+          "deadline": "Cancels {duration} after the first message.",
           "restockLabel": "Restock items",
           "notifyLabel": "Send store notification",
-          "requiresEscalation": "Turn on “Flag unanswered orders” first. Cancellation uses the same delay."
+          "requiresEscalation": "Turn on “Flag unanswered orders” first."
         },
         "quietHeading": "Quiet hours",
         "quietDescription": "No messages at night. Anything due during quiet hours is sent when they end.",
@@ -3684,7 +3648,6 @@
         "autoDetect": "We'll detect your reply automatically"
       },
       "tapConfirmOnPhone": "Tap \"Confirm order\" on your phone",
-      "tapNote": "This is exactly what your customer will do.",
       "autoDetectNext": "We'll detect your reply and move on automatically",
       "mobile": {
         "subheading": "We sent a test message to WhatsApp on this phone. Open it and tap \"Confirm order\".",
@@ -3741,7 +3704,6 @@
       },
       "storeName": {
         "label": "Store name as it appears in the message",
-        "hint": "We took it from your sign-up details.",
         "placeholder": "e.g. Noor Store"
       },
       "phone": {
@@ -3772,7 +3734,6 @@
         "Africa_Casablanca": "Casablanca",
         "UTC": "UTC"
       },
-      "footerCaption": "We won't send anything to your customers until you add an order.",
       "submit": "Next: send a test message",
       "submitting": "Saving and sending…",
       "loading": "Getting your store ready…",
@@ -3792,33 +3753,27 @@
       "pipelineLabel": "How Akeed works with every order",
       "pipeline": {
         "add": {
-          "title": "You add the order",
-          "description": "One order from WhatsApp, Instagram or a phone call, or many at once from an Excel file."
+          "title": "You add the order"
         },
         "send": {
-          "title": "We message your customer",
-          "description": "The same message you just tried, in your store's name."
+          "title": "We message your customer"
         },
         "reply": {
-          "title": "You see the reply in Confirmations",
-          "description": "Confirmed or canceled, and we gather who didn't reply so you can follow up."
+          "title": "You see the reply in Confirmations"
         }
       },
       "stats": {
         "balanceLabel": "Your balance now",
         "balanceValue": "{count} credits",
-        "balanceCaption": "Free, no payment card",
         "priceLabel": "After the free credits",
         "priceCaption": "per WhatsApp message sent",
         "testLabel": "The test message",
-        "testValue": "Free",
-        "testCaption": "Not deducted from your balance"
+        "testValue": "Free"
       },
       "addOrder": "Add your first order",
       "importFile": "Import from a file",
       "useApi": "Use the API",
-      "dashboard": "Go to the dashboard",
-      "caption": "We send the confirmation to your customer as soon as you add the order."
+      "dashboard": "Go to the dashboard"
     },
     "phoneTest": {
       "action": "Send it to my phone",
@@ -3922,7 +3877,6 @@
       }
     },
     "title": "Billing & credits",
-    "subtitle": "You only pay for the confirmation messages we send. No monthly plan.",
     "creditModelNotice": {
       "title": "Your balance number doubled. Its value did not change.",
       "body": "1 credit now equals EGP 1, and each WhatsApp message from Akeed uses 2 credits. A message still costs EGP 2, and no money has moved.",
@@ -3985,7 +3939,6 @@
     },
     "alerts": {
       "lowTitle": "{count, plural, one {Only 1 credit left} other {Only {formatted} credits left}}",
-      "lowDescription": "Top up before you run out so new orders keep getting confirmed.",
       "zeroTitle": "You’re out of message credits",
       "zeroDescription": "We aren’t confirming new orders right now. Your orders and data are safe, and messages resume as soon as you top up.",
       "debtTitle": "{count, plural, one {You owe 1 credit} other {You owe {formatted} credits}}",
@@ -4033,15 +3986,14 @@
       "balanceAfter": "Balance after purchase: <b>{count}</b> credits",
       "pay": "Pay <amount>{value}</amount>",
       "payEmpty": "Pay",
-      "paymobNote": "You finish paying on Paymob’s secure page by card or Vodafone Cash. Akeed never sees or stores your payment details.",
+      "paymobNote": "Secure payment on Paymob, by card or Vodafone Cash.",
       "coverage": {
         "akeedShort": "Akeed's number",
         "ownShort": "Your number",
         "approx": "≈ {count}",
         "tileLabel": "Pays for about {akeed} messages from Akeed's number, or {own} from your number",
         "akeed": "Messages from Akeed's number",
-        "own": "Or from your number",
-        "metaNote": "Meta bills your business separately for messages from your number."
+        "own": "Or from your number"
       },
       "blocked": {
         "disabled": "Credit purchases are switched off right now.",
@@ -4065,8 +4017,7 @@
       "lost": "Dispute lost"
     },
     "error": {
-      "title": "Billing could not be loaded",
-      "description": "We could not retrieve the trusted credit balance. Try again before taking billing action."
+      "title": "Billing could not be loaded"
     },
     "return": {
       "credits": "Credits",
@@ -4135,8 +4086,7 @@
       "packNote": "One pack pays for two own-number sends",
       "empty": "No transactions yet.",
       "error": "Transactions couldn’t load.",
-      "retry": "Try again",
-      "note": "The available balance includes any spare credit. Usage is counted per send; pack postings stay in this history."
+      "retry": "Try again"
     },
     "ownNumberGuide": "How your own WhatsApp number is billed"
   },
@@ -4158,8 +4108,7 @@
       "templatePrompt": "No file ready? Download the template:",
       "templateCsv": "CSV",
       "templateExcel": "Excel",
-      "templateFailed": "The template could not be downloaded. Try again.",
-      "autoAdvance": "As soon as you choose a file, we move on to checking it."
+      "templateFailed": "The template could not be downloaded. Try again."
     },
     "fileErrors": {
       "actions": {
@@ -4519,7 +4468,6 @@
         "blankHint": "Move orders without a payment method to the right bucket for this import. If unchanged, they follow your store setting.",
         "confirmValue": "Confirm “{value}” orders",
         "empty": "No values here",
-        "remember": "We'll remember this for your next files.",
         "summary": "{confirm} → confirm · {ignore} → skip",
         "summaryConfirmOnly": "{confirm} → confirm",
         "edit": "Edit",
@@ -4621,7 +4569,6 @@
     "connect": {
       "title": "Connect {store} to EasyOrders",
       "titleNoStore": "Connect your store to EasyOrders",
-      "body": "Akeed will confirm your cash-on-delivery orders from EasyOrders over WhatsApp. You approve the connection once, in EasyOrders.",
       "permissionsTitle": "Akeed asks EasyOrders for two permissions only:",
       "permissions": {
         "read": "Read your new orders",
@@ -4722,9 +4669,7 @@
     },
     "details": {
       "title": "A few details about your EasyOrders orders",
-      "body": "Akeed needs these once, to read your orders correctly.",
       "secretsKept": "Your webhook secrets are saved. Leave these two fields empty to keep them.",
-      "footerCaption": "You can change these later.",
       "submit": "Save and continue",
       "saving": "Saving…",
       "edit": "Change the country or currency"
@@ -4733,7 +4678,6 @@
       "loading": "Loading your setup…",
       "loadError": "We couldn’t load your setup. Check your internet connection and try again.",
       "retry": "Try again",
-      "footerCaption": "The test is free and goes to your number only.",
       "notReady": "Fix what’s flagged above to send the test message.",
       "sender": {
         "configured": "Messages go out from Akeed’s WhatsApp number. You don’t need a number of your own.",
@@ -4749,8 +4693,7 @@
         "noReplyOn": "Marked as no reply after {minutes} minutes. Akeed cancels the order in EasyOrders by itself only if you turn on automatic cancellation.",
         "noReplyOff": "Orders are not marked as no reply automatically.",
         "quietHoursOn": "No messages between {start} and {end}.",
-        "quietHoursOff": "No quiet hours.",
-        "changeLater": "You can change these in Settings after setup."
+        "quietHoursOff": "No quiet hours."
       }
     },
     "revoked": {
@@ -4843,7 +4786,6 @@
     },
     "enterUrl": {
       "title": "Connect your WooCommerce store",
-      "body": "Akeed will confirm your cash-on-delivery orders from WooCommerce over WhatsApp. You approve the connection once, in your store.",
       "label": "Your store’s address",
       "hint": "The address your customers visit, starting with https://",
       "placeholder": "https://example.com",
@@ -4888,7 +4830,6 @@
       "loading": "Loading your setup…",
       "loadError": "We couldn’t load your setup. Check your internet connection and try again.",
       "retry": "Try again",
-      "footerCaption": "The test is free and goes to your number only.",
       "notReady": "Fix what’s flagged above to send the test message.",
       "sender": {
         "configured": "Messages go out from Akeed’s WhatsApp number. You don’t need a number of your own.",
@@ -4904,8 +4845,7 @@
         "noReplyOn": "Marked as no reply after {minutes} minutes. Akeed cancels the order in WooCommerce by itself only if you turn on automatic cancellation.",
         "noReplyOff": "Orders are not marked as no reply automatically.",
         "quietHoursOn": "No messages between {start} and {end}.",
-        "quietHoursOff": "No quiet hours.",
-        "changeLater": "You can change these in Settings after setup."
+        "quietHoursOff": "No quiet hours."
       }
     },
     "done": {
@@ -4943,7 +4883,6 @@
       "rejectedDeliveries": "{count, plural, one {# order notification was refused because its signature or store address didn’t match.} other {# order notifications were refused because their signature or store address didn’t match.}} If the webhook was edited in WooCommerce, disconnect and connect the same store again."
     },
     "check": {
-      "help": "Ask your store whether the connection still works.",
       "button": "Check connection",
       "checking": "Checking your store…",
       "ok": "Your store answered, accepted Akeed’s access, and both order notifications are active.",

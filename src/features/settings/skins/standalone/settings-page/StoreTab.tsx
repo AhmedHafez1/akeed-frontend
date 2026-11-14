@@ -11,7 +11,7 @@ import type { StandaloneSettingsModel } from '@/features/settings/domain/useStan
 import { createLogger } from '@/shared/lib/logger'
 import { cn } from '@/shared/lib/utils'
 import { queryKeys } from '@/shared/query/keys'
-import { akLink, akPill, notify } from '@/shared/ui'
+import { InfoHint, akLink, akPill, notify } from '@/shared/ui'
 import {
   AnnotatedSection,
   AnnotatedSections,
@@ -95,10 +95,7 @@ export function StoreTab({ model, data, readOnly }: StoreTabProps) {
 
   return (
     <AnnotatedSections>
-      <AnnotatedSection
-        title={tSettings('sourceHeading')}
-        description={t('sourceDesc')}
-      >
+      <AnnotatedSection title={tSettings('sourceHeading')}>
         <div
           className={cn(
             'flex items-center justify-between gap-4',
@@ -109,11 +106,12 @@ export function StoreTab({ model, data, readOnly }: StoreTabProps) {
             <span className="bg-neutral-soft text-ink-muted rounded-ak-control grid size-10 shrink-0 place-items-center">
               <FileText aria-hidden="true" className="size-4.5" />
             </span>
-            <div className="min-w-0">
+            <div className="flex min-w-0 items-center gap-1">
               <h3 className={settingsRowTitle}>{sourceName}</h3>
-              <p className="text-ak-caption text-ink-muted mt-0.5">
-                {t(skin?.helpKey ?? 'sourceHelp')}
-              </p>
+              <InfoHint
+                label={sourceName}
+                content={t(skin?.helpKey ?? 'sourceHelp')}
+              />
             </div>
           </div>
           {disconnected ? (
@@ -132,24 +130,18 @@ export function StoreTab({ model, data, readOnly }: StoreTabProps) {
       </AnnotatedSection>
 
       {SourcePanel && (
-        <AnnotatedSection
-          title={t('connectionHeading')}
-          description={t('connectionDesc')}
-        >
+        <AnnotatedSection title={t('connectionHeading')}>
           <SourcePanel onChanged={refreshSource} />
         </AnnotatedSection>
       )}
 
       {skin?.showsHealth && (
-        <AnnotatedSection
-          title={t('health.heading')}
-          description={t('health.desc')}
-        >
+        <AnnotatedSection title={t('health.heading')}>
           <SourceHealthCard />
         </AnnotatedSection>
       )}
 
-      <AnnotatedSection title={t('codHeading')} description={t('codDesc')}>
+      <AnnotatedSection title={t('codHeading')}>
         <SwitchSetting
           title={t('codLabel')}
           help={t('codHelp')}

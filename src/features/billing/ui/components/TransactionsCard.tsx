@@ -131,9 +131,6 @@ export function TransactionsCard({
             </table>
           </div>
         )}
-        <p className="text-ak-caption text-ink-muted border-line border-t px-5 py-3 sm:px-6">
-          {t('note')}
-        </p>
       </div>
     </section>
   )

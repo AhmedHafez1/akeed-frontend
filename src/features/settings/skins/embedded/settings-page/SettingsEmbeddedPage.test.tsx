@@ -646,13 +646,11 @@ describe('SettingsEmbeddedPage message languages', () => {
     await storeNameInput()
     previewIn('en')
 
-    // The helper names the language of the message on the phone.
+    // The helper names the number the test goes to.
     expect(
       screen.getByText(
         (_, element) =>
-          element?.tagName === 'P' &&
-          element.textContent.includes('+20') &&
-          element.textContent.includes(messageCopy.languageNames.en)
+          element?.tagName === 'P' && element.textContent.includes('+20')
       )
     ).toBeTruthy()
     fireEvent.click(screen.getByRole('button', { name: messageCopy.testSend }))

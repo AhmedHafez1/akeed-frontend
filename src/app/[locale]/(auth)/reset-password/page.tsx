@@ -126,10 +126,7 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <AuthPanel
-      title={t('auth.resetPasswordTitle')}
-      description={t('auth.resetPasswordSubtitle')}
-    >
+    <AuthPanel title={t('auth.resetPasswordTitle')}>
       <form className="space-y-6" onSubmit={handleSubmit} noValidate>
         {error && (
           <div

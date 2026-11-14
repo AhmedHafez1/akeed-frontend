@@ -33,10 +33,7 @@ function PageShell({
       className="mx-auto w-full max-w-295 space-y-6 pt-2 pb-8"
       aria-busy={busy || undefined}
     >
-      <header className="space-y-1">
-        <h1 className="text-ak-title text-ink">{t('title')}</h1>
-        <p className="text-ak-body text-ink-muted">{t('subtitle')}</p>
-      </header>
+      <h1 className="text-ak-title text-ink">{t('title')}</h1>
       {children}
     </div>
   )
@@ -79,12 +76,7 @@ export function BillingStandalonePage() {
           <span className="bg-ak-danger-soft text-ak-danger flex size-10 items-center justify-center rounded-full">
             <AlertTriangle aria-hidden="true" className="size-5" />
           </span>
-          <div className="space-y-1">
-            <p className="text-ak-section text-ink">{t('error.title')}</p>
-            <p className="text-ak-body text-ink-muted">
-              {t('error.description')}
-            </p>
-          </div>
+          <p className="text-ak-section text-ink">{t('error.title')}</p>
           <button
             type="button"
             onClick={() => void state.refreshSummary()}

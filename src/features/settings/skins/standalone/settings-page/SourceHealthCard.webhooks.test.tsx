@@ -136,7 +136,7 @@ describe('SourceHealthCard webhook state', () => {
     [
       'unknown',
       'Couldn’t be read from your store',
-      'Your store didn’t answer, or didn’t accept Akeed’s access. That is not by itself a fault of the notification.',
+      'Couldn’t read this from your store.',
       false,
     ],
   ] as const)(
@@ -168,10 +168,10 @@ describe('SourceHealthCard webhook state', () => {
       'text-ak-warning'
     )
     expect(
-      screen.getByText(
+      screen.queryByText(
         'Nothing is wrong with that by itself: an event arrives when your store gets an order.'
       )
-    ).toBeTruthy()
+    ).toBeNull()
   })
 
   it('shows the same in Arabic, right to left', async () => {

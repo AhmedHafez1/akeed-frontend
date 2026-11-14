@@ -10,7 +10,7 @@ import {
 } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { SettingsHelp as Embedded } from '@/features/settings/skins/embedded/settings-page/SettingsHelp'
-import { SettingsHelp as Standalone } from '@/features/settings/skins/standalone/settings-page/SettingsHelp'
+import { InfoHint as Standalone } from '@/shared/ui/info-hint'
 
 beforeEach(() => {
   vi.spyOn(HTMLElement.prototype, 'offsetParent', 'get').mockReturnValue(

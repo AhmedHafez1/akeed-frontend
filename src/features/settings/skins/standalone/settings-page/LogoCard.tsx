@@ -8,8 +8,7 @@ import { useTranslations } from 'next-intl'
 import { LOGO_ACCEPT_ATTRIBUTE } from '@/features/settings/domain/merchantLogo'
 import type { MerchantLogoModel } from '@/features/settings/domain/useMerchantLogo'
 import { cn } from '@/shared/lib/utils'
-import { akButton, akCard } from '@/shared/ui'
-import { SettingsHelp } from './SettingsHelp'
+import { InfoHint, akButton, akCard } from '@/shared/ui'
 
 interface LogoCardProps {
   logo: MerchantLogoModel
@@ -39,7 +38,15 @@ export function LogoCard({ logo, readOnly }: LogoCardProps) {
         <h2 id={headingId} className="text-ak-section text-ink">
           {t('heading')}
         </h2>
-        <SettingsHelp label={t('heading')} content={t('description')} />
+        <InfoHint
+          label={t('heading')}
+          content={
+            <span className="block space-y-2">
+              <span className="block">{t('description')}</span>
+              <span className="block">{t('requirements')}</span>
+            </span>
+          }
+        />
       </div>
       <div className="flex flex-wrap items-center gap-4">
         <div className="border-line bg-surface-sunken rounded-ak-control flex size-20 shrink-0 items-center justify-center overflow-hidden border">
@@ -54,7 +61,6 @@ export function LogoCard({ logo, readOnly }: LogoCardProps) {
           )}
         </div>
         <div className="min-w-0 flex-1 space-y-2">
-          <p className="text-ak-caption text-ink-muted">{t('requirements')}</p>
           {!readOnly && (
             <div className="flex flex-wrap gap-2">
               <input
@@ -121,15 +127,12 @@ export function LogoCard({ logo, readOnly }: LogoCardProps) {
       )}
 
       {branding.bannerUrl && (
-        <figure className="border-line space-y-1.5 border-t pt-3">
+        <figure className="border-line border-t pt-3">
           <img
             src={branding.bannerUrl}
             alt={t('bannerAlt')}
             className="border-line rounded-ak-control aspect-[1200/628] w-full border object-cover"
           />
-          <figcaption className="text-ak-caption text-ink-muted">
-            {t('bannerCaption')}
-          </figcaption>
         </figure>
       )}
     </section>

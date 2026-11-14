@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
-import { akButton } from '@/shared/ui'
+import { InfoHint, akButton } from '@/shared/ui'
 import { useBlockedOrdersBanner } from '@/features/dashboard/domain/useBlockedOrdersBanner'
 import type { CapacitySummary } from '@/features/dashboard/model/dashboard.model'
 
@@ -33,8 +33,9 @@ export function BlockedOrdersBanner({
           {view.title}
         </p>
         <p className="text-ak-body text-foreground">{view.body}</p>
-        <p className="text-ak-body text-muted-foreground">
-          {view.remaining} · {view.note}
+        <p className="text-ak-body text-muted-foreground flex items-center gap-1">
+          {view.remaining}
+          <InfoHint label={view.title} content={view.note} />
         </p>
       </div>
       {view.cta && (

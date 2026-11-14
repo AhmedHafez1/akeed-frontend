@@ -140,9 +140,7 @@ describe('standalone Timing tab', () => {
         escalationDelayMinutes,
       })
       expect(
-        screen.getByText(
-          'سيُلغى الطلب تلقائيًا بعد ' + duration + ' من الرسالة الأولى.'
-        )
+        screen.getByText('يُلغى بعد ' + duration + ' من الرسالة الأولى.')
       ).toBeTruthy()
     }
   )
@@ -158,11 +156,11 @@ describe('standalone Timing tab', () => {
     fireEvent.click(toggle(timing.autoCancel.label))
     fireEvent.click(toggle(timing.reminderLabel))
     expect(
-      screen.getByText('سيُلغى الطلب تلقائيًا بعد دقيقتين من الرسالة الأولى.')
+      screen.getByText('يُلغى بعد دقيقتين من الرسالة الأولى.')
     ).toBeTruthy()
     fireEvent.click(toggle(timing.reminderLabel))
     expect(
-      screen.getByText('سيُلغى الطلب تلقائيًا بعد 4 دقائق من الرسالة الأولى.')
+      screen.getByText('يُلغى بعد 4 دقائق من الرسالة الأولى.')
     ).toBeTruthy()
     expect(api.saveSettings).not.toHaveBeenCalled()
     fireEvent.click(saveButton())
@@ -305,43 +303,40 @@ describe('standalone Timing tab', () => {
     expect(pressedIn(timing.alertGroup)).toEqual(['5 س'])
   })
 
-  it('rejects an invalid custom delay on save and focuses the field', async () => {
+  it('offers the same five send times as Shopify, with no custom field', async () => {
     await renderTiming()
+
+    const segments = within(group(timing.sendTimeLabel)).getAllByRole('button')
+    expect(segments).toHaveLength(5)
+    expect(segments[0].textContent).toBe(timing.sendPresets.now)
+    expect(screen.getByText(timing.fromOrder)).toBeTruthy()
     expect(
       document.getElementById(SETTINGS_FIELD_ID.sendDelayCustom)
     ).toBeNull()
 
     fireEvent.click(
-      within(group(timing.sendTimeLabel)).getByRole('button', {
-        name: timing.sendPresets.custom,
-      })
+      within(group(timing.sendTimeLabel)).getByRole('button', { name: '2 س' })
     )
-    const input = screen.getByLabelText(
-      page.timing.customDelayLabel
-    ) as HTMLInputElement
-    expect(input.id).toBe(SETTINGS_FIELD_ID.sendDelayCustom)
-    expect(input.value).toBe('0')
-    expect(screen.getByText(timing.customDelaySuffix)).toBeTruthy()
-
-    fireEvent.change(input, { target: { value: '2000' } })
-    fireEvent.click(saveButton())
-
-    const error = await screen.findByText(timing.customDelayError)
-    expect(error.getAttribute('role')).toBe('alert')
-    expect(input.getAttribute('aria-invalid')).toBe('true')
-    await waitFor(() => expect(document.activeElement).toBe(input))
-    expect(api.saveSettings).not.toHaveBeenCalled()
-
-    fireEvent.change(input, { target: { value: '45' } })
-    expect(screen.queryByText(timing.customDelayError)).toBeNull()
-    expect(flowSteps()[1].textContent).toContain('بعد 45 دقيقة')
+    expect(flowSteps()[1].textContent).toContain('بعد ساعتين')
 
     fireEvent.click(saveButton())
     await waitFor(() =>
       expect(api.saveSettings).toHaveBeenCalledWith(
-        expect.objectContaining({ sendDelayMinutes: 45 })
+        expect.objectContaining({ sendDelayMinutes: 120 })
       )
     )
+  })
+
+  it('keeps a saved send time that is not one of the choices', async () => {
+    await renderTiming({ sendDelayMinutes: 10 })
+
+    expect(
+      within(group(timing.sendTimeLabel)).getAllByRole('button')
+    ).toHaveLength(6)
+    expect(pressedIn(timing.sendTimeLabel)).toHaveLength(1)
+    expect(pressedIn(timing.sendTimeLabel)).not.toEqual([
+      timing.sendPresets.now,
+    ])
   })
 
   it('rejects quiet hours that start and end at the same time', async () => {

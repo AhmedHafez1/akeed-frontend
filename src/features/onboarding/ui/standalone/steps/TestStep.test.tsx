@@ -99,7 +99,7 @@ describe('TestStep', () => {
     expect(screen.getByText('تم الإرسال')).toBeTruthy()
     expect(screen.getByText('وصلت إلى هاتفك')).toBeTruthy()
     expect(screen.getByText('اضغط «تأكيد الطلب» على هاتفك')).toBeTruthy()
-    expect(screen.getByText('هذا بالضبط ما سيفعله عميلك.')).toBeTruthy()
+    expect(screen.queryByText('هذا بالضبط ما سيفعله عميلك.')).toBeNull()
     expect(
       screen.getByText('الرسالة التجريبية مجانية ولا تُخصم من رصيدك.')
     ).toBeTruthy()

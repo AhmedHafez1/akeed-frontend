@@ -141,10 +141,7 @@ export function UploadStep({ canEdit, onUploaded }: UploadStepProps) {
   return (
     <ModalStepLayout
       footer={
-        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-muted-foreground text-sm">
-            {t('upload.autoAdvance')}
-          </p>
+        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-end">
           <DialogClose asChild>
             <Button type="button" variant="outline" className="h-11 sm:h-10">
               {t('modal.cancel')}

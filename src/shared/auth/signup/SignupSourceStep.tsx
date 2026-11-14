@@ -57,9 +57,8 @@ export function SignupSourceStep({
 
   return (
     <div className="space-y-6">
-      <header className="space-y-1.5 text-start">
+      <header className="text-start">
         <h1 className="text-ink text-h2 font-bold">{t('source.heading')}</h1>
-        <p className="text-ink-muted text-sm">{t('source.subtitle')}</p>
       </header>
 
       <nav aria-label={t('source.summaryLabel')}>

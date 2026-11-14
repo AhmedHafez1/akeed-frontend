@@ -103,7 +103,8 @@ describe('SourceHealthCard', () => {
       const { container } = await renderCard(health(), locale)
 
       expect(screen.getByText(none)).toBeTruthy()
-      expect(screen.getByText(note)).toBeTruthy()
+      // The reassurance sits behind the help icon, not on the page.
+      expect(screen.queryByText(note)).toBeNull()
       // Silence is not a fault: nothing alerts and nothing is highlighted.
       expect(screen.queryByRole('alert')).toBeNull()
       expect(container.querySelector('.text-ak-warning')).toBeNull()
@@ -141,7 +142,7 @@ describe('SourceHealthCard', () => {
     expect(valueOf('Access to your store').className).toContain(
       'text-ak-warning'
     )
-    expect(document.body.textContent).toContain(
+    expect(document.body.textContent).not.toContain(
       'This is the answer the store gave the last time Akeed used its key, not a live check.'
     )
     expect(document.body.textContent).toContain('9 events in the last 7 days.')
@@ -228,7 +229,7 @@ describe('SourceHealthCard', () => {
     expect(valueOf('What Akeed updates in your store').textContent).toBe(
       'Order status updates are not switched on for this store yet'
     )
-    expect(document.body.textContent).toContain(
+    expect(document.body.textContent).not.toContain(
       'Results are always recorded in Akeed.'
     )
   })

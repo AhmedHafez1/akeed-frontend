@@ -104,7 +104,7 @@ function DetailsBody({
         <DialogTitle className="text-xl">
           <bdi dir="ltr">{orderTitle}</bdi>
         </DialogTitle>
-        <DialogDescription>
+        <DialogDescription className="sr-only">
           {verification.change_request
             ? t('changeRequest.detailsDescription')
             : t(resolveRowDescriptionKey(verification))}

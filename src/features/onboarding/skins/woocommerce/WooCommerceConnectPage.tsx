@@ -310,7 +310,6 @@ export function WooCommerceConnectPage() {
       {view === 'enterUrl' && (
         <Panel lead={line('idle', storeUrl)} tone="brand">
           {heading(t('enterUrl.title'))}
-          <p className="text-ink-muted text-sm">{t('enterUrl.body')}</p>
           <form
             className="space-y-4 text-start"
             onSubmit={submit}

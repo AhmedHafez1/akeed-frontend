@@ -71,7 +71,8 @@ describe('store update in the details sheet', () => {
     expect(section.textContent).toContain(
       "We could not update this order in your store. Try again, or change the order's status in your store yourself."
     )
-    expect(section.textContent).toContain('saved in Akeed either way')
+    // That the result is kept in Akeed is help behind the icon now.
+    expect(section.textContent).not.toContain('saved in Akeed either way')
     expect(section.textContent).not.toContain('source_unavailable')
   })
 
@@ -89,7 +90,9 @@ describe('store update in the details sheet', () => {
   it('offers no retry to a viewer', () => {
     renderSheet(verification(), 'en', { canRetrySync: false })
 
-    expect(screen.queryByRole('button', { name: /store update/i })).toBeNull()
+    expect(
+      screen.queryByRole('button', { name: 'Try the store update again' })
+    ).toBeNull()
     expect(screen.getByText('Not updated in your store')).toBeTruthy()
   })
 
@@ -104,16 +107,6 @@ describe('store update in the details sheet', () => {
   })
 
   it.each([
-    [
-      'en',
-      sync({ state: 'pending', retryable: false }),
-      'We are still trying to update this order in your store. There is nothing you need to do yet.',
-    ],
-    [
-      'ar',
-      sync({ state: 'pending', retryable: false }),
-      'ما زلنا نحاول تحديث هذا الطلب في متجرك. لا يلزمك فعل شيء الآن.',
-    ],
     [
       'en',
       sync({
@@ -146,6 +139,21 @@ describe('store update in the details sheet', () => {
     }
   )
 
+  it('adds no guidance while the update is pending: the badge says it', () => {
+    renderSheet(
+      verification({
+        remote_sync: sync({ state: 'pending', retryable: false }),
+      }),
+      'en'
+    )
+
+    expect(
+      screen.queryByText(
+        'We are still trying to update this order in your store. There is nothing you need to do yet.'
+      )
+    ).toBeNull()
+  })
+
   it('offers no retry while the update is pending or was never sent', () => {
     renderSheet(
       verification({
@@ -154,7 +162,9 @@ describe('store update in the details sheet', () => {
       'en'
     )
 
-    expect(screen.queryByRole('button', { name: /store update/i })).toBeNull()
+    expect(
+      screen.queryByRole('button', { name: 'Try the store update again' })
+    ).toBeNull()
   })
 
   it('says nothing for a source that reports no sync', () => {

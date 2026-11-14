@@ -13,7 +13,7 @@ import {
 import { integrationKeyErrorKey } from '@/features/settings/domain/integrationKeyErrors'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { cn } from '@/shared/lib/utils'
-import { akButton, akPill, Skeleton } from '@/shared/ui'
+import { InfoHint, akButton, akPill, Skeleton } from '@/shared/ui'
 import { ApiConnectionGuide } from './ApiConnectionGuide'
 import { CreateApiKeyDialog } from './CreateApiKeyDialog'
 import { RevokeApiKeyDialog } from './RevokeApiKeyDialog'
@@ -78,22 +78,23 @@ export function ApiKeysTab({ readOnly }: ApiKeysTabProps) {
   return (
     <>
       <AnnotatedSections>
-        <AnnotatedSection title={t('heading')} description={t('description')}>
+        <AnnotatedSection title={t('heading')}>
           <div
             className={cn(
               'flex flex-wrap items-start justify-between gap-4',
               settingsRowPadding
             )}
           >
-            <div className="flex min-w-0 flex-1 items-start gap-3">
+            <div className="flex min-w-0 flex-1 items-center gap-3">
               <span className="bg-neutral-soft text-ink-muted rounded-ak-control grid size-10 shrink-0 place-items-center">
                 <KeyRound aria-hidden="true" className="size-4.5" />
               </span>
-              <div className="min-w-0">
+              <div className="flex min-w-0 items-center gap-1">
                 <h3 className={settingsRowTitle}>{t('serverOnlyTitle')}</h3>
-                <p className="text-ak-caption text-ink-muted mt-0.5">
-                  {t('serverOnly')}
-                </p>
+                <InfoHint
+                  label={t('serverOnlyTitle')}
+                  content={t('serverOnly')}
+                />
               </div>
             </div>
             {!readOnly && (

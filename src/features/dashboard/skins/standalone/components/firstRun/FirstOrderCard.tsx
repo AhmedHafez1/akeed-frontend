@@ -10,7 +10,7 @@ import { ManualOrderAction } from '@/features/orders'
 import { formatCredits } from '@/shared/lib/money'
 import { withLocale, type SupportedLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
-import { Button, akCard } from '@/shared/ui'
+import { Button, InfoHint, akCard } from '@/shared/ui'
 
 interface FirstOrderCardProps {
   /** Shown above the title, e.g. the skipped-test reminder. */
@@ -36,11 +36,11 @@ export function FirstOrderCard({ banner }: FirstOrderCardProps) {
     >
       {banner}
 
-      <header className="space-y-1.5">
+      <header className="flex items-center gap-1">
         <h2 id="first-order-title" className="text-ink text-h3 font-bold">
           {t('title')}
         </h2>
-        <p className="text-ink-muted text-body">{t('subtitle')}</p>
+        <InfoHint label={t('title')} content={t('subtitle')} />
       </header>
 
       {isOutOfCredits ? (
@@ -72,15 +72,21 @@ export function FirstOrderCard({ banner }: FirstOrderCardProps) {
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="border-brand-line bg-brand-soft rounded-panel flex flex-col gap-3 border p-5 sm:p-6">
             <Package aria-hidden="true" className="text-brand-ink size-7" />
-            <h3 className="text-ink text-lg font-bold">{t('manual.title')}</h3>
-            <p className="text-ink-muted flex-1 text-sm">{t('manual.body')}</p>
+            <div className="flex flex-1 items-start gap-1">
+              <h3 className="text-ink text-lg font-bold">
+                {t('manual.title')}
+              </h3>
+              <InfoHint label={t('manual.title')} content={t('manual.body')} />
+            </div>
             <ManualOrderAction variant="tile" />
           </div>
 
           <div className="border-line bg-card rounded-panel flex flex-col gap-3 border p-5 sm:p-6">
             <Upload aria-hidden="true" className="text-ink-muted size-7" />
-            <h3 className="text-ink text-lg font-bold">{t('file.title')}</h3>
-            <p className="text-ink-muted flex-1 text-sm">{t('file.body')}</p>
+            <div className="flex flex-1 items-start gap-1">
+              <h3 className="text-ink text-lg font-bold">{t('file.title')}</h3>
+              <InfoHint label={t('file.title')} content={t('file.body')} />
+            </div>
             <Button
               asChild
               variant="outline"
@@ -94,8 +100,6 @@ export function FirstOrderCard({ banner }: FirstOrderCardProps) {
           </div>
         </div>
       )}
-
-      <p className="text-ink-muted text-sm">{t('storeLinkSoon')}</p>
     </section>
   )
 }

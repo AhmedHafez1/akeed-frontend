@@ -28,7 +28,7 @@ function renderCard(props: Partial<Parameters<typeof ChangeRequestsCard>[0]>) {
 describe('ChangeRequestsCard', () => {
   it('is off by default and can be turned on when the messages are ready', () => {
     const { onChange, toggle } = renderCard({})
-    expect(screen.getByText('Off')).toBeTruthy()
+    expect(screen.queryByText('Off')).toBeNull()
     expect(toggle.disabled).toBe(false)
     fireEvent.click(toggle)
     expect(onChange).toHaveBeenCalledWith(true)

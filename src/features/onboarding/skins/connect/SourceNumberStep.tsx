@@ -29,7 +29,7 @@ interface SourceNumberStepProps {
   setup: SourceSetupFlow
   /**
    * The source's own `checklist` messages: `loading`, `loadError`, `retry`,
-   * `notReady`, `footerCaption`, `sender.*` and `automation.*`.
+   * `notReady`, `sender.*` and `automation.*`.
    */
   namespace: string
   /** Keeps element ids unique per source, e.g. `easyorders`. */
@@ -223,9 +223,6 @@ export function SourceNumberStep({
                     </li>
                   ))}
                 </ul>
-                <p className="text-muted-foreground text-xs">
-                  {t('automation.changeLater')}
-                </p>
               </section>
 
               {setup.saveError && (
@@ -244,11 +241,7 @@ export function SourceNumberStep({
 
         <div className="border-line bg-surface-sunken flex flex-col gap-4 border-t p-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <p className="text-ink-muted text-sm" aria-live="polite">
-            {isLoading
-              ? t('loading')
-              : setup.isReady
-                ? t('footerCaption')
-                : t('notReady')}
+            {isLoading ? t('loading') : setup.isReady ? null : t('notReady')}
           </p>
           <LoadingButton
             type="submit"

@@ -353,7 +353,10 @@ describe('ApiKeysTab', () => {
 
     expect(screen.queryByRole('button', { name: copy.createButton })).toBeNull()
     expect(within(list).queryAllByRole('button')).toHaveLength(0)
-    expect(screen.getByText(copy.serverOnly)).toBeTruthy()
+    expect(screen.queryByText(copy.serverOnly)).toBeNull()
+    expect(
+      screen.getByRole('button', { name: copy.serverOnlyTitle })
+    ).toBeTruthy()
   })
 
   it('links to the server API guide in the reader’s language, in a new tab', async () => {

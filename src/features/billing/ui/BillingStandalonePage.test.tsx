@@ -303,7 +303,8 @@ describe('BillingStandalonePage with the merchant number', () => {
     expect(screen.getByText('146')).toBeTruthy()
     expect(screen.getByText('1 credit / message')).toBeTruthy()
     expect(screen.getByText('2 credits / message')).toBeTruthy()
-    expect(screen.getByText(balance.senders.usageNote)).toBeTruthy()
+    // The note sits behind the help icon beside its heading.
+    expect(screen.queryByText(balance.senders.usageNote)).toBeNull()
   })
 
   it('keeps the page as it was while the own number is not offered or used', () => {
@@ -364,8 +365,10 @@ describe('Recharge with the merchant number', () => {
     expect(screen.getByText(coverage.own)).toBeTruthy()
     expect(screen.getAllByText('≈ 250').length).toBeGreaterThan(0)
     expect(screen.getAllByText('≈ 500').length).toBeGreaterThan(0)
-    // Beside the coverage figures, as well as under the balance card’s rates.
-    expect(screen.getAllByText(coverage.metaNote)).toHaveLength(2)
+    // The Meta billing note is help behind the rates icon, shown once.
+    expect(
+      screen.queryByText(en.whatsappConnect.tab.costs.creditNote)
+    ).toBeNull()
   })
 
   it('keeps recharge as it was while the own number is not offered', () => {
@@ -373,7 +376,9 @@ describe('Recharge with the merchant number', () => {
     renderPage('en')
 
     expect(screen.queryByText(coverage.akeed)).toBeNull()
-    expect(screen.queryByText(coverage.metaNote)).toBeNull()
+    expect(
+      screen.queryByText(en.whatsappConnect.tab.costs.creditNote)
+    ).toBeNull()
   })
 
   it('shows no coverage when the server sends no own-number rate', () => {

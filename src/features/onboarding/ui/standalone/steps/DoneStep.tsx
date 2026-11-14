@@ -62,7 +62,7 @@ export function DoneStep({ headingRef, reply }: DoneStepProps) {
       >
         {PIPELINE.map((stage, index) => (
           <Fragment key={stage}>
-            <li className="space-y-2">
+            <li>
               <div className="flex items-center gap-3">
                 <span className="bg-brand-soft text-brand-ink inline-flex size-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold">
                   {index + 1}
@@ -71,9 +71,6 @@ export function DoneStep({ headingRef, reply }: DoneStepProps) {
                   {t(`pipeline.${stage}.title`)}
                 </p>
               </div>
-              <p className="text-ink-muted text-sm">
-                {t(`pipeline.${stage}.description`)}
-              </p>
             </li>
             {index < PIPELINE.length - 1 && (
               <li
@@ -97,7 +94,6 @@ export function DoneStep({ headingRef, reply }: DoneStepProps) {
                 ? t('stats.balanceValue', { count: offer.credits })
                 : undefined
             ),
-            caption: t('stats.balanceCaption'),
           },
           {
             id: 'price',
@@ -109,35 +105,29 @@ export function DoneStep({ headingRef, reply }: DoneStepProps) {
             id: 'test',
             label: t('stats.testLabel'),
             value: t('stats.testValue'),
-            caption: t('stats.testCaption'),
           },
         ]}
       />
 
-      <div className="space-y-3">
-        <div className="flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
-          <Button asChild size="lg" className="gap-2 font-semibold">
-            <Link href={withLocale(FIRST_ORDER_PATH, locale)}>
-              <Package aria-hidden="true" />
-              {t('addOrder')}
-            </Link>
-          </Button>
-          <Button asChild size="lg" variant="outline" className="gap-2">
-            <Link href={withLocale(importModalPath('new'), locale)}>
-              <Upload aria-hidden="true" />
-              {t('importFile')}
-            </Link>
-          </Button>
-          <Button asChild variant="link" className="font-semibold">
-            <Link href={withLocale(API_KEYS_PATH, locale)}>{t('useApi')}</Link>
-          </Button>
-          <Button asChild variant="link" className="font-semibold">
-            <Link href={withLocale('/dashboard', locale)}>
-              {t('dashboard')}
-            </Link>
-          </Button>
-        </div>
-        <p className="text-ink-muted text-sm">{t('caption')}</p>
+      <div className="flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+        <Button asChild size="lg" className="gap-2 font-semibold">
+          <Link href={withLocale(FIRST_ORDER_PATH, locale)}>
+            <Package aria-hidden="true" />
+            {t('addOrder')}
+          </Link>
+        </Button>
+        <Button asChild size="lg" variant="outline" className="gap-2">
+          <Link href={withLocale(importModalPath('new'), locale)}>
+            <Upload aria-hidden="true" />
+            {t('importFile')}
+          </Link>
+        </Button>
+        <Button asChild variant="link" className="font-semibold">
+          <Link href={withLocale(API_KEYS_PATH, locale)}>{t('useApi')}</Link>
+        </Button>
+        <Button asChild variant="link" className="font-semibold">
+          <Link href={withLocale('/dashboard', locale)}>{t('dashboard')}</Link>
+        </Button>
       </div>
     </div>
   )
