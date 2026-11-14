@@ -1786,7 +1786,6 @@
         "timing": {
           "flowDesc": "Se actualiza mientras editas, antes de guardar.",
           "autoHelp": "Si está desactivada, no se envían mensajes.",
-          "customDelayLabel": "Retraso",
           "quietDesc": "Sin mensajes por la noche.",
           "quietHelp": "Los mensajes programados durante el horario de silencio se envían cuando este termina."
         },
@@ -2188,14 +2187,8 @@
         "sendTimeLabel": "Momento del envío",
         "previewMessage": "Vista previa del mensaje",
         "sendPresets": {
-          "now": "De inmediato",
-          "after15m": "Tras 15 minutos",
-          "after1h": "Tras 1 hora",
-          "custom": "Personalizado"
+          "now": "De inmediato"
         },
-        "customDelayLabel": "Retraso en minutos",
-        "customDelaySuffix": "min",
-        "customDelayError": "Ingresa minutos enteros de 0 a 1,440.",
         "followHeading": "Seguimiento",
         "followDescription": "Cuando el cliente no responde.",
         "reminderLabel": "Enviar un recordatorio",

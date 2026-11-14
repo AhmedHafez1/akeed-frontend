@@ -1786,7 +1786,6 @@
         "timing": {
           "flowDesc": "یہ آپ کی تبدیلی کے ساتھ ساتھ بدلتا ہے، محفوظ کرنے سے پہلے ہی۔",
           "autoHelp": "آف ہونے پر کوئی پیغام نہیں بھیجا جاتا۔",
-          "customDelayLabel": "تاخیر",
           "quietDesc": "رات کو کوئی پیغام نہیں۔",
           "quietHelp": "خاموش اوقات میں جو کچھ بھیجا جانا ہو وہ ان کے ختم ہوتے ہی بھیج دیا جاتا ہے۔"
         },
@@ -2188,14 +2187,8 @@
         "sendTimeLabel": "بھیجنے کا وقت",
         "previewMessage": "پیغام کا پیش منظر",
         "sendPresets": {
-          "now": "فوراً",
-          "after15m": "15 منٹ بعد",
-          "after1h": "1 گھنٹے بعد",
-          "custom": "اپنی مرضی کا"
+          "now": "فوراً"
         },
-        "customDelayLabel": "تاخیر، منٹوں میں",
-        "customDelaySuffix": "منٹ",
-        "customDelayError": "0 سے 1,440 تک پورے منٹ درج کریں۔",
         "followHeading": "فالو اپ",
         "followDescription": "جب کسٹمر جواب نہ دے۔",
         "reminderLabel": "ایک یاد دہانی بھیجیں",

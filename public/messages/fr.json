@@ -1786,7 +1786,6 @@
         "timing": {
           "flowDesc": "Se met à jour pendant que vous modifiez, avant l’enregistrement.",
           "autoHelp": "Si l’option est désactivée, aucun message n’est envoyé.",
-          "customDelayLabel": "Délai",
           "quietDesc": "Pas de messages la nuit.",
           "quietHelp": "Tout envoi prévu pendant les heures de silence part à la fin de celles-ci."
         },
@@ -2188,14 +2187,8 @@
         "sendTimeLabel": "Moment de l’envoi",
         "previewMessage": "Aperçu du message",
         "sendPresets": {
-          "now": "Immédiatement",
-          "after15m": "Après 15 minutes",
-          "after1h": "Après 1 heure",
-          "custom": "Personnalisé"
+          "now": "Immédiatement"
         },
-        "customDelayLabel": "Délai en minutes",
-        "customDelaySuffix": "min",
-        "customDelayError": "Saisissez un nombre entier de minutes entre 0 et 1 440.",
         "followHeading": "Relance",
         "followDescription": "Quand le client ne répond pas.",
         "reminderLabel": "Envoyer un rappel",

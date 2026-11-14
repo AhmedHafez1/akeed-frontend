@@ -2949,7 +2949,6 @@
         "timing": {
           "flowDesc": "يتحدث هذا المسار مع كل تعديل قبل الحفظ.",
           "autoHelp": "عند الإيقاف لا نرسل أي رسائل.",
-          "customDelayLabel": "مدة التأخير",
           "quietDesc": "لا نرسل رسائل ليلًا.",
           "quietHelp": "ما يحين موعده خلالها يُرسل عند انتهائها."
         },
@@ -3351,14 +3350,8 @@
         "sendTimeLabel": "وقت الإرسال",
         "previewMessage": "معاينة الرسالة",
         "sendPresets": {
-          "now": "فورًا",
-          "after15m": "بعد 15 دقيقة",
-          "after1h": "بعد ساعة",
-          "custom": "مخصص"
+          "now": "فورًا"
         },
-        "customDelayLabel": "مدة التأخير بالدقائق",
-        "customDelaySuffix": "دقيقة",
-        "customDelayError": "أدخل عدد دقائق صحيحاً من 0 إلى 1440.",
         "followHeading": "المتابعة",
         "followDescription": "عند عدم رد العميل.",
         "reminderLabel": "إرسال تذكير واحد",

@@ -342,15 +342,13 @@ describe.each(['ar', 'en'] as const)('embedded Timing tab (%s)', (locale) => {
     expect(nav.push).toHaveBeenCalledWith(`/${locale}/settings?tab=message`)
   })
 
-  it('offers five send times and no custom field', async () => {
+  it('offers five send times', async () => {
     const view = await renderTiming(locale)
 
     expect(view.segmentsIn(timing.sendTimeLabel)).toEqual(expected.sendSegments)
     expect(view.pressedIn(timing.sendTimeLabel)).toEqual([
       expected.sendSegments[0],
     ])
-    expect(screen.queryByText(timing.sendPresets.custom)).toBeNull()
-    expect(screen.queryByLabelText(timing.customDelayLabel)).toBeNull()
   })
 
   it('keeps a saved send time that is not one of the choices', async () => {

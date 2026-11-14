@@ -11,7 +11,6 @@ import {
   fieldErrorFromApiCode,
   firstInvalidField,
   formFromSettings,
-  sendDelayChoicePatch,
   suggestedTimezoneOnEnable,
   timelineInputFromForm,
   toSettingsPayload,
@@ -230,32 +229,6 @@ describe('suggestedTimezoneOnEnable', () => {
         shopTimezone: 'Europe/Istanbul',
       })
     ).toBeNull()
-  })
-})
-
-describe('sendDelayChoicePatch', () => {
-  it('opens "custom" on the delay the form currently means', () => {
-    const form = { ...formFor(), sendDelayChoice: 'after1h' as const }
-    expect(sendDelayChoicePatch(form, 'custom')).toEqual({
-      sendDelayChoice: 'custom',
-      sendDelayCustom: '60',
-    })
-  })
-
-  it('falls back to 0 when the custom value is not a valid delay', () => {
-    const form = {
-      ...formFor(),
-      sendDelayChoice: 'custom' as const,
-      sendDelayCustom: 'abc',
-    }
-    expect(sendDelayChoicePatch(form, 'custom').sendDelayCustom).toBe('0')
-  })
-
-  it('writes the minutes of a preset', () => {
-    expect(sendDelayChoicePatch(formFor(), 'after15m')).toEqual({
-      sendDelayChoice: 'after15m',
-      sendDelayCustom: '15',
-    })
   })
 })
 

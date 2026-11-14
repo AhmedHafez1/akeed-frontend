@@ -8,14 +8,14 @@ import {
   ESCALATION_PRESET_HOURS,
   hourPresetOptions,
   REMINDER_PRESET_HOURS,
-  SEND_DELAY_PRESETS,
-  type SendDelayChoice,
+  sendDelayFieldsFor,
+  sendDelayOptions,
 } from '@/features/settings/domain/delayPresets'
 import { quietTimeValues } from '@/features/settings/domain/quietHours'
 import {
   escalationMinutesFromForm,
   escalationTogglePatch,
-  sendDelayChoicePatch,
+  resolvedSendDelayMinutes,
   SETTINGS_FIELD_ID,
   timelineInputFromForm,
 } from '@/features/settings/domain/settingsForm'
@@ -128,14 +128,14 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
 
   const timeline = buildAutomationTimeline(timelineInputFromForm(values))
 
-  const sendChoices: ReadonlyArray<{ value: SendDelayChoice; label: string }> =
-    [
-      ...SEND_DELAY_PRESETS.map((preset) => ({
-        value: preset.id,
-        label: t(`sendPresets.${preset.id}`),
-      })),
-      { value: 'custom', label: t('sendPresets.custom') },
-    ]
+  const sendDelayMinutes = resolvedSendDelayMinutes(values)
+  const sendChoices = sendDelayOptions(sendDelayMinutes).map((option) => ({
+    value: String(option.minutes),
+    label:
+      option.minutes === 0
+        ? t('sendPresets.now')
+        : formatShortDuration(t, option.minutes),
+  }))
 
   const hourOptions = (presets: readonly number[], currentMinutes: number) =>
     hourPresetOptions(presets, currentMinutes).map((option) => ({
@@ -148,9 +148,6 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
     values.quietHoursEnd
   ).map((value) => ({ value, label: formatQuietTime(t, value) }))
 
-  const customDelayError = model.errors.sendDelayCustom
-    ? t('customDelayError')
-    : null
   const quietHoursError = model.errors.quietHours
     ? t(`quietErrors.${model.errors.quietHours}`)
     : null
@@ -187,58 +184,18 @@ export function TimingTab({ model, data, readOnly }: TimingTabProps) {
                 )}
               >
                 <p className={fieldLabelClass}>{t('sendTimeLabel')}</p>
-                <AkSegmented
-                  aria-label={t('sendTimeLabel')}
-                  options={sendChoices}
-                  value={values.sendDelayChoice}
-                  disabled={readOnly}
-                  onValueChange={(choice) =>
-                    model.update(sendDelayChoicePatch(values, choice))
-                  }
-                />
-                {values.sendDelayChoice === 'custom' && (
-                  <div className="flex w-full max-w-60 flex-col gap-1.5">
-                    <label
-                      htmlFor={SETTINGS_FIELD_ID.sendDelayCustom}
-                      className={fieldLabelClass}
-                    >
-                      {tPage('customDelayLabel')}
-                    </label>
-                    <div className="relative">
-                      <input
-                        id={SETTINGS_FIELD_ID.sendDelayCustom}
-                        type="text"
-                        inputMode="numeric"
-                        autoComplete="off"
-                        value={values.sendDelayCustom}
-                        onChange={(event) =>
-                          model.update({
-                            sendDelayCustom: event.target.value.trim(),
-                          })
-                        }
-                        disabled={readOnly}
-                        aria-invalid={customDelayError ? true : undefined}
-                        className={cn(
-                          'ak-focus bg-surface-raised text-ink text-ak-body rounded-ak-control h-10 w-full border ps-3 pe-16 tabular-nums disabled:cursor-not-allowed disabled:opacity-60',
-                          customDelayError
-                            ? 'border-ak-warning'
-                            : 'border-control-border'
-                        )}
-                      />
-                      <span
-                        aria-hidden="true"
-                        className="text-ak-caption text-ink-muted pointer-events-none absolute end-3 top-1/2 -translate-y-1/2"
-                      >
-                        {t('customDelaySuffix')}
-                      </span>
-                    </div>
-                    {customDelayError && (
-                      <p role="alert" className={fieldErrorClass}>
-                        {customDelayError}
-                      </p>
-                    )}
-                  </div>
-                )}
+                <div className="text-ak-body flex flex-wrap items-center gap-2.5">
+                  <AkSegmented
+                    aria-label={t('sendTimeLabel')}
+                    options={sendChoices}
+                    value={String(sendDelayMinutes)}
+                    disabled={readOnly}
+                    onValueChange={(minutes) =>
+                      model.update(sendDelayFieldsFor(Number(minutes)))
+                    }
+                  />
+                  <span className="text-ink-muted">{t('fromOrder')}</span>
+                </div>
               </div>
             )}
           </SwitchSetting>

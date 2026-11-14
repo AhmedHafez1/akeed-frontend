@@ -1786,7 +1786,6 @@
         "timing": {
           "flowDesc": "Bu, siz düzenledikçe kaydetmeden önce güncellenir.",
           "autoHelp": "Kapalıyken hiçbir mesaj gönderilmez.",
-          "customDelayLabel": "Gecikme",
           "quietDesc": "Gece mesaj gönderilmez.",
           "quietHelp": "Sessiz saatlere denk gelen mesajlar, sessiz saatler bitince gönderilir."
         },
@@ -2188,14 +2187,8 @@
         "sendTimeLabel": "Gönderim zamanı",
         "previewMessage": "Mesajı önizle",
         "sendPresets": {
-          "now": "Hemen",
-          "after15m": "15 dakika sonra",
-          "after1h": "1 saat sonra",
-          "custom": "Özel"
+          "now": "Hemen"
         },
-        "customDelayLabel": "Dakika cinsinden gecikme",
-        "customDelaySuffix": "dk",
-        "customDelayError": "0 ile 1.440 arasında tam dakika girin.",
         "followHeading": "Takip",
         "followDescription": "Müşteri yanıt vermediğinde.",
         "reminderLabel": "Bir hatırlatma gönder",

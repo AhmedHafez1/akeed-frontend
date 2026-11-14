@@ -2955,7 +2955,6 @@
         "timing": {
           "flowDesc": "This updates as you edit, before you save.",
           "autoHelp": "When off, no messages are sent.",
-          "customDelayLabel": "Delay",
           "quietDesc": "No messages at night.",
           "quietHelp": "Anything due during quiet hours is sent when they end."
         },
@@ -3357,14 +3356,8 @@
         "sendTimeLabel": "Send time",
         "previewMessage": "Preview message",
         "sendPresets": {
-          "now": "Immediately",
-          "after15m": "After 15 minutes",
-          "after1h": "After 1 hour",
-          "custom": "Custom"
+          "now": "Immediately"
         },
-        "customDelayLabel": "Delay in minutes",
-        "customDelaySuffix": "min",
-        "customDelayError": "Enter whole minutes from 0 to 1,440.",
         "followHeading": "Follow-up",
         "followDescription": "When customers don’t reply.",
         "reminderLabel": "Send one reminder",
