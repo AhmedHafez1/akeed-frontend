@@ -167,7 +167,9 @@ export function useMessageStyles({
 
   return {
     previewLanguage,
-    canChoosePreviewLanguage: values.defaultLanguage === 'auto',
+    canChoosePreviewLanguage:
+      values.defaultLanguage === 'auto' ||
+      values.defaultLanguage === 'storefront',
     setPreviewLanguage,
     languages,
     isLive,
@@ -184,7 +186,8 @@ export function useMessageStyles({
     selectedReminder: reminders?.[previewLanguage] ?? null,
     chooseLanguage: (language) => {
       update({ defaultLanguage: language })
-      if (language !== 'auto') setPreviewLanguage(language)
+      if (language !== 'auto' && language !== 'storefront')
+        setPreviewLanguage(language)
     },
     chooseFixedLanguage: () => {
       const language = isLive

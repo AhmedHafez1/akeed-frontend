@@ -2107,6 +2107,8 @@
         "recommended": "تجویز کردہ",
         "languageFixed": "تمام کسٹمرز کے لیے ایک زبان",
         "languageFixedHelp": "ہر کسٹمر کو پیغام آپ کی منتخب کردہ زبان میں ملتا ہے۔",
+        "languageStorefront": "اس زبان کے مطابق جس میں کسٹمر نے خریداری کی",
+        "languageStorefrontHelp": "ہر کسٹمر کو پیغام اسی زبان میں ملتا ہے جو اس نے آپ کے اسٹور پر استعمال کی۔",
         "languageFixedLabel": "زبان",
         "languageOptionLocked": "{language} ({status})",
         "awaitingApproval": "واٹس ایپ کی منظوری کا انتظار ہے",

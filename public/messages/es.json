@@ -2107,6 +2107,8 @@
         "recommended": "Recomendado",
         "languageFixed": "Un solo idioma para todos los clientes",
         "languageFixedHelp": "Todos los clientes reciben el mensaje en el idioma que elijas.",
+        "languageStorefront": "Según el idioma en que compró el cliente",
+        "languageStorefrontHelp": "Cada cliente recibe el mensaje en el idioma que usó en tu tienda.",
         "languageFixedLabel": "Idioma",
         "languageOptionLocked": "{language} ({status})",
         "awaitingApproval": "En espera de la aprobación de WhatsApp",

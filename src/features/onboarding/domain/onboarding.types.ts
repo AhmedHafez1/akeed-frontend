@@ -6,8 +6,14 @@ export interface BillingManagement {
   canManageBilling: boolean
 }
 
-/** The store's message language: one language, or `auto` by number. */
-export type IntegrationOnboardingLanguage = 'auto' | MessageLanguage
+/**
+ * The store's message language: one language, `auto` by number, or
+ * `storefront`, the language the customer shopped in (Shopify stores).
+ */
+export type IntegrationOnboardingLanguage =
+  | 'auto'
+  | 'storefront'
+  | MessageLanguage
 
 /**
  * The id of a message style. The styles a store may choose come from the

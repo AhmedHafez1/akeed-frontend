@@ -3270,6 +3270,8 @@
         "recommended": "موصى به",
         "languageFixed": "لغة واحدة لكل العملاء",
         "languageFixedHelp": "تصل الرسالة لكل العملاء باللغة التي تختارها.",
+        "languageStorefront": "حسب اللغة التي تسوّق بها العميل",
+        "languageStorefrontHelp": "تصل الرسالة لكل عميل باللغة التي استخدمها في متجرك.",
         "languageFixedLabel": "اللغة",
         "languageOptionLocked": "{language} ({status})",
         "awaitingApproval": "بانتظار موافقة واتساب",

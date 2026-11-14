@@ -42,6 +42,10 @@ Akeed; Arapça, İngilizce, Urduca, İspanyolca ve Fransızca şablonları farkl
 
 Ayarlarınızda bir dil **Henüz kullanılamıyor** olarak görünüyorsa, o dildeki WhatsApp mesajı duraklatılmış ya da hâlâ incelemededir. Bu mesajı alacak müşteriler, mesaj yeniden kullanılabilir olana kadar İngilizce mesaj alır.
 
+### Müşterinin alışveriş yaptığı dil
+
+Shopify mağazaları için. **Müşterinin alışveriş yaptığı dile göre** seçeneğinde her müşteri mesajı mağazanızda kullandığı dilde alır. Akeed’in mesaj göndermediği bir dil İngilizce alır. Siparişte dil yoksa, Otomatik’teki gibi müşteri numarası belirler.
+
 ## Doğru Üslup Nasıl Seçilir
 
 ### Arapça mağazalar (genel)

@@ -847,6 +847,25 @@ describe('SettingsEmbeddedPage message languages', () => {
     expect(lastSaveBarCall()).toBe('hidden')
   })
 
+  it('follows the language the customer shopped in, and saves it', async () => {
+    renderPage()
+    await storeNameInput()
+
+    fireEvent.click(radio(messageCopy.languageStorefront))
+    expect(radio(messageCopy.languageStorefront).checked).toBe(true)
+    // Like automatic: no list of one language, and every language previewed.
+    expect(screen.queryByLabelText(messageCopy.languageFixedLabel)).toBeNull()
+    expect(previewLanguage()).toBeTruthy()
+    await act(async () => {
+      fireEvent.click(screen.getByText('حفظ'))
+    })
+
+    expect(api.saveSettings).toHaveBeenCalledTimes(1)
+    expect(api.saveSettings.mock.calls[0][0]).toMatchObject({
+      defaultLanguage: 'storefront',
+    })
+  })
+
   it('lets a store choose a live language and one of its styles, and saves both', async () => {
     api.fetchSettings.mockResolvedValue(liveUrduSettingsFixture())
     renderPage()
