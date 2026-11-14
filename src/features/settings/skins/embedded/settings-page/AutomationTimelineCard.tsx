@@ -39,7 +39,7 @@ function markerClassName(step: TimelineStep) {
   // The order arriving is not something Akeed does, so it stays neutral.
   return step.id === 'newOrder'
     ? 'bg-(--p-color-bg-fill-secondary) text-(--p-color-icon-secondary)'
-    : 'bg-(--p-color-bg-fill-brand) text-(--p-color-text-brand-on-bg-fill)'
+    : 'bg-(--p-color-bg-fill-success) text-(--p-color-text-success-on-bg-fill)'
 }
 
 /**

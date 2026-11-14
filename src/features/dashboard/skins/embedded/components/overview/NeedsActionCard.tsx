@@ -1,6 +1,5 @@
 import {
   Badge,
-  Banner,
   BlockStack,
   Box,
   Card,
@@ -288,7 +287,6 @@ export function NeedsActionCard({
   const { locale } = useLocaleInfo()
   // Eight columns do not fit a phone; below md each order becomes a card.
   const { mdUp } = useBreakpoints({ defaults: { mdUp: true } })
-  const tChange = useTranslations('dashboard.changeRequest')
   const rowProps = {
     timeZone,
     canConfirm,
@@ -297,9 +295,6 @@ export function NeedsActionCard({
     onHandle,
   }
   const items = needsAction.items.slice(0, NEEDS_ACTION_CARD_LIMIT)
-  const hasChangeRequest = items.some(
-    (item) => item.reason.type === 'change_requested'
-  )
 
   return (
     <Card padding="0">
@@ -322,11 +317,6 @@ export function NeedsActionCard({
         </InlineStack>
       </Box>
       <Divider />
-      {hasChangeRequest && (
-        <Box padding="400" paddingBlockEnd="0">
-          <Banner tone="critical">{tChange('doNotShipStrip')}</Banner>
-        </Box>
-      )}
       {items.length === 0 ? (
         <Box padding="600">
           <BlockStack gap="200" inlineAlign="center">
