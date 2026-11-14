@@ -56,7 +56,9 @@ describe('CreditModelNoticeBanner', () => {
     render(<CreditModelNoticeBanner />, { wrapper })
 
     expect(await screen.findByText(title)).toBeTruthy()
-    expect(screen.queryByRole('button')).toBeNull()
+    // Only the help icon; nothing to dismiss.
+    expect(screen.getAllByRole('button')).toHaveLength(1)
+    expect(screen.getByRole('button', { name: title })).toBeTruthy()
   })
 
   it('shows nothing for an organization with no notice', async () => {

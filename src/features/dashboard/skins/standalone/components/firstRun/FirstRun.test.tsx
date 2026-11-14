@@ -99,8 +99,8 @@ describe('Standalone dashboard first run', () => {
       screen.getByRole('link', { name: 'استيراد من ملف' }).getAttribute('href')
     ).toContain('/ar/')
     expect(
-      screen.getByText('ربط متجرك الإلكتروني ليصل كل طلب تلقائيًا: قريبًا.')
-    ).toBeTruthy()
+      screen.queryByText('ربط متجرك الإلكتروني ليصل كل طلب تلقائيًا: قريبًا.')
+    ).toBeNull()
     expect(screen.getByRole('heading', { name: 'التأكيدات' })).toBeTruthy()
     expect(screen.getByText('أُرسل · بانتظار الرد')).toBeTruthy()
     expect(screen.queryByText('التأكيد التلقائي')).toBeTruthy()
@@ -154,11 +154,7 @@ describe('Standalone dashboard first run', () => {
     renderSkin(skin)
 
     expect(screen.getByText('لم تجرّب الرسالة بعد')).toBeTruthy()
-    expect(
-      screen.getByText(
-        'شاهدها على هاتفك قبل أن تصل لأول عميل. دقيقة واحدة، ومجانًا.'
-      )
-    ).toBeTruthy()
+    expect(screen.getByText('دقيقة واحدة، ومجانًا.')).toBeTruthy()
     expect(
       screen.getByRole('button', { name: 'أرسلها إلى هاتفي' })
     ).toBeTruthy()

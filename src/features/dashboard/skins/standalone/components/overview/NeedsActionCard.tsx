@@ -302,7 +302,6 @@ export function NeedsActionCard({
           <p className="text-ak-body text-ink mt-3 font-semibold">
             {t('empty')}
           </p>
-          <p className="text-ak-body text-ink-muted mt-1">{t('emptyBody')}</p>
         </div>
       ) : (
         <>

@@ -187,14 +187,9 @@ export function DashboardStandaloneSkin({
           role="alert"
           className="border-ak-danger/30 bg-ak-danger-soft rounded-ak-card flex flex-col items-start gap-3 border px-6 py-5"
         >
-          <div>
-            <p className="text-ak-body text-ak-danger font-semibold">
-              {t('overview.error.title')}
-            </p>
-            <p className="text-ak-body text-ak-danger mt-1">
-              {t('overview.unavailable')}
-            </p>
-          </div>
+          <p className="text-ak-body text-ak-danger font-semibold">
+            {t('overview.error.title')}
+          </p>
           <button
             type="button"
             onClick={retry}

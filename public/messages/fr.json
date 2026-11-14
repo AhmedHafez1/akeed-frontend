@@ -853,10 +853,10 @@
     "subtitle": "Suivez l’état des vérifications et les commandes récentes sur tous vos canaux.",
     "valueProposition": "Akeed confirme les commandes en paiement à la livraison par WhatsApp avant leur traitement.",
     "standalone": {
-      "manualConfirmBody": "Akeed enregistrera la commande comme confirmée, exactement comme si le client l’avait confirmée. Aucun autre message ne sera envoyé.",
+      "manualConfirmBody": "Aucun autre message ne sera envoyé.",
       "credits": {
-        "warning": "Vous avez utilisé {used} crédits sur {limit}. Les confirmations s’arrêtent quand ils sont épuisés.",
-        "exhausted": "Vous avez utilisé tous vos crédits. Les confirmations sont arrêtées jusqu’à votre prochaine recharge.",
+        "warning": "{used} crédits utilisés sur {limit}",
+        "exhausted": "Plus de crédits. Les confirmations sont en pause.",
         "cta": "Acheter des crédits"
       },
       "header": {
@@ -1249,7 +1249,6 @@
       "readOnlyNotice": "Vous avez un accès en lecture seule. Un propriétaire ou un administrateur peut relancer une vérification ou marquer comme annulées les commandes qui le permettent.",
       "empty": {
         "title": "Aucune confirmation pour l’instant",
-        "description": "Le statut de chaque commande s’affiche ici dès que vous l’ajoutez.",
         "testHeading": "Essayez le message sur votre téléphone",
         "testHint": "Nous envoyons un message de test gratuit au numéro WhatsApp enregistré sur votre compte. Il n’est pas déduit de votre solde."
       },
@@ -1632,20 +1631,19 @@
           "title": "Fichier Excel ou CSV",
           "body": "Pour plusieurs commandes à la fois. Nous associons les colonnes pour vous, et vous vérifiez avant tout envoi."
         },
-        "storeLinkSoon": "Connecter votre boutique en ligne pour que chaque commande arrive automatiquement : bientôt disponible.",
         "zeroBalance": {
           "title": "Votre solde est de {count} crédits",
-          "body": "Chaque confirmation utilise 2 crédits de votre solde. Rechargez pour envoyer la première.",
+          "body": "Rechargez pour envoyer la première.",
           "action": "Recharger le solde"
         }
       },
       "skippedTest": {
         "title": "Vous n’avez pas encore essayé le message",
-        "body": "Voyez-le sur votre téléphone avant votre premier client. Une minute, et c’est gratuit."
+        "body": "Une minute, et c’est gratuit."
       },
       "confirmations": {
         "title": "Confirmations",
-        "empty": "Aucune commande pour l’instant. Le statut de chaque commande s’affichera ici au fur et à mesure.",
+        "empty": "Aucune commande pour l’instant.",
         "examplesLabel": "Exemples de statuts de commande :",
         "examples": {
           "sent": "Envoyé · en attente de réponse",

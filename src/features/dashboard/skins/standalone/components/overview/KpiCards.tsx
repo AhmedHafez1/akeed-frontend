@@ -76,7 +76,7 @@ export function KpiCards({
 }) {
   const t = useTranslations('dashboard.standalone.kpis')
   const { locale } = useLocaleInfo()
-  const details = useKpiDetails(kpis)
+  const details = useKpiDetails(kpis, { compact: true })
 
   return (
     <div className="grid gap-4 md:grid-cols-3">

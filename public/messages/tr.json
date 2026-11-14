@@ -853,10 +853,10 @@
     "subtitle": "Kanallarınızdaki doğrulama durumunu ve son siparişleri izleyin.",
     "valueProposition": "Akeed, kapıda ödemeli siparişleri hazırlamadan önce WhatsApp üzerinden onaylar.",
     "standalone": {
-      "manualConfirmBody": "Akeed siparişi, müşteri onaylamış gibi onaylandı olarak kaydeder. Başka mesaj gönderilmez.",
+      "manualConfirmBody": "Başka mesaj gönderilmez.",
       "credits": {
-        "warning": "{limit} kredinin {used} tanesini kullandınız. Krediler bittiğinde onaylar durur.",
-        "exhausted": "Tüm kredilerinizi kullandınız. Kredi yükleyene kadar onaylar durduruldu.",
+        "warning": "{limit} krediden {used} kullanıldı",
+        "exhausted": "Krediniz bitti. Onaylar duraklatıldı.",
         "cta": "Kredi satın al"
       },
       "header": {
@@ -1249,7 +1249,6 @@
       "readOnlyNotice": "Salt okunur erişiminiz var. Doğrulamayı yeniden deneme veya desteklenen siparişleri iptal edildi olarak işaretleme işlemlerini bir hesap sahibi ya da yönetici yapabilir.",
       "empty": {
         "title": "Henüz onay yok",
-        "description": "Her siparişin durumu, siparişi eklediğiniz anda burada görünür.",
         "testHeading": "Mesajı telefonunuzda deneyin",
         "testHint": "Hesabınızda kayıtlı WhatsApp numarasına ücretsiz bir test mesajı göndeririz. Bakiyenizden düşülmez."
       },
@@ -1632,20 +1631,19 @@
           "title": "Excel veya CSV dosyası",
           "body": "Aynı anda çok sayıda sipariş için. Sütunları sizin için eşleştiririz, siz de herhangi bir şey gönderilmeden önce kontrol edersiniz."
         },
-        "storeLinkSoon": "Her siparişin otomatik gelmesi için çevrimiçi mağazanızı bağlama: yakında.",
         "zeroBalance": {
           "title": "Bakiyeniz {count} kredi",
-          "body": "Her onay bakiyenizden 2 kredi kullanır. İlk onayınızı göndermek için bakiye yükleyin.",
+          "body": "İlk onayınızı göndermek için bakiye yükleyin.",
           "action": "Bakiye yükle"
         }
       },
       "skippedTest": {
         "title": "Mesajı henüz denemediniz",
-        "body": "İlk müşterinizden önce siz telefonunuzda görün. Bir dakika sürer ve ücretsizdir."
+        "body": "Bir dakika sürer ve ücretsizdir."
       },
       "confirmations": {
         "title": "Onaylar",
-        "empty": "Henüz sipariş yok. Her siparişin durumu gerçekleştikçe burada görünecek.",
+        "empty": "Henüz sipariş yok.",
         "examplesLabel": "Örnek sipariş durumları:",
         "examples": {
           "sent": "Gönderildi · yanıt bekleniyor",

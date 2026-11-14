@@ -2022,10 +2022,10 @@
     "subtitle": "Monitor verification status and recent orders across your channels.",
     "valueProposition": "Akeed confirms cash-on-delivery orders through WhatsApp before fulfillment.",
     "standalone": {
-      "manualConfirmBody": "Akeed will record the order as confirmed, just as if the customer had confirmed. No more messages will be sent.",
+      "manualConfirmBody": "No more messages will be sent.",
       "credits": {
-        "warning": "You've used {used} of {limit} credits. Confirmations stop when they run out.",
-        "exhausted": "You've used all your credits. Confirmations have stopped until you top up.",
+        "warning": "{used} of {limit} credits used",
+        "exhausted": "Out of credits. Confirmations are paused.",
         "cta": "Buy credits"
       },
       "header": {
@@ -2418,7 +2418,6 @@
       "readOnlyNotice": "You have read-only access. An owner or admin can retry verification or mark supported orders canceled.",
       "empty": {
         "title": "No confirmations yet",
-        "description": "Each order's status shows here as soon as you add it.",
         "testHeading": "Try the message on your phone",
         "testHint": "We send a free test message to the WhatsApp number saved on your account. It isn't deducted from your balance."
       },
@@ -2801,20 +2800,19 @@
           "title": "Excel or CSV file",
           "body": "For many orders at once. We match the columns for you, and you review before anything is sent."
         },
-        "storeLinkSoon": "Connecting your online store so every order arrives automatically: coming soon.",
         "zeroBalance": {
           "title": "Your balance is {count} credits",
-          "body": "Each confirmation uses 2 credits from your balance. Top up to send your first one.",
+          "body": "Top up to send your first confirmation.",
           "action": "Top up balance"
         }
       },
       "skippedTest": {
         "title": "You haven't tried the message yet",
-        "body": "See it on your phone before your first customer does. One minute, and free."
+        "body": "One minute, and free."
       },
       "confirmations": {
         "title": "Confirmations",
-        "empty": "No orders yet. Each order's status will show here as it happens.",
+        "empty": "No orders yet.",
         "examplesLabel": "Example order statuses:",
         "examples": {
           "sent": "Sent · awaiting reply",

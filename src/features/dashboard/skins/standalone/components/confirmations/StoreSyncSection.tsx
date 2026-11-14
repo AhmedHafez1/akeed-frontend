@@ -3,7 +3,7 @@
 import { Store } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import { LoadingButton, StatusBadge } from '@/shared/ui'
+import { InfoHint, LoadingButton, StatusBadge } from '@/shared/ui'
 import { remoteSyncView } from '@/features/dashboard/domain/remoteSync'
 import { formatTooltipDateTime } from '@/features/dashboard/domain/verificationRow'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
@@ -45,15 +45,14 @@ export function StoreSyncSection({
         >
           <Store aria-hidden="true" className="size-4" />
           {t('title')}
+          <InfoHint label={t('title')} content={t('separate')} />
         </h3>
         <StatusBadge kind={view.badge} icon={false}>
           {t(view.labelKey)}
         </StatusBadge>
       </div>
-      <p className="text-muted-foreground mt-2 text-xs leading-5">
-        {t('separate')}
-      </p>
-      {view.guidanceKey && (
+      {/* The badge already says an update is on its way. */}
+      {view.guidanceKey && view.guidanceKey !== 'guidance.pending' && (
         <p className="text-foreground mt-2 leading-6">{t(view.guidanceKey)}</p>
       )}
       {updatedAt && (

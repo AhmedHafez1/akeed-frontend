@@ -853,10 +853,10 @@
     "subtitle": "Supervisa el estado de las verificaciones y los pedidos recientes en todos tus canales.",
     "valueProposition": "Akeed confirma por WhatsApp los pedidos con pago contra entrega antes de prepararlos.",
     "standalone": {
-      "manualConfirmBody": "Akeed registrará el pedido como confirmado, igual que si lo hubiera confirmado el cliente. No se enviarán más mensajes.",
+      "manualConfirmBody": "No se enviarán más mensajes.",
       "credits": {
-        "warning": "Usaste {used} de {limit} créditos. Las confirmaciones se detienen cuando se agotan.",
-        "exhausted": "Usaste todos tus créditos. Las confirmaciones están detenidas hasta que recargues.",
+        "warning": "{used} de {limit} créditos usados",
+        "exhausted": "Sin créditos. Las confirmaciones están en pausa.",
         "cta": "Comprar créditos"
       },
       "header": {
@@ -1249,7 +1249,6 @@
       "readOnlyNotice": "Tienes acceso de solo lectura. Un propietario o administrador puede reintentar la verificación o marcar como cancelados los pedidos que lo admitan.",
       "empty": {
         "title": "Aún no hay confirmaciones",
-        "description": "El estado de cada pedido aparece aquí en cuanto lo agregas.",
         "testHeading": "Prueba el mensaje en tu teléfono",
         "testHint": "Enviamos un mensaje de prueba gratis al número de WhatsApp guardado en tu cuenta. No se descuenta de tu saldo."
       },
@@ -1632,20 +1631,19 @@
           "title": "Archivo Excel o CSV",
           "body": "Para muchos pedidos a la vez. Relacionamos las columnas por ti, y tú revisas antes de que se envíe algo."
         },
-        "storeLinkSoon": "Conectar tu tienda en línea para que cada pedido llegue automáticamente: próximamente.",
         "zeroBalance": {
           "title": "Tu saldo es de {count} créditos",
-          "body": "Cada confirmación usa 2 créditos de tu saldo. Recarga para enviar la primera.",
+          "body": "Recarga para enviar la primera.",
           "action": "Recargar saldo"
         }
       },
       "skippedTest": {
         "title": "Aún no has probado el mensaje",
-        "body": "Míralo en tu teléfono antes que tu primer cliente. Un minuto, y gratis."
+        "body": "Un minuto, y gratis."
       },
       "confirmations": {
         "title": "Confirmaciones",
-        "empty": "Aún no hay pedidos. El estado de cada pedido aparecerá aquí en el momento.",
+        "empty": "Aún no hay pedidos.",
         "examplesLabel": "Ejemplos de estados de pedido:",
         "examples": {
           "sent": "Enviado · esperando respuesta",

@@ -6,7 +6,7 @@ import { TipBannerSlot } from '@/features/tips'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { creditFeedbackKey } from '@/shared/lib/creditFeedback'
 import { cn } from '@/shared/lib/utils'
-import { akButton, akCard, notify } from '@/shared/ui'
+import { InfoHint, akButton, akCard, notify } from '@/shared/ui'
 import { useConfirmationsList } from '../../domain/useConfirmationsList'
 import {
   exportErrorKey,
@@ -207,9 +207,7 @@ export function DashboardVerificationsStandaloneSkin({
         subtitle={
           list.settings ? (
             <SettingsStatusLine settings={list.settings} />
-          ) : (
-            t('confirmations.subtitle')
-          )
+          ) : undefined
         }
         periodLabel={t('overview.periodLabel')}
         period={period}
@@ -236,11 +234,12 @@ export function DashboardVerificationsStandaloneSkin({
           role="status"
           className="border-ak-warning-line bg-ak-warning-soft text-ak-warning rounded-ak-card border px-6 py-4"
         >
-          <p className="text-ak-body font-semibold">
+          <p className="text-ak-body flex items-center gap-1 font-semibold">
             {t('sourceDisconnectedTitle')}
-          </p>
-          <p className="text-ak-body mt-1">
-            {t('sourceDisconnectedDescription')}
+            <InfoHint
+              label={t('sourceDisconnectedTitle')}
+              content={t('sourceDisconnectedDescription')}
+            />
           </p>
         </div>
       )}
@@ -301,23 +300,19 @@ export function DashboardVerificationsStandaloneSkin({
           ) : list.rows.length === 0 ? (
             isOnboarding ? (
               <div className="bg-card rounded-ak-card m-4 space-y-6 p-6">
-                <div>
-                  <h2 className="text-ak-section text-ink">
-                    {t('verifications.empty.title')}
-                  </h2>
-                  <p className="text-ak-body text-ink-muted mt-2 max-w-xl">
-                    {t('verifications.empty.description')}
-                  </p>
-                </div>
+                <h2 className="text-ak-section text-ink">
+                  {t('verifications.empty.title')}
+                </h2>
                 {list.canSendTest && phoneTestAction && (
                   <div className="border-line space-y-3 border-t pt-5">
-                    <div className="space-y-1">
+                    <div className="flex items-center gap-1">
                       <h3 className="text-ink text-sm font-semibold">
                         {t('verifications.empty.testHeading')}
                       </h3>
-                      <p className="text-ink-muted text-sm">
-                        {t('verifications.empty.testHint')}
-                      </p>
+                      <InfoHint
+                        label={t('verifications.empty.testHeading')}
+                        content={t('verifications.empty.testHint')}
+                      />
                     </div>
                     {phoneTestAction}
                   </div>

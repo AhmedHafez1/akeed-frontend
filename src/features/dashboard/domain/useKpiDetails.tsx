@@ -33,34 +33,61 @@ function joinValues(
 /**
  * The line under a dashboard number: what the confirmed and the canceled
  * orders are worth, and what the rate is a share of. Each is null when the period has nothing to
- * say, so the card stays quiet.
+ * say, so the card stays quiet. `compact` (standalone) keeps only the
+ * figures: the amount, and the rate as confirmed/sent.
  */
-export function useKpiDetails(kpis: DashboardOverview['kpis']): KpiDetails {
+export function useKpiDetails(
+  kpis: DashboardOverview['kpis'],
+  { compact = false }: { compact?: boolean } = {}
+): KpiDetails {
   const t = useTranslations('dashboard.overview.kpis')
+  const tCompact = useTranslations('dashboard.standalone.kpis')
   const { locale } = useLocaleInfo()
 
   const confirmedValue = joinValues(kpis.confirmed.value, locale)
+  const compactRate = () => {
+    const counts = {
+      confirmed: formatCount(kpis.confirmation_rate.confirmed, locale),
+      sent: formatCount(kpis.confirmation_rate.sent, locale),
+    }
+    return (
+      <>
+        <bdi aria-hidden="true">{tCompact('rateDetail', counts)}</bdi>
+        <span className="sr-only">{tCompact('rateDetailLabel', counts)}</span>
+      </>
+    )
+  }
   const canceledValue = joinValues(kpis.canceled_before_shipping.value, locale)
 
   return {
     confirmed:
-      kpis.confirmed.count > 0 && confirmedValue
-        ? t.rich('confirmed.value', {
+      kpis.confirmed.count > 0 && confirmedValue ? (
+        compact ? (
+          <Amount>{confirmedValue}</Amount>
+        ) : (
+          t.rich('confirmed.value', {
             amount: () => <Amount>{confirmedValue}</Amount>,
           })
-        : null,
+        )
+      ) : null,
     canceled:
-      kpis.canceled_before_shipping.count > 0 && canceledValue
-        ? t.rich('canceled.value', {
+      kpis.canceled_before_shipping.count > 0 && canceledValue ? (
+        compact ? (
+          <Amount>{canceledValue}</Amount>
+        ) : (
+          t.rich('canceled.value', {
             amount: () => <Amount>{canceledValue}</Amount>,
           })
-        : null,
+        )
+      ) : null,
     rate:
       kpis.confirmation_rate.sent > 0
-        ? t('rate.body', {
-            confirmed: formatCount(kpis.confirmation_rate.confirmed, locale),
-            sent: formatCount(kpis.confirmation_rate.sent, locale),
-          })
+        ? compact
+          ? compactRate()
+          : t('rate.body', {
+              confirmed: formatCount(kpis.confirmation_rate.confirmed, locale),
+              sent: formatCount(kpis.confirmation_rate.sent, locale),
+            })
         : null,
   }
 }
