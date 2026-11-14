@@ -2732,7 +2732,6 @@
       }
     },
     "title": "Faturalandırma ve krediler",
-    "subtitle": "Yalnızca gönderdiğimiz onay mesajları için ödeme yaparsınız. Aylık plan yok.",
     "creditModelNotice": {
       "title": "Bakiyenizdeki sayı iki katına çıktı. Değeri değişmedi.",
       "body": "Artık 1 kredi 1 EGP’ye eşit ve Akeed’den gönderilen her WhatsApp mesajı 2 kredi kullanıyor. Bir mesajın maliyeti yine 2 EGP ve hiçbir para hareketi olmadı.",
@@ -2795,7 +2794,6 @@
     },
     "alerts": {
       "lowTitle": "{count, plural, one {Yalnızca 1 kredi kaldı} other {Yalnızca {formatted} kredi kaldı}}",
-      "lowDescription": "Yeni siparişlerin onaylanmaya devam etmesi için krediniz bitmeden yükleme yapın.",
       "zeroTitle": "Mesaj krediniz kalmadı",
       "zeroDescription": "Şu anda yeni siparişleri onaylatmıyoruz. Siparişleriniz ve verileriniz güvende; kredi yüklediğiniz anda mesajlar yeniden başlar.",
       "debtTitle": "{count, plural, one {1 kredi borcunuz var} other {{formatted} kredi borcunuz var}}",
@@ -2843,15 +2841,14 @@
       "balanceAfter": "Satın alma sonrası bakiye: <b>{count}</b> kredi",
       "pay": "Öde: <amount>{value}</amount>",
       "payEmpty": "Öde",
-      "paymobNote": "Ödemeyi Paymob’un güvenli sayfasında kartla veya Vodafone Cash ile tamamlarsınız. Akeed ödeme bilgilerinizi asla görmez ve saklamaz.",
+      "paymobNote": "Paymob üzerinden kartla veya Vodafone Cash ile güvenli ödeme.",
       "coverage": {
         "akeedShort": "Akeed numarası",
         "ownShort": "Numaranız",
         "approx": "≈ {count}",
         "tileLabel": "Akeed numarasından yaklaşık {akeed} mesaj veya numaranızdan {own} mesaj karşılar",
         "akeed": "Akeed numarasından mesajlar",
-        "own": "Veya numaranızdan",
-        "metaNote": "Meta, kendi numaranızdan gönderilen mesajlar için işletmenizi ayrıca faturalandırır."
+        "own": "Veya numaranızdan"
       },
       "blocked": {
         "disabled": "Kredi satın alımları şu anda kapalı.",
@@ -2875,8 +2872,7 @@
       "lost": "İtiraz kaybedildi"
     },
     "error": {
-      "title": "Faturalandırma yüklenemedi",
-      "description": "Doğrulanmış kredi bakiyesini alamadık. Faturalandırmayla ilgili bir işlem yapmadan önce tekrar deneyin."
+      "title": "Faturalandırma yüklenemedi"
     },
     "return": {
       "credits": "Krediler",
@@ -2945,8 +2941,7 @@
       "packNote": "Bir paket, kendi numaranızdan iki gönderimi karşılar",
       "empty": "Henüz işlem yok.",
       "error": "İşlemler yüklenemedi.",
-      "retry": "Tekrar dene",
-      "note": "Kullanılabilir bakiye ek krediyi de içerir. Kullanım gönderim başına sayılır; paket kayıtları bu geçmişte kalır."
+      "retry": "Tekrar dene"
     },
     "ownNumberGuide": "Kendi WhatsApp numaranız nasıl faturalandırılır"
   },
@@ -2968,8 +2963,7 @@
       "templatePrompt": "Hazır dosyanız yok mu? Şablonu indirin:",
       "templateCsv": "CSV",
       "templateExcel": "Excel",
-      "templateFailed": "Şablon indirilemedi. Tekrar deneyin.",
-      "autoAdvance": "Bir dosya seçtiğiniz anda kontrol adımına geçeriz."
+      "templateFailed": "Şablon indirilemedi. Tekrar deneyin."
     },
     "fileErrors": {
       "actions": {
@@ -3329,7 +3323,6 @@
         "blankHint": "Ödeme yöntemi olmayan siparişleri bu içe aktarma için doğru gruba taşıyın. Değiştirmezseniz mağaza ayarınıza göre işlenirler.",
         "confirmValue": "“{value}” siparişlerini onayla",
         "empty": "Burada değer yok",
-        "remember": "Sonraki dosyalarınız için bunu hatırlayacağız.",
         "summary": "{confirm} → onayla · {ignore} → atla",
         "summaryConfirmOnly": "{confirm} → onayla",
         "edit": "Düzenle",

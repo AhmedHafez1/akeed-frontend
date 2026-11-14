@@ -3901,7 +3901,6 @@
       }
     },
     "title": "Billing & credits",
-    "subtitle": "You only pay for the confirmation messages we send. No monthly plan.",
     "creditModelNotice": {
       "title": "Your balance number doubled. Its value did not change.",
       "body": "1 credit now equals EGP 1, and each WhatsApp message from Akeed uses 2 credits. A message still costs EGP 2, and no money has moved.",
@@ -3964,7 +3963,6 @@
     },
     "alerts": {
       "lowTitle": "{count, plural, one {Only 1 credit left} other {Only {formatted} credits left}}",
-      "lowDescription": "Top up before you run out so new orders keep getting confirmed.",
       "zeroTitle": "You’re out of message credits",
       "zeroDescription": "We aren’t confirming new orders right now. Your orders and data are safe, and messages resume as soon as you top up.",
       "debtTitle": "{count, plural, one {You owe 1 credit} other {You owe {formatted} credits}}",
@@ -4012,15 +4010,14 @@
       "balanceAfter": "Balance after purchase: <b>{count}</b> credits",
       "pay": "Pay <amount>{value}</amount>",
       "payEmpty": "Pay",
-      "paymobNote": "You finish paying on Paymob’s secure page by card or Vodafone Cash. Akeed never sees or stores your payment details.",
+      "paymobNote": "Secure payment on Paymob, by card or Vodafone Cash.",
       "coverage": {
         "akeedShort": "Akeed's number",
         "ownShort": "Your number",
         "approx": "≈ {count}",
         "tileLabel": "Pays for about {akeed} messages from Akeed's number, or {own} from your number",
         "akeed": "Messages from Akeed's number",
-        "own": "Or from your number",
-        "metaNote": "Meta bills your business separately for messages from your number."
+        "own": "Or from your number"
       },
       "blocked": {
         "disabled": "Credit purchases are switched off right now.",
@@ -4044,8 +4041,7 @@
       "lost": "Dispute lost"
     },
     "error": {
-      "title": "Billing could not be loaded",
-      "description": "We could not retrieve the trusted credit balance. Try again before taking billing action."
+      "title": "Billing could not be loaded"
     },
     "return": {
       "credits": "Credits",
@@ -4114,8 +4110,7 @@
       "packNote": "One pack pays for two own-number sends",
       "empty": "No transactions yet.",
       "error": "Transactions couldn’t load.",
-      "retry": "Try again",
-      "note": "The available balance includes any spare credit. Usage is counted per send; pack postings stay in this history."
+      "retry": "Try again"
     },
     "ownNumberGuide": "How your own WhatsApp number is billed"
   },
@@ -4137,8 +4132,7 @@
       "templatePrompt": "No file ready? Download the template:",
       "templateCsv": "CSV",
       "templateExcel": "Excel",
-      "templateFailed": "The template could not be downloaded. Try again.",
-      "autoAdvance": "As soon as you choose a file, we move on to checking it."
+      "templateFailed": "The template could not be downloaded. Try again."
     },
     "fileErrors": {
       "actions": {
@@ -4498,7 +4492,6 @@
         "blankHint": "Move orders without a payment method to the right bucket for this import. If unchanged, they follow your store setting.",
         "confirmValue": "Confirm “{value}” orders",
         "empty": "No values here",
-        "remember": "We'll remember this for your next files.",
         "summary": "{confirm} → confirm · {ignore} → skip",
         "summaryConfirmOnly": "{confirm} → confirm",
         "edit": "Edit",

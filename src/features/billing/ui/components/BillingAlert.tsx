@@ -42,7 +42,8 @@ export function BillingAlert({ summary }: { summary: CreditSummary }) {
             formatted: formatCredits(count, locale),
           })}
         </span>
-        <span>{t(`${state}Description`)}</span>
+        {/* A low balance needs no explanation; the empty states do. */}
+        {state !== 'low' && <span>{t(`${state}Description`)}</span>}
       </p>
     </div>
   )

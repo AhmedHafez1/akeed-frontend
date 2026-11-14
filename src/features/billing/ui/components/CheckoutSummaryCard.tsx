@@ -2,7 +2,7 @@
 
 import { useId } from 'react'
 import Link from 'next/link'
-import { ArrowRight, Info, ShieldCheck, TrendingUp } from 'lucide-react'
+import { ArrowRight, ShieldCheck, TrendingUp } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
@@ -132,13 +132,6 @@ export function CheckoutSummaryCard({
                 ),
               })}
             </span>
-          </p>
-        )}
-
-        {rates && (
-          <p className="text-ak-caption text-ink-muted mt-3 flex items-start gap-2">
-            <Info aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
-            <span>{t('coverage.metaNote')}</span>
           </p>
         )}
 

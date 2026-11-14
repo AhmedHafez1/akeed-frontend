@@ -1,9 +1,9 @@
 'use client'
 
-import { Check, Info } from 'lucide-react'
+import { Info } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/shared/lib/utils'
-import { Button } from '@/shared/ui'
+import { Button, InfoHint } from '@/shared/ui'
 import type { OrderImportPaymentValues } from '../../../api/orderImportsApi'
 import {
   paymentBuckets,
@@ -99,14 +99,29 @@ export function PaymentBucketsPanel({
 
   return (
     <section aria-labelledby="order-import-payment" className="space-y-3">
-      <div className="space-y-1">
+      <div className="flex items-center gap-1">
         <h3
           id="order-import-payment"
           className="text-foreground text-base font-bold"
         >
           {t('question')}
         </h3>
-        <p className="text-muted-foreground text-sm">{t('intro')}</p>
+        <InfoHint
+          label={t('question')}
+          content={
+            <span className="block space-y-2">
+              <span className="block">{t('intro')}</span>
+              {values.truncated && (
+                <span className="block">
+                  <TruncatedNote />
+                </span>
+              )}
+              {values.blankCount > 0 && (
+                <span className="block">{t('blankHint')}</span>
+              )}
+            </span>
+          }
+        />
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
@@ -125,20 +140,6 @@ export function PaymentBucketsPanel({
           onMove={onMove}
         />
       </div>
-
-      {values.truncated && (
-        <p className="text-muted-foreground text-xs">
-          {/* The shared payment copy explains the 50-value cap. */}
-          <TruncatedNote />
-        </p>
-      )}
-      {values.blankCount > 0 && (
-        <p className="text-muted-foreground text-xs">{t('blankHint')}</p>
-      )}
-      <p className="text-muted-foreground flex items-center gap-1.5 text-xs">
-        <Check aria-hidden="true" className="size-3.5 shrink-0" />
-        {t('remember')}
-      </p>
     </section>
   )
 }

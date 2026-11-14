@@ -2732,7 +2732,6 @@
       }
     },
     "title": "Facturation et crédits",
-    "subtitle": "Vous ne payez que les messages de confirmation que nous envoyons. Pas de forfait mensuel.",
     "creditModelNotice": {
       "title": "Le nombre affiché pour votre solde a doublé. Sa valeur n’a pas changé.",
       "body": "Désormais, 1 crédit vaut 1 EGP et chaque message WhatsApp d’Akeed utilise 2 crédits. Un message coûte toujours 2 EGP, et aucun argent n’a bougé.",
@@ -2795,7 +2794,6 @@
     },
     "alerts": {
       "lowTitle": "{count, plural, one {Plus que 1 crédit} other {Plus que {formatted} crédits}}",
-      "lowDescription": "Rechargez avant d’être à court pour que les nouvelles commandes continuent d’être confirmées.",
       "zeroTitle": "Vous n’avez plus de crédits de messages",
       "zeroDescription": "Nous ne confirmons plus les nouvelles commandes pour le moment. Vos commandes et vos données sont en sécurité, et les messages reprennent dès que vous rechargez.",
       "debtTitle": "{count, plural, one {Vous devez 1 crédit} other {Vous devez {formatted} crédits}}",
@@ -2843,15 +2841,14 @@
       "balanceAfter": "Solde après l’achat : <b>{count}</b> crédits",
       "pay": "Payer <amount>{value}</amount>",
       "payEmpty": "Payer",
-      "paymobNote": "Vous terminez le paiement sur la page sécurisée de Paymob, par carte ou avec Vodafone Cash. Akeed ne voit ni ne conserve jamais vos données de paiement.",
+      "paymobNote": "Paiement sécurisé sur Paymob, par carte ou avec Vodafone Cash.",
       "coverage": {
         "akeedShort": "Numéro d’Akeed",
         "ownShort": "Votre numéro",
         "approx": "≈ {count}",
         "tileLabel": "Couvre environ {akeed} messages depuis le numéro d’Akeed, ou {own} depuis votre numéro",
         "akeed": "Messages depuis le numéro d’Akeed",
-        "own": "Ou depuis votre numéro",
-        "metaNote": "Meta facture séparément à votre entreprise les messages envoyés depuis votre numéro."
+        "own": "Ou depuis votre numéro"
       },
       "blocked": {
         "disabled": "L’achat de crédits est désactivé pour le moment.",
@@ -2875,8 +2872,7 @@
       "lost": "Litige perdu"
     },
     "error": {
-      "title": "Impossible de charger la facturation",
-      "description": "Nous n’avons pas pu récupérer le solde de crédits de référence. Réessayez avant toute opération de facturation."
+      "title": "Impossible de charger la facturation"
     },
     "return": {
       "credits": "Crédits",
@@ -2945,8 +2941,7 @@
       "packNote": "Un pack couvre deux envois depuis votre numéro",
       "empty": "Aucune transaction pour l’instant.",
       "error": "Impossible de charger les transactions.",
-      "retry": "Réessayer",
-      "note": "Le solde disponible inclut tout crédit supplémentaire. L’usage est compté par envoi ; les packs restent dans cet historique."
+      "retry": "Réessayer"
     },
     "ownNumberGuide": "Comment votre propre numéro WhatsApp est facturé"
   },
@@ -2968,8 +2963,7 @@
       "templatePrompt": "Pas de fichier prêt ? Téléchargez le modèle :",
       "templateCsv": "CSV",
       "templateExcel": "Excel",
-      "templateFailed": "Le modèle n’a pas pu être téléchargé. Réessayez.",
-      "autoAdvance": "Dès que vous choisissez un fichier, nous passons à sa vérification."
+      "templateFailed": "Le modèle n’a pas pu être téléchargé. Réessayez."
     },
     "fileErrors": {
       "actions": {
@@ -3329,7 +3323,6 @@
         "blankHint": "Placez les commandes sans mode de paiement dans le bon groupe pour cet import. Sans changement, elles suivent le réglage de votre boutique.",
         "confirmValue": "Confirmer les commandes « {value} »",
         "empty": "Aucune valeur ici",
-        "remember": "Nous nous en souviendrons pour vos prochains fichiers.",
         "summary": "{confirm} → confirmer · {ignore} → ignorer",
         "summaryConfirmOnly": "{confirm} → confirmer",
         "edit": "Modifier",

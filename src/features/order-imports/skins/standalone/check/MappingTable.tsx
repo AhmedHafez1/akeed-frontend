@@ -4,7 +4,7 @@ import { useState, type ReactNode } from 'react'
 import { AlertTriangle, Check, ChevronDown } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/shared/lib/utils'
-import { Button } from '@/shared/ui'
+import { Button, InfoHint } from '@/shared/ui'
 import type {
   OrderImportDateFormat,
   OrderImportField,
@@ -331,10 +331,11 @@ function DateFormatChoice({
   const t = useTranslations('orderImport.settings')
   return (
     <fieldset className="space-y-2" aria-describedby="order-import-date-help">
-      <legend className="text-foreground text-sm font-medium">
+      <legend className="text-foreground flex items-center gap-1 text-sm font-medium">
         {t('dateFormat')}
+        <InfoHint label={t('dateFormat')} content={t('dateFormatHelp')} />
       </legend>
-      <p id="order-import-date-help" className="text-muted-foreground text-xs">
+      <p id="order-import-date-help" className="sr-only">
         {t('dateFormatHelp')}
       </p>
       <div className="flex flex-wrap gap-2">
