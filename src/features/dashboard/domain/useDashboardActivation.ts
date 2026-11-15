@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useStartupReady } from '@/shared/hooks/useStartupPerformance'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { activationStateOptions } from '../api/activationQueries'
 import {
@@ -21,6 +22,7 @@ export function useDashboardActivation() {
   const searchParams = useSearchParams()
   const activationQuery = useQuery(activationStateOptions())
   const state = activationQuery.data
+  useStartupReady('dashboard-activation-ready', activationQuery.isSuccess)
 
   const locale = pathname?.split('/')[1] ?? 'ar'
 

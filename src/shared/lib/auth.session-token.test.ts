@@ -279,13 +279,30 @@ describe('embedded session token acquisition', () => {
     auth.primeShopifySessionToken(token('one'))
     fetchMock.mockReturnValueOnce(pending.promise)
     const request = auth.fetchWithAuth('/api/orders')
+    const rejection = expect(request).rejects.toMatchObject({
+      name: 'AbortError',
+    })
     await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1))
     visit('two')
     auth.primeShopifySessionToken(token('two'))
     pending.resolve(new Response('{}', { status: 401 }))
-    expect((await request).status).toBe(401)
+    await rejection
     expect(fetchMock).toHaveBeenCalledTimes(1)
     expect(idToken).not.toHaveBeenCalled()
+  })
+
+  it('rejects a successful response from a previous shop before consumers can cache it', async () => {
+    const pending = deferred<Response>()
+    auth.primeShopifySessionToken(token('one'))
+    fetchMock.mockReturnValueOnce(pending.promise)
+    const request = auth.fetchWithAuth('/api/orders')
+    const rejection = expect(request).rejects.toMatchObject({
+      name: 'AbortError',
+    })
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1))
+    visit('two')
+    pending.resolve(new Response('{"private":"synthetic-old-shop"}'))
+    await rejection
   })
 
   it('preserves standalone Supabase authentication', async () => {

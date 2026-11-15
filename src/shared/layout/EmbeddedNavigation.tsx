@@ -18,19 +18,21 @@
  * @see https://shopify.dev/docs/api/app-bridge-library/web-components/ui-nav-menu
  */
 
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
 
 export function EmbeddedNavigation() {
   const pathname = usePathname()
   const locale = getLocaleFromPathname(pathname ?? '')
+  const diagnosticSearch =
+    useSearchParams().get('akeed_perf') === '1' ? '?akeed_perf=1' : ''
 
   return (
     <s-app-nav>
-      <s-link href={`/${locale}/dashboard`} rel="home">
+      <s-link href={`/${locale}/dashboard${diagnosticSearch}`} rel="home">
         Dashboard
       </s-link>
-      <s-link href={`/${locale}/settings`}>Settings</s-link>
+      <s-link href={`/${locale}/settings${diagnosticSearch}`}>Settings</s-link>
     </s-app-nav>
   )
 }

@@ -9,6 +9,7 @@ import { resolveOrganizationSourceMode } from '@/shared/config/commerceSources'
 import { ApiError, createApiError, parseJsonResponse } from '@/shared/lib/http'
 import { createLogger } from '@/shared/lib/logger'
 import { withLocale } from '@/shared/lib/locale'
+import { measureStartup } from '@/shared/lib/startup-performance'
 
 /**
  * Akeed API Client with Dual Authentication
@@ -245,7 +246,9 @@ async function getShopifySessionToken(
 
     const generation = sessionTokenGeneration
     const request = Promise.resolve().then(async () => {
-      const token = await shopify.idToken()
+      const token = await measureStartup('session-token', () =>
+        shopify.idToken()
+      )
       if (syncSessionTokenContext() !== context) return null
       if (sessionTokenGeneration !== generation) {
         return sessionTokenCache?.token ?? null
@@ -360,6 +363,13 @@ async function sendWithAuth(
   const fullUrl = resolveRequestUrl(url, isEmbedded)
 
   const response = await transport(fullUrl, headers)
+  if (
+    isEmbedded &&
+    requestContext !==
+      syncSessionTokenContext(resolveEmbeddedContextFromWindow(false))
+  ) {
+    throw new DOMException('Authentication context changed.', 'AbortError')
+  }
 
   // Handle 401 Unauthorized
   if (response.status === 401) {
@@ -375,7 +385,17 @@ async function sendWithAuth(
 
         // If the retry also fails with 401, fall through to return it
         // without another retry (no infinite loop).
-        return transport(fullUrl, retryHeaders)
+        const retried = await transport(fullUrl, retryHeaders)
+        if (
+          requestContext !==
+          syncSessionTokenContext(resolveEmbeddedContextFromWindow(false))
+        ) {
+          throw new DOMException(
+            'Authentication context changed.',
+            'AbortError'
+          )
+        }
+        return retried
       }
     } else if (typeof window !== 'undefined') {
       // Standalone mode: redirect to login

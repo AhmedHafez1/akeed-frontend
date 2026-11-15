@@ -4,7 +4,15 @@ import {
   fetchOnboardingState,
   OnboardingApiError,
 } from '@/features/onboarding/api/onboardingApi'
-import type { IntegrationOnboardingStatus } from '@/features/onboarding/domain/onboarding.types'
+import type {
+  IntegrationOnboardingStatus,
+  OnboardingStateResponse,
+} from '@/features/onboarding/domain/onboarding.types'
+import { resolveEmbeddedContextFromWindow } from '@/shared/lib/embedded-context'
+import { primeShopifySessionToken } from '@/shared/lib/auth'
+import { measureStartup } from '@/shared/lib/startup-performance'
+import { createLogger } from '@/shared/lib/logger'
+import type { ShopifyGlobal } from '@/shared/types/window.model'
 
 export type EmbeddedOnboardingGate =
   | 'none'
@@ -36,6 +44,40 @@ interface OnboardingCache {
 let installCache: InstallCache | null = null
 let onboardingCache: OnboardingCache | null = null
 
+interface EmbeddedAuthScope {
+  readonly key: string | null
+}
+const SERVER_SCOPE: EmbeddedAuthScope = { key: null }
+let scope: EmbeddedAuthScope = SERVER_SCOPE
+let installRequest: Promise<boolean> | null = null
+let onboardingRequest: Promise<OnboardingStateResponse> | null = null
+const logger = createLogger('EmbeddedAuth')
+
+export function getEmbeddedAuthScope(): EmbeddedAuthScope {
+  if (typeof window === 'undefined') return SERVER_SCOPE
+  const context = resolveEmbeddedContextFromWindow(false)
+  const key = context.isEmbedded
+    ? JSON.stringify([context.shopDomain, context.hostParam])
+    : null
+  if (scope.key !== key) {
+    clearEmbeddedAuthCaches()
+    scope = { key }
+  }
+  return scope
+}
+
+export function isCurrentEmbeddedAuthScope(
+  expected: EmbeddedAuthScope
+): boolean {
+  return expected === getEmbeddedAuthScope()
+}
+
+function assertScope(expected: EmbeddedAuthScope) {
+  if (!isCurrentEmbeddedAuthScope(expected)) {
+    throw new DOMException('Embedded context changed.', 'AbortError')
+  }
+}
+
 /** Install status is stable — cache for 5 minutes. */
 const INSTALL_CACHE_TTL_MS = 5 * 60 * 1000
 
@@ -47,6 +89,7 @@ const INSTALL_CACHE_TTL_MS = 5 * 60 * 1000
 const ONBOARDING_CACHE_TTL_MS = 5 * 60 * 1000
 
 export function getCachedInstallStatus(shopDomain: string): boolean | null {
+  getEmbeddedAuthScope()
   if (
     installCache &&
     installCache.shopDomain === shopDomain &&
@@ -61,10 +104,12 @@ export function setCachedInstallStatus(
   shopDomain: string,
   installed: boolean
 ): void {
+  getEmbeddedAuthScope()
   installCache = { shopDomain, installed, timestamp: Date.now() }
 }
 
 export function getCachedOnboardingStatus(): IntegrationOnboardingStatus | null {
+  getEmbeddedAuthScope()
   if (
     onboardingCache &&
     onboardingCache.status === 'completed' &&
@@ -78,14 +123,77 @@ export function getCachedOnboardingStatus(): IntegrationOnboardingStatus | null 
 export function setCachedOnboardingStatus(
   status: IntegrationOnboardingStatus
 ): void {
+  getEmbeddedAuthScope()
   if (status === 'completed') {
     onboardingCache = { status, timestamp: Date.now() }
   }
 }
 
 export function clearEmbeddedAuthCaches(): void {
+  scope = { key: scope.key }
+  installRequest = null
+  onboardingRequest = null
   installCache = null
   onboardingCache = null
+}
+
+/** Share only in-flight work; successful installation keeps the existing TTL. */
+export function ensureEmbeddedInstall(
+  shopDomain: string,
+  shopify: ShopifyGlobal | null
+): Promise<boolean> {
+  const expected = getEmbeddedAuthScope()
+  if (
+    !expected.key ||
+    resolveEmbeddedContextFromWindow(false).shopDomain !== shopDomain
+  )
+    return Promise.reject(
+      new DOMException('Missing embedded context.', 'AbortError')
+    )
+  if (getCachedInstallStatus(shopDomain) === true) return Promise.resolve(true)
+  if (installRequest) return installRequest
+  const request = (async () => {
+    let installed = false
+    if (shopify) {
+      try {
+        const token = await measureStartup('session-token', () =>
+          shopify.idToken()
+        )
+        assertScope(expected)
+        if (token) {
+          primeShopifySessionToken(token)
+          installed = await measureStartup(
+            'token-exchange',
+            () => performTokenExchange(token),
+            Boolean
+          )
+          assertScope(expected)
+        }
+      } catch (error) {
+        assertScope(expected)
+        logger.warn('Token exchange failed, falling back to install check', {
+          errorName: error instanceof Error ? error.name : 'UnknownError',
+        })
+      }
+    }
+    if (!installed) {
+      installed = await measureStartup(
+        'install-check',
+        () => checkEmbeddedInstall(shopDomain),
+        Boolean
+      )
+      assertScope(expected)
+    }
+    if (installed) setCachedInstallStatus(shopDomain, true)
+    return installed
+  })()
+  installRequest = request
+  // Attach cleanup to both outcomes without creating an unhandled rejected promise.
+  const cleanup = () => {
+    if (installRequest === request) installRequest = null
+  }
+  void request.then(cleanup, cleanup)
+  return request
 }
 
 /**
@@ -212,14 +320,21 @@ function isRetryableOnboardingError(error: unknown): boolean {
  * Fetches onboarding status with a short bounded retry strategy to handle
  * token/session timing races during embedded app initialization.
  */
-export async function fetchOnboardingStatusWithRetry(): Promise<IntegrationOnboardingStatus> {
+async function fetchOnboardingStateWithRetry(
+  expected: EmbeddedAuthScope
+): Promise<OnboardingStateResponse> {
   const maxAttempts = 3
 
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    assertScope(expected)
     try {
-      const { state } = await fetchOnboardingState()
-      return state.onboardingStatus
+      const response = await measureStartup('onboarding-request', () =>
+        fetchOnboardingState()
+      )
+      assertScope(expected)
+      return response
     } catch (error) {
+      assertScope(expected)
       if (attempt === maxAttempts || !isRetryableOnboardingError(error)) {
         throw error
       }
@@ -229,4 +344,24 @@ export async function fetchOnboardingStatusWithRetry(): Promise<IntegrationOnboa
   }
 
   throw new Error('Unable to resolve onboarding state')
+}
+
+export function fetchEmbeddedOnboardingState(): Promise<OnboardingStateResponse> {
+  const expected = getEmbeddedAuthScope()
+  if (!expected.key)
+    return Promise.reject(
+      new DOMException('Missing embedded context.', 'AbortError')
+    )
+  if (onboardingRequest) return onboardingRequest
+  const request = fetchOnboardingStateWithRetry(expected).then((response) => {
+    assertScope(expected)
+    setCachedOnboardingStatus(response.state.onboardingStatus)
+    return response
+  })
+  onboardingRequest = request
+  const cleanup = () => {
+    if (onboardingRequest === request) onboardingRequest = null
+  }
+  void request.then(cleanup, cleanup)
+  return request
 }

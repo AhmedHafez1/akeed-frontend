@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic'
 import { usePathname } from 'next/navigation'
 import { isWhatsappConnectRoute } from '@/shared/lib/locale'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
+import { useStartupPerformance } from '@/shared/hooks/useStartupPerformance'
 import { QueryProvider } from '@/shared/query/QueryProvider'
 import { StandaloneLayout } from './StandaloneLayout'
 
@@ -37,7 +38,9 @@ interface AppLayoutProps {
 }
 
 function AppLayoutInner({ children }: AppLayoutProps) {
-  const { isEmbedded } = useAkeedMode()
+  const mode = useAkeedMode()
+  useStartupPerformance(mode)
+  const { isEmbedded } = mode
   const pathname = usePathname()
 
   // Opened top-level from Shopify too, where Polaris and App Bridge do not

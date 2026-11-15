@@ -67,11 +67,12 @@ function resolveFromSearchParams(searchParams: URLSearchParams): {
 }
 
 export function resolveEmbeddedContextFromSearch(
-  searchParams: URLSearchParams
+  searchParams: URLSearchParams,
+  persist = true
 ): EmbeddedContext {
   const fromUrl = resolveFromSearchParams(searchParams)
   if (fromUrl.shopDomain && fromUrl.hostParam) {
-    persistEmbeddedContext(fromUrl.shopDomain, fromUrl.hostParam)
+    if (persist) persistEmbeddedContext(fromUrl.shopDomain, fromUrl.hostParam)
     return {
       shopDomain: fromUrl.shopDomain,
       hostParam: fromUrl.hostParam,
@@ -97,7 +98,9 @@ export function resolveEmbeddedContextFromSearch(
   }
 }
 
-export function resolveEmbeddedContextFromWindow(): EmbeddedContext {
+export function resolveEmbeddedContextFromWindow(
+  persist = true
+): EmbeddedContext {
   if (typeof window === 'undefined') {
     return {
       shopDomain: null,
@@ -107,6 +110,5 @@ export function resolveEmbeddedContextFromWindow(): EmbeddedContext {
   }
 
   const searchParams = new URLSearchParams(window.location.search)
-  return resolveEmbeddedContextFromSearch(searchParams)
+  return resolveEmbeddedContextFromSearch(searchParams, persist)
 }
-
