@@ -1,11 +1,6 @@
 'use client'
 
-import {
-  Banner,
-  BlockStack,
-  Button,
-  InlineStack,
-} from '@shopify/polaris'
+import { Banner, BlockStack, Button, InlineStack } from '@shopify/polaris'
 import type {
   ChecklistItem,
   ChecklistItemId,
@@ -37,26 +32,24 @@ interface ActivationPanelProps {
   needsPlan: boolean
   quietHoursEnabled: boolean
   onOpenSettings: () => void
+  onDismissLive: () => void
   onOpenQuietHours: () => void
   onTryTest: () => void
   onChoosePlan: () => void
   onContactSupport: () => void
 }
 
-
 /**
- * First-run dashboard: says Akeed is live, shows the three activation
- * milestones (the last one waits for the merchant's business, it is not a
- * task), and the two things a new merchant may want: quiet hours and help.
+ * Dismissible welcome status, or an independent warning when automation is paused.
  */
 export function ActivationPanel({
   messages,
   isLive,
   needsPlan,
   onOpenSettings,
+  onDismissLive,
   onChoosePlan,
 }: ActivationPanelProps) {
-
   return (
     <BlockStack gap="400">
       {needsPlan ? (
@@ -74,13 +67,15 @@ export function ActivationPanel({
           </InlineStack>
         </Banner>
       ) : (
-        <Banner tone={isLive ? 'success' : 'warning'}>
+        <Banner
+          tone={isLive ? 'success' : 'warning'}
+          onDismiss={isLive ? onDismissLive : undefined}
+        >
           <InlineStack
             align="space-between"
             blockAlign="center"
             gap="300"
             wrap={false}
-            
           >
             <div className="min-w-0 flex-1">
               <p>{isLive ? messages.liveBanner : messages.pausedBanner}</p>

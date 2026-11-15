@@ -1,5 +1,6 @@
 /** The slice of `/api/onboarding/state` the first-run dashboard reads. */
 export interface DashboardActivationState {
+  integrationId?: string
   permissions?: { canUpdateConfiguration: boolean }
   sendingAvailability?: import('@/shared/types/sendingAvailability').SendingAvailability
   isAutoVerifyEnabled: boolean

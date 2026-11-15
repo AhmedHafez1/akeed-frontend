@@ -160,7 +160,7 @@ export function MainEmbeddedSkin() {
             onAction={tips.onAction}
             onDismiss={tips.onDismiss}
           />
-          {showActivation && !activation.needsPlan && (
+          {(activation.showLiveBanner || activation.showPausedBanner) && (
             <DashboardActivationSection activation={activation} />
           )}
           {activeTab === 'metrics' ? (
