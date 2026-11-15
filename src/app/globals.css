@@ -778,6 +778,45 @@
   outline: none;
 }
 
+/*
+ * Embedded Polaris tabs (confirmations filters, settings sections), in the
+ * look of the main title tabs
+ * (`MainTabsTitle`): the open tab is dark text over an underline, the others
+ * secondary text that gains a light underline on hover. Keyboard focus keeps
+ * Polaris's ring.
+ */
+.akeed-underline-tabs .Polaris-Tabs__Tab:not([aria-disabled='true']),
+.akeed-underline-tabs
+  .Polaris-Tabs__Tab:not([aria-disabled='true']):is(
+    :hover,
+    :focus,
+    :focus-visible,
+    :active
+  ) {
+  border-radius: 0;
+  border-bottom: var(--p-border-width-050) solid transparent;
+  background: transparent;
+  color: var(--p-color-text-secondary);
+}
+
+.akeed-underline-tabs .Polaris-Tabs__Tab:not([aria-disabled='true']):hover {
+  border-bottom-color: var(--p-color-border);
+  color: var(--p-color-text);
+}
+
+.akeed-underline-tabs .Polaris-Tabs__Tab--active:not([aria-disabled='true']),
+.akeed-underline-tabs
+  .Polaris-Tabs__Tab--active:not([aria-disabled='true']):is(
+    :hover,
+    :focus,
+    :focus-visible,
+    :active
+  ) {
+  border-bottom-color: var(--p-color-border-inverse);
+  background: transparent;
+  color: var(--p-color-text);
+}
+
 @media (max-width: 48rem) {
   .akeed-embedded-content {
     padding-inline: 0.75rem;

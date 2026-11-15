@@ -753,13 +753,88 @@ describe('ConfirmationsCardList', () => {
     expect(cards).toHaveLength(2)
     expect(within(cards[0]).getByText('مؤكد')).toBeTruthy()
     expect(within(cards[0]).getByText('US$ 49.95')).toBeTruthy()
-    expect(
-      within(cards[0]).getByRole('link', { name: /بيانات الشحن/ })
-    ).toBeTruthy()
     expect(within(cards[1]).getByText('لم يرد')).toBeTruthy()
     expect(within(cards[1]).getByText(/أُرسل التذكير .*17 سبتمبر/)).toBeTruthy()
+    // The WhatsApp actions sit in each card's "…" sheet, not on the card.
     expect(
-      within(cards[1]).getByRole('link', { name: /راسل .* على واتساب/ })
+      screen.queryAllByRole('link', { name: /واتساب|الشحن/ })
+    ).toHaveLength(0)
+    fireEvent.click(
+      within(cards[0]).getByRole('button', { name: /مزيد من الإجراءات/ })
+    )
+    expect(
+      within(screen.getByRole('dialog')).getByRole('link', {
+        name: /بيانات الشحن/,
+      })
     ).toBeTruthy()
+  })
+
+  function renderCards(rows: VerificationItem[]) {
+    const onOpenDetails = vi.fn()
+    renderEmbedded(
+      <ConfirmationsCardList
+        rows={rows}
+        timeZone="UTC"
+        canWrite
+        canRetry
+        actingId={null}
+        handlers={{
+          onOpenDetails,
+          onRequestConfirm: vi.fn(),
+          onRequestCancel: vi.fn(),
+          onRetry: vi.fn(),
+          onToggleAutoCancel: vi.fn(),
+        }}
+      />,
+      'en'
+    )
+    return onOpenDetails
+  }
+
+  it('opens the details when the card itself is tapped', () => {
+    const row = listRow({ customer_name: 'Ahmed' })
+    const onOpenDetails = renderCards([row])
+    fireEvent.click(screen.getByText('Ahmed'))
+    expect(onOpenDetails).toHaveBeenCalledExactlyOnceWith(row)
+  })
+
+  it('leaves the details closed when "…" or the sheet is tapped', () => {
+    const onOpenDetails = renderCards([listRow()])
+    fireEvent.click(screen.getByRole('button', { name: /More actions/ }))
+    const sheet = screen.getByRole('dialog')
+    fireEvent.click(within(sheet).getByText('Send shipping info'))
+    fireEvent.click(sheet)
+    expect(onOpenDetails).not.toHaveBeenCalled()
+  })
+
+  it('shows a repeat customer as text and a risky one as a badge', () => {
+    renderCards([
+      listRow({
+        customer_history: {
+          other_orders: 12,
+          confirmed: 12,
+          canceled: 0,
+          no_reply: 0,
+        },
+      }),
+      listRow({
+        id: 'v-2',
+        customer_history: {
+          other_orders: 3,
+          confirmed: 1,
+          canceled: 2,
+          no_reply: 0,
+        },
+      }),
+    ])
+    const [repeat, risky] = screen.getAllByRole('listitem')
+    const repeatText = within(repeat).getByText(
+      'Repeat customer · 12 confirmed'
+    )
+    expect(repeatText.closest('.Polaris-Badge')).toBeNull()
+    const riskText = within(risky).getByText(
+      '2 of 3 other orders not confirmed'
+    )
+    expect(riskText.closest('.Polaris-Badge')).not.toBeNull()
   })
 })

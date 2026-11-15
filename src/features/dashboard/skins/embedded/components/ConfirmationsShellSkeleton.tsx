@@ -55,7 +55,7 @@ export function ConfirmationsShellSkeleton() {
           />
           <Card padding="0">
             <div className="flex flex-col gap-3 p-3 lg:flex-row lg:items-center lg:justify-between">
-              <div className="min-w-0">
+              <div className="akeed-underline-tabs min-w-0">
                 <Tabs tabs={tabs} selected={selected} onSelect={noop} />
               </div>
               <div className="w-full lg:w-96">

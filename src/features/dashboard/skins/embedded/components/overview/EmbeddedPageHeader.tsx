@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { BlockStack, Select, Text } from '@shopify/polaris'
+import { BlockStack, Select, Text, useBreakpoints } from '@shopify/polaris'
 import { HEADER_ACTIONS_ATTRIBUTE } from '../../../../domain/useAnchoredPanel'
 import type { DateRangeFilterOption } from '../../../../domain/dashboard.types'
 import type { DashboardStatsDateRange } from '../../../../model/dashboard.model'
@@ -34,6 +34,7 @@ export function EmbeddedPageHeader({
   actions,
   periodControl,
 }: EmbeddedPageHeaderProps) {
+  const { mdUp } = useBreakpoints({ defaults: { mdUp: true } })
   return (
     <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
       <BlockStack gap="200">
@@ -78,7 +79,10 @@ export function EmbeddedPageHeader({
             >
               <Select
                 label={periodControl.label}
-                labelInline
+                // On a phone the label gives way so the select fits beside
+                // the usage button; screen readers still hear it.
+                labelInline={mdUp}
+                labelHidden={!mdUp}
                 options={periodControl.options.map((option) => ({
                   label: option.label,
                   value: option.id,
