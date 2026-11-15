@@ -1259,6 +1259,7 @@
     },
     "activation": {
       "liveBanner": "Akeed est actif. Les nouvelles commandes en paiement à la livraison seront vérifiées automatiquement.",
+      "dismiss": "Masquer",
       "pausedBanner": "La confirmation automatique est désactivée. Activez-la dans les paramètres pour qu’Akeed confirme vos nouvelles commandes.",
       "needsPlanTitle": "Choisissez un forfait pour qu’Akeed confirme vos vraies commandes",
       "needsPlanBody": "Cette boutique a déjà utilisé son forfait gratuit. Les messages de test restent gratuits.",

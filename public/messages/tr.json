@@ -1259,6 +1259,7 @@
     },
     "activation": {
       "liveBanner": "Akeed aktif. Yeni kapıda ödemeli siparişler otomatik olarak doğrulanacak.",
+      "dismiss": "Kapat",
       "pausedBanner": "Otomatik onay kapalı. Akeed’in yeni siparişlerinizi onaylatması için ayarlardan açın.",
       "needsPlanTitle": "Akeed’in gerçek siparişlerinizi onaylatması için bir plan seçin",
       "needsPlanBody": "Bu mağaza ücretsiz planını daha önce kullandı. Test mesajları ücretsiz olmaya devam eder.",

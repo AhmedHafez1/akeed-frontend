@@ -74,21 +74,20 @@ afterEach(() => {
 
 describe('dashboard welcome banner', () => {
   it.each([
-    ['en', LIVE],
+    ['en', LIVE, 'Dismiss'],
     [
       'ar',
       'أكيد يعمل الآن. سيتم التحقق من طلبات الدفع عند الاستلام الجديدة تلقائيًا.',
+      'إخفاء',
     ],
   ] as const)(
     'shows the agreed %s copy after setup, even after a test confirmation',
-    async (locale, copy) => {
+    async (locale, copy, dismiss) => {
       const value = state()
       value.activation!.testConfirmedAt = '2026-11-15T08:01:00Z'
       setup(value, locale)
       expect(await screen.findByText(copy)).toBeTruthy()
-      expect(
-        screen.getByRole('button', { name: 'Dismiss notification' })
-      ).toBeTruthy()
+      expect(screen.getByRole('button', { name: dismiss })).toBeTruthy()
     }
   )
 
@@ -96,9 +95,7 @@ describe('dashboard welcome banner', () => {
     const value = state()
     const view = setup(value)
     await screen.findByText(LIVE)
-    fireEvent.click(
-      screen.getByRole('button', { name: 'Dismiss notification' })
-    )
+    fireEvent.click(screen.getByRole('button', { name: 'Dismiss' }))
     expect(screen.queryByText(LIVE)).toBeNull()
     expect(screen.getByTestId('first-run').textContent).toBe('true')
     view.unmount()
@@ -113,9 +110,7 @@ describe('dashboard welcome banner', () => {
     const value = state()
     const view = setup(value)
     await screen.findByText(LIVE)
-    fireEvent.click(
-      screen.getByRole('button', { name: 'Dismiss notification' })
-    )
+    fireEvent.click(screen.getByRole('button', { name: 'Dismiss' }))
     const next = state()
     act(() =>
       view.client.setQueryData(queryKeys.onboarding.state(), { state: next })
@@ -181,9 +176,7 @@ describe('dashboard welcome banner', () => {
     const value = state()
     const { client } = setup(value)
     await screen.findByText(LIVE)
-    fireEvent.click(
-      screen.getByRole('button', { name: 'Dismiss notification' })
-    )
+    fireEvent.click(screen.getByRole('button', { name: 'Dismiss' }))
     const paused = {
       ...value,
       isAutoVerifyEnabled: false,
@@ -197,9 +190,7 @@ describe('dashboard welcome banner', () => {
       client.setQueryData(queryKeys.onboarding.state(), { state: paused })
     )
     expect(await screen.findByText(PAUSED)).toBeTruthy()
-    expect(
-      screen.queryByRole('button', { name: 'Dismiss notification' })
-    ).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Dismiss' })).toBeNull()
   })
 
   it('dismisses for the current page when storage is unavailable', async () => {
@@ -214,9 +205,7 @@ describe('dashboard welcome banner', () => {
       .mockImplementation(() => undefined)
     setup(state())
     await screen.findByText(LIVE)
-    fireEvent.click(
-      screen.getByRole('button', { name: 'Dismiss notification' })
-    )
+    fireEvent.click(screen.getByRole('button', { name: 'Dismiss' }))
     expect(screen.queryByText(LIVE)).toBeNull()
     expect(warning).toHaveBeenCalledOnce()
   })
@@ -228,9 +217,7 @@ describe('dashboard welcome banner', () => {
     vi.spyOn(console, 'warn').mockImplementation(() => undefined)
     setup(state())
     await screen.findByText(LIVE)
-    fireEvent.click(
-      screen.getByRole('button', { name: 'Dismiss notification' })
-    )
+    fireEvent.click(screen.getByRole('button', { name: 'Dismiss' }))
     expect(screen.queryByText(LIVE)).toBeNull()
   })
 
