@@ -13,6 +13,20 @@ const intlMiddleware = createMiddleware({
 })
 
 export default function proxy(request: NextRequest) {
+  const { pathname, searchParams } = request.nextUrl
+  const rootLocale = locales.find(
+    (locale) => pathname === `/${locale}` || pathname === `/${locale}/`
+  )
+  if (
+    (pathname === '/' || rootLocale) &&
+    searchParams.get('shop')?.trim() &&
+    searchParams.get('host')?.trim() &&
+    (!searchParams.has('embedded') || searchParams.get('embedded') === '1')
+  ) {
+    const target = new URL(request.url)
+    target.pathname = `/${rootLocale ?? defaultLocale}/dashboard`
+    return NextResponse.redirect(target)
+  }
   // The admin screens exist in English only.
   if (/^\/(?:ar|ur|es|fr|tr)\/admin(?:\/|$)/.test(request.nextUrl.pathname)) {
     const target = request.nextUrl.clone()

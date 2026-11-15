@@ -2,7 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { useStartupReady } from '@/shared/hooks/useStartupPerformance'
+import {
+  useStartupReady,
+  useStartupPainted,
+} from '@/shared/hooks/useStartupPerformance'
 import { ApiError } from '@/shared/lib/http'
 import { createLogger } from '@/shared/lib/logger'
 import { usePendingManualOrders } from '@/features/orders'
@@ -79,6 +82,7 @@ export function useConfirmationsList({
   })
 
   useStartupReady('dashboard-confirmations-ready', query.isSuccess)
+  useStartupPainted('dashboard-confirmations-painted', query.isSuccess)
   const pages = query.data?.pages
   const page = pages?.[0]
   const serverRows = useMemo(

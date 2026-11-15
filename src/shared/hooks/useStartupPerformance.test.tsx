@@ -1,6 +1,9 @@
 import { renderHook, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { useStartupPerformance } from './useStartupPerformance'
+import {
+  useStartupPerformance,
+  useStartupPainted,
+} from './useStartupPerformance'
 
 const onReport = vi.fn().mockResolvedValue(undefined)
 const mode = {
@@ -15,6 +18,29 @@ vi.mock('next/navigation', () => ({
 }))
 
 describe('Shopify Web Vitals diagnostics lifecycle', () => {
+  it('reports successful content after an intervening frame and cancels unmounted work', () => {
+    window.history.replaceState(null, '', '/en/dashboard?akeed_perf=1')
+    const frames: FrameRequestCallback[] = []
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+      frames.push(callback)
+      return frames.length
+    })
+    const cancel = vi.spyOn(window, 'cancelAnimationFrame')
+    const view = renderHook(
+      ({ ready }) =>
+        useStartupPainted('dashboard-confirmations-painted', ready),
+      { initialProps: { ready: false } }
+    )
+    expect(frames).toHaveLength(0)
+    view.rerender({ ready: true })
+    expect(console.debug).not.toHaveBeenCalled()
+    frames[0](0)
+    expect(console.debug).not.toHaveBeenCalled()
+    frames[1](1)
+    expect(console.debug).toHaveBeenCalledTimes(1)
+    view.unmount()
+    expect(cancel).toHaveBeenCalled()
+  })
   beforeEach(() => {
     vi.clearAllMocks()
     onReport.mockResolvedValue(undefined)

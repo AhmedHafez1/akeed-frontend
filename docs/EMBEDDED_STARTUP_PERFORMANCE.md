@@ -64,3 +64,26 @@ Once this code is available in an owner-controlled deployment, enable the flag i
 Save only the whitelisted diagnostic records. Record the final browser LCP candidate and its structural locator, Shopify's eventual report, each startup duration, and whether onboarding repeated before normal polling/focus refresh. A Performance panel recording can identify the loading/evaluation critical path locally; inspect/redact it before sharing because raw traces can contain authentication and merchant data. Do not copy the full iframe URL, request headers or response payloads into a report.
 
 Report implementation, synthetic verification, deployment and live verification separately. This change is not deployed by the profiling script. Shopify's target is p75 LCP at most 2.5 seconds, INP at most 200 milliseconds and CLS at most 0.1 over the field evaluation window; a small local sample cannot establish that result. See [Shopify's performance guidance](https://shopify.dev/docs/apps/build/performance/admin-installation-oauth) and [Web Vitals API](https://shopify.dev/docs/api/app-home/latest/apis/device-and-platform-integration/web-vitals-api).
+
+
+## Startup sequencing and request attribution
+
+Embedded root requests (`/` or a locale root) with nonempty `shop` and `host` redirect on the server to the locale dashboard. If `embedded` is supplied it must equal `1`. Query parameters survive the redirect; ordinary website entry is unchanged. The dashboard gate still sends pending stores to onboarding, and the client landing gate remains a fallback.
+
+After the App Bridge token is primed, onboarding starts alongside token exchange. The gate confirms installation before consuming the full onboarding response or populating its query cache. Fast speculative responses are retained until consumption, failed speculative reads can be retried after installation, and context changes abort obsolete transports and fence their late results. Dashboard destinations start confirmations and overview prefetches before rendering or redirecting. They use the mounted hooks' exact query options and 30-second provider freshness; normal focus and polling refreshes remain active. Embedded verification links preserve their query parameters while redirecting to confirmations.
+
+Additional opt-in diagnostics:
+
+| Metric | Meaning |
+| --- | --- |
+| `embedded-layout-ready` | The dynamically loaded embedded layout has mounted. |
+| `navigation-start` | Sidebar pointer/keyboard activation; paired with `route-transition` using a numeric `navigationId`. A paired transition's value is elapsed milliseconds, while an unpaired initial transition remains navigation-relative. |
+| `api-request` | One same-origin API resource: duration, `ttfbMs` (responseStart minus requestStart), allowlisted route and numeric `serverTiming` values. Unknown API routes become `/api/other`; query strings, identifiers and timing descriptions are omitted. |
+| `dashboard-confirmations-painted` | A frame-scheduled marker after successful confirmations content commits, separate from the query-success marker. It is an approximation of paint opportunity, not a field Web Vital. |
+| Vital with `final: true` | The last browser LCP candidate/structural locator and latest supplied Shopify vitals, flushed when the document becomes hidden. Missing Shopify reports stay missing. |
+
+Backend `Server-Timing` fields are `auth`, `handler`, `total`, `db`, `dbmax`, `dbq` and `dbconn`. All values are numeric; `dbq` and `dbconn` are counts despite the header's `dur` syntax. Summed database time overlaps concurrent work and must not be added to total request time. Connection counts describe generations first observed during each request's window, including reconnects; overlapping requests can share that observation.
+
+Keep readiness targets separate from Shopify's rolling 28-day field report: cold dashboard readiness p75 at most 2.5 seconds, warm reload at most 1.5 seconds, paired cached navigation at most 200 ms; field LCP at most 2.5 seconds, INP at most 200 ms and CLS at most 0.1. Compare at least five equivalent cold, warm-reload and sidebar runs in English and Arabic, report sample counts, and retain the final LCP locator. Match the capture window to backend onboarding/list/overview and boot-probe logs. Single runs and synthetic fixture improvements do not establish production targets.
+
+The server-free profiler now mounts real confirmations/overview query options alongside activation and records request starts. Its baseline comparison substitutes the baseline gate/auth helpers only; it does not reproduce Next.js server proxy/RSC/chunk latency, real Shopify framing or backend network distance. The locale-root proxy behavior is covered separately by routing tests. Output is stored as `.tmp/startup-performance/round2-browser-comparison.json`.

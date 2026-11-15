@@ -14,6 +14,7 @@ import {
 } from '@/shared/lib/locale'
 import { EmbeddedLanguageSelector } from './EmbeddedLanguageSelector'
 import { EmbeddedNavigation } from './EmbeddedNavigation'
+import { useStartupReady } from '@/shared/hooks/useStartupPerformance'
 
 /**
  * EmbeddedLayout — Shopify Polaris Integration
@@ -47,6 +48,7 @@ interface EmbeddedLayoutProps {
 }
 
 export function EmbeddedLayout({ children }: EmbeddedLayoutProps) {
+  useStartupReady('embedded-layout-ready', true)
   const locale = getLocaleFromPathname(usePathname() ?? '/')
 
   return (

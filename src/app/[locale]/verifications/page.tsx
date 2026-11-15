@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
@@ -38,10 +38,13 @@ function EmbeddedVerificationsRedirect() {
   const pathname = usePathname()
   const router = useRouter()
   const locale = getLocaleFromPathname(pathname ?? '')
+  const search = useSearchParams().toString()
 
   useEffect(() => {
-    router.replace(`/${locale}/dashboard?tab=confirmations`)
-  }, [locale, router])
+    const params = new URLSearchParams(search)
+    params.set('tab', 'confirmations')
+    router.replace(`/${locale}/dashboard?${params}`)
+  }, [locale, router, search])
 
   return null
 }
