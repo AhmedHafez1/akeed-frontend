@@ -1305,6 +1305,7 @@
       },
       "usage": {
         "trigger": "{count, plural, one {{formatted} message restant} other {{formatted} messages restants}}",
+        "triggerShort": "{count, plural, one {{formatted} message} other {{formatted} messages}}",
         "triggerUnknown": "Utilisation des messages",
         "heading": "Utilisation des messages",
         "allowance": {

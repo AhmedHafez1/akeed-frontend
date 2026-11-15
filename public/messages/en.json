@@ -2474,6 +2474,7 @@
       },
       "usage": {
         "trigger": "{count, plural, one {{formatted} message left} other {{formatted} messages left}}",
+        "triggerShort": "{count, plural, one {{formatted} message} other {{formatted} messages}}",
         "triggerUnknown": "Message usage",
         "heading": "Message usage",
         "allowance": {

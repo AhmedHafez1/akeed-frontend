@@ -1305,6 +1305,7 @@
       },
       "usage": {
         "trigger": "{count, plural, one {{formatted} mesaj kaldı} other {{formatted} mesaj kaldı}}",
+        "triggerShort": "{count, plural, one {{formatted} mesaj} other {{formatted} mesaj}}",
         "triggerUnknown": "Mesaj kullanımı",
         "heading": "Mesaj kullanımı",
         "allowance": {
