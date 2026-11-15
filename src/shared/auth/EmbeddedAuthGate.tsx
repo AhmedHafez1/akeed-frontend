@@ -21,6 +21,11 @@ import { createLogger } from '@/shared/lib/logger'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
 import { queryKeys } from '@/shared/query/keys'
 import { startStartupStage } from '@/shared/lib/startup-performance'
+import {
+  confirmationsListOptions,
+  verificationOverviewOptions,
+} from '@/features/dashboard/api/verificationQueries'
+import { resolveDashboardRange } from '@/features/dashboard/domain/confirmationsUrlState'
 
 const logger = createLogger('EmbeddedAuthGate')
 const queryScopes = new WeakMap<
@@ -146,7 +151,9 @@ export function EmbeddedAuthGate({
       }
 
       try {
-        const isInstalled = await ensureEmbeddedInstall(shopDomain, shopify)
+        const isInstalled = await ensureEmbeddedInstall(shopDomain, shopify, {
+          prefetchOnboarding: onboardingGate !== 'none',
+        })
         if (!isCurrent()) return
         if (!isInstalled) {
           finish(false)
@@ -171,6 +178,23 @@ export function EmbeddedAuthGate({
             onboardingGate,
             onboardingStatus,
           })
+
+          if (
+            redirectDestination === 'dashboard' ||
+            (onboardingGate === 'dashboard' && !redirectDestination)
+          ) {
+            const dateRange = resolveDashboardRange(
+              new URLSearchParams(search).get('range')
+            )
+            // The mounted hooks join these exact queries. Do not wait for
+            // dashboard data to release the authentication gate.
+            void queryClient.prefetchInfiniteQuery(
+              confirmationsListOptions({ tab: 'all', dateRange, search: '' })
+            )
+            void queryClient.prefetchQuery(
+              verificationOverviewOptions(dateRange)
+            )
+          }
 
           if (redirectDestination) {
             const destinationPath = withLocale(

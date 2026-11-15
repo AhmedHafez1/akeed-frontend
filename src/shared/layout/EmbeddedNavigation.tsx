@@ -20,6 +20,7 @@
 
 import { usePathname, useSearchParams } from 'next/navigation'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
+import { markNavigationStart } from '@/shared/lib/startup-performance'
 
 export function EmbeddedNavigation() {
   const pathname = usePathname()
@@ -28,7 +29,20 @@ export function EmbeddedNavigation() {
     useSearchParams().get('akeed_perf') === '1' ? '?akeed_perf=1' : ''
 
   return (
-    <s-app-nav>
+    <s-app-nav
+      onPointerDown={(event) => {
+        const link = (event.target as Element).closest('s-link')
+        const href = link?.getAttribute('href')
+        if (href) markNavigationStart(href)
+      }}
+      onKeyDown={(event) => {
+        if (event.key !== 'Enter') return
+        const href = (event.target as Element)
+          .closest('s-link')
+          ?.getAttribute('href')
+        if (href) markNavigationStart(href)
+      }}
+    >
       <s-link href={`/${locale}/dashboard${diagnosticSearch}`} rel="home">
         Dashboard
       </s-link>

@@ -51,6 +51,9 @@ const SERVER_SCOPE: EmbeddedAuthScope = { key: null }
 let scope: EmbeddedAuthScope = SERVER_SCOPE
 let installRequest: Promise<boolean> | null = null
 let onboardingRequest: Promise<OnboardingStateResponse> | null = null
+let speculativeOnboarding: Promise<OnboardingStateResponse> | null = null
+let scopeAbort = new AbortController()
+let onboardingAbort: AbortController | null = null
 const logger = createLogger('EmbeddedAuth')
 
 export function getEmbeddedAuthScope(): EmbeddedAuthScope {
@@ -130,6 +133,11 @@ export function setCachedOnboardingStatus(
 }
 
 export function clearEmbeddedAuthCaches(): void {
+  scopeAbort.abort()
+  scopeAbort = new AbortController()
+  onboardingAbort?.abort()
+  onboardingAbort = null
+  speculativeOnboarding = null
   scope = { key: scope.key }
   installRequest = null
   onboardingRequest = null
@@ -140,7 +148,8 @@ export function clearEmbeddedAuthCaches(): void {
 /** Share only in-flight work; successful installation keeps the existing TTL. */
 export function ensureEmbeddedInstall(
   shopDomain: string,
-  shopify: ShopifyGlobal | null
+  shopify: ShopifyGlobal | null,
+  options: { prefetchOnboarding?: boolean } = {}
 ): Promise<boolean> {
   const expected = getEmbeddedAuthScope()
   if (
@@ -152,6 +161,7 @@ export function ensureEmbeddedInstall(
     )
   if (getCachedInstallStatus(shopDomain) === true) return Promise.resolve(true)
   if (installRequest) return installRequest
+  const signal = scopeAbort.signal
   const request = (async () => {
     let installed = false
     if (shopify) {
@@ -162,9 +172,16 @@ export function ensureEmbeddedInstall(
         assertScope(expected)
         if (token) {
           primeShopifySessionToken(token)
+          if (options.prefetchOnboarding && !getCachedOnboardingStatus()) {
+            const early = fetchEmbeddedOnboardingState({ speculative: true })
+            speculativeOnboarding = early
+            void early.catch(() => {
+              if (speculativeOnboarding === early) speculativeOnboarding = null
+            })
+          }
           installed = await measureStartup(
             'token-exchange',
-            () => performTokenExchange(token),
+            () => performTokenExchange(token, signal),
             Boolean
           )
           assertScope(expected)
@@ -179,12 +196,18 @@ export function ensureEmbeddedInstall(
     if (!installed) {
       installed = await measureStartup(
         'install-check',
-        () => checkEmbeddedInstall(shopDomain),
+        () => checkEmbeddedInstall(shopDomain, signal),
         Boolean
       )
       assertScope(expected)
     }
     if (installed) setCachedInstallStatus(shopDomain, true)
+    else {
+      speculativeOnboarding = null
+      onboardingRequest = null
+      onboardingCache = null
+      onboardingAbort?.abort()
+    }
     return installed
   })()
   installRequest = request
@@ -248,11 +271,13 @@ export function resolveOnboardingRedirect(params: {
  *          install check).
  */
 export async function performTokenExchange(
-  sessionToken: string
+  sessionToken: string,
+  signal?: AbortSignal
 ): Promise<boolean> {
   try {
     const response = await fetch('/api/auth/shopify/token-exchange', {
       method: 'POST',
+      signal,
       headers: {
         'Content-Type': 'application/json',
         accept: 'application/json',
@@ -276,11 +301,13 @@ export async function performTokenExchange(
  * Returns true only when the endpoint confirms the app is installed.
  */
 export async function checkEmbeddedInstall(
-  shopDomain: string
+  shopDomain: string,
+  signal?: AbortSignal
 ): Promise<boolean> {
   const checkUrl = `/api/auth/shopify/check?shop=${encodeURIComponent(shopDomain)}`
   const response = await fetch(checkUrl, {
     method: 'GET',
+    signal,
     credentials: 'include',
     headers: {
       accept: 'application/json',
@@ -321,7 +348,8 @@ function isRetryableOnboardingError(error: unknown): boolean {
  * token/session timing races during embedded app initialization.
  */
 async function fetchOnboardingStateWithRetry(
-  expected: EmbeddedAuthScope
+  expected: EmbeddedAuthScope,
+  signal: AbortSignal
 ): Promise<OnboardingStateResponse> {
   const maxAttempts = 3
 
@@ -329,7 +357,7 @@ async function fetchOnboardingStateWithRetry(
     assertScope(expected)
     try {
       const response = await measureStartup('onboarding-request', () =>
-        fetchOnboardingState()
+        fetchOnboardingState(signal)
       )
       assertScope(expected)
       return response
@@ -346,16 +374,28 @@ async function fetchOnboardingStateWithRetry(
   throw new Error('Unable to resolve onboarding state')
 }
 
-export function fetchEmbeddedOnboardingState(): Promise<OnboardingStateResponse> {
+export function fetchEmbeddedOnboardingState(
+  options: { speculative?: boolean } = {}
+): Promise<OnboardingStateResponse> {
   const expected = getEmbeddedAuthScope()
   if (!expected.key)
     return Promise.reject(
       new DOMException('Missing embedded context.', 'AbortError')
     )
-  if (onboardingRequest) return onboardingRequest
-  const request = fetchOnboardingStateWithRetry(expected).then((response) => {
+  // Retain a fast speculative response until the confirmed-install gate
+  // consumes its full envelope. Ordinary reads still retain only in-flight work.
+  const early = !options.speculative ? speculativeOnboarding : null
+  if (!early && onboardingRequest) return onboardingRequest
+  if (early) speculativeOnboarding = null
+  if (!early) onboardingAbort = new AbortController()
+  const signal = AbortSignal.any([scopeAbort.signal, onboardingAbort!.signal])
+  const request = (
+    early ?? fetchOnboardingStateWithRetry(expected, signal)
+  ).then((response) => {
     assertScope(expected)
-    setCachedOnboardingStatus(response.state.onboardingStatus)
+    signal.throwIfAborted()
+    if (!options.speculative)
+      setCachedOnboardingStatus(response.state.onboardingStatus)
     return response
   })
   onboardingRequest = request

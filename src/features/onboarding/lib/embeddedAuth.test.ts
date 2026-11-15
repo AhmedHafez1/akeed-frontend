@@ -50,6 +50,88 @@ let bridge: ShopifyGlobal
 let fetchMock: ReturnType<typeof vi.fn>
 
 describe('embedded startup request ownership', () => {
+  it('starts onboarding before exchange resolves and retains a fast full envelope until consumption', async () => {
+    const exchange = deferred<Response>()
+    fetchMock.mockReturnValueOnce(exchange.promise)
+    const installed = ensureEmbeddedInstall('synthetic.myshopify.com', bridge, {
+      prefetchOnboarding: true,
+    })
+    await vi.waitFor(() =>
+      expect(fetchOnboardingState).toHaveBeenCalledTimes(1)
+    )
+    expect(getCachedOnboardingStatus()).toBeNull()
+    exchange.resolve(new Response(JSON.stringify({ installed: true })))
+    expect(await installed).toBe(true)
+    const [a, b] = await Promise.all([
+      fetchEmbeddedOnboardingState(),
+      fetchEmbeddedOnboardingState(),
+    ])
+    expect(a).toBe(fullState)
+    expect(b).toBe(a)
+    expect(getCachedOnboardingStatus()).toBe('completed')
+    expect(fetchOnboardingState).toHaveBeenCalledTimes(1)
+  })
+
+  it('refetches a failed speculative read after successful installation', async () => {
+    vi.mocked(fetchOnboardingState).mockRejectedValueOnce(
+      new OnboardingApiError('not installed', 401, null)
+    )
+    const exchange = deferred<Response>()
+    fetchMock.mockReturnValueOnce(exchange.promise)
+    const installed = ensureEmbeddedInstall('synthetic.myshopify.com', bridge, {
+      prefetchOnboarding: true,
+    })
+    await vi.waitFor(() =>
+      expect(fetchOnboardingState).toHaveBeenCalledTimes(1)
+    )
+    exchange.resolve(new Response(JSON.stringify({ installed: true })))
+    await installed
+    expect(await fetchEmbeddedOnboardingState()).toBe(fullState)
+    expect(fetchOnboardingState).toHaveBeenCalledTimes(2)
+  })
+
+  it('discards speculative success when installation is refused', async () => {
+    fetchMock.mockImplementation(
+      async () =>
+        new Response(JSON.stringify({ installed: false }), {
+          headers: { 'content-type': 'application/json' },
+        })
+    )
+    expect(
+      await ensureEmbeddedInstall('synthetic.myshopify.com', bridge, {
+        prefetchOnboarding: true,
+      })
+    ).toBe(false)
+    expect(getCachedOnboardingStatus()).toBeNull()
+    await fetchEmbeddedOnboardingState()
+    expect(fetchOnboardingState).toHaveBeenCalledTimes(2)
+  })
+
+  it('aborts both transports and rejects late results after a context switch', async () => {
+    const exchange = deferred<Response>()
+    const onboarding = deferred<typeof fullState>()
+    fetchMock.mockReturnValueOnce(exchange.promise)
+    vi.mocked(fetchOnboardingState).mockReturnValueOnce(onboarding.promise)
+    const installed = ensureEmbeddedInstall('synthetic.myshopify.com', bridge, {
+      prefetchOnboarding: true,
+    })
+    const rejected = expect(installed).rejects.toMatchObject({
+      name: 'AbortError',
+    })
+    await vi.waitFor(() =>
+      expect(fetchOnboardingState).toHaveBeenCalledTimes(1)
+    )
+    const signal = vi.mocked(fetchOnboardingState).mock.calls[0][0]!
+    const exchangeSignal = fetchMock.mock.calls[0][1].signal as AbortSignal
+    navigate('another')
+    getEmbeddedAuthScope()
+    expect(signal.aborted).toBe(true)
+    expect(exchangeSignal.aborted).toBe(true)
+    onboarding.resolve(fullState)
+    exchange.resolve(new Response(JSON.stringify({ installed: true })))
+    await rejected
+    expect(getCachedOnboardingStatus()).toBeNull()
+  })
   beforeEach(() => {
     vi.clearAllMocks()
     navigate()

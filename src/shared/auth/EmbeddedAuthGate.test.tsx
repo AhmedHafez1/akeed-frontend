@@ -12,6 +12,10 @@ import { fetchOnboardingState } from '@/features/onboarding/api/onboardingApi'
 import { activationStateOptions } from '@/features/dashboard/api/activationQueries'
 import { api } from '@/shared/lib/auth'
 import { queryKeys } from '@/shared/query/keys'
+import {
+  confirmationsListOptions,
+  verificationOverviewOptions,
+} from '@/features/dashboard/api/verificationQueries'
 
 const router = { replace: vi.fn() }
 const bridge = {
@@ -106,8 +110,24 @@ describe('embedded gate and dashboard cache integration', () => {
       const view = render(tree(client))
       await screen.findByText('ready:false')
       expect(fetchOnboardingState).toHaveBeenCalledTimes(1)
-      expect(api.get).not.toHaveBeenCalled()
+      expect(api.get).toHaveBeenCalledTimes(2)
       expect(bridge.idToken).toHaveBeenCalledTimes(1)
+      await waitFor(() =>
+        expect(
+          client.getQueryData(
+            confirmationsListOptions({
+              tab: 'all',
+              dateRange: 'last_30_days',
+              search: '',
+            }).queryKey
+          )
+        ).toBeDefined()
+      )
+      expect(
+        client.getQueryData(
+          verificationOverviewOptions('last_30_days').queryKey
+        )
+      ).toBeDefined()
       expect(client.getQueryData(queryKeys.onboarding.state())).toEqual(
         response
       )
@@ -120,7 +140,7 @@ describe('embedded gate and dashboard cache integration', () => {
           queryKey: queryKeys.onboarding.state(),
         })
       })
-      expect(api.get).toHaveBeenCalledTimes(1)
+      expect(api.get).toHaveBeenCalledTimes(3)
       client.clear()
     }
   )

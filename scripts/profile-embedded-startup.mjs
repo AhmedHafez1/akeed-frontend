@@ -40,7 +40,7 @@ const stubs = {
     'export const useAppBridgeLoading=()=>{};',
   '@/shared/lib/auth': `
     export const primeShopifySessionToken=()=>{};
-    export const api={get:()=>window.fixture.readState('activation')};
+    export const api={get:(url)=>url.startsWith('/api/onboarding/')?window.fixture.readState('activation'):window.fixture.readApi(url)};
   `,
   '@/features/onboarding/api/onboardingApi': `
     export const fetchOnboardingState=()=>window.fixture.readState('gate');
@@ -50,24 +50,30 @@ const stubs = {
 const entry = `
   import React, {useEffect} from 'react';
   import {createRoot} from 'react-dom/client';
-  import {QueryClient,QueryClientProvider,useQuery} from '@tanstack/react-query';
+  import {QueryClient,QueryClientProvider,useQuery,useInfiniteQuery} from '@tanstack/react-query';
   import {EmbeddedAuthGate} from '@/shared/auth/EmbeddedAuthGate';
   import {activationStateOptions} from '@/features/dashboard/api/activationQueries';
+  import {confirmationsListOptions,verificationOverviewOptions} from '@/features/dashboard/api/verificationQueries';
   import {usePathname,useRouter} from 'next/navigation';
   import {useAkeedMode} from '@/shared/hooks/useAkeedMode';
   import {useStartupPerformance,useStartupReady} from '@/shared/hooks/useStartupPerformance';
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   const state={state:{onboardingStatus:'completed',permissions:{canUpdateConfiguration:false}}};
-  window.fixture={reads:{gate:0,activation:0,exchange:0,token:0},errors:[],ready:[],
+  window.fixture={reads:{gate:0,activation:0,exchange:0,token:0,list:0,overview:0},errors:[],ready:[],events:[],
     bridge:{idToken:async()=>{window.fixture.reads.token++;await sleep(20);return 'synthetic-only'},loading:()=>{},webVitals:{onReport:async()=>{}}},
-    readState:async kind=>{window.fixture.reads[kind]++;await sleep(120);return state}};
-  window.fetch=async()=>{window.fixture.reads.exchange++;await sleep(80);return new Response(JSON.stringify({installed:true}),{headers:{'Content-Type':'application/json'}})};
+    readState:async kind=>{window.fixture.reads[kind]++;window.fixture.events.push({kind,at:performance.now()});await sleep(120);return state}};
+  window.fixture.readApi=async url=>{const kind=url.includes('/overview')?'overview':'list';window.fixture.reads[kind]++;window.fixture.events.push({kind,at:performance.now()});await sleep(100);return kind==='list'?{data:[],next_cursor:null}:{overview:{synthetic:true}}};
+  window.fetch=async()=>{window.fixture.reads.exchange++;window.fixture.events.push({kind:'exchange',at:performance.now()});await sleep(80);window.fixture.events.push({kind:'exchange-ended',at:performance.now()});return new Response(JSON.stringify({installed:true}),{headers:{'Content-Type':'application/json'}})};
   window.addEventListener('error',e=>window.fixture.errors.push(e.message));
   function Activation(){
     const query=useQuery(activationStateOptions());
+    const list=useInfiniteQuery(confirmationsListOptions({tab:'all',dateRange:'last_30_days',search:''}));
+    const overview=useQuery(verificationOverviewOptions('last_30_days'));
+    const ready=query.isSuccess&&list.isSuccess&&overview.isSuccess;
+    useStartupReady('dashboard-confirmations-ready',list.isSuccess);
     useStartupReady('dashboard-activation-ready',query.isSuccess);
-    useEffect(()=>{if(query.isSuccess)window.fixture.ready.push(performance.now())},[query.isSuccess]);
-    return <main><h1>{query.isSuccess?'Synthetic dashboard ready':'Loading activation'}</h1></main>;
+    useEffect(()=>{if(ready)window.fixture.ready.push(performance.now())},[ready]);
+    return <main><h1>{ready?'Synthetic dashboard ready':'Loading activation'}</h1></main>;
   }
   function App(){
     useStartupPerformance(useAkeedMode());
@@ -170,6 +176,7 @@ try {
                   .args()[1]
                   .jsonValue()
                   .then((data) => ({ phase: capturedPhase, ...data }))
+                  .catch(() => null)
               )
             }
           })
@@ -198,6 +205,7 @@ try {
           const initial = await page.evaluate(() => ({
             ...window.fixture.reads,
             readyAt: window.fixture.ready[0],
+            events: window.fixture.events,
           }))
           phase = 'warm-navigation'
           await page.getByRole('button', { name: 'Navigate' }).click()
@@ -221,7 +229,7 @@ try {
             initial,
             warmNavigation: warm,
             reload,
-            diagnostics: await Promise.all(diagnostics),
+            diagnostics: (await Promise.all(diagnostics)).filter(Boolean),
             errors,
           })
           await context.close()
@@ -238,11 +246,17 @@ const report = {
   observedAt: new Date().toISOString(),
   baseline,
   synthetic: true,
-  fixtureDelaysMs: { token: 20, exchange: 80, onboarding: 120 },
+  fixtureDelaysMs: {
+    token: 20,
+    exchange: 80,
+    onboarding: 120,
+    list: 100,
+    overview: 100,
+  },
   results,
 }
 writeFileSync(
-  path.join(output, 'browser-comparison.json'),
+  path.join(output, 'round2-browser-comparison.json'),
   JSON.stringify(report, null, 2) + '\n'
 )
 for (const version of ['before', 'after']) {
@@ -265,10 +279,17 @@ for (const version of ['before', 'after']) {
           run.warmNavigation.gate + run.warmNavigation.activation !==
           run.initial.gate + run.initial.activation
       ).length,
+      listReads: [...new Set(runs.map((run) => run.initial.list))],
+      overviewReads: [...new Set(runs.map((run) => run.initial.overview))],
+      overlappingOnboarding: runs.filter(
+        (run) =>
+          run.initial.events.find((e) => e.kind === 'gate')?.at <
+          run.initial.events.find((e) => e.kind === 'exchange-ended')?.at
+      ).length,
       errors: runs.flatMap((run) => run.errors),
     })
   )
 }
-console.log(path.join(output, 'browser-comparison.json'))
+console.log(path.join(output, 'round2-browser-comparison.json'))
 if (results.some((result) => result.errors.length || !result.initial.readyAt))
   process.exitCode = 1

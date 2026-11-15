@@ -6,9 +6,53 @@ import {
   reportShopifyVitals,
   sanitizedStartupPath,
   startStartupStage,
+  markNavigationStart,
+  parseServerTiming,
 } from './startup-performance'
 
 describe('opt-in startup diagnostics', () => {
+  it('accepts only known finite numeric server timings', () => {
+    expect(
+      parseServerTiming([
+        { name: 'auth', duration: 12, description: 'secret' },
+        { name: 'dbq', duration: 3, description: '' },
+        { name: 'private', duration: 100, description: 'secret' },
+        { name: 'db', duration: '10', description: '' },
+        { name: 'handler', duration: Infinity, description: '' },
+      ] as unknown as PerformanceServerTiming[])
+    ).toEqual({ auth: 12, dbq: 3 })
+  })
+
+  it('pairs sidebar starts with matching route commits and flushes final safe vitals', () => {
+    window.history.replaceState(null, '', '/en/dashboard?akeed_perf=1')
+    const cleanup = observeStartupPerformance()
+    markNavigationStart('/en/settings?token=secret')
+    window.history.replaceState(null, '', '/en/settings?akeed_perf=1')
+    window.dispatchEvent(new Event('akeed:performance-route'))
+    const calls = vi.mocked(console.debug).mock.calls.map((call) => call[1])
+    const start = calls.find((call) => call.metric === 'navigation-start')
+    const end = calls.find((call) => call.metric === 'route-transition')
+    expect(end).toMatchObject({
+      navigationId: start.navigationId,
+      path: '/en/settings',
+    })
+    reportShopifyVitals({ metrics: [{ name: 'LCP', value: 1200 }] })
+    vi.spyOn(document, 'visibilityState', 'get').mockReturnValue('hidden')
+    document.dispatchEvent(new Event('visibilitychange'))
+    expect(console.debug).toHaveBeenCalledWith(
+      '[Akeed performance]',
+      expect.objectContaining({
+        metric: 'LCP',
+        value: 1200,
+        final: true,
+        source: 'shopify',
+      })
+    )
+    expect(JSON.stringify(vi.mocked(console.debug).mock.calls)).not.toContain(
+      'secret'
+    )
+    cleanup()
+  })
   beforeEach(() => {
     window.history.replaceState(null, '', '/ar/dashboard')
     vi.spyOn(console, 'debug').mockImplementation(() => undefined)
@@ -118,6 +162,38 @@ describe('opt-in startup diagnostics', () => {
         { startTime: 500, element: document.querySelector('h1') },
       ],
     })
+    observers.get('resource')!({
+      getEntries: () => [
+        {
+          name: `${window.location.origin}/api/onboarding/state?shop=secret`,
+          duration: 150,
+          requestStart: 20,
+          responseStart: 120,
+          serverTiming: [{ name: 'dbq', duration: 4, description: 'secret' }],
+        },
+      ],
+    })
+    expect(console.debug).toHaveBeenCalledWith(
+      '[Akeed performance]',
+      expect.objectContaining({
+        metric: 'api-request',
+        path: '/api/onboarding/state',
+        value: 150,
+        ttfbMs: 100,
+        serverTiming: { dbq: 4 },
+      })
+    )
+    vi.spyOn(document, 'visibilityState', 'get').mockReturnValue('hidden')
+    document.dispatchEvent(new Event('visibilitychange'))
+    expect(console.debug).toHaveBeenCalledWith(
+      '[Akeed performance]',
+      expect.objectContaining({
+        metric: 'LCP',
+        value: 500,
+        final: true,
+        source: 'browser',
+      })
+    )
     window.history.replaceState(
       null,
       '',

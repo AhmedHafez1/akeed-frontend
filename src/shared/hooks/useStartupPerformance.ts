@@ -59,3 +59,23 @@ export function useStartupReady(stage: StartupStage, ready: boolean) {
     }
   }, [ready, stage])
 }
+
+/** A frame after the successful content commit; separate from field LCP. */
+export function useStartupPainted(stage: StartupStage, ready: boolean) {
+  const reported = useRef(false)
+  useEffect(() => {
+    if (!ready || reported.current || !isStartupPerformanceEnabled()) return
+    let second: number | undefined
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(() => {
+        if (reported.current) return
+        reported.current = true
+        markStartupReady(stage)
+      })
+    })
+    return () => {
+      cancelAnimationFrame(first)
+      if (second !== undefined) cancelAnimationFrame(second)
+    }
+  }, [ready, stage])
+}

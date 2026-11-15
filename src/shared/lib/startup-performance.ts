@@ -1,6 +1,8 @@
 'use client'
 
 type StartupStage =
+  | 'embedded-layout-ready'
+  | 'dashboard-confirmations-painted'
   | 'application-effect'
   | 'app-bridge'
   | 'session-token'
@@ -12,6 +14,67 @@ type StartupStage =
   | 'dashboard-stats-ready'
   | 'dashboard-overview-ready'
   | 'dashboard-activation-ready'
+
+const latestShopifyVitals = new Map<string, number>()
+let pendingNavigation: { at: number; path: string; id: number } | null = null
+let navigationSequence = 0
+const SERVER_TIMINGS = new Set([
+  'auth',
+  'handler',
+  'total',
+  'db',
+  'dbmax',
+  'dbq',
+  'dbconn',
+])
+const API_ROUTES = new Set([
+  '/api/auth/shopify/token-exchange',
+  '/api/auth/shopify/check',
+  '/api/onboarding/state',
+  '/api/verifications',
+  '/api/verifications/overview',
+  '/api/verifications/stats',
+  '/api/whatsapp-sender',
+  '/api/whatsapp-sender/connection',
+  '/api/tips',
+  '/api/review-prompt',
+])
+
+export function parseServerTiming(
+  entries: readonly PerformanceServerTiming[] = []
+): Record<string, number> {
+  return Object.fromEntries(
+    entries
+      .filter(
+        (entry) =>
+          SERVER_TIMINGS.has(entry.name) &&
+          typeof entry.duration === 'number' &&
+          Number.isFinite(entry.duration) &&
+          entry.duration >= 0
+      )
+      .map((entry) => [entry.name, entry.duration])
+  )
+}
+
+/** Pair a sidebar activation with the next matching route commit. */
+export function markNavigationStart(path: string): void {
+  if (!isStartupPerformanceEnabled()) return
+  const target = new URL(path, window.location.origin)
+  if (target.origin !== window.location.origin) return
+  const safe = target.pathname.match(
+    /^\/(ar|en|ur|es|fr|tr)\/(dashboard|settings)$/
+  )?.[0]
+  if (!safe) return
+  pendingNavigation = {
+    at: performance.now(),
+    path: safe,
+    id: ++navigationSequence,
+  }
+  emit('navigation-start', pendingNavigation.at, {
+    path: safe,
+    navigationId: pendingNavigation.id,
+  })
+}
 
 const VITALS = new Set(['LCP', 'FCP', 'CLS', 'INP', 'TTFB'])
 const ROUTES = new Set([
@@ -74,6 +137,10 @@ function emit(
     source?: 'browser' | 'shopify'
     outcome?: 'success' | 'failure'
     path?: string
+    final?: boolean
+    navigationId?: number
+    ttfbMs?: number
+    serverTiming?: Record<string, number>
   } = {}
 ) {
   if (!isStartupPerformanceEnabled() || !Number.isFinite(value) || value < 0)
@@ -85,6 +152,16 @@ function emit(
     atMs: Math.round(performance.now()),
     path: extra.path ?? sanitizedStartupPath(),
     build: BUILD,
+    ...(extra.final ? { final: true } : {}),
+    ...(extra.navigationId !== undefined
+      ? { navigationId: extra.navigationId }
+      : {}),
+    ...(extra.ttfbMs !== undefined &&
+    Number.isFinite(extra.ttfbMs) &&
+    extra.ttfbMs >= 0
+      ? { ttfbMs: extra.ttfbMs }
+      : {}),
+    ...(extra.serverTiming ? { serverTiming: extra.serverTiming } : {}),
     ...(extra.element ? { element: extra.element } : {}),
     ...(extra.count !== undefined ? { count: extra.count } : {}),
     ...(extra.source ? { source: extra.source } : {}),
@@ -149,7 +226,10 @@ function elementLocator(element: Element | null): string {
 /** Mount once per app. All observers are optional and read only local timing data. */
 export function observeStartupPerformance(): () => void {
   if (!isStartupPerformanceEnabled()) return () => undefined
+  latestShopifyVitals.clear()
+  let latestLcp: { value: number; element: string; path?: string } | undefined
   const observers: PerformanceObserver[] = []
+  const flushers: (() => void)[] = []
   const routes = [{ at: 0, path: sanitizedStartupPath() }]
   const categoryOf = (entry: PerformanceEntry) => {
     try {
@@ -175,6 +255,10 @@ export function observeStartupPerformance(): () => void {
       )
       observer.observe({ type, buffered: true })
       observers.push(observer)
+      flushers.push(() => {
+        const pending = observer.takeRecords?.()
+        if (pending?.length) callback(pending)
+      })
     } catch {
       /* Older browsers may not implement every performance entry type. */
     }
@@ -226,6 +310,11 @@ export function observeStartupPerformance(): () => void {
       const route = routes.findLast(
         (route) => route.at <= entry.startTime
       )?.path
+      latestLcp = {
+        value: entry.startTime,
+        element: elementLocator(lcp.element ?? null),
+        path: route,
+      }
       emit('LCP', entry.startTime, {
         source: 'browser',
         element: elementLocator(lcp.element ?? null),
@@ -240,16 +329,58 @@ export function observeStartupPerformance(): () => void {
     for (const entry of entries) {
       const category = categoryOf(entry)
       if (category) emit(`resource-${category}`, entry.duration)
+      const resource = entry as PerformanceResourceTiming
+      try {
+        const url = new URL(entry.name)
+        if (
+          url.origin === window.location.origin &&
+          url.pathname.startsWith('/api/')
+        ) {
+          emit('api-request', resource.duration, {
+            path: API_ROUTES.has(url.pathname) ? url.pathname : '/api/other',
+            ttfbMs: resource.responseStart - resource.requestStart,
+            serverTiming: parseServerTiming(resource.serverTiming),
+          })
+        }
+      } catch {
+        /* Non-URL entries carry no request attribution. */
+      }
     }
   })
   const onRoute = () => {
     routes.push({ at: performance.now(), path: sanitizedStartupPath() })
-    emit('route-transition', performance.now())
+    const navigation = pendingNavigation
+    const matches = navigation?.path === sanitizedStartupPath()
+    emit(
+      'route-transition',
+      matches ? performance.now() - navigation.at : performance.now(),
+      {
+        ...(matches ? { navigationId: navigation.id } : {}),
+      }
+    )
+    pendingNavigation = null
     resources()
   }
+  const onHidden = () => {
+    if (document.visibilityState !== 'hidden') return
+    flushers.forEach((flush) => flush())
+    if (latestLcp)
+      emit('LCP', latestLcp.value, {
+        source: 'browser',
+        element: latestLcp.element,
+        path: latestLcp.path,
+        final: true,
+      })
+    for (const [name, value] of latestShopifyVitals)
+      emit(name, value, { source: 'shopify', final: true })
+  }
+  document.addEventListener('visibilitychange', onHidden)
   window.addEventListener('akeed:performance-route', onRoute)
   return () => {
     observers.forEach((observer) => observer.disconnect())
+    document.removeEventListener('visibilitychange', onHidden)
+    pendingNavigation = null
+    latestShopifyVitals.clear()
     window.removeEventListener('load', onLoad)
     window.removeEventListener('akeed:performance-route', onRoute)
     window.clearTimeout(timer)
@@ -261,8 +392,15 @@ export function reportShopifyVitals(report: {
 }): void {
   if (!isStartupPerformanceEnabled() || !Array.isArray(report?.metrics)) return
   for (const metric of report.metrics) {
-    if (metric && VITALS.has(metric.name))
+    if (
+      metric &&
+      VITALS.has(metric.name) &&
+      Number.isFinite(metric.value) &&
+      metric.value >= 0
+    ) {
+      latestShopifyVitals.set(metric.name, metric.value)
       emit(metric.name, metric.value, { source: 'shopify' })
+    }
   }
 }
 

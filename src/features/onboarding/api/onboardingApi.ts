@@ -80,8 +80,11 @@ export function clearKnownOnboardingSource(): void {
   knownSignupSource = null
 }
 
-export async function fetchOnboardingState(): Promise<OnboardingStateResponse> {
+export async function fetchOnboardingState(
+  signal?: AbortSignal
+): Promise<OnboardingStateResponse> {
   const response = await fetchWithAuth('/api/onboarding/state', {
+    signal,
     method: 'GET',
     cache: 'no-store',
   })
@@ -95,6 +98,7 @@ export async function fetchOnboardingState(): Promise<OnboardingStateResponse> {
   }
 
   const result = await parseJsonResponse<OnboardingStateResponse>(response)
+  signal?.throwIfAborted()
   knownOnboardingSource = { platformType: result.state.source.platformType }
   return result
 }
