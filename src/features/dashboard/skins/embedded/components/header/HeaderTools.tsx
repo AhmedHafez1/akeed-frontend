@@ -2,6 +2,7 @@
 
 import { useId } from 'react'
 import { useTranslations } from 'next-intl'
+import { useBreakpoints } from '@shopify/polaris'
 import { GaugeIcon, LightbulbIcon } from '@shopify/polaris-icons'
 import type { TipCardView } from '@/features/tips'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
@@ -65,13 +66,18 @@ export function HeaderTools({
   const unreadTipsLabel = formatCount(unreadTips, locale)
   const showTips = tips.cards.length > 0 || openPanel === 'tips'
 
+  // On a phone "left" gives way so the button fits beside the period select;
+  // screen readers still hear the full wording.
+  const { mdUp } = useBreakpoints({ defaults: { mdUp: true } })
+  const known = view.kind === 'known' && view.limit > 0
+  const usageCount = known
+    ? { count: view.remaining, formatted: formatCount(view.remaining, locale) }
+    : null
+  const usageFullLabel = usageCount
+    ? t('usage.trigger', usageCount)
+    : t('usage.triggerUnknown')
   const usageLabel =
-    view.kind === 'known' && view.limit > 0
-      ? t('usage.trigger', {
-          count: view.remaining,
-          formatted: formatCount(view.remaining, locale),
-        })
-      : t('usage.triggerUnknown')
+    usageCount && !mdUp ? t('usage.triggerShort', usageCount) : usageFullLabel
 
   return (
     <>
@@ -113,6 +119,9 @@ export function HeaderTools({
         ref={usageTriggerRef}
         icon={GaugeIcon}
         label={usageLabel}
+        accessibilityLabel={
+          usageLabel === usageFullLabel ? undefined : usageFullLabel
+        }
         tone={usageTone(view)}
         loading={view.kind === 'loading'}
         expanded={openPanel === 'usage'}

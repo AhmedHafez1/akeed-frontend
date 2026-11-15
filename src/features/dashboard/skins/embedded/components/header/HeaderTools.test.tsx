@@ -130,7 +130,9 @@ describe('HeaderTools', () => {
   it('shows what is left, with a dialog trigger and no badge', () => {
     renderEmbedded(<Harness />, 'en')
     const trigger = usageTrigger()
-    expect(trigger.textContent).toBe('5 messages left')
+    // Tests run at phone width: the short label shows, the full one is read.
+    expect(trigger.textContent).toBe('5 messages')
+    expect(trigger.getAttribute('aria-label')).toBe('5 messages left')
     expect(trigger.getAttribute('aria-haspopup')).toBe('dialog')
     expect(trigger.getAttribute('aria-expanded')).toBe('false')
   })
@@ -348,7 +350,7 @@ describe('HeaderTools', () => {
 
   it('keeps the last count after a failed refresh and offers a retry', () => {
     renderEmbedded(<Harness view={{ ...warning, stale: true }} />, 'en')
-    expect(usageTrigger().textContent).toBe('5 messages left')
+    expect(usageTrigger().getAttribute('aria-label')).toBe('5 messages left')
     fireEvent.click(usageTrigger())
     expect(screen.getByText('Unable to refresh usage')).toBeTruthy()
     expect(

@@ -1305,6 +1305,7 @@
       },
       "usage": {
         "trigger": "{count, plural, one {{formatted} پیغام باقی} other {{formatted} پیغامات باقی}}",
+        "triggerShort": "{count, plural, one {{formatted} پیغام} other {{formatted} پیغامات}}",
         "triggerUnknown": "پیغامات کا استعمال",
         "heading": "پیغامات کا استعمال",
         "allowance": {

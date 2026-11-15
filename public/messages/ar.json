@@ -2468,6 +2468,7 @@
       },
       "usage": {
         "trigger": "{count, plural, zero {لم تتبقَّ رسائل} one {رسالة واحدة متبقية} two {رسالتان متبقيتان} few {{formatted} رسائل متبقية} many {{formatted} رسالة متبقية} other {{formatted} رسالة متبقية}}",
+        "triggerShort": "{count, plural, zero {لا رسائل} one {رسالة واحدة} two {رسالتان} few {{formatted} رسائل} many {{formatted} رسالة} other {{formatted} رسالة}}",
         "triggerUnknown": "استخدام الرسائل",
         "heading": "استخدام الرسائل",
         "allowance": {
