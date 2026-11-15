@@ -2428,6 +2428,7 @@
     },
     "activation": {
       "liveBanner": "Akeed is live. New COD orders will be verified automatically.",
+      "dismiss": "Dismiss",
       "pausedBanner": "Auto-confirm is off. Turn it on in settings so Akeed confirms your new orders.",
       "needsPlanTitle": "Choose a plan so Akeed confirms your real orders",
       "needsPlanBody": "This store already used its free plan. Test messages stay free.",

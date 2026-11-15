@@ -1,6 +1,12 @@
 'use client'
 
-import { Banner, BlockStack, Button, InlineStack } from '@shopify/polaris'
+import {
+  Banner,
+  BlockStack,
+  Button,
+  InlineGrid,
+  InlineStack,
+} from '@shopify/polaris'
 import type {
   ChecklistItem,
   ChecklistItemId,
@@ -13,6 +19,7 @@ export interface ActivationPanelMessages {
   needsPlanBody: string
   choosePlan: string
   settings: string
+  dismiss: string
   checklistTitle: string
   checklistProgress: string
   checklistItems: Record<ChecklistItemId, { title: string; hint?: string }>
@@ -67,21 +74,24 @@ export function ActivationPanel({
           </InlineStack>
         </Banner>
       ) : (
-        <Banner
-          tone={isLive ? 'success' : 'warning'}
-          onDismiss={isLive ? onDismissLive : undefined}
-        >
-          <InlineStack
-            align="space-between"
-            blockAlign="center"
+        <Banner tone={isLive ? 'success' : 'warning'}>
+          <InlineGrid
+            columns={{ xs: '1fr', sm: '1fr auto' }}
+            alignItems="center"
             gap="300"
-            wrap={false}
           >
-            <div className="min-w-0 flex-1">
+            <div className="min-w-0">
               <p>{isLive ? messages.liveBanner : messages.pausedBanner}</p>
             </div>
-            <Button onClick={onOpenSettings}>{messages.settings}</Button>
-          </InlineStack>
+            <InlineStack gap="300" blockAlign="center" align="end" wrap={false}>
+              <Button onClick={onOpenSettings}>{messages.settings}</Button>
+              {isLive && (
+                <Button variant="tertiary" onClick={onDismissLive}>
+                  {messages.dismiss}
+                </Button>
+              )}
+            </InlineStack>
+          </InlineGrid>
         </Banner>
       )}
     </BlockStack>

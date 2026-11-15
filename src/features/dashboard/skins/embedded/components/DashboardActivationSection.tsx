@@ -58,6 +58,7 @@ export function DashboardActivationSection({
           needsPlanBody: t('needsPlanBody'),
           choosePlan: t('choosePlan'),
           settings: t('settings'),
+          dismiss: t('dismiss'),
           checklistTitle: t('checklist.title'),
           checklistProgress: t('checklist.progress', {
             done: doneCount,
