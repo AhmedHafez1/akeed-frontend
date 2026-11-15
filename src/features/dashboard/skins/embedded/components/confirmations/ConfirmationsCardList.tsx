@@ -1,4 +1,3 @@
-import type { MouseEvent } from 'react'
 import { Badge, BlockStack, Box, InlineStack, Text } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
 import { isNeedsActionRow } from '../../../../domain/confirmationRowStatus'
@@ -9,6 +8,8 @@ import { ConfirmationRowActions } from './ConfirmationRowActions'
 import {
   AmountText,
   FollowUpCell,
+  isCardControlClick,
+  StackedCardTimes,
   StatusCell,
   useConfirmationRowView,
   type ConfirmationsListProps,
@@ -59,19 +60,6 @@ function CardCustomer({
   )
 }
 
-/**
- * Clicks on the card's own link and buttons do their own thing. The "…" sheet
- * is portalled, so its clicks bubble here through React though they are not
- * on the card; those are ignored too.
- */
-function isFromControl(event: MouseEvent<HTMLElement>) {
-  const target = event.target as HTMLElement
-  return (
-    !event.currentTarget.contains(target) ||
-    target.closest('a, button') !== null
-  )
-}
-
 function ConfirmationCard({
   row,
   timeZone,
@@ -99,7 +87,7 @@ function ConfirmationCard({
       <div
         className="cursor-pointer pb-[5px]"
         onClick={(event) => {
-          if (!isFromControl(event)) handlers.onOpenDetails(row)
+          if (!isCardControlClick(event)) handlers.onOpenDetails(row)
         }}
       >
         <BlockStack gap="200">
@@ -145,20 +133,12 @@ function ConfirmationCard({
             wrap={false}
             gap="200"
           >
-            <BlockStack gap="050">
-              {/* Block wrappers, so each line keeps the small text's own
-                  line height. */}
-              <div title={view.orderTimeTitle || undefined}>
-                <Text as="p" variant="bodySm" tone="subdued">
-                  {t('confirmations.card.ordered', { time: view.orderTime })}
-                </Text>
-              </div>
-              <div title={view.lastUpdateTitle || undefined}>
-                <Text as="p" variant="bodySm" tone="subdued">
-                  {t('confirmations.card.updated', { time: view.lastUpdate })}
-                </Text>
-              </div>
-            </BlockStack>
+            <StackedCardTimes
+              orderTime={view.orderTime}
+              orderTimeTitle={view.orderTimeTitle}
+              lastUpdate={view.lastUpdate}
+              lastUpdateTitle={view.lastUpdateTitle}
+            />
             <ConfirmationRowActions
               row={row}
               orderLabel={view.orderLabel}

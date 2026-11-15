@@ -779,6 +779,20 @@
 }
 
 /*
+ * On a phone the period select's visible text is 13px, as on desktop and as
+ * the usage button beside it. Only the shown text shrinks: the transparent native
+ * <select> on top keeps Polaris's 16px, so iOS does not zoom when it is
+ * tapped.
+ */
+@media (max-width: 47.9975em) {
+  .akeed-period-select .Polaris-Select__Content,
+  .akeed-period-select .Polaris-Select__Content div > span {
+    font-size: var(--p-font-size-325);
+    line-height: var(--p-font-line-height-500);
+  }
+}
+
+/*
  * Embedded Polaris tabs (confirmations filters, settings sections), in the
  * look of the main title tabs
  * (`MainTabsTitle`): the open tab is dark text over an underline, the others

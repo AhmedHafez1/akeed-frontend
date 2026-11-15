@@ -1,4 +1,4 @@
-import { Icon, Text } from '@shopify/polaris'
+import { Icon, Text, useBreakpoints } from '@shopify/polaris'
 import { EditIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
@@ -9,16 +9,20 @@ import {
 import type { DashboardOverview } from '../../../../model/dashboard.model'
 
 function StatusItem({
+  compact,
   isOn,
   label,
   stateLabel,
 }: {
+  compact: boolean
   isOn: boolean
   label: string
   stateLabel: string
 }) {
   return (
-    <li className="inline-flex items-center gap-1.5">
+    <li
+      className={`inline-flex items-center whitespace-nowrap ${compact ? 'gap-1' : 'gap-1.5'}`}
+    >
       <span
         aria-hidden="true"
         className="inline-block size-2 shrink-0 rounded-full"
@@ -28,7 +32,7 @@ function StatusItem({
             : 'var(--p-color-icon-disabled)',
         }}
       />
-      <Text as="span" variant="bodyMd" tone="subdued">
+      <Text as="span" variant={compact ? 'bodySm' : 'bodyMd'} tone="subdued">
         {label}
         <span className="sr-only"> ({stateLabel})</span>
       </Text>
@@ -58,33 +62,48 @@ export function SettingsStatusLine({
   )
   const quietOn = settings.quiet_hours_enabled && quietWindow !== null
 
+  // A phone gets small text, tighter gaps, the short reminder wording and an
+  // icon-only edit button, so the whole line fits on one row.
+  const { mdUp } = useBreakpoints({ defaults: { mdUp: true } })
+  const compact = !mdUp
+  const reminderKey =
+    delay.unit === 'hours'
+      ? compact
+        ? 'followUpHoursShort'
+        : 'followUpHours'
+      : compact
+        ? 'followUpMinutesShort'
+        : 'followUpMinutes'
+  const gap = compact ? 'gap-x-2' : 'gap-x-4'
+
   return (
-    <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+    <div className={`flex flex-wrap items-center gap-y-1 ${gap}`}>
       <ul
         aria-label={t('label')}
-        className="m-0 flex list-none flex-wrap items-center gap-x-4 gap-y-1 p-0"
+        className={`m-0 flex list-none flex-wrap items-center gap-y-1 p-0 ${gap}`}
       >
         <StatusItem
+          compact={compact}
           isOn={settings.auto_verify_enabled}
           label={
             settings.auto_verify_enabled
-              ? t('autoConfirm')
+              ? t(compact ? 'autoConfirmShort' : 'autoConfirm')
               : t('autoConfirmOff')
           }
           stateLabel={settings.auto_verify_enabled ? t('on') : t('off')}
         />
         <StatusItem
+          compact={compact}
           isOn={settings.follow_up_enabled}
           label={
             settings.follow_up_enabled
-              ? delay.unit === 'hours'
-                ? t('followUpHours', { count: delay.value })
-                : t('followUpMinutes', { count: delay.value })
+              ? t(reminderKey, { count: delay.value })
               : t('followUpOff')
           }
           stateLabel={settings.follow_up_enabled ? t('on') : t('off')}
         />
         <StatusItem
+          compact={compact}
           isOn={quietOn}
           label={
             quietOn
@@ -105,9 +124,11 @@ export function SettingsStatusLine({
         <span aria-hidden="true" className="shrink-0">
           <Icon source={EditIcon} tone="inherit" />
         </span>
-        <Text as="span" variant="bodyMd" fontWeight="medium">
-          {t('edit')}
-        </Text>
+        {!compact && (
+          <Text as="span" variant="bodyMd" fontWeight="medium">
+            {t('edit')}
+          </Text>
+        )}
       </button>
     </div>
   )
