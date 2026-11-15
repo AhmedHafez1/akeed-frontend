@@ -1,3 +1,4 @@
+import type { MouseEvent } from 'react'
 import { Badge, BlockStack, InlineStack, Icon, Text } from '@shopify/polaris'
 import {
   AlertTriangleIcon,
@@ -118,6 +119,51 @@ export function CardTimes({
         </Text>
       </span>
     </InlineStack>
+  )
+}
+
+/**
+ * A phone card's times, "Updated" always under "Ordered". Block wrappers keep
+ * each line at the small text's own line height.
+ */
+export function StackedCardTimes({
+  orderTime,
+  orderTimeTitle,
+  lastUpdate,
+  lastUpdateTitle,
+}: {
+  orderTime: string
+  orderTimeTitle: string
+  lastUpdate: string
+  lastUpdateTitle: string
+}) {
+  const t = useTranslations('dashboard.confirmations.card')
+  return (
+    <BlockStack gap="050">
+      <div title={orderTimeTitle || undefined}>
+        <Text as="p" variant="bodySm" tone="subdued">
+          {t('ordered', { time: orderTime })}
+        </Text>
+      </div>
+      <div title={lastUpdateTitle || undefined}>
+        <Text as="p" variant="bodySm" tone="subdued">
+          {t('updated', { time: lastUpdate })}
+        </Text>
+      </div>
+    </BlockStack>
+  )
+}
+
+/**
+ * Whether a click on a phone card came from one of its own links or buttons,
+ * or from its portalled "…" sheet (React bubbles those through the card
+ * though they are not on it). Only other clicks open the card.
+ */
+export function isCardControlClick(event: MouseEvent<HTMLElement>) {
+  const target = event.target as HTMLElement
+  return (
+    !event.currentTarget.contains(target) ||
+    target.closest('a, button') !== null
   )
 }
 

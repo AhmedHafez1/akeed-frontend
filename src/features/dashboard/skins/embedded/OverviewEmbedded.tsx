@@ -66,6 +66,8 @@ interface OverviewEmbeddedProps {
   onEditSettings: () => void
   onViewNeedsAction: () => void
   onHandleChangeRequest: (verificationId: string) => void
+  /** Opens a waiting order's details on the Confirmations page. */
+  onOpenNeedsAction: (verificationId: string) => void
 }
 
 /** The embedded dashboard: settings, warnings, three KPIs, actions, the funnel. */
@@ -82,6 +84,7 @@ export function OverviewEmbedded({
   onEditSettings,
   onViewNeedsAction,
   onHandleChangeRequest,
+  onOpenNeedsAction,
 }: OverviewEmbeddedProps) {
   const t = useTranslations('dashboard.overview')
   const searchParams = useSearchParams()
@@ -154,6 +157,7 @@ export function OverviewEmbedded({
             onRequestConfirm={confirmation.request}
             onViewAll={onViewNeedsAction}
             onHandle={onHandleChangeRequest}
+            onOpenDetails={onOpenNeedsAction}
           />
           <MessageFlowCard
             funnel={overview.funnel}

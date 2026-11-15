@@ -82,15 +82,80 @@ describe('NeedsActionCard', () => {
     expect(within(row).getByText(/^طُلب 22 سبتمبر · 9:58/)).toBeTruthy()
     expect(within(row).getByText(/^آخر تحديث 23 سبتمبر · 10:00/)).toBeTruthy()
 
-    const chat = within(row).getByRole('link', { name: /واتساب/ })
+    // WhatsApp and Confirm sit in the card's "…" sheet, not on the card.
+    expect(within(row).queryByRole('link', { name: /واتساب/ })).toBeNull()
+    fireEvent.click(within(row).getByRole('button', { name: /#1138/ }))
+    const sheet = screen.getByRole('dialog')
+    const chat = within(sheet).getByRole('link', { name: /واتساب/ })
     expect(chat.getAttribute('href')).toBe('https://wa.me/201007611456')
     expect(chat.getAttribute('target')).toBe('_blank')
 
-    fireEvent.click(within(row).getByRole('button', { name: /يدوياً/ }))
+    fireEvent.click(within(sheet).getByRole('button', { name: /يدوياً/ }))
     expect(onRequestConfirm).toHaveBeenCalledWith({
       verificationId: 'v-1138',
       orderLabel: '#1138',
     })
+  })
+
+  it('opens the order when the card is tapped, but not from "…"', () => {
+    const onOpenDetails = vi.fn()
+    const onHandle = vi.fn()
+    renderEmbedded(
+      <NeedsActionCard
+        needsAction={{ count: 1, items: [item()] }}
+        {...props}
+        onOpenDetails={onOpenDetails}
+        onHandle={onHandle}
+      />,
+      'en'
+    )
+    fireEvent.click(screen.getByRole('button', { name: /#1138/ }))
+    fireEvent.click(screen.getByRole('dialog'))
+    expect(onOpenDetails).not.toHaveBeenCalled()
+
+    fireEvent.click(screen.getByText('Abdelghany Hafez'))
+    expect(onOpenDetails).toHaveBeenCalledExactlyOnceWith('v-1138')
+    expect(onHandle).not.toHaveBeenCalled()
+  })
+
+  it('opens a change request in its request view when the card is tapped', () => {
+    const onOpenDetails = vi.fn()
+    const onHandle = vi.fn()
+    renderEmbedded(
+      <NeedsActionCard
+        needsAction={{
+          count: 1,
+          items: [
+            item({
+              reason: {
+                type: 'change_requested',
+                since: '2026-09-22T10:00:00Z',
+                hours: 2,
+                failure_code: null,
+              },
+              change_request: {
+                id: 'cr-1',
+                opened_at: '2026-09-22T10:00:00Z',
+                confirmation_cycle: 1,
+                acknowledgment: { status: 'done', reason: null },
+                reconfirmation: {
+                  state: null,
+                  scheduled_for: null,
+                  last_error: null,
+                },
+              },
+            } as Partial<NeedsActionItem>),
+          ],
+        }}
+        {...props}
+        onOpenDetails={onOpenDetails}
+        onHandle={onHandle}
+      />,
+      'en'
+    )
+    fireEvent.click(screen.getByText('Abdelghany Hafez'))
+    expect(onHandle).toHaveBeenCalledExactlyOnceWith('v-1138')
+    expect(onOpenDetails).not.toHaveBeenCalled()
   })
 
   it('explains a failed delivery and offers no WhatsApp chat', () => {
@@ -273,15 +338,37 @@ describe('SettingsStatusLine', () => {
     const items = screen
       .getAllByRole('listitem')
       .map((node) => node.textContent)
+    // Tests run at phone width: the short wording, and the edit button is
+    // the pencil alone with its full name for screen readers.
     expect(items).toEqual([
-      'التأكيد التلقائي (مفعّل)',
+      'تأكيد تلقائي (مفعّل)',
       'تذكير بعد 6 ساعات (مفعّل)',
       'هدوء 9م–9ص (مفعّل)',
     ])
-    fireEvent.click(
-      screen.getByRole('button', { name: 'تعديل إعدادات التأكيد' })
-    )
+    const edit = screen.getByRole('button', { name: 'تعديل إعدادات التأكيد' })
+    expect(edit.textContent).toBe('')
+    fireEvent.click(edit)
     expect(onEdit).toHaveBeenCalled()
+  })
+
+  it('uses the short reminder wording on a phone', () => {
+    renderEmbedded(
+      <SettingsStatusLine
+        settings={{
+          auto_verify_enabled: true,
+          follow_up_enabled: true,
+          follow_up_delay_minutes: 120,
+          quiet_hours_enabled: false,
+          quiet_hours_start: null,
+          quiet_hours_end: null,
+        }}
+        onEdit={vi.fn()}
+      />,
+      'en'
+    )
+    expect(
+      screen.getAllByRole('listitem').map((node) => node.textContent)
+    ).toEqual(['Auto-confirm (On)', 'Reminder 2h (On)', 'No quiet hours (Off)'])
   })
 
   it('says what is off', () => {

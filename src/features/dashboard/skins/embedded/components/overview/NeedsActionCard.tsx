@@ -32,11 +32,12 @@ import type {
 import {
   AmountText,
   BADGE_TONES,
-  CardTimes,
   CustomerCell,
   CustomerNameCell,
   DateTimeCell,
+  isCardControlClick,
   PhoneCell,
+  StackedCardTimes,
 } from '../confirmations/confirmationRowView'
 import { OrderNumberLink } from '../shared/OrderNumberLink'
 import { NeedsActionRowActions } from './NeedsActionRowActions'
@@ -49,6 +50,8 @@ interface RowProps {
   onViewAll: () => void
   /** Opens this order's change request in its details. */
   onHandle: (verificationId: string) => void
+  /** Opens this order's details on the Confirmations page. */
+  onOpenDetails: (verificationId: string) => void
 }
 
 /** Everything a row and a card show, from one item. */
@@ -173,25 +176,55 @@ function TableRow({
   )
 }
 
-/** The Confirmations page's narrow-screen card, with the reason written out. */
+/**
+ * The Confirmations page's phone card, with the reason written out. A tap on
+ * the card opens the order's details on that page; every action sits behind
+ * "…" at the end of the card.
+ */
 function CardRow(props: RowProps) {
   const { row, name, phone, amount, times, target } = useRowView(props)
+  const verificationId = props.item.verification_id
   return (
     <Box
       as="li"
-      padding="400"
+      paddingBlockStart="300"
+      paddingBlockEnd="300"
+      paddingInline="400"
       borderBlockEndWidth="025"
       borderColor="border"
       background="bg-surface-warning"
     >
-      <BlockStack gap="300">
-        <InlineStack align="space-between" blockAlign="center" wrap={false}>
-          <OrderLabel item={props.item} fallback={row.orderLabel} />
-          <AmountText amount={amount} isCanceled={false} />
-        </InlineStack>
-        <CustomerCell name={name} phone={phone} />
-        <BlockStack gap="150" inlineAlign="start">
-          <NeedsActionStatus row={row} />
+      {/* Keyboard users reach the same details through "…". The extra 5px
+          gives the bottom line room. */}
+      <div
+        className="cursor-pointer pb-[5px]"
+        onClick={(event) => {
+          if (isCardControlClick(event)) return
+          if (row.changeRequest) props.onHandle(verificationId)
+          else props.onOpenDetails(verificationId)
+        }}
+      >
+        <BlockStack gap="200">
+          <InlineStack
+            align="space-between"
+            blockAlign="center"
+            wrap={false}
+            gap="200"
+          >
+            <OrderLabel item={props.item} fallback={row.orderLabel} />
+            <AmountText amount={amount} isCanceled={false} />
+          </InlineStack>
+          <InlineStack
+            align="space-between"
+            blockAlign="start"
+            wrap={false}
+            gap="200"
+          >
+            <CustomerCell name={name} phone={phone} />
+            <div className="shrink-0 whitespace-nowrap">
+              <NeedsActionStatus row={row} />
+            </div>
+          </InlineStack>
           <Text
             as="p"
             variant="bodySm"
@@ -200,18 +233,24 @@ function CardRow(props: RowProps) {
           >
             {row.reasonText}
           </Text>
+          <InlineStack
+            align="space-between"
+            blockAlign="center"
+            wrap={false}
+            gap="200"
+          >
+            <StackedCardTimes {...times} />
+            <NeedsActionRowActions
+              row={row}
+              target={target}
+              customerLabel={name ?? phone}
+              onRequestConfirm={props.onRequestConfirm}
+              onViewAll={props.onViewAll}
+              onHandle={() => props.onHandle(verificationId)}
+            />
+          </InlineStack>
         </BlockStack>
-        <CardTimes {...times} />
-        <NeedsActionRowActions
-          row={row}
-          target={target}
-          customerLabel={name ?? phone}
-          onRequestConfirm={props.onRequestConfirm}
-          onViewAll={props.onViewAll}
-          onHandle={() => props.onHandle(props.item.verification_id)}
-          layout="stacked"
-        />
-      </BlockStack>
+      </div>
     </Box>
   )
 }
@@ -275,6 +314,7 @@ export function NeedsActionCard({
   onRequestConfirm,
   onViewAll,
   onHandle,
+  onOpenDetails,
 }: {
   needsAction: DashboardOverview['needs_action']
   timeZone: string
@@ -282,6 +322,7 @@ export function NeedsActionCard({
   onRequestConfirm: (target: ManualConfirmationTarget) => void
   onViewAll: () => void
   onHandle: (verificationId: string) => void
+  onOpenDetails: (verificationId: string) => void
 }) {
   const t = useTranslations('dashboard.overview.needsAction')
   const { locale } = useLocaleInfo()
@@ -293,6 +334,7 @@ export function NeedsActionCard({
     onRequestConfirm,
     onViewAll,
     onHandle,
+    onOpenDetails,
   }
   const items = needsAction.items.slice(0, NEEDS_ACTION_CARD_LIMIT)
 

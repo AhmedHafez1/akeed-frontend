@@ -209,6 +209,13 @@ export function MainEmbeddedSkin() {
                     open: verificationId,
                   })
                 }
+                onOpenNeedsAction={(verificationId) =>
+                  updateParams({
+                    tab: 'confirmations',
+                    filter: 'needs_action',
+                    open: verificationId,
+                  })
+                }
               />
             )
           ) : (

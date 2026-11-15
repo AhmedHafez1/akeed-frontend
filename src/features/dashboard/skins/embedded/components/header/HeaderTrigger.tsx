@@ -73,7 +73,7 @@ export function HeaderTrigger({
       aria-controls={expanded ? controls : undefined}
       aria-busy={loading || undefined}
       onClick={onClick}
-      className="inline-flex max-w-full cursor-pointer items-center gap-2 border text-start text-(length:--p-font-size-400) leading-(--p-font-line-height-600) focus-visible:outline-2 focus-visible:outline-offset-1 md:text-(length:--p-font-size-325) md:leading-(--p-font-line-height-500)"
+      className="inline-flex max-w-full cursor-pointer items-center gap-2 border text-start text-(length:--p-font-size-325) leading-(--p-font-line-height-500) focus-visible:outline-2 focus-visible:outline-offset-1"
       style={{
         ...TONES[tone],
         borderRadius: 'var(--p-border-radius-200)',
