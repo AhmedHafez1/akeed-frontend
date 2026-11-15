@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useStartupReady } from '@/shared/hooks/useStartupPerformance'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { activationStateOptions } from '../api/activationQueries'
+import { useLiveBannerDismissal } from './useLiveBannerDismissal'
 import {
   buildActivationChecklist,
   resolveFreeMessagesLeft,
@@ -22,6 +23,10 @@ export function useDashboardActivation() {
   const searchParams = useSearchParams()
   const activationQuery = useQuery(activationStateOptions())
   const state = activationQuery.data
+  const liveBanner = useLiveBannerDismissal(
+    state?.integrationId,
+    state?.activation?.setupCompletedAt
+  )
   useStartupReady('dashboard-activation-ready', activationQuery.isSuccess)
 
   const locale = pathname?.split('/')[1] ?? 'ar'
@@ -46,6 +51,19 @@ export function useDashboardActivation() {
     state,
     checklist,
     isFirstRun: shouldShowActivation(state),
+    showLiveBanner:
+      activationQuery.isSuccess &&
+      shouldShowActivation(state) &&
+      state?.activation?.isLive === true &&
+      !state.activation.needsPlan &&
+      state.sendingAvailability?.available !== false &&
+      !liveBanner.dismissed,
+    showPausedBanner:
+      activationQuery.isSuccess &&
+      !!state?.activation?.setupCompletedAt &&
+      !state.isAutoVerifyEnabled &&
+      !state.activation.needsPlan,
+    dismissLiveBanner: liveBanner.dismiss,
     isLive: state?.activation?.isLive ?? false,
     needsPlan: state?.activation?.needsPlan ?? false,
     freeMessagesLeft: resolveFreeMessagesLeft(state),

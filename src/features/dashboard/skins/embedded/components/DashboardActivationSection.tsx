@@ -93,6 +93,7 @@ export function DashboardActivationSection({
         needsPlan={activation.needsPlan}
         quietHoursEnabled={quietHoursEnabled}
         onOpenSettings={activation.openSettings}
+        onDismissLive={activation.dismissLiveBanner}
         onOpenQuietHours={activation.openQuietHours}
         onTryTest={activation.openTest}
         onChoosePlan={() => setIsPlansOpen(true)}
