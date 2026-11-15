@@ -1,4 +1,5 @@
-import { Link, Text } from '@shopify/polaris'
+import { Icon, Text } from '@shopify/polaris'
+import { EditIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import {
@@ -93,9 +94,21 @@ export function SettingsStatusLine({
           stateLabel={quietOn ? t('on') : t('off')}
         />
       </ul>
-      <Link onClick={onEdit} accessibilityLabel={t('editLabel')}>
-        {t('edit')}
-      </Link>
+      {/* Dark text with an edit icon, in the look of the main tabs rather
+          than Polaris's blue link; the underline appears on hover. */}
+      <button
+        type="button"
+        onClick={onEdit}
+        aria-label={t('editLabel')}
+        className="inline-flex cursor-pointer items-center gap-1 border-0 bg-transparent p-0 text-(--p-color-text) hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--p-color-border-focus)"
+      >
+        <span aria-hidden="true" className="shrink-0">
+          <Icon source={EditIcon} tone="inherit" />
+        </span>
+        <Text as="span" variant="bodyMd" fontWeight="medium">
+          {t('edit')}
+        </Text>
+      </button>
     </div>
   )
 }

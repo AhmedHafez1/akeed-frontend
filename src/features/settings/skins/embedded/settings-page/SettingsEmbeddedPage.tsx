@@ -167,58 +167,60 @@ export function SettingsEmbeddedPage() {
         onDiscard={model.discard}
       />
       <BlockStack gap="400">
-        <Tabs
-          tabs={tabs}
-          selected={Math.max(0, shownTabs.indexOf(activeTab))}
-          onSelect={(index) => goToTab(shownTabs[index])}
-        >
-          <BlockStack gap="400">
-            {readOnly && activeTab !== 'whatsapp' && (
-              <Banner tone="info">
-                <p>{t('readOnly')}</p>
-              </Banner>
-            )}
-            {model.saveError && onFormTab && (
-              <Banner tone="critical" onDismiss={model.dismissSaveError}>
-                <p>{model.saveError}</p>
-              </Banner>
-            )}
-            {!onFormTab && firstDirtyTab && (
-              <Banner
-                tone="warning"
-                action={{
-                  content: t('reviewChanges'),
-                  onAction: () => goToTab(firstDirtyTab),
-                }}
-              >
-                <p>{t('unsavedElsewhere')}</p>
-              </Banner>
-            )}
+        <div className="akeed-underline-tabs">
+          <Tabs
+            tabs={tabs}
+            selected={Math.max(0, shownTabs.indexOf(activeTab))}
+            onSelect={(index) => goToTab(shownTabs[index])}
+          >
+            <BlockStack gap="400">
+              {readOnly && activeTab !== 'whatsapp' && (
+                <Banner tone="info">
+                  <p>{t('readOnly')}</p>
+                </Banner>
+              )}
+              {model.saveError && onFormTab && (
+                <Banner tone="critical" onDismiss={model.dismissSaveError}>
+                  <p>{model.saveError}</p>
+                </Banner>
+              )}
+              {!onFormTab && firstDirtyTab && (
+                <Banner
+                  tone="warning"
+                  action={{
+                    content: t('reviewChanges'),
+                    onAction: () => goToTab(firstDirtyTab),
+                  }}
+                >
+                  <p>{t('unsavedElsewhere')}</p>
+                </Banner>
+              )}
 
-            {activeTab === 'message' && (
-              <MessageTab model={model} data={data} readOnly={readOnly} />
-            )}
-            {activeTab === 'timing' && (
-              <TimingTab
-                model={model}
-                data={data}
-                readOnly={readOnly}
-                onPreviewMessage={() => goToTab('message')}
-              />
-            )}
-            {activeTab === 'plan' && (
-              <PlanTab
-                model={model}
-                data={data}
-                ownNumberVisible={ownNumber.visible}
-                ownNumberConnected={ownNumber.connected}
-              />
-            )}
-            {activeTab === 'whatsapp' && !whatsappHidden && (
-              <WhatsappTab pools={data.billing.usage.pools ?? null} />
-            )}
-          </BlockStack>
-        </Tabs>
+              {activeTab === 'message' && (
+                <MessageTab model={model} data={data} readOnly={readOnly} />
+              )}
+              {activeTab === 'timing' && (
+                <TimingTab
+                  model={model}
+                  data={data}
+                  readOnly={readOnly}
+                  onPreviewMessage={() => goToTab('message')}
+                />
+              )}
+              {activeTab === 'plan' && (
+                <PlanTab
+                  model={model}
+                  data={data}
+                  ownNumberVisible={ownNumber.visible}
+                  ownNumberConnected={ownNumber.connected}
+                />
+              )}
+              {activeTab === 'whatsapp' && !whatsappHidden && (
+                <WhatsappTab pools={data.billing.usage.pools ?? null} />
+              )}
+            </BlockStack>
+          </Tabs>
+        </div>
       </BlockStack>
     </Page>
   )
