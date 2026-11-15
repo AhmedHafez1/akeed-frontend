@@ -51,7 +51,10 @@ export { SendTestToPhoneAction } from './ui/standalone/components/SendTestToPhon
 export {
   checkEmbeddedInstall,
   clearEmbeddedAuthCaches,
-  fetchOnboardingStatusWithRetry,
+  ensureEmbeddedInstall,
+  fetchEmbeddedOnboardingState,
+  getEmbeddedAuthScope,
+  isCurrentEmbeddedAuthScope,
   getCachedInstallStatus,
   getCachedOnboardingStatus,
   performTokenExchange,

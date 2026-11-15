@@ -2,26 +2,31 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useQueryClient, type QueryClient } from '@tanstack/react-query'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { useAppBridgeLoading } from '@/shared/hooks/useAppBridgeLoading'
 import { useDelayedBoolean } from '@/shared/hooks/useDelayedBoolean'
 import {
-  checkEmbeddedInstall,
   clearEmbeddedAuthCaches,
-  fetchOnboardingStatusWithRetry,
+  ensureEmbeddedInstall,
+  fetchEmbeddedOnboardingState,
+  getEmbeddedAuthScope,
+  isCurrentEmbeddedAuthScope,
   getCachedInstallStatus,
   getCachedOnboardingStatus,
-  performTokenExchange,
   resolveOnboardingRedirect,
-  setCachedInstallStatus,
-  setCachedOnboardingStatus,
   type EmbeddedOnboardingGate,
 } from '@/features/onboarding'
 import { createLogger } from '@/shared/lib/logger'
 import { getLocaleFromPathname, withLocale } from '@/shared/lib/locale'
-import { primeShopifySessionToken } from '@/shared/lib/auth'
+import { queryKeys } from '@/shared/query/keys'
+import { startStartupStage } from '@/shared/lib/startup-performance'
 
 const logger = createLogger('EmbeddedAuthGate')
+const queryScopes = new WeakMap<
+  QueryClient,
+  ReturnType<typeof getEmbeddedAuthScope>
+>()
 
 interface EmbeddedAuthGateProps {
   children: React.ReactNode
@@ -72,6 +77,8 @@ export function EmbeddedAuthGate({
   const { isEmbedded, shopDomain, hostParam, shopify, isLoading } =
     useAkeedMode()
   const router = useRouter()
+  const queryClient = useQueryClient()
+  const scope = getEmbeddedAuthScope()
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const locale = getLocaleFromPathname(pathname ?? '')
@@ -82,10 +89,13 @@ export function EmbeddedAuthGate({
 
   // Initialise as ready when caches are warm — avoids skeleton flash on
   // subsequent navigations within the same embedded session.
-  const [isEmbeddedReady, setIsEmbeddedReady] = useState(() => {
-    if (!isEmbedded || !shopDomain) return false
-    return canSatisfyFromCache(shopDomain, onboardingGate)
-  })
+  const [ready, setReady] = useState(() =>
+    isEmbedded && canSatisfyFromCache(shopDomain, onboardingGate)
+      ? { scope, onboardingGate }
+      : null
+  )
+  const isEmbeddedReady =
+    ready?.scope === scope && ready.onboardingGate === onboardingGate
 
   // Show native Shopify top-bar progress while auth gate is checking
   useAppBridgeLoading(isEmbedded && !isEmbeddedReady)
@@ -97,8 +107,18 @@ export function EmbeddedAuthGate({
 
     if (!isEmbedded || !shopDomain) return
     if (onboardingGate !== 'none' && !shopify) return
+    const scope = getEmbeddedAuthScope()
+    if (scope.key !== JSON.stringify([shopDomain, hostParam])) return
+
+    if (queryScopes.get(queryClient) !== scope) {
+      // Query keys are shared; a different embedded identity must start empty.
+      queryClient.clear()
+      queryScopes.set(queryClient, scope)
+    }
 
     let active = true
+    const finish = startStartupStage('auth-gate')
+    const isCurrent = () => active && isCurrentEmbeddedAuthScope(scope)
 
     const redirectToAuth = () => {
       const authUrl = buildInstallAuthUrl(shopDomain, hostParam)
@@ -114,7 +134,7 @@ export function EmbeddedAuthGate({
     }
 
     const runChecks = async () => {
-      if (!active) return
+      if (!isCurrent()) return
 
       // Determine whether we already have a cached install confirmation.
       // When the cache is warm we skip the loading state entirely so the
@@ -122,51 +142,16 @@ export function EmbeddedAuthGate({
       const hasWarmInstallCache = getCachedInstallStatus(shopDomain) === true
 
       if (!hasWarmInstallCache) {
-        setIsEmbeddedReady(false)
+        setReady(null)
       }
 
       try {
-        let isInstalled = hasWarmInstallCache
-
-        // Skip the expensive token exchange & install check when cache
-        // already confirms the app is installed for this shop.
+        const isInstalled = await ensureEmbeddedInstall(shopDomain, shopify)
+        if (!isCurrent()) return
         if (!isInstalled) {
-          // -- Primary: Token Exchange (App Bridge v4)
-          // If the Shopify global is available we can attempt a seamless
-          // token exchange. This both verifies install status AND performs
-          // first-install without a full-page redirect out of the iframe.
-          if (shopify) {
-            try {
-              const sessionToken = await shopify.idToken()
-              if (sessionToken) {
-                primeShopifySessionToken(sessionToken)
-                isInstalled = await performTokenExchange(sessionToken)
-              }
-            } catch (exchangeError) {
-              logger.warn(
-                'Token exchange failed, falling back to install check',
-                {
-                  error:
-                    exchangeError instanceof Error
-                      ? exchangeError.message
-                      : exchangeError,
-                }
-              )
-            }
-          }
-
-          // -- Fallback: install check + OAuth redirect
-          if (!isInstalled) {
-            isInstalled = await checkEmbeddedInstall(shopDomain)
-          }
-
-          if (!isInstalled) {
-            redirectToAuth()
-            return
-          }
-
-          // Persist successful install confirmation
-          setCachedInstallStatus(shopDomain, true)
+          finish(false)
+          redirectToAuth()
+          return
         }
 
         if (onboardingGate !== 'none') {
@@ -175,9 +160,11 @@ export function EmbeddedAuthGate({
           let onboardingStatus = getCachedOnboardingStatus()
 
           if (!onboardingStatus) {
-            onboardingStatus = await fetchOnboardingStatusWithRetry()
-            if (!active) return
-            setCachedOnboardingStatus(onboardingStatus)
+            const response = await fetchEmbeddedOnboardingState()
+            if (!isCurrent()) return
+            onboardingStatus = response.state.onboardingStatus
+            // Keep the full envelope: activation reads this exact query key.
+            queryClient.setQueryData(queryKeys.onboarding.state(), response)
           }
 
           const redirectDestination = resolveOnboardingRedirect({
@@ -194,23 +181,27 @@ export function EmbeddedAuthGate({
             const currentRoute = `${pathname ?? ''}${search}`
 
             if (destinationRoute !== currentRoute) {
+              finish()
               router.replace(destinationRoute)
               return
             }
           }
         }
 
-        if (active) {
-          setIsEmbeddedReady(true)
+        if (isCurrent()) {
+          finish()
+          setReady({ scope, onboardingGate })
         }
       } catch (error) {
+        if (!isCurrent()) return
+        finish(false)
         logger.error('Failed embedded auth checks', error, {
           shopDomain,
           onboardingGate,
         })
-        if (active) {
+        if (isCurrent()) {
           clearEmbeddedAuthCaches()
-          setIsEmbeddedReady(false)
+          setReady(null)
         }
       }
     }
@@ -229,6 +220,7 @@ export function EmbeddedAuthGate({
     onboardingGate,
     pathname,
     router,
+    queryClient,
     search,
     shopDomain,
   ])

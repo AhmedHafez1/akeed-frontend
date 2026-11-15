@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import { resolveEmbeddedContextFromSearch } from '@/shared/lib/embedded-context'
 import { createLogger } from '@/shared/lib/logger'
 import type { ShopifyGlobal } from '@/shared/types/window.model'
+import { startStartupStage } from '@/shared/lib/startup-performance'
 
 const logger = createLogger('Akeed')
 
@@ -118,10 +119,12 @@ export function useAkeedMode(): AkeedModeContext {
     if (!isEmbedded) return
 
     const controller = new AbortController()
+    const finish = startStartupStage('app-bridge')
 
     waitForShopifyGlobal(controller.signal)
       .then((instance) => {
         if (controller.signal.aborted) return
+        finish(Boolean(instance))
 
         if (!instance) {
           logger.error(

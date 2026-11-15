@@ -1,6 +1,7 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
+import { useStartupReady } from '@/shared/hooks/useStartupPerformance'
 import { verificationOverviewOptions } from '../api/verificationQueries'
 import type { DashboardStatsDateRange } from '../model/dashboard.model'
 
@@ -22,6 +23,7 @@ export function useDashboardOverview(dateRange: DashboardStatsDateRange) {
         : false
     },
   })
+  useStartupReady('dashboard-overview-ready', query.isSuccess)
 
   return {
     overview: query.data ?? null,

@@ -9,6 +9,13 @@
  */
 
 interface ShopifyGlobal {
+  webVitals?: {
+    onReport(
+      callback:
+        | ((report: { metrics: { name: string; value: number }[] }) => void)
+        | null
+    ): Promise<void>
+  }
   /**
    * Returns the current Shopify session token (JWT).
    * Replaces App Bridge v3's `getSessionToken(app)`.

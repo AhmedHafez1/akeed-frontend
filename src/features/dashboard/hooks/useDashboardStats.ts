@@ -2,6 +2,7 @@
 
 import { useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useStartupReady } from '@/shared/hooks/useStartupPerformance'
 import { verificationStatsOptions } from '../api/verificationQueries'
 import type { DashboardStatsDateRange } from '../model/dashboard.model'
 
@@ -28,6 +29,7 @@ export function useDashboardStats(dateRange: DashboardStatsDateRange) {
         ? IN_PROGRESS_POLL_INTERVAL_MS
         : false,
   })
+  useStartupReady('dashboard-stats-ready', Boolean(stats))
 
   const refetch = useCallback(() => {
     void refetchQuery()

@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { useStartupReady } from '@/shared/hooks/useStartupPerformance'
 import { isAwaitingOutcome } from '../domain/verificationLifecycle'
 import { verificationListInfiniteOptions } from '../api/verificationQueries'
 import type {
@@ -72,6 +73,7 @@ export function useDashboardData(
     isPending,
     refetch: refetchQuery,
   } = query
+  useStartupReady('dashboard-confirmations-ready', query.isSuccess)
 
   const pages = data?.pages
   const verifications = useMemo(() => flattenPages(pages ?? []), [pages])
