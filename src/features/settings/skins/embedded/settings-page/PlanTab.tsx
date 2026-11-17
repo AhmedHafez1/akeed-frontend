@@ -130,14 +130,10 @@ export function PlanTab({
     Boolean(ownNumberAllowance(plan, ownNumberPresence))
   )
   const usagePools = billing.usage.pools
+  // Each candidate plan is sized with its own pools, from the API.
   const byPool =
-    billing.messagesSentLast30DaysByPool &&
-    usagePools &&
-    usagePools.akeed.limit > 0
-      ? {
-          ...billing.messagesSentLast30DaysByPool,
-          ownNumberRatio: usagePools.ownNumber.limit / usagePools.akeed.limit,
-        }
+    billing.messagesSentLast30DaysByPool && usagePools
+      ? billing.messagesSentLast30DaysByPool
       : null
   const recommendedId = recommendPlan(billing.plans, sentLast30Days, byPool)
   // Only a live paid plan renews; Starter and a lapsed plan do not, nor a

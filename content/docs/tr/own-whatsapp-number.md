@@ -9,7 +9,7 @@ slug: own-whatsapp-number
 
 Akeed onayları varsayılan olarak kendi resmi WhatsApp numarasından gönderir ve sizin bir şey bağlamanız gerekmez. Kendi WhatsApp Business numaranızı da bağlayabilirsiniz; böylece müşteriler onayları işletmenizin adıyla ve numarasından alır.
 
-Akeed’in numarası yedek olarak kalır. Numaranızın henüz gönderemediği her mesaj Akeed’in numarasından çıkar, bu yüzden müşteriler onaylarını almaya devam eder.
+Akeed’in numarası yedek olarak kalır. Numaranızın henüz gönderemediği her mesaj Akeed’in numarasından çıkar, bu yüzden müşteriler onaylarını almaya devam eder. Yedek mesajlar, **Maliyeti Nedir?** bölümünde açıklandığı gibi planınızdan veya kredilerinizden düşer.
 
 Telefonunuzdaki WhatsApp Business uygulamasında zaten kullandığınız bir numarayı ya da henüz WhatsApp’ta olmayan bir numarayı bağlayabilirsiniz.
 
@@ -72,18 +72,22 @@ Ayarların gösterdiği sorunu giderin: şablon incelemesini bekleyin, Meta işl
 | Sizin numaranız | 1 kredi |
 | Akeed’in numarası | 2 kredi |
 
-Bakiyeniz, Akeed’in numarasından gönderilen bir yedek mesajın tam maliyetini karşılamıyorsa mesaj yine de gönderilir ve kalan bakiye kullanılır.
+Akeed’in numarasından giden bir yedek mesaj, Akeed’in numarasından giden her mesaj gibi 2 kredidir. Bakiyeniz yetmezse gönderilmez: sipariş **Gönderim bekliyor** durumunda bekler ve kredi satın aldığınızda gönderilir.
 
 ### Shopify Planları
 
 Numaranız bağlandığında planınızda iki ayrı kota olur:
 
-| Kota | Büyüklük |
-| --- | --- |
-| Akeed’in numarasından mesajlar | Planınıza dahil mesajlar |
-| Sizin numaranızdan mesajlar | Planınıza dahil mesajların üç katı |
+| Plan | Akeed’in numarasından mesajlar | Sizin numaranızdan mesajlar |
+| --- | --- | --- |
+| Starter (tek seferlik) | 30 | 90 |
+| Basic | 300 | 1.000 |
+| Pro | 1.000 | 5.000 |
+| Scale | 2.500 | 20.000 |
 
-İki kota her fatura döneminin başında birlikte yenilenir. Numaranızdan giden bir mesaj kendi numara kotanızdan düşer; bu kota bittiğinde Akeed kotasından 1 mesaj düşer. Akeed’in numarasından giden bir yedek mesaj Akeed kotasından düşer; bu kota bittiğinde kendi numara kotanızdan 3 mesaj düşer. İkisi de bittiğinde gönderim, kotalar yenilenene kadar durur.
+İki kota her fatura döneminin başında birlikte yenilenir. Starter kotaları tek seferliktir ve yenilenmez. Numaranızdan giden bir mesaj kendi numara kotanızdan düşer; bu kota bittiğinde Akeed kotasından 1 mesaj düşer. İkisi de bittiğinde gönderim, kotalar yenilenene kadar durur.
+
+Akeed’in numarasından giden bir yedek mesaj Akeed kotasından düşer, hiçbir zaman sizin numara kotanızdan düşmez. Akeed kotası bittiğinde yedek mesaj gönderilmez: sipariş, sınırınızdan sonra gelen her sipariş gibi **Gönderim bekliyor** durumunda bekler ve kotalarınız yenilendiğinde ya da planınızı yükselttiğinizde gönderilir. Numaranızdan giden mesajlar, kotaları yettiği sürece gitmeye devam eder.
 
 ### Meta Ücretleri
 

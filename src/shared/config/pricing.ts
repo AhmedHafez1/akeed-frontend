@@ -81,9 +81,6 @@ export const OWN_NUMBER_MESSAGE_PRICE_MINOR =
 export const OWN_NUMBER_PRICING_ENABLED =
   process.env.NEXT_PUBLIC_OWN_NUMBER_PRICING_ENABLED === 'true'
 
-/** Own-number messages each included Akeed message adds on Shopify plans. */
-export const OWN_NUMBER_POOL_MULTIPLIER = 3
-
 export interface ShopifyPublicAllowance {
   id: 'starter' | 'basic' | 'pro' | 'business'
   akeedMessages: number
@@ -91,30 +88,23 @@ export interface ShopifyPublicAllowance {
   oneTime: boolean
 }
 
-function allowance(
-  id: ShopifyPublicAllowance['id'],
-  akeedMessages: number,
-  oneTime = false
-): ShopifyPublicAllowance {
-  return {
-    id,
-    akeedMessages,
-    ownNumberMessages: akeedMessages * OWN_NUMBER_POOL_MULTIPLIER,
-    oneTime,
-  }
-}
-
 /**
  * Message allowances only, for the public own-number promotion. Mirrors
- * `includedVerifications` and `ownNumberLimit` in the backend's
- * `src/shared/billing/billing-plan.ts`; a test pins both columns. Prices stay
- * off the page: Shopify presents them on the App Store listing.
+ * `includedVerifications` and `ownNumberIncludedVerifications` in the
+ * backend's `src/shared/billing/billing-plan.ts`; a test pins both columns.
+ * Each plan sets its own-number pool; it is not a multiple. Prices stay off
+ * the page: Shopify presents them on the App Store listing.
  */
 export const SHOPIFY_PUBLIC_ALLOWANCES: readonly ShopifyPublicAllowance[] = [
-  allowance('starter', 30, true),
-  allowance('basic', 300),
-  allowance('pro', 1000),
-  allowance('business', 2500),
+  { id: 'starter', akeedMessages: 30, ownNumberMessages: 90, oneTime: true },
+  { id: 'basic', akeedMessages: 300, ownNumberMessages: 1000, oneTime: false },
+  { id: 'pro', akeedMessages: 1000, ownNumberMessages: 5000, oneTime: false },
+  {
+    id: 'business',
+    akeedMessages: 2500,
+    ownNumberMessages: 20000,
+    oneTime: false,
+  },
 ]
 
 /*

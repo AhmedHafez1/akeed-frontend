@@ -24,7 +24,7 @@ describe('perMessagePrice', () => {
     // Basic: 300 Akeed messages plus a separate own-number pool. Own-number
     // messages carry no Akeed charge, so they never dilute the price shown.
     expect(perMessagePrice(9.99, 300)).toBe(0.033)
-    expect(perMessagePrice(9.99, 300 + 900)).not.toBe(
+    expect(perMessagePrice(9.99, 300 + 1000)).not.toBe(
       perMessagePrice(9.99, 300)
     )
   })

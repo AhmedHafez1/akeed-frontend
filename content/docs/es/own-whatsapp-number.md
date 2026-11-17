@@ -9,7 +9,7 @@ slug: own-whatsapp-number
 
 Por defecto, Akeed envía las confirmaciones desde su propio número oficial de WhatsApp y no necesitas conectar nada. También puedes conectar tu propio número de WhatsApp Business, para que los clientes reciban las confirmaciones con el nombre y el número de tu negocio.
 
-El número de Akeed sigue disponible como respaldo. Cualquier mensaje que tu número aún no pueda enviar sale desde el número de Akeed, así que los clientes siguen recibiendo sus confirmaciones.
+El número de Akeed sigue disponible como respaldo. Cualquier mensaje que tu número aún no pueda enviar sale desde el número de Akeed, así que los clientes siguen recibiendo sus confirmaciones. Los mensajes de respaldo cuentan contra tu plan o tus créditos, como explica **¿Cuánto cuesta?**.
 
 Puedes conectar un número que ya usas en la app WhatsApp Business de tu teléfono, o un número que todavía no está en WhatsApp.
 
@@ -72,18 +72,22 @@ Resuelve lo que indica la configuración: espera la revisión de la plantilla, s
 | Tu número | 1 crédito |
 | El número de Akeed | 2 créditos |
 
-Si tu saldo no alcanza para el costo completo de un mensaje de respaldo desde el número de Akeed, el mensaje se envía igualmente y usa lo que queda.
+Un mensaje de respaldo desde el número de Akeed cuesta 2 créditos, como cualquier mensaje desde el número de Akeed. Si tu saldo no alcanza, no se envía: el pedido queda con el estado **En espera de envío** y sale cuando compras créditos.
 
 ### Planes de Shopify
 
 Cuando tu número está conectado, tu plan tiene dos cupos separados:
 
-| Cupo | Tamaño |
-| --- | --- |
-| Mensajes desde el número de Akeed | Los mensajes incluidos en tu plan |
-| Mensajes desde tu número | El triple de los mensajes incluidos en tu plan |
+| Plan | Mensajes desde el número de Akeed | Mensajes desde tu número |
+| --- | --- | --- |
+| Starter (única vez) | 30 | 90 |
+| Basic | 300 | 1,000 |
+| Pro | 1,000 | 5,000 |
+| Scale | 2,500 | 20,000 |
 
-Los dos cupos se renuevan juntos al inicio de cada período de facturación. Un mensaje desde tu número usa el cupo de tu número; cuando se agota, usa 1 mensaje del cupo de Akeed. Un mensaje de respaldo desde el número de Akeed usa el cupo de Akeed; cuando se agota, usa 3 mensajes del cupo de tu número. Cuando ambos se agotan, los envíos se detienen hasta que se renueven.
+Los dos cupos se renuevan juntos al inicio de cada período de facturación. Los de Starter son de una sola vez y no se renuevan. Un mensaje desde tu número usa el cupo de tu número; cuando se agota, usa 1 mensaje del cupo de Akeed. Cuando ambos se agotan, los envíos se detienen hasta que se renueven.
+
+Un mensaje de respaldo desde el número de Akeed usa el cupo de Akeed, nunca el de tu número. Cuando el cupo de Akeed se agota, el respaldo no se envía: el pedido queda con el estado **En espera de envío**, como cualquier pedido que llega después de tu límite, y sale cuando tus cupos se renuevan o mejoras tu plan. Los mensajes desde tu número siguen saliendo mientras dure su cupo.
 
 ### Cargos de Meta
 

@@ -35,7 +35,7 @@ describe('own-number pricing config', () => {
     )
   })
 
-  it('mirrors the backend plan allowances and the 3× own-number pool', async () => {
+  it('mirrors the backend plan allowances and own-number pools', async () => {
     const { SHOPIFY_PUBLIC_ALLOWANCES } = await loadPricing(undefined)
     expect(
       SHOPIFY_PUBLIC_ALLOWANCES.map((plan) => [
@@ -46,9 +46,9 @@ describe('own-number pricing config', () => {
       ])
     ).toEqual([
       ['starter', 30, 90, true],
-      ['basic', 300, 900, false],
-      ['pro', 1000, 3000, false],
-      ['business', 2500, 7500, false],
+      ['basic', 300, 1000, false],
+      ['pro', 1000, 5000, false],
+      ['business', 2500, 20000, false],
     ])
   })
 })

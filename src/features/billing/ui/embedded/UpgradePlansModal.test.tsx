@@ -19,7 +19,7 @@ vi.mock('@/features/whatsapp-connect', () => ({
   useOwnNumberPresence: () => presence.value,
 }))
 
-const OWN_POOLS = { starter: 90, basic: 900, pro: 3000, business: 7500 }
+const OWN_POOLS = { starter: 90, basic: 1000, pro: 5000, business: 20000 }
 
 function plansResponse(
   isFreePlanClaimed: boolean,
@@ -271,7 +271,7 @@ describe('UpgradePlansModal', () => {
 })
 
 describe('UpgradePlansModal with the merchant number', () => {
-  const OWN_LINE = /\+900\u2069? من رقمك الخاص/
+  const OWN_LINE = /\+1,000\u2069? من رقمك الخاص/
   const META = 'وتحاسب Meta نشاطك التجاري بشكل منفصل عليها.'
   const pageText = () => document.body.textContent ?? ''
 
@@ -287,8 +287,8 @@ describe('UpgradePlansModal with the merchant number', () => {
     await renderModal(true)
 
     expect(pageText()).toMatch(OWN_LINE)
-    expect(pageText()).toMatch(/\+3,000\u2069? من رقمك الخاص/)
-    expect(pageText()).toMatch(/\+7,500\u2069? من رقمك الخاص/)
+    expect(pageText()).toMatch(/\+5,000\u2069? من رقمك الخاص/)
+    expect(pageText()).toMatch(/\+20,000\u2069? من رقمك الخاص/)
     expect(screen.getAllByText('تُتاح عند ربط رقمك')).toHaveLength(3)
     expect(pageText()).toContain(META)
     // The Akeed allowance stays the headline, unchanged.
