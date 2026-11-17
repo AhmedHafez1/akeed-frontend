@@ -105,7 +105,7 @@ Les boutiques Shopify installent Akeed depuis Shopify, reçoivent les commandes 
 
 ### Faut-il son propre compte WhatsApp Business ?
 
-Non. Akeed envoie les confirmations via son infrastructure WhatsApp officielle.
+Non. Par défaut, Akeed envoie les confirmations depuis son numéro WhatsApp officiel. Vous pouvez aussi connecter votre propre numéro WhatsApp Business pour que les clients reçoivent les confirmations depuis le numéro de votre entreprise, le numéro d’Akeed restant disponible en secours. Consultez [Utiliser votre propre numéro WhatsApp](/docs/own-whatsapp-number).
 
 ### Mon équipe peut-elle partager un compte ?
 

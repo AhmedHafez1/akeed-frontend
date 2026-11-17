@@ -105,7 +105,7 @@ Shopify mağazaları Akeed’i Shopify’dan yükler, siparişleri otomatik olar
 
 ### Kendi WhatsApp Business hesabım gerekli mi?
 
-Hayır. Akeed onayları kendi resmi WhatsApp altyapısı üzerinden gönderir.
+Hayır. Akeed onayları varsayılan olarak kendi resmi WhatsApp numarasından gönderir. Müşterilerin onayları işletmenizin numarasından alması için kendi WhatsApp Business numaranızı da bağlayabilirsiniz; Akeed’in numarası yedek olarak kalır. [Kendi WhatsApp Numaranızı Kullanma](/docs/own-whatsapp-number) kılavuzuna bakın.
 
 ### Ekibim tek bir hesabı paylaşabilir mi?
 

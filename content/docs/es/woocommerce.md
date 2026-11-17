@@ -131,7 +131,7 @@ No. Akeed se conecta mediante la pantalla de aprobación propia de WooCommerce.
 
 ### ¿Se necesita un número propio de WhatsApp Business?
 
-No. Los mensajes se envían desde el número de WhatsApp de Akeed.
+No. Por defecto, Akeed envía las confirmaciones desde su número oficial de WhatsApp. También puedes conectar tu propio número de WhatsApp Business para que los clientes reciban las confirmaciones desde el número de tu negocio, con el número de Akeed como respaldo. Consulta [Usar tu propio número de WhatsApp](/docs/own-whatsapp-number).
 
 ### ¿Akeed importa los pedidos antiguos?
 

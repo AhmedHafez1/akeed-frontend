@@ -109,7 +109,7 @@ Check that its payment method is cash on delivery, that the customer's phone num
 
 ### Do I need my own WhatsApp Business number?
 
-No. Messages are sent from Akeed's WhatsApp number.
+No. Akeed sends confirmations from its official WhatsApp number by default. You can also connect your own WhatsApp Business number so customers get confirmations from your business number, with Akeed's number as a backup. See [Use Your Own WhatsApp Number](/docs/own-whatsapp-number).
 
 ### Does Akeed import my old orders?
 
