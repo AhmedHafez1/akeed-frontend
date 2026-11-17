@@ -13,13 +13,11 @@ import {
   ReceiptText,
   Smartphone,
 } from 'lucide-react'
+import { resolveSupportedLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
 import { akButton, akCard, akPill } from '@/shared/ui'
-import type { ConnectTicketClaimed } from '../api/whatsappConnectApi'
-import { useConnectTicket } from '../hooks/useConnectTicket'
-import { useEmbeddedSignup } from '../hooks/useEmbeddedSignup'
+import { useConnectPage, type ConnectPageState } from '../hooks/useConnectPage'
 import { metaErrorKey, serverErrorKey } from '../model/signupErrors'
-import type { SignupPhase } from '../model/signupMachine'
 import { ConnectHandshake, type HandshakeState } from './ConnectHandshake'
 import { SetupTimeline } from './SetupTimeline'
 import { SignupSteps } from './SignupSteps'
@@ -31,13 +29,13 @@ const CONSEQUENCES = [
   { key: 'activity', Icon: Clock },
 ] as const
 
-/** Which step a phase belongs to; null hides the steps. */
-const STEP_OF: Record<SignupPhase, 0 | 1 | 2 | null> = {
-  idle: 0,
-  cancelled: 0,
-  noCode: 0,
-  metaError: 0,
-  inMeta: 1,
+/** Which step a state belongs to; null hides the steps. */
+const STEP_OF: Record<ConnectPageState['status'], 0 | 1 | 2 | null> = {
+  claiming: null,
+  missing: null,
+  invalid: null,
+  ready: 0,
+  returned: 0,
   submitting: 1,
   failed: 1,
   connected: 2,
@@ -115,41 +113,38 @@ function ConnectCard({
   )
 }
 
-function SignupPanel({ claim }: { claim: ConnectTicketClaimed }) {
+/** What the current state says, below the steps. */
+function StatusMessage({ state }: { state: ConnectPageState }) {
   const t = useTranslations('whatsappConnect')
-  const locale = useLocale()
-  const signup = useEmbeddedSignup(claim, locale)
-  const { state } = signup
-  const outcome = useRef<HTMLDivElement>(null)
-  const settled =
-    state.phase !== 'idle' &&
-    state.phase !== 'inMeta' &&
-    state.phase !== 'submitting'
-
-  // Screen readers and keyboards land on the result once there is one.
-  useEffect(() => {
-    if (settled) outcome.current?.focus()
-  }, [settled, state.phase])
-
-  let status: ReactNode = null
-  switch (state.phase) {
-    case 'inMeta':
-      status = (
+  switch (state.status) {
+    case 'claiming':
+      return (
         <div className={SECTION}>
-          <Busy>{t('inMeta')}</Busy>
-          <span className={akPill({ tone: 'neutral' })}>{t('waiting')}</span>
+          <Busy>{t('claiming')}</Busy>
         </div>
       )
-      break
+    case 'missing':
+      return (
+        <Notice tone="info" title={t('missingHeading')}>
+          <p>{t('missing')}</p>
+        </Notice>
+      )
+    case 'invalid':
+    case 'failed':
+      return (
+        <Notice tone="warning" title={t('failedHeading')}>
+          <p>{t(`errors.${serverErrorKey(state.errorCode)}`)}</p>
+          <p>{t('startAgain')}</p>
+        </Notice>
+      )
     case 'submitting':
-      status = (
+      return (
         <div className={SECTION}>
           <Busy>{t('submitting')}</Busy>
         </div>
       )
-      break
     case 'connected':
-      status = (
+      return (
         <div className={SECTION}>
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="text-ak-section text-ink flex items-center gap-2">
@@ -172,19 +167,10 @@ function SignupPanel({ claim }: { claim: ConnectTicketClaimed }) {
           </p>
         </div>
       )
-      break
-    case 'cancelled':
-      status = signup.lostOnTouch ? (
-        <Notice tone="warning">{t('lostOnTouch')}</Notice>
-      ) : (
+    case 'returned':
+      return state.cancelled ? (
         <Notice tone="info">{t('cancelled')}</Notice>
-      )
-      break
-    case 'noCode':
-      status = <Notice tone="warning">{t('noCode')}</Notice>
-      break
-    case 'metaError':
-      status = (
+      ) : (
         <Notice tone="warning" title={t('metaErrorHeading')}>
           <p>{t(`metaErrors.${metaErrorKey(state.metaErrorCode)}`)}</p>
           {state.metaErrorCode && (
@@ -194,36 +180,54 @@ function SignupPanel({ claim }: { claim: ConnectTicketClaimed }) {
           )}
         </Notice>
       )
-      break
-    case 'failed':
-      status = (
-        <Notice tone="warning" title={t('failedHeading')}>
-          <p>{t(`errors.${serverErrorKey(state.errorCode)}`)}</p>
-          <p>{t('startAgain')}</p>
-        </Notice>
-      )
-      break
     case 'expired':
-      status = <Notice tone="warning">{t('expired')}</Notice>
-      break
+      return <Notice tone="warning">{t('expired')}</Notice>
+    case 'ready':
+      return null
   }
+}
 
-  const step = STEP_OF[state.phase]
-  const showLaunch = signup.canLaunch || state.phase === 'idle'
+/**
+ * The connect page's content: checks the link, explains what connecting
+ * changes, sends this tab to Meta's signup and reports what the server saved
+ * when Meta brings it back.
+ */
+export function WhatsappConnectFlow() {
+  const t = useTranslations('whatsappConnect')
+  const locale = resolveSupportedLocale(useLocale())
+  const { state, goToMeta } = useConnectPage(locale)
+  const outcome = useRef<HTMLDivElement>(null)
+  const settled =
+    state.status !== 'claiming' &&
+    state.status !== 'ready' &&
+    state.status !== 'submitting'
+
+  // Screen readers and keyboards land on the result once there is one.
+  useEffect(() => {
+    if (settled) outcome.current?.focus()
+  }, [settled, state.status])
+
+  const step = STEP_OF[state.status]
+  const canGo = state.status === 'ready' || state.status === 'returned'
+  const leaving = canGo && state.leaving
   return (
     <ConnectCard
       handshake={
-        state.phase === 'connected'
+        state.status === 'connected'
           ? 'joined'
-          : state.phase === 'inMeta' || state.phase === 'submitting'
+          : state.status === 'submitting' || leaving
             ? 'waiting'
             : 'idle'
       }
-      phoneNumber={state.completion?.displayPhoneNumber}
+      phoneNumber={
+        state.status === 'connected'
+          ? state.completion.displayPhoneNumber
+          : null
+      }
     >
       {step !== null && <SignupSteps current={step} />}
 
-      {state.phase === 'idle' && (
+      {state.status === 'ready' && (
         <section aria-labelledby="whatsapp-connect-before" className={SECTION}>
           <h2 id="whatsapp-connect-before" className="text-ak-section text-ink">
             {t('before.heading')}
@@ -250,91 +254,38 @@ function SignupPanel({ claim }: { claim: ConnectTicketClaimed }) {
         aria-live="polite"
         className="focus:outline-none"
       >
-        {status}
+        <StatusMessage state={state} />
       </div>
 
-      {showLaunch && (
+      {canGo && (
         <div className="space-y-2.5">
-          {signup.sdkStatus === 'failed' ? (
-            <Notice tone="warning">
-              <p>{t('sdkFailed')}</p>
-              <button
-                type="button"
-                className={cn(
-                  akButton({ variant: 'secondary', size: 'row' }),
-                  'mt-1.5'
-                )}
-                onClick={signup.retrySdk}
-              >
-                {t('retrySdk')}
-              </button>
-            </Notice>
-          ) : (
-            <button
-              type="button"
-              className={cn(
-                akButton({
-                  variant:
-                    state.phase === 'metaError' ? 'secondary' : 'primary',
-                  size: 'lg',
-                }),
-                'w-full'
-              )}
-              onClick={signup.launch}
-              disabled={!signup.canLaunch}
-              aria-describedby="whatsapp-connect-launch-note"
-            >
-              {signup.sdkStatus === 'loading' && (
-                <Loader2 aria-hidden="true" className="animate-spin" />
-              )}
-              {state.phase === 'idle' ? t('launch') : t('tryAgain')}
-            </button>
-          )}
+          <button
+            type="button"
+            className={cn(
+              akButton({
+                variant:
+                  state.status === 'returned' && !state.cancelled
+                    ? 'secondary'
+                    : 'primary',
+                size: 'lg',
+              }),
+              'w-full'
+            )}
+            onClick={goToMeta}
+            disabled={leaving}
+            aria-describedby="whatsapp-connect-launch-note"
+          >
+            {leaving && <Loader2 aria-hidden="true" className="animate-spin" />}
+            {state.status === 'ready' ? t('launch') : t('tryAgain')}
+          </button>
           <p
             id="whatsapp-connect-launch-note"
             className="text-ak-caption text-ink-muted flex items-center justify-center gap-1.5 text-center"
           >
-            {signup.sdkStatus === 'loading' ? (
-              t('sdkLoading')
-            ) : state.phase === 'idle' ? (
-              <>
-                <Lock aria-hidden="true" className="size-3.5 shrink-0" />
-                {t('before.meta')}
-              </>
-            ) : null}
+            <Lock aria-hidden="true" className="size-3.5 shrink-0" />
+            {t('before.meta')}
           </p>
         </div>
-      )}
-    </ConnectCard>
-  )
-}
-
-/**
- * The connect page's content: checks the link, explains what connecting
- * changes, runs Meta's signup and reports what the server saved.
- */
-export function WhatsappConnectFlow() {
-  const t = useTranslations('whatsappConnect')
-  const ticket = useConnectTicket()
-
-  if (ticket.status === 'ready') return <SignupPanel claim={ticket.claim} />
-  return (
-    <ConnectCard handshake="idle">
-      {ticket.status === 'claiming' && (
-        <div role="status" aria-live="polite" className={SECTION}>
-          <Busy>{t('claiming')}</Busy>
-        </div>
-      )}
-      {ticket.status === 'missing' && (
-        <Notice tone="info" title={t('missingHeading')}>
-          <p>{t('missing')}</p>
-        </Notice>
-      )}
-      {ticket.status === 'invalid' && (
-        <Notice tone="warning" title={t('failedHeading')}>
-          <p>{t(`errors.${serverErrorKey(ticket.errorCode)}`)}</p>
-          <p>{t('startAgain')}</p>
-        </Notice>
       )}
     </ConnectCard>
   )
