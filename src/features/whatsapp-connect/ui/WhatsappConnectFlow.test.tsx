@@ -14,7 +14,7 @@ import {
   type FacebookLoginResponse,
   type FacebookSdk,
 } from '../hooks/facebookSdk'
-import { SESSION_WAIT_MS } from '../hooks/useEmbeddedSignup'
+import { LOST_ON_TOUCH_MS, SESSION_WAIT_MS } from '../hooks/useEmbeddedSignup'
 import { WhatsappConnectFlow } from './WhatsappConnectFlow'
 
 vi.mock('../api/whatsappConnectApi', async (importOriginal) => ({
@@ -265,6 +265,65 @@ describe('WhatsappConnectFlow', () => {
     fireEvent.click(again)
     expect(fb.login).toHaveBeenCalledTimes(2)
     expect(complete).not.toHaveBeenCalled()
+  })
+
+  describe('on a phone', () => {
+    function useTouch(coarse: boolean) {
+      vi.stubGlobal(
+        'matchMedia',
+        vi.fn((query: string) => ({
+          matches: coarse && query === '(pointer: coarse)',
+          media: query,
+        }))
+      )
+    }
+    async function launchAndLose(after: number) {
+      await launch()
+      const start = Date.now()
+      vi.spyOn(Date, 'now').mockReturnValue(start + after)
+      await answerLogin(null)
+    }
+    afterEach(() => {
+      vi.unstubAllGlobals()
+      vi.restoreAllMocks()
+    })
+
+    it('explains a long attempt that came back with nothing', async () => {
+      useTouch(true)
+      renderPage()
+      await launchAndLose(LOST_ON_TOUCH_MS)
+      expect(
+        await screen.findByText(en.whatsappConnect.lostOnTouch)
+      ).toBeTruthy()
+      expect(screen.queryByText(en.whatsappConnect.cancelled)).toBeNull()
+      expect(
+        screen.getByRole('button', { name: en.whatsappConnect.tryAgain })
+      ).toBeTruthy()
+    })
+
+    it('keeps a quick close as cancelled', async () => {
+      useTouch(true)
+      renderPage()
+      await launchAndLose(LOST_ON_TOUCH_MS - 1_000)
+      expect(await screen.findByText(en.whatsappConnect.cancelled)).toBeTruthy()
+    })
+
+    it('keeps a cancel from Meta as cancelled', async () => {
+      useTouch(true)
+      renderPage()
+      await launch()
+      await post({ type: 'WA_EMBEDDED_SIGNUP', event: 'CANCEL', data: {} })
+      vi.spyOn(Date, 'now').mockReturnValue(Date.now() + LOST_ON_TOUCH_MS)
+      await answerLogin(null)
+      expect(await screen.findByText(en.whatsappConnect.cancelled)).toBeTruthy()
+    })
+
+    it('keeps a long attempt on a computer as cancelled', async () => {
+      useTouch(false)
+      renderPage()
+      await launchAndLose(LOST_ON_TOUCH_MS)
+      expect(await screen.findByText(en.whatsappConnect.cancelled)).toBeTruthy()
+    })
   })
 
   it('explains a finish without the last click', async () => {

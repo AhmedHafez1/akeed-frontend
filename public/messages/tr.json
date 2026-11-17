@@ -3874,6 +3874,7 @@
       "close": "Bu sayfayı kapatıp Akeed’e dönebilirsiniz."
     },
     "cancelled": "Facebook penceresini bitirmeden kapattınız. Hiçbir şey bağlanmadı.",
+    "lostOnTouch": "Facebook sekmesi sonucu bu sayfaya gönderemedi, bu yüzden hiçbir şey bağlanmadı. Bu sekmeye dönüp yeniden deneyin veya işlemi bir bilgisayarda tamamlayın.",
     "noCode": "Facebook son adımı onaylamadı. Pencereyi yeniden açın ve kapatmak yerine son ekranda Bitir’e tıklayın.",
     "metaErrorHeading": "Facebook bağlantıyı tamamlayamadı",
     "metaErrorCode": "Meta hata kodu: {code}",

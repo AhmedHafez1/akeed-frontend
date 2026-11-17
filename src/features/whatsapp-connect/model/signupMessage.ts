@@ -11,6 +11,7 @@
 /** Meta's hosts that open the signup window. */
 export const TRUSTED_FACEBOOK_HOSTNAMES: ReadonlySet<string> = new Set([
   'www.facebook.com',
+  'm.facebook.com',
   'web.facebook.com',
   'business.facebook.com',
 ])

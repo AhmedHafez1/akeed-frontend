@@ -3874,6 +3874,7 @@
       "close": "Vous pouvez fermer cette page et revenir à Akeed."
     },
     "cancelled": "Vous avez fermé la fenêtre Facebook avant la fin. Aucun numéro n’a été connecté.",
+    "lostOnTouch": "L’onglet Facebook n’a pas pu renvoyer le résultat à cette page, donc rien n’a été connecté. Revenez sur cet onglet et réessayez, ou terminez sur un ordinateur.",
     "noCode": "Facebook n’a pas confirmé la dernière étape. Rouvrez-le et cliquez sur Terminer sur le dernier écran au lieu de fermer la fenêtre.",
     "metaErrorHeading": "Facebook n’a pas pu terminer la connexion",
     "metaErrorCode": "Code d’erreur Meta : {code}",

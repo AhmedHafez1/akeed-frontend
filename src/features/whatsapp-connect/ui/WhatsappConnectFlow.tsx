@@ -174,7 +174,11 @@ function SignupPanel({ claim }: { claim: ConnectTicketClaimed }) {
       )
       break
     case 'cancelled':
-      status = <Notice tone="info">{t('cancelled')}</Notice>
+      status = signup.lostOnTouch ? (
+        <Notice tone="warning">{t('lostOnTouch')}</Notice>
+      ) : (
+        <Notice tone="info">{t('cancelled')}</Notice>
+      )
       break
     case 'noCode':
       status = <Notice tone="warning">{t('noCode')}</Notice>

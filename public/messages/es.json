@@ -3874,6 +3874,7 @@
       "close": "Puedes cerrar esta página y volver a Akeed."
     },
     "cancelled": "Cerraste la ventana de Facebook antes de terminar. No se conectó nada.",
+    "lostOnTouch": "La pestaña de Facebook no pudo enviar el resultado a esta página, así que no se conectó nada. Vuelve a esta pestaña e inténtalo de nuevo, o termina en un ordenador.",
     "noCode": "Facebook no confirmó el último paso. Ábrelo de nuevo y haz clic en Finalizar en la última pantalla en lugar de cerrar la ventana.",
     "metaErrorHeading": "Facebook no pudo completar la conexión",
     "metaErrorCode": "Código de error de Meta: {code}",

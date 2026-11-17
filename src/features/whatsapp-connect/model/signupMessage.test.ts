@@ -5,6 +5,7 @@ describe('isTrustedFacebookOrigin', () => {
   it.each([
     'https://www.facebook.com',
     'https://web.facebook.com',
+    'https://m.facebook.com',
     'https://business.facebook.com',
   ])('trusts %s', (origin) => {
     expect(isTrustedFacebookOrigin(origin)).toBe(true)
@@ -19,7 +20,6 @@ describe('isTrustedFacebookOrigin', () => {
     'https://www.facebook.com:8443',
     'https://user@www.facebook.com',
     'https://www.facebook.com/',
-    'https://m.facebook.com',
     'https://akeed.facebook.com',
     'null',
     '',
