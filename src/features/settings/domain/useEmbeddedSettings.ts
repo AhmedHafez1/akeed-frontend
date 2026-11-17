@@ -3,7 +3,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { useShopifySubscribe } from '@/features/billing'
+import {
+  type ShopifySubscribeFailure,
+  useShopifySubscribe,
+} from '@/features/billing'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
 import { useAppBridgeLoading } from '@/shared/hooks/useAppBridgeLoading'
 import { getLocaleFromPathname } from '@/shared/lib/locale'
@@ -14,6 +17,12 @@ import {
 } from './useSettingsModel'
 
 export type { SaveOutcome } from './useSettingsModel'
+
+const PLAN_ERROR_KEY = {
+  freePlanClaimed: 'plan.freePlanClaimedError',
+  freePlanPhoneRequired: 'plan.freePlanPhoneRequiredError',
+  failed: 'plan.subscribeError',
+} as const satisfies Record<ShopifySubscribeFailure, string>
 
 /**
  * State and actions for the embedded Settings page: the shared form model
@@ -70,12 +79,7 @@ export function useEmbeddedSettings() {
   const { data, dirtyTabs: modelDirtyTabs } = model
 
   const planErrorMessage = useCallback(
-    (failure: 'freePlanClaimed' | 'failed') =>
-      t(
-        failure === 'freePlanClaimed'
-          ? 'plan.freePlanClaimedError'
-          : 'plan.subscribeError'
-      ),
+    (failure: ShopifySubscribeFailure) => t(PLAN_ERROR_KEY[failure]),
     [t]
   )
   const plan = useShopifySubscribe(hostParam, {

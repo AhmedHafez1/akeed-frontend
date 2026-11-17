@@ -2045,7 +2045,7 @@
     "planVolumePerMonth": "Jusqu’à {count} confirmations WhatsApp / mois",
     "planVolumeOneTime": "{count} confirmations WhatsApp (une seule fois)",
     "freePlanAlreadyClaimedTooltip": "Vous avez déjà utilisé le forfait gratuit. Il ne peut être choisi qu’une seule fois.",
-    "freePlanAlreadyClaimedError": "Cette boutique a déjà utilisé le forfait gratuit. Choisissez un forfait payant.",
+    "freePlanAlreadyClaimedError": "Le forfait gratuit a déjà été utilisé avec cette boutique ou ce numéro WhatsApp. Choisissez un forfait payant.",
     "embedded": {
       "title": "Paramètres",
       "tabs": {
@@ -2222,7 +2222,8 @@
         "renew": "Renouveler {plan} maintenant",
         "billingManaged": "Votre forfait est géré par l’équipe Akeed. Contactez l’assistance pour le modifier.",
         "subscribeError": "Nous n’avons pas pu ouvrir la page d’approbation de Shopify. Réessayez.",
-        "freePlanClaimedError": "Cette boutique a déjà utilisé le forfait gratuit. Choisissez un forfait payant.",
+        "freePlanClaimedError": "Le forfait gratuit a déjà été utilisé avec cette boutique ou ce numéro WhatsApp. Choisissez un forfait payant.",
+        "freePlanPhoneRequiredError": "Ajoutez d’abord votre numéro WhatsApp pour utiliser le forfait gratuit.",
         "pools": {
           "title": "Deux quotas. Une période de facturation.",
           "akeed": "Messages depuis Akeed",
@@ -2260,7 +2261,8 @@
     "planPricePerMonth": "{price} / mois",
     "planVolumePerMonth": "Jusqu’à {count} confirmations WhatsApp / mois",
     "freePlanAlreadyClaimedTooltip": "Vous avez déjà utilisé le forfait gratuit. Il ne peut être choisi qu’une seule fois.",
-    "freePlanAlreadyClaimedError": "Cette boutique a déjà utilisé le forfait gratuit. Choisissez un forfait payant.",
+    "freePlanAlreadyClaimedError": "Le forfait gratuit a déjà été utilisé avec cette boutique ou ce numéro WhatsApp. Choisissez un forfait payant.",
+    "freePlanPhoneRequiredError": "Ajoutez d’abord votre numéro WhatsApp dans Paramètres pour utiliser le forfait gratuit.",
     "freePlanUsedBadge": "Utilisé",
     "planStarterName": "Starter",
     "planBasicName": "Basic",

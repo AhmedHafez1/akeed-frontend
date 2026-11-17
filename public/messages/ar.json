@@ -3208,7 +3208,7 @@
     "planVolumePerMonth": "حتى {count} رسالة تأكيد واتساب شهرياً",
     "planVolumeOneTime": "{count} رسالة تأكيد واتساب (مرة واحدة)",
     "freePlanAlreadyClaimedTooltip": "لقد استخدمت الخطة المجانية من قبل. يمكن اختيار الخطة المجانية مرة واحدة فقط.",
-    "freePlanAlreadyClaimedError": "استخدم هذا المتجر الخطة المجانية من قبل. اختر خطة مدفوعة.",
+    "freePlanAlreadyClaimedError": "استُخدمت الخطة المجانية من قبل مع هذا المتجر أو رقم واتساب. اختر خطة مدفوعة.",
     "embedded": {
       "title": "الإعدادات",
       "tabs": {
@@ -3385,7 +3385,8 @@
         "renew": "جدِّد باقة {plan} الآن",
         "billingManaged": "تتم إدارة باقتك من فريق أكيد. تواصل مع الدعم لتغييرها.",
         "subscribeError": "تعذّر فتح صفحة الموافقة في شوبيفاي. حاول مرة أخرى.",
-        "freePlanClaimedError": "استخدم هذا المتجر الباقة المجانية من قبل. اختر باقة مدفوعة.",
+        "freePlanClaimedError": "استُخدمت الباقة المجانية من قبل مع هذا المتجر أو رقم واتساب. اختر باقة مدفوعة.",
+        "freePlanPhoneRequiredError": "أضف رقم واتساب الخاص بك أولًا لاستخدام الباقة المجانية.",
         "pools": {
           "title": "رصيدان. فترة فوترة واحدة.",
           "akeed": "رسائل من رقم أكيد",
@@ -3423,7 +3424,8 @@
     "planPricePerMonth": "{price}/شهر",
     "planVolumePerMonth": "حتى {count} رسالة تأكيد واتساب شهرياً",
     "freePlanAlreadyClaimedTooltip": "لقد استخدمت الخطة المجانية من قبل. يمكن اختيار الخطة المجانية مرة واحدة فقط.",
-    "freePlanAlreadyClaimedError": "استخدم هذا المتجر الخطة المجانية من قبل. اختر خطة مدفوعة.",
+    "freePlanAlreadyClaimedError": "استُخدمت الخطة المجانية من قبل مع هذا المتجر أو رقم واتساب. اختر خطة مدفوعة.",
+    "freePlanPhoneRequiredError": "أضف رقم واتساب الخاص بك في الإعدادات أولًا لاستخدام الخطة المجانية.",
     "freePlanUsedBadge": "مستخدمة",
     "planStarterName": "البداية",
     "planBasicName": "الأساسية",

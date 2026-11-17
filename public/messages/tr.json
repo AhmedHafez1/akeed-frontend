@@ -2045,7 +2045,7 @@
     "planVolumePerMonth": "Ayda en fazla {count} WhatsApp onayı",
     "planVolumeOneTime": "{count} WhatsApp onayı (tek seferlik)",
     "freePlanAlreadyClaimedTooltip": "Ücretsiz planı daha önce kullandınız. Ücretsiz plan yalnızca bir kez seçilebilir.",
-    "freePlanAlreadyClaimedError": "Bu mağaza ücretsiz planı daha önce kullandı. Lütfen ücretli bir plan seçin.",
+    "freePlanAlreadyClaimedError": "Ücretsiz plan bu mağaza veya WhatsApp numarasıyla daha önce kullanıldı. Lütfen ücretli bir plan seçin.",
     "embedded": {
       "title": "Ayarlar",
       "tabs": {
@@ -2222,7 +2222,8 @@
         "renew": "{plan} planını şimdi yenile",
         "billingManaged": "Planınız Akeed ekibi tarafından yönetiliyor. Değiştirmek için destek ekibine ulaşın.",
         "subscribeError": "Shopify’ın onay sayfasını açamadık. Tekrar deneyin.",
-        "freePlanClaimedError": "Bu mağaza ücretsiz planı daha önce kullandı. Ücretli bir plan seçin.",
+        "freePlanClaimedError": "Ücretsiz plan bu mağaza veya WhatsApp numarasıyla daha önce kullanıldı. Ücretli bir plan seçin.",
+        "freePlanPhoneRequiredError": "Ücretsiz planı kullanmak için önce WhatsApp numaranızı ekleyin.",
         "pools": {
           "title": "İki kota. Tek fatura dönemi.",
           "akeed": "Akeed numarasından mesajlar",
@@ -2260,7 +2261,8 @@
     "planPricePerMonth": "{price} / ay",
     "planVolumePerMonth": "Ayda en fazla {count} WhatsApp onayı",
     "freePlanAlreadyClaimedTooltip": "Ücretsiz planı daha önce kullandınız. Ücretsiz plan yalnızca bir kez seçilebilir.",
-    "freePlanAlreadyClaimedError": "Bu mağaza ücretsiz planı daha önce kullandı. Lütfen ücretli bir plan seçin.",
+    "freePlanAlreadyClaimedError": "Ücretsiz plan bu mağaza veya WhatsApp numarasıyla daha önce kullanıldı. Lütfen ücretli bir plan seçin.",
+    "freePlanPhoneRequiredError": "Ücretsiz planı kullanmak için önce Ayarlar’dan WhatsApp numaranızı ekleyin.",
     "freePlanUsedBadge": "Kullanıldı",
     "planStarterName": "Starter",
     "planBasicName": "Basic",

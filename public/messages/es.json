@@ -2045,7 +2045,7 @@
     "planVolumePerMonth": "Hasta {count} confirmaciones por WhatsApp / mes",
     "planVolumeOneTime": "{count} confirmaciones por WhatsApp (una sola vez)",
     "freePlanAlreadyClaimedTooltip": "Ya usaste el plan gratuito. Solo se puede elegir una vez.",
-    "freePlanAlreadyClaimedError": "Esta tienda ya usó el plan gratuito. Elige un plan de pago.",
+    "freePlanAlreadyClaimedError": "El plan gratuito ya se usó con esta tienda o este número de WhatsApp. Elige un plan de pago.",
     "embedded": {
       "title": "Configuración",
       "tabs": {
@@ -2222,7 +2222,8 @@
         "renew": "Renovar {plan} ahora",
         "billingManaged": "El equipo de Akeed administra tu plan. Contacta al soporte para cambiarlo.",
         "subscribeError": "No pudimos abrir la página de aprobación de Shopify. Inténtalo de nuevo.",
-        "freePlanClaimedError": "Esta tienda ya usó el plan gratuito. Elige un plan de pago.",
+        "freePlanClaimedError": "El plan gratuito ya se usó con esta tienda o este número de WhatsApp. Elige un plan de pago.",
+        "freePlanPhoneRequiredError": "Primero añade tu número de WhatsApp para usar el plan gratuito.",
         "pools": {
           "title": "Dos cupos. Un periodo de facturación.",
           "akeed": "Mensajes desde Akeed",
@@ -2260,7 +2261,8 @@
     "planPricePerMonth": "{price} / mes",
     "planVolumePerMonth": "Hasta {count} confirmaciones por WhatsApp / mes",
     "freePlanAlreadyClaimedTooltip": "Ya usaste el plan gratuito. Solo se puede elegir una vez.",
-    "freePlanAlreadyClaimedError": "Esta tienda ya usó el plan gratuito. Elige un plan de pago.",
+    "freePlanAlreadyClaimedError": "El plan gratuito ya se usó con esta tienda o este número de WhatsApp. Elige un plan de pago.",
+    "freePlanPhoneRequiredError": "Primero añade tu número de WhatsApp en Configuración para usar el plan gratuito.",
     "freePlanUsedBadge": "Usado",
     "planStarterName": "Starter",
     "planBasicName": "Basic",

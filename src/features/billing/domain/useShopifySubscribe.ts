@@ -10,7 +10,32 @@ import type { ShopifyPlanId } from './shopifyPlans'
 const logger = createLogger('Billing')
 
 /** Why sending the merchant to Shopify failed, for a caller's own wording. */
-export type ShopifySubscribeFailure = 'freePlanClaimed' | 'failed'
+export type ShopifySubscribeFailure =
+  | 'freePlanClaimed'
+  | 'freePlanPhoneRequired'
+  | 'failed'
+
+const FAILURE_BY_CODE: Record<string, ShopifySubscribeFailure> = {
+  BILLING_FREE_PLAN_ALREADY_CLAIMED: 'freePlanClaimed',
+  BILLING_FREE_PLAN_PHONE_REQUIRED: 'freePlanPhoneRequired',
+}
+
+const DEFAULT_MESSAGE_KEY = {
+  freePlanClaimed: 'freePlanAlreadyClaimedError',
+  freePlanPhoneRequired: 'freePlanPhoneRequiredError',
+  failed: 'billingActivationError',
+} as const satisfies Record<ShopifySubscribeFailure, string>
+
+/** The failure a subscribe error stands for, from the backend's code. */
+export function shopifySubscribeFailure(
+  error: unknown
+): ShopifySubscribeFailure {
+  return (
+    (error instanceof ApiError && error.code
+      ? FAILURE_BY_CODE[error.code]
+      : undefined) ?? 'failed'
+  )
+}
 
 /** Leaves the Shopify admin iframe for the charge approval page. */
 function openConfirmation(confirmationUrl: string) {
@@ -59,19 +84,9 @@ export function useShopifySubscribe(
         openConfirmation(confirmationUrl)
       } catch (subscribeError) {
         logger.error('Failed to activate plan', subscribeError)
-        const failure: ShopifySubscribeFailure =
-          subscribeError instanceof ApiError &&
-          subscribeError.code === 'BILLING_FREE_PLAN_ALREADY_CLAIMED'
-            ? 'freePlanClaimed'
-            : 'failed'
+        const failure = shopifySubscribeFailure(subscribeError)
         setError(
-          errorMessage
-            ? errorMessage(failure)
-            : t(
-                failure === 'freePlanClaimed'
-                  ? 'freePlanAlreadyClaimedError'
-                  : 'billingActivationError'
-              )
+          errorMessage ? errorMessage(failure) : t(DEFAULT_MESSAGE_KEY[failure])
         )
         setSubscribingPlanId(null)
         pending.current = false
