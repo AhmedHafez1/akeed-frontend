@@ -32,6 +32,19 @@ export const SESSION_WAIT_MS = 4_000
 
 const MAX_CODE_LENGTH = 2_048
 
+/**
+ * An attempt this long that ends with no code and no cancel from Meta most
+ * likely ran to the end in a phone tab that lost its link to this page.
+ */
+export const LOST_ON_TOUCH_MS = 20_000
+
+function isTouchDevice(): boolean {
+  return (
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(pointer: coarse)').matches
+  )
+}
+
 export type SdkStatus = 'loading' | 'ready' | 'failed'
 
 export interface EmbeddedSignup {
@@ -40,6 +53,11 @@ export interface EmbeddedSignup {
   canLaunch: boolean
   /** Opens Meta's window. Call it directly from the click. */
   launch: () => void
+  /**
+   * The last attempt ended with no code on a phone after running long enough
+   * to finish: Meta's tab could not report back to this page.
+   */
+  lostOnTouch: boolean
   /** Back to the start after a cancel or a Meta error. */
   reset: () => void
   retrySdk: () => void
@@ -68,6 +86,9 @@ export function useEmbeddedSignup(
   const sdk = useRef<FacebookSdk | null>(null)
   const mounted = useRef(true)
   const submitted = useRef(false)
+  const launchedAt = useRef(0)
+  const sawCancel = useRef(false)
+  const [lostOnTouch, setLostOnTouch] = useState(false)
 
   useEffect(() => {
     mounted.current = true
@@ -100,8 +121,10 @@ export function useEmbeddedSignup(
       if (!message) return
       if (message.kind === 'finish')
         dispatch({ type: 'SESSION_FINISH', hints: message.hints })
-      else if (message.kind === 'cancel') dispatch({ type: 'SESSION_CANCEL' })
-      else dispatch({ type: 'SESSION_ERROR', errorCode: message.errorCode })
+      else if (message.kind === 'cancel') {
+        sawCancel.current = true
+        dispatch({ type: 'SESSION_CANCEL' })
+      } else dispatch({ type: 'SESSION_ERROR', errorCode: message.errorCode })
     }
     window.addEventListener('message', onMessage)
     return () => window.removeEventListener('message', onMessage)
@@ -162,11 +185,22 @@ export function useEmbeddedSignup(
     const loaded = sdk.current
     if (!loaded || !launchable || submitted.current) return
     dispatch({ type: 'LAUNCH' })
+    launchedAt.current = Date.now()
+    sawCancel.current = false
+    setLostOnTouch(false)
     // FB.login opens a popup, so it runs inside the click, before any await.
     loaded.login(
       (response) => {
-        if (mounted.current)
-          dispatch({ type: 'LOGIN_RESULT', code: codeFrom(response) })
+        if (!mounted.current) return
+        const code = codeFrom(response)
+        if (
+          code === null &&
+          !sawCancel.current &&
+          Date.now() - launchedAt.current >= LOST_ON_TOUCH_MS &&
+          isTouchDevice()
+        )
+          setLostOnTouch(true)
+        dispatch({ type: 'LOGIN_RESULT', code })
       },
       {
         config_id: claim.configId,
@@ -188,6 +222,7 @@ export function useEmbeddedSignup(
     sdkStatus,
     canLaunch: launchable,
     launch,
+    lostOnTouch,
     reset,
     retrySdk,
   }

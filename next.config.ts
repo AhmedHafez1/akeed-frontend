@@ -41,6 +41,12 @@ const nextConfig: NextConfig = {
         source: '/:locale/whatsapp/:path*',
         headers: [
           {
+            // Keeps Meta's signup window linked to this tab, so its result
+            // can come back on phones too.
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin-allow-popups',
+          },
+          {
             key: 'Cache-Control',
             value: 'private, no-store',
           },

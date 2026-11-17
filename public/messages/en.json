@@ -5424,6 +5424,7 @@
       "close": "You can close this page and go back to Akeed."
     },
     "cancelled": "You closed the Facebook window before finishing. Nothing was connected.",
+    "lostOnTouch": "Facebook's tab couldn't send the result back to this page, so nothing was connected. Come back to this tab and try again, or finish on a computer.",
     "noCode": "Facebook didn't confirm the last step. Open it again and click Finish on the last screen instead of closing the window.",
     "metaErrorHeading": "Facebook couldn't finish the connection",
     "metaErrorCode": "Meta error code: {code}",
