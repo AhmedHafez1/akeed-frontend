@@ -48,7 +48,7 @@ const copy = en.whatsappConnect.tab
 
 const pools: UsagePools = {
   akeed: { used: 138, limit: 300, remaining: 162 },
-  ownNumber: { used: 360, limit: 900, remaining: 540 },
+  ownNumber: { used: 360, limit: 1000, remaining: 640 },
 }
 
 function renderTab(tabPools: UsagePools | null = pools) {
@@ -81,7 +81,7 @@ describe('embedded WhatsApp tab', () => {
       await screen.findByRole('button', { name: copy.connect.action })
     ).toBeTruthy()
     expect(screen.getByText('300 messages')).toBeTruthy()
-    expect(screen.getByText('+900 messages')).toBeTruthy()
+    expect(screen.getByText('+1,000 messages')).toBeTruthy()
     expect(screen.getByText(copy.costs.poolNote)).toBeTruthy()
   })
 

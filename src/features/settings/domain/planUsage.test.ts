@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
-  allowanceDemand,
+  planCovers,
   recommendPlan,
   resolvePrimaryPlanId,
   resolveUsageBanner,
@@ -8,10 +8,30 @@ import {
 } from './planUsage'
 
 const PLANS = [
-  { id: 'starter', amount: 0, includedVerifications: 30 },
-  { id: 'basic', amount: 9.99, includedVerifications: 300 },
-  { id: 'pro', amount: 22.99, includedVerifications: 1000 },
-  { id: 'business', amount: 49.99, includedVerifications: 2500 },
+  {
+    id: 'starter',
+    amount: 0,
+    includedVerifications: 30,
+    ownNumberIncludedVerifications: 90,
+  },
+  {
+    id: 'basic',
+    amount: 9.99,
+    includedVerifications: 300,
+    ownNumberIncludedVerifications: 1000,
+  },
+  {
+    id: 'pro',
+    amount: 22.99,
+    includedVerifications: 1000,
+    ownNumberIncludedVerifications: 5000,
+  },
+  {
+    id: 'business',
+    amount: 49.99,
+    includedVerifications: 2500,
+    ownNumberIncludedVerifications: 20000,
+  },
 ]
 
 describe('resolveUsageBanner', () => {
@@ -81,32 +101,34 @@ describe('recommendPlan', () => {
     expect(recommendPlan([PLANS[0]], 10)).toBeNull()
   })
 
-  it('sizes each pool from what it paid for with mixed senders', () => {
-    // 264 messages in all would need Pro; 64 of them paid from Akeed's pool
-    // and 200 from a pool three times larger only need Basic.
-    expect(
-      recommendPlan(PLANS, 264, {
-        akeed: 64,
-        ownNumber: 200,
-        ownNumberRatio: 3,
-      })
-    ).toBe('basic')
-    // The tighter pool decides: own-number volume can still call for more.
-    expect(
-      recommendPlan(PLANS, 1000, {
-        akeed: 100,
-        ownNumber: 900,
-        ownNumberRatio: 3,
-      })
-    ).toBe('pro')
+  it('sizes each plan with its own pools for mixed senders', () => {
+    // 264 messages in all would need Pro; 64 from Akeed's pool and 200 from
+    // the own number fit Basic's 300 + 1,000.
+    expect(recommendPlan(PLANS, 264, { akeed: 64, ownNumber: 200 })).toBe(
+      'basic'
+    )
+    // Basic's own pool covers 1,000 / 1.5 own-number messages; beyond that
+    // they spill into the Akeed pool and Pro's larger pools fit.
+    expect(recommendPlan(PLANS, 1100, { akeed: 100, ownNumber: 1000 })).toBe(
+      'pro'
+    )
+    // Scale's 20,000 own-number pool is what fits high own-number volume.
+    expect(recommendPlan(PLANS, 6000, { akeed: 500, ownNumber: 5500 })).toBe(
+      'business'
+    )
   })
 
-  it('counts every message against the allowance without pool figures', () => {
-    expect(allowanceDemand(264)).toBe(264)
-    expect(allowanceDemand(264, null)).toBe(264)
-    expect(
-      allowanceDemand(10, { akeed: 4, ownNumber: 6, ownNumberRatio: 0 })
-    ).toBe(10)
+  it("spills own-number volume past a plan's own pool into its Akeed pool", () => {
+    const basic = PLANS[1]
+    // 600 own-number messages need 900 with headroom: under Basic's 1,000.
+    expect(planCovers(basic, 700, { akeed: 100, ownNumber: 600 })).toBe(true)
+    // 800 need 1,200: 200 spill over, and 150 + 200 exceeds 300.
+    expect(planCovers(basic, 900, { akeed: 100, ownNumber: 800 })).toBe(false)
+  })
+
+  it('counts every message against the Akeed allowance without pool figures', () => {
+    expect(planCovers(PLANS[1], 200)).toBe(true)
+    expect(planCovers(PLANS[1], 201, null)).toBe(false)
   })
 })
 

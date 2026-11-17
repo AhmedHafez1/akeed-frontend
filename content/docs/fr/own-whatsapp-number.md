@@ -9,7 +9,7 @@ slug: own-whatsapp-number
 
 Par défaut, Akeed envoie les confirmations depuis son propre numéro WhatsApp officiel, et vous n’avez rien à connecter. Vous pouvez aussi connecter votre propre numéro WhatsApp Business, pour que les clients reçoivent les confirmations au nom et depuis le numéro de votre entreprise.
 
-Le numéro d’Akeed reste disponible en secours. Tout message que votre numéro ne peut pas encore envoyer part du numéro d’Akeed, et les clients continuent donc de recevoir leurs confirmations.
+Le numéro d’Akeed reste disponible en secours. Tout message que votre numéro ne peut pas encore envoyer part du numéro d’Akeed, et les clients continuent donc de recevoir leurs confirmations. Les messages de secours sont décomptés de votre forfait ou de vos crédits, comme l’explique la section **Combien ça coûte ?**.
 
 Vous pouvez connecter un numéro que vous utilisez déjà dans l’application WhatsApp Business sur votre téléphone, ou un numéro qui n’est pas encore sur WhatsApp.
 
@@ -72,18 +72,22 @@ Réglez ce que les paramètres signalent : attendez l’examen du modèle, rég
 | Votre numéro | 1 crédit |
 | Le numéro d’Akeed | 2 crédits |
 
-Si votre solde ne couvre pas le coût complet d’un message de secours depuis le numéro d’Akeed, le message est quand même envoyé et utilise ce qui reste.
+Un message de secours depuis le numéro d’Akeed coûte 2 crédits, comme tout message depuis le numéro d’Akeed. Si votre solde est insuffisant, il n’est pas envoyé : la commande attend avec le statut **En attente d’envoi** et part dès que vous achetez des crédits.
 
 ### Forfaits Shopify
 
 Une fois votre numéro connecté, votre forfait comporte deux quotas distincts :
 
-| Quota | Taille |
-| --- | --- |
-| Messages depuis le numéro d’Akeed | Les messages inclus dans votre forfait |
-| Messages depuis votre numéro | Trois fois les messages inclus dans votre forfait |
+| Forfait | Messages depuis le numéro d’Akeed | Messages depuis votre numéro |
+| --- | --- | --- |
+| Starter (une seule fois) | 30 | 90 |
+| Basic | 300 | 1 000 |
+| Pro | 1 000 | 5 000 |
+| Scale | 2 500 | 20 000 |
 
-Les deux quotas se renouvellent ensemble au début de chaque période de facturation. Un message depuis votre numéro utilise le quota de votre numéro ; une fois celui-ci épuisé, il utilise 1 message du quota d’Akeed. Un message de secours depuis le numéro d’Akeed utilise le quota d’Akeed ; une fois celui-ci épuisé, il utilise 3 messages du quota de votre numéro. Quand les deux sont épuisés, les envois s’arrêtent jusqu’à leur renouvellement.
+Les deux quotas se renouvellent ensemble au début de chaque période de facturation. Ceux de Starter sont valables une seule fois et ne se renouvellent pas. Un message depuis votre numéro utilise le quota de votre numéro ; une fois celui-ci épuisé, il utilise 1 message du quota d’Akeed. Quand les deux sont épuisés, les envois s’arrêtent jusqu’à leur renouvellement.
+
+Un message de secours depuis le numéro d’Akeed utilise le quota d’Akeed, jamais celui de votre numéro. Une fois le quota d’Akeed épuisé, le message de secours n’est pas envoyé : la commande attend avec le statut **En attente d’envoi**, comme toute commande reçue après votre limite, et part dès que vos quotas sont renouvelés ou que vous changez de forfait. Les messages depuis votre numéro continuent tant que leur quota le permet.
 
 ### Frais de Meta
 

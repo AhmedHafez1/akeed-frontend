@@ -33,15 +33,15 @@ describe('message coverage', () => {
 })
 
 describe('own-number plan allowance', () => {
-  const plan = { ownNumberIncludedVerifications: 900 }
+  const plan = { ownNumberIncludedVerifications: 1000 }
 
   it('shows the pool while the own number is offered', () => {
     expect(
       ownNumberAllowance(plan, { visible: true, connected: false })
-    ).toEqual({ messages: 900, connected: false })
+    ).toEqual({ messages: 1000, connected: false })
     expect(
       ownNumberAllowance(plan, { visible: true, connected: true })
-    ).toEqual({ messages: 900, connected: true })
+    ).toEqual({ messages: 1000, connected: true })
   })
 
   it('hides it while not offered, still loading, or missing from the API', () => {

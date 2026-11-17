@@ -35,6 +35,8 @@ export interface RecommendablePlan {
   id: string
   amount: number
   includedVerifications: number
+  /** The plan's own-number pool, from the API. Each plan sets its own. */
+  ownNumberIncludedVerifications?: number
 }
 
 function paidBySize<T extends RecommendablePlan>(plans: readonly T[]): T[] {
@@ -47,29 +49,41 @@ function paidBySize<T extends RecommendablePlan>(plans: readonly T[]): T[] {
 export interface SentByPool {
   akeed: number
   ownNumber: number
-  /** The own-number pool's size per Akeed message, from the current pools. */
-  ownNumberRatio: number
 }
 
 /**
- * Messages the Akeed allowance has to cover. With the merchant's own number,
- * each pool is sized from what it actually paid for: own-number messages
- * count against a pool `ownNumberRatio` times larger, so they need that much
- * less of the allowance. Whichever pool is tighter decides.
+ * Whether a plan covers the volume with 1.5 times headroom. Without pool
+ * figures every message counts against the Akeed allowance. With them, each
+ * pool covers what it paid for, using that plan's own pool sizes: own-number
+ * messages beyond the own-number pool spill into the Akeed pool, as sends from
+ * a healthy number do.
  */
-export function allowanceDemand(
+export function planCovers(
+  plan: RecommendablePlan,
   messagesSentLast30Days: number,
   byPool?: SentByPool | null
-): number {
-  if (!byPool || byPool.ownNumberRatio <= 0) return messagesSentLast30Days
-  return Math.max(byPool.akeed, byPool.ownNumber / byPool.ownNumberRatio)
+): boolean {
+  if (!byPool)
+    return (
+      plan.includedVerifications >=
+      messagesSentLast30Days * RECOMMENDATION_HEADROOM
+    )
+  const ownPool = plan.ownNumberIncludedVerifications ?? 0
+  const overflow = Math.max(
+    byPool.ownNumber * RECOMMENDATION_HEADROOM - ownPool,
+    0
+  )
+  return (
+    plan.includedVerifications >=
+    byPool.akeed * RECOMMENDATION_HEADROOM + overflow
+  )
 }
 
 /**
- * The smallest paid plan whose monthly allowance is at least 1.5 times the
- * messages sent in the last 30 days, which leaves room for follow-ups. Without
- * history there is nothing to base a recommendation on, so there is none;
- * volume above every plan means the largest one.
+ * The smallest paid plan that covers the messages sent in the last 30 days
+ * with 1.5 times headroom, which leaves room for follow-ups. Without history
+ * there is nothing to base a recommendation on, so there is none; volume
+ * above every plan means the largest one.
  */
 export function recommendPlan(
   plans: readonly RecommendablePlan[],
@@ -79,10 +93,8 @@ export function recommendPlan(
   const paid = paidBySize(plans)
   if (paid.length === 0 || messagesSentLast30Days <= 0) return null
 
-  const target =
-    allowanceDemand(messagesSentLast30Days, byPool) * RECOMMENDATION_HEADROOM
   return (
-    paid.find((plan) => plan.includedVerifications >= target)?.id ??
+    paid.find((plan) => planCovers(plan, messagesSentLast30Days, byPool))?.id ??
     paid[paid.length - 1].id
   )
 }

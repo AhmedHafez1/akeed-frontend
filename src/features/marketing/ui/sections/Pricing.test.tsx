@@ -18,6 +18,7 @@ describe('Pricing', () => {
     expect(text()).not.toContain(own.meta_note)
     expect(text()).not.toContain(own.fact_title)
     expect(text()).not.toContain("messages from Akeed's number")
+    expect(text()).not.toContain('20,000')
     expect(
       screen.getByRole('link', { name: /See plans on Shopify/ })
     ).toBeTruthy()
@@ -53,9 +54,9 @@ describe('Pricing', () => {
 
     for (const [akeed, ownCount] of [
       ['30', '90'],
-      ['300', '900'],
-      ['1,000', '3,000'],
-      ['2,500', '7,500'],
+      ['300', '1,000'],
+      ['1,000', '5,000'],
+      ['2,500', '20,000'],
     ]) {
       expect(text()).toContain(`${akeed} messages from Akeed's number`)
       expect(text()).toContain(`${ownCount} more from your own number`)
@@ -73,5 +74,9 @@ describe('Pricing', () => {
     expect(screen.getByText(arOwn.from_yours)).toBeTruthy()
     expect(screen.getByText(arOwn.meta_note)).toBeTruthy()
     expect(screen.getByText(arOwn.shopify_note)).toBeTruthy()
+    // Western digits, the approved own-number figures.
+    for (const ownCount of ['90', '1,000', '5,000', '20,000'])
+      expect(text()).toContain(ownCount)
+    expect(text()).not.toContain('7,500')
   })
 })

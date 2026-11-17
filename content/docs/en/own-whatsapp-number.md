@@ -9,7 +9,7 @@ slug: own-whatsapp-number
 
 By default, Akeed sends confirmations from its own official WhatsApp number, and you don't need to connect anything. You can also connect your own WhatsApp Business number, so customers get confirmations from your business name and number.
 
-Akeed's number stays in place as a backup. Any message your number is not ready to send still goes out from Akeed's number, so customers keep getting their confirmations.
+Akeed's number stays in place as a backup. Any message your number is not ready to send still goes out from Akeed's number, so customers keep getting their confirmations. Backup messages count against your plan or credits, as **What It Costs** explains.
 
 You can connect a number you already use in the WhatsApp Business app on your phone, or a number that is not on WhatsApp yet.
 
@@ -72,18 +72,22 @@ Fix what the settings point to: wait for the template review, settle the payment
 | Your number | 1 credit |
 | Akeed's number | 2 credits |
 
-If your balance can't cover the full cost of a backup message from Akeed's number, the message is still sent and uses what is left.
+A backup message from Akeed's number costs 2 credits, like any message from Akeed's number. If your balance is too low, it isn't sent: the order waits with the status **Waiting to send** and goes out once you buy credits.
 
 ### Shopify Plans
 
 Once your number is connected, your plan has two separate allowances:
 
-| Allowance | Size |
-| --- | --- |
-| Messages from Akeed's number | The messages included in your plan |
-| Messages from your number | Three times the messages included in your plan |
+| Plan | Messages from Akeed's number | Messages from your number |
+| --- | --- | --- |
+| Starter (one-time) | 30 | 90 |
+| Basic | 300 | 1,000 |
+| Pro | 1,000 | 5,000 |
+| Scale | 2,500 | 20,000 |
 
-Both allowances reset together at the start of each billing period. A message from your number uses the own-number allowance; when that is used up, it uses 1 message from the Akeed allowance. A backup message from Akeed's number uses the Akeed allowance; when that is used up, it uses 3 messages from the own-number allowance. When both are used up, sending stops until they reset.
+Both allowances reset together at the start of each billing period. Starter's are one-time and don't reset. A message from your number uses the own-number allowance; when that is used up, it uses 1 message from the Akeed allowance. When both are used up, sending stops until they reset.
+
+A backup message from Akeed's number uses the Akeed allowance, never your number's. When the Akeed allowance is used up, the backup isn't sent: the order waits with the status **Waiting to send**, like any order that arrives after your limit, and goes out once your allowances reset or you upgrade. Messages from your number keep going while their allowance lasts.
 
 ### Meta's Charges
 
