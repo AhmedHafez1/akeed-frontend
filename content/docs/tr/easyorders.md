@@ -109,7 +109,7 @@ Mağazanın EasyOrders’da etkin olduğunu kontrol edin ve siparişlerin redded
 
 ### Kendi WhatsApp Business numaram gerekli mi?
 
-Hayır. Mesajlar Akeed’in WhatsApp numarasından gönderilir.
+Hayır. Akeed onayları varsayılan olarak kendi resmi WhatsApp numarasından gönderir. Müşterilerin onayları işletmenizin numarasından alması için kendi WhatsApp Business numaranızı da bağlayabilirsiniz; Akeed’in numarası yedek olarak kalır. [Kendi WhatsApp Numaranızı Kullanma](/docs/own-whatsapp-number) kılavuzuna bakın.
 
 ### Akeed eski siparişlerimi içe aktarır mı?
 
