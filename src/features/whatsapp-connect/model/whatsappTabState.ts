@@ -4,6 +4,7 @@ import type {
   WhatsappConnectionStatus,
   WhatsappSenderAvailability,
 } from '../api/whatsappConnectApi'
+import { whatsappProgress, type WhatsappProgress } from './whatsappProgress'
 
 /**
  * What the WhatsApp settings tab shows, from the two server answers alone.
@@ -97,6 +98,7 @@ export interface TabBanner {
 }
 
 export interface ConnectionView {
+  progress: WhatsappProgress
   kind: 'connection'
   state: WhatsappConnectionStatus['state']
   phone: string | null
@@ -297,8 +299,9 @@ export function whatsappTabView(
   }
 
   const wantsReconnect = banners.some((banner) => banner.action === 'reconnect')
-  return {
+  const view: ConnectionView = {
     kind: 'connection',
+    progress: { rows: [], coverage: null },
     state: connection.state,
     phone: connection.displayPhoneNumber,
     signupPath: connection.signupPath,
@@ -332,4 +335,6 @@ export function whatsappTabView(
       (connection.state !== 'disconnected' && wantsReconnect),
     isOwner,
   }
+  view.progress = whatsappProgress(view, connection)
+  return view
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import type { KeyboardEvent } from 'react'
+import { useEffect, useRef, type KeyboardEvent } from 'react'
 import {
   STANDALONE_SETTINGS_TABS,
   type StandaloneSettingsTabId,
@@ -38,6 +38,13 @@ export function SettingsTabs({
   unsavedLabel,
   onSelect,
 }: SettingsTabsProps) {
+  const selectedTab = useRef<HTMLButtonElement>(null)
+  useEffect(() => {
+    selectedTab.current?.scrollIntoView?.({
+      block: 'nearest',
+      inline: 'nearest',
+    })
+  }, [active])
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     const count = shownTabs.length
     const tabs = Array.from(
@@ -80,6 +87,7 @@ export function SettingsTabs({
           return (
             <button
               key={tab}
+              ref={selected ? selectedTab : undefined}
               id={settingsTabDomId(tab)}
               type="button"
               role="tab"

@@ -25,7 +25,7 @@ You can connect a number you already use in the WhatsApp Business app on your ph
 1. Open **Settings**, then **WhatsApp**.
 2. Choose **Connect your number**. A secure page opens in a new tab.
 3. Finish the Facebook connection there: choose or create your business, then choose the number.
-4. Return to Akeed. The WhatsApp settings refresh and show how ready your number is.
+4. On the success screen, choose **Back to WhatsApp settings**. You return to the WhatsApp tab in Akeed or Shopify Admin, in your selected language.
 
 If the new tab does not open, allow pop-ups for Akeed in your browser and choose **Connect your number** again.
 
@@ -42,9 +42,9 @@ Your number sends a message only when both of these are true:
 - the number is healthy: connected, with no payment or quality problem flagged by Meta,
 - the exact template for that message is approved in the customer's message language.
 
-Readiness is checked for each template and each language. Your confirmation in Arabic can be ready while the reminder in English is still in review. The WhatsApp settings list each template with its language, its status and the number that sends it now.
+The WhatsApp tab shows three statuses: **Number connected**, **Message templates** and **Sending from your number**. Some messages may be ready while others await approval. A problem appears beside the affected status, with the next action.
 
-The settings also show the number that sent your last message. That tells you what happened before, not what happens next. The current sender of each template is what counts.
+Pending setup refreshes every 15 seconds while this page is visible, and when you return to the tab. An earlier successful send does not mean your number is ready now.
 
 ### When Akeed's Number Takes Over
 
@@ -55,7 +55,7 @@ Akeed's number sends instead of yours when:
 - your number is disconnected,
 - Meta does not give a clear answer when Akeed sends from your number.
 
-Your customer still gets the confirmation. The WhatsApp settings show the reason for each template.
+The WhatsApp tab shows connection, approval and sending problems together with the action to take.
 
 ### Getting Back to Your Number
 
@@ -98,11 +98,11 @@ Meta charges your business separately for messages sent from your number, under 
 
 ## Thank-You Replies
 
-After a customer confirms or cancels, Akeed can send a short thank-you. In **Settings**, then **WhatsApp**, choose whether customers get a thank-you from your number. It is on until you turn it off, and your choice is kept if you reconnect.
+Use the single thank-you switch in **Settings → Message** for both numbers. Your existing choice stays saved when you connect or reconnect. A thank-you uses the number that received the customer’s reply.
 
-- A thank-you from your number has no Akeed charge. Meta may charge your business under its own pricing.
-- A thank-you from your number never falls back to Akeed's number. If your number can't send it, the customer gets no thank-you.
-- Thank-yous from Akeed's number keep their own setting and cost, shown in your settings.
+- On Shopify, each thank-you uses one message from the actual sender’s allowance. With prepaid credits, it costs 1 credit from your number or 2 credits from Akeed’s number. Meta may charge separately.
+- While your number awaits approval, a reply received by Akeed still uses Akeed’s allowance or credit rate.
+- If capacity is unavailable, the thank-you is skipped. A failed thank-you from your number never falls back to Akeed.
 
 ## Who Can Do What
 

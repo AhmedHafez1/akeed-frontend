@@ -1690,13 +1690,15 @@
       "label": "Enviar mensajes de agradecimiento",
       "description": "Envía un mensaje después de que el cliente confirme o cancele su pedido.",
       "creditCost": "Cada agradecimiento usa {count} créditos.",
-      "planCost": "Cada agradecimiento cuenta como 1 mensaje de tu plan.",
+      "planCost": "Cada agradecimiento usa un mensaje de la cuota del número que lo envía.",
       "confirmed": "Tras la confirmación",
       "canceled": "Tras la cancelación",
       "unavailable": "Los mensajes de agradecimiento no están disponibles temporalmente. Aún puedes desactivarlos.",
       "textUnavailable": "No hay texto de agradecimiento disponible en este idioma.",
       "autoNote": "Este ejemplo usa el estilo predeterminado. El texto árabe real sigue el dialecto del cliente.",
-      "saveUnavailable": "Los mensajes de agradecimiento no están disponibles. Desactívalos para guardar los cambios."
+      "saveUnavailable": "Los mensajes de agradecimiento no están disponibles. Desactívalos para guardar los cambios.",
+      "senderCreditCost": "Créditos: {own} desde tu número, {akeed} desde Akeed.",
+      "akeedCreditCost": "Desde Akeed: {count} créditos."
     },
     "logo": {
       "heading": "Logo de la tienda",
@@ -3849,7 +3851,7 @@
   },
   "whatsappConnect": {
     "title": "Conecta tu número de WhatsApp",
-    "intro": "Envía las confirmaciones de pedidos desde tu propio número de WhatsApp Business en lugar del de Akeed.",
+    "intro": "Envía confirmaciones desde el número de tu negocio.",
     "claiming": "Comprobando tu enlace...",
     "missingHeading": "Empieza desde la configuración de Akeed",
     "missing": "Esta página se abre desde un enlace de Akeed. En Akeed, ve a Configuración y elige Conectar WhatsApp.",
@@ -3865,7 +3867,7 @@
     "tryAgain": "Abrir Facebook de nuevo",
     "submitting": "Comprobando tu conexión con Meta...",
     "connected": {
-      "heading": "Tu número está conectado",
+      "heading": "WhatsApp conectado",
       "pending": "La configuración aún no ha terminado. Akeed está preparando tus plantillas de mensajes y las confirmaciones seguirán saliendo desde el número de Akeed hasta que tu número esté listo.",
       "close": "Puedes cerrar esta página y volver a Akeed."
     },
@@ -3947,7 +3949,7 @@
       },
       "connect": {
         "heading": "Un número conocido. La voz de tu tienda.",
-        "body": "Akeed sigue enviando hasta que tu número esté listo.",
+        "body": "Envía confirmaciones desde el número de tu negocio.",
         "keepApp": "Sigue usando tu app WhatsApp Business",
         "metaBills": "Meta factura directamente a tu negocio",
         "action": "Conectar tu número",
@@ -4158,7 +4160,53 @@
         "body": "Tus ajustes de envío no cambiaron. Inténtalo de nuevo para ver el estado más reciente.",
         "retry": "Intentar de nuevo"
       },
-      "help": "Cómo funciona tu propio número"
-    }
+      "help": "Cómo funciona tu propio número",
+      "progress": {
+        "label": "Estado de configuración de WhatsApp",
+        "labels": {
+          "number": "Número conectado",
+          "templates": "Plantillas de mensajes",
+          "sending": "Envíos desde tu número"
+        },
+        "statuses": {
+          "connected": "Conectado",
+          "reconnect": "Necesita reconexión",
+          "preparing": "Preparando",
+          "pending": "Pendiente de aprobación",
+          "someApproved": "Algunas aprobadas",
+          "approved": "Aprobadas",
+          "waiting": "Esperando aprobación",
+          "someMessages": "Algunos mensajes",
+          "ready": "Listo",
+          "attention": "Necesita atención",
+          "paused": "En pausa"
+        },
+        "coverage": {
+          "pending": "Akeed envía los mensajes mientras tu número se prepara.",
+          "partial": "Akeed envía los mensajes que aún esperan aprobación."
+        },
+        "issues": {
+          "payment": "Actualiza tu método de pago en Meta.",
+          "credentials": "Vuelve a conectar tu número de WhatsApp.",
+          "restricted": "Revisa la restricción en el administrador de WhatsApp.",
+          "quality": "Revisa la calidad de tu número en Meta.",
+          "unavailable": "Tu número no está disponible temporalmente.",
+          "templates": "Algunas plantillas necesitan atención. Por ahora, Akeed envía esos mensajes.",
+          "setup": "No pudimos terminar de preparar tu número.",
+          "retry": "Estamos reintentando la configuración automáticamente.",
+          "sendingOff": "Los envíos desde tu número están en pausa. Akeed envía por ahora.",
+          "inactive": "Finalizó la conexión de tu app WhatsApp Business. Vuelve a conectarla y abre la app al menos cada 14 días."
+        },
+        "actions": {
+          "manager": "Abrir el administrador de WhatsApp",
+          "help": "Obtener ayuda",
+          "reconnect": "Reconectar",
+          "askOwner": "Pide al propietario de tu tienda que vuelva a conectar el número."
+        }
+      }
+    },
+    "fees": "Se aplican cargos de uso de Akeed y de mensajes de Meta.",
+    "whatChanges": "¿Qué cambia?",
+    "backToSettings": "Volver a la configuración de WhatsApp"
   }
 }

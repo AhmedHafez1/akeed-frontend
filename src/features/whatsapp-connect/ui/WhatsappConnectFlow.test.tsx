@@ -56,6 +56,7 @@ const signedClaim = (expiresInMs = 30 * 60_000) => ({
 })
 
 beforeEach(() => {
+  sessionStorage.clear()
   arriveAt(`?ticket=${TICKET}`)
   claim.mockReset().mockResolvedValue(signedClaim())
   complete.mockReset().mockResolvedValue({
@@ -87,16 +88,18 @@ describe('WhatsappConnectFlow: from the link', () => {
     setItem.mockRestore()
   })
 
-  it('explains what connecting changes before going to Facebook', async () => {
+  it('keeps the fee visible and detailed changes collapsed before Facebook', async () => {
     renderPage()
-    await screen.findByRole('heading', {
-      name: en.whatsappConnect.before.heading,
-    })
-    for (const key of ['sending', 'billing', 'app', 'activity'] as const)
-      expect(screen.getByText(en.whatsappConnect.before[key])).toBeTruthy()
-    expect(screen.getByText(en.whatsappConnect.before.meta)).toBeTruthy()
+    await screen.findByRole('button', { name: en.whatsappConnect.launch })
+    expect(screen.getByText(en.whatsappConnect.fees)).toBeTruthy()
+    const disclosure = screen
+      .getByText(en.whatsappConnect.whatChanges)
+      .closest('details')!
+    expect(disclosure.open).toBe(false)
+    expect(disclosure.textContent).toContain(en.whatsappConnect.before.app)
+    fireEvent.click(screen.getByText(en.whatsappConnect.whatChanges))
+    expect(disclosure.open).toBe(true)
   })
-
   it('sends this tab to Meta once, without opening another', async () => {
     const open = vi.spyOn(window, 'open')
     renderPage()
@@ -162,7 +165,7 @@ describe('WhatsappConnectFlow: from the link', () => {
 })
 
 describe('WhatsappConnectFlow: back from Meta', () => {
-  it('cleans the address, submits the code once and shows setup pending only after the server saved it', async () => {
+  it('cleans the address, submits once and shows success with a localized return destination', async () => {
     let resolve!: (value: Awaited<ReturnType<typeof complete>>) => void
     complete.mockReturnValue(new Promise((r) => (resolve = r)))
     arriveAt(`?code=${CODE}&state=${SIGNUP_TICKET}`, '#_=_')
@@ -184,18 +187,25 @@ describe('WhatsappConnectFlow: back from Meta', () => {
         state: 'connecting',
         displayPhoneNumber: '+20 100 555 0101',
         signupPath: 'new_number',
+        returnUrl:
+          'https://test-shop.myshopify.com/admin/apps/akeed/en/settings?tab=whatsapp',
       })
     )
     expect(
       await screen.findByText(en.whatsappConnect.connected.heading)
     ).toBeTruthy()
     expect(screen.getByText('+20 100 555 0101')).toBeTruthy()
-    expect(screen.getByText(en.whatsappConnect.setupPending)).toBeTruthy()
+    expect(screen.queryByText(en.whatsappConnect.setupPending)).toBeNull()
+    expect(
+      screen.queryByRole('list', { name: en.whatsappConnect.steps.label })
+    ).toBeNull()
     expect(
       screen
-        .getByRole('list', { name: en.whatsappConnect.steps.label })
-        .querySelector('[aria-current="step"]')?.textContent
-    ).toContain(en.whatsappConnect.steps.setup)
+        .getByRole('link', { name: en.whatsappConnect.backToSettings })
+        .getAttribute('href')
+    ).toBe(
+      'https://test-shop.myshopify.com/admin/apps/akeed/en/settings?tab=whatsapp'
+    )
     expect(complete).toHaveBeenCalledTimes(1)
   })
 

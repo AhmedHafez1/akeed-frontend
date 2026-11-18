@@ -15,6 +15,10 @@ import { ApiError } from '@/shared/lib/http'
 type Scenario =
   | 'unconnected'
   | 'active'
+  | 'pending'
+  | 'preparing'
+  | 'setupError'
+  | 'credentials'
   | 'mixed'
   | 'degraded'
   | 'sendingOff'
@@ -133,7 +137,10 @@ function availability() {
 function connection() {
   const current = scenario()
   if (current === 'unconnected' || current === 'unavailable') return null
-  const degraded = current === 'degraded' || current === 'sendingOff'
+  const degraded =
+    current === 'degraded' ||
+    current === 'sendingOff' ||
+    current === 'credentials'
   const details =
     current === 'mixed'
       ? [
@@ -165,6 +172,24 @@ function connection() {
               }
             : row
         )
+  const templateDetails =
+    current === 'preparing' || current === 'setupError'
+      ? []
+      : current === 'pending'
+        ? details.map((row) => ({
+            ...row,
+            status: 'pending',
+            readiness: { kind: 'akeed_system', reason: 'template_pending' },
+          }))
+        : current === 'credentials'
+          ? details.map((row) => ({
+              ...row,
+              readiness: {
+                kind: 'akeed_system',
+                reason: 'degraded:credentials',
+              },
+            }))
+          : details
   return {
     thankYouEnabled: memory().thankYou,
     state:
@@ -172,17 +197,25 @@ function connection() {
         ? 'disconnected'
         : current === 'offboarded'
           ? 'offboarded'
-          : 'active',
+          : current === 'preparing' || current === 'setupError'
+            ? 'connecting'
+            : 'active',
     signupPath: 'coexistence',
     displayPhoneNumber: '+20 100 555 0101',
     health: {
       stateReason: null,
       qualityRating: 'GREEN',
-      degradedClass: degraded ? 'payment' : null,
+      degradedClass:
+        current === 'credentials' ? 'credentials' : degraded ? 'payment' : null,
       lastCheckedAt: minutesAgo(12),
     },
     setup: {
-      status: 'complete',
+      status:
+        current === 'setupError'
+          ? 'exhausted'
+          : current === 'preparing'
+            ? 'queued'
+            : 'complete',
       step: 'done',
       errorCode: null,
       retryAt: null,
@@ -202,7 +235,7 @@ function connection() {
       needsStaff: 0,
       drift: 0,
     },
-    templateDetails: details,
+    templateDetails,
   }
 }
 

@@ -2859,13 +2859,15 @@
       "label": "Send thank-you messages",
       "description": "Send one message after a customer confirms or cancels an order.",
       "creditCost": "Each thank-you uses {count} credits.",
-      "planCost": "Each thank-you counts as 1 message toward your plan.",
+      "planCost": "Each thank-you uses one message from the sending number’s allowance.",
       "confirmed": "After confirmation",
       "canceled": "After cancellation",
       "unavailable": "Thank-you messages are temporarily unavailable. You can still turn them off.",
       "textUnavailable": "No thank-you text is available for this language.",
       "autoNote": "This example uses the default style. The actual Arabic wording follows the customer’s dialect.",
-      "saveUnavailable": "Thank-you messages are currently unavailable. Turn them off to save your changes."
+      "saveUnavailable": "Thank-you messages are currently unavailable. Turn them off to save your changes.",
+      "senderCreditCost": "Credits: {own} from your number, {akeed} from Akeed.",
+      "akeedCreditCost": "From Akeed: {count} credits."
     },
     "logo": {
       "heading": "Store logo",
@@ -5399,7 +5401,7 @@
   },
   "whatsappConnect": {
     "title": "Connect your WhatsApp number",
-    "intro": "Send order confirmations from your own WhatsApp Business number instead of Akeed's.",
+    "intro": "Send confirmations from your business number.",
     "claiming": "Checking your link...",
     "missingHeading": "Start from Akeed settings",
     "missing": "This page opens from a link in Akeed. In Akeed, go to Settings and choose Connect WhatsApp.",
@@ -5415,7 +5417,7 @@
     "tryAgain": "Open Facebook again",
     "submitting": "Checking your connection with Meta...",
     "connected": {
-      "heading": "Your number is connected",
+      "heading": "WhatsApp connected",
       "pending": "Setup isn't finished yet. Akeed is preparing your message templates, and confirmations keep going out from Akeed's number until your number is ready.",
       "close": "You can close this page and go back to Akeed."
     },
@@ -5497,7 +5499,7 @@
       },
       "connect": {
         "heading": "A familiar number. Your store’s voice.",
-        "body": "Akeed keeps sending until your number is ready.",
+        "body": "Send confirmations from your business number.",
         "keepApp": "Keep using your WhatsApp Business app",
         "metaBills": "Meta bills your business directly",
         "action": "Connect your number",
@@ -5708,7 +5710,53 @@
         "body": "Your sending settings haven’t changed. Try again to see the latest status.",
         "retry": "Try again"
       },
-      "help": "How your own number works"
-    }
+      "help": "How your own number works",
+      "progress": {
+        "label": "WhatsApp setup status",
+        "labels": {
+          "number": "Number connected",
+          "templates": "Message templates",
+          "sending": "Sending from your number"
+        },
+        "statuses": {
+          "connected": "Connected",
+          "reconnect": "Needs reconnecting",
+          "preparing": "Preparing",
+          "pending": "Pending approval",
+          "someApproved": "Some approved",
+          "approved": "Approved",
+          "waiting": "Waiting for approval",
+          "someMessages": "Some messages",
+          "ready": "Ready",
+          "attention": "Needs attention",
+          "paused": "Paused"
+        },
+        "coverage": {
+          "pending": "Akeed sends messages while your number gets ready.",
+          "partial": "Akeed sends messages still awaiting approval."
+        },
+        "issues": {
+          "payment": "Update your payment method in Meta.",
+          "credentials": "Reconnect your WhatsApp number.",
+          "restricted": "Check the restriction in WhatsApp Manager.",
+          "quality": "Review your number’s quality in Meta.",
+          "unavailable": "Your number is temporarily unavailable.",
+          "templates": "Some templates need attention. Akeed sends those messages for now.",
+          "setup": "We couldn’t finish preparing your number.",
+          "retry": "We’re retrying setup automatically.",
+          "sendingOff": "Sending from your number is paused. Akeed sends for now.",
+          "inactive": "Your WhatsApp Business app link ended. Reconnect, then open the app at least every 14 days."
+        },
+        "actions": {
+          "manager": "Open WhatsApp Manager",
+          "help": "Get help",
+          "reconnect": "Reconnect",
+          "askOwner": "Ask your store owner to reconnect."
+        }
+      }
+    },
+    "fees": "Akeed usage and Meta message fees apply.",
+    "whatChanges": "What changes?",
+    "backToSettings": "Back to WhatsApp settings"
   }
 }

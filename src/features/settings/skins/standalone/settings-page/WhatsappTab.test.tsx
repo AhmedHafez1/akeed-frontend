@@ -110,17 +110,15 @@ describe('standalone WhatsApp tab before connecting', () => {
     connection.mockResolvedValue({ connection: null })
   })
 
-  it('offers the owner the connect action with both rates from the server', async () => {
+  it('offers a concise connect card without progress before connection', async () => {
     renderTab()
     const button = await screen.findByRole('button', {
       name: copy.connect.action,
     })
     expect(button.hasAttribute('disabled')).toBe(false)
-    expect(await screen.findByText('2 credits / message')).toBeTruthy()
-    expect(screen.getByText('1 credit / message')).toBeTruthy()
-    expect(screen.queryByText(copy.costs.creditNote)).toBeNull()
+    expect(screen.queryByRole('list', { name: copy.progress.label })).toBeNull()
+    expect(screen.queryByRole('switch')).toBeNull()
   })
-
   it('shows the action to others but leaves it to the owner', async () => {
     sender.mockResolvedValue(
       availabilityFixture({
@@ -133,7 +131,7 @@ describe('standalone WhatsApp tab before connecting', () => {
       name: copy.connect.action,
     })
     expect(button.hasAttribute('disabled')).toBe(true)
-    expect(screen.getByText(copy.permissions.title)).toBeTruthy()
+    expect(screen.getByText(copy.connect.ownerOnly)).toBeTruthy()
   })
 
   it('opens the new tab inside the click and sends it to the connect page', async () => {
@@ -192,20 +190,22 @@ describe('standalone WhatsApp tab before connecting', () => {
 })
 
 describe('standalone WhatsApp tab with a connection', () => {
-  it('keeps current readiness, each template sender and the last send apart', async () => {
-    sender.mockResolvedValue(
-      availabilityFixture({
-        lastAccepted: {
-          confirmation: {
-            kind: 'merchant_own',
-            reason: 'own_number',
-            acceptedAt: '2026-11-04T08:42:00.000Z',
-            deliveryStatus: 'read',
-          },
-          reminder: null,
-        },
-      })
-    )
+  it('explains unavailable reconnection to the owner without asking them to ask themselves', async () => {
+    sender.mockResolvedValue(availabilityFixture({ available: false }))
+    connection.mockResolvedValue({
+      connection: connectionFixture({ state: 'disconnected' }),
+    })
+    renderTab()
+    expect(
+      await screen.findByText(copy.progress.issues.unavailable)
+    ).toBeTruthy()
+    expect(screen.queryByText(copy.banners.askOwner)).toBeNull()
+    expect(screen.queryByRole('list', { name: copy.progress.label })).toBeNull()
+    expect(
+      screen.queryByRole('button', { name: copy.reconnect.action })
+    ).toBeNull()
+  })
+  it('shows partial approval in three rows without template inventory or send history', async () => {
     connection.mockResolvedValue({
       connection: connectionFixture({
         templateDetails: [
@@ -218,47 +218,19 @@ describe('standalone WhatsApp tab with a connection', () => {
       }),
     })
     renderTab()
-    expect(await screen.findByText(copy.readiness.templatesVary)).toBeTruthy()
-    expect(screen.getByText(copy.banners.templatesInReview.title)).toBeTruthy()
-    const table = screen.getByRole('table', { name: copy.templates.tableLabel })
-    const rows = within(table).getAllByRole('row').slice(1)
-    expect(within(rows[0]).getByText('Arabic')).toBeTruthy()
-    expect(within(rows[0]).getByText(copy.sender.yourNumber)).toBeTruthy()
-    expect(within(rows[1]).getByText('English')).toBeTruthy()
+    const list = await screen.findByRole('list', { name: copy.progress.label })
+    expect(within(list).getAllByRole('listitem')).toHaveLength(3)
     expect(
-      within(rows[1]).getByText(copy.templates.status.pending)
+      within(list).getByText(copy.progress.statuses.someApproved)
     ).toBeTruthy()
-    expect(within(rows[1]).getByText(copy.sender.akeed)).toBeTruthy()
-    expect(screen.getByText(copy.last.confirmation)).toBeTruthy()
-    expect(screen.queryByText(copy.last.historical)).toBeNull()
-    const last = screen.getByText(copy.last.confirmation).parentElement
-    expect(last?.textContent).toContain(copy.sender.yourNumber)
-    expect(last?.textContent).toContain(copy.last.delivery.read)
+    expect(
+      within(list).getByText(copy.progress.statuses.someMessages)
+    ).toBeTruthy()
+    expect(screen.queryByRole('table')).toBeNull()
+    expect(screen.queryByText(copy.last.confirmation)).toBeNull()
+    expect(screen.queryByRole('switch')).toBeNull()
   })
-
-  it('never reads a degraded number as ready, whatever was sent before', async () => {
-    sender.mockResolvedValue(
-      availabilityFixture({
-        alerts: [
-          {
-            kind: 'payment',
-            reason: 'payment',
-            severity: 'critical',
-            action: 'whatsapp_manager',
-            templates: [],
-          },
-        ],
-        lastAccepted: {
-          confirmation: {
-            kind: 'merchant_own',
-            reason: 'own_number',
-            acceptedAt: '2026-11-04T08:00:00.000Z',
-            deliveryStatus: 'delivered',
-          },
-          reminder: null,
-        },
-      })
-    )
+  it('places a payment problem beside sending, even after an earlier successful send', async () => {
     connection.mockResolvedValue({
       connection: connectionFixture({
         health: {
@@ -275,48 +247,30 @@ describe('standalone WhatsApp tab with a connection', () => {
       }),
     })
     renderTab()
-    expect(await screen.findByText(copy.readiness.degradedPayment)).toBeTruthy()
-    expect(screen.queryByText(copy.readiness.ready)).toBeNull()
-    expect(screen.getByRole('alert').textContent).toContain(
-      copy.banners.payment.payment.title
-    )
-    expect(screen.getByRole('alert').textContent).toContain(
-      copy.banners.resumes
-    )
-    expect(screen.getByText(copy.templates.footer.degraded)).toBeTruthy()
+    expect(await screen.findByText(copy.progress.issues.payment)).toBeTruthy()
+    expect(screen.getByText(copy.progress.statuses.approved)).toBeTruthy()
+    expect(screen.queryByText(copy.progress.statuses.ready)).toBeNull()
+    expect(
+      screen
+        .getByRole('link', { name: copy.progress.actions.manager })
+        .getAttribute('href')
+    ).toContain('business.facebook.com')
   })
-
-  it('says sending is switched off without promising recovery', async () => {
+  it('shows disabled sending beside its row', async () => {
     sender.mockResolvedValue(availabilityFixture({ sendingEnabled: false }))
     renderTab()
-    expect(await screen.findByText(copy.banners.sendingOff.title)).toBeTruthy()
-    expect(screen.getByText(copy.readiness.sendingOff)).toBeTruthy()
     expect(
-      screen.queryByText(copy.banners.resumes, { exact: false })
-    ).toBeNull()
+      await screen.findByText(copy.progress.issues.sendingOff)
+    ).toBeTruthy()
+    expect(screen.getByText(copy.progress.statuses.paused)).toBeTruthy()
   })
-
-  it('saves the thank-you switch once, and reports a failure', async () => {
-    let finish: (value: { thankYouEnabled: boolean }) => void = () => {}
-    thankYou.mockImplementationOnce(
-      () => new Promise((resolve) => (finish = resolve))
-    )
+  it('keeps thank-you management exclusively in Message settings', async () => {
     renderTab()
-    const toggle = await screen.findByRole('switch', {
-      name: copy.thankYou.heading,
-    })
-    fireEvent.click(toggle)
-    fireEvent.click(toggle)
-    await waitFor(() => expect(thankYou).toHaveBeenCalledTimes(1))
-    expect(thankYou.mock.calls[0][0]).toBe(false)
-    finish({ thankYouEnabled: false })
-    thankYou.mockRejectedValueOnce(new ApiError('x', 500))
-    await waitFor(() => expect(toggle.hasAttribute('disabled')).toBe(false))
-    fireEvent.click(toggle)
-    expect(await screen.findByText(copy.thankYou.error)).toBeTruthy()
+    await screen.findByRole('list', { name: copy.progress.label })
+    expect(screen.queryByRole('switch')).toBeNull()
+    expect(thankYou).not.toHaveBeenCalled()
   })
-
-  it('leaves everything read-only for a viewer', async () => {
+  it('leaves disconnect read-only for a viewer', async () => {
     sender.mockResolvedValue(
       availabilityFixture({
         canConnect: false,
@@ -324,18 +278,12 @@ describe('standalone WhatsApp tab with a connection', () => {
       })
     )
     renderTab()
-    const toggle = await screen.findByRole('switch', {
-      name: copy.thankYou.heading,
+    const disconnectButton = await screen.findByRole('button', {
+      name: copy.disconnect.action,
     })
-    expect(toggle.hasAttribute('disabled')).toBe(true)
-    expect(screen.getByText(copy.thankYou.readOnly)).toBeTruthy()
-    expect(
-      screen
-        .getByRole('button', { name: copy.disconnect.action })
-        .hasAttribute('disabled')
-    ).toBe(true)
+    expect(disconnectButton.hasAttribute('disabled')).toBe(true)
+    expect(screen.queryByRole('switch')).toBeNull()
   })
-
   it('disconnects after confirming and lists the WhatsApp Business app steps', async () => {
     disconnect.mockResolvedValue({
       state: 'disconnected',
@@ -414,18 +362,18 @@ describe('standalone WhatsApp tab with a connection', () => {
     connection.mockRejectedValueOnce(new ApiError('x', 500))
     renderTab()
     expect(await screen.findByText(copy.load.title)).toBeTruthy()
-    expect(screen.queryByText(copy.readiness.ready)).toBeNull()
+    expect(screen.queryByText(copy.progress.statuses.ready)).toBeNull()
     fireEvent.click(screen.getByRole('button', { name: copy.load.retry }))
-    expect(await screen.findByText(copy.readiness.ready)).toBeTruthy()
+    expect(await screen.findByText(copy.progress.statuses.ready)).toBeTruthy()
   })
 })
 
 describe('standalone WhatsApp tab in Arabic', () => {
-  it('names message languages in Arabic and keeps the number left to right', async () => {
+  it('translates the status rows and keeps the number left to right', async () => {
     renderTab('ar')
     const tab = ar.whatsappConnect.tab
-    expect(await screen.findByText(tab.readiness.ready)).toBeTruthy()
-    expect(screen.getByText('العربية')).toBeTruthy()
+    expect(await screen.findByText(tab.progress.statuses.ready)).toBeTruthy()
+    expect(screen.getByText(tab.progress.labels.templates)).toBeTruthy()
     const numbers = screen.getAllByText('+20 100 555 0101')
     expect(numbers.every((node) => node.getAttribute('dir') === 'ltr')).toBe(
       true

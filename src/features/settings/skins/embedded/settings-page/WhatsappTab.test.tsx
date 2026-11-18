@@ -1,11 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import {
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  within,
-} from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AppProvider } from '@shopify/polaris'
 import polaris from '@shopify/polaris/locales/en.json'
@@ -23,7 +17,6 @@ import {
   connectionFixture,
   templateFixture,
 } from '@/features/whatsapp-connect/testing/whatsappFixtures'
-import type { UsagePools } from '@/shared/types/usagePools'
 import { WhatsappTab } from './WhatsappTab'
 
 vi.mock(
@@ -46,12 +39,7 @@ const thankYou = vi.mocked(updateWhatsappThankYou)
 const disconnect = vi.mocked(disconnectWhatsapp)
 const copy = en.whatsappConnect.tab
 
-const pools: UsagePools = {
-  akeed: { used: 138, limit: 300, remaining: 162 },
-  ownNumber: { used: 360, limit: 1000, remaining: 640 },
-}
-
-function renderTab(tabPools: UsagePools | null = pools) {
+function renderTab() {
   const client = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   })
@@ -59,7 +47,7 @@ function renderTab(tabPools: UsagePools | null = pools) {
     <QueryClientProvider client={client}>
       <NextIntlClientProvider locale="en" messages={en} timeZone="UTC">
         <AppProvider i18n={polaris}>
-          <WhatsappTab pools={tabPools} />
+          <WhatsappTab />
         </AppProvider>
       </NextIntlClientProvider>
     </QueryClientProvider>
@@ -74,18 +62,16 @@ beforeEach(() => {
 })
 
 describe('embedded WhatsApp tab', () => {
-  it('shows both plan pools before connecting', async () => {
+  it('shows a concise connect card before connecting', async () => {
     connection.mockResolvedValue({ connection: null })
     renderTab()
     expect(
       await screen.findByRole('button', { name: copy.connect.action })
     ).toBeTruthy()
-    expect(screen.getByText('300 messages')).toBeTruthy()
-    expect(screen.getByText('+1,000 messages')).toBeTruthy()
-    expect(screen.getByText(copy.costs.poolNote)).toBeTruthy()
+    expect(screen.queryByRole('list', { name: copy.progress.label })).toBeNull()
+    expect(screen.queryByRole('checkbox')).toBeNull()
   })
-
-  it('renders template readiness per language with the current sender', async () => {
+  it('shows three status rows and keeps partial approvals distinct', async () => {
     connection.mockResolvedValue({
       connection: connectionFixture({
         templateDetails: [
@@ -98,15 +84,14 @@ describe('embedded WhatsApp tab', () => {
       }),
     })
     renderTab()
-    expect(await screen.findByText(copy.readiness.templatesVary)).toBeTruthy()
-    expect(screen.getByText(copy.status.connected)).toBeTruthy()
-    const table = screen.getByRole('table')
-    expect(within(table).getByText('Arabic')).toBeTruthy()
-    expect(within(table).getByText('French')).toBeTruthy()
-    expect(within(table).getByText(copy.templates.status.rejected)).toBeTruthy()
-    expect(within(table).getByText(copy.sender.akeed)).toBeTruthy()
+    const list = await screen.findByRole('list', { name: copy.progress.label })
+    expect(within(list).getAllByRole('listitem')).toHaveLength(3)
+    expect(
+      within(list).getByText(copy.progress.statuses.someApproved)
+    ).toBeTruthy()
+    expect(within(list).getByText(copy.progress.issues.templates)).toBeTruthy()
+    expect(screen.queryByRole('table')).toBeNull()
   })
-
   it('keeps a viewer read-only', async () => {
     sender.mockResolvedValue(
       availabilityFixture({
@@ -115,26 +100,18 @@ describe('embedded WhatsApp tab', () => {
       })
     )
     renderTab()
-    const checkbox = await screen.findByRole('checkbox', {
-      name: copy.thankYou.heading,
+    const button = await screen.findByRole('button', {
+      name: copy.disconnect.action,
     })
-    expect(checkbox.hasAttribute('disabled')).toBe(true)
-    expect(
-      screen
-        .getByRole('button', { name: copy.disconnect.action })
-        .getAttribute('aria-disabled')
-    ).toBe('true')
+    expect(button.getAttribute('aria-disabled')).toBe('true')
+    expect(screen.queryByRole('checkbox')).toBeNull()
   })
-
-  it('saves the thank-you setting', async () => {
+  it('has no duplicate thank-you preference', async () => {
     renderTab()
-    fireEvent.click(
-      await screen.findByRole('checkbox', { name: copy.thankYou.heading })
-    )
-    await waitFor(() => expect(thankYou).toHaveBeenCalledTimes(1))
-    expect(thankYou.mock.calls[0][0]).toBe(false)
+    await screen.findByRole('list', { name: copy.progress.label })
+    expect(screen.queryByRole('checkbox')).toBeNull()
+    expect(thankYou).not.toHaveBeenCalled()
   })
-
   it('disconnects through the modal and shows the app steps', async () => {
     disconnect.mockResolvedValue({
       state: 'disconnected',
@@ -162,9 +139,11 @@ describe('embedded WhatsApp tab', () => {
     expect(screen.queryByText(copy.disconnect.cleanupManual)).toBeNull()
   })
 
-  it('explains a failed read', async () => {
-    sender.mockRejectedValue(new ApiError('x', 500))
+  it('explains a failed read and recovers with Retry', async () => {
+    sender.mockRejectedValueOnce(new ApiError('x', 500))
     renderTab()
     expect(await screen.findByText(copy.load.title)).toBeTruthy()
+    fireEvent.click(screen.getByRole('button', { name: copy.load.retry }))
+    expect(await screen.findByText(copy.progress.statuses.ready)).toBeTruthy()
   })
 })

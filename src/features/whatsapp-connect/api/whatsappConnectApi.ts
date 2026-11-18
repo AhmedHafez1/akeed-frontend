@@ -7,6 +7,8 @@ import { NETWORK_ERROR_CODE } from '../model/signupErrors'
 
 /** A signup the server verified and saved. */
 export interface SignupCompletion {
+  /** Absent only on an older backend. */
+  returnUrl?: string
   displayPhoneNumber: string | null
   signupPath: 'coexistence' | 'new_number'
 }
@@ -132,6 +134,7 @@ export function disconnectWhatsapp() {
 }
 
 export interface ConnectTicketClaimed {
+  returnUrl?: string
   /** Single use; Meta carries it back to this page as `state`. */
   signupTicket: string
   expiresAt: string

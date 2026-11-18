@@ -1690,13 +1690,15 @@
       "label": "Teşekkür mesajları gönder",
       "description": "Müşteri siparişini onayladıktan veya iptal ettikten sonra bir mesaj gönderin.",
       "creditCost": "Her teşekkür mesajı {count} kredi kullanır.",
-      "planCost": "Her teşekkür mesajı planınızdan 1 mesaj olarak sayılır.",
+      "planCost": "Her teşekkür mesajı, gönderen numaranın kotasından bir mesaj kullanır.",
       "confirmed": "Onay sonrasında",
       "canceled": "İptal sonrasında",
       "unavailable": "Teşekkür mesajları geçici olarak kullanılamıyor. Yine de kapatabilirsiniz.",
       "textUnavailable": "Bu dilde teşekkür metni bulunmuyor.",
       "autoNote": "Bu örnek varsayılan stili kullanır. Gerçek Arapça metin müşterinin lehçesine göre değişir.",
-      "saveUnavailable": "Teşekkür mesajları şu anda kullanılamıyor. Değişiklikleri kaydetmek için kapatın."
+      "saveUnavailable": "Teşekkür mesajları şu anda kullanılamıyor. Değişiklikleri kaydetmek için kapatın.",
+      "senderCreditCost": "Krediler: numaranızdan {own}, Akeed’den {akeed}.",
+      "akeedCreditCost": "Akeed’den: {count} kredi."
     },
     "logo": {
       "heading": "Mağaza logosu",
@@ -3849,7 +3851,7 @@
   },
   "whatsappConnect": {
     "title": "WhatsApp numaranızı bağlayın",
-    "intro": "Sipariş onaylarını Akeed’in numarası yerine kendi WhatsApp Business numaranızdan gönderin.",
+    "intro": "Onayları işletme numaranızdan gönderin.",
     "claiming": "Bağlantınız kontrol ediliyor...",
     "missingHeading": "Akeed ayarlarından başlayın",
     "missing": "Bu sayfa Akeed’deki bir bağlantıdan açılır. Akeed’de Ayarlar’a gidin ve WhatsApp’ı bağla’yı seçin.",
@@ -3865,7 +3867,7 @@
     "tryAgain": "Facebook’u yeniden aç",
     "submitting": "Meta ile bağlantınız kontrol ediliyor...",
     "connected": {
-      "heading": "Numaranız bağlandı",
+      "heading": "WhatsApp bağlandı",
       "pending": "Kurulum henüz tamamlanmadı. Akeed mesaj şablonlarınızı hazırlıyor ve numaranız hazır olana kadar onaylar Akeed’in numarasından gitmeye devam ediyor.",
       "close": "Bu sayfayı kapatıp Akeed’e dönebilirsiniz."
     },
@@ -3947,7 +3949,7 @@
       },
       "connect": {
         "heading": "Tanıdık bir numara. Mağazanızın sesi.",
-        "body": "Numaranız hazır olana kadar Akeed göndermeye devam eder.",
+        "body": "Onayları işletme numaranızdan gönderin.",
         "keepApp": "WhatsApp Business uygulamanızı kullanmaya devam edin",
         "metaBills": "Meta işletmenizi doğrudan faturalandırır",
         "action": "Numaranızı bağlayın",
@@ -4158,7 +4160,53 @@
         "body": "Gönderim ayarlarınız değişmedi. En son durumu görmek için tekrar deneyin.",
         "retry": "Tekrar dene"
       },
-      "help": "Kendi numaranız nasıl çalışır"
-    }
+      "help": "Kendi numaranız nasıl çalışır",
+      "progress": {
+        "label": "WhatsApp kurulum durumu",
+        "labels": {
+          "number": "Numara bağlandı",
+          "templates": "Mesaj şablonları",
+          "sending": "Numaranızdan gönderim"
+        },
+        "statuses": {
+          "connected": "Bağlı",
+          "reconnect": "Yeniden bağlantı gerekli",
+          "preparing": "Hazırlanıyor",
+          "pending": "Onay bekleniyor",
+          "someApproved": "Bazıları onaylandı",
+          "approved": "Onaylandı",
+          "waiting": "Onay bekleniyor",
+          "someMessages": "Bazı mesajlar",
+          "ready": "Hazır",
+          "attention": "İlgilenmeniz gerekiyor",
+          "paused": "Duraklatıldı"
+        },
+        "coverage": {
+          "pending": "Numaranız hazırlanırken mesajları Akeed gönderir.",
+          "partial": "Onay bekleyen mesajları Akeed gönderir."
+        },
+        "issues": {
+          "payment": "Meta’daki ödeme yönteminizi güncelleyin.",
+          "credentials": "WhatsApp numaranızı yeniden bağlayın.",
+          "restricted": "WhatsApp Yöneticisi’nde kısıtlamayı kontrol edin.",
+          "quality": "Meta’da numaranızın kalitesini inceleyin.",
+          "unavailable": "Numaranız geçici olarak kullanılamıyor.",
+          "templates": "Bazı şablonlarla ilgilenilmesi gerekiyor. Şimdilik bu mesajları Akeed gönderir.",
+          "setup": "Numaranızın hazırlığını tamamlayamadık.",
+          "retry": "Kurulumu otomatik olarak yeniden deniyoruz.",
+          "sendingOff": "Numaranızdan gönderim duraklatıldı. Şimdilik Akeed gönderir.",
+          "inactive": "WhatsApp Business uygulamanızın bağlantısı sona erdi. Yeniden bağlayın ve uygulamayı en az 14 günde bir açın."
+        },
+        "actions": {
+          "manager": "WhatsApp Yöneticisi’ni aç",
+          "help": "Yardım al",
+          "reconnect": "Yeniden bağla",
+          "askOwner": "Mağaza sahibinizden numarayı yeniden bağlamasını isteyin."
+        }
+      }
+    },
+    "fees": "Akeed kullanım ve Meta mesaj ücretleri uygulanır.",
+    "whatChanges": "Neler değişir?",
+    "backToSettings": "WhatsApp ayarlarına dön"
   }
 }
