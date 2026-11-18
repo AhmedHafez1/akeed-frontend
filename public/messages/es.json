@@ -373,6 +373,7 @@
         "emailRequired": "Ingresa tu correo electrónico.",
         "emailInvalid": "Ingresa un correo válido, como nombre@tienda.com",
         "emailRegistered": "Este correo ya está registrado. <link>Inicia sesión</link>",
+        "emailRegisteredGoogle": "Este correo ya está registrado. <link>Inicia sesión</link> o continúa con Google.",
         "passwordTooShort": "La contraseña es demasiado corta. Usa al menos 8 caracteres.",
         "passwordWeak": "Esta contraseña es fácil de adivinar. Agrega números o símbolos.",
         "termsRequired": "Acepta los términos para crear tu cuenta.",

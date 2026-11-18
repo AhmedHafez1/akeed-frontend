@@ -1536,6 +1536,7 @@
         "emailRequired": "اكتب بريدك الإلكتروني.",
         "emailInvalid": "اكتب بريدًا صحيحًا، مثل: name@store.com",
         "emailRegistered": "هذا البريد مسجّل. <link>سجّل الدخول بدلًا من ذلك</link>",
+        "emailRegisteredGoogle": "هذا البريد مسجّل. <link>سجّل الدخول</link> أو تابع باستخدام Google.",
         "passwordTooShort": "كلمة المرور قصيرة. اكتب 8 أحرف على الأقل.",
         "passwordWeak": "كلمة المرور سهلة التخمين. أضف أرقامًا أو رموزًا.",
         "termsRequired": "وافق على الشروط لإنشاء الحساب.",

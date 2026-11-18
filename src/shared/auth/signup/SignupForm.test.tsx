@@ -173,6 +173,25 @@ describe('SignupForm', () => {
     expect(onEmailSent).not.toHaveBeenCalled()
   })
 
+  it('also offers Google for an already-registered email when Google is on', async () => {
+    vi.stubEnv('NEXT_PUBLIC_GOOGLE_AUTH_ENABLED', 'true')
+    try {
+      signUp.mockResolvedValue({
+        user: { identities: [] },
+        session: null,
+      } as never)
+      renderForm('en')
+      fillValid()
+      fireEvent.click(screen.getByRole('button', { name: 'Create account' }))
+
+      const link = await screen.findByRole('link', { name: 'Sign in' })
+      expect(link.getAttribute('href')).toBe('/en/login')
+      expect(screen.getByText(/or continue with Google\./)).toBeTruthy()
+    } finally {
+      vi.unstubAllEnvs()
+    }
+  })
+
   it('shows a form-level alert when Supabase fails', async () => {
     signUp.mockRejectedValue(new Error('network'))
     renderForm()

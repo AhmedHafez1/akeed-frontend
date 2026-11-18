@@ -373,6 +373,7 @@
         "emailRequired": "E-posta adresinizi girin.",
         "emailInvalid": "Geçerli bir e-posta adresi girin, örneğin ad@magaza.com",
         "emailRegistered": "Bu e-posta adresi zaten kayıtlı. <link>Bunun yerine giriş yapın</link>",
+        "emailRegisteredGoogle": "Bu e-posta adresi zaten kayıtlı. <link>Giriş yapın</link> veya Google ile devam edin.",
         "passwordTooShort": "Şifre çok kısa. En az 8 karakter kullanın.",
         "passwordWeak": "Bu şifre kolay tahmin edilir. Rakam veya simge ekleyin.",
         "termsRequired": "Hesabınızı oluşturmak için koşulları kabul edin.",
