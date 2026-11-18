@@ -3,9 +3,13 @@
 import { api, getApiBaseUrl } from '@/shared/lib/auth'
 import { ApiError, createApiError, parseJsonResponse } from '@/shared/lib/http'
 import type { SupportedLocale } from '@/shared/lib/locale'
-import type { SignupSessionHints } from '../model/signupMessage'
 import { NETWORK_ERROR_CODE } from '../model/signupErrors'
-import type { SignupCompletion } from '../model/signupMachine'
+
+/** A signup the server verified and saved. */
+export interface SignupCompletion {
+  displayPhoneNumber: string | null
+  signupPath: 'coexistence' | 'new_number'
+}
 
 /** One accepted send, as it happened: history, never current readiness. */
 export interface AcceptedSend {
@@ -128,12 +132,14 @@ export function disconnectWhatsapp() {
 }
 
 export interface ConnectTicketClaimed {
-  /** Single use; kept in memory for the one completion request. */
+  /** Single use; Meta carries it back to this page as `state`. */
   signupTicket: string
   expiresAt: string
-  appId: string
-  configId: string
-  graphApiVersion: string
+  /**
+   * Meta's sign-in page for this signup, opened in the same tab. It carries
+   * the signup ticket, so it is used for navigation only.
+   */
+  signupUrl: string
 }
 
 export const whatsappSenderQueryKey = ['whatsapp-sender'] as const
@@ -185,28 +191,34 @@ async function postWithTicket<T>(path: string, body: unknown): Promise<T> {
 }
 
 export function claimConnectTicket(
-  ticket: string
+  ticket: string,
+  locale: SupportedLocale
 ): Promise<ConnectTicketClaimed> {
-  return postWithTicket('/api/whatsapp-connect/claim', { ticket })
+  return postWithTicket('/api/whatsapp-connect/claim', { ticket, locale })
 }
 
+/** Trades an unused signup ticket for a fresh one and a fresh Meta link. */
+export function relaunchWhatsappSignup(
+  signupTicket: string,
+  locale: SupportedLocale
+): Promise<ConnectTicketClaimed> {
+  return postWithTicket('/api/whatsapp-connect/relaunch', {
+    signupTicket,
+    locale,
+  })
+}
+
+/**
+ * Meta's code, back on the connect page in `redirectLocale`: the server
+ * exchanges it with that page as `redirect_uri` and reads the account and
+ * number from the token.
+ */
 export function completeWhatsappSignup(input: {
   signupTicket: string
   code: string
-  session: SignupSessionHints | null
+  redirectLocale: SupportedLocale
 }): Promise<SignupCompletion & { state: 'connecting' }> {
-  const session = input.session
-  return postWithTicket('/api/whatsapp-connect/complete', {
-    signupTicket: input.signupTicket,
-    code: input.code,
-    ...(session && session.wabaIds.length > 0
-      ? { wabaIds: session.wabaIds }
-      : {}),
-    ...(session?.phoneNumberId ? { phoneNumberId: session.phoneNumberId } : {}),
-    ...(session && session.isOnBusinessApp !== null
-      ? { isOnBusinessApp: session.isOnBusinessApp }
-      : {}),
-  })
+  return postWithTicket('/api/whatsapp-connect/complete', input)
 }
 
 export function apiErrorCode(error: unknown): string {

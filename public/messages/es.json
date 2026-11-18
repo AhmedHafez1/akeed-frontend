@@ -3859,23 +3859,17 @@
       "billing": "Meta te cobra directamente los mensajes de WhatsApp enviados desde tu número. Es aparte de lo que pagas a Akeed.",
       "app": "Si este número usa la app WhatsApp Business, podrás seguir usándola con algunos cambios: las listas de difusión pasan a ser de solo lectura, los mensajes temporales, los de visualización única y la ubicación en tiempo real se desactivan en los chats individuales, y los dispositivos vinculados se desconectan hasta que los vuelvas a vincular.",
       "activity": "Sigue abriendo la app WhatsApp Business en tu teléfono. Si pasa unas dos semanas sin usarse, Meta puede desconectar el número de Akeed.",
-      "meta": "Continuarás en una ventana de Facebook para elegir tu negocio y tu número."
+      "meta": "Continuarás en Facebook para elegir tu negocio y tu número, y luego volverás aquí."
     },
     "launch": "Continuar con Facebook",
     "tryAgain": "Abrir Facebook de nuevo",
-    "sdkLoading": "Cargando Facebook...",
-    "sdkFailed": "No se pudo cargar Facebook. Revisa tu conexión o permite facebook.com en tu bloqueador de contenido y vuelve a intentarlo.",
-    "retrySdk": "Reintentar",
-    "inMeta": "Completa los pasos en la ventana de Facebook. Mantén esta página abierta.",
     "submitting": "Comprobando tu conexión con Meta...",
     "connected": {
       "heading": "Tu número está conectado",
       "pending": "La configuración aún no ha terminado. Akeed está preparando tus plantillas de mensajes y las confirmaciones seguirán saliendo desde el número de Akeed hasta que tu número esté listo.",
       "close": "Puedes cerrar esta página y volver a Akeed."
     },
-    "cancelled": "Cerraste la ventana de Facebook antes de terminar. No se conectó nada.",
-    "lostOnTouch": "La pestaña de Facebook no pudo enviar el resultado a esta página, así que no se conectó nada. Vuelve a esta pestaña e inténtalo de nuevo, o termina en un ordenador.",
-    "noCode": "Facebook no confirmó el último paso. Ábrelo de nuevo y haz clic en Finalizar en la última pantalla en lugar de cerrar la ventana.",
+    "cancelled": "Saliste de Facebook antes de terminar. No se conectó nada.",
     "metaErrorHeading": "Facebook no pudo completar la conexión",
     "metaErrorCode": "Código de error de Meta: {code}",
     "failedHeading": "Tu número no se conectó",
@@ -3915,7 +3909,6 @@
       "done": "completado"
     },
     "yourNumber": "Tu número",
-    "waiting": "Esperando a Facebook",
     "setupPending": "Configuración pendiente",
     "timeline": {
       "label": "Qué pasa después",

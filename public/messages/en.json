@@ -5409,23 +5409,17 @@
       "billing": "Meta bills you directly for WhatsApp messages sent from your number. This is separate from what you pay Akeed.",
       "app": "If this number uses the WhatsApp Business app, you keep using it, with some changes: broadcast lists become read-only, disappearing messages, view-once messages and live location are turned off in one-to-one chats, and linked devices are signed out until you link them again.",
       "activity": "Keep opening the WhatsApp Business app on your phone. If it goes unused for about two weeks, Meta can disconnect the number from Akeed.",
-      "meta": "You'll continue in a Facebook window to choose your business and number."
+      "meta": "You'll continue on Facebook to choose your business and number, then come back here."
     },
     "launch": "Continue with Facebook",
     "tryAgain": "Open Facebook again",
-    "sdkLoading": "Loading Facebook...",
-    "sdkFailed": "Facebook could not be loaded. Check your connection or allow facebook.com in any content blocker, then try again.",
-    "retrySdk": "Try again",
-    "inMeta": "Finish the steps in the Facebook window. Keep this page open.",
     "submitting": "Checking your connection with Meta...",
     "connected": {
       "heading": "Your number is connected",
       "pending": "Setup isn't finished yet. Akeed is preparing your message templates, and confirmations keep going out from Akeed's number until your number is ready.",
       "close": "You can close this page and go back to Akeed."
     },
-    "cancelled": "You closed the Facebook window before finishing. Nothing was connected.",
-    "lostOnTouch": "Facebook's tab couldn't send the result back to this page, so nothing was connected. Come back to this tab and try again, or finish on a computer.",
-    "noCode": "Facebook didn't confirm the last step. Open it again and click Finish on the last screen instead of closing the window.",
+    "cancelled": "You left Facebook before finishing. Nothing was connected.",
     "metaErrorHeading": "Facebook couldn't finish the connection",
     "metaErrorCode": "Meta error code: {code}",
     "failedHeading": "Your number wasn't connected",
@@ -5465,7 +5459,6 @@
       "done": "completed"
     },
     "yourNumber": "Your number",
-    "waiting": "Waiting for Facebook",
     "setupPending": "Setup pending",
     "timeline": {
       "label": "What happens next",

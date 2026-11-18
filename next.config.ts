@@ -41,10 +41,9 @@ const nextConfig: NextConfig = {
         source: '/:locale/whatsapp/:path*',
         headers: [
           {
-            // Keeps Meta's signup window linked to this tab, so its result
-            // can come back on phones too.
+            // Signup runs in this tab: no other window needs a link to it.
             key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin-allow-popups',
+            value: 'same-origin',
           },
           {
             key: 'Cache-Control',
@@ -81,6 +80,12 @@ const nextConfig: NextConfig = {
               "frame-ancestors 'self' https://admin.shopify.com https://*.myshopify.com",
           },
         ],
+      },
+      {
+        // After the site-wide rule, which it overrides: Meta's code and the
+        // signup ticket come back in this page's address.
+        source: '/:locale/whatsapp/:path*',
+        headers: [{ key: 'Referrer-Policy', value: 'no-referrer' }],
       },
       {
         source: '/:locale/signup/google',

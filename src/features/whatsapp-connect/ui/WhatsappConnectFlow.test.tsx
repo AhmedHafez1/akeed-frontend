@@ -8,50 +8,28 @@ import { ApiError } from '@/shared/lib/http'
 import {
   claimConnectTicket,
   completeWhatsappSignup,
+  relaunchWhatsappSignup,
 } from '../api/whatsappConnectApi'
-import {
-  resetFacebookSdkForTests,
-  type FacebookLoginResponse,
-  type FacebookSdk,
-} from '../hooks/facebookSdk'
-import { LOST_ON_TOUCH_MS, SESSION_WAIT_MS } from '../hooks/useEmbeddedSignup'
+import { leavePage } from '../hooks/leavePage'
 import { WhatsappConnectFlow } from './WhatsappConnectFlow'
 
 vi.mock('../api/whatsappConnectApi', async (importOriginal) => ({
   ...(await importOriginal<typeof import('../api/whatsappConnectApi')>()),
   claimConnectTicket: vi.fn(),
   completeWhatsappSignup: vi.fn(),
+  relaunchWhatsappSignup: vi.fn(),
 }))
+vi.mock('../hooks/leavePage', () => ({ leavePage: vi.fn() }))
 
 const TICKET = 'T'.repeat(43)
-const TRUSTED = 'https://www.facebook.com'
-const SESSION = {
-  type: 'WA_EMBEDDED_SIGNUP',
-  event: 'FINISH',
-  data: {
-    phone_number_id: '106540352242922',
-    is_on_biz_app: false,
-    messaging_account_ids: ['102290129340398'],
-    primary_waac_ids: [],
-  },
-}
+const SIGNUP_TICKET = 'S'.repeat(43)
+const CODE = 'AQD-fake-code'
+const META_URL = 'https://www.facebook.com/v26.0/dialog/oauth?state=S'
 
 const claim = vi.mocked(claimConnectTicket)
 const complete = vi.mocked(completeWhatsappSignup)
-
-let loginCallback: ((response: FacebookLoginResponse) => void) | null
-let fb: { init: ReturnType<typeof vi.fn>; login: ReturnType<typeof vi.fn> }
-
-function installFacebook() {
-  loginCallback = null
-  fb = {
-    init: vi.fn(),
-    login: vi.fn((callback: (response: FacebookLoginResponse) => void) => {
-      loginCallback = callback
-    }),
-  }
-  window.FB = fb as unknown as FacebookSdk
-}
+const relaunch = vi.mocked(relaunchWhatsappSignup)
+const leave = vi.mocked(leavePage)
 
 function renderPage(locale: 'en' | 'ar' = 'en') {
   return render(
@@ -67,84 +45,77 @@ function renderPage(locale: 'en' | 'ar' = 'en') {
   )
 }
 
-const post = (data: unknown, origin = TRUSTED) =>
-  act(() => {
-    window.dispatchEvent(new MessageEvent('message', { origin, data }))
-  })
-
-const answerLogin = (code: string | null) =>
-  act(() => {
-    loginCallback?.(code ? { authResponse: { code } } : { status: 'unknown' })
-  })
-
-async function launch() {
-  const button = await screen.findByRole('button', {
-    name: en.whatsappConnect.launch,
-  })
-  await waitFor(
-    () => expect((button as HTMLButtonElement).disabled).toBe(false),
-    {
-      onTimeout: (e) => {
-        console.log(
-          'INIT CALLS',
-          fb.init.mock.calls.length,
-          'FB',
-          typeof window.FB
-        )
-        return e
-      },
-    }
-  )
-  fireEvent.click(button)
+function arriveAt(search: string, hash = '') {
+  window.history.replaceState(null, '', `/en/whatsapp/connect${search}${hash}`)
 }
 
+const signedClaim = (expiresInMs = 30 * 60_000) => ({
+  signupTicket: SIGNUP_TICKET,
+  expiresAt: new Date(Date.now() + expiresInMs).toISOString(),
+  signupUrl: META_URL,
+})
+
 beforeEach(() => {
-  resetFacebookSdkForTests()
-  installFacebook()
-  window.history.replaceState(null, '', `/en/whatsapp/connect?ticket=${TICKET}`)
-  claim.mockReset().mockResolvedValue({
-    signupTicket: 'S'.repeat(43),
-    expiresAt: new Date(Date.now() + 30 * 60_000).toISOString(),
-    appId: '999653349077771',
-    configId: '2344392272632365',
-    graphApiVersion: 'v26.0',
-  })
+  arriveAt(`?ticket=${TICKET}`)
+  claim.mockReset().mockResolvedValue(signedClaim())
   complete.mockReset().mockResolvedValue({
     state: 'connecting',
     displayPhoneNumber: '+20 100 555 0101',
     signupPath: 'new_number',
   })
+  relaunch.mockReset().mockResolvedValue({
+    ...signedClaim(),
+    signupUrl: `${META_URL}2`,
+  })
+  leave.mockReset()
 })
 
 afterEach(() => {
   vi.useRealTimers()
-  resetFacebookSdkForTests()
 })
 
-describe('WhatsappConnectFlow', () => {
-  it('takes the ticket out of the address, claims it once and stores it nowhere', async () => {
+describe('WhatsappConnectFlow: from the link', () => {
+  it('takes the ticket out of the address, claims it once for this language and stores it nowhere', async () => {
     const setItem = vi.spyOn(Storage.prototype, 'setItem')
     renderPage()
     await screen.findByRole('button', { name: en.whatsappConnect.launch })
     expect(window.location.search).toBe('')
     expect(window.location.pathname).toBe('/en/whatsapp/connect')
     expect(claim).toHaveBeenCalledTimes(1)
-    expect(claim).toHaveBeenCalledWith(TICKET)
+    expect(claim).toHaveBeenCalledWith(TICKET, 'en')
     expect(setItem.mock.calls.flat().join()).not.toContain(TICKET)
     setItem.mockRestore()
   })
 
-  it('explains what connecting changes before launching', async () => {
+  it('explains what connecting changes before going to Facebook', async () => {
     renderPage()
     await screen.findByRole('heading', {
       name: en.whatsappConnect.before.heading,
     })
     for (const key of ['sending', 'billing', 'app', 'activity'] as const)
       expect(screen.getByText(en.whatsappConnect.before[key])).toBeTruthy()
+    expect(screen.getByText(en.whatsappConnect.before.meta)).toBeTruthy()
+  })
+
+  it('sends this tab to Meta once, without opening another', async () => {
+    const open = vi.spyOn(window, 'open')
+    renderPage()
+    const button = await screen.findByRole('button', {
+      name: en.whatsappConnect.launch,
+    })
+    fireEvent.click(button)
+    fireEvent.click(button)
+    expect(leave).toHaveBeenCalledTimes(1)
+    expect(leave).toHaveBeenCalledWith(META_URL)
+    expect(open).not.toHaveBeenCalled()
+    expect((button as HTMLButtonElement).disabled).toBe(true)
+    // Going to Facebook never shows the connection as made.
+    expect(screen.queryByText(en.whatsappConnect.setupPending)).toBeNull()
+    open.mockRestore()
   })
 
   it('says where to start when there is no ticket, without claiming', async () => {
-    window.history.replaceState(null, '', '/en/whatsapp/connect')
+    arriveAt('')
     renderPage()
     expect(await screen.findByText(en.whatsappConnect.missing)).toBeTruthy()
     expect(claim).not.toHaveBeenCalled()
@@ -160,47 +131,54 @@ describe('WhatsappConnectFlow', () => {
     ).toBeTruthy()
   })
 
-  it('launches v5 with the documented options, and nothing more', async () => {
+  it('expires with the signup ticket while waiting for the click', async () => {
+    claim.mockResolvedValue(signedClaim(1_000))
     renderPage()
-    await launch()
-    expect(fb.init).toHaveBeenCalledTimes(1)
-    expect(fb.init).toHaveBeenCalledWith(
-      expect.objectContaining({ appId: '999653349077771', version: 'v26.0' })
-    )
-    expect(fb.login).toHaveBeenCalledTimes(1)
-    expect(fb.login.mock.calls[0][1]).toEqual({
-      config_id: '2344392272632365',
-      response_type: 'code',
-      override_default_response_type: true,
-      extras: { setup: {}, version: 'v5' },
-    })
-    expect(screen.getByText(en.whatsappConnect.inMeta)).toBeTruthy()
-    expect(screen.getByText(en.whatsappConnect.waiting)).toBeTruthy()
-    // Facebook's window being open never shows the connection as made.
-    expect(screen.queryByText(en.whatsappConnect.setupPending)).toBeNull()
+    expect(
+      await screen.findByText(en.whatsappConnect.expired, undefined, {
+        timeout: 3_000,
+      })
+    ).toBeTruthy()
+    expect(
+      screen.queryByRole('button', { name: en.whatsappConnect.launch })
+    ).toBeNull()
   })
 
-  it('submits once with the session first, and shows setup pending only after the server saved it', async () => {
+  it('renders in Arabic', async () => {
+    window.history.replaceState(
+      null,
+      '',
+      `/ar/whatsapp/connect?ticket=${TICKET}`
+    )
+    renderPage('ar')
+    expect(
+      await screen.findByRole('heading', { name: ar.whatsappConnect.title })
+    ).toBeTruthy()
+    expect(
+      await screen.findByRole('button', { name: ar.whatsappConnect.launch })
+    ).toBeTruthy()
+    expect(claim).toHaveBeenCalledWith(TICKET, 'ar')
+  })
+})
+
+describe('WhatsappConnectFlow: back from Meta', () => {
+  it('cleans the address, submits the code once and shows setup pending only after the server saved it', async () => {
     let resolve!: (value: Awaited<ReturnType<typeof complete>>) => void
     complete.mockReturnValue(new Promise((r) => (resolve = r)))
+    arriveAt(`?code=${CODE}&state=${SIGNUP_TICKET}`, '#_=_')
     renderPage()
-    await launch()
-    await post(JSON.stringify(SESSION))
-    expect(complete).not.toHaveBeenCalled()
-    await answerLogin('code-1')
-    await post(JSON.stringify(SESSION))
-    await answerLogin('code-2')
-    await waitFor(() => expect(complete).toHaveBeenCalledTimes(1))
+    expect(await screen.findByText(en.whatsappConnect.submitting)).toBeTruthy()
+    expect(window.location.search).toBe('')
+    expect(window.location.hash).toBe('')
+    expect(complete).toHaveBeenCalledTimes(1)
     expect(complete).toHaveBeenCalledWith({
-      signupTicket: 'S'.repeat(43),
-      code: 'code-1',
-      session: {
-        wabaIds: ['102290129340398'],
-        phoneNumberId: '106540352242922',
-        isOnBusinessApp: false,
-      },
+      signupTicket: SIGNUP_TICKET,
+      code: CODE,
+      redirectLocale: 'en',
     })
+    expect(claim).not.toHaveBeenCalled()
     expect(screen.queryByText(en.whatsappConnect.connected.heading)).toBeNull()
+
     await act(async () =>
       resolve({
         state: 'connecting',
@@ -211,14 +189,8 @@ describe('WhatsappConnectFlow', () => {
     expect(
       await screen.findByText(en.whatsappConnect.connected.heading)
     ).toBeTruthy()
-    expect(screen.getByText(en.whatsappConnect.connected.pending)).toBeTruthy()
     expect(screen.getByText('+20 100 555 0101')).toBeTruthy()
     expect(screen.getByText(en.whatsappConnect.setupPending)).toBeTruthy()
-    const timeline = screen.getByRole('list', {
-      name: en.whatsappConnect.timeline.label,
-    })
-    expect(timeline.textContent).toContain(en.whatsappConnect.timeline.verified)
-    expect(timeline.textContent).toContain(en.whatsappConnect.timeline.next)
     expect(
       screen
         .getByRole('list', { name: en.whatsappConnect.steps.label })
@@ -227,140 +199,12 @@ describe('WhatsappConnectFlow', () => {
     expect(complete).toHaveBeenCalledTimes(1)
   })
 
-  it('submits once with the code first, then the session', async () => {
-    renderPage()
-    await launch()
-    await answerLogin('code-1')
-    await post(SESSION)
-    await waitFor(() => expect(complete).toHaveBeenCalledTimes(1))
-    expect(complete.mock.calls[0][0].session?.wabaIds).toEqual([
-      '102290129340398',
-    ])
-  })
-
-  it('ignores a session from an untrusted origin and goes ahead without hints after the wait', async () => {
-    renderPage()
-    await launch()
-    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
-    await post(JSON.stringify(SESSION), 'https://evilfacebook.com')
-    await answerLogin('code-1')
-    expect(complete).not.toHaveBeenCalled()
-    await act(async () => {
-      vi.advanceTimersByTime(SESSION_WAIT_MS)
-    })
-    vi.useRealTimers()
-    await waitFor(() => expect(complete).toHaveBeenCalledTimes(1))
-    expect(complete.mock.calls[0][0].session).toBeNull()
-  })
-
-  it('treats a closed window as cancelled and allows another try', async () => {
-    renderPage()
-    await launch()
-    await post({ type: 'WA_EMBEDDED_SIGNUP', event: 'CANCEL', data: {} })
-    await answerLogin(null)
-    expect(await screen.findByText(en.whatsappConnect.cancelled)).toBeTruthy()
-    const again = screen.getByRole('button', {
-      name: en.whatsappConnect.tryAgain,
-    })
-    fireEvent.click(again)
-    expect(fb.login).toHaveBeenCalledTimes(2)
-    expect(complete).not.toHaveBeenCalled()
-  })
-
-  describe('on a phone', () => {
-    function useTouch(coarse: boolean) {
-      vi.stubGlobal(
-        'matchMedia',
-        vi.fn((query: string) => ({
-          matches: coarse && query === '(pointer: coarse)',
-          media: query,
-        }))
-      )
-    }
-    async function launchAndLose(after: number) {
-      await launch()
-      const start = Date.now()
-      vi.spyOn(Date, 'now').mockReturnValue(start + after)
-      await answerLogin(null)
-    }
-    afterEach(() => {
-      vi.unstubAllGlobals()
-      vi.restoreAllMocks()
-    })
-
-    it('explains a long attempt that came back with nothing', async () => {
-      useTouch(true)
-      renderPage()
-      await launchAndLose(LOST_ON_TOUCH_MS)
-      expect(
-        await screen.findByText(en.whatsappConnect.lostOnTouch)
-      ).toBeTruthy()
-      expect(screen.queryByText(en.whatsappConnect.cancelled)).toBeNull()
-      expect(
-        screen.getByRole('button', { name: en.whatsappConnect.tryAgain })
-      ).toBeTruthy()
-    })
-
-    it('keeps a quick close as cancelled', async () => {
-      useTouch(true)
-      renderPage()
-      await launchAndLose(LOST_ON_TOUCH_MS - 1_000)
-      expect(await screen.findByText(en.whatsappConnect.cancelled)).toBeTruthy()
-    })
-
-    it('keeps a cancel from Meta as cancelled', async () => {
-      useTouch(true)
-      renderPage()
-      await launch()
-      await post({ type: 'WA_EMBEDDED_SIGNUP', event: 'CANCEL', data: {} })
-      vi.spyOn(Date, 'now').mockReturnValue(Date.now() + LOST_ON_TOUCH_MS)
-      await answerLogin(null)
-      expect(await screen.findByText(en.whatsappConnect.cancelled)).toBeTruthy()
-    })
-
-    it('keeps a long attempt on a computer as cancelled', async () => {
-      useTouch(false)
-      renderPage()
-      await launchAndLose(LOST_ON_TOUCH_MS)
-      expect(await screen.findByText(en.whatsappConnect.cancelled)).toBeTruthy()
-    })
-  })
-
-  it('explains a finish without the last click', async () => {
-    renderPage()
-    await launch()
-    await post(SESSION)
-    await answerLogin(null)
-    expect(await screen.findByText(en.whatsappConnect.noCode)).toBeTruthy()
-    expect(complete).not.toHaveBeenCalled()
-  })
-
-  it.each([
-    ['2655093', en.whatsappConnect.metaErrors.sharedWithPartner],
-    ['3441045', en.whatsappConnect.metaErrors.notEligible],
-    ['4563015', en.whatsappConnect.metaErrors.updateApp],
-    ['9999999', en.whatsappConnect.metaErrors.default],
-  ])('gives guidance for Meta error %s', async (code, text) => {
-    renderPage()
-    await launch()
-    await post({
-      type: 'WA_EMBEDDED_SIGNUP',
-      event: 'ERROR',
-      data: { error_code: code, error_message: 'raw provider text' },
-    })
-    await answerLogin(null)
-    expect(await screen.findByText(text)).toBeTruthy()
-    expect(screen.queryByText('raw provider text')).toBeNull()
-  })
-
   it('translates a refused completion and points back to settings', async () => {
     complete.mockRejectedValue(
       new ApiError('x', 409, 'WHATSAPP_NUMBER_ALREADY_CONNECTED')
     )
+    arriveAt(`?code=${CODE}&state=${SIGNUP_TICKET}`)
     renderPage()
-    await launch()
-    await post(SESSION)
-    await answerLogin('code-1')
     expect(
       await screen.findByText(en.whatsappConnect.errors.numberAlreadyConnected)
     ).toBeTruthy()
@@ -370,45 +214,65 @@ describe('WhatsappConnectFlow', () => {
     ).toBeNull()
   })
 
-  it('reports an SDK that fails to load, and loads it again on request', async () => {
-    delete window.FB
+  it('treats a cancel as cancelled and goes again with a fresh link', async () => {
+    arriveAt(
+      `?error=access_denied&error_code=200&error_reason=user_denied&state=${SIGNUP_TICKET}`
+    )
     renderPage()
-    await waitFor(() =>
-      expect(document.getElementById('akeed-facebook-sdk')).not.toBeNull()
-    )
-    const script = document.getElementById(
-      'akeed-facebook-sdk'
-    ) as HTMLScriptElement
-    expect(script.src).toBe('https://connect.facebook.net/en_US/sdk.js')
-    await act(async () => script.onerror?.(new Event('error')))
-    expect(await screen.findByText(en.whatsappConnect.sdkFailed)).toBeTruthy()
-
-    installFacebook()
-    fireEvent.click(
-      screen.getByRole('button', { name: en.whatsappConnect.retrySdk })
-    )
-    await launch()
-    expect(fb.login).toHaveBeenCalledTimes(1)
-  })
-
-  it('stops listening when the page goes away', async () => {
-    const remove = vi.spyOn(window, 'removeEventListener')
-    const view = renderPage()
-    await launch()
-    view.unmount()
-    expect(remove).toHaveBeenCalledWith('message', expect.any(Function))
-    await answerLogin('late-code')
+    expect(await screen.findByText(en.whatsappConnect.cancelled)).toBeTruthy()
+    expect(window.location.search).toBe('')
     expect(complete).not.toHaveBeenCalled()
-    remove.mockRestore()
+    fireEvent.click(
+      screen.getByRole('button', { name: en.whatsappConnect.tryAgain })
+    )
+    await waitFor(() => expect(leave).toHaveBeenCalledWith(`${META_URL}2`))
+    expect(relaunch).toHaveBeenCalledTimes(1)
+    expect(relaunch).toHaveBeenCalledWith(SIGNUP_TICKET, 'en')
   })
 
-  it('renders in Arabic', async () => {
-    renderPage('ar')
+  it('points back to settings when the fresh link is refused', async () => {
+    relaunch.mockRejectedValue(
+      new ApiError('x', 401, 'WHATSAPP_CONNECT_TICKET_INVALID')
+    )
+    arriveAt(`?error=access_denied&state=${SIGNUP_TICKET}`)
+    renderPage()
+    fireEvent.click(
+      await screen.findByRole('button', { name: en.whatsappConnect.tryAgain })
+    )
     expect(
-      await screen.findByRole('heading', { name: ar.whatsappConnect.title })
+      await screen.findByText(en.whatsappConnect.errors.ticketInvalid)
     ).toBeTruthy()
+    expect(leave).not.toHaveBeenCalled()
+  })
+
+  it.each([
+    ['2655093', en.whatsappConnect.metaErrors.sharedWithPartner],
+    ['3441045', en.whatsappConnect.metaErrors.notEligible],
+    ['9999999', en.whatsappConnect.metaErrors.default],
+  ])('gives guidance for Meta error %s', async (code, text) => {
+    arriveAt(
+      `?error=server_error&error_code=${code}&error_description=raw+provider+text&state=${SIGNUP_TICKET}`
+    )
+    renderPage()
+    expect(await screen.findByText(text)).toBeTruthy()
+    expect(screen.queryByText(/raw provider text/)).toBeNull()
     expect(
-      await screen.findByRole('button', { name: ar.whatsappConnect.launch })
+      screen.getByRole('button', { name: en.whatsappConnect.tryAgain })
     ).toBeTruthy()
+  })
+
+  it.each([
+    [`?code=${CODE}`],
+    [`?code=${CODE}&state=short`],
+    [`?code=has%20space&state=${SIGNUP_TICKET}`],
+    [`?state=${SIGNUP_TICKET}`],
+  ])('refuses a return that does not add up: %s', async (search) => {
+    arriveAt(search)
+    renderPage()
+    expect(
+      await screen.findByText(en.whatsappConnect.errors.ticketInvalid)
+    ).toBeTruthy()
+    expect(window.location.search).toBe('')
+    expect(complete).not.toHaveBeenCalled()
   })
 })
