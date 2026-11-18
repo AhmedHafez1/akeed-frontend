@@ -23,6 +23,8 @@ import {
 } from '../../../testing/settingsFixture'
 import { templateMessageFixture } from '@/shared/lib/templateMessageFixture'
 import { SettingsEmbeddedPage } from './SettingsEmbeddedPage'
+import type { resolvePlanNumber } from '@/features/settings/domain/planNumber'
+import { availabilityFixture } from '@/features/whatsapp-connect/testing/whatsappFixtures'
 
 const nav = vi.hoisted(() => ({
   search: new URLSearchParams(),
@@ -36,6 +38,11 @@ const api = vi.hoisted(() => ({
 }))
 
 const onboarding = vi.hoisted(() => ({ sendOnboardingTest: vi.fn() }))
+const sender = vi.hoisted(() => ({
+  data: { connection: null, isLoading: false, isError: false } as Parameters<
+    typeof resolvePlanNumber
+  >[0],
+}))
 
 const shopify = vi.hoisted(() => ({
   saveBar: {
@@ -70,6 +77,10 @@ vi.mock('@/shared/hooks/useAppBridgeLoading', () => ({
 }))
 
 vi.mock('../../../api/settingsApi', () => api)
+vi.mock('@/features/whatsapp-connect', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/features/whatsapp-connect')>()),
+  useWhatsappSenderData: () => sender.data,
+}))
 
 vi.mock('@/features/onboarding/api/onboardingApi', async (importOriginal) => ({
   ...(await importOriginal<
@@ -133,6 +144,7 @@ function lastSaveBarCall() {
 afterEach(() => vi.restoreAllMocks())
 
 beforeEach(() => {
+  sender.data = { connection: null, isLoading: false, isError: false }
   vi.spyOn(HTMLElement.prototype, 'offsetParent', 'get').mockReturnValue(
     document.body
   )
@@ -270,6 +282,42 @@ describe('SettingsEmbeddedPage', () => {
     expect(screen.getAllByText('الأنسب لاستخدامك')).toHaveLength(1)
     expect(screen.getByText('أرسلت 28 رسالة في آخر 30 يوماً.')).toBeTruthy()
     expect(shopify.saveBar.show).not.toHaveBeenCalled()
+  })
+
+  it('opens WhatsApp settings from the allowance banner and preserves Shopify parameters', async () => {
+    sender.data = {
+      connection: null,
+      availability: availabilityFixture(),
+      isLoading: false,
+      isError: false,
+    }
+    api.fetchSettings.mockResolvedValue(
+      settingsResponseFixture({
+        billing: {
+          usage: {
+            used: 30,
+            limit: 30,
+            periodStart: '2026-11-18',
+            periodEnd: null,
+            pools: {
+              akeed: { used: 30, limit: 30, remaining: 0 },
+              ownNumber: { used: 0, limit: 90, remaining: 90 },
+            },
+          },
+        },
+      })
+    )
+    renderPage('plan')
+    nav.search.set('shop', 'test.myshopify.com')
+    nav.search.set('host', 'synthetic-host')
+    fireEvent.click(
+      await screen.findByRole('button', {
+        name: ar.settings.embedded.plan.allowanceBanner.connectAction,
+      })
+    )
+    expect(nav.push).toHaveBeenCalledWith(
+      '/ar/settings?tab=whatsapp&shop=test.myshopify.com&host=synthetic-host'
+    )
   })
 
   it('sends a test straight to a saved number', async () => {

@@ -56,6 +56,14 @@ vi.mock('@/shared/hooks/useAppBridgeLoading', () => ({
 }))
 
 vi.mock('../../../api/settingsApi', () => api)
+vi.mock('@/features/whatsapp-connect', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/features/whatsapp-connect')>()),
+  useWhatsappSenderData: () => ({
+    connection: null,
+    isLoading: false,
+    isError: false,
+  }),
+}))
 
 const MESSAGES = { ar, en }
 const copy = (locale: Locale) => MESSAGES[locale].settings.embedded.timing
