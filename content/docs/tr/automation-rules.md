@@ -44,7 +44,7 @@ Açıksa Akeed, yanıt vermeyen müşterilere bir hatırlatma gönderir.
 ### Önerilen varsayılan
 
 - Hatırlatmayı **açık** tutun.
-- İlk gönderimden **6 saat** sonrasıyla başlayın. Varsayılan değer budur.
+- İlk gönderimden **2 saat** sonrasıyla başlayın. Varsayılan değer budur.
 
 ### Neden işe yarar
 
@@ -113,7 +113,7 @@ Saat dilimini ana operasyon ekibinizin ve müşterilerinizin kullandığı saat 
 | Mağaza Tipi | İlk Gecikme | Hatırlatma | Yanıt Yok İşaretleme | Sessiz Saatler |
 | --- | ---: | ---: | ---: | --- |
 | Hızlı sevkiyat yapan mağaza | 0–10 dk | 60 dk | 240 dk | İsteğe bağlı |
-| Dengeli varsayılan kurulum | 0 dk | 360 dk | Hatırlatmadan sonra 720 dk | Kapalı veya 22:00–09:00 |
+| Dengeli varsayılan kurulum | 0 dk | 120 dk | Hatırlatmadan sonra 720 dk | Kapalı veya 22:00–09:00 |
 
 Bunları başlangıç noktası olarak kullanın, ardından yanıt ve onay oranlarınıza göre her hafta ince ayar yapın.
 
