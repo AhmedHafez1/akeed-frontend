@@ -32,26 +32,30 @@ import { getFormatLocale } from '@/shared/lib/locale'
 import {
   recommendPlan,
   resolvePrimaryPlanId,
-  resolveUsageBanner,
+  resolvePlanUsageBanner,
   usagePercent,
 } from '@/features/settings/domain/planUsage'
 import type { EmbeddedSettingsModel } from '@/features/settings/domain/useEmbeddedSettings'
+import type { PlanNumberState } from '@/features/settings/domain/planNumber'
 import type { UsagePools } from '@/shared/types/usagePools'
 
 interface PlanTabProps {
   model: EmbeddedSettingsModel
   data: SettingsResponse
-  /** The merchant's own number is offered or connected. */
-  ownNumberVisible?: boolean
-  /** The merchant's own number is connected and active. */
-  ownNumberConnected?: boolean
+  ownNumber?: PlanNumberState
+  onOpenWhatsapp?: () => void
 }
 
 export function PlanTab({
   model,
   data,
-  ownNumberVisible = false,
-  ownNumberConnected = false,
+  ownNumber = {
+    status: 'unknown',
+    visible: false,
+    connected: false,
+    canConnect: false,
+  },
+  onOpenWhatsapp,
 }: PlanTabProps) {
   const t = useTranslations('settings.embedded.plan')
   const tPlans = useTranslations('billing.embeddedPlans')
@@ -60,13 +64,7 @@ export function PlanTab({
   const locale = useLocale()
 
   const { state, billing } = data
-  // Each pool as charged, once the merchant's own number is offered or has
-  // paid for sends; otherwise the single allowance as before.
-  const pools =
-    billing.usage.pools &&
-    (ownNumberVisible || billing.usage.pools.ownNumber.used > 0)
-      ? billing.usage.pools
-      : null
+  const pools = ownNumber.connected ? (billing.usage.pools ?? null) : null
   const planName = (id: OnboardingBillingPlanId) => tNames(PLAN_NAME_KEYS[id])
   const status = state.sendingAvailability
   const currentPlanId = status
@@ -96,9 +94,17 @@ export function PlanTab({
         : tRequired('inactive')
   const currentPlan = billing.plans.find((plan) => plan.id === currentPlanId)
   const isFree = !currentPlan || currentPlan.amount === 0
-  const { used, limit, periodEnd } = billing.usage
+  const { periodEnd } = billing.usage
+  // A hidden own-number pool must not be included in the visible Akeed meter.
+  const { used, limit } = billing.usage.pools?.akeed ?? billing.usage
   const percent = usagePercent(used, limit)
-  const banner = currentPlanId ? resolveUsageBanner(used, limit) : null
+  const banner = resolvePlanUsageBanner({
+    active: Boolean(currentPlanId),
+    used: billing.usage.used,
+    limit: billing.usage.limit,
+    pools: billing.usage.pools,
+    number: ownNumber,
+  })
   const remaining = Math.max(0, limit - used)
   const paidThroughAt = billing.paidThroughAt ?? null
   const paidThroughDate = paidThroughAt
@@ -122,10 +128,7 @@ export function PlanTab({
   const canSubscribe = state.permissions.canUpdateConfiguration
   const sentLast30Days = billing.messagesSentLast30Days ?? 0
   const paidPlans = billing.plans.filter((plan) => plan.amount > 0)
-  const ownNumberPresence = {
-    visible: ownNumberVisible,
-    connected: ownNumberConnected,
-  }
+  const ownNumberPresence = ownNumber
   const showsOwnNumber = paidPlans.some((plan) =>
     Boolean(ownNumberAllowance(plan, ownNumberPresence))
   )
@@ -147,6 +150,81 @@ export function PlanTab({
     recommendedId
   )
 
+  const canRenew =
+    !isFree && Boolean(currentPlanId && currentPlanId === renewablePlanId)
+  const billingAction =
+    banner?.tone === 'critical' &&
+    !ownNumber.connected &&
+    isShopifyBilled &&
+    canSubscribe
+      ? {
+          content:
+            canRenew && currentPlanId
+              ? t('renew', { plan: planName(currentPlanId) })
+              : tRequired('choosePlan'),
+          disabled: model.subscribingPlanId !== null,
+          loading: canRenew && model.subscribingPlanId === currentPlanId,
+          onAction: () => {
+            if (canRenew && currentPlanId)
+              void model.subscribe(currentPlanId, { renew: true })
+            else {
+              const heading = document.getElementById('settings-plan-options')
+              heading?.scrollIntoView({ block: 'start' })
+              heading?.focus({ preventScroll: true })
+            }
+          },
+        }
+      : undefined
+  const numberAction =
+    banner &&
+    !['low', 'exhausted'].includes(banner.kind) &&
+    ownNumber.visible &&
+    onOpenWhatsapp
+      ? {
+          content: t(
+            banner.kind === 'connect'
+              ? 'allowanceBanner.connectAction'
+              : banner.kind === 'setup'
+                ? 'allowanceBanner.setupAction'
+                : banner.kind === 'reconnect' && ownNumber.canConnect
+                  ? 'allowanceBanner.reconnectAction'
+                  : 'allowanceBanner.reviewAction'
+          ),
+          onAction: onOpenWhatsapp,
+        }
+      : undefined
+  const bannerTitle = !banner
+    ? ''
+    : banner.kind === 'low'
+      ? t(isFree ? 'warningTitleFree' : 'warningTitle', {
+          remaining: banner.remaining,
+        })
+      : banner.kind === 'exhausted'
+        ? t('criticalTitle')
+        : t(`allowanceBanner.${banner.kind}Title`)
+  const bannerBody = !banner
+    ? ''
+    : banner.kind === 'low'
+      ? renewalDate
+        ? t('warningBodyRenews', { date: renewalDate })
+        : t('warningBody')
+      : banner.kind === 'exhausted'
+        ? t('criticalBody')
+        : banner.kind === 'connect'
+          ? t(
+              canRenew
+                ? 'allowanceBanner.connectRenewBody'
+                : 'allowanceBanner.connectChooseBody'
+            )
+          : t(`allowanceBanner.${banner.kind}Body`)
+  const poolNote = renewalDate
+    ? t('pools.noteRenews', { date: renewalDate })
+    : isFree
+      ? `${tPlans('oneTime')} ${tPlans('ownNumber.note')}`
+      : paidThroughDate
+        ? tPlans('ownNumber.note')
+        : t('pools.note')
+
   return (
     <BlockStack gap="400">
       {paidThroughDate && (
@@ -157,21 +235,11 @@ export function PlanTab({
       {banner && (
         <Banner
           tone={banner.tone}
-          title={
-            banner.tone === 'critical'
-              ? t('criticalTitle')
-              : t(isFree ? 'warningTitleFree' : 'warningTitle', {
-                  remaining: banner.remaining,
-                })
-          }
+          title={bannerTitle}
+          action={billingAction ?? numberAction}
+          secondaryAction={billingAction ? numberAction : undefined}
         >
-          <p>
-            {banner.tone === 'critical'
-              ? t('criticalBody')
-              : renewalDate
-                ? t('warningBodyRenews', { date: renewalDate })
-                : t('warningBody')}
-          </p>
+          <p>{bannerBody}</p>
         </Banner>
       )}
 
@@ -204,9 +272,14 @@ export function PlanTab({
           )}
           {currentPlanId &&
             (pools ? (
-              <PoolMeters pools={pools} renewalDate={renewalDate} />
+              <PoolMeters pools={pools} note={poolNote} />
             ) : (
               <>
+                {billing.usage.pools && (
+                  <Text as="p" tone="subdued">
+                    {t('pools.akeed')}
+                  </Text>
+                )}
                 <InlineStack
                   align="space-between"
                   blockAlign="baseline"
@@ -268,14 +341,16 @@ export function PlanTab({
 
       {isShopifyBilled ? (
         <>
-          <BlockStack gap="100">
-            <Text as="h2" variant="headingLg">
-              {tPlans('heading')}
-            </Text>
-            <Text as="p" tone="subdued">
-              {tPlans('sameFeatures')}
-            </Text>
-          </BlockStack>
+          <div id="settings-plan-options" tabIndex={-1}>
+            <BlockStack gap="100">
+              <Text as="h2" variant="headingLg">
+                {tPlans('heading')}
+              </Text>
+              <Text as="p" tone="subdued">
+                {tPlans('sameFeatures')}
+              </Text>
+            </BlockStack>
+          </div>
           <InlineGrid columns={{ xs: 1, md: 3 }} gap="400">
             {paidPlans.map((plan) => (
               <PlanCard
@@ -316,13 +391,7 @@ export function PlanTab({
 }
 
 /** The Akeed and own-number pools, side by side, for one billing period. */
-function PoolMeters({
-  pools,
-  renewalDate,
-}: {
-  pools: UsagePools
-  renewalDate: string | null
-}) {
+function PoolMeters({ pools, note }: { pools: UsagePools; note: string }) {
   const t = useTranslations('settings.embedded.plan.pools')
   const tPlans = useTranslations('billing.embeddedPlans')
   const rows = [
@@ -331,9 +400,6 @@ function PoolMeters({
   ] as const
   return (
     <BlockStack gap="300">
-      <Text as="p" fontWeight="semibold">
-        {t('title')}
-      </Text>
       <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
         {rows.map(({ key, pool }) => {
           const labelId = `settings-pool-${key}`
@@ -368,7 +434,7 @@ function PoolMeters({
         })}
       </InlineGrid>
       <Text as="p" tone="subdued">
-        {renewalDate ? t('noteRenews', { date: renewalDate }) : t('note')}
+        {note}
       </Text>
     </BlockStack>
   )

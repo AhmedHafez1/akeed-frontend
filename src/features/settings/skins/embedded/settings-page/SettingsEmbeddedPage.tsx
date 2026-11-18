@@ -26,7 +26,8 @@ import {
   type SettingsTabId,
 } from '@/features/settings/domain/settingsTabs'
 import { useEmbeddedSettings } from '@/features/settings/domain/useEmbeddedSettings'
-import { useOwnNumberPresence } from '@/features/whatsapp-connect'
+import { useWhatsappSenderData } from '@/features/whatsapp-connect'
+import { resolvePlanNumber } from '@/features/settings/domain/planNumber'
 import { AppBridgeSaveBar } from '@/shared/ui/app-bridge/AppBridgeSaveBar'
 import { MessageTab } from './MessageTab'
 import { PlanTab } from './PlanTab'
@@ -68,7 +69,8 @@ export function SettingsEmbeddedPage() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const model = useEmbeddedSettings()
-  const ownNumber = useOwnNumberPresence()
+  const senderData = useWhatsappSenderData()
+  const ownNumber = resolvePlanNumber(senderData)
   // The field to focus once its tab has rendered after a failed save.
   const pendingFocus = useRef<SettingsFieldKey | null>(null)
 
@@ -76,7 +78,7 @@ export function SettingsEmbeddedPage() {
   const activeTab = resolveSettingsTab(tabParam)
   // Offered while connecting is, or while a connection exists to manage.
   const whatsappHidden =
-    activeTab === 'whatsapp' && !ownNumber.isLoading && !ownNumber.visible
+    activeTab === 'whatsapp' && !senderData.isLoading && !ownNumber.visible
   const shownTabs = SETTINGS_TABS.filter(
     (tab) => tab !== 'whatsapp' || ownNumber.visible || activeTab === 'whatsapp'
   )
@@ -211,8 +213,8 @@ export function SettingsEmbeddedPage() {
                 <PlanTab
                   model={model}
                   data={data}
-                  ownNumberVisible={ownNumber.visible}
-                  ownNumberConnected={ownNumber.connected}
+                  ownNumber={ownNumber}
+                  onOpenWhatsapp={() => goToTab('whatsapp')}
                 />
               )}
               {activeTab === 'whatsapp' && !whatsappHidden && <WhatsappTab />}

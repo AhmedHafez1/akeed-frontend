@@ -1,3 +1,6 @@
+import type { UsagePools } from '@/shared/types/usagePools'
+import type { PlanNumberState } from './planNumber'
+
 /**
  * Plan-tab rules: the credits banner thresholds and the recommended plan.
  * Both are pure so the thresholds and sizing are pinned by unit tests.
@@ -24,6 +27,60 @@ export function resolveUsageBanner(
   if (used >= limit) return { tone: 'critical', remaining }
   if (used / limit >= USAGE_WARNING_RATIO) return { tone: 'warning', remaining }
   return null
+}
+
+export interface PlanUsageBanner {
+  kind:
+    | 'low'
+    | 'exhausted'
+    | 'connect'
+    | 'setup'
+    | 'reconnect'
+    | 'attention'
+    | 'partial'
+  tone: UsageBannerTone
+  remaining: number
+}
+
+/** Server totals describe usable capacity; persisted pools describe ownership. */
+export function resolvePlanUsageBanner(params: {
+  active: boolean
+  used: number
+  limit: number
+  pools?: UsagePools | null
+  number: PlanNumberState
+}): PlanUsageBanner | null {
+  if (!params.active) return null
+  const { used, limit, pools, number } = params
+  const ownRemaining = pools?.ownNumber.remaining ?? 0
+  const akeedEmpty = Boolean(pools && pools.akeed.remaining <= 0)
+  if (akeedEmpty && ownRemaining > 0 && number.status !== 'unknown') {
+    const kind =
+      number.status === 'unconnected'
+        ? number.visible && number.canConnect
+          ? 'connect'
+          : null
+        : number.status === 'preparing'
+          ? 'setup'
+          : number.status === 'disconnected'
+            ? 'reconnect'
+            : number.status === 'attention' || number.status === 'partial'
+              ? number.status
+              : null
+    if (kind) {
+      return {
+        kind,
+        tone: kind === 'connect' ? 'critical' : 'warning',
+        remaining: ownRemaining,
+      }
+    }
+  }
+  const banner = resolveUsageBanner(used, limit)
+  if (!banner) return null
+  return {
+    ...banner,
+    kind: banner.tone === 'critical' ? 'exhausted' : 'low',
+  }
 }
 
 export function usagePercent(used: number, limit: number): number {

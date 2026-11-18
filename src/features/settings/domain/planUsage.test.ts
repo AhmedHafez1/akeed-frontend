@@ -2,10 +2,12 @@ import { describe, expect, it } from 'vitest'
 import {
   planCovers,
   recommendPlan,
+  resolvePlanUsageBanner,
   resolvePrimaryPlanId,
   resolveUsageBanner,
   usagePercent,
 } from './planUsage'
+import type { PlanNumberState } from './planNumber'
 
 const PLANS = [
   {
@@ -33,6 +35,100 @@ const PLANS = [
     ownNumberIncludedVerifications: 20000,
   },
 ]
+
+describe('Plan usage banner', () => {
+  function banner(
+    akeedLeft: number,
+    ownLeft: number,
+    status: PlanNumberState['status'] = 'ready',
+    overrides: Partial<Parameters<typeof resolvePlanUsageBanner>[0]> = {}
+  ) {
+    const combined = status === 'ready' || status === 'partial'
+    return resolvePlanUsageBanner({
+      active: true,
+      used: combined ? 1300 - akeedLeft - ownLeft : 300 - akeedLeft,
+      limit: combined ? 1300 : 300,
+      pools: {
+        akeed: { used: 300 - akeedLeft, limit: 300, remaining: akeedLeft },
+        ownNumber: { used: 1000 - ownLeft, limit: 1000, remaining: ownLeft },
+      },
+      number: {
+        status,
+        connected: ['ready', 'partial', 'attention'].includes(status),
+        visible: true,
+        canConnect: true,
+      },
+      ...overrides,
+    })
+  }
+  it('does not call either single-pool exhaustion total exhaustion', () => {
+    expect(banner(0, 800)).toBeNull()
+    expect(banner(300, 0)).toBeNull()
+  })
+  it('warns at 80% combined usage and counts the messages still usable', () => {
+    expect(banner(0, 261)).toBeNull()
+    expect(banner(0, 260)).toMatchObject({ kind: 'low', remaining: 260 })
+    expect(banner(1, 0)).toMatchObject({ kind: 'low', remaining: 1 })
+  })
+  it('shows the existing exhaustion state only when no usable messages remain', () => {
+    expect(banner(0, 0)).toMatchObject({ kind: 'exhausted', tone: 'critical' })
+  })
+  it('offers connection only when available, permitted, and allowance remains', () => {
+    expect(banner(0, 800, 'unconnected')).toMatchObject({
+      kind: 'connect',
+      remaining: 800,
+    })
+    for (const number of [
+      {
+        status: 'unconnected',
+        connected: false,
+        visible: false,
+        canConnect: true,
+      },
+      {
+        status: 'unconnected',
+        connected: false,
+        visible: true,
+        canConnect: false,
+      },
+    ] satisfies PlanNumberState[]) {
+      expect(banner(0, 800, 'unconnected', { number })).toMatchObject({
+        kind: 'exhausted',
+      })
+    }
+    expect(banner(0, 0, 'unconnected')).toMatchObject({ kind: 'exhausted' })
+  })
+  it.each([
+    ['preparing', 'setup'],
+    ['disconnected', 'reconnect'],
+    ['attention', 'attention'],
+    ['partial', 'partial'],
+  ] as const)('guides %s to %s when Akeed is empty', (status, kind) => {
+    expect(banner(0, 800, status)).toMatchObject({
+      kind,
+      tone: 'warning',
+      remaining: 800,
+    })
+    expect(banner(100, 800, status)).toBeNull()
+  })
+  it('does not interpret unknown connection status as a connection offer', () => {
+    expect(banner(0, 800, 'unknown')).toMatchObject({ kind: 'exhausted' })
+  })
+  it('preserves server usage rather than adding inaccessible pools', () => {
+    expect(
+      banner(100, 800, 'attention', { used: 240, limit: 300 })
+    ).toMatchObject({ kind: 'low', remaining: 60 })
+  })
+  it('supports older responses without pools without inventing an allowance', () => {
+    expect(banner(0, 800, 'unconnected', { pools: null })).toMatchObject({
+      kind: 'exhausted',
+    })
+  })
+  it('suppresses allowance banners when no plan is active', () => {
+    expect(banner(0, 0, 'ready', { active: false })).toBeNull()
+    expect(banner(0, 800, 'unconnected', { active: false })).toBeNull()
+  })
+})
 
 describe('resolveUsageBanner', () => {
   it('is hidden below 80%', () => {
