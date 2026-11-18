@@ -326,6 +326,11 @@ export function getApiBaseUrl(): string {
   return ''
 }
 
+/** The isolated fixture has no Shopify session to prime. */
+export function primeShopifySessionToken(token: string): void {
+  void token
+}
+
 const WHATSAPP_SENDER_FIXTURE = {
   available: true,
   appId: '999653349077771',

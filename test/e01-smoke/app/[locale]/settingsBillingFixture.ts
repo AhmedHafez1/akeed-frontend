@@ -36,6 +36,7 @@ export function isSettingsBillingFixture() {
   const path = window.location.pathname
   return (
     path.endsWith('/settings') ||
+    path.endsWith('/embedded-settings') ||
     path.endsWith('/billing/credits') ||
     path.endsWith('/billing/return')
   )
@@ -367,6 +368,8 @@ function settings(): SettingsResponse {
     },
     acknowledgment: {
       creditsPerMessage: creditSummary().price.creditsPerMessage,
+      ownNumberCreditsPerMessage:
+        creditSummary().price.ownNumberCreditsPerMessage,
       available:
         new URLSearchParams(window.location.search).get('thankYou') !==
         'unavailable',

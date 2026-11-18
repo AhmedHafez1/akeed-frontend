@@ -14,27 +14,40 @@ import {
   whatsappConnectionQueryKey,
   whatsappSenderQueryKey,
 } from '../api/whatsappConnectApi'
+import { hasPendingWhatsappSetup } from '../model/whatsappProgress'
 
 /**
  * The sender availability and the connection behind the WhatsApp tab. Both
  * refetch when the merchant comes back to the tab, which is how the screen
  * catches up after the connect page finishes in another tab.
  */
-export function useWhatsappSenderData(enabled = true) {
-  const availability = useQuery({
-    queryKey: whatsappSenderQueryKey,
-    queryFn: getWhatsappSender,
-    staleTime: 60_000,
-    retry: false,
-    refetchOnWindowFocus: true,
-    enabled,
-  })
+export function useWhatsappSenderData(enabled = true, pollPending = false) {
   const connection = useQuery({
     queryKey: whatsappConnectionQueryKey,
     queryFn: getWhatsappConnection,
     staleTime: 30_000,
     retry: false,
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus: 'always',
+    refetchOnMount: pollPending ? 'always' : true,
+    refetchInterval: (query) =>
+      pollPending && hasPendingWhatsappSetup(query.state.data?.connection)
+        ? 15_000
+        : false,
+    refetchIntervalInBackground: false,
+    enabled,
+  })
+  const availability = useQuery({
+    queryKey: whatsappSenderQueryKey,
+    queryFn: getWhatsappSender,
+    staleTime: 60_000,
+    retry: false,
+    refetchOnWindowFocus: 'always',
+    refetchOnMount: pollPending ? 'always' : true,
+    refetchInterval:
+      pollPending && hasPendingWhatsappSetup(connection.data?.connection)
+        ? 15_000
+        : false,
+    refetchIntervalInBackground: false,
     enabled,
   })
   return {

@@ -12,6 +12,11 @@ import {
 } from '../api/whatsappConnectApi'
 import { leavePage } from './leavePage'
 import {
+  forgetSettingsReturn,
+  readSettingsReturn,
+  rememberSettingsReturn,
+} from '../model/settingsReturn'
+import {
   readSignupReturn,
   withoutSignupReturn,
   type SignupReturn,
@@ -43,6 +48,7 @@ export type ConnectPageState =
 
 export interface ConnectPage {
   state: ConnectPageState
+  returnUrl: string | null
   /** Sends this tab to Meta's signup. Only while `ready` or `returned`. */
   goToMeta: () => void
 }
@@ -57,7 +63,8 @@ type Arrival =
 /**
  * Reads what the page arrived with (a link ticket, or Meta's return) and
  * removes it from the address before anything else, so a refresh, a shared
- * link or a later request never repeats it. Nothing is written to storage.
+ * link or a later request never repeats it. Credentials never enter storage;
+ * only the public settings destination survives the redirect.
  */
 export function takeArrival(): Arrival {
   const url = new URL(window.location.href)
@@ -88,6 +95,7 @@ export function takeArrival(): Arrival {
  */
 export function useConnectPage(locale: SupportedLocale): ConnectPage {
   const [state, setState] = useState<ConnectPageState>({ status: 'claiming' })
+  const [returnUrl, setReturnUrl] = useState<string | null>(null)
   // One arrival per page, even when effects run twice: a second claim or
   // completion with the same ticket would be refused.
   const started = useRef<Promise<ConnectPageState> | null>(null)
@@ -96,6 +104,7 @@ export function useConnectPage(locale: SupportedLocale): ConnectPage {
   useEffect(() => {
     if (!started.current) {
       const arrival = takeArrival()
+      if (arrival.kind === 'ticket') forgetSettingsReturn()
       withCode.current =
         arrival.kind === 'return' && arrival.signupReturn.kind === 'code'
       started.current = arrive(arrival, locale)
@@ -108,7 +117,24 @@ export function useConnectPage(locale: SupportedLocale): ConnectPage {
         )
     })
     started.current.then((next) => {
-      if (active) setState(next)
+      if (active) {
+        const destination =
+          next.status === 'ready'
+            ? rememberSettingsReturn(
+                next.claim.returnUrl,
+                next.claim.expiresAt,
+                locale
+              )
+            : next.status === 'connected'
+              ? rememberSettingsReturn(
+                  next.completion.returnUrl,
+                  new Date(Date.now() + 30 * 60_000).toISOString(),
+                  locale
+                )
+              : null
+        setReturnUrl(destination ?? readSettingsReturn(locale))
+        setState(next)
+      }
     })
     return () => {
       active = false
@@ -140,13 +166,21 @@ export function useConnectPage(locale: SupportedLocale): ConnectPage {
     if (state.status !== 'returned' || state.leaving) return
     setState({ ...state, leaving: true })
     relaunchWhatsappSignup(state.signupTicket, locale).then(
-      (claim) => leavePage(claim.signupUrl),
+      (claim) => {
+        const destination = rememberSettingsReturn(
+          claim.returnUrl,
+          claim.expiresAt,
+          locale
+        )
+        if (destination) setReturnUrl(destination)
+        leavePage(claim.signupUrl)
+      },
       (error: unknown) =>
         setState({ status: 'failed', errorCode: apiErrorCode(error) })
     )
   }, [state, locale])
 
-  return { state, goToMeta }
+  return { state, returnUrl, goToMeta }
 }
 
 async function arrive(
@@ -180,6 +214,7 @@ async function arrive(
       completion: {
         displayPhoneNumber: result.displayPhoneNumber,
         signupPath: result.signupPath,
+        returnUrl: result.returnUrl,
       },
     }
   } catch (error) {

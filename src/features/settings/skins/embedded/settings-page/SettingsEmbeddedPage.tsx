@@ -215,9 +215,7 @@ export function SettingsEmbeddedPage() {
                   ownNumberConnected={ownNumber.connected}
                 />
               )}
-              {activeTab === 'whatsapp' && !whatsappHidden && (
-                <WhatsappTab pools={data.billing.usage.pools ?? null} />
-              )}
+              {activeTab === 'whatsapp' && !whatsappHidden && <WhatsappTab />}
             </BlockStack>
           </Tabs>
         </div>

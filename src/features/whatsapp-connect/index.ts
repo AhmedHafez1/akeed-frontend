@@ -26,6 +26,11 @@ export {
 } from './model/whatsappTabState'
 export { acceptedAtLabel, messageLanguageName } from './model/whatsappTabFormat'
 export { serverErrorKey } from './model/signupErrors'
+export type {
+  WhatsappProgressRow,
+  ProgressStatus,
+  ProgressIssue,
+} from './model/whatsappProgress'
 export { apiErrorCode } from './api/whatsappConnectApi'
 export type {
   AcceptedSend,

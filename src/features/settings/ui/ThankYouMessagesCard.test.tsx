@@ -76,42 +76,44 @@ describe.each([
     'standalone',
     Standalone,
     'switch',
-    en.settings.thankYou.creditCost.replace('{count}', '2'),
+    en.settings.thankYou.akeedCreditCost.replace('{count}', '2'),
   ],
   ['embedded', Embedded, 'checkbox', en.settings.thankYou.planCost],
 ] as const)('%s thank-you settings', (_skin, Component, role, cost) => {
-  it('starts compact, reveals price and examples through help, and toggles', async () => {
+  it('shows sender-aware cost and expands the existing examples with one control', () => {
     renderCard(Component)
     const control = screen.getByRole(role, { name: en.settings.thankYou.label })
     expect(checked(control)).toBe(false)
-    // Standalone drops the on/off pill: the switch already shows it.
-    expect(screen.queryAllByText(en.settings.thankYou.off)).toHaveLength(
-      _skin === 'embedded' ? 1 : 0
-    )
-    expect(screen.queryByText(cost)).toBeNull()
-    expect(screen.queryByText('Confirmed 123 from Nour')).toBeNull()
-    expect(screen.getByText(en.settings.thankYou.description)).toBeTruthy()
-    fireEvent.click(
-      screen.getByRole('button', { name: en.settings.thankYou.heading })
-    )
-    expect(await screen.findByRole('tooltip')).toBeTruthy()
+    expect(screen.queryAllByText(en.settings.thankYou.off)).toHaveLength(0)
     expect(screen.getByText(cost)).toBeTruthy()
-    expect(
-      screen.getByRole('heading', {
-        name: en.settings.thankYou.examplesHeading,
-      })
-    ).toBeTruthy()
-    expect(
-      screen.getByText(en.settings.embedded.message.languageNames.en)
-    ).toBeTruthy()
+    const disclosure = screen
+      .getByText(en.settings.thankYou.examplesHeading)
+      .closest('details')!
+    expect(disclosure.open).toBe(false)
+    fireEvent.click(screen.getByText(en.settings.thankYou.examplesHeading))
+    expect(disclosure.open).toBe(true)
     expect(screen.getByText('Confirmed 123 from Nour')).toBeTruthy()
     expect(screen.getByText('Canceled 123')).toBeTruthy()
     fireEvent.click(control)
     expect(checked(control)).toBe(true)
-    expect(screen.queryAllByText(en.settings.thankYou.on)).toHaveLength(
-      _skin === 'embedded' ? 1 : 0
-    )
   })
+
+  it('uses the configured own-number and Akeed credit rates', () => {
+    renderCard(Component, {
+      acknowledgment: {
+        ...base.acknowledgment!,
+        ownNumberCreditsPerMessage: 1,
+      },
+    })
+    const text =
+      _skin === 'embedded'
+        ? en.settings.thankYou.planCost
+        : en.settings.thankYou.senderCreditCost
+            .replace('{own}', '1')
+            .replace('{akeed}', '2')
+    expect(screen.getByText(text)).toBeTruthy()
+  })
+
   it('keeps English samples in LTR within Arabic UI and uses Arabic direction for missing text', async () => {
     renderCard(
       Component,
@@ -131,10 +133,7 @@ describe.each([
       },
       'ar'
     )
-    fireEvent.click(
-      screen.getByRole('button', { name: ar.settings.thankYou.heading })
-    )
-    await screen.findByRole('tooltip')
+    fireEvent.click(screen.getByText(ar.settings.thankYou.examplesHeading))
     const sample = screen.getByText('Confirmed 123 from Nour')
     expect(sample.getAttribute('dir')).toBe('ltr')
     expect(sample.getAttribute('lang')).toBe('en')
@@ -166,15 +165,14 @@ describe.each([
     renderCard(Component, { acknowledgment: undefined })
     expect(screen.queryByRole(role)).not.toBeTruthy()
   })
-  it('keeps automatic-style details available to read-only users', async () => {
+  it('keeps automatic-style details available to read-only users', () => {
     renderCard(Component, { readOnly: true, automaticStyle: true })
-    expect(screen.queryByText(en.settings.thankYou.autoNote)).toBeNull()
-    const help = screen.getByRole('button', {
-      name: en.settings.thankYou.heading,
-    })
-    expect((help as HTMLButtonElement).disabled).toBe(false)
-    fireEvent.focus(help)
-    await screen.findByRole('tooltip')
+    const details = screen
+      .getByText(en.settings.thankYou.examplesHeading)
+      .closest('details')!
+    expect(details.open).toBe(false)
+    fireEvent.click(screen.getByText(en.settings.thankYou.examplesHeading))
+    expect(details.open).toBe(true)
     expect(screen.getByText(en.settings.thankYou.autoNote)).toBeTruthy()
   })
 })

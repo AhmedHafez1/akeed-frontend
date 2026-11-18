@@ -15,12 +15,7 @@ export default function WhatsappTabFixturePage() {
     <AppProvider i18n={enTranslations}>
       <div style={{ background: 'var(--p-color-bg)', minHeight: '100vh' }}>
         <Page title="Settings">
-          <WhatsappTab
-            pools={{
-              akeed: { used: 138, limit: 300, remaining: 162 },
-              ownNumber: { used: 360, limit: 900, remaining: 540 },
-            }}
-          />
+          <WhatsappTab />
         </Page>
       </div>
     </AppProvider>

@@ -2,7 +2,7 @@
 
 import { useId } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { AkSwitch, InfoHint, akCard } from '@/shared/ui'
+import { AkSwitch, akCard } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 import { getLocaleDirection } from '@/shared/lib/locale'
 import {
@@ -18,71 +18,84 @@ export function ThankYouMessagesCard(props: ThankYouMessagesProps) {
   const preview = thankYouPreview(props)
   if (!props.acknowledgment) return null
   const available = props.acknowledgment.available
-  const details = (
-    <div className="space-y-3">
-      <p>{t('description')}</p>
-      <p>
-        {t('creditCost', { count: props.acknowledgment.creditsPerMessage })}
-      </p>
-      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-t border-current/15 pt-3">
-        <h3 className="font-semibold">{t('examplesHeading')}</h3>
-        <span>{tLanguages(props.language)}</span>
-      </div>
-      {props.automaticStyle && <p>{t('autoNote')}</p>}
-      {(['confirmed', 'canceled'] as const).map((outcome) => (
-        <div key={outcome} className="space-y-2">
-          <h4 className="font-semibold">{t(outcome)}</h4>
-          <p
-            className="rounded-control border border-current/15 bg-current/5 px-3 py-2.5 text-start wrap-anywhere whitespace-pre-wrap"
-            dir={
-              preview[outcome] ? preview.direction : getLocaleDirection(locale)
-            }
-            lang={preview[outcome] ? props.language : locale}
-          >
-            {preview[outcome] ?? t('textUnavailable')}
-          </p>
-        </div>
-      ))}
-    </div>
-  )
+  const own = props.acknowledgment.ownNumberCreditsPerMessage
+  const cost =
+    typeof own === 'number' && Number.isFinite(own)
+      ? t('senderCreditCost', {
+          own,
+          akeed: props.acknowledgment.creditsPerMessage,
+        })
+      : t('akeedCreditCost', { count: props.acknowledgment.creditsPerMessage })
   return (
     <section
-      className={cn(akCard, 'space-y-3 px-4 py-4 sm:px-6')}
-      aria-labelledby={`${id}-heading`}
+      className={cn(akCard, 'space-y-4 p-5 sm:p-6')}
+      aria-labelledby={id + '-heading'}
     >
-      <div className="flex items-center gap-1">
-        <h2 id={`${id}-heading`} className="text-ak-section text-ink">
-          {t('heading')}
-        </h2>
-        <InfoHint label={t('heading')} content={details} rich />
-      </div>
+      <h2 id={id + '-heading'} className="text-ak-section text-ink">
+        {t('heading')}
+      </h2>
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-4">
           <label
-            id={`${id}-label`}
-            htmlFor={`${id}-switch`}
+            id={id + '-label'}
+            htmlFor={id + '-switch'}
             className="text-ak-body text-ink font-medium"
           >
             {t('label')}
           </label>
           <AkSwitch
-            id={`${id}-switch`}
-            aria-labelledby={`${id}-label`}
-            aria-describedby={`${id}-description${!available ? ` ${id}-unavailable` : ''}`}
+            id={id + '-switch'}
+            aria-labelledby={id + '-label'}
+            aria-describedby={
+              id +
+              '-description ' +
+              id +
+              '-cost' +
+              (!available ? ' ' + id + '-unavailable' : '')
+            }
             checked={props.checked}
             disabled={props.readOnly || (!available && !props.checked)}
             onCheckedChange={props.onChange}
           />
         </div>
-        <p id={`${id}-description`} className="sr-only">
+        <p id={id + '-description'} className="sr-only">
           {t('description')}
         </p>
+        <p id={id + '-cost'} className="text-ak-caption text-ink-muted">
+          {cost}
+        </p>
       </div>
+      <details className="border-line border-t pt-4">
+        <summary className="text-ak-caption text-ink-muted ak-focus cursor-pointer rounded-sm">
+          {t('examplesHeading')}
+        </summary>
+        <div className="text-ak-caption text-ink-muted space-y-4 pt-4">
+          <p>{t('description')}</p>
+          <p>{tLanguages(props.language)}</p>
+          {props.automaticStyle && <p>{t('autoNote')}</p>}
+          {(['confirmed', 'canceled'] as const).map((outcome) => (
+            <div key={outcome} className="space-y-2">
+              <h3 className="text-ink font-semibold">{t(outcome)}</h3>
+              <p
+                className="border-line bg-surface-sunken rounded-ak-control border px-3 py-2.5 text-start wrap-anywhere whitespace-pre-wrap"
+                dir={
+                  preview[outcome]
+                    ? preview.direction
+                    : getLocaleDirection(locale)
+                }
+                lang={preview[outcome] ? props.language : locale}
+              >
+                {preview[outcome] ?? t('textUnavailable')}
+              </p>
+            </div>
+          ))}
+        </div>
+      </details>
       {!available && (
         <p
-          id={`${id}-unavailable`}
+          id={id + '-unavailable'}
           role="status"
-          className="text-ak-caption bg-ak-warning-soft text-ak-warning border-ak-warning-line rounded-ak-control border px-3 py-2.5"
+          className="text-ak-caption border-ak-warning-line bg-ak-warning-soft text-ak-warning rounded-ak-control border px-3 py-2.5"
         >
           {t('unavailable')}
         </p>

@@ -25,7 +25,7 @@ Telefonunuzdaki WhatsApp Business uygulamasında zaten kullandığınız bir num
 1. **Ayarlar**’ı, ardından **WhatsApp**’ı açın.
 2. **Numaranızı bağlayın**’ı seçin. Yeni bir sekmede güvenli bir sayfa açılır.
 3. Facebook bağlantısını orada tamamlayın: işletmenizi seçin veya oluşturun, ardından numarayı seçin.
-4. Akeed’e geri dönün. WhatsApp ayarları yenilenir ve numaranızın ne kadar hazır olduğunu gösterir.
+4. Başarı ekranında **WhatsApp ayarlarına dön** seçeneğini seçin. Seçtiğiniz dilde Akeed veya Shopify Admin içindeki WhatsApp sekmesine dönersiniz.
 
 Yeni sekme açılmazsa tarayıcınızda Akeed için açılır pencerelere izin verin ve **Numaranızı bağlayın**’ı yeniden seçin.
 
@@ -42,9 +42,9 @@ Numaranız bir mesajı yalnızca şu iki koşul birlikte sağlandığında gönd
 - numara sağlıklıdır: bağlıdır ve Meta herhangi bir ödeme veya kalite sorunu bildirmemiştir,
 - o mesajın şablonu müşterinin mesaj dilinde onaylanmıştır.
 
-Hazırlık her şablon ve her dil için ayrı ayrı kontrol edilir. Arapça onay mesajınız hazırken İngilizce hatırlatma hâlâ incelemede olabilir. WhatsApp ayarları her şablonu dili, durumu ve şu anda onu gönderen numarayla birlikte gösterir.
+WhatsApp sekmesi üç durum gösterir: **Numara bağlı**, **Mesaj şablonları** ve **Numaranızdan gönderim**. Bazı mesajlar hazırken diğerleri onay bekleyebilir. Her sorun, gerekli işlemle birlikte ilgili durumun yanında gösterilir.
 
-Ayarlar, son mesajınızı gönderen numarayı da gösterir. Bu, daha önce ne olduğunu anlatır; bundan sonra ne olacağını değil. Önemli olan, her şablonun şu anki göndericisidir.
+Bekleyen kurulum, sayfa görünürken 15 saniyede bir ve sekmeye döndüğünüzde yenilenir. Daha önce başarılı bir gönderim yapılmış olması, numaranızın şu anda hazır olduğu anlamına gelmez.
 
 ### Akeed’in Numarası Ne Zaman Devreye Girer?
 
@@ -55,7 +55,7 @@ Akeed’in numarası sizinkinin yerine şu durumlarda gönderir:
 - numaranızın bağlantısı kesildiyse,
 - Akeed numaranızdan gönderdiğinde Meta net bir yanıt vermezse.
 
-Müşteriniz onayı yine de alır. WhatsApp ayarları her şablonun nedenini gösterir.
+WhatsApp sekmesi bağlantı, onay ve gönderim sorunlarını gerekli işlemle birlikte gösterir.
 
 ### Numaranıza Geri Dönme
 
@@ -98,11 +98,11 @@ Meta, numaranızdan gönderilen mesajlar için işletmenizden kendi fiyatlarına
 
 ## Teşekkür Mesajları
 
-Müşteri siparişi onayladığında veya iptal ettiğinde Akeed kısa bir teşekkür mesajı gönderebilir. **Ayarlar**’da, ardından **WhatsApp**’ta, müşterilerin numaranızdan teşekkür mesajı alıp almayacağını seçin. Siz kapatana kadar açık kalır ve yeniden bağlansanız da seçiminiz korunur.
+Her iki numara için **Ayarlar → Mesaj** bölümündeki tek teşekkür anahtarını kullanın. Mevcut seçiminiz bağlantı veya yeniden bağlantı sırasında korunur. Teşekkür, müşterinin yanıtını alan numaradan gönderilir.
 
-- Numaranızdan giden teşekkür mesajı için Akeed ücret almaz. Meta, kendi fiyatlarına göre işletmenizden ücret alabilir.
-- Numaranızdan giden teşekkür mesajı hiçbir zaman Akeed’in numarasına geçmez. Numaranız gönderemezse müşteri teşekkür mesajı almaz.
-- Akeed’in numarasından giden teşekkür mesajlarının kendi ayarı ve maliyeti vardır; bunlar ayarlarınızda gösterilir.
+- Shopify’da her teşekkür, gerçek gönderenin kotasından bir mesaj kullanır. Ön ödemeli kredilerde numaranızdan 1 kredi, Akeed’in numarasından 2 kredi harcar. Meta ayrıca ücret alabilir.
+- Numaranız onay beklerken Akeed’e gelen yanıtlar, Akeed’in kotasını veya kredi ücretini kullanmaya devam eder.
+- Kota veya kredi yoksa teşekkür gönderilmez. Numaranızdan başarısız olan teşekkür Akeed’in numarasından yeniden gönderilmez.
 
 ## Kim Ne Yapabilir?
 

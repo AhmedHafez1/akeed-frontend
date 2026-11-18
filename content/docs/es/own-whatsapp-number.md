@@ -25,7 +25,7 @@ Puedes conectar un número que ya usas en la app WhatsApp Business de tu teléfo
 1. Abre **Configuración** y luego **WhatsApp**.
 2. Elige **Conectar tu número**. Se abre una página segura en una pestaña nueva.
 3. Completa allí la conexión con Facebook: elige o crea tu negocio y luego elige el número.
-4. Vuelve a Akeed. La configuración de WhatsApp se actualiza y muestra qué tan listo está tu número.
+4. En la pantalla de éxito, elige **Volver a la configuración de WhatsApp**. Regresarás a la pestaña WhatsApp en Akeed o Shopify Admin, en el idioma elegido.
 
 Si la pestaña nueva no se abre, permite las ventanas emergentes de Akeed en tu navegador y vuelve a elegir **Conectar tu número**.
 
@@ -42,9 +42,9 @@ Tu número envía un mensaje solo cuando se cumplen estas dos condiciones:
 - el número está en buen estado: conectado y sin problemas de pago o de calidad señalados por Meta,
 - la plantilla exacta de ese mensaje está aprobada en el idioma de mensajes del cliente.
 
-La preparación se revisa por plantilla y por idioma. Tu confirmación en árabe puede estar lista mientras el recordatorio en inglés sigue en revisión. La configuración de WhatsApp muestra cada plantilla con su idioma, su estado y el número que la envía ahora.
+La pestaña WhatsApp muestra tres estados: **Número conectado**, **Plantillas de mensajes** y **Envío desde tu número**. Algunos mensajes pueden estar listos mientras otros esperan aprobación. Cada problema aparece junto al estado correspondiente, con la acción que debes tomar.
 
-La configuración también muestra el número que envió tu último mensaje. Eso indica lo que pasó antes, no lo que pasará después. Lo que cuenta es el remitente actual de cada plantilla.
+La configuración pendiente se actualiza cada 15 segundos mientras la página está visible y al volver a la pestaña. Un envío anterior exitoso no significa que tu número esté listo ahora.
 
 ### ¿Cuándo toma el relevo el número de Akeed?
 
@@ -55,7 +55,7 @@ El número de Akeed envía en lugar del tuyo cuando:
 - tu número está desconectado,
 - Meta no da una respuesta clara cuando Akeed envía desde tu número.
 
-Tu cliente recibe la confirmación de todos modos. La configuración de WhatsApp muestra el motivo de cada plantilla.
+La pestaña WhatsApp muestra los problemas de conexión, aprobación y envío junto con la acción necesaria.
 
 ### Volver a tu número
 
@@ -98,11 +98,11 @@ Meta cobra a tu negocio por separado los mensajes enviados desde tu número, seg
 
 ## Mensajes de agradecimiento
 
-Cuando un cliente confirma o cancela, Akeed puede enviar un breve agradecimiento. En **Configuración** y luego **WhatsApp**, elige si los clientes reciben un agradecimiento desde tu número. Está activado hasta que lo desactives, y tu elección se conserva si vuelves a conectar.
+Usa el único interruptor de agradecimientos en **Configuración → Mensaje** para ambos números. Tu elección actual se conserva al conectar o reconectar. El agradecimiento sale del número que recibió la respuesta del cliente.
 
-- Un agradecimiento desde tu número no tiene cargo de Akeed. Meta puede cobrar a tu negocio según sus propios precios.
-- Un agradecimiento desde tu número nunca pasa al número de Akeed. Si tu número no puede enviarlo, el cliente no recibe agradecimiento.
-- Los agradecimientos desde el número de Akeed tienen su propia configuración y su propio costo, que se muestran en tu configuración.
+- En Shopify, cada agradecimiento usa un mensaje de la cuota del remitente real. Con créditos prepagados, cuesta 1 crédito desde tu número o 2 créditos desde el número de Akeed. Meta puede cobrar por separado.
+- Mientras tu número espera aprobación, una respuesta recibida por Akeed sigue usando la cuota o la tarifa de créditos de Akeed.
+- Si no hay cuota o créditos disponibles, se omite el agradecimiento. Un agradecimiento fallido desde tu número nunca se reenvía desde Akeed.
 
 ## Quién puede hacer qué
 

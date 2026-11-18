@@ -25,7 +25,7 @@ Vous pouvez connecter un numéro que vous utilisez déjà dans l’application W
 1. Ouvrez **Paramètres**, puis **WhatsApp**.
 2. Choisissez **Connecter votre numéro**. Une page sécurisée s’ouvre dans un nouvel onglet.
 3. Terminez-y la connexion avec Facebook : choisissez ou créez votre entreprise, puis choisissez le numéro.
-4. Revenez dans Akeed. Les paramètres WhatsApp s’actualisent et indiquent à quel point votre numéro est prêt.
+4. Sur l’écran de réussite, choisissez **Retour aux paramètres WhatsApp**. Vous revenez à l’onglet WhatsApp dans Akeed ou Shopify Admin, dans la langue choisie.
 
 Si le nouvel onglet ne s’ouvre pas, autorisez les fenêtres pop-up pour Akeed dans votre navigateur et choisissez de nouveau **Connecter votre numéro**.
 
@@ -42,9 +42,9 @@ Votre numéro n’envoie un message que lorsque ces deux conditions sont réunie
 - le numéro est en bon état : connecté, sans problème de paiement ou de qualité signalé par Meta,
 - le modèle exact de ce message est approuvé dans la langue des messages du client.
 
-La disponibilité est vérifiée pour chaque modèle et chaque langue. Votre confirmation en arabe peut être prête alors que le rappel en anglais est encore en cours d’examen. Les paramètres WhatsApp affichent chaque modèle avec sa langue, son statut et le numéro qui l’envoie actuellement.
+L’onglet WhatsApp affiche trois états : **Numéro connecté**, **Modèles de message** et **Envoi depuis votre numéro**. Certains messages peuvent être prêts tandis que d’autres attendent une approbation. Chaque problème apparaît à côté de l’état concerné, avec l’action à effectuer.
 
-Les paramètres indiquent aussi le numéro qui a envoyé votre dernier message. Cela montre ce qui s’est passé, pas ce qui va se passer ensuite. Ce qui compte, c’est l’expéditeur actuel de chaque modèle.
+La configuration en attente s’actualise toutes les 15 secondes lorsque la page est visible, et à votre retour dans l’onglet. Un envoi réussi auparavant ne signifie pas que votre numéro est prêt maintenant.
 
 ### Quand le numéro d’Akeed prend-il le relais ?
 
@@ -55,7 +55,7 @@ Le numéro d’Akeed envoie à la place du vôtre lorsque :
 - votre numéro est déconnecté,
 - Meta ne donne pas de réponse claire lorsque Akeed envoie depuis votre numéro.
 
-Votre client reçoit quand même sa confirmation. Les paramètres WhatsApp indiquent la raison pour chaque modèle.
+L’onglet WhatsApp affiche les problèmes de connexion, d’approbation et d’envoi avec l’action à effectuer.
 
 ### Revenir à votre numéro
 
@@ -98,11 +98,11 @@ Meta facture séparément à votre entreprise les messages envoyés depuis votre
 
 ## Messages de remerciement
 
-Quand un client confirme ou annule, Akeed peut envoyer un court remerciement. Dans **Paramètres**, puis **WhatsApp**, choisissez si les clients reçoivent un remerciement depuis votre numéro. Il reste activé jusqu’à ce que vous le désactiviez, et votre choix est conservé si vous reconnectez le numéro.
+Utilisez l’unique interrupteur de remerciements dans **Paramètres → Message** pour les deux numéros. Votre choix actuel reste enregistré lors de la connexion ou reconnexion. Le remerciement part du numéro qui a reçu la réponse du client.
 
-- Un remerciement depuis votre numéro n’entraîne aucuns frais Akeed. Meta peut facturer votre entreprise selon ses propres tarifs.
-- Un remerciement depuis votre numéro ne passe jamais par le numéro d’Akeed. Si votre numéro ne peut pas l’envoyer, le client ne reçoit pas de remerciement.
-- Les remerciements depuis le numéro d’Akeed ont leur propre réglage et leur propre coût, affichés dans vos paramètres.
+- Sur Shopify, chaque remerciement utilise un message du quota de l’expéditeur réel. Avec les crédits prépayés, il coûte 1 crédit depuis votre numéro ou 2 crédits depuis celui d’Akeed. Meta peut facturer séparément.
+- Pendant l’attente d’approbation de votre numéro, une réponse reçue par Akeed utilise toujours le quota ou le tarif en crédits d’Akeed.
+- Sans quota ou crédits disponibles, le remerciement est ignoré. Un remerciement échoué depuis votre numéro n’est jamais renvoyé depuis Akeed.
 
 ## Qui peut faire quoi
 

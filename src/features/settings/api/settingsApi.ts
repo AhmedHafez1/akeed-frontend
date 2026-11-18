@@ -45,6 +45,7 @@ export interface SettingsResponse {
   acknowledgment?: {
     available: boolean
     creditsPerMessage: number
+    ownNumberCreditsPerMessage?: number
     previews: ByMessageLanguage<
       Record<string, { confirmed: string | null; canceled: string | null }>
     >
