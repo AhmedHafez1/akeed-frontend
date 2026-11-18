@@ -44,7 +44,7 @@ Si cette option est activée, Akeed envoie un rappel de relance aux clients qui 
 ### Valeur recommandée
 
 - Laissez la relance **activée**.
-- Commencez par **6 heures** après le premier envoi. C’est la valeur par défaut.
+- Commencez par **2 heures** après le premier envoi. C’est la valeur par défaut.
 
 ### Pourquoi c’est utile
 
@@ -113,7 +113,7 @@ Choisissez le fuseau horaire de votre équipe opérationnelle principale et de v
 | Profil de boutique | Délai initial | Relance | Escalade | Heures de silence |
 | --- | ---: | ---: | ---: | --- |
 | Boutique à traitement rapide | 0–10 min | 60 min | 240 min | Facultatives |
-| Configuration équilibrée par défaut | 0 min | 360 min | 720 min après la relance | Désactivées, ou 22:00–09:00 |
+| Configuration équilibrée par défaut | 0 min | 120 min | 720 min après la relance | Désactivées, ou 22:00–09:00 |
 
 Prenez-les comme points de départ, puis ajustez chaque semaine d’après vos taux de réponse et de confirmation.
 

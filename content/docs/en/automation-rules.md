@@ -44,7 +44,7 @@ If enabled, Akeed sends one follow-up reminder to customers who did not reply.
 ### Recommended default
 
 - Keep follow-up **enabled**.
-- Start with **6 hours** after the first message. This is the default.
+- Start with **2 hours** after the first message. This is the default.
 
 ### Why it helps
 
@@ -113,7 +113,7 @@ Set timezone to the same timezone used by your core operations team and customer
 | Store Pattern | Initial Delay | Follow-Up | Escalation | Quiet Hours |
 | --- | ---: | ---: | ---: | --- |
 | Fast fulfillment store | 0–10 min | 60 min | 240 min | Optional |
-| Balanced default setup | 0 min | 360 min | 720 min after the reminder | Off, or 22:00–09:00 |
+| Balanced default setup | 0 min | 120 min | 720 min after the reminder | Off, or 22:00–09:00 |
 
 Use these as starting points, then tune weekly using your reply and confirmation rates.
 

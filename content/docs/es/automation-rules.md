@@ -44,7 +44,7 @@ Si está activado, Akeed envía un recordatorio a los clientes que no respondier
 ### Valor recomendado
 
 - Deja el recordatorio **activado**.
-- Empieza con **6 horas** después del primer envío. Es el valor predeterminado.
+- Empieza con **2 horas** después del primer envío. Es el valor predeterminado.
 
 ### Por qué ayuda
 
@@ -113,7 +113,7 @@ Usa la misma zona horaria de tu equipo principal de operaciones y de tus cliente
 | Tipo de tienda | Retraso inicial | Recordatorio | Aviso | Horario de silencio |
 | --- | ---: | ---: | ---: | --- |
 | Tienda con preparación rápida | 0–10 min | 60 min | 240 min | Opcional |
-| Configuración equilibrada | 0 min | 360 min | 720 min tras el recordatorio | Desactivado, o 22:00–09:00 |
+| Configuración equilibrada | 0 min | 120 min | 720 min tras el recordatorio | Desactivado, o 22:00–09:00 |
 
 Úsalas como punto de partida y luego ajústalas cada semana con tus tasas de respuesta y de confirmación.
 
