@@ -373,6 +373,7 @@
         "emailRequired": "Saisissez votre e-mail.",
         "emailInvalid": "Saisissez un e-mail valide, par exemple name@store.com",
         "emailRegistered": "Cet e-mail est déjà enregistré. <link>Connectez-vous plutôt</link>",
+        "emailRegisteredGoogle": "Cet e-mail est déjà enregistré. <link>Connectez-vous</link> ou continuez avec Google.",
         "passwordTooShort": "Mot de passe trop court. Utilisez au moins 8 caractères.",
         "passwordWeak": "Ce mot de passe est facile à deviner. Ajoutez des chiffres ou des symboles.",
         "termsRequired": "Acceptez les conditions pour créer votre compte.",

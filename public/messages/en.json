@@ -1542,6 +1542,7 @@
         "emailRequired": "Enter your email.",
         "emailInvalid": "Enter a valid email, like name@store.com",
         "emailRegistered": "This email is already registered. <link>Sign in instead</link>",
+        "emailRegisteredGoogle": "This email is already registered. <link>Sign in</link> or continue with Google.",
         "passwordTooShort": "Password is too short. Use at least 8 characters.",
         "passwordWeak": "This password is easy to guess. Add numbers or symbols.",
         "termsRequired": "Accept the terms to create your account.",

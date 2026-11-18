@@ -71,7 +71,11 @@ export function SignupForm({
     const code = fieldErrors[field]
     if (!code) return undefined
     if (code === 'emailRegistered') {
-      return t.rich('errors.emailRegistered', {
+      // A Google-only account has no password, so offer Google as well.
+      const key = isGoogleAuthEnabled()
+        ? 'errors.emailRegisteredGoogle'
+        : 'errors.emailRegistered'
+      return t.rich(key, {
         link: (chunks) => (
           <Link href={loginPath} className={LINK_CLASS}>
             {chunks}
