@@ -145,6 +145,25 @@ export function clearAdminStorePaidThrough(integrationId: string) {
   )
 }
 
+/**
+ * Permanently deletes a dead store and its whole organization. The backend
+ * re-checks eligibility and the typed name. Audited by the backend.
+ */
+export function deleteAdminStore(
+  integrationId: string,
+  confirmStoreName: string
+) {
+  return adminRequest<{
+    deleted: true
+    logins_removed: number
+    logins_failed: number
+  }>(`/api/admin/stores/${encodeURIComponent(integrationId)}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ confirm_store_name: confirmStoreName }),
+  })
+}
+
 export function getAdminStoreVerifications(
   integrationId: string,
   query: string

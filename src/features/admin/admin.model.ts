@@ -94,6 +94,8 @@ export interface AdminStore {
   first_eligible_real_order_at: string | null
   activated_at: string | null
   last_activity_at: string | null
+  /** Whether staff may delete this store and its whole organization. */
+  can_delete?: boolean
   health: {
     status: AdminHealthStatus
     top_signal: string | null
