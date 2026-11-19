@@ -784,6 +784,50 @@
     }
   },
   "adminBilling": {
+    "checkoutAttempts": {
+      "title": "Checkout attempts",
+      "description": "Merchants who opened Paymob checkout. Contact the ones who did not pay.",
+      "filterLabel": "Show merchants",
+      "filters": {
+        "unpaid": "Not paid",
+        "paid": "Paid",
+        "all": "All"
+      },
+      "columns": {
+        "merchant": "Merchant",
+        "owner": "Owner",
+        "attempts": "Attempts",
+        "lastAttempt": "Last attempt",
+        "amount": "Amount",
+        "result": "Result"
+      },
+      "outcome": {
+        "paid": "Paid",
+        "declined": "Declined",
+        "declinedWith": "Declined: {reason}",
+        "failed": "Checkout failed",
+        "canceled": "Canceled",
+        "left_checkout": "Left checkout",
+        "in_checkout": "In checkout"
+      },
+      "paidEarlier": "Paid before",
+      "summary": "{attempts, plural, one {# attempt} other {# attempts}} · {amount} · {when}",
+      "whatsappTo": "Message {name} on WhatsApp",
+      "emailTo": "Email {name} at {email}",
+      "email": "Email",
+      "noContact": "No contact details",
+      "missingOrganization": "Unnamed merchant",
+      "details": "Details",
+      "openAccount": "Open billing account for {name}",
+      "loading": "Loading checkout attempts…",
+      "empty": "No merchant has started a checkout yet.",
+      "emptyUnpaid": "Every merchant who started a checkout has paid.",
+      "error": "Could not load checkout attempts.",
+      "accessDenied": "You do not have access to billing.",
+      "retry": "Try again",
+      "previous": "Previous",
+      "next": "Next"
+    },
     "title": "Standalone credit accounts",
     "description": "Every Standalone account opens active with its one-time launch grant when the merchant verifies their email. Filter by status, balance and reconciliation, then open an account to inspect or correct it.",
     "refresh": "Refresh",

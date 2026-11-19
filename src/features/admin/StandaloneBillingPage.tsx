@@ -13,6 +13,7 @@ import type {
 } from './standalone-billing.model'
 import { StandaloneBillingObservability } from './StandaloneBillingObservability'
 import { StandaloneBillingSettlements } from './StandaloneBillingSettlements'
+import { CheckoutAttemptsSection } from './CheckoutAttemptsSection'
 
 const balanceTones = {
   none: 'bg-muted text-foreground/70',
@@ -116,6 +117,7 @@ export function StandaloneBillingPage() {
         </Button>
       </header>
       <StandaloneBillingObservability canOperate={canOperate} />
+      <CheckoutAttemptsSection />
       <StandaloneBillingSettlements canOperate={canOperate} />
       {state.error && (
         <div

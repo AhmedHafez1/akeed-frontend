@@ -784,6 +784,50 @@
     }
   },
   "adminBilling": {
+    "checkoutAttempts": {
+      "title": "محاولات الدفع",
+      "description": "التجار الذين فتحوا صفحة الدفع في Paymob. تواصل مع من لم يُكمل الدفع.",
+      "filterLabel": "عرض التجار",
+      "filters": {
+        "unpaid": "لم يدفع",
+        "paid": "دفع",
+        "all": "الكل"
+      },
+      "columns": {
+        "merchant": "التاجر",
+        "owner": "المالك",
+        "attempts": "المحاولات",
+        "lastAttempt": "آخر محاولة",
+        "amount": "المبلغ",
+        "result": "النتيجة"
+      },
+      "outcome": {
+        "paid": "تم الدفع",
+        "declined": "مرفوض",
+        "declinedWith": "مرفوض: {reason}",
+        "failed": "تعذّر بدء الدفع",
+        "canceled": "أُلغي",
+        "left_checkout": "غادر صفحة الدفع",
+        "in_checkout": "في صفحة الدفع"
+      },
+      "paidEarlier": "دفع من قبل",
+      "summary": "{attempts, plural, one {محاولة واحدة} two {محاولتان} few {# محاولات} many {# محاولة} other {# محاولة}} · {amount} · {when}",
+      "whatsappTo": "راسل {name} على واتساب",
+      "emailTo": "راسل {name} على {email}",
+      "email": "البريد",
+      "noContact": "لا توجد بيانات تواصل",
+      "missingOrganization": "تاجر بلا اسم",
+      "details": "التفاصيل",
+      "openAccount": "افتح حساب الرصيد الخاص بـ {name}",
+      "loading": "جارٍ تحميل محاولات الدفع…",
+      "empty": "لم يبدأ أي تاجر عملية دفع بعد.",
+      "emptyUnpaid": "كل التجار الذين بدأوا الدفع أكملوه.",
+      "error": "تعذّر تحميل محاولات الدفع.",
+      "accessDenied": "ليست لديك صلاحية الوصول إلى الفوترة.",
+      "retry": "إعادة المحاولة",
+      "previous": "السابق",
+      "next": "التالي"
+    },
     "title": "حسابات رصيد المتاجر المستقلة",
     "description": "يُفتح كل حساب مستقل نشطًا مع منحة الإطلاق لمرة واحدة بمجرد أن يؤكد التاجر بريده الإلكتروني. صفِّ الحسابات حسب الحالة والرصيد والتسوية، ثم افتح الحساب لمراجعته أو تصحيحه.",
     "refresh": "تحديث",
