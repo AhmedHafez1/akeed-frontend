@@ -10,6 +10,7 @@ import {
   ChevronDown,
   ChevronRight,
   CircleAlert,
+  CreditCard,
   Filter,
   HeartPulse,
   Loader2,
@@ -48,6 +49,7 @@ import {
 } from './AdminUi'
 import { SignalCallout, SignalSummary } from './AdminSignalUi'
 import { signalLabel, signalOptions } from './adminSignals'
+import { StoreDeleteAction } from './StoreDeleteAction'
 
 const lifecycleOptions = [
   { value: '', label: 'All lifecycle stages' },
@@ -97,6 +99,7 @@ const filterLabels: Record<string, string> = {
   health_status: 'Health',
   signal: 'Signal',
   plan: 'Plan',
+  paying: 'Paying',
   onboarding_status: 'Onboarding',
   country: 'Country',
   customer_country: 'Customer country',
@@ -336,7 +339,7 @@ export function StoresAdminPage() {
                 </span>
               )}
             </div>
-            <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 xl:grid-cols-8">
+            <div className="grid grid-cols-2 gap-3 lg:grid-cols-5 xl:grid-cols-9">
               <AdminMetricCard
                 label="Currently installed"
                 value={response.summary.currently_installed ?? 0}
@@ -374,6 +377,15 @@ export function StoresAdminPage() {
                 icon={StoreIcon}
                 active={searchParams.get('lifecycle_status') === 'uninstalled'}
                 onClick={() => toggleFilter('lifecycle_status', 'uninstalled')}
+              />
+              <AdminMetricCard
+                label="Paying"
+                value={response.summary.paying ?? 0}
+                detail="Basic, Pro, Business"
+                icon={CreditCard}
+                tone="emerald"
+                active={searchParams.get('paying') === 'true'}
+                onClick={() => toggleFilter('paying', 'true')}
               />
               <AdminMetricCard
                 label="Healthy"
@@ -613,11 +625,13 @@ export function StoresAdminPage() {
                     aria-label={`Remove ${filter.label} filter`}
                   >
                     <span className="font-medium">{filter.label}:</span>
-                    {filter.key === 'platform'
-                      ? platformLabel(filter.value)
-                      : filter.key === 'signal'
-                        ? signalLabel(filter.value)
-                        : titleCase(filter.value)}
+                    {filter.key === 'paying'
+                      ? 'Paid plans'
+                      : filter.key === 'platform'
+                        ? platformLabel(filter.value)
+                        : filter.key === 'signal'
+                          ? signalLabel(filter.value)
+                          : titleCase(filter.value)}
                     <X className="size-3" aria-hidden="true" />
                   </button>
                 ))}
@@ -667,6 +681,7 @@ export function StoresAdminPage() {
               stores={response.data}
               sort={sort}
               direction={direction}
+              onDeleted={() => void load()}
               onSort={(nextSort) => {
                 if (sort === nextSort)
                   setFilter('direction', direction === 'asc' ? 'desc' : 'asc')
@@ -738,6 +753,7 @@ interface StoresResultsProps {
   sort: string
   direction: string
   onSort: (sort: string) => void
+  onDeleted: () => void
 }
 
 function StoresResults({
@@ -745,6 +761,7 @@ function StoresResults({
   sort,
   direction,
   onSort,
+  onDeleted,
 }: StoresResultsProps) {
   const { locale } = useLocaleInfo()
   const searchParams = useSearchParams()
@@ -885,7 +902,11 @@ function StoresResults({
                     {isExpanded && (
                       <tr id={detailId}>
                         <td colSpan={9} className="bg-muted/50 px-5 py-5">
-                          <StoreDetails store={store} href={storeHref(store)} />
+                          <StoreDetails
+                            store={store}
+                            href={storeHref(store)}
+                            onDeleted={onDeleted}
+                          />
                         </td>
                       </tr>
                     )}
@@ -986,7 +1007,11 @@ function StoresResults({
               </Button>
               {isExpanded && (
                 <div id={detailId} className="border-border mt-4 border-t pt-4">
-                  <StoreDetails store={store} href={storeHref(store)} />
+                  <StoreDetails
+                    store={store}
+                    href={storeHref(store)}
+                    onDeleted={onDeleted}
+                  />
                 </div>
               )}
             </article>
@@ -1038,7 +1063,15 @@ function SortableHeader({
   )
 }
 
-function StoreDetails({ store, href }: { store: AdminStore; href: string }) {
+function StoreDetails({
+  store,
+  href,
+  onDeleted,
+}: {
+  store: AdminStore
+  href: string
+  onDeleted: () => void
+}) {
   const details = [
     ['Platform', platformLabel(store.platform)],
     ['Country', store.country_code ?? 'Unknown'],
@@ -1080,7 +1113,14 @@ function StoreDetails({ store, href }: { store: AdminStore; href: string }) {
           </div>
         ))}
       </dl>
-      <div className="flex justify-end">
+      <div className="flex flex-wrap justify-end gap-2">
+        {store.can_delete && (
+          <StoreDeleteAction
+            integrationId={store.integration_id}
+            storeName={store.store_name}
+            onDeleted={onDeleted}
+          />
+        )}
         <Button asChild variant="outline" size="sm">
           <Link href={href}>
             View store details
