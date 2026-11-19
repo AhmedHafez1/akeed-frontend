@@ -22,6 +22,7 @@ export type TipLink =
 
 export interface TipCardView {
   card: TipCard
+  secondaryLink?: TipLink | null
   link: TipLink | null
 }
 
@@ -51,6 +52,12 @@ export function useTipCards(options: {
   const cards: TipCardView[] = (query.data?.cards ?? []).map((card) => ({
     card,
     link: resolveLink(card, options.mode, locale, search),
+    secondaryLink: resolveLink(
+      { ...card, action: card.secondary_action ?? null },
+      options.mode,
+      card.locale,
+      search
+    ),
   }))
   // Cards arrive newest first, so a dismissed banner gives way to the next.
   const banner = cards.find((view) => view.card.show_as_banner === true) ?? null
@@ -135,5 +142,7 @@ function resolveLink(
       : null
   }
   const href = resolveTipHref(action.route, mode, locale, search)
+  if (href && action.route === 'guide_own_whatsapp_number')
+    return { kind: 'external', href, label: action.label }
   return href ? { kind: 'internal', href, label: action.label } : null
 }

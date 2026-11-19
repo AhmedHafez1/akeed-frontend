@@ -8,6 +8,7 @@ export type TipTargetingMode = 'direct' | 'filters'
 export type TipActionKind = 'none' | 'internal' | 'external'
 
 export interface TipAudienceFilters {
+  own_number_connection?: 'connected' | 'not_connected'
   countries?: string[]
   platforms?: string[]
   signup_from?: string
@@ -35,7 +36,36 @@ export interface TipAnalytics {
   dismissed: number
 }
 
+export interface AnnouncementEmail {
+  translations: { locale: string; subject: string; body: string }[]
+}
+export interface TipSecondaryAction {
+  action: TipAction
+  labels: Record<string, string>
+}
+export interface AnnouncementEmailStats {
+  pending: number
+  processing: number
+  sent: number
+  skipped: number
+  failed: number
+  reasons: Record<string, number>
+}
+export interface AnnouncementPreview {
+  locale: string
+  sample: string
+  subject?: string
+  text?: string
+  html?: string
+  missing?: string
+}
+
 export interface AdminTipCampaign {
+  email?: AnnouncementEmail | null
+  secondary_action?: TipSecondaryAction | null
+  email_enabled?: boolean
+  email_stopped_at?: string | null
+  email_stats?: AnnouncementEmailStats | null
   id: string
   name: string
   type: TipType
@@ -199,6 +229,8 @@ export interface TipContentForm {
 }
 
 export interface TipForm {
+  email?: AnnouncementEmail | null
+  secondaryAction?: TipSecondaryAction | null
   name: string
   type: TipType
   /** Languages with content, English always first. */
@@ -250,6 +282,8 @@ export function tipFormFromCampaign(campaign: AdminTipCampaign): TipForm {
   if (!content[TIP_FALLBACK_LOCALE])
     content[TIP_FALLBACK_LOCALE] = emptyContent()
   return {
+    email: campaign.email ?? null,
+    secondaryAction: campaign.secondary_action ?? null,
     name: campaign.name,
     type: campaign.type,
     locales: TIP_LOCALES.filter((locale) => content[locale]),
@@ -302,6 +336,7 @@ function tipAction(form: TipForm): TipAction | null {
 export function tipContentPayload(form: TipForm) {
   const hasAction = form.actionKind !== 'none'
   return {
+    secondary_action: form.secondaryAction ?? null,
     name: form.name,
     type: form.type,
     action: tipAction(form),
@@ -319,6 +354,7 @@ export function tipContentPayload(form: TipForm) {
 export function tipDraftPayload(form: TipForm) {
   return {
     ...tipContentPayload(form),
+    email: form.email ?? null,
     expires_at: form.expiresLocal ? localInputToIso(form.expiresLocal) : null,
     audience: {
       mode: form.mode,
@@ -385,6 +421,16 @@ export function validateTipForm(
     if (code) issues[key] = code
   }
   set('name', textIssue(form.name, TIP_LIMITS.name, 0))
+  for (const email of form.email?.translations ?? []) {
+    if (!email.subject.trim() || !email.body.trim())
+      issues[`email.${email.locale}`] = 'required'
+    else if (
+      email.subject.length > 200 ||
+      email.body.length > 12000 ||
+      /[\r\n{}]/.test(email.subject)
+    )
+      issues[`email.${email.locale}`] = 'invalid_value'
+  }
   const hasAction = form.actionKind !== 'none'
   for (const locale of form.locales) {
     const content = form.content[locale] ?? emptyContent()
@@ -473,6 +519,7 @@ export function activeFilterCount(filters: TipAudienceFilters): number {
     filters.signup_from || filters.signup_to,
     filters.message_languages?.length,
     filters.plans?.length,
+    filters.own_number_connection,
     Object.keys(filters.features ?? {}).length,
   ].filter(Boolean).length
 }

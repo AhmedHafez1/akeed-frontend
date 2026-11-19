@@ -10,6 +10,20 @@ import type {
   TipDeliveryHistory,
 } from './admin-tips.model'
 
+import type { AnnouncementPreview } from './admin-tips.model'
+
+export function getTipEmailPreview(id: string, locale: string, sample: string) {
+  return adminRequest<AnnouncementPreview>(
+    `/api/admin/tips-campaigns/${encodeURIComponent(id)}/email-preview?${new URLSearchParams({ locale, sample })}`
+  )
+}
+export function stopTipEmail(id: string) {
+  return send<AdminTipCampaign>(
+    `/api/admin/tips-campaigns/${encodeURIComponent(id)}/email-stop`,
+    'POST'
+  )
+}
+
 const BASE = '/api/admin/tips-campaigns'
 
 function send<T>(url: string, method: string, body?: unknown) {

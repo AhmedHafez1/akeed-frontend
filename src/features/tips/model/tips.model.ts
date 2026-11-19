@@ -6,6 +6,8 @@ export type TipActionMode = 'embedded' | 'standalone'
 
 /** The pages a tip's button may open; mirrors the backend catalog. */
 export type TipActionRoute =
+  | 'settings_whatsapp'
+  | 'guide_own_whatsapp_number'
   | 'settings_message'
   | 'settings_timing'
   | 'plan'
@@ -29,6 +31,7 @@ export interface TipCard {
   locale: string
   title: string
   description: string
+  secondary_action?: TipCardAction | null
   action: TipCardAction | null
   published_at: string
   /** Also shown as a one-line banner; missing on older APIs means off. */
@@ -55,6 +58,14 @@ export const TIP_ACTION_TARGETS: Record<
   TipActionRoute,
   Partial<Record<TipActionMode, TipTarget>>
 > = {
+  settings_whatsapp: {
+    embedded: { path: '/settings', params: { tab: 'whatsapp' } },
+    standalone: { path: '/settings', params: { tab: 'whatsapp' } },
+  },
+  guide_own_whatsapp_number: {
+    embedded: { path: '/docs/own-whatsapp-number' },
+    standalone: { path: '/docs/own-whatsapp-number' },
+  },
   settings_message: {
     embedded: { path: '/settings', params: { tab: 'message' } },
     standalone: { path: '/settings', params: { tab: 'message' } },
@@ -94,6 +105,8 @@ export function resolveTipHref(
   locale: string,
   currentSearch: string
 ): string | null {
+  if (route === 'guide_own_whatsapp_number')
+    return withLocale('/docs/own-whatsapp-number', locale)
   const target = TIP_ACTION_TARGETS[route as TipActionRoute]?.[mode]
   if (!target) return null
   const search = new URLSearchParams(mode === 'embedded' ? currentSearch : '')

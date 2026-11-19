@@ -29,6 +29,7 @@ function TrackedTipCard({
       ref={ref}
       card={view.card}
       link={view.link}
+      secondaryLink={view.secondaryLink}
       canDismiss={canDismiss}
       onAction={() => onAction(id, view.card.delivery_generation ?? 1)}
       onDismiss={() => onDismiss(id, view.card.delivery_generation ?? 1)}
