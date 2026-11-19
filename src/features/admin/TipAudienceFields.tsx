@@ -119,6 +119,7 @@ export function TipAudienceFields({
   revision,
   locked,
 }: TipAudienceFieldsProps) {
+  const a = useTranslations('adminAnnouncements')
   const t = useTranslations('adminTips.audience')
   const tp = useTranslations('adminTips')
   const [labels, setLabels] = useState<Record<string, string>>({})
@@ -305,6 +306,25 @@ export function TipAudienceFields({
         ) : (
           <div className="space-y-5">
             <p className="text-muted-foreground text-xs">{t('logic')}</p>
+            <label className="block space-y-2">
+              <span>{a('connection')}</span>
+              <select
+                value={filters.own_number_connection ?? ''}
+                onChange={(event) => {
+                  const next = { ...filters }
+                  const value = event.target.value
+                  if (value === 'connected' || value === 'not_connected')
+                    next.own_number_connection = value
+                  else delete next.own_number_connection
+                  onChange({ ...form, filters: next })
+                }}
+                className={templateFieldClass}
+              >
+                <option value="">{a('any')}</option>
+                <option value="connected">{a('connected')}</option>
+                <option value="not_connected">{a('notConnected')}</option>
+              </select>
+            </label>
             <CheckboxGroup
               legend={t('countries')}
               values={(options?.countries ?? []).map((row) => row.country_code)}

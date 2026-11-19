@@ -26,6 +26,11 @@ import {
   type TipForm,
   type TipFormIssues,
 } from './admin-tips.model'
+import {
+  TipAnnouncementFields,
+  TipEmailPreview,
+  TipEmailDelivery,
+} from './TipAnnouncementFields'
 import { TipAudienceFields } from './TipAudienceFields'
 import { TipContentFields } from './TipContentFields'
 import { TipReviewPanel } from './TipReviewPanel'
@@ -230,6 +235,18 @@ function TipCampaignEditor({
         />
       </Section>
 
+      <TipAnnouncementFields
+        form={form}
+        issues={shownIssues}
+        onChange={onFormChange}
+        readOnly={!isDraft}
+        secondaryReadOnly={readOnly}
+      />
+      {campaign?.email && !review && <TipEmailPreview campaign={campaign} />}
+      {campaign?.email && !isDraft && (
+        <TipEmailDelivery campaign={campaign} onChanged={onChanged} />
+      )}
+
       <Section
         title={t('audience.title')}
         description={
@@ -292,7 +309,9 @@ function TipCampaignEditor({
           <Section
             title={t('analytics.title')}
             description={
-              campaign.action ? undefined : t('analytics.noButtonNote')
+              campaign.action || campaign.secondary_action
+                ? undefined
+                : t('analytics.noButtonNote')
             }
           >
             <p className="text-muted-foreground text-sm">
@@ -309,7 +328,9 @@ function TipCampaignEditor({
                       {t(`analytics.${key}`)}
                     </dt>
                     <dd className="text-foreground text-2xl font-semibold tabular-nums">
-                      {key === 'clicked' && !campaign.action
+                      {key === 'clicked' &&
+                      !campaign.action &&
+                      !campaign.secondary_action
                         ? t('analytics.noButton')
                         : format.count(campaign.analytics[key])}
                     </dd>

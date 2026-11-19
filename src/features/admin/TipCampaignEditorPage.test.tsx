@@ -148,7 +148,7 @@ describe('Tips campaign editor', () => {
       screen.getAllByText(en.adminTips.issues.required).length
     ).toBeGreaterThanOrEqual(3)
     expect(api.createTipCampaign).not.toHaveBeenCalled()
-    expect(screen.queryByRole('switch')).toBeNull()
+    expect(screen.queryByRole('switch', { name: /as a banner/ })).toBeNull()
   })
 
   it('reviews the audience, previews the card and publishes with the token', async () => {
@@ -272,7 +272,7 @@ describe('Tips campaign editor', () => {
         })
     )
     renderAdmin(<TipCampaignEditorPage id="c1" />, 'en')
-    const toggle = await screen.findByRole('switch')
+    const toggle = await screen.findByRole('switch', { name: /as a banner/ })
     const name = screen.getByLabelText(
       en.adminTips.editor.name
     ) as HTMLInputElement
@@ -361,7 +361,7 @@ describe('Tips campaign editor', () => {
       en.adminTips.editor.name
     )) as HTMLInputElement
     fireEvent.change(name, { target: { value: 'Keep these edits' } })
-    fireEvent.click(screen.getByRole('switch'))
+    fireEvent.click(screen.getByRole('switch', { name: /as a banner/ }))
     expect(await screen.findByRole('alert')).toBeTruthy()
     expect(name.value).toBe('Keep these edits')
     expect(screen.getByLabelText(en.adminTips.editor.name)).toBe(name)
@@ -456,11 +456,13 @@ describe('Tips campaign editor', () => {
       await screen.findByRole('button', { name: en.adminTips.review.review })
     )
     await screen.findByTestId('tip-preview')
-    fireEvent.click(screen.getByRole('switch'))
+    fireEvent.click(screen.getByRole('switch', { name: /as a banner/ }))
     await waitFor(() =>
-      expect(screen.getByRole('switch').getAttribute('aria-checked')).toBe(
-        'true'
-      )
+      expect(
+        screen
+          .getByRole('switch', { name: /as a banner/ })
+          .getAttribute('aria-checked')
+      ).toBe('true')
     )
     expect(screen.getByTestId('tip-preview')).toBeTruthy()
     fireEvent.click(
@@ -484,7 +486,7 @@ describe('Tips campaign editor', () => {
         campaign({ status, effective_status: status, show_as_banner: true })
       )
       renderAdmin(<TipCampaignEditorPage id="c1" />, 'en')
-      const toggle = await screen.findByRole('switch')
+      const toggle = await screen.findByRole('switch', { name: /as a banner/ })
       expect(toggle.getAttribute('aria-checked')).toBe('true')
       expect((toggle as HTMLButtonElement).disabled).toBe(status === 'archived')
     }
@@ -497,22 +499,27 @@ describe('Tips campaign editor', () => {
       new AdminApiError('offline', 0, null)
     )
     renderAdmin(<TipCampaignEditorPage id="c1" />, 'en')
-    fireEvent.click(await screen.findByRole('switch'))
+    fireEvent.click(await screen.findByRole('switch', { name: /as a banner/ }))
     expect(await screen.findByText(en.adminTips.banner.error)).toBeTruthy()
-    expect(screen.getByRole('switch').getAttribute('aria-checked')).toBe(
-      'false'
-    )
-    expect((screen.getByRole('switch') as HTMLButtonElement).disabled).toBe(
-      false
-    )
+    expect(
+      screen
+        .getByRole('switch', { name: /as a banner/ })
+        .getAttribute('aria-checked')
+    ).toBe('false')
+    expect(
+      (screen.getByRole('switch', { name: /as a banner/ }) as HTMLButtonElement)
+        .disabled
+    ).toBe(false)
     expect(api.getTipCampaign).toHaveBeenCalledTimes(1)
     api.setTipBanner.mockResolvedValueOnce(campaign({ show_as_banner: true }))
     api.getTipCampaign.mockResolvedValue(campaign({ show_as_banner: true }))
-    fireEvent.click(screen.getByRole('switch'))
+    fireEvent.click(screen.getByRole('switch', { name: /as a banner/ }))
     await waitFor(() =>
-      expect(screen.getByRole('switch').getAttribute('aria-checked')).toBe(
-        'true'
-      )
+      expect(
+        screen
+          .getByRole('switch', { name: /as a banner/ })
+          .getAttribute('aria-checked')
+      ).toBe('true')
     )
     expect(screen.queryByRole('alert')).toBeNull()
     log.mockRestore()

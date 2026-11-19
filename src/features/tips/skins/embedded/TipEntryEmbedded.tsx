@@ -52,7 +52,7 @@ export function TipEntryEmbedded({
   const t = useTranslations('tips')
   const router = useRouter()
   const seenRef = useRef<HTMLDivElement>(null)
-  const { card, link } = view
+  const { card, link, secondaryLink } = view
   const unread = card.first_viewed_at === null
   useTipReadVisibility(
     seenRef,
@@ -93,7 +93,7 @@ export function TipEntryEmbedded({
             </BlockStack>
           </div>
         </BlockStack>
-        {(canDismiss || link) && (
+        {(canDismiss || link || secondaryLink) && (
           <Box paddingBlockStart="400">
             <InlineStack align="end" blockAlign="center" gap="200" wrap>
               {canDismiss && (
@@ -132,6 +132,33 @@ export function TipEntryEmbedded({
                     accessibilityLabel={`${link.label} (${t('opensInNewTab')})`}
                   >
                     {link.label}
+                  </Button>
+                </div>
+              )}
+              {secondaryLink && (
+                <div lang={card.locale} dir={getLocaleDirection(card.locale)}>
+                  <Button
+                    variant="plain"
+                    url={
+                      secondaryLink.kind === 'external'
+                        ? secondaryLink.href
+                        : undefined
+                    }
+                    target={
+                      secondaryLink.kind === 'external' ? '_blank' : undefined
+                    }
+                    onClick={() => {
+                      onAction(card.id, card.delivery_generation ?? 1)
+                      if (secondaryLink.kind === 'internal')
+                        router.push(secondaryLink.href)
+                    }}
+                    accessibilityLabel={
+                      secondaryLink.kind === 'external'
+                        ? secondaryLink.label + ' (' + t('opensInNewTab') + ')'
+                        : secondaryLink.label
+                    }
+                  >
+                    {secondaryLink.label}
                   </Button>
                 </div>
               )}

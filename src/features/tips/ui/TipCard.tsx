@@ -20,6 +20,7 @@ import type { TipCard as TipCardModel } from '../model/tips.model'
 
 export interface TipCardProps {
   card: Pick<TipCardModel, 'type' | 'locale' | 'title' | 'description'>
+  secondaryLink?: TipLink | null
   link: TipLink | null
   canDismiss: boolean
   onDismiss?: () => void
@@ -47,6 +48,7 @@ export const TIP_TYPE_BADGES: Record<
 export function TipCard({
   card,
   link,
+  secondaryLink,
   canDismiss,
   onDismiss,
   onAction,
@@ -121,6 +123,27 @@ export function TipCard({
             <span className="sr-only">{t('opensInNewTab')}</span>
           </a>
         )}
+        {secondaryLink &&
+          (secondaryLink.kind === 'external' ? (
+            <a
+              href={secondaryLink.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={onAction}
+              className={cn(akLink, 'self-start')}
+            >
+              {secondaryLink.label}
+              <span className="sr-only">{t('opensInNewTab')}</span>
+            </a>
+          ) : (
+            <Link
+              href={secondaryLink.href}
+              onClick={onAction}
+              className={cn(akLink, 'self-start')}
+            >
+              {secondaryLink.label}
+            </Link>
+          ))}
       </div>
     </article>
   )

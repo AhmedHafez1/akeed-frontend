@@ -41,3 +41,24 @@ describe('isSafeExternalUrl', () => {
     expect(isSafeExternalUrl(url)).toBe(expected)
   })
 })
+
+describe('announcement action routes', () => {
+  it('opens the WhatsApp tab with Shopify context and localizes the public guide', () => {
+    expect(
+      resolveTipHref(
+        'settings_whatsapp',
+        'embedded',
+        'ur',
+        'shop=demo.myshopify.com&host=abc'
+      )
+    ).toBe('/ur/settings?shop=demo.myshopify.com&host=abc&tab=whatsapp')
+    expect(
+      resolveTipHref(
+        'guide_own_whatsapp_number',
+        'embedded',
+        'ur',
+        'shop=demo.myshopify.com&host=abc'
+      )
+    ).toBe('/ur/docs/own-whatsapp-number')
+  })
+})

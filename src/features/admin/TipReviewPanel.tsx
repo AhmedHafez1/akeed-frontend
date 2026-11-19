@@ -19,6 +19,7 @@ import {
   type AdminTipReview,
 } from './admin-tips.model'
 import type { AdminApiError } from './adminApi'
+import { TipEmailPreview } from './TipAnnouncementFields'
 import { TemplateConfirmDialog } from './TemplateWriteUi'
 import { TipsErrorNotice, useTipsFormat } from './TipsAdminUi'
 import { useOrganizationPages } from './useAdminTips'
@@ -38,7 +39,9 @@ export function TipCardPreview({ campaign }: { campaign: AdminTipCampaign }) {
     !!row &&
     !!row.title &&
     !!row.description &&
-    (!hasAction || !!row.action_label)
+    (!hasAction || !!row.action_label) &&
+    (!campaign.secondary_action ||
+      !!campaign.secondary_action.labels[row.locale])
   const requested = campaign.translations.find((row) => row.locale === locale)
   const bundle = complete(requested)
     ? requested
@@ -55,6 +58,35 @@ export function TipCardPreview({ campaign }: { campaign: AdminTipCampaign }) {
   if (campaign.action?.kind === 'internal' && bundle.action_label) {
     const href = resolveTipHref(campaign.action.route, 'standalone', locale, '')
     link = href ? { kind: 'internal', href, label: bundle.action_label } : null
+  }
+
+  let secondaryLink: TipLink | null = null
+  const secondary = campaign.secondary_action
+  const secondaryLabel = secondary?.labels[bundle.locale]
+  if (secondary && secondaryLabel) {
+    if (secondary.action.kind === 'external')
+      secondaryLink = {
+        kind: 'external',
+        href: secondary.action.url,
+        label: secondaryLabel,
+      }
+    else {
+      const href = resolveTipHref(
+        secondary.action.route,
+        'standalone',
+        bundle.locale,
+        ''
+      )
+      if (href)
+        secondaryLink = {
+          kind:
+            secondary.action.route === 'guide_own_whatsapp_number'
+              ? 'external'
+              : 'internal',
+          href,
+          label: secondaryLabel,
+        }
+    }
   }
 
   return (
@@ -98,6 +130,7 @@ export function TipCardPreview({ campaign }: { campaign: AdminTipCampaign }) {
             description: bundle.description,
           }}
           link={link}
+          secondaryLink={secondaryLink}
           canDismiss
           onDismiss={() => undefined}
         />
@@ -316,7 +349,10 @@ export function TipReviewPanel({
               </dd>
             </div>
           </dl>
-          <TipCardPreview campaign={campaign} />
+          <div className="grid gap-5 xl:grid-cols-2">
+            <TipCardPreview campaign={campaign} />
+            {campaign.email && <TipEmailPreview campaign={campaign} />}
+          </div>
           <TipRecipientsList
             campaignId={campaign.id}
             reloadKey={review.review_token}
