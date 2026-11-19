@@ -3,6 +3,7 @@ import type {
   CreditAccountList,
   CreditAccountRow,
 } from '@/features/admin/standalone-billing.model'
+import type { CheckoutAttemptRow } from '@/features/admin/checkout-attempts.model'
 import {
   accountDetailFixture,
   accountOperationFixture,
@@ -243,6 +244,86 @@ function filterAccounts(query: URLSearchParams) {
   })
 }
 
+function attempt(
+  orgId: string,
+  name: string,
+  owner: CheckoutAttemptRow['owner'],
+  attempts: number,
+  lastAttemptAt: string,
+  outcome: CheckoutAttemptRow['latest']['outcome'],
+  extra: { paidEver?: boolean; declineCode?: string; platform?: string } = {}
+): CheckoutAttemptRow {
+  return {
+    orgId,
+    organizationName: name,
+    owner,
+    source: { platformType: extra.platform ?? 'standalone', identity: orgId },
+    attempts,
+    firstAttemptAt: lastAttemptAt,
+    lastAttemptAt,
+    paidEver: extra.paidEver ?? outcome === 'paid',
+    latest: {
+      reference: `akd_${orgId.slice(0, 8)}`,
+      status: outcome === 'paid' ? 'successful' : 'pending',
+      outcome,
+      declineCode: extra.declineCode ?? null,
+      reconciliationCode: null,
+      totalMinor: 20000,
+      currency: 'EGP',
+    },
+  }
+}
+
+/** Synthetic merchants who opened Paymob checkout. */
+const checkoutAttempts: CheckoutAttemptRow[] = [
+  attempt(
+    '0b6f0f3e-1111-4a1a-9a1a-000000000001',
+    'Nile Leather Co.',
+    {
+      name: 'Mona Adel',
+      email: 'mona@nile-leather.test',
+      whatsappPhone: '+201000000101',
+    },
+    2,
+    '2026-11-18T04:26:11Z',
+    'declined',
+    { declineCode: 'authentication_failed' }
+  ),
+  attempt(
+    '0b6f0f3e-1111-4a1a-9a1a-000000000002',
+    'Lotus Home',
+    {
+      name: 'Karim Samir',
+      email: 'karim@lotushome.test',
+      whatsappPhone: '+201110000202',
+    },
+    2,
+    '2026-11-13T05:15:24Z',
+    'left_checkout',
+    { platform: 'easyorders' }
+  ),
+  attempt(
+    '0b6f0f3e-1111-4a1a-9a1a-000000000003',
+    'متجر الزهراء',
+    { name: null, email: 'zahra@store.test', whatsappPhone: null },
+    1,
+    '2026-11-01T03:07:07Z',
+    'left_checkout'
+  ),
+  attempt(
+    '0b6f0f3e-1111-4a1a-9a1a-000000000004',
+    'Delta Gifts',
+    {
+      name: 'Hany Lotfy',
+      email: 'hany@deltagifts.test',
+      whatsappPhone: '+201270000505',
+    },
+    3,
+    '2026-11-19T20:43:30Z',
+    'paid'
+  ),
+]
+
 export async function adminBillingFixtureRequest(
   url: string,
   options: RequestInit = {}
@@ -438,6 +519,16 @@ export async function adminBillingFixtureRequest(
     settlements.push(row)
     settlementKeys.set(key, row)
     return Response.json({ ...row, duplicate: false })
+  }
+  if (
+    url.startsWith('/api/admin/standalone-billing/checkout-attempts?') &&
+    options.method === undefined
+  ) {
+    const paid = new URL(url, 'http://fixture').searchParams.get('paid')
+    const rows = checkoutAttempts.filter((row) =>
+      paid === 'unpaid' ? !row.paidEver : paid === 'paid' ? row.paidEver : true
+    )
+    return Response.json({ rows, nextOffset: null })
   }
   if (
     url.startsWith('/api/admin/standalone-billing/accounts?') &&
