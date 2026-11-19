@@ -331,7 +331,7 @@ describe('French messages', () => {
       'footer.logoAlt',
       'footer.navigationTitle',
       'footer.youtube',
-      'legal.privacySection5Title',
+      'legal.privacySection6Title',
       'messageTemplate.variantLabels.direct',
       'messageTemplate.whatsappLabel',
       'onboarding.planBasicName',
