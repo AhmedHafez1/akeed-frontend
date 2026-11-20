@@ -40,8 +40,8 @@ export interface CreditAccountRow {
     postedBalance: number
     heldCredits: number
     availableCredits: number
-    /** What the merchant sees; the fields above are stored credits. */
-    displayedAvailableCredits: number
+    /** Messages left, including an unused own-number half. */
+    balance: number
     version: number
   } | null
   freeGrantPresent: boolean

@@ -57,6 +57,37 @@ function base(
   }
 }
 
+/** A prepaid store: messages left out of everything added. */
+function standalone(
+  id: string,
+  name: string,
+  balance: number,
+  added: number,
+  state: 'ok' | 'low'
+): AdminStore {
+  const used = added - balance
+  return {
+    ...base(id, name, null, null),
+    platform: 'standalone',
+    shop_domain: null,
+    source_identity: `standalone:org-${id}`,
+    billing: {
+      model: 'credits',
+      account_status: 'active',
+      balance,
+      held: 1,
+      debt: 0,
+      usage: {
+        added,
+        used,
+        left: balance,
+        percent: Math.round((used * 100) / added),
+      },
+      balance_state: state,
+    },
+  }
+}
+
 function withSignals(
   store: AdminStore,
   health: Omit<AdminStore['health'], 'top_signal' | 'signal_count'>
@@ -138,6 +169,8 @@ const stores: AdminStore[] = [
     },
   }),
   base('store-healthy', 'Alexandria Kids', 'basic', 'active'),
+  standalone('store-prepaid', 'Mansoura Market', 135.5, 170, 'ok'),
+  standalone('store-prepaid-low', 'Tanta Shoes', 8.5, 100, 'low'),
 ]
 
 function localDay(daysAgo: number) {

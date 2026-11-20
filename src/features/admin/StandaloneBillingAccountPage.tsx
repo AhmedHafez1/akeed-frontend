@@ -7,6 +7,7 @@ import { Button } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { AdminMetricCard } from './AdminUi'
+import { MeterBar } from './AdminStoreUi'
 import {
   AccountSection,
   AuditTable,
@@ -22,7 +23,6 @@ import type {
 } from './standalone-billing-operations.model'
 import {
   formatDateTime,
-  formatDisplayedMoney,
   formatNumber,
   formatSigned,
 } from './standaloneBillingFormat'
@@ -114,11 +114,6 @@ function AccountBody({
   const canPreview = !!account && !detail.mutationsBlocked
   const limited = (count: number, truncated: boolean) =>
     truncated && t('truncated', { count })
-  const withStored = (stored: number, detailText: string) =>
-    t('storedDetail', {
-      stored: formatNumber(stored, locale),
-      detail: detailText,
-    })
 
   return (
     <>
@@ -133,16 +128,10 @@ function AccountBody({
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <AdminMetricCard
             label={t('balance.available')}
-            value={formatDisplayedMoney(
-              account.displayed.availableCredits,
-              locale
-            )}
-            detail={withStored(
-              account.availableCredits,
-              t(`balanceStates.${account.balanceState}`, {
-                threshold: detail.lowBalanceThreshold,
-              })
-            )}
+            value={formatNumber(account.balance, locale)}
+            detail={t(`balanceStates.${account.balanceState}`, {
+              threshold: detail.lowBalanceThreshold,
+            })}
             tone={
               account.balanceState === 'ok'
                 ? 'emerald'
@@ -150,34 +139,37 @@ function AccountBody({
                   ? 'red'
                   : 'amber'
             }
-          />
+          >
+            <div className="mt-3">
+              <MeterBar percent={account.usage.percent} />
+              <p className="text-muted-foreground mt-1.5 text-xs tabular-nums">
+                {t('balance.usage', {
+                  used: formatNumber(account.usage.used, locale),
+                  added: formatNumber(account.usage.added, locale),
+                })}
+              </p>
+            </div>
+          </AdminMetricCard>
           <AdminMetricCard
             label={t('balance.posted')}
-            value={formatDisplayedMoney(
-              account.displayed.postedBalance,
-              locale
-            )}
-            detail={withStored(
-              account.postedBalance,
-              t(`accountStatus.${account.status}`)
-            )}
+            value={formatNumber(account.postedBalance, locale)}
+            detail={t(`accountStatus.${account.status}`)}
           />
           <AdminMetricCard
             label={t('balance.held')}
-            value={formatDisplayedMoney(account.displayed.heldCredits, locale)}
-            detail={withStored(account.heldCredits, t('balance.heldDetail'))}
+            value={formatNumber(account.heldCredits, locale)}
+            detail={t('balance.heldDetail')}
           />
           <AdminMetricCard
             label={t('balance.debt')}
-            value={formatDisplayedMoney(account.displayed.debtCredits, locale)}
-            detail={withStored(
-              account.debtCredits,
+            value={formatNumber(account.debtCredits, locale)}
+            detail={
               account.activatedAt
                 ? t('balance.activatedAt', {
                     time: formatDateTime(account.activatedAt, locale),
                   })
                 : t('balance.notActivated')
-            )}
+            }
             tone={account.debtCredits > 0 ? 'red' : 'neutral'}
           />
         </div>

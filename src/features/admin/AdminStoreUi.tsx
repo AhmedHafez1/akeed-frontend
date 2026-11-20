@@ -3,6 +3,7 @@ import { cn } from '@/shared/lib/utils'
 import { countryName } from '@/shared/lib/country'
 import type {
   AdminCreditBalanceState,
+  AdminCreditUsage,
   AdminHealthStatus,
   AdminStore,
   AdminStoreWhatsapp,
@@ -191,8 +192,27 @@ export function CreditBalanceBadge({
   )
 }
 
+/** A thin bar that turns amber from 80% and red at 100%. */
+export function MeterBar({ percent }: { percent: number }) {
+  const width = Math.min(Math.max(percent, 0), 100)
+  return (
+    <div className="bg-muted mt-2 h-1.5 overflow-hidden rounded-full">
+      <div
+        className={cn(
+          'h-full rounded-full',
+          percent >= 100
+            ? 'bg-destructive'
+            : percent >= 80
+              ? 'bg-secondary'
+              : 'bg-primary'
+        )}
+        style={{ width: `${width}%` }}
+      />
+    </div>
+  )
+}
+
 export function UsageMeter({ usage }: { usage: AdminUsage }) {
-  const width = Math.min(Math.max(usage.percent, 0), 100)
   return (
     <div>
       <div className="flex items-center justify-between gap-2 text-xs">
@@ -206,30 +226,29 @@ export function UsageMeter({ usage }: { usage: AdminUsage }) {
           </span>
         )}
       </div>
-      <div className="bg-muted mt-2 h-1.5 overflow-hidden rounded-full">
-        <div
-          className={cn(
-            'h-full rounded-full',
-            usage.percent >= 100
-              ? 'bg-destructive'
-              : usage.percent >= 80
-                ? 'bg-secondary'
-                : 'bg-primary'
-          )}
-          style={{ width: `${width}%` }}
-        />
-      </div>
+      <MeterBar percent={usage.percent} />
     </div>
   )
 }
 
-/** Stored credits, and the spare displayed credit when there is one. */
-export function storedCreditsLabel(billing: {
-  available: number
-  spare?: number
-}): string {
-  const stored = `${billing.available.toLocaleString('en')} stored`
-  return billing.spare === 1 ? `${stored} + 1 spare` : stored
+/**
+ * Prepaid messages as a meter: used out of everything added, with what is
+ * left. One message is EGP 1, and an unused own-number half shows as .5.
+ */
+export function CreditMeter({ usage }: { usage: AdminCreditUsage }) {
+  return (
+    <div>
+      <div className="flex items-center justify-between gap-2 text-xs">
+        <span className="text-foreground font-medium tabular-nums">
+          {usage.used.toLocaleString('en')} / {usage.added.toLocaleString('en')}
+        </span>
+        <span className="text-muted-foreground tabular-nums">
+          {usage.left.toLocaleString('en')} left
+        </span>
+      </div>
+      <MeterBar percent={usage.percent} />
+    </div>
+  )
 }
 
 /** Whether the own-number pool is worth showing for this store. */
@@ -253,12 +272,7 @@ export function BillingCell({ store }: { store: AdminStore }) {
   if (store.billing.model === 'credits') {
     return (
       <div>
-        <p className="text-foreground text-xs font-medium tabular-nums">
-          {store.billing.displayed_available.toLocaleString('en')} credits
-        </p>
-        <p className="text-muted-foreground text-xs tabular-nums">
-          {storedCreditsLabel(store.billing)}
-        </p>
+        <CreditMeter usage={store.billing.usage} />
         <div className="mt-1.5">
           <CreditBalanceBadge state={store.billing.balance_state} />
         </div>
@@ -367,7 +381,7 @@ export function PlanCell({ store }: { store: AdminStore }) {
   if (store.billing.model === 'credits') {
     return (
       <>
-        <p className="text-foreground font-medium">Prepaid credits</p>
+        <p className="text-foreground font-medium">Prepaid messages</p>
         <p className="text-muted-foreground mt-1 text-xs">
           {titleCase(store.billing.account_status)}
         </p>

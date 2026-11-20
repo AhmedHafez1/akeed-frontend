@@ -6,7 +6,7 @@ import { Skeleton } from '@/shared/ui'
 import { useCreditOffer } from '@/features/onboarding/hooks/useCreditOffer'
 
 /**
- * "You have 30 free confirmation messages": the free grant and the price
+ * "You have 100 free confirmation messages": the free grant and the price
  * after it, once, beside the form that spends nothing yet. A skeleton holds
  * the space while the balance loads; nothing shows if it cannot load.
  */

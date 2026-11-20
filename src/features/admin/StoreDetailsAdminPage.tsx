@@ -22,7 +22,6 @@ import { Badge, Button, Skeleton } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 import { countryName } from '@/shared/lib/country'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import { formatDisplayedMoney } from './standaloneBillingFormat'
 import type {
   AdminStoreDetail,
   AdminStoreMilestone,
@@ -35,6 +34,7 @@ import { StorePaidThroughControl } from './StorePaidThroughControl'
 import { StoreReviewPromptCard } from './StoreReviewPromptCard'
 import {
   CreditBalanceBadge,
+  CreditMeter,
   CustomerCountryCode,
   customerCountriesLabel,
   formatDate,
@@ -47,7 +47,6 @@ import {
   titleCase,
   UsageMeter,
   hasOwnNumber,
-  storedCreditsLabel,
 } from './AdminStoreUi'
 import { AdminEmptyState, AdminMetricCard, AdminSelect } from './AdminUi'
 import { SignalList } from './AdminSignalUi'
@@ -315,7 +314,6 @@ function StoreHeader({
 }
 
 function StoreKpis({ store }: { store: AdminStoreDetail }) {
-  const { locale } = useLocaleInfo()
   const totals = store.verification_totals
   const confirmed = totals.by_status.confirmed ?? 0
   const canceled = totals.by_status.canceled ?? 0
@@ -359,11 +357,8 @@ function StoreKpis({ store }: { store: AdminStoreDetail }) {
       {store.billing.model === 'credits' ? (
         <AdminMetricCard
           label="Balance"
-          value={formatDisplayedMoney(
-            store.billing.displayed_available,
-            locale
-          )}
-          detail={`${numberFormat.format(store.billing.available)} stored, ${numberFormat.format(store.billing.held)} stored held`}
+          value={numberFormat.format(store.billing.balance)}
+          detail={`messages left, ${numberFormat.format(store.billing.held)} held for sends`}
           icon={Coins}
           tone={
             store.billing.balance_state === 'ok'
@@ -482,30 +477,30 @@ function BillingCard({
   integrationId: string
   onChanged: () => void
 }) {
-  const { locale } = useLocaleInfo()
   const billing = store.billing
   if (billing.model === 'credits') {
     return (
-      <DetailCard title="Billing · Prepaid credits">
+      <DetailCard title="Billing · Prepaid messages">
         <div className="mb-4 flex items-end justify-between gap-3">
           <div>
             <p className="text-foreground text-2xl font-semibold tabular-nums">
-              <bdi>
-                {formatDisplayedMoney(billing.displayed_available, locale)}
-              </bdi>
+              {numberFormat.format(billing.balance)}
             </p>
             <p className="text-muted-foreground text-xs">
-              available, {storedCreditsLabel(billing)}
+              messages left · 1 message = EGP 1
             </p>
           </div>
           <CreditBalanceBadge state={billing.balance_state} />
         </div>
+        <div className="mb-4">
+          <CreditMeter usage={billing.usage} />
+        </div>
         <DetailList
           items={[
             ['Account status', titleCase(billing.account_status)],
-            ['Held for sends (stored)', numberFormat.format(billing.held)],
+            ['Held for sends', numberFormat.format(billing.held)],
             [
-              'Debt (stored)',
+              'Debt',
               billing.debt > 0 ? (
                 <span className="text-destructive-subtle-foreground">
                   {numberFormat.format(billing.debt)}
