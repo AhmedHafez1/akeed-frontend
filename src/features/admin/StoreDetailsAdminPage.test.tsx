@@ -64,6 +64,7 @@ function store(
     data_quality: [],
     owner_email: 'owner@example.test',
     merchant_whatsapp_phone: null,
+    next_charge_at: '2026-12-01T10:00:00Z',
     created_at: null,
     last_synced_at: null,
     billing_activated_at: null,
@@ -135,6 +136,19 @@ describe('admin store automation visibility', () => {
       expect(api.store).toHaveBeenCalledWith('store-1')
     }
   )
+
+  it('shows when the store is next charged, or a dash without a live plan', async () => {
+    api.store.mockResolvedValue(response(store()))
+    const view = render(<StoreDetailsAdminPage integrationId="store-1" />)
+    await screen.findByText('Thank-you messages')
+    expect(row('Next charge').textContent).toBe('Next chargeDec 1, 2026')
+    view.unmount()
+
+    api.store.mockResolvedValue(response({ ...store(), next_charge_at: null }))
+    render(<StoreDetailsAdminPage integrationId="store-1" />)
+    await screen.findByText('Thank-you messages')
+    expect(row('Next charge').textContent).toBe('Next charge—')
+  })
 
   it('shows Unknown for absent preferences from an older backend', async () => {
     api.store.mockResolvedValue(response(store()))

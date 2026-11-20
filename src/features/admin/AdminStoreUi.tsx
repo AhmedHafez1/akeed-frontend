@@ -18,6 +18,10 @@ export const formatDate = (value: string | null) =>
       )
     : 'Unknown'
 
+/** The next charge date, or a dash for a store that is not charged. */
+export const formatNextCharge = (value: string | null) =>
+  value ? formatDate(value) : '—'
+
 export const formatDateTime = (value: string | null) =>
   value
     ? new Intl.DateTimeFormat('en', {

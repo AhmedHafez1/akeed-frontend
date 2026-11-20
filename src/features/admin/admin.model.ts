@@ -86,6 +86,8 @@ export interface AdminStore {
   source_identity: string
   owner_email: string | null
   merchant_whatsapp_phone: string | null
+  /** When a paying store is next charged; null without a live recurring plan. */
+  next_charge_at: string | null
   country_code: string | null
   /** Where the store's customers' phones are from, over its real orders. */
   customer_countries: AdminCustomerCountries

@@ -39,6 +39,7 @@ import {
   customerCountriesLabel,
   formatDate,
   formatDateTime,
+  formatNextCharge,
   HealthBadge,
   isInstalledPlatform,
   LifecycleBadge,
@@ -548,6 +549,7 @@ function BillingCard({
           ['Plan', titleCase(billing.plan)],
           ['Subscription', titleCase(billing.subscription_status)],
           ['Billing activated', formatDate(store.billing_activated_at)],
+          ['Next charge', formatNextCharge(store.next_charge_at)],
           ...reinstallRows(store),
         ]}
       />
