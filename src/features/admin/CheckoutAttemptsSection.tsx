@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { Mail, MessageCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/shared/ui'
 import { SegmentedControl } from '@/shared/ui/segmented-control'
@@ -11,10 +10,10 @@ import {
   CHECKOUT_PAID_FILTERS,
   paidEarlier,
   readableCode,
-  whatsappChatUrl,
   type CheckoutAttemptRow,
   type CheckoutOutcome,
 } from './checkout-attempts.model'
+import { ContactChips } from './ContactChips'
 import { formatDateTime, formatMoney } from './standaloneBillingFormat'
 import { useCheckoutAttempts } from './useCheckoutAttempts'
 
@@ -26,9 +25,6 @@ const outcomeTones: Record<CheckoutOutcome, string> = {
   left_checkout: 'bg-warning-subtle text-warning-subtle-foreground',
   in_checkout: 'bg-muted text-foreground',
 }
-
-const contactClass =
-  'border-border text-primary hover:bg-primary-subtle focus-visible:ring-ring inline-flex items-center gap-1 rounded-lg border px-2 py-0.5 text-xs font-medium whitespace-nowrap focus-visible:ring-2 focus-visible:outline-none'
 
 /** Merchants who opened Paymob checkout, for staff to follow up. */
 export function CheckoutAttemptsSection() {
@@ -60,41 +56,18 @@ export function CheckoutAttemptsSection() {
   )
 
   const contact = (row: CheckoutAttemptRow) => {
-    const chat = whatsappChatUrl(row.owner.whatsappPhone)
     const who = row.owner.name ?? row.organizationName ?? row.orgId
     return (
-      <span className="inline-flex items-center gap-1.5">
-        {chat && (
-          <a
-            href={chat}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={contactClass}
-            aria-label={t('whatsappTo', { name: who })}
-          >
-            <MessageCircle className="size-3.5" aria-hidden />
-            <span dir="ltr" className="tabular-nums">
-              {row.owner.whatsappPhone}
-            </span>
-          </a>
-        )}
-        {row.owner.email && (
-          <a
-            href={`mailto:${row.owner.email}`}
-            className={contactClass}
-            aria-label={t('emailTo', { name: who, email: row.owner.email })}
-            title={row.owner.email}
-          >
-            <Mail className="size-3.5" aria-hidden />
-            {t('email')}
-          </a>
-        )}
-        {!chat && !row.owner.email && (
-          <span className="text-muted-foreground text-xs">
-            {t('noContact')}
-          </span>
-        )}
-      </span>
+      <ContactChips
+        phone={row.owner.whatsappPhone}
+        email={row.owner.email}
+        labels={{
+          whatsapp: t('whatsappTo', { name: who }),
+          emailTo: t('emailTo', { name: who, email: row.owner.email ?? '' }),
+          email: t('email'),
+          none: t('noContact'),
+        }}
+      />
     )
   }
 

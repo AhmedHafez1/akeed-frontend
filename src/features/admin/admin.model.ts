@@ -84,6 +84,8 @@ export interface AdminStore {
   store_name: string
   shop_domain: string | null
   source_identity: string
+  owner_email: string | null
+  merchant_whatsapp_phone: string | null
   country_code: string | null
   /** Where the store's customers' phones are from, over its real orders. */
   customer_countries: AdminCustomerCountries
@@ -194,8 +196,6 @@ export interface AdminStoreMilestone {
 }
 
 export interface AdminStoreDetail extends AdminStore {
-  owner_email: string | null
-  merchant_whatsapp_phone: string | null
   created_at: string | null
   last_synced_at: string | null
   billing_activated_at: string | null

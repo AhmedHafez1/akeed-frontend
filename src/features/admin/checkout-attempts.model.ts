@@ -39,12 +39,6 @@ export interface CheckoutAttemptsPage {
   nextOffset: number | null
 }
 
-/** A wa.me link needs the number as digits only, without the plus. */
-export function whatsappChatUrl(phone: string | null): string | null {
-  const digits = phone?.replace(/\D/g, '') ?? ''
-  return digits.length >= 8 ? `https://wa.me/${digits}` : null
-}
-
 /** Provider codes arrive as `authentication_failed`; staff read words. */
 export function readableCode(code: string): string {
   return code.replace(/_/g, ' ')

@@ -1,6 +1,7 @@
 import { Badge } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 import { countryName } from '@/shared/lib/country'
+import { ContactChips } from './ContactChips'
 import type {
   AdminCreditBalanceState,
   AdminCreditUsage,
@@ -397,5 +398,28 @@ export function PlanCell({ store }: { store: AdminStore }) {
         {titleCase(store.billing.subscription_status)}
       </p>
     </>
+  )
+}
+
+/** The merchant's WhatsApp and email chips on the stores list and detail. */
+export function StoreContact({
+  store,
+}: {
+  store: Pick<
+    AdminStore,
+    'store_name' | 'owner_email' | 'merchant_whatsapp_phone'
+  >
+}) {
+  return (
+    <ContactChips
+      phone={store.merchant_whatsapp_phone}
+      email={store.owner_email}
+      labels={{
+        whatsapp: `Message ${store.store_name} on WhatsApp`,
+        emailTo: `Email ${store.store_name} at ${store.owner_email ?? ''}`,
+        email: 'Email',
+        none: 'No contact details',
+      }}
+    />
   )
 }

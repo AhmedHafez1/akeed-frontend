@@ -27,6 +27,8 @@ function store(overrides: Partial<AdminStore> = {}): AdminStore {
     store_name: 'Cairo Fashion House',
     shop_domain: 'cairo-fashion.example.test',
     source_identity: 'cairo-fashion.example.test',
+    owner_email: 'owner@cairo-fashion.example.test',
+    merchant_whatsapp_phone: '+20 100 000 0101',
     country_code: 'EG',
     customer_countries: { top: 'EG', share: 100, count: 1 },
     timezone: 'Africa/Cairo',
@@ -72,6 +74,8 @@ function store(overrides: Partial<AdminStore> = {}): AdminStore {
 const healthy = store({
   integration_id: 'store-2',
   store_name: 'Alexandria Kids',
+  owner_email: null,
+  merchant_whatsapp_phone: null,
   health: {
     status: 'healthy',
     top_signal: null,
@@ -110,6 +114,29 @@ describe('admin store list signals', () => {
     expect(within(cairo).queryByText('Orders Not Eligible')).toBeNull()
     const quiet = within(table).getByText('Alexandria Kids').closest('tr')!
     expect(within(quiet).queryByText(/more$/)).toBeNull()
+  })
+
+  it('opens a WhatsApp chat and an email from the contact chips', async () => {
+    render(<StoresAdminPage />)
+
+    const table = await screen.findByRole('table')
+    const cairo = within(table).getByText('Cairo Fashion House').closest('tr')!
+    const chat = within(cairo).getByRole('link', {
+      name: 'Message Cairo Fashion House on WhatsApp',
+    })
+    expect(chat.getAttribute('href')).toBe('https://wa.me/201000000101')
+    expect(chat.getAttribute('target')).toBe('_blank')
+    expect(
+      within(cairo)
+        .getByRole('link', {
+          name: 'Email Cairo Fashion House at owner@cairo-fashion.example.test',
+        })
+        .getAttribute('href')
+    ).toBe('mailto:owner@cairo-fashion.example.test')
+
+    const quiet = within(table).getByText('Alexandria Kids').closest('tr')!
+    expect(within(quiet).queryByRole('link', { name: /WhatsApp/ })).toBeNull()
+    expect(within(quiet).getByText('No contact details')).toBeTruthy()
   })
 
   it('puts the same signal line on the phone card, tinted by its level', async () => {
