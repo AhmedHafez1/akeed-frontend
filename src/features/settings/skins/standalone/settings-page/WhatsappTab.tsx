@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Check, CircleAlert, Loader2, MessageCircle } from 'lucide-react'
+import { Check, CircleAlert, Loader2 } from 'lucide-react'
 import {
   serverErrorKey,
   useWhatsappTab,
@@ -18,6 +18,7 @@ import {
   DocsLink,
   Skeleton,
 } from '@/shared/ui'
+import { WhatsappNumberHeader } from '@/features/settings/skins/shared/WhatsappNumberHeader'
 import { WhatsappDisconnectDialog } from './WhatsappDisconnectDialog'
 
 /** The own-number connection has one identity and three current status rows. */
@@ -27,14 +28,14 @@ export function WhatsappTab() {
   const [confirming, setConfirming] = useState(false)
   if (model.status === 'loading')
     return (
-      <div className={cn(akCard, 'space-y-4 p-6')} aria-busy="true">
+      <div className={cn(akCard, 'space-y-4 p-4 sm:p-6')} aria-busy="true">
         <Skeleton className="h-5 w-1/3" />
         <Skeleton className="h-36 w-full" />
       </div>
     )
   if (model.status === 'error')
     return (
-      <div role="alert" className={cn(akCard, 'space-y-4 p-6')}>
+      <div role="alert" className={cn(akCard, 'space-y-4 p-4 sm:p-6')}>
         <h2 className="text-ak-section text-ink">{t('load.title')}</h2>
         <p className="text-ak-body text-ink-muted">{t('load.body')}</p>
         <button
@@ -49,12 +50,9 @@ export function WhatsappTab() {
   const view = model.view
   if (view.kind === 'hidden') return null
   return (
-    <section
-      className={cn(akCard, 'max-w-190 min-w-0')}
-      aria-label={t('number.title')}
-    >
+    <section className={cn(akCard, 'min-w-0')} aria-label={t('number.title')}>
       {view.kind === 'unconnected' ? (
-        <div className="space-y-5 p-5 sm:p-6">
+        <div className="space-y-5 p-4 sm:p-6">
           <div className="space-y-2">
             <h2 className="text-ak-section text-ink">{t('number.title')}</h2>
             <p className="text-ak-body text-ink-muted">{t('connect.body')}</p>
@@ -67,26 +65,11 @@ export function WhatsappTab() {
         </div>
       ) : (
         <>
-          <header className="flex items-center gap-3.5 p-5 sm:p-6">
-            <span
-              aria-hidden="true"
-              className="border-brand-line bg-brand-soft text-brand-ink rounded-ak-control flex size-11 shrink-0 items-center justify-center border"
-            >
-              <MessageCircle className="size-5" />
-            </span>
-            <div className="min-w-0 space-y-0.5">
-              <p className="text-ak-caption text-ink-muted">
-                {t('number.title')}
-              </p>
-              <h2 className="text-ink text-lg font-semibold">
-                <bdi dir="ltr" className="break-words tabular-nums">
-                  {view.phone ?? t('number.noNumber')}
-                </bdi>
-              </h2>
-            </div>
-          </header>
+          <div className="p-4 sm:px-6 sm:py-5">
+            <WhatsappNumberHeader connection={view} />
+          </div>
           {view.progress.rows.length > 0 ? (
-            <div className="px-5 sm:px-6">
+            <div className="px-4 sm:px-6">
               <ol
                 aria-label={t('progress.label')}
                 className="m-0 list-none p-0"
@@ -107,7 +90,7 @@ export function WhatsappTab() {
               )}
             </div>
           ) : (
-            <div className="border-line mx-5 space-y-3 border-t py-5 sm:mx-6">
+            <div className="border-line mx-4 space-y-3 border-t py-5 sm:mx-6">
               <h3 className="text-ak-section text-ink">
                 {t('reconnect.title')}
               </h3>
@@ -141,7 +124,7 @@ export function WhatsappTab() {
           )}
           {model.disconnect.result && view.state === 'disconnected' && (
             <div
-              className="border-line mx-5 space-y-3 border-t py-5 sm:mx-6"
+              className="border-line mx-4 space-y-3 border-t py-5 sm:mx-6"
               role="status"
             >
               <p className="text-ak-body text-ink">{t('disconnect.done')}</p>
@@ -169,7 +152,7 @@ export function WhatsappTab() {
               )}
             </div>
           )}
-          <footer className="border-line flex flex-wrap items-center justify-between gap-3 border-t px-5 py-3.5 sm:px-6">
+          <footer className="border-line flex flex-wrap items-center justify-between gap-3 border-t px-4 py-3.5 sm:px-6">
             {view.state !== 'disconnected' ? (
               <div className="flex flex-wrap items-center gap-3">
                 <button

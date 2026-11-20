@@ -1,0 +1,58 @@
+.tabs {
+  --tab-gap: 20px;
+  --tab-size: var(--p-text-heading-lg-font-size);
+  --tab-line-height: var(--p-text-heading-lg-font-line-height);
+}
+.tabs :global(.Polaris-Tabs__Outer) > :global(.Polaris-Box) {
+  padding: 0;
+  margin-block-end: var(--p-space-400);
+}
+.tabs :global(.Polaris-Tabs__Wrapper) {
+  padding: 0;
+}
+.tabs :global(.Polaris-Tabs) {
+  flex-wrap: nowrap;
+  gap: var(--tab-gap);
+  padding: 0;
+}
+.tabs :global(.Polaris-Tabs__Tab) {
+  height: auto;
+  padding: 0 0 4px;
+  margin: 0;
+}
+.tabs :global(.Polaris-Tabs__Tab) :global(.Polaris-Text--root) {
+  font-size: var(--tab-size);
+  line-height: var(--tab-line-height);
+  font-weight: var(--p-font-weight-regular);
+}
+.tabs
+  :global(.Polaris-Tabs__Tab[aria-selected='true'])
+  :global(.Polaris-Text--root) {
+  font-weight: var(--p-font-weight-semibold);
+}
+@media (max-width: 639px) {
+  .tabs {
+    --tab-gap: clamp(4px, 1.8vw, 12px);
+    --tab-size: clamp(0.8125rem, 3.7vw, 1rem);
+    --tab-line-height: 1.4;
+  }
+  .tabs :global(.Polaris-Tabs__Wrapper) {
+    padding-inline: clamp(8px, 3vw, 16px);
+  }
+  .tabs :global(.Polaris-Tabs__Tab) {
+    padding: 0 2px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+@media (max-width: 349px) {
+  .tabs {
+    --tab-gap: 3px;
+  }
+  .tabs :global(.Polaris-Tabs__Wrapper) {
+    padding-inline: 6px;
+  }
+  .tabs :global(.Polaris-Tabs__Tab) {
+    padding-inline: 0;
+  }
+}
