@@ -30,6 +30,7 @@ import {
   WhatsappCell,
   formatDate,
   formatDateTime,
+  formatNextCharge,
   HealthBadge,
   isInstalledPlatform,
   LifecycleBadge,
@@ -89,6 +90,7 @@ const sortOptions = [
   { value: 'store_name', label: 'Store name' },
   { value: 'last_activity', label: 'Last activity' },
   { value: 'usage_percent', label: 'Usage' },
+  { value: 'next_charge', label: 'Next charge' },
   { value: 'activation_date', label: 'Activation date' },
   { value: 'health', label: 'Health' },
 ]
@@ -784,7 +786,7 @@ function StoresResults({
     <section aria-label="Store results">
       <div className="border-border bg-card hidden overflow-hidden rounded-2xl border shadow-xs md:block">
         <div className="overflow-x-auto">
-          <table className="bg-card w-full min-w-[1480px] text-left text-sm">
+          <table className="bg-card w-full min-w-[1600px] text-left text-sm">
             <thead className="border-border bg-muted/40 text-muted-foreground border-b text-xs font-semibold tracking-wide uppercase">
               <tr>
                 <SortableHeader
@@ -807,6 +809,13 @@ function StoresResults({
                 <SortableHeader
                   label="Usage"
                   sortKey="usage_percent"
+                  activeSort={sort}
+                  direction={direction}
+                  onSort={onSort}
+                />
+                <SortableHeader
+                  label="Next charge"
+                  sortKey="next_charge"
                   activeSort={sort}
                   direction={direction}
                   onSort={onSort}
@@ -875,6 +884,9 @@ function StoresResults({
                       <td className="min-w-40 px-4 py-4">
                         <BillingCell store={store} />
                       </td>
+                      <td className="text-foreground/70 px-4 py-4 text-xs whitespace-nowrap">
+                        {formatNextCharge(store.next_charge_at)}
+                      </td>
                       <td className="px-4 py-4">
                         <WhatsappCell whatsapp={store.whatsapp} />
                       </td>
@@ -906,7 +918,7 @@ function StoresResults({
                     </tr>
                     {isExpanded && (
                       <tr id={detailId}>
-                        <td colSpan={10} className="bg-muted/50 px-5 py-5">
+                        <td colSpan={11} className="bg-muted/50 px-5 py-5">
                           <StoreDetails
                             store={store}
                             href={storeHref(store)}
@@ -974,6 +986,12 @@ function StoresResults({
                     {store.billing.model === 'credits' ? 'Messages' : 'Usage'}
                   </p>
                   <BillingCell store={store} />
+                </div>
+                <div className="col-span-2">
+                  <p className="text-muted-foreground">Next charge</p>
+                  <p className="text-foreground mt-1 font-medium">
+                    {formatNextCharge(store.next_charge_at)}
+                  </p>
                 </div>
                 <div className="col-span-2">
                   <p className="text-muted-foreground mb-1.5">WhatsApp</p>

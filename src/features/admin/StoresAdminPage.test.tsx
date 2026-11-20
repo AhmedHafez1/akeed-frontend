@@ -29,6 +29,7 @@ function store(overrides: Partial<AdminStore> = {}): AdminStore {
     source_identity: 'cairo-fashion.example.test',
     owner_email: 'owner@cairo-fashion.example.test',
     merchant_whatsapp_phone: '+20 100 000 0101',
+    next_charge_at: '2026-12-01T10:00:00Z',
     country_code: 'EG',
     customer_countries: { top: 'EG', share: 100, count: 1 },
     timezone: 'Africa/Cairo',
@@ -76,6 +77,7 @@ const healthy = store({
   store_name: 'Alexandria Kids',
   owner_email: null,
   merchant_whatsapp_phone: null,
+  next_charge_at: null,
   health: {
     status: 'healthy',
     top_signal: null,
@@ -137,6 +139,19 @@ describe('admin store list signals', () => {
     const quiet = within(table).getByText('Alexandria Kids').closest('tr')!
     expect(within(quiet).queryByRole('link', { name: /WhatsApp/ })).toBeNull()
     expect(within(quiet).getByText('No contact details')).toBeTruthy()
+  })
+
+  it('shows when a paying store is next charged and a dash when it is not', async () => {
+    render(<StoresAdminPage />)
+
+    const table = await screen.findByRole('table')
+    const cairo = within(table).getByText('Cairo Fashion House').closest('tr')!
+    expect(within(cairo).getByText('Dec 1, 2026')).toBeTruthy()
+    const quiet = within(table).getByText('Alexandria Kids').closest('tr')!
+    expect(within(quiet).getAllByText('—').length).toBeGreaterThan(0)
+    expect(
+      within(table).getByRole('button', { name: /Next charge/ })
+    ).toBeTruthy()
   })
 
   it('puts the same signal line on the phone card, tinted by its level', async () => {
