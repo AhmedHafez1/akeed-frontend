@@ -260,6 +260,7 @@
     "shopify_cta": "Ver planes en Shopify",
     "authoritative_note": "Los precios se muestran en libras egipcias y pueden cambiar. El precio válido es el que aparece en tu página de facturación.",
     "own_number": {
+      "headline_unit": "por mensaje desde tu propio número",
       "rates_heading": "Costo por mensaje",
       "from_akeed": "Desde el número de Akeed",
       "from_yours": "Desde tu propio número",

@@ -32,9 +32,8 @@ export function CreditPriceCard({
   const t = useTranslations('pricing_credits')
   const { locale, targets } = useAcquisition()
 
-  // The headline is one message from Akeed's number.
   const price = formatBalanceParts(
-    CREDIT_MESSAGE_PRICE_MINOR,
+    showOwnNumber ? OWN_NUMBER_MESSAGE_PRICE_MINOR : CREDIT_MESSAGE_PRICE_MINOR,
     CREDIT_CURRENCY,
     locale
   )
@@ -79,7 +78,9 @@ export function CreditPriceCard({
           {!price.currencyFirst && currency}
         </span>
       </p>
-      <p className="mt-3 text-base text-slate-400">{t('per_credit')}</p>
+      <p className="mt-3 text-base text-slate-400">
+        {t(showOwnNumber ? 'own_number.headline_unit' : 'per_credit')}
+      </p>
 
       {showOwnNumber && (
         <div className="mt-6 border-t border-white/10 pt-5">

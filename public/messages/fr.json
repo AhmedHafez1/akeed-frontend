@@ -260,6 +260,7 @@
     "shopify_cta": "Voir les forfaits sur Shopify",
     "authoritative_note": "Les prix sont indiqués en livres égyptiennes et peuvent changer. Le prix qui fait foi est celui affiché sur votre page de facturation.",
     "own_number": {
+      "headline_unit": "par message depuis votre propre numéro",
       "rates_heading": "Coût par message",
       "from_akeed": "Depuis le numéro d’Akeed",
       "from_yours": "Depuis votre propre numéro",

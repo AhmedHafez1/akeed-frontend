@@ -12,7 +12,9 @@ describe('Pricing', () => {
   it('shows only the credit model while the own-number promotion is off', () => {
     renderMarketing(<Pricing showOwnNumber={false} />, 'en')
 
-    expect(screen.getByText('per message')).toBeTruthy()
+    expect(
+      screen.getByText('per message').previousElementSibling?.textContent
+    ).toBe('EGP1')
     expect(text()).toContain('Covers 250–500 orders')
     expect(text()).not.toContain(own.from_yours)
     expect(text()).not.toContain(own.meta_note)
@@ -29,8 +31,10 @@ describe('Pricing', () => {
     expect(text()).not.toContain(own.from_yours)
   })
 
-  it('puts the own-number rate beside Akeed’s, with Meta’s charge disclosed', () => {
+  it('leads with the own-number rate and shows both rates below it', () => {
     renderMarketing(<Pricing showOwnNumber />, 'en')
+    const unit = screen.getByText('per message from your own number')
+    expect(unit.previousElementSibling?.textContent).toBe('EGP0.5')
 
     expect(screen.getByText(own.from_akeed)).toBeTruthy()
     expect(screen.getByText(own.from_yours)).toBeTruthy()
@@ -71,6 +75,8 @@ describe('Pricing', () => {
     renderMarketing(<Pricing showOwnNumber />, 'ar')
 
     const arOwn = ar.pricing_credits.own_number
+    const unit = screen.getByText(arOwn.headline_unit)
+    expect(unit.previousElementSibling?.textContent).toBe('0.5ج.م')
     expect(screen.getByText(arOwn.from_yours)).toBeTruthy()
     expect(screen.getByText(arOwn.meta_note)).toBeTruthy()
     expect(screen.getByText(arOwn.shopify_note)).toBeTruthy()
