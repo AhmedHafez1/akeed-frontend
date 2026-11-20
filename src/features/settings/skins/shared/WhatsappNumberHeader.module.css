@@ -1,0 +1,70 @@
+.header {
+  --connector-color: var(--ink-muted);
+  --check-ring: var(--surface-raised);
+  --label-color: var(--ink-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(10px, 1.6vw, 16px);
+  min-width: 0;
+}
+
+:global(.Polaris-Page) .header {
+  --connector-color: var(--p-color-border-hover);
+  --check-ring: var(--p-color-bg-surface);
+  --label-color: var(--p-color-text-secondary);
+}
+
+.logo {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 10px;
+}
+.connector {
+  display: grid;
+  place-items: center;
+  position: relative;
+  flex: 1 1 0%;
+  min-width: 25px;
+}
+.connector::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  border-top: 2px dotted var(--connector-color);
+}
+.check {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  background: color-mix(
+    in srgb,
+    var(--akeed-logo-green) 12%,
+    var(--check-ring)
+  );
+  color: var(--akeed-logo-green);
+  border: 1px solid currentColor;
+  box-shadow: 0 0 0 3px var(--check-ring);
+}
+.identity {
+  min-width: 0;
+  text-align: end;
+}
+.identity p {
+  color: var(--label-color);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  margin: 0;
+}
+.identity h2 {
+  font-size: 1.125rem;
+  line-height: 1.35;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+}

@@ -10,7 +10,7 @@ import {
   Page,
   SkeletonBodyText,
   SkeletonDisplayText,
-  SkeletonPage,
+  Text,
   Tabs,
 } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
@@ -29,6 +29,7 @@ import { useEmbeddedSettings } from '@/features/settings/domain/useEmbeddedSetti
 import { useWhatsappSenderData } from '@/features/whatsapp-connect'
 import { resolvePlanNumber } from '@/features/settings/domain/planNumber'
 import { AppBridgeSaveBar } from '@/shared/ui/app-bridge/AppBridgeSaveBar'
+import styles from './SettingsEmbeddedPage.module.css'
 import { MessageTab } from './MessageTab'
 import { PlanTab } from './PlanTab'
 import { TimingTab } from './TimingTab'
@@ -43,7 +44,10 @@ function isFormTab(tab: SettingsTabId): tab is 'message' | 'timing' {
 
 export function SettingsEmbeddedSkeleton({ title }: { title: string }) {
   return (
-    <SkeletonPage title={title}>
+    <Page>
+      <Text as="h1" visuallyHidden>
+        {title}
+      </Text>
       <Layout>
         <Layout.Section>
           <Card>
@@ -59,7 +63,7 @@ export function SettingsEmbeddedSkeleton({ title }: { title: string }) {
           </Card>
         </Layout.Section>
       </Layout>
-    </SkeletonPage>
+    </Page>
   )
 }
 
@@ -124,7 +128,10 @@ export function SettingsEmbeddedPage() {
 
   if (model.isLoadError) {
     return (
-      <Page title={t('title')}>
+      <Page>
+        <Text as="h1" visuallyHidden>
+          {t('title')}
+        </Text>
         <Banner
           tone="critical"
           title={t('loadError')}
@@ -158,7 +165,10 @@ export function SettingsEmbeddedPage() {
   const onFormTab = isFormTab(activeTab)
 
   return (
-    <Page title={t('title')}>
+    <Page>
+      <Text as="h1" visuallyHidden>
+        {t('title')}
+      </Text>
       <AppBridgeSaveBar
         id={SAVE_BAR_ID}
         open={model.isDirty && !readOnly && onFormTab}
@@ -169,7 +179,7 @@ export function SettingsEmbeddedPage() {
         onDiscard={model.discard}
       />
       <BlockStack gap="400">
-        <div className="akeed-underline-tabs">
+        <div className={styles.tabs + ' akeed-underline-tabs'}>
           <Tabs
             tabs={tabs}
             selected={Math.max(0, shownTabs.indexOf(activeTab))}

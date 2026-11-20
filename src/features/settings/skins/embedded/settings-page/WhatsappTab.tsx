@@ -18,7 +18,7 @@ import {
   SkeletonDisplayText,
   Text,
 } from '@shopify/polaris'
-import { ChatIcon, CheckIcon, AlertCircleIcon } from '@shopify/polaris-icons'
+import { CheckIcon, AlertCircleIcon } from '@shopify/polaris-icons'
 import { useLocale, useTranslations } from 'next-intl'
 import {
   serverErrorKey,
@@ -26,6 +26,7 @@ import {
   type WhatsappProgressRow,
   type WhatsappTabModel,
 } from '@/features/whatsapp-connect'
+import { WhatsappNumberHeader } from '@/features/settings/skins/shared/WhatsappNumberHeader'
 import { buildDocsArticleHref } from '@/shared/lib/docs-links'
 import { resolveSupportedLocale } from '@/shared/lib/locale'
 
@@ -65,214 +66,188 @@ export function WhatsappTab() {
     }
   }
   return (
-    <Box maxWidth="760px">
-      <Card padding="600">
-        {view.kind === 'unconnected' ? (
+    <Card>
+      {view.kind === 'unconnected' ? (
+        <BlockStack gap="400">
+          <Text as="h2" variant="headingMd">
+            {t('number.title')}
+          </Text>
+          <Text as="p" tone="subdued">
+            {t('connect.body')}
+          </Text>
+          <ConnectAction
+            model={model}
+            canConnect={view.canConnect}
+            label={t('connect.action')}
+          />
+        </BlockStack>
+      ) : (
+        <>
           <BlockStack gap="400">
-            <Text as="h2" variant="headingMd">
-              {t('number.title')}
-            </Text>
-            <Text as="p" tone="subdued">
-              {t('connect.body')}
-            </Text>
-            <ConnectAction
-              model={model}
-              canConnect={view.canConnect}
-              label={t('connect.action')}
-            />
-          </BlockStack>
-        ) : (
-          <>
-            <BlockStack gap="400">
-              <InlineStack gap="300" blockAlign="center" wrap={false}>
-                <Box
-                  background="bg-surface-success"
-                  borderColor="border-success"
-                  borderWidth="025"
-                  borderRadius="200"
-                  padding="300"
+            <WhatsappNumberHeader connection={view} />
+            {view.progress.rows.length > 0 ? (
+              <div>
+                <ol
+                  aria-label={t('progress.label')}
+                  style={{ listStyle: 'none', padding: 0, margin: 0 }}
                 >
-                  <Icon source={ChatIcon} tone="success" />
-                </Box>
-                <BlockStack gap="100">
+                  {view.progress.rows.map((row) => (
+                    <ProgressRow
+                      key={row.id}
+                      row={row}
+                      isOwner={view.isOwner}
+                      helpUrl={helpUrl}
+                      onReconnect={() => setConfirming(true)}
+                    />
+                  ))}
+                </ol>
+                {view.progress.coverage && (
                   <Text as="p" variant="bodySm" tone="subdued">
-                    {t('number.title')}
+                    {t('progress.coverage.' + view.progress.coverage)}
                   </Text>
-                  <Text as="h2" variant="headingMd">
-                    <bdi dir="ltr">{view.phone ?? t('number.noNumber')}</bdi>
-                  </Text>
-                </BlockStack>
-              </InlineStack>
-              {view.progress.rows.length > 0 ? (
-                <div>
-                  <ol
-                    aria-label={t('progress.label')}
-                    style={{ listStyle: 'none', padding: 0, margin: 0 }}
-                  >
-                    {view.progress.rows.map((row) => (
-                      <ProgressRow
-                        key={row.id}
-                        row={row}
-                        isOwner={view.isOwner}
-                        helpUrl={helpUrl}
-                        onReconnect={() => setConfirming(true)}
-                      />
-                    ))}
-                  </ol>
-                  {view.progress.coverage && (
-                    <Text as="p" variant="bodySm" tone="subdued">
-                      {t('progress.coverage.' + view.progress.coverage)}
-                    </Text>
-                  )}
-                </div>
-              ) : (
-                <Box
-                  borderBlockStartWidth="025"
-                  borderColor="border"
-                  paddingBlockStart="400"
-                >
-                  <BlockStack gap="300">
-                    <Text as="h3" variant="headingSm">
-                      {t('reconnect.title')}
-                    </Text>
-                    <Text as="p" tone="subdued">
-                      {t(
-                        view.banners.some(
-                          (banner) =>
-                            banner.key === 'disconnect.primary_inactivity'
-                        )
-                          ? 'progress.issues.inactive'
-                          : 'reconnect.body'
-                      )}
-                    </Text>
-                    {view.canReconnect ? (
-                      <ConnectAction
-                        model={model}
-                        canConnect
-                        label={t('reconnect.action')}
-                      />
-                    ) : (
-                      <Text as="p" tone="subdued">
-                        {t(
-                          view.isOwner
-                            ? view.reconnectNeedsDisconnect
-                              ? 'banners.reconnectFirst'
-                              : 'progress.issues.unavailable'
-                            : 'banners.askOwner'
-                        )}
-                      </Text>
-                    )}
-                  </BlockStack>
-                </Box>
-              )}
-              {model.disconnect.result && view.state === 'disconnected' && (
-                <Banner tone="info" title={t('disconnect.done')}>
-                  <BlockStack gap="200">
-                    {model.disconnect.result.businessAppSteps.length > 0 && (
-                      <>
-                        <p>{t('disconnect.appStepsIntro')}</p>
-                        <List type="number">
-                          {model.disconnect.result.businessAppSteps.map(
-                            (step) => (
-                              <List.Item key={step}>
-                                {t.has('disconnect.appSteps.' + step)
-                                  ? t('disconnect.appSteps.' + step)
-                                  : t('disconnect.cleanupManual')}
-                              </List.Item>
-                            )
-                          )}
-                        </List>
-                      </>
-                    )}
-                    {model.disconnect.result.providerCleanup ===
-                      'manual_required' && (
-                      <p>{t('disconnect.cleanupManual')}</p>
-                    )}
-                  </BlockStack>
-                </Banner>
-              )}
+                )}
+              </div>
+            ) : (
               <Box
                 borderBlockStartWidth="025"
                 borderColor="border"
                 paddingBlockStart="400"
               >
-                <InlineStack
-                  align="space-between"
-                  blockAlign="center"
-                  gap="300"
-                >
-                  {view.state !== 'disconnected' ? (
-                    <InlineStack gap="300" blockAlign="center">
-                      <Button
-                        onClick={() => setConfirming(true)}
-                        disabled={
-                          !view.canDisconnect || model.disconnect.isPending
-                        }
-                      >
-                        {t('disconnect.action')}
-                      </Button>
-                      {!view.canDisconnect && (
-                        <Text as="span" tone="subdued" variant="bodySm">
-                          {t('connect.ownerOnly')}
-                        </Text>
-                      )}
-                    </InlineStack>
-                  ) : (
-                    <span />
-                  )}
-                  <Link url={helpUrl} target="_blank" monochrome>
-                    {t('help')}
-                  </Link>
-                </InlineStack>
-              </Box>
-            </BlockStack>
-            <Modal
-              open={confirming}
-              onClose={close}
-              title={t('disconnect.title')}
-              primaryAction={{
-                content: t('disconnect.confirm'),
-                destructive: true,
-                loading: model.disconnect.isPending,
-                onAction: async () => {
-                  if (await model.disconnect.run()) setConfirming(false)
-                },
-              }}
-              secondaryActions={[
-                {
-                  content: t('disconnect.keep'),
-                  disabled: model.disconnect.isPending,
-                  onAction: close,
-                },
-              ]}
-            >
-              <Modal.Section>
                 <BlockStack gap="300">
-                  <Text as="p">
-                    {t('disconnect.body')}
-                    {view.signupPath === 'coexistence' && (
-                      <> {t('disconnect.coexistence')}</>
-                    )}
+                  <Text as="h3" variant="headingSm">
+                    {t('reconnect.title')}
                   </Text>
                   <Text as="p" tone="subdued">
-                    {t('disconnect.history')}
+                    {t(
+                      view.banners.some(
+                        (banner) =>
+                          banner.key === 'disconnect.primary_inactivity'
+                      )
+                        ? 'progress.issues.inactive'
+                        : 'reconnect.body'
+                    )}
                   </Text>
-                  {model.disconnect.error && (
-                    <Banner tone="critical">
-                      <p>
-                        {model.disconnect.error === 'ownerRequired'
-                          ? tErrors('ownerRequired')
-                          : t('disconnect.error')}
-                      </p>
-                    </Banner>
+                  {view.canReconnect ? (
+                    <ConnectAction
+                      model={model}
+                      canConnect
+                      label={t('reconnect.action')}
+                    />
+                  ) : (
+                    <Text as="p" tone="subdued">
+                      {t(
+                        view.isOwner
+                          ? view.reconnectNeedsDisconnect
+                            ? 'banners.reconnectFirst'
+                            : 'progress.issues.unavailable'
+                          : 'banners.askOwner'
+                      )}
+                    </Text>
                   )}
                 </BlockStack>
-              </Modal.Section>
-            </Modal>
-          </>
-        )}
-      </Card>
-    </Box>
+              </Box>
+            )}
+            {model.disconnect.result && view.state === 'disconnected' && (
+              <Banner tone="info" title={t('disconnect.done')}>
+                <BlockStack gap="200">
+                  {model.disconnect.result.businessAppSteps.length > 0 && (
+                    <>
+                      <p>{t('disconnect.appStepsIntro')}</p>
+                      <List type="number">
+                        {model.disconnect.result.businessAppSteps.map(
+                          (step) => (
+                            <List.Item key={step}>
+                              {t.has('disconnect.appSteps.' + step)
+                                ? t('disconnect.appSteps.' + step)
+                                : t('disconnect.cleanupManual')}
+                            </List.Item>
+                          )
+                        )}
+                      </List>
+                    </>
+                  )}
+                  {model.disconnect.result.providerCleanup ===
+                    'manual_required' && <p>{t('disconnect.cleanupManual')}</p>}
+                </BlockStack>
+              </Banner>
+            )}
+            <Box
+              borderBlockStartWidth="025"
+              borderColor="border"
+              paddingBlockStart="400"
+            >
+              <InlineStack align="space-between" blockAlign="center" gap="300">
+                {view.state !== 'disconnected' ? (
+                  <InlineStack gap="300" blockAlign="center">
+                    <Button
+                      onClick={() => setConfirming(true)}
+                      disabled={
+                        !view.canDisconnect || model.disconnect.isPending
+                      }
+                    >
+                      {t('disconnect.action')}
+                    </Button>
+                    {!view.canDisconnect && (
+                      <Text as="span" tone="subdued" variant="bodySm">
+                        {t('connect.ownerOnly')}
+                      </Text>
+                    )}
+                  </InlineStack>
+                ) : (
+                  <span />
+                )}
+                <Link url={helpUrl} target="_blank" monochrome>
+                  {t('help')}
+                </Link>
+              </InlineStack>
+            </Box>
+          </BlockStack>
+          <Modal
+            open={confirming}
+            onClose={close}
+            title={t('disconnect.title')}
+            primaryAction={{
+              content: t('disconnect.confirm'),
+              destructive: true,
+              loading: model.disconnect.isPending,
+              onAction: async () => {
+                if (await model.disconnect.run()) setConfirming(false)
+              },
+            }}
+            secondaryActions={[
+              {
+                content: t('disconnect.keep'),
+                disabled: model.disconnect.isPending,
+                onAction: close,
+              },
+            ]}
+          >
+            <Modal.Section>
+              <BlockStack gap="300">
+                <Text as="p">
+                  {t('disconnect.body')}
+                  {view.signupPath === 'coexistence' && (
+                    <> {t('disconnect.coexistence')}</>
+                  )}
+                </Text>
+                <Text as="p" tone="subdued">
+                  {t('disconnect.history')}
+                </Text>
+                {model.disconnect.error && (
+                  <Banner tone="critical">
+                    <p>
+                      {model.disconnect.error === 'ownerRequired'
+                        ? tErrors('ownerRequired')
+                        : t('disconnect.error')}
+                    </p>
+                  </Banner>
+                )}
+              </BlockStack>
+            </Modal.Section>
+          </Modal>
+        </>
+      )}
+    </Card>
   )
 }
 
