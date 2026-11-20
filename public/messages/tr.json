@@ -260,6 +260,7 @@
     "shopify_cta": "Shopify’daki planları görün",
     "authoritative_note": "Fiyatlar Mısır lirası olarak gösterilir ve değişebilir. Geçerli fiyat, faturalandırma sayfanızda gösterilen fiyattır.",
     "own_number": {
+      "headline_unit": "kendi numaranızdan mesaj başına",
       "rates_heading": "Mesaj başına maliyet",
       "from_akeed": "Akeed numarasından",
       "from_yours": "Kendi numaranızdan",

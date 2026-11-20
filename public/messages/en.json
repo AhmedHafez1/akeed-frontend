@@ -1473,6 +1473,7 @@
     "shopify_cta": "See plans on Shopify",
     "authoritative_note": "Prices are shown in Egyptian pounds and may change. The authoritative price is the one shown on your billing page.",
     "own_number": {
+      "headline_unit": "per message from your own number",
       "rates_heading": "Cost per message",
       "from_akeed": "From Akeed's number",
       "from_yours": "From your own number",
