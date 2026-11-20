@@ -7,6 +7,7 @@ import { cn } from '@/shared/lib/utils'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { AdminSelect } from './AdminUi'
 import { useStandaloneBilling } from './useStandaloneBilling'
+import { formatDisplayedMoney } from './standaloneBillingFormat'
 import type {
   AccountFilters,
   CreditAccountRow,
@@ -46,7 +47,10 @@ export function StandaloneBillingPage() {
         </div>
         <div className="text-muted-foreground mt-1 text-xs">
           {t('balance', {
-            displayed: row.account.displayedAvailableCredits,
+            displayed: formatDisplayedMoney(
+              row.account.displayedAvailableCredits,
+              locale
+            ),
             available: row.account.availableCredits,
             posted: row.account.postedBalance,
           })}

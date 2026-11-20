@@ -14,8 +14,8 @@ Akeed funciona de tres maneras. Usa esta guía cuando lo configures por primera 
 | Si tú… | Usa | Cómo llegan los pedidos | Cómo pagas |
 | --- | --- | --- | --- |
 | Tienes una tienda Shopify | [Ruta A: Shopify](#ruta-a-shopify) | Automáticamente desde tu tienda. | Un plan mensual que cobra Shopify. |
-| Tienes una tienda WooCommerce o EasyOrders | [Conectar WooCommerce](/docs/woocommerce) o [Conectar EasyOrders](/docs/easyorders) | Automáticamente desde tu tienda. | Créditos, comprados mediante Paymob. |
-| Vendes en cualquier otro lugar o trabajas con una hoja de cálculo | [Ruta B: Tu propia tienda](#ruta-b-tu-propia-tienda-sin-shopify) | Los agregas uno por uno, importas un archivo o los envías desde tu propio servidor. | Créditos, comprados mediante Paymob. |
+| Tienes una tienda WooCommerce o EasyOrders | [Conectar WooCommerce](/docs/woocommerce) o [Conectar EasyOrders](/docs/easyorders) | Automáticamente desde tu tienda. | Saldo prepago, recargado mediante Paymob. |
+| Vendes en cualquier otro lugar o trabajas con una hoja de cálculo | [Ruta B: Tu propia tienda](#ruta-b-tu-propia-tienda-sin-shopify) | Los agregas uno por uno, importas un archivo o los envías desde tu propio servidor. | Saldo prepago, recargado mediante Paymob. |
 
 > [!INFO]
 > Akeed está diseñado para confirmar pedidos contra entrega. No envía mensajes de confirmación para pedidos pagados en línea.
@@ -111,12 +111,12 @@ Akeed envía una confirmación de prueba gratis a tu propio número. Comprueba q
 - **Un pedido:** usa **Verificar pedido** en el panel.
 - **Muchos pedidos:** usa **Importar desde un archivo** para cargar un archivo CSV o Excel. Consulta [Importación masiva de pedidos](/docs/bulk-order-import).
 
-### Paso 5: Mantén créditos disponibles
+### Paso 5: Mantén tu saldo disponible
 
-Empiezas con 60 créditos gratis, suficientes para 30 mensajes de WhatsApp. 1 crédito equivale a EGP 1, cada mensaje de WhatsApp usa 2 créditos y un recordatorio usa 2 más. Abre **Facturación y créditos** para comprar más mediante Paymob, con tarjeta o Vodafone Cash.
+Empiezas con 100 mensajes gratis. Después cada mensaje desde el número de Akeed cuesta 1 EGP y cada recordatorio cuenta como otro mensaje. Abre **Facturación y saldo** para recargar mediante Paymob con tarjeta o Vodafone Cash.
 
 > [!WARNING]
-> Cuando se agotan tus créditos, las confirmaciones nuevas se detienen hasta que compres más.
+> Cuando se agota tu saldo, las confirmaciones nuevas se detienen hasta que lo recargues.
 
 ## Errores comunes
 
@@ -124,7 +124,7 @@ Empiezas con 60 créditos gratis, suficientes para 30 mensajes de WhatsApp. 1 cr
 | --- | --- |
 | Desactivar la confirmación automática por accidente | Deja activada la confirmación automática, salvo que quieras pausar todas las confirmaciones nuevas. |
 | Enviar el pedido antes de que el cliente responda | Siempre que sea posible, espera a que el estado sea confirmado. |
-| No vigilar el uso del plan o el saldo de créditos | Revisa tu barra de uso (Shopify) o tu saldo de créditos (cuenta independiente) para que los envíos no se detengan de forma inesperada. |
+| No vigilar el uso del plan o el saldo | Revisa tu barra de uso (Shopify) o tu saldo (cuenta independiente) para que los envíos no se detengan de forma inesperada. |
 | Configurar retrasos muy largos | Usa retrasos de primer envío y de recordatorio que sean prácticos para tu flujo de preparación de pedidos. |
 
 ## Solución de problemas
@@ -139,7 +139,7 @@ Comprueba que el número de teléfono sea válido e incluya el código de país.
 
 ### Los envíos nuevos se detuvieron
 
-En Shopify, revisa el uso de tu plan. Si se agotaron tus confirmaciones incluidas, mejora tu plan o espera al siguiente periodo de facturación. En una cuenta independiente, revisa tu saldo de créditos y compra más si está en cero.
+En Shopify, revisa el uso de tu plan. Si agotaste las confirmaciones incluidas, mejora el plan o espera al siguiente periodo de facturación. En una cuenta independiente, revisa tu saldo y recárgalo si se agotó.
 
 ## Preguntas frecuentes
 

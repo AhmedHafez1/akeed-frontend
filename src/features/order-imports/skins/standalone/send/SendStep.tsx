@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
 import { FileSpreadsheet, Send } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
-import { billingPurchaseHref } from '@/features/billing'
+import { billingPurchaseHref, useCreditMoney } from '@/features/billing'
 import { withLocale, type SupportedLocale } from '@/shared/lib/locale'
 import {
   Button,
@@ -275,8 +275,10 @@ function SendFooter({
   onSubmit: () => void
 }) {
   const t = useTranslations('orderImport')
+  const money = useCreditMoney()
   const busy = phase === 'importing' || phase === 'sending'
   const shortfall = quote ? shortfallOf(quote) : undefined
+  const topUp = shortfall?.suggestedPurchaseCredits ?? 0
   const sendLabel = t('send.sendNow', { count: ready })
 
   const primary = shortfall ? (
@@ -284,13 +286,13 @@ function SendFooter({
       <Link
         href={withLocale(
           billingPurchaseHref({
-            credits: shortfall.suggestedPurchaseCredits ?? 0,
+            amountMinor: money.toMinor(topUp),
             returnTo: importReturnPath(batchId, true),
           }),
           locale
         )}
       >
-        {t('start.buy', { credits: shortfall.suggestedPurchaseCredits ?? 0 })}
+        {t('start.buy', { amount: money.format(topUp) })}
       </Link>
     </Button>
   ) : quote ? (

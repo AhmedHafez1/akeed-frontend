@@ -6,11 +6,14 @@ import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
 import { akButton, akCard, Skeleton } from '@/shared/ui'
+import { creditsToMinor } from '@/shared/lib/balanceMoney'
 import {
+  creditsAsMoney,
   formatBillingDate,
   formatCredits,
   formatMoney,
 } from '../../domain/billingFormatters'
+import type { CreditSummary } from '../../domain/billing.types'
 import type { UseTransactionsResult } from '../../domain/useTransactions'
 
 /** The newest postings shown; the history behind them is the ledger's. */
@@ -18,13 +21,16 @@ const SHOWN = 8
 
 /**
  * The latest ledger postings: top-ups, sends, packs and returns, each with
- * the balance after it. History only: usage figures come from the per-send
- * totals above, never from adding these rows up.
+ * the balance after it, in pounds at today's price. History only: usage
+ * figures come from the per-send totals above, never from adding these rows
+ * up.
  */
 export function TransactionsCard({
   history,
+  price,
 }: {
   history: UseTransactionsResult
+  price: Pick<CreditSummary['price'], 'unitPriceMinor' | 'currency'>
 }) {
   const t = useTranslations('billing.transactions')
   const { locale } = useLocaleInfo()
@@ -89,20 +95,26 @@ export function TransactionsCard({
                       className="text-ink px-3 py-3 text-start font-semibold"
                     >
                       {t(`types.${row.ledgerType}`)}
+                      {row.ledgerType === 'purchase' &&
+                        row.purchase &&
+                        row.purchase.totalMinor !==
+                          creditsToMinor(
+                            row.quantity,
+                            price.unitPriceMinor
+                          ) && (
+                          <span className="text-ak-caption text-ink-muted ms-2 font-normal">
+                            <bdi>
+                              {formatMoney(
+                                row.purchase.totalMinor,
+                                row.purchase.currency,
+                                locale
+                              )}
+                            </bdi>
+                          </span>
+                        )}
                       {row.ledgerType === 'own_number_pack' && (
                         <span className="text-ak-caption text-ink-muted ms-2 font-normal">
                           {t('packNote')}
-                        </span>
-                      )}
-                      {row.purchase && (
-                        <span className="text-ak-caption text-ink-muted ms-2 font-normal">
-                          <bdi>
-                            {formatMoney(
-                              row.purchase.totalMinor,
-                              row.purchase.currency,
-                              locale
-                            )}
-                          </bdi>
                         </span>
                       )}
                     </th>
@@ -117,13 +129,16 @@ export function TransactionsCard({
                       )}
                     >
                       {row.quantity > 0 ? '+' : ''}
-                      {formatCredits(row.quantity, locale)}
+                      {formatCredits(
+                        creditsToMinor(row.quantity, price.unitPriceMinor) /
+                          100,
+                        locale
+                      )}
                     </td>
-                    <td
-                      dir="ltr"
-                      className="text-ink px-3 py-3 text-start tabular-nums"
-                    >
-                      {formatCredits(row.balanceAfter, locale)}
+                    <td className="text-ink px-3 py-3 text-start tabular-nums">
+                      <bdi>
+                        {creditsAsMoney(row.balanceAfter, price, locale)}
+                      </bdi>
                     </td>
                   </tr>
                 ))}

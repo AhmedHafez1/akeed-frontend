@@ -166,6 +166,6 @@ Ayrıca bakın: [Otomasyon Kuralları](/docs/automation-rules)
 
 **Ayarlar › Mesaj** bölümünde **Onay veya iptal sonrasında teşekkür mesajı gönder** seçeneğini açıp kaydedin. Tek anahtar her iki sonucu kontrol eder ve her mağaza için varsayılan olarak kapalıdır. Açmadan önce iki örneği inceleyin. Metni Akeed yönetir; metin müşteriye gönderilen son mesajın dilini ve stilini kullanır.
 
-Her teşekkür mesajı normal mesaj ücretiyle hesaplanır: Shopify dışında **2 kredi**, Shopify içinde **planınızdan 1 mesaj**. Ücret anahtarın yanında gösterilir. Kredi veya plan hakkı kalmadığında Akeed teşekkür mesajını atlar; müşterinin onayı veya iptali korunur. Teslimat başarısız olursa mesaj ücreti iade edilir.
+Her teşekkür mesajı normal mesaj tarifesinden ücretlendirilir. Bağımsız hesaplarda Akeed’in numarasından **1 EGP**, kendi numaranızdan **0,5 EGP** tutar. Shopify’da **planınızdan 1 mesaj** kullanır. Ücret anahtarın yanında gösterilir. Bakiye veya plan hakkı kalmadığında Akeed teşekkür mesajını atlar ve müşterinin onayını ya da iptalini korur. Teslimat başarısız olursa ücret iade edilir.
 
 Kapatmak, gönderimi henüz başlamamış teşekkür mesajlarını durdurur. Yeniden açmak geçmiş yanıtlar için mesaj göndermez. Bu mesajlar yalnızca müşteri yanıtlarında gönderilir; test siparişleri, personel iptalleri veya otomatik iptaller için gönderilmez.

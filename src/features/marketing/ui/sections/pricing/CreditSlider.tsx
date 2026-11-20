@@ -18,9 +18,11 @@ import {
   OWN_NUMBER_CREDITS_PER_MESSAGE,
 } from '@/shared/config/pricing'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import { formatCredits, formatMoneyParts } from '@/shared/lib/money'
+import { formatBalance, formatBalanceParts } from '@/shared/lib/balanceMoney'
+import { formatCredits } from '@/shared/lib/money'
 
-const PREFERRED_DEFAULT = 500
+/** Displayed credits: EGP 500 at the default price. */
+const PREFERRED_DEFAULT = 1000
 
 /*
  * Snapped onto the purchasable range, so a config change can never start the
@@ -63,10 +65,12 @@ export function CreditSlider({ showOwnNumber = false }: CreditSliderProps) {
   const totalMinor = credits * CREDIT_UNIT_PRICE_MINOR
 
   const spring = useSpring(totalMinor, { stiffness: 180, damping: 28 })
+  // Whole pounds while it moves, so no stray piastres flash past.
   const animatedAmount = useTransform(
     spring,
     (value) =>
-      formatMoneyParts(Math.round(value), CREDIT_CURRENCY, locale).amount
+      formatBalanceParts(Math.round(value / 100) * 100, CREDIT_CURRENCY, locale)
+        .amount
   )
 
   useEffect(() => {
@@ -77,12 +81,12 @@ export function CreditSlider({ showOwnNumber = false }: CreditSliderProps) {
     }
   }, [spring, totalMinor, shouldReduceMotion])
 
-  const total = formatMoneyParts(totalMinor, CREDIT_CURRENCY, locale)
+  const total = formatBalanceParts(totalMinor, CREDIT_CURRENCY, locale)
+  const pounds = (value: number) =>
+    formatBalance(value * CREDIT_UNIT_PRICE_MINOR, CREDIT_CURRENCY, locale)
   const range = CREDIT_PURCHASE_MAX - CREDIT_PURCHASE_MIN
   const fill = range > 0 ? ((credits - CREDIT_PURCHASE_MIN) / range) * 100 : 0
-  const creditsLabel = t('slider_value', {
-    count: formatCredits(credits, locale),
-  })
+  const creditsLabel = t('slider_value', { count: pounds(credits) })
   const messages = Math.floor(credits / CREDITS_PER_MESSAGE)
   const ownMessages = Math.floor(credits / OWN_NUMBER_CREDITS_PER_MESSAGE)
   const coverageValues = {
@@ -109,9 +113,9 @@ export function CreditSlider({ showOwnNumber = false }: CreditSliderProps) {
         <p id={labelId} className="text-base font-semibold text-slate-100">
           {t('slider_label')}
         </p>
-        <span className="rounded-full bg-emerald-400/10 px-3 py-1 text-sm font-semibold text-white tabular-nums ring-1 ring-emerald-400/50">
+        <bdi className="rounded-full bg-emerald-400/10 px-3 py-1 text-sm font-semibold text-white tabular-nums ring-1 ring-emerald-400/50">
           {creditsLabel}
-        </span>
+        </bdi>
       </div>
 
       <div dir="ltr" className="mt-6">
@@ -128,24 +132,33 @@ export function CreditSlider({ showOwnNumber = false }: CreditSliderProps) {
           style={{ '--fill': `${fill}%` } as CSSProperties}
         />
         <div className="mt-3 flex justify-between text-xs text-slate-500 tabular-nums">
-          <span>{formatCredits(CREDIT_PURCHASE_MIN, locale)}</span>
-          <span>{formatCredits(CREDIT_PURCHASE_MAX, locale)}</span>
+          <span>{pounds(CREDIT_PURCHASE_MIN)}</span>
+          <span>{pounds(CREDIT_PURCHASE_MAX)}</span>
         </div>
       </div>
 
       <div className="mt-8 flex flex-col gap-4 border-t border-white/10 pt-8 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
         <div>
           <p className="text-sm text-slate-400">{t('total_label')}</p>
-          <p className="mt-1 flex items-baseline gap-2">
-            <motion.span
-              dir="ltr"
-              aria-hidden
-              className="text-3xl font-bold text-white tabular-nums sm:text-4xl"
-            >
-              {animatedAmount}
-            </motion.span>
-            <span aria-hidden className="text-lg text-slate-400">
-              {total.currency}
+          <p className="mt-1 flex">
+            {/* The parts in reading order, kept left to right in RTL too. */}
+            <span dir="ltr" className="inline-flex items-baseline gap-2">
+              {total.currencyFirst && (
+                <span aria-hidden className="text-lg text-slate-400">
+                  {total.currency}
+                </span>
+              )}
+              <motion.span
+                aria-hidden
+                className="text-3xl font-bold text-white tabular-nums sm:text-4xl"
+              >
+                {animatedAmount}
+              </motion.span>
+              {!total.currencyFirst && (
+                <span aria-hidden className="text-lg text-slate-400">
+                  {total.currency}
+                </span>
+              )}
             </span>
           </p>
         </div>
@@ -176,7 +189,7 @@ export function CreditSlider({ showOwnNumber = false }: CreditSliderProps) {
 
         {/* One announcement per settled value, not one per animation frame. */}
         <p className="sr-only" aria-live="polite">
-          {`${creditsLabel} = ${total.amount} ${total.currency}. ${coverageLabel}`}
+          {`${creditsLabel}. ${coverageLabel}`}
         </p>
       </div>
     </div>

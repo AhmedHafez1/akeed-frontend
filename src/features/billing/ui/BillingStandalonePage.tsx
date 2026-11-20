@@ -11,7 +11,6 @@ import { useBillingUsage } from '../domain/useBillingUsage'
 import { useTransactions } from '../domain/useTransactions'
 import { BalanceCard } from './components/BalanceCard'
 import { BillingAlert } from './components/BillingAlert'
-import { CreditModelNoticeBanner } from './components/CreditModelNoticeBanner'
 import { CheckoutSummaryCard } from './components/CheckoutSummaryCard'
 import { RechargePanel } from './components/RechargePanel'
 import { TransactionsCard } from './components/TransactionsCard'
@@ -40,7 +39,7 @@ function PageShell({
 }
 
 /**
- * Billing & credits: the balance and its state, one alert when the balance
+ * Billing & balance: the balance and its state, one alert when the balance
  * needs attention, then the amount to buy beside the order summary. Pay is
  * the page's one primary action.
  */
@@ -91,7 +90,6 @@ export function BillingStandalonePage() {
 
   return (
     <PageShell>
-      <CreditModelNoticeBanner />
       <BalanceCard
         summary={state.summary}
         usage={usage}
@@ -99,10 +97,10 @@ export function BillingStandalonePage() {
       />
       <BillingAlert summary={state.summary} />
       <div className={buyGrid}>
-        <RechargePanel state={state} showOwnNumber={ownNumber.visible} />
+        <RechargePanel state={state} />
         <CheckoutSummaryCard state={state} showOwnNumber={ownNumber.visible} />
       </div>
-      <TransactionsCard history={history} />
+      <TransactionsCard history={history} price={state.summary.price} />
       {ownNumber.visible && (
         <p className="text-ak-caption text-ink-muted text-center">
           <DocsLink article="ownWhatsappNumber" className={akLink}>

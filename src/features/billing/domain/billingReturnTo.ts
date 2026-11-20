@@ -15,30 +15,36 @@ export function isAllowedReturnTo(value: unknown): value is string {
   return typeof value === 'string' && RETURN_TO_PATTERN.test(value)
 }
 
-/** The billing link another screen offers, prefilled with a quantity. */
+/**
+ * The billing link another screen offers, prefilled with an amount of money:
+ * whole pounds, rounded up so the shortfall is covered.
+ */
 export function billingPurchaseHref(options: {
-  credits: number
+  amountMinor: number
   returnTo: string
 }): string {
-  const query = new URLSearchParams({ credits: String(options.credits) })
+  const query = new URLSearchParams({
+    amount: String(Math.max(1, Math.ceil(options.amountMinor / 100))),
+  })
   if (isAllowedReturnTo(options.returnTo))
     query.set('returnTo', options.returnTo)
   return `/billing?${query.toString()}`
 }
 
 /**
- * A requested quantity made purchasable: rounded up onto the step grid and
- * kept inside the server's range, so the merchant never lands on an amount
- * they cannot buy. `null` when nothing usable was asked for.
+ * A requested amount in whole pounds made purchasable: rounded up onto the
+ * step grid and kept inside the range, so the merchant never lands on an
+ * amount they cannot buy. `null` when nothing usable was asked for.
  */
-export function prefilledQuantity(
+export function prefilledAmount(
   raw: string | null,
   range: { min: number; max: number; step: number }
 ): number | null {
   if (!raw || !/^\d{1,7}$/.test(raw)) return null
   const requested = Number(raw)
   if (requested <= 0) return null
-  const onGrid = Math.ceil(requested / range.step) * range.step
+  const stepMinor = Math.round(range.step * 100)
+  const onGrid = (Math.ceil((requested * 100) / stepMinor) * stepMinor) / 100
   return Math.min(range.max, Math.max(range.min, onGrid))
 }
 

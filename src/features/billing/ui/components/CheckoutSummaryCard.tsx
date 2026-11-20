@@ -9,8 +9,16 @@ import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
 import { akButton, akCard } from '@/shared/ui'
 import { purchaseBlock } from '../../domain/balanceState'
-import { formatCredits, formatMoney } from '../../domain/billingFormatters'
-import { coverageRates, messageCoverage } from '../../domain/messageCoverage'
+import {
+  creditsAsMoney,
+  formatCredits,
+  formatMoney,
+} from '../../domain/billingFormatters'
+import {
+  coverageRates,
+  messageCoverage,
+  messagePrices,
+} from '../../domain/messageCoverage'
 import type { useBillingPage } from '../../domain/useBillingPage'
 
 interface CheckoutSummaryCardProps {
@@ -41,14 +49,21 @@ export function CheckoutSummaryCard({
   const totalMinor = state.checkout?.totalMinor ?? state.totalMinor
   const isQuantityValid = !state.quantityError
   const rates = showOwnNumber ? coverageRates(summary.price) : null
+  const akeedMessages = Math.floor(
+    totalMinor / messagePrices(summary.price).akeed
+  )
   const coverage =
-    rates && isQuantityValid ? messageCoverage(state.quantity, rates) : null
+    rates && isQuantityValid ? messageCoverage(totalMinor, rates) : null
   const total = formatMoney(totalMinor, currency, locale)
   const block = purchaseBlock(summary)
-  // Credits bought first settle what is owed, then add to the balance.
-  const balanceAfter = Math.max(
-    0,
-    summary.availableCredits - summary.debtCredits + state.quantity
+  // A top-up first settles what is owed, then adds to the balance.
+  const balanceAfter = creditsAsMoney(
+    Math.max(
+      0,
+      summary.availableCredits - summary.debtCredits + state.quantity
+    ),
+    summary.price,
+    locale
   )
   const checkoutUrl = state.checkout?.checkoutUrl
   const payClass = cn(akButton({ variant: 'primary', size: 'lg' }), 'w-full')
@@ -68,41 +83,21 @@ export function CheckoutSummaryCard({
       <div className="px-4 pb-5 sm:px-6">
         <dl className="text-ak-body">
           <div className="flex items-baseline justify-between gap-3 py-2">
-            <dt className="text-ink-muted">{t('messages')}</dt>
+            <dt className="text-ink-muted">{t('coverage.akeed')}</dt>
             <dd dir="ltr" className="font-semibold tabular-nums">
-              {isQuantityValid ? formatCredits(state.quantity, locale) : '—'}
-            </dd>
-          </div>
-          <div className="flex items-baseline justify-between gap-3 py-2">
-            <dt className="text-ink-muted">{t('unitPrice')}</dt>
-            <dd>
-              <bdi className="tabular-nums">
-                {formatMoney(summary.price.unitPriceMinor, currency, locale)}
-              </bdi>
+              {isQuantityValid ? formatCredits(akeedMessages, locale) : '—'}
             </dd>
           </div>
           {coverage && (
-            <>
-              <div className="flex items-baseline justify-between gap-3 py-2">
-                <dt className="text-ink-muted">{t('coverage.akeed')}</dt>
-                <dd dir="ltr" className="font-semibold tabular-nums">
-                  {t('coverage.approx', {
-                    count: formatCredits(coverage.akeed, locale),
-                  })}
-                </dd>
-              </div>
-              <div className="flex items-baseline justify-between gap-3 py-2">
-                <dt className="text-ink-muted">{t('coverage.own')}</dt>
-                <dd
-                  dir="ltr"
-                  className="text-brand-ink font-semibold tabular-nums"
-                >
-                  {t('coverage.approx', {
-                    count: formatCredits(coverage.ownNumber, locale),
-                  })}
-                </dd>
-              </div>
-            </>
+            <div className="flex items-baseline justify-between gap-3 py-2">
+              <dt className="text-ink-muted">{t('coverage.own')}</dt>
+              <dd
+                dir="ltr"
+                className="text-brand-ink font-semibold tabular-nums"
+              >
+                {formatCredits(coverage.ownNumber, locale)}
+              </dd>
+            </div>
           )}
           <div className="border-line mt-1.5 flex items-baseline justify-between gap-3 border-t pt-3.5">
             <dt className="font-semibold">{t('total')}</dt>
@@ -124,10 +119,10 @@ export function CheckoutSummaryCard({
             />
             <span>
               {t.rich('balanceAfter', {
-                count: formatCredits(balanceAfter, locale),
+                amount: balanceAfter,
                 b: (chunks) => (
-                  <b dir="ltr" className="font-semibold tabular-nums">
-                    {chunks}
+                  <b className="font-semibold tabular-nums">
+                    <bdi>{chunks}</bdi>
                   </b>
                 ),
               })}

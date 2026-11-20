@@ -4,10 +4,10 @@ import type { ReactNode } from 'react'
 import Link from 'next/link'
 import { useLocale, useTranslations } from 'next-intl'
 import { Package, Upload, Wallet } from 'lucide-react'
-import { useBillingSummary } from '@/features/billing'
+import { useBillingSummary, useCreditMoney } from '@/features/billing'
 import { importModalPath } from '@/features/order-imports'
 import { ManualOrderAction } from '@/features/orders'
-import { formatCredits } from '@/shared/lib/money'
+import { formatBalance } from '@/shared/lib/balanceMoney'
 import { withLocale, type SupportedLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
 import { Button, InfoHint, akCard } from '@/shared/ui'
@@ -27,7 +27,15 @@ export function FirstOrderCard({ banner }: FirstOrderCardProps) {
   const tImport = useTranslations('orderImport.entry')
   const locale = useLocale() as SupportedLocale
   const { summary } = useBillingSummary()
+  const money = useCreditMoney()
   const isOutOfCredits = summary?.availableCredits === 0
+  const messagePrice = formatBalance(
+    summary?.price.akeedMessagePriceMinor ??
+      summary?.price.messagePriceMinor ??
+      money.toMinor(2),
+    money.currency,
+    locale
+  )
 
   return (
     <section
@@ -40,7 +48,10 @@ export function FirstOrderCard({ banner }: FirstOrderCardProps) {
         <h2 id="first-order-title" className="text-ink text-h3 font-bold">
           {t('title')}
         </h2>
-        <InfoHint label={t('title')} content={t('subtitle')} />
+        <InfoHint
+          label={t('title')}
+          content={t('subtitle', { price: messagePrice })}
+        />
       </header>
 
       {isOutOfCredits ? (
@@ -55,9 +66,7 @@ export function FirstOrderCard({ banner }: FirstOrderCardProps) {
             />
             <div className="space-y-0.5">
               <p className="text-ink font-semibold">
-                {t('zeroBalance.title', {
-                  count: formatCredits(0, locale),
-                })}
+                {t('zeroBalance.title', { count: money.format(0) })}
               </p>
               <p className="text-ink-muted text-sm">{t('zeroBalance.body')}</p>
             </div>

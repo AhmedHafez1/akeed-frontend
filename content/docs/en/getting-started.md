@@ -14,8 +14,8 @@ Akeed works in three ways. Use this guide when you are setting it up for the fir
 | If you… | Use | How orders arrive | How you pay |
 | --- | --- | --- | --- |
 | Have a Shopify store | [Path A: Shopify](#path-a-shopify) | Automatically from your store. | A monthly plan billed by Shopify. |
-| Have a WooCommerce or EasyOrders store | [Connect WooCommerce](/docs/woocommerce) or [Connect EasyOrders](/docs/easyorders) | Automatically from your store. | Credits, bought through Paymob. |
-| Sell anywhere else, or work from a spreadsheet | [Path B: Your own store](#path-b-your-own-store-no-shopify) | You add them one by one, import a file, or send them from your own server. | Credits, bought through Paymob. |
+| Have a WooCommerce or EasyOrders store | [Connect WooCommerce](/docs/woocommerce) or [Connect EasyOrders](/docs/easyorders) | Automatically from your store. | A prepaid balance, topped up through Paymob. |
+| Sell anywhere else, or work from a spreadsheet | [Path B: Your own store](#path-b-your-own-store-no-shopify) | You add them one by one, import a file, or send them from your own server. | A prepaid balance, topped up through Paymob. |
 
 > [!INFO]
 > Akeed is designed for COD order confirmation. It does not send confirmation messages for online-paid orders.
@@ -111,12 +111,12 @@ Akeed sends a free test confirmation to your own number. Check that it arrives a
 - **One order:** use **Verify order** on the dashboard.
 - **Many orders:** use **Import from file** to bring in a CSV or Excel file. See [Bulk Order Import](/docs/bulk-order-import).
 
-### Step 5: Keep Credits Available
+### Step 5: Keep Your Balance Topped Up
 
-You start with 60 free credits, enough for 30 WhatsApp messages. 1 credit is EGP 1, each WhatsApp message uses 2 credits, and a follow-up uses 2 more. Open **Billing & credits** to buy more through Paymob with a card or Vodafone Cash.
+You start with 100 free messages. After that, each WhatsApp message from Akeed's number costs EGP 1, and a follow-up is another message. Open **Billing & balance** to top up through Paymob with a card or Vodafone Cash.
 
 > [!WARNING]
-> When your credits run out, new confirmations stop until you buy more.
+> When your balance runs out, new confirmations stop until you top up.
 
 ## Common Mistakes
 
@@ -124,7 +124,7 @@ You start with 60 free credits, enough for 30 WhatsApp messages. 1 credit is EGP
 | --- | --- |
 | Turning off auto-confirmation by accident | Keep auto-confirmation enabled unless you want to pause all new COD confirmations. |
 | Shipping before the customer responds | Wait for a confirmed status whenever possible. |
-| Ignoring plan usage or credit balance | Watch your usage bar (Shopify) or your credit balance (standalone) so sends do not stop unexpectedly. |
+| Ignoring plan usage or balance | Watch your usage bar (Shopify) or your balance (standalone) so sends do not stop unexpectedly. |
 | Setting very long delays | Keep first-send and follow-up delays practical for your fulfillment workflow. |
 
 ## Troubleshooting
@@ -139,7 +139,7 @@ Make sure the phone number is valid and includes the country code. If the issue 
 
 ### New sends stopped
 
-On Shopify, check your plan usage. If your included confirmations are used up, upgrade your plan or wait for the next billing period. On a standalone account, check your credit balance and buy more credits if it is empty.
+On Shopify, check your plan usage. If your included confirmations are used up, upgrade your plan or wait for the next billing period. On a standalone account, check your balance and top up if it is empty.
 
 ## FAQ
 

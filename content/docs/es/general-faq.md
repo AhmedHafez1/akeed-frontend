@@ -1,6 +1,6 @@
 ---
 title: Preguntas frecuentes generales
-description: Respuestas rápidas a las preguntas más comunes de los comerciantes sobre configuración, importación de pedidos, mensajes, planes, créditos y soporte.
+description: Respuestas rápidas a las preguntas más comunes de los comerciantes sobre configuración, importación de pedidos, mensajes, planes, precios y soporte.
 order: 12
 slug: general-faq
 ---
@@ -57,29 +57,29 @@ El pedido queda sin confirmar, y tu equipo puede retenerlo, hacer seguimiento u 
 
 No. El flujo principal se centra en la verificación de pedidos contra entrega.
 
-## Planes, créditos y límites
+## Planes, precios y límites
 
 ### ¿Cómo se paga Akeed?
 
-Las tiendas Shopify se suscriben a un plan mensual que se cobra mediante Shopify. Las cuentas independientes pagan por lo que usan con créditos, comprados mediante Paymob con tarjeta o Vodafone Cash. Consulta [Usar Akeed sin Shopify](/docs/standalone-platform).
+Las tiendas Shopify se suscriben a un plan mensual que se cobra mediante Shopify. Las cuentas independientes pagan por mensaje con saldo prepago, que recargan mediante Paymob con tarjeta o Vodafone Cash. Consulta [Usar Akeed sin Shopify](/docs/standalone-platform).
 
-### ¿Cómo se cuentan los créditos?
+### ¿Cuánto cuesta un mensaje?
 
-1 crédito equivale a EGP 1, y cada mensaje de WhatsApp enviado a un cliente usa 2 créditos. Un recordatorio a un cliente que no ha respondido usa 2 créditos más. Si WhatsApp no acepta un mensaje, sus créditos se devuelven automáticamente.
+Cada mensaje de WhatsApp cuesta 1 EGP desde el número de Akeed o 0,5 EGP desde tu propio número de WhatsApp Business. Un recordatorio a un cliente que no responde cuenta como otro mensaje. Si WhatsApp no acepta un mensaje, su importe se devuelve automáticamente.
 
-### ¿Qué pasa al llegar al límite mensual de confirmaciones o al quedarse sin créditos?
+### ¿Qué pasa al llegar al límite mensual de confirmaciones o al quedarse sin saldo?
 
-Las confirmaciones nuevas se pausan hasta que tu ciclo se renueve, mejores el plan o compres más créditos. En un plan de pago de Shopify también puedes renovarlo ahora, lo que inicia un nuevo periodo de 30 días con la asignación completa.
+Las confirmaciones nuevas se pausan hasta que se renueve tu ciclo, mejores el plan o recargues el saldo. También puedes renovar un plan de pago de Shopify ahora para iniciar un periodo de 30 días con la cuota completa.
 
 ### ¿Hay cargos adicionales automáticos después del límite?
 
-No. Puedes elegir mejorar tu plan o comprar créditos, pero el uso no continúa en silencio con cargos inesperados.
+No. Puedes elegir mejorar tu plan o recargar tu saldo, pero el uso no continúa en silencio con cargos inesperados.
 
 ## Solución de problemas y soporte
 
 ### ¿Por dónde empezar si los mensajes no se envían?
 
-Revisa primero el estado de la confirmación automática, el uso del plan o el saldo de créditos, y el formato de los números de teléfono. Luego consulta [Solución de problemas](/docs/troubleshooting).
+Revisa primero el estado de la confirmación automática, el uso del plan o el saldo, y el formato de los números de teléfono. Luego consulta [Solución de problemas](/docs/troubleshooting).
 
 ### ¿Cuándo conviene contactar al soporte?
 

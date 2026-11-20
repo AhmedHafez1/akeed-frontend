@@ -14,7 +14,7 @@ Servez-vous-en lorsque :
 - des commandes ne sont pas confirmées,
 - des messages sont retardés ou ne partent pas,
 - trop de commandes passent en « Sans réponse »,
-- l’utilisation du forfait ou un solde de crédits vide bloque les nouveaux envois,
+- l’utilisation du forfait ou un solde vide bloque les nouveaux envois,
 - un import de fichier ne se comporte pas comme prévu.
 
 ## Liste de vérification rapide
@@ -23,7 +23,7 @@ Avant un dépannage approfondi, vérifiez d’abord ces points :
 
 1. La confirmation automatique est activée.
 2. La commande est éligible au COD.
-3. L’utilisation du forfait n’a pas atteint la limite, ou votre solde de crédits (comptes autonomes) n’est pas vide.
+3. L’utilisation du forfait n’a pas atteint la limite, ou votre solde (comptes autonomes) n’est pas vide.
 4. Les heures de silence ne retardent pas les envois.
 5. Le numéro de téléphone comporte l’indicatif du pays.
 
@@ -54,7 +54,7 @@ Ces cinq vérifications résolvent la plupart des problèmes.
 
 ### Que faire
 
-1. Si l’utilisation est proche de la limite ou l’a atteinte, changez de forfait ou attendez le prochain cycle. Sur un compte autonome, achetez des crédits dans **Facturation et crédits**.
+1. Si l’utilisation approche de la limite ou l’a atteinte, changez de forfait ou attendez le prochain cycle. Sur un compte autonome, rechargez votre solde dans **Facturation et solde**.
 2. Si un statut d’échec apparaît, vérifiez la qualité du numéro du client.
 3. En cas de retard, vérifiez les heures de silence et le fuseau horaire.
 
@@ -139,14 +139,14 @@ Ces cinq vérifications résolvent la plupart des problèmes.
 
 - Avez-vous appuyé sur **Envoyer** après l’aperçu ? L’import seul n’envoie rien.
 - Les commandes sont-elles toujours **En attente de démarrage** ? Elles doivent être démarrées dans les 24 heures.
-- L’import est-il en pause parce que les crédits sont épuisés ?
+- L’import est-il en pause parce que le solde est épuisé ?
 - Certaines lignes ont-elles été ignorées, car invalides, en double ou exclues ?
 
 ### Que faire
 
 1. Ouvrez l’écran d’import et lisez la raison indiquée à côté de chaque groupe ignoré.
-2. Si **Envoyer** est bloqué, achetez des crédits ou activez la confirmation automatique, puis appuyez de nouveau sur **Envoyer**.
-3. Si l’import est en pause, achetez des crédits et choisissez **Reprendre**.
+2. Si **Envoyer** est bloqué, rechargez votre solde ou activez la confirmation automatique, puis appuyez de nouveau sur **Envoyer**.
+3. Si l’import est en pause, rechargez votre solde et choisissez **Reprendre**.
 4. Si le délai est dépassé ou si l’import a expiré, envoyez de nouveau le fichier. Les commandes dotées d’un numéro de commande et déjà importées sont reconnues et ne sont pas dupliquées, et les commandes ressemblantes vous sont signalées pour examen.
 
 Pour les problèmes de fichier et de colonnes, consultez le tableau de dépannage dans [Import de commandes en masse](/docs/bulk-order-import).
@@ -157,7 +157,7 @@ Pour les problèmes de fichier et de colonnes, consultez le tableau de dépannag
 
 - L’état actuel de la facturation dans les paramètres.
 - Si le changement de forfait a été approuvé dans Shopify (boutiques Shopify).
-- Si votre paiement Paymob a abouti et si votre solde de crédits a été mis à jour (comptes autonomes).
+- Si votre paiement Paymob a abouti et si votre solde a été mis à jour (comptes autonomes).
 - Le niveau d’utilisation par rapport à la limite incluse.
 
 ### Que faire
@@ -165,7 +165,7 @@ Pour les problèmes de fichier et de colonnes, consultez le tableau de dépannag
 1. Relancez le changement de forfait si l’approbation n’a pas été finalisée.
 2. Conservez le forfait actif actuel si le changement a été refusé.
 3. Changez de forfait avant d’atteindre la limite stricte d’utilisation en période chargée.
-4. Sur un compte autonome, si un paiement apparaît en attente, patientez un instant et consultez **Facturation et crédits** avant de payer de nouveau.
+4. Sur un compte autonome, si un paiement apparaît en attente, patientez un instant et consultez **Facturation et solde** avant de payer de nouveau.
 
 ## Quand contacter l’assistance
 
@@ -173,7 +173,7 @@ Contactez l’assistance lorsque :
 
 - le problème persiste après la liste de vérification et les étapes propres au problème,
 - le message de test échoue lui aussi à répétition,
-- l’état de la facturation semble incohérent avec l’approbation Shopify, ou un paiement Paymob n’apparaît pas dans votre solde de crédits.
+- l’état de la facturation semble incohérent avec l’approbation Shopify, ou un paiement Paymob n’apparaît pas dans votre solde.
 
 Lorsque vous contactez l’assistance, indiquez :
 

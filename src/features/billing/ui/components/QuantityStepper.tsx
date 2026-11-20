@@ -55,7 +55,7 @@ export function QuantityStepper({
         id={id}
         dir="ltr"
         type="text"
-        inputMode="numeric"
+        inputMode="decimal"
         autoComplete="off"
         value={value}
         onChange={(event) => onChange(event.target.value)}

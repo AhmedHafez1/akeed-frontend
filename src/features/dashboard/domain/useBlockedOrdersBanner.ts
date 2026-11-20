@@ -2,6 +2,11 @@
 
 import { useTranslations } from 'next-intl'
 import { PLAN_NAME_KEYS } from '@/features/billing'
+import {
+  CREDIT_CURRENCY,
+  CREDIT_UNIT_PRICE_MINOR,
+} from '@/shared/config/pricing'
+import { formatBalance } from '@/shared/lib/balanceMoney'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { getFormatLocale } from '@/shared/lib/locale'
 import type { CapacityAction, CapacitySummary } from '../model/dashboard.model'
@@ -78,10 +83,20 @@ export function useBlockedOrdersBanner(
 
   return {
     title: t('title', { count: number.format(capacity.blocked_count) }),
-    remaining: t(
-      capacity.mode === 'credits' ? 'remaining.credits' : 'remaining.plan',
-      { remaining: number.format(Math.max(capacity.remaining, 0)) }
-    ),
+    remaining:
+      capacity.mode === 'credits'
+        ? t('remaining.credits', {
+            // From the pricing config, which matches the server's price, so
+            // the embedded skin never fetches a prepaid balance.
+            remaining: formatBalance(
+              Math.max(capacity.remaining, 0) * CREDIT_UNIT_PRICE_MINOR,
+              CREDIT_CURRENCY,
+              locale
+            ),
+          })
+        : t('remaining.plan', {
+            remaining: number.format(Math.max(capacity.remaining, 0)),
+          }),
     body: date ? t(bodyKey.dated, { date }) : t(bodyKey.undated),
     note: t('note'),
     cta:

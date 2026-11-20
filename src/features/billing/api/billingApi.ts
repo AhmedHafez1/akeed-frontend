@@ -107,21 +107,6 @@ export function fetchPurchases(
   )
 }
 
-export interface CreditModelNotice {
-  visible: boolean
-  canDismiss: boolean
-}
-
-export function fetchCreditModelNotice() {
-  return billingRequest<CreditModelNotice>('/api/billing/credit-model-notice')
-}
-
-export function dismissCreditModelNotice() {
-  return billingRequest<void>('/api/billing/credit-model-notice/dismiss', {
-    method: 'POST',
-  })
-}
-
 export function fetchPurchase(reference: string) {
   return billingRequest<PurchaseDetail>(
     `/api/billing/purchases/${encodeURIComponent(reference)}`

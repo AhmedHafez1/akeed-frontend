@@ -9,10 +9,18 @@ import { useDashboardOverview } from '@/features/dashboard/domain/useDashboardOv
 import { useStandaloneFirstRun } from '@/features/dashboard/domain/useStandaloneFirstRun'
 import { DashboardStandaloneSkin } from '@/features/dashboard/skins/standalone/DashboardStandaloneSkin'
 
-vi.mock('@/features/billing', () => ({
-  CreditModelNoticeBanner: () => null,
-  useBillingSummary: vi.fn(),
-}))
+vi.mock('@/features/billing', async () => {
+  const { formatBalance } = await import('@/shared/lib/balanceMoney')
+  return {
+    useBillingSummary: vi.fn(),
+    useCreditMoney: () => ({
+      unitPriceMinor: 50,
+      currency: 'EGP',
+      toMinor: (credits: number) => credits * 50,
+      format: (credits: number) => formatBalance(credits * 50, 'EGP', 'ar'),
+    }),
+  }
+})
 vi.mock('@/features/orders', () => ({
   ManualOrderAction: () => <button type="button">تأكيد طلب</button>,
 }))
@@ -44,7 +52,15 @@ function mockFirstRun(
 
 function mockCredits(availableCredits: number) {
   vi.mocked(useBillingSummary).mockReturnValue({
-    summary: { availableCredits },
+    summary: {
+      availableCredits,
+      price: {
+        unitPriceMinor: 50,
+        messagePriceMinor: 100,
+        creditsPerMessage: 2,
+        currency: 'EGP',
+      },
+    },
     isLoading: false,
     error: null,
     refresh: vi.fn(),
@@ -141,7 +157,7 @@ describe('Standalone dashboard first run', () => {
     mockCredits(0)
     renderSkin(skin)
 
-    expect(screen.getByText('رصيدك 0 رصيد')).toBeTruthy()
+    expect(screen.getByText('رصيدك 0 ج.م')).toBeTruthy()
     expect(
       screen.getByRole('link', { name: 'شحن الرصيد' }).getAttribute('href')
     ).toBe('/ar/billing')

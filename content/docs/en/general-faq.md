@@ -1,6 +1,6 @@
 ---
 title: General FAQ
-description: Quick answers to common merchant questions about setup, importing orders, messaging, plans, credits, and support.
+description: Quick answers to common merchant questions about setup, importing orders, messaging, plans, prices, and support.
 order: 12
 slug: general-faq
 ---
@@ -57,29 +57,29 @@ The order stays unconfirmed, and your team can hold it, follow up, or skip shipp
 
 No. The core flow focuses on COD order verification.
 
-## Plans, Credits and Limits
+## Plans, Prices and Limits
 
 ### How do I pay for Akeed?
 
-Shopify stores subscribe to a monthly plan billed through Shopify. Standalone accounts pay for what they use with credits, bought through Paymob with a card or Vodafone Cash. See [Using Akeed Without Shopify](/docs/standalone-platform).
+Shopify stores subscribe to a monthly plan billed through Shopify. Standalone accounts pay per message from a prepaid balance, topped up through Paymob with a card or Vodafone Cash. See [Using Akeed Without Shopify](/docs/standalone-platform).
 
-### How are credits counted?
+### How much does a message cost?
 
-1 credit is EGP 1, and each WhatsApp message sent to a customer uses 2 credits. A follow-up to a customer who has not replied uses 2 more credits. If WhatsApp does not accept a message, its credits are returned automatically.
+Each WhatsApp message sent to a customer costs EGP 1 from Akeed's number, or EGP 0.5 from your own WhatsApp Business number. A follow-up to a customer who has not replied is another message. If WhatsApp does not accept a message, its cost is returned automatically.
 
-### What happens when I reach my monthly confirmation limit or run out of credits?
+### What happens when I reach my monthly confirmation limit or my balance runs out?
 
-New confirmations pause until your cycle renews, you upgrade the plan, or you buy more credits. On a paid Shopify plan you can also renew it now, which starts a new 30-day period with the full allowance.
+New confirmations pause until your cycle renews, you upgrade the plan, or you top up. On a paid Shopify plan you can also renew it now, which starts a new 30-day period with the full allowance.
 
 ### Are there automatic extra charges after the limit?
 
-No. You can choose to upgrade or buy credits, but usage does not silently continue with surprise charges.
+No. You can choose to upgrade or top up, but usage does not silently continue with surprise charges.
 
 ## Troubleshooting and Support
 
 ### Where should I start if messages are not sent?
 
-Check auto-confirmation status, plan usage or credit balance, and phone number formatting first. Then review [Troubleshooting](/en/docs/troubleshooting).
+Check auto-confirmation status, plan usage or balance, and phone number formatting first. Then review [Troubleshooting](/en/docs/troubleshooting).
 
 ### When should I contact support?
 

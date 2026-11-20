@@ -121,7 +121,7 @@ Yes, from your order source in Settings.
 
 ### How do I pay?
 
-With credits, like every account that does not use Shopify. See [Using Akeed Without Shopify](/docs/standalone-platform#how-credits-work).
+With a prepaid balance, like every account that does not use Shopify. See [Using Akeed Without Shopify](/docs/standalone-platform#how-your-balance-works).
 
 ## Related Guides
 

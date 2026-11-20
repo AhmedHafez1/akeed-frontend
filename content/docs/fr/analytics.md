@@ -23,7 +23,7 @@ Tous les chiffres n’ont pas la même valeur opérationnelle. Concentrez-vous d
 | Taux de réponse | Montre si les clients réagissent à vos messages. |
 | Volume sans réponse | Signale d’éventuels problèmes de timing ou d’adéquation du message. |
 | Envois échoués | Met en évidence des problèmes de remise ou de configuration. |
-| Progression de l’utilisation | Vous évite d’atteindre la limite de votre forfait ou d’épuiser vos crédits sans prévenir. |
+| Progression de l’utilisation | Vous évite d’atteindre la limite de votre forfait ou d’épuiser votre solde sans prévenir. |
 
 ## Définition des indicateurs (côté marchand)
 
@@ -57,12 +57,12 @@ Suivez-les chaque jour. Même un petit pic d’échecs peut réduire discrèteme
 
 ### Utilisation (utilisé / limite)
 
-Sur Shopify, cet indicateur montre votre progression par rapport aux confirmations incluses dans votre forfait. Sur un compte autonome, surveillez plutôt votre solde de crédits.
+Sur Shopify, cet indicateur montre votre progression par rapport aux confirmations incluses dans votre forfait. Sur un compte autonome, surveillez plutôt votre solde.
 
 Considérez-le comme un signal opérationnel, pas seulement comme une information de facturation.
 
 > [!WARNING]
-> Si l’utilisation atteint votre limite ou si vos crédits sont épuisés, les nouvelles confirmations peuvent s’arrêter jusqu’au renouvellement, à un changement de forfait ou à un achat de crédits.
+> Si l’utilisation atteint votre limite ou si votre solde est épuisé, les nouvelles confirmations peuvent s’arrêter jusqu’au renouvellement, à un changement de forfait ou à un recharge du solde.
 
 ## Comment lire les tendances (chaque semaine)
 
@@ -83,7 +83,7 @@ N’optimisez pas à partir d’une seule journée.
 | Baisse du taux de réponse | Recul de plus de 10 % par rapport à la période précédente | Revoyez le ton du modèle et le moment de l’envoi. |
 | Hausse des commandes sans réponse | Hausse de plus de 15 % d’une semaine à l’autre | Activez ou ajustez la relance et les délais d’escalade. |
 | Envois échoués | Pic soudain | Vérifiez la qualité des numéros et les paramètres. |
-| Pression sur l’utilisation | 80 % et 95 % de votre forfait, ou un solde de crédits bas | Changez de forfait ou achetez des crédits avant d’atteindre la limite. |
+| Pression sur l’utilisation | 80 % et 95 % de votre forfait, ou un solde bas | Changez de forfait ou rechargez votre solde avant d’atteindre la limite. |
 
 ## Erreurs fréquentes
 
@@ -115,7 +115,7 @@ N’optimisez pas à partir d’une seule journée.
 ### Utilisation proche de la limite avec de bonnes performances
 
 - Bon problème : la demande se porte bien.
-- Changez de forfait ou achetez des crédits avant l’arrêt des envois.
+- Changez de forfait ou rechargez votre solde avant l’arrêt des envois.
 
 ## FAQ
 

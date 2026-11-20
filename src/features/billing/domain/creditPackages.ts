@@ -13,6 +13,7 @@ import type { CreditSummary } from './billing.types'
 const PRESET_CREDITS = CREDIT_PRESETS
 
 export interface CreditPackage {
+  /** Displayed credits, the quantity the purchase API takes. */
   credits: number
   totalMinor: number
 }

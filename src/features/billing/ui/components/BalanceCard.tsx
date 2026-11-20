@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { creditsToMinor, formatBalanceParts } from '@/shared/lib/balanceMoney'
 import { cn } from '@/shared/lib/utils'
 import { InfoHint, akCard, akPill, Skeleton } from '@/shared/ui'
 import {
@@ -17,11 +18,13 @@ import {
   type BalanceTone,
 } from '../../domain/balanceState'
 import {
+  creditsAsMoney,
   formatCredits,
   formatMoney,
   formatShortDate,
 } from '../../domain/billingFormatters'
 import type { CreditSummary } from '../../domain/billing.types'
+import { messagePrices } from '../../domain/messageCoverage'
 import { runwayDays } from '../../domain/usageInsights'
 import type { BillingUsage } from '../../domain/useBillingUsage'
 import { DailyUsageBars } from './DailyUsageBars'
@@ -73,8 +76,21 @@ export function BalanceCard({
   showSenders = false,
 }: BalanceCardProps) {
   const t = useTranslations('billing.balance')
-  const tRates = useTranslations('whatsappConnect.tab.costs')
   const { locale } = useLocaleInfo()
+  const { price } = summary
+  const money = (credits: number) => creditsAsMoney(credits, price, locale)
+  const prices = messagePrices(price)
+  const hero = formatBalanceParts(
+    summary.balanceMinor ??
+      creditsToMinor(summary.availableCredits, price.unitPriceMinor),
+    price.currency,
+    locale
+  )
+  const heroCurrency = (
+    <span className="text-ink-muted text-[0.9375rem] font-semibold">
+      {hero.currency}
+    </span>
+  )
   const headingId = useId()
   const { state, tone } = resolveBalanceState(summary)
   const StateIcon = STATE_ICON[state]
@@ -82,7 +98,11 @@ export function BalanceCard({
   const ready = usage.status === 'ready' ? usage : null
   const senders =
     showSenders || (ready !== null && ready.bySender.ownNumber > 0)
-  const ownRate = summary.price.ownNumberCreditsPerMessage
+  /** Credits one message used from each number, to count messages sent. */
+  const perMessage = {
+    akeed: price.creditsPerMessage,
+    ownNumber: price.ownNumberCreditsPerMessage ?? 1,
+  }
 
   // A runway only means something while messages can still go out.
   const days =
@@ -118,15 +138,16 @@ export function BalanceCard({
           >
             {t('available')}
           </h2>
-          <p className="flex flex-wrap items-baseline gap-2.5">
-            <span
-              dir="ltr"
-              className={cn('text-ak-hero tabular-nums', TONE_TEXT[tone])}
-            >
-              {formatCredits(summary.availableCredits, locale)}
-            </span>
-            <span className="text-ink-muted text-[0.9375rem] font-semibold">
-              {t('unit')}
+          <p className="flex">
+            {/* The parts in reading order, kept left to right in RTL too. */}
+            <span dir="ltr" className="inline-flex items-baseline gap-2">
+              {hero.currencyFirst && heroCurrency}
+              <span
+                className={cn('text-ak-hero tabular-nums', TONE_TEXT[tone])}
+              >
+                {hero.amount}
+              </span>
+              {!hero.currencyFirst && heroCurrency}
             </span>
           </p>
           <div className="flex flex-wrap items-center gap-2">
@@ -149,6 +170,7 @@ export function BalanceCard({
         )}
         {ready && (
           <DailyUsageBars
+            price={price}
             daily={ready.daily}
             split={senders ? ready.dailyBySender : undefined}
           />
@@ -158,9 +180,7 @@ export function BalanceCard({
       <dl className="border-line divide-line grid divide-y border-t sm:auto-cols-fr sm:grid-flow-col sm:divide-x sm:divide-y-0">
         <Stat label={t('usedThisMonth')}>
           {ready ? (
-            <span dir="ltr" className="tabular-nums">
-              {formatCredits(ready.usedThisMonth, locale)}
-            </span>
+            <bdi className="tabular-nums">{money(ready.usedThisMonth)}</bdi>
           ) : (
             usagePlaceholder
           )}
@@ -170,9 +190,13 @@ export function BalanceCard({
             usagePlaceholder
           ) : ready.lastPurchase ? (
             <span className="flex flex-wrap items-baseline gap-x-1.5">
-              <span dir="ltr" className="tabular-nums">
-                {formatCredits(ready.lastPurchase.quantity, locale)}
-              </span>
+              <bdi className="tabular-nums">
+                {formatMoney(
+                  ready.lastPurchase.totalMinor,
+                  ready.lastPurchase.currency,
+                  locale
+                )}
+              </bdi>
               <span className="text-ak-caption text-ink-muted font-normal">
                 · {formatShortDate(ready.lastPurchase.createdAt, locale)}
               </span>
@@ -184,18 +208,27 @@ export function BalanceCard({
           )}
         </Stat>
         <Stat label={t('unitPrice')}>
-          <bdi className="tabular-nums">
-            {formatMoney(
-              summary.price.unitPriceMinor,
-              summary.price.currency,
-              locale
+          <span className="flex flex-wrap items-baseline gap-x-1.5">
+            <bdi className="tabular-nums">
+              {formatMoney(prices.akeed, price.currency, locale)}
+            </bdi>
+            {senders && prices.ownNumber !== null && (
+              <span className="text-ak-caption text-ink-muted font-normal">
+                ·{' '}
+                {t.rich('ownNumberPrice', {
+                  price: formatMoney(prices.ownNumber, price.currency, locale),
+                  amount: (chunks) => (
+                    <bdi className="tabular-nums">{chunks}</bdi>
+                  ),
+                })}
+              </span>
             )}
-          </bdi>
+          </span>
         </Stat>
       </dl>
 
       {senders && (
-        <div className="border-line grid gap-5 border-t px-5 py-4 sm:grid-cols-2 sm:px-6">
+        <div className="border-line border-t px-5 py-4 sm:px-6">
           <div className="space-y-2">
             <h3 className="text-ak-caption text-ink-muted flex items-center gap-1">
               {t('senders.usedHeading')}
@@ -220,11 +253,21 @@ export function BalanceCard({
                   <dd className="text-ink text-[1.0625rem] font-semibold">
                     {ready ? (
                       <>
-                        <span dir="ltr" className="tabular-nums">
-                          {formatCredits(ready.bySender[sender], locale)}
-                        </span>{' '}
+                        <bdi className="tabular-nums">
+                          {money(ready.bySender[sender])}
+                        </bdi>{' '}
                         <span className="text-ak-caption text-ink-muted font-normal">
-                          {t('unit')}
+                          {t('senders.messages', {
+                            count: Math.floor(
+                              ready.bySender[sender] / perMessage[sender]
+                            ),
+                            formatted: formatCredits(
+                              Math.floor(
+                                ready.bySender[sender] / perMessage[sender]
+                              ),
+                              locale
+                            ),
+                          })}
                         </span>
                       </>
                     ) : (
@@ -235,37 +278,6 @@ export function BalanceCard({
               ))}
             </dl>
           </div>
-          {ownRate !== undefined && (
-            <div className="space-y-2">
-              <h3 className="text-ak-caption text-ink-muted flex items-center gap-1">
-                {t('senders.ratesHeading')}
-                <InfoHint
-                  label={t('senders.ratesHeading')}
-                  content={tRates('creditNote')}
-                />
-              </h3>
-              <dl className="flex flex-wrap gap-x-8 gap-y-2">
-                <div className="flex flex-col gap-0.5">
-                  <dt className="text-ak-caption text-ink-muted">
-                    {t('senders.ownNumber')}
-                  </dt>
-                  <dd className="text-ink text-[1.0625rem] font-semibold">
-                    {tRates('credits', { count: ownRate })}
-                  </dd>
-                </div>
-                <div className="flex flex-col gap-0.5">
-                  <dt className="text-ak-caption text-ink-muted">
-                    {t('senders.akeed')}
-                  </dt>
-                  <dd className="text-ink text-[1.0625rem] font-semibold">
-                    {tRates('credits', {
-                      count: summary.price.creditsPerMessage,
-                    })}
-                  </dd>
-                </div>
-              </dl>
-            </div>
-          )}
         </div>
       )}
     </section>

@@ -2,22 +2,19 @@
 
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { formatBalanceParts } from '@/shared/lib/balanceMoney'
 import { cn } from '@/shared/lib/utils'
 import { akChoiceSurface, AkChoiceGroup } from '@/shared/ui'
-import { formatCredits, formatMoney } from '../../domain/billingFormatters'
+import { formatCredits } from '../../domain/billingFormatters'
 import type { CreditPackage } from '../../domain/creditPackages'
-import {
-  messageCoverage,
-  type CoverageRates,
-} from '../../domain/messageCoverage'
 
 interface CreditPackageTilesProps {
   packages: CreditPackage[]
   selected: number | null
   currency: string
+  /** One message from Akeed's number, to say what each amount pays for. */
+  akeedMessagePriceMinor: number
   disabled: boolean
-  /** Both per-message rates while the own number is offered; null hides coverage. */
-  coverageRates?: CoverageRates | null
   onSelect: (credits: number) => void
 }
 
@@ -29,8 +26,8 @@ export function CreditPackageTiles({
   packages,
   selected,
   currency,
+  akeedMessagePriceMinor,
   disabled,
-  coverageRates = null,
   onSelect,
 }: CreditPackageTilesProps) {
   const t = useTranslations('billing.purchase')
@@ -41,13 +38,13 @@ export function CreditPackageTiles({
   return (
     <AkChoiceGroup
       aria-label={t('chooseAmount')}
-      className="grid-cols-2 gap-3 lg:grid-cols-4"
+      className="grid-cols-2 gap-3 @[39rem]:grid-cols-4"
     >
       {packages.map((item, index) => {
         const checked = item.credits === selected
         const isTabStop = checked || (selected === null && index === 0)
-        const coverage =
-          coverageRates && messageCoverage(item.credits, coverageRates)
+        const amount = formatBalanceParts(item.totalMinor, currency, locale)
+        const messages = Math.floor(item.totalMinor / akeedMessagePriceMinor)
         return (
           <button
             key={item.credits}
@@ -73,51 +70,28 @@ export function CreditPackageTiles({
             </span>
             <span
               dir="ltr"
-              className="text-[1.375rem] leading-7.5 font-semibold tabular-nums"
+              className="inline-flex items-baseline gap-1.5 tabular-nums"
             >
-              {formatCredits(item.credits, locale)}
+              {amount.currencyFirst && (
+                <span className="text-ak-caption text-ink-muted font-semibold">
+                  {amount.currency}
+                </span>
+              )}
+              <span className="text-[1.375rem] leading-7.5 font-semibold">
+                {amount.amount}
+              </span>
+              {!amount.currencyFirst && (
+                <span className="text-ak-caption text-ink-muted font-semibold">
+                  {amount.currency}
+                </span>
+              )}
             </span>
-            <span className="text-ak-caption text-ink-muted">{t('unit')}</span>
-            <bdi className="text-ak-caption mt-2 font-semibold tabular-nums">
-              {formatMoney(item.totalMinor, currency, locale)}
-            </bdi>
-            {coverage && (
-              <>
-                <span
-                  aria-hidden="true"
-                  className="border-line text-ink-muted mt-2 flex w-full flex-col border-t pt-2 text-xs leading-[1.125rem]"
-                >
-                  <span className="flex justify-between gap-1.5">
-                    <span>{t('coverage.akeedShort')}</span>
-                    <b
-                      dir="ltr"
-                      className="text-ink font-semibold whitespace-nowrap tabular-nums"
-                    >
-                      {t('coverage.approx', {
-                        count: formatCredits(coverage.akeed, locale),
-                      })}
-                    </b>
-                  </span>
-                  <span className="text-brand-ink flex justify-between gap-1.5">
-                    <span>{t('coverage.ownShort')}</span>
-                    <b
-                      dir="ltr"
-                      className="font-semibold whitespace-nowrap tabular-nums"
-                    >
-                      {t('coverage.approx', {
-                        count: formatCredits(coverage.ownNumber, locale),
-                      })}
-                    </b>
-                  </span>
-                </span>
-                <span className="sr-only">
-                  {t('coverage.tileLabel', {
-                    akeed: formatCredits(coverage.akeed, locale),
-                    own: formatCredits(coverage.ownNumber, locale),
-                  })}
-                </span>
-              </>
-            )}
+            <span className="text-ak-caption text-ink-muted">
+              {t('tileMessages', {
+                count: messages,
+                formatted: formatCredits(messages, locale),
+              })}
+            </span>
           </button>
         )
       })}

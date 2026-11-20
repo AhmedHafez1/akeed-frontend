@@ -1,6 +1,6 @@
 ---
 title: Genel SSS
-description: Kurulum, sipariş içe aktarma, mesajlaşma, planlar, krediler ve destek hakkında satıcıların sık sorduğu sorulara kısa yanıtlar.
+description: Kurulum, sipariş içe aktarma, mesajlaşma, planlar, fiyatlar ve destek hakkında satıcıların sık sorduğu sorulara kısa yanıtlar.
 order: 12
 slug: general-faq
 ---
@@ -57,29 +57,29 @@ Sipariş onaylanmamış olarak kalır; ekibiniz kendi sürecine göre siparişi 
 
 Hayır. Ana akış kapıda ödeme siparişlerinin doğrulanmasına odaklanır.
 
-## Planlar, Krediler ve Sınırlar
+## Planlar, Fiyatlar ve Sınırlar
 
 ### Akeed için nasıl ödeme yaparım?
 
-Shopify mağazaları Shopify üzerinden faturalanan aylık bir plana abone olur. Bağımsız hesaplar kullandıkları kadar kredi ile öder; krediler Paymob üzerinden kartla veya Vodafone Cash ile satın alınır. [Akeed’i Shopify Olmadan Kullanma](/docs/standalone-platform) kılavuzuna bakın.
+Shopify mağazaları Shopify üzerinden faturalanan aylık bir plana abone olur. Bağımsız hesaplar ön ödemeli bakiyeden mesaj başına ödeme yapar. Paymob üzerinden kartla veya Vodafone Cash ile bakiye yükleyebilirsiniz. [Akeed’i Shopify Olmadan Kullanma](/docs/standalone-platform) kılavuzuna bakın.
 
-### Krediler nasıl sayılır?
+### Bir mesajın ücreti nedir?
 
-1 kredi EGP 1’e eşittir ve müşteriye gönderilen her WhatsApp mesajı 2 kredi kullanır. Yanıt vermeyen bir müşteriye gönderilen hatırlatma 2 kredi daha kullanır. WhatsApp bir mesajı kabul etmezse kredileri otomatik olarak iade edilir.
+WhatsApp mesajı Akeed’in numarasından 1 EGP, kendi WhatsApp Business numaranızdan 0,5 EGP tutar. Yanıt vermeyen müşteriye gönderilen hatırlatma ayrı bir mesaj olarak ücretlendirilir. WhatsApp bir mesajı kabul etmezse ücret otomatik olarak iade edilir.
 
-### Aylık onay sınırıma ulaştığımda ya da kredim bittiğinde ne olur?
+### Aylık onay sınırıma ulaştığımda ya da bakiyem bittiğinde ne olur?
 
-Yeni onaylar, döneminiz yenilenene, planınızı yükseltene ya da kredi satın alana kadar duraklar. Ücretli bir Shopify planında planınızı şimdi yenileyebilirsiniz de; bu, tam hakla 30 günlük yeni bir dönem başlatır.
+Döneminiz yenilenene, planınızı yükseltene ya da bakiye yükleyene kadar yeni onaylar durur. Ücretli bir Shopify planını hemen yenileyerek tam kotayla 30 günlük yeni bir dönem de başlatabilirsiniz.
 
 ### Sınırdan sonra otomatik ek ücret alınıyor mu?
 
-Hayır. Planınızı yükseltmeyi ya da kredi satın almayı seçebilirsiniz, ancak kullanım sürpriz ücretlerle sessizce devam etmez.
+Hayır. Planınızı yükseltmeyi ya da bakiye yüklemeyi seçebilirsiniz, ancak kullanım sürpriz ücretlerle sessizce devam etmez.
 
 ## Sorun Giderme ve Destek
 
 ### Mesajlar gönderilmiyorsa nereden başlamalıyım?
 
-Önce otomatik onay durumunu, plan kullanımını veya kredi bakiyesini ve telefon numarası biçimini kontrol edin. Ardından [Sorun Giderme](/docs/troubleshooting) sayfasını inceleyin.
+Önce otomatik onay durumunu, plan kullanımını veya bakiyeni ve telefon numarası biçimini kontrol edin. Ardından [Sorun Giderme](/docs/troubleshooting) sayfasını inceleyin.
 
 ### Destek ekibiyle ne zaman iletişime geçmeliyim?
 

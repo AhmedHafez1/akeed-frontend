@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
 import { resolveBalanceState } from '../../domain/balanceState'
-import { formatCredits } from '../../domain/billingFormatters'
+import { creditsAsMoney } from '../../domain/billingFormatters'
 import type { CreditSummary } from '../../domain/billing.types'
 
 /**
@@ -38,8 +38,7 @@ export function BillingAlert({ summary }: { summary: CreditSummary }) {
       <p className="flex min-w-0 flex-col">
         <span className="font-bold">
           {t(`${state}Title`, {
-            count,
-            formatted: formatCredits(count, locale),
+            amount: creditsAsMoney(count, summary.price, locale),
           })}
         </span>
         {/* A low balance needs no explanation; the empty states do. */}

@@ -22,6 +22,7 @@ import type {
 } from './standalone-billing-operations.model'
 import {
   formatDateTime,
+  formatDisplayedMoney,
   formatNumber,
   formatSigned,
 } from './standaloneBillingFormat'
@@ -132,7 +133,10 @@ function AccountBody({
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <AdminMetricCard
             label={t('balance.available')}
-            value={formatNumber(account.displayed.availableCredits, locale)}
+            value={formatDisplayedMoney(
+              account.displayed.availableCredits,
+              locale
+            )}
             detail={withStored(
               account.availableCredits,
               t(`balanceStates.${account.balanceState}`, {
@@ -149,7 +153,10 @@ function AccountBody({
           />
           <AdminMetricCard
             label={t('balance.posted')}
-            value={formatNumber(account.displayed.postedBalance, locale)}
+            value={formatDisplayedMoney(
+              account.displayed.postedBalance,
+              locale
+            )}
             detail={withStored(
               account.postedBalance,
               t(`accountStatus.${account.status}`)
@@ -157,12 +164,12 @@ function AccountBody({
           />
           <AdminMetricCard
             label={t('balance.held')}
-            value={formatNumber(account.displayed.heldCredits, locale)}
+            value={formatDisplayedMoney(account.displayed.heldCredits, locale)}
             detail={withStored(account.heldCredits, t('balance.heldDetail'))}
           />
           <AdminMetricCard
             label={t('balance.debt')}
-            value={formatNumber(account.displayed.debtCredits, locale)}
+            value={formatDisplayedMoney(account.displayed.debtCredits, locale)}
             detail={withStored(
               account.debtCredits,
               account.activatedAt

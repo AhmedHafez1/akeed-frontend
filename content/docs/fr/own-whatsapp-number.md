@@ -9,7 +9,7 @@ slug: own-whatsapp-number
 
 Par défaut, Akeed envoie les confirmations depuis son propre numéro WhatsApp officiel, et vous n’avez rien à connecter. Vous pouvez aussi connecter votre propre numéro WhatsApp Business, pour que les clients reçoivent les confirmations au nom et depuis le numéro de votre entreprise.
 
-Le numéro d’Akeed reste disponible en secours. Tout message que votre numéro ne peut pas encore envoyer part du numéro d’Akeed, et les clients continuent donc de recevoir leurs confirmations. Les messages de secours sont décomptés de votre forfait ou de vos crédits, comme l’explique la section **Combien ça coûte ?**.
+Le numéro d’Akeed reste disponible en secours. Tout message que votre numéro ne peut pas encore envoyer part du numéro d’Akeed, et les clients continuent donc de recevoir leurs confirmations. Les messages de secours sont décomptés de votre forfait ou de votre solde, comme l’explique la section **Combien ça coûte ?**.
 
 Vous pouvez connecter un numéro que vous utilisez déjà dans l’application WhatsApp Business sur votre téléphone, ou un numéro qui n’est pas encore sur WhatsApp.
 
@@ -63,16 +63,16 @@ Réglez ce que les paramètres signalent : attendez l’examen du modèle, rég
 
 ## Combien ça coûte ?
 
-### Crédits prépayés
+### Solde prépayé
 
-1 crédit équivaut à 1 EGP.
+Le coût est déduit de votre solde en livres égyptiennes.
 
 | Envoyé depuis | Coût par message |
 | --- | --- |
-| Votre numéro | 1 crédit |
-| Le numéro d’Akeed | 2 crédits |
+| Votre numéro | 0,5 EGP |
+| Le numéro d’Akeed | 1 EGP |
 
-Un message de secours depuis le numéro d’Akeed coûte 2 crédits, comme tout message depuis le numéro d’Akeed. Si votre solde est insuffisant, il n’est pas envoyé : la commande attend avec le statut **En attente d’envoi** et part dès que vous achetez des crédits.
+Un message de secours depuis le numéro d’Akeed coûte 1 EGP. Si votre solde est insuffisant, la commande reste **En attente d’envoi** et part dès que vous rechargez votre solde.
 
 ### Forfaits Shopify
 
@@ -91,7 +91,7 @@ Un message de secours depuis le numéro d’Akeed utilise le quota d’Akeed, ja
 
 ### Frais de Meta
 
-Meta facture séparément à votre entreprise les messages envoyés depuis votre numéro, selon ses propres tarifs et via votre compte professionnel Meta. Ces frais ne font pas partie de vos crédits ni de votre forfait Akeed. Les messages envoyés depuis le numéro d’Akeed ne vous coûtent aucuns frais Meta.
+Meta facture séparément à votre entreprise les messages envoyés depuis votre numéro, selon ses propres tarifs et via votre compte professionnel Meta. Ces frais ne font pas partie de votre solde ni de votre forfait Akeed. Les messages envoyés depuis le numéro d’Akeed ne vous coûtent aucuns frais Meta.
 
 > [!INFO]
 > La facturation indique combien de messages sont partis de chaque numéro, pour que vous puissiez comparer le coût des deux.
@@ -100,9 +100,9 @@ Meta facture séparément à votre entreprise les messages envoyés depuis votre
 
 Utilisez l’unique interrupteur de remerciements dans **Paramètres → Message** pour les deux numéros. Votre choix actuel reste enregistré lors de la connexion ou reconnexion. Le remerciement part du numéro qui a reçu la réponse du client.
 
-- Sur Shopify, chaque remerciement utilise un message du quota de l’expéditeur réel. Avec les crédits prépayés, il coûte 1 crédit depuis votre numéro ou 2 crédits depuis celui d’Akeed. Meta peut facturer séparément.
-- Pendant l’attente d’approbation de votre numéro, une réponse reçue par Akeed utilise toujours le quota ou le tarif en crédits d’Akeed.
-- Sans quota ou crédits disponibles, le remerciement est ignoré. Un remerciement échoué depuis votre numéro n’est jamais renvoyé depuis Akeed.
+- Sur Shopify, chaque remerciement utilise un message du quota de l’expéditeur. Avec un solde prépayé, il coûte 0,5 EGP depuis votre numéro ou 1 EGP depuis le numéro d’Akeed. Meta peut facturer séparément.
+- Pendant l’attente d’approbation de votre numéro, une réponse reçue par Akeed utilise toujours le quota ou le tarif d’Akeed.
+- Sans quota ou solde disponible, le remerciement est ignoré. Un remerciement échoué depuis votre numéro n’est jamais renvoyé depuis Akeed.
 
 ## Qui peut faire quoi
 

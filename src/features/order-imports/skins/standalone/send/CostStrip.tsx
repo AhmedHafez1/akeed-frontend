@@ -2,6 +2,7 @@
 
 import type { ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
+import { useCreditMoney } from '@/features/billing'
 import { cn } from '@/shared/lib/utils'
 import { Skeleton } from '@/shared/ui'
 import type { OrderImportStartQuote } from '../../../api/orderImportsApi'
@@ -21,6 +22,7 @@ export function CostStrip({
   quote: OrderImportStartQuote | undefined
 }) {
   const t = useTranslations('orderImport.send.cost')
+  const money = useCreditMoney()
 
   if (!quote)
     return (
@@ -71,12 +73,17 @@ export function CostStrip({
       {quote.accountingMode === 'prepaid_credit' ? (
         <Stat
           label={t('balance')}
-          value={shortfall ? 0 : (after ?? 0)}
+          value={<bdi>{money.format(shortfall ? 0 : (after ?? 0))}</bdi>}
           critical={!!shortfall}
           note={
             shortfall
-              ? t('short', { shortfall: shortfall.shortfall ?? 0 })
-              : t('of', { available: quote.creditsAvailable ?? 0 })
+              ? t('short', {
+                  shortfall: money.format(shortfall.shortfall ?? 0),
+                })
+              : t('of', {
+                  cost: money.format(quote.estimatedCreditsMin),
+                  available: money.format(quote.creditsAvailable ?? 0),
+                })
           }
         />
       ) : (
@@ -110,7 +117,7 @@ function Stat({
   critical = false,
 }: {
   label: string
-  value: number | string
+  value: number | ReactNode
   note: ReactNode
   critical?: boolean
 }) {

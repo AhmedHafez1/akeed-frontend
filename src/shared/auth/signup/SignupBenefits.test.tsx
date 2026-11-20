@@ -32,10 +32,10 @@ describe('SignupBenefits', () => {
       expect(aside.textContent).toContain(ownStep)
       expect(aside.textContent).toContain('Try the message on your phone')
 
-      expect(within(aside).getByText('30 free WhatsApp messages')).toBeTruthy()
+      expect(within(aside).getByText('100 free WhatsApp messages')).toBeTruthy()
       expect(
         within(aside).getByText(
-          'Then 2.00 EGP per WhatsApp message. No monthly subscription, and no card to start.'
+          'Then EGP 1 per WhatsApp message. No monthly subscription, and no card to start.'
         )
       ).toBeTruthy()
     }
@@ -55,10 +55,10 @@ describe('SignupBenefits', () => {
     expect(
       screen.getByRole('complementary', { name: 'ما الذي يحدث بعد ذلك' })
     ).toBeTruthy()
-    expect(screen.getByText('30 رسالة واتساب مجانية')).toBeTruthy()
+    expect(screen.getByText('100 رسالة واتساب مجانية')).toBeTruthy()
     expect(
       screen.getByText(
-        'ثم 2.00 ج.م لكل رسالة واتساب. بدون اشتراك شهري وبدون بطاقة ائتمان للبدء.'
+        'ثم 1 ج.م لكل رسالة واتساب. بدون اشتراك شهري وبدون بطاقة ائتمان للبدء.'
       )
     ).toBeTruthy()
   })

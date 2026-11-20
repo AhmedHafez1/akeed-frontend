@@ -2,42 +2,45 @@
 
 import { useLocale } from 'next-intl'
 import { useBillingSummary } from '@/features/billing'
-import { formatCredits, formatMoneyParts } from '@/shared/lib/money'
+import { creditsToMinor, formatBalance } from '@/shared/lib/balanceMoney'
+import { formatCredits } from '@/shared/lib/money'
 import type { SupportedLocale } from '@/shared/lib/locale'
 
 export interface CreditOffer {
   /** Free confirmations available now, already localized. */
   count: string
-  /** The balance those confirmations come from, in credits, localized. */
-  credits: string
-  /** Price of one confirmation after them, e.g. "2.00 ج.م" / "2.00 EGP". */
+  /** The balance those confirmations come from, as money, e.g. "EGP 100". */
+  balance: string
+  /** Price of one confirmation after them, e.g. "1 ج.م" / "EGP 1". */
   price: string
 }
 
 /**
- * The free-credit offer shown on the setup and success screens, from the
+ * The free-message offer shown on the setup and success screens, from the
  * same cached balance the rest of the app reads. `offer` stays null until
  * it has loaded, so no screen ever renders a placeholder "0".
  */
 export function useCreditOffer() {
   const locale = useLocale() as SupportedLocale
   const { summary, isLoading } = useBillingSummary()
-
   if (!summary) return { offer: null, isLoading }
-
-  const { amount, currency } = formatMoneyParts(
-    summary.price.messagePriceMinor,
-    summary.price.currency,
-    locale
-  )
+  const { price } = summary
   const offer: CreditOffer = {
     count: formatCredits(
-      Math.floor(summary.availableCredits / summary.price.creditsPerMessage),
+      Math.floor(summary.availableCredits / price.creditsPerMessage),
       locale
     ),
-    credits: formatCredits(summary.availableCredits, locale),
-    // Intl ends the Arabic pound with a period ("ج.م."); drop it mid-sentence.
-    price: `${amount} ${currency.replace(/\.$/, '')}`,
+    balance: formatBalance(
+      summary.balanceMinor ??
+        creditsToMinor(summary.availableCredits, price.unitPriceMinor),
+      price.currency,
+      locale
+    ),
+    price: formatBalance(
+      price.akeedMessagePriceMinor ?? price.messagePriceMinor,
+      price.currency,
+      locale
+    ),
   }
   return { offer, isLoading }
 }

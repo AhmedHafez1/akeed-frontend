@@ -39,11 +39,11 @@ Geliştiriciniz yoksa [Toplu Sipariş İçe Aktarma](/docs/bulk-order-import) ö
 | Soru | Yanıt |
 | --- | --- |
 | Mesaj, sipariş alınır alınmaz mı gönderilir? | Akeed önce siparişi kaydeder, ardından mesajı sessiz saatler ve gönderim gecikmesi gibi ayarlarınıza göre gönderir. |
-| Önceden ödenmiş siparişlere ne olur? | Kaydedilir ve panelde görünür, ancak müşteriye mesaj gönderilmez ve kredi kullanılmaz. |
-| Sistem aynı siparişi iki kez gönderirse ne olur? | İkinci bir sipariş oluşturulmaz, ikinci bir mesaj gönderilmez ve kredi iki kez düşülmez. |
+| Önceden ödenmiş siparişlere ne olur? | Kaydedilir ve panelde görünür. Müşteriye mesaj gönderilmez ve ücret alınmaz. |
+| Sistem aynı siparişi iki kez gönderirse ne olur? | İkinci bir sipariş oluşturulmaz, ikinci bir mesaj gönderilmez ve yeniden ücret alınmaz. |
 | Bir sipariş API’den değiştirilebilir veya iptal edilebilir mi? | Hayır. API yalnızca sipariş oluşturur. |
 | Müşterinin yanıtı nerede görülür? | Paneldeki **Onaylar** listesinde. Akeed sunucunuza bildirim göndermez. |
-| Bir test modu var mı? | Hayır. Her kapıda ödeme siparişi gerçek bir mesaj gönderir ve kredi kullanır. Önce kendi telefon numaranızla deneyin. |
+| Bir test modu var mı? | Hayır. Kabul edilen kapıda ödeme siparişi gerçek bir mesaj gönderir ve ücreti bakiyenizden düşülür. Önce kendi telefon numaranızla deneyin. |
 | Siparişlerin alınmasını ne durdurur? | Bakiyenin bitmesi, ayarlarda otomatik onayın kapatılması ya da anahtarın iptal edilmesi. |
 
 ## Sorun Olursa

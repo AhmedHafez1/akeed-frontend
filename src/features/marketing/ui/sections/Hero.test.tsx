@@ -51,7 +51,7 @@ describe('Hero', () => {
         'Akeed messages the customer on WhatsApp for every order and records the reply, whether your orders come from Shopify, or you add them by hand, from a file, or through the API.'
       )
     ).toBeTruthy()
-    expect(screen.getByText('30 free WhatsApp messages')).toBeTruthy()
+    expect(screen.getByText('100 free WhatsApp messages')).toBeTruthy()
     expect(screen.getByText('No credit card required')).toBeTruthy()
     expect(screen.getByText('Official WhatsApp Business Platform')).toBeTruthy()
   })

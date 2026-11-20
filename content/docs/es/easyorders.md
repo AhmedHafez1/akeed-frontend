@@ -121,7 +121,7 @@ Sí, desde tu origen de pedidos en Configuración.
 
 ### ¿Cómo se paga?
 
-Con créditos, como todas las cuentas que no usan Shopify. Consulta [Usar Akeed sin Shopify](/docs/standalone-platform#cómo-funcionan-los-créditos).
+Con saldo prepago, como todas las cuentas que no usan Shopify. Consulta [Usar Akeed sin Shopify](/docs/standalone-platform#cómo-funciona-tu-saldo).
 
 ## Guías relacionadas
 

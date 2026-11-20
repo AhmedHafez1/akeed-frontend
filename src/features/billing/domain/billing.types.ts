@@ -44,6 +44,8 @@ export interface CreditSummary {
   postedBalance: number
   heldCredits: number
   availableCredits: number
+  /** `availableCredits` as money. Absent from an older backend. */
+  balanceMinor?: number
   debtCredits: number
   lowBalanceThreshold: number
   freeGrant: {
@@ -60,6 +62,10 @@ export interface CreditSummary {
     creditsPerMessage: number
     /** Credits one message from the merchant's own number uses. Absent from an older backend. */
     ownNumberCreditsPerMessage?: number
+    /** One Akeed message, as money. Absent from an older backend. */
+    akeedMessagePriceMinor?: number
+    /** One message from the merchant's own number, as money. */
+    ownNumberMessagePriceMinor?: number
     currency: string
   }
   range: { min: number; max: number; step: number }

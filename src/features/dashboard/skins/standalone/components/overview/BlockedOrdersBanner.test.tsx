@@ -52,7 +52,7 @@ describe('BlockedOrdersBanner (standalone)', () => {
     expect(screen.queryByRole('alert')).toBeNull()
   })
 
-  it('counts the waiting orders and links to buying credits', () => {
+  it('counts the waiting orders and links to topping up', () => {
     renderStandalone(
       <BlockedOrdersBanner capacity={credits} timeZone="UTC" />,
       'en'
@@ -60,10 +60,10 @@ describe('BlockedOrdersBanner (standalone)', () => {
 
     const alert = screen.getByRole('alert')
     expect(alert.textContent).toContain('Orders waiting to be sent: 3')
-    expect(alert.textContent).toContain('Credits left: 0')
-    expect(alert.textContent).toContain('Buy credits and Akeed sends them')
+    expect(alert.textContent).toContain('Balance left: EGP 0')
+    expect(alert.textContent).toContain('Top up and Akeed sends them')
     expect(
-      screen.getByRole('link', { name: 'Buy credits' }).getAttribute('href')
+      screen.getByRole('link', { name: 'Top up balance' }).getAttribute('href')
     ).toBe('/en/billing')
   })
 
@@ -74,7 +74,7 @@ describe('BlockedOrdersBanner (standalone)', () => {
       'طلبات بانتظار الإرسال: 3'
     )
     expect(
-      screen.getByRole('link', { name: 'اشحن رصيدك' }).getAttribute('href')
+      screen.getByRole('link', { name: 'اشحن الرصيد' }).getAttribute('href')
     ).toBe('/ar/billing')
   })
 })

@@ -27,7 +27,7 @@ There is one endpoint, and it does one thing: it creates an order. From there th
 | An API key | An owner or admin creates it in **Settings → API keys**. The key is shown once, so store it in your server's settings right away. |
 | The endpoint address | Shown in **Settings → API keys** under **Send orders to**. The examples call it `$AKEED_API_URL`. |
 | Automatic confirmation | Turned on in **Settings**. While it is off, the API refuses new orders. |
-| Credits | Enough credits for the messages you will send. See [Using Akeed Without Shopify](/docs/standalone-platform). |
+| Balance | Enough balance for the messages you will send. See [Using Akeed Without Shopify](/docs/standalone-platform). |
 | HTTPS and JSON | Requests are sent over HTTPS with a JSON body in UTF-8. |
 
 A key belongs to one store. Every order sent with it goes to that store. There is no field for choosing another store or account, and a request that tries to send one is rejected.
@@ -87,7 +87,7 @@ X-Correlation-Id: <CORRELATION_ID>
 Open **Confirmations** in Akeed. The order is there, and the customer receives the WhatsApp confirmation message.
 
 > [!WARNING]
-> There is no test mode. An accepted cash-on-delivery order sends a real WhatsApp message and uses credits. While you build, send orders with your own phone number.
+> There is no test mode. An accepted cash-on-delivery order sends a real WhatsApp message and is charged to your balance. While you build, send orders with your own phone number.
 
 ## Order Fields
 
@@ -133,7 +133,7 @@ A `202` response with `"status": "accepted"` means Akeed has stored the order sa
 What happens next depends on the order:
 
 - **Cash on delivery:** Akeed sends the WhatsApp confirmation, follows up if the customer does not reply, and marks the result. Your quiet hours and sending delay apply, as they do for every order.
-- **Not cash on delivery:** the order is stored and visible in your dashboard, but the customer is never messaged and no credit is used.
+- **Not cash on delivery:** the order is stored and visible in your dashboard, but the customer is never messaged and nothing is charged.
 
 ### Where to see the result
 
@@ -864,13 +864,13 @@ No. Send one request per order. For a large one-time batch, use [Bulk Order Impo
 
 ### What happens to orders that are already paid?
 
-They are accepted and shown in your dashboard, but the customer is not messaged and no credit is used.
+They are accepted and shown in your dashboard, but the customer is not messaged and nothing is charged.
 
 ### Do I need a different key for each server?
 
 It is a good habit. Name each key after the server that uses it, so you can revoke one without stopping the others. All keys of a store share the same request limit.
 
-### Does a retry cost a credit?
+### Does a retry cost anything?
 
 No. A retry with the same key, or a second request for an order Akeed already has, never sends a second message.
 

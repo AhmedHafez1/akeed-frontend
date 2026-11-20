@@ -12,8 +12,8 @@ describe('Pricing', () => {
   it('shows only the credit model while the own-number promotion is off', () => {
     renderMarketing(<Pricing showOwnNumber={false} />, 'en')
 
-    expect(screen.getByText('per credit')).toBeTruthy()
-    expect(text()).toContain('Covers 125–250 orders')
+    expect(screen.getByText('per message')).toBeTruthy()
+    expect(text()).toContain('Covers 250–500 orders')
     expect(text()).not.toContain(own.from_yours)
     expect(text()).not.toContain(own.meta_note)
     expect(text()).not.toContain(own.fact_title)
@@ -34,8 +34,8 @@ describe('Pricing', () => {
 
     expect(screen.getByText(own.from_akeed)).toBeTruthy()
     expect(screen.getByText(own.from_yours)).toBeTruthy()
-    expect(text()).toMatch(/2 credits · EGP\s?2/)
-    expect(text()).toMatch(/1 credit · EGP\s?1/)
+    expect(screen.getByText('EGP 1', { selector: 'bdi' })).toBeTruthy()
+    expect(screen.getByText('EGP 0.5', { selector: 'bdi' })).toBeTruthy()
     expect(screen.getByText(own.saving)).toBeTruthy()
     expect(screen.getByText(own.meta_note)).toBeTruthy()
     expect(screen.getByText(own.fact_title)).toBeTruthy()
@@ -44,9 +44,9 @@ describe('Pricing', () => {
   it('quotes both coverage figures for the slider amount instead of orders', () => {
     renderMarketing(<Pricing showOwnNumber />, 'en')
 
-    expect(text()).toContain("About 250 messages from Akeed's number")
-    expect(text()).toContain('or 500 from your own number')
-    expect(text()).not.toContain('Covers 125–250 orders')
+    expect(text()).toContain("About 500 messages from Akeed's number")
+    expect(text()).toContain('or 1,000 from your own number')
+    expect(text()).not.toContain('Covers 250–500 orders')
   })
 
   it('lists each Shopify plan as two separate allowances', () => {

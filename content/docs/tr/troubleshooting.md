@@ -14,7 +14,7 @@ Bu sayfa, Akeed’de en sık karşılaşılan operasyonel sorunları hızla teş
 - siparişler onaylanmıyorsa,
 - mesajlar gecikiyor ya da gönderilmiyorsa,
 - çok fazla sipariş yanıt yok durumuna geçiyorsa,
-- plan kullanımı veya boş bir kredi bakiyesi yeni gönderimleri engelliyorsa,
+- plan kullanımı veya boş bir bakiye yeni gönderimleri engelliyorsa,
 - bir dosya içe aktarma işlemi beklendiği gibi çalışmıyorsa.
 
 ## Hızlı Ön Kontrol Listesi
@@ -23,7 +23,7 @@ Ayrıntılı sorun gidermeye geçmeden önce şunları kontrol edin:
 
 1. Otomatik onay açık.
 2. Sipariş kapıda ödeme onayına uygun.
-3. Plan kullanımı sınıra ulaşmamış ya da kredi bakiyeniz (bağımsız hesaplar) boş değil.
+3. Plan kullanımı sınıra ulaşmamış ya da bakiyeniz (bağımsız hesaplar) boş değil.
 4. Sessiz saatler gönderimleri geciktirmiyor.
 5. Telefon numarası biçimi ülke kodunu içeriyor.
 
@@ -54,7 +54,7 @@ Bu beş kontrol çoğu sorunu çözer.
 
 ### Ne yapmalı
 
-1. Kullanım sınıra yakın veya dolmuşsa planınızı yükseltin ya da bir sonraki dönemi bekleyin. Bağımsız bir hesapta **Faturalandırma ve krediler** bölümünden kredi satın alın.
+1. Kullanım sınıra yakınsa veya sınırı doldurduysanız planınızı yükseltin ya da bir sonraki dönemi bekleyin. Bağımsız hesapta **Faturalandırma ve bakiye** bölümünden bakiye yükleyin.
 2. Başarısız durumu görünüyorsa müşterinin telefon numarasının doğruluğunu kontrol edin.
 3. Gecikme varsa sessiz saatleri ve saat dilimi ayarlarını kontrol edin.
 
@@ -139,14 +139,14 @@ Bu beş kontrol çoğu sorunu çözer.
 
 - Önizlemeden sonra **Gönder** düğmesine bastınız mı? Yalnızca içe aktarmak hiçbir şey göndermez.
 - Siparişler hâlâ **Başlatılmayı bekliyor** durumunda mı? 24 saat içinde başlatılmaları gerekir.
-- Kredi bittiği için içe aktarma duraklatıldı mı?
+- Bakiye bittiği için içe aktarma duraklatıldı mı?
 - Bazı satırlar geçersiz, yinelenen veya hariç tutulan olarak atlandı mı?
 
 ### Ne yapmalı
 
 1. İçe aktarma ekranını açın ve atlanan her grubun yanındaki nedeni okuyun.
-2. **Gönder** engelliyse kredi satın alın veya otomatik onayı açın, ardından yeniden **Gönder** düğmesine basın.
-3. İçe aktarma duraklatıldıysa kredi satın alın ve **Devam et** seçeneğini seçin.
+2. **Gönder** engelliyse bakiye yükleyin veya otomatik onayı açın, ardından yeniden **Gönder** düğmesine basın.
+3. İçe aktarma duraklatıldıysa bakiye yükleyin ve **Devam et** seçeneğini seçin.
 4. Süre geçtiyse ya da içe aktarmanın süresi dolduysa dosyayı yeniden yükleyin. Daha önce içe aktarılmış ve sipariş numarası olan siparişler tanınır ve yinelenmez; birbirine benzeyen siparişler ise incelemeniz için işaretlenir.
 
 Dosya ve sütun sorunları için [Toplu Sipariş İçe Aktarma](/docs/bulk-order-import) kılavuzundaki sorun giderme tablosuna bakın.
@@ -157,7 +157,7 @@ Dosya ve sütun sorunları için [Toplu Sipariş İçe Aktarma](/docs/bulk-order
 
 - Ayarlardaki mevcut faturalandırma durumu.
 - Plan değişikliğinin Shopify’da onaylanıp onaylanmadığı (Shopify mağazaları).
-- Paymob ödemenizin tamamlanıp tamamlanmadığı ve kredi bakiyenizin güncellenip güncellenmediği (bağımsız hesaplar).
+- Paymob ödemenizin tamamlanıp tamamlanmadığı ve bakiyenizin güncellenip güncellenmediği (bağımsız hesaplar).
 - Kullanım düzeyi ile plana dahil sınır.
 
 ### Ne yapmalı
@@ -165,7 +165,7 @@ Dosya ve sütun sorunları için [Toplu Sipariş İçe Aktarma](/docs/bulk-order
 1. Onay tamamlanmadıysa plan değişikliğini yeniden deneyin.
 2. Plan yükseltme reddedildiyse mevcut etkin planınızla devam edin.
 3. Yoğun dönemlerde kesin kullanım sınırına ulaşmadan önce planınızı yükseltin.
-4. Bağımsız bir hesapta bir ödeme beklemede görünüyorsa, yeniden ödeme yapmadan önce biraz bekleyin ve **Faturalandırma ve krediler** bölümünü kontrol edin.
+4. Bağımsız bir hesapta bir ödeme beklemede görünüyorsa, yeniden ödeme yapmadan önce biraz bekleyin ve **Faturalandırma ve bakiye** bölümünü kontrol edin.
 
 ## Destek Ekibiyle Ne Zaman İletişime Geçmeli
 
@@ -173,7 +173,7 @@ Dosya ve sütun sorunları için [Toplu Sipariş İçe Aktarma](/docs/bulk-order
 
 - sorun, kontrol listesi ve soruna özel adımlardan sonra da devam ediyorsa,
 - test mesajı da tekrar tekrar başarısız oluyorsa,
-- faturalandırma durumu Shopify onayıyla tutarsız görünüyorsa ya da bir Paymob ödemesi kredi bakiyenizde görünmüyorsa.
+- faturalandırma durumu Shopify onayıyla tutarsız görünüyorsa ya da bir Paymob ödemesi bakiyenizde görünmüyorsa.
 
 Destek ekibiyle iletişime geçerken şunları ekleyin:
 

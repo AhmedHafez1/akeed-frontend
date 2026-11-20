@@ -1,6 +1,6 @@
 ---
 title: FAQ générale
-description: Des réponses rapides aux questions courantes des marchands sur la configuration, l’import de commandes, les messages, les forfaits, les crédits et l’assistance.
+description: Des réponses rapides aux questions courantes des marchands sur la configuration, l’import de commandes, les messages, les forfaits, les tarifs et l’assistance.
 order: 12
 slug: general-faq
 ---
@@ -57,29 +57,29 @@ La commande reste non confirmée, et votre équipe peut la retenir, relancer le 
 
 Non. Le parcours principal porte sur la vérification des commandes COD.
 
-## Forfaits, crédits et limites
+## Forfaits, tarifs et limites
 
 ### Comment paie-t-on Akeed ?
 
-Les boutiques Shopify souscrivent un forfait mensuel facturé par Shopify. Les comptes autonomes paient ce qu’ils consomment avec des crédits, achetés via Paymob par carte ou avec Vodafone Cash. Consultez [Utiliser Akeed sans Shopify](/docs/standalone-platform).
+Les boutiques Shopify souscrivent un forfait mensuel facturé par Shopify. Les comptes autonomes paient par message avec un solde prépayé rechargeable via Paymob par carte ou avec Vodafone Cash. Consultez [Utiliser Akeed sans Shopify](/docs/standalone-platform).
 
-### Comment les crédits sont-ils décomptés ?
+### Combien coûte un message ?
 
-1 crédit vaut 1 EGP, et chaque message WhatsApp envoyé à un client utilise 2 crédits. Une relance à un client qui n’a pas répondu utilise 2 crédits de plus. Si WhatsApp n’accepte pas un message, ses crédits sont restitués automatiquement.
+Chaque message WhatsApp coûte 1 EGP depuis le numéro d’Akeed ou 0,5 EGP depuis votre propre numéro WhatsApp Business. Une relance à un client qui n’a pas répondu compte comme un message supplémentaire. Si WhatsApp n’accepte pas un message, son coût est restitué automatiquement.
 
-### Que se passe-t-il quand la limite mensuelle de confirmations est atteinte ou que les crédits sont épuisés ?
+### Que se passe-t-il lorsque la limite mensuelle de confirmations est atteinte ou que le solde est épuisé ?
 
-Les nouvelles confirmations sont suspendues jusqu’au renouvellement de votre cycle, à un changement de forfait ou à un achat de crédits. Sur un forfait Shopify payant, vous pouvez aussi le renouveler maintenant, ce qui démarre une nouvelle période de 30 jours avec le quota complet.
+Les nouvelles confirmations sont suspendues jusqu’au renouvellement de votre cycle, au changement de forfait ou à la recharge de votre solde. Vous pouvez aussi renouveler un forfait Shopify payant maintenant pour démarrer une période de 30 jours avec le quota complet.
 
 ### Y a-t-il des frais supplémentaires automatiques au-delà de la limite ?
 
-Non. Vous pouvez choisir de changer de forfait ou d’acheter des crédits, mais la consommation ne se poursuit pas en silence avec des frais inattendus.
+Non. Vous pouvez choisir de changer de forfait ou d’recharger votre solde, mais la consommation ne se poursuit pas en silence avec des frais inattendus.
 
 ## Dépannage et assistance
 
 ### Par où commencer si les messages ne partent pas ?
 
-Vérifiez d’abord l’état de la confirmation automatique, l’utilisation du forfait ou le solde de crédits, et le format des numéros de téléphone. Consultez ensuite [Dépannage](/docs/troubleshooting).
+Vérifiez d’abord l’état de la confirmation automatique, l’utilisation du forfait ou le solde, et le format des numéros de téléphone. Consultez ensuite [Dépannage](/docs/troubleshooting).
 
 ### Quand contacter l’assistance ?
 

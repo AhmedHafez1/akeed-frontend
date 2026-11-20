@@ -22,6 +22,7 @@ import { Badge, Button, Skeleton } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 import { countryName } from '@/shared/lib/country'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
+import { formatDisplayedMoney } from './standaloneBillingFormat'
 import type {
   AdminStoreDetail,
   AdminStoreMilestone,
@@ -314,6 +315,7 @@ function StoreHeader({
 }
 
 function StoreKpis({ store }: { store: AdminStoreDetail }) {
+  const { locale } = useLocaleInfo()
   const totals = store.verification_totals
   const confirmed = totals.by_status.confirmed ?? 0
   const canceled = totals.by_status.canceled ?? 0
@@ -356,8 +358,11 @@ function StoreKpis({ store }: { store: AdminStoreDetail }) {
       />
       {store.billing.model === 'credits' ? (
         <AdminMetricCard
-          label="Credits available"
-          value={numberFormat.format(store.billing.displayed_available)}
+          label="Balance"
+          value={formatDisplayedMoney(
+            store.billing.displayed_available,
+            locale
+          )}
           detail={`${numberFormat.format(store.billing.available)} stored, ${numberFormat.format(store.billing.held)} stored held`}
           icon={Coins}
           tone={
@@ -477,6 +482,7 @@ function BillingCard({
   integrationId: string
   onChanged: () => void
 }) {
+  const { locale } = useLocaleInfo()
   const billing = store.billing
   if (billing.model === 'credits') {
     return (
@@ -484,10 +490,12 @@ function BillingCard({
         <div className="mb-4 flex items-end justify-between gap-3">
           <div>
             <p className="text-foreground text-2xl font-semibold tabular-nums">
-              {numberFormat.format(billing.displayed_available)}
+              <bdi>
+                {formatDisplayedMoney(billing.displayed_available, locale)}
+              </bdi>
             </p>
             <p className="text-muted-foreground text-xs">
-              credits available, {storedCreditsLabel(billing)}
+              available, {storedCreditsLabel(billing)}
             </p>
           </div>
           <CreditBalanceBadge state={billing.balance_state} />

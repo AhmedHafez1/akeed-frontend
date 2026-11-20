@@ -26,7 +26,7 @@ La importación masiva está disponible en las cuentas independientes. Si usas A
 | Tamaño | Hasta 5 MB y 100 pedidos por archivo. Si tienes más pedidos, divide el archivo e importa cada parte. |
 | Fila de encabezados | La primera fila debe contener los nombres de las columnas. |
 | Columnas mínimas | Teléfono del cliente, nombre del cliente e importe del pedido. |
-| Créditos | Créditos suficientes para todos los pedidos que quieres confirmar. Consulta [Usar Akeed sin Shopify](/docs/standalone-platform). |
+| Saldo | Saldo suficiente para todos los pedidos que quieres confirmar. Consulta [Usar Akeed sin Shopify](/docs/standalone-platform). |
 
 ¿No tienes un archivo listo? Descarga la plantilla de ejemplo en **CSV** o **Excel** en la pantalla de carga, en árabe o en inglés.
 
@@ -72,7 +72,7 @@ La vista previa termina con el costo y el tiempo: la cantidad de mensajes, hasta
 Akeed importa entonces los pedidos listos e inicia la confirmación. Puedes seguir el estado de cada pedido en **Confirmaciones**.
 
 > [!WARNING]
-> Si tu saldo no cubre todos los pedidos, o la confirmación automática está desactivada, **Enviar** se bloquea y no se envía nada. Akeed muestra cuántos créditos te faltan y un botón **Comprar créditos**. No hay inicios parciales.
+> Si tu saldo no cubre todos los pedidos, o la confirmación automática está desactivada, **Enviar** se bloquea y no se envía nada. Akeed muestra el importe que te falta y un botón **Recargar saldo**. No hay inicios parciales.
 
 ## Qué reconoce Akeed
 
@@ -120,7 +120,7 @@ Normalmente nunca ves este estado, porque **Enviar** importa e inicia en una sol
 | Plazo de inicio | Los pedidos en espera deben iniciarse en un plazo de 24 horas. De lo contrario se retiran sin costo, y puedes subir el archivo de nuevo. |
 | Ritmo | Akeed envía de forma gradual, unos 20 primeros mensajes por minuto, para que la calidad de tu WhatsApp se mantenga en buen estado. |
 | Horario de silencio | Si configuraste un horario de silencio en Configuración, el envío se pausa durante ese horario y se reanuda después. |
-| Sin créditos | Si los créditos se agotan durante el envío, la importación se pausa. Compra créditos y elige **Reanudar**. |
+| Saldo agotado | Si el saldo se agota durante el envío, la importación se pausa. Recarga el saldo y elige **Reanudar**. |
 
 ## El mismo archivo dos veces: seguro por diseño
 
@@ -130,7 +130,7 @@ Normalmente nunca ves este estado, porque **Enviar** importa e inicia en una sol
 
 ## Pedidos importados en la lista de Confirmaciones
 
-Los pedidos importados están en la misma lista de **Confirmaciones** que todos los demás y funcionan igual: estado, recordatorio, tratamiento de la falta de respuesta, reintento y cancelación, y uso de créditos. Los estados previos al primer mensaje son **Esperando inicio**, **En cola** y **Enviando**.
+Los pedidos importados están en la misma lista de **Confirmaciones** que todos los demás y funcionan igual: estado, recordatorio, tratamiento de la falta de respuesta, reintento y cancelación, y cargos. Los estados previos al primer mensaje son **Esperando inicio**, **En cola** y **Enviando**.
 
 ## Privacidad y conservación
 
@@ -151,7 +151,7 @@ Los pedidos importados están en la misma lista de **Confirmaciones** que todos 
 | Es un teléfono fijo | Reemplázalo por el número móvil del cliente. |
 | No es pago contra entrega, así que no se confirmará | Revisa el valor de pago. Si realmente es contra entrega, muévelo a **Confirmar · pago contra entrega** en el paso de columnas. |
 | El pedido tiene más de 7 días | Los pedidos tan antiguos ya no se pueden confirmar. Para omitir las comprobaciones de fecha, pon la fecha del pedido en **No está en el archivo** en el paso de columnas. |
-| Compra créditos para empezar | Compra créditos para que tu saldo cubra todos los pedidos y presiona **Enviar** de nuevo. |
+| Recarga tu saldo para empezar | Recarga lo suficiente para cubrir todos los pedidos y presiona **Enviar** de nuevo. |
 | La confirmación automática está desactivada | Actívala en Configuración y luego envía. |
 | Esta importación venció | Sube el archivo de nuevo. |
 | La importación no está disponible para esta tienda | La importación masiva es para cuentas independientes. Las tiendas Shopify reciben los pedidos automáticamente. |
@@ -174,9 +174,9 @@ El inicio se aplica a toda la importación. Quita del archivo los pedidos que no
 
 Lo mismo que con cualquier otro pedido: un recordatorio y luego **Sin respuesta**. Consulta [Reglas de automatización](/docs/automation-rules).
 
-### ¿Cuántos créditos usa una importación?
+### ¿Cuánto cuesta una importación?
 
-Dos créditos por mensaje. Un archivo con 80 pedidos listos usa 160 créditos (EGP 160, porque 1 crédito equivale a EGP 1), o hasta 320 créditos si los recordatorios están activados y los clientes no responden.
+Cada mensaje desde el número de Akeed cuesta 1 EGP. Enviar el primer mensaje para 80 pedidos listos cuesta 80 EGP, o hasta 160 EGP si activas los recordatorios y los clientes no responden.
 
 ### ¿Se puede descargar un informe de las filas omitidas?
 

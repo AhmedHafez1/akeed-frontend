@@ -7,8 +7,10 @@ function envInt(value: string | undefined, fallback: number): number {
  * Standalone credit pricing, mirroring the backend's
  * `src/shared/config/standalone-credit-billing.config.ts`.
  *
- * Quantities here are displayed credits: 1 credit = EGP 1, half the stored
- * credit the backend counts. Signed-in amounts come from the `/api/billing`
+ * Quantities here are displayed credits, the unit the API counts in: half a
+ * stored credit, EGP 0.50 at the default price. Merchants never see them:
+ * screens show money (`shared/lib/balanceMoney`) and message counts, so an
+ * Akeed-number message is EGP 1 and an own-number one EGP 0.5. Signed-in amounts come from the `/api/billing`
  * summary, which is authoritative; these exist because the public marketing
  * and signup pages are unauthenticated and `/api/billing` sits behind
  * `DualAuthGuard`. The in-app recharge tiles also share `CREDIT_PRESETS`.
@@ -19,12 +21,12 @@ export const CREDIT_CURRENCY = 'EGP'
 
 export const CREDIT_UNIT_PRICE_MINOR = envInt(
   process.env.NEXT_PUBLIC_CREDIT_UNIT_PRICE_MINOR,
-  100
+  50
 )
 
 export const CREDIT_FREE_GRANT = envInt(
   process.env.NEXT_PUBLIC_CREDIT_FREE_GRANT,
-  60
+  200
 )
 
 export const CREDIT_PURCHASE_MIN = envInt(
@@ -48,13 +50,14 @@ export const CREDIT_LOW_BALANCE_THRESHOLD = envInt(
 )
 
 /**
- * Preset recharge sizes. Presentation only — the API exposes a continuous
- * `{min, max, step}` range, not packages. Shared with the in-app recharge tiles
+ * Preset recharge sizes in displayed credits: EGP 100, 250, 500 and 1,000.
+ * Presentation only — the API exposes a continuous `{min, max, step}` range,
+ * not packages. Shared with the in-app recharge tiles
  * so the two surfaces cannot drift.
  */
 export const CREDIT_PRESETS = [200, 500, 1000, 2000] as const
 
-/** Credits one WhatsApp message from the Akeed number uses. */
+/** Displayed credits one WhatsApp message from the Akeed number uses. */
 export const CREDITS_PER_MESSAGE = 2
 
 /** What the free grant buys, for copy that counts messages. */
@@ -66,7 +69,7 @@ export const CREDIT_FREE_MESSAGES = Math.floor(
 export const CREDIT_MESSAGE_PRICE_MINOR =
   CREDIT_UNIT_PRICE_MINOR * CREDITS_PER_MESSAGE
 
-/** Credits one message from the merchant's own WhatsApp number uses. */
+/** Displayed credits one message from the merchant's own number uses. */
 export const OWN_NUMBER_CREDITS_PER_MESSAGE = 1
 
 /** One message from the merchant's own number, Akeed's charge only. */

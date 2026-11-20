@@ -139,7 +139,7 @@ No. Akeed confirma los pedidos realizados después de conectar la tienda.
 
 ### ¿Cómo se paga?
 
-Con créditos, como todas las cuentas que no usan Shopify. Consulta [Usar Akeed sin Shopify](/docs/standalone-platform#cómo-funcionan-los-créditos).
+Con saldo prepago, como todas las cuentas que no usan Shopify. Consulta [Usar Akeed sin Shopify](/docs/standalone-platform#cómo-funciona-tu-saldo).
 
 ### ¿Se pueden conectar dos tiendas a una cuenta?
 

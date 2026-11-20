@@ -34,11 +34,12 @@ const summary: CreditSummary = {
   postedBalance: 888,
   heldCredits: 0,
   availableCredits: 888,
+  balanceMinor: 44_400,
   debtCredits: 0,
   lowBalanceThreshold: 50,
-  freeGrant: { granted: true, quantity: 30, grantedAt: null },
+  freeGrant: { granted: true, quantity: 200, grantedAt: null },
   price: {
-    unitPriceMinor: 100,
+    unitPriceMinor: 50,
     messagePriceMinor: 200,
     creditsPerMessage: 2,
     currency: 'EGP',
@@ -53,9 +54,9 @@ function purchase(overrides: Partial<PurchaseDetail> = {}): PurchaseDetail {
     reference: REFERENCE,
     status: 'successful',
     disputeStatus: 'none',
-    quantity: 500,
-    unitPriceMinor: 200,
-    totalMinor: 100_000,
+    quantity: 1000,
+    unitPriceMinor: 50,
+    totalMinor: 50_000,
     currency: 'EGP',
     refundedMinor: 0,
     reconciliationRequired: false,
@@ -124,9 +125,9 @@ describe('BillingReturnPage (ar)', () => {
   it('names the outcome of a successful payment and the new balance', async () => {
     const { container } = renderPage()
 
-    await heading('أضفنا 500 رصيد إلى حسابك')
+    await heading('أضفنا 500 ج.م إلى رصيدك')
     expect(screen.getByText('رصيدك الآن', { exact: false }).textContent).toBe(
-      'رصيدك الآن 888 رصيد، ونرسل التأكيدات للطلبات الجديدة كالمعتاد.'
+      'رصيدك الآن 444 ج.م، وتستمر تأكيدات الطلبات الجديدة كالمعتاد.'
     )
 
     const card = container.querySelector('section')
@@ -136,8 +137,8 @@ describe('BillingReturnPage (ar)', () => {
       'bg-brand-soft text-brand'
     )
 
-    expect(detail('الرصيد')).toBe('500')
-    expect(detail('المبلغ')).toBe('1,000.00 ج.م')
+    expect(detail('الرسائل')).toBe('500')
+    expect(detail('المبلغ')).toBe('500 ج.م')
     expect(detail('آخر تحديث')).toBe('1 أكتوبر 2026 · 8:52 ص')
     const pill = screen.getByText('ناجحة')
     expect(pill.className).toContain('bg-brand-soft')
@@ -160,8 +161,8 @@ describe('BillingReturnPage (ar)', () => {
     mockSummary('stale')
     renderPage()
 
-    await heading('أضفنا 500 رصيد إلى حسابك')
-    expect(screen.getByText('الرصيد متاح في حسابك الآن.')).toBeTruthy()
+    await heading('أضفنا 500 ج.م إلى رصيدك')
+    expect(screen.getByText('أُضيف الشحن إلى رصيدك.')).toBeTruthy()
     expect(screen.queryByText('ونرسل التأكيدات', { exact: false })).toBeNull()
   })
 
@@ -169,16 +170,16 @@ describe('BillingReturnPage (ar)', () => {
     mockSummary('fresh', {}, true)
     renderPage()
 
-    await heading('أضفنا 500 رصيد إلى حسابك')
-    expect(screen.getByText('الرصيد متاح في حسابك الآن.')).toBeTruthy()
+    await heading('أضفنا 500 ج.م إلى رصيدك')
+    expect(screen.getByText('أُضيف الشحن إلى رصيدك.')).toBeTruthy()
   })
 
   it('does not promise confirmations when the account cannot send', async () => {
     mockSummary('fresh', { status: 'suspended' })
     renderPage()
 
-    await heading('أضفنا 500 رصيد إلى حسابك')
-    expect(screen.getByText('الرصيد متاح في حسابك الآن.')).toBeTruthy()
+    await heading('أضفنا 500 ج.م إلى رصيدك')
+    expect(screen.getByText('أُضيف الشحن إلى رصيدك.')).toBeTruthy()
   })
 
   it('offers to continue the import that sent the merchant here', async () => {
@@ -235,7 +236,7 @@ describe('BillingReturnPage (ar)', () => {
     )
 
     await act(async () => settle(purchase()))
-    await heading('أضفنا 500 رصيد إلى حسابك')
+    await heading('أضفنا 500 ج.م إلى رصيدك')
   })
 
   it('stops polling after five tries and says the payment is still waiting', async () => {
@@ -260,9 +261,7 @@ describe('BillingReturnPage (ar)', () => {
 
     await heading('لم تكتمل الدفعة')
     expect(
-      screen.getByText(
-        'لم يُضف رصيد إلى حسابك. يمكنك بدء عملية شراء جديدة متى شئت.'
-      )
+      screen.getByText('لم يُضف شيء إلى رصيدك. يمكنك بدء شحن جديد متى شئت.')
     ).toBeTruthy()
     expect(container.querySelector('.size-14')?.className).toContain(
       'bg-ak-danger-soft text-ak-danger'
@@ -326,7 +325,7 @@ describe('BillingReturnPage (ar)', () => {
     expect(container.querySelector('dl')).toBeNull()
 
     fireEvent.click(screen.getByRole('button', { name: 'تحديث الحالة' }))
-    await heading('أضفنا 500 رصيد إلى حسابك')
+    await heading('أضفنا 500 ج.م إلى رصيدك')
     expect(fetchPurchase).toHaveBeenCalledTimes(2)
   })
 
@@ -345,14 +344,14 @@ describe('BillingReturnPage (en)', () => {
   it('names the outcome of a successful payment and the new balance', async () => {
     renderPage('en')
 
-    await heading('We added 500 credits to your balance')
+    await heading('We added EGP 500 to your balance')
     expect(
       screen.getByText('Your balance is now', { exact: false }).textContent
     ).toBe(
-      'Your balance is now 888 credits, and new orders keep getting confirmed as usual.'
+      'Your balance is now EGP 444, and new orders keep getting confirmed as usual.'
     )
-    expect(detail('Credits')).toBe('500')
-    expect(detail('Amount')).toBe('EGP 1,000.00')
+    expect(detail('Messages')).toBe('500')
+    expect(detail('Amount')).toBe('EGP 500')
     expect(detail('Last updated')).toBe('Oct 1, 2026 · 8:52 AM')
     expect(screen.getByText('Successful')).toBeTruthy()
     expect(

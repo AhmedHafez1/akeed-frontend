@@ -1,17 +1,12 @@
 'use client'
 
-import { Suspense } from 'react'
 import {
   DashboardStandaloneSkin,
   useStandaloneDashboardUrlState,
 } from '@/features/dashboard'
 import { SendTestToPhoneAction } from '@/features/onboarding'
-import {
-  StandaloneShellProvider,
-  useStandaloneShell,
-} from '@/shared/layout/StandaloneShellContext'
-import { StandaloneSidebar } from '@/shared/layout/StandaloneSidebar'
-import { StandaloneTopBar } from '@/shared/layout/StandaloneTopBar'
+import { useStandaloneShell } from '@/shared/layout/StandaloneShellContext'
+import { FixtureStandaloneShell } from '../FixtureStandaloneShell'
 
 /*
  * The standalone dashboard's first run, with the production sidebar, top bar
@@ -35,18 +30,8 @@ function Dashboard() {
 
 export default function FirstRunFixturePage() {
   return (
-    <Suspense>
-      <StandaloneShellProvider>
-        <div className="akeed-app-canvas text-foreground flex min-h-screen">
-          <StandaloneSidebar className="sticky top-0 hidden h-screen lg:flex" />
-          <div className="flex min-w-0 flex-1 flex-col">
-            <StandaloneTopBar onOpenNavigation={() => undefined} />
-            <main className="flex-1 p-4 sm:p-6 lg:p-8">
-              <Dashboard />
-            </main>
-          </div>
-        </div>
-      </StandaloneShellProvider>
-    </Suspense>
+    <FixtureStandaloneShell>
+      <Dashboard />
+    </FixtureStandaloneShell>
   )
 }

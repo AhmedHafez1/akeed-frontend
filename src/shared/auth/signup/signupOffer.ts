@@ -3,14 +3,15 @@ import {
   CREDIT_FREE_MESSAGES,
   CREDIT_MESSAGE_PRICE_MINOR,
 } from '@/shared/config/pricing'
+import { formatBalance } from '@/shared/lib/balanceMoney'
 import type { SupportedLocale } from '@/shared/lib/locale'
-import { formatCredits, formatMoneyParts } from '@/shared/lib/money'
+import { formatCredits } from '@/shared/lib/money'
 
 export interface SignupOffer {
   /** Free WhatsApp messages on a new Akeed account. */
   count: number
   formattedCount: string
-  /** Price of one message after them, e.g. "2.00 ج.م". */
+  /** Price of one message after them, e.g. "1 ج.م" or "EGP 1". */
   price: string
 }
 
@@ -19,17 +20,10 @@ export interface SignupOffer {
  * from the copy.
  */
 export function getSignupOffer(locale: SupportedLocale): SignupOffer {
-  const { amount, currency } = formatMoneyParts(
-    CREDIT_MESSAGE_PRICE_MINOR,
-    CREDIT_CURRENCY,
-    locale
-  )
-
   return {
     count: CREDIT_FREE_MESSAGES,
     formattedCount: formatCredits(CREDIT_FREE_MESSAGES, locale),
-    // Same shape as onboarding's credit offer; Intl ends the Arabic pound
-    // with a period, which reads wrong mid-sentence.
-    price: `${amount} ${currency.replace(/\.$/, '')}`,
+    // Same formatter as onboarding's offer and the in-app balance.
+    price: formatBalance(CREDIT_MESSAGE_PRICE_MINOR, CREDIT_CURRENCY, locale),
   }
 }

@@ -152,11 +152,17 @@ function credits() {
     lowBalanceThreshold: 10,
     freeGrant: {
       granted: true,
-      quantity: 30,
+      quantity: 200,
       grantedAt: '2026-09-29T07:50:00.000Z',
     },
-    price: { unitPriceMinor: 200, currency: 'EGP' },
-    range: { min: 100, max: 5000, step: 50 },
+    price: {
+      unitPriceMinor: 50,
+      messagePriceMinor: 100,
+      creditsPerMessage: 2,
+      akeedMessagePriceMinor: 100,
+      currency: 'EGP',
+    },
+    range: { min: 200, max: 10000, step: 100 },
     canPurchase: true,
     purchaseDenialReason: null,
   }

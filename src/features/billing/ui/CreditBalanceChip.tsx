@@ -3,13 +3,13 @@
 import Link from 'next/link'
 import { MessageCircle } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
-import { formatCredits } from '@/shared/lib/money'
+import { creditsToMinor, formatBalance } from '@/shared/lib/balanceMoney'
 import { withLocale, type SupportedLocale } from '@/shared/lib/locale'
 import { Skeleton } from '@/shared/ui'
 import { useBillingSummary } from '../domain/useBillingSummary'
 
 /**
- * "الرصيد 60 رصيد" in the standalone top bar, linking to billing. A skeleton
+ * "الرصيد 150.5 ج.م" in the standalone top bar, linking to billing. A skeleton
  * while the balance loads (never a placeholder "0"); nothing if it failed.
  * Below 640px only the number shows, with the full phrase as its label.
  */
@@ -24,7 +24,12 @@ export function CreditBalanceChip() {
     ) : null
   }
 
-  const count = formatCredits(summary.availableCredits, locale)
+  const count = formatBalance(
+    summary.balanceMinor ??
+      creditsToMinor(summary.availableCredits, summary.price.unitPriceMinor),
+    summary.price.currency,
+    locale
+  )
   const label = t('label', { count })
 
   return (

@@ -26,7 +26,7 @@ Bulk import is available on standalone accounts. If you use Akeed on Shopify, yo
 | Size | Up to 5 MB and 100 orders per file. For more orders, split the file and import each part. |
 | Header row | The first row must contain column names. |
 | Minimum columns | Customer phone, customer name and order amount. |
-| Credits | Enough credits for every order you want to confirm. See [Using Akeed Without Shopify](/docs/standalone-platform). |
+| Balance | Enough balance for every order you want to confirm. See [Using Akeed Without Shopify](/docs/standalone-platform). |
 
 No file ready? Download the sample **CSV** or **Excel** template on the upload screen, in Arabic or English.
 
@@ -72,7 +72,7 @@ The preview ends with the cost and timing: the number of messages, up to double 
 Akeed then imports the ready orders and starts confirmation. You can follow each order's status in **Confirmations**.
 
 > [!WARNING]
-> If your balance does not cover every order, or automatic confirmation is turned off, **Send** is blocked and nothing is sent. Akeed shows how many credits you are short and a **Buy credits** button. There are no partial starts.
+> If your balance does not cover every order, or automatic confirmation is turned off, **Send** is blocked and nothing is sent. Akeed shows how much you are short and a **Top up** button. There are no partial starts.
 
 ## What Akeed Recognizes
 
@@ -120,7 +120,7 @@ You normally never see this state, because **Send** imports and starts in one ac
 | Start window | Held orders must be started within 24 hours. Otherwise they are withdrawn at no cost, and you can upload the file again. |
 | Pacing | Akeed sends gradually, about 20 first messages per minute, so your WhatsApp quality stays healthy. |
 | Quiet hours | If you set quiet hours in Settings, sending pauses during them and resumes afterward. |
-| Out of credits | If credits run out while sending, the import pauses. Buy credits and choose **Resume**. |
+| Balance ran out | If your balance runs out while sending, the import pauses. Top up and choose **Resume**. |
 
 ## Same File Twice: Safe by Design
 
@@ -130,7 +130,7 @@ You normally never see this state, because **Send** imports and starts in one ac
 
 ## Imported Orders in the Confirmations list
 
-Imported orders live in the same **Confirmations** list as every other order and work the same way: status, follow-up, no-reply handling, retry and cancel, and credit use. Statuses before the first message are **Awaiting start**, **Queued** and **Sending**.
+Imported orders live in the same **Confirmations** list as every other order and work the same way: status, follow-up, no-reply handling, retry and cancel, and charges. Statuses before the first message are **Awaiting start**, **Queued** and **Sending**.
 
 ## Privacy and Retention
 
@@ -151,7 +151,7 @@ Imported orders live in the same **Confirmations** list as every other order and
 | This is a landline | Replace it with the customer's mobile number. |
 | Not cash on delivery, so it won't be confirmed | Check the payment value. If it is really COD, move it to **Confirm · cash on delivery** in the column step. |
 | Order is more than 7 days old | Orders that old are too late to confirm. To skip date checks, set the order date to **Not in the file** in the column step. |
-| Buy credits to start | Buy credits so your balance covers every order, then press **Send** again. |
+| Top up your balance to start | Top up so your balance covers every order, then press **Send** again. |
 | Automatic confirmation is turned off | Turn it on in Settings, then send. |
 | This import expired | Upload the file again. |
 | Importing isn't available for this store | Bulk import is for standalone accounts. Shopify stores receive orders automatically. |
@@ -174,9 +174,9 @@ Starting applies to the whole import. Take out any orders you do not want from t
 
 The same as for any other order: a follow-up, then **No reply**. See [Automation Rules](/docs/automation-rules).
 
-### How many credits will an import use?
+### How much will an import cost?
 
-Two credits per message. A file of 80 ready orders uses 160 credits (EGP 160, since 1 credit is EGP 1), or up to 320 credits if follow-ups are on and customers do not reply.
+EGP 1 per message from Akeed's number. A file of 80 ready orders costs EGP 80, or up to EGP 160 if follow-ups are on and customers do not reply.
 
 ### Can I download a report of rows that were skipped?
 

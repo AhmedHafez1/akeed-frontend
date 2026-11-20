@@ -3,17 +3,28 @@ import { coverageRates, messageCoverage } from './messageCoverage'
 import { ownNumberAllowance } from './planPresentation'
 
 const price = {
-  unitPriceMinor: 100,
-  messagePriceMinor: 200,
+  unitPriceMinor: 50,
+  messagePriceMinor: 100,
   creditsPerMessage: 2,
   currency: 'EGP',
 }
 
 describe('message coverage', () => {
-  it('reads both rates from the server price', () => {
+  it('reads both message prices from the server', () => {
+    expect(
+      coverageRates({
+        ...price,
+        ownNumberCreditsPerMessage: 1,
+        akeedMessagePriceMinor: 100,
+        ownNumberMessagePriceMinor: 50,
+      })
+    ).toEqual({ akeed: 100, ownNumber: 50 })
+  })
+
+  it('derives them from the credit rates of an older backend', () => {
     expect(coverageRates({ ...price, ownNumberCreditsPerMessage: 1 })).toEqual({
-      akeed: 2,
-      ownNumber: 1,
+      akeed: 100,
+      ownNumber: 50,
     })
   })
 
@@ -24,10 +35,16 @@ describe('message coverage', () => {
     ).toBeNull()
   })
 
-  it('counts whole messages from either number for the same credits', () => {
-    const rates = { akeed: 2, ownNumber: 1 }
-    expect(messageCoverage(500, rates)).toEqual({ akeed: 250, ownNumber: 500 })
-    expect(messageCoverage(201, rates)).toEqual({ akeed: 100, ownNumber: 201 })
+  it('counts whole messages from either number for the same money', () => {
+    const rates = { akeed: 100, ownNumber: 50 }
+    expect(messageCoverage(25000, rates)).toEqual({
+      akeed: 250,
+      ownNumber: 500,
+    })
+    expect(messageCoverage(10050, rates)).toEqual({
+      akeed: 100,
+      ownNumber: 201,
+    })
     expect(messageCoverage(-5, rates)).toEqual({ akeed: 0, ownNumber: 0 })
   })
 })

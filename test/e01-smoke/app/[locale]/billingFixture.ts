@@ -37,7 +37,15 @@ function merchantCreditSummary(): CreditSummary {
       : account === 'not-provisioned'
         ? 'not_provisioned'
         : 'active'
-  const posted = account === 'zero' ? 2 : account === 'debt' ? -4 : 10
+  // Displayed credits at EGP 0.50: healthy is EGP 150.5, low EGP 4.5.
+  const posted =
+    account === 'zero'
+      ? 2
+      : account === 'debt'
+        ? -4
+        : account === 'healthy'
+          ? 303
+          : 11
   const held = account === 'zero' || account === 'debt' ? 2 : 2
   return {
     billingEnabled: account !== 'disabled',
@@ -45,17 +53,21 @@ function merchantCreditSummary(): CreditSummary {
     postedBalance: posted,
     heldCredits: held,
     availableCredits: Math.max(posted - held, 0),
+    balanceMinor: Math.max(posted - held, 0) * 50,
     debtCredits: Math.max(-posted, 0),
     lowBalanceThreshold: 20,
     freeGrant: {
       granted: status === 'active',
-      quantity: 60,
+      quantity: 200,
       grantedAt: status === 'active' ? '2026-09-01T10:00:00.000Z' : null,
     },
     price: {
-      unitPriceMinor: 100,
-      messagePriceMinor: 200,
+      unitPriceMinor: 50,
+      messagePriceMinor: 100,
       creditsPerMessage: 2,
+      ownNumberCreditsPerMessage: 1,
+      akeedMessagePriceMinor: 100,
+      ownNumberMessagePriceMinor: 50,
       currency: 'EGP',
     },
     range: { min: 200, max: 10000, step: 100 },
@@ -80,11 +92,11 @@ function merchantPurchase(
     reference,
     status,
     disputeStatus: 'none',
-    quantity: 100,
-    unitPriceMinor: 200,
-    totalMinor: 20000,
+    quantity: 200,
+    unitPriceMinor: 50,
+    totalMinor: 10000,
     currency: 'EGP',
-    refundedMinor: status === 'refunded' ? 20000 : 0,
+    refundedMinor: status === 'refunded' ? 10000 : 0,
     reconciliationRequired: false,
     checkoutExpiresAt: '2026-09-10T12:15:00.000Z',
     createdAt: '2026-09-10T12:00:00.000Z',

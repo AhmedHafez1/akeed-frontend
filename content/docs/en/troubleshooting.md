@@ -14,7 +14,7 @@ Use it when:
 - orders are not getting confirmed,
 - messages are delayed or not sent,
 - too many orders move to no-reply,
-- plan usage or an empty credit balance blocks new sends,
+- plan usage or an empty balance blocks new sends,
 - a file import does not behave as expected.
 
 ## Quick Triage Checklist
@@ -23,7 +23,7 @@ Before deep troubleshooting, check these first:
 
 1. Auto-confirmation is enabled.
 2. Order is COD-eligible.
-3. Plan usage has not reached the limit, or your credit balance (standalone accounts) is not empty.
+3. Plan usage has not reached the limit, or your balance (standalone accounts) is not empty.
 4. Quiet hours are not delaying sends.
 5. Phone number format includes country code.
 
@@ -54,7 +54,7 @@ These five checks solve most issues.
 
 ### What to do
 
-1. If usage is near/full, upgrade plan or wait for next cycle. On a standalone account, buy credits in **Billing & credits**.
+1. If usage is near/full, upgrade plan or wait for next cycle. On a standalone account, top up in **Billing & balance**.
 2. If failed status appears, verify customer phone quality.
 3. If delayed, check quiet hours and timezone settings.
 
@@ -139,14 +139,14 @@ These five checks solve most issues.
 
 - Did you press **Send** after the preview? Importing alone sends nothing.
 - Are the orders still **Awaiting start**? They must be started within 24 hours.
-- Is the import paused because credits ran out?
+- Is the import paused because your balance ran out?
 - Were some rows skipped as invalid, duplicate or excluded?
 
 ### What to do
 
 1. Open the import screen and read the reason next to each skipped group.
-2. If **Send** is blocked, buy credits or turn on automatic confirmation, then press **Send** again.
-3. If the import is paused, buy credits and choose **Resume**.
+2. If **Send** is blocked, top up or turn on automatic confirmation, then press **Send** again.
+3. If the import is paused, top up and choose **Resume**.
 4. If the window passed or the import expired, upload the file again. Orders with an order number that were already imported are recognized and not duplicated, and look-alike orders are flagged for your review.
 
 For file and column problems, see the troubleshooting table in [Bulk Order Import](/docs/bulk-order-import).
@@ -157,7 +157,7 @@ For file and column problems, see the troubleshooting table in [Bulk Order Impor
 
 - Current billing status in settings.
 - Whether plan change was approved in Shopify (Shopify stores).
-- Whether your Paymob payment was completed and your credit balance updated (standalone accounts).
+- Whether your Paymob payment was completed and your balance updated (standalone accounts).
 - Usage level vs included limit.
 
 ### What to do
@@ -165,7 +165,7 @@ For file and column problems, see the troubleshooting table in [Bulk Order Impor
 1. Retry plan change if approval was not completed.
 2. Keep current active plan if upgrade was declined.
 3. Upgrade before reaching hard usage limit in busy periods.
-4. On a standalone account, if a payment shows as pending, wait a moment and check **Billing & credits** before paying again.
+4. On a standalone account, if a payment shows as pending, wait a moment and check **Billing & balance** before paying again.
 
 ## When to Contact Support
 
@@ -173,7 +173,7 @@ Contact support when:
 
 - issue persists after checklist + issue-specific steps,
 - test message also fails repeatedly,
-- billing status appears inconsistent with Shopify approval, or a Paymob payment does not show in your credit balance.
+- billing status appears inconsistent with Shopify approval, or a Paymob payment does not show in your balance.
 
 When contacting support, include:
 

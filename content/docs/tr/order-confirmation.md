@@ -49,8 +49,8 @@ Sipariş onayı her ikisini de azaltmaya yardımcı olur.
 | İptal edildi | Müşteri iptal etti (ya da yanıt gelmediği için satıcı iptal etti). | Kargoya vermeyin. |
 | Yanıt yok | Ayarladığınız yanıt yok işaretleme süresi içinde yanıt gelmedi. | Hızla gözden geçirin ve iptal politikanızı uygulayın. |
 | WhatsApp iletilemedi | WhatsApp mesajı müşterinin numarasına iletemedi. Akeed hatırlatma göndermez ve bu mesajı kullanımınıza saymaz. | Müşteriyi arayın, ardından siparişi elle onaylayın ya da iptal edin. |
-| Gönderim bekliyor | Planınızın onayları veya krediniz bittiği için mesaj gönderilmedi. Ücret alınmaz. | Planınızı yükseltin ya da kredi satın alın; Akeed mesajı otomatik olarak gönderir. |
-| Başarısız | Gönderim başarısız oldu ya da engellendi. | Telefon numarasının doğruluğunu, plan kullanımını veya kredi bakiyesini ve ayarları kontrol edin. |
+| Gönderim bekliyor | Planınızın onayları veya bakiyeniz bittiği için mesaj gönderilmedi. Ücret alınmaz. | Planınızı yükseltin ya da bakiye yükleyin. Akeed mesajı otomatik olarak gönderir. |
+| Başarısız | Gönderim başarısız oldu ya da engellendi. | Telefon numarasının doğruluğunu, plan kullanımını veya bakiyeni ve ayarları kontrol edin. |
 
 ## Satıcılar İçin Pratik Akış
 
@@ -92,7 +92,7 @@ Başarısız bir gönderim yalnızca paneldeki bir sayı değil, operasyonel bir
 ### Başarısız onaylar artıyor
 
 - Telefon numaralarının doğruluğunu ve ülke kodu biçimini kontrol edin.
-- Mevcut plan kullanımını veya kredi bakiyesini kontrol edin.
+- Mevcut plan kullanımını veya bakiyeni kontrol edin.
 - Geçerli olduğunu bildiğiniz bir numaraya test onayı gönderin.
 
 ## SSS
@@ -115,9 +115,9 @@ WhatsApp, Akeed’e mesajın teslim edilemeyeceğini bildirir ve sipariş **What
 
 WhatsApp üç farklı nedende aynı yanıtı verir ve hangisi olduğunu söylemez: numara WhatsApp’ta değildir, müşteri WhatsApp’ın en son koşullarını kabul etmemiştir ya da WhatsApp uygulaması güncel değildir. Bu yüzden sizin WhatsApp’tan ulaşabildiğiniz bir müşteri de burada görünebilir. Müşteriden WhatsApp’ı güncellemesini ve koşullarını kabul etmesini isteyin (WhatsApp bunu Ayarlar, ardından Yardım bölümünde gösterir). Sonraki siparişlerinin mesajları ona ulaşabilir.
 
-### Planımın onayları veya kredim bittiğinde ne olur?
+### Planımın onayları veya bakiyem bittiğinde ne olur?
 
-Yeni siparişler yine alınır, ancak mesajları **Gönderim bekliyor** durumunda bekler ve panodaki kırmızı bir uyarı kaç siparişin beklediğini ve ne yapabileceğinizi gösterir. Bunlar için ücret alınmaz. Planınızı yükselttiğinizde, kredi satın aldığınızda ya da plan kotanız yenilendiğinde Akeed bunları en eskisinden başlayarak, gönderim gecikmesine ve sessiz saatlere uyarak otomatik olarak gönderir. 24 saatten uzun bekleyen bir sipariş kendiliğinden gönderilmez: onaylayabileceğiniz, iptal edebileceğiniz ya da yeniden deneyebileceğiniz **İşlem bekleyen** bölümüne taşınır.
+Yeni siparişler yine alınır, ancak mesajları **Gönderim bekliyor** durumunda bekler ve panodaki kırmızı bir uyarı kaç siparişin beklediğini ve ne yapabileceğinizi gösterir. Bunlar için ücret alınmaz. Planınızı yükselttiğinizde, bakiye yüklediğinizde ya da plan kotanız yenilendiğinde Akeed bunları en eskisinden başlayarak, gönderim gecikmesine ve sessiz saatlere uyarak otomatik olarak gönderir. 24 saatten uzun bekleyen bir sipariş kendiliğinden gönderilmez: onaylayabileceğiniz, iptal edebileceğiniz ya da yeniden deneyebileceğiniz **İşlem bekleyen** bölümüne taşınır.
 
 Ücretli bir Shopify planında uyarı ayrıca planınızın adını taşıyan bir yenileme düğmesi sunar, örneğin **Basic planını şimdi yenile**. Mevcut planınızı Shopify’da yeniden onaylarsınız ve tam hakla 30 günlük yeni bir dönem hemen başlar; bekleyen siparişler gönderilir. Eski dönemden kalan mesajlar devretmez. Aynı düğme **Ayarlar → Plan** bölümünde mevcut planınızda da bulunur.
 
