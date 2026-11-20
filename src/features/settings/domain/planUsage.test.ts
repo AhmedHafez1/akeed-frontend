@@ -13,14 +13,14 @@ const PLANS = [
   {
     id: 'starter',
     amount: 0,
-    includedVerifications: 30,
-    ownNumberIncludedVerifications: 90,
+    includedVerifications: 60,
+    ownNumberIncludedVerifications: 200,
   },
   {
     id: 'basic',
     amount: 9.99,
     includedVerifications: 300,
-    ownNumberIncludedVerifications: 1000,
+    ownNumberIncludedVerifications: 2000,
   },
   {
     id: 'pro',
@@ -46,11 +46,11 @@ describe('Plan usage banner', () => {
     const combined = status === 'ready' || status === 'partial'
     return resolvePlanUsageBanner({
       active: true,
-      used: combined ? 1300 - akeedLeft - ownLeft : 300 - akeedLeft,
-      limit: combined ? 1300 : 300,
+      used: combined ? 2300 - akeedLeft - ownLeft : 300 - akeedLeft,
+      limit: combined ? 2300 : 300,
       pools: {
         akeed: { used: 300 - akeedLeft, limit: 300, remaining: akeedLeft },
-        ownNumber: { used: 1000 - ownLeft, limit: 1000, remaining: ownLeft },
+        ownNumber: { used: 2000 - ownLeft, limit: 2000, remaining: ownLeft },
       },
       number: {
         status,
@@ -63,11 +63,11 @@ describe('Plan usage banner', () => {
   }
   it('does not call either single-pool exhaustion total exhaustion', () => {
     expect(banner(0, 800)).toBeNull()
-    expect(banner(300, 0)).toBeNull()
+    expect(banner(300, 0)).toMatchObject({ kind: 'low', remaining: 300 })
   })
   it('warns at 80% combined usage and counts the messages still usable', () => {
-    expect(banner(0, 261)).toBeNull()
-    expect(banner(0, 260)).toMatchObject({ kind: 'low', remaining: 260 })
+    expect(banner(0, 461)).toBeNull()
+    expect(banner(0, 460)).toMatchObject({ kind: 'low', remaining: 460 })
     expect(banner(1, 0)).toMatchObject({ kind: 'low', remaining: 1 })
   })
   it('shows the existing exhaustion state only when no usable messages remain', () => {
@@ -199,13 +199,13 @@ describe('recommendPlan', () => {
 
   it('sizes each plan with its own pools for mixed senders', () => {
     // 264 messages in all would need Pro; 64 from Akeed's pool and 200 from
-    // the own number fit Basic's 300 + 1,000.
+    // the own number fit Basic's 300 + 2,000.
     expect(recommendPlan(PLANS, 264, { akeed: 64, ownNumber: 200 })).toBe(
       'basic'
     )
-    // Basic's own pool covers 1,000 / 1.5 own-number messages; beyond that
+    // Basic's own pool covers 2,000 / 1.5 own-number messages; beyond that
     // they spill into the Akeed pool and Pro's larger pools fit.
-    expect(recommendPlan(PLANS, 1100, { akeed: 100, ownNumber: 1000 })).toBe(
+    expect(recommendPlan(PLANS, 1600, { akeed: 100, ownNumber: 1500 })).toBe(
       'pro'
     )
     // Scale's 20,000 own-number pool is what fits high own-number volume.
@@ -216,10 +216,10 @@ describe('recommendPlan', () => {
 
   it("spills own-number volume past a plan's own pool into its Akeed pool", () => {
     const basic = PLANS[1]
-    // 600 own-number messages need 900 with headroom: under Basic's 1,000.
-    expect(planCovers(basic, 700, { akeed: 100, ownNumber: 600 })).toBe(true)
-    // 800 need 1,200: 200 spill over, and 150 + 200 exceeds 300.
-    expect(planCovers(basic, 900, { akeed: 100, ownNumber: 800 })).toBe(false)
+    // 1,200 own-number messages need 1,800 with headroom: under Basic's 2,000.
+    expect(planCovers(basic, 1300, { akeed: 100, ownNumber: 1200 })).toBe(true)
+    // 1,500 need 2,250: 250 spill over, and 150 + 250 exceeds 300.
+    expect(planCovers(basic, 1600, { akeed: 100, ownNumber: 1500 })).toBe(false)
   })
 
   it('counts every message against the Akeed allowance without pool figures', () => {

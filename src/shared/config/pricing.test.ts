@@ -58,8 +58,8 @@ describe('own-number pricing config', () => {
         plan.oneTime,
       ])
     ).toEqual([
-      ['starter', 30, 90, true],
-      ['basic', 300, 1000, false],
+      ['starter', 60, 200, true],
+      ['basic', 300, 2000, false],
       ['pro', 1000, 5000, false],
       ['business', 2500, 20000, false],
     ])

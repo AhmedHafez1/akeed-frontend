@@ -80,8 +80,8 @@ Numaranız bağlandığında planınızda iki ayrı kota olur:
 
 | Plan | Akeed’in numarasından mesajlar | Sizin numaranızdan mesajlar |
 | --- | --- | --- |
-| Starter (tek seferlik) | 30 | 90 |
-| Basic | 300 | 1.000 |
+| Starter (tek seferlik) | 60 | 200 |
+| Basic | 300 | 2.000 |
 | Pro | 1.000 | 5.000 |
 | Scale | 2.500 | 20.000 |
 

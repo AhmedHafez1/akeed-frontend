@@ -35,8 +35,8 @@ function renderTab(
     legacy?: boolean
   } = {}
 ) {
-  const akeedLimit = options.free ? 30 : 300
-  const ownLimit = options.free ? 90 : 1000
+  const akeedLimit = options.free ? 60 : 300
+  const ownLimit = options.free ? 200 : 2000
   const akeedLeft = options.akeed ?? 0
   const ownLeft = options.own ?? 800
   const presence = { ...number, ...options.number }
@@ -76,7 +76,7 @@ function renderTab(
   })
   data.billing.plans = data.billing.plans.map((plan) => ({
     ...plan,
-    ownNumberIncludedVerifications: plan.id === 'basic' ? 1000 : 90,
+    ownNumberIncludedVerifications: plan.id === 'basic' ? 2000 : 200,
   }))
   const subscribe = vi.fn()
   const onOpenWhatsapp = vi.fn()
@@ -111,7 +111,7 @@ describe.each(['en', 'ar'] as const)('Plan allowances (%s)', (locale) => {
     expect(screen.queryByText(copy.pools.ownNumber)).toBeNull()
     expect(screen.getByText(copy.pools.akeed)).toBeTruthy()
     expect(screen.getByText(notice.connectTitle)).toBeTruthy()
-    expect(screen.getAllByText(/1,000/).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(/2,000/).length).toBeGreaterThan(0)
   })
   it('shows both current pools without the removed heading', () => {
     renderTab(locale)
@@ -126,11 +126,11 @@ describe.each(['en', 'ar'] as const)('Plan allowances (%s)', (locale) => {
     expect(screen.queryByText(notice.connectTitle)).toBeNull()
   })
   it('warns about combined usable messages at the existing threshold', () => {
-    renderTab(locale, { own: 260 })
+    renderTab(locale, { own: 460 })
     expect(screen.queryByText(copy.criticalTitle)).toBeNull()
     expect(
       screen.getAllByText(
-        locale === 'en' ? '260 messages left' : 'متبقي 260 رسالة'
+        locale === 'en' ? '460 messages left' : 'متبقي 460 رسالة'
       )
     ).toHaveLength(2)
   })
@@ -175,7 +175,7 @@ describe.each(['en', 'ar'] as const)('Plan allowances (%s)', (locale) => {
   it('offers plan selection to free users instead of renewal', () => {
     renderTab(locale, {
       free: true,
-      own: 90,
+      own: 200,
       number: { status: 'unconnected', connected: false },
     })
     expect(screen.getByText(notice.connectChooseBody)).toBeTruthy()

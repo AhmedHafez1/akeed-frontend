@@ -80,8 +80,8 @@ Une fois votre numéro connecté, votre forfait comporte deux quotas distincts 
 
 | Forfait | Messages depuis le numéro d’Akeed | Messages depuis votre numéro |
 | --- | --- | --- |
-| Starter (une seule fois) | 30 | 90 |
-| Basic | 300 | 1 000 |
+| Starter (une seule fois) | 60 | 200 |
+| Basic | 300 | 2 000 |
 | Pro | 1 000 | 5 000 |
 | Scale | 2 500 | 20 000 |
 

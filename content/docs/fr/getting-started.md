@@ -57,7 +57,7 @@ Choisissez le forfait qui correspond à votre volume mensuel prévu de confirmat
 
 | Forfait | Confirmations incluses | Idéal pour |
 | --- | ---: | --- |
-| Starter | 30 | Essayer Akeed pour la première fois. |
+| Starter | 60 | Essayer Akeed pour la première fois. |
 | Basic | 300 | Les petites boutiques qui confirment régulièrement des commandes COD. |
 | Pro | 1 000 | Les boutiques avec un volume COD quotidien et des besoins d’automatisation. |
 | Scale | 2 500 | Les activités COD à plus fort volume. |

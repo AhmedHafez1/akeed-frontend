@@ -211,7 +211,7 @@ export function settingsResponseFixture(
           name: 'Akeed Starter',
           amount: 0,
           currencyCode: 'USD',
-          includedVerifications: 30,
+          includedVerifications: 60,
         },
         {
           id: 'basic',

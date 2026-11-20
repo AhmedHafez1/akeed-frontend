@@ -19,7 +19,7 @@ vi.mock('@/features/whatsapp-connect', () => ({
   useOwnNumberPresence: () => presence.value,
 }))
 
-const OWN_POOLS = { starter: 90, basic: 1000, pro: 5000, business: 20000 }
+const OWN_POOLS = { starter: 200, basic: 2000, pro: 5000, business: 20000 }
 
 function plansResponse(
   isFreePlanClaimed: boolean,
@@ -34,7 +34,7 @@ function plansResponse(
         name: 'Akeed Starter',
         amount: 0,
         currencyCode: 'USD',
-        includedVerifications: 30,
+        includedVerifications: 60,
       },
       {
         id: 'basic',
@@ -100,7 +100,7 @@ const radio = (name: string) =>
   screen.getByRole('radio', { name }) as HTMLInputElement
 
 const FREE_USED =
-  /الباقة المجانية \(30 رسالة لمرة واحدة\) استُخدمت في هذا المتجر\./
+  /الباقة المجانية \(60 رسالة لمرة واحدة\) استُخدمت في هذا المتجر\./
 
 beforeEach(() => {
   vi.clearAllMocks()
@@ -119,7 +119,7 @@ describe('UpgradePlansModal', () => {
     expect(radio('الاحترافية').checked).toBe(false)
     expect(radio('المتقدمة').checked).toBe(false)
     expect(screen.getByText(FREE_USED)).toBeTruthy()
-    expect(screen.queryByText('البداية: 30 رسالة مجانية لمرة واحدة')).toBeNull()
+    expect(screen.queryByText('البداية: 60 رسالة مجانية لمرة واحدة')).toBeNull()
 
     expect(screen.getByText('US$ 49.99')).toBeTruthy()
     expect(screen.getAllByRole('listitem')).toHaveLength(4)
@@ -174,7 +174,7 @@ describe('UpgradePlansModal', () => {
     expect(radio('الأساسية').checked).toBe(true)
     expect(screen.queryByText(FREE_USED)).toBeNull()
 
-    fireEvent.click(radio('البداية: 30 رسالة مجانية لمرة واحدة'))
+    fireEvent.click(radio('البداية: 60 رسالة مجانية لمرة واحدة'))
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: 'ابدأ مجاناً' }))
     })
@@ -271,7 +271,7 @@ describe('UpgradePlansModal', () => {
 })
 
 describe('UpgradePlansModal with the merchant number', () => {
-  const OWN_LINE = /\+1,000\u2069? من رقمك الخاص/
+  const OWN_LINE = /\+2,000\u2069? من رقمك الخاص/
   const META = 'وتحاسب Meta نشاطك التجاري بشكل منفصل عليها.'
   const pageText = () => document.body.textContent ?? ''
 

@@ -57,7 +57,7 @@ Aylık beklenen kapıda ödeme onay hacminize uygun planı seçin.
 
 | Plan | Dahil Onaylar | En Uygun Olduğu Durum |
 | --- | ---: | --- |
-| Starter | 30 | Akeed’i ilk kez deneyenler. |
+| Starter | 60 | Akeed’i ilk kez deneyenler. |
 | Basic | 300 | Kapıda ödeme siparişlerini düzenli olarak onaylayan küçük mağazalar. |
 | Pro | 1.000 | Günlük kapıda ödeme hacmi ve otomasyon ihtiyacı olan mağazalar. |
 | Scale | 2.500 | Daha yüksek hacimli kapıda ödeme operasyonları. |

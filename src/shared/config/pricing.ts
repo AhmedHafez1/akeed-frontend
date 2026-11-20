@@ -99,8 +99,8 @@ export interface ShopifyPublicAllowance {
  * the page: Shopify presents them on the App Store listing.
  */
 export const SHOPIFY_PUBLIC_ALLOWANCES: readonly ShopifyPublicAllowance[] = [
-  { id: 'starter', akeedMessages: 30, ownNumberMessages: 90, oneTime: true },
-  { id: 'basic', akeedMessages: 300, ownNumberMessages: 1000, oneTime: false },
+  { id: 'starter', akeedMessages: 60, ownNumberMessages: 200, oneTime: true },
+  { id: 'basic', akeedMessages: 300, ownNumberMessages: 2000, oneTime: false },
   { id: 'pro', akeedMessages: 1000, ownNumberMessages: 5000, oneTime: false },
   {
     id: 'business',
