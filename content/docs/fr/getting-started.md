@@ -14,8 +14,8 @@ Akeed fonctionne de trois façons. Suivez ce guide si vous le configurez pour la
 | Si vous… | Utilisez | Comment arrivent les commandes | Comment vous payez |
 | --- | --- | --- | --- |
 | Avez une boutique Shopify | [Parcours A : Shopify](#parcours-a-shopify) | Automatiquement depuis votre boutique. | Un forfait mensuel facturé par Shopify. |
-| Avez une boutique WooCommerce ou EasyOrders | [Connecter WooCommerce](/docs/woocommerce) ou [Connecter EasyOrders](/docs/easyorders) | Automatiquement depuis votre boutique. | Des crédits, achetés via Paymob. |
-| Vendez ailleurs, ou travaillez à partir d’une feuille de calcul | [Parcours B : votre propre boutique](#parcours-b-votre-propre-boutique-sans-shopify) | Vous les ajoutez une par une, importez un fichier ou les envoyez depuis votre propre serveur. | Des crédits, achetés via Paymob. |
+| Avez une boutique WooCommerce ou EasyOrders | [Connecter WooCommerce](/docs/woocommerce) ou [Connecter EasyOrders](/docs/easyorders) | Automatiquement depuis votre boutique. | Un solde prépayé rechargeable via Paymob. |
+| Vendez ailleurs, ou travaillez à partir d’une feuille de calcul | [Parcours B : votre propre boutique](#parcours-b-votre-propre-boutique-sans-shopify) | Vous les ajoutez une par une, importez un fichier ou les envoyez depuis votre propre serveur. | Un solde prépayé rechargeable via Paymob. |
 
 > [!INFO]
 > Akeed est conçu pour la confirmation des commandes COD. Il n’envoie pas de message de confirmation pour les commandes payées en ligne.
@@ -111,12 +111,12 @@ Akeed envoie une confirmation de test gratuite à votre propre numéro. Vérifie
 - **Une commande :** utilisez **Vérifier une commande** dans le tableau de bord.
 - **Plusieurs commandes :** utilisez **Importer depuis un fichier** pour charger un fichier CSV ou Excel. Consultez [Import de commandes en masse](/docs/bulk-order-import).
 
-### Étape 5 : garder des crédits disponibles
+### Étape 5 : recharger votre solde
 
-Vous commencez avec 60 crédits gratuits, soit 30 messages WhatsApp. 1 crédit vaut 1 EGP, chaque message WhatsApp utilise 2 crédits et une relance en utilise 2 de plus. Ouvrez **Facturation et crédits** pour en acheter via Paymob, par carte ou avec Vodafone Cash.
+Vous commencez avec 100 messages offerts. Ensuite, chaque message depuis le numéro d’Akeed coûte 1 EGP et une relance compte comme un message supplémentaire. Ouvrez **Facturation et solde** pour recharger via Paymob par carte ou avec Vodafone Cash.
 
 > [!WARNING]
-> Quand vos crédits sont épuisés, les nouvelles confirmations s’arrêtent jusqu’à ce que vous en achetiez.
+> Lorsque votre solde est épuisé, les nouvelles confirmations s’arrêtent jusqu’à ce que vous le rechargiez.
 
 ## Erreurs fréquentes
 
@@ -124,7 +124,7 @@ Vous commencez avec 60 crédits gratuits, soit 30 messages WhatsApp. 1 crédit v
 | --- | --- |
 | Désactiver la confirmation automatique par mégarde | Laissez la confirmation automatique activée, sauf si vous voulez suspendre toutes les nouvelles confirmations COD. |
 | Expédier avant la réponse du client | Attendez le statut « Confirmée » chaque fois que c’est possible. |
-| Ignorer l’utilisation du forfait ou le solde de crédits | Surveillez votre barre d’utilisation (Shopify) ou votre solde de crédits (compte autonome) pour que les envois ne s’arrêtent pas de façon inattendue. |
+| Ignorer l’utilisation du forfait ou le solde | Surveillez votre barre d’utilisation (Shopify) ou votre solde (compte autonome) pour que les envois ne s’arrêtent pas de façon inattendue. |
 | Régler des délais très longs | Gardez des délais de premier envoi et de relance adaptés à votre logistique. |
 
 ## Dépannage
@@ -139,7 +139,7 @@ Assurez-vous que le numéro de téléphone est valide et comporte l’indicatif 
 
 ### Les nouveaux envois se sont arrêtés
 
-Sur Shopify, vérifiez l’utilisation de votre forfait. Si vos confirmations incluses sont épuisées, changez de forfait ou attendez la prochaine période de facturation. Sur un compte autonome, vérifiez votre solde de crédits et achetez-en s’il est vide.
+Sur Shopify, vérifiez l’utilisation de votre forfait. Si vous avez épuisé vos confirmations, changez de forfait ou attendez la prochaine période de facturation. Sur un compte autonome, vérifiez votre solde et rechargez-le si nécessaire.
 
 ## FAQ
 

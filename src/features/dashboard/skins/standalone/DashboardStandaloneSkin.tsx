@@ -2,7 +2,6 @@
 
 import { useEffect, useState, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
-import { CreditModelNoticeBanner } from '@/features/billing'
 import { TipBannerSlot, TipsSection } from '@/features/tips'
 import { cn } from '@/shared/lib/utils'
 import { Skeleton, akButton, akCard, notify } from '@/shared/ui'
@@ -152,7 +151,6 @@ export function DashboardStandaloneSkin({
           afterHeader={
             <>
               <TipBannerSlot />
-              <CreditModelNoticeBanner />
               <TipsSection />
             </>
           }
@@ -177,7 +175,6 @@ export function DashboardStandaloneSkin({
       />
 
       <TipBannerSlot />
-      <CreditModelNoticeBanner />
       <TipsSection />
 
       {isLoading || firstRun.status === 'loading' ? (

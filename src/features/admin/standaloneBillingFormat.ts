@@ -1,4 +1,25 @@
+import {
+  CREDIT_CURRENCY,
+  CREDIT_UNIT_PRICE_MINOR,
+} from '@/shared/config/pricing'
+import { formatBalance } from '@/shared/lib/balanceMoney'
 import type { SupportedLocale } from '@/shared/lib/locale'
+
+/**
+ * The money a merchant sees for a displayed-credit figure, e.g. "EGP 150.5".
+ * Staff still read stored credits beside it: one stored credit is one Akeed
+ * message, and two displayed credits.
+ */
+export function formatDisplayedMoney(
+  displayedCredits: number,
+  locale: SupportedLocale
+) {
+  return formatBalance(
+    displayedCredits * CREDIT_UNIT_PRICE_MINOR,
+    CREDIT_CURRENCY,
+    locale
+  )
+}
 
 export const RECONCILIATION_CODES = [
   'provider_rejected',

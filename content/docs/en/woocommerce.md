@@ -139,7 +139,7 @@ No. Akeed confirms orders placed after the store is connected.
 
 ### How do I pay?
 
-With credits, like every account that does not use Shopify. See [Using Akeed Without Shopify](/docs/standalone-platform#how-credits-work).
+With a prepaid balance, like every account that does not use Shopify. See [Using Akeed Without Shopify](/docs/standalone-platform#how-your-balance-works).
 
 ### Can I connect two stores to one account?
 

@@ -8,16 +8,10 @@ import {
   CREDIT_CURRENCY,
   CREDIT_FREE_MESSAGES,
   CREDIT_MESSAGE_PRICE_MINOR,
-  CREDIT_UNIT_PRICE_MINOR,
-  CREDITS_PER_MESSAGE,
-  OWN_NUMBER_CREDITS_PER_MESSAGE,
   OWN_NUMBER_MESSAGE_PRICE_MINOR,
 } from '@/shared/config/pricing'
-import {
-  formatCredits,
-  formatMoney,
-  formatMoneyParts,
-} from '@/shared/lib/money'
+import { formatBalance, formatBalanceParts } from '@/shared/lib/balanceMoney'
+import { formatCredits } from '@/shared/lib/money'
 import { CreditSlider } from './CreditSlider'
 
 /**
@@ -38,10 +32,17 @@ export function CreditPriceCard({
   const t = useTranslations('pricing_credits')
   const { locale, targets } = useAcquisition()
 
-  const price = formatMoneyParts(
-    CREDIT_UNIT_PRICE_MINOR,
+  // The headline is one message from Akeed's number.
+  const price = formatBalanceParts(
+    CREDIT_MESSAGE_PRICE_MINOR,
     CREDIT_CURRENCY,
     locale
+  )
+  const money = (minor: number) => formatBalance(minor, CREDIT_CURRENCY, locale)
+  const currency = (
+    <span className="text-2xl font-semibold text-slate-400">
+      {price.currency}
+    </span>
   )
 
   return (
@@ -64,32 +65,21 @@ export function CreditPriceCard({
       </span>
 
       {/*
-       * The amount is forced LTR so Arabic punctuation does not land on the
-       * wrong side of the digits. Formatting comes from shared/lib/money, so
-       * this renders exactly like the in-app balance.
+       * The amount and currency keep their reading order left to right, so
+       * Arabic punctuation does not land on the wrong side of the digits.
+       * Formatting comes from shared/lib/balanceMoney, so this renders exactly
+       * like the in-app balance.
        */}
-      <p className="mt-8 flex items-baseline gap-3">
-        <span
-          dir="ltr"
-          className="text-6xl leading-none font-bold text-white tabular-nums sm:text-7xl"
-        >
-          {price.amount}
-        </span>
-        <span className="text-2xl font-semibold text-slate-400">
-          {price.currency}
+      <p className="mt-8 flex">
+        <span dir="ltr" className="inline-flex items-baseline gap-3">
+          {price.currencyFirst && currency}
+          <span className="text-6xl leading-none font-bold text-white tabular-nums sm:text-7xl">
+            {price.amount}
+          </span>
+          {!price.currencyFirst && currency}
         </span>
       </p>
       <p className="mt-3 text-base text-slate-400">{t('per_credit')}</p>
-      <p className="mt-1 text-base text-slate-400">
-        {t('message_cost', {
-          credits: formatCredits(CREDITS_PER_MESSAGE, locale),
-          price: formatMoney(
-            CREDIT_MESSAGE_PRICE_MINOR,
-            CREDIT_CURRENCY,
-            locale
-          ),
-        })}
-      </p>
 
       {showOwnNumber && (
         <div className="mt-6 border-t border-white/10 pt-5">
@@ -102,16 +92,7 @@ export function CreditPriceCard({
                 {t('own_number.from_akeed')}
               </dt>
               <dd className="mt-0.5 text-lg font-semibold text-white">
-                <bdi>
-                  {t('own_number.rate', {
-                    credits: CREDITS_PER_MESSAGE,
-                    price: formatMoney(
-                      CREDIT_MESSAGE_PRICE_MINOR,
-                      CREDIT_CURRENCY,
-                      locale
-                    ),
-                  })}
-                </bdi>
+                <bdi>{money(CREDIT_MESSAGE_PRICE_MINOR)}</bdi>
               </dd>
             </div>
             <div className="border-s-2 border-emerald-400 ps-3">
@@ -119,16 +100,7 @@ export function CreditPriceCard({
                 {t('own_number.from_yours')}
               </dt>
               <dd className="mt-0.5 text-lg font-semibold text-white">
-                <bdi>
-                  {t('own_number.rate', {
-                    credits: OWN_NUMBER_CREDITS_PER_MESSAGE,
-                    price: formatMoney(
-                      OWN_NUMBER_MESSAGE_PRICE_MINOR,
-                      CREDIT_CURRENCY,
-                      locale
-                    ),
-                  })}
-                </bdi>
+                <bdi>{money(OWN_NUMBER_MESSAGE_PRICE_MINOR)}</bdi>
               </dd>
             </div>
           </dl>

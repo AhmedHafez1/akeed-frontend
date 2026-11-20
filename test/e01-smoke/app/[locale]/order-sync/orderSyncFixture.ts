@@ -324,8 +324,8 @@ export async function orderSyncCreditsResponse(): Promise<Response> {
     lowBalanceThreshold: 10,
     freeGrant: { granted: true, quantity: 40, grantedAt: null },
     price: {
-      unitPriceMinor: 100,
-      messagePriceMinor: 200,
+      unitPriceMinor: 50,
+      messagePriceMinor: 100,
       creditsPerMessage: 2,
       currency: 'EGP',
     },

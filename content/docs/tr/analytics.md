@@ -23,7 +23,7 @@ Her sayının operasyonel değeri aynı değildir. Önce şunlara odaklanın:
 | Yanıt oranı | Müşterilerin mesajlarınızla etkileşime girip girmediğini gösterir. |
 | Yanıt yok hacmi | Olası zamanlama veya mesaj uyumu sorunlarını gösterir. |
 | Başarısız gönderimler | Teslimat veya yapılandırma sorunlarını öne çıkarır. |
-| Kullanım ilerlemesi | Plan sınırınıza beklenmedik şekilde ulaşmanızı ya da kredinizin bitmesini önler. |
+| Kullanım ilerlemesi | Plan sınırınıza beklenmedik şekilde ulaşmanızı ya da bakiyenizin bitmesini önler. |
 
 ## Metrik Tanımları (Satıcı Görünümü)
 
@@ -57,12 +57,12 @@ Bunu her gün takip edin. Küçük bir başarısızlık artışı bile etkili on
 
 ### Kullanım (Kullanılan / Sınır)
 
-Shopify’da bu, planınıza dahil onaylara göre ilerlemeyi gösterir. Bağımsız bir hesapta bunun yerine kredi bakiyenizi takip edin.
+Shopify’da bu, planınıza dahil onaylara göre ilerlemeyi gösterir. Bağımsız bir hesapta bunun yerine bakiyenizi takip edin.
 
 Bunu yalnızca bir faturalandırma bilgisi olarak değil, operasyonel bir sinyal olarak kullanın.
 
 > [!WARNING]
-> Kullanım sınırınıza ulaşırsa ya da krediniz biterse, yenileme, plan yükseltme veya kredi satın alma işlemine kadar yeni onaylar durabilir.
+> Kullanım sınırınıza ulaşırsa ya da bakiyeniz biterse, yenileme, plan yükseltme veya bakiye yüklemeye kadar yeni onaylar durabilir.
 
 ## Eğilimler Nasıl Okunur (Haftalık)
 
@@ -83,7 +83,7 @@ Yalnızca tek bir güne bakarak iyileştirme yapmayın.
 | Yanıt oranında düşüş | Önceki döneme göre %10’dan fazla düşüş | Şablonun üslubunu ve gönderim zamanlamasını gözden geçirin. |
 | Yanıt yok artışı | Haftadan haftaya %15’ten fazla artış | Hatırlatma ve yanıt yok işaretleme sürelerini açın veya yeniden ayarlayın. |
 | Başarısız gönderimler | Ani artış | Telefon numaralarının doğruluğunu ve ayarları kontrol edin. |
-| Kullanım baskısı | Planınızın %80’i ve %95’i ya da düşük kredi bakiyesi | Sınıra ulaşmadan planınızı yükseltin veya kredi satın alın. |
+| Kullanım baskısı | Planınızın %80’i ve %95’i ya da düşük bakiye | Sınıra ulaşmadan planınızı yükseltin veya bakiye yükleyin. |
 
 ## Sık Yapılan Hatalar
 
@@ -115,7 +115,7 @@ Yalnızca tek bir güne bakarak iyileştirme yapmayın.
 ### Performans güçlü, kullanım sınıra yakın
 
 - Bu iyi bir sorun: talep sağlıklı.
-- Gönderimler durmadan önce planınızı yükseltin veya kredi satın alın.
+- Gönderimler durmadan önce planınızı yükseltin veya bakiye yükleyin.
 
 ## SSS
 

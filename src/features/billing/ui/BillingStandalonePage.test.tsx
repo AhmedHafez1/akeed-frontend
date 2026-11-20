@@ -29,28 +29,29 @@ const history = vi.hoisted(() => ({
 vi.mock('../domain/useTransactions', () => ({
   useTransactions: () => history,
 }))
-vi.mock('./components/CreditModelNoticeBanner', () => ({
-  CreditModelNoticeBanner: () => null,
-}))
 
 type PageState = ReturnType<typeof useBillingPage>
 
 const summary: CreditSummary = {
   billingEnabled: true,
   status: 'active',
-  postedBalance: 388,
+  // 301 displayed credits at EGP 0.50: EGP 150.5.
+  postedBalance: 301,
   heldCredits: 0,
-  availableCredits: 388,
+  availableCredits: 301,
+  balanceMinor: 15_050,
   debtCredits: 0,
-  lowBalanceThreshold: 50,
-  freeGrant: { granted: true, quantity: 30, grantedAt: null },
+  lowBalanceThreshold: 100,
+  freeGrant: { granted: true, quantity: 200, grantedAt: null },
   price: {
-    unitPriceMinor: 100,
-    messagePriceMinor: 200,
+    unitPriceMinor: 50,
+    messagePriceMinor: 100,
     creditsPerMessage: 2,
+    akeedMessagePriceMinor: 100,
     currency: 'EGP',
   },
-  range: { min: 100, max: 5000, step: 50 },
+  // EGP 100 to 5,000 in steps of 50.
+  range: { min: 200, max: 10_000, step: 100 },
   canPurchase: true,
   purchaseDenialReason: null,
 }
@@ -59,9 +60,9 @@ const lastPurchase: PurchaseSummary = {
   reference: 'akd_0123456789abcdef0123456789abcdef',
   status: 'successful',
   disputeStatus: 'none',
-  quantity: 500,
-  unitPriceMinor: 200,
-  totalMinor: 100_000,
+  quantity: 1000,
+  unitPriceMinor: 50,
+  totalMinor: 50_000,
   currency: 'EGP',
   refundedMinor: 0,
   reconciliationRequired: false,
@@ -93,13 +94,14 @@ function mockPage(
     summaryError: null,
     refreshSummary: vi.fn(),
     packages: derivePackages(merged.range, merged.price.unitPriceMinor),
-    selectedPackage: 500,
+    selectedPackage: 1000,
     selectPackage: vi.fn(),
-    quantityInput: '500',
-    setQuantityInput: vi.fn(),
-    quantity: 500,
+    amountInput: '500',
+    setAmountInput: vi.fn(),
+    amountRange: { min: 100, max: 5000, step: 50 },
+    quantity: 1000,
     quantityError: null,
-    totalMinor: 100_000,
+    totalMinor: 50_000,
     adjustQuantity: vi.fn(),
     canPurchase: merged.canPurchase && merged.billingEnabled,
     isLocked: false,
@@ -128,11 +130,11 @@ function renderPage(lang: 'ar' | 'en' = 'ar') {
   )
 }
 
-const RUNWAY = 'يكفي حوالي 36 يومًا بمعدل استخدامك هذا الشهر.'
+const RUNWAY = 'يكفي حوالي 28 يومًا بمعدل استخدامك هذا الشهر.'
 const PAUSED = 'التأكيدات للطلبات الجديدة متوقفة حتى تشحن الرصيد.'
 
 beforeEach(() => {
-  // The 20th: 212 used so far is 10.6 a day, so 388 lasts 36 days.
+  // The 20th: 212 used so far is 10.6 a day, so 301 lasts 28 days.
   vi.useFakeTimers({ toFake: ['Date'] })
   vi.setSystemTime(new Date(2026, 9, 20, 12))
   vi.mocked(useBillingUsage).mockReturnValue(readyUsage)
@@ -153,8 +155,9 @@ describe('BillingStandalonePage (ar)', () => {
     expect(
       screen.getByRole('heading', { level: 1, name: 'الفوترة والرصيد' })
     ).toBeTruthy()
-    const hero = screen.getByText('388')
+    const hero = screen.getByText('150.5')
     expect(hero.className).toContain('text-brand')
+    expect(hero.parentElement?.textContent).toBe('150.5ج.م')
     expect(screen.getByText('الرصيد كافٍ')).toBeTruthy()
     expect(screen.getByText(RUNWAY)).toBeTruthy()
 
@@ -162,49 +165,56 @@ describe('BillingStandalonePage (ar)', () => {
     expect(screen.queryByRole('alert')).toBeNull()
     expect(screen.queryByRole('status')).toBeNull()
 
-    expect(screen.getByText('212')).toBeTruthy()
+    // 212 displayed credits spent: EGP 106.
+    expect(screen.getByText('106 ج.م')).toBeTruthy()
+    // The last top-up and the order total.
+    expect(screen.getAllByText('500 ج.م').length).toBeGreaterThan(1)
     expect(screen.getByText('· 12 سبتمبر')).toBeTruthy()
-    expect(screen.getAllByText('1.00 ج.م').length).toBe(2)
+    expect(screen.getByText('1 ج.م')).toBeTruthy()
 
     const selected = screen.getByRole('radio', { checked: true })
-    expect(selected.textContent).toContain('500')
-    expect(selected.textContent).toContain('500.00 ج.م')
-    expect(screen.getByText('من 100 إلى 5,000 رصيد، بخطوات قدرها 50.'))
+    expect(selected.textContent).toContain('500ج.م')
+    expect(selected.textContent).toContain('500 رسالة')
+    expect(
+      screen.getByText('من 100 ج.م إلى 5,000 ج.م، بزيادات 50 ج.م.')
+    ).toBeTruthy()
 
-    const pay = screen.getByRole('button', { name: 'ادفع 1,000.00 ج.م' })
+    const pay = screen.getByRole('button', { name: 'ادفع 500 ج.م' })
     expect(pay).toHaveProperty('disabled', false)
     expect(container.querySelectorAll('button.bg-brand').length).toBe(1)
+    // 301 + 1,000 displayed credits: EGP 650.5.
     expect(
-      screen.getByText('رصيدك بعد الشراء', { exact: false }).textContent
-    ).toBe('رصيدك بعد الشراء 888 رصيد')
+      screen.getByText('الرصيد بعد الشحن', { exact: false }).textContent
+    ).toBe('الرصيد بعد الشحن: 650.5 ج.م')
   })
 
   it('warns once, under the card, when the balance is low', () => {
-    mockPage({ availableCredits: 42, postedBalance: 42 })
+    mockPage({ availableCredits: 42, postedBalance: 42, balanceMinor: 2100 })
     renderPage()
 
-    expect(screen.getByText('42').className).toContain('text-ak-warning')
+    expect(screen.getByText('21').className).toContain('text-ak-warning')
     expect(screen.getByText('الرصيد منخفض')).toBeTruthy()
     const banner = screen.getByRole('status')
-    expect(banner.textContent).toContain('بقي 42 رصيد فقط')
+    expect(banner.textContent).toContain('تبقى 21 ج.م فقط')
     expect(banner.className).toContain('bg-ak-warning-soft')
     expect(screen.queryByRole('alert')).toBeNull()
   })
 
   it('says confirmations are paused when the balance is empty', () => {
-    mockPage({ availableCredits: 0, postedBalance: 0 })
+    mockPage({ availableCredits: 0, postedBalance: 0, balanceMinor: 0 })
     renderPage()
 
-    expect(screen.getByText('نفد الرصيد')).toBeTruthy()
+    expect(screen.getByText('الرصيد فارغ')).toBeTruthy()
     expect(screen.getByText(PAUSED)).toBeTruthy()
     expect(screen.queryByText(RUNWAY)).toBeNull()
     const banner = screen.getByRole('alert')
-    expect(banner.textContent).toContain('نفد رصيد الرسائل')
+    expect(banner.textContent).toContain('رصيدك فارغ')
     expect(banner.className).toContain('bg-ak-danger-soft')
     // An empty balance is exactly when buying must stay open.
-    expect(
-      screen.getByRole('button', { name: 'ادفع 1,000.00 ج.م' })
-    ).toHaveProperty('disabled', false)
+    expect(screen.getByRole('button', { name: 'ادفع 500 ج.م' })).toHaveProperty(
+      'disabled',
+      false
+    )
   })
 
   it('holds Pay and points to the purchase status while one is pending', () => {
@@ -216,9 +226,10 @@ describe('BillingStandalonePage (ar)', () => {
     expect(
       screen.getByRole('link', { name: 'عرض حالة الشراء' }).getAttribute('href')
     ).toBe('/ar/billing/return?purchaseRef=akd_0123456789abcdef')
-    expect(
-      screen.getByRole('button', { name: 'ادفع 1,000.00 ج.م' })
-    ).toHaveProperty('disabled', true)
+    expect(screen.getByRole('button', { name: 'ادفع 500 ج.م' })).toHaveProperty(
+      'disabled',
+      true
+    )
     expect(
       screen.getByRole('button', { name: 'بدء عملية شراء جديدة' })
     ).toBeTruthy()
@@ -230,10 +241,10 @@ describe('BillingStandalonePage (ar)', () => {
     vi.mocked(useBillingUsage).mockReturnValue({ status: 'loading' })
     renderPage()
 
-    expect(screen.getByText('استخدمت هذا الشهر')).toBeTruthy()
+    expect(screen.getByText('المصروف هذا الشهر')).toBeTruthy()
     expect(screen.queryByText('0')).toBeNull()
     expect(screen.queryByText(RUNWAY)).toBeNull()
-    expect(screen.getByText('388')).toBeTruthy()
+    expect(screen.getByText('150.5')).toBeTruthy()
   })
 
   it('disables buying for a read-only member and says why', () => {
@@ -242,12 +253,13 @@ describe('BillingStandalonePage (ar)', () => {
 
     expect(
       screen.getByText(
-        'لديك صلاحية العرض فقط. يستطيع المالك أو المدير شراء الرصيد.'
+        'لديك صلاحية عرض فقط. يمكن للمالك أو المسؤول شحن الرصيد.'
       )
     ).toBeTruthy()
-    expect(
-      screen.getByRole('button', { name: 'ادفع 1,000.00 ج.م' })
-    ).toHaveProperty('disabled', true)
+    expect(screen.getByRole('button', { name: 'ادفع 500 ج.م' })).toHaveProperty(
+      'disabled',
+      true
+    )
     expect(screen.getByRole('textbox')).toHaveProperty('disabled', true)
   })
 
@@ -277,10 +289,11 @@ describe('BillingStandalonePage (en)', () => {
   it('writes amounts with the currency code first', () => {
     renderPage('en')
 
-    expect(
-      screen.getByRole('button', { name: 'Pay EGP 1,000.00' })
-    ).toBeTruthy()
-    expect(screen.getByText('Lasts about 36 days at this month’s pace.'))
+    expect(screen.getByRole('button', { name: 'Pay EGP 500' })).toBeTruthy()
+    expect(screen.getByText('150.5').parentElement?.textContent).toBe(
+      'EGP150.5'
+    )
+    expect(screen.getByText('Lasts about 28 days at this month’s pace.'))
     expect(screen.getByText('· Sep 12')).toBeTruthy()
   })
 })
@@ -299,10 +312,15 @@ describe('BillingStandalonePage with the merchant number', () => {
     renderPage('en')
     const balance = en.billing.balance
     expect(screen.getByText(balance.senders.usedHeading)).toBeTruthy()
-    expect(screen.getByText('124')).toBeTruthy()
-    expect(screen.getByText('146')).toBeTruthy()
-    expect(screen.getByText('1 credit / message')).toBeTruthy()
-    expect(screen.getByText('2 credits / message')).toBeTruthy()
+    // 124 displayed credits from Akeed's number are 62 messages, EGP 62;
+    // 146 from the merchant's number are 146 messages, EGP 73.
+    expect(screen.getByText('EGP 62')).toBeTruthy()
+    expect(screen.getByText('62 messages')).toBeTruthy()
+    expect(screen.getByText('EGP 73')).toBeTruthy()
+    expect(screen.getByText('146 messages')).toBeTruthy()
+    // Cost per message: EGP 1, and EGP 0.5 from the merchant's number.
+    expect(screen.getByText('EGP 1')).toBeTruthy()
+    expect(screen.getByText('EGP 0.5')).toBeTruthy()
     // The note sits behind the help icon beside its heading.
     expect(screen.queryByText(balance.senders.usageNote)).toBeNull()
   })
@@ -341,7 +359,9 @@ describe('BillingStandalonePage with the merchant number', () => {
     const tx = en.billing.transactions
     expect(screen.getByText(tx.types.own_number_pack)).toBeTruthy()
     expect(screen.getByText(tx.packNote)).toBeTruthy()
-    expect(screen.getByText('842')).toBeTruthy()
+    // Balance after in money; the pack of 2 displayed credits is EGP 1.
+    expect(screen.getByText('EGP 421')).toBeTruthy()
+    expect(screen.getByText('-1')).toBeTruthy()
   })
 })
 
@@ -356,26 +376,22 @@ describe('Recharge with the merchant number', () => {
     mockPage(withOwnRate)
     renderPage('en')
 
-    expect(
-      screen.getByText(
-        "Pays for about 250 messages from Akeed's number, or 500 from your number"
-      )
-    ).toBeTruthy()
+    // EGP 500 pays for 500 messages from Akeed's number or 1,000 from yours.
     expect(screen.getByText(coverage.akeed)).toBeTruthy()
     expect(screen.getByText(coverage.own)).toBeTruthy()
-    expect(screen.getAllByText('≈ 250').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('≈ 500').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('1,000').length).toBeGreaterThan(0)
     // The Meta billing note is help behind the rates icon, shown once.
     expect(
       screen.queryByText(en.whatsappConnect.tab.costs.creditNote)
     ).toBeNull()
   })
 
-  it('keeps recharge as it was while the own number is not offered', () => {
+  it('counts only Akeed messages while the own number is not offered', () => {
     mockPage(withOwnRate)
     renderPage('en')
 
-    expect(screen.queryByText(coverage.akeed)).toBeNull()
+    expect(screen.getByText(coverage.akeed)).toBeTruthy()
+    expect(screen.queryByText(coverage.own)).toBeNull()
     expect(
       screen.queryByText(en.whatsappConnect.tab.costs.creditNote)
     ).toBeNull()
@@ -386,6 +402,6 @@ describe('Recharge with the merchant number', () => {
     mockPage()
     renderPage('en')
 
-    expect(screen.queryByText(coverage.akeed)).toBeNull()
+    expect(screen.queryByText(coverage.own)).toBeNull()
   })
 })

@@ -14,8 +14,8 @@ Akeed üç şekilde çalışır. İlk kurulumu yaparken bu kılavuzu kullanın.
 | Durumunuz… | Kullanın | Siparişler nasıl gelir | Nasıl ödersiniz |
 | --- | --- | --- | --- |
 | Shopify mağazanız varsa | [Yol A: Shopify](#yol-a-shopify) | Mağazanızdan otomatik olarak. | Shopify tarafından faturalanan aylık bir plan. |
-| WooCommerce veya EasyOrders mağazanız varsa | [WooCommerce’i bağlama](/docs/woocommerce) veya [EasyOrders’ı bağlama](/docs/easyorders) | Mağazanızdan otomatik olarak. | Paymob üzerinden satın alınan krediler. |
-| Başka bir yerde satış yapıyor ya da bir tablo üzerinden çalışıyorsanız | [Yol B: Kendi mağazanız](#yol-b-kendi-mağazanız-shopify-olmadan) | Siparişleri tek tek eklersiniz, bir dosya içe aktarırsınız ya da kendi sunucunuzdan gönderirsiniz. | Paymob üzerinden satın alınan krediler. |
+| WooCommerce veya EasyOrders mağazanız varsa | [WooCommerce’i bağlama](/docs/woocommerce) veya [EasyOrders’ı bağlama](/docs/easyorders) | Mağazanızdan otomatik olarak. | Paymob üzerinden yüklenen ön ödemeli bakiye. |
+| Başka bir yerde satış yapıyor ya da bir tablo üzerinden çalışıyorsanız | [Yol B: Kendi mağazanız](#yol-b-kendi-mağazanız-shopify-olmadan) | Siparişleri tek tek eklersiniz, bir dosya içe aktarırsınız ya da kendi sunucunuzdan gönderirsiniz. | Paymob üzerinden yüklenen ön ödemeli bakiye. |
 
 > [!INFO]
 > Akeed, kapıda ödemeli siparişlerin onayı için tasarlanmıştır. Online ödemesi yapılmış siparişler için onay mesajı göndermez.
@@ -111,12 +111,12 @@ Akeed kendi numaranıza ücretsiz bir test onayı gönderir. Mesajın geldiğini
 - **Tek sipariş:** paneldeki **Siparişi doğrula** seçeneğini kullanın.
 - **Çok sayıda sipariş:** bir CSV veya Excel dosyası getirmek için **Dosyadan içe aktar** seçeneğini kullanın. [Toplu Sipariş İçe Aktarma](/docs/bulk-order-import) kılavuzuna bakın.
 
-### Adım 5: Kredinizi Hazır Tutun
+### Adım 5: Bakiyenizi Yükleyin
 
-30 WhatsApp mesajına yetecek 60 ücretsiz krediyle başlarsınız. 1 kredi EGP 1’e eşittir, her WhatsApp mesajı 2 kredi kullanır; bir hatırlatma da 2 kredi daha kullanır. Daha fazla kredi almak için **Faturalandırma ve krediler** bölümünü açın ve Paymob üzerinden kartla veya Vodafone Cash ile ödeyin.
+100 ücretsiz mesajla başlarsınız. Sonrasında Akeed’in numarasından gönderilen her mesaj 1 EGP tutar. Hatırlatma ayrı bir mesaj sayılır. Paymob üzerinden kartla veya Vodafone Cash ile bakiye yüklemek için **Faturalandırma ve bakiye** bölümünü açın.
 
 > [!WARNING]
-> Krediniz bittiğinde, yeni kredi alana kadar yeni onaylar durur.
+> Bakiyeniz bittiğinde, yeniden yükleyene kadar yeni onaylar durur.
 
 ## Sık Yapılan Hatalar
 
@@ -124,7 +124,7 @@ Akeed kendi numaranıza ücretsiz bir test onayı gönderir. Mesajın geldiğini
 | --- | --- |
 | Otomatik onayı yanlışlıkla kapatmak | Tüm yeni kapıda ödeme onaylarını duraklatmak istemiyorsanız otomatik onayı açık tutun. |
 | Müşteri yanıt vermeden kargoya vermek | Mümkün olduğunca onaylandı durumunu bekleyin. |
-| Plan kullanımını veya kredi bakiyesini göz ardı etmek | Gönderimlerin beklenmedik şekilde durmaması için kullanım çubuğunuzu (Shopify) veya kredi bakiyenizi (bağımsız hesap) takip edin. |
+| Plan kullanımını veya bakiyeni göz ardı etmek | Gönderimlerin beklenmedik şekilde durmaması için kullanım çubuğunuzu (Shopify) veya bakiyenizi (bağımsız hesap) takip edin. |
 | Çok uzun gecikmeler ayarlamak | İlk gönderim ve hatırlatma gecikmelerini sevkiyat akışınıza uygun tutun. |
 
 ## Sorun Giderme
@@ -139,7 +139,7 @@ Telefon numarasının geçerli olduğundan ve ülke kodunu içerdiğinden emin o
 
 ### Yeni gönderimler durdu
 
-Shopify’da plan kullanımınızı kontrol edin. Planınıza dahil onaylar bittiyse planınızı yükseltin ya da bir sonraki fatura dönemini bekleyin. Bağımsız bir hesapta kredi bakiyenizi kontrol edin ve bakiye sıfırsa kredi yükleyin.
+Shopify’da plan kullanımınızı kontrol edin. Planınıza dahil onaylar bittiyse planınızı yükseltin ya da bir sonraki fatura dönemini bekleyin. Bağımsız bir hesapta bakiyenizi kontrol edin ve gerekirse yükleme yapın.
 
 ## SSS
 

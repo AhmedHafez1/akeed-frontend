@@ -104,8 +104,8 @@ describe('SignupForm', () => {
   it('states the next step, the free allowance and the price under the source', () => {
     renderForm('en')
     const summary = screen.getByText(/After you verify your email/)
-    expect(summary.textContent).toContain('30 free WhatsApp messages')
-    expect(summary.textContent).toContain('2.00 EGP per message')
+    expect(summary.textContent).toContain('100 free WhatsApp messages')
+    expect(summary.textContent).toContain('EGP 1 per message')
   })
 
   it('shows inline errors and focuses the first invalid field', async () => {

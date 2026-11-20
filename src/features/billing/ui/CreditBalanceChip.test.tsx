@@ -8,7 +8,10 @@ import { CreditBalanceChip } from './CreditBalanceChip'
 vi.mock('../domain/useBillingSummary', () => ({ useBillingSummary: vi.fn() }))
 
 function mockSummary(
-  summary: { availableCredits: number } | null,
+  summary: {
+    availableCredits: number
+    price?: { unitPriceMinor: number; currency: string }
+  } | null,
   { isLoading = false, error = null as Error | null } = {}
 ) {
   vi.mocked(useBillingSummary).mockReturnValue({
@@ -27,12 +30,18 @@ function renderChip() {
   )
 }
 
-beforeEach(() => mockSummary({ availableCredits: 30 }))
+beforeEach(() =>
+  mockSummary({
+    availableCredits: 31,
+    price: { unitPriceMinor: 50, currency: 'EGP' },
+  })
+)
 
 describe('CreditBalanceChip', () => {
-  it('shows the balance in credits and links to billing', () => {
+  it('shows the balance as money and links to billing', () => {
     renderChip()
-    const link = screen.getByRole('link', { name: 'الرصيد 30' })
+    // 31 displayed credits at EGP 0.50.
+    const link = screen.getByRole('link', { name: 'الرصيد 15.5 ج.م' })
     expect(link.getAttribute('href')).toBe('/ar/billing')
   })
 

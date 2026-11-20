@@ -35,6 +35,19 @@ describe('own-number pricing config', () => {
     )
   })
 
+  it('defaults to EGP 1 a message, 100 free messages and EGP 100–5,000 top-ups', async () => {
+    const pricing = await loadPricing(undefined)
+    expect(pricing.CREDIT_MESSAGE_PRICE_MINOR).toBe(100)
+    expect(pricing.OWN_NUMBER_MESSAGE_PRICE_MINOR).toBe(50)
+    expect(pricing.CREDIT_FREE_MESSAGES).toBe(100)
+    const pounds = (credits: number) =>
+      (credits * pricing.CREDIT_UNIT_PRICE_MINOR) / 100
+    expect(pounds(pricing.CREDIT_PURCHASE_MIN)).toBe(100)
+    expect(pounds(pricing.CREDIT_PURCHASE_MAX)).toBe(5000)
+    expect(pounds(pricing.CREDIT_PURCHASE_STEP)).toBe(50)
+    expect(pricing.CREDIT_PRESETS.map(pounds)).toEqual([100, 250, 500, 1000])
+  })
+
   it('mirrors the backend plan allowances and own-number pools', async () => {
     const { SHOPIFY_PUBLIC_ALLOWANCES } = await loadPricing(undefined)
     expect(

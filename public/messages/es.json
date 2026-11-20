@@ -224,8 +224,8 @@
       "answer": "Sí. Crea una cuenta de Akeed y verifica tu correo electrónico. Tu cuenta queda activa de inmediato con sus mensajes de WhatsApp gratis, así que puedes agregar pedidos manualmente, desde un archivo o mediante la API. Las tiendas WooCommerce y EasyOrders usan el mismo tipo de cuenta y conectan la tienda durante la configuración. Las tiendas Shopify empiezan en cuanto instalan la app."
     },
     "credit_usage": {
-      "question": "¿Cómo se cuentan exactamente los créditos?",
-      "answer": "En una cuenta de Akeed (WooCommerce, EasyOrders o sin tienda conectada), 1 crédito equivale a EGP 1, y cada mensaje de WhatsApp enviado a un cliente usa 2 créditos, no cada pedido. Un recordatorio a un cliente que no ha respondido usa 2 créditos más, y un mensaje que no se pudo enviar se reembolsa automáticamente. Las tiendas Shopify no usan créditos: se suscriben a un plan mensual y pagan en su factura de Shopify."
+      "question": "¿Cómo se descuenta exactamente mi saldo?",
+      "answer": "En una cuenta de Akeed (WooCommerce, EasyOrders o sin tienda conectada), cada mensaje de WhatsApp enviado a un cliente cuesta EGP 1 desde el número de Akeed, o EGP 0.5 desde tu propio número de WhatsApp Business, sin importar la cantidad de pedidos. Un recordatorio a un cliente que no respondió es otro mensaje, y un mensaje que no se pudo enviar se reembolsa automáticamente. Las tiendas Shopify no usan saldo: se suscriben a un plan mensual y pagan en su factura de Shopify."
     }
   },
   "whatsapp_button": {
@@ -238,22 +238,21 @@
     "subtitle": "WooCommerce, EasyOrders y pedidos sin tienda: pagas por los mensajes que envías. Las tiendas Shopify se suscriben y pagan dentro de Shopify.",
     "account_title": "Cuenta de Akeed · pago por uso",
     "account_audience": "Para tiendas WooCommerce y EasyOrders, y para pedidos manuales, por archivo y por API.",
-    "unit_text": "Crédito",
-    "unit_price_note": "1 crédito equivale a EGP 1. Un mensaje de WhatsApp de Akeed usa 2 créditos.",
-    "per_credit": "por crédito",
-    "message_cost": "Un mensaje de WhatsApp de Akeed usa {credits} créditos ({price})",
+    "unit_text": "mensaje",
+    "unit_price_note": "Un mensaje de WhatsApp desde el número de Akeed cuesta EGP 1.",
+    "per_credit": "por mensaje",
     "grant_pill": "{count} mensajes gratis al registrarte",
-    "slider_label": "¿Cuántos créditos necesitas?",
-    "slider_value": "{count} créditos",
+    "slider_label": "¿Cuánto necesitas?",
+    "slider_value": "{count}",
     "total_label": "Total",
     "calculator_orders": "Cubre de {low} a {high} pedidos",
-    "how_title": "Cómo se usan los créditos",
-    "credit_is_message_title": "1 crédito equivale a EGP 1",
-    "credit_is_message_body": "Cada mensaje de WhatsApp de Akeed usa 2 créditos, así que un mensaje cuesta EGP 2.",
+    "how_title": "Cómo funciona tu saldo",
+    "credit_is_message_title": "Pagas por mensaje enviado",
+    "credit_is_message_body": "Cada mensaje de WhatsApp desde el número de Akeed cuesta EGP 1.",
     "followup_title": "Los recordatorios también cuentan",
-    "followup_body": "Si un cliente no responde, el recordatorio usa 2 créditos más.",
+    "followup_body": "Si el cliente no responde, el recordatorio cuesta EGP 1.",
     "rejected_title": "Los envíos fallidos se reembolsan",
-    "rejected_body": "Si un envío falla, sus créditos vuelven a tu cuenta automáticamente.",
+    "rejected_body": "Si un envío falla, su costo vuelve a tu saldo automáticamente.",
     "cta": "Crea tu cuenta gratis",
     "cta_note": "Sin tarjeta de crédito",
     "shopify_title": "Tiendas Shopify · plan mensual",
@@ -264,11 +263,10 @@
       "rates_heading": "Costo por mensaje",
       "from_akeed": "Desde el número de Akeed",
       "from_yours": "Desde tu propio número",
-      "rate": "{credits, plural, one {# crédito} other {# créditos}} · {price}",
       "saving": "Conectar tu propio número de WhatsApp Business reduce a la mitad lo que Akeed cobra por mensaje.",
       "meta_note": "Meta factura a tu negocio por separado los mensajes enviados desde tu número.",
       "fact_title": "Tu propio número es opcional",
-      "fact_body": "Conecta tu número de WhatsApp Business y cada mensaje enviado desde él usa 1 crédito. Meta te factura directamente esos mensajes.",
+      "fact_body": "Conecta tu número de WhatsApp Business y cada mensaje desde él cuesta EGP 0.5. Meta te factura directamente esos mensajes.",
       "slider_coverage": "<line>Unos <b>{count}</b> mensajes desde el número de Akeed</line><line>o <o>{own}</o> desde tu propio número</line>",
       "akeed_line": "<b>{count}</b> mensajes desde el número de Akeed",
       "own_line": "{count} más desde tu propio número",
@@ -516,15 +514,15 @@
     "refundEyebrow": "Legal",
     "refundTitle": "Política de reembolso y cancelación",
     "refundLastUpdated": "Última actualización: noviembre de 2026",
-    "refundIntro": "Esta política explica cómo funcionan los reembolsos, los créditos y las cancelaciones de suscripción en Akeed.",
+    "refundIntro": "Esta política explica cómo funcionan los reembolsos, el saldo prepagado y las cancelaciones de suscripción en Akeed.",
     "refundSection1Title": "1. Naturaleza de los servicios digitales",
-    "refundSection1Body": "Akeed vende créditos prepagados para la verificación de pedidos por WhatsApp, que se pagan mediante Paymob, y ofrece una suscripción mensual a la app de Shopify para los comerciantes que usan Shopify. 1 crédito equivale a EGP 1, y cada mensaje de verificación enviado desde el número de Akeed usa 2 créditos. Si WhatsApp no acepta un mensaje, sus créditos se devuelven automáticamente a su saldo.",
-    "refundSection2Title": "2. Reembolsos de créditos",
-    "refundSection2Body": "Todas las compras de créditos son definitivas y no reembolsables una vez completadas, sin importar si se usa todo el saldo. Los créditos comprados no vencen. Los pagos son procesados por Paymob, y Akeed no almacena los datos de su tarjeta ni de su billetera.",
+    "refundSection1Body": "Akeed vende saldo prepagado para la verificación de pedidos por WhatsApp, pagado a través de Paymob, y ofrece una suscripción mensual a la app de Shopify para los comerciantes que usan Shopify. Cada mensaje de verificación enviado desde el número de Akeed cuesta EGP 1, y cada uno enviado desde tu propio número de WhatsApp Business cuesta EGP 0.5. Si WhatsApp no acepta un mensaje, su costo vuelve a tu saldo automáticamente.",
+    "refundSection2Title": "2. Reembolsos del saldo",
+    "refundSection2Body": "Todas las recargas de saldo son definitivas y no reembolsables una vez completadas, se use o no todo el saldo. Tu saldo no vence. Los pagos los procesa Paymob, y Akeed no guarda los datos de tu tarjeta o billetera.",
     "refundSection3Title": "3. Cancelación de la suscripción",
-    "refundSection3Body": "La suscripción a la app de Akeed para Shopify se puede cancelar en cualquier momento desde la página de facturación de su panel de Shopify. La cancelación sigue las reglas del ciclo de facturación de Shopify y no reembolsa el periodo de facturación en curso. Las cuentas independientes no tienen suscripción: solo se paga al comprar créditos, por lo que no hay nada que cancelar.",
+    "refundSection3Body": "La suscripción a la app de Akeed para Shopify se puede cancelar en cualquier momento desde la página de facturación de tu administrador de Shopify. La cancelación sigue las reglas del ciclo de facturación de Shopify y no reembolsa el período actual. Las cuentas independientes no tienen suscripción: solo pagas cuando recargas tu saldo, así que no hay nada que cancelar.",
     "refundSection4Title": "4. Proceso de cancelación",
-    "refundSection4Body": "Comerciantes de Shopify: para cancelar, desinstale la app de Akeed desde su panel de Shopify o cancele la suscripción desde la configuración de facturación de Shopify. El saldo restante de créditos se conserva en su cuenta y sigue disponible si reinstala la app. Cuentas independientes: puede dejar de usar Akeed y de comprar créditos en cualquier momento. Para cerrar su cuenta, contáctenos con los datos de la sección 5.",
+    "refundSection4Body": "Comerciantes de Shopify: para cancelar, desinstala la app de Akeed desde tu administrador de Shopify o cancela la suscripción en la configuración de facturación de Shopify. Cuentas independientes: puedes dejar de usar Akeed y de recargar en cualquier momento, y el saldo restante se queda en tu cuenta. Para cerrar tu cuenta, contáctanos con los datos de la sección 5.",
     "refundSection5Title": "5. Contacto para solicitudes de reembolso",
     "refundSection5Body": "Para disputas de facturación, pagos cobrados por error o solicitudes excepcionales de reembolso, contáctenos en support@getakeed.com o al +201148675077.",
     "homeLink": "Volver al inicio",
@@ -602,7 +600,7 @@
   "appHeader": {
     "dashboard": "Panel",
     "verifications": "Confirmaciones",
-    "billing": "Facturación y créditos",
+    "billing": "Facturación y saldo",
     "paymentStatus": "Estado del pago",
     "settings": "Configuración",
     "navigationMenu": "Abrir el menú de navegación",
@@ -843,15 +841,13 @@
     "standalone": {
       "manualConfirmBody": "No se enviarán más mensajes.",
       "credits": {
-        "warning": "{used} de {limit} créditos usados",
-        "exhausted": "Sin créditos. Las confirmaciones están en pausa.",
-        "cta": "Comprar créditos"
+        "warning": "{used} de {limit} gastados",
+        "exhausted": "Tu saldo está agotado. Las confirmaciones están en pausa.",
+        "cta": "Recargar saldo"
       },
       "header": {
-        "credits": "{count, plural, one {crédito de mensaje} other {créditos de mensajes}}",
-        "creditsLabel": "{count, plural, one {Queda # crédito de mensaje} other {Quedan # créditos de mensajes}}",
         "topUp": "Recargar",
-        "topUpLabel": "Recargar créditos de mensajes"
+        "topUpLabel": "Recargar saldo"
       },
       "settings": {
         "autoConfirm": "Confirmación automática",
@@ -1191,7 +1187,7 @@
       "not_started": "La importación no se inició, así que no se envió ningún mensaje.",
       "queued": "El envío comenzó y este pedido está en la fila. Su mensaje sale en unos minutos.",
       "sending": "La solicitud de confirmación se está enviando al cliente en este momento.",
-      "blocked": "Aún no se envió: se agotaron las confirmaciones de tu plan o tus créditos. Akeed lo enviará automáticamente en cuanto puedas volver a enviar, y no se cobra nada hasta entonces."
+      "blocked": "Aún no se envió: se agotaron las confirmaciones de tu plan o tu saldo. Akeed lo envía automáticamente cuando puedas volver a enviar, y no se cobra nada hasta entonces."
     },
     "sources": {
       "shopify": "Shopify",
@@ -1212,11 +1208,11 @@
       "auto_verify_disabled": "La verificación automática está en pausa. Actívala antes de reintentar.",
       "onboarding_incomplete": "Completa la configuración independiente antes de reintentar la verificación.",
       "provider_outcome_unknown": "No se pudo confirmar si el mensaje fue aceptado. Contacta al soporte antes de reintentar.",
-      "template_unavailable": "El mensaje de WhatsApp para este pedido no está disponible en este momento, así que no se envió nada y no se usó ningún crédito. El soporte de Akeed ya fue avisado. Reintenta más tarde.",
-      "CREDIT_ACCOUNT_NOT_PROVISIONED": "Los créditos de esta cuenta aún no están configurados, así que no se envió ningún mensaje. Contacta al soporte de Akeed si el problema continúa.",
+      "template_unavailable": "El mensaje de WhatsApp de este pedido no está disponible ahora, así que no se envió ni se cobró nada. Se avisó al soporte de Akeed. Vuelve a intentarlo más tarde.",
+      "CREDIT_ACCOUNT_NOT_PROVISIONED": "El saldo de esta cuenta aún no está configurado, así que no se envió ningún mensaje. Contacta al soporte de Akeed si continúa.",
       "CREDIT_ACCOUNT_SUSPENDED": "Los envíos de mensajes nuevos están en pausa para esta cuenta. Contacta al soporte.",
-      "CREDIT_DEBT_OUTSTANDING": "Hay que saldar un saldo de créditos pendiente antes de enviar mensajes nuevos.",
-      "INSUFFICIENT_CREDITS": "No había créditos de mensajes disponibles, así que no se envió ningún mensaje. Agrega créditos y reintenta.",
+      "CREDIT_DEBT_OUTSTANDING": "Hay que saldar un importe pendiente antes de enviar mensajes nuevos.",
+      "INSUFFICIENT_CREDITS": "Tu saldo no alcanzaba, así que no se envió el mensaje. Recarga y vuelve a intentarlo.",
       "PAYMENT_PENDING_RECONCILIATION": "El envío de mensajes está en pausa mientras se revisa la facturación. Contacta al soporte.",
       "provider_delivery_failed": "WhatsApp no pudo entregar el mensaje a este cliente.",
       "missing_currency": "Aún no se ha elegido la moneda de la tienda, así que este pedido no se confirmó. Elígela en la configuración de conexión de la tienda.",
@@ -1229,7 +1225,7 @@
       "order_predates_connection": "Este pedido se hizo antes de que la tienda se conectara a Akeed, así que no se envió ninguna confirmación.",
       "order_not_placed": "Este pedido aún no se ha realizado, o su estado es uno que Akeed no confirma, así que no se envió ningún mensaje.",
       "generic": "La verificación no pudo continuar. Revisa la configuración o contacta al soporte.",
-      "capacity_block_stale": "Este pedido esperó demasiado a tener confirmaciones o créditos, así que Akeed no lo envió. Confírmalo o cancélalo tú, o reinténtalo para enviarlo ahora."
+      "capacity_block_stale": "Este pedido esperó demasiado por confirmaciones o saldo, así que Akeed no lo envió. Confírmalo o cancélalo tú, o vuelve a intentar enviarlo ahora."
     },
     "verifications": {
       "loading": "Cargando verificaciones...",
@@ -1503,7 +1499,7 @@
           "followUpSent": "Recordatorio enviado",
           "sendsAt": "Se envía {time}",
           "callCustomer": "Llama al cliente",
-          "waitingForCapacity": "Plan o créditos agotados"
+          "waitingForCapacity": "Plan o saldo agotado"
         },
         "tooltip": {
           "scheduledFor": "Programado para {time}",
@@ -1600,12 +1596,12 @@
     },
     "failedRow": {
       "reason": {
-        "noCredits": "Créditos insuficientes",
+        "noCredits": "Saldo insuficiente",
         "autoVerifyOff": "La confirmación automática está desactivada",
         "rejected": "WhatsApp rechazó el mensaje"
       },
       "action": {
-        "buyCredits": "Comprar créditos",
+        "buyCredits": "Recargar",
         "openSettings": "Abrir configuración",
         "details": "Detalles"
       }
@@ -1615,7 +1611,7 @@
       "greetingNoName": "Te damos la bienvenida",
       "firstOrder": {
         "title": "Envía tu primera confirmación a un cliente real",
-        "subtitle": "Elige cómo llegan tus pedidos a Akeed. Enviamos la confirmación en cuanto agregas un pedido, y usa 2 créditos de tu saldo.",
+        "subtitle": "Elige cómo llegan tus pedidos a Akeed. Enviamos la confirmación en cuanto agregas un pedido, y cuesta {price} de tu saldo.",
         "manual": {
           "title": "Un pedido",
           "body": "Para pedidos de WhatsApp, Instagram y por teléfono. Solo el número del cliente, el número de pedido y el importe."
@@ -1625,7 +1621,7 @@
           "body": "Para muchos pedidos a la vez. Relacionamos las columnas por ti, y tú revisas antes de que se envíe algo."
         },
         "zeroBalance": {
-          "title": "Tu saldo es de {count} créditos",
+          "title": "Tu saldo es de {count}",
           "body": "Recarga para enviar la primera.",
           "action": "Recargar saldo"
         }
@@ -1649,12 +1645,12 @@
       "title": "Pedidos en espera de envío: {count}",
       "remaining": {
         "plan": "Confirmaciones restantes en este periodo: {remaining}",
-        "credits": "Créditos restantes: {remaining}"
+        "credits": "Saldo restante: {remaining}"
       },
       "body": {
         "upgrade": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Mejora tu plan para enviarlos ahora, o saldrán automáticamente cuando tu cupo se renueve el {date}.",
         "upgradeNoDate": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Mejora tu plan y Akeed los enviará automáticamente.",
-        "recharge": "Se agotaron tus créditos, así que estos pedidos no se enviaron. Compra créditos y Akeed los enviará automáticamente.",
+        "recharge": "Tu saldo se agotó, así que estos pedidos no se enviaron. Recarga y Akeed los envía automáticamente.",
         "waitReset": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Saldrán automáticamente cuando tu cupo se renueve el {date}.",
         "waitResetNoDate": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Saldrán automáticamente cuando tu cupo se renueve.",
         "upgradeOrRenew": "Se agotaron las confirmaciones de tu plan, así que estos pedidos no se enviaron. Mejora o renueva tu plan para enviarlos ahora, o saldrán automáticamente cuando tu cupo se renueve el {date}.",
@@ -1665,7 +1661,7 @@
       "note": "No se cobra nada hasta que se envía un pedido. Un pedido que espera demasiado pasa a Requieren acción.",
       "cta": {
         "upgrade": "Mejorar plan",
-        "recharge": "Comprar créditos",
+        "recharge": "Recargar saldo",
         "renew": "Renovar {plan} ahora"
       }
     }
@@ -1692,7 +1688,6 @@
       "examplesHeading": "Ejemplos de mensajes",
       "label": "Enviar mensajes de agradecimiento",
       "description": "Envía un mensaje después de que el cliente confirme o cancele su pedido.",
-      "creditCost": "Cada agradecimiento usa {count} créditos.",
       "planCost": "Cada agradecimiento usa un mensaje de la cuota del número que lo envía.",
       "confirmed": "Tras la confirmación",
       "canceled": "Tras la cancelación",
@@ -1700,8 +1695,8 @@
       "textUnavailable": "No hay texto de agradecimiento disponible en este idioma.",
       "autoNote": "Este ejemplo usa el estilo predeterminado. El texto árabe real sigue el dialecto del cliente.",
       "saveUnavailable": "Los mensajes de agradecimiento no están disponibles. Desactívalos para guardar los cambios.",
-      "senderCreditCost": "Créditos: {own} desde tu número, {akeed} desde Akeed.",
-      "akeedCreditCost": "Desde Akeed: {count} créditos."
+      "senderCreditCost": "Costo: {own} desde tu número, {akeed} desde Akeed.",
+      "akeedCreditCost": "Desde Akeed: {count}."
     },
     "logo": {
       "heading": "Logo de la tienda",
@@ -1787,7 +1782,7 @@
           "codHeading": "Información de pago faltante",
           "codLabel": "Tratarlos como pago contra entrega",
           "codHelp": "Actívalo solo si tu origen de pedidos suele omitir el método de pago en los pedidos contra entrega.",
-          "codRisk": "Los pedidos prepagados sin información de pago también recibirán un mensaje de confirmación y usarán créditos.",
+          "codRisk": "Los pedidos prepagados sin datos de pago también recibirán un mensaje de confirmación, cobrado de tu saldo.",
           "sourceHelpEasyOrders": "Los pedidos llegan solos desde tu tienda EasyOrders.",
           "sourceHelpWooCommerce": "Los pedidos llegan solos desde tu tienda WooCommerce.",
           "disconnected": "Desconectada",
@@ -2447,7 +2442,7 @@
       "sourceUnsupported": "La verificación de pedidos solo está disponible para orígenes independientes.",
       "setupIncomplete": "Completa la configuración inicial independiente antes de verificar un pedido.",
       "entitlement": "La verificación de pedidos no está habilitada para este espacio de trabajo. Contacta al soporte.",
-      "notProvisioned": "Los créditos de esta cuenta aún no están configurados. Actualiza la página o contacta al soporte de Akeed si el problema continúa.",
+      "notProvisioned": "El saldo de esta cuenta aún no está configurado. Actualiza o contacta al soporte de Akeed si continúa.",
       "unexpected": "No pudimos enviar el pedido a verificación. Revisa los datos e inténtalo de nuevo."
     },
     "retry": {
@@ -2623,8 +2618,8 @@
       },
       "stats": {
         "balanceLabel": "Tu saldo ahora",
-        "balanceValue": "{count} créditos",
-        "priceLabel": "Después de los créditos gratis",
+        "balanceValue": "{count}",
+        "priceLabel": "Después de los mensajes gratis",
         "priceCaption": "por mensaje de WhatsApp enviado",
         "testLabel": "El mensaje de prueba",
         "testValue": "Gratis"
@@ -2656,17 +2651,17 @@
     "backHome": "Volver al inicio"
   },
   "creditErrors": {
-    "notProvisioned": "Los créditos de esta cuenta aún no están configurados. Actualiza la página o contacta al soporte de Akeed si el problema continúa. Los pedidos existentes y el historial siguen disponibles.",
+    "notProvisioned": "El saldo de esta cuenta aún no está configurado. Actualiza o contacta al soporte de Akeed si continúa. Los pedidos y el historial siguen disponibles.",
     "suspended": "Los envíos de mensajes nuevos están en pausa para esta cuenta. Contacta al soporte. Los pedidos existentes y el historial siguen disponibles.",
-    "debt": "Hay que saldar un saldo de créditos pendiente antes de enviar mensajes nuevos. Los pedidos existentes y el historial siguen disponibles.",
-    "insufficient": "No hay créditos de mensajes disponibles. Los envíos se reanudarán cuando haya créditos. Los pedidos existentes y el historial siguen disponibles.",
+    "debt": "Hay que saldar un importe pendiente antes de enviar mensajes nuevos. Los pedidos y el historial siguen disponibles.",
+    "insufficient": "Tu saldo no alcanza para enviar. Los envíos se reanudan cuando recargues. Los pedidos y el historial siguen disponibles.",
     "reconciliation": "El envío de mensajes está en pausa mientras se revisa la facturación. Contacta al soporte. Los pedidos existentes y el historial siguen disponibles.",
-    "billingLink": "Abrir facturación y créditos"
+    "billingLink": "Abrir facturación y saldo"
   },
   "billing": {
     "ledgerReasons": {
       "own_number_messages": "Mensajes desde tu número",
-      "own_number_messages_returned": "Créditos de mensajes de tu número restituidos"
+      "own_number_messages_returned": "Reembolso de mensajes desde tu número"
     },
     "embeddedPlans": {
       "heading": "Elige tu asignación mensual de mensajes",
@@ -2735,25 +2730,16 @@
         "note": "Los mensajes desde tu propio número son un cupo separado que se renueva con tu plan. Meta factura a tu negocio por separado esos mensajes."
       }
     },
-    "title": "Facturación y créditos",
-    "creditModelNotice": {
-      "title": "El número de tu saldo se duplicó. Su valor no cambió.",
-      "body": "Ahora 1 crédito equivale a EGP 1, y cada mensaje de WhatsApp de Akeed usa 2 créditos. Un mensaje sigue costando EGP 2, y no hubo ningún movimiento de dinero.",
-      "example": "Por ejemplo, 100 créditos ahora son 200 créditos y siguen enviando 100 mensajes.",
-      "dismissFailed": "No se pudo guardar. Inténtalo de nuevo.",
-      "dismiss": "Entendido"
-    },
-    "description": "Consulta los créditos disponibles para las confirmaciones de pedidos por WhatsApp, compra más de forma segura y revisa cada movimiento de la cuenta.",
-    "threshold": "Alerta de saldo bajo a los {count} créditos",
+    "title": "Facturación y saldo",
     "retry": "Intentar de nuevo",
     "balance": {
+      "ownNumberPrice": "<amount>{price}</amount> desde tu número",
       "available": "Saldo disponible",
-      "unit": "créditos",
       "state": {
         "healthy": "Saldo suficiente",
         "low": "Saldo bajo",
-        "zero": "Sin créditos",
-        "debt": "Sin créditos",
+        "zero": "Saldo agotado",
+        "debt": "Saldo agotado",
         "suspended": "Facturación suspendida",
         "notProvisioned": "Sin configurar"
       },
@@ -2762,12 +2748,13 @@
       "chartLabel": "Últimos 14 días",
       "chartFrom": "Hace 14 días",
       "chartToday": "Hoy",
-      "usedThisMonth": "Usados este mes",
-      "lastPurchase": "Última compra",
-      "noPurchase": "Aún no hay compras",
-      "unitPrice": "Precio por crédito",
+      "usedThisMonth": "Gastado este mes",
+      "lastPurchase": "Última recarga",
+      "noPurchase": "Aún no hay recargas",
+      "unitPrice": "Costo por mensaje",
       "senders": {
-        "usedHeading": "Créditos usados este mes por número",
+        "messages": "{count, plural, one {1 mensaje} other {{formatted} mensajes}}",
+        "usedHeading": "Gastado este mes por número",
         "akeed": "Número de Akeed",
         "ownNumber": "Tu número",
         "usageNote": "Costo real de cada envío, descontando los envíos reembolsados.",
@@ -2779,48 +2766,25 @@
       "suspended": "Suspendida",
       "not_provisioned": "Sin configurar"
     },
-    "metrics": {
-      "available": "Créditos disponibles",
-      "availableHelp": "Listos para mensajes nuevos",
-      "posted": "Saldo registrado",
-      "postedHelp": "Todos los créditos confirmados",
-      "held": "Créditos retenidos",
-      "heldHelp": "Reservados para envíos en curso",
-      "debt": "Deuda",
-      "debtHelp": "Créditos que hay que saldar",
-      "messages": "Mensajes este mes",
-      "messagesHelp": "Desde el {date}",
-      "messagesCapped": "Dentro de las últimas {count} operaciones cargadas",
-      "postedShort": "Todos los créditos confirmados",
-      "heldShort": "Retenidos para mensajes en curso",
-      "debtShort": "Nada pendiente",
-      "debtOutstanding": "Saldo por saldar"
-    },
     "alerts": {
-      "lowTitle": "{count, plural, one {Solo queda 1 crédito} other {Solo quedan {formatted} créditos}}",
-      "zeroTitle": "Te quedaste sin créditos de mensajes",
+      "lowTitle": "Solo quedan {amount}",
+      "zeroTitle": "Tu saldo está agotado",
       "zeroDescription": "En este momento no estamos confirmando pedidos nuevos. Tus pedidos y tus datos están a salvo, y los mensajes se reanudan en cuanto recargues.",
-      "debtTitle": "{count, plural, one {Debes 1 crédito} other {Debes {formatted} créditos}}",
+      "debtTitle": "Debes {amount}",
       "debtDescription": "No confirmaremos pedidos nuevos hasta que esto se salde. Recarga para cubrirlo y reanudar los mensajes.",
       "suspendedTitle": "La facturación está suspendida",
       "suspendedDescription": "Las compras y los envíos de mensajes no están disponibles. Contacta al soporte de Akeed.",
-      "notProvisionedTitle": "La facturación por créditos aún no está configurada",
+      "notProvisionedTitle": "Tu saldo aún no está configurado",
       "notProvisionedDescription": "Estamos terminando de configurar tu cuenta. Hasta entonces, las compras y los envíos de mensajes no están disponibles."
     },
-    "grant": {
-      "title": "Créditos de bienvenida",
-      "granted": "Se registraron tus {count} créditos de bienvenida, que se otorgan una sola vez.",
-      "pending": "Tus {count} créditos de bienvenida, que se otorgan una sola vez, se registran al crear tu cuenta."
-    },
     "purchase": {
-      "title": "Comprar créditos",
-      "description": "Elige cuántos créditos. 1 crédito equivale a EGP 1, un mensaje de WhatsApp usa 2, y los créditos nunca vencen.",
-      "quantity": "Cantidad de créditos",
+      "tileMessages": "{count, plural, one {1 mensaje} other {{formatted} mensajes}}",
+      "title": "Recargar saldo",
+      "description": "Elige un importe. Tu saldo paga los mensajes de WhatsApp y no vence.",
+      "quantity": "Importe",
       "decrease": "Disminuir la cantidad",
       "increase": "Aumentar la cantidad",
-      "rules": "De {min} a {max} créditos, en incrementos de {step}.",
-      "credits": "Créditos",
-      "unitPrice": "Precio por crédito",
+      "rules": "De {min} a {max}, en pasos de {step}.",
       "total": "Total",
       "submit": "Crear pago seguro",
       "creating": "Creando el pago…",
@@ -2830,19 +2794,17 @@
       "pendingDescription": "Revisa su estado antes de iniciar una nueva para no pagar dos veces.",
       "viewStatus": "Ver el estado de la compra",
       "errors": {
-        "whole": "Ingresa un número entero de créditos.",
+        "whole": "Introduce un importe válido.",
         "refresh": "Los precios cambiaron desde que abriste esta página. Actualízala e inténtalo de nuevo.",
         "range": "Elige entre {min} y {max}.",
         "step": "Elige un múltiplo de {step}.",
         "network": "No se pudo completar la solicitud de pago. Reintenta de forma segura con el mismo intento de compra.",
-        "api": "No se pudo crear el pago. Revisa la cantidad o inténtalo de nuevo."
+        "api": "No se pudo crear el pago. Revisa el importe o inténtalo de nuevo."
       },
       "chooseAmount": "Elige una cantidad",
-      "customLabel": "O ingresa otra cantidad",
-      "unit": "créditos",
+      "customLabel": "O ingresa otro importe",
       "summaryTitle": "Resumen de la compra",
-      "messages": "Créditos",
-      "balanceAfter": "Saldo después de la compra: <b>{count}</b> créditos",
+      "balanceAfter": "Saldo después de la recarga: <b>{amount}</b>",
       "pay": "Pagar <amount>{value}</amount>",
       "payEmpty": "Pagar",
       "paymobNote": "Pago seguro en Paymob, con tarjeta o Vodafone Cash.",
@@ -2850,15 +2812,15 @@
         "akeedShort": "Número de Akeed",
         "ownShort": "Tu número",
         "approx": "≈ {count}",
-        "tileLabel": "Alcanza para unos {akeed} mensajes desde el número de Akeed, o {own} desde tu número",
+        "tileLabel": "Alcanza para {akeed} mensajes desde el número de Akeed, o {own} desde tu número",
         "akeed": "Mensajes desde el número de Akeed",
         "own": "O desde tu número"
       },
       "blocked": {
-        "disabled": "Las compras de créditos están desactivadas en este momento.",
+        "disabled": "Las recargas están desactivadas por ahora.",
         "suspended": "Las compras no están disponibles mientras la facturación esté suspendida.",
         "notProvisioned": "Las compras no están disponibles hasta que terminemos de configurar tu cuenta.",
-        "readOnly": "Tienes acceso de solo lectura. Un propietario o administrador puede comprar créditos."
+        "readOnly": "Solo tienes acceso de lectura. Un propietario o administrador puede recargar."
       }
     },
     "purchaseStatus": {
@@ -2879,7 +2841,7 @@
       "title": "No se pudo cargar la facturación"
     },
     "return": {
-      "credits": "Créditos",
+      "credits": "Mensajes",
       "amount": "Importe",
       "status": "Estado",
       "updated": "Última actualización",
@@ -2889,9 +2851,9 @@
       "newPurchase": "Iniciar una compra nueva",
       "refresh": "Actualizar estado",
       "refreshing": "Actualizando…",
-      "successTitle": "{count, plural, one {Agregamos <n>{value}</n> crédito a tu saldo} other {Agregamos <n>{value}</n> créditos a tu saldo}}",
-      "successBody": "{count, plural, one {Tu saldo ahora es de <n>{value}</n> crédito, y los pedidos nuevos se siguen confirmando como siempre.} other {Tu saldo ahora es de <n>{value}</n> créditos, y los pedidos nuevos se siguen confirmando como siempre.}}",
-      "successBodyNoBalance": "Los créditos ya están en tu saldo.",
+      "successTitle": "Agregamos <n>{value}</n> a tu saldo",
+      "successBody": "Tu saldo ahora es de <n>{value}</n> y los pedidos nuevos se siguen confirmando como siempre.",
+      "successBodyNoBalance": "La recarga ya está en tu saldo.",
       "title": {
         "pending": "Comprobando tu pago",
         "stale": "Seguimos esperando la confirmación del pago",
@@ -2906,37 +2868,34 @@
       "body": {
         "pending": "Estamos esperando la confirmación de Paymob. Deja esta página abierta o vuelve más tarde: no iniciaremos un cargo nuevo.",
         "stale": "Pausamos las comprobaciones automáticas. Actualiza cuando quieras; no iniciaremos un cargo nuevo.",
-        "failed": "No se agregaron créditos a tu cuenta. Puedes iniciar una compra nueva cuando quieras.",
-        "canceled": "No se agregaron créditos a tu cuenta. Puedes iniciar una compra nueva cuando quieras.",
-        "expired": "No se agregaron créditos. Inicia una compra nueva desde la página de facturación.",
+        "failed": "No se agregó nada a tu saldo. Puedes iniciar una nueva recarga cuando quieras.",
+        "canceled": "No se agregó nada a tu saldo. Puedes iniciar una nueva recarga cuando quieras.",
+        "expired": "No se agregó nada a tu saldo. Inicia una nueva recarga desde la página de facturación.",
         "refunded": "El importe fue devuelto, y tu saldo ya lo refleja.",
         "reconciliation": "Estamos conciliando este pago con Paymob. No tienes que hacer nada, a menos que el soporte te contacte.",
         "invalid": "Este enlace no contiene una referencia de compra válida. Vuelve a facturación.",
         "error": "No iniciamos un cargo nuevo. Actualiza el estado o vuelve a facturación."
       }
     },
-    "badge": {
-      "label": "créditos de mensajes"
-    },
     "balanceChip": {
-      "label": "Saldo: {count} créditos",
-      "value": "Saldo: <strong>{count}</strong> créditos"
+      "label": "Saldo: {count}",
+      "value": "Saldo <strong>{count}</strong>"
     },
     "transactions": {
       "title": "Movimientos",
       "columns": {
         "transaction": "Movimiento",
         "date": "Fecha",
-        "credits": "Créditos",
+        "credits": "Importe",
         "balance": "Saldo después"
       },
       "types": {
-        "purchase": "Recarga de créditos",
-        "free_grant": "Créditos de bienvenida",
+        "purchase": "Recarga",
+        "free_grant": "Mensajes gratis",
         "consumption": "Mensaje desde Akeed",
         "own_number_pack": "Mensajes desde tu número",
-        "own_number_pack_reversal": "Créditos de tu número restaurados",
-        "failure_reversal": "Créditos devueltos por un mensaje no entregado",
+        "own_number_pack_reversal": "Reembolso de mensajes desde tu número",
+        "failure_reversal": "Reembolso de un mensaje no entregado",
         "refund_reversal": "Reembolso",
         "chargeback_reversal": "Pago en disputa",
         "chargeback_reinstatement": "Pago en disputa restaurado",
@@ -3203,19 +3162,16 @@
       "pace": "Ritmo de envío",
       "paceValue": "Unos {rate, number} por minuto · aprox. {duration}",
       "quietNote": "(se pausa en el horario de silencio {window})",
-      "credits": "Créditos",
-      "creditsValue": "{min, number} ahora · hasta {max, number} con recordatorios",
-      "creditsValueNoFollowUp": "{min, number} ahora",
+      "credits": "Costo",
       "planUsage": "Confirmaciones del plan",
       "planUsageValue": "{min, number} ahora · quedan {slots, number} en este periodo",
       "balance": "Tu saldo",
       "balanceValue": "{available, number} → {after, number} después de los primeros mensajes",
-      "balanceShort": "{available, number} créditos · faltan {shortfall, number}",
       "attestationLabel": "Consentimiento del cliente",
       "cancel": "Cancelar",
       "confirm": "Empezar a enviar a {count, plural, one {# cliente} other {# clientes}}",
-      "buy": "Comprar {credits, number} créditos",
-      "shortfallTitle": "Compra créditos para empezar.",
+      "buy": "Recargar {amount}",
+      "shortfallTitle": "Recarga tu saldo para empezar.",
       "shortfallBody": "No se enviará nada hasta que tu saldo cubra los {count, number} pedidos.",
       "autoVerifyTitle": "La confirmación automática está desactivada",
       "openSettings": "Abrir configuración",
@@ -3245,7 +3201,7 @@
       "staffPaused": "Pausado por el soporte de Akeed. Contacta al soporte para continuar con el envío.",
       "resume": "Reanudar",
       "resumeFailed": "No se pudo reanudar el envío.",
-      "buyCredits": "Comprar créditos",
+      "buyCredits": "Recargar saldo",
       "stopped": "Detenido. Los mensajes llegaron a {sent, plural, one {# cliente} other {# clientes}}; no se contactará a {withdrawn, plural, one {# cliente} other {# clientes}}. Los pedidos ya enviados siguen su curso normal.",
       "completed": "Los mensajes llegaron a {count, plural, one {# cliente} other {# clientes}}. Las respuestas siguen llegando a tu lista de confirmaciones.",
       "notStartedTitle": "Esta importación nunca se inició",
@@ -3370,8 +3326,8 @@
         "upTo": "Hasta {max, number} con recordatorios",
         "noFollowUp": "Sin mensajes de recordatorio",
         "balance": "Tu saldo después del envío",
-        "of": "de {available, number} créditos",
-        "short": "faltan {shortfall, number} créditos",
+        "of": "Usa {cost} de {available}",
+        "short": "Faltan {shortfall}",
         "plan": "Disponibles en tu plan",
         "planOf": "de {slots, number} en este periodo",
         "duration": "Tiempo estimado",
@@ -3982,7 +3938,6 @@
         "description": "Conoce el costo antes de conectar.",
         "fromAkeed": "Desde Akeed",
         "fromYours": "Desde tu número",
-        "credits": "{count, plural, one {# crédito / mensaje} other {# créditos / mensaje}}",
         "creditNote": "Meta factura a tu negocio por separado los mensajes enviados desde tu número.",
         "messages": "{count} mensajes",
         "extraMessages": "+{count} mensajes",
@@ -4075,7 +4030,7 @@
         "title": "Respuestas de agradecimiento",
         "description": "Envía una respuesta breve cuando un cliente confirma o cancela.",
         "heading": "Enviar agradecimientos desde tu número",
-        "help": "Sin créditos de Akeed. Pueden aplicarse precios de Meta. Estas respuestas solo se envían desde tu número, nunca desde el de Akeed.",
+        "help": "Sin cargo de Akeed. Pueden aplicar las tarifas de Meta. Estas respuestas solo salen desde tu número, nunca desde el de Akeed.",
         "readOnly": "El propietario y los administradores de la tienda pueden cambiar esto.",
         "error": "Este cambio no se guardó. Inténtalo de nuevo."
       },

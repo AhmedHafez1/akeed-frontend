@@ -18,7 +18,7 @@ import { ApiError } from '@/shared/lib/http'
  * and top bar (/settings, /billing/credits, /billing/return). Query parameters
  * pick a scenario:
  *
- *   account=healthy | low | zero | suspended      the credit balance (healthy)
+ *   account=healthy | half | low | zero | suspended  the credit balance
  *   outcome=successful | pending | failed | expired   the purchase returned to
  *   pending=1        the billing page opens on a purchase still being checked
  *   role=viewer      settings are read-only
@@ -53,7 +53,14 @@ const DAILY_USAGE = [9, 14, 11, 17, 8, 12, 21, 15, 13, 18, 10, 16, 22, 14]
 function creditSummary(): CreditSummary {
   const account = param('account') ?? 'healthy'
   const suspended = account === 'suspended'
-  const available = account === 'low' ? 42 : account === 'zero' ? 0 : 388
+  const available =
+    account === 'half'
+      ? 301
+      : account === 'low'
+        ? 42
+        : account === 'zero'
+          ? 0
+          : 388
   return {
     billingEnabled: true,
     bulkImportEnabled: true,
@@ -61,16 +68,17 @@ function creditSummary(): CreditSummary {
     postedBalance: available,
     heldCredits: 0,
     availableCredits: available,
+    balanceMinor: available * 50,
     debtCredits: 0,
     lowBalanceThreshold: 100,
     freeGrant: {
       granted: true,
-      quantity: 60,
+      quantity: 200,
       grantedAt: '2026-08-01T10:00:00.000Z',
     },
     price: {
-      unitPriceMinor: 100,
-      messagePriceMinor: 200,
+      unitPriceMinor: 50,
+      messagePriceMinor: 100,
       creditsPerMessage: 2,
       ownNumberCreditsPerMessage: 1,
       currency: 'EGP',
@@ -89,9 +97,9 @@ function purchase(
     reference: PURCHASE_REF,
     status,
     disputeStatus: 'none',
-    quantity: 500,
-    unitPriceMinor: 200,
-    totalMinor: 100_000,
+    quantity: 1000,
+    unitPriceMinor: 50,
+    totalMinor: 50_000,
     currency: 'EGP',
     refundedMinor: 0,
     reconciliationRequired: false,
@@ -151,7 +159,7 @@ function ledger(): LedgerEntry[] {
       entries.push({
         id: `send-${daysAgo}-${index}`,
         type: 'consumption',
-        quantity: -1,
+        quantity: -2,
         actorType: 'meta',
         reasonCode: 'message_accepted',
         postedBalanceAfter: balance,
@@ -161,13 +169,13 @@ function ledger(): LedgerEntry[] {
         ).toISOString(),
         purchaseRef: null,
       })
-      balance += 1
+      balance += 2
     }
   }
   entries.push({
     id: 'purchase-1',
     type: 'purchase',
-    quantity: 500,
+    quantity: 1000,
     actorType: 'paymob',
     reasonCode: 'payment_verified',
     postedBalanceAfter: balance,

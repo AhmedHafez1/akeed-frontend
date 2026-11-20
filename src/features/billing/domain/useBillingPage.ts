@@ -4,12 +4,30 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { BillingApiError, createPurchase } from '../api/billingApi'
 import type { CreatePurchaseResponse } from './billing.types'
-import { prefilledQuantity, rememberReturnTo } from './billingReturnTo'
+import { creditsToMinor } from '@/shared/lib/balanceMoney'
+import { prefilledAmount, rememberReturnTo } from './billingReturnTo'
 import { derivePackages } from './creditPackages'
 import { useBillingSummary } from './useBillingSummary'
 
 function newIdempotencyKey() {
   return crypto.randomUUID()
+}
+
+/**
+ * The purchase range in pounds. The API states it in displayed credits
+ * at `unitPriceMinor` each; at the default price that is EGP 100 to 5,000 in
+ * steps of 50.
+ */
+export function amountRange(
+  range: { min: number; max: number; step: number },
+  unitPriceMinor: number
+) {
+  const pounds = (credits: number) => (credits * unitPriceMinor) / 100
+  return {
+    min: pounds(range.min),
+    max: pounds(range.max),
+    step: pounds(range.step),
+  }
 }
 
 export function useBillingPage() {
@@ -19,13 +37,15 @@ export function useBillingPage() {
     error,
     refresh,
   } = useBillingSummary()
-  const [quantityInput, setQuantityInput] = useState('')
+  /** The amount the merchant pays, in pounds, as typed. */
+  const [amountInput, setAmountInput] = useState('')
   const [isCreating, setIsCreating] = useState(false)
   const [checkout, setCheckout] = useState<CreatePurchaseResponse | null>(null)
   const [pendingReference, setPendingReference] = useState<string | null>(null)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
   const idempotencyKeyRef = useRef<string | null>(null)
   const searchParams = useSearchParams()
+  const requestedAmount = searchParams.get('amount')
   const requestedCredits = searchParams.get('credits')
   const returnTo = searchParams.get('returnTo')
 
@@ -34,25 +54,53 @@ export function useBillingPage() {
     rememberReturnTo(returnTo)
   }, [returnTo])
 
-  useEffect(() => {
-    if (summary && !quantityInput)
-      setQuantityInput(
-        String(
-          prefilledQuantity(requestedCredits, summary.range) ??
-            summary.range.min
-        )
-      )
-  }, [quantityInput, requestedCredits, summary])
+  const range = useMemo(
+    () =>
+      summary ? amountRange(summary.range, summary.price.unitPriceMinor) : null,
+    [summary]
+  )
 
-  const quantity = Number(quantityInput)
+  useEffect(() => {
+    if (!range || !summary || amountInput) return
+    const legacyAmount =
+      requestedCredits && /^\d{1,7}$/.test(requestedCredits)
+        ? String(
+            Math.ceil(
+              creditsToMinor(
+                Number(requestedCredits),
+                summary.price.unitPriceMinor
+              ) / 100
+            )
+          )
+        : null
+    setAmountInput(
+      String(
+        prefilledAmount(requestedAmount ?? legacyAmount, range) ?? range.min
+      )
+    )
+  }, [amountInput, range, requestedAmount, requestedCredits, summary])
+
+  const normalizedInput = amountInput.trim().replace(',', '.')
+  const amountMinor = /^\d+(?:\.\d{1,2})?$/.test(normalizedInput)
+    ? Math.round(Number(normalizedInput) * 100)
+    : null
   const quantityError = useMemo(() => {
-    if (!summary) return null
-    if (!Number.isInteger(quantity)) return 'whole'
-    if (quantity < summary.range.min || quantity > summary.range.max)
+    if (!range) return null
+    if (amountMinor === null || !Number.isSafeInteger(amountMinor))
+      return 'whole'
+    if (
+      amountMinor < Math.round(range.min * 100) ||
+      amountMinor > Math.round(range.max * 100)
+    )
       return 'range'
-    if (quantity % summary.range.step !== 0) return 'step'
+    if (amountMinor % Math.round(range.step * 100) !== 0) return 'step'
     return null
-  }, [quantity, summary])
+  }, [amountMinor, range])
+  /** What the purchase API takes: displayed credits, always even. */
+  const quantity =
+    summary && amountMinor !== null && !quantityError
+      ? amountMinor / summary.price.unitPriceMinor
+      : 0
 
   const packages = useMemo(
     () =>
@@ -72,16 +120,15 @@ export function useBillingPage() {
     [packages, quantity]
   )
 
-  const totalMinor =
-    summary && Number.isFinite(quantity)
-      ? quantity * summary.price.unitPriceMinor
-      : 0
+  const totalMinor = Number.isSafeInteger(amountMinor) ? (amountMinor ?? 0) : 0
 
   const adjustQuantity = useCallback(
     (direction: -1 | 1) => {
-      if (!summary) return
-      const { min, max, step } = summary.range
-      const base = Number.isInteger(quantity) ? quantity : min
+      if (!range) return
+      const min = Math.round(range.min * 100)
+      const max = Math.round(range.max * 100)
+      const step = Math.round(range.step * 100)
+      const base = amountMinor ?? min
       /*
        * Snap onto the step grid before moving, so stepping away from a
        * hand-typed amount lands on a quantity the server will actually price
@@ -92,14 +139,18 @@ export function useBillingPage() {
           ? Math.floor(base / step) * step
           : Math.ceil(base / step) * step
       const next = Math.min(max, Math.max(min, grid + direction * step))
-      setQuantityInput(String(next))
+      setAmountInput(String(next / 100))
     },
-    [quantity, summary]
+    [amountMinor, range]
   )
 
-  const selectPackage = useCallback((credits: number) => {
-    setQuantityInput(String(credits))
-  }, [])
+  const selectPackage = useCallback(
+    (credits: number) => {
+      if (!summary) return
+      setAmountInput(String((credits * summary.price.unitPriceMinor) / 100))
+    },
+    [summary]
+  )
 
   const createCheckout = useCallback(async () => {
     if (!summary || quantityError || isCreating) return
@@ -131,8 +182,8 @@ export function useBillingPage() {
     setCheckout(null)
     setPendingReference(null)
     setCheckoutError(null)
-    if (summary) setQuantityInput(String(summary.range.min))
-  }, [summary])
+    if (range) setAmountInput(String(range.min))
+  }, [range])
 
   /** A checkout in flight freezes the amount it was priced for. */
   const isLocked = !!checkout || !!pendingReference
@@ -146,8 +197,9 @@ export function useBillingPage() {
     packages,
     selectedPackage,
     selectPackage,
-    quantityInput,
-    setQuantityInput,
+    amountInput,
+    setAmountInput,
+    amountRange: range,
     quantity,
     quantityError,
     totalMinor,

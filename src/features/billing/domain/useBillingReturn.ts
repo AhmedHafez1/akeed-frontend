@@ -2,6 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { useLocale } from 'next-intl'
+import { creditsToMinor, formatBalance } from '@/shared/lib/balanceMoney'
+import type { SupportedLocale } from '@/shared/lib/locale'
 import { useEmitDomainEvent } from '@/shared/query/domainEvents'
 import { fetchPurchase } from '../api/billingApi'
 import type { PurchaseDetail } from './billing.types'
@@ -24,6 +27,7 @@ function isTerminal(purchase: PurchaseDetail) {
  * created here.
  */
 export function useBillingReturn() {
+  const locale = useLocale() as SupportedLocale
   const searchParams = useSearchParams()
   const purchaseRef = searchParams.get('purchaseRef') ?? ''
   const isValidReference = PURCHASE_REFERENCE.test(purchaseRef)
@@ -105,7 +109,15 @@ export function useBillingReturn() {
     updatedAt > successSeenAt &&
     summary.status === 'active' &&
     summary.availableCredits > 0
-      ? summary.availableCredits
+      ? formatBalance(
+          summary.balanceMinor ??
+            creditsToMinor(
+              summary.availableCredits,
+              summary.price.unitPriceMinor
+            ),
+          summary.price.currency,
+          locale
+        )
       : null
 
   return {
@@ -114,7 +126,10 @@ export function useBillingReturn() {
     refresh,
     returnTo,
     forgetReturnTo,
-    /** The balance after a successful purchase; `null` until it is known. */
+    /**
+     * The balance after a successful purchase, formatted as money; `null`
+     * until it is known.
+     */
     balance,
   }
 }

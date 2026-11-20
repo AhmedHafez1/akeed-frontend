@@ -1,6 +1,6 @@
 ---
 title: Usar Akeed sin Shopify
-description: Confirma por WhatsApp los pedidos con pago contra entrega de cualquier tienda. Conecta WooCommerce o EasyOrders, agrega pedidos manualmente o importa un archivo, y paga por el uso con créditos.
+description: Confirma por WhatsApp los pedidos con pago contra entrega de cualquier tienda. Conecta WooCommerce o EasyOrders, agrega pedidos manualmente o importa un archivo y paga por mensaje con saldo prepago.
 order: 2
 slug: standalone-platform
 ---
@@ -52,27 +52,27 @@ Después de eso ya estás en marcha. Agrega tu primer pedido o importa un archiv
 
 Las cuentas independientes nuevas empiezan con estos valores predeterminados: el primer mensaje se envía de inmediato, un recordatorio sale después de 2 horas y un pedido sin respuesta se marca como **Sin respuesta** 12 horas después del recordatorio. El horario de silencio está desactivado, así que los mensajes salen a cualquier hora. Actívalo para retenerlos de 22:00 a 09:00. Puedes cambiarlos en Configuración. Consulta [Reglas de automatización](/docs/automation-rules).
 
-## Cómo funcionan los créditos
+## Cómo funciona tu saldo
 
-Las cuentas independientes no usan un plan mensual. Pagas por lo que usas con **créditos**.
+En una cuenta independiente recargas tu saldo en libras egipcias y pagas por mensaje enviado. No hay cuota mensual.
 
 | Regla | Detalles |
 | --- | --- |
-| Un mensaje | Cada mensaje de WhatsApp enviado a un cliente usa 2 créditos, así que cuesta EGP 2. |
-| Recordatorios | Un recordatorio a un cliente que no ha respondido usa 2 créditos más. |
-| Envíos fallidos | Si WhatsApp no acepta un mensaje, sus créditos vuelven a tu cuenta automáticamente. |
-| Créditos de bienvenida | Las cuentas nuevas reciben **60 créditos gratis** una sola vez, suficientes para 30 mensajes, sin tarjeta de crédito. Tu saldo se muestra en la app. |
-| Precio | **EGP 1.00** por crédito al momento de escribir esta guía. Un mensaje y su recordatorio cuestan EGP 4.00 en total. |
-| Sin suscripción | Solo pagas cuando compras créditos. No hay cargo mensual. |
+| Un mensaje | Cada mensaje de WhatsApp desde el número de Akeed cuesta **1 EGP**. Desde tu propio número de WhatsApp Business cuesta **0,5 EGP**. |
+| Recordatorios | Un recordatorio a un cliente que no ha respondido cuenta como otro mensaje al mismo precio. |
+| Envíos fallidos | Si WhatsApp no acepta un mensaje, su importe se devuelve automáticamente a tu saldo. |
+| Mensajes gratis | Las cuentas nuevas reciben **100 mensajes gratis** una sola vez, sin tarjeta de crédito. Puedes consultar tu saldo en la app. |
+| Precio | Un mensaje y su recordatorio desde el número de Akeed cuestan 2 EGP en total. |
+| Sin suscripción | Solo pagas al recargar tu saldo. No hay cargo mensual. |
 
-### Comprar créditos
+### Recargar el saldo
 
-Abre **Facturación y créditos**, elige cuántos créditos necesitas y continúa al pago. Puedes comprar de 200 a 10,000 créditos por vez, en incrementos de 100. Por ejemplo, 1,000 créditos cuestan EGP 1,000. El pago lo gestiona **Paymob**, el proveedor de pagos egipcio, y puedes pagar con tarjeta o con Vodafone Cash. Los precios están en libras egipcias y pueden cambiar, así que el precio que aparece en la página de facturación es siempre el que se aplica.
+Abre **Facturación y saldo**, elige un importe y continúa al pago. Puedes recargar entre 100 y 5.000 EGP por vez, en incrementos de 50 EGP. Por ejemplo, 500 EGP cubren 500 mensajes desde el número de Akeed. Paga por **Paymob** con tarjeta o Vodafone Cash. Se aplica el precio que aparece en la página de facturación.
 
-Akeed nunca pide ni almacena los datos de tu tarjeta o de tu billetera. Los créditos se agregan a tu saldo después de que Paymob confirma el pago.
+Akeed nunca pide ni almacena los datos de tu tarjeta o de tu billetera. El importe se agrega a tu saldo cuando Paymob confirma el pago.
 
 > [!WARNING]
-> Cuando tu saldo se agota, las confirmaciones nuevas se detienen hasta que compres más créditos. Vigila tu saldo y recarga antes de enviar una importación grande.
+> Si agotas tu saldo, las confirmaciones nuevas se detienen hasta que lo recargues. Revisa tu saldo antes de iniciar una importación grande.
 
 ## Qué cambia respecto a Shopify
 
@@ -80,7 +80,7 @@ Akeed nunca pide ni almacena los datos de tu tarjeta o de tu billetera. Los cré
 | --- | --- | --- | --- |
 | Cómo llegan los pedidos | Automáticamente desde tu tienda. | Automáticamente desde tu tienda. | Los agregas tú, uno por uno, desde un archivo o desde tu servidor. |
 | Dónde aparecen los resultados | En tu panel de Akeed y en tu pedido de Shopify. | En tu panel de Akeed y en el pedido de tu tienda. | En tu panel de Akeed. |
-| Cómo pagas | Un plan mensual que cobra Shopify. | Créditos comprados mediante Paymob. | Créditos comprados mediante Paymob. |
+| Cómo pagas | Un plan mensual que cobra Shopify. | Saldo prepago que recargas mediante Paymob. | Saldo prepago que recargas mediante Paymob. |
 
 En los pedidos que agregas tú, Akeed no cambia nada en otro sistema. Usa el estado de tu panel para decidir qué enviar.
 
@@ -88,9 +88,9 @@ En los pedidos que agregas tú, Akeed no cambia nada en otro sistema. Usa el est
 
 | Error | Mejor opción |
 | --- | --- |
-| Iniciar una importación grande con poco saldo | Revisa primero tu saldo. Akeed no empieza a menos que tus créditos cubran todos los pedidos de la importación. |
+| Iniciar una importación grande con poco saldo | Revisa primero tu saldo. Akeed solo empieza si el saldo cubre todos los pedidos de la importación. |
 | Enviar el pedido antes de que el cliente confirme | Envía primero los pedidos con estado **Confirmado**. |
-| Olvidar que los recordatorios usan créditos | Calcula hasta 4 créditos por pedido. |
+| Olvidar el costo de los recordatorios | Calcula hasta 2 EGP por pedido desde el número de Akeed. |
 | Esperar que se confirmen los pedidos pagados en línea | Solo se confirman los pedidos contra entrega. |
 
 ## Preguntas frecuentes
@@ -101,7 +101,7 @@ No. Las cuentas independientes no necesitan Shopify ni ninguna otra plataforma.
 
 ### ¿Akeed es distinto para las tiendas Shopify?
 
-Las tiendas Shopify instalan Akeed desde Shopify, reciben los pedidos automáticamente y usan un plan mensual que cobra Shopify. Los demás comerciantes crean una cuenta, conectan una tienda WooCommerce o EasyOrders o agregan sus propios pedidos, y usan créditos.
+Las tiendas Shopify instalan Akeed desde Shopify, reciben los pedidos automáticamente y usan un plan mensual que cobra Shopify. Los demás comerciantes crean una cuenta, conectan una tienda WooCommerce o EasyOrders o agregan sus propios pedidos, y pagan por mensaje con saldo prepago.
 
 ### ¿Se necesita una cuenta propia de WhatsApp Business?
 

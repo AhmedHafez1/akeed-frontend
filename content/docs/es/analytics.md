@@ -23,7 +23,7 @@ No todos los números tienen el mismo valor operativo. Empieza por estos:
 | Tasa de respuesta | Muestra si los clientes interactúan con tus mensajes. |
 | Volumen sin respuesta | Muestra posibles problemas de horario o de adecuación del mensaje. |
 | Envíos fallidos | Señala problemas de entrega o de configuración. |
-| Avance del uso | Evita que llegues por sorpresa al límite de tu plan o te quedes sin créditos. |
+| Avance del uso | Evita que llegues por sorpresa al límite de tu plan o te quedes sin saldo. |
 
 ## Definiciones de las métricas (vista del comerciante)
 
@@ -57,12 +57,12 @@ Revísalos a diario. Incluso un pequeño aumento de fallos puede reducir sin que
 
 ### Uso (usado / límite)
 
-En Shopify, muestra el avance respecto a las confirmaciones incluidas en tu plan. En una cuenta independiente, vigila tu saldo de créditos.
+En Shopify, muestra el avance respecto a las confirmaciones incluidas en tu plan. En una cuenta independiente, vigila tu saldo.
 
 Úsalo como una señal operativa, no solo como un dato de facturación.
 
 > [!WARNING]
-> Si el uso llega a tu límite o tus créditos se agotan, las confirmaciones nuevas pueden detenerse hasta la renovación, la mejora del plan o una compra de créditos.
+> Si el uso llega a tu límite o tu saldo se agota, las confirmaciones nuevas pueden detenerse hasta la renovación, la mejora del plan o una recarga.
 
 ## Cómo leer las tendencias (semanalmente)
 
@@ -83,7 +83,7 @@ No optimices a partir de un solo día.
 | Caída de la tasa de respuesta | Baja más del 10 % respecto al periodo anterior | Revisa el tono de la plantilla y el horario de envío. |
 | Aumento de pedidos sin respuesta | Sube más del 15 % de una semana a otra | Activa o reajusta el recordatorio y los plazos del aviso. |
 | Envíos fallidos | Aumento repentino | Verifica la calidad de los teléfonos y la configuración. |
-| Presión sobre el uso | 80 % y 95 % de tu plan, o un saldo de créditos bajo | Mejora tu plan o compra créditos antes de llegar al límite. |
+| Presión sobre el uso | 80 % y 95 % de tu plan, o un saldo bajo | Mejora tu plan o recarga el saldo antes de llegar al límite. |
 
 ## Errores comunes
 
@@ -115,7 +115,7 @@ No optimices a partir de un solo día.
 ### Uso cerca del límite con buen rendimiento
 
 - Es un buen problema: la demanda es sana.
-- Mejora tu plan o compra créditos antes de que los envíos se detengan.
+- Mejora tu plan o recarga el saldo antes de que los envíos se detengan.
 
 ## Preguntas frecuentes
 

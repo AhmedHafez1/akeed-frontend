@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { Moon } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
-import { billingPurchaseHref } from '@/features/billing'
+import { billingPurchaseHref, useCreditMoney } from '@/features/billing'
 import { creditFeedbackKey } from '@/shared/lib/creditFeedback'
 import { getFormatLocale, withLocale } from '@/shared/lib/locale'
 import { Button, LoadingButton, Progress } from '@/shared/ui'
@@ -125,6 +125,7 @@ function StatusBanner({
   const t = useTranslations('orderImport.release')
   const tStart = useTranslations('orderImport.start')
   const tCredits = useTranslations('creditErrors')
+  const money = useCreditMoney()
   const locale = useLocale()
   const blockerText = useBlockerText()
   const resume = useResumeOrderImport(detail.batchId)
@@ -216,7 +217,7 @@ function StatusBanner({
                   <Link
                     href={withLocale(
                       billingPurchaseHref({
-                        credits: release?.heldCredits ?? 0,
+                        amountMinor: money.toMinor(release?.heldCredits ?? 0),
                         returnTo: importReturnPath(detail.batchId, false),
                       }),
                       locale

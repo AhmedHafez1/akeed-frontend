@@ -39,11 +39,11 @@ Si no cuentas con un desarrollador, usa la [Importación masiva de pedidos](/doc
 | Pregunta | Respuesta |
 | --- | --- |
 | ¿El mensaje se envía en cuanto se recibe el pedido? | Akeed primero guarda el pedido y luego envía el mensaje según tu configuración, como el horario de silencio y el retraso de envío. |
-| ¿Qué pasa con los pedidos pagados por adelantado? | Se guardan y aparecen en el panel, pero no se envía ningún mensaje al cliente ni se usa ningún crédito. |
-| ¿Qué pasa si el sistema envía el mismo pedido dos veces? | No se crea un segundo pedido, no se envía un segundo mensaje y no se descuenta el crédito dos veces. |
+| ¿Qué pasa con los pedidos pagados por adelantado? | Se guardan y aparecen en el panel, pero el cliente no recibe un mensaje y no se cobra nada. |
+| ¿Qué pasa si el sistema envía el mismo pedido dos veces? | No se crea otro pedido, no se envía otro mensaje y no hay un segundo cargo. |
 | ¿Se puede modificar o cancelar un pedido desde la API? | No. La API solo crea pedidos. |
 | ¿Dónde se ve la respuesta del cliente? | En la lista de **Confirmaciones** del panel. Akeed no envía notificaciones a tu servidor. |
-| ¿Hay un modo de prueba? | No. Cada pedido con pago contra entrega envía un mensaje real y usa créditos. Prueba primero con tu propio número de teléfono. |
+| ¿Hay un modo de prueba? | No. Cada pedido aceptado con pago contra entrega envía un mensaje real que se cobra del saldo. Prueba primero con tu propio número de teléfono. |
 | ¿Qué detiene la recepción de pedidos? | Que se agote el saldo, que se desactive la confirmación automática en la configuración o que se revoque la clave. |
 
 ## Si hay un problema

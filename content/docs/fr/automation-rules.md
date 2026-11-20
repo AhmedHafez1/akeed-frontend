@@ -81,7 +81,7 @@ Akeed n’annule une commande que si tout ceci est vrai :
 - Vous n’avez pas exclu la commande avec **Ne pas annuler automatiquement**.
 - La boutique indique toujours la commande comme non payée et non expédiée.
 
-Si Akeed n’a pas pu envoyer ou distribuer un message, par exemple parce que votre forfait ou vos crédits sont épuisés, l’annulation est suspendue. Akeed n’annule jamais une commande à cause de ses propres limites d’envoi.
+Si Akeed n’a pas pu envoyer ou distribuer un message, par exemple parce que votre forfait ou votre solde est épuisé, l’annulation est suspendue. Akeed n’annule jamais une commande à cause de ses propres limites d’envoi.
 
 Sur Shopify, vous choisissez si les articles sont remis en stock et si Shopify prévient le client. WooCommerce et EasyOrders suivent les réglages de votre boutique. Une commande annulée affiche **Aucune réponse après les tentatives de confirmation**. Si le client confirme ensuite, la commande affiche **Confirmée après annulation** et passe dans **À traiter par vous** pour que vous le contactiez. La commande reste annulée. Tout autre message après l’annulation est ignoré.
 

@@ -49,8 +49,8 @@ La confirmation des commandes aide à réduire les deux.
 | Annulée | Le client a annulé (ou le marchand a annulé faute de réponse). | N’expédiez pas. |
 | Sans réponse | Pas de réponse dans le délai d’escalade configuré. | Examinez-la rapidement et appliquez votre politique d’annulation. |
 | Non distribué sur WhatsApp | WhatsApp n’a pas pu remettre le message au numéro du client. Akeed n’envoie pas de rappel et ne compte pas ce message dans votre consommation. | Appelez le client, puis confirmez ou annulez la commande manuellement. |
-| En attente d’envoi | Les confirmations de votre forfait ou vos crédits sont épuisés, le message n’a donc pas été envoyé. Rien n’est facturé. | Changez de forfait ou achetez des crédits : Akeed l’enverra alors automatiquement. |
-| Échec | L’envoi a échoué ou a été bloqué. | Vérifiez la qualité du numéro, l’utilisation du forfait ou le solde de crédits, et les paramètres. |
+| En attente d’envoi | Les confirmations de votre forfait ou votre solde sont épuisés. Le message n’a pas été envoyé et rien n’est facturé. | Changez de forfait ou rechargez votre solde. Akeed enverra le message automatiquement. |
+| Échec | L’envoi a échoué ou a été bloqué. | Vérifiez la qualité du numéro, l’utilisation du forfait ou le solde, et les paramètres. |
 
 ## Routine pratique pour le marchand
 
@@ -92,7 +92,7 @@ Un envoi échoué est un signal opérationnel, pas un simple chiffre du tableau 
 ### Les confirmations échouées augmentent
 
 - Vérifiez la qualité des numéros de téléphone et le format de l’indicatif du pays.
-- Vérifiez l’utilisation actuelle du forfait ou le solde de crédits.
+- Vérifiez l’utilisation actuelle du forfait ou le solde.
 - Envoyez une confirmation de test à un numéro que vous savez valide.
 
 ## FAQ
@@ -115,9 +115,9 @@ WhatsApp indique à Akeed que le message ne peut pas être remis, et la commande
 
 WhatsApp donne la même réponse pour trois raisons et ne précise pas laquelle : le numéro n’est pas sur WhatsApp, le client n’a pas accepté les dernières conditions de WhatsApp, ou son application WhatsApp n’est pas à jour. Un client que vous joignez vous-même sur WhatsApp peut donc se retrouver ici. Demandez-lui de mettre à jour WhatsApp et d’accepter ses conditions (WhatsApp le lui propose dans Paramètres, puis Aide). Les messages de ses prochaines commandes pourront ensuite lui parvenir.
 
-### Que se passe-t-il quand les confirmations de mon forfait ou mes crédits sont épuisés ?
+### Que se passe-t-il quand les confirmations de mon forfait ou mon solde sont épuisés ?
 
-Les nouvelles commandes sont toujours reçues, mais leurs messages attendent avec le statut **En attente d’envoi**, et un bandeau rouge sur le tableau de bord indique combien attendent et ce que vous pouvez faire. Rien n’est facturé pour elles. Dès que vous changez de forfait, achetez des crédits ou que votre quota est renouvelé, Akeed les envoie automatiquement, de la plus ancienne à la plus récente, en respectant le délai d’envoi et les heures de silence. Une commande qui attend plus de 24 heures n’est pas envoyée d’elle-même : elle passe dans **À traiter**, où vous pouvez la confirmer, l’annuler ou la relancer.
+Les nouvelles commandes sont toujours reçues, mais leurs messages attendent avec le statut **En attente d’envoi**, et un bandeau rouge sur le tableau de bord indique combien attendent et ce que vous pouvez faire. Rien n’est facturé pour elles. Dès que vous changez de forfait, rechargez votre solde ou que votre quota est renouvelé, Akeed les envoie automatiquement, de la plus ancienne à la plus récente, en respectant le délai d’envoi et les heures de silence. Une commande qui attend plus de 24 heures n’est pas envoyée d’elle-même : elle passe dans **À traiter**, où vous pouvez la confirmer, l’annuler ou la relancer.
 
 Sur un forfait Shopify payant, le bandeau propose aussi un bouton de renouvellement au nom de votre forfait, par exemple **Renouveler Basic maintenant**. Vous approuvez à nouveau votre forfait actuel dans Shopify, et une nouvelle période de 30 jours démarre aussitôt avec le quota complet : les commandes en attente partent. Les messages restants de l’ancienne période ne sont pas reportés. Le même bouton figure sur votre forfait actuel dans **Paramètres → Forfait**.
 

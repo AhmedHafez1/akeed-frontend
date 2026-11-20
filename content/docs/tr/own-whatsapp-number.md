@@ -9,7 +9,7 @@ slug: own-whatsapp-number
 
 Akeed onayları varsayılan olarak kendi resmi WhatsApp numarasından gönderir ve sizin bir şey bağlamanız gerekmez. Kendi WhatsApp Business numaranızı da bağlayabilirsiniz; böylece müşteriler onayları işletmenizin adıyla ve numarasından alır.
 
-Akeed’in numarası yedek olarak kalır. Numaranızın henüz gönderemediği her mesaj Akeed’in numarasından çıkar, bu yüzden müşteriler onaylarını almaya devam eder. Yedek mesajlar, **Maliyeti Nedir?** bölümünde açıklandığı gibi planınızdan veya kredilerinizden düşer.
+Akeed’in numarası yedek olarak kalır. Numaranızın henüz gönderemediği her mesaj Akeed’in numarasından çıkar, bu yüzden müşteriler onaylarını almaya devam eder. Yedek mesajlar, **Maliyeti Nedir?** bölümünde açıklandığı gibi planınızdan veya bakiyenizden düşer.
 
 Telefonunuzdaki WhatsApp Business uygulamasında zaten kullandığınız bir numarayı ya da henüz WhatsApp’ta olmayan bir numarayı bağlayabilirsiniz.
 
@@ -63,16 +63,16 @@ Ayarların gösterdiği sorunu giderin: şablon incelemesini bekleyin, Meta işl
 
 ## Maliyeti Nedir?
 
-### Ön Ödemeli Krediler
+### Ön Ödemeli Bakiye
 
-1 kredi, 1 EGP’ye eşittir.
+Mesaj ücreti Mısır lirası cinsinden bakiyenizden düşülür.
 
 | Gönderen | Mesaj başına maliyet |
 | --- | --- |
-| Sizin numaranız | 1 kredi |
-| Akeed’in numarası | 2 kredi |
+| Sizin numaranız | 0,5 EGP |
+| Akeed’in numarası | 1 EGP |
 
-Akeed’in numarasından giden bir yedek mesaj, Akeed’in numarasından giden her mesaj gibi 2 kredidir. Bakiyeniz yetmezse gönderilmez: sipariş **Gönderim bekliyor** durumunda bekler ve kredi satın aldığınızda gönderilir.
+Akeed’in numarasından giden yedek mesaj 1 EGP tutar. Bakiyeniz yetmezse sipariş **Gönderim bekliyor** durumunda kalır ve bakiye yüklediğinizde gönderilir.
 
 ### Shopify Planları
 
@@ -91,7 +91,7 @@ Akeed’in numarasından giden bir yedek mesaj Akeed kotasından düşer, hiçbi
 
 ### Meta Ücretleri
 
-Meta, numaranızdan gönderilen mesajlar için işletmenizden kendi fiyatlarına göre ve Meta işletme hesabınız üzerinden ayrıca ücret alır. Bu ücretler Akeed kredilerinizin veya planınızın parçası değildir. Akeed’in numarasından gönderilen mesajlar için size Meta ücreti çıkmaz.
+Meta, numaranızdan gönderilen mesajlar için işletmenizden kendi fiyatlarına göre ve Meta işletme hesabınız üzerinden ayrıca ücret alır. Bu ücretler Akeed bakiyenizin veya planınızın parçası değildir. Akeed’in numarasından gönderilen mesajlar için size Meta ücreti çıkmaz.
 
 > [!INFO]
 > Faturalandırma, her numaradan kaç mesaj gittiğini gösterir; böylece ikisinin maliyetini karşılaştırabilirsiniz.
@@ -100,9 +100,9 @@ Meta, numaranızdan gönderilen mesajlar için işletmenizden kendi fiyatlarına
 
 Her iki numara için **Ayarlar → Mesaj** bölümündeki tek teşekkür anahtarını kullanın. Mevcut seçiminiz bağlantı veya yeniden bağlantı sırasında korunur. Teşekkür, müşterinin yanıtını alan numaradan gönderilir.
 
-- Shopify’da her teşekkür, gerçek gönderenin kotasından bir mesaj kullanır. Ön ödemeli kredilerde numaranızdan 1 kredi, Akeed’in numarasından 2 kredi harcar. Meta ayrıca ücret alabilir.
-- Numaranız onay beklerken Akeed’e gelen yanıtlar, Akeed’in kotasını veya kredi ücretini kullanmaya devam eder.
-- Kota veya kredi yoksa teşekkür gönderilmez. Numaranızdan başarısız olan teşekkür Akeed’in numarasından yeniden gönderilmez.
+- Shopify’da her teşekkür mesajı, gerçek gönderenin kotasından bir mesaj kullanır. Ön ödemeli bakiyede kendi numaranızdan 0,5 EGP, Akeed’in numarasından 1 EGP tutar. Meta ayrıca ücret alabilir.
+- Numaranız onay beklerken Akeed’e gelen yanıtlar, Akeed’in kotasını veya mesaj tarifesini kullanmaya devam eder.
+- Kota veya bakiye yoksa teşekkür gönderilmez. Numaranızdan başarısız olan teşekkür Akeed’in numarasından yeniden gönderilmez.
 
 ## Kim Ne Yapabilir?
 

@@ -3,7 +3,8 @@
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { cn } from '@/shared/lib/utils'
-import { formatCredits } from '../../domain/billingFormatters'
+import { creditsAsMoney } from '../../domain/billingFormatters'
+import type { CreditSummary } from '../../domain/billing.types'
 
 /**
  * Messages per day over the last 14 days, today's bar in the brand colour.
@@ -15,9 +16,12 @@ import { formatCredits } from '../../domain/billingFormatters'
 export function DailyUsageBars({
   daily,
   split,
+  price,
 }: {
   daily: number[]
   split?: { akeed: number[]; ownNumber: number[] }
+  /** Prices the 14-day total, which shows as money. */
+  price: Pick<CreditSummary['price'], 'unitPriceMinor' | 'currency'>
 }) {
   const t = useTranslations('billing.balance')
   const { locale } = useLocaleInfo()
@@ -29,7 +33,7 @@ export function DailyUsageBars({
       <div className="text-ak-caption text-ink-muted mb-2 flex justify-between">
         <span>{t('chartLabel')}</span>
         <span dir="ltr" className="text-ink font-semibold tabular-nums">
-          {formatCredits(total, locale)}
+          {creditsAsMoney(total, price, locale)}
         </span>
       </div>
       <div className="flex h-14 items-end gap-1">

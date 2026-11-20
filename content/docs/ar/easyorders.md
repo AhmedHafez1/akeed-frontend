@@ -121,7 +121,7 @@ slug: easyorders
 
 ### كيف أدفع؟
 
-بالرصيد، مثل كل حساب لا يستخدم Shopify. راجع [استخدام أكيد بدون Shopify](/docs/standalone-platform).
+تدفع لكل رسالة من رصيد مسبق الدفع، مثل كل حساب لا يستخدم Shopify. راجع [استخدام أكيد بدون Shopify](/docs/standalone-platform).
 
 ## أدلة ذات صلة
 

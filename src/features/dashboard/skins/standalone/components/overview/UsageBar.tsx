@@ -3,6 +3,7 @@
 import { useId } from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
+import { useCreditMoney } from '@/features/billing'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
 import { cn } from '@/shared/lib/utils'
@@ -20,6 +21,7 @@ export function UsageBar({
   usage: NonNullable<DashboardOverview['usage']>
 }) {
   const t = useTranslations('dashboard.standalone.credits')
+  const money = useCreditMoney()
   const { locale } = useLocaleInfo()
   const labelId = useId()
   const exhausted = usage.state === 'exhausted'
@@ -45,7 +47,10 @@ export function UsageBar({
         >
           {exhausted
             ? t('exhausted')
-            : t('warning', { used: usage.used, limit: usage.limit })}
+            : t('warning', {
+                used: money.format(usage.used),
+                limit: money.format(usage.limit),
+              })}
         </p>
         <div
           role="progressbar"

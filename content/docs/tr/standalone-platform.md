@@ -1,6 +1,6 @@
 ---
 title: Akeed’i Shopify Olmadan Kullanma
-description: Kapıda ödemeli siparişleri herhangi bir mağazadan WhatsApp üzerinden onaylayın. WooCommerce veya EasyOrders’ı bağlayın, siparişleri elle ekleyin ya da bir dosyadan içe aktarın ve kullanımınızı kredilerle ödeyin.
+description: Herhangi bir mağazanın kapıda ödemeli siparişlerini WhatsApp üzerinden onaylayın. WooCommerce veya EasyOrders’ı bağlayın, siparişleri elle ekleyin ya da dosyadan içe aktarın ve ön ödemeli bakiyenizden mesaj başına ödeme yapın.
 order: 2
 slug: standalone-platform
 ---
@@ -52,27 +52,27 @@ Bundan sonra kullanıma hazırsınız. İlk siparişinizi ekleyin ya da bir dosy
 
 Yeni bağımsız hesaplar şu varsayılanlarla başlar: ilk mesaj hemen gönderilir, 2 saat sonra bir hatırlatma gider ve yanıt gelmeyen bir sipariş hatırlatmadan 12 saat sonra **Yanıt yok** olarak işaretlenir. Sessiz saatler kapalıdır, bu yüzden mesajlar her saatte gönderilir. Mesajları 22:00 ile 09:00 arasında bekletmek için açın. Bunları Ayarlar’dan değiştirebilirsiniz. [Otomasyon Kuralları](/docs/automation-rules) kılavuzuna bakın.
 
-## Krediler Nasıl Çalışır
+## Bakiyeniz Nasıl Çalışır
 
-Bağımsız hesaplar aylık plan kullanmaz. Kullandığınız kadarını **kredi** ile ödersiniz.
+Bağımsız hesaplarda aylık plan yoktur. Mısır lirası cinsinden bakiyenize para yükler, gönderdiğiniz her mesaj için ödeme yaparsınız.
 
 | Kural | Ayrıntılar |
 | --- | --- |
-| Bir mesaj | Müşteriye gönderilen her WhatsApp mesajı 2 kredi kullanır, yani EGP 2 tutar. |
-| Hatırlatmalar | Yanıt vermeyen bir müşteriye gönderilen hatırlatma 2 kredi daha kullanır. |
-| Başarısız gönderimler | WhatsApp bir mesajı kabul etmezse kredileri hesabınıza otomatik olarak iade edilir. |
-| Başlangıç kredileri | Yeni hesaplar kredi kartı gerekmeden bir kereye mahsus 30 mesaja yetecek **60 ücretsiz kredi** alır. Bakiyeniz uygulamada gösterilir. |
-| Fiyat | Bu kılavuzun yazıldığı tarihte kredi başına **EGP 1,00**. Bir mesaj ve hatırlatması birlikte EGP 4,00 tutar. |
-| Abonelik yok | Yalnızca kredi satın aldığınızda ödersiniz. Aylık ücret yoktur. |
+| Bir mesaj | Akeed’in numarasından gönderilen WhatsApp mesajı **1 EGP**, kendi WhatsApp Business numaranızdan gönderilen mesaj **0,5 EGP** tutar. |
+| Hatırlatmalar | Yanıt vermeyen bir müşteriye gönderilen hatırlatma, aynı fiyattan bir mesaj daha sayılır. |
+| Başarısız gönderimler | WhatsApp bir mesajı kabul etmezse mesaj ücreti otomatik olarak bakiyenize iade edilir. |
+| Ücretsiz mesajlar | Yeni hesaplara kredi kartı gerekmeden bir defaya mahsus **100 ücretsiz mesaj** verilir. Bakiyenizi uygulamada görebilirsiniz. |
+| Fiyat | Akeed’in numarasından gönderilen bir mesaj ve hatırlatması toplam 2 EGP tutar. |
+| Abonelik yok | Yalnızca bakiye yüklerken ödeme yaparsınız. Aylık ücret yoktur. |
 
-### Kredi satın alma
+### Bakiye yükleme
 
-**Faturalandırma ve krediler** bölümünü açın, kaç krediye ihtiyacınız olduğunu seçin ve ödeme adımına geçin. Tek seferde 100’er artışlarla 200 ile 10.000 arasında kredi satın alabilirsiniz. Örneğin 1.000 kredi EGP 1.000 tutar. Ödeme, Mısırlı ödeme sağlayıcısı **Paymob** tarafından işlenir ve kartla veya Vodafone Cash ile ödeyebilirsiniz. Fiyatlar Mısır lirası cinsindendir ve değişebilir; geçerli olan her zaman faturalandırma sayfasında gösterilen fiyattır.
+**Faturalandırma ve bakiye** bölümünü açın, bir tutar seçip ödemeye geçin. Tek seferde 100 ile 5.000 EGP arasında, 50 EGP’lik adımlarla yükleme yapabilirsiniz. Örneğin 500 EGP, Akeed’in numarasından 500 mesajı karşılar. **Paymob** üzerinden kartla veya Vodafone Cash ile ödeyebilirsiniz. Faturalandırma sayfasındaki fiyat geçerlidir.
 
-Akeed kart veya cüzdan bilgilerinizi hiçbir zaman istemez ve saklamaz. Krediler, Paymob ödemeyi onayladıktan sonra bakiyenize eklenir.
+Akeed kart veya cüzdan bilgilerinizi hiçbir zaman istemez ve saklamaz. Paymob ödemeyi onayladıktan sonra tutar bakiyenize eklenir.
 
 > [!WARNING]
-> Bakiyeniz bittiğinde, yeni kredi satın alana kadar yeni onaylar durur. Bakiyenizi takip edin ve büyük bir içe aktarma göndermeden önce kredi yükleyin.
+> Bakiyeniz bittiğinde, yeniden yükleyene kadar yeni onaylar durur. Büyük bir içe aktarma başlatmadan önce bakiyenizi kontrol edin.
 
 ## Shopify’dan Farkları
 
@@ -80,7 +80,7 @@ Akeed kart veya cüzdan bilgilerinizi hiçbir zaman istemez ve saklamaz. Kredile
 | --- | --- | --- | --- |
 | Siparişler nasıl gelir | Mağazanızdan otomatik olarak. | Mağazanızdan otomatik olarak. | Siz eklersiniz: tek tek, bir dosyadan veya sunucunuzdan. |
 | Sonuçlar nerede görünür | Akeed panelinizde ve Shopify siparişinizde. | Akeed panelinizde ve mağazanızdaki siparişte. | Akeed panelinizde. |
-| Nasıl ödersiniz | Shopify tarafından faturalanan aylık bir plan. | Paymob üzerinden satın alınan krediler. | Paymob üzerinden satın alınan krediler. |
+| Nasıl ödersiniz | Shopify tarafından faturalanan aylık bir plan. | Paymob üzerinden yüklenen ön ödemeli bakiye. | Paymob üzerinden yüklenen ön ödemeli bakiye. |
 
 Kendiniz eklediğiniz siparişlerde Akeed başka bir sistemde hiçbir şeyi değiştirmez. Neyi kargoya vereceğinize karar vermek için panelinizdeki durumu kullanın.
 
@@ -88,9 +88,9 @@ Kendiniz eklediğiniz siparişlerde Akeed başka bir sistemde hiçbir şeyi değ
 
 | Hata | Daha İyi Yaklaşım |
 | --- | --- |
-| Düşük bakiyeyle büyük bir içe aktarma başlatmak | Önce bakiyenizi kontrol edin. Krediniz içe aktarmadaki tüm siparişleri karşılamıyorsa Akeed başlatmaz. |
+| Düşük bakiyeyle büyük bir içe aktarma başlatmak | Önce bakiyenizi kontrol edin. Akeed ancak bakiyeniz içe aktarmadaki tüm siparişleri karşılıyorsa başlar. |
 | Müşteri onaylamadan kargoya vermek | Önce **Onaylandı** durumundaki siparişleri gönderin. |
-| Hatırlatmaların kredi kullandığını unutmak | Sipariş başına en fazla 4 kredi hesaplayın. |
+| Hatırlatmanın ücretini unutmak | Akeed’in numarasından gönderimde sipariş başına 2 EGP’ye kadar hesaplayın. |
 | Online ödemesi yapılmış siparişlerin onaylanmasını beklemek | Yalnızca kapıda ödeme siparişleri onaylanır. |
 
 ## SSS
@@ -101,7 +101,7 @@ Hayır. Bağımsız hesaplar Shopify’a veya başka bir platforma ihtiyaç duym
 
 ### Akeed Shopify mağazaları için farklı mı?
 
-Shopify mağazaları Akeed’i Shopify’dan yükler, siparişleri otomatik olarak alır ve Shopify tarafından faturalanan aylık bir plan kullanır. Diğer satıcılar bir hesap oluşturur, bir WooCommerce veya EasyOrders mağazası bağlar ya da kendi siparişlerini ekler ve kredi kullanır.
+Shopify mağazaları Akeed’i Shopify’dan yükler, siparişleri otomatik olarak alır ve Shopify tarafından faturalanan aylık bir plan kullanır. Diğer satıcılar hesap oluşturur, bir WooCommerce veya EasyOrders mağazası bağlar ya da kendi siparişlerini ekler ve ön ödemeli bakiyelerinden mesaj başına ödeme yapar.
 
 ### Kendi WhatsApp Business hesabım gerekli mi?
 

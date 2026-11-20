@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  creditsAsMoney,
   formatBillingDate,
   formatMoney,
   formatShortDate,
@@ -13,39 +14,51 @@ const ARABIC_INDIC_DIGIT = new RegExp(
 
 describe('formatMoney', () => {
   it('writes Arabic amounts first, then the currency without its dot', () => {
-    expect(formatMoney(100_000, 'EGP', 'ar')).toBe('1,000.00 ج.م')
-    expect(formatMoney(200, 'EGP', 'ar')).toBe('2.00 ج.م')
+    expect(formatMoney(100_000, 'EGP', 'ar')).toBe('1,000 ج.م')
+    expect(formatMoney(15_050, 'EGP', 'ar')).toBe('150.5 ج.م')
   })
 
-  it('writes English amounts after the currency code', () => {
-    expect(formatMoney(100_000, 'EGP', 'en')).toBe('EGP 1,000.00')
-    expect(formatMoney(200, 'EGP', 'en')).toBe('EGP 2.00')
+  it('writes English amounts after the currency code, without .00', () => {
+    expect(formatMoney(100_000, 'EGP', 'en')).toBe('EGP 1,000')
+    expect(formatMoney(50, 'EGP', 'en')).toBe('EGP 0.5')
   })
 
   it('keeps the same form in Urdu and Spanish', () => {
     for (const locale of ['ur', 'es'] as const) {
-      expect(formatMoney(100_000, 'EGP', locale)).toBe('EGP 1,000.00')
-      expect(formatMoney(200, 'USD', locale)).toBe('USD 2.00')
+      expect(formatMoney(100_000, 'EGP', locale)).toBe('EGP 1,000')
+      expect(formatMoney(250, 'USD', locale)).toBe('USD 2.5')
     }
   })
 
   it('writes French amounts the French way, then the currency code', () => {
-    expect(formatMoney(100_000, 'EGP', 'fr')).toBe('1 000,00 EGP')
-    expect(formatMoney(1_234_550, 'EUR', 'fr')).toBe('12 345,50 EUR')
+    expect(formatMoney(100_000, 'EGP', 'fr').replace(/s/g, ' ')).toBe(
+      '1 000 EGP'
+    )
+    expect(formatMoney(1_234_550, 'EUR', 'fr').replace(/s/g, ' ')).toBe(
+      '12 345,5 EUR'
+    )
     expect(formatMoney(200, 'USD', 'fr')).not.toMatch(BIDI_MARK)
   })
 
   it('falls back to the code and amount for a currency Intl rejects', () => {
-    expect(formatMoney(200, 'CREDITS', 'en')).toBe('CREDITS 2.00')
+    expect(formatMoney(250, 'CREDITS', 'en')).toBe('CREDITS 2.5')
   })
 
   it('uses Western digits and no bidi marks in every locale', () => {
     for (const locale of ['ar', 'en', 'ur', 'es'] as const) {
       const text = formatMoney(1_234_550, 'EGP', locale)
-      expect(text).toContain('12,345.50')
+      expect(text).toContain('12,345.5')
       expect(text).not.toMatch(BIDI_MARK)
       expect(text).not.toMatch(ARABIC_INDIC_DIGIT)
     }
+  })
+})
+
+describe('creditsAsMoney', () => {
+  it('shows displayed credits as the money they are worth', () => {
+    const price = { unitPriceMinor: 50, currency: 'EGP' }
+    expect(creditsAsMoney(301, price, 'en')).toBe('EGP 150.5')
+    expect(creditsAsMoney(200, price, 'ar')).toBe('100 ج.م')
   })
 })
 

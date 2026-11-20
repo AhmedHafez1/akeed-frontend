@@ -1,6 +1,6 @@
 ---
 title: Utiliser Akeed sans Shopify
-description: Confirmez sur WhatsApp les commandes en paiement à la livraison de n’importe quelle boutique. Connectez WooCommerce ou EasyOrders, ajoutez des commandes à la main ou importez un fichier, et payez votre consommation avec des crédits.
+description: Confirmez sur WhatsApp les commandes en paiement à la livraison de n’importe quelle boutique. Connectez WooCommerce ou EasyOrders, ajoutez des commandes à la main ou importez un fichier, puis payez par message avec un solde prépayé.
 order: 2
 slug: standalone-platform
 ---
@@ -52,27 +52,27 @@ Vous êtes alors en service. Ajoutez votre première commande ou importez un fic
 
 Les nouveaux comptes autonomes démarrent avec ces réglages par défaut : le premier message part immédiatement, une relance part au bout de 2 heures, et une commande sans réponse est marquée **Sans réponse** 12 heures après la relance. Les heures de silence sont désactivées, donc les messages partent à toute heure. Activez-les pour les retenir de 22:00 à 09:00. Vous pouvez les modifier dans les paramètres. Consultez [Règles d’automatisation](/docs/automation-rules).
 
-## Fonctionnement des crédits
+## Fonctionnement de votre solde
 
-Les comptes autonomes n’ont pas de forfait mensuel. Vous payez ce que vous consommez avec des **crédits**.
+Avec un compte autonome, vous rechargez votre solde en livres égyptiennes et payez par message envoyé. Il n’y a pas de forfait mensuel.
 
 | Règle | Détails |
 | --- | --- |
-| Un message | Chaque message WhatsApp envoyé à un client utilise 2 crédits, soit 2 EGP. |
-| Relances | Un rappel à un client qui n’a pas répondu utilise 2 crédits de plus. |
-| Envois échoués | Si WhatsApp n’accepte pas un message, ses crédits reviennent automatiquement sur votre compte. |
-| Crédits de bienvenue | Les nouveaux comptes reçoivent **60 crédits gratuits** une seule fois, soit 30 messages, sans carte bancaire. Votre solde est affiché dans l’application. |
-| Prix | **1,00 EGP** par crédit au moment de la rédaction. Un message et sa relance coûtent 4,00 EGP au total. |
-| Pas d’abonnement | Vous ne payez que lorsque vous achetez des crédits. Il n’y a aucun prélèvement mensuel. |
+| Un message | Un message WhatsApp depuis le numéro d’Akeed coûte **1 EGP**. Depuis votre propre numéro WhatsApp Business, il coûte **0,5 EGP**. |
+| Relances | Un rappel à un client qui n’a pas répondu compte comme un message supplémentaire au même tarif. |
+| Envois échoués | Si WhatsApp n’accepte pas un message, son coût est automatiquement recrédité sur votre solde. |
+| Messages offerts | Les nouveaux comptes reçoivent **100 messages offerts** une seule fois, sans carte bancaire. Votre solde est affiché dans l’application. |
+| Prix | Un message et sa relance depuis le numéro d’Akeed coûtent 2 EGP au total. |
+| Pas d’abonnement | Vous payez uniquement quand vous rechargez votre solde. Il n’y a aucun prélèvement mensuel. |
 
-### Acheter des crédits
+### Recharger votre solde
 
-Ouvrez **Facturation et crédits**, choisissez le nombre de crédits dont vous avez besoin, puis passez au paiement. Vous pouvez acheter de 200 à 10 000 crédits à la fois, par paliers de 100. Par exemple, 1 000 crédits coûtent 1 000 EGP. Le paiement est assuré par **Paymob**, prestataire de paiement égyptien, et vous pouvez payer par carte ou avec Vodafone Cash. Les prix sont en livres égyptiennes et peuvent changer : le prix affiché sur la page de facturation est toujours celui qui s’applique.
+Ouvrez **Facturation et solde**, choisissez un montant et passez au paiement. Vous pouvez recharger entre 100 et 5 000 EGP à la fois, par paliers de 50 EGP. Par exemple, 500 EGP couvrent 500 messages depuis le numéro d’Akeed. Payez via **Paymob** par carte ou avec Vodafone Cash. Le tarif affiché sur la page de facturation s’applique.
 
-Akeed ne demande ni ne conserve jamais les données de votre carte ou de votre portefeuille électronique. Les crédits sont ajoutés à votre solde dès que Paymob confirme le paiement.
+Akeed ne demande ni ne conserve jamais les données de votre carte ou de votre portefeuille électronique. Le montant est ajouté à votre solde dès que Paymob confirme le paiement.
 
 > [!WARNING]
-> Quand votre solde est épuisé, les nouvelles confirmations s’arrêtent jusqu’à ce que vous achetiez des crédits. Surveillez votre solde, et rechargez avant de lancer un gros import.
+> Lorsque votre solde est épuisé, les nouvelles confirmations s’arrêtent jusqu’à ce que vous le rechargiez. Surveillez votre solde avant de lancer un gros import.
 
 ## Ce qui diffère de Shopify
 
@@ -80,7 +80,7 @@ Akeed ne demande ni ne conserve jamais les données de votre carte ou de votre p
 | --- | --- | --- | --- |
 | Comment arrivent les commandes | Automatiquement depuis votre boutique. | Automatiquement depuis votre boutique. | Vous les ajoutez, une par une, depuis un fichier ou depuis votre serveur. |
 | Où apparaissent les résultats | Dans votre tableau de bord Akeed et sur votre commande Shopify. | Dans votre tableau de bord Akeed et sur la commande dans votre boutique. | Dans votre tableau de bord Akeed. |
-| Comment vous payez | Un forfait mensuel facturé par Shopify. | Des crédits achetés via Paymob. | Des crédits achetés via Paymob. |
+| Comment vous payez | Un forfait mensuel facturé par Shopify. | Un solde prépayé rechargeable via Paymob. | Un solde prépayé rechargeable via Paymob. |
 
 Pour les commandes que vous ajoutez vous-même, Akeed ne modifie rien dans un autre système. Fiez-vous au statut de votre tableau de bord pour décider quoi expédier.
 
@@ -88,9 +88,9 @@ Pour les commandes que vous ajoutez vous-même, Akeed ne modifie rien dans un au
 
 | Erreur | Meilleure approche |
 | --- | --- |
-| Lancer un gros import avec un solde bas | Vérifiez d’abord votre solde. Akeed ne démarre pas si vos crédits ne couvrent pas toutes les commandes de l’import. |
+| Lancer un gros import avec un solde bas | Vérifiez d’abord votre solde. Akeed démarre seulement si votre solde couvre toutes les commandes de l’import. |
 | Expédier avant la confirmation du client | Expédiez d’abord les commandes au statut **Confirmée**. |
-| Oublier que les relances utilisent des crédits | Prévoyez jusqu’à 4 crédits par commande. |
+| Oublier le coût des relances | Prévoyez jusqu’à 2 EGP par commande depuis le numéro d’Akeed. |
 | S’attendre à ce que les commandes payées en ligne soient confirmées | Seules les commandes COD sont confirmées. |
 
 ## FAQ
@@ -101,7 +101,7 @@ Non. Les comptes autonomes n’ont besoin ni de Shopify ni d’aucune autre plat
 
 ### Akeed est-il différent pour les boutiques Shopify ?
 
-Les boutiques Shopify installent Akeed depuis Shopify, reçoivent les commandes automatiquement et utilisent un forfait mensuel facturé par Shopify. Les autres marchands créent un compte, connectent une boutique WooCommerce ou EasyOrders ou ajoutent leurs propres commandes, et utilisent des crédits.
+Les boutiques Shopify installent Akeed depuis Shopify, reçoivent les commandes automatiquement et utilisent un forfait mensuel facturé par Shopify. Les autres marchands créent un compte, connectent une boutique WooCommerce ou EasyOrders ou ajoutent leurs propres commandes, puis paient par message avec un solde prépayé.
 
 ### Faut-il son propre compte WhatsApp Business ?
 

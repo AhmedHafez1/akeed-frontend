@@ -14,7 +14,7 @@ Esta página te ayuda a diagnosticar y resolver rápido los problemas operativos
 - los pedidos no se confirman,
 - los mensajes se retrasan o no se envían,
 - demasiados pedidos pasan a sin respuesta,
-- el uso del plan o un saldo de créditos en cero bloquea los envíos nuevos,
+- el uso del plan o un saldo en cero bloquea los envíos nuevos,
 - una importación por archivo no se comporta como esperabas.
 
 ## Lista de comprobación rápida
@@ -23,7 +23,7 @@ Antes de investigar a fondo, revisa primero esto:
 
 1. La confirmación automática está activada.
 2. El pedido es de pago contra entrega.
-3. El uso del plan no llegó al límite, o tu saldo de créditos (cuentas independientes) no está en cero.
+3. El uso del plan no llegó al límite, o tu saldo (cuentas independientes) no está en cero.
 4. El horario de silencio no está retrasando los envíos.
 5. El número de teléfono incluye el código de país.
 
@@ -54,7 +54,7 @@ Estas cinco comprobaciones resuelven la mayoría de los problemas.
 
 ### Qué hacer
 
-1. Si el uso está cerca del límite o lo alcanzó, mejora tu plan o espera al siguiente ciclo. En una cuenta independiente, compra créditos en **Facturación y créditos**.
+1. Si el uso se acerca al límite o lo alcanzó, mejora tu plan o espera al siguiente ciclo. En una cuenta independiente, recarga tu saldo en **Facturación y saldo**.
 2. Si aparece el estado fallido, verifica la calidad del teléfono del cliente.
 3. Si hay retraso, revisa el horario de silencio y la zona horaria.
 
@@ -139,14 +139,14 @@ Estas cinco comprobaciones resuelven la mayoría de los problemas.
 
 - ¿Presionaste **Enviar** después de la vista previa? Importar por sí solo no envía nada.
 - ¿Los pedidos siguen en **Esperando inicio**? Hay que iniciarlos en un plazo de 24 horas.
-- ¿La importación está en pausa porque se agotaron los créditos?
+- ¿La importación está en pausa porque se agotó el saldo?
 - ¿Se omitieron algunas filas por no ser válidas, estar duplicadas o quedar excluidas?
 
 ### Qué hacer
 
 1. Abre la pantalla de importación y lee el motivo junto a cada grupo omitido.
-2. Si **Enviar** está bloqueado, compra créditos o activa la confirmación automática y presiona **Enviar** de nuevo.
-3. Si la importación está en pausa, compra créditos y elige **Reanudar**.
+2. Si **Enviar** está bloqueado, recarga el saldo o activa la confirmación automática y presiona **Enviar** de nuevo.
+3. Si la importación está en pausa, recarga el saldo y elige **Reanudar**.
 4. Si pasó el plazo o la importación venció, sube el archivo de nuevo. Los pedidos con número de pedido que ya se importaron se reconocen y no se duplican, y los pedidos parecidos se marcan para que los revises.
 
 Para problemas de archivo y de columnas, consulta la tabla de solución de problemas en [Importación masiva de pedidos](/docs/bulk-order-import).
@@ -157,7 +157,7 @@ Para problemas de archivo y de columnas, consulta la tabla de solución de probl
 
 - El estado actual de la facturación en la configuración.
 - Si el cambio de plan se aprobó en Shopify (tiendas Shopify).
-- Si tu pago de Paymob se completó y tu saldo de créditos se actualizó (cuentas independientes).
+- Si tu pago de Paymob se completó y tu saldo se actualizó (cuentas independientes).
 - El nivel de uso respecto al límite incluido.
 
 ### Qué hacer
@@ -165,7 +165,7 @@ Para problemas de archivo y de columnas, consulta la tabla de solución de probl
 1. Reintenta el cambio de plan si la aprobación no se completó.
 2. Conserva el plan activo actual si la mejora fue rechazada.
 3. Mejora tu plan antes de llegar al límite de uso en periodos de mucha actividad.
-4. En una cuenta independiente, si un pago aparece como pendiente, espera un momento y revisa **Facturación y créditos** antes de pagar de nuevo.
+4. En una cuenta independiente, si un pago aparece como pendiente, espera un momento y revisa **Facturación y saldo** antes de pagar de nuevo.
 
 ## Cuándo contactar al soporte
 
@@ -173,7 +173,7 @@ Contacta al soporte cuando:
 
 - el problema continúa después de la lista de comprobación y de los pasos específicos,
 - el mensaje de prueba también falla repetidamente,
-- el estado de la facturación no coincide con la aprobación de Shopify, o un pago de Paymob no aparece en tu saldo de créditos.
+- el estado de la facturación no coincide con la aprobación de Shopify, o un pago de Paymob no aparece en tu saldo.
 
 Al contactar al soporte, incluye:
 

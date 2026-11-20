@@ -26,7 +26,7 @@ Toplu içe aktarma bağımsız hesaplarda kullanılabilir. Akeed’i Shopify’d
 | Boyut | Dosya başına en fazla 5 MB ve 100 sipariş. Daha fazla sipariş için dosyayı bölün ve her parçayı ayrı içe aktarın. |
 | Başlık satırı | İlk satır sütun adlarını içermelidir. |
 | Gerekli sütunlar | Müşteri telefonu, müşteri adı ve sipariş tutarı. |
-| Kredi | Onaylamak istediğiniz her sipariş için yeterli kredi. [Akeed’i Shopify Olmadan Kullanma](/docs/standalone-platform) kılavuzuna bakın. |
+| Bakiye | Onaylamak istediğiniz tüm siparişleri karşılayacak bakiye. [Akeed’i Shopify Olmadan Kullanma](/docs/standalone-platform) kılavuzuna bakın. |
 
 Hazır bir dosyanız yok mu? Yükleme ekranından Arapça veya İngilizce örnek **CSV** ya da **Excel** şablonunu indirin.
 
@@ -72,7 +72,7 @@ Akeed her satırı kontrol eder ve kaç siparişin hazır olduğunu, diğerlerin
 Akeed ardından hazır siparişleri içe aktarır ve onayı başlatır. Her siparişin durumunu **Onaylar** bölümünden takip edebilirsiniz.
 
 > [!WARNING]
-> Bakiyeniz tüm siparişleri karşılamıyorsa ya da otomatik onay kapalıysa **Gönder** engellenir ve hiçbir şey gönderilmez. Akeed kaç kredinizin eksik olduğunu ve bir **Kredi satın al** düğmesi gösterir. Kısmi başlatma yoktur.
+> Bakiyeniz tüm siparişleri karşılamıyorsa ya da otomatik onay kapalıysa **Gönder** engellenir ve hiçbir mesaj gönderilmez. Akeed eksik tutarı ve **Bakiye yükle** düğmesini gösterir. Kısmi başlatma yoktur.
 
 ## Akeed’in Tanıdıkları
 
@@ -120,7 +120,7 @@ Sütun adımını geçtiğinizde Akeed eşleştirmenizi kaydeder. Bir sonraki se
 | Başlatma süresi | Bekletilen siparişler 24 saat içinde başlatılmalıdır. Aksi halde ücretsiz olarak geri çekilir ve dosyayı yeniden yükleyebilirsiniz. |
 | Gönderim hızı | WhatsApp kalite puanınızın sağlıklı kalması için Akeed gönderimleri kademeli olarak, dakikada yaklaşık 20 ilk mesaj olacak şekilde yapar. |
 | Sessiz saatler | Ayarlar’da sessiz saatler belirlediyseniz gönderim bu saatlerde duraklar ve sonrasında devam eder. |
-| Kredi bitmesi | Gönderim sırasında kredi biterse içe aktarma duraklar. Kredi satın alın ve **Devam et** seçeneğini seçin. |
+| Bakiye bitmesi | Gönderim sırasında bakiye biterse içe aktarma duraklar. Bakiye yükleyip **Devam et** seçeneğini seçin. |
 
 ## Aynı Dosya İki Kez: Tasarım Gereği Güvenli
 
@@ -130,7 +130,7 @@ Sütun adımını geçtiğinizde Akeed eşleştirmenizi kaydeder. Bir sonraki se
 
 ## Onaylar Listesindeki İçe Aktarılan Siparişler
 
-İçe aktarılan siparişler diğer tüm siparişlerle aynı **Onaylar** listesinde yer alır ve aynı şekilde çalışır: durum, hatırlatma, yanıt yok işlemleri, yeniden deneme ve iptal etme, kredi kullanımı. İlk mesajdan önceki durumlar **Başlatılmayı bekliyor**, **Sırada** ve **Gönderiliyor** durumlarıdır.
+İçe aktarılan siparişler diğer tüm siparişlerle aynı **Onaylar** listesinde yer alır ve aynı şekilde çalışır: durum, hatırlatma, yanıt yok işlemleri, yeniden deneme ve iptal etme, mesaj ücretleri. İlk mesajdan önceki durumlar **Başlatılmayı bekliyor**, **Sırada** ve **Gönderiliyor** durumlarıdır.
 
 ## Gizlilik ve Saklama
 
@@ -151,7 +151,7 @@ Sütun adımını geçtiğinizde Akeed eşleştirmenizi kaydeder. Bir sonraki se
 | Bu bir sabit hat numarası | Müşterinin cep telefonu numarasıyla değiştirin. |
 | Kapıda ödeme değil, bu yüzden onaylanmayacak | Ödeme değerini kontrol edin. Gerçekten kapıda ödemeyse sütun adımında **Onayla · kapıda ödeme** grubuna taşıyın. |
 | Sipariş 7 günden eski | Bu kadar eski siparişleri onaylamak için çok geç. Tarih kontrollerini atlamak için sütun adımında sipariş tarihini **Dosyada yok** olarak ayarlayın. |
-| Başlatmak için kredi satın alın | Bakiyeniz tüm siparişleri karşılayacak kadar kredi satın alın, ardından yeniden **Gönder** düğmesine basın. |
+| Başlatmak için bakiye yükleyin | Tüm siparişleri karşılayacak kadar bakiye yükleyip yeniden **Gönder** düğmesine basın. |
 | Otomatik onay kapalı | Ayarlar’dan açın, ardından gönderin. |
 | Bu içe aktarmanın süresi doldu | Dosyayı yeniden yükleyin. |
 | Bu mağaza için içe aktarma kullanılamıyor | Toplu içe aktarma bağımsız hesaplar içindir. Shopify mağazaları siparişleri otomatik olarak alır. |
@@ -174,9 +174,9 @@ Başlatma tüm içe aktarmaya uygulanır. **Gönder** düğmesine basmadan önce
 
 Diğer tüm siparişlerdeki gibi: bir hatırlatma, ardından **Yanıt yok**. [Otomasyon Kuralları](/docs/automation-rules) kılavuzuna bakın.
 
-### Bir içe aktarma ne kadar kredi kullanır?
+### İçe aktarılan siparişleri göndermenin maliyeti nedir?
 
-Mesaj başına iki kredi. 80 hazır sipariş içeren bir dosya 160 kredi kullanır (1 kredi EGP 1 olduğu için EGP 160); hatırlatmalar açıksa ve müşteriler yanıt vermezse bu 320 krediye kadar çıkabilir.
+Akeed’in numarasından gönderilen her mesaj 1 EGP tutar. Gönderime hazır 80 sipariş için ilk mesajların toplamı 80 EGP’dir. Hatırlatmalar açıksa ve müşteriler yanıt vermezse toplam 160 EGP’ye kadar çıkabilir.
 
 ### Atlanan satırların raporunu indirebilir miyim?
 

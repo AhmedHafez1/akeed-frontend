@@ -4,7 +4,12 @@ import { useId } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { AkSwitch, akCard } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
-import { getLocaleDirection } from '@/shared/lib/locale'
+import {
+  CREDIT_CURRENCY,
+  CREDIT_UNIT_PRICE_MINOR,
+} from '@/shared/config/pricing'
+import { formatBalance } from '@/shared/lib/balanceMoney'
+import { getLocaleDirection, type SupportedLocale } from '@/shared/lib/locale'
 import {
   thankYouPreview,
   type ThankYouMessagesProps,
@@ -18,14 +23,26 @@ export function ThankYouMessagesCard(props: ThankYouMessagesProps) {
   const preview = thankYouPreview(props)
   if (!props.acknowledgment) return null
   const available = props.acknowledgment.available
-  const own = props.acknowledgment.ownNumberCreditsPerMessage
+  const ack = props.acknowledgment
+  // Prices from the API; derived from the credit rates for an older backend.
+  const money = (minor: number) =>
+    formatBalance(minor, CREDIT_CURRENCY, locale as SupportedLocale)
+  const akeedPrice =
+    ack.akeedMessagePriceMinor ??
+    ack.creditsPerMessage * CREDIT_UNIT_PRICE_MINOR
+  const own = ack.ownNumberCreditsPerMessage
+  const ownPrice =
+    ack.ownNumberMessagePriceMinor ??
+    (typeof own === 'number' && Number.isFinite(own)
+      ? own * CREDIT_UNIT_PRICE_MINOR
+      : null)
   const cost =
-    typeof own === 'number' && Number.isFinite(own)
+    ownPrice !== null
       ? t('senderCreditCost', {
-          own,
-          akeed: props.acknowledgment.creditsPerMessage,
+          own: money(ownPrice),
+          akeed: money(akeedPrice),
         })
-      : t('akeedCreditCost', { count: props.acknowledgment.creditsPerMessage })
+      : t('akeedCreditCost', { count: money(akeedPrice) })
   return (
     <section
       className={cn(akCard, 'space-y-4 p-5 sm:p-6')}

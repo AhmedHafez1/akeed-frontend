@@ -156,8 +156,8 @@ describe('signup page', () => {
       const aside = screen.getByRole('complementary', {
         name: 'What happens next',
       })
-      expect(aside.textContent).toContain('30 free WhatsApp messages')
-      expect(aside.textContent).toContain('Then 2.00 EGP per WhatsApp message')
+      expect(aside.textContent).toContain('100 free WhatsApp messages')
+      expect(aside.textContent).toContain('Then EGP 1 per WhatsApp message')
     }
   )
 

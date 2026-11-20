@@ -166,6 +166,6 @@ See also: [Automation Rules](/docs/automation-rules)
 
 In **Settings › Message**, turn on **Send a thank-you after confirmation or cancellation**, then save. One switch covers both outcomes. It starts off for every store. Read the two examples before enabling it; Akeed manages the wording, which follows the language and style of the latest message sent to the customer.
 
-Each thank-you uses the normal message rate: **2 credits** outside Shopify, or **1 message from your plan** in Shopify. The charge appears beside the switch. If there is no credit or plan allowance left, Akeed skips the thank-you and keeps the customer’s confirmation or cancellation. Failed delivery restores the message charge.
+Each thank-you uses the normal message price: **EGP 1** from Akeed's number (EGP 0.5 from your own number) outside Shopify, or **1 message from your plan** in Shopify. The charge appears beside the switch. If there is no balance or plan allowance left, Akeed skips the thank-you and keeps the customer’s confirmation or cancellation. Failed delivery restores the message charge.
 
 Turning it off stops thank-you messages that have not started sending. It does not send messages for past replies when you turn it back on. Thank-you messages are sent only for customer replies, never for test orders, staff cancellations or automatic cancellations.

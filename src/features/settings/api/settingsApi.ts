@@ -46,6 +46,10 @@ export interface SettingsResponse {
     available: boolean
     creditsPerMessage: number
     ownNumberCreditsPerMessage?: number
+    /** One Akeed-number message, as money. Absent from an older backend. */
+    akeedMessagePriceMinor?: number
+    /** One own-number message, as money. Absent from an older backend. */
+    ownNumberMessagePriceMinor?: number
     previews: ByMessageLanguage<
       Record<string, { confirmed: string | null; canceled: string | null }>
     >

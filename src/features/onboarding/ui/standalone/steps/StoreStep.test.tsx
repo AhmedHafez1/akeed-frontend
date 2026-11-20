@@ -35,10 +35,10 @@ vi.mock('@/features/onboarding/api/onboardingApi', async () => {
 })
 
 const summary = {
-  availableCredits: 60,
+  availableCredits: 200,
   price: {
-    unitPriceMinor: 100,
-    messagePriceMinor: 200,
+    unitPriceMinor: 50,
+    messagePriceMinor: 100,
     creditsPerMessage: 2,
     currency: 'EGP',
   },
@@ -118,9 +118,9 @@ describe('StoreStep', () => {
 
   it('states the free credits and the price after them', () => {
     renderStore()
-    expect(screen.getByText('رصيدك 30 رسالة تأكيد مجانية')).toBeTruthy()
+    expect(screen.getByText('رصيدك 100 رسالة تأكيد مجانية')).toBeTruthy()
     expect(
-      screen.getByText('بدون بطاقة دفع. بعدها 2.00 ج.م فقط لكل رسالة تُرسل.')
+      screen.getByText('بدون بطاقة دفع. بعدها 1 ج.م فقط لكل رسالة تُرسل.')
     ).toBeTruthy()
   })
 

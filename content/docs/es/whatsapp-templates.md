@@ -166,6 +166,6 @@ Consulta también: [Reglas de automatización](/docs/automation-rules)
 
 En **Configuración › Mensaje**, activa **Enviar un agradecimiento tras la confirmación o cancelación** y guarda. Un solo interruptor controla ambos resultados y empieza desactivado en todas las tiendas. Revisa los dos ejemplos antes de activarlo. Akeed administra el texto, que usa el idioma y estilo del último mensaje enviado al cliente.
 
-Cada agradecimiento cuesta lo mismo que un mensaje normal: **2 créditos** fuera de Shopify o **1 mensaje de tu plan** en Shopify. El costo aparece junto al interruptor. Si no quedan créditos o mensajes del plan, Akeed omite el agradecimiento y conserva la confirmación o cancelación del cliente. Si falla la entrega, se devuelve el cargo.
+Cada agradecimiento tiene la tarifa normal de un mensaje. En cuentas independientes cuesta **1 EGP** desde el número de Akeed o **0,5 EGP** desde tu número. En Shopify cuenta como **1 mensaje de tu plan**. El costo aparece junto al interruptor. Si se agota el saldo o la cuota, Akeed omite el agradecimiento y conserva la confirmación o cancelación. Si falla la entrega, se devuelve el importe.
 
 Al desactivarlo, se detienen los agradecimientos cuyo envío aún no empezó. Volver a activarlo no envía mensajes por respuestas anteriores. Solo se envían por respuestas del cliente, nunca por pedidos de prueba, cancelaciones del personal o cancelaciones automáticas.

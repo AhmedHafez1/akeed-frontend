@@ -121,7 +121,7 @@ Evet, Ayarlar’daki sipariş kaynağınızdan.
 
 ### Nasıl ödeme yaparım?
 
-Shopify kullanmayan her hesap gibi kredi ile. [Akeed’i Shopify Olmadan Kullanma](/docs/standalone-platform#krediler-nasıl-çalışır) kılavuzuna bakın.
+Shopify kullanmayan her hesap gibi ön ödemeli bakiye ile. [Akeed’i Shopify Olmadan Kullanma](/docs/standalone-platform#bakiyeniz-nasıl-çalışır) kılavuzuna bakın.
 
 ## İlgili Kılavuzlar
 

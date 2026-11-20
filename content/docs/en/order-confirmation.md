@@ -49,8 +49,8 @@ Order confirmation helps reduce both.
 | Canceled | Customer canceled (or merchant canceled after no reply). | Do not ship. |
 | No reply | No response within your configured escalation window. | Review quickly and follow your cancellation policy. |
 | WhatsApp undeliverable | WhatsApp couldn’t deliver the message to the customer’s number. Akeed sends no reminder and counts no usage for it. | Call the customer, then confirm or cancel the order by hand. |
-| Waiting to send | Your plan’s confirmations or your credits ran out, so the message wasn’t sent. Nothing is charged for it. | Upgrade or buy credits. Akeed then sends it automatically. |
-| Failed | Send failed or was blocked. | Check phone quality, plan usage or credit balance, and settings. |
+| Waiting to send | Your plan’s confirmations or your balance ran out, so the message wasn’t sent. Nothing is charged for it. | Upgrade or top up. Akeed then sends it automatically. |
+| Failed | Send failed or was blocked. | Check phone quality, plan usage or balance, and settings. |
 
 ## Practical Merchant Workflow
 
@@ -92,7 +92,7 @@ A failed send is an operational signal, not just a dashboard number.
 ### Failed confirmations increase
 
 - Verify phone number quality and country code formatting.
-- Check current plan usage or credit balance.
+- Check current plan usage or balance.
 - Send a test confirmation to a known-valid number.
 
 ## FAQ
@@ -115,9 +115,9 @@ WhatsApp tells Akeed the message can’t be delivered, and the order moves to **
 
 WhatsApp gives the same answer for three reasons and doesn’t say which one applies: the number isn’t on WhatsApp, the customer hasn’t accepted WhatsApp’s latest terms, or their WhatsApp app is out of date. So a customer you can reach on WhatsApp yourself can still end up here. Ask them to update WhatsApp and accept its terms (WhatsApp shows the prompt under Settings, then Help). Messages for their next orders can then reach them.
 
-### What happens when my plan or credits run out?
+### What happens when my plan or balance runs out?
 
-New orders are still taken in, but their messages wait with the status **Waiting to send**, and a red banner on the dashboard shows how many are waiting and what you can do. Nothing is charged for them. Once you upgrade, buy credits, or your plan’s allowance renews, Akeed sends them automatically, oldest first, keeping your send delay and quiet hours. An order that waits more than 24 hours is not sent on its own: it moves to **Needs action**, where you can confirm, cancel or retry it.
+New orders are still taken in, but their messages wait with the status **Waiting to send**, and a red banner on the dashboard shows how many are waiting and what you can do. Nothing is charged for them. Once you upgrade, top up, or your plan’s allowance renews, Akeed sends them automatically, oldest first, keeping your send delay and quiet hours. An order that waits more than 24 hours is not sent on its own: it moves to **Needs action**, where you can confirm, cancel or retry it.
 
 On a paid Shopify plan, the banner also offers **Renew {plan} now**, named after your plan (for example **Renew Basic now**). You approve your current plan again in Shopify, and a new 30-day period starts right away with the full allowance, so the waiting orders go out. Messages left in the old period don’t carry over. The same button is on your current plan in **Settings → Plan**.
 

@@ -13,7 +13,7 @@ import { faqs } from '@/features/marketing/config/site'
 import type { Locale } from '@/i18n'
 import {
   CREDIT_CURRENCY,
-  CREDIT_UNIT_PRICE_MINOR,
+  CREDIT_MESSAGE_PRICE_MINOR,
 } from '@/shared/config/pricing'
 import {
   createPublicPageMetadata,
@@ -52,7 +52,8 @@ async function getHomeStructuredData(locale: Locale) {
   })
   const faq = await getTranslations({ locale, namespace: 'faq' })
 
-  const unitPrice = (CREDIT_UNIT_PRICE_MINOR / 100).toFixed(2)
+  // One WhatsApp message from Akeed's number, the unit the product is sold in.
+  const unitPrice = (CREDIT_MESSAGE_PRICE_MINOR / 100).toFixed(2)
 
   const softwareApplication = {
     '@context': 'https://schema.org',
@@ -63,7 +64,7 @@ async function getHomeStructuredData(locale: Locale) {
     url: getCanonicalUrl(locale),
     description: metadata('description'),
     /*
-     * Metered, not a subscription: the product is priced per credit, so a flat
+     * Metered, not a subscription: the product is priced per message, so a flat
      * Offer would misdescribe it. Standalone accounts are
      * self-serve, so it is available now.
      */

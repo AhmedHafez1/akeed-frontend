@@ -1,6 +1,6 @@
 ---
 title: Using Akeed Without Shopify
-description: Confirm cash-on-delivery orders on WhatsApp from any store. Connect WooCommerce or EasyOrders, add orders manually or import a file, and pay for usage with credits.
+description: Confirm cash-on-delivery orders on WhatsApp from any store. Connect WooCommerce or EasyOrders, add orders manually or import a file, and pay per message from a prepaid balance.
 order: 2
 slug: standalone-platform
 ---
@@ -52,27 +52,27 @@ After that you are live. Add your first order or import a file.
 
 New standalone accounts start with these defaults: the first message is sent right away, one follow-up goes out after 2 hours, and an order with no reply is marked **No reply** 12 hours after that follow-up. Quiet hours are off, so messages go out at any hour. Turn them on to hold messages from 22:00 to 09:00. You can change them in Settings. See [Automation Rules](/docs/automation-rules).
 
-## How Credits Work
+## How Your Balance Works
 
-Standalone accounts do not use a monthly plan. You pay for what you use with **credits**.
+Standalone accounts do not use a monthly plan. You top up a **balance** in Egyptian pounds and pay per message sent.
 
 | Rule | Details |
 | --- | --- |
-| One message | Each WhatsApp message sent to a customer uses 2 credits, so it costs EGP 2. |
-| Follow-ups | A reminder to a customer who has not replied uses 2 more credits. |
-| Failed sends | If WhatsApp does not accept a message, its credits return to your account automatically. |
-| Launch credits | New accounts receive **60 free credits** once, enough for 30 messages, with no credit card. Your balance is shown in the app. |
-| Price | **EGP 1.00** per credit at the time of writing. A message and its follow-up cost EGP 4.00 together. |
-| No subscription | You pay only when you buy credits. There is no monthly charge. |
+| One message | Each WhatsApp message sent to a customer from Akeed's number costs **EGP 1**. From your own WhatsApp Business number it costs **EGP 0.5**. |
+| Follow-ups | A reminder to a customer who has not replied is another message, at the same price. |
+| Failed sends | If WhatsApp does not accept a message, its cost returns to your balance automatically. |
+| Free messages | New accounts receive **100 free messages** once, with no credit card. Your balance is shown in the app. |
+| Price | A message and its follow-up cost EGP 2 together from Akeed's number, at the time of writing. |
+| No subscription | You pay only when you top up. There is no monthly charge. |
 
-### Buying credits
+### Topping up
 
-Open **Billing & credits**, choose how many credits you need, and continue to checkout. You can buy from 200 to 10,000 credits at a time, in steps of 100. For example, 1,000 credits cost EGP 1,000. Payment is handled by **Paymob**, the Egyptian payment provider, and you can pay by card or with Vodafone Cash. Prices are in Egyptian pounds and may change, so the price shown on the billing page is always the one that applies.
+Open **Billing & balance**, choose an amount, and continue to checkout. You can top up from EGP 100 to EGP 5,000 at a time, in steps of EGP 50. For example, EGP 500 pays for 500 messages from Akeed's number. Payment is handled by **Paymob**, the Egyptian payment provider, and you can pay by card or with Vodafone Cash. Prices are in Egyptian pounds and may change, so the price shown on the billing page is always the one that applies.
 
-Akeed never asks for or stores your card or wallet details. Credits are added to your balance after Paymob confirms the payment.
+Akeed never asks for or stores your card or wallet details. The amount is added to your balance after Paymob confirms the payment.
 
 > [!WARNING]
-> When your balance runs out, new confirmations stop until you buy more credits. Watch your balance, and top up before sending a large import.
+> When your balance runs out, new confirmations stop until you top up. Watch your balance, and top up before sending a large import.
 
 ## What Is Different from Shopify
 
@@ -80,7 +80,7 @@ Akeed never asks for or stores your card or wallet details. Credits are added to
 | --- | --- | --- | --- |
 | How orders arrive | Automatically from your store. | Automatically from your store. | You add them, one by one, from a file or from your server. |
 | Where results appear | Your Akeed dashboard and your Shopify order. | Your Akeed dashboard and the order in your store. | Your Akeed dashboard. |
-| How you pay | A monthly plan billed by Shopify. | Credits bought through Paymob. | Credits bought through Paymob. |
+| How you pay | A monthly plan billed by Shopify. | A prepaid balance topped up through Paymob. | A prepaid balance topped up through Paymob. |
 
 For orders you add yourself, Akeed does not change anything in another system. Use the status in your dashboard to decide what to ship.
 
@@ -88,9 +88,9 @@ For orders you add yourself, Akeed does not change anything in another system. U
 
 | Mistake | Better Approach |
 | --- | --- |
-| Starting a large import with a low balance | Check your balance first. Akeed will not start unless your credits cover every order in the import. |
+| Starting a large import with a low balance | Check your balance first. Akeed will not start unless your balance covers every order in the import. |
 | Shipping before the customer confirms | Ship **Confirmed** orders first. |
-| Forgetting that follow-ups use credits | Plan for up to 4 credits per order. |
+| Forgetting that follow-ups cost a message | Plan for up to EGP 2 per order from Akeed's number. |
 | Expecting online-paid orders to be confirmed | Only COD orders are confirmed. |
 
 ## FAQ
@@ -101,7 +101,7 @@ No. Standalone accounts do not need Shopify or any other platform.
 
 ### Is Akeed different for Shopify stores?
 
-Shopify stores install Akeed from Shopify, receive orders automatically and use a monthly plan billed by Shopify. Other merchants create an account, connect a WooCommerce or EasyOrders store or add their own orders, and use credits.
+Shopify stores install Akeed from Shopify, receive orders automatically and use a monthly plan billed by Shopify. Other merchants create an account, connect a WooCommerce or EasyOrders store or add their own orders, and pay per message from a prepaid balance.
 
 ### Do I need my own WhatsApp Business account?
 

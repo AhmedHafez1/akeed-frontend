@@ -1,4 +1,6 @@
+import { creditsToMinor, formatBalance } from '@/shared/lib/balanceMoney'
 import { getFormatLocale, type SupportedLocale } from '@/shared/lib/locale'
+import type { CreditSummary } from './billing.types'
 
 /*
  * Credit counts are shared with the public pricing section, so they live in
@@ -7,53 +9,31 @@ import { getFormatLocale, type SupportedLocale } from '@/shared/lib/locale'
  */
 export { formatCredits } from '@/shared/lib/money'
 
-const BIDI_MARKS = new RegExp(
-  `[${String.fromCharCode(0x200e, 0x200f, 0x061c)}]`,
-  'g'
-)
-
 /**
- * A billing amount with Western digits and two decimals: `1,000.00 ج.م` in
- * Arabic (the amount, then the currency), `EGP 1,000.00` in English and
- * `1 000,00 EGP` in French, as the language's own format writes a currency code.
- *
- * `Intl` under `ar` wraps the amount in bidi marks and ends the symbol with a
- * dot (`ج.م.`) that reads as a full stop, so the string is built here instead.
- * Render it inside `<bdi>` so it keeps its order within a sentence.
+ * A billing amount: `EGP 150.5` in English and `150.5 ج.م` in Arabic, with
+ * Western digits and no `.00` on whole pounds. One formatter for every
+ * amount a merchant sees, from `shared/lib/balanceMoney`. Render it inside
+ * `<bdi>` so it keeps its order within a sentence.
  */
 export function formatMoney(
   valueMinor: number,
   currency: string,
   locale: SupportedLocale
 ) {
-  const amount = new Intl.NumberFormat('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(valueMinor / 100)
-  if (locale !== 'ar') {
-    try {
-      return new Intl.NumberFormat(`${getFormatLocale(locale)}-u-nu-latn`, {
-        style: 'currency',
-        currency,
-        currencyDisplay: 'code',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
-        .format(valueMinor / 100)
-        .replace(BIDI_MARKS, '')
-        .replace(/\s+/g, ' ')
-    } catch {
-      return `${currency} ${amount}`
-    }
-  }
+  return formatBalance(valueMinor, currency, locale)
+}
 
-  const symbol =
-    new Intl.NumberFormat('ar', { style: 'currency', currency })
-      .formatToParts(0)
-      .find((part) => part.type === 'currency')
-      ?.value.replace(BIDI_MARKS, '')
-      .replace(/.$/, '') ?? currency
-  return `${amount} ${symbol}`
+/** Displayed credits from the API, shown as the money they are worth. */
+export function creditsAsMoney(
+  credits: number,
+  price: Pick<CreditSummary['price'], 'unitPriceMinor' | 'currency'>,
+  locale: SupportedLocale
+) {
+  return formatBalance(
+    creditsToMinor(credits, price.unitPriceMinor),
+    price.currency,
+    locale
+  )
 }
 
 /** `12 سبتمبر` / `Sep 12`; the year only when it is not this one. */

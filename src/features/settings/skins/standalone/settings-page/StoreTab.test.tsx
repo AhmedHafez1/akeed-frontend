@@ -337,7 +337,7 @@ describe('standalone Store tab', () => {
     expect(codSwitch().getAttribute('aria-checked')).toBe('true')
     expect(
       screen.getByText(
-        'ستصل رسالة تأكيد أيضًا للطلبات المدفوعة مسبقًا التي تنقصها معلومات الدفع، وتُخصم من رصيدك.'
+        'الطلبات المدفوعة مسبقًا التي تنقصها بيانات الدفع ستتلقى أيضًا رسالة تأكيد تُخصم من رصيدك.'
       )
     ).toBeTruthy()
     expect(

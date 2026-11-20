@@ -9,7 +9,7 @@ slug: own-whatsapp-number
 
 Por defecto, Akeed envía las confirmaciones desde su propio número oficial de WhatsApp y no necesitas conectar nada. También puedes conectar tu propio número de WhatsApp Business, para que los clientes reciban las confirmaciones con el nombre y el número de tu negocio.
 
-El número de Akeed sigue disponible como respaldo. Cualquier mensaje que tu número aún no pueda enviar sale desde el número de Akeed, así que los clientes siguen recibiendo sus confirmaciones. Los mensajes de respaldo cuentan contra tu plan o tus créditos, como explica **¿Cuánto cuesta?**.
+El número de Akeed sigue disponible como respaldo. Cualquier mensaje que tu número aún no pueda enviar sale desde el número de Akeed, así que los clientes siguen recibiendo sus confirmaciones. Los mensajes de respaldo cuentan contra tu plan o tu saldo, como explica **¿Cuánto cuesta?**.
 
 Puedes conectar un número que ya usas en la app WhatsApp Business de tu teléfono, o un número que todavía no está en WhatsApp.
 
@@ -63,16 +63,16 @@ Resuelve lo que indica la configuración: espera la revisión de la plantilla, s
 
 ## ¿Cuánto cuesta?
 
-### Créditos prepagados
+### Saldo prepago
 
-1 crédito equivale a EGP 1.
+El costo del mensaje se descuenta de tu saldo en libras egipcias.
 
 | Enviado desde | Costo por mensaje |
 | --- | --- |
-| Tu número | 1 crédito |
-| El número de Akeed | 2 créditos |
+| Tu número | 0,5 EGP |
+| El número de Akeed | 1 EGP |
 
-Un mensaje de respaldo desde el número de Akeed cuesta 2 créditos, como cualquier mensaje desde el número de Akeed. Si tu saldo no alcanza, no se envía: el pedido queda con el estado **En espera de envío** y sale cuando compras créditos.
+Un mensaje de respaldo desde el número de Akeed cuesta 1 EGP. Si tu saldo no alcanza, el pedido queda **En espera de envío** y sale cuando recargas el saldo.
 
 ### Planes de Shopify
 
@@ -91,7 +91,7 @@ Un mensaje de respaldo desde el número de Akeed usa el cupo de Akeed, nunca el 
 
 ### Cargos de Meta
 
-Meta cobra a tu negocio por separado los mensajes enviados desde tu número, según sus propios precios y a través de tu cuenta comercial de Meta. Estos cargos no forman parte de tus créditos ni de tu plan de Akeed. Los mensajes enviados desde el número de Akeed no te generan cargos de Meta.
+Meta cobra a tu negocio por separado los mensajes enviados desde tu número, según sus propios precios y a través de tu cuenta comercial de Meta. Estos cargos no forman parte de tu saldo ni de tu plan de Akeed. Los mensajes enviados desde el número de Akeed no te generan cargos de Meta.
 
 > [!INFO]
 > Facturación muestra cuántos mensajes salieron desde cada número, para que puedas comparar el costo de ambos.
@@ -100,9 +100,9 @@ Meta cobra a tu negocio por separado los mensajes enviados desde tu número, seg
 
 Usa el único interruptor de agradecimientos en **Configuración → Mensaje** para ambos números. Tu elección actual se conserva al conectar o reconectar. El agradecimiento sale del número que recibió la respuesta del cliente.
 
-- En Shopify, cada agradecimiento usa un mensaje de la cuota del remitente real. Con créditos prepagados, cuesta 1 crédito desde tu número o 2 créditos desde el número de Akeed. Meta puede cobrar por separado.
-- Mientras tu número espera aprobación, una respuesta recibida por Akeed sigue usando la cuota o la tarifa de créditos de Akeed.
-- Si no hay cuota o créditos disponibles, se omite el agradecimiento. Un agradecimiento fallido desde tu número nunca se reenvía desde Akeed.
+- En Shopify, cada agradecimiento usa un mensaje de la cuota del remitente. Con saldo prepago, cuesta 0,5 EGP desde tu número o 1 EGP desde el número de Akeed. Meta puede cobrar por separado.
+- Mientras tu número espera aprobación, una respuesta recibida por Akeed sigue usando la cuota o la tarifa de Akeed.
+- Si no hay cuota o saldo disponible, se omite el agradecimiento. Un agradecimiento fallido desde tu número nunca se reenvía desde Akeed.
 
 ## Quién puede hacer qué
 

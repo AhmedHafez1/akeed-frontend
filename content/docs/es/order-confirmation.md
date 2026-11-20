@@ -49,8 +49,8 @@ La confirmación de pedidos ayuda a reducir ambos.
 | Cancelado | El cliente canceló (o el comerciante canceló por falta de respuesta). | No lo envíes. |
 | Sin respuesta | No hubo respuesta dentro del plazo de aviso que configuraste. | Revísalo pronto y aplica tu política de cancelación. |
 | No entregado en WhatsApp | WhatsApp no pudo entregar el mensaje al número del cliente. Akeed no envía recordatorio y no cuenta el mensaje en tu uso. | Llama al cliente y después confirma o cancela el pedido manualmente. |
-| En espera de envío | Se agotaron las confirmaciones de tu plan o tus créditos, así que el mensaje no se envió. No se cobra nada. | Mejora tu plan o compra créditos. Akeed lo enviará automáticamente. |
-| Fallido | El envío falló o fue bloqueado. | Revisa la calidad del teléfono, el uso del plan o el saldo de créditos, y la configuración. |
+| En espera de envío | Se agotaron las confirmaciones de tu plan o tu saldo, así que el mensaje no se envió. No se cobra nada. | Mejora tu plan o recarga el saldo. Akeed lo enviará automáticamente. |
+| Fallido | El envío falló o fue bloqueado. | Revisa la calidad del teléfono, el uso del plan o el saldo, y la configuración. |
 
 ## Flujo de trabajo práctico para el comerciante
 
@@ -92,7 +92,7 @@ Un envío fallido es una señal operativa, no solo un número del panel.
 ### Aumentan las confirmaciones fallidas
 
 - Verifica la calidad de los números de teléfono y el formato del código de país.
-- Revisa el uso actual del plan o el saldo de créditos.
+- Revisa el uso actual del plan o el saldo.
 - Envía una confirmación de prueba a un número que sepas que es válido.
 
 ## Preguntas frecuentes
@@ -115,9 +115,9 @@ WhatsApp avisa a Akeed de que el mensaje no se puede entregar, y el pedido pasa 
 
 WhatsApp da la misma respuesta por tres motivos y no dice cuál es: el número no está en WhatsApp, el cliente no aceptó los términos más recientes de WhatsApp o su app de WhatsApp está desactualizada. Por eso puede aparecer aquí un cliente al que tú sí puedes escribir por WhatsApp. Pídele que actualice WhatsApp y acepte sus términos (WhatsApp se lo pide en Ajustes, luego Ayuda). Después, los mensajes de sus próximos pedidos podrán llegarle.
 
-### ¿Qué pasa cuando se agotan las confirmaciones de mi plan o mis créditos?
+### ¿Qué pasa cuando se agotan las confirmaciones de mi plan o mi saldo?
 
-Los pedidos nuevos se siguen recibiendo, pero sus mensajes quedan con el estado **En espera de envío**, y un aviso rojo en el panel muestra cuántos esperan y qué puedes hacer. No se cobra nada por ellos. En cuanto mejoras tu plan, compras créditos o tu cupo se renueva, Akeed los envía automáticamente, empezando por el más antiguo y respetando el retraso de envío y las horas de silencio. Un pedido que espera más de 24 horas no se envía solo: pasa a **Requieren acción**, donde puedes confirmarlo, cancelarlo o reintentarlo.
+Los pedidos nuevos se siguen recibiendo, pero sus mensajes quedan con el estado **En espera de envío**, y un aviso rojo en el panel muestra cuántos esperan y qué puedes hacer. No se cobra nada por ellos. En cuanto mejoras tu plan, recargas el saldo o tu cupo se renueva, Akeed los envía automáticamente, empezando por el más antiguo y respetando el retraso de envío y las horas de silencio. Un pedido que espera más de 24 horas no se envía solo: pasa a **Requieren acción**, donde puedes confirmarlo, cancelarlo o reintentarlo.
 
 En un plan de pago de Shopify, el aviso también ofrece un botón de renovación con el nombre de tu plan, por ejemplo **Renovar Basic ahora**. Apruebas de nuevo tu plan actual en Shopify y empieza en el acto un nuevo periodo de 30 días con la asignación completa, así que los pedidos en espera se envían. Los mensajes que quedan del periodo anterior no se acumulan. El mismo botón está en tu plan actual en **Configuración → Plan**.
 

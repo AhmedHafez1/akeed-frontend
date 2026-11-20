@@ -76,7 +76,7 @@ describe.each([
     'standalone',
     Standalone,
     'switch',
-    en.settings.thankYou.akeedCreditCost.replace('{count}', '2'),
+    en.settings.thankYou.akeedCreditCost.replace('{count}', 'EGP 1'),
   ],
   ['embedded', Embedded, 'checkbox', en.settings.thankYou.planCost],
 ] as const)('%s thank-you settings', (_skin, Component, role, cost) => {
@@ -98,7 +98,7 @@ describe.each([
     expect(checked(control)).toBe(true)
   })
 
-  it('uses the configured own-number and Akeed credit rates', () => {
+  it('shows the own-number and Akeed prices as money', () => {
     renderCard(Component, {
       acknowledgment: {
         ...base.acknowledgment!,
@@ -109,8 +109,8 @@ describe.each([
       _skin === 'embedded'
         ? en.settings.thankYou.planCost
         : en.settings.thankYou.senderCreditCost
-            .replace('{own}', '1')
-            .replace('{akeed}', '2')
+            .replace('{own}', 'EGP 0.5')
+            .replace('{akeed}', 'EGP 1')
     expect(screen.getByText(text)).toBeTruthy()
   })
 

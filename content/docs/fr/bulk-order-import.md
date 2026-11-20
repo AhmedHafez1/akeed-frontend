@@ -26,7 +26,7 @@ L’import en masse est disponible sur les comptes autonomes. Si vous utilisez A
 | Taille | Jusqu’à 5 Mo et 100 commandes par fichier. Pour davantage de commandes, divisez le fichier et importez chaque partie. |
 | Ligne d’en-tête | La première ligne doit contenir les noms des colonnes. |
 | Colonnes minimales | Téléphone du client, nom du client et montant de la commande. |
-| Crédits | Assez de crédits pour toutes les commandes à confirmer. Consultez [Utiliser Akeed sans Shopify](/docs/standalone-platform). |
+| Solde | Un solde suffisant pour toutes les commandes à confirmer. Consultez [Utiliser Akeed sans Shopify](/docs/standalone-platform). |
 
 Pas de fichier prêt ? Téléchargez le modèle d’exemple **CSV** ou **Excel** sur l’écran d’envoi, en arabe ou en anglais.
 
@@ -72,7 +72,7 @@ L’aperçu se termine par le coût et la durée : le nombre de messages, jusqu
 Akeed importe alors les commandes prêtes et démarre la confirmation. Vous pouvez suivre le statut de chaque commande dans **Confirmations**.
 
 > [!WARNING]
-> Si votre solde ne couvre pas toutes les commandes, ou si la confirmation automatique est désactivée, **Envoyer** est bloqué et rien n’est envoyé. Akeed indique combien de crédits il vous manque et affiche un bouton **Acheter des crédits**. Il n’y a pas de démarrage partiel.
+> Si votre solde est insuffisant ou si la confirmation automatique est désactivée, **Envoyer** est bloqué et aucun message ne part. Akeed indique le montant manquant et affiche un bouton **Recharger le solde**. Il n’y a pas de démarrage partiel.
 
 ## Ce qu’Akeed reconnaît
 
@@ -120,7 +120,7 @@ En temps normal, vous ne voyez jamais cet état, car **Envoyer** importe et dém
 | Délai de démarrage | Les commandes en attente doivent être démarrées dans les 24 heures. Sinon, elles sont retirées sans frais, et vous pouvez envoyer de nouveau le fichier. |
 | Rythme | Akeed envoie progressivement, environ 20 premiers messages par minute, pour préserver la qualité de votre WhatsApp. |
 | Heures de silence | Si vous avez défini des heures de silence dans les paramètres, l’envoi s’interrompt pendant celles-ci et reprend ensuite. |
-| Crédits épuisés | Si les crédits s’épuisent pendant l’envoi, l’import se met en pause. Achetez des crédits et choisissez **Reprendre**. |
+| Solde épuisé | Si votre solde s’épuise pendant l’envoi, l’import se met en pause. Rechargez-le et choisissez **Reprendre**. |
 
 ## Le même fichier deux fois : sûr par conception
 
@@ -130,7 +130,7 @@ En temps normal, vous ne voyez jamais cet état, car **Envoyer** importe et dém
 
 ## Les commandes importées dans la liste Confirmations
 
-Les commandes importées se trouvent dans la même liste **Confirmations** que toutes les autres et fonctionnent de la même façon : statut, relance, traitement des absences de réponse, nouvelle tentative et annulation, et utilisation des crédits. Les statuts antérieurs au premier message sont **En attente de démarrage**, **En file d’attente** et **Envoi en cours**.
+Les commandes importées se trouvent dans la même liste **Confirmations** que toutes les autres et fonctionnent de la même façon : statut, relance, traitement des absences de réponse, nouvelle tentative et annulation, et frais. Les statuts antérieurs au premier message sont **En attente de démarrage**, **En file d’attente** et **Envoi en cours**.
 
 ## Confidentialité et conservation
 
@@ -151,7 +151,7 @@ Les commandes importées se trouvent dans la même liste **Confirmations** que t
 | C’est une ligne fixe | Remplacez-la par le numéro de mobile du client. |
 | Pas un paiement à la livraison : elle ne sera pas confirmée | Vérifiez la valeur de paiement. S’il s’agit bien de COD, déplacez-la vers **Confirmer · paiement à la livraison** à l’étape des colonnes. |
 | La commande date de plus de 7 jours | Il est trop tard pour confirmer des commandes aussi anciennes. Pour ignorer les contrôles de date, réglez la date de commande sur **Absent du fichier** à l’étape des colonnes. |
-| Achetez des crédits pour démarrer | Achetez des crédits pour que votre solde couvre toutes les commandes, puis appuyez de nouveau sur **Envoyer**. |
+| Rechargez votre solde pour démarrer | Rechargez suffisamment pour couvrir toutes les commandes, puis appuyez de nouveau sur **Envoyer**. |
 | La confirmation automatique est désactivée | Activez-la dans les paramètres, puis envoyez. |
 | Cet import a expiré | Envoyez de nouveau le fichier. |
 | L’import n’est pas disponible pour cette boutique | L’import en masse est réservé aux comptes autonomes. Les boutiques Shopify reçoivent leurs commandes automatiquement. |
@@ -174,9 +174,9 @@ Le démarrage s’applique à l’import entier. Retirez du fichier les commande
 
 La même chose que pour toute autre commande : une relance, puis **Sans réponse**. Consultez [Règles d’automatisation](/docs/automation-rules).
 
-### Combien de crédits un import utilise-t-il ?
+### Combien coûte un import ?
 
-Deux crédits par message. Un fichier de 80 commandes prêtes utilise 160 crédits (160 EGP, car 1 crédit vaut 1 EGP), ou jusqu’à 320 crédits si les relances sont activées et que les clients ne répondent pas.
+Chaque message depuis le numéro d’Akeed coûte 1 EGP. Le premier message pour 80 commandes prêtes coûte 80 EGP. Le total peut atteindre 160 EGP si les relances sont activées et que les clients ne répondent pas.
 
 ### Peut-on télécharger un rapport des lignes ignorées ?
 

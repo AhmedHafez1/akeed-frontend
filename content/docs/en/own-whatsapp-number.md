@@ -9,7 +9,7 @@ slug: own-whatsapp-number
 
 By default, Akeed sends confirmations from its own official WhatsApp number, and you don't need to connect anything. You can also connect your own WhatsApp Business number, so customers get confirmations from your business name and number.
 
-Akeed's number stays in place as a backup. Any message your number is not ready to send still goes out from Akeed's number, so customers keep getting their confirmations. Backup messages count against your plan or credits, as **What It Costs** explains.
+Akeed's number stays in place as a backup. Any message your number is not ready to send still goes out from Akeed's number, so customers keep getting their confirmations. Backup messages count against your plan or balance, as **What It Costs** explains.
 
 You can connect a number you already use in the WhatsApp Business app on your phone, or a number that is not on WhatsApp yet.
 
@@ -63,16 +63,16 @@ Fix what the settings point to: wait for the template review, settle the payment
 
 ## What It Costs
 
-### Prepaid Credits
+### Prepaid Balance
 
-1 credit equals EGP 1.
+The price is taken from your balance in Egyptian pounds.
 
 | Sent from | Cost per message |
 | --- | --- |
-| Your number | 1 credit |
-| Akeed's number | 2 credits |
+| Your number | EGP 0.5 |
+| Akeed's number | EGP 1 |
 
-A backup message from Akeed's number costs 2 credits, like any message from Akeed's number. If your balance is too low, it isn't sent: the order waits with the status **Waiting to send** and goes out once you buy credits.
+A backup message from Akeed's number costs EGP 1, like any message from Akeed's number. If your balance is too low, it isn't sent: the order waits with the status **Waiting to send** and goes out once you top up.
 
 ### Shopify Plans
 
@@ -91,7 +91,7 @@ A backup message from Akeed's number uses the Akeed allowance, never your number
 
 ### Meta's Charges
 
-Meta charges your business separately for messages sent from your number, under Meta's own pricing and through your Meta business account. These charges are not part of your Akeed credits or plan. Messages sent from Akeed's number carry no Meta charge for you.
+Meta charges your business separately for messages sent from your number, under Meta's own pricing and through your Meta business account. These charges are not part of your Akeed balance or plan. Messages sent from Akeed's number carry no Meta charge for you.
 
 > [!INFO]
 > Billing shows how many messages went out from each number, so you can compare the cost of both.
@@ -100,8 +100,8 @@ Meta charges your business separately for messages sent from your number, under 
 
 Use the single thank-you switch in **Settings → Message** for both numbers. Your existing choice stays saved when you connect or reconnect. A thank-you uses the number that received the customer’s reply.
 
-- On Shopify, each thank-you uses one message from the actual sender’s allowance. With prepaid credits, it costs 1 credit from your number or 2 credits from Akeed’s number. Meta may charge separately.
-- While your number awaits approval, a reply received by Akeed still uses Akeed’s allowance or credit rate.
+- On Shopify, each thank-you uses one message from the actual sender’s allowance. With a prepaid balance, it costs EGP 0.5 from your number or EGP 1 from Akeed’s number. Meta may charge separately.
+- While your number awaits approval, a reply received by Akeed still uses Akeed’s allowance or price.
 - If capacity is unavailable, the thank-you is skipped. A failed thank-you from your number never falls back to Akeed.
 
 ## Who Can Do What

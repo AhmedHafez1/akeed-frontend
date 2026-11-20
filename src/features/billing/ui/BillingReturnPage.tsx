@@ -94,8 +94,9 @@ function PurchaseDetails({ purchase }: { purchase: PurchaseDetail }) {
     <>
       <dl className="border-line rounded-ak-card mt-7 grid overflow-hidden border text-start sm:grid-cols-2">
         <Detail label={t('credits')} className="sm:border-e">
+          {/* A message from Akeed's number is two displayed credits. */}
           <span dir="ltr" className={akNumeric}>
-            {formatCredits(purchase.quantity, locale)}
+            {formatCredits(Math.floor(purchase.quantity / 2), locale)}
           </span>
         </Detail>
         <Detail label={t('amount')} className="border-t sm:border-t-0">
@@ -145,8 +146,8 @@ function LoadingBody() {
 
 interface ReturnBodyProps {
   view: ReturnView
-  /** The balance after a successful purchase; `null` until it is known. */
-  balance: number | null
+  /** The balance after a successful purchase, as money; `null` until known. */
+  balance: string | null
   returnTo: string | null
   onContinueImport: () => void
   isRefreshing: boolean
@@ -181,8 +182,11 @@ function ReturnBody({
       <h1 className="text-ak-title text-ink mt-5">
         {view.copy === 'successful'
           ? t.rich('successTitle', {
-              count: view.purchase.quantity,
-              value: formatCredits(view.purchase.quantity, locale),
+              value: formatMoney(
+                view.purchase.totalMinor,
+                view.purchase.currency,
+                locale
+              ),
               n: numeric,
             })
           : t(`title.${view.copy}`)}
@@ -192,8 +196,7 @@ function ReturnBody({
           ? t(`body.${view.copy}`)
           : balance !== null
             ? t.rich('successBody', {
-                count: balance,
-                value: formatCredits(balance, locale),
+                value: balance,
                 n: numeric,
               })
             : t('successBodyNoBalance')}
