@@ -280,12 +280,7 @@ export function PurchasesTable({
               </div>
             </Td>
             <Td className="tabular-nums">
-              {formatNumber(purchase.displayedQuantity, locale)}
-              <div className="text-muted-foreground mt-1 text-xs font-normal">
-                {t('storedValue', {
-                  value: formatNumber(purchase.quantity, locale),
-                })}
-              </div>
+              {formatNumber(purchase.quantity, locale)}
             </Td>
             <Td className="whitespace-nowrap tabular-nums">
               {formatMoney(purchase.totalMinor, purchase.currency, locale)}
@@ -357,22 +352,10 @@ export function LedgerTable({
                   : 'text-primary-subtle-foreground'
               )}
             >
-              <span dir="ltr">
-                {formatSigned(entry.displayedQuantity, locale)}
-              </span>
-              <div className="text-muted-foreground mt-1 text-xs font-normal">
-                {t('storedValue', {
-                  value: formatSigned(entry.quantity, locale),
-                })}
-              </div>
+              <span dir="ltr">{formatSigned(entry.quantity, locale)}</span>
             </Td>
             <Td className="whitespace-nowrap tabular-nums">
-              {formatNumber(entry.displayedPostedBalanceAfter, locale)}
-              <div className="text-muted-foreground mt-1 text-xs">
-                {t('storedValue', {
-                  value: `${formatNumber(entry.postedBalanceBefore, locale)} → ${formatNumber(entry.postedBalanceAfter, locale)}`,
-                })}
-              </div>
+              {formatNumber(entry.postedBalanceAfter, locale)}
             </Td>
             <Td className="space-y-1">
               {entry.purchaseRef && (

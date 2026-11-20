@@ -689,7 +689,7 @@
       "netRevenue": "Net revenue",
       "gross": "Gross {amount}",
       "liability": "Unspent paid-credit liability",
-      "liabilityCredits": "{count} paid stored credits remain",
+      "liabilityCredits": "{count} paid messages remain",
       "arppu": "ARPPU",
       "revenuePerMessage": "Revenue per accepted message",
       "freeUtilization": "Free-credit utilization",
@@ -844,7 +844,7 @@
     "next": "Next",
     "noSource": "No source yet",
     "noAccount": "No credit account",
-    "balance": "{displayed} shown to merchant, stored {available} available of {posted} posted",
+    "balance": "{balance} messages left, {posted} posted",
     "grantPosted": "Launch grant already posted",
     "accountStatus": {
       "active": "Active",
@@ -853,7 +853,7 @@
     "creditHealth": "Credit health",
     "details": "Open",
     "openAccount": "Open billing account for {name}",
-    "debt": "{count} stored credits of debt",
+    "debt": "{count} messages of debt",
     "projectionMismatch": "Balance does not match its ledger",
     "reconciliationSummary": "Needs reconciliation: {purchases} flagged purchases, {holds} unresolved sends",
     "balanceStates": {
@@ -887,8 +887,6 @@
     }
   },
   "adminBillingOps": {
-    "storedValue": "{value} stored",
-    "storedDetail": "{stored} stored · {detail}",
     "back": "All billing accounts",
     "eyebrow": "Standalone billing account",
     "unknownOrganization": "Organization",
@@ -909,16 +907,17 @@
     },
     "balanceStates": {
       "none": "No credit account",
-      "ok": "Above the stored low-balance threshold of {threshold}",
-      "low": "At or below the stored low-balance threshold of {threshold}",
+      "ok": "Above the low-balance threshold of {threshold}",
+      "low": "At or below the low-balance threshold of {threshold}",
       "zero": "No spendable credits",
       "debt": "In debt; new sends are blocked"
     },
     "balance": {
-      "available": "Available credits",
+      "available": "Messages left",
       "posted": "Posted balance",
-      "held": "Held credits",
+      "held": "Held for sends",
       "heldDetail": "Reserved for sends not yet settled",
+      "usage": "{used} used of {added} added",
       "debt": "Debt",
       "activatedAt": "Activated {time}",
       "notActivated": "No launch grant posted"
@@ -1135,16 +1134,16 @@
       "done": "Done",
       "alreadyDone": "It had already been recorded; nothing changed twice.",
       "adjustment": {
-        "title": "Stored credit adjustment",
-        "description": "Add or remove stored credits with a staff ledger entry. 1 stored credit is one Akeed message, which the merchant sees as EGP 1. Preview first: the adjustment applies only to the balance you reviewed, and is recorded with your identity and reason.",
-        "quantity": "Stored credits to add or remove",
-        "quantityHelp": "A whole number between -{max} and {max}, not zero. Use a minus sign to remove credits.",
-        "review": "Review: {quantity} stored credits",
+        "title": "Balance adjustment",
+        "description": "Add or remove messages with a staff ledger entry. One message from Akeed's number is EGP 1 to the merchant. Preview first: the adjustment applies only to the balance you reviewed, and is recorded with your identity and reason.",
+        "quantity": "Messages to add or remove",
+        "quantityHelp": "A whole number between -{max} and {max}, not zero. Use a minus sign to remove messages.",
+        "review": "Review: {quantity} messages",
         "createsDebt": "This leaves the account in debt, which blocks new sends until it is cleared.",
-        "apply": "Apply {quantity} stored credits",
+        "apply": "Apply {quantity} messages",
         "outcomes": {
-          "applied": "Posted {quantity} stored credits. The posted balance is now {posted} stored.",
-          "duplicate": "This adjustment was already posted ({quantity} stored credits); nothing was posted twice. The posted balance was {posted} stored."
+          "applied": "Posted {quantity} messages. The posted balance is now {posted}.",
+          "duplicate": "This adjustment was already posted ({quantity} messages); nothing was posted twice. The posted balance was {posted}."
         }
       },
       "repair": {

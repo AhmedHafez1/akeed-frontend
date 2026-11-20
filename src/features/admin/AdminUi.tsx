@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import { ChevronDown, Clock3 } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
@@ -106,6 +107,8 @@ interface AdminMetricCardProps {
   label: string
   value: string | number
   detail?: string
+  /** Extra content under the detail, such as a meter. */
+  children?: ReactNode
   icon?: LucideIcon
   tone?: 'neutral' | 'emerald' | 'amber' | 'red' | 'blue'
   active?: boolean
@@ -128,6 +131,7 @@ export function AdminMetricCard({
   tone = 'neutral',
   active = false,
   onClick,
+  children,
 }: AdminMetricCardProps) {
   const content = (
     <>
@@ -148,6 +152,7 @@ export function AdminMetricCard({
         {value}
       </p>
       {detail && <p className="text-muted-foreground mt-1 text-xs">{detail}</p>}
+      {children}
     </>
   )
   const classes = cn(

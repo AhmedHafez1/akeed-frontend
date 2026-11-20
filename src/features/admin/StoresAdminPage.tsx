@@ -963,7 +963,7 @@ function StoresResults({
                 </div>
                 <div className="col-span-2">
                   <p className="text-muted-foreground mb-1.5">
-                    {store.billing.model === 'credits' ? 'Credits' : 'Usage'}
+                    {store.billing.model === 'credits' ? 'Messages' : 'Usage'}
                   </p>
                   <BillingCell store={store} />
                 </div>

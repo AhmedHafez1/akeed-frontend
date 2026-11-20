@@ -10,6 +10,14 @@ export interface AdminUsage {
   percent: number
 }
 
+/** Everything added to a prepaid account, what sends used and what is left. */
+export interface AdminCreditUsage {
+  added: number
+  used: number
+  left: number
+  percent: number
+}
+
 export type AdminStoreBilling =
   | {
       model: 'plan'
@@ -20,13 +28,11 @@ export type AdminStoreBilling =
   | {
       model: 'credits'
       account_status: string
-      available: number
+      /** Messages left: one Akeed message, EGP 1. Can end in .5. */
+      balance: number
       held: number
       debt: number
-      /** The spare displayed credit, 0 or 1. Absent from an older backend. */
-      spare?: number
-      /** What the merchant sees; the fields above are stored credits. */
-      displayed_available: number
+      usage: AdminCreditUsage
       balance_state: AdminCreditBalanceState
     }
 
