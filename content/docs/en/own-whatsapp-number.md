@@ -80,8 +80,8 @@ Once your number is connected, your plan has two separate allowances:
 
 | Plan | Messages from Akeed's number | Messages from your number |
 | --- | --- | --- |
-| Starter (one-time) | 30 | 90 |
-| Basic | 300 | 1,000 |
+| Starter (one-time) | 60 | 200 |
+| Basic | 300 | 2,000 |
 | Pro | 1,000 | 5,000 |
 | Scale | 2,500 | 20,000 |
 

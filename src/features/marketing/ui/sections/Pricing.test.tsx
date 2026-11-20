@@ -57,8 +57,8 @@ describe('Pricing', () => {
     renderMarketing(<Pricing showOwnNumber />, 'en')
 
     for (const [akeed, ownCount] of [
-      ['30', '90'],
-      ['300', '1,000'],
+      ['60', '200'],
+      ['300', '2,000'],
       ['1,000', '5,000'],
       ['2,500', '20,000'],
     ]) {
@@ -81,7 +81,7 @@ describe('Pricing', () => {
     expect(screen.getByText(arOwn.meta_note)).toBeTruthy()
     expect(screen.getByText(arOwn.shopify_note)).toBeTruthy()
     // Western digits, the approved own-number figures.
-    for (const ownCount of ['90', '1,000', '5,000', '20,000'])
+    for (const ownCount of ['200', '2,000', '5,000', '20,000'])
       expect(text()).toContain(ownCount)
     expect(text()).not.toContain('7,500')
   })

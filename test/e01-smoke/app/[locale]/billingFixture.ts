@@ -244,8 +244,8 @@ function settings(): SettingsResponse {
                 name: 'Akeed Starter',
                 amount: 0,
                 currencyCode: 'USD',
-                includedVerifications: 30,
-                ownNumberIncludedVerifications: 90,
+                includedVerifications: 60,
+                ownNumberIncludedVerifications: 200,
               },
               {
                 id: 'basic',
@@ -253,7 +253,7 @@ function settings(): SettingsResponse {
                 amount: 9.99,
                 currencyCode: 'USD',
                 includedVerifications: 300,
-                ownNumberIncludedVerifications: 900,
+                ownNumberIncludedVerifications: 2000,
               },
               {
                 id: 'pro',
@@ -261,7 +261,7 @@ function settings(): SettingsResponse {
                 amount: 22.99,
                 currencyCode: 'USD',
                 includedVerifications: 1000,
-                ownNumberIncludedVerifications: 3000,
+                ownNumberIncludedVerifications: 5000,
               },
               {
                 id: 'business',
@@ -269,7 +269,7 @@ function settings(): SettingsResponse {
                 amount: 49.99,
                 currencyCode: 'USD',
                 includedVerifications: 2500,
-                ownNumberIncludedVerifications: 7500,
+                ownNumberIncludedVerifications: 20000,
               },
             ]
           : [],

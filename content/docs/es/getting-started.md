@@ -57,7 +57,7 @@ Elige el plan que corresponda a tu volumen mensual esperado de confirmaciones de
 
 | Plan | Confirmaciones incluidas | Ideal para |
 | --- | ---: | --- |
-| Starter | 30 | Probar Akeed por primera vez. |
+| Starter | 60 | Probar Akeed por primera vez. |
 | Basic | 300 | Tiendas pequeñas que confirman pedidos contra entrega con regularidad. |
 | Pro | 1,000 | Tiendas con volumen diario de pedidos contra entrega y necesidades de automatización. |
 | Scale | 2,500 | Operaciones de pago contra entrega de mayor volumen. |

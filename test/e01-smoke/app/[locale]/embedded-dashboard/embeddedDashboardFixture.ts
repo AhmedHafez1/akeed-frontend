@@ -14,7 +14,8 @@ import { ApiError } from '@/shared/lib/http'
  * Scenarios (`?scenario=`): `empty` (a new shop), `error` (every read fails),
  * `limit` (plan used up), `quiet` (usage under 80%), `viewer` (read-only role),
  * `blocked-basic` and `blocked-scale` (an order waits on a used-up paid plan,
- * which the banner and plan picker offer to renew), `race` (the customer
+ * which the banner and plan picker offer to renew; add `&free=available` to
+ * show an unclaimed Starter), `race` (the customer
  * settles every change request before the merchant's action lands).
  *
  * Three orders carry an open change request: one whose customer was told,
@@ -254,25 +255,35 @@ function capacity(): CapacitySummary | null {
   }
 }
 
+const STARTER_LIMIT = 60
 const PLANS = [
-  ['starter', 'Akeed Starter', 0, 30],
-  ['basic', 'Akeed Basic', 9.99, 300],
-  ['pro', 'Akeed Pro', 22.99, 1000],
-  ['business', 'Akeed Scale', 49.99, 2500],
+  ['starter', 'Akeed Starter', 0, STARTER_LIMIT, 200],
+  ['basic', 'Akeed Basic', 9.99, 300, 2000],
+  ['pro', 'Akeed Pro', 22.99, 1000, 5000],
+  ['business', 'Akeed Scale', 49.99, 2500, 20000],
 ] as const
 
 function shopifyPlans() {
   return {
     billingManagement: { mode: 'shopify', canManageBilling: true },
-    plans: PLANS.map(([id, name, amount, includedVerifications]) => ({
-      id,
-      name,
-      amount,
-      currencyCode: 'USD',
-      includedVerifications,
-      ownNumberIncludedVerifications: includedVerifications * 3,
-    })),
-    isFreePlanClaimed: true,
+    plans: PLANS.map(
+      ([
+        id,
+        name,
+        amount,
+        includedVerifications,
+        ownNumberIncludedVerifications,
+      ]) => ({
+        id,
+        name,
+        amount,
+        currencyCode: 'USD',
+        includedVerifications,
+        ownNumberIncludedVerifications,
+      })
+    ),
+    isFreePlanClaimed:
+      new URLSearchParams(window.location.search).get('free') !== 'available',
     currentPlanId: blockedPlan() ?? 'starter',
   }
 }
@@ -289,7 +300,8 @@ function overview(): DashboardOverview {
   const sent = empty ? 0 : 28
   const pct = (value: number) =>
     sent ? Number(((value / sent) * 100).toFixed(1)) : null
-  const used = scenario() === 'limit' ? 30 : scenario() === 'quiet' ? 12 : 27
+  const used =
+    scenario() === 'limit' ? STARTER_LIMIT : scenario() === 'quiet' ? 12 : 54
   return {
     date_range: 'last_30_days',
     reporting_timezone: 'Africa/Cairo',
@@ -308,9 +320,14 @@ function overview(): DashboardOverview {
     },
     usage: {
       used,
-      limit: 30,
-      percent: Math.round((used / 30) * 100),
-      state: used >= 30 ? 'exhausted' : used >= 24 ? 'warning' : 'ok',
+      limit: STARTER_LIMIT,
+      percent: Math.round((used / STARTER_LIMIT) * 100),
+      state:
+        used >= STARTER_LIMIT
+          ? 'exhausted'
+          : used >= STARTER_LIMIT * 0.8
+            ? 'warning'
+            : 'ok',
     },
     kpis: {
       confirmed: {
@@ -448,7 +465,7 @@ const onboardingState = {
       isLive: true,
       needsPlan: false,
     },
-    usage: { used: 27, limit: 30, remaining: 3 },
+    usage: { used: 54, limit: STARTER_LIMIT, remaining: STARTER_LIMIT - 54 },
   },
 }
 
@@ -473,6 +490,10 @@ export async function embeddedDashboardRequest<T>(
     return list(url) as T
   if (method === 'GET' && url.pathname === '/api/onboarding/billing/plans')
     return shopifyPlans() as T
+  if (method === 'GET' && url.pathname === '/api/whatsapp-sender')
+    return { available: true } as T
+  if (method === 'GET' && url.pathname === '/api/whatsapp-sender/connection')
+    return { connection: null } as T
   // Stays on the page; the request log shows the plan and `renew` flag.
   if (method === 'POST' && url.pathname === '/api/onboarding/billing')
     return { confirmationUrl: '#shopify-approval' } as T

@@ -57,7 +57,7 @@ Choose the plan that matches your expected monthly COD confirmation volume.
 
 | Plan | Included Confirmations | Best For |
 | --- | ---: | --- |
-| Starter | 30 | Trying Akeed for the first time. |
+| Starter | 60 | Trying Akeed for the first time. |
 | Basic | 300 | Small stores confirming COD orders regularly. |
 | Pro | 1,000 | Stores with daily COD volume and automation needs. |
 | Scale | 2,500 | Higher-volume COD operations. |

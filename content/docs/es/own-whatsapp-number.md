@@ -80,8 +80,8 @@ Cuando tu número está conectado, tu plan tiene dos cupos separados:
 
 | Plan | Mensajes desde el número de Akeed | Mensajes desde tu número |
 | --- | --- | --- |
-| Starter (única vez) | 30 | 90 |
-| Basic | 300 | 1,000 |
+| Starter (única vez) | 60 | 200 |
+| Basic | 300 | 2,000 |
 | Pro | 1,000 | 5,000 |
 | Scale | 2,500 | 20,000 |
 
