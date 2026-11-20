@@ -36,6 +36,7 @@ import {
   PlanCell,
   PlatformBadge,
   platformLabel,
+  StoreContact,
   storeSubtitle,
   CustomerCountryMarker,
   customerCountriesLabel,
@@ -783,7 +784,7 @@ function StoresResults({
     <section aria-label="Store results">
       <div className="border-border bg-card hidden overflow-hidden rounded-2xl border shadow-xs md:block">
         <div className="overflow-x-auto">
-          <table className="bg-card w-full min-w-[1280px] text-left text-sm">
+          <table className="bg-card w-full min-w-[1480px] text-left text-sm">
             <thead className="border-border bg-muted/40 text-muted-foreground border-b text-xs font-semibold tracking-wide uppercase">
               <tr>
                 <SortableHeader
@@ -793,6 +794,7 @@ function StoresResults({
                   direction={direction}
                   onSort={onSort}
                 />
+                <th className="px-4 py-3">Contact</th>
                 <th className="px-4 py-3">Lifecycle</th>
                 <SortableHeader
                   label="Installed"
@@ -859,6 +861,9 @@ function StoresResults({
                         </div>
                       </td>
                       <td className="px-4 py-4">
+                        <StoreContact store={store} />
+                      </td>
+                      <td className="px-4 py-4">
                         <LifecycleBadge status={store.lifecycle_status} />
                       </td>
                       <td className="text-foreground/70 px-4 py-4 text-xs whitespace-nowrap">
@@ -901,7 +906,7 @@ function StoresResults({
                     </tr>
                     {isExpanded && (
                       <tr id={detailId}>
-                        <td colSpan={9} className="bg-muted/50 px-5 py-5">
+                        <td colSpan={10} className="bg-muted/50 px-5 py-5">
                           <StoreDetails
                             store={store}
                             href={storeHref(store)}
@@ -948,6 +953,9 @@ function StoresResults({
                 <HealthBadge status={store.health.status} />
               </div>
               <SignalCallout store={store} />
+              <div className="mt-3 flex flex-wrap">
+                <StoreContact store={store} />
+              </div>
               <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
                 <div>
                   <p className="text-muted-foreground">Lifecycle</p>

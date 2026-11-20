@@ -44,6 +44,7 @@ import {
   LifecycleBadge,
   PlatformBadge,
   platformLabel,
+  StoreContact,
   titleCase,
   UsageMeter,
   hasOwnNumber,
@@ -442,16 +443,7 @@ function ProfileCard({ store }: { store: AdminStoreDetail }) {
         items={[
           ['Organization', store.organization_name],
           ['Owner', store.owner_email ?? 'Unknown'],
-          [
-            'WhatsApp number',
-            store.merchant_whatsapp_phone ? (
-              <span className="font-mono" dir="ltr">
-                {store.merchant_whatsapp_phone}
-              </span>
-            ) : (
-              'Not provided'
-            ),
-          ],
+          ['Contact', <StoreContact key="contact" store={store} />],
           ['Platform', platformLabel(store.platform)],
           ['Country', store.country_code ?? 'Unknown'],
           ['Customer countries', customerCountriesLabel(store) ?? 'Unknown'],
