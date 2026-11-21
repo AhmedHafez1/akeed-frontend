@@ -4102,7 +4102,6 @@
       },
       "reconnect": {
         "title": "Numaranızı yeniden bağlayın",
-        "body": "WhatsApp Business bağlantınız kaldırıldı. Onaylar Akeed numarasından devam ediyor.",
         "next": "Sonraki adım",
         "nextValue": "Yeniden bağlayın, ardından durumu kontrol edin",
         "action": "Facebook ile yeniden bağlan"
@@ -4136,6 +4135,24 @@
         "retry": "Tekrar dene"
       },
       "help": "Kendi numaranız nasıl çalışır",
+      "statusNote": {
+        "notConnected": "Bağlı değilsiniz. Onay mesajları Akeed’in resmî WhatsApp numarasından gönderilir.",
+        "settingUp": "Numaranız bağlanıyor. Kurulum bitene kadar mesajlar Akeed numarasından gönderilir.",
+        "awaitingTemplates": "Numaranız bağlı. Meta mesaj şablonlarınızı inceliyor; bu genellikle 24 saate kadar sürer. O zamana kadar mesajlar Akeed numarasından gönderilir, bu yüzden hiçbir sipariş kaçmaz.",
+        "awaitingTemplatesPartial": "Meta bazı şablonları hâlâ inceliyor ({total} şablondan {approved} tanesi onaylandı). Onaylı şablonlu mesajlar numaranızdan ({number}), diğerleri Akeed numarasından gönderilir.",
+        "active": "Mesajlar numaranızdan ({number}) gönderiliyor.",
+        "sendingIssue": {
+          "credentials": "Numaranızla ({number}) bağlantının yenilenmesi gerekiyor, bu yüzden şu anda bu numaradan gönderemiyoruz. Şimdilik mesajlar Akeed numarasından gönderilir.",
+          "payment": "Meta’daki ödeme yönteminiz ilginizi bekliyor, bu yüzden şu anda numaranızdan ({number}) gönderemiyoruz. Şimdilik mesajlar Akeed numarasından gönderilir.",
+          "restricted": "Meta numaranızı ({number}) kısıtladı, bu yüzden şu anda bu numaradan gönderemiyoruz. Şimdilik mesajlar Akeed numarasından gönderilir.",
+          "unavailable": "Numaranız ({number}) geçici olarak kullanılamıyor, bu yüzden şu anda bu numaradan gönderemiyoruz. Şimdilik mesajlar Akeed numarasından gönderilir.",
+          "setup": "Numaranızın ({number}) kurulumunu tamamlayamadık. Mesajlar Akeed numarasından gönderilir."
+        },
+        "templatesRejected": "Meta bazı şablonlarınızı onaylamadı. Bu şablonlu mesajlar Akeed numarasından, diğerleri numaranızdan ({number}) gönderilir.",
+        "templatesRejectedAkeed": "Meta bazı şablonlarınızı onaylamadı. Şimdilik mesajlar Akeed numarasından gönderilir.",
+        "disconnected": "Numaranızın bağlantısı kesildi. Mesajlar Akeed numarasından gönderilir. İstediğiniz zaman yeniden bağlayabilirsiniz.",
+        "numberFallback": "bağlı numara"
+      },
       "progress": {
         "label": "WhatsApp kurulum durumu",
         "labels": {
@@ -4155,10 +4172,6 @@
           "ready": "Hazır",
           "attention": "İlgilenmeniz gerekiyor",
           "paused": "Duraklatıldı"
-        },
-        "coverage": {
-          "pending": "Numaranız hazırlanırken mesajları Akeed gönderir.",
-          "partial": "Onay bekleyen mesajları Akeed gönderir."
         },
         "issues": {
           "payment": "Meta’daki ödeme yönteminizi güncelleyin.",

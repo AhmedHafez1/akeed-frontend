@@ -22,8 +22,10 @@ import { CheckIcon, AlertCircleIcon } from '@shopify/polaris-icons'
 import { useLocale, useTranslations } from 'next-intl'
 import {
   serverErrorKey,
+  useStatusNoteText,
   useWhatsappTab,
   type WhatsappProgressRow,
+  type WhatsappStatusNote,
   type WhatsappTabModel,
 } from '@/features/whatsapp-connect'
 import { WhatsappNumberHeader } from '@/features/settings/skins/shared/WhatsappNumberHeader'
@@ -75,6 +77,9 @@ export function WhatsappTab() {
           <Text as="p" tone="subdued">
             {t('connect.body')}
           </Text>
+          <Text as="p" variant="bodySm" tone="subdued">
+            <NoteText note={view.note} />
+          </Text>
           <ConnectAction
             model={model}
             canConnect={view.canConnect}
@@ -101,9 +106,9 @@ export function WhatsappTab() {
                     />
                   ))}
                 </ol>
-                {view.progress.coverage && (
+                {view.note.key && (
                   <Text as="p" variant="bodySm" tone="subdued">
-                    {t('progress.coverage.' + view.progress.coverage)}
+                    <NoteText note={view.note} />
                   </Text>
                 )}
               </div>
@@ -118,14 +123,10 @@ export function WhatsappTab() {
                     {t('reconnect.title')}
                   </Text>
                   <Text as="p" tone="subdued">
-                    {t(
-                      view.banners.some(
-                        (banner) =>
-                          banner.key === 'disconnect.primary_inactivity'
-                      )
-                        ? 'progress.issues.inactive'
-                        : 'reconnect.body'
-                    )}
+                    <NoteText note={view.note} />
+                    {view.banners.some(
+                      (banner) => banner.key === 'disconnect.primary_inactivity'
+                    ) && ` ${t('progress.issues.inactive')}`}
                   </Text>
                   {view.canReconnect ? (
                     <ConnectAction
@@ -249,6 +250,11 @@ export function WhatsappTab() {
       )}
     </Card>
   )
+}
+
+/** The status note as text; a component so the hook is never called conditionally. */
+function NoteText({ note }: { note: WhatsappStatusNote }) {
+  return <>{useStatusNoteText(note)}</>
 }
 
 function ProgressRow({

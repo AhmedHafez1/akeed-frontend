@@ -4102,7 +4102,6 @@
       },
       "reconnect": {
         "title": "Vuelve a conectar tu número",
-        "body": "Se retiró tu conexión de WhatsApp Business. Las confirmaciones siguen saliendo desde Akeed.",
         "next": "Siguiente paso",
         "nextValue": "Vuelve a conectar y revisa el estado",
         "action": "Volver a conectar con Facebook"
@@ -4136,6 +4135,24 @@
         "retry": "Intentar de nuevo"
       },
       "help": "Cómo funciona tu propio número",
+      "statusNote": {
+        "notConnected": "No estás conectado. Las confirmaciones se envían desde el número oficial de WhatsApp de Akeed.",
+        "settingUp": "Estamos conectando tu número. Hasta que termine la configuración, los mensajes se envían desde el número de Akeed.",
+        "awaitingTemplates": "Tu número está conectado. Meta está revisando tus plantillas de mensajes, lo que suele tardar hasta 24 horas. Mientras tanto, los mensajes se envían desde el número de Akeed, así que no se pierde ningún pedido.",
+        "awaitingTemplatesPartial": "Meta sigue revisando algunas plantillas ({approved} de {total} aprobadas). Los mensajes con plantillas aprobadas se envían desde {number}; el resto, desde el número de Akeed.",
+        "active": "Los mensajes se envían desde {number}.",
+        "sendingIssue": {
+          "credentials": "La conexión con {number} necesita renovarse, así que ahora no podemos enviar desde él. Mientras tanto, los mensajes se envían desde el número de Akeed.",
+          "payment": "Tu método de pago en Meta necesita atención, así que ahora no podemos enviar desde {number}. Mientras tanto, los mensajes se envían desde el número de Akeed.",
+          "restricted": "Meta restringió {number}, así que ahora no podemos enviar desde él. Mientras tanto, los mensajes se envían desde el número de Akeed.",
+          "unavailable": "{number} no está disponible por ahora, así que no podemos enviar desde él. Mientras tanto, los mensajes se envían desde el número de Akeed.",
+          "setup": "No pudimos terminar de configurar {number}. Los mensajes se envían desde el número de Akeed."
+        },
+        "templatesRejected": "Meta no aprobó algunas de tus plantillas. Esos mensajes se envían desde el número de Akeed y el resto, desde {number}.",
+        "templatesRejectedAkeed": "Meta no aprobó algunas de tus plantillas. Por ahora, los mensajes se envían desde el número de Akeed.",
+        "disconnected": "Tu número está desconectado. Los mensajes se envían desde el número de Akeed. Puedes volver a conectarlo cuando quieras.",
+        "numberFallback": "tu número"
+      },
       "progress": {
         "label": "Estado de configuración de WhatsApp",
         "labels": {
@@ -4155,10 +4172,6 @@
           "ready": "Listo",
           "attention": "Necesita atención",
           "paused": "En pausa"
-        },
-        "coverage": {
-          "pending": "Akeed envía los mensajes mientras tu número se prepara.",
-          "partial": "Akeed envía los mensajes que aún esperan aprobación."
         },
         "issues": {
           "payment": "Actualiza tu método de pago en Meta.",

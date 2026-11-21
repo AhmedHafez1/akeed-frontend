@@ -4102,7 +4102,6 @@
       },
       "reconnect": {
         "title": "Reconnectez votre numéro",
-        "body": "Votre connexion WhatsApp Business a été retirée. Les confirmations continuent depuis Akeed.",
         "next": "Étape suivante",
         "nextValue": "Reconnectez-vous, puis vérifiez l’état",
         "action": "Se reconnecter avec Facebook"
@@ -4136,6 +4135,24 @@
         "retry": "Réessayer"
       },
       "help": "Comment fonctionne votre propre numéro",
+      "statusNote": {
+        "notConnected": "Vous n’êtes pas connecté. Les confirmations partent du numéro WhatsApp officiel d’Akeed.",
+        "settingUp": "Connexion de votre numéro en cours. Tant que la configuration n’est pas terminée, les messages partent du numéro d’Akeed.",
+        "awaitingTemplates": "Votre numéro est connecté. Meta examine vos modèles de messages, ce qui prend généralement jusqu’à 24 heures. D’ici là, les messages partent du numéro d’Akeed, aucune commande n’est donc manquée.",
+        "awaitingTemplatesPartial": "Meta examine encore certains modèles ({approved} sur {total} approuvés). Les messages dont le modèle est approuvé partent de {number} ; les autres, du numéro d’Akeed.",
+        "active": "Les messages partent de {number}.",
+        "sendingIssue": {
+          "credentials": "La connexion à {number} doit être renouvelée, nous ne pouvons donc pas envoyer depuis ce numéro pour le moment. En attendant, les messages partent du numéro d’Akeed.",
+          "payment": "Votre moyen de paiement chez Meta demande votre attention, nous ne pouvons donc pas envoyer depuis {number} pour le moment. En attendant, les messages partent du numéro d’Akeed.",
+          "restricted": "Meta a restreint {number}, nous ne pouvons donc pas envoyer depuis ce numéro pour le moment. En attendant, les messages partent du numéro d’Akeed.",
+          "unavailable": "{number} est temporairement indisponible, nous ne pouvons donc pas envoyer depuis ce numéro pour le moment. En attendant, les messages partent du numéro d’Akeed.",
+          "setup": "Nous n’avons pas pu terminer la configuration de {number}. Les messages partent du numéro d’Akeed."
+        },
+        "templatesRejected": "Meta n’a pas approuvé certains de vos modèles. Ces messages partent du numéro d’Akeed, les autres de {number}.",
+        "templatesRejectedAkeed": "Meta n’a pas approuvé certains de vos modèles. Pour l’instant, les messages partent du numéro d’Akeed.",
+        "disconnected": "Votre numéro est déconnecté. Les messages partent du numéro d’Akeed. Vous pouvez le reconnecter à tout moment.",
+        "numberFallback": "votre numéro"
+      },
       "progress": {
         "label": "État de la configuration WhatsApp",
         "labels": {
@@ -4155,10 +4172,6 @@
           "ready": "Prêt",
           "attention": "Action requise",
           "paused": "En pause"
-        },
-        "coverage": {
-          "pending": "Akeed envoie les messages pendant la préparation de votre numéro.",
-          "partial": "Akeed envoie les messages encore en attente d’approbation."
         },
         "issues": {
           "payment": "Mettez à jour votre moyen de paiement dans Meta.",

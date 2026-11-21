@@ -5,6 +5,7 @@ export type {
   WhatsappConnectEntry,
 } from './hooks/useWhatsappConnectEntry'
 export { useWhatsappTab } from './hooks/useWhatsappTab'
+export { useStatusNoteText } from './hooks/useStatusNoteText'
 export type {
   WhatsappTabModel,
   WhatsappTabStatus,
@@ -24,6 +25,10 @@ export {
   type TemplateRow,
   type WhatsappTabView,
 } from './model/whatsappTabState'
+export type {
+  WhatsappStatus,
+  WhatsappStatusNote,
+} from './model/whatsappStatusNote'
 export { acceptedAtLabel, messageLanguageName } from './model/whatsappTabFormat'
 export { serverErrorKey } from './model/signupErrors'
 export type {

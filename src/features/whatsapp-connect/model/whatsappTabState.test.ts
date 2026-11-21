@@ -34,7 +34,7 @@ describe('whatsappTabView without a connection', () => {
   ])('offers connecting, to the owner only (owner %s)', (owner, canConnect) => {
     expect(
       whatsappTabView(availabilityFixture({ canConnect: owner }), null)
-    ).toEqual({ kind: 'unconnected', canConnect })
+    ).toMatchObject({ kind: 'unconnected', canConnect })
   })
 })
 

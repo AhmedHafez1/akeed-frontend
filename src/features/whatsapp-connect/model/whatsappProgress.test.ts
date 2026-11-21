@@ -28,7 +28,6 @@ describe('current WhatsApp progress', () => {
       'preparing',
       'waiting',
     ])
-    expect(result.coverage).toBe('pending')
   })
   it('distinguishes partial approval and partial sending', () => {
     const result = progress(
@@ -48,7 +47,6 @@ describe('current WhatsApp progress', () => {
       'someMessages',
     ])
     expect(result.rows[1].tone).toBe('info')
-    expect(result.coverage).toBe('partial')
   })
   it('shows approvals in green and readiness without requiring a historical send', () => {
     const result = progress(connectionFixture())
@@ -58,7 +56,6 @@ describe('current WhatsApp progress', () => {
       'ready',
     ])
     expect(result.rows.every((row) => row.tone === 'success')).toBe(true)
-    expect(result.coverage).toBeNull()
   })
   it('keeps approval separate from current health and old successful sends', () => {
     const result = progress(
@@ -108,7 +105,6 @@ describe('current WhatsApp progress', () => {
       issue: 'sendingOff',
       done: false,
     })
-    expect(result.coverage).toBeNull()
   })
   it('does not count non-utility approval and exposes its recovery', () => {
     const result = progress(

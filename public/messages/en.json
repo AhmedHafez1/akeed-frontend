@@ -5697,7 +5697,6 @@
       },
       "reconnect": {
         "title": "Reconnect your number",
-        "body": "Your WhatsApp Business connection was removed. Confirmations continue from Akeed.",
         "next": "Next step",
         "nextValue": "Reconnect, then check readiness",
         "action": "Reconnect with Facebook"
@@ -5731,6 +5730,24 @@
         "retry": "Try again"
       },
       "help": "How your own number works",
+      "statusNote": {
+        "notConnected": "You’re not connected. Confirmations are sent from Akeed’s official WhatsApp number.",
+        "settingUp": "Connecting your number. Until setup finishes, messages are sent from Akeed’s number.",
+        "awaitingTemplates": "Your number is connected. Meta is reviewing your message templates, which usually takes up to 24 hours. Until then, messages are sent from Akeed’s number, so no orders are missed.",
+        "awaitingTemplatesPartial": "Meta is still reviewing some of your templates ({approved} of {total} approved). Messages with approved templates are sent from {number}; the rest from Akeed’s number.",
+        "active": "Messages are being sent from {number}.",
+        "sendingIssue": {
+          "credentials": "The connection to {number} needs renewing, so we can’t send from it right now. Messages are sent from Akeed’s number meanwhile.",
+          "payment": "Your payment method in Meta needs attention, so we can’t send from {number} right now. Messages are sent from Akeed’s number meanwhile.",
+          "restricted": "Meta has restricted {number}, so we can’t send from it right now. Messages are sent from Akeed’s number meanwhile.",
+          "unavailable": "{number} is temporarily unavailable, so we can’t send from it right now. Messages are sent from Akeed’s number meanwhile.",
+          "setup": "We couldn’t finish setting up {number}. Messages are sent from Akeed’s number."
+        },
+        "templatesRejected": "Meta didn’t approve some of your templates. Those messages are sent from Akeed’s number, the rest from {number}.",
+        "templatesRejectedAkeed": "Meta didn’t approve some of your templates. For now, messages are sent from Akeed’s number.",
+        "disconnected": "Your number is disconnected. Messages are sent from Akeed’s number. You can reconnect anytime.",
+        "numberFallback": "your number"
+      },
       "progress": {
         "label": "WhatsApp setup status",
         "labels": {
@@ -5750,10 +5767,6 @@
           "ready": "Ready",
           "attention": "Needs attention",
           "paused": "Paused"
-        },
-        "coverage": {
-          "pending": "Akeed sends messages while your number gets ready.",
-          "partial": "Akeed sends messages still awaiting approval."
         },
         "issues": {
           "payment": "Update your payment method in Meta.",
