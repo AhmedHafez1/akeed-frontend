@@ -34,7 +34,6 @@ export interface WhatsappProgressRow {
 }
 export interface WhatsappProgress {
   rows: WhatsappProgressRow[]
-  coverage: 'pending' | 'partial' | null
 }
 
 /** Poll background setup, never disconnected numbers or exhausted setup jobs. */
@@ -63,7 +62,7 @@ export function whatsappProgress(
   connection: WhatsappConnectionStatus
 ): WhatsappProgress {
   if (view.state === 'disconnected' || view.state === 'offboarded')
-    return { rows: [], coverage: null }
+    return { rows: [] }
   const rows = connection.templateDetails
   const approved = rows.filter(
     (row) => row.status === 'approved' && row.category === 'utility'
@@ -180,15 +179,5 @@ export function whatsappProgress(
     sending.tone = 'warning'
     sending.done = false
   }
-  return {
-    rows: [number, templates, sending],
-    coverage:
-      issue || reconnect
-        ? null
-        : view.readiness === 'templatesVary'
-          ? 'partial'
-          : view.readiness === 'ready'
-            ? null
-            : 'pending',
-  }
+  return { rows: [number, templates, sending] }
 }

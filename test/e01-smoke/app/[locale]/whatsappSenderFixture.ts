@@ -5,7 +5,9 @@ import { ApiError } from '@/shared/lib/http'
  * Synthetic facts only: no Meta call, no real number. `?wa=` picks a state:
  *
  *   unconnected | active (default) | mixed | degraded | sendingOff |
- *   disconnected | offboarded | unavailable | error | loading
+ *   disconnected | offboarded | unavailable | error | loading |
+ *   verifyingRestricted (templates in review) | verifyingApproved (every
+ *   template approved, still restricted) | templatesRejected
  *
  * `role=owner|admin|viewer` sets the permissions, `disconnect=fail` makes
  * disconnecting fail. Disconnecting and the thank-you switch keep their new
@@ -20,6 +22,9 @@ type Scenario =
   | 'setupError'
   | 'credentials'
   | 'mixed'
+  | 'verifyingRestricted'
+  | 'verifyingApproved'
+  | 'templatesRejected'
   | 'degraded'
   | 'sendingOff'
   | 'disconnected'
@@ -172,24 +177,50 @@ function connection() {
               }
             : row
         )
+  const verifying =
+    current === 'verifyingRestricted' || current === 'verifyingApproved'
+  const notReady = { kind: 'akeed_system', reason: 'not_ready' }
   const templateDetails =
     current === 'preparing' || current === 'setupError'
       ? []
-      : current === 'pending'
+      : current === 'verifyingRestricted'
         ? details.map((row) => ({
             ...row,
             status: 'pending',
-            readiness: { kind: 'akeed_system', reason: 'template_pending' },
+            readiness: notReady,
           }))
-        : current === 'credentials'
-          ? details.map((row) => ({
-              ...row,
-              readiness: {
-                kind: 'akeed_system',
-                reason: 'degraded:credentials',
-              },
-            }))
-          : details
+        : current === 'verifyingApproved'
+          ? details.map((row) => ({ ...row, readiness: notReady }))
+          : current === 'templatesRejected'
+            ? [
+                template('cod_confirm.ar.standard', 'ar'),
+                template('cod_confirm.en.standard', 'en', 'rejected', {
+                  kind: 'akeed_system',
+                  reason: 'template_rejected',
+                }),
+                template('cod_reminder.fr.standard', 'fr', 'pending', {
+                  kind: 'akeed_system',
+                  reason: 'template_pending',
+                }),
+              ]
+            : current === 'pending'
+              ? details.map((row) => ({
+                  ...row,
+                  status: 'pending',
+                  readiness: {
+                    kind: 'akeed_system',
+                    reason: 'template_pending',
+                  },
+                }))
+              : current === 'credentials'
+                ? details.map((row) => ({
+                    ...row,
+                    readiness: {
+                      kind: 'akeed_system',
+                      reason: 'degraded:credentials',
+                    },
+                  }))
+                : details
   return {
     thankYouEnabled: memory().thankYou,
     state:
@@ -199,14 +230,21 @@ function connection() {
           ? 'offboarded'
           : current === 'preparing' || current === 'setupError'
             ? 'connecting'
-            : 'active',
+            : verifying
+              ? 'verifying'
+              : 'active',
     signupPath: 'coexistence',
     displayPhoneNumber: '+20 100 555 0101',
     health: {
       stateReason: null,
-      qualityRating: 'GREEN',
-      degradedClass:
-        current === 'credentials' ? 'credentials' : degraded ? 'payment' : null,
+      qualityRating: verifying ? null : 'GREEN',
+      degradedClass: verifying
+        ? 'restricted'
+        : current === 'credentials'
+          ? 'credentials'
+          : degraded
+            ? 'payment'
+            : null,
       lastCheckedAt: minutesAgo(12),
     },
     setup: {

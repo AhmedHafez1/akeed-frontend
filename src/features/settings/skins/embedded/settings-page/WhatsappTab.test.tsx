@@ -147,3 +147,61 @@ describe('embedded WhatsApp tab', () => {
     expect(await screen.findByText(copy.progress.statuses.ready)).toBeTruthy()
   })
 })
+
+/** The number is wrapped in direction isolates; compare without them. */
+const ISOLATES = new RegExp(
+  '[' + String.fromCharCode(0x2066) + String.fromCharCode(0x2069) + ']',
+  'g'
+)
+const PHONE = '+20 100 555 0101'
+const note = en.whatsappConnect.tab.statusNote
+const hasText = (expected: string) =>
+  screen.getByText(
+    (_, node) =>
+      node?.tagName === 'P' &&
+      (node.textContent ?? '').replace(ISOLATES, '') === expected
+  )
+
+describe('embedded WhatsApp status note', () => {
+  it('says Akeed sends before anything is connected', async () => {
+    connection.mockResolvedValue({ connection: null })
+    renderTab()
+    await screen.findByRole('button', { name: copy.connect.action })
+    expect(hasText(note.notConnected)).toBeTruthy()
+  })
+  it('says Meta is reviewing templates for a number that is still verifying', async () => {
+    connection.mockResolvedValue({
+      connection: connectionFixture({
+        state: 'verifying',
+        health: {
+          stateReason: null,
+          qualityRating: null,
+          degradedClass: 'restricted',
+          lastCheckedAt: null,
+        },
+        templateDetails: [
+          templateFixture('cod_confirm.ar.standard', 'ar', {
+            status: 'pending',
+            readiness: { kind: 'akeed_system', reason: 'not_ready' },
+          }),
+        ],
+      }),
+    })
+    renderTab()
+    await screen.findByRole('list', { name: copy.progress.label })
+    expect(hasText(note.awaitingTemplates)).toBeTruthy()
+  })
+  it('says the number itself sends once every template resolves to it', async () => {
+    renderTab()
+    await screen.findByRole('list', { name: copy.progress.label })
+    expect(hasText(note.active.replace('{number}', PHONE))).toBeTruthy()
+  })
+  it('says Akeed sends after disconnecting', async () => {
+    connection.mockResolvedValue({
+      connection: connectionFixture({ state: 'disconnected' }),
+    })
+    renderTab()
+    await screen.findByText(copy.reconnect.title)
+    expect(hasText(note.disconnected)).toBeTruthy()
+  })
+})

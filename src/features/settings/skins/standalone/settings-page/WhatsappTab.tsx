@@ -5,9 +5,11 @@ import { useTranslations } from 'next-intl'
 import { Check, CircleAlert, Loader2 } from 'lucide-react'
 import {
   serverErrorKey,
+  useStatusNoteText,
   useWhatsappTab,
   type WhatsappTabModel,
   type WhatsappProgressRow,
+  type WhatsappStatusNote,
 } from '@/features/whatsapp-connect'
 import { cn } from '@/shared/lib/utils'
 import {
@@ -56,6 +58,9 @@ export function WhatsappTab() {
           <div className="space-y-2">
             <h2 className="text-ak-section text-ink">{t('number.title')}</h2>
             <p className="text-ak-body text-ink-muted">{t('connect.body')}</p>
+            <p className="text-ak-caption text-ink-muted" role="status">
+              <NoteText note={view.note} />
+            </p>
           </div>
           <ConnectAction
             model={model}
@@ -83,9 +88,12 @@ export function WhatsappTab() {
                   />
                 ))}
               </ol>
-              {view.progress.coverage && (
-                <p className="text-ak-caption text-ink-muted pb-5">
-                  {t('progress.coverage.' + view.progress.coverage)}
+              {view.note.key && (
+                <p
+                  className="text-ak-caption text-ink-muted pb-5"
+                  role="status"
+                >
+                  <NoteText note={view.note} />
                 </p>
               )}
             </div>
@@ -95,13 +103,10 @@ export function WhatsappTab() {
                 {t('reconnect.title')}
               </h3>
               <p className="text-ak-body text-ink-muted">
-                {t(
-                  view.banners.some(
-                    (banner) => banner.key === 'disconnect.primary_inactivity'
-                  )
-                    ? 'progress.issues.inactive'
-                    : 'reconnect.body'
-                )}
+                <NoteText note={view.note} />
+                {view.banners.some(
+                  (banner) => banner.key === 'disconnect.primary_inactivity'
+                ) && ` ${t('progress.issues.inactive')}`}
               </p>
               {view.canReconnect ? (
                 <ConnectAction
@@ -196,6 +201,11 @@ export function WhatsappTab() {
       )}
     </section>
   )
+}
+
+/** The status note as text; a component so the hook is never called conditionally. */
+function NoteText({ note }: { note: WhatsappStatusNote }) {
+  return <>{useStatusNoteText(note)}</>
 }
 
 function ProgressRow({

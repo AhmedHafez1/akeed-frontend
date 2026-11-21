@@ -380,3 +380,127 @@ describe('standalone WhatsApp tab in Arabic', () => {
     )
   })
 })
+
+/** The number is wrapped in direction isolates; compare without them. */
+const ISOLATES = new RegExp(
+  '[' + String.fromCharCode(0x2066) + String.fromCharCode(0x2069) + ']',
+  'g'
+)
+const PHONE = '+20 100 555 0101'
+const noteTexts = () =>
+  screen
+    .getAllByRole('status')
+    .map((node) => (node.textContent ?? '').replace(ISOLATES, ''))
+
+const reviewing = Array.from({ length: 3 }, (_, i) =>
+  templateFixture(`cod_confirm.t${i}.standard`, 'ar', {
+    status: 'pending',
+    readiness: { kind: 'akeed_system', reason: 'not_ready' },
+  })
+)
+const noteOf = (locale: 'en' | 'ar') =>
+  (locale === 'en' ? en : ar).whatsappConnect.tab.statusNote
+
+describe.each(['en', 'ar'] as const)(
+  'standalone WhatsApp status note (%s)',
+  (locale) => {
+    const note = noteOf(locale)
+    const issues = (locale === 'en' ? en : ar).whatsappConnect.tab.progress
+      .issues
+
+    it('says Akeed sends before anything is connected', async () => {
+      connection.mockResolvedValue({ connection: null })
+      renderTab(locale)
+      await screen.findByRole('button')
+      expect(noteTexts()).toContain(note.notConnected)
+    })
+    it('says Meta is reviewing templates for a restricted number that is still verifying', async () => {
+      connection.mockResolvedValue({
+        connection: connectionFixture({
+          state: 'verifying',
+          health: {
+            stateReason: null,
+            qualityRating: null,
+            degradedClass: 'restricted',
+            lastCheckedAt: null,
+          },
+          templateDetails: reviewing,
+        }),
+      })
+      renderTab(locale)
+      await screen.findByRole('list')
+      expect(noteTexts()).toContain(note.awaitingTemplates)
+      expect(noteTexts().join(' ')).not.toContain(
+        note.sendingIssue.restricted.replace('{number}', PHONE)
+      )
+    })
+    it('says the number itself sends once every template resolves to it', async () => {
+      renderTab(locale)
+      await screen.findByRole('list')
+      expect(noteTexts()).toContain(note.active.replace('{number}', PHONE))
+    })
+    it('explains a number that cannot send without repeating the action the row already shows', async () => {
+      connection.mockResolvedValue({
+        connection: connectionFixture({
+          health: {
+            stateReason: null,
+            qualityRating: 'GREEN',
+            degradedClass: 'restricted',
+            lastCheckedAt: null,
+          },
+          templateDetails: [
+            templateFixture('cod_confirm.ar.standard', 'ar', {
+              readiness: {
+                kind: 'akeed_system',
+                reason: 'degraded:restricted',
+              },
+            }),
+          ],
+        }),
+      })
+      renderTab(locale)
+      await screen.findByRole('list')
+      expect(noteTexts()).toContain(
+        note.sendingIssue.restricted.replace('{number}', PHONE)
+      )
+      expect(screen.getAllByText(issues.restricted)).toHaveLength(1)
+    })
+    it('adds the action when no status row carries it yet', async () => {
+      connection.mockResolvedValue({
+        connection: connectionFixture({
+          state: 'verifying',
+          health: {
+            stateReason: null,
+            qualityRating: null,
+            degradedClass: 'restricted',
+            lastCheckedAt: null,
+          },
+          templateDetails: [
+            templateFixture('cod_confirm.ar.standard', 'ar', {
+              readiness: { kind: 'akeed_system', reason: 'not_ready' },
+            }),
+          ],
+        }),
+      })
+      renderTab(locale)
+      await screen.findByRole('list')
+      expect(noteTexts()).toContain(
+        `${note.sendingIssue.restricted.replace('{number}', PHONE)} ${issues.restricted}`
+      )
+    })
+    it('says Akeed sends after disconnecting, in the place of the old reconnect text', async () => {
+      connection.mockResolvedValue({
+        connection: connectionFixture({ state: 'disconnected' }),
+      })
+      renderTab(locale)
+      await screen.findByRole('button')
+      expect(
+        screen.getByText(
+          (_, node) =>
+            (node?.textContent ?? '').replace(ISOLATES, '') ===
+            note.disconnected
+        )
+      ).toBeTruthy()
+    })
+  }
+)

@@ -5,6 +5,11 @@ import type {
   WhatsappSenderAvailability,
 } from '../api/whatsappConnectApi'
 import { whatsappProgress, type WhatsappProgress } from './whatsappProgress'
+import {
+  NOT_CONNECTED_NOTE,
+  whatsappStatusNote,
+  type WhatsappStatusNote,
+} from './whatsappStatusNote'
 
 /**
  * What the WhatsApp settings tab shows, from the two server answers alone.
@@ -99,6 +104,8 @@ export interface TabBanner {
 
 export interface ConnectionView {
   progress: WhatsappProgress
+  /** The one sentence saying which number sends messages now. */
+  note: WhatsappStatusNote
   kind: 'connection'
   state: WhatsappConnectionStatus['state']
   phone: string | null
@@ -122,7 +129,7 @@ export interface ConnectionView {
 export type WhatsappTabView =
   /** Neither connecting nor a connection: the tab is hidden. */
   | { kind: 'hidden' }
-  | { kind: 'unconnected'; canConnect: boolean }
+  | { kind: 'unconnected'; canConnect: boolean; note: WhatsappStatusNote }
   | ConnectionView
 
 const DEGRADED: Record<string, NumberReadiness> = {
@@ -257,7 +264,11 @@ export function whatsappTabView(
   const available = Boolean(availability?.available)
   if (!connection) {
     return available
-      ? { kind: 'unconnected', canConnect: Boolean(availability?.canConnect) }
+      ? {
+          kind: 'unconnected',
+          canConnect: Boolean(availability?.canConnect),
+          note: NOT_CONNECTED_NOTE,
+        }
       : { kind: 'hidden' }
   }
   const sendingEnabled = availability?.sendingEnabled === true
@@ -301,7 +312,8 @@ export function whatsappTabView(
   const wantsReconnect = banners.some((banner) => banner.action === 'reconnect')
   const view: ConnectionView = {
     kind: 'connection',
-    progress: { rows: [], coverage: null },
+    progress: { rows: [] },
+    note: NOT_CONNECTED_NOTE,
     state: connection.state,
     phone: connection.displayPhoneNumber,
     signupPath: connection.signupPath,
@@ -336,5 +348,6 @@ export function whatsappTabView(
     isOwner,
   }
   view.progress = whatsappProgress(view, connection)
+  view.note = whatsappStatusNote(view, connection)
   return view
 }
