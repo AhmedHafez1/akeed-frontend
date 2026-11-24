@@ -14,6 +14,10 @@ dev_store_url = "aahi-9681.myshopify.com"
 [webhooks]
 api_version = "2026-01"
 
+  [[webhooks.subscriptions]]
+  topics = [ "orders/updated" ]
+  uri = "/webhooks/shopify/orders-updated"
+
 [access_scopes]
 scopes = "read_customers,write_order_edits,read_orders,write_orders,read_products"
 optional_scopes = [ ]
