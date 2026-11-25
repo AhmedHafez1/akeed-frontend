@@ -7,7 +7,7 @@ slug: shipping-notifications
 
 ## Resumen
 
-Cuando envías un pedido contra reembolso, Akeed puede mandar al cliente un mensaje de WhatsApp. El mensaje dice que el pedido va en camino, incluye el número o enlace de seguimiento si lo agregas y ofrece tres botones: **Estaré en casa**, **Reprogramar** y **Cambiar dirección**.
+Cuando envías un pedido contra reembolso, Akeed puede mandar al cliente un mensaje de WhatsApp. El mensaje dice que el pedido va en camino, pide al cliente tener listo el total en efectivo y mantener el teléfono encendido para el repartidor, incluye el número o enlace de seguimiento si lo agregas y ofrece tres botones: **Lo recibiré**, **No estaré disponible** y **Cambiar dirección**.
 
 Los avisos de envío están disponibles para tiendas Shopify.
 
@@ -54,9 +54,9 @@ Abre un pedido para ver por qué se envió el mensaje, su seguimiento y la respu
 
 ## Respuestas del cliente
 
-Cuando el cliente toca **Reprogramar** o **Cambiar dirección**, el pedido pasa a **Requieren tu acción**. Contacta al cliente, coordina la entrega con tu mensajería y luego haz clic en **Marcar como resuelto**.
+Cuando el cliente toca **No estaré disponible** o **Cambiar dirección**, el pedido pasa a **Requieren tu acción**. Contacta al cliente, coordina la entrega con tu mensajería y luego haz clic en **Marcar como resuelto**.
 
-**Estaré en casa** no requiere nada de tu parte. Si los mensajes de agradecimiento están activados, Akeed le agradece al cliente su respuesta.
+**Lo recibiré** no requiere nada de tu parte. Si los mensajes de agradecimiento están activados, Akeed le agradece al cliente su respuesta.
 
 Un pedido cuyo mensaje no llegó al cliente también aparece en **Requieren tu acción**, como **No entregado en WhatsApp**. Llama al cliente y luego haz clic en **Marcar como resuelto**.
 

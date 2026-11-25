@@ -7,7 +7,7 @@ slug: shipping-notifications
 
 ## Vue d’ensemble
 
-Quand vous expédiez une commande en paiement à la livraison, Akeed peut envoyer un message WhatsApp au client. Le message indique que la commande est en route, inclut le numéro ou le lien de suivi si vous l’ajoutez, et propose trois boutons, **Je serai chez moi**, **Reprogrammer** et **Changer d’adresse**.
+Quand vous expédiez une commande en paiement à la livraison, Akeed peut envoyer un message WhatsApp au client. Le message indique que la commande est en route, demande au client de préparer le montant en espèces et de garder son téléphone allumé pour le livreur, inclut le numéro ou le lien de suivi si vous l’ajoutez, et propose trois boutons, **Je la recevrai**, **Je serai absent(e)** et **Changer d’adresse**.
 
 Les notifications d’expédition sont disponibles pour les boutiques Shopify.
 
@@ -54,9 +54,9 @@ Ouvrez une commande pour voir pourquoi le message est parti, son suivi et la ré
 
 ## Réponses du client
 
-Quand le client appuie sur **Reprogrammer** ou **Changer d’adresse**, la commande passe dans **À traiter par vous**. Contactez le client, organisez la livraison avec votre transporteur, puis cliquez sur **Marquer comme traité**.
+Quand le client appuie sur **Je serai absent(e)** ou **Changer d’adresse**, la commande passe dans **À traiter par vous**. Contactez le client, organisez la livraison avec votre transporteur, puis cliquez sur **Marquer comme traité**.
 
-**Je serai chez moi** ne demande rien de votre part. Si les messages de remerciement sont activés, Akeed remercie le client pour sa réponse.
+**Je la recevrai** ne demande rien de votre part. Si les messages de remerciement sont activés, Akeed remercie le client pour sa réponse.
 
 Une commande dont le message n’a pas atteint le client apparaît aussi dans **À traiter par vous**, comme **Non distribué sur WhatsApp**. Appelez le client, puis cliquez sur **Marquer comme traité**.
 

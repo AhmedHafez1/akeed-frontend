@@ -1492,7 +1492,7 @@
           "notSent": "mensaje no enviado"
         },
         "blocked": "En espera de envío",
-        "reschedule": "Reprogramar",
+        "reschedule": "No disponible",
         "changeAddress": "Cambiar dirección"
       },
       "loadingMore": "Cargando más pedidos…",
@@ -1680,11 +1680,11 @@
         "track": "Rastrear",
         "reply": "Respuesta del cliente",
         "replies": {
-          "home": "Estaré en casa",
-          "reschedule": "Reprogramar",
+          "home": "Lo recibiré",
+          "reschedule": "No estaré disponible",
           "address": "Cambiar dirección"
         },
-        "requestReschedule": "El cliente pidió reprogramar la entrega.",
+        "requestReschedule": "El cliente no estará disponible para la entrega.",
         "requestAddress": "El cliente pidió cambiar la dirección.",
         "notReached": "El aviso de envío no llegó al cliente.",
         "contactHint": "Contacta al cliente y luego márcalo como resuelto.",

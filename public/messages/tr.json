@@ -1492,7 +1492,7 @@
           "notSent": "mesaj gönderilmedi"
         },
         "blocked": "Gönderim bekliyor",
-        "reschedule": "Yeniden planla",
+        "reschedule": "Müsait değil",
         "changeAddress": "Adresi değiştir"
       },
       "loadingMore": "Daha fazla sipariş yükleniyor…",
@@ -1680,11 +1680,11 @@
         "track": "Takip et",
         "reply": "Müşteri yanıtı",
         "replies": {
-          "home": "Evde olacağım",
-          "reschedule": "Yeniden planla",
+          "home": "Teslim alacağım",
+          "reschedule": "Müsait olmayacağım",
           "address": "Adresi değiştir"
         },
-        "requestReschedule": "Müşteri teslimatın yeniden planlanmasını istedi.",
+        "requestReschedule": "Müşteri teslimat sırasında müsait olmayacak.",
         "requestAddress": "Müşteri adresin değiştirilmesini istedi.",
         "notReached": "Kargo mesajı müşteriye ulaşmadı.",
         "contactHint": "Müşteriyle iletişime geçin, ardından tamamlandı olarak işaretleyin.",

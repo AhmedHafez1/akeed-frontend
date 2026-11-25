@@ -7,7 +7,7 @@ slug: shipping-notifications
 
 ## Genel Bakış
 
-Kapıda ödemeli bir siparişi kargoya verdiğinizde Akeed müşteriye tek bir WhatsApp mesajı gönderebilir. Mesaj siparişin yolda olduğunu söyler, eklediyseniz takip numarasını veya bağlantısını içerir ve üç düğme sunar: **Evde olacağım**, **Yeniden planla** ve **Adresi değiştir**.
+Kapıda ödemeli bir siparişi kargoya verdiğinizde Akeed müşteriye tek bir WhatsApp mesajı gönderebilir. Mesaj siparişin yolda olduğunu söyler, müşteriden tutarı nakit olarak hazır bulundurmasını ve kurye için telefonunu açık tutmasını ister, eklediyseniz takip numarasını veya bağlantısını içerir ve üç düğme sunar: **Teslim alacağım**, **Müsait olmayacağım** ve **Adresi değiştir**.
 
 Kargo bildirimleri Shopify mağazaları için kullanılabilir.
 
@@ -54,9 +54,9 @@ Mesajın neden gönderildiğini, takip bilgisini ve müşterinin yanıtını gö
 
 ## Müşteri Yanıtları
 
-Müşteri **Yeniden planla** veya **Adresi değiştir** düğmesine dokunduğunda sipariş **İşlem bekleyenler** bölümüne geçer. Müşteriyle iletişime geçin, teslimatı kargo firmanızla ayarlayın, ardından **Tamamlandı olarak işaretle** düğmesine tıklayın.
+Müşteri **Müsait olmayacağım** veya **Adresi değiştir** düğmesine dokunduğunda sipariş **İşlem bekleyenler** bölümüne geçer. Müşteriyle iletişime geçin, teslimatı kargo firmanızla ayarlayın, ardından **Tamamlandı olarak işaretle** düğmesine tıklayın.
 
-**Evde olacağım** sizden bir şey gerektirmez. Teşekkür mesajları açıksa Akeed müşteriye yanıtı için teşekkür eder.
+**Teslim alacağım** sizden bir şey gerektirmez. Teşekkür mesajları açıksa Akeed müşteriye yanıtı için teşekkür eder.
 
 Mesajı müşteriye ulaşmayan bir sipariş de **İşlem bekleyenler** bölümünde **WhatsApp iletilemedi** olarak görünür. Müşteriyi arayın, ardından **Tamamlandı olarak işaretle** düğmesine tıklayın.
 

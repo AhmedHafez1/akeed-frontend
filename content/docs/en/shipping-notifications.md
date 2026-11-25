@@ -7,7 +7,7 @@ slug: shipping-notifications
 
 ## Overview
 
-When you ship a COD order, Akeed can send the customer one WhatsApp message. It says the order is on its way, includes the tracking number or link when you add one, and offers three buttons: **I’ll be home**, **Reschedule** and **Change address**.
+When you ship a COD order, Akeed can send the customer one WhatsApp message. It says the order is on its way, asks the customer to have the total ready in cash and keep their phone on for the courier, includes the tracking number or link when you add one, and offers three buttons: **I’ll receive it**, **Won’t be available** and **Change address**.
 
 Shipping notifications are available for Shopify stores.
 
@@ -54,9 +54,9 @@ Open an order to see why the message was sent, its tracking and the customer's r
 
 ## Customer Replies
 
-When the customer taps **Reschedule** or **Change address**, the order moves to **Needs your action**. Contact the customer, arrange the delivery with your courier, then click **Mark done**.
+When the customer taps **Won’t be available** or **Change address**, the order moves to **Needs your action**. Contact the customer, arrange the delivery with your courier, then click **Mark done**.
 
-**I’ll be home** needs nothing from you. If thank-you messages are on, Akeed thanks the customer for their reply.
+**I’ll receive it** needs nothing from you. If thank-you messages are on, Akeed thanks the customer for their reply.
 
 An order whose message could not reach the customer also appears in **Needs your action**, as **WhatsApp undeliverable**. Call the customer, then click **Mark done**.
 
