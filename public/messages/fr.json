@@ -1385,7 +1385,9 @@
           "send_failed": "Message non envoyé",
           "no_whatsapp": "Non distribué sur WhatsApp · Appelez le client",
           "auto_cancel_failed": "L’annulation automatique a échoué",
-          "late_reply_after_auto_cancel": "A confirmé après l’annulation"
+          "late_reply_after_auto_cancel": "A confirmé après l’annulation",
+          "delivery_request": "Demande du client · {date}",
+          "shipping_not_reachable": "Le message d’expédition n’a pas atteint le client"
         },
         "actions": {
           "whatsapp": "Écrire sur WhatsApp",
@@ -1462,7 +1464,8 @@
         "total": "Total",
         "orderTime": "Date de commande",
         "updated": "Dernière mise à jour",
-        "action": "Action"
+        "action": "Action",
+        "shipping": "Expédition"
       },
       "card": {
         "ordered": "Commandée : {time}",
@@ -1500,7 +1503,8 @@
           "followUpSent": "Rappel envoyé",
           "sendsAt": "Envoi : {time}",
           "callCustomer": "Appelez le client",
-          "waitingForCapacity": "Forfait ou solde épuisé"
+          "waitingForCapacity": "Forfait ou solde épuisé",
+          "shippedNotReached": "Message d’expédition non distribué"
         },
         "tooltip": {
           "scheduledFor": "Planifié pour : {time}",
@@ -1517,7 +1521,9 @@
           "generic": "message non remis",
           "notSent": "message non envoyé"
         },
-        "blocked": "En attente d’envoi"
+        "blocked": "En attente d’envoi",
+        "reschedule": "Reprogrammer",
+        "changeAddress": "Changer d’adresse"
       },
       "loadingMore": "Chargement d’autres commandes…",
       "autoCancel": {
@@ -1664,6 +1670,56 @@
         "upgrade": "Changer de forfait",
         "recharge": "Recharger le solde",
         "renew": "Renouveler {plan} maintenant"
+      }
+    },
+    "shipping": {
+      "heading": "Expédition",
+      "badges": {
+        "sent": "Envoyé",
+        "undeliverable": "Non distribué sur WhatsApp",
+        "failedToSend": "Échec de l’envoi",
+        "notSent": "Non envoyé"
+      },
+      "reasons": {
+        "no_phone": "Aucun numéro de téléphone",
+        "not_on_whatsapp": "Le numéro n’est pas sur WhatsApp",
+        "no_allowance": "Plus aucun message dans votre forfait",
+        "order_too_old": "Commande de plus de 30 jours",
+        "order_cancelled": "Commande annulée",
+        "send_failed": "WhatsApp n’a pas pu le distribuer",
+        "template_unavailable": "Pas encore disponible dans cette langue"
+      },
+      "markDone": "Marquer comme traité",
+      "markedDone": "Marqué comme traité",
+      "resolveErrors": {
+        "readOnly": "Seul le propriétaire ou un administrateur peut le faire.",
+        "notFound": "Cette commande n’a pas de message d’expédition.",
+        "generic": "Impossible de marquer comme traité. Réessayez."
+      },
+      "details": {
+        "title": "Message d’expédition",
+        "trigger": "Envoyé parce que",
+        "triggerFulfillment": "Commande traitée",
+        "triggerTag": "Balise « {tag} »",
+        "status": {
+          "delivered": "Distribué",
+          "read": "Lu",
+          "pending": "Envoi en cours"
+        },
+        "tracking": "Suivi",
+        "track": "Suivre",
+        "reply": "Réponse du client",
+        "replies": {
+          "home": "Je serai chez moi",
+          "reschedule": "Reprogrammer",
+          "address": "Changer d’adresse"
+        },
+        "requestReschedule": "Le client a demandé de reprogrammer la livraison.",
+        "requestAddress": "Le client a demandé de changer l’adresse.",
+        "notReached": "Le message d’expédition n’a pas atteint le client.",
+        "contactHint": "Contactez le client, puis marquez-le comme traité.",
+        "doneAt": "Traité {time}",
+        "statusLabel": "Statut"
       }
     }
   },
@@ -2053,7 +2109,8 @@
         "message": "Message",
         "timing": "Délais et relance",
         "plan": "Forfait",
-        "whatsapp": "WhatsApp"
+        "whatsapp": "WhatsApp",
+        "shipping": "Expédition"
       },
       "save": "Enregistrer",
       "discard": "Ignorer",
@@ -2248,6 +2305,33 @@
           "note": "Les deux quotas se renouvellent ensemble. Meta facture séparément à votre entreprise les messages envoyés depuis votre numéro.",
           "noteRenews": "Les deux quotas se renouvellent ensemble le {date}. Meta facture séparément à votre entreprise les messages envoyés depuis votre numéro."
         }
+      },
+      "shipping": {
+        "sectionTitle": "Notifications d’expédition",
+        "sectionDescription": "Un message WhatsApp quand une commande est expédiée.",
+        "masterLabel": "Envoyer un message quand une commande est expédiée",
+        "whenTitle": "Quand l’envoyer",
+        "whenDescription": "Choisissez ce qui marque une commande comme expédiée.",
+        "fulfillLabel": "Quand je traite la commande",
+        "fulfillHelp": "Inclut le numéro ou le lien de suivi si vous l’ajoutez.",
+        "tagsLabel": "Quand j’ajoute une balise",
+        "tagsPlaceholder": "p. ex. Expédié",
+        "tagsHelp": "Jusqu’à 10 balises, écrites comme dans Shopify.",
+        "add": "Ajouter",
+        "tagErrors": {
+          "reserved": "Les balises d’Akeed, comme « <tag>Akeed: Verified</tag> », sont réservées. Utilisez une autre balise.",
+          "tooMany": "Vous pouvez ajouter jusqu’à 10 balises.",
+          "tooLong": "Une balise peut contenir jusqu’à 40 caractères.",
+          "duplicate": "Cette balise est déjà ajoutée.",
+          "invalid": "Une balise n’a pas pu être enregistrée. Vérifiez vos balises et réessayez."
+        },
+        "noTrigger": "Choisissez au moins une option, le traitement ou une balise.",
+        "messageTitle": "Message",
+        "messageDescription": "Ce que reçoit votre client, dans la langue des messages de votre boutique.",
+        "billingLine": "Chaque message d’expédition utilise 1 message de votre forfait.",
+        "previewLabel": "Aperçu du message d’expédition",
+        "previewEmpty": "Le message d’expédition n’est pas encore disponible.",
+        "saveUnavailable": "Les notifications d’expédition ne sont pas disponibles pour cette boutique."
       }
     },
     "sourceEasyOrders": "EasyOrders",

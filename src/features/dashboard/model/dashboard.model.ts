@@ -158,6 +158,8 @@ export type VerificationItem = {
    * merchant settles it or the customer answers. Null when none is open.
    */
   change_request?: ChangeRequestSummary | null
+  /** The order's Shipped message; null when none was due. */
+  shipping?: ShippingSummary | null
   /**
    * Client-only: set on a row the UI is showing ahead of the server — an order
    * the merchant just created whose verification a worker has not written yet.
@@ -312,9 +314,46 @@ export type ChangeRequestSummary = {
   }
 }
 
+/** Why a Shipped message was not sent, by the server's stable code. */
+export type ShippingFailureReason =
+  | 'no_phone'
+  | 'not_on_whatsapp'
+  | 'no_allowance'
+  | 'order_too_old'
+  | 'order_cancelled'
+  | 'send_failed'
+  | 'template_unavailable'
+
+/** An order's Shipped message, as a list row or a needs-action item carries it. */
+export type ShippingSummary = {
+  status: 'pending' | 'sent' | 'delivered' | 'read' | 'failed'
+  /**
+   * Set exactly when `failed`. A code this client does not know (such as the
+   * retired `allowance_low`) is shown as a plain failure.
+   */
+  reason_code: ShippingFailureReason | (string & {}) | null
+  trigger: 'fulfillment' | 'tag'
+  /** The tag that sent it; only for `tag`. */
+  matched_tag: string | null
+  tracking_number: string | null
+  tracking_url: string | null
+  /** The customer's first tap on the message. */
+  customer_reply: 'home' | 'reschedule' | 'address' | null
+  customer_replied_at: string | null
+  /** A reschedule or address request the merchant has not marked done. */
+  delivery_request: boolean
+  /** When the merchant marked the request, or the unreached customer, done. */
+  resolved_at: string | null
+  updated_at: string
+}
+
 /** Why the server says a row needs the merchant. */
 export type NeedsActionReason =
   | 'change_requested'
+  /** The customer asked to reschedule the delivery or change the address. */
+  | 'delivery_request'
+  /** The Shipped message could not reach the customer (no phone or WhatsApp). */
+  | 'shipping_not_reachable'
   | 'late_reply_after_auto_cancel'
   | 'no_whatsapp'
   | 'delivery_failed'
@@ -363,6 +402,8 @@ export type NeedsActionItem = {
   customer_history?: CustomerHistory | null
   /** Set for `change_requested`. */
   change_request?: ChangeRequestSummary | null
+  /** Set for `delivery_request` and `shipping_not_reachable`. */
+  shipping?: ShippingSummary | null
 }
 
 export type UsageState = 'ok' | 'warning' | 'exhausted'
@@ -395,6 +436,11 @@ export type DashboardOverview = {
     quiet_hours_enabled: boolean
     quiet_hours_start: string | null
     quiet_hours_end: string | null
+    /**
+     * The store's shipping notifications switch. Absent where the feature
+     * does not exist (Shopify only, behind the server's switch).
+     */
+    shipping_notifications_enabled?: boolean
   }
   usage: {
     used: number

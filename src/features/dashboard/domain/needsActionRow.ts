@@ -3,6 +3,7 @@ import type { NeedsActionItem } from '../model/dashboard.model'
 import { customerContact, type CustomerContact } from '../lib/customerContact'
 import { canCancelNeedsActionItem } from './cancellation'
 import { isAckMissing } from './changeRequestView'
+import { shippingRequestKind } from './shippingStatus'
 import { hasCapability } from './verificationLifecycle'
 
 /**
@@ -18,7 +19,13 @@ export interface NeedsActionRowModel {
   /** Keys under `dashboard.confirmations.status`, as the table uses them. */
   status: {
     kind: 'needsAction' | 'failed' | 'noWhatsApp'
-    badge: 'noReply' | 'failed' | 'noWhatsApp' | 'changeRequested'
+    badge:
+      | 'noReply'
+      | 'failed'
+      | 'noWhatsApp'
+      | 'changeRequested'
+      | 'reschedule'
+      | 'changeAddress'
   }
   /** Null when the message never arrived: there is no chat to continue. */
   chatUrl: string | null
@@ -35,6 +42,16 @@ export interface NeedsActionRowModel {
     /** WhatsApp, call and copy, or null without a usable number. */
     contact: CustomerContact | null
   } | null
+  /**
+   * Set for a delivery request or an unreached customer after shipping: the
+   * merchant contacts the customer, then marks it done.
+   */
+  shipping: {
+    /** False for a viewer: "Mark done" is not offered. */
+    canResolve: boolean
+    /** WhatsApp, call and copy, or null without a usable number. */
+    contact: CustomerContact | null
+  } | null
 }
 
 export function needsActionRowModel(
@@ -44,6 +61,33 @@ export function needsActionRowModel(
   const failed =
     item.reason.type === 'delivery_failed' || item.reason.type === 'send_failed'
   const noWhatsApp = item.reason.type === 'no_whatsapp'
+  const orderLabel =
+    formatOrderNumber(item.order_number) ??
+    `${fallbackPrefix} ${item.order_id.slice(0, 8)}`
+  if (
+    item.reason.type === 'delivery_request' ||
+    item.reason.type === 'shipping_not_reachable'
+  ) {
+    const reachable = item.reason.type === 'delivery_request'
+    const contact = customerContact(item.customer_phone)
+    return {
+      orderLabel,
+      status: reachable
+        ? {
+            kind: 'needsAction',
+            badge:
+              shippingRequestKind(item.shipping) === 'address'
+                ? 'changeAddress'
+                : 'reschedule',
+          }
+        : { kind: 'noWhatsApp', badge: 'noWhatsApp' },
+      chatUrl: reachable ? (contact?.whatsAppUrl ?? null) : null,
+      confirmable: false,
+      cancelable: false,
+      changeRequest: null,
+      shipping: { canResolve: canAct, contact: reachable ? contact : null },
+    }
+  }
   if (item.reason.type === 'change_requested') {
     const contact = customerContact(item.customer_phone)
     return {
@@ -60,6 +104,7 @@ export function needsActionRowModel(
           : false,
         contact,
       },
+      shipping: null,
     }
   }
   return {
@@ -77,5 +122,6 @@ export function needsActionRowModel(
       hasCapability(item.capabilities, 'merchant_manual_confirmation'),
     cancelable: canAct && canCancelNeedsActionItem(item),
     changeRequest: null,
+    shipping: null,
   }
 }

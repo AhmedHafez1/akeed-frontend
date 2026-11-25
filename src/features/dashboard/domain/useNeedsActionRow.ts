@@ -16,7 +16,7 @@ export function useNeedsActionRow(
   canAct: boolean
 ): NeedsActionRowModel & { badgeText: string; reasonText: string } {
   const t = useTranslations('dashboard')
-  const reason = useNeedsActionReason(item.reason, timeZone)
+  const reason = useNeedsActionReason(item.reason, timeZone, item.shipping)
   const model = needsActionRowModel(item, {
     fallbackPrefix: t('table.orderFallbackPrefix'),
     canAct,

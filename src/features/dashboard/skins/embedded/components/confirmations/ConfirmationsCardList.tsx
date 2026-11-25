@@ -1,6 +1,7 @@
 import { Badge, BlockStack, Box, InlineStack, Text } from '@shopify/polaris'
 import { useTranslations } from 'next-intl'
 import { isNeedsActionRow } from '../../../../domain/confirmationRowStatus'
+import { showsShippingLine } from '../../../../domain/shippingStatus'
 import { useCustomerRecordView } from '../../../../domain/useCustomerRecordView'
 import type { VerificationItem } from '../../../../model/dashboard.model'
 import { OrderNumberLink } from '../shared/OrderNumberLink'
@@ -9,6 +10,7 @@ import {
   AmountText,
   FollowUpCell,
   isCardControlClick,
+  ShippingCell,
   StackedCardTimes,
   StatusCell,
   useConfirmationRowView,
@@ -67,6 +69,7 @@ function ConfirmationCard({
   canRetry,
   actingId,
   handlers,
+  showShipping,
 }: CardProps) {
   const t = useTranslations('dashboard')
   const view = useConfirmationRowView(row, timeZone)
@@ -124,6 +127,12 @@ function ConfirmationCard({
               <StatusCell row={row} timeZone={timeZone} />
             </div>
           </InlineStack>
+
+          {/* Its own short line, like the reminder's: a phone has no room
+              beside the status for a long word such as "WhatsApp undeliverable". */}
+          {showShipping && showsShippingLine(row) && (
+            <ShippingCell row={row} timeZone={timeZone} withLabel />
+          )}
 
           <FollowUpCell row={row} timeZone={timeZone} showTime />
 

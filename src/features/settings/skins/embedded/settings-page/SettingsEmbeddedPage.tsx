@@ -32,14 +32,17 @@ import { AppBridgeSaveBar } from '@/shared/ui/app-bridge/AppBridgeSaveBar'
 import styles from './SettingsEmbeddedPage.module.css'
 import { MessageTab } from './MessageTab'
 import { PlanTab } from './PlanTab'
+import { ShippingTab } from './ShippingTab'
 import { TimingTab } from './TimingTab'
 import { WhatsappTab } from './WhatsappTab'
 
 const SAVE_BAR_ID = 'akeed-settings-save-bar'
 
 /** The tabs that hold form fields; the others are never dirty. */
-function isFormTab(tab: SettingsTabId): tab is 'message' | 'timing' {
-  return tab === 'message' || tab === 'timing'
+function isFormTab(
+  tab: SettingsTabId
+): tab is 'message' | 'timing' | 'shipping' {
+  return tab === 'message' || tab === 'timing' || tab === 'shipping'
 }
 
 export function SettingsEmbeddedSkeleton({ title }: { title: string }) {
@@ -83,8 +86,16 @@ export function SettingsEmbeddedPage() {
   // Offered while connecting is, or while a connection exists to manage.
   const whatsappHidden =
     activeTab === 'whatsapp' && !senderData.isLoading && !ownNumber.visible
+  // Shipping exists only where the backend sends its fields (Shopify, behind
+  // the server's switch). Until the settings load it is not offered.
+  const shippingAvailable =
+    model.data?.state.shippingNotificationsEnabled !== undefined
+  const shippingHidden =
+    activeTab === 'shipping' && Boolean(model.data) && !shippingAvailable
   const shownTabs = SETTINGS_TABS.filter(
-    (tab) => tab !== 'whatsapp' || ownNumber.visible || activeTab === 'whatsapp'
+    (tab) =>
+      (tab !== 'whatsapp' || ownNumber.visible || activeTab === 'whatsapp') &&
+      (tab !== 'shipping' || shippingAvailable)
   )
 
   const goToTab = useCallback(
@@ -101,9 +112,9 @@ export function SettingsEmbeddedPage() {
   // Old tab ids (store, confirmation, message-preview, billing, ...) land on
   // the tab that now holds their fields, without adding a history entry.
   useEffect(() => {
-    if (whatsappHidden) goToTab('message', 'replace')
+    if (whatsappHidden || shippingHidden) goToTab('message', 'replace')
     else if (!isCanonicalSettingsTab(tabParam)) goToTab(activeTab, 'replace')
-  }, [activeTab, goToTab, tabParam, whatsappHidden])
+  }, [activeTab, goToTab, shippingHidden, tabParam, whatsappHidden])
 
   // Focus a field on another tab once that tab has rendered.
   useEffect(() => {
@@ -218,6 +229,9 @@ export function SettingsEmbeddedPage() {
                   readOnly={readOnly}
                   onPreviewMessage={() => goToTab('message')}
                 />
+              )}
+              {activeTab === 'shipping' && shippingAvailable && (
+                <ShippingTab model={model} data={data} readOnly={readOnly} />
               )}
               {activeTab === 'plan' && (
                 <PlanTab

@@ -182,6 +182,9 @@ export function useConfirmationsList({
     reportingTimezone: pageContext?.reporting_timezone ?? 'UTC',
     sourceStatus: pageContext?.source?.status ?? null,
     settings: pageContext?.settings ?? null,
+    /** The Shipping column: only while the store has shipping notifications on. */
+    showShipping:
+      pageContext?.settings?.shipping_notifications_enabled === true,
     capacity: pageContext?.capacity ?? null,
     creditDenialCode,
     canWrite: permissions?.can_cancel_orders === true,

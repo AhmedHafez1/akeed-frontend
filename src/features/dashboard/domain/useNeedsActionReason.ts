@@ -12,7 +12,8 @@ import { deliveryFailureKey } from './deliveryFailure'
  */
 export function useNeedsActionReason(
   reason: NeedsActionItem['reason'],
-  timeZone: string
+  timeZone: string,
+  shipping?: NeedsActionItem['shipping']
 ): { text: string; isCritical: boolean } {
   const t = useTranslations('dashboard.overview.needsAction.reason')
   const tFailure = useTranslations('dashboard.confirmations.status.failure')
@@ -25,6 +26,21 @@ export function useNeedsActionReason(
       }),
       isCritical: true,
     }
+  }
+  if (reason.type === 'delivery_request') {
+    return {
+      text: t('delivery_request', {
+        date: formatShortDate(
+          shipping?.customer_replied_at ?? reason.since,
+          locale,
+          timeZone
+        ),
+      }),
+      isCritical: true,
+    }
+  }
+  if (reason.type === 'shipping_not_reachable') {
+    return { text: t('shipping_not_reachable'), isCritical: true }
   }
   if (reason.type === 'no_whatsapp') {
     return { text: t('no_whatsapp'), isCritical: true }

@@ -97,6 +97,7 @@ describe('a No WhatsApp row', () => {
       confirmable: true,
       cancelable: true,
       changeRequest: null,
+      shipping: null,
     })
   })
 })

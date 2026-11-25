@@ -22,6 +22,7 @@ import {
 import type { VerificationItem } from '../../../../model/dashboard.model'
 import { ConfirmationOrderDetails } from './ConfirmationOrderDetails'
 import { EmbeddedChangeRequestPanel } from './EmbeddedChangeRequestPanel'
+import { EmbeddedShippingSection } from './EmbeddedShippingSection'
 
 function Fact({ label, children }: { label: string; children: string }) {
   return (
@@ -87,6 +88,12 @@ function DetailsBody({
           {formatOrderTotal(verification, locale)}
         </Fact>
       </InlineGrid>
+
+      <EmbeddedShippingSection
+        verification={verification}
+        timeZone={timeZone}
+        canAct={canAct}
+      />
 
       <ConfirmationOrderDetails verification={verification} />
 

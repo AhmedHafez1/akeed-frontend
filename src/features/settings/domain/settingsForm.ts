@@ -48,6 +48,13 @@ export interface SettingsFormValues {
   acknowledgmentEnabled: boolean
   /** Absent while the backend does not offer it, so it is never sent. */
   changeRequestsEnabled?: boolean
+  /**
+   * The Shipping tab. Absent where the feature does not exist, so it is
+   * never sent; all three are present or absent together.
+   */
+  shippingNotificationsEnabled?: boolean
+  shippingFulfillmentTriggerEnabled?: boolean
+  shippingTags?: string[]
   isAutoVerifyEnabled: boolean
   sendDelayChoice: SendDelayChoice
   sendDelayCustom: string
@@ -84,6 +91,14 @@ export function formFromSettings(
     ...(state.changeRequestsEnabled === undefined
       ? {}
       : { changeRequestsEnabled: state.changeRequestsEnabled }),
+    ...(state.shippingNotificationsEnabled === undefined
+      ? {}
+      : {
+          shippingNotificationsEnabled: state.shippingNotificationsEnabled,
+          shippingFulfillmentTriggerEnabled:
+            state.shippingFulfillmentTriggerEnabled !== false,
+          shippingTags: [...(state.shippingTags ?? [])],
+        }),
     isAutoVerifyEnabled: state.isAutoVerifyEnabled,
     sendDelayChoice: sendDelayChoiceFor(state.sendDelayMinutes),
     sendDelayCustom: String(state.sendDelayMinutes),
@@ -187,6 +202,14 @@ export function toSettingsPayload(
     ...(values.changeRequestsEnabled === undefined
       ? {}
       : { changeRequestsEnabled: values.changeRequestsEnabled }),
+    ...(values.shippingNotificationsEnabled === undefined
+      ? {}
+      : {
+          shippingNotificationsEnabled: values.shippingNotificationsEnabled,
+          shippingFulfillmentTriggerEnabled:
+            values.shippingFulfillmentTriggerEnabled !== false,
+          shippingTags: [...(values.shippingTags ?? [])],
+        }),
     isAutoVerifyEnabled: values.isAutoVerifyEnabled,
     assumeCodWhenPaymentMissing: values.assumeCodWhenPaymentMissing,
     ...templateChoicesPayload(values),
@@ -253,13 +276,31 @@ const STORE_TAB_FIELDS = [
   'assumeCodWhenPaymentMissing',
 ] as const satisfies ReadonlyArray<keyof OnboardingSettingsPayload>
 
+/** The embedded Shipping tab. */
+const SHIPPING_TAB_FIELDS = [
+  'shippingNotificationsEnabled',
+  'shippingFulfillmentTriggerEnabled',
+  'shippingTags',
+] as const satisfies ReadonlyArray<keyof OnboardingSettingsPayload>
+
 /** The tabs that hold form fields (the embedded Plan tab has none). */
-export type SettingsEditableTab = 'message' | 'timing' | 'store'
+export type SettingsEditableTab = 'message' | 'timing' | 'shipping' | 'store'
 
 function tabOfField(key: string): SettingsEditableTab {
   if ((MESSAGE_TAB_FIELDS as readonly string[]).includes(key)) return 'message'
   if ((STORE_TAB_FIELDS as readonly string[]).includes(key)) return 'store'
+  if ((SHIPPING_TAB_FIELDS as readonly string[]).includes(key))
+    return 'shipping'
   return 'timing'
+}
+
+/** Payload values compare by value; a tag list is equal when its tags are. */
+function samePayloadValue(a: unknown, b: unknown): boolean {
+  if (Array.isArray(a) && Array.isArray(b))
+    return (
+      a.length === b.length && a.every((value, index) => value === b[index])
+    )
+  return a === b
 }
 
 /**
@@ -280,7 +321,7 @@ export function dirtyTabs(
   // An unparsable custom value drops out of the payload; count it as a change.
   if (resolvedSendDelayMinutes(current) === null) tabs.add('timing')
   for (const key of keys) {
-    if (next[key] === base[key]) continue
+    if (samePayloadValue(next[key], base[key])) continue
     tabs.add(tabOfField(key))
   }
   return tabs
@@ -292,6 +333,7 @@ export type SettingsFieldKey =
   | 'quietHours'
   | 'timezone'
   | 'autoCancel'
+  | 'shippingTags'
 
 export type SettingsFieldErrorCode =
   | 'required'
@@ -300,6 +342,7 @@ export type SettingsFieldErrorCode =
   | QuietHoursError
   | 'unsupportedTimezone'
   | 'requiresEscalation'
+  | 'invalidTags'
 
 export type SettingsFormErrors = Partial<
   Record<SettingsFieldKey, SettingsFieldErrorCode>
@@ -312,6 +355,7 @@ export const SETTINGS_FIELD_ORDER: readonly SettingsFieldKey[] = [
   'quietHours',
   'timezone',
   'autoCancel',
+  'shippingTags',
 ]
 
 export const SETTINGS_FIELD_TAB: Record<
@@ -323,6 +367,7 @@ export const SETTINGS_FIELD_TAB: Record<
   quietHours: 'timing',
   timezone: 'timing',
   autoCancel: 'timing',
+  shippingTags: 'shipping',
 }
 
 /** DOM ids of the inputs, so a failed save can move focus to the field. */
@@ -332,6 +377,7 @@ export const SETTINGS_FIELD_ID: Record<SettingsFieldKey, string> = {
   quietHours: 'settings-quiet-hours-start',
   timezone: 'settings-quiet-hours-timezone',
   autoCancel: 'settings-auto-cancel',
+  shippingTags: 'settings-shipping-tags',
 }
 
 export function validateSettingsForm(
@@ -375,6 +421,8 @@ export function fieldErrorFromApiCode(
       return { quietHours: 'sameStartEnd' }
     case 'SETTINGS_AUTO_CANCEL_REQUIRES_ESCALATION':
       return { autoCancel: 'requiresEscalation' }
+    case 'SETTINGS_SHIPPING_TAGS_INVALID':
+      return { shippingTags: 'invalidTags' }
     default:
       return null
   }

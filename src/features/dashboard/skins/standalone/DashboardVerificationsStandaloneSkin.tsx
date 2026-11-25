@@ -329,6 +329,7 @@ export function DashboardVerificationsStandaloneSkin({
             <>
               <ConfirmationsList
                 rows={list.rows}
+                showShipping={list.showShipping}
                 timeZone={list.reportingTimezone}
                 canWrite={list.canWrite}
                 canRetry={list.canRetry}

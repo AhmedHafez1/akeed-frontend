@@ -2597,7 +2597,9 @@
           "send_failed": "Message not sent",
           "no_whatsapp": "WhatsApp undeliverable · Call the customer",
           "auto_cancel_failed": "Automatic cancellation failed",
-          "late_reply_after_auto_cancel": "Confirmed after it was canceled"
+          "late_reply_after_auto_cancel": "Confirmed after it was canceled",
+          "delivery_request": "Customer request · {date}",
+          "shipping_not_reachable": "The Shipped message didn’t reach the customer"
         },
         "actions": {
           "whatsapp": "WhatsApp them",
@@ -2674,7 +2676,8 @@
         "total": "Total",
         "orderTime": "Order time",
         "updated": "Last update",
-        "action": "Action"
+        "action": "Action",
+        "shipping": "Shipping"
       },
       "card": {
         "ordered": "Ordered {time}",
@@ -2712,7 +2715,8 @@
           "followUpSent": "Reminder sent",
           "sendsAt": "Sends {time}",
           "callCustomer": "Call the customer",
-          "waitingForCapacity": "Plan or balance used up"
+          "waitingForCapacity": "Plan or balance used up",
+          "shippedNotReached": "Shipped message not delivered"
         },
         "tooltip": {
           "scheduledFor": "Scheduled for {time}",
@@ -2729,7 +2733,9 @@
           "generic": "message not delivered",
           "notSent": "message not sent"
         },
-        "blocked": "Waiting to send"
+        "blocked": "Waiting to send",
+        "reschedule": "Reschedule",
+        "changeAddress": "Change address"
       },
       "loadingMore": "Loading more orders…",
       "autoCancel": {
@@ -2876,6 +2882,56 @@
         "upgrade": "Upgrade plan",
         "recharge": "Top up balance",
         "renew": "Renew {plan} now"
+      }
+    },
+    "shipping": {
+      "heading": "Shipping",
+      "badges": {
+        "sent": "Sent",
+        "undeliverable": "WhatsApp undeliverable",
+        "failedToSend": "Failed to send",
+        "notSent": "Not sent"
+      },
+      "reasons": {
+        "no_phone": "No phone number",
+        "not_on_whatsapp": "Number isn’t on WhatsApp",
+        "no_allowance": "No messages left in your plan",
+        "order_too_old": "Order is older than 30 days",
+        "order_cancelled": "Order was cancelled",
+        "send_failed": "WhatsApp couldn’t deliver it",
+        "template_unavailable": "Not available in this language yet"
+      },
+      "markDone": "Mark done",
+      "markedDone": "Marked done",
+      "resolveErrors": {
+        "readOnly": "Only the store owner or an admin can do this.",
+        "notFound": "This order has no Shipped message.",
+        "generic": "Couldn’t mark it done. Try again."
+      },
+      "details": {
+        "title": "Shipping message",
+        "trigger": "Sent because",
+        "triggerFulfillment": "Order fulfilled",
+        "triggerTag": "Tag “{tag}”",
+        "status": {
+          "delivered": "Delivered",
+          "read": "Read",
+          "pending": "Sending"
+        },
+        "tracking": "Tracking",
+        "track": "Track",
+        "reply": "Customer reply",
+        "replies": {
+          "home": "I’ll be home",
+          "reschedule": "Reschedule",
+          "address": "Change address"
+        },
+        "requestReschedule": "The customer asked to reschedule the delivery.",
+        "requestAddress": "The customer asked to change the address.",
+        "notReached": "The Shipped message didn’t reach the customer.",
+        "contactHint": "Contact the customer, then mark it done.",
+        "doneAt": "Done {time}",
+        "statusLabel": "Status"
       }
     }
   },
@@ -3265,7 +3321,8 @@
         "message": "Message",
         "timing": "Timing & follow-up",
         "plan": "Plan",
-        "whatsapp": "WhatsApp"
+        "whatsapp": "WhatsApp",
+        "shipping": "Shipping"
       },
       "save": "Save",
       "discard": "Discard",
@@ -3460,6 +3517,33 @@
           "note": "Both pools reset together. Meta bills your business separately for messages from your number.",
           "noteRenews": "Both pools reset together on {date}. Meta bills your business separately for messages from your number."
         }
+      },
+      "shipping": {
+        "sectionTitle": "Shipping notifications",
+        "sectionDescription": "One WhatsApp message when an order ships.",
+        "masterLabel": "Send a message when an order ships",
+        "whenTitle": "When to send",
+        "whenDescription": "Choose what marks an order as shipped.",
+        "fulfillLabel": "When I fulfill the order",
+        "fulfillHelp": "Includes the tracking number or link when you add one.",
+        "tagsLabel": "When I add a tag",
+        "tagsPlaceholder": "e.g. Shipped",
+        "tagsHelp": "Up to 10 tags, written as in Shopify.",
+        "add": "Add",
+        "tagErrors": {
+          "reserved": "Tags starting with <tag>“Akeed:”</tag> are reserved. Use another tag.",
+          "tooMany": "You can add up to 10 tags.",
+          "tooLong": "A tag can be up to 40 characters.",
+          "duplicate": "This tag is already added.",
+          "invalid": "A tag couldn’t be saved. Check your tags and try again."
+        },
+        "noTrigger": "Choose at least one: fulfillment or a tag.",
+        "messageTitle": "Message",
+        "messageDescription": "What your customer receives, in your store’s message language.",
+        "billingLine": "Each Shipped message uses 1 message from your plan.",
+        "previewLabel": "Preview of the Shipped message",
+        "previewEmpty": "The Shipped message isn’t available yet.",
+        "saveUnavailable": "Shipping notifications aren’t available for this store."
       }
     },
     "sourceEasyOrders": "EasyOrders",

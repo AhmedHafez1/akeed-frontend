@@ -7,6 +7,7 @@ import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll'
 import { useMediaQuery } from '@/shared/hooks/useMediaQuery'
 import { cn } from '@/shared/lib/utils'
 import { isNeedsActionRow } from '@/features/dashboard/domain/confirmationRowStatus'
+import { showsShippingLine } from '@/features/dashboard/domain/shippingStatus'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
 import { ConfirmationRowActions } from './ConfirmationRowActions'
 import {
@@ -29,6 +30,7 @@ import {
   FollowUpCell,
   OrderCell,
   PhoneCell,
+  ShippingCell,
   StatusCell,
   StatusNote,
   useConfirmationRowView,
@@ -93,6 +95,11 @@ function TableRow({ row, timeZone, actingId, ...rest }: RowProps) {
       <td className={TABLE_CELL}>
         <FollowUpCell row={row} timeZone={timeZone} />
       </td>
+      {rest.showShipping && (
+        <td className={TABLE_CELL}>
+          <ShippingCell row={row} timeZone={timeZone} />
+        </td>
+      )}
       <td className={TABLE_CELL}>
         <DateTimeCell text={view.lastUpdate} title={view.lastUpdateTitle} />
       </td>
@@ -156,6 +163,11 @@ function CardRow({ row, timeZone, actingId, ...rest }: RowProps) {
           <StatusNote row={row} timeZone={timeZone} />
         </div>
       </div>
+      {/* Its own short line: a phone has no room beside the status for a
+          long word such as "WhatsApp undeliverable". */}
+      {rest.showShipping && showsShippingLine(row) && (
+        <ShippingCell row={row} timeZone={timeZone} withLabel />
+      )}
       <CardTimes
         orderTime={view.orderTime}
         orderTimeTitle={view.orderTimeTitle}
@@ -189,6 +201,23 @@ const HEADINGS = [
   ['updated', 'w-[12%]'],
   ['total', 'w-[10%] text-end'],
   ['action', 'w-[8%] text-end'],
+] as const
+
+/**
+ * With the Shipping column the table is 80px wider (still scrolling sideways
+ * below that), so "WhatsApp undeliverable" fits on one line beside the rest.
+ */
+const HEADINGS_WITH_SHIPPING = [
+  ['order', 'w-[8%]'],
+  ['orderTime', 'w-[11%]'],
+  ['customer', 'w-[12%]'],
+  ['phone', 'w-[11%]'],
+  ['status', 'w-[13%]'],
+  ['followUp', 'w-[7%]'],
+  ['shipping', 'w-[14%]'],
+  ['updated', 'w-[10%]'],
+  ['total', 'w-[8%] text-end'],
+  ['action', 'w-[6%] text-end'],
 ] as const
 
 /**
@@ -234,6 +263,7 @@ export function ConfirmationsList({
 }: ConfirmationsListProps & ConfirmationsScrollProps) {
   const t = useTranslations('dashboard.confirmations')
   const isTableLayout = useMediaQuery(TABLE_QUERY)
+  const headings = rowProps.showShipping ? HEADINGS_WITH_SHIPPING : HEADINGS
   const { rootRef, sentinelRef } = useInfiniteScroll({
     hasMore,
     isLoading: isLoadingMore,
@@ -250,11 +280,16 @@ export function ConfirmationsList({
       className={cn(SCROLL_AREA, 'ak-focus')}
     >
       <div className="hidden md:block">
-        <table className={cn(TABLE, 'min-w-300')}>
+        <table
+          className={cn(
+            TABLE,
+            rowProps.showShipping ? 'min-w-340' : 'min-w-300'
+          )}
+        >
           <caption className="sr-only">{t('title')}</caption>
           <thead>
             <tr className={TABLE_HEAD_ROW}>
-              {HEADINGS.map(([heading, width]) => (
+              {headings.map(([heading, width]) => (
                 <th
                   key={heading}
                   scope="col"

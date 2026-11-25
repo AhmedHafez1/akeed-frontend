@@ -11,6 +11,8 @@ export type TemplateMessageVariable =
   | 'store'
   | 'order'
   | 'total'
+  /** The tracking line of a Shipped message. */
+  | 'tracking'
   | TemplateDetailVariable
 
 /** What a detailed template shows of the order: its items and where it ships. */
@@ -32,10 +34,10 @@ export interface TemplateMessage {
  * that gives none shows the sample order below.
  */
 export type TemplateMessageValues = Record<
-  Exclude<TemplateMessageVariable, TemplateDetailVariable>,
+  Exclude<TemplateMessageVariable, TemplateDetailVariable | 'tracking'>,
   string
 > &
-  Partial<Record<TemplateDetailVariable, string>>
+  Partial<Record<TemplateDetailVariable | 'tracking', string>>
 
 /**
  * The sample order a preview shows in a detailed template, written as a send
@@ -174,7 +176,8 @@ export function fillTemplateSegments(
         values[segment.variable] ??
         TEMPLATE_DETAIL_SAMPLES[message.direction][
           segment.variable as TemplateDetailVariable
-        ]
+        ] ??
+        ''
       const previous = segments[segments.length - 1]
       if (
         segment.variable === 'order' &&

@@ -16,6 +16,10 @@ import { resolveRowStatus } from '@/features/dashboard/domain/confirmationRowSta
 import { isAckMissing } from '@/features/dashboard/domain/changeRequestView'
 import { remoteSyncView } from '@/features/dashboard/domain/remoteSync'
 import {
+  shippingCellView,
+  type ShippingBadge,
+} from '@/features/dashboard/domain/shippingStatus'
+import {
   formatTooltipDateTime,
   getLastUpdateAt,
 } from '@/features/dashboard/domain/verificationRow'
@@ -31,7 +35,7 @@ import {
   formatPhoneInternational,
 } from '@/features/dashboard/lib/orderDisplay'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
-import { StatusBadge } from '@/shared/ui/status-badge'
+import { StatusBadge, type StatusBadgeKind } from '@/shared/ui/status-badge'
 
 /** What the table and the card list both take. */
 export interface ConfirmationsListProps {
@@ -43,6 +47,8 @@ export interface ConfirmationsListProps {
   handlers: ConfirmationRowActionHandlers & {
     onOpenDetails: (row: VerificationItem) => void
   }
+  /** The Shipping column: only while the store has the feature on. */
+  showShipping?: boolean
 }
 
 /** The row's display values, derived once for the table and the cards. */
@@ -215,6 +221,57 @@ export function StatusCell({
 }
 
 /** The table's Follow-up column: "Sent", with the time in its tooltip. */
+/** The Shipping pill's family, matching the status pills. */
+const SHIPPING_KINDS: Record<ShippingBadge, StatusBadgeKind> = {
+  sent: 'pending',
+  undeliverable: 'noWhatsApp',
+  failedToSend: 'failed',
+  notSent: 'scheduled',
+}
+
+/**
+ * The one-line Shipping cell: Sent, or why the Shipped message did not go
+ * out (its reason on hover and to screen readers), or nothing.
+ */
+export function ShippingCell({
+  row,
+  timeZone,
+  withLabel = false,
+}: {
+  row: VerificationItem
+  timeZone: string
+  /** On a card, "Shipping" goes before the pill: there is no heading. */
+  withLabel?: boolean
+}) {
+  const t = useTranslations('dashboard.shipping')
+  const { locale } = useLocaleInfo()
+  const view = shippingCellView(row.shipping)
+  if (!view || !row.shipping) return null
+  const detail =
+    view.badge === 'sent'
+      ? formatTooltipDateTime(row.shipping.updated_at, locale, timeZone)
+      : view.reason
+        ? t(`reasons.${view.reason}`)
+        : ''
+  return (
+    <span className="inline-flex min-w-0 items-center gap-1.5 whitespace-nowrap">
+      {withLabel && (
+        <span className="text-ak-caption text-ink-muted">{t('heading')}</span>
+      )}
+      <StatusBadge
+        kind={SHIPPING_KINDS[view.badge]}
+        icon={false}
+        title={detail || undefined}
+      >
+        {t(`badges.${view.badge}`)}
+      </StatusBadge>
+      {detail && view.badge !== 'sent' && (
+        <span className="sr-only">{detail}</span>
+      )}
+    </span>
+  )
+}
+
 export function FollowUpCell({
   row,
   timeZone,

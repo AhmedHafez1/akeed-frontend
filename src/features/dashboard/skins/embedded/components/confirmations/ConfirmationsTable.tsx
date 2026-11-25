@@ -11,6 +11,7 @@ import {
   DateTimeCell,
   FollowUpCell,
   PhoneCell,
+  ShippingCell,
   StatusCell,
   useConfirmationRowView,
   type ConfirmationsListProps,
@@ -31,6 +32,7 @@ function ConfirmationsTableRow({
   canRetry,
   actingId,
   handlers,
+  showShipping,
 }: RowProps) {
   const t = useTranslations('dashboard')
   const view = useConfirmationRowView(row, timeZone)
@@ -85,6 +87,14 @@ function ConfirmationsTableRow({
         </div>
       </IndexTable.Cell>
 
+      {showShipping && (
+        <IndexTable.Cell>
+          <div className={cellClassName}>
+            <ShippingCell row={row} timeZone={timeZone} />
+          </div>
+        </IndexTable.Cell>
+      )}
+
       <IndexTable.Cell>
         <div className={cellClassName}>
           <DateTimeCell text={view.lastUpdate} title={view.lastUpdateTitle} />
@@ -126,6 +136,7 @@ export function ConfirmationsTable({
   const alignment = isRTL ? ('end' as const) : undefined
   const cellClassName = isRTL ? 'w-full text-right' : 'w-full'
 
+  // The Shipping heading and cell are gated together, so columns never shift.
   const headings = [
     { title: t('confirmations.headings.order'), alignment },
     { title: t('confirmations.headings.orderTime'), alignment },
@@ -133,6 +144,9 @@ export function ConfirmationsTable({
     { title: t('confirmations.headings.phone'), alignment },
     { title: t('confirmations.headings.status'), alignment },
     { title: t('table.headings.followUp'), alignment },
+    ...(rowProps.showShipping
+      ? [{ title: t('confirmations.headings.shipping'), alignment }]
+      : []),
     { title: t('confirmations.headings.updated'), alignment },
     { title: t('confirmations.headings.total'), alignment },
     { title: t('confirmations.headings.action'), alignment },
@@ -145,7 +159,7 @@ export function ConfirmationsTable({
         plural: t('confirmations.resource.plural'),
       }}
       itemCount={rows.length}
-      headings={[...headings]}
+      headings={[headings[0], ...headings.slice(1)]}
       selectable={false}
     >
       {rows.map((row, index) => (

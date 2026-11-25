@@ -129,7 +129,9 @@ export function SettingsStandalonePage() {
   const handleSave = useCallback(async () => {
     const outcome = await model.save()
     if (outcome.ok || !outcome.invalidField) return
-    const tab = SETTINGS_FIELD_TAB[outcome.invalidField]
+    // Shipping exists only in the embedded app; its field never fails here.
+    const fieldTab = SETTINGS_FIELD_TAB[outcome.invalidField]
+    const tab = fieldTab === 'shipping' ? 'message' : fieldTab
     if (tab === activeTab) {
       // Already rendered with its error by the time `save` resolves.
       document.getElementById(SETTINGS_FIELD_ID[outcome.invalidField])?.focus()
@@ -185,8 +187,13 @@ export function SettingsStandalonePage() {
     'api-keys': t('tabs.apiKeys'),
     whatsapp: t('tabs.whatsapp'),
   }
-  // The API keys tab holds no form fields, so it is never dirty.
-  const dirtyTabs: ReadonlySet<StandaloneSettingsTabId> = model.dirtyTabs
+  // The API keys tab holds no form fields, so it is never dirty; the
+  // Shipping fields exist only in the embedded app.
+  const dirtyTabs: ReadonlySet<StandaloneSettingsTabId> = new Set(
+    [...model.dirtyTabs].filter(
+      (tab): tab is Exclude<typeof tab, 'shipping'> => tab !== 'shipping'
+    )
+  )
   const dirtyTabLabels = STANDALONE_SETTINGS_TABS.filter((tab) =>
     dirtyTabs.has(tab)
   ).map((tab) => labels[tab])
@@ -200,7 +207,7 @@ export function SettingsStandalonePage() {
         tabs={shownTabs}
         active={activeTab}
         labels={labels}
-        dirtyTabs={model.dirtyTabs}
+        dirtyTabs={dirtyTabs}
         unsavedLabel={t('unsavedShort')}
         onSelect={goToTab}
       />
