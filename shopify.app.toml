@@ -2,7 +2,7 @@
 
 client_id = "1a5206c30b74f6600897545465ee8d13"
 name = "Akeed"
-application_url = "https://get-akeed.vercel.app"
+application_url = "https://getakeed.com"
 embedded = true
 
 [build]
@@ -12,32 +12,32 @@ automatically_update_urls_on_dev = false
 api_version = "2026-01"
 
   [[webhooks.subscriptions]]
-  topics = [ "app_subscriptions/update" ]
-  uri = "/webhooks/shopify/app-subscriptions/update"
+  uri = "https://get-akeed.vercel.app/webhooks/shopify/customers/data_request"
+  compliance_topics = [ "customers/data_request" ]
 
   [[webhooks.subscriptions]]
-  topics = [ "orders/create" ]
-  uri = "/webhooks/shopify/orders-create"
+  uri = "https://get-akeed.vercel.app/webhooks/shopify/customers/redact"
+  compliance_topics = [ "customers/redact" ]
 
   [[webhooks.subscriptions]]
-  topics = [ "orders/updated" ]
-  uri = "/webhooks/shopify/orders-updated"
+  uri = "https://get-akeed.vercel.app/webhooks/shopify/shop/redact"
+  compliance_topics = [ "shop/redact" ]
 
   [[webhooks.subscriptions]]
+  uri = "https://get-akeed.vercel.app/webhooks/shopify/uninstalled"
   topics = [ "app/uninstalled" ]
-  uri = "/webhooks/shopify/uninstalled"
 
   [[webhooks.subscriptions]]
-  compliance_topics = ["customers/data_request"]
-  uri = "/webhooks/shopify/customers/data_request"
+  uri = "https://get-akeed.vercel.app/webhooks/shopify/orders-create"
+  topics = [ "orders/create" ]
 
   [[webhooks.subscriptions]]
-  compliance_topics = ["customers/redact"]
-  uri = "/webhooks/shopify/customers/redact"
+  uri = "https://get-akeed.vercel.app/webhooks/shopify/app-subscriptions/update"
+  topics = [ "app_subscriptions/update" ]
 
   [[webhooks.subscriptions]]
-  compliance_topics = ["shop/redact"]
-  uri = "/webhooks/shopify/shop/redact"
+  uri = "https://get-akeed.vercel.app/webhooks/shopify/orders-updated"
+  topics = [ "orders/updated" ]
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
@@ -46,4 +46,6 @@ optional_scopes = [ ]
 use_legacy_install_flow = false
 
 [auth]
-redirect_urls = [ "https://unmasticatory-dihydroxy-brittny.ngrok-free.dev/api/auth/shopify/callback" ]
+redirect_urls = [
+  "https://akeed-backend-production.up.railway.app/api/auth/shopify/callback"
+]
