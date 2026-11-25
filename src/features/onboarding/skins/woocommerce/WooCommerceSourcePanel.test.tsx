@@ -157,8 +157,9 @@ describe('WooCommerceSourcePanel', () => {
       expect(
         screen.queryByRole('button', { name: 'Re-enable order notifications' })
       ).toBeNull()
-      // Settings re-reads its state and the health card.
-      expect(onChanged).toHaveBeenCalledTimes(1)
+      // Settings re-reads its state and the health card. It is told from an
+      // effect after this render, so a slow run must wait for it.
+      await waitFor(() => expect(onChanged).toHaveBeenCalledTimes(1))
     })
 
     it.each([
@@ -225,7 +226,7 @@ describe('WooCommerceSourcePanel', () => {
         })
       ).toBeTruthy()
       expect(fetchStatus).toHaveBeenCalledTimes(2)
-      expect(onChanged).toHaveBeenCalledTimes(1)
+      await waitFor(() => expect(onChanged).toHaveBeenCalledTimes(1))
     })
 
     it('does not read again for a health answer it has already seen', async () => {
