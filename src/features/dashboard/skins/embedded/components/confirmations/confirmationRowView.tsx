@@ -21,6 +21,10 @@ import { useAutoCancelMarker } from '../../../../domain/useAutoCancelMarker'
 import { useCustomerRecordView } from '../../../../domain/useCustomerRecordView'
 import { isAckMissing } from '../../../../domain/changeRequestView'
 import {
+  shippingCellView,
+  type ShippingBadge,
+} from '../../../../domain/shippingStatus'
+import {
   customerDisplayName,
   formatDayAndClock,
   formatOrderAmount,
@@ -40,6 +44,8 @@ export interface ConfirmationsListProps {
   handlers: ConfirmationRowActionHandlers & {
     onOpenDetails: (row: VerificationItem) => void
   }
+  /** The Shipping column: only while the store has the feature on. */
+  showShipping?: boolean
 }
 
 /**
@@ -240,6 +246,61 @@ export function CustomerRecordBadge({
       <Badge tone={tone} toneAndProgressLabelOverride={view.label}>
         {view.compact}
       </Badge>
+    </span>
+  )
+}
+
+/** The Shipping badge's tone, in the same families as the status badges. */
+const SHIPPING_TONES: Record<
+  ShippingBadge,
+  'info' | 'attention' | 'critical' | undefined
+> = {
+  sent: 'info',
+  undeliverable: 'attention',
+  failedToSend: 'critical',
+  notSent: undefined,
+}
+
+/**
+ * The one-line Shipping cell: Sent, or why the Shipped message did not go
+ * out (its reason on hover and to screen readers), or nothing.
+ */
+export function ShippingCell({
+  row,
+  timeZone,
+  withLabel = false,
+}: {
+  row: VerificationItem
+  timeZone: string
+  /** On a card, "Shipping" goes before the badge: there is no heading. */
+  withLabel?: boolean
+}) {
+  const t = useTranslations('dashboard.shipping')
+  const { locale } = useLocaleInfo()
+  const view = shippingCellView(row.shipping)
+  if (!view || !row.shipping) return null
+  const detail =
+    view.badge === 'sent'
+      ? formatTooltipDateTime(row.shipping.updated_at, locale, timeZone)
+      : view.reason
+        ? t(`reasons.${view.reason}`)
+        : ''
+  return (
+    <span
+      title={detail || undefined}
+      className="inline-flex items-center gap-1 whitespace-nowrap"
+    >
+      {withLabel && (
+        <Text as="span" variant="bodySm" tone="subdued">
+          {t('heading')}
+        </Text>
+      )}
+      <Badge tone={SHIPPING_TONES[view.badge]}>
+        {t(`badges.${view.badge}`)}
+      </Badge>
+      {detail && view.badge !== 'sent' && (
+        <span className="sr-only">{detail}</span>
+      )}
     </span>
   )
 }

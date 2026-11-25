@@ -2591,7 +2591,9 @@
           "send_failed": "لم تُرسل الرسالة",
           "no_whatsapp": "تعذّر التسليم على واتساب · اتصل بالعميل",
           "auto_cancel_failed": "فشل الإلغاء التلقائي",
-          "late_reply_after_auto_cancel": "أكد بعد الإلغاء"
+          "late_reply_after_auto_cancel": "أكد بعد الإلغاء",
+          "delivery_request": "طلب من العميل · {date}",
+          "shipping_not_reachable": "لم تصل رسالة الشحن إلى العميل"
         },
         "actions": {
           "whatsapp": "راسله واتساب",
@@ -2668,7 +2670,8 @@
         "total": "الإجمالي",
         "orderTime": "وقت الطلب",
         "updated": "آخر تحديث",
-        "action": "إجراء"
+        "action": "إجراء",
+        "shipping": "الشحن"
       },
       "card": {
         "ordered": "طُلب {time}",
@@ -2706,7 +2709,8 @@
           "followUpSent": "أُرسل التذكير",
           "sendsAt": "يُرسل {time}",
           "callCustomer": "اتصل بالعميل",
-          "waitingForCapacity": "نفدت الباقة أو الرصيد"
+          "waitingForCapacity": "نفدت الباقة أو الرصيد",
+          "shippedNotReached": "لم تصل رسالة الشحن"
         },
         "tooltip": {
           "scheduledFor": "مجدول في {time}",
@@ -2723,7 +2727,9 @@
           "generic": "لم تصل الرسالة",
           "notSent": "لم تُرسل الرسالة"
         },
-        "blocked": "بانتظار الإرسال"
+        "blocked": "بانتظار الإرسال",
+        "reschedule": "تغيير الموعد",
+        "changeAddress": "تغيير العنوان"
       },
       "loadingMore": "جارٍ تحميل المزيد من الطلبات…",
       "autoCancel": {
@@ -2870,6 +2876,56 @@
         "upgrade": "رقِّ باقتك",
         "recharge": "اشحن الرصيد",
         "renew": "جدِّد باقة {plan} الآن"
+      }
+    },
+    "shipping": {
+      "heading": "الشحن",
+      "badges": {
+        "sent": "تم الإرسال",
+        "undeliverable": "تعذّر التسليم على واتساب",
+        "failedToSend": "فشل الإرسال",
+        "notSent": "لم تُرسل"
+      },
+      "reasons": {
+        "no_phone": "لا يوجد رقم هاتف",
+        "not_on_whatsapp": "الرقم غير مسجّل على واتساب",
+        "no_allowance": "لا توجد رسائل متبقية في باقتك",
+        "order_too_old": "الطلب أقدم من 30 يومًا",
+        "order_cancelled": "الطلب ملغي",
+        "send_failed": "تعذّر الإرسال عبر واتساب",
+        "template_unavailable": "غير متاحة بهذه اللغة بعد"
+      },
+      "markDone": "تم",
+      "markedDone": "تم التحديث",
+      "resolveErrors": {
+        "readOnly": "صاحب المتجر أو المسؤول وحده يمكنه ذلك.",
+        "notFound": "لا توجد رسالة شحن لهذا الطلب.",
+        "generic": "تعذّر الحفظ. حاول مرة أخرى."
+      },
+      "details": {
+        "title": "رسالة الشحن",
+        "trigger": "أُرسلت بسبب",
+        "triggerFulfillment": "تنفيذ الطلب",
+        "triggerTag": "الوسم “{tag}”",
+        "status": {
+          "delivered": "تم التسليم",
+          "read": "تمت القراءة",
+          "pending": "جارٍ الإرسال"
+        },
+        "tracking": "التتبع",
+        "track": "تتبّع",
+        "reply": "رد العميل",
+        "replies": {
+          "home": "سأكون في المنزل",
+          "reschedule": "تغيير الموعد",
+          "address": "تغيير العنوان"
+        },
+        "requestReschedule": "طلب العميل تغيير موعد التسليم.",
+        "requestAddress": "طلب العميل تغيير العنوان.",
+        "notReached": "لم تصل رسالة الشحن إلى العميل.",
+        "contactHint": "تواصل مع العميل، ثم اضغط تم.",
+        "doneAt": "تمت {time}",
+        "statusLabel": "الحالة"
       }
     }
   },
@@ -3259,7 +3315,8 @@
         "message": "الرسالة",
         "timing": "التوقيت والمتابعة",
         "plan": "الباقة",
-        "whatsapp": "واتساب"
+        "whatsapp": "واتساب",
+        "shipping": "الشحن"
       },
       "save": "حفظ",
       "discard": "تجاهل",
@@ -3454,6 +3511,33 @@
           "note": "يتجدد الرصيدان معًا. تحاسب Meta نشاطك التجاري بشكل منفصل على الرسائل المرسلة من رقمك.",
           "noteRenews": "يتجدد الرصيدان معًا في {date}. تحاسب Meta نشاطك التجاري بشكل منفصل على الرسائل المرسلة من رقمك."
         }
+      },
+      "shipping": {
+        "sectionTitle": "إشعارات الشحن",
+        "sectionDescription": "رسالة واتساب واحدة عند شحن الطلب.",
+        "masterLabel": "أرسل رسالة عند شحن الطلب",
+        "whenTitle": "متى تُرسل",
+        "whenDescription": "اختر ما يجعل الطلب مشحونًا.",
+        "fulfillLabel": "عند تنفيذ الطلب",
+        "fulfillHelp": "تتضمن رقم التتبع أو رابطه إن أضفته.",
+        "tagsLabel": "عند إضافة وسم",
+        "tagsPlaceholder": "مثال: تم الشحن",
+        "tagsHelp": "حتى 10 وسوم، كما تكتبها في Shopify.",
+        "add": "إضافة",
+        "tagErrors": {
+          "reserved": "الوسوم التي تبدأ بـ <tag>“Akeed:”</tag> محجوزة. استخدم وسمًا آخر.",
+          "tooMany": "يمكنك إضافة 10 وسوم كحد أقصى.",
+          "tooLong": "يمكن أن يصل الوسم إلى 40 حرفًا.",
+          "duplicate": "هذا الوسم مضاف بالفعل.",
+          "invalid": "تعذّر حفظ أحد الوسوم. راجع الوسوم وحاول مرة أخرى."
+        },
+        "noTrigger": "اختر خيارًا واحدًا على الأقل: التنفيذ أو وسم.",
+        "messageTitle": "الرسالة",
+        "messageDescription": "ما يصل إلى عميلك بلغة رسائل متجرك.",
+        "billingLine": "كل رسالة شحن تستهلك رسالة واحدة من باقتك.",
+        "previewLabel": "معاينة رسالة الشحن",
+        "previewEmpty": "رسالة الشحن غير متاحة بعد.",
+        "saveUnavailable": "إشعارات الشحن غير متاحة لهذا المتجر."
       }
     },
     "sourceEasyOrders": "EasyOrders",

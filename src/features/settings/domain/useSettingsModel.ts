@@ -62,6 +62,7 @@ export interface SettingsModelMessages extends Record<
   acknowledgmentUnavailable?: string
   /** The store's three-button messages are not ready for its sender. */
   changeRequestsUnavailable?: string
+  shippingUnavailable?: string
   readOnly: string
   testSendSuccess: string
 }
@@ -214,9 +215,12 @@ export function useSettingsModel({
           : error instanceof ApiError &&
               error.code === 'CHANGE_REQUEST_TEMPLATES_UNAVAILABLE'
             ? (messages.changeRequestsUnavailable ?? messages.saveError)
-            : error instanceof ApiError && error.status === 403
-              ? messages.readOnly
-              : messages.saveError
+            : error instanceof ApiError &&
+                error.code === 'SETTINGS_SHIPPING_NOTIFICATIONS_UNAVAILABLE'
+              ? (messages.shippingUnavailable ?? messages.saveError)
+              : error instanceof ApiError && error.status === 403
+                ? messages.readOnly
+                : messages.saveError
       setSaveError(message)
       adapter.notifyError(message, 'save')
       return {

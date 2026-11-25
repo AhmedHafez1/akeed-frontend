@@ -1385,7 +1385,9 @@
           "send_failed": "Mensaje no enviado",
           "no_whatsapp": "No entregado en WhatsApp · Llama al cliente",
           "auto_cancel_failed": "La cancelación automática falló",
-          "late_reply_after_auto_cancel": "Confirmó tras la cancelación"
+          "late_reply_after_auto_cancel": "Confirmó tras la cancelación",
+          "delivery_request": "Solicitud del cliente · {date}",
+          "shipping_not_reachable": "El aviso de envío no llegó al cliente"
         },
         "actions": {
           "whatsapp": "Ir a WhatsApp",
@@ -1462,7 +1464,8 @@
         "total": "Total",
         "orderTime": "Hora del pedido",
         "updated": "Última actualización",
-        "action": "Acción"
+        "action": "Acción",
+        "shipping": "Envío"
       },
       "card": {
         "ordered": "Pedido: {time}",
@@ -1500,7 +1503,8 @@
           "followUpSent": "Recordatorio enviado",
           "sendsAt": "Se envía {time}",
           "callCustomer": "Llama al cliente",
-          "waitingForCapacity": "Plan o saldo agotado"
+          "waitingForCapacity": "Plan o saldo agotado",
+          "shippedNotReached": "Aviso de envío no entregado"
         },
         "tooltip": {
           "scheduledFor": "Programado para {time}",
@@ -1517,7 +1521,9 @@
           "generic": "mensaje no entregado",
           "notSent": "mensaje no enviado"
         },
-        "blocked": "En espera de envío"
+        "blocked": "En espera de envío",
+        "reschedule": "Reprogramar",
+        "changeAddress": "Cambiar dirección"
       },
       "loadingMore": "Cargando más pedidos…",
       "autoCancel": {
@@ -1664,6 +1670,56 @@
         "upgrade": "Mejorar plan",
         "recharge": "Recargar saldo",
         "renew": "Renovar {plan} ahora"
+      }
+    },
+    "shipping": {
+      "heading": "Envío",
+      "badges": {
+        "sent": "Enviado",
+        "undeliverable": "No entregado en WhatsApp",
+        "failedToSend": "Envío fallido",
+        "notSent": "No enviado"
+      },
+      "reasons": {
+        "no_phone": "Sin número de teléfono",
+        "not_on_whatsapp": "El número no está en WhatsApp",
+        "no_allowance": "No quedan mensajes en tu plan",
+        "order_too_old": "El pedido tiene más de 30 días",
+        "order_cancelled": "El pedido fue cancelado",
+        "send_failed": "WhatsApp no pudo entregarlo",
+        "template_unavailable": "Aún no disponible en este idioma"
+      },
+      "markDone": "Marcar como resuelto",
+      "markedDone": "Marcado como resuelto",
+      "resolveErrors": {
+        "readOnly": "Solo el propietario o un administrador puede hacerlo.",
+        "notFound": "Este pedido no tiene aviso de envío.",
+        "generic": "No se pudo marcar como resuelto. Inténtalo de nuevo."
+      },
+      "details": {
+        "title": "Aviso de envío",
+        "trigger": "Enviado porque",
+        "triggerFulfillment": "Pedido preparado",
+        "triggerTag": "Etiqueta “{tag}”",
+        "status": {
+          "delivered": "Entregado",
+          "read": "Leído",
+          "pending": "Enviando"
+        },
+        "tracking": "Seguimiento",
+        "track": "Rastrear",
+        "reply": "Respuesta del cliente",
+        "replies": {
+          "home": "Estaré en casa",
+          "reschedule": "Reprogramar",
+          "address": "Cambiar dirección"
+        },
+        "requestReschedule": "El cliente pidió reprogramar la entrega.",
+        "requestAddress": "El cliente pidió cambiar la dirección.",
+        "notReached": "El aviso de envío no llegó al cliente.",
+        "contactHint": "Contacta al cliente y luego márcalo como resuelto.",
+        "doneAt": "Resuelto {time}",
+        "statusLabel": "Estado"
       }
     }
   },
@@ -2053,7 +2109,8 @@
         "message": "Mensaje",
         "timing": "Tiempos y recordatorio",
         "plan": "Plan",
-        "whatsapp": "WhatsApp"
+        "whatsapp": "WhatsApp",
+        "shipping": "Envíos"
       },
       "save": "Guardar",
       "discard": "Descartar",
@@ -2248,6 +2305,33 @@
           "note": "Ambos cupos se renuevan juntos. Meta factura a tu empresa por separado los mensajes enviados desde tu número.",
           "noteRenews": "Ambos cupos se renuevan juntos el {date}. Meta factura a tu empresa por separado los mensajes enviados desde tu número."
         }
+      },
+      "shipping": {
+        "sectionTitle": "Avisos de envío",
+        "sectionDescription": "Un mensaje de WhatsApp cuando se envía un pedido.",
+        "masterLabel": "Enviar un mensaje cuando se envía un pedido",
+        "whenTitle": "Cuándo enviarlo",
+        "whenDescription": "Elige qué marca un pedido como enviado.",
+        "fulfillLabel": "Cuando preparo el pedido",
+        "fulfillHelp": "Incluye el número o enlace de seguimiento si lo agregas.",
+        "tagsLabel": "Cuando agrego una etiqueta",
+        "tagsPlaceholder": "p. ej., Enviado",
+        "tagsHelp": "Hasta 10 etiquetas, escritas como en Shopify.",
+        "add": "Agregar",
+        "tagErrors": {
+          "reserved": "Las etiquetas que empiezan con <tag>“Akeed:”</tag> están reservadas. Usa otra etiqueta.",
+          "tooMany": "Puedes agregar hasta 10 etiquetas.",
+          "tooLong": "Una etiqueta puede tener hasta 40 caracteres.",
+          "duplicate": "Esta etiqueta ya está agregada.",
+          "invalid": "No se pudo guardar una etiqueta. Revisa tus etiquetas e inténtalo de nuevo."
+        },
+        "noTrigger": "Elige al menos una opción: preparación o una etiqueta.",
+        "messageTitle": "Mensaje",
+        "messageDescription": "Lo que recibe tu cliente, en el idioma de mensajes de tu tienda.",
+        "billingLine": "Cada aviso de envío usa 1 mensaje de tu plan.",
+        "previewLabel": "Vista previa del aviso de envío",
+        "previewEmpty": "El aviso de envío aún no está disponible.",
+        "saveUnavailable": "Los avisos de envío no están disponibles para esta tienda."
       }
     },
     "sourceEasyOrders": "EasyOrders",

@@ -20,6 +20,10 @@ api_version = "2026-01"
   uri = "/webhooks/shopify/orders-create"
 
   [[webhooks.subscriptions]]
+  topics = [ "orders/updated" ]
+  uri = "/webhooks/shopify/orders-updated"
+
+  [[webhooks.subscriptions]]
   topics = [ "app/uninstalled" ]
   uri = "/webhooks/shopify/uninstalled"
 

@@ -1385,7 +1385,9 @@
           "send_failed": "Mesaj gönderilmedi",
           "no_whatsapp": "WhatsApp iletilemedi · Müşteriyi arayın",
           "auto_cancel_failed": "Otomatik iptal başarısız oldu",
-          "late_reply_after_auto_cancel": "İptalden sonra onayladı"
+          "late_reply_after_auto_cancel": "İptalden sonra onayladı",
+          "delivery_request": "Müşteri talebi · {date}",
+          "shipping_not_reachable": "Kargo mesajı müşteriye ulaşmadı"
         },
         "actions": {
           "whatsapp": "WhatsApp’tan yazın",
@@ -1462,7 +1464,8 @@
         "total": "Toplam",
         "orderTime": "Sipariş zamanı",
         "updated": "Son güncelleme",
-        "action": "İşlem"
+        "action": "İşlem",
+        "shipping": "Kargo"
       },
       "card": {
         "ordered": "Sipariş: {time}",
@@ -1500,7 +1503,8 @@
           "followUpSent": "Hatırlatma gönderildi",
           "sendsAt": "Gönderim: {time}",
           "callCustomer": "Müşteriyi arayın",
-          "waitingForCapacity": "Plan veya bakiye bitti"
+          "waitingForCapacity": "Plan veya bakiye bitti",
+          "shippedNotReached": "Kargo mesajı iletilemedi"
         },
         "tooltip": {
           "scheduledFor": "Planlanan zaman: {time}",
@@ -1517,7 +1521,9 @@
           "generic": "mesaj teslim edilmedi",
           "notSent": "mesaj gönderilmedi"
         },
-        "blocked": "Gönderim bekliyor"
+        "blocked": "Gönderim bekliyor",
+        "reschedule": "Yeniden planla",
+        "changeAddress": "Adresi değiştir"
       },
       "loadingMore": "Daha fazla sipariş yükleniyor…",
       "autoCancel": {
@@ -1664,6 +1670,56 @@
         "upgrade": "Planı yükselt",
         "recharge": "Bakiye yükle",
         "renew": "{plan} planını şimdi yenile"
+      }
+    },
+    "shipping": {
+      "heading": "Kargo",
+      "badges": {
+        "sent": "Gönderildi",
+        "undeliverable": "WhatsApp iletilemedi",
+        "failedToSend": "Gönderilemedi",
+        "notSent": "Gönderilmedi"
+      },
+      "reasons": {
+        "no_phone": "Telefon numarası yok",
+        "not_on_whatsapp": "Numara WhatsApp’ta değil",
+        "no_allowance": "Planınızda mesaj kalmadı",
+        "order_too_old": "Sipariş 30 günden eski",
+        "order_cancelled": "Sipariş iptal edildi",
+        "send_failed": "WhatsApp iletemedi",
+        "template_unavailable": "Bu dilde henüz kullanılamıyor"
+      },
+      "markDone": "Tamamlandı olarak işaretle",
+      "markedDone": "Tamamlandı olarak işaretlendi",
+      "resolveErrors": {
+        "readOnly": "Bunu yalnızca mağaza sahibi veya bir yönetici yapabilir.",
+        "notFound": "Bu siparişin kargo mesajı yok.",
+        "generic": "İşaretlenemedi. Tekrar deneyin."
+      },
+      "details": {
+        "title": "Kargo mesajı",
+        "trigger": "Gönderilme nedeni",
+        "triggerFulfillment": "Sipariş gönderildi",
+        "triggerTag": "“{tag}” etiketi",
+        "status": {
+          "delivered": "İletildi",
+          "read": "Okundu",
+          "pending": "Gönderiliyor"
+        },
+        "tracking": "Takip",
+        "track": "Takip et",
+        "reply": "Müşteri yanıtı",
+        "replies": {
+          "home": "Evde olacağım",
+          "reschedule": "Yeniden planla",
+          "address": "Adresi değiştir"
+        },
+        "requestReschedule": "Müşteri teslimatın yeniden planlanmasını istedi.",
+        "requestAddress": "Müşteri adresin değiştirilmesini istedi.",
+        "notReached": "Kargo mesajı müşteriye ulaşmadı.",
+        "contactHint": "Müşteriyle iletişime geçin, ardından tamamlandı olarak işaretleyin.",
+        "doneAt": "Tamamlandı {time}",
+        "statusLabel": "Durum"
       }
     }
   },
@@ -2053,7 +2109,8 @@
         "message": "Mesaj",
         "timing": "Zamanlama ve takip",
         "plan": "Plan",
-        "whatsapp": "WhatsApp"
+        "whatsapp": "WhatsApp",
+        "shipping": "Kargo"
       },
       "save": "Kaydet",
       "discard": "Vazgeç",
@@ -2248,6 +2305,33 @@
           "note": "İki kota birlikte yenilenir. Meta, kendi numaranızdan gönderilen mesajlar için işletmenizi ayrıca faturalandırır.",
           "noteRenews": "İki kota {date} tarihinde birlikte yenilenir. Meta, kendi numaranızdan gönderilen mesajlar için işletmenizi ayrıca faturalandırır."
         }
+      },
+      "shipping": {
+        "sectionTitle": "Kargo bildirimleri",
+        "sectionDescription": "Sipariş kargoya verildiğinde tek bir WhatsApp mesajı.",
+        "masterLabel": "Sipariş kargoya verildiğinde mesaj gönder",
+        "whenTitle": "Ne zaman gönderilsin",
+        "whenDescription": "Bir siparişin neyle kargoya verilmiş sayılacağını seçin.",
+        "fulfillLabel": "Siparişi gönderdiğimde",
+        "fulfillHelp": "Eklediyseniz takip numarasını veya bağlantısını içerir.",
+        "tagsLabel": "Etiket eklediğimde",
+        "tagsPlaceholder": "ör. Kargoda",
+        "tagsHelp": "Shopify’daki gibi yazılmış en fazla 10 etiket.",
+        "add": "Ekle",
+        "tagErrors": {
+          "reserved": "<tag>“Akeed:”</tag> ile başlayan etiketler ayrılmıştır. Başka bir etiket kullanın.",
+          "tooMany": "En fazla 10 etiket ekleyebilirsiniz.",
+          "tooLong": "Bir etiket en fazla 40 karakter olabilir.",
+          "duplicate": "Bu etiket zaten eklendi.",
+          "invalid": "Bir etiket kaydedilemedi. Etiketlerinizi kontrol edip tekrar deneyin."
+        },
+        "noTrigger": "En az birini seçin: gönderim veya etiket.",
+        "messageTitle": "Mesaj",
+        "messageDescription": "Müşterinizin, mağazanızın mesaj dilinde aldığı mesaj.",
+        "billingLine": "Her kargo mesajı planınızdan 1 mesaj kullanır.",
+        "previewLabel": "Kargo mesajının önizlemesi",
+        "previewEmpty": "Kargo mesajı henüz kullanılamıyor.",
+        "saveUnavailable": "Kargo bildirimleri bu mağaza için kullanılamıyor."
       }
     },
     "sourceEasyOrders": "EasyOrders",

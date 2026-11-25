@@ -38,6 +38,7 @@ describe('needsActionRowModel', () => {
       confirmable: true,
       cancelable: true,
       changeRequest: null,
+      shipping: null,
     })
   })
 

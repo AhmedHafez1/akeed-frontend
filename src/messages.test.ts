@@ -354,6 +354,7 @@ describe('French messages', () => {
       'settings.automation.units.minutes',
       'settings.embedded.message.variantLabels.direct',
       'settings.embedded.message.variantLabels.standardPlain',
+      'settings.embedded.shipping.messageTitle',
       'settings.embedded.tabs.message',
       'settings.embedded.tabs.whatsapp',
       'settings.embedded.timing.minutes',

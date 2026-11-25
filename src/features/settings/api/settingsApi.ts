@@ -54,6 +54,15 @@ export interface SettingsResponse {
       Record<string, { confirmed: string | null; canceled: string | null }>
     >
   }
+  /**
+   * The Shipped message for the Shipping tab's preview, per language (null
+   * where none exists), and a sample tracking line in each language. Present
+   * only with the state's shipping fields.
+   */
+  shipping?: {
+    messages: ByMessageLanguage<TemplateMessage | null>
+    trackingSamples: ByMessageLanguage<string>
+  }
   /** The store's logo and banner. Absent from an older backend. */
   branding?: MerchantBranding
   billing: {

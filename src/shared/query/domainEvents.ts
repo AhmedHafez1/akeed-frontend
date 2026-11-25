@@ -33,6 +33,8 @@ export type DomainEvent =
    * confirmation; or the server said the customer settled it first.
    */
   | 'verification.changeRequestChanged'
+  /** The merchant marked a delivery request or an unreached customer done. */
+  | 'verification.shippingResolved'
   | 'verification.testSent'
   | 'credits.purchased'
   /** A file import was uploaded, re-mapped, changed or discarded. Nothing was sent. */
@@ -81,6 +83,7 @@ const AFFECTED_QUERIES: Record<DomainEvent, ReadonlyArray<QueryKey>> = {
   'verification.confirmed': [queryKeys.verifications.all],
   'verification.storeSyncRetried': [queryKeys.verifications.all],
   'verification.changeRequestChanged': [queryKeys.verifications.all],
+  'verification.shippingResolved': [queryKeys.verifications.all],
   'verification.autoCancelChanged': [queryKeys.verifications.all],
   'verification.retried': [
     queryKeys.verifications.all,

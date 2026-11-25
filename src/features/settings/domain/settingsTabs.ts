@@ -1,8 +1,15 @@
-export type SettingsTabId = 'message' | 'timing' | 'plan' | 'whatsapp'
+export type SettingsTabId =
+  | 'message'
+  | 'timing'
+  | 'shipping'
+  | 'plan'
+  | 'whatsapp'
 
+/** `shipping` is shown only where the backend sends the shipping fields. */
 export const SETTINGS_TABS: SettingsTabId[] = [
   'message',
   'timing',
+  'shipping',
   'plan',
   'whatsapp',
 ]

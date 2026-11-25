@@ -100,6 +100,14 @@ export interface IntegrationOnboardingState {
   /** "Request a change" on future messages. Absent from an older backend. */
   changeRequestsEnabled?: boolean
   /**
+   * Shipping notifications: the switch, the fulfillment trigger and the
+   * tags. Absent where the feature does not exist (Shopify only, behind the
+   * server's switch), and then the Shipping tab is hidden.
+   */
+  shippingNotificationsEnabled?: boolean
+  shippingFulfillmentTriggerEnabled?: boolean
+  shippingTags?: string[]
+  /**
    * Whether the store's sender has an approved three-button message for the
    * selected languages and styles. Only `ready` is shown.
    */
@@ -248,6 +256,9 @@ export interface OnboardingSettingsPayload {
   isAutoVerifyEnabled: boolean
   acknowledgmentEnabled?: boolean
   changeRequestsEnabled?: boolean
+  shippingNotificationsEnabled?: boolean
+  shippingFulfillmentTriggerEnabled?: boolean
+  shippingTags?: string[]
   assumeCodWhenPaymentMissing?: boolean
   shippingCurrency?: string
   avgShippingCost?: number

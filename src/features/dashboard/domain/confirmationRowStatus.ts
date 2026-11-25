@@ -1,5 +1,6 @@
 import type { VerificationItem } from '../model/dashboard.model'
 import { deliveryFailureKey } from './deliveryFailure'
+import { isShippingSent, shippingRequestKind } from './shippingStatus'
 
 export type RowStatusTone = 'success' | 'critical' | 'warning' | 'neutral'
 
@@ -46,6 +47,26 @@ export function resolveRowStatus(
   // order must not ship until it is settled.
   if (row.change_request) {
     return { badge: 'changeRequested', tone: 'warning', kind: 'needsAction' }
+  }
+  // After shipping, the customer's request or an unreached customer is what
+  // the merchant must act on, so it replaces "Confirmed".
+  if (row.action_reason === 'delivery_request') {
+    return {
+      badge:
+        shippingRequestKind(row.shipping) === 'address'
+          ? 'changeAddress'
+          : 'reschedule',
+      tone: 'warning',
+      kind: 'needsAction',
+    }
+  }
+  if (row.action_reason === 'shipping_not_reachable') {
+    return {
+      badge: 'noWhatsApp',
+      tone: 'warning',
+      kind: 'noWhatsApp',
+      sub: 'sub.shippedNotReached',
+    }
   }
   switch (row.status) {
     case 'confirmed':
@@ -149,9 +170,12 @@ export function isNeedsActionRow(row: VerificationItem): boolean {
 }
 
 /**
- * A real confirmed order the merchant can follow up with shipping details.
- * The phone check stays with the link builder, which returns null without one.
+ * A real confirmed order the merchant can follow up with shipping details,
+ * unless the Shipped message already went out automatically. The phone check
+ * stays with the link builder, which returns null without one.
  */
 export function canSendShippingInfo(row: VerificationItem): boolean {
-  return row.status === 'confirmed' && !row.is_test
+  return (
+    row.status === 'confirmed' && !row.is_test && !isShippingSent(row.shipping)
+  )
 }

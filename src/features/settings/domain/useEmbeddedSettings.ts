@@ -48,6 +48,7 @@ export function useEmbeddedSettings() {
       saveError: t('saveError'),
       acknowledgmentUnavailable: tThankYou('saveUnavailable'),
       changeRequestsUnavailable: tChangeRequests('saveUnavailable'),
+      shippingUnavailable: t('shipping.saveUnavailable'),
       readOnly: t('readOnly'),
       testSendSuccess: t('testSendSuccess'),
       testSendCooldown: t('testSendCooldown'),
@@ -94,7 +95,7 @@ export function useEmbeddedSettings() {
 
   // The embedded app has no Store tab and no control for its field.
   const dirty = useMemo(() => {
-    const tabs = new Set<'message' | 'timing'>()
+    const tabs = new Set<'message' | 'timing' | 'shipping'>()
     for (const tab of modelDirtyTabs) if (tab !== 'store') tabs.add(tab)
     return tabs
   }, [modelDirtyTabs])

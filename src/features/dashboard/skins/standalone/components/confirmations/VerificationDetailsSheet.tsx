@@ -25,6 +25,7 @@ import {
 import { orderSourceLabelKey } from '@/features/dashboard/lib/orderDisplay'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
 import { ChangeRequestPanel } from './ChangeRequestPanel'
+import { ShippingSection } from './ShippingSection'
 import { StoreSyncSection } from './StoreSyncSection'
 import { VerificationOrderDetails } from './VerificationOrderDetails'
 
@@ -145,6 +146,12 @@ function DetailsBody({
             </p>
           </div>
         </div>
+
+        <ShippingSection
+          verification={verification}
+          timeZone={timeZone}
+          canAct={canActOnChangeRequest}
+        />
 
         <VerificationOrderDetails verification={verification} />
 
