@@ -61,8 +61,7 @@
   "ecosystem": {
     "eyebrow": "Satış şeklinize göre tasarlandı",
     "independent": "Bağımsız",
-    "sources_label": "Sipariş kaynakları",
-    "channel": "Onaylar şu kanaldan"
+    "sources_label": "Sipariş kaynakları"
   },
   "sources": {
     "title": "Siparişleriniz nereden geliyor?",
@@ -97,46 +96,43 @@
   },
   "how_it_works": {
     "section_title": "Akeed nasıl çalışır",
-    "main_title": "Siparişleriniz nereden gelirse gelsin, adımlar aynı.",
+    "main_title": "Yalnızca müşterinin onayladığı siparişleri kargoya verin.",
     "steps": {
       "order": {
         "title": "Kapıda ödemeli sipariş gelir",
         "description": "Bağlı mağazanızdan gelir ya da elle, dosyadan veya API ile eklenir."
       },
-      "message": {
-        "title": "WhatsApp mesajı otomatik gider",
-        "description": "Mağazanız adına, resmî WhatsApp Business Platformu üzerinden."
+      "confirm": {
+        "title": "Müşteri WhatsApp’tan onaylar"
       },
-      "reply": {
-        "title": "Müşteri yanıt verir",
-        "description": "Sohbette tek dokunuşla onaylar veya iptal eder. Yanıt vermeyenlere bir hatırlatma gidebilir."
-      },
-      "update": {
-        "title": "Akeed siparişi günceller",
-        "description": "Bağlı mağazanızda veya Akeed panelinizde. Böylece yalnızca onaylanan siparişleri kargolarsınız."
+      "ship": {
+        "title": "Yalnızca onaylı siparişleri kargolarsınız"
       }
+    },
+    "card": {
+      "new": "Yeni",
+      "order": "Sipariş #{number}",
+      "cod": "Kapıda ödeme",
+      "message": "{store} üzerinden verdiğiniz #{number} numaralı siparişinizi lütfen onaylayın.",
+      "verified": "Akeed ile onaylandı",
+      "ready": "Kargoya hazır"
     }
   },
   "outcomes": {
     "section_title": "Üç olası sonuç",
     "main_title": "Müşteri ne yanıt verirse versin, siparişle ne yapacağınızı bilirsiniz.",
+    "message": "Lütfen #{number} numaralı siparişinizi onaylayın.",
     "confirmed": {
       "title": "Onaylandı",
-      "reply": "Evet",
-      "action": "Siparişi kargola",
-      "description": "Müşteri WhatsApp’tan onaylar. Akeed onayı kaydeder ve siparişi bağlı mağazanızda ve Akeed panelinizde günceller."
+      "result": "Kargoya hazır"
     },
     "canceled": {
       "title": "İptal edildi",
-      "reply": "Hayır",
-      "action": "Kargolama",
-      "description": "Müşteri WhatsApp’tan iptal eder. Akeed iptali kaydeder ve siparişi işaretler, böylece kargolamamanız gerektiğini bilirsiniz."
+      "result": "Kargoya verme"
     },
     "no_reply": {
       "title": "Yanıt yok",
-      "reply": "Yanıt yok",
-      "action": "Hatırlat",
-      "description": "Akeed, hatırlatma ayarlarınıza göre bir hatırlatma gönderir. Yine yanıt gelmezse sipariş Yanıt yok olarak işaretlenir ve karar sizindir. Otomatik iptali açtıysanız sipariş iptal edilir."
+      "result": "Hatırlatma, sonra siz karar verin"
     }
   },
   "trust": {
@@ -227,8 +223,6 @@
     "credit_is_message_body": "Akeed numarasından her WhatsApp mesajı 1 EGP.",
     "followup_title": "Takip mesajları da sayılır",
     "followup_body": "Müşteri yanıt vermezse hatırlatma 1 EGP.",
-    "rejected_title": "Başarısız gönderimler iade edilir",
-    "rejected_body": "Bir gönderim başarısız olursa ücreti otomatik olarak bakiyenize döner.",
     "cta": "Ücretsiz hesabınızı oluşturun",
     "cta_note": "Kredi kartı gerekmez",
     "shopify_title": "Shopify mağazaları · aylık plan",

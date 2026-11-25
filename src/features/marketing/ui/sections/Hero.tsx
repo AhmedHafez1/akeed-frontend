@@ -77,8 +77,7 @@ function Hero({ confirmedOrdersTotal = null }: HeroProps) {
             {...fadeUp(0.24)}
             className="relative flex justify-center lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:justify-end"
           >
-            {/* Zoom, not a narrower frame: narrower wraps the message taller. */}
-            <div className="relative w-full max-w-68 max-sm:[zoom:0.8] lg:me-8 lg:max-w-75 xl:me-16">
+            <div className="relative w-full max-w-70 lg:me-8 xl:me-16">
               <div
                 aria-hidden
                 className="bg-primary-subtle/80 pointer-events-none absolute top-1/2 left-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full sm:h-96 sm:w-96 lg:h-120 lg:w-120"

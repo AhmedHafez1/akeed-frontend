@@ -61,8 +61,7 @@
   "ecosystem": {
     "eyebrow": "Conçu pour votre façon de vendre",
     "independent": "Indépendant",
-    "sources_label": "Sources des commandes",
-    "channel": "Confirmations envoyées sur"
+    "sources_label": "Sources des commandes"
   },
   "sources": {
     "title": "D’où viennent vos commandes ?",
@@ -97,46 +96,43 @@
   },
   "how_it_works": {
     "section_title": "Comment fonctionne Akeed",
-    "main_title": "Les mêmes étapes, d’où que viennent vos commandes.",
+    "main_title": "N’expédiez que les commandes confirmées par vos clients.",
     "steps": {
       "order": {
         "title": "Une commande COD arrive",
         "description": "Depuis votre boutique connectée, ou ajoutée à la main, depuis un fichier ou via l’API."
       },
-      "message": {
-        "title": "Message WhatsApp envoyé automatiquement",
-        "description": "Au nom de votre boutique, via la plateforme WhatsApp Business officielle."
+      "confirm": {
+        "title": "Le client confirme sur WhatsApp"
       },
-      "reply": {
-        "title": "Le client répond",
-        "description": "Il confirme ou annule d’un seul geste dans la conversation. Sans réponse, il peut recevoir un rappel."
-      },
-      "update": {
-        "title": "Akeed met à jour la commande",
-        "description": "Dans votre boutique connectée ou votre tableau de bord Akeed, pour n’expédier que les commandes confirmées."
+      "ship": {
+        "title": "Vous n’expédiez que les commandes confirmées"
       }
+    },
+    "card": {
+      "new": "Nouveau",
+      "order": "Commande #{number}",
+      "cod": "Paiement à la livraison",
+      "message": "Merci de confirmer votre commande #{number} chez {store}.",
+      "verified": "Confirmée via Akeed",
+      "ready": "Prête à expédier"
     }
   },
   "outcomes": {
     "section_title": "Trois issues possibles",
     "main_title": "Quelle que soit la réponse du client, vous savez quoi faire de la commande.",
+    "message": "Merci de confirmer votre commande #{number}.",
     "confirmed": {
       "title": "Confirmée",
-      "reply": "Oui",
-      "action": "Expédier la commande",
-      "description": "Le client confirme sur WhatsApp. Akeed enregistre la confirmation et met à jour la commande dans votre boutique connectée et votre tableau de bord Akeed."
+      "result": "Prête à expédier"
     },
     "canceled": {
       "title": "Annulée",
-      "reply": "Non",
-      "action": "Ne pas expédier",
-      "description": "Le client annule sur WhatsApp. Akeed enregistre l’annulation et marque la commande, pour que vous sachiez qu’il ne faut pas l’expédier."
+      "result": "Ne l’expédiez pas"
     },
     "no_reply": {
       "title": "Pas de réponse",
-      "reply": "Pas de réponse",
-      "action": "Relance",
-      "description": "Akeed envoie un rappel selon vos réglages de relance. Toujours sans réponse, la commande est marquée Pas de réponse pour que vous décidiez, ou annulée automatiquement si vous l’avez activé."
+      "result": "Rappel, puis vous décidez"
     }
   },
   "trust": {
@@ -227,8 +223,6 @@
     "credit_is_message_body": "Chaque message WhatsApp depuis le numéro d’Akeed coûte 1 EGP.",
     "followup_title": "Les relances comptent aussi",
     "followup_body": "Si le client ne répond pas, la relance coûte 1 EGP.",
-    "rejected_title": "Les envois échoués sont remboursés",
-    "rejected_body": "Si un envoi échoue, son coût revient automatiquement sur votre solde.",
     "cta": "Créez votre compte gratuit",
     "cta_note": "Sans carte bancaire",
     "shopify_title": "Boutiques Shopify · forfait mensuel",
