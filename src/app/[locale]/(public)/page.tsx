@@ -8,6 +8,7 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { HomePage } from '@/features/marketing'
+import { getConfirmedOrdersTotal } from '@/features/marketing/api/publicStats.server'
 import { EmbeddedAuthGate } from '@/shared/auth/EmbeddedAuthGate'
 import { faqs } from '@/features/marketing/config/site'
 import type { Locale } from '@/i18n'
@@ -105,7 +106,10 @@ export default async function Home({
   params: Promise<{ locale: string }>
 }) {
   const { locale } = await params
-  const structuredData = await getHomeStructuredData(locale as Locale)
+  const [structuredData, confirmedOrdersTotal] = await Promise.all([
+    getHomeStructuredData(locale as Locale),
+    getConfirmedOrdersTotal(),
+  ])
 
   return (
     <>
@@ -113,7 +117,7 @@ export default async function Home({
         <JsonLd key={data['@type'] as string} data={data} />
       ))}
       <EmbeddedAuthGate onboardingGate="landing">
-        <HomePage />
+        <HomePage confirmedOrdersTotal={confirmedOrdersTotal} />
       </EmbeddedAuthGate>
     </>
   )

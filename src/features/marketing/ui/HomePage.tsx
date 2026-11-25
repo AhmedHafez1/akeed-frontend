@@ -9,16 +9,31 @@ import {
 import { Reveal } from '@/features/marketing/ui/components/Reveal'
 import Hero from '@/features/marketing/ui/sections/Hero'
 import HowItWorks from '@/features/marketing/ui/sections/HowItWorks'
+import Outcomes from '@/features/marketing/ui/sections/Outcomes'
 import Pricing from '@/features/marketing/ui/sections/Pricing'
 import Sources from '@/features/marketing/ui/sections/Sources'
 import Trust from '@/features/marketing/ui/sections/Trust'
 import FAQ from '@/features/marketing/ui/sections/FAQ'
 
-export function HomePage() {
+interface HomePageProps {
+  confirmedOrdersTotal?: number | null
+}
+
+export function HomePage({ confirmedOrdersTotal = null }: HomePageProps) {
   return (
     <main className="flex min-h-screen flex-col gap-0">
       <section className={`w-full ${landingSectionBackgroundClass}`}>
-        <Hero />
+        <Hero confirmedOrdersTotal={confirmedOrdersTotal} />
+      </section>
+      <section className={`w-full ${landingSectionChromeAltClass}`}>
+        <Reveal>
+          <HowItWorks />
+        </Reveal>
+      </section>
+      <section className={`w-full ${landingSectionChromeClass}`}>
+        <Reveal>
+          <Outcomes />
+        </Reveal>
       </section>
       <section className={`w-full ${landingSectionChromeAltClass}`}>
         <Reveal>
@@ -32,15 +47,10 @@ export function HomePage() {
       </section>
       <section className={`w-full ${landingSectionChromeAltClass}`}>
         <Reveal>
-          <HowItWorks />
-        </Reveal>
-      </section>
-      <section className={`w-full ${landingSectionChromeClass}`}>
-        <Reveal>
           <Pricing />
         </Reveal>
       </section>
-      <section className={`w-full ${landingSectionChromeAltClass}`}>
+      <section className={`w-full ${landingSectionChromeClass}`}>
         <Reveal>
           <FAQ />
         </Reveal>

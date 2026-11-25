@@ -46,26 +46,23 @@
   "hero": {
     "title": "Kapıda ödemeli siparişleri",
     "highlight": "kargolamadan önce onaylayın.",
-    "subtitle": "Akeed her sipariş için müşteriye WhatsApp’tan yazar ve yanıtı kaydeder. Siparişleriniz {platforms} üzerinden gelebilir ya da onları elle, dosyadan veya API ile ekleyebilirsiniz.",
+    "subtitle": "Akeed müşterilerinize otomatik olarak WhatsApp mesajı gönderir, yanıtlarını kaydeder ve kargodan önce sipariş durumunu günceller.",
     "cta_primary": "Ücretsiz başlayın",
     "cta_shopify": "Shopify’a yükleyin",
     "microcopy_credits": "{count} ücretsiz WhatsApp mesajı",
     "microcopy_no_card": "Kredi kartı gerekmez",
     "microcopy_official": "Resmî WhatsApp Business Platformu",
-    "flow": {
-      "order_title": "Yeni kapıda ödemeli sipariş",
-      "order_meta": "#10482 · EGP 1.250",
-      "message_title": "WhatsApp mesajı",
-      "message_meta": "Otomatik gönderildi",
-      "confirm_title": "Müşteri onaylar",
-      "confirm_meta": "Saniyeler içinde",
-      "updated_title": "Sipariş güncellendi",
-      "updated_meta": "Mağazanızda veya Akeed panelinizde"
+    "mockup_label": "Bir demo sipariş için Onayla ve İptal et düğmeleriyle Akeed WhatsApp onay mesajı",
+    "counter": {
+      "lead": "Siparişlerini Akeed ile onaylayan mağazalara katılın",
+      "label": "Akeed üzerinden onaylanan sipariş"
     }
   },
   "ecosystem": {
     "eyebrow": "Satış şeklinize göre tasarlandı",
-    "independent": "Bağımsız"
+    "independent": "Bağımsız",
+    "sources_label": "Sipariş kaynakları",
+    "channel": "Onaylar şu kanaldan"
   },
   "sources": {
     "title": "Siparişleriniz nereden geliyor?",
@@ -98,69 +95,48 @@
       "cta": "Ücretsiz hesap oluşturun"
     }
   },
-  "demo": {
-    "badge": "Canlı demo",
-    "title": "Onay akışını",
-    "title_highlight": "gerçek zamanlı izleyin",
-    "subtitle": "Akeed’in markanıza özel, kurallara dayalı bir WhatsApp onay akışıyla sipariş bilgilerini nasıl doğruladığını ve sonucu otomatik olarak nasıl güncellediğini izleyin.",
-    "phone_status": "Çevrimiçi",
-    "chat": {
-      "bot_1": "Merhaba Ahmed 👋\nKapıda ödemeli #10482 numaralı siparişiniz hazır.\nToplam: EGP 1.250\n\nKargoya verebilmemiz için lütfen siparişinizi onaylayın.",
-      "user_1": "Onaylandı ✅",
-      "bot_3": "📍 Teslimat adresi:\n12 King Fahd Road\nRiyad, Suudi Arabistan\n\nBu teslimat adresi doğru mu?",
-      "user_2": "Evet, adres doğru",
-      "bot_5": "Harika ✅ Siparişiniz onaylandı ve kargoya hazır olarak işaretlendi.",
-      "bot_6": "Mağazanız otomatik olarak güncellenecek. Bizi tercih ettiğiniz için teşekkür ederiz.",
-      "buttons": {
-        "confirm": "Siparişi onayla",
-        "cancel": "Siparişi iptal et",
-        "will_confirm_later": "Sonra onaylayacağım",
-        "correct_address": "Evet, adres doğru"
-      }
-    },
-    "bot_name": "Akeed Onay",
-    "bot_name_short": "Akeed",
-    "typing_placeholder": "Bir mesaj yazın...",
-    "stats_title": "Gerçek zamanlı performans",
-    "stat_1_label": "Onaylanan sipariş",
-    "stat_1_value": "12.847",
-    "stat_2_label": "Ortalama yanıt süresi",
-    "stat_2_value": "< 3 sn",
-    "stat_3_label": "Tasarruf edilen kargo maliyeti",
-    "stat_3_value": "34 bin $",
-    "stat_4_label": "Onay oranı",
-    "stat_4_value": "%85",
-    "stat_5_label": "Günlük sipariş",
-    "stat_5_value": "+10 bin",
-    "stat_6_label": "Kurulum süresi",
-    "stat_6_value": "5 dk",
-    "features_title": "Ekipler neden güveniyor",
-    "feature_1": "Resmî Meta WhatsApp Cloud API ile teslimat",
-    "feature_2": "Yapılandırılmış onay ve adres kontrolleri",
-    "feature_3": "Ekibinizin yönetebileceği kurallara dayalı akışlar",
-    "feature_4": "Gerçek zamanlı sipariş durumu güncellemeleri",
-    "feature_5": "Daha hızlı kurulum için paylaşımlı WhatsApp altyapısı"
-  },
   "how_it_works": {
     "section_title": "Akeed nasıl çalışır",
     "main_title": "Siparişleriniz nereden gelirse gelsin, adımlar aynı.",
     "steps": {
       "order": {
-        "title": "Sipariş Akeed’e ulaşır",
+        "title": "Kapıda ödemeli sipariş gelir",
         "description": "Bağlı mağazanızdan gelir ya da elle, dosyadan veya API ile eklenir."
       },
       "message": {
-        "title": "Müşteriye bir WhatsApp mesajı",
-        "description": "Resmî WhatsApp Business Platformu üzerinden, mağazanız adına otomatik olarak gönderilir."
+        "title": "WhatsApp mesajı otomatik gider",
+        "description": "Mağazanız adına, resmî WhatsApp Business Platformu üzerinden."
       },
       "reply": {
-        "title": "Müşteri onaylar veya iptal eder",
-        "description": "Sohbette tek dokunuşla. Yanıt vermeyenlere bir hatırlatma gider."
+        "title": "Müşteri yanıt verir",
+        "description": "Sohbette tek dokunuşla onaylar veya iptal eder. Yanıt vermeyenlere bir hatırlatma gidebilir."
       },
       "update": {
-        "title": "Sipariş durumu güncellenir",
+        "title": "Akeed siparişi günceller",
         "description": "Bağlı mağazanızda veya Akeed panelinizde. Böylece yalnızca onaylanan siparişleri kargolarsınız."
       }
+    }
+  },
+  "outcomes": {
+    "section_title": "Üç olası sonuç",
+    "main_title": "Müşteri ne yanıt verirse versin, siparişle ne yapacağınızı bilirsiniz.",
+    "confirmed": {
+      "title": "Onaylandı",
+      "reply": "Evet",
+      "action": "Siparişi kargola",
+      "description": "Müşteri WhatsApp’tan onaylar. Akeed onayı kaydeder ve siparişi bağlı mağazanızda ve Akeed panelinizde günceller."
+    },
+    "canceled": {
+      "title": "İptal edildi",
+      "reply": "Hayır",
+      "action": "Kargolama",
+      "description": "Müşteri WhatsApp’tan iptal eder. Akeed iptali kaydeder ve siparişi işaretler, böylece kargolamamanız gerektiğini bilirsiniz."
+    },
+    "no_reply": {
+      "title": "Yanıt yok",
+      "reply": "Yanıt yok",
+      "action": "Hatırlat",
+      "description": "Akeed, hatırlatma ayarlarınıza göre bir hatırlatma gönderir. Yine yanıt gelmezse sipariş Yanıt yok olarak işaretlenir ve karar sizindir. Otomatik iptali açtıysanız sipariş iptal edilir."
     }
   },
   "trust": {
