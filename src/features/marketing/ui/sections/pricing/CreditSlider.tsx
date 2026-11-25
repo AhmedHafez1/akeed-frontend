@@ -21,8 +21,8 @@ import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { formatBalance, formatBalanceParts } from '@/shared/lib/balanceMoney'
 import { formatCredits } from '@/shared/lib/money'
 
-/** Displayed credits: EGP 500 at the default price. */
-const PREFERRED_DEFAULT = 1000
+/** Displayed credits: EGP 100 at the default price. */
+const PREFERRED_DEFAULT = 200
 
 /*
  * Snapped onto the purchasable range, so a config change can never start the
@@ -168,7 +168,7 @@ export function CreditSlider({ showOwnNumber = false }: CreditSliderProps) {
           className="hidden h-10 w-px self-center bg-white/10 sm:block"
         />
 
-        <p className="text-sm text-slate-400 sm:max-w-xs sm:text-base">
+        <p className="text-base font-semibold text-emerald-300 sm:max-w-xs sm:text-lg">
           {showOwnNumber
             ? t.rich('own_number.slider_coverage', {
                 ...coverageValues,

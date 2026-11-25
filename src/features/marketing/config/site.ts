@@ -1,31 +1,12 @@
 import {
   BadgeCheck,
   Building2,
-  CheckCircle2,
   Languages,
   Lock,
   MessageCircle,
   ShieldCheck,
-  ShoppingCart,
-  UserRound,
   type LucideIcon,
 } from 'lucide-react'
-
-export interface HowItWorksStep {
-  key: string
-  icon: LucideIcon
-}
-
-/*
- * The same four steps for every order source; message keys live under
- * `how_it_works.steps.<key>`.
- */
-export const howItWorksSteps: HowItWorksStep[] = [
-  { key: 'order', icon: ShoppingCart },
-  { key: 'message', icon: MessageCircle },
-  { key: 'reply', icon: UserRound },
-  { key: 'update', icon: CheckCircle2 },
-]
 
 export interface TrustPoint {
   key: string

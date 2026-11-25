@@ -30,6 +30,8 @@ interface WhatsAppTemplateButtonsProps {
   buttons: ReadonlyArray<WhatsAppTemplateButton>
   /** Draws attention to the button the viewer is expected to tap. */
   emphasizedTone?: WhatsAppReplyTone
+  /** The button the customer just tapped: shown pressed, the others dimmed. */
+  pressedTone?: WhatsAppReplyTone
 }
 
 /**
@@ -39,6 +41,7 @@ interface WhatsAppTemplateButtonsProps {
 export function WhatsAppTemplateButtons({
   buttons,
   emphasizedTone,
+  pressedTone,
 }: WhatsAppTemplateButtonsProps) {
   return (
     <div className="divide-y divide-slate-200 border-t border-slate-200 dark:divide-slate-700 dark:border-slate-700">
@@ -46,9 +49,12 @@ export function WhatsAppTemplateButtons({
         <div
           key={button.label}
           className={cn(
-            'px-3 py-2.5 text-center text-[0.875rem] font-semibold text-sky-700 dark:text-sky-400',
+            'px-3 py-2.5 text-center text-[0.875rem] font-semibold text-sky-700 transition-[background-color,opacity,transform] duration-300 dark:text-sky-400',
             emphasizedTone === button.tone &&
-              'bg-sky-50 motion-safe:animate-pulse dark:bg-sky-950/40'
+              'bg-sky-50 motion-safe:animate-pulse dark:bg-sky-950/40',
+            pressedTone === button.tone &&
+              'scale-[0.97] bg-sky-100 dark:bg-sky-900/50',
+            pressedTone && pressedTone !== button.tone && 'opacity-45'
           )}
         >
           {button.label}

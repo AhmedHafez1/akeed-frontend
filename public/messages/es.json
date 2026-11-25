@@ -61,8 +61,7 @@
   "ecosystem": {
     "eyebrow": "Hecho para tu forma de vender",
     "independent": "Independiente",
-    "sources_label": "Orígenes de los pedidos",
-    "channel": "Confirmaciones por"
+    "sources_label": "Orígenes de los pedidos"
   },
   "sources": {
     "title": "¿De dónde llegan tus pedidos?",
@@ -97,46 +96,43 @@
   },
   "how_it_works": {
     "section_title": "Cómo funciona Akeed",
-    "main_title": "Los mismos pasos, sin importar de dónde lleguen tus pedidos.",
+    "main_title": "Envía solo los pedidos que tus clientes confirman.",
     "steps": {
       "order": {
         "title": "Llega un pedido contra entrega",
         "description": "Desde tu tienda conectada, o agregado manualmente, desde un archivo o mediante la API."
       },
-      "message": {
-        "title": "Mensaje de WhatsApp automático",
-        "description": "A nombre de tu tienda, mediante la plataforma oficial de WhatsApp Business."
+      "confirm": {
+        "title": "El cliente confirma por WhatsApp"
       },
-      "reply": {
-        "title": "El cliente responde",
-        "description": "Confirma o cancela con un toque en el chat. Quien no responde puede recibir un recordatorio."
-      },
-      "update": {
-        "title": "Akeed actualiza el pedido",
-        "description": "En tu tienda conectada o en tu panel de Akeed, para que envíes solo los pedidos confirmados."
+      "ship": {
+        "title": "Envías solo pedidos confirmados"
       }
+    },
+    "card": {
+      "new": "Nuevo",
+      "order": "Pedido #{number}",
+      "cod": "Pago contra entrega",
+      "message": "Por favor, confirma tu pedido #{number} de {store}.",
+      "verified": "Confirmado con Akeed",
+      "ready": "Listo para enviar"
     }
   },
   "outcomes": {
     "section_title": "Tres resultados posibles",
     "main_title": "Responda lo que responda el cliente, sabes qué hacer con el pedido.",
+    "message": "Por favor, confirma tu pedido #{number}.",
     "confirmed": {
       "title": "Confirmado",
-      "reply": "Sí",
-      "action": "Enviar el pedido",
-      "description": "El cliente confirma por WhatsApp. Akeed registra la confirmación y actualiza el pedido en tu tienda conectada y en tu panel de Akeed."
+      "result": "Listo para enviar"
     },
     "canceled": {
       "title": "Cancelado",
-      "reply": "No",
-      "action": "No enviar",
-      "description": "El cliente cancela por WhatsApp. Akeed registra la cancelación y marca el pedido para que sepas que no debes enviarlo."
+      "result": "No lo envíes"
     },
     "no_reply": {
       "title": "Sin respuesta",
-      "reply": "Sin respuesta",
-      "action": "Seguimiento",
-      "description": "Akeed envía un recordatorio según tu configuración de seguimiento. Si sigue sin haber respuesta, el pedido se marca como Sin respuesta para que decidas, o se cancela automáticamente si lo activaste."
+      "result": "Recordatorio, luego decides tú"
     }
   },
   "trust": {
@@ -227,8 +223,6 @@
     "credit_is_message_body": "Cada mensaje de WhatsApp desde el número de Akeed cuesta EGP 1.",
     "followup_title": "Los recordatorios también cuentan",
     "followup_body": "Si el cliente no responde, el recordatorio cuesta EGP 1.",
-    "rejected_title": "Los envíos fallidos se reembolsan",
-    "rejected_body": "Si un envío falla, su costo vuelve a tu saldo automáticamente.",
     "cta": "Crea tu cuenta gratis",
     "cta_note": "Sin tarjeta de crédito",
     "shopify_title": "Tiendas Shopify · plan mensual",

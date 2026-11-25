@@ -4,7 +4,7 @@ import { renderMarketing } from '@/features/marketing/ui/marketingTestUtils'
 import Outcomes from './Outcomes'
 
 describe('Outcomes', () => {
-  it('names the three answers and what each one means', () => {
+  it('names the three answers and what happens to the order', () => {
     renderMarketing(<Outcomes />, 'en')
 
     const cards = screen.getAllByRole('listitem')
@@ -13,9 +13,9 @@ describe('Outcomes', () => {
       'Canceled',
       'No reply',
     ])
-    expect(cards[0].textContent).toContain('Ship the order')
-    expect(cards[1].textContent).toContain("Don't ship")
-    expect(cards[2].textContent).toContain('Follow up')
+    expect(cards[0].textContent).toContain('Ready to ship')
+    expect(cards[1].textContent).toContain("Don't ship it")
+    expect(cards[2].textContent).toContain('Reminder, then you decide')
   })
 
   it('does not claim a customer cancel cancels the order in the store', () => {

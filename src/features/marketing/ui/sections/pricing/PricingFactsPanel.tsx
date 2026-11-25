@@ -9,7 +9,7 @@ import { useTranslations } from 'next-intl'
  * not each order — and a follow-up is another message. Saying "orders" here
  * would under-quote real cost by roughly half.
  */
-const FACT_KEYS = ['credit_is_message', 'followup', 'rejected'] as const
+const FACT_KEYS = ['credit_is_message', 'followup'] as const
 
 interface PricingFactsPanelProps {
   /** Add the optional own-number fact, with Meta's separate charge. */

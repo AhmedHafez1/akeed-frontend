@@ -83,8 +83,7 @@ const inkSurfaceFiles = [
   'src/features/marketing/ui/sections/pricing/CreditPriceCard.tsx',
   'src/features/marketing/ui/sections/pricing/CreditSlider.tsx',
   'src/features/marketing/ui/components/AcquisitionCta.tsx',
-  'src/features/marketing/ui/components/ChatInterface.tsx',
-  'src/features/marketing/ui/components/chat/**/*.{ts,tsx}',
+  'src/features/marketing/ui/components/hero/HeroPhoneMockup.tsx',
   'src/features/docs/ui/MarkdownContent.tsx',
 ]
 

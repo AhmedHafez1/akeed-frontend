@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import { cn } from '@/shared/lib/utils'
 import { WhatsAppChatHeader } from './chat-header'
 import { WhatsAppMessageBubble } from './message-bubble'
 import { WhatsAppPhoneFrame } from './phone-frame'
@@ -24,9 +23,6 @@ interface WhatsAppPhonePreviewProps {
   messageLang?: string
   /** An image header above the text, as a template with one shows it. */
   headerImage?: { src: string; alt: string }
-  /** Drops the empty chat space, for tight layouts such as a mobile hero. */
-  compact?: boolean
-  className?: string
 }
 
 /**
@@ -45,22 +41,15 @@ export function WhatsAppPhonePreview({
   messageDir,
   messageLang,
   headerImage,
-  compact = false,
-  className,
 }: WhatsAppPhonePreviewProps) {
   return (
-    <WhatsAppPhoneFrame className={className}>
+    <WhatsAppPhoneFrame>
       <WhatsAppChatHeader
         name={senderName}
         statusLabel={senderStatus}
         avatarAlt={avatarAlt}
       />
-      <div
-        className={cn(
-          'space-y-3 px-3',
-          compact ? 'pt-3 pb-5' : 'min-h-80 py-4'
-        )}
-      >
+      <div className="min-h-80 space-y-3 px-3 py-4">
         <div className="flex justify-center">
           <span className="rounded-md bg-white/90 px-2 py-0.5 text-[0.6875rem] text-slate-600 shadow-sm dark:bg-[#182229] dark:text-slate-300">
             {dayLabel}
@@ -69,10 +58,7 @@ export function WhatsAppPhonePreview({
         <div
           dir={messageDir}
           lang={messageLang}
-          className={cn(
-            'mx-auto w-[92%] overflow-hidden rounded-xl rounded-ss-sm bg-white shadow-sm dark:bg-[#202c33]',
-            compact ? 'my-3' : 'my-8'
-          )}
+          className="mx-auto my-8 w-[92%] overflow-hidden rounded-xl rounded-ss-sm bg-white shadow-sm dark:bg-[#202c33]"
         >
           {headerImage && (
             // A merchant's own upload from storage or a local file: not a

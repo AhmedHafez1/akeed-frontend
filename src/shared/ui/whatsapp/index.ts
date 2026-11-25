@@ -2,6 +2,8 @@ export { WhatsAppChatHeader } from './chat-header'
 export { WhatsAppMessageBubble } from './message-bubble'
 export { WhatsAppPhoneFrame } from './phone-frame'
 export { WhatsAppPhonePreview } from './phone-preview'
+export { WhatsAppTemplateMessage } from './template-message'
+export { WhatsAppTypingIndicator } from './typing-indicator'
 export {
   WhatsAppQuickReplyIcon,
   WhatsAppTemplateButtons,

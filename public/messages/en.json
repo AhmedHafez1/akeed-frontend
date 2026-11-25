@@ -1273,8 +1273,7 @@
   "ecosystem": {
     "eyebrow": "Built for how you sell",
     "independent": "Independent",
-    "sources_label": "Order sources",
-    "channel": "Confirmations sent on"
+    "sources_label": "Order sources"
   },
   "sources": {
     "title": "Where do your orders come from?",
@@ -1309,46 +1308,43 @@
   },
   "how_it_works": {
     "section_title": "How Akeed Works",
-    "main_title": "The same steps, wherever your orders come from.",
+    "main_title": "Ship only the orders your customers confirm.",
     "steps": {
       "order": {
         "title": "A COD order comes in",
         "description": "From your connected store, or added by hand, from a file, or through the API."
       },
-      "message": {
-        "title": "WhatsApp message sent automatically",
-        "description": "In your store's name, through the official WhatsApp Business Platform."
+      "confirm": {
+        "title": "The customer confirms on WhatsApp"
       },
-      "reply": {
-        "title": "The customer replies",
-        "description": "They confirm or cancel with one tap in the chat. Anyone who doesn't reply can get a reminder."
-      },
-      "update": {
-        "title": "Akeed updates the order",
-        "description": "In your connected store or your Akeed dashboard, so you ship confirmed orders only."
+      "ship": {
+        "title": "You ship confirmed orders only"
       }
+    },
+    "card": {
+      "new": "New",
+      "order": "Order #{number}",
+      "cod": "Cash on delivery",
+      "message": "Please confirm your order #{number} from {store}.",
+      "verified": "Confirmed via Akeed",
+      "ready": "Ready to ship"
     }
   },
   "outcomes": {
     "section_title": "Three possible outcomes",
     "main_title": "Whatever the customer answers, you know what to do with the order.",
+    "message": "Please confirm your order #{number}.",
     "confirmed": {
       "title": "Confirmed",
-      "reply": "Yes",
-      "action": "Ship the order",
-      "description": "The customer confirms on WhatsApp. Akeed records the confirmation and updates the order in your connected store and your Akeed dashboard."
+      "result": "Ready to ship"
     },
     "canceled": {
       "title": "Canceled",
-      "reply": "No",
-      "action": "Don't ship",
-      "description": "The customer cancels on WhatsApp. Akeed records the cancellation and marks the order, so you know not to ship it."
+      "result": "Don't ship it"
     },
     "no_reply": {
       "title": "No reply",
-      "reply": "No reply",
-      "action": "Follow up",
-      "description": "Akeed sends a reminder based on your follow-up settings. If there is still no answer, the order is marked No reply for you to decide, or canceled automatically if you turned that on."
+      "result": "Reminder, then you decide"
     }
   },
   "trust": {
@@ -1439,8 +1435,6 @@
     "credit_is_message_body": "Each WhatsApp message from Akeed's number costs EGP 1.",
     "followup_title": "Follow-ups count too",
     "followup_body": "If a customer does not reply, the reminder costs EGP 1.",
-    "rejected_title": "Failed sends are refunded",
-    "rejected_body": "If a send fails, its cost returns to your balance automatically.",
     "cta": "Create your free account",
     "cta_note": "No credit card needed",
     "shopify_title": "Shopify stores · monthly plan",

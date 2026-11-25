@@ -74,12 +74,20 @@ describe('Hero', () => {
     expect(screen.queryByText('orders confirmed through Akeed')).toBeNull()
   })
 
-  it('keeps WhatsApp apart from the order sources', () => {
+  it('lists the order sources for screen readers, apart from WhatsApp', () => {
     renderMarketing(<Hero />, 'en')
 
     const sources = screen.getByRole('list', { name: 'Order sources' })
     expect(sources.textContent).toContain('Shopify')
     expect(sources.textContent).not.toContain('WhatsApp')
-    expect(screen.getByText('Confirmations sent on')).toBeTruthy()
+  })
+
+  it('scrolls the logos, WhatsApp among them, in a decorative strip', () => {
+    renderMarketing(<Hero />, 'en')
+
+    const track = document.querySelector('.animate-marquee')
+    expect(track?.closest('[aria-hidden]')).toBeTruthy()
+    expect(track?.textContent).toContain('WhatsApp')
+    expect(track?.textContent).toContain('Shopify')
   })
 })

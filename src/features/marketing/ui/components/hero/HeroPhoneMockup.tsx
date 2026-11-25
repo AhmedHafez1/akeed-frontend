@@ -1,23 +1,35 @@
 'use client'
 
+import {
+  AnimatePresence,
+  motion,
+  useInView,
+  useReducedMotion,
+} from 'framer-motion'
 import { useTranslations } from 'next-intl'
+import { useRef, type ReactNode } from 'react'
+import type { MockupSegment } from '@/features/marketing/config/heroMockup'
 import {
-  HERO_MOCKUP_TEMPLATES,
-  type MockupSegment,
-} from '@/features/marketing/config/heroMockup'
-import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
-import {
-  formatMessageTotal,
-  getMessageLanguageDirection,
-  getMessagePreviewTimestamp,
-  isMessageLanguage,
-  MESSAGE_SAMPLE_CUSTOMER_NAMES,
-} from '@/shared/lib/messageLanguage'
+  DEMO_ORDERS,
+  useMockupTemplate,
+} from '@/features/marketing/ui/components/useMockupTemplate'
+import { getMessagePreviewTimestamp } from '@/shared/lib/messageLanguage'
 import { cn } from '@/shared/lib/utils'
-import { WhatsAppPhonePreview } from '@/shared/ui/whatsapp'
+import {
+  WhatsAppChatHeader,
+  WhatsAppMessageBubble,
+  WhatsAppPhoneFrame,
+  WhatsAppTemplateMessage,
+  WhatsAppTypingIndicator,
+} from '@/shared/ui/whatsapp'
+import { reachedStage, useHeroConfirmLoop } from './useHeroConfirmLoop'
 
-// Synthetic order shown in the mockup; never a real customer's data.
-const DEMO_ORDER = { number: '1042', amount: '599', currency: 'EGP' }
+const bubbleMotion = {
+  initial: { opacity: 0, y: 10, scale: 0.96 },
+  animate: { opacity: 1, y: 0, scale: 1 },
+  exit: { opacity: 0 },
+  transition: { duration: 0.25 },
+}
 
 interface HeroPhoneMockupProps {
   className?: string
@@ -25,23 +37,28 @@ interface HeroPhoneMockupProps {
 
 /**
  * The registered confirmation template of the page's language, filled with a
- * demo order, as the customer sees it in WhatsApp.
+ * demo order, playing out as the customer sees it: the message, a tap on
+ * Confirm, the reply and Akeed's thank-you.
  */
 export function HeroPhoneMockup({ className }: HeroPhoneMockupProps) {
   const t = useTranslations('hero')
   const tPhone = useTranslations('onboarding.test.phone')
-  const { locale } = useLocaleInfo()
-  const language = isMessageLanguage(locale) ? locale : 'en'
-  const template = HERO_MOCKUP_TEMPLATES[language]
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { margin: '-80px' })
+  const reduceMotion = useReducedMotion() ?? false
+  const stage = useHeroConfirmLoop(inView, reduceMotion)
+  const { language, template, direction, customer, formatTotal } =
+    useMockupTemplate()
+  const time = getMessagePreviewTimestamp(language)
 
   const values = {
-    customer: MESSAGE_SAMPLE_CUSTOMER_NAMES[language],
+    customer,
     store: template.store,
-    order: DEMO_ORDER.number,
-    total: formatMessageTotal(DEMO_ORDER.amount, DEMO_ORDER.currency, language),
+    order: DEMO_ORDERS.hero.number,
+    total: formatTotal(DEMO_ORDERS.hero),
   }
 
-  const renderSegment = (segment: MockupSegment, index: number) => {
+  const renderSegment = (segment: MockupSegment, index: number): ReactNode => {
     if (typeof segment === 'string') return segment
     const text = values[segment.variable]
     // The order number is the one value an RTL line can reorder.
@@ -56,29 +73,105 @@ export function HeroPhoneMockup({ className }: HeroPhoneMockupProps) {
     )
   }
 
+  const renderLines = (lines: ReadonlyArray<ReadonlyArray<MockupSegment>>) =>
+    lines.map((line, index) => <p key={index}>{line.map(renderSegment)}</p>)
+
   return (
     <div
+      ref={ref}
       role="img"
       aria-label={t('mockup_label')}
       className={cn('w-full', className)}
     >
-      <WhatsAppPhonePreview
-        compact
-        senderName={tPhone('senderName')}
-        senderStatus={tPhone('senderStatus')}
-        avatarAlt=""
-        dayLabel={tPhone('today')}
-        paragraphs={template.lines.map((line, index) => (
-          <span key={index}>{line.map(renderSegment)}</span>
-        ))}
-        timeLabel={getMessagePreviewTimestamp(language)}
-        buttons={[
-          { label: template.confirm, tone: 'confirm' },
-          { label: template.cancel, tone: 'cancel' },
-        ]}
-        messageDir={getMessageLanguageDirection(language)}
-        messageLang={language}
-      />
+      <WhatsAppPhoneFrame className="max-w-66 lg:max-w-70">
+        <WhatsAppChatHeader
+          name={tPhone('senderName')}
+          statusLabel={tPhone('senderStatus')}
+          avatarAlt=""
+        />
+        {/* Anchored to the bottom, like a chat: older lines fade out at the top. */}
+        <div
+          dir={direction}
+          lang={language}
+          className="flex h-96 flex-col justify-end gap-2.5 overflow-hidden mask-[linear-gradient(to_bottom,transparent,black_2.5rem)] px-2.5 pt-3 pb-4 sm:h-108"
+        >
+          <div className="flex justify-center">
+            <span className="rounded-md bg-white/90 px-2 py-0.5 text-[0.6875rem] text-slate-600 shadow-sm dark:bg-[#182229] dark:text-slate-300">
+              {tPhone('today')}
+            </span>
+          </div>
+
+          <AnimatePresence initial={false} mode="popLayout">
+            {stage === 'typing' && (
+              <motion.div key="typing-1" {...bubbleMotion}>
+                <WhatsAppTypingIndicator />
+              </motion.div>
+            )}
+
+            {stage !== 'typing' && (
+              <motion.div
+                key="message"
+                layout
+                {...bubbleMotion}
+                className="w-[94%]"
+              >
+                <WhatsAppTemplateMessage
+                  timeLabel={time}
+                  buttons={[
+                    { label: template.confirm, tone: 'confirm' },
+                    { label: template.cancel, tone: 'cancel' },
+                  ]}
+                  pressedTone={
+                    reachedStage(stage, 'pressed') ? 'confirm' : undefined
+                  }
+                >
+                  {renderLines(template.lines)}
+                </WhatsAppTemplateMessage>
+              </motion.div>
+            )}
+
+            {reachedStage(stage, 'replied') && (
+              <motion.div
+                key="reply"
+                layout
+                {...bubbleMotion}
+                className="max-w-[80%] self-end"
+              >
+                <WhatsAppMessageBubble
+                  direction="outgoing"
+                  timeLabel={time}
+                  className="px-1.5"
+                >
+                  {template.confirm}
+                </WhatsAppMessageBubble>
+              </motion.div>
+            )}
+
+            {stage === 'thanksTyping' && (
+              <motion.div key="typing-2" layout {...bubbleMotion}>
+                <WhatsAppTypingIndicator />
+              </motion.div>
+            )}
+
+            {stage === 'thanked' && (
+              <motion.div
+                key="thanks"
+                layout
+                {...bubbleMotion}
+                className="max-w-[88%]"
+              >
+                <WhatsAppMessageBubble
+                  direction="incoming"
+                  timeLabel={time}
+                  className="px-2"
+                >
+                  {renderLines(template.thankYou)}
+                </WhatsAppMessageBubble>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </WhatsAppPhoneFrame>
     </div>
   )
 }

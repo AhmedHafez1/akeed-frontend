@@ -15,7 +15,8 @@ describe('Pricing', () => {
     expect(
       screen.getByText('per message').previousElementSibling?.textContent
     ).toBe('EGP1')
-    expect(text()).toContain('Covers 250–500 orders')
+    expect(text()).toContain('Covers 50–100 orders')
+    expect(text()).not.toContain('Failed sends are refunded')
     expect(text()).not.toContain(own.from_yours)
     expect(text()).not.toContain(own.meta_note)
     expect(text()).not.toContain(own.fact_title)
@@ -48,9 +49,9 @@ describe('Pricing', () => {
   it('quotes both coverage figures for the slider amount instead of orders', () => {
     renderMarketing(<Pricing showOwnNumber />, 'en')
 
-    expect(text()).toContain("About 500 messages from Akeed's number")
-    expect(text()).toContain('or 1,000 from your own number')
-    expect(text()).not.toContain('Covers 250–500 orders')
+    expect(text()).toContain("About 100 messages from Akeed's number")
+    expect(text()).toContain('or 200 from your own number')
+    expect(text()).not.toContain('Covers 50–100 orders')
   })
 
   it('lists each Shopify plan as two separate allowances', () => {
