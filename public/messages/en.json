@@ -1258,26 +1258,23 @@
   "hero": {
     "title": "Confirm COD orders",
     "highlight": "before you ship.",
-    "subtitle": "Akeed messages the customer on WhatsApp for every order and records the reply, whether your orders come from {platforms}, or you add them by hand, from a file, or through the API.",
+    "subtitle": "Akeed automatically messages your customers on WhatsApp, records their reply and updates the order status before you ship.",
     "cta_primary": "Get started free",
     "cta_shopify": "Install on Shopify",
     "microcopy_credits": "{count} free WhatsApp messages",
     "microcopy_no_card": "No credit card required",
     "microcopy_official": "Official WhatsApp Business Platform",
-    "flow": {
-      "order_title": "New COD Order",
-      "order_meta": "#10482 · EGP 1,250",
-      "message_title": "WhatsApp message",
-      "message_meta": "Sent automatically",
-      "confirm_title": "Customer confirms",
-      "confirm_meta": "In seconds",
-      "updated_title": "Order updated",
-      "updated_meta": "In your store or your Akeed dashboard"
+    "mockup_label": "An Akeed WhatsApp confirmation message for a demo order, with Confirm and Cancel buttons",
+    "counter": {
+      "lead": "Join the stores that use Akeed to confirm their orders",
+      "label": "orders confirmed through Akeed"
     }
   },
   "ecosystem": {
     "eyebrow": "Built for how you sell",
-    "independent": "Independent"
+    "independent": "Independent",
+    "sources_label": "Order sources",
+    "channel": "Confirmations sent on"
   },
   "sources": {
     "title": "Where do your orders come from?",
@@ -1310,69 +1307,48 @@
       "cta": "Create a free account"
     }
   },
-  "demo": {
-    "badge": "Live Demo",
-    "title": "See the confirmation flow in",
-    "title_highlight": "Real-Time",
-    "subtitle": "Watch Akeed run a branded, rule-based WhatsApp confirmation flow that verifies the order details and updates the result automatically.",
-    "phone_status": "Online",
-    "chat": {
-      "bot_1": "Hi Ahmed 👋\nYour COD order #10482 is ready.\nTotal: EGP 1,250\n\nPlease confirm your order so we can proceed with shipping.",
-      "user_1": "Confirmed ✅",
-      "bot_3": "📍 Delivery Address:\n12 King Fahd Road\nRiyadh, Saudi Arabia\n\nIs this delivery address correct?",
-      "user_2": "Yes, the address is correct",
-      "bot_5": "Perfect ✅ Your order is now confirmed and marked ready for shipping.",
-      "bot_6": "We'll keep your store updated automatically. Thank you for shopping with us.",
-      "buttons": {
-        "confirm": "Confirm Order",
-        "cancel": "Cancel Order",
-        "will_confirm_later": "Confirm Later",
-        "correct_address": "Yes, address is correct"
-      }
-    },
-    "bot_name": "Akeed Confirmation",
-    "bot_name_short": "Akeed",
-    "typing_placeholder": "Type a message...",
-    "stats_title": "Real-Time Performance",
-    "stat_1_label": "Orders Confirmed",
-    "stat_1_value": "12,847",
-    "stat_2_label": "Average Response Time",
-    "stat_2_value": "< 3 sec",
-    "stat_3_label": "Shipping Cost Saved",
-    "stat_3_value": "$34K",
-    "stat_4_label": "Confirmation rate",
-    "stat_4_value": "85%",
-    "stat_5_label": "Orders Daily",
-    "stat_5_value": "+10K",
-    "stat_6_label": "Setup Time",
-    "stat_6_value": "5min",
-    "features_title": "Why teams trust it",
-    "feature_1": "Official Meta WhatsApp Cloud API delivery",
-    "feature_2": "Structured confirmation and address checks",
-    "feature_3": "Rule-based flows your team can control",
-    "feature_4": "Real-time order status updates",
-    "feature_5": "Shared WhatsApp infrastructure for faster setup"
-  },
   "how_it_works": {
     "section_title": "How Akeed Works",
     "main_title": "The same steps, wherever your orders come from.",
     "steps": {
       "order": {
-        "title": "The order reaches Akeed",
+        "title": "A COD order comes in",
         "description": "From your connected store, or added by hand, from a file, or through the API."
       },
       "message": {
-        "title": "A WhatsApp message to the customer",
-        "description": "Sent automatically in your store's name through the official WhatsApp Business Platform."
+        "title": "WhatsApp message sent automatically",
+        "description": "In your store's name, through the official WhatsApp Business Platform."
       },
       "reply": {
-        "title": "The customer confirms or cancels",
-        "description": "With one tap in the chat. Anyone who doesn't reply gets a reminder."
+        "title": "The customer replies",
+        "description": "They confirm or cancel with one tap in the chat. Anyone who doesn't reply can get a reminder."
       },
       "update": {
-        "title": "The order status is updated",
+        "title": "Akeed updates the order",
         "description": "In your connected store or your Akeed dashboard, so you ship confirmed orders only."
       }
+    }
+  },
+  "outcomes": {
+    "section_title": "Three possible outcomes",
+    "main_title": "Whatever the customer answers, you know what to do with the order.",
+    "confirmed": {
+      "title": "Confirmed",
+      "reply": "Yes",
+      "action": "Ship the order",
+      "description": "The customer confirms on WhatsApp. Akeed records the confirmation and updates the order in your connected store and your Akeed dashboard."
+    },
+    "canceled": {
+      "title": "Canceled",
+      "reply": "No",
+      "action": "Don't ship",
+      "description": "The customer cancels on WhatsApp. Akeed records the cancellation and marks the order, so you know not to ship it."
+    },
+    "no_reply": {
+      "title": "No reply",
+      "reply": "No reply",
+      "action": "Follow up",
+      "description": "Akeed sends a reminder based on your follow-up settings. If there is still no answer, the order is marked No reply for you to decide, or canceled automatically if you turned that on."
     }
   },
   "trust": {

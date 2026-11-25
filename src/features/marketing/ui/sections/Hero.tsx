@@ -9,53 +9,24 @@ import {
   ShieldCheck,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useAcquisition } from '@/features/marketing/domain/useAcquisition'
 import { AcquisitionCta } from '@/features/marketing/ui/components/AcquisitionCta'
-import { HeroFlowSteps } from '@/features/marketing/ui/components/hero/HeroFlowSteps'
-import {
-  DEFAULT_SIGNUP_SOURCE_ID,
-  getStartRoutes,
-} from '@/shared/config/commerceSources'
+import { ConfirmedOrdersCounter } from '@/features/marketing/ui/components/hero/ConfirmedOrdersCounter'
+import { HeroPhoneMockup } from '@/features/marketing/ui/components/hero/HeroPhoneMockup'
 import { CREDIT_FREE_MESSAGES } from '@/shared/config/pricing'
 import { formatCredits } from '@/shared/lib/money'
 import Ecosystem from './Ecosystem'
 
-const ChatInterface = dynamic(
-  () =>
-    import('@/features/marketing/ui/components/ChatInterface').then(
-      (mod) => mod.ChatInterface
-    ),
-  { ssr: false }
-)
+interface HeroProps {
+  /** Null when the backend could not answer: the counter is then left out. */
+  confirmedOrdersTotal?: number | null
+}
 
-/* en-GB joins the last item with "or" and no comma before it. */
-const LIST_LOCALES = {
-  ar: 'ar',
-  en: 'en-GB',
-  ur: 'ur',
-  es: 'es',
-  fr: 'fr',
-  tr: 'tr',
-} as const
-
-function Hero() {
+function Hero({ confirmedOrdersTotal = null }: HeroProps) {
   const t = useTranslations('hero')
-  const tSources = useTranslations('sources')
   const { locale, targets } = useAcquisition()
   const shouldReduceMotion = useReducedMotion()
-
-  // Named from the routes that are switched on, so a store Akeed cannot
-  // connect yet is never promised here.
-  const platforms = new Intl.ListFormat(LIST_LOCALES[locale], {
-    style: 'long',
-    type: 'disjunction',
-  }).format(
-    getStartRoutes()
-      .filter((route) => route.id !== DEFAULT_SIGNUP_SOURCE_ID)
-      .map((route) => tSources(`${route.id}.title`))
-  )
 
   const microcopyItems = [
     {
@@ -78,14 +49,14 @@ function Hero() {
   })
 
   return (
-    <section className="relative overflow-hidden px-4 pt-28 pb-54 sm:px-6 sm:pt-32 lg:px-10 lg:pt-36 rtl:pb-50">
+    <section className="relative overflow-hidden px-4 pt-24 sm:px-6 sm:pt-32 lg:px-10 lg:pt-36">
       <div className="mx-auto w-full max-w-7xl">
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-8">
-          <div className="flex w-full flex-col items-center text-center lg:items-start lg:text-start">
-            {/* Headline */}
+        {/* Mobile reads headline, phone, then CTAs; desktop puts the phone in its own column. */}
+        <div className="grid items-center gap-y-6 sm:gap-y-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-x-8">
+          <div className="flex w-full flex-col items-center text-center lg:col-start-1 lg:row-start-1 lg:items-start lg:self-end lg:text-start">
             <motion.h1
               {...fadeUp(0.08)}
-              className="text-display text-foreground mb-6 text-balance lg:text-[3.5rem] lg:leading-[1.04] xl:text-[4.25rem] rtl:lg:text-[3.25rem] rtl:lg:leading-tight rtl:xl:text-[3.75rem]"
+              className="text-display text-foreground mb-5 text-balance sm:mb-6 lg:text-[3.5rem] lg:leading-[1.04] xl:text-[4.25rem] rtl:lg:text-[3.25rem] rtl:lg:leading-tight rtl:xl:text-[3.75rem]"
             >
               {/* Arabic runs longer, so only the LTR line is held to one row. */}
               <span className="block ltr:lg:whitespace-nowrap">
@@ -96,14 +67,30 @@ function Hero() {
 
             <motion.p
               {...fadeUp(0.16)}
-              className="text-lead text-muted-foreground mb-8 max-w-2xl text-pretty"
+              className="text-lead text-muted-foreground max-w-xl text-pretty"
             >
-              {t('subtitle', { platforms })}
+              {t('subtitle')}
             </motion.p>
+          </div>
 
+          <motion.div
+            {...fadeUp(0.24)}
+            className="relative flex justify-center lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:justify-end"
+          >
+            {/* Zoom, not a narrower frame: narrower wraps the message taller. */}
+            <div className="relative w-full max-w-68 max-sm:[zoom:0.8] lg:me-8 lg:max-w-75 xl:me-16">
+              <div
+                aria-hidden
+                className="bg-primary-subtle/80 pointer-events-none absolute top-1/2 left-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full sm:h-96 sm:w-96 lg:h-120 lg:w-120"
+              />
+              <HeroPhoneMockup className="relative" />
+            </div>
+          </motion.div>
+
+          <div className="flex w-full flex-col items-center lg:col-start-1 lg:row-start-2 lg:items-start lg:self-start">
             {/* CTA row: one primary action, and the direct exit for Shopify. */}
             <motion.div
-              {...fadeUp(0.24)}
+              {...fadeUp(0.32)}
               className="mb-5 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center lg:justify-start"
             >
               <AcquisitionCta
@@ -141,7 +128,7 @@ function Hero() {
 
             {/* Microcopy */}
             <motion.ul
-              {...fadeUp(0.32)}
+              {...fadeUp(0.4)}
               className="text-muted-foreground flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm lg:justify-start"
             >
               {microcopyItems.map(({ label, icon: Icon }) => (
@@ -152,27 +139,13 @@ function Hero() {
               ))}
             </motion.ul>
           </div>
-
-          {/* Product visual: flow steps beside the WhatsApp phone */}
-          <motion.div
-            {...fadeUp(0.3)}
-            className="relative hidden items-center justify-end lg:flex"
-          >
-            <div
-              aria-hidden
-              className="bg-primary-subtle/80 pointer-events-none absolute end-0 top-1/2 h-120 w-120 -translate-y-1/2 rounded-full xl:-end-8"
-            />
-            <div className="relative z-10 me-5 xl:me-7">
-              <HeroFlowSteps />
-            </div>
-            <div className="relative">
-              <ChatInterface />
-            </div>
-          </motion.div>
         </div>
       </div>
 
-      <div className="absolute bottom-0 w-full">
+      <div className="mt-14 flex flex-col items-center sm:mt-16 lg:mt-20">
+        {confirmedOrdersTotal !== null && (
+          <ConfirmedOrdersCounter total={confirmedOrdersTotal} />
+        )}
         <Ecosystem />
       </div>
     </section>

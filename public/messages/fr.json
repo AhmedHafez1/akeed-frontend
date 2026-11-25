@@ -46,26 +46,23 @@
   "hero": {
     "title": "Commandes COD",
     "highlight": "confirmées avant l’envoi.",
-    "subtitle": "Akeed écrit au client sur WhatsApp pour chaque commande et enregistre sa réponse, que vos commandes viennent de {platforms} ou que vous les ajoutiez à la main, depuis un fichier ou via l’API.",
+    "subtitle": "Akeed envoie automatiquement un message WhatsApp à vos clients, enregistre leur réponse et met à jour le statut de la commande avant l’expédition.",
     "cta_primary": "Commencer gratuitement",
     "cta_shopify": "Installer sur Shopify",
     "microcopy_credits": "{count} messages WhatsApp gratuits",
     "microcopy_no_card": "Sans carte bancaire",
     "microcopy_official": "Plateforme WhatsApp Business officielle",
-    "flow": {
-      "order_title": "Commande COD",
-      "order_meta": "#10482 · 1 250 EGP",
-      "message_title": "Message WhatsApp",
-      "message_meta": "Envoyé automatiquement",
-      "confirm_title": "Le client confirme",
-      "confirm_meta": "En quelques secondes",
-      "updated_title": "Commande à jour",
-      "updated_meta": "Dans votre boutique ou votre tableau de bord Akeed"
+    "mockup_label": "Message de confirmation WhatsApp d’Akeed pour une commande de démonstration, avec les boutons Confirmer et Annuler",
+    "counter": {
+      "lead": "Rejoignez les boutiques qui confirment leurs commandes avec Akeed",
+      "label": "commandes confirmées via Akeed"
     }
   },
   "ecosystem": {
     "eyebrow": "Conçu pour votre façon de vendre",
-    "independent": "Indépendant"
+    "independent": "Indépendant",
+    "sources_label": "Sources des commandes",
+    "channel": "Confirmations envoyées sur"
   },
   "sources": {
     "title": "D’où viennent vos commandes ?",
@@ -98,69 +95,48 @@
       "cta": "Créer un compte gratuit"
     }
   },
-  "demo": {
-    "badge": "Démo en direct",
-    "title": "Découvrez le parcours de confirmation en",
-    "title_highlight": "temps réel",
-    "subtitle": "Regardez Akeed dérouler une confirmation WhatsApp à vos couleurs, fondée sur des règles, qui vérifie les détails de la commande et met à jour le résultat automatiquement.",
-    "phone_status": "En ligne",
-    "chat": {
-      "bot_1": "Bonjour Ahmed 👋\nVotre commande #10482 en paiement à la livraison est prête.\nTotal : 1 250 EGP\n\nMerci de confirmer votre commande pour que nous puissions l’expédier.",
-      "user_1": "Confirmée ✅",
-      "bot_3": "📍 Adresse de livraison :\n12 King Fahd Road\nRiyad, Arabie saoudite\n\nCette adresse de livraison est-elle correcte ?",
-      "user_2": "Oui, l’adresse est correcte",
-      "bot_5": "Parfait ✅ Votre commande est confirmée et prête à être expédiée.",
-      "bot_6": "Nous tiendrons votre boutique à jour automatiquement. Merci pour votre achat.",
-      "buttons": {
-        "confirm": "Confirmer la commande",
-        "cancel": "Annuler la commande",
-        "will_confirm_later": "Confirmer plus tard",
-        "correct_address": "Oui, l’adresse est correcte"
-      }
-    },
-    "bot_name": "Confirmation Akeed",
-    "bot_name_short": "Akeed",
-    "typing_placeholder": "Écrivez un message...",
-    "stats_title": "Performances en temps réel",
-    "stat_1_label": "Commandes confirmées",
-    "stat_1_value": "12 847",
-    "stat_2_label": "Temps de réponse moyen",
-    "stat_2_value": "< 3 s",
-    "stat_3_label": "Frais d’expédition économisés",
-    "stat_3_value": "34 k$",
-    "stat_4_label": "Taux de confirmation",
-    "stat_4_value": "85 %",
-    "stat_5_label": "Commandes par jour",
-    "stat_5_value": "+10 k",
-    "stat_6_label": "Temps de configuration",
-    "stat_6_value": "5 min",
-    "features_title": "Pourquoi les équipes lui font confiance",
-    "feature_1": "Envoi via l’API officielle WhatsApp Cloud de Meta",
-    "feature_2": "Confirmation structurée et vérification de l’adresse",
-    "feature_3": "Parcours fondés sur des règles que votre équipe contrôle",
-    "feature_4": "Statut des commandes mis à jour en temps réel",
-    "feature_5": "Infrastructure WhatsApp partagée pour démarrer plus vite"
-  },
   "how_it_works": {
     "section_title": "Comment fonctionne Akeed",
     "main_title": "Les mêmes étapes, d’où que viennent vos commandes.",
     "steps": {
       "order": {
-        "title": "La commande arrive dans Akeed",
+        "title": "Une commande COD arrive",
         "description": "Depuis votre boutique connectée, ou ajoutée à la main, depuis un fichier ou via l’API."
       },
       "message": {
-        "title": "Un message WhatsApp au client",
-        "description": "Envoyé automatiquement au nom de votre boutique via la plateforme WhatsApp Business officielle."
+        "title": "Message WhatsApp envoyé automatiquement",
+        "description": "Au nom de votre boutique, via la plateforme WhatsApp Business officielle."
       },
       "reply": {
-        "title": "Le client confirme ou annule",
-        "description": "D’un seul geste dans la conversation. Sans réponse, le client reçoit un rappel."
+        "title": "Le client répond",
+        "description": "Il confirme ou annule d’un seul geste dans la conversation. Sans réponse, il peut recevoir un rappel."
       },
       "update": {
-        "title": "Le statut de la commande est mis à jour",
+        "title": "Akeed met à jour la commande",
         "description": "Dans votre boutique connectée ou votre tableau de bord Akeed, pour n’expédier que les commandes confirmées."
       }
+    }
+  },
+  "outcomes": {
+    "section_title": "Trois issues possibles",
+    "main_title": "Quelle que soit la réponse du client, vous savez quoi faire de la commande.",
+    "confirmed": {
+      "title": "Confirmée",
+      "reply": "Oui",
+      "action": "Expédier la commande",
+      "description": "Le client confirme sur WhatsApp. Akeed enregistre la confirmation et met à jour la commande dans votre boutique connectée et votre tableau de bord Akeed."
+    },
+    "canceled": {
+      "title": "Annulée",
+      "reply": "Non",
+      "action": "Ne pas expédier",
+      "description": "Le client annule sur WhatsApp. Akeed enregistre l’annulation et marque la commande, pour que vous sachiez qu’il ne faut pas l’expédier."
+    },
+    "no_reply": {
+      "title": "Pas de réponse",
+      "reply": "Pas de réponse",
+      "action": "Relance",
+      "description": "Akeed envoie un rappel selon vos réglages de relance. Toujours sans réponse, la commande est marquée Pas de réponse pour que vous décidiez, ou annulée automatiquement si vous l’avez activé."
     }
   },
   "trust": {

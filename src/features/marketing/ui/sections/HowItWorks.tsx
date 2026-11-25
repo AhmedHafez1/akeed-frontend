@@ -10,7 +10,7 @@ import { StepGrid } from './howItWorks/StepGrid'
 
 /**
  * One flow for every order source. Only where the order comes from differs,
- * and the start-route cards above already say that.
+ * and the start-route cards further down already say that.
  */
 function HowItWorks() {
   const t = useTranslations('how_it_works')

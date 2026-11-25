@@ -42,21 +42,19 @@ function PngMark({ src, className }: { src: string; className?: string }) {
 
 function ChannelItem({ label, mark, markClassName }: Omit<Channel, 'id'>) {
   return (
-    <div
-      className={cn(
-        'text-foreground/75 flex shrink-0 items-center gap-2.5 rounded-full px-3.5 py-1.5 font-medium whitespace-nowrap'
-      )}
-    >
+    <>
       <span
         className={cn(
-          'flex h-6 w-6 shrink-0 items-center justify-center',
+          'flex h-8 w-8 shrink-0 items-center justify-center',
           markClassName
         )}
       >
         {mark}
       </span>
-      <span className="text-sm sm:text-base">{label}</span>
-    </div>
+      <span className="text-foreground/75 text-xs font-medium whitespace-nowrap sm:text-base">
+        {label}
+      </span>
+    </>
   )
 }
 
@@ -66,37 +64,17 @@ function Ecosystem() {
   // A store appears only while its start route is switched on.
   const startRouteIds = new Set(getStartRoutes().map((route) => route.id))
 
-  const allChannels: Array<Channel & { requiresStartRoute?: boolean }> = [
+  const allSources: Array<Channel & { requiresStartRoute?: boolean }> = [
     {
       id: 'shopify',
       label: 'Shopify',
       mark: <PngMark src="/images/landing/logos/shopify_icon_1.png" />,
     },
     {
-      id: 'independent',
-      label: t('independent'),
-      mark: (
-        <span className="bg-muted text-foreground/80 flex h-7 w-7 items-center justify-center rounded-full">
-          <Store className="h-6 w-6" strokeWidth={2} />
-        </span>
-      ),
-    },
-    { id: 'facebook', label: 'Facebook', mark: <FacebookMark /> },
-    {
-      id: 'whatsapp',
-      label: 'WhatsApp',
-      mark: (
-        <PngMark
-          src="/images/landing/logos/wa_icon_1.png"
-          className="scale-[1.35]"
-        />
-      ),
-    },
-    {
       id: 'woocommerce',
       requiresStartRoute: true,
       label: 'WooCommerce',
-      markClassName: 'w-9',
+      markClassName: 'w-11',
       mark: (
         <PngMark src="/images/landing/logos/woo.png" className="scale-[1.5]" />
       ),
@@ -107,7 +85,7 @@ function Ecosystem() {
       label: 'EasyOrders',
       // The source file is the full wordmark; show only its icon.
       mark: (
-        <span className="block h-5 w-[1.05rem] overflow-hidden">
+        <span className="block h-7 w-[1.47rem] overflow-hidden">
           <Image
             src="/images/landing/logos/easy-order.png"
             alt=""
@@ -115,72 +93,70 @@ function Ecosystem() {
             height={117}
             unoptimized
             draggable={false}
-            className="h-5 w-auto max-w-none"
+            className="h-7 w-auto max-w-none"
           />
         </span>
       ),
     },
+    {
+      id: 'independent',
+      label: t('independent'),
+      mark: (
+        <span className="bg-muted text-foreground/80 flex h-8 w-8 items-center justify-center rounded-full">
+          <Store aria-hidden className="h-5 w-5" strokeWidth={2} />
+        </span>
+      ),
+    },
+    { id: 'facebook', label: 'Facebook', mark: <FacebookMark /> },
   ]
 
-  const channels: Channel[] = allChannels
-    .filter(
-      (channel) => !channel.requiresStartRoute || startRouteIds.has(channel.id)
-    )
-    .map(({ id, label, mark, markClassName }) => ({
-      id,
-      label,
-      mark,
-      markClassName,
-    }))
-
-  /*
-   * Each group repeats the list twice so one group is always wider than the
-   * viewport; the track holds two identical groups and slides by exactly
-   * -50%, which lands the second group where the first began — no jump.
-   */
-  const group = (duplicate: boolean) => (
-    <div
-      className={cn(
-        'flex shrink-0 items-center gap-x-6 pe-6 sm:gap-x-10 sm:pe-10',
-        'motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:gap-y-3 motion-reduce:pe-0',
-        duplicate && 'motion-reduce:hidden'
-      )}
-    >
-      {[0, 1].map((copy) =>
-        channels.map(({ id, ...channel }) => (
-          <div
-            key={`${copy}-${id}`}
-            className={cn('contents', copy === 1 && 'motion-reduce:hidden')}
-          >
-            <ChannelItem {...channel} />
-          </div>
-        ))
-      )}
-    </div>
+  const sources = allSources.filter(
+    (source) => !source.requiresStartRoute || startRouteIds.has(source.id)
   )
 
   return (
-    <div className="px-4 py-9 sm:px-6 sm:py-11 lg:px-10">
-      <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-5 sm:gap-6">
+    <div className="w-full px-4 py-10 sm:px-6 sm:py-12 lg:px-10">
+      <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-6">
         <h2 className="text-muted-foreground text-sm font-semibold tracking-[0.18em] uppercase rtl:text-lg rtl:tracking-normal">
           {t('eyebrow')}
         </h2>
 
-        {/* Screen readers get the plain list; the moving track is decorative. */}
-        <ul className="sr-only">
-          {channels.map(({ id, label }) => (
-            <li key={id}>{label}</li>
-          ))}
-        </ul>
+        <div className="flex w-full flex-col items-center gap-6 lg:flex-row lg:justify-center lg:gap-10">
+          {/* Mobile: three per row, icon over label, so nothing is clipped. */}
+          <ul
+            aria-label={t('sources_label')}
+            className="flex w-full max-w-sm flex-wrap justify-center gap-y-5 sm:max-w-none sm:gap-x-10 lg:w-auto"
+          >
+            {sources.map(({ id, ...source }) => (
+              <li
+                key={id}
+                className="flex basis-1/3 flex-col items-center gap-1.5 sm:basis-auto sm:flex-row sm:gap-2.5"
+              >
+                <ChannelItem {...source} />
+              </li>
+            ))}
+          </ul>
 
-        <div
-          aria-hidden
-          dir="ltr"
-          className="w-full overflow-hidden mask-[linear-gradient(to_right,transparent,black_12%,black_88%,transparent)] motion-reduce:mask-none"
-        >
-          <div className="animate-marquee flex w-max py-1 hover:[animation-play-state:paused] motion-reduce:w-full motion-reduce:animate-none motion-reduce:justify-center">
-            {group(false)}
-            {group(true)}
+          <div
+            aria-hidden
+            className="bg-border h-px w-16 shrink-0 lg:h-10 lg:w-px"
+          />
+
+          <div className="flex items-center gap-3">
+            <span className="text-muted-foreground text-xs font-medium sm:text-sm">
+              {t('channel')}
+            </span>
+            <span className="flex items-center gap-2.5">
+              <ChannelItem
+                label="WhatsApp"
+                mark={
+                  <PngMark
+                    src="/images/landing/logos/wa_icon_1.png"
+                    className="scale-[1.35]"
+                  />
+                }
+              />
+            </span>
           </div>
         </div>
       </div>

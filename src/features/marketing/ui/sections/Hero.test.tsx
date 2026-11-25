@@ -1,11 +1,8 @@
 import { screen } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { renderMarketing } from '@/features/marketing/ui/marketingTestUtils'
 import { getShopifyAppStoreListingUrl } from '@/shared/lib/shopify-auth'
 import Hero from './Hero'
-
-// The phone demo is a client-only animation; the hero's copy does not need it.
-vi.mock('next/dynamic', () => ({ default: () => () => null }))
 
 const heroLinks = () =>
   Array.from(document.querySelectorAll<HTMLAnchorElement>('a[data-variant]'))
@@ -42,13 +39,12 @@ describe('Hero', () => {
     expect(document.querySelector('a[href="#how-it-works"]')).toBeNull()
   })
 
-  it('names only the stores that are switched on, and the three microcopy facts', () => {
+  it('states the value in one short line, and the three microcopy facts', () => {
     renderMarketing(<Hero />, 'en')
 
-    // No connect switch is on in the test environment.
     expect(
       screen.getByText(
-        'Akeed messages the customer on WhatsApp for every order and records the reply, whether your orders come from Shopify, or you add them by hand, from a file, or through the API.'
+        'Akeed automatically messages your customers on WhatsApp, records their reply and updates the order status before you ship.'
       )
     ).toBeTruthy()
     expect(screen.getByText('100 free WhatsApp messages')).toBeTruthy()
@@ -56,9 +52,34 @@ describe('Hero', () => {
     expect(screen.getByText('Official WhatsApp Business Platform')).toBeTruthy()
   })
 
-  it('says where the order is updated', () => {
+  it('shows the real Arabic template with its two replies on the phone', () => {
     renderMarketing(<Hero />, 'ar')
 
-    expect(screen.getByText('في متجرك أو لوحة أكيد')).toBeTruthy()
+    const phone = screen.getByRole('img', {
+      name: /^رسالة تأكيد واتساب من أكيد لطلب تجريبي/,
+    })
+    expect(phone.textContent).toContain(
+      'يرجى تأكيد الطلب لنتمكن من إرساله إليك بأسرع وقت.'
+    )
+    expect(phone.textContent).toContain('1042')
+    expect(phone.textContent).toContain('تأكيد الطلب')
+    expect(phone.textContent).toContain('إلغاء الطلب')
+    // A picture of the message, not a control that could confirm an order.
+    expect(phone.querySelector('button, a')).toBeNull()
+  })
+
+  it('leaves the counter out when there is no real total', () => {
+    renderMarketing(<Hero confirmedOrdersTotal={null} />, 'en')
+
+    expect(screen.queryByText('orders confirmed through Akeed')).toBeNull()
+  })
+
+  it('keeps WhatsApp apart from the order sources', () => {
+    renderMarketing(<Hero />, 'en')
+
+    const sources = screen.getByRole('list', { name: 'Order sources' })
+    expect(sources.textContent).toContain('Shopify')
+    expect(sources.textContent).not.toContain('WhatsApp')
+    expect(screen.getByText('Confirmations sent on')).toBeTruthy()
   })
 })
