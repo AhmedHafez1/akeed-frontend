@@ -2704,7 +2704,7 @@
           "notSent": "message not sent"
         },
         "blocked": "Waiting to send",
-        "reschedule": "Reschedule",
+        "reschedule": "Not available",
         "changeAddress": "Change address"
       },
       "loadingMore": "Loading more orders…",
@@ -2892,11 +2892,11 @@
         "track": "Track",
         "reply": "Customer reply",
         "replies": {
-          "home": "I’ll be home",
-          "reschedule": "Reschedule",
+          "home": "I’ll receive it",
+          "reschedule": "Won’t be available",
           "address": "Change address"
         },
-        "requestReschedule": "The customer asked to reschedule the delivery.",
+        "requestReschedule": "The customer won’t be available for delivery.",
         "requestAddress": "The customer asked to change the address.",
         "notReached": "The Shipped message didn’t reach the customer.",
         "contactHint": "Contact the customer, then mark it done.",
