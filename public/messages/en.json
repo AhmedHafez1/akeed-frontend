@@ -505,6 +505,8 @@
       "changeParent": "Original template",
       "linkLabel": "Track order button",
       "linkLabelFixed": "Opens the shipment's tracking link; set by Akeed, cannot be customized.",
+      "shippingChangeLabel": "Change address button",
+      "shippingButtonsHint": "Buttons in order: the two replies above, Change address, then Track order. The last two are set by Akeed.",
       "changeButtonsHint": "Buttons in order: Confirm, Cancel, Request a change. The third label is fixed."
     },
     "validation": {

@@ -89,6 +89,8 @@ export function TemplateDraftForm({
   const textLocked = mode === 'readonly'
   const used = draftVariables(form.body, options.variables)
   const preview = previewDraft(form)
+  // The Shipped message's third reply and link button are set by Akeed.
+  const shipped = form.purpose === 'shipping_shipped'
 
   const set = <K extends keyof DraftForm>(key: K, value: DraftForm[K]) =>
     onChange({ ...form, [key]: value })
@@ -342,14 +344,18 @@ export function TemplateDraftForm({
           </div>
           <p className="text-muted-foreground text-xs">
             {t(
-              form.change_request_of_key ? 'changeButtonsHint' : 'buttonsHint'
+              shipped
+                ? 'shippingButtonsHint'
+                : form.change_request_of_key
+                  ? 'changeButtonsHint'
+                  : 'buttonsHint'
             )}
           </p>
-          {form.change_request_of_key && (
+          {(form.change_request_of_key || shipped) && (
             <div className="space-y-2">
               <Field
                 id="draft-change"
-                label={t('changeLabel')}
+                label={t(shipped ? 'shippingChangeLabel' : 'changeLabel')}
                 hint={t('changeLabelFixed')}
               >
                 <input
@@ -364,12 +370,16 @@ export function TemplateDraftForm({
                 id="draft-change-issues"
                 issues={issuesFor(validation, ['change_label'])}
               />
-              <p className="text-muted-foreground text-sm">
-                {t('changeParent')}
-              </p>
-              <p className="font-mono text-xs break-all" dir="ltr">
-                {form.change_request_of_key}
-              </p>
+              {form.change_request_of_key && (
+                <>
+                  <p className="text-muted-foreground text-sm">
+                    {t('changeParent')}
+                  </p>
+                  <p className="font-mono text-xs break-all" dir="ltr">
+                    {form.change_request_of_key}
+                  </p>
+                </>
+              )}
             </div>
           )}
           {form.link_label && (
