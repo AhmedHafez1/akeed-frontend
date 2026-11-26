@@ -4011,7 +4011,7 @@
         "preparing": "En configuración",
         "degradedPayment": "El pago necesita atención",
         "degradedCredentials": "La conexión necesita renovarse",
-        "degradedRestricted": "Restringido por Meta",
+        "degradedRestricted": "Meta lo está configurando",
         "degradedOther": "No disponible por ahora",
         "sendingOff": "En pausa — se envía desde Akeed",
         "disconnected": "Desconectado",
@@ -4140,8 +4140,8 @@
             "body": "Akeed ya no puede enviar desde tu número. Las confirmaciones salen desde Akeed."
           },
           "restricted": {
-            "title": "Meta restringió tu cuenta",
-            "body": "Las confirmaciones salen desde Akeed. Revisa tu cuenta en el Administrador de WhatsApp."
+            "title": "Meta aún está configurando tu número",
+            "body": "Mientras tanto, las confirmaciones salen desde Akeed. No tienes que hacer nada."
           },
           "sender_unavailable": {
             "title": "Una confirmación reciente salió desde Akeed",
@@ -4198,7 +4198,7 @@
         "sendingIssue": {
           "credentials": "La conexión con {number} necesita renovarse, así que ahora no podemos enviar desde él. Mientras tanto, los mensajes se envían desde el número de Akeed.",
           "payment": "Tu método de pago en Meta necesita atención, así que ahora no podemos enviar desde {number}. Mientras tanto, los mensajes se envían desde el número de Akeed.",
-          "restricted": "Meta restringió {number}, así que ahora no podemos enviar desde él. Mientras tanto, los mensajes se envían desde el número de Akeed.",
+          "restricted": "Meta aún está configurando {number}. Mientras tanto, los mensajes se envían desde el número de Akeed.",
           "unavailable": "{number} no está disponible por ahora, así que no podemos enviar desde él. Mientras tanto, los mensajes se envían desde el número de Akeed.",
           "setup": "No pudimos terminar de configurar {number}. Los mensajes se envían desde el número de Akeed."
         },
@@ -4230,7 +4230,7 @@
         "issues": {
           "payment": "Actualiza tu método de pago en Meta.",
           "credentials": "Vuelve a conectar tu número de WhatsApp.",
-          "restricted": "Revisa la restricción en el administrador de WhatsApp.",
+          "restricted": "Meta aún está configurando tu número. Akeed envía por ahora.",
           "quality": "Revisa la calidad de tu número en Meta.",
           "unavailable": "Tu número no está disponible temporalmente.",
           "templates": "Algunas plantillas necesitan atención. Por ahora, Akeed envía esos mensajes.",

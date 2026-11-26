@@ -4011,7 +4011,7 @@
         "preparing": "Kuruluyor",
         "degradedPayment": "Ödeme ilgilenmenizi bekliyor",
         "degradedCredentials": "Bağlantının yenilenmesi gerekiyor",
-        "degradedRestricted": "Meta tarafından kısıtlandı",
+        "degradedRestricted": "Meta tarafından hazırlanıyor",
         "degradedOther": "Geçici olarak kullanılamıyor",
         "sendingOff": "Duraklatıldı — Akeed numarasından gönderiliyor",
         "disconnected": "Bağlantı kesildi",
@@ -4140,8 +4140,8 @@
             "body": "Akeed artık numaranızdan gönderemiyor. Onaylar Akeed numarasından gidiyor."
           },
           "restricted": {
-            "title": "Meta hesabınızı kısıtladı",
-            "body": "Onaylar Akeed numarasından gidiyor. Hesabınızı WhatsApp Yöneticisi’nde kontrol edin."
+            "title": "Meta numaranızı hâlâ hazırlıyor",
+            "body": "Bu sırada onaylar Akeed numarasından gidiyor. Sizin bir şey yapmanız gerekmiyor."
           },
           "sender_unavailable": {
             "title": "Yakın zamandaki bir onay Akeed numarasından gitti",
@@ -4198,7 +4198,7 @@
         "sendingIssue": {
           "credentials": "Numaranızla ({number}) bağlantının yenilenmesi gerekiyor, bu yüzden şu anda bu numaradan gönderemiyoruz. Şimdilik mesajlar Akeed numarasından gönderilir.",
           "payment": "Meta’daki ödeme yönteminiz ilginizi bekliyor, bu yüzden şu anda numaranızdan ({number}) gönderemiyoruz. Şimdilik mesajlar Akeed numarasından gönderilir.",
-          "restricted": "Meta numaranızı ({number}) kısıtladı, bu yüzden şu anda bu numaradan gönderemiyoruz. Şimdilik mesajlar Akeed numarasından gönderilir.",
+          "restricted": "Meta numaranızı ({number}) hâlâ hazırlıyor. Şimdilik mesajlar Akeed numarasından gönderilir.",
           "unavailable": "Numaranız ({number}) geçici olarak kullanılamıyor, bu yüzden şu anda bu numaradan gönderemiyoruz. Şimdilik mesajlar Akeed numarasından gönderilir.",
           "setup": "Numaranızın ({number}) kurulumunu tamamlayamadık. Mesajlar Akeed numarasından gönderilir."
         },
@@ -4230,7 +4230,7 @@
         "issues": {
           "payment": "Meta’daki ödeme yönteminizi güncelleyin.",
           "credentials": "WhatsApp numaranızı yeniden bağlayın.",
-          "restricted": "WhatsApp Yöneticisi’nde kısıtlamayı kontrol edin.",
+          "restricted": "Meta numaranızı hâlâ hazırlıyor. Şimdilik Akeed gönderiyor.",
           "quality": "Meta’da numaranızın kalitesini inceleyin.",
           "unavailable": "Numaranız geçici olarak kullanılamıyor.",
           "templates": "Bazı şablonlarla ilgilenilmesi gerekiyor. Şimdilik bu mesajları Akeed gönderir.",
