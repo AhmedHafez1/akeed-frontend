@@ -78,10 +78,21 @@ export function SettingsPhonePreview({
               ))
         }
         timeLabel={getMessagePreviewTimestamp(language)}
-        buttons={message.buttons.map((reply, index) => ({
-          label: reply,
-          tone: templateReplyTone(index),
-        }))}
+        buttons={[
+          ...message.buttons.map((reply, index) => ({
+            label: reply,
+            tone: templateReplyTone(index),
+          })),
+          ...(message.linkButton
+            ? [
+                {
+                  label: message.linkButton,
+                  tone: 'cancel' as const,
+                  link: true,
+                },
+              ]
+            : []),
+        ]}
         messageDir={message.direction}
         messageLang={language}
         headerImage={headerImage}

@@ -4250,5 +4250,16 @@
     "fees": "Akeed kullanım ve Meta mesaj ücretleri uygulanır.",
     "whatChanges": "Neler değişir?",
     "backToSettings": "WhatsApp ayarlarına dön"
+  },
+  "trackingLink": {
+    "title": "<order>{number}</order> numaralı siparişiniz yolda",
+    "titleNoOrder": "Siparişiniz yolda",
+    "trackingNumber": "Takip numarası",
+    "copy": "Kopyala",
+    "copied": "Kopyalandı",
+    "courierContact": "Kurye teslimattan önce sizinle iletişime geçecek.",
+    "unavailableTitle": "Bu bağlantı kullanılamıyor",
+    "unavailableBody": "Süresi dolmuş olabilir. Siparişiniz için mağazayla iletişime geçin.",
+    "sentWith": "Gönderen:"
   }
 }

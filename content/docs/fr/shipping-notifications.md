@@ -7,7 +7,7 @@ slug: shipping-notifications
 
 ## Vue d’ensemble
 
-Quand vous expédiez une commande en paiement à la livraison, Akeed peut envoyer un message WhatsApp au client. Le message indique que la commande est en route, demande au client de préparer le montant en espèces et de garder son téléphone allumé pour le livreur, inclut le numéro ou le lien de suivi si vous l’ajoutez, et propose trois boutons, **Je la recevrai**, **Je serai absent(e)** et **Changer d’adresse**.
+Quand vous expédiez une commande en paiement à la livraison, Akeed peut envoyer un message WhatsApp au client. Le message indique que la commande est en route, demande au client de préparer le montant en espèces et de garder son téléphone allumé pour le livreur, inclut le numéro de suivi si vous l’ajoutez, et propose trois boutons, **Je la recevrai**, **Je serai absent(e)** et **Changer d’adresse**, suivis d’un bouton **Suivre la commande**.
 
 Les notifications d’expédition sont disponibles pour les boutiques Shopify.
 
@@ -51,6 +51,10 @@ Ouvrez une commande pour voir pourquoi le message est parti, son suivi et la ré
 | Pas encore disponible dans cette langue | Le message dans cette langue attend l’approbation de WhatsApp. |
 | Commande de plus de 30 jours | Rien à faire. |
 | Commande annulée | Rien à faire. |
+
+## Bouton Suivre la commande
+
+**Suivre la commande** ouvre la page de suivi de votre transporteur quand l’expédition a un lien de suivi, ou quand Akeed reconnaît le transporteur et le numéro de suivi. Sinon, il ouvre une courte page Akeed avec le nom de votre boutique, le numéro de commande, le transporteur et le numéro de suivi à copier. Elle n’affiche jamais l’adresse ni le téléphone du client.
 
 ## Réponses du client
 

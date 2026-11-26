@@ -97,6 +97,7 @@ const VALIDATION_RULES = [
   'button_order',
   'change_label_fixed',
   'change_link_required',
+  'link_button_not_allowed',
 ] as const
 
 /** `TemplateSubmissionErrorCode` in the backend's template catalog port. */

@@ -7,7 +7,7 @@ slug: shipping-notifications
 
 ## Genel Bakış
 
-Kapıda ödemeli bir siparişi kargoya verdiğinizde Akeed müşteriye tek bir WhatsApp mesajı gönderebilir. Mesaj siparişin yolda olduğunu söyler, müşteriden tutarı nakit olarak hazır bulundurmasını ve kurye için telefonunu açık tutmasını ister, eklediyseniz takip numarasını veya bağlantısını içerir ve üç düğme sunar: **Teslim alacağım**, **Müsait olmayacağım** ve **Adresi değiştir**.
+Kapıda ödemeli bir siparişi kargoya verdiğinizde Akeed müşteriye tek bir WhatsApp mesajı gönderebilir. Mesaj siparişin yolda olduğunu söyler, müşteriden tutarı nakit olarak hazır bulundurmasını ve kurye için telefonunu açık tutmasını ister, eklediyseniz takip numarasını içerir ve üç düğme sunar: **Teslim alacağım**, **Müsait olmayacağım** ve **Adresi değiştir**; ardından bir **Siparişi takip et** düğmesi gelir.
 
 Kargo bildirimleri Shopify mağazaları için kullanılabilir.
 
@@ -51,6 +51,10 @@ Mesajın neden gönderildiğini, takip bilgisini ve müşterinin yanıtını gö
 | Bu dilde henüz kullanılamıyor | O dildeki mesaj WhatsApp onayını bekliyor. |
 | Sipariş 30 günden eski | Yapılacak bir şey yok. |
 | Sipariş iptal edildi | Yapılacak bir şey yok. |
+
+## Siparişi Takip Et Düğmesi
+
+**Siparişi takip et**, gönderide bir takip bağlantısı varsa ya da Akeed kargo firmasını ve takip numarasını tanıyorsa kargo firmasının takip sayfasını açar. Aksi halde mağaza adınızı, sipariş numarasını, kargo firmasını ve kopyalanacak takip numarasını gösteren kısa bir Akeed sayfası açar. Müşterinin adresini veya telefon numarasını asla göstermez.
 
 ## Müşteri Yanıtları
 

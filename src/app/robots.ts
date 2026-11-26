@@ -6,6 +6,8 @@ export default function robots(): MetadataRoute.Robots {
   const disallowedRoutes = [
     '/api/',
     '/webhooks/',
+    // Track order short links: private to the customer who received one.
+    '/t/',
     ...locales.flatMap((locale) =>
       privateSeoRoutes.map((route) => `/${locale}${route}`)
     ),
