@@ -4114,8 +4114,8 @@
         },
         "payment": {
           "payment": {
-            "title": "Mettez à jour votre moyen de paiement chez Meta",
-            "body": "Les confirmations partent depuis Akeed pour le moment. Mettez à jour votre moyen de paiement dans le Gestionnaire WhatsApp."
+            "title": "Ajoutez un moyen de paiement chez Meta pour envoyer depuis votre numéro",
+            "body": "D’ici là, les confirmations continuent de partir d’Akeed. Ajoutez-le dans le Gestionnaire WhatsApp."
           }
         },
         "quality_drop": {
@@ -4228,7 +4228,7 @@
           "paused": "En pause"
         },
         "issues": {
-          "payment": "Mettez à jour votre moyen de paiement dans Meta.",
+          "payment": "Ajoutez un moyen de paiement dans Meta.",
           "credentials": "Reconnectez votre numéro WhatsApp.",
           "restricted": "Meta configure encore votre numéro. Akeed envoie pour l’instant.",
           "quality": "Vérifiez la qualité de votre numéro dans Meta.",

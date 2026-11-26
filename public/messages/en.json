@@ -5715,8 +5715,8 @@
         },
         "payment": {
           "payment": {
-            "title": "Update your payment method in Meta",
-            "body": "Confirmations are going from Akeed for now. Update your payment method in WhatsApp Manager."
+            "title": "Add a payment method in Meta to send from your number",
+            "body": "Confirmations keep going from Akeed until then. Add it in WhatsApp Manager."
           }
         },
         "quality_drop": {
@@ -5829,7 +5829,7 @@
           "paused": "Paused"
         },
         "issues": {
-          "payment": "Update your payment method in Meta.",
+          "payment": "Add a payment method in Meta.",
           "credentials": "Reconnect your WhatsApp number.",
           "restricted": "Meta is still setting up your number. Akeed sends for now.",
           "quality": "Review your number’s quality in Meta.",
