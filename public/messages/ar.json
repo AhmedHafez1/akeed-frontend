@@ -4081,6 +4081,7 @@
       "pay": "ادفع <amount>{value}</amount>",
       "payEmpty": "ادفع",
       "paymobNote": "دفع آمن عبر Paymob بالبطاقة أو فودافون كاش.",
+      "walletOtpNote": "فودافون كاش: يصل الرمز برسالة SMS خلال 2–3 دقائق. انتظره ولا تضغط ادفع مرة أخرى.",
       "coverage": {
         "akeedShort": "رقم أكيد",
         "ownShort": "رقمك",
