@@ -386,6 +386,7 @@
       "WHATSAPP_TEMPLATE_DEFAULT_SHOWS_ORDER_DETAILS": "A template that shows order items or an address cannot be a language default, because not every order has them.",
       "WHATSAPP_TEMPLATE_IMAGE_TWIN_NOT_CONFIGURED": "Set META_APP_ID to create image twins. Nothing was submitted.",
       "WHATSAPP_TEMPLATE_IMAGE_TWIN_UPLOAD_FAILED": "The sample image could not be uploaded to Meta. Nothing was submitted.",
+      "WHATSAPP_TEMPLATE_TRACKING_LINK_UNCONFIGURED": "Set SHIPPING_TRACKING_LINK_BASE_URL to submit a template with a Track order button. Nothing was submitted.",
       "WHATSAPP_MESSAGE_TEXT_CONFLICT": "Another operator saved this text at the same time. Reload and try again.",
       "WHATSAPP_MESSAGE_TEXT_INVALID": "This text does not meet the rules for its purpose.",
       "WHATSAPP_TEMPLATE_DRAFT_IDENTITY_FIXED": "The language code and parameter format are fixed to the original template.",
@@ -502,6 +503,8 @@
       "changeLabel": "Request a change label",
       "changeLabelFixed": "Fixed service label; cannot be customized.",
       "changeParent": "Original template",
+      "linkLabel": "Track order button",
+      "linkLabelFixed": "Opens the shipment's tracking link; set by Akeed, cannot be customized.",
       "changeButtonsHint": "Buttons in order: Confirm, Cancel, Request a change. The third label is fixed."
     },
     "validation": {
@@ -531,7 +534,8 @@
         "button_count": "A confirmation has exactly two quick replies.",
         "button_order": "The Confirm button must come first.",
         "change_label_fixed": "Use the fixed Request a change label for this language.",
-        "change_link_required": "The third button requires its original-template relationship."
+        "change_link_required": "The third button requires its original-template relationship.",
+        "link_button_not_allowed": "Only the Shipped message can have a link button."
       }
     },
     "submit": {
@@ -5903,5 +5907,16 @@
       "required": "Enter a subject and body.",
       "unknown": "Unknown or malformed placeholder."
     }
+  },
+  "trackingLink": {
+    "title": "Your order <order>{number}</order> is on its way",
+    "titleNoOrder": "Your order is on its way",
+    "trackingNumber": "Tracking number",
+    "copy": "Copy",
+    "copied": "Copied",
+    "courierContact": "The courier will contact you before delivery.",
+    "unavailableTitle": "This link isn’t available",
+    "unavailableBody": "It may have expired. Contact the store about your order.",
+    "sentWith": "Sent with"
   }
 }

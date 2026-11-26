@@ -44,6 +44,7 @@ export const config = {
   matcher: [
     '/',
     '/(ar|en|ur|es|fr|tr)/:path*',
-    '/((?!api|webhooks|auth/shopify|_next|_vercel|images|fonts|.*\\..*).*)',
+    // `t/` is the Track order short link: it has no locale prefix.
+    '/((?!api|webhooks|auth/shopify|t/|_next|_vercel|images|fonts|.*\\..*).*)',
   ],
 }

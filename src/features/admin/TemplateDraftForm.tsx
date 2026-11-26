@@ -372,6 +372,27 @@ export function TemplateDraftForm({
               </p>
             </div>
           )}
+          {form.link_label && (
+            <div className="space-y-2">
+              <Field
+                id="draft-link"
+                label={t('linkLabel')}
+                hint={t('linkLabelFixed')}
+              >
+                <input
+                  id="draft-link"
+                  className={templateFieldClass}
+                  dir={getMessageLanguageDirection(form.language)}
+                  readOnly
+                  value={form.link_label}
+                />
+              </Field>
+              <TemplateIssues
+                id="draft-link-issues"
+                issues={issuesFor(validation, ['link_label'])}
+              />
+            </div>
+          )}
         </fieldset>
 
         <fieldset className="border-border bg-card space-y-4 rounded-2xl border p-5 shadow-sm">

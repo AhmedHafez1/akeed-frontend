@@ -56,6 +56,8 @@ export interface TemplateDraft {
   confirm_label: string
   cancel_label: string
   change_label?: string | null
+  /** The Shipped message's Track order link button; staff cannot edit it. */
+  link_label?: string | null
   change_request_of_key?: string | null
   samples: TemplateDraftSamples
   state: TemplateDraftState
@@ -105,6 +107,8 @@ export interface TemplateDraftForm {
   confirm_label: string
   cancel_label: string
   change_label?: string | null
+  /** The Shipped message's Track order link button; staff cannot edit it. */
+  link_label?: string | null
   change_request_of_key?: string | null
   samples: TemplateDraftSamples
 }
@@ -193,6 +197,7 @@ export function draftToForm(draft: TemplateDraft): TemplateDraftForm {
     confirm_label: draft.confirm_label,
     cancel_label: draft.cancel_label,
     change_label: draft.change_label,
+    link_label: draft.link_label,
     change_request_of_key: draft.change_request_of_key,
     samples: { ...draft.samples },
   }
@@ -232,6 +237,9 @@ export function previewDraft(form: TemplateDraftForm): RenderedTemplateMessage {
       { label: form.cancel_label, kind: 'quick_reply' },
       ...(form.change_request_of_key && form.change_label
         ? [{ label: form.change_label, kind: 'quick_reply' as const }]
+        : []),
+      ...(form.link_label
+        ? [{ label: form.link_label, kind: 'url' as const }]
         : []),
     ].filter((button) => button.label.trim().length > 0),
     direction: getMessageLanguageDirection(form.language),

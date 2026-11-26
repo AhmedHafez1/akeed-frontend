@@ -7,7 +7,7 @@ slug: shipping-notifications
 
 ## Overview
 
-When you ship a COD order, Akeed can send the customer one WhatsApp message. It says the order is on its way, asks the customer to have the total ready in cash and keep their phone on for the courier, includes the tracking number or link when you add one, and offers three buttons: **I’ll receive it**, **Won’t be available** and **Change address**.
+When you ship a COD order, Akeed can send the customer one WhatsApp message. It says the order is on its way, asks the customer to have the total ready in cash and keep their phone on for the courier, includes the tracking number when you add one, and offers three buttons, **I’ll receive it**, **Won’t be available** and **Change address**, followed by a **Track order** button.
 
 Shipping notifications are available for Shopify stores.
 
@@ -51,6 +51,10 @@ Open an order to see why the message was sent, its tracking and the customer's r
 | Not available in this language yet | The message in that language is waiting for WhatsApp's approval. |
 | Order is older than 30 days | Nothing to do. |
 | Order was cancelled | Nothing to do. |
+
+## Track Order Button
+
+**Track order** opens your courier’s tracking page when the shipment has a tracking link, or when Akeed recognizes the courier and the tracking number. Otherwise it opens a short Akeed page with your store name, the order number, the courier and the tracking number to copy. It never shows the customer’s address or phone number.
 
 ## Customer Replies
 

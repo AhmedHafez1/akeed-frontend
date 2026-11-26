@@ -7,7 +7,7 @@ slug: shipping-notifications
 
 ## Resumen
 
-Cuando envías un pedido contra reembolso, Akeed puede mandar al cliente un mensaje de WhatsApp. El mensaje dice que el pedido va en camino, pide al cliente tener listo el total en efectivo y mantener el teléfono encendido para el repartidor, incluye el número o enlace de seguimiento si lo agregas y ofrece tres botones: **Lo recibiré**, **No estaré disponible** y **Cambiar dirección**.
+Cuando envías un pedido contra reembolso, Akeed puede mandar al cliente un mensaje de WhatsApp. El mensaje dice que el pedido va en camino, pide al cliente tener listo el total en efectivo y mantener el teléfono encendido para el repartidor, incluye el número de seguimiento si lo agregas y ofrece tres botones, **Lo recibiré**, **No estaré disponible** y **Cambiar dirección**, seguidos de un botón **Rastrear pedido**.
 
 Los avisos de envío están disponibles para tiendas Shopify.
 
@@ -51,6 +51,10 @@ Abre un pedido para ver por qué se envió el mensaje, su seguimiento y la respu
 | Aún no disponible en este idioma | El mensaje en ese idioma espera la aprobación de WhatsApp. |
 | El pedido tiene más de 30 días | No hace falta hacer nada. |
 | El pedido fue cancelado | No hace falta hacer nada. |
+
+## Botón Rastrear pedido
+
+**Rastrear pedido** abre la página de seguimiento de tu transportista cuando el envío tiene un enlace de seguimiento, o cuando Akeed reconoce el transportista y el número de seguimiento. Si no, abre una página breve de Akeed con el nombre de tu tienda, el número de pedido, el transportista y el número de seguimiento para copiarlo. Nunca muestra la dirección ni el teléfono del cliente.
 
 ## Respuestas del cliente
 

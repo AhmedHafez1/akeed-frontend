@@ -386,6 +386,7 @@
       "WHATSAPP_TEMPLATE_DEFAULT_SHOWS_ORDER_DETAILS": "القالب الذي يعرض منتجات الطلب أو العنوان لا يصلح قالبًا افتراضيًا للغة، لأن بعض الطلبات لا تحتوي عليها.",
       "WHATSAPP_TEMPLATE_IMAGE_TWIN_NOT_CONFIGURED": "اضبط META_APP_ID لإنشاء نسخ الصورة. لم يُرسَل شيء.",
       "WHATSAPP_TEMPLATE_IMAGE_TWIN_UPLOAD_FAILED": "تعذّر رفع صورة العينة إلى ميتا. لم يُرسَل شيء.",
+      "WHATSAPP_TEMPLATE_TRACKING_LINK_UNCONFIGURED": "اضبط SHIPPING_TRACKING_LINK_BASE_URL لإرسال قالب فيه زر تتبع الطلب. لم يُرسَل شيء.",
       "WHATSAPP_MESSAGE_TEXT_CONFLICT": "حفظ مشغّل آخر هذا النص في الوقت نفسه. أعد التحميل وحاول مجددًا.",
       "WHATSAPP_MESSAGE_TEXT_INVALID": "لا يطابق هذا النص قواعد غرضه.",
       "WHATSAPP_TEMPLATE_DRAFT_IDENTITY_FIXED": "رمز اللغة وصيغة المتغيرات ثابتان وفق القالب الأصلي.",
@@ -502,6 +503,8 @@
       "changeLabel": "زر طلب التعديل",
       "changeLabelFixed": "تسمية ثابتة ومعتمدة، غير قابلة للتخصيص.",
       "changeParent": "القالب الأصلي",
+      "linkLabel": "زر تتبع الطلب",
+      "linkLabelFixed": "يفتح رابط تتبع الشحنة؛ يحدده أكيد ولا يمكن تخصيصه.",
       "changeButtonsHint": "الأزرار بالترتيب: تأكيد، إلغاء، طلب تعديل. الزر الثالث ثابت."
     },
     "validation": {
@@ -531,7 +534,8 @@
         "button_count": "رسالة التأكيد تحمل ردّين سريعين بالضبط.",
         "button_order": "يجب أن يأتي زر التأكيد أولًا.",
         "change_label_fixed": "يلزم استخدام تسمية طلب التعديل الثابتة لهذه اللغة.",
-        "change_link_required": "يلزم ربط زر طلب التعديل بالقالب الأصلي."
+        "change_link_required": "يلزم ربط زر طلب التعديل بالقالب الأصلي.",
+        "link_button_not_allowed": "زر الرابط متاح لرسالة الشحن فقط."
       }
     },
     "submit": {
@@ -5903,5 +5907,16 @@
       "required": "Enter a subject and body.",
       "unknown": "Unknown or malformed placeholder."
     }
+  },
+  "trackingLink": {
+    "title": "طلبك <order>{number}</order> في الطريق إليك",
+    "titleNoOrder": "طلبك في الطريق إليك",
+    "trackingNumber": "رقم التتبع",
+    "copy": "نسخ",
+    "copied": "تم النسخ",
+    "courierContact": "سيتواصل معك المندوب قبل التوصيل.",
+    "unavailableTitle": "هذا الرابط غير متاح",
+    "unavailableBody": "ربما انتهت صلاحيته. تواصل مع المتجر بخصوص طلبك.",
+    "sentWith": "أُرسلت عبر"
   }
 }

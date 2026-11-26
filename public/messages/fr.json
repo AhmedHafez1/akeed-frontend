@@ -4250,5 +4250,16 @@
     "fees": "Les frais d’utilisation Akeed et de messagerie Meta s’appliquent.",
     "whatChanges": "Qu’est-ce qui change ?",
     "backToSettings": "Retour aux paramètres WhatsApp"
+  },
+  "trackingLink": {
+    "title": "Votre commande <order>{number}</order> est en route",
+    "titleNoOrder": "Votre commande est en route",
+    "trackingNumber": "Numéro de suivi",
+    "copy": "Copier",
+    "copied": "Copié",
+    "courierContact": "Le livreur vous contactera avant la livraison.",
+    "unavailableTitle": "Ce lien n’est pas disponible",
+    "unavailableBody": "Il a peut-être expiré. Contactez la boutique au sujet de votre commande.",
+    "sentWith": "Envoyé avec"
   }
 }

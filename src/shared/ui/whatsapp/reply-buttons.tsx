@@ -1,4 +1,4 @@
-import { SquareCheck, X } from 'lucide-react'
+import { ExternalLink, SquareCheck, X } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
 
 export type WhatsAppReplyTone = 'confirm' | 'cancel'
@@ -24,6 +24,8 @@ export function WhatsAppQuickReplyIcon({ tone }: { tone: WhatsAppReplyTone }) {
 export interface WhatsAppTemplateButton {
   label: string
   tone: WhatsAppReplyTone
+  /** A link button, drawn with WhatsApp's open-link mark. */
+  link?: boolean
 }
 
 interface WhatsAppTemplateButtonsProps {
@@ -57,7 +59,14 @@ export function WhatsAppTemplateButtons({
             pressedTone && pressedTone !== button.tone && 'opacity-45'
           )}
         >
-          {button.label}
+          {button.link ? (
+            <span className="inline-flex items-center justify-center gap-1.5">
+              <ExternalLink aria-hidden className="h-3.5 w-3.5" />
+              {button.label}
+            </span>
+          ) : (
+            button.label
+          )}
         </div>
       ))}
     </div>

@@ -24,7 +24,10 @@ export type TemplateMessageSegment =
 
 export interface TemplateMessage {
   lines: TemplateMessageSegment[][]
+  /** The quick replies, in order. */
   buttons: string[]
+  /** The link button's label, shown after the quick replies. */
+  linkButton?: string
   direction: 'rtl' | 'ltr'
   source: 'provider' | 'registered'
 }
