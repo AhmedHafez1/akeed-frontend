@@ -4081,6 +4081,7 @@
       "pay": "Pay <amount>{value}</amount>",
       "payEmpty": "Pay",
       "paymobNote": "Secure payment on Paymob, by card or Vodafone Cash.",
+      "walletOtpNote": "Vodafone Cash: the code arrives by SMS within 2–3 minutes. Wait for it and don’t press Pay again.",
       "coverage": {
         "akeedShort": "Akeed's number",
         "ownShort": "Your number",
@@ -4153,31 +4154,6 @@
     "balanceChip": {
       "label": "Balance: {count}",
       "value": "Balance <strong>{count}</strong>"
-    },
-    "transactions": {
-      "title": "Transactions",
-      "columns": {
-        "transaction": "Transaction",
-        "date": "Date",
-        "credits": "Amount",
-        "balance": "Balance after"
-      },
-      "types": {
-        "purchase": "Top-up",
-        "free_grant": "Free messages",
-        "consumption": "Message from Akeed",
-        "own_number_pack": "Own-number messages",
-        "own_number_pack_reversal": "Refund for messages from your number",
-        "failure_reversal": "Refund for an undelivered message",
-        "refund_reversal": "Refund",
-        "chargeback_reversal": "Payment disputed",
-        "chargeback_reinstatement": "Disputed payment restored",
-        "staff_adjustment": "Adjustment by Akeed"
-      },
-      "packNote": "One pack pays for two own-number sends",
-      "empty": "No transactions yet.",
-      "error": "Transactions couldn’t load.",
-      "retry": "Try again"
     },
     "ownNumberGuide": "How your own WhatsApp number is billed"
   },

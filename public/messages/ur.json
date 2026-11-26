@@ -2863,6 +2863,7 @@
       "pay": "<amount>{value}</amount> ادا کریں",
       "payEmpty": "ادا کریں",
       "paymobNote": "Paymob پر محفوظ ادائیگی، کارڈ یا Vodafone Cash سے۔",
+      "walletOtpNote": "Vodafone Cash: کوڈ SMS سے 2–3 منٹ میں آتا ہے۔ انتظار کریں اور دوبارہ ادائیگی نہ دبائیں۔",
       "coverage": {
         "akeedShort": "اکید کا نمبر",
         "ownShort": "آپ کا نمبر",
@@ -2935,31 +2936,6 @@
     "balanceChip": {
       "label": "بیلنس: {count}",
       "value": "بیلنس <strong>{count}</strong>"
-    },
-    "transactions": {
-      "title": "لین دین",
-      "columns": {
-        "transaction": "لین دین",
-        "date": "تاریخ",
-        "credits": "رقم",
-        "balance": "بعد کا بیلنس"
-      },
-      "types": {
-        "purchase": "ٹاپ اپ",
-        "free_grant": "مفت پیغامات",
-        "consumption": "اکید کے نمبر سے پیغام",
-        "own_number_pack": "آپ کے نمبر سے پیغامات",
-        "own_number_pack_reversal": "آپ کے نمبر کے پیغامات کی واپسی",
-        "failure_reversal": "نہ پہنچنے والے پیغام کی واپسی",
-        "refund_reversal": "رقم کی واپسی",
-        "chargeback_reversal": "ادائیگی پر اعتراض",
-        "chargeback_reinstatement": "متنازع ادائیگی بحال",
-        "staff_adjustment": "اکید کی طرف سے ایڈجسٹمنٹ"
-      },
-      "packNote": "ایک پیک آپ کے نمبر سے دو پیغامات کا خرچ پورا کرتا ہے",
-      "empty": "ابھی کوئی لین دین نہیں۔",
-      "error": "لین دین لوڈ نہیں ہو سکے۔",
-      "retry": "دوبارہ کوشش کریں"
     },
     "ownNumberGuide": "آپ کے اپنے واٹس ایپ نمبر کا بل کیسے بنتا ہے"
   },

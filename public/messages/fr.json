@@ -2863,6 +2863,7 @@
       "pay": "Payer <amount>{value}</amount>",
       "payEmpty": "Payer",
       "paymobNote": "Paiement sécurisé sur Paymob, par carte ou avec Vodafone Cash.",
+      "walletOtpNote": "Vodafone Cash : le code arrive par SMS sous 2 à 3 minutes. Attendez-le et n’appuyez pas de nouveau sur Payer.",
       "coverage": {
         "akeedShort": "Numéro d’Akeed",
         "ownShort": "Votre numéro",
@@ -2935,31 +2936,6 @@
     "balanceChip": {
       "label": "Solde : {count}",
       "value": "Solde <strong>{count}</strong>"
-    },
-    "transactions": {
-      "title": "Transactions",
-      "columns": {
-        "transaction": "Transaction",
-        "date": "Date",
-        "credits": "Montant",
-        "balance": "Solde après"
-      },
-      "types": {
-        "purchase": "Recharge",
-        "free_grant": "Messages offerts",
-        "consumption": "Message depuis Akeed",
-        "own_number_pack": "Messages depuis votre numéro",
-        "own_number_pack_reversal": "Remboursement de messages depuis votre numéro",
-        "failure_reversal": "Remboursement d’un message non distribué",
-        "refund_reversal": "Remboursement",
-        "chargeback_reversal": "Paiement contesté",
-        "chargeback_reinstatement": "Paiement contesté rétabli",
-        "staff_adjustment": "Ajustement par Akeed"
-      },
-      "packNote": "Un pack couvre deux envois depuis votre numéro",
-      "empty": "Aucune transaction pour l’instant.",
-      "error": "Impossible de charger les transactions.",
-      "retry": "Réessayer"
     },
     "ownNumberGuide": "Comment votre propre numéro WhatsApp est facturé"
   },
