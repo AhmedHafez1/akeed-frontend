@@ -2,7 +2,7 @@
 
 import { useId } from 'react'
 import Link from 'next/link'
-import { ArrowRight, ShieldCheck, Smartphone, TrendingUp } from 'lucide-react'
+import { ArrowRight, ShieldCheck, TrendingUp } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useLocaleInfo } from '@/shared/hooks/useLocaleInfo'
 import { withLocale } from '@/shared/lib/locale'
@@ -229,14 +229,6 @@ export function CheckoutSummaryCard({
             className="text-brand mt-0.5 size-4 shrink-0"
           />
           <span>{t('paymobNote')}</span>
-        </p>
-
-        <p className="text-ak-caption text-ink-muted flex items-start gap-2">
-          <Smartphone
-            aria-hidden="true"
-            className="text-brand mt-0.5 size-4 shrink-0"
-          />
-          <span>{t('walletOtpNote')}</span>
         </p>
       </div>
     </aside>
