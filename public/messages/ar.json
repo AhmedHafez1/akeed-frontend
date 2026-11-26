@@ -4155,31 +4155,6 @@
       "label": "الرصيد {count}",
       "value": "الرصيد <strong>{count}</strong>"
     },
-    "transactions": {
-      "title": "المعاملات",
-      "columns": {
-        "transaction": "المعاملة",
-        "date": "التاريخ",
-        "credits": "المبلغ",
-        "balance": "الرصيد بعدها"
-      },
-      "types": {
-        "purchase": "شحن",
-        "free_grant": "رسائل مجانية",
-        "consumption": "رسالة من رقم أكيد",
-        "own_number_pack": "رسائل من رقمك",
-        "own_number_pack_reversal": "استرداد رسائل من رقمك",
-        "failure_reversal": "استرداد رسالة لم تُرسل",
-        "refund_reversal": "استرداد",
-        "chargeback_reversal": "اعتراض على الدفع",
-        "chargeback_reinstatement": "استعادة دفعة معترض عليها",
-        "staff_adjustment": "تعديل من أكيد"
-      },
-      "packNote": "حزمة واحدة تغطي رسالتين من رقمك",
-      "empty": "لا توجد معاملات بعد.",
-      "error": "تعذّر تحميل المعاملات.",
-      "retry": "حاول مرة أخرى"
-    },
     "ownNumberGuide": "كيف تُحسب تكلفة رقم واتساب الخاص بك"
   },
   "orderImport": {

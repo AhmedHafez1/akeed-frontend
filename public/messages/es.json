@@ -2937,31 +2937,6 @@
       "label": "Saldo: {count}",
       "value": "Saldo <strong>{count}</strong>"
     },
-    "transactions": {
-      "title": "Movimientos",
-      "columns": {
-        "transaction": "Movimiento",
-        "date": "Fecha",
-        "credits": "Importe",
-        "balance": "Saldo después"
-      },
-      "types": {
-        "purchase": "Recarga",
-        "free_grant": "Mensajes gratis",
-        "consumption": "Mensaje desde Akeed",
-        "own_number_pack": "Mensajes desde tu número",
-        "own_number_pack_reversal": "Reembolso de mensajes desde tu número",
-        "failure_reversal": "Reembolso de un mensaje no entregado",
-        "refund_reversal": "Reembolso",
-        "chargeback_reversal": "Pago en disputa",
-        "chargeback_reinstatement": "Pago en disputa restaurado",
-        "staff_adjustment": "Ajuste de Akeed"
-      },
-      "packNote": "Un paquete cubre dos envíos desde tu número",
-      "empty": "Aún no hay movimientos.",
-      "error": "No se pudieron cargar los movimientos.",
-      "retry": "Intentar de nuevo"
-    },
     "ownNumberGuide": "Cómo se factura tu propio número de WhatsApp"
   },
   "orderImport": {

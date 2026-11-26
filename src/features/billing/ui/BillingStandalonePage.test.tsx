@@ -16,19 +16,6 @@ const presence = vi.hoisted(() => ({ visible: false }))
 vi.mock('@/features/whatsapp-connect', () => ({
   useOwnNumberPresence: () => ({ visible: presence.visible, isLoading: false }),
 }))
-const history = vi.hoisted(() => ({
-  transactions: [] as unknown[],
-  purchases: [],
-  isComplete: true,
-  isWindowCovered: true,
-  isLoading: false,
-  isDraining: false,
-  error: false,
-  reload: async () => undefined,
-}))
-vi.mock('../domain/useTransactions', () => ({
-  useTransactions: () => history,
-}))
 
 type PageState = ReturnType<typeof useBillingPage>
 
@@ -144,7 +131,6 @@ beforeEach(() => {
 afterEach(() => {
   vi.useRealTimers()
   presence.visible = false
-  history.transactions = []
   testLocale.current = 'ar'
 })
 
@@ -338,30 +324,6 @@ describe('BillingStandalonePage with the merchant number', () => {
     renderPage('en')
     expect(screen.getAllByText('—').length).toBeGreaterThan(0)
     expect(screen.queryByText('0')).toBeNull()
-  })
-
-  it('lists the latest transactions with the own-number pack note', () => {
-    history.transactions = [
-      {
-        id: 'tx-1',
-        kind: 'usage',
-        ledgerType: 'own_number_pack',
-        reasonCode: 'own_number_messages',
-        actorType: 'system',
-        quantity: -2,
-        balanceAfter: 842,
-        createdAt: new Date(2026, 9, 20, 10, 42).toISOString(),
-        reference: null,
-        purchase: null,
-      },
-    ]
-    renderPage('en')
-    const tx = en.billing.transactions
-    expect(screen.getByText(tx.types.own_number_pack)).toBeTruthy()
-    expect(screen.getByText(tx.packNote)).toBeTruthy()
-    // Balance after in money; the pack of 2 displayed credits is EGP 1.
-    expect(screen.getByText('EGP 421')).toBeTruthy()
-    expect(screen.getByText('-1')).toBeTruthy()
   })
 })
 

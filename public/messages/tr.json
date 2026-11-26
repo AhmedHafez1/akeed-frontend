@@ -2937,31 +2937,6 @@
       "label": "Bakiye: {count}",
       "value": "Bakiye <strong>{count}</strong>"
     },
-    "transactions": {
-      "title": "İşlemler",
-      "columns": {
-        "transaction": "İşlem",
-        "date": "Tarih",
-        "credits": "Tutar",
-        "balance": "Sonraki bakiye"
-      },
-      "types": {
-        "purchase": "Yükleme",
-        "free_grant": "Ücretsiz mesajlar",
-        "consumption": "Akeed numarasından mesaj",
-        "own_number_pack": "Kendi numaranızdan mesajlar",
-        "own_number_pack_reversal": "Numaranızdan gönderilen mesajlar için iade",
-        "failure_reversal": "İletilmeyen mesaj için iade",
-        "refund_reversal": "İade",
-        "chargeback_reversal": "İtiraz edilen ödeme",
-        "chargeback_reinstatement": "İtiraz edilen ödeme geri yüklendi",
-        "staff_adjustment": "Akeed düzeltmesi"
-      },
-      "packNote": "Bir paket, kendi numaranızdan iki gönderimi karşılar",
-      "empty": "Henüz işlem yok.",
-      "error": "İşlemler yüklenemedi.",
-      "retry": "Tekrar dene"
-    },
     "ownNumberGuide": "Kendi WhatsApp numaranız nasıl faturalandırılır"
   },
   "orderImport": {
