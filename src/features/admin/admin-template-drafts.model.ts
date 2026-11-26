@@ -235,7 +235,8 @@ export function previewDraft(form: TemplateDraftForm): RenderedTemplateMessage {
     buttons: [
       { label: form.confirm_label, kind: 'quick_reply' },
       { label: form.cancel_label, kind: 'quick_reply' },
-      ...(form.change_request_of_key && form.change_label
+      ...((form.change_request_of_key || form.purpose === 'shipping_shipped') &&
+      form.change_label
         ? [{ label: form.change_label, kind: 'quick_reply' as const }]
         : []),
       ...(form.link_label

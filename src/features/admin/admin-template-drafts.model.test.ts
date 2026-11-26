@@ -95,6 +95,26 @@ describe('template draft model', () => {
     ])
   })
 
+  it('previews the Shipped message with Change address and Track order', () => {
+    const preview = previewDraft(
+      form({
+        purpose: 'shipping_shipped',
+        body: 'Hello',
+        confirm_label: "I'll receive it",
+        cancel_label: "Won't be available",
+        change_label: 'Change address',
+        link_label: 'Track order',
+      })
+    )
+
+    expect(preview.buttons).toEqual([
+      { label: "I'll receive it", kind: 'quick_reply' },
+      { label: "Won't be available", kind: 'quick_reply' },
+      { label: 'Change address', kind: 'quick_reply' },
+      { label: 'Track order', kind: 'url' },
+    ])
+  })
+
   it('previews Urdu right to left, and Spanish, French and Turkish left to right', () => {
     expect(
       previewDraft(form({ language: 'ur', body: 'السلام علیکم' })).direction
