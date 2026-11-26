@@ -2863,6 +2863,7 @@
       "pay": "<amount>{value}</amount> ادا کریں",
       "payEmpty": "ادا کریں",
       "paymobNote": "Paymob پر محفوظ ادائیگی، کارڈ یا Vodafone Cash سے۔",
+      "walletOtpNote": "Vodafone Cash: کوڈ SMS سے 2–3 منٹ میں آتا ہے۔ انتظار کریں اور دوبارہ ادائیگی نہ دبائیں۔",
       "coverage": {
         "akeedShort": "اکید کا نمبر",
         "ownShort": "آپ کا نمبر",

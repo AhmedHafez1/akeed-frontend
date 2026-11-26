@@ -2863,6 +2863,7 @@
       "pay": "Payer <amount>{value}</amount>",
       "payEmpty": "Payer",
       "paymobNote": "Paiement sécurisé sur Paymob, par carte ou avec Vodafone Cash.",
+      "walletOtpNote": "Vodafone Cash : le code arrive par SMS sous 2 à 3 minutes. Attendez-le et n’appuyez pas de nouveau sur Payer.",
       "coverage": {
         "akeedShort": "Numéro d’Akeed",
         "ownShort": "Votre numéro",
