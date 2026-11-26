@@ -4114,8 +4114,8 @@
         },
         "payment": {
           "payment": {
-            "title": "Meta’daki ödeme yönteminizi güncelleyin",
-            "body": "Onaylar şimdilik Akeed numarasından gidiyor. Ödeme yönteminizi WhatsApp Yöneticisi’nde güncelleyin."
+            "title": "Numaranızdan göndermek için Meta’ya bir ödeme yöntemi ekleyin",
+            "body": "O zamana kadar onaylar Akeed numarasından gitmeye devam eder. Ödeme yöntemini WhatsApp Yöneticisi’nde ekleyin."
           }
         },
         "quality_drop": {
@@ -4228,7 +4228,7 @@
           "paused": "Duraklatıldı"
         },
         "issues": {
-          "payment": "Meta’daki ödeme yönteminizi güncelleyin.",
+          "payment": "Meta’ya bir ödeme yöntemi ekleyin.",
           "credentials": "WhatsApp numaranızı yeniden bağlayın.",
           "restricted": "Meta numaranızı hâlâ hazırlıyor. Şimdilik Akeed gönderiyor.",
           "quality": "Meta’da numaranızın kalitesini inceleyin.",
