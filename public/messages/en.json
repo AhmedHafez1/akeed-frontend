@@ -4081,6 +4081,7 @@
       "pay": "Pay <amount>{value}</amount>",
       "payEmpty": "Pay",
       "paymobNote": "Secure payment on Paymob, by card or Vodafone Cash.",
+      "walletOtpNote": "Vodafone Cash: the code arrives by SMS within 2–3 minutes. Wait for it and don’t press Pay again.",
       "coverage": {
         "akeedShort": "Akeed's number",
         "ownShort": "Your number",
