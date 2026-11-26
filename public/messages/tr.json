@@ -2863,7 +2863,6 @@
       "pay": "Öde: <amount>{value}</amount>",
       "payEmpty": "Öde",
       "paymobNote": "Paymob üzerinden kartla veya Vodafone Cash ile güvenli ödeme.",
-      "walletOtpNote": "Vodafone Cash: kod 2–3 dakika içinde SMS ile gelir. Bekleyin ve Öde’ye tekrar basmayın.",
       "coverage": {
         "akeedShort": "Akeed numarası",
         "ownShort": "Numaranız",
