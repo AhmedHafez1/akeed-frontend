@@ -160,7 +160,7 @@ export function whatsappProgress(
     sending.action =
       issue === 'credentials'
         ? 'reconnect'
-        : ['payment', 'restricted', 'quality'].includes(issue)
+        : ['payment', 'quality'].includes(issue)
           ? 'whatsapp_manager'
           : issue === 'unavailable'
             ? 'support'

@@ -5612,7 +5612,7 @@
         "preparing": "Setting up",
         "degradedPayment": "Payment needs attention",
         "degradedCredentials": "Connection needs renewing",
-        "degradedRestricted": "Restricted by Meta",
+        "degradedRestricted": "Being set up by Meta",
         "degradedOther": "Temporarily unavailable",
         "sendingOff": "Paused — sending from Akeed",
         "disconnected": "Disconnected",
@@ -5741,8 +5741,8 @@
             "body": "Akeed can no longer send from your number. Confirmations are going from Akeed."
           },
           "restricted": {
-            "title": "Meta restricted your account",
-            "body": "Confirmations are going from Akeed. Check your account in WhatsApp Manager."
+            "title": "Meta is still setting up your number",
+            "body": "Confirmations are going from Akeed meanwhile. Nothing for you to do."
           },
           "sender_unavailable": {
             "title": "A recent confirmation went from Akeed",
@@ -5799,7 +5799,7 @@
         "sendingIssue": {
           "credentials": "The connection to {number} needs renewing, so we can’t send from it right now. Messages are sent from Akeed’s number meanwhile.",
           "payment": "Your payment method in Meta needs attention, so we can’t send from {number} right now. Messages are sent from Akeed’s number meanwhile.",
-          "restricted": "Meta has restricted {number}, so we can’t send from it right now. Messages are sent from Akeed’s number meanwhile.",
+          "restricted": "Meta is still setting up {number}. Messages are sent from Akeed’s number meanwhile.",
           "unavailable": "{number} is temporarily unavailable, so we can’t send from it right now. Messages are sent from Akeed’s number meanwhile.",
           "setup": "We couldn’t finish setting up {number}. Messages are sent from Akeed’s number."
         },
@@ -5831,7 +5831,7 @@
         "issues": {
           "payment": "Update your payment method in Meta.",
           "credentials": "Reconnect your WhatsApp number.",
-          "restricted": "Check the restriction in WhatsApp Manager.",
+          "restricted": "Meta is still setting up your number. Akeed sends for now.",
           "quality": "Review your number’s quality in Meta.",
           "unavailable": "Your number is temporarily unavailable.",
           "templates": "Some templates need attention. Akeed sends those messages for now.",
