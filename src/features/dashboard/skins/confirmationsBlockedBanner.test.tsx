@@ -28,6 +28,9 @@ vi.mock('../domain/useManualConfirmation', () => ({
     dismissFeedback: vi.fn(),
   }),
 }))
+vi.mock('../domain/useShippingResolve', () => ({
+  useShippingResolve: () => ({ resolve: vi.fn(), pendingId: null }),
+}))
 vi.mock('../domain/useOutcomeSyncRetry', () => ({
   useOutcomeSyncRetry: () => ({ retryingId: null, retry: vi.fn() }),
 }))

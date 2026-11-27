@@ -29,14 +29,19 @@ The message goes to COD orders that Akeed received. Test orders, cancelled order
 
 ## The Shipping Column
 
-Your orders list shows one word per order in the **Shipping** column:
+Your orders list shows one word per order in the **Shipping** column. The **Status** column keeps the confirmation result, such as **Confirmed**.
 
 | What you see | What it means |
 | --- | --- |
-| **Sent** | The message went out. |
+| **Sent** | The message went out. Hover the word to see whether it was delivered or read. |
+| **Will receive** | The customer tapped **I’ll receive it**. |
+| **Not available** | The customer tapped **Won’t be available**. Contact them. |
+| **Change address** | The customer asked to change the address. Contact them. |
 | **WhatsApp undeliverable** | The customer has no phone number, or the number is not on WhatsApp. |
 | **Failed to send** | Something stopped the message. Hover the word to see why. |
 | **Not sent** | The order is older than 30 days or was cancelled. |
+
+After you click **Mark done**, the word stays in grey. Hover it to see when it was done.
 
 Open an order to see why the message was sent, its tracking and the customer's reply.
 
@@ -58,11 +63,13 @@ Open an order to see why the message was sent, its tracking and the customer's r
 
 ## Customer Replies
 
-When the customer taps **Won’t be available** or **Change address**, the order moves to **Needs your action**. Contact the customer, arrange the delivery with your courier, then click **Mark done**.
+When the customer taps **Won’t be available** or **Change address**, the order moves to **Needs your action**. Contact the customer, arrange the delivery with your courier, then click **Mark done** in the order's **⋯** menu or in its details.
 
 **I’ll receive it** needs nothing from you. If thank-you messages are on, Akeed thanks the customer for their reply.
 
-An order whose message could not reach the customer also appears in **Needs your action**, as **WhatsApp undeliverable**. Call the customer, then click **Mark done**.
+An order whose message could not reach the customer also appears in **Needs your action**, with **WhatsApp undeliverable** in the **Shipping** column. Call the customer, then click **Mark done**.
+
+Only the store owner and admins can mark a reply done.
 
 ## Billing
 

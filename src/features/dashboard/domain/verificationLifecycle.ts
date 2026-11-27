@@ -102,6 +102,21 @@ export function hasCapability(
 }
 
 /**
+ * Reasons the server never cancels for: the customer never saw the question
+ * (a failed send or delivery), already answered it (a reply after Akeed
+ * canceled, a change request, a reply to the Shipped message), or the
+ * Shipped message could not reach them.
+ */
+const NOT_CANCELLABLE_REASONS: ReadonlySet<NeedsActionReason> = new Set([
+  'delivery_failed',
+  'send_failed',
+  'late_reply_after_auto_cancel',
+  'change_requested',
+  'delivery_request',
+  'shipping_not_reachable',
+])
+
+/**
  * Merchant cancellation is offered once the customer has gone unanswered —
  * escalated to no-reply, or already flagged for the merchant for a no-reply
  * reason — and only when the commerce source can carry the outcome back.
@@ -114,12 +129,10 @@ export function canMarkOrderCanceled(
   // A settled order has nothing left to cancel, even when it still needs a
   // look (a reply after Akeed canceled it).
   if (status === 'confirmed' || status === 'canceled') return false
-  const unanswered =
-    status === 'no_reply' ||
-    (Boolean(actionReason) &&
-      actionReason !== 'delivery_failed' &&
-      actionReason !== 'send_failed' &&
-      actionReason !== 'late_reply_after_auto_cancel')
+  // The server decides by the row's reason first, whatever the status.
+  if (actionReason != null && NOT_CANCELLABLE_REASONS.has(actionReason))
+    return false
+  const unanswered = status === 'no_reply' || actionReason != null
   if (!unanswered) return false
   // A row loaded before capabilities existed is assumed cancellable; the
   // server rejects it if not, and hiding the only recovery action would be

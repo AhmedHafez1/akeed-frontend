@@ -2691,11 +2691,22 @@
           "followUpSent": "أُرسل التذكير",
           "sendsAt": "يُرسل {time}",
           "callCustomer": "اتصل بالعميل",
-          "waitingForCapacity": "نفدت الباقة أو الرصيد",
-          "shippedNotReached": "لم تصل رسالة الشحن"
+          "waitingForCapacity": "نفدت الباقة أو الرصيد"
         },
         "tooltip": {
           "scheduledFor": "مجدول في {time}",
+          "confirmedByCustomer": "أكده العميل · {time}",
+          "confirmedManually": "تأكيد يدوي · {time}",
+          "confirmedAfterReminder": "أُكّد بعد التذكير · {time}",
+          "canceledByCustomer": "ألغاه العميل · {time}",
+          "canceledNoReply": "أُلغي: لم يرد العميل · {time}",
+          "canceledNoWhatsApp": "أُلغي: تعذّر التسليم على واتساب · {time}",
+          "canceledAutomatically": "أُلغي تلقائيًا: لا رد · {time}",
+          "canceledInStore": "أُلغي في شوبيفاي · {time}",
+          "failed": "فشل الإرسال: {reason}",
+          "blocked": "بانتظار الإرسال: نفدت الباقة أو الرصيد",
+          "noReplySince": "لا رد منذ {time}",
+          "changeRequested": "طلب تعديل · {time}",
           "reminderAt": "التذكير مجدول في {time}",
           "callCustomer": "تعذّر على واتساب التوصيل إلى هذا الرقم. قد لا يكون الرقم مسجلًا على واتساب، أو يحتاج العميل إلى تحديث واتساب أو قبول أحدث شروطه. اتصل بالعميل لتأكيد الطلب.",
           "callCustomerSince": "منذ {time}، تعذّر على واتساب التوصيل إلى هذا الرقم. قد لا يكون الرقم مسجلًا على واتساب، أو يحتاج العميل إلى تحديث واتساب أو قبول أحدث شروطه. اتصل بالعميل لتأكيد الطلب.",
@@ -2862,8 +2873,12 @@
     },
     "shipping": {
       "heading": "الشحن",
+      "replyAt": "{reply} · {time}",
       "badges": {
         "sent": "تم الإرسال",
+        "willReceive": "سيستلم",
+        "notAvailable": "غير متاح",
+        "changeAddress": "تغيير العنوان",
         "undeliverable": "تعذّر التسليم على واتساب",
         "failedToSend": "فشل الإرسال",
         "notSent": "لم تُرسل"
@@ -2899,7 +2914,7 @@
         "reply": "رد العميل",
         "replies": {
           "home": "تمام، هستلمه",
-          "reschedule": "مش هكون موجود",
+          "reschedule": "غير متاح",
           "address": "تغيير العنوان"
         },
         "requestReschedule": "العميل لن يكون متاحًا لاستلام الطلب.",

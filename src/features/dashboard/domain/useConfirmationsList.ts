@@ -16,7 +16,7 @@ import {
   useRetryVerificationMutation,
 } from '../api/verificationMutations'
 import { mergeOptimisticRows } from './optimisticVerification'
-import { isAwaitingOutcome } from './verificationLifecycle'
+import { confirmationsPollInterval } from './confirmationsPolling'
 import type {
   ConfirmationsTab,
   DashboardStatsDateRange,
@@ -25,7 +25,6 @@ import type {
 const logger = createLogger('ConfirmationsList')
 
 const SEARCH_DEBOUNCE_MS = 300
-const AWAITING_POLL_INTERVAL_MS = 30_000
 /** What the server accepts as a search; anything else is flagged, not sent. */
 const SEARCH_PATTERN = /^[#+\d\s()-]*$/
 const SEARCH_MAX_LENGTH = 32
@@ -74,11 +73,10 @@ export function useConfirmationsList({
   const query = useInfiniteQuery({
     ...confirmationsListOptions({ tab, dateRange, search, importBatchId }),
     refetchInterval: (current) =>
-      current.state.data?.pages.some((page) =>
-        page.data.some((row) => isAwaitingOutcome(row.status))
-      )
-        ? AWAITING_POLL_INTERVAL_MS
-        : false,
+      confirmationsPollInterval(
+        current.state.data?.pages.flatMap((page) => page.data) ?? [],
+        Date.now()
+      ),
   })
 
   useStartupReady('dashboard-confirmations-ready', query.isSuccess)
@@ -182,9 +180,14 @@ export function useConfirmationsList({
     reportingTimezone: pageContext?.reporting_timezone ?? 'UTC',
     sourceStatus: pageContext?.source?.status ?? null,
     settings: pageContext?.settings ?? null,
-    /** The Shipping column: only while the store has shipping notifications on. */
+    /**
+     * The Shipping column: while the store has shipping notifications on, or
+     * while a loaded order has a Shipped message (an open request must not
+     * vanish when the setting is switched off).
+     */
     showShipping:
-      pageContext?.settings?.shipping_notifications_enabled === true,
+      pageContext?.settings?.shipping_notifications_enabled === true ||
+      serverRows.some((row) => Boolean(row.shipping)),
     capacity: pageContext?.capacity ?? null,
     creditDenialCode,
     canWrite: permissions?.can_cancel_orders === true,

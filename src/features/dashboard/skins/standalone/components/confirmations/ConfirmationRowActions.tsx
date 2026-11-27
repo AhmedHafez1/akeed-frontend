@@ -4,6 +4,7 @@ import {
   CalendarCheck,
   CalendarX,
   CheckCircle2,
+  CircleCheckBig,
   Ellipsis,
   Eye,
   MessageCircle,
@@ -62,6 +63,7 @@ export function ConfirmationRowActions({
   if (row.optimistic) return null
   const LinkIcon = plan.primary === 'shipping' ? Truck : MessageCircle
   const autoCancelToggle = plan.autoCancelToggle
+  const markShippingDone = handlers.onMarkShippingDone
 
   const inline = layout === 'inline'
 
@@ -143,6 +145,15 @@ export function ConfirmationRowActions({
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+          {plan.canMarkShippingDone && markShippingDone && (
+            <DropdownMenuItem
+              disabled={isAnyActing}
+              onSelect={() => markShippingDone(row)}
+            >
+              <CircleCheckBig aria-hidden="true" className="size-4" />
+              {t('shipping.markDone')}
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem onSelect={() => handlers.onOpenDetails(row)}>
             <Eye aria-hidden="true" className="size-4" />
             {t('table.actions.details')}

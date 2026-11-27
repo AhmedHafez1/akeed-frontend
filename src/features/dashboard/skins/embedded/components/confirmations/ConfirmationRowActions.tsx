@@ -51,13 +51,21 @@ function useConfirmationRowActions({
   const plan = planConfirmationRowActions(row, { canWrite, canRetry })
   const link = useConfirmationRowLink(row, orderLabel, plan.primary)
 
-  const items: RowActionItem[] = [
-    {
-      id: 'details',
-      content: t('table.actions.details'),
-      onAction: () => handlers.onOpenDetails(row),
-    },
-  ]
+  const items: RowActionItem[] = []
+  // The step the merchant came for: their contact with the customer is done.
+  const markDone = handlers.onMarkShippingDone
+  if (plan.canMarkShippingDone && markDone) {
+    items.push({
+      id: 'mark-done',
+      content: t('shipping.markDone'),
+      onAction: () => markDone(row),
+    })
+  }
+  items.push({
+    id: 'details',
+    content: t('table.actions.details'),
+    onAction: () => handlers.onOpenDetails(row),
+  })
   if (plan.canConfirm) {
     items.push({
       id: 'confirm',

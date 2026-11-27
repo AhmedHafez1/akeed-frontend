@@ -1473,11 +1473,22 @@
           "followUpSent": "Rappel envoyé",
           "sendsAt": "Envoi : {time}",
           "callCustomer": "Appelez le client",
-          "waitingForCapacity": "Forfait ou solde épuisé",
-          "shippedNotReached": "Message d’expédition non distribué"
+          "waitingForCapacity": "Forfait ou solde épuisé"
         },
         "tooltip": {
           "scheduledFor": "Planifié pour : {time}",
+          "confirmedByCustomer": "Confirmée par le client · {time}",
+          "confirmedManually": "Confirmée manuellement · {time}",
+          "confirmedAfterReminder": "Confirmée après le rappel · {time}",
+          "canceledByCustomer": "Annulée par le client · {time}",
+          "canceledNoReply": "Annulée : sans réponse du client · {time}",
+          "canceledNoWhatsApp": "Annulée : non distribué sur WhatsApp · {time}",
+          "canceledAutomatically": "Annulée automatiquement : aucune réponse · {time}",
+          "canceledInStore": "Annulée dans Shopify · {time}",
+          "failed": "Échec de l’envoi : {reason}",
+          "blocked": "En attente d’envoi : forfait ou solde épuisé",
+          "noReplySince": "Sans réponse depuis le {time}",
+          "changeRequested": "Modification demandée · {time}",
           "reminderAt": "Rappel planifié pour : {time}",
           "callCustomer": "WhatsApp n’a pas pu joindre ce numéro. Il n’est peut-être pas sur WhatsApp, ou le client doit mettre à jour WhatsApp ou accepter ses dernières conditions. Appelez le client pour confirmer.",
           "callCustomerSince": "Depuis le {time}, WhatsApp ne parvient pas à joindre ce numéro. Il n’est peut-être pas sur WhatsApp, ou le client doit mettre à jour WhatsApp ou accepter ses dernières conditions. Appelez le client pour confirmer.",
@@ -1644,8 +1655,12 @@
     },
     "shipping": {
       "heading": "Expédition",
+      "replyAt": "{reply} · {time}",
       "badges": {
         "sent": "Envoyé",
+        "willReceive": "Recevra",
+        "notAvailable": "Absent",
+        "changeAddress": "Changer d’adresse",
         "undeliverable": "Non distribué sur WhatsApp",
         "failedToSend": "Échec de l’envoi",
         "notSent": "Non envoyé"
@@ -1681,7 +1696,7 @@
         "reply": "Réponse du client",
         "replies": {
           "home": "Je la recevrai",
-          "reschedule": "Je serai absent(e)",
+          "reschedule": "Absent",
           "address": "Changer d’adresse"
         },
         "requestReschedule": "Le client sera absent à la livraison.",

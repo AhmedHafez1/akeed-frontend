@@ -105,11 +105,71 @@ describe('StatusCell', () => {
     ).toBe('Sep 16, 2026, 7:00 AM')
   })
 
-  it('does not show a tooltip when the status has no lifecycle timestamp', () => {
-    const row = { status: 'failed' } as VerificationItem
+  it('names who confirmed it and when', () => {
+    const row = {
+      status: 'confirmed',
+      confirmation_source: 'merchant_manual',
+      confirmed_at: '2026-09-16T07:00:00Z',
+    } as VerificationItem
     renderStandalone(<StatusCell row={row} timeZone="UTC" />, 'en')
 
-    expect(screen.getByText(/failed/i).closest('[title]')).toBeNull()
+    expect(
+      screen.getByText('Confirmed').closest('[title]')?.getAttribute('title')
+    ).toBe('Confirmed manually · Sep 16, 2026, 7:00 AM')
+  })
+
+  it.each([
+    [
+      'customer confirmed',
+      {
+        status: 'confirmed',
+        confirmation_source: 'customer',
+        confirmed_at: '2026-09-16T07:00:00Z',
+      },
+      'Confirmed',
+      'Confirmed by the customer · Sep 16, 2026, 7:00 AM',
+    ],
+    [
+      'merchant canceled for no reply',
+      {
+        status: 'canceled',
+        cancellation_source: 'merchant_no_reply',
+        canceled_at: '2026-09-16T07:00:00Z',
+      },
+      'Canceled',
+      'Canceled: no reply from the customer · Sep 16, 2026, 7:00 AM',
+    ],
+    [
+      'no reply',
+      { status: 'no_reply', no_reply_at: '2026-09-16T07:00:00Z' },
+      'No reply',
+      'No reply since Sep 16, 2026, 7:00 AM',
+    ],
+    [
+      'change requested',
+      {
+        status: 'read',
+        read_at: '2026-09-15T07:00:00Z',
+        change_request: { opened_at: '2026-09-16T07:00:00Z' },
+      },
+      'Change requested',
+      'Change requested · Sep 16, 2026, 7:00 AM',
+    ],
+  ])('says what happened and when: %s', (_, fields, badge, title) => {
+    renderStandalone(
+      <StatusCell row={fields as unknown as VerificationItem} timeZone="UTC" />,
+      'en'
+    )
+    expect(
+      screen.getByText(badge).closest('[title]')?.getAttribute('title')
+    ).toBe(title)
+  })
+
+  it('does not show a tooltip when there is nothing to add', () => {
+    const row = { status: 'awaiting_start' } as VerificationItem
+    renderStandalone(<StatusCell row={row} timeZone="UTC" />, 'en')
+
+    expect(screen.getByText('Awaiting start').closest('[title]')).toBeNull()
   })
 
   it('names an escalated order "No reply", the same word as the Shopify table', () => {

@@ -2,6 +2,7 @@ import type { VerificationItem } from '../model/dashboard.model'
 import { canCancelOrder } from './cancellation'
 import { autoCancelToggleAction } from './autoCancel'
 import { canSendShippingInfo } from './confirmationRowStatus'
+import { isShippingReason } from './shippingStatus'
 import { canRetryVerification, hasCapability } from './verificationLifecycle'
 
 /**
@@ -25,7 +26,19 @@ export interface ConfirmationRowActionPlan {
   canCancel: boolean
   /** Keep the order out of the automatic cancellation, or let it back in. */
   autoCancelToggle: 'exclude' | 'include' | null
+  /**
+   * "Mark done" for an open delivery request or an unreached customer after
+   * shipping. Owner and admin only, as the server enforces.
+   */
+  canMarkShippingDone: boolean
 }
+
+/** Reasons where WhatsApp is what failed, so there is no chat to offer. */
+const NO_CHAT_REASONS: ReadonlySet<string> = new Set([
+  'delivery_failed',
+  'no_whatsapp',
+  'shipping_not_reachable',
+])
 
 export function planConfirmationRowActions(
   row: VerificationItem,
@@ -40,6 +53,7 @@ export function planConfirmationRowActions(
       canRetry: false,
       canCancel: false,
       autoCancelToggle: null,
+      canMarkShippingDone: false,
     }
   }
 
@@ -51,15 +65,15 @@ export function planConfirmationRowActions(
       canRetry: false,
       canCancel: false,
       autoCancelToggle: null,
+      canMarkShippingDone: false,
     }
   }
 
-  // No chat where the message never arrived: a failed delivery, or a
-  // number that is not on WhatsApp at all.
+  // No chat where the message never arrived: a failed delivery, a number
+  // that is not on WhatsApp at all, or a Shipped message that could not
+  // reach the customer.
   const primary =
-    row.action_reason &&
-    row.action_reason !== 'delivery_failed' &&
-    row.action_reason !== 'no_whatsapp'
+    row.action_reason && !NO_CHAT_REASONS.has(row.action_reason)
       ? 'chat'
       : canSendShippingInfo(row)
         ? 'shipping'
@@ -75,6 +89,8 @@ export function planConfirmationRowActions(
     canRetry: permissions.canRetry && canRetryVerification(row.capabilities),
     canCancel: permissions.canWrite && canCancelOrder(row),
     autoCancelToggle: permissions.canWrite ? autoCancelToggleAction(row) : null,
+    canMarkShippingDone:
+      permissions.canWrite && isShippingReason(row.action_reason),
   }
 }
 
@@ -87,4 +103,6 @@ export interface ConfirmationRowActionHandlers {
     row: VerificationItem,
     action: 'exclude' | 'include'
   ) => void
+  /** "Mark done" on a shipping row; the item shows only when it is wired. */
+  onMarkShippingDone?: (row: VerificationItem) => void
 }
