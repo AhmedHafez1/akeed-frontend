@@ -11,8 +11,10 @@ import { needsActionRowModel } from './needsActionRow'
 import {
   isShippingSent,
   safeTrackingUrl,
+  shippingCellKind,
   shippingCellView,
   shippingRequestKind,
+  showsShippingLine,
 } from './shippingStatus'
 
 function shipping(overrides: Partial<ShippingSummary> = {}): ShippingSummary {
@@ -53,9 +55,64 @@ describe('shippingCellView', () => {
       expect(shippingCellView(shipping({ status }))).toEqual({
         badge: 'sent',
         reason: null,
+        done: false,
       })
     }
   )
+
+  it.each([
+    ['home', 'willReceive'],
+    ['reschedule', 'notAvailable'],
+    ['address', 'changeAddress'],
+  ] as const)('shows the %s reply as %s', (reply, badge) => {
+    const view = shippingCellView(
+      shipping({
+        status: 'read',
+        customer_reply: reply,
+        delivery_request: reply !== 'home',
+      })
+    )
+    expect(view).toEqual({ badge, reason: null, done: false })
+  })
+
+  it('keeps a request marked done, greyed', () => {
+    const view = shippingCellView(
+      shipping({
+        status: 'read',
+        customer_reply: 'address',
+        resolved_at: '2026-11-27T09:30:00Z',
+      })
+    )
+    expect(view).toEqual({ badge: 'changeAddress', reason: null, done: true })
+    expect(shippingCellKind(view!)).toBe('scheduled')
+  })
+
+  it('greys an unreached customer marked done', () => {
+    const view = shippingCellView(
+      shipping({
+        status: 'failed',
+        reason_code: 'no_phone',
+        resolved_at: '2026-11-27T09:30:00Z',
+      })
+    )
+    expect(view).toEqual({
+      badge: 'undeliverable',
+      reason: 'no_phone',
+      done: true,
+    })
+  })
+
+  it.each([
+    ['sent', 'pending'],
+    ['willReceive', 'confirmed'],
+    ['notAvailable', 'needsAction'],
+    ['changeAddress', 'needsAction'],
+    ['undeliverable', 'noWhatsApp'],
+    ['failedToSend', 'failed'],
+    ['notSent', 'scheduled'],
+  ] as const)('gives %s the %s family', (badge, kind) => {
+    expect(shippingCellKind({ badge, reason: null, done: false })).toBe(kind)
+  })
 
   it.each([
     ['no_phone', 'undeliverable'],
@@ -68,7 +125,7 @@ describe('shippingCellView', () => {
   ] as const)('words %s as %s, with its reason', (reason, badge) => {
     expect(
       shippingCellView(shipping({ status: 'failed', reason_code: reason }))
-    ).toEqual({ badge, reason })
+    ).toEqual({ badge, reason, done: false })
   })
 
   it('shows a retired or unknown code as a plain failure without a reason', () => {
@@ -76,7 +133,7 @@ describe('shippingCellView', () => {
       shippingCellView(
         shipping({ status: 'failed', reason_code: 'allowance_low' })
       )
-    ).toEqual({ badge: 'failedToSend', reason: null })
+    ).toEqual({ badge: 'failedToSend', reason: null, done: false })
   })
 })
 
@@ -156,35 +213,49 @@ describe('the manual "Send shipping info" action', () => {
 })
 
 describe('row status after shipping', () => {
-  it('shows the customer request in place of Confirmed', () => {
-    expect(
-      resolveRowStatus(
-        row({
-          action_reason: 'delivery_request',
-          shipping: shipping({
-            delivery_request: true,
-            customer_reply: 'reschedule',
-          }),
-        })
-      )
-    ).toEqual({ badge: 'reschedule', tone: 'warning', kind: 'needsAction' })
-    expect(
-      resolveRowStatus(
-        row({
-          action_reason: 'delivery_request',
-          shipping: shipping({
-            delivery_request: true,
-            customer_reply: 'address',
-          }),
-        })
-      ).badge
-    ).toBe('changeAddress')
-  })
+  it.each(['reschedule', 'address'] as const)(
+    'keeps Confirmed when the customer replies %s',
+    (reply) => {
+      expect(
+        resolveRowStatus(
+          row({
+            action_reason: 'delivery_request',
+            shipping: shipping({
+              delivery_request: true,
+              customer_reply: reply,
+            }),
+          })
+        )
+      ).toMatchObject({ badge: 'confirmed', kind: 'confirmed' })
+    }
+  )
 
-  it('shows an unreached customer as WhatsApp undeliverable', () => {
+  it('keeps Confirmed for an unreached customer', () => {
     expect(
       resolveRowStatus(row({ action_reason: 'shipping_not_reachable' }))
-    ).toMatchObject({ badge: 'noWhatsApp', kind: 'noWhatsApp' })
+    ).toMatchObject({ badge: 'confirmed', kind: 'confirmed' })
+  })
+
+  it('keeps an unanswered order awaiting, not "No reply", after a shipping reply', () => {
+    expect(
+      resolveRowStatus(
+        row({ status: 'read', action_reason: 'delivery_request' })
+      ).badge
+    ).toBe('awaitingReply')
+  })
+
+  it('shows the Shipping line on a card for an unreached customer too', () => {
+    expect(
+      showsShippingLine({
+        shipping: shipping({
+          status: 'failed',
+          reason_code: 'not_on_whatsapp',
+        }),
+      })
+    ).toBe(true)
+    expect(
+      showsShippingLine({ shipping: shipping({ status: 'pending' }) })
+    ).toBe(false)
   })
 })
 

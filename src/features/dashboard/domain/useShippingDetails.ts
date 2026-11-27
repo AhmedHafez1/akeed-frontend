@@ -9,9 +9,9 @@ import type {
 import {
   isShippingReason,
   safeTrackingUrl,
-  shippingCellView,
+  shippingDeliveryView,
   shippingRequestKind,
-  type ShippingBadge,
+  type ShippingDeliveryBadge,
 } from './shippingStatus'
 import { formatTooltipDateTime } from './verificationRow'
 
@@ -21,7 +21,7 @@ export interface ShippingDetailsView {
   /** The status word: Sent, Delivered, Read, Pending, or the failure badge. */
   status: string
   /** The badge family, for the skin's colour; null while pending. */
-  badge: ShippingBadge | null
+  badge: ShippingDeliveryBadge | null
   /** When it was sent or failed. */
   time: string
   /** Why it was not sent, written out; null otherwise. */
@@ -49,7 +49,8 @@ export function useShippingDetails(
   if (!shipping) return null
   const time = (iso: string | null) =>
     formatTooltipDateTime(iso, locale, timeZone)
-  const cell = shippingCellView(shipping)
+  // The details keep how the message went; the reply has its own line.
+  const cell = shippingDeliveryView(shipping)
   const status =
     shipping.status === 'delivered' || shipping.status === 'read'
       ? t(`details.status.${shipping.status}`)

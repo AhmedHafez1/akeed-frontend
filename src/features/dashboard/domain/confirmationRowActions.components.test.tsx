@@ -160,3 +160,56 @@ for (const skin of ['embedded', 'standalone'] as const) {
     })
   }
 }
+
+describe('Mark done in the embedded row sheet', () => {
+  const shippedRow: VerificationItem = {
+    ...requestRow,
+    status: 'confirmed',
+    change_request: null,
+    action_reason: 'delivery_request',
+  }
+
+  function renderSheet(canWrite: boolean) {
+    const handlers = {
+      onOpenDetails: vi.fn(),
+      onRequestConfirm: vi.fn(),
+      onRequestCancel: vi.fn(),
+      onRetry: vi.fn(),
+      onToggleAutoCancel: vi.fn(),
+      onMarkShippingDone: vi.fn(),
+    }
+    renderEmbedded(
+      <EmbeddedActions
+        row={shippedRow}
+        orderLabel="#1187"
+        canWrite={canWrite}
+        canRetry={canWrite}
+        isActing={false}
+        handlers={handlers}
+      />,
+      'en'
+    )
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: en.dashboard.confirmations.actions.more.replace(
+          '{order}',
+          '#1187'
+        ),
+      })
+    )
+    return handlers
+  }
+
+  it('lets an owner or admin mark the request done', () => {
+    const handlers = renderSheet(true)
+    fireEvent.click(screen.getByRole('button', { name: 'Mark done' }))
+    expect(handlers.onMarkShippingDone).toHaveBeenCalledExactlyOnceWith(
+      shippedRow
+    )
+  })
+
+  it('does not offer it to a viewer', () => {
+    renderSheet(false)
+    expect(screen.queryByRole('button', { name: 'Mark done' })).toBeNull()
+  })
+})

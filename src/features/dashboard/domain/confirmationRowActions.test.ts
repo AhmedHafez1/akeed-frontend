@@ -43,6 +43,7 @@ describe('planConfirmationRowActions', () => {
       canRetry: false,
       canCancel: true,
       autoCancelToggle: null,
+      canMarkShippingDone: false,
     })
   })
 
@@ -92,6 +93,7 @@ describe('planConfirmationRowActions', () => {
       canRetry: false,
       canCancel: false,
       autoCancelToggle: null,
+      canMarkShippingDone: false,
     })
   })
 
@@ -107,6 +109,79 @@ describe('planConfirmationRowActions', () => {
       canRetry: false,
       canCancel: false,
       autoCancelToggle: null,
+      canMarkShippingDone: false,
     })
+  })
+})
+
+describe('row actions after shipping', () => {
+  const cancellable = capabilities(
+    'merchant_no_reply_cancellation',
+    'merchant_manual_confirmation'
+  )
+
+  it('offers Mark done to an owner or admin, never to a viewer', () => {
+    for (const reason of [
+      'delivery_request',
+      'shipping_not_reachable',
+    ] as const) {
+      const shipped = row({ status: 'confirmed', action_reason: reason })
+      expect(
+        planConfirmationRowActions(shipped, owner).canMarkShippingDone
+      ).toBe(true)
+      expect(
+        planConfirmationRowActions(shipped, viewer).canMarkShippingDone
+      ).toBe(false)
+    }
+    expect(
+      planConfirmationRowActions(
+        row({ status: 'no_reply', action_reason: 'no_reply' }),
+        owner
+      ).canMarkShippingDone
+    ).toBe(false)
+  })
+
+  it('offers no chat when the Shipped message could not reach the customer', () => {
+    expect(
+      planConfirmationRowActions(
+        row({ status: 'confirmed', action_reason: 'shipping_not_reachable' }),
+        owner
+      ).primary
+    ).not.toBe('chat')
+    expect(
+      planConfirmationRowActions(
+        row({ status: 'confirmed', action_reason: 'delivery_request' }),
+        owner
+      ).primary
+    ).toBe('chat')
+  })
+
+  it.each(['delivery_request', 'shipping_not_reachable'] as const)(
+    'offers no Cancel on an unconfirmed order with %s, which the server refuses',
+    (reason) => {
+      expect(
+        planConfirmationRowActions(
+          row({
+            status: 'no_reply',
+            action_reason: reason,
+            capabilities: cancellable,
+          }),
+          owner
+        ).canCancel
+      ).toBe(false)
+    }
+  )
+
+  it('still offers Cancel on an unanswered order', () => {
+    expect(
+      planConfirmationRowActions(
+        row({
+          status: 'no_reply',
+          action_reason: 'no_reply',
+          capabilities: cancellable,
+        }),
+        owner
+      ).canCancel
+    ).toBe(true)
   })
 })

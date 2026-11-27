@@ -3,22 +3,41 @@ import type {
   ShippingFailureReason,
   ShippingSummary,
 } from '../model/dashboard.model'
+import type { RowStatusKind } from './confirmationRowStatus'
 
 /**
- * How the Shipping cell words a Shipped message. Owner rule: a customer
- * WhatsApp cannot reach is "WhatsApp undeliverable"; a real problem is
- * "Failed to send"; an order Akeed rightly skipped is "Not sent".
+ * How a Shipped message itself went. Owner rule: a customer WhatsApp cannot
+ * reach is "WhatsApp undeliverable"; a real problem is "Failed to send"; an
+ * order Akeed rightly skipped is "Not sent".
  */
-export type ShippingBadge =
+export type ShippingDeliveryBadge =
   | 'sent'
   | 'undeliverable'
   | 'failedToSend'
   | 'notSent'
 
+/**
+ * What the Shipping cell says: the customer's reply once there is one,
+ * otherwise how the message went.
+ */
+export type ShippingBadge =
+  | ShippingDeliveryBadge
+  | 'willReceive'
+  | 'notAvailable'
+  | 'changeAddress'
+
+export interface ShippingDeliveryView {
+  badge: ShippingDeliveryBadge
+  /** Key under `dashboard.shipping.reasons`, for the tooltip; null without one. */
+  reason: ShippingFailureReason | null
+}
+
 export interface ShippingCellView {
   badge: ShippingBadge
   /** Key under `dashboard.shipping.reasons`, for the tooltip; null without one. */
   reason: ShippingFailureReason | null
+  /** The merchant marked the request, or the unreached customer, done. */
+  done: boolean
 }
 
 const KNOWN_REASONS: ReadonlySet<string> = new Set<ShippingFailureReason>([
@@ -40,7 +59,7 @@ function knownReason(code: string | null): ShippingFailureReason | null {
 /** The badge a failure reason wears. An unknown code is a plain failure. */
 export function shippingFailureBadge(
   reason: ShippingFailureReason | null
-): Exclude<ShippingBadge, 'sent'> {
+): Exclude<ShippingDeliveryBadge, 'sent'> {
   if (reason === 'no_phone' || reason === 'not_on_whatsapp')
     return 'undeliverable'
   if (reason === 'order_too_old' || reason === 'order_cancelled')
@@ -58,17 +77,61 @@ export function isShippingSent(shipping: ShippingSummary | null | undefined) {
 }
 
 /**
- * The one-line Shipping cell. Blank (null) when nothing was due or the
- * message is still pending.
+ * How the Shipped message went, ignoring any reply. Null when nothing was
+ * due or the message is still pending.
  */
-export function shippingCellView(
+export function shippingDeliveryView(
   shipping: ShippingSummary | null | undefined
-): ShippingCellView | null {
+): ShippingDeliveryView | null {
   if (!shipping) return null
   if (isShippingSent(shipping)) return { badge: 'sent', reason: null }
   if (shipping.status !== 'failed') return null
   const reason = knownReason(shipping.reason_code)
   return { badge: shippingFailureBadge(reason), reason }
+}
+
+/**
+ * The one-line Shipping cell: the customer's reply once they tapped one,
+ * otherwise how the message went. A request or an unreached customer the
+ * merchant marked done keeps its word, greyed. Blank (null) when nothing was
+ * due or the message is still pending.
+ */
+export function shippingCellView(
+  shipping: ShippingSummary | null | undefined
+): ShippingCellView | null {
+  const delivery = shippingDeliveryView(shipping)
+  if (!shipping || !delivery) return null
+  const done = shipping.resolved_at !== null
+  switch (shipping.customer_reply) {
+    case 'address':
+      return { badge: 'changeAddress', reason: null, done }
+    case 'reschedule':
+      return { badge: 'notAvailable', reason: null, done }
+    case 'home':
+      return { badge: 'willReceive', reason: null, done: false }
+    default:
+      return { ...delivery, done: delivery.badge === 'undeliverable' && done }
+  }
+}
+
+/** The badge family a Shipping cell wears, the same as the status badges'. */
+export function shippingCellKind(view: ShippingCellView): RowStatusKind {
+  if (view.done) return 'scheduled'
+  switch (view.badge) {
+    case 'sent':
+      return 'pending'
+    case 'willReceive':
+      return 'confirmed'
+    case 'notAvailable':
+    case 'changeAddress':
+      return 'needsAction'
+    case 'undeliverable':
+      return 'noWhatsApp'
+    case 'failedToSend':
+      return 'failed'
+    case 'notSent':
+      return 'scheduled'
+  }
 }
 
 /** What the customer's open request asks for; null when none is open. */
@@ -94,16 +157,9 @@ export function safeTrackingUrl(url: string | null | undefined): string | null {
   return url && /^https:\/\//i.test(url) ? url : null
 }
 
-/**
- * Whether a phone card shows its Shipping line. Not when the card's status
- * already says the Shipped message could not reach the customer.
- */
+/** Whether a phone card shows its Shipping line: whenever the cell would. */
 export function showsShippingLine(row: {
-  action_reason?: NeedsActionReason | null
   shipping?: ShippingSummary | null
 }): boolean {
-  return (
-    shippingCellView(row.shipping) !== null &&
-    row.action_reason !== 'shipping_not_reachable'
-  )
+  return shippingCellView(row.shipping) !== null
 }

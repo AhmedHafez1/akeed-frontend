@@ -11,13 +11,13 @@ import {
 import { CheckIcon } from '@shopify/polaris-icons'
 import { useTranslations } from 'next-intl'
 import { useAkeedMode } from '@/shared/hooks/useAkeedMode'
-import type { ShippingBadge } from '../../../../domain/shippingStatus'
+import type { ShippingDeliveryBadge } from '../../../../domain/shippingStatus'
 import { useShippingDetails } from '../../../../domain/useShippingDetails'
 import { useShippingResolve } from '../../../../domain/useShippingResolve'
 import type { VerificationItem } from '../../../../model/dashboard.model'
 
 const TONES: Record<
-  ShippingBadge,
+  ShippingDeliveryBadge,
   'info' | 'attention' | 'critical' | undefined
 > = {
   sent: 'info',

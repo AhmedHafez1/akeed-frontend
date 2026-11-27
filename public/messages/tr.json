@@ -1473,11 +1473,22 @@
           "followUpSent": "Hatırlatma gönderildi",
           "sendsAt": "Gönderim: {time}",
           "callCustomer": "Müşteriyi arayın",
-          "waitingForCapacity": "Plan veya bakiye bitti",
-          "shippedNotReached": "Kargo mesajı iletilemedi"
+          "waitingForCapacity": "Plan veya bakiye bitti"
         },
         "tooltip": {
           "scheduledFor": "Planlanan zaman: {time}",
+          "confirmedByCustomer": "Müşteri onayladı · {time}",
+          "confirmedManually": "Elle onaylandı · {time}",
+          "confirmedAfterReminder": "Hatırlatmadan sonra onaylandı · {time}",
+          "canceledByCustomer": "Müşteri iptal etti · {time}",
+          "canceledNoReply": "İptal edildi: müşteriden yanıt yok · {time}",
+          "canceledNoWhatsApp": "İptal edildi: WhatsApp iletilemedi · {time}",
+          "canceledAutomatically": "Otomatik iptal edildi: yanıt yok · {time}",
+          "canceledInStore": "Shopify’da iptal edildi · {time}",
+          "failed": "Gönderilemedi: {reason}",
+          "blocked": "Gönderim bekliyor: plan veya bakiye bitti",
+          "noReplySince": "{time} tarihinden beri yanıt yok",
+          "changeRequested": "Değişiklik istendi · {time}",
           "reminderAt": "Hatırlatma zamanı: {time}",
           "callCustomer": "WhatsApp bu numaraya iletemedi. Numara WhatsApp’ta kayıtlı olmayabilir ya da müşterinin WhatsApp’ı güncellemesi veya en son koşulları kabul etmesi gerekebilir. Onay için müşteriyi arayın.",
           "callCustomerSince": "{time} tarihinden beri WhatsApp bu numaraya iletemiyor. Numara WhatsApp’ta kayıtlı olmayabilir ya da müşterinin WhatsApp’ı güncellemesi veya en son koşulları kabul etmesi gerekebilir. Onay için müşteriyi arayın.",
@@ -1644,8 +1655,12 @@
     },
     "shipping": {
       "heading": "Kargo",
+      "replyAt": "{reply} · {time}",
       "badges": {
         "sent": "Gönderildi",
+        "willReceive": "Teslim alacak",
+        "notAvailable": "Müsait değil",
+        "changeAddress": "Adresi değiştir",
         "undeliverable": "WhatsApp iletilemedi",
         "failedToSend": "Gönderilemedi",
         "notSent": "Gönderilmedi"
@@ -1681,7 +1696,7 @@
         "reply": "Müşteri yanıtı",
         "replies": {
           "home": "Teslim alacağım",
-          "reschedule": "Müsait olmayacağım",
+          "reschedule": "Müsait değil",
           "address": "Adresi değiştir"
         },
         "requestReschedule": "Müşteri teslimat sırasında müsait olmayacak.",

@@ -29,14 +29,19 @@ El mensaje se envía a los pedidos contra reembolso que recibió Akeed. Se omite
 
 ## La columna Envío
 
-Tu lista de pedidos muestra una palabra por pedido en la columna **Envío**:
+Tu lista de pedidos muestra una palabra por pedido en la columna **Envío**. La columna **Estado** conserva el resultado de la confirmación, como **Confirmado**.
 
 | Lo que ves | Qué significa |
 | --- | --- |
-| **Enviado** | El mensaje salió. |
+| **Enviado** | El mensaje salió. Pasa el cursor sobre la palabra para ver si se entregó o se leyó. |
+| **Lo recibirá** | El cliente tocó **Lo recibiré**. |
+| **No disponible** | El cliente tocó **No estaré disponible**. Contáctalo. |
+| **Cambiar dirección** | El cliente pidió cambiar la dirección. Contáctalo. |
 | **No entregado en WhatsApp** | El cliente no tiene número de teléfono, o el número no está en WhatsApp. |
 | **Envío fallido** | Algo detuvo el mensaje. Pasa el cursor sobre la palabra para ver por qué. |
 | **No enviado** | El pedido tiene más de 30 días o fue cancelado. |
+
+Después de hacer clic en **Marcar como resuelto**, la palabra queda en gris. Pasa el cursor sobre ella para ver cuándo se resolvió.
 
 Abre un pedido para ver por qué se envió el mensaje, su seguimiento y la respuesta del cliente.
 
@@ -58,11 +63,13 @@ Abre un pedido para ver por qué se envió el mensaje, su seguimiento y la respu
 
 ## Respuestas del cliente
 
-Cuando el cliente toca **No estaré disponible** o **Cambiar dirección**, el pedido pasa a **Requieren tu acción**. Contacta al cliente, coordina la entrega con tu mensajería y luego haz clic en **Marcar como resuelto**.
+Cuando el cliente toca **No estaré disponible** o **Cambiar dirección**, el pedido pasa a **Requieren tu acción**. Contacta al cliente, coordina la entrega con tu mensajería y luego haz clic en **Marcar como resuelto** en el menú **⋯** del pedido o en sus detalles.
 
 **Lo recibiré** no requiere nada de tu parte. Si los mensajes de agradecimiento están activados, Akeed le agradece al cliente su respuesta.
 
-Un pedido cuyo mensaje no llegó al cliente también aparece en **Requieren tu acción**, como **No entregado en WhatsApp**. Llama al cliente y luego haz clic en **Marcar como resuelto**.
+Un pedido cuyo mensaje no llegó al cliente también aparece en **Requieren tu acción**, con **No entregado en WhatsApp** en la columna **Envío**. Llama al cliente y luego haz clic en **Marcar como resuelto**.
+
+Solo el propietario de la tienda y los administradores pueden marcar una respuesta como resuelta.
 
 ## Facturación
 

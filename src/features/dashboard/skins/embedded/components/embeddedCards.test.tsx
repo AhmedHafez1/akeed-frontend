@@ -504,7 +504,7 @@ describe('ConfirmationsTable', () => {
     expect(screen.queryByText('Call the customer')).toBeNull()
   })
 
-  it('does not show a status tooltip when no lifecycle timestamp exists', () => {
+  it('says why a send failed on hover', () => {
     renderEmbedded(
       <ConfirmationsTable
         rows={[listRow({ status: 'failed', confirmed_at: null })]}
@@ -513,7 +513,24 @@ describe('ConfirmationsTable', () => {
       'en'
     )
 
-    expect(screen.getByText(/failed/i).closest('[title]')).toBeNull()
+    expect(
+      screen
+        .getByText('Failed to send')
+        .closest('[title]')
+        ?.getAttribute('title')
+    ).toBe('Failed to send: message not sent')
+  })
+
+  it('does not show a status tooltip when there is nothing to add', () => {
+    renderEmbedded(
+      <ConfirmationsTable
+        rows={[listRow({ status: 'awaiting_start', confirmed_at: null })]}
+        {...tableProps}
+      />,
+      'en'
+    )
+
+    expect(screen.getByText('Awaiting start').closest('[title]')).toBeNull()
   })
 
   it('shows nameless customers and phone in separate one-line table cells', () => {

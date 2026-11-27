@@ -21,9 +21,10 @@ import { useAutoCancelMarker } from '../../../../domain/useAutoCancelMarker'
 import { useCustomerRecordView } from '../../../../domain/useCustomerRecordView'
 import { isAckMissing } from '../../../../domain/changeRequestView'
 import {
+  shippingCellKind,
   shippingCellView,
-  type ShippingBadge,
 } from '../../../../domain/shippingStatus'
+import { useShippingTooltip } from '../../../../domain/useShippingTooltip'
 import {
   customerDisplayName,
   formatDayAndClock,
@@ -182,7 +183,9 @@ export function StatusCell({
 }) {
   const t = useTranslations('dashboard.confirmations.status')
   const view = resolveRowStatus(row, { showStoreCancellation: true })
-  const statusTitle = useStatusTooltip(row, timeZone)
+  const statusTitle = useStatusTooltip(row, timeZone, {
+    showStoreCancellation: true,
+  })
   const autoCancel = useAutoCancelMarker(row, timeZone)
   const tChange = useTranslations('dashboard.changeRequest')
   return (
@@ -250,20 +253,10 @@ export function CustomerRecordBadge({
   )
 }
 
-/** The Shipping badge's tone, in the same families as the status badges. */
-const SHIPPING_TONES: Record<
-  ShippingBadge,
-  'info' | 'attention' | 'critical' | undefined
-> = {
-  sent: 'info',
-  undeliverable: 'attention',
-  failedToSend: 'critical',
-  notSent: undefined,
-}
-
 /**
- * The one-line Shipping cell: Sent, or why the Shipped message did not go
- * out (its reason on hover and to screen readers), or nothing.
+ * The one-line Shipping cell: the customer's reply (greyed once marked
+ * done), Sent, or why the Shipped message did not go out, with the detail on
+ * hover and to screen readers; or nothing.
  */
 export function ShippingCell({
   row,
@@ -276,15 +269,10 @@ export function ShippingCell({
   withLabel?: boolean
 }) {
   const t = useTranslations('dashboard.shipping')
-  const { locale } = useLocaleInfo()
   const view = shippingCellView(row.shipping)
-  if (!view || !row.shipping) return null
-  const detail =
-    view.badge === 'sent'
-      ? formatTooltipDateTime(row.shipping.updated_at, locale, timeZone)
-      : view.reason
-        ? t(`reasons.${view.reason}`)
-        : ''
+  const detail = useShippingTooltip(row.shipping, view, timeZone)
+  if (!view) return null
+  const label = t(`badges.${view.badge}`)
   return (
     <span
       title={detail || undefined}
@@ -295,12 +283,8 @@ export function ShippingCell({
           {t('heading')}
         </Text>
       )}
-      <Badge tone={SHIPPING_TONES[view.badge]}>
-        {t(`badges.${view.badge}`)}
-      </Badge>
-      {detail && view.badge !== 'sent' && (
-        <span className="sr-only">{detail}</span>
-      )}
+      <Badge tone={BADGE_TONES[shippingCellKind(view)]}>{label}</Badge>
+      {detail && detail !== label && <span className="sr-only">{detail}</span>}
     </span>
   )
 }

@@ -147,7 +147,7 @@ describe('Shipping column, Shopify table', () => {
     expect(screen.queryByText(en.dashboard.shipping.badges.sent)).toBeNull()
   })
 
-  it('shows Sent with its time, and nothing while pending or not due', () => {
+  it('shows Sent with how far it got, and nothing while pending or not due', () => {
     renderEmbedded(
       <ConfirmationsTable
         rows={[
@@ -164,9 +164,65 @@ describe('Shipping column, Shopify table', () => {
     const sent = screen.getAllByText('Sent')
     // The Reminder column is empty here, so every "Sent" is Shipping's.
     expect(sent).toHaveLength(1)
-    expect(sent[0].closest('[title]')?.getAttribute('title')).toBe(
-      'Nov 25, 2026, 12:20 PM'
+    // The record keeps no delivered time, so the tooltip names the step only.
+    expect(sent[0].closest('[title]')?.getAttribute('title')).toBe('Delivered')
+  })
+
+  it('shows the reply in Shipping and keeps Confirmed in Status', () => {
+    renderEmbedded(
+      <ConfirmationsTable
+        rows={[
+          listRow({
+            id: 'a',
+            action_reason: 'delivery_request',
+            shipping: shipping({
+              status: 'read',
+              customer_reply: 'address',
+              customer_replied_at: '2026-11-27T11:20:00Z',
+              delivery_request: true,
+            }),
+          }),
+          listRow({
+            id: 'b',
+            shipping: shipping({
+              status: 'read',
+              customer_reply: 'home',
+              customer_replied_at: '2026-11-27T10:05:00Z',
+            }),
+          }),
+          listRow({
+            id: 'c',
+            shipping: shipping({
+              status: 'read',
+              customer_reply: 'reschedule',
+              customer_replied_at: '2026-11-27T08:00:00Z',
+              resolved_at: '2026-11-27T09:30:00Z',
+            }),
+          }),
+        ]}
+        showShipping
+        {...listProps}
+      />,
+      'en'
     )
+    expect(screen.getAllByText('Confirmed')).toHaveLength(3)
+    const address = screen.getByText('Change address')
+    expect(address.closest('[title]')?.getAttribute('title')).toBe(
+      'Change address · Nov 27, 2026, 11:20 AM'
+    )
+    expect(address.closest('.Polaris-Badge')?.className).toContain(
+      'toneWarning'
+    )
+    const receive = screen.getByText('Will receive')
+    expect(receive.closest('.Polaris-Badge')?.className).toContain(
+      'toneSuccess'
+    )
+    // Marked done: the reply stays, greyed, with when it was done.
+    const done = screen.getByText('Not available')
+    expect(done.closest('[title]')?.getAttribute('title')).toBe(
+      'Done Nov 27, 2026, 9:30 AM'
+    )
+    expect(done.closest('.Polaris-Badge')?.className).not.toContain('tone')
   })
 
   it.each(REASONS)(
@@ -217,7 +273,7 @@ describe('Shipping column, Shopify table', () => {
     ).toBeNull()
   })
 
-  it('does not repeat "WhatsApp undeliverable" on a card whose status says it', () => {
+  it('keeps Confirmed on the card and says the customer was unreached in Shipping', () => {
     renderEmbedded(
       <ConfirmationsCardList
         rows={[
@@ -236,7 +292,10 @@ describe('Shipping column, Shopify table', () => {
     expect(
       screen.getAllByText(ar.dashboard.shipping.badges.undeliverable)
     ).toHaveLength(1)
-    expect(screen.queryByText(ar.dashboard.shipping.heading)).toBeNull()
+    expect(screen.getByText(ar.dashboard.shipping.heading)).toBeTruthy()
+    expect(
+      screen.getByText(ar.dashboard.confirmations.status.confirmed)
+    ).toBeTruthy()
   })
 })
 

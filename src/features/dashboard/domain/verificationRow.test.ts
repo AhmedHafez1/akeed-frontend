@@ -54,6 +54,46 @@ describe('getLastUpdateAt', () => {
     ).toBe('2026-09-17T09:00:00Z')
   })
 
+  it('counts a shipping reply, its Mark done and an open change request', () => {
+    const base = {
+      created_at: '2026-11-26T17:50:00Z',
+      confirmed_at: '2026-11-26T18:12:00Z',
+    }
+    const shipping = (
+      over: Partial<NonNullable<VerificationItem['shipping']>>
+    ) =>
+      ({
+        status: 'read',
+        customer_reply: 'address',
+        customer_replied_at: '2026-11-27T11:20:00Z',
+        resolved_at: null,
+        // Tracking-link opens move this one; it is not counted.
+        updated_at: '2026-11-28T00:00:00Z',
+        ...over,
+      }) as VerificationItem['shipping']
+    expect(getLastUpdateAt(row({ ...base, shipping: shipping({}) }))).toBe(
+      '2026-11-27T11:20:00Z'
+    )
+    expect(
+      getLastUpdateAt(
+        row({
+          ...base,
+          shipping: shipping({ resolved_at: '2026-11-27T13:00:00Z' }),
+        })
+      )
+    ).toBe('2026-11-27T13:00:00Z')
+    expect(
+      getLastUpdateAt(
+        row({
+          ...base,
+          change_request: {
+            opened_at: '2026-11-26T21:02:00Z',
+          } as VerificationItem['change_request'],
+        })
+      )
+    ).toBe('2026-11-26T21:02:00Z')
+  })
+
   it('is the order time when nothing has happened yet', () => {
     expect(getLastUpdateAt(row({ created_at: '2026-09-16T06:49:00Z' }))).toBe(
       '2026-09-16T06:49:00Z'

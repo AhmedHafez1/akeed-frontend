@@ -1,6 +1,6 @@
 import type { VerificationItem } from '../model/dashboard.model'
 import { deliveryFailureKey } from './deliveryFailure'
-import { isShippingSent, shippingRequestKind } from './shippingStatus'
+import { isShippingReason, isShippingSent } from './shippingStatus'
 
 export type RowStatusTone = 'success' | 'critical' | 'warning' | 'neutral'
 
@@ -48,26 +48,8 @@ export function resolveRowStatus(
   if (row.change_request) {
     return { badge: 'changeRequested', tone: 'warning', kind: 'needsAction' }
   }
-  // After shipping, the customer's request or an unreached customer is what
-  // the merchant must act on, so it replaces "Confirmed".
-  if (row.action_reason === 'delivery_request') {
-    return {
-      badge:
-        shippingRequestKind(row.shipping) === 'address'
-          ? 'changeAddress'
-          : 'reschedule',
-      tone: 'warning',
-      kind: 'needsAction',
-    }
-  }
-  if (row.action_reason === 'shipping_not_reachable') {
-    return {
-      badge: 'noWhatsApp',
-      tone: 'warning',
-      kind: 'noWhatsApp',
-      sub: 'sub.shippedNotReached',
-    }
-  }
+  // A shipping reply or an unreached customer is the Shipping cell's to say:
+  // the status keeps the confirmation result (the row stays amber).
   switch (row.status) {
     case 'confirmed':
       return {
@@ -154,7 +136,10 @@ export function resolveRowStatus(
       break
   }
 
-  if (row.action_reason || row.status === 'no_reply') {
+  if (
+    (row.action_reason && !isShippingReason(row.action_reason)) ||
+    row.status === 'no_reply'
+  ) {
     return {
       badge: 'noReply',
       tone: 'warning',

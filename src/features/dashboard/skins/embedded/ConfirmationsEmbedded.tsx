@@ -26,6 +26,7 @@ import {
 } from '../../domain/useConfirmationsExport'
 import { useConfirmationsList } from '../../domain/useConfirmationsList'
 import { useManualConfirmation } from '../../domain/useManualConfirmation'
+import { useShippingResolve } from '../../domain/useShippingResolve'
 import { formatCount } from '../../lib/orderDisplay'
 import type { DateRangeFilterOption } from '../../domain/dashboard.types'
 import type {
@@ -129,6 +130,11 @@ export function ConfirmationsEmbedded({
           : `${t(`confirmations.tabs.${id}`)} (${formatCount(count, locale)})`,
       panelID: 'confirmations-panel',
     }
+  })
+
+  const shippingResolve = useShippingResolve({
+    onDone: (message) => setFeedback({ tone: 'success', message }),
+    onError: (message) => setFeedback({ tone: 'critical', message }),
   })
 
   const handleRetry = async (row: VerificationItem) => {
@@ -336,6 +342,10 @@ export function ConfirmationsEmbedded({
                   onRetry: (row) => void handleRetry(row),
                   onToggleAutoCancel: (row, action) =>
                     void handleToggleAutoCancel(row, action),
+                  onMarkShippingDone: (row) => {
+                    setFeedback(null)
+                    void shippingResolve.resolve(row.id)
+                  },
                 }}
               />
             </LoadMoreFooter>

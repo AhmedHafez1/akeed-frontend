@@ -13,12 +13,12 @@ import { cn } from '@/shared/lib/utils'
 import { akButton, akLink, notify } from '@/shared/ui'
 import { StatusBadge, type StatusBadgeKind } from '@/shared/ui/status-badge'
 import { customerContact } from '@/features/dashboard/lib/customerContact'
-import type { ShippingBadge } from '@/features/dashboard/domain/shippingStatus'
+import type { ShippingDeliveryBadge } from '@/features/dashboard/domain/shippingStatus'
 import { useShippingDetails } from '@/features/dashboard/domain/useShippingDetails'
 import { useShippingResolve } from '@/features/dashboard/domain/useShippingResolve'
 import type { VerificationItem } from '@/features/dashboard/model/dashboard.model'
 
-const KINDS: Record<ShippingBadge, StatusBadgeKind> = {
+const KINDS: Record<ShippingDeliveryBadge, StatusBadgeKind> = {
   sent: 'pending',
   undeliverable: 'noWhatsApp',
   failedToSend: 'failed',

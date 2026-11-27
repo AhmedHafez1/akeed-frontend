@@ -1473,11 +1473,22 @@
           "followUpSent": "یاد دہانی بھیج دی گئی",
           "sendsAt": "{time} بھیجا جائے گا",
           "callCustomer": "کسٹمر کو کال کریں",
-          "waitingForCapacity": "پلان یا بیلنس ختم",
-          "shippedNotReached": "شپنگ پیغام نہیں پہنچا"
+          "waitingForCapacity": "پلان یا بیلنس ختم"
         },
         "tooltip": {
           "scheduledFor": "{time} کے لیے شیڈول شدہ",
+          "confirmedByCustomer": "کسٹمر نے تصدیق کی · {time}",
+          "confirmedManually": "خود تصدیق کی گئی · {time}",
+          "confirmedAfterReminder": "یاد دہانی کے بعد تصدیق · {time}",
+          "canceledByCustomer": "کسٹمر نے منسوخ کیا · {time}",
+          "canceledNoReply": "منسوخ: کسٹمر کا جواب نہیں آیا · {time}",
+          "canceledNoWhatsApp": "منسوخ: واٹس ایپ پیغام نہیں پہنچا · {time}",
+          "canceledAutomatically": "خودکار منسوخ: کوئی جواب نہیں · {time}",
+          "canceledInStore": "Shopify میں منسوخ ہوا · {time}",
+          "failed": "بھیجنے میں ناکامی: {reason}",
+          "blocked": "بھیجنے کا منتظر: پلان یا بیلنس ختم",
+          "noReplySince": "{time} سے کوئی جواب نہیں",
+          "changeRequested": "تبدیلی کی درخواست · {time}",
           "reminderAt": "یاد دہانی {time} کے لیے شیڈول شدہ",
           "callCustomer": "واٹس ایپ اس نمبر تک پیغام نہیں پہنچا سکا۔ ہو سکتا ہے نمبر واٹس ایپ پر نہ ہو، یا کسٹمر کو واٹس ایپ اپ ڈیٹ کرنے یا اس کی تازہ شرائط قبول کرنے کی ضرورت ہو۔ تصدیق کے لیے کسٹمر کو کال کریں۔",
           "callCustomerSince": "{time} سے واٹس ایپ اس نمبر تک پیغام نہیں پہنچا پا رہا۔ ہو سکتا ہے نمبر واٹس ایپ پر نہ ہو، یا کسٹمر کو واٹس ایپ اپ ڈیٹ کرنے یا اس کی تازہ شرائط قبول کرنے کی ضرورت ہو۔ تصدیق کے لیے کسٹمر کو کال کریں۔",
@@ -1644,8 +1655,12 @@
     },
     "shipping": {
       "heading": "شپنگ",
+      "replyAt": "{reply} · {time}",
       "badges": {
         "sent": "بھیجی گئی",
+        "willReceive": "وصول کریں گے",
+        "notAvailable": "دستیاب نہیں",
+        "changeAddress": "پتہ تبدیل کریں",
         "undeliverable": "واٹس ایپ پیغام نہیں پہنچا",
         "failedToSend": "بھیجنے میں ناکامی",
         "notSent": "نہیں بھیجا گیا"
@@ -1681,7 +1696,7 @@
         "reply": "کسٹمر کا جواب",
         "replies": {
           "home": "ٹھیک ہے، وصول کر لیں گے",
-          "reschedule": "اس وقت دستیاب نہیں",
+          "reschedule": "دستیاب نہیں",
           "address": "پتہ تبدیل کریں"
         },
         "requestReschedule": "کسٹمر ڈیلیوری کے وقت دستیاب نہیں ہوگا۔",

@@ -29,14 +29,19 @@ Le message part pour les commandes en paiement à la livraison reçues par Akeed
 
 ## La colonne Expédition
 
-La liste de vos commandes affiche un mot par commande dans la colonne **Expédition**.
+La liste de vos commandes affiche un mot par commande dans la colonne **Expédition**. La colonne **Statut** garde le résultat de la confirmation, par exemple **Confirmée**.
 
 | Ce que vous voyez | Ce que cela veut dire |
 | --- | --- |
-| **Envoyé** | Le message est parti. |
+| **Envoyé** | Le message est parti. Survolez le mot pour voir s’il a été distribué ou lu. |
+| **Recevra** | Le client a appuyé sur **Je la recevrai**. |
+| **Absent** | Le client a appuyé sur **Je serai absent(e)**. Contactez-le. |
+| **Changer d’adresse** | Le client a demandé à changer d’adresse. Contactez-le. |
 | **Non distribué sur WhatsApp** | Le client n’a pas de numéro de téléphone, ou le numéro n’est pas sur WhatsApp. |
 | **Échec de l’envoi** | Quelque chose a bloqué le message. Survolez le mot pour voir pourquoi. |
 | **Non envoyé** | La commande a plus de 30 jours ou a été annulée. |
+
+Après un clic sur **Marquer comme traité**, le mot reste en gris. Survolez-le pour voir quand il a été traité.
 
 Ouvrez une commande pour voir pourquoi le message est parti, son suivi et la réponse du client.
 
@@ -58,11 +63,13 @@ Ouvrez une commande pour voir pourquoi le message est parti, son suivi et la ré
 
 ## Réponses du client
 
-Quand le client appuie sur **Je serai absent(e)** ou **Changer d’adresse**, la commande passe dans **À traiter par vous**. Contactez le client, organisez la livraison avec votre transporteur, puis cliquez sur **Marquer comme traité**.
+Quand le client appuie sur **Je serai absent(e)** ou **Changer d’adresse**, la commande passe dans **À traiter par vous**. Contactez le client, organisez la livraison avec votre transporteur, puis cliquez sur **Marquer comme traité** dans le menu **⋯** de la commande ou dans son détail.
 
 **Je la recevrai** ne demande rien de votre part. Si les messages de remerciement sont activés, Akeed remercie le client pour sa réponse.
 
-Une commande dont le message n’a pas atteint le client apparaît aussi dans **À traiter par vous**, comme **Non distribué sur WhatsApp**. Appelez le client, puis cliquez sur **Marquer comme traité**.
+Une commande dont le message n’a pas atteint le client apparaît aussi dans **À traiter par vous**, avec **Non distribué sur WhatsApp** dans la colonne **Expédition**. Appelez le client, puis cliquez sur **Marquer comme traité**.
+
+Seuls le propriétaire de la boutique et les administrateurs peuvent marquer une réponse comme traitée.
 
 ## Facturation
 

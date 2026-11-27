@@ -2691,11 +2691,22 @@
           "followUpSent": "Reminder sent",
           "sendsAt": "Sends {time}",
           "callCustomer": "Call the customer",
-          "waitingForCapacity": "Plan or balance used up",
-          "shippedNotReached": "Shipped message not delivered"
+          "waitingForCapacity": "Plan or balance used up"
         },
         "tooltip": {
           "scheduledFor": "Scheduled for {time}",
+          "confirmedByCustomer": "Confirmed by the customer · {time}",
+          "confirmedManually": "Confirmed manually · {time}",
+          "confirmedAfterReminder": "Confirmed after reminder · {time}",
+          "canceledByCustomer": "Canceled by the customer · {time}",
+          "canceledNoReply": "Canceled: no reply from the customer · {time}",
+          "canceledNoWhatsApp": "Canceled: WhatsApp undeliverable · {time}",
+          "canceledAutomatically": "Canceled automatically: no response · {time}",
+          "canceledInStore": "Canceled in Shopify · {time}",
+          "failed": "Failed to send: {reason}",
+          "blocked": "Waiting to send: plan or balance used up",
+          "noReplySince": "No reply since {time}",
+          "changeRequested": "Change requested · {time}",
           "reminderAt": "Reminder scheduled for {time}",
           "callCustomer": "WhatsApp couldn’t deliver to this number. It may not be on WhatsApp, or the customer needs to update WhatsApp or accept its latest terms. Call the customer to confirm.",
           "callCustomerSince": "Since {time}, WhatsApp couldn’t deliver to this number. It may not be on WhatsApp, or the customer needs to update WhatsApp or accept its latest terms. Call the customer to confirm.",
@@ -2862,8 +2873,12 @@
     },
     "shipping": {
       "heading": "Shipping",
+      "replyAt": "{reply} · {time}",
       "badges": {
         "sent": "Sent",
+        "willReceive": "Will receive",
+        "notAvailable": "Not available",
+        "changeAddress": "Change address",
         "undeliverable": "WhatsApp undeliverable",
         "failedToSend": "Failed to send",
         "notSent": "Not sent"
@@ -2899,7 +2914,7 @@
         "reply": "Customer reply",
         "replies": {
           "home": "I’ll receive it",
-          "reschedule": "Won’t be available",
+          "reschedule": "Not available",
           "address": "Change address"
         },
         "requestReschedule": "The customer won’t be available for delivery.",

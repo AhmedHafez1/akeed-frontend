@@ -13,6 +13,7 @@ import {
   useConfirmationsExport,
 } from '@/features/dashboard/domain/useConfirmationsExport'
 import { useManualConfirmation } from '../../domain/useManualConfirmation'
+import { useShippingResolve } from '../../domain/useShippingResolve'
 import { useOutcomeSyncRetry } from '../../domain/useOutcomeSyncRetry'
 import type { DateRangeFilterOption } from '../../domain/dashboard.types'
 import { formatCount } from '../../lib/orderDisplay'
@@ -81,6 +82,10 @@ export function DashboardVerificationsStandaloneSkin({
   })
   const confirmation = useManualConfirmation()
   const storeSync = useOutcomeSyncRetry()
+  const shippingResolve = useShippingResolve({
+    onDone: (message) => notify.success({ message, id: 'shipping-resolve' }),
+    onError: (message) => notify.error({ message, id: 'shipping-resolve' }),
+  })
   const exporter = useConfirmationsExport({
     tab,
     dateRange: period,
@@ -353,6 +358,8 @@ export function DashboardVerificationsStandaloneSkin({
                   onRetry: (row) => void handleRetry(row),
                   onToggleAutoCancel: (row, action) =>
                     void handleToggleAutoCancel(row, action),
+                  onMarkShippingDone: (row) =>
+                    void shippingResolve.resolve(row.id),
                 }}
               />
             </>

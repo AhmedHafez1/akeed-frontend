@@ -135,9 +135,11 @@ export function getStatusTimestamp(
 
 /**
  * When anything last happened on the row: the newest of the server's
- * `updated_at` and every lifecycle timestamp, or the order time when nothing
+ * `updated_at`, every lifecycle timestamp, the customer's shipping reply, its
+ * "Mark done" and an open change request, or the order time when nothing
  * has happened yet. Taking the newest keeps the column right for a step that
- * was recorded without touching `updated_at`.
+ * was recorded without touching `updated_at`. The shipping record's own
+ * `updated_at` stays out: opening the tracking link moves it too.
  */
 export function getLastUpdateAt(verification: VerificationItem): string | null {
   const candidates = [
@@ -151,6 +153,9 @@ export function getLastUpdateAt(verification: VerificationItem): string | null {
     verification.expired_at,
     verification.no_reply_at,
     verification.follow_up_sent_at,
+    verification.shipping?.customer_replied_at,
+    verification.shipping?.resolved_at,
+    verification.change_request?.opened_at,
   ]
   let latest: string | null = null
   let latestTime = Number.NEGATIVE_INFINITY

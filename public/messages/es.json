@@ -1473,11 +1473,22 @@
           "followUpSent": "Recordatorio enviado",
           "sendsAt": "Se envía {time}",
           "callCustomer": "Llama al cliente",
-          "waitingForCapacity": "Plan o saldo agotado",
-          "shippedNotReached": "Aviso de envío no entregado"
+          "waitingForCapacity": "Plan o saldo agotado"
         },
         "tooltip": {
           "scheduledFor": "Programado para {time}",
+          "confirmedByCustomer": "Confirmado por el cliente · {time}",
+          "confirmedManually": "Confirmado manualmente · {time}",
+          "confirmedAfterReminder": "Confirmado tras el recordatorio · {time}",
+          "canceledByCustomer": "Cancelado por el cliente · {time}",
+          "canceledNoReply": "Cancelado: sin respuesta del cliente · {time}",
+          "canceledNoWhatsApp": "Cancelado: no entregado en WhatsApp · {time}",
+          "canceledAutomatically": "Cancelado automáticamente: sin respuesta · {time}",
+          "canceledInStore": "Cancelado en Shopify · {time}",
+          "failed": "Envío fallido: {reason}",
+          "blocked": "En espera de envío: plan o saldo agotado",
+          "noReplySince": "Sin respuesta desde {time}",
+          "changeRequested": "Cambio solicitado · {time}",
           "reminderAt": "Recordatorio programado para {time}",
           "callCustomer": "WhatsApp no pudo entregar a este número. Puede que no esté en WhatsApp o que el cliente deba actualizar WhatsApp o aceptar sus términos más recientes. Llama al cliente para confirmar.",
           "callCustomerSince": "Desde {time}, WhatsApp no puede entregar a este número. Puede que no esté en WhatsApp o que el cliente deba actualizar WhatsApp o aceptar sus términos más recientes. Llama al cliente para confirmar.",
@@ -1644,8 +1655,12 @@
     },
     "shipping": {
       "heading": "Envío",
+      "replyAt": "{reply} · {time}",
       "badges": {
         "sent": "Enviado",
+        "willReceive": "Lo recibirá",
+        "notAvailable": "No disponible",
+        "changeAddress": "Cambiar dirección",
         "undeliverable": "No entregado en WhatsApp",
         "failedToSend": "Envío fallido",
         "notSent": "No enviado"
@@ -1681,7 +1696,7 @@
         "reply": "Respuesta del cliente",
         "replies": {
           "home": "Lo recibiré",
-          "reschedule": "No estaré disponible",
+          "reschedule": "No disponible",
           "address": "Cambiar dirección"
         },
         "requestReschedule": "El cliente no estará disponible para la entrega.",
