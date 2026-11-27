@@ -4090,8 +4090,8 @@
         },
         "payment": {
           "payment": {
-            "title": "Numaranızdan göndermek için Meta’ya bir ödeme yöntemi ekleyin",
-            "body": "O zamana kadar onaylar Akeed numarasından gitmeye devam eder. Ödeme yöntemini WhatsApp Yöneticisi’nde ekleyin."
+            "title": "Numaranızdan göndermek için tek adım kaldı",
+            "body": "Onaylar Akeed numarasından sorunsuz gidiyor. Kendi numaranızdan göndermek için WhatsApp Yöneticisi’nde bir ödeme yöntemi ekleyin."
           }
         },
         "quality_drop": {

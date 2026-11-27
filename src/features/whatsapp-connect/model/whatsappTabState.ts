@@ -230,7 +230,14 @@ function bannerOf(alert: SenderAlert, sendingEnabled: boolean): TabBanner {
   const key = `${alert.kind}.${alert.reason}` as BannerKey
   return {
     key,
-    tone: alert.severity === 'critical' ? 'critical' : 'warning',
+    // Akeed keeps confirming while the payment method is missing, so the
+    // payment banner is a calm note rather than a warning.
+    tone:
+      alert.severity === 'critical'
+        ? 'critical'
+        : alert.kind === 'payment'
+          ? 'info'
+          : 'warning',
     action: alert.action,
     resumes:
       sendingEnabled &&
