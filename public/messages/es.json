@@ -4090,8 +4090,8 @@
         },
         "payment": {
           "payment": {
-            "title": "Añade un método de pago en Meta para enviar desde tu número",
-            "body": "Hasta entonces, las confirmaciones siguen saliendo desde Akeed. Añádelo en el Administrador de WhatsApp."
+            "title": "Un paso más para enviar desde tu número",
+            "body": "Las confirmaciones salen con normalidad desde el número de Akeed. Para enviarlas desde el tuyo, añade un método de pago en el Administrador de WhatsApp."
           }
         },
         "quality_drop": {

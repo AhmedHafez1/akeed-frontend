@@ -5691,8 +5691,8 @@
         },
         "payment": {
           "payment": {
-            "title": "Add a payment method in Meta to send from your number",
-            "body": "Confirmations keep going from Akeed until then. Add it in WhatsApp Manager."
+            "title": "One step left to send from your number",
+            "body": "Confirmations are going out normally from Akeed’s number. To send from yours, add a payment method in WhatsApp Manager."
           }
         },
         "quality_drop": {
