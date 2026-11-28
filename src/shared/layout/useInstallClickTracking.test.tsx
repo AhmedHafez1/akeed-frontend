@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   INSTALL_CLICK_NAVIGATION_DELAY_MS,
+  SHOPIFY_INSTALL_CLICK_CONTENT_NAME,
   useInstallClickTracking,
 } from './useInstallClickTracking'
 
@@ -26,6 +27,18 @@ function Page() {
 describe('useInstallClickTracking', () => {
   let fbq: ReturnType<typeof vi.fn>
 
+  function expectInstallClickReported(times = 1) {
+    expect(fbq).toHaveBeenCalledTimes(times * 2)
+    expect(fbq).toHaveBeenNthCalledWith(1, 'trackCustom', 'InstallClick')
+    expect(fbq).toHaveBeenNthCalledWith(
+      2,
+      'track',
+      'CompleteRegistration',
+      { content_name: SHOPIFY_INSTALL_CLICK_CONTENT_NAME },
+      { eventID: expect.any(String) }
+    )
+  }
+
   beforeEach(() => {
     vi.useFakeTimers()
     window.sessionStorage.clear()
@@ -47,7 +60,7 @@ describe('useInstallClickTracking', () => {
     const clicked = fireEvent.click(screen.getByText('Install on Shopify'))
 
     expect(clicked).toBe(false)
-    expect(fbq).toHaveBeenCalledExactlyOnceWith('trackCustom', 'InstallClick')
+    expectInstallClickReported()
     expect(assign).not.toHaveBeenCalled()
 
     vi.advanceTimersByTime(INSTALL_CLICK_NAVIGATION_DELAY_MS)
@@ -62,7 +75,7 @@ describe('useInstallClickTracking', () => {
     const clicked = fireEvent.click(link)
 
     expect(clicked).toBe(true)
-    expect(fbq).toHaveBeenCalledExactlyOnceWith('trackCustom', 'InstallClick')
+    expectInstallClickReported()
     expect(link.getAttribute('href')).toContain('utm_source=facebook')
     vi.runAllTimers()
     expect(assign).not.toHaveBeenCalled()
@@ -74,7 +87,19 @@ describe('useInstallClickTracking', () => {
       screen.getByText('Install on Shopify'),
       new MouseEvent('auxclick', { bubbles: true, button: 1 })
     )
-    expect(fbq).toHaveBeenCalledExactlyOnceWith('trackCustom', 'InstallClick')
+    expectInstallClickReported()
+  })
+
+  it('sends one registration event ID per visit', () => {
+    render(<Page />)
+    fireEvent.click(screen.getByText('Install on Shopify'))
+    fireEvent.click(screen.getByText('New tab'))
+
+    const registrations = fbq.mock.calls.filter(
+      ([, name]) => name === 'CompleteRegistration'
+    )
+    expect(registrations).toHaveLength(2)
+    expect(registrations[0][3]).toEqual(registrations[1][3])
   })
 
   it('ignores other links', () => {
