@@ -25,9 +25,16 @@ export function trackMetaCustomEvent(name: string): void {
   getFbq()?.('trackCustom', name)
 }
 
-/** A standard event the server also reports; `eventId` lets Meta dedupe. */
-export function trackMetaEvent(name: string, eventId: string): void {
-  getFbq()?.('track', name, {}, { eventID: eventId })
+/**
+ * A standard event. `eventId` lets Meta dedupe it, against the server's copy
+ * or against a repeat from the same visitor.
+ */
+export function trackMetaEvent(
+  name: string,
+  eventId: string,
+  customData: Record<string, string> = {}
+): void {
+  getFbq()?.('track', name, customData, { eventID: eventId })
 }
 
 export function newMetaEventId(): string {
