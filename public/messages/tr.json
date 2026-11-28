@@ -55,7 +55,8 @@
     "mockup_label": "Bir demo sipariş için Onayla ve İptal et düğmeleriyle Akeed WhatsApp onay mesajı",
     "counter": {
       "lead": "Siparişlerini Akeed ile onaylayan mağazalara katılın",
-      "label": "Akeed üzerinden onaylanan sipariş"
+      "label": "Akeed üzerinden onaylanan sipariş",
+      "stores": "{count, plural, one {Akeed’e bağlı mağaza} other {Akeed’e bağlı mağaza}}"
     }
   },
   "ecosystem": {

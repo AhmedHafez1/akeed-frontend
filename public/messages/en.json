@@ -1273,7 +1273,8 @@
     "mockup_label": "An Akeed WhatsApp confirmation message for a demo order, with Confirm and Cancel buttons",
     "counter": {
       "lead": "Join the stores that use Akeed to confirm their orders",
-      "label": "orders confirmed through Akeed"
+      "label": "orders confirmed through Akeed",
+      "stores": "{count, plural, one {store connected to Akeed} other {stores connected to Akeed}}"
     }
   },
   "ecosystem": {

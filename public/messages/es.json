@@ -55,7 +55,8 @@
     "mockup_label": "Mensaje de confirmación de Akeed en WhatsApp para un pedido de demostración, con los botones Confirmar y Cancelar",
     "counter": {
       "lead": "Únete a las tiendas que usan Akeed para confirmar sus pedidos",
-      "label": "pedidos confirmados a través de Akeed"
+      "label": "pedidos confirmados a través de Akeed",
+      "stores": "{count, plural, one {tienda conectada a Akeed} other {tiendas conectadas a Akeed}}"
     }
   },
   "ecosystem": {

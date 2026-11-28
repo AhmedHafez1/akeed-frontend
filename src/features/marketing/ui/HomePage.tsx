@@ -17,13 +17,20 @@ import FAQ from '@/features/marketing/ui/sections/FAQ'
 
 interface HomePageProps {
   confirmedOrdersTotal?: number | null
+  activeStoresTotal?: number | null
 }
 
-export function HomePage({ confirmedOrdersTotal = null }: HomePageProps) {
+export function HomePage({
+  confirmedOrdersTotal = null,
+  activeStoresTotal = null,
+}: HomePageProps) {
   return (
     <main className="flex min-h-screen flex-col gap-0">
       <section className={`w-full ${landingSectionBackgroundClass}`}>
-        <Hero confirmedOrdersTotal={confirmedOrdersTotal} />
+        <Hero
+          confirmedOrdersTotal={confirmedOrdersTotal}
+          activeStoresTotal={activeStoresTotal}
+        />
       </section>
       <section className={`w-full ${landingSectionChromeAltClass}`}>
         <Reveal>
