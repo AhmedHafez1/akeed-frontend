@@ -31,8 +31,11 @@ class FakeIntersectionObserver {
   }
 }
 
-const shownNumber = () =>
-  document.querySelector('[aria-hidden="true"].tabular-nums')?.textContent
+const shownNumber = (stat: 'orders' | 'stores' = 'orders') =>
+  document.querySelector(`[data-stat="${stat}"]`)?.textContent
+
+const digits = (stat: 'orders' | 'stores') =>
+  Number(shownNumber(stat)?.replace(/\D/g, ''))
 
 describe('ConfirmedOrdersCounter', () => {
   beforeEach(() => {
@@ -47,33 +50,76 @@ describe('ConfirmedOrdersCounter', () => {
     vi.unstubAllGlobals()
   })
 
-  it('counts up to the real total once it is visible', () => {
-    renderMarketing(<ConfirmedOrdersCounter total={12500} />, 'en')
+  it('counts both numbers up to the real totals once visible', () => {
+    renderMarketing(<ConfirmedOrdersCounter total={12500} stores={930} />, 'en')
 
     act(() => {
       vi.advanceTimersByTime(600)
     })
-    const midway = Number(shownNumber()?.replace(/\D/g, ''))
-    expect(midway).toBeGreaterThan(0)
-    expect(midway).toBeLessThan(12500)
+    expect(digits('orders')).toBeGreaterThan(0)
+    expect(digits('orders')).toBeLessThan(12500)
+    expect(digits('stores')).toBeGreaterThan(0)
+    expect(digits('stores')).toBeLessThan(930)
 
     act(() => {
       vi.advanceTimersByTime(1000)
     })
-    expect(shownNumber()).toBe('12,500')
+    expect(shownNumber('orders')).toBe('12,500')
+    expect(shownNumber('stores')).toBe('930')
+    expect(screen.getByText('orders confirmed through Akeed')).toBeTruthy()
+    expect(screen.getByText('stores connected to Akeed')).toBeTruthy()
+  })
+
+  it('puts the stores before the orders', () => {
+    renderMarketing(<ConfirmedOrdersCounter total={12500} stores={93} />, 'en')
+
+    const order = Array.from(
+      document.querySelectorAll<HTMLElement>('[data-stat]'),
+      (element) => element.dataset.stat
+    )
+    expect(order).toEqual(['stores', 'orders'])
+  })
+
+  it('shows only the orders when the stores were not counted', () => {
+    renderMarketing(
+      <ConfirmedOrdersCounter total={12500} stores={null} />,
+      'en'
+    )
+
+    expect(document.querySelector('[data-stat="stores"]')).toBeNull()
+    expect(screen.queryByText('stores connected to Akeed')).toBeNull()
     expect(screen.getByText('orders confirmed through Akeed')).toBeTruthy()
   })
 
-  it('shows the total at once when motion is reduced', () => {
-    reduceMotion = true
-    renderMarketing(<ConfirmedOrdersCounter total={12500} />, 'en')
+  it.each([
+    [1, 'متجر مربوط بأكيد'],
+    [5, 'متاجر مربوطة بأكيد'],
+    [93, 'متجرًا مربوطًا بأكيد'],
+    [100, 'متجر مربوط بأكيد'],
+  ])('words the Arabic label for %i stores', (stores, label) => {
+    renderMarketing(
+      <ConfirmedOrdersCounter total={12500} stores={stores} />,
+      'ar'
+    )
 
-    expect(shownNumber()).toBe('12,500')
+    expect(screen.getByText(label)).toBeTruthy()
   })
 
-  it('gives assistive tech the real total, not the moving number', () => {
-    renderMarketing(<ConfirmedOrdersCounter total={12500} />, 'en')
+  it('shows the totals at once when motion is reduced', () => {
+    reduceMotion = true
+    renderMarketing(<ConfirmedOrdersCounter total={12500} stores={93} />, 'en')
 
-    expect(document.querySelector('.sr-only')?.textContent).toContain('12,500')
+    expect(shownNumber('orders')).toBe('12,500')
+    expect(shownNumber('stores')).toBe('93')
+  })
+
+  it('gives assistive tech the real totals, not the moving numbers', () => {
+    renderMarketing(<ConfirmedOrdersCounter total={12500} stores={93} />, 'en')
+
+    const spoken = Array.from(
+      document.querySelectorAll('.sr-only'),
+      (element) => element.textContent?.trim()
+    )
+    expect(spoken).toEqual(['93', '12,500'])
   })
 })

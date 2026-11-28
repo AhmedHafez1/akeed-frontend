@@ -21,9 +21,14 @@ import Ecosystem from './Ecosystem'
 interface HeroProps {
   /** Null when the backend could not answer: the counter is then left out. */
   confirmedOrdersTotal?: number | null
+  /** Null when the stores could not be counted: only orders then show. */
+  activeStoresTotal?: number | null
 }
 
-function Hero({ confirmedOrdersTotal = null }: HeroProps) {
+function Hero({
+  confirmedOrdersTotal = null,
+  activeStoresTotal = null,
+}: HeroProps) {
   const t = useTranslations('hero')
   const { locale, targets } = useAcquisition()
   const shouldReduceMotion = useReducedMotion()
@@ -143,7 +148,10 @@ function Hero({ confirmedOrdersTotal = null }: HeroProps) {
 
       <div className="mt-14 flex flex-col items-center sm:mt-16 lg:mt-20">
         {confirmedOrdersTotal !== null && (
-          <ConfirmedOrdersCounter total={confirmedOrdersTotal} />
+          <ConfirmedOrdersCounter
+            total={confirmedOrdersTotal}
+            stores={activeStoresTotal}
+          />
         )}
         <Ecosystem />
       </div>

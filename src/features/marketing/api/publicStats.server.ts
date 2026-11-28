@@ -7,13 +7,25 @@ const STATS_TIMEOUT_MS = 3000
 
 interface PublicStatsResponse {
   confirmed_orders_total?: unknown
+  active_stores_total?: unknown
 }
 
+export interface PublicStats {
+  confirmedOrdersTotal: number
+  /** Null when the backend did not count them. */
+  activeStoresTotal: number | null
+}
+
+const asTotal = (value: unknown): number | null =>
+  typeof value === 'number' && Number.isInteger(value) && value >= 0
+    ? value
+    : null
+
 /**
- * Orders customers confirmed through Akeed, or null when the backend cannot
- * say: the homepage then hides the counter rather than show a guess.
+ * The homepage's live totals, or null when the backend cannot say how many
+ * orders were confirmed: the card is then hidden rather than show a guess.
  */
-export async function getConfirmedOrdersTotal(): Promise<number | null> {
+export async function getPublicStats(): Promise<PublicStats | null> {
   const baseUrl = (
     process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'
   ).replace(/\/+$/, '')
@@ -28,10 +40,12 @@ export async function getConfirmedOrdersTotal(): Promise<number | null> {
       return null
     }
     const body = (await response.json()) as PublicStatsResponse
-    const total = body.confirmed_orders_total
-    return typeof total === 'number' && Number.isInteger(total) && total >= 0
-      ? total
-      : null
+    const confirmedOrdersTotal = asTotal(body.confirmed_orders_total)
+    if (confirmedOrdersTotal === null) return null
+    return {
+      confirmedOrdersTotal,
+      activeStoresTotal: asTotal(body.active_stores_total),
+    }
   } catch (error) {
     logger.warn('Stats request failed', {
       error: error instanceof Error ? error.message : String(error),
