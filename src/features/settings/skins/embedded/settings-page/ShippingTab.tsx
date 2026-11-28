@@ -18,6 +18,7 @@ import type { SettingsResponse } from '@/features/settings/api/settingsApi'
 import {
   PREVIEW_CUSTOMER_NAMES,
   PREVIEW_ORDER_NUMBER,
+  previewTotal,
 } from '@/features/settings/domain/messagePreview'
 import { SETTINGS_FIELD_ID } from '@/features/settings/domain/settingsForm'
 import {
@@ -170,7 +171,10 @@ export function ShippingTab({ model, data, readOnly }: ShippingTabProps) {
     customer: PREVIEW_CUSTOMER_NAMES[preview.language],
     store: values.storeName.trim() || 'Akeed Store',
     order: PREVIEW_ORDER_NUMBER,
-    total: '',
+    total: previewTotal(
+      data.state.messageCurrency ?? data.state.shippingCurrency,
+      preview.language
+    ),
     tracking: data.shipping?.trackingSamples[preview.language] ?? '',
   }
 

@@ -10,6 +10,7 @@ import type { TemplateMessage } from '@/shared/lib/templateMessage'
 import ar from '../../../../../../public/messages/ar.json'
 import en from '../../../../../../public/messages/en.json'
 import type { SettingsResponse } from '../../../api/settingsApi'
+import { previewTotal } from '../../../domain/messagePreview'
 import { settingsResponseFixture } from '../../../testing/settingsFixture'
 import { SettingsEmbeddedPage } from './SettingsEmbeddedPage'
 
@@ -82,6 +83,11 @@ const SHIPPED: Record<'ar' | 'en', TemplateMessage> = {
         { text: ' has been shipped.' },
       ],
       [{ variable: 'tracking' }],
+      [
+        { text: 'Please have ' },
+        { variable: 'total' },
+        { text: ' ready in cash.' },
+      ],
     ],
     buttons: ['I’ll be home', 'Reschedule', 'Change address'],
     direction: 'ltr',
@@ -212,6 +218,13 @@ describe('Settings › Shipping', () => {
     expect(screen.getByText('Shipped')).toBeTruthy()
     const preview = screen.getByRole('img', { name: copy('en').previewLabel })
     expect(preview.textContent).toContain('Tracking: 1Z999')
+    // The sample order's total, as the confirmation preview writes it.
+    const { state } = settingsResponseFixture({ state: ON })
+    const total = previewTotal(
+      state.messageCurrency ?? state.shippingCurrency,
+      'en'
+    )
+    expect(preview.textContent).toContain(`Please have ${total} ready in cash.`)
     expect(within(preview).getByText('Reschedule')).toBeTruthy()
     expect(screen.getByText(copy('en').billingLine)).toBeTruthy()
   })
